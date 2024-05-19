@@ -1,6 +1,7 @@
-(* ----- YUHO lang V1.0 EBNF ----- *)
+(* ----- YUHO lang V1.0 ----- *)
 
 (* --- reference!!! --- *)
+    (* grammer here is specified under the EBNF standard notation *)
     (* terminals => basic units of a language, eg. keywords, identifiers, operators *)
     (* non-terminals => higher-level structures built from terminals *)
 
