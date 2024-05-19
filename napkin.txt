@@ -1,7 +1,11 @@
 fua
-* work on the README.md
 * brainstorm language syntax
-    * consider the composite elemnts of a crime per azfir's criminal law
+    * consider making it like this...
+       * parser demands that user format the desired sections of the penal code in a certain manner similar to Catala's user experience
+       * then convert that to Yuho lang, where the section and subsection is treated as a function with respective composite elements (physical, fault, defences) per azfir's crim class
+       * these functions in Yuho lang can then be catalogued and as and when required, a given offence will just cause the function to be called in Yuho lang, and the function takes in the various inputs and returns a given 'consequence' (punishment + damages)
+       * moreso a proof of concept currently that shows it is possible to codefiy the law in such a manner 
+       * NEED TO THINK OF PROPER OUTPUT TARGETS AND USE CASES
     * make as generic and identify basic patterns in every section first
     * test out the logical syntax on most common crim statutes
     * as language syntax develops, be sure to update lang-spec on doc and grammer
@@ -10,10 +14,10 @@ fua
     * purpose of yuho lang
         * input the offences
         * output the relevant charges and damages programatically
-* brainstorm toolchains
+* work on the README.md
 * add an ebnf file in the doc directory, considering adding a subdirectory for lang-spec
 * work on defining the tokens
 * work on lexer
 * work on ast
 * work on transpiler
-* add and integrate a CONTRIBUTE.md if needed, make the project open-source
+* brainstorm toolchains for OUTPUT purposes
