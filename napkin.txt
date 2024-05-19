@@ -1,0 +1,18 @@
+fua
+* work on the README.md
+* brainstorm language syntax
+    * consider the composite elemnts of a crime per azfir's criminal law
+    * make as generic and identify basic patterns in every section first
+    * test out the logical syntax on most common crim statutes
+* brainstorm usage and flow of work for users, who is yuho lang for?
+    * i want it to function similarly to catala in how generic it is for first operation
+    * purpose of yuho lang
+        * input the offences
+        * output the relevant charges and damages programatically
+* brainstorm toolchains
+* add an ebnf file in the doc directory, considering adding a subdirectory for lang-spec
+* work on defining the tokens
+* work on lexer
+* work on ast
+* work on transpiler
+* add and integrate a CONTRIBUTE.md if needed, make the project open-source
