@@ -33,7 +33,7 @@ $ make build
 
 ## Contribute
 
-Yuho is open-source! For contributions guidelines, refer to [CONTRIBUTING.md](CONTRIBUTING.md).
+Yuho is open-source! For contribution guidelines, refer to [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## References
 
