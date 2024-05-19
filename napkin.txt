@@ -4,6 +4,7 @@ fua
     * consider the composite elemnts of a crime per azfir's criminal law
     * make as generic and identify basic patterns in every section first
     * test out the logical syntax on most common crim statutes
+    * as language syntax develops, be sure to update lang-spec on doc and grammer
 * brainstorm usage and flow of work for users, who is yuho lang for?
     * i want it to function similarly to catala in how generic it is for first operation
     * purpose of yuho lang
