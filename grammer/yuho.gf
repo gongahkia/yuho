@@ -142,7 +142,7 @@ statement ::= identifier "=" expression
 statement_body ::= "{" statement+ "}" 
 
 (* --- comment --- *)
-    (* => anthing following a // on the same line *)
+    (* => anything following a // on the same line *)
 
 comment ::= "//" ( string* | integer* | float* | statement* )
 
