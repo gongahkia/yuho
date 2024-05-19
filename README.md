@@ -12,19 +12,23 @@ Development is currently scoped by the [Penal Code 1871](https://sso.agc.gov.sg/
 
 ## Documentation
 
-> FUA add more here
+* [grammer specification](grammer)
+* [language specification](doc/syntax.md)
+* [example](example)
 
 ## Usage
 
-> FUA add more here
+```console
+$ git clone https://github.com/gongahkia/yuho
+$ cd yuho  
+$ make 
+```
 
 ## References
 
 * [A Logic for Statutes](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3088206)
 
 ## Analogues
-
-> FUA add why each of these are analogues of yuho lang
 
 * [Catala](https://github.com/CatalaLang) => 
 * [L4](https://github.com/smucclaw/documentation) => 
