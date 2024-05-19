@@ -89,18 +89,18 @@ boolean ::= "TRUE"
     (* => basic arithmetic *)
     (* => comparison *)
 
-operator = assignment_operator
+operator ::= assignment_operator
         | mathematical_operator
         | comparison_operator
 
-assignment_operator = "="
+assignment_operator ::= "="
 
-mathematical_operator = "+" 
-                    | "-" 
-                    | "*" 
-                    | "/" 
+mathematical_operator ::= "+" 
+                        | "-" 
+                        | "*" 
+                        | "/" 
 
-comparison_operator = "<" 
+comparison_operator ::= "<" 
                     | ">" 
                     | "<=" 
                     | ">=" 
@@ -133,13 +133,13 @@ factor ::= "(" mathematical_expression ")"
     (* => control flow statements eg. if, for-loop *)
     (* => yuho features implicit returns *)
 
-statement = identifier "=" expression
-         | keyword statement_body 
+statement ::= identifier "=" expression
+             | keyword statement_body 
 
 (* --- statement body --- *)
     (* => one or more statements enclosed within curly braces *)
 
-statement_body = "{" statement+ "}" 
+statement_body ::= "{" statement+ "}" 
 
 (* --- comment --- *)
     (* => anthing following a // on the same line *)
