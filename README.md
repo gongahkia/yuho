@@ -8,7 +8,8 @@ Development is currently scoped by the [Penal Code 1871](https://sso.agc.gov.sg/
 
 ## Rationale
 
-> FUA add more here
+> [!WARNING]
+> WIP
 
 ## Documentation
 
@@ -29,7 +30,8 @@ $ make build
 
 ### GUI
 
-> FUA to add gui installation instructions
+> [!WARNING]
+> WIP
 
 ## Contribute
 
