@@ -9,7 +9,7 @@ Development is currently scoped by the [Penal Code 1871](https://sso.agc.gov.sg/
 ## Rationale
 
 > [!WARNING]
-> WIP
+> To add more here later
 
 ## Documentation
 
@@ -28,11 +28,6 @@ $ make config
 $ make build
 ```
 
-### GUI
-
-> [!WARNING]
-> WIP
-
 ## Contribute
 
 Yuho is open-source! For contribution guidelines, refer to [CONTRIBUTING.md](CONTRIBUTING.md).
@@ -48,4 +43,7 @@ Yuho takes much inspiration from the following projects.
 
 ### Research
 
-* [A Logic for Statutes](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3088206)
+* [A Logic for Statutes](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3088206) by Sarah B Lawsky
+* [Law and logic: A review from an argumentation perspective](https://www.sciencedirect.com/science/article/pii/S0004370215000910) by Henry Prakken, Giovanni Sartor
+* [Defeasible semantics for L4](https://ink.library.smu.edu.sg/cclaw/5/) by Guido Governatori, Meng Weng Wong
+* [CLAWs and Effect](https://www.lawsociety.org.sg/publication/claws-and-effect/) by Alexis N Chun
