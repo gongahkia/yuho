@@ -1,13 +1,15 @@
 ![](https://img.shields.io/badge/yuho_1.0-WIP-orange)
 
+> [!WARNING]
+> To see what's currently being worked, see [napkin.txt](napkin.txt).
+
 # `yuho`
 
-Yuho is a domain-specific language providing a programmatic representation of Singapore Criminal Law.
+Yuho is a functional domain-specific language providing a programmatic representation of Singapore Criminal Law.
 
 ## Rationale
 
-> [!WARNING]
-> To add more here later
+> to add here
 
 ## Scope
 
@@ -87,10 +89,12 @@ Yuho is open-source. Contribution guidelines are found at [CONTRIBUTING.md](CONT
 
 ### Analogues
 
-Yuho takes much inspiration from the following projects.
+Yuho takes inspiration from the following projects.
 
 * [Catala](https://github.com/CatalaLang): Language syntax that explicitly mimicks logical structure of the Law, focused on general Socio-fiscal legislature in most jurisidictions.
 * [Natural L4](https://github.com/smucclaw/dsl): Language with an English-like syntax that transpiles to multiple targets, focused on codification of contracts and Singapore Contract Law.
+* [Blawx](https://github.com/Lexpedite/blawx): User-friendly web-based tool for Rules as Code, a declarative logic knowledge representation tool for encoding, testing and using rules.
+* [Morphir](https://github.com/finos/morphir): Technology agnostic toolkit for digitisation of business models and their underlying decision logic, enabling automation in fintech.
 
 ### Research
 
