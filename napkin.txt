@@ -1,4 +1,5 @@
 fua
+* add rationale for Yuho lang from my pocket notebook, particuarly the section on yuho lang
 * rework the entire ebnf file
 * three main products
   * 1. core YUHO lang syntax that lawyers and programmers will write in (.ebnf file => define syntax, .md file => explain and give examples, .yuho => actual yuho files to show yuho at work representing various statutes)
