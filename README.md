@@ -1,7 +1,7 @@
 ![](https://img.shields.io/badge/yuho_1.0-WIP-orange)
 
 > [!NOTE]  
-> To see what's currently being worked, see [napkin.txt](napkin.txt).
+> To see what's currently being worked on, see [napkin.txt](napkin.txt).
 
 # `yuho`
 
