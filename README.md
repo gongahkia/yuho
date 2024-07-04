@@ -1,8 +1,5 @@
 ![](https://img.shields.io/badge/yuho_1.0-WIP-orange)
 
-> [!NOTE]  
-> To see what's currently being worked on, see [napkin.txt](napkin.txt).
-
 # `yuho`
 
 Yuho is a functional domain-specific language providing a programmatic representation of Singapore Criminal Law.
