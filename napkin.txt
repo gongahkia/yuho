@@ -11,3 +11,9 @@ fua
     * .fs
 * supplementary products
   * .md files for EACH of the products mentioned above explaining necessary terms
+
+additional resources
+  * be aware that other formal verification methods and formats exist and learn / implement them if necessary
+    * func => https://samibendou.github.io/func-lang/
+    * coq => https://coq.inria.fr/
+    * cogent => https://trustworthy.systems/projects/OLD/cogent/
