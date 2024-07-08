@@ -16,7 +16,7 @@ Development is currently scoped by the following statutes as specified [here](do
 
 * [Grammer verification](grammer)
 * [Language syntax specification](doc/syntax.md)
-* [Example](example)
+* [Example](example/sampleTheft.yh)
 
 ## Usage
 
