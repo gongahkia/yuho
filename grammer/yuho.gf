@@ -5,150 +5,49 @@
 (* terminals => basic units of a language, eg. keywords, identifiers, operators *)
 (* non-terminals => higher-level structures built from terminals *)
 
-(* --- note!!! --- *)
-(* YUHO grammer is a work in progress and subject to change *)
-(* take nothing here as final until otherwise specified *)
-
 (* ---------- *)
 
-(* --- keyword --- *)
+(* lexical core *)
+letter = "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z" | "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z";
+digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9";
+identifier = letter , { letter | digit };
+integer = digit , { digit };
+float = digit , { digit } , "." , digit , { digit };
+string = "\"" , { letter | digit | " " | "!" | "#" | "$" | "%" | "&" | "'" | "(" | ")" | "*" | "+" | "," | "-" | "." | "/" | ":" | ";" | "<" | "=" | ">" | "?" | "@" | "[" | "]" | "^" | "_" | "`" | "{" | "|" | "}" | "~" } , "\"";
+comment = "//" , { any character } | "/*" , { any character } , "*/";
 
-keyword ::= "if"
-        | "else"
-        | "else if"
-        | "for" (* same for-loop syntax as go *)
-        | "fn"
-        | statute_specification
-        | charge
-        | client
-        | party
+(* datatypes *)
+type = "integer" | "float" | "percent" | "money" | "date" | "duration" | "boolean" | "string" | identifier;
+boolean = "TRUE" | "FALSE";
+percent = integer , "%";
+money = "$" , digit , { digit | "," } , "." , digit , digit;
+date = digit , digit , "-" , digit , digit , "-" , digit , digit , digit , digit;
+duration = integer , " " , ("day" | "month" | "year");
 
-(* --- statutes --- *)
-(* => for referencing statutes in documentation *)
+(* variable declaration *)
+variable_declaration = "scope" , identifier , "{" , { type , identifier , ":=" , expression , ";" } , "}";
+union_type = type , "|" , type;
+pass_value = "pass";
 
-statute_specification ::= statute "_S" section ( "." subsection )*
-charge ::= statute_specification "_" ( damage "_" )* ( punishment )*
+(* data structures *)
+struct_declaration = "struct" , identifier , "{" , { type , identifier , "," } , "}";
+struct_literal = identifier , ":=" , "{" , { identifier , ":=" , expression , "," } , "}";
 
-statute ::= string
-section ::= integer
-section_title ::= string
-subsection ::= integer
-subsection_title ::= string
-statute_body ::= string
+(* operators *)
+arithmetic_operator = "+" | "-" | "*" | "/" | "//" | "%";
+comparison_operator = "==" | "!=" | ">" | "<" | ">=" | "<=";
+logical_operator = "and" | "or" | "not";
 
-(* --- damages --- *)
-(* => for referencing damages in documentation *)
+(* control structures *)
+match_case = "match" , identifier , "{" , { "case" , expression , ":=" , expression , ";" } , "case" , "_" , ":=" , "pass" , ";" , "}";
 
-damage ::= non_monetary_damage
-        | monetary_damage
-non_monetary_damage ::= string
-monetary_damage ::= "S$" integer
+(* functions *)
+function_declaration = type , "func" , identifier , "(" , { type , identifier , "," } , ")" , "{" , { statement } , "}";
+return_expression = ":=" , expression;
 
-(* --- punishment --- *)
-(* => for referencing punishments in documentation *)
+(* statements and expressions *)
+statement = variable_declaration | struct_declaration | struct_literal | match_case | function_declaration | return_expression;
+expression = identifier | integer | float | string | boolean | percent | money | date | duration | arithmetic_operator | comparison_operator | logical_operator;
 
-punishment ::= string
-            | integer "_counts_of_" punishment
-
-(* --- parties --- *)
-(* => for referencing your client and parties in documentation *)
-
-client ::= party
-
-party ::= plaintiff
-        | defendant
-        | third_party
-        | other_party
-
-plaintiff ::= "P" integer* "_" party_name
-defendant ::= "D" integer* "_" party_name
-third_party ::= "T" integer* "_" party_name
-other_party ::= "O" integer* "_" party_name
-party_name ::= string
-
-(* --- identifier --- *)
-(* => YUHO identifier naming scheme is camel_case by default *)
-
-identifier ::= char { char | digit | "_" }
-
-(* --- literal --- *)
-(* => note that there is no char datatype in yuho, this is just for formal specification *)
-(* => note that there is also no digit datatype in yuho, this is just for formal specification *)
-(* => above 2 notes are relevant for typecasting *)
-
-char ::= "a" .. "z"
-string ::= '"' char+ '"' (* all text in yuho is a string by default as long as its enclosed by double quotes *)
-digit ::= "0" .. "9"
-integer ::= "-"? digit+ (* signed and unsigned integers *)
-float ::= "-"? digit+ "." digit+ (* floating point number, there are no doubles in yuho *)
-boolean ::= "TRUE"
-        | "FALSE"
-
-(* --- operators --- *)
-(* => assignment *)
-(* => basic arithmetic *)
-(* => comparison *)
-
-operator ::= assignment_operator
-            | mathematical_operator
-            | comparison_operator
-
-assignment_operator ::= "="
-
-mathematical_operator ::= "+"
-                        | "-"
-                        | "*"
-                        | "/"
-
-comparison_operator ::= "<"
-                        | ">"
-                        | "<="
-                        | ">="
-                        | "=="
-                        | "!="
-
-(* --- expression --- *)
-(* => includes defintion for mathematical and generic expressions *)
-(* => recursive definition for nested expressions *)
-
-expression ::= generic_expression*
-            | mathematical_expression*
-            | expression*
-
-generic_expression ::= expression expression+
-                    | expression "(" identifier ")" (* function call *)
-                    | identifier
-
-mathematical_expression ::= term
-                        | term operator mathematical_expression
-
-term ::= factor
-        | factor '*' term
-
-factor ::= "(" mathematical_expression ")"
-        | ( integer | float )
-
-(* --- statements --- *)
-(* => variable assignment *)
-(* => control flow statements eg. if, for-loop *)
-(* => yuho features implicit returns *)
-
-statement ::= identifier "=" expression
-            | keyword statement_body
-
-(* --- statement body --- *)
-(* => one or more statements enclosed within curly braces *)
-
-statement_body ::= "{" statement+ "}"
-
-(* --- comment --- *)
-(* => anything following a // on the same line *)
-
-comment ::= "//" ( string* | integer* | float* | statement* )
-
-(* --- program --- *)
-(* => zero or more statements *)
-(* => zero or more statement bodies *)
-
-program ::= statement* 
-        | statement_body*
+(* program *)
+program = { statement };
