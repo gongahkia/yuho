@@ -1,18 +1,49 @@
-all:build
+all: build
 
-build:src/main.go
-	@go mod tidy
-	@go run src/main.go
+build: src/main.rs
+	@rustup update
+	@cargo build --release
+	@cargo run
 
-debug:src/main.go
+debug: src/main.rs
 	@echo "debug mode"
-	@go run src/main.go
+	@cargo run
 
 config:
-	@sudo apt upgrade && sudo apt update && sudo apt autoremove
-	@sudo apt install golang
-	@sudo apt install gcc
-	@go mod init github.com/gongahkia/yuho
+
+	@sudo apt update && sudo apt upgrade && sudo apt autoremove
+
+	# for Rust
+	@curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+	@source $HOME/.cargo/env
+	@rustup update
+
+	# for Haskell
+	@curl -sSL https://get.haskellstack.org/ | sh
+	@stack upgrade
+	@stack setup
+
+	# for OCaml and ML
+	@sudo apt install -y ocaml opam
+	@opam init -y --disable-sandboxing
+	@eval $(opam env)
+	@opam switch create 4.14.0
+	@eval $(opam env)
+
+	# for Yacc
+	@sudo apt install -y bison flex
+
+	# for Alloy
+	@sudo apt install -y default-jre
+	@wget https://github.com/AlloyTools/org.alloytools.alloy/releases/download/v6.0.0/alloy6.jar -O /usr/local/bin/alloy6.jar
+
+	# for F*
+	@git clone --depth 1 https://github.com/FStarLang/FStar.git
+	@cd FStar && make -C src/ocaml-output
+
+	# for EBNF 
+	@curl -O https://www.antlr.org/download/antlr-4.9.2-complete.jar
+	@sudo mv antlr-4.9.2-complete.jar /usr/local/lib/
 
 clean:
 	@rm -rf .git .gitignore README.md

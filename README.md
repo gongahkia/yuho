@@ -1,4 +1,4 @@
-![](https://img.shields.io/badge/yuho_1.0-WIP-orange)
+![](https://img.shields.io/badge/yuho_1.0-passing-green)
 
 # `Yuho`
 
@@ -20,14 +20,10 @@ Getting into the specifics, Yuho provides the following three products.
 
 1. [Yuho](doc/syntax.md), a DSL made to be readable and codeable by lawyers
 2. [Formalised semantic](tests/) for legal reasoning modelled after the syntactical patterns of the law
-3. Transpiler to the following target outputs *(to be expanded on in the future)*
+3. [Transpiler](src/secondary/) to the following target outputs 
     * JavaScript (`.js`): browser simulations and extensions
     * R (`.r`): data modelling and visualisation
     * F* (`.fs`): proof backends
-
-## Scope
-
-Development is currently scoped by the following statutes as specified [here](doc/scope.md). 
 
 ## Documentation
 
@@ -35,6 +31,10 @@ Development is currently scoped by the following statutes as specified [here](do
 * [Grammer specification](grammer/)
 * [Formal verification](tests/)
 * [Examples](example/)
+
+## Scope
+
+Development is currently scoped by the following statutes as specified [here](doc/scope.md). 
 
 ## Usage
 
