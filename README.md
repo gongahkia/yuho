@@ -14,9 +14,9 @@ Development is currently scoped by the following statutes as specified [here](do
 
 ## Documentation
 
+* [Language specification](doc/syntax.md)
 * [Grammer specification](grammer/)
 * [Formal verification](tests/)
-* [Language specification](doc/syntax.md)
 * [Examples](example/)
 
 ## Usage
