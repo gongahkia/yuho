@@ -1,3 +1,10 @@
+> [!IMPORTANT]  
+> Yuho is not actively under development right now.  
+> This means language features are relatively set in stone.  
+> I will return to work on this in the future.  
+> 
+> *\- Gabriel* 
+
 ![](https://img.shields.io/badge/yuho_1.0-passing-green)
 
 # `Yuho`
