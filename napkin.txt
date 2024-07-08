@@ -1,8 +1,4 @@
 fua
-
-* add rationale for Yuho lang from my pocket notebook, particuarly the section on yuho lang
-* learn haskell from scratch today to write an interpreter in it
-
 * three main products
   * 1. core YUHO lang syntax that lawyers and programmers will write in (.ebnf file => define syntax, .md file => explain and give examples, .yuho => actual yuho files to show yuho at work representing various statutes)
     * YUHO should be functional with all functional paradigms
@@ -13,6 +9,8 @@ fua
     * .fs
 * supplementary products
   * .md files for EACH of the products mentioned above explaining necessary terms
+* consider adding this to my README.md
+  * Yuho aims to collapse these superpositions possible within the multiple decision procedures of legislation to arrive at an unambigious state, calculating the ulimate end state of a given charge for accused who choose to [self-reprsent](https://www.judiciary.gov.sg/attending-court/represent-yourself-court-rights-responsibilities) in Courts.
 
 additional resources
   * be aware that other formal verification methods and formats exist and learn / implement them if necessary
