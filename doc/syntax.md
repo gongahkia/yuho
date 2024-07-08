@@ -1,12 +1,25 @@
 # `Yuho` language syntax
 
+## Table Of Contents
+
+1. [Introduction](#introduction)
+2. [Comments](#comments)
+3. [Variable Declaration](#variable-declaration)
+4. [Types](#types)
+5. [Data Structures](#data-structures)
+6. [Operators](#operators)
+7. [Control Structures](#control-structures)
+8. [Functions](#functions)
+9. [Testing](#testing)
+
 ## Introduction
 
-* file extension of `.yh`
+* Yuho source files have the file extension `.yh`
 * strongly, statically-typed
 * camelCase naming scheme
-* limited syntax out of the box
-    * allow for language to be quickly learnt
+* indentation is optional but recommended for easier readability with multiple nested {} curly braces
+* features limited syntax out of the box
+    * allow for language to be quickly picked up and used
     * allow for detailed modelling of statute logic
     * not semicolon-delimited
 * functional language
@@ -14,7 +27,7 @@
     * every statement is an expression 
     * every expression evaluates to a single value
     * limited theoretical support for higher-order functions, functions are therefore 1.5 class citizens (not first class)
-    * mimicks the completeness of the law
+    * mimicks the logical and syntactical completeness of the law
 
 ## Comments
 
@@ -30,14 +43,26 @@ comment
 */
 ```
 
-## Variable declaration
+## Variable Declaration
 
 ```yh
 // ----- VARIABLE DECLARATION -----
-    // : 
-    // := => 
-    // scope =>
+    // := => provides a simultaneous immutable variable declaration and binding between a specified named variable identifier and its assigned value, wherein the value cannot be then reassigned or modified after its initial assignment
+        // note that the datatype of any named variable is specified before the variable identifier similar to C++
+        // every value in Yuho is therefore IMMUTABLE
+    // scope => declares the lexical scope of a given section of Yuho code for modularity within {} curly braces, the equivalent of a namespace in most other C-style programming languages
+        // . => scoped variables, structs and functions are then called via . dot syntax
+        // also observe how this syntax is nearly identical to a struct's declaration
 
+scope teachingVariableDeclaration {
+    integer anInteger := 100
+    float aFloat := 200.00
+    string aString := "more examples are shown below fam"
+}
+
+teachingVariableDeclaration.anInteger // evaluates to 100
+teachingVariableDeclaration.anFloat // evaluates to 200.00
+teachingVariableDeclaration.anString // evaluates to "more examples are shown below fam"
 ```
 
 ## Types
@@ -74,7 +99,7 @@ boolean anExampleBoolean := TRUE
 string anExampleString := "if the act by which the death is caused is done with the intention of causing death"
 ```
 
-## Data structures
+## Data Structures
 
 ```yh
 // ----- DATA STRUCTURE -----
@@ -208,32 +233,76 @@ or // logical OR
 not // logical NOT
 ```
 
-## Control structures
+## Control Structures
 
 ```yh
 // ----- CONTROL STRUCTURE -----
-    // note that there are no loops in Yuho for obvious reasons
-    // the obvious reason is this => what purpose would there be in looping over an iterable structure when we are dealing with statutes
+    // note that there are NO LOOPS in Yuho for obvious reasons
+    // the obvious reason is this => what purpose would there be in looping over an iterable structure when we are dealing with statutes, there are no loops in statute definitions!
     // just for completeness, recursion and traversal functions used for iteration (map, fold, filter) are also NOT supported
     // higher-order functions ARE supported in theory, but please don't write them
+    // they often create odd side-effects especially when written by those with little experience in functional languages, and we want Yuho to be as idiot-proof as possible
 
 // --- CONDITIONALS ---
-    // 
+    // adhering to similar functional paradigms, Yuho provides for advanced pattern-matching capabilities as the one proper way to model conditional constructs with its match case constructs
+    // there are therefore NO if else if else constructs in Yuho
+    // this likewise mimicks the all-encompassing nature of statutory provisions, no exceptions can arise from Yuho lang and edge-cases are covered out of the box
 
+// MATCH CASE _
+    // match => declares the beginning of a match case construct within curly braces
+    // case => specifies each predicate case condition that could arise from a match construct
+    // := => delimits the relationship between a given case and its consequence
+    // consequence => follows every case and exception condition as the resulting expression of a given case predicate being fulfilled
+    // _ => catch-all fall-through default operator that executes when all other predicate case conditions fail to be met that MUST ALWAYS BE SPECIFIED to cover all edge cases
+    // pass => skips execution and evaluaton of the current block, the equivalent of pass in other programming languages like Python
+        // note that where a given fall-through default case has no code to evaluate, we just write pass (as seen below)
+    // also observe that we can directly assign the result of a match case construct to variables similar to other functional languages
 
+money currentBankAccount := $100,000.00
+
+boolean brokeOrNot := match anExampleMatchValue {
+    case currentBankAccount <= $200,000.00 := consequence TRUE
+    case currentBankAccount > $200,000.00 := consequence FALSE
+    case _ := consequence pass // since this is a boolean match statement, the _ case predicate in actuality will never run, so we leave the code as pass
+} // here brokeOrNot evaluates in the back-end to TRUE
 ```
 
 ## Functions
 
 ```yh
 // ----- FUNCTION -----
+    // <returnValueDatatype> func <functionName> ( <parameterDatatype(s)> <parameterName(s)> ) { <functionDefinitionBody> }  => declaration and definition of a named function, very similar to how C-style languages handle function definition syntax
+    // := => prefixes the function's return expression or value, equivalent to the return keyword in most other programming languages
+        // similar to other functional languages, there are NO void types in Yuho, every function MUST return an established or user-defined datatype
+    // though anonymous functions are theoretically supported in Yuho, we avoid them for the sake of simplicity, readability and clarity in function definition
 
+int func aSimpleComputation (int a, int b) {
+    := a + b // this is the return expression
+}
+
+float func aMoreComplexComputation (float c, float d, float e) {
+    f := 100.00
+    := c + d + e + f // this is the return expression
+}
 ```
 
 ## Testing
 
 ```yh
 // ----- TESTING -----
-    // assert => 
+    // assert => asserts that the following expression on the same line always evaluates to boolean TRUE, and throws an error during tranpilation if it evaluates instead to boolean FALSE
 
+// taking the function definition from before...
+
+scope test1 {
+
+    int func aSimpleComputation (int a, int b) { 
+        := a + b 
+    }
+
+    assert aSimpleComputation(1, 2) == 3 // evaluates to TRUE
+    assert aSimpleComputation(2, 3) == 5 // evaluates to TRUE
+    assert aSimpleComputation(3, 4) == 6 // evaluates to FALSE, so throws an error and Yuho program ends here
+
+}
 ```
