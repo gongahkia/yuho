@@ -1,6 +1,6 @@
 ![](https://img.shields.io/badge/yuho_1.0-WIP-orange)
 
-# `yuho`
+# `Yuho`
 
 Yuho is a functional domain-specific language providing a programmatic representation of Singapore Criminal Law.
 
@@ -14,8 +14,8 @@ Development is currently scoped by the following statutes as specified [here](do
 
 ## Documentation
 
-* [Grammer specification](grammer)
-* [Language specification](doc/syntax.md)
+* [Grammer verification](grammer)
+* [Language syntax specification](doc/syntax.md)
 * [Example](example)
 
 ## Usage

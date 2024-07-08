@@ -1,6 +1,12 @@
 fua
+
 * add rationale for Yuho lang from my pocket notebook, particuarly the section on yuho lang
+* create a yuho file explaining Yuho's syntax (sample.yh)
 * rework the entire ebnf file
+* rework the entire alloy file and ask gpt for help to write test cases
+* by the end of today, be cocksure of the syntactical capabilities of catala
+* learn haskell from scratch today to write an interpreter in it
+
 * three main products
   * 1. core YUHO lang syntax that lawyers and programmers will write in (.ebnf file => define syntax, .md file => explain and give examples, .yuho => actual yuho files to show yuho at work representing various statutes)
     * YUHO should be functional with all functional paradigms
