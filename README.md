@@ -8,18 +8,18 @@ Yuho is a functional domain-specific language providing a programmatic represent
 
 The law is innately complex, with statutes often calling for further human discernment. 
 
-In a bid to automate out inefficiency, many public systems incorporate programs *(written in languages like C, COBOL, Java, etc.)* that compute payments to be collected and disbursed, especially in the areas of income, housing and corporate tax. 
+In a bid to automate out inefficiency, many public systems incorporate [programs](https://youtu.be/jmHwAh_-IOU?si=f4DlP7pklN424kCw) *(written in languages like C, COBOL, Java, etc.)* that compute payments to be collected and disbursed, especially in the areas of income, housing and corporate tax. 
 
 However, these computations are often written by programmers who have little understanding of the actual legislation invoked to arrive at the given valuation. As such, the only way to ensure the correctness of these programs is through unit tests which must be calculated and handwritten by lawyers. Due to the aforementioned intricacies and many exceptions found in the law, the number of unit tests quickly skyrockets into the thousands. Moreover, inevitable modifications to existing legislation effectively mean these unit tests have to be rewritten multiple times, wasting many manhours. 
 
-Ultimately, the tedium of such a task means most programs in this vein fail the minimum requirements of sufficient unit testing, resulting in large-scale undertesting that causes costly failures.
+Ultimately, the tedium of such a task means most programs in this vein fail the minimum requirements of [sufficient unit testing](https://daedtech.com/unit-testing-enough/), resulting in large-scale undertesting that causes [costly failures](https://inria.hal.science/hal-02936606v1/document).
 
-Yuho combats these issues by providing a grammatically-validated syntax core for Singapore Criminal Law that presents all possible consequences for a given offence, whilst providing an assurance of logical correctness to reduce the number of unit tests that must be written for a given computation. Additionally, Yuho is designed to be exception-validated and language-agnostic, transpiling from a single formally-specified source of truth to multiple target outputs, encouraging the development of tools that leverage off Yuho's logical core.
+Yuho combats these issues by providing a [grammatically-validated](https://www.usna.edu/Users/cs/wcbrown/courses/F19SI413/lec/l07/lec.html) syntax core for Singapore Criminal Law that presents all possible consequences for a given offence, whilst providing an assurance of logical correctness to reduce the number of unit tests that must be written for a given computation. Additionally, Yuho is designed to be [exception-validated](https://www.reddit.com/r/learnjavascript/comments/y6663u/difference_between_input_validation_and_exception/) and [language-agnostic](https://softwareengineering.stackexchange.com/questions/28484/what-is-language-agnosticism-and-why-is-it-called-that), transpiling from a single formally-specified source of truth to multiple target outputs, encouraging the development of tools that leverage off Yuho's logical core.
 
 Getting into the specifics, Yuho provides the following three products.
 
 1. [Yuho](doc/syntax.md), a DSL made to be readable and codeable by lawyers
-2. [Formalised semantic](formal verification) for legal reasoning modelled after the syntactical patterns of the law
+2. [Formalised semantic](tests/) for legal reasoning modelled after the syntactical patterns of the law
 3. Transpiler to the following target outputs *(to be expanded on in the future)*
     * JavaScript (`.js`): browser simulations and extensions
     * R (`.r`): data modelling and visualisation
