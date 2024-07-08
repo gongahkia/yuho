@@ -4,7 +4,7 @@ fua
 * create a yuho file explaining Yuho's syntax (sample.yh)
 * rework the entire ebnf file
 * rework the entire alloy file and ask gpt for help to write test cases
-* by the end of today, be cocksure of the syntactical capabilities of catala
+
 * learn haskell from scratch today to write an interpreter in it
 
 * three main products

@@ -50,6 +50,8 @@ comment
     // := => provides a simultaneous immutable variable declaration and binding between a specified named variable identifier and its assigned value, wherein the value cannot be then reassigned or modified after its initial assignment
         // note that the datatype of any named variable is specified before the variable identifier similar to C++
         // every value in Yuho is therefore IMMUTABLE
+    // | => used to specify a UNION type in Yuho where the | pipe operator delimits the possible datatypes when a given variable has a value that is unspecified in current legislation and thus could be of multiple datatypes, most commonly paired with pass as below
+        // pass => aside from acting as a keyword that skips execution of a certain block, also functions as a special NULLABLE type (and value to itself) that represents the absence of a value, the equivalent of void or null in other programming languages
     // scope => declares the lexical scope of a given section of Yuho code for modularity within {} curly braces, the equivalent of a namespace in most other C-style programming languages
         // . => scoped variables, structs and functions are then called via . dot syntax
         // also observe how this syntax is nearly identical to a struct's declaration
@@ -58,11 +60,13 @@ scope teachingVariableDeclaration {
     integer anInteger := 100
     float aFloat := 200.00
     string aString := "more examples are shown below fam"
+    pass | money aPossiblyPassOrMoneyValue := pass
 }
 
 teachingVariableDeclaration.anInteger // evaluates to 100
 teachingVariableDeclaration.anFloat // evaluates to 200.00
 teachingVariableDeclaration.anString // evaluates to "more examples are shown below fam"
+teachingVariableDeclaration.aPossiblyPassOrMoneyValue // evaluates to pass
 ```
 
 ## Types
@@ -90,6 +94,7 @@ percent anExamplePercentage := 25% // this evaluates to 0.25
 money anExampleMoneyAmount := $12,000,298,322.28 // this evaluates to 12000298322.28
 date anExampleDate := 12-01-2020 // this evaluates to an integer dependant on the relative earliest date within the local scope
 duration anExampleDuration := 1 day // this evaluates to 1 day 0 month 0 year, which then evaluates to 1 day total
+duration anotherExampleDuration := 1 month // this evaluates to 0 day 1 month 0 year, which then evaluates to 30 days total
 
 // GENERIC PRIMITIVES
     // boolean => TRUE, FALSE
@@ -117,7 +122,8 @@ string anExampleString := "if the act by which the death is caused is done with 
         // note that the field value's datatype is specified before the field's named identifier
         // note that Yuho's struct named field identifiers themselves can be of any datatype and do not necessarily have to be a string
         // also note that structs are really a custom user-defined datatype which can then be called as any other datatype
-        // lastly observe that the last named field of the struct is also suffixed with a , comma similar to Go
+        // moreover note that we avoid repetition by only specifying the datatype of a struct's named field value ONCE in the struct definition and not in the instances of struct literals afterward (this logic applies for nested structs also!)
+        // lastly observe that the LAST named field of the struct is also suffixed with a , comma similar to Go
     // . => struct values are accessed via the dot syntax (and enum variants are called within the context of enums)
     // := => indicates the relationship between a specified named field and the immutable value assigned to it (meaning, therefore that struct fields are also immutable)
     // this flexible syntax allows for the following data structures to be implemented if necessary (examples included below)
