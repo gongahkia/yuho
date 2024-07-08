@@ -1,10 +1,6 @@
 fua
 
 * add rationale for Yuho lang from my pocket notebook, particuarly the section on yuho lang
-* create a yuho file explaining Yuho's syntax (sample.yh)
-* rework the entire ebnf file
-* rework the entire alloy file and ask gpt for help to write test cases
-
 * learn haskell from scratch today to write an interpreter in it
 
 * three main products
