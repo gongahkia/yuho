@@ -63,8 +63,8 @@ scope sampleTheft {
                 imprisonmentDuration := 10 year,
                 fine := pass,
                 supplementaryPunishment := "caning with not less than 3 strokes",
-            }
+            },
         },
-    }
+    },
 
 }
