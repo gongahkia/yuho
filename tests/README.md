@@ -1,3 +1,3 @@
-# formal verification
+# Formal verification
 
-* see https://alloytools.org/
+* see [alloytools.org](https://alloytools.org/)

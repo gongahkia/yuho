@@ -14,9 +14,10 @@ Development is currently scoped by the following statutes as specified [here](do
 
 ## Documentation
 
-* [Grammer verification](grammer)
-* [Language syntax specification](doc/syntax.md)
-* [Example](example/sampleTheft.yh)
+* [Grammer specification](grammer/)
+* [Formal verification](tests/)
+* [Language specification](doc/syntax.md)
+* [Examples](example/)
 
 ## Usage
 
