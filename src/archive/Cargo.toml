@@ -1,0 +1,3 @@
+[dependencies]
+nom = "7"
+rustyline = "8"
