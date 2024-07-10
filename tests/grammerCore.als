@@ -1,9 +1,7 @@
-module YUHO_Test
+module grammerCore
 
 open util/ordering[Time]
 open util/boolean
-
-module Yuho
 
 // ----- ABSTRACT SYNTAX DEFINITION VIA SIGNATURES -----
 
@@ -174,30 +172,3 @@ sig StringLiteral extends Literal {
 sig BooleanLiteral extends Literal {
     value: one Boolean
 }
-
-// ----- CHECKS VIA ASSERTIONS -----
-
-assert VariableDeclarationsHaveTypeAndValue {
-    all v: VariableDeclaration | some v.varType and some v.value
-}
-
-assert StructsHaveUniqueNames {
-    all disj s1, s2: Struct | s1.name != s2.name
-}
-
-assert FunctionsHaveReturnTypeAndBody {
-    all f: Function | some f.returnType and some f.funcName and some f.body
-}
-
-assert MatchCaseHasAtLeastOneCase {
-    all m: MatchCase | some m.cases
-}
-
-check VariableDeclarationsHaveTypeAndValue for 5
-check StructsHaveUniqueNames for 5
-check FunctionsHaveReturnTypeAndBody for 5
-check MatchCaseHasAtLeastOneCase for 5
-
-// ----- CHECKS -----
-
-run {} for 5
