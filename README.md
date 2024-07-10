@@ -30,10 +30,17 @@ Getting into the specifics, Yuho provides the following three products.
 
 1. [Yuho](doc/syntax.md), a DSL made to be readable and codeable by lawyers
 2. [Formalised semantic](tests/) for legal reasoning modelled after the syntactical patterns of the law
-3. [Transpiler](src/secondary/) to the following target outputs 
-    * JavaScript (`.js`): browser simulations and extensions
-    * R (`.r`): data modelling and visualisation
-    * F* (`.fs`): proof backends
+3. [Transpiler](src/secondary/) that transpiles to the below targets
+
+### Output formats
+
+| Target | Usage |
+| :--- | :--- |
+| JavaScript | browser simulations and extensions |
+| JSON | REST APIs |
+| R | data modelling and visualisation |
+| Alloy | formal verification |
+| F* | proof backends |
 
 ## Documentation
 
