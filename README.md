@@ -12,7 +12,7 @@
 
 # `Yuho`
 
-Yuho is a functional domain-specific language providing a programmatic representation of Singapore Criminal Law.
+Yuho is a domain-specific language providing a programmatic representation of Singapore Criminal Law.
 
 ## Rationale
 
