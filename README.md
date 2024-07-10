@@ -1,6 +1,9 @@
 > [!IMPORTANT]  
 > Yuho is not actively under development right now.  
 > This means language features are relatively set in stone.  
+> Also, note that there is currently only rudimentary support  
+> for transpilation of Yuho to other outputs.  
+> 
 > I will return to work on this in the future.  
 > 
 > *\- Gabriel* 
