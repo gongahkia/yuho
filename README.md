@@ -65,7 +65,7 @@ Yuho is open-source. Contribution guidelines are found at [CONTRIBUTING.md](admi
 
 ### Analogues
 
-Yuho takes inspiration from the following projects.
+Yuho takes much inspiration from the following projects.
 
 * [Catala](https://github.com/CatalaLang): Language syntax that explicitly mimicks logical structure of the Law, focused on general Socio-fiscal legislature in most jurisidictions.
 * [Natural L4](https://github.com/smucclaw/dsl): Language with an English-like syntax that transpiles to multiple targets, focused on codification of contracts and Singapore Contract Law.
