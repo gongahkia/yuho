@@ -1,0 +1,51 @@
+type Duration is null | {}
+type Money is null | {}
+type String is null | {}
+
+record Punishment {
+    imprisonmentDuration: Maybe<Duration>,
+    fine: Maybe<Money>,
+    supplementaryPunishment: Maybe<String>
+}
+
+record PunishmentForTheft {
+    ofGeneric: Maybe<Punishment>,
+    ofMotorVehicle: Maybe<Punishment>,
+    ofDwellingHouse: Maybe<Punishment>,
+    ofClerkOrServant: Maybe<Punishment>,
+    afterPreparationCausingDeath: Maybe<Punishment>
+}
+
+record Statute {
+    sectionNumber: int,
+    sectionDescription: string,
+    definition: string,
+    result: Maybe<PunishmentForTheft>
+}
+
+function createPunishment(imprisonment: Maybe<Duration>, fine: Maybe<Money>, supplementary: Maybe<String>) -> Punishment:
+    return { imprisonmentDuration: imprisonment, fine: fine, supplementaryPunishment: supplementary }
+
+function createPunishmentForTheft(p1: Punishment, p2: Punishment, p3: Punishment, p4: Punishment, p5: Punishment) -> PunishmentForTheft:
+    return {
+        ofGeneric: some(p1),
+        ofMotorVehicle: some(p2),
+        ofDwellingHouse: some(p3),
+        ofClerkOrServant: some(p4),
+        afterPreparationCausingDeath: some(p5)
+    }
+
+function createStatute(sectionNum: int, sectionDesc: string, def: string, result: PunishmentForTheft) -> Statute:
+    return { sectionNumber: sectionNum, sectionDescription: sectionDesc, definition: def, result: some(result) }
+
+function main() -> (Statute):
+    let p1 = createPunishment(some(null), some(null), some(null))
+    let p2 = createPunishment(some(null), some(null), some("A person convicted of an offence under this section shall, unless the court for special reasons thinks fit to order otherwise, be disqualified for such period as the court may order from the date of his release from imprisonment from holding or obtaining a driving licence under the Road Traffic Act 1961."))
+    let p3 = createPunishment(some(null), some(null), some(null))
+    let p4 = createPunishment(some(null), some(null), some(null))
+    let p5 = createPunishment(some(null), some(null), some("caning with not less than 3 strokes"))
+    let pft = createPunishmentForTheft(p1, p2, p3, p4, p5)
+    return createStatute(378, "Theft", "Whoever, intending to take dishonestly any movable property out of the possession of any person without that person’s consent, moves that property in order to such taking, is said to commit theft.", pft)
+
+void main():
+    let statute = main()

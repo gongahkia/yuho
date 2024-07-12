@@ -40,6 +40,7 @@ Getting into the specifics, Yuho provides the following three products.
 | JSON | REST APIs |
 | R | data modelling and visualisation |
 | Alloy | formal verification |
+| Whiley | decision logic |
 | F* | proof backends |
 
 ## Documentation
