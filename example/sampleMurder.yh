@@ -1,0 +1,49 @@
+/*
+Based off the following statutory provisions on murder
+    * Penal Code S300
+    * Penal Code S302
+*/
+
+scope sampleMurder {
+
+    // STRUCT DEFINITIONS
+
+    struct statute {
+        int sectionNumber,
+        string sectionDescription,
+        string definition,
+        punishmentForMurder result,
+    }
+
+    struct punishmentForMurder {
+        punishment ofGeneric,
+        punishment ofMurderWithDeathSentence,
+    }
+
+    punishment {
+        duration imprisonmentDuration,
+        pass | money fine,
+        pass | string supplementaryPunishment,
+    }
+
+    // STRUCT LITERALS
+
+    statute aStatuteOnMurder := {
+        sectionNumber := 300,
+        sectionDescription := "Murder",
+        definition := "Whoever causes death by doing an act with the intention of causing death, or with the intention of causing such bodily injury as is likely to cause death, or with the knowledge that he is likely by such act to cause death, commits the offence of murder.",
+        result := {
+            ofGeneric := {
+                imprisonmentDuration := life imprisonment,
+                fine := pass,
+                supplementaryPunishment := pass,
+            }, 
+            ofMurderWithDeathSentence := {
+                imprisonmentDuration := pass,
+                fine := pass,
+                supplementaryPunishment := "death penalty",
+            },
+        },
+    },
+
+}

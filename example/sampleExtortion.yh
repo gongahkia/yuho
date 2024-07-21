@@ -1,0 +1,56 @@
+/*
+Based off the following statutory provisions on extortion
+    * Penal Code S383
+    * Penal Code S384
+    * Penal Code S385
+*/
+
+scope sampleExtortion {
+
+    // STRUCT DEFINITIONS
+
+    struct statute {
+        int sectionNumber,
+        string sectionDescription,
+        string definition,
+        punishmentForExtortion result,
+    }
+
+    struct punishmentForExtortion {
+        punishment ofGeneric,
+        punishment withThreatToCauseDeath,
+        punishment withThreatToCauseGrievousHurt,
+    }
+
+    punishment {
+        duration imprisonmentDuration,
+        pass | money fine,
+        pass | string supplementaryPunishment,
+    }
+
+    // STRUCT LITERALS
+
+    statute aStatuteOnExtortion := {
+        sectionNumber := 383,
+        sectionDescription := "Extortion",
+        definition := "Whoever intentionally puts any person in fear of any injury to that person or to any other, and thereby dishonestly induces the person so put in fear to deliver to any person any property or valuable security, or anything signed or sealed which may be converted into a valuable security, commits extortion.",
+        result := {
+            ofGeneric := {
+                imprisonmentDuration := 3 year,
+                fine := pass,
+                supplementaryPunishment := pass,
+            }, 
+            withThreatToCauseDeath := {
+                imprisonmentDuration := 10 year,
+                fine := pass,
+                supplementaryPunishment := pass,
+            },
+            withThreatToCauseGrievousHurt := {
+                imprisonmentDuration := 7 year,
+                fine := pass,
+                supplementaryPunishment := pass,
+            },
+        },
+    },
+
+}

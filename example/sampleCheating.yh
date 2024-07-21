@@ -1,0 +1,49 @@
+/*
+Based off the following statutory provisions on cheating
+    * Penal Code S415
+    * Penal Code S416
+*/
+
+scope sampleCheating {
+
+    // STRUCT DEFINITIONS
+
+    struct statute {
+        int sectionNumber,
+        string sectionDescription,
+        string definition,
+        punishmentForCheating result,
+    }
+
+    struct punishmentForCheating {
+        punishment ofGeneric,
+        punishment ofPersonation,
+    }
+
+    punishment {
+        duration imprisonmentDuration,
+        pass | money fine,
+        pass | string supplementaryPunishment,
+    }
+
+    // STRUCT LITERALS
+
+    statute aStatuteOnCheating := {
+        sectionNumber := 415,
+        sectionDescription := "Cheating",
+        definition := "Whoever, by deceiving any person, fraudulently or dishonestly induces the person so deceived to deliver any property to any person, or to consent that any person shall retain any property, or intentionally induces the person so deceived to do or omit to do anything which he would not do or omit if he were not so deceived, and which act or omission causes or is likely to cause damage or harm to that person in body, mind, reputation, or property, is said to cheat.",
+        result := {
+            ofGeneric := {
+                imprisonmentDuration := 3 year,
+                fine := pass,
+                supplementaryPunishment := pass,
+            }, 
+            ofPersonation := {
+                imprisonmentDuration := 7 year,
+                fine := pass,
+                supplementaryPunishment := "A person convicted of cheating by personation shall be disqualified for such period as the court may order from holding any office of profit under the Government or from practicing any profession or carrying on any trade or business.",
+            },
+        },
+    },
+
+}
