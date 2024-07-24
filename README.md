@@ -41,6 +41,7 @@ Getting into the specifics, Yuho provides the following three products.
 | R | data modelling and visualisation |
 | Alloy | formal verification |
 | Whiley | decision logic |
+| Catala | decision logic |
 | F* | proof backends |
 
 ## Documentation
