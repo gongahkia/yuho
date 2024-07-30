@@ -45,6 +45,10 @@ config:
 	@curl -O https://www.antlr.org/download/antlr-4.9.2-complete.jar
 	@sudo mv antlr-4.9.2-complete.jar /usr/local/lib/
 
+lang:lsp/base
+	@cd lsp/base && chmod +x start-lsp.sh
+	@./start-lsp.sh
+
 clean:
 	@rm -rf .git .gitignore README.md
 

@@ -1,0 +1,10 @@
+{
+    "languageserver": {
+        "yuho": {
+            "command": "node",
+            "args": ["lsp/index.js"],
+            "filetypes": ["yuho"],
+            "rootPatterns": [".yuhoconfig"]
+        }
+    }
+}
