@@ -53,4 +53,4 @@
 
 ;; --- file association ---
 
-(add-to-list 'auto-mode-alist '("\\.yuho\\'" . yuho-mode))
+(add-to-list 'auto-mode-alist '("\\.yh\\'" . yuho-mode))
