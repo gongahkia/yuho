@@ -19,7 +19,7 @@
 
 ## Usage
 
-```sh
-npm install -g http-server
-http-server -p 8000
+```console
+$ npm install -g http-server
+$ http-server -p 8000
 ```
