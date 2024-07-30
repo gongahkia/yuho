@@ -1,0 +1,15 @@
+body {
+    background-color: #fbf1c7; /* Gruvbox light background */
+    color: #3c3836; /* Dark text color */
+}
+
+h1 {
+    color: #b57614; /* Gruvbox dark yellow */
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#mermaidContainer {
+    background-color: #f2e5bc; /* Slightly darker background for the diagram */
+    border: 2px solid #3c3836; /* Dark border */
+}

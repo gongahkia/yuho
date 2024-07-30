@@ -4,10 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yuho flowchart</title>
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css">
+    <title>Yuho Statute Visualiser</title>
+
     <script type="module">
+
         import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
         mermaid.initialize({ startOnLoad: true });
+
         async function loadMermaidDefinition() {
             const response = await fetch('output.mmd');
             const mermaidDefinition = await response.text();
@@ -15,12 +20,44 @@
             element.innerHTML = mermaidDefinition;
             mermaid.init(undefined, element);
         }
-        document.addEventListener('DOMContentLoaded', loadMermaidDefinition);
+
+        async function loadYuhoFile() {
+            const response = await fetch('example.yh'); 
+            const yhContent = await response.text();
+            const preElement = document.querySelector('#yuhoCode');
+            preElement.textContent = yhContent;
+        }
+
+        async function loadJSONFile() {
+            const response = await fetch('example.json'); 
+            const jsonContent = await response.text();
+            const preElement = document.querySelector('pre code.language-json');
+            preElement.textContent = jsonContent;
+            Prism.highlightElement(preElement);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadMermaidDefinition();
+            loadYuhoFile();
+            loadJSONFile(); 
+        });
+
     </script>
 </head>
 
-    <body>
-        <div id="mermaidContainer"></div>
-    </body>
+<body>
+    <h1 style="text-align:center">YUHO STATUTE VISUALISER</h1>
+    <p>Referencing <a href="https://sso.agc.gov.sg/Act/PC1871?ProvIds=P417-">Penal Code S378 - S383</a></p>
+    <hr>
+    <div id="mermaidContainer"></div>
+    <hr>
+    <p>This diagram was derived from this <i>Yuho</i> code</p>
+    <pre id='yuhoCode'></pre>
+    <p>which transpiled to the below <i>JSON</i>.</p>
+    <pre><code class="language-json"></code></pre>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+    <hr>
+</body>
 
 </html>
