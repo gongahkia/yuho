@@ -1,38 +1,28 @@
 graph TD
 
-    A[Statute: Theft (Section 378)] --> B[Definition: Whoever, intending to take dishonestly any movable property out of the possession of any person without that person’s consent, moves that property in order to such taking, is said to commit theft.]
-    
-    B --> C[Outcome: ofGeneric]
-    B --> D[Outcome: ofMotorVehicle]
-    B --> E[Outcome: ofDwellingHouse]
-    B --> F[Outcome: ofClerkOrServant]
-    B --> G[Outcome: afterPreparationCausingDeath]
+    A[Section 378] --> B[Statute: Theft] --> C[Definition: Whoever, intending to take dishonestly any movable property out of the possession of any person without that person’s consent, moves that property in order to such taking, is said to commit theft.]
 
-    C --> C1[Imprisonment Duration: 3 years]
-    C --> C2[Fine: None]
-    C --> C3[Supplementary Punishment: None]
-
-    D --> D1[Imprisonment Duration: 7 years]
-    D --> D2[Fine: None]
-    D --> D3[Supplementary Punishment: A person convicted of an offence under this section shall, unless the court for special reasons thinks fit to order otherwise, be disqualified for such period as the court may order from the date of his release from imprisonment from holding or obtaining a driving licence under the Road Traffic Act 1961.]
-
-    E --> E1[Imprisonment Duration: 7 years]
+    C --> D[Section 379] --> E[Result: ofGeneric]
+    E --> E1[Imprisonment Duration: 3 years]
     E --> E2[Fine: None]
     E --> E3[Supplementary Punishment: None]
 
-    F --> F1[Imprisonment Duration: 7 years]
-    F --> F2[Fine: None]
-    F --> F3[Supplementary Punishment: None]
-
-    G --> G1[Imprisonment Duration: 10 years]
+    C --> F[Section 380] --> G[Result: ofMotorVehicle]
+    G --> G1[Imprisonment Duration: 7 years]
     G --> G2[Fine: None]
-    G --> G3[Supplementary Punishment: Caning with not less than 3 strokes]
-    
-    %% Adding Subsections
-    subgraph "Subsections"
-        H1[Subsection A: General Theft] --> C1
-        H2[Subsection B: Vehicle Theft] --> D1
-        H3[Subsection C: House Theft] --> E1
-        H4[Subsection D: Clerk/Servant Theft] --> F1
-        H5[Subsection E: Death After Preparation] --> G1
-    end
+    G --> G3[Supplementary Punishment: A person convicted of an offence under this section shall, unless the court for special reasons thinks fit to order otherwise, be disqualified for such period as the court may order from the date of his release from imprisonment from holding or obtaining a driving licence under the Road Traffic Act 1961.]
+
+    C --> H[Section 381] --> I[Result: ofDwellingHouse]
+    I --> I1[Imprisonment Duration: 7 years]
+    I --> I2[Fine: None]
+    I --> I3[Supplementary Punishment: None]
+
+    C --> J[Section 382] --> K[Result: ofClerkOrServant]
+    K --> K1[Imprisonment Duration: 7 years]
+    K --> K2[Fine: None]
+    K --> K3[Supplementary Punishment: None]
+
+    C --> L[Section 383] --> M[Result: afterPreparationCausingDeath]
+    M --> M1[Imprisonment Duration: 10 years]
+    M --> M2[Fine: None]
+    M --> M3[Supplementary Punishment: Caning with not less than 3 strokes]
