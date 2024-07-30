@@ -3,7 +3,7 @@
         "yuho": {
             "command": "node",
             "args": ["../base/index.js"],
-            "filetypes": ["yuho"],
+            "filetypes": ["yh"],
             "rootPatterns": [".yuhoconfig"]
         }
     }
