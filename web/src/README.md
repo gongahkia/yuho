@@ -1,10 +1,20 @@
-# Transpiler
+# Transpilers `.yh` to `.mmd`
 
-Source code also found [here](../../src/secondary/yuhoToJSON).
+Source code can also be found here.
 
-## Transpile `.yh` to `.json`
+* [`yuho_to_json`](../../src/secondary/yuho_to_json)
+* [`json_to_mmd`](../../src/secondary/json_to_mmd)
 
-``` py
+Also, see the below.
+
+* [json.org](https://www.json.org/json-en.html)
+* [mermaid.js.org](https://mermaid.js.org/)
+
+## Usage  
+
+### 1. Transpile `.yh` to `.json`
+
+```console
 $ python<versionNumber> trans_json.py
 ```
 
@@ -12,12 +22,18 @@ $ python<versionNumber> trans_json.py
 * Transpiled `.json` files are in `./web/out/json`.
 * Valid `.json` files are in `./web/dep/json`.
 
-## Transpile `.json` to `.mmd`
+### 2. Transpile `.json` to `.mmd`
 
-> continue adding support here and add valid mmd files to be checked against
+```console
+$ python<versionNumber> trans_mmd.py
+```
 
-## Validation
+* Read `.json` files are in `./web/out/json`.
+* Transpiled `.mmd` files are in `./web/out/mmd`.
+* Valid `.mmd` files are in `./web/dep/mmd`.
 
-```py
+### 3. Validation
+
+```console
 $ python<versionNumber> validate.py
 ```

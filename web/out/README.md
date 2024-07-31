@@ -1,1 +1,4 @@
 # Transpiled output
+
+* `.json`
+* `.mmd`
