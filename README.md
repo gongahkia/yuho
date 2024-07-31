@@ -1,6 +1,7 @@
 > [!IMPORTANT]  
 > Yuho is not actively under development right now.  
-> This means language features are relatively set in stone.  
+> This means language features are relatively set in stone.
+>   
 > Also, note that there is currently only rudimentary support  
 > for transpilation of Yuho to other outputs.  
 > 
@@ -39,7 +40,8 @@ Getting into the specifics, Yuho provides the following four products.
 | :--- | :--- |
 | [JSON](src/secondary/yuho_to_json) | REST APIs |
 | [Mermaid](src/secondary/json_to_mmd) | diagrammatic representation |  
-| [JavaScript](src/secondary/yuhoToJavaScript) | browser simulations and extensions <br> :warning: *(DISCONTINUED, REPLACED BY JSON)* |
+| [JavaScript](src/secondary/yuhoToJavaScript) | :warning: *DISCONTINUED, REPLACED BY JSON* :warning: |
+| [HTML](src/secondary/yuho_json_mmd_to_html) | frontend display for learning purposes |  
 | [R](src/secondary/yuhoToR) | data modelling and visualisation |
 | [Alloy](src/secondary/yuhoToAlloy) | formal verification |
 | [Whiley](src/secondary/yuhoToWhiley) | decision logic |
