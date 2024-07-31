@@ -1,8 +1,5 @@
 # Frontend display
 
-> [!WARNING]
-> Incomplete and very experimental.   
-
 ## Goals
 
 * display evaluation of a statute *(situation -> fulfillment of predicates -> consequence)* as a flowchart
