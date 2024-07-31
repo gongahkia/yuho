@@ -1,2 +1,3 @@
 web/out/json/*.json
 web/out/mmd/*.mmd
+web/out/html/*.html

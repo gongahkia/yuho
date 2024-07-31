@@ -8,9 +8,7 @@ def create_html_file(base_name):
     html_template = f"""
 <!DOCTYPE html>
 <html lang="en">
-
     <head>
-
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="main.css">
@@ -24,64 +22,52 @@ def create_html_file(base_name):
                 margin: 0;
                 padding: 0;
             }}
-
             header {{
                 text-align: center;
                 position: relative;
                 padding: 20px;
             }}
-
             #github-link {{
                 position: absolute;
                 top: 20px;
                 right: 20px;
             }}
-
             #github-logo {{
                 width: 32px;
                 height: 32px;
             }}
-
             h1 {{
                 color: #b57614; 
                 margin-bottom: 10px;
             }}
-
             .center-text {{
                 margin: 0;
                 font-size: 1em;
                 color: #3c3836; 
             }}
-
             a {{
                 color: #b57614; 
                 text-decoration: none;
             }}
-
             a:hover {{
                 text-decoration: underline;
             }}
-
             main {{
                 padding: 20px;
             }}
-
             #mermaidContainer {{
                 background-color: #f2e5bc; 
                 border: 2px solid #3c3836; 
                 padding: 10px;
                 margin-bottom: 20px;
             }}
-
             section#code {{
                 margin-top: 20px;
             }}
-
             h2 {{
                 color: #b57614; 
                 margin-bottom: 10px;
             }}
-
             pre {{
                 background-color: #f2e5bc; 
                 border: 1px solid #3c3836; 
@@ -89,15 +75,12 @@ def create_html_file(base_name):
                 overflow: auto;
             }}
         </style>
-        
         <script type="module">
             import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
             mermaid.initialize({{ startOnLoad: true }});
-
             const mermaidFilePath = '../mmd/{base_name}.mmd';
             const yuhoFilePath = '../../dep/yh/{base_name}.yh';
             const jsonFilePath = '../json/{base_name}.json';
-
             async function loadMermaidDefinition() {{
                 const response = await fetch(mermaidFilePath);
                 const mermaidDefinition = await response.text();
@@ -105,14 +88,12 @@ def create_html_file(base_name):
                 element.innerHTML = mermaidDefinition;
                 mermaid.init(undefined, element);
             }}
-
             async function loadYuhoFile() {{
                 const response = await fetch(yuhoFilePath); 
                 const yhContent = await response.text();
                 const preElement = document.querySelector('#yuhoCode');
                 preElement.textContent = yhContent;
             }}
-
             async function loadJSONFile() {{
                 const response = await fetch(jsonFilePath); 
                 const jsonContent = await response.text();
@@ -120,18 +101,14 @@ def create_html_file(base_name):
                 preElement.textContent = jsonContent;
                 Prism.highlightElement(preElement);
             }}
-
             document.addEventListener('DOMContentLoaded', () => {{
                 loadMermaidDefinition();
                 loadYuhoFile();
                 loadJSONFile(); 
             }});
         </script>
-
     </head>
-
     <body>
-
         <header>
             <h1>Yuho Statute Visualiser</h1>
             <p class="center-text">Referencing <a href="https://sso.agc.gov.sg/Act/PC1871">Penal Code 1871</a></p>
@@ -139,7 +116,6 @@ def create_html_file(base_name):
                 <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub" id="github-logo">
             </a>
         </header>
-
         <main>
             <section id="diagram">
                 <div id="mermaidContainer"></div>
@@ -151,14 +127,12 @@ def create_html_file(base_name):
                 <pre><code class="language-json"></code></pre>
             </section>
         </main>
-
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
-
     </body>
-
 </html>
 """
+
     file_name = f"../out/html/{base_name}.html"
     with open(file_name, "w") as file:
         file.write(html_template)
@@ -169,7 +143,7 @@ def main():
     index_html_file_names = ["theft", "cheating", "murder", "extortion", "trespass"]
     for file_name in index_html_file_names:
         create_html_file(file_name)
-        print(f"{COLOR_GREEN}Finished writing {file_name}{COLOR_RESET}")
+        print(f"{COLOR_GREEN}Finished writing ../out/html/{file_name}.html{COLOR_RESET}")
 
 if __name__ == "__main__":
     main()

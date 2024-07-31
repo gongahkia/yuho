@@ -53,6 +53,30 @@ def validate_mmd_files(dep_mmd_dir, out_mmd_dir):
         if file_name not in dep_mmd_files:
             print(f"{file_name}: {COLOR_RED}File not found in dependency directory{COLOR_RESET}")
 
+def validate_html_files(dep_html_dir, out_html_dir):
+    print(f"{COLOR_CYAN}~ HTML FILES ~{COLOR_RESET}")
+    dep_html_files = set(f for f in os.listdir(dep_html_dir) if f.endswith('.html'))
+    out_html_files = set(f for f in os.listdir(out_html_dir) if f.endswith('.html'))
+    for file_name in dep_html_files:
+        dep_file_path = os.path.join(dep_html_dir, file_name)
+        if file_name in out_html_files:
+            out_file_path = os.path.join(out_html_dir, file_name)
+            try:
+                with open(dep_file_path, 'r') as dep_file, open(out_file_path, 'r') as out_file:
+                    dep_content = dep_file.read()
+                    out_content = out_file.read()
+                    if dep_content == out_content:
+                        print(f"{file_name}: {COLOR_GREEN}Match{COLOR_RESET}")
+                    else:
+                        print(f"{file_name}: {COLOR_RED}Mismatch{COLOR_RESET}")
+            except Exception as e:
+                print(f"{file_name}: {COLOR_RED}Error - {e}{COLOR_RESET}")
+        else:
+            print(f"{file_name}: {COLOR_RED}File not found in output directory{COLOR_RESET}")
+    for file_name in out_html_files:
+        if file_name not in dep_html_files:
+            print(f"{file_name}: {COLOR_RED}File not found in dependency directory{COLOR_RESET}")
+
 # ----- MAIN EXECUTION CODE -----
 
 if __name__ == "__main__":
@@ -60,5 +84,8 @@ if __name__ == "__main__":
     out_json_dir = os.path.join("..", "out", "json")
     dep_mmd_dir = os.path.join("..", "dep", "mmd")
     out_mmd_dir = os.path.join("..", "out", "mmd")
+    dep_html_dir = os.path.join("..", "dep", "html")
+    out_html_dir = os.path.join("..", "out", "html")
     validate_json_files(dep_json_dir, out_json_dir)
     validate_mmd_files(dep_mmd_dir, out_mmd_dir)
+    validate_html_files(dep_html_dir, out_html_dir)
