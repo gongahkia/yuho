@@ -34,15 +34,15 @@ Getting into the specifics, Yuho provides the following three products.
 
 ### Output formats
 
-| Target | Usage |
+| Target | Usage | 
 | :--- | :--- |
-| JavaScript | browser simulations and extensions |
-| JSON | REST APIs |
-| R | data modelling and visualisation |
-| Alloy | formal verification |
-| Whiley | decision logic |
-| Catala | decision logic |
-| F* | proof backends |
+| [JSON](./web) | REST APIs |
+| [JavaScript](src/secondary/yuhoToJavaScript) | *(now deprecated, see JSON)* browser simulations and extensions |
+| [R](src/secondary/yuhoToR) | data modelling and visualisation |
+| [Alloy](src/secondary/yuhoToAlloy) | formal verification |
+| [Whiley](src/secondary/yuhoToWhiley) | decision logic |
+| [Catala](src/secondary/yuhoToCatala) | decision logic |
+| [F*](src/secondary/yuhoToFStar) | proof backends |
 
 ## Documentation
 
