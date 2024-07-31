@@ -12,7 +12,7 @@ $ python<versionNumber> trans.py
 
 ## Transpile `.json` to `.mmd`
 
-> continue adding support here
+> continue adding support here and add valid mmd files to be checked against
 
 ## Validation
 
