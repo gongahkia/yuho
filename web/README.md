@@ -3,6 +3,9 @@
 
 # Frontend display
 
+* Transpiler logic can be found [here](src)
+* Frontend logic can be found [here](front)
+
 ## Goals
 
 * display evaluation of a statute *(situation -> fulfillment of predicates -> consequence)* as a flowchart
