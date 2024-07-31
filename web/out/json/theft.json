@@ -27,31 +27,6 @@
             "imprisonmentDuration": "10 year",
             "fine": null,
             "supplementaryPunishment": null
-        },
-        "ofMurderWithDeathSentence": {
-            "imprisonmentDuration": null,
-            "fine": null,
-            "supplementaryPunishment": null
-        },
-        "ofPersonation": {
-            "imprisonmentDuration": null,
-            "fine": null,
-            "supplementaryPunishment": null
-        },
-        "withThreatToCauseDeath": {
-            "imprisonmentDuration": null,
-            "fine": null,
-            "supplementaryPunishment": null
-        },
-        "withThreatToCauseGrievousHurt": {
-            "imprisonmentDuration": null,
-            "fine": null,
-            "supplementaryPunishment": null
-        },
-        "ofHouseTrespass": {
-            "imprisonmentDuration": null,
-            "fine": null,
-            "supplementaryPunishment": null
         }
     }
 }
