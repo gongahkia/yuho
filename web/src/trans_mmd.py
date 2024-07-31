@@ -10,8 +10,8 @@ def parse_json_to_mmd(json_data):
     result = json_data.get("result", {})
 
     mmd_lines = [
-        f"graph TD",
-        f"    A[Section {section_number}] --> B[Statute: {section_description}] --> C[Definition: {definition}]"
+        f"graph TD\n",
+        f"    A[Section {section_number}] --> B[Statute: {section_description}] --> C[Definition: {definition}]\n"
     ]
 
     result_index = 0
