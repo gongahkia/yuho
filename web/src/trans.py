@@ -44,11 +44,11 @@ def parse_yuho_to_json(yuho_data):
 
 def main():
     yuho_files = [
-        ('dep/yh/cheating.yh', 'out/json/cheating.json'),
-        ('dep/yh/murder.yh', 'out/json/murder.json'),
-        ('dep/yh/theft.yh', 'out/json/theft.json'),
-        ('dep/yh/extortion.yh', 'out/json/extortion.json'),
-        ('dep/yh/trespass.yh', 'out/json/trespass.json')  
+        ('../dep/yh/cheating.yh', '../out/json/cheating.json'),
+        ('../dep/yh/murder.yh', '../out/json/murder.json'),
+        ('../dep/yh/theft.yh', '../out/json/theft.json'),
+        ('../dep/yh/extortion.yh', '../out/json/extortion.json'),
+        ('../dep/yh/trespass.yh', '../out/json/trespass.json')  
     ]
     for yuho_file_path, write_file_path in yuho_files:
         yuho_data = read_yuho_file(yuho_file_path)

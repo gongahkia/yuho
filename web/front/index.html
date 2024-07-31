@@ -13,9 +13,9 @@
         import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
         mermaid.initialize({ startOnLoad: true });
 
-        const mermaidFilePath = 'dep/mmd/theft.mmd';
-        const yuhoFilePath = 'dep/yh/theft.yh';
-        const jsonFilePath = 'dep/json/theft.json';
+        const mermaidFilePath = '../dep/mmd/theft.mmd';
+        const yuhoFilePath = '../dep/yh/theft.yh';
+        const jsonFilePath = '../dep/json/theft.json';
 
         async function loadMermaidDefinition() {
             const response = await fetch(mermaidFilePath);
