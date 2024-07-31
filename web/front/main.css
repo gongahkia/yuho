@@ -1,15 +1,71 @@
 body {
     background-color: #fbf1c7; /* Gruvbox light background */
     color: #3c3836; /* Dark text color */
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    text-align: center;
+    position: relative;
+    padding: 20px;
+}
+
+#github-link {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+#github-logo {
+    width: 32px;
+    height: 32px;
 }
 
 h1 {
     color: #b57614; /* Gruvbox dark yellow */
-    text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
+}
+
+.center-text {
+    margin: 0;
+    font-size: 1em;
+    color: #3c3836; /* Dark text color */
+}
+
+a {
+    color: #b57614; /* Gruvbox dark yellow */
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+main {
+    padding: 20px;
 }
 
 #mermaidContainer {
     background-color: #f2e5bc; /* Slightly darker background for the diagram */
     border: 2px solid #3c3836; /* Dark border */
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+section#code {
+    margin-top: 20px;
+}
+
+h2 {
+    color: #b57614; /* Gruvbox dark yellow */
+    margin-bottom: 10px;
+}
+
+pre {
+    background-color: #f2e5bc; /* Slightly darker background for the code */
+    border: 1px solid #3c3836; /* Dark border */
+    padding: 10px;
+    overflow: auto;
 }

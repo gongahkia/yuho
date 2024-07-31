@@ -1,67 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="main.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css">
-    <title>Yuho Statute Visualiser</title>
+    <head>
 
-    <script type="module">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="main.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css">
+        <title>Yuho Statute Visualiser</title>
 
-        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
-        mermaid.initialize({ startOnLoad: true });
+        <script type="module">
+            import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+            mermaid.initialize({ startOnLoad: true });
 
-        const mermaidFilePath = '../dep/mmd/theft.mmd';
-        const yuhoFilePath = '../dep/yh/theft.yh';
-        const jsonFilePath = '../dep/json/theft.json';
+            const mermaidFilePath = '../dep/mmd/theft.mmd';
+            const yuhoFilePath = '../dep/yh/theft.yh';
+            const jsonFilePath = '../dep/json/theft.json';
 
-        async function loadMermaidDefinition() {
-            const response = await fetch(mermaidFilePath);
-            const mermaidDefinition = await response.text();
-            const element = document.getElementById('mermaidContainer');
-            element.innerHTML = mermaidDefinition;
-            mermaid.init(undefined, element);
-        }
+            async function loadMermaidDefinition() {
+                const response = await fetch(mermaidFilePath);
+                const mermaidDefinition = await response.text();
+                const element = document.getElementById('mermaidContainer');
+                element.innerHTML = mermaidDefinition;
+                mermaid.init(undefined, element);
+            }
 
-        async function loadYuhoFile() {
-            const response = await fetch(yuhoFilePath); 
-            const yhContent = await response.text();
-            const preElement = document.querySelector('#yuhoCode');
-            preElement.textContent = yhContent;
-        }
+            async function loadYuhoFile() {
+                const response = await fetch(yuhoFilePath); 
+                const yhContent = await response.text();
+                const preElement = document.querySelector('#yuhoCode');
+                preElement.textContent = yhContent;
+            }
 
-        async function loadJSONFile() {
-            const response = await fetch(jsonFilePath); 
-            const jsonContent = await response.text();
-            const preElement = document.querySelector('pre code.language-json');
-            preElement.textContent = jsonContent;
-            Prism.highlightElement(preElement);
-        }
+            async function loadJSONFile() {
+                const response = await fetch(jsonFilePath); 
+                const jsonContent = await response.text();
+                const preElement = document.querySelector('pre code.language-json');
+                preElement.textContent = jsonContent;
+                Prism.highlightElement(preElement);
+            }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            loadMermaidDefinition();
-            loadYuhoFile();
-            loadJSONFile(); 
-        });
+            document.addEventListener('DOMContentLoaded', () => {
+                loadMermaidDefinition();
+                loadYuhoFile();
+                loadJSONFile(); 
+            });
+        </script>
 
-    </script>
-</head>
+    </head>
 
-<body>
-    <h1 style="text-align:center">YUHO STATUTE VISUALISER</h1>
-    <p>Referencing <a href="https://sso.agc.gov.sg/Act/PC1871?ProvIds=P417-">Penal Code S378 - S383</a></p>
-    <hr>
-    <div id="mermaidContainer"></div>
-    <hr>
-    <p>This diagram was derived from this <i>Yuho</i> code</p>
-    <pre id='yuhoCode'></pre>
-    <p>which transpiled to the below <i>JSON</i>.</p>
-    <pre><code class="language-json"></code></pre>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
-    <hr>
-</body>
+    <body>
+
+        <header>
+            <h1>Yuho Statute Visualiser</h1>
+            <p class="center-text">Referencing <a href="https://sso.agc.gov.sg/Act/PC1871">Penal Code 1871</a></p>
+            <a href="https://github.com/gongahkia" target="_blank" id="github-link">
+                <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub" id="github-logo">
+            </a>
+        </header>
+
+        <main>
+            <section id="diagram">
+                <div id="mermaidContainer"></div>
+            </section>
+            <section id="code">
+                <h2>Yuho Code</h2>
+                <pre id='yuhoCode'></pre>
+                <h2>Transpiled JSON</h2>
+                <pre><code class="language-json"></code></pre>
+            </section>
+        </main>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+
+    </body>
 
 </html>
