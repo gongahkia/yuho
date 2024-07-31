@@ -19,14 +19,14 @@ def validate_json_files(dep_json_dir, out_json_dir):
         dep_data = read_json(dep_file_path)
         out_data = read_json(out_file_path)
         if dep_data == out_data:
-            print(f"{COLOR_GREEN}{file_name}: Match{COLOR_RESET}")
+            print(f"{file_name}: {COLOR_GREEN}Match{COLOR_RESET}")
         else:
-            print(f"{COLOR_RED}{file_name}: Mismatch{COLOR_RESET}")
+            print(f"{file_name}: {COLOR_RED}Mismatch{COLOR_RESET}")
 
 
 # ----- MAIN EXECUTION CODE -----
 
 if __name__ == "__main__":
     dep_json_dir = os.path.join("dep", "json")
-    out_json_dir = "out"
+    out_json_dir = os.path.join("out", "json")
     validate_json_files(dep_json_dir, out_json_dir)
