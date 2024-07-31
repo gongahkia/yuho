@@ -1,4 +1,4 @@
 > [!CAUTION]
 > Deprecated and discontinued.
 >   
-> See [JSON](../../web) for active support.  
+> See [JSON](../../../web) for active support.  
