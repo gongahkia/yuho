@@ -1,30 +1,30 @@
 {
-    "sectionNumber": 378,
-    "sectionDescription": "Theft",
-    "definition": "Whoever, intending to take dishonestly any movable property out of the possession of any person without that person\u2019s consent, moves that property in order to such taking, is said to commit theft.",
+    "sectionNumber": 441,
+    "sectionDescription": "Criminal Trespass",
+    "definition": "Whoever enters into or upon property in the possession of another with intent to commit an offence or to intimidate, insult or annoy any person in possession of such property, or having lawfully entered into or upon such property, unlawfully remains there with intent thereby to intimidate, insult or annoy any such person, or with intent to commit an offence, is said to commit 'criminal trespass'.",
     "result": {
         "ofGeneric": {
-            "imprisonmentDuration": "3 year",
+            "imprisonmentDuration": "3 month",
             "fine": null,
             "supplementaryPunishment": null
         },
         "ofMotorVehicle": {
-            "imprisonmentDuration": "7 year",
+            "imprisonmentDuration": null,
             "fine": null,
             "supplementaryPunishment": null
         },
         "ofDwellingHouse": {
-            "imprisonmentDuration": "7 year",
+            "imprisonmentDuration": null,
             "fine": null,
             "supplementaryPunishment": null
         },
         "ofClerkOrServant": {
-            "imprisonmentDuration": "7 year",
+            "imprisonmentDuration": null,
             "fine": null,
             "supplementaryPunishment": null
         },
         "afterPreparationCausingDeath": {
-            "imprisonmentDuration": "10 year",
+            "imprisonmentDuration": null,
             "fine": null,
             "supplementaryPunishment": null
         },
@@ -49,7 +49,7 @@
             "supplementaryPunishment": null
         },
         "ofHouseTrespass": {
-            "imprisonmentDuration": null,
+            "imprisonmentDuration": "1 year",
             "fine": null,
             "supplementaryPunishment": null
         }
