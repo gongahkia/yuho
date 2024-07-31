@@ -1,5 +1,7 @@
 # Transpiler
 
+Source code also found [here](../../src/secondary/yuhoToJSON).
+
 ## Transpile `.yh` to `.json`
 
 ``` py
