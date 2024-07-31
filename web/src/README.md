@@ -5,7 +5,7 @@ Source code also found [here](../../src/secondary/yuhoToJSON).
 ## Transpile `.yh` to `.json`
 
 ``` py
-$ python<versionNumber> trans.py
+$ python<versionNumber> trans_json.py
 ```
 
 * Read `.yh` files are in `./web/dep/yh`.

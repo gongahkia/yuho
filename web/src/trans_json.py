@@ -3,6 +3,9 @@
 import re
 import json
 
+COLOR_GREEN = '\033[92m'
+COLOR_RESET = '\033[0m'
+
 def read_yuho_file(file_path):
     with open(file_path, 'r') as file:
         return file.read()
@@ -56,7 +59,7 @@ def main():
         json_string = json.dumps(json_output, indent=4)
         with open(write_file_path, 'w') as json_file:
             json_file.write(json_string)
-        print(f'Finished writing {write_file_path}')
+        print(f"{COLOR_GREEN}Finished writing {write_file_path}{COLOR_RESET}")
 
 if __name__ == "__main__":
     main()
