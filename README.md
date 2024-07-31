@@ -37,7 +37,7 @@ Getting into the specifics, Yuho provides the following three products.
 | Target | Usage | 
 | :--- | :--- |
 | [JSON](./web) | REST APIs |
-| [JavaScript](src/secondary/yuhoToJavaScript) | *(now deprecated, see JSON)* browser simulations and extensions |
+| [JavaScript](src/secondary/yuhoToJavaScript) | browser simulations and extensions <br> :warning: *(DISCONTINUED, REPLACED BY JSON)* |
 | [R](src/secondary/yuhoToR) | data modelling and visualisation |
 | [Alloy](src/secondary/yuhoToAlloy) | formal verification |
 | [Whiley](src/secondary/yuhoToWhiley) | decision logic |
