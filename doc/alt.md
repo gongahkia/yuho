@@ -1,12 +1,11 @@
 # Alternative rationale for `Yuho`
 
 > [!NOTE]  
-> Reasoning here is nearly  
-> a carbon copy of Catala's  
-> rationale.
+> Reasoning here is nearly a carbon  
+> copy of Catala's rationale.
 >  
-> This is now outdated and for  
-> archival purposes.
+> This is now outdated and stored here  
+> for archival purposes.
 
 In a bid to automate out inefficiency, many public systems incorporate [programs](https://youtu.be/jmHwAh_-IOU?si=f4DlP7pklN424kCw) *(written in languages like C, COBOL, Java, etc.)* that compute payments to be collected and disbursed, especially in the areas of income, housing and corporate tax. 
 
