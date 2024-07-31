@@ -10,10 +10,6 @@
   * display how different statutes relate to each other
 * live editor that shows how mermaid flowchart fluxes as `yuho` code edited
 
-## Screenshot
-
-![](asset/screenshot1.png)
-
 ## Usage
 
 ```console
@@ -21,3 +17,7 @@ $ cd front
 $ npm install -g http-server
 $ http-server -p 8000
 ```
+
+## Screenshot
+
+![](asset/screenshot1.png)

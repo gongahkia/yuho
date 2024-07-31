@@ -1,7 +1,5 @@
 # Transpiler
 
-Python is a dependancy. *(duh)*
-
 ## Transpile `.yh` to `.json`
 
 ``` py
