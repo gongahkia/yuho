@@ -17,6 +17,13 @@
 
 ![](asset/screenshot1.png)
 
+## Validation
+
+```py
+$ python<versionNumber> parse.py
+$ python<versionNumber> validate.py
+```
+
 ## Usage
 
 ```console

@@ -36,13 +36,15 @@ def parse_yuho_to_json(yuho_data):
 # ----- EXECUTION CODE -----
 
 def main():
-    yuho_file_path = 'example.yh'
+    yuho_file_path = 'dep/yh/theft.yh'
+    write_file_path = 'out/theft.json'
     yuho_data = read_yuho_file(yuho_file_path)
     json_output = parse_yuho_to_json(yuho_data)
     json_string = json.dumps(json_output, indent=4)
-    with open('example.json', 'w') as json_file:
+    with open(write_file_path, 'w') as json_file:
         json_file.write(json_string)
-    print(json_string)
+    # print(json_string)
+    print('finished writing to json file')
 
 if __name__ == "__main__":
     main()

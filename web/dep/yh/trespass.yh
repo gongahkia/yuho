@@ -1,0 +1,49 @@
+/*
+Based off the following statutory provisions on criminal trespass
+    * Penal Code S441
+    * Penal Code S442
+*/
+
+scope sampleCriminalTrespass {
+
+    // STRUCT DEFINITIONS
+
+    struct statute {
+        int sectionNumber,
+        string sectionDescription,
+        string definition,
+        punishmentForTrespass result,
+    }
+
+    struct punishmentForTrespass {
+        punishment ofGeneric,
+        punishment ofHouseTrespass,
+    }
+
+    punishment {
+        duration imprisonmentDuration,
+        pass | money fine,
+        pass | string supplementaryPunishment,
+    }
+
+    // STRUCT LITERALS
+
+    statute aStatuteOnCriminalTrespass := {
+        sectionNumber := 441,
+        sectionDescription := "Criminal Trespass",
+        definition := "Whoever enters into or upon property in the possession of another with intent to commit an offence or to intimidate, insult or annoy any person in possession of such property, or having lawfully entered into or upon such property, unlawfully remains there with intent thereby to intimidate, insult or annoy any such person, or with intent to commit an offence, is said to commit 'criminal trespass'.",
+        result := {
+            ofGeneric := {
+                imprisonmentDuration := 3 month,
+                fine := pass,
+                supplementaryPunishment := pass,
+            },
+            ofHouseTrespass := {
+                imprisonmentDuration := 1 year,
+                fine := pass,
+                supplementaryPunishment := pass,
+            },
+        },
+    },
+
+}
