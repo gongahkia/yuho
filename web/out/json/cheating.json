@@ -8,50 +8,10 @@
             "fine": null,
             "supplementaryPunishment": null
         },
-        "ofMotorVehicle": {
-            "imprisonmentDuration": null,
-            "fine": null,
-            "supplementaryPunishment": null
-        },
-        "ofDwellingHouse": {
-            "imprisonmentDuration": null,
-            "fine": null,
-            "supplementaryPunishment": null
-        },
-        "ofClerkOrServant": {
-            "imprisonmentDuration": null,
-            "fine": null,
-            "supplementaryPunishment": null
-        },
-        "afterPreparationCausingDeath": {
-            "imprisonmentDuration": null,
-            "fine": null,
-            "supplementaryPunishment": null
-        },
-        "ofMurderWithDeathSentence": {
-            "imprisonmentDuration": null,
-            "fine": null,
-            "supplementaryPunishment": null
-        },
         "ofPersonation": {
             "imprisonmentDuration": "7 year",
             "fine": null,
-            "supplementaryPunishment": null
-        },
-        "withThreatToCauseDeath": {
-            "imprisonmentDuration": null,
-            "fine": null,
-            "supplementaryPunishment": null
-        },
-        "withThreatToCauseGrievousHurt": {
-            "imprisonmentDuration": null,
-            "fine": null,
-            "supplementaryPunishment": null
-        },
-        "ofHouseTrespass": {
-            "imprisonmentDuration": null,
-            "fine": null,
-            "supplementaryPunishment": null
+            "supplementaryPunishment": "A person convicted of cheating by personation shall be disqualified for such period as the court may order from holding any office of profit under the Government or from practicing any profession or carrying on any trade or business."
         }
     }
 }

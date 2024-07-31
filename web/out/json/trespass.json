@@ -8,46 +8,6 @@
             "fine": null,
             "supplementaryPunishment": null
         },
-        "ofMotorVehicle": {
-            "imprisonmentDuration": null,
-            "fine": null,
-            "supplementaryPunishment": null
-        },
-        "ofDwellingHouse": {
-            "imprisonmentDuration": null,
-            "fine": null,
-            "supplementaryPunishment": null
-        },
-        "ofClerkOrServant": {
-            "imprisonmentDuration": null,
-            "fine": null,
-            "supplementaryPunishment": null
-        },
-        "afterPreparationCausingDeath": {
-            "imprisonmentDuration": null,
-            "fine": null,
-            "supplementaryPunishment": null
-        },
-        "ofMurderWithDeathSentence": {
-            "imprisonmentDuration": null,
-            "fine": null,
-            "supplementaryPunishment": null
-        },
-        "ofPersonation": {
-            "imprisonmentDuration": null,
-            "fine": null,
-            "supplementaryPunishment": null
-        },
-        "withThreatToCauseDeath": {
-            "imprisonmentDuration": null,
-            "fine": null,
-            "supplementaryPunishment": null
-        },
-        "withThreatToCauseGrievousHurt": {
-            "imprisonmentDuration": null,
-            "fine": null,
-            "supplementaryPunishment": null
-        },
         "ofHouseTrespass": {
             "imprisonmentDuration": "1 year",
             "fine": null,

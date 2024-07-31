@@ -11,7 +11,7 @@
         "ofMotorVehicle": {
             "imprisonmentDuration": "7 year",
             "fine": null,
-            "supplementaryPunishment": null
+            "supplementaryPunishment": "A person convicted of an offence under this section shall, unless the court for special reasons thinks fit to order otherwise, be disqualified for such period as the court may order from the date of his release from imprisonment from holding or obtaining a driving licence under the Road Traffic Act 1961."
         },
         "ofDwellingHouse": {
             "imprisonmentDuration": "7 year",
@@ -26,7 +26,7 @@
         "afterPreparationCausingDeath": {
             "imprisonmentDuration": "10 year",
             "fine": null,
-            "supplementaryPunishment": null
+            "supplementaryPunishment": "caning with not less than 3 strokes"
         }
     }
 }
