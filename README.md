@@ -37,7 +37,8 @@ Getting into the specifics, Yuho provides the following four products.
 
 | Target | Usage | 
 | :--- | :--- |
-| [JSON](./web) | REST APIs |
+| [JSON](src/secondary/yuho_to_json) | REST APIs |
+| [Mermaid](src/secondary/json_to_mmd) | diagrammatic representation |  
 | [JavaScript](src/secondary/yuhoToJavaScript) | browser simulations and extensions <br> :warning: *(DISCONTINUED, REPLACED BY JSON)* |
 | [R](src/secondary/yuhoToR) | data modelling and visualisation |
 | [Alloy](src/secondary/yuhoToAlloy) | formal verification |
