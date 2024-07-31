@@ -1,3 +1,6 @@
+> [!NOTE]  
+> WIP
+
 # Frontend display
 
 ## Goals
