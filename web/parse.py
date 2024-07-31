@@ -1,3 +1,5 @@
+# HELL YEAH IT WORKS
+
 import re
 import json
 
@@ -6,15 +8,12 @@ def read_yuho_file(file_path):
         return file.read()
 
 def parse_yuho_to_json(yuho_data):
-    """Parses YH data and converts it to JSON format."""
-    
-    # Extract section number, description, and definition
+
     section_number = re.search(r'sectionNumber\s*:=\s*(\d+)', yuho_data).group(1)
     section_description = re.search(r'sectionDescription\s*:=\s*"(.*?)"', yuho_data).group(1)
     definition = re.search(r'definition\s*:=\s*"(.*?)"', yuho_data).group(1)
-
-    # Extract all punishment types dynamically
     result = {}
+
     punishment_pattern = re.compile(
         r'\b(\w+)\s*:=\s*{\s*imprisonmentDuration\s*:=\s*(\d+\s*year|life imprisonment|pass|[\w\s]+)\s*.*?fine\s*:=\s*(pass|money)\s*.*?supplementaryPunishment\s*:=\s*(pass|"(.*?)")', 
         re.DOTALL
@@ -26,14 +25,12 @@ def parse_yuho_to_json(yuho_data):
         imprisonment_duration = punishment[1].strip()
         fine = None if punishment[2] == "pass" else punishment[2]
         supplementary_punishment = None if punishment[3] == "pass" else punishment[3].strip().strip('"')
-
         result[punishment_name] = {
             "imprisonmentDuration": imprisonment_duration if imprisonment_duration != "pass" else None,
             "fine": fine,
             "supplementaryPunishment": supplementary_punishment if supplementary_punishment else None
         }
 
-    # Construct the final JSON object
     output_json = {
         "sectionNumber": int(section_number),
         "sectionDescription": section_description,
@@ -51,7 +48,7 @@ def main():
         ('dep/yh/murder.yh', 'out/json/murder.json'),
         ('dep/yh/theft.yh', 'out/json/theft.json'),
         ('dep/yh/extortion.yh', 'out/json/extortion.json'),
-        ('dep/yh/trespass.yh', 'out/json/trespass.json')  # Added trespass file
+        ('dep/yh/trespass.yh', 'out/json/trespass.json')  
     ]
     for yuho_file_path, write_file_path in yuho_files:
         yuho_data = read_yuho_file(yuho_file_path)
