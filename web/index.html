@@ -13,8 +13,12 @@
         import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
         mermaid.initialize({ startOnLoad: true });
 
+        const mermaidFilePath = 'dep/mmd/theft.mmd';
+        const yuhoFilePath = 'dep/yh/theft.yh';
+        const jsonFilePath = 'dep/json/theft.json';
+
         async function loadMermaidDefinition() {
-            const response = await fetch('output.mmd');
+            const response = await fetch(mermaidFilePath);
             const mermaidDefinition = await response.text();
             const element = document.getElementById('mermaidContainer');
             element.innerHTML = mermaidDefinition;
@@ -22,14 +26,14 @@
         }
 
         async function loadYuhoFile() {
-            const response = await fetch('example.yh'); 
+            const response = await fetch(yuhoFilePath); 
             const yhContent = await response.text();
             const preElement = document.querySelector('#yuhoCode');
             preElement.textContent = yhContent;
         }
 
         async function loadJSONFile() {
-            const response = await fetch('example.json'); 
+            const response = await fetch(jsonFilePath); 
             const jsonContent = await response.text();
             const preElement = document.querySelector('pre code.language-json');
             preElement.textContent = jsonContent;
