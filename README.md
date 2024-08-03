@@ -1,11 +1,10 @@
 > [!IMPORTANT]  
-> Yuho is undergoing a major overhaul right   
-> now. This means language features are likely  
-> to change.  
+> Yuho is undergoing a major overhaul right now.   
+> This means language features are likely to change.  
 >   
-> As such, support for other transpilation outputs  
-> is not currently my primary focus. To see what is  
-> being worked on, refer [here](./doc/future.md)
+> As such, support for other transpilation outputs is not   
+> currently my primary focus. To see what is being worked on,   
+> refer [here](./doc/future.md).  
 >   
 > I can be found on Linkedin for anything urgent.  
 >   
