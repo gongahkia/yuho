@@ -1,13 +1,15 @@
 > [!IMPORTANT]  
-> Yuho is not actively under development right now.  
-> This means language features are relatively set in stone.
+> Yuho is undergoing a major overhaul right   
+> now. This means language features are likely  
+> to change.  
 >   
-> Also, note that there is currently only rudimentary support  
-> for transpilation of Yuho to other outputs.  
-> 
-> I will return to work on this in the future.  
-> 
-> *\- Gabriel* 
+> As such, support for other transpilation outputs  
+> is not currently my primary focus. To see what is  
+> being worked on, refer [here](./doc/future.md)
+>   
+> I can be found on Linkedin for anything urgent.  
+>   
+> *\- Gabriel*   
 
 ![](https://img.shields.io/badge/yuho_1.0-passing-green)
 
