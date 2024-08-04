@@ -108,7 +108,8 @@ string anExampleString := "if the act by which the death is caused is done with 
 
 ```yh
 // ----- DATA STRUCTURE -----
-    // there is only ONE data structure in Yuho, the struct
+    // confused by the vast ocean of data structures in other languages? (what's an enum, struct, array, hashmap, dictionary and tuple?)
+    // fear no more, for there is only ONE data structure in Yuho, the struct
     // this means that there are no other conventional data structures, such as lists, tuples etc
     // Yuho takes inspiration from languages like Lua and PHP here, where the core syntax is built around the singular data structure, the dictionary cum table
     // the rationale behind this is as follows
@@ -237,6 +238,9 @@ anExampleNormalStruct anEgNormalStructLiteral := {
 and // logical AND
 or // logical OR
 not // logical NOT
+&& // alternative syntax for logical AND
+|| // alternative syntax for logical OR
+! // alternative syntax for logical NOT
 ```
 
 ## Control Structures

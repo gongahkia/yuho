@@ -6,8 +6,9 @@
 
 #### Immediate 
 
-* Rethink Yuho's syntax to be more robust
-* Start from the `./examples/sampleCheating.yh` and rework how Yuho is representing the statute of cheatingA
+* Rethink Yuho's syntax to be more specific toward Criminal Law *(examine statutes within the Penal Code, what should we be representing?)*
+* Add syntax keywords(?) to Yuho to account for *Explanation* sections within a statute
+* Start from the `./examples/reworked_sample_cheating.yh` and rework how Yuho is representing the statute of cheating
     * Incorporate conditional logic (like OR) into definition attribute of the struct, punishment etc. 
         * Definition shouldn't just be a damn string! Otherwise the logic still needs to be mentally evaluated by the lawyer / law student.
         * What other fields can I break up and specify logic within?
@@ -16,7 +17,8 @@
             * Mental element and Physical element
             * Mens reus and Actus reus
     * Make tokenisation stronger.
-* Rescope entire project based on accurately representing a single provision for Cheating from S415 A
+* Rescope entire project based on accurately representing a single provision for Cheating from S415 
+* Tool that affords dynamic generation of struct instances / tests as legible examples for lawyers to use based upon the *Illustrations* section of a given definition statute (again, see S415 on Cheating)
 
 #### Later
 
