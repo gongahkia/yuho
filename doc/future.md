@@ -8,7 +8,6 @@
 
 * Rethink Yuho's syntax to be more robust
 * Start from the `./examples/sampleCheating.yh` and rework how Yuho is representing the statute of cheatingA
-    * Rename the syntax from `struct` to sthing like `container`? the term `struct` itself might be too intimidating for lawyers and law students
     * Incorporate conditional logic (like OR) into definition attribute of the struct, punishment etc. 
         * Definition shouldn't just be a damn string! Otherwise the logic still needs to be mentally evaluated by the lawyer / law student.
         * What other fields can I break up and specify logic within?
