@@ -17,7 +17,7 @@
 * Proposed workflow for [`src`](./../src) code
     1. enforce Yuho's syntax by reading `.yh` files and checking whether a struct instance conforms to its struct definition laid out
         * add a reminder in the LSP whenever an enum is detected to not end with an `NA` option 
-    2. transpile `.yh` code to `.mmd` for diagramtic representations by reading **valid struct instances**
+    2. transpile `.yh` code to `.mmd` for diagramtic representations by reading **valid struct instances**, see `./../test_frontend/` and continue working on the code for that
 * Apply the following changes made to *Cheating* to all other examples as well!
 * Add a live editor if possible that transpiles yuho code live by running a script in the backend and rerenders the mermaid diagram everytime
     * implement this in svelteflow for extra points
@@ -38,21 +38,22 @@
     * intuitive controls so lawyers and law students *(no programming proficiency required)*
     * "right now you're showing how the sausage is made *(the nerdy programmer shit)*"
     * pitching Yuho to lawyers requires an easy to **access** and **use** frontend interface
-    * scratch-like controls with drag and drop interface so different logical blocks can be rearranged and the struct updates live
-        * is there a HTML element / Svelte frontend that can achieve the same flow-chart like Display without relying on Mermaid? *(ideally I would want HMR)*
-        * see [Svelteflow](https://svelteflow.dev/) for reactive diagrams and flowcharts
-    * retain the flowchart-style display to show all logical outcomes of a given offence as defined by the statute
-    * add user input method that allows 'stepping-through' the flowchart for a given charge / **highlight** the logical path for A --> B, useful especially if the flowchart is very complex and nested
-        * see [Whyline](https://www.cs.cmu.edu/~NatProg/whyline.html) for dynamic sites that display logical evaluation of a given decision
-            * application in Yuho front-end
-                * allows users to ask "Why did" and "Why didn't" questions about a given output
-                * users choose from a set of questions generated automatically via static and dynamic analyses, and the tool provides answers in terms of the runtime events that caused or prevented the desired output
+    * provide 2 frontend products
+        1. live editor for Yuho code that updates the mermaid diagram
+            * see [L4 IDE](https://smucclaw.github.io/l4-lp/) for live editor that allows updating of diagrams
+            * in terms of functionality and ease of use, see L4's approach via a [Google Sheets Extension](https://l4-documentation.readthedocs.io/en/latest/docs/quickstart-installation.html#getting-the-legalss-spreadsheet-working-on-your-computer) 
+        2. scratch-like controls with drag and drop interface so different logical blocks can be rearranged and the struct updates live
+            * is there a HTML element / Svelte frontend that can achieve the same flow-chart like Display without relying on Mermaid? *(ideally I would want HMR)*
+            * see [Svelteflow](https://svelteflow.dev/) for reactive diagrams and flowcharts
+        * retain the flowchart-style display to show all logical outcomes of a given offence as defined by the statute
+        * add user input method that allows 'stepping-through' the flowchart for a given charge / **highlight** the logical path for A --> B, useful especially if the flowchart is very complex and nested
+            * see [Whyline](https://www.cs.cmu.edu/~NatProg/whyline.html) for dynamic sites that display logical evaluation of a given decision
+                * application in Yuho front-end
+                    * allows users to ask "Why did" and "Why didn't" questions about a given output
+                    * users choose from a set of questions generated automatically via static and dynamic analyses, and the tool provides answers in terms of the runtime events that caused or prevented the desired output
         * see [Enso](https://github.com/enso-org/enso/tree/develop?tab=readme-ov-file) for dynamic sites that provide accurate intuitive modelling of why a given statute operates the way it does
         * see [Tonto](https://matheuslenke.github.io/tonto-docs/) for how it models conceptual models textually
         * see [D2](https://github.com/terrastruct/d2) for a diagramming language as easy to read as markdown and mermaid
-    * live editor for Yuho code that updates the mermaid diagram
-        * see [L4 IDE](https://smucclaw.github.io/l4-lp/) for live editor that allows updating of diagrams
-    * in terms of functionality and ease of use, see L4's approach via a [Google Sheets Extension](https://l4-documentation.readthedocs.io/en/latest/docs/quickstart-installation.html#getting-the-legalss-spreadsheet-working-on-your-computer) 
 
 3. Comprehensive 
     * find edgecases Prof Alexandar Woon was talking about within the Penal Code *(generated by the amendments or not)*

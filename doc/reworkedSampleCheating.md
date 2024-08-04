@@ -124,7 +124,7 @@ Right now two primary Mermaid outputs are supported.
 mindmap
     Cheating
       Accused: Party.Accused
-      Action: "deceiving"
+      Action: Deceiving
       Victim: Party.Victim
       Attribution
         AttributionType.SoleInducment
@@ -148,7 +148,9 @@ mindmap
         DamageHarmType.Reputation
         DamageHarmType.Property
         DamageHarmType.NA
-      Consequence Definition: "is said to cheat"
+      Definition
+        ConsequenceDefinition.SaidToCheat
+        ConsequenceDefinition.NotSaidToCheat
 ```
 2. Flowchart
     * splay out all possible consequences of a statute
