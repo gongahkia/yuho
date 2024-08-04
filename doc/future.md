@@ -10,8 +10,12 @@
     1. enforce Yuho's syntax by reading `.yh` files and checking whether a struct instance conforms to its struct definition laid out
         * add a reminder in the LSP whenever an enum is detected to not end with an `NA` option 
     2. transpile `.yh` code to `.mmd` for diagramtic representations by reading **valid struct instances**
+* Add a live editor if possible that transpiles yuho code live by running a script in the backend and rerenders the mermaid diagram everytime
+    * implement this in svelteflow for extra points
 * Rethink Yuho's syntax to be more specific toward Criminal Law *(examine statutes within the Penal Code, what should we be representing?)*
 * Add syntax keywords(?) to Yuho to account for *Explanation* sections within a statute
+* Rethink Yuho's direction and if I seek to represent **only** definition sections or if I seek to represent **both** definition and the **consequence punishemnt application sections**
+    * Rescope entire project based on accurately representing a single provision for Cheating from S415 
 * Start from the `./examples/reworked_sample_cheating.yh` and rework how Yuho is representing the statute of cheating
     * Incorporate conditional logic (like OR) into definition attribute of the struct, punishment etc. 
         * Definition shouldn't just be a damn string! Otherwise the logic still needs to be mentally evaluated by the lawyer / law student.
@@ -21,7 +25,6 @@
             * Mental element and Physical element
             * Mens reus and Actus reus
     * Make tokenisation stronger.
-* Rescope entire project based on accurately representing a single provision for Cheating from S415 
 * Tool that affords dynamic generation of struct instances / tests as legible examples for lawyers to use based upon the *Illustrations* section of a given definition statute (again, see S415 on Cheating)
 
 #### Later
