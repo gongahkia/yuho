@@ -18,11 +18,13 @@
     1. enforce Yuho's syntax by reading `.yh` files and checking whether a struct instance conforms to its struct definition laid out
         * add a reminder in the LSP whenever an enum is detected to not end with an `NA` option 
     2. transpile `.yh` code to `.mmd` for diagramtic representations by reading **valid struct instances**
+* Apply the following changes made to *Cheating* to all other examples as well!
 * Add a live editor if possible that transpiles yuho code live by running a script in the backend and rerenders the mermaid diagram everytime
     * implement this in svelteflow for extra points
 * Rethink Yuho's syntax to be more specific toward Criminal Law *(examine statutes within the Penal Code, what should we be representing?)*
 * Add syntax keywords(?) to Yuho to account for *Explanation* sections within a statute
 * Tool that affords dynamic generation of struct instances / tests as legible examples for lawyers to use based upon the *Illustrations* section of a given definition statute (again, see S415 on Cheating)
+* Can I represent evaluation of a struct instance for a statute using conditional logic to render a given situation within the flowchart
 
 #### Later
 
