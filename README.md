@@ -1,5 +1,5 @@
 > [!IMPORTANT]  
-> Yuho is undergoing a major overhaul right now.   
+> Yuho is undergoing a [major overhaul](doc/reworkedSampleCheating.md) right now.   
 > This means language features are likely to change.  
 >   
 > As such, support for other transpilation outputs is not   

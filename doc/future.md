@@ -6,6 +6,10 @@
 
 #### Immediate 
 
+* Proposed workflow is to
+    1. enforce Yuho's syntax by reading `.yh` files and checking whether a struct instance conforms to its struct definition laid out
+        * add a reminder in the LSP whenever an enum is detected to not end with an `NA` option 
+    2. transpile `.yh` code to `.mmd` for diagramtic representations by reading **valid struct instances**
 * Rethink Yuho's syntax to be more specific toward Criminal Law *(examine statutes within the Penal Code, what should we be representing?)*
 * Add syntax keywords(?) to Yuho to account for *Explanation* sections within a statute
 * Start from the `./examples/reworked_sample_cheating.yh` and rework how Yuho is representing the statute of cheating
