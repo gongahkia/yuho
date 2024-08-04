@@ -42,6 +42,7 @@
                 * users choose from a set of questions generated automatically via static and dynamic analyses, and the tool provides answers in terms of the runtime events that caused or prevented the desired output
         * see [Enso](https://github.com/enso-org/enso/tree/develop?tab=readme-ov-file) for dynamic sites that provide accurate intuitive modelling of why a given statute operates the way it does
         * see [Tonto](https://matheuslenke.github.io/tonto-docs/) for how it models conceptual models textually
+        * see [D2](https://github.com/terrastruct/d2) for a diagramming language as easy to read as markdown and mermaid
     * live editor for Yuho code that updates the mermaid diagram
         * see [L4 IDE](https://smucclaw.github.io/l4-lp/) for live editor that allows updating of diagrams
     * in terms of functionality and ease of use, see L4's approach via a [Google Sheets Extension](https://l4-documentation.readthedocs.io/en/latest/docs/quickstart-installation.html#getting-the-legalss-spreadsheet-working-on-your-computer) 
