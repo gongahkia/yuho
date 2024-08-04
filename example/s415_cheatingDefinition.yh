@@ -1,0 +1,83 @@
+/*
+VERSION 1.1
+    * primarily for brainstorming
+    * explore whether I can breakdown the interior logic within definition sections further
+    * do I just want to restrict this syntax for definition sections (s415) or for all consequence sections in Penal Code also (s416)?
+
+Based off the following statutory provisions on cheating
+    * Penal Code S415
+/* 
+
+scope s415CheatingDefinition {
+
+    struct Party { // ENUM
+        Accused,
+        Victim,
+    }
+
+    struct AttributionType { // ENUM
+        SoleInducment,
+        NotSoleInducement,
+        NA,
+    }
+
+    struct DeceptionType { // ENUM
+        Fraudulently,
+        Dishonestly,
+        NA,
+    }
+
+    struct InducementType { // ENUM
+        DeliverProperty,
+        ConsentRetainProperty,
+        DoOrOmit,
+        NA,
+    }
+
+    struct DamageHarmType { // ENUM
+        Body,
+        Mind, 
+        Reputation,
+        Property,
+        NA,
+    }
+
+    struct ConsequenceDefinition { // ENUM
+        SaidToCheat,
+        NotSaidToCheat,
+    }
+
+    // STRUCT DEFINITION
+
+    struct Cheating { 
+        Party accused,
+        string action,
+        Party victim,
+        AttributionType attribution,
+        DeceptionType deception,
+        InducementType inducement,
+        boolean causesDamageHarm,
+        ({DamageHarmType} or DamageHarmType) damageHarmResult, // ARRAY OF ENUMS SO MORE THAN ONE CAN BE SELECTED OR A SINGLE ENUM VALUE
+        ConsequenceDefinition definition,
+    }
+
+    // STRUCT LITERAL
+
+    Cheating cheatingDefinition := { 
+        accused := Party.Accused,
+        action := "deceiving",
+        victim := Party.Victim,
+        attribution := AttributionType.SoleInducment or AttributionType.NotSoleInducement or AttributionType.NA,
+        deception := DeceptionType.Fraudulently or DeceptionType.Dishonestly or DeceptionType.NA,
+        inducement := InducementType.DeliverProperty or InducementType.ConsentRetainProperty or InducementType.DoOrOmit or InducementType.NA, 
+        causesDamageHarm := TRUE or FALSE,
+        damageHarmResult := {
+            DamageHarmType.Body,
+            DamageHarmType.Mind,
+            DamageHarmType.Reputation,
+            DamageHarmType.Property,
+        } or DamageHarmType.NA,
+        definition:= ConsequenceDefinition.SaidToCheat or ConsequenceDefinition.NotSaidToCheat,
+    }
+
+}
