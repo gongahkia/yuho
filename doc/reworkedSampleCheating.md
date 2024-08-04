@@ -1,4 +1,4 @@
-# Reworked example for Cheating Statute
+# Reworked example for S415 Cheating Statute
 
 Here's the process of breaking down a statute's definition. The below example is done on the offense of Cheating under Penal Code S415.
 
@@ -33,10 +33,6 @@ Once converted to Yuho's syntax, the statute will be structured as
 
 ```yh
 /*
-VERSION 1.1
-    * primarily for brainstorming
-    * explore whether I can breakdown the interior logic within definition sections further
-
 Based off the following statutory provisions on cheating
     * Penal Code S415
 /* 
