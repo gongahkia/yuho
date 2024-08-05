@@ -6,9 +6,6 @@
 
 #### Immediate 
 
-* Specify how Yuho's syntax will indicate that a specific enum variant *(`*.NA`)* or boolean `FALSE` immediately shortcircuits to a specific output 
-    * *eg.* `FALSE` or `DamageHarmType.NA` immediately short circuits to `NotSaidToCheat`
-    * might need to introduce new syntax for this if existing syntax can't compensate
 * Rethink Yuho's direction and if I seek to represent **only** definition sections or if I seek to represent **both** definition and the **consequence punishemnt application sections**
     * Rescope entire project based on accurately representing a single provision for Cheating from S415 
     * Continue working on this from [`s415_cheating_definition.yh`](./../example/s415_cheatingDefinition.yh)

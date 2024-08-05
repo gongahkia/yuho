@@ -29,7 +29,11 @@ WHETHER OR NOT such deception was the sole or main inducement,
 is said to cheat."
 ```
 
-Once converted to Yuho's syntax, the statute will be structured as 
+Once converted to Yuho's syntax, the statute will be structured as follows.
+
+> [!NOTE]
+> For an annotated version of the below Yuho  
+> code, see [s415_cheating_definition.yh](./../example/s415_cheating_definition.yh).  
 
 ```yh
 /*
@@ -37,33 +41,35 @@ Based off the following statutory provisions on cheating
     * Penal Code S415
 /* 
 
-scope reworkedSampleCheatingDefinition {
+scope s415CheatingDefinition {
 
-    struct Party { // ENUM
+    // ~ ENUMS ~
+
+    struct Party { 
         Accused,
         Victim,
     }
 
-    struct AttributionType { // ENUM
+    struct AttributionType { 
         SoleInducment,
         NotSoleInducement,
         NA,
     }
 
-    struct DeceptionType { // ENUM
+    struct DeceptionType { 
         Fraudulently,
         Dishonestly,
         NA,
     }
 
-    struct InducementType { // ENUM
+    struct InducementType { 
         DeliverProperty,
         ConsentRetainProperty,
         DoOrOmit,
         NA,
     }
 
-    struct DamageHarmType { // ENUM
+    struct DamageHarmType { 
         Body,
         Mind, 
         Reputation,
@@ -71,12 +77,12 @@ scope reworkedSampleCheatingDefinition {
         NA,
     }
 
-    struct ConsequenceDefinition { // ENUM
+    struct ConsequenceDefinition { 
         SaidToCheat,
         NotSaidToCheat,
     }
 
-    // STRUCT DEFINITION
+    // ~ STRUCT DEFINITION ~
 
     struct Cheating { 
         Party accused,
@@ -86,13 +92,14 @@ scope reworkedSampleCheatingDefinition {
         DeceptionType deception,
         InducementType inducement,
         boolean causesDamageHarm,
-        ({DamageHarmType} or DamageHarmType) damageHarmResult, // ARRAY OF ENUMS SO MORE THAN ONE CAN BE SELECTED OR A SINGLE ENUM VALUE
+        {DamageHarmType} || DamageHarmType damageHarmResult, 
         ConsequenceDefinition definition,
     }
 
-    // STRUCT LITERAL
+    // ~ STRUCT LITERAL ~
 
     Cheating cheatingDefinition := { 
+
         accused := Party.Accused,
         action := "deceiving",
         victim := Party.Victim,
@@ -105,8 +112,27 @@ scope reworkedSampleCheatingDefinition {
             DamageHarmType.Mind,
             DamageHarmType.Reputation,
             DamageHarmType.Property,
-        } or DamageHarmType.NA,
-        definition:= ConsequenceDefinition.SaidToCheat or ConsequenceDefinition.NotSaidToCheat,
+        } or DamageHarmType.NA, 
+
+        definition := match attribution {
+            case AttributionType.SoleInducment := deception
+            case AttributionType.NotSoleInducement := deception
+            case AttributionType.NA := consequence ConsequenceDefinition.NotSaidToCheat
+        },
+        definition := match deception {
+            case DeceptionType.Fraudulently := consequence inducement
+            case DeceptionType.Dishonestly := consequence inducement
+            case DeceptionType.NA := consequence ConsequenceDefinition.NotSaidToCheat
+        },
+        definition := match causesDamageHarm {
+            case TRUE := consequence damageHarmResult
+            case FALSE := consequence ConsequenceDefinition.NotSaidToCheat
+        },
+        definition := match {
+            case DamageHarmType.NA in damageHarmResult := consequence ConsequenceDefinition.NotSaidToCheat
+            case _ :=  consequence ConsequenceDefinition.SaidToCheat 
+        },
+
     }
 
 }
