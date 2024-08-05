@@ -1,32 +1,22 @@
 # Future plans
 
-## 030824
+## Follow Up Actions
 
-### Follow Up Actions
+### Immediate 
 
-#### Immediate 
-
-* Rethink Yuho's direction and if I seek to represent **only** definition sections or if I seek to represent **both** definition and the **consequence punishemnt application sections**
-    * Rescope entire project based on accurately representing a single provision for Cheating from S415 
-    * Continue working on this from [`s415_cheating_definition.yh`](./../example/s415_cheating_definition.yh)
-    * Incorporate conditional logic (like OR) into all attribute of the structm including punishment etc. 
-        * What other elements of a statute can I break up and specify logic within?
-    * How else can I break down the logic of a statute to be **even more** granular?
-        * Mental element and Physical element
-        * Mens reus and Actus reus
+* Currently rescope Yuho to focus on accurately representing **definition sections** within the Penal Code (s415 for cheating) under [`s415_cheating_definition.yh`](./../example/s415_cheating_definition.yh)
+    * Add syntax keywords(?) to Yuho to account for *Explanation* sections within a statute
+    * Tool that affords dynamic generation of struct instances / tests as legible examples for lawyers to use based upon the *Illustrations* section of a given definition statute (again, see S415 on Cheating)
+* Apply the following changes made to *Cheating* to all other examples as well!
 * Proposed workflow for [`src`](./../src) code
     1. enforce Yuho's syntax by reading `.yh` files and checking whether a struct instance conforms to its struct definition laid out
         * add a reminder in the LSP whenever an enum is detected to not end with an `NA` option 
+        * linting as needed
     2. transpile `.yh` code to `.mmd` for diagramtic representations by reading **valid struct instances**, see `./../test_frontend/` and continue working on the code for that
-* Apply the following changes made to *Cheating* to all other examples as well!
 * Add a live editor if possible that transpiles yuho code live by running a script in the backend and rerenders the mermaid diagram everytime
-    * implement this in svelteflow for extra points
-* Rethink Yuho's syntax to be more specific toward Criminal Law *(examine statutes within the Penal Code, what should we be representing?)*
-* Add syntax keywords(?) to Yuho to account for *Explanation* sections within a statute
-* Tool that affords dynamic generation of struct instances / tests as legible examples for lawyers to use based upon the *Illustrations* section of a given definition statute (again, see S415 on Cheating)
-* Can I represent evaluation of a struct instance for a statute using conditional logic to render a given situation within the flowchart
+    * Implement this in svelteflow for extra points
 
-#### Later
+### Later
 
 1. Checks under `./test`
     * right now only checking for syntax and enforcing basic conditional constructs
@@ -70,7 +60,29 @@
     * `./web/front/index.html` for updates to the transpiled HTML frontend code
     * `./lsp/` for a complete rehaul of Yuho's LSP and to provide IDE-style syntax highlighting for any IDE I want Yuho to be supported in
 
-### Feedback
+5. Integrate fault element, physical element, defences
+    * How else can I break down the logic of a statute *(both definition s415 and consequence punishment application s416-s420) *to be **even more** granular?
+        * Fault element
+        * Physical element
+        * Defences
+    * Refer to Criminal Law notes google doc from Azfir's structure of inquiry as required
+    * Consider integrating actus reas and mens reas and defences into the EXISTING statute struct literals for definitions
+        * attribution and deception: mental element
+        * actual action performed: physical element
+
+6. Future scope
+    * expand Yuho's scope to cover **both** definition **and** the consequence punishment application sections (s416 - s420)
+    * see how to represent them within `.yh` code first, include those in the `./examples/` folder
+    * then determine what their transpiled output and diagramatic representation in `.mmd` would look like
+    * identify common UNIQUE attributes shared by s416-s420 *(consequence punishment application sections)*
+    * incorporate conditional logic (like AND OR) into those attributes and make as granular as possible
+        * What other elements of a statute can I break up and specify logic within?
+    * rethink Yuho's syntax to be more specific toward Criminal Law *(examine statutes within the Penal Code, what should we be representing?)*
+    * can I represent detailed evaluation of a struct instance that includes BOTH the base definition *(eg. s415)* AND its detailed applications *(eg. s416-420)* within the same flowchart?
+
+## Feedback
+
+### 030824
 
 * Prof Alexander Woon
     * Yuho presupposes a consistent structure across the whole penal code, which might be a misplaced assumption
