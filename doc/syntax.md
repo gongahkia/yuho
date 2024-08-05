@@ -43,6 +43,31 @@ comment
 */
 ```
 
+## Scope
+
+```yh
+// ----- SCOPE -----
+    // scope => declares the lexical scope of a given section of Yuho code for modularity within {} curly braces, the equivalent of a namespace in most other C-style programming languages
+        // . => scoped variables, structs and functions are then called via . dot syntax
+        // also observe how this syntax is nearly identical to a struct's declaration
+        // all scopes are automatically exported as user-defined modules which can be called from other files
+    // referencing <fileName> => brings all scopes declared in other Yuho source files into the local scope of the current Yuho file by default , the equivalent of import in JavaScript, #import or #include in C-style languages, and use or mod in Rust
+    // referencing <scopeName> from <fileName> => brings a single specific scope into the current file
+        // . => elements (variables, structs, functions) from within a scope can then be called with the following format using the dot syntax in <scopeName>.<elementName>
+
+scope teachingScope {
+    integer anInteger := 100
+    float aFloat := 200.00
+    string aString := "more examples are shown below fam"
+    pass || money aPossiblyPassOrMoneyValue := pass
+}
+
+teachingScope.anInteger // evaluates to 100
+teachingScope.anFloat // evaluates to 200.00
+teachingScope.anString // evaluates to "more examples are shown below fam"
+teachingScope.aPossiblyPassOrMoneyValue // evaluates to pass
+```
+
 ## Variable Declaration
 
 ```yh
@@ -52,21 +77,11 @@ comment
         // every value in Yuho is therefore IMMUTABLE
     // || => used to specify a UNION type in Yuho where the || shorthand OR operator delimits the possible datatypes when a given variable has a value that is unspecified in current legislation and thus could be of multiple datatypes, most commonly paired with pass as below
         // pass => aside from acting as a keyword that skips execution of a certain block, also functions as a special NULLABLE type (and value to itself) that represents the absence of a value, the equivalent of void or null in other programming languages
-    // scope => declares the lexical scope of a given section of Yuho code for modularity within {} curly braces, the equivalent of a namespace in most other C-style programming languages
-        // . => scoped variables, structs and functions are then called via . dot syntax
-        // also observe how this syntax is nearly identical to a struct's declaration
 
-scope teachingVariableDeclaration {
-    integer anInteger := 100
-    float aFloat := 200.00
-    string aString := "more examples are shown below fam"
-    pass || money aPossiblyPassOrMoneyValue := pass
-}
-
-teachingVariableDeclaration.anInteger // evaluates to 100
-teachingVariableDeclaration.anFloat // evaluates to 200.00
-teachingVariableDeclaration.anString // evaluates to "more examples are shown below fam"
-teachingVariableDeclaration.aPossiblyPassOrMoneyValue // evaluates to pass
+integer anotherInteger := 200
+float anotherFloat := 400.00
+string anotherString := "even more examples are shown below homie"
+pass || money anotherPossiblyPassOrMoneyValue := $10.00
 ```
 
 ## Types
