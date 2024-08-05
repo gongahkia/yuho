@@ -6,7 +6,26 @@
 
 * Currently rescope Yuho to focus on accurately representing **definition sections** within the Penal Code (s415 for cheating) under [`s415_cheating_definition.yh`](./../example/s415_cheating_definition.yh)
     * change the base README.md to reflect this shift
-    * figure out what mermaid diagrams can be created based on the illustration struct instances
+
+* Create a tool that can compile a base struct definition file and an instance of a struct literal file of a given illustration / situation and highlight that path in Mermaid, perhaps with a clicking through and rerendering
+    * Brainstorm all possible mermaid diagrams that can be created based on the illustration struct instances
+    * Example of a highlighted path is as below
+    * Maybe have a sidebar showing what each step fulfilled is like to achieve that highlighted path *(assuming click-through functionality is present)*
+
+```mermaid
+flowchart TD
+    A[Start] --> B[Process A]
+    B --> C[Decision]
+    C -->|Yes| D[Process B]
+    C -->|No| E[Process C]
+    D --> F[End]
+    E --> F
+
+    classDef highlightedPath fill:#ffcc00,stroke:#000,stroke-width:2px;
+    class A,B,C,D,F highlightedPath;
+highlighted path in a flowchart in Mermaid
+```
+
 * Add a live editor if possible that transpiles yuho code live by running a script in the backend and rerenders the mermaid diagram everytime
     * Implement this in svelteflow for extra points
 * Apply the following changes made to *Cheating* to all other examples as well!
