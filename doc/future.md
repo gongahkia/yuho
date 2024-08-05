@@ -7,23 +7,22 @@
 * Currently rescope Yuho to focus on accurately representing **definition sections** within the Penal Code (s415 for cheating) under [`s415_cheating_definition.yh`](./../example/s415_cheating_definition.yh)
     * change the base README.md to reflect this shift
 
-* Create a tool that can compile a base struct definition file and an instance of a struct literal file of a given illustration / situation and highlight that path in Mermaid, perhaps with a clicking through and rerendering
+* Create a tool that can compile a base struct definition file and an instance of a struct literal file of a given illustration / situation and highlight that path in a Mermaid flowchart, perhaps with a clicking through and rerendering the mermaid diagram each time while appending a new named node to the class
     * Brainstorm all possible mermaid diagrams that can be created based on the illustration struct instances
     * Example of a highlighted path is as below
     * Maybe have a sidebar showing what each step fulfilled is like to achieve that highlighted path *(assuming click-through functionality is present)*
 
 ```mermaid
 flowchart TD
-    A[Start] --> B[Process A]
-    B --> C[Decision]
-    C -->|Yes| D[Process B]
-    C -->|No| E[Process C]
-    D --> F[End]
-    E --> F
+   A[Start] --> B[Process A]
+   B --> C[Decision]
+   C -->|Yes| D[Process B]
+   C -->|No| E[Process C]
+   D --> F[End]
+   E --> F
 
-    classDef highlightedPath fill:#ffcc00,stroke:#000,stroke-width:2px;
-    class A,B,C,D,F highlightedPath;
-highlighted path in a flowchart in Mermaid
+   classDef highlightedPath fill:#77DD77,stroke:#000,stroke-width:2px,color:black;
+   class A,B,C,D,F highlightedPath;
 ```
 
 * Add a live editor if possible that transpiles yuho code live by running a script in the backend and rerenders the mermaid diagram everytime
