@@ -1,0 +1,24 @@
+// add a keyword for importing structs and other declared keywords like function into other files
+// specify that keyword and update syntax.md to include it
+
+/* 
+Based off the following illustration A on cheating
+    * (a) "A, by falsely pretending to be in the Government service, 
+           intentionally deceives Z, and thus dishonestly induces Z 
+           to let him have on credit goods for which he does not mean 
+           to pay. A cheats."
+*/
+
+Cheating cheatingIllustrationA := { 
+
+    accused := "A",
+    action := "falsely pretending to be in the Government service, intentionally deceiving",
+    victim := "Z",
+    attribution := AttributionType.SoleInducment, 
+    deception := DeceptionType.Dishonestly, 
+    inducement := InducementType.ConsentRetainProperty, // Z is induced to let A have goods on credit
+    causesDamageHarm := TRUE, 
+    damageHarmResult := DamageHarmType.Property, // damage is to Z's property
+    definition := ConsequenceDefinition.SaidToCheat, // notice the exclusion of all previous conditional logic since those are evaluated in this struct and the consequence is clear
+
+}
