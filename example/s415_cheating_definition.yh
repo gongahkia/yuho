@@ -103,6 +103,12 @@ scope s415CheatingDefinition {
             case DeceptionType.Dishonestly := consequence inducement
             case DeceptionType.NA := consequence ConsequenceDefinition.NotSaidToCheat
         },
+        definition := match inducement {
+            case InducementType.DeliverProperty := consequence causesDamageHarm
+            case InducementType.ConsentRetainProperty := consequence causesDamageHarm
+            case InducementType.DoOrOmit := consequence causesDamageHarm
+            case InducementType.NA := consequence ConsequenceDefinition.NotSaidToCheat
+        },
         definition := match causesDamageHarm{
             case TRUE := consequence damageHarmResult
             case FALSE := consequence ConsequenceDefinition.NotSaidToCheat
