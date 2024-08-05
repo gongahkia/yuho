@@ -50,7 +50,7 @@ comment
     // := => provides a simultaneous immutable variable declaration and binding between a specified named variable identifier and its assigned value, wherein the value cannot be then reassigned or modified after its initial assignment
         // note that the datatype of any named variable is specified before the variable identifier similar to C++
         // every value in Yuho is therefore IMMUTABLE
-    // | => used to specify a UNION type in Yuho where the | pipe operator delimits the possible datatypes when a given variable has a value that is unspecified in current legislation and thus could be of multiple datatypes, most commonly paired with pass as below
+    // || => used to specify a UNION type in Yuho where the || shorthand OR operator delimits the possible datatypes when a given variable has a value that is unspecified in current legislation and thus could be of multiple datatypes, most commonly paired with pass as below
         // pass => aside from acting as a keyword that skips execution of a certain block, also functions as a special NULLABLE type (and value to itself) that represents the absence of a value, the equivalent of void or null in other programming languages
     // scope => declares the lexical scope of a given section of Yuho code for modularity within {} curly braces, the equivalent of a namespace in most other C-style programming languages
         // . => scoped variables, structs and functions are then called via . dot syntax
@@ -60,7 +60,7 @@ scope teachingVariableDeclaration {
     integer anInteger := 100
     float aFloat := 200.00
     string aString := "more examples are shown below fam"
-    pass | money aPossiblyPassOrMoneyValue := pass
+    pass || money aPossiblyPassOrMoneyValue := pass
 }
 
 teachingVariableDeclaration.anInteger // evaluates to 100
@@ -260,21 +260,28 @@ not // logical NOT
 
 // MATCH CASE _
     // match => declares the beginning of a match case construct within curly braces
+        // also note that you can optionally specify a match predicate after the match keyword based on how complex you require the pattern-matching construct to be
     // case => specifies each predicate case condition that could arise from a match construct
     // := => delimits the relationship between a given case and its consequence
     // consequence => follows every case and exception condition as the resulting expression of a given case predicate being fulfilled
     // _ => catch-all fall-through default operator that executes when all other predicate case conditions fail to be met that MUST ALWAYS BE SPECIFIED to cover all edge cases
     // pass => skips execution and evaluaton of the current block, the equivalent of pass in other programming languages like Python
         // note that where a given fall-through default case has no code to evaluate, we just write pass (as seen below)
-    // also observe that we can directly assign the result of a match case construct to variables similar to other functional languages
+    // observe that we can directly assign the result of a match case construct to variables similar to other functional languages
 
 money currentBankAccount := $100,000.00
-
-boolean brokeOrNot := match anExampleMatchValue {
+boolean brokeOrNot := match {
     case currentBankAccount <= $200,000.00 := consequence TRUE
     case currentBankAccount > $200,000.00 := consequence FALSE
     case _ := consequence pass // since this is a boolean match statement, the _ case predicate in actuality will never run, so we leave the code as pass
 } // here brokeOrNot evaluates in the back-end to TRUE
+
+boolean isGuilty := TRUE
+string finalJudgement := match isGuilty {
+    case TRUE := consequence "Go to Jail!"
+    case FALSE := consequence "You have been acquitted!"
+    case _ := consequence "This will never run but is useful for proper edge-guarding."
+} // here finalJudgement evaluates in the back-end to the string "Go to Jail!"
 ```
 
 ## Functions

@@ -10,6 +10,10 @@ Based off the following statutory provisions on cheating
 
 scope s415CheatingDefinition {
 
+    // ~ ENUMS ~
+        // observe how we use enums to model most multi-valued custom types in Yuho, the equivalent of optional types in other programming languages
+        // enums are incredibly useful and let us perform powerful comprehensive pattern-matching as will be seen below
+
     struct Party { // ENUM
         Accused,
         Victim,
@@ -47,7 +51,7 @@ scope s415CheatingDefinition {
         NotSaidToCheat,
     }
 
-    // STRUCT DEFINITION
+    // ~ STRUCT DEFINITION ~
 
     struct Cheating { 
         Party accused,
@@ -57,13 +61,19 @@ scope s415CheatingDefinition {
         DeceptionType deception,
         InducementType inducement,
         boolean causesDamageHarm,
-        ({DamageHarmType} or DamageHarmType) damageHarmResult, // ARRAY OF ENUMS SO MORE THAN ONE CAN BE SELECTED OR A SINGLE ENUM VALUE
+        {DamageHarmType} || DamageHarmType damageHarmResult, // union type where damageHarmResult can either be an array of enums or a single enum, the enum defined under DamageHarmType
         ConsequenceDefinition definition,
     }
 
-    // STRUCT LITERAL
+    // ~ STRUCT LITERAL ~
 
     Cheating cheatingDefinition := { 
+
+        // ~ struct literal attributes ~
+            // instantiated based on the struct definition specified above
+            // there must be at least ONE struct attribute literal defined below for each struct attribute specified within the definition above
+            // Yuho's interpreter will specify any inconsistencies and prevent transpilation if the struct literal is instantiated wrongly
+
         accused := Party.Accused,
         action := "deceiving",
         victim := Party.Victim,
@@ -76,8 +86,32 @@ scope s415CheatingDefinition {
             DamageHarmType.Mind,
             DamageHarmType.Reputation,
             DamageHarmType.Property,
-        } or DamageHarmType.NA,
-        definition:= ConsequenceDefinition.SaidToCheat or ConsequenceDefinition.NotSaidToCheat,
+        } or DamageHarmType.NA, // this evaluates in the backend to a simple OR construct as with deception, inducement and causesDamageHarm
+
+        // ~ logical short circuiting ~
+            // every logical operator introduced in a struct instance must have its each of its enumerations' logic resolved with a corresponding match-case construct
+            // by convention, the match-case constructs are placed at the bottom of the struct instance for greater readability
+            // since the logical shortcircuiting is introduced here
+
+        definition := match attribution {
+            case AttributionType.SoleInducment := deception
+            case AttributionType.NotSoleInducement := deception
+            case AttributionType.NA := consequence ConsequenceDefinition.NotSaidToCheat
+        },
+        definition := match deception {
+            case DeceptionType.Fraudulently := consequence inducement
+            case DeceptionType.Dishonestly := consequence inducement
+            case DeceptionType.NA := consequence ConsequenceDefinition.NotSaidToCheat
+        },
+        definition := match causesDamageHarm{
+            case TRUE := consequence damageHarmResult
+            case FALSE := consequence ConsequenceDefinition.NotSaidToCheat
+        },
+        definition := match {
+            case DamageHarmType.NA in damageHarmResult := consequence ConsequenceDefinition.NotSaidToCheat
+            case _ :=  consequence ConsequenceDefinition.SaidToCheat 
+        },
+
     }
 
 }
