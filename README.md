@@ -1,6 +1,9 @@
 > [!IMPORTANT]  
-> Yuho is undergoing a [major overhaul](doc/reworkedSampleCheating.md) right now.   
-> This means language features are likely to change.  
+> Yuho is undergoing a major overhaul right now.   
+> This means language features are likely to change.
+> 
+> For a rough idea of where Yuho is headed, see  
+> [`reworked_sample_cheating.md`](doc/reworkedSampleCheating.md).  
 >   
 > As such, support for other transpilation outputs is not   
 > currently my primary focus. To see what is being worked on,   
