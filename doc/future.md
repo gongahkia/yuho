@@ -5,8 +5,8 @@
 ### Immediate 
 
 * Currently rescope Yuho to focus on accurately representing **definition sections** within the Penal Code (s415 for cheating) under [`s415_cheating_definition.yh`](./../example/s415_cheating_definition.yh)
-    * Add syntax keywords(?) to Yuho to account for *Explanation* sections within a statute
     * Tool that affords dynamic generation of struct instances / tests as legible examples for lawyers to use based upon the *Illustrations* section of a given definition statute (again, see S415 on Cheating)
+    * Perhaps under its own `.yh` file with names like `s415_cheating_illustration_A`
 * Apply the following changes made to *Cheating* to all other examples as well!
 * Proposed workflow for [`src`](./../src) code
     1. enforce Yuho's syntax by reading `.yh` files and checking whether a struct instance conforms to its struct definition laid out
@@ -15,6 +15,11 @@
     2. transpile `.yh` code to `.mmd` for diagramtic representations by reading **valid struct instances**, see `./../test_frontend/` and continue working on the code for that
 * Add a live editor if possible that transpiles yuho code live by running a script in the backend and rerenders the mermaid diagram everytime
     * Implement this in svelteflow for extra points
+* Add Yuho CLI tools in Svelte or Rust to run checks similar to Rust Cargo that 
+    * make it easy to START writing a Yuho struct in a `.yh` file
+    * check the validity of a Yuho file ending in the file extension `.yh`
+    * transpile the `.yh` file to a `.mmd` file that provides either a Mindmap or Flowchart
+    * think of a funny name for the CLI tool like *junior_lawywer* *(in the spirit of Catala's `clerk`)*
 
 ### Later
 
@@ -60,7 +65,12 @@
     * `./web/front/index.html` for updates to the transpiled HTML frontend code
     * `./lsp/` for a complete rehaul of Yuho's LSP and to provide IDE-style syntax highlighting for any IDE I want Yuho to be supported in
 
-5. Integrate fault element, physical element, defences
+5. Account for the *Explanations* under every section (*eg.* s415)
+    * Add a new syntax keyword OR define a struct attribute under an existing struct to include these *Explanations* sections
+    * Do I want to break down the terms and logic within these sections also?
+    * Consider how these *Explanations* would be rendered on the existing Mindmap and Flowchart representations in mermaid
+
+6. Integrate fault element, physical element, defences
     * How else can I break down the logic of a statute *(both definition s415 and consequence punishment application s416-s420) *to be **even more** granular?
         * Fault element
         * Physical element
@@ -70,7 +80,7 @@
         * attribution and deception: mental element
         * actual action performed: physical element
 
-6. Future scope
+7. Future scope
     * expand Yuho's scope to cover **both** definition **and** the consequence punishment application sections (s416 - s420)
     * see how to represent them within `.yh` code first, include those in the `./examples/` folder
     * then determine what their transpiled output and diagramatic representation in `.mmd` would look like
