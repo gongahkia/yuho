@@ -5,8 +5,6 @@
 ### Immediate 
 
 * Currently rescope Yuho to focus on accurately representing **definition sections** within the Penal Code (s415 for cheating) under [`s415_cheating_definition.yh`](./../example/s415_cheating_definition.yh)
-    * Tool that affords dynamic generation of struct instances / tests as legible examples for lawyers to use based upon the *Illustrations* section of a given definition statute (again, see S415 on Cheating)
-    * Perhaps under its own `.yh` file with names like `s415_cheating_illustration_A`
 * Apply the following changes made to *Cheating* to all other examples as well!
 * Proposed workflow for [`src`](./../src) code
     1. enforce Yuho's syntax by reading `.yh` files and checking whether a struct instance conforms to its struct definition laid out
@@ -19,6 +17,7 @@
     * make it easy to START writing a Yuho struct in a `.yh` file
     * check the validity of a Yuho file ending in the file extension `.yh`
     * transpile the `.yh` file to a `.mmd` file that provides either a Mindmap or Flowchart
+    * tool that affords dynamic generation of struct instances / tests as legible examples for lawyers to use based upon the *Illustrations* section of a given definition statute (again, see S415 on Cheating)
     * think of a funny name for the CLI tool like *junior_lawywer* *(in the spirit of Catala's `clerk`)*
 
 ### Later
