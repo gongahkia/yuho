@@ -5,14 +5,16 @@
 ### Immediate 
 
 * Currently rescope Yuho to focus on accurately representing **definition sections** within the Penal Code (s415 for cheating) under [`s415_cheating_definition.yh`](./../example/s415_cheating_definition.yh)
+    * change the base README.md to reflect this shift
+    * figure out what mermaid diagrams can be created based on the illustration struct instances
+* Add a live editor if possible that transpiles yuho code live by running a script in the backend and rerenders the mermaid diagram everytime
+    * Implement this in svelteflow for extra points
 * Apply the following changes made to *Cheating* to all other examples as well!
 * Proposed workflow for [`src`](./../src) code
     1. enforce Yuho's syntax by reading `.yh` files and checking whether a struct instance conforms to its struct definition laid out
         * add a reminder in the LSP whenever an enum is detected to not end with an `NA` option 
         * linting as needed
     2. transpile `.yh` code to `.mmd` for diagramtic representations by reading **valid struct instances**, see `./../test_frontend/` and continue working on the code for that
-* Add a live editor if possible that transpiles yuho code live by running a script in the backend and rerenders the mermaid diagram everytime
-    * Implement this in svelteflow for extra points
 * Add Yuho CLI tools in Svelte or Rust to run checks similar to Rust Cargo that 
     * make it easy to START writing a Yuho struct in a `.yh` file
     * check the validity of a Yuho file ending in the file extension `.yh`

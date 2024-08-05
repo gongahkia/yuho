@@ -33,7 +33,7 @@ Once converted to Yuho's syntax, the statute will be structured as follows.
 
 > [!NOTE]
 > For an annotated version of the below Yuho  
-> code, see [s415_cheating_definition.yh](./../example/s415_cheating_definition.yh).  
+> code, see [s415_cheating_definition.yh](./../example/cheating/s415_cheating_definition.yh).  
 
 ```yh
 /*

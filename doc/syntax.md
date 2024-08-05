@@ -16,7 +16,8 @@
 
 * Yuho source files have the file extension `.yh`
 * strongly, statically-typed
-* camelCase naming scheme
+* Yuho source files follow the snake_case naming scheme 
+* variables, functions, structs and all user-defined constructs follow the camelCase naming scheme
 * indentation is optional but recommended for easier readability with multiple nested {} curly braces
 * features limited syntax out of the box
     * allow for language to be quickly picked up and used
