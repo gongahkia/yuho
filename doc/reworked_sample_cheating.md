@@ -85,9 +85,9 @@ scope s415CheatingDefinition {
     // ~ STRUCT DEFINITION ~
 
     struct Cheating { 
-        Party accused,
+        string || Party accused,
         string action,
-        Party victim,
+        string || Party victim,
         AttributionType attribution,
         DeceptionType deception,
         InducementType inducement,

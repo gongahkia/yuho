@@ -1,0 +1,23 @@
+// add to synatx.md and here keyword for importing structs and other declared keywords like function
+
+/* 
+
+Based off the following illustration A on cheating
+
+"A, by falsely pretending to be in the Government service, intentionally deceives Z, and thus dishonestly induces Z to let him have on credit goods for which he does not mean to pay. A cheats."
+
+*/
+
+Cheating cheatingIllustrationA := { 
+
+    accused := "A",
+    action := "falsely pretending to be in the Government service, intentionally deceiving",
+    victim := "Z",
+    attribution := AttributionType.SoleInducment, // since the deception is directly causing the action
+    deception := DeceptionType.Dishonestly, // as the action is done dishonestly
+    inducement := InducementType.ConsentRetainProperty, // Z is induced to let A have goods on credit
+    causesDamageHarm := TRUE, // as Z is harmed by losing the goods
+    damageHarmResult := DamageHarmType.Property, // the damage is to Z's property
+    definition := ConsequenceDefinition.SaidToCheat, // clearly cheating in this case
+
+}
