@@ -51,9 +51,10 @@ comment
         // . => scoped variables, structs and functions are then called via . dot syntax
         // also observe how this syntax is nearly identical to a struct's declaration
         // all scopes are automatically exported as user-defined modules which can be called from other files
-    // referencing <fileName> => brings all scopes declared in other Yuho source files into the local scope of the current Yuho file by default , the equivalent of import in JavaScript, #import or #include in C-style languages, and use or mod in Rust
+    // referencing <fileName> => brings all scopes declared in other Yuho source files into the local scope of the current Yuho file by default, the equivalent of import in JavaScript, #import or #include in C-style languages, and use or mod in Rust
     // referencing <scopeName> from <fileName> => brings a single specific scope into the current file
         // . => elements (variables, structs, functions) from within a scope can then be called with the following format using the dot syntax in <scopeName>.<elementName>
+        // fileName => specified without the .yh file extension, similar to Golang and most other programming languages
 
 scope teachingScope {
     integer anInteger := 100

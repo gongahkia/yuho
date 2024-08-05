@@ -6,11 +6,9 @@ Based off the following illustration A on cheating
            to pay. A cheats."
 */
 
-referencing Cheating from s415_cheating_definition 
-    // import syntax to bring in structs and functions from other files
-    // specify that keyword and update syntax.md to include it
+referencing Cheating from s415_cheating_definition // syntax to bring in a previously declared struct from another Yuho source file
 
-Cheating cheatingIllustrationA := { 
+s415_cheating_definition.Cheating cheatingIllustrationA := { 
 
     accused := "A",
     action := "falsely pretending to be in the Government service, intentionally deceiving",
