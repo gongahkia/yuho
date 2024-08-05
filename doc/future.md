@@ -4,8 +4,34 @@
 
 ### Immediate 
 
-* Currently rescope Yuho to focus on accurately representing **definition sections** within the Penal Code (s415 for cheating) under [`s415_cheating_definition.yh`](./../example/s415_cheating_definition.yh)
-    * change the base README.md to reflect this shift
+* Integrate fault element, physical element, defences
+   * Add further syntax for how to specify one portion as ACTUS REUS and one portion as MENS REUS
+       * Shelve discussion of defences for now and add it below to future.md as additional thing to consider but inconsequential since statutes by default don't specify the defences of an offence
+       * Consider integrating actus reas and mens reas and defences into the EXISTING statute struct literals for definitions
+           * attribution and deception: mental element
+           * actual action performed: physical element 
+       * How else can I break down the logic of a statute *(both definition s415 and consequence punishment application s416-s420)* to be **even more** granular?
+           * Fault element
+           * Physical element
+           * Defences
+       * Refer to Criminal Law notes google doc from Azfir's structure of inquiry as required
+    * Diagrammatically represent the actus reus and mens reus with flowchart subgraphs as below
+    * If succesfull, integrate this updated syntax into the `./example/cheating/s415_cheating_definition.yh` and `./doc/reworked_sample_cheating.md`
+
+```mermaid
+flowchart TD
+    subgraph Actus Reus
+        A[Start] --> B[Process]
+    end
+
+    subgraph Mens Reus
+        C{Decision} -->|Yes| D[End]
+        C -->|No| E[Alternative End]
+    end
+
+    A --> C
+    B --> C
+```
 
 * Create a tool that can compile a base struct definition file and an instance of a struct literal file of a given illustration / situation and highlight that path in a Mermaid flowchart, perhaps with a clicking through and rerendering the mermaid diagram each time while appending a new named node to the class
     * Brainstorm all possible mermaid diagrams that can be created based on the illustration struct instances
@@ -39,6 +65,8 @@ flowchart TD
     * transpile the `.yh` file to a `.mmd` file that provides either a Mindmap or Flowchart
     * tool that affords dynamic generation of struct instances / tests as legible examples for lawyers to use based upon the *Illustrations* section of a given definition statute (again, see S415 on Cheating)
     * think of a funny name for the CLI tool like *junior_lawywer* *(in the spirit of Catala's `clerk`)*
+* Currently rescope Yuho to focus on accurately representing **definition sections** within the Penal Code (s415 for cheating) under [`s415_cheating_definition.yh`](./../example/s415_cheating_definition.yh)
+    * change the base README.md to reflect this shift
 
 ### Later
 
@@ -89,17 +117,7 @@ flowchart TD
     * Do I want to break down the terms and logic within these sections also?
     * Consider how these *Explanations* would be rendered on the existing Mindmap and Flowchart representations in mermaid
 
-6. Integrate fault element, physical element, defences
-    * How else can I break down the logic of a statute *(both definition s415 and consequence punishment application s416-s420) *to be **even more** granular?
-        * Fault element
-        * Physical element
-        * Defences
-    * Refer to Criminal Law notes google doc from Azfir's structure of inquiry as required
-    * Consider integrating actus reas and mens reas and defences into the EXISTING statute struct literals for definitions
-        * attribution and deception: mental element
-        * actual action performed: physical element
-
-7. Future scope
+6. Future scope
     * expand Yuho's scope to cover **both** definition **and** the consequence punishment application sections (s416 - s420)
     * see how to represent them within `.yh` code first, include those in the `./examples/` folder
     * then determine what their transpiled output and diagramatic representation in `.mmd` would look like
