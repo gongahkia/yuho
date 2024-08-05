@@ -9,6 +9,8 @@ Based off the following illustration A on cheating
            to pay. A cheats."
 */
 
+Referencing Cheating from s415_cheating_definition
+
 Cheating cheatingIllustrationA := { 
 
     accused := "A",
