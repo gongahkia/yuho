@@ -1,0 +1,24 @@
+/*
+Based off the following illustration B on cheating
+    * (b) "A, by putting a counterfeit mark on an article,
+           intentionally deceives Z into a belief that this article
+           was made by a certain celebrated manufacturer, and thus
+           dishonestly induces Z to buy and pay for the article.
+           A cheats."
+*/
+
+referencing Cheating from s415_cheating_definition 
+
+s415_cheating_definition.Cheating cheatingIllustrationB := { 
+
+    accused := "A",
+    action := "putting a counterfeit mark on an article, intentionally deceiving",
+    victim := "Z",
+    attribution := AttributionType.SoleInducment, 
+    deception := DeceptionType.Dishonestly, 
+    inducement := InducementType.DeliverProperty, // Z is induced to buy and pay for the article
+    causesDamageHarm := TRUE, 
+    damageHarmResult := DamageHarmType.Property, // damage is to Z's property
+    definition := ConsequenceDefinition.SaidToCheat, // clear cheating case
+
+}

@@ -1,0 +1,24 @@
+/*
+Based off the following illustration K on cheating
+    * (k) "A places an order for concert tickets using 
+           stolen credit card details, intentionally deceives 
+           Z into believing that the payment is legitimate, and 
+           thereby dishonestly induces Z to deliver the tickets. 
+           A cheats."
+*/
+
+referencing Cheating from s415_cheating_definition 
+
+s415_cheating_definition.Cheating cheatingIllustrationK := { 
+
+    accused := "A",
+    action := "placing an order for concert tickets using stolen credit card details, intentionally deceiving",
+    victim := "Z",
+    attribution := AttributionType.SoleInducment, 
+    deception := DeceptionType.Fraudulently, 
+    inducement := InducementType.DeliverProperty, // Z is induced to deliver the tickets
+    causesDamageHarm := TRUE, 
+    damageHarmResult := DamageHarmType.Property, // damage is to Z's property
+    definition := ConsequenceDefinition.SaidToCheat, // clear cheating case
+
+}

@@ -1,0 +1,25 @@
+/*
+Based off the following illustration I on cheating
+    * (i) "A sells and conveys an estate to B. A, knowing 
+           that in consequence of such sale he has no right 
+           to the property, sells or mortgages the same to Z 
+           without disclosing the fact of the previous sale and
+           conveyance to B, and receives the purchase or mortgage 
+           money from Z. A cheats."
+*/
+
+referencing Cheating from s415_cheating_definition 
+
+s415_cheating_definition.Cheating cheatingIllustrationI := { 
+
+    accused := "A",
+    action := "selling or mortgaging the same property to Z without disclosing the previous sale",
+    victim := "Z",
+    attribution := AttributionType.SoleInducment, 
+    deception := DeceptionType.Dishonestly, 
+    inducement := InducementType.DeliverProperty, // Z is induced to pay money
+    causesDamageHarm := TRUE, 
+    damageHarmResult := DamageHarmType.Property, // damage is to Z's property
+    definition := ConsequenceDefinition.SaidToCheat, // clear cheating case
+
+}
