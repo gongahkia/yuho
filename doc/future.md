@@ -8,7 +8,7 @@
 
 * Rethink Yuho's direction and if I seek to represent **only** definition sections or if I seek to represent **both** definition and the **consequence punishemnt application sections**
     * Rescope entire project based on accurately representing a single provision for Cheating from S415 
-    * Continue working on this from [`s415_cheating_definition.yh`](./../example/s415_cheatingDefinition.yh)
+    * Continue working on this from [`s415_cheating_definition.yh`](./../example/s415_cheating_definition.yh)
     * Incorporate conditional logic (like OR) into all attribute of the structm including punishment etc. 
         * What other elements of a statute can I break up and specify logic within?
     * How else can I break down the logic of a statute to be **even more** granular?
