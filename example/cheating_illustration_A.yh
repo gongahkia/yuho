@@ -1,6 +1,3 @@
-// add a keyword for importing structs and other declared keywords like function into other files
-// specify that keyword and update syntax.md to include it
-
 /* 
 Based off the following illustration A on cheating
     * (a) "A, by falsely pretending to be in the Government service, 
@@ -9,7 +6,9 @@ Based off the following illustration A on cheating
            to pay. A cheats."
 */
 
-Referencing Cheating from s415_cheating_definition
+referencing Cheating from s415_cheating_definition 
+    // import syntax to bring in structs and functions from other files
+    // specify that keyword and update syntax.md to include it
 
 Cheating cheatingIllustrationA := { 
 
