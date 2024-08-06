@@ -10,7 +10,10 @@
     * Maybe have a sidebar showing what each step fulfilled is like to achieve that highlighted path *(assuming click-through functionality is present)*
     * Write a script that parses the mermaid file and assigns each start and destination arrow (descriptions within `[]`, split by `-->`)
     * This indice will later be referenced when deciding which arrow to color
-        * linkStyle <indiceThatIsTheArrowNumber> stroke:#77DD77,stroke-width:4px;
+        * `linkStyle <indiceThatIsTheArrowNumber> stroke:#77DD77,stroke-width:4px;`
+    * Animate mermaid diagrams effectively allowing "stepping through" by cycling through images
+        * [get the images](https://blog.lmorchard.com/2023/01/03/mermaid-animations/)
+        * [invisible boxes](https://yairm210.medium.com/animating-mermaid-graphs-as-gifs-2ec8f3b24fbc) if needed for specific rendering patterns
 
 ```mermaid
 flowchart LR
