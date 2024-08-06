@@ -215,7 +215,15 @@ flowchart TD
 
 Yuho's flexible syntax affords further separation of concepts foundational to Criminal Law, such as the *Material facts*, *Mens Rea* and *Actus Reus*.  
 
-These can likewise be displayed both as a mindmap and as a flowchart.
+> [!NOTE]
+> For an annotated version of the below Yuho  
+> code, see [s415_detailed_cheating_definition.yh](./../example/cheating/s415_detailed_cheating_definition.yh).  
+
+```yh
+
+```
+
+When transpiled, these can then be displayed both as a mindmap and a flowchart.  
 
 ```mermaid
 mindmap

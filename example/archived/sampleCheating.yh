@@ -20,7 +20,7 @@ scope sampleCheating {
         punishment ofPersonation,
     }
 
-    punishment {
+    struct punishment {
         duration imprisonmentDuration,
         pass | money fine,
         pass | string supplementaryPunishment,

@@ -4,6 +4,7 @@
 
 ### Immediate 
 
+* If succesfull, integrate this updated syntax into the `./example/cheating/s415_cheating_definition.yh` and `./doc/reworked_sample_cheating.md`
 * Integrate fault element, physical element, defences
    * Add further syntax for how to specify one portion as ACTUS REUS and one portion as MENS REUS
        * Shelve discussion of defences for now and add it below to future.md as additional thing to consider but inconsequential since statutes by default don't specify the defences of an offence
@@ -23,23 +24,6 @@
                 * ILLEGAL OMISSION
            * Defences
        * Refer to Criminal Law notes google doc from Azfir's structure of inquiry as required
-    * Diagrammatically represent the actus reus and mens reus with flowchart subgraphs as below
-    * If succesfull, integrate this updated syntax into the `./example/cheating/s415_cheating_definition.yh` and `./doc/reworked_sample_cheating.md`
-
-```mermaid
-flowchart TD
-    subgraph Actus Reus
-        A[Start] --> B[Process]
-    end
-
-    subgraph Mens Reus
-        C{Decision} -->|Yes| D[End]
-        C -->|No| E[Alternative End]
-    end
-
-    A --> C
-    B --> C
-```
 
 * Create a tool that can compile a base struct definition file and an instance of a struct literal file of a given illustration / situation and highlight that path in a Mermaid flowchart, perhaps with a clicking through and rerendering the mermaid diagram each time while appending a new named node to the class
     * Brainstorm all possible mermaid diagrams that can be created based on the illustration struct instances

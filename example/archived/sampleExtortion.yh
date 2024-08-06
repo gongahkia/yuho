@@ -22,7 +22,7 @@ scope sampleExtortion {
         punishment withThreatToCauseGrievousHurt,
     }
 
-    punishment {
+    struct punishment {
         duration imprisonmentDuration,
         pass | money fine,
         pass | string supplementaryPunishment,
