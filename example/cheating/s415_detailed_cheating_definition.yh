@@ -7,7 +7,7 @@ Based off the following statutory provisions on cheating
     * Penal Code S415
 /* 
 
-scope s415CheatingDefinition {
+scope s415DetailedCheatingDefinition {
 
     // ~ ENUMS ~
         // observe how we use enums to model most multi-valued custom types in Yuho, the equivalent of optional types in other programming languages
@@ -50,19 +50,31 @@ scope s415CheatingDefinition {
         NotSaidToCheat,
     }
 
-    struct Ablah blah
+    // ~ STRUCT DEFINITIONS ~
+        // used to group related information
+        // structs are a type onto themselves, a custom datatype
 
-    // ~ STRUCT DEFINITION ~
-
-    struct Cheating { 
+    struct Facts { // STRUCT
         string || Party accused,
         string action,
         string || Party victim,
-        AttributionType attribution,
+    }
+
+    struct MentalElement { // STRUCT
         DeceptionType deception,
+    }
+
+    struct PhysicalElement { // STRUCT
+        AttributionType attribution,
         InducementType inducement,
         boolean causesDamageHarm,
-        {DamageHarmType} || DamageHarmType damageHarmResult, // union type where damageHarmResult can either be an array of enums or a single enum, the enum defined under DamageHarmType
+        {DamageHarmType} || DamageHarmType damageHarmResult, 
+    }
+
+    struct Cheating { // STRUCT
+        Facts materialFacts,
+        MentalElement mensRea,
+        PhysicalElement actusReus,
         ConsequenceDefinition definition,
     }
 
@@ -75,24 +87,30 @@ scope s415CheatingDefinition {
             // there must be at least ONE struct attribute literal defined below for each struct attribute specified within the definition above
             // Yuho's interpreter will specify any inconsistencies and prevent transpilation if the struct literal is instantiated wrongly
 
-        accused := Party.Accused,
-        action := "deceiving",
-        victim := Party.Victim,
-        attribution := AttributionType.SoleInducment or AttributionType.NotSoleInducement or AttributionType.NA,
-        deception := DeceptionType.Fraudulently or DeceptionType.Dishonestly or DeceptionType.NA,
-        inducement := InducementType.DeliverProperty or InducementType.ConsentRetainProperty or InducementType.DoOrOmit or InducementType.NA, 
-        causesDamageHarm := TRUE or FALSE,
-        damageHarmResult := {
-            DamageHarmType.Body,
-            DamageHarmType.Mind,
-            DamageHarmType.Reputation,
-            DamageHarmType.Property,
-        } or DamageHarmType.NA, // this evaluates in the backend to a simple OR construct as with deception, inducement and causesDamageHarm
+        materialFacts := {
+            accused := Party.Accused,
+            action := "deceiving",
+            victim := Party.Victim,
+        },
+        mensRea := {
+            deception := DeceptionType.Fraudulently or DeceptionType.Dishonestly or DeceptionType.NA,
+        },
+        actusReus := {
+            attribution := AttributionType.SoleInducment or AttributionType.NotSoleInducement or AttributionType.NA,
+            inducement := InducementType.DeliverProperty or InducementType.ConsentRetainProperty or InducementType.DoOrOmit or InducementType.NA, 
+            causesDamageHarm := TRUE or FALSE,
+            damageHarmResult := {
+                DamageHarmType.Body,
+                DamageHarmType.Mind,
+                DamageHarmType.Reputation,
+                DamageHarmType.Property,
+            } or DamageHarmType.NA, // this evaluates in the backend to a simple OR construct as with deception, inducement and causesDamageHarm
+        },
 
         // ~ logical short circuiting ~
             // every logical operator introduced in a struct instance must have its each of its enumerations' logic resolved with a corresponding match-case construct
             // by convention, the match-case constructs are placed at the bottom of the struct instance for greater readability
-            // since the logical shortcircuiting is introduced here, it means the order of the struct literal's attributes above does not really matter  
+            // since the logical shortcircuiting is introduced here, it means the order of the struct literal's attributes above does not really matter and they can be further grouped with structs
 
         definition := match attribution {
             case AttributionType.SoleInducment := deception
