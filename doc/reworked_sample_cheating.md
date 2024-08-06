@@ -402,8 +402,9 @@ To see how a specific scenario plays out *(see [`cheating_illustration_A.yh`](./
 
 ```mermaid
 flowchart TD
+
     subgraph flowchart2[Illustration A]
-        A1[Cheating Illustration A] --> B1[Accused := A]
+        A1[Cheating] --> B1[Accused := A]
         B1 --> C1[Action := Falsely pretending to be in Government service, intentionally deceiving]
         C1 --> D1[Victim := Z]
         D1 --> E1[Attribution := SoleInducement]
@@ -412,12 +413,29 @@ flowchart TD
         G1 --> H1[Causes Damage/Harm := TRUE]
         H1 --> I1[Damage Harm Result := Property]
         I1 --> J1[Definition := SaidToCheat]
+
+        subgraph MaterialFacts1[Material Facts]
+            B1
+            C1
+            D1
+        end
+
+        subgraph MensRea1[Mens Rea]
+            F1
+        end
+
+        subgraph ActusReus1[Actus Reus]
+           E1
+           G1
+           H1
+           I1 
+        end
     end
 
     subgraph flowchart1[Cheating statute Definition]
         A2[Cheating] --> B2[Accused := Party.Accused]
         
-        subgraph MaterialFacts[Material Facts]
+        subgraph MaterialFacts2[Material Facts]
             B2 --> C2[Action := Deceiving] 
             C2 --> D2[Victim := Party.Victim]
         end
@@ -431,7 +449,7 @@ flowchart TD
         F2 --> |DeceptionType.Dishonestly| G2
         F2 --> |DeceptionType.NA| Z
         
-        subgraph MensRea[Mens Rea]
+        subgraph MensRea2[Mens Rea]
             F2
         end
         
@@ -440,7 +458,7 @@ flowchart TD
         G2 --> |InducementType.DoOrOmit| H2
         G2 --> |InducementType.NA| Z
         
-        subgraph ActusReus[Actus Reus]
+        subgraph ActusReus2[Actus Reus]
             E2
             G2
             H2
