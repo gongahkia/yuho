@@ -401,49 +401,79 @@ flowchart LR
 To see how a specific scenario plays out *(see [`cheating_illustration_A.yh`](./../example/cheating/cheating_illustration_A.yh))* according to the statute definition specified earlier, each step in the logical journey can be traced.
 
 ```mermaid
-flowchart LR
-    A[Cheating] --> B[Accused := Party.Accused]
-    subgraph Material facts
-        B --> C[Action := Deceiving] 
-        C --> D[Victim := Party.Victim]
-    end 
-    D --> E[Attribution]
-    E --> |AttributionType.SoleInducement| F[Deception]
-    E --> |AttributionType.NotSoleInducement| F
-    E --> |AttributionType.NA| Z
-    F --> |DeceptionType.Fraudulently| G[Inducement] 
-    F --> |DeceptionType.Dishonestly| G
-    F --> |DeceptionType.NA| Z 
-    subgraph Mens Rea
-        F
+flowchart TD
+    subgraph flowchart2[Illustration A]
+        A1[Cheating Illustration A] --> B1[Accused := A]
+        B1 --> C1[Action := Falsely pretending to be in Government service, intentionally deceiving]
+        C1 --> D1[Victim := Z]
+        D1 --> E1[Attribution := SoleInducement]
+        E1 --> F1[Deception := Dishonestly]
+        F1 --> G1[Inducement := ConsentRetainProperty]
+        G1 --> H1[Causes Damage/Harm := TRUE]
+        H1 --> I1[Damage Harm Result := Property]
+        I1 --> J1[Definition := SaidToCheat]
     end
-    G --> |InducementType.DeliverProperty| H[CausesDamageHarm]
-    G --> |InducementType.ConsentRetainProperty| H
-    G --> |InducementType.DoOrOmit| H
-    G --> |InducementType.NA| Z
-    subgraph Actus Reus
-        E
-        G
-        H
-        I
+
+    subgraph flowchart1[Cheating statute Definition]
+        A2[Cheating] --> B2[Accused := Party.Accused]
+        
+        subgraph MaterialFacts[Material Facts]
+            B2 --> C2[Action := Deceiving] 
+            C2 --> D2[Victim := Party.Victim]
+        end
+        
+        D2 --> E2[Attribution]
+        E2 --> |AttributionType.SoleInducement| F2[Deception]
+        E2 --> |AttributionType.NotSoleInducement| F2
+        E2 --> |AttributionType.NA| Z
+        
+        F2 --> |DeceptionType.Fraudulently| G2[Inducement] 
+        F2 --> |DeceptionType.Dishonestly| G2
+        F2 --> |DeceptionType.NA| Z
+        
+        subgraph MensRea[Mens Rea]
+            F2
+        end
+        
+        G2 --> |InducementType.DeliverProperty| H2[CausesDamageHarm]
+        G2 --> |InducementType.ConsentRetainProperty| H2
+        G2 --> |InducementType.DoOrOmit| H2
+        G2 --> |InducementType.NA| Z
+        
+        subgraph ActusReus[Actus Reus]
+            E2
+            G2
+            H2
+            I2
+        end
+        
+        H2 --> |TRUE| I2[DamageHarmResult]
+        H2 --> |FALSE| Z[ConsequenceDefinition.NotSaidToCheat]
+        I2 --> |DamageHarmType.Body| Y[ConsequenceDefinition.SaidToCheat]
+        I2 --> |DamageHarmType.Mind| Y
+        I2 --> |DamageHarmType.Reputation| Y
+        I2 --> |DamageHarmType.Property| Y
+        I2 --> |DamageHarmType.NA| Z
     end
-    H --> |TRUE| I[DamageHarmResult]
-    H --> |FALSE| Z[ConsequenceDefinition.NotSaidToCheat]
-    I --> |DamageHarmType.Body| Y[ConsequenceDefinition.SaidToCheat]
-    I --> |DamageHarmType.Mind| Y
-    I --> |DamageHarmType.Reputation| Y
-    I --> |DamageHarmType.Property| Y
-    I --> |DamageHarmType.NA| Z
 
     classDef highlightedPath fill:#77DD77,stroke:#000,stroke-width:2px,color:black;
-    class A,B,C,D,E,F,G,H,I,Y highlightedPath;
+    class A1,B1,C1,D1,E1,F1,G1,H1,I1,J1 highlightedPath;
+    class A2,B2,C2,D2,E2,F2,G2,H2,I2,Y highlightedPath;
     linkStyle 0 stroke:#77DD77,stroke-width:4px;
     linkStyle 1 stroke:#77DD77,stroke-width:4px;
     linkStyle 2 stroke:#77DD77,stroke-width:4px;
     linkStyle 3 stroke:#77DD77,stroke-width:4px;
     linkStyle 4 stroke:#77DD77,stroke-width:4px;
+    linkStyle 5 stroke:#77DD77,stroke-width:4px;
+    linkStyle 6 stroke:#77DD77,stroke-width:4px;
     linkStyle 7 stroke:#77DD77,stroke-width:4px;
+    linkStyle 8 stroke:#77DD77,stroke-width:4px;
+    linkStyle 9 stroke:#77DD77,stroke-width:4px;
     linkStyle 10 stroke:#77DD77,stroke-width:4px;
-    linkStyle 14 stroke:#77DD77,stroke-width:4px;
+    linkStyle 11 stroke:#77DD77,stroke-width:4px;
+    linkStyle 12 stroke:#77DD77,stroke-width:4px;
+    linkStyle 13 stroke:#77DD77,stroke-width:4px;
+    linkStyle 16 stroke:#77DD77,stroke-width:4px;
     linkStyle 19 stroke:#77DD77,stroke-width:4px;
+    linkStyle 28 stroke:#77DD77,stroke-width:4px;
 ```
