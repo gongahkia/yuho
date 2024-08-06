@@ -1,5 +1,7 @@
 # Reworked example for S415 Cheating Statute
 
+![](./asset/monkey.jpg)
+
 Here's the process of breaking down a statute's definition. The below example is done on the offense of Cheating under Penal Code S415.
 
 In plaintext, Penal Code S415 is as below.
