@@ -80,6 +80,8 @@ flowchart LR
 * Currently rescope Yuho to focus on accurately representing **definition sections** within the Penal Code (s415 for cheating) under [`s415_cheating_definition.yh`](./../example/s415_cheating_definition.yh)
     * change the base README.md to reflect this shift
 * Clean up all ideas for easier reading in [`reworked_sample_cheating.md`](./../doc/reworked_sample_cheating.md)
+* Consider using [KROKI](https://kroki.io/) to render my diagrams instead
+* Provide both mermaid and kroki as transpilation output options
 
 ### Later
 
