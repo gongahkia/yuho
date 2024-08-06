@@ -36,14 +36,7 @@ Once converted to Yuho's syntax, the statute will be structured as follows.
 > code, see [s415_cheating_definition.yh](./../example/cheating/s415_cheating_definition.yh).  
 
 ```yh
-/*
-Based off the following statutory provisions on cheating
-    * Penal Code S415
-/* 
-
 scope s415CheatingDefinition {
-
-    // ~ ENUMS ~
 
     struct Party { 
         Accused,
@@ -82,8 +75,6 @@ scope s415CheatingDefinition {
         NotSaidToCheat,
     }
 
-    // ~ STRUCT DEFINITION ~
-
     struct Cheating { 
         string || Party accused,
         string action,
@@ -95,8 +86,6 @@ scope s415CheatingDefinition {
         {DamageHarmType} || DamageHarmType damageHarmResult, 
         ConsequenceDefinition definition,
     }
-
-    // ~ STRUCT LITERAL ~
 
     Cheating cheatingDefinition := { 
 
@@ -220,7 +209,119 @@ Yuho's flexible syntax affords further separation of concepts foundational to Cr
 > code, see [s415_detailed_cheating_definition.yh](./../example/cheating/s415_detailed_cheating_definition.yh).  
 
 ```yh
+scope s415DetailedCheatingDefinition {
 
+    struct Party {
+        Accused,
+        Victim,
+    }
+
+    struct AttributionType {
+        SoleInducment,
+        NotSoleInducement,
+        NA,
+    }
+
+    struct DeceptionType {
+        Fraudulently,
+        Dishonestly,
+        NA,
+    }
+
+    struct InducementType {
+        DeliverProperty,
+        ConsentRetainProperty,
+        DoOrOmit,
+        NA,
+    }
+
+    struct DamageHarmType {
+        Body,
+        Mind, 
+        Reputation,
+        Property,
+        NA,
+    }
+
+    struct ConsequenceDefinition {
+        SaidToCheat,
+        NotSaidToCheat,
+    }
+
+    struct Facts {
+        string || Party accused,
+        string action,
+        string || Party victim,
+    }
+
+    struct MentalElement {
+        DeceptionType deception,
+    }
+
+    struct PhysicalElement {
+        AttributionType attribution,
+        InducementType inducement,
+        boolean causesDamageHarm,
+        {DamageHarmType} || DamageHarmType damageHarmResult, 
+    }
+
+    struct Cheating {
+        Facts materialFacts,
+        MentalElement mensRea,
+        PhysicalElement actusReus,
+        ConsequenceDefinition definition,
+    }
+
+    Cheating cheatingDefinition := { 
+
+        materialFacts := {
+            accused := Party.Accused,
+            action := "deceiving",
+            victim := Party.Victim,
+        },
+        mensRea := {
+            deception := DeceptionType.Fraudulently or DeceptionType.Dishonestly or DeceptionType.NA,
+        },
+        actusReus := {
+            attribution := AttributionType.SoleInducment or AttributionType.NotSoleInducement or AttributionType.NA,
+            inducement := InducementType.DeliverProperty or InducementType.ConsentRetainProperty or InducementType.DoOrOmit or InducementType.NA, 
+            causesDamageHarm := TRUE or FALSE,
+            damageHarmResult := {
+                DamageHarmType.Body,
+                DamageHarmType.Mind,
+                DamageHarmType.Reputation,
+                DamageHarmType.Property,
+            } or DamageHarmType.NA, 
+        },
+
+        definition := match attribution {
+            case AttributionType.SoleInducment := deception
+            case AttributionType.NotSoleInducement := deception
+            case AttributionType.NA := consequence ConsequenceDefinition.NotSaidToCheat
+        },
+        definition := match deception {
+            case DeceptionType.Fraudulently := consequence inducement
+            case DeceptionType.Dishonestly := consequence inducement
+            case DeceptionType.NA := consequence ConsequenceDefinition.NotSaidToCheat
+        },
+        definition := match inducement {
+            case InducementType.DeliverProperty := consequence causesDamageHarm
+            case InducementType.ConsentRetainProperty := consequence causesDamageHarm
+            case InducementType.DoOrOmit := consequence causesDamageHarm
+            case InducementType.NA := consequence ConsequenceDefinition.NotSaidToCheat
+        },
+        definition := match causesDamageHarm{
+            case TRUE := consequence damageHarmResult
+            case FALSE := consequence ConsequenceDefinition.NotSaidToCheat
+        },
+        definition := match {
+            case DamageHarmType.NA in damageHarmResult := consequence ConsequenceDefinition.NotSaidToCheat
+            case _ :=  consequence ConsequenceDefinition.SaidToCheat 
+        },
+
+    }
+
+}
 ```
 
 When transpiled, these can then be displayed both as a mindmap and a flowchart.  
@@ -262,7 +363,7 @@ mindmap
 ```
 
 ```mermaid
-flowchart TD
+flowchart LR
     A[Cheating] --> B[Accused := Party.Accused]
     subgraph Material facts
         B --> C[Action := Deceiving] 
@@ -283,6 +384,7 @@ flowchart TD
     G --> |InducementType.DoOrOmit| H
     G --> |InducementType.NA| Z
     subgraph Actus Reus
+        E
         G
         H
         I
