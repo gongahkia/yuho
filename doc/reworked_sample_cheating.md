@@ -203,7 +203,7 @@ flowchart TD
     I --> |DamageHarmType.NA| Z
 ```
 
-Yuho's flexible syntax affords further separation of concepts foundational to Criminal Law, such as the *Material facts*, *Mens Rea* and *Actus Reus*.  
+Further, Yuho's flexible syntax also affords separation of concepts foundational to Criminal Law, such as *Material facts*, *Mens Rea* and *Actus Reus*.  
 
 > [!NOTE]
 > For an annotated version of the below Yuho code, see [s415_detailed_cheating_definition.yh](./../example/cheating/s415_detailed_cheating_definition.yh).  
