@@ -32,8 +32,7 @@ is said to cheat."
 Once converted to Yuho's syntax, the statute will be structured as follows.
 
 > [!NOTE]
-> For an annotated version of the below Yuho  
-> code, see [s415_cheating_definition.yh](./../example/cheating/s415_cheating_definition.yh).  
+> For an annotated version of the below Yuho code, see [s415_cheating_definition.yh](./../example/cheating/s415_cheating_definition.yh).  
 
 ```yh
 scope s415CheatingDefinition {
@@ -205,8 +204,7 @@ flowchart TD
 Yuho's flexible syntax affords further separation of concepts foundational to Criminal Law, such as the *Material facts*, *Mens Rea* and *Actus Reus*.  
 
 > [!NOTE]
-> For an annotated version of the below Yuho  
-> code, see [s415_detailed_cheating_definition.yh](./../example/cheating/s415_detailed_cheating_definition.yh).  
+> For an annotated version of the below Yuho code, see [s415_detailed_cheating_definition.yh](./../example/cheating/s415_detailed_cheating_definition.yh).  
 
 ```yh
 scope s415DetailedCheatingDefinition {
