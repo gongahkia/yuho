@@ -8,18 +8,56 @@
     * Brainstorm all possible mermaid diagrams that can be created based on the illustration struct instances
     * Example of a highlighted path is as below
     * Maybe have a sidebar showing what each step fulfilled is like to achieve that highlighted path *(assuming click-through functionality is present)*
+    * Write a script that parses the mermaid file and assigns each start and destination arrow (descriptions within `[]`, split by `-->`)
+    * This indice will later be referenced when deciding which arrow to color
+        * linkStyle <indiceThatIsTheArrowNumber> stroke:#77DD77,stroke-width:4px;
 
 ```mermaid
-flowchart TD
-   A[Start] --> B[Process A]
-   B --> C[Decision]
-   C -->|Yes| D[Process B]
-   C -->|No| E[Process C]
-   D --> F[End]
-   E --> F
+flowchart LR
+    A[Cheating] --> B[Accused := Party.Accused]
+    subgraph Material facts
+        B --> C[Action := Deceiving] 
+        C --> D[Victim := Party.Victim]
+    end 
+    D --> E[Attribution]
+    E --> |AttributionType.SoleInducement| F[Deception]
+    E --> |AttributionType.NotSoleInducement| F
+    E --> |AttributionType.NA| Z
+    F --> |DeceptionType.Fraudulently| G[Inducement] 
+    F --> |DeceptionType.Dishonestly| G
+    F --> |DeceptionType.NA| Z 
+    subgraph Mens Rea
+        F
+    end
+    G --> |InducementType.DeliverProperty| H[CausesDamageHarm]
+    G --> |InducementType.ConsentRetainProperty| H
+    G --> |InducementType.DoOrOmit| H
+    G --> |InducementType.NA| Z
+    subgraph Actus Reus
+        E
+        G
+        H
+        I
+    end
+    H --> |TRUE| I[DamageHarmResult]
+    H --> |FALSE| Z[ConsequenceDefinition.NotSaidToCheat]
+    I --> |DamageHarmType.Body| Y[ConsequenceDefinition.SaidToCheat]
+    I --> |DamageHarmType.Mind| Y
+    I --> |DamageHarmType.Reputation| Y
+    I --> |DamageHarmType.Property| Y
+    I --> |DamageHarmType.NA| Z
 
-   classDef highlightedPath fill:#77DD77,stroke:#000,stroke-width:2px,color:black;
-   class A,B,C,D,F highlightedPath;
+    classDef highlightedPath fill:#77DD77,stroke:#000,stroke-width:2px,color:black;
+    class A,B,C,D,E,F,G,H,I,Y highlightedPath;
+    linkStyle 0 stroke:#77DD77,stroke-width:4px;
+    linkStyle 1 stroke:#77DD77,stroke-width:4px;
+    linkStyle 2 stroke:#77DD77,stroke-width:4px;
+    linkStyle 3 stroke:#77DD77,stroke-width:4px;
+    linkStyle 4 stroke:#77DD77,stroke-width:4px;
+    linkStyle 7 stroke:#77DD77,stroke-width:4px;
+    linkStyle 10 stroke:#77DD77,stroke-width:4px;
+    linkStyle 14 stroke:#77DD77,stroke-width:4px;
+    linkStyle 19 stroke:#77DD77,stroke-width:4px;
 ```
 
 * Add a live editor if possible that transpiles yuho code live by running a script in the backend and rerenders the mermaid diagram everytime
