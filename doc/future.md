@@ -4,26 +4,6 @@
 
 ### Immediate 
 
-* Integrate fault element, physical element, defences
-   * Add further syntax for how to specify one portion as ACTUS REUS and one portion as MENS REUS
-       * Shelve discussion of defences for now and add it below to future.md as additional thing to consider but inconsequential since statutes by default don't specify the defences of an offence
-       * Consider integrating actus reas and mens reas and defences into the EXISTING statute struct literals for definitions
-           * deception: mental element
-           * actual action performed, attribution: physical element 
-       * How else can I break down the logic of a statute *(both definition s415 and consequence punishment application s416-s420)* to be **even more** granular?
-           * Fault element
-                * INTENTION
-                * KNOWLEDGE
-                * RASHNESS
-                * NEGLIGENCE
-           * Physical element
-                * CAUSATION
-                * CONCURRENCE
-                * AUTOMATISM
-                * ILLEGAL OMISSION
-           * Defences
-       * Refer to Criminal Law notes google doc from Azfir's structure of inquiry as required
-
 * Create a tool that can compile a base struct definition file and an instance of a struct literal file of a given illustration / situation and highlight that path in a Mermaid flowchart, perhaps with a clicking through and rerendering the mermaid diagram each time while appending a new named node to the class
     * Brainstorm all possible mermaid diagrams that can be created based on the illustration struct instances
     * Example of a highlighted path is as below
@@ -117,6 +97,23 @@ flowchart TD
         * What other elements of a statute can I break up and specify logic within?
     * rethink Yuho's syntax to be more specific toward Criminal Law *(examine statutes within the Penal Code, what should we be representing?)*
     * can I represent detailed evaluation of a struct instance that includes BOTH the base definition *(eg. s415)* AND its detailed applications *(eg. s416-420)* within the same flowchart?
+
+7. More development on fault element, physical element, defences
+    * Further integrate the composite elements of Actus reus and Mens rea into Yuho's syntax and diagramatic representation?
+        * Fault element
+            * INTENTION
+            * KNOWLEDGE
+            * RASHNESS
+            * NEGLIGENCE
+        * Physical element
+            * CAUSATION
+            * CONCURRENCE
+            * AUTOMATISM
+            * ILLEGAL OMISSION
+    * Include general and specific defences?
+       * Shelve discussion of defences for now and add it below to future.md as additional thing to consider but inconsequential since statutes by default don't specify the defences of an offence
+       * Perhaps can include it within the flowchart
+    * Refer to Criminal Law notes google doc from Azfir's structure of inquiry as required
 
 ## Feedback
 
