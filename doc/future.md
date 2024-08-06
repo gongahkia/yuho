@@ -4,7 +4,6 @@
 
 ### Immediate 
 
-* If succesfull, integrate this updated syntax into the `./example/cheating/s415_cheating_definition.yh` and `./doc/reworked_sample_cheating.md`
 * Integrate fault element, physical element, defences
    * Add further syntax for how to specify one portion as ACTUS REUS and one portion as MENS REUS
        * Shelve discussion of defences for now and add it below to future.md as additional thing to consider but inconsequential since statutes by default don't specify the defences of an offence
