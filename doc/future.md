@@ -8,11 +8,19 @@
    * Add further syntax for how to specify one portion as ACTUS REUS and one portion as MENS REUS
        * Shelve discussion of defences for now and add it below to future.md as additional thing to consider but inconsequential since statutes by default don't specify the defences of an offence
        * Consider integrating actus reas and mens reas and defences into the EXISTING statute struct literals for definitions
-           * attribution and deception: mental element
-           * actual action performed: physical element 
+           * deception: mental element
+           * actual action performed, attribution: physical element 
        * How else can I break down the logic of a statute *(both definition s415 and consequence punishment application s416-s420)* to be **even more** granular?
            * Fault element
+                * INTENTION
+                * KNOWLEDGE
+                * RASHNESS
+                * NEGLIGENCE
            * Physical element
+                * CAUSATION
+                * CONCURRENCE
+                * AUTOMATISM
+                * ILLEGAL OMISSION
            * Defences
        * Refer to Criminal Law notes google doc from Azfir's structure of inquiry as required
     * Diagrammatically represent the actus reus and mens reus with flowchart subgraphs as below

@@ -212,3 +212,78 @@ flowchart TD
     I --> |DamageHarmType.Property| Y
     I --> |DamageHarmType.NA| Z
 ```
+
+Yuho's flexible syntax affords further separation of concepts foundational to Criminal Law, such as the *Material facts*, *Mens Rea* and *Actus Reus*.  
+
+These can likewise be displayed both as a mindmap and as a flowchart.
+
+```mermaid
+mindmap
+    Cheating
+        Material facts
+            Accused: Party.Accused
+            Action: Deceiving
+            Victim: Party.Victim
+        Mens Rea
+            Deception
+                DeceptionType.Fraudulently
+                DeceptionType.Dishonestly
+                DeceptionType.NA
+        Actus Reus
+            Attribution
+                AttributionType.SoleInducment
+                AttributionType.NotSoleInducement
+                AttributionType.NA
+            Inducement
+                InducementType.DeliverProperty
+                InducementType.ConsentRetainProperty
+                InducementType.DoOrOmit
+                InducementType.NA
+            Causes Damage/Harm
+                TRUE
+                FALSE
+            Damage/Harm Result
+                DamageHarmType.Body
+                DamageHarmType.Mind
+                DamageHarmType.Reputation
+                DamageHarmType.Property
+                DamageHarmType.NA
+      Definition
+        ConsequenceDefinition.SaidToCheat
+        ConsequenceDefinition.NotSaidToCheat
+```
+
+```mermaid
+flowchart TD
+    A[Cheating] --> B[Accused := Party.Accused]
+    subgraph Material facts
+        B --> C[Action := Deceiving] 
+        C --> D[Victim := Party.Victim]
+    end 
+    D --> E[Attribution]
+    E --> |AttributionType.SoleInducement| F[Deception]
+    E --> |AttributionType.NotSoleInducement| F
+    E --> |AttributionType.NA| Z
+    F --> |DeceptionType.Fraudulently| G[Inducement] 
+    F --> |DeceptionType.Dishonestly| G
+    F --> |DeceptionType.NA| Z 
+    subgraph Mens Rea
+        F
+    end
+    G --> |InducementType.DeliverProperty| H[CausesDamageHarm]
+    G --> |InducementType.ConsentRetainProperty| H
+    G --> |InducementType.DoOrOmit| H
+    G --> |InducementType.NA| Z
+    subgraph Actus Reus
+        G
+        H
+        I
+    end
+    H --> |TRUE| I[DamageHarmResult]
+    H --> |FALSE| Z[ConsequenceDefinition.NotSaidToCheat]
+    I --> |DamageHarmType.Body| Y[ConsequenceDefinition.SaidToCheat]
+    I --> |DamageHarmType.Mind| Y
+    I --> |DamageHarmType.Reputation| Y
+    I --> |DamageHarmType.Property| Y
+    I --> |DamageHarmType.NA| Z
+```
