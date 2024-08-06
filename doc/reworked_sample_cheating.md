@@ -324,7 +324,7 @@ scope s415DetailedCheatingDefinition {
 }
 ```
 
-When transpiled, these can then be displayed both as a mindmap and a flowchart.  
+When transpiled, these can then be displayed both as a mindmap    
 
 ```mermaid
 mindmap
@@ -361,6 +361,8 @@ mindmap
         ConsequenceDefinition.SaidToCheat
         ConsequenceDefinition.NotSaidToCheat
 ```
+
+and as a flowchart.
 
 ```mermaid
 flowchart LR
