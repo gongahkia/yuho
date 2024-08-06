@@ -79,6 +79,7 @@ flowchart LR
     * think of a funny name for the CLI tool like *junior_lawywer* *(in the spirit of Catala's `clerk`)*
 * Currently rescope Yuho to focus on accurately representing **definition sections** within the Penal Code (s415 for cheating) under [`s415_cheating_definition.yh`](./../example/s415_cheating_definition.yh)
     * change the base README.md to reflect this shift
+* Clean up all ideas for easier reading in [`reworked_sample_cheating.md`](./../doc/reworked_sample_cheating.md)
 
 ### Later
 
