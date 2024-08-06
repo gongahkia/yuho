@@ -397,3 +397,53 @@ flowchart LR
     I --> |DamageHarmType.Property| Y
     I --> |DamageHarmType.NA| Z
 ```
+
+To see how a specific scenario plays out *(see [`cheating_illustration_A.yh`](./../example/cheating/cheating_illustration_A.yh))* according to the statute definition specified earlier, each step in the logical journey can be traced.
+
+```mermaid
+flowchart LR
+    A[Cheating] --> B[Accused := Party.Accused]
+    subgraph Material facts
+        B --> C[Action := Deceiving] 
+        C --> D[Victim := Party.Victim]
+    end 
+    D --> E[Attribution]
+    E --> |AttributionType.SoleInducement| F[Deception]
+    E --> |AttributionType.NotSoleInducement| F
+    E --> |AttributionType.NA| Z
+    F --> |DeceptionType.Fraudulently| G[Inducement] 
+    F --> |DeceptionType.Dishonestly| G
+    F --> |DeceptionType.NA| Z 
+    subgraph Mens Rea
+        F
+    end
+    G --> |InducementType.DeliverProperty| H[CausesDamageHarm]
+    G --> |InducementType.ConsentRetainProperty| H
+    G --> |InducementType.DoOrOmit| H
+    G --> |InducementType.NA| Z
+    subgraph Actus Reus
+        E
+        G
+        H
+        I
+    end
+    H --> |TRUE| I[DamageHarmResult]
+    H --> |FALSE| Z[ConsequenceDefinition.NotSaidToCheat]
+    I --> |DamageHarmType.Body| Y[ConsequenceDefinition.SaidToCheat]
+    I --> |DamageHarmType.Mind| Y
+    I --> |DamageHarmType.Reputation| Y
+    I --> |DamageHarmType.Property| Y
+    I --> |DamageHarmType.NA| Z
+
+    classDef highlightedPath fill:#77DD77,stroke:#000,stroke-width:2px,color:black;
+    class A,B,C,D,E,F,G,H,I,Y highlightedPath;
+    linkStyle 0 stroke:#77DD77,stroke-width:4px;
+    linkStyle 1 stroke:#77DD77,stroke-width:4px;
+    linkStyle 2 stroke:#77DD77,stroke-width:4px;
+    linkStyle 3 stroke:#77DD77,stroke-width:4px;
+    linkStyle 4 stroke:#77DD77,stroke-width:4px;
+    linkStyle 7 stroke:#77DD77,stroke-width:4px;
+    linkStyle 10 stroke:#77DD77,stroke-width:4px;
+    linkStyle 14 stroke:#77DD77,stroke-width:4px;
+    linkStyle 19 stroke:#77DD77,stroke-width:4px;
+```
