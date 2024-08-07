@@ -164,7 +164,7 @@ flowchart LR
     * Proposed workflow 
         1. Statute def *(plaintext)* --[`model_1`]--> Statute def *(Yuho struct)*
         2. Statute def *(Yuho struct)* + Statute illustration *(plaintext)* --[`model_2`]--> Statute illustration *(Yuho struct)*
-        3. Statute illustration *(Yuho struct)* --[`transpilatin_program`]--> Whatever transpilation output
+        3. Statute illustration *(Yuho struct)* --[`transpilation_program`]--> Whatever transpilation output
     * Note that statute illustration CAN be replaced by any given scenario fed to Yuho
     * `model_1`: train a model that takes in existing statutes and converts it to Yuho code
     * `model_2`: train a model that takes in a statute as a yuho struct and a plaintext scenario and outputs the yuho struct for that scenario
