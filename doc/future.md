@@ -168,7 +168,7 @@ flowchart LR
     * Note that statute illustration CAN be replaced by any given scenario fed to Yuho
     * `model_1`: train a model that takes in existing statutes and converts it to Yuho code
     * `model_2`: train a model that takes in a statute as a yuho struct and a plaintext scenario and outputs the yuho struct for that scenario
-    * any transpilation output including the base mindmaps and flowcharts can then be produced
+    * `transpilation_program`: any transpilation output including the base mindmaps and flowcharts can then be produced
 
 ## Feedback
 
