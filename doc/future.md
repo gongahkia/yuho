@@ -24,6 +24,17 @@
             6. every ENUM and its respective enumeration values must be specified in a struct literal and have their predicates and consequences specified in a match-case conditional check
             7. the above rule can ONLY be ignored if case _ is used as a catch-all case
             8. match-case syntax itself must be correct with consequence being called
+        * consider writing in
+            * Racket: designed for creating new languages with metaprogramming support but less mainstream
+            * Elixir: excellent concurrency and expressive syntax but steeper learning curve and less mainstream than some other options
+            * Python: easy to write and maintain but slow performance since interpreted
+            * Ruby: very readable and expressive but slow performance and less widespread 
+            * JavaScript: extensive web ecosystem but slower performance
+            * Haskell: strong type system and great for functional programming paradigm but steep learning curve
+            * OCaml: strong type system and excellent for symbolic computation but steep learning curve
+            * C#: strong tooling support and heavy support in enterprise but heavier runtime compared to other options
+            * Lua: lightweight and excellent embedding but limited standard library, less support for concurrency 
+            * Go: good performance but limited metaprogramming support
 
 2. Yuho CLI TRANSPILER  
     * transpile **valid Yuho struct instances** to Mermaid mindmaps and flowcharts
