@@ -86,7 +86,7 @@ scope s415CheatingDefinition {
         } or DamageHarmType.NA, // this evaluates in the backend to a simple OR construct as with deception, inducement and causesDamageHarm
 
         // ~ logical short circuiting ~
-            // every logical operator introduced in a struct instance must have its each of its enumerations' logic resolved with a corresponding match-case construct
+            // every logical operator introduced in a struct literal must have its each of its enumerations' logic resolved with a corresponding match-case construct
             // by convention, the match-case constructs are placed at the bottom of the struct instance for greater readability
             // since the logical shortcircuiting is introduced here, it means the order of the struct literal's attributes above does not really matter  
 

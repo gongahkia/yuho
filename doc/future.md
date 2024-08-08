@@ -14,8 +14,22 @@
     * validate user-defined Yuho structs and enforces syntax
     * parses `.yh` files and checks whether a struct instance conforms to its struct definition laid out
     * **things to check**
-        1. emit REMINDER when an `enum` does not end with an `NA` option  
-        2. add more later
+        * ERRORS are fatal and break the interpreting
+        * REMINDERS are note fatal and do not break the interpreting
+        * ***GENERAl CHECKS***
+            1. base syntax checks
+        * ***STRUCT DEFINITION CHECKS***
+            1. emit REMINDER when an `enum` does not end with an `NA` option 
+            2. emit ERROR if calling another struct within a struct (nested call) but that struct is not defined
+        * ***STRUCT INSTANCE CHECKS***
+            1. check validity of sole types
+            2. check validity of UNION types with the || operator, whether the eventual type assigned is there
+            3. check validity of ENUM literals being declared from their base type
+            4. check validity of all enumerations of an ENUM specified with 'or' as the delimiters
+            5. specifically boolean types must always have TRUE and FALSE splayed out as enumerations
+            6. every ENUM and its respective enumeration values must be specified in a struct literal and have their predicates and consequences specified in a match-case conditional check
+            7. the above rule can ONLY be ignored if case _ is used as a catch-all case
+            8. match-case syntax itself must be correct with consequence being called
 
 2. Yuho CLI TRANSPILER  
     * transpile **valid Yuho struct instances** to Mermaid mindmaps and flowcharts
