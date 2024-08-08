@@ -66,6 +66,9 @@
             * Statute def *(plaintext)* --[`model_1`]--> Statute def *(Yuho struct)*
         2. `model_2`: train a model that takes in a statute as a yuho struct and a plaintext scenario and outputs the yuho struct for that scenario
             * Statute def *(Yuho struct)* + Statute illustration / Sample scenario *(plaintext)* --[`model_2`]--> Statute illustration / Sample scenario *(Yuho struct)*
+    * see [legal-bert](https://huggingface.co/nlpaueb/legal-bert-base-uncased)
+    * see [scott](https://scott.intelllex.com/)
+    * see [ollama](https://ollama.com/library)
 
 ### Later
 
