@@ -4,84 +4,68 @@
 
 ### Immediate 
 
-* Create a tool that can compile a base struct definition file and an instance of a struct literal file of a given illustration / situation and highlight that path in a Mermaid flowchart, perhaps with a clicking through and rerendering the mermaid diagram each time while appending a new named node to the class
-    * Brainstorm all possible mermaid diagrams that can be created based on the illustration struct instances
-    * Example of a highlighted path is as below
-    * Maybe have a sidebar showing what each step fulfilled is like to achieve that highlighted path *(assuming click-through functionality is present)*
-    * Write a script that parses the mermaid file and assigns each start and destination arrow (descriptions within `[]`, split by `-->`)
-    * This indice will later be referenced when deciding which arrow to color
-        * `linkStyle <indiceThatIsTheArrowNumber> stroke:#77DD77,stroke-width:4px;`
-    * Animate mermaid diagrams effectively allowing "stepping through" by cycling through images
-        * [get the images](https://blog.lmorchard.com/2023/01/03/mermaid-animations/)
-        * [invisible boxes](https://yairm210.medium.com/animating-mermaid-graphs-as-gifs-2ec8f3b24fbc) if needed for specific rendering patterns
-
-```mermaid
-flowchart LR
-    A[Cheating] --> B[Accused := Party.Accused]
-    subgraph Material facts
-        B --> C[Action := Deceiving] 
-        C --> D[Victim := Party.Victim]
-    end 
-    D --> E[Attribution]
-    E --> |AttributionType.SoleInducement| F[Deception]
-    E --> |AttributionType.NotSoleInducement| F
-    E --> |AttributionType.NA| Z
-    F --> |DeceptionType.Fraudulently| G[Inducement] 
-    F --> |DeceptionType.Dishonestly| G
-    F --> |DeceptionType.NA| Z 
-    subgraph Mens Rea
-        F
-    end
-    G --> |InducementType.DeliverProperty| H[CausesDamageHarm]
-    G --> |InducementType.ConsentRetainProperty| H
-    G --> |InducementType.DoOrOmit| H
-    G --> |InducementType.NA| Z
-    subgraph Actus Reus
-        E
-        G
-        H
-        I
-    end
-    H --> |TRUE| I[DamageHarmResult]
-    H --> |FALSE| Z[ConsequenceDefinition.NotSaidToCheat]
-    I --> |DamageHarmType.Body| Y[ConsequenceDefinition.SaidToCheat]
-    I --> |DamageHarmType.Mind| Y
-    I --> |DamageHarmType.Reputation| Y
-    I --> |DamageHarmType.Property| Y
-    I --> |DamageHarmType.NA| Z
-
-    classDef highlightedPath fill:#77DD77,stroke:#000,stroke-width:2px,color:black;
-    class A,B,C,D,E,F,G,H,I,Y highlightedPath;
-    linkStyle 0 stroke:#77DD77,stroke-width:4px;
-    linkStyle 1 stroke:#77DD77,stroke-width:4px;
-    linkStyle 2 stroke:#77DD77,stroke-width:4px;
-    linkStyle 3 stroke:#77DD77,stroke-width:4px;
-    linkStyle 4 stroke:#77DD77,stroke-width:4px;
-    linkStyle 7 stroke:#77DD77,stroke-width:4px;
-    linkStyle 10 stroke:#77DD77,stroke-width:4px;
-    linkStyle 14 stroke:#77DD77,stroke-width:4px;
-    linkStyle 19 stroke:#77DD77,stroke-width:4px;
-```
-
-* Add a live editor if possible that transpiles yuho code live by running a script in the backend and rerenders the mermaid diagram everytime
-    * Implement this in svelteflow for extra points
 * Apply the following changes made to *Cheating* to all other examples as well!
-* Proposed workflow for [`src`](./../src) code
-    1. enforce Yuho's syntax by reading `.yh` files and checking whether a struct instance conforms to its struct definition laid out
-        * add a reminder in the LSP whenever an enum is detected to not end with an `NA` option 
-        * linting as needed
-    2. transpile `.yh` code to `.mmd` for diagramtic representations by reading **valid struct instances**, see `./../test_frontend/` and continue working on the code for that
-* Add Yuho CLI tools in Svelte or Rust to run checks similar to Rust Cargo that 
-    * make it easy to START writing a Yuho struct in a `.yh` file
-    * check the validity of a Yuho file ending in the file extension `.yh`
-    * transpile the `.yh` file to a `.mmd` file that provides either a Mindmap or Flowchart
-    * tool that affords dynamic generation of struct instances / tests as legible examples for lawyers to use based upon the *Illustrations* section of a given definition statute (again, see S415 on Cheating)
-    * think of a funny name for the CLI tool like *junior_lawywer* *(in the spirit of Catala's `clerk`)*
 * Currently rescope Yuho to focus on accurately representing **definition sections** within the Penal Code (s415 for cheating) under [`s415_cheating_definition.yh`](./../example/s415_cheating_definition.yh)
     * change the base README.md to reflect this shift
 * Clean up all ideas for easier reading in [`reworked_sample_cheating.md`](./../doc/reworked_sample_cheating.md)
 * Consider using [KROKI](https://kroki.io/) to render my diagrams instead
 * Provide both mermaid and kroki as transpilation output options
+
+### Products
+
+1. Yuho CLI INTERPRETER  
+    * validate user-defined Yuho structs and enforces syntax
+    * parses `.yh` files and checks whether a struct instance conforms to its struct definition laid out
+    * **things to check**
+        1. emit REMINDER when an `enum` does not end with an `NA` option  
+        2. add more later
+
+2. Yuho CLI TRANSPILER  
+    * transpile **valid Yuho struct instances** to Mermaid mindmaps and flowcharts
+        1. Statute definition *(Yuho struct)* --[`transpilation_program`]--> Mermaid diagram *(Flowchart, Mindmap)*
+        2. Statute illustration / Scenario *(Yuho struct)* --[`transpilation_program`]--> Highlighted mermaid diagrams *(Flowchart, Mindmap)*
+    * brainstorm other transpilation outputs after
+
+3. Other Yuho CLI TOOLS
+    * same ease of build process as Vite for frontend and Cargo for Rust
+    * think of a good name for the CLI TOOL like Catala's `clerk` and Elephant's `briefcase`  
+    * **things to implement**
+        1. generates a template empty Yuho struct with the base Yuho syntax for lawyers to use quickly
+        2. generates a Yuho struct instance from a user-defined validated Yuho struct with template empty values inserted within the struct instance
+
+4. Frontend WEB DISPLAY 
+    * clicking-through feature to step through the highlighted path in a Mermaid flowchart
+    * sidebar showing what each step fulfilled is like to achieve that highlighted path 
+    * animating mermaid diagrams
+        1. write a script that parses the mermaid file and assigns each start and destination arrow (descriptions within `[]`, split by `-->`)
+        * this indice will later be referenced when deciding which arrow to color
+            * `linkStyle <indiceThatIsTheArrowNumber> stroke:#77DD77,stroke-width:4px;`
+        2. [get the images](https://blog.lmorchard.com/2023/01/03/mermaid-animations/)
+        3. [invisible boxes](https://yairm210.medium.com/animating-mermaid-graphs-as-gifs-2ec8f3b24fbc) 
+
+5. Frontend BROWSER EDITOR for Yuho code
+    * in-browser IDE similar to [L4's IDE](https://smucclaw.github.io/l4-lp/)
+    * transpiles written yuho code live to display a Mermaid diagram (see 3)
+    * browser native LSP 
+    * linting
+    * snippets
+    * provides decent error messages
+    * consider using svelteflow
+
+6. Yuho LSP
+    * exported for other IDEs
+        * VSCODE (as a browser extension)
+        * Emacs
+        * Vim
+
+7. Yuho chatbot
+    * Chatbot that can provide legal advice to the layman **and** explain law concepts clearly to students via Mermaid diagrams
+    * Yuho as an intermediary language that provides sanitised input to easily train LLMs on SG Criminal Law cases
+    * **things to implement**
+        1. `model_1`: train a model that takes in existing statutes and converts it to Yuho code
+            * Statute def *(plaintext)* --[`model_1`]--> Statute def *(Yuho struct)*
+        2. `model_2`: train a model that takes in a statute as a yuho struct and a plaintext scenario and outputs the yuho struct for that scenario
+            * Statute def *(Yuho struct)* + Statute illustration / Sample scenario *(plaintext)* --[`model_2`]--> Statute illustration / Sample scenario *(Yuho struct)*
 
 ### Later
 
@@ -158,17 +142,6 @@ flowchart LR
        * Shelve discussion of defences for now and add it below to future.md as additional thing to consider but inconsequential since statutes by default don't specify the defences of an offence
        * Perhaps can include it within the flowchart
     * Refer to Criminal Law notes google doc from Azfir's structure of inquiry as required
-
-8. LLM integration 
-    * Yuho as an intermediary language that provides sanitised input to easily train an LLM on SG Criminal Law cases
-    * Proposed workflow 
-        1. Statute def *(plaintext)* --[`model_1`]--> Statute def *(Yuho struct)*
-        2. Statute def *(Yuho struct)* + Statute illustration *(plaintext)* --[`model_2`]--> Statute illustration *(Yuho struct)*
-        3. Statute illustration *(Yuho struct)* --[`transpilation_program`]--> Whatever transpilation output
-    * Note that statute illustration CAN be replaced by any given scenario fed to Yuho
-    * `model_1`: train a model that takes in existing statutes and converts it to Yuho code
-    * `model_2`: train a model that takes in a statute as a yuho struct and a plaintext scenario and outputs the yuho struct for that scenario
-    * `transpilation_program`: any transpilation output including the base mindmaps and flowcharts can then be produced
 
 ## Feedback
 
