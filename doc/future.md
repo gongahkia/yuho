@@ -2,12 +2,6 @@
 
 ## Follow Up Actions
 
-### Immediate 
-
-* update the base `README.md` and `reworked_sample_cheating.md` to focus Yuho on accurately representing **definition sections** within the Penal Code
-* clean up `reworked_sample_cheating.md` for easier formatted reading
-* create other examples for other definition statutes and its illustrations 
-
 ### Products
 
 1. Yuho CLI INTERPRETER  
@@ -80,6 +74,12 @@
     * see [legal-bert](https://huggingface.co/nlpaueb/legal-bert-base-uncased)
     * see [scott](https://scott.intelllex.com/)
     * see [ollama](https://ollama.com/library)
+
+### Admin
+
+* update the base `README.md` and `reworked_sample_cheating.md` to focus Yuho on accurately representing **definition sections** within the Penal Code
+* clean up `reworked_sample_cheating.md` for easier formatted reading
+* create other examples for other definition statutes and its illustrations 
 
 ### Later
 
