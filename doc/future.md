@@ -4,12 +4,11 @@
 
 ### Immediate 
 
-* Apply the following changes made to *Cheating* to all other examples as well!
-* Currently rescope Yuho to focus on accurately representing **definition sections** within the Penal Code (s415 for cheating) under [`s415_cheating_definition.yh`](./../example/s415_cheating_definition.yh)
-    * change the base README.md to reflect this shift
-* Clean up all ideas for easier reading in [`reworked_sample_cheating.md`](./../doc/reworked_sample_cheating.md)
-* Consider using [KROKI](https://kroki.io/) to render my diagrams instead
-* Provide both mermaid and kroki as transpilation output options
+* update the base `README.md` and `reworked_sample_cheating.md` to focus Yuho on accurately representing **definition sections** within the Penal Code
+* clean up `reworked_sample_cheating.md` for easier formatted reading
+* create other examples for other definition statutes and its illustrations 
+* consider using [KROKI](https://kroki.io/) to render my diagrams instead
+* provide both mermaid and kroki as transpilation output options
 
 ### Products
 
