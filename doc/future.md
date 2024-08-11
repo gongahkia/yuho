@@ -4,6 +4,15 @@
 
 ### Products
 
+> [!IMPORTANT]
+> Consider using automated tools like  
+> * YACC  
+> * ANTLR
+> 
+> to generate parsers for me, so I just define the formal grammer.  
+>
+> ALSO look into other automated tools and their uses.  
+
 1. Yuho CLI INTERPRETER  
     * validate user-defined Yuho structs and enforces syntax
     * parses `.yh` files and checks whether a struct instance conforms to its struct definition laid out
