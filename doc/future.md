@@ -5,11 +5,13 @@
 ### Products
 
 > [!IMPORTANT]
-> Consider using automated tools like  
+> Consider using automated tools like
+> 
+> * Lex
 > * YACC  
 > * ANTLR
 > 
-> to generate parsers for me, so I just define the formal grammer.  
+> to tokenise Yuho and generate parsers for me, so I just define the formal grammer.  
 >
 > ALSO look into other automated tools and their uses.  
 
