@@ -78,6 +78,12 @@ $ make build
 
 Yuho is open-source. Contribution guidelines are found at [CONTRIBUTING.md](admin/CONTRIBUTING.md).
 
+## FAQ
+
+### 1. What does Yuho mean?
+
+Yuho is derived from 夢 法 (*yume ho*) which roughly translates to 'ideal law' in Japanese.
+
 ## References
 
 ### Analogues
