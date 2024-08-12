@@ -7,7 +7,7 @@
 >   
 > As such, support for other transpilation outputs is not   
 > currently my primary focus. To see what is being worked on,   
-> refer [here](./doc/main/future.md).  
+> refer to [`future.md`](./doc/main/future.md).  
 >   
 > I can be found on Linkedin for anything urgent.  
 >   
