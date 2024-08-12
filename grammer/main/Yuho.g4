@@ -15,8 +15,11 @@ STRUCT: 'struct';
 FN: 'fn';
 PERCENT: '%';
 MONEY_PREFIX: '$';
-DATE_FORMAT: 'DD-MM-YYYY';
-DURATION_UNITS: ('day' | 'month' | 'year');
+
+DAY: 'day';
+MONTH: 'month';
+YEAR: 'year';
+DURATION_UNITS: DAY | MONTH | YEAR;
 
 IDENTIFIER: [a-zA-Z_][a-zA-Z_0-9]*;
 DOT: '.';
@@ -65,7 +68,7 @@ expression: expression (PLUS | MINUS | MULT | DIV) expression
           | expression (GT | LT | EQUAL | NOTEQUAL) expression
           | expression (AND | OR) expression
           | IDENTIFIER
-          | IDENTIFIER DOT IDENTIFIER  // Accessing struct fields
+          | IDENTIFIER DOT IDENTIFIER  
           | literal;
 
 literal: STRING | INTEGER | FLOAT | PERCENTAGE | MONEY | DATE | DURATION | TRUE | FALSE;
