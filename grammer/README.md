@@ -1,6 +1,8 @@
 # Grammer specification
 
-## Core reading
+## Generating the lexer and parser yourself
+
+Pick any of the below implementations.
 
 * [YACC](https://silcnitc.github.io/yacc.html)
 * [Lex](https://wycwiki.readthedocs.io/en/latest/_static/compilers/lex.html)
@@ -18,10 +20,30 @@ $ javac Yuho*.java
 ```
 
 * [Coco/R](https://ssw.jku.at/Research/Projects/Coco/)
+
+```sh
+$ CocoR Yuho.cocor
+```
+
 * [JavaCC](https://javacc.github.io/javacc/)
+
+``` sh
+$ javacc Yuho.jj
+```
+
 * [PEG.js](https://github.com/pegjs/pegjs)
-* [Lark](https://github.com/lark-parser/lark)
+
+``` sh
+$ pegjs Yuho.pegjs
+```
+
 * [Ragel](http://www.colm.net/open-source/ragel/)
+
+``` sh
+$ ragel -C -G2 Yuho.rl
+```
+
+* [Lark](https://github.com/lark-parser/lark)
 * [Tcllib](https://core.tcl-lang.org/tcllib/doc/tcllib-1-18/embedded/www/tcllib/files/apps/pt.html)
 
 ## Additional reading
