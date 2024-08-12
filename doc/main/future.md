@@ -101,6 +101,7 @@
 
 * fix relative links in `README.md` and `reworked_sample_cheating.md`
 * clean up `reworked_sample_cheating.md` for easier formatted reading
+* design a logo for Yuho and add it to the `README.md`, credit the designer in the `README.md` under contributions accordingly
 * update the base `README.md` and `reworked_sample_cheating.md` to focus Yuho on accurately representing **definition sections** within the Penal Code
 * create other examples for other definition statutes and its illustrations under `./example/main/`
 
