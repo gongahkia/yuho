@@ -33,35 +33,35 @@ For those interested, Yuho provides a [grammatically-validated](https://www.usna
 
 Getting into the specifics, Yuho provides the following four products.
 
-1. [Yuho](./doc/syntax.md), a DSL made to be readable and codeable by law students and lawyers
+1. [Yuho](./doc/main/syntax.md), a DSL made to be readable and codeable by law students and lawyers
 2. [Formalised semantic](./tests/) for legal reasoning modelled after the syntactical patterns of the law
 3. [Web frontend](./web/) that displays a statute's logic as a flowchart
-4. [Transpiler](./src/secondary/) that transpiles to the below targets
+4. [Transpiler](./src/) that transpiles to the below targets
 
 ### Output formats
 
 | Target | Usage | 
 | :--- | :--- |
-| [JSON](src/secondary/yuho_to_json) | REST APIs |
-| [Mermaid](src/secondary/json_to_mmd) | diagrammatic representation |  
-| [JavaScript](src/secondary/yuhoToJavaScript) | :warning: *DISCONTINUED, REPLACED BY JSON* :warning: |
-| [HTML](src/secondary/yuho_json_mmd_to_html) | frontend display for learning purposes |  
-| [R](src/secondary/yuhoToR) | data modelling and visualisation |
-| [Alloy](src/secondary/yuhoToAlloy) | formal verification |
-| [Whiley](src/secondary/yuhoToWhiley) | decision logic |
-| [Catala](src/secondary/yuhoToCatala) | decision logic |
-| [F*](src/secondary/yuhoToFStar) | proof backends |
+| [JSON](src/archive/v1/secondary/yuho_to_json) | REST APIs |
+| [Mermaid](src/archive/v1/secondary/json_to_mmd) | diagrammatic representation |  
+| [JavaScript](src/archive/v1/secondary/yuhoToJavaScript) | :warning: *DISCONTINUED, REPLACED BY JSON* :warning: |
+| [HTML](src/archive/v1/secondary/yuho_json_mmd_to_html) | frontend display for learning purposes |  
+| [R](src/archive/v1/secondary/yuhoToR) | data modelling and visualisation |
+| [Alloy](src/archive/v1/secondary/yuhoToAlloy) | formal verification |
+| [Whiley](src/archive/v1/secondary/yuhoToWhiley) | decision logic |
+| [Catala](src/archive/v1/secondary/yuhoToCatala) | decision logic |
+| [F*](src/archive/v1/secondary/yuhoToFStar) | proof backends |
 
 ## Documentation
 
-* [Language specification](doc/syntax.md)
-* [Grammer specification](grammer/)
-* [Formal verification](tests/)
-* [Examples](example/)
+* [Language specification](./doc/main/syntax.md)
+* [Grammer specification](./grammer/)
+* [Formal verification](./tests/)
+* [Examples](./example/)
 
 ## Scope
 
-Development is currently scoped by the following statutes as specified [here](doc/scope.md). 
+Development is currently scoped by the following statutes as specified [here](./doc/main/scope.md). 
 
 ## Usage
 
@@ -76,7 +76,7 @@ $ make build
 
 ## Contribute
 
-Yuho is open-source. Contribution guidelines are found at [CONTRIBUTING.md](admin/CONTRIBUTING.md).
+Yuho is open-source. Contribution guidelines are found at [CONTRIBUTING.md](./admin/CONTRIBUTING.md).
 
 ## FAQ
 
