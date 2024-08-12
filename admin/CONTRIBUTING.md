@@ -88,8 +88,4 @@ We follow [these guidelines](https://gist.github.com/robertpainsi/b632364184e709
 
 Our documentation is written in [Markdown](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax), and we follow the [Github Markdown Styleguide](https://github.com/google/styleguide/blob/gh-pages/docguide/style.md).
 
-## FAQ 
-
-1. 
-
-> This is to be updated with more FAQ here as they come in. Future contributors are welcome!
+## [FAQ](https://github.com/gongahkia/yuho?tab=readme-ov-file#faq)
