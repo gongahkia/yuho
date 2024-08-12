@@ -4,9 +4,13 @@
 
 * [YACC](https://silcnitc.github.io/yacc.html)
 * [Lex](https://wycwiki.readthedocs.io/en/latest/_static/compilers/lex.html)
-* [ANTLR](https://www.antlr.org/)
 
-### Usage
+```sh
+$ flex Yuho.l
+$ bison -d Yuho.y
+```
+
+* [ANTLR](https://www.antlr.org/)
 
 ```sh
 $ antlr4 Yuho.g4

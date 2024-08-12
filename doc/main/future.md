@@ -104,6 +104,8 @@
 * update `Makefile` to install dependancies
   * Antlrl4 per [here](https://github.com/antlr/antlr4/blob/master/doc/getting-started.md)
   * Java
+  * Flex
+  * Bison
 
 ### Later
 
