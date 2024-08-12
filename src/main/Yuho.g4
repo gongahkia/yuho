@@ -28,7 +28,7 @@ STRING: '"' .*? '"';
 INTEGER: [0-9]+;
 FLOAT: [0-9]+ '.' [0-9]*;
 PERCENTAGE: INTEGER PERCENT;
-MONEY: MONEY_PREFIX [0-9]{1,3}(,[0-9]{3})* ('.'[0-9]{2})?;
+MONEY: MONEY_PREFIX ([0-9]{1,3}) (','[0-9]{3})* ('.'[0-9]{2})?;
 DATE: [0-9]{2} '-' [0-9]{2} '-' [0-9]{4};
 DURATION: INTEGER (DURATION_UNITS (',' INTEGER DURATION_UNITS)*)?;
 

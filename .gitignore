@@ -1,3 +1,4 @@
-web/out/json/*.json
-web/out/mmd/*.mmd
-web/out/html/*.html
+web/archive/v1/out/json/*.json
+web/archive/v1/out/mmd/*.mmd
+web/archive/v1/out/html/*.html
+*.class
