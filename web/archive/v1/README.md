@@ -1,4 +1,7 @@
-# Frontend display
+# Frontend display v1.0
+
+> [!WARNING]
+> Now deprecated.
 
 * Transpiler logic can be found [here](src)
 * Frontend logic can be found [here](front)

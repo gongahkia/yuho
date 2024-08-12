@@ -99,9 +99,10 @@
 
 ### Admin
 
-* update the base `README.md` and `reworked_sample_cheating.md` to focus Yuho on accurately representing **definition sections** within the Penal Code
+* fix relative links in `README.md` and `reworked_sample_cheating.md`
 * clean up `reworked_sample_cheating.md` for easier formatted reading
-* create other examples for other definition statutes and its illustrations 
+* update the base `README.md` and `reworked_sample_cheating.md` to focus Yuho on accurately representing **definition sections** within the Penal Code
+* create other examples for other definition statutes and its illustrations under `./example/main/`
 
 ### Later
 
