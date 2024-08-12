@@ -72,6 +72,7 @@
 
 5. Frontend BROWSER EDITOR for Yuho code
     * in-browser IDE similar to [L4's IDE](https://smucclaw.github.io/l4-lp/)
+    * produces a user-visible AST with legible error messages simialr to [ANTLR Lab](http://lab.antlr.org/)
     * transpiles written yuho code live to display a Mermaid diagram (see 3)
     * browser native LSP 
     * linting
