@@ -3,11 +3,11 @@
 > This means language features are likely to change.
 > 
 > For a rough idea of where Yuho is headed, see  
-> [`reworked_sample_cheating.md`](doc/reworked_sample_cheating.md).  
+> [`reworked_sample_cheating.md`](./doc/main/reworked_sample_cheating.md).  
 >   
 > As such, support for other transpilation outputs is not   
 > currently my primary focus. To see what is being worked on,   
-> refer [here](./doc/future.md).  
+> refer [here](./doc/main/future.md).  
 >   
 > I can be found on Linkedin for anything urgent.  
 >   
