@@ -1,4 +1,4 @@
-# Yuho v1.0 Syntax
+# Yuho syntax v1.0
 
 > [!WARNING]
 > Now deprecated.
