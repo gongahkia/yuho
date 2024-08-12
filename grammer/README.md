@@ -1,6 +1,6 @@
 # Grammer specification
 
-## Generating the lexer and parser yourself
+## Generate the lexer and parser yourself
 
 Pick any of the below implementations.
 
@@ -46,7 +46,7 @@ $ ragel -C -G2 Yuho.rl
 * [Lark](https://github.com/lark-parser/lark)
 * [Tcllib](https://core.tcl-lang.org/tcllib/doc/tcllib-1-18/embedded/www/tcllib/files/apps/pt.html)
 
-## Additional reading
+## References
 
 * [A Guide To Lex & YACC](https://arcb.csc.ncsu.edu/~mueller/codeopt/codeopt00/y_man.pdf) by Thomas Niemann
 * [EBNF: A Notation to Describe Syntax](https://ics.uci.edu/~pattis/ICS-33/lectures/ebnf.pdf) by UC Irvine Donald Bren School of Information & Computer Sciences
