@@ -4,8 +4,6 @@
 
 ### Products
 
-> [!TIP]
-
 > [!IMPORTANT]
 > * consider using automated tools like Lex, YACC, ANTLR to generate parsers and lexers for me automatically
 > * if that doesn't work then implement a handwritten parser in racket
