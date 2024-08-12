@@ -1,12 +1,9 @@
-> [!IMPORTANT]  
-> Yuho is undergoing a major overhaul right now.   
-> This means language features are likely to change.
+> [!CAUTION]  
+> Yuho is undergoing a major overhaul right now. This means language features are likely to change.  
 > 
-> For a rough idea of where Yuho is headed, see  
-> [`reworked_sample_cheating.md`](./doc/main/reworked_sample_cheating.md).  
+> For a rough idea of where Yuho is headed, see [`reworked_sample_cheating.md`](./doc/main/reworked_sample_cheating.md).    
 >   
-> As such, support for other transpilation outputs is not   
-> currently my primary focus. To see what is being worked on,   
+> As such, support for other transpilation outputs is not currently my primary focus. To see what is being worked on,   
 > refer to [`future.md`](./doc/main/future.md).  
 >   
 > I can be found on Linkedin for anything urgent.  
