@@ -8,7 +8,7 @@
 > Consider using automated tools like Lex, YACC or ANTLR to tokenise Yuho and generate parsers for me, so I can just define the formal grammer.  
 
 > [!IMPORTANT]
-> * debug Yuho.g4 syntax for compiling to parser and lexer with ANTLR CLI
+> * debug Yuho.g4, Yuho.l, Yuho.y syntax for compiling to parser and lexer 
 > * if that doesn't work then use YACC and Lex to generate parser and lexer in C instead
 
 1. Yuho CLI INTERPRETER  
