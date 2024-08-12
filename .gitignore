@@ -1,4 +1,13 @@
+# our tests
 web/archive/v1/out/json/*.json
 web/archive/v1/out/mmd/*.mmd
 web/archive/v1/out/html/*.html
+
+# antlr 
 *.class
+*.interp
+*.tokens
+YuhoLexer.java
+YuhoParser.java
+YuhoListener.java
+YuhoBaseListener.java
