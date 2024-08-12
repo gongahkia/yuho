@@ -2,7 +2,7 @@
 
 | Yuho tool | Implementation | Status |
 | :--- | :--- | :--- | 
-| Lexer | [ANTLR4](https://www.antlr.org/) | ![](https://img.shields.io/badge/status-up-brightgreen) |
-| Parser | [ANTLR4](https://www.antlr.org/) | ![](https://img.shields.io/badge/status-up-brightgreen) |
+| Lexer | | ![](https://img.shields.io/badge/status-not%20implemented-ff3333) |
+| Parser | | ![](https://img.shields.io/badge/status-not%20implemented-ff3333) |
 | Transpiler to <`add_transpilation_output(s)`> | | ![](https://img.shields.io/badge/status-not%20implemented-ff3333) | 
 
