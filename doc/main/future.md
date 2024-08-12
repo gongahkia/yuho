@@ -6,7 +6,7 @@
 
 > [!IMPORTANT]
 > * consider using automated tools like Lex, YACC, ANTLR to generate parsers and lexers for me automatically
-> * if that doesn't work then implement a handwritten parser in racket or scheme but whatever so that Meng does not roast me 
+> * if that doesn't work then implement a handwritten parser in racket or scheme
 
 1. Yuho CLI INTERPRETER  
     * validate user-defined Yuho structs and enforces syntax
