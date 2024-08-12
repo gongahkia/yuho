@@ -5,6 +5,14 @@
 * [YACC](https://silcnitc.github.io/yacc.html)
 * [Lex](https://wycwiki.readthedocs.io/en/latest/_static/compilers/lex.html)
 * [ANTLR](https://www.antlr.org/)
+
+### Usage
+
+```sh
+$ antlr4 Yuho.g4
+$ javac Yuho*.java
+```
+
 * [Coco/R](https://ssw.jku.at/Research/Projects/Coco/)
 * [JavaCC](https://javacc.github.io/javacc/)
 * [PEG.js](https://github.com/pegjs/pegjs)
