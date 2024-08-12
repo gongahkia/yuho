@@ -3,8 +3,7 @@
 > 
 > For a rough idea of where Yuho is headed, see [`reworked_sample_cheating.md`](./doc/main/reworked_sample_cheating.md).    
 >   
-> As such, support for other transpilation outputs is not currently my primary focus. To see what is being worked on,   
-> refer to [`future.md`](./doc/main/future.md).  
+> As such, support for other transpilation outputs is not currently my primary focus. To see what is being worked on, refer to [`future.md`](./doc/main/future.md).    
 >   
 > I can be found on Linkedin for anything urgent.  
 >   
