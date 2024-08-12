@@ -5,11 +5,10 @@
 ### Products
 
 > [!TIP]
-> Consider using automated tools like Lex, YACC or ANTLR to tokenise Yuho and generate parsers for me, so I can just define the formal grammer.  
 
 > [!IMPORTANT]
-> * debug Yuho.g4, Yuho.l, Yuho.y syntax for compiling to parser and lexer 
-> * if that doesn't work then use YACC and Lex to generate parser and lexer in C instead
+> * consider using automated tools like Lex, YACC, ANTLR to generate parsers and lexers for me automatically
+> * if that doesn't work then implement a handwritten parser in racket
 
 1. Yuho CLI INTERPRETER  
     * validate user-defined Yuho structs and enforces syntax
@@ -101,11 +100,18 @@
 * design a logo for Yuho and add it to the `README.md`, credit the designer in the `README.md` under contributions accordingly
 * update the base `README.md` and `reworked_sample_cheating.md` to focus Yuho on accurately representing **definition sections** within the Penal Code
 * create other examples for other definition statutes and its illustrations under `./example/main/`
-* update `Makefile` to install dependancies
-  * Antlrl4 per [here](https://github.com/antlr/antlr4/blob/master/doc/getting-started.md)
+* update `Makefile` to install dependancies for the below if they choose to generate the parser themselves
+  * Racket
   * Java
+  * Antlrl4 per [here](https://github.com/antlr/antlr4/blob/master/doc/getting-started.md)
   * Flex
   * Bison
+  * Coco/R
+  * Peg.js
+  * JavaCc
+  * Ragel
+  * Lark
+  * Tcllib
 
 ### Later
 
