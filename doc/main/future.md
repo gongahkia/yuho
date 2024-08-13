@@ -4,51 +4,20 @@
 
 ### Products
 
-> [!IMPORTANT]
-> * implement a handwritten parser in racket or raku
-
-1. Yuho CLI INTERPRETER  
-    * validate user-defined Yuho structs and enforces syntax
-    * parses `.yh` files and checks whether a struct instance conforms to its struct definition laid out
-    * **things to check**
-        * ERRORS are fatal and break the interpreting
-        * REMINDERS are not fatal and do not break the interpreting
-        * ***GENERAl CHECKS***
-            1. base syntax checks
-        * ***STRUCT DEFINITION CHECKS***
-            1. emit REMINDER when an `enum` does not end with an `NA` option 
-            2. emit ERROR if calling another struct within a struct (nested call) but that struct is not defined
-        * ***STRUCT INSTANCE CHECKS***
-            1. check validity of sole types
-            2. check validity of UNION types with the || operator, whether the eventual type assigned is there
-            3. check validity of ENUM literals being declared from their base type
-            4. check validity of all enumerations of an ENUM specified with 'or' as the delimiters
-            5. specifically boolean types must always have TRUE and FALSE splayed out as enumerations
-            6. every ENUM and its respective enumeration values must be specified in a struct literal and have their predicates and consequences specified in a match-case conditional check
-            7. the above rule can ONLY be ignored if case _ is used as a catch-all case
-            8. match-case syntax itself must be correct with consequence being called
-        * consider writing in
-            * Racket: designed for creating new languages with metaprogramming support but less mainstream
-            * Elixir: excellent concurrency and expressive syntax but steeper learning curve and less mainstream than some other options
-            * Ruby: very readable and expressive but slow performance and less widespread 
-            * Raku
-            * Nim
-            * Prolog
-
-2. Yuho CLI TRANSPILER  
+1. Yuho CLI TRANSPILER  
     * transpile **valid Yuho struct instances** to Mermaid mindmaps and flowcharts
         1. Statute definition *(Yuho struct)* --[`transpilation_program`]--> Mermaid diagram *(Flowchart, Mindmap)*
         2. Statute illustration / Scenario *(Yuho struct)* --[`transpilation_program`]--> Highlighted mermaid diagrams *(Flowchart, Mindmap)*
     * brainstorm other transpilation outputs after
 
-3. Other Yuho CLI TOOLS
+2. Other Yuho CLI TOOLS
     * same ease of build process as Vite for frontend and Cargo for Rust
     * think of a good name for the CLI TOOL like Catala's `clerk` and Elephant's `briefcase`  
     * **things to implement**
         1. generates a template empty Yuho struct with the base Yuho syntax for lawyers to use quickly
         2. generates a Yuho struct instance from a user-defined validated Yuho struct with template empty values inserted within the struct instance
 
-4. Frontend WEB DISPLAY 
+3. Frontend WEB DISPLAY 
     * clicking-through feature to step through the highlighted path in a Mermaid flowchart
     * sidebar showing what each step fulfilled is like to achieve that highlighted path 
     * animating mermaid diagrams
@@ -58,7 +27,7 @@
         2. [get the images](https://blog.lmorchard.com/2023/01/03/mermaid-animations/)
         3. [invisible boxes](https://yairm210.medium.com/animating-mermaid-graphs-as-gifs-2ec8f3b24fbc) 
 
-5. Frontend BROWSER EDITOR for Yuho code
+4. Frontend BROWSER EDITOR for Yuho code
     * in-browser IDE similar to [L4's IDE](https://smucclaw.github.io/l4-lp/)
     * produces a user-visible AST with legible error messages simialr to [ANTLR Lab](http://lab.antlr.org/)
     * transpiles written yuho code live to display a Mermaid diagram (see 3)
@@ -68,13 +37,13 @@
     * provides decent error messages
     * consider using svelteflow
 
-6. Yuho LSP
+5. Yuho LSP
     * exported for other IDEs
         * VSCODE (as a browser extension)
         * Emacs
         * Vim
 
-7. Yuho chatbot
+6. Yuho chatbot
     * Chatbot that can provide legal advice to the layman **and** explain law concepts clearly to students via Mermaid diagrams
     * Yuho as an intermediary language that provides sanitised input to easily train LLMs on SG Criminal Law cases
     * **things to implement**
