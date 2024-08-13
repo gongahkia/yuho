@@ -2,7 +2,7 @@ module function
 
 open util/ordering[Time]
 open util/boolean
-open grammarCore
+open grammer_core
 
 assert functions_have_return_type_and_body {
   all f: Function | some f.returnType and some f.funcName and some f.body
