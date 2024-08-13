@@ -2,7 +2,7 @@ module match_case
 
 open util/ordering[Time]
 open util/boolean
-open grammarCore
+open grammer_core
 
 assert match_case_has_at_least_one_case {
   all m: MatchCase | some m.cases
