@@ -14,7 +14,7 @@
 # `Yuho`
 
 <p align="center">
-<img src="./asset/yuho_mascot.png" width=25% height=25%>
+<img src="./asset/yuho_mascot.png" width=40% height=40%>
 </p>
 
 Yuho is a domain-specific language providing a programmatic representation of Singapore Criminal Law.
