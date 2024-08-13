@@ -2,7 +2,7 @@ module assertion
 
 open util/ordering[Time]
 open util/boolean
-open grammarCore
+open grammer_core
 
 assert all_assertions_hold { 
   all a: Assertion | check a for 5 
