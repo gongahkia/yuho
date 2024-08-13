@@ -1,75 +1,83 @@
-grammar org.example.Yuho with org.eclipse.xtext.common.Terminals
-
-generate yuho "http://www.gongahkia.org/Yuho"
+grammar yuho.Yuho with org.eclipse.xtext.common.Terminals
+generate yuho "http://www.Yuho.yuho"
 
 Model:
-    (declarations+=Declaration | functionDefinitions+=FunctionDefinition | structDefinitions+=StructDefinition | matchCases+=MatchCase)* EOF;
+    (declarations+=Declaration | functionDefinitions+=FunctionDefinition | structDefinitions+=StructDefinition | matchCases+=MatchCase)*;
 
 Declaration:
-    type=Type name=ID (':=' expression=Expression)?;
+    type=Type name=ID (ASSIGN expression=Expression)?;
 
 Type:
     'int' | 'float' | 'percent' | 'money' | 'date' | 'duration' | 'bool' | 'string' | ID;
 
+LogicalExpression:
+    RelationalExpression ((AND | OR) RelationalExpression)*;
+
+RelationalExpression:
+    AdditiveExpression ((GT | LT | EQUAL | NOTEQUAL) AdditiveExpression)*;
+
+AdditiveExpression:
+    MultiplicativeExpression ((PLUS | MINUS) MultiplicativeExpression)*;
+
+MultiplicativeExpression:
+    PrimaryExpression ((MULT | DIV) PrimaryExpression)*;
+
+PrimaryExpression:
+    ID ('.' ID)? | Literal | LPAREN Expression RPAREN;
+
 Expression:
-    Expression (operator=('+') | operator=('-') | operator=('*') | operator='/') Expression
-    | Expression (operator=('>') | operator=('<') | operator=='==') Expression
-    | Expression (operator=('&&') | operator='||') Expression
-    | ID ('.' ID)?
-    | Literal;
+    LogicalExpression;
 
 Literal:
-    STRING | INT | FLOAT | PERCENTAGE | MONEY | DATE | DURATION | 'TRUE' | 'FALSE';
+    STRING | INTEGER | FLOAT | PERCENTAGE | MONEY | DATE | DURATION | TRUE_LITERAL | FALSE_LITERAL;
 
 Statement:
     Declaration
     | Assignment
     | FunctionCall
     | MatchCase
-    | PassStatement;
+    | {Statement} PassStatement;
 
 Assignment:
-    ID ':=' expression=Expression;
+    ID ASSIGN expression=Expression;
 
 MatchCase:
-    'match' '(' expression=Expression ')'? '{' (caseClauses+=CaseClause)* '}';
+    MATCH LPAREN expression=Expression RPAREN? LBRACE (caseClauses+=CaseClause)* RBRACE;
 
 CaseClause:
-    'case' expression=Expression ':=' 'consequence' expression=Expression
-    | 'case' '_' ':=' 'consequence' PassStatement;
+    CASE expression=Expression ASSIGN CONSEQUENCE expression=Expression
+    | {CaseClause} CASE UNDERSCORE ASSIGN CONSEQUENCE PassStatement;
 
 PassStatement:
-    'pass';
+    PASS;
 
 FunctionDefinition:
-    'fn' name=ID '(' (parameters+=Parameter (',' parameters+=Parameter)*)? ')' ':' returnType=Type '{' (statements+=Statement)* '}';
+    FN name=ID LPAREN (parameters+=Parameter (COMMA parameters+=Parameter)*)? RPAREN COLON returnType=Type LPAREN (statements+=Statement)* RPAREN;
 
 Parameter:
     type=Type name=ID;
 
 FunctionCall:
-    ID '(' (arguments+=Expression (',' arguments+=Expression)*)? ')';
+    {FunctionCall} ID LPAREN (arguments+=Expression (COMMA arguments+=Expression)*)? RPAREN;
 
 StructDefinition:
-    'struct' name=ID '{' (members+=StructMember (',' | ';')*)? '}';
+    STRUCT name=ID LBRACE (members+=StructMember (COMMA | SEMICOLON)*)? RBRACE;
 
 StructMember:
     type=Type name=ID;
 
 EntryPoint:
-    'main' '{' (statements+=Statement)* '}';
+    {EntryPoint} 'main' LBRACE (statements+=Statement)* RBRACE;
 
-terminal STRING: '"' (~["\\] | '\\' .)* '"';
-terminal INT: ('0'..'9')+;
+terminal STRING: '"' ('\\'. | !('\\' | '"'))* '"';
+terminal INTEGER: ('0'..'9')+;
 terminal FLOAT: ('0'..'9')+ '.' ('0'..'9')*;
-terminal PERCENTAGE: INT '%' ;
-terminal MONEY: '$' ('0'..'9')+ ((',' '0'..'9')*)? ('.' ('0'..'9')*)?;
+terminal PERCENTAGE: INT PERCENT ;
+terminal MONEY: MONEY_PREFIX ('0'..'9')+ ((',' '0'..'9')*)? ('.' ('0'..'9')*)?;
 terminal DATE: '0'..'9' ('0'..'9') '-' '0'..'9' ('0'..'9') '-' '0'..'9' ('0'..'9') ('0'..'9') ('0'..'9');
-terminal DURATION: ('0'..'9')+ ('day' | 'month' | 'year') (',' ('0'..'9')+ ('day' | 'month' | 'year'))*;
-terminal ID: ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '0'..'9' | '_')*;
-
-terminal WS: (' ' | '\t' | '\r' | '\n')+;
-
+terminal DURATION: ('0'..'9')+ (DURATION_UNITS) (COMMA ('0'..'9')+ (DURATION_UNITS))*;
+@Override terminal ID: ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '0'..'9' | '_')*;
+@Override terminal WS: (' ' | '\t' | '\r' | '\n')+;
 terminal PLUS: '+';
 terminal MINUS: '-';
 terminal MULT: '*';
@@ -90,8 +98,8 @@ terminal RPAREN: ')';
 terminal COMMA: ',';
 terminal UNDERSCORE: '_';
 
-terminal TRUE: 'TRUE';
-terminal FALSE: 'FALSE';
+terminal TRUE_LITERAL: 'TRUE';
+terminal FALSE_LITERAL: 'FALSE';
 terminal MATCH: 'match';
 terminal CASE: 'case';
 terminal CONSEQUENCE: 'consequence';
