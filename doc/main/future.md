@@ -5,15 +5,16 @@
 ### Products
 
 > [!IMPORTANT]
-> * consider using automated tools like Lex, YACC, ANTLR to generate parsers and lexers for me automatically
-> * if that doesn't work then implement a handwritten parser in racket or scheme
+> * also check out xtext
+> * consider using automated tools like ANTLR to generate parsers and lexers for me automatically
+> * if that doesn't work then implement a handwritten parser in racket or raku
 
 1. Yuho CLI INTERPRETER  
     * validate user-defined Yuho structs and enforces syntax
     * parses `.yh` files and checks whether a struct instance conforms to its struct definition laid out
     * **things to check**
         * ERRORS are fatal and break the interpreting
-        * REMINDERS are note fatal and do not break the interpreting
+        * REMINDERS are not fatal and do not break the interpreting
         * ***GENERAl CHECKS***
             1. base syntax checks
         * ***STRUCT DEFINITION CHECKS***
@@ -31,14 +32,10 @@
         * consider writing in
             * Racket: designed for creating new languages with metaprogramming support but less mainstream
             * Elixir: excellent concurrency and expressive syntax but steeper learning curve and less mainstream than some other options
-            * Python: easy to write and maintain but slow performance since interpreted
             * Ruby: very readable and expressive but slow performance and less widespread 
-            * JavaScript: extensive web ecosystem but slower performance
-            * Haskell: strong type system and great for functional programming paradigm but steep learning curve
-            * OCaml: strong type system and excellent for symbolic computation but steep learning curve
-            * C#: strong tooling support and heavy support in enterprise but heavier runtime compared to other options
-            * Lua: lightweight and excellent embedding but limited standard library, less support for concurrency 
-            * Go: good performance but limited metaprogramming support
+            * Raku
+            * Nim
+            * Prolog
 
 2. Yuho CLI TRANSPILER  
     * transpile **valid Yuho struct instances** to Mermaid mindmaps and flowcharts

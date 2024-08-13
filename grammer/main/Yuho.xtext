@@ -1,0 +1,107 @@
+grammar org.example.Yuho with org.eclipse.xtext.common.Terminals
+
+generate yuho "http://www.gongahkia.org/Yuho"
+
+Model:
+    (declarations+=Declaration | functionDefinitions+=FunctionDefinition | structDefinitions+=StructDefinition | matchCases+=MatchCase)* EOF;
+
+Declaration:
+    type=Type name=ID (':=' expression=Expression)?;
+
+Type:
+    'int' | 'float' | 'percent' | 'money' | 'date' | 'duration' | 'bool' | 'string' | ID;
+
+Expression:
+    Expression (operator=('+') | operator=('-') | operator=('*') | operator='/') Expression
+    | Expression (operator=('>') | operator=('<') | operator=='==') Expression
+    | Expression (operator=('&&') | operator='||') Expression
+    | ID ('.' ID)?
+    | Literal;
+
+Literal:
+    STRING | INT | FLOAT | PERCENTAGE | MONEY | DATE | DURATION | 'TRUE' | 'FALSE';
+
+Statement:
+    Declaration
+    | Assignment
+    | FunctionCall
+    | MatchCase
+    | PassStatement;
+
+Assignment:
+    ID ':=' expression=Expression;
+
+MatchCase:
+    'match' '(' expression=Expression ')'? '{' (caseClauses+=CaseClause)* '}';
+
+CaseClause:
+    'case' expression=Expression ':=' 'consequence' expression=Expression
+    | 'case' '_' ':=' 'consequence' PassStatement;
+
+PassStatement:
+    'pass';
+
+FunctionDefinition:
+    'fn' name=ID '(' (parameters+=Parameter (',' parameters+=Parameter)*)? ')' ':' returnType=Type '{' (statements+=Statement)* '}';
+
+Parameter:
+    type=Type name=ID;
+
+FunctionCall:
+    ID '(' (arguments+=Expression (',' arguments+=Expression)*)? ')';
+
+StructDefinition:
+    'struct' name=ID '{' (members+=StructMember (',' | ';')*)? '}';
+
+StructMember:
+    type=Type name=ID;
+
+EntryPoint:
+    'main' '{' (statements+=Statement)* '}';
+
+terminal STRING: '"' (~["\\] | '\\' .)* '"';
+terminal INT: ('0'..'9')+;
+terminal FLOAT: ('0'..'9')+ '.' ('0'..'9')*;
+terminal PERCENTAGE: INT '%' ;
+terminal MONEY: '$' ('0'..'9')+ ((',' '0'..'9')*)? ('.' ('0'..'9')*)?;
+terminal DATE: '0'..'9' ('0'..'9') '-' '0'..'9' ('0'..'9') '-' '0'..'9' ('0'..'9') ('0'..'9') ('0'..'9');
+terminal DURATION: ('0'..'9')+ ('day' | 'month' | 'year') (',' ('0'..'9')+ ('day' | 'month' | 'year'))*;
+terminal ID: ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '0'..'9' | '_')*;
+
+terminal WS: (' ' | '\t' | '\r' | '\n')+;
+
+terminal PLUS: '+';
+terminal MINUS: '-';
+terminal MULT: '*';
+terminal DIV: '/';
+terminal ASSIGN: ':=';
+terminal EQUAL: '==';
+terminal NOTEQUAL: '!=';
+terminal GT: '>';
+terminal LT: '<';
+terminal AND: '&&';
+terminal OR: '||';
+terminal SEMICOLON: ';';
+terminal COLON: ':';
+terminal LBRACE: '{';
+terminal RBRACE: '}';
+terminal LPAREN: '(';
+terminal RPAREN: ')';
+terminal COMMA: ',';
+terminal UNDERSCORE: '_';
+
+terminal TRUE: 'TRUE';
+terminal FALSE: 'FALSE';
+terminal MATCH: 'match';
+terminal CASE: 'case';
+terminal CONSEQUENCE: 'consequence';
+terminal PASS: 'pass';
+terminal STRUCT: 'struct';
+terminal FN: 'fn';
+terminal PERCENT: '%';
+terminal MONEY_PREFIX: '$';
+
+terminal DAY: 'day';
+terminal MONTH: 'month';
+terminal YEAR: 'year';
+terminal DURATION_UNITS: DAY | MONTH | YEAR;
