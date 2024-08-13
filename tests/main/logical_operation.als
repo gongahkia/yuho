@@ -2,7 +2,7 @@ module logical_operation
 
 open util/ordering[Time]
 open util/boolean
-open grammarCore
+open grammer_core
 
 assert valid_logical_operators {
   all op: LogicalOperator | op in And + Or + Not
