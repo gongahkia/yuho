@@ -82,7 +82,7 @@ Yuho is open-source. Contribution guidelines are found at [CONTRIBUTING.md](./ad
 
 ### 1. What does Yuho mean?
 
-Yuho is derived from 夢法 (*yume ho*) which roughly translates to 'ideal law' in Japanese. Coincidentally, 'daily helper' is also read as 祐歩 (*yuho*).
+Yuho is derived from 夢法 (*yume ho*) which roughly translates to 'ideal law' in Japanese.
 
 ## References
 
