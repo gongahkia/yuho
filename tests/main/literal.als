@@ -2,7 +2,7 @@ module literal
 
 open util/ordering[Time]
 open util/boolean
-open grammarCore
+open grammer_core
 
 assert valid_literal_types {
   all l: Literal | l in IntegerLiteral + FloatLiteral + StringLiteral + BooleanLiteral
