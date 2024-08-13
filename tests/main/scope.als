@@ -2,7 +2,7 @@ module scope
 
 open util/ordering[Time]
 open util/boolean
-open grammarCore
+open grammer_core
 
 assert scope_has_name_and_variables {
   all s: Scope | some s.name and some s.variables
