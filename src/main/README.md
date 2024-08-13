@@ -11,7 +11,7 @@
 ## Generate the lexer and parser *(and optionally, IDE)* yourself
 
 1. Navigate to [./grammer/main](../../grammer/main/)
-2. Pick an implementation.
+2. Pick an implementation
 
 ### [YACC](https://silcnitc.github.io/yacc.html) and [Lex](https://wycwiki.readthedocs.io/en/latest/_static/compilers/lex.html)
 
