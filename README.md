@@ -35,8 +35,8 @@ Getting into the specifics, Yuho provides the following four products.
 
 1. [Yuho](./doc/main/syntax.md), a DSL made to be readable and codeable by law students and lawyers
 2. [Formalised semantic](./tests/) for legal reasoning modelled after the syntactical patterns of the law
-3. [Web frontend](./web/) that displays a statute's logic as a flowchart
-4. [Transpiler](./src/) that transpiles to the below targets
+3. [Web frontend](./web/main/) that displays a statute's logic as a flowchart
+4. [Transpiler](./src/main/) that transpiles to the below targets
 
 ### Output formats
 
