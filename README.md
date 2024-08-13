@@ -34,7 +34,7 @@ For those interested, Yuho provides a [grammatically-validated](https://www.usna
 Getting into the specifics, Yuho provides the following four products.
 
 1. [Yuho](./doc/main/syntax.md), a DSL made to be readable and codeable by law students and lawyers
-2. [Formalised semantic](./tests/) for legal reasoning modelled after the syntactical patterns of the law
+2. [Formalised semantic](./tests/main) for legal reasoning modelled after the syntactical patterns of the law
 3. [Web frontend](./web/main/) that displays a statute's logic as a flowchart
 4. [Transpiler](./src/main/) that transpiles to the below targets
 
@@ -42,21 +42,13 @@ Getting into the specifics, Yuho provides the following four products.
 
 | Target | Usage | 
 | :--- | :--- |
-| [JSON](src/archive/v1/secondary/yuho_to_json) | REST APIs |
-| [Mermaid](src/archive/v1/secondary/json_to_mmd) | diagrammatic representation |  
-| [JavaScript](src/archive/v1/secondary/yuhoToJavaScript) | :warning: *DISCONTINUED, REPLACED BY JSON* :warning: |
-| [HTML](src/archive/v1/secondary/yuho_json_mmd_to_html) | frontend display for learning purposes |  
-| [R](src/archive/v1/secondary/yuhoToR) | data modelling and visualisation |
-| [Alloy](src/archive/v1/secondary/yuhoToAlloy) | formal verification |
-| [Whiley](src/archive/v1/secondary/yuhoToWhiley) | decision logic |
-| [Catala](src/archive/v1/secondary/yuhoToCatala) | decision logic |
-| [F*](src/archive/v1/secondary/yuhoToFStar) | proof backends |
+| | |
 
 ## Documentation
 
 * [Language specification](./doc/main/syntax.md)
 * [Grammer specification](./grammer/main/)
-* [Formal verification](./tests/)
+* [Formal verification](./tests/main/)
 * [Examples](./example/main/)
 
 ## Scope
