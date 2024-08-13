@@ -1,4 +1,4 @@
-# Yuho lexer, parser and transpiler
+# Lexer, parser and transpiler
 
 ## Yuho default implementation v2.0
 
