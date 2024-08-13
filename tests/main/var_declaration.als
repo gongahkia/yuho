@@ -2,7 +2,7 @@ module var_declaration
 
 open util/ordering[Time]
 open util/boolean
-open grammarCore
+open grammer_core
 
 assert variable_declarations_have_type_and_value {
   all v: VariableDeclaration | some v.var_type and some v.value
