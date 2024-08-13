@@ -55,17 +55,6 @@ Getting into the specifics, Yuho provides the following four products.
 
 Development is currently scoped by the following statutes as specified [here](./doc/main/scope.md). 
 
-## Usage
-
-### CLI 
-
-```console
-$ git clone https://github.com/gongahkia/yuho
-$ cd yuho  
-$ make config
-$ make build
-```
-
 ## Contribute
 
 Yuho is open-source. Contribution guidelines are found at [CONTRIBUTING.md](./admin/CONTRIBUTING.md).
