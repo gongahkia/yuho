@@ -2,7 +2,7 @@ module expression
 
 open util/ordering[Time]
 open util/boolean
-open grammarCore
+open grammer_core
 
 assert all_expressions_have_type {
   all e: Expression | some e.type
