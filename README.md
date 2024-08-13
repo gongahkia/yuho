@@ -55,9 +55,9 @@ Getting into the specifics, Yuho provides the following four products.
 ## Documentation
 
 * [Language specification](./doc/main/syntax.md)
-* [Grammer specification](./grammer/)
+* [Grammer specification](./grammer/main/)
 * [Formal verification](./tests/)
-* [Examples](./example/)
+* [Examples](./example/main/)
 
 ## Scope
 
