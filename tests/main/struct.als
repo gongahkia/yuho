@@ -2,7 +2,7 @@ module struct
 
 open util/ordering[Time]
 open util/boolean
-open grammarCore
+open grammer_core
 
 assert structs_have_unique_names {
   all disj s1, s2: Struct | s1.name != s2.name
