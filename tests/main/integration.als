@@ -2,7 +2,7 @@ module integration
 
 open util/ordering[Time]
 open util/boolean
-open grammarCore
+open grammer_core
 
 assert core_components_exist {
   all c: CoreComponent | some c
