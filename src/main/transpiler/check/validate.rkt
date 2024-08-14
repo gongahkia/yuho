@@ -1,5 +1,5 @@
 #lang racket
-(require racket/file racket/json)
+(require racket/file)
 
 (define COLOR-CYAN "\033[96m")
 (define COLOR-GREEN "\033[92m")
@@ -10,10 +10,17 @@
   (with-input-from-file file-path
     (λ () (read-json))))
 
+;; this isn't used currently so the racket/json library does not need to be included
+;; anyway it's given issues currently lol
+
 (define (validate-json-files dep-json-dir out-json-dir)
   (printf "~a~a~a~n" COLOR-CYAN "~ JSON FILES ~" COLOR-RESET)
-  (define dep-json-files (set (filter (λ (f) (string-suffix? ".json" f)) (directory-list dep-json-dir))))
-  (define out-json-files (set (filter (λ (f) (string-suffix? ".json" f)) (directory-list out-json-dir))))
+  (define dep-json-files
+    (set (filter (λ (f) (string-suffix? ".json" (path->string f)))
+                 (directory-list dep-json-dir))))
+  (define out-json-files
+    (set (filter (λ (f) (string-suffix? ".json" (path->string f)))
+                 (directory-list out-json-dir))))
   (for-each (λ (file-name)
               (define dep-file-path (build-path dep-json-dir file-name))
               (if (set-member? out-json-files file-name)
@@ -34,8 +41,12 @@
 
 (define (validate-mmd-files dep-mmd-dir out-mmd-dir)
   (printf "~a~a~a~n" COLOR-CYAN "~ MMD FILES ~" COLOR-RESET)
-  (define dep-mmd-files (set (filter (λ (f) (string-suffix? ".mmd" f)) (directory-list dep-mmd-dir))))
-  (define out-mmd-files (set (filter (λ (f) (string-suffix? ".mmd" f)) (directory-list out-mmd-dir))))
+  (define dep-mmd-files
+    (set (filter (λ (f) (string-suffix? ".mmd" (path->string f)))
+                 (directory-list dep-mmd-dir))))
+  (define out-mmd-files
+    (set (filter (λ (f) (string-suffix? ".mmd" (path->string f)))
+                 (directory-list out-mmd-dir))))
   (for-each (λ (file-name)
               (define dep-file-path (build-path dep-mmd-dir file-name))
               (if (set-member? out-mmd-files file-name)
@@ -52,8 +63,12 @@
 
 (define (validate-html-files dep-html-dir out-html-dir)
   (printf "~a~a~a~n" COLOR-CYAN "~ HTML FILES ~" COLOR-RESET)
-  (define dep-html-files (set (filter (λ (f) (string-suffix? ".html" f)) (directory-list dep-html-dir))))
-  (define out-html-files (set (filter (λ (f) (string-suffix? ".html" f)) (directory-list out-html-dir))))
+  (define dep-html-files
+    (set (filter (λ (f) (string-suffix? ".html" (path->string f)))
+                 (directory-list dep-html-dir))))
+  (define out-html-files
+    (set (filter (λ (f) (string-suffix? ".html" (path->string f)))
+                 (directory-list out-html-dir))))
   (for-each (λ (file-name)
               (define dep-file-path (build-path dep-html-dir file-name))
               (if (set-member? out-html-files file-name)
@@ -73,6 +88,9 @@
 
 ;; ----- MAIN EXECUTION CODE -----
 
-(let ([dep-mmd-dir (build-path "dep" "mmd")]
-      [out-mmd-dir (build-path "out" "mmd")]
-  (validate-mmd-files dep-mmd-dir out-mmd-dir)
+(let ([dep-mmd-dir-mindmap (build-path "check" "dep" "mmd_mindmap")]
+      [out-mmd-dir-mindmap (build-path "check" "out" "mmd_mindmap")]
+      [dep-mmd-dir-flowchart (build-path "check" "dep" "mmd_flowchart")]
+      [out-mmd-dir-flowchart (build-path "check" "out" "mmd_flowchart")])
+  (validate-mmd-files dep-mmd-dir-mindmap out-mmd-dir-mindmap)
+  (validate-mmd-files dep-mmd-dir-flowchart out-mmd-dir-flowchart))
