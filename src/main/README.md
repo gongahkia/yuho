@@ -1,4 +1,4 @@
-# Lexer, parser and [transpiler](./transpiler)
+# Lexer, parser, [transpiler](./transpiler) and [CLI tool](./cli)
 
 ## Yuho default implementation v2.0
 
