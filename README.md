@@ -2,9 +2,7 @@
 > Yuho is undergoing a major overhaul right now. This means language features are likely to change.  
 > 
 > For a rough idea of where Yuho is headed, see [`reworked_sample_cheating.md`](./doc/main/reworked_sample_cheating.md).    
->   
-> As such, support for other transpilation outputs is not currently my primary focus. To see what is being worked on, refer to [`future.md`](./doc/main/future.md).    
->   
+>     
 > I can be found on Linkedin for anything urgent.  
 >   
 > *\- Gabriel*   
@@ -35,8 +33,11 @@ Getting into the specifics, Yuho provides the following four products.
 
 1. [Yuho](./doc/main/syntax.md), a DSL made to be readable and codeable by law students and lawyers
 2. [Formalised semantic](./tests/main) for legal reasoning modelled after the syntactical patterns of the law
-3. [Web frontend](./web/main/) that displays a statute's logic as a flowchart
+3. [CLI tool](./src/main/) for interacting with Yuho's primary functions in the CLI
 4. [Transpiler](./src/main/) that transpiles to the below targets
+
+> [!NOTE]
+> More transpilation outputs are being worked on [here](./src/main/transpiler/).
 
 ### Output formats
 
@@ -45,15 +46,20 @@ Getting into the specifics, Yuho provides the following four products.
 | Mermaid | Diagrammatic representation *(Mindmap, Flowchart)* |
 | Alloy | Formal verification |   
 
-> [!NOTE]
-> More transpilation outputs are being worked on [here](./src/main/transpiler/).
-
 ## Documentation
 
 * [Language specification](./doc/main/syntax.md)
 * [Grammer specification](./grammer/main/)
 * [Formal verification](./tests/main/)
 * [Examples](./example/main/)
+
+## Roadmap
+
+The below products are in development. For more details on what's being worked on, refer to [`future.md`](./doc/main/future.md).
+
+1. [Web frontend](./web/main/) that displays a statute's logic as a flowchart
+2. [Browser editor](./web/main) for Yuho code with hot reloading and drag-and-drop functionality  
+3. [LSP](./lsp) for major editors
 
 ## Scope
 
