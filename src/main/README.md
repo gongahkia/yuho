@@ -7,7 +7,7 @@
 | Lexer | Racket | ![](https://img.shields.io/badge/status-up-brightgreen) |
 | Parser | Racket | ![](https://img.shields.io/badge/status-up-brightgreen) |
 | REPL | Racket | ![](https://img.shields.io/badge/status-up-brightgreen) | 
-| CLI tooling | Racket | ![](https://img.shields.io/badge/status-up-brightgreen) | 
+| CLI tool | Racket | ![](https://img.shields.io/badge/status-up-brightgreen) | 
 
 ## Generate the lexer and parser *(and optionally, IDE)* yourself
 
