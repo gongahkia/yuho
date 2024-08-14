@@ -4,20 +4,7 @@
 
 ### Products
 
-1. Yuho CLI TRANSPILER  
-    * transpile **valid Yuho struct instances** to Mermaid mindmaps and flowcharts
-        1. Statute definition *(Yuho struct)* --[`transpilation_program`]--> Mermaid diagram *(Flowchart, Mindmap)*
-        2. Statute illustration / Scenario *(Yuho struct)* --[`transpilation_program`]--> Highlighted mermaid diagrams *(Flowchart, Mindmap)*
-    * brainstorm other transpilation outputs after
-
-2. Other Yuho CLI TOOLS
-    * same ease of build process as Vite for frontend and Cargo for Rust
-    * think of a good name for the CLI TOOL like Catala's `clerk` and Elephant's `briefcase`  
-    * **things to implement**
-        1. generates a template empty Yuho struct with the base Yuho syntax for lawyers to use quickly
-        2. generates a Yuho struct instance from a user-defined validated Yuho struct with template empty values inserted within the struct instance
-
-3. Frontend WEB DISPLAY 
+1. Frontend WEB DISPLAY 
     * clicking-through feature to step through the highlighted path in a Mermaid flowchart
     * sidebar showing what each step fulfilled is like to achieve that highlighted path 
     * animating mermaid diagrams
@@ -27,7 +14,7 @@
         2. [get the images](https://blog.lmorchard.com/2023/01/03/mermaid-animations/)
         3. [invisible boxes](https://yairm210.medium.com/animating-mermaid-graphs-as-gifs-2ec8f3b24fbc) 
 
-4. Frontend BROWSER EDITOR for Yuho code
+2. Frontend BROWSER EDITOR for Yuho code
     * in-browser IDE similar to [L4's IDE](https://smucclaw.github.io/l4-lp/)
     * produces a user-visible AST with legible error messages simialr to [ANTLR Lab](http://lab.antlr.org/)
     * transpiles written yuho code live to display a Mermaid diagram (see 3)
@@ -37,13 +24,13 @@
     * provides decent error messages
     * consider using svelteflow
 
-5. Yuho LSP
+3. Yuho LSP
     * exported for other IDEs
         * VSCODE (as a browser extension)
         * Emacs
         * Vim
 
-6. Yuho chatbot
+4. Yuho chatbot
     * Chatbot that can provide legal advice to the layman **and** explain law concepts clearly to students via Mermaid diagrams
     * Yuho as an intermediary language that provides sanitised input to easily train LLMs on SG Criminal Law cases
     * **things to implement**
