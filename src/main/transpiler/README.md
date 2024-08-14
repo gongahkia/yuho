@@ -2,7 +2,7 @@
 
 | Target | Usage | Implementation status | 
 | :--- | :--- | :--- | 
-| Mermaid | diagrammatic representation *(Mindmap, Flowchart)* | ![](https://img.shields.io/badge/status-not%20implemented-ff3333) |
+| Mermaid | diagrammatic representation *(mindmap, flowchart)* | ![](https://img.shields.io/badge/status-not%20implemented-ff3333) |
 | JSON | REST APIs | ![](https://img.shields.io/badge/status-not%20implemented-ff3333) |
 | HTML | frontend display for learning purposes | ![](https://img.shields.io/badge/status-not%20implemented-ff3333) |
 | Alloy | formal verification | ![](https://img.shields.io/badge/status-not%20implemented-ff3333) |
