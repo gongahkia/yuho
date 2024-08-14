@@ -2,10 +2,9 @@
 
 | Target | Usage | Implementation status | 
 | :--- | :--- | :--- | 
-| Mermaid | diagrammatic representation *(mindmap, flowchart)* | ![](https://img.shields.io/badge/status-not%20implemented-ff3333) |
+| Mermaid | diagrammatic representation *(mindmap, flowchart)* | ![](https://img.shields.io/badge/status-up-brightgreen) |
+| Alloy | formal verification | ![](https://img.shields.io/badge/status-up-brightgreen) |
 | JSON | REST APIs | ![](https://img.shields.io/badge/status-not%20implemented-ff3333) |
-| HTML | frontend display for learning purposes | ![](https://img.shields.io/badge/status-not%20implemented-ff3333) |
-| Alloy | formal verification | ![](https://img.shields.io/badge/status-not%20implemented-ff3333) |
 | Catala | decision logic | ![](https://img.shields.io/badge/status-not%20implemented-ff3333) |
 | R | data modelling and visualisation | ![](https://img.shields.io/badge/status-not%20implemented-ff3333) |
 
