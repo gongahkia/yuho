@@ -1,7 +1,7 @@
 > [!CAUTION]  
 > Yuho is undergoing a major overhaul right now. This means language features are likely to change.  
 > 
-> For a rough idea of where Yuho is headed, see [`reworked_sample_cheating.md`](./doc/main/reworked_sample_cheating.md).    
+> For a rough idea of where Yuho is headed, see [`yuho_onboarding.md`](./doc/main/yuho_onboarding.md).    
 >     
 > I can be found on Linkedin for anything urgent.  
 >   
