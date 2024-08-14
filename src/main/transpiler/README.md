@@ -8,3 +8,22 @@
 | Alloy | formal verification | ![](https://img.shields.io/badge/status-not%20implemented-ff3333) |
 | Catala | decision logic | ![](https://img.shields.io/badge/status-not%20implemented-ff3333) |
 | R | data modelling and visualisation | ![](https://img.shields.io/badge/status-not%20implemented-ff3333) |
+
+## Usage 
+
+### 1. Transpile `.yh` to `.mmd`
+
+```console
+$ racket to_mmd/trans_mmd_mindmap.rkt
+$ racket to_mmd/trans_mmd_flowchart.rkt
+```
+
+* Read `.yh` files are in `./check/dep/yh`
+* Valid `.mmd` files are in `./check/dep/mmd`
+* Transpiled `.mmd` files are in `./check/out/mmd`
+
+### 2. Validate transpilation outputs 
+
+```console
+$ racket check/validate.rkt
+```
