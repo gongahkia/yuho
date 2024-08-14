@@ -15,14 +15,14 @@
 
 ### [YACC](https://silcnitc.github.io/yacc.html) and [Lex](https://wycwiki.readthedocs.io/en/latest/_static/compilers/lex.html)
 
-```sh
+```console
 $ flex Yuho.l
 $ bison -d Yuho.y
 ```
 
 ### [ANTLR](https://www.antlr.org/)
 
-```sh
+```console
 $ antlr4 Yuho.g4
 $ javac Yuho*.java
 ```
@@ -36,25 +36,25 @@ $ javac Yuho*.java
 
 ### [Coco/R](https://ssw.jku.at/Research/Projects/Coco/)
 
-```sh
+```console
 $ CocoR Yuho.cocor
 ```
 
 ### [JavaCC](https://javacc.github.io/javacc/)
 
-```sh
+```console
 $ javacc Yuho.jj
 ```
 
 ### [PEG.js](https://github.com/pegjs/pegjs)
 
-```sh
+```console
 $ pegjs Yuho.pegjs
 ```
 
 ### [Ragel](http://www.colm.net/open-source/ragel/)
 
-```sh
+```console
 $ ragel -C -G2 Yuho.rl
 ```
 
@@ -86,14 +86,14 @@ if __name__ == "__main__":
 
 2. Run the following commands
 
-```sh
+```console
 $ pip3 install lark-parser
 $ lark -o output_file.py Yuho.lark
 ```
 
 ### [Tcllib](https://core.tcl-lang.org/tcllib/doc/tcllib-1-18/embedded/www/tcllib/files/apps/pt.html)
 
-```sh
+```console
 $ teacup install tcllib
 $ tclsh script_name.tcl
 ```
