@@ -1,12 +1,3 @@
-> [!CAUTION]  
-> Yuho is undergoing a major overhaul right now. This means language features are likely to change.  
-> 
-> For a rough idea of where Yuho is headed, see [`yuho_onboarding.md`](./doc/main/yuho_onboarding.md).    
->     
-> I can be found on Linkedin for anything urgent.  
->   
-> *\- Gabriel*   
-
 ![](https://img.shields.io/badge/yuho_1.0-passing-green) ![](https://img.shields.io/badge/yuho_2.0-build-orange)
 
 # `Yuho`
@@ -27,8 +18,6 @@ Criminal Law is often a [foundational module](https://law.smu.edu.sg/programmes/
 
 Yuho is a DSL that seeks to *help law students* better understand statutes by providing a flexible syntax which affords a programmatic representation of Singapore Criminal Law. By allowing users to decide how to represent stautory provisions in `.yh` code, the hope is that the statute's key elements and its underlying conditional relationships surface themselves. These representations can be coarse or granular, entirely scoped by their use-cases.  
 
-
-
 Getting into the specifics, Yuho provides the following four products.
 
 1. [Yuho](./doc/main/syntax.md), a DSL made to be readable and codeable by law students and lawyers
@@ -46,6 +35,8 @@ Getting into the specifics, Yuho provides the following four products.
 > [!NOTE]
 > More transpilation outputs are being worked on [here](./src/main/transpiler/).
 
+Sold on Yuho? Check out the [quickstart](#quickstart) guide.
+
 ### Nerd stuff
 
 For those interested, Yuho provides a [grammatically-validated](https://www.usna.edu/Users/cs/wcbrown/courses/F19SI413/lec/l07/lec.html) syntax core that splays out all requirements and consequences for a given offence, providing assurance of logical correctness from the get-go. Yuho was also designed to be [exception-validated](https://www.reddit.com/r/learnjavascript/comments/y6663u/difference_between_input_validation_and_exception/) and [language-agnostic](https://softwareengineering.stackexchange.com/questions/28484/what-is-language-agnosticism-and-why-is-it-called-that), transpiling from one formally-specified source of truth to multiple target outputs, encouraging the development of tools that leverage off Yuho's logical core.   
@@ -58,6 +49,10 @@ Want to find out more? See Yuho's [documentation](#documentation).
 * [Grammer specification](./grammer/main/)
 * [Formal verification](./tests/main/)
 * [Examples](./example/main/)
+
+## Quickstart
+
+See [`yuho_onboarding.md`](./doc/main/yuho_onboarding.md).
 
 ## Roadmap
 
