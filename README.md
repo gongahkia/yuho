@@ -40,9 +40,13 @@ Getting into the specifics, Yuho provides the following four products.
 
 ### Output formats
 
-| Target | Usage | 
-| :--- | :--- |
-| | |
+| Target | Usage |   
+| :--- | :--- |  
+| Mermaid | diagrammatic representation *(Mindmap, Flowchart)* |
+| Alloy | formal verification |   
+
+> [!NOTE]
+> More transpilation outputs are being worked on [here](./src/main/transpiler/).
 
 ## Documentation
 
