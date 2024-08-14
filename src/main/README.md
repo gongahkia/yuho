@@ -1,4 +1,4 @@
-# Lexer, parser and transpiler
+# Lexer, parser and [transpiler](./transpiler)
 
 ## Yuho default implementation v2.0
 
@@ -6,7 +6,7 @@
 | :--- | :--- | :--- | 
 | Lexer | Racket | ![](https://img.shields.io/badge/status-up-brightgreen) |
 | Parser | Racket | ![](https://img.shields.io/badge/status-up-brightgreen) |
-| Transpiler to <`add_transpilation_output(s)`> | NIL | ![](https://img.shields.io/badge/status-not%20implemented-ff3333) | 
+| REPL | | ![](https://img.shields.io/badge/status-not%20implemented-ff3333) | 
 
 ## Generate the lexer and parser *(and optionally, IDE)* yourself
 
