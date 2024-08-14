@@ -42,8 +42,8 @@ Getting into the specifics, Yuho provides the following four products.
 
 | Target | Usage |   
 | :--- | :--- |  
-| Mermaid | diagrammatic representation *(Mindmap, Flowchart)* |
-| Alloy | formal verification |   
+| Mermaid | Diagrammatic representation *(Mindmap, Flowchart)* |
+| Alloy | Formal verification |   
 
 > [!NOTE]
 > More transpilation outputs are being worked on [here](./src/main/transpiler/).
