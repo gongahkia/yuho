@@ -45,8 +45,38 @@
       (format "        %s\n" type)
       (generate-struct-nodes type (extract-subfields type)))))
 
-  (define (extract-subfields struct-name)
-    '())
+(define (extract-subfields struct-name)
+  (define (find-struct-by-name name)
+    (for/or ([element (in-list parsed-xml)])
+      (when (and (list? element)
+                  (string=? (first element) 'struct))
+        (let ([struct-name (second element)]
+              [fields (third element)])
+          (when (string=? name struct-name)
+            fields)))))
+
+  (define (extract-nested-fields fields)
+    (for/list ([field (in-list fields)])
+      (when (string-contains? (second field) "struct")
+        (let ([nested-type (second field)])
+          (list (first field) nested-type (find-struct-by-name nested-type))))))
+
+  (define (generate-struct-nodes fields)
+    (apply string-append
+           (for/list ([field (in-list fields)])
+             (let ([field-name (first field)]
+                   [field-type (second field)])
+               (if (string-contains? field-type "struct")
+                   (string-append
+                    (format "    ~a\n" field-name)
+                    (generate-struct-nodes (find-struct-by-name field-type)))
+                   (format "        ~a: ~a\n" field-name field-type)))))
+
+  (define (extract-all-fields struct-name)
+    (let ([fields (find-struct-by-name struct-name)])
+      (generate-struct-nodes fields)))
+
+  (extract-all-fields struct-name))
 
   (define (yuho-to-mermaid yuho-code)
     (let ([structs (extract-structs yuho-code)])
