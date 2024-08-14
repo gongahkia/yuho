@@ -52,7 +52,7 @@ Want to find out more? See Yuho's [documentation](#documentation).
 
 ## Quickstart
 
-See [`yuho_onboarding.md`](./doc/main/yuho_onboarding.md).
+Learn how Yuho works in 5 minutes at [`yuho_onboarding.md`](./doc/main/yuho_onboarding.md).
 
 ## Roadmap
 
