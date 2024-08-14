@@ -27,7 +27,7 @@ Criminal Law is often a [foundational module](https://law.smu.edu.sg/programmes/
 
 Yuho is a DSL that seeks to *help law students* better understand statutes by providing a flexible syntax which affords a programmatic representation of Singapore Criminal Law. By allowing users to decide how to represent stautory provisions in `.yh` code, the hope is that the statute's key elements and its underlying conditional relationships surface themselves. These representations can be coarse or granular, entirely scoped by their use-cases.  
 
-For those interested, Yuho provides a [grammatically-validated](https://www.usna.edu/Users/cs/wcbrown/courses/F19SI413/lec/l07/lec.html) syntax core that splays out all requirements and consequences for a given offence, providing assurance of logical correctness from the get-go. Yuho was also designed to be [exception-validated](https://www.reddit.com/r/learnjavascript/comments/y6663u/difference_between_input_validation_and_exception/) and [language-agnostic](https://softwareengineering.stackexchange.com/questions/28484/what-is-language-agnosticism-and-why-is-it-called-that), transpiling from one formally-specified source of truth to multiple target outputs, encouraging the development of tools that leverage off Yuho's logical core.
+
 
 Getting into the specifics, Yuho provides the following four products.
 
@@ -36,9 +36,6 @@ Getting into the specifics, Yuho provides the following four products.
 3. [CLI tool](./src/main/) for interacting with Yuho's primary functions in the CLI
 4. [Transpiler](./src/main/) that transpiles to the below targets
 
-> [!NOTE]
-> More transpilation outputs are being worked on [here](./src/main/transpiler/).
-
 ### Output formats
 
 | Target | Usage |   
@@ -46,7 +43,16 @@ Getting into the specifics, Yuho provides the following four products.
 | Mermaid | Diagrammatic representation *(Mindmap, Flowchart)* |
 | Alloy | Formal verification |   
 
-## Documentation
+> [!NOTE]
+> More transpilation outputs are being worked on [here](./src/main/transpiler/).
+
+### Nerd stuff
+
+For those interested, Yuho provides a [grammatically-validated](https://www.usna.edu/Users/cs/wcbrown/courses/F19SI413/lec/l07/lec.html) syntax core that splays out all requirements and consequences for a given offence, providing assurance of logical correctness from the get-go. Yuho was also designed to be [exception-validated](https://www.reddit.com/r/learnjavascript/comments/y6663u/difference_between_input_validation_and_exception/) and [language-agnostic](https://softwareengineering.stackexchange.com/questions/28484/what-is-language-agnosticism-and-why-is-it-called-that), transpiling from one formally-specified source of truth to multiple target outputs, encouraging the development of tools that leverage off Yuho's logical core.   
+
+Want to find out more? See Yuho's [documentation](#documentation).
+
+### Documentation
 
 * [Language specification](./doc/main/syntax.md)
 * [Grammer specification](./grammer/main/)
