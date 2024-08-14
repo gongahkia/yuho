@@ -6,7 +6,7 @@
 | :--- | :--- | :--- | 
 | Lexer | Racket | ![](https://img.shields.io/badge/status-up-brightgreen) |
 | Parser | Racket | ![](https://img.shields.io/badge/status-up-brightgreen) |
-| REPL | | ![](https://img.shields.io/badge/status-not%20implemented-ff3333) | 
+| REPL | NIL | ![](https://img.shields.io/badge/status-not%20implemented-ff3333) | 
 
 ## Generate the lexer and parser *(and optionally, IDE)* yourself
 
