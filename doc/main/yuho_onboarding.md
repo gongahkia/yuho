@@ -41,9 +41,11 @@ WHETHER OR NOT such deception was the sole or main inducement,
 is said to cheat."
 ```
 
-This is where Yuho comes in.
+Still, the conditional relationship each element shares with the overall offense is not explicit.  
 
-Once someone has learnt the basics of Yuho's lean syntax, they will be able to structure that same statute in Yuho as below.
+This is where Yuho comes in.  
+
+Once someone has learnt the basics of Yuho's terse syntax, they will be able to structure that same statute in Yuho as below.
 
 ```yh
 scope s415CheatingDefinition {
@@ -428,7 +430,7 @@ s415_cheating_definition.Cheating cheatingIllustrationA := {
 }
 ```
 
-When transpiled to a Mermaid flowchart, it produces the following.
+When transpiled to a Mermaid flowchart, the path that the specified Yuho statute literal fulfills is highlighted.  
 
 ```mermaid
 flowchart TD
@@ -526,17 +528,11 @@ flowchart TD
     linkStyle 28 stroke:#77DD77,stroke-width:4px;
 ```
 
-> FORMAT THE BELOW LATER
-
 ## Where to go next?
 
 * Learn Yuho's syntax at [`syntax.md`](./syntax.md)
-* See other examples of Yuho at [`./example`](./example)
-
-> [!NOTE]
-> For an annotated version of the below Yuho code, see [s415_cheating_definition.yh](./../example/cheating/s415_cheating_definition.yh).  
-
-> [!NOTE]
-> For an annotated version of the below Yuho code, see [s415_detailed_cheating_definition.yh](./../example/cheating/s415_detailed_cheating_definition.yh).
->
-> `cheating_illustration_A.yh`](./../example/cheating/cheating_illustration_A.yh))* each step in the logical journey can be traced.
+* See other examples of Yuho at [`./example/`](./example/)
+* Run Yuho's syntax through formal specifications with [Alloy Analyzer](https://alloytools.org/) at [`./tests/main`](./../../tests/main)
+* Try Yuho out for yourself at [`./src/main/`](./../../src/main/)
+* Build Yuho's lexer and parser yourself at [`./grammer/main/`](./../../grammer/main/)
+* Have Racket, DSL development experience or want to gain that experience? See [`CONTRIBUTING.md`](./../../admin/CONTRIBUTING.md)
