@@ -408,7 +408,7 @@ flowchart LR
 
 Moreover, we are able to visualise how a specific scenario plays out diagramatically when holding its Yuho statute literal against a Yuho statute definition as specified earlier.  
 
-Below is a Yuho statute literal of [*Illustration A* from Section 415 of the Penal Code](https://sso.agc.gov.sg/Act/PC1871?ProvIds=P417-#pr415-). 
+Below is a Yuho statute literal of [*Illustration A*](https://sso.agc.gov.sg/Act/PC1871?ProvIds=P417-#pr415-) from Section 415 of the Penal Code 1871. 
 
 ```yh
 referencing Cheating from s415_cheating_definition
