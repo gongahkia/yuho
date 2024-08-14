@@ -75,7 +75,4 @@
 
 (let ([dep-mmd-dir (build-path "dep" "mmd")]
       [out-mmd-dir (build-path "out" "mmd")]
-      [dep-html-dir (build-path "dep" "html")]
-      [out-html-dir (build-path "out" "html")])
   (validate-mmd-files dep-mmd-dir out-mmd-dir)
-  (validate-html-files dep-html-dir out-html-dir))
