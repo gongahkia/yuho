@@ -22,7 +22,17 @@ $ racket to_mmd/trans_mmd_flowchart.rkt
 * Valid `.mmd` files are in `./check/dep/mmd_*`
 * Transpiled `.mmd` files are in `./check/out/mmd_*`
 
-### 2. Validate transpilation outputs 
+### 2. Transpile `.yh` to `.als`
+
+```console
+$ racket to_als/trans_als.rkt
+```
+
+* Read `.yh` files are in `./check/dep/yh`
+* Valid `.als` files are in `./check/dep/als`
+* Transpiled `.als` files are in `./check/out/als`
+
+### 3. Validate transpilation outputs 
 
 ```console
 $ racket check/validate.rkt
