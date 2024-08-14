@@ -531,7 +531,7 @@ flowchart TD
 ## Where to go next?
 
 * Learn Yuho's syntax at [`syntax.md`](./syntax.md)
-* See other examples of Yuho at [`./example/`](./example/)
+* See other examples of Yuho at [`./example/`](./../../example/main/)
 * Run Yuho's syntax through formal specifications with [Alloy Analyzer](https://alloytools.org/) at [`./tests/main`](./../../tests/main)
 * Try Yuho out for yourself at [`./src/main/`](./../../src/main/)
 * Build Yuho's lexer and parser yourself at [`./grammer/main/`](./../../grammer/main/)
