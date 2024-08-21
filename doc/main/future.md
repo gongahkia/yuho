@@ -2,6 +2,33 @@
 
 ## Follow Up Actions
 
+### Brainstorming
+
+1. Regarding the interlinks between statutes
+    * Many provisions, when they become more complex, have terms like “subject to” that logically connect different sections or entire statutes *(by way of providing explanation or exception for a given rule or term)*
+    * Can I provide an example of how Yuho can represent 2 statutes interacting, both in `.yh` code and in Mindmap and Flowchart form?
+
+2. Implement Prof How Khang's feedback *(15/08/2024)*
+    * Any DSL that seeks to act as a reprentation of any domain of law needs to consider its purpose and scope
+    * It is essential to consider both scope and purpose because providing an accurate representation of law that can make the implicit explicit then makes a DSL for the law useful for 
+        * the lay-person trying to understand the law as a framework
+        * LLMs that are being trained on a set number of inputs and outputs
+    * Purpose-wise, we put law into code to make things that are implicit explicit since writing code inherently requires us to render out all assumptions that are made for a given situation
+        * Can Yuho reach this state of representation for Criminal Law?
+    * Scope-wise, how far back are we pushing the *(axiomatic)* point from which we are reasoning from? 
+        * with regard to assumptions made
+            * *eg. before even considering how a given a given statute should apply for a case, we should figure whether the given case can even be heard in the current court*
+        * with regard to how granular and specific we are when breaking down a given statute
+    * As an additonal consideration, what other aspects of law can Yuho seek to represent?
+        * Given its flexible syntax, can we consider if it can accurately represent certain Tort cases which overlap with Criminal cases
+
+3. Implement CCLAW's feedback *(15/08/2024)*
+    * Need to iron out logical conondrums with how Yuho evaluates relational logic
+        * *eg. S415 says "any person who...", how do we specify that "any person" does not include the`Party.Victim` or somewhere held as being in the same relationship as them, but specifically refers to the `Party.Accused` themselves*
+    * It appears at first pass that defining object literals, then working your way to the class definition is always the more intuitive way of representing data
+        * That said, is there a far more intuitive way of representing logic than through forcing definition of class templates?
+        * Despite what I claim, Yuho's struct template and struct literal is just a glorified class object relationship
+
 ### Products
 
 1. Frontend WEB DISPLAY 
@@ -138,21 +165,3 @@
        * Shelve discussion of defences for now and add it below to future.md as additional thing to consider but inconsequential since statutes by default don't specify the defences of an offence
        * Perhaps can include it within the flowchart
     * Refer to Criminal Law notes google doc from Azfir's structure of inquiry as required
-
-## Feedback
-
-### 030824
-
-* Prof Alexander Woon
-    * Yuho presupposes a consistent structure across the whole penal code, which might be a misplaced assumption
-    * Penal Code 1871 but many amendments have since been made, creating inconsistencies within the format of how the whole Penal Code is structured
-    * Cheating provision in particular is very complicated
-    * How can you more robustly represent the Penal Code?
-
-* Eugene
-    * L4 focuses on so many areas that their language design has to account for too many things 
-    * Advantage is that Yuho can afford to be **more granular** in it's representation of even one statute, so focus on that first
-    * How deep can Yuho go in representing statutes that can differentiate Yuho from other DSLs? 
-
-* Lucas
-    * Don't be discouraged
