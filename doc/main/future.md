@@ -4,11 +4,17 @@
 
 ### Brainstorming
 
-1. Regarding the interlinks between statutes
+1. See https://motoraccidents.lawnet.sg/
+    * Could Yuho provide a way for dynamic form generation *(even a glorified google form or execel sheet)* for specific statutes?
+    * Try implementing sections from the [Road Traffic Act](https://sso.agc.gov.sg/SL/RTA1961-R20) and see if the generated flowchart is harder to parse
+    * Integrate a transpiler to generate a HTML form or brainstorm other frontends that Lawyers can easily use and deploy siilar to `motoraccidents/quantum`
+    * Integrate a transpiler that drafts emails and whatsapp messages informing clients of all possible outcomes, integrate an LLM for this portion
+   
+2. Regarding the interlinks between statutes
     * Many provisions, when they become more complex, have terms like “subject to” that logically connect different sections or entire statutes *(by way of providing explanation or exception for a given rule or term)*
     * Can I provide an example of how Yuho can represent 2 statutes interacting, both in `.yh` code and in Mindmap and Flowchart form?
 
-2. Implement Prof How Khang's feedback *(15/08/2024)*
+3. Implement Prof How Khang's feedback *(15/08/2024)*
     * Any DSL that seeks to act as a reprentation of any domain of law needs to consider its purpose and scope
     * It is essential to consider both scope and purpose because providing an accurate representation of law that can make the implicit explicit then makes a DSL for the law useful for 
         * the lay-person trying to understand the law as a framework
@@ -22,7 +28,7 @@
     * As an additonal consideration, what other aspects of law can Yuho seek to represent?
         * Given its flexible syntax, can we consider if it can accurately represent certain Tort cases which overlap with Criminal cases
 
-3. Implement CCLAW's feedback *(15/08/2024)*
+4. Implement CCLAW's feedback *(15/08/2024)*
     * Need to iron out logical conondrums with how Yuho evaluates relational logic
         * *eg. S415 says "any person who...", how do we specify that "any person" does not include the`Party.Victim` or somewhere held as being in the same relationship as them, but specifically refers to the `Party.Accused` themselves*
     * It appears at first pass that defining object literals, then working your way to the class definition is always the more intuitive way of representing data
