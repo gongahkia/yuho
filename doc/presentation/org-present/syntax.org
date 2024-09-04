@@ -1,0 +1,112 @@
+#+TITLE: A primer to Yuho's syntax
+#+AUTHOR: Gabriel Ong
+#+OPTIONS: toc:nil num:nil
+#+LATEX_CLASS: beamer
+#+BEAMER_THEME: default
+#+BEAMER_COLOR_THEME: default
+
+* Yuho Language Syntax
+** Yuho source files
+   - The file extension is =.yh=
+   - Yuho source files follow the snake_case naming scheme
+   - Variables, functions, structs, and all user-defined constructs follow the camelCase naming scheme
+   - Indentation is optional but recommended for easier readability with multiple nested {} curly braces
+   - Yuho is strongly, statically-typed
+
+** Comments
+   - Single-line comments start with =//= and multi-line comments are enclosed with =/* */=
+   - Example:
+     #+BEGIN_SRC yh
+     // this is a single-line comment
+     /*
+     this is a
+     multi-line
+     comment
+     */
+     #+END_SRC
+
+** Scope
+   - Declares the lexical scope of a section of Yuho code
+   - Variables, structs, and functions are accessed via dot syntax
+   - Scopes are automatically exported as user-defined modules
+   - Example:
+     #+BEGIN_SRC yh
+     scope teachingScope {
+         integer anInteger := 100
+         float aFloat := 200.00
+         string aString := "example"
+     }
+     teachingScope.anInteger
+     #+END_SRC
+
+** Variable Declaration
+   - Variables are declared and assigned values using =:= syntax
+   - Datatype is specified before the variable identifier
+   - Example:
+     #+BEGIN_SRC yh
+     integer anotherInteger := 200
+     float anotherFloat := 400.00
+     #+END_SRC
+
+** Types
+   - Yuho supports both numerical and generic primitive types
+   - Example of numerical primitives:
+     #+BEGIN_SRC yh
+     integer anExampleInteger := 200
+     float anExampleFloat := 0.1823448
+     #+END_SRC
+   - Example of generic primitives:
+     #+BEGIN_SRC yh
+     boolean anExampleBoolean := TRUE
+     string anExampleString := "example string"
+     #+END_SRC
+
+** Data Structures
+   - Only one data structure in Yuho: the struct
+   - Allows the creation of fixed-sized arrays, tuples, dictionaries, enums, and normal structs
+   - Example:
+     #+BEGIN_SRC yh
+     struct anExampleNormalStruct {
+         string name,
+         integer age,
+         money wealth,
+         date DOB,
+     }
+     #+END_SRC
+
+** Operators
+   - Arithmetic operators: =+, -, *, /=, //, %=
+   - Comparison operators: ===, !=, >, <, >=, <=
+   - Logical operators: =and, or, not, &&, ||, !=
+
+** Control Structures
+   - No loops in Yuho
+   - Conditional structures use pattern-matching with =match case=
+   - Example:
+     #+BEGIN_SRC yh
+     boolean isGuilty := TRUE
+     string finalJudgement := match isGuilty {
+         case TRUE := consequence "Go to Jail!"
+         case FALSE := consequence "You have been acquitted!"
+     }
+     #+END_SRC
+
+** Functions
+   - Function definition syntax:
+     #+BEGIN_SRC org
+     <returnValueDatatype> func <functionName> ( <parameterDatatype(s)> <parameterName(s)> ) { <functionDefinitionBody> }
+     #+END_SRC
+   - Every function must return a value
+   - Example:
+     #+BEGIN_SRC yh
+     int func aSimpleComputation (int a, int b) {
+         := a + b
+     }
+     #+END_SRC
+
+** Testing
+   - Testing is done using =assert=
+   - Example:
+     #+BEGIN_SRC yh
+     assert aSimpleComputation(1, 2) == 3
+     #+END_SRC
