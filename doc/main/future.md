@@ -2,19 +2,29 @@
 
 ## Follow Up Actions
 
-### Brainstorming
+1. Can I implement a syntax that covers Tort law as well?
+    * Plot out the architecture diagram first
+        * Work out how to integrate a trained LLM that can read and validate Yuho
+    * Consider completely redefining Yuho's syntax to cover the following features
+        * simpler and easy to learn and write a tokenisor and parser, closer to Julia 
+        * make the CLI tools easier to learn
+    * Implement a syntax that covers 
+        * common law rulings
+        * statutory provisions
+        * real logic so that CCLAW's edgecases in logic under point 4 can be covered
+    * How these rulings would tie in to existing cases
 
-1. See https://motoraccidents.lawnet.sg/
+2. See https://motoraccidents.lawnet.sg/ and https://github.com/smucclaw/ladder-diagram
     * Could Yuho provide a way for dynamic form generation *(even a glorified google form or execel sheet)* for specific statutes?
     * Try implementing sections from the [Road Traffic Act](https://sso.agc.gov.sg/SL/RTA1961-R20) and see if the generated flowchart is harder to parse
     * Integrate a transpiler to generate a HTML form or brainstorm other frontends that Lawyers can easily use and deploy siilar to `motoraccidents/quantum`
     * Integrate a transpiler that drafts emails and whatsapp messages informing clients of all possible outcomes, integrate an LLM for this portion
    
-2. Regarding the interlinks between statutes
+3. Regarding the interlinks between statutes
     * Many provisions, when they become more complex, have terms like “subject to” that logically connect different sections or entire statutes *(by way of providing explanation or exception for a given rule or term)*
     * Can I provide an example of how Yuho can represent 2 statutes interacting, both in `.yh` code and in Mindmap and Flowchart form?
 
-3. Implement Prof How Khang's feedback *(15/08/2024)*
+4. Implement Prof How Khang's feedback *(15/08/2024)*
     * Any DSL that seeks to act as a reprentation of any domain of law needs to consider its purpose and scope
     * It is essential to consider both scope and purpose because providing an accurate representation of law that can make the implicit explicit then makes a DSL for the law useful for 
         * the lay-person trying to understand the law as a framework
@@ -28,14 +38,14 @@
     * As an additonal consideration, what other aspects of law can Yuho seek to represent?
         * Given its flexible syntax, can we consider if it can accurately represent certain Tort cases which overlap with Criminal cases
 
-4. Implement CCLAW's feedback *(15/08/2024)*
+5. Implement CCLAW's feedback *(15/08/2024)*
     * Need to iron out logical conondrums with how Yuho evaluates relational logic
         * *eg. S415 says "any person who...", how do we specify that "any person" does not include the`Party.Victim` or somewhere held as being in the same relationship as them, but specifically refers to the `Party.Accused` themselves*
     * It appears at first pass that defining object literals, then working your way to the class definition is always the more intuitive way of representing data
         * That said, is there a far more intuitive way of representing logic than through forcing definition of class templates?
         * Despite what I claim, Yuho's struct template and struct literal is just a glorified class object relationship
 
-### Products
+## Products
 
 1. Frontend WEB DISPLAY 
     * clicking-through feature to step through the highlighted path in a Mermaid flowchart
@@ -75,27 +85,7 @@
     * see [scott](https://scott.intelllex.com/)
     * see [ollama](https://ollama.com/library)
 
-### Admin
-
-* fix relative links in `README.md` and `reworked_sample_cheating.md`
-* clean up `reworked_sample_cheating.md` for easier formatted reading
-* design a logo for Yuho and add it to the `README.md`, credit the designer in the `README.md` under contributions accordingly
-* update the base `README.md` and `reworked_sample_cheating.md` to focus Yuho on accurately representing **definition sections** within the Penal Code
-* create other examples for other definition statutes and its illustrations under `./example/main/`
-* update `Makefile` to install dependancies for the below if they choose to generate the parser themselves
-  * Racket
-  * Java
-  * Antlrl4 per [here](https://github.com/antlr/antlr4/blob/master/doc/getting-started.md)
-  * Flex
-  * Bison
-  * Coco/R
-  * Peg.js
-  * JavaCc
-  * Ragel
-  * Lark
-  * Tcllib
-
-### Later
+## Later
 
 1. Checks under `./test`
     * right now only checking for syntax and enforcing basic conditional constructs
