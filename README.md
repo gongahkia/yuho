@@ -1,4 +1,4 @@
-![](https://img.shields.io/badge/yuho_1.0-passing-green) ![](https://img.shields.io/badge/yuho_2.0-build-orange)
+![](https://img.shields.io/badge/yuho_1.0-passing-green) ![](https://img.shields.io/badge/yuho_2.0-passing-green) ![](https://img.shields.io/badge/yuho_3.0-build-orange)
 
 # `Yuho`
 
