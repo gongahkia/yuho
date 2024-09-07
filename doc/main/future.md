@@ -45,6 +45,14 @@
         * That said, is there a far more intuitive way of representing logic than through forcing definition of class templates?
         * Despite what I claim, Yuho's struct template and struct literal is just a glorified class object relationship
 
+6. Afford exporting to multiple diagrammatic outputs
+    * mermaid diagrams (all sorts)
+    * ASCII diagrams for non-mermaid rendering interfaces
+    * PLANTUML diagrams
+    * graphviz
+    * kroki
+    * d2
+
 ## Products
 
 1. Frontend WEB DISPLAY 
