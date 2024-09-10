@@ -1,7 +1,8 @@
 ![](https://img.shields.io/badge/yuho_1.0-passing-green) ![](https://img.shields.io/badge/yuho_2.0-passing-green) ![](https://img.shields.io/badge/yuho_3.0-build-orange)
 
 > [!IMPORTANT]
-> Reworking the entirity of Yuho v3.0  
+> Reworking the entirity of Yuho with v3.0.   
+> Things are about to change.      
 >   
 > ~ Gabriel
 
@@ -11,7 +12,7 @@
 <img src="./asset/yuho_mascot.png" width=40% height=40%>
 </p>
 
-Yuho is a domain-specific language providing a programmatic representation of Singapore Criminal Law.
+Yuho is a domain-specific language providing a programmatic representation of Singapore Tort and Criminal Law.
 
 ## Rationale
 
