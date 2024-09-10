@@ -2,6 +2,8 @@
 
 ## Follow Up Actions
 
+> See [here](https://docs.google.com/document/d/1LTxfNQ1bS9gfFlFkAGrGTDzjjhMmyWh7slpYRvE5KQY/edit?usp=drive_link) for follow up actions for class part or make a seperate repo
+
 1. Can I implement a syntax that covers Tort law as well?
     * Plot out the architecture diagram first
         * Work out how to integrate a trained LLM that can read and validate Yuho
