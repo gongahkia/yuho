@@ -16,6 +16,9 @@
         * real logic so that CCLAW's edgecases in logic under point 4 can be covered
     * How these rulings would tie in to existing cases
 
+1. Consider implementing [langchainlaw](https://github.com/nehcneb/langchainlaw/tree/main) and Yuho's editor as a [streamlit](https://streamlit.io/cloud) app
+    1. see sample implementation [here](https://lawtodata.streamlit.app/)
+
 2. See https://motoraccidents.lawnet.sg/ and https://github.com/smucclaw/ladder-diagram
     * Could Yuho provide a way for dynamic form generation *(even a glorified google form or execel sheet)* for specific statutes?
     * Try implementing sections from the [Road Traffic Act](https://sso.agc.gov.sg/SL/RTA1961-R20) and see if the generated flowchart is harder to parse
