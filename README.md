@@ -1,13 +1,14 @@
-![](https://img.shields.io/badge/yuho_1.0-passing-green) ![](https://img.shields.io/badge/yuho_2.0-passing-green) ![](https://img.shields.io/badge/yuho_3.0-build-orange)
-
+[![](https://img.shields.io/badge/yuho_1.0-passing-green)](https://github.com/gongahkia/yuho/releases/tag/1.0) [![](https://img.shields.io/badge/yuho_2.0-passing-green)](https://github.com/gongahkia/yuho/releases/tag/2.0) ![](https://img.shields.io/badge/yuho_3.0-build-orange)
+  
 > [!IMPORTANT]
-> Reworking the entirity of Yuho with v3.0.   
-> Things are about to change.      
->   
-> ~ Gabriel
-
-# `Yuho`
-
+> Reworking the entirity of Yuho in v3.0.  
+> Most things are about to change, but change is good.  
+> Watch this space.  
+>  
+> ~ Gabriel  
+  
+# `Yuho`  
+  
 <p align="center">
 <img src="./asset/yuho_mascot.png" width=40% height=40%>
 </p>
@@ -31,15 +32,17 @@ Getting into the specifics, Yuho provides the following four products.
 3. [CLI tool](./src/main/) for interacting with Yuho's primary functions in the CLI
 4. [Transpiler](./src/main/) that transpiles to the below targets
 
+> FUA edit the entire above rationale to account for tort law and Yuho's future scope and specificity
+
 ### Output formats
 
 | Target | Usage |   
 | :--- | :--- |  
-| Mermaid | Diagrammatic representation *(Mindmap, Flowchart)* |
-| Alloy | Formal verification |   
-| [More](./src/main/transpiler/) | ... |
+| | | 
 
 Sold on Yuho? Check out the [quickstart](#quickstart) guide.
+
+> FUA edit the above table and add transpilation outputs when they're worked out
 
 ## Nerd stuff
 
@@ -47,32 +50,36 @@ For those interested, Yuho provides a [grammatically-validated](https://www.usna
 
 Want to find out more? See Yuho's [documentation](#documentation).
 
+> FUA edit the above section later when Yuho v3.0's purpose and scope is clear
+
 ### Documentation
 
-* [Language specification](./doc/main/syntax.md)
-* [Grammer specification](./grammer/main/)
-* [Formal verification](./tests/main/)
-* [Examples](./example/main/)
+* [Language specification]()
+* [Grammer specification]()
+* [Formal verification]()
+* [Examples]()
+
+> FUA add the relative links to the relevant directories here later
 
 ## Quickstart
 
-Learn how Yuho works in 5 minutes at [`yuho_onboarding.md`](./doc/main/yuho_onboarding.md).
+Learn how Yuho works in 5 minutes at [`5_MINUTES.md`](./doc/5_MINUTES.md).
 
 ## Roadmap
 
-The below products are in development. For more details on what's being worked on, refer to [`future.md`](./doc/main/future.md).
+The below products are in development. For more details on what's being worked on, refer to [`KANBAN.md`](./doc/KANBAN.md).
 
-1. [Web frontend](./web/main/) that displays a statute's logic as a flowchart
-2. [Browser editor](./web/main) for Yuho code with hot reloading and drag-and-drop functionality  
-3. [LSP](./lsp) for major editors
+1. blah blah blah
+
+> FUA add more details here later
 
 ## Scope
 
-Development is currently scoped by the following statutes as specified [here](./doc/main/scope.md). 
+Development is currently scoped by the following statutes at [`SCOPE.md`](./doc/SCOPE.md). 
 
 ## Contribute
 
-Yuho is open-source. Contribution guidelines are found at [CONTRIBUTING.md](./admin/CONTRIBUTING.md).
+Yuho is open-source. Contribution guidelines are found at [`CONTRIBUTING.md`](./admin/CONTRIBUTING.md).
 
 ## References
 

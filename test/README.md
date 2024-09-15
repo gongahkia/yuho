@@ -2,4 +2,4 @@
 
 Fresh for Yuho v3
 
-For Formal verification, see [alloytools.org](https://alloytools.org/)
+See [alloytools.org](https://alloytools.org/) for formal verification. Explore other tools also.

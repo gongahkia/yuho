@@ -1,4 +1,4 @@
-# Example Yuho file
+# Example Yuho files v3.0
 
 Fresh for v3
 

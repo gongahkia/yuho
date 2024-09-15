@@ -1,3 +1,3 @@
-# Yuho default implementation v3.0
+# Yuho source code v3.0
 
 Fresh for Yuho v3

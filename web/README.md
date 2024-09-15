@@ -1,3 +1,3 @@
-# Yuho Web frontend v3.0
+# Yuho web frontend v3.0
 
-Fresh web frontend for Yuho v3
+Fresh for Yuho v3
