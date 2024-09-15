@@ -42,7 +42,7 @@ This section guides you through submitting a bug report for Yuho. **Following th
 1. Perform a cursory search [here](https://github.com/gongahkia/yuho/issues) for whether the issue has already been reported.
 2. If it has already been reported, add a comment to **that issue** instead of opening a new issue.
 3. If not already reported, please be as detailed as possible in describing the issue.
-4. Follow [this template](bug_report.md) in the issue's description when opening a new issue.
+4. Follow [this template](./BUG_REPORT.md) in the issue's description when opening a new issue.
 
 #### NOTE
 
@@ -60,7 +60,7 @@ This section guides you through submitting an enhancement suggestion for Yuho. *
 1. Perform a cursory search [here](https://github.com/gongahkia/yuho/issues) for whether the enhancement has already been suggested.
 2. If it has already been suggested, add a comment to **that issue** instead of opening a new issue.
 3. If not already suggested, please be as detailed as possible in describing the suggestion.
-4. Follow [this template](suggest_enhancement_form.md) in the issue's description when opening a new issue.
+4. Follow [this template](./SUGGEST_ENHANCEMENT_FORM.md) in the issue's description when opening a new issue.
 
 ### Your First Code Contribution
 
@@ -88,4 +88,4 @@ We follow [these guidelines](https://gist.github.com/robertpainsi/b632364184e709
 
 Our documentation is written in [Markdown](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax), and we follow the [Github Markdown Styleguide](https://github.com/google/styleguide/blob/gh-pages/docguide/style.md).
 
-## [FAQ](https://github.com/gongahkia/yuho?tab=readme-ov-file#faq)
+## [FAQ](./FAQ.md)
