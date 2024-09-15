@@ -1,0 +1,10 @@
+{
+    "languageserver": {
+        "yuho": {
+            "command": "node",
+            "args": ["../base/index.js"],
+            "filetypes": ["yh"],
+            "rootPatterns": [".yuhoconfig"]
+        }
+    }
+}
