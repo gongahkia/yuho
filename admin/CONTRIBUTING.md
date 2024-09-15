@@ -44,9 +44,8 @@ This section guides you through submitting a bug report for Yuho. **Following th
 3. If not already reported, please be as detailed as possible in describing the issue.
 4. Follow [this template](./BUG_REPORT.md) in the issue's description when opening a new issue.
 
-#### NOTE
-
-* If you find a closed issue that seems like it is the same thing that you're experiencing, open a new issue and include a link to the original issue in the new issue description.
+> [!NOTE]
+> If you find a closed issue that seems like it is the same thing that you're experiencing, open a new issue and include a link to the original issue in the new issue description.
 
 ### Suggesting Enhancements
 
