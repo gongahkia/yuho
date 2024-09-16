@@ -1,9 +1,7 @@
 [![](https://img.shields.io/badge/yuho_1.0-passing-green)](https://github.com/gongahkia/yuho/releases/tag/1.0) [![](https://img.shields.io/badge/yuho_2.0-passing-green)](https://github.com/gongahkia/yuho/releases/tag/2.0) ![](https://img.shields.io/badge/yuho_3.0-build-orange)
   
 > [!IMPORTANT]
-> Reworking the entirity of Yuho in v3.0.  
-> Most things are about to change, but change is good.  
-> Watch this space.  
+> Reworking the entirity of Yuho in v3.0. Most things are about to change, but change is good.  
 >  
 > ~ Gabriel  
   
@@ -34,7 +32,7 @@ Getting into the specifics, Yuho provides the following four products.
 3. [CLI tool](./src/main/) for interacting with Yuho's primary functions in the CLI
 4. [Transpiler](./src/main/) that transpiles to the below targets
 
-> FUA edit the entire above rationale to account for tort law and Yuho's future scope and specificity
+> FUA edit the entire above rationale to account for tort law and Yuho's future scope and specificity and fix the relative links
 
 ### Output formats
 
@@ -57,11 +55,9 @@ Want to find out more? See Yuho's [documentation](#documentation).
 ### Documentation
 
 * [Language specification](./doc/SYNTAX.md)
-* [Grammer specification](./)
-* [Formal verification](./)
+* [Grammer specification](./grammer)
+* [Formal verification](./test)
 * [Examples](./example)
-
-> FUA add the relative links to the relevant directories here later
 
 ## Quickstart
 
