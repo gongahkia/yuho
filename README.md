@@ -54,10 +54,10 @@ Want to find out more? See Yuho's [documentation](#documentation).
 
 ### Documentation
 
-* [Language specification]()
-* [Grammer specification]()
-* [Formal verification]()
-* [Examples]()
+* [Language specification](./doc/SYNTAX.md)
+* [Grammer specification](./)
+* [Formal verification](./)
+* [Examples](./example)
 
 > FUA add the relative links to the relevant directories here later
 
@@ -67,7 +67,11 @@ Learn how Yuho works in 5 minutes at [`5_MINUTES.md`](./doc/5_MINUTES.md).
 
 ## Roadmap
 
-The below products are in development. For more details on what's being worked on, refer to [`KANBAN.md`](./doc/KANBAN.md).
+The below products are in development. 
+
+For more details on what's being worked on currently, refer to [`KANBAN.md`](./doc/KANBAN.md).  
+  
+For more details on what's being implemented in the future, refer to [`ROADMAP.md`](./doc/ROADMAP.md).
 
 1. blah blah blah
 
@@ -113,3 +117,5 @@ Yuho stands on the shoulders of past research and academia.
 * [Large Language Models in Law: A Survey](https://arxiv.org/pdf/2312.03718) by Jinqi Lai, Wensheng Gan, Jiayang Wu, Zhenlian Qi and Philip S Yu
 * [Automating Defeasible Reasoning in Law with Answer Set Programming](http://platon.etsii.urjc.es/~jarias/GDE-2022/GDE-07.pdf) by Lim How Khang, Avishkar Mahajan, Martin Strecker and Meng Weng Wong
 * [User Guided Abductive Proof Generation for Answer Set Programming Queries](https://dl.acm.org/doi/10.1145/3551357.3551383) by Avishkar Mahajan, Martin Strecker and Meng Weng Wong
+* [Computer-Readable Legislation Project: What might an IDE-like drafting tool look like?](https://osf.io/uk2vy/) by Matthew Waddington, Laurence Diver and Tin San Leon Qiu
+* [An IDE-like tool for legislative drafting](https://crlp-jerseyldo.github.io/work/an-ide-for-legislation) by crlp-jerseyldo.github.io

@@ -1,4 +1,22 @@
-# Future plans
+# Yuho v3.0 Kanban Board
+
+Things actively being worked on.
+
+## Backlog 🔙
+
+1. 
+
+## Doing ✍️
+
+1. 
+
+## Review 🗳️
+
+1. 
+
+## Done 👏
+
+1. 
 
 ## Follow Up Actions
 
