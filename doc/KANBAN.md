@@ -1,28 +1,31 @@
 # Yuho v3.0 Kanban Board
 
-Things actively being worked on.
+Things being worked on.
 
 ## Backlog 🔙
 
 ### 1. Syntax
 
 1. Edit SYNTAX.md and fully brainstorm complete set of keywords for Yuho
-2. Possible keywords
-    1. AND, OR, NOT, CAUSE, ()
-    2. TEST, REQUIRE
-    3. IF, ELSE, ELSEIF
-    4. RULING, PRECEDENT, 
-    5. ALL, NONE, ONE, MORE THAN ONE, ZERO
-3. Syntax must be 
+    1. Possible keywords
+        1. AND, OR, NOT, CAUSE, ()
+        2. TEST, REQUIRE
+        3. IF, ELSE, ELSEIF
+        4. RULING, PRECEDENT, 
+        5. ALL, NONE, ONE, MORE THAN ONE, ZERO
+    2. See [L4 syntax](https://github.com/smucclaw/lam4)
+    3. See [Catala's syntax](https://github.com/CatalaLang)
+    4. See [Blawx](https://github.com/Lexpedite/blawx)
+2. Syntax must be 
     1. simple to learn and write
     2. simple to read
     3. easy to tokenise, parse and interpret
     4. be able to represent common law rulings and statutes
     5. general enough to represent both criminal law and tort, as well as common law rulings
     6. all keywords are CAPITALISED by default for ease of reading
-        * "Normalisation" results in documents that are faster and more accurate to read and understand 
+        1. "Normalisation" results in documents that are faster and more accurate to read and understand 
     7. all keywords should aim to be familar to lawyers and the layperson and not too technical to avoid a steep learning curve
-4. Language inspirations
+3. Language inspirations
     1. Python
     2. Julia
     3. Nim
@@ -96,8 +99,10 @@ Things actively being worked on.
     7. d2
     8. [tonto](https://github.com/matheuslenke/Tonto)
     9. [enso](https://github.com/enso-org/enso)
-3. Transpile to a diagramatic representation similar to something Wong Weng Meng has achieved with his react application that shows the multiple pathways that are possible 
-4. INCLUDE a similar field below *(generated dynamically by traversing all paths one can take)* that shows ALL POSSIBLE paths that the reading of a given statute can take, similar to the below image
+3. Textual outputs
+    1. ...
+4. Programatic outputs
+    1. ...
 5. purpose of this would be to 
     1. convert ambigious within-sentence syntax into an unambigious between-sentence syntax
     2. disambiguiting the relevant aspects of within-sentence syntax
@@ -105,11 +110,19 @@ Things actively being worked on.
 ![](../asset/reference/normalising_legal_drafting_1.png)
 ![](../asset/reference/normalising_legal_drafting_2.png)
 ![](../asset/reference/normalising_legal_drafting_3.png)
+
+### 7. Web frontend
+
+1. a frontend web display 
+2. see Wong Meng Weng's [react application]() that shows the multiple pathways that are possible 
+3. INCLUDE a similar field below *(generated dynamically by traversing all paths one can take)* that shows ALL POSSIBLE paths that the reading of a given statute can take as seen below
+
 ![](../asset/reference/meng_proto_react_1.png)
 ![](../asset/reference/meng_proto_react_2.png)
 ![](../asset/reference/meng_proto_react_3.png)
 
-### 7. README.md
+
+### 8. README.md
 
 1. Edit README.md to more accurately reflect Yuho's purpose
 2. Include an ASCII architecture diagram 
@@ -126,7 +139,7 @@ Things actively being worked on.
         2. rule against surplusage
         3. etc...
 
-### 8. CLI tools
+### 9. CLI tools
 
 1. Create a suite of Yuho CLI tools
 2. Make them easy to install, learn and use
@@ -135,21 +148,6 @@ Things actively being worked on.
     2. Python Pip
     3. FZF
     4. Git
-
-### 9. Web frontend
-
-> [!WARNING]
-> edit this and add Meng's frontend
-
-1. Frontend WEB DISPLAY 
-    * clicking-through feature to step through the highlighted path in a Mermaid flowchart
-    * sidebar showing what each step fulfilled is like to achieve that highlighted path 
-    * animating mermaid diagrams
-        1. write a script that parses the mermaid file and assigns each start and destination arrow (descriptions within `[]`, split by `-->`)
-        * this indice will later be referenced when deciding which arrow to color
-            * `linkStyle <indiceThatIsTheArrowNumber> stroke:#77DD77,stroke-width:4px;`
-        2. [get the images](https://blog.lmorchard.com/2023/01/03/mermaid-animations/)
-        3. [invisible boxes](https://yairm210.medium.com/animating-mermaid-graphs-as-gifs-2ec8f3b24fbc) 
 
 ## Doing ✍️
 
