@@ -15,6 +15,8 @@
 
 Yuho is a domain-specific language providing a programmatic representation of Singapore Tort and Criminal Law.
 
+Dedicated to simplifying [legalese](https://www.merriam-webster.com/dictionary/legalese).
+
 ## Rationale
 
 The law is innately complex.  

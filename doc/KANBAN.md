@@ -78,6 +78,7 @@ Things actively being worked on.
     * [CCLaw Sandbox](https://github.com/smucclaw)
 
 7. Meng's subsequent presentation to me *(13/09/2024)*
+    * Applying formal logic (heuristic minimization) to the realm of informal logic (lawmaking)
     * DSL as a vehicle to support boolean minimization in statutes
         * applied in *Poh Yuan Nie v Public Prosecutor [2022] SGCA 74*
         * useful for eliminating contradictions within judgements and rulings
@@ -89,10 +90,50 @@ Things actively being worked on.
         * eg. `"Selling prohibited substances" IS AN OFFENCE AND IS NOT AN OFFENCE` == CONTRADICTION and will be flagged
         * eg. `NOT "Assaulting a police officer" IF AND ONLY IF "Acting in self-defense"` = `"Acting in self-defense" -> NOT "Assaulting a police officer"`
     * Allows for elimination of contradictions and simplification of complex legalese
-    * 
+    * ALSO provide a service that transpiles existing legislation to Yuho code which can then be represented programatically
+    * New Yuho syntax should be both EASY TO LEARN, EASY TO READ and EASY TO WRITE 
+        * "Normalisation" results in documents that are faster and more accurate to read and understand 
+        * New syntax should make all keywords CAPITAL by default for easy to read
+        * Easy to write means terms must be familar to lawyers
+    * Transpile to a diagramatic representation similar to something Wong Weng Meng has achieved with his react application that shows the multiple pathways that are possible 
+    * INCLUDE a similar field below *(generated dynamically by traversing all paths one can take)*that shows ALL POSSIBLE paths that the reading of a given statute can take, similar to the below image
 
-> [!WARNING]
-> Continue adding notes here and brainstormed ideas from slide 10 of [Meng's slides](https://docs.google.com/presentation/d/100PZji8Dc_CLHrC3Aqmb_QyUD2IcWd65p3fgCPzCy9k/edit?usp=sharing), and then format everything and split between KANBAN.md and FUTURE.md
+![](../asset/reference/normalising_legal_drafting_1.png)
+![](../asset/reference/normalising_legal_drafting_2.png)
+![](../asset/reference/normalising_legal_drafting_3.png)
+
+    * purpose of this would be to 
+        * convert ambigious within-sentence syntax into an unambigious between-sentence syntax
+        * disambiguiting the relevant aspects of within-sentence syntax
+    * on the basis of simplifying boolean logic to its most basic evaluation
+    * on the basis of minimization of boolean functions
+    * on the basis of variable substitution
+        * that will allow further simplification of statutes
+            * `(A and B) or (C and D and E)`, assuming we define `E in terms of C` which looks like `E = ! C` = `(A and B) or (C and D and not C)`
+            * now imagine E is "property" and C is defined as what is NOT property OR property's actual definition
+            * also this has a contradiction inside!
+            * simplification of boolean circuits is super relevant because it means we don't even need to waste resources validating D
+            * this means we have dropped from 5 cardinals to 2 cardinals
+    * on the basis of eliminating logic redundancy
+    * on the basis of ignoring don't care terms and can't happen terms
+    * includes () to signify grouping alongside existing AND and OR and NOT and CAUSES and 
+    * must include a robust debugging engine that can debug logical conundrums
+    * must include a robust engine that can dynamically generates truth tables based on any propositional formula where TRUTH VALUES are replaced by statutes and its subdivisions
+    * implement the Espresso-IISOJS npm libarry for heuristic minimiation of single-output boolean functions myself in python or whatever language I choose to write this in, probably just use Python for simplicity
+    * research cannons of interpretation and construction in law and those that are relevant for the implementation of DSLs and heuristic minimalisation 
+        * eg.
+        * harmonious construction
+        * rule against surplusage
+    * implement recursive definitions that will render the evaluation of statutes easier 
+        * eg. cheating s415 has the word dishonestly, wrongful gain and wrongful loss, defined in s23 and 24 respectively
+    * purpose would be for law students to identify defective logic, charges and rulings when applying statutes
+    * purpose would be for lawyers, lawmakers and drafters to avoid wasting precious court time rationalilising or applying obiter and judgements that make little sense
+    * research and look into SAT solving and other formal methods to identify logical fallacies and issues with logic
+    * further applications could include a chatgpt or bert powered CHARGE GENERATION FORM that will receive a given statute and parse it to Yuho, then feeding that through a lang-chain powered model that puts the Yuho code into a formalised english form
+
+![](meng_proto_react_1.png)
+![](meng_proto_react_2.png)
+![](meng_proto_react_3.png)
 
 ## Products
 
