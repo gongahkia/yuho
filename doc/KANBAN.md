@@ -75,6 +75,24 @@ Things actively being worked on.
     * graphviz
     * kroki
     * d2
+    * [CCLaw Sandbox](https://github.com/smucclaw)
+
+7. Meng's subsequent presentation to me *(13/09/2024)*
+    * DSL as a vehicle to support boolean minimization in statutes
+        * applied in *Poh Yuan Nie v Public Prosecutor [2022] SGCA 74*
+        * useful for eliminating contradictions within judgements and rulings
+    * **Normalized legal drafting and the query method** introduced the idea of expressing statutes in terms of formal logic, allowing for subsequent boolean minimization
+    * Basically same notion as a more complex statement can evaluate to a less complex one, an idea I wanted to incorporate in Yuho from the very beginning
+        * eg. `"Driving while intoxicated" IS NOT NOT NOT NOT NOT AN OFFENCE` = `"Driving while intoxicated" IS AN OFFENCE`
+        * eg. `"Entering the premises without permission" IF AND ONLY IF "breaking a window"` = `"Breaking a window" -> "Entering the premises without permission"`
+        * eg. `"Carrying a concealed weapon" AND "Committing theft" IS AN OFFENCE` = `"Committing theft" IS AN OFFENCE` and `"Carrying a concealed weapon" IS AN OFFENCE` 
+        * eg. `"Selling prohibited substances" IS AN OFFENCE AND IS NOT AN OFFENCE` == CONTRADICTION and will be flagged
+        * eg. `NOT "Assaulting a police officer" IF AND ONLY IF "Acting in self-defense"` = `"Acting in self-defense" -> NOT "Assaulting a police officer"`
+    * Allows for elimination of contradictions and simplification of complex legalese
+    * 
+
+> [!WARNING]
+> Continue adding notes here and brainstormed ideas from slide 10 of [Meng's slides](https://docs.google.com/presentation/d/100PZji8Dc_CLHrC3Aqmb_QyUD2IcWd65p3fgCPzCy9k/edit?usp=sharing), and then format everything and split between KANBAN.md and FUTURE.md
 
 ## Products
 
