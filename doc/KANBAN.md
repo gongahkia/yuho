@@ -4,7 +4,109 @@ Things actively being worked on.
 
 ## Backlog 🔙
 
-1. 
+1. Edit SYNTAX.md and fully brainstorm complete set of keywords for Yuho
+    1. AND, OR, NOT, CAUSES, TEST, REQUIRE, IF, ELSE, ELSEIF, RULING, PRECEDENT, ALL, NONE, ONE, MORE THAN ONE, ZERO, ()
+    2. Syntax must be 
+        1. simple to learn and write
+        2. simple to read
+        3. easy to tokenise, parse and interpret
+        4. be able to represent common law rulings and statutes
+        5. general enough to represent both criminal law and tort, as well as common law rulings
+        6. all keywords are CAPITALISED by default for ease of reading
+            * "Normalisation" results in documents that are faster and more accurate to read and understand 
+        7. all keywords should aim to be familar to lawyers and the layperson and not too technical to avoid a steep learning curve
+    3. Language inspirations
+        1. Python
+        2. Julia
+        3. Nim
+2. Logic engine
+    1. Implement the Espresso-IISOJS npm libarry for heuristic minimiation of single-output boolean functions myself in python or whatever language I choose to write this in, probably just use Python for simplicity
+    1. Can represent everything as truth values first
+    2. Can evaluate those truth values
+    3. Handles
+        1. Boolean minimization
+            1. As applied in *Poh Yuan Nie v Public Prosecutor [2022] SGCA 74* in Meng's presentation to me on 13/09/24
+            2. A more complex statement should evaluate to a less complex one
+                1. eg. `"Driving while intoxicated" IS NOT NOT NOT NOT NOT AN OFFENCE` = `"Driving while intoxicated" IS AN OFFENCE`
+                2. eg. `"Entering the premises without permission" IF AND ONLY IF "breaking a window"` = `"Breaking a window" -> "Entering the premises without permission"`
+                3. eg. `"Carrying a concealed weapon" AND "Committing theft" IS AN OFFENCE` = `"Committing theft" IS AN OFFENCE` and `"Carrying a concealed weapon" IS AN OFFENCE` 
+                4. eg. `"Selling prohibited substances" IS AN OFFENCE AND IS NOT AN OFFENCE` == CONTRADICTION and will be flagged
+                5. eg. `NOT "Assaulting a police officer" IF AND ONLY IF "Acting in self-defense"` = `"Acting in self-defense" -> NOT "Assaulting a police officer"`
+        2. Contradiction flagging
+        3. Variable substitution
+            1. `(A and B) or (C and D and E)`, assuming we define `E in terms of C` which looks like `E = ! C` = `(A and B) or (C and D and not C)`
+            2. now imagine E is "property" and C is defined as what is NOT property OR property's actual definition
+            3. also this has a contradiction inside!
+            4. simplification of boolean circuits is super relevant because it means we don't even need to waste resources validating D
+            5. this means we have dropped from 5 cardinals to 2 cardinals
+            6. also implement recursive definitions that will render the evaluation of statutes easier 
+                1. eg. cheating s415 has the word dishonestly, wrongful gain and wrongful loss, defined in s23 and 24 respectively
+        4. eliminating logic redundancy
+        5. ignoring don't care terms and can't happen terms
+    4. Allows for expressing statutes in terms of formal logic
+        1. Per *Normalized legal drafting and the query method*
+        2. Elimination of contradiction
+        3. Simplification of complex legalese
+        4. Simplification of nonsensical obiter and ratio
+    5. Can dynamically generate a truth table from specified truth values and their relationships in any propositional formula presented
+        1. TRUTH VALUES are replaced by statutes and its subdivisions
+    6. Flags logical contradictions and fallacies
+    7. Validates whether a given statement is logically coherent or not
+    8. look into SAT solving and other formal methods to identify logical fallacies and issues with logic
+3. Add all examples of sample Yuho code in the ./example file directory, 
+    1. Represent the Spandeck test in Yuho for tort duty of care *(type of harm, threshold requirement and 2 stages of proximity and public policy considerations)*
+    2. Represent old UK tests in Yuho for tort duty of care
+    3. Add focus on whether the relationship shared between kinds of harm caused 
+    4. Could the transpiler generate a degree_of_liability represented as a float?
+    5. Interlinks between statutes
+        1. Complex provisions have terms like “subject to” that logically connect different sections or entire statutes *(by way of providing explanation or exception for a given rule or term)*
+        2. Provide an example of how Yuho can represent 2 statutes interacting
+        3. Or remove this entire follow up action Or move it to FUTURE.md
+4. Add the logic for the tokenisor, parser and interpreter in ./src file directory
+5. Add proper tests that are runnable within Alloy or find another framework to run tests in
+6. Brainstorm transpilation outputs for Yuho
+    1. Diagrammatic outputs
+        1. Mermaid diagrams, primarily with flowcharts
+        2. [Ladder diagrams](https://github.com/smucclaw/ladder-diagram) 
+        3. ASCII diagrams
+        4. PLANTUML diagrams
+        5. graphviz
+        6. kroki
+        7. d2
+    * Transpile to a diagramatic representation similar to something Wong Weng Meng has achieved with his react application that shows the multiple pathways that are possible 
+    * INCLUDE a similar field below *(generated dynamically by traversing all paths one can take)* that shows ALL POSSIBLE paths that the reading of a given statute can take, similar to the below image
+    * purpose of this would be to 
+        * convert ambigious within-sentence syntax into an unambigious between-sentence syntax
+        * disambiguiting the relevant aspects of within-sentence syntax
+
+![](../asset/reference/normalising_legal_drafting_1.png)
+![](../asset/reference/normalising_legal_drafting_2.png)
+![](../asset/reference/normalising_legal_drafting_3.png)
+![](meng_proto_react_1.png)
+![](meng_proto_react_2.png)
+![](meng_proto_react_3.png)
+
+7. Edit README.md to more accurately reflect Yuho's purpose
+    1. Include an ASCII architecture diagram 
+    2. Include a mermaid architecture diagram
+    3. Benefits of a DSL is that code makes all things explicit while the law features many assumptions that are implicit
+    4. Yuho as a DSL benefits from the law as code mindset by rendering these assumptions in detail
+    5. Yuho's usecases
+        1. purpose would be for law students to identify defective logic, charges and rulings when applying statutes
+        2. purpose would be for lawyers, lawmakers and drafters to avoid wasting precious court time rationalilising or applying obiter and judgements that make little sense
+    6. Research
+        1. research cannons of interpretation and construction in law and those that are relevant for the implementation of DSLs and heuristic minimalisation 
+        2. eg.
+            1. harmonious construction
+            2. rule against surplusage
+            3. etc...
+8. Create a suite of Yuho CLI tools
+    1. Make them easy to install, learn and use
+    2. References for decent CLI tools
+        1. Rust Cargo
+        2. Python Pip
+        3. FZF
+        4. Git
 
 ## Doing ✍️
 
@@ -18,122 +120,36 @@ Things actively being worked on.
 
 1. 
 
-## Follow Up Actions
+> [!WARNING]
+> FUA To move everything here to `ROADMAP.md` once done updating plans on this document
 
-> See [here](https://docs.google.com/document/d/1LTxfNQ1bS9gfFlFkAGrGTDzjjhMmyWh7slpYRvE5KQY/edit?usp=drive_link) for follow up actions for class part or make a seperate repo
+## Move to `ROADMAP.md` for future plans
 
-1. Can I implement a syntax that covers Tort law as well?
-    * Plot out the architecture diagram first
-        * Work out how to integrate a trained LLM that can read and validate Yuho
-    * Consider completely redefining Yuho's syntax to cover the following features
-        * simpler and easy to learn and write a tokenisor and parser, closer to Julia 
-        * make the CLI tools easier to learn
-    * Implement a syntax that covers 
-        * common law rulings
-        * statutory provisions
-        * real logic so that CCLAW's edgecases in logic under point 4 can be covered
-    * How these rulings would tie in to existing cases
+* Yuho LSP
+    * Write a LSP that works for most major code editors
+    * Provides snippets, linting and syntax highlighting
+    * Flags errors that might arise from wrongful Yuho code
+* Yuho live editor
+    * see [lawtodata](https://lawtodata.streamlit.app/) web application
+    * see [streamlit](https://streamlit.io/cloud) as platform to deploy app on
+* Yuho should be LLM powered
+    * Work out how to integrate a trained LLM that can read and validate Yuho
+    * Explore other usecases where an LLM would be useful
+    * Both front-end and back-end
+    * Consider [langchainlaw](https://github.com/nehcneb/langchainlaw/tree/main) integration for training a model
+    * Yuho as an intermediary language that makes understanding the logic of the law easier to learn for a given model
+    * LLM-powered service that transpiles existing legislation to Yuho lang
+    * Further applications could include a chatgpt or bert powered CHARGE GENERATION FORM that will receive a given statute and parse it to Yuho, then feeding that through a lang-chain powered model that puts the Yuho code into a formalised english form
+* Form generation
+    * See [motoraccidents.lawnet](https://motoraccidents.lawnet.sg/) for reference on easy form creation 
+    * Consider implementation as a google docs or google sheets extension
+* Uncategorised
+    * There are many assumptions made when we reason from one premise to another premise in the law, how far do we push this inquiry back?
+        * *eg. before even considering how a given a given statute should apply for a case, we should figure whether the given case can even be heard in the current court*
+    * See [CCLaw Sandbox](https://github.com/smucclaw) for inspiration
 
-1. Consider implementing [langchainlaw](https://github.com/nehcneb/langchainlaw/tree/main) and Yuho's editor as a [streamlit](https://streamlit.io/cloud) app
-    1. see sample implementation [here](https://lawtodata.streamlit.app/)
-
-2. See https://motoraccidents.lawnet.sg/ and https://github.com/smucclaw/ladder-diagram
-    * Could Yuho provide a way for dynamic form generation *(even a glorified google form or execel sheet)* for specific statutes?
-    * Try implementing sections from the [Road Traffic Act](https://sso.agc.gov.sg/SL/RTA1961-R20) and see if the generated flowchart is harder to parse
-    * Integrate a transpiler to generate a HTML form or brainstorm other frontends that Lawyers can easily use and deploy siilar to `motoraccidents/quantum`
-    * Integrate a transpiler that drafts emails and whatsapp messages informing clients of all possible outcomes, integrate an LLM for this portion
-   
-3. Regarding the interlinks between statutes
-    * Many provisions, when they become more complex, have terms like “subject to” that logically connect different sections or entire statutes *(by way of providing explanation or exception for a given rule or term)*
-    * Can I provide an example of how Yuho can represent 2 statutes interacting, both in `.yh` code and in Mindmap and Flowchart form?
-
-4. Implement Prof How Khang's feedback *(15/08/2024)*
-    * Any DSL that seeks to act as a reprentation of any domain of law needs to consider its purpose and scope
-    * It is essential to consider both scope and purpose because providing an accurate representation of law that can make the implicit explicit then makes a DSL for the law useful for 
-        * the lay-person trying to understand the law as a framework
-        * LLMs that are being trained on a set number of inputs and outputs
-    * Purpose-wise, we put law into code to make things that are implicit explicit since writing code inherently requires us to render out all assumptions that are made for a given situation
-        * Can Yuho reach this state of representation for Criminal Law?
-    * Scope-wise, how far back are we pushing the *(axiomatic)* point from which we are reasoning from? 
-        * with regard to assumptions made
-            * *eg. before even considering how a given a given statute should apply for a case, we should figure whether the given case can even be heard in the current court*
-        * with regard to how granular and specific we are when breaking down a given statute
-    * As an additonal consideration, what other aspects of law can Yuho seek to represent?
-        * Given its flexible syntax, can we consider if it can accurately represent certain Tort cases which overlap with Criminal cases
-
-5. Implement CCLAW's feedback *(15/08/2024)*
-    * Need to iron out logical conondrums with how Yuho evaluates relational logic
-        * *eg. S415 says "any person who...", how do we specify that "any person" does not include the`Party.Victim` or somewhere held as being in the same relationship as them, but specifically refers to the `Party.Accused` themselves*
-    * It appears at first pass that defining object literals, then working your way to the class definition is always the more intuitive way of representing data
-        * That said, is there a far more intuitive way of representing logic than through forcing definition of class templates?
-        * Despite what I claim, Yuho's struct template and struct literal is just a glorified class object relationship
-
-6. Afford exporting to multiple diagrammatic outputs
-    * mermaid diagrams (all sorts)
-    * ASCII diagrams for non-mermaid rendering interfaces
-    * PLANTUML diagrams
-    * graphviz
-    * kroki
-    * d2
-    * [CCLaw Sandbox](https://github.com/smucclaw)
-
-7. Meng's subsequent presentation to me *(13/09/2024)*
-    * Applying formal logic (heuristic minimization) to the realm of informal logic (lawmaking)
-    * DSL as a vehicle to support boolean minimization in statutes
-        * applied in *Poh Yuan Nie v Public Prosecutor [2022] SGCA 74*
-        * useful for eliminating contradictions within judgements and rulings
-    * **Normalized legal drafting and the query method** introduced the idea of expressing statutes in terms of formal logic, allowing for subsequent boolean minimization
-    * Basically same notion as a more complex statement can evaluate to a less complex one, an idea I wanted to incorporate in Yuho from the very beginning
-        * eg. `"Driving while intoxicated" IS NOT NOT NOT NOT NOT AN OFFENCE` = `"Driving while intoxicated" IS AN OFFENCE`
-        * eg. `"Entering the premises without permission" IF AND ONLY IF "breaking a window"` = `"Breaking a window" -> "Entering the premises without permission"`
-        * eg. `"Carrying a concealed weapon" AND "Committing theft" IS AN OFFENCE` = `"Committing theft" IS AN OFFENCE` and `"Carrying a concealed weapon" IS AN OFFENCE` 
-        * eg. `"Selling prohibited substances" IS AN OFFENCE AND IS NOT AN OFFENCE` == CONTRADICTION and will be flagged
-        * eg. `NOT "Assaulting a police officer" IF AND ONLY IF "Acting in self-defense"` = `"Acting in self-defense" -> NOT "Assaulting a police officer"`
-    * Allows for elimination of contradictions and simplification of complex legalese
-    * ALSO provide a service that transpiles existing legislation to Yuho code which can then be represented programatically
-    * New Yuho syntax should be both EASY TO LEARN, EASY TO READ and EASY TO WRITE 
-        * "Normalisation" results in documents that are faster and more accurate to read and understand 
-        * New syntax should make all keywords CAPITAL by default for easy to read
-        * Easy to write means terms must be familar to lawyers
-    * Transpile to a diagramatic representation similar to something Wong Weng Meng has achieved with his react application that shows the multiple pathways that are possible 
-    * INCLUDE a similar field below *(generated dynamically by traversing all paths one can take)*that shows ALL POSSIBLE paths that the reading of a given statute can take, similar to the below image
-
-![](../asset/reference/normalising_legal_drafting_1.png)
-![](../asset/reference/normalising_legal_drafting_2.png)
-![](../asset/reference/normalising_legal_drafting_3.png)
-
-    * purpose of this would be to 
-        * convert ambigious within-sentence syntax into an unambigious between-sentence syntax
-        * disambiguiting the relevant aspects of within-sentence syntax
-    * on the basis of simplifying boolean logic to its most basic evaluation
-    * on the basis of minimization of boolean functions
-    * on the basis of variable substitution
-        * that will allow further simplification of statutes
-            * `(A and B) or (C and D and E)`, assuming we define `E in terms of C` which looks like `E = ! C` = `(A and B) or (C and D and not C)`
-            * now imagine E is "property" and C is defined as what is NOT property OR property's actual definition
-            * also this has a contradiction inside!
-            * simplification of boolean circuits is super relevant because it means we don't even need to waste resources validating D
-            * this means we have dropped from 5 cardinals to 2 cardinals
-    * on the basis of eliminating logic redundancy
-    * on the basis of ignoring don't care terms and can't happen terms
-    * includes () to signify grouping alongside existing AND and OR and NOT and CAUSES and 
-    * must include a robust debugging engine that can debug logical conundrums
-    * must include a robust engine that can dynamically generates truth tables based on any propositional formula where TRUTH VALUES are replaced by statutes and its subdivisions
-    * implement the Espresso-IISOJS npm libarry for heuristic minimiation of single-output boolean functions myself in python or whatever language I choose to write this in, probably just use Python for simplicity
-    * research cannons of interpretation and construction in law and those that are relevant for the implementation of DSLs and heuristic minimalisation 
-        * eg.
-        * harmonious construction
-        * rule against surplusage
-    * implement recursive definitions that will render the evaluation of statutes easier 
-        * eg. cheating s415 has the word dishonestly, wrongful gain and wrongful loss, defined in s23 and 24 respectively
-    * purpose would be for law students to identify defective logic, charges and rulings when applying statutes
-    * purpose would be for lawyers, lawmakers and drafters to avoid wasting precious court time rationalilising or applying obiter and judgements that make little sense
-    * research and look into SAT solving and other formal methods to identify logical fallacies and issues with logic
-    * further applications could include a chatgpt or bert powered CHARGE GENERATION FORM that will receive a given statute and parse it to Yuho, then feeding that through a lang-chain powered model that puts the Yuho code into a formalised english form
-
-![](meng_proto_react_1.png)
-![](meng_proto_react_2.png)
-![](meng_proto_react_3.png)
+> [!WARNING]
+> FUA to finish sorting and simplifying all this information under the relevant fields above
 
 ## Products
 
