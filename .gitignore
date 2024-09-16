@@ -1,12 +1,9 @@
-# validate transpilation outputs
 web/archive/v1/out/json/*.json
 web/archive/v1/out/mmd/*.mmd
 web/archive/v1/out/html/*.html
 src/main/transpiler/check/out/als/*.als
 src/main/transpiler/check/out/mmd_flowchart/*.mmd
 src/main/transpiler/check/out/mmd_mindmap/*.mmd
-
-# antlr 
 *.class
 *.interp
 *.tokens
@@ -14,3 +11,4 @@ YuhoLexer.java
 YuhoParser.java
 YuhoListener.java
 YuhoBaseListener.java
+__pycache__
