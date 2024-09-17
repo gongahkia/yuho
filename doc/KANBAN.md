@@ -10,7 +10,7 @@ Things being worked on.
     1. Possible keywords
         1. AND, OR, NOT, CAUSE, ()
         2. TEST, REQUIRE
-        3. IF, ELSE, ELSEIF
+        3. IF, ELSE, ELSEIF, ONLY IF, IOR, XOR
         4. RULING, PRECEDENT, DERIVE, ORIGINATE, INHERIT
         5. ALL, NONE, ONE, MORE THAN ONE, ZERO
         6. ACT, POLICY, REFERENCE, PER, LEGISLATION, INCLUSIVE IF, EXCLUSIVE IF, CASE, STATUTE
