@@ -5,6 +5,7 @@
 > [!WARNING]
 > Continue to add these functions in Python to this file directory in the future
 >
+> 1. Simplify the line 68's logic fully, if not remove it for now to avoid confusion, also put in proper effort for this since it goes to SYNTAX.md
 > 1. Make every evaluated statement as atomic as possible, so propositional formulas evaluate to fundamental propositions.
 > 2. Prime Implicant
 > 3. Don’t Care Conditions
@@ -30,9 +31,6 @@ By substituting truth values with statutory elements, complex statements evaluat
   
 ### Examples
 
-> [!WARNING]
-> Continue formatting and logicising the below examples to make sure readable from line 66
-
 <details>
 <summary>
 <h4>Simple examples</h4>
@@ -44,15 +42,19 @@ By substituting truth values with statutory elements, complex statements evaluat
 ```
 
 ```txt
-"Carrying a concealed weapon" AND "Committing theft" IS OFFENCE = "Committing theft" IS OFFENCE AND "Carrying a concealed weapon" IS OFFENCE
+"Carrying a concealed weapon" AND "Committing theft" IS OFFENCE = "Committing theft" AND "Carrying a concealed weapon" THEN OFFENCE = "Committing theft" AND "Carrying a concealed weapon" -> OFFENCE =
 ```
 
 ```txt
-"Entering the premises without permission" IF AND ONLY IF "Breaking a window" = "Breaking a window" -> "Entering the premises without permission"
+("Carrying a concealed weapon" AND "Committing theft") IS OFFENCE = "Committing theft" IS OFFENCE AND "Carrying a concealed weapon" IS OFFENCE
 ```
 
 ```txt
-NOT "Assaulting a police officer" IF AND ONLY IF "Acting in self-defense" = "Acting in self-defense" -> NOT "Assaulting a police officer"
+"Entering the premises without permission" IF AND ONLY IF "Breaking a window" = "Breaking a window" THEN ONLY "Entering the premises without permission" = ONLY "Breaking a window" -> "Entering the premises without permission"
+```
+
+```txt
+NOT "Assaulting a police officer" IF AND ONLY IF "Acting in self-defense" = "Acting in self-defense" THEN ONLY NOT "Assaulting a police officer" = ONLY "Acting in self-defense" -> NOT "Assaulting a police officer"
 ```
 
 </details>
