@@ -1,5 +1,17 @@
-# Logic evaluation
+# Logic engine 
 
+* Heuristic evaluation
+* Prime Implicant
+
+> [!WARNING]
+> FUA continue to add these in the future!
+
+* Don’t Care Conditions
+* Tautology
+* SAT Solvers
+* Multi-Level Minimization
+* Factorization
+* Complementation
 * Boolean minimization in `prop_eval.py`
 
 ## Usage
@@ -14,6 +26,12 @@ There are benefits to implementing a logic engine capable of heuristic and boole
 By substituting truth values with statutory elements, complex statements evaluate to less complex ones and contradictions are easily identified.  
 
 ### Examples
+
+<details>
+<summary>
+<h4>Simple examples</h4>
+</summary>
+<br>
 
 ```txt
 "Driving while intoxicated" IS NOT NOT NOT NOT OFFENCE = "Driving while intoxicated" IS OFFENCE
@@ -34,6 +52,7 @@ NOT "Assaulting a police officer" IF AND ONLY IF "Acting in self-defense" = "Act
 ```txt
 "Selling prohibited substances" IS OFFENCE AND IS NOT OFFENCE = WRONGFUL_CLAIM: CONTRADICTION
 ```
+</details>
 
 > [!WARNING]
 > Continue formatting and logicising the below examples to make sure readable
@@ -43,6 +62,12 @@ NOT "Assaulting a police officer" IF AND ONLY IF "Acting in self-defense" = "Act
 
 > [!WARNING]
 > Make every evaluated statement as atomic as possible, so should propositional formulas should evaluate to basic truth statements
+
+<details>
+<summary>
+<h4>Complex examples</h4>
+</summary>
+<br>
 
 ```txt
 ("Driving while intoxicated" OR ("Committing vandalism" AND NOT "Paying damages")) IS OFFENCE IF AND ONLY IF (NOT "Providing false testimony" OR "Assisting in investigation") = ("Providing false testimony" -> ("Driving while intoxicated" OR ("Committing vandalism" AND NOT "Paying damages"))) AND (("Driving while intoxicated" OR ("Committing vandalism" AND NOT "Paying damages")) -> (NOT "Providing false testimony" OR "Assisting in investigation"))
@@ -64,6 +89,7 @@ NOT "Assaulting a police officer" IF AND ONLY IF "Acting in self-defense" = "Act
 ```txt
 NOT (("Money laundering" AND "Identity theft") OR ("Fraud" AND NOT "Forgery")) IS OFFENCE IF ("Assault" AND "Battery") IS NOT OFFENCE = ("Assault" AND "Battery") -> NOT (("Money laundering" AND "Identity theft") OR ("Fraud" AND NOT "Forgery")) IS OFFENCE
 ```
+</details>
 
 > [!WARNING]
 > CCLaw talk from today notes
@@ -84,10 +110,14 @@ NOT (("Money laundering" AND "Identity theft") OR ("Fraud" AND NOT "Forgery")) I
 > 
 > * basic inconsitency checking and testing facilities for DSLs
 > * DSL must include a syntax to define a given thing recursively
+> * give me an IDE that has some autocomplete and linting
+> * make the linting and snippets comprehensive
+> * DSLs must account for subsidiary legislation as well
+> * definitions need to be recursive
 > 
-> If person must wear seatbelt and they don't, they're in breach of the provision
+> If person must wear seatbelt and they don't, they're in breach of the provision, but could that be interpreted differently
 > 
 > FUA
 >   * also consider changing my code font to iosevka
 >   * how can we integrate LLMs that then produce yuho code
->   * 
+>   * https://boostdraft.com
