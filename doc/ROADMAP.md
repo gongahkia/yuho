@@ -13,7 +13,7 @@ Things to be implemented in future releases.
     1. an in-browser IDE 
         1. transpiles written yuho code live to a specified diagramatic output
         2. linting
-        3. snippets
+        3. snippets and autocomplete
         4. provides decent error messages
     2. see [lawtodata](https://lawtodata.streamlit.app/) web application
     3. see [streamlit](https://streamlit.io/cloud) as platform to deploy app on

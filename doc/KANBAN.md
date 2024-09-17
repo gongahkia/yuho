@@ -11,8 +11,16 @@ Things being worked on.
         1. AND, OR, NOT, CAUSE, ()
         2. TEST, REQUIRE
         3. IF, ELSE, ELSEIF
-        4. RULING, PRECEDENT, 
+        4. RULING, PRECEDENT, DERIVE, ORIGINATE, INHERIT
         5. ALL, NONE, ONE, MORE THAN ONE, ZERO
+        6. ACT, POLICY, REFERENCE, PER, LEGISLATION, INCLUSIVE IF, EXCLUSIVE IF, CASE, STATUTE
+        7. OBITER, RATIO, FROM, PRIMARY, SUBSIDIARY 
+        8. WRONGFUL, RIGHTFUL
+            1. subdivisions of WRONGFUL and RIGHTFUL
+            2. eg. WRONGFUL: CONTRADICTION or WRONGFUL: CAUSATION_ERROR are possible error messages
+        9. SHALL, MUST
+            1. DSLs need to account for the nuances between SHALL and MUST
+            2. What is a necessary compulsary consequence and what is a possible consequence?
     2. See [L4 syntax](https://github.com/smucclaw/lam4)
     3. See [Catala's syntax](https://github.com/CatalaLang)
     4. See [Blawx](https://github.com/Lexpedite/blawx)
@@ -22,9 +30,11 @@ Things being worked on.
     3. easy to tokenise, parse and interpret
     4. be able to represent common law rulings and statutes
     5. general enough to represent both criminal law and tort, as well as common law rulings
-    6. all keywords are CAPITALISED by default for ease of reading
+    6. able to define a given term or idea recursively
+    7. all keywords are CAPITALISED by default for ease of reading
         1. "Normalisation" results in documents that are faster and more accurate to read and understand 
-    7. all keywords should aim to be familar to lawyers and the layperson and not too technical to avoid a steep learning curve
+    8. all keywords should aim to be familar to lawyers and the layperson and not too technical to avoid a steep learning curve
+    9. account for subsidiary legislation as well and distinguish it from primary legislation
 3. Language inspirations
     1. Python
     2. Julia
@@ -65,6 +75,10 @@ Things being worked on.
 6. Flags logical contradictions and fallacies
 7. Validates whether a given statement is logically coherent or not
 8. look into SAT solving and other formal methods to identify logical fallacies and issues with logic
+9. logic engine should be able to 
+    1. evaluate basic propositional formulas
+    2. handle basic inconsitency checking 
+    3. accelerate testing facilities for DSLs
 
 ### 3. Code examples
 
@@ -116,6 +130,17 @@ Things being worked on.
 1. a frontend web display 
 2. see Wong Meng Weng's [react application]() that shows the multiple pathways that are possible 
 3. INCLUDE a similar field below *(generated dynamically by traversing all paths one can take)* that shows ALL POSSIBLE paths that the reading of a given statute can take as seen below
+4. Diagrammatic representation should show ALL possible permutations of a given offence 
+    1. These permutations can then be checked against a specified situation to determine applicability
+5. Diagrammatic representation could also include the given Yuho code for a specified situation
+6. DSL diagrammatic representations should be able to account for base assumptions that are implicit within the law
+    1. which court can hear a given case?
+    2. which jurisdiction a case can be heard in?
+    3. what constitutes a person per the specific act?
+    4. eg. in s415, the act would not apply for those who are not singaporeans, can we edit the diagrammatic representation to account for that?
+        1. end goal of making what is implicit explicit
+        2. perhaps could consider making these implicit assumptions explicit by specifying them as preconditions within the list of all permutations
+7. Still lacking diagrammatic representation that can reflect that a given statute is contingent on another statute, brainstorm how to reflect that in the web frontend
 
 ![](../asset/reference/meng_proto_react_1.png)
 ![](../asset/reference/meng_proto_react_2.png)
