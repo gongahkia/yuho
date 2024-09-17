@@ -5,17 +5,15 @@
 > [!WARNING]
 > Continue to add these functions in Python to this file directory in the future
 >
-> 1. Simplify the line 68's logic fully, if not remove it for now to avoid confusion, also put in proper effort for this since it goes to SYNTAX.md
-> 1. Make every evaluated statement as atomic as possible, so propositional formulas evaluate to fundamental propositions.
-> 2. Prime Implicant
-> 3. Don’t Care Conditions
-> 4. Tautology
-> 5. SAT Solvers
-> 6. Multi-Level Minimization
-> 7. Factorization
-> 8. Complementation
-> 9. Heuristic minimzation
-> 10. Add further examples of wrongful Yuho logic soon
+> 1. Prime Implicant
+> 2. Don’t Care Conditions
+> 3. Tautology
+> 4. SAT Solvers
+> 5. Multi-Level Minimization
+> 6. Factorization
+> 7. Complementation
+> 8. Heuristic minimzation
+> 9. Add further examples of wrongful Yuho logic soon
 
 ## Usage
 
@@ -29,81 +27,25 @@ There are many benefits to implementing a logic engine capable of heuristic and 
   
 By substituting truth values with statutory elements, complex statements evaluate to less complex ones.   
   
-### Examples
+### Rightful examples
 
-<details>
-<summary>
-<h4>Simple examples</h4>
-</summary>
-<br>
+Rightful formulas are minimized to their fundamental propositions.
 
-```txt
-"Driving while intoxicated" IS NOT NOT NOT NOT OFFENCE = "Driving while intoxicated" IS OFFENCE
-```
+| Complex | Minimized | More |
+| :--- | :--- | :--- |
+| `"Driving while intoxicated" IS NOT NOT NOT NOT OFFENCE` | `"Driving while intoxicated" IS OFFENCE` | NIL |
+| `("Carrying a concealed weapon" AND "Committing theft") IS OFFENCE` | `"Committing theft" IS OFFENCE AND "Carrying a concealed weapon" IS OFFENCE` | NIL |
+| `"Resisting arrest" AND NOT "Under the influence of alcohol" IS OFFENCE` | `"Resisting arrest" IS OFFENCE AND "Under the influence of alcohol" NOT OFFENCE` | NIL |
+| `"Entering the premises without permission" IF AND ONLY IF "Breaking a window" ` | `"Breaking a window" THEN ONLY "Entering the premises without permission"` | Also minimized to `ONLY "Breaking a window" -> "Entering the premises without permission"` |
+| `NOT "Assaulting a police officer" IF AND ONLY IF "Acting in self-defense"` |`"Acting in self-defense" THEN ONLY NOT "Assaulting a police officer"` | Also minimized to `ONLY "Acting in self-defense" -> NOT "Assaulting a police officer"` |
+| `NOT ("Possessing stolen goods" AND "Fleeing from police") IF AND ONLY IF "Being innocent"` | `"Being innocent" THEN ONLY NOT "Possessing stolen goods" OR NOT "Fleeing from police"` | Also minimized to `ONLY "Being innocent" -> NOT "Posessing stolen goods" OR NOT "Fleeing from police"` |
 
-```txt
-"Carrying a concealed weapon" AND "Committing theft" IS OFFENCE = "Committing theft" AND "Carrying a concealed weapon" THEN OFFENCE = "Committing theft" AND "Carrying a concealed weapon" -> OFFENCE =
-```
+### Wrongful examples
 
-```txt
-("Carrying a concealed weapon" AND "Committing theft") IS OFFENCE = "Committing theft" IS OFFENCE AND "Carrying a concealed weapon" IS OFFENCE
-```
+Wrongful formulas are flagged.
 
-```txt
-"Entering the premises without permission" IF AND ONLY IF "Breaking a window" = "Breaking a window" THEN ONLY "Entering the premises without permission" = ONLY "Breaking a window" -> "Entering the premises without permission"
-```
-
-```txt
-NOT "Assaulting a police officer" IF AND ONLY IF "Acting in self-defense" = "Acting in self-defense" THEN ONLY NOT "Assaulting a police officer" = ONLY "Acting in self-defense" -> NOT "Assaulting a police officer"
-```
-
-</details>
-
-<details>
-<summary>
-<h4>Complex examples</h4>
-</summary>
-<br>
-
-```txt
-("Driving while intoxicated" OR ("Committing vandalism" AND NOT "Paying damages")) IS OFFENCE IF AND ONLY IF (NOT "Providing false testimony" OR "Assisting in investigation") = ("Providing false testimony" -> ("Driving while intoxicated" OR ("Committing vandalism" AND NOT "Paying damages"))) AND (("Driving while intoxicated" OR ("Committing vandalism" AND NOT "Paying damages")) -> (NOT "Providing false testimony" OR "Assisting in investigation"))
-```
-
-```txt
-((NOT "Trespassing" AND "Breaking a window") OR ("Carrying a concealed weapon" AND NOT "Fleeing from the scene")) IS OFFENCE AND (NOT "Committing theft" IF "Breaking a window") IS OFFENCE = 
-((NOT "Trespassing" AND "Breaking a window") OR ("Carrying a concealed weapon" AND NOT "Fleeing from the scene")) IS OFFENCE AND ("Breaking a window" -> NOT "Committing theft") IS OFFENCE
-```
-
-```txt
-("Fraud" OR (NOT "Embezzlement" AND ("Bribery" OR NOT "Tax evasion"))) AND ("Obstruction of justice" OR (NOT "Tax evasion" AND "Perjury")) IS OFFENCE IF AND ONLY IF (NOT "Obstruction of justice" OR "Cooperation with authorities") = ((("Fraud" OR (NOT "Embezzlement" AND ("Bribery" OR NOT "Tax evasion"))) AND ("Obstruction of justice" OR (NOT "Tax evasion" AND "Perjury"))) -> (NOT "Obstruction of justice" OR "Cooperation with authorities")) AND ((NOT "Obstruction of justice" OR "Cooperation with authorities") -> (("Fraud" OR (NOT "Embezzlement" AND ("Bribery" OR NOT "Tax evasion"))) AND ("Obstruction of justice" OR (NOT "Tax evasion" AND "Perjury"))))
-```
-
-```txt
-(("Forgery" AND "Counterfeiting") OR NOT ("Breaking and entering" AND "Vandalism")) IF "Being an accomplice" IS OFFENCE AND ("Conspiracy" IF "Murder") IS OFFENCE = ("Being an accomplice" -> (("Forgery" AND "Counterfeiting") OR NOT ("Breaking and entering" AND "Vandalism"))) IS OFFENCE AND ("Murder" -> "Conspiracy") IS OFFENCE
-```
-
-```txt
-NOT (("Money laundering" AND "Identity theft") OR ("Fraud" AND NOT "Forgery")) IS OFFENCE IF ("Assault" AND "Battery") IS NOT OFFENCE = ("Assault" AND "Battery") -> NOT (("Money laundering" AND "Identity theft") OR ("Fraud" AND NOT "Forgery")) IS OFFENCE
-```
-
-</details>
-
-<details>
-<summary>
-<h4>Wrongful examples</h4>
-</summary>
-<br>
-
-```txt
-"Selling prohibited substances" IS OFFENCE AND IS NOT OFFENCE = WRONGFUL: CONTRADICTION
-```
-
-```txt
-"Selling prohibited substances" IS OFFENCE OR IS NOT OFFENCE = WRONGFUL: TAUTOLOGY
-```
-
-```txt
-"Selling prohibited substances" IS OFFENCE IF "Selling prohibited substances" IS OFFENCE = WRONGFUL: CIRCULAR_REASONING
-```
-
-</details>
+| Complex | Minimized | More |
+| :--- | :--- | :--- |
+| `"Selling prohibited substances" IS OFFENCE AND IS NOT OFFENCE` | ERROR | Flagged with `WRONGFUL: CONTRADICTION` |
+| `"Selling prohibited substances" IS OFFENCE OR IS NOT OFFENCE` | ERROR | Flagged with `WRONGFUL: TAUTOLOGY` |
+| `"Selling prohibited substances" IS OFFENCE IF "Selling prohibited substances IS OFFENCE` | ERROR | Flagged with `WRONGFUL: CIRCULAR_REASONING` |
