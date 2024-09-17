@@ -10,16 +10,16 @@ Things being worked on.
     1. Possible keywords
         1. AND, OR, NOT, CAUSE, ()
         2. TEST, REQUIRE
-        3. IF, ELSE, ELSEIF, ONLY IF, IOR, XOR
+        3. IF, ELSE, ELSEIF, IF AND ONLY IF, OR, XOR
         4. RULING, PRECEDENT, DERIVE, ORIGINATE, INHERIT
-        5. ALL, NONE, ONE, MORE THAN ONE, ZERO
-        6. ACT, POLICY, REFERENCE, PER, LEGISLATION, INCLUSIVE IF, EXCLUSIVE IF, CASE, STATUTE
-        7. OBITER, RATIO, FROM, PRIMARY, SUBSIDIARY 
-        8. LEGAL, ILLEGAL
-        9. WRONGFUL, RIGHTFUL
+        6. ALL, NONE, ONE, MORE THAN ONE, ZERO
+        7. ACT, POLICY, REFERENCE, PER, LEGISLATION, INCLUSIVE IF, EXCLUSIVE IF, CASE, STATUTE
+        8. OBITER, RATIO, FROM, PRIMARY, SUBSIDIARY 
+        9. LEGAL, ILLEGAL
+        10. WRONGFUL, RIGHTFUL
             1. subdivisions of WRONGFUL and RIGHTFUL
             2. eg. WRONGFUL: CONTRADICTION or WRONGFUL: CAUSATION_ERROR are possible error messages
-        10. SHALL, MUST
+        11. SHALL, MUST
             1. DSLs need to account for the nuances between SHALL and MUST
             2. What is a necessary compulsary consequence and what is a possible consequence?
     2. See [L4 syntax](https://github.com/smucclaw/lam4)
