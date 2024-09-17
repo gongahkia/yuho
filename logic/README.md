@@ -121,3 +121,6 @@ NOT (("Money laundering" AND "Identity theft") OR ("Fraud" AND NOT "Forgery")) I
 >   * also consider changing my code font to iosevka
 >   * how can we integrate LLMs that then produce yuho code
 >   * https://boostdraft.com
+>   * add these as articlesA
+>   * https://www.doc.ic.ac.uk/~rak/papers/British%20Nationality%20Act.pdf
+>   * https://www.semanticscholar.org/paper/The-British-Nationality-Act-as-a-logic-program-Sergot-Sadri/16d480717a1d233ae94b09e3b983d8cc96437644
