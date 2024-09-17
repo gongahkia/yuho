@@ -93,27 +93,30 @@ NOT (("Money laundering" AND "Identity theft") OR ("Fraud" AND NOT "Forgery")) I
 
 > [!WARNING]
 > CCLaw talk from today notes
-> 
-> UK Courts and Drafters have for years talked about the movement from SHALL to MUST
->   MUST: currently used in consequence of breach
 >   
-> * DSLs need to account for the nuances between SHALL and MUST
-> * What is a necessary compulsary consequence, what is a possible consequence
-> * DSL needs keywords like ACT, POLICY, REFERENCE, PER, LEGISLATE, INCLUSIVE IF, EXCLUSIVE IF 
-> * Must account for the inclusion of common law and obiter
-> * Must account for the inclusion of policy and statute
-> * DSL must be easy to read and to write
-> * Structure matters
-> * if and boolean connectives
-> * add syntax for error checking like WRONGFUL and RIGHTFUL errors and specification of how an error is wrongful or rightful
+> * ACT, POLICY, REFERENCE, PER, LEGISLATE, INCLUSIVE IF, EXCLUSIVE IF, CASE, STATUTE
+> * OBITER, RATIO
+> * WRONGFUL, RIGHTFUL
+>   * subdivisions of WRONGFUL and RIGHTFUL
+> * SHALL, MUST
+>   * DSLs need to account for the nuances between SHALL and MUST
+>   * What is a necessary compulsary consequence, what is a possible consequence
+
+
 > * validation for a given equation 
-> 
 > * basic inconsitency checking and testing facilities for DSLs
 > * DSL must include a syntax to define a given thing recursively
 > * give me an IDE that has some autocomplete and linting
 > * make the linting and snippets comprehensive
 > * DSLs must account for subsidiary legislation as well
 > * definitions need to be recursive
+> * diagrammatic representation should show ALL possible enumeratios and permutations of a given offence so that it can then be checked against an indiivdual's specified situation
+> * maybe make these implicit assumptions clear in the base permutations shown
+> * the diagrammatic representation DOES NOT account for base assumptions that are implicit within the law, like which court should hear a given case in the flowchart, like which jurisdiction a case should be heard in, like what constitutes a person per the interpretation act
+> * eg. s415 the breakdown of a diagram does not even apply for those who are not singaporeans and this could expand to as far as we want
+> * make EVERYTHING that is implciit in the understanding of the law EXPLICIT
+> * still lacking grammer and diagrammatic representation that can reflect that a given statute is contingent on another statute, there's a specified grammer
+> * shows the yuho code representation
 > 
 > If person must wear seatbelt and they don't, they're in breach of the provision, but could that be interpreted differently
 > 
@@ -121,6 +124,7 @@ NOT (("Money laundering" AND "Identity theft") OR ("Fraud" AND NOT "Forgery")) I
 >   * also consider changing my code font to iosevka
 >   * how can we integrate LLMs that then produce yuho code
 >   * https://boostdraft.com
->   * add these as articlesA
+>   * add these as articles to my readme.md
 >   * https://www.doc.ic.ac.uk/~rak/papers/British%20Nationality%20Act.pdf
 >   * https://www.semanticscholar.org/paper/The-British-Nationality-Act-as-a-logic-program-Sergot-Sadri/16d480717a1d233ae94b09e3b983d8cc96437644
+> dont make drafting in pseduo-code a glorified version of form filling
