@@ -1,18 +1,18 @@
-# Logic engine 
+# Logic evaluation 
 
-* Heuristic evaluation
-* Prime Implicant
+* Boolean minimization in `prop_eval.py`
 
 > [!WARNING]
 > FUA continue to add these in the future!
-
-* Don’t Care Conditions
-* Tautology
-* SAT Solvers
-* Multi-Level Minimization
-* Factorization
-* Complementation
-* Boolean minimization in `prop_eval.py`
+>
+> * Prime Implicant
+> * Don’t Care Conditions
+> * Tautology
+> * SAT Solvers
+> * Multi-Level Minimization
+> * Factorization
+> * Complementation
+> * Heuristic minimzation
 
 ## Usage
 
