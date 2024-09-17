@@ -8,7 +8,7 @@ Things being worked on.
 
 1. Edit SYNTAX.md and fully brainstorm complete set of keywords for Yuho
     1. Possible keywords
-        1. AND, OR, NOT, CAUSE, ()
+        1. AND, OR, NOT, CAUSE, (), ONLY
         2. TEST, REQUIRE
         3. IF, ELSE, ELSEIF, IF AND ONLY IF, OR, XOR
         4. RULING, PRECEDENT, DERIVE, ORIGINATE, INHERIT
