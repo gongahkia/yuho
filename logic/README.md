@@ -92,20 +92,20 @@ NOT (("Money laundering" AND "Identity theft") OR ("Fraud" AND NOT "Forgery")) I
 </details>
 
 > [!WARNING]
-> CCLaw talk from today notes
 >   
-> * ACT, POLICY, REFERENCE, PER, LEGISLATE, INCLUSIVE IF, EXCLUSIVE IF, CASE, STATUTE
-> * OBITER, RATIO
-> * WRONGFUL, RIGHTFUL
->   * subdivisions of WRONGFUL and RIGHTFUL
-> * SHALL, MUST
->   * DSLs need to account for the nuances between SHALL and MUST
->   * What is a necessary compulsary consequence, what is a possible consequence
-
-
-> * validation for a given equation 
-> * basic inconsitency checking and testing facilities for DSLs
-> * DSL must include a syntax to define a given thing recursively
+> * Keywords
+>   * ACT, POLICY, REFERENCE, PER, LEGISLATE, INCLUSIVE IF, EXCLUSIVE IF, CASE, STATUTE
+>   * OBITER, RATIO
+>   * WRONGFUL, RIGHTFUL
+>       * subdivisions of WRONGFUL and RIGHTFUL
+>   * SHALL, MUST
+>       * DSLs need to account for the nuances between SHALL and MUST
+>       * What is a necessary compulsary consequence and what is a possible consequence?
+>   * DSL must include a syntax to define a given thing recursively
+> 
+> * Validation for a given equation 
+>   * basic inconsitency checking 
+>   * testing facilities for DSLs
 > * give me an IDE that has some autocomplete and linting
 > * make the linting and snippets comprehensive
 > * DSLs must account for subsidiary legislation as well

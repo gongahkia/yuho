@@ -118,3 +118,6 @@ Yuho stands on the shoulders of past research and academia.
 * [Computer-Readable Legislation Project: What might an IDE-like drafting tool look like?](https://osf.io/uk2vy/) by Matthew Waddington, Laurence Diver and Tin San Leon Qiu
 * [Normalized Legal Drafting and the Query Method](https://repository.law.umich.edu/articles/29/) by Layman E Allen and C Rudy Engholm
 * [An IDE-like tool for legislative drafting](https://crlp-jerseyldo.github.io/work/an-ide-for-legislation) by crlp-jerseyldo.github.io
+* [The Grammar And Structure Of Legal Texts](https://academic.oup.com/edited-volume/34877/chapter-abstract/298341735?redirectedFrom=fulltext) by Risto Hiltunen
+* [Does Justice Have a Syntax?](https://www.jstor.org/stable/27073484) by Steven L Winter
+* [The syntax of legal exceptions: how the absence of proof is a proof of absence thereof](https://www.tandfonline.com/doi/abs/10.1080/20414005.2017.1283567) by Kyriakos N Kotsoglou
