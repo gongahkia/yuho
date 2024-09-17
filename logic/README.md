@@ -5,14 +5,16 @@
 > [!WARNING]
 > Continue to add these functions in Python to this file directory in the future
 >
-> * Prime Implicant
-> * Don’t Care Conditions
-> * Tautology
-> * SAT Solvers
-> * Multi-Level Minimization
-> * Factorization
-> * Complementation
-> * Heuristic minimzation
+> 1. Make every evaluated statement as atomic as possible, so propositional formulas evaluate to fundamental propositions.
+> 2. Prime Implicant
+> 3. Don’t Care Conditions
+> 4. Tautology
+> 5. SAT Solvers
+> 6. Multi-Level Minimization
+> 7. Factorization
+> 8. Complementation
+> 9. Heuristic minimzation
+> 10. Add further examples of wrongful Yuho logic soon
 
 ## Usage
 
@@ -29,13 +31,7 @@ By substituting truth values with statutory elements, complex statements evaluat
 ### Examples
 
 > [!WARNING]
-> Continue formatting and logicising the below examples to make sure readable
-
-> [!WARNING]
-> Continue adding examples below showing logical fallacies and other contradictions
-
-> [!WARNING]
-> Make every evaluated statement as atomic as possible, so should propositional formulas should evaluate to basic truth statements
+> Continue formatting and logicising the below examples to make sure readable from line 66
 
 <details>
 <summary>
@@ -59,9 +55,6 @@ By substituting truth values with statutory elements, complex statements evaluat
 NOT "Assaulting a police officer" IF AND ONLY IF "Acting in self-defense" = "Acting in self-defense" -> NOT "Assaulting a police officer"
 ```
 
-```txt
-"Selling prohibited substances" IS OFFENCE AND IS NOT OFFENCE = WRONGFUL_CLAIM: CONTRADICTION
-```
 </details>
 
 <details>
@@ -90,4 +83,25 @@ NOT "Assaulting a police officer" IF AND ONLY IF "Acting in self-defense" = "Act
 ```txt
 NOT (("Money laundering" AND "Identity theft") OR ("Fraud" AND NOT "Forgery")) IS OFFENCE IF ("Assault" AND "Battery") IS NOT OFFENCE = ("Assault" AND "Battery") -> NOT (("Money laundering" AND "Identity theft") OR ("Fraud" AND NOT "Forgery")) IS OFFENCE
 ```
+
+</details>
+
+<details>
+<summary>
+<h4>Wrongful examples</h4>
+</summary>
+<br>
+
+```txt
+"Selling prohibited substances" IS OFFENCE AND IS NOT OFFENCE = WRONGFUL: CONTRADICTION
+```
+
+```txt
+"Selling prohibited substances" IS OFFENCE OR IS NOT OFFENCE = WRONGFUL: TAUTOLOGY
+```
+
+```txt
+"Selling prohibited substances" IS OFFENCE IF "Selling prohibited substances" IS OFFENCE = WRONGFUL: CIRCULAR_REASONING
+```
+
 </details>

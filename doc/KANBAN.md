@@ -15,10 +15,11 @@ Things being worked on.
         5. ALL, NONE, ONE, MORE THAN ONE, ZERO
         6. ACT, POLICY, REFERENCE, PER, LEGISLATION, INCLUSIVE IF, EXCLUSIVE IF, CASE, STATUTE
         7. OBITER, RATIO, FROM, PRIMARY, SUBSIDIARY 
-        8. WRONGFUL, RIGHTFUL
+        8. LEGAL, ILLEGAL
+        9. WRONGFUL, RIGHTFUL
             1. subdivisions of WRONGFUL and RIGHTFUL
             2. eg. WRONGFUL: CONTRADICTION or WRONGFUL: CAUSATION_ERROR are possible error messages
-        9. SHALL, MUST
+        10. SHALL, MUST
             1. DSLs need to account for the nuances between SHALL and MUST
             2. What is a necessary compulsary consequence and what is a possible consequence?
     2. See [L4 syntax](https://github.com/smucclaw/lam4)
