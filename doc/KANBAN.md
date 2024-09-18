@@ -8,38 +8,33 @@ Things being worked on.
 
 1. Edit SYNTAX.md and fully brainstorm complete set of keywords for Yuho
     1. Possible keywords
-        1. AND, OR, NOT, CAUSE, (), ONLY
-        2. TEST, REQUIRE
-        3. IF, ELSE, ELSEIF, IF AND ONLY IF, OR, XOR
-        4. RULING, PRECEDENT, DERIVE, ORIGINATE, INHERIT
-        6. ALL, NONE, ONE, MORE THAN ONE, ZERO
-        7. ACT, POLICY, REFERENCE, PER, LEGISLATION, INCLUSIVE IF, EXCLUSIVE IF, CASE, STATUTE
-        8. OBITER, RATIO, FROM, PRIMARY, SUBSIDIARY 
-        9. LEGAL, ILLEGAL
-        10. WRONGFUL, RIGHTFUL
-            1. subdivisions of WRONGFUL and RIGHTFUL
-            2. eg. WRONGFUL: CONTRADICTION or WRONGFUL: CAUSATION_ERROR are possible error messages
-        11. SHALL, MUST
-            1. DSLs need to account for the nuances between SHALL and MUST
-            2. What is a necessary compulsary consequence and what is a possible consequence?
+        1. AND, NOT, CAUSE
+        2. ()
+        3. TEST, REQUIRE
+        4. OR, XOR
+        5. IF, ELSE, ELSEIF, IF AND ONLY IF
+        7. ONLY, ALL, NONE, ZERO, ONE, MORE THAN ONE
+        8. RULING, PRECEDENT, DERIVE, ORIGINATE, INHERIT
+        9. ACT, POLICY, REFERENCE, PER, LEGISLATION, INCLUSIVE IF, EXCLUSIVE IF, CASE, STATUTE
+        10. OBITER, RATIO, FROM, PRIMARY, SUBSIDIARY 
+        11. LEGAL, ILLEGAL
+        12. WRONGFUL, RIGHTFUL
+            1. eg. WRONGFUL: CONTRADICTION or WRONGFUL: CAUSATION_ERROR are possible error messages
+            2. eg. RIGHTFUL: VALID_ARGUMENT are possible valid messages
+        13. CAN, MUST
+            1. CAN is a possible consequence
+            2. MUST is a compulsary consequence
     2. See [L4 syntax](https://github.com/smucclaw/lam4)
     3. See [Catala's syntax](https://github.com/CatalaLang)
     4. See [Blawx](https://github.com/Lexpedite/blawx)
 2. Syntax must be 
-    1. simple to learn and write
-    2. simple to read
-    3. easy to tokenise, parse and interpret
+    1. simple to learn, read and write
+    2. easy to tokenise, parse and interpret
+    3. general enough to represent any statutory law
     4. be able to represent common law rulings and statutes
-    5. general enough to represent both criminal law and tort, as well as common law rulings
-    6. able to define a given term or idea recursively
-    7. all keywords are CAPITALISED by default for ease of reading
-        1. "Normalisation" results in documents that are faster and more accurate to read and understand 
-    8. all keywords should aim to be familar to lawyers and the layperson and not too technical to avoid a steep learning curve
-    9. account for subsidiary legislation as well and distinguish it from primary legislation
-3. Language inspirations
-    1. Python
-    2. Julia
-    3. Nim
+    5. able to define a given term or idea recursively
+    6. all keywords should aim to be familar to lawyers and the layperson and not too technical to avoid a steep learning curve
+    7. account for subsidiary legislation as well and distinguish it from primary legislation
 
 ### 2. Logic engine
 
