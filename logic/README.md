@@ -1,5 +1,7 @@
 # Logic evaluation 
 
+Boolean and Heuristic minimization
+
 ## Rationale
   
 There are many benefits to implementing a logic engine capable of heuristic and boolean minimization.  
@@ -10,35 +12,147 @@ By substituting truth values with statutory elements, complex statements evaluat
 
 Rightful formulas are minimized to their fundamental propositions.
 
-| Complex | Minimized | More |
-| :--- | :--- | :--- |
-| `"Driving while intoxicated" IS NOT NOT NOT NOT OFFENCE` | `"Driving while intoxicated" IS OFFENCE` | NIL |
-| `("Carrying a concealed weapon" AND "Committing theft") IS OFFENCE` | `"Committing theft" IS OFFENCE AND "Carrying a concealed weapon" IS OFFENCE` | NIL |
-| `"Resisting arrest" AND NOT "Under the influence of alcohol" IS OFFENCE` | `"Resisting arrest" IS OFFENCE AND "Under the influence of alcohol" NOT OFFENCE` | NIL |
-| `"Entering the premises without permission" IF AND ONLY IF "Breaking a window" ` | `"Breaking a window" THEN ONLY "Entering the premises without permission"` | Also minimized to `ONLY "Breaking a window" -> "Entering the premises without permission"` |
-| `NOT "Assaulting a police officer" IF AND ONLY IF "Acting in self-defense"` |`"Acting in self-defense" THEN ONLY NOT "Assaulting a police officer"` | Also minimized to `ONLY "Acting in self-defense" -> NOT "Assaulting a police officer"` |
-| `NOT ("Possessing stolen goods" AND "Fleeing from police") IF AND ONLY IF "Being innocent"` | `"Being innocent" THEN ONLY NOT "Possessing stolen goods" OR NOT "Fleeing from police"` | Also minimized to `ONLY "Being innocent" -> NOT "Posessing stolen goods" OR NOT "Fleeing from police"` |
+<details>
+<summary>Example 1</summary>
+<br>
+
+```txt
+"Driving while intoxicated" IS NOT NOT NOT NOT OFFENCE
+```
+
+```txt
+"Driving while intoxicated" IS OFFENCE
+```
+
+</details>
+
+<details>
+<summary>Example 2</summary>
+<br>
+
+```txt
+("Carrying a concealed weapon" AND "Committing theft") IS OFFENCE
+```
+
+```txt
+"Committing theft" IS OFFENCE AND "Carrying a concealed weapon" IS OFFENCE
+```
+
+</details>
+
+<details>
+<summary>Example 3</summary>
+<br>
+
+```txt
+"Resisting arrest" AND NOT "Under the influence of alcohol" IS OFFENCE
+```
+
+```txt
+"Resisting arrest" IS OFFENCE AND "Under the influence of alcohol" NOT OFFENCE
+```
+
+</details>
+
+<details>
+<summary>Example 4</summary>
+<br>
+
+```txt
+"Entering the premises without permission" IF AND ONLY IF "Breaking a window"
+```
+
+```txt
+"Breaking a window" THEN ONLY "Entering the premises without permission"
+```
+
+```txt
+ONLY "Breaking a window" -> "Entering the premises without permission"
+```
+
+</details>
+
+<details>
+<summary>Example 5</summary>
+<br>
+
+```txt
+NOT "Assaulting a police officer" IF AND ONLY IF "Acting in self-defense"
+```
+
+```txt
+"Acting in self-defense" THEN ONLY NOT "Assaulting a police officer"
+```
+
+```txt
+ONLY "Acting in self-defense" -> NOT "Assaulting a police officer"
+```
+
+</details>
+
+<details>
+<summary>Example 6</summary>
+<br>
+
+```txt
+NOT ("Possessing stolen goods" AND "Fleeing from police") IF AND ONLY IF "Being innocent"
+```
+
+```txt
+"Being innocent" THEN ONLY NOT "Possessing stolen goods" OR NOT "Fleeing from police"
+```
+
+```txt
+ONLY "Being innocent" -> NOT "Posessing stolen goods" OR NOT "Fleeing from police"
+```
+
+</details>
 
 ### Wrongful examples
 
 Wrongful formulas are flagged.
 
-| Complex | Minimized | More |
-| :--- | :--- | :--- |
-| `"Selling prohibited substances" IS OFFENCE AND IS NOT OFFENCE` | ERROR | Flagged with `WRONGFUL: CONTRADICTION` |
-| `"Selling prohibited substances" IS OFFENCE OR IS NOT OFFENCE` | ERROR | Flagged with `WRONGFUL: TAUTOLOGY` |
-| `"Selling prohibited substances" IS OFFENCE IF "Selling prohibited substances IS OFFENCE` | ERROR | Flagged with `WRONGFUL: CIRCULAR_REASONING` |
+<details>
+<summary>Example 1</summary>
+<br>
 
-## Details 
+```txt
+"Selling prohibited substances" IS OFFENCE AND IS NOT OFFENCE
+```
 
-* Single-level, Multi-level boolean minimization and Heuristic minimization in `minimize.py`
-* Truth tables, factorization and evaluation in `eval.py`
-* Prime implicants in `prime.py`
-* Don't care conditions in `dc.py`
-* Complements in `comp.py`
-* Basic, Brute Force, DPLL and Walk SAT solvers in `sat_solver.py`
-* CDCL SAT solver in `CDCL_solver.py`
-* PicoSAT solver in `picosat_solver.py`
+```txt
+WRONGFUL: CONTRADICTION
+```
+
+</details>
+
+<details>
+<summary>Example 2</summary>
+<br>
+
+```txt
+"Selling prohibited substances" IS OFFENCE OR IS NOT OFFENCE
+```
+
+```txt
+WRONGFUL: TAUTOLOGY
+```
+
+</details>
+
+<details>
+<summary>Example 3</summary>
+<br>
+
+```txt
+"Selling prohibited substances" IS OFFENCE IF "Selling prohibited substances IS OFFENCE
+```
+
+```txt
+WRONGFUL: CIRCULAR_REASONING
+```
+
+</details>
 
 ## Usage
 
