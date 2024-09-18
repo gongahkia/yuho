@@ -1,23 +1,5 @@
 # Logic evaluation 
 
-* Single-level, Multi-level boolean minimization and Heuristic minimization in `minimize.py`
-* Truth tables, factorization and evaluation in `eval.py`
-* Prime implicants in `prime.py`
-* Don't care conditions in `dc.py`
-* Complements in `comp.py`
-* Basic, Brute Force, DPLL and Walk SAT solvers in `sat_solver.py`
-* CDCL SAT solver in `CDCL_solver.py`
-* PicoSAT solver in `picosat_solver.py`
-
-## Usage
-
-```console
-$ python3 -m venv venv
-$ source venv/bin/activate
-$ pip install -r requirements.txt
-$ python3 learn.py
-```
-
 ## Rationale
   
 There are many benefits to implementing a logic engine capable of heuristic and boolean minimization.  
@@ -46,3 +28,23 @@ Wrongful formulas are flagged.
 | `"Selling prohibited substances" IS OFFENCE AND IS NOT OFFENCE` | ERROR | Flagged with `WRONGFUL: CONTRADICTION` |
 | `"Selling prohibited substances" IS OFFENCE OR IS NOT OFFENCE` | ERROR | Flagged with `WRONGFUL: TAUTOLOGY` |
 | `"Selling prohibited substances" IS OFFENCE IF "Selling prohibited substances IS OFFENCE` | ERROR | Flagged with `WRONGFUL: CIRCULAR_REASONING` |
+
+## Details 
+
+* Single-level, Multi-level boolean minimization and Heuristic minimization in `minimize.py`
+* Truth tables, factorization and evaluation in `eval.py`
+* Prime implicants in `prime.py`
+* Don't care conditions in `dc.py`
+* Complements in `comp.py`
+* Basic, Brute Force, DPLL and Walk SAT solvers in `sat_solver.py`
+* CDCL SAT solver in `CDCL_solver.py`
+* PicoSAT solver in `picosat_solver.py`
+
+## Usage
+
+```console
+$ python3 -m venv venv
+$ source venv/bin/activate
+$ pip install -r requirements.txt
+$ python3 learn.py
+```
