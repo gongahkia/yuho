@@ -5,9 +5,6 @@
 > [!WARNING]
 > Continue to add these functions in Python to this file directory in the future
 >
-> 1. Prime Implicant
-> 2. Don’t Care Conditions
-> 3. Tautology
 > 4. SAT Solvers
 > 5. Multi-Level Minimization
 > 6. Factorization

@@ -1,5 +1,10 @@
+# NOTE
+    # this is code that is not intended, and should never enter into production
+    # for learning to work with basic truth tables in Python-style data structures
+
 from itertools import product
 from functools import reduce
+import prime as p
 
 def generate_truth_table(variables):
     """
@@ -58,6 +63,25 @@ def display_truth_table_custom(truth_table, variables):
         result = str(int(row['Result']))
         print("\t".join(values + [result]))
 
+def factorize_formula(truth_table, variables):
+    """
+    factor the formula based on 
+    its generated truth table
+    
+    parameters:
+    * truth_table (list of dicts): generated truth table
+    * variables (list): list of variables used in the propositional formula
+    
+    returns:
+    * list: factored form of the boolean expression
+    """
+    prime_imps = p.prime_implicants(truth_table, variables)
+    factored = []
+    for implicant in prime_imps:
+        common_terms = [term for term in implicant if all(term in imp for imp in prime_imps)]
+        factored.append(common_terms)
+    return factored
+
 def evaluate_formula(formula, variables):
     """
     evaluate a custom propositional formula 
@@ -80,25 +104,3 @@ def evaluate_formula(formula, variables):
         assignment['Result'] = eval(formula, {}, eval_context)
         truth_table.append(assignment)
     return truth_table
-
-def minimize_formula(formula, variables):
-    """
-    carry out basic boolean minimization 
-    on the specified propositional formula 
-    by applying the generated truth table
-    
-    parameters:
-    * formula (str): propositional formula to evaluate and minimize
-    * variables (list): list of variables used in the propositional formula
-
-    returns:
-    * str: minimized propositonal formula based on logical equivalence
-    """
-    truth_table = evaluate_formula(formula, variables)
-    all_true = all(row['Result'] for row in truth_table)
-    all_false = all(not row['Result'] for row in truth_table)
-    if all_true:
-        return "TRUE (tautology)"
-    elif all_false:
-        return "FALSE (contradiction)"
-    return "the formula CANNOT be further minimized"
