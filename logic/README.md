@@ -2,19 +2,12 @@
 
 * Boolean minimization in `prop_eval.py`
 
-> [!WARNING]
-> Continue to add these functions in Python to this file directory in the future
->
-> 4. SAT Solvers
-> 5. Multi-Level Minimization
-> 6. Factorization
-> 7. Complementation
-> 8. Heuristic minimzation
-> 9. Add further examples of wrongful Yuho logic soon
-
 ## Usage
 
 ```console
+$ python3 -m venv venv
+$ source venv/bin/activate
+$ pip install -r requirements.txt
 $ python3 learn.py
 ```
 
