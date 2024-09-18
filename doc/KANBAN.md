@@ -7,26 +7,28 @@ Things being worked on.
 ### 1. Syntax
 
 1. Edit SYNTAX.md and fully brainstorm complete set of keywords for Yuho
-    1. Possible keywords
+    1. Basic keywords that must be included
         1. AND, NOT, CAUSE
         2. ()
         3. TEST, REQUIRE
         4. OR, XOR
         5. IF, ELSE, ELSEIF, IF AND ONLY IF
         7. ONLY, ALL, NONE, ZERO, ONE, MORE THAN ONE
-        8. RULING, PRECEDENT, DERIVE, ORIGINATE, INHERIT
-        9. ACT, POLICY, REFERENCE, PER, LEGISLATION, INCLUSIVE IF, EXCLUSIVE IF, CASE, STATUTE
-        10. OBITER, RATIO, FROM, PRIMARY, SUBSIDIARY 
-        11. LEGAL, ILLEGAL
-        12. WRONGFUL, RIGHTFUL
+        8. INHERIT, APPLY
+        9. CASE, STATUTE, ACT, POLICY
+        10. LEGAL, ILLEGAL
+        11. WRONGFUL, RIGHTFUL
             1. eg. WRONGFUL: CONTRADICTION or WRONGFUL: CAUSATION_ERROR are possible error messages
             2. eg. RIGHTFUL: VALID_ARGUMENT are possible valid messages
-        13. CAN, MUST
+    2. Possible keywords to include
+        1. CAN, MUST
             1. CAN is a possible consequence
             2. MUST is a compulsary consequence
-    2. See [L4 syntax](https://github.com/smucclaw/lam4)
-    3. See [Catala's syntax](https://github.com/CatalaLang)
-    4. See [Blawx](https://github.com/Lexpedite/blawx)
+        2. OBITER, RATIO, PRIMARY, SECONDARY, LEGISLATION
+        3. REFERENCES
+    3. See [L4 syntax](https://github.com/smucclaw/lam4)
+    4. See [Catala's syntax](https://github.com/CatalaLang)
+    5. See [Blawx](https://github.com/Lexpedite/blawx)
 2. Syntax must be 
     1. simple to learn, read and write
     2. easy to tokenise, parse and interpret
