@@ -1,6 +1,13 @@
 # Logic evaluation 
 
-* Boolean minimization in `prop_eval.py`
+* Single-level, Multi-level boolean minimization and Heuristic minimization in `minimize.py`
+* Truth tables, factorization and evaluation in `eval.py`
+* Prime implicants in `prime.py`
+* Don't care conditions in `dc.py`
+* Complements in `comp.py`
+* Basic, Brute Force, DPLL and Walk SAT solvers in `sat_solver.py`
+* CDCL SAT solver in `CDCL_solver.py`
+* PicoSAT solver in `picosat_solver.py`
 
 ## Usage
 
