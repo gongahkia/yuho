@@ -8,27 +8,79 @@ Things being worked on.
 
 1. Edit SYNTAX.md and fully brainstorm complete set of keywords for Yuho
     1. Basic keywords that must be included
+        1. # *(to prefix comments)*
         1. AND, NOT, CAUSE
         2. ()
+        3. : *(to define scope alongside 4-tab indentation similar to Python)*
         3. TEST, REQUIRE
         4. OR, XOR
-        5. IF, ELSE, ELSEIF, IF AND ONLY IF
+        5. IF, ELSE, ELSEIF, IF AND ONLY IF, CONSEQUENCE *(as a replacement for then)*
         7. ONLY, ALL, NONE, ZERO, ONE, MORE THAN ONE
         8. INHERIT, APPLY
-        9. CASE, STATUTE, ACT, POLICY
+        9. CASE, STATUTE, POLICY, SECTION, SUBSECTION
         10. LEGAL, ILLEGAL
         11. WRONGFUL, RIGHTFUL
             1. eg. WRONGFUL: CONTRADICTION or WRONGFUL: CAUSATION_ERROR are possible error messages
             2. eg. RIGHTFUL: VALID_ARGUMENT are possible valid messages
+        12. SCOPE
+        13. AGAMOTTO
+            1. For enumerating upon and displaying all possible permutations of a RESULT of a given statute or process representation in Yuho
+            2. AGAMOTTO_RESULT
+                1. Returns a string array of all possible RESULT CONSEQUENCEs of a given statute representation in Yuho
+            3. AGAMOTTO (default)
+                1. Returns a string array of all possible Yuho-enumerated outcomes and their RESULT CONSEQUENCES of a given statute representation
+                2. Shows the logical flow and propositional statements that led the outcome's evaluation
+            3. Referencing the eye of agamotto which Dr Strange used to view all possible timelines
+            4. Similar to Prof Alex Woon's enumeration of all possible paths for S415 Cheating in his textbook
+            5. ![](https://upload.wikimedia.org/wikipedia/en/a/af/Eye_of_Agamotto.jpg)
+        14. ASSERT *(for testing validity of an outcome depending on a specified scenario)*
+            1. Consider whether this is truly necessary
+            2. If Yuho's purpose is just to generate RIGHTFUL representations of statutes then transpile to diagrammatic representations
+        15. EXCEPTION
+            1. Called by EXCEPTION STATUTE <existing_statute_rule>
+            1. Include this if it won't bloat the existing IF ELSEIF IF AND ONLY IF syntax
+            2. Used to specify exceptions to an existing statute that has already been defined, allows for easier grouping
+            3. Exceptions will be linked as an array of exceptions that are checked back-end when a propositional formula is evaluted and handled through AGAMOTTO and ASSERT
     2. Possible keywords to include
         1. CAN, MUST
             1. CAN is a possible consequence
             2. MUST is a compulsary consequence
         2. OBITER, RATIO, PRIMARY, SECONDARY, LEGISLATION
         3. REFERENCES
-    3. See [L4 syntax](https://github.com/smucclaw/lam4)
-    4. See [Catala's syntax](https://github.com/CatalaLang)
-    5. See [Blawx](https://github.com/Lexpedite/blawx)
+        4. Consider incorporating STRUCT as the singular flexible datatype anyway to define further nuanced relationships
+            1. See Yuho v2.0 for how it handles structs
+            2. In that structs can represent multiple datatypes in other languages like 
+                1. Array
+                2. Tuple
+                3. Dictionary
+                4. Struct
+                5. Enum
+    3. Datatypes
+        1. Front-end representation
+            1. STRING
+            2. INT
+            3. FLOAT
+            2. MONEY
+            3. DATE
+            4. TIME
+            5. PUNISHMENT
+            6. RESULT / CONSEQUENCE 
+            7. BOOLEAN
+            8. STATE *(ILLEGAL, LEGAL)*
+            9. Add more
+        2. Back-end representation *(how the data is handled on the back-end)*
+            1. Add more
+    4. Paradigms
+        1. Object-oriented by default *(since it best represents how humans understand data)*
+        2. Functional by choice *(similar to Rust)*
+        3. Explore other [alternatives](https://stackoverflow.com/questions/3525240/object-oriented-programming-beyond-just-methods)
+    5. See [L4 syntax](https://github.com/smucclaw/lam4)
+        1. What L4 is currently doing
+        2.
+    6. See [Blawx](https://github.com/Lexpedite/blawx)
+        1. What Blawx is currently doing
+        2.
+    7. See [Catala's syntax](https://github.com/CatalaLang)
 2. Syntax must be 
     1. simple to learn, read and write
     2. easy to tokenise, parse and interpret
@@ -171,6 +223,12 @@ Things being worked on.
     2. Python Pip
     3. FZF
     4. Git
+
+### 10. Web Wikipage
+
+1. For learning Yuho's syntax easily
+2. Can integrate the Yuho web frontend under point [7.](#7-web-frontend)
+3. Similar to [catala-lang.org](https://catala-lang.org/en)
 
 ## Doing ✍️
 
