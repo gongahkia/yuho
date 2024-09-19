@@ -9,13 +9,16 @@ Things being worked on.
 1. Edit SYNTAX.md and fully brainstorm complete set of keywords for Yuho
     1. Try writing out one of the statutes with this syntax in .yh in the examples directory
     2. Then when syntax is formalised add it to SYNTAX.md
+    3. Give the syntax a bit more thought, maybe return to v2.0's syntax if out of ideas as [here](https://github.com/gongahkia/yuho/blob/main/archive/yuho_v2/doc/yuho_onboarding.md)
     3. Basic keywords that **must be included**
         1. # *(to prefix comments)*
         2. ()
         3. : *(to define scope alongside 4-tab indentation similar to Python)*
         4. AND, OR, NOT
         6. IF *(normal if statement)*, ELSE, ELSEIF, IF AND ONLY IF *(biconditional if statement)*, CONSEQUENCE *(as a replacement for then)* / CAUSE / THEN / -> 
-        7. ONLY, ALL, NONE, ZERO, ONE, MORE THAN ONE
+        7. ONLY, ALL, NONE, ZERO, ONE, MORE THAN ONE, ANY
+        8. RULE
+        8. PASS
         8. INHERIT
         9. SCOPE
         10. CASE, STATUTE, POLICY, SECTION, SUBSECTION

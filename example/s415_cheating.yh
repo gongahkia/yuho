@@ -1,1 +1,55 @@
-# FUA to add syntax here to represent cheating as well
+# Penal Code 1871
+# Cheating
+# Section 415 
+# 
+# Whoever, by deceiving any person, whether or not such deception was 
+# the sole or main inducement, fraudulently or dishonestly induces the 
+# person so deceived to deliver or cause the delivery of any property to 
+# any person, or to consent that any person shall retain any property, or 
+# intentionally induces the person so deceived to do or omit to do anything 
+# which he would not do or omit to do if he were not so deceived, and which 
+# act or omission causes or is likely to cause damage or harm to any person 
+# in body, mind, reputation or property, is said to “cheat”.
+
+SCOPE penal_code:
+
+    STRUCT person:
+        PASS
+
+    STRUCT victim INHERIT person
+    STRUCT accused INHERIT person
+
+    STRUCT s415_cheating:
+        RULE:
+            IF ANY person_1 "deceives" ANY person_2:
+                IF "deception was the sole inducement" OR "deception was the main inducement":
+                    IF person_1 "fraudulently induces" person_2 OR person_1 "dishonestly induces" person_2:
+                        IF "to deliver of any property to any person" OR "to cause the delivery of any property to any person" OR "to consent that any person shall retain any property":
+                            IF person_1 "act or omission causes or is likely to cause damage or harm to any person in body" OR person_1 "act or omission causes or is likely to cause damage or harm to any person in mind" OR person_1 "act or omission causes or is likely to cause damage or harm to any person in reputation" OR person_1 "act or omission causes or is likely to cause damage or harm to any person in property":
+                                CONSEQUENCE ILLEGAL
+                                CONSEQUENCE "is said to 'cheat'"
+                            ELSE:
+                                CONSEQUENCE LEGAL
+                        ELSE:
+                            CONSEQUENCE LEGAL
+                    ELSEIF person_1 "intentionally induces" person_2 "to do anything which he would not do if he were not so deceived" OR person_1 "intentionally induces" person_2 "to omit to do anything which he would not do if he were not so deceived"
+                        IF person_1 "act or omission causes or is likely to cause damage or harm to any person in body" OR person_1 "act or omission causes or is likely to cause damage or harm to any person in mind" OR person_1 "act or omission causes or is likely to cause damage or harm to any person in reputation" OR person_1 "act or omission causes or is likely to cause damage or harm to any person in property":
+                            CONSEQUENCE ILLEGAL
+                            CONSEQUENCE "is said to 'cheat'"
+                        ELSE:
+                            CONSEQUENCE LEGAL
+                    ELSE:
+                        CONSEQUENCE LEGAL
+                ELSE:
+                    CONSEQUENCE LEGAL
+            ELSE:
+                CONSEQUENCE LEGAL
+
+    EXCEPTION s415_cheating:
+        IF person_1 == person_2:
+            CONSEQUENCE LEGAL
+
+# The below is execution code for Yuho 
+
+AGAMOTTO_RESULT penal_code.s415_cheating
+AGAMOTTO penal_code.s415_cheating
