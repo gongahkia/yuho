@@ -7,23 +7,23 @@ Things being worked on.
 ### 1. Syntax
 
 1. Edit SYNTAX.md and fully brainstorm complete set of keywords for Yuho
-    1. Basic keywords that must be included
+    1. Try writing out one of the statutes with this syntax in .yh in the examples directory
+    2. Then when syntax is formalised add it to SYNTAX.md
+    3. Basic keywords that **must be included**
         1. # *(to prefix comments)*
-        1. AND, NOT, CAUSE
         2. ()
         3. : *(to define scope alongside 4-tab indentation similar to Python)*
-        3. TEST, REQUIRE
-        4. OR, XOR
-        5. IF, ELSE, ELSEIF, IF AND ONLY IF, CONSEQUENCE *(as a replacement for then)*
+        4. AND, OR, NOT
+        6. IF *(normal if statement)*, ELSE, ELSEIF, IF AND ONLY IF *(biconditional if statement)*, CONSEQUENCE *(as a replacement for then)* / CAUSE / THEN / -> 
         7. ONLY, ALL, NONE, ZERO, ONE, MORE THAN ONE
-        8. INHERIT, APPLY
-        9. CASE, STATUTE, POLICY, SECTION, SUBSECTION
-        10. LEGAL, ILLEGAL
+        8. INHERIT
+        9. SCOPE
+        10. CASE, STATUTE, POLICY, SECTION, SUBSECTION
+            1. LEGAL, ILLEGAL
         11. WRONGFUL, RIGHTFUL
             1. eg. WRONGFUL: CONTRADICTION or WRONGFUL: CAUSATION_ERROR are possible error messages
             2. eg. RIGHTFUL: VALID_ARGUMENT are possible valid messages
-        12. SCOPE
-        13. AGAMOTTO
+        12. AGAMOTTO
             1. For enumerating upon and displaying all possible permutations of a RESULT of a given statute or process representation in Yuho
             2. AGAMOTTO_RESULT
                 1. Returns a string array of all possible RESULT CONSEQUENCEs of a given statute representation in Yuho
@@ -33,21 +33,15 @@ Things being worked on.
             3. Referencing the eye of agamotto which Dr Strange used to view all possible timelines
             4. Similar to Prof Alex Woon's enumeration of all possible paths for S415 Cheating in his textbook
             5. ![](https://upload.wikimedia.org/wikipedia/en/a/af/Eye_of_Agamotto.jpg)
-        14. ASSERT *(for testing validity of an outcome depending on a specified scenario)*
-            1. Consider whether this is truly necessary
-            2. If Yuho's purpose is just to generate RIGHTFUL representations of statutes then transpile to diagrammatic representations
-        15. EXCEPTION
+        13. EXCEPTION
             1. Called by EXCEPTION STATUTE <existing_statute_rule>
             1. Include this if it won't bloat the existing IF ELSEIF IF AND ONLY IF syntax
             2. Used to specify exceptions to an existing statute that has already been defined, allows for easier grouping
             3. Exceptions will be linked as an array of exceptions that are checked back-end when a propositional formula is evaluted and handled through AGAMOTTO and ASSERT
-    2. Possible keywords to include
-        1. CAN, MUST
-            1. CAN is a possible consequence
-            2. MUST is a compulsary consequence
-        2. OBITER, RATIO, PRIMARY, SECONDARY, LEGISLATION
-        3. REFERENCES
-        4. Consider incorporating STRUCT as the singular flexible datatype anyway to define further nuanced relationships
+        14. ASSERT *(for testing validity of an outcome depending on a specified scenario)*
+            1. Consider whether this is truly necessary
+            2. If Yuho's purpose is just to generate RIGHTFUL representations of statutes then transpile to diagrammatic representations
+        15. Consider incorporating STRUCT as the singular flexible datatype anyway to define further nuanced relationships
             1. See Yuho v2.0 for how it handles structs
             2. In that structs can represent multiple datatypes in other languages like 
                 1. Array
@@ -55,32 +49,33 @@ Things being worked on.
                 3. Dictionary
                 4. Struct
                 5. Enum
-    3. Datatypes
+    2. Datatypes
         1. Front-end representation
             1. STRING
-            2. INT
-            3. FLOAT
-            2. MONEY
-            3. DATE
-            4. TIME
-            5. PUNISHMENT
-            6. RESULT / CONSEQUENCE 
-            7. BOOLEAN
-            8. STATE *(ILLEGAL, LEGAL)*
-            9. Add more
-        2. Back-end representation *(how the data is handled on the back-end)*
-            1. Add more
-    4. Paradigms
+            2. NUMBER
+                1. Covers both integers, floats
+            3. BOOLEAN
+            4. MONEY
+                1. Back-end represented as a float
+            5. DATE
+                1. Back-end represented as a string
+            6. TIME
+                1. Back-end represented as an integer
+            7. RESULT *(for the CONSEQUENCE keyword)*
+            8. STATE
+                1. ILLEGAL
+                2. LEGAL
+    3. Paradigms
         1. Object-oriented by default *(since it best represents how humans understand data)*
+            1. Dot syntax to extract value fields
         2. Functional by choice *(similar to Rust)*
         3. Explore other [alternatives](https://stackoverflow.com/questions/3525240/object-oriented-programming-beyond-just-methods)
-    5. See [L4 syntax](https://github.com/smucclaw/lam4)
-        1. What L4 is currently doing
-        2.
-    6. See [Blawx](https://github.com/Lexpedite/blawx)
-        1. What Blawx is currently doing
-        2.
-    7. See [Catala's syntax](https://github.com/CatalaLang)
+    4. Possible keywords to **consider including**
+        1. CAN, MUST
+            1. CAN is a possible consequence
+            2. MUST is a compulsary consequence
+        2. OBITER, RATIO, PRIMARY, SECONDARY, LEGISLATION
+        3. REFERENCES
 2. Syntax must be 
     1. simple to learn, read and write
     2. easy to tokenise, parse and interpret
@@ -209,7 +204,7 @@ Things being worked on.
 6. Yuho's usecases
     1. purpose would be for law students to identify defective logic, charges and rulings when applying statutes
     2. purpose would be for lawyers, lawmakers and drafters to avoid wasting precious court time rationalilising or applying obiter and judgements that make little sense
-67. Research
+7. Research
     1. research cannons of interpretation and construction in law and those that are relevant for the implementation of DSLs and heuristic minimalisation 
     2. eg.
         1. harmonious construction
