@@ -191,6 +191,8 @@ Things being worked on.
         1. end goal of making what is implicit explicit
         2. perhaps could consider making these implicit assumptions explicit by specifying them as preconditions within the list of all permutations
 7. Still lacking diagrammatic representation that can reflect that a given statute is contingent on another statute, brainstorm how to reflect that in the web frontend
+8. [Google Blocky](https://github.com/google/blockly) API 
+    1. Svelteflow API for a drag and drop interface to interact with Yuho DSL
 
 ![](../asset/reference/meng_proto_react_1.png)
 ![](../asset/reference/meng_proto_react_2.png)
