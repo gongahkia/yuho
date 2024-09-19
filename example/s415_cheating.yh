@@ -21,19 +21,19 @@ SCOPE penal_code:
 
     STRUCT s415_cheating:
         RULE:
-            IF ANY person_1 "deceives" ANY person_2:
+            IF ANY person.accused "deceives" ANY person.victim:
                 IF "deception was the sole inducement" OR "deception was the main inducement":
-                    IF person_1 "fraudulently induces" person_2 OR person_1 "dishonestly induces" person_2:
-                        IF "to deliver of any property to any person" OR "to cause the delivery of any property to any person" OR "to consent that any person shall retain any property":
-                            IF person_1 "act or omission causes or is likely to cause damage or harm to any person in body" OR person_1 "act or omission causes or is likely to cause damage or harm to any person in mind" OR person_1 "act or omission causes or is likely to cause damage or harm to any person in reputation" OR person_1 "act or omission causes or is likely to cause damage or harm to any person in property":
+                    IF person.accused "fraudulently induces" person.victim OR person.accused "dishonestly induces" person.victim:
+                        IF "to deliver of any property to" ANY person OR "to cause the delivery of any property to" ANY person OR "to consent that" ANY person "shall retain any property":
+                            IF person.accused "act or omission causes or is likely to cause damage or harm to" ANY person "in body" OR person.accused "act or omission causes or is likely to cause damage or harm to" ANY person "in mind" OR person.accused "act or omission causes or is likely to cause damage or harm to" ANY person "in reputation" OR person.accused "act or omission causes or is likely to cause damage or harm to" ANY person "in property":
                                 CONSEQUENCE ILLEGAL
                                 CONSEQUENCE "is said to 'cheat'"
                             ELSE:
                                 CONSEQUENCE LEGAL
                         ELSE:
                             CONSEQUENCE LEGAL
-                    ELSEIF person_1 "intentionally induces" person_2 "to do anything which he would not do if he were not so deceived" OR person_1 "intentionally induces" person_2 "to omit to do anything which he would not do if he were not so deceived"
-                        IF person_1 "act or omission causes or is likely to cause damage or harm to any person in body" OR person_1 "act or omission causes or is likely to cause damage or harm to any person in mind" OR person_1 "act or omission causes or is likely to cause damage or harm to any person in reputation" OR person_1 "act or omission causes or is likely to cause damage or harm to any person in property":
+                    ELSEIF person.accused "intentionally induces" person.victim "to do anything which he would not do if he were not so deceived" OR person.accused "intentionally induces" person.victim "to omit to do anything which he would not do if he were not so deceived"
+                        IF person.accused "act or omission causes or is likely to cause damage or harm to" ANY person "in body" OR person.accused "act or omission causes or is likely to cause damage or harm to" ANY person "in mind" OR person.accused "act or omission causes or is likely to cause damage or harm to" ANY person "in reputation" OR person.accused "act or omission causes or is likely to cause damage or harm to" ANY person "in property":
                             CONSEQUENCE ILLEGAL
                             CONSEQUENCE "is said to 'cheat'"
                         ELSE:
@@ -46,7 +46,7 @@ SCOPE penal_code:
                 CONSEQUENCE LEGAL
 
     EXCEPTION s415_cheating:
-        IF person_1 == person_2:
+        IF person.accused == person.victim:
             CONSEQUENCE LEGAL
 
 # The below is execution code for Yuho 
