@@ -10,9 +10,14 @@ Things being worked on.
     1. Try writing out one of the statutes with this syntax in .yh in the examples directory
     2. Then when syntax is formalised add it to SYNTAX.md
     3. !!! Syntax should be able to account for case representations including more complex situations of vicarious liabilty and multiple parties and third parties aside from just the Plaintiff and Defendant
-        1. See Jerrold Soh's tort slides for the cases of 
+        1. Extract further cases from my tort notes google slides, ideally get 1 case from each week
+        2. Extract further concepts from my tort notes google slides, ideally get 1 concept from each week
+        3. See Jerrold Soh's tort slides for the cases of 
             1. See Toh Siew Kee v Ho Ah Lam Ferrocement Pte Ltd and others 2012
             2. NTUC Foodfare Co-operative Ltd v SIA Engineering Co Ltd and another 2018
+            3. Singapore Rifle Association v Singapore Shooting Association 2018
+        2. Can i repurpose some of v2's syntax to represent the static and dynamic roles played by certain parties
+        3. And can the diagrammatic representation make sense
     3. Give the syntax a bit more thought, maybe return to v2.0's syntax if out of ideas as [here](https://github.com/gongahkia/yuho/blob/main/archive/yuho_v2/doc/yuho_onboarding.md)
     3. Basic keywords that **must be included**
         1. # *(to prefix comments)*
