@@ -7,11 +7,9 @@ Things being worked on.
 ### 1. Syntax
 
 1. Edit SYNTAX.md and fully brainstorm complete set of keywords for Yuho
-    1. Can i repurpose most of Yuho v2's syntax to represent the static and dynamic roles played by certain parties?
-        1. DO THIS ASAP!!!
-    1. Try writing out more of the statutes with this syntax in .yh in the examples directory
-    2. Then when syntax is formalised add it to SYNTAX.md
-    3. !!! Syntax should be able to account for case representations including more complex situations of vicarious liabilty and multiple parties and third parties aside from just the Plaintiff and Defendant
+    1. Try writing out more of the statutes with this syntax in .yh in the examples directory following the syntax of `s415_cheating.yh`
+    2. !!! Syntax should be able to account for case representations including more complex situations of vicarious liabilty and multiple parties and third parties aside from just the Plaintiff and Defendant
+    2. When syntax is formalised add it to SYNTAX.md
         1. Extract further cases from my tort notes google slides, ideally get 1 case from each week
         2. Extract further concepts from my tort notes google slides, ideally get 1 concept from each week
         3. See Jerrold Soh's tort slides for the cases of 
@@ -19,12 +17,14 @@ Things being worked on.
             2. NTUC Foodfare Co-operative Ltd v SIA Engineering Co Ltd and another 2018
             3. Singapore Rifle Association v Singapore Shooting Association 2018
         3. And can the diagrammatic representation make sense
-    3. Give the syntax a bit more thought, maybe return to v2.0's syntax if out of ideas as [here](https://github.com/gongahkia/yuho/blob/main/archive/yuho_v2/doc/yuho_onboarding.md)
+    3. Brainstorm further tools and their names similar to AGAMOTO but like "CLERK" 
+        1. Basically ALL CLI TOOLS are not CLI tools but are instead run from within Yuho files under a given scope
+        2. The only CLI tool I want for Yuho is the interpreter and transpiler which also runs from within a given Yuho scope and file
     3. Basic keywords that **must be included**
         1. # *(to prefix comments)*
         2. ()
+        4. AND, OR *(functions as XOR)*, AND OR *(functions as IOR)*, NOT
         3. : *(to define scope alongside 4-tab indentation similar to Python)*
-        4. AND, OR, NOT
         6. IF *(normal if statement)*, ELSE, ELSEIF, IF AND ONLY IF *(biconditional if statement)*, CONSEQUENCE *(as a replacement for then)* / CAUSE / THEN / -> 
         7. ONLY, ALL, NONE, ZERO, ONE, MORE THAN ONE, ANY
         8. RULE
