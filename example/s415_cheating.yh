@@ -14,42 +14,104 @@
 SCOPE penal_code:
 
     STRUCT person:
-        PASS
+        victim
+        accused
+        other
 
-    STRUCT victim INHERIT person
-    STRUCT accused INHERIT person
+    STRUCT party:
+        person.victim
+        person.accused
 
-    STRUCT s415_cheating:
-        RULE:
-            IF ANY person.accused "deceives" ANY person.victim:
-                IF "deception was the sole inducement" OR "deception was the main inducement":
-                    IF person.accused "fraudulently induces" person.victim OR person.accused "dishonestly induces" person.victim:
-                        IF "to deliver of any property to" ANY person OR "to cause the delivery of any property to" ANY person OR "to consent that" ANY person "shall retain any property":
-                            IF person.accused "act or omission causes or is likely to cause damage or harm to" ANY person "in body" OR person.accused "act or omission causes or is likely to cause damage or harm to" ANY person "in mind" OR person.accused "act or omission causes or is likely to cause damage or harm to" ANY person "in reputation" OR person.accused "act or omission causes or is likely to cause damage or harm to" ANY person "in property":
-                                CONSEQUENCE ILLEGAL
-                                CONSEQUENCE "is said to 'cheat'"
-                            ELSE:
-                                CONSEQUENCE LEGAL
-                        ELSE:
-                            CONSEQUENCE LEGAL
-                    ELSEIF person.accused "intentionally induces" person.victim "to do anything which he would not do if he were not so deceived" OR person.accused "intentionally induces" person.victim "to omit to do anything which he would not do if he were not so deceived"
-                        IF person.accused "act or omission causes or is likely to cause damage or harm to" ANY person "in body" OR person.accused "act or omission causes or is likely to cause damage or harm to" ANY person "in mind" OR person.accused "act or omission causes or is likely to cause damage or harm to" ANY person "in reputation" OR person.accused "act or omission causes or is likely to cause damage or harm to" ANY person "in property":
-                            CONSEQUENCE ILLEGAL
-                            CONSEQUENCE "is said to 'cheat'"
-                        ELSE:
-                            CONSEQUENCE LEGAL
-                    ELSE:
-                        CONSEQUENCE LEGAL
-                ELSE:
-                    CONSEQUENCE LEGAL
-            ELSE:
-                CONSEQUENCE LEGAL
+    STRUCT action:
+        deceiving
+        NOT deceiving
 
-    EXCEPTION s415_cheating:
-        IF person.accused == person.victim:
-            CONSEQUENCE LEGAL
+    STRUCT attribution_type:
+        sole_inducement
+        NOT sole_inducement
+        NA
 
-# The below is execution code for Yuho 
+    STRUCT deception_type:
+        fraudulently
+        dishonestly
+        NA
 
-AGAMOTTO_RESULT penal_code.s415_cheating
-AGAMOTTO penal_code.s415_cheating
+    STRUCT inducement_type:
+        deliver_property
+        cause_delivery_property
+        consent_retain_property
+        induce_to_do
+        induce_to_omit
+        NA
+
+    STRUCT damage_harm_type:
+        body
+        mind
+        reputation
+        property
+        NA
+
+    STRUCT consequence_definition:
+        said_to_cheat
+        NOT said_to_cheat
+
+    # Every statute definition in Yuho comprises the following
+        # RULE: a template of the different fields expected of the specific statute, within which the datatypes of each field prefix the field name
+        # LOGIC: used to specify the logical flow of a statute, within which MATCH -> CASE _ statements are used
+        # EXCEPTION: used to specify situations where the statute specication under RULE and LOGIC is not applicable
+            # tends to cover logical conundrums
+    # some notes about the section
+        # it is completely acceptable to leave the LOGIC and EXCEPTION sections empty if there is none to be specified, but the section itself must still be mentioned, and a breaking error will be flagged if the RULE section is left empty
+
+    RULE s415_cheating_definition:
+        party accused = person.accused
+        action current_action = deceiving OR NOT deceiving
+        party victim = person.victim
+        attribution_type attribution = sole_inducement OR NOT sole_inducement OR NA
+        deception_type deception = fraudulently OR dishonestly OR NA
+        inducement_type inducement = deliver_property OR cause_delivery_property OR consent_retain_property OR induce_to_do OR induce_to_omit OR NA
+        BOOL causes_damage_harm = TRUE OR FALSE
+        damage_harm_type damage_harm_result = (body AND OR mind AND OR reputation AND OR property) OR NA
+        consequence_definition consequence = said_to_cheat OR NOT said_to_cheat
+
+    LOGIC s415_cheating_definition:
+
+        MATCH current_action:
+            CASE deceiving -> CONSEQUENCE attribution
+            CASE NOT deceiving -> CONSEQUENCE consequence = NOT said_to_cheat
+        
+        MATCH attribution:
+            CASE sole_inducment -> CONSEQUENCE deception
+            CASE NOT sole_inducement -> CONSEQUENCE deception
+            CASE NA -> CONSEQUENCE consequnce = NOT said_to_cheat
+
+        MATCH deception:
+            CASE fraudulently -> CONSEQUENCE inducement
+            CASE dishonestly -> CONSEQUENCE inducement
+            CASE NA -> CONSEQUENCE consequence = NOT said_to_cheat
+
+        MATCH inducment:
+            CASE deliver_property -> CONSEQUENCE causes_damage_harm
+            CASE cause_delivery_property -> CONSEQUENCE causes_damage_harm
+            CASE consent_retain_property -> CONSEQUENCE causes_damage_harm
+            CASE induce_to_do -> CONSEQUENCE causes_damage_harm
+            CASE induce_to_omit -> CONSEQUENCE causes_damage_harm
+            CASE NA -> CONSEQUENCE consequence = NOT said_to_cheat
+
+        MATCH causes_damage_harm:
+            CASE TRUE -> CONSEQUENCE damage_harm_result 
+            CASE FALSE -> CONSEQUENCE consequence = NOT said_to_cheat
+
+        MATCH damage_harm_result:
+            CASE NA IN damage_harm_result -> CONSEQUENCE consequence = NOT said_to_cheat
+            CASE _ => CONSEQUENCE consequence = said_to_cheat
+
+    EXCEPTION s415_cheating_definition:
+        accused != victim
+
+SCOPE TEST:
+
+    # execution code in yuho is specified within the TEST SCOPE
+
+    AGAMOTTO penal_code.s415_cheating_definition
+    AGAMOTTO_RESULT penal_code.s415_cheating_definition
