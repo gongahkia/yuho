@@ -2,7 +2,7 @@
 
 | 🔙 | ✍️ | 🗳️ | 👏 |
 | :---: | :---: | :---: | :---: |
-| [**Backlog**](#backlog) | [**Doing**](#doing) (1) | [**Review**](#review) | [**Done**](#done) |
+| [**Backlog**](#backlog) (9) | [**Doing**](#doing) (1) | [**Review**](#review) | [**Done**](#done) |
 
 ## Backlog
 
