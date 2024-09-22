@@ -1,7 +1,7 @@
 [![](https://img.shields.io/badge/yuho_1.0-passing-green)](https://github.com/gongahkia/yuho/releases/tag/1.0) [![](https://img.shields.io/badge/yuho_2.0-passing-green)](https://github.com/gongahkia/yuho/releases/tag/2.0) ![](https://img.shields.io/badge/yuho_3.0-build-orange)
   
 > [!IMPORTANT]
-> Reworking the entirity of Yuho in v3.0. Most things are about to change, but change is good.
+> Yuho is moving into v3.0. Most things are about to change, but change is good.
 >
 > See [KANBAN.md](./doc/KANBAN.md) for updates.
 >  
