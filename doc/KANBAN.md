@@ -1,102 +1,10 @@
 # Yuho v3.0 Kanban Board
 
-Things being worked on.
+| 🔙 | ✍️ | 🗳️ | 👏 |
+| :---: | :---: | :---: | :---: |
+| [**Backlog**](#backlog) | [**Doing**](#doing) | [**Review**](#review) | [**Done**](#done) |
 
-## Backlog 🔙
-
-### 1. Syntax
-
-1. Edit SYNTAX.md and fully brainstorm complete set of keywords for Yuho
-    1. Try writing out more of the statutes with this syntax in .yh in the examples directory following the syntax of `s415_cheating.yh`
-    2. !!! Syntax should be able to account for case representations including more complex situations of vicarious liabilty and multiple parties and third parties aside from just the Plaintiff and Defendant
-    2. When syntax is formalised add it to SYNTAX.md
-        1. Extract further cases from my tort notes google slides, ideally get 1 case from each week
-        2. Extract further concepts from my tort notes google slides, ideally get 1 concept from each week
-        3. See Jerrold Soh's tort slides for the cases of 
-            1. See Toh Siew Kee v Ho Ah Lam Ferrocement Pte Ltd and others 2012
-            2. NTUC Foodfare Co-operative Ltd v SIA Engineering Co Ltd and another 2018
-            3. Singapore Rifle Association v Singapore Shooting Association 2018
-        3. And can the diagrammatic representation make sense
-    3. Brainstorm further tools and their names similar to AGAMOTO but like "CLERK" 
-        1. Basically ALL CLI TOOLS are not CLI tools but are instead run from within Yuho files under a given scope
-        2. The only CLI tool I want for Yuho is the interpreter and transpiler which also runs from within a given Yuho scope and file
-    3. Basic keywords that **must be included**
-        1. # *(to prefix comments)*
-        2. ()
-        4. AND, OR *(functions as XOR)*, AND OR *(functions as IOR)*, NOT
-        3. : *(to define scope alongside 4-tab indentation similar to Python)*
-        6. IF *(normal if statement)*, ELSE, ELSEIF, IF AND ONLY IF *(biconditional if statement)*, CONSEQUENCE *(as a replacement for then)* / CAUSE / THEN / -> 
-        7. ONLY, ALL, NONE, ZERO, ONE, MORE THAN ONE, ANY
-        8. RULE
-        8. PASS
-        8. INHERIT
-        9. SCOPE
-        10. CASE, STATUTE, POLICY, SECTION, SUBSECTION
-            1. LEGAL, ILLEGAL
-        11. WRONGFUL, RIGHTFUL
-            1. eg. WRONGFUL: CONTRADICTION or WRONGFUL: CAUSATION_ERROR are possible error messages
-            2. eg. RIGHTFUL: VALID_ARGUMENT are possible valid messages
-        12. AGAMOTTO
-            1. For enumerating upon and displaying all possible permutations of a RESULT of a given statute or process representation in Yuho
-            2. AGAMOTTO_RESULT
-                1. Returns a string array of all possible RESULT CONSEQUENCEs of a given statute representation in Yuho
-            3. AGAMOTTO (default)
-                1. Returns a string array of all possible Yuho-enumerated outcomes and their RESULT CONSEQUENCES of a given statute representation
-                2. Shows the logical flow and propositional statements that led the outcome's evaluation
-            3. Referencing the eye of agamotto which Dr Strange used to view all possible timelines
-            4. Similar to Prof Alex Woon's enumeration of all possible paths for S415 Cheating in his textbook
-            5. ![](https://upload.wikimedia.org/wikipedia/en/a/af/Eye_of_Agamotto.jpg)
-        13. EXCEPTION
-            1. Called by EXCEPTION STATUTE <existing_statute_rule>
-            1. Include this if it won't bloat the existing IF ELSEIF IF AND ONLY IF syntax
-            2. Used to specify exceptions to an existing statute that has already been defined, allows for easier grouping
-            3. Exceptions will be linked as an array of exceptions that are checked back-end when a propositional formula is evaluted and handled through AGAMOTTO and ASSERT
-        14. ASSERT *(for testing validity of an outcome depending on a specified scenario)*
-            1. Consider whether this is truly necessary
-            2. If Yuho's purpose is just to generate RIGHTFUL representations of statutes then transpile to diagrammatic representations
-        15. Consider incorporating STRUCT as the singular flexible datatype anyway to define further nuanced relationships
-            1. See Yuho v2.0 for how it handles structs
-            2. In that structs can represent multiple datatypes in other languages like 
-                1. Array
-                2. Tuple
-                3. Dictionary
-                4. Struct
-                5. Enum
-    2. Datatypes
-        1. Front-end representation
-            1. STRING
-            2. NUMBER
-                1. Covers both integers, floats
-            3. BOOLEAN
-            4. MONEY
-                1. Back-end represented as a float
-            5. DATE
-                1. Back-end represented as a string
-            6. TIME
-                1. Back-end represented as an integer
-            7. RESULT *(for the CONSEQUENCE keyword)*
-            8. STATE
-                1. ILLEGAL
-                2. LEGAL
-    3. Paradigms
-        1. Object-oriented by default *(since it best represents how humans understand data)*
-            1. Dot syntax to extract value fields
-        2. Functional by choice *(similar to Rust)*
-        3. Explore other [alternatives](https://stackoverflow.com/questions/3525240/object-oriented-programming-beyond-just-methods)
-    4. Possible keywords to **consider including**
-        1. CAN, MUST
-            1. CAN is a possible consequence
-            2. MUST is a compulsary consequence
-        2. OBITER, RATIO, PRIMARY, SECONDARY, LEGISLATION
-        3. REFERENCES
-2. Syntax must be 
-    1. simple to learn, read and write
-    2. easy to tokenise, parse and interpret
-    3. general enough to represent any statutory law
-    4. be able to represent common law rulings and statutes
-    5. able to define a given term or idea recursively
-    6. all keywords should aim to be familar to lawyers and the layperson and not too technical to avoid a steep learning curve
-    7. account for subsidiary legislation as well and distinguish it from primary legislation
+## Backlog
 
 ### 2. Logic engine
 
@@ -224,11 +132,15 @@ Things being worked on.
         2. rule against surplusage
         3. etc...
 
-### 9. CLI tools
+### 9. "CLI tools"
 
 1. Create a suite of Yuho CLI tools
-2. Make them easy to install, learn and use
-3. References for decent CLI tools
+2. Brainstorm further tools and their names similar to AGAMOTO and ASSERT 
+    1. Basically ALL CLI TOOLS are not CLI tools but are instead run in-line from within Yuho files under a given scope
+    2. The only CLI tool I want for Yuho is the interpreter and transpiler which also runs from within a given Yuho scope and file
+    3. Naming convention would be along the line of "clerk" for Elegant Elephant
+3. Make them easy to install, learn and use
+4. References for decent CLI tools
     1. Rust Cargo
     2. Python Pip
     3. FZF
@@ -240,14 +152,111 @@ Things being worked on.
 2. Can integrate the Yuho web frontend under point [7.](#7-web-frontend)
 3. Similar to [catala-lang.org](https://catala-lang.org/en)
 
-## Doing ✍️
+## Doing
 
-1. 
+### 1. Syntax
 
-## Review 🗳️
+1. Edit SYNTAX.md and add the below
+    * `#` *(for comments)*
+    * SCOPE
+    * `:` *(to define scope alongside 4-tab indentation similar to Python)*
+    * STRUCT
+        * the singular flexible datatype anyway to define further nuanced relationships
+        * STRUCTs can represent multiple datatypes in other languages like and are represented as such in the back-end
+            * STRUCT.ARRAY
+            * STRUCT.TUPLE
+            * STRUCT.DICTIONARY
+            * STRUCT.STRUCT
+            * STRUCT.ENUM
+    * NA *(equivalent to None and evaluates to Null back-end)*
+    * NOT
+    * `()` *(to group logical statements together)*
+    * AND
+    * OR *(equivalent of XOR)*
+    * AND OR *(equivalent of IOR)*
+    * RULE
+    * LOGIC
+    * MATCH CASE -> CONSEQUENCE
+    * _ 
+    * EXCEPTION
+        * Used to specify exceptions to an existing statute that has already been defined, allows for easier grouping
+        * Exceptions are sym-linked as an array of exceptions that are checked back-end when a propositional formula is evaluted and handled through AGAMOTTO and ASSERT
+    * AGAMOTTO
+        * Command called in-line
+        * For enumerating upon and displaying all possible permutations of a RESULT of a given statute or process representation in Yuho
+        * AGAMOTTO_RESULT
+            * Returns a string array of all possible RESULT CONSEQUENCEs of a given statute representation in Yuho
+        * AGAMOTTO (default)
+            * Returns a string array of all possible Yuho-enumerated outcomes and their RESULT CONSEQUENCES of a given statute representation
+            * Shows the logical flow and propositional statements that led the outcome's evaluation
+    * APPLY 
+        * Called with the syntax APPLY *<previously defined RULE identifier>* IN *<applied RULE instance identifier>:*
+        * Equivalent of instantiating a struct literal instance *(APPLY eg_rule_name IN eg_applied_rule_instance_name:)* based on the previously defined struct template *(RULE eg_rule_name)*
+        * Allows for calling of ASSERT later to check whether the rule has been applied correctly
+    * ASSERT 
+        * Command called in-line similar to AGAMOTTO
+        * Called with the syntax ASSERT *<applied RULE instance identifier>* 
+            * Determines whether a given applied APPLY RULE instance has been applied correctly according to the given RULE
+        * Called with the syntax ASSERT *<previously defined RULE identifier>* CONSEQUENCE *<specific CONSEQUENCE identifier>* WHERE *<specified MATCH predicate event name>* = *<specified CASE predicate event value>* AND ...
+            * Helps test validity of a CONSEQUENCE outcome when specifying a chain of predicates within that rule to determine whether a given outcome can arise when following the logic of a rule if certain predicates are fulfilled
+            * Introduces the syntax WHERE
+        * Evaluates either to WRONGFUL or RIGHTFUL with the corresponding rationale explained as below
+    * WHERE
+        * Exclusively used in ASSERT ... CONSEQUENCE ... WHERE ... = ... 
+        * Not currently used anywhere else
+    * WRONGFUL, RIGHTFUL as validation state / error messages 
+        * eg. WRONGFUL -> FALSE_APPLICATION_OF_RULE
+        * eg. WRONGFUL -> CONTRADICTION 
+        * eg. WRONGFUL -> CAUSATION_ERROR 
+        * eg. RIGHTFUL -> TRUE_APPLICATION_OF_RULE
+        * eg. RIGHTFUL -> VALID_ARGUMENT 
+2. Datatypes
+    1. Primitives
+        1. STRING
+        2. NUMBER
+            1. Back-end covers
+                1. NUMBER.INTEGER
+                2. NUMBER.FLOAT
+        3. BOOLEAN
+            1. BOOLEAN.TRUE
+            2. BOOLEAN.FALSE
+    2. Complex
+        1. MONEY
+            1. Back-end represented as NUMBER.FLOAT
+        2. DATE
+            1. Back-end represented as STRING
+        3. TIME
+            1. Back-end represented as NUMBER.FLOAT
+        4. RESULT 
+            1. Specific datatype for what is specified after the CONSEQUENCE keyword
+            1. Back-end represented as STRING 
+        5. STATE
+            1. STATE.WRONGFUL
+            2. STATE.RIGHTFUL
+            3. Stored as conceptually distinct from BOOLEAN
+3. Try writing out MORE of the statutes with this syntax in .yh in the examples directory 
+4. Try writing out MORE of the cases with the defined syntax in .yh in the examples directory
+5. When syntax is formalised add it to SYNTAX.md
+    1. Extract further cases from my tort notes google slides, ideally get 1 case from each week
+    2. Extract further concepts from my tort notes google slides, ideally get 1 concept from each week
+    3. See Jerrold Soh's tort slides for the cases of 
+        1. See Toh Siew Kee v Ho Ah Lam Ferrocement Pte Ltd and others 2012
+        2. NTUC Foodfare Co-operative Ltd v SIA Engineering Co Ltd and another 2018
+        3. Singapore Rifle Association v Singapore Shooting Association 2018
+    3. And can the diagrammatic representation make sense
+6. Syntax must be 
+    1. simple to learn, read and write
+    2. easy to tokenise, parse and interpret
+    3. general enough to represent any statutory law
+    4. be able to represent common law rulings and statutes
+    5. able to define a given term or idea recursively
+    6. all keywords should aim to be familar to lawyers and the layperson and not too technical to avoid a steep learning curve
+    7. account for subsidiary legislation as well and distinguish it from primary legislation
 
-1. 
+## Review
 
-## Done 👏
+### 1. 
 
-1. 
+## Done
+
+### 1. 

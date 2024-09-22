@@ -13,6 +13,8 @@
 
 SCOPE penal_code:
 
+    # STRUCTs are useful when defining RULEs
+
     STRUCT person:
         victim
         accused
@@ -104,7 +106,7 @@ SCOPE penal_code:
 
         MATCH damage_harm_result:
             CASE NA IN damage_harm_result -> CONSEQUENCE consequence = NOT said_to_cheat
-            CASE _ => CONSEQUENCE consequence = said_to_cheat
+            CASE _ -> CONSEQUENCE consequence = said_to_cheat
 
     EXCEPTION s415_cheating_definition:
         accused != victim
