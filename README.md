@@ -12,9 +12,9 @@
 <img src="./asset/logo/yuho_mascot.png" width=40% height=40%>
 </p>
 
-Yuho is a domain-specific language providing a programmatic representation of Singapore Tort and Criminal Law.
+Yuho is a domain-specific language dedicated to simplifying [legalese](https://www.merriam-webster.com/dictionary/legalese) by providing a programmatic representation of Singapore Law. 
 
-Dedicated to simplifying [legalese](https://www.merriam-webster.com/dictionary/legalese).
+Yuho's current applications are focused on Singapore Tort and Criminal Law *(but really can be applied to any jurisdiction that relies on [statutes](https://www.merriam-webster.com/dictionary/statute) and or [case law](https://www.merriam-webster.com/dictionary/case%20law)*).
 
 ## Rationale
 
