@@ -158,6 +158,9 @@
 
 1. Edit SYNTAX.md and add the below
     * Consider possible syntax to represent the applied rule identifiers in a more natural language kind of way
+        * Look into how Catala and L4 handle concepts like this
+        * Then work from there
+        * Otherwise adopt the syntax from V2.0 but just clean it up further
     * REFERENCING <scope identifier> FROM <file name omitting the .yh portion similar to Go>
         * anything within the current scope will be brought into the present file
     * `#` *(for comments)*
