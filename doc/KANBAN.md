@@ -157,8 +157,14 @@
 ### 1. Syntax
 
 1. Edit SYNTAX.md and add the below
+    * Consider possible syntax to represent the applied rule identifiers in a more natural language kind of way
+    * REFERENCING <scope identifier> FROM <file name omitting the .yh portion similar to Go>
+        * anything within the current scope will be brought into the present file
     * `#` *(for comments)*
-    * SCOPE
+    * SCOPE 
+        * RUN: a special scope that is the equivalent of the main function in most other programming languages
+        * Everything placed within the SCOPE RUN of any file will be automatically run when the given file is executed
+        * Yuho files lacking a SCOPE RUN call will be treated as module files
     * `:` *(to define scope alongside 4-tab indentation similar to Python)*
     * STRUCT
         * the singular flexible datatype anyway to define further nuanced relationships
@@ -189,21 +195,13 @@
         * AGAMOTTO (default)
             * Returns a string array of all possible Yuho-enumerated outcomes and their RESULT CONSEQUENCES of a given statute representation
             * Shows the logical flow and propositional statements that led the outcome's evaluation
-    * APPLY 
-        * Called with the syntax APPLY *<previously defined RULE identifier>* IN *<applied RULE instance identifier>:*
-        * Equivalent of instantiating a struct literal instance *(APPLY eg_rule_name IN eg_applied_rule_instance_name:)* based on the previously defined struct template *(RULE eg_rule_name)*
-        * Allows for calling of ASSERT later to check whether the rule has been applied correctly
-    * ASSERT 
+    * APPLY, ASSERT
         * Command called in-line similar to AGAMOTTO
-        * Called with the syntax ASSERT *<applied RULE instance identifier>* 
-            * Determines whether a given applied APPLY RULE instance has been applied correctly according to the given RULE
-        * Called with the syntax ASSERT *<previously defined RULE identifier>* CONSEQUENCE *<specific CONSEQUENCE identifier>* WHERE *<specified MATCH predicate event name>* = *<specified CASE predicate event value>* AND ...
+        * Called with the syntax ASSERT CONSEQUENCE *<specific CONSEQUENCE value, doesn't have to be an endpoint just any value in the chain of reasoning>* WHERE APPLY *<existing rule identfier>* IN *<existing rule instance identifier>*
+        * Applied rule instance identifiers are user-defined scenarios that they apply a given rule to
             * Helps test validity of a CONSEQUENCE outcome when specifying a chain of predicates within that rule to determine whether a given outcome can arise when following the logic of a rule if certain predicates are fulfilled
-            * Introduces the syntax WHERE
+            * Introduces the syntax WHERE and IN
         * Evaluates either to WRONGFUL or RIGHTFUL with the corresponding rationale explained as below
-    * WHERE
-        * Exclusively used in ASSERT ... CONSEQUENCE ... WHERE ... = ... 
-        * Not currently used anywhere else
     * WRONGFUL, RIGHTFUL as validation state / error messages 
         * eg. WRONGFUL -> FALSE_APPLICATION_OF_RULE
         * eg. WRONGFUL -> CONTRADICTION 

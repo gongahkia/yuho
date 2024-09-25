@@ -53,7 +53,7 @@ SCOPE penal_code:
         property
         NA
 
-    STRUCT consequence_definition:
+    STRUCT consequence_outcome:
         said_to_cheat
         NOT said_to_cheat
 
@@ -74,7 +74,7 @@ SCOPE penal_code:
         inducement_type inducement = deliver_property OR cause_delivery_property OR consent_retain_property OR induce_to_do OR induce_to_omit OR NA
         BOOL causes_damage_harm = TRUE OR FALSE
         damage_harm_type damage_harm_result = (body AND OR mind AND OR reputation AND OR property) OR NA
-        consequence_definition consequence = said_to_cheat OR NOT said_to_cheat
+        consequence_outcome consequence = said_to_cheat OR NOT said_to_cheat
 
     LOGIC s415_cheating_definition:
 
@@ -110,10 +110,3 @@ SCOPE penal_code:
 
     EXCEPTION s415_cheating_definition:
         accused != victim
-
-SCOPE TEST:
-
-    # execution code in yuho is specified within the TEST SCOPE
-
-    AGAMOTTO penal_code.s415_cheating_definition
-    AGAMOTTO_RESULT penal_code.s415_cheating_definition

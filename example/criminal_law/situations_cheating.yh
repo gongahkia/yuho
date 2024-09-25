@@ -1,0 +1,58 @@
+REFERENCING penal_code FROM s415_cheating
+
+SCOPE s415_cheating_illustration:
+
+    STRUCT illustration_a:
+
+#       Cheating Ilustration (a)
+#       "A, by falsely pretending to be in the Government service, 
+#       intentionally deceives Z, and thus dishonestly induces Z 
+#       to let him have on credit goods for which he does not mean 
+#       to pay. A cheats."
+
+        # FUA add code here
+
+    STRUCT illustration_b:
+
+#       Cheating Ilustration (b)
+#       "A, by putting a counterfeit mark on an article,
+#       intentionally deceives Z into a belief that this article
+#       was made by a certain celebrated manufacturer, and thus
+#       dishonestly induces Z to buy and pay for the article.
+#       A cheats."
+
+        # FUA add code here
+
+    STRUCT illustration_c:
+
+#       Cheating Ilustration (c)
+#       "A, by exhibiting to Z a false sample of an article,
+#       intentionally deceives Z into believing that the article
+#       corresponds with the sample, and thereby dishonestly induces
+#       Z to buy and pay for the article. A cheats."
+
+        # FUA add code here
+
+SCOPE criminal_law_hypos:
+
+    STRUCT situation_a:
+        # FUA add code here
+    
+    STRUCT situation_b:
+        # FUA add code here
+
+    STRUCT situation_c:
+        # FUA add code here
+
+SCOPE EXECUTE:
+
+    AGAMOTTO penal_code.s415_cheating_definition
+    AGAMOTTO_RESULT penal_code.s415_cheating_definition
+
+    ASSERT CONSEQUENCE consequence_outcome.said_to_cheat WHERE APPLY penal_code.s415_cheating_definition IN s415_cheating_illustration.illustration_a 
+    ASSERT CONSEQUENCE consequence_outcome.said_to_cheat WHERE APPLY penal_code.s415_cheating_definition IN s415_cheating_illustration.illustration_b
+    ASSERT CONSEQUENCE consequence_outcome.said_to_cheat WHERE APPLY penal_code.s415_cheating_definition IN s415_cheating_illustration.illustration_c
+
+    ASSERT CONSEQUENCE NOT consequence_outcome.not_said_to_cheat WHERE APPLY penal_code.s415_cheating_definition IN criminal_law_hypos.situation_a 
+    ASSERT CONSEQUENCE consequence_outcome.not_said_to_cheat WHERE APPLY penal_code.s415_cheating_definition IN criminal_law_hypos.situation_b 
+    ASSERT CONSEQUENCE NOT consequence_outcome.not_said_to_cheat WHERE APPLY penal_code.s415_cheating_definition IN criminal_law_hypos.situation_c
