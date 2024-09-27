@@ -156,6 +156,7 @@
 
 ### 1. Syntax
 
+1. Consider including a syntax that can represent probabilistic events like COULD, WOULD and research more what kinds of probability there are, use GPT for brainstorming syntax 
 1. Edit SYNTAX.md and add the below
     * Consider possible syntax to represent the applied rule identifiers in a more natural language kind of way
         * Look into how Catala and L4 handle concepts like this
