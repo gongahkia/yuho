@@ -1,10 +1,4 @@
-[![](https://img.shields.io/badge/yuho_1.0-passing-green)](https://github.com/gongahkia/yuho/releases/tag/1.0) [![](https://img.shields.io/badge/yuho_2.0-passing-green)](https://github.com/gongahkia/yuho/releases/tag/2.0) ![](https://img.shields.io/badge/yuho_3.0-build-orange)
-  
-> [!IMPORTANT]
-> Yuho is moving into v3.0.  
-> See [KANBAN.md](./doc/KANBAN.md) for updates.
->  
-> ~ Gabriel  
+[![](https://img.shields.io/badge/yuho_1.0-passing-green)](https://github.com/gongahkia/yuho/releases/tag/1.0) [![](https://img.shields.io/badge/yuho_2.0-passing-green)](https://github.com/gongahkia/yuho/releases/tag/2.0) 
   
 # `Yuho`  
   
@@ -14,7 +8,7 @@
 
 Yuho is a domain-specific language dedicated to simplifying [legalese](https://www.merriam-webster.com/dictionary/legalese) by providing a programmatic representation of Singapore Law. 
 
-Yuho's current applications are focused on Singapore Tort and Criminal Law *(but really can be applied to any jurisdiction that relies on [statutes](https://www.merriam-webster.com/dictionary/statute) and or [case law](https://www.merriam-webster.com/dictionary/case%20law)*).
+Yuho's current applications are focused on Singapore Criminal Law *(but really can be applied to any jurisdiction that relies on [statutes](https://www.merriam-webster.com/dictionary/statute))*.
 
 ## Rationale
 
@@ -33,25 +27,24 @@ Getting into the specifics, Yuho provides the following four products.
 3. [CLI tool](./src/main/) for interacting with Yuho's primary functions in the CLI
 4. [Transpiler](./src/main/) that transpiles to the below targets
 
-> FUA edit the entire above rationale to account for tort law and Yuho's future scope and specificity and fix the relative links
-
 ### Output formats
+
+> [!TIP]  
+> More transpilation outputs are to be added in the future!
 
 | Target | Usage |   
 | :--- | :--- |  
-| | | 
+| Mermaid | Diagrammatic representations of statutory logic *(mindmap, flowchart)* | 
+| Alloy | Semantic and logical verification | 
+| ... | ... |
 
 Sold on Yuho? Check out the [quickstart](#quickstart) guide.
-
-> FUA edit the above table and add transpilation outputs when they're worked out
 
 ## Nerd stuff
 
 For those interested, Yuho provides a [grammatically-validated](https://www.usna.edu/Users/cs/wcbrown/courses/F19SI413/lec/l07/lec.html) syntax core that splays out all requirements and consequences for a given offence, providing assurance of logical correctness from the get-go. Yuho was also designed to be [exception-validated](https://www.reddit.com/r/learnjavascript/comments/y6663u/difference_between_input_validation_and_exception/) and [language-agnostic](https://softwareengineering.stackexchange.com/questions/28484/what-is-language-agnosticism-and-why-is-it-called-that), transpiling from one formally-specified source of truth to multiple target outputs, encouraging the development of tools that leverage off Yuho's logical core.   
 
 Want to find out more? See Yuho's [documentation](#documentation).
-
-> FUA edit the above section later when Yuho v3.0's purpose and scope is clear
 
 ### Documentation
 
@@ -71,10 +64,6 @@ The below products are in development.
 For more details on what's being worked on currently, refer to [`KANBAN.md`](./doc/KANBAN.md).  
   
 For more details on what's being implemented in the future, refer to [`ROADMAP.md`](./doc/ROADMAP.md).
-
-1. blah blah blah
-
-> FUA add more details here later
 
 ## Scope
 
