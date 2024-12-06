@@ -1,0 +1,28 @@
+/*
+Based off the following illustration G on cheating
+    * (g) "A intentionally deceives Z into a belief that A 
+           means to deliver to Z a certain quantity of pepper 
+           which he does not intend to deliver, and thereby 
+           dishonestly induces Z to advance money upon the 
+           faith of such delivery. A cheats; but if A, at 
+           the time of obtaining the money, intends to deliver 
+           the pepper, and afterwards breaks his contract and 
+           does not deliver it, he does not cheat, but is liable 
+           only to a civil action for breach of contract."
+*/
+
+referencing Cheating from s415_cheating_definition 
+
+s415_cheating_definition.Cheating cheatingIllustrationG := { 
+
+    accused := "A",
+    action := "intentionally deceiving Z into a belief that A means to deliver a certain quantity of pepper",
+    victim := "Z",
+    attribution := AttributionType.SoleInducment, 
+    deception := DeceptionType.Dishonestly, 
+    inducement := InducementType.DeliverProperty, // Z is induced to advance money
+    causesDamageHarm := TRUE, 
+    damageHarmResult := DamageHarmType.Property, // damage is to Z's property
+    definition := ConsequenceDefinition.SaidToCheat, // clear cheating case
+
+}

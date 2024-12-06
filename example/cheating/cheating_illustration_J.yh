@@ -1,0 +1,20 @@
+/*
+Based off the following illustration J on cheating
+    * (j) "A plays with false dice or marked cards. A cheats."
+*/
+
+referencing Cheating from s415_cheating_definition 
+
+s415_cheating_definition.Cheating cheatingIllustrationJ := { 
+
+    accused := "A",
+    action := "playing with false dice or marked cards",
+    victim := "Z",
+    attribution := AttributionType.SoleInducment, 
+    deception := DeceptionType.Dishonestly, 
+    inducement := InducementType.DeliverProperty, // Z is induced to play and lose money/property
+    causesDamageHarm := TRUE, 
+    damageHarmResult := DamageHarmType.Property, // damage is to Z's property
+    definition := ConsequenceDefinition.SaidToCheat, // clear cheating case
+
+}

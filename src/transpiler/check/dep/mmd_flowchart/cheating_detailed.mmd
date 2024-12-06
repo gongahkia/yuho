@@ -1,0 +1,33 @@
+flowchart LR
+    A[Cheating] --> B[Accused := Party.Accused]
+    subgraph Material facts
+        B --> C[Action := Deceiving] 
+        C --> D[Victim := Party.Victim]
+    end 
+    D --> E[Attribution]
+    E --> |AttributionType.SoleInducement| F[Deception]
+    E --> |AttributionType.NotSoleInducement| F
+    E --> |AttributionType.NA| Z
+    F --> |DeceptionType.Fraudulently| G[Inducement] 
+    F --> |DeceptionType.Dishonestly| G
+    F --> |DeceptionType.NA| Z 
+    subgraph Mens Rea
+        F
+    end
+    G --> |InducementType.DeliverProperty| H[CausesDamageHarm]
+    G --> |InducementType.ConsentRetainProperty| H
+    G --> |InducementType.DoOrOmit| H
+    G --> |InducementType.NA| Z
+    subgraph Actus Reus
+        E
+        G
+        H
+        I
+    end
+    H --> |TRUE| I[DamageHarmResult]
+    H --> |FALSE| Z[ConsequenceDefinition.NotSaidToCheat]
+    I --> |DamageHarmType.Body| Y[ConsequenceDefinition.SaidToCheat]
+    I --> |DamageHarmType.Mind| Y
+    I --> |DamageHarmType.Reputation| Y
+    I --> |DamageHarmType.Property| Y
+    I --> |DamageHarmType.NA| Z

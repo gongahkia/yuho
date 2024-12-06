@@ -29,16 +29,15 @@ Getting into the specifics, Yuho provides the following four products.
 
 ### Output formats
 
-> [!TIP]  
-> More transpilation outputs are to be added in the future!
-
 | Target | Usage |   
 | :--- | :--- |  
 | Mermaid | Diagrammatic representations of statutory logic *(mindmap, flowchart)* | 
 | Alloy | Semantic and logical verification | 
-| ... | ... |
 
 Sold on Yuho? Check out the [quickstart](#quickstart) guide.
+
+> [!TIP]  
+> More transpilation outputs might be added in the future. Open an issue to contribute suggestions!
 
 ## Nerd stuff
 
@@ -59,10 +58,6 @@ Learn how Yuho works in 5 minutes at [`5_MINUTES.md`](./doc/5_MINUTES.md).
 
 ## Roadmap
 
-The below products are in development. 
-
-For more details on what's being worked on currently, refer to [`KANBAN.md`](./doc/KANBAN.md).  
-  
 For more details on what's being implemented in the future, refer to [`ROADMAP.md`](./doc/ROADMAP.md).
 
 ## Scope
