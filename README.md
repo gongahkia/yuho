@@ -6,9 +6,9 @@
 <img src="./asset/logo/yuho_mascot.png" width=40% height=40%>
 </p>
 
-Yuho is a domain-specific language dedicated to simplifying [legalese](https://www.merriam-webster.com/dictionary/legalese) by providing a programmatic representation of Singapore Law. 
+Yuho is a domain-specific language dedicated to simplifying [legalese](https://www.merriam-webster.com/dictionary/legalese) by providing a programmatic representation of Singapore Law.  
 
-Yuho's current applications are focused on Singapore Criminal Law *(but really can be applied to any jurisdiction that relies on [statutes](https://www.merriam-webster.com/dictionary/statute))*.
+Current applications are focused on Singapore Criminal Law but really can be applied to any jurisdiction that relies on [statutes](https://www.merriam-webster.com/dictionary/statute).
 
 ## Rationale
 
@@ -22,10 +22,10 @@ Yuho is a DSL that seeks to *help law students* better understand statutes by pr
 
 Getting into the specifics, Yuho provides the following four products.
 
-1. [Yuho](./doc/main/syntax.md), a DSL made to be readable and codeable by law students and lawyers
-2. [Formalised semantic](./tests/main) for legal reasoning modelled after the syntactical patterns of the law
-3. [CLI tool](./src/main/) for interacting with Yuho's primary functions in the CLI
-4. [Transpiler](./src/main/) that transpiles to the below targets
+1. [Yuho](./doc/SYNTAX.md), a DSL made to be readable and codeable by law students and lawyers
+2. [Formalised semantic](./test/) for legal reasoning modelled after the syntactical patterns of the law
+3. [CLI tool](./src/cli/) for interacting with Yuho's primary functions in the CLI
+4. [Transpiler](./src/transpiler/) that transpiles to the below targets
 
 ### Output formats
 
