@@ -53,7 +53,8 @@ Things are happening at [`yuho_and_beyond`](./../archive/yuho_and_beyond/).
     4. see [Whyline](https://www.cs.cmu.edu/~NatProg/whyline.html) for dynamic sites that display logical evaluation of a given decision
     5. Allow user to ask "Why did" and "Why didn't" questions about a given output
         1. Users choose from a set of questions generated automatically via static and dynamic analyses, and the tool provides answers in terms of the runtime events that caused or prevented the desired output
-    6. Consider implementing this in [Blockly](https://developers.google.com/blockly)
+    6. Consider implementing this in [Blockly](https://developers.google.com/blockly) through writing a visual editor from scratch
+        1. Can consider following [this tutorial](https://github.com/jaelle/blockly-page-editor)
 
 6. Uncategorised
     1. There are many assumptions made when we reason from one premise to another premise in the law, how far do we push this inquiry back?
