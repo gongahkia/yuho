@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Yuho Blockly Sample App</title>
+    <script src="https://unpkg.com/blockly/blockly.min.js"></script> 
+    <style>
+        #pageContainer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #blocklyDiv {
+            height: 480px;
+            width: 600px;
+            border: 1px solid black;
+        }
+        #outputPane {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="pageContainer">
+        <h1>Yuho and Blockly</h1>
+        <div id="outputPane">
+            <pre id="generatedCode"><code></code></pre>
+            <div id="output"></div>
+        </div>
+        <div id="blocklyDiv"></div>
+        <button id="generateCode">Generate Code</button> 
+    </div>
+    <script type="module" src="./toolbox.js"></script>
+    <script type="module" src="./yuho_blocks.js"></script>
+    <script type="module" src="./javascript.js"></script> 
+    <script type="module" src="./main.js"></script> 
+</body>
+</html>
