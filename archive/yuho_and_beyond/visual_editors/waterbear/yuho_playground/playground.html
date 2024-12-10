@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Yuho Playground</title>
+    <link rel="stylesheet" href="lib/reset.css">
+    <link rel="stylesheet" href="lib/notiFire.css">
+    <link rel="stylesheet" href="css/widget.css">
+    <link rel="stylesheet" href="css/block.css">
+    <link rel="stylesheet" href="css/block_colors.css">
+    <link rel="stylesheet" href="css/app.css">
+    <!-- <script src="lib/prefixfree.min.js"></script> -->
+    <script src="lib/ga.js"></script>
+</head>
+
+<body>
+    <header>
+        <h1>Yuho Playground</h1>
+    </header>
+    <wb-hbox>
+        <wb-vbox>
+
+            <div class="menu">
+                <button class="open-files">File</button>
+                <button class="undo" id="undoButton" title="Ctrl-Z or ⌘-Z">Undo</button>
+                <button class="redo" id="redoButton" title="Ctrl-Y or ⌘-Shift-Z">Redo</button>
+                <button class="open-example">Examples</button>
+            </div>
+            <wb-workbox>
+                <sidebar>
+                    <wb-search></wb-search>
+                    <wb-expression type="number" ns="variable" fn="set">
+                        <wb-value type="text">anotherInteger</wb-value>
+                        <wb-value type="number">200</wb-value>
+                    </wb-expression>
+                    <wb-expression type="number" ns="arithmetic" fn="add">
+                        <wb-value type="number">200</wb-value>
+                        <wb-value type="number">100</wb-value>
+                    </wb-expression>
+                    <wb-expression type="boolean" ns="boolean" fn="lessThanOrEqual">
+                        <wb-value type="number">$100,000.00</wb-value>
+                        <wb-value type="number">$200,000.00</wb-value>
+                    </wb-expression>
+
+                    <wb-expression type="boolean" ns="boolean" fn="greaterThan">
+                        <wb-value type="number">$100,000.00</wb-value>
+                        <wb-value type="number">$200,000.00</wb-value>
+                    </wb-expression>
+
+                    <wb-step ns="function" fn="call">
+                        <wb-value>print</wb-value>
+                        <wb-value type="text">Broke</wb-value>
+                    </wb-step>
+
+                    <wb-step ns="function" fn="call">
+                        <wb-value>print</wb-value>
+                        <wb-value type="text">Not Broke</wb-value>
+                    </wb-step>
+                    <wb-step ns="function" fn="define">
+                        <wb-value type="text">aSimpleComputation</wb-value>
+                        <wb-value type="number">a</wb-value>
+                        <wb-value type="number">b</wb-value>
+                        <wb-expression type="number" ns="arithmetic" fn="add">
+                            <wb-value type="number">a</wb-value>
+                            <wb-value type="number">b</wb-value>
+                        </wb-expression>
+                    </wb-step>
+
+                    <wb-step ns="function" fn="call">
+                        <wb-value>aSimpleComputation</wb-value>
+                        <wb-value type="number">1</wb-value>
+                        <wb-value type="number">2</wb-value>
+                    </wb-step>
+                    <wb-expression type="boolean" ns="variable" fn="set">
+                        <wb-value type="text">isGuilty</wb-value>
+                        <wb-value type="boolean">TRUE</wb-value>
+                    </wb-expression>
+                    <wb-expression type="number" ns="variable" fn="set">
+                        <wb-value type="text">anExampleMoneyAmount</wb-value>
+                        <wb-value type="number">$12,000,298,322.28</wb-value>
+                    </wb-expression>
+                    <wb-expression type="list" ns="variable" fn="set">
+                        <wb-value type="text">anEgArrayLiteral</wb-value>
+                        <wb-value type="text">watermelon</wb-value>
+                        <wb-value type="text">sugar</wb-value>
+                        <wb-value type="text">high</wb-value>
+                    </wb-expression>
+                    <wb-expression type="number" ns="function" fn="return">
+                        <wb-value type="number">a + b</wb-value>
+                    </wb-expression>
+                    <wb-expression type="boolean" ns="boolean" fn="equal">
+                        <wb-value type="number">aSimpleComputation(1, 2)</wb-value>
+                        <wb-value type="number">3</wb-value>
+                    </wb-expression>
+
+                </sidebar>
+                <wb-splitter></wb-splitter>
+                <wb-workspace>
+                    <header>Workspace</header>
+                    <wb-contains></wb-contains>
+                </wb-workspace>
+            </wb-workbox>
+        </wb-vbox>
+        <wb-splitter></wb-splitter>
+        <wb-vbox>
+            <div class="menu">
+                <button class="do-run">Run</button>
+                <button class="do-stop">Stop</button>
+            </div>
+            <wb-playground>
+                <canvas></canvas>
+            </wb-playground>
+        </wb-vbox>
+    </wb-hbox>
+    <output class="feedback"></output>
+    <svg class="sekrit-svg">
+        <text class="resize-tester"></text>
+    </svg>
+    <!-- third-party library code -->
+    <script src="lib/ajax.js"></script>
+    <!-- polyfill for custom elements -->
+    <script src="lib/document-register-element.js"></script>
+    <script src="lib/SAT.js"></script>
+    <script src="lib/timbre.js"></script>
+    <script src="lib/keyboard.js"></script>
+    <script src="lib/ndict.js"></script>
+    <script src="lib/nanomodal.js"></script>
+    <script src="lib/notiFire.js"></script>
+    <!-- polyfill for setImmediate -->
+    <script src="lib/setImmediate-1.0.2.js"></script>
+    <!-- Waterbear code -->
+    <script src="js/util.js"></script>
+    <script src="js/event.js"></script>
+    <script src="js/undo.js"></script>
+    <script src="js/runtime.js"></script>
+    <script src="js/dom.js"></script>
+    <script src="js/widget.js"></script>
+    <script src="js/block.js"></script>
+    <script src="js/select.js"></script>
+    <script src="js/cutandpaste.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/file.js"></script>
+    <script src="js/queryparams.js"></script>
+</body>
+
+</html>

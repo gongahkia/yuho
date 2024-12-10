@@ -1,0 +1,99 @@
+/* Block colours by namespace, with handling for dimming
+ * while dragging, highlighting drop-targets, and
+ * highlighting selected blocks.
+ */
+
+ /* This can all be further simplified by ghosting dragged blocks and highlighting targets
+    using JavaScript */
+
+[ns="control"]{ --hue: 0; }
+[ns="sprite"]{  --hue: 105; }
+[ns="music"]{ --hue: 210; }
+[ns="sound"]{ --hue: 315; }
+[ns="array"]{ --hue: 60; }
+[ns="boolean"]{ --hue: 165; }
+[ns="stage"]{ --hue: 270; }
+[ns="color"]{ --hue: 15; }
+[ns="image"]{ --hue: 120; }
+[ns="math"]{ --hue: 235; }
+[ns="random"]{ --hue: 330; }
+[ns="vector"]{ --hue: 75; }
+[ns="object"]{ --hue: 180; }
+[ns="string"]{ --hue: 285; }
+[ns="path"]{ --hue: 30; }
+[ns="rect"]{ --hue: 240; }
+[ns="input"]{ --hue: 345; }
+[ns="motion"]{ --hue: 90; }
+[ns="shape"]{ --hue: 195; }
+[ns="geolocation"]{ --hue: 300; }
+[ns="size"]{ --hue: 45; }
+[ns="date"]{ --hue: 55; }
+
+[ns]{
+    --color: hsl(var(--hue), 50%, 50%);
+    --border: hsl(var(--hue), 50%, 30%);
+    --color-light: hsl(var(--hue), 50%, 75%);
+    --border-light: hsl(var(--hue), 50%, 60%);
+}
+
+[ns],
+.block-dragging .drop-target,
+.block-dragging .drop-target.selected-block {
+    background-color: var(--color);
+    border-color: var(--border);
+    fill: var(--color);
+    stroke: var(--border);
+}
+
+.block-dragging [ns],
+.block-dragging .selected-block {
+    background-color: var(--color-light);
+    border-color: var(--border-light);
+    fill: var(--color-light);
+    stroke: var(--border-light);
+}
+
+
+/* Expression block colours by return type, with handling
+ * for dimming while dragging, highlighting drop-targets,
+ * and highlighting selected blocks.
+ */
+
+[type=number]{ --hue: 225; }
+[type="color"]{ --hue: 15; }
+[type="text"]{ --hue: 150; }
+[type="boolean"]{ --hue: 165; }
+[type="sprite"]{ --hue: 105; }
+[type="any"]{ --hue: 0; }
+[type="sound"]{ --hue: 315; }
+[type="array"]{ --hue: 60; }
+[type="wb-image"]{ --hue: 120; }
+[type="shape"]{ --hue: 195; }
+[type="vector"]{ --hue: 75; }
+[type="object"]{ --hue: 180; }
+[type="path"]{ --hue: 30; }
+[type="pathset"]{ --hue: 30; }
+[type="rect"]{ --hue: 135; }
+[type="string"]{ --hue: 240; }
+[type="geolocation"]{ --hue: 285; }
+[type="size"]{ --hue: 300; }
+[type="motion"]{ --hue: 45; }
+[type="date"]{ --hue: 90; }
+
+wb-expression.selected-block {
+    background-color: hsl(var(--hue), 95%, 50%);
+    border-color: hsl(var(--hue), 50%, 75%);
+}
+
+wb-expression,
+.block-dragging wb-expression.drop-target {
+    background-color: hsl(var(--hue), 50%, 50%);
+    border-color: hsl(var(--hue), 50%, 30%);
+}
+
+.block-dragging wb-expression,
+.block-dragging wb-expression.selected-block {
+    background-color: hsl(var(--hue), 50%, 75%);
+    border-color: hsl(var(--hue), 9%, 52%);
+}
+

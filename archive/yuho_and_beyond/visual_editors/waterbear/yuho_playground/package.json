@@ -1,0 +1,37 @@
+{
+  "name": "waterbear",
+  "version": "0.8.0",
+  "description": "Visual programming language for non-programmers.",
+  "private": true,
+  "directories": {
+    "doc": "docs",
+    "example": "example",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "phantomjs test/all-blocks-have-functions.js ; karma start test/karma.conf.js",
+    "start": "echo \"open http://localhost:8000/playground.html in your web browser\";static -p 8000"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/waterbearlang/waterbear.git"
+  },
+  "author": "Dethe Elza <dethe@livingcode.org>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/waterbearlang/waterbear/issues"
+  },
+  "homepage": "https//waterbearlang.com/",
+  "devDependencies": {
+    "istanbul": "^0.3.21",
+    "karma": "^0.13.11",
+    "karma-coverage": "^0.5.2",
+    "karma-phantomjs-launcher": "^0.2.1",
+    "karma-qunit": "^0.1.5",
+    "node-static": "^0.7.7",
+    "parse5": "^1.5.0",
+    "phantomjs": "^1.9.18",
+    "qunitjs": "^1.19.0"
+  },
+  "dependencies": {}
+}
