@@ -37,3 +37,12 @@ Thumbs.db
 .env.production.local
 .cache/
 coverage/
+waterbear.tmproj
+nbproject/
+.*.swp
+waterbear.bbprojectd
+.DS_Store
+node_modules
+out/
+*~
+carry/

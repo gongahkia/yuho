@@ -5,4 +5,4 @@
 
 Interact with Yuho in [Blockly's visual editor](https://github.com/jaelle/blockly-page-editor).
 
-![](../../../asset/screenshot/yuho_and_blockly.png)
+![](../../../../asset/screenshot/yuho_and_blockly.png)
