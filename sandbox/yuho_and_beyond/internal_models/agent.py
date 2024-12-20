@@ -112,20 +112,120 @@ if __name__ == "__main__":
 
     TARGET_FILEPATH = "generated_log/log.json"
 
-    example_statute = "<your_example_statute_here>"
-    example_dsl_code = "<your_example_dsl_code_here>"
-    statute_prompt = "<your_statute_prompt_here>"
+    example_statute  = "Whoever, by deceiving any person, whether or not such deception was the sole or main inducement, fraudulently or dishonestly induces the person so deceived to deliver or cause the delivery of any property to any person, or to consent that any person shall retain any property, or intentionally induces the person so deceived to do or omit to do anything which he would not do or omit to do if he were not so deceived, and which act or omission causes or is likely to cause damage or harm to any person in body, mind, reputation or property, is said to cheat."
+
+    example_dsl_code = """
+   scope s415CheatingDefinition {
+
+    struct Party { 
+        Accused,
+        Victim,
+    }
+
+    struct AttributionType { 
+        SoleInducment,
+        NotSoleInducement,
+        NA,
+    }
+
+    struct DeceptionType { 
+        Fraudulently,
+        Dishonestly,
+        NA,
+    }
+
+    struct InducementType { 
+        DeliverProperty,
+        ConsentRetainProperty,
+        DoOrOmit,
+        NA,
+    }
+
+    struct DamageHarmType { 
+        Body,
+        Mind, 
+        Reputation,
+        Property,
+        NA,
+    }
+
+    struct ConsequenceDefinition { 
+        SaidToCheat,
+        NotSaidToCheat,
+    }
+
+    struct Cheating { 
+        string || Party accused,
+        string action,
+        string || Party victim,
+        AttributionType attribution,
+        DeceptionType deception,
+        InducementType inducement,
+        boolean causesDamageHarm,
+        {DamageHarmType} || DamageHarmType damageHarmResult, 
+        ConsequenceDefinition definition,
+    }
+
+    Cheating cheatingDefinition := { 
+
+        accused := Party.Accused,
+        action := "deceiving",
+        victim := Party.Victim,
+        attribution := AttributionType.SoleInducment or AttributionType.NotSoleInducement or AttributionType.NA,
+        deception := DeceptionType.Fraudulently or DeceptionType.Dishonestly or DeceptionType.NA,
+        inducement := InducementType.DeliverProperty or InducementType.ConsentRetainProperty or InducementType.DoOrOmit or InducementType.NA, 
+        causesDamageHarm := TRUE or FALSE,
+        damageHarmResult := {
+            DamageHarmType.Body,
+            DamageHarmType.Mind,
+            DamageHarmType.Reputation,
+            DamageHarmType.Property,
+        } or DamageHarmType.NA, 
+
+        definition := match attribution {
+            case AttributionType.SoleInducment := deception
+            case AttributionType.NotSoleInducement := deception
+            case AttributionType.NA := consequence ConsequenceDefinition.NotSaidToCheat
+        },
+        definition := match deception {
+            case DeceptionType.Fraudulently := consequence inducement
+            case DeceptionType.Dishonestly := consequence inducement
+            case DeceptionType.NA := consequence ConsequenceDefinition.NotSaidToCheat
+        },
+        definition := match inducement {
+            case InducementType.DeliverProperty := consequence causesDamageHarm
+            case InducementType.ConsentRetainProperty := consequence causesDamageHarm
+            case InducementType.DoOrOmit := consequence causesDamageHarm
+            case InducementType.NA := consequence ConsequenceDefinition.NotSaidToCheat
+        },
+        definition := match causesDamageHarm{
+            case TRUE := consequence damageHarmResult
+            case FALSE := consequence ConsequenceDefinition.NotSaidToCheat
+        },
+        definition := match {
+            case DamageHarmType.NA in damageHarmResult := consequence ConsequenceDefinition.NotSaidToCheat
+            case _ :=  consequence ConsequenceDefinition.SaidToCheat 
+        },
+
+    }
+
+} 
+    """
+
+    input_statute_prompt = "A person is guilty of a public nuisance, who does any act, or is guilty of an illegal omission, which causes any common injury, danger or annoyance to the public, or to the people in general who dwell or occupy property in the vicinity, or which must necessarily cause injury, obstruction, danger or annoyance to persons who may have occasion to use any public right."
 
     client_model = start_model()
 
     if client_model:
+
         print("Generating DSL code now...")
         
-        generated_dsl_code = generate_dsl_code(client_model, example_statute, example_dsl_code, statute_prompt)
+        generated_dsl_code = generate_dsl_code(client_model, example_statute, example_dsl_code, input_statute_prompt)
         
         write_agent_log(TARGET_FILEPATH, generated_dsl_code)
         
         print("DSL code generation complete.")
     
     else:
+
         print("Error: Unable to generate ollama model.")
