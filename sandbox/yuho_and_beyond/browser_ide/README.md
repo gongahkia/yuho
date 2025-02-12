@@ -4,6 +4,8 @@ Syntax highlighting implemented based on [Yuho 2.0](./../../../src/)'s syntax.
 
 Made with React, Next.js and Tailwind CSS.
 
+![](./../../../asset/screenshot/yuho_browser_ide.png)
+
 ## Usage
 
 For local deployment, run the following.
