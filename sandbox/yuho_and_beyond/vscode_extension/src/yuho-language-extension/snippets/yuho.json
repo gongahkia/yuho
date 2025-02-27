@@ -1,0 +1,31 @@
+{
+    "Function Definition": {
+        "prefix": "fn",
+        "body": [
+            "fn ${1:functionName}(${2:parameters}): ${3:returnType} {",
+            "\t$0",
+            "}"
+        ],
+        "description": "Function definition"
+    },
+    "Struct Definition": {
+        "prefix": "struct",
+        "body": [
+            "struct ${1:StructName} {",
+            "\t${2:type} ${3:member};",
+            "\t$0",
+            "}"
+        ],
+        "description": "Struct definition"
+    },
+    "Match Case": {
+        "prefix": "match",
+        "body": [
+            "match (${1:expression}) {",
+            "\tcase ${2:condition} := consequence ${3:result};",
+            "\tcase _ := consequence pass;",
+            "}"
+        ],
+        "description": "Match case statement"
+    }
+}
