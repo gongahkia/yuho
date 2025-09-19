@@ -1,0 +1,133 @@
+%import common.CNAME -> IDENTIFIER
+%import common.INT -> INTEGER
+%import common.FLOAT
+%import common.WS
+%import common.ESCAPED_STRING -> STRING
+%ignore WS
+
+// Comments
+COMMENT: "//" /[^\n]*/
+MULTILINE_COMMENT: "/*" /(.|\n)*?/ "*/"
+%ignore COMMENT
+%ignore MULTILINE_COMMENT
+
+// Keywords
+TRUE: "TRUE"
+FALSE: "FALSE"
+MATCH: "match"
+CASE: "case"
+CONSEQUENCE: "consequence"
+PASS: "pass"
+STRUCT: "struct"
+FN: "fn"
+REFERENCING: "referencing"
+FROM: "from"
+
+// Special literals
+PERCENT: "%"
+MONEY_PREFIX: "$"
+DURATION_UNITS: ("day" | "days" | "month" | "months" | "year" | "years")
+
+// Compound literals
+PERCENTAGE: INTEGER "%"
+MONEY: MONEY_PREFIX INTEGER ("." INTEGER)?
+DATE: /[0-9]{2}-[0-9]{2}-[0-9]{4}/
+DURATION: INTEGER DURATION_UNITS
+
+// Operators
+PLUS: "+"
+MINUS: "-"
+MULT: "*"
+DIV: "/"
+ASSIGN: ":="
+EQUAL: "=="
+NOTEQUAL: "!="
+GT: ">"
+LT: "<"
+AND: "&&"
+OR: "||"
+DOT: "."
+
+// Delimiters
+SEMICOLON: ";"
+COLON: ":"
+LBRACE: "{"
+RBRACE: "}"
+LPAREN: "("
+RPAREN: ")"
+COMMA: ","
+UNDERSCORE: "_"
+
+// Main program structure
+program: (import_statement | declaration | function_definition | struct_definition | match_case)*
+
+// Import statements
+import_statement: REFERENCING IDENTIFIER FROM IDENTIFIER
+
+// Variable declarations
+declaration: type IDENTIFIER ASSIGN expression SEMICOLON
+           | type IDENTIFIER SEMICOLON
+
+// Types
+type: "int" | "float" | "percent" | "money" | "date" | "duration" | "bool" | "string" | qualified_identifier
+
+// Qualified identifiers (for referencing other modules)
+qualified_identifier: IDENTIFIER (DOT IDENTIFIER)*
+
+// Expressions
+expression: logical_expression
+
+logical_expression: relational_expression (logical_operator relational_expression)*
+logical_operator: AND | OR
+
+relational_expression: additive_expression (relational_operator additive_expression)*
+relational_operator: GT | LT | EQUAL | NOTEQUAL
+
+additive_expression: multiplicative_expression (additive_operator multiplicative_expression)*
+additive_operator: PLUS | MINUS
+
+multiplicative_expression: primary_expression (multiplicative_operator primary_expression)*
+multiplicative_operator: MULT | DIV
+
+primary_expression: IDENTIFIER
+                  | qualified_identifier
+                  | literal
+                  | LPAREN expression RPAREN
+
+// Literals
+literal: STRING | INTEGER | FLOAT | PERCENTAGE | MONEY | DATE | DURATION | TRUE | FALSE
+
+// Statements
+statement: declaration
+         | assignment
+         | function_call
+         | match_case
+         | pass_statement
+
+assignment: IDENTIFIER ASSIGN expression SEMICOLON
+
+// Match-case structures
+match_case: MATCH (LPAREN expression RPAREN)? LBRACE case_clause* RBRACE
+
+case_clause: CASE expression ASSIGN CONSEQUENCE expression SEMICOLON
+           | CASE UNDERSCORE ASSIGN CONSEQUENCE pass_statement SEMICOLON
+
+pass_statement: PASS SEMICOLON
+
+// Function definitions
+function_definition: FN IDENTIFIER LPAREN parameter_list RPAREN COLON type block
+
+parameter_list: (parameter (COMMA parameter)*)?
+parameter: type IDENTIFIER
+
+// Function calls
+function_call: IDENTIFIER LPAREN argument_list RPAREN SEMICOLON
+argument_list: (expression (COMMA expression)*)?
+
+// Struct definitions
+struct_definition: STRUCT IDENTIFIER LBRACE struct_member* RBRACE
+
+struct_member: type IDENTIFIER COMMA?
+
+// Code blocks
+block: LBRACE statement* RBRACE

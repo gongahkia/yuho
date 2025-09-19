@@ -1,12 +1,32 @@
-all: build
+all: install
 
-build: src/main.rs
+# Yuho v3.0 (Python) commands
+install:
+	@echo "Installing Yuho v3.0 (Python)..."
+	@pip install -r requirements.txt
+	@pip install -e .
+
+test:
+	@echo "Running Yuho v3.0 tests..."
+	@python3 -m pytest yuho_v3/tests/ -v
+
+check-example:
+	@echo "Checking example files..."
+	@python3 yuho_v3/cli/main.py check example/cheating/cheating_illustration_A.yh
+
+repl:
+	@echo "Starting Yuho REPL..."
+	@python3 yuho_v3/repl.py
+
+# Legacy Rust/Racket commands (require installation)
+build-legacy: src/main.rs
+	@echo "Building legacy Rust version (requires Rust)..."
 	@rustup update
 	@cargo build --release
 	@cargo run
 
-debug: src/main.rs
-	@echo "debug mode"
+debug-legacy: src/main.rs
+	@echo "Debug mode for legacy version..."
 	@cargo run
 
 config:

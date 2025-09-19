@@ -1,13 +1,25 @@
 # [Lexer](./lexer), [parser](./parser), [transpiler](./transpiler) and [CLI tool](./cli)
 
-## Yuho default implementation v2.0
+## Yuho default implementation v3.0
 
 | Yuho tool | Implementation | Status |
-| :--- | :--- | :--- | 
-| Lexer | Racket | ![](https://img.shields.io/badge/status-up-brightgreen) |
-| Parser | Racket | ![](https://img.shields.io/badge/status-up-brightgreen) |
-| REPL | Racket | ![](https://img.shields.io/badge/status-up-brightgreen) | 
-| CLI tool | Racket | ![](https://img.shields.io/badge/status-up-brightgreen) | 
+| :--- | :--- | :--- |
+| Lexer | Python (Lark) | ![](https://img.shields.io/badge/status-up-brightgreen) |
+| Parser | Python (Lark) | ![](https://img.shields.io/badge/status-up-brightgreen) |
+| REPL | Python | ![](https://img.shields.io/badge/status-up-brightgreen) |
+| CLI tool | Python (Click) | ![](https://img.shields.io/badge/status-up-brightgreen) |
+| Semantic Analyzer | Python | ![](https://img.shields.io/badge/status-up-brightgreen) |
+| Mermaid Transpiler | Python | ![](https://img.shields.io/badge/status-up-brightgreen) |
+| Alloy Transpiler | Python | ![](https://img.shields.io/badge/status-up-brightgreen) |
+
+## Yuho v2.0 (Legacy - Racket)
+
+| Yuho tool | Implementation | Status |
+| :--- | :--- | :--- |
+| Lexer | Racket | ![](https://img.shields.io/badge/status-needs--racket-red) |
+| Parser | Racket | ![](https://img.shields.io/badge/status-needs--racket-red) |
+| REPL | Racket | ![](https://img.shields.io/badge/status-needs--racket-red) |
+| CLI tool | Racket | ![](https://img.shields.io/badge/status-needs--racket-red) | 
 
 ## Generate the lexer and parser *(and optionally, IDE)* yourself
 

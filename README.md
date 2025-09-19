@@ -1,4 +1,4 @@
-[![](https://img.shields.io/badge/yuho_1.0-passing-green)](https://github.com/gongahkia/yuho/releases/tag/1.0) [![](https://img.shields.io/badge/yuho_2.0-passing-green)](https://github.com/gongahkia/yuho/releases/tag/2.0) 
+[![](https://img.shields.io/badge/yuho_1.0-archived-inactive)](https://github.com/gongahkia/yuho/releases/tag/1.0) [![](https://img.shields.io/badge/yuho_2.0-archived-inactive)](https://github.com/gongahkia/yuho/releases/tag/2.0) [![](https://img.shields.io/badge/yuho_3.0-active-green)](https://github.com/gongahkia/yuho/tree/main/yuho_v3) 
   
 # `Yuho`  
   
@@ -54,7 +54,9 @@ Want to find out more? See Yuho's [documentation](#documentation).
 
 ## Quickstart
 
-Learn how Yuho works in 5 minutes at [`5_MINUTES.md`](./doc/5_MINUTES.md).
+**Yuho v3.0 (Python)**: See [`QUICKSTART_V3.md`](./doc/QUICKSTART_V3.md) for the latest implementation.
+
+**Legacy versions**: Learn how Yuho works in 5 minutes at [`5_MINUTES.md`](./doc/5_MINUTES.md).
 
 ## Roadmap
 
