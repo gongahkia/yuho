@@ -2,9 +2,9 @@
 # Generates GitHub Pages documentation
 
 site_name: Yuho Documentation
-site_description: A domain-specific language for simplifying legal reasoning
-site_author: Yuho Contributors
-site_url: https://gongahkia.github.io/yuho
+site_description: A domain-specific language for simplifying legal reasoning 
+site_author: Gabriel Ong 
+site_url: https://gabrielongzm.com/yuho
 
 # Repository
 repo_name: gongahkia/yuho
