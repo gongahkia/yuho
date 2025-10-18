@@ -1,9 +1,5 @@
 # Welcome to Yuho
 
-<div align="center">
-  <img src="../asset/logo/yuho_mascot.png" alt="Yuho Logo" width="300"/>
-</div>
-
 **Yuho** is a domain-specific language (DSL) dedicated to simplifying [legalese](https://www.merriam-webster.com/dictionary/legalese) by providing a programmatic representation of Singapore Law.
 
 ## What is Yuho?
