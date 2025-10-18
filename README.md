@@ -1,4 +1,4 @@
-[![](https://img.shields.io/badge/yuho_1.0-archived-inactive)](https://github.com/gongahkia/yuho/releases/tag/1.0) [![](https://img.shields.io/badge/yuho_2.0-archived-inactive)](https://github.com/gongahkia/yuho/releases/tag/2.0) [![](https://img.shields.io/badge/yuho_3.0-active-green)](https://github.com/gongahkia/yuho/tree/main/yuho_v3) 
+[![](https://img.shields.io/badge/yuho_1.0-archived-red)](https://github.com/gongahkia/yuho/releases/tag/1.0) [![](https://img.shields.io/badge/yuho_2.0-archived-red)](https://github.com/gongahkia/yuho/releases/tag/2.0) [![](https://img.shields.io/badge/yuho_3.0-active-green)](https://github.com/gongahkia/yuho/tree/main/yuho_v3) 
   
 # `Yuho`  
   
