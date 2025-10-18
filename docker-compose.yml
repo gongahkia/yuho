@@ -1,0 +1,117 @@
+# Docker Compose configuration for Yuho v3.0
+# Provides easy development and testing environments
+
+version: '3.9'
+
+services:
+  # Development environment with full tooling
+  yuho-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    image: yuho:dev
+    container_name: yuho-dev
+    volumes:
+      # Mount source code for live development
+      - .:/app
+      # Mount workspace for yuho files
+      - ./workspace:/workspace
+    working_dir: /app
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: /bin/bash
+    stdin_open: true
+    tty: true
+
+  # Testing environment
+  yuho-test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: testing
+    image: yuho:test
+    container_name: yuho-test
+    volumes:
+      - .:/app
+      # Persist test results
+      - ./test-results:/app/test-results
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: >
+      bash -c "
+        pytest yuho_v3/tests/ 
+        --verbose 
+        --cov=yuho_v3 
+        --cov-report=html 
+        --cov-report=term 
+        --cov-report=xml 
+        --html=test-results/report.html 
+        --self-contained-html
+      "
+
+  # Production environment (minimal)
+  yuho:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    image: yuho:latest
+    container_name: yuho
+    volumes:
+      # Mount workspace for yuho files
+      - ./workspace:/app/workspace
+    working_dir: /app/workspace
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: ["--help"]
+
+  # REPL environment for interactive use
+  yuho-repl:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    image: yuho:latest
+    container_name: yuho-repl
+    volumes:
+      - ./workspace:/app/workspace
+    working_dir: /app/workspace
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: ["yuho-repl"]
+    stdin_open: true
+    tty: true
+
+  # Documentation builder
+  yuho-docs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    image: yuho:dev
+    container_name: yuho-docs
+    volumes:
+      - .:/app
+      - ./site:/app/site
+    working_dir: /app
+    ports:
+      - "8000:8000"
+    command: >
+      bash -c "
+        pip install mkdocs mkdocs-material mkdocstrings[python] &&
+        mkdocs serve -a 0.0.0.0:8000
+      "
+
+# Shared volumes for persistence
+volumes:
+  workspace:
+    driver: local
+  test-results:
+    driver: local
+
+# Network configuration
+networks:
+  default:
+    name: yuho-network
+

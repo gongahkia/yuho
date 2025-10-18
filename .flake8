@@ -1,0 +1,53 @@
+[flake8]
+# Flake8 configuration for Yuho v3.0
+
+# Maximum line length
+max-line-length = 100
+
+# Maximum complexity
+max-complexity = 10
+
+# Exclude patterns
+exclude =
+    .git,
+    __pycache__,
+    .pytest_cache,
+    .mypy_cache,
+    .coverage,
+    htmlcov,
+    dist,
+    build,
+    *.egg-info,
+    venv,
+    env,
+    archive,
+    sandbox,
+    yuho_v1,
+    yuho_v2
+
+# Ignore specific errors
+ignore =
+    E203,  # Whitespace before ':' (conflicts with Black)
+    E266,  # Too many leading '#' for block comment
+    E501,  # Line too long (handled by Black)
+    W503,  # Line break before binary operator (conflicts with Black)
+    W504,  # Line break after binary operator
+
+# Per-file ignores
+per-file-ignores =
+    __init__.py:F401,F403
+    tests/*:F401,F811
+
+# Error codes to always check
+select = B,C,E,F,W,T4,B9
+
+# Enable naming conventions check
+enable-extensions = G
+
+# Count errors
+count = True
+# Show source code
+show-source = True
+# Show error statistics
+statistics = True
+

@@ -1,0 +1,38 @@
+# Development dependencies for Yuho v3.0
+
+# Core dependencies (from requirements.txt)
+lark-parser>=1.1.7
+click>=8.0.0
+colorama>=0.4.6
+
+# Testing
+pytest>=7.4.0
+pytest-cov>=4.1.0
+pytest-xdist>=3.3.1  # Parallel test execution
+pytest-timeout>=2.1.0  # Test timeouts
+pytest-benchmark>=4.0.0  # Performance benchmarks
+
+# Code Quality
+black>=23.7.0  # Code formatting
+flake8>=6.1.0  # Linting
+mypy>=1.5.0  # Type checking
+pylint>=2.17.0  # Advanced linting
+isort>=5.12.0  # Import sorting
+
+# Pre-commit hooks
+pre-commit>=3.3.3
+
+# Security
+bandit>=1.7.5  # Security linting
+safety>=2.3.5  # Dependency vulnerability scanning
+
+# Documentation
+mkdocs>=1.5.2  # Documentation site generator
+mkdocs-material>=9.2.0  # Material theme for MkDocs
+mkdocstrings[python]>=0.23.0  # Auto-generate API docs
+pymdown-extensions>=10.2.0  # Markdown extensions
+
+# Development tools
+ipython>=8.14.0  # Enhanced REPL
+ipdb>=0.13.13  # Debugger
+
