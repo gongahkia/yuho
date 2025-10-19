@@ -11,7 +11,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 setup(
     name="yuho",
     version="3.0.0",
-    author="Yuho Contributors",
+    author="Gabriel Ong",
     description="A domain-specific language for simplifying legal reasoning",
     long_description=long_description,
     long_description_content_type="text/markdown",
