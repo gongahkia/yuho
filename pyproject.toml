@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.8"
 license = {text = "MIT"}
 authors = [
-    {name = "Yuho Contributors"}
+    {name = "Gabriel Ong"}
 ]
 keywords = ["legal", "dsl", "law", "compiler", "transpiler"]
 classifiers = [

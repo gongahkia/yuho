@@ -114,7 +114,7 @@ CMD ["--help"]
 LABEL org.opencontainers.image.title="Yuho" \
       org.opencontainers.image.description="A domain-specific language for simplifying legal reasoning" \
       org.opencontainers.image.version="3.0.0" \
-      org.opencontainers.image.authors="Yuho Contributors" \
+      org.opencontainers.image.authors="Gabriel Ong" \
       org.opencontainers.image.url="https://github.com/gongahkia/yuho" \
       org.opencontainers.image.source="https://github.com/gongahkia/yuho" \
       org.opencontainers.image.licenses="MIT"

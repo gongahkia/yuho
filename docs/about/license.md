@@ -7,7 +7,7 @@ Yuho is released under the MIT License.
 ```
 MIT License
 
-Copyright (c) 2024 Yuho Contributors
+Copyright (c) 2024 Gabriel Ong
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -40,7 +40,7 @@ SOFTWARE.
 ### What You Must Do
 - ✅ **Include License** - Include the MIT License text in distributions
 - ✅ **Include Copyright** - Include the copyright notice
-- ✅ **Attribution** - Give credit to Yuho contributors
+- ✅ **Attribution** - Give credit to Gabriel Ong
 
 ### What You Cannot Do
 - ❌ **Remove Copyright** - Cannot remove copyright notices
@@ -131,7 +131,7 @@ The MIT License includes an implicit patent grant, allowing use of any patents h
 - **Brand Guidelines** - Follow brand guidelines for logo use
 
 ### Attribution Guidelines
-- **Credit Required** - Give credit to Yuho contributors
+- **Credit Required** - Give credit to Gabriel Ong
 - **Logo Use** - Use logo according to guidelines
 - **Brand Protection** - Protect Yuho brand integrity
 
