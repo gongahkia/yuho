@@ -12,13 +12,11 @@
         <meta name="author" content="Gabriel Ong">
       
       
-        <link rel="canonical" href="https://gabrielongzm.com/yuho/development/architecture/">
+        <link rel="canonical" href="https://gabrielongzm.com/yuho/about/license/">
       
       
-        <link rel="prev" href="../../examples/patterns/">
+        <link rel="prev" href="../changelog/">
       
-      
-        <link rel="next" href="../contributing/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -26,7 +24,7 @@
     
     
       
-        <title>Architecture - Yuho Documentation</title>
+        <title>License - Yuho Documentation</title>
       
     
     
@@ -82,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#architecture" class="md-skip">
+        <a href="#license" class="md-skip">
           Skip to content
         </a>
       
@@ -122,7 +120,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Architecture
+              License
             
           </span>
         </div>
@@ -351,13 +349,11 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="./" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../../development/architecture/" class="md-tabs__link">
           
   
   
@@ -393,11 +389,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../../about/faq/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../faq/" class="md-tabs__link">
           
   
   
@@ -1252,31 +1250,28 @@
       
   
   
-    
   
   
-  
     
     
     
     
-      
-        
-        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
         
           
-          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
             
   
   
@@ -1289,7 +1284,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_7">
             <span class="md-nav__icon md-icon"></span>
             Development
@@ -1300,32 +1295,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    Architecture
-    
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../development/architecture/" class="md-nav__link">
         
   
   
@@ -1336,398 +1309,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#system-overview" class="md-nav__link">
-    <span class="md-ellipsis">
-      System Overview
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#high-level-architecture" class="md-nav__link">
-    <span class="md-ellipsis">
-      High-Level Architecture
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#component-architecture" class="md-nav__link">
-    <span class="md-ellipsis">
-      Component Architecture
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Component Architecture">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-lexer-lexerpy" class="md-nav__link">
-    <span class="md-ellipsis">
-      1. Lexer (lexer.py)
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2-parser-parserpy" class="md-nav__link">
-    <span class="md-ellipsis">
-      2. Parser (parser.py)
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#3-ast-nodes-ast_nodespy" class="md-nav__link">
-    <span class="md-ellipsis">
-      3. AST Nodes (ast_nodes.py)
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#4-semantic-analyzer-semantic_analyzerpy" class="md-nav__link">
-    <span class="md-ellipsis">
-      4. Semantic Analyzer (semantic_analyzer.py)
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#5-transpilers" class="md-nav__link">
-    <span class="md-ellipsis">
-      5. Transpilers
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#6-cli-climainpy" class="md-nav__link">
-    <span class="md-ellipsis">
-      6. CLI (cli/main.py)
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#7-repl-replpy" class="md-nav__link">
-    <span class="md-ellipsis">
-      7. REPL (repl.py)
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#data-flow" class="md-nav__link">
-    <span class="md-ellipsis">
-      Data Flow
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Data Flow">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#typical-compilation-pipeline" class="md-nav__link">
-    <span class="md-ellipsis">
-      Typical Compilation Pipeline
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#transpilation-pipeline" class="md-nav__link">
-    <span class="md-ellipsis">
-      Transpilation Pipeline
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#design-principles" class="md-nav__link">
-    <span class="md-ellipsis">
-      Design Principles
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Design Principles">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-separation-of-concerns" class="md-nav__link">
-    <span class="md-ellipsis">
-      1. Separation of Concerns
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2-immutability" class="md-nav__link">
-    <span class="md-ellipsis">
-      2. Immutability
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#3-type-safety" class="md-nav__link">
-    <span class="md-ellipsis">
-      3. Type Safety
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#4-error-handling" class="md-nav__link">
-    <span class="md-ellipsis">
-      4. Error Handling
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#5-extensibility" class="md-nav__link">
-    <span class="md-ellipsis">
-      5. Extensibility
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#testing-strategy" class="md-nav__link">
-    <span class="md-ellipsis">
-      Testing Strategy
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Testing Strategy">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#test-pyramid" class="md-nav__link">
-    <span class="md-ellipsis">
-      Test Pyramid
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#performance-considerations" class="md-nav__link">
-    <span class="md-ellipsis">
-      Performance Considerations
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Performance Considerations">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#current-optimizations" class="md-nav__link">
-    <span class="md-ellipsis">
-      Current Optimizations
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#future-optimizations" class="md-nav__link">
-    <span class="md-ellipsis">
-      Future Optimizations
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#security-considerations" class="md-nav__link">
-    <span class="md-ellipsis">
-      Security Considerations
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Security Considerations">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#input-validation" class="md-nav__link">
-    <span class="md-ellipsis">
-      Input Validation
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#resource-limits" class="md-nav__link">
-    <span class="md-ellipsis">
-      Resource Limits
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#dependency-security" class="md-nav__link">
-    <span class="md-ellipsis">
-      Dependency Security
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#deployment-architecture" class="md-nav__link">
-    <span class="md-ellipsis">
-      Deployment Architecture
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Deployment Architecture">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#standalone-cli" class="md-nav__link">
-    <span class="md-ellipsis">
-      Standalone CLI
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#docker-container" class="md-nav__link">
-    <span class="md-ellipsis">
-      Docker Container
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#future-architecture-enhancements" class="md-nav__link">
-    <span class="md-ellipsis">
-      Future Architecture Enhancements
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Future Architecture Enhancements">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#language-server-protocol-lsp" class="md-nav__link">
-    <span class="md-ellipsis">
-      Language Server Protocol (LSP)
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#web-interface" class="md-nav__link">
-    <span class="md-ellipsis">
-      Web Interface
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#plugin-system" class="md-nav__link">
-    <span class="md-ellipsis">
-      Plugin System
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#references" class="md-nav__link">
-    <span class="md-ellipsis">
-      References
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1740,7 +1321,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../contributing/" class="md-nav__link">
+      <a href="../../development/contributing/" class="md-nav__link">
         
   
   
@@ -1763,7 +1344,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../testing/" class="md-nav__link">
+      <a href="../../development/testing/" class="md-nav__link">
         
   
   
@@ -1786,7 +1367,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../docker/" class="md-nav__link">
+      <a href="../../development/docker/" class="md-nav__link">
         
   
   
@@ -1980,28 +1561,31 @@
       
   
   
+    
   
   
+  
     
     
     
     
+      
+        
+        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" checked>
         
           
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_9" >
-        
-          
-          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
             
   
   
@@ -2014,7 +1598,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_9">
             <span class="md-nav__icon md-icon"></span>
             About
@@ -2028,7 +1612,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../about/faq/" class="md-nav__link">
+      <a href="../faq/" class="md-nav__link">
         
   
   
@@ -2051,7 +1635,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../about/roadmap/" class="md-nav__link">
+      <a href="../roadmap/" class="md-nav__link">
         
   
   
@@ -2074,7 +1658,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../about/changelog/" class="md-nav__link">
+      <a href="../changelog/" class="md-nav__link">
         
   
   
@@ -2094,10 +1678,32 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../about/license/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    License
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -2108,6 +1714,524 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#mit-license" class="md-nav__link">
+    <span class="md-ellipsis">
+      MIT License
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#license-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      License Summary
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="License Summary">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-you-can-do" class="md-nav__link">
+    <span class="md-ellipsis">
+      What You Can Do
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-you-must-do" class="md-nav__link">
+    <span class="md-ellipsis">
+      What You Must Do
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-you-cannot-do" class="md-nav__link">
+    <span class="md-ellipsis">
+      What You Cannot Do
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#legal-disclaimer" class="md-nav__link">
+    <span class="md-ellipsis">
+      Legal Disclaimer
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Legal Disclaimer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#software-disclaimer" class="md-nav__link">
+    <span class="md-ellipsis">
+      Software Disclaimer
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#legal-accuracy-disclaimer" class="md-nav__link">
+    <span class="md-ellipsis">
+      Legal Accuracy Disclaimer
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#third-party-licenses" class="md-nav__link">
+    <span class="md-ellipsis">
+      Third-Party Licenses
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Third-Party Licenses">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dependencies
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#license-compatibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      License Compatibility
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#commercial-use" class="md-nav__link">
+    <span class="md-ellipsis">
+      Commercial Use
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Commercial Use">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#commercial-projects" class="md-nav__link">
+    <span class="md-ellipsis">
+      Commercial Projects
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#commercial-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      Commercial Examples
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#open-source-compliance" class="md-nav__link">
+    <span class="md-ellipsis">
+      Open Source Compliance
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Open Source Compliance">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#gpl-compatibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      GPL Compatibility
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#other-licenses" class="md-nav__link">
+    <span class="md-ellipsis">
+      Other Licenses
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#patent-policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Patent Policy
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Patent Policy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#patent-grant" class="md-nav__link">
+    <span class="md-ellipsis">
+      Patent Grant
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#patent-protection" class="md-nav__link">
+    <span class="md-ellipsis">
+      Patent Protection
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#trademark-policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Trademark Policy
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Trademark Policy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#yuho-trademark" class="md-nav__link">
+    <span class="md-ellipsis">
+      Yuho Trademark
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#attribution-guidelines" class="md-nav__link">
+    <span class="md-ellipsis">
+      Attribution Guidelines
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#legal-jurisdiction" class="md-nav__link">
+    <span class="md-ellipsis">
+      Legal Jurisdiction
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Legal Jurisdiction">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#governing-law" class="md-nav__link">
+    <span class="md-ellipsis">
+      Governing Law
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#international-use" class="md-nav__link">
+    <span class="md-ellipsis">
+      International Use
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#contributor-license-agreement" class="md-nav__link">
+    <span class="md-ellipsis">
+      Contributor License Agreement
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Contributor License Agreement">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#code-contributions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Code Contributions
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#legal-contributions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Legal Contributions
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#privacy-policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Privacy Policy
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Privacy Policy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#data-collection" class="md-nav__link">
+    <span class="md-ellipsis">
+      Data Collection
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Data Usage
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#security-policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Security Policy
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Security Policy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#security-reporting" class="md-nav__link">
+    <span class="md-ellipsis">
+      Security Reporting
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#security-measures" class="md-nav__link">
+    <span class="md-ellipsis">
+      Security Measures
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#support-and-maintenance" class="md-nav__link">
+    <span class="md-ellipsis">
+      Support and Maintenance
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Support and Maintenance">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#support-policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Support Policy
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#maintenance" class="md-nav__link">
+    <span class="md-ellipsis">
+      Maintenance
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#contact-information" class="md-nav__link">
+    <span class="md-ellipsis">
+      Contact Information
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Contact Information">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#legal-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Legal Questions
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#technical-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Technical Questions
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#version-history" class="md-nav__link">
+    <span class="md-ellipsis">
+      Version History
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Version History">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#license-versions" class="md-nav__link">
+    <span class="md-ellipsis">
+      License Versions
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Changes
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conclusion
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#next-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      Next Steps
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -2147,91 +2271,46 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#system-overview" class="md-nav__link">
+  <a href="#mit-license" class="md-nav__link">
     <span class="md-ellipsis">
-      System Overview
+      MIT License
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#high-level-architecture" class="md-nav__link">
+  <a href="#license-summary" class="md-nav__link">
     <span class="md-ellipsis">
-      High-Level Architecture
+      License Summary
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#component-architecture" class="md-nav__link">
-    <span class="md-ellipsis">
-      Component Architecture
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Component Architecture">
+    <nav class="md-nav" aria-label="License Summary">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#1-lexer-lexerpy" class="md-nav__link">
+  <a href="#what-you-can-do" class="md-nav__link">
     <span class="md-ellipsis">
-      1. Lexer (lexer.py)
+      What You Can Do
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#2-parser-parserpy" class="md-nav__link">
+  <a href="#what-you-must-do" class="md-nav__link">
     <span class="md-ellipsis">
-      2. Parser (parser.py)
+      What You Must Do
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#3-ast-nodes-ast_nodespy" class="md-nav__link">
+  <a href="#what-you-cannot-do" class="md-nav__link">
     <span class="md-ellipsis">
-      3. AST Nodes (ast_nodes.py)
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#4-semantic-analyzer-semantic_analyzerpy" class="md-nav__link">
-    <span class="md-ellipsis">
-      4. Semantic Analyzer (semantic_analyzer.py)
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#5-transpilers" class="md-nav__link">
-    <span class="md-ellipsis">
-      5. Transpilers
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#6-cli-climainpy" class="md-nav__link">
-    <span class="md-ellipsis">
-      6. CLI (cli/main.py)
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#7-repl-replpy" class="md-nav__link">
-    <span class="md-ellipsis">
-      7. REPL (repl.py)
+      What You Cannot Do
     </span>
   </a>
   
@@ -2243,28 +2322,28 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#data-flow" class="md-nav__link">
+  <a href="#legal-disclaimer" class="md-nav__link">
     <span class="md-ellipsis">
-      Data Flow
+      Legal Disclaimer
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Data Flow">
+    <nav class="md-nav" aria-label="Legal Disclaimer">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#typical-compilation-pipeline" class="md-nav__link">
+  <a href="#software-disclaimer" class="md-nav__link">
     <span class="md-ellipsis">
-      Typical Compilation Pipeline
+      Software Disclaimer
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#transpilation-pipeline" class="md-nav__link">
+  <a href="#legal-accuracy-disclaimer" class="md-nav__link">
     <span class="md-ellipsis">
-      Transpilation Pipeline
+      Legal Accuracy Disclaimer
     </span>
   </a>
   
@@ -2276,55 +2355,28 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#design-principles" class="md-nav__link">
+  <a href="#third-party-licenses" class="md-nav__link">
     <span class="md-ellipsis">
-      Design Principles
+      Third-Party Licenses
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Design Principles">
+    <nav class="md-nav" aria-label="Third-Party Licenses">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#1-separation-of-concerns" class="md-nav__link">
+  <a href="#dependencies" class="md-nav__link">
     <span class="md-ellipsis">
-      1. Separation of Concerns
+      Dependencies
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#2-immutability" class="md-nav__link">
+  <a href="#license-compatibility" class="md-nav__link">
     <span class="md-ellipsis">
-      2. Immutability
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#3-type-safety" class="md-nav__link">
-    <span class="md-ellipsis">
-      3. Type Safety
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#4-error-handling" class="md-nav__link">
-    <span class="md-ellipsis">
-      4. Error Handling
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#5-extensibility" class="md-nav__link">
-    <span class="md-ellipsis">
-      5. Extensibility
+      License Compatibility
     </span>
   </a>
   
@@ -2336,19 +2388,28 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#testing-strategy" class="md-nav__link">
+  <a href="#commercial-use" class="md-nav__link">
     <span class="md-ellipsis">
-      Testing Strategy
+      Commercial Use
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Testing Strategy">
+    <nav class="md-nav" aria-label="Commercial Use">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#test-pyramid" class="md-nav__link">
+  <a href="#commercial-projects" class="md-nav__link">
     <span class="md-ellipsis">
-      Test Pyramid
+      Commercial Projects
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#commercial-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      Commercial Examples
     </span>
   </a>
   
@@ -2360,28 +2421,28 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#performance-considerations" class="md-nav__link">
+  <a href="#open-source-compliance" class="md-nav__link">
     <span class="md-ellipsis">
-      Performance Considerations
+      Open Source Compliance
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Performance Considerations">
+    <nav class="md-nav" aria-label="Open Source Compliance">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#current-optimizations" class="md-nav__link">
+  <a href="#gpl-compatibility" class="md-nav__link">
     <span class="md-ellipsis">
-      Current Optimizations
+      GPL Compatibility
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#future-optimizations" class="md-nav__link">
+  <a href="#other-licenses" class="md-nav__link">
     <span class="md-ellipsis">
-      Future Optimizations
+      Other Licenses
     </span>
   </a>
   
@@ -2393,37 +2454,28 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#security-considerations" class="md-nav__link">
+  <a href="#patent-policy" class="md-nav__link">
     <span class="md-ellipsis">
-      Security Considerations
+      Patent Policy
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Security Considerations">
+    <nav class="md-nav" aria-label="Patent Policy">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#input-validation" class="md-nav__link">
+  <a href="#patent-grant" class="md-nav__link">
     <span class="md-ellipsis">
-      Input Validation
+      Patent Grant
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#resource-limits" class="md-nav__link">
+  <a href="#patent-protection" class="md-nav__link">
     <span class="md-ellipsis">
-      Resource Limits
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#dependency-security" class="md-nav__link">
-    <span class="md-ellipsis">
-      Dependency Security
+      Patent Protection
     </span>
   </a>
   
@@ -2435,28 +2487,28 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#deployment-architecture" class="md-nav__link">
+  <a href="#trademark-policy" class="md-nav__link">
     <span class="md-ellipsis">
-      Deployment Architecture
+      Trademark Policy
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Deployment Architecture">
+    <nav class="md-nav" aria-label="Trademark Policy">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#standalone-cli" class="md-nav__link">
+  <a href="#yuho-trademark" class="md-nav__link">
     <span class="md-ellipsis">
-      Standalone CLI
+      Yuho Trademark
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#docker-container" class="md-nav__link">
+  <a href="#attribution-guidelines" class="md-nav__link">
     <span class="md-ellipsis">
-      Docker Container
+      Attribution Guidelines
     </span>
   </a>
   
@@ -2468,37 +2520,28 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#future-architecture-enhancements" class="md-nav__link">
+  <a href="#legal-jurisdiction" class="md-nav__link">
     <span class="md-ellipsis">
-      Future Architecture Enhancements
+      Legal Jurisdiction
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Future Architecture Enhancements">
+    <nav class="md-nav" aria-label="Legal Jurisdiction">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#language-server-protocol-lsp" class="md-nav__link">
+  <a href="#governing-law" class="md-nav__link">
     <span class="md-ellipsis">
-      Language Server Protocol (LSP)
+      Governing Law
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#web-interface" class="md-nav__link">
+  <a href="#international-use" class="md-nav__link">
     <span class="md-ellipsis">
-      Web Interface
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#plugin-system" class="md-nav__link">
-    <span class="md-ellipsis">
-      Plugin System
+      International Use
     </span>
   </a>
   
@@ -2510,9 +2553,216 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#references" class="md-nav__link">
+  <a href="#contributor-license-agreement" class="md-nav__link">
     <span class="md-ellipsis">
-      References
+      Contributor License Agreement
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Contributor License Agreement">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#code-contributions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Code Contributions
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#legal-contributions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Legal Contributions
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#privacy-policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Privacy Policy
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Privacy Policy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#data-collection" class="md-nav__link">
+    <span class="md-ellipsis">
+      Data Collection
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Data Usage
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#security-policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Security Policy
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Security Policy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#security-reporting" class="md-nav__link">
+    <span class="md-ellipsis">
+      Security Reporting
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#security-measures" class="md-nav__link">
+    <span class="md-ellipsis">
+      Security Measures
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#support-and-maintenance" class="md-nav__link">
+    <span class="md-ellipsis">
+      Support and Maintenance
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Support and Maintenance">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#support-policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Support Policy
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#maintenance" class="md-nav__link">
+    <span class="md-ellipsis">
+      Maintenance
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#contact-information" class="md-nav__link">
+    <span class="md-ellipsis">
+      Contact Information
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Contact Information">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#legal-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Legal Questions
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#technical-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Technical Questions
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#version-history" class="md-nav__link">
+    <span class="md-ellipsis">
+      Version History
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Version History">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#license-versions" class="md-nav__link">
+    <span class="md-ellipsis">
+      License Versions
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Changes
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conclusion
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#next-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      Next Steps
     </span>
   </a>
   
@@ -2537,294 +2787,253 @@
   
 
 
-<h1 id="architecture">Architecture<a class="headerlink" href="#architecture" title="Permanent link">&para;</a></h1>
-<p>This document describes the architecture and design of Yuho v3.0.</p>
-<h2 id="system-overview">System Overview<a class="headerlink" href="#system-overview" title="Permanent link">&para;</a></h2>
-<p>Yuho is a domain-specific language (DSL) compiler/transpiler that processes legal statute representations and outputs various formats for visualization and verification.</p>
-<h2 id="high-level-architecture">High-Level Architecture<a class="headerlink" href="#high-level-architecture" title="Permanent link">&para;</a></h2>
-<pre class="mermaid"><code>graph TB
-    A[Yuho Source Code .yh] --&gt; B[Lexer]
-    B --&gt; C[Parser]
-    C --&gt; D[AST]
-    D --&gt; E[Semantic Analyzer]
-    E --&gt; F{Valid?}
-    F --&gt;|Yes| G[Transpilers]
-    F --&gt;|No| H[Error Reporter]
-    G --&gt; I[Mermaid Diagrams]
-    G --&gt; J[Alloy Specifications]
-    H --&gt; K[User Feedback]</code></pre>
-<h2 id="component-architecture">Component Architecture<a class="headerlink" href="#component-architecture" title="Permanent link">&para;</a></h2>
-<h3 id="1-lexer-lexerpy">1. Lexer (<code>lexer.py</code>)<a class="headerlink" href="#1-lexer-lexerpy" title="Permanent link">&para;</a></h3>
-<p><strong>Purpose</strong>: Tokenization and initial parsing using Lark parser</p>
-<p><strong>Responsibilities</strong>:
-- Read Yuho source code
-- Tokenize input using grammar rules
-- Generate parse tree
-- Report syntax errors</p>
-<p><strong>Technology</strong>: Lark (LALR parser generator)</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">class</span> <span class="nc">YuhoLexer</span><span class="p">:</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>        <span class="c1"># Load grammar from grammar.lark</span>
+<h1 id="license">License<a class="headerlink" href="#license" title="Permanent link">&para;</a></h1>
+<p>Yuho is released under the MIT License.</p>
+<h2 id="mit-license">MIT License<a class="headerlink" href="#mit-license" title="Permanent link">&para;</a></h2>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>MIT License
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>Copyright (c) 2024 Yuho Contributors
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tree</span><span class="p">:</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>        <span class="c1"># Parse text into Lark parse tree</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>Permission is hereby granted, free of charge, to any person obtaining a copy
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>of this software and associated documentation files (the &quot;Software&quot;), to deal
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>in the Software without restriction, including without limitation the rights
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>copies of the Software, and to permit persons to whom the Software is
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>furnished to do so, subject to the following conditions:
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>The above copyright notice and this permission notice shall be included in all
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>copies or substantial portions of the Software.
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>SOFTWARE.
 </span></code></pre></div>
-<h3 id="2-parser-parserpy">2. Parser (<code>parser.py</code>)<a class="headerlink" href="#2-parser-parserpy" title="Permanent link">&para;</a></h3>
-<p><strong>Purpose</strong>: Transform parse trees into Abstract Syntax Trees (AST)</p>
-<p><strong>Responsibilities</strong>:
-- Transform Lark parse trees into Yuho AST nodes
-- Handle all language constructs
-- Maintain source location information</p>
-<p><strong>Key Classes</strong>:
-- <code>YuhoTransformer</code>: Lark transformer for AST generation
-- <code>YuhoParser</code>: Main parser interface</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">class</span> <span class="nc">YuhoParser</span><span class="p">:</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Program</span><span class="p">:</span>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>        <span class="c1"># Parse text into Yuho AST</span>
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    <span class="k">def</span> <span class="nf">parse_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Program</span><span class="p">:</span>
-</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>        <span class="c1"># Parse file into AST</span>
-</span></code></pre></div>
-<h3 id="3-ast-nodes-ast_nodespy">3. AST Nodes (<code>ast_nodes.py</code>)<a class="headerlink" href="#3-ast-nodes-ast_nodespy" title="Permanent link">&para;</a></h3>
-<p><strong>Purpose</strong>: Define all AST node types</p>
-<p><strong>Node Hierarchy</strong>:
-<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>ASTNode (base)
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>├── Program
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>├── Statement
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>│   ├── Declaration
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>│   ├── Assignment
-</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>│   ├── StructDefinition
-</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>│   ├── FunctionDefinition
-</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>│   ├── MatchCase
-</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>│   └── PassStatement
-</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>├── Expression
-</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>│   ├── Literal
-</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>│   ├── Identifier
-</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>│   ├── BinaryOperation
-</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>│   ├── UnaryOperation
-</span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>│   └── FunctionCall
-</span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>└── TypeNode
-</span></code></pre></div></p>
-<p><strong>Design Pattern</strong>: Dataclasses for immutability and clarity</p>
-<h3 id="4-semantic-analyzer-semantic_analyzerpy">4. Semantic Analyzer (<code>semantic_analyzer.py</code>)<a class="headerlink" href="#4-semantic-analyzer-semantic_analyzerpy" title="Permanent link">&para;</a></h3>
-<p><strong>Purpose</strong>: Type checking, scope analysis, and semantic validation</p>
-<p><strong>Responsibilities</strong>:
-- Type checking for all expressions
-- Scope resolution and variable tracking
-- Struct member validation
-- Function signature verification
-- Error collection and reporting</p>
-<p><strong>Key Classes</strong>:
-- <code>SymbolTable</code>: Manages scopes and symbols
-- <code>SemanticAnalyzer</code>: Main analysis engine</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">class</span> <span class="nc">SemanticAnalyzer</span><span class="p">:</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    <span class="k">def</span> <span class="nf">analyze</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">program</span><span class="p">:</span> <span class="n">Program</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>        <span class="c1"># Analyze AST and return errors</span>
-</span></code></pre></div>
-<h3 id="5-transpilers">5. Transpilers<a class="headerlink" href="#5-transpilers" title="Permanent link">&para;</a></h3>
-<h4 id="mermaid-transpiler-transpilersmermaid_transpilerpy">Mermaid Transpiler (<code>transpilers/mermaid_transpiler.py</code>)<a class="headerlink" href="#mermaid-transpiler-transpilersmermaid_transpilerpy" title="Permanent link">&para;</a></h4>
-<p><strong>Purpose</strong>: Generate Mermaid diagram specifications</p>
-<p><strong>Output Formats</strong>:
-- Flowcharts: Representing control flow and logic
-- Mindmaps: Representing hierarchical structure</p>
-<p><strong>Algorithm</strong>:
-1. Traverse AST depth-first
-2. Generate unique node IDs
-3. Build Mermaid syntax for each node type
-4. Connect nodes based on relationships</p>
-<h4 id="alloy-transpiler-transpilersalloy_transpilerpy">Alloy Transpiler (<code>transpilers/alloy_transpiler.py</code>)<a class="headerlink" href="#alloy-transpiler-transpilersalloy_transpilerpy" title="Permanent link">&para;</a></h4>
-<p><strong>Purpose</strong>: Generate Alloy specifications for formal verification</p>
-<p><strong>Output Components</strong>:
-- Signatures: From struct definitions
-- Predicates: From match-case logic
-- Facts: From constraints
-- Run commands: For verification</p>
-<p><strong>Algorithm</strong>:
-1. Convert structs to Alloy signatures
-2. Convert match-case to predicates
-3. Map Yuho types to Alloy types
-4. Generate verification commands</p>
-<h3 id="6-cli-climainpy">6. CLI (<code>cli/main.py</code>)<a class="headerlink" href="#6-cli-climainpy" title="Permanent link">&para;</a></h3>
-<p><strong>Purpose</strong>: Command-line interface for all Yuho operations</p>
-<p><strong>Commands</strong>:
-- <code>check</code>: Validate Yuho files
-- <code>draw</code>: Generate diagrams
-- <code>alloy</code>: Generate Alloy specs
-- <code>draft</code>: Create templates
-- <code>how</code>: Show examples</p>
-<p><strong>Technology</strong>: Click framework for CLI</p>
-<h3 id="7-repl-replpy">7. REPL (<code>repl.py</code>)<a class="headerlink" href="#7-repl-replpy" title="Permanent link">&para;</a></h3>
-<p><strong>Purpose</strong>: Interactive shell for Yuho</p>
-<p><strong>Features</strong>:
-- Live code evaluation
-- Command history
-- File loading
-- Inline transpilation</p>
-<h2 id="data-flow">Data Flow<a class="headerlink" href="#data-flow" title="Permanent link">&para;</a></h2>
-<h3 id="typical-compilation-pipeline">Typical Compilation Pipeline<a class="headerlink" href="#typical-compilation-pipeline" title="Permanent link">&para;</a></h3>
-<pre class="mermaid"><code>sequenceDiagram
-    participant User
-    participant CLI
-    participant Lexer
-    participant Parser
-    participant Analyzer
-    participant Transpiler
-
-    User-&gt;&gt;CLI: yuho check file.yh
-    CLI-&gt;&gt;Lexer: Read file
-    Lexer-&gt;&gt;Parser: Parse tree
-    Parser-&gt;&gt;Analyzer: AST
-    Analyzer-&gt;&gt;Analyzer: Type check
-    Analyzer-&gt;&gt;CLI: Errors (if any)
-    CLI-&gt;&gt;User: Results</code></pre>
-<h3 id="transpilation-pipeline">Transpilation Pipeline<a class="headerlink" href="#transpilation-pipeline" title="Permanent link">&para;</a></h3>
-<pre class="mermaid"><code>sequenceDiagram
-    participant User
-    participant CLI
-    participant Parser
-    participant Transpiler
-
-    User-&gt;&gt;CLI: yuho draw file.yh
-    CLI-&gt;&gt;Parser: Parse file
-    Parser-&gt;&gt;CLI: AST
-    CLI-&gt;&gt;Transpiler: Transpile AST
-    Transpiler-&gt;&gt;CLI: Mermaid code
-    CLI-&gt;&gt;User: Output</code></pre>
-<h2 id="design-principles">Design Principles<a class="headerlink" href="#design-principles" title="Permanent link">&para;</a></h2>
-<h3 id="1-separation-of-concerns">1. Separation of Concerns<a class="headerlink" href="#1-separation-of-concerns" title="Permanent link">&para;</a></h3>
+<h2 id="license-summary">License Summary<a class="headerlink" href="#license-summary" title="Permanent link">&para;</a></h2>
+<h3 id="what-you-can-do">What You Can Do<a class="headerlink" href="#what-you-can-do" title="Permanent link">&para;</a></h3>
 <ul>
-<li>Each component has a single, well-defined responsibility</li>
-<li>Clear interfaces between components</li>
-<li>Minimal coupling</li>
+<li>✅ <strong>Use</strong> - Use Yuho for any purpose, including commercial use</li>
+<li>✅ <strong>Modify</strong> - Modify the source code to suit your needs</li>
+<li>✅ <strong>Distribute</strong> - Share Yuho with others</li>
+<li>✅ <strong>Sell</strong> - Use Yuho in commercial products</li>
+<li>✅ <strong>Private Use</strong> - Use Yuho in private projects</li>
 </ul>
-<h3 id="2-immutability">2. Immutability<a class="headerlink" href="#2-immutability" title="Permanent link">&para;</a></h3>
+<h3 id="what-you-must-do">What You Must Do<a class="headerlink" href="#what-you-must-do" title="Permanent link">&para;</a></h3>
 <ul>
-<li>AST nodes are immutable dataclasses</li>
-<li>Transformations create new structures</li>
-<li>Easier reasoning and testing</li>
+<li>✅ <strong>Include License</strong> - Include the MIT License text in distributions</li>
+<li>✅ <strong>Include Copyright</strong> - Include the copyright notice</li>
+<li>✅ <strong>Attribution</strong> - Give credit to Yuho contributors</li>
 </ul>
-<h3 id="3-type-safety">3. Type Safety<a class="headerlink" href="#3-type-safety" title="Permanent link">&para;</a></h3>
+<h3 id="what-you-cannot-do">What You Cannot Do<a class="headerlink" href="#what-you-cannot-do" title="Permanent link">&para;</a></h3>
 <ul>
-<li>Strong typing throughout</li>
-<li>Python type hints</li>
-<li>Runtime type checking in semantic analyzer</li>
+<li>❌ <strong>Remove Copyright</strong> - Cannot remove copyright notices</li>
+<li>❌ <strong>Remove License</strong> - Cannot remove license text</li>
+<li>❌ <strong>Hold Liable</strong> - Cannot hold authors liable for damages</li>
 </ul>
-<h3 id="4-error-handling">4. Error Handling<a class="headerlink" href="#4-error-handling" title="Permanent link">&para;</a></h3>
+<h2 id="legal-disclaimer">Legal Disclaimer<a class="headerlink" href="#legal-disclaimer" title="Permanent link">&para;</a></h2>
+<h3 id="software-disclaimer">Software Disclaimer<a class="headerlink" href="#software-disclaimer" title="Permanent link">&para;</a></h3>
 <ul>
-<li>Collect all errors, don't fail fast</li>
-<li>Provide helpful error messages</li>
-<li>Include source location information</li>
+<li><strong>No Warranty</strong> - Software is provided "as is" without warranty</li>
+<li><strong>No Liability</strong> - Authors are not liable for any damages</li>
+<li><strong>Use at Your Own Risk</strong> - Use the software at your own risk</li>
+<li><strong>No Support</strong> - No guarantee of support or updates</li>
 </ul>
-<h3 id="5-extensibility">5. Extensibility<a class="headerlink" href="#5-extensibility" title="Permanent link">&para;</a></h3>
+<h3 id="legal-accuracy-disclaimer">Legal Accuracy Disclaimer<a class="headerlink" href="#legal-accuracy-disclaimer" title="Permanent link">&para;</a></h3>
 <ul>
-<li>Easy to add new transpilers</li>
-<li>Plugin architecture possible</li>
-<li>Well-documented interfaces</li>
+<li><strong>Not Legal Advice</strong> - Yuho is not a substitute for legal advice</li>
+<li><strong>Consult Legal Professionals</strong> - Always consult qualified legal professionals</li>
+<li><strong>Verify Legal Accuracy</strong> - Verify all legal content for accuracy</li>
+<li><strong>Use at Your Own Risk</strong> - Legal use is at your own risk</li>
 </ul>
-<h2 id="testing-strategy">Testing Strategy<a class="headerlink" href="#testing-strategy" title="Permanent link">&para;</a></h2>
-<h3 id="test-pyramid">Test Pyramid<a class="headerlink" href="#test-pyramid" title="Permanent link">&para;</a></h3>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>          /\
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>         /  \    E2E Tests
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>        /----\
-</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>       /      \  Integration Tests  
-</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>      /--------\
-</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>     /          \ Unit Tests
-</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>    /------------\
-</span></code></pre></div>
-<p><strong>Unit Tests</strong>: Individual component testing
-- Lexer tokenization
-- Parser AST generation
-- Semantic analysis rules
-- Transpiler output</p>
-<p><strong>Integration Tests</strong>: Component interaction
-- Full parse → analyze pipeline
-- Parse → transpile pipeline
-- File I/O operations</p>
-<p><strong>E2E Tests</strong>: Complete workflows
-- Real example files
-- CLI commands
-- Error scenarios</p>
-<h2 id="performance-considerations">Performance Considerations<a class="headerlink" href="#performance-considerations" title="Permanent link">&para;</a></h2>
-<h3 id="current-optimizations">Current Optimizations<a class="headerlink" href="#current-optimizations" title="Permanent link">&para;</a></h3>
+<h2 id="third-party-licenses">Third-Party Licenses<a class="headerlink" href="#third-party-licenses" title="Permanent link">&para;</a></h2>
+<h3 id="dependencies">Dependencies<a class="headerlink" href="#dependencies" title="Permanent link">&para;</a></h3>
+<p>Yuho uses the following third-party libraries:</p>
+<h4 id="python-dependencies">Python Dependencies<a class="headerlink" href="#python-dependencies" title="Permanent link">&para;</a></h4>
 <ul>
-<li>LALR parsing (efficient)</li>
-<li>Single-pass semantic analysis</li>
-<li>Lazy evaluation where possible</li>
+<li><strong>lark-parser</strong> - MIT License</li>
+<li><strong>click</strong> - BSD License</li>
+<li><strong>colorama</strong> - BSD License</li>
 </ul>
-<h3 id="future-optimizations">Future Optimizations<a class="headerlink" href="#future-optimizations" title="Permanent link">&para;</a></h3>
+<h4 id="development-dependencies">Development Dependencies<a class="headerlink" href="#development-dependencies" title="Permanent link">&para;</a></h4>
 <ul>
-<li>Caching of parsed files</li>
-<li>Parallel analysis of independent files</li>
-<li>Incremental compilation</li>
+<li><strong>pytest</strong> - MIT License</li>
+<li><strong>pytest-cov</strong> - MIT License</li>
+<li><strong>black</strong> - MIT License</li>
+<li><strong>flake8</strong> - MIT License</li>
+<li><strong>mypy</strong> - MIT License</li>
+<li><strong>pre-commit</strong> - MIT License</li>
 </ul>
-<h2 id="security-considerations">Security Considerations<a class="headerlink" href="#security-considerations" title="Permanent link">&para;</a></h2>
-<h3 id="input-validation">Input Validation<a class="headerlink" href="#input-validation" title="Permanent link">&para;</a></h3>
+<h4 id="documentation-dependencies">Documentation Dependencies<a class="headerlink" href="#documentation-dependencies" title="Permanent link">&para;</a></h4>
 <ul>
-<li>Grammar enforces syntax constraints</li>
-<li>Semantic analyzer validates types</li>
-<li>File path sanitization in CLI</li>
+<li><strong>mkdocs</strong> - BSD License</li>
+<li><strong>mkdocs-material</strong> - MIT License</li>
 </ul>
-<h3 id="resource-limits">Resource Limits<a class="headerlink" href="#resource-limits" title="Permanent link">&para;</a></h3>
+<h3 id="license-compatibility">License Compatibility<a class="headerlink" href="#license-compatibility" title="Permanent link">&para;</a></h3>
+<p>All dependencies are compatible with the MIT License and can be used in commercial projects.</p>
+<h2 id="commercial-use">Commercial Use<a class="headerlink" href="#commercial-use" title="Permanent link">&para;</a></h2>
+<h3 id="commercial-projects">Commercial Projects<a class="headerlink" href="#commercial-projects" title="Permanent link">&para;</a></h3>
 <ul>
-<li>Parser timeout for large files</li>
-<li>Memory limits for AST size</li>
-<li>Stack depth limits for recursion</li>
+<li>✅ <strong>Allowed</strong> - Commercial use is explicitly allowed</li>
+<li>✅ <strong>No Restrictions</strong> - No additional restrictions for commercial use</li>
+<li>✅ <strong>No Fees</strong> - No licensing fees required</li>
+<li>✅ <strong>No Attribution Required</strong> - No requirement to open source your code</li>
 </ul>
-<h3 id="dependency-security">Dependency Security<a class="headerlink" href="#dependency-security" title="Permanent link">&para;</a></h3>
+<h3 id="commercial-examples">Commercial Examples<a class="headerlink" href="#commercial-examples" title="Permanent link">&para;</a></h3>
 <ul>
-<li>Regular vulnerability scanning</li>
-<li>Minimal dependency surface</li>
-<li>Pinned versions in production</li>
+<li><strong>Legal Tech Companies</strong> - Use Yuho in legal technology products</li>
+<li><strong>Law Firms</strong> - Use Yuho for internal legal analysis</li>
+<li><strong>Educational Institutions</strong> - Use Yuho for legal education</li>
+<li><strong>Government Agencies</strong> - Use Yuho for legal research</li>
 </ul>
-<h2 id="deployment-architecture">Deployment Architecture<a class="headerlink" href="#deployment-architecture" title="Permanent link">&para;</a></h2>
-<h3 id="standalone-cli">Standalone CLI<a class="headerlink" href="#standalone-cli" title="Permanent link">&para;</a></h3>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>┌─────────────────┐
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>│   User System   │
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>│                 │
-</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>│  ┌───────────┐  │
-</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>│  │   Yuho    │  │
-</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>│  │    CLI    │  │
-</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>│  └───────────┘  │
-</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>│                 │
-</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>│  .yh files      │
-</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>└─────────────────┘
-</span></code></pre></div>
-<h3 id="docker-container">Docker Container<a class="headerlink" href="#docker-container" title="Permanent link">&para;</a></h3>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>┌─────────────────────┐
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>│  Docker Container   │
-</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>│  ┌───────────────┐  │
-</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>│  │  Yuho Runtime │  │
-</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>│  └───────────────┘  │
-</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>│         │           │
-</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>│    ┌────▼────┐      │
-</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>│    │ Volumes │      │
-</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>│    └─────────┘      │
-</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>└─────────────────────┘
-</span></code></pre></div>
-<h2 id="future-architecture-enhancements">Future Architecture Enhancements<a class="headerlink" href="#future-architecture-enhancements" title="Permanent link">&para;</a></h2>
-<h3 id="language-server-protocol-lsp">Language Server Protocol (LSP)<a class="headerlink" href="#language-server-protocol-lsp" title="Permanent link">&para;</a></h3>
+<h2 id="open-source-compliance">Open Source Compliance<a class="headerlink" href="#open-source-compliance" title="Permanent link">&para;</a></h2>
+<h3 id="gpl-compatibility">GPL Compatibility<a class="headerlink" href="#gpl-compatibility" title="Permanent link">&para;</a></h3>
 <ul>
-<li>Real-time syntax checking</li>
-<li>Auto-completion</li>
-<li>Go-to-definition</li>
+<li>✅ <strong>GPL Compatible</strong> - MIT License is compatible with GPL</li>
+<li>✅ <strong>Can Include in GPL Projects</strong> - Can be included in GPL-licensed projects</li>
+<li>✅ <strong>No Copyleft</strong> - No copyleft requirements</li>
 </ul>
-<h3 id="web-interface">Web Interface<a class="headerlink" href="#web-interface" title="Permanent link">&para;</a></h3>
+<h3 id="other-licenses">Other Licenses<a class="headerlink" href="#other-licenses" title="Permanent link">&para;</a></h3>
 <ul>
-<li>Browser-based editor</li>
-<li>Live preview</li>
-<li>Shared examples</li>
+<li>✅ <strong>Apache 2.0 Compatible</strong> - Compatible with Apache 2.0 License</li>
+<li>✅ <strong>BSD Compatible</strong> - Compatible with BSD licenses</li>
+<li>✅ <strong>Most Licenses Compatible</strong> - Compatible with most open source licenses</li>
 </ul>
-<h3 id="plugin-system">Plugin System<a class="headerlink" href="#plugin-system" title="Permanent link">&para;</a></h3>
+<h2 id="patent-policy">Patent Policy<a class="headerlink" href="#patent-policy" title="Permanent link">&para;</a></h2>
+<h3 id="patent-grant">Patent Grant<a class="headerlink" href="#patent-grant" title="Permanent link">&para;</a></h3>
+<p>The MIT License includes an implicit patent grant, allowing use of any patents held by contributors.</p>
+<h3 id="patent-protection">Patent Protection<a class="headerlink" href="#patent-protection" title="Permanent link">&para;</a></h3>
 <ul>
-<li>Custom transpilers</li>
-<li>Custom validators</li>
-<li>Extension hooks</li>
+<li>✅ <strong>Patent Grant</strong> - Implicit patent grant included</li>
+<li>✅ <strong>No Patent Lawsuits</strong> - Contributors cannot sue for patent infringement</li>
+<li>✅ <strong>Patent Protection</strong> - Protection against patent lawsuits</li>
 </ul>
-<h2 id="references">References<a class="headerlink" href="#references" title="Permanent link">&para;</a></h2>
+<h2 id="trademark-policy">Trademark Policy<a class="headerlink" href="#trademark-policy" title="Permanent link">&para;</a></h2>
+<h3 id="yuho-trademark">Yuho Trademark<a class="headerlink" href="#yuho-trademark" title="Permanent link">&para;</a></h3>
 <ul>
-<li><a href="https://lark-parser.readthedocs.io/">Lark Parser Documentation</a></li>
-<li><a href="https://en.wikipedia.org/wiki/Abstract_syntax_tree">AST Design Patterns</a></li>
-<li><a href="https://en.wikipedia.org/wiki/Compiler">Compiler Design</a></li>
+<li><strong>Trademark Rights</strong> - Yuho name and logo are trademarks</li>
+<li><strong>Fair Use</strong> - Fair use for attribution is allowed</li>
+<li><strong>Commercial Use</strong> - Commercial use requires permission</li>
+<li><strong>Brand Guidelines</strong> - Follow brand guidelines for logo use</li>
+</ul>
+<h3 id="attribution-guidelines">Attribution Guidelines<a class="headerlink" href="#attribution-guidelines" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Credit Required</strong> - Give credit to Yuho contributors</li>
+<li><strong>Logo Use</strong> - Use logo according to guidelines</li>
+<li><strong>Brand Protection</strong> - Protect Yuho brand integrity</li>
+</ul>
+<h2 id="legal-jurisdiction">Legal Jurisdiction<a class="headerlink" href="#legal-jurisdiction" title="Permanent link">&para;</a></h2>
+<h3 id="governing-law">Governing Law<a class="headerlink" href="#governing-law" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Jurisdiction</strong> - Governed by the laws of Singapore</li>
+<li><strong>Dispute Resolution</strong> - Disputes resolved in Singapore courts</li>
+<li><strong>Legal Framework</strong> - Subject to Singapore legal framework</li>
+</ul>
+<h3 id="international-use">International Use<a class="headerlink" href="#international-use" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Global Use</strong> - Can be used globally</li>
+<li><strong>Local Laws</strong> - Subject to local laws where used</li>
+<li><strong>Compliance</strong> - Ensure compliance with local regulations</li>
+</ul>
+<h2 id="contributor-license-agreement">Contributor License Agreement<a class="headerlink" href="#contributor-license-agreement" title="Permanent link">&para;</a></h2>
+<h3 id="code-contributions">Code Contributions<a class="headerlink" href="#code-contributions" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>License Grant</strong> - Contributors grant license to use their code</li>
+<li><strong>Patent Grant</strong> - Contributors grant patent license</li>
+<li><strong>Moral Rights</strong> - Contributors waive moral rights</li>
+<li><strong>Representation</strong> - Contributors represent they have rights to contribute</li>
+</ul>
+<h3 id="legal-contributions">Legal Contributions<a class="headerlink" href="#legal-contributions" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Legal Content</strong> - Legal content contributions are welcome</li>
+<li><strong>Accuracy</strong> - Ensure legal accuracy</li>
+<li><strong>Expert Review</strong> - Legal content subject to expert review</li>
+<li><strong>Responsibility</strong> - Contributors responsible for legal accuracy</li>
+</ul>
+<h2 id="privacy-policy">Privacy Policy<a class="headerlink" href="#privacy-policy" title="Permanent link">&para;</a></h2>
+<h3 id="data-collection">Data Collection<a class="headerlink" href="#data-collection" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>No Personal Data</strong> - No personal data collected</li>
+<li><strong>Usage Analytics</strong> - Optional usage analytics</li>
+<li><strong>Error Reporting</strong> - Optional error reporting</li>
+<li><strong>User Privacy</strong> - Respect user privacy</li>
+</ul>
+<h3 id="data-usage">Data Usage<a class="headerlink" href="#data-usage" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Improvement</strong> - Data used to improve software</li>
+<li><strong>No Sharing</strong> - Data not shared with third parties</li>
+<li><strong>User Control</strong> - Users control data sharing</li>
+<li><strong>Transparency</strong> - Transparent about data usage</li>
+</ul>
+<h2 id="security-policy">Security Policy<a class="headerlink" href="#security-policy" title="Permanent link">&para;</a></h2>
+<h3 id="security-reporting">Security Reporting<a class="headerlink" href="#security-reporting" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Vulnerability Reporting</strong> - Report security vulnerabilities</li>
+<li><strong>Responsible Disclosure</strong> - Follow responsible disclosure</li>
+<li><strong>Security Updates</strong> - Regular security updates</li>
+<li><strong>Security Review</strong> - Regular security reviews</li>
+</ul>
+<h3 id="security-measures">Security Measures<a class="headerlink" href="#security-measures" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Code Review</strong> - All code subject to review</li>
+<li><strong>Security Testing</strong> - Regular security testing</li>
+<li><strong>Dependency Updates</strong> - Regular dependency updates</li>
+<li><strong>Security Monitoring</strong> - Continuous security monitoring</li>
+</ul>
+<h2 id="support-and-maintenance">Support and Maintenance<a class="headerlink" href="#support-and-maintenance" title="Permanent link">&para;</a></h2>
+<h3 id="support-policy">Support Policy<a class="headerlink" href="#support-policy" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Community Support</strong> - Community-based support</li>
+<li><strong>No Guarantee</strong> - No guarantee of support</li>
+<li><strong>Best Effort</strong> - Best effort to provide support</li>
+<li><strong>Documentation</strong> - Comprehensive documentation provided</li>
+</ul>
+<h3 id="maintenance">Maintenance<a class="headerlink" href="#maintenance" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Regular Updates</strong> - Regular updates and improvements</li>
+<li><strong>Bug Fixes</strong> - Bug fixes as needed</li>
+<li><strong>Security Updates</strong> - Security updates as needed</li>
+<li><strong>Feature Updates</strong> - New features as developed</li>
+</ul>
+<h2 id="contact-information">Contact Information<a class="headerlink" href="#contact-information" title="Permanent link">&para;</a></h2>
+<h3 id="legal-questions">Legal Questions<a class="headerlink" href="#legal-questions" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Email</strong> - legal@yuho.dev</li>
+<li><strong>GitHub</strong> - GitHub Issues</li>
+<li><strong>Discussions</strong> - GitHub Discussions</li>
+<li><strong>Community</strong> - Community forums</li>
+</ul>
+<h3 id="technical-questions">Technical Questions<a class="headerlink" href="#technical-questions" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Email</strong> - support@yuho.dev</li>
+<li><strong>GitHub</strong> - GitHub Issues</li>
+<li><strong>Documentation</strong> - Check documentation first</li>
+<li><strong>Community</strong> - Community support</li>
+</ul>
+<h2 id="version-history">Version History<a class="headerlink" href="#version-history" title="Permanent link">&para;</a></h2>
+<h3 id="license-versions">License Versions<a class="headerlink" href="#license-versions" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>v1.0</strong> - Initial MIT License</li>
+<li><strong>v2.0</strong> - Updated MIT License with clarifications</li>
+<li><strong>v3.0</strong> - Current MIT License</li>
+</ul>
+<h3 id="changes">Changes<a class="headerlink" href="#changes" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>v2.0</strong> - Added legal disclaimers</li>
+<li><strong>v3.0</strong> - Added trademark policy</li>
+<li><strong>Future</strong> - Updates as needed</li>
+</ul>
+<h2 id="conclusion">Conclusion<a class="headerlink" href="#conclusion" title="Permanent link">&para;</a></h2>
+<p>The MIT License provides maximum freedom for users while protecting contributors. It allows commercial use, modification, and distribution while maintaining attribution requirements.</p>
+<p>For any questions about the license, please contact the project maintainers or consult with legal professionals.</p>
+<h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../roadmap/">Roadmap</a> - Future development plans</li>
+<li><a href="../changelog/">Changelog</a> - Recent changes and updates</li>
+<li><a href="../../development/contributing/">Contributing</a> - How to contribute</li>
+<li><a href="../../development/testing/">Development</a> - Development guidelines</li>
 </ul>
 
 
