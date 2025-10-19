@@ -2,46 +2,146 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://gabrielongzm.com/yuho/</loc>
-         <lastmod>2025-10-18</lastmod>
+         <lastmod>2025-10-19</lastmod>
+    </url>
+    <url>
+         <loc>https://gabrielongzm.com/yuho/about/changelog/</loc>
+         <lastmod>2025-10-19</lastmod>
     </url>
     <url>
          <loc>https://gabrielongzm.com/yuho/about/faq/</loc>
-         <lastmod>2025-10-18</lastmod>
+         <lastmod>2025-10-19</lastmod>
+    </url>
+    <url>
+         <loc>https://gabrielongzm.com/yuho/about/license/</loc>
+         <lastmod>2025-10-19</lastmod>
+    </url>
+    <url>
+         <loc>https://gabrielongzm.com/yuho/about/roadmap/</loc>
+         <lastmod>2025-10-19</lastmod>
+    </url>
+    <url>
+         <loc>https://gabrielongzm.com/yuho/api/ast/</loc>
+         <lastmod>2025-10-19</lastmod>
+    </url>
+    <url>
+         <loc>https://gabrielongzm.com/yuho/api/lexer/</loc>
+         <lastmod>2025-10-19</lastmod>
     </url>
     <url>
          <loc>https://gabrielongzm.com/yuho/api/parser/</loc>
-         <lastmod>2025-10-18</lastmod>
+         <lastmod>2025-10-19</lastmod>
+    </url>
+    <url>
+         <loc>https://gabrielongzm.com/yuho/api/semantic/</loc>
+         <lastmod>2025-10-19</lastmod>
+    </url>
+    <url>
+         <loc>https://gabrielongzm.com/yuho/api/transpilers/</loc>
+         <lastmod>2025-10-19</lastmod>
+    </url>
+    <url>
+         <loc>https://gabrielongzm.com/yuho/cli/alloy/</loc>
+         <lastmod>2025-10-19</lastmod>
+    </url>
+    <url>
+         <loc>https://gabrielongzm.com/yuho/cli/check/</loc>
+         <lastmod>2025-10-19</lastmod>
     </url>
     <url>
          <loc>https://gabrielongzm.com/yuho/cli/commands/</loc>
-         <lastmod>2025-10-18</lastmod>
+         <lastmod>2025-10-19</lastmod>
+    </url>
+    <url>
+         <loc>https://gabrielongzm.com/yuho/cli/draft/</loc>
+         <lastmod>2025-10-19</lastmod>
+    </url>
+    <url>
+         <loc>https://gabrielongzm.com/yuho/cli/draw/</loc>
+         <lastmod>2025-10-19</lastmod>
+    </url>
+    <url>
+         <loc>https://gabrielongzm.com/yuho/cli/repl/</loc>
+         <lastmod>2025-10-19</lastmod>
     </url>
     <url>
          <loc>https://gabrielongzm.com/yuho/development/architecture/</loc>
-         <lastmod>2025-10-18</lastmod>
+         <lastmod>2025-10-19</lastmod>
+    </url>
+    <url>
+         <loc>https://gabrielongzm.com/yuho/development/contributing/</loc>
+         <lastmod>2025-10-19</lastmod>
+    </url>
+    <url>
+         <loc>https://gabrielongzm.com/yuho/development/docker/</loc>
+         <lastmod>2025-10-19</lastmod>
+    </url>
+    <url>
+         <loc>https://gabrielongzm.com/yuho/development/testing/</loc>
+         <lastmod>2025-10-19</lastmod>
+    </url>
+    <url>
+         <loc>https://gabrielongzm.com/yuho/examples/cheating/</loc>
+         <lastmod>2025-10-19</lastmod>
     </url>
     <url>
          <loc>https://gabrielongzm.com/yuho/examples/criminal-law/</loc>
-         <lastmod>2025-10-18</lastmod>
+         <lastmod>2025-10-19</lastmod>
+    </url>
+    <url>
+         <loc>https://gabrielongzm.com/yuho/examples/patterns/</loc>
+         <lastmod>2025-10-19</lastmod>
     </url>
     <url>
          <loc>https://gabrielongzm.com/yuho/getting-started/first-program/</loc>
-         <lastmod>2025-10-18</lastmod>
+         <lastmod>2025-10-19</lastmod>
     </url>
     <url>
          <loc>https://gabrielongzm.com/yuho/getting-started/installation/</loc>
-         <lastmod>2025-10-18</lastmod>
+         <lastmod>2025-10-19</lastmod>
     </url>
     <url>
          <loc>https://gabrielongzm.com/yuho/getting-started/quickstart/</loc>
-         <lastmod>2025-10-18</lastmod>
+         <lastmod>2025-10-19</lastmod>
+    </url>
+    <url>
+         <loc>https://gabrielongzm.com/yuho/language/comments/</loc>
+         <lastmod>2025-10-19</lastmod>
+    </url>
+    <url>
+         <loc>https://gabrielongzm.com/yuho/language/functions/</loc>
+         <lastmod>2025-10-19</lastmod>
+    </url>
+    <url>
+         <loc>https://gabrielongzm.com/yuho/language/match-case/</loc>
+         <lastmod>2025-10-19</lastmod>
     </url>
     <url>
          <loc>https://gabrielongzm.com/yuho/language/overview/</loc>
-         <lastmod>2025-10-18</lastmod>
+         <lastmod>2025-10-19</lastmod>
+    </url>
+    <url>
+         <loc>https://gabrielongzm.com/yuho/language/structs/</loc>
+         <lastmod>2025-10-19</lastmod>
+    </url>
+    <url>
+         <loc>https://gabrielongzm.com/yuho/language/syntax/</loc>
+         <lastmod>2025-10-19</lastmod>
+    </url>
+    <url>
+         <loc>https://gabrielongzm.com/yuho/language/types/</loc>
+         <lastmod>2025-10-19</lastmod>
+    </url>
+    <url>
+         <loc>https://gabrielongzm.com/yuho/transpilers/alloy/</loc>
+         <lastmod>2025-10-19</lastmod>
+    </url>
+    <url>
+         <loc>https://gabrielongzm.com/yuho/transpilers/mermaid/</loc>
+         <lastmod>2025-10-19</lastmod>
     </url>
     <url>
          <loc>https://gabrielongzm.com/yuho/transpilers/overview/</loc>
-         <lastmod>2025-10-18</lastmod>
+         <lastmod>2025-10-19</lastmod>
     </url>
 </urlset>
