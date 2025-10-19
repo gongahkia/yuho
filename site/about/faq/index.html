@@ -1,0 +1,3728 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A domain-specific language for simplifying legal reasoning">
+      
+      
+        <meta name="author" content="Gabriel Ong">
+      
+      
+        <link rel="canonical" href="https://gabrielongzm.com/yuho/about/faq/">
+      
+      
+        <link rel="prev" href="../../api/transpilers/">
+      
+      
+        <link rel="next" href="../roadmap/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.22">
+    
+    
+      
+        <title>FAQ - Yuho Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.84d31ad4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#frequently-asked-questions" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Yuho Documentation" class="md-header__button md-logo" aria-label="Yuho Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3c-1.27 0-2.4.8-2.82 2H3v2h1.95L2 14c-.47 2 1 3 3.5 3s4.06-1 3.5-3L6.05 7h3.12c.33.85.98 1.5 1.83 1.83V20H2v2h20v-2h-9V8.82c.85-.32 1.5-.97 1.82-1.82h3.13L15 14c-.47 2 1 3 3.5 3s4.06-1 3.5-3l-2.95-7H21V5h-6.17C14.4 3.8 13.27 3 12 3m0 2a1 1 0 0 1 1 1 1 1 0 0 1-1 1 1 1 0 0 1-1-1 1 1 0 0 1 1-1m-6.5 5.25L7 14H4zm13 0L20 14h-3z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Yuho Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              FAQ
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/gongahkia/yuho" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    gongahkia/yuho
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../getting-started/installation/" class="md-tabs__link">
+          
+  
+  
+  Getting Started
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../language/overview/" class="md-tabs__link">
+          
+  
+  
+  Language Guide
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../cli/commands/" class="md-tabs__link">
+          
+  
+  
+  CLI Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../transpilers/overview/" class="md-tabs__link">
+          
+  
+  
+  Transpilers
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../examples/criminal-law/" class="md-tabs__link">
+          
+  
+  
+  Examples
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../development/architecture/" class="md-tabs__link">
+          
+  
+  
+  Development
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../api/parser/" class="md-tabs__link">
+          
+  
+  
+  API Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="./" class="md-tabs__link">
+          
+  
+  
+  About
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Yuho Documentation" class="md-nav__button md-logo" aria-label="Yuho Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3c-1.27 0-2.4.8-2.82 2H3v2h1.95L2 14c-.47 2 1 3 3.5 3s4.06-1 3.5-3L6.05 7h3.12c.33.85.98 1.5 1.83 1.83V20H2v2h20v-2h-9V8.82c.85-.32 1.5-.97 1.82-1.82h3.13L15 14c-.47 2 1 3 3.5 3s4.06-1 3.5-3l-2.95-7H21V5h-6.17C14.4 3.8 13.27 3 12 3m0 2a1 1 0 0 1 1 1 1 1 0 0 1-1 1 1 1 0 0 1-1-1 1 1 0 0 1 1-1m-6.5 5.25L7 14H4zm13 0L20 14h-3z"/></svg>
+
+    </a>
+    Yuho Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/gongahkia/yuho" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    gongahkia/yuho
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Getting Started
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Getting Started
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Installation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Quick Start
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/first-program/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Your First Program
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Language Guide
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Language Guide
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/syntax/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Syntax
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/types/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Types
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/structs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Structs
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/match-case/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Match-Case
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/functions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Functions
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/comments/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Comments
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    CLI Reference
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            CLI Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli/commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Commands
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli/check/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Check
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli/draw/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Draw
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli/alloy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Alloy
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli/draft/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Draft
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli/repl/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    REPL
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Transpilers
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Transpilers
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transpilers/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transpilers/mermaid/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Mermaid
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transpilers/alloy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Alloy
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Examples
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            Examples
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/criminal-law/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Criminal Law
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/cheating/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Cheating Offenses
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/patterns/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Custom Patterns
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Development
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            Development
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../development/architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Architecture
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../development/contributing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Contributing
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../development/testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Testing
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../development/docker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Docker
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    API Reference
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            API Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/parser/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Parser
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/lexer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Lexer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/ast/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    AST Nodes
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/semantic/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Semantic Analyzer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/transpilers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Transpilers
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    About
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            About
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    FAQ
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    FAQ
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#general-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      General Questions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="General Questions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-is-yuho" class="md-nav__link">
+    <span class="md-ellipsis">
+      What is Yuho?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-yuho" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why "Yuho"?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#who-should-use-yuho" class="md-nav__link">
+    <span class="md-ellipsis">
+      Who should use Yuho?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#is-yuho-production-ready" class="md-nav__link">
+    <span class="md-ellipsis">
+      Is Yuho production-ready?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installation-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      Installation &amp; Setup
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Installation &amp; Setup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-install-yuho" class="md-nav__link">
+    <span class="md-ellipsis">
+      How do I install Yuho?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-are-the-requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      What are the requirements?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-i-use-yuho-on-windows" class="md-nav__link">
+    <span class="md-ellipsis">
+      Can I use Yuho on Windows?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-am-i-getting-command-not-found-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why am I getting "command not found" errors?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#language-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Language Questions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Language Questions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#is-yuho-turing-complete" class="md-nav__link">
+    <span class="md-ellipsis">
+      Is Yuho Turing-complete?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-no-loops" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why no loops?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-immutability" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why immutability?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-i-use-yuho-for-contract-law" class="md-nav__link">
+    <span class="md-ellipsis">
+      Can I use Yuho for contract law?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-about-case-law" class="md-nav__link">
+    <span class="md-ellipsis">
+      What about case law?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#syntax-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Syntax Questions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Syntax Questions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-instead-of" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why := instead of =?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-match-case-instead-of-if-else" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why match-case instead of if-else?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-i-have-optional-fields-in-structs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Can I have optional fields in structs?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-are-there-so-few-data-structures" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why are there so few data structures?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usage-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Usage Questions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Usage Questions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-check-my-yuho-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      How do I check my Yuho code?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-generate-diagrams" class="md-nav__link">
+    <span class="md-ellipsis">
+      How do I generate diagrams?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-i-use-yuho-in-my-ide" class="md-nav__link">
+    <span class="md-ellipsis">
+      Can I use Yuho in my IDE?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-view-mermaid-diagrams" class="md-nav__link">
+    <span class="md-ellipsis">
+      How do I view Mermaid diagrams?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#transpiler-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Transpiler Questions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Transpiler Questions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-output-formats-are-supported" class="md-nav__link">
+    <span class="md-ellipsis">
+      What output formats are supported?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-use-alloy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why use Alloy?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#do-i-need-to-know-alloy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Do I need to know Alloy?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-i-add-my-own-transpiler" class="md-nav__link">
+    <span class="md-ellipsis">
+      Can I add my own transpiler?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#development-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Development Questions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Development Questions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-can-i-contribute" class="md-nav__link">
+    <span class="md-ellipsis">
+      How can I contribute?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#whats-the-technology-stack" class="md-nav__link">
+    <span class="md-ellipsis">
+      What's the technology stack?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-is-yuho-tested" class="md-nav__link">
+    <span class="md-ellipsis">
+      How is Yuho tested?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-i-use-yuho-in-my-project" class="md-nav__link">
+    <span class="md-ellipsis">
+      Can I use Yuho in my project?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#performance-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Performance Questions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Performance Questions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-fast-is-yuho" class="md-nav__link">
+    <span class="md-ellipsis">
+      How fast is Yuho?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-yuho-handle-large-codebases" class="md-nav__link">
+    <span class="md-ellipsis">
+      Can Yuho handle large codebases?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#is-there-a-file-size-limit" class="md-nav__link">
+    <span class="md-ellipsis">
+      Is there a file size limit?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-messages" class="md-nav__link">
+    <span class="md-ellipsis">
+      Error Messages
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Error Messages">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#syntax-error-at-line-x" class="md-nav__link">
+    <span class="md-ellipsis">
+      "Syntax error at line X"
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#type-mismatch-error" class="md-nav__link">
+    <span class="md-ellipsis">
+      "Type mismatch" error
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#undefined-variable-error" class="md-nav__link">
+    <span class="md-ellipsis">
+      "Undefined variable" error
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-not-found-error" class="md-nav__link">
+    <span class="md-ellipsis">
+      "Module not found" error
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#docker-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Docker Questions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Docker Questions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-use-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why use Docker?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-run-yuho-in-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      How do I run Yuho in Docker?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-i-develop-in-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      Can I develop in Docker?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#documentation-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Documentation Questions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Documentation Questions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#where-is-the-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Where is the documentation?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#is-there-a-pdf-version" class="md-nav__link">
+    <span class="md-ellipsis">
+      Is there a PDF version?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-contribute-to-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      How do I contribute to documentation?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#legal-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Legal Questions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Legal Questions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#is-yuho-legally-binding" class="md-nav__link">
+    <span class="md-ellipsis">
+      Is Yuho legally binding?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-i-use-yuho-in-court" class="md-nav__link">
+    <span class="md-ellipsis">
+      Can I use Yuho in court?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-jurisdiction-does-yuho-cover" class="md-nav__link">
+    <span class="md-ellipsis">
+      What jurisdiction does Yuho cover?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-yuho-replace-lawyers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Can Yuho replace lawyers?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      Troubleshooting
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#my-code-wont-parse" class="md-nav__link">
+    <span class="md-ellipsis">
+      My code won't parse
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diagrams-arent-generating" class="md-nav__link">
+    <span class="md-ellipsis">
+      Diagrams aren't generating
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tests-are-failing" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tests are failing
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#future-plans" class="md-nav__link">
+    <span class="md-ellipsis">
+      Future Plans
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Future Plans">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#whats-on-the-roadmap" class="md-nav__link">
+    <span class="md-ellipsis">
+      What's on the roadmap?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-will-feature-x-be-added" class="md-nav__link">
+    <span class="md-ellipsis">
+      When will feature X be added?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-i-request-a-feature" class="md-nav__link">
+    <span class="md-ellipsis">
+      Can I request a feature?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#community" class="md-nav__link">
+    <span class="md-ellipsis">
+      Community
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Community">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-get-help" class="md-nav__link">
+    <span class="md-ellipsis">
+      How do I get help?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#is-there-a-community-forum" class="md-nav__link">
+    <span class="md-ellipsis">
+      Is there a community forum?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-report-bugs" class="md-nav__link">
+    <span class="md-ellipsis">
+      How do I report bugs?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#comparisons" class="md-nav__link">
+    <span class="md-ellipsis">
+      Comparisons
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Comparisons">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#yuho-vs-natural-l4" class="md-nav__link">
+    <span class="md-ellipsis">
+      Yuho vs Natural L4
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#yuho-vs-catala" class="md-nav__link">
+    <span class="md-ellipsis">
+      Yuho vs Catala
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#yuho-vs-traditional-legal-tools" class="md-nav__link">
+    <span class="md-ellipsis">
+      Yuho vs traditional legal tools
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#still-have-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Still Have Questions?
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../roadmap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Roadmap
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Changelog
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../license/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    License
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#general-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      General Questions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="General Questions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-is-yuho" class="md-nav__link">
+    <span class="md-ellipsis">
+      What is Yuho?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-yuho" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why "Yuho"?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#who-should-use-yuho" class="md-nav__link">
+    <span class="md-ellipsis">
+      Who should use Yuho?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#is-yuho-production-ready" class="md-nav__link">
+    <span class="md-ellipsis">
+      Is Yuho production-ready?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installation-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      Installation &amp; Setup
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Installation &amp; Setup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-install-yuho" class="md-nav__link">
+    <span class="md-ellipsis">
+      How do I install Yuho?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-are-the-requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      What are the requirements?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-i-use-yuho-on-windows" class="md-nav__link">
+    <span class="md-ellipsis">
+      Can I use Yuho on Windows?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-am-i-getting-command-not-found-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why am I getting "command not found" errors?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#language-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Language Questions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Language Questions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#is-yuho-turing-complete" class="md-nav__link">
+    <span class="md-ellipsis">
+      Is Yuho Turing-complete?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-no-loops" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why no loops?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-immutability" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why immutability?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-i-use-yuho-for-contract-law" class="md-nav__link">
+    <span class="md-ellipsis">
+      Can I use Yuho for contract law?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-about-case-law" class="md-nav__link">
+    <span class="md-ellipsis">
+      What about case law?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#syntax-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Syntax Questions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Syntax Questions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-instead-of" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why := instead of =?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-match-case-instead-of-if-else" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why match-case instead of if-else?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-i-have-optional-fields-in-structs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Can I have optional fields in structs?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-are-there-so-few-data-structures" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why are there so few data structures?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usage-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Usage Questions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Usage Questions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-check-my-yuho-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      How do I check my Yuho code?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-generate-diagrams" class="md-nav__link">
+    <span class="md-ellipsis">
+      How do I generate diagrams?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-i-use-yuho-in-my-ide" class="md-nav__link">
+    <span class="md-ellipsis">
+      Can I use Yuho in my IDE?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-view-mermaid-diagrams" class="md-nav__link">
+    <span class="md-ellipsis">
+      How do I view Mermaid diagrams?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#transpiler-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Transpiler Questions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Transpiler Questions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-output-formats-are-supported" class="md-nav__link">
+    <span class="md-ellipsis">
+      What output formats are supported?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-use-alloy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why use Alloy?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#do-i-need-to-know-alloy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Do I need to know Alloy?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-i-add-my-own-transpiler" class="md-nav__link">
+    <span class="md-ellipsis">
+      Can I add my own transpiler?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#development-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Development Questions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Development Questions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-can-i-contribute" class="md-nav__link">
+    <span class="md-ellipsis">
+      How can I contribute?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#whats-the-technology-stack" class="md-nav__link">
+    <span class="md-ellipsis">
+      What's the technology stack?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-is-yuho-tested" class="md-nav__link">
+    <span class="md-ellipsis">
+      How is Yuho tested?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-i-use-yuho-in-my-project" class="md-nav__link">
+    <span class="md-ellipsis">
+      Can I use Yuho in my project?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#performance-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Performance Questions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Performance Questions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-fast-is-yuho" class="md-nav__link">
+    <span class="md-ellipsis">
+      How fast is Yuho?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-yuho-handle-large-codebases" class="md-nav__link">
+    <span class="md-ellipsis">
+      Can Yuho handle large codebases?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#is-there-a-file-size-limit" class="md-nav__link">
+    <span class="md-ellipsis">
+      Is there a file size limit?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-messages" class="md-nav__link">
+    <span class="md-ellipsis">
+      Error Messages
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Error Messages">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#syntax-error-at-line-x" class="md-nav__link">
+    <span class="md-ellipsis">
+      "Syntax error at line X"
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#type-mismatch-error" class="md-nav__link">
+    <span class="md-ellipsis">
+      "Type mismatch" error
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#undefined-variable-error" class="md-nav__link">
+    <span class="md-ellipsis">
+      "Undefined variable" error
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-not-found-error" class="md-nav__link">
+    <span class="md-ellipsis">
+      "Module not found" error
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#docker-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Docker Questions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Docker Questions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-use-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why use Docker?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-run-yuho-in-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      How do I run Yuho in Docker?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-i-develop-in-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      Can I develop in Docker?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#documentation-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Documentation Questions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Documentation Questions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#where-is-the-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Where is the documentation?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#is-there-a-pdf-version" class="md-nav__link">
+    <span class="md-ellipsis">
+      Is there a PDF version?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-contribute-to-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      How do I contribute to documentation?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#legal-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Legal Questions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Legal Questions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#is-yuho-legally-binding" class="md-nav__link">
+    <span class="md-ellipsis">
+      Is Yuho legally binding?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-i-use-yuho-in-court" class="md-nav__link">
+    <span class="md-ellipsis">
+      Can I use Yuho in court?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-jurisdiction-does-yuho-cover" class="md-nav__link">
+    <span class="md-ellipsis">
+      What jurisdiction does Yuho cover?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-yuho-replace-lawyers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Can Yuho replace lawyers?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      Troubleshooting
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#my-code-wont-parse" class="md-nav__link">
+    <span class="md-ellipsis">
+      My code won't parse
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diagrams-arent-generating" class="md-nav__link">
+    <span class="md-ellipsis">
+      Diagrams aren't generating
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tests-are-failing" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tests are failing
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#future-plans" class="md-nav__link">
+    <span class="md-ellipsis">
+      Future Plans
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Future Plans">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#whats-on-the-roadmap" class="md-nav__link">
+    <span class="md-ellipsis">
+      What's on the roadmap?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-will-feature-x-be-added" class="md-nav__link">
+    <span class="md-ellipsis">
+      When will feature X be added?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-i-request-a-feature" class="md-nav__link">
+    <span class="md-ellipsis">
+      Can I request a feature?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#community" class="md-nav__link">
+    <span class="md-ellipsis">
+      Community
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Community">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-get-help" class="md-nav__link">
+    <span class="md-ellipsis">
+      How do I get help?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#is-there-a-community-forum" class="md-nav__link">
+    <span class="md-ellipsis">
+      Is there a community forum?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-report-bugs" class="md-nav__link">
+    <span class="md-ellipsis">
+      How do I report bugs?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#comparisons" class="md-nav__link">
+    <span class="md-ellipsis">
+      Comparisons
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Comparisons">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#yuho-vs-natural-l4" class="md-nav__link">
+    <span class="md-ellipsis">
+      Yuho vs Natural L4
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#yuho-vs-catala" class="md-nav__link">
+    <span class="md-ellipsis">
+      Yuho vs Catala
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#yuho-vs-traditional-legal-tools" class="md-nav__link">
+    <span class="md-ellipsis">
+      Yuho vs traditional legal tools
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#still-have-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Still Have Questions?
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="frequently-asked-questions">Frequently Asked Questions<a class="headerlink" href="#frequently-asked-questions" title="Permanent link">&para;</a></h1>
+<p>Common questions about Yuho and their answers.</p>
+<h2 id="general-questions">General Questions<a class="headerlink" href="#general-questions" title="Permanent link">&para;</a></h2>
+<h3 id="what-is-yuho">What is Yuho?<a class="headerlink" href="#what-is-yuho" title="Permanent link">&para;</a></h3>
+<p>Yuho is a domain-specific language (DSL) designed specifically for representing legal statutes and reasoning patterns in code. It helps law students and legal professionals better understand complex legal logic by providing a programmatic representation.</p>
+<h3 id="why-yuho">Why "Yuho"?<a class="headerlink" href="#why-yuho" title="Permanent link">&para;</a></h3>
+<p>The name reflects the goal of making legal reasoning clear and understandable - helping users say "Yuho!" (like "Eureka!") when they finally grasp complex legal concepts.</p>
+<h3 id="who-should-use-yuho">Who should use Yuho?<a class="headerlink" href="#who-should-use-yuho" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Law students</strong> learning statutory interpretation</li>
+<li><strong>Legal educators</strong> teaching legal reasoning</li>
+<li><strong>Legal professionals</strong> working with Singapore Criminal Law</li>
+<li><strong>Legal tech developers</strong> building tools for legal analysis</li>
+</ul>
+<h3 id="is-yuho-production-ready">Is Yuho production-ready?<a class="headerlink" href="#is-yuho-production-ready" title="Permanent link">&para;</a></h3>
+<p>Yes! Yuho v3.0 is production-ready with:
+- Comprehensive testing (234+ tests)
+- Docker containerization
+- CI/CD pipeline
+- Full documentation
+- Type safety and error handling</p>
+<hr />
+<h2 id="installation-setup">Installation &amp; Setup<a class="headerlink" href="#installation-setup" title="Permanent link">&para;</a></h2>
+<h3 id="how-do-i-install-yuho">How do I install Yuho?<a class="headerlink" href="#how-do-i-install-yuho" title="Permanent link">&para;</a></h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># From source (recommended)</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/gongahkia/yuho.git
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nb">cd</span><span class="w"> </span>yuho
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="c1"># Or with Docker</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>docker<span class="w"> </span>pull<span class="w"> </span>yuho:latest
+</span></code></pre></div>
+<p>See <a href="../../getting-started/installation/">Installation Guide</a> for details.</p>
+<h3 id="what-are-the-requirements">What are the requirements?<a class="headerlink" href="#what-are-the-requirements" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Python 3.8 or higher</li>
+<li>pip package manager</li>
+<li>Optional: Docker for containerized usage</li>
+</ul>
+<h3 id="can-i-use-yuho-on-windows">Can I use Yuho on Windows?<a class="headerlink" href="#can-i-use-yuho-on-windows" title="Permanent link">&para;</a></h3>
+<p>Yes! Yuho works on Windows, macOS, and Linux. Install Python 3.8+ and follow the installation instructions.</p>
+<h3 id="why-am-i-getting-command-not-found-errors">Why am I getting "command not found" errors?<a class="headerlink" href="#why-am-i-getting-command-not-found-errors" title="Permanent link">&para;</a></h3>
+<p>Ensure Python's scripts directory is in your PATH:
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Check installation</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>which<span class="w"> </span>yuho
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>yuho<span class="w"> </span>--version
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="c1"># If not found, reinstall</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.<span class="w"> </span>--force-reinstall
+</span></code></pre></div></p>
+<hr />
+<h2 id="language-questions">Language Questions<a class="headerlink" href="#language-questions" title="Permanent link">&para;</a></h2>
+<h3 id="is-yuho-turing-complete">Is Yuho Turing-complete?<a class="headerlink" href="#is-yuho-turing-complete" title="Permanent link">&para;</a></h3>
+<p>No, and by design! Yuho intentionally lacks:
+- Loops (no <code>for</code>, <code>while</code>)
+- Recursion (limited)
+- Side effects</p>
+<p>This reflects the nature of legal statutes, which don't contain loops or recursive definitions.</p>
+<h3 id="why-no-loops">Why no loops?<a class="headerlink" href="#why-no-loops" title="Permanent link">&para;</a></h3>
+<p>Legal statutes don't iterate or loop. They define fixed conditions and consequences. Yuho's design mirrors this structure.</p>
+<h3 id="why-immutability">Why immutability?<a class="headerlink" href="#why-immutability" title="Permanent link">&para;</a></h3>
+<p>Immutability reflects the fixed nature of legal statutes - once defined, statutory elements don't change within a single analysis.</p>
+<h3 id="can-i-use-yuho-for-contract-law">Can I use Yuho for contract law?<a class="headerlink" href="#can-i-use-yuho-for-contract-law" title="Permanent link">&para;</a></h3>
+<p>Currently, Yuho is focused on Singapore Criminal Law, but the principles can be applied to any statute-based legal system. Contract law support may be added in future versions.</p>
+<h3 id="what-about-case-law">What about case law?<a class="headerlink" href="#what-about-case-law" title="Permanent link">&para;</a></h3>
+<p>Yuho currently focuses on statutes rather than case law. Adding case law precedent support is on the roadmap.</p>
+<hr />
+<h2 id="syntax-questions">Syntax Questions<a class="headerlink" href="#syntax-questions" title="Permanent link">&para;</a></h2>
+<h3 id="why-instead-of">Why <code>:=</code> instead of <code>=</code>?<a class="headerlink" href="#why-instead-of" title="Permanent link">&para;</a></h3>
+<p>The <code>:=</code> operator makes variable binding explicit and distinguishes it from comparison (<code>==</code>). This is common in functional languages and mathematical notation.</p>
+<h3 id="why-match-case-instead-of-if-else">Why match-case instead of if-else?<a class="headerlink" href="#why-match-case-instead-of-if-else" title="Permanent link">&para;</a></h3>
+<p>Match-case ensures complete coverage of all possibilities (through the <code>_</code> wildcard), mirroring legal reasoning where all cases must be considered.</p>
+<h3 id="can-i-have-optional-fields-in-structs">Can I have optional fields in structs?<a class="headerlink" href="#can-i-have-optional-fields-in-structs" title="Permanent link">&para;</a></h3>
+<p>Not yet, but union types are on the roadmap. Currently, use union types like:
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>pass || money optionalAmount := pass
+</span></code></pre></div></p>
+<h3 id="why-are-there-so-few-data-structures">Why are there so few data structures?<a class="headerlink" href="#why-are-there-so-few-data-structures" title="Permanent link">&para;</a></h3>
+<p>Simplicity! Yuho intentionally provides only structs, which can represent arrays, tuples, dictionaries, and enums. This reduces cognitive load for legal professionals learning to code.</p>
+<hr />
+<h2 id="usage-questions">Usage Questions<a class="headerlink" href="#usage-questions" title="Permanent link">&para;</a></h2>
+<h3 id="how-do-i-check-my-yuho-code">How do I check my Yuho code?<a class="headerlink" href="#how-do-i-check-my-yuho-code" title="Permanent link">&para;</a></h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>yuho<span class="w"> </span>check<span class="w"> </span>file.yh
+</span></code></pre></div>
+<p>This validates both syntax and semantics.</p>
+<h3 id="how-do-i-generate-diagrams">How do I generate diagrams?<a class="headerlink" href="#how-do-i-generate-diagrams" title="Permanent link">&para;</a></h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># Flowchart</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>yuho<span class="w"> </span>draw<span class="w"> </span>file.yh<span class="w"> </span>--format<span class="w"> </span>flowchart<span class="w"> </span>-o<span class="w"> </span>diagram.mmd
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># Mindmap</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>yuho<span class="w"> </span>draw<span class="w"> </span>file.yh<span class="w"> </span>--format<span class="w"> </span>mindmap<span class="w"> </span>-o<span class="w"> </span>mindmap.mmd
+</span></code></pre></div>
+<h3 id="can-i-use-yuho-in-my-ide">Can I use Yuho in my IDE?<a class="headerlink" href="#can-i-use-yuho-in-my-ide" title="Permanent link">&para;</a></h3>
+<p>Basic syntax highlighting is available. LSP (Language Server Protocol) support is planned for future releases.</p>
+<p>Current editor support:
+- Vim: Basic highlighting available
+- VS Code: Extension in development
+- Emacs: Configuration available</p>
+<h3 id="how-do-i-view-mermaid-diagrams">How do I view Mermaid diagrams?<a class="headerlink" href="#how-do-i-view-mermaid-diagrams" title="Permanent link">&para;</a></h3>
+<p>Options:
+1. <strong>Mermaid Live Editor</strong>: https://mermaid.live
+2. <strong>VS Code</strong>: Install Mermaid extension
+3. <strong>GitHub</strong>: Renders automatically in README files
+4. <strong>Documentation tools</strong>: MkDocs, Docusaurus support Mermaid</p>
+<hr />
+<h2 id="transpiler-questions">Transpiler Questions<a class="headerlink" href="#transpiler-questions" title="Permanent link">&para;</a></h2>
+<h3 id="what-output-formats-are-supported">What output formats are supported?<a class="headerlink" href="#what-output-formats-are-supported" title="Permanent link">&para;</a></h3>
+<p>Currently:
+- <strong>Mermaid</strong> (flowcharts and mindmaps)
+- <strong>Alloy</strong> (formal verification)</p>
+<p>Planned:
+- Python code generation
+- JSON/YAML export
+- GraphViz diagrams</p>
+<h3 id="why-use-alloy">Why use Alloy?<a class="headerlink" href="#why-use-alloy" title="Permanent link">&para;</a></h3>
+<p>Alloy is a formal specification language that can automatically verify logical consistency. It's perfect for ensuring legal logic is sound.</p>
+<h3 id="do-i-need-to-know-alloy">Do I need to know Alloy?<a class="headerlink" href="#do-i-need-to-know-alloy" title="Permanent link">&para;</a></h3>
+<p>No! Yuho generates Alloy automatically. If you want to verify specifications, you can learn Alloy basics, but it's not required.</p>
+<h3 id="can-i-add-my-own-transpiler">Can I add my own transpiler?<a class="headerlink" href="#can-i-add-my-own-transpiler" title="Permanent link">&para;</a></h3>
+<p>Yes! See <a href="../../transpilers/overview/">Transpilers Overview</a> for how to add new transpilers.</p>
+<hr />
+<h2 id="development-questions">Development Questions<a class="headerlink" href="#development-questions" title="Permanent link">&para;</a></h2>
+<h3 id="how-can-i-contribute">How can I contribute?<a class="headerlink" href="#how-can-i-contribute" title="Permanent link">&para;</a></h3>
+<p>See <a href="../../development/contributing/">Contributing Guide</a> for:
+- Code contributions
+- Documentation improvements
+- Bug reports
+- Feature requests</p>
+<h3 id="whats-the-technology-stack">What's the technology stack?<a class="headerlink" href="#whats-the-technology-stack" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Language</strong>: Python 3.8+</li>
+<li><strong>Parser</strong>: Lark (LALR parser generator)</li>
+<li><strong>CLI</strong>: Click framework</li>
+<li><strong>Testing</strong>: pytest</li>
+<li><strong>Docs</strong>: MkDocs with Material theme</li>
+<li><strong>CI/CD</strong>: GitHub Actions</li>
+</ul>
+<h3 id="how-is-yuho-tested">How is Yuho tested?<a class="headerlink" href="#how-is-yuho-tested" title="Permanent link">&para;</a></h3>
+<p>Comprehensive testing with 234+ tests:
+- Unit tests for components
+- Integration tests for workflows
+- End-to-end tests with real examples
+- Performance tests</p>
+<h3 id="can-i-use-yuho-in-my-project">Can I use Yuho in my project?<a class="headerlink" href="#can-i-use-yuho-in-my-project" title="Permanent link">&para;</a></h3>
+<p>Yes! Yuho is open-source. See the license for details.</p>
+<hr />
+<h2 id="performance-questions">Performance Questions<a class="headerlink" href="#performance-questions" title="Permanent link">&para;</a></h2>
+<h3 id="how-fast-is-yuho">How fast is Yuho?<a class="headerlink" href="#how-fast-is-yuho" title="Permanent link">&para;</a></h3>
+<p>Typical performance:
+- Small files (&lt;10 statements): &lt;10ms
+- Medium files (10-100 statements): &lt;50ms
+- Large files (100-1000 statements): &lt;500ms</p>
+<h3 id="can-yuho-handle-large-codebases">Can Yuho handle large codebases?<a class="headerlink" href="#can-yuho-handle-large-codebases" title="Permanent link">&para;</a></h3>
+<p>Yes, though Yuho is designed for individual statutes rather than entire codebases. Each statute is typically a separate file.</p>
+<h3 id="is-there-a-file-size-limit">Is there a file size limit?<a class="headerlink" href="#is-there-a-file-size-limit" title="Permanent link">&para;</a></h3>
+<p>No hard limit, but practical considerations:
+- Files over 1000 lines may be slow to parse
+- Consider splitting large statutes into modules</p>
+<hr />
+<h2 id="error-messages">Error Messages<a class="headerlink" href="#error-messages" title="Permanent link">&para;</a></h2>
+<h3 id="syntax-error-at-line-x">"Syntax error at line X"<a class="headerlink" href="#syntax-error-at-line-x" title="Permanent link">&para;</a></h3>
+<p>Check common issues:
+- Using <code>=</code> instead of <code>:=</code>
+- Missing semicolons <code>;</code>
+- Unclosed braces <code>{}</code>
+- Wrong comment syntax</p>
+<h3 id="type-mismatch-error">"Type mismatch" error<a class="headerlink" href="#type-mismatch-error" title="Permanent link">&para;</a></h3>
+<p>Ensure types match:
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>// Wrong
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>int x := &quot;string&quot;;
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>// Correct
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>int x := 42;
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>string s := &quot;string&quot;;
+</span></code></pre></div></p>
+<h3 id="undefined-variable-error">"Undefined variable" error<a class="headerlink" href="#undefined-variable-error" title="Permanent link">&para;</a></h3>
+<p>Variables must be declared before use:
+<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>// Wrong
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>int y := x;  // x not defined
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>// Correct
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>int x := 42;
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>int y := x;
+</span></code></pre></div></p>
+<h3 id="module-not-found-error">"Module not found" error<a class="headerlink" href="#module-not-found-error" title="Permanent link">&para;</a></h3>
+<p>When importing, ensure:
+- File exists
+- Path is correct
+- Using correct import syntax</p>
+<hr />
+<h2 id="docker-questions">Docker Questions<a class="headerlink" href="#docker-questions" title="Permanent link">&para;</a></h2>
+<h3 id="why-use-docker">Why use Docker?<a class="headerlink" href="#why-use-docker" title="Permanent link">&para;</a></h3>
+<p>Benefits:
+- Consistent environment across systems
+- No need to install Python locally
+- Easy testing and deployment
+- Isolated from system Python</p>
+<h3 id="how-do-i-run-yuho-in-docker">How do I run Yuho in Docker?<a class="headerlink" href="#how-do-i-run-yuho-in-docker" title="Permanent link">&para;</a></h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># Check a file</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>:/workspace<span class="w"> </span>yuho:latest<span class="w"> </span>check<span class="w"> </span>file.yh
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="c1"># Interactive REPL</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>docker-compose<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>yuho-repl
+</span></code></pre></div>
+<h3 id="can-i-develop-in-docker">Can I develop in Docker?<a class="headerlink" href="#can-i-develop-in-docker" title="Permanent link">&para;</a></h3>
+<p>Yes! Use the development container:
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>docker-compose<span class="w"> </span>up<span class="w"> </span>yuho-dev
+</span></code></pre></div></p>
+<hr />
+<h2 id="documentation-questions">Documentation Questions<a class="headerlink" href="#documentation-questions" title="Permanent link">&para;</a></h2>
+<h3 id="where-is-the-documentation">Where is the documentation?<a class="headerlink" href="#where-is-the-documentation" title="Permanent link">&para;</a></h3>
+<p>Multiple locations:
+- <strong>This site</strong>: https://gongahkia.github.io/yuho
+- <strong>Syntax spec</strong>: <code>doc/SYNTAX.md</code> in repository
+- <strong>Examples</strong>: <code>example/</code> directory
+- <strong>API docs</strong>: Auto-generated from code</p>
+<h3 id="is-there-a-pdf-version">Is there a PDF version?<a class="headerlink" href="#is-there-a-pdf-version" title="Permanent link">&para;</a></h3>
+<p>Not currently, but you can print any documentation page to PDF from your browser.</p>
+<h3 id="how-do-i-contribute-to-documentation">How do I contribute to documentation?<a class="headerlink" href="#how-do-i-contribute-to-documentation" title="Permanent link">&para;</a></h3>
+<p>Documentation is in <code>docs/</code> directory. Edit Markdown files and submit a pull request.</p>
+<hr />
+<h2 id="legal-questions">Legal Questions<a class="headerlink" href="#legal-questions" title="Permanent link">&para;</a></h2>
+<h3 id="is-yuho-legally-binding">Is Yuho legally binding?<a class="headerlink" href="#is-yuho-legally-binding" title="Permanent link">&para;</a></h3>
+<p>No! Yuho is an educational and analytical tool. It does not constitute legal advice and representations in Yuho are not legally binding.</p>
+<h3 id="can-i-use-yuho-in-court">Can I use Yuho in court?<a class="headerlink" href="#can-i-use-yuho-in-court" title="Permanent link">&para;</a></h3>
+<p>Yuho is not designed for courtroom use. It's an educational and analytical tool for understanding legal logic.</p>
+<h3 id="what-jurisdiction-does-yuho-cover">What jurisdiction does Yuho cover?<a class="headerlink" href="#what-jurisdiction-does-yuho-cover" title="Permanent link">&para;</a></h3>
+<p>Currently focused on Singapore Criminal Law, but applicable to any statute-based jurisdiction.</p>
+<h3 id="can-yuho-replace-lawyers">Can Yuho replace lawyers?<a class="headerlink" href="#can-yuho-replace-lawyers" title="Permanent link">&para;</a></h3>
+<p>Absolutely not! Yuho is a tool for understanding and analyzing legal logic, not for providing legal advice or services.</p>
+<hr />
+<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
+<h3 id="my-code-wont-parse">My code won't parse<a class="headerlink" href="#my-code-wont-parse" title="Permanent link">&para;</a></h3>
+<p>Common issues:
+1. Check for typos in keywords
+2. Ensure proper use of <code>:=</code>
+3. Verify all braces are matched
+4. Check semicolon placement</p>
+<h3 id="diagrams-arent-generating">Diagrams aren't generating<a class="headerlink" href="#diagrams-arent-generating" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Check file passes <code>yuho check</code></li>
+<li>Verify output path is writable</li>
+<li>Ensure proper command syntax</li>
+<li>Check for transpiler errors in verbose mode</li>
+</ol>
+<h3 id="tests-are-failing">Tests are failing<a class="headerlink" href="#tests-are-failing" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Ensure all dependencies installed: <code>pip install -r requirements-dev.txt</code></li>
+<li>Check Python version: <code>python --version</code> (need 3.8+)</li>
+<li>Clear cache: <code>rm -rf __pycache__ .pytest_cache</code></li>
+<li>Reinstall: <code>pip install -e . --force-reinstall</code></li>
+</ol>
+<hr />
+<h2 id="future-plans">Future Plans<a class="headerlink" href="#future-plans" title="Permanent link">&para;</a></h2>
+<h3 id="whats-on-the-roadmap">What's on the roadmap?<a class="headerlink" href="#whats-on-the-roadmap" title="Permanent link">&para;</a></h3>
+<p>See <a href="../../doc/ROADMAP.md">Roadmap</a> for detailed plans, including:
+- LSP support for IDEs
+- More transpiler targets
+- Web interface
+- Additional legal domains
+- Contract law support</p>
+<h3 id="when-will-feature-x-be-added">When will feature X be added?<a class="headerlink" href="#when-will-feature-x-be-added" title="Permanent link">&para;</a></h3>
+<p>Check the <a href="https://github.com/gongahkia/yuho/issues">GitHub Issues</a> for feature requests and timelines.</p>
+<h3 id="can-i-request-a-feature">Can I request a feature?<a class="headerlink" href="#can-i-request-a-feature" title="Permanent link">&para;</a></h3>
+<p>Yes! Open an issue on GitHub with your feature request.</p>
+<hr />
+<h2 id="community">Community<a class="headerlink" href="#community" title="Permanent link">&para;</a></h2>
+<h3 id="how-do-i-get-help">How do I get help?<a class="headerlink" href="#how-do-i-get-help" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Check this FAQ</li>
+<li>Read the <a href="../../">documentation</a></li>
+<li>Search <a href="https://github.com/gongahkia/yuho/issues">GitHub Issues</a></li>
+<li>Open a new issue if needed</li>
+</ol>
+<h3 id="is-there-a-community-forum">Is there a community forum?<a class="headerlink" href="#is-there-a-community-forum" title="Permanent link">&para;</a></h3>
+<p>Currently, discussions happen on GitHub. A dedicated forum may be added if there's demand.</p>
+<h3 id="how-do-i-report-bugs">How do I report bugs?<a class="headerlink" href="#how-do-i-report-bugs" title="Permanent link">&para;</a></h3>
+<p>Use the <a href="../../admin/BUG_REPORT.md">bug report template</a> and open a GitHub issue.</p>
+<hr />
+<h2 id="comparisons">Comparisons<a class="headerlink" href="#comparisons" title="Permanent link">&para;</a></h2>
+<h3 id="yuho-vs-natural-l4">Yuho vs Natural L4<a class="headerlink" href="#yuho-vs-natural-l4" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Natural L4</strong>: English-like syntax, broader scope (all Singapore law)</li>
+<li><strong>Yuho</strong>: Code-like syntax, focused on criminal law</li>
+<li>Both aim to formalize legal reasoning</li>
+</ul>
+<h3 id="yuho-vs-catala">Yuho vs Catala<a class="headerlink" href="#yuho-vs-catala" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Catala</strong>: Mimics legal text structure exactly</li>
+<li><strong>Yuho</strong>: More programming-oriented syntax</li>
+<li>Both transpile to multiple formats</li>
+</ul>
+<h3 id="yuho-vs-traditional-legal-tools">Yuho vs traditional legal tools<a class="headerlink" href="#yuho-vs-traditional-legal-tools" title="Permanent link">&para;</a></h3>
+<p>Yuho is NOT a replacement for:
+- Legal research tools (Westlaw, LexisNexis)
+- Document automation (Docassemble)
+- Case management systems</p>
+<p>Yuho is FOR:
+- Understanding legal logic
+- Teaching legal reasoning
+- Analyzing statutory structure</p>
+<hr />
+<h2 id="still-have-questions">Still Have Questions?<a class="headerlink" href="#still-have-questions" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Check the <a href="../../">documentation</a></li>
+<li>Read the <a href="../../language/syntax/">syntax guide</a></li>
+<li>See <a href="../../examples/criminal-law/">examples</a></li>
+<li>Open a <a href="https://github.com/gongahkia/yuho/issues">GitHub issue</a></li>
+</ul>
+<hr />
+<p><em>This FAQ is continuously updated. Last updated: 2024</em></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2024 Gabriel Ong
+    </div>
+  
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/gongahkia/yuho" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate", "content.tabs.link"], "search": "../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.f55a23d4.min.js"></script>
+      
+        <script src="../../javascripts/extra.js"></script>
+      
+    
+  </body>
+</html>
