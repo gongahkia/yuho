@@ -27,8 +27,8 @@ Getting into the specifics, Yuho provides the following four products.
 
 1. [Yuho](./doc/SYNTAX.md), a DSL made to be readable and codeable by law students and lawyers
 2. [Formalised semantic](./test/) for legal reasoning modelled after the syntactical patterns of the law
-3. [CLI tool](./src/cli/) for interacting with Yuho's primary functions in the CLI
-4. [Transpiler](./src/transpiler/) that transpiles to the below targets
+3. [CLI tool](./yuho_v3/cli/) for interacting with Yuho's primary functions in the CLI
+4. [Transpiler](./yuho_v3/transpilers/) that transpiles to the below targets
 
 ### Output formats
 
