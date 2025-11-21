@@ -4,10 +4,6 @@
 > Yuho's Documentation is now available [***here***](https://gabrielongzm.com/yuho-docs/).
   
 # `Yuho`  
-  
-<p align="center">
-<img src="./asset/logo/yuho_mascot.png" width=40% height=40%>
-</p>
 
 Yuho is a domain-specific language dedicated to simplifying [legalese](https://www.merriam-webster.com/dictionary/legalese) by providing a programmatic representation of Singapore Law.  
 
