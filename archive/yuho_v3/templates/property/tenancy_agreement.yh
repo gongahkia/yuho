@@ -1,0 +1,446 @@
+// Residential Tenancy Agreement Template
+// Singapore Law Compliant
+// Based on landlord-tenant common law
+
+import std.contracts.contract_formation
+
+@citation("", "", "Common Law - Landlord and Tenant")
+
+// Property type
+enum PropertyType {
+    HDB,
+    Condominium,
+    Landed,
+    Apartment,
+    Room // For room rental
+}
+
+// Tenancy type
+enum TenancyType {
+    FixedTerm,
+    Periodic, // Month-to-month
+    Tenancy2Years
+}
+
+// Utilities responsibility
+enum UtilitiesResponsibility {
+    TenantPays,
+    LandlordPays,
+    Shared,
+    IncludedInRent
+}
+
+// Residential Tenancy Agreement
+struct ResidentialTenancyAgreement {
+    // Parties
+    string landlord_name,
+    string landlord_nric_or_uen,
+    string landlord_address,
+    optional string landlord_agent_name,
+
+    string tenant_name,
+    string tenant_nric,
+    string tenant_address,
+    optional string tenant_agent_name,
+
+    // Property details
+    PropertyType property_type,
+    string property_address,
+    string unit_number,
+    optional Positive<float> floor_area_sqm,
+
+    // For HDB flats - additional requirements
+    optional bool hdb_owner_singaporean,
+    optional bool hdb_minimum_occupation_period_met,
+
+    // Tenancy term
+    TenancyType tenancy_type,
+    date commencement_date,
+    BoundedInt<1, 60> tenancy_months, // Typically 12-24 months
+    date expiry_date,
+
+    // Rent
+    Positive<money<SGD>> monthly_rent,
+    BoundedInt<1, 31> rent_due_day, // Day of month rent is due
+    string payment_method,
+
+    // Security deposit
+    Positive<money<SGD>> security_deposit,
+    BoundedInt<1, 6> security_deposit_months where security_deposit_months >= 1,
+    // Security deposit typically 1-2 months rent
+    where security_deposit == monthly_rent * security_deposit_months,
+
+    // Stamp duty
+    bool tenant_pays_stamp_duty where tenant_pays_stamp_duty == true,
+    bool agreement_must_be_stamped where agreement_must_be_stamped == true,
+
+    // Utilities
+    UtilitiesResponsibility utilities_responsibility,
+    list<string> utilities_included, // e.g., ["Electricity", "Water", "Gas", "Internet"]
+
+    // Maintenance
+    bool landlord_structural_maintenance where landlord_structural_maintenance == true,
+    bool tenant_general_maintenance where tenant_general_maintenance == true,
+    bool tenant_repairs_minor_damage where tenant_repairs_minor_damage == true,
+
+    // Aircon servicing
+    optional bool tenant_services_aircon,
+    optional BoundedInt<1, 12> aircon_servicing_months,
+
+    // Use of property
+    bool residential_use_only where residential_use_only == true,
+    bool no_illegal_activities where no_illegal_activities == true,
+    BoundedInt<1, 20> maximum_occupants,
+
+    // Subletting
+    bool subletting_allowed,
+    bool landlord_consent_required_for_subletting,
+
+    // Alterations
+    bool no_alterations_without_consent where no_alterations_without_consent == true,
+    bool restore_to_original_on_expiry,
+
+    // Diplomatic clause (early termination)
+    optional bool diplomatic_clause,
+    optional BoundedInt<1, 12> diplomatic_clause_months, // Can terminate after X months
+    optional BoundedInt<1, 3> diplomatic_notice_months,
+
+    // Renewal option
+    optional bool renewal_option,
+    optional BoundedInt<1, 60> renewal_term_months,
+    optional BoundedInt<1, 6> renewal_notice_months,
+
+    // Termination
+    bool terminable_for_breach where terminable_for_breach == true,
+    BoundedInt<1, 3> notice_period_months,
+    optional Positive<money<SGD>> early_termination_penalty,
+
+    // Landlord access
+    bool landlord_right_to_inspect where landlord_right_to_inspect == true,
+    BoundedInt<1, 72> landlord_inspection_notice_hours where landlord_inspection_notice_hours >= 24,
+
+    // Inventory
+    bool inventory_attached where inventory_attached == true,
+    string inventory_description,
+
+    // Insurance
+    bool landlord_insures_property where landlord_insures_property == true,
+    bool tenant_insures_contents,
+
+    // Return of deposit
+    BoundedInt<1, 60> deposit_return_days where deposit_return_days <= 30,
+    bool deductions_for_damage,
+    bool deductions_for_unpaid_bills,
+
+    // Governing law
+    string governing_law := "Singapore",
+    string dispute_resolution
+}
+
+// Room Rental Agreement (typically shorter, simpler)
+struct RoomRentalAgreement {
+    // Parties
+    string landlord_name,
+    string landlord_nric,
+
+    string tenant_name,
+    string tenant_nric,
+
+    // Property
+    string property_address,
+    string room_description,
+
+    // Term
+    date commencement_date,
+    BoundedInt<1, 24> rental_months,
+
+    // Rent
+    Positive<money<SGD>> monthly_rent,
+    BoundedInt<1, 31> rent_due_day,
+
+    // Deposit
+    Positive<money<SGD>> security_deposit,
+    where security_deposit == monthly_rent * 1, // Typically 1 month
+
+    // Utilities
+    bool utilities_included where utilities_included == true,
+    optional Positive<money<SGD>> utilities_cap,
+
+    // Common areas
+    bool access_to_common_areas where access_to_common_areas == true,
+    list<string> common_areas, // e.g., ["Kitchen", "Living room", "Bathroom"]
+
+    // House rules
+    bool quiet_hours_enforced,
+    optional string quiet_hours_period,
+    bool no_smoking,
+    bool no_pets,
+    bool no_visitors_overnight,
+
+    // Notice period
+    BoundedInt<1, 3> notice_period_months where notice_period_months == 1,
+
+    // Governing law
+    string governing_law := "Singapore"
+}
+
+// Example: 2-year condo rental
+example CondoTenancy := ResidentialTenancyAgreement {
+    landlord_name: "John Tan",
+    landlord_nric_or_uen: "S1234567A",
+    landlord_address: "123 Owner Street, Singapore 238801",
+    landlord_agent_name: Some("PropertyAgent Pte Ltd"),
+
+    tenant_name: "Jane Lim",
+    tenant_nric: "S9876543Z",
+    tenant_address: "456 Current Address, Singapore 560123",
+    tenant_agent_name: None,
+
+    property_type: PropertyType::Condominium,
+    property_address: "789 Luxury Condo, Orchard Road",
+    unit_number: "#15-08",
+    floor_area_sqm: Some(120.0),
+
+    hdb_owner_singaporean: None,
+    hdb_minimum_occupation_period_met: None,
+
+    tenancy_type: TenancyType::Tenancy2Years,
+    commencement_date: "01-01-2025",
+    tenancy_months: 24,
+    expiry_date: "31-12-2026",
+
+    monthly_rent: 4500.00,
+    rent_due_day: 1,
+    payment_method: "Bank transfer to landlord account",
+
+    security_deposit: 9000.00,
+    security_deposit_months: 2,
+
+    tenant_pays_stamp_duty: true,
+    agreement_must_be_stamped: true,
+
+    utilities_responsibility: UtilitiesResponsibility::TenantPays,
+    utilities_included: [],
+
+    landlord_structural_maintenance: true,
+    tenant_general_maintenance: true,
+    tenant_repairs_minor_damage: true,
+
+    tenant_services_aircon: Some(true),
+    aircon_servicing_months: Some(3),
+
+    residential_use_only: true,
+    no_illegal_activities: true,
+    maximum_occupants: 4,
+
+    subletting_allowed: false,
+    landlord_consent_required_for_subletting: true,
+
+    no_alterations_without_consent: true,
+    restore_to_original_on_expiry: true,
+
+    diplomatic_clause: Some(true),
+    diplomatic_clause_months: Some(12),
+    diplomatic_notice_months: Some(2),
+
+    renewal_option: Some(true),
+    renewal_term_months: Some(24),
+    renewal_notice_months: Some(3),
+
+    terminable_for_breach: true,
+    notice_period_months: 2,
+    early_termination_penalty: Some(9000.00), // 2 months rent
+
+    landlord_right_to_inspect: true,
+    landlord_inspection_notice_hours: 48,
+
+    inventory_attached: true,
+    inventory_description: "Furniture list, appliances, fixtures",
+
+    landlord_insures_property: true,
+    tenant_insures_contents: true,
+
+    deposit_return_days: 14,
+    deductions_for_damage: true,
+    deductions_for_unpaid_bills: true,
+
+    governing_law: "Singapore",
+    dispute_resolution: "Small Claims Tribunal"
+}
+
+// Example: HDB flat rental
+example HDBTenancy := ResidentialTenancyAgreement {
+    landlord_name: "Ahmad Bin Mohamed",
+    landlord_nric_or_uen: "S2345678B",
+    landlord_address: "123 HDB Avenue, Singapore 560123",
+    landlord_agent_name: None,
+
+    tenant_name: "David Lee",
+    tenant_nric: "S8765432C",
+    tenant_address: "456 Temporary Address, Singapore 238801",
+    tenant_agent_name: None,
+
+    property_type: PropertyType::HDB,
+    property_address: "789 HDB Avenue, Tampines",
+    unit_number: "#08-123",
+    floor_area_sqm: Some(95.0),
+
+    hdb_owner_singaporean: Some(true),
+    hdb_minimum_occupation_period_met: Some(true), // MOP must be met
+
+    tenancy_type: TenancyType::FixedTerm,
+    commencement_date: "01-02-2025",
+    tenancy_months: 24,
+    expiry_date: "31-01-2027",
+
+    monthly_rent: 2800.00,
+    rent_due_day: 1,
+    payment_method: "GIRO or PayNow",
+
+    security_deposit: 2800.00,
+    security_deposit_months: 1,
+
+    tenant_pays_stamp_duty: true,
+    agreement_must_be_stamped: true,
+
+    utilities_responsibility: UtilitiesResponsibility::TenantPays,
+    utilities_included: [],
+
+    landlord_structural_maintenance: true,
+    tenant_general_maintenance: true,
+    tenant_repairs_minor_damage: true,
+
+    tenant_services_aircon: Some(true),
+    aircon_servicing_months: Some(6),
+
+    residential_use_only: true,
+    no_illegal_activities: true,
+    maximum_occupants: 6, // HDB rules apply
+
+    subletting_allowed: false,
+    landlord_consent_required_for_subletting: true,
+
+    no_alterations_without_consent: true,
+    restore_to_original_on_expiry: true,
+
+    diplomatic_clause: None,
+    diplomatic_clause_months: None,
+    diplomatic_notice_months: None,
+
+    renewal_option: Some(true),
+    renewal_term_months: Some(24),
+    renewal_notice_months: Some(2),
+
+    terminable_for_breach: true,
+    notice_period_months: 2,
+    early_termination_penalty: Some(5600.00), // 2 months rent
+
+    landlord_right_to_inspect: true,
+    landlord_inspection_notice_hours: 48,
+
+    inventory_attached: true,
+    inventory_description: "Furniture, fans, light fittings",
+
+    landlord_insures_property: true,
+    tenant_insures_contents: false,
+
+    deposit_return_days: 21,
+    deductions_for_damage: true,
+    deductions_for_unpaid_bills: true,
+
+    governing_law: "Singapore",
+    dispute_resolution: "Small Claims Tribunal"
+}
+
+// Example: Room rental
+example RoomRental := RoomRentalAgreement {
+    landlord_name: "Sarah Ng",
+    landlord_nric: "S3456789D",
+
+    tenant_name: "Michelle Tan",
+    tenant_nric: "S6543210E",
+
+    property_address: "123 Bedroom Lane, Singapore 560456",
+    room_description: "Master bedroom with attached bathroom",
+
+    commencement_date: "01-03-2025",
+    rental_months: 12,
+
+    monthly_rent: 1200.00,
+    rent_due_day: 1,
+
+    security_deposit: 1200.00,
+
+    utilities_included: true,
+    utilities_cap: Some(100.00),
+
+    access_to_common_areas: true,
+    common_areas: ["Kitchen", "Living room", "Balcony"],
+
+    quiet_hours_enforced: true,
+    quiet_hours_period: Some("11pm - 7am"),
+    no_smoking: true,
+    no_pets: true,
+    no_visitors_overnight: true,
+
+    notice_period_months: 1,
+
+    governing_law: "Singapore"
+}
+
+// Compliance principles
+
+principle AgreementMustBeStamped {
+    forall agreement: ResidentialTenancyAgreement,
+    agreement.agreement_must_be_stamped == true &&
+    agreement.tenant_pays_stamp_duty == true
+}
+
+principle SecurityDepositReasonable {
+    forall agreement: ResidentialTenancyAgreement,
+    agreement.security_deposit_months >= 1 &&
+    agreement.security_deposit_months <= 3
+}
+
+principle ResidentialUseOnly {
+    forall agreement: ResidentialTenancyAgreement,
+    agreement.residential_use_only == true &&
+    agreement.no_illegal_activities == true
+}
+
+principle LandlordStructuralMaintenance {
+    forall agreement: ResidentialTenancyAgreement,
+    agreement.landlord_structural_maintenance == true
+}
+
+principle NoAlterationsWithoutConsent {
+    forall agreement: ResidentialTenancyAgreement,
+    agreement.no_alterations_without_consent == true
+}
+
+principle LandlordRightToInspect {
+    forall agreement: ResidentialTenancyAgreement,
+    agreement.landlord_right_to_inspect == true &&
+    agreement.landlord_inspection_notice_hours >= 24
+}
+
+principle InventoryRequired {
+    forall agreement: ResidentialTenancyAgreement,
+    agreement.inventory_attached == true
+}
+
+principle TimelyDepositReturn {
+    forall agreement: ResidentialTenancyAgreement,
+    agreement.deposit_return_days <= 30
+}
+
+principle HDBMinimumOccupationPeriod {
+    forall agreement: ResidentialTenancyAgreement,
+    agreement.property_type == PropertyType::HDB =>
+    agreement.hdb_minimum_occupation_period_met == Some(true)
+}
+
+principle RoomRentalDepositOneMonth {
+    forall agreement: RoomRentalAgreement,
+    agreement.security_deposit == agreement.monthly_rent
+}

@@ -1,0 +1,36 @@
+// Generic Types Examples
+// Demonstrates parametric polymorphism in Yuho
+
+// Generic container struct
+struct Container<T> {
+    T value,
+    string label,
+}
+
+// Generic pair/tuple struct
+struct Pair<A, B> {
+    A first,
+    B second,
+}
+
+// Generic result type (success or error)
+struct Result<T, E> {
+    bool is_success,
+    T value,
+    E error_message,
+}
+
+// Concrete types for demonstration
+struct Person {
+    string name,
+    BoundedInt<0, 150> age,
+}
+
+struct Transaction {
+    money<SGD> amount,
+    string date,
+}
+
+// NOTE: Generic function definitions are valid in syntax but require
+// advanced parser support for type variables in return position.
+// These struct definitions demonstrate the generic type system working correctly.

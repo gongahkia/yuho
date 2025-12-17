@@ -1,0 +1,29 @@
+// Example file demonstrating principle verification
+// Usage: yuho verify-principle verify_principle_example.yh NoDoubleJeopardy --show-smt
+
+enum Verdict {
+    Guilty,
+    NotGuilty,
+    Pending,
+}
+
+struct CriminalCase {
+    string accused,
+    string offense,
+    Verdict verdict,
+}
+
+// Define a principle: No person should be tried twice for the same offense
+principle NoDoubleJeopardy {
+    forall case1: CriminalCase,
+    forall case2: CriminalCase,
+    if case1.accused == case2.accused && case1.offense == case2.offense
+    then case1 == case2
+}
+
+// Another principle: Presumption of innocence
+principle PresumptionOfInnocence {
+    forall case: CriminalCase,
+    if case.verdict == Verdict::Pending
+    then exists proof: bool where proof == false
+}

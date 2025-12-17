@@ -1,0 +1,312 @@
+// Tort Law - Negligence
+// Based on Singapore common law principles
+
+// Legal test for negligence
+legal_test Negligence {
+    // Element 1: Duty of care
+    bool duty_of_care_owed,
+
+    // Element 2: Breach of duty
+    bool duty_breached,
+    bool fell_below_standard_of_care,
+
+    // Element 3: Causation
+    bool factual_causation,  // But-for test
+    bool legal_causation,    // Not too remote
+
+    // Element 4: Damage
+    bool damage_suffered,
+    bool damage_not_too_remote,
+
+    // All elements required
+    requires duty_of_care_owed &&
+             duty_breached &&
+             fell_below_standard_of_care &&
+             factual_causation &&
+             legal_causation &&
+             damage_suffered &&
+             damage_not_too_remote
+}
+
+// Duty of care - Spandeck test (Singapore)
+struct DutyOfCare {
+    // Parties
+    string defendant_name,
+    string plaintiff_name,
+
+    // Threshold test: Factual foreseeability
+    bool harm_factually_foreseeable where harm_factually_foreseeable == true,
+
+    // Threshold test: Proximity
+    bool sufficient_proximity,
+    bool physical_proximity,
+    bool circumstantial_proximity,
+    bool causal_proximity,
+
+    where sufficient_proximity == (physical_proximity ||
+                                   circumstantial_proximity ||
+                                   causal_proximity),
+
+    // Policy considerations
+    bool no_policy_against_duty,
+
+    // Duty established
+    bool duty_exists := harm_factually_foreseeable &&
+                       sufficient_proximity &&
+                       no_policy_against_duty
+}
+
+// Standard of care
+struct StandardOfCare {
+    // Objective standard: reasonable person
+    bool reasonable_person_standard,
+
+    // Professional standard (Bolam test)
+    bool professional_defendant,
+    bool acted_in_accordance_with_professional_practice,
+
+    // Factors affecting standard
+    bool special_skill_professed,
+    bool emergency_situation,
+    BoundedInt<0, 100> probability_of_harm,
+    string magnitude_of_harm,
+
+    // Breach determination
+    bool standard_met :=
+        if professional_defendant
+        then acted_in_accordance_with_professional_practice
+        else reasonable_person_standard
+}
+
+// Causation
+struct Causation {
+    // Factual causation - but-for test
+    bool but_for_breach_no_damage where but_for_breach_no_damage == true,
+
+    // Legal causation - not too remote
+    bool damage_reasonably_foreseeable,
+    bool no_novus_actus_interveniens, // No intervening act
+
+    // Established
+    bool factual_causation := but_for_breach_no_damage,
+    bool legal_causation := damage_reasonably_foreseeable &&
+                           no_novus_actus_interveniens
+}
+
+// Damage
+enum DamageType {
+    PersonalInjury,
+    PropertyDamage,
+    PureEconomicLoss,
+    PsychiatricHarm
+}
+
+struct Damage {
+    DamageType damage_type,
+    string description,
+
+    // Quantum
+    Positive<money<SGD>> amount_claimed,
+
+    // Special damages (quantifiable)
+    optional Positive<money<SGD>> medical_expenses,
+    optional Positive<money<SGD>> loss_of_earnings,
+    optional Positive<money<SGD>> property_repair_costs,
+
+    // General damages (non-quantifiable)
+    optional Positive<money<SGD>> pain_and_suffering,
+    optional Positive<money<SGD>> loss_of_amenity,
+    optional Positive<money<SGD>> future_losses,
+
+    // Remoteness
+    bool reasonably_foreseeable where reasonably_foreseeable == true
+}
+
+// Negligence claim
+struct NegligenceClaim {
+    // Parties
+    string plaintiff,
+    string defendant,
+
+    // Duty of care
+    DutyOfCare duty,
+
+    // Breach
+    StandardOfCare standard,
+    bool breach_occurred where breach_occurred == !standard.standard_met,
+
+    // Causation
+    Causation causation,
+
+    // Damage
+    Damage damage,
+
+    // Defenses
+    bool contributory_negligence,
+    optional BoundedInt<0, 100> plaintiff_contribution_percentage,
+
+    bool voluntary_assumption_of_risk,
+
+    // Claim established
+    bool claim_established := duty.duty_exists &&
+                             breach_occurred &&
+                             causation.factual_causation &&
+                             causation.legal_causation &&
+                             damage.reasonably_foreseeable &&
+                             !voluntary_assumption_of_risk
+}
+
+// Example: Road traffic accident
+example TrafficAccident := NegligenceClaim {
+    plaintiff: "Injured Pedestrian",
+    defendant: "Motorist",
+
+    duty: DutyOfCare {
+        defendant_name: "Motorist",
+        plaintiff_name: "Injured Pedestrian",
+
+        harm_factually_foreseeable: true,
+
+        sufficient_proximity: true,
+        physical_proximity: true,
+        circumstantial_proximity: false,
+        causal_proximity: false,
+
+        no_policy_against_duty: true
+    },
+
+    standard: StandardOfCare {
+        reasonable_person_standard: true,
+
+        professional_defendant: false,
+        acted_in_accordance_with_professional_practice: false,
+
+        special_skill_professed: false,
+        emergency_situation: false,
+        probability_of_harm: 80,
+        magnitude_of_harm: "Serious injury or death"
+    },
+
+    breach_occurred: true,
+
+    causation: Causation {
+        but_for_breach_no_damage: true,
+        damage_reasonably_foreseeable: true,
+        no_novus_actus_interveniens: true
+    },
+
+    damage: Damage {
+        damage_type: DamageType::PersonalInjury,
+        description: "Fractured leg and head trauma",
+
+        amount_claimed: 150000.00,
+
+        medical_expenses: Some(30000.00),
+        loss_of_earnings: Some(50000.00),
+        property_repair_costs: None,
+
+        pain_and_suffering: Some(50000.00),
+        loss_of_amenity: Some(20000.00),
+        future_losses: None,
+
+        reasonably_foreseeable: true
+    },
+
+    contributory_negligence: true,
+    plaintiff_contribution_percentage: Some(20),
+
+    voluntary_assumption_of_risk: false
+}
+
+// Example: Medical negligence
+example MedicalNegligence := NegligenceClaim {
+    plaintiff: "Patient",
+    defendant: "Doctor",
+
+    duty: DutyOfCare {
+        defendant_name: "Doctor",
+        plaintiff_name: "Patient",
+
+        harm_factually_foreseeable: true,
+
+        sufficient_proximity: true,
+        physical_proximity: true,
+        circumstantial_proximity: true,
+        causal_proximity: true,
+
+        no_policy_against_duty: true
+    },
+
+    standard: StandardOfCare {
+        reasonable_person_standard: false,
+
+        professional_defendant: true,
+        acted_in_accordance_with_professional_practice: false, // Breach
+
+        special_skill_professed: true,
+        emergency_situation: false,
+        probability_of_harm: 60,
+        magnitude_of_harm: "Permanent disability"
+    },
+
+    breach_occurred: true,
+
+    causation: Causation {
+        but_for_breach_no_damage: true,
+        damage_reasonably_foreseeable: true,
+        no_novus_actus_interveniens: true
+    },
+
+    damage: Damage {
+        damage_type: DamageType::PersonalInjury,
+        description: "Permanent nerve damage from surgical error",
+
+        amount_claimed: 500000.00,
+
+        medical_expenses: Some(100000.00),
+        loss_of_earnings: Some(200000.00),
+        property_repair_costs: None,
+
+        pain_and_suffering: Some(150000.00),
+        loss_of_amenity: Some(50000.00),
+        future_losses: None,
+
+        reasonably_foreseeable: true
+    },
+
+    contributory_negligence: false,
+    plaintiff_contribution_percentage: None,
+
+    voluntary_assumption_of_risk: false
+}
+
+// Principle: Duty requires foreseeability and proximity
+principle DutyRequiresForeseeabilityAndProximity {
+    forall duty: DutyOfCare,
+    duty.duty_exists == true =>
+    (duty.harm_factually_foreseeable == true &&
+     duty.sufficient_proximity == true)
+}
+
+// Principle: But-for causation required
+principle ButForCausationRequired {
+    forall causation: Causation,
+    causation.factual_causation == true =>
+    causation.but_for_breach_no_damage == true
+}
+
+// Principle: Damage must be foreseeable
+principle DamageMustBeForeseeable {
+    forall damage: Damage,
+    damage.reasonably_foreseeable == true
+}
+
+// Principle: Claim requires all elements
+principle NegligenceRequiresAllElements {
+    forall claim: NegligenceClaim,
+    claim.claim_established == true =>
+    (claim.duty.duty_exists == true &&
+     claim.breach_occurred == true &&
+     claim.causation.factual_causation == true &&
+     claim.causation.legal_causation == true)
+}

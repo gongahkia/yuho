@@ -1,0 +1,35 @@
+// Import Person and Address from person module
+referencing Person, Address from person
+
+// Employee extends Person with employment details
+struct Employee {
+    Person person,
+    string employee_id,
+    string job_title,
+    string department,
+    money<SGD> salary,
+    date hired_date,
+    Address work_address,
+}
+
+// Employment contract scope
+scope employment_contract {
+    Employee e := Employee {
+        person := Person {
+            name := "Alice Chen",
+            age := 30,
+            email := "alice.chen@company.com",
+        },
+        employee_id := "EMP001",
+        job_title := "Senior Software Engineer",
+        department := "Engineering",
+        salary := 120000.00,
+        hired_date := 2023-01-15,
+        work_address := Address {
+            street := "1 Tech Street",
+            city := "Singapore",
+            postal_code := "123456",
+            country := "Singapore",
+        },
+    }
+}

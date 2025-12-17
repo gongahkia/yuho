@@ -1,0 +1,34 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/yuho-core",
+    "crates/yuho-check",
+    "crates/yuho-transpile",
+    "crates/yuho-lsp",
+    "crates/yuho-wasm",
+    "crates/yuho-cli",
+    "crates/yuho-llm", "crates/yuho-config", "crates/yuho-decision-tree",
+]
+
+# Z3 is optional and requires libclang to build
+# To include: cargo build --features z3
+exclude = [
+    "crates/yuho-z3",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+authors = ["Gabriel Ong"]
+license = "MIT"
+repository = "https://github.com/gongahkia/yuho-2"
+
+[workspace.dependencies]
+thiserror = "1.0"
+anyhow = "1.0"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+logos = "0.14"
+lalrpop-util = "0.20"
+clap = { version = "4.4", features = ["derive"] }
+colored = "2.1"

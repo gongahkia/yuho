@@ -1,0 +1,281 @@
+// Tort Law - Defamation
+// Based on Singapore Defamation Act and common law
+
+@citation("", "", "Defamation Act")
+
+// Types of defamation
+enum DefamationType {
+    Libel,    // Written/permanent form
+    Slander   // Spoken/transient form
+}
+
+// Legal test for defamation
+legal_test Defamation {
+    // Element 1: Defamatory statement
+    bool statement_defamatory,
+    bool lowers_reputation,
+    bool exposes_to_hatred_ridicule_contempt,
+
+    // Element 2: Statement refers to plaintiff
+    bool refers_to_plaintiff,
+
+    // Element 3: Statement published to third party
+    bool published_to_third_party,
+
+    // All elements required
+    requires (lowers_reputation || exposes_to_hatred_ridicule_contempt) &&
+             statement_defamatory &&
+             refers_to_plaintiff &&
+             published_to_third_party
+}
+
+// Defamation claim
+struct DefamationClaim {
+    // Parties
+    string plaintiff,
+    string defendant,
+
+    // The statement
+    string defamatory_statement,
+    date publication_date,
+    DefamationType defamation_type,
+
+    // Elements
+    bool statement_defamatory where statement_defamatory == true,
+    bool lowers_plaintiff_reputation,
+    bool exposes_to_contempt,
+
+    // Reference to plaintiff
+    bool refers_to_plaintiff where refers_to_plaintiff == true,
+    bool innuendo_required,  // Meaning not obvious
+
+    // Publication
+    bool published where published == true,
+    string publication_medium,
+    BoundedInt<1, 1000000> number_of_people_reached,
+
+    // Presumed damages for libel
+    bool damages_presumed := defamation_type == DefamationType::Libel
+}
+
+// Defense: Justification (truth)
+struct JustificationDefense {
+    DefamationClaim claim,
+
+    // Statement must be substantially true
+    bool statement_substantially_true where statement_substantially_true == true,
+
+    // Complete defense if proven
+    bool defense_established := statement_substantially_true
+}
+
+// Defense: Fair comment
+struct FairCommentDefense {
+    DefamationClaim claim,
+
+    // Requirements
+    bool comment_not_fact,  // Must be opinion, not fact
+    bool matter_of_public_interest,
+    bool based_on_true_facts,
+    bool honest_belief,
+
+    // Malice defeats defense
+    bool defendant_acted_with_malice,
+
+    // Defense established
+    bool defense_established := comment_not_fact &&
+                                matter_of_public_interest &&
+                                based_on_true_facts &&
+                                honest_belief &&
+                                !defendant_acted_with_malice
+}
+
+// Defense: Qualified privilege
+struct QualifiedPrivilegeDefense {
+    DefamationClaim claim,
+
+    // Occasions of qualified privilege
+    bool duty_to_communicate,
+    bool legitimate_interest,
+    bool reciprocal_duty_interest,
+
+    // Parliamentary privilege (absolute)
+    bool parliamentary_proceedings,
+
+    // Judicial privilege (absolute)
+    bool court_proceedings,
+
+    // Malice defeats qualified privilege
+    bool defendant_acted_with_malice,
+
+    // Defense established
+    bool defense_established :=
+        if parliamentary_proceedings || court_proceedings
+        then true  // Absolute privilege
+        else (duty_to_communicate || legitimate_interest || reciprocal_duty_interest) &&
+             !defendant_acted_with_malice
+}
+
+// Defense: Offer of amends - Section 7 Defamation Act
+struct OfferOfAmendsDefense {
+    @citation("7", "1", "Defamation Act")
+
+    DefamationClaim claim,
+
+    // Offer made
+    bool offer_made_in_writing,
+    bool offer_made_promptly,
+
+    // Contents of offer
+    bool correction_offered,
+    bool apology_offered,
+    optional Positive<money<SGD>> compensation_offered,
+
+    // Innocent publication
+    bool defendant_unaware_defamatory,
+    bool no_reason_to_believe_defamatory,
+
+    // Defense established
+    bool defense_established := offer_made_in_writing &&
+                               offer_made_promptly &&
+                               correction_offered &&
+                               apology_offered &&
+                               defendant_unaware_defamatory
+}
+
+// Remedies
+struct DefamationRemedies {
+    DefamationClaim claim,
+
+    // Damages
+    optional Positive<money<SGD>> general_damages,
+    optional Positive<money<SGD>> aggravated_damages,
+    optional Positive<money<SGD>> exemplary_damages,
+
+    // Injunction
+    bool injunction_sought,
+    bool injunction_granted,
+
+    // Publication of apology
+    bool apology_ordered,
+    string apology_text
+}
+
+// Example: Online defamation (libel)
+example OnlineDefamation := DefamationClaim {
+    plaintiff: "Business Owner",
+    defendant: "Anonymous blogger",
+
+    defamatory_statement: "Business Owner is a fraudster who cheats customers",
+    publication_date: "15-11-2024",
+    defamation_type: DefamationType::Libel,
+
+    statement_defamatory: true,
+    lowers_plaintiff_reputation: true,
+    exposes_to_contempt: true,
+
+    refers_to_plaintiff: true,
+    innuendo_required: false,
+
+    published: true,
+    publication_medium: "Blog post and social media",
+    number_of_people_reached: 10000
+}
+
+// Example: Justification defense (truth)
+example TruthDefense := JustificationDefense {
+    claim: OnlineDefamation,
+
+    statement_substantially_true: true
+}
+
+// Example: Fair comment on public figure
+example FairCommentOnPolitician := FairCommentDefense {
+    claim: DefamationClaim {
+        plaintiff: "Politician",
+        defendant: "Journalist",
+
+        defamatory_statement: "The politician's policies are misguided and harmful",
+        publication_date: "20-11-2024",
+        defamation_type: DefamationType::Libel,
+
+        statement_defamatory: true,
+        lowers_plaintiff_reputation: true,
+        exposes_to_contempt: false,
+
+        refers_to_plaintiff: true,
+        innuendo_required: false,
+
+        published: true,
+        publication_medium: "Newspaper article",
+        number_of_people_reached: 50000
+    },
+
+    comment_not_fact: true,
+    matter_of_public_interest: true,
+    based_on_true_facts: true,
+    honest_belief: true,
+
+    defendant_acted_with_malice: false
+}
+
+// Example: Qualified privilege - employment reference
+example EmploymentReference := QualifiedPrivilegeDefense {
+    claim: DefamationClaim {
+        plaintiff: "Former Employee",
+        defendant: "Former Employer",
+
+        defamatory_statement: "Employee was terminated for misconduct",
+        publication_date: "10-11-2024",
+        defamation_type: DefamationType::Libel,
+
+        statement_defamatory: true,
+        lowers_plaintiff_reputation: true,
+        exposes_to_contempt: true,
+
+        refers_to_plaintiff: true,
+        innuendo_required: false,
+
+        published: true,
+        publication_medium: "Employment reference letter",
+        number_of_people_reached: 1
+    },
+
+    duty_to_communicate: true,
+    legitimate_interest: true,
+    reciprocal_duty_interest: true,
+
+    parliamentary_proceedings: false,
+    court_proceedings: false,
+
+    defendant_acted_with_malice: false
+}
+
+// Principle: Publication to third party required
+principle PublicationRequired {
+    forall claim: DefamationClaim,
+    claim.published == true
+}
+
+// Principle: Truth is complete defense
+principle TruthDefense {
+    forall defense: JustificationDefense,
+    defense.statement_substantially_true == true =>
+    defense.defense_established == true
+}
+
+// Principle: Malice defeats qualified privilege
+principle MaliceDefeatsPrivilege {
+    forall defense: QualifiedPrivilegeDefense,
+    !defense.parliamentary_proceedings &&
+    !defense.court_proceedings &&
+    defense.defendant_acted_with_malice == true =>
+    defense.defense_established == false
+}
+
+// Principle: Fair comment requires honest belief
+principle FairCommentRequiresHonesty {
+    forall defense: FairCommentDefense,
+    defense.defense_established == true =>
+    defense.honest_belief == true
+}

@@ -1,0 +1,82 @@
+// Singapore Penal Code Section 415: Cheating
+//
+// Whoever, by deceiving any person, fraudulently or dishonestly induces
+// the person so deceived to deliver any property to any person, or to
+// consent that any person shall retain any property, or intentionally
+// induces the person so deceived to do or omit to do anything which he
+// would not do or omit if he were not so deceived, and which act or
+// omission causes or is likely to cause damage or harm to that person
+// in body, mind, reputation or property, is said to "cheat".
+
+// Define the legal test for cheating with ALL required elements
+legal_test Cheating {
+    requires deception: bool,
+    requires dishonest_intent: bool,
+    requires property_delivery: bool,
+    requires victim_induced: bool,
+}
+
+// Represent a case being analyzed
+struct CheatingCase {
+    string case_id,
+    string accused_name,
+    string victim_name,
+
+    // Elements to be proven
+    bool deception,
+    bool dishonest_intent,
+    bool property_delivery,
+    bool victim_induced,
+
+    // Additional case details
+    money<SGD> amount_involved,
+    date incident_date,
+}
+
+// Possible verdicts
+enum Verdict {
+    Guilty,
+    NotGuilty,
+}
+
+// Determine verdict based on whether all cheating elements are satisfied
+func determine_cheating_verdict(CheatingCase case) -> Verdict {
+    match case {
+        case satisfies Cheating := Verdict::Guilty
+        case _ := Verdict::NotGuilty
+    }
+}
+
+// Example case 1: All elements present
+CheatingCase guilty_case := CheatingCase {
+    case_id: "PP v Smith 2024",
+    accused_name: "John Smith",
+    victim_name: "Jane Doe",
+
+    deception: true,              // Smith falsely represented he had authority
+    dishonest_intent: true,       // Intent was to obtain property dishonestly
+    property_delivery: true,      // Victim delivered $10,000
+    victim_induced: true,         // Victim was induced by the deception
+
+    amount_involved: $10000,
+    incident_date: "15-03-2024",
+}
+
+// Example case 2: Missing element (no dishonest intent)
+CheatingCase innocent_case := CheatingCase {
+    case_id: "PP v Jones 2024",
+    accused_name: "Mary Jones",
+    victim_name: "Bob Williams",
+
+    deception: true,              // There was a misrepresentation
+    dishonest_intent: false,      // But it was an honest mistake
+    property_delivery: true,      // Property was delivered
+    victim_induced: true,         // Victim was induced
+
+    amount_involved: $5000,
+    incident_date: "20-04-2024",
+}
+
+// Verdict determinations
+Verdict verdict1 := determine_cheating_verdict(guilty_case)    // Should be Guilty
+Verdict verdict2 := determine_cheating_verdict(innocent_case)  // Should be NotGuilty

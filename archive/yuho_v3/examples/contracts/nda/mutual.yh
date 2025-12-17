@@ -1,0 +1,236 @@
+// Mutual Non-Disclosure Agreement
+// Both parties exchange confidential information
+
+struct MutualNDA {
+    // Party A
+    string party_a_name,
+    string party_a_address,
+    string party_a_representative,
+    
+    // Party B
+    string party_b_name,
+    string party_b_address,
+    string party_b_representative,
+    
+    // Agreement Details
+    ValidDate<after="01-01-2020"> effective_date,
+    ValidDate<before="31-12-2035"> expiration_date,
+    string purpose,
+    
+    // Scope of Confidential Information
+    bool technical_information,
+    bool business_strategies,
+    bool financial_data,
+    bool customer_information,
+    bool product_roadmaps,
+    bool source_code,
+    bool algorithms,
+    bool know_how,
+    
+    // Obligations
+    BoundedInt<1, 10> confidentiality_period_years where confidentiality_period_years >= 3,
+    bool perpetual_trade_secrets,
+    
+    // Standard of Care
+    bool reasonable_care_standard,
+    bool same_care_as_own_information,
+    
+    // Permitted Use
+    bool only_for_stated_purpose,
+    bool no_reverse_engineering,
+    bool no_competitive_use,
+    
+    // Permitted Disclosures
+    bool employees_with_need_to_know,
+    bool subsidiaries_and_affiliates,
+    bool legal_advisors,
+    bool financial_advisors,
+    bool bound_by_same_obligations,
+    
+    // Exceptions (Standard)
+    bool public_domain_exception,
+    bool prior_knowledge_exception,
+    bool independent_development_exception,
+    bool rightfully_obtained_exception,
+    bool required_by_law_exception,
+    
+    // Return and Destruction
+    BoundedInt<5, 60> return_destroy_within_days,
+    bool written_certification_required,
+    bool may_retain_for_legal_compliance,
+    
+    // No License or Warranty
+    bool no_license_granted,
+    bool no_warranty_on_information,
+    bool no_obligation_to_proceed,
+    
+    // Remedies
+    bool injunctive_relief,
+    bool equitable_relief,
+    bool attorney_fees_to_prevailing_party,
+    
+    // Term and Termination
+    BoundedInt<1, 5> initial_term_years,
+    bool survivability_after_termination,
+    BoundedInt<1, 90> termination_notice_days,
+    
+    // Miscellaneous
+    bool entire_agreement,
+    bool amendments_in_writing_only,
+    bool severability,
+    bool no_waiver,
+    string governing_law,
+    string dispute_resolution_method,
+}
+
+scope MutualNDATerms {
+    // Verify mutual obligations are balanced
+    fn verify_mutual_obligations(MutualNDA nda) -> bool {
+        bool adequate_term := nda.confidentiality_period_years >= 3
+        bool adequate_care := nda.reasonable_care_standard
+        bool adequate_return := nda.return_destroy_within_days <= 60
+        
+        return adequate_term && adequate_care && adequate_return
+    }
+    
+    // Calculate total protection period
+    fn calculate_protection_period(
+        ValidDate<after="01-01-2020"> effective,
+        ValidDate<before="31-12-2035"> expiration,
+        int confidentiality_years
+    ) -> int {
+        // In production, calculate from expiration + confidentiality years
+        return confidentiality_years
+    }
+    
+    // Check if disclosure is permitted
+    fn is_disclosure_permitted(
+        MutualNDA nda,
+        string recipient_category,
+        bool has_need_to_know,
+        bool bound_by_obligations
+    ) -> bool {
+        bool need_met := has_need_to_know
+        bool binding_met := !nda.bound_by_same_obligations || bound_by_obligations
+        
+        bool category_permitted := match recipient_category {
+            case "employee" := nda.employees_with_need_to_know
+            case "subsidiary" := nda.subsidiaries_and_affiliates
+            case "legal_advisor" := nda.legal_advisors
+            case "financial_advisor" := nda.financial_advisors
+            case _ := false
+        }
+        
+        return category_permitted && need_met && binding_met
+    }
+    
+    // Check if information falls under exception
+    fn is_exception_applicable(
+        MutualNDA nda,
+        bool is_public,
+        bool prior_knowledge,
+        bool independently_developed,
+        bool rightfully_obtained,
+        bool legally_required
+    ) -> bool {
+        bool exception := (nda.public_domain_exception && is_public) ||
+                         (nda.prior_knowledge_exception && prior_knowledge) ||
+                         (nda.independent_development_exception && independently_developed) ||
+                         (nda.rightfully_obtained_exception && rightfully_obtained) ||
+                         (nda.required_by_law_exception && legally_required)
+        return exception
+    }
+    
+    // Determine applicable remedies
+    fn determine_remedies(MutualNDA nda, bool breach_occurred) -> string {
+        match breach_occurred {
+            case true := match nda.injunctive_relief && nda.attorney_fees_to_prevailing_party {
+                case true := "Injunctive relief available plus attorney fees to prevailing party"
+                case false := "Standard remedies apply"
+            }
+            case false := "No breach - no remedies triggered"
+        }
+    }
+}
+
+// Example: Joint Venture Exploration
+MutualNDA joint_venture_nda := MutualNDA {
+    party_a_name := "Alpha Technologies Pte Ltd",
+    party_a_address := "50 Raffles Place, Singapore 048623",
+    party_a_representative := "John Smith, CEO",
+    
+    party_b_name := "Beta Innovations Pte Ltd",
+    party_b_address := "1 George Street, Singapore 049145",
+    party_b_representative := "Jane Doe, Managing Director",
+    
+    effective_date := "01-01-2025",
+    expiration_date := "31-12-2027",
+    purpose := "Exploration of joint venture opportunity in AI and machine learning space",
+    
+    technical_information := true,
+    business_strategies := true,
+    financial_data := true,
+    customer_information := true,
+    product_roadmaps := true,
+    source_code := true,
+    algorithms := true,
+    know_how := true,
+    
+    confidentiality_period_years := 5,
+    perpetual_trade_secrets := true,
+    
+    reasonable_care_standard := true,
+    same_care_as_own_information := true,
+    
+    only_for_stated_purpose := true,
+    no_reverse_engineering := true,
+    no_competitive_use := true,
+    
+    employees_with_need_to_know := true,
+    subsidiaries_and_affiliates := true,
+    legal_advisors := true,
+    financial_advisors := true,
+    bound_by_same_obligations := true,
+    
+    public_domain_exception := true,
+    prior_knowledge_exception := true,
+    independent_development_exception := true,
+    rightfully_obtained_exception := true,
+    required_by_law_exception := true,
+    
+    return_destroy_within_days := 30,
+    written_certification_required := true,
+    may_retain_for_legal_compliance := true,
+    
+    no_license_granted := true,
+    no_warranty_on_information := true,
+    no_obligation_to_proceed := true,
+    
+    injunctive_relief := true,
+    equitable_relief := true,
+    attorney_fees_to_prevailing_party := true,
+    
+    initial_term_years := 3,
+    survivability_after_termination := true,
+    termination_notice_days := 30,
+    
+    entire_agreement := true,
+    amendments_in_writing_only := true,
+    severability := true,
+    no_waiver := true,
+    governing_law := "Singapore",
+    dispute_resolution_method := "Arbitration under SIAC rules",
+}
+
+// Standard of care
+match joint_venture_nda.same_care_as_own_information {
+    case true := "Each party must protect the other's information with same care as their own"
+    case false := "Reasonable care standard applies"
+}
+
+// Dispute resolution
+match joint_venture_nda.dispute_resolution_method {
+    case "Arbitration under SIAC rules" := "Disputes resolved via SIAC arbitration in Singapore"
+    case "Litigation" := "Disputes resolved in Singapore courts"
+    case _ := "Dispute resolution method not specified"
+}

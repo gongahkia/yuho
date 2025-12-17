@@ -1,0 +1,49 @@
+// Examples of nested quantifiers for legal principle verification
+
+// Example 1: Simple nested forall
+// All defendants have all rights protected
+principle AllDefendantsHaveAllRights {
+    forall defendant: Defendant,
+    forall right: ConstitutionalRight,
+    defendant.rights_protected == true
+}
+
+// Example 2: Mixed forall and exists
+// For every case, there exists evidence
+principle CaseHasEvidence {
+    forall case: CriminalCase,
+    exists evidence: Evidence,
+    evidence.case_id == case.id && evidence.admissible == true
+}
+
+// Example 3: Triple nesting
+// For all judges, for all cases, there exists a ruling
+principle JudgesMakeRulings {
+    forall judge: Judge,
+    forall case: Case,
+    exists ruling: Ruling,
+    ruling.judge_id == judge.id && ruling.case_id == case.id
+}
+
+// Example 4: Complex nested quantifiers with logical operators
+// Double jeopardy protection
+principle NoDoubleJeopardy {
+    forall person: Person,
+    forall offense: Offense,
+    forall case1: CriminalCase,
+    exists verdict1: Verdict,
+    verdict1.case_id == case1.id && 
+    verdict1.accused == person &&
+    verdict1.offense == offense &&
+    verdict1.final == true
+}
+
+// Example 5: Nested exists quantifiers
+// Evidence chain requirement
+principle EvidenceChain {
+    exists witness: Witness,
+    exists testimony: Testimony,
+    exists corroboration: Evidence,
+    testimony.witness_id == witness.id &&
+    corroboration.supports == testimony.id
+}

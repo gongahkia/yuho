@@ -1,0 +1,23 @@
+[package]
+name = "yuho-cli"
+version.workspace = true
+edition.workspace = true
+
+[[bin]]
+name = "yuho"
+path = "src/main.rs"
+
+[features]
+default = []
+z3 = ["yuho-z3"]
+
+[dependencies]
+yuho-core = { path = "../yuho-core" }
+yuho-check = { path = "../yuho-check" }
+yuho-transpile = { path = "../yuho-transpile" }
+yuho-decision-tree = { path = "../yuho-decision-tree" }
+yuho-z3 = { path = "../yuho-z3", optional = true }
+clap.workspace = true
+colored.workspace = true
+anyhow.workspace = true
+serde_json.workspace = true

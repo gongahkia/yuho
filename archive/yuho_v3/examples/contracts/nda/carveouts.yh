@@ -1,0 +1,317 @@
+// NDA with Carve-Outs
+// Sophisticated NDA with specific exclusions and permitted use cases
+
+struct CarveOut {
+    string carve_out_name,
+    string description,
+    bool requires_prior_notice,
+    bool requires_documentation,
+    BoundedInt<0, 30> notice_days,
+}
+
+struct NDAWithCarveOuts {
+    // Basic Parties
+    string disclosing_party,
+    string receiving_party,
+    ValidDate<after="01-01-2020"> effective_date,
+    string purpose,
+    
+    // Standard Confidentiality Terms
+    BoundedInt<2, 10> confidentiality_years,
+    bool trade_secrets_perpetual,
+    
+    // Carve-Out Categories
+    Array<CarveOut> specific_carve_outs,
+    
+    // Regulatory Carve-Outs
+    bool regulatory_disclosure_permitted,
+    bool sec_filing_permitted,
+    bool stock_exchange_disclosure_permitted,
+    bool audit_disclosure_permitted,
+    bool tax_authority_disclosure_permitted,
+    BoundedInt<0, 10> regulatory_notice_days,
+    
+    // Litigation Carve-Outs
+    bool court_ordered_disclosure_permitted,
+    bool subpoena_response_permitted,
+    bool government_investigation_permitted,
+    BoundedInt<1, 15> litigation_notice_days,
+    bool best_efforts_to_limit_disclosure,
+    
+    // M&A Carve-Outs
+    bool due_diligence_disclosure_permitted,
+    bool prospective_acquirer_disclosure_permitted,
+    bool requires_acquirer_nda,
+    bool board_approved_transaction_only,
+    BoundedInt<0, 10> ma_notice_days,
+    
+    // Financing Carve-Outs
+    bool lender_disclosure_permitted,
+    bool investor_disclosure_permitted,
+    bool requires_lender_confidentiality,
+    bool senior_secured_lenders_only,
+    
+    // Operational Carve-Outs
+    bool contractor_disclosure_permitted,
+    bool supplier_disclosure_permitted,
+    bool customer_disclosure_permitted,
+    bool requires_back_to_back_nda,
+    bool limited_to_necessary_information,
+    
+    // Professional Advisor Carve-Outs
+    bool lawyer_disclosure_permitted,
+    bool accountant_disclosure_permitted,
+    bool investment_banker_permitted,
+    bool consultant_permitted,
+    bool professional_duty_of_confidentiality,
+    
+    // Public Relations Carve-Outs
+    bool press_release_with_consent,
+    bool earnings_call_disclosure_permitted,
+    bool investor_presentation_permitted,
+    bool must_sanitize_confidential_info,
+    
+    // Research & Development Carve-Outs
+    bool academic_collaboration_permitted,
+    bool research_publication_permitted,
+    bool patent_filing_permitted,
+    bool requires_prior_review,
+    BoundedInt<30, 90> review_period_days,
+    
+    // Geographic Carve-Outs
+    bool us_jurisdiction_exception,
+    bool eu_jurisdiction_exception,
+    bool china_jurisdiction_exception,
+    string specific_countries,
+    
+    // Temporal Carve-Outs
+    bool information_age_exception,
+    BoundedInt<1, 5> information_age_years,
+    bool automatic_declassification,
+    
+    // Competitive Carve-Outs
+    bool competitive_analysis_permitted,
+    bool benchmarking_permitted,
+    bool market_research_permitted,
+    bool must_anonymize,
+    
+    // Remedies and Limitations
+    bool carve_out_reduces_liability,
+    bool good_faith_reliance_defense,
+    bool indemnification_for_carve_out_breach,
+    money<SGD> liability_cap,
+    
+    // Procedural Requirements
+    bool written_notice_required,
+    bool must_specify_carve_out_basis,
+    bool must_minimize_disclosure,
+    bool cooperation_in_protective_orders,
+    
+    // Clawback Provisions
+    bool disclosed_info_remains_confidential,
+    bool return_if_transaction_fails,
+    BoundedInt<5, 30> return_deadline_days,
+}
+
+scope NDACarveOutTerms {
+    // Verify carve-out is valid
+    fn validate_carve_out(
+        NDAWithCarveOuts nda,
+        string carve_out_type,
+        bool notice_given,
+        int notice_days
+    ) -> bool {
+        bool valid := match carve_out_type {
+            case "regulatory" := nda.regulatory_disclosure_permitted && 
+                                (!nda.written_notice_required || (notice_given && notice_days >= nda.regulatory_notice_days))
+            case "litigation" := nda.court_ordered_disclosure_permitted && 
+                                notice_days >= nda.litigation_notice_days
+            case "ma" := nda.due_diligence_disclosure_permitted && 
+                        (!nda.board_approved_transaction_only || true)
+            case "financing" := nda.lender_disclosure_permitted
+            case _ := false
+        }
+        return valid
+    }
+    
+    // Check if disclosure requires additional protections
+    fn requires_additional_protections(
+        NDAWithCarveOuts nda,
+        string carve_out_type
+    ) -> bool {
+        bool needs_protection := match carve_out_type {
+            case "ma" := nda.requires_acquirer_nda
+            case "financing" := nda.requires_lender_confidentiality
+            case "operational" := nda.requires_back_to_back_nda
+            case "research" := nda.requires_prior_review
+            case _ := false
+        }
+        return needs_protection
+    }
+    
+    // Calculate notice period required
+    fn get_required_notice_days(
+        NDAWithCarveOuts nda,
+        string carve_out_type
+    ) -> int {
+        int days := match carve_out_type {
+            case "regulatory" := nda.regulatory_notice_days
+            case "litigation" := nda.litigation_notice_days
+            case "ma" := nda.ma_notice_days
+            case "research" := nda.review_period_days
+            case _ := 0
+        }
+        return days
+    }
+    
+    // Check if information must be returned
+    fn must_return_information(
+        NDAWithCarveOuts nda,
+        bool transaction_completed
+    ) -> bool {
+        bool return_required := nda.return_if_transaction_fails && !transaction_completed
+        return return_required
+    }
+    
+    // Assess liability reduction
+    fn calculate_liability(
+        NDAWithCarveOuts nda,
+        bool carve_out_applicable,
+        bool good_faith
+    ) -> money<SGD> {
+        match carve_out_applicable && good_faith && nda.carve_out_reduces_liability {
+            case true := return $0
+            case false := return nda.liability_cap
+        }
+    }
+}
+
+// Example: M&A Due Diligence NDA
+CarveOut regulatory_carveout := CarveOut {
+    carve_out_name := "SEC Regulatory Disclosure",
+    description := "Required disclosures under securities laws",
+    requires_prior_notice := true,
+    requires_documentation := true,
+    notice_days := 5,
+}
+
+CarveOut ma_carveout := CarveOut {
+    carve_out_name := "Acquisition Due Diligence",
+    description := "Disclosure to potential acquirers under signed NDA",
+    requires_prior_notice := true,
+    requires_documentation := true,
+    notice_days := 3,
+}
+
+CarveOut lender_carveout := CarveOut {
+    carve_out_name := "Senior Lender Disclosure",
+    description := "Disclosure to existing senior secured lenders",
+    requires_prior_notice := false,
+    requires_documentation := false,
+    notice_days := 0,
+}
+
+NDAWithCarveOuts acquisition_nda := NDAWithCarveOuts {
+    disclosing_party := "Target Company Pte Ltd",
+    receiving_party := "Acquirer Holdings Pte Ltd",
+    effective_date := "15-01-2025",
+    purpose := "Evaluation of potential acquisition transaction",
+    
+    confidentiality_years := 3,
+    trade_secrets_perpetual := true,
+    
+    specific_carve_outs := [regulatory_carveout, ma_carveout, lender_carveout],
+    
+    regulatory_disclosure_permitted := true,
+    sec_filing_permitted := true,
+    stock_exchange_disclosure_permitted := true,
+    audit_disclosure_permitted := true,
+    tax_authority_disclosure_permitted := true,
+    regulatory_notice_days := 5,
+    
+    court_ordered_disclosure_permitted := true,
+    subpoena_response_permitted := true,
+    government_investigation_permitted := true,
+    litigation_notice_days := 10,
+    best_efforts_to_limit_disclosure := true,
+    
+    due_diligence_disclosure_permitted := true,
+    prospective_acquirer_disclosure_permitted := false,
+    requires_acquirer_nda := true,
+    board_approved_transaction_only := true,
+    ma_notice_days := 3,
+    
+    lender_disclosure_permitted := true,
+    investor_disclosure_permitted := true,
+    requires_lender_confidentiality := true,
+    senior_secured_lenders_only := true,
+    
+    contractor_disclosure_permitted := true,
+    supplier_disclosure_permitted := false,
+    customer_disclosure_permitted := false,
+    requires_back_to_back_nda := true,
+    limited_to_necessary_information := true,
+    
+    lawyer_disclosure_permitted := true,
+    accountant_disclosure_permitted := true,
+    investment_banker_permitted := true,
+    consultant_permitted := true,
+    professional_duty_of_confidentiality := true,
+    
+    press_release_with_consent := true,
+    earnings_call_disclosure_permitted := false,
+    investor_presentation_permitted := true,
+    must_sanitize_confidential_info := true,
+    
+    academic_collaboration_permitted := false,
+    research_publication_permitted := false,
+    patent_filing_permitted := true,
+    requires_prior_review := true,
+    review_period_days := 30,
+    
+    us_jurisdiction_exception := false,
+    eu_jurisdiction_exception := false,
+    china_jurisdiction_exception := false,
+    specific_countries := "Singapore only",
+    
+    information_age_exception := false,
+    information_age_years := 5,
+    automatic_declassification := false,
+    
+    competitive_analysis_permitted := false,
+    benchmarking_permitted := false,
+    market_research_permitted := false,
+    must_anonymize := true,
+    
+    carve_out_reduces_liability := true,
+    good_faith_reliance_defense := true,
+    indemnification_for_carve_out_breach := false,
+    liability_cap := $1000000,
+    
+    written_notice_required := true,
+    must_specify_carve_out_basis := true,
+    must_minimize_disclosure := true,
+    cooperation_in_protective_orders := true,
+    
+    disclosed_info_remains_confidential := true,
+    return_if_transaction_fails := true,
+    return_deadline_days := 14,
+}
+
+// Determine if M&A carve-out applies
+match acquisition_nda.due_diligence_disclosure_permitted && acquisition_nda.requires_acquirer_nda {
+    case true := "May disclose to potential acquirers who have signed their own NDA"
+    case false := "M&A carve-out not available"
+}
+
+// Regulatory disclosure requirements
+match acquisition_nda.regulatory_disclosure_permitted {
+    case true := "Must provide 5 days notice before regulatory disclosure"
+    case false := "No regulatory carve-out - all disclosures prohibited"
+}
+
+// Information return obligation
+match acquisition_nda.return_if_transaction_fails {
+    case true := "Must return all information within 14 days if deal does not close"
+    case false := "No return obligation"
+}

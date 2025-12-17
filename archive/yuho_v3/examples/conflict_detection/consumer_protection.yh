@@ -1,0 +1,21 @@
+// Consumer Protection Act - Simplified Example
+//
+// This file defines consumer contract rules
+
+enum ContractValidity {
+    Enforceable,
+    Unenforceable,
+}
+
+struct ConsumerContract {
+    string consumer,
+    string merchant,
+    bool unfair_terms,
+    bool disclosed_properly,
+}
+
+legal_test FairContract {
+    requires transparency: bool,
+    requires no_hidden_fees: bool,
+    requires clear_terms: bool,
+}

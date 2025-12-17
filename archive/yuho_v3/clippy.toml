@@ -1,0 +1,33 @@
+# Yuho-2 Clippy Configuration
+
+# Deny the following clippy warnings (treat as errors)
+# We want high code quality standards
+
+# Correctness lints (deny)
+correctness = { level = "deny", priority = 10 }
+
+# Complexity lints (warn about overly complex code)
+complexity = { level = "warn", priority = 5 }
+
+# Performance lints (warn about potential performance issues)
+perf = { level = "warn", priority = 5 }
+
+# Style lints (maintain consistent code style)
+style = { level = "warn", priority = 1 }
+
+# Cargo lints
+cargo = { level = "warn", priority = 5 }
+
+# Pedantic lints (optional, but good practices)
+pedantic = { level = "allow", priority = -10 }
+
+# Cognitive complexity limit
+cognitive-complexity-threshold = 50
+
+# Allow specific lints that may be noisy
+allow = [
+    "clippy::module_name_repetitions",
+    "clippy::similar_names",
+    "clippy::too_many_arguments",
+    "clippy::must_use_candidate",
+]

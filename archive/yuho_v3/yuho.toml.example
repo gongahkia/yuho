@@ -1,0 +1,98 @@
+# Example configuration file for Yuho
+# Copy this to yuho.toml or ~/.config/yuho/yuho.toml and customize
+
+# Cache configuration
+[cache]
+max_entries = 1000          # Maximum number of cache entries
+ttl_seconds = 3600          # Time to live in seconds (1 hour)
+enable_persistence = false  # Save cache to disk between sessions
+# persistence_path = "~/.cache/yuho/cache.json"
+
+# HTTP client configuration
+[http]
+connect_timeout_seconds = 10   # Connection timeout
+request_timeout_seconds = 30   # Request timeout
+idle_timeout_seconds = 90      # Idle connection timeout
+
+# Documentation URLs
+[docs]
+base_url = "https://github.com/gongahkia/yuho-2/wiki"
+
+[docs.external_tools]
+mermaid = "https://mermaid.live"
+alloy = "http://alloytools.org"
+
+# Date format configuration
+[date_formats]
+default = "DD-MM-YYYY"
+allowed = ["DD-MM-YYYY", "YYYY-MM-DD", "MM/DD/YYYY"]
+
+# Precision for numeric types
+[precision]
+float_decimal_places = 4     # General floating point precision
+money_decimal_places = 2     # Money amounts (cents)
+percent_decimal_places = 4   # Percentage precision
+
+# LLM provider configuration
+[llm]
+default_provider = "openai"  # Default LLM provider to use
+fallback_providers = ["claude"]  # Fallback providers in order
+
+# Token limits per operation type
+[llm.token_limits]
+explanation_max_tokens = 1000
+statute_parsing_max_tokens = 2000
+test_generation_max_tokens = 1500
+contract_generation_max_tokens = 3000
+legal_reasoning_max_tokens = 2500
+
+# OpenAI provider configuration
+[llm.providers.openai]
+base_url = "https://api.openai.com/v1"
+# api_version = "v1"
+
+[llm.providers.openai.pricing.gpt-4-turbo]
+input_price_per_mtok = 10.00
+output_price_per_mtok = 30.00
+effective_date = "2025-01-01"
+
+[llm.providers.openai.pricing.gpt-4]
+input_price_per_mtok = 30.00
+output_price_per_mtok = 60.00
+effective_date = "2025-01-01"
+
+[llm.providers.openai.pricing.gpt-3-5-turbo]
+input_price_per_mtok = 0.50
+output_price_per_mtok = 1.50
+effective_date = "2025-01-01"
+
+# Claude provider configuration
+[llm.providers.claude]
+base_url = "https://api.anthropic.com/v1"
+api_version = "2023-06-01"
+
+[llm.providers.claude.pricing.claude-3-5-sonnet]
+input_price_per_mtok = 3.00
+output_price_per_mtok = 15.00
+effective_date = "2025-01-01"
+
+[llm.providers.claude.pricing.claude-3-opus]
+input_price_per_mtok = 15.00
+output_price_per_mtok = 75.00
+effective_date = "2025-01-01"
+
+[llm.providers.claude.pricing.claude-3-haiku]
+input_price_per_mtok = 0.25
+output_price_per_mtok = 1.25
+effective_date = "2025-01-01"
+
+# Rate limiting per provider
+[llm.rate_limits.openai]
+requests_per_minute = 60
+tokens_per_minute = 90000
+burst_size = 10
+
+[llm.rate_limits.claude]
+requests_per_minute = 50
+tokens_per_minute = 100000
+burst_size = 5

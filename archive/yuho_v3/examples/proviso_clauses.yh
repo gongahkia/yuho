@@ -1,0 +1,44 @@
+// Proviso Clauses Example
+// Demonstrates proviso clauses that add exceptions to rules
+
+struct Contract {
+    string parties,
+    money<SGD> consideration,
+    bool valid_offer,
+    bool valid_acceptance,
+}
+
+// Basic proviso clause
+proviso that consideration > 0 {
+    bool contract_enforceable := true
+}
+
+// Proviso with applies_to
+provided that valid_offer && valid_acceptance applies to Contract {
+    bool contract_formation := true
+}
+
+enum EmploymentStatus {
+    Employed,
+    Unemployed,
+    SelfEmployed,
+}
+
+struct Employee {
+    string name,
+    int years_of_service,
+    money<SGD> salary,
+    EmploymentStatus status,
+}
+
+// Proviso for employment benefits
+proviso that years_of_service >= 5 {
+    bool eligible_for_pension := true
+    money<SGD> pension_amount := salary * 0.5
+}
+
+// Proviso for tax exemption
+provided that salary < 20000 {
+    bool tax_exempt := true
+    percent tax_rate := 0.0
+}

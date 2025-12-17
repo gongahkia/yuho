@@ -1,0 +1,42 @@
+// Pattern Matching with Guards
+// Demonstrates guard clauses in match expressions
+
+struct Person {
+    string name,
+    BoundedInt<0, 150> age,
+}
+
+// Age categorization with guards
+string func categorize_age(int age) {
+    match age {
+        case n where n < 0 := "invalid"
+        case n where n < 18 := "minor"
+        case n where n >= 18 && n < 65 := "adult"
+        case n where n >= 65 := "senior"
+        case _ := "unknown"
+    }
+}
+
+// Grade classification with guards
+string func classify_grade(int score) {
+    match score {
+        case s where s >= 90 := "A"
+        case s where s >= 80 && s < 90 := "B"
+        case s where s >= 70 && s < 80 := "C"
+        case s where s >= 60 && s < 70 := "D"
+        case s where s < 60 := "F"
+        case _ := "invalid"
+    }
+}
+
+// Temperature categorization
+string func temperature_status(int temp) {
+    match temp {
+        case t where t < 0 := "freezing"
+        case t where t >= 0 && t < 15 := "cold"
+        case t where t >= 15 && t < 25 := "comfortable"
+        case t where t >= 25 && t < 35 := "warm"
+        case t where t >= 35 := "hot"
+        case _ := "unknown"
+    }
+}

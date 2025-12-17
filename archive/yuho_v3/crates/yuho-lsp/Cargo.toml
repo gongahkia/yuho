@@ -1,0 +1,19 @@
+[package]
+name = "yuho-lsp"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[[bin]]
+name = "yuho-lsp"
+path = "src/main.rs"
+
+[dependencies]
+yuho-core = { path = "../yuho-core" }
+yuho-check = { path = "../yuho-check" }
+tower-lsp = "0.20"
+tokio = { version = "1", features = ["full"] }
+serde_json.workspace = true
+serde.workspace = true

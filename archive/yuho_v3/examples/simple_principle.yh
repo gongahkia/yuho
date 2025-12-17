@@ -1,0 +1,9 @@
+// Simple principle test
+
+principle SimplePrinciple {
+    forall x: int, x > 0
+}
+
+struct TestStruct {
+    int value,
+}

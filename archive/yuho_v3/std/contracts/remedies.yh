@@ -1,0 +1,264 @@
+// Contract Law - Remedies for Breach of Contract
+// Based on Singapore contract law principles
+
+// Types of breach
+enum BreachType {
+    Repudiatory,  // Fundamental breach, goes to root of contract
+    Intermediate, // Breach of intermediate term
+    Warranty      // Minor breach, non-fundamental
+}
+
+// Types of remedies
+enum RemedyType {
+    Damages,
+    SpecificPerformance,
+    Injunction,
+    Rescission,
+    Restitution
+}
+
+// Legal test for breach of contract
+legal_test BreachOfContract {
+    // Valid contract exists
+    bool valid_contract_exists,
+
+    // Obligation under contract
+    bool contractual_obligation_exists,
+
+    // Breach occurred
+    bool obligation_not_performed,
+    bool no_valid_excuse,
+
+    // All elements required
+    requires valid_contract_exists &&
+             contractual_obligation_exists &&
+             obligation_not_performed &&
+             no_valid_excuse
+}
+
+// Breach of contract
+struct ContractBreach {
+    // Parties
+    string innocent_party,
+    string breaching_party,
+
+    // Contract details
+    string contract_description,
+    date contract_date,
+
+    // Breach details
+    string obligation_breached,
+    date breach_date,
+    BreachType breach_type,
+
+    // Consequences
+    bool contract_terminated,
+    bool repudiation_accepted,
+
+    // For repudiatory breach
+    where (breach_type == BreachType::Repudiatory) =>
+          contract_terminated == repudiation_accepted
+}
+
+// Damages claim
+struct DamagesClaim {
+    ContractBreach breach,
+
+    // Types of losses
+    Positive<money<SGD>> direct_losses,
+    Positive<money<SGD>> consequential_losses,
+
+    // Remoteness - Hadley v Baxendale test
+    bool losses_in_contemplation where losses_in_contemplation == true,
+
+    // Mitigation
+    bool innocent_party_mitigated,
+    optional Positive<money<SGD>> mitigation_savings,
+
+    // Calculation
+    Positive<money<SGD>> total_losses := direct_losses + consequential_losses,
+    Positive<money<SGD>> recoverable_damages :=
+        if innocent_party_mitigated && mitigation_savings.is_some()
+        then total_losses - mitigation_savings.unwrap()
+        else total_losses,
+
+    // Causation
+    bool losses_caused_by_breach where losses_caused_by_breach == true
+}
+
+// Liquidated damages clause
+struct LiquidatedDamages {
+    @citation("", "", "Contract")
+
+    string contract_provision,
+    Positive<money<SGD>> stipulated_amount,
+
+    // Must be genuine pre-estimate
+    bool genuine_pre_estimate where genuine_pre_estimate == true,
+
+    // Not a penalty
+    bool is_penalty,
+    where genuine_pre_estimate == !is_penalty,
+
+    // Enforceable if not penalty
+    bool enforceable := !is_penalty
+}
+
+// Specific performance
+struct SpecificPerformanceClaim {
+    ContractBreach breach,
+
+    // Requirements for specific performance
+    bool damages_inadequate where damages_inadequate == true,
+    bool contract_sufficiently_certain,
+    bool no_hardship_to_defendant,
+    bool no_constant_supervision_required,
+
+    // Common for land contracts
+    bool contract_for_sale_of_land,
+
+    // Equitable remedy - discretionary
+    bool granted := damages_inadequate &&
+                   contract_sufficiently_certain &&
+                   no_hardship_to_defendant &&
+                   no_constant_supervision_required,
+
+    // Description of performance sought
+    string performance_sought
+}
+
+// Injunction
+struct InjunctionClaim {
+    ContractBreach breach,
+
+    // Type of injunction
+    bool prohibitory,  // Prevents doing something
+    bool mandatory,    // Requires doing something
+
+    // Requirements
+    bool irreparable_harm,
+    bool balance_of_convenience_favors_plaintiff,
+
+    // Negative covenant in contract
+    optional string negative_covenant,
+
+    // Granted based on equitable principles
+    bool granted := irreparable_harm && balance_of_convenience_favors_plaintiff
+}
+
+// Example: Repudiatory breach - property sale
+example PropertySaleBreach := ContractBreach {
+    innocent_party: "Purchaser",
+    breaching_party: "Vendor",
+
+    contract_description: "Sale and Purchase of 123 Orchard Road",
+    contract_date: "01-10-2024",
+
+    obligation_breached: "Vendor refused to complete sale",
+    breach_date: "15-11-2024",
+    breach_type: BreachType::Repudiatory,
+
+    contract_terminated: true,
+    repudiation_accepted: true
+}
+
+// Example: Damages claim for lost profits
+example LostProfitsDamages := DamagesClaim {
+    breach: ContractBreach {
+        innocent_party: "ABC Trading Pte Ltd",
+        breaching_party: "XYZ Suppliers Pte Ltd",
+
+        contract_description: "Supply of 1000 units",
+        contract_date: "01-09-2024",
+
+        obligation_breached: "Failed to deliver goods on time",
+        breach_date: "15-10-2024",
+        breach_type: BreachType::Repudiatory,
+
+        contract_terminated: false,
+        repudiation_accepted: false
+    },
+
+    direct_losses: 50000.00,
+    consequential_losses: 30000.00,
+
+    losses_in_contemplation: true,
+
+    innocent_party_mitigated: true,
+    mitigation_savings: Some(10000.00),
+
+    losses_caused_by_breach: true
+}
+
+// Example: Specific performance for land
+example LandSpecificPerformance := SpecificPerformanceClaim {
+    breach: PropertySaleBreach,
+
+    damages_inadequate: true, // Land is unique
+    contract_sufficiently_certain: true,
+    no_hardship_to_defendant: true,
+    no_constant_supervision_required: true,
+
+    contract_for_sale_of_land: true,
+
+    performance_sought: "Vendor to complete transfer of property title"
+}
+
+// Example: Liquidated damages clause
+example LiquidatedDamagesClause := LiquidatedDamages {
+    contract_provision: "Clause 15: Delay damages of $1000 per day",
+    stipulated_amount: 1000.00,
+
+    genuine_pre_estimate: true,
+    is_penalty: false
+}
+
+// Example: Injunction to prevent competition
+example NonCompeteInjunction := InjunctionClaim {
+    breach: ContractBreach {
+        innocent_party: "Former Employer",
+        breaching_party: "Former Employee",
+
+        contract_description: "Employment contract with non-compete clause",
+        contract_date: "01-01-2020",
+
+        obligation_breached: "Working for competitor within restriction period",
+        breach_date: "01-12-2024",
+        breach_type: BreachType::Warranty,
+
+        contract_terminated: true,
+        repudiation_accepted: false
+    },
+
+    prohibitory: true,
+    mandatory: false,
+
+    irreparable_harm: true,
+    balance_of_convenience_favors_plaintiff: true,
+
+    negative_covenant: Some("Employee shall not work for competitors within 6 months")
+}
+
+// Principle: Innocent party must mitigate
+principle DutyToMitigate {
+    forall claim: DamagesClaim,
+    claim.innocent_party_mitigated == true
+}
+
+// Principle: Remoteness test
+principle RemotenessOfDamages {
+    forall claim: DamagesClaim,
+    claim.recoverable_damages > 0 => claim.losses_in_contemplation == true
+}
+
+// Principle: Liquidated damages cannot be penalty
+principle NoPenaltyClauses {
+    forall ld: LiquidatedDamages,
+    ld.enforceable == true => ld.is_penalty == false
+}
+
+// Principle: Specific performance requires inadequate damages
+principle SpecificPerformanceRequiresInadequacy {
+    forall sp: SpecificPerformanceClaim,
+    sp.granted == true => sp.damages_inadequate == true
+}

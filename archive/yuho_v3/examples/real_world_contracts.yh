@@ -1,0 +1,177 @@
+// Real-world legal contracts demonstration
+// Showcases practical use cases for legal practitioners
+
+// Non-Disclosure Agreement (NDA)
+struct NDA {
+    string disclosing_party,
+    string receiving_party,
+    ValidDate<after="01-01-2020"> effective_date,
+    BoundedInt<12, 60> confidentiality_period_months,
+    Positive<money<SGD>> breach_penalty where breach_penalty >= 10000 && breach_penalty <= 1000000,
+    bool includes_mutual_obligations,
+}
+
+// Service Level Agreement (SLA)
+struct SLA {
+    string service_provider,
+    string client,
+    ValidDate<after="01-01-2024"> start_date,
+    ValidDate<after="01-01-2025", before="31-12-2030"> end_date,
+    BoundedInt<90, 100> uptime_percentage where uptime_percentage >= 95,
+    Positive<money<SGD>> monthly_fee where monthly_fee >= 1000,
+    Positive<money<SGD>> penalty_per_hour where penalty_per_hour <= monthly_fee,
+}
+
+// Vendor Agreement
+struct VendorAgreement {
+    string vendor_name,
+    string company_name,
+    ValidDate<after="01-01-2024"> contract_start,
+    BoundedInt<6, 36> contract_duration_months,
+    Positive<money<SGD>> annual_spend_commitment where annual_spend_commitment >= 50000,
+    BoundedInt<0, 90> payment_terms_days where payment_terms_days >= 30,
+    BoundedInt<1, 12> notice_period_months,
+}
+
+// Intellectual Property Assignment
+struct IPAssignment {
+    string assignor,
+    string assignee,
+    string ip_description,
+    ValidDate<after="01-01-2020"> assignment_date,
+    Positive<money<SGD>> consideration where consideration >= 1,
+    bool includes_future_improvements,
+    bool worldwide_rights,
+}
+
+// Partnership Agreement
+struct PartnershipAgreement {
+    NonEmpty<string> partners,
+    string business_name,
+    ValidDate<after="01-01-2024"> formation_date,
+    Positive<money<SGD>> total_capital where total_capital >= 10000,
+    BoundedInt<0, 100> profit_share_percentage where profit_share_percentage <= 100,
+    bool allows_additional_partners,
+}
+
+// Real Estate Purchase Agreement
+struct RealEstatePurchase {
+    string seller,
+    string buyer,
+    string property_address,
+    Positive<money<SGD>> purchase_price where purchase_price >= 100000,
+    Positive<money<SGD>> deposit where deposit >= 10000 && deposit <= purchase_price,
+    ValidDate<after="01-01-2024"> completion_date,
+    BoundedInt<7, 90> inspection_period_days,
+}
+
+// Consultant Agreement
+struct ConsultantAgreement {
+    string consultant_name,
+    string company_name,
+    ValidDate<after="01-01-2024"> start_date,
+    BoundedInt<1, 24> contract_duration_months,
+    Positive<money<SGD>> daily_rate where daily_rate >= 500 && daily_rate <= 5000,
+    BoundedInt<1, 5> days_per_week where days_per_week <= 5,
+    bool includes_ip_assignment,
+}
+
+// Distribution Agreement
+struct DistributionAgreement {
+    string distributor,
+    string manufacturer,
+    NonEmpty<string> territories,
+    ValidDate<after="01-01-2024"> effective_date,
+    BoundedInt<12, 60> term_months,
+    BoundedInt<0, 50> commission_percentage where commission_percentage >= 5 && commission_percentage <= 30,
+    Positive<money<SGD>> minimum_annual_sales where minimum_annual_sales >= 100000,
+    bool exclusive_rights,
+}
+
+// Software License Agreement
+struct SoftwareLicense {
+    string licensor,
+    string licensee,
+    string software_name,
+    ValidDate<after="01-01-2024"> license_start,
+    ValidDate<after="01-01-2025", before="31-12-2035"> license_end,
+    Positive<money<SGD>> license_fee where license_fee >= 1000,
+    BoundedInt<1, 100> user_count where user_count >= 1,
+    bool allows_modification,
+    bool allows_redistribution,
+}
+
+// Franchise Agreement
+struct FranchiseAgreement {
+    string franchisor,
+    string franchisee,
+    string brand_name,
+    ValidDate<after="01-01-2024"> commencement_date,
+    BoundedInt<24, 120> franchise_term_months,
+    Positive<money<SGD>> initial_fee where initial_fee >= 50000,
+    BoundedInt<1, 15> royalty_percentage where royalty_percentage >= 3,
+    Positive<money<SGD>> advertising_contribution where advertising_contribution >= 1000,
+    string territory,
+}
+
+// Example usage scopes
+scope nda_example {
+    NDA agreement := NDA {
+        disclosing_party := "Tech Innovations Pte Ltd",
+        receiving_party := "Venture Capital Partners",
+        effective_date := 01-03-2024,
+        confidentiality_period_months := 24,
+        breach_penalty := $50000,
+        includes_mutual_obligations := true,
+    }
+}
+
+scope sla_example {
+    SLA service_contract := SLA {
+        service_provider := "Cloud Services Ltd",
+        client := "E-Commerce Corp",
+        start_date := 01-04-2024,
+        end_date := 31-03-2027,
+        uptime_percentage := 99,
+        monthly_fee := $5000,
+        penalty_per_hour := $100,
+    }
+}
+
+scope real_estate_example {
+    RealEstatePurchase property_sale := RealEstatePurchase {
+        seller := "Alice Property Holdings",
+        buyer := "Bob Investment Group",
+        property_address := "456 Orchard Road, Singapore",
+        purchase_price := $2500000,
+        deposit := $250000,
+        completion_date := 30-06-2024,
+        inspection_period_days := 14,
+    }
+}
+
+scope consultant_example {
+    ConsultantAgreement consulting := ConsultantAgreement {
+        consultant_name := "John Smith",
+        company_name := "Tech Startup Pte Ltd",
+        start_date := 01-05-2024,
+        contract_duration_months := 6,
+        daily_rate := $1200,
+        days_per_week := 3,
+        includes_ip_assignment := true,
+    }
+}
+
+scope franchise_example {
+    FranchiseAgreement franchise := FranchiseAgreement {
+        franchisor := "Global Coffee Chain",
+        franchisee := "Local Entrepreneur Pte Ltd",
+        brand_name := "Premium Coffee House",
+        commencement_date := 01-07-2024,
+        franchise_term_months := 60,
+        initial_fee := $150000,
+        royalty_percentage := 6,
+        advertising_contribution := $2000,
+        territory := "Central Business District, Singapore",
+    }
+}

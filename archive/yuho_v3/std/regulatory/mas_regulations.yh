@@ -1,0 +1,542 @@
+// Monetary Authority of Singapore (MAS) Regulations
+// Financial services regulatory compliance
+// Based on various MAS Acts and Guidelines
+
+@citation("", "", "Securities and Futures Act")
+@citation("", "", "Financial Advisers Act")
+@citation("", "", "Payment Services Act")
+
+// Type of financial service
+enum FinancialService {
+    BankingServices,
+    InvestmentAdvisory,
+    SecuritiesTrading,
+    FundManagement,
+    PaymentServices,
+    InsuranceBrokerage,
+    DigitalPaymentToken, // Cryptocurrency
+    Other
+}
+
+// License type
+enum MASLicense {
+    BankLicense,
+    MerchantBankLicense,
+    FinanceCompanyLicense,
+    CapitalMarketsServicesLicense, // CMS license
+    FinancialAdvisorLicense,
+    PaymentServiceLicense,
+    DigitalPaymentTokenLicense,
+    InsuranceBrokerLicense
+}
+
+// Customer type (for KYC/AML)
+enum CustomerType {
+    IndividualRetail,
+    AccreditedInvestor,
+    InstitutionalInvestor,
+    CorporateClient,
+    HighNetWorth
+}
+
+// Risk category
+enum RiskCategory {
+    Low,
+    Medium,
+    High,
+    Prohibited
+}
+
+// Licensed financial institution
+struct LicensedFinancialInstitution {
+    // Institution details
+    string institution_name,
+    string institution_uen,
+    string institution_address,
+
+    // MAS license
+    MASLicense license_type,
+    string license_number,
+    date license_issue_date,
+    optional date license_expiry_date,
+    bool license_valid where license_valid == true,
+
+    // Services provided
+    list<FinancialService> services_offered,
+
+    // Capital adequacy requirements
+    Positive<money<SGD>> minimum_capital_requirement,
+    Positive<money<SGD>> current_capital,
+    where current_capital >= minimum_capital_requirement,
+
+    // Compliance
+    bool has_compliance_officer where has_compliance_officer == true,
+    string compliance_officer_name,
+
+    bool has_money_laundering_reporting_officer where has_money_laundering_reporting_officer == true,
+    string mlro_name,
+
+    // Auditor
+    bool has_approved_auditor where has_approved_auditor == true,
+    string auditor_name
+}
+
+// Know Your Customer (KYC) / Customer Due Diligence
+struct CustomerDueDiligence {
+    // Customer details
+    string customer_name,
+    string customer_nric_or_uen,
+    CustomerType customer_type,
+
+    // Financial institution
+    string institution_name,
+    string institution_uen,
+
+    // KYC date
+    date kyc_performed_date,
+
+    // Identity verification
+    @citation("", "", "MAS Notice on Prevention of Money Laundering and Countering the Financing of Terrorism")
+    bool identity_verified where identity_verified == true,
+    list<string> identity_documents, // e.g., ["NRIC", "Passport"]
+
+    // Source of funds
+    bool source_of_funds_verified where source_of_funds_verified == true,
+    string source_of_funds_description,
+
+    // Purpose of relationship
+    string purpose_of_relationship,
+    bool purpose_reasonable where purpose_reasonable == true,
+
+    // Risk assessment
+    RiskCategory risk_category,
+    string risk_assessment_rationale,
+
+    // Enhanced due diligence (for high-risk customers)
+    optional bool enhanced_due_diligence_performed,
+    optional string edd_measures,
+
+    // Politically exposed person (PEP) check
+    bool pep_check_performed where pep_check_performed == true,
+    bool is_pep,
+    optional string pep_approval_authority,
+
+    // Ongoing monitoring
+    bool ongoing_monitoring_required where ongoing_monitoring_required == true,
+    BoundedInt<1, 60> review_frequency_months,
+
+    // Sanctions screening
+    bool sanctions_screening_performed where sanctions_screening_performed == true,
+    bool sanctions_match_found,
+
+    // Record keeping - must keep for 5 years
+    BoundedInt<1, 120> record_retention_months where record_retention_months >= 60
+}
+
+// Suspicious Transaction Report (STR)
+struct SuspiciousTransactionReport {
+    // Institution details
+    string institution_name,
+    string institution_uen,
+    string mlro_name,
+
+    // Transaction details
+    date transaction_date,
+    Positive<money<SGD>> transaction_amount,
+    string transaction_description,
+
+    // Customer involved
+    string customer_name,
+    string customer_nric_or_uen,
+
+    // Suspicion details
+    date suspicion_identified_date,
+    string suspicion_rationale,
+    list<string> red_flag_indicators,
+
+    // STR filing - must file within reasonable time
+    bool str_filed where str_filed == true,
+    date str_filing_date,
+    BoundedInt<0, 30> days_to_file,
+    where days_to_file <= 15, // Best practice: within 15 days
+
+    // Authority notified
+    string authority_notified := "Commercial Affairs Department (CAD) / Suspicious Transaction Reporting Office (STRO)",
+
+    // Customer notification - PROHIBITED
+    bool customer_notified_of_str where customer_notified_of_str == false, // Tipping off is criminal offense
+
+    // Internal investigation
+    bool internal_investigation_conducted where internal_investigation_conducted == true,
+    optional string investigation_findings
+}
+
+// Fair dealing requirements (for financial advisors)
+struct FairDealingCompliance {
+    // Financial advisor
+    string advisor_name,
+    string advisor_license_number,
+    string institution_name,
+
+    // Customer
+    string customer_name,
+    CustomerType customer_type,
+
+    // Product recommendation
+    date recommendation_date,
+    string product_name,
+    string product_type, // e.g., "Unit trust", "Insurance", "Structured product"
+    RiskCategory product_risk,
+
+    // Customer knowledge assessment - must assess
+    @citation("", "", "MAS Notice on Fair Dealing")
+    bool customer_knowledge_assessed where customer_knowledge_assessed == true,
+    bool customer_has_relevant_knowledge,
+    bool customer_has_prior_experience,
+
+    // Financial situation assessment
+    bool financial_situation_assessed where financial_situation_assessed == true,
+    Positive<money<SGD>> customer_annual_income,
+    Positive<money<SGD>> customer_net_worth,
+
+    // Investment objectives
+    bool investment_objectives_assessed where investment_objectives_assessed == true,
+    string investment_objectives,
+    string risk_tolerance, // "Conservative", "Moderate", "Aggressive"
+
+    // Suitability assessment
+    bool suitability_assessment_performed where suitability_assessment_performed == true,
+    bool product_suitable_for_customer,
+    string suitability_rationale,
+
+    // Product disclosure
+    bool product_disclosure_provided where product_disclosure_provided == true,
+    bool risks_explained where risks_explained == true,
+    bool fees_disclosed where fees_disclosed == true,
+
+    // Warning for unsuitable products
+    optional bool unsuitability_warning_given,
+    optional bool customer_acknowledged_risks,
+
+    // Documentation
+    bool recommendation_documented where recommendation_documented == true,
+    bool customer_signature_obtained where customer_signature_obtained == true
+}
+
+// Anti-Money Laundering (AML) compliance
+struct AMLCompliance {
+    // Institution
+    string institution_name,
+    string institution_uen,
+
+    // AML program
+    bool aml_policy_established where aml_policy_established == true,
+    date aml_policy_date,
+
+    // Risk assessment
+    bool institution_risk_assessment_conducted where institution_risk_assessment_conducted == true,
+    date risk_assessment_date,
+    BoundedInt<1, 36> risk_assessment_review_months where risk_assessment_review_months <= 24,
+
+    // Staff training
+    bool aml_training_provided where aml_training_provided == true,
+    BoundedInt<1, 24> training_frequency_months where training_frequency_months <= 12,
+
+    // Monitoring systems
+    bool transaction_monitoring_system where transaction_monitoring_system == true,
+    bool automated_screening where automated_screening == true,
+
+    // Independent audit
+    bool independent_aml_audit where independent_aml_audit == true,
+    date last_audit_date,
+    BoundedInt<1, 36> audit_frequency_months where audit_frequency_months <= 24
+}
+
+// Digital Payment Token (DPT) service provider
+struct DigitalPaymentTokenService {
+    // Service provider
+    string service_provider_name,
+    string service_provider_uen,
+
+    // MAS license - Payment Services Act
+    @citation("", "", "Payment Services Act 2019")
+    MASLicense license_type where license_type == MASLicense::DigitalPaymentTokenLicense,
+    string license_number,
+    bool license_valid where license_valid == true,
+
+    // Services offered
+    list<string> dpt_services, // e.g., ["Exchange", "Custody", "Transfer"]
+
+    // Customer safeguards
+    bool customer_assets_segregated where customer_assets_segregated == true,
+    bool cold_storage_used where cold_storage_used == true,
+    Positive<float> cold_storage_percentage where cold_storage_percentage >= 90.0,
+
+    // Insurance
+    bool insurance_coverage where insurance_coverage == true,
+    Positive<money<SGD>> insurance_amount,
+
+    // AML/CFT compliance
+    bool kyc_performed where kyc_performed == true,
+    bool transaction_monitoring where transaction_monitoring == true,
+    bool sanctions_screening where sanctions_screening == true,
+
+    // Technology risk management
+    @citation("", "", "MAS Technology Risk Management Guidelines")
+    bool cybersecurity_measures where cybersecurity_measures == true,
+    bool penetration_testing where penetration_testing == true,
+    bool incident_response_plan where incident_response_plan == true,
+
+    // Customer disclosure
+    bool risks_disclosed where risks_disclosed == true,
+    bool no_deposit_insurance where no_deposit_insurance == true // DPT not insured by SDIC
+}
+
+// Example: Licensed investment advisory firm
+example InvestmentAdvisoryFirm := LicensedFinancialInstitution {
+    institution_name: "Wealth Advisors Pte Ltd",
+    institution_uen: "202012345A",
+    institution_address: "123 Shenton Way, Singapore 068808",
+
+    license_type: MASLicense::FinancialAdvisorLicense,
+    license_number: "FA2020-123",
+    license_issue_date: "01-01-2020",
+    license_expiry_date: None, // Perpetual unless revoked
+    license_valid: true,
+
+    services_offered: [
+        FinancialService::InvestmentAdvisory,
+        FinancialService::FundManagement
+    ],
+
+    minimum_capital_requirement: 250000.00, // SGD 250k for FA license
+    current_capital: 500000.00,
+
+    has_compliance_officer: true,
+    compliance_officer_name: "Jane Tan",
+
+    has_money_laundering_reporting_officer: true,
+    mlro_name: "John Lim",
+
+    has_approved_auditor: true,
+    auditor_name: "KPMG Singapore"
+}
+
+// Example: High-risk customer KYC
+example HighRiskCustomerKYC := CustomerDueDiligence {
+    customer_name: "Acme International Ltd",
+    customer_nric_or_uen: "200012345B",
+    customer_type: CustomerType::CorporateClient,
+
+    institution_name: "Major Bank Singapore",
+    institution_uen: "199012345C",
+
+    kyc_performed_date: "15-01-2025",
+
+    identity_verified: true,
+    identity_documents: ["ACRA Business Profile", "Certificate of Incorporation", "Directors' NRICs"],
+
+    source_of_funds_verified: true,
+    source_of_funds_description: "Trading profits from international commodities",
+
+    purpose_of_relationship: "Corporate banking and trade finance",
+    purpose_reasonable: true,
+
+    risk_category: RiskCategory::High,
+    risk_assessment_rationale: "International trade in high-risk jurisdiction",
+
+    enhanced_due_diligence_performed: Some(true),
+    edd_measures: Some("Verified ultimate beneficial owners, obtained additional financial statements, ongoing transaction monitoring"),
+
+    pep_check_performed: true,
+    is_pep: false,
+    pep_approval_authority: None,
+
+    ongoing_monitoring_required: true,
+    review_frequency_months: 6, // More frequent for high-risk
+
+    sanctions_screening_performed: true,
+    sanctions_match_found: false,
+
+    record_retention_months: 84 // 7 years for high-risk
+}
+
+// Example: Suspicious transaction report
+example LargeUnusualTransactionSTR := SuspiciousTransactionReport {
+    institution_name: "SecureBank Pte Ltd",
+    institution_uen: "198012345D",
+    mlro_name: "David Ng",
+
+    transaction_date: "10-02-2025",
+    transaction_amount: 2000000.00,
+    transaction_description: "Large cash deposit followed by immediate wire transfer",
+
+    customer_name: "Suspicious Corp Pte Ltd",
+    customer_nric_or_uen: "202198765E",
+
+    suspicion_identified_date: "11-02-2025",
+    suspicion_rationale: "Unusual pattern inconsistent with business profile, structuring suspected",
+    red_flag_indicators: [
+        "Large cash deposit (SGD 2M)",
+        "Immediate wire transfer to high-risk jurisdiction",
+        "No apparent business justification",
+        "Customer evasive when questioned"
+    ],
+
+    str_filed: true,
+    str_filing_date: "13-02-2025",
+    days_to_file: 3,
+
+    customer_notified_of_str: false, // Critical: tipping off is illegal
+
+    internal_investigation_conducted: true,
+    investigation_findings: Some("Transaction inconsistent with stated business activities")
+}
+
+// Example: Fair dealing for retail investor
+example RetailInvestorAdvice := FairDealingCompliance {
+    advisor_name: "Alice Tan",
+    advisor_license_number: "FA-REP-123456",
+    institution_name: "Trusted Advisors Pte Ltd",
+
+    customer_name: "Bob Lee",
+    customer_type: CustomerType::IndividualRetail,
+
+    recommendation_date: "20-02-2025",
+    product_name: "Asia Growth Fund",
+    product_type: "Unit trust - Equity fund",
+    product_risk: RiskCategory::Medium,
+
+    customer_knowledge_assessed: true,
+    customer_has_relevant_knowledge: true,
+    customer_has_prior_experience: true,
+
+    financial_situation_assessed: true,
+    customer_annual_income: 120000.00,
+    customer_net_worth: 500000.00,
+
+    investment_objectives_assessed: true,
+    investment_objectives: "Long-term capital growth for retirement",
+    risk_tolerance: "Moderate",
+
+    suitability_assessment_performed: true,
+    product_suitable_for_customer: true,
+    suitability_rationale: "Customer has moderate risk tolerance, long investment horizon, and understands equity market risks",
+
+    product_disclosure_provided: true,
+    risks_explained: true,
+    fees_disclosed: true,
+
+    unsuitability_warning_given: None,
+    customer_acknowledged_risks: None,
+
+    recommendation_documented: true,
+    customer_signature_obtained: true
+}
+
+// Example: Cryptocurrency exchange
+example CryptoExchange := DigitalPaymentTokenService {
+    service_provider_name: "CryptoSG Exchange Pte Ltd",
+    service_provider_uen: "202112345F",
+
+    license_type: MASLicense::DigitalPaymentTokenLicense,
+    license_number: "PS2021-DPT-001",
+    license_valid: true,
+
+    dpt_services: ["Exchange", "Custody", "Transfer"],
+
+    customer_assets_segregated: true,
+    cold_storage_used: true,
+    cold_storage_percentage: 95.0,
+
+    insurance_coverage: true,
+    insurance_amount: 10000000.00,
+
+    kyc_performed: true,
+    transaction_monitoring: true,
+    sanctions_screening: true,
+
+    cybersecurity_measures: true,
+    penetration_testing: true,
+    incident_response_plan: true,
+
+    risks_disclosed: true,
+    no_deposit_insurance: true
+}
+
+// MAS compliance principles
+
+principle ValidLicenseRequired {
+    forall institution: LicensedFinancialInstitution,
+    institution.license_valid == true
+}
+
+principle CapitalAdequacy {
+    forall institution: LicensedFinancialInstitution,
+    institution.current_capital >= institution.minimum_capital_requirement
+}
+
+principle ComplianceOfficerRequired {
+    forall institution: LicensedFinancialInstitution,
+    institution.has_compliance_officer == true &&
+    institution.has_money_laundering_reporting_officer == true
+}
+
+principle KYCRequired {
+    forall kyc: CustomerDueDiligence,
+    kyc.identity_verified == true &&
+    kyc.source_of_funds_verified == true &&
+    kyc.pep_check_performed == true &&
+    kyc.sanctions_screening_performed == true
+}
+
+principle RecordRetentionMinimum5Years {
+    forall kyc: CustomerDueDiligence,
+    kyc.record_retention_months >= 60
+}
+
+principle STRFilingRequired {
+    forall str: SuspiciousTransactionReport,
+    str.str_filed == true &&
+    str.days_to_file <= 15
+}
+
+principle NoTippingOff {
+    forall str: SuspiciousTransactionReport,
+    str.customer_notified_of_str == false
+}
+
+principle SuitabilityAssessmentRequired {
+    forall advice: FairDealingCompliance,
+    advice.customer_knowledge_assessed == true &&
+    advice.financial_situation_assessed == true &&
+    advice.investment_objectives_assessed == true &&
+    advice.suitability_assessment_performed == true
+}
+
+principle ProductDisclosureRequired {
+    forall advice: FairDealingCompliance,
+    advice.product_disclosure_provided == true &&
+    advice.risks_explained == true &&
+    advice.fees_disclosed == true
+}
+
+principle DPTCustomerProtection {
+    forall dpt: DigitalPaymentTokenService,
+    dpt.customer_assets_segregated == true &&
+    dpt.cold_storage_percentage >= 90.0 &&
+    dpt.insurance_coverage == true
+}
+
+principle DPTRiskDisclosure {
+    forall dpt: DigitalPaymentTokenService,
+    dpt.risks_disclosed == true &&
+    dpt.no_deposit_insurance == true
+}
+
+principle AMLProgramRequired {
+    forall aml: AMLCompliance,
+    aml.aml_policy_established == true &&
+    aml.aml_training_provided == true &&
+    aml.transaction_monitoring_system == true
+}

@@ -1,0 +1,209 @@
+// Contract Law - Misrepresentation
+// Based on Singapore common law and Misrepresentation Act
+
+// Types of misrepresentation
+enum MisrepresentationType {
+    Fraudulent,    // Deceit - knew it was false or reckless
+    Negligent,     // Careless - had no reasonable grounds to believe true
+    Innocent      // Honestly believed it was true
+}
+
+// Legal test for misrepresentation
+legal_test Misrepresentation {
+    // Element 1: False statement of fact
+    bool false_statement_made,
+    bool statement_of_fact,  // Not opinion or future intention
+
+    // Element 2: Made by one party to other
+    bool made_by_contracting_party,
+
+    // Element 3: Induced other party to contract
+    bool induced_contract,
+    bool relied_upon,
+
+    // Element 4: Statement must be material
+    bool material_to_decision,
+
+    // All elements required
+    requires false_statement_made &&
+             statement_of_fact &&
+             made_by_contracting_party &&
+             induced_contract &&
+             relied_upon &&
+             material_to_decision
+}
+
+// Misrepresentation instance
+struct MisrepresentationClaim {
+    // Parties
+    string representor_name,    // Person who made the false statement
+    string representee_name,    // Person who relied on it
+
+    // The misrepresentation
+    string false_statement,
+    date date_of_statement,
+    bool statement_of_fact where statement_of_fact == true,
+
+    // Falsity
+    bool statement_false where statement_false == true,
+    string actual_truth,
+
+    // Reliance
+    bool representee_relied where representee_relied == true,
+    bool induced_contract where induced_contract == true,
+
+    // Type
+    MisrepresentationType misrep_type,
+
+    // Fraudulent misrepresentation elements
+    bool representor_knew_false,      // For fraudulent
+    bool representor_reckless,        // For fraudulent
+
+    // Negligent misrepresentation elements
+    bool representor_had_no_grounds,  // For negligent
+
+    // Type determination
+    where (misrep_type == MisrepresentationType::Fraudulent) =>
+          (representor_knew_false || representor_reckless),
+
+    where (misrep_type == MisrepresentationType::Negligent) =>
+          representor_had_no_grounds,
+
+    // Contract details
+    string contract_subject,
+    date contract_date,
+    Positive<money<SGD>> contract_value
+}
+
+// Remedies for misrepresentation
+enum MisrepresentationRemedy {
+    Rescission,          // Set aside the contract
+    Damages,            // Financial compensation
+    RescissionAndDamages // Both
+}
+
+// Remedy claim
+struct MisrepresentationRemedyClaim {
+    MisrepresentationClaim misrepresentation,
+
+    // Remedy sought
+    MisrepresentationRemedy remedy_sought,
+
+    // For rescission
+    bool bars_to_rescission,
+    bool affirmation_occurred,
+    bool lapse_of_time,
+    bool third_party_rights,
+    bool impossible_to_restore,
+
+    // Rescission available if no bars
+    bool rescission_available := (remedy_sought == MisrepresentationRemedy::Rescission ||
+                                   remedy_sought == MisrepresentationRemedy::RescissionAndDamages) &&
+                                  !affirmation_occurred &&
+                                  !lapse_of_time &&
+                                  !third_party_rights &&
+                                  !impossible_to_restore,
+
+    // Damages available for fraudulent and negligent
+    bool damages_available := (misrepresentation.misrep_type == MisrepresentationType::Fraudulent ||
+                              misrepresentation.misrep_type == MisrepresentationType::Negligent),
+
+    // Quantum of damages
+    optional Positive<money<SGD>> damages_amount
+}
+
+// Example: Fraudulent misrepresentation - sale of business
+example FraudulentBusinessSale := MisrepresentationClaim {
+    representor_name: "Seller Ltd",
+    representee_name: "Buyer Ltd",
+
+    false_statement: "The business generates $500,000 annual profit",
+    date_of_statement: "01-09-2024",
+    statement_of_fact: true,
+
+    statement_false: true,
+    actual_truth: "The business actually loses $100,000 annually",
+
+    representee_relied: true,
+    induced_contract: true,
+
+    misrep_type: MisrepresentationType::Fraudulent,
+
+    representor_knew_false: true,
+    representor_reckless: false,
+    representor_had_no_grounds: false,
+
+    contract_subject: "Sale of business",
+    contract_date: "15-09-2024",
+    contract_value: 2000000.00
+}
+
+// Example: Negligent misrepresentation - property sale
+example NegligentPropertyMisrep := MisrepresentationClaim {
+    representor_name: "Property Agent",
+    representee_name: "Home Buyer",
+
+    false_statement: "This property has no structural issues",
+    date_of_statement: "10-10-2024",
+    statement_of_fact: true,
+
+    statement_false: true,
+    actual_truth: "Property has foundation cracks requiring $50,000 repair",
+
+    representee_relied: true,
+    induced_contract: true,
+
+    misrep_type: MisrepresentationType::Negligent,
+
+    representor_knew_false: false,
+    representor_reckless: false,
+    representor_had_no_grounds: true, // Didn't check structural report
+
+    contract_subject: "Sale of HDB flat",
+    contract_date: "20-10-2024",
+    contract_value: 650000.00
+}
+
+// Example: Remedy claim for fraudulent misrep
+example RemedyForFraud := MisrepresentationRemedyClaim {
+    misrepresentation: FraudulentBusinessSale,
+
+    remedy_sought: MisrepresentationRemedy::RescissionAndDamages,
+
+    bars_to_rescission: false,
+    affirmation_occurred: false,
+    lapse_of_time: false,
+    third_party_rights: false,
+    impossible_to_restore: false,
+
+    damages_amount: Some(500000.00) // Losses from reliance
+}
+
+// Principle: Fraudulent misrep requires knowledge of falsity
+principle FraudulentRequiresKnowledge {
+    forall misrep: MisrepresentationClaim,
+    misrep.misrep_type == MisrepresentationType::Fraudulent =>
+    (misrep.representor_knew_false || misrep.representor_reckless)
+}
+
+// Principle: Rescission requires no bars
+principle RescissionRequiresNoBars {
+    forall remedy: MisrepresentationRemedyClaim,
+    remedy.rescission_available == true =>
+    (!remedy.affirmation_occurred &&
+     !remedy.lapse_of_time &&
+     !remedy.third_party_rights &&
+     !remedy.impossible_to_restore)
+}
+
+// Principle: Must be statement of fact
+principle MustBeStatementOfFact {
+    forall misrep: MisrepresentationClaim,
+    misrep.statement_of_fact == true
+}
+
+// Principle: Reliance required
+principle RelianceRequired {
+    forall misrep: MisrepresentationClaim,
+    misrep.induced_contract == true => misrep.representee_relied == true
+}

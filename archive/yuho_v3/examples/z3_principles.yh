@@ -1,0 +1,74 @@
+// Z3 SMT Translation Examples
+
+// Example 1: Simple forall principle
+principle AllPositive {
+    forall x: int, x > 0
+}
+
+// Example 2: Nested forall quantifiers
+principle NestedForall {
+    forall x: int,
+    forall y: int,
+    x + y > x
+}
+
+// Example 3: Mixed quantifiers - evidence requirement
+principle EvidenceExists {
+    forall case: CriminalCase,
+    exists evidence: Evidence,
+    evidence.case_id == case.id && evidence.admissible == true
+}
+
+// Example 4: Triple nesting - judicial process
+principle JudicialProcess {
+    forall court: Court,
+    forall case: Case,
+    exists judge: Judge,
+    judge.court_id == court.id && judge.assigned_case == case.id
+}
+
+// Example 5: Complex boolean logic
+principle FairTrial {
+    forall defendant: Defendant,
+    (defendant.represented == true) && 
+    (defendant.notified == true) &&
+    (defendant.evidence_disclosed == true)
+}
+
+// Example 6: Double jeopardy protection
+principle NoDoubleJeopardy {
+    forall person: Person,
+    forall offense: Offense,
+    forall case1: CriminalCase,
+    forall case2: CriminalCase,
+    (case1.accused == person && case2.accused == person &&
+     case1.offense == offense && case2.offense == offense &&
+     case1.verdict != Verdict::Pending &&
+     case1.id != case2.id) == false
+}
+
+// Example 7: Exists with constraints
+principle WitnessAvailability {
+    exists witness: Witness,
+    witness.credible == true &&
+    witness.available == true &&
+    witness.competent == true
+}
+
+// Example 8: Quantifier with arithmetic
+principle AgeRequirement {
+    forall person: Person,
+    person.age >= 18 && person.age <= 100
+}
+
+// Example 9: String properties
+principle NameRequired {
+    forall person: Person,
+    person.name != "" && person.name != pass
+}
+
+// Example 10: Temporal constraints
+principle ValidPeriod {
+    forall contract: Contract,
+    contract.start_date < contract.end_date
+}

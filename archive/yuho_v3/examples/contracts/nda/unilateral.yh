@@ -1,0 +1,160 @@
+// Unilateral Non-Disclosure Agreement
+// One party (Disclosing Party) shares confidential information with another (Receiving Party)
+
+struct UnilateralNDA {
+    // Parties
+    string disclosing_party_name,
+    string disclosing_party_address,
+    string receiving_party_name,
+    string receiving_party_address,
+    
+    // Agreement Details
+    ValidDate<after="01-01-2020"> effective_date,
+    string purpose,
+    
+    // Confidential Information Definition
+    bool includes_technical_information,
+    bool includes_business_information,
+    bool includes_financial_information,
+    bool includes_customer_data,
+    bool includes_trade_secrets,
+    
+    // Obligations
+    BoundedInt<1, 10> confidentiality_period_years where confidentiality_period_years >= 2,
+    bool perpetual_for_trade_secrets,
+    
+    // Permitted Disclosures
+    bool can_disclose_to_employees,
+    bool can_disclose_to_contractors,
+    bool can_disclose_to_advisors,
+    bool requires_need_to_know,
+    
+    // Exclusions from Confidential Information
+    bool excludes_public_domain,
+    bool excludes_prior_knowledge,
+    bool excludes_independent_development,
+    bool excludes_rightful_third_party,
+    
+    // Return of Information
+    BoundedInt<1, 30> return_within_days,
+    bool certification_of_destruction_required,
+    
+    // Remedies
+    bool injunctive_relief_available,
+    bool liquidated_damages,
+    money<SGD> liquidated_damages_amount,
+    
+    // No License Grant
+    bool explicitly_no_license,
+    bool no_obligation_to_disclose,
+    
+    // Governing Law
+    string governing_jurisdiction,
+    bool singapore_courts_exclusive,
+}
+
+scope UnilateralNDATerms {
+    // Verify NDA covers required protections
+    fn verify_protections(UnilateralNDA nda) -> bool {
+        bool has_confidentiality := nda.confidentiality_period_years >= 2
+        bool has_return_provision := nda.return_within_days <= 30
+        bool has_remedies := nda.injunctive_relief_available
+        
+        return has_confidentiality && has_return_provision && has_remedies
+    }
+    
+    // Calculate expiration date
+    fn calculate_expiration(
+        ValidDate<after="01-01-2020"> effective_date,
+        int years
+    ) -> ValidDate<after="01-01-2020"> {
+        // In production, would add years to effective_date
+        return "01-01-2027"
+    }
+    
+    // Check if information is excluded
+    fn is_information_excluded(
+        UnilateralNDA nda,
+        bool is_public,
+        bool was_known_before,
+        bool independently_developed,
+        bool from_third_party
+    ) -> bool {
+        bool excluded := (nda.excludes_public_domain && is_public) ||
+                        (nda.excludes_prior_knowledge && was_known_before) ||
+                        (nda.excludes_independent_development && independently_developed) ||
+                        (nda.excludes_rightful_third_party && from_third_party)
+        return excluded
+    }
+    
+    // Check if disclosure is permitted
+    fn can_disclose_to(
+        UnilateralNDA nda,
+        string recipient_type,
+        bool has_need_to_know
+    ) -> bool {
+        bool need_to_know_met := !nda.requires_need_to_know || has_need_to_know
+        
+        match recipient_type {
+            case "employee" := return nda.can_disclose_to_employees && need_to_know_met
+            case "contractor" := return nda.can_disclose_to_contractors && need_to_know_met
+            case "advisor" := return nda.can_disclose_to_advisors && need_to_know_met
+            case _ := return false
+        }
+    }
+}
+
+// Example: Technology Company sharing with Potential Partner
+UnilateralNDA tech_partner_nda := UnilateralNDA {
+    disclosing_party_name := "TechInnovate Pte Ltd",
+    disclosing_party_address := "1 Marina Boulevard, Singapore 018989",
+    receiving_party_name := "GlobalSolutions Pte Ltd",
+    receiving_party_address := "10 Anson Road, Singapore 079903",
+    
+    effective_date := "01-12-2024",
+    purpose := "Evaluation of potential strategic partnership and technology collaboration",
+    
+    includes_technical_information := true,
+    includes_business_information := true,
+    includes_financial_information := true,
+    includes_customer_data := false,
+    includes_trade_secrets := true,
+    
+    confidentiality_period_years := 5,
+    perpetual_for_trade_secrets := true,
+    
+    can_disclose_to_employees := true,
+    can_disclose_to_contractors := true,
+    can_disclose_to_advisors := true,
+    requires_need_to_know := true,
+    
+    excludes_public_domain := true,
+    excludes_prior_knowledge := true,
+    excludes_independent_development := true,
+    excludes_rightful_third_party := true,
+    
+    return_within_days := 10,
+    certification_of_destruction_required := true,
+    
+    injunctive_relief_available := true,
+    liquidated_damages := true,
+    liquidated_damages_amount := $100000,
+    
+    explicitly_no_license := true,
+    no_obligation_to_disclose := true,
+    
+    governing_jurisdiction := "Singapore",
+    singapore_courts_exclusive := true,
+}
+
+// Confidentiality period determination
+match tech_partner_nda.perpetual_for_trade_secrets {
+    case true := "Trade secrets protected indefinitely, other information for 5 years"
+    case false := "All confidential information protected for 5 years"
+}
+
+// Remedy availability
+match tech_partner_nda.liquidated_damages {
+    case true := "Breach results in $100,000 liquidated damages plus injunctive relief"
+    case false := "Injunctive relief only - no predetermined damages"
+}

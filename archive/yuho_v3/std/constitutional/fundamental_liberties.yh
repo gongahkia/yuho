@@ -1,0 +1,288 @@
+// Singapore Constitution - Part IV: Fundamental Liberties
+// Based on Constitution of the Republic of Singapore
+
+@citation("", "Part IV", "Constitution")
+
+// Types of fundamental liberties
+enum FundamentalLiberty {
+    Liberty,                    // Article 9
+    Slavery,                    // Article 10
+    Equality,                   // Article 12
+    ProhibitionOfBanishment,    // Article 13
+    FreedomOfSpeech,           // Article 14
+    FreedomOfAssembly,         // Article 14
+    FreedomOfAssociation,      // Article 14
+    FreedomOfReligion,         // Article 15
+    RightsInEducation,         // Article 16
+    PropertyRights              // Article 13
+}
+
+// Liberty of person - Article 9
+struct LibertyOfPerson {
+    @citation("9", "1", "Constitution")
+
+    string person_name,
+
+    // Right to life and personal liberty
+    bool right_to_life where right_to_life == true,
+    bool right_to_personal_liberty where right_to_personal_liberty == true,
+
+    // Deprivation only according to law
+    bool deprived_of_liberty,
+    bool deprivation_according_to_law,
+
+    // If deprived, must be lawful
+    where deprived_of_liberty => deprivation_according_to_law,
+
+    // Arrest provisions - Article 9(3)
+    @citation("9", "3", "Constitution")
+    optional string grounds_of_arrest,
+    optional date arrest_date,
+    bool informed_of_grounds := grounds_of_arrest.is_some(),
+
+    // Right to counsel - Article 9(3)
+    bool right_to_counsel_respected
+}
+
+// Equality before law - Article 12
+struct EqualityBeforeLaw {
+    @citation("12", "1", "Constitution")
+
+    // All persons equal before law
+    bool all_persons_equal where all_persons_equal == true,
+    bool equal_protection_of_law where equal_protection_of_law == true,
+
+    // Prohibited grounds of discrimination
+    bool discrimination_on_religion,
+    bool discrimination_on_race,
+    bool discrimination_on_descent,
+    bool discrimination_on_place_of_birth,
+
+    // No discrimination on these grounds
+    where !discrimination_on_religion &&
+          !discrimination_on_race &&
+          !discrimination_on_descent &&
+          !discrimination_on_place_of_birth,
+
+    // Reasonable classification permitted
+    bool classification_reasonable,
+    bool classification_has_nexus_to_object
+}
+
+// Freedom of speech - Article 14(1)(a)
+struct FreedomOfSpeech {
+    @citation("14", "1", "Constitution")
+
+    string person_name,
+    string speech_content,
+
+    // Right to freedom of speech
+    bool right_to_freedom_of_speech where right_to_freedom_of_speech == true,
+
+    // Restrictions - Article 14(2)
+    @citation("14", "2", "Constitution")
+    bool restriction_imposed,
+
+    // Grounds for restriction
+    bool restriction_for_security,
+    bool restriction_for_public_order,
+    bool restriction_for_morality,
+    bool restriction_for_contempt_of_court,
+    bool restriction_for_defamation,
+    bool restriction_for_incitement,
+
+    // Restriction must be on permitted ground
+    where restriction_imposed =>
+          (restriction_for_security ||
+           restriction_for_public_order ||
+           restriction_for_morality ||
+           restriction_for_contempt_of_court ||
+           restriction_for_defamation ||
+           restriction_for_incitement),
+
+    // Restriction must be by law
+    bool restriction_by_law
+}
+
+// Freedom of religion - Article 15
+struct FreedomOfReligion {
+    @citation("15", "1", "Constitution")
+
+    string person_name,
+    string religion,
+
+    // Right to profess, practice, propagate
+    bool right_to_profess where right_to_profess == true,
+    bool right_to_practice where right_to_practice == true,
+    bool right_to_propagate where right_to_propagate == true,
+
+    // No person required to receive religious instruction
+    @citation("15", "4", "Constitution")
+    bool compulsory_religious_instruction,
+    where compulsory_religious_instruction == false,
+
+    // Restrictions permitted
+    bool restriction_for_public_order,
+    bool restriction_for_public_health,
+    bool restriction_for_morality,
+
+    // General law
+    bool subject_to_general_law where subject_to_general_law == true
+}
+
+// Preventive detention - Article 149
+struct PreventiveDetention {
+    @citation("149", "1", "Constitution")
+
+    string detainee_name,
+    date detention_date,
+
+    // Grounds for preventive detention
+    bool threat_to_security,
+    bool threat_to_public_order,
+    bool involvement_in_subversion,
+
+    // At least one ground required
+    where threat_to_security ||
+          threat_to_public_order ||
+          involvement_in_subversion,
+
+    // Detention order
+    string detention_order_authority,
+    BoundedInt<1, 730> detention_period_days, // Up to 2 years
+
+    // Advisory board review - Article 149(4)
+    @citation("149", "4", "Constitution")
+    bool advisory_board_review_conducted,
+    optional date review_date
+}
+
+// Example: Unlawful arrest
+example UnlawfulArrest := LibertyOfPerson {
+    person_name: "John Citizen",
+
+    right_to_life: true,
+    right_to_personal_liberty: true,
+
+    deprived_of_liberty: true,
+    deprivation_according_to_law: false, // UNLAWFUL
+
+    grounds_of_arrest: None,
+    arrest_date: Some("15-11-2024"),
+    informed_of_grounds: false,
+
+    right_to_counsel_respected: false
+}
+
+// Example: Lawful arrest with proper procedure
+example LawfulArrest := LibertyOfPerson {
+    person_name: "Suspected Criminal",
+
+    right_to_life: true,
+    right_to_personal_liberty: true,
+
+    deprived_of_liberty: true,
+    deprivation_according_to_law: true,
+
+    grounds_of_arrest: Some("Suspected of theft under Section 378 Penal Code"),
+    arrest_date: Some("20-11-2024"),
+    informed_of_grounds: true,
+
+    right_to_counsel_respected: true
+}
+
+// Example: Discriminatory law (unconstitutional)
+example DiscriminatoryLaw := EqualityBeforeLaw {
+    all_persons_equal: true,
+    equal_protection_of_law: true,
+
+    discrimination_on_religion: true, // UNCONSTITUTIONAL
+    discrimination_on_race: false,
+    discrimination_on_descent: false,
+    discrimination_on_place_of_birth: false,
+
+    classification_reasonable: false,
+    classification_has_nexus_to_object: false
+}
+
+// Example: Freedom of speech with lawful restriction
+example SeditionRestriction := FreedomOfSpeech {
+    person_name: "Public speaker",
+    speech_content: "Inciting racial hatred",
+
+    right_to_freedom_of_speech: true,
+
+    restriction_imposed: true,
+
+    restriction_for_security: false,
+    restriction_for_public_order: true,
+    restriction_for_morality: false,
+    restriction_for_contempt_of_court: false,
+    restriction_for_defamation: false,
+    restriction_for_incitement: true,
+
+    restriction_by_law: true // Sedition Act
+}
+
+// Example: Freedom of religion
+example ReligiousPractice := FreedomOfReligion {
+    person_name: "Religious practitioner",
+    religion: "Buddhism",
+
+    right_to_profess: true,
+    right_to_practice: true,
+    right_to_propagate: true,
+
+    compulsory_religious_instruction: false,
+
+    restriction_for_public_order: false,
+    restriction_for_public_health: false,
+    restriction_for_morality: false,
+
+    subject_to_general_law: true
+}
+
+// Example: Preventive detention under ISA
+example ISADetention := PreventiveDetention {
+    detainee_name: "Security threat",
+    detention_date: "01-12-2024",
+
+    threat_to_security: true,
+    threat_to_public_order: false,
+    involvement_in_subversion: true,
+
+    detention_order_authority: "Minister of Home Affairs",
+    detention_period_days: 730, // 2 years
+
+    advisory_board_review_conducted: true,
+    review_date: Some("01-01-2025")
+}
+
+// Principle: Liberty requires due process
+principle LibertyRequiresDueProcess {
+    forall liberty: LibertyOfPerson,
+    liberty.deprived_of_liberty == true =>
+    liberty.deprivation_according_to_law == true
+}
+
+// Principle: No discrimination on prohibited grounds
+principle NoDiscrimination {
+    forall equality: EqualityBeforeLaw,
+    equality.discrimination_on_religion == false &&
+    equality.discrimination_on_race == false &&
+    equality.discrimination_on_descent == false &&
+    equality.discrimination_on_place_of_birth == false
+}
+
+// Principle: Speech restrictions must be lawful
+principle SpeechRestrictionsByLaw {
+    forall speech: FreedomOfSpeech,
+    speech.restriction_imposed == true =>
+    speech.restriction_by_law == true
+}
+
+// Principle: Religious freedom subject to general law
+principle ReligionSubjectToLaw {
+    forall religion: FreedomOfReligion,
+    religion.subject_to_general_law == true
+}

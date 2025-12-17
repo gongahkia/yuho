@@ -1,0 +1,201 @@
+// Regulatory Compliance: Data Protection
+//
+// This example demonstrates using legal tests to verify
+// compliance with data protection regulations.
+
+// GDPR-style data protection compliance requirements
+legal_test GDPRCompliance {
+    requires lawful_basis: bool,
+    requires data_minimization: bool,
+    requires purpose_limitation: bool,
+    requires accuracy: bool,
+    requires storage_limitation: bool,
+    requires security_measures: bool,
+}
+
+// Additional requirements for sensitive data
+legal_test SensitiveDataCompliance {
+    requires explicit_consent: bool,
+    requires enhanced_security: bool,
+    requires impact_assessment: bool,
+}
+
+// Breach notification requirements
+legal_test BreachNotification {
+    requires authority_notified: bool,
+    requires subjects_notified: bool,
+    requires within_72_hours: bool,
+}
+
+// Compliance status
+enum ComplianceStatus {
+    Compliant,
+    NonCompliant,
+    PartiallyCompliant,
+}
+
+// Represent data processing activity
+struct DataProcessing {
+    string processing_id,
+    string organization,
+    string data_category,
+
+    // GDPR compliance elements
+    bool lawful_basis,
+    bool data_minimization,
+    bool purpose_limitation,
+    bool accuracy,
+    bool storage_limitation,
+    bool security_measures,
+
+    // Sensitive data elements (if applicable)
+    bool explicit_consent,
+    bool enhanced_security,
+    bool impact_assessment,
+    bool is_sensitive_data,
+
+    // Breach notification (if breach occurred)
+    bool breach_occurred,
+    bool authority_notified,
+    bool subjects_notified,
+    bool within_72_hours,
+
+    // Metadata
+    date assessment_date,
+}
+
+// Check GDPR compliance
+func check_gdpr_compliance(DataProcessing processing) -> ComplianceStatus {
+    match processing {
+        case satisfies GDPRCompliance := match processing {
+            case p where p.is_sensitive_data == true := match processing {
+                case satisfies SensitiveDataCompliance := ComplianceStatus::Compliant
+                case _ := ComplianceStatus::PartiallyCompliant
+            }
+            case _ := ComplianceStatus::Compliant
+        }
+        case _ := ComplianceStatus::NonCompliant
+    }
+}
+
+// Check breach notification compliance
+func check_breach_compliance(DataProcessing processing) -> ComplianceStatus {
+    match processing {
+        case p where p.breach_occurred == false := ComplianceStatus::Compliant
+        case satisfies BreachNotification := ComplianceStatus::Compliant
+        case _ := ComplianceStatus::NonCompliant
+    }
+}
+
+// Example 1: Fully compliant regular data processing
+DataProcessing compliant_regular := DataProcessing {
+    processing_id: "PROC-2024-001",
+    organization: "Acme Corp",
+    data_category: "Customer Contact Information",
+
+    lawful_basis: true,
+    data_minimization: true,
+    purpose_limitation: true,
+    accuracy: true,
+    storage_limitation: true,
+    security_measures: true,
+
+    explicit_consent: false,
+    enhanced_security: false,
+    impact_assessment: false,
+    is_sensitive_data: false,
+
+    breach_occurred: false,
+    authority_notified: false,
+    subjects_notified: false,
+    within_72_hours: false,
+
+    assessment_date: "01-06-2024",
+}
+
+// Example 2: Compliant sensitive data processing
+DataProcessing compliant_sensitive := DataProcessing {
+    processing_id: "PROC-2024-002",
+    organization: "Medical Center",
+    data_category: "Patient Health Records",
+
+    lawful_basis: true,
+    data_minimization: true,
+    purpose_limitation: true,
+    accuracy: true,
+    storage_limitation: true,
+    security_measures: true,
+
+    explicit_consent: true,           // Required for sensitive data
+    enhanced_security: true,          // Required for sensitive data
+    impact_assessment: true,          // Required for sensitive data
+    is_sensitive_data: true,
+
+    breach_occurred: false,
+    authority_notified: false,
+    subjects_notified: false,
+    within_72_hours: false,
+
+    assessment_date: "15-06-2024",
+}
+
+// Example 3: Non-compliant - missing security measures
+DataProcessing non_compliant := DataProcessing {
+    processing_id: "PROC-2024-003",
+    organization: "Startup Inc",
+    data_category: "User Analytics",
+
+    lawful_basis: true,
+    data_minimization: true,
+    purpose_limitation: true,
+    accuracy: true,
+    storage_limitation: true,
+    security_measures: false,        // Missing!
+
+    explicit_consent: false,
+    enhanced_security: false,
+    impact_assessment: false,
+    is_sensitive_data: false,
+
+    breach_occurred: false,
+    authority_notified: false,
+    subjects_notified: false,
+    within_72_hours: false,
+
+    assessment_date: "20-06-2024",
+}
+
+// Example 4: Breach with proper notification
+DataProcessing breach_compliant := DataProcessing {
+    processing_id: "PROC-2024-004",
+    organization: "Retail Chain",
+    data_category: "Customer Payment Info",
+
+    lawful_basis: true,
+    data_minimization: true,
+    purpose_limitation: true,
+    accuracy: true,
+    storage_limitation: true,
+    security_measures: true,
+
+    explicit_consent: false,
+    enhanced_security: false,
+    impact_assessment: false,
+    is_sensitive_data: false,
+
+    breach_occurred: true,
+    authority_notified: true,         // Properly notified
+    subjects_notified: true,          // Properly notified
+    within_72_hours: true,            // Within timeframe
+
+    assessment_date: "25-06-2024",
+}
+
+// Check compliance statuses
+ComplianceStatus status1 := check_gdpr_compliance(compliant_regular)    // Compliant
+ComplianceStatus status2 := check_gdpr_compliance(compliant_sensitive)  // Compliant
+ComplianceStatus status3 := check_gdpr_compliance(non_compliant)        // NonCompliant
+
+// Check breach compliance
+ComplianceStatus breach1 := check_breach_compliance(compliant_regular)  // Compliant (no breach)
+ComplianceStatus breach2 := check_breach_compliance(breach_compliant)   // Compliant (notified)

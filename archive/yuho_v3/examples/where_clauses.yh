@@ -1,0 +1,46 @@
+// Demonstration of where clause constraints
+// Showcases the new constraint parsing features
+
+// Simple struct with where clauses on fields
+struct LegalContract {
+    string title,
+    Positive<money<SGD>> value where value <= 10000000,
+    BoundedInt<1, 100> num_parties where num_parties >= 2,
+    date signed_date where signed_date >= "01-01-2020",
+}
+
+// Employment contract with comprehensive constraints
+struct EmploymentContract {
+    string employee_name,
+    string employer_name,
+    Positive<money<SGD>> annual_salary where annual_salary >= 30000 && annual_salary <= 500000,
+    BoundedInt<0, 365> vacation_days where vacation_days >= 14,
+    BoundedInt<1, 12> notice_period_months where notice_period_months >= 1,
+    ValidDate<after="01-01-2020"> start_date,
+}
+
+// Tax bracket with range constraints
+struct TaxBracket {
+    BoundedInt<0, 1000000> min_income where min_income >= 0,
+    BoundedInt<0, 1000000> max_income where max_income > min_income,
+    Positive<percent> tax_rate where tax_rate <= 50,
+}
+
+// Penalty structure with multiple constraints
+struct Penalty {
+    BoundedInt<0, 100> severity_score where severity_score >= 0 && severity_score <= 100,
+    Positive<money<SGD>> fine where fine >= 100 && fine <= 100000,
+    BoundedInt<0, 3650> jail_days where jail_days >= 0,
+}
+
+// Scope demonstrating usage
+scope contract_example {
+    EmploymentContract contract := EmploymentContract {
+        employee_name := "John Doe",
+        employer_name := "Tech Corp Pte Ltd",
+        annual_salary := $80000,
+        vacation_days := 21,
+        notice_period_months := 2,
+        start_date := 15-03-2024,
+    }
+}

@@ -1,0 +1,28 @@
+// Singapore Law Gazette Format - Simple Example
+// Tests struct inheritance and gazette transpilation
+
+struct Contract {
+    string parties,
+    string consideration,
+    date formation_date,
+}
+
+struct EmploymentContract extends Contract {
+    string employer,
+    string employee,
+    money<SGD> salary,
+    date commencement_date,
+}
+
+enum ContractValidity {
+    Valid,
+    Voidable,
+    Void,
+}
+
+struct Offense {
+    string description,
+    Citation<"415", "1", "Penal Code"> statutory_basis,
+    bool mens_rea,
+    bool actus_reus,
+}

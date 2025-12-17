@@ -1,0 +1,155 @@
+// Contract Law - Formation of Contract
+// Based on Singapore Contract Law principles
+
+// Legal test for valid contract formation
+legal_test ValidContract {
+    // Essential elements of a contract
+    bool offer_made,
+    bool offer_accepted,
+    bool consideration_provided,
+    bool intention_to_create_legal_relations,
+    bool capacity_to_contract,
+
+    // All elements must be present
+    requires offer_made &&
+             offer_accepted &&
+             consideration_provided &&
+             intention_to_create_legal_relations &&
+             capacity_to_contract
+}
+
+// Offer
+struct Offer {
+    string offeror_name,
+    string offeree_name,
+    string terms,
+    date offer_date,
+    bool definite_and_certain where definite_and_certain == true,
+    bool communicated where communicated == true,
+}
+
+// Acceptance
+struct Acceptance {
+    string acceptor_name,
+    date acceptance_date,
+    bool unconditional where unconditional == true,
+    bool communicated_to_offeror where communicated_to_offeror == true,
+
+    // Mirror image rule - acceptance must match offer
+    bool matches_offer_terms where matches_offer_terms == true
+}
+
+// Consideration
+struct Consideration {
+    string description,
+    Positive<money<SGD>> value,
+    bool sufficient where sufficient == true,
+    bool not_past where not_past == true,
+
+    // Consideration must move from promisee
+    bool moves_from_promisee where moves_from_promisee == true
+}
+
+// Contract
+struct Contract {
+    // Parties
+    string party_a_name,
+    string party_b_name,
+
+    // Formation elements
+    Offer offer,
+    Acceptance acceptance,
+    Consideration consideration,
+
+    // Capacity
+    BoundedInt<18, 150> party_a_age where party_a_age >= 21, // Age of majority in Singapore
+    BoundedInt<18, 150> party_b_age where party_b_age >= 21,
+
+    // Intention to create legal relations
+    bool commercial_context, // Presumed in commercial contexts
+    bool domestic_context,   // Rebutted in domestic contexts
+
+    // Contract must be valid
+    bool is_valid := offer.definite_and_certain &&
+                     offer.communicated &&
+                     acceptance.unconditional &&
+                     acceptance.communicated_to_offeror &&
+                     acceptance.matches_offer_terms &&
+                     consideration.sufficient &&
+                     consideration.not_past,
+
+    // Terms
+    string contract_terms,
+    date effective_date,
+
+    // Optional clauses
+    optional date termination_date,
+    optional string governing_law := "Singapore"
+}
+
+// Example: Sale of goods contract
+example SaleOfGoods := Contract {
+    party_a_name: "ABC Trading Pte Ltd",
+    party_b_name: "XYZ Retail Pte Ltd",
+
+    offer: Offer {
+        offeror_name: "ABC Trading Pte Ltd",
+        offeree_name: "XYZ Retail Pte Ltd",
+        terms: "Supply 1000 units of Product X at $10 per unit",
+        offer_date: "01-11-2024",
+        definite_and_certain: true,
+        communicated: true
+    },
+
+    acceptance: Acceptance {
+        acceptor_name: "XYZ Retail Pte Ltd",
+        acceptance_date: "05-11-2024",
+        unconditional: true,
+        communicated_to_offeror: true,
+        matches_offer_terms: true
+    },
+
+    consideration: Consideration {
+        description: "Payment of $10,000 for goods",
+        value: 10000.00,
+        sufficient: true,
+        not_past: true,
+        moves_from_promisee: true
+    },
+
+    party_a_age: 30, // Assuming representative is of age
+    party_b_age: 35,
+
+    commercial_context: true,
+    domestic_context: false,
+
+    contract_terms: "Supply 1000 units of Product X at $10 per unit, delivery within 30 days",
+    effective_date: "05-11-2024",
+    termination_date: None,
+    governing_law: "Singapore"
+}
+
+// Principle: Contract requires offer and acceptance
+principle ContractRequiresOfferAndAcceptance {
+    forall contract: Contract,
+    contract.offer.communicated == true &&
+    contract.acceptance.communicated_to_offeror == true
+}
+
+// Principle: Consideration must be sufficient
+principle ConsiderationMustBeSufficient {
+    forall contract: Contract,
+    contract.consideration.sufficient == true
+}
+
+// Principle: Past consideration is no consideration
+principle PastConsiderationInvalid {
+    forall contract: Contract,
+    contract.consideration.not_past == true
+}
+
+// Principle: Parties must have capacity
+principle PartiesMustHaveCapacity {
+    forall contract: Contract,
+    contract.party_a_age >= 21 && contract.party_b_age >= 21
+}

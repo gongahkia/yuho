@@ -1,0 +1,14 @@
+[package]
+name = "yuho-config"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+config = "0.14"
+directories = "5.0"

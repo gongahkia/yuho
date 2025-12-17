@@ -1,0 +1,86 @@
+// Decision Tree Example
+// Demonstrates match expressions for legal decision making
+
+enum LiabilityStatus {
+    Liable,
+    NotLiable,
+    InsufficientEvidence,
+}
+
+enum FaultType {
+    Negligence,
+    IntentionalWrongdoing,
+    StrictLiability,
+}
+
+struct LiabilityAssessment {
+    string case_id,
+    FaultType fault_type,
+    bool causation_established,
+    bool damages_proven,
+    LiabilityStatus status,
+}
+
+fn assess_liability(fault: FaultType, causation: bool, damages: bool) -> LiabilityStatus {
+    match fault {
+        case Negligence := 
+            if causation && damages {
+                Liable
+            } else {
+                NotLiable
+            }
+        case IntentionalWrongdoing :=
+            if damages {
+                Liable
+            } else {
+                InsufficientEvidence
+            }
+        case StrictLiability :=
+            if causation {
+                Liable
+            } else {
+                NotLiable
+            }
+        case _ := InsufficientEvidence
+    }
+}
+
+enum CriminalOffense {
+    Theft,
+    Fraud,
+    Assault,
+    Trespass,
+}
+
+enum SentencingSeverity {
+    Fine,
+    Probation,
+    Imprisonment,
+}
+
+fn determine_sentence(offense: CriminalOffense, prior_convictions: int, value: int) -> SentencingSeverity {
+    match offense {
+        case Theft :=
+            if prior_convictions > 2 || value > 10000 {
+                Imprisonment
+            } else if value > 1000 {
+                Probation
+            } else {
+                Fine
+            }
+        case Fraud :=
+            if value > 50000 {
+                Imprisonment
+            } else {
+                Probation
+            }
+        case Assault :=
+            if prior_convictions > 0 {
+                Imprisonment
+            } else {
+                Probation
+            }
+        case Trespass := Fine
+        case _ := Fine
+    }
+}

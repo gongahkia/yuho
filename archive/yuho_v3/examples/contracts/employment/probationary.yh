@@ -1,0 +1,152 @@
+// Probationary Employment Contract
+// Initial probationary period with potential conversion to permanent
+
+struct ProbationaryEmployment {
+    // Employee Information
+    string employee_name,
+    string employee_id,
+    ValidDate<after="01-01-2020"> start_date,
+    
+    // Position Details
+    string job_title,
+    string department,
+    string reporting_to,
+    
+    // Probation Period
+    BoundedInt<1, 6> probation_months where probation_months >= 3,
+    ValidDate<after="01-01-2020"> probation_end_date,
+    bool probation_extendable,
+    BoundedInt<0, 3> max_extension_months,
+    
+    // Compensation During Probation
+    money<SGD> probation_salary where probation_salary >= 30000 && probation_salary <= 400000,
+    money<SGD> permanent_salary where permanent_salary >= probation_salary,
+    percent salary_increase,
+    
+    // Working Arrangement
+    BoundedInt<35, 45> weekly_hours,
+    
+    // Benefits (Reduced During Probation)
+    BoundedInt<7, 14> probation_annual_leave,
+    BoundedInt<14, 21> permanent_annual_leave,
+    bool health_insurance_during_probation,
+    
+    // Performance Evaluation
+    BoundedInt<1, 3> evaluation_count,
+    bool monthly_reviews,
+    bool mid_probation_review,
+    bool final_evaluation,
+    
+    // Termination Terms
+    BoundedInt<1, 7> notice_period_days during probation,
+    BoundedInt<1, 3> permanent_notice_months,
+    
+    // Confirmation Criteria
+    BoundedInt<60, 100> minimum_performance_score,
+    bool requires_manager_approval,
+    bool requires_hr_approval,
+}
+
+scope ProbationaryEmploymentTerms {
+    // Calculate probation end date
+    fn calculate_probation_end(ValidDate<after="01-01-2020"> start, int months) -> ValidDate<after="01-01-2020"> {
+        // In production, would add months to start date
+        return "01-04-2025"
+    }
+    
+    // Calculate salary increase percentage
+    fn calculate_increase_percentage(money<SGD> probation, money<SGD> permanent) -> percent {
+        money<SGD> increase := permanent - probation
+        percent percentage := (increase / probation) * 100
+        return percentage
+    }
+    
+    // Evaluate performance
+    fn evaluate_performance(
+        int technical_score,
+        int teamwork_score,
+        int attendance_score,
+        int initiative_score
+    ) -> int {
+        // Weight scores: Technical 40%, Teamwork 30%, Attendance 20%, Initiative 10%
+        int weighted := (technical_score * 40 + teamwork_score * 30 + 
+                        attendance_score * 20 + initiative_score * 10) / 100
+        return weighted
+    }
+    
+    // Check if confirmation requirements are met
+    fn can_confirm(
+        int performance_score,
+        int minimum_score,
+        bool manager_approved,
+        bool hr_approved,
+        ProbationaryEmployment contract
+    ) -> bool {
+        bool score_met := performance_score >= minimum_score
+        bool approvals_met := (!contract.requires_manager_approval || manager_approved) &&
+                             (!contract.requires_hr_approval || hr_approved)
+        return score_met && approvals_met
+    }
+    
+    // Determine confirmation outcome
+    fn confirmation_decision(int final_score, int minimum) -> string {
+        match final_score >= minimum {
+            case true := "Confirmed - Convert to permanent employment"
+            case false := "Not confirmed - Extend probation or terminate"
+        }
+    }
+}
+
+// Example: Junior Developer on Probation
+ProbationaryEmployment junior_dev := ProbationaryEmployment {
+    employee_name := "David Wong",
+    employee_id := "PROB2025001",
+    start_date := "01-01-2025",
+    
+    job_title := "Junior Software Developer",
+    department := "Engineering",
+    reporting_to := "Senior Developer",
+    
+    probation_months := 3,
+    probation_end_date := "31-03-2025",
+    probation_extendable := true,
+    max_extension_months := 3,
+    
+    probation_salary := $54000,
+    permanent_salary := $60000,
+    salary_increase := 11,
+    
+    weekly_hours := 40,
+    
+    probation_annual_leave := 7,
+    permanent_annual_leave := 14,
+    health_insurance_during_probation := false,
+    
+    evaluation_count := 3,
+    monthly_reviews := true,
+    mid_probation_review := true,
+    final_evaluation := true,
+    
+    notice_period_days := 7,
+    permanent_notice_months := 1,
+    
+    minimum_performance_score := 70,
+    requires_manager_approval := true,
+    requires_hr_approval := true,
+}
+
+// Performance evaluation process
+match junior_dev.evaluation_count {
+    case 1 := "Single evaluation at end of probation"
+    case 2 := "Mid-probation and final evaluation"
+    case 3 := "Monthly reviews plus final evaluation"
+    case _ := "Invalid evaluation count"
+}
+
+// Confirmation criteria
+match junior_dev.minimum_performance_score {
+    case score where score >= 80 := "Excellent - Immediate confirmation recommended"
+    case score where score >= 70 := "Good - Confirmation subject to approvals"
+    case score where score >= 60 := "Adequate - Consider probation extension"
+    case _ := "Below expectations - Review termination"
+}

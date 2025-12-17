@@ -1,0 +1,15 @@
+// Simple Decision Tree Example
+// Basic match expression for decision tree visualization
+
+enum Verdict {
+    Guilty,
+    NotGuilty,
+}
+
+scope criminal_assessment {
+    Verdict verdict := match evidence_quality {
+        case Strong := Guilty
+        case Weak := NotGuilty
+        case _ := NotGuilty
+    }
+}

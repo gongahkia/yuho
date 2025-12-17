@@ -1,0 +1,14 @@
+// Main File - Conflict Detection Example
+//
+// This demonstrates how to check for conflicts between different statutes
+
+referencing ContractValidity from contract_act
+referencing ConsumerContract from consumer_protection
+
+// Check for conflicts between the two acts
+// This will detect that ContractValidity has different variants in each file
+verify no_conflict between contract_act.yh and consumer_protection.yh
+
+// Expected output:
+// ERROR: Enum 'ContractValidity' has conflicting definitions:
+//   ["Valid", "Void", "Voidable"] vs ["Enforceable", "Unenforceable"]

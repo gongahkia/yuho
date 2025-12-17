@@ -1,0 +1,51 @@
+// Singapore Law Gazette Format Example
+// Demonstrates proper legal formatting
+
+struct Contract {
+    string parties,
+    string consideration,
+    bool mutual_consent,
+    date formation_date,
+}
+
+struct EmploymentContract extends Contract {
+    string employer,
+    string employee,
+    money<SGD> salary,
+    date commencement_date,
+}
+
+enum ContractValidity {
+    Valid,
+    Voidable,
+    Void,
+}
+
+enum RemedyType {
+    Damages,
+    SpecificPerformance,
+    Injunction,
+    Rescission,
+}
+
+fn assess_contract_validity(contract: Contract, capacity: bool, legality: bool) -> ContractValidity {
+    if !capacity {
+        Voidable
+    } else if !legality {
+        Void
+    } else {
+        Valid
+    }
+}
+
+struct Offense {
+    string description,
+    Citation<"415", "1", "Penal Code"> statutory_basis,
+    bool mens_rea,
+    bool actus_reus,
+}
+
+struct CriminalLiability {
+    Offense offense,
+    bool guilty,
+}

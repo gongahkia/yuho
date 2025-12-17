@@ -1,0 +1,54 @@
+// Yuho Dependent Types Example
+// Demonstrates the enhanced type system for legal constraints
+
+// Person with age constraint
+struct Person {
+    string name,
+    BoundedInt<0, 150> age,
+    money<SGD> salary,
+}
+
+// Contract with positive amount requirement
+struct Contract {
+    Person buyer,
+    Person seller,
+    Positive<money<SGD>> amount,
+    date signed_date,
+}
+
+// Legal penalty structure
+struct Penalty {
+    BoundedInt<0, 100> severity_score,
+    Positive<money<SGD>> fine,
+    BoundedInt<0, 365> jail_days,
+}
+
+// Tax bracket with bounded income
+struct TaxBracket {
+    BoundedInt<0, 1000000> min_income,
+    BoundedInt<0, 1000000> max_income,
+    Positive<percent> tax_rate,
+}
+
+// Evidence collection (must be non-empty)
+struct Investigation {
+    string case_id,
+    NonEmpty<string> witnesses,
+    Array<string> documents,
+}
+
+// Examples of using the dependent types
+scope contract_validation {
+    // Person declarations
+    Person alice := Person {
+        name := "Alice",
+        age := 30,
+        salary := $50000,
+    }
+
+    Person bob := Person {
+        name := "Bob",
+        age := 45,
+        salary := $60000,
+    }
+}

@@ -1,0 +1,403 @@
+// Shareholders Agreement Template
+// Singapore Law Compliant
+// Based on Companies Act and contract law
+
+import std.contracts.contract_formation
+
+@citation("", "", "Companies Act (Cap 50)")
+
+// Share class
+enum ShareClass {
+    Ordinary,
+    Preference,
+    RedeemablePreference,
+    ConvertiblePreference
+}
+
+// Voting rights
+enum VotingRights {
+    OneShareOneVote,
+    MultipleVotes,
+    NoVotingRights,
+    ClassVoting
+}
+
+// Dividend rights
+enum DividendRights {
+    ProRata,
+    Preference,
+    Cumulative,
+    NonCumulative
+}
+
+// Transfer restrictions
+enum TransferRestriction {
+    RightOfFirstRefusal, // ROFR
+    RightOfFirstOffer,   // ROFO
+    TagAlong,            // Co-sale right
+    DragAlong,           // Forced sale
+    NoTransferWithoutConsent
+}
+
+// Shareholders Agreement
+struct ShareholdersAgreement {
+    // Company details
+    string company_name,
+    string company_uen,
+    string company_address,
+    date incorporation_date,
+
+    // Shareholders
+    list<string> shareholder_names,
+    list<string> shareholder_nric_or_uen,
+    list<Positive<int>> share_quantities,
+    list<Positive<float>> ownership_percentages,
+
+    // Total shares check
+    where ownership_percentages.sum() == 100.0,
+
+    // Share details
+    Positive<int> total_issued_shares,
+    ShareClass share_class,
+    Positive<money<SGD>> par_value_per_share,
+    Positive<money<SGD>> total_share_capital,
+
+    // Agreement date
+    date agreement_date,
+
+    // Board composition
+    BoundedInt<1, 15> board_size,
+    list<string> initial_directors,
+    optional string chairman_name,
+    bool chairman_casting_vote,
+
+    // Director appointment rights
+    optional list<string> shareholders_with_director_appointment_rights,
+    optional list<BoundedInt<1, 5>> directors_per_shareholder,
+
+    // Reserved matters (require supermajority or unanimous consent)
+    list<string> reserved_matters,
+    BoundedInt<50, 100> reserved_matters_threshold where reserved_matters_threshold >= 75,
+
+    // Voting rights
+    VotingRights voting_structure,
+    bool proxy_voting_allowed,
+
+    // Dividend policy
+    DividendRights dividend_rights,
+    optional Positive<float> minimum_dividend_percentage,
+    bool dividends_at_board_discretion,
+
+    // Transfer restrictions
+    list<TransferRestriction> transfer_restrictions,
+    bool board_approval_required_for_transfer where board_approval_required_for_transfer == true,
+
+    // Right of first refusal (ROFR)
+    optional bool rofr_applies,
+    optional BoundedInt<1, 60> rofr_offer_period_days,
+    optional BoundedInt<1, 30> rofr_acceptance_period_days,
+
+    // Tag-along rights (minority protection)
+    optional bool tag_along_rights,
+    optional Positive<float> tag_along_threshold_percentage, // E.g., if > 50% shares sold
+
+    // Drag-along rights (majority can force sale)
+    optional bool drag_along_rights,
+    optional Positive<float> drag_along_threshold_percentage, // E.g., if > 75% agree to sell
+
+    // Pre-emptive rights (right to maintain ownership percentage)
+    bool pre_emptive_rights where pre_emptive_rights == true,
+    BoundedInt<1, 60> pre_emptive_offer_period_days,
+
+    // Non-compete (for shareholder-directors)
+    optional bool non_compete_clause,
+    optional BoundedInt<1, 5> non_compete_years,
+    optional string non_compete_scope,
+
+    // Confidentiality
+    bool confidentiality_clause where confidentiality_clause == true,
+    BoundedInt<1, 10> confidentiality_years where confidentiality_years >= 3,
+
+    // Deadlock resolution
+    bool deadlock_mechanism where deadlock_mechanism == true,
+    string deadlock_procedure, // E.g., "Mediation then buy-sell"
+
+    // Exit mechanisms
+    optional bool buyout_on_death_or_incapacity,
+    optional string valuation_method, // E.g., "Net asset value" or "Earnings multiple"
+
+    // Good leaver / bad leaver provisions
+    optional bool leaver_provisions,
+    optional string good_leaver_definition,
+    optional string bad_leaver_definition,
+
+    // Dispute resolution
+    bool mediation_first where mediation_first == true,
+    string dispute_resolution, // "SIAC Arbitration" or "Singapore Courts"
+
+    // Governing law
+    string governing_law := "Singapore"
+}
+
+// Example: Tech startup shareholders agreement (3 co-founders)
+example StartupShareholdersAgreement := ShareholdersAgreement {
+    company_name: "InnovateTech Pte Ltd",
+    company_uen: "202312345A",
+    company_address: "123 Startup Lane, Singapore 138632",
+    incorporation_date: "01-01-2023",
+
+    shareholder_names: [
+        "Alice Tan (CEO)",
+        "Bob Lim (CTO)",
+        "Charlie Ng (CFO)"
+    ],
+    shareholder_nric_or_uen: [
+        "S1234567A",
+        "S2345678B",
+        "S3456789C"
+    ],
+    share_quantities: [
+        500000,
+        300000,
+        200000
+    ],
+    ownership_percentages: [
+        50.0,
+        30.0,
+        20.0
+    ],
+
+    total_issued_shares: 1000000,
+    share_class: ShareClass::Ordinary,
+    par_value_per_share: 0.01,
+    total_share_capital: 10000.00,
+
+    agreement_date: "01-01-2023",
+
+    board_size: 3,
+    initial_directors: [
+        "Alice Tan",
+        "Bob Lim",
+        "Charlie Ng"
+    ],
+    chairman_name: Some("Alice Tan"),
+    chairman_casting_vote: true,
+
+    shareholders_with_director_appointment_rights: None,
+    directors_per_shareholder: None,
+
+    reserved_matters: [
+        "Issue of new shares",
+        "Sale of company or major assets",
+        "Borrowing above SGD 100,000",
+        "Change of business scope",
+        "Removal of directors",
+        "Amendment of constitution",
+        "Winding up"
+    ],
+    reserved_matters_threshold: 75, // 75% approval required
+
+    voting_structure: VotingRights::OneShareOneVote,
+    proxy_voting_allowed: true,
+
+    dividend_rights: DividendRights::ProRata,
+    minimum_dividend_percentage: None,
+    dividends_at_board_discretion: true,
+
+    transfer_restrictions: [
+        TransferRestriction::RightOfFirstRefusal,
+        TransferRestriction::TagAlong,
+        TransferRestriction::DragAlong
+    ],
+    board_approval_required_for_transfer: true,
+
+    rofr_applies: Some(true),
+    rofr_offer_period_days: Some(30),
+    rofr_acceptance_period_days: Some(14),
+
+    tag_along_rights: Some(true),
+    tag_along_threshold_percentage: Some(50.0),
+
+    drag_along_rights: Some(true),
+    drag_along_threshold_percentage: Some(75.0),
+
+    pre_emptive_rights: true,
+    pre_emptive_offer_period_days: 30,
+
+    non_compete_clause: Some(true),
+    non_compete_years: Some(2),
+    non_compete_scope: Some("Cannot start competing tech business in same sector"),
+
+    confidentiality_clause: true,
+    confidentiality_years: 5,
+
+    deadlock_mechanism: true,
+    deadlock_procedure: "First mediation, then Russian roulette buy-sell",
+
+    buyout_on_death_or_incapacity: Some(true),
+    valuation_method: Some("Net asset value or 3x revenue, whichever higher"),
+
+    leaver_provisions: Some(true),
+    good_leaver_definition: Some("Death, disability, retirement with notice"),
+    bad_leaver_definition: Some("Termination for cause, voluntary resignation without notice"),
+
+    mediation_first: true,
+    dispute_resolution: "SIAC Arbitration",
+
+    governing_law: "Singapore"
+}
+
+// Example: Investment with investor rights
+example InvestorShareholdersAgreement := ShareholdersAgreement {
+    company_name: "GrowthCo Pte Ltd",
+    company_uen: "202223456B",
+    company_address: "456 Business Park, Singapore 117543",
+    incorporation_date: "01-06-2022",
+
+    shareholder_names: [
+        "Founders (pooled)",
+        "Series A Investor Fund"
+    ],
+    shareholder_nric_or_uen: [
+        "Various",
+        "200012345C"
+    ],
+    share_quantities: [
+        600000, // Founders diluted to 60%
+        400000  // Investor 40%
+    ],
+    ownership_percentages: [
+        60.0,
+        40.0
+    ],
+
+    total_issued_shares: 1000000,
+    share_class: ShareClass::Ordinary,
+    par_value_per_share: 0.01,
+    total_share_capital: 10000.00,
+
+    agreement_date: "01-12-2024",
+
+    board_size: 5,
+    initial_directors: [
+        "Founder CEO",
+        "Founder CTO",
+        "Founder CFO",
+        "Investor Director 1",
+        "Investor Director 2"
+    ],
+    chairman_name: Some("Investor Director 1"),
+    chairman_casting_vote: false, // Equal voting
+
+    shareholders_with_director_appointment_rights: Some([
+        "Founders",
+        "Series A Investor Fund"
+    ]),
+    directors_per_shareholder: Some([3, 2]),
+
+    reserved_matters: [
+        "Issue of new shares or options",
+        "Sale, merger, or acquisition",
+        "Borrowing above SGD 500,000",
+        "Annual budget approval",
+        "Executive compensation above SGD 200,000",
+        "Related party transactions",
+        "Change of business",
+        "IPO or listing",
+        "Winding up"
+    ],
+    reserved_matters_threshold: 75,
+
+    voting_structure: VotingRights::OneShareOneVote,
+    proxy_voting_allowed: true,
+
+    dividend_rights: DividendRights::ProRata,
+    minimum_dividend_percentage: None,
+    dividends_at_board_discretion: true,
+
+    transfer_restrictions: [
+        TransferRestriction::RightOfFirstRefusal,
+        TransferRestriction::TagAlong,
+        TransferRestriction::DragAlong,
+        TransferRestriction::NoTransferWithoutConsent
+    ],
+    board_approval_required_for_transfer: true,
+
+    rofr_applies: Some(true),
+    rofr_offer_period_days: Some(60),
+    rofr_acceptance_period_days: Some(30),
+
+    tag_along_rights: Some(true),
+    tag_along_threshold_percentage: Some(30.0), // Minority protection
+
+    drag_along_rights: Some(true),
+    drag_along_threshold_percentage: Some(75.0),
+
+    pre_emptive_rights: true,
+    pre_emptive_offer_period_days: 45,
+
+    non_compete_clause: Some(true),
+    non_compete_years: Some(3),
+    non_compete_scope: Some("Founders cannot compete during employment and 2 years after"),
+
+    confidentiality_clause: true,
+    confidentiality_years: 10,
+
+    deadlock_mechanism: true,
+    deadlock_procedure: "Investor has right to appoint independent director as tiebreaker",
+
+    buyout_on_death_or_incapacity: Some(true),
+    valuation_method: Some("Independent valuation by Big 4 accounting firm"),
+
+    leaver_provisions: Some(true),
+    good_leaver_definition: Some("Death, disability, termination without cause"),
+    bad_leaver_definition: Some("Termination for cause, breach of duties, voluntary resignation"),
+
+    mediation_first: true,
+    dispute_resolution: "SIAC Arbitration",
+
+    governing_law: "Singapore"
+}
+
+// Compliance principles
+
+principle OwnershipAddsToHundred {
+    forall agreement: ShareholdersAgreement,
+    agreement.ownership_percentages.sum() == 100.0
+}
+
+principle BoardApprovalForTransfer {
+    forall agreement: ShareholdersAgreement,
+    agreement.board_approval_required_for_transfer == true
+}
+
+principle PreEmptiveRightsProtection {
+    forall agreement: ShareholdersAgreement,
+    agreement.pre_emptive_rights == true
+}
+
+principle ReservedMattersSupermajority {
+    forall agreement: ShareholdersAgreement,
+    agreement.reserved_matters_threshold >= 75
+}
+
+principle ConfidentialityRequired {
+    forall agreement: ShareholdersAgreement,
+    agreement.confidentiality_clause == true &&
+    agreement.confidentiality_years >= 3
+}
+
+principle DeadlockMechanism {
+    forall agreement: ShareholdersAgreement,
+    agreement.deadlock_mechanism == true
+}
+
+principle MediationFirst {
+    forall agreement: ShareholdersAgreement,
+    agreement.mediation_first == true
+}
+
+principle TransferRestrictions {
+    forall agreement: ShareholdersAgreement,
+    agreement.transfer_restrictions.length() > 0
+}

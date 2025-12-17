@@ -1,0 +1,244 @@
+// Singapore Penal Code - Sections 351-358: Assault and Criminal Force
+
+@citation("351", "1", "Penal Code")
+
+// Legal test for assault
+legal_test Assault {
+    // Element 1: Gesture or preparation
+    bool threatening_gesture_made,
+    bool preparation_to_use_force,
+
+    // Element 2: Intention to cause apprehension
+    bool intention_to_cause_apprehension,
+
+    // Element 3: Causing apprehension
+    bool victim_apprehensive,
+
+    // Element 4: Unlawful force threatened
+    bool force_would_be_unlawful,
+
+    // All elements required
+    requires (threatening_gesture_made || preparation_to_use_force) &&
+             intention_to_cause_apprehension &&
+             victim_apprehensive &&
+             force_would_be_unlawful
+}
+
+// Legal test for criminal force
+legal_test CriminalForce {
+    @citation("350", "1", "Penal Code")
+
+    // Element 1: Use of force
+    bool force_used,
+
+    // Element 2: Against another person
+    bool against_person,
+
+    // Element 3: Without consent
+    bool without_consent,
+
+    // Element 4: Intention or knowledge
+    bool intention_to_cause_injury,
+    bool intention_to_cause_fear,
+    bool intention_to_cause_annoyance,
+    bool knowledge_likely_to_cause_injury,
+
+    // Requirements
+    requires force_used &&
+             against_person &&
+             without_consent &&
+             (intention_to_cause_injury ||
+              intention_to_cause_fear ||
+              intention_to_cause_annoyance ||
+              knowledge_likely_to_cause_injury)
+}
+
+// Assault offense
+struct AssaultOffense {
+    Citation<"351", "1", "Penal Code"> statute,
+
+    // Parties
+    string accused_name,
+    string victim_name,
+
+    // Actus reus
+    string threatening_gesture_description,
+    date date_of_offense,
+    string location,
+
+    // Mens rea
+    bool intention_to_cause_apprehension where intention_to_cause_apprehension == true,
+
+    // Victim's state
+    bool victim_apprehensive where victim_apprehensive == true,
+
+    // Lawfulness
+    bool force_would_be_unlawful where force_would_be_unlawful == true
+}
+
+// Criminal force offense - Section 352
+struct CriminalForceOffense {
+    Citation<"352", "1", "Penal Code"> statute,
+
+    // Parties
+    string accused_name,
+    BoundedInt<7, 150> accused_age,
+    string victim_name,
+    BoundedInt<0, 150> victim_age,
+
+    // Force details
+    string nature_of_force,
+    bool force_applied where force_applied == true,
+    date date_of_offense,
+
+    // Consent
+    bool consent_given where consent_given == false,
+
+    // Mens rea
+    bool intention_to_injure,
+    bool intention_to_cause_fear,
+    bool intention_to_provoke,
+
+    // At least one intention must exist
+    where intention_to_injure || intention_to_cause_fear || intention_to_provoke
+}
+
+// Voluntarily causing hurt - Section 323
+struct VoluntarilyCausingHurt {
+    @citation("323", "1", "Penal Code")
+
+    Citation<"323", "1", "Penal Code"> statute,
+
+    // Parties
+    string accused_name,
+    string victim_name,
+
+    // Hurt definition - Section 319: bodily pain, disease, infirmity
+    bool bodily_pain_caused,
+    bool disease_caused,
+    bool infirmity_caused,
+
+    // At least one type of hurt
+    where bodily_pain_caused || disease_caused || infirmity_caused,
+
+    // Voluntariness - intentionally caused
+    bool voluntarily_caused where voluntarily_caused == true,
+
+    // Details
+    string description_of_hurt,
+    date date_of_offense,
+
+    // Not grievous hurt (Section 320)
+    bool is_grievous_hurt,
+
+    // Punishment gradation
+    bool liable_to_imprisonment := !is_grievous_hurt,
+    bool liable_to_enhanced_punishment := is_grievous_hurt
+}
+
+// Grievous hurt - Section 320
+enum GrievousHurtType {
+    Emasculation,
+    PermanentSightLoss,
+    PermanentHearingLoss,
+    PrivationOfMember,      // Loss of limb/joint
+    DestructionOfPower,     // Permanent impairment
+    PermanentDisfigurement,
+    Fracture,
+    SevereToothDamage
+}
+
+struct VoluntarilyCausingGrievousHurt {
+    @citation("325", "1", "Penal Code")
+
+    Citation<"325", "1", "Penal Code"> statute,
+
+    string accused_name,
+    string victim_name,
+
+    // Type of grievous hurt
+    GrievousHurtType hurt_type,
+
+    // Voluntariness
+    bool voluntarily_caused where voluntarily_caused == true,
+
+    // Details
+    string medical_report,
+    date date_of_offense,
+
+    // Enhanced punishment for grievous hurt
+    bool liable_to_severe_punishment where liable_to_severe_punishment == true
+}
+
+// Example: Simple assault
+example VerbalThreat := AssaultOffense {
+    statute: Citation<"351", "1", "Penal Code">,
+
+    accused_name: "Aggressor",
+    victim_name: "Victim",
+
+    threatening_gesture_description: "Raised fist in threatening manner",
+    date_of_offense: "10-11-2024",
+    location: "Orchard Road",
+
+    intention_to_cause_apprehension: true,
+    victim_apprehensive: true,
+    force_would_be_unlawful: true
+}
+
+// Example: Criminal force
+example Pushing := CriminalForceOffense {
+    statute: Citation<"352", "1", "Penal Code">,
+
+    accused_name: "John Doe",
+    accused_age: 30,
+    victim_name: "Jane Smith",
+    victim_age: 28,
+
+    nature_of_force: "Pushed victim causing them to stumble",
+    force_applied: true,
+    date_of_offense: "15-11-2024",
+
+    consent_given: false,
+
+    intention_to_injure: false,
+    intention_to_cause_fear: true,
+    intention_to_provoke: true
+}
+
+// Example: Causing hurt
+example PunchingIncident := VoluntarilyCausingHurt {
+    statute: Citation<"323", "1", "Penal Code">,
+
+    accused_name: "Assailant",
+    victim_name: "Victim",
+
+    bodily_pain_caused: true,
+    disease_caused: false,
+    infirmity_caused: false,
+
+    voluntarily_caused: true,
+
+    description_of_hurt: "Punch to face causing bruising and pain",
+    date_of_offense: "20-11-2024",
+
+    is_grievous_hurt: false
+}
+
+// Principle: Criminal force requires lack of consent
+principle CriminalForceRequiresNoConsent {
+    forall offense: CriminalForceOffense,
+    offense.consent_given == false
+}
+
+// Principle: Hurt must be voluntary
+principle HurtMustBeVoluntary {
+    forall hurt: VoluntarilyCausingHurt,
+    hurt.voluntarily_caused == true
+}
+
+// Principle: Assault requires apprehension
+principle AssaultRequiresApprehension {
+    forall assault: AssaultOffense,
+    assault.victim_apprehensive == true
+}

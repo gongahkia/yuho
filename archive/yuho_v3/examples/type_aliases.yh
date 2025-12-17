@@ -1,0 +1,24 @@
+// Type Alias Examples
+// Demonstrates type aliases for improved readability
+
+// Simple type aliases
+type UserId := int
+type Email := string
+
+// Type aliases with dependent types
+type Age := BoundedInt<0, 150>
+type Score := BoundedInt<0, 100>
+
+// Struct definitions using type aliases
+struct User {
+    UserId id,
+    Email email,
+    string name,
+    Age age,
+}
+
+struct TestResult {
+    UserId student_id,
+    Score math_score,
+    Score english_score,
+}

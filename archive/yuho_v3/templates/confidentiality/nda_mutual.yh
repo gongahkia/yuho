@@ -1,0 +1,364 @@
+// Mutual Non-Disclosure Agreement (NDA) Template
+// Singapore Law Compliant
+// Based on Contract Law principles
+
+import std.contracts.contract_formation
+
+@citation("", "", "Contract Law")
+
+// Types of confidential information
+enum ConfidentialInfoType {
+    TradeSecrets,
+    BusinessInformation,
+    TechnicalInformation,
+    CustomerData,
+    FinancialInformation,
+    StrategicPlans,
+    Other
+}
+
+// Purpose of disclosure
+enum DisclosurePurpose {
+    BusinessNegotiations,
+    PotentialPartnership,
+    DueDiligence,
+    Collaboration,
+    ServiceProvision,
+    Other
+}
+
+// Mutual NDA - both parties exchange confidential information
+struct MutualNDA {
+    // Parties
+    string party1_name,
+    string party1_uen,
+    string party1_address,
+
+    string party2_name,
+    string party2_uen,
+    string party2_address,
+
+    // NDA details
+    date effective_date,
+    DisclosurePurpose disclosure_purpose,
+    string purpose_description,
+
+    // Confidential information definition
+    list<ConfidentialInfoType> info_types,
+    string additional_info_description,
+
+    // Obligations
+    bool maintain_confidentiality where maintain_confidentiality == true,
+    bool use_only_for_purpose where use_only_for_purpose == true,
+    bool no_reverse_engineering where no_reverse_engineering == true,
+
+    // Permitted disclosures
+    bool can_disclose_to_employees,
+    bool can_disclose_to_advisors,
+    bool must_inform_of_obligations where can_disclose_to_employees || can_disclose_to_advisors => must_inform_of_obligations == true,
+
+    // Exclusions from confidentiality
+    bool excludes_public_domain where excludes_public_domain == true,
+    bool excludes_already_known where excludes_already_known == true,
+    bool excludes_independently_developed where excludes_independently_developed == true,
+    bool excludes_lawfully_obtained where excludes_lawfully_obtained == true,
+
+    // Duration
+    BoundedInt<1, 10> confidentiality_years where confidentiality_years >= 2, // Typically 2-5 years
+    optional date expiry_date,
+
+    // Return of materials
+    bool must_return_materials where must_return_materials == true,
+    BoundedInt<1, 90> days_to_return where days_to_return <= 30, // Usually 30 days
+
+    // Non-solicitation (optional)
+    optional bool non_solicitation_clause,
+    optional BoundedInt<1, 3> non_solicitation_years,
+
+    // Remedies
+    bool specific_performance_available where specific_performance_available == true,
+    bool injunctive_relief_available where injunctive_relief_available == true,
+    bool liquidated_damages_clause,
+    optional Positive<money<SGD>> liquidated_damages_amount,
+
+    // Governing law and jurisdiction
+    string governing_law := "Singapore",
+    string dispute_resolution := "Singapore Courts" // Or arbitration
+}
+
+// Unilateral NDA - one party discloses to another
+struct UnilateralNDA {
+    // Disclosing party
+    string disclosing_party_name,
+    string disclosing_party_uen,
+    string disclosing_party_address,
+
+    // Receiving party
+    string receiving_party_name,
+    string receiving_party_uen,
+    string receiving_party_address,
+
+    // NDA details
+    date effective_date,
+    DisclosurePurpose disclosure_purpose,
+    string purpose_description,
+
+    // Confidential information definition
+    list<ConfidentialInfoType> info_types,
+    string additional_info_description,
+
+    // Obligations (on receiving party only)
+    bool maintain_confidentiality where maintain_confidentiality == true,
+    bool use_only_for_purpose where use_only_for_purpose == true,
+    bool no_reverse_engineering where no_reverse_engineering == true,
+    bool no_copying_without_permission where no_copying_without_permission == true,
+
+    // Permitted disclosures
+    bool can_disclose_to_employees,
+    bool can_disclose_to_advisors,
+    bool must_inform_of_obligations where can_disclose_to_employees || can_disclose_to_advisors => must_inform_of_obligations == true,
+
+    // Exclusions from confidentiality
+    bool excludes_public_domain where excludes_public_domain == true,
+    bool excludes_already_known where excludes_already_known == true,
+    bool excludes_independently_developed where excludes_independently_developed == true,
+    bool excludes_lawfully_obtained where excludes_lawfully_obtained == true,
+    bool excludes_required_by_law where excludes_required_by_law == true,
+
+    // Duration
+    BoundedInt<1, 10> confidentiality_years where confidentiality_years >= 2,
+    optional date expiry_date,
+
+    // Return of materials
+    bool must_return_materials where must_return_materials == true,
+    BoundedInt<1, 90> days_to_return where days_to_return <= 30,
+
+    // Ownership
+    bool disclosing_party_retains_ownership where disclosing_party_retains_ownership == true,
+    bool no_license_granted where no_license_granted == true,
+
+    // Remedies
+    bool specific_performance_available where specific_performance_available == true,
+    bool injunctive_relief_available where injunctive_relief_available == true,
+    bool liquidated_damages_clause,
+    optional Positive<money<SGD>> liquidated_damages_amount,
+
+    // Governing law
+    string governing_law := "Singapore",
+    string dispute_resolution := "Singapore Courts"
+}
+
+// Example: Tech partnership mutual NDA
+example TechPartnershipMutualNDA := MutualNDA {
+    party1_name: "InnovateTech Pte Ltd",
+    party1_uen: "202012345A",
+    party1_address: "123 Innovation Drive, Singapore 138632",
+
+    party2_name: "FutureSoft Pte Ltd",
+    party2_uen: "201987654B",
+    party2_address: "456 Tech Park, Singapore 117543",
+
+    effective_date: "01-12-2024",
+    disclosure_purpose: DisclosurePurpose::PotentialPartnership,
+    purpose_description: "Exploring potential technology partnership and integration",
+
+    info_types: [
+        ConfidentialInfoType::TradeSecrets,
+        ConfidentialInfoType::TechnicalInformation,
+        ConfidentialInfoType::BusinessInformation
+    ],
+    additional_info_description: "Source code, algorithms, business plans, customer lists",
+
+    maintain_confidentiality: true,
+    use_only_for_purpose: true,
+    no_reverse_engineering: true,
+
+    can_disclose_to_employees: true,
+    can_disclose_to_advisors: true,
+    must_inform_of_obligations: true,
+
+    excludes_public_domain: true,
+    excludes_already_known: true,
+    excludes_independently_developed: true,
+    excludes_lawfully_obtained: true,
+
+    confidentiality_years: 3,
+    expiry_date: None,
+
+    must_return_materials: true,
+    days_to_return: 30,
+
+    non_solicitation_clause: Some(true),
+    non_solicitation_years: Some(2),
+
+    specific_performance_available: true,
+    injunctive_relief_available: true,
+    liquidated_damages_clause: false,
+    liquidated_damages_amount: None,
+
+    governing_law: "Singapore",
+    dispute_resolution: "SIAC Arbitration"
+}
+
+// Example: Investor due diligence unilateral NDA
+example InvestorDueDiligenceNDA := UnilateralNDA {
+    disclosing_party_name: "StartupCo Pte Ltd",
+    disclosing_party_uen: "202123456C",
+    disclosing_party_address: "789 Startup Lane, Singapore 018956",
+
+    receiving_party_name: "Venture Capital Fund Ltd",
+    receiving_party_uen: "200876543D",
+    receiving_party_address: "321 Investment Street, Singapore 049318",
+
+    effective_date: "15-11-2024",
+    disclosure_purpose: DisclosurePurpose::DueDiligence,
+    purpose_description: "Due diligence for potential Series A investment",
+
+    info_types: [
+        ConfidentialInfoType::FinancialInformation,
+        ConfidentialInfoType::BusinessInformation,
+        ConfidentialInfoType::CustomerData,
+        ConfidentialInfoType::StrategicPlans
+    ],
+    additional_info_description: "Financial statements, cap table, customer contracts, growth projections",
+
+    maintain_confidentiality: true,
+    use_only_for_purpose: true,
+    no_reverse_engineering: true,
+    no_copying_without_permission: true,
+
+    can_disclose_to_employees: true,
+    can_disclose_to_advisors: true,
+    must_inform_of_obligations: true,
+
+    excludes_public_domain: true,
+    excludes_already_known: true,
+    excludes_independently_developed: true,
+    excludes_lawfully_obtained: true,
+    excludes_required_by_law: true,
+
+    confidentiality_years: 5,
+    expiry_date: None,
+
+    must_return_materials: true,
+    days_to_return: 14,
+
+    disclosing_party_retains_ownership: true,
+    no_license_granted: true,
+
+    specific_performance_available: true,
+    injunctive_relief_available: true,
+    liquidated_damages_clause: true,
+    liquidated_damages_amount: Some(100000.00),
+
+    governing_law: "Singapore",
+    dispute_resolution: "Singapore Courts"
+}
+
+// Example: Employee NDA (unilateral)
+example EmployeeNDA := UnilateralNDA {
+    disclosing_party_name: "SecureTech Pte Ltd",
+    disclosing_party_uen: "201554321E",
+    disclosing_party_address: "888 Security Road, Singapore 139951",
+
+    receiving_party_name: "John Tan",
+    receiving_party_uen: "S1234567A", // NRIC
+    receiving_party_address: "123 Residential Street, Singapore 560123",
+
+    effective_date: "01-01-2025",
+    disclosure_purpose: DisclosurePurpose::ServiceProvision,
+    purpose_description: "Employment as Software Engineer",
+
+    info_types: [
+        ConfidentialInfoType::TradeSecrets,
+        ConfidentialInfoType::TechnicalInformation,
+        ConfidentialInfoType::CustomerData
+    ],
+    additional_info_description: "Proprietary software, client information, security protocols",
+
+    maintain_confidentiality: true,
+    use_only_for_purpose: true,
+    no_reverse_engineering: true,
+    no_copying_without_permission: true,
+
+    can_disclose_to_employees: false,
+    can_disclose_to_advisors: false,
+    must_inform_of_obligations: false,
+
+    excludes_public_domain: true,
+    excludes_already_known: true,
+    excludes_independently_developed: true,
+    excludes_lawfully_obtained: true,
+    excludes_required_by_law: true,
+
+    confidentiality_years: 5, // Survives termination of employment
+    expiry_date: None,
+
+    must_return_materials: true,
+    days_to_return: 7,
+
+    disclosing_party_retains_ownership: true,
+    no_license_granted: true,
+
+    specific_performance_available: true,
+    injunctive_relief_available: true,
+    liquidated_damages_clause: false,
+    liquidated_damages_amount: None,
+
+    governing_law: "Singapore",
+    dispute_resolution: "Singapore Courts"
+}
+
+// Principles for NDA validity
+
+principle ConfidentialityObligationRequired {
+    forall nda: MutualNDA,
+    nda.maintain_confidentiality == true
+}
+
+principle ConfidentialityObligationRequiredUnilateral {
+    forall nda: UnilateralNDA,
+    nda.maintain_confidentiality == true
+}
+
+principle UseLimitedToPurpose {
+    forall nda: MutualNDA,
+    nda.use_only_for_purpose == true
+}
+
+principle MaterialsMustBeReturned {
+    forall nda: UnilateralNDA,
+    nda.must_return_materials == true &&
+    nda.days_to_return <= 30
+}
+
+principle ReasonableConfidentialityPeriod {
+    forall nda: MutualNDA,
+    nda.confidentiality_years >= 2 &&
+    nda.confidentiality_years <= 10
+}
+
+principle DisclosingPartyRetainsOwnership {
+    forall nda: UnilateralNDA,
+    nda.disclosing_party_retains_ownership == true &&
+    nda.no_license_granted == true
+}
+
+principle StandardExclusionsIncluded {
+    forall nda: MutualNDA,
+    nda.excludes_public_domain == true &&
+    nda.excludes_already_known == true &&
+    nda.excludes_independently_developed == true
+}
+
+principle RemediesAvailableForBreach {
+    forall nda: UnilateralNDA,
+    nda.specific_performance_available == true &&
+    nda.injunctive_relief_available == true
+}
+
+principle PermittedDisclosureRequiresNotice {
+    forall nda: MutualNDA,
+    (nda.can_disclose_to_employees || nda.can_disclose_to_advisors) =>
+    nda.must_inform_of_obligations == true
+}

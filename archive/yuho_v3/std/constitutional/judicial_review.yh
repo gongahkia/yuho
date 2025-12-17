@@ -1,0 +1,316 @@
+// Singapore Constitution - Judicial Review
+// Based on principles of administrative and constitutional law
+
+// Grounds for judicial review
+enum JudicialReviewGround {
+    Illegality,
+    Irrationality,      // Wednesbury unreasonableness
+    ProceduralImpropriety,
+    Unconstitutionality
+}
+
+// Types of prerogative orders
+enum PrerogativeOrder {
+    MandatoryOrder,    // Formerly mandamus - compels action
+    ProhibitingOrder,  // Formerly prohibition - prevents action
+    QuashingOrder,     // Formerly certiorari - quashes decision
+    OrderOfReview      // Declaration + injunction
+}
+
+// Legal test for judicial review
+legal_test JudicialReview {
+    // Element 1: Public law matter
+    bool involves_public_body,
+    bool involves_public_function,
+    bool sufficient_public_element,
+
+    // Element 2: Standing (locus standi)
+    bool applicant_has_standing,
+    bool applicant_affected_by_decision,
+
+    // Element 3: Ground for review established
+    bool ground_established,
+
+    // Element 4: Not precluded
+    bool not_barred_by_statute,
+    bool within_time_limit,
+
+    // All elements required
+    requires (involves_public_body || involves_public_function) &&
+             sufficient_public_element &&
+             applicant_has_standing &&
+             applicant_affected_by_decision &&
+             ground_established &&
+             not_barred_by_statute &&
+             within_time_limit
+}
+
+// Illegality - acting beyond powers (ultra vires)
+struct IllegalityGround {
+    string public_body_name,
+    string decision_or_action,
+    date decision_date,
+
+    // Exceeded statutory powers
+    bool exceeded_statutory_power where exceeded_statutory_power == true,
+    string parent_statute,
+
+    // Or acted for improper purpose
+    bool acted_for_improper_purpose,
+
+    // Or took irrelevant considerations into account
+    bool considered_irrelevant_factors,
+
+    // Or failed to consider relevant factors
+    bool failed_to_consider_relevant_factors,
+
+    // At least one basis for illegality
+    where exceeded_statutory_power ||
+          acted_for_improper_purpose ||
+          considered_irrelevant_factors ||
+          failed_to_consider_relevant_factors
+}
+
+// Irrationality - Wednesbury unreasonableness
+struct IrrationalityGround {
+    string public_body_name,
+    string decision_or_action,
+
+    // So unreasonable no reasonable authority would make it
+    bool decision_absurd where decision_absurd == true,
+    bool decision_perverse,
+    bool decision_outrageous,
+
+    // Basis for irrationality
+    where decision_absurd || decision_perverse || decision_outrageous,
+
+    string reasons_for_irrationality
+}
+
+// Procedural impropriety
+struct ProceduralImproprietyGround {
+    string public_body_name,
+    string decision_or_action,
+
+    // Breach of natural justice
+    bool breach_of_natural_justice,
+
+    // Rule against bias (nemo judex in causa sua)
+    bool actual_bias,
+    bool apparent_bias,
+    bool reasonable_suspicion_of_bias,
+
+    // Right to be heard (audi alteram partem)
+    bool right_to_be_heard_violated,
+    bool no_opportunity_to_respond,
+
+    // Breach of statutory procedures
+    bool breach_of_statutory_procedure,
+    string procedure_breached,
+
+    // At least one basis
+    where breach_of_natural_justice ||
+          actual_bias ||
+          apparent_bias ||
+          breach_of_statutory_procedure
+}
+
+// Unconstitutionality
+struct UnconstitutionalityGround {
+    string legislation_or_action,
+
+    // Violates fundamental liberty
+    FundamentalLiberty liberty_violated,
+
+    // Specific constitutional provision
+    string constitutional_provision,
+
+    // Proportionality test
+    bool legitimate_objective,
+    bool rational_connection,
+    bool less_intrusive_means_available,
+    bool proportionate_effect,
+
+    // Fails proportionality if less intrusive means available
+    bool unconstitutional := !legitimate_objective ||
+                            !rational_connection ||
+                            less_intrusive_means_available ||
+                            !proportionate_effect
+}
+
+// Judicial review application
+struct JudicialReviewApplication {
+    // Applicant
+    string applicant_name,
+    bool applicant_has_standing where applicant_has_standing == true,
+
+    // Respondent (public body)
+    string respondent_name,
+    bool respondent_is_public_body where respondent_is_public_body == true,
+
+    // Decision under challenge
+    string decision_challenged,
+    date decision_date,
+
+    // Ground(s) for review
+    optional IllegalityGround illegality,
+    optional IrrationalityGround irrationality,
+    optional ProceduralImproprietyGround procedural_impropriety,
+    optional UnconstitutionalityGround unconstitutionality,
+
+    // At least one ground must be present
+    where illegality.is_some() ||
+          irrationality.is_some() ||
+          procedural_impropriety.is_some() ||
+          unconstitutionality.is_some(),
+
+    // Remedy sought
+    PrerogativeOrder remedy_sought,
+
+    // Procedural requirements
+    date application_date,
+    BoundedInt<1, 180> days_since_decision,
+    bool within_time_limit := days_since_decision <= 90, // Usually 3 months
+
+    // Leave requirement
+    bool leave_to_apply_granted
+}
+
+// Example: Ultra vires decision
+example UltraViresDecision := JudicialReviewApplication {
+    applicant_name: "Affected Citizen",
+    applicant_has_standing: true,
+
+    respondent_name: "Statutory Board",
+    respondent_is_public_body: true,
+
+    decision_challenged: "Decision to impose licensing condition not provided in statute",
+    decision_date: "01-10-2024",
+
+    illegality: Some(IllegalityGround {
+        public_body_name: "Statutory Board",
+        decision_or_action: "Imposed ultra vires licensing condition",
+        decision_date: "01-10-2024",
+
+        exceeded_statutory_power: true,
+        parent_statute: "Licensing Act",
+
+        acted_for_improper_purpose: false,
+        considered_irrelevant_factors: false,
+        failed_to_consider_relevant_factors: false
+    }),
+
+    irrationality: None,
+    procedural_impropriety: None,
+    unconstitutionality: None,
+
+    remedy_sought: PrerogativeOrder::QuashingOrder,
+
+    application_date: "15-10-2024",
+    days_since_decision: 14,
+
+    leave_to_apply_granted: true
+}
+
+// Example: Breach of natural justice
+example NaturalJusticeBreach := JudicialReviewApplication {
+    applicant_name: "Licensed Professional",
+    applicant_has_standing: true,
+
+    respondent_name: "Professional Board",
+    respondent_is_public_body: true,
+
+    decision_challenged: "License revoked without hearing",
+    decision_date: "05-11-2024",
+
+    illegality: None,
+    irrationality: None,
+
+    procedural_impropriety: Some(ProceduralImproprietyGround {
+        public_body_name: "Professional Board",
+        decision_or_action: "Revoked license without hearing",
+
+        breach_of_natural_justice: true,
+
+        actual_bias: false,
+        apparent_bias: false,
+        reasonable_suspicion_of_bias: false,
+
+        right_to_be_heard_violated: true,
+        no_opportunity_to_respond: true,
+
+        breach_of_statutory_procedure: false,
+        procedure_breached: ""
+    }),
+
+    unconstitutionality: None,
+
+    remedy_sought: PrerogativeOrder::QuashingOrder,
+
+    application_date: "20-11-2024",
+    days_since_decision: 15,
+
+    leave_to_apply_granted: true
+}
+
+// Example: Unconstitutional legislation
+example UnconstitutionalLaw := JudicialReviewApplication {
+    applicant_name: "Rights Advocate",
+    applicant_has_standing: true,
+
+    respondent_name: "Attorney-General",
+    respondent_is_public_body: true,
+
+    decision_challenged: "Discriminatory statutory provision",
+    decision_date: "01-01-2024",
+
+    illegality: None,
+    irrationality: None,
+    procedural_impropriety: None,
+
+    unconstitutionality: Some(UnconstitutionalityGround {
+        legislation_or_action: "Discriminatory Act Section 5",
+
+        liberty_violated: FundamentalLiberty::Equality,
+
+        constitutional_provision: "Article 12",
+
+        legitimate_objective: false,
+        rational_connection: false,
+        less_intrusive_means_available: true,
+        proportionate_effect: false
+    }),
+
+    remedy_sought: PrerogativeOrder::OrderOfReview,
+
+    application_date: "01-03-2024",
+    days_since_decision: 60,
+
+    leave_to_apply_granted: true
+}
+
+// Principle: Public bodies must act within powers
+principle PublicBodiesMustActIntraVires {
+    forall ground: IllegalityGround,
+    ground.exceeded_statutory_power == false
+}
+
+// Principle: Natural justice must be observed
+principle NaturalJusticeMustBeObserved {
+    forall ground: ProceduralImproprietyGround,
+    ground.breach_of_natural_justice == false &&
+    ground.actual_bias == false &&
+    ground.right_to_be_heard_violated == false
+}
+
+// Principle: Decisions must not be irrational
+principle DecisionsMustBeRational {
+    forall ground: IrrationalityGround,
+    ground.decision_absurd == false
+}
+
+// Principle: Laws must be constitutional
+principle LawsMustBeConstitutional {
+    forall ground: UnconstitutionalityGround,
+    ground.unconstitutional == false
+}

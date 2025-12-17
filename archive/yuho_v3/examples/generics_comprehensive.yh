@@ -1,0 +1,38 @@
+// Comprehensive generic types test suite
+
+// Single type parameter
+struct Box<T> {
+    T value,
+}
+
+// Multiple type parameters
+struct Triple<A, B, C> {
+    A first,
+    B second,
+    C third,
+}
+
+// Nested generics
+struct Container<T> {
+    Array<T> items,
+    BoundedInt<0, 100> count,
+}
+
+// Generic with dependent types
+struct ValidatedBox<T> {
+    T value,
+    Positive<int> validation_level,
+}
+
+// Complex nesting
+struct Result<T, E> {
+    bool success,
+    T data,
+    Array<E> errors,
+}
+
+// Money with generics
+struct Transaction<C> {
+    money<C> amount,
+    string description,
+}

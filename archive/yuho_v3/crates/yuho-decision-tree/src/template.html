@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yuho Decision Tree Visualization</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        #tree-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+            overflow: auto;
+        }
+        .node circle {
+            fill: #fff;
+            stroke: steelblue;
+            stroke-width: 3px;
+        }
+        .node.root circle {
+            fill: #4CAF50;
+            stroke: #2E7D32;
+        }
+        .node.decision circle {
+            fill: #2196F3;
+            stroke: #1565C0;
+        }
+        .node.action circle {
+            fill: #FFC107;
+            stroke: #F57C00;
+        }
+        .node.default circle {
+            fill: #9E9E9E;
+            stroke: #616161;
+        }
+        .node text {
+            font: 12px sans-serif;
+            text-anchor: middle;
+        }
+        .link {
+            fill: none;
+            stroke: #ccc;
+            stroke-width: 2px;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .legend {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 4px;
+        }
+        .legend-item {
+            display: inline-block;
+            margin-right: 20px;
+        }
+        .legend-circle {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <h1>Yuho Decision Tree Visualization</h1>
+    <div class="legend">
+        <div class="legend-item">
+            <span class="legend-circle" style="background: #4CAF50;"></span>
+            <span>Root (Match Expression)</span>
+        </div>
+        <div class="legend-item">
+            <span class="legend-circle" style="background: #2196F3;"></span>
+            <span>Decision (Pattern)</span>
+        </div>
+        <div class="legend-item">
+            <span class="legend-circle" style="background: #FFC107;"></span>
+            <span>Action (Result)</span>
+        </div>
+        <div class="legend-item">
+            <span class="legend-circle" style="background: #9E9E9E;"></span>
+            <span>Default (Wildcard)</span>
+        </div>
+    </div>
+    <div id="tree-container"></div>
+    <script>
+        const treeData = {{TREE_DATA}};
+        console.log("Tree data:", treeData);
+        
+        if (!Array.isArray(treeData) || treeData.length === 0) {
+            document.getElementById("tree-container").innerHTML = "<p>No decision trees found in the program.</p>";
+        } else {
+            treeData.forEach((tree, index) => renderTree(tree, index));
+        }
+
+        function renderTree(data, index) {
+            const margin = {top: 20, right: 120, bottom: 20, left: 120};
+            const width = 960 - margin.right - margin.left;
+            const height = 600 - margin.top - margin.bottom;
+
+            const svg = d3.select("#tree-container")
+                .append("svg")
+                .attr("width", width + margin.right + margin.left)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform", `translate(${margin.left},${margin.top})`);
+
+            const tree = d3.tree().size([height, width]);
+            const root = d3.hierarchy(data, d => d.children);
+            const treeLayout = tree(root);
+
+            // Links
+            svg.selectAll(".link")
+                .data(treeLayout.links())
+                .enter()
+                .append("path")
+                .attr("class", "link")
+                .attr("d", d3.linkHorizontal()
+                    .x(d => d.y)
+                    .y(d => d.x));
+
+            // Nodes
+            const node = svg.selectAll(".node")
+                .data(treeLayout.descendants())
+                .enter()
+                .append("g")
+                .attr("class", d => `node ${d.data.node_type.toLowerCase()}`)  
+                .attr("transform", d => `translate(${d.y},${d.x})`);
+
+            node.append("circle")
+                .attr("r", 10);
+
+            node.append("text")
+                .attr("dy", "-1em")
+                .attr("x", d => d.children ? -13 : 13)
+                .style("text-anchor", d => d.children ? "end" : "start")
+                .text(d => d.data.label.substring(0, 50));
+        }
+    </script>
+</body>
+</html>

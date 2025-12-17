@@ -1,0 +1,489 @@
+// Employment Act (Cap 91) Provisions
+// Singapore's primary employment legislation
+// Based on Employment Act (Cap 91)
+
+@citation("", "", "Employment Act (Cap 91)")
+
+// Employee category
+enum EmployeeCategory {
+    Workman,              // Manual/non-supervisory earning ≤ $4,500
+    NonWorkman,           // Supervisory/managerial earning ≤ $2,600
+    PartIVProtected,      // All employees earning ≤ $2,600 (Part IV protection)
+    Manager,              // Executive/managerial not covered
+    Professional          // Professional not covered
+}
+
+// Leave type
+enum LeaveType {
+    AnnualLeave,
+    SickLeave,
+    Maternity,
+    Paternity,
+    ChildcareLeavePaid,
+    ChildcareLeaveUnpaid,
+    InfantCareLeave,
+    UnpaidInfantCareLeave,
+    SharedParentalLeave,
+    Hospitalization
+}
+
+// Termination reason
+enum TerminationReason {
+    Resignation,
+    TerminationWithNotice,
+    TerminationWithoutNotice, // Misconduct
+    Redundancy,
+    Retrenchment,
+    Retirement,
+    Expiry,
+    MutualAgreement
+}
+
+// Salary payment compliance (Section 20)
+struct SalaryPayment {
+    // Employer
+    string employer_name,
+    string employer_uen,
+
+    // Employee
+    string employee_name,
+    string employee_nric,
+
+    // Salary details
+    date salary_month,
+    Positive<money<SGD>> basic_salary,
+    Positive<money<SGD>> allowances,
+    Positive<money<SGD>> overtime_pay,
+    Positive<money<SGD>> total_salary,
+
+    // Section 20 - Payment within 7 days
+    @citation("20", "1", "Employment Act (Cap 91)")
+    date salary_due_date, // Last day of month
+    date salary_paid_date,
+    BoundedInt<0, 30> days_after_month_end,
+    where days_after_month_end <= 7, // Must pay within 7 days
+
+    // Payment method - Section 20(3)
+    @citation("20", "3", "Employment Act (Cap 91)")
+    string payment_method, // "Bank transfer" or "Cash" or "Cheque"
+    bool paid_via_bank where paid_via_bank == true, // Mandatory for most
+
+    // Itemized payslip - Section 20(2)
+    @citation("20", "2", "Employment Act (Cap 91)")
+    bool payslip_provided where payslip_provided == true,
+    bool payslip_itemized where payslip_itemized == true,
+
+    // Deductions - Section 32
+    @citation("32", "1", "Employment Act (Cap 91)")
+    Positive<money<SGD>> cpf_deduction,
+    Positive<money<SGD>> authorized_deductions,
+    Positive<money<SGD>> net_salary,
+    where net_salary == total_salary - cpf_deduction - authorized_deductions
+}
+
+// Annual leave entitlement (Section 43)
+struct AnnualLeaveEntitlement {
+    // Employee
+    string employee_name,
+    string employee_nric,
+    EmployeeCategory employee_category,
+
+    // Service period
+    date employment_start_date,
+    date current_date,
+    BoundedInt<0, 50> years_of_service,
+
+    // Section 43 - Annual leave entitlement
+    @citation("43", "1", "Employment Act (Cap 91)")
+    BoundedInt<7, 21> annual_leave_days,
+
+    // Calculation based on service years
+    where years_of_service < 1 => annual_leave_days >= 7,
+    where years_of_service >= 1 && years_of_service < 2 => annual_leave_days >= 7,
+    where years_of_service >= 2 && years_of_service < 3 => annual_leave_days >= 8,
+    where years_of_service >= 3 && years_of_service < 4 => annual_leave_days >= 9,
+    where years_of_service >= 4 && years_of_service < 5 => annual_leave_days >= 10,
+    where years_of_service >= 5 && years_of_service < 6 => annual_leave_days >= 11,
+    where years_of_service >= 6 && years_of_service < 7 => annual_leave_days >= 12,
+    where years_of_service >= 7 && years_of_service < 8 => annual_leave_days >= 13,
+    where years_of_service >= 8 => annual_leave_days >= 14,
+
+    // Leave year
+    date leave_year_start,
+    date leave_year_end,
+
+    // Leave taken
+    BoundedInt<0, 21> leave_days_taken,
+    BoundedInt<0, 21> leave_days_remaining,
+    where leave_days_remaining == annual_leave_days - leave_days_taken,
+
+    // Carry forward - Section 43(6)
+    @citation("43", "6", "Employment Act (Cap 91)")
+    optional BoundedInt<0, 21> leave_days_carried_forward
+}
+
+// Sick leave entitlement (Section 89)
+struct SickLeaveEntitlement {
+    // Employee
+    string employee_name,
+    string employee_nric,
+    EmployeeCategory employee_category,
+
+    // Service period
+    date employment_start_date,
+    BoundedInt<0, 50> months_of_service,
+
+    // Section 89 - Sick leave entitlement
+    @citation("89", "1", "Employment Act (Cap 91)")
+
+    // Outpatient sick leave
+    BoundedInt<0, 14> outpatient_sick_leave_days,
+    where months_of_service < 3 => outpatient_sick_leave_days >= 5,
+    where months_of_service >= 3 && months_of_service < 6 => outpatient_sick_leave_days >= 8,
+    where months_of_service >= 6 => outpatient_sick_leave_days >= 14,
+
+    // Hospitalization leave
+    BoundedInt<0, 60> hospitalization_leave_days,
+    where months_of_service < 3 => hospitalization_leave_days >= 15,
+    where months_of_service >= 3 && months_of_service < 6 => hospitalization_leave_days >= 30,
+    where months_of_service >= 6 => hospitalization_leave_days >= 60,
+
+    // Total sick leave cap
+    BoundedInt<0, 74> total_sick_leave_days,
+    where total_sick_leave_days <= outpatient_sick_leave_days + hospitalization_leave_days,
+
+    // Medical certificate requirement
+    bool medical_certificate_required where medical_certificate_required == true,
+
+    // Leave year
+    date leave_year_start,
+    date leave_year_end,
+
+    // Leave taken
+    BoundedInt<0, 14> outpatient_days_taken,
+    BoundedInt<0, 60> hospitalization_days_taken,
+    BoundedInt<0, 74> total_sick_days_taken,
+    where total_sick_days_taken == outpatient_days_taken + hospitalization_days_taken
+}
+
+// Rest days and working hours (Part IV)
+struct WorkingHoursCompliance {
+    // Employee (Part IV applies to those earning ≤ $2,600)
+    string employee_name,
+    string employee_nric,
+    EmployeeCategory employee_category,
+    Positive<money<SGD>> monthly_salary,
+
+    // Part IV protection
+    bool part_iv_protected where employee_category == EmployeeCategory::PartIVProtected,
+    where part_iv_protected == true => monthly_salary <= 2600.00,
+
+    // Section 38 - Working hours
+    @citation("38", "1", "Employment Act (Cap 91)")
+    BoundedInt<1, 84> hours_per_week,
+    where hours_per_week <= 44, // Maximum 44 hours per week
+
+    BoundedInt<1, 12> hours_per_day,
+    where hours_per_day <= 8, // Normal: 8 hours per day
+
+    // Section 40 - Overtime
+    @citation("40", "1", "Employment Act (Cap 91)")
+    BoundedInt<0, 72> overtime_hours_per_month,
+    where overtime_hours_per_month <= 72, // Maximum 72 hours OT per month
+
+    // Overtime rate - Section 37(3)
+    @citation("37", "3", "Employment Act (Cap 91)")
+    Positive<float> overtime_rate where overtime_rate >= 1.5, // At least 1.5x hourly rate
+
+    // Section 36 - Rest day
+    @citation("36", "1", "Employment Act (Cap 91)")
+    bool one_rest_day_per_week where one_rest_day_per_week == true,
+    string rest_day, // e.g., "Sunday"
+
+    // Section 88 - Public holidays
+    @citation("88", "1", "Employment Act (Cap 91)")
+    BoundedInt<11, 11> public_holidays_per_year where public_holidays_per_year == 11
+}
+
+// Maternity leave (Section 76)
+struct MaternityLeaveEntitlement {
+    // Employee
+    string employee_name,
+    string employee_nric,
+
+    // Eligibility - Section 76(1)
+    @citation("76", "1", "Employment Act (Cap 91)")
+    bool citizen_or_pr where citizen_or_pr == true,
+    bool worked_90_days_before_confinement where worked_90_days_before_confinement == true,
+    BoundedInt<1, 10> number_of_children,
+
+    // Maternity leave duration
+    BoundedInt<0, 16> maternity_leave_weeks,
+    where number_of_children <= 2 => maternity_leave_weeks == 16, // 16 weeks for first 2 children
+    where number_of_children > 2 => maternity_leave_weeks == 12,  // 12 weeks for 3rd+ child
+
+    // Government-paid portion (first 8 weeks for first 2 children)
+    BoundedInt<0, 16> government_paid_weeks,
+    where number_of_children <= 2 => government_paid_weeks == 8,
+    where number_of_children > 2 => government_paid_weeks == 4,
+
+    // Employer-paid portion
+    BoundedInt<0, 16> employer_paid_weeks,
+    where employer_paid_weeks == maternity_leave_weeks - government_paid_weeks,
+
+    // Confinement date
+    date expected_confinement_date,
+    optional date actual_confinement_date,
+
+    // Leave period
+    date leave_start_date,
+    date leave_end_date,
+
+    // Return to work
+    bool returned_to_work,
+    optional date return_date
+}
+
+// Retrenchment (Section 45)
+struct RetrenchmentCompliance {
+    // Employer
+    string employer_name,
+    string employer_uen,
+
+    // Employee
+    string employee_name,
+    string employee_nric,
+    date employment_start_date,
+    BoundedInt<0, 50> years_of_service,
+
+    // Retrenchment details
+    date retrenchment_date,
+    TerminationReason termination_reason where termination_reason == TerminationReason::Retrenchment,
+
+    // Section 45 - Notice or salary in lieu
+    @citation("45", "1", "Employment Act (Cap 91)")
+    bool notice_given_or_salary_in_lieu where notice_given_or_salary_in_lieu == true,
+
+    BoundedInt<0, 8> notice_weeks_required,
+    where years_of_service < 2 => notice_weeks_required == 1,
+    where years_of_service >= 2 && years_of_service < 5 => notice_weeks_required == 2,
+    where years_of_service >= 5 => notice_weeks_required == 4,
+
+    optional date notice_date,
+    optional Positive<money<SGD>> salary_in_lieu_amount,
+
+    // Retrenchment benefit (not legally required but common practice)
+    optional Positive<money<SGD>> retrenchment_benefit,
+    optional string retrenchment_benefit_formula, // e.g., "1 month per year of service"
+
+    // MOM notification required for retrenchment
+    bool mom_notified where mom_notified == true,
+    date mom_notification_date,
+    BoundedInt<0, 30> days_to_notify_mom where days_to_notify_mom <= 5
+}
+
+// Example: Salary payment compliance
+example MonthlySalaryPayment := SalaryPayment {
+    employer_name: "TechCorp Pte Ltd",
+    employer_uen: "202012345A",
+
+    employee_name: "John Tan",
+    employee_nric: "S1234567A",
+
+    salary_month: "01-01-2025",
+    basic_salary: 3000.00,
+    allowances: 500.00,
+    overtime_pay: 200.00,
+    total_salary: 3700.00,
+
+    salary_due_date: "31-01-2025",
+    salary_paid_date: "05-02-2025",
+    days_after_month_end: 5, // Within 7-day requirement
+
+    payment_method: "Bank transfer",
+    paid_via_bank: true,
+
+    payslip_provided: true,
+    payslip_itemized: true,
+
+    cpf_deduction: 740.00, // 20% employee CPF
+    authorized_deductions: 0.00,
+    net_salary: 2960.00
+}
+
+// Example: Annual leave for 3-year employee
+example ThreeYearEmployeeLeave := AnnualLeaveEntitlement {
+    employee_name: "Sarah Lim",
+    employee_nric: "S9876543B",
+    employee_category: EmployeeCategory::Workman,
+
+    employment_start_date: "01-01-2022",
+    current_date: "01-01-2025",
+    years_of_service: 3,
+
+    annual_leave_days: 9, // 3 years = 9 days minimum
+
+    leave_year_start: "01-01-2025",
+    leave_year_end: "31-12-2025",
+
+    leave_days_taken: 5,
+    leave_days_remaining: 4,
+
+    leave_days_carried_forward: Some(2) // From previous year
+}
+
+// Example: Sick leave after 6 months service
+example SixMonthSickLeave := SickLeaveEntitlement {
+    employee_name: "David Wong",
+    employee_nric: "S8765432C",
+    employee_category: EmployeeCategory::Workman,
+
+    employment_start_date: "01-07-2024",
+    months_of_service: 6,
+
+    outpatient_sick_leave_days: 14, // 6 months = 14 days
+    hospitalization_leave_days: 60, // 6 months = 60 days
+    total_sick_leave_days: 74,
+
+    medical_certificate_required: true,
+
+    leave_year_start: "01-01-2025",
+    leave_year_end: "31-12-2025",
+
+    outpatient_days_taken: 3,
+    hospitalization_days_taken: 0,
+    total_sick_days_taken: 3
+}
+
+// Example: Working hours compliance
+example PartIVEmployeeHours := WorkingHoursCompliance {
+    employee_name: "Ahmad Rahman",
+    employee_nric: "S7654321D",
+    employee_category: EmployeeCategory::PartIVProtected,
+    monthly_salary: 2400.00,
+
+    part_iv_protected: true,
+
+    hours_per_week: 44, // Maximum allowed
+    hours_per_day: 8,
+
+    overtime_hours_per_month: 40,
+
+    overtime_rate: 1.5,
+
+    one_rest_day_per_week: true,
+    rest_day: "Sunday",
+
+    public_holidays_per_year: 11
+}
+
+// Example: Maternity leave for second child
+example SecondChildMaternity := MaternityLeaveEntitlement {
+    employee_name: "Michelle Tan",
+    employee_nric: "S6543210E",
+
+    citizen_or_pr: true,
+    worked_90_days_before_confinement: true,
+    number_of_children: 2,
+
+    maternity_leave_weeks: 16,
+    government_paid_weeks: 8,
+    employer_paid_weeks: 8,
+
+    expected_confinement_date: "15-03-2025",
+    actual_confinement_date: Some("14-03-2025"),
+
+    leave_start_date: "01-03-2025",
+    leave_end_date: "28-06-2025",
+
+    returned_to_work: false,
+    return_date: None
+}
+
+// Example: Retrenchment with notice
+example FiveYearRetrenchment := RetrenchmentCompliance {
+    employer_name: "Manufacturing Ltd",
+    employer_uen: "199012345F",
+
+    employee_name: "Robert Lee",
+    employee_nric: "S5432109F",
+    employment_start_date: "01-01-2020",
+    years_of_service: 5,
+
+    retrenchment_date: "31-03-2025",
+    termination_reason: TerminationReason::Retrenchment,
+
+    notice_given_or_salary_in_lieu: true,
+    notice_weeks_required: 4, // 5 years = 4 weeks notice
+
+    notice_date: Some("28-02-2025"), // 4 weeks notice
+    salary_in_lieu_amount: None,
+
+    retrenchment_benefit: Some(15000.00),
+    retrenchment_benefit_formula: Some("1 month salary per year of service (5 months)"),
+
+    mom_notified: true,
+    mom_notification_date: "03-03-2025",
+    days_to_notify_mom: 3
+}
+
+// Employment Act compliance principles
+
+principle SalaryPaymentWithin7Days {
+    forall payment: SalaryPayment,
+    payment.days_after_month_end <= 7
+}
+
+principle PayslipRequired {
+    forall payment: SalaryPayment,
+    payment.payslip_provided == true &&
+    payment.payslip_itemized == true
+}
+
+principle AnnualLeaveMinimum7Days {
+    forall leave: AnnualLeaveEntitlement,
+    leave.annual_leave_days >= 7
+}
+
+principle WorkingHoursLimit {
+    forall hours: WorkingHoursCompliance,
+    hours.part_iv_protected == true =>
+    hours.hours_per_week <= 44
+}
+
+principle OvertimeLimit72Hours {
+    forall hours: WorkingHoursCompliance,
+    hours.overtime_hours_per_month <= 72
+}
+
+principle OvertimeRateMinimum {
+    forall hours: WorkingHoursCompliance,
+    hours.overtime_rate >= 1.5
+}
+
+principle OneRestDayPerWeek {
+    forall hours: WorkingHoursCompliance,
+    hours.one_rest_day_per_week == true
+}
+
+principle MaternityLeaveEligibility {
+    forall maternity: MaternityLeaveEntitlement,
+    maternity.citizen_or_pr == true &&
+    maternity.worked_90_days_before_confinement == true
+}
+
+principle MaternityLeaveDuration {
+    forall maternity: MaternityLeaveEntitlement,
+    maternity.number_of_children <= 2 => maternity.maternity_leave_weeks == 16
+}
+
+principle RetrenchmentNoticeRequired {
+    forall retrenchment: RetrenchmentCompliance,
+    retrenchment.notice_given_or_salary_in_lieu == true
+}
+
+principle MOMNotificationForRetrenchment {
+    forall retrenchment: RetrenchmentCompliance,
+    retrenchment.mom_notified == true &&
+    retrenchment.days_to_notify_mom <= 5
+}

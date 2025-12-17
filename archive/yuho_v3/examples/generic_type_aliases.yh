@@ -1,0 +1,23 @@
+// Generic Type Aliases Test
+// Testing type aliases with type parameters
+
+// Generic type alias - single parameter
+type Box<T> := struct Box_impl<T>
+
+// Generic type alias - multiple parameters
+type Pair<A, B> := struct Pair_impl<A, B>
+
+// The actual struct definitions
+struct Box_impl<T> {
+    T value,
+}
+
+struct Pair_impl<A, B> {
+    A first,
+    B second,
+}
+
+// Using the type aliases
+Box<int> int_box := Box_impl {
+    value := 42,
+}

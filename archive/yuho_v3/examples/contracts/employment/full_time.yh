@@ -1,0 +1,112 @@
+// Full-Time Employment Contract
+// Standard full-time employment agreement with comprehensive terms
+
+struct FullTimeEmployment {
+    // Employee Information
+    string employee_name,
+    string employee_id,
+    ValidDate<after="01-01-2020"> start_date,
+    
+    // Position Details
+    string job_title,
+    string department,
+    string reporting_to,
+    
+    // Compensation
+    money<SGD> annual_salary where annual_salary >= 30000 && annual_salary <= 500000,
+    percent bonus_percentage where bonus_percentage >= 0 && bonus_percentage <= 50,
+    money<SGD> monthly_salary,
+    
+    // Working Hours
+    BoundedInt<20, 50> weekly_hours where weekly_hours == 40,
+    BoundedInt<1, 5> working_days where working_days == 5,
+    
+    // Benefits
+    BoundedInt<14, 30> annual_leave_days where annual_leave_days >= 14,
+    BoundedInt<14, 60> medical_leave_days where medical_leave_days >= 14,
+    bool health_insurance,
+    bool dental_coverage,
+    bool life_insurance,
+    
+    // Probation
+    BoundedInt<0, 6> probation_months where probation_months >= 3,
+    
+    // Notice Period
+    BoundedInt<1, 3> notice_period_months where notice_period_months >= 1,
+    
+    // Confidentiality & IP
+    bool confidentiality_clause,
+    bool ip_assignment_clause,
+    bool non_compete_clause,
+    BoundedInt<0, 24> non_compete_months,
+}
+
+scope FullTimeEmploymentTerms {
+    // Calculate monthly salary from annual
+    fn calculate_monthly_salary(money<SGD> annual) -> money<SGD> {
+        return annual / 12
+    }
+    
+    // Verify employment terms are valid
+    fn verify_terms(FullTimeEmployment contract) -> bool {
+        bool valid_salary := contract.monthly_salary == calculate_monthly_salary(contract.annual_salary)
+        bool valid_hours := contract.weekly_hours == 40
+        bool valid_leave := contract.annual_leave_days >= 14
+        bool valid_probation := contract.probation_months <= 6
+        
+        return valid_salary && valid_hours && valid_leave && valid_probation
+    }
+    
+    // Check if employee is still in probation
+    fn is_probation(ValidDate<after="01-01-2020"> start_date, ValidDate<after="01-01-2020"> current_date, int probation_months) -> bool {
+        // In production, would calculate actual date difference
+        return true
+    }
+    
+    // Calculate annual bonus
+    fn calculate_bonus(money<SGD> annual_salary, percent bonus_percentage, percent performance_rating) -> money<SGD> {
+        money<SGD> base_bonus := annual_salary * (bonus_percentage / 100)
+        money<SGD> adjusted_bonus := base_bonus * (performance_rating / 100)
+        return adjusted_bonus
+    }
+}
+
+// Example: Senior Software Engineer Contract
+FullTimeEmployment senior_engineer := FullTimeEmployment {
+    employee_name := "Alice Tan",
+    employee_id := "EMP2025001",
+    start_date := "01-01-2025",
+    
+    job_title := "Senior Software Engineer",
+    department := "Engineering",
+    reporting_to := "Engineering Manager",
+    
+    annual_salary := $120000,
+    bonus_percentage := 15,
+    monthly_salary := $10000,
+    
+    weekly_hours := 40,
+    working_days := 5,
+    
+    annual_leave_days := 21,
+    medical_leave_days := 14,
+    health_insurance := true,
+    dental_coverage := true,
+    life_insurance := true,
+    
+    probation_months := 3,
+    notice_period_months := 2,
+    
+    confidentiality_clause := true,
+    ip_assignment_clause := true,
+    non_compete_clause := true,
+    non_compete_months := 12,
+}
+
+// Termination conditions
+match senior_engineer.notice_period_months {
+    case 1 := "30 days notice required"
+    case 2 := "60 days notice required"
+    case 3 := "90 days notice required"
+    case _ := "Invalid notice period"
+}

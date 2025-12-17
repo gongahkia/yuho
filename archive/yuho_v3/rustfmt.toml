@@ -1,0 +1,52 @@
+# Yuho-2 Rust Formatting Configuration
+
+# Edition
+edition = "2021"
+
+# Maximum line width
+max_width = 100
+
+# Hard tabs or spaces
+hard_tabs = false
+tab_spaces = 4
+
+# Use field initialize shorthand if possible
+use_field_init_shorthand = true
+
+# Use try shorthand
+use_try_shorthand = true
+
+# Imports
+imports_granularity = "Crate"
+group_imports = "StdExternalCrate"
+reorder_imports = true
+
+# Format strings
+format_strings = true
+
+# Comments
+normalize_comments = true
+wrap_comments = true
+comment_width = 80
+
+# Control brace style
+brace_style = "SameLineWhere"
+control_brace_style = "AlwaysSameLine"
+
+# Trailing commas
+trailing_comma = "Vertical"
+
+# Match block trailing commas
+match_block_trailing_comma = true
+
+# Newlines
+newline_style = "Unix"
+
+# Fn single line
+fn_single_line = false
+
+# Where single line
+where_single_line = false
+
+# Struct lit
+struct_lit_single_line = false

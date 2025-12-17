@@ -1,0 +1,31 @@
+// Cheating under Section 415 of the Singapore Penal Code
+// Yuho specification demonstrating legal reasoning
+
+enum DeceptionType {
+    FalseRepresentation,
+    Concealment,
+    OtherDeception,
+}
+
+enum Verdict {
+    Guilty,
+    NotGuilty,
+}
+
+struct CheatingCase {
+    string accused_name,
+    string victim_name,
+    money amount,
+    DeceptionType deception,
+    bool induced_delivery,
+}
+
+scope s415_cheating {
+    bool deception_present := true
+    bool property_delivered := true
+
+    match deception_present {
+        case true := "deception found"
+        case _ := "no deception"
+    }
+}

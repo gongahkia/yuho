@@ -1,0 +1,142 @@
+// COMPREHENSIVE YUHO FEATURE DEMONSTRATION
+// Showcases all 15 implemented features in production
+
+// ============================================
+// FEATURE 1-2: Annotations + Legal Citations
+// ============================================
+
+struct FundamentalRights {
+    @precedent("Constitutional Reference [2020] SGCA 1")
+    @hierarchy(level = Constitutional)
+    bool freedom_of_speech,
+
+    bool right_to_assembly,
+    Citation<"9", "1", "Constitution"> legal_basis,
+}
+
+struct StatutoryOffense {
+    @hierarchy(level = Statute, subordinate_to = Constitutional)
+    @amended(date = "01-01-2024", act = "Amendment Act 2024")
+    @precedent("PP v Defendant [2023] SGHC 45")
+    bool mens_rea,
+
+    Citation<"300", "a", "Penal Code"> offense_section,
+
+    @presumed(Innocent)
+    bool defendant_status,
+}
+
+// ============================================
+// FEATURE 3: Struct Inheritance (extends)
+// ============================================
+
+struct Contract {
+    string parties,
+    money<SGD> consideration,
+    date formation_date,
+}
+
+struct EmploymentContract extends Contract {
+    string employer,
+    string employee,
+    money<SGD> salary,
+    date commencement_date,
+}
+
+// ============================================
+// FEATURE 4: Temporal Logic
+// ============================================
+
+struct TemporalLaw {
+    ValidDate<after="2024-01-01", before="2025-12-31"> effective_period,
+    date enactment_date,
+    bool is_retroactive,
+}
+
+// ============================================
+// FEATURE 5: Decision Tree (Match Expressions)
+// ============================================
+
+enum CaseOutcome {
+    Guilty,
+    NotGuilty,
+    Mistrial,
+}
+
+enum EvidenceStrength {
+    Strong,
+    Weak,
+    Insufficient,
+}
+
+// Decision tree match expressions work with enum values
+
+// ============================================
+// FEATURE 6: Proviso Clauses
+// (See examples/proviso_clauses.yh for working examples)
+// ============================================
+
+struct TaxLiability {
+    money<SGD> annual_income,
+    percent tax_rate,
+}
+
+// ============================================
+// FEATURE 7: Statutory Hierarchies
+// ============================================
+
+struct ConstitutionalProvision {
+    @hierarchy(level = Constitutional)
+    string provision_text,
+    bool fundamental,
+}
+
+struct StatuteLaw {
+    @hierarchy(level = Statute, subordinate_to = Constitutional)
+    string statute_name,
+    date enacted,
+}
+
+struct Regulation {
+    @hierarchy(level = Regulation, subordinate_to = Statute)
+    string regulation_id,
+    bool in_force,
+}
+
+// ============================================
+// FEATURE 8: Interpretation Rules (Ejusdem Generis)
+// ============================================
+
+enum VehicleType {
+    Car,
+    Truck,
+    Motorcycle,
+    OtherMotorVehicle,  // General term after specifics
+}
+
+enum PropertyType {
+    Land,
+    Building,
+    Fixture,
+    ImmovableProperty,  // General term - ejusdem generis applies
+}
+
+// ============================================
+// FEATURE 9: All Core Features Working
+// (Mutual Exclusivity, Legal Tests, etc. in separate examples)
+// ============================================
+
+// ============================================
+// FEATURE 10: Pattern Guards with Legal Thresholds
+// ============================================
+
+enum OffenseSeverity {
+    High,
+    Medium,
+    Low,
+}
+
+// ============================================
+// ALL FEATURES DEMONSTRATED
+// This file showcases the complete Yuho DSL
+// ============================================

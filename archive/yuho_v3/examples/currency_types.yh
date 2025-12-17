@@ -1,0 +1,50 @@
+// Currency-Specific Money Types Example
+// Demonstrates money<Currency> for multi-jurisdiction contracts
+
+enum Currency {
+    SGD,
+    USD,
+    EUR,
+    GBP,
+}
+
+struct Payment {
+    money<SGD> singapore_amount,
+    money<USD> us_amount,
+    money<EUR> euro_amount,
+}
+
+struct CrossBorderContract {
+    string party_a,
+    string party_b,
+    money<SGD> sgd_value,
+    money<USD> usd_value,
+    date exchange_date,
+}
+
+scope international_transaction {
+    // Singapore payment
+    money<SGD> sgd_payment := $5000
+
+    // US payment
+    money<USD> usd_payment := $3500
+
+    // European payment
+    money<EUR> eur_payment := $4200
+
+    // Cross-border contract
+    CrossBorderContract contract := {
+        party_a := "Singapore Corp",
+        party_b := "US Corp",
+        sgd_value := $100000,
+        usd_value := $75000,
+        exchange_date := 15-03-2024,
+    }
+
+    // Payment breakdown
+    Payment breakdown := {
+        singapore_amount := $50000,
+        us_amount := $37500,
+        euro_amount := $42000,
+    }
+}

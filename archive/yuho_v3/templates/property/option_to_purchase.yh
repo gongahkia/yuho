@@ -1,0 +1,390 @@
+// Option to Purchase (OTP) Template
+// Singapore Law Compliant
+// Based on property conveyancing law
+
+import std.contracts.contract_formation
+import std.property.land_titles
+
+@citation("", "", "Conveyancing and Law of Property Act")
+
+// Property tenure
+enum PropertyTenure {
+    Freehold,
+    Leasehold999Years,
+    Leasehold99Years,
+    LeaseholdOther
+}
+
+// Property status
+enum PropertyStatus {
+    Vacant,
+    TenantOccupied,
+    OwnerOccupied
+}
+
+// Option to Purchase (OTP)
+struct OptionToPurchase {
+    // Vendor (Seller)
+    string vendor_name,
+    string vendor_nric_or_uen,
+    string vendor_address,
+    optional string vendor_solicitor,
+
+    // Purchaser (Buyer)
+    string purchaser_name,
+    string purchaser_nric_or_uen,
+    string purchaser_address,
+    optional string purchaser_solicitor,
+
+    // Property details
+    string property_address,
+    string lot_number,
+    optional string unit_number, // For condos/HDB
+    PropertyType property_type,
+    PropertyTenure tenure,
+    optional BoundedInt<1, 999> remaining_lease_years,
+
+    // For HDB flats
+    optional bool hdb_ethnic_quota_applies,
+    optional bool purchaser_eligible_for_hdb,
+
+    // Property status
+    PropertyStatus status,
+    optional date vacant_possession_date,
+
+    // Purchase price
+    Positive<money<SGD>> purchase_price,
+
+    // Option fee (1% of purchase price, non-refundable)
+    Positive<money<SGD>> option_fee,
+    where option_fee >= purchase_price * 0.01,
+    date option_fee_paid_date,
+
+    // Option period (typically 14 days to exercise)
+    date option_date,
+    BoundedInt<1, 21> option_period_days where option_period_days <= 14,
+    date option_expiry_date,
+
+    // Exercise of option
+    bool option_exercised,
+    optional date exercise_date,
+
+    // Option exercise fee (usually 4-5% of purchase price)
+    Positive<money<SGD>> option_exercise_amount,
+    where option_exercise_amount >= purchase_price * 0.04,
+    // Total option fee + exercise amount should be around 5%
+    where option_fee + option_exercise_amount <= purchase_price * 0.10,
+
+    // Completion
+    BoundedInt<1, 16> completion_weeks where completion_weeks >= 8, // Usually 8-12 weeks
+    date completion_date,
+
+    // Balance payment on completion
+    Positive<money<SGD>> balance_amount,
+    where balance_amount == purchase_price - option_fee - option_exercise_amount,
+
+    // Financing contingency (for buyers taking loan)
+    optional bool subject_to_financing,
+    optional BoundedInt<1, 21> financing_contingency_days,
+
+    // Property sold as-is
+    bool sold_as_is where sold_as_is == true,
+    bool caveat_emptor where caveat_emptor == true, // Buyer beware
+
+    // Encumbrances
+    bool free_from_encumbrances where free_from_encumbrances == true,
+    optional list<string> permitted_encumbrances,
+
+    // Existing tenancy
+    optional bool subject_to_existing_tenancy,
+    optional date tenancy_expiry_date,
+
+    // Vendor's obligations
+    bool vendor_pays_outstanding_charges where vendor_pays_outstanding_charges == true,
+    bool vendor_delivers_vacant_possession,
+
+    // Purchaser's obligations
+    bool purchaser_pays_stamp_duty where purchaser_pays_stamp_duty == true,
+    bool purchaser_pays_legal_fees where purchaser_pays_legal_fees == true,
+    bool purchaser_responsible_for_survey,
+
+    // CPF usage (for Singapore citizens/PRs)
+    optional bool purchaser_using_cpf,
+    optional Positive<money<SGD>> cpf_amount,
+
+    // Damages for non-completion
+    bool damages_clause where damages_clause == true,
+    Positive<money<SGD>> damages_amount, // Typically option fee + exercise amount forfeited
+
+    // Caveat
+    bool purchaser_can_lodge_caveat where purchaser_can_lodge_caveat == true,
+
+    // Governing law
+    string governing_law := "Singapore",
+    string dispute_resolution
+}
+
+// Sale and Purchase Agreement (full contract after OTP exercised)
+struct SaleAndPurchaseAgreement {
+    // Based on OTP
+    OptionToPurchase otp,
+    where otp.option_exercised == true,
+
+    // Additional terms after OTP
+    date spa_date,
+    bool spa_signed_by_vendor where spa_signed_by_vendor == true,
+    bool spa_signed_by_purchaser where spa_signed_by_purchaser == true,
+
+    // Detailed property description
+    string full_property_description,
+    Positive<float> land_area_sqm,
+    optional Positive<float> floor_area_sqm,
+
+    // Title information
+    string title_number,
+    bool certificate_of_title_issued where certificate_of_title_issued == true,
+
+    // Fixtures and fittings
+    list<string> included_fixtures,
+    list<string> excluded_items,
+
+    // Apportionment of outgoings
+    bool property_tax_apportioned where property_tax_apportioned == true,
+    bool maintenance_fees_apportioned,
+    bool utilities_apportioned,
+
+    // Requisitions
+    BoundedInt<1, 21> requisitions_period_days where requisitions_period_days <= 14,
+
+    // Defects in title
+    bool vendor_rectifies_title_defects where vendor_rectifies_title_defects == true,
+    BoundedInt<1, 60> defect_rectification_days,
+
+    // Insurance
+    bool vendor_insures_until_completion where vendor_insures_until_completion == true,
+
+    // Access for inspection
+    bool purchaser_right_to_inspect,
+    BoundedInt<1, 72> inspection_notice_hours,
+
+    // Governing law
+    string governing_law := "Singapore"
+}
+
+// Example: Condominium OTP
+example CondoOTP := OptionToPurchase {
+    vendor_name: "Mr. Lim Keng Huat",
+    vendor_nric_or_uen: "S1234567A",
+    vendor_address: "789 Owner Street, Singapore 238801",
+    vendor_solicitor: Some("Lim & Associates LLP"),
+
+    purchaser_name: "Ms. Tan Wei Ling",
+    purchaser_nric_or_uen: "S9876543Z",
+    purchaser_address: "456 Buyer Avenue, Singapore 560123",
+    purchaser_solicitor: Some("Tan Law Corporation"),
+
+    property_address: "123 Luxury Heights, Orchard Boulevard",
+    lot_number: "MK25-12345A",
+    unit_number: Some("#20-08"),
+    property_type: PropertyType::Condominium,
+    tenure: PropertyTenure::Freehold,
+    remaining_lease_years: None,
+
+    hdb_ethnic_quota_applies: None,
+    purchaser_eligible_for_hdb: None,
+
+    status: PropertyStatus::Vacant,
+    vacant_possession_date: Some("15-03-2025"),
+
+    purchase_price: 1800000.00,
+
+    option_fee: 18000.00, // 1% of purchase price
+    option_fee_paid_date: "01-01-2025",
+
+    option_date: "01-01-2025",
+    option_period_days: 14,
+    option_expiry_date: "15-01-2025",
+
+    option_exercised: true,
+    exercise_date: Some("10-01-2025"),
+
+    option_exercise_amount: 72000.00, // 4% of purchase price
+    // Total 5% paid (option fee + exercise)
+
+    completion_weeks: 12,
+    completion_date: "03-04-2025",
+
+    balance_amount: 1710000.00, // 95% of purchase price
+
+    subject_to_financing: Some(true),
+    financing_contingency_days: Some(14),
+
+    sold_as_is: true,
+    caveat_emptor: true,
+
+    free_from_encumbrances: true,
+    permitted_encumbrances: None,
+
+    subject_to_existing_tenancy: None,
+    tenancy_expiry_date: None,
+
+    vendor_pays_outstanding_charges: true,
+    vendor_delivers_vacant_possession: true,
+
+    purchaser_pays_stamp_duty: true,
+    purchaser_pays_legal_fees: true,
+    purchaser_responsible_for_survey: true,
+
+    purchaser_using_cpf: Some(true),
+    cpf_amount: Some(200000.00),
+
+    damages_clause: true,
+    damages_amount: 90000.00, // Option fee + exercise amount
+
+    purchaser_can_lodge_caveat: true,
+
+    governing_law: "Singapore",
+    dispute_resolution: "Singapore Courts"
+}
+
+// Example: HDB resale OTP
+example HDBResaleOTP := OptionToPurchase {
+    vendor_name: "Mr. Ahmad Bin Rahman",
+    vendor_nric_or_uen: "S2345678B",
+    vendor_address: "789 HDB Avenue, Singapore 560789",
+    vendor_solicitor: None, // HDB resales often don't use lawyers
+
+    purchaser_name: "Mr. David Lim",
+    purchaser_nric_or_uen: "S8765432C",
+    purchaser_address: "321 Rental Place, Singapore 560321",
+    purchaser_solicitor: None,
+
+    property_address: "789 Tampines Street 82",
+    lot_number: "TS82-1234",
+    unit_number: Some("#10-456"),
+    property_type: PropertyType::HDB,
+    tenure: PropertyTenure::Leasehold99Years,
+    remaining_lease_years: Some(85),
+
+    hdb_ethnic_quota_applies: Some(true),
+    purchaser_eligible_for_hdb: Some(true),
+
+    status: PropertyStatus::OwnerOccupied,
+    vacant_possession_date: Some("28-02-2025"),
+
+    purchase_price: 550000.00,
+
+    option_fee: 5500.00, // 1%
+    option_fee_paid_date: "05-01-2025",
+
+    option_date: "05-01-2025",
+    option_period_days: 14,
+    option_expiry_date: "19-01-2025",
+
+    option_exercised: true,
+    exercise_date: Some("15-01-2025"),
+
+    option_exercise_amount: 22000.00, // 4%
+
+    completion_weeks: 8,
+    completion_date: "10-03-2025",
+
+    balance_amount: 522500.00,
+
+    subject_to_financing: Some(true),
+    financing_contingency_days: Some(21), // HDB loan approval
+
+    sold_as_is: true,
+    caveat_emptor: true,
+
+    free_from_encumbrances: true,
+    permitted_encumbrances: Some(["HDB mortgage"]),
+
+    subject_to_existing_tenancy: None,
+    tenancy_expiry_date: None,
+
+    vendor_pays_outstanding_charges: true,
+    vendor_delivers_vacant_possession: true,
+
+    purchaser_pays_stamp_duty: true,
+    purchaser_pays_legal_fees: true,
+    purchaser_responsible_for_survey: false, // Not required for HDB
+
+    purchaser_using_cpf: Some(true),
+    cpf_amount: Some(150000.00),
+
+    damages_clause: true,
+    damages_amount: 27500.00,
+
+    purchaser_can_lodge_caveat: true,
+
+    governing_law: "Singapore",
+    dispute_resolution: "Singapore Courts"
+}
+
+// Compliance principles
+
+principle OptionFeeMinimumOnePercent {
+    forall otp: OptionToPurchase,
+    otp.option_fee >= otp.purchase_price * 0.01
+}
+
+principle OptionExerciseFeeReasonable {
+    forall otp: OptionToPurchase,
+    otp.option_exercise_amount >= otp.purchase_price * 0.04 &&
+    otp.option_fee + otp.option_exercise_amount <= otp.purchase_price * 0.10
+}
+
+principle OptionPeriodReasonable {
+    forall otp: OptionToPurchase,
+    otp.option_period_days <= 14
+}
+
+principle CompletionTimeReasonable {
+    forall otp: OptionToPurchase,
+    otp.completion_weeks >= 8 &&
+    otp.completion_weeks <= 16
+}
+
+principle SoldAsIs {
+    forall otp: OptionToPurchase,
+    otp.sold_as_is == true &&
+    otp.caveat_emptor == true
+}
+
+principle FreeFromEncumbrances {
+    forall otp: OptionToPurchase,
+    otp.free_from_encumbrances == true
+}
+
+principle VendorPaysOutstandingCharges {
+    forall otp: OptionToPurchase,
+    otp.vendor_pays_outstanding_charges == true
+}
+
+principle PurchaserPaysStampDuty {
+    forall otp: OptionToPurchase,
+    otp.purchaser_pays_stamp_duty == true
+}
+
+principle CaveatRight {
+    forall otp: OptionToPurchase,
+    otp.purchaser_can_lodge_caveat == true
+}
+
+principle HDBEligibility {
+    forall otp: OptionToPurchase,
+    otp.property_type == PropertyType::HDB =>
+    otp.purchaser_eligible_for_hdb == Some(true)
+}
+
+principle SPASignedByBothParties {
+    forall spa: SaleAndPurchaseAgreement,
+    spa.spa_signed_by_vendor == true &&
+    spa.spa_signed_by_purchaser == true
+}
+
+principle PropertyTaxApportioned {
+    forall spa: SaleAndPurchaseAgreement,
+    spa.property_tax_apportioned == true
+}

@@ -1,0 +1,15 @@
+[package]
+name = "yuho-z3"
+version = "0.1.0"
+edition = "2021"
+authors = ["Gabriel Ong"]
+license = "MIT"
+repository = "https://github.com/gongahkia/yuho-2"
+
+[dependencies]
+yuho-core = { path = "../yuho-core" }
+thiserror = "1.0"
+# Z3 - Note: Requires Z3 to be installed on the system
+# macOS: brew install z3
+# Linux: sudo apt-get install libz3-dev
+z3 = "0.19"

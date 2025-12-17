@@ -1,0 +1,31 @@
+// Import Person and Address from person module
+referencing Person, Address from person
+
+// Customer profile with billing information
+struct Customer {
+    Person person,
+    string customer_id,
+    date registration_date,
+    Address billing_address,
+    string payment_method,
+}
+
+// Service agreement scope
+scope service_agreement {
+    Customer c := Customer {
+        person := Person {
+            name := "Bob Tan",
+            age := 42,
+            email := "bob.tan@email.com",
+        },
+        customer_id := "CUST2024001",
+        registration_date := 2024-03-10,
+        billing_address := Address {
+            street := "123 Main Street",
+            city := "Singapore",
+            postal_code := "654321",
+            country := "Singapore",
+        },
+        payment_method := "Credit Card",
+    }
+}

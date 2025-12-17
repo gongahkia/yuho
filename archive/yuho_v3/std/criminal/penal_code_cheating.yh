@@ -1,0 +1,107 @@
+// Singapore Penal Code - Section 415: Cheating
+// This module models the offense of cheating under Singapore law
+
+// Citation for the statutory provision
+@citation("415", "1", "Penal Code")
+
+// Legal test for cheating offense
+// Based on Section 415 of the Singapore Penal Code
+legal_test Cheating {
+    // Element 1: Deception
+    bool deception_occurred,
+
+    // Element 2: Fraudulent or dishonest inducement
+    bool fraudulent_inducement,
+    bool dishonest_inducement,
+
+    // Element 3: Delivery of property or causing harm/risk
+    bool property_delivered,
+    bool harm_caused,
+    bool risk_of_harm,
+
+    // Element 4: Mens rea (intention to deceive)
+    bool intention_to_deceive,
+
+    // Precedent: Cheating requires all elements
+    @precedent("Gunasegaran s/o Pavadaisamy v Public Prosecutor", "2", "1997", "SGCA")
+    // The accused must intentionally deceive the victim
+    requires intention_to_deceive && deception_occurred,
+
+    // Either fraudulent OR dishonest inducement suffices
+    requires fraudulent_inducement || dishonest_inducement,
+
+    // Must result in property delivery OR harm/risk
+    requires property_delivered || harm_caused || risk_of_harm
+}
+
+// Victim of cheating
+struct Victim {
+    string name,
+    BoundedInt<18, 150> age where age >= 18, // Must be adult
+    bool deceived,
+}
+
+// Property delivered through cheating
+struct PropertyDelivered {
+    string description,
+    Positive<money<SGD>> value,
+    date date_of_delivery,
+}
+
+// Cheating offense instance
+struct CheatingOffense {
+    Citation<"415", "1", "Penal Code"> statute,
+
+    Victim victim,
+    string accused_name,
+
+    PropertyDelivered property,
+
+    // Deception details
+    string nature_of_deception,
+    date date_of_deception,
+
+    // Mens rea
+    bool fraudulent_intent,
+    bool dishonest_intent,
+
+    // At least one form of dishonest intent required
+    where fraudulent_intent || dishonest_intent
+}
+
+// Example: Online scam
+example OnlineScam := CheatingOffense {
+    statute: Citation<"415", "1", "Penal Code">,
+
+    victim: Victim {
+        name: "Tan Ah Kow",
+        age: 45,
+        deceived: true
+    },
+
+    accused_name: "Unknown scammer",
+
+    property: PropertyDelivered {
+        description: "Bank transfer to fake investment scheme",
+        value: 50000.00,
+        date_of_delivery: "15-03-2024"
+    },
+
+    nature_of_deception: "False representation of legitimate investment opportunity",
+    date_of_deception: "01-03-2024",
+
+    fraudulent_intent: true,
+    dishonest_intent: true
+}
+
+// Principle: Cheating requires deception
+principle CheatingRequiresDeception {
+    forall offense: CheatingOffense,
+    offense.victim.deceived == true
+}
+
+// Principle: Property must have positive value
+principle PropertyHasValue {
+    forall offense: CheatingOffense,
+    offense.property.value > 0
+}

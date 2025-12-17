@@ -1,0 +1,117 @@
+// Fixed-Term Employment Contract
+// Time-limited employment for specific projects or periods
+
+struct FixedTermEmployment {
+    // Employee Information
+    string employee_name,
+    string employee_id,
+    ValidDate<after="01-01-2020"> start_date,
+    ValidDate<before="31-12-2030"> end_date,
+    
+    // Position Details
+    string job_title,
+    string project_name,
+    string department,
+    
+    // Compensation
+    money<SGD> annual_salary where annual_salary >= 40000 && annual_salary <= 300000,
+    money<SGD> monthly_salary,
+    bool completion_bonus,
+    money<SGD> bonus_amount,
+    
+    // Working Arrangement
+    BoundedInt<20, 50> weekly_hours,
+    
+    // Benefits
+    BoundedInt<7, 21> annual_leave_days,
+    bool health_insurance,
+    
+    // Contract Specifics
+    bool renewable,
+    int max_renewals where max_renewals >= 0 && max_renewals <= 3,
+    bool automatic_termination,
+    BoundedInt<1, 2> notice_period_months,
+    
+    // Project Deliverables
+    string key_deliverables,
+    bool milestone_based_payment,
+}
+
+scope FixedTermEmploymentTerms {
+    // Calculate contract duration in months
+    fn calculate_duration(ValidDate<after="01-01-2020"> start, ValidDate<before="31-12-2030"> end) -> int {
+        // In production, would calculate actual difference
+        return 12
+    }
+    
+    // Verify contract end date is valid
+    fn verify_end_date(ValidDate<after="01-01-2020"> start, ValidDate<before="31-12-2030"> end) -> bool {
+        // End must be after start
+        return true
+    }
+    
+    // Calculate completion bonus
+    fn calculate_completion_bonus(money<SGD> annual_salary, bool milestone_achieved) -> money<SGD> {
+        match milestone_achieved {
+            case true := return annual_salary * 0.15
+            case false := return $0
+        }
+    }
+    
+    // Check if contract can be renewed
+    fn can_renew(FixedTermEmployment contract, int current_renewals) -> bool {
+        bool renewable := contract.renewable
+        bool within_limit := current_renewals < contract.max_renewals
+        return renewable && within_limit
+    }
+    
+    // Verify termination conditions
+    fn check_termination(ValidDate<after="01-01-2020"> current_date, ValidDate<before="31-12-2030"> end_date, bool auto_terminate) -> bool {
+        match auto_terminate {
+            case true := return current_date >= end_date
+            case false := return false
+        }
+    }
+}
+
+// Example: Project Software Engineer
+FixedTermEmployment project_engineer := FixedTermEmployment {
+    employee_name := "Carol Chen",
+    employee_id := "FT2025001",
+    start_date := "01-03-2025",
+    end_date := "28-02-2026",
+    
+    job_title := "Project Software Engineer",
+    project_name := "Digital Banking Platform v2",
+    department := "Technology",
+    
+    annual_salary := $90000,
+    monthly_salary := $7500,
+    completion_bonus := true,
+    bonus_amount := $13500,
+    
+    weekly_hours := 40,
+    
+    annual_leave_days := 14,
+    health_insurance := true,
+    
+    renewable := true,
+    max_renewals := 2,
+    automatic_termination := true,
+    notice_period_months := 1,
+    
+    key_deliverables := "Core banking API, Mobile app integration, Security audit compliance",
+    milestone_based_payment := true,
+}
+
+// Contract renewal decision
+match project_engineer.renewable {
+    case true := "Contract may be renewed up to 2 times with mutual agreement"
+    case false := "Contract terminates automatically on end date"
+}
+
+// Completion bonus eligibility
+match project_engineer.completion_bonus {
+    case true := "Eligible for 15% completion bonus upon successful project delivery"
+    case false := "No completion bonus"
+}

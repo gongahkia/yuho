@@ -1,0 +1,157 @@
+// Singapore Penal Code - Section 378: Theft
+// This module models the offense of theft under Singapore law
+
+@citation("378", "1", "Penal Code")
+
+// Legal test for theft
+// Based on Section 378 of the Singapore Penal Code
+legal_test Theft {
+    // Element 1: Dishonest intention
+    bool dishonest_intention,
+
+    // Element 2: Taking of moveable property
+    bool property_taken,
+    bool property_moveable,
+
+    // Element 3: Out of possession of another person
+    bool out_of_possession_of_another,
+
+    // Element 4: Without consent
+    bool without_consent,
+
+    // Element 5: Intention to permanently deprive
+    bool intention_permanent_deprivation,
+
+    // All elements must be satisfied
+    requires dishonest_intention &&
+             property_taken &&
+             property_moveable &&
+             out_of_possession_of_another &&
+             without_consent &&
+             intention_permanent_deprivation
+}
+
+// Property that can be stolen
+struct MoveableProperty {
+    string description,
+    Positive<money<SGD>> estimated_value,
+    bool is_moveable where is_moveable == true,
+    string owner_name,
+}
+
+// Theft offense instance
+struct TheftOffense {
+    Citation<"378", "1", "Penal Code"> statute,
+
+    // Accused person details
+    string accused_name,
+    BoundedInt<7, 150> accused_age, // Age of criminal responsibility is 7
+
+    // Victim details
+    string victim_name,
+    BoundedInt<0, 150> victim_age,
+
+    // Property details
+    MoveableProperty property,
+
+    // Circumstances
+    date date_of_offense,
+    string location,
+
+    // Mens rea elements
+    bool dishonest_intention where dishonest_intention == true,
+    bool intention_to_permanently_deprive where intention_to_permanently_deprive == true,
+
+    // Actus reus elements
+    bool consent_given where consent_given == false, // Theft requires NO consent
+
+    // Value threshold for punishment gradation
+    bool value_exceeds_5000 := property.estimated_value > 5000.00
+}
+
+// Aggravated theft (e.g., dwelling house)
+struct TheftInDwellingHouse extends TheftOffense {
+    @citation("380", "1", "Penal Code")
+
+    bool committed_in_dwelling_house where committed_in_dwelling_house == true,
+    string dwelling_house_address,
+
+    // Enhanced punishment for dwelling house theft
+    bool liable_to_increased_punishment where liable_to_increased_punishment == true
+}
+
+// Example: Shop theft
+example ShopTheft := TheftOffense {
+    statute: Citation<"378", "1", "Penal Code">,
+
+    accused_name: "John Doe",
+    accused_age: 25,
+
+    victim_name: "ABC Electronics Pte Ltd",
+    victim_age: 0, // Company, age not applicable
+
+    property: MoveableProperty {
+        description: "iPhone 15 Pro Max",
+        estimated_value: 2199.00,
+        is_moveable: true,
+        owner_name: "ABC Electronics Pte Ltd"
+    },
+
+    date_of_offense: "20-11-2024",
+    location: "Orchard Road",
+
+    dishonest_intention: true,
+    intention_to_permanently_deprive: true,
+    consent_given: false,
+
+    value_exceeds_5000: false
+}
+
+// Example: Dwelling house theft
+example DwellingHouseTheft := TheftInDwellingHouse {
+    statute: Citation<"380", "1", "Penal Code">,
+
+    accused_name: "Jane Smith",
+    accused_age: 30,
+
+    victim_name: "Resident of apartment",
+    victim_age: 55,
+
+    property: MoveableProperty {
+        description: "Diamond necklace",
+        estimated_value: 15000.00,
+        is_moveable: true,
+        owner_name: "Resident of apartment"
+    },
+
+    date_of_offense: "05-11-2024",
+    location: "Tampines HDB flat",
+
+    dishonest_intention: true,
+    intention_to_permanently_deprive: true,
+    consent_given: false,
+
+    value_exceeds_5000: true,
+
+    committed_in_dwelling_house: true,
+    dwelling_house_address: "Blk 123 Tampines St 11 #05-678",
+    liable_to_increased_punishment: true
+}
+
+// Principle: No theft without dishonest intention
+principle NoTheftWithoutDishonestIntent {
+    forall offense: TheftOffense,
+    offense.dishonest_intention == true
+}
+
+// Principle: Theft requires lack of consent
+principle TheftRequiresNoConsent {
+    forall offense: TheftOffense,
+    offense.consent_given == false
+}
+
+// Principle: Property must be moveable
+principle TheftRequiresMoveableProperty {
+    forall offense: TheftOffense,
+    offense.property.is_moveable == true
+}

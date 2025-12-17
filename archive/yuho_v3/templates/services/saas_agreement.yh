@@ -1,0 +1,435 @@
+// Software as a Service (SaaS) Agreement Template
+// Singapore Law Compliant
+// Based on Contract Law and PDPA principles
+
+import std.contracts.contract_formation
+
+@citation("", "", "Contract Law")
+@citation("", "", "Personal Data Protection Act")
+
+// Subscription tier
+enum SubscriptionTier {
+    Free,
+    Basic,
+    Professional,
+    Enterprise,
+    Custom
+}
+
+// Billing cycle
+enum BillingCycle {
+    Monthly,
+    Quarterly,
+    Annual,
+    Biennial
+}
+
+// Service level
+enum ServiceLevel {
+    Availability99,     // 99% uptime
+    Availability999,    // 99.9% uptime
+    Availability9999,   // 99.99% uptime
+    BestEffort
+}
+
+// Data location
+enum DataLocation {
+    Singapore,
+    AsiaPacific,
+    Global,
+    CustomerChoice
+}
+
+// SaaS Subscription Agreement
+struct SaaSAgreement {
+    // Parties
+    string provider_name,
+    string provider_uen,
+    string provider_address,
+
+    string customer_name,
+    string customer_uen,
+    string customer_address,
+
+    // Service details
+    date effective_date,
+    string service_name,
+    string service_description,
+    list<string> included_features,
+
+    // Subscription
+    SubscriptionTier tier,
+    BillingCycle billing_cycle,
+    Positive<money<SGD>> subscription_fee,
+
+    // User limits
+    optional BoundedInt<1, 10000> max_users,
+    optional Positive<int> max_storage_gb,
+    optional Positive<int> max_api_calls_per_month,
+
+    // Term and renewal
+    date commencement_date,
+    BoundedInt<1, 60> initial_term_months,
+    bool auto_renewal where auto_renewal == true,
+    BoundedInt<1, 12> renewal_term_months,
+
+    // Payment terms
+    bool payment_in_advance where payment_in_advance == true,
+    BoundedInt<1, 30> payment_due_days where payment_due_days <= 14,
+    string payment_method,
+
+    // Late payment
+    bool late_payment_interest,
+    optional Positive<float> late_payment_interest_rate,
+
+    // Service level
+    ServiceLevel sla_level,
+    Positive<float> uptime_percentage,
+    optional string sla_credits_policy,
+
+    // Data and privacy
+    bool pdpa_compliant where pdpa_compliant == true,
+    DataLocation data_location,
+    bool data_encryption where data_encryption == true,
+    bool customer_owns_data where customer_owns_data == true,
+
+    // Data processing
+    bool provider_is_data_intermediary where provider_is_data_intermediary == true,
+    bool subprocessors_allowed,
+    optional list<string> subprocessor_list,
+
+    // Backup and availability
+    bool daily_backups where daily_backups == true,
+    BoundedInt<1, 90> backup_retention_days where backup_retention_days >= 30,
+    optional BoundedInt<1, 365> data_export_on_termination_days,
+
+    // Intellectual property
+    bool provider_retains_ip where provider_retains_ip == true,
+    bool customer_gets_license where customer_gets_license == true,
+    bool license_terminates_with_agreement where license_terminates_with_agreement == true,
+
+    // Customer IP and content
+    bool customer_retains_content_ip where customer_retains_content_ip == true,
+    bool provider_license_to_process where provider_license_to_process == true,
+
+    // Security
+    bool security_measures where security_measures == true,
+    bool penetration_testing,
+    bool security_breach_notification where security_breach_notification == true,
+    BoundedInt<1, 72> breach_notification_hours where breach_notification_hours <= 72, // PDPA requirement
+
+    // Support
+    string support_channels, // e.g., "Email, chat, phone"
+    BoundedInt<1, 72> support_response_hours,
+    optional bool dedicated_support,
+
+    // Usage restrictions
+    bool acceptable_use_policy where acceptable_use_policy == true,
+    bool no_illegal_use where no_illegal_use == true,
+    bool no_harmful_use where no_harmful_use == true,
+
+    // Suspension and termination
+    bool can_suspend_for_non_payment where can_suspend_for_non_payment == true,
+    bool can_suspend_for_aup_violation where can_suspend_for_aup_violation == true,
+    BoundedInt<1, 30> notice_before_suspension_days,
+
+    // Termination
+    bool terminable_with_notice where terminable_with_notice == true,
+    BoundedInt<1, 90> notice_period_days where notice_period_days >= 30,
+    bool no_refund_on_termination,
+
+    // Warranties and disclaimers
+    bool as_is_disclaimer,
+    bool no_warranty_of_merchantability,
+    bool no_warranty_of_fitness,
+
+    // Limitation of liability
+    bool liability_limited where liability_limited == true,
+    Positive<money<SGD>> liability_cap, // Typically 12 months fees
+    bool no_liability_for_indirect_damages where no_liability_for_indirect_damages == true,
+
+    // Force majeure
+    bool force_majeure_clause where force_majeure_clause == true,
+
+    // Governing law
+    string governing_law := "Singapore",
+    string dispute_resolution
+}
+
+// Example: Project management SaaS (Professional tier)
+example ProjectManagementSaaS := SaaSAgreement {
+    provider_name: "TaskFlow Pte Ltd",
+    provider_uen: "202012345A",
+    provider_address: "123 Tech Park, Singapore 117543",
+
+    customer_name: "StartupCo Pte Ltd",
+    customer_uen: "202123456B",
+    customer_address: "456 Innovation Drive, Singapore 138632",
+
+    effective_date: "01-01-2025",
+    service_name: "TaskFlow Project Management Platform",
+    service_description: "Cloud-based project management and collaboration tool",
+    included_features: [
+        "Unlimited projects",
+        "Team collaboration",
+        "File storage 100GB",
+        "API access",
+        "Advanced reporting",
+        "Priority support"
+    ],
+
+    tier: SubscriptionTier::Professional,
+    billing_cycle: BillingCycle::Annual,
+    subscription_fee: 2400.00, // SGD 200/month billed annually
+
+    max_users: Some(25),
+    max_storage_gb: Some(100),
+    max_api_calls_per_month: Some(100000),
+
+    commencement_date: "01-01-2025",
+    initial_term_months: 12,
+    auto_renewal: true,
+    renewal_term_months: 12,
+
+    payment_in_advance: true,
+    payment_due_days: 14,
+    payment_method: "Credit card or bank transfer",
+
+    late_payment_interest: true,
+    late_payment_interest_rate: Some(1.5), // 1.5% per month
+
+    sla_level: ServiceLevel::Availability999,
+    uptime_percentage: 99.9,
+    sla_credits_policy: Some("10% credit for each 1% below SLA"),
+
+    pdpa_compliant: true,
+    data_location: DataLocation::Singapore,
+    data_encryption: true,
+    customer_owns_data: true,
+
+    provider_is_data_intermediary: true,
+    subprocessors_allowed: true,
+    subprocessor_list: Some([
+        "AWS Singapore (hosting)",
+        "SendGrid (email)",
+        "Stripe (payments)"
+    ]),
+
+    daily_backups: true,
+    backup_retention_days: 30,
+    data_export_on_termination_days: Some(30),
+
+    provider_retains_ip: true,
+    customer_gets_license: true,
+    license_terminates_with_agreement: true,
+
+    customer_retains_content_ip: true,
+    provider_license_to_process: true,
+
+    security_measures: true,
+    penetration_testing: true,
+    security_breach_notification: true,
+    breach_notification_hours: 72,
+
+    support_channels: "Email, live chat, phone",
+    support_response_hours: 4,
+    dedicated_support: Some(false),
+
+    acceptable_use_policy: true,
+    no_illegal_use: true,
+    no_harmful_use: true,
+
+    can_suspend_for_non_payment: true,
+    can_suspend_for_aup_violation: true,
+    notice_before_suspension_days: 7,
+
+    terminable_with_notice: true,
+    notice_period_days: 30,
+    no_refund_on_termination: true,
+
+    as_is_disclaimer: false,
+    no_warranty_of_merchantability: false,
+    no_warranty_of_fitness: false,
+
+    liability_limited: true,
+    liability_cap: 2400.00, // 12 months subscription
+    no_liability_for_indirect_damages: true,
+
+    force_majeure_clause: true,
+
+    governing_law: "Singapore",
+    dispute_resolution: "SIAC Arbitration"
+}
+
+// Example: Enterprise CRM SaaS
+example EnterpriseCRM := SaaSAgreement {
+    provider_name: "CustomerHub Pte Ltd",
+    provider_uen: "201987654C",
+    provider_address: "789 Enterprise Street, Singapore 068808",
+
+    customer_name: "MegaCorp Pte Ltd",
+    customer_uen: "200012345D",
+    customer_address: "321 Corporate Tower, Singapore 049318",
+
+    effective_date: "01-02-2025",
+    service_name: "CustomerHub CRM Enterprise",
+    service_description: "Enterprise customer relationship management platform",
+    included_features: [
+        "Unlimited users",
+        "Advanced analytics",
+        "Custom integrations",
+        "Dedicated account manager",
+        "24/7 priority support",
+        "Custom SLA",
+        "On-premise deployment option"
+    ],
+
+    tier: SubscriptionTier::Enterprise,
+    billing_cycle: BillingCycle::Annual,
+    subscription_fee: 50000.00,
+
+    max_users: None, // Unlimited
+    max_storage_gb: Some(1000),
+    max_api_calls_per_month: Some(10000000),
+
+    commencement_date: "01-02-2025",
+    initial_term_months: 24,
+    auto_renewal: true,
+    renewal_term_months: 12,
+
+    payment_in_advance: true,
+    payment_due_days: 30,
+    payment_method: "Bank transfer",
+
+    late_payment_interest: true,
+    late_payment_interest_rate: Some(2.0),
+
+    sla_level: ServiceLevel::Availability9999,
+    uptime_percentage: 99.99,
+    sla_credits_policy: Some("20% credit for each 0.1% below SLA"),
+
+    pdpa_compliant: true,
+    data_location: DataLocation::CustomerChoice,
+    data_encryption: true,
+    customer_owns_data: true,
+
+    provider_is_data_intermediary: true,
+    subprocessors_allowed: true,
+    subprocessor_list: Some([
+        "AWS Singapore (primary hosting)",
+        "Azure Singapore (backup)",
+        "Twilio (SMS)"
+    ]),
+
+    daily_backups: true,
+    backup_retention_days: 90,
+    data_export_on_termination_days: Some(90),
+
+    provider_retains_ip: true,
+    customer_gets_license: true,
+    license_terminates_with_agreement: true,
+
+    customer_retains_content_ip: true,
+    provider_license_to_process: true,
+
+    security_measures: true,
+    penetration_testing: true,
+    security_breach_notification: true,
+    breach_notification_hours: 24, // Faster for enterprise
+
+    support_channels: "Email, phone, dedicated Slack channel, on-site",
+    support_response_hours: 1,
+    dedicated_support: Some(true),
+
+    acceptable_use_policy: true,
+    no_illegal_use: true,
+    no_harmful_use: true,
+
+    can_suspend_for_non_payment: true,
+    can_suspend_for_aup_violation: true,
+    notice_before_suspension_days: 14,
+
+    terminable_with_notice: true,
+    notice_period_days: 90,
+    no_refund_on_termination: true,
+
+    as_is_disclaimer: false,
+    no_warranty_of_merchantability: false,
+    no_warranty_of_fitness: false,
+
+    liability_limited: true,
+    liability_cap: 100000.00, // 2x annual subscription
+    no_liability_for_indirect_damages: true,
+
+    force_majeure_clause: true,
+
+    governing_law: "Singapore",
+    dispute_resolution: "SIAC Arbitration"
+}
+
+// Compliance principles
+
+principle PDPACompliance {
+    forall agreement: SaaSAgreement,
+    agreement.pdpa_compliant == true &&
+    agreement.security_breach_notification == true &&
+    agreement.breach_notification_hours <= 72
+}
+
+principle CustomerOwnsData {
+    forall agreement: SaaSAgreement,
+    agreement.customer_owns_data == true &&
+    agreement.customer_retains_content_ip == true
+}
+
+principle DataEncryptionRequired {
+    forall agreement: SaaSAgreement,
+    agreement.data_encryption == true
+}
+
+principle DailyBackupsRequired {
+    forall agreement: SaaSAgreement,
+    agreement.daily_backups == true &&
+    agreement.backup_retention_days >= 30
+}
+
+principle PaymentInAdvance {
+    forall agreement: SaaSAgreement,
+    agreement.payment_in_advance == true
+}
+
+principle AutoRenewalEnabled {
+    forall agreement: SaaSAgreement,
+    agreement.auto_renewal == true
+}
+
+principle ReasonableNoticePeriod {
+    forall agreement: SaaSAgreement,
+    agreement.terminable_with_notice == true &&
+    agreement.notice_period_days >= 30
+}
+
+principle LiabilityLimited {
+    forall agreement: SaaSAgreement,
+    agreement.liability_limited == true &&
+    agreement.no_liability_for_indirect_damages == true
+}
+
+principle AcceptableUsePolicy {
+    forall agreement: SaaSAgreement,
+    agreement.acceptable_use_policy == true &&
+    agreement.no_illegal_use == true &&
+    agreement.no_harmful_use == true
+}
+
+principle ProviderRetainsIP {
+    forall agreement: SaaSAgreement,
+    agreement.provider_retains_ip == true &&
+    agreement.customer_gets_license == true &&
+    agreement.license_terminates_with_agreement == true
+}
+
+principle SLADefined {
+    forall agreement: SaaSAgreement,
+    agreement.uptime_percentage >= 99.0
+}

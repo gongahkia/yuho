@@ -1,0 +1,447 @@
+// Accounting and Corporate Regulatory Authority (ACRA) Requirements
+// Company registration, compliance, and filing obligations
+// Based on Companies Act (Cap 50) and Business Registration Act
+
+@citation("", "", "Companies Act (Cap 50)")
+@citation("", "", "Business Registration Act")
+
+// Company type
+enum CompanyType {
+    PrivateLimitedCompany,  // Pte Ltd
+    PublicLimitedCompany,   // Ltd
+    LimitedLiabilityPartnership, // LLP
+    SoleProprietorship,
+    Partnership,
+    ForeignCompanyBranch,
+    RepresentativeOffice
+}
+
+// Entity status
+enum EntityStatus {
+    LiveNormal,
+    LiveStruckOff,
+    Dormant,
+    UnderLiquidation,
+    Dissolved,
+    Cancelled
+}
+
+// Financial year end
+enum FinancialYearEnd {
+    March31,
+    June30,
+    September30,
+    December31,
+    Other
+}
+
+// Company registration
+struct CompanyRegistration {
+    // Company details
+    string company_name,
+    string company_uen,
+    CompanyType company_type,
+
+    // Registration - Section 19
+    @citation("19", "", "Companies Act (Cap 50)")
+    date incorporation_date,
+    bool company_registered where company_registered == true,
+
+    // Registered office - Section 142
+    @citation("142", "", "Companies Act (Cap 50)")
+    string registered_office_address,
+    bool singapore_registered_office where singapore_registered_office == true,
+
+    // Share capital (for companies with shares)
+    optional Positive<money<SGD>> paid_up_capital,
+    optional BoundedInt<1, 50> number_of_shareholders,
+
+    // Directors - Section 145
+    @citation("145", "1", "Companies Act (Cap 50)")
+    BoundedInt<1, 50> number_of_directors,
+    where number_of_directors >= 1, // Minimum 1 director
+
+    // Resident director requirement - Section 145(1A)
+    @citation("145", "1A", "Companies Act (Cap 50)")
+    bool has_resident_director where has_resident_director == true,
+    // At least one director ordinarily resident in Singapore
+
+    // Company secretary - Section 171
+    @citation("171", "1", "Companies Act (Cap 50)")
+    bool has_company_secretary where has_company_secretary == true,
+    string company_secretary_name,
+
+    // Primary business activity
+    string primary_activity_description,
+    string ssic_code, // Singapore Standard Industrial Classification
+
+    // Entity status
+    EntityStatus entity_status
+}
+
+// Annual filing requirements
+struct AnnualFiling {
+    // Company
+    string company_name,
+    string company_uen,
+    CompanyType company_type,
+
+    // Financial year
+    FinancialYearEnd financial_year_end,
+    date financial_year_end_date,
+
+    // Annual Return (AR) - Section 197
+    @citation("197", "", "Companies Act (Cap 50)")
+    bool annual_return_required where annual_return_required == true,
+    date annual_return_due_date,
+    // AR due within 1 month after AGM or 7 months after FYE (whichever earlier)
+
+    optional bool annual_return_filed,
+    optional date annual_return_filed_date,
+    optional BoundedInt<0, 365> days_late,
+
+    // Annual General Meeting (AGM) - Section 175
+    @citation("175", "1", "Companies Act (Cap 50)")
+    bool agm_required,
+    // AGM must be held within 6 months after FYE (except first AGM)
+    optional date agm_date,
+    optional BoundedInt<0, 365> days_after_fye,
+    where agm_required == true && agm_date != None =>
+          days_after_fye <= 180, // 6 months = ~180 days
+
+    // Financial statements - Section 201
+    @citation("201", "", "Companies Act (Cap 50)")
+    bool financial_statements_required where financial_statements_required == true,
+    optional bool financial_statements_filed,
+    optional date financial_statements_filed_date,
+
+    // Audit requirement - Section 205
+    @citation("205", "", "Companies Act (Cap 50)")
+    bool audit_required,
+    optional string auditor_name,
+
+    // Small company exemption
+    optional bool qualifies_as_small_company,
+    // Small company: revenue ≤ $10M AND total assets ≤ $10M
+
+    // Late filing penalties
+    optional Positive<money<SGD>> late_filing_penalty,
+    optional bool composition_offer_available
+}
+
+// Change in company particulars
+struct ChangeInParticulars {
+    // Company
+    string company_name,
+    string company_uen,
+
+    // Type of change
+    string change_type, // e.g., "Director appointment", "Address change", "Share transfer"
+    date change_effective_date,
+
+    // ACRA notification requirement
+    bool acra_notification_required where acra_notification_required == true,
+    BoundedInt<1, 60> notification_deadline_days,
+
+    // Common notification deadlines:
+    // - Director changes: 14 days (Section 145(5))
+    // - Registered office: 14 days (Section 142(3))
+    // - Company secretary: 14 days (Section 171(4))
+    // - Share allotment: 1 month (Section 128)
+
+    date notification_due_date,
+    optional bool notification_filed,
+    optional date notification_filed_date,
+    optional BoundedInt<0, 365> days_late
+}
+
+// Director compliance
+struct DirectorCompliance {
+    // Director details
+    string director_name,
+    string director_nric_or_fin,
+    bool singapore_resident,
+
+    // Company
+    string company_name,
+    string company_uen,
+
+    // Appointment - Section 145
+    @citation("145", "", "Companies Act (Cap 50)")
+    date appointment_date,
+    bool appointment_notified_to_acra where appointment_notified_to_acra == true,
+    date acra_notification_date,
+    BoundedInt<0, 30> notification_days where notification_days <= 14,
+
+    // Residential address on record
+    bool residential_address_provided where residential_address_provided == true,
+
+    // Consent to act
+    bool consent_to_act_obtained where consent_to_act_obtained == true,
+
+    // Disqualification check - Section 148
+    @citation("148", "", "Companies Act (Cap 50)")
+    bool director_not_disqualified where director_not_disqualified == true,
+    // Directors cannot be undischarged bankrupts or convicted of fraud
+
+    // Age requirement - Section 145(5A)
+    @citation("145", "5A", "Companies Act (Cap 50)")
+    BoundedInt<18, 120> director_age where director_age >= 18,
+
+    // Other directorships
+    BoundedInt<0, 200> number_of_directorships
+}
+
+// Striking off application
+struct StrikingOffApplication {
+    // Company
+    string company_name,
+    string company_uen,
+    CompanyType company_type,
+
+    // Application date
+    date application_date,
+
+    // Eligibility - Section 344A
+    @citation("344A", "", "Companies Act (Cap 50)")
+    bool company_inactive where company_inactive == true,
+    bool no_outstanding_liabilities where no_outstanding_liabilities == true,
+    bool no_assets_or_property where no_assets_or_property == true,
+
+    // All members consent
+    bool all_members_consent where all_members_consent == true,
+
+    // Gazette publication
+    bool published_in_gazette where published_in_gazette == true,
+    date gazette_publication_date,
+
+    // Objection period (60 days)
+    BoundedInt<1, 120> objection_period_days where objection_period_days == 60,
+    bool objections_received,
+
+    // Striking off
+    optional bool struck_off,
+    optional date striking_off_date,
+    EntityStatus new_status
+}
+
+// Business profile disclosure
+struct BusinessProfileDisclosure {
+    // Company
+    string company_name,
+    string company_uen,
+
+    // Public information (available via BizFile)
+    bool company_name_disclosed where company_name_disclosed == true,
+    bool uen_disclosed where uen_disclosed == true,
+    bool incorporation_date_disclosed where incorporation_date_disclosed == true,
+    bool entity_status_disclosed where entity_status_disclosed == true,
+    bool registered_office_disclosed where registered_office_disclosed == true,
+    bool directors_disclosed where directors_disclosed == true,
+    bool shareholders_disclosed where shareholders_disclosed == true,
+    bool company_secretary_disclosed where company_secretary_disclosed == true,
+    bool paid_up_capital_disclosed where paid_up_capital_disclosed == true,
+
+    // All information publicly accessible
+    bool publicly_accessible where publicly_accessible == true
+}
+
+// Example: Pte Ltd registration
+example StandardPteLtdRegistration := CompanyRegistration {
+    company_name: "InnovateTech Pte Ltd",
+    company_uen: "202012345A",
+    company_type: CompanyType::PrivateLimitedCompany,
+
+    incorporation_date: "01-01-2020",
+    company_registered: true,
+
+    registered_office_address: "123 Innovation Drive, Singapore 138632",
+    singapore_registered_office: true,
+
+    paid_up_capital: Some(100000.00),
+    number_of_shareholders: Some(3),
+
+    number_of_directors: 2,
+
+    has_resident_director: true,
+
+    has_company_secretary: true,
+    company_secretary_name: "Corporate Secretarial Services Pte Ltd",
+
+    primary_activity_description: "Software development and IT consulting",
+    ssic_code: "62011", // Computer programming
+
+    entity_status: EntityStatus::LiveNormal
+}
+
+// Example: Annual filing for small company
+example SmallCompanyAnnualFiling := AnnualFiling {
+    company_name: "SmallBiz Pte Ltd",
+    company_uen: "201987654B",
+    company_type: CompanyType::PrivateLimitedCompany,
+
+    financial_year_end: FinancialYearEnd::December31,
+    financial_year_end_date: "31-12-2024",
+
+    annual_return_required: true,
+    annual_return_due_date: "31-07-2025", // 7 months after FYE
+
+    annual_return_filed: Some(true),
+    annual_return_filed_date: Some("15-07-2025"),
+    days_late: Some(0),
+
+    agm_required: true,
+    agm_date: Some("30-06-2025"),
+    days_after_fye: Some(180), // Exactly 6 months
+
+    financial_statements_required: true,
+    financial_statements_filed: Some(true),
+    financial_statements_filed_date: Some("15-07-2025"),
+
+    audit_required: false, // Small company exemption
+    auditor_name: None,
+
+    qualifies_as_small_company: Some(true),
+
+    late_filing_penalty: None,
+    composition_offer_available: None
+}
+
+// Example: Director appointment notification
+example NewDirectorAppointment := ChangeInParticulars {
+    company_name: "GrowthCo Pte Ltd",
+    company_uen: "202123456C",
+
+    change_type: "Appointment of new director",
+    change_effective_date: "01-02-2025",
+
+    acra_notification_required: true,
+    notification_deadline_days: 14, // Section 145(5)
+
+    notification_due_date: "15-02-2025",
+    notification_filed: Some(true),
+    notification_filed_date: Some("10-02-2025"),
+    days_late: Some(0)
+}
+
+// Example: Director compliance
+example ResidentDirector := DirectorCompliance {
+    director_name: "John Tan Keng Huat",
+    director_nric_or_fin: "S1234567A",
+    singapore_resident: true,
+
+    company_name: "TechStartup Pte Ltd",
+    company_uen: "202234567D",
+
+    appointment_date: "01-01-2025",
+    appointment_notified_to_acra: true,
+    acra_notification_date: "10-01-2025",
+    notification_days: 9,
+
+    residential_address_provided: true,
+
+    consent_to_act_obtained: true,
+
+    director_not_disqualified: true,
+
+    director_age: 35,
+
+    number_of_directorships: 3
+}
+
+// Example: Striking off application
+example InactiveCompanyStrikingOff := StrikingOffApplication {
+    company_name: "Dormant Business Pte Ltd",
+    company_uen: "201012345E",
+    company_type: CompanyType::PrivateLimitedCompany,
+
+    application_date: "01-01-2025",
+
+    company_inactive: true,
+    no_outstanding_liabilities: true,
+    no_assets_or_property: true,
+
+    all_members_consent: true,
+
+    published_in_gazette: true,
+    gazette_publication_date: "15-01-2025",
+
+    objection_period_days: 60,
+    objections_received: false,
+
+    struck_off: Some(true),
+    striking_off_date: Some("20-03-2025"),
+    new_status: EntityStatus::LiveStruckOff
+}
+
+// ACRA compliance principles
+
+principle CompanyRegisteredWithACRA {
+    forall registration: CompanyRegistration,
+    registration.company_registered == true
+}
+
+principle SingaporeRegisteredOffice {
+    forall registration: CompanyRegistration,
+    registration.singapore_registered_office == true
+}
+
+principle ResidentDirectorRequired {
+    forall registration: CompanyRegistration,
+    registration.has_resident_director == true
+}
+
+principle CompanySecretaryRequired {
+    forall registration: CompanyRegistration,
+    registration.has_company_secretary == true
+}
+
+principle AnnualReturnFiled {
+    forall filing: AnnualFiling,
+    filing.annual_return_required == true =>
+    filing.annual_return_filed == Some(true)
+}
+
+principle AGMWithin6Months {
+    forall filing: AnnualFiling,
+    filing.agm_required == true && filing.agm_date != None =>
+    filing.days_after_fye <= 180
+}
+
+principle DirectorNotificationWithin14Days {
+    forall change: ChangeInParticulars,
+    change.change_type == "Appointment of new director" =>
+    change.notification_deadline_days == 14
+}
+
+principle DirectorMinimumAge {
+    forall director: DirectorCompliance,
+    director.director_age >= 18
+}
+
+principle DirectorNotDisqualified {
+    forall director: DirectorCompliance,
+    director.director_not_disqualified == true
+}
+
+principle DirectorConsentObtained {
+    forall director: DirectorCompliance,
+    director.consent_to_act_obtained == true
+}
+
+principle StrikingOffRequiresInactive {
+    forall striking_off: StrikingOffApplication,
+    striking_off.company_inactive == true &&
+    striking_off.no_outstanding_liabilities == true &&
+    striking_off.no_assets_or_property == true
+}
+
+principle AllMembersConsentForStrikingOff {
+    forall striking_off: StrikingOffApplication,
+    striking_off.all_members_consent == true
+}
+
+principle BusinessProfilePublic {
+    forall profile: BusinessProfileDisclosure,
+    profile.publicly_accessible == true
+}

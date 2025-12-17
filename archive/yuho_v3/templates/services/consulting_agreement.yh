@@ -1,0 +1,484 @@
+// Consulting Services Agreement Template
+// Singapore Law Compliant
+// Based on Contract Law and Services principles
+
+import std.contracts.contract_formation
+
+@citation("", "", "Contract Law")
+
+// Service type
+enum ServiceType {
+    BusinessConsulting,
+    ITConsulting,
+    LegalConsulting,
+    FinancialConsulting,
+    ManagementConsulting,
+    TechnicalConsulting,
+    Other
+}
+
+// Payment structure
+enum PaymentStructure {
+    Hourly,
+    Daily,
+    Monthly,
+    ProjectBased,
+    Retainer,
+    Milestone
+}
+
+// Intellectual property ownership
+enum IPOwnership {
+    ClientOwns,
+    ConsultantOwns,
+    JointOwnership,
+    LicenseToClient
+}
+
+// Consulting Services Agreement
+struct ConsultingServicesAgreement {
+    // Parties
+    string client_name,
+    string client_uen,
+    string client_address,
+
+    string consultant_name,
+    string consultant_uen_or_nric,
+    string consultant_address,
+
+    // Service details
+    date effective_date,
+    ServiceType service_type,
+    string service_description,
+    string deliverables,
+
+    // Term
+    date commencement_date,
+    optional date completion_date,
+    optional BoundedInt<1, 60> contract_months, // For ongoing arrangements
+
+    // Payment
+    PaymentStructure payment_structure,
+    Positive<money<SGD>> rate_amount,
+    string rate_description, // e.g., "per hour", "per month", "per project"
+
+    // For milestone-based payments
+    optional list<string> milestones,
+    optional list<Positive<money<SGD>>> milestone_payments,
+
+    // Payment terms
+    BoundedInt<1, 90> payment_days where payment_days <= 60, // Usually 30-60 days
+    string payment_method,
+
+    // Expenses
+    bool reimburse_expenses,
+    optional string expense_policy,
+    optional Positive<money<SGD>> expense_limit,
+
+    // Consultant obligations
+    bool duty_of_care where duty_of_care == true,
+    bool professional_standards where professional_standards == true,
+    bool timely_delivery where timely_delivery == true,
+
+    // Client obligations
+    bool provide_necessary_information where provide_necessary_information == true,
+    bool timely_payment where timely_payment == true,
+
+    // Intellectual property
+    IPOwnership ip_ownership,
+    bool work_for_hire,
+    string ip_clause,
+
+    // Confidentiality
+    bool confidentiality_clause where confidentiality_clause == true,
+    BoundedInt<1, 10> confidentiality_years where confidentiality_years >= 2,
+
+    // Exclusivity and conflicts
+    bool exclusive_arrangement,
+    bool no_conflicts_of_interest where no_conflicts_of_interest == true,
+
+    // Independent contractor status
+    bool independent_contractor where independent_contractor == true,
+    bool not_employee where not_employee == true,
+    bool responsible_for_own_taxes where responsible_for_own_taxes == true,
+
+    // Termination
+    bool terminable_with_notice where terminable_with_notice == true,
+    BoundedInt<1, 90> notice_period_days,
+    bool terminable_for_cause where terminable_for_cause == true,
+
+    // Liability and indemnity
+    bool limitation_of_liability,
+    optional Positive<money<SGD>> liability_cap,
+    bool indemnity_clause,
+
+    // Insurance (professional indemnity)
+    optional bool professional_indemnity_required,
+    optional Positive<money<SGD>> insurance_minimum_amount,
+
+    // Dispute resolution
+    string governing_law := "Singapore",
+    string dispute_resolution // Courts or arbitration
+}
+
+// Software Development Services Agreement
+struct SoftwareDevelopmentAgreement extends ConsultingServicesAgreement {
+    service_type: ServiceType where service_type == ServiceType::ITConsulting,
+
+    // Development specifics
+    string technical_specifications,
+    list<string> development_milestones,
+    list<string> acceptance_criteria,
+
+    // IP typically goes to client for work-for-hire
+    ip_ownership: IPOwnership where ip_ownership == IPOwnership::ClientOwns,
+    work_for_hire: bool where work_for_hire == true,
+
+    // Source code and documentation
+    bool deliver_source_code where deliver_source_code == true,
+    bool deliver_documentation where deliver_documentation == true,
+
+    // Warranties
+    bool warranty_period_included,
+    optional BoundedInt<1, 12> warranty_months,
+    bool fit_for_purpose_warranty,
+
+    // Maintenance and support
+    optional bool post_delivery_support,
+    optional BoundedInt<1, 12> support_months
+}
+
+// Professional Services Retainer Agreement
+struct ProfessionalServicesRetainer {
+    // Parties
+    string client_name,
+    string client_uen,
+    string client_address,
+
+    string service_provider_name,
+    string service_provider_uen,
+    string service_provider_address,
+
+    // Retainer details
+    date effective_date,
+    BoundedInt<1, 36> retainer_months, // Usually 12 months
+    ServiceType service_type,
+    string services_description,
+
+    // Retainer fee
+    Positive<money<SGD>> monthly_retainer_fee,
+    BoundedInt<1, 50> included_hours_per_month,
+    Positive<money<SGD>> additional_hourly_rate,
+
+    // Payment
+    BoundedInt<1, 31> payment_day_of_month,
+    bool advance_payment where advance_payment == true, // Retainers usually paid in advance
+
+    // Rollover of unused hours
+    bool hours_rollover,
+    optional BoundedInt<1, 12> max_rollover_months,
+
+    // Scope of services
+    list<string> included_services,
+    list<string> excluded_services,
+
+    // Obligations
+    bool priority_service,
+    bool dedicated_point_of_contact,
+    BoundedInt<1, 72> response_time_hours where response_time_hours <= 24,
+
+    // Confidentiality
+    bool confidentiality_clause where confidentiality_clause == true,
+
+    // Termination
+    BoundedInt<1, 90> notice_period_days where notice_period_days >= 30,
+    bool pro_rata_refund_on_termination,
+
+    // Governing law
+    string governing_law := "Singapore"
+}
+
+// Example: IT consulting agreement
+example ITConsultingProject := ConsultingServicesAgreement {
+    client_name: "FinanceCo Pte Ltd",
+    client_uen: "202012345A",
+    client_address: "123 Shenton Way, Singapore 068808",
+
+    consultant_name: "TechExperts Consulting Pte Ltd",
+    consultant_uen_or_nric: "201987654B",
+    consultant_address: "456 Science Park Drive, Singapore 118258",
+
+    effective_date: "01-12-2024",
+    service_type: ServiceType::ITConsulting,
+    service_description: "Enterprise IT infrastructure review and optimization",
+    deliverables: "Assessment report, recommendations document, implementation roadmap",
+
+    commencement_date: "01-12-2024",
+    completion_date: Some("28-02-2025"),
+    contract_months: None,
+
+    payment_structure: PaymentStructure::Milestone,
+    rate_amount: 50000.00,
+    rate_description: "Project-based fee of SGD 50,000",
+
+    milestones: Some([
+        "Initial assessment completion",
+        "Recommendations report delivery",
+        "Implementation roadmap delivery"
+    ]),
+    milestone_payments: Some([
+        15000.00,
+        20000.00,
+        15000.00
+    ]),
+
+    payment_days: 30,
+    payment_method: "Bank transfer",
+
+    reimburse_expenses: true,
+    expense_policy: Some("Pre-approved expenses only"),
+    expense_limit: Some(2000.00),
+
+    duty_of_care: true,
+    professional_standards: true,
+    timely_delivery: true,
+
+    provide_necessary_information: true,
+    timely_payment: true,
+
+    ip_ownership: IPOwnership::ClientOwns,
+    work_for_hire: true,
+    ip_clause: "All work product shall be owned by Client",
+
+    confidentiality_clause: true,
+    confidentiality_years: 3,
+
+    exclusive_arrangement: false,
+    no_conflicts_of_interest: true,
+
+    independent_contractor: true,
+    not_employee: true,
+    responsible_for_own_taxes: true,
+
+    terminable_with_notice: true,
+    notice_period_days: 30,
+    terminable_for_cause: true,
+
+    limitation_of_liability: true,
+    liability_cap: Some(50000.00), // Capped at contract value
+    indemnity_clause: true,
+
+    professional_indemnity_required: Some(true),
+    insurance_minimum_amount: Some(500000.00),
+
+    governing_law: "Singapore",
+    dispute_resolution: "SIAC Arbitration"
+}
+
+// Example: Software development agreement
+example WebAppDevelopment := SoftwareDevelopmentAgreement {
+    client_name: "RetailShop Pte Ltd",
+    client_uen: "202123456C",
+    client_address: "789 Retail Street, Singapore 238801",
+
+    consultant_name: "DevStudio Pte Ltd",
+    consultant_uen_or_nric: "201876543D",
+    consultant_address: "321 Tech Hub, Singapore 138632",
+
+    effective_date: "01-01-2025",
+    service_type: ServiceType::ITConsulting,
+    service_description: "Custom e-commerce web application development",
+    deliverables: "Working web application, source code, documentation",
+
+    commencement_date: "01-01-2025",
+    completion_date: Some("30-06-2025"),
+    contract_months: None,
+
+    payment_structure: PaymentStructure::Milestone,
+    rate_amount: 80000.00,
+    rate_description: "Project fee of SGD 80,000",
+
+    milestones: Some([
+        "Design approval",
+        "Alpha version delivery",
+        "Beta version delivery",
+        "Final deployment"
+    ]),
+    milestone_payments: Some([
+        20000.00,
+        20000.00,
+        20000.00,
+        20000.00
+    ]),
+
+    payment_days: 14,
+    payment_method: "Bank transfer",
+
+    reimburse_expenses: false,
+    expense_policy: None,
+    expense_limit: None,
+
+    duty_of_care: true,
+    professional_standards: true,
+    timely_delivery: true,
+
+    provide_necessary_information: true,
+    timely_payment: true,
+
+    ip_ownership: IPOwnership::ClientOwns,
+    work_for_hire: true,
+    ip_clause: "All source code and IP shall be owned by Client",
+
+    confidentiality_clause: true,
+    confidentiality_years: 5,
+
+    exclusive_arrangement: false,
+    no_conflicts_of_interest: true,
+
+    independent_contractor: true,
+    not_employee: true,
+    responsible_for_own_taxes: true,
+
+    terminable_with_notice: true,
+    notice_period_days: 30,
+    terminable_for_cause: true,
+
+    limitation_of_liability: true,
+    liability_cap: Some(80000.00),
+    indemnity_clause: true,
+
+    professional_indemnity_required: Some(true),
+    insurance_minimum_amount: Some(1000000.00),
+
+    governing_law: "Singapore",
+    dispute_resolution: "Singapore Courts",
+
+    // Software-specific fields
+    technical_specifications: "Web app with user authentication, product catalog, shopping cart, payment gateway integration",
+    development_milestones: [
+        "UI/UX design completion",
+        "Backend API development",
+        "Frontend development",
+        "Integration and testing",
+        "Deployment and handover"
+    ],
+    acceptance_criteria: [
+        "All features per specifications",
+        "Responsive design for mobile/desktop",
+        "Payment gateway functional",
+        "No critical bugs"
+    ],
+
+    deliver_source_code: true,
+    deliver_documentation: true,
+
+    warranty_period_included: true,
+    warranty_months: Some(6),
+    fit_for_purpose_warranty: true,
+
+    post_delivery_support: Some(true),
+    support_months: Some(3)
+}
+
+// Example: Legal retainer
+example LegalRetainer := ProfessionalServicesRetainer {
+    client_name: "BusinessCorp Pte Ltd",
+    client_uen: "202234567E",
+    client_address: "456 Business Avenue, Singapore 049318",
+
+    service_provider_name: "Law Firm LLP",
+    service_provider_uen: "199012345F",
+    service_provider_address: "789 Legal Towers, Singapore 068807",
+
+    effective_date: "01-01-2025",
+    retainer_months: 12,
+    service_type: ServiceType::LegalConsulting,
+    services_description: "General corporate legal advice and contract review",
+
+    monthly_retainer_fee: 5000.00,
+    included_hours_per_month: 10,
+    additional_hourly_rate: 600.00,
+
+    payment_day_of_month: 1,
+    advance_payment: true,
+
+    hours_rollover: true,
+    max_rollover_months: Some(3),
+
+    included_services: [
+        "Contract review and drafting",
+        "Corporate compliance advice",
+        "General legal consultation",
+        "Email and phone advice"
+    ],
+    excluded_services: [
+        "Litigation",
+        "Conveyancing",
+        "Intellectual property registration",
+        "Court appearances"
+    ],
+
+    priority_service: true,
+    dedicated_point_of_contact: true,
+    response_time_hours: 24,
+
+    confidentiality_clause: true,
+
+    notice_period_days: 60,
+    pro_rata_refund_on_termination: true,
+
+    governing_law: "Singapore"
+}
+
+// Compliance principles
+
+principle DutyOfCareRequired {
+    forall agreement: ConsultingServicesAgreement,
+    agreement.duty_of_care == true
+}
+
+principle IndependentContractorStatus {
+    forall agreement: ConsultingServicesAgreement,
+    agreement.independent_contractor == true &&
+    agreement.not_employee == true &&
+    agreement.responsible_for_own_taxes == true
+}
+
+principle ConfidentialityRequired {
+    forall agreement: ConsultingServicesAgreement,
+    agreement.confidentiality_clause == true &&
+    agreement.confidentiality_years >= 2
+}
+
+principle ReasonablePaymentTerms {
+    forall agreement: ConsultingServicesAgreement,
+    agreement.payment_days <= 60
+}
+
+principle SoftwareIPGoesToClient {
+    forall agreement: SoftwareDevelopmentAgreement,
+    agreement.ip_ownership == IPOwnership::ClientOwns &&
+    agreement.work_for_hire == true
+}
+
+principle SoftwareSourceCodeDelivered {
+    forall agreement: SoftwareDevelopmentAgreement,
+    agreement.deliver_source_code == true &&
+    agreement.deliver_documentation == true
+}
+
+principle RetainerPaidInAdvance {
+    forall retainer: ProfessionalServicesRetainer,
+    retainer.advance_payment == true
+}
+
+principle ReasonableNotice {
+    forall agreement: ConsultingServicesAgreement,
+    agreement.terminable_with_notice == true &&
+    agreement.notice_period_days >= 7
+}
+
+principle NoConflictsOfInterest {
+    forall agreement: ConsultingServicesAgreement,
+    agreement.no_conflicts_of_interest == true
+}

@@ -1,0 +1,47 @@
+// Mutual Exclusivity Example: Criminal Verdict
+//
+// Demonstrates mutually_exclusive enum for legal verdicts
+
+mutually_exclusive enum Verdict {
+    Guilty,
+    NotGuilty,
+}
+
+struct CriminalCase {
+    string case_id,
+    string defendant,
+    bool beyond_reasonable_doubt,
+    bool elements_proven,
+}
+
+// Valid: Single return path
+func automatic_acquittal(CriminalCase case) -> Verdict {
+    return Verdict::NotGuilty
+}
+
+// Valid: Match with clear single outcome per path
+func determine_verdict(CriminalCase case) -> Verdict {
+    match case {
+        case c where c.beyond_reasonable_doubt == true
+                 and c.elements_proven == true := Verdict::Guilty
+        case _ := Verdict::NotGuilty
+    }
+}
+
+// Test cases
+CriminalCase guilty_case := CriminalCase {
+    case_id: "PP v Smith 2024",
+    defendant: "John Smith",
+    beyond_reasonable_doubt: true,
+    elements_proven: true,
+}
+
+CriminalCase innocent_case := CriminalCase {
+    case_id: "PP v Jones 2024",
+    defendant: "Mary Jones",
+    beyond_reasonable_doubt: false,
+    elements_proven: false,
+}
+
+Verdict v1 := determine_verdict(guilty_case)     // Guilty
+Verdict v2 := determine_verdict(innocent_case)   // NotGuilty

@@ -1,0 +1,207 @@
+// Full-Time Employment Contract Template
+// MOM (Ministry of Manpower) Compliant for Singapore
+// Based on Employment Act (Cap 91)
+
+import std.contracts.contract_formation
+
+@citation("", "", "Employment Act")
+
+// Employment status
+enum EmploymentStatus {
+    Permanent,
+    Contract,
+    Probation
+}
+
+// Employment type
+enum EmploymentType {
+    FullTime,
+    PartTime
+}
+
+// Full-time employment contract
+struct FullTimeEmploymentContract {
+    // Parties
+    string employer_name,
+    string employer_uen,
+    string employer_address,
+
+    string employee_name,
+    string employee_nric,
+    string employee_address,
+    BoundedInt<16, 75> employee_age where employee_age >= 18, // Min working age
+
+    // Employment details
+    string job_title,
+    string job_description,
+    EmploymentStatus status,
+    EmploymentType employment_type where employment_type == EmploymentType::FullTime,
+
+    // Start date
+    date employment_start_date,
+
+    // Probation period (if applicable)
+    optional BoundedInt<1, 6> probation_months, // Usually 3-6 months
+    optional date probation_end_date,
+
+    // Salary - Section 2 Employment Act
+    Positive<money<SGD>> monthly_salary,
+    BoundedInt<1, 31> salary_payment_day, // Must pay within 7 days of end of month
+
+    // Working hours - Part IV Employment Act
+    BoundedInt<1, 48> hours_per_week where hours_per_week <= 44, // Normal hours max 44
+    BoundedInt<1, 12> hours_overtime_per_day where hours_overtime_per_day <= 12,
+
+    // Annual leave - Section 43 Employment Act
+    @citation("43", "1", "Employment Act")
+    BoundedInt<7, 21> annual_leave_days where annual_leave_days >= 7, // Min 7 days
+
+    // Medical leave - Section 89 Employment Act
+    @citation("89", "1", "Employment Act")
+    BoundedInt<14, 60> outpatient_medical_leave_days where outpatient_medical_leave_days >= 14,
+    BoundedInt<60, 60> hospitalization_leave_days where hospitalization_leave_days == 60,
+
+    // CPF contributions (mandatory for Singapore Citizens/PRs)
+    bool cpf_applicable,
+    optional BoundedInt<0, 37> employer_cpf_rate, // Varies by age
+    optional BoundedInt<0, 20> employee_cpf_rate,
+
+    // Notice period
+    BoundedInt<1, 3> notice_period_months,
+
+    // Termination
+    bool terminable_with_notice where terminable_with_notice == true,
+    string termination_clause,
+
+    // Confidentiality
+    bool confidentiality_clause where confidentiality_clause == true,
+
+    // Governing law
+    string governing_law := "Singapore"
+}
+
+// Probationary employment contract
+struct ProbationaryEmploymentContract extends FullTimeEmploymentContract {
+    status: EmploymentStatus where status == EmploymentStatus::Probation,
+
+    // Probation is required
+    probation_months: Some(BoundedInt<1, 6>) where probation_months.unwrap() >= 3,
+
+    // Shorter notice during probation
+    BoundedInt<0, 1> probation_notice_days where probation_notice_days <= 7
+}
+
+// Example: Software Engineer employment contract
+example SoftwareEngineerContract := FullTimeEmploymentContract {
+    employer_name: "Tech Innovations Pte Ltd",
+    employer_uen: "202012345A",
+    employer_address: "123 Science Park Road, Singapore 117543",
+
+    employee_name: "John Doe",
+    employee_nric: "S1234567A",
+    employee_address: "456 Orchard Road, Singapore 238883",
+    employee_age: 28,
+
+    job_title: "Software Engineer",
+    job_description: "Design, develop, and maintain software applications",
+    status: EmploymentStatus::Permanent,
+    employment_type: EmploymentType::FullTime,
+
+    employment_start_date: "01-01-2025",
+
+    probation_months: None,
+    probation_end_date: None,
+
+    monthly_salary: 6000.00,
+    salary_payment_day: 25,
+
+    hours_per_week: 44,
+    hours_overtime_per_day: 2,
+
+    annual_leave_days: 14,
+
+    outpatient_medical_leave_days: 14,
+    hospitalization_leave_days: 60,
+
+    cpf_applicable: true,
+    employer_cpf_rate: Some(17),
+    employee_cpf_rate: Some(20),
+
+    notice_period_months: 1,
+
+    terminable_with_notice: true,
+    termination_clause: "Either party may terminate with 1 month written notice",
+
+    confidentiality_clause: true,
+
+    governing_law: "Singapore"
+}
+
+// Example: Fresh graduate on probation
+example GraduateTraineeContract := ProbationaryEmploymentContract {
+    employer_name: "ABC Consulting Pte Ltd",
+    employer_uen: "201987654B",
+    employer_address: "789 Shenton Way, Singapore 068805",
+
+    employee_name: "Jane Lim",
+    employee_nric: "S9876543Z",
+    employee_address: "321 Tampines Street 32, Singapore 529384",
+    employee_age: 23,
+
+    job_title: "Management Trainee",
+    job_description: "Rotational program across departments",
+    status: EmploymentStatus::Probation,
+    employment_type: EmploymentType::FullTime,
+
+    employment_start_date: "01-02-2025",
+
+    probation_months: Some(3),
+    probation_end_date: Some("30-04-2025"),
+
+    monthly_salary: 3500.00,
+    salary_payment_day: 25,
+
+    hours_per_week: 44,
+    hours_overtime_per_day: 2,
+
+    annual_leave_days: 14,
+
+    outpatient_medical_leave_days: 14,
+    hospitalization_leave_days: 60,
+
+    cpf_applicable: true,
+    employer_cpf_rate: Some(17),
+    employee_cpf_rate: Some(20),
+
+    notice_period_months: 1,
+    probation_notice_days: 7,
+
+    terminable_with_notice: true,
+    termination_clause: "7 days notice during probation, 1 month thereafter",
+
+    confidentiality_clause: true,
+
+    governing_law: "Singapore"
+}
+
+// MOM Compliance checks
+principle SalaryPaymentWithin7Days {
+    forall contract: FullTimeEmploymentContract,
+    contract.salary_payment_day <= 7 // Within 7 days of month end
+}
+
+principle MinimumAnnualLeave {
+    forall contract: FullTimeEmploymentContract,
+    contract.annual_leave_days >= 7
+}
+
+principle WorkingHoursLimit {
+    forall contract: FullTimeEmploymentContract,
+    contract.hours_per_week <= 44
+}
+
+principle CPFForCitizensAndPRs {
+    forall contract: FullTimeEmploymentContract,
+    contract.cpf_applicable == true =>
+    (contract.employer_cpf_rate.is_some() && contract.employee_cpf_rate.is_some())
+}

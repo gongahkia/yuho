@@ -1,0 +1,26 @@
+// Presumption Tracking Example
+// Demonstrates burden of proof and legal presumptions
+
+// Basic presumption of innocence
+enum Verdict {
+    Guilty,
+    NotGuilty,
+}
+
+struct Defendant {
+    string name,
+    int age,
+    Verdict status,
+}
+
+struct Evidence {
+    string description,
+    bool authenticated,
+    date collected_date,
+}
+
+struct CriminalCase {
+    string case_number,
+    Defendant defendant,
+    Array<Evidence> evidence,
+}

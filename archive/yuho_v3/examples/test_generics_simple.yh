@@ -1,0 +1,10 @@
+// Minimal generic types test
+
+struct Container<T> {
+    T value,
+}
+
+struct Pair<A, B> {
+    A first,
+    B second,
+}

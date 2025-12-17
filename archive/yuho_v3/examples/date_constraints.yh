@@ -1,0 +1,54 @@
+// Demonstration of ValidDate constraints
+// Showcases date validation with after/before parameters
+
+// Simple date constraint - must be after a specific date
+struct FutureEvent {
+    string event_name,
+    ValidDate<after="01-01-2024"> event_date,
+}
+
+// Date with both bounds
+struct HistoricalPeriod {
+    string period_name,
+    ValidDate<after="01-01-1900", before="31-12-2000"> start_date,
+    ValidDate<after="01-01-1900", before="31-12-2000"> end_date,
+}
+
+// Contract with time-bound validity
+struct TimeBoundContract {
+    string contract_id,
+    ValidDate<after="01-01-2020"> effective_from,
+    ValidDate<after="01-01-2020", before="31-12-2030"> expires_on,
+    Positive<money<SGD>> value,
+}
+
+// Lease agreement with date constraints
+struct LeaseAgreement {
+    string property_address,
+    string tenant_name,
+    ValidDate<after="01-01-2024"> lease_start,
+    ValidDate<after="01-01-2025"> lease_end,  // Must be after 2025
+    BoundedInt<6, 36> lease_duration_months,
+    Positive<money<SGD>> monthly_rent,
+}
+
+// License with expiry
+struct SoftwareLicense {
+    string licensee_name,
+    string software_name,
+    ValidDate<after="01-01-2024"> issued_date,
+    ValidDate<after="01-01-2025", before="31-12-2030"> expiry_date,
+    bool is_renewable,
+}
+
+// Scope demonstrating usage
+scope lease_example {
+    LeaseAgreement lease := LeaseAgreement {
+        property_address := "123 Main St, Singapore",
+        tenant_name := "Alice Tan",
+        lease_start := 01-04-2024,
+        lease_end := 01-04-2026,
+        lease_duration_months := 24,
+        monthly_rent := $3000,
+    }
+}

@@ -1,0 +1,427 @@
+// Personal Data Protection Act (PDPA) 2012
+// Singapore's data protection and privacy law
+// Based on PDPA 2012 (Act 26 of 2012)
+
+@citation("", "", "Personal Data Protection Act 2012")
+
+// Purpose of collection
+enum CollectionPurpose {
+    Marketing,
+    ServiceProvision,
+    Employment,
+    CustomerRelationship,
+    LegalObligation,
+    ContractPerformance,
+    LegitimateInterests,
+    Other
+}
+
+// Legal basis for processing
+enum LegalBasis {
+    Consent,              // Section 13 - consent required
+    Contract,             // Section 17 - necessary for contract
+    LegalObligation,      // Section 17 - required by law
+    VitalInterests,       // Section 17 - protect life/health
+    PublicInterest,       // Section 17 - public interest
+    LegitimateInterests   // Section 17 - legitimate interests
+}
+
+// Type of personal data
+enum DataType {
+    Name,
+    NRIC,
+    ContactDetails,
+    FinancialData,
+    HealthData,
+    BiometricData,
+    LocationData,
+    OnlineBehavior,
+    EmploymentData,
+    Other
+}
+
+// Data subject rights
+enum DataSubjectRight {
+    AccessRight,           // Section 21 - right to access
+    CorrectionRight,       // Section 22 - right to correct
+    WithdrawalRight,       // Section 16 - withdraw consent
+    PortabilityRight,      // Right to data portability
+    ObjectionRight         // Right to object to processing
+}
+
+// Personal data collection
+struct PersonalDataCollection {
+    // Organization details
+    string organization_name,
+    string organization_uen,
+    bool is_data_controller where is_data_controller == true,
+    optional string data_protection_officer,
+
+    // Data collected
+    list<DataType> data_types,
+    string data_description,
+
+    // Purpose - Section 18 (Purpose Limitation)
+    @citation("18", "1", "Personal Data Protection Act 2012")
+    list<CollectionPurpose> purposes,
+    string purpose_description,
+    bool purposes_notified_to_individual where purposes_notified_to_individual == true,
+
+    // Legal basis - Section 13 (Consent) or Section 17 (Deemed Consent)
+    LegalBasis legal_basis,
+
+    // Consent - Section 14 (Form of consent)
+    @citation("14", "1", "Personal Data Protection Act 2012")
+    optional bool consent_obtained,
+    optional bool consent_voluntary,
+    optional bool consent_informed,
+    optional date consent_date,
+
+    // For consent-based collection
+    where legal_basis == LegalBasis::Consent =>
+          consent_obtained == Some(true) &&
+          consent_voluntary == Some(true) &&
+          consent_informed == Some(true),
+
+    // Notification - Section 20 (Notification)
+    @citation("20", "1", "Personal Data Protection Act 2012")
+    bool individual_notified where individual_notified == true,
+    list<string> information_provided, // What was disclosed to individual
+
+    // Collection limitation - Section 18
+    bool collection_reasonable where collection_reasonable == true,
+    bool collection_necessary_for_purpose where collection_necessary_for_purpose == true,
+
+    // Accuracy - Section 23
+    @citation("23", "1", "Personal Data Protection Act 2012")
+    bool reasonable_steps_to_ensure_accuracy where reasonable_steps_to_ensure_accuracy == true,
+
+    // Retention - Section 25
+    @citation("25", "1", "Personal Data Protection Act 2012")
+    bool retained_only_as_long_as_necessary where retained_only_as_long_as_necessary == true,
+    optional BoundedInt<1, 120> retention_months,
+
+    // Date of collection
+    date collection_date
+}
+
+// Data breach notification
+struct DataBreachNotification {
+    // Organization
+    string organization_name,
+    string organization_uen,
+
+    // Breach details
+    date breach_discovery_date,
+    string breach_description,
+    list<DataType> affected_data_types,
+    BoundedInt<1, 1000000> estimated_affected_individuals,
+
+    // Section 26D - Notification to Commission (within 3 calendar days)
+    @citation("26D", "1", "Personal Data Protection Act 2012")
+    bool notified_pdpc where notified_pdpc == true,
+    date pdpc_notification_date,
+    BoundedInt<0, 10> days_to_notify_pdpc,
+    where days_to_notify_pdpc <= 3, // Must notify within 3 days
+
+    // Section 26D - Notification to affected individuals (as soon as practicable)
+    @citation("26D", "2", "Personal Data Protection Act 2012")
+    bool notified_individuals where notified_individuals == true,
+    date individuals_notification_date,
+    string notification_method,
+
+    // Severity assessment
+    bool significant_harm_likely where significant_harm_likely == true,
+    bool significant_scale where significant_scale == true,
+    string harm_assessment,
+
+    // Remedial actions
+    bool remedial_actions_taken where remedial_actions_taken == true,
+    list<string> remedial_measures,
+
+    // Investigation
+    bool investigation_conducted where investigation_conducted == true,
+    optional string investigation_findings
+}
+
+// Data transfer to third parties
+struct DataTransfer {
+    // Transferor (data controller)
+    string transferor_name,
+    string transferor_uen,
+
+    // Transferee (recipient)
+    string transferee_name,
+    optional string transferee_jurisdiction,
+    bool transferee_outside_singapore,
+
+    // Data being transferred
+    list<DataType> data_types,
+    BoundedInt<1, 1000000> estimated_individuals_affected,
+
+    // Purpose of transfer - Section 24 (Transfer Limitation)
+    @citation("24", "1", "Personal Data Protection Act 2012")
+    CollectionPurpose transfer_purpose,
+    string transfer_purpose_description,
+
+    // Section 26 - Transfer outside Singapore
+    @citation("26", "1", "Personal Data Protection Act 2012")
+    optional bool consent_obtained_for_transfer,
+    optional bool adequate_protection_in_destination,
+    optional bool contractual_protections,
+
+    // For transfers outside Singapore
+    where transferee_outside_singapore == true =>
+          consent_obtained_for_transfer == Some(true) ||
+          adequate_protection_in_destination == Some(true) ||
+          contractual_protections == Some(true),
+
+    // Data processing agreement
+    bool data_processing_agreement_signed where data_processing_agreement_signed == true,
+    date transfer_date
+}
+
+// Do Not Call (DNC) Registry compliance
+struct DNCCompliance {
+    // Organization
+    string organization_name,
+    string organization_uen,
+
+    // Message details
+    string message_type, // "Marketing SMS", "Marketing call", etc.
+    date message_date,
+
+    // DNC Registry check - Section 43
+    @citation("43", "1", "Personal Data Protection Act 2012")
+    bool checked_dnc_registry where checked_dnc_registry == true,
+    date dnc_check_date,
+
+    // Recipient opted in or has ongoing relationship
+    bool recipient_consent_obtained,
+    bool ongoing_relationship_exists,
+
+    // Clear identification - Section 40
+    @citation("40", "1", "Personal Data Protection Act 2012")
+    bool organization_clearly_identified where organization_clearly_identified == true,
+    bool contact_info_provided where contact_info_provided == true,
+
+    // Opt-out mechanism - Section 41
+    @citation("41", "1", "Personal Data Protection Act 2012")
+    bool opt_out_mechanism_provided where opt_out_mechanism_provided == true,
+    string opt_out_method,
+
+    // Compliance check
+    bool dnc_compliant := checked_dnc_registry &&
+                         (recipient_consent_obtained || ongoing_relationship_exists) &&
+                         organization_clearly_identified &&
+                         opt_out_mechanism_provided
+}
+
+// Example: E-commerce data collection
+example EcommerceDataCollection := PersonalDataCollection {
+    organization_name: "ShopOnline Pte Ltd",
+    organization_uen: "202012345A",
+    is_data_controller: true,
+    data_protection_officer: Some("dpo@shoponline.sg"),
+
+    data_types: [
+        DataType::Name,
+        DataType::ContactDetails,
+        DataType::FinancialData,
+        DataType::OnlineBehavior
+    ],
+    data_description: "Customer name, email, phone, payment info, browsing history",
+
+    purposes: [
+        CollectionPurpose::ServiceProvision,
+        CollectionPurpose::CustomerRelationship,
+        CollectionPurpose::Marketing
+    ],
+    purpose_description: "Process orders, customer service, send promotional materials",
+    purposes_notified_to_individual: true,
+
+    legal_basis: LegalBasis::Consent,
+
+    consent_obtained: Some(true),
+    consent_voluntary: Some(true),
+    consent_informed: Some(true),
+    consent_date: Some("01-01-2025"),
+
+    individual_notified: true,
+    information_provided: [
+        "Types of data collected",
+        "Purposes of collection",
+        "Right to withdraw consent",
+        "Contact details of DPO"
+    ],
+
+    collection_reasonable: true,
+    collection_necessary_for_purpose: true,
+
+    reasonable_steps_to_ensure_accuracy: true,
+
+    retained_only_as_long_as_necessary: true,
+    retention_months: Some(60), // 5 years
+
+    collection_date: "01-01-2025"
+}
+
+// Example: Data breach notification
+example CustomerDataBreach := DataBreachNotification {
+    organization_name: "FinanceApp Pte Ltd",
+    organization_uen: "201987654B",
+
+    breach_discovery_date: "15-01-2025",
+    breach_description: "Unauthorized access to customer database due to SQL injection vulnerability",
+    affected_data_types: [
+        DataType::Name,
+        DataType::NRIC,
+        DataType::ContactDetails,
+        DataType::FinancialData
+    ],
+    estimated_affected_individuals: 50000,
+
+    notified_pdpc: true,
+    pdpc_notification_date: "17-01-2025",
+    days_to_notify_pdpc: 2, // Within 3-day requirement
+
+    notified_individuals: true,
+    individuals_notification_date: "18-01-2025",
+    notification_method: "Email and SMS to all affected customers",
+
+    significant_harm_likely: true,
+    significant_scale: true,
+    harm_assessment: "Risk of identity theft and financial fraud",
+
+    remedial_actions_taken: true,
+    remedial_measures: [
+        "Patched SQL injection vulnerability",
+        "Enhanced database security",
+        "Implemented additional monitoring",
+        "Offered free credit monitoring to affected customers"
+    ],
+
+    investigation_conducted: true,
+    investigation_findings: Some("Vulnerability exploited by external actor, no insider involvement")
+}
+
+// Example: Cross-border data transfer
+example CloudServiceTransfer := DataTransfer {
+    transferor_name: "LocalBusiness Pte Ltd",
+    transferor_uen: "202123456C",
+
+    transferee_name: "AWS Singapore",
+    transferee_jurisdiction: Some("Singapore"),
+    transferee_outside_singapore: false,
+
+    data_types: [
+        DataType::Name,
+        DataType::ContactDetails,
+        DataType::EmploymentData
+    ],
+    estimated_individuals_affected: 500,
+
+    transfer_purpose: CollectionPurpose::ServiceProvision,
+    transfer_purpose_description: "Cloud hosting and data storage",
+
+    consent_obtained_for_transfer: Some(true),
+    adequate_protection_in_destination: Some(true),
+    contractual_protections: Some(true),
+
+    data_processing_agreement_signed: true,
+    transfer_date: "01-02-2025"
+}
+
+// Example: DNC compliance for marketing SMS
+example MarketingSMSCompliance := DNCCompliance {
+    organization_name: "RetailShop Pte Ltd",
+    organization_uen: "202234567D",
+
+    message_type: "Marketing SMS",
+    message_date: "05-02-2025",
+
+    checked_dnc_registry: true,
+    dnc_check_date: "04-02-2025",
+
+    recipient_consent_obtained: true,
+    ongoing_relationship_exists: true,
+
+    organization_clearly_identified: true,
+    contact_info_provided: true,
+
+    opt_out_mechanism_provided: true,
+    opt_out_method: "Reply STOP to unsubscribe"
+}
+
+// PDPA compliance principles
+
+principle ConsentRequired {
+    forall collection: PersonalDataCollection,
+    collection.legal_basis == LegalBasis::Consent =>
+    collection.consent_obtained == Some(true) &&
+    collection.consent_voluntary == Some(true) &&
+    collection.consent_informed == Some(true)
+}
+
+principle PurposeNotificationRequired {
+    forall collection: PersonalDataCollection,
+    collection.purposes_notified_to_individual == true &&
+    collection.individual_notified == true
+}
+
+principle CollectionReasonableAndNecessary {
+    forall collection: PersonalDataCollection,
+    collection.collection_reasonable == true &&
+    collection.collection_necessary_for_purpose == true
+}
+
+principle AccuracyRequired {
+    forall collection: PersonalDataCollection,
+    collection.reasonable_steps_to_ensure_accuracy == true
+}
+
+principle RetentionLimitation {
+    forall collection: PersonalDataCollection,
+    collection.retained_only_as_long_as_necessary == true
+}
+
+principle BreachNotificationWithin3Days {
+    forall breach: DataBreachNotification,
+    breach.notified_pdpc == true &&
+    breach.days_to_notify_pdpc <= 3
+}
+
+principle BreachNotificationToIndividuals {
+    forall breach: DataBreachNotification,
+    breach.significant_harm_likely == true =>
+    breach.notified_individuals == true
+}
+
+principle RemediationRequired {
+    forall breach: DataBreachNotification,
+    breach.remedial_actions_taken == true
+}
+
+principle CrossBorderTransferProtection {
+    forall transfer: DataTransfer,
+    transfer.transferee_outside_singapore == true =>
+    (transfer.consent_obtained_for_transfer == Some(true) ||
+     transfer.adequate_protection_in_destination == Some(true) ||
+     transfer.contractual_protections == Some(true))
+}
+
+principle DataProcessingAgreementRequired {
+    forall transfer: DataTransfer,
+    transfer.data_processing_agreement_signed == true
+}
+
+principle DNCRegistryCheck {
+    forall dnc: DNCCompliance,
+    dnc.checked_dnc_registry == true
+}
+
+principle OptOutMechanismRequired {
+    forall dnc: DNCCompliance,
+    dnc.opt_out_mechanism_provided == true &&
+    dnc.organization_clearly_identified == true
+}

@@ -1,0 +1,129 @@
+// Tort Law: Negligence
+//
+// This example demonstrates using legal tests to establish
+// the elements of tortious liability for negligence.
+
+// Four elements required for negligence
+legal_test Negligence {
+    requires duty_of_care: bool,
+    requires breach_of_duty: bool,
+    requires causation: bool,
+    requires damages: bool,
+}
+
+// Special duty of care relationships
+legal_test ProfessionalDuty {
+    requires professional_relationship: bool,
+    requires reasonable_skill_standard: bool,
+    requires foreseeable_harm: bool,
+}
+
+// Liability outcome
+enum Liability {
+    Liable,
+    NotLiable,
+}
+
+// Represent a negligence case
+struct NegligenceCase {
+    string case_reference,
+    string plaintiff,
+    string defendant,
+
+    // Negligence elements
+    bool duty_of_care,
+    bool breach_of_duty,
+    bool causation,
+    bool damages,
+
+    // Professional duty elements (if applicable)
+    bool professional_relationship,
+    bool reasonable_skill_standard,
+    bool foreseeable_harm,
+
+    // Case details
+    money<SGD> damages_claimed,
+    date incident_date,
+}
+
+// Determine liability for ordinary negligence
+func determine_negligence_liability(NegligenceCase case) -> Liability {
+    match case {
+        case satisfies Negligence := Liability::Liable
+        case _ := Liability::NotLiable
+    }
+}
+
+// Determine if professional duty exists
+func has_professional_duty(NegligenceCase case) -> bool {
+    match case {
+        case satisfies ProfessionalDuty := true
+        case _ := false
+    }
+}
+
+// Example 1: Medical malpractice (all elements present)
+NegligenceCase medical_malpractice := NegligenceCase {
+    case_reference: "Plaintiff v Doctor 2024",
+    plaintiff: "Patient A",
+    defendant: "Dr. Smith",
+
+    duty_of_care: true,              // Doctor-patient relationship
+    breach_of_duty: true,            // Failed to diagnose
+    causation: true,                 // Failure caused harm
+    damages: true,                   // Patient suffered injury
+
+    professional_relationship: true,  // Doctor-patient
+    reasonable_skill_standard: true,  // Medical standard applies
+    foreseeable_harm: true,          // Harm was foreseeable
+
+    damages_claimed: $50000,
+    incident_date: "10-01-2024",
+}
+
+// Example 2: Car accident (ordinary negligence)
+NegligenceCase car_accident := NegligenceCase {
+    case_reference: "Smith v Jones 2024",
+    plaintiff: "Driver Smith",
+    defendant: "Driver Jones",
+
+    duty_of_care: true,              // Duty to drive safely
+    breach_of_duty: true,            // Ran red light
+    causation: true,                 // Caused collision
+    damages: true,                   // Property and injury damage
+
+    professional_relationship: false, // Not professionals
+    reasonable_skill_standard: false,
+    foreseeable_harm: false,
+
+    damages_claimed: $15000,
+    incident_date: "05-03-2024",
+}
+
+// Example 3: No breach (not negligent)
+NegligenceCase no_breach := NegligenceCase {
+    case_reference: "Williams v Brown 2024",
+    plaintiff: "Alice Williams",
+    defendant: "Bob Brown",
+
+    duty_of_care: true,              // Duty existed
+    breach_of_duty: false,           // Did not breach duty
+    causation: false,                // No causation
+    damages: true,                   // Damages exist but unrelated
+
+    professional_relationship: false,
+    reasonable_skill_standard: false,
+    foreseeable_harm: false,
+
+    damages_claimed: $10000,
+    incident_date: "20-04-2024",
+}
+
+// Determine liabilities
+Liability liability1 := determine_negligence_liability(medical_malpractice)  // Liable
+Liability liability2 := determine_negligence_liability(car_accident)        // Liable
+Liability liability3 := determine_negligence_liability(no_breach)           // NotLiable
+
+// Check professional duties
+bool is_professional1 := has_professional_duty(medical_malpractice)  // true
+bool is_professional2 := has_professional_duty(car_accident)         // false

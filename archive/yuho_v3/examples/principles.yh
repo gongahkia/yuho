@@ -1,0 +1,209 @@
+// Legal Principle Verification Examples
+// Demonstrates the principle keyword with forall/exists quantifiers
+
+// Criminal Law Principles
+
+principle NoDoubleJeopardy {
+    forall case1: CriminalCase,
+    forall case2: CriminalCase,
+    if case1.verdict == Verdict::Guilty 
+        && case2.accused == case1.accused
+        && case2.offense == case1.offense
+    then case1.case_id == case2.case_id
+}
+
+principle PresumptionOfInnocence {
+    forall accused: Person,
+    forall trial: CriminalTrial,
+    if trial.accused == accused && !trial.concluded
+    then accused.presumed_status == Status::Innocent
+}
+
+// Contract Law Principles
+
+principle ConsiderationRequired {
+    forall contract: Contract,
+    if contract.enforceable == true
+    then exists consideration: money<SGD>,
+        consideration > 0 && contract.consideration == consideration
+}
+
+principle MutualConsent {
+    forall contract: Contract,
+    if contract.valid == true
+    then contract.offer_accepted == true 
+        && contract.parties_competent == true
+}
+
+// Property Law Principles
+
+principle BundleOfRights {
+    forall property: RealProperty,
+    forall owner: Person,
+    if property.owner == owner
+    then owner.has_right_to_possess == true
+        && owner.has_right_to_use == true
+        && owner.has_right_to_transfer == true
+}
+
+principle AdversePossessionLimit {
+    forall claim: AdversePossessionClaim,
+    if claim.successful == true
+    then claim.continuous_years >= 12
+}
+
+// Tort Law Principles
+
+principle ReasonablePersonStandard {
+    forall defendant: Person,
+    forall negligence_claim: NegligenceClaim,
+    if negligence_claim.breach_found == true
+    then exists reasonable_person: Person,
+        defendant.conduct < reasonable_person.expected_conduct
+}
+
+principle CausationRequired {
+    forall tort: TortClaim,
+    if tort.liability_established == true
+    then tort.factual_causation == true
+        && tort.legal_causation == true
+}
+
+// Constitutional Law Principles
+
+principle FundamentalRightsProtection {
+    forall right: FundamentalRight,
+    forall restriction: LegalRestriction,
+    if restriction.applies_to == right
+    then restriction.prescribed_by_law == true
+        && restriction.proportionate == true
+}
+
+principle EqualProtection {
+    forall person1: Person,
+    forall person2: Person,
+    forall law: Statute,
+    if person1.circumstances == person2.circumstances
+    then law.applies_to(person1) == law.applies_to(person2)
+}
+
+// Evidence Law Principles
+
+principle BeyondReasonableDoubt {
+    forall case: CriminalCase,
+    if case.verdict == Verdict::Guilty
+    then case.evidence_strength >= 95 // percentage certainty
+}
+
+principle BalanceOfProbabilities {
+    forall case: CivilCase,
+    if case.judgment == Judgment::Plaintiff
+    then case.evidence_strength > 50 // more likely than not
+}
+
+// Procedural Principles
+
+principle NaturalJustice {
+    forall hearing: LegalHearing,
+    if hearing.valid == true
+    then hearing.right_to_be_heard == true
+        && hearing.unbiased_tribunal == true
+}
+
+principle TimelyJustice {
+    forall case: CourtCase,
+    if case.filed_date.year() == 2024
+    then exists hearing_date: date,
+        hearing_date <= case.filed_date + duration_days(180)
+}
+
+// Supporting Type Definitions
+
+struct CriminalCase {
+    string case_id,
+    Person accused,
+    string offense,
+    Verdict verdict,
+}
+
+enum Verdict {
+    Guilty,
+    NotGuilty,
+    Acquitted,
+}
+
+struct Person {
+    string name,
+    Status presumed_status,
+}
+
+enum Status {
+    Innocent,
+    Guilty,
+}
+
+struct CriminalTrial {
+    Person accused,
+    bool concluded,
+}
+
+struct Contract {
+    bool enforceable,
+    bool valid,
+    bool offer_accepted,
+    bool parties_competent,
+    money<SGD> consideration,
+}
+
+struct RealProperty {
+    Person owner,
+}
+
+struct AdversePossessionClaim {
+    bool successful,
+    int continuous_years,
+}
+
+struct NegligenceClaim {
+    bool breach_found,
+}
+
+struct TortClaim {
+    bool liability_established,
+    bool factual_causation,
+    bool legal_causation,
+}
+
+struct FundamentalRight {
+    string name,
+}
+
+struct LegalRestriction {
+    FundamentalRight applies_to,
+    bool prescribed_by_law,
+    bool proportionate,
+}
+
+struct Statute {
+    string name,
+}
+
+struct CivilCase {
+    Judgment judgment,
+    int evidence_strength,
+}
+
+enum Judgment {
+    Plaintiff,
+    Defendant,
+}
+
+struct LegalHearing {
+    bool valid,
+    bool right_to_be_heard,
+    bool unbiased_tribunal,
+}
+
+struct CourtCase {
+    date filed_date,
+}

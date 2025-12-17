@@ -1,0 +1,68 @@
+// Legal Precedent Citations Example
+// Demonstrates @precedent annotations with case law references
+
+struct Cheating {
+    @precedent("Tan Siew Eng v PP [1997] SGHC 123")
+    bool deception,
+    
+    @precedent("Gunasegaran s/o Pavadaisamy v PP [1997] SGCA 14")
+    bool dishonest_concealment,
+    
+    bool property_transfer,
+}
+
+struct Defamation {
+    @precedent("Lee Kuan Yew v Davies Derek Gwyn [1989] SGHC 20")
+    bool false_statement,
+    
+    @precedent("Ramachandran Jayakumar v Wuu David [1999] SGHC 82")
+    bool published_to_third_party,
+    
+    bool caused_harm_to_reputation,
+}
+
+struct NegligenceLiability {
+    @precedent("Spandeck Engineering v Defence Science & Technology Agency [2007] SGCA 37")
+    bool duty_of_care,
+    
+    @precedent("Sunny Metal & Engineering Pte Ltd v Ng Khim Ming Eric [2007] SGCA 36")
+    bool breach_of_duty,
+    
+    @precedent("Asia Hotel Investments Ltd v Starwood Asia Pacific Management Pte Ltd [2005] SGHC 92")
+    bool causation,
+    
+    bool damages,
+}
+
+struct ContractualLiability {
+    @precedent("Gay Choon Ing v Loh Sze Ti Terence Peter [2009] SGCA 3")
+    bool valid_contract,
+    
+    @precedent("RDC Concrete Pte Ltd v Sato Kogyo (S) Pte Ltd [2007] SGCA 39")
+    bool breach_of_contract,
+    
+    bool damages_proven,
+}
+
+// Criminal law precedents
+struct MurderElements {
+    @precedent("Ong Pang Siew v PP [2011] SGCA 37")
+    bool intention_to_cause_death,
+    
+    @precedent("Pathip Selvan s/o Sugumaran v PP [2012] SGCA 38")
+    bool caused_death,
+    
+    bool no_lawful_justification,
+}
+
+// Property law precedents
+struct AdversePossession {
+    @precedent("Balwant Singh v Double L & T Pte Ltd [1996] SGCA 78")
+    bool factual_possession,
+    
+    @precedent("Teo Siew Peng v Neo Hock Pheng [1999] SGCA 3")
+    bool intention_to_possess,
+    
+    @precedent("Wong Kok Chin v Mah Ten Kui Joseph [2015] SGHC 107")
+    duration possession_period,
+}

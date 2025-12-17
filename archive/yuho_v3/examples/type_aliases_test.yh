@@ -1,0 +1,29 @@
+// Type Alias Examples
+// Demonstrates type aliases for improved readability
+
+// Simple type aliases
+type UserId := int
+type Email := string
+type Timestamp := date
+
+// Type aliases with dependent types
+type Age := BoundedInt<0, 150>
+type Percentage := BoundedInt<0, 100>
+type PositiveAmount := Positive<money<SGD>>
+
+// Type aliases for complex types
+type PersonID := BoundedInt<1, 999999>
+
+// Using type aliases in struct definitions
+struct User {
+    UserId id,
+    Email email,
+    string name,
+    Age age,
+}
+
+struct Transaction {
+    PersonID person_id,
+    PositiveAmount amount,
+    Timestamp created_at,
+}

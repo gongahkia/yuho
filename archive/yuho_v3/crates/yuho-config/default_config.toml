@@ -1,0 +1,38 @@
+# Default configuration for Yuho
+# This file contains sensible defaults for all configuration options
+
+[cache]
+max_entries = 1000
+ttl_seconds = 3600
+enable_persistence = false
+
+[http]
+connect_timeout_seconds = 10
+request_timeout_seconds = 30
+idle_timeout_seconds = 90
+
+[docs]
+base_url = "https://github.com/gongahkia/yuho-2/wiki"
+
+[docs.external_tools]
+mermaid = "https://mermaid.live"
+alloy = "http://alloytools.org"
+
+[date_formats]
+default = "DD-MM-YYYY"
+allowed = ["DD-MM-YYYY", "YYYY-MM-DD", "MM/DD/YYYY"]
+
+[precision]
+float_decimal_places = 4
+money_decimal_places = 2
+percent_decimal_places = 4
+
+[llm]
+default_provider = "openai"
+
+[llm.token_limits]
+explanation_max_tokens = 1000
+statute_parsing_max_tokens = 2000
+test_generation_max_tokens = 1500
+contract_generation_max_tokens = 3000
+legal_reasoning_max_tokens = 2500

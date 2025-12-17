@@ -1,0 +1,34 @@
+// Example demonstrating citation validation
+// This file showcases various citation formats and validation scenarios
+
+struct PenalCodeSection {
+    Citation<"415", "1", "Penal Code"> offense_definition,
+    string description,
+}
+
+struct ContractLawReference {
+    // Valid citation
+    Citation<"96", "a", "Contract Act"> contract_requirements,
+
+    // Multiple citations
+    Citation<"97", "b", "Contract Act"> consideration,
+    Citation<"10", "", "Contract Act"> validity,
+}
+
+struct InvalidCitations {
+    // These will trigger validation errors:
+    // Citation<"99999", "1", "Penal Code"> out_of_range,  // Section number too high
+    // Citation<"ABC", "1", "Penal Code"> non_numeric,  // Non-numeric section
+    // Citation<"415", "@#$", "Penal Code"> invalid_subsection,  // Invalid subsection format
+}
+
+// Define an act so cross-references work
+struct PenalCode {
+    string jurisdiction,
+    int year_enacted,
+}
+
+struct ContractAct {
+    string jurisdiction,
+    int year_enacted,
+}

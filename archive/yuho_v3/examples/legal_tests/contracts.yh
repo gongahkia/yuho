@@ -1,0 +1,127 @@
+// Contract Formation Requirements
+//
+// This example demonstrates using legal tests to verify
+// all essential elements of a valid contract are present.
+
+// Core elements for a valid contract
+legal_test ValidContract {
+    requires offer_made: bool,
+    requires acceptance_given: bool,
+    requires consideration_present: bool,
+    requires legal_capacity: bool,
+    requires lawful_purpose: bool,
+}
+
+// Additional requirement for written contracts
+legal_test WrittenContract {
+    requires proper_form: bool,
+    requires signatures_present: bool,
+    requires witness_attestation: bool,
+}
+
+// Contract status
+enum ContractStatus {
+    Binding,
+    Void,
+    Voidable,
+    Unenforceable,
+}
+
+// Represent a contract for analysis
+struct ContractData {
+    string contract_id,
+    string party_a,
+    string party_b,
+
+    // Essential elements
+    bool offer_made,
+    bool acceptance_given,
+    bool consideration_present,
+    bool legal_capacity,
+    bool lawful_purpose,
+
+    // Form requirements
+    bool proper_form,
+    bool signatures_present,
+    bool witness_attestation,
+
+    // Contract details
+    money<SGD> contract_value,
+    date execution_date,
+}
+
+// Determine if contract is valid and binding
+func determine_contract_status(ContractData contract) -> ContractStatus {
+    match contract {
+        case satisfies ValidContract := match contract {
+            case satisfies WrittenContract := ContractStatus::Binding
+            case _ := ContractStatus::Binding  // Oral contracts can be valid
+        }
+        case _ := ContractStatus::Void
+    }
+}
+
+// Example 1: Valid written contract
+ContractData valid_written := ContractData {
+    contract_id: "CON-2024-001",
+    party_a: "Alice Corp",
+    party_b: "Bob Industries",
+
+    offer_made: true,
+    acceptance_given: true,
+    consideration_present: true,
+    legal_capacity: true,
+    lawful_purpose: true,
+
+    proper_form: true,
+    signatures_present: true,
+    witness_attestation: true,
+
+    contract_value: $100000,
+    execution_date: "01-06-2024",
+}
+
+// Example 2: Invalid - lacks consideration
+ContractData invalid_no_consideration := ContractData {
+    contract_id: "CON-2024-002",
+    party_a: "Charlie LLC",
+    party_b: "Diana Partners",
+
+    offer_made: true,
+    acceptance_given: true,
+    consideration_present: false,  // Missing consideration!
+    legal_capacity: true,
+    lawful_purpose: true,
+
+    proper_form: true,
+    signatures_present: true,
+    witness_attestation: false,
+
+    contract_value: $50000,
+    execution_date: "15-06-2024",
+}
+
+// Example 3: Valid oral contract
+ContractData valid_oral := ContractData {
+    contract_id: "CON-2024-003",
+    party_a: "Eve Trading",
+    party_b: "Frank Enterprises",
+
+    offer_made: true,
+    acceptance_given: true,
+    consideration_present: true,
+    legal_capacity: true,
+    lawful_purpose: true,
+
+    proper_form: false,            // Not written
+    signatures_present: false,     // No signatures
+    witness_attestation: false,    // No witnesses
+
+    contract_value: $5000,
+    execution_date: "20-06-2024",
+}
+
+// Determine statuses
+ContractStatus status1 := determine_contract_status(valid_written)           // Binding
+ContractStatus status2 := determine_contract_status(invalid_no_consideration) // Void
+ContractStatus status3 := determine_contract_status(valid_oral)              // Binding

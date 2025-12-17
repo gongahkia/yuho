@@ -1,0 +1,188 @@
+// Singapore Evidence Act - Admissibility of Evidence
+// Based on the Evidence Act (Cap 97)
+
+@citation("", "", "Evidence Act")
+
+// Legal test for admissible evidence
+legal_test AdmissibleEvidence {
+    // Relevance
+    bool is_relevant,
+
+    // Not excluded by law
+    bool not_privileged,
+    bool not_hearsay_or_exception_applies,
+    bool not_opinion_or_expert,
+    bool not_character_evidence_or_exception_applies,
+
+    // Properly obtained
+    bool lawfully_obtained,
+
+    // All criteria must be met
+    requires is_relevant &&
+             not_privileged &&
+             not_hearsay_or_exception_applies &&
+             lawfully_obtained
+}
+
+// Types of evidence
+enum EvidenceType {
+    Documentary,
+    Oral,
+    Real,      // Physical objects
+    Digital,
+    Expert
+}
+
+// Evidence admissibility
+struct Evidence {
+    string description,
+    EvidenceType evidence_type,
+    date date_obtained,
+    string obtained_by,
+
+    // Relevance - Section 5-11 Evidence Act
+    bool is_relevant where is_relevant == true,
+
+    // Hearsay rule - Section 62
+    bool is_hearsay,
+    bool hearsay_exception_applies,
+
+    // Admissibility determination
+    bool is_admissible := is_relevant &&
+                          (!is_hearsay || hearsay_exception_applies) &&
+                          lawfully_obtained,
+
+    // Chain of custody
+    bool chain_of_custody_intact,
+    bool lawfully_obtained where lawfully_obtained == true
+}
+
+// Documentary evidence
+struct DocumentaryEvidence extends Evidence {
+    string document_type,
+    bool is_original,
+    bool authenticated,
+
+    // Section 63-67: Proof of documents
+    bool properly_proved := (is_original && authenticated) ||
+                           (!is_original && secondary_evidence_allowed),
+
+    bool secondary_evidence_allowed
+}
+
+// Digital evidence
+struct DigitalEvidence extends Evidence {
+    string device_type,
+    string hash_value,  // For integrity verification
+    bool forensically_sound,
+
+    // Section 116A: Computer output admissibility
+    @citation("116A", "1", "Evidence Act")
+    bool computer_properly_operated,
+    bool data_regularly_supplied,
+
+    bool is_admissible := is_relevant &&
+                         forensically_sound &&
+                         computer_properly_operated &&
+                         chain_of_custody_intact
+}
+
+// Confession - Section 17-30
+struct Confession {
+    @citation("17", "1", "Evidence Act")
+
+    string accused_name,
+    string confession_text,
+    date confession_date,
+
+    // Voluntariness requirement
+    bool voluntary where voluntary == true,
+    bool induced_by_threat,
+    bool induced_by_promise,
+    bool induced_by_oppression,
+
+    // Must be voluntary
+    where voluntary == !induced_by_threat &&
+          voluntary == !induced_by_promise &&
+          voluntary == !induced_by_oppression,
+
+    // Made to proper person
+    bool made_to_proper_authority,
+
+    // Section 258: Admissibility
+    @citation("258", "1", "Criminal Procedure Code")
+    bool admissible := voluntary && made_to_proper_authority
+}
+
+// Expert evidence - Section 47
+struct ExpertEvidence extends Evidence {
+    @citation("47", "1", "Evidence Act")
+
+    string expert_name,
+    string field_of_expertise,
+    string opinion,
+
+    // Expert qualifications
+    bool properly_qualified where properly_qualified == true,
+    bool opinion_within_expertise where opinion_within_expertise == true,
+
+    // Admissibility
+    bool is_admissible := is_relevant &&
+                         properly_qualified &&
+                         opinion_within_expertise
+}
+
+// Example: DNA evidence
+example DNAEvidence := DigitalEvidence {
+    description: "DNA sample from crime scene",
+    evidence_type: EvidenceType::Digital,
+    date_obtained: "15-10-2024",
+    obtained_by: "Forensic officer",
+
+    is_relevant: true,
+    is_hearsay: false,
+    hearsay_exception_applies: false,
+
+    chain_of_custody_intact: true,
+    lawfully_obtained: true,
+
+    device_type: "DNA sequencer",
+    hash_value: "a3f5d8c9...",
+    forensically_sound: true,
+
+    computer_properly_operated: true,
+    data_regularly_supplied: true
+}
+
+// Example: Confession
+example PoliceConfession := Confession {
+    accused_name: "John Doe",
+    confession_text: "I admit to taking the phone from the store",
+    confession_date: "20-10-2024",
+
+    voluntary: true,
+    induced_by_threat: false,
+    induced_by_promise: false,
+    induced_by_oppression: false,
+
+    made_to_proper_authority: true
+}
+
+// Principle: Hearsay generally inadmissible
+principle HearsayInadmissible {
+    forall evidence: Evidence,
+    evidence.is_hearsay == true =>
+    (evidence.hearsay_exception_applies == true || evidence.is_admissible == false)
+}
+
+// Principle: Confessions must be voluntary
+principle ConfessionsMustBeVoluntary {
+    forall confession: Confession,
+    confession.admissible == true => confession.voluntary == true
+}
+
+// Principle: Relevance is necessary
+principle RelevanceRequired {
+    forall evidence: Evidence,
+    evidence.is_admissible == true => evidence.is_relevant == true
+}

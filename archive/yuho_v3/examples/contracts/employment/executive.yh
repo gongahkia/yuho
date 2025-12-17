@@ -1,0 +1,195 @@
+// Executive Employment Contract
+// Senior leadership position with enhanced compensation and benefits
+
+struct ExecutiveEmployment {
+    // Executive Information
+    string executive_name,
+    string executive_id,
+    ValidDate<after="01-01-2020"> start_date,
+    
+    // Position Details
+    string title,
+    string division,
+    BoundedInt<1, 10> direct_reports_count,
+    bool board_member,
+    bool executive_committee_member,
+    
+    // Base Compensation
+    money<SGD> annual_base_salary where annual_base_salary >= 200000 && annual_base_salary <= 2000000,
+    money<SGD> monthly_base_salary,
+    
+    // Variable Compensation
+    percent annual_bonus_target where annual_bonus_target >= 20 && annual_bonus_target <= 100,
+    money<SGD> signing_bonus,
+    bool equity_grant,
+    int equity_units,
+    BoundedInt<1, 4> vesting_years,
+    
+    // Long-Term Incentives
+    bool long_term_incentive_plan,
+    percent ltip_percentage,
+    BoundedInt<2, 5> ltip_performance_period_years,
+    
+    // Benefits Package
+    BoundedInt<21, 35> annual_leave_days where annual_leave_days >= 25,
+    money<SGD> car_allowance,
+    money<SGD> housing_allowance,
+    money<SGD> entertainment_allowance,
+    bool executive_health_screening,
+    bool spouse_health_coverage,
+    bool life_insurance_coverage,
+    money<SGD> life_insurance_amount,
+    
+    // Professional Development
+    money<SGD> annual_training_budget,
+    bool executive_coaching,
+    bool conference_attendance,
+    
+    // Contract Terms
+    BoundedInt<1, 3> initial_term_years,
+    bool auto_renewal,
+    BoundedInt<3, 12> notice_period_months where notice_period_months >= 6,
+    
+    // Severance & Protection
+    bool severance_package,
+    BoundedInt<6, 24> severance_months,
+    bool change_of_control_clause,
+    BoundedInt<12, 36> change_of_control_months,
+    
+    // Restrictive Covenants
+    bool non_compete,
+    BoundedInt<6, 24> non_compete_months,
+    bool non_solicitation,
+    BoundedInt<12, 36> non_solicitation_months,
+    bool confidentiality_perpetual,
+}
+
+scope ExecutiveEmploymentTerms {
+    // Calculate total compensation
+    fn calculate_total_comp(
+        money<SGD> base,
+        percent bonus_target,
+        money<SGD> allowances,
+        bool equity,
+        int units
+    ) -> money<SGD> {
+        money<SGD> target_bonus := base * (bonus_target / 100)
+        money<SGD> total := base + target_bonus + allowances
+        return total
+    }
+    
+    // Calculate equity value (simplified)
+    fn calculate_equity_value(int units, money<SGD> share_price) -> money<SGD> {
+        return units * share_price
+    }
+    
+    // Calculate vesting schedule
+    fn calculate_vested_equity(int total_units, int months_served, int vesting_years) -> int {
+        int vesting_months := vesting_years * 12
+        int vested := (total_units * months_served) / vesting_months
+        return vested
+    }
+    
+    // Calculate severance payment
+    fn calculate_severance(
+        money<SGD> monthly_salary,
+        int severance_months,
+        bool change_of_control,
+        bool coc_triggered
+    ) -> money<SGD> {
+        match change_of_control && coc_triggered {
+            case true := return monthly_salary * (severance_months * 2)
+            case false := return monthly_salary * severance_months
+        }
+    }
+    
+    // Verify executive package is competitive
+    fn verify_compensation_package(ExecutiveEmployment contract) -> bool {
+        bool adequate_base := contract.annual_base_salary >= 200000
+        bool adequate_bonus := contract.annual_bonus_target >= 20
+        bool adequate_leave := contract.annual_leave_days >= 25
+        bool adequate_notice := contract.notice_period_months >= 6
+        
+        return adequate_base && adequate_bonus && adequate_leave && adequate_notice
+    }
+    
+    // Check if non-compete is enforceable
+    fn is_non_compete_enforceable(
+        BoundedInt<6, 24> months,
+        money<SGD> compensation
+    ) -> bool {
+        // Non-compete more likely enforceable if reasonable duration and compensated
+        bool reasonable_duration := months <= 18
+        bool has_compensation := compensation > 0
+        return reasonable_duration && has_compensation
+    }
+}
+
+// Example: Chief Technology Officer
+ExecutiveEmployment cto := ExecutiveEmployment {
+    executive_name := "Emily Lim",
+    executive_id := "EXEC2025001",
+    start_date := "01-04-2025",
+    
+    title := "Chief Technology Officer",
+    division := "Technology",
+    direct_reports_count := 8,
+    board_member := false,
+    executive_committee_member := true,
+    
+    annual_base_salary := $400000,
+    monthly_base_salary := $33333,
+    
+    annual_bonus_target := 50,
+    signing_bonus := $50000,
+    equity_grant := true,
+    equity_units := 100000,
+    vesting_years := 4,
+    
+    long_term_incentive_plan := true,
+    ltip_percentage := 30,
+    ltip_performance_period_years := 3,
+    
+    annual_leave_days := 28,
+    car_allowance := $24000,
+    housing_allowance := $60000,
+    entertainment_allowance := $12000,
+    executive_health_screening := true,
+    spouse_health_coverage := true,
+    life_insurance_coverage := true,
+    life_insurance_amount := $1000000,
+    
+    annual_training_budget := $20000,
+    executive_coaching := true,
+    conference_attendance := true,
+    
+    initial_term_years := 3,
+    auto_renewal := true,
+    notice_period_months := 6,
+    
+    severance_package := true,
+    severance_months := 12,
+    change_of_control_clause := true,
+    change_of_control_months := 24,
+    
+    non_compete := true,
+    non_compete_months := 12,
+    non_solicitation := true,
+    non_solicitation_months := 24,
+    confidentiality_perpetual := true,
+}
+
+// Total compensation calculation
+money<SGD> total_allowances := cto.car_allowance + cto.housing_allowance + cto.entertainment_allowance
+
+match cto.annual_bonus_target {
+    case target where target >= 50 := "Senior Executive - 50%+ bonus target"
+    case target where target >= 30 := "Mid-level Executive - 30-49% bonus target"
+    case _ := "Entry Executive - Below 30% bonus target"
+}
+
+// Change of control protection
+match cto.change_of_control_clause {
+    case true := "Protected with 2x severance if terminated within 24 months of change of control"
+    case false := "Standard severance only"
+}

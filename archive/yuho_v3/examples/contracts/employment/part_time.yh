@@ -1,0 +1,87 @@
+// Part-Time Employment Contract
+// Flexible part-time employment with hourly compensation
+
+struct PartTimeEmployment {
+    // Employee Information
+    string employee_name,
+    string employee_id,
+    ValidDate<after="01-01-2020"> start_date,
+    ValidDate<before="31-12-2030"> end_date,
+    
+    // Position Details
+    string job_title,
+    string department,
+    
+    // Compensation
+    money<SGD> hourly_rate where hourly_rate >= 10 && hourly_rate <= 150,
+    BoundedInt<8, 30> weekly_hours where weekly_hours <= 30,
+    BoundedInt<1, 5> working_days where working_days <= 5,
+    
+    // Benefits (Prorated)
+    BoundedInt<0, 14> annual_leave_days,
+    bool cpf_contribution,
+    
+    // Contract Terms
+    bool renewable,
+    BoundedInt<3, 24> contract_duration_months,
+    BoundedInt<1, 4> notice_period_weeks,
+}
+
+scope PartTimeEmploymentTerms {
+    // Calculate monthly earnings
+    fn estimate_monthly_earnings(money<SGD> hourly_rate, int weekly_hours) -> money<SGD> {
+        int monthly_hours := weekly_hours * 4
+        return hourly_rate * monthly_hours
+    }
+    
+    // Calculate prorated annual leave
+    fn calculate_prorated_leave(int weekly_hours) -> int {
+        // Full-time (40hrs) gets 14 days, prorate for part-time
+        int base_leave := 14
+        int prorated := (weekly_hours * base_leave) / 40
+        return prorated
+    }
+    
+    // Check if CPF contribution is required
+    fn requires_cpf(money<SGD> monthly_earnings) -> bool {
+        // CPF required if earning more than $500/month
+        return monthly_earnings > 500
+    }
+    
+    // Verify contract is valid
+    fn verify_contract(PartTimeEmployment contract) -> bool {
+        bool valid_hours := contract.weekly_hours <= 30
+        bool valid_dates := contract.end_date > contract.start_date
+        bool valid_rate := contract.hourly_rate >= 10
+        
+        return valid_hours && valid_dates && valid_rate
+    }
+}
+
+// Example: Part-Time Marketing Assistant
+PartTimeEmployment marketing_assistant := PartTimeEmployment {
+    employee_name := "Bob Lee",
+    employee_id := "PT2025001",
+    start_date := "01-02-2025",
+    end_date := "31-12-2025",
+    
+    job_title := "Marketing Assistant",
+    department := "Marketing",
+    
+    hourly_rate := $25,
+    weekly_hours := 20,
+    working_days := 3,
+    
+    annual_leave_days := 7,
+    cpf_contribution := true,
+    
+    renewable := true,
+    contract_duration_months := 12,
+    notice_period_weeks := 2,
+}
+
+// Determine employment benefits
+match marketing_assistant.cpf_contribution {
+    case true := "CPF contributions apply - employer must contribute 17%"
+    case false := "No CPF contributions required"
+}

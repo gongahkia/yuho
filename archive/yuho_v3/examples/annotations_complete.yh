@@ -1,0 +1,61 @@
+// Complete Annotation System Example
+// Demonstrates all four annotation types: @precedent, @presumed, @hierarchy, @amended
+
+struct ConstitutionalProvision {
+    @hierarchy(level = Constitutional)
+    bool fundamental_right,
+
+    @precedent("Taw Cheng Kong v PP [1998] SGCA 42")
+    bool judicial_review_available,
+
+    string description,
+}
+
+struct StatutoryOffense {
+    @hierarchy(level = Statute, subordinate_to = Constitutional)
+    @precedent("PP v Tan Cheng Yew [2013] SGCA 17")
+    bool criminal_liability,
+
+    @amended(date = "15-03-2020", act = "Criminal Law Reform Act 2020")
+    int maximum_penalty,
+
+    string offense_description,
+}
+
+struct CriminalTrial {
+    @presumed(NotGuilty)
+    bool defendant_status,
+
+    @precedent("Jagatheesan s/o Krishnasamy v PP [2006] SGHC 129")
+    bool burden_of_proof_discharged,
+
+    bool evidence_presented,
+}
+
+struct LegalHierarchyExample {
+    @hierarchy(level = Constitutional)
+    string constitutional_provision,
+
+    @hierarchy(level = Statute, subordinate_to = Constitutional)
+    string statutory_law,
+
+    @hierarchy(level = Regulation, subordinate_to = Statute)
+    string regulatory_requirement,
+}
+
+struct AmendmentTrackingExample {
+    @amended(date = "01-01-2023", act = "Amendment Act 2023")
+    int original_threshold,
+
+    @amended(date = "15-06-2024", act = "Amendment Act 2024")
+    @precedent("Recent Case v Authority [2024] SGCA 12")
+    bool new_requirement,
+
+    string description,
+}
+
+enum Verdict {
+    Guilty,
+    NotGuilty,
+    Acquitted,
+}

@@ -1,0 +1,25 @@
+// Singapore Contract Act - Simplified Example
+//
+// This file defines contract validity under contract law
+
+enum ContractValidity {
+    Valid,
+    Void,
+    Voidable,
+}
+
+struct Contract {
+    string parties,
+    string terms,
+    bool offer_made,
+    bool acceptance_given,
+    bool consideration_present,
+}
+
+legal_test ValidContract {
+    requires offer: bool,
+    requires acceptance: bool,
+    requires consideration: bool,
+    requires capacity: bool,
+    requires lawful_purpose: bool,
+}

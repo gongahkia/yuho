@@ -1,0 +1,46 @@
+// Constraint Inheritance Example
+// Demonstrates inheritance of constraints from parent legal concepts
+
+// Base dishonest act
+struct DishonestAct {
+    bool dishonest_intent,
+    bool property_involved,
+}
+
+// Theft extends DishonestAct
+struct Theft extends DishonestAct {
+    bool permanent_deprivation,
+    bool without_consent,
+}
+
+// Fraud extends DishonestAct  
+struct Fraud extends DishonestAct {
+    bool false_representation,
+    bool caused_loss,
+}
+
+// Criminal breach of trust extends DishonestAct
+struct CriminalBreachOfTrust extends DishonestAct {
+    bool entrusted_property,
+    bool breach_of_fiduciary_duty,
+}
+
+// Contract types with inheritance
+struct Contract {
+    string parties,
+    string consideration,
+    bool mutual_consent,
+}
+
+struct EmploymentContract extends Contract {
+    string employer,
+    string employee,
+    money<SGD> salary,
+}
+
+struct SaleContract extends Contract {
+    string seller,
+    string buyer,
+    string goods,
+    money<SGD> price,
+}

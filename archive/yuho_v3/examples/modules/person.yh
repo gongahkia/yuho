@@ -1,0 +1,14 @@
+// Basic person struct for reuse across modules
+struct Person {
+    string name,
+    int age,
+    string email,
+}
+
+// Address type for shared use
+struct Address {
+    string street,
+    string city,
+    string postal_code,
+    string country,
+}

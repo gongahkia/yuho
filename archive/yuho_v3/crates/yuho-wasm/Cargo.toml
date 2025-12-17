@@ -1,0 +1,22 @@
+[package]
+name = "yuho-wasm"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+yuho-core = { path = "../yuho-core" }
+yuho-check = { path = "../yuho-check" }
+yuho-transpile = { path = "../yuho-transpile" }
+wasm-bindgen = "0.2"
+serde.workspace = true
+serde_json.workspace = true
+serde-wasm-bindgen = "0.6"
+
+[dev-dependencies]
+wasm-bindgen-test = "0.3"

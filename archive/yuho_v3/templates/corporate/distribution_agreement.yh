@@ -1,0 +1,426 @@
+// Distribution and Agency Agreement Template
+// Singapore Law Compliant
+// Based on contract law and agency principles
+
+import std.contracts.contract_formation
+
+@citation("", "", "Contract Law")
+
+// Relationship type
+enum RelationshipType {
+    ExclusiveDistributor,
+    NonExclusiveDistributor,
+    SoleAgent,
+    SalesAgent,
+    CommissionAgent
+}
+
+// Territory
+enum Territory {
+    Singapore,
+    SoutheastAsia,
+    AsiaPacific,
+    Worldwide,
+    Custom
+}
+
+// Commission structure
+enum CommissionStructure {
+    PercentageOfSales,
+    FixedFee,
+    TieredPercentage,
+    Hybrid
+}
+
+// Distribution Agreement
+struct DistributionAgreement {
+    // Parties
+    string supplier_name,
+    string supplier_uen,
+    string supplier_address,
+    string supplier_jurisdiction,
+
+    string distributor_name,
+    string distributor_uen,
+    string distributor_address,
+
+    // Relationship
+    date effective_date,
+    RelationshipType relationship_type,
+    bool exclusive_arrangement,
+    Territory territory,
+    optional string custom_territory_description,
+
+    // Products/services
+    list<string> products,
+    string product_description,
+    optional list<string> excluded_products,
+
+    // Term
+    date commencement_date,
+    BoundedInt<1, 60> initial_term_months,
+    bool auto_renewal,
+    optional BoundedInt<1, 24> renewal_term_months,
+
+    // Distributor's rights and obligations
+    bool market_and_promote where market_and_promote == true,
+    bool maintain_inventory,
+    optional Positive<money<SGD>> minimum_inventory_value,
+
+    // Sales targets
+    optional bool minimum_sales_targets,
+    optional list<Positive<money<SGD>>> annual_sales_targets,
+    optional string consequences_of_missing_targets,
+
+    // Pricing
+    bool supplier_sets_wholesale_price where supplier_sets_wholesale_price == true,
+    bool distributor_sets_retail_price,
+    optional Positive<float> suggested_retail_markup_percentage,
+
+    // Payment terms
+    CommissionStructure commission_structure,
+    optional Positive<float> commission_percentage,
+    optional Positive<money<SGD>> fixed_commission,
+    optional list<Positive<float>> tiered_commission_percentages,
+    optional list<Positive<money<SGD>>> tiered_sales_thresholds,
+
+    BoundedInt<1, 120> payment_terms_days where payment_terms_days <= 90,
+    string payment_method,
+
+    // Marketing and promotion
+    bool supplier_provides_marketing_materials where supplier_provides_marketing_materials == true,
+    optional Positive<money<SGD>> marketing_fund_contribution,
+    bool use_supplier_trademarks where use_supplier_trademarks == true,
+
+    // Intellectual property
+    bool supplier_retains_ip where supplier_retains_ip == true,
+    bool license_to_use_trademarks where license_to_use_trademarks == true,
+    bool license_terminates_with_agreement where license_terminates_with_agreement == true,
+
+    // Quality control
+    bool supplier_quality_standards where supplier_quality_standards == true,
+    bool right_to_audit where right_to_audit == true,
+
+    // Warranties
+    bool supplier_warrants_products where supplier_warrants_products == true,
+    bool distributor_provides_local_warranty,
+    optional BoundedInt<1, 24> warranty_period_months,
+
+    // Returns and defects
+    bool returns_policy,
+    optional BoundedInt<1, 90> returns_period_days,
+    bool supplier_bears_cost_of_defects where supplier_bears_cost_of_defects == true,
+
+    // Confidentiality
+    bool confidentiality_clause where confidentiality_clause == true,
+    BoundedInt<1, 10> confidentiality_years where confidentiality_years >= 3,
+
+    // Non-compete
+    optional bool non_compete_during_term,
+    optional bool non_compete_after_termination,
+    optional BoundedInt<1, 3> non_compete_years_post_termination,
+
+    // Non-solicitation
+    optional bool non_solicitation_of_customers,
+    optional BoundedInt<1, 2> non_solicitation_years,
+
+    // Termination
+    bool terminable_with_notice where terminable_with_notice == true,
+    BoundedInt<1, 12> notice_period_months where notice_period_months >= 3,
+    bool terminable_for_cause where terminable_for_cause == true,
+
+    // Post-termination
+    bool sell_through_period_allowed,
+    optional BoundedInt<1, 6> sell_through_months,
+    bool return_unsold_inventory,
+
+    // Indemnity
+    bool mutual_indemnity where mutual_indemnity == true,
+    bool product_liability_indemnity where product_liability_indemnity == true,
+
+    // Limitation of liability
+    bool liability_limited,
+    optional Positive<money<SGD>> liability_cap,
+
+    // Dispute resolution
+    bool mediation_first where mediation_first == true,
+    string dispute_resolution,
+
+    // Governing law
+    string governing_law := "Singapore"
+}
+
+// Example: Exclusive distributor for consumer electronics
+example ElectronicsDistribution := DistributionAgreement {
+    supplier_name: "GlobalTech Inc.",
+    supplier_uen: "US12345",
+    supplier_address: "123 Silicon Valley, USA",
+    supplier_jurisdiction: "Delaware, USA",
+
+    distributor_name: "SingaporeElectronics Pte Ltd",
+    distributor_uen: "202012345A",
+    distributor_address: "456 Distribution Centre, Singapore 117543",
+
+    effective_date: "01-01-2025",
+    relationship_type: RelationshipType::ExclusiveDistributor,
+    exclusive_arrangement: true,
+    territory: Territory::Singapore,
+    custom_territory_description: None,
+
+    products: [
+        "Smartphones",
+        "Tablets",
+        "Smartwatches",
+        "Accessories"
+    ],
+    product_description: "Consumer electronics under GlobalTech brand",
+    excluded_products: Some(["Enterprise servers", "Industrial equipment"]),
+
+    commencement_date: "01-01-2025",
+    initial_term_months: 36,
+    auto_renewal: true,
+    renewal_term_months: Some(12),
+
+    market_and_promote: true,
+    maintain_inventory: true,
+    minimum_inventory_value: Some(500000.00),
+
+    minimum_sales_targets: Some(true),
+    annual_sales_targets: Some([
+        2000000.00, // Year 1
+        3000000.00, // Year 2
+        4000000.00  // Year 3
+    ]),
+    consequences_of_missing_targets: Some("Warning for first year, termination rights for supplier if missed 2 consecutive years"),
+
+    supplier_sets_wholesale_price: true,
+    distributor_sets_retail_price: true,
+    suggested_retail_markup_percentage: Some(30.0),
+
+    commission_structure: CommissionStructure::TieredPercentage,
+    commission_percentage: None,
+    fixed_commission: None,
+    tiered_commission_percentages: Some([
+        15.0, // 0 - 1M
+        18.0, // 1M - 3M
+        20.0  // 3M+
+    ]),
+    tiered_sales_thresholds: Some([
+        0.00,
+        1000000.00,
+        3000000.00
+    ]),
+
+    payment_terms_days: 60,
+    payment_method: "Wire transfer",
+
+    supplier_provides_marketing_materials: true,
+    marketing_fund_contribution: Some(50000.00),
+    use_supplier_trademarks: true,
+
+    supplier_retains_ip: true,
+    license_to_use_trademarks: true,
+    license_terminates_with_agreement: true,
+
+    supplier_quality_standards: true,
+    right_to_audit: true,
+
+    supplier_warrants_products: true,
+    distributor_provides_local_warranty: true,
+    warranty_period_months: Some(12),
+
+    returns_policy: true,
+    returns_period_days: Some(30),
+    supplier_bears_cost_of_defects: true,
+
+    confidentiality_clause: true,
+    confidentiality_years: 5,
+
+    non_compete_during_term: Some(true),
+    non_compete_after_termination: Some(true),
+    non_compete_years_post_termination: Some(2),
+
+    non_solicitation_of_customers: Some(true),
+    non_solicitation_years: Some(1),
+
+    terminable_with_notice: true,
+    notice_period_months: 6,
+    terminable_for_cause: true,
+
+    sell_through_period_allowed: true,
+    sell_through_months: Some(3),
+    return_unsold_inventory: true,
+
+    mutual_indemnity: true,
+    product_liability_indemnity: true,
+
+    liability_limited: true,
+    liability_cap: Some(5000000.00),
+
+    mediation_first: true,
+    dispute_resolution: "SIAC Arbitration",
+
+    governing_law: "Singapore"
+}
+
+// Example: Non-exclusive sales agent
+example SalesAgentAgreement := DistributionAgreement {
+    supplier_name: "SoftwareCo Pte Ltd",
+    supplier_uen: "201912345B",
+    supplier_address: "789 Tech Park, Singapore 138632",
+    supplier_jurisdiction: "Singapore",
+
+    distributor_name: "SalesExperts Pte Ltd",
+    distributor_uen: "202123456C",
+    distributor_address: "321 Sales Street, Singapore 049318",
+
+    effective_date: "01-02-2025",
+    relationship_type: RelationshipType::SalesAgent,
+    exclusive_arrangement: false,
+    territory: Territory::SoutheastAsia,
+    custom_territory_description: Some("Singapore, Malaysia, Indonesia, Thailand, Philippines"),
+
+    products: [
+        "SaaS Platform Licenses",
+        "Professional Services"
+    ],
+    product_description: "Enterprise software solutions",
+    excluded_products: None,
+
+    commencement_date: "01-02-2025",
+    initial_term_months: 12,
+    auto_renewal: true,
+    renewal_term_months: Some(12),
+
+    market_and_promote: true,
+    maintain_inventory: false,
+    minimum_inventory_value: None,
+
+    minimum_sales_targets: Some(false),
+    annual_sales_targets: None,
+    consequences_of_missing_targets: None,
+
+    supplier_sets_wholesale_price: true,
+    distributor_sets_retail_price: false, // Agent doesn't set price
+    suggested_retail_markup_percentage: None,
+
+    commission_structure: CommissionStructure::PercentageOfSales,
+    commission_percentage: Some(15.0),
+    fixed_commission: None,
+    tiered_commission_percentages: None,
+    tiered_sales_thresholds: None,
+
+    payment_terms_days: 30,
+    payment_method: "Bank transfer",
+
+    supplier_provides_marketing_materials: true,
+    marketing_fund_contribution: None,
+    use_supplier_trademarks: true,
+
+    supplier_retains_ip: true,
+    license_to_use_trademarks: true,
+    license_terminates_with_agreement: true,
+
+    supplier_quality_standards: true,
+    right_to_audit: true,
+
+    supplier_warrants_products: true,
+    distributor_provides_local_warranty: false,
+    warranty_period_months: None,
+
+    returns_policy: false,
+    returns_period_days: None,
+    supplier_bears_cost_of_defects: true,
+
+    confidentiality_clause: true,
+    confidentiality_years: 3,
+
+    non_compete_during_term: Some(true),
+    non_compete_after_termination: Some(false),
+    non_compete_years_post_termination: None,
+
+    non_solicitation_of_customers: Some(true),
+    non_solicitation_years: Some(1),
+
+    terminable_with_notice: true,
+    notice_period_months: 3,
+    terminable_for_cause: true,
+
+    sell_through_period_allowed: false,
+    sell_through_months: None,
+    return_unsold_inventory: false,
+
+    mutual_indemnity: true,
+    product_liability_indemnity: true,
+
+    liability_limited: true,
+    liability_cap: Some(100000.00),
+
+    mediation_first: true,
+    dispute_resolution: "Singapore Courts",
+
+    governing_law: "Singapore"
+}
+
+// Compliance principles
+
+principle MarketAndPromote {
+    forall agreement: DistributionAgreement,
+    agreement.market_and_promote == true
+}
+
+principle SupplierSetsWholesalePrice {
+    forall agreement: DistributionAgreement,
+    agreement.supplier_sets_wholesale_price == true
+}
+
+principle SupplierRetainsIP {
+    forall agreement: DistributionAgreement,
+    agreement.supplier_retains_ip == true &&
+    agreement.license_to_use_trademarks == true &&
+    agreement.license_terminates_with_agreement == true
+}
+
+principle QualityStandards {
+    forall agreement: DistributionAgreement,
+    agreement.supplier_quality_standards == true &&
+    agreement.right_to_audit == true
+}
+
+principle SupplierWarrantsProducts {
+    forall agreement: DistributionAgreement,
+    agreement.supplier_warrants_products == true
+}
+
+principle SupplierBearsDefectCosts {
+    forall agreement: DistributionAgreement,
+    agreement.supplier_bears_cost_of_defects == true
+}
+
+principle ConfidentialityRequired {
+    forall agreement: DistributionAgreement,
+    agreement.confidentiality_clause == true &&
+    agreement.confidentiality_years >= 3
+}
+
+principle ReasonableNoticePeriod {
+    forall agreement: DistributionAgreement,
+    agreement.terminable_with_notice == true &&
+    agreement.notice_period_months >= 3
+}
+
+principle MutualIndemnity {
+    forall agreement: DistributionAgreement,
+    agreement.mutual_indemnity == true &&
+    agreement.product_liability_indemnity == true
+}
+
+principle MediationFirst {
+    forall agreement: DistributionAgreement,
+    agreement.mediation_first == true
+}
+
+principle ReasonablePaymentTerms {
+    forall agreement: DistributionAgreement,
+    agreement.payment_terms_days <= 90
+}

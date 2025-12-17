@@ -1,0 +1,9 @@
+[package]
+name = "yuho-transpile"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+yuho-core = { path = "../yuho-core" }
+thiserror.workspace = true
+serde_json.workspace = true

@@ -1,0 +1,457 @@
+// Consumer Protection (Fair Trading) Act (Cap 52A)
+// Consumer protection and unfair practices legislation
+// Based on CPFTA (Cap 52A) and Consumer Protection (Consumer Goods Safety Requirements) Regulations
+
+@citation("", "", "Consumer Protection (Fair Trading) Act (Cap 52A)")
+
+// Type of unfair practice
+enum UnfairPracticeType {
+    FalseRepresentation,
+    MisleadingConduct,
+    UnconscionableConduct,
+    BaitAdvertising,
+    DemandingPaymentWithoutIntention,
+    AcceptingPaymentWithoutIntention,
+    PyramidScheme,
+    HarassmentOrCoercion,
+    Other
+}
+
+// Product safety issue
+enum SafetyIssueType {
+    DefectiveProduct,
+    InherentDanger,
+    MissingWarnings,
+    FailedSafetyStandards,
+    RecalledProduct,
+    CounterfeitProduct
+}
+
+// Consumer remedy
+enum ConsumerRemedy {
+    FullRefund,
+    PartialRefund,
+    Replacement,
+    Repair,
+    PriceReduction,
+    ContractRescission,
+    Compensation,
+    Other
+}
+
+// Lemon law applicability
+enum GoodsType {
+    MotorVehicle,
+    Furniture,
+    HomeAppliance,
+    Electronics,
+    Computer,
+    Other
+}
+
+// Unfair practice complaint
+struct UnfairPracticeComplaint {
+    // Consumer details
+    string consumer_name,
+    string consumer_nric,
+    string consumer_address,
+
+    // Supplier details
+    string supplier_name,
+    string supplier_uen,
+    string supplier_address,
+
+    // Transaction details
+    date transaction_date,
+    Positive<money<SGD>> transaction_amount,
+    string goods_or_services_description,
+
+    // Unfair practice alleged - Section 4
+    @citation("4", "1", "Consumer Protection (Fair Trading) Act")
+    UnfairPracticeType practice_type,
+    string practice_description,
+
+    // Section 5 - False or misleading representation
+    @citation("5", "", "Consumer Protection (Fair Trading) Act")
+    optional bool false_representation_about_price,
+    optional bool false_representation_about_quality,
+    optional bool false_representation_about_origin,
+    optional bool false_representation_about_benefits,
+
+    // Section 6 - Misleading conduct
+    @citation("6", "", "Consumer Protection (Fair Trading) Act")
+    optional bool misleading_conduct,
+    optional string misleading_conduct_description,
+
+    // Section 7 - Unconscionable conduct
+    @citation("7", "", "Consumer Protection (Fair Trading) Act")
+    optional bool unconscionable_conduct,
+    optional string unconscionable_conduct_description,
+
+    // Complaint filed
+    date complaint_filed_date,
+    bool complaint_filed_with_case where complaint_filed_with_case == true,
+
+    // Remedy sought
+    ConsumerRemedy remedy_sought,
+    optional Positive<money<SGD>> compensation_amount_sought
+}
+
+// Lemon Law claim (for defective goods)
+struct LemonLawClaim {
+    // Consumer
+    string consumer_name,
+    string consumer_nric,
+
+    // Supplier
+    string supplier_name,
+    string supplier_uen,
+
+    // Product details
+    GoodsType goods_type,
+    string goods_description,
+    Positive<money<SGD>> purchase_price,
+    date purchase_date,
+
+    // Defect details
+    string defect_description,
+    date defect_discovered_date,
+
+    // Lemon Law applicability - Section 12B
+    @citation("12B", "1", "Consumer Protection (Fair Trading) Act")
+    bool purchased_from_retailer where purchased_from_retailer == true,
+    bool goods_cost_above_threshold, // Currently no minimum threshold
+
+    // Timeframe - within 6 months of delivery
+    BoundedInt<0, 365> days_since_delivery,
+    where days_since_delivery <= 180, // Must claim within 6 months
+
+    // Non-conformity with contract - Section 12C
+    @citation("12C", "", "Consumer Protection (Fair Trading) Act")
+    bool goods_not_of_satisfactory_quality,
+    bool goods_not_fit_for_purpose,
+    bool goods_not_as_described,
+
+    // Number of repair attempts
+    BoundedInt<0, 10> repair_attempts,
+
+    // Remedy progression - Section 12D
+    @citation("12D", "", "Consumer Protection (Fair Trading) Act")
+    // First attempt: Repair or replacement
+    bool repair_or_replacement_requested where repair_or_replacement_requested == true,
+    optional date repair_request_date,
+    optional bool repair_successful,
+
+    // If repair/replacement fails: Refund or price reduction
+    optional bool refund_requested,
+    optional bool price_reduction_accepted,
+    optional Positive<money<SGD>> refund_amount,
+
+    // Resolution
+    bool claim_resolved,
+    optional ConsumerRemedy remedy_provided,
+    optional date resolution_date
+}
+
+// Product safety complaint
+struct ProductSafetyComplaint {
+    // Consumer
+    string consumer_name,
+    string consumer_nric,
+
+    // Supplier/Manufacturer
+    string supplier_name,
+    string manufacturer_name,
+    optional string manufacturer_country,
+
+    // Product details
+    string product_name,
+    string product_description,
+    optional string product_batch_number,
+    optional string product_serial_number,
+
+    // Purchase details
+    date purchase_date,
+    Positive<money<SGD>> purchase_price,
+
+    // Safety issue - Consumer Protection (Consumer Goods Safety Requirements) Regulations
+    @citation("", "", "Consumer Protection (Consumer Goods Safety Requirements) Regulations")
+    SafetyIssueType safety_issue_type,
+    string safety_issue_description,
+
+    // Injury or damage
+    bool injury_occurred,
+    optional string injury_description,
+    bool property_damage_occurred,
+    optional string property_damage_description,
+
+    // Regulatory standards
+    optional bool failed_safety_standards,
+    optional string relevant_safety_standard, // e.g., "SS 472 (Electric Fans)"
+
+    // Reported to authorities
+    bool reported_to_case where reported_to_case == true,
+    date case_report_date,
+
+    // Product recall
+    optional bool product_recall_issued,
+    optional date recall_date,
+    optional string recall_notice_url,
+
+    // Remedy sought
+    ConsumerRemedy remedy_sought,
+    optional Positive<money<SGD>> compensation_sought
+}
+
+// Warranty compliance
+struct WarrantyCompliance {
+    // Supplier
+    string supplier_name,
+    string supplier_uen,
+
+    // Consumer
+    string consumer_name,
+    string consumer_nric,
+
+    // Product
+    string product_description,
+    Positive<money<SGD>> purchase_price,
+    date purchase_date,
+
+    // Warranty terms - must be clear and transparent
+    bool warranty_provided where warranty_provided == true,
+    BoundedInt<0, 60> warranty_period_months,
+    string warranty_terms,
+
+    // Warranty disclosure
+    bool warranty_terms_disclosed_before_purchase where warranty_terms_disclosed_before_purchase == true,
+    bool warranty_terms_in_plain_language where warranty_terms_in_plain_language == true,
+    bool warranty_exclusions_clearly_stated where warranty_exclusions_clearly_stated == true,
+
+    // Warranty claim
+    optional date warranty_claim_date,
+    optional string claim_description,
+    optional bool claim_within_warranty_period,
+
+    // Claim handling
+    optional BoundedInt<0, 90> claim_processing_days,
+    optional bool claim_approved,
+    optional ConsumerRemedy remedy_provided
+}
+
+// Cooling-off period (for certain contracts)
+struct CoolingOffPeriod {
+    // Supplier
+    string supplier_name,
+    string supplier_uen,
+
+    // Consumer
+    string consumer_name,
+    string consumer_nric,
+
+    // Contract type
+    string contract_type, // e.g., "Gym membership", "Timeshare", "Direct selling"
+    Positive<money<SGD>> contract_value,
+    date contract_date,
+
+    // Cooling-off period applicability
+    bool cooling_off_period_applies,
+    optional BoundedInt<1, 14> cooling_off_days, // Typically 5-10 days
+
+    // Consumer rights notice
+    bool consumer_rights_notice_provided where consumer_rights_notice_provided == true,
+    bool notice_in_prescribed_form where notice_in_prescribed_form == true,
+
+    // Cancellation
+    optional bool contract_cancelled_during_cooling_off,
+    optional date cancellation_date,
+    optional BoundedInt<0, 30> days_from_contract,
+
+    // Refund
+    optional bool full_refund_provided,
+    optional Positive<money<SGD>> refund_amount,
+    optional BoundedInt<0, 60> refund_processing_days
+}
+
+// Example: False representation complaint
+example FalseAdvertisingComplaint := UnfairPracticeComplaint {
+    consumer_name: "Alice Tan",
+    consumer_nric: "S1234567A",
+    consumer_address: "123 Consumer Street, Singapore 560123",
+
+    supplier_name: "Dodgy Deals Pte Ltd",
+    supplier_uen: "202012345A",
+    supplier_address: "456 Seller Road, Singapore 068808",
+
+    transaction_date: "15-01-2025",
+    transaction_amount: 2000.00,
+    goods_or_services_description: "Weight loss supplement advertised as '100% guaranteed weight loss'",
+
+    practice_type: UnfairPracticeType::FalseRepresentation,
+    practice_description: "Supplier falsely represented that product would guarantee weight loss without diet or exercise",
+
+    false_representation_about_price: Some(false),
+    false_representation_about_quality: Some(true),
+    false_representation_about_origin: Some(false),
+    false_representation_about_benefits: Some(true),
+
+    misleading_conduct: Some(true),
+    misleading_conduct_description: Some("Advertisement showed dramatic before/after photos that were stock images, not actual users"),
+
+    unconscionable_conduct: None,
+    unconscionable_conduct_description: None,
+
+    complaint_filed_date: "01-02-2025",
+    complaint_filed_with_case: true,
+
+    remedy_sought: ConsumerRemedy::FullRefund,
+    compensation_amount_sought: Some(2000.00)
+}
+
+// Example: Lemon law claim for defective washing machine
+example DefectiveWashingMachineClaim := LemonLawClaim {
+    consumer_name: "Bob Lim",
+    consumer_nric: "S9876543B",
+
+    supplier_name: "Electronics Retailer Pte Ltd",
+    supplier_uen: "201987654C",
+
+    goods_type: GoodsType::HomeAppliance,
+    goods_description: "Front-load washing machine, Model XYZ-2000",
+    purchase_price: 1200.00,
+    purchase_date: "01-12-2024",
+
+    defect_description: "Machine leaks water and fails to complete wash cycles",
+    defect_discovered_date: "15-01-2025",
+
+    purchased_from_retailer: true,
+    goods_cost_above_threshold: true,
+
+    days_since_delivery: 45, // Within 6-month lemon law period
+
+    goods_not_of_satisfactory_quality: true,
+    goods_not_fit_for_purpose: true,
+    goods_not_as_described: false,
+
+    repair_attempts: 2,
+
+    repair_or_replacement_requested: true,
+    repair_request_date: Some("20-01-2025"),
+    repair_successful: Some(false), // Repair failed twice
+
+    refund_requested: Some(true),
+    price_reduction_accepted: None,
+    refund_amount: Some(1200.00),
+
+    claim_resolved: true,
+    remedy_provided: Some(ConsumerRemedy::FullRefund),
+    resolution_date: Some("15-02-2025")
+}
+
+// Example: Unsafe electric fan complaint
+example UnsafeFanComplaint := ProductSafetyComplaint {
+    consumer_name: "Charlie Wong",
+    consumer_nric: "S8765432C",
+
+    supplier_name: "Cheap Appliances Shop",
+    manufacturer_name: "Unknown Manufacturer",
+    manufacturer_country: Some("Unknown"),
+
+    product_name: "Desktop Electric Fan",
+    product_description: "16-inch electric fan, no brand markings",
+    product_batch_number: None,
+    product_serial_number: None,
+
+    purchase_date: "10-01-2025",
+    purchase_price: 25.00,
+
+    safety_issue_type: SafetyIssueType::FailedSafetyStandards,
+    safety_issue_description: "Fan caught fire after 2 hours of use, no safety cut-off, non-compliant wiring",
+
+    injury_occurred: false,
+    injury_description: None,
+    property_damage_occurred: true,
+    property_damage_description: Some("Minor smoke damage to desk and wall"),
+
+    failed_safety_standards: Some(true),
+    relevant_safety_standard: Some("SS 472 (Safety Requirements for Electric Fans)"),
+
+    reported_to_case: true,
+    case_report_date: "12-01-2025",
+
+    product_recall_issued: None,
+    recall_date: None,
+    recall_notice_url: None,
+
+    remedy_sought: ConsumerRemedy::FullRefund,
+    compensation_sought: Some(500.00) // Refund + property damage
+}
+
+// Example: Gym membership cooling-off
+example GymMembershipCoolingOff := CoolingOffPeriod {
+    supplier_name: "FitLife Gym Pte Ltd",
+    supplier_uen: "202123456D",
+
+    consumer_name: "Diana Tan",
+    consumer_nric: "S7654321D",
+
+    contract_type: "Gym membership (2-year contract)",
+    contract_value: 2400.00,
+    contract_date: "01-02-2025",
+
+    cooling_off_period_applies: true,
+    cooling_off_days: Some(5),
+
+    consumer_rights_notice_provided: true,
+    notice_in_prescribed_form: true,
+
+    contract_cancelled_during_cooling_off: Some(true),
+    cancellation_date: Some("04-02-2025"),
+    days_from_contract: Some(3), // Within 5-day cooling-off period
+
+    full_refund_provided: Some(true),
+    refund_amount: Some(2400.00),
+    refund_processing_days: Some(14)
+}
+
+// Consumer Protection Act principles
+
+principle ComplaintFiledWithCASE {
+    forall complaint: UnfairPracticeComplaint,
+    complaint.complaint_filed_with_case == true
+}
+
+principle LemonLawWithin6Months {
+    forall claim: LemonLawClaim,
+    claim.days_since_delivery <= 180
+}
+
+principle LemonLawRepairFirst {
+    forall claim: LemonLawClaim,
+    claim.repair_or_replacement_requested == true
+}
+
+principle SafetyComplaintReported {
+    forall complaint: ProductSafetyComplaint,
+    complaint.safety_issue_type == SafetyIssueType::DefectiveProduct ||
+    complaint.safety_issue_type == SafetyIssueType::FailedSafetyStandards =>
+    complaint.reported_to_case == true
+}
+
+principle WarrantyTermsDisclosed {
+    forall warranty: WarrantyCompliance,
+    warranty.warranty_terms_disclosed_before_purchase == true &&
+    warranty.warranty_terms_in_plain_language == true
+}
+
+principle WarrantyExclusionsClear {
+    forall warranty: WarrantyCompliance,
+    warranty.warranty_exclusions_clearly_stated == true
+}
+
+principle CoolingOffNoticeProvided {
+    forall cooling_off: CoolingOffPeriod,
+    cooling_off.cooling_off_period_applies == true =>
+    cooling_off.consumer_rights_notice_provided == true &&
+    cooling_off.notice_in_prescribed_form == true
+}

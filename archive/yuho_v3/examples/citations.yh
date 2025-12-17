@@ -1,0 +1,22 @@
+// Legal Citation Types Example
+// Demonstrates the Citation<section, subsection, act> type
+
+struct OffenseDefinition {
+    Citation<"415", "1", "Penal Code"> statutory_basis,
+    string description,
+}
+
+struct Cheating {
+    Citation<"415", "1", "Penal Code"> statute,
+    bool deception,
+    bool dishonest_inducement,
+    bool property_delivered,
+}
+
+struct Theft {
+    Citation<"379", "1", "Penal Code"> statute,
+    bool dishonest_intent,
+    bool movable_property,
+    bool without_consent,
+}
+

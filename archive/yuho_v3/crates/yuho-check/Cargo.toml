@@ -1,0 +1,12 @@
+[package]
+name = "yuho-check"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+yuho-core = { path = "../yuho-core" }
+thiserror.workspace = true
+chrono = "0.4"
+
+[dev-dependencies]
+tempfile = "3.8"

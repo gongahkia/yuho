@@ -1,0 +1,294 @@
+// Multi-Party Non-Disclosure Agreement
+// Three or more parties sharing confidential information for a common purpose
+
+struct PartyInfo {
+    string party_name,
+    string party_address,
+    string authorized_representative,
+    string contact_email,
+    bool is_disclosing_party,
+    bool is_receiving_party,
+}
+
+struct MultiPartyNDA {
+    // Parties (minimum 3)
+    Array<PartyInfo> parties where parties.length >= 3 && parties.length <= 10,
+    BoundedInt<3, 10> number_of_parties,
+    
+    // Agreement Details
+    ValidDate<after="01-01-2020"> effective_date,
+    string common_purpose,
+    string project_codename,
+    
+    // Confidential Information Scope
+    bool technical_specs,
+    bool business_plans,
+    bool financial_projections,
+    bool market_analysis,
+    bool customer_lists,
+    bool supplier_information,
+    bool intellectual_property,
+    bool strategic_plans,
+    
+    // Multi-Party Specific Terms
+    bool information_flows_between_all_parties,
+    bool bilateral_exchanges_only,
+    bool requires_disclosure_notice,
+    
+    // Information Handling
+    BoundedInt<2, 10> confidentiality_years where confidentiality_years >= 3,
+    bool perpetual_for_trade_secrets,
+    
+    // Standard of Care
+    bool reasonable_care_required,
+    bool written_consent_for_disclosure,
+    
+    // Permitted Disclosures
+    bool can_disclose_to_employees,
+    bool can_disclose_to_consultants,
+    bool can_disclose_to_affiliates,
+    bool must_mark_confidential,
+    bool requires_recipient_list,
+    
+    // Exception Categories
+    bool public_domain,
+    bool prior_possession,
+    bool independent_development,
+    bool third_party_disclosure,
+    bool court_order,
+    
+    // Information Ownership
+    bool each_party_retains_ownership,
+    bool no_joint_ownership_created,
+    bool no_partnership_created,
+    
+    // Return and Destruction
+    BoundedInt<10, 90> return_deadline_days,
+    bool destruction_certification,
+    bool audit_rights,
+    
+    // Withdrawal from Agreement
+    bool party_can_withdraw,
+    BoundedInt<30, 90> withdrawal_notice_days,
+    bool obligations_survive_withdrawal,
+    
+    // Adding New Parties
+    bool new_parties_permitted,
+    bool requires_all_parties_consent,
+    bool amendment_process_defined,
+    
+    // Remedies
+    bool injunctive_relief,
+    bool specific_performance,
+    bool indemnification,
+    money<SGD> liability_cap_per_party,
+    
+    // Coordination
+    bool lead_party_designated,
+    string lead_party_name,
+    bool steering_committee,
+    
+    // Term and Termination
+    BoundedInt<1, 5> initial_term_years,
+    bool automatic_renewal,
+    bool unanimous_termination_required,
+    
+    // Governing Law
+    string governing_jurisdiction,
+    string dispute_resolution,
+    bool all_parties_consent_to_jurisdiction,
+}
+
+scope MultiPartyNDATerms {
+    // Verify minimum parties requirement
+    fn verify_parties(MultiPartyNDA nda) -> bool {
+        bool min_parties := nda.number_of_parties >= 3
+        bool max_parties := nda.number_of_parties <= 10
+        return min_parties && max_parties
+    }
+    
+    // Check if party can disclose to another party
+    fn can_party_disclose_to_party(
+        MultiPartyNDA nda,
+        string from_party,
+        string to_party,
+        Array<PartyInfo> parties
+    ) -> bool {
+        match nda.information_flows_between_all_parties {
+            case true := return true
+            case false := match nda.bilateral_exchanges_only {
+                case true := return false  // Need specific bilateral agreement
+                case false := return nda.written_consent_for_disclosure
+            }
+        }
+    }
+    
+    // Check if new party can be added
+    fn can_add_new_party(
+        MultiPartyNDA nda,
+        bool all_existing_parties_consent
+    ) -> bool {
+        bool addition_permitted := nda.new_parties_permitted
+        bool consent_requirement_met := !nda.requires_all_parties_consent || all_existing_parties_consent
+        return addition_permitted && consent_requirement_met
+    }
+    
+    // Calculate each party's liability exposure
+    fn calculate_max_liability(
+        MultiPartyNDA nda,
+        int breaching_parties_count
+    ) -> money<SGD> {
+        money<SGD> total_exposure := nda.liability_cap_per_party * breaching_parties_count
+        return total_exposure
+    }
+    
+    // Check if information is protected from party
+    fn is_information_protected_from(
+        MultiPartyNDA nda,
+        string disclosing_party,
+        string receiving_party,
+        bool is_public,
+        bool prior_knowledge
+    ) -> bool {
+        bool exception_applies := (nda.public_domain && is_public) ||
+                                 (nda.prior_possession && prior_knowledge)
+        return !exception_applies
+    }
+    
+    // Determine if withdrawal is valid
+    fn validate_withdrawal(
+        MultiPartyNDA nda,
+        string withdrawing_party,
+        int notice_days_given
+    ) -> bool {
+        bool withdrawal_allowed := nda.party_can_withdraw
+        bool adequate_notice := notice_days_given >= nda.withdrawal_notice_days
+        return withdrawal_allowed && adequate_notice
+    }
+}
+
+// Example: Consortium for Smart City Development
+PartyInfo govt_agency := PartyInfo {
+    party_name := "Urban Development Authority",
+    party_address := "45 Maxwell Road, Singapore 069118",
+    authorized_representative := "Director of Smart Cities",
+    contact_email := "smartcities@uda.gov.sg",
+    is_disclosing_party := true,
+    is_receiving_party := true,
+}
+
+PartyInfo tech_company := PartyInfo {
+    party_name := "FutureTech Solutions Pte Ltd",
+    party_address := "1 Fusionopolis Way, Singapore 138632",
+    authorized_representative := "Chief Innovation Officer",
+    contact_email := "partnerships@futuretech.sg",
+    is_disclosing_party := true,
+    is_receiving_party := true,
+}
+
+PartyInfo university := PartyInfo {
+    party_name := "National University Research Institute",
+    party_address := "21 Lower Kent Ridge Road, Singapore 119077",
+    authorized_representative := "Director of Industry Partnerships",
+    contact_email := "industry@nuri.edu.sg",
+    is_disclosing_party := true,
+    is_receiving_party := true,
+}
+
+PartyInfo infrastructure := PartyInfo {
+    party_name := "Metropolitan Infrastructure Holdings",
+    party_address := "10 Marina Boulevard, Singapore 018983",
+    authorized_representative := "VP Strategic Projects",
+    contact_email := "projects@metroinfra.com",
+    is_disclosing_party := true,
+    is_receiving_party := true,
+}
+
+MultiPartyNDA smart_city_nda := MultiPartyNDA {
+    parties := [govt_agency, tech_company, university, infrastructure],
+    number_of_parties := 4,
+    
+    effective_date := "01-02-2025",
+    common_purpose := "Collaborative development of smart city infrastructure and IoT solutions",
+    project_codename := "Project Phoenix",
+    
+    technical_specs := true,
+    business_plans := true,
+    financial_projections := true,
+    market_analysis := true,
+    customer_lists := false,
+    supplier_information := true,
+    intellectual_property := true,
+    strategic_plans := true,
+    
+    information_flows_between_all_parties := true,
+    bilateral_exchanges_only := false,
+    requires_disclosure_notice := true,
+    
+    confidentiality_years := 5,
+    perpetual_for_trade_secrets := true,
+    
+    reasonable_care_required := true,
+    written_consent_for_disclosure := false,
+    
+    can_disclose_to_employees := true,
+    can_disclose_to_consultants := true,
+    can_disclose_to_affiliates := true,
+    must_mark_confidential := true,
+    requires_recipient_list := true,
+    
+    public_domain := true,
+    prior_possession := true,
+    independent_development := true,
+    third_party_disclosure := true,
+    court_order := true,
+    
+    each_party_retains_ownership := true,
+    no_joint_ownership_created := true,
+    no_partnership_created := true,
+    
+    return_deadline_days := 30,
+    destruction_certification := true,
+    audit_rights := true,
+    
+    party_can_withdraw := true,
+    withdrawal_notice_days := 90,
+    obligations_survive_withdrawal := true,
+    
+    new_parties_permitted := true,
+    requires_all_parties_consent := true,
+    amendment_process_defined := true,
+    
+    injunctive_relief := true,
+    specific_performance := true,
+    indemnification := true,
+    liability_cap_per_party := $500000,
+    
+    lead_party_designated := true,
+    lead_party_name := "Urban Development Authority",
+    steering_committee := true,
+    
+    initial_term_years := 3,
+    automatic_renewal := false,
+    unanimous_termination_required := false,
+    
+    governing_jurisdiction := "Singapore",
+    dispute_resolution := "Mediation then arbitration under SIAC rules",
+    all_parties_consent_to_jurisdiction := true,
+}
+
+// Information flow model
+match smart_city_nda.information_flows_between_all_parties {
+    case true := "All 4 parties can share information freely within the consortium"
+    case false := "Bilateral agreements required for each information exchange"
+}
+
+// Party withdrawal implications
+match smart_city_nda.obligations_survive_withdrawal {
+    case true := "Withdrawing party remains bound by confidentiality obligations"
+    case false := "Confidentiality obligations terminate upon withdrawal"
+}
+
+// Maximum liability exposure
+money<SGD> max_single_breach := smart_city_nda.liability_cap_per_party
+money<SGD> max_total_exposure := max_single_breach * smart_city_nda.number_of_parties

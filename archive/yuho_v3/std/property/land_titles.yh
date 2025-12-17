@@ -1,0 +1,262 @@
+// Singapore Land Titles Act - Indefeasibility of Title
+// Based on Land Titles Act (Cap 157)
+
+@citation("", "", "Land Titles Act")
+
+// Types of land tenure in Singapore
+enum LandTenure {
+    Freehold,
+    Leasehold,
+    StateLease
+}
+
+// Types of caveats
+enum CaveatType {
+    Prohibitory,  // Prevents dealing
+    Restrictive,  // Restricts certain dealings
+    Withdrawal    // Removes previous caveat
+}
+
+// Registered proprietor of land
+struct RegisteredProprietor {
+    string name,
+    string identification_number,
+
+    // Indefeasibility - Section 46
+    @citation("46", "1", "Land Titles Act")
+    bool title_indefeasible where title_indefeasible == true,
+
+    // Registration details
+    date registration_date,
+    string land_lot_number,
+    string mukim,
+
+    // Tenure
+    LandTenure tenure_type,
+
+    // For leasehold
+    optional BoundedInt<1, 999> lease_years,
+    optional date lease_commencement_date,
+    optional date lease_expiry_date where lease_years.is_some() =>
+        lease_expiry_date.is_some()
+}
+
+// Exceptions to indefeasibility - Section 46(2)
+struct IndefeasibilityException {
+    RegisteredProprietor proprietor,
+
+    // Grounds for exception
+    bool obtained_by_fraud,
+    bool obtained_by_misrepresentation,
+    bool obtained_by_forgery,
+    bool obtained_by_void_instrument,
+
+    // At least one ground must exist
+    where obtained_by_fraud ||
+          obtained_by_misrepresentation ||
+          obtained_by_forgery ||
+          obtained_by_void_instrument,
+
+    // Exception invalidates indefeasibility
+    bool indefeasibility_lost := true
+}
+
+// Caveat - Section 115
+struct Caveat {
+    @citation("115", "1", "Land Titles Act")
+
+    string caveator_name,
+    string land_lot_number,
+    CaveatType caveat_type,
+
+    // Grounds for caveat
+    string estate_or_interest_claimed,
+    bool caveator_has_interest where caveator_has_interest == true,
+
+    // Lodgment details
+    date lodgment_date,
+    string instrument_number,
+
+    // Effect
+    bool prevents_registration := caveat_type == CaveatType::Prohibitory,
+
+    // Lapsing
+    optional date lapse_date,
+    bool has_lapsed := lapse_date.is_some() && current_date() > lapse_date.unwrap()
+}
+
+// Sale and purchase of property
+struct PropertySaleAndPurchase {
+    // Vendor (seller)
+    RegisteredProprietor vendor,
+
+    // Purchaser (buyer)
+    string purchaser_name,
+    string purchaser_id,
+
+    // Property details
+    string property_address,
+    string land_lot_number,
+
+    // Purchase price
+    Positive<money<SGD>> purchase_price,
+
+    // Option to Purchase (OTP)
+    date otp_date,
+    Positive<money<SGD>> option_fee,
+    BoundedInt<1, 30> option_exercise_period, // Usually 14-21 days
+
+    // Exercise of option
+    bool option_exercised,
+    optional date exercise_date,
+    optional Positive<money<SGD>> deposit_paid,
+
+    // Completion
+    optional date completion_date,
+    bool sale_completed,
+
+    // Caveat lodged by purchaser
+    optional Caveat purchaser_caveat
+}
+
+// HDB flat ownership (special Singapore rules)
+struct HDBFlat {
+    @citation("", "", "Housing and Development Act")
+
+    string flat_address,
+    string block_number,
+    string street_name,
+    string unit_number,
+
+    // Flat type
+    string flat_type, // 2-room, 3-room, 4-room, 5-room, Executive
+
+    // Lease details (99-year lease from HDB)
+    BoundedInt<1, 99> remaining_lease_years,
+    date lease_commencement_date,
+
+    // Ownership restrictions
+    bool subject_to_ethnic_quota,
+    bool subject_to_minimum_occupation_period,
+    BoundedInt<0, 10> mop_years_remaining,
+
+    // Eligibility
+    bool owner_singapore_citizen where owner_singapore_citizen == true,
+
+    // Resale levy (if applicable)
+    optional Positive<money<SGD>> resale_levy_payable
+}
+
+// Example: Freehold landed property
+example FreeholdProperty := RegisteredProprietor {
+    name: "Tan Ah Kow",
+    identification_number: "S1234567A",
+
+    title_indefeasible: true,
+
+    registration_date: "15-06-2020",
+    land_lot_number: "MK25-12345X",
+    mukim: "25",
+
+    tenure_type: LandTenure::Freehold,
+
+    lease_years: None,
+    lease_commencement_date: None,
+    lease_expiry_date: None
+}
+
+// Example: Leasehold condominium
+example LeaseholdCondo := RegisteredProprietor {
+    name: "Lee Wei Ming",
+    identification_number: "S7654321B",
+
+    title_indefeasible: true,
+
+    registration_date: "01-01-2015",
+    land_lot_number: "TS28-67890L",
+    mukim: "28",
+
+    tenure_type: LandTenure::Leasehold,
+
+    lease_years: Some(99),
+    lease_commencement_date: Some("01-01-2010"),
+    lease_expiry_date: Some("31-12-2108")
+}
+
+// Example: Property sale with caveat
+example PropertySale := PropertySaleAndPurchase {
+    vendor: FreeholdProperty,
+
+    purchaser_name: "Lim Mei Ling",
+    purchaser_id: "S9876543C",
+
+    property_address: "123 Orchard Road #05-67",
+    land_lot_number: "MK25-12345X",
+
+    purchase_price: 2500000.00,
+
+    otp_date: "01-11-2024",
+    option_fee: 5000.00,
+    option_exercise_period: 14,
+
+    option_exercised: true,
+    exercise_date: Some("10-11-2024"),
+    deposit_paid: Some(250000.00),
+
+    completion_date: Some("10-01-2025"),
+    sale_completed: false,
+
+    purchaser_caveat: Some(Caveat {
+        caveator_name: "Lim Mei Ling",
+        land_lot_number: "MK25-12345X",
+        caveat_type: CaveatType::Prohibitory,
+
+        estate_or_interest_claimed: "Purchaser under Sale and Purchase Agreement",
+        caveator_has_interest: true,
+
+        lodgment_date: "11-11-2024",
+        instrument_number: "IA/123456/2024",
+
+        lapse_date: None,
+        has_lapsed: false
+    })
+}
+
+// Example: HDB resale flat
+example HDBResale := HDBFlat {
+    flat_address: "Blk 123 Tampines Street 11 #10-456",
+    block_number: "123",
+    street_name: "Tampines Street 11",
+    unit_number: "#10-456",
+
+    flat_type: "4-room",
+
+    remaining_lease_years: 85,
+    lease_commencement_date: "01-06-1990",
+
+    subject_to_ethnic_quota: true,
+    subject_to_minimum_occupation_period: false,
+    mop_years_remaining: 0,
+
+    owner_singapore_citizen: true,
+
+    resale_levy_payable: Some(30000.00)
+}
+
+// Principle: Registered title is indefeasible
+principle IndefeasibilityOfTitle {
+    forall proprietor: RegisteredProprietor,
+    proprietor.title_indefeasible == true
+}
+
+// Principle: Caveat requires interest
+principle CaveatRequiresInterest {
+    forall caveat: Caveat,
+    caveat.caveator_has_interest == true
+}
+
+// Principle: HDB flats require Singapore citizenship
+principle HDBRequiresCitizenship {
+    forall flat: HDBFlat,
+    flat.owner_singapore_citizen == true
+}
