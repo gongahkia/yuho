@@ -1,9 +1,13 @@
-[![](https://img.shields.io/badge/yuho_1.0-passing-green)](https://github.com/gongahkia/yuho/releases/tag/1.0) [![](https://img.shields.io/badge/yuho_2.0-passing-light_green)](https://github.com/gongahkia/yuho/releases/tag/2.0) [![](https://img.shields.io/badge/yuho_3.0-passing-forestgreen)](https://github.com/gongahkia/yuho/releases/tag/3.0) 
+[![](https://img.shields.io/badge/yuho_1.0-passing-%23004D00)](https://github.com/gongahkia/yuho/releases/tag/1.0) 
+[![](https://img.shields.io/badge/yuho_2.0-passing-light_%23228B22)](https://github.com/gongahkia/yuho/releases/tag/2.0) 
+[![](https://img.shields.io/badge/yuho_3.0-passing-%2350C878)](https://github.com/gongahkia/yuho/releases/tag/3.0) 
+[![](https://img.shields.io/badge/yuho_4.0-passing-%2390EE90)](https://github.com/gongahkia/yuho/releases/tag/4.0) 
 
-> [!IMPORTANT]
-> Yuho's Documentation is now available [***here***](https://gabrielongzm.com/yuho-docs/).
-  
 # `Yuho`  
+
+<p align="center">
+    <img src="./asset/logo/yuho_mascot.png" width=40% height=40%>
+</p>
 
 Yuho is a domain-specific language dedicated to simplifying [legalese](https://www.merriam-webster.com/dictionary/legalese) by providing a programmatic representation of Singapore Law.  
 
@@ -53,7 +57,7 @@ Want to find out more? See Yuho's [documentation](#documentation).
 
 ## Quickstart
 
-**Yuho v4.0 (Python)**: See [`QUICKSTART_V3.md`](./doc/QUICKSTART_V3.md) for the latest implementation.
+**Yuho v4.0 (Python)**: See [`QUICKSTART_V4.md`](./doc/QUICKSTART_V4.md) for the latest implementation.
 
 **Legacy versions**: Learn how Yuho works in 5 minutes at [`5_MINUTES.md`](./doc/5_MINUTES.md).
 

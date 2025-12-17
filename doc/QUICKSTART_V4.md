@@ -20,7 +20,7 @@ pip install -e .
 
 ```bash
 yuho --version
-# Should output: yuho, version 3.0.0
+# Should output: yuho, version 4.0.0
 ```
 
 ## Basic Usage
