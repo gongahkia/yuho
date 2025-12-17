@@ -1,4 +1,4 @@
-# Development dependencies for Yuho v3.0
+# Development dependencies for Yuho v4.0
 
 # Core dependencies (from requirements.txt)
 lark-parser>=1.1.7

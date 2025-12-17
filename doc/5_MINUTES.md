@@ -153,7 +153,7 @@ scope s415CheatingDefinition {
 }
 ```
 
-This Yuho code can then be [transpiled](./../../yuho_v3/transpilers/) to various diagrammatic representations in [Mermaid](https://mermaid.js.org/).  
+This Yuho code can then be [transpiled](./../../yuho_v4/transpilers/) to various diagrammatic representations in [Mermaid](https://mermaid.js.org/).  
 
 Right now two primary Mermaid outputs are supported.  
 
@@ -541,6 +541,6 @@ flowchart TD
 * Learn Yuho's syntax at [`syntax.md`](./syntax.md)
 * See other examples of Yuho at [`./example/`](./../../example/)
 * Run Yuho's syntax through formal specifications with [Alloy Analyzer](https://alloytools.org/) at [`./test/`](./../../test/)
-* Try Yuho out for yourself at [`./yuho_v3/`](./../../yuho_v3/)
+* Try Yuho out for yourself at [`./yuho_v4/`](./../../yuho_v4/)
 * Build Yuho's lexer and parser yourself at [`./grammer/`](./../../grammer/)
 * Have Racket, DSL development experience or want to gain that experience? See [`CONTRIBUTING.md`](./../../admin/CONTRIBUTING.md)

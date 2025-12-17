@@ -44,8 +44,8 @@ dev = [
 ]
 
 [project.scripts]
-yuho = "yuho_v3.cli.main:cli"
-yuho-repl = "yuho_v3.repl:main"
+yuho = "yuho_v4.cli.main:cli"
+yuho-repl = "yuho_v4.repl:main"
 
 [project.urls]
 Homepage = "https://github.com/gongahkia/yuho"
@@ -105,7 +105,7 @@ show_error_codes = true
 show_error_context = true
 
 [[tool.mypy.overrides]]
-module = "yuho_v3.tests.*"
+module = "yuho_v4.tests.*"
 ignore_errors = true
 
 [tool.pylint.messages_control]
@@ -121,14 +121,14 @@ max-line-length = 100
 
 [tool.pytest.ini_options]
 minversion = "7.0"
-addopts = "-ra -q --strict-markers --cov=yuho_v3 --cov-report=html --cov-report=term-missing"
-testpaths = ["yuho_v3/tests"]
+addopts = "-ra -q --strict-markers --cov=yuho_v4 --cov-report=html --cov-report=term-missing"
+testpaths = ["yuho_v4/tests"]
 python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
 
 [tool.coverage.run]
-source = ["yuho_v3"]
+source = ["yuho_v4"]
 omit = [
     "*/tests/*",
     "*/test_*.py",

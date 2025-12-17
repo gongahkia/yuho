@@ -1,3 +1,3 @@
 """
-CLI tools for Yuho v3
+CLI tools for Yuho v4
 """

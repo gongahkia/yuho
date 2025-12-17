@@ -1,5 +1,5 @@
 """
-Yuho v3.0 - Python Implementation
+Yuho v4.0 - Python Implementation
 A domain-specific language for simplifying legal reasoning
 """
 

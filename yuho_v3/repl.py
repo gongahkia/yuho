@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Yuho v3.0 REPL - Interactive shell for Yuho language
+Yuho v4.0 REPL - Interactive shell for Yuho language
 """
 
 import sys
@@ -31,7 +31,7 @@ class YuhoREPL:
 
     def run(self):
         """Run the REPL"""
-        print(f"{Fore.CYAN}Yuho v3.0 REPL{Style.RESET_ALL}")
+        print(f"{Fore.CYAN}Yuho v4.0 REPL{Style.RESET_ALL}")
         print(f"Type {Fore.YELLOW}'help'{Style.RESET_ALL} for commands, {Fore.YELLOW}'exit'{Style.RESET_ALL} to quit")
         print()
 

@@ -9,7 +9,7 @@ import sys
 import os
 from pathlib import Path
 
-# Add yuho_v3 to Python path for imports
+# Add yuho_v4 to Python path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 

@@ -23,8 +23,8 @@ Getting into the specifics, Yuho provides the following four products.
 
 1. [Yuho](./doc/SYNTAX.md), a DSL made to be readable and codeable by law students and lawyers
 2. [Formalised semantic](./test/) for legal reasoning modelled after the syntactical patterns of the law
-3. [CLI tool](./yuho_v3/cli/) for interacting with Yuho's primary functions in the CLI
-4. [Transpiler](./yuho_v3/transpilers/) that transpiles to the below targets
+3. [CLI tool](./yuho_v4/cli/) for interacting with Yuho's primary functions in the CLI
+4. [Transpiler](./yuho_v4/transpilers/) that transpiles to the below targets
 
 ### Output formats
 
@@ -53,7 +53,7 @@ Want to find out more? See Yuho's [documentation](#documentation).
 
 ## Quickstart
 
-**Yuho v3.0 (Python)**: See [`QUICKSTART_V3.md`](./doc/QUICKSTART_V3.md) for the latest implementation.
+**Yuho v4.0 (Python)**: See [`QUICKSTART_V3.md`](./doc/QUICKSTART_V3.md) for the latest implementation.
 
 **Legacy versions**: Learn how Yuho works in 5 minutes at [`5_MINUTES.md`](./doc/5_MINUTES.md).
 

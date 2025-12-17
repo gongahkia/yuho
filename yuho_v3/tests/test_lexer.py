@@ -5,7 +5,7 @@ Tests tokenization and parsing of Yuho source code.
 """
 
 import pytest
-from yuho_v3.lexer import YuhoLexer
+from yuho_v4.lexer import YuhoLexer
 
 
 class TestLexerBasics:

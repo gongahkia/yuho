@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Simple test of Yuho v3 without external dependencies
+Simple test of Yuho v4 without external dependencies
 """
 
 import sys
@@ -58,6 +58,6 @@ struct Cheating {
 except Exception as e:
     print(f"✗ File operation error: {e}")
 
-print("\\nYuho v3.0 basic structure is ready!")
+print("\\nYuho v4.0 basic structure is ready!")
 print("To use full functionality, install dependencies:")
 print("  pip install lark-parser click colorama")

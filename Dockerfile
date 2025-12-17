@@ -1,4 +1,4 @@
-# Multi-stage Dockerfile for Yuho v3.0
+# Multi-stage Dockerfile for Yuho v4.0
 # Production-ready containerization with security best practices
 
 # Stage 1: Base image with Python
@@ -68,7 +68,7 @@ RUN pip install pytest pytest-cov pytest-xdist
 USER yuho
 
 # Run tests by default
-CMD ["pytest", "-v", "--cov=yuho_v3", "--cov-report=html", "--cov-report=term"]
+CMD ["pytest", "-v", "--cov=yuho_v4", "--cov-report=html", "--cov-report=term"]
 
 # Stage 5: Production image (minimal)
 FROM base AS production
@@ -83,7 +83,7 @@ ENV PATH="/opt/venv/bin:$PATH"
 WORKDIR /app
 
 # Copy only necessary application files
-COPY --chown=yuho:yuho yuho_v3/ /app/yuho_v3/
+COPY --chown=yuho:yuho yuho_v4/ /app/yuho_v4/
 COPY --chown=yuho:yuho setup.py README.md /app/
 COPY --chown=yuho:yuho requirements.txt /app/
 

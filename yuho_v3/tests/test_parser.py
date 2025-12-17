@@ -5,8 +5,8 @@ Tests AST generation and transformation from parse trees.
 """
 
 import pytest
-from yuho_v3.parser import YuhoParser
-from yuho_v3.ast_nodes import (
+from yuho_v4.parser import YuhoParser
+from yuho_v4.ast_nodes import (
     Program, Declaration, StructDefinition, MatchCase,
     Literal, YuhoType, TypeNode, Identifier
 )

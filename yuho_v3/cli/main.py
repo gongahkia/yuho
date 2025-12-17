@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Yuho v3.0 CLI - Main entry point for all Yuho tools
+Yuho v4.0 CLI - Main entry point for all Yuho tools
 """
 
 import click
@@ -23,7 +23,7 @@ from transpilers.alloy_transpiler import AlloyTranspiler
 @click.group()
 @click.version_option(version='3.0.0')
 def cli():
-    """Yuho v3.0 - Legal Domain-Specific Language Tools"""
+    """Yuho v4.0 - Legal Domain-Specific Language Tools"""
     pass
 
 @cli.command()
@@ -128,7 +128,7 @@ def alloy(file_path, output):
 @click.option('--output', '-o', help='Output file path')
 def draft(struct_name, output):
     """Create a new Yuho file template with basic struct"""
-    template = f"""// Yuho v3.0 - Generated template for {struct_name}
+    template = f"""// Yuho v4.0 - Generated template for {struct_name}
 
 struct {struct_name} {{
     // Add your fields here
@@ -161,7 +161,7 @@ struct {struct_name} {{
 def how():
     """Show help and usage examples"""
     help_text = f"""
-{Fore.CYAN}Yuho v3.0 - Legal Domain-Specific Language{Style.RESET_ALL}
+{Fore.CYAN}Yuho v4.0 - Legal Domain-Specific Language{Style.RESET_ALL}
 
 {Fore.YELLOW}Common Usage Examples:{Style.RESET_ALL}
 

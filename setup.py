@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Setup script for Yuho v3.0
+Setup script for Yuho v4.0
 """
 
 from setuptools import setup, find_packages
@@ -46,12 +46,12 @@ setup(
     },
     entry_points={
         "console_scripts": [
-            "yuho=yuho_v3.cli.main:cli",
-            "yuho-repl=yuho_v3.repl:YuhoREPL",
+            "yuho=yuho_v4.cli.main:cli",
+            "yuho-repl=yuho_v4.repl:YuhoREPL",
         ],
     },
     include_package_data=True,
     package_data={
-        "yuho_v3": ["grammar.lark"],
+        "yuho_v4": ["grammar.lark"],
     },
 )

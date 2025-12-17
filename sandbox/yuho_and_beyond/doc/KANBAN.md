@@ -1,4 +1,4 @@
-# Yuho v3.0 Kanban Board
+# Yuho v4.0 Kanban Board
 
 | 🔙 | ✍️ | 🗳️ | 👏 |
 | :---: | :---: | :---: | :---: |

@@ -1,5 +1,5 @@
 [flake8]
-# Flake8 configuration for Yuho v3.0
+# Flake8 configuration for Yuho v4.0
 
 # Maximum line length
 max-line-length = 100

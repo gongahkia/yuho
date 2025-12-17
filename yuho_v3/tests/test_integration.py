@@ -8,10 +8,10 @@ import pytest
 import os
 import tempfile
 from pathlib import Path
-from yuho_v3.parser import YuhoParser
-from yuho_v3.semantic_analyzer import SemanticAnalyzer
-from yuho_v3.transpilers.mermaid_transpiler import MermaidTranspiler
-from yuho_v3.transpilers.alloy_transpiler import AlloyTranspiler
+from yuho_v4.parser import YuhoParser
+from yuho_v4.semantic_analyzer import SemanticAnalyzer
+from yuho_v4.transpilers.mermaid_transpiler import MermaidTranspiler
+from yuho_v4.transpilers.alloy_transpiler import AlloyTranspiler
 
 
 class TestEndToEndWorkflow:

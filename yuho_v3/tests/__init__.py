@@ -1,5 +1,5 @@
 """
-Yuho v3.0 Test Suite
+Yuho v4.0 Test Suite
 
 This package contains comprehensive tests for the Yuho language implementation.
 Test organization:

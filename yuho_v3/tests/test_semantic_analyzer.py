@@ -5,8 +5,8 @@ Tests type checking, scope analysis, and semantic validation.
 """
 
 import pytest
-from yuho_v3.parser import YuhoParser
-from yuho_v3.semantic_analyzer import SemanticAnalyzer, SemanticError
+from yuho_v4.parser import YuhoParser
+from yuho_v4.semantic_analyzer import SemanticAnalyzer, SemanticError
 
 
 class TestSemanticAnalyzerBasics:

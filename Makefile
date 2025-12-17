@@ -1,22 +1,22 @@
 all: install
 
-# Yuho v3.0 (Python) commands
+# Yuho v4.0 (Python) commands
 install:
-	@echo "Installing Yuho v3.0 (Python)..."
+	@echo "Installing Yuho v4.0 (Python)..."
 	@pip install -r requirements.txt
 	@pip install -e .
 
 test:
-	@echo "Running Yuho v3.0 tests..."
-	@python3 -m pytest yuho_v3/tests/ -v
+	@echo "Running Yuho v4.0 tests..."
+	@python3 -m pytest yuho_v4/tests/ -v
 
 check-example:
 	@echo "Checking example files..."
-	@python3 yuho_v3/cli/main.py check example/cheating/cheating_illustration_A.yh
+	@python3 yuho_v4/cli/main.py check example/cheating/cheating_illustration_A.yh
 
 repl:
 	@echo "Starting Yuho REPL..."
-	@python3 yuho_v3/repl.py
+	@python3 yuho_v4/repl.py
 
 # Legacy Rust/Racket commands (require installation)
 build-legacy: src/main.rs

@@ -1,4 +1,4 @@
-# Docker Compose configuration for Yuho v3.0
+# Docker Compose configuration for Yuho v4.0
 # Provides easy development and testing environments
 
 version: '3.9'
@@ -40,9 +40,9 @@ services:
       - PYTHONUNBUFFERED=1
     command: >
       bash -c "
-        pytest yuho_v3/tests/ 
+        pytest yuho_v4/tests/ 
         --verbose 
-        --cov=yuho_v3 
+        --cov=yuho_v4 
         --cov-report=html 
         --cov-report=term 
         --cov-report=xml 

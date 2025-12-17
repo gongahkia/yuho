@@ -1,4 +1,4 @@
-# Docker ignore file for Yuho v3.0
+# Docker ignore file for Yuho v4.0
 # Excludes unnecessary files from Docker build context
 
 # Python

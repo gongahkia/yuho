@@ -1,4 +1,4 @@
-# Yuho v3.0 Quickstart Guide
+# Yuho v4.0 Quickstart Guide
 
 ## Installation
 
@@ -6,13 +6,13 @@
 - Python 3.8 or higher
 - pip package manager
 
-### Install Yuho v3.0
+### Install Yuho v4.0
 
 ```bash
 # Install dependencies
 pip install -r requirements.txt
 
-# Install Yuho v3.0 (development mode)
+# Install Yuho v4.0 (development mode)
 pip install -e .
 ```
 
@@ -62,7 +62,7 @@ yuho-repl
 Or run the Python module directly:
 
 ```bash
-python3 yuho_v3/repl.py
+python3 yuho_v4/repl.py
 ```
 
 ## Writing Yuho Code
