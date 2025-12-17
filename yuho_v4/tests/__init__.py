@@ -12,5 +12,5 @@ Test organization:
 - test_edge_cases.py: Edge cases and error handling tests
 """
 
-__version__ = "3.0.0"
+__version__ = "4.0.0"
 
