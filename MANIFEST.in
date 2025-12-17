@@ -1,0 +1,31 @@
+# Include core documentation files
+include README.md
+include LICENSE
+include CHANGELOG.md
+
+# Include requirements files
+include requirements.txt
+include requirements-dev.txt
+
+# Include pytest configuration
+include pytest.ini
+
+# Include grammar specification files
+recursive-include yuho_v4 *.lark
+
+# Include type information
+recursive-include yuho_v4 py.typed
+
+# Exclude unnecessary files
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]
+recursive-exclude * .DS_Store
+recursive-exclude * *.so
+recursive-exclude * *.dylib
+
+# Exclude test and development files from distribution
+recursive-exclude yuho_v4/tests *
+prune archive
+prune sandbox
+prune asset
+prune doc
