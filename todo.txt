@@ -40,28 +40,9 @@
 # CLI: Command-line interface with rich error messages
 # ============================================================================
 
-(A) Set up Click-based CLI entry point with --version, --help, --verbose flags +cli
-(A) Implement `yuho check <file>` command: parse, build AST, run semantic analysis +cli
-(A) Implement rich error formatting: source line display, caret pointing to error location +cli
-(A) Implement error suggestions using Levenshtein distance for typos in keywords/identifiers +cli
-(A) Implement `yuho transpile <file> -t <target>` with target validation +cli
-(A) Implement `yuho transpile` output modes: stdout (default), -o <file>, --dir <directory> +cli
-(A) Implement `yuho transpile --all` to generate all targets at once into output directory +cli
-(A) Implement `yuho explain <file>` command that invokes LLM for natural language explanation +cli
-(A) Implement `yuho explain --section <num>` to explain specific statute section only +cli
-(A) Implement `yuho explain --interactive` for follow-up questions in REPL mode +cli
-(A) Implement `yuho serve` command to start MCP server on configurable port +cli
-(A) Implement `yuho serve --stdio` for stdio-based MCP transport (editor integration) +cli
-(A) Implement `yuho contribute <file>` command: validate .yh file and associated tests +cli
-(A) Implement `yuho contribute --package` to create distributable .yhpkg archive +cli
-(B) Implement `yuho init` command to scaffold new statute project with template files +cli
-(B) Implement `yuho fmt <file>` command for canonical formatting +cli
-(B) Implement `yuho test <file>` command to run associated test files +cli
-(B) Add --json flag to all commands for machine-readable output +cli
 (B) Add --color/--no-color flags with auto-detection of terminal capabilities +cli
 (B) Add --quiet flag to suppress non-error output +cli
 (C) Implement shell completion scripts for bash, zsh, fish +cli
-(C) Implement `yuho lsp` command to start LSP server (for editors that invoke directly) +cli
 
 # ============================================================================
 # LSP: Full Language Server Protocol implementation
