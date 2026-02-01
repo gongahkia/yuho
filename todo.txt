@@ -27,28 +27,12 @@
 # TRANSPILATION: Multi-target code generation
 # ============================================================================
 
-(A) Define TranspileTarget enum: JSON, JSON_LD, ENGLISH, LATEX, MERMAID, ALLOY +transpile
-(A) Define TranspilerBase abstract class with transpile(ast: ModuleNode) -> str method +transpile
-(A) Implement JSONTranspiler: serialize AST to JSON with type discriminators and source locations +transpile
-(A) Implement JSON-LD context definition with legal ontology terms (schema.org/Legislation extensions) +transpile
-(A) Implement JSONLDTranspiler: extend JSONTranspiler adding @context, @type, @id annotations +transpile
-(A) Implement EnglishTranspiler: template-based controlled natural language generation +transpile
-(A) Define English templates for each AST node type (statute, element, penalty, match-case) +transpile
-(A) Implement EnglishTranspiler clause connectors: "if", "unless", "provided that", "notwithstanding" +transpile
-(A) Implement EnglishTranspiler penalty formatter: "imprisonment up to X years", "fine up to $Y" +transpile
 (B) Implement LaTeXTranspiler with legal document preamble (article class, section formatting) +transpile
 (B) Implement LaTeX statute formatting: section numbers, margin notes, cross-references +transpile
 (B) Implement LaTeX penalty tables with imprisonment/fine columns +transpile
 (B) Implement LaTeX illustration blocks with gray background and italic text +transpile
 (B) Add LaTeX to PDF compilation via subprocess call to pdflatex/xelatex +transpile
-(A) Implement MermaidTranspiler for decision tree flowcharts from match expressions +transpile
-(A) Implement Mermaid node generation: decision diamonds for conditions, rectangles for outcomes +transpile
-(A) Implement Mermaid edge labels from pattern guards and match arm conditions +transpile
 (B) Implement Mermaid subgraph grouping for nested match expressions +transpile
-(A) Implement AlloyTranspiler: generate Alloy sig declarations from struct definitions +transpile
-(A) Implement Alloy fact generation from statute elements (constraints) +transpile
-(A) Implement Alloy pred generation from function definitions +transpile
-(A) Implement Alloy assert generation for cross-statute consistency checks +transpile
 (B) Implement Alloy run/check command generation for bounded model checking +transpile
 (C) Implement TranspilerRegistry singleton mapping TranspileTarget to Transpiler instances +transpile
 
