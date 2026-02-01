@@ -403,21 +403,137 @@ class AlloyTranspiler(TranspilerBase, Visitor):
             self._emit("")
 
     def _emit_run_commands(self, ast: nodes.ModuleNode) -> None:
-        """Emit run and check commands."""
-        self._emit("-- Verification commands")
+        """
+        Emit run and check commands for bounded model checking.
+        
+        Generates:
+        - run commands to find satisfying instances
+        - check commands to verify assertions
+        - parameterized scope bounds
+        """
+        self._emit("-- =========================================================================")
+        self._emit("-- Verification commands for bounded model checking")
+        self._emit("-- =========================================================================")
         self._emit("")
-
-        # Run command for each offense type
+        
+        # Configuration comment
+        self._emit("-- Scope configuration (adjust bounds as needed)")
+        self._emit("-- Default scope is 5 atoms per sig, Int scope is 4 bits (-8 to 7)")
+        self._emit("")
+        
+        # Run commands for finding satisfying offense instances
+        self._emit("-- Run commands: find satisfying instances")
         for statute in ast.statutes:
             safe_name = self._safe_name(statute.section_number)
-            self._emit(f"run show{safe_name} {{ some {safe_name}Offense }} for 3")
-
+            offense_sig = f"{safe_name}Offense"
+            
+            # Basic run: find any instance
+            self._emit(f"run show{safe_name}Instance {{")
+            self._indent += 1
+            self._emit(f"some o: {offense_sig} | o.guilty = True")
+            self._indent -= 1
+            self._emit("} for 3 but 4 Int")
+            self._emit("")
+            
+            # Run with all elements satisfied
+            self._emit(f"run show{safe_name}GuiltyScenario {{")
+            self._indent += 1
+            self._emit(f"some o: {offense_sig} |")
+            self._indent += 1
+            conditions = [f"o.{self._safe_name(e.name)} = True" for e in statute.elements]
+            if conditions:
+                self._emit(" and ".join(conditions))
+            else:
+                self._emit("o.guilty = True")
+            self._indent -= 1
+            self._indent -= 1
+            self._emit("} for 5 but 4 Int")
+            self._emit("")
+            
+            # Run to find innocent scenario (not guilty)
+            self._emit(f"run show{safe_name}InnocentScenario {{")
+            self._indent += 1
+            self._emit(f"some o: {offense_sig} | o.guilty = False")
+            self._indent -= 1
+            self._emit("} for 3 but 4 Int")
+            self._emit("")
+        
+        # Check commands for assertions
+        self._emit("-- Check commands: verify assertions with counterexample search")
         self._emit("")
-
-        # Check assertions
-        self._emit("check NoContradictoryElements for 5")
+        
+        # Check element consistency
+        for statute in ast.statutes:
+            safe_name = self._safe_name(statute.section_number)
+            offense_sig = f"{safe_name}Offense"
+            
+            # Check that guilty implies all elements true
+            self._emit(f"assert {safe_name}GuiltyImpliesElements {{")
+            self._indent += 1
+            self._emit(f"all o: {offense_sig} | o.guilty = True implies (")
+            self._indent += 1
+            conditions = [f"o.{self._safe_name(e.name)} = True" for e in statute.elements]
+            if conditions:
+                self._emit(" and ".join(conditions))
+            else:
+                self._emit("True = True")  # Trivially true
+            self._indent -= 1
+            self._emit(")")
+            self._indent -= 1
+            self._emit("}")
+            self._emit(f"check {safe_name}GuiltyImpliesElements for 5 but 4 Int")
+            self._emit("")
+            
+            # Check that all elements true implies guilty
+            if statute.elements:
+                self._emit(f"assert {safe_name}ElementsImplyGuilty {{")
+                self._indent += 1
+                self._emit(f"all o: {offense_sig} | (")
+                self._indent += 1
+                self._emit(" and ".join(conditions))
+                self._indent -= 1
+                self._emit(f") implies o.guilty = True")
+                self._indent -= 1
+                self._emit("}")
+                self._emit(f"check {safe_name}ElementsImplyGuilty for 5 but 4 Int")
+                self._emit("")
+        
+        # Global consistency assertions
+        self._emit("check NoContradictoryElements for 5 but 4 Int")
         if len(ast.statutes) >= 2:
-            self._emit("check PenaltyOrdering for 5")
+            self._emit("check PenaltyOrdering for 5 but 4 Int")
+        self._emit("")
+        
+        # Negative checks (looking for counterexamples to impossibilities)
+        self._emit("-- Negative checks: these should find NO counterexamples")
+        for statute in ast.statutes:
+            safe_name = self._safe_name(statute.section_number)
+            offense_sig = f"{safe_name}Offense"
+            
+            # Check: it's impossible to be guilty with no elements satisfied
+            if statute.elements:
+                self._emit(f"assert {safe_name}NoElementsNoGuilt {{")
+                self._indent += 1
+                no_conditions = [f"o.{self._safe_name(e.name)} = False" for e in statute.elements]
+                self._emit(f"all o: {offense_sig} | (")
+                self._indent += 1
+                self._emit(" and ".join(no_conditions))
+                self._indent -= 1
+                self._emit(") implies o.guilty = False")
+                self._indent -= 1
+                self._emit("}")
+                self._emit(f"check {safe_name}NoElementsNoGuilt for 5 but 4 Int")
+                self._emit("")
+        
+        # Exhaustive exploration hint
+        self._emit("-- =========================================================================")
+        self._emit("-- To run in Alloy Analyzer:")
+        self._emit("--   1. Open this file in Alloy Analyzer")
+        self._emit("--   2. Execute 'run' commands to find satisfying instances")
+        self._emit("--   3. Execute 'check' commands to verify assertions")
+        self._emit("--   4. Green checkmark = assertion holds within scope")
+        self._emit("--   5. Red X = counterexample found (click to view)")
+        self._emit("-- =========================================================================")
 
     def _safe_name(self, name: str) -> str:
         """Convert name to safe Alloy identifier."""
@@ -427,3 +543,4 @@ class AlloyTranspiler(TranspilerBase, Visitor):
         if safe and safe[0].isdigit():
             safe = "S" + safe
         return safe
+
