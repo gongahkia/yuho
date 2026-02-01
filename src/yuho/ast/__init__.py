@@ -75,6 +75,12 @@ from yuho.ast.nodes import (
 from yuho.ast.visitor import Visitor
 from yuho.ast.transformer import Transformer
 from yuho.ast.builder import ASTBuilder
+from yuho.ast.exhaustiveness import (
+    ExhaustivenessChecker,
+    ExhaustivenessError,
+    ExhaustivenessResult,
+    check_exhaustiveness,
+)
 
 __all__ = [
     # Base
@@ -144,4 +150,9 @@ __all__ = [
     "Visitor",
     "Transformer",
     "ASTBuilder",
+    # Analysis
+    "ExhaustivenessChecker",
+    "ExhaustivenessError",
+    "ExhaustivenessResult",
+    "check_exhaustiveness",
 ]
