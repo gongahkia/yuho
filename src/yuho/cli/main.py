@@ -2,6 +2,7 @@
 Main CLI entry point using Click.
 """
 
+import os
 import sys
 from pathlib import Path
 from typing import Optional, List
@@ -11,6 +12,36 @@ import click
 from yuho import __version__
 
 
+def _detect_color_support() -> bool:
+    """
+    Auto-detect terminal color support.
+    
+    Checks for:
+    - TTY attached to stdout
+    - NO_COLOR environment variable (force disable)
+    - FORCE_COLOR environment variable (force enable)
+    - TERM environment variable
+    """
+    # NO_COLOR spec: https://no-color.org/
+    if os.environ.get("NO_COLOR"):
+        return False
+    
+    # FORCE_COLOR always wins
+    if os.environ.get("FORCE_COLOR"):
+        return True
+    
+    # Check if stdout is a TTY
+    if not hasattr(sys.stdout, "isatty") or not sys.stdout.isatty():
+        return False
+    
+    # Check TERM variable
+    term = os.environ.get("TERM", "")
+    if term == "dumb":
+        return False
+    
+    return True
+
+
 # Click context settings
 CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
 
@@ -18,15 +49,38 @@ CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
 @click.group(context_settings=CONTEXT_SETTINGS)
 @click.version_option(version=__version__, prog_name="yuho")
 @click.option("-v", "--verbose", is_flag=True, help="Enable verbose output")
+@click.option(
+    "--color/--no-color",
+    "use_color",
+    default=None,
+    help="Force color output on/off (auto-detected by default)"
+)
+@click.option(
+    "-q", "--quiet",
+    is_flag=True,
+    help="Suppress non-error output"
+)
 @click.pass_context
-def cli(ctx: click.Context, verbose: bool) -> None:
+def cli(ctx: click.Context, verbose: bool, use_color: Optional[bool], quiet: bool) -> None:
     """
     Yuho - A domain-specific language for encoding legal statutes.
 
     Use 'yuho <command> --help' for command-specific help.
     """
     ctx.ensure_object(dict)
-    ctx.obj["verbose"] = verbose
+    ctx.obj["verbose"] = verbose and not quiet  # Quiet overrides verbose
+    ctx.obj["quiet"] = quiet
+    
+    # Determine color setting
+    if use_color is None:
+        # Auto-detect
+        ctx.obj["color"] = _detect_color_support()
+    else:
+        ctx.obj["color"] = use_color
+    
+    # Set global color state for error_formatter
+    from yuho.cli import error_formatter
+    error_formatter.COLOR_ENABLED = ctx.obj["color"]
 
 
 # =============================================================================

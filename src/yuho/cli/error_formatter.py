@@ -13,19 +13,37 @@ from yuho.parser.source_location import SourceLocation
 from yuho.parser.wrapper import ParseError
 
 
+# Global color control - can be set by CLI
+# None = auto-detect, True = force on, False = force off
+COLOR_ENABLED: Optional[bool] = None
+
+
 # ANSI color codes
 class Colors:
     RED = "\033[91m"
     YELLOW = "\033[93m"
     BLUE = "\033[94m"
     CYAN = "\033[96m"
+    GREEN = "\033[92m"
     BOLD = "\033[1m"
     DIM = "\033[2m"
     RESET = "\033[0m"
 
 
 def supports_color() -> bool:
-    """Check if terminal supports color."""
+    """
+    Check if terminal supports color.
+    
+    Respects the global COLOR_ENABLED flag if set,
+    otherwise auto-detects based on terminal capabilities.
+    """
+    global COLOR_ENABLED
+    
+    # If explicitly set, use that value
+    if COLOR_ENABLED is not None:
+        return COLOR_ENABLED
+    
+    # Auto-detect
     if not hasattr(sys.stdout, "isatty"):
         return False
     if not sys.stdout.isatty():
@@ -38,6 +56,7 @@ def colorize(text: str, color: str) -> str:
     if supports_color():
         return f"{color}{text}{Colors.RESET}"
     return text
+
 
 
 def format_error(error: ParseError, source: str) -> str:

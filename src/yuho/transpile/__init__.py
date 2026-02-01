@@ -16,6 +16,7 @@ from yuho.transpile.jsonld_transpiler import JSONLDTranspiler
 from yuho.transpile.english_transpiler import EnglishTranspiler
 from yuho.transpile.mermaid_transpiler import MermaidTranspiler
 from yuho.transpile.alloy_transpiler import AlloyTranspiler
+from yuho.transpile.latex_transpiler import LaTeXTranspiler, compile_to_pdf
 
 __all__ = [
     "TranspileTarget",
@@ -23,6 +24,8 @@ __all__ = [
     "JSONTranspiler",
     "JSONLDTranspiler",
     "EnglishTranspiler",
+    "LaTeXTranspiler",
+    "compile_to_pdf",
     "MermaidTranspiler",
     "AlloyTranspiler",
 ]
@@ -42,6 +45,7 @@ def get_transpiler(target: TranspileTarget) -> TranspilerBase:
         TranspileTarget.JSON: JSONTranspiler,
         TranspileTarget.JSON_LD: JSONLDTranspiler,
         TranspileTarget.ENGLISH: EnglishTranspiler,
+        TranspileTarget.LATEX: LaTeXTranspiler,
         TranspileTarget.MERMAID: MermaidTranspiler,
         TranspileTarget.ALLOY: AlloyTranspiler,
     }

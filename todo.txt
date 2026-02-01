@@ -12,32 +12,18 @@
 # TRANSPILATION: Multi-target code generation
 # ============================================================================
 
-(B) Implement LaTeXTranspiler with legal document preamble (article class, section formatting) +transpile
-(B) Implement LaTeX statute formatting: section numbers, margin notes, cross-references +transpile
-(B) Implement LaTeX penalty tables with imprisonment/fine columns +transpile
-(B) Implement LaTeX illustration blocks with gray background and italic text +transpile
-(B) Add LaTeX to PDF compilation via subprocess call to pdflatex/xelatex +transpile
-(B) Implement Mermaid subgraph grouping for nested match expressions +transpile
-(B) Implement Alloy run/check command generation for bounded model checking +transpile
 (C) Implement TranspilerRegistry singleton mapping TranspileTarget to Transpiler instances +transpile
 
 # ============================================================================
 # CLI: Command-line interface with rich error messages
 # ============================================================================
 
-(B) Add --color/--no-color flags with auto-detection of terminal capabilities +cli
-(B) Add --quiet flag to suppress non-error output +cli
 (C) Implement shell completion scripts for bash, zsh, fish +cli
 
 # ============================================================================
 # LSP: Full Language Server Protocol implementation
 # ============================================================================
 
-(B) Implement textDocument/hover showing type information for expressions +lsp
-(B) Implement textDocument/hover showing doc-comments for functions and statutes +lsp
-(B) Implement textDocument/definition for go-to-definition on identifiers +lsp
-(B) Implement textDocument/definition for go-to-definition on imports (open .yh file) +lsp
-(B) Implement textDocument/references to find all usages of a symbol +lsp
 (B) Implement textDocument/rename with workspace-wide symbol renaming +lsp
 (B) Implement textDocument/documentSymbol returning statute/function/struct hierarchy +lsp
 (B) Implement workspace/symbol for project-wide symbol search +lsp
@@ -157,13 +143,13 @@
 # ROADMAP: v6 items (visual editor and beyond)
 # ============================================================================
 
-(C) [v6] Design Scratch-like block palette for Yuho constructs +roadmap
-(C) [v6] Implement drag-and-drop block editor using Blockly or custom React components +roadmap
-(C) [v6] Implement bidirectional sync between block editor and .yh source +roadmap
-(C) [v6] Implement localhost-only web server serving visual editor UI +roadmap
-(C) [v6] Implement block-to-AST and AST-to-block converters +roadmap
-(C) [v6] Design guided statute builder wizard for non-programmers +roadmap
-(C) [v6] Implement collaborative editing via CRDT synchronization +roadmap
+(D) [v6] Design Scratch-like block palette for Yuho constructs +roadmap
+(D) [v6] Implement drag-and-drop block editor using Blockly or custom React components +roadmap
+(D) [v6] Implement bidirectional sync between block editor and .yh source +roadmap
+(D) [v6] Implement localhost-only web server serving visual editor UI +roadmap
+(D) [v6] Implement block-to-AST and AST-to-block converters +roadmap
+(D) [v6] Design guided statute builder wizard for non-programmers +roadmap
+(D) [v6] Implement collaborative editing via CRDT synchronization +roadmap
 
 # ============================================================================
 # DOCS: Remaining once everything else is done
