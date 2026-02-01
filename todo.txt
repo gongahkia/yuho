@@ -150,13 +150,13 @@
 # ROADMAP: v6 items (visual editor and beyond)
 # ============================================================================
 
-(C) [v6] Design Scratch-like block palette for Yuho constructs +roadmap
-(C) [v6] Implement drag-and-drop block editor using Blockly or custom React components +roadmap
-(C) [v6] Implement bidirectional sync between block editor and .yh source +roadmap
-(C) [v6] Implement localhost-only web server serving visual editor UI +roadmap
-(C) [v6] Implement block-to-AST and AST-to-block converters +roadmap
-(C) [v6] Design guided statute builder wizard for non-programmers +roadmap
-(C) [v6] Implement collaborative editing via CRDT synchronization +roadmap
+(D) [v6] Design Scratch-like block palette for Yuho constructs +roadmap
+(D) [v6] Implement drag-and-drop block editor using Blockly or custom React components +roadmap
+(D) [v6] Implement bidirectional sync between block editor and .yh source +roadmap
+(D) [v6] Implement localhost-only web server serving visual editor UI +roadmap
+(D) [v6] Implement block-to-AST and AST-to-block converters +roadmap
+(D) [v6] Design guided statute builder wizard for non-programmers +roadmap
+(D) [v6] Implement collaborative editing via CRDT synchronization +roadmap
 
 # ============================================================================
 # DOCS: Remaining once everything else is done
