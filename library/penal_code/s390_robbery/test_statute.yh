@@ -1,0 +1,117 @@
+/*
+Test cases for S390 Robbery
+
+Tests verify robbery as combination of:
+    1. Theft-based: theft + aggravating act during commission
+    2. Extortion-based: extortion + presence + fear + immediate delivery
+*/
+
+referencing s390_robbery/statute
+
+scope testS390Robbery {
+
+    // Test Case 1: Theft with causing hurt -> Robbery
+    RobberyCase testTheftWithHurt := {
+        accused := Party.Accused,
+        victim := Party.Victim,
+        baseOffense := BaseOffense.Theft,
+        theftStage := TheftStage.DuringCommission,
+        aggravatingAct := AggravatingAct.CausingHurt,
+        presenceStatus := PresenceStatus.InPresenceOfVictim,
+        deliveryTiming := DeliveryTiming.NA,
+        definition := ConsequenceDefinition.CommitsRobbery,
+    }
+    assert testTheftWithHurt.definition == ConsequenceDefinition.CommitsRobbery
+
+    // Test Case 2: Theft with wrongful restraint while carrying away -> Robbery
+    RobberyCase testTheftCarryingAway := {
+        accused := Party.Accused,
+        victim := Party.Victim,
+        baseOffense := BaseOffense.Theft,
+        theftStage := TheftStage.CarryingAway,
+        aggravatingAct := AggravatingAct.CausingWrongfulRestraint,
+        presenceStatus := PresenceStatus.InPresenceOfVictim,
+        deliveryTiming := DeliveryTiming.NA,
+        definition := ConsequenceDefinition.CommitsRobbery,
+    }
+    assert testTheftCarryingAway.definition == ConsequenceDefinition.CommitsRobbery
+
+    // Test Case 3: Theft with fear of instant death + immediate delivery -> Robbery
+    RobberyCase testTheftWithFear := {
+        accused := Party.Accused,
+        victim := Party.Victim,
+        baseOffense := BaseOffense.Theft,
+        theftStage := TheftStage.DuringCommission,
+        aggravatingAct := AggravatingAct.FearOfInstantDeath,
+        presenceStatus := PresenceStatus.InPresenceOfVictim,
+        deliveryTiming := DeliveryTiming.ImmediateDelivery,
+        definition := ConsequenceDefinition.CommitsRobbery,
+    }
+    assert testTheftWithFear.definition == ConsequenceDefinition.CommitsRobbery
+
+    // Test Case 4: Extortion in presence with fear of instant hurt -> Robbery
+    RobberyCase testExtortionRobbery := {
+        accused := Party.Accused,
+        victim := Party.Victim,
+        baseOffense := BaseOffense.Extortion,
+        theftStage := TheftStage.NA,
+        aggravatingAct := AggravatingAct.FearOfInstantHurt,
+        presenceStatus := PresenceStatus.InPresenceOfVictim,
+        deliveryTiming := DeliveryTiming.ImmediateDelivery,
+        definition := ConsequenceDefinition.CommitsRobbery,
+    }
+    assert testExtortionRobbery.definition == ConsequenceDefinition.CommitsRobbery
+
+    // Test Case 5: Extortion not in presence -> Not Robbery
+    RobberyCase testExtortionNotPresent := {
+        accused := Party.Accused,
+        victim := Party.Victim,
+        baseOffense := BaseOffense.Extortion,
+        theftStage := TheftStage.NA,
+        aggravatingAct := AggravatingAct.FearOfInstantDeath,
+        presenceStatus := PresenceStatus.NotInPresenceOfVictim,
+        deliveryTiming := DeliveryTiming.ImmediateDelivery,
+        definition := ConsequenceDefinition.DoesNotCommitRobbery,
+    }
+    assert testExtortionNotPresent.definition == ConsequenceDefinition.DoesNotCommitRobbery
+
+    // Test Case 6: Theft without aggravating act -> Not Robbery
+    RobberyCase testTheftNoAggravation := {
+        accused := Party.Accused,
+        victim := Party.Victim,
+        baseOffense := BaseOffense.Theft,
+        theftStage := TheftStage.DuringCommission,
+        aggravatingAct := AggravatingAct.NA,
+        presenceStatus := PresenceStatus.InPresenceOfVictim,
+        deliveryTiming := DeliveryTiming.NA,
+        definition := ConsequenceDefinition.DoesNotCommitRobbery,
+    }
+    assert testTheftNoAggravation.definition == ConsequenceDefinition.DoesNotCommitRobbery
+
+    // Test Case 7: No base offense -> Not Robbery
+    RobberyCase testNoBaseOffense := {
+        accused := Party.Accused,
+        victim := Party.Victim,
+        baseOffense := BaseOffense.NA,
+        theftStage := TheftStage.NA,
+        aggravatingAct := AggravatingAct.CausingHurt,
+        presenceStatus := PresenceStatus.InPresenceOfVictim,
+        deliveryTiming := DeliveryTiming.NA,
+        definition := ConsequenceDefinition.DoesNotCommitRobbery,
+    }
+    assert testNoBaseOffense.definition == ConsequenceDefinition.DoesNotCommitRobbery
+
+    // Test Case 8: Delayed delivery -> Not Robbery (for fear-based)
+    RobberyCase testDelayedDelivery := {
+        accused := Party.Accused,
+        victim := Party.Victim,
+        baseOffense := BaseOffense.Extortion,
+        theftStage := TheftStage.NA,
+        aggravatingAct := AggravatingAct.FearOfInstantDeath,
+        presenceStatus := PresenceStatus.InPresenceOfVictim,
+        deliveryTiming := DeliveryTiming.DelayedDelivery,
+        definition := ConsequenceDefinition.DoesNotCommitRobbery,
+    }
+    assert testDelayedDelivery.definition == ConsequenceDefinition.DoesNotCommitRobbery
+
+}

@@ -1,0 +1,13 @@
+[statute]
+section_number = "383"
+title = "Extortion"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[contributor]
+name = "Yuho Team"
+email = ""
+
+[description]
+summary = "Whoever intentionally puts any person in fear of any injury to that person or to any other, and thereby dishonestly induces the person so put in fear to deliver to any person any property, or valuable security, or anything signed or sealed which may be converted into a valuable security, commits extortion."
+source = "Singapore Penal Code 1871, Section 383"

@@ -1,0 +1,13 @@
+[statute]
+section_number = "378"
+title = "Theft"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[contributor]
+name = "Yuho Team"
+email = ""
+
+[description]
+summary = "Whoever, intending to take dishonestly any movable property out of the possession of any person without that person's consent, moves that property in order to such taking, is said to commit theft."
+source = "Singapore Penal Code 1871, Section 378"

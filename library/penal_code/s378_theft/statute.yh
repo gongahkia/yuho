@@ -1,0 +1,125 @@
+/*
+VERSION 1.0
+
+Based off the following statutory provisions on theft
+    * Singapore Penal Code S378
+
+Theft requires:
+    1. Dishonest intention (wrongful gain/loss)
+    2. Movable property
+    3. Taking out of possession of another person
+    4. Without consent
+    5. Moving the property
+
+This demonstrates property offense with intent elements.
+*/
+
+scope s378Theft {
+
+    // ~ ENUMS ~
+
+    struct Party { // ENUM
+        Accused,
+        Victim,
+    }
+
+    struct PropertyType { // ENUM - Types of movable property
+        Tangible,
+        Intangible,
+        SeveredFromLand,
+        NA,
+    }
+
+    struct IntentionType { // ENUM - Dishonest intention elements
+        WrongfulGain,
+        WrongfulLoss,
+        WrongfulGainAndLoss,
+        NA,
+    }
+
+    struct ConsentStatus { // ENUM
+        WithConsent,
+        WithoutConsent,
+    }
+
+    struct PossessionStatus { // ENUM
+        InPossessionOfAnother,
+        NotInPossessionOfAnother,
+    }
+
+    struct MovementStatus { // ENUM
+        PropertyMoved,
+        PropertyNotMoved,
+    }
+
+    struct ConsequenceDefinition { // ENUM
+        CommitsTheft,
+        DoesNotCommitTheft,
+    }
+
+    // ~ STRUCT DEFINITION ~
+
+    struct TheftCase {
+        string || Party accused,
+        string || Party victim,
+        PropertyType propertyType,
+        IntentionType dishonestIntention,
+        ConsentStatus consent,
+        PossessionStatus possession,
+        MovementStatus movement,
+        ConsequenceDefinition definition,
+    }
+
+    // ~ STRUCT LITERAL ~
+
+    TheftCase theftDefinition := {
+
+        // ~ struct literal attributes ~
+            // Whoever, intending to take dishonestly any movable property
+            // out of the possession of any person without that person's consent,
+            // moves that property in order to such taking, is said to commit theft
+
+        accused := Party.Accused,
+        victim := Party.Victim,
+        propertyType := PropertyType.Tangible or PropertyType.Intangible or PropertyType.SeveredFromLand or PropertyType.NA,
+        dishonestIntention := IntentionType.WrongfulGain or IntentionType.WrongfulLoss or IntentionType.WrongfulGainAndLoss or IntentionType.NA,
+        consent := ConsentStatus.WithConsent or ConsentStatus.WithoutConsent,
+        possession := PossessionStatus.InPossessionOfAnother or PossessionStatus.NotInPossessionOfAnother,
+        movement := MovementStatus.PropertyMoved or MovementStatus.PropertyNotMoved,
+
+        // ~ logical short circuiting ~
+            // All five elements must be present for theft:
+            // 1. Movable property
+            // 2. Dishonest intention
+            // 3. Without consent
+            // 4. Out of possession of another
+            // 5. Movement of property
+
+        definition := match propertyType {
+            case PropertyType.Tangible := consequence dishonestIntention
+            case PropertyType.Intangible := consequence dishonestIntention
+            case PropertyType.SeveredFromLand := consequence dishonestIntention
+            case PropertyType.NA := consequence ConsequenceDefinition.DoesNotCommitTheft
+        },
+        definition := match dishonestIntention {
+            case IntentionType.WrongfulGain := consequence consent
+            case IntentionType.WrongfulLoss := consequence consent
+            case IntentionType.WrongfulGainAndLoss := consequence consent
+            case IntentionType.NA := consequence ConsequenceDefinition.DoesNotCommitTheft
+        },
+        definition := match consent {
+            case ConsentStatus.WithoutConsent := consequence possession
+            case ConsentStatus.WithConsent := consequence ConsequenceDefinition.DoesNotCommitTheft
+        },
+        definition := match possession {
+            case PossessionStatus.InPossessionOfAnother := consequence movement
+            case PossessionStatus.NotInPossessionOfAnother := consequence ConsequenceDefinition.DoesNotCommitTheft
+        },
+        definition := match movement {
+            case MovementStatus.PropertyMoved := consequence ConsequenceDefinition.CommitsTheft
+            case MovementStatus.PropertyNotMoved := consequence ConsequenceDefinition.DoesNotCommitTheft
+        },
+
+    }
+
+}

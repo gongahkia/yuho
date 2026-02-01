@@ -1,0 +1,13 @@
+[statute]
+section_number = "319"
+title = "Hurt"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[contributor]
+name = "Yuho Team"
+email = ""
+
+[description]
+summary = "Whoever causes bodily pain, disease or infirmity to any person is said to cause hurt."
+source = "Singapore Penal Code 1871, Section 319"

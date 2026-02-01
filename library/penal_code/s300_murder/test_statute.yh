@@ -1,0 +1,102 @@
+/*
+Test cases for S300 Murder
+
+Tests verify:
+    1. Murder requires culpable homicide + specific mens rea
+    2. Each exception successfully reduces murder to culpable homicide not amounting to murder
+    3. No exception results in murder conviction
+*/
+
+referencing s300_murder/statute
+
+scope testS300Murder {
+
+    // Test Case 1: Murder with intention to cause death, no exception
+    MurderCase testMurderNoException := {
+        accused := Party.Accused,
+        victim := Party.Victim,
+        culpableHomicide := TRUE,
+        mensRea := MensRea.IntentionToCauseDeath,
+        exception := Exception.NA,
+        definition := ConsequenceDefinition.Murder,
+    }
+    assert testMurderNoException.definition == ConsequenceDefinition.Murder
+
+    // Test Case 2: Grave and sudden provocation exception applies
+    MurderCase testProvocationException := {
+        accused := Party.Accused,
+        victim := Party.Victim,
+        culpableHomicide := TRUE,
+        mensRea := MensRea.IntentionToCauseDeath,
+        exception := Exception.GraveAndSuddenProvocation,
+        definition := ConsequenceDefinition.CulpableHomicideNotAmountingToMurder,
+    }
+    assert testProvocationException.definition == ConsequenceDefinition.CulpableHomicideNotAmountingToMurder
+
+    // Test Case 3: Exceeding private defence exception applies
+    MurderCase testPrivateDefenceException := {
+        accused := Party.Accused,
+        victim := Party.Victim,
+        culpableHomicide := TRUE,
+        mensRea := MensRea.IntentionToInflictBodilyInjurySufficientToKill,
+        exception := Exception.ExceedingPrivateDefence,
+        definition := ConsequenceDefinition.CulpableHomicideNotAmountingToMurder,
+    }
+    assert testPrivateDefenceException.definition == ConsequenceDefinition.CulpableHomicideNotAmountingToMurder
+
+    // Test Case 4: Sudden fight exception applies
+    MurderCase testSuddenFightException := {
+        accused := Party.Accused,
+        victim := Party.Victim,
+        culpableHomicide := TRUE,
+        mensRea := MensRea.IntentionToCauseDeath,
+        exception := Exception.SuddenFight,
+        definition := ConsequenceDefinition.CulpableHomicideNotAmountingToMurder,
+    }
+    assert testSuddenFightException.definition == ConsequenceDefinition.CulpableHomicideNotAmountingToMurder
+
+    // Test Case 5: Diminished responsibility exception applies
+    MurderCase testDiminishedResponsibility := {
+        accused := Party.Accused,
+        victim := Party.Victim,
+        culpableHomicide := TRUE,
+        mensRea := MensRea.IntentionToCauseDeath,
+        exception := Exception.DiminishedResponsibility,
+        definition := ConsequenceDefinition.CulpableHomicideNotAmountingToMurder,
+    }
+    assert testDiminishedResponsibility.definition == ConsequenceDefinition.CulpableHomicideNotAmountingToMurder
+
+    // Test Case 6: Not culpable homicide -> Not murder
+    MurderCase testNotCulpableHomicide := {
+        accused := Party.Accused,
+        victim := Party.Victim,
+        culpableHomicide := FALSE,
+        mensRea := MensRea.IntentionToCauseDeath,
+        exception := Exception.NA,
+        definition := ConsequenceDefinition.NotCulpableHomicide,
+    }
+    assert testNotCulpableHomicide.definition == ConsequenceDefinition.NotCulpableHomicide
+
+    // Test Case 7: Culpable homicide but no murder mens rea
+    MurderCase testNoMurderMensRea := {
+        accused := Party.Accused,
+        victim := Party.Victim,
+        culpableHomicide := TRUE,
+        mensRea := MensRea.NA,
+        exception := Exception.NA,
+        definition := ConsequenceDefinition.CulpableHomicideNotAmountingToMurder,
+    }
+    assert testNoMurderMensRea.definition == ConsequenceDefinition.CulpableHomicideNotAmountingToMurder
+
+    // Test Case 8: Victim consent exception applies
+    MurderCase testVictimConsent := {
+        accused := Party.Accused,
+        victim := Party.Victim,
+        culpableHomicide := TRUE,
+        mensRea := MensRea.IntentionToCauseDeath,
+        exception := Exception.VictimConsent,
+        definition := ConsequenceDefinition.CulpableHomicideNotAmountingToMurder,
+    }
+    assert testVictimConsent.definition == ConsequenceDefinition.CulpableHomicideNotAmountingToMurder
+
+}

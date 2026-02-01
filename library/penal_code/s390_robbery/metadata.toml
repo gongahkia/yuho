@@ -1,0 +1,13 @@
+[statute]
+section_number = "390"
+title = "Robbery"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[contributor]
+name = "Yuho Team"
+email = ""
+
+[description]
+summary = "In all robbery, there is either theft or extortion. When theft is robbery: if the offender during or after committing theft voluntarily causes or attempts to cause death, hurt, wrongful restraint, or fear of instant harm. When extortion is robbery: if the offender is in presence of the victim and puts them in fear of instant death, hurt, or wrongful restraint, inducing immediate delivery."
+source = "Singapore Penal Code 1871, Section 390"

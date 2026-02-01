@@ -1,25 +1,10 @@
 # Yuho v5 PRD - Generated 2026-02-01
 # Priority: (A) MVP/critical path, (B) Important, (C) Can parallelize
-# Tags: +parser +ast +transpile +cli +lsp +mcp +llm +test +verify +library +statutes +config
 
 # ============================================================================
 # PARSER: tree-sitter grammar and Python bindings
 # ============================================================================
 
-(A) Define tree-sitter grammar for Yuho literals: int, float, bool, string with escape sequences +parser
-(A) Define tree-sitter grammar for legal-native types: money (currency+amount), percent, date (ISO8601), duration +parser
-(A) Define tree-sitter grammar for struct declarations with named fields and optional type annotations +parser
-(A) Define tree-sitter grammar for match-case expressions with pattern guards and wildcard patterns +parser
-(A) Define tree-sitter grammar for function definitions with parameter types and return type annotations +parser
-(A) Define tree-sitter grammar for statute blocks: section number, title, definitions, elements, penalties +parser
-(A) Define tree-sitter grammar for import statements referencing other .yh files +parser
-(A) Define tree-sitter grammar for comments: single-line (//) and multi-line (/* */) with doc-comments (///) +parser
-(A) Implement tree-sitter external scanner for context-sensitive tokens (indentation, string interpolation) +parser
-(A) Configure tree-sitter build to generate C parser and compile shared library +parser
-(A) Create py-tree-sitter bindings: install tree_sitter_yuho package exposing language() function +parser
-(A) Write parser wrapper class that accepts source string and returns tree-sitter Tree object +parser
-(A) Implement source position tracking: SourceLocation(file, line, col, end_line, end_col) dataclass +parser
-(A) Implement error recovery annotations in grammar for common syntax errors (missing semicolons, unmatched braces) +parser
 (B) Add tree-sitter queries for syntax highlighting (keywords, types, literals, comments, operators) +parser
 (B) Add tree-sitter queries for code folding (statute blocks, match arms, struct bodies) +parser
 (B) Add tree-sitter queries for indentation rules +parser
@@ -28,29 +13,6 @@
 # AST: Internal representation and semantic analysis
 # ============================================================================
 
-(A) Define immutable AST base class with source_location field and accept(visitor) method +ast
-(A) Define LiteralNode variants: IntLit, FloatLit, BoolLit, StringLit with value field +ast
-(A) Define MoneyNode with currency (enum: SGD, USD, etc.) and amount (Decimal) fields +ast
-(A) Define PercentNode with value (Decimal) field, enforce 0-100 range in constructor +ast
-(A) Define DateNode wrapping datetime.date with ISO8601 parsing +ast
-(A) Define DurationNode with years, months, days, hours, minutes, seconds fields +ast
-(A) Define StructDefNode with name, fields (list of FieldDef), and type_params for generics +ast
-(A) Define StructLiteralNode with struct_name and field_values (dict of field_name to ExprNode) +ast
-(A) Define FieldAccessNode with base_expr and field_name for dot notation access +ast
-(A) Define IndexAccessNode with base_expr and index_expr for bracket notation (struct-as-array) +ast
-(A) Define MatchExprNode with scrutinee (ExprNode), arms (list of MatchArm), ensure exhaustiveness flag +ast
-(A) Define MatchArm with pattern (PatternNode), guard (optional ExprNode), body (ExprNode) +ast
-(A) Define PatternNode variants: WildcardPattern, LiteralPattern, StructPattern, BindingPattern +ast
-(A) Define FunctionDefNode with name, params (list of ParamDef), return_type, body (ExprNode) +ast
-(A) Define FunctionCallNode with callee (ExprNode or name), args (list of ExprNode) +ast
-(A) Define StatuteNode with section_number, title, definitions, elements, penalties, illustrations +ast
-(A) Define ElementNode for actus reus / mens rea components with description and conditions +ast
-(A) Define PenaltyNode with imprisonment (DurationNode range), fine (MoneyNode range), or both +ast
-(A) Define ImportNode with path (relative .yh file) and imported names (list or wildcard) +ast
-(A) Define ModuleNode as root AST containing imports, type_defs, function_defs, statutes +ast
-(A) Implement ASTBuilder class that walks tree-sitter Tree and constructs AST nodes +ast
-(A) Implement Visitor base class with visit_* methods for each AST node type +ast
-(A) Implement Transformer base class that returns new AST nodes (immutable transformation) +ast
 (B) Implement TypeInferenceVisitor that annotates each ExprNode with inferred type +ast
 (B) Implement TypeCheckVisitor that validates type consistency and reports type errors +ast
 (B) Implement ScopeAnalysisVisitor that builds symbol tables and resolves references +ast
@@ -64,28 +26,12 @@
 # TRANSPILATION: Multi-target code generation
 # ============================================================================
 
-(A) Define TranspileTarget enum: JSON, JSON_LD, ENGLISH, LATEX, MERMAID, ALLOY +transpile
-(A) Define TranspilerBase abstract class with transpile(ast: ModuleNode) -> str method +transpile
-(A) Implement JSONTranspiler: serialize AST to JSON with type discriminators and source locations +transpile
-(A) Implement JSON-LD context definition with legal ontology terms (schema.org/Legislation extensions) +transpile
-(A) Implement JSONLDTranspiler: extend JSONTranspiler adding @context, @type, @id annotations +transpile
-(A) Implement EnglishTranspiler: template-based controlled natural language generation +transpile
-(A) Define English templates for each AST node type (statute, element, penalty, match-case) +transpile
-(A) Implement EnglishTranspiler clause connectors: "if", "unless", "provided that", "notwithstanding" +transpile
-(A) Implement EnglishTranspiler penalty formatter: "imprisonment up to X years", "fine up to $Y" +transpile
 (B) Implement LaTeXTranspiler with legal document preamble (article class, section formatting) +transpile
 (B) Implement LaTeX statute formatting: section numbers, margin notes, cross-references +transpile
 (B) Implement LaTeX penalty tables with imprisonment/fine columns +transpile
 (B) Implement LaTeX illustration blocks with gray background and italic text +transpile
 (B) Add LaTeX to PDF compilation via subprocess call to pdflatex/xelatex +transpile
-(A) Implement MermaidTranspiler for decision tree flowcharts from match expressions +transpile
-(A) Implement Mermaid node generation: decision diamonds for conditions, rectangles for outcomes +transpile
-(A) Implement Mermaid edge labels from pattern guards and match arm conditions +transpile
 (B) Implement Mermaid subgraph grouping for nested match expressions +transpile
-(A) Implement AlloyTranspiler: generate Alloy sig declarations from struct definitions +transpile
-(A) Implement Alloy fact generation from statute elements (constraints) +transpile
-(A) Implement Alloy pred generation from function definitions +transpile
-(A) Implement Alloy assert generation for cross-statute consistency checks +transpile
 (B) Implement Alloy run/check command generation for bounded model checking +transpile
 (C) Implement TranspilerRegistry singleton mapping TranspileTarget to Transpiler instances +transpile
 
@@ -93,44 +39,14 @@
 # CLI: Command-line interface with rich error messages
 # ============================================================================
 
-(A) Set up Click-based CLI entry point with --version, --help, --verbose flags +cli
-(A) Implement `yuho check <file>` command: parse, build AST, run semantic analysis +cli
-(A) Implement rich error formatting: source line display, caret pointing to error location +cli
-(A) Implement error suggestions using Levenshtein distance for typos in keywords/identifiers +cli
-(A) Implement `yuho transpile <file> -t <target>` with target validation +cli
-(A) Implement `yuho transpile` output modes: stdout (default), -o <file>, --dir <directory> +cli
-(A) Implement `yuho transpile --all` to generate all targets at once into output directory +cli
-(A) Implement `yuho explain <file>` command that invokes LLM for natural language explanation +cli
-(A) Implement `yuho explain --section <num>` to explain specific statute section only +cli
-(A) Implement `yuho explain --interactive` for follow-up questions in REPL mode +cli
-(A) Implement `yuho serve` command to start MCP server on configurable port +cli
-(A) Implement `yuho serve --stdio` for stdio-based MCP transport (editor integration) +cli
-(A) Implement `yuho contribute <file>` command: validate .yh file and associated tests +cli
-(A) Implement `yuho contribute --package` to create distributable .yhpkg archive +cli
-(B) Implement `yuho init` command to scaffold new statute project with template files +cli
-(B) Implement `yuho fmt <file>` command for canonical formatting +cli
-(B) Implement `yuho test <file>` command to run associated test files +cli
-(B) Add --json flag to all commands for machine-readable output +cli
 (B) Add --color/--no-color flags with auto-detection of terminal capabilities +cli
 (B) Add --quiet flag to suppress non-error output +cli
 (C) Implement shell completion scripts for bash, zsh, fish +cli
-(C) Implement `yuho lsp` command to start LSP server (for editors that invoke directly) +cli
 
 # ============================================================================
 # LSP: Full Language Server Protocol implementation
 # ============================================================================
 
-(A) Set up pygls-based LSP server with TextDocumentSyncKind.Incremental +lsp
-(A) Implement textDocument/didOpen handler: parse document, cache AST, publish diagnostics +lsp
-(A) Implement textDocument/didChange handler: incremental re-parse, update AST cache +lsp
-(A) Implement textDocument/didClose handler: clean up document state +lsp
-(A) Implement diagnostic generation from parser errors with DiagnosticSeverity.Error +lsp
-(A) Implement diagnostic generation from semantic errors (type errors, unresolved refs) +lsp
-(A) Implement diagnostic generation from warnings (unreachable code, shadowed bindings) +lsp
-(A) Implement textDocument/completion for keywords (match, struct, statute, fn, import) +lsp
-(A) Implement textDocument/completion for built-in types (money, percent, date, duration, etc.) +lsp
-(A) Implement textDocument/completion for struct field names based on type context +lsp
-(A) Implement textDocument/completion for function names from current scope +lsp
 (B) Implement textDocument/hover showing type information for expressions +lsp
 (B) Implement textDocument/hover showing doc-comments for functions and statutes +lsp
 (B) Implement textDocument/definition for go-to-definition on identifiers +lsp
@@ -152,15 +68,6 @@
 # MCP: Model Context Protocol server exposing all functionality
 # ============================================================================
 
-(A) Set up FastMCP-based server with stdio and HTTP transports +mcp
-(A) Define MCP tool: yuho_check(file_content: str) -> {valid: bool, errors: list} +mcp
-(A) Define MCP tool: yuho_transpile(file_content: str, target: str) -> {output: str} +mcp
-(A) Define MCP tool: yuho_explain(file_content: str, section: str | None) -> {explanation: str} +mcp
-(A) Define MCP tool: yuho_parse(file_content: str) -> {ast: dict} for AST inspection +mcp
-(A) Define MCP tool: yuho_format(file_content: str) -> {formatted: str} +mcp
-(A) Define MCP tool: yuho_complete(file_content: str, line: int, col: int) -> {completions: list} +mcp
-(A) Define MCP tool: yuho_hover(file_content: str, line: int, col: int) -> {info: str} +mcp
-(A) Define MCP tool: yuho_definition(file_content: str, line: int, col: int) -> {location: dict} +mcp
 (B) Define MCP tool: yuho_references(file_content: str, line: int, col: int) -> {locations: list} +mcp
 (B) Define MCP tool: yuho_symbols(file_content: str) -> {symbols: list} +mcp
 (B) Define MCP tool: yuho_diagnostics(file_content: str) -> {diagnostics: list} +mcp
@@ -168,9 +75,6 @@
 (B) Define MCP tool: yuho_library_search(query: str) -> {statutes: list} for statute library search +mcp
 (B) Define MCP tool: yuho_library_get(section: str) -> {statute: dict} to retrieve statute by section +mcp
 (B) Define MCP tool: yuho_statute_to_yuho(natural_text: str) -> {yuho_code: str} LLM-assisted transpilation +mcp
-(A) Define MCP resource: yuho://grammar returning tree-sitter grammar source +mcp
-(A) Define MCP resource: yuho://types returning built-in type definitions +mcp
-(A) Define MCP resource: yuho://library/{section} returning statute source by section number +mcp
 (B) Define MCP resource: yuho://docs/{topic} returning reference documentation +mcp
 (B) Implement MCP prompts: explain_statute, convert_to_yuho, analyze_coverage +mcp
 (C) Add MCP server health check endpoint +mcp
@@ -180,19 +84,6 @@
 # LLM: Local-first with Ollama/HuggingFace, cloud fallback
 # ============================================================================
 
-(A) Define LLMProvider abstract base class with generate(prompt: str, max_tokens: int) -> str +llm
-(A) Define LLMConfig dataclass: provider (ollama|huggingface|openai|anthropic), model_name, api_key, base_url +llm
-(A) Implement OllamaProvider using httpx to call local Ollama API at configurable host:port +llm
-(A) Implement OllamaProvider model availability check and automatic pull if missing +llm
-(A) Implement HuggingFaceProvider using transformers library for local inference +llm
-(A) Implement HuggingFaceProvider model download and caching via huggingface_hub +llm
-(A) Implement HuggingFaceProvider device selection: CUDA if available, else CPU +llm
-(B) Implement OpenAIProvider using openai SDK with configurable base_url for API-compatible services +llm
-(B) Implement AnthropicProvider using anthropic SDK +llm
-(A) Implement LLMProviderFactory that instantiates provider from LLMConfig +llm
-(A) Implement provider fallback chain: try local first, fall back to cloud if configured +llm
-(A) Define prompt template for statute explanation: system prompt with legal context, user prompt with .yh code +llm
-(A) Define prompt template for statute-to-Yuho conversion: examples, grammar summary, input statute text +llm
 (B) Implement streaming response support for real-time output in CLI +llm
 (B) Implement response caching with content-hash keys to avoid repeated LLM calls +llm
 (B) Implement rate limiting for cloud providers with exponential backoff +llm
@@ -203,10 +94,6 @@
 # CONFIG: User configuration system
 # ============================================================================
 
-(A) Define config file location: ~/.config/yuho/config.toml +config
-(A) Define config schema: [llm], [transpile], [lsp], [mcp] sections +config
-(A) Implement config loading with defaults, file override, env var override, CLI flag override +config
-(A) Implement [llm] config: provider, model, ollama_host, huggingface_cache, api_keys +config
 (B) Implement [transpile] config: default_target, latex_compiler, output_dir +config
 (B) Implement [lsp] config: diagnostic_severity_levels, completion_trigger_chars +config
 (B) Implement [mcp] config: host, port, allowed_origins, auth_token +config
@@ -218,14 +105,6 @@
 # TEST: Property-based testing with Hypothesis
 # ============================================================================
 
-(A) Define Hypothesis strategy for generating valid Yuho literal expressions +test
-(A) Define Hypothesis strategy for generating valid struct definitions +test
-(A) Define Hypothesis strategy for generating valid match expressions with N arms +test
-(A) Define Hypothesis strategy for generating valid statute blocks +test
-(A) Define Hypothesis strategy for generating complete valid .yh modules +test
-(A) Implement round-trip invariant test: parse(pretty_print(parse(src))) == parse(src) +test
-(A) Implement AST well-formedness invariant: all nodes have valid source locations +test
-(A) Implement type preservation invariant: typeof(expr) == typeof(constant_fold(expr)) +test
 (B) Implement exhaustiveness invariant: generated match exprs pass exhaustiveness check +test
 (B) Implement reachability invariant: no generated match arms are unreachable +test
 (B) Implement JSON round-trip invariant: from_json(to_json(ast)) == ast +test
@@ -266,14 +145,6 @@
 # STATUTES: Implement 10+ Penal Code sections for language breadth
 # ============================================================================
 
-(A) Implement S299 Culpable Homicide: demonstrate mens rea conditions with match-case +statutes
-(A) Implement S300 Murder: demonstrate exception handling via first-match-wins priority +statutes
-(A) Implement S319 Hurt: demonstrate physical element definitions +statutes
-(A) Implement S378 Theft: demonstrate property offense with intent elements +statutes
-(A) Implement S383 Extortion: demonstrate compound offense with multiple elements +statutes
-(A) Implement S390 Robbery: demonstrate offense defined by combination of other offenses +statutes
-(A) Implement S403 Dishonest Misappropriation: demonstrate possession-based offense +statutes
-(A) Implement S415 Cheating: migrate existing v4 implementation to v5 tree-sitter AST +statutes
 (A) Implement S420 Cheating and Dishonestly Inducing Delivery: demonstrate aggravated offense +statutes
 (B) Implement S463 Forgery: demonstrate document-related offense +statutes
 (B) Implement S499 Defamation: demonstrate speech-based offense with exceptions +statutes

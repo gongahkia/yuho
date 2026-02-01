@@ -1,0 +1,13 @@
+[statute]
+section_number = "403"
+title = "Dishonest Misappropriation of Movable Property"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[contributor]
+name = "Yuho Team"
+email = ""
+
+[description]
+summary = "Whoever dishonestly misappropriates or converts to his own use any movable property, shall be punished with imprisonment for a term which may extend to 2 years, or with fine, or with both."
+source = "Singapore Penal Code 1871, Section 403"

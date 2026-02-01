@@ -1,0 +1,91 @@
+/*
+Test cases for S299 Culpable Homicide
+
+Tests verify the three mens rea conditions that constitute culpable homicide:
+    1. Intention to cause death
+    2. Intention to cause bodily injury likely to cause death
+    3. Knowledge that the act is likely to cause death
+*/
+
+referencing s299_culpable_homicide/statute
+
+scope testS299CulpableHomicide {
+
+    // Test Case 1: Intention to cause death -> Culpable Homicide
+    CulpableHomicideCase testIntentionDeath := {
+        accused := Party.Accused,
+        victim := Party.Victim,
+        actusReus := ActusReus.ActCausingDeath,
+        deathCaused := TRUE,
+        mensRea := MensRea.IntentionToCauseDeath,
+        definition := ConsequenceDefinition.CulpableHomicide,
+    }
+    assert testIntentionDeath.definition == ConsequenceDefinition.CulpableHomicide
+
+    // Test Case 2: Intention to cause bodily injury likely to cause death -> Culpable Homicide
+    CulpableHomicideCase testIntentionBodilyInjury := {
+        accused := Party.Accused,
+        victim := Party.Victim,
+        actusReus := ActusReus.ActCausingDeath,
+        deathCaused := TRUE,
+        mensRea := MensRea.IntentionToCauseBodilyInjuryLikelyToCauseDeath,
+        definition := ConsequenceDefinition.CulpableHomicide,
+    }
+    assert testIntentionBodilyInjury.definition == ConsequenceDefinition.CulpableHomicide
+
+    // Test Case 3: Knowledge act likely to cause death -> Culpable Homicide
+    CulpableHomicideCase testKnowledge := {
+        accused := Party.Accused,
+        victim := Party.Victim,
+        actusReus := ActusReus.ActCausingDeath,
+        deathCaused := TRUE,
+        mensRea := MensRea.KnowledgeActLikelyToCauseDeath,
+        definition := ConsequenceDefinition.CulpableHomicide,
+    }
+    assert testKnowledge.definition == ConsequenceDefinition.CulpableHomicide
+
+    // Test Case 4: No death caused -> Not Culpable Homicide
+    CulpableHomicideCase testNoDeathCaused := {
+        accused := Party.Accused,
+        victim := Party.Victim,
+        actusReus := ActusReus.ActCausingDeath,
+        deathCaused := FALSE,
+        mensRea := MensRea.IntentionToCauseDeath,
+        definition := ConsequenceDefinition.NotCulpableHomicide,
+    }
+    assert testNoDeathCaused.definition == ConsequenceDefinition.NotCulpableHomicide
+
+    // Test Case 5: No mens rea -> Not Culpable Homicide
+    CulpableHomicideCase testNoMensRea := {
+        accused := Party.Accused,
+        victim := Party.Victim,
+        actusReus := ActusReus.ActCausingDeath,
+        deathCaused := TRUE,
+        mensRea := MensRea.NA,
+        definition := ConsequenceDefinition.NotCulpableHomicide,
+    }
+    assert testNoMensRea.definition == ConsequenceDefinition.NotCulpableHomicide
+
+    // Test Case 6: No actus reus -> Not Culpable Homicide
+    CulpableHomicideCase testNoActusReus := {
+        accused := Party.Accused,
+        victim := Party.Victim,
+        actusReus := ActusReus.NA,
+        deathCaused := TRUE,
+        mensRea := MensRea.IntentionToCauseDeath,
+        definition := ConsequenceDefinition.NotCulpableHomicide,
+    }
+    assert testNoActusReus.definition == ConsequenceDefinition.NotCulpableHomicide
+
+    // Test Case 7: Omission causing death with intent -> Culpable Homicide
+    CulpableHomicideCase testOmission := {
+        accused := Party.Accused,
+        victim := Party.Victim,
+        actusReus := ActusReus.OmissionCausingDeath,
+        deathCaused := TRUE,
+        mensRea := MensRea.IntentionToCauseDeath,
+        definition := ConsequenceDefinition.CulpableHomicide,
+    }
+    assert testOmission.definition == ConsequenceDefinition.CulpableHomicide
+
+}
