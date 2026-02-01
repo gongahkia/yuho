@@ -12,7 +12,6 @@
 # TRANSPILATION: Multi-target code generation
 # ============================================================================
 
-(B) Implement Alloy run/check command generation for bounded model checking +transpile
 (C) Implement TranspilerRegistry singleton mapping TranspileTarget to Transpiler instances +transpile
 
 # ============================================================================
