@@ -1,0 +1,13 @@
+[statute]
+section_number = "300"
+title = "Murder"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[contributor]
+name = "Yuho Team"
+email = ""
+
+[description]
+summary = "Culpable homicide is murder if the act by which death is caused is done with the intention of causing death, or with the intention of causing such bodily injury as the offender knows to be likely to cause death, or with the intention of causing bodily injury sufficient in the ordinary course of nature to cause death, or with the knowledge that the act is so imminently dangerous that it must in all probability cause death. Several exceptions reduce murder to culpable homicide not amounting to murder."
+source = "Singapore Penal Code 1871, Section 300"
