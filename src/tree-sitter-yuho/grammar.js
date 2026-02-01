@@ -6,6 +6,14 @@
 module.exports = grammar({
   name: 'yuho',
 
+  // External scanner for context-sensitive tokens
+  externals: $ => [
+    $._string_content_external,
+    $.interpolation_start,
+    $.interpolation_end,
+    $._error_sentinel,
+  ],
+
   extras: $ => [
     /\s/,
     $.comment,
@@ -13,6 +21,26 @@ module.exports = grammar({
   ],
 
   word: $ => $.identifier,
+
+  // Conflict handling for error recovery
+  conflicts: $ => [
+    // Allow recovery when statement/expression boundaries are ambiguous
+    [$.variable_declaration, $.expression_statement],
+    [$.assignment_statement, $.expression_statement],
+    // Match arm body can be expression or pass
+    [$.match_arm],
+  ],
+
+  // Inline rules that don't need their own node types
+  inline: $ => [
+    $._declaration,
+    $._statement,
+    $._expression,
+    $._literal,
+    $._pattern,
+    $._type,
+    $._lvalue,
+  ],
 
   rules: {
     // =========================================================================
