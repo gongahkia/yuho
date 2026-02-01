@@ -146,7 +146,6 @@
 # STATUTES: Implement 10+ Penal Code sections for language breadth
 # ============================================================================
 
-(A) Implement S299 Culpable Homicide: demonstrate mens rea conditions with match-case +statutes
 (A) Implement S300 Murder: demonstrate exception handling via first-match-wins priority +statutes
 (A) Implement S319 Hurt: demonstrate physical element definitions +statutes
 (A) Implement S378 Theft: demonstrate property offense with intent elements +statutes
