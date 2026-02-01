@@ -85,19 +85,6 @@
 # LLM: Local-first with Ollama/HuggingFace, cloud fallback
 # ============================================================================
 
-(A) Define LLMProvider abstract base class with generate(prompt: str, max_tokens: int) -> str +llm
-(A) Define LLMConfig dataclass: provider (ollama|huggingface|openai|anthropic), model_name, api_key, base_url +llm
-(A) Implement OllamaProvider using httpx to call local Ollama API at configurable host:port +llm
-(A) Implement OllamaProvider model availability check and automatic pull if missing +llm
-(A) Implement HuggingFaceProvider using transformers library for local inference +llm
-(A) Implement HuggingFaceProvider model download and caching via huggingface_hub +llm
-(A) Implement HuggingFaceProvider device selection: CUDA if available, else CPU +llm
-(B) Implement OpenAIProvider using openai SDK with configurable base_url for API-compatible services +llm
-(B) Implement AnthropicProvider using anthropic SDK +llm
-(A) Implement LLMProviderFactory that instantiates provider from LLMConfig +llm
-(A) Implement provider fallback chain: try local first, fall back to cloud if configured +llm
-(A) Define prompt template for statute explanation: system prompt with legal context, user prompt with .yh code +llm
-(A) Define prompt template for statute-to-Yuho conversion: examples, grammar summary, input statute text +llm
 (B) Implement streaming response support for real-time output in CLI +llm
 (B) Implement response caching with content-hash keys to avoid repeated LLM calls +llm
 (B) Implement rate limiting for cloud providers with exponential backoff +llm
