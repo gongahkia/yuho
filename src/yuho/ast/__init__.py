@@ -75,6 +75,24 @@ from yuho.ast.nodes import (
 from yuho.ast.visitor import Visitor
 from yuho.ast.transformer import Transformer
 from yuho.ast.builder import ASTBuilder
+from yuho.ast.exhaustiveness import (
+    ExhaustivenessChecker,
+    ExhaustivenessError,
+    ExhaustivenessResult,
+    check_exhaustiveness,
+)
+from yuho.ast.reachability import (
+    ReachabilityChecker,
+    ReachabilityError,
+    ReachabilityResult,
+    check_reachability,
+)
+from yuho.ast.overlap import (
+    OverlapDetector,
+    OverlapWarning,
+    OverlapResult,
+    check_overlaps,
+)
 
 __all__ = [
     # Base
@@ -144,4 +162,17 @@ __all__ = [
     "Visitor",
     "Transformer",
     "ASTBuilder",
+    # Analysis
+    "ExhaustivenessChecker",
+    "ExhaustivenessError",
+    "ExhaustivenessResult",
+    "check_exhaustiveness",
+    "ReachabilityChecker",
+    "ReachabilityError",
+    "ReachabilityResult",
+    "check_reachability",
+    "OverlapDetector",
+    "OverlapWarning",
+    "OverlapResult",
+    "check_overlaps",
 ]
