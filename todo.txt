@@ -1,6 +1,5 @@
 # Yuho v5 PRD - Generated 2026-02-01
 # Priority: (A) MVP/critical path, (B) Important, (C) Can parallelize
-# Tags: +parser +ast +transpile +cli +lsp +mcp +llm +test +verify +library +statutes +config
 
 # ============================================================================
 # PARSER: tree-sitter grammar and Python bindings
@@ -146,13 +145,6 @@
 # STATUTES: Implement 10+ Penal Code sections for language breadth
 # ============================================================================
 
-(A) Implement S300 Murder: demonstrate exception handling via first-match-wins priority +statutes
-(A) Implement S319 Hurt: demonstrate physical element definitions +statutes
-(A) Implement S378 Theft: demonstrate property offense with intent elements +statutes
-(A) Implement S383 Extortion: demonstrate compound offense with multiple elements +statutes
-(A) Implement S390 Robbery: demonstrate offense defined by combination of other offenses +statutes
-(A) Implement S403 Dishonest Misappropriation: demonstrate possession-based offense +statutes
-(A) Implement S415 Cheating: migrate existing v4 implementation to v5 tree-sitter AST +statutes
 (A) Implement S420 Cheating and Dishonestly Inducing Delivery: demonstrate aggravated offense +statutes
 (B) Implement S463 Forgery: demonstrate document-related offense +statutes
 (B) Implement S499 Defamation: demonstrate speech-based offense with exceptions +statutes
