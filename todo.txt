@@ -24,11 +24,6 @@
 # LSP: Full Language Server Protocol implementation
 # ============================================================================
 
-(B) Implement textDocument/hover showing type information for expressions +lsp
-(B) Implement textDocument/hover showing doc-comments for functions and statutes +lsp
-(B) Implement textDocument/definition for go-to-definition on identifiers +lsp
-(B) Implement textDocument/definition for go-to-definition on imports (open .yh file) +lsp
-(B) Implement textDocument/references to find all usages of a symbol +lsp
 (B) Implement textDocument/rename with workspace-wide symbol renaming +lsp
 (B) Implement textDocument/documentSymbol returning statute/function/struct hierarchy +lsp
 (B) Implement workspace/symbol for project-wide symbol search +lsp
