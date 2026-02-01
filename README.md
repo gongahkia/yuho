@@ -1,7 +1,8 @@
 [![](https://img.shields.io/badge/yuho_1.0-passing-%23004D00)](https://github.com/gongahkia/yuho/releases/tag/1.0) 
-[![](https://img.shields.io/badge/yuho_2.0-passing-light_%23228B22)](https://github.com/gongahkia/yuho/releases/tag/2.0) 
-[![](https://img.shields.io/badge/yuho_3.0-passing-%2350C878)](https://github.com/gongahkia/yuho/releases/tag/3.0) 
-[![](https://img.shields.io/badge/yuho_4.0-passing-%2390EE90)](https://github.com/gongahkia/yuho/releases/tag/4.0) 
+[![](https://img.shields.io/badge/yuho_2.0-passing-%23228B22)](https://github.com/gongahkia/yuho/releases/tag/2.0) 
+[![](https://img.shields.io/badge/yuho_3.0-passing-%2332CD32)](https://github.com/gongahkia/yuho/releases/tag/3.0) 
+[![](https://img.shields.io/badge/yuho_4.0-passing-%237CFC00)](https://github.com/gongahkia/yuho/releases/tag/4.0) 
+[![](https://img.shields.io/badge/yuho_5.0-passing-%2398FB98)](https://github.com/gongahkia/yuho/releases/tag/5.0) 
 
 # `Yuho`  
 
