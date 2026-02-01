@@ -18,8 +18,6 @@
 # CLI: Command-line interface with rich error messages
 # ============================================================================
 
-(B) Add --color/--no-color flags with auto-detection of terminal capabilities +cli
-(B) Add --quiet flag to suppress non-error output +cli
 (C) Implement shell completion scripts for bash, zsh, fish +cli
 
 # ============================================================================
