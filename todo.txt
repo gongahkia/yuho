@@ -172,3 +172,11 @@
 (C) [v6] Implement block-to-AST and AST-to-block converters +roadmap
 (C) [v6] Design guided statute builder wizard for non-programmers +roadmap
 (C) [v6] Implement collaborative editing via CRDT synchronization +roadmap
+
+# ============================================================================
+# DOCS: Remaining once everything else is done
+# ============================================================================
+
+(C) Read through every document within ./doc/ and rewrite/update them while keeping to the same writing style for the current v5 support
+(C) If a document within ./doc/ clearly refers to a previous version of Yuho v0-v4 or sandbox, update me
+(C) Update the following sections within README.md of Output formats of Rationale section and Nerd stuff (if required)
