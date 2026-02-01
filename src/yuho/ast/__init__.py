@@ -81,6 +81,12 @@ from yuho.ast.exhaustiveness import (
     ExhaustivenessResult,
     check_exhaustiveness,
 )
+from yuho.ast.reachability import (
+    ReachabilityChecker,
+    ReachabilityError,
+    ReachabilityResult,
+    check_reachability,
+)
 
 __all__ = [
     # Base
@@ -155,4 +161,8 @@ __all__ = [
     "ExhaustivenessError",
     "ExhaustivenessResult",
     "check_exhaustiveness",
+    "ReachabilityChecker",
+    "ReachabilityError",
+    "ReachabilityResult",
+    "check_reachability",
 ]
