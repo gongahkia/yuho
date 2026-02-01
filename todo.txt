@@ -5,7 +5,6 @@
 # AST: Internal representation and semantic analysis
 # ============================================================================
 
-(B) Implement ExhaustivenessChecker for match expressions using pattern matrix algorithm +ast
 (B) Implement ReachabilityChecker that warns on unreachable match arms (dead code) +ast
 (B) Implement OverlapDetector that warns when match arm patterns overlap (legal ambiguity) +ast
 (C) Implement ConstantFolder that evaluates compile-time constant expressions +ast
