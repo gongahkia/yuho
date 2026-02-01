@@ -19,17 +19,21 @@ class MermaidTranspiler(TranspilerBase, Visitor):
     with diamonds for conditions and rectangles for outcomes.
     """
 
-    def __init__(self, direction: str = "TD"):
+    def __init__(self, direction: str = "TD", use_subgraphs: bool = True):
         """
         Initialize the Mermaid transpiler.
 
         Args:
             direction: Flowchart direction (TD=top-down, LR=left-right)
+            use_subgraphs: Whether to wrap nested match expressions in subgraphs
         """
         self.direction = direction
+        self.use_subgraphs = use_subgraphs
         self._output: List[str] = []
         self._node_counter = 0
+        self._subgraph_counter = 0
         self._node_ids: Dict[int, str] = {}
+        self._nesting_depth = 0  # Track nesting level for subgraph indentation
 
     @property
     def target(self) -> TranspileTarget:
@@ -39,6 +43,8 @@ class MermaidTranspiler(TranspilerBase, Visitor):
         """Transpile AST to Mermaid diagram."""
         self._output = []
         self._node_counter = 0
+        self._subgraph_counter = 0
+        self._nesting_depth = 0
 
         # Header
         self._emit(f"flowchart {self.direction}")
@@ -61,6 +67,15 @@ class MermaidTranspiler(TranspilerBase, Visitor):
         """Generate a new unique node ID."""
         self._node_counter += 1
         return f"{prefix}{self._node_counter}"
+
+    def _new_subgraph_id(self, name: str = "sub") -> str:
+        """Generate a new unique subgraph ID."""
+        self._subgraph_counter += 1
+        return f"{name}_{self._subgraph_counter}"
+
+    def _indent(self) -> str:
+        """Get current indentation string based on nesting depth."""
+        return "    " * (self._nesting_depth + 1)
 
     def _escape_text(self, text: str) -> str:
         """Escape text for Mermaid labels."""
@@ -152,18 +167,42 @@ class MermaidTranspiler(TranspilerBase, Visitor):
     # Match expression to flowchart
     # =========================================================================
 
-    def _transpile_match_expr(self, match: nodes.MatchExprNode, start_id: str) -> str:
+    def _transpile_match_expr(
+        self, 
+        match: nodes.MatchExprNode, 
+        start_id: str,
+        subgraph_name: Optional[str] = None,
+    ) -> str:
         """
         Generate flowchart nodes for a match expression.
 
         Returns the ID of the end/merge node.
         """
+        # Check if this contains nested match expressions
+        has_nested = any(
+            isinstance(arm.body, nodes.MatchExprNode) 
+            for arm in match.arms
+        )
+        
+        # Use subgraph for nested match at depth > 0 or if explicitly named
+        use_subgraph = (
+            self.use_subgraphs and 
+            (self._nesting_depth > 0 or subgraph_name is not None)
+        )
+        
+        subgraph_id = None
+        if use_subgraph:
+            subgraph_id = self._new_subgraph_id("match")
+            label = subgraph_name or "nested decision"
+            self._emit(f"{self._indent()}subgraph {subgraph_id}[\"{self._escape_text(label)}\"]")
+            self._nesting_depth += 1
+        
         # Create decision node for scrutinee
         if match.scrutinee:
             scrutinee_label = self._expr_to_label(match.scrutinee)
             decision_id = self._new_node_id("D")
-            self._emit(f"    {decision_id}{{{{{self._escape_text(scrutinee_label)}}}}}")
-            self._emit(f"    {start_id} --> {decision_id}")
+            self._emit(f"{self._indent()}{decision_id}{{{{{self._escape_text(scrutinee_label)}}}}}")
+            self._emit(f"{self._indent()}{start_id} --> {decision_id}")
         else:
             decision_id = start_id
 
@@ -173,10 +212,15 @@ class MermaidTranspiler(TranspilerBase, Visitor):
         # Process each arm
         for i, arm in enumerate(match.arms):
             arm_outcome_id = self._transpile_match_arm(arm, decision_id, i)
-            self._emit(f"    {arm_outcome_id} --> {end_id}")
+            self._emit(f"{self._indent()}{arm_outcome_id} --> {end_id}")
 
         # Create end node (circle for merge point)
-        self._emit(f"    {end_id}((*))")
+        self._emit(f"{self._indent()}{end_id}((*))")
+        
+        # Close subgraph if opened
+        if use_subgraph:
+            self._nesting_depth -= 1
+            self._emit(f"{self._indent()}end")
 
         return end_id
 
@@ -193,24 +237,41 @@ class MermaidTranspiler(TranspilerBase, Visitor):
         if arm.guard:
             guard_id = self._new_node_id("G")
             guard_label = self._expr_to_label(arm.guard)
-            self._emit(f"    {guard_id}{{{{{self._escape_text(guard_label)}}}}}")
-            self._emit(f"    {from_id} -->|\"{self._escape_text(pattern_label)}\"| {guard_id}")
+            self._emit(f"{self._indent()}{guard_id}{{{{{self._escape_text(guard_label)}}}}}")
+            self._emit(f"{self._indent()}{from_id} -->|\"{self._escape_text(pattern_label)}\"| {guard_id}")
 
-            # True path goes to outcome
-            outcome_id = self._new_node_id("O")
-            body_label = self._expr_to_label(arm.body)
-            self._emit(f"    {outcome_id}[\"{self._escape_text(body_label)}\"]")
-            self._emit(f"    {guard_id} -->|\"Yes\"| {outcome_id}")
-
-            return outcome_id
+            # Check if body is a nested match expression
+            if isinstance(arm.body, nodes.MatchExprNode):
+                # Generate subgraph for nested match
+                nested_label = f"when {pattern_label} (guarded)"
+                end_id = self._transpile_match_expr(arm.body, guard_id, nested_label)
+                return end_id
+            else:
+                # True path goes to outcome
+                outcome_id = self._new_node_id("O")
+                body_label = self._expr_to_label(arm.body)
+                self._emit(f"{self._indent()}{outcome_id}[\"{self._escape_text(body_label)}\"]")
+                self._emit(f"{self._indent()}{guard_id} -->|\"Yes\"| {outcome_id}")
+                return outcome_id
         else:
-            # Direct path to outcome
-            outcome_id = self._new_node_id("O")
-            body_label = self._expr_to_label(arm.body)
-            self._emit(f"    {outcome_id}[\"{self._escape_text(body_label)}\"]")
-            self._emit(f"    {from_id} -->|\"{self._escape_text(pattern_label)}\"| {outcome_id}")
-
-            return outcome_id
+            # Check if body is a nested match expression
+            if isinstance(arm.body, nodes.MatchExprNode):
+                # Create a connector node for the nested match
+                connector_id = self._new_node_id("C")
+                self._emit(f"{self._indent()}{connector_id}((...))")  
+                self._emit(f"{self._indent()}{from_id} -->|\"{self._escape_text(pattern_label)}\"| {connector_id}")
+                
+                # Generate subgraph for nested match
+                nested_label = f"when {pattern_label}"
+                end_id = self._transpile_match_expr(arm.body, connector_id, nested_label)
+                return end_id
+            else:
+                # Direct path to outcome
+                outcome_id = self._new_node_id("O")
+                body_label = self._expr_to_label(arm.body)
+                self._emit(f"{self._indent()}{outcome_id}[\"{self._escape_text(body_label)}\"]")
+                self._emit(f"{self._indent()}{from_id} -->|\"{self._escape_text(pattern_label)}\"| {outcome_id}")
+                return outcome_id
 
     # =========================================================================
     # Label generation helpers
