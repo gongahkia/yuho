@@ -12,12 +12,6 @@
 # TRANSPILATION: Multi-target code generation
 # ============================================================================
 
-(B) Implement LaTeXTranspiler with legal document preamble (article class, section formatting) +transpile
-(B) Implement LaTeX statute formatting: section numbers, margin notes, cross-references +transpile
-(B) Implement LaTeX penalty tables with imprisonment/fine columns +transpile
-(B) Implement LaTeX illustration blocks with gray background and italic text +transpile
-(B) Add LaTeX to PDF compilation via subprocess call to pdflatex/xelatex +transpile
-(B) Implement Mermaid subgraph grouping for nested match expressions +transpile
 (B) Implement Alloy run/check command generation for bounded model checking +transpile
 (C) Implement TranspilerRegistry singleton mapping TranspileTarget to Transpiler instances +transpile
 
