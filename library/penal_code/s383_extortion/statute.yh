@@ -1,0 +1,141 @@
+/*
+VERSION 1.0
+
+Based off the following statutory provisions on extortion
+    * Singapore Penal Code S383
+
+Extortion requires multiple compound elements:
+    1. Intentionally putting someone in fear of harm
+    2. Harm to body, mind, reputation, or property (of victim or another)
+    3. Whether harm is legal or illegal (does not matter)
+    4. Dishonestly inducing delivery
+    5. Delivery of property, valuable security, or signed/sealed document
+
+This demonstrates compound offense with multiple elements.
+*/
+
+scope s383Extortion {
+
+    // ~ ENUMS ~
+
+    struct Party { // ENUM
+        Accused,
+        Victim,
+        ThirdParty,
+    }
+
+    struct HarmType { // ENUM - Types of harm that can be threatened
+        Body,
+        Mind,
+        Reputation,
+        Property,
+        NA,
+    }
+
+    struct HarmTarget { // ENUM - Who is threatened with harm
+        Victim,
+        ThirdParty,
+        NA,
+    }
+
+    struct HarmLegality { // ENUM - Whether threatened harm is legal or illegal
+        Legal,
+        Illegal,
+    }
+
+    struct InducementType { // ENUM - Dishonest inducement status
+        Dishonest,
+        NotDishonest,
+    }
+
+    struct DeliveryType { // ENUM - Types of things delivered
+        Property,
+        ValuableSecurity,
+        SignedSealedDocument,
+        NA,
+    }
+
+    struct FearStatus { // ENUM
+        FearInduced,
+        FearNotInduced,
+    }
+
+    struct ConsequenceDefinition { // ENUM
+        CommitsExtortion,
+        DoesNotCommitExtortion,
+    }
+
+    // ~ STRUCT DEFINITION ~
+
+    struct ExtortionCase {
+        string || Party accused,
+        string || Party victim,
+        FearStatus fearStatus,
+        HarmType harmType,
+        HarmTarget harmTarget,
+        HarmLegality harmLegality,
+        InducementType inducementType,
+        DeliveryType deliveryType,
+        ConsequenceDefinition definition,
+    }
+
+    // ~ STRUCT LITERAL ~
+
+    ExtortionCase extortionDefinition := {
+
+        // ~ struct literal attributes ~
+            // Whoever intentionally puts any person in fear of any injury 
+            // to that person or to any other, and thereby dishonestly 
+            // induces the person so put in fear to deliver to any person 
+            // any property, or valuable security, or anything signed or 
+            // sealed which may be converted into a valuable security, 
+            // commits extortion
+
+        accused := Party.Accused,
+        victim := Party.Victim,
+        fearStatus := FearStatus.FearInduced or FearStatus.FearNotInduced,
+        harmType := HarmType.Body or HarmType.Mind or HarmType.Reputation or HarmType.Property or HarmType.NA,
+        harmTarget := HarmTarget.Victim or HarmTarget.ThirdParty or HarmTarget.NA,
+        harmLegality := HarmLegality.Legal or HarmLegality.Illegal,
+        inducementType := InducementType.Dishonest or InducementType.NotDishonest,
+        deliveryType := DeliveryType.Property or DeliveryType.ValuableSecurity or DeliveryType.SignedSealedDocument or DeliveryType.NA,
+
+        // ~ logical short circuiting ~
+            // Multiple compound elements must all be present:
+            // 1. Fear induced
+            // 2. Valid harm type
+            // 3. Valid harm target
+            // 4. Dishonest inducement
+            // 5. Delivery occurs
+
+        definition := match fearStatus {
+            case FearStatus.FearInduced := consequence harmType
+            case FearStatus.FearNotInduced := consequence ConsequenceDefinition.DoesNotCommitExtortion
+        },
+        definition := match harmType {
+            case HarmType.Body := consequence harmTarget
+            case HarmType.Mind := consequence harmTarget
+            case HarmType.Reputation := consequence harmTarget
+            case HarmType.Property := consequence harmTarget
+            case HarmType.NA := consequence ConsequenceDefinition.DoesNotCommitExtortion
+        },
+        definition := match harmTarget {
+            case HarmTarget.Victim := consequence inducementType
+            case HarmTarget.ThirdParty := consequence inducementType
+            case HarmTarget.NA := consequence ConsequenceDefinition.DoesNotCommitExtortion
+        },
+        // Note: harmLegality does NOT affect outcome - both legal and illegal harm threats constitute extortion
+        definition := match inducementType {
+            case InducementType.Dishonest := consequence deliveryType
+            case InducementType.NotDishonest := consequence ConsequenceDefinition.DoesNotCommitExtortion
+        },
+        definition := match deliveryType {
+            case DeliveryType.Property := consequence ConsequenceDefinition.CommitsExtortion
+            case DeliveryType.ValuableSecurity := consequence ConsequenceDefinition.CommitsExtortion
+            case DeliveryType.SignedSealedDocument := consequence ConsequenceDefinition.CommitsExtortion
+            case DeliveryType.NA := consequence ConsequenceDefinition.DoesNotCommitExtortion
+        },
+
+    }
+
+}
