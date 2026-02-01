@@ -106,14 +106,6 @@
 # TEST: Property-based testing with Hypothesis
 # ============================================================================
 
-(A) Define Hypothesis strategy for generating valid Yuho literal expressions +test
-(A) Define Hypothesis strategy for generating valid struct definitions +test
-(A) Define Hypothesis strategy for generating valid match expressions with N arms +test
-(A) Define Hypothesis strategy for generating valid statute blocks +test
-(A) Define Hypothesis strategy for generating complete valid .yh modules +test
-(A) Implement round-trip invariant test: parse(pretty_print(parse(src))) == parse(src) +test
-(A) Implement AST well-formedness invariant: all nodes have valid source locations +test
-(A) Implement type preservation invariant: typeof(expr) == typeof(constant_fold(expr)) +test
 (B) Implement exhaustiveness invariant: generated match exprs pass exhaustiveness check +test
 (B) Implement reachability invariant: no generated match arms are unreachable +test
 (B) Implement JSON round-trip invariant: from_json(to_json(ast)) == ast +test
