@@ -269,32 +269,267 @@ class YuhoLanguageServer(LanguageServer):
         return lsp.CompletionList(is_incomplete=False, items=items)
 
     def _get_hover(self, uri: str, position: lsp.Position) -> Optional[lsp.Hover]:
-        """Get hover information for position."""
+        """Get hover information for position showing type info and doc-comments."""
         doc_state = self._documents.get(uri)
-        if not doc_state or not doc_state.ast:
+        if not doc_state:
             return None
-
-        # TODO: Implement proper position-to-node lookup
-        # For now, return None
-        return None
+        
+        # Get word at position
+        word = self._get_word_at_position(doc_state.source, position)
+        if not word:
+            return None
+        
+        hover_content: List[str] = []
+        
+        # Check if it's a keyword
+        if word in YUHO_KEYWORDS:
+            hover_content.append(f"**keyword** `{word}`")
+            keyword_docs = {
+                "struct": "Defines a structured type with named fields.",
+                "fn": "Defines a function.",
+                "match": "Pattern matching expression.",
+                "case": "Case arm in a match expression.",
+                "statute": "Defines a legal statute with elements and penalties.",
+                "elements": "Section containing the elements of an offense.",
+                "penalty": "Section specifying the punishment for an offense.",
+                "actus_reus": "Physical/conduct element of an offense (guilty act).",
+                "mens_rea": "Mental element of an offense (guilty mind).",
+                "circumstance": "Circumstantial element required for the offense.",
+            }
+            if word in keyword_docs:
+                hover_content.append(keyword_docs[word])
+        
+        # Check if it's a built-in type
+        elif word in YUHO_TYPES:
+            hover_content.append(f"**type** `{word}`")
+            type_docs = {
+                "int": "Integer number type (whole numbers).",
+                "float": "Floating-point number type (decimals).",
+                "bool": "Boolean type: TRUE or FALSE.",
+                "string": "Text string type.",
+                "money": "Monetary amount with currency (e.g., $1000.00 SGD).",
+                "percent": "Percentage value (0-100%).",
+                "date": "Calendar date (YYYY-MM-DD).",
+                "duration": "Time duration (years, months, days, etc.).",
+                "void": "No value type (for procedures).",
+            }
+            if word in type_docs:
+                hover_content.append(type_docs[word])
+        
+        # Check AST for user-defined symbols
+        elif doc_state.ast:
+            # Check structs
+            for struct in doc_state.ast.type_defs:
+                if struct.name == word:
+                    fields = ", ".join(f"{f.name}: {self._type_to_str(f.type_annotation)}" 
+                                       for f in struct.fields)
+                    hover_content.append(f"```yuho\nstruct {struct.name} {{\n  {fields}\n}}\n```")
+                    break
+            
+            # Check functions
+            for func in doc_state.ast.function_defs:
+                if func.name == word:
+                    params = ", ".join(f"{p.name}: {self._type_to_str(p.type_annotation)}" 
+                                      for p in func.params)
+                    ret = f" -> {self._type_to_str(func.return_type)}" if func.return_type else ""
+                    hover_content.append(f"```yuho\nfn {func.name}({params}){ret}\n```")
+                    # TODO: Add doc-comment if available
+                    break
+            
+            # Check statutes
+            for statute in doc_state.ast.statutes:
+                if statute.section_number == word or f"S{statute.section_number}" == word:
+                    title = statute.title.value if statute.title else "Untitled"
+                    hover_content.append(f"**Statute Section {statute.section_number}**: {title}")
+                    
+                    # Add element summary
+                    if statute.elements:
+                        hover_content.append("\n**Elements:**")
+                        for elem in statute.elements:
+                            hover_content.append(f"- {elem.element_type}: {elem.name}")
+                    
+                    # Add penalty summary
+                    if statute.penalty:
+                        hover_content.append("\n**Penalty:**")
+                        if statute.penalty.imprisonment_max:
+                            hover_content.append(f"- Imprisonment: up to {statute.penalty.imprisonment_max}")
+                        if statute.penalty.fine_max:
+                            hover_content.append(f"- Fine: up to {statute.penalty.fine_max}")
+                    break
+        
+        if not hover_content:
+            return None
+        
+        return lsp.Hover(
+            contents=lsp.MarkupContent(
+                kind=lsp.MarkupKind.Markdown,
+                value="\n".join(hover_content),
+            )
+        )
 
     def _get_definition(self, uri: str, position: lsp.Position) -> Optional[lsp.Location]:
         """Get definition location for identifier at position."""
         doc_state = self._documents.get(uri)
-        if not doc_state or not doc_state.ast:
+        if not doc_state:
             return None
-
-        # TODO: Implement proper definition lookup
+        
+        word = self._get_word_at_position(doc_state.source, position)
+        if not word:
+            return None
+        
+        # Check AST for definitions
+        if doc_state.ast:
+            # Check struct definitions
+            for struct in doc_state.ast.type_defs:
+                if struct.name == word and struct.source_location:
+                    return lsp.Location(
+                        uri=uri,
+                        range=self._loc_to_range(struct.source_location),
+                    )
+            
+            # Check function definitions
+            for func in doc_state.ast.function_defs:
+                if func.name == word and func.source_location:
+                    return lsp.Location(
+                        uri=uri,
+                        range=self._loc_to_range(func.source_location),
+                    )
+            
+            # Check statute definitions (by section number)
+            for statute in doc_state.ast.statutes:
+                if (statute.section_number == word or 
+                    f"S{statute.section_number}" == word) and statute.source_location:
+                    return lsp.Location(
+                        uri=uri,
+                        range=self._loc_to_range(statute.source_location),
+                    )
+            
+            # Check imports - navigate to the .yh file
+            for imp in doc_state.ast.imports:
+                # If user clicked on an imported name
+                if imp.imported_names and word in imp.imported_names:
+                    # Try to resolve the import path
+                    import_location = self._resolve_import_path(uri, imp.path)
+                    if import_location:
+                        return lsp.Location(
+                            uri=import_location,
+                            range=lsp.Range(
+                                start=lsp.Position(line=0, character=0),
+                                end=lsp.Position(line=0, character=0),
+                            ),
+                        )
+        
         return None
 
     def _get_references(self, uri: str, position: lsp.Position) -> List[lsp.Location]:
         """Get all references to symbol at position."""
         doc_state = self._documents.get(uri)
-        if not doc_state or not doc_state.ast:
+        if not doc_state:
             return []
+        
+        word = self._get_word_at_position(doc_state.source, position)
+        if not word:
+            return []
+        
+        locations: List[lsp.Location] = []
+        
+        # Find all occurrences of the word in the source
+        lines = doc_state.source.splitlines()
+        for line_num, line in enumerate(lines):
+            col = 0
+            while True:
+                pos = line.find(word, col)
+                if pos == -1:
+                    break
+                
+                # Check if it's a whole word (not part of a larger identifier)
+                before_ok = (pos == 0 or not (line[pos - 1].isalnum() or line[pos - 1] == '_'))
+                after_pos = pos + len(word)
+                after_ok = (after_pos >= len(line) or not (line[after_pos].isalnum() or line[after_pos] == '_'))
+                
+                if before_ok and after_ok:
+                    locations.append(lsp.Location(
+                        uri=uri,
+                        range=lsp.Range(
+                            start=lsp.Position(line=line_num, character=pos),
+                            end=lsp.Position(line=line_num, character=pos + len(word)),
+                        ),
+                    ))
+                
+                col = after_pos
+        
+        return locations
 
-        # TODO: Implement reference finding
-        return []
+    def _get_word_at_position(self, source: str, position: lsp.Position) -> Optional[str]:
+        """Extract the word/identifier at the given position."""
+        lines = source.splitlines()
+        if position.line >= len(lines):
+            return None
+        
+        line = lines[position.line]
+        if position.character >= len(line):
+            return None
+        
+        # Find word boundaries
+        start = position.character
+        end = position.character
+        
+        # Expand backwards
+        while start > 0 and (line[start - 1].isalnum() or line[start - 1] == '_'):
+            start -= 1
+        
+        # Expand forwards
+        while end < len(line) and (line[end].isalnum() or line[end] == '_'):
+            end += 1
+        
+        if start == end:
+            return None
+        
+        return line[start:end]
+
+    def _type_to_str(self, type_node) -> str:
+        """Convert a type node to a string representation."""
+        if type_node is None:
+            return "unknown"
+        
+        from yuho.ast import nodes
+        if isinstance(type_node, nodes.BuiltinType):
+            return type_node.name
+        elif isinstance(type_node, nodes.NamedType):
+            return type_node.name
+        elif isinstance(type_node, nodes.OptionalType):
+            return f"{self._type_to_str(type_node.inner)}?"
+        elif isinstance(type_node, nodes.ArrayType):
+            return f"[{self._type_to_str(type_node.element_type)}]"
+        elif isinstance(type_node, nodes.GenericType):
+            args = ", ".join(self._type_to_str(a) for a in type_node.type_args)
+            return f"{type_node.base}<{args}>"
+        return str(type_node)
+
+    def _resolve_import_path(self, current_uri: str, import_path: str) -> Optional[str]:
+        """Resolve an import path to a file URI."""
+        import os
+        from urllib.parse import urlparse, unquote
+        
+        # Parse current URI to get directory
+        parsed = urlparse(current_uri)
+        current_path = unquote(parsed.path)
+        current_dir = os.path.dirname(current_path)
+        
+        # Try different resolution strategies
+        candidates = [
+            os.path.join(current_dir, import_path),
+            os.path.join(current_dir, f"{import_path}.yh"),
+            os.path.join(current_dir, "lib", import_path),
+            os.path.join(current_dir, "lib", f"{import_path}.yh"),
+        ]
+        
+        for candidate in candidates:
+            if os.path.isfile(candidate):
+                return f"file://{candidate}"
+        
+        return None
+
 
     def _get_document_symbols(self, uri: str) -> List[lsp.DocumentSymbol]:
         """Get document symbol hierarchy."""
