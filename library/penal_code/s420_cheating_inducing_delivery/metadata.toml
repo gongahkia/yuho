@@ -1,0 +1,14 @@
+[statute]
+section_number = "420"
+title = "Cheating and Dishonestly Inducing Delivery of Property"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[contributor]
+name = "Yuho Team"
+email = ""
+
+[description]
+summary = "Whoever cheats and thereby dishonestly induces the person deceived to deliver any property to any person, or to make, alter or destroy the whole or any part of a valuable security, or anything which is signed or sealed and capable of being converted into a valuable security, shall be punished with imprisonment and fine. Cheating by remote communication carries enhanced penalties."
+source = "Singapore Penal Code 1871, Section 420"
+notes = "Aggravated form of S415 Cheating"
