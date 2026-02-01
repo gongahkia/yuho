@@ -48,17 +48,6 @@
 # LSP: Full Language Server Protocol implementation
 # ============================================================================
 
-(A) Set up pygls-based LSP server with TextDocumentSyncKind.Incremental +lsp
-(A) Implement textDocument/didOpen handler: parse document, cache AST, publish diagnostics +lsp
-(A) Implement textDocument/didChange handler: incremental re-parse, update AST cache +lsp
-(A) Implement textDocument/didClose handler: clean up document state +lsp
-(A) Implement diagnostic generation from parser errors with DiagnosticSeverity.Error +lsp
-(A) Implement diagnostic generation from semantic errors (type errors, unresolved refs) +lsp
-(A) Implement diagnostic generation from warnings (unreachable code, shadowed bindings) +lsp
-(A) Implement textDocument/completion for keywords (match, struct, statute, fn, import) +lsp
-(A) Implement textDocument/completion for built-in types (money, percent, date, duration, etc.) +lsp
-(A) Implement textDocument/completion for struct field names based on type context +lsp
-(A) Implement textDocument/completion for function names from current scope +lsp
 (B) Implement textDocument/hover showing type information for expressions +lsp
 (B) Implement textDocument/hover showing doc-comments for functions and statutes +lsp
 (B) Implement textDocument/definition for go-to-definition on identifiers +lsp
