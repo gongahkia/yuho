@@ -5,17 +5,11 @@
 # PARSER: tree-sitter grammar and Python bindings
 # ============================================================================
 
-(B) Add tree-sitter queries for syntax highlighting (keywords, types, literals, comments, operators) +parser
-(B) Add tree-sitter queries for code folding (statute blocks, match arms, struct bodies) +parser
-(B) Add tree-sitter queries for indentation rules +parser
 
 # ============================================================================
 # AST: Internal representation and semantic analysis
 # ============================================================================
 
-(B) Implement TypeInferenceVisitor that annotates each ExprNode with inferred type +ast
-(B) Implement TypeCheckVisitor that validates type consistency and reports type errors +ast
-(B) Implement ScopeAnalysisVisitor that builds symbol tables and resolves references +ast
 (B) Implement ExhaustivenessChecker for match expressions using pattern matrix algorithm +ast
 (B) Implement ReachabilityChecker that warns on unreachable match arms (dead code) +ast
 (B) Implement OverlapDetector that warns when match arm patterns overlap (legal ambiguity) +ast
@@ -145,7 +139,6 @@
 # STATUTES: Implement 10+ Penal Code sections for language breadth
 # ============================================================================
 
-(A) Implement S420 Cheating and Dishonestly Inducing Delivery: demonstrate aggravated offense +statutes
 (B) Implement S463 Forgery: demonstrate document-related offense +statutes
 (B) Implement S499 Defamation: demonstrate speech-based offense with exceptions +statutes
 (B) Implement S503 Criminal Breach of Trust: demonstrate fiduciary offense +statutes
