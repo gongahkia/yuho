@@ -14,29 +14,6 @@
 # AST: Internal representation and semantic analysis
 # ============================================================================
 
-(A) Define immutable AST base class with source_location field and accept(visitor) method +ast
-(A) Define LiteralNode variants: IntLit, FloatLit, BoolLit, StringLit with value field +ast
-(A) Define MoneyNode with currency (enum: SGD, USD, etc.) and amount (Decimal) fields +ast
-(A) Define PercentNode with value (Decimal) field, enforce 0-100 range in constructor +ast
-(A) Define DateNode wrapping datetime.date with ISO8601 parsing +ast
-(A) Define DurationNode with years, months, days, hours, minutes, seconds fields +ast
-(A) Define StructDefNode with name, fields (list of FieldDef), and type_params for generics +ast
-(A) Define StructLiteralNode with struct_name and field_values (dict of field_name to ExprNode) +ast
-(A) Define FieldAccessNode with base_expr and field_name for dot notation access +ast
-(A) Define IndexAccessNode with base_expr and index_expr for bracket notation (struct-as-array) +ast
-(A) Define MatchExprNode with scrutinee (ExprNode), arms (list of MatchArm), ensure exhaustiveness flag +ast
-(A) Define MatchArm with pattern (PatternNode), guard (optional ExprNode), body (ExprNode) +ast
-(A) Define PatternNode variants: WildcardPattern, LiteralPattern, StructPattern, BindingPattern +ast
-(A) Define FunctionDefNode with name, params (list of ParamDef), return_type, body (ExprNode) +ast
-(A) Define FunctionCallNode with callee (ExprNode or name), args (list of ExprNode) +ast
-(A) Define StatuteNode with section_number, title, definitions, elements, penalties, illustrations +ast
-(A) Define ElementNode for actus reus / mens rea components with description and conditions +ast
-(A) Define PenaltyNode with imprisonment (DurationNode range), fine (MoneyNode range), or both +ast
-(A) Define ImportNode with path (relative .yh file) and imported names (list or wildcard) +ast
-(A) Define ModuleNode as root AST containing imports, type_defs, function_defs, statutes +ast
-(A) Implement ASTBuilder class that walks tree-sitter Tree and constructs AST nodes +ast
-(A) Implement Visitor base class with visit_* methods for each AST node type +ast
-(A) Implement Transformer base class that returns new AST nodes (immutable transformation) +ast
 (B) Implement TypeInferenceVisitor that annotates each ExprNode with inferred type +ast
 (B) Implement TypeCheckVisitor that validates type consistency and reports type errors +ast
 (B) Implement ScopeAnalysisVisitor that builds symbol tables and resolves references +ast
