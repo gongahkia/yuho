@@ -1,0 +1,13 @@
+[statute]
+section_number = "299"
+title = "Culpable Homicide"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[contributor]
+name = "Yuho Team"
+email = ""
+
+[description]
+summary = "Whoever causes death by doing an act with the intention of causing death, or with the intention of causing such bodily injury as is likely to cause death, or with the knowledge that he is likely by such act to cause death, commits the offence of culpable homicide."
+source = "Singapore Penal Code 1871, Section 299"
