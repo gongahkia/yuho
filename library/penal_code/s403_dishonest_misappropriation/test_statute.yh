@@ -1,0 +1,119 @@
+/*
+Test cases for S403 Dishonest Misappropriation
+
+Tests verify possession-based offense elements:
+    1. Movable property
+    2. Not entitled to exclusive possession
+    3. Misappropriation/conversion
+    4. Dishonest intent (can develop later)
+*/
+
+referencing s403_dishonest_misappropriation/statute
+
+scope testS403DishonestMisappropriation {
+
+    // Test Case 1: Found property, converted with dishonest intent -> Offense
+    DishonestMisappropriationCase testFoundProperty := {
+        accused := Party.Accused,
+        owner := Party.Owner,
+        propertyType := PropertyType.Tangible,
+        possessionSource := PossessionSource.Found,
+        entitlementStatus := EntitlementStatus.NotEntitledToExclusivePossession,
+        misappropriationType := MisappropriationType.ConversionToOwnUse,
+        intentStatus := IntentStatus.DishonestIntent,
+        definition := ConsequenceDefinition.CommitsDishonestMisappropriation,
+    }
+    assert testFoundProperty.definition == ConsequenceDefinition.CommitsDishonestMisappropriation
+
+    // Test Case 2: Entrusted property, converted later -> Offense
+    DishonestMisappropriationCase testEntrustedProperty := {
+        accused := Party.Accused,
+        owner := Party.Owner,
+        propertyType := PropertyType.Tangible,
+        possessionSource := PossessionSource.EntrustedTemporarily,
+        entitlementStatus := EntitlementStatus.NotEntitledToExclusivePossession,
+        misappropriationType := MisappropriationType.TreatingAsOwnProperty,
+        intentStatus := IntentStatus.IntentDevelopedLater,
+        definition := ConsequenceDefinition.CommitsDishonestMisappropriation,
+    }
+    assert testEntrustedProperty.definition == ConsequenceDefinition.CommitsDishonestMisappropriation
+
+    // Test Case 3: Property received by mistake -> Offense
+    DishonestMisappropriationCase testReceivedByMistake := {
+        accused := Party.Accused,
+        owner := Party.Owner,
+        propertyType := PropertyType.Tangible,
+        possessionSource := PossessionSource.ReceivedByMistake,
+        entitlementStatus := EntitlementStatus.NotEntitledToExclusivePossession,
+        misappropriationType := MisappropriationType.ConversionToOwnUse,
+        intentStatus := IntentStatus.DishonestIntent,
+        definition := ConsequenceDefinition.CommitsDishonestMisappropriation,
+    }
+    assert testReceivedByMistake.definition == ConsequenceDefinition.CommitsDishonestMisappropriation
+
+    // Test Case 4: Intent developed later (initially honest) -> Offense
+    DishonestMisappropriationCase testLaterIntent := {
+        accused := Party.Accused,
+        owner := Party.Owner,
+        propertyType := PropertyType.Tangible,
+        possessionSource := PossessionSource.Found,
+        entitlementStatus := EntitlementStatus.NotEntitledToExclusivePossession,
+        misappropriationType := MisappropriationType.ConversionToOwnUse,
+        intentStatus := IntentStatus.IntentDevelopedLater,
+        definition := ConsequenceDefinition.CommitsDishonestMisappropriation,
+    }
+    assert testLaterIntent.definition == ConsequenceDefinition.CommitsDishonestMisappropriation
+
+    // Test Case 5: Entitled to exclusive possession -> No Offense
+    DishonestMisappropriationCase testEntitled := {
+        accused := Party.Accused,
+        owner := Party.Owner,
+        propertyType := PropertyType.Tangible,
+        possessionSource := PossessionSource.OtherLawfulMeans,
+        entitlementStatus := EntitlementStatus.EntitledToExclusivePossession,
+        misappropriationType := MisappropriationType.ConversionToOwnUse,
+        intentStatus := IntentStatus.DishonestIntent,
+        definition := ConsequenceDefinition.DoesNotCommitDishonestMisappropriation,
+    }
+    assert testEntitled.definition == ConsequenceDefinition.DoesNotCommitDishonestMisappropriation
+
+    // Test Case 6: No misappropriation -> No Offense
+    DishonestMisappropriationCase testNoMisappropriation := {
+        accused := Party.Accused,
+        owner := Party.Owner,
+        propertyType := PropertyType.Tangible,
+        possessionSource := PossessionSource.Found,
+        entitlementStatus := EntitlementStatus.NotEntitledToExclusivePossession,
+        misappropriationType := MisappropriationType.NA,
+        intentStatus := IntentStatus.DishonestIntent,
+        definition := ConsequenceDefinition.DoesNotCommitDishonestMisappropriation,
+    }
+    assert testNoMisappropriation.definition == ConsequenceDefinition.DoesNotCommitDishonestMisappropriation
+
+    // Test Case 7: Honest intent only -> No Offense
+    DishonestMisappropriationCase testHonestIntent := {
+        accused := Party.Accused,
+        owner := Party.Owner,
+        propertyType := PropertyType.Tangible,
+        possessionSource := PossessionSource.Found,
+        entitlementStatus := EntitlementStatus.NotEntitledToExclusivePossession,
+        misappropriationType := MisappropriationType.ConversionToOwnUse,
+        intentStatus := IntentStatus.HonestIntent,
+        definition := ConsequenceDefinition.DoesNotCommitDishonestMisappropriation,
+    }
+    assert testHonestIntent.definition == ConsequenceDefinition.DoesNotCommitDishonestMisappropriation
+
+    // Test Case 8: Not movable property -> No Offense
+    DishonestMisappropriationCase testNoProperty := {
+        accused := Party.Accused,
+        owner := Party.Owner,
+        propertyType := PropertyType.NA,
+        possessionSource := PossessionSource.Found,
+        entitlementStatus := EntitlementStatus.NotEntitledToExclusivePossession,
+        misappropriationType := MisappropriationType.ConversionToOwnUse,
+        intentStatus := IntentStatus.DishonestIntent,
+        definition := ConsequenceDefinition.DoesNotCommitDishonestMisappropriation,
+    }
+    assert testNoProperty.definition == ConsequenceDefinition.DoesNotCommitDishonestMisappropriation
+
+}

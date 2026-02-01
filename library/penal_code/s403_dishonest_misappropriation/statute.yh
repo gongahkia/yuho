@@ -1,0 +1,121 @@
+/*
+VERSION 1.0
+
+Based off the following statutory provisions on dishonest misappropriation
+    * Singapore Penal Code S403
+
+Dishonest Misappropriation requires:
+    1. Movable property
+    2. Accused not entitled to immediate/exclusive possession
+    3. Misappropriation or conversion to own use
+    4. Dishonest intent
+
+This demonstrates possession-based offense.
+Note: Initial lawful possession can become misappropriation if dishonest intent develops later.
+*/
+
+scope s403DishonestMisappropriation {
+
+    // ~ ENUMS ~
+
+    struct Party { // ENUM
+        Accused,
+        Owner,
+    }
+
+    struct PropertyType { // ENUM - Types of movable property
+        Tangible,
+        Intangible,
+        NA,
+    }
+
+    struct PossessionSource { // ENUM - How accused came into possession
+        Found,
+        EntrustedTemporarily,
+        ReceivedByMistake,
+        OtherLawfulMeans,
+        NA,
+    }
+
+    struct EntitlementStatus { // ENUM - Possession rights
+        EntitledToExclusivePossession,
+        NotEntitledToExclusivePossession,
+    }
+
+    struct MisappropriationType { // ENUM - Type of conversion
+        ConversionToOwnUse,
+        UseInconsistentWithOwnerIntent,
+        TreatingAsOwnProperty,
+        NA,
+    }
+
+    struct IntentStatus { // ENUM - Dishonest intention
+        DishonestIntent,
+        HonestIntent,
+        IntentDevelopedLater,
+    }
+
+    struct ConsequenceDefinition { // ENUM
+        CommitsDishonestMisappropriation,
+        DoesNotCommitDishonestMisappropriation,
+    }
+
+    // ~ STRUCT DEFINITION ~
+
+    struct DishonestMisappropriationCase {
+        string || Party accused,
+        string || Party owner,
+        PropertyType propertyType,
+        PossessionSource possessionSource,
+        EntitlementStatus entitlementStatus,
+        MisappropriationType misappropriationType,
+        IntentStatus intentStatus,
+        ConsequenceDefinition definition,
+    }
+
+    // ~ STRUCT LITERAL ~
+
+    DishonestMisappropriationCase dishonestMisappropriationDefinition := {
+
+        // ~ struct literal attributes ~
+            // Whoever dishonestly misappropriates or converts to his own use 
+            // any movable property, shall be punished
+
+        accused := Party.Accused,
+        owner := Party.Owner,
+        propertyType := PropertyType.Tangible or PropertyType.Intangible or PropertyType.NA,
+        possessionSource := PossessionSource.Found or PossessionSource.EntrustedTemporarily or PossessionSource.ReceivedByMistake or PossessionSource.OtherLawfulMeans or PossessionSource.NA,
+        entitlementStatus := EntitlementStatus.EntitledToExclusivePossession or EntitlementStatus.NotEntitledToExclusivePossession,
+        misappropriationType := MisappropriationType.ConversionToOwnUse or MisappropriationType.UseInconsistentWithOwnerIntent or MisappropriationType.TreatingAsOwnProperty or MisappropriationType.NA,
+        intentStatus := IntentStatus.DishonestIntent or IntentStatus.HonestIntent or IntentStatus.IntentDevelopedLater,
+
+        // ~ logical short circuiting ~
+            // Key distinction from theft: no "taking" required
+            // Accused may already have lawful possession
+            // Offense occurs when dishonest conversion happens
+
+        definition := match propertyType {
+            case PropertyType.Tangible := consequence entitlementStatus
+            case PropertyType.Intangible := consequence entitlementStatus
+            case PropertyType.NA := consequence ConsequenceDefinition.DoesNotCommitDishonestMisappropriation
+        },
+        definition := match entitlementStatus {
+            case EntitlementStatus.NotEntitledToExclusivePossession := consequence misappropriationType
+            case EntitlementStatus.EntitledToExclusivePossession := consequence ConsequenceDefinition.DoesNotCommitDishonestMisappropriation
+        },
+        definition := match misappropriationType {
+            case MisappropriationType.ConversionToOwnUse := consequence intentStatus
+            case MisappropriationType.UseInconsistentWithOwnerIntent := consequence intentStatus
+            case MisappropriationType.TreatingAsOwnProperty := consequence intentStatus
+            case MisappropriationType.NA := consequence ConsequenceDefinition.DoesNotCommitDishonestMisappropriation
+        },
+        // Intent may develop later after initial lawful possession
+        definition := match intentStatus {
+            case IntentStatus.DishonestIntent := consequence ConsequenceDefinition.CommitsDishonestMisappropriation
+            case IntentStatus.IntentDevelopedLater := consequence ConsequenceDefinition.CommitsDishonestMisappropriation
+            case IntentStatus.HonestIntent := consequence ConsequenceDefinition.DoesNotCommitDishonestMisappropriation
+        },
+
+    }
+
+}
