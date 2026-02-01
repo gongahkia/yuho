@@ -1,0 +1,14 @@
+[statute]
+section_number = "415"
+title = "Cheating"
+jurisdiction = "Singapore"
+version = "2.0.0"
+
+[contributor]
+name = "Yuho Team"
+email = ""
+
+[description]
+summary = "Whoever, by deceiving any person, fraudulently or dishonestly induces the person so deceived to deliver any property to any person, or to consent that any person shall retain any property, or intentionally induces the person so deceived to do or omit to do anything which he would not do or omit if he were not so deceived, and which act or omission causes or is likely to cause damage or harm to that person in body, mind, reputation or property, is said to 'cheat'."
+source = "Singapore Penal Code 1871, Section 415"
+notes = "Migrated from v4 to v5 tree-sitter AST"

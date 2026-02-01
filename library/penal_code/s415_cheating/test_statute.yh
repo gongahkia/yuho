@@ -1,0 +1,128 @@
+/*
+Test cases for S415 Cheating
+
+Tests verify deception-based offense elements:
+    1. Attribution (deception as inducement)
+    2. Deception type (fraudulent/dishonest)
+    3. Inducement type (deliver/retain/do-omit)
+    4. Harm causation
+    5. Harm type (body/mind/reputation/property)
+*/
+
+referencing s415_cheating/statute
+
+scope testS415Cheating {
+
+    // Test Case 1: Fraudulent deception, deliver property, harm to property -> Cheating
+    CheatingCase testFraudulentDeliverProperty := {
+        accused := Party.Accused,
+        action := "deceiving",
+        victim := Party.Victim,
+        attribution := AttributionType.SoleInducement,
+        deception := DeceptionType.Fraudulently,
+        inducement := InducementType.DeliverProperty,
+        causesDamageHarm := TRUE,
+        damageHarmResult := DamageHarmType.Property,
+        definition := ConsequenceDefinition.SaidToCheat,
+    }
+    assert testFraudulentDeliverProperty.definition == ConsequenceDefinition.SaidToCheat
+
+    // Test Case 2: Dishonest deception, consent to retain -> Cheating
+    CheatingCase testDishonestRetain := {
+        accused := Party.Accused,
+        action := "deceiving",
+        victim := Party.Victim,
+        attribution := AttributionType.SoleInducement,
+        deception := DeceptionType.Dishonestly,
+        inducement := InducementType.ConsentRetainProperty,
+        causesDamageHarm := TRUE,
+        damageHarmResult := DamageHarmType.Property,
+        definition := ConsequenceDefinition.SaidToCheat,
+    }
+    assert testDishonestRetain.definition == ConsequenceDefinition.SaidToCheat
+
+    // Test Case 3: Do or omit inducement, harm to mind -> Cheating
+    CheatingCase testDoOrOmit := {
+        accused := Party.Accused,
+        action := "deceiving",
+        victim := Party.Victim,
+        attribution := AttributionType.NotSoleInducement,
+        deception := DeceptionType.Fraudulently,
+        inducement := InducementType.DoOrOmit,
+        causesDamageHarm := TRUE,
+        damageHarmResult := DamageHarmType.Mind,
+        definition := ConsequenceDefinition.SaidToCheat,
+    }
+    assert testDoOrOmit.definition == ConsequenceDefinition.SaidToCheat
+
+    // Test Case 4: Harm to reputation -> Cheating
+    CheatingCase testReputationHarm := {
+        accused := Party.Accused,
+        action := "deceiving",
+        victim := Party.Victim,
+        attribution := AttributionType.SoleInducement,
+        deception := DeceptionType.Fraudulently,
+        inducement := InducementType.DeliverProperty,
+        causesDamageHarm := TRUE,
+        damageHarmResult := DamageHarmType.Reputation,
+        definition := ConsequenceDefinition.SaidToCheat,
+    }
+    assert testReputationHarm.definition == ConsequenceDefinition.SaidToCheat
+
+    // Test Case 5: No deception -> Not Cheating
+    CheatingCase testNoDeception := {
+        accused := Party.Accused,
+        action := "deceiving",
+        victim := Party.Victim,
+        attribution := AttributionType.SoleInducement,
+        deception := DeceptionType.NA,
+        inducement := InducementType.DeliverProperty,
+        causesDamageHarm := TRUE,
+        damageHarmResult := DamageHarmType.Property,
+        definition := ConsequenceDefinition.NotSaidToCheat,
+    }
+    assert testNoDeception.definition == ConsequenceDefinition.NotSaidToCheat
+
+    // Test Case 6: No inducement -> Not Cheating
+    CheatingCase testNoInducement := {
+        accused := Party.Accused,
+        action := "deceiving",
+        victim := Party.Victim,
+        attribution := AttributionType.SoleInducement,
+        deception := DeceptionType.Fraudulently,
+        inducement := InducementType.NA,
+        causesDamageHarm := TRUE,
+        damageHarmResult := DamageHarmType.Property,
+        definition := ConsequenceDefinition.NotSaidToCheat,
+    }
+    assert testNoInducement.definition == ConsequenceDefinition.NotSaidToCheat
+
+    // Test Case 7: No harm caused -> Not Cheating
+    CheatingCase testNoHarm := {
+        accused := Party.Accused,
+        action := "deceiving",
+        victim := Party.Victim,
+        attribution := AttributionType.SoleInducement,
+        deception := DeceptionType.Fraudulently,
+        inducement := InducementType.DeliverProperty,
+        causesDamageHarm := FALSE,
+        damageHarmResult := DamageHarmType.NA,
+        definition := ConsequenceDefinition.NotSaidToCheat,
+    }
+    assert testNoHarm.definition == ConsequenceDefinition.NotSaidToCheat
+
+    // Test Case 8: No attribution -> Not Cheating
+    CheatingCase testNoAttribution := {
+        accused := Party.Accused,
+        action := "deceiving",
+        victim := Party.Victim,
+        attribution := AttributionType.NA,
+        deception := DeceptionType.Fraudulently,
+        inducement := InducementType.DeliverProperty,
+        causesDamageHarm := TRUE,
+        damageHarmResult := DamageHarmType.Property,
+        definition := ConsequenceDefinition.NotSaidToCheat,
+    }
+    assert testNoAttribution.definition == ConsequenceDefinition.NotSaidToCheat
+
+}

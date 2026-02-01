@@ -1,0 +1,135 @@
+/*
+VERSION 2.0 (Migrated from v4 to v5)
+
+Based off the following statutory provisions on cheating
+    * Singapore Penal Code S415
+
+Cheating requires:
+    1. Deception (fraudulently or dishonestly)
+    2. Inducement to:
+        - Deliver property, OR
+        - Consent to retain property, OR
+        - Do or omit to do something
+    3. Causing or likelihood of causing damage/harm to:
+        - Body, mind, reputation, or property
+
+This demonstrates deception-based offense with multiple inducement types.
+*/
+
+scope s415Cheating {
+
+    // ~ ENUMS ~
+
+    struct Party { // ENUM
+        Accused,
+        Victim,
+    }
+
+    struct AttributionType { // ENUM - Whether deception was sole inducement
+        SoleInducement,
+        NotSoleInducement,
+        NA,
+    }
+
+    struct DeceptionType { // ENUM - Nature of deception
+        Fraudulently,
+        Dishonestly,
+        NA,
+    }
+
+    struct InducementType { // ENUM - What victim was induced to do
+        DeliverProperty,
+        ConsentRetainProperty,
+        DoOrOmit,
+        NA,
+    }
+
+    struct DamageHarmType { // ENUM - Type of harm caused
+        Body,
+        Mind,
+        Reputation,
+        Property,
+        NA,
+    }
+
+    struct ConsequenceDefinition { // ENUM
+        SaidToCheat,
+        NotSaidToCheat,
+    }
+
+    // ~ STRUCT DEFINITION ~
+
+    struct CheatingCase {
+        string || Party accused,
+        string action,
+        string || Party victim,
+        AttributionType attribution,
+        DeceptionType deception,
+        InducementType inducement,
+        boolean causesDamageHarm,
+        DamageHarmType damageHarmResult,
+        ConsequenceDefinition definition,
+    }
+
+    // ~ STRUCT LITERAL ~
+
+    CheatingCase cheatingDefinition := {
+
+        // ~ struct literal attributes ~
+            // Whoever, by deceiving any person, fraudulently or dishonestly 
+            // induces the person so deceived to deliver any property to any person, 
+            // or to consent that any person shall retain any property, 
+            // or intentionally induces the person so deceived to do or omit to do 
+            // anything which he would not do or omit if he were not so deceived, 
+            // and which act or omission causes or is likely to cause damage or harm 
+            // to that person in body, mind, reputation or property, 
+            // is said to "cheat".
+
+        accused := Party.Accused,
+        action := "deceiving",
+        victim := Party.Victim,
+        attribution := AttributionType.SoleInducement or AttributionType.NotSoleInducement or AttributionType.NA,
+        deception := DeceptionType.Fraudulently or DeceptionType.Dishonestly or DeceptionType.NA,
+        inducement := InducementType.DeliverProperty or InducementType.ConsentRetainProperty or InducementType.DoOrOmit or InducementType.NA,
+        causesDamageHarm := TRUE or FALSE,
+        damageHarmResult := DamageHarmType.Body or DamageHarmType.Mind or DamageHarmType.Reputation or DamageHarmType.Property or DamageHarmType.NA,
+
+        // ~ logical short circuiting ~
+            // Elements checked in sequence:
+            // 1. Attribution (was there any inducement relationship)
+            // 2. Deception type (fraudulent or dishonest)
+            // 3. Inducement type (what was victim induced to do)
+            // 4. Harm causation
+            // 5. Harm type
+
+        definition := match attribution {
+            case AttributionType.SoleInducement := consequence deception
+            case AttributionType.NotSoleInducement := consequence deception
+            case AttributionType.NA := consequence ConsequenceDefinition.NotSaidToCheat
+        },
+        definition := match deception {
+            case DeceptionType.Fraudulently := consequence inducement
+            case DeceptionType.Dishonestly := consequence inducement
+            case DeceptionType.NA := consequence ConsequenceDefinition.NotSaidToCheat
+        },
+        definition := match inducement {
+            case InducementType.DeliverProperty := consequence causesDamageHarm
+            case InducementType.ConsentRetainProperty := consequence causesDamageHarm
+            case InducementType.DoOrOmit := consequence causesDamageHarm
+            case InducementType.NA := consequence ConsequenceDefinition.NotSaidToCheat
+        },
+        definition := match causesDamageHarm {
+            case TRUE := consequence damageHarmResult
+            case FALSE := consequence ConsequenceDefinition.NotSaidToCheat
+        },
+        definition := match damageHarmResult {
+            case DamageHarmType.Body := consequence ConsequenceDefinition.SaidToCheat
+            case DamageHarmType.Mind := consequence ConsequenceDefinition.SaidToCheat
+            case DamageHarmType.Reputation := consequence ConsequenceDefinition.SaidToCheat
+            case DamageHarmType.Property := consequence ConsequenceDefinition.SaidToCheat
+            case DamageHarmType.NA := consequence ConsequenceDefinition.NotSaidToCheat
+        },
+
+    }
+
+}
