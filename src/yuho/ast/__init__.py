@@ -87,6 +87,12 @@ from yuho.ast.reachability import (
     ReachabilityResult,
     check_reachability,
 )
+from yuho.ast.overlap import (
+    OverlapDetector,
+    OverlapWarning,
+    OverlapResult,
+    check_overlaps,
+)
 
 __all__ = [
     # Base
@@ -165,4 +171,8 @@ __all__ = [
     "ReachabilityError",
     "ReachabilityResult",
     "check_reachability",
+    "OverlapDetector",
+    "OverlapWarning",
+    "OverlapResult",
+    "check_overlaps",
 ]
