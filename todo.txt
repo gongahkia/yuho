@@ -6,20 +6,6 @@
 # PARSER: tree-sitter grammar and Python bindings
 # ============================================================================
 
-(A) Define tree-sitter grammar for Yuho literals: int, float, bool, string with escape sequences +parser
-(A) Define tree-sitter grammar for legal-native types: money (currency+amount), percent, date (ISO8601), duration +parser
-(A) Define tree-sitter grammar for struct declarations with named fields and optional type annotations +parser
-(A) Define tree-sitter grammar for match-case expressions with pattern guards and wildcard patterns +parser
-(A) Define tree-sitter grammar for function definitions with parameter types and return type annotations +parser
-(A) Define tree-sitter grammar for statute blocks: section number, title, definitions, elements, penalties +parser
-(A) Define tree-sitter grammar for import statements referencing other .yh files +parser
-(A) Define tree-sitter grammar for comments: single-line (//) and multi-line (/* */) with doc-comments (///) +parser
-(A) Implement tree-sitter external scanner for context-sensitive tokens (indentation, string interpolation) +parser
-(A) Configure tree-sitter build to generate C parser and compile shared library +parser
-(A) Create py-tree-sitter bindings: install tree_sitter_yuho package exposing language() function +parser
-(A) Write parser wrapper class that accepts source string and returns tree-sitter Tree object +parser
-(A) Implement source position tracking: SourceLocation(file, line, col, end_line, end_col) dataclass +parser
-(A) Implement error recovery annotations in grammar for common syntax errors (missing semicolons, unmatched braces) +parser
 (B) Add tree-sitter queries for syntax highlighting (keywords, types, literals, comments, operators) +parser
 (B) Add tree-sitter queries for code folding (statute blocks, match arms, struct bodies) +parser
 (B) Add tree-sitter queries for indentation rules +parser
