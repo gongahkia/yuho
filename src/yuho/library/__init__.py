@@ -1,0 +1,33 @@
+"""
+Yuho library module - user-contributed statute repository.
+
+Provides:
+- Package format definitions (.yhpkg)
+- Contribution validation
+- Library indexing and search
+- Package installation and management
+"""
+
+from yuho.library.package import (
+    Package,
+    PackageMetadata,
+    PackageValidator,
+)
+from yuho.library.index import (
+    LibraryIndex,
+    search_library,
+)
+from yuho.library.install import (
+    install_package,
+    uninstall_package,
+)
+
+__all__ = [
+    "Package",
+    "PackageMetadata",
+    "PackageValidator",
+    "LibraryIndex",
+    "search_library",
+    "install_package",
+    "uninstall_package",
+]
