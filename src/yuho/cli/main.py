@@ -349,6 +349,75 @@ def completion(ctx: click.Context, shell: str, show_install: bool) -> None:
         click.echo(get_completion_script(shell_lower))
 
 
+# =============================================================================
+# Config command
+# =============================================================================
+
+
+@cli.group()
+@click.pass_context
+def config(ctx: click.Context) -> None:
+    """
+    Manage Yuho configuration.
+
+    View and modify configuration settings for all Yuho components.
+    """
+    pass
+
+
+@config.command("show")
+@click.option("-s", "--section", type=click.Choice(["llm", "transpile", "lsp", "mcp"]),
+              help="Show only specific section")
+@click.option("-f", "--format", "fmt", type=click.Choice(["toml", "json"]),
+              default="toml", help="Output format")
+@click.pass_context
+def config_show(ctx: click.Context, section: Optional[str], fmt: str) -> None:
+    """
+    Display current configuration.
+
+    Shows all configuration values from file and environment.
+
+    Examples:
+        yuho config show
+        yuho config show -s llm
+        yuho config show -f json
+    """
+    from yuho.cli.commands.config import run_config_show
+    run_config_show(section=section, format=fmt, verbose=ctx.obj["verbose"])
+
+
+@config.command("set")
+@click.argument("key")
+@click.argument("value")
+@click.pass_context
+def config_set(ctx: click.Context, key: str, value: str) -> None:
+    """
+    Set a configuration value.
+
+    KEY must be in format 'section.key' (e.g., 'llm.provider').
+
+    Examples:
+        yuho config set llm.provider ollama
+        yuho config set llm.model llama3
+        yuho config set mcp.port 9000
+    """
+    from yuho.cli.commands.config import run_config_set
+    run_config_set(key, value, verbose=ctx.obj["verbose"])
+
+
+@config.command("init")
+@click.option("--force", is_flag=True, help="Overwrite existing config file")
+@click.pass_context
+def config_init(ctx: click.Context, force: bool) -> None:
+    """
+    Create a default configuration file.
+
+    Creates ~/.config/yuho/config.toml with sensible defaults.
+    """
+    from yuho.cli.commands.config import run_config_init
+    run_config_init(force=force, verbose=ctx.obj["verbose"])
+
+
 def main() -> None:
     """Main entry point."""
     cli()
