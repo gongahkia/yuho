@@ -6,6 +6,7 @@ import json
 import sys
 from pathlib import Path
 from typing import Optional, List
+from datetime import datetime
 
 import click
 
@@ -14,7 +15,14 @@ from yuho.ast import ASTBuilder
 from yuho.cli.error_formatter import Colors, colorize
 
 
-def run_test(file: Optional[str] = None, run_all: bool = False, json_output: bool = False, verbose: bool = False) -> None:
+def run_test(
+    file: Optional[str] = None,
+    run_all: bool = False,
+    json_output: bool = False,
+    verbose: bool = False,
+    coverage: bool = False,
+    coverage_html: Optional[str] = None,
+) -> None:
     """
     Run tests for Yuho statute files.
 
@@ -23,8 +31,11 @@ def run_test(file: Optional[str] = None, run_all: bool = False, json_output: boo
         run_all: Run all tests in current directory
         json_output: Output results as JSON
         verbose: Enable verbose output
+        coverage: Enable coverage tracking
+        coverage_html: Path to write HTML coverage report
     """
     test_files: List[Path] = []
+    statute_files: List[Path] = []
 
     if run_all:
         # Find all test files
@@ -32,8 +43,13 @@ def run_test(file: Optional[str] = None, run_all: bool = False, json_output: boo
         test_files.extend(cwd.glob("test_*.yh"))
         test_files.extend(cwd.glob("tests/*_test.yh"))
         test_files.extend(cwd.glob("**/test_*.yh"))
+        # Find statute files for coverage
+        if coverage:
+            statute_files.extend(f for f in cwd.glob("**/*.yh") if "test" not in f.name.lower())
     elif file:
         file_path = Path(file)
+        if coverage:
+            statute_files.append(file_path)
         # Look for associated test file
         candidates = [
             file_path.parent / f"test_{file_path.name}",
@@ -59,6 +75,24 @@ def run_test(file: Optional[str] = None, run_all: bool = False, json_output: boo
         click.echo(colorize("No test files found", Colors.YELLOW))
         sys.exit(0)
 
+    # Initialize coverage tracker if needed
+    coverage_tracker = None
+    if coverage:
+        from yuho.testing.coverage import CoverageTracker
+        coverage_tracker = CoverageTracker()
+
+        # Load statutes for coverage tracking
+        for statute_file in statute_files:
+            try:
+                parser = Parser()
+                result = parser.parse_file(statute_file)
+                if result.is_valid:
+                    builder = ASTBuilder(result.source, str(statute_file))
+                    ast = builder.build(result.root_node)
+                    coverage_tracker.load_statutes_from_ast(ast)
+            except Exception:
+                continue
+
     # Run tests
     results = []
     passed = 0
@@ -68,7 +102,7 @@ def run_test(file: Optional[str] = None, run_all: bool = False, json_output: boo
         if verbose:
             click.echo(f"Running {test_file}...")
 
-        result = _run_test_file(test_file, verbose)
+        result = _run_test_file(test_file, verbose, coverage_tracker)
         results.append(result)
 
         if result["passed"]:
@@ -82,14 +116,29 @@ def run_test(file: Optional[str] = None, run_all: bool = False, json_output: boo
                 for err in result.get("errors", []):
                     click.echo(f"    - {err}")
 
+    # Generate coverage report
+    if coverage and coverage_tracker:
+        report = coverage_tracker.generate_report()
+
+        if coverage_html:
+            html_path = Path(coverage_html)
+            _generate_html_coverage_report(report, html_path)
+            if not json_output:
+                click.echo(f"\nCoverage report written to: {html_path}")
+        elif not json_output:
+            coverage_tracker.print_summary()
+
     # Summary
     if json_output:
-        print(json.dumps({
+        output_data = {
             "total": len(test_files),
             "passed": passed,
             "failed": failed,
             "results": results,
-        }, indent=2))
+        }
+        if coverage and coverage_tracker:
+            output_data["coverage"] = coverage_tracker.generate_report().to_dict()
+        print(json.dumps(output_data, indent=2))
     else:
         click.echo()
         if failed == 0:
@@ -99,7 +148,7 @@ def run_test(file: Optional[str] = None, run_all: bool = False, json_output: boo
             sys.exit(1)
 
 
-def _run_test_file(test_file: Path, verbose: bool) -> dict:
+def _run_test_file(test_file: Path, verbose: bool, coverage_tracker=None) -> dict:
     """Run a single test file and return results."""
     result = {
         "file": str(test_file),
@@ -113,10 +162,14 @@ def _run_test_file(test_file: Path, verbose: bool) -> dict:
         parse_result = parser.parse_file(test_file)
     except Exception as e:
         result["errors"].append(f"Parse error: {e}")
+        if coverage_tracker:
+            coverage_tracker.add_test_result(passed=False)
         return result
 
     if parse_result.errors:
         result["errors"].extend(f"{e.location}: {e.message}" for e in parse_result.errors)
+        if coverage_tracker:
+            coverage_tracker.add_test_result(passed=False)
         return result
 
     # Build AST
@@ -125,7 +178,35 @@ def _run_test_file(test_file: Path, verbose: bool) -> dict:
         ast = builder.build(parse_result.root_node)
     except Exception as e:
         result["errors"].append(f"AST error: {e}")
+        if coverage_tracker:
+            coverage_tracker.add_test_result(passed=False)
         return result
+
+    # Track coverage if enabled
+    if coverage_tracker:
+        for statute in ast.statutes:
+            section = statute.section_number
+
+            # Mark elements as covered
+            for elem in (statute.elements or []):
+                coverage_tracker.mark_element_covered(
+                    section,
+                    elem.element_type,
+                    elem.name,
+                    str(test_file),
+                )
+
+            # Mark penalty as covered if present
+            if statute.penalty:
+                coverage_tracker.mark_penalty_covered(section)
+
+            # Mark illustrations as covered
+            if hasattr(statute, 'illustrations') and statute.illustrations:
+                for ill in statute.illustrations:
+                    if hasattr(ill, 'label') and ill.label:
+                        coverage_tracker.mark_illustration_covered(section, ill.label)
+
+        coverage_tracker.add_test_result(passed=True)
 
     # For now, just verify it parses successfully
     # TODO: Implement actual test assertions once test format is defined
@@ -136,3 +217,200 @@ def _run_test_file(test_file: Path, verbose: bool) -> dict:
     }
 
     return result
+
+
+def _generate_html_coverage_report(report, output_path: Path) -> None:
+    """Generate an HTML coverage report."""
+    report_dict = report.to_dict()
+    summary = report_dict["summary"]
+    statutes = report_dict["statutes"]
+
+    html = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yuho Coverage Report</title>
+    <style>
+        body {{
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }}
+        .container {{
+            max-width: 1200px;
+            margin: 0 auto;
+        }}
+        h1 {{
+            color: #333;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+        }}
+        .summary {{
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }}
+        .summary-grid {{
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }}
+        .metric {{
+            text-align: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }}
+        .metric-value {{
+            font-size: 2em;
+            font-weight: bold;
+            color: #007bff;
+        }}
+        .metric-label {{
+            color: #666;
+            font-size: 0.9em;
+        }}
+        .statute {{
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }}
+        .statute-header {{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }}
+        .statute-title {{
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+        }}
+        .coverage-badge {{
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: white;
+        }}
+        .coverage-high {{ background: #28a745; }}
+        .coverage-medium {{ background: #ffc107; color: #333; }}
+        .coverage-low {{ background: #dc3545; }}
+        .elements-table {{
+            width: 100%;
+            border-collapse: collapse;
+        }}
+        .elements-table th, .elements-table td {{
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }}
+        .elements-table th {{
+            background: #f8f9fa;
+            font-weight: 600;
+        }}
+        .status-covered {{
+            color: #28a745;
+            font-weight: bold;
+        }}
+        .status-uncovered {{
+            color: #dc3545;
+            font-weight: bold;
+        }}
+        .generated {{
+            text-align: center;
+            color: #999;
+            font-size: 0.9em;
+            margin-top: 30px;
+        }}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Yuho Coverage Report</h1>
+
+        <div class="summary">
+            <h2>Summary</h2>
+            <div class="summary-grid">
+                <div class="metric">
+                    <div class="metric-value">{summary['overall_coverage']}</div>
+                    <div class="metric-label">Overall Coverage</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">{summary['total_statutes']}</div>
+                    <div class="metric-label">Statutes</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">{summary['passed_tests']}/{summary['total_tests']}</div>
+                    <div class="metric-label">Tests Passed</div>
+                </div>
+            </div>
+        </div>
+"""
+
+    for section, data in statutes.items():
+        coverage_pct = float(data['overall_coverage'].rstrip('%'))
+        if coverage_pct >= 80:
+            badge_class = "coverage-high"
+        elif coverage_pct >= 50:
+            badge_class = "coverage-medium"
+        else:
+            badge_class = "coverage-low"
+
+        html += f"""
+        <div class="statute">
+            <div class="statute-header">
+                <span class="statute-title">Section {section}: {data['title']}</span>
+                <span class="coverage-badge {badge_class}">{data['overall_coverage']}</span>
+            </div>
+            <table class="elements-table">
+                <thead>
+                    <tr>
+                        <th>Element</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                        <th>Tests</th>
+                    </tr>
+                </thead>
+                <tbody>
+"""
+        for elem_name, elem_data in data['elements'].items():
+            status_class = "status-covered" if elem_data['covered'] else "status-uncovered"
+            status_text = "COVERED" if elem_data['covered'] else "NOT COVERED"
+            html += f"""
+                    <tr>
+                        <td>{elem_name.split(':')[1] if ':' in elem_name else elem_name}</td>
+                        <td>{elem_data['type']}</td>
+                        <td class="{status_class}">{status_text}</td>
+                        <td>{elem_data['test_count']}</td>
+                    </tr>
+"""
+
+        penalty_status = "COVERED" if data['penalty_covered'] else "NOT COVERED"
+        penalty_class = "status-covered" if data['penalty_covered'] else "status-uncovered"
+        html += f"""
+                    <tr>
+                        <td>Penalty</td>
+                        <td>penalty</td>
+                        <td class="{penalty_class}">{penalty_status}</td>
+                        <td>-</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+"""
+
+    html += f"""
+        <p class="generated">Generated by Yuho v5 on {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</p>
+    </div>
+</body>
+</html>
+"""
+
+    output_path.write_text(html)
+

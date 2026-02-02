@@ -275,15 +275,37 @@ def fmt(ctx: click.Context, file: str, in_place: bool, check: bool) -> None:
 @click.argument("file", type=click.Path(exists=True), required=False)
 @click.option("--all", "run_all", is_flag=True, help="Run all tests in directory")
 @click.option("--json", "json_output", is_flag=True, help="Output results as JSON")
+@click.option("--coverage", is_flag=True, help="Enable coverage tracking")
+@click.option("--coverage-html", type=click.Path(), help="Generate HTML coverage report")
 @click.pass_context
-def test(ctx: click.Context, file: Optional[str], run_all: bool, json_output: bool) -> None:
+def test(
+    ctx: click.Context,
+    file: Optional[str],
+    run_all: bool,
+    json_output: bool,
+    coverage: bool,
+    coverage_html: Optional[str],
+) -> None:
     """
     Run tests for a Yuho statute file.
 
     Looks for test_<filename>.yh or tests/<filename>_test.yh
+
+    Examples:
+        yuho test statute.yh
+        yuho test --all
+        yuho test --all --coverage
+        yuho test --all --coverage-html coverage.html
     """
     from yuho.cli.commands.test import run_test
-    run_test(file, run_all=run_all, json_output=json_output, verbose=ctx.obj["verbose"])
+    run_test(
+        file,
+        run_all=run_all,
+        json_output=json_output,
+        verbose=ctx.obj["verbose"],
+        coverage=coverage or bool(coverage_html),
+        coverage_html=coverage_html,
+    )
 
 
 # =============================================================================
