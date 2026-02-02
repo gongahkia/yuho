@@ -1,0 +1,158 @@
+/*
+Illustrations for S499 Defamation
+
+These examples demonstrate typical fact patterns for the offense of defamation,
+including cases where exceptions/defenses apply.
+*/
+
+referencing s499_defamation/statute
+
+scope illustrationsS499Defamation {
+
+    /*
+    Illustration (a): Spoken false accusation in public
+
+    A says to a crowd, "Z is a thief who stole from his employer,"
+    knowing this to be false and intending to harm Z's reputation.
+    */
+    DefamationCase illustrationA := {
+        accused := "A",
+        action := "making imputation",
+        victim := "Z",
+        method := ImputationMethod.SpokenWords,
+        mensRea := MensRea.IntendingToHarm,
+        harmTarget := HarmTarget.Reputation,
+        exception := ExceptionType.NoExceptionApplies,
+        definition := ConsequenceDefinition.DefamesVictim,
+    }
+    assert illustrationA.definition == ConsequenceDefinition.DefamesVictim
+
+    /*
+    Illustration (b): Written defamation in newspaper
+
+    B publishes an article stating "Z committed fraud," having reason
+    to believe this false statement will harm Z's reputation.
+    */
+    DefamationCase illustrationB := {
+        accused := "B",
+        action := "making imputation",
+        victim := "Z",
+        method := ImputationMethod.WrittenWords,
+        mensRea := MensRea.ReasonToBelieveHarmWillOccur,
+        harmTarget := HarmTarget.Reputation,
+        exception := ExceptionType.NoExceptionApplies,
+        definition := ConsequenceDefinition.DefamesVictim,
+    }
+    assert illustrationB.definition == ConsequenceDefinition.DefamesVictim
+
+    /*
+    Illustration (c): Truth for public good exception
+
+    C, a journalist, publishes accurate information about a public official
+    accepting bribes. Though harmful to reputation, it is true and serves
+    the public interest in knowing about corruption.
+    */
+    DefamationCase illustrationC := {
+        accused := "C",
+        action := "making imputation",
+        victim := "Z",
+        method := ImputationMethod.WrittenWords,
+        mensRea := MensRea.KnowingHarmWillOccur,
+        harmTarget := HarmTarget.Reputation,
+        exception := ExceptionType.TruthForPublicGood,
+        definition := ConsequenceDefinition.DoesNotDefameVictim,
+    }
+    assert illustrationC.definition == ConsequenceDefinition.DoesNotDefameVictim
+
+    /*
+    Illustration (d): Opinion on public servant's conduct
+
+    D writes a letter to the editor criticizing Minister Z's handling
+    of a public policy matter. This is protected opinion on the public
+    conduct of a public servant.
+    */
+    DefamationCase illustrationD := {
+        accused := "D",
+        action := "making imputation",
+        victim := "Z",
+        method := ImputationMethod.WrittenWords,
+        mensRea := MensRea.IntendingToHarm,
+        harmTarget := HarmTarget.Reputation,
+        exception := ExceptionType.PublicConductOfPublicServant,
+        definition := ConsequenceDefinition.DoesNotDefameVictim,
+    }
+    assert illustrationD.definition == ConsequenceDefinition.DoesNotDefameVictim
+
+    /*
+    Illustration (e): Caution for benefit of another
+
+    E, in good faith, warns F that Z has a history of defaulting on debts,
+    to protect F from potential financial harm in a business deal.
+    */
+    DefamationCase illustrationE := {
+        accused := "E",
+        action := "making imputation",
+        victim := "Z",
+        method := ImputationMethod.SpokenWords,
+        mensRea := MensRea.KnowingHarmWillOccur,
+        harmTarget := HarmTarget.Reputation,
+        exception := ExceptionType.CautionForBenefit,
+        definition := ConsequenceDefinition.DoesNotDefameVictim,
+    }
+    assert illustrationE.definition == ConsequenceDefinition.DoesNotDefameVictim
+
+    /*
+    Illustration (f): Good faith accusation to authority
+
+    F reports to police that Z committed a crime, making the accusation
+    in good faith to the proper authority.
+    */
+    DefamationCase illustrationF := {
+        accused := "F",
+        action := "making imputation",
+        victim := "Z",
+        method := ImputationMethod.SpokenWords,
+        mensRea := MensRea.IntendingToHarm,
+        harmTarget := HarmTarget.Reputation,
+        exception := ExceptionType.GoodFaithAccusationToAuthority,
+        definition := ConsequenceDefinition.DoesNotDefameVictim,
+    }
+    assert illustrationF.definition == ConsequenceDefinition.DoesNotDefameVictim
+
+    /*
+    Illustration (g): Fair court report
+
+    G, a journalist, publishes an accurate account of testimony given
+    in Z's public trial, which contains damaging allegations.
+    */
+    DefamationCase illustrationG := {
+        accused := "G",
+        action := "making imputation",
+        victim := "Z",
+        method := ImputationMethod.WrittenWords,
+        mensRea := MensRea.KnowingHarmWillOccur,
+        harmTarget := HarmTarget.Reputation,
+        exception := ExceptionType.PublishedCourtReport,
+        definition := ConsequenceDefinition.DoesNotDefameVictim,
+    }
+    assert illustrationG.definition == ConsequenceDefinition.DoesNotDefameVictim
+
+    /*
+    Illustration (h): Defamation by visible representation
+
+    H creates and distributes a cartoon depicting Z as a pig stealing money,
+    intending to harm Z's reputation as a businessman.
+    */
+    DefamationCase illustrationH := {
+        accused := "H",
+        action := "making imputation",
+        victim := "Z",
+        method := ImputationMethod.VisibleRepresentations,
+        mensRea := MensRea.IntendingToHarm,
+        harmTarget := HarmTarget.Reputation,
+        exception := ExceptionType.NoExceptionApplies,
+        definition := ConsequenceDefinition.DefamesVictim,
+    }
+    assert illustrationH.definition == ConsequenceDefinition.DefamesVictim
+
+}

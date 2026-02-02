@@ -1,0 +1,115 @@
+/*
+Illustrations for S463 Forgery
+
+These examples demonstrate typical fact patterns for the offense of forgery,
+showing how the statutory elements apply in practice.
+*/
+
+referencing s463_forgery/statute
+
+scope illustrationsS463Forgery {
+
+    /*
+    Illustration (a): Creating a fraudulent will
+
+    A intends to defraud Z's heirs. A creates a document purporting to be
+    Z's will, signing Z's name to make it appear genuine. A intends to
+    use this document to claim Z's property after Z's death.
+    */
+    ForgeryCase illustrationA := {
+        accused := "A",
+        action := "making false document",
+        documentType := DocumentType.FalseDocument,
+        makingAct := MakingActType.CreatingEntireDocument,
+        intent := IntentType.CausePartWithProperty,
+        target := TargetType.SpecificPerson,
+        definition := ConsequenceDefinition.CommitsForgery,
+    }
+    assert illustrationA.definition == ConsequenceDefinition.CommitsForgery
+
+    /*
+    Illustration (b): Altering a cheque
+
+    B receives a cheque from Z for $100. B alters the amount to read $1,000,
+    intending to fraudulently obtain $900 more than entitled.
+    */
+    ForgeryCase illustrationB := {
+        accused := "B",
+        action := "making false document",
+        documentType := DocumentType.FalseDocument,
+        makingAct := MakingActType.AlteringExistingDocument,
+        intent := IntentType.CommitFraud,
+        target := TargetType.SpecificPerson,
+        definition := ConsequenceDefinition.CommitsForgery,
+    }
+    assert illustrationB.definition == ConsequenceDefinition.CommitsForgery
+
+    /*
+    Illustration (c): Signing another's name on a contract
+
+    C signs D's name on a contract without D's authority, intending to
+    cause D to be bound by the contract terms.
+    */
+    ForgeryCase illustrationC := {
+        accused := "C",
+        action := "making false document",
+        documentType := DocumentType.PartOfDocument,
+        makingAct := MakingActType.SigningFalsely,
+        intent := IntentType.CauseEnterContract,
+        target := TargetType.SpecificPerson,
+        definition := ConsequenceDefinition.CommitsForgery,
+    }
+    assert illustrationC.definition == ConsequenceDefinition.CommitsForgery
+
+    /*
+    Illustration (d): Creating fake academic certificate
+
+    E creates a fake university degree certificate to support a claim
+    of having professional qualifications for a job application.
+    */
+    ForgeryCase illustrationD := {
+        accused := "E",
+        action := "making false document",
+        documentType := DocumentType.FalseDocument,
+        makingAct := MakingActType.CreatingEntireDocument,
+        intent := IntentType.SupportClaimOrTitle,
+        target := TargetType.NA,
+        definition := ConsequenceDefinition.CommitsForgery,
+    }
+    assert illustrationD.definition == ConsequenceDefinition.CommitsForgery
+
+    /*
+    Illustration (e): Forging government permit for public harm
+
+    F creates a false building permit, intending to deceive municipal
+    authorities and cause public harm through unsafe construction.
+    */
+    ForgeryCase illustrationE := {
+        accused := "F",
+        action := "making false document",
+        documentType := DocumentType.FalseDocument,
+        makingAct := MakingActType.CreatingEntireDocument,
+        intent := IntentType.CauseDamageInjury,
+        target := TargetType.Public,
+        definition := ConsequenceDefinition.CommitsForgery,
+    }
+    assert illustrationE.definition == ConsequenceDefinition.CommitsForgery
+
+    /*
+    Illustration (f): No forgery - making a copy for reference only
+
+    G makes a photocopy of Z's document for personal reference only,
+    without any intent to deceive or cause harm.
+    */
+    ForgeryCase illustrationF := {
+        accused := "G",
+        action := "making false document",
+        documentType := DocumentType.FalseDocument,
+        makingAct := MakingActType.CreatingEntireDocument,
+        intent := IntentType.NA,
+        target := TargetType.NA,
+        definition := ConsequenceDefinition.DoesNotCommitForgery,
+    }
+    assert illustrationF.definition == ConsequenceDefinition.DoesNotCommitForgery
+
+}

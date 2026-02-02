@@ -1,0 +1,160 @@
+/*
+Illustrations for S503 Criminal Breach of Trust
+
+These examples demonstrate typical fact patterns for the offense of
+criminal breach of trust, showing fiduciary relationships and breach types.
+*/
+
+referencing s503_criminal_breach_of_trust/statute
+
+scope illustrationsS503CriminalBreachOfTrust {
+
+    /*
+    Illustration (a): Trustee misappropriating trust funds
+
+    A, appointed trustee of Z's estate, uses $10,000 from the trust
+    for personal gambling debts, intending to repay later but dishonestly
+    using funds not his own.
+    */
+    CriminalBreachOfTrustCase illustrationA := {
+        accused := "A",
+        action := "breaching trust",
+        victim := "Z's estate beneficiaries",
+        entrustment := EntrustmentType.EntrustedWithProperty,
+        propertyRelation := PropertyRelation.Fiduciary,
+        breachAct := BreachActType.Misappropriates,
+        mensRea := MensRea.Dishonestly,
+        definition := ConsequenceDefinition.CommitsCriminalBreachOfTrust,
+    }
+    assert illustrationA.definition == ConsequenceDefinition.CommitsCriminalBreachOfTrust
+
+    /*
+    Illustration (b): Employee converting employer's property
+
+    B, a store clerk entrusted with cash from daily sales, takes $500
+    from the register and uses it to pay personal bills.
+    */
+    CriminalBreachOfTrustCase illustrationB := {
+        accused := "B",
+        action := "breaching trust",
+        victim := "Employer",
+        entrustment := EntrustmentType.EntrustedWithProperty,
+        propertyRelation := PropertyRelation.Custodian,
+        breachAct := BreachActType.ConvertsToOwnUse,
+        mensRea := MensRea.Dishonestly,
+        definition := ConsequenceDefinition.CommitsCriminalBreachOfTrust,
+    }
+    assert illustrationB.definition == ConsequenceDefinition.CommitsCriminalBreachOfTrust
+
+    /*
+    Illustration (c): Agent violating principal's instructions
+
+    C, an agent authorized to sell Z's car for at least $20,000, sells
+    it for $15,000 and keeps the difference when Z believes it sold
+    for $20,000.
+    */
+    CriminalBreachOfTrustCase illustrationC := {
+        accused := "C",
+        action := "breaching trust",
+        victim := "Z",
+        entrustment := EntrustmentType.DominionOverProperty,
+        propertyRelation := PropertyRelation.Controller,
+        breachAct := BreachActType.DisposesViolatingContract,
+        mensRea := MensRea.Dishonestly,
+        definition := ConsequenceDefinition.CommitsCriminalBreachOfTrust,
+    }
+    assert illustrationC.definition == ConsequenceDefinition.CommitsCriminalBreachOfTrust
+
+    /*
+    Illustration (d): Carrier disposing goods against law
+
+    D, a shipping company, is entrusted with goods to transport from
+    Singapore to Malaysia. D sells the goods in transit without authority,
+    violating transport regulations.
+    */
+    CriminalBreachOfTrustCase illustrationD := {
+        accused := "D",
+        action := "breaching trust",
+        victim := "Consignor",
+        entrustment := EntrustmentType.EntrustedWithProperty,
+        propertyRelation := PropertyRelation.Possessor,
+        breachAct := BreachActType.DisposesViolatingLaw,
+        mensRea := MensRea.Dishonestly,
+        definition := ConsequenceDefinition.CommitsCriminalBreachOfTrust,
+    }
+    assert illustrationD.definition == ConsequenceDefinition.CommitsCriminalBreachOfTrust
+
+    /*
+    Illustration (e): Wilfully allowing another to misuse property
+
+    E, a bank manager with control over vault access, wilfully allows
+    F (a friend) to take money from the vault, knowing F has no right.
+    */
+    CriminalBreachOfTrustCase illustrationE := {
+        accused := "E",
+        action := "breaching trust",
+        victim := "Bank",
+        entrustment := EntrustmentType.DominionOverProperty,
+        propertyRelation := PropertyRelation.Controller,
+        breachAct := BreachActType.SuffersOtherToDo,
+        mensRea := MensRea.Wilfully,
+        definition := ConsequenceDefinition.CommitsCriminalBreachOfTrust,
+    }
+    assert illustrationE.definition == ConsequenceDefinition.CommitsCriminalBreachOfTrust
+
+    /*
+    Illustration (f): Using property contrary to contractual terms
+
+    F borrows a car from Z under agreement to use it only for commuting
+    to work. F dishonestly uses the car to run a private taxi service.
+    */
+    CriminalBreachOfTrustCase illustrationF := {
+        accused := "F",
+        action := "breaching trust",
+        victim := "Z",
+        entrustment := EntrustmentType.EntrustedWithProperty,
+        propertyRelation := PropertyRelation.Possessor,
+        breachAct := BreachActType.UsesViolatingContract,
+        mensRea := MensRea.Dishonestly,
+        definition := ConsequenceDefinition.CommitsCriminalBreachOfTrust,
+    }
+    assert illustrationF.definition == ConsequenceDefinition.CommitsCriminalBreachOfTrust
+
+    /*
+    Illustration (g): No breach - honest use within scope
+
+    G, entrusted with company funds for office supplies, uses the funds
+    to purchase exactly what was authorized. No breach of trust occurs.
+    */
+    CriminalBreachOfTrustCase illustrationG := {
+        accused := "G",
+        action := "breaching trust",
+        victim := "Company",
+        entrustment := EntrustmentType.EntrustedWithProperty,
+        propertyRelation := PropertyRelation.Custodian,
+        breachAct := BreachActType.NA,
+        mensRea := MensRea.NA,
+        definition := ConsequenceDefinition.DoesNotCommitCriminalBreachOfTrust,
+    }
+    assert illustrationG.definition == ConsequenceDefinition.DoesNotCommitCriminalBreachOfTrust
+
+    /*
+    Illustration (h): No entrustment - no fiduciary duty
+
+    H finds property on the street and takes it. Since H was never
+    entrusted with the property, this may be theft but not criminal
+    breach of trust.
+    */
+    CriminalBreachOfTrustCase illustrationH := {
+        accused := "H",
+        action := "breaching trust",
+        victim := "Unknown owner",
+        entrustment := EntrustmentType.NA,
+        propertyRelation := PropertyRelation.NA,
+        breachAct := BreachActType.Misappropriates,
+        mensRea := MensRea.Dishonestly,
+        definition := ConsequenceDefinition.DoesNotCommitCriminalBreachOfTrust,
+    }
+    assert illustrationH.definition == ConsequenceDefinition.DoesNotCommitCriminalBreachOfTrust
+
+}
