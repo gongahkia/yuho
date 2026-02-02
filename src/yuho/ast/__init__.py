@@ -93,6 +93,11 @@ from yuho.ast.overlap import (
     OverlapResult,
     check_overlaps,
 )
+from yuho.ast.constant_folder import (
+    ConstantFolder,
+    ConstantFoldingError,
+    fold_constants,
+)
 
 __all__ = [
     # Base
@@ -175,4 +180,8 @@ __all__ = [
     "OverlapWarning",
     "OverlapResult",
     "check_overlaps",
+    # Constant folding
+    "ConstantFolder",
+    "ConstantFoldingError",
+    "fold_constants",
 ]
