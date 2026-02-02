@@ -158,6 +158,8 @@ def transpile(
 @click.option("--provider", type=click.Choice(["ollama", "huggingface", "openai", "anthropic"]),
               help="LLM provider to use")
 @click.option("--model", help="Model name to use")
+@click.option("--stream/--no-stream", "stream", default=True,
+              help="Enable/disable streaming output for real-time response")
 @click.pass_context
 def explain(
     ctx: click.Context,
@@ -165,7 +167,8 @@ def explain(
     section: Optional[str],
     interactive: bool,
     provider: Optional[str],
-    model: Optional[str]
+    model: Optional[str],
+    stream: bool,
 ) -> None:
     """
     Generate natural language explanation of a Yuho file.
@@ -179,7 +182,8 @@ def explain(
         interactive=interactive,
         provider=provider,
         model=model,
-        verbose=ctx.obj["verbose"]
+        verbose=ctx.obj["verbose"],
+        stream=stream,
     )
 
 
