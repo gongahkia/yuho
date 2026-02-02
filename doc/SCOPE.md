@@ -12,7 +12,7 @@ The below Singaporean statutes were selected based on their relation to the foll
 | Statute | Purpose | Implementation |
 | :---: | :--- | :---: |
 | [Interpretation Act 1965](https://sso.agc.gov.sg/Act/IA1965) | Defines terms and expressions and governs statutory interpretation | ![](https://img.shields.io/badge/status-not%20implemented-ff3333) |
-| [Penal Code 1871](https://sso.agc.gov.sg/Act/PC1871) | Defines criminal offenses and penalties | ![](https://img.shields.io/badge/status-not%20implemented-ff3333) |
+| [Penal Code 1871](https://sso.agc.gov.sg/Act/PC1871) | Defines criminal offenses and penalties | ![](https://img.shields.io/badge/status-partial%20(12%20sections)-ffcc00) |
 | [Criminal Procedure Code](https://sso.agc.gov.sg/Act/CPC2010) | Governs the procedure for criminal justice | ![](https://img.shields.io/badge/status-not%20implemented-ff3333) |
 | [Misuse of Drugs Act](https://sso.agc.gov.sg/Act/MDA1973) | Addresses drug-related offenses | ![](https://img.shields.io/badge/status-not%20implemented-ff3333) |
 | [Women’s Charter](https://sso.agc.gov.sg/Act/WC1961) | Protects women and children with provisions on domestic violence | ![](https://img.shields.io/badge/status-not%20implemented-ff3333) |
