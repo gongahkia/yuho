@@ -11,38 +11,26 @@
 # ============================================================================
 
 
-(C) Implement semantic versioning validation and compatibility checking +library
-(C) Add package deprecation and replacement tracking +library
 
 # ============================================================================
 # CLI: Library subcommand
 # ============================================================================
 
-(C) Implement `yuho library outdated` - show packages with updates available +cli
-(C) Implement `yuho library tree` - show dependency tree +cli
 
 # ============================================================================
 # LSP: Enhanced capabilities
 # ============================================================================
 
-(B) Implement code action: extract match arm to named pattern +lsp
-(C) Implement code action: inline variable at cursor +lsp
-(C) Implement code action: convert struct literal to explicit form +lsp
-(C) Add selection range support for expand/shrink selection +lsp
 
 # ============================================================================
 # MCP: Complete TODO tools
 # ============================================================================
 
-(B) Implement `yuho_statute_to_yuho` tool - LLM-based natural language conversion +mcp
 
 # ============================================================================
 # TEST: User-facing test infrastructure
 # ============================================================================
 
-(C) Create pytest fixtures for Yuho file parsing in user tests +test
-(C) Add test coverage reporting for statute implementations +test
-(C) Implement `yuho test --coverage` flag with HTML report +test
 
 # ============================================================================
 # ROADMAP: v6 items (visual editor and beyond)
@@ -60,9 +48,3 @@
 # DOCS: Documentation updates for v5
 # ============================================================================
 
-(D) Update doc/5_MINUTES.md to ensure all references point to v5 only and the content itself is v5 accurate +docs
-(D) Read through doc/ROADMAP.md to edit the status of all tasks that have been completed within sandbox/yuho_and_beyond +docs
-(D) For other items within docs/ROADMAP.md undone, add to this todo.txt first but highlight these are pending user clarification +docs
-(D) Examine doc/SYNTAX.md and ensure there is nothing to update per yuho v5, if there is then update accordingly +docs
-(D) Examine doc/FAQ.md and ensure there is nothing to update per yuho v5, if there is then update accordingly +docs
-(D) Examine doc/SCOPE.md and ensure there is nothing to update per yuho v5, if there is then update accordingly +docs
