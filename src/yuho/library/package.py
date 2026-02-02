@@ -79,13 +79,15 @@ class PackageMetadata:
     
     def is_valid(self) -> tuple[bool, List[str]]:
         """
-        Validate metadata completeness.
-        
+        Validate metadata completeness including semver validation.
+
         Returns:
             Tuple of (is_valid, list of error messages)
         """
+        from yuho.library.resolver import validate_semver
+
         errors = []
-        
+
         if not self.section_number:
             errors.append("section_number is required")
         if not self.title:
@@ -96,7 +98,12 @@ class PackageMetadata:
             errors.append("contributor is required")
         if not self.version:
             errors.append("version is required")
-        
+        else:
+            # Validate version is proper semver
+            semver_result = validate_semver(self.version, strict=True)
+            if not semver_result.valid:
+                errors.extend(f"version: {e}" for e in semver_result.errors)
+
         return (len(errors) == 0, errors)
 
 

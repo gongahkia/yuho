@@ -35,6 +35,11 @@ from yuho.library.resolver import (
     Version,
     VersionConstraint,
     resolve_dependencies,
+    validate_semver,
+    SemverValidation,
+    SemverValidationError,
+    CompatibilityChecker,
+    CompatibilityResult,
 )
 from yuho.library.lockfile import (
     LockFile,
@@ -64,6 +69,11 @@ __all__ = [
     "Version",
     "VersionConstraint",
     "resolve_dependencies",
+    "validate_semver",
+    "SemverValidation",
+    "SemverValidationError",
+    "CompatibilityChecker",
+    "CompatibilityResult",
     "LockFile",
     "LockFileManager",
     "LockedPackage",
