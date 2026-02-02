@@ -1,7 +1,13 @@
 """
 Hypothesis-based tests for Yuho statute implementations.
 
-Tests invariants for S463 Forgery, S499 Defamation, and S503 Criminal Breach of Trust.
+Tests invariants for multiple Singapore Penal Code sections including:
+- S300 Murder
+- S378 Theft
+- S415 Cheating
+- S463 Forgery
+- S499 Defamation
+- S503 Criminal Breach of Trust
 """
 
 import pytest
@@ -353,3 +359,328 @@ class TestCrossStatuteInvariants:
         if case["entrustment_type"] == "Employment":
             return "S408"
         return "S406"
+
+
+# Additional strategies for other statutes
+
+@st.composite
+def murder_case_strategy(draw):
+    """Generate murder case data based on S300."""
+    mens_rea_types = [
+        "IntentionToCauseDeath",
+        "IntentionToInflictInjuryKnownLikelyToCauseDeath",
+        "IntentionToInflictBodilyInjurySufficientToKill",
+        "KnowledgeActSoDangerousDeathLikely",
+        "NA",
+    ]
+    exception_types = [
+        "GraveAndSuddenProvocation",
+        "ExceedingPrivateDefence",
+        "PublicServantExceedingPowers",
+        "SuddenFight",
+        "VictimConsent",
+        "DiminishedResponsibility",
+        "Infanticide",
+        "NA",
+    ]
+
+    return {
+        "accused_name": draw(person_name_strategy()),
+        "victim_name": draw(person_name_strategy()),
+        "culpable_homicide": draw(st.booleans()),
+        "mens_rea": draw(st.sampled_from(mens_rea_types)),
+        "exception": draw(st.sampled_from(exception_types)),
+        "deprived_of_self_control": draw(st.booleans()),
+        "premeditation": draw(st.booleans()),
+    }
+
+
+@st.composite
+def theft_case_strategy(draw):
+    """Generate theft case data based on S378."""
+    property_types = ["Tangible", "Intangible", "SeveredFromLand", "NA"]
+    intention_types = ["WrongfulGain", "WrongfulLoss", "WrongfulGainAndLoss", "NA"]
+
+    return {
+        "accused_name": draw(person_name_strategy()),
+        "victim_name": draw(person_name_strategy()),
+        "property_type": draw(st.sampled_from(property_types)),
+        "dishonest_intention": draw(st.sampled_from(intention_types)),
+        "without_consent": draw(st.booleans()),
+        "in_possession_of_another": draw(st.booleans()),
+        "property_moved": draw(st.booleans()),
+        "property_value": draw(money_strategy()),
+    }
+
+
+@st.composite
+def cheating_case_strategy(draw):
+    """Generate cheating case data based on S415."""
+    deception_types = ["Fraudulently", "Dishonestly", "NA"]
+    inducement_types = ["DeliverProperty", "ConsentRetainProperty", "DoOrOmit", "NA"]
+    harm_types = ["Body", "Mind", "Reputation", "Property", "NA"]
+
+    return {
+        "accused_name": draw(person_name_strategy()),
+        "victim_name": draw(person_name_strategy()),
+        "deception_type": draw(st.sampled_from(deception_types)),
+        "inducement_type": draw(st.sampled_from(inducement_types)),
+        "sole_inducement": draw(st.booleans()),
+        "causes_harm": draw(st.booleans()),
+        "harm_type": draw(st.sampled_from(harm_types)),
+        "property_value": draw(money_strategy()),
+    }
+
+
+class TestMurderInvariants:
+    """Property-based tests for Murder (S300) invariants."""
+
+    @given(murder_case_strategy())
+    @STATUTE_SETTINGS
+    def test_murder_requires_culpable_homicide(self, case):
+        """Murder requires underlying culpable homicide."""
+        if not case["culpable_homicide"]:
+            assert not self._is_murder(case), \
+                "Murder requires culpable homicide (S299) as foundation"
+
+    @given(murder_case_strategy())
+    @STATUTE_SETTINGS
+    def test_murder_requires_mens_rea(self, case):
+        """Murder requires one of four mens rea conditions."""
+        assume(case["culpable_homicide"])
+        if case["mens_rea"] == "NA":
+            assert not self._is_murder(case), \
+                "Murder requires specific mens rea under S300"
+
+    @given(murder_case_strategy())
+    @STATUTE_SETTINGS
+    def test_exception_reduces_to_culpable_homicide(self, case):
+        """Any valid exception reduces murder to culpable homicide."""
+        assume(case["culpable_homicide"] and case["mens_rea"] != "NA")
+        if case["exception"] != "NA":
+            # Exception should reduce murder to culpable homicide not amounting to murder
+            result = self._determine_offense(case)
+            assert result == "CulpableHomicideNotAmountingToMurder", \
+                "Exception should reduce murder to culpable homicide"
+
+    @given(murder_case_strategy())
+    @STATUTE_SETTINGS
+    def test_provocation_requires_loss_of_self_control(self, case):
+        """Provocation exception requires deprivation of self-control."""
+        assume(case["exception"] == "GraveAndSuddenProvocation")
+        if not case["deprived_of_self_control"]:
+            # Provocation defense should fail
+            valid_defense = self._is_valid_provocation(case)
+            assert not valid_defense, \
+                "Provocation requires loss of self-control"
+
+    @given(murder_case_strategy())
+    @STATUTE_SETTINGS
+    def test_sudden_fight_excludes_premeditation(self, case):
+        """Sudden fight exception excludes premeditation."""
+        assume(case["exception"] == "SuddenFight")
+        if case["premeditation"]:
+            valid_defense = self._is_valid_sudden_fight(case)
+            assert not valid_defense, \
+                "Sudden fight defense fails with premeditation"
+
+    def _is_murder(self, case):
+        """Determine if case constitutes murder."""
+        if not case["culpable_homicide"]:
+            return False
+        if case["mens_rea"] == "NA":
+            return False
+        if case["exception"] != "NA":
+            return False
+        return True
+
+    def _determine_offense(self, case):
+        """Determine the applicable offense."""
+        if not case["culpable_homicide"]:
+            return "NotCulpableHomicide"
+        if case["mens_rea"] == "NA":
+            return "CulpableHomicideNotAmountingToMurder"
+        if case["exception"] != "NA":
+            return "CulpableHomicideNotAmountingToMurder"
+        return "Murder"
+
+    def _is_valid_provocation(self, case):
+        """Check if provocation defense is valid."""
+        return case["deprived_of_self_control"]
+
+    def _is_valid_sudden_fight(self, case):
+        """Check if sudden fight defense is valid."""
+        return not case["premeditation"]
+
+
+class TestTheftInvariants:
+    """Property-based tests for Theft (S378) invariants."""
+
+    @given(theft_case_strategy())
+    @STATUTE_SETTINGS
+    def test_theft_requires_movable_property(self, case):
+        """Theft requires movable property."""
+        if case["property_type"] == "NA":
+            assert not self._is_theft(case), \
+                "Theft requires movable property"
+
+    @given(theft_case_strategy())
+    @STATUTE_SETTINGS
+    def test_theft_requires_dishonest_intention(self, case):
+        """Theft requires dishonest intention."""
+        if case["dishonest_intention"] == "NA":
+            assert not self._is_theft(case), \
+                "Theft requires dishonest intention"
+
+    @given(theft_case_strategy())
+    @STATUTE_SETTINGS
+    def test_theft_requires_without_consent(self, case):
+        """Theft requires taking without consent."""
+        if not case["without_consent"]:
+            assert not self._is_theft(case), \
+                "Theft requires absence of consent"
+
+    @given(theft_case_strategy())
+    @STATUTE_SETTINGS
+    def test_theft_requires_movement(self, case):
+        """Theft requires movement of property."""
+        if not case["property_moved"]:
+            assert not self._is_theft(case), \
+                "Theft requires movement of property"
+
+    @given(theft_case_strategy())
+    @STATUTE_SETTINGS
+    def test_all_elements_implies_theft(self, case):
+        """All five elements present implies theft."""
+        if (case["property_type"] != "NA" and
+            case["dishonest_intention"] != "NA" and
+            case["without_consent"] and
+            case["in_possession_of_another"] and
+            case["property_moved"]):
+            assert self._is_theft(case), \
+                "All elements present should establish theft"
+
+    def _is_theft(self, case):
+        """Determine if case constitutes theft."""
+        return (
+            case["property_type"] != "NA" and
+            case["dishonest_intention"] != "NA" and
+            case["without_consent"] and
+            case["in_possession_of_another"] and
+            case["property_moved"]
+        )
+
+
+class TestCheatingInvariants:
+    """Property-based tests for Cheating (S415) invariants."""
+
+    @given(cheating_case_strategy())
+    @STATUTE_SETTINGS
+    def test_cheating_requires_deception(self, case):
+        """Cheating requires deception (fraudulent or dishonest)."""
+        if case["deception_type"] == "NA":
+            assert not self._is_cheating(case), \
+                "Cheating requires deception"
+
+    @given(cheating_case_strategy())
+    @STATUTE_SETTINGS
+    def test_cheating_requires_inducement(self, case):
+        """Cheating requires inducement of some kind."""
+        if case["inducement_type"] == "NA":
+            assert not self._is_cheating(case), \
+                "Cheating requires inducement"
+
+    @given(cheating_case_strategy())
+    @STATUTE_SETTINGS
+    def test_cheating_requires_harm(self, case):
+        """Cheating requires actual or likely harm."""
+        if not case["causes_harm"]:
+            assert not self._is_cheating(case), \
+                "Cheating requires damage or harm"
+
+    @given(cheating_case_strategy())
+    @STATUTE_SETTINGS
+    def test_harm_requires_target(self, case):
+        """Harm must have a specific type."""
+        assume(case["causes_harm"])
+        if case["harm_type"] == "NA":
+            assert not self._is_cheating(case), \
+                "Harm must have specific type"
+
+    @given(cheating_case_strategy())
+    @STATUTE_SETTINGS
+    def test_all_elements_implies_cheating(self, case):
+        """All elements present implies cheating."""
+        if (case["deception_type"] != "NA" and
+            case["inducement_type"] != "NA" and
+            case["causes_harm"] and
+            case["harm_type"] != "NA"):
+            assert self._is_cheating(case), \
+                "All elements present should establish cheating"
+
+    def _is_cheating(self, case):
+        """Determine if case constitutes cheating."""
+        return (
+            case["deception_type"] != "NA" and
+            case["inducement_type"] != "NA" and
+            case["causes_harm"] and
+            case["harm_type"] != "NA"
+        )
+
+
+class TestLibraryStatuteParsing:
+    """Test that library statute files parse correctly."""
+
+    @pytest.mark.parametrize("statute_dir", [
+        "s299_culpable_homicide",
+        "s300_murder",
+        "s319_hurt",
+        "s378_theft",
+        "s383_extortion",
+        "s390_robbery",
+        "s403_dishonest_misappropriation",
+        "s415_cheating",
+        "s420_cheating_inducing_delivery",
+        "s463_forgery",
+        "s499_defamation",
+        "s503_criminal_breach_of_trust",
+    ])
+    def test_library_statute_parses(self, statute_dir):
+        """Library statutes should parse without errors."""
+        from yuho.parser import Parser
+
+        statute_path = (
+            Path(__file__).parent.parent /
+            "library" / "penal_code" / statute_dir / "statute.yh"
+        )
+        if not statute_path.exists():
+            pytest.skip(f"Statute file not found: {statute_path}")
+
+        parser = Parser()
+        result = parser.parse_file(statute_path)
+
+        assert result.tree is not None, f"{statute_dir} should parse successfully"
+
+    @pytest.mark.parametrize("statute_dir", [
+        "s300_murder",
+        "s378_theft",
+        "s415_cheating",
+        "s463_forgery",
+        "s499_defamation",
+        "s503_criminal_breach_of_trust",
+    ])
+    def test_library_illustrations_parse(self, statute_dir):
+        """Library illustrations should parse without errors."""
+        from yuho.parser import Parser
+
+        illustration_path = (
+            Path(__file__).parent.parent /
+            "library" / "penal_code" / statute_dir / "illustrations.yh"
+        )
+        if not illustration_path.exists():
+            pytest.skip(f"Illustration file not found: {illustration_path}")
+
+        parser = Parser()
+        result = parser.parse_file(illustration_path)
+
+        assert result.tree is not None, f"{statute_dir} illustrations should parse"
