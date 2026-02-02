@@ -70,17 +70,10 @@
 # NEOVIM: LSP extension with tree-sitter highlighting
 # ============================================================================
 
-(B) Create nvim-yuho plugin structure: lua/yuho/init.lua, queries/, ftdetect/ +neovim
-(B) Implement filetype detection for .yh files in ftdetect/yuho.vim +neovim
-(B) Bundle tree-sitter-yuho parser for nvim-treesitter integration +neovim
-(B) Write tree-sitter highlight queries in queries/yuho/highlights.scm +neovim
-(B) Write tree-sitter indent queries in queries/yuho/indents.scm +neovim
-(B) Write tree-sitter fold queries in queries/yuho/folds.scm +neovim
-(B) Implement LSP client configuration connecting to `yuho lsp` +neovim
-(B) Implement on_attach function enabling completion, diagnostics, formatting +neovim
 (C) Add which-key integration for Yuho-specific keybindings +neovim
 (C) Add telescope.nvim integration for statute symbol search +neovim
 (C) Add lualine.nvim integration showing current statute section in statusline +neovim
+
 
 # ============================================================================
 # ROADMAP: v6 items (visual editor and beyond)
