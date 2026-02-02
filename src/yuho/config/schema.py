@@ -70,6 +70,17 @@ class MCPSection:
 
 
 @dataclass
+class LibrarySection:
+    """[library] configuration section."""
+
+    registry_url: str = "https://registry.yuho.dev"
+    registry_api_version: str = "v1"
+    auth_token: Optional[str] = None
+    timeout: int = 30
+    verify_ssl: bool = True
+
+
+@dataclass
 class ConfigSchema:
     """Complete configuration schema."""
 
@@ -77,6 +88,7 @@ class ConfigSchema:
     transpile: TranspileSection = field(default_factory=TranspileSection)
     lsp: LSPSection = field(default_factory=LSPSection)
     mcp: MCPSection = field(default_factory=MCPSection)
+    library: LibrarySection = field(default_factory=LibrarySection)
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "ConfigSchema":
@@ -85,12 +97,14 @@ class ConfigSchema:
         transpile_data = data.get("transpile", {})
         lsp_data = data.get("lsp", {})
         mcp_data = data.get("mcp", {})
+        library_data = data.get("library", {})
 
         return cls(
             llm=LLMSection(**{k: v for k, v in llm_data.items() if k in LLMSection.__dataclass_fields__}),
             transpile=TranspileSection(**{k: v for k, v in transpile_data.items() if k in TranspileSection.__dataclass_fields__}),
             lsp=LSPSection(**{k: v for k, v in lsp_data.items() if k in LSPSection.__dataclass_fields__}),
             mcp=MCPSection(**{k: v for k, v in mcp_data.items() if k in MCPSection.__dataclass_fields__}),
+            library=LibrarySection(**{k: v for k, v in library_data.items() if k in LibrarySection.__dataclass_fields__}),
         )
 
     def to_dict(self) -> Dict[str, Any]:
@@ -123,5 +137,11 @@ class ConfigSchema:
                 "host": self.mcp.host,
                 "port": self.mcp.port,
                 "allowed_origins": self.mcp.allowed_origins,
+            },
+            "library": {
+                "registry_url": self.library.registry_url,
+                "registry_api_version": self.library.registry_api_version,
+                "timeout": self.library.timeout,
+                "verify_ssl": self.library.verify_ssl,
             },
         }

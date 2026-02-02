@@ -20,6 +20,12 @@ from yuho.library.index import (
 from yuho.library.install import (
     install_package,
     uninstall_package,
+    list_installed,
+    update_package,
+    check_updates,
+    download_package,
+    update_all_packages,
+    publish_package,
 )
 
 __all__ = [
@@ -30,4 +36,10 @@ __all__ = [
     "search_library",
     "install_package",
     "uninstall_package",
+    "list_installed",
+    "update_package",
+    "check_updates",
+    "download_package",
+    "update_all_packages",
+    "publish_package",
 ]
