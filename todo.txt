@@ -35,24 +35,13 @@
 # CONFIG: User configuration system
 # ============================================================================
 
-(B) Implement [transpile] config: default_target, latex_compiler, output_dir +config
-(B) Implement [lsp] config: diagnostic_severity_levels, completion_trigger_chars +config
-(B) Implement [mcp] config: host, port, allowed_origins, auth_token +config
-(B) Implement `yuho config show` command to display current configuration +config
-(B) Implement `yuho config set <key> <value>` command for runtime config updates +config
-(C) Implement config file validation with helpful error messages for invalid values +config
 
 # ============================================================================
 # TEST: Property-based testing with Hypothesis
 # ============================================================================
 
-(B) Implement exhaustiveness invariant: generated match exprs pass exhaustiveness check +test
-(B) Implement reachability invariant: no generated match arms are unreachable +test
-(B) Implement JSON round-trip invariant: from_json(to_json(ast)) == ast +test
-(B) Implement transpilation determinism: transpile(ast) == transpile(ast) (no randomness) +test
-(B) Implement cross-transpiler consistency: json_ast parsed from JSON equals original AST +test
-(C) Implement fuzzing harness for parser with arbitrary byte sequences +test
 (C) Implement differential testing against v4 Lark parser for compatible inputs +test
+
 
 # ============================================================================
 # VERIFY: Formal verification with Alloy and Z3
