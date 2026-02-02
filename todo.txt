@@ -40,7 +40,6 @@
 # TEST: Property-based testing with Hypothesis
 # ============================================================================
 
-(C) Implement differential testing against v4 Lark parser for compatible inputs +test
 
 
 # ============================================================================
@@ -58,7 +57,6 @@
 # STATUTES: Implement 10+ Penal Code sections for language breadth
 # ============================================================================
 
-(C) Write comprehensive test suite for each implemented statute using Hypothesis +statutes
 
 # ============================================================================
 # NEOVIM: LSP extension with tree-sitter highlighting
