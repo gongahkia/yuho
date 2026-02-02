@@ -300,6 +300,51 @@ def lsp(ctx: click.Context, tcp: Optional[int]) -> None:
     run_lsp(tcp=tcp, verbose=ctx.obj["verbose"])
 
 
+# =============================================================================
+# Completion command
+# =============================================================================
+
+
+@cli.command()
+@click.argument(
+    "shell",
+    type=click.Choice(["bash", "zsh", "fish"], case_sensitive=False),
+)
+@click.option(
+    "--install", "show_install",
+    is_flag=True,
+    help="Show installation instructions"
+)
+@click.pass_context
+def completion(ctx: click.Context, shell: str, show_install: bool) -> None:
+    """
+    Generate shell completion script.
+
+    Outputs a completion script for the specified shell that can be
+    sourced or saved to the appropriate location.
+
+    Examples:
+        # Bash: Add to ~/.bashrc
+        eval "$(yuho completion bash)"
+
+        # Zsh: Add to ~/.zshrc
+        eval "$(yuho completion zsh)"
+
+        # Fish: Save to completions directory
+        yuho completion fish > ~/.config/fish/completions/yuho.fish
+
+    Use --install to see detailed installation instructions.
+    """
+    from yuho.cli.completions import get_completion_script, get_install_instructions
+
+    shell_lower = shell.lower()
+
+    if show_install:
+        click.echo(get_install_instructions(shell_lower))
+    else:
+        click.echo(get_completion_script(shell_lower))
+
+
 def main() -> None:
     """Main entry point."""
     cli()
