@@ -6,6 +6,7 @@ Provides:
 - Contribution validation
 - Library indexing and search
 - Package installation and management
+- Dependency resolution with version constraints
 """
 
 from yuho.library.package import (
@@ -27,6 +28,14 @@ from yuho.library.install import (
     update_all_packages,
     publish_package,
 )
+from yuho.library.resolver import (
+    DependencyResolver,
+    Resolution,
+    Dependency,
+    Version,
+    VersionConstraint,
+    resolve_dependencies,
+)
 
 __all__ = [
     "Package",
@@ -42,4 +51,10 @@ __all__ = [
     "download_package",
     "update_all_packages",
     "publish_package",
+    "DependencyResolver",
+    "Resolution",
+    "Dependency",
+    "Version",
+    "VersionConstraint",
+    "resolve_dependencies",
 ]
