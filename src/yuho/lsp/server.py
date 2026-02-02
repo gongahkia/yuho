@@ -1269,8 +1269,28 @@ class YuhoLanguageServer(LanguageServer):
                     ),
                 ))
 
+            # Inline variable at cursor
+            inline_info = self._get_inline_variable_info(doc_state, range_)
+            if inline_info:
+                var_name, var_value, usage_ranges = inline_info
+                if usage_ranges:
+                    edits = []
+                    # Replace all usages with the value
+                    for usage_range in usage_ranges:
+                        edits.append(lsp.TextEdit(
+                            range=usage_range,
+                            new_text=var_value,
+                        ))
+                    actions.append(lsp.CodeAction(
+                        title=f"Inline variable '{var_name}'",
+                        kind=lsp.CodeActionKind.RefactorInline,
+                        edit=lsp.WorkspaceEdit(
+                            changes={uri: edits},
+                        ),
+                    ))
+
         return actions
-    
+
     def _get_type_conversion(self, from_type: str, to_type: str) -> Optional[str]:
         """Get conversion function name for type conversion."""
         conversions = {
@@ -1401,6 +1421,84 @@ class YuhoLanguageServer(LanguageServer):
             if match:
                 names.add(match.group(1))
         return names
+
+    def _get_inline_variable_info(
+        self, doc_state: DocumentState, range_: lsp.Range
+    ) -> Optional[Tuple[str, str, List[lsp.Range]]]:
+        """
+        Get information needed to inline a variable at cursor.
+
+        Args:
+            doc_state: Document state
+            range_: Cursor range
+
+        Returns:
+            Tuple of (var_name, var_value, list of usage ranges) or None
+        """
+        import re
+
+        # Get word at cursor
+        line = range_.start.line
+        char = range_.start.character
+        line_text = self._get_line_text(doc_state.source, line)
+
+        # Find word boundaries
+        word_start = char
+        while word_start > 0 and (line_text[word_start - 1].isalnum() or line_text[word_start - 1] == '_'):
+            word_start -= 1
+
+        word_end = char
+        while word_end < len(line_text) and (line_text[word_end].isalnum() or line_text[word_end] == '_'):
+            word_end += 1
+
+        if word_start == word_end:
+            return None
+
+        var_name = line_text[word_start:word_end]
+
+        # Look for variable definition: "let var_name = value" or "var_name := value"
+        var_value = None
+        definition_line = -1
+
+        lines = doc_state.source.splitlines()
+        for i, src_line in enumerate(lines):
+            # Match let binding: let x = value
+            let_match = re.match(rf'^\s*let\s+{re.escape(var_name)}\s*=\s*(.+)$', src_line)
+            if let_match:
+                var_value = let_match.group(1).strip()
+                definition_line = i
+                break
+
+            # Match assignment: x := value
+            assign_match = re.match(rf'^\s*{re.escape(var_name)}\s*:=\s*(.+)$', src_line)
+            if assign_match:
+                var_value = assign_match.group(1).strip()
+                definition_line = i
+                break
+
+        if not var_value:
+            return None
+
+        # Find all usages of the variable (excluding definition)
+        usage_ranges = []
+        var_pattern = re.compile(rf'\b{re.escape(var_name)}\b')
+
+        for line_num, src_line in enumerate(lines):
+            if line_num == definition_line:
+                continue  # Skip definition line
+
+            for match in var_pattern.finditer(src_line):
+                # Check it's not part of a definition
+                prefix = src_line[:match.start()]
+                if 'let ' in prefix or ':=' in src_line[match.start():]:
+                    continue
+
+                usage_ranges.append(lsp.Range(
+                    start=lsp.Position(line=line_num, character=match.start()),
+                    end=lsp.Position(line=line_num, character=match.end()),
+                ))
+
+        return (var_name, var_value, usage_ranges)
 
     def _find_similar_variants(self, doc_state: DocumentState, typo: str) -> List[str]:
         """Find enum variants similar to a typo using Levenshtein distance."""
