@@ -250,6 +250,40 @@ class YuhoLanguageServer(LanguageServer):
             settings = params.settings
             self._update_configuration(settings)
 
+        @self.feature(
+            lsp.TEXT_DOCUMENT_SEMANTIC_TOKENS_FULL,
+            lsp.SemanticTokensOptions(
+                legend=lsp.SemanticTokensLegend(
+                    token_types=[
+                        "namespace", "type", "class", "enum", "interface",
+                        "struct", "typeParameter", "parameter", "variable",
+                        "property", "enumMember", "event", "function", "method",
+                        "macro", "keyword", "modifier", "comment", "string",
+                        "number", "regexp", "operator",
+                    ],
+                    token_modifiers=[
+                        "declaration", "definition", "readonly", "static",
+                        "deprecated", "abstract", "async", "modification",
+                        "documentation", "defaultLibrary",
+                    ],
+                ),
+                full=True,
+            ),
+        )
+        def semantic_tokens_full(params: lsp.SemanticTokensParams) -> Optional[lsp.SemanticTokens]:
+            """Provide semantic tokens for enhanced syntax highlighting."""
+            uri = params.text_document.uri
+
+            return self._get_semantic_tokens(uri)
+
+        @self.feature(lsp.TEXT_DOCUMENT_INLAY_HINT)
+        def inlay_hint(params: lsp.InlayHintParams) -> List[lsp.InlayHint]:
+            """Provide inlay hints showing inferred types inline."""
+            uri = params.text_document.uri
+            range_ = params.range
+
+            return self._get_inlay_hints(uri, range_)
+
     def _publish_diagnostics(self, uri: str, doc_state: DocumentState):
         """Publish diagnostics for a document."""
         diagnostics: List[lsp.Diagnostic] = []
@@ -988,6 +1022,134 @@ class YuhoLanguageServer(LanguageServer):
                     logger.setLevel(getattr(logging, level))
 
             # Could add more configuration options here
+
+    def _get_semantic_tokens(self, uri: str) -> Optional[lsp.SemanticTokens]:
+        """Compute semantic tokens for the document."""
+        doc_state = self._documents.get(uri)
+        if not doc_state or not doc_state.ast:
+            return None
+
+        # Token type indices (matching the legend defined in handler)
+        TOKEN_TYPES = {
+            "namespace": 0, "type": 1, "class": 2, "enum": 3, "interface": 4,
+            "struct": 5, "typeParameter": 6, "parameter": 7, "variable": 8,
+            "property": 9, "enumMember": 10, "event": 11, "function": 12,
+            "method": 13, "macro": 14, "keyword": 15, "modifier": 16,
+            "comment": 17, "string": 18, "number": 19, "regexp": 20, "operator": 21,
+        }
+
+        # Modifier bit flags
+        MODIFIERS = {
+            "declaration": 0, "definition": 1, "readonly": 2, "static": 3,
+            "deprecated": 4, "abstract": 5, "async": 6, "modification": 7,
+            "documentation": 8, "defaultLibrary": 9,
+        }
+
+        tokens: List[tuple] = []  # (line, col, length, type_idx, modifier_bits)
+
+        # Collect tokens from structs
+        for struct in doc_state.ast.type_defs:
+            loc = struct.source_location
+            if loc:
+                # Struct name token
+                tokens.append((
+                    loc.line - 1,  # 0-indexed
+                    loc.col - 1,
+                    len(struct.name),
+                    TOKEN_TYPES["struct"],
+                    (1 << MODIFIERS["definition"]),
+                ))
+
+        # Collect tokens from functions
+        for func in doc_state.ast.function_defs:
+            loc = func.source_location
+            if loc:
+                tokens.append((
+                    loc.line - 1,
+                    loc.col - 1,
+                    len(func.name),
+                    TOKEN_TYPES["function"],
+                    (1 << MODIFIERS["definition"]),
+                ))
+
+            # Parameters
+            for param in func.params:
+                if param.source_location:
+                    tokens.append((
+                        param.source_location.line - 1,
+                        param.source_location.col - 1,
+                        len(param.name),
+                        TOKEN_TYPES["parameter"],
+                        0,
+                    ))
+
+        # Collect tokens from statutes
+        for statute in doc_state.ast.statutes:
+            loc = statute.source_location
+            if loc:
+                tokens.append((
+                    loc.line - 1,
+                    loc.col - 1,
+                    len(f"statute"),
+                    TOKEN_TYPES["keyword"],
+                    0,
+                ))
+
+        # Sort tokens by position
+        tokens.sort(key=lambda t: (t[0], t[1]))
+
+        # Encode as relative positions (LSP semantic tokens format)
+        data: List[int] = []
+        prev_line = 0
+        prev_col = 0
+
+        for line, col, length, type_idx, modifiers in tokens:
+            delta_line = line - prev_line
+            delta_col = col if delta_line > 0 else col - prev_col
+
+            data.extend([delta_line, delta_col, length, type_idx, modifiers])
+
+            prev_line = line
+            prev_col = col
+
+        return lsp.SemanticTokens(data=data)
+
+    def _get_inlay_hints(self, uri: str, range_: lsp.Range) -> List[lsp.InlayHint]:
+        """Provide inlay hints for inferred types and parameter names."""
+        hints: List[lsp.InlayHint] = []
+        doc_state = self._documents.get(uri)
+
+        if not doc_state or not doc_state.ast:
+            return hints
+
+        # Add type hints for variable declarations without explicit types
+        for var in doc_state.ast.variables:
+            loc = var.source_location
+            if not loc:
+                continue
+
+            # Check if in range
+            if loc.line - 1 < range_.start.line or loc.line - 1 > range_.end.line:
+                continue
+
+            # If variable has a value but type could be inferred
+            if var.value and var.type_annotation:
+                type_str = self._type_to_str(var.type_annotation)
+                hints.append(lsp.InlayHint(
+                    position=lsp.Position(
+                        line=loc.line - 1,
+                        character=loc.col + len(var.name),
+                    ),
+                    label=f": {type_str}",
+                    kind=lsp.InlayHintKind.Type,
+                    padding_left=False,
+                    padding_right=True,
+                ))
+
+        # Add parameter name hints for function calls
+        # (Requires deeper AST traversal - simplified for now)
+
+        return hints
 
     def _loc_to_range(self, loc: SourceLocation) -> lsp.Range:
         """Convert SourceLocation to LSP Range."""
