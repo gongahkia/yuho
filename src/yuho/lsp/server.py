@@ -284,6 +284,14 @@ class YuhoLanguageServer(LanguageServer):
 
             return self._get_inlay_hints(uri, range_)
 
+        @self.feature(lsp.TEXT_DOCUMENT_SIGNATURE_HELP)
+        def signature_help(params: lsp.SignatureHelpParams) -> Optional[lsp.SignatureHelp]:
+            """Provide signature help for function parameters."""
+            uri = params.text_document.uri
+            position = params.position
+
+            return self._get_signature_help(uri, position)
+
     def _publish_diagnostics(self, uri: str, doc_state: DocumentState):
         """Publish diagnostics for a document."""
         diagnostics: List[lsp.Diagnostic] = []
@@ -625,6 +633,122 @@ class YuhoLanguageServer(LanguageServer):
         
         return None
 
+    def _get_signature_help(
+        self, uri: str, position: lsp.Position
+    ) -> Optional[lsp.SignatureHelp]:
+        """Get signature help for function call at position."""
+        doc_state = self._documents.get(uri)
+        if not doc_state:
+            return None
+        
+        # Get the line up to cursor
+        lines = doc_state.source.splitlines()
+        if position.line >= len(lines):
+            return None
+        
+        line = lines[position.line]
+        line_to_cursor = line[:position.character]
+        
+        # Find function call context
+        func_name, param_index = self._parse_function_call_context(line_to_cursor)
+        if not func_name:
+            return None
+        
+        # Find the function definition
+        if doc_state.ast:
+            for func in doc_state.ast.function_defs:
+                if func.name == func_name:
+                    return self._build_signature_help(func, param_index)
+        
+        return None
+    
+    def _parse_function_call_context(self, line_to_cursor: str) -> tuple:
+        """
+        Parse the line to find function call context.
+        
+        Returns:
+            Tuple of (function_name, parameter_index) or (None, 0)
+        """
+        # Find the last unclosed parenthesis
+        paren_depth = 0
+        func_end = -1
+        
+        for i in range(len(line_to_cursor) - 1, -1, -1):
+            char = line_to_cursor[i]
+            if char == ')':
+                paren_depth += 1
+            elif char == '(':
+                if paren_depth == 0:
+                    func_end = i
+                    break
+                paren_depth -= 1
+        
+        if func_end < 0:
+            return (None, 0)
+        
+        # Extract function name before the opening paren
+        func_name_part = line_to_cursor[:func_end].rstrip()
+        
+        # Find start of identifier
+        func_start = len(func_name_part)
+        while func_start > 0 and (func_name_part[func_start - 1].isalnum() or 
+                                   func_name_part[func_start - 1] == '_'):
+            func_start -= 1
+        
+        func_name = func_name_part[func_start:]
+        if not func_name or not func_name[0].isalpha():
+            return (None, 0)
+        
+        # Count commas to determine parameter index
+        args_part = line_to_cursor[func_end + 1:]
+        param_index = 0
+        paren_depth = 0
+        
+        for char in args_part:
+            if char == '(':
+                paren_depth += 1
+            elif char == ')':
+                paren_depth -= 1
+            elif char == ',' and paren_depth == 0:
+                param_index += 1
+        
+        return (func_name, param_index)
+    
+    def _build_signature_help(self, func, active_param: int) -> lsp.SignatureHelp:
+        """Build SignatureHelp from function definition."""
+        # Build parameter info
+        parameters = []
+        params_str_parts = []
+        
+        for param in func.params:
+            type_str = self._type_to_str(param.type_annotation)
+            param_str = f"{param.name}: {type_str}"
+            params_str_parts.append(param_str)
+            
+            parameters.append(lsp.ParameterInformation(
+                label=param_str,
+                documentation=f"Parameter `{param.name}` of type `{type_str}`",
+            ))
+        
+        # Build full signature string
+        params_str = ", ".join(params_str_parts)
+        ret_str = ""
+        if func.return_type:
+            ret_str = f" -> {self._type_to_str(func.return_type)}"
+        
+        signature_str = f"fn {func.name}({params_str}){ret_str}"
+        
+        signature = lsp.SignatureInformation(
+            label=signature_str,
+            parameters=parameters,
+            active_parameter=min(active_param, len(parameters) - 1) if parameters else None,
+        )
+        
+        return lsp.SignatureHelp(
+            signatures=[signature],
+            active_signature=0,
+            active_parameter=active_param,
+        )
 
     def _get_document_symbols(self, uri: str) -> List[lsp.DocumentSymbol]:
         """Get document symbol hierarchy."""
