@@ -894,8 +894,10 @@ class YuhoLanguageServer(LanguageServer):
 
         # Check diagnostics for quick fixes
         for diagnostic in context.diagnostics:
-            if "undefined" in diagnostic.message.lower():
-                # Suggest adding an import
+            msg = diagnostic.message.lower()
+            
+            # Fix for undefined symbol
+            if "undefined" in msg:
                 word = self._extract_undefined_symbol(diagnostic.message)
                 if word:
                     actions.append(lsp.CodeAction(
@@ -914,8 +916,113 @@ class YuhoLanguageServer(LanguageServer):
                             },
                         ),
                     ))
+            
+            # Fix for missing match arms (non-exhaustive match)
+            if "non-exhaustive" in msg or "missing" in msg and "arm" in msg:
+                actions.append(lsp.CodeAction(
+                    title="Add wildcard pattern '_ =>'",
+                    kind=lsp.CodeActionKind.QuickFix,
+                    diagnostics=[diagnostic],
+                    edit=lsp.WorkspaceEdit(
+                        changes={
+                            uri: [lsp.TextEdit(
+                                range=lsp.Range(
+                                    start=lsp.Position(
+                                        line=diagnostic.range.end.line,
+                                        character=0,
+                                    ),
+                                    end=lsp.Position(
+                                        line=diagnostic.range.end.line,
+                                        character=0,
+                                    ),
+                                ),
+                                new_text="        _ => pass\n",
+                            )],
+                        },
+                    ),
+                ))
+            
+            # Fix for type mismatch
+            if "type mismatch" in msg or "expected" in msg and "got" in msg:
+                # Try to suggest conversion
+                import re
+                match = re.search(r"expected\s+(\w+).*got\s+(\w+)", msg)
+                if match:
+                    expected, got = match.groups()
+                    conversion = self._get_type_conversion(got, expected)
+                    if conversion:
+                        actions.append(lsp.CodeAction(
+                            title=f"Convert to {expected}",
+                            kind=lsp.CodeActionKind.QuickFix,
+                            diagnostics=[diagnostic],
+                            # Note: Full edit would wrap expression in conversion
+                        ))
+            
+            # Fix for missing struct fields
+            if "missing field" in msg:
+                field_match = re.search(r"missing field[s]?\s*['\"]?(\w+)", msg)
+                if field_match:
+                    field = field_match.group(1)
+                    actions.append(lsp.CodeAction(
+                        title=f"Add missing field '{field}'",
+                        kind=lsp.CodeActionKind.QuickFix,
+                        diagnostics=[diagnostic],
+                        edit=lsp.WorkspaceEdit(
+                            changes={
+                                uri: [lsp.TextEdit(
+                                    range=lsp.Range(
+                                        start=diagnostic.range.end,
+                                        end=diagnostic.range.end,
+                                    ),
+                                    new_text=f", {field}: TODO",
+                                )],
+                            },
+                        ),
+                    ))
+        
+        # Context-based refactorings (not tied to diagnostics)
+        if doc_state.ast:
+            # If inside a match expression, offer to add case
+            line_text = self._get_line_text(doc_state.source, range_.start.line)
+            if "match" in line_text.lower():
+                actions.append(lsp.CodeAction(
+                    title="Add match case",
+                    kind=lsp.CodeActionKind.Refactor,
+                    edit=lsp.WorkspaceEdit(
+                        changes={
+                            uri: [lsp.TextEdit(
+                                range=lsp.Range(
+                                    start=lsp.Position(line=range_.end.line + 1, character=0),
+                                    end=lsp.Position(line=range_.end.line + 1, character=0),
+                                ),
+                                new_text="    case TODO => pass\n",
+                            )],
+                        },
+                    ),
+                ))
 
         return actions
+    
+    def _get_type_conversion(self, from_type: str, to_type: str) -> Optional[str]:
+        """Get conversion function name for type conversion."""
+        conversions = {
+            ("int", "float"): "to_float",
+            ("float", "int"): "to_int",
+            ("string", "int"): "parse_int",
+            ("string", "float"): "parse_float",
+            ("int", "string"): "to_string",
+            ("float", "string"): "to_string",
+            ("bool", "string"): "to_string",
+        }
+        return conversions.get((from_type.lower(), to_type.lower()))
+    
+    def _get_line_text(self, source: str, line: int) -> str:
+        """Get text of a specific line."""
+        lines = source.splitlines()
+        if 0 <= line < len(lines):
+            return lines[line]
+        return ""
+
 
     def _extract_undefined_symbol(self, message: str) -> Optional[str]:
         """Extract undefined symbol name from error message."""
