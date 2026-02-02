@@ -98,6 +98,11 @@ from yuho.ast.constant_folder import (
     ConstantFoldingError,
     fold_constants,
 )
+from yuho.ast.dead_code import (
+    DeadCodeEliminator,
+    EliminationStats,
+    eliminate_dead_code,
+)
 
 __all__ = [
     # Base
@@ -184,4 +189,8 @@ __all__ = [
     "ConstantFolder",
     "ConstantFoldingError",
     "fold_constants",
+    # Dead code elimination
+    "DeadCodeEliminator",
+    "EliminationStats",
+    "eliminate_dead_code",
 ]
