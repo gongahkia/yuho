@@ -523,6 +523,114 @@ class Z3Solver:
         result = self.check_satisfiability(z3_constraints)
         return result.model if result.satisfiable else None
 
+    def enumerate_models(
+        self, constraints: List[Any], max_models: int = 10
+    ) -> List[Dict[str, Any]]:
+        """
+        Enumerate multiple satisfying models for given constraints.
+        
+        Finds up to max_models different satisfying assignments that
+        fulfill the constraints. Useful for test case generation and
+        exploring solution spaces.
+        
+        Args:
+            constraints: List of Z3 constraints
+            max_models: Maximum number of models to enumerate
+            
+        Returns:
+            List of model dictionaries (empty if UNSAT)
+        """
+        if not Z3_AVAILABLE:
+            return []
+        
+        solver = z3.Solver()
+        solver.set("timeout", self.timeout_ms)
+        
+        # Add all constraints
+        for c in constraints:
+            if c is not None:
+                solver.add(c)
+        
+        models = []
+        extractor = Z3CounterexampleExtractor()
+        
+        for _ in range(max_models):
+            result = solver.check()
+            
+            if result != z3.sat:
+                break
+            
+            # Extract model
+            model = solver.model()
+            model_dict = extractor.model_to_counterexample(model)
+            models.append(model_dict)
+            
+            # Block this solution to find a different one
+            block_constraint = []
+            for decl in model.decls():
+                const = decl()
+                value = model[decl]
+                # Add constraint that at least one variable must differ
+                block_constraint.append(const != value)
+            
+            if block_constraint:
+                solver.add(z3.Or(block_constraint))
+            else:
+                # No variables to block, can't enumerate more
+                break
+        
+        return models
+    
+    def enumerate_statute_interpretations(
+        self, ast: "ModuleNode", max_interpretations: int = 5
+    ) -> List[Dict[str, Any]]:
+        """
+        Enumerate valid interpretations of statute constraints.
+        
+        Finds multiple satisfying models that represent different
+        valid interpretations of the statutes.
+        
+        Args:
+            ast: ModuleNode from Yuho AST
+            max_interpretations: Maximum interpretations to find
+            
+        Returns:
+            List of interpretation dictionaries
+        """
+        generator = Z3Generator()
+        solver, assertions = generator.generate(ast)
+        
+        if not Z3_AVAILABLE or solver is None:
+            return []
+        
+        interpretations = []
+        extractor = Z3CounterexampleExtractor()
+        
+        for i in range(max_interpretations):
+            result = solver.check()
+            
+            if result != z3.sat:
+                break
+            
+            model = solver.model()
+            interpretation = extractor.model_to_counterexample(model)
+            interpretation['interpretation_id'] = i + 1
+            interpretations.append(interpretation)
+            
+            # Block this interpretation
+            block_constraints = []
+            for decl in model.decls():
+                const = decl()
+                value = model[decl]
+                block_constraints.append(const != value)
+            
+            if block_constraints:
+                solver.add(z3.Or(block_constraints))
+            else:
+                break
+        
+        return interpretations
+
     def check_statute_consistency(
         self, ast: "ModuleNode"
     ) -> Tuple[bool, List[Z3Diagnostic]]:
