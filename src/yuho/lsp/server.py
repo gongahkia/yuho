@@ -189,6 +189,67 @@ class YuhoLanguageServer(LanguageServer):
 
             return self._format_document(uri)
 
+        @self.feature(lsp.TEXT_DOCUMENT_RANGE_FORMATTING)
+        def range_formatting(params: lsp.DocumentRangeFormattingParams) -> List[lsp.TextEdit]:
+            """Format a selection of the document."""
+            uri = params.text_document.uri
+            range_ = params.range
+
+            return self._format_range(uri, range_)
+
+        @self.feature(lsp.TEXT_DOCUMENT_RENAME)
+        def rename(params: lsp.RenameParams) -> Optional[lsp.WorkspaceEdit]:
+            """Rename symbol across workspace."""
+            uri = params.text_document.uri
+            position = params.position
+            new_name = params.new_name
+
+            return self._rename_symbol(uri, position, new_name)
+
+        @self.feature(lsp.TEXT_DOCUMENT_PREPARE_RENAME)
+        def prepare_rename(params: lsp.PrepareRenameParams) -> Optional[lsp.PrepareRenameResult_Type1]:
+            """Check if rename is valid at position."""
+            uri = params.text_document.uri
+            position = params.position
+
+            return self._prepare_rename(uri, position)
+
+        @self.feature(lsp.WORKSPACE_SYMBOL)
+        def workspace_symbol(params: lsp.WorkspaceSymbolParams) -> List[lsp.SymbolInformation]:
+            """Search for symbols across workspace."""
+            query = params.query
+
+            return self._workspace_symbol_search(query)
+
+        @self.feature(lsp.TEXT_DOCUMENT_CODE_ACTION)
+        def code_action(params: lsp.CodeActionParams) -> List[lsp.CodeAction]:
+            """Provide quick fixes and refactorings."""
+            uri = params.text_document.uri
+            range_ = params.range
+            context = params.context
+
+            return self._get_code_actions(uri, range_, context)
+
+        @self.feature(lsp.TEXT_DOCUMENT_CODE_LENS)
+        def code_lens(params: lsp.CodeLensParams) -> List[lsp.CodeLens]:
+            """Provide code lens annotations."""
+            uri = params.text_document.uri
+
+            return self._get_code_lenses(uri)
+
+        @self.feature(lsp.TEXT_DOCUMENT_FOLDING_RANGE)
+        def folding_range(params: lsp.FoldingRangeParams) -> List[lsp.FoldingRange]:
+            """Provide folding ranges for code folding."""
+            uri = params.text_document.uri
+
+            return self._get_folding_ranges(uri)
+
+        @self.feature(lsp.WORKSPACE_DID_CHANGE_CONFIGURATION)
+        def did_change_configuration(params: lsp.DidChangeConfigurationParams):
+            """Handle configuration changes."""
+            settings = params.settings
+            self._update_configuration(settings)
+
     def _publish_diagnostics(self, uri: str, doc_state: DocumentState):
         """Publish diagnostics for a document."""
         diagnostics: List[lsp.Diagnostic] = []
@@ -598,6 +659,335 @@ class YuhoLanguageServer(LanguageServer):
         except Exception as e:
             logger.warning(f"Format error: {e}")
             return []
+
+    def _format_range(self, uri: str, range_: lsp.Range) -> List[lsp.TextEdit]:
+        """Format a range of the document."""
+        doc_state = self._documents.get(uri)
+        if not doc_state:
+            return []
+
+        # For now, format the entire document - proper range formatting
+        # would require parsing and reformatting just the selection
+        return self._format_document(uri)
+
+    def _rename_symbol(
+        self, uri: str, position: lsp.Position, new_name: str
+    ) -> Optional[lsp.WorkspaceEdit]:
+        """Rename symbol at position across all documents."""
+        doc_state = self._documents.get(uri)
+        if not doc_state:
+            return None
+
+        word = self._get_word_at_position(doc_state.source, position)
+        if not word:
+            return None
+
+        # Validate new name is a valid identifier
+        if not new_name or not new_name[0].isalpha() and new_name[0] != '_':
+            return None
+        if not all(c.isalnum() or c == '_' for c in new_name):
+            return None
+
+        # Check if this is a renameable symbol (struct, function, variable, statute)
+        is_renameable = False
+        if doc_state.ast:
+            for struct in doc_state.ast.type_defs:
+                if struct.name == word:
+                    is_renameable = True
+                    break
+            for func in doc_state.ast.function_defs:
+                if func.name == word:
+                    is_renameable = True
+                    break
+
+        if not is_renameable:
+            return None
+
+        # Collect edits across all open documents
+        changes: Dict[str, List[lsp.TextEdit]] = {}
+
+        for doc_uri, doc in self._documents.items():
+            edits = self._find_and_replace_symbol(doc, word, new_name)
+            if edits:
+                changes[doc_uri] = edits
+
+        if not changes:
+            return None
+
+        return lsp.WorkspaceEdit(changes=changes)
+
+    def _find_and_replace_symbol(
+        self, doc_state: DocumentState, old_name: str, new_name: str
+    ) -> List[lsp.TextEdit]:
+        """Find all occurrences of symbol and create edits to replace with new name."""
+        edits: List[lsp.TextEdit] = []
+        lines = doc_state.source.splitlines()
+
+        for line_num, line in enumerate(lines):
+            col = 0
+            while True:
+                pos = line.find(old_name, col)
+                if pos == -1:
+                    break
+
+                # Check if it's a whole word
+                before_ok = pos == 0 or not (line[pos - 1].isalnum() or line[pos - 1] == '_')
+                after_pos = pos + len(old_name)
+                after_ok = after_pos >= len(line) or not (line[after_pos].isalnum() or line[after_pos] == '_')
+
+                if before_ok and after_ok:
+                    edits.append(lsp.TextEdit(
+                        range=lsp.Range(
+                            start=lsp.Position(line=line_num, character=pos),
+                            end=lsp.Position(line=line_num, character=after_pos),
+                        ),
+                        new_text=new_name,
+                    ))
+
+                col = after_pos
+
+        return edits
+
+    def _prepare_rename(
+        self, uri: str, position: lsp.Position
+    ) -> Optional[lsp.PrepareRenameResult_Type1]:
+        """Check if symbol at position can be renamed."""
+        doc_state = self._documents.get(uri)
+        if not doc_state:
+            return None
+
+        word = self._get_word_at_position(doc_state.source, position)
+        if not word:
+            return None
+
+        # Check if this is a renameable symbol
+        is_renameable = False
+        if doc_state.ast:
+            for struct in doc_state.ast.type_defs:
+                if struct.name == word:
+                    is_renameable = True
+                    break
+            for func in doc_state.ast.function_defs:
+                if func.name == word:
+                    is_renameable = True
+                    break
+
+        if not is_renameable:
+            return None
+
+        # Find the range of the word
+        lines = doc_state.source.splitlines()
+        line = lines[position.line] if position.line < len(lines) else ""
+        start = position.character
+        end = position.character
+
+        while start > 0 and (line[start - 1].isalnum() or line[start - 1] == '_'):
+            start -= 1
+        while end < len(line) and (line[end].isalnum() or line[end] == '_'):
+            end += 1
+
+        return lsp.PrepareRenameResult_Type1(
+            range=lsp.Range(
+                start=lsp.Position(line=position.line, character=start),
+                end=lsp.Position(line=position.line, character=end),
+            ),
+            placeholder=word,
+        )
+
+    def _workspace_symbol_search(self, query: str) -> List[lsp.SymbolInformation]:
+        """Search for symbols matching query across all documents."""
+        results: List[lsp.SymbolInformation] = []
+        query_lower = query.lower()
+
+        for uri, doc_state in self._documents.items():
+            if not doc_state.ast:
+                continue
+
+            # Search structs
+            for struct in doc_state.ast.type_defs:
+                if query_lower in struct.name.lower():
+                    loc = struct.source_location
+                    if loc:
+                        results.append(lsp.SymbolInformation(
+                            name=struct.name,
+                            kind=lsp.SymbolKind.Struct,
+                            location=lsp.Location(
+                                uri=uri,
+                                range=self._loc_to_range(loc),
+                            ),
+                        ))
+
+            # Search functions
+            for func in doc_state.ast.function_defs:
+                if query_lower in func.name.lower():
+                    loc = func.source_location
+                    if loc:
+                        results.append(lsp.SymbolInformation(
+                            name=func.name,
+                            kind=lsp.SymbolKind.Function,
+                            location=lsp.Location(
+                                uri=uri,
+                                range=self._loc_to_range(loc),
+                            ),
+                        ))
+
+            # Search statutes
+            for statute in doc_state.ast.statutes:
+                title = statute.title.value if statute.title else ""
+                if query_lower in f"s{statute.section_number}".lower() or query_lower in title.lower():
+                    loc = statute.source_location
+                    if loc:
+                        results.append(lsp.SymbolInformation(
+                            name=f"S{statute.section_number}: {title}",
+                            kind=lsp.SymbolKind.Module,
+                            location=lsp.Location(
+                                uri=uri,
+                                range=self._loc_to_range(loc),
+                            ),
+                        ))
+
+        return results
+
+    def _get_code_actions(
+        self, uri: str, range_: lsp.Range, context: lsp.CodeActionContext
+    ) -> List[lsp.CodeAction]:
+        """Provide code actions (quick fixes, refactorings)."""
+        actions: List[lsp.CodeAction] = []
+        doc_state = self._documents.get(uri)
+
+        if not doc_state:
+            return actions
+
+        # Check diagnostics for quick fixes
+        for diagnostic in context.diagnostics:
+            if "undefined" in diagnostic.message.lower():
+                # Suggest adding an import
+                word = self._extract_undefined_symbol(diagnostic.message)
+                if word:
+                    actions.append(lsp.CodeAction(
+                        title=f"Add import for '{word}'",
+                        kind=lsp.CodeActionKind.QuickFix,
+                        diagnostics=[diagnostic],
+                        edit=lsp.WorkspaceEdit(
+                            changes={
+                                uri: [lsp.TextEdit(
+                                    range=lsp.Range(
+                                        start=lsp.Position(line=0, character=0),
+                                        end=lsp.Position(line=0, character=0),
+                                    ),
+                                    new_text=f"import {word}\n",
+                                )],
+                            },
+                        ),
+                    ))
+
+        return actions
+
+    def _extract_undefined_symbol(self, message: str) -> Optional[str]:
+        """Extract undefined symbol name from error message."""
+        import re
+        match = re.search(r"undefined[:\s]+['\"]?(\w+)['\"]?", message, re.IGNORECASE)
+        if match:
+            return match.group(1)
+        return None
+
+    def _get_code_lenses(self, uri: str) -> List[lsp.CodeLens]:
+        """Provide code lenses (actionable annotations)."""
+        lenses: List[lsp.CodeLens] = []
+        doc_state = self._documents.get(uri)
+
+        if not doc_state or not doc_state.ast:
+            return lenses
+
+        # Add "Run tests" lens above statute definitions
+        for statute in doc_state.ast.statutes:
+            loc = statute.source_location
+            if loc:
+                lenses.append(lsp.CodeLens(
+                    range=lsp.Range(
+                        start=lsp.Position(line=loc.line - 1, character=0),
+                        end=lsp.Position(line=loc.line - 1, character=0),
+                    ),
+                    command=lsp.Command(
+                        title=f"▶ Run tests for S{statute.section_number}",
+                        command="yuho.runStatuteTests",
+                        arguments=[uri, statute.section_number],
+                    ),
+                ))
+
+        # Add "Transpile" lens above statute definitions
+        for statute in doc_state.ast.statutes:
+            loc = statute.source_location
+            if loc:
+                lenses.append(lsp.CodeLens(
+                    range=lsp.Range(
+                        start=lsp.Position(line=loc.line - 1, character=0),
+                        end=lsp.Position(line=loc.line - 1, character=0),
+                    ),
+                    command=lsp.Command(
+                        title="📄 Transpile to English",
+                        command="yuho.transpileStatute",
+                        arguments=[uri, statute.section_number, "english"],
+                    ),
+                ))
+
+        return lenses
+
+    def _get_folding_ranges(self, uri: str) -> List[lsp.FoldingRange]:
+        """Provide folding ranges for code folding."""
+        ranges: List[lsp.FoldingRange] = []
+        doc_state = self._documents.get(uri)
+
+        if not doc_state or not doc_state.ast:
+            return ranges
+
+        # Fold structs
+        for struct in doc_state.ast.type_defs:
+            loc = struct.source_location
+            if loc and loc.end_line > loc.line:
+                ranges.append(lsp.FoldingRange(
+                    start_line=loc.line - 1,
+                    end_line=loc.end_line - 1,
+                    kind=lsp.FoldingRangeKind.Region,
+                ))
+
+        # Fold functions
+        for func in doc_state.ast.function_defs:
+            loc = func.source_location
+            if loc and loc.end_line > loc.line:
+                ranges.append(lsp.FoldingRange(
+                    start_line=loc.line - 1,
+                    end_line=loc.end_line - 1,
+                    kind=lsp.FoldingRangeKind.Region,
+                ))
+
+        # Fold statutes
+        for statute in doc_state.ast.statutes:
+            loc = statute.source_location
+            if loc and loc.end_line > loc.line:
+                ranges.append(lsp.FoldingRange(
+                    start_line=loc.line - 1,
+                    end_line=loc.end_line - 1,
+                    kind=lsp.FoldingRangeKind.Region,
+                ))
+
+        return ranges
+
+    def _update_configuration(self, settings: Any) -> None:
+        """Update server configuration from client settings."""
+        if not settings:
+            return
+
+        # Handle yuho-specific settings
+        yuho_settings = settings.get("yuho", {})
+        if yuho_settings:
+            # Update logging level
+            if "logLevel" in yuho_settings:
+                level = yuho_settings["logLevel"].upper()
+                if level in ("DEBUG", "INFO", "WARNING", "ERROR"):
+                    logger.setLevel(getattr(logging, level))
+
+            # Could add more configuration options here
 
     def _loc_to_range(self, loc: SourceLocation) -> lsp.Range:
         """Convert SourceLocation to LSP Range."""
