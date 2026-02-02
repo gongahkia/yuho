@@ -11,8 +11,6 @@
 # ============================================================================
 
 
-(A) Implement dependency resolution with version constraint solving +library
-(A) Implement version locking (yuho.lock file) for reproducible installs +library
 (B) Implement conflict detection when multiple packages define same section +library
 (B) Implement registry browsing with pagination and filtering +library
 (B) Add package signature verification with Ed25519 key management +library
@@ -23,13 +21,6 @@
 # CLI: Library subcommand
 # ============================================================================
 
-(A) Implement `yuho library search <query>` - search registry by keyword +cli
-(A) Implement `yuho library install <package>` - install from registry or path +cli
-(A) Implement `yuho library uninstall <package>` - remove installed package +cli
-(A) Implement `yuho library list` - show installed packages with versions +cli
-(B) Implement `yuho library update [package]` - update one or all packages +cli
-(B) Implement `yuho library publish <path>` - publish to registry +cli
-(B) Implement `yuho library info <package>` - show package details +cli
 (C) Implement `yuho library outdated` - show packages with updates available +cli
 (C) Implement `yuho library tree` - show dependency tree +cli
 
@@ -37,7 +28,6 @@
 # LSP: Enhanced capabilities
 # ============================================================================
 
-(A) Implement code actions for common errors (missing match arms, type mismatches) +lsp
 (A) Implement signature help for function parameters +lsp
 (B) Implement cross-file rename with workspace-wide symbol tracking +lsp
 (B) Implement quick fixes: add missing struct fields, fix enum variant typos +lsp
