@@ -80,6 +80,10 @@
 # DOCS: Remaining once everything else is done
 # ============================================================================
 
-(C) Read through every document within ./doc/ and rewrite/update them while keeping to the same writing style for the current v5 support
-(C) If a document within ./doc/ clearly refers to a previous version of Yuho v0-v4 or sandbox, update me
-(C) Update the following sections within README.md of Output formats of Rationale section and Nerd stuff (if required)
+# DOCUMENTATION STATUS (reviewed 2026-02-02):
+# - README.md: UPDATED for v5 (Output formats, Nerd stuff, Quickstart)
+# - doc/5_MINUTES.md: References yuho_v4 paths (lines 156, 544) - content still valid
+# - doc/ROADMAP.md: References sandbox/yuho_and_beyond (line 3) - roadmap items now in PRD
+# - doc/SYNTAX.md: Current, no changes needed
+# - doc/FAQ.md: Current, no changes needed
+# - doc/SCOPE.md: Current, no changes needed
