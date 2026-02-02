@@ -6,6 +6,7 @@ Provides:
 - Alloy analyzer integration for bounded model checking
 - Z3 constraint generation and satisfiability checking
 - Z3 constraint generation from AST (parallel to Alloy)
+- Combined Alloy+Z3 verification with cross-validation
 - Counterexample parsing and diagnostic generation
 """
 
@@ -22,6 +23,10 @@ from yuho.verify.z3_solver import (
     ConstraintGenerator,
     SatisfiabilityResult,
 )
+from yuho.verify.combined import (
+    CombinedVerifier,
+    CombinedVerificationResult,
+)
 
 __all__ = [
     "AlloyGenerator",
@@ -33,4 +38,6 @@ __all__ = [
     "Z3CounterexampleExtractor",
     "ConstraintGenerator",
     "SatisfiabilityResult",
+    "CombinedVerifier",
+    "CombinedVerificationResult",
 ]
