@@ -11,7 +11,6 @@
 # ============================================================================
 
 
-(A) Implement library index with search by section/keyword/jurisdiction/tags +library
 (A) Implement dependency resolution with version constraint solving +library
 (A) Implement version locking (yuho.lock file) for reproducible installs +library
 (B) Implement conflict detection when multiple packages define same section +library
