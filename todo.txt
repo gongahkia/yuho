@@ -60,8 +60,6 @@
 # STATUTES: Implement 10+ Penal Code sections for language breadth
 # ============================================================================
 
-(B) Implement S499 Defamation: demonstrate speech-based offense with exceptions +statutes
-(B) Implement S503 Criminal Breach of Trust: demonstrate fiduciary offense +statutes
 (C) Write comprehensive test suite for each implemented statute using Hypothesis +statutes
 (C) Create example illustrations for each statute showing typical fact patterns +statutes
 
