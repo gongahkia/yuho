@@ -36,6 +36,13 @@ from yuho.library.resolver import (
     VersionConstraint,
     resolve_dependencies,
 )
+from yuho.library.lockfile import (
+    LockFile,
+    LockFileManager,
+    LockedPackage,
+    load_lock_file,
+    create_lock_file,
+)
 
 __all__ = [
     "Package",
@@ -57,4 +64,9 @@ __all__ = [
     "Version",
     "VersionConstraint",
     "resolve_dependencies",
+    "LockFile",
+    "LockFileManager",
+    "LockedPackage",
+    "load_lock_file",
+    "create_lock_file",
 ]
