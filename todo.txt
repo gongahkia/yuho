@@ -65,25 +65,24 @@
 
 
 # ============================================================================
-# DOCS: Remaining once everything else is done
-# ============================================================================
-
-# DOCUMENTATION STATUS (reviewed 2026-02-02):
-# - README.md: UPDATED for v5 (Output formats, Nerd stuff, Quickstart)
-# - doc/5_MINUTES.md: References yuho_v4 paths (lines 156, 544) - content still valid
-# - doc/ROADMAP.md: References sandbox/yuho_and_beyond (line 3) - roadmap items now in PRD
-# - doc/SYNTAX.md: Current, no changes needed
-# - doc/FAQ.md: Current, no changes needed
-# - doc/SCOPE.md: Current, no changes needed
-
-# ============================================================================
 # ROADMAP: v6 items (visual editor and beyond)
 # ============================================================================
 
-(D) [v6] Design Scratch-like block palette for Yuho constructs with Svelte but ensure it is entirely localhost and is not meant for actaul web deployment +roadmap
-(D) [v6] Implement drag-and-drop block editor using Blockly or custom Svelte components +roadmap
-(D) [v6] Implement bidirectional sync between block editor and .yh source that allows export/import as well +roadmap
-(D) [v6] Integrate existing neovim LSP extension with tree-sitter highlighting 
-(D) [v6] Add a neovim extension command to allow for opening the block editor and previewing .yh files as their block-like palette in localhost (functions simialr to markdown preview extension) +roadmap
-(D) [v6] Implement block-to-AST and AST-to-block converters +roadmap
-(D) [v6] Design guided statute builder wizard for non-programmers but don't need to make too fancy +roadmap
+(D) Design Scratch-like block palette for Yuho constructs with Svelte but ensure it is entirely localhost and is not meant for actaul web deployment +roadmap
+(D) Implement drag-and-drop block editor using Blockly or custom Svelte components +roadmap
+(D) Implement bidirectional sync between block editor and .yh source that allows export/import as well +roadmap
+(D) Integrate existing neovim LSP extension with tree-sitter highlighting 
+(D) Add a neovim extension command to allow for opening the block editor and previewing .yh files as their block-like palette in localhost (functions simialr to markdown preview extension) +roadmap
+(D) Implement block-to-AST and AST-to-block converters +roadmap
+(D) Design guided statute builder wizard for non-programmers but don't need to make too fancy +roadmap
+
+# ============================================================================
+# DOCS
+# ============================================================================
+
+(D) update doc/5_MINUTES.md to ensure all references point to v5 only and the content itself is v5 accurate
+(D) read through doc/ROADMAP.md to edit the status of all tasks that have been completed within sandbox/yuho_and_beyond 
+(D) for other items within docs/ROADMAP.md undone, add to this todo.txt first but highlight these are pending my clarification
+(D) examine doc/SYNTAX.md and ensure there is nothing to update per yuho v5, if there is then update accordingly
+(D) examine doc/FAQ.md and ensure there is nothing to update per yuho v5, if there is then update accordingly
+(D) examine doc/SCOPE.md and ensure there is nothing to update per yuho v5, if there is then update accordingly
