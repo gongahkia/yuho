@@ -59,7 +59,6 @@
 # ============================================================================
 
 (C) Write comprehensive test suite for each implemented statute using Hypothesis +statutes
-(C) Create example illustrations for each statute showing typical fact patterns +statutes
 
 # ============================================================================
 # NEOVIM: LSP extension with tree-sitter highlighting
