@@ -5,20 +5,16 @@
 # AST: Internal representation and semantic analysis
 # ============================================================================
 
-(C) Implement ConstantFolder that evaluates compile-time constant expressions +ast
-(C) Implement DeadCodeEliminator that removes provably unreachable branches +ast
 
 # ============================================================================
 # TRANSPILATION: Multi-target code generation
 # ============================================================================
 
-(C) Implement TranspilerRegistry singleton mapping TranspileTarget to Transpiler instances +transpile
 
 # ============================================================================
 # CLI: Command-line interface with rich error messages
 # ============================================================================
 
-(C) Implement shell completion scripts for bash, zsh, fish +cli
 
 # ============================================================================
 # LSP: Full Language Server Protocol implementation
