@@ -1289,6 +1289,23 @@ class YuhoLanguageServer(LanguageServer):
                         ),
                     ))
 
+            # Convert struct literal to explicit form
+            struct_info = self._get_struct_literal_info(doc_state, range_)
+            if struct_info:
+                struct_range, explicit_form = struct_info
+                actions.append(lsp.CodeAction(
+                    title="Convert to explicit struct literal",
+                    kind=lsp.CodeActionKind.RefactorRewrite,
+                    edit=lsp.WorkspaceEdit(
+                        changes={
+                            uri: [lsp.TextEdit(
+                                range=struct_range,
+                                new_text=explicit_form,
+                            )],
+                        },
+                    ),
+                ))
+
         return actions
 
     def _get_type_conversion(self, from_type: str, to_type: str) -> Optional[str]:
@@ -1421,6 +1438,97 @@ class YuhoLanguageServer(LanguageServer):
             if match:
                 names.add(match.group(1))
         return names
+
+    def _get_struct_literal_info(
+        self, doc_state: DocumentState, range_: lsp.Range
+    ) -> Optional[Tuple[lsp.Range, str]]:
+        """
+        Get info to convert a positional struct literal to explicit form.
+
+        Detects patterns like: TypeName(val1, val2, ...)
+        Converts to: TypeName { field1: val1, field2: val2, ... }
+
+        Returns:
+            Tuple of (literal_range, explicit_form) or None
+        """
+        import re
+
+        line = range_.start.line
+        line_text = self._get_line_text(doc_state.source, line)
+
+        # Match positional struct: TypeName(arg1, arg2, ...)
+        # Must start with uppercase (type name convention)
+        struct_pattern = re.compile(r'([A-Z]\w*)\s*\(([^)]+)\)')
+
+        for match in struct_pattern.finditer(line_text):
+            match_start = match.start()
+            match_end = match.end()
+
+            # Check if cursor is within this match
+            if match_start <= range_.start.character <= match_end:
+                type_name = match.group(1)
+                args_str = match.group(2)
+
+                # Parse arguments
+                args = [a.strip() for a in args_str.split(',')]
+
+                # Try to find struct definition to get field names
+                field_names = self._get_struct_field_names(doc_state, type_name)
+
+                if not field_names:
+                    # Generate generic field names
+                    field_names = [f"field{i+1}" for i in range(len(args))]
+
+                # Build explicit form
+                if len(args) <= len(field_names):
+                    field_assignments = [
+                        f"{field_names[i]}: {args[i]}"
+                        for i in range(len(args))
+                    ]
+                    explicit_form = f"{type_name} {{ {', '.join(field_assignments)} }}"
+
+                    literal_range = lsp.Range(
+                        start=lsp.Position(line=line, character=match_start),
+                        end=lsp.Position(line=line, character=match_end),
+                    )
+
+                    return (literal_range, explicit_form)
+
+        return None
+
+    def _get_struct_field_names(self, doc_state: DocumentState, type_name: str) -> List[str]:
+        """Get field names for a struct type from AST or source."""
+        import re
+
+        field_names = []
+
+        # Try AST first
+        if doc_state.ast:
+            for type_def in doc_state.ast.type_defs:
+                if hasattr(type_def, 'name') and type_def.name == type_name:
+                    if hasattr(type_def, 'fields'):
+                        for field in type_def.fields:
+                            if hasattr(field, 'name'):
+                                field_names.append(field.name)
+                        if field_names:
+                            return field_names
+
+        # Fallback: parse source for struct definition
+        # Match: struct TypeName { field1: Type, field2: Type }
+        struct_pattern = re.compile(
+            rf'struct\s+{re.escape(type_name)}\s*\{{([^}}]+)\}}',
+            re.DOTALL
+        )
+
+        match = struct_pattern.search(doc_state.source)
+        if match:
+            fields_str = match.group(1)
+            # Extract field names: "name: Type" patterns
+            field_pattern = re.compile(r'(\w+)\s*:')
+            for field_match in field_pattern.finditer(fields_str):
+                field_names.append(field_match.group(1))
+
+        return field_names
 
     def _get_inline_variable_info(
         self, doc_state: DocumentState, range_: lsp.Range
