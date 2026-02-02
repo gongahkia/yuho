@@ -11,8 +11,6 @@
 # ============================================================================
 
 
-(B) Implement conflict detection when multiple packages define same section +library
-(B) Implement registry browsing with pagination and filtering +library
 (B) Add package signature verification with Ed25519 key management +library
 (C) Implement semantic versioning validation and compatibility checking +library
 (C) Add package deprecation and replacement tracking +library
@@ -28,7 +26,6 @@
 # LSP: Enhanced capabilities
 # ============================================================================
 
-(A) Implement signature help for function parameters +lsp
 (B) Implement cross-file rename with workspace-wide symbol tracking +lsp
 (B) Implement quick fixes: add missing struct fields, fix enum variant typos +lsp
 (B) Implement code action: extract match arm to named pattern +lsp
@@ -40,8 +37,6 @@
 # MCP: Complete TODO tools
 # ============================================================================
 
-(B) Implement `yuho_hover` tool - get hover info for position +mcp
-(B) Implement `yuho_definition` tool - find definition location +mcp
 (B) Implement `yuho_statute_to_yuho` tool - LLM-based natural language conversion +mcp
 
 # ============================================================================
