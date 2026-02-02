@@ -84,9 +84,52 @@ class YuhoLanguageServer(LanguageServer):
 
         # Document cache
         self._documents: Dict[str, DocumentState] = {}
+        
+        # Workspace folders for cross-file operations
+        self._workspace_folders: List[str] = []
+        
+        # Symbol index for workspace-wide lookups
+        self._symbol_index: Dict[str, Dict[str, Any]] = {}
 
         # Register handlers
         self._register_handlers()
+    
+    def _index_workspace_symbols(self, folder_uri: str) -> None:
+        """Index all Yuho files in workspace folder."""
+        from pathlib import Path
+        from urllib.parse import urlparse, unquote
+        
+        parsed = urlparse(folder_uri)
+        folder_path = Path(unquote(parsed.path))
+        
+        if not folder_path.exists():
+            return
+        
+        for yh_file in folder_path.rglob("*.yh"):
+            file_uri = f"file://{yh_file}"
+            if file_uri not in self._documents:
+                try:
+                    content = yh_file.read_text()
+                    doc_state = DocumentState(file_uri, content)
+                    doc_state._parse()
+                    
+                    # Index symbols
+                    if doc_state.ast:
+                        for struct in doc_state.ast.type_defs:
+                            self._symbol_index[struct.name] = {
+                                "kind": "struct",
+                                "uri": file_uri,
+                                "location": struct.source_location,
+                            }
+                        for func in doc_state.ast.function_defs:
+                            self._symbol_index[func.name] = {
+                                "kind": "function", 
+                                "uri": file_uri,
+                                "location": func.source_location,
+                            }
+                except Exception:
+                    pass
+
 
     def _register_handlers(self):
         """Register LSP request/notification handlers."""
@@ -868,11 +911,57 @@ class YuhoLanguageServer(LanguageServer):
             edits = self._find_and_replace_symbol(doc, word, new_name)
             if edits:
                 changes[doc_uri] = edits
+        
+        # Also search workspace files not currently open
+        for folder_uri in self._workspace_folders:
+            self._search_workspace_for_symbol(folder_uri, word, new_name, changes)
 
         if not changes:
             return None
 
         return lsp.WorkspaceEdit(changes=changes)
+    
+    def _search_workspace_for_symbol(
+        self,
+        folder_uri: str,
+        old_name: str,
+        new_name: str,
+        changes: Dict[str, List[lsp.TextEdit]],
+    ) -> None:
+        """Search workspace folder for symbol occurrences."""
+        from pathlib import Path
+        from urllib.parse import urlparse, unquote
+        
+        parsed = urlparse(folder_uri)
+        folder_path = Path(unquote(parsed.path))
+        
+        if not folder_path.exists():
+            return
+        
+        for yh_file in folder_path.rglob("*.yh"):
+            file_uri = f"file://{yh_file}"
+            
+            # Skip already-open documents
+            if file_uri in self._documents:
+                continue
+            
+            try:
+                content = yh_file.read_text()
+                
+                # Quick check if symbol appears in file
+                if old_name not in content:
+                    continue
+                
+                # Create temporary doc state for editing
+                temp_doc = DocumentState(file_uri, content)
+                edits = self._find_and_replace_symbol(temp_doc, old_name, new_name)
+                
+                if edits:
+                    changes[file_uri] = edits
+                    
+            except Exception:
+                pass
+
 
     def _find_and_replace_symbol(
         self, doc_state: DocumentState, old_name: str, new_name: str
