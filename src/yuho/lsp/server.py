@@ -335,6 +335,14 @@ class YuhoLanguageServer(LanguageServer):
 
             return self._get_signature_help(uri, position)
 
+        @self.feature(lsp.TEXT_DOCUMENT_SELECTION_RANGE)
+        def selection_range(params: lsp.SelectionRangeParams) -> Optional[List[lsp.SelectionRange]]:
+            """Provide selection ranges for expand/shrink selection."""
+            uri = params.text_document.uri
+            positions = params.positions
+
+            return self._get_selection_ranges(uri, positions)
+
     def _publish_diagnostics(self, uri: str, doc_state: DocumentState):
         """Publish diagnostics for a document."""
         diagnostics: List[lsp.Diagnostic] = []
@@ -791,6 +799,236 @@ class YuhoLanguageServer(LanguageServer):
             signatures=[signature],
             active_signature=0,
             active_parameter=active_param,
+        )
+
+    def _get_selection_ranges(
+        self, uri: str, positions: List[lsp.Position]
+    ) -> Optional[List[lsp.SelectionRange]]:
+        """
+        Get selection ranges for expand/shrink selection feature.
+
+        Returns nested ranges from smallest to largest enclosing syntax element.
+        """
+        doc_state = self._documents.get(uri)
+        if not doc_state:
+            return None
+
+        results = []
+        for position in positions:
+            selection_range = self._build_selection_range(doc_state, position)
+            results.append(selection_range)
+
+        return results
+
+    def _build_selection_range(
+        self, doc_state: DocumentState, position: lsp.Position
+    ) -> lsp.SelectionRange:
+        """Build nested selection ranges for a position."""
+        import re
+
+        line = position.line
+        char = position.character
+        lines = doc_state.source.splitlines()
+
+        if line >= len(lines):
+            # Return minimal range
+            return lsp.SelectionRange(
+                range=lsp.Range(start=position, end=position)
+            )
+
+        line_text = lines[line]
+        ranges: List[lsp.Range] = []
+
+        # Level 1: Word at cursor
+        word_start = char
+        word_end = char
+
+        while word_start > 0 and (line_text[word_start - 1].isalnum() or line_text[word_start - 1] == '_'):
+            word_start -= 1
+        while word_end < len(line_text) and (line_text[word_end].isalnum() or line_text[word_end] == '_'):
+            word_end += 1
+
+        if word_start != word_end:
+            ranges.append(lsp.Range(
+                start=lsp.Position(line=line, character=word_start),
+                end=lsp.Position(line=line, character=word_end),
+            ))
+
+        # Level 2: String literal if inside one
+        for match in re.finditer(r'"[^"]*"', line_text):
+            if match.start() <= char <= match.end():
+                ranges.append(lsp.Range(
+                    start=lsp.Position(line=line, character=match.start()),
+                    end=lsp.Position(line=line, character=match.end()),
+                ))
+                break
+
+        # Level 3: Bracketed expression (parentheses, braces, brackets)
+        for open_char, close_char in [('(', ')'), ('{', '}'), ('[', ']')]:
+            bracket_range = self._find_enclosing_brackets(
+                lines, line, char, open_char, close_char
+            )
+            if bracket_range:
+                ranges.append(bracket_range)
+
+        # Level 4: Current line (non-whitespace)
+        line_content_start = len(line_text) - len(line_text.lstrip())
+        line_content_end = len(line_text.rstrip())
+        if line_content_end > line_content_start:
+            ranges.append(lsp.Range(
+                start=lsp.Position(line=line, character=line_content_start),
+                end=lsp.Position(line=line, character=line_content_end),
+            ))
+
+        # Level 5: Full line including newline
+        ranges.append(lsp.Range(
+            start=lsp.Position(line=line, character=0),
+            end=lsp.Position(line=line + 1, character=0),
+        ))
+
+        # Level 6: Block (based on indentation)
+        block_range = self._find_indentation_block(lines, line)
+        if block_range:
+            ranges.append(block_range)
+
+        # Level 7: Entire document
+        ranges.append(lsp.Range(
+            start=lsp.Position(line=0, character=0),
+            end=lsp.Position(line=len(lines), character=0),
+        ))
+
+        # Remove duplicates and sort by size (smallest first)
+        unique_ranges = []
+        seen = set()
+        for r in ranges:
+            key = (r.start.line, r.start.character, r.end.line, r.end.character)
+            if key not in seen:
+                seen.add(key)
+                unique_ranges.append(r)
+
+        # Sort by range size
+        def range_size(r: lsp.Range) -> int:
+            start = r.start.line * 10000 + r.start.character
+            end = r.end.line * 10000 + r.end.character
+            return end - start
+
+        unique_ranges.sort(key=range_size)
+
+        # Build nested SelectionRange (smallest to largest)
+        if not unique_ranges:
+            return lsp.SelectionRange(
+                range=lsp.Range(start=position, end=position)
+            )
+
+        # Build from largest to smallest (parent first)
+        result = lsp.SelectionRange(range=unique_ranges[-1])
+        for r in reversed(unique_ranges[:-1]):
+            result = lsp.SelectionRange(range=r, parent=result)
+
+        return result
+
+    def _find_enclosing_brackets(
+        self, lines: List[str], line: int, char: int, open_char: str, close_char: str
+    ) -> Optional[lsp.Range]:
+        """Find the smallest enclosing bracket pair."""
+        # Flatten to single string with line tracking
+        line_text = lines[line]
+
+        # Search backwards for opening bracket
+        open_line, open_char_pos = line, char - 1
+        depth = 0
+
+        while open_line >= 0:
+            search_line = lines[open_line]
+            start_pos = open_char_pos if open_line == line else len(search_line) - 1
+
+            for i in range(start_pos, -1, -1):
+                c = search_line[i]
+                if c == close_char:
+                    depth += 1
+                elif c == open_char:
+                    if depth == 0:
+                        # Found opening bracket, now find closing
+                        close_line, close_char_pos = self._find_closing_bracket(
+                            lines, open_line, i, open_char, close_char
+                        )
+                        if close_line is not None:
+                            return lsp.Range(
+                                start=lsp.Position(line=open_line, character=i),
+                                end=lsp.Position(line=close_line, character=close_char_pos + 1),
+                            )
+                        return None
+                    depth -= 1
+
+            open_line -= 1
+            open_char_pos = len(lines[open_line]) - 1 if open_line >= 0 else 0
+
+        return None
+
+    def _find_closing_bracket(
+        self, lines: List[str], start_line: int, start_char: int, open_char: str, close_char: str
+    ) -> Tuple[Optional[int], int]:
+        """Find the matching closing bracket."""
+        depth = 1
+        line_num = start_line
+        char_pos = start_char + 1
+
+        while line_num < len(lines):
+            search_line = lines[line_num]
+            start_pos = char_pos if line_num == start_line else 0
+
+            for i in range(start_pos, len(search_line)):
+                c = search_line[i]
+                if c == open_char:
+                    depth += 1
+                elif c == close_char:
+                    depth -= 1
+                    if depth == 0:
+                        return (line_num, i)
+
+            line_num += 1
+
+        return (None, 0)
+
+    def _find_indentation_block(self, lines: List[str], line: int) -> Optional[lsp.Range]:
+        """Find block based on indentation level."""
+        if line >= len(lines):
+            return None
+
+        current_line = lines[line]
+        if not current_line.strip():
+            return None
+
+        current_indent = len(current_line) - len(current_line.lstrip())
+
+        # Find block start (first line with same or less indentation)
+        block_start = line
+        for i in range(line - 1, -1, -1):
+            l = lines[i]
+            if not l.strip():
+                continue
+            indent = len(l) - len(l.lstrip())
+            if indent < current_indent:
+                break
+            block_start = i
+
+        # Find block end
+        block_end = line
+        for i in range(line + 1, len(lines)):
+            l = lines[i]
+            if not l.strip():
+                continue
+            indent = len(l) - len(l.lstrip())
+            if indent < current_indent:
+                break
+            block_end = i
+
+        if block_start == block_end:
+            return None
+
+        return lsp.Range(
+            start=lsp.Position(line=block_start, character=0),
+            end=lsp.Position(line=block_end + 1, character=0),
         )
 
     def _get_document_symbols(self, uri: str) -> List[lsp.DocumentSymbol]:
