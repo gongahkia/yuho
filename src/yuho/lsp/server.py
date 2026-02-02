@@ -2,7 +2,7 @@
 Yuho Language Server Protocol implementation using pygls.
 """
 
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Optional, Any, Tuple
 import logging
 
 try:
@@ -1220,8 +1220,9 @@ class YuhoLanguageServer(LanguageServer):
 
         # Context-based refactorings (not tied to diagnostics)
         if doc_state.ast:
-            # If inside a match expression, offer to add case
             line_text = self._get_line_text(doc_state.source, range_.start.line)
+
+            # If inside a match expression, offer to add case
             if "match" in line_text.lower():
                 actions.append(lsp.CodeAction(
                     title="Add match case",
@@ -1235,6 +1236,35 @@ class YuhoLanguageServer(LanguageServer):
                                 ),
                                 new_text="    case TODO => pass\n",
                             )],
+                        },
+                    ),
+                ))
+
+            # Extract match arm to named pattern
+            pattern_info = self._extract_match_arm_pattern(doc_state, range_)
+            if pattern_info:
+                pattern_text, pattern_range = pattern_info
+                suggested_name = self._suggest_pattern_name(pattern_text, doc_state)
+                actions.append(lsp.CodeAction(
+                    title=f"Extract to named pattern '{suggested_name}'",
+                    kind=lsp.CodeActionKind.RefactorExtract,
+                    edit=lsp.WorkspaceEdit(
+                        changes={
+                            uri: [
+                                # Add pattern definition at top
+                                lsp.TextEdit(
+                                    range=lsp.Range(
+                                        start=lsp.Position(line=0, character=0),
+                                        end=lsp.Position(line=0, character=0),
+                                    ),
+                                    new_text=f"pattern {suggested_name} = {pattern_text}\n\n",
+                                ),
+                                # Replace pattern with name reference
+                                lsp.TextEdit(
+                                    range=pattern_range,
+                                    new_text=suggested_name,
+                                ),
+                            ],
                         },
                     ),
                 ))
@@ -1270,6 +1300,108 @@ class YuhoLanguageServer(LanguageServer):
             return match.group(1)
         return None
     
+    def _extract_match_arm_pattern(
+        self, doc_state: DocumentState, range_: lsp.Range
+    ) -> Optional[Tuple[str, lsp.Range]]:
+        """
+        Extract pattern text from a match arm at cursor position.
+
+        Returns:
+            Tuple of (pattern_text, pattern_range) if on a case pattern, else None
+        """
+        import re
+
+        line = range_.start.line
+        line_text = self._get_line_text(doc_state.source, line)
+
+        # Look for case pattern: "case <pattern> =>"
+        case_match = re.match(r'^(\s*)case\s+(.+?)\s*=>', line_text)
+        if not case_match:
+            return None
+
+        indent = case_match.group(1)
+        pattern = case_match.group(2).strip()
+
+        # Don't extract trivial patterns (wildcards, simple variables)
+        if pattern in ('_', 'true', 'false') or re.match(r'^\w+$', pattern):
+            return None
+
+        # Calculate pattern range
+        pattern_start_char = len(indent) + len("case ")
+        pattern_end_char = pattern_start_char + len(pattern)
+
+        pattern_range = lsp.Range(
+            start=lsp.Position(line=line, character=pattern_start_char),
+            end=lsp.Position(line=line, character=pattern_end_char),
+        )
+
+        return (pattern, pattern_range)
+
+    def _suggest_pattern_name(self, pattern_text: str, doc_state: DocumentState) -> str:
+        """
+        Suggest a name for an extracted pattern based on its content.
+
+        Args:
+            pattern_text: The pattern being extracted
+            doc_state: Document state for checking existing names
+
+        Returns:
+            A suggested snake_case pattern name
+        """
+        import re
+
+        # Extract meaningful parts from pattern
+        # e.g., "Person { name: \"John\" }" -> "john_person"
+        # e.g., "Amount > 100" -> "large_amount"
+
+        name_parts = []
+
+        # Look for struct/enum type name
+        struct_match = re.match(r'^(\w+)\s*\{', pattern_text)
+        if struct_match:
+            name_parts.append(struct_match.group(1).lower())
+
+        # Look for literal values
+        string_values = re.findall(r'"([^"]+)"', pattern_text)
+        for val in string_values[:2]:  # Max 2 string parts
+            # Convert to snake_case
+            clean_val = re.sub(r'[^a-zA-Z0-9]', '_', val.lower())
+            clean_val = re.sub(r'_+', '_', clean_val).strip('_')
+            if clean_val and len(clean_val) <= 20:
+                name_parts.insert(0, clean_val)
+
+        # Look for numeric comparisons
+        if '>' in pattern_text or '>=' in pattern_text:
+            name_parts.insert(0, "large")
+        elif '<' in pattern_text or '<=' in pattern_text:
+            name_parts.insert(0, "small")
+
+        # Fallback if no meaningful parts
+        if not name_parts:
+            name_parts = ["extracted_pattern"]
+
+        suggested = "_".join(name_parts)
+
+        # Ensure uniqueness by checking existing pattern names
+        existing_patterns = self._get_existing_pattern_names(doc_state)
+        base_name = suggested
+        counter = 1
+        while suggested in existing_patterns:
+            suggested = f"{base_name}_{counter}"
+            counter += 1
+
+        return suggested
+
+    def _get_existing_pattern_names(self, doc_state: DocumentState) -> set:
+        """Get set of existing pattern names in document."""
+        import re
+        names = set()
+        for line in doc_state.source.splitlines():
+            match = re.match(r'^\s*pattern\s+(\w+)\s*=', line)
+            if match:
+                names.add(match.group(1))
+        return names
+
     def _find_similar_variants(self, doc_state: DocumentState, typo: str) -> List[str]:
         """Find enum variants similar to a typo using Levenshtein distance."""
         if not doc_state.ast:
