@@ -418,6 +418,202 @@ def config_init(ctx: click.Context, force: bool) -> None:
     run_config_init(force=force, verbose=ctx.obj["verbose"])
 
 
+# =============================================================================
+# Library command
+# =============================================================================
+
+
+@cli.group()
+@click.pass_context
+def library(ctx: click.Context) -> None:
+    """
+    Manage Yuho statute packages.
+
+    Search, install, update, and manage statute packages from the library.
+    """
+    pass
+
+
+@library.command("search")
+@click.argument("query")
+@click.option("-j", "--jurisdiction", help="Filter by jurisdiction")
+@click.option("-t", "--tag", "tags", multiple=True, help="Filter by tag")
+@click.option("-n", "--limit", type=int, default=20, help="Max results")
+@click.option("--json", "json_output", is_flag=True, help="Output as JSON")
+@click.pass_context
+def library_search(
+    ctx: click.Context,
+    query: str,
+    jurisdiction: Optional[str],
+    tags: tuple,
+    limit: int,
+    json_output: bool,
+) -> None:
+    """
+    Search for packages in the library.
+
+    Examples:
+        yuho library search theft
+        yuho library search S403 --jurisdiction singapore
+    """
+    from yuho.cli.commands.library import run_library_search
+    run_library_search(
+        query,
+        jurisdiction=jurisdiction,
+        tags=list(tags) if tags else None,
+        limit=limit,
+        json_output=json_output,
+        verbose=ctx.obj["verbose"],
+    )
+
+
+@library.command("install")
+@click.argument("package")
+@click.option("-f", "--force", is_flag=True, help="Overwrite existing")
+@click.option("--no-deps", is_flag=True, help="Skip dependencies")
+@click.option("--json", "json_output", is_flag=True, help="Output as JSON")
+@click.pass_context
+def library_install(
+    ctx: click.Context,
+    package: str,
+    force: bool,
+    no_deps: bool,
+    json_output: bool,
+) -> None:
+    """
+    Install a package from registry or local path.
+
+    Examples:
+        yuho library install S403
+        yuho library install ./my-statute.yhpkg
+    """
+    from yuho.cli.commands.library import run_library_install
+    run_library_install(
+        package,
+        force=force,
+        no_deps=no_deps,
+        json_output=json_output,
+        verbose=ctx.obj["verbose"],
+    )
+
+
+@library.command("uninstall")
+@click.argument("package")
+@click.option("--json", "json_output", is_flag=True, help="Output as JSON")
+@click.pass_context
+def library_uninstall(
+    ctx: click.Context,
+    package: str,
+    json_output: bool,
+) -> None:
+    """
+    Uninstall an installed package.
+
+    Examples:
+        yuho library uninstall S403
+    """
+    from yuho.cli.commands.library import run_library_uninstall
+    run_library_uninstall(
+        package,
+        json_output=json_output,
+        verbose=ctx.obj["verbose"],
+    )
+
+
+@library.command("list")
+@click.option("--json", "json_output", is_flag=True, help="Output as JSON")
+@click.pass_context
+def library_list(ctx: click.Context, json_output: bool) -> None:
+    """
+    List all installed packages.
+    """
+    from yuho.cli.commands.library import run_library_list
+    run_library_list(json_output=json_output, verbose=ctx.obj["verbose"])
+
+
+@library.command("update")
+@click.argument("package", required=False)
+@click.option("--all", "all_packages", is_flag=True, help="Update all packages")
+@click.option("--json", "json_output", is_flag=True, help="Output as JSON")
+@click.pass_context
+def library_update(
+    ctx: click.Context,
+    package: Optional[str],
+    all_packages: bool,
+    json_output: bool,
+) -> None:
+    """
+    Update one or all packages.
+
+    Without arguments, shows available updates.
+    Use --all to apply all updates.
+
+    Examples:
+        yuho library update           # Show updates
+        yuho library update --all     # Apply all updates
+        yuho library update S403      # Update specific package
+    """
+    from yuho.cli.commands.library import run_library_update
+    run_library_update(
+        package,
+        all_packages=all_packages,
+        json_output=json_output,
+        verbose=ctx.obj["verbose"],
+    )
+
+
+@library.command("publish")
+@click.argument("path", type=click.Path(exists=True))
+@click.option("--registry", help="Registry URL")
+@click.option("--token", help="Auth token")
+@click.option("--json", "json_output", is_flag=True, help="Output as JSON")
+@click.pass_context
+def library_publish(
+    ctx: click.Context,
+    path: str,
+    registry: Optional[str],
+    token: Optional[str],
+    json_output: bool,
+) -> None:
+    """
+    Publish a package to the registry.
+
+    Examples:
+        yuho library publish ./my-statute --token $YUHO_TOKEN
+    """
+    from yuho.cli.commands.library import run_library_publish
+    run_library_publish(
+        path,
+        registry=registry,
+        token=token,
+        json_output=json_output,
+        verbose=ctx.obj["verbose"],
+    )
+
+
+@library.command("info")
+@click.argument("package")
+@click.option("--json", "json_output", is_flag=True, help="Output as JSON")
+@click.pass_context
+def library_info(
+    ctx: click.Context,
+    package: str,
+    json_output: bool,
+) -> None:
+    """
+    Show detailed package information.
+
+    Examples:
+        yuho library info S403
+    """
+    from yuho.cli.commands.library import run_library_info
+    run_library_info(
+        package,
+        json_output=json_output,
+        verbose=ctx.obj["verbose"],
+    )
+
+
 def main() -> None:
     """Main entry point."""
     cli()
