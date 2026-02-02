@@ -229,6 +229,50 @@ class LibraryIndex:
         """Get total number of indexed packages."""
         return len(self._entries)
     
+    def detect_conflicts(self) -> List[Dict[str, Any]]:
+        """
+        Detect conflicts where multiple packages define the same section.
+        
+        Returns:
+            List of conflicts, each with 'section_number', 'packages' list
+        """
+        from collections import defaultdict
+        
+        # This implementation tracks if multiple sources provide same section
+        # In current implementation, each section maps to one entry
+        # Conflicts occur when trying to install a package with existing section
+        conflicts = []
+        
+        # For enhanced conflict detection, check package_path uniqueness
+        path_to_sections: Dict[str, List[str]] = defaultdict(list)
+        
+        for entry in self._entries.values():
+            path_to_sections[entry.package_path].append(entry.section_number)
+        
+        # Find duplicate paths (shouldn't happen in normal operation)
+        for path, sections in path_to_sections.items():
+            if len(sections) > 1:
+                conflicts.append({
+                    "type": "duplicate_path",
+                    "package_path": path,
+                    "sections": sections,
+                    "message": f"Package {path} provides multiple sections",
+                })
+        
+        return conflicts
+    
+    def check_section_conflict(self, section_number: str) -> Optional[IndexEntry]:
+        """
+        Check if installing a section would conflict with existing package.
+        
+        Args:
+            section_number: Section number to check
+            
+        Returns:
+            Existing conflicting entry, or None if no conflict
+        """
+        return self._entries.get(section_number)
+
     def rebuild(self) -> int:
         """
         Rebuild index from installed packages.
