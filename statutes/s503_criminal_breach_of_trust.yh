@@ -1,0 +1,295 @@
+// Section 503 - Criminal Breach of Trust
+// Singapore Penal Code
+// Demonstrates fiduciary offense with entrustment and dishonest misappropriation
+
+// Types for breach of trust analysis
+enum EntrustmentType {
+    Employment,
+    Agency,
+    Partnership,
+    Trust,
+    JointProperty,
+    Guardianship,
+    BankingRelation,
+    PublicOffice,
+}
+
+enum MisappropriationType {
+    Conversion,           // Using property as own
+    Misappropriation,     // Applying for unauthorized purpose
+    Disposal,             // Sale or transfer
+    DishonestUse,         // Using for benefit other than owner
+}
+
+struct EntrustmentRelation {
+    string entrustor,
+    string entrustee,
+    EntrustmentType type,
+    string property_description,
+    money property_value,
+    string purpose_of_entrustment,
+}
+
+struct BreachElements {
+    bool property_entrusted,
+    bool dominion_over_property,
+    bool dishonest_misappropriation,
+    bool conversion_for_own_use,
+    bool disposal_in_violation,
+    MisappropriationType misappropriation_type,
+}
+
+struct CriminalBreachCase {
+    string accused_name,
+    EntrustmentRelation entrustment,
+    BreachElements elements,
+    money amount_involved,
+    bool public_servant,
+    bool banker_merchant,
+}
+
+// Section 405: Criminal Breach of Trust Definition  
+statute S405 {
+    section: "405"
+    title: "Criminal Breach of Trust"
+    
+    elements {
+        // Element 1: Entrustment
+        entrustment: "being in any manner entrusted with property, or with any dominion over property"
+        
+        // Element 2: Dishonest act
+        dishonest_act: "dishonestly misappropriates or converts to his own use that property"
+        
+        // Alternative Element 2: Disposal/Use
+        disposal: "dishonestly uses or disposes of that property in violation of any direction of law"
+        
+        // Alternative: Contract violation
+        contract_violation: "in violation of any legal contract, express or implied"
+    }
+    
+    // Main legal test for CBT
+    fn is_criminal_breach_of_trust(case: CriminalBreachCase) -> bool {
+        let elements := case.elements
+        
+        // First, check entrustment
+        match elements.property_entrusted {
+            case true => {
+                // Check dominion
+                match elements.dominion_over_property {
+                    case true => {
+                        // Check dishonest misappropriation
+                        return is_dishonest_breach(elements)
+                    }
+                    case false => false
+                }
+            }
+            case false => false
+        }
+    }
+    
+    // Check if breach was dishonest
+    fn is_dishonest_breach(elements: BreachElements) -> bool {
+        match elements.dishonest_misappropriation {
+            case true => true
+            case false => {
+                match elements.conversion_for_own_use {
+                    case true => true
+                    case false => {
+                        match elements.disposal_in_violation {
+                            case true => true
+                            case false => false
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    // Determine entrustment type significance
+    fn has_fiduciary_duty(etype: EntrustmentType) -> bool {
+        match etype {
+            case Employment => true
+            case Agency => true
+            case Partnership => true
+            case Trust => true
+            case Guardianship => true
+            case PublicOffice => true
+            case BankingRelation => true
+            case JointProperty => true
+        }
+    }
+    
+    penalty {
+        imprisonment: duration(0, 7, 0)  // Up to 7 years
+        fine: money(0, SGD)
+        both: true
+    }
+}
+
+// Section 406: Punishment for CBT
+statute S406 {
+    section: "406"
+    title: "Punishment of Criminal Breach of Trust"
+    
+    description: "Whoever commits criminal breach of trust shall be punished with imprisonment for a term which may extend to 7 years, or with fine, or with both."
+    
+    penalty {
+        imprisonment: duration(0, 7, 0)
+        fine: money(0, SGD)
+        both: true
+    }
+}
+
+// Section 407: CBT by Carrier
+statute S407 {
+    section: "407"
+    title: "Criminal Breach of Trust by Carrier, etc."
+    
+    elements {
+        entrustee_type: "a carrier, wharfinger, or warehouse-keeper"
+        property_entrusted: "entrusted in such capacity with property"
+    }
+    
+    penalty {
+        imprisonment: duration(0, 15, 0)  // Higher penalty
+        fine: money(0, SGD)
+        both: true
+    }
+}
+
+// Section 408: CBT by Clerk or Servant
+statute S408 {
+    section: "408"
+    title: "Criminal Breach of Trust by Clerk or Servant"
+    
+    elements {
+        position: "being a clerk or servant, or employed as a clerk or servant"
+        capacity: "in such capacity entrusted with property"
+    }
+    
+    // Aggravated due to position of trust from employment
+    fn is_aggravated_cbt(case: CriminalBreachCase) -> bool {
+        match case.entrustment.type {
+            case Employment => true
+            case _ => false
+        }
+    }
+    
+    penalty {
+        imprisonment: duration(0, 15, 0)  // Up to 15 years
+        fine: money(0, SGD)
+        both: true
+    }
+}
+
+// Section 409: CBT by Public Servant, Banker, Merchant, Agent
+statute S409 {
+    section: "409"
+    title: "Criminal Breach of Trust by Public Servant, or by Banker, Merchant, or Agent"
+    
+    elements {
+        position_type: "public servant, banker, merchant, or agent"
+        entrustment: "entrusted in such capacity with property"
+    }
+    
+    fn applies_to(case: CriminalBreachCase) -> bool {
+        return case.public_servant || case.banker_merchant
+    }
+    
+    penalty {
+        imprisonment: duration(0, 20, 0)   // Up to life imprisonment
+        fine: money(0, SGD)
+        caning: true                        // May include caning
+        both: true
+    }
+}
+
+// Master statute combining S405-S409
+statute S503_combined {
+    section: "503"
+    title: "Criminal Breach of Trust (Combined Analysis)"
+    
+    // Determine correct section based on case facts
+    fn determine_applicable_section(case: CriminalBreachCase) -> string {
+        // Check for S409 - Public servant/banker/merchant
+        match case.public_servant || case.banker_merchant {
+            case true => return "S409"
+            case false => {
+                // Check for S408 - Clerk/servant
+                match case.entrustment.type {
+                    case Employment => return "S408"
+                    case _ => {
+                        // Check for S407 - Carrier
+                        // Default to S406
+                        return "S406"
+                    }
+                }
+            }
+        }
+    }
+    
+    illustration A {
+        description: "A, being executor of the will of a deceased person, dishonestly disobeys the law which directs him to divide the estate according to the will, and appropriates it to his own use. A has committed criminal breach of trust."
+        
+        facts {
+            accused: "A"
+            position: "Executor of will"
+            entrustment_type: Trust
+            property: "Estate of deceased"
+            act: "Appropriated estate for own use"
+            intent: "Dishonest"
+        }
+        
+        analysis {
+            property_entrusted: true
+            dominion_over_property: true
+            dishonest_misappropriation: true
+            violated_legal_direction: true
+        }
+        
+        outcome: "A is guilty of criminal breach of trust under S405"
+    }
+    
+    illustration B {
+        description: "A is a warehouse-keeper. Z deposits 100 bales of cotton with A. A dishonestly sells the cotton and applies the money to his own use. A has committed criminal breach of trust under S407."
+        
+        facts {
+            accused: "A"
+            position: "Warehouse-keeper"
+            entrustment_type: Agency
+            property: "100 bales of cotton"
+            act: "Sold cotton, kept proceeds"
+        }
+        
+        analysis {
+            carrier_or_warehouse: true
+            property_entrusted: true
+            conversion: true
+            aggravated: true
+        }
+        
+        outcome: "A is guilty under S407 (carrier/warehouse-keeper)"
+    }
+    
+    illustration C {
+        description: "A, a bank manager, receives deposits from customers in his capacity as bank manager. He dishonestly misappropriates part of the deposits. A has committed criminal breach of trust under S409."
+        
+        facts {
+            accused: "A"
+            position: "Bank manager"
+            entrustment_type: BankingRelation
+            property: "Customer deposits"
+            act: "Misappropriated deposits"
+            banker: true
+        }
+        
+        analysis {
+            banker_merchant: true
+            property_entrusted: true
+            dishonest_misappropriation: true
+            most_aggravated: true
+        }
+        
+        outcome: "A is guilty under S409 (banker) - severest punishment"
+    }
+}

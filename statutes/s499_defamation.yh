@@ -1,0 +1,226 @@
+// Section 499 - Defamation
+// Singapore Penal Code
+// Demonstrates speech-based offense with exceptions
+
+// Types for defamation analysis
+enum PublicationType {
+    Spoken,           // Slander
+    Written,          // Libel
+    Printed,
+    Electronic,
+    Broadcast,
+    Visual,
+}
+
+enum DefamationDefense {
+    Truth,
+    PublicInterest,
+    FairComment,
+    PrivilegedOccasion,
+    Consent,
+}
+
+struct Imputation {
+    string content,
+    bool harms_reputation,
+    bool lowers_moral_character,
+    bool lowers_intellectual_character,
+    bool affects_profession,
+    bool affects_credit,
+}
+
+struct DefamationElements {
+    bool imputation_made,
+    bool published_to_third_party,
+    bool identified_person,
+    bool intention_to_harm,
+    bool reckless_publication,
+    Imputation imputation,
+}
+
+struct DefamationCase {
+    string accused_name,
+    string victim_name,
+    PublicationType publication_type,
+    string defamatory_statement,
+    bool public_figure,
+    DefamationElements elements,
+    DefamationDefense claimed_defense,
+}
+
+// Section 499: Defamation Definition
+statute S499 {
+    section: "499"
+    title: "Defamation"
+    
+    elements {
+        // Core definition
+        imputation: "Whoever, by words either spoken or intended to be read, or by signs, or by visible representations"
+        
+        // Harm to reputation
+        reputation_harm: "makes or publishes any imputation concerning any person"
+        
+        // Intent/Knowledge requirement
+        intent: "intending to harm, or knowing or having reason to believe that such imputation will harm, the reputation of such person"
+    }
+    
+    // Legal test for defamation
+    fn is_defamation(case: DefamationCase) -> bool {
+        let elements := case.elements
+        
+        // Check all elements present
+        match elements.imputation_made {
+            case true => {
+                match elements.published_to_third_party {
+                    case true => {
+                        match elements.identified_person {
+                            case true => {
+                                // Check intention or recklessness
+                                match elements.intention_to_harm || elements.reckless_publication {
+                                    case true => {
+                                        // Check if defense applies
+                                        return !has_valid_defense(case)
+                                    }
+                                    case false => false
+                                }
+                            }
+                            case false => false
+                        }
+                    }
+                    case false => false
+                }
+            }
+            case false => false
+        }
+    }
+    
+    // Check if imputation harms reputation
+    fn harms_reputation(imp: Imputation) -> bool {
+        return imp.harms_reputation ||
+               imp.lowers_moral_character ||
+               imp.lowers_intellectual_character ||
+               imp.affects_profession ||
+               imp.affects_credit
+    }
+    
+    // Check claimed defense validity
+    fn has_valid_defense(case: DefamationCase) -> bool {
+        match case.claimed_defense {
+            case Truth => {
+                // Truth is complete defense if for public good
+                return true
+            }
+            case PublicInterest => {
+                return case.public_figure
+            }
+            case FairComment => {
+                // Fair comment on matters of public interest
+                return true
+            }
+            case PrivilegedOccasion => {
+                // Absolute or qualified privilege
+                return true
+            }
+            case Consent => {
+                return true
+            }
+        }
+    }
+    
+    penalty {
+        imprisonment: duration(0, 2, 0)  // Up to 2 years
+        fine: money(0, SGD)              // Discretionary
+        both: true
+    }
+    
+    // Statutory Exceptions (from S499)
+    exception 1 {
+        title: "First Exception - Truth for Public Good"
+        description: "It is not defamation to impute anything which is true concerning any person, if it be for the public good that the imputation should be made or published."
+        
+        test: "Whether it is for the public good is a question of fact."
+    }
+    
+    exception 2 {
+        title: "Second Exception - Public Conduct of Public Servants"
+        description: "It is not defamation to express in good faith any opinion whatever respecting the conduct of a public servant in the discharge of his public functions, or respecting his character, so far as his character appears in that conduct."
+    }
+    
+    exception 3 {
+        title: "Third Exception - Public Question Conduct"
+        description: "It is not defamation to express in good faith any opinion whatever respecting the conduct of any person touching any public question, and respecting his character, so far as his character appears in that conduct."
+    }
+    
+    exception 4 {
+        title: "Fourth Exception - Court Proceedings"
+        description: "It is not defamation to publish a substantially true report of the proceedings of a court of justice, or of the result of any such proceedings."
+    }
+    
+    exception 5 {
+        title: "Fifth Exception - Merits of Decided Cases"
+        description: "It is not defamation to express in good faith any opinion whatever respecting the merits of any case, civil or criminal, which has been decided by a court of justice."
+    }
+    
+    exception 6 {
+        title: "Sixth Exception - Merits of Public Performance"
+        description: "It is not defamation to express in good faith any opinion respecting the merits of any performance which its author has submitted to the judgment of the public."
+    }
+    
+    exception 7 {
+        title: "Seventh Exception - Censure by Authority"
+        description: "It is not defamation in a person having over another any authority, either conferred by law or arising out of a lawful contract, to pass in good faith any censure on the conduct of that other in matters to which such lawful authority relates."
+    }
+    
+    exception 8 {
+        title: "Eighth Exception - Accusation to Authorities"
+        description: "It is not defamation to prefer in good faith an accusation against any person to any of those who have lawful authority over that person."
+    }
+    
+    exception 9 {
+        title: "Ninth Exception - Imputation Made in Good Faith"
+        description: "It is not defamation to make an imputation on the character of another, provided that the imputation be made in good faith for the protection of the interests of the person making it."
+    }
+    
+    exception 10 {
+        title: "Tenth Exception - Caution in Good Faith"
+        description: "It is not defamation to convey a caution, in good faith, to one person against another."
+    }
+    
+    illustration A {
+        description: "A says 'Z is an honest man; he never stole B's watch' intending to cause it to be believed that Z did steal B's watch. This is defamation, unless it falls within one of the exceptions."
+        
+        facts {
+            accused: "A"
+            statement: "Z is an honest man; he never stole B's watch"
+            implied_meaning: "Z stole B's watch"
+            intent: "Innuendo to harm Z's reputation"
+        }
+        
+        analysis {
+            imputation_made: true
+            harm_intended: true
+            innuendo: true
+        }
+        
+        outcome: "A is guilty of defamation under S499"
+    }
+    
+    illustration B {
+        description: "A publishes a biography of Z, stating facts tending to show that Z was dishonest in business dealings. If the facts are true and publication is for public benefit, A has not defamed Z."
+        
+        facts {
+            accused: "A"
+            publication: "Biography"
+            content: "Facts about dishonest business dealings"
+            truth: true
+            public_benefit: true
+        }
+        
+        analysis {
+            imputation_made: true
+            exception_1_applies: true
+        }
+        
+        outcome: "A is not guilty - First Exception applies"
+    }
+}

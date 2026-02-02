@@ -1,0 +1,165 @@
+// Section 463 - Forgery
+// Singapore Penal Code
+// Demonstrates document-related offense with elements and illustrations
+
+// Types for forgery analysis
+enum DocumentType {
+    PublicDocument,
+    PrivateDocument,
+    ElectronicRecord,
+    Signature,
+    Seal,
+    ValueSecurity,
+}
+
+enum ForgeryIntent {
+    CausePropertyDamage,
+    SupportClaim,
+    CauseDishonor,
+    CommitFraud,
+    Other,
+}
+
+struct ForgeryElements {
+    bool false_document_made,
+    bool intent_to_deceive,
+    bool representation_as_genuine,
+    DocumentType document_type,
+    ForgeryIntent intent_type,
+}
+
+struct ForgeryCase {
+    string accused_name,
+    string document_description,
+    DocumentType document_type,
+    bool dishonest_intent,
+    bool fraudulent_intent,
+    ForgeryElements elements,
+}
+
+// Section 463: Forgery Definition
+statute S463 {
+    section: "463"
+    title: "Forgery"
+    
+    elements {
+        // Element 1: Making of false document
+        making_false_document: "Whoever makes any false document or false electronic record"
+        
+        // Element 2: Part of false document
+        making_part: "or part of a document or electronic record"
+        
+        // Element 3: Intent requirement (disjunctive)
+        intent_requirement: "with intent to cause damage or injury, to the public or to any person, or to support any claim or title, or to cause any person to part with property, or to enter into any express or implied contract, or with intent to commit fraud or that fraud may be committed"
+    }
+    
+    // Legal test for forgery
+    fn is_forgery(case: ForgeryCase) -> bool {
+        // Check all elements are present
+        let elements := case.elements
+        
+        match elements.false_document_made {
+            case true => {
+                match elements.intent_to_deceive {
+                    case true => {
+                        // Forgery established if both false document and intent
+                        return true
+                    }
+                    case false => {
+                        // No intent - not forgery
+                        return false
+                    }
+                }
+            }
+            case false => {
+                // No false document made
+                return false
+            }
+        }
+    }
+    
+    // Check if document qualifies
+    fn qualifies_as_document(doc_type: DocumentType) -> bool {
+        match doc_type {
+            case PublicDocument => true
+            case PrivateDocument => true
+            case ElectronicRecord => true
+            case Signature => true
+            case Seal => true
+            case ValueSecurity => true
+        }
+    }
+    
+    penalty {
+        imprisonment: duration(0, 4, 0)  // Up to 4 years
+        fine: money(0, SGD)              // Discretionary fine
+        both: true                       // May include both
+    }
+    
+    // Illustrations demonstrating application
+    illustration A {
+        description: "A has a letter of credit upon B for $10,000, written by Z. A, in order to defraud B, adds a cipher to the 10,000 and makes the sum $100,000, intending that it may be believed by B that Z so wrote the letter. A has committed forgery."
+        
+        facts {
+            accused: "A"
+            document: "Letter of credit"
+            alteration: "Added cipher to change amount"
+            intent: "To defraud B"
+        }
+        
+        analysis {
+            false_document: true   // Modified genuine document
+            intent_to_deceive: true
+            fraudulent: true
+        }
+        
+        outcome: "A is guilty of forgery under S463"
+    }
+    
+    illustration B {
+        description: "A, without Z's authority, affixes Z's seal to a document purporting to be a conveyance of an estate from Z to A, with the intention of selling the estate to B, and thereby of obtaining from B the purchase-money. A has committed forgery."
+        
+        facts {
+            accused: "A"
+            document: "Conveyance of estate"
+            falsification: "Affixed Z's seal without authority"
+            intent: "To sell estate and obtain purchase money"
+        }
+        
+        analysis {
+            false_document: true
+            intent_to_deceive: true
+            property_fraud: true
+        }
+        
+        outcome: "A is guilty of forgery under S463"
+    }
+    
+    illustration C {
+        description: "A picks up a cheque on a banker signed by B, payable to bearer, but without any sum having been inserted in the cheque. A fraudulently fills up the cheque by inserting a sum of $10,000. A has committed forgery."
+        
+        facts {
+            accused: "A"
+            document: "Cheque"
+            falsification: "Filled in blank cheque"
+            amount: 10000
+            intent: "Fraudulent"
+        }
+        
+        analysis {
+            false_document: true   // Unauthorized completion
+            intent_to_deceive: true
+            fraudulent: true
+        }
+        
+        outcome: "A is guilty of forgery under S463"
+    }
+    
+    exceptions {
+        // Authorized alterations
+        authorized_alteration: "Alterations made with proper authority do not constitute forgery"
+        
+        // Clerical corrections
+        clerical_correction: "Good faith corrections of clerical errors are not forgery"
+    }
+}
