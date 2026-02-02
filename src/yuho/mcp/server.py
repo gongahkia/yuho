@@ -880,36 +880,74 @@ class YuhoMCPServer:
             """
             Convert natural language statute text to Yuho code using LLM.
 
+            Uses a structured prompt to convert legal statute descriptions
+            into valid Yuho DSL code with proper elements, penalties, and definitions.
+
             Args:
                 natural_text: Natural language description of a statute
 
             Returns:
-                {yuho_code: str} or {error: str}
+                {yuho_code: str, valid: bool, errors: list} or {error: str}
             """
+            import asyncio
+
             try:
-                from yuho.llm import get_provider
+                from yuho.llm import get_provider, STATUTE_TO_YUHO_PROMPT
+                from yuho.parser import Parser
 
+                # Get LLM provider
                 provider = get_provider()
+                if not provider.is_available():
+                    return {"error": "No LLM provider available. Configure Ollama or an API key."}
 
-                prompt = f"""Convert the following legal statute text into Yuho DSL code.
+                # Build prompt using the specialized template
+                prompt = STATUTE_TO_YUHO_PROMPT.format(statute_text=natural_text)
 
-Statute text:
-{natural_text}
+                # Run synchronous LLM call in executor to not block
+                loop = asyncio.get_event_loop()
+                response = await loop.run_in_executor(
+                    None, lambda: provider.generate(prompt, max_tokens=2000)
+                )
 
-Please generate valid Yuho code with:
-- Proper statute declaration with section number
-- Elements (actus_reus, mens_rea, circumstance)
-- Penalty section if applicable
-- Definitions if needed
+                # Extract code block if present
+                yuho_code = response.strip()
+                if "```" in yuho_code:
+                    # Extract code from markdown code block
+                    import re
+                    code_match = re.search(r"```(?:yuho)?\s*\n(.*?)```", yuho_code, re.DOTALL)
+                    if code_match:
+                        yuho_code = code_match.group(1).strip()
 
-Yuho code:"""
+                # Validate the generated code
+                parser = Parser()
+                result = parser.parse(yuho_code)
 
-                response = await provider.generate_async(prompt)
-                return {"yuho_code": response}
-            except ImportError:
-                return {"error": "LLM provider not configured"}
+                if result.errors:
+                    return {
+                        "yuho_code": yuho_code,
+                        "valid": False,
+                        "errors": [
+                            {
+                                "message": err.message,
+                                "line": err.location.line,
+                                "col": err.location.col,
+                            }
+                            for err in result.errors
+                        ],
+                        "note": "LLM generated code with syntax errors. Manual correction may be needed.",
+                    }
+
+                return {
+                    "yuho_code": yuho_code,
+                    "valid": True,
+                    "errors": [],
+                }
+
+            except ImportError as e:
+                missing = str(e).split("'")[-2] if "'" in str(e) else "llm dependencies"
+                return {"error": f"LLM provider not configured. Missing: {missing}. Install with: pip install yuho[llm]"}
             except Exception as e:
-                return {"error": str(e)}
+                return {"error": f"LLM generation failed: {str(e)}"}
 
     def _register_resources(self):
         """Register MCP resources."""
