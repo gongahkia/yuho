@@ -383,8 +383,103 @@ class YuhoMCPServer:
             Returns:
                 {info: str} or {info: null}
             """
-            # TODO: Implement proper position lookup
+            from yuho.parser import Parser
+            from yuho.ast import ASTBuilder
+            
+            # Keywords and their docs
+            KEYWORD_DOCS = {
+                "struct": "Defines a structured type with named fields.",
+                "fn": "Defines a function.",
+                "match": "Pattern matching expression.",
+                "case": "Case arm in a match expression.",
+                "statute": "Defines a legal statute with elements and penalties.",
+                "elements": "Section containing the elements of an offense.",
+                "penalty": "Section specifying the punishment for an offense.",
+                "actus_reus": "Physical/conduct element of an offense (guilty act).",
+                "mens_rea": "Mental element of an offense (guilty mind).",
+                "circumstance": "Circumstantial element required for the offense.",
+            }
+            
+            TYPE_DOCS = {
+                "int": "Integer number type (whole numbers).",
+                "float": "Floating-point number type (decimals).",
+                "bool": "Boolean type: TRUE or FALSE.",
+                "string": "Text string type.",
+                "money": "Monetary amount with currency (e.g., $1000.00 SGD).",
+                "percent": "Percentage value (0-100%).",
+                "date": "Calendar date (YYYY-MM-DD).",
+                "duration": "Time duration (years, months, days, etc.).",
+                "void": "No value type (for procedures).",
+            }
+            
+            # Get word at position
+            lines = file_content.splitlines()
+            if line < 1 or line > len(lines):
+                return {"info": None}
+            
+            target_line = lines[line - 1]
+            if col < 1 or col > len(target_line):
+                return {"info": None}
+            
+            # Extract word at position
+            start = col - 1
+            end = col - 1
+            while start > 0 and (target_line[start - 1].isalnum() or target_line[start - 1] == '_'):
+                start -= 1
+            while end < len(target_line) and (target_line[end].isalnum() or target_line[end] == '_'):
+                end += 1
+            
+            if start == end:
+                return {"info": None}
+            
+            word = target_line[start:end]
+            
+            # Check keywords
+            if word in KEYWORD_DOCS:
+                return {"info": f"**keyword** `{word}`\n\n{KEYWORD_DOCS[word]}"}
+            
+            # Check types
+            if word in TYPE_DOCS:
+                return {"info": f"**type** `{word}`\n\n{TYPE_DOCS[word]}"}
+            
+            # Parse for symbol info
+            parser = Parser()
+            result = parser.parse(file_content)
+            
+            if result.is_valid:
+                try:
+                    builder = ASTBuilder(file_content)
+                    ast = builder.build(result.root_node)
+                    
+                    # Check structs
+                    for struct in ast.type_defs:
+                        if struct.name == word:
+                            fields = ", ".join(f"{f.name}: {f.type_annotation}" for f in struct.fields)
+                            return {"info": f"**struct** `{struct.name}`\n\n```yuho\nstruct {struct.name} {{ {fields} }}\n```"}
+                    
+                    # Check functions
+                    for func in ast.function_defs:
+                        if func.name == word:
+                            params = ", ".join(f"{p.name}: {p.type_annotation}" for p in func.params)
+                            ret = f" -> {func.return_type}" if func.return_type else ""
+                            return {"info": f"**function** `{func.name}`\n\n```yuho\nfn {func.name}({params}){ret}\n```"}
+                    
+                    # Check statutes
+                    for statute in ast.statutes:
+                        if statute.section_number == word or f"S{statute.section_number}" == word:
+                            title = statute.title.value if statute.title else "Untitled"
+                            info = f"**Statute Section {statute.section_number}**: {title}"
+                            if statute.elements:
+                                info += "\n\n**Elements:**\n"
+                                for elem in statute.elements:
+                                    info += f"- {elem.element_type}: {elem.name}\n"
+                            return {"info": info}
+                            
+                except Exception:
+                    pass
+            
             return {"info": None}
+
 
         @self.server.tool()
         async def yuho_definition(file_content: str, line: int, col: int) -> Dict[str, Any]:
@@ -399,8 +494,76 @@ class YuhoMCPServer:
             Returns:
                 {location: {line, col}} or {location: null}
             """
-            # TODO: Implement proper definition lookup
+            from yuho.parser import Parser
+            from yuho.ast import ASTBuilder
+            
+            # Get word at position
+            lines = file_content.splitlines()
+            if line < 1 or line > len(lines):
+                return {"location": None}
+            
+            target_line = lines[line - 1]
+            if col < 1 or col > len(target_line):
+                return {"location": None}
+            
+            # Extract word at position
+            start = col - 1
+            end = col - 1
+            while start > 0 and (target_line[start - 1].isalnum() or target_line[start - 1] == '_'):
+                start -= 1
+            while end < len(target_line) and (target_line[end].isalnum() or target_line[end] == '_'):
+                end += 1
+            
+            if start == end:
+                return {"location": None}
+            
+            word = target_line[start:end]
+            
+            # Parse for symbol definitions
+            parser = Parser()
+            result = parser.parse(file_content)
+            
+            if result.is_valid:
+                try:
+                    builder = ASTBuilder(file_content)
+                    ast = builder.build(result.root_node)
+                    
+                    # Check struct definitions
+                    for struct in ast.type_defs:
+                        if struct.name == word and struct.source_location:
+                            return {
+                                "location": {
+                                    "line": struct.source_location.line,
+                                    "col": struct.source_location.col,
+                                }
+                            }
+                    
+                    # Check function definitions
+                    for func in ast.function_defs:
+                        if func.name == word and func.source_location:
+                            return {
+                                "location": {
+                                    "line": func.source_location.line,
+                                    "col": func.source_location.col,
+                                }
+                            }
+                    
+                    # Check statute definitions (by section number)
+                    for statute in ast.statutes:
+                        if (statute.section_number == word or 
+                            f"S{statute.section_number}" == word) and statute.source_location:
+                            return {
+                                "location": {
+                                    "line": statute.source_location.line,
+                                    "col": statute.source_location.col,
+                                }
+                            }
+                            
+                except Exception:
+                    pass
+            
             return {"location": None}
+
 
         @self.server.tool()
         async def yuho_references(file_content: str, line: int, col: int) -> Dict[str, Any]:
