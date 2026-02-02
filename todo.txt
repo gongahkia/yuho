@@ -2,37 +2,6 @@
 # Priority: (A) Critical/blocking, (B) Important, (C) Enhancement, (D) Future/v6
 
 # ============================================================================
-# VERIFY: Formal verification with Alloy and Z3
-# ============================================================================
-
-
-# ============================================================================
-# LIBRARY: Full registry and dependency management
-# ============================================================================
-
-
-
-# ============================================================================
-# CLI: Library subcommand
-# ============================================================================
-
-
-# ============================================================================
-# LSP: Enhanced capabilities
-# ============================================================================
-
-
-# ============================================================================
-# MCP: Complete TODO tools
-# ============================================================================
-
-
-# ============================================================================
-# TEST: User-facing test infrastructure
-# ============================================================================
-
-
-# ============================================================================
 # ROADMAP: v6 items (visual editor and beyond)
 # ============================================================================
 
@@ -43,8 +12,3 @@
 (D) Add a neovim extension command to allow for opening the block editor and previewing .yh files as their block-like palette in localhost (functions simialr to markdown preview extension) +roadmap
 (D) Implement block-to-AST and AST-to-block converters +roadmap
 (D) Design guided statute builder wizard for non-programmers but don't need to make too fancy +roadmap
-
-# ============================================================================
-# DOCS: Documentation updates for v5
-# ============================================================================
-
