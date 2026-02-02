@@ -638,6 +638,37 @@ def library_outdated(
     )
 
 
+@library.command("tree")
+@click.argument("package", required=False)
+@click.option("--depth", "-d", default=10, help="Maximum depth to display")
+@click.option("--json", "json_output", is_flag=True, help="Output as JSON")
+@click.pass_context
+def library_tree(
+    ctx: click.Context,
+    package: Optional[str],
+    depth: int,
+    json_output: bool,
+) -> None:
+    """
+    Show dependency tree for packages.
+
+    Displays a tree visualization of package dependencies. If no package
+    is specified, shows trees for all installed packages.
+
+    Examples:
+        yuho library tree
+        yuho library tree S403
+        yuho library tree --depth 3
+    """
+    from yuho.cli.commands.library import run_library_tree
+    run_library_tree(
+        package=package,
+        depth=depth,
+        json_output=json_output,
+        verbose=ctx.obj["verbose"],
+    )
+
+
 def main() -> None:
     """Main entry point."""
     cli()

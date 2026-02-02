@@ -362,6 +362,141 @@ def run_library_outdated(
     click.echo(f"Run 'yuho library update --all' to update outdated packages")
 
 
+def run_library_tree(
+    package: Optional[str] = None,
+    depth: int = 10,
+    json_output: bool = False,
+    verbose: bool = False,
+) -> None:
+    """
+    Show dependency tree for packages.
+
+    Args:
+        package: Specific package to show tree for (None for all installed)
+        depth: Maximum depth to display
+        json_output: Output as JSON
+        verbose: Verbose output including versions
+    """
+    from yuho.library import list_installed, LibraryIndex, Package
+    from yuho.library.resolver import Dependency
+    from pathlib import Path
+
+    index = LibraryIndex()
+
+    def get_dependencies(section: str) -> List[str]:
+        """Get dependencies for a package from its metadata."""
+        entry = index.get(section)
+        if not entry:
+            return []
+        # Load package to get dependencies
+        pkg_path = Path(entry.package_path) if hasattr(entry, 'package_path') else None
+        if pkg_path and pkg_path.exists():
+            try:
+                pkg = Package.from_yhpkg(pkg_path)
+                return pkg.metadata.dependencies
+            except Exception:
+                pass
+        return []
+
+    def build_tree(section: str, seen: set, current_depth: int) -> dict:
+        """Build dependency tree recursively."""
+        if current_depth > depth or section in seen:
+            return {"section": section, "circular": section in seen, "children": []}
+
+        seen = seen | {section}
+        entry = index.get(section)
+        version = entry.version if entry else "?"
+
+        deps = get_dependencies(section)
+        children = []
+
+        for dep_str in deps:
+            try:
+                dep = Dependency.parse(dep_str)
+                child_tree = build_tree(dep.package, seen, current_depth + 1)
+                child_tree["constraint"] = str(dep.constraint)
+                children.append(child_tree)
+            except Exception:
+                children.append({"section": dep_str, "error": True, "children": []})
+
+        return {
+            "section": section,
+            "version": version,
+            "children": children,
+        }
+
+    def print_tree(node: dict, prefix: str = "", is_last: bool = True) -> None:
+        """Print tree with ASCII art."""
+        connector = "└── " if is_last else "├── "
+        section = node.get("section", "?")
+        version = node.get("version", "")
+        constraint = node.get("constraint", "")
+
+        # Format the node
+        label = click.style(section, fg="cyan", bold=True)
+        if verbose and version:
+            label += click.style(f" v{version}", fg="yellow")
+        if constraint:
+            label += click.style(f" ({constraint})", fg="white", dim=True)
+        if node.get("circular"):
+            label += click.style(" (circular)", fg="red")
+        if node.get("error"):
+            label += click.style(" (not found)", fg="red")
+
+        click.echo(prefix + connector + label)
+
+        children = node.get("children", [])
+        child_prefix = prefix + ("    " if is_last else "│   ")
+
+        for i, child in enumerate(children):
+            print_tree(child, child_prefix, i == len(children) - 1)
+
+    # Get packages to display
+    if package:
+        packages = [package]
+    else:
+        installed = list_installed()
+        packages = [pkg.get("section_number") for pkg in installed if pkg.get("section_number")]
+
+    if not packages:
+        if json_output:
+            click.echo(json.dumps({"trees": [], "message": "No packages installed"}))
+        else:
+            click.echo("No packages installed")
+        return
+
+    # Build trees
+    trees = []
+    for pkg in packages:
+        tree = build_tree(pkg, set(), 0)
+        trees.append(tree)
+
+    if json_output:
+        click.echo(json.dumps({"trees": trees}, indent=2))
+        return
+
+    click.echo()
+    for i, tree in enumerate(trees):
+        section = tree.get("section", "?")
+        version = tree.get("version", "")
+        children = tree.get("children", [])
+
+        # Root node
+        root_label = click.style(section, fg="cyan", bold=True)
+        if verbose and version:
+            root_label += click.style(f" v{version}", fg="yellow")
+
+        if not children:
+            click.echo(f"{root_label} (no dependencies)")
+        else:
+            click.echo(root_label)
+            for j, child in enumerate(children):
+                print_tree(child, "", j == len(children) - 1)
+
+        if i < len(trees) - 1:
+            click.echo()
+
+
 def run_library_info(
     package: str,
     json_output: bool = False,
@@ -369,40 +504,40 @@ def run_library_info(
 ) -> None:
     """
     Show detailed package information.
-    
+
     Args:
         package: Package section number
         json_output: Output as JSON
         verbose: Verbose output
     """
     from yuho.library import LibraryIndex
-    
+
     index = LibraryIndex()
     entry = index.get(package)
-    
+
     if not entry:
         if json_output:
             click.echo(json.dumps({"error": f"Package not found: {package}"}))
         else:
             click.echo(f"Package not found: {package}")
         raise SystemExit(1)
-    
+
     info = entry.to_dict()
-    
+
     if json_output:
         click.echo(json.dumps(info, indent=2))
         return
-    
+
     click.echo(click.style(f"\n{info['section_number']}", fg="cyan", bold=True) +
                click.style(f" v{info['version']}", fg="yellow"))
     click.echo(f"\n  Title:        {info['title']}")
     click.echo(f"  Jurisdiction: {info['jurisdiction']}")
     click.echo(f"  Contributor:  {info['contributor']}")
-    
+
     if info.get("description"):
         click.echo(f"  Description:  {info['description']}")
-    
+
     if info.get("tags"):
         click.echo(f"  Tags:         {', '.join(info['tags'])}")
-    
+
     click.echo()
