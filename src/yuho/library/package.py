@@ -21,10 +21,45 @@ METADATA_VERSION = "1.0"
 
 
 @dataclass
+class DeprecationInfo:
+    """Information about package deprecation status."""
+    deprecated: bool = False
+    reason: str = ""
+    deprecated_since: str = ""  # Version when deprecated
+    replacement: str = ""  # Section number of replacement package (e.g., "S378A")
+    removal_version: str = ""  # Version when package will be removed
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary for serialization."""
+        if not self.deprecated:
+            return {}
+        return {
+            "deprecated": self.deprecated,
+            "reason": self.reason,
+            "deprecated_since": self.deprecated_since,
+            "replacement": self.replacement,
+            "removal_version": self.removal_version,
+        }
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> "DeprecationInfo":
+        """Create from dictionary."""
+        if not data:
+            return cls()
+        return cls(
+            deprecated=data.get("deprecated", False),
+            reason=data.get("reason", ""),
+            deprecated_since=data.get("deprecated_since", ""),
+            replacement=data.get("replacement", ""),
+            removal_version=data.get("removal_version", ""),
+        )
+
+
+@dataclass
 class PackageMetadata:
     """
     Metadata for a Yuho statute package.
-    
+
     Defined in metadata.toml within the contribution directory.
     """
     section_number: str
@@ -36,6 +71,7 @@ class PackageMetadata:
     tags: List[str] = field(default_factory=list)
     dependencies: List[str] = field(default_factory=list)
     license: str = "CC-BY-4.0"
+    deprecation: DeprecationInfo = field(default_factory=DeprecationInfo)
     
     @classmethod
     def from_toml(cls, path: Path) -> "PackageMetadata":
@@ -47,10 +83,14 @@ class PackageMetadata:
                 import tomli as tomllib
             except ImportError:
                 raise RuntimeError("tomllib/tomli required for metadata parsing")
-        
+
         with open(path, "rb") as f:
             data = tomllib.load(f)
-        
+
+        # Parse deprecation info if present
+        deprecation_data = data.get("deprecation", {})
+        deprecation = DeprecationInfo.from_dict(deprecation_data)
+
         return cls(
             section_number=data.get("section_number", ""),
             title=data.get("title", ""),
@@ -61,11 +101,12 @@ class PackageMetadata:
             tags=data.get("tags", []),
             dependencies=data.get("dependencies", []),
             license=data.get("license", "CC-BY-4.0"),
+            deprecation=deprecation,
         )
     
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary."""
-        return {
+        result = {
             "section_number": self.section_number,
             "title": self.title,
             "jurisdiction": self.jurisdiction,
@@ -76,6 +117,28 @@ class PackageMetadata:
             "dependencies": self.dependencies,
             "license": self.license,
         }
+        deprecation_dict = self.deprecation.to_dict()
+        if deprecation_dict:
+            result["deprecation"] = deprecation_dict
+        return result
+
+    @property
+    def is_deprecated(self) -> bool:
+        """Check if package is deprecated."""
+        return self.deprecation.deprecated
+
+    def get_deprecation_warning(self) -> Optional[str]:
+        """Get deprecation warning message if deprecated."""
+        if not self.deprecation.deprecated:
+            return None
+        msg = f"Package {self.section_number} is deprecated"
+        if self.deprecation.reason:
+            msg += f": {self.deprecation.reason}"
+        if self.deprecation.replacement:
+            msg += f". Use {self.deprecation.replacement} instead"
+        if self.deprecation.removal_version:
+            msg += f". Will be removed in version {self.deprecation.removal_version}"
+        return msg
     
     def is_valid(self) -> tuple[bool, List[str]]:
         """
@@ -232,6 +295,19 @@ class Package:
             f'tags = {json.dumps(self.metadata.tags)}',
             f'dependencies = {json.dumps(self.metadata.dependencies)}',
         ]
+        # Add deprecation section if deprecated
+        if self.metadata.deprecation.deprecated:
+            lines.append("")
+            lines.append("[deprecation]")
+            lines.append("deprecated = true")
+            if self.metadata.deprecation.reason:
+                lines.append(f'reason = "{self.metadata.deprecation.reason}"')
+            if self.metadata.deprecation.deprecated_since:
+                lines.append(f'deprecated_since = "{self.metadata.deprecation.deprecated_since}"')
+            if self.metadata.deprecation.replacement:
+                lines.append(f'replacement = "{self.metadata.deprecation.replacement}"')
+            if self.metadata.deprecation.removal_version:
+                lines.append(f'removal_version = "{self.metadata.deprecation.removal_version}"')
         path.write_text("\n".join(lines))
     
     def content_hash(self) -> str:
@@ -267,26 +343,31 @@ class PackageValidator:
     def validate(self, package: Package) -> tuple[bool, List[str], List[str]]:
         """
         Validate a package.
-        
+
         Args:
             package: Package to validate
-            
+
         Returns:
             Tuple of (is_valid, errors, warnings)
         """
         errors = []
         warnings = []
-        
+
         # Validate metadata
         meta_valid, meta_errors = package.metadata.is_valid()
         if not meta_valid:
             errors.extend(f"Metadata: {e}" for e in meta_errors)
-        
+
+        # Check for deprecation
+        deprecation_warning = package.metadata.get_deprecation_warning()
+        if deprecation_warning:
+            warnings.append(deprecation_warning)
+
         # Validate statute parsability
         parse_errors = self._check_parsability(package.statute_content)
         if parse_errors:
             errors.extend(f"Parse: {e}" for e in parse_errors)
-        
+
         # Validate tests if present
         if package.test_content:
             test_errors = self._check_parsability(package.test_content)
@@ -294,7 +375,7 @@ class PackageValidator:
                 warnings.extend(f"Test parse: {e}" for e in test_errors)
         else:
             warnings.append("No test file provided")
-        
+
         # Check signature if present
         if package.signature:
             sig_valid = self._verify_signature(package)
@@ -302,12 +383,12 @@ class PackageValidator:
                 errors.append("Signature verification failed")
         else:
             warnings.append("No signature provided")
-        
+
         # Determine overall validity
         is_valid = len(errors) == 0
         if self.strict and warnings:
             is_valid = False
-        
+
         return (is_valid, errors, warnings)
     
     def _check_parsability(self, content: str) -> List[str]:

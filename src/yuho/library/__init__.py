@@ -13,6 +13,7 @@ from yuho.library.package import (
     Package,
     PackageMetadata,
     PackageValidator,
+    DeprecationInfo,
 )
 from yuho.library.index import (
     LibraryIndex,
@@ -53,6 +54,7 @@ __all__ = [
     "Package",
     "PackageMetadata",
     "PackageValidator",
+    "DeprecationInfo",
     "LibraryIndex",
     "search_library",
     "install_package",
