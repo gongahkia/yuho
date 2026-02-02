@@ -52,8 +52,6 @@
 # LIBRARY: User-contributed statute repository
 # ============================================================================
 
-(C) Implement library publish command: upload to configured registry URL +library
-(C) Implement library update command: check for newer versions of installed packages +library
 
 
 # ============================================================================
@@ -67,9 +65,6 @@
 # NEOVIM: LSP extension with tree-sitter highlighting
 # ============================================================================
 
-(C) Add which-key integration for Yuho-specific keybindings +neovim
-(C) Add telescope.nvim integration for statute symbol search +neovim
-(C) Add lualine.nvim integration showing current statute section in statusline +neovim
 
 
 # ============================================================================
