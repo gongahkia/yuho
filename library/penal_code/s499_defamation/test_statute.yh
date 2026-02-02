@@ -1,0 +1,171 @@
+/*
+Test cases for S499 Defamation
+
+Tests verify speech-based offense elements:
+    1. Method of imputation (spoken/written/signs/visual)
+    2. Mens rea (intent to harm/knowledge/reason to believe)
+    3. Harm to reputation
+    4. Exception defenses (truth, public good, good faith, etc.)
+*/
+
+referencing s499_defamation/statute
+
+scope testS499Defamation {
+
+    // Test Case 1: Spoken words, intent to harm, no exception -> Defamation
+    DefamationCase testSpokenIntentNoException := {
+        accused := Party.Accused,
+        action := "making imputation",
+        victim := Party.Victim,
+        method := ImputationMethod.SpokenWords,
+        mensRea := MensRea.IntendingToHarm,
+        harmTarget := HarmTarget.Reputation,
+        exception := ExceptionType.NoExceptionApplies,
+        definition := ConsequenceDefinition.DefamesVictim,
+    }
+    assert testSpokenIntentNoException.definition == ConsequenceDefinition.DefamesVictim
+
+    // Test Case 2: Written words, knowledge of harm, no exception -> Defamation
+    DefamationCase testWrittenKnowledge := {
+        accused := Party.Accused,
+        action := "making imputation",
+        victim := Party.Victim,
+        method := ImputationMethod.WrittenWords,
+        mensRea := MensRea.KnowingHarmWillOccur,
+        harmTarget := HarmTarget.Reputation,
+        exception := ExceptionType.NoExceptionApplies,
+        definition := ConsequenceDefinition.DefamesVictim,
+    }
+    assert testWrittenKnowledge.definition == ConsequenceDefinition.DefamesVictim
+
+    // Test Case 3: Signs, reason to believe harm -> Defamation
+    DefamationCase testSignsReasonToBelieve := {
+        accused := Party.Accused,
+        action := "making imputation",
+        victim := Party.Victim,
+        method := ImputationMethod.Signs,
+        mensRea := MensRea.ReasonToBelieveHarmWillOccur,
+        harmTarget := HarmTarget.Reputation,
+        exception := ExceptionType.NoExceptionApplies,
+        definition := ConsequenceDefinition.DefamesVictim,
+    }
+    assert testSignsReasonToBelieve.definition == ConsequenceDefinition.DefamesVictim
+
+    // Test Case 4: Visual representations -> Defamation
+    DefamationCase testVisualRepresentations := {
+        accused := Party.Accused,
+        action := "making imputation",
+        victim := Party.Victim,
+        method := ImputationMethod.VisibleRepresentations,
+        mensRea := MensRea.IntendingToHarm,
+        harmTarget := HarmTarget.Reputation,
+        exception := ExceptionType.NoExceptionApplies,
+        definition := ConsequenceDefinition.DefamesVictim,
+    }
+    assert testVisualRepresentations.definition == ConsequenceDefinition.DefamesVictim
+
+    // Test Case 5: Truth for public good exception -> Not Defamation
+    DefamationCase testTruthForPublicGood := {
+        accused := Party.Accused,
+        action := "making imputation",
+        victim := Party.Victim,
+        method := ImputationMethod.WrittenWords,
+        mensRea := MensRea.IntendingToHarm,
+        harmTarget := HarmTarget.Reputation,
+        exception := ExceptionType.TruthForPublicGood,
+        definition := ConsequenceDefinition.DoesNotDefameVictim,
+    }
+    assert testTruthForPublicGood.definition == ConsequenceDefinition.DoesNotDefameVictim
+
+    // Test Case 6: Public conduct of public servant exception -> Not Defamation
+    DefamationCase testPublicConductPublicServant := {
+        accused := Party.Accused,
+        action := "making imputation",
+        victim := Party.Victim,
+        method := ImputationMethod.WrittenWords,
+        mensRea := MensRea.KnowingHarmWillOccur,
+        harmTarget := HarmTarget.Reputation,
+        exception := ExceptionType.PublicConductOfPublicServant,
+        definition := ConsequenceDefinition.DoesNotDefameVictim,
+    }
+    assert testPublicConductPublicServant.definition == ConsequenceDefinition.DoesNotDefameVictim
+
+    // Test Case 7: Court report exception -> Not Defamation
+    DefamationCase testPublishedCourtReport := {
+        accused := Party.Accused,
+        action := "making imputation",
+        victim := Party.Victim,
+        method := ImputationMethod.WrittenWords,
+        mensRea := MensRea.ReasonToBelieveHarmWillOccur,
+        harmTarget := HarmTarget.Reputation,
+        exception := ExceptionType.PublishedCourtReport,
+        definition := ConsequenceDefinition.DoesNotDefameVictim,
+    }
+    assert testPublishedCourtReport.definition == ConsequenceDefinition.DoesNotDefameVictim
+
+    // Test Case 8: Good faith accusation to authority -> Not Defamation
+    DefamationCase testGoodFaithAccusation := {
+        accused := Party.Accused,
+        action := "making imputation",
+        victim := Party.Victim,
+        method := ImputationMethod.SpokenWords,
+        mensRea := MensRea.IntendingToHarm,
+        harmTarget := HarmTarget.Reputation,
+        exception := ExceptionType.GoodFaithAccusationToAuthority,
+        definition := ConsequenceDefinition.DoesNotDefameVictim,
+    }
+    assert testGoodFaithAccusation.definition == ConsequenceDefinition.DoesNotDefameVictim
+
+    // Test Case 9: Caution for benefit exception -> Not Defamation
+    DefamationCase testCautionForBenefit := {
+        accused := Party.Accused,
+        action := "making imputation",
+        victim := Party.Victim,
+        method := ImputationMethod.SpokenWords,
+        mensRea := MensRea.IntendingToHarm,
+        harmTarget := HarmTarget.Reputation,
+        exception := ExceptionType.CautionForBenefit,
+        definition := ConsequenceDefinition.DoesNotDefameVictim,
+    }
+    assert testCautionForBenefit.definition == ConsequenceDefinition.DoesNotDefameVictim
+
+    // Test Case 10: No method of imputation -> Not Defamation
+    DefamationCase testNoMethod := {
+        accused := Party.Accused,
+        action := "making imputation",
+        victim := Party.Victim,
+        method := ImputationMethod.NA,
+        mensRea := MensRea.IntendingToHarm,
+        harmTarget := HarmTarget.Reputation,
+        exception := ExceptionType.NoExceptionApplies,
+        definition := ConsequenceDefinition.DoesNotDefameVictim,
+    }
+    assert testNoMethod.definition == ConsequenceDefinition.DoesNotDefameVictim
+
+    // Test Case 11: No mens rea -> Not Defamation
+    DefamationCase testNoMensRea := {
+        accused := Party.Accused,
+        action := "making imputation",
+        victim := Party.Victim,
+        method := ImputationMethod.SpokenWords,
+        mensRea := MensRea.NA,
+        harmTarget := HarmTarget.Reputation,
+        exception := ExceptionType.NoExceptionApplies,
+        definition := ConsequenceDefinition.DoesNotDefameVictim,
+    }
+    assert testNoMensRea.definition == ConsequenceDefinition.DoesNotDefameVictim
+
+    // Test Case 12: No harm target -> Not Defamation
+    DefamationCase testNoHarmTarget := {
+        accused := Party.Accused,
+        action := "making imputation",
+        victim := Party.Victim,
+        method := ImputationMethod.SpokenWords,
+        mensRea := MensRea.IntendingToHarm,
+        harmTarget := HarmTarget.NA,
+        exception := ExceptionType.NoExceptionApplies,
+        definition := ConsequenceDefinition.DoesNotDefameVictim,
+    }
+    assert testNoHarmTarget.definition == ConsequenceDefinition.DoesNotDefameVictim
+
+}

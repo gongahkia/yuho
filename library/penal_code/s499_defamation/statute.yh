@@ -1,0 +1,146 @@
+/*
+VERSION 2.0
+
+Based off the following statutory provisions on defamation
+    * Singapore Penal Code S499
+
+Defamation requires:
+    1. Making or publishing an imputation concerning a person
+    2. By words (spoken or intended to be read), signs, or visible representations
+    3. Intent to harm reputation OR knowledge/belief that harm will occur
+    4. Target is the reputation of the person
+
+Exceptions (defenses):
+    - Truth published for public good
+    - Opinion on public conduct of public servants
+    - Opinion on conduct in public matters
+    - Published court reports
+    - Opinion on merits of publicly submitted work
+    - Good faith censure of public authority
+    - Good faith accusation to proper authority
+    - Imputation made in good faith by authorized person
+    - Caution in good faith for benefit of another
+
+This demonstrates speech-based offense with exception defenses.
+*/
+
+scope s499Defamation {
+
+    // ~ ENUMS ~
+
+    struct Party { // ENUM
+        Accused,
+        Victim,
+    }
+
+    struct ImputationMethod { // ENUM - How imputation was made
+        SpokenWords,
+        WrittenWords,
+        Signs,
+        VisibleRepresentations,
+        NA,
+    }
+
+    struct MensRea { // ENUM - Mental state
+        IntendingToHarm,
+        KnowingHarmWillOccur,
+        ReasonToBelieveHarmWillOccur,
+        NA,
+    }
+
+    struct HarmTarget { // ENUM - What is harmed
+        Reputation,
+        NA,
+    }
+
+    struct ExceptionType { // ENUM - Available defenses
+        TruthForPublicGood,
+        PublicConductOfPublicServant,
+        ConductInPublicMatter,
+        PublishedCourtReport,
+        MeritsOfPublicWork,
+        GoodFaithCensureOfAuthority,
+        GoodFaithAccusationToAuthority,
+        AuthorizedPersonGoodFaith,
+        CautionForBenefit,
+        NoExceptionApplies,
+    }
+
+    struct ConsequenceDefinition { // ENUM
+        DefamesVictim,
+        DoesNotDefameVictim,
+    }
+
+    // ~ STRUCT DEFINITION ~
+
+    struct DefamationCase {
+        string || Party accused,
+        string action,
+        string || Party victim,
+        ImputationMethod method,
+        MensRea mensRea,
+        HarmTarget harmTarget,
+        ExceptionType exception,
+        ConsequenceDefinition definition,
+    }
+
+    // ~ STRUCT LITERAL ~
+
+    DefamationCase defamationDefinition := {
+
+        // ~ struct literal attributes ~
+            // Whoever, by words either spoken or intended to be read, or by signs,
+            // or by visible representations, makes or publishes any imputation
+            // concerning any person, intending to harm, or knowing or having reason
+            // to believe that such imputation will harm the reputation of such person,
+            // is said, except in the cases hereinafter excepted, to defame that person.
+
+        accused := Party.Accused,
+        action := "making imputation",
+        victim := Party.Victim,
+        method := ImputationMethod.SpokenWords or ImputationMethod.WrittenWords or ImputationMethod.Signs or ImputationMethod.VisibleRepresentations or ImputationMethod.NA,
+        mensRea := MensRea.IntendingToHarm or MensRea.KnowingHarmWillOccur or MensRea.ReasonToBelieveHarmWillOccur or MensRea.NA,
+        harmTarget := HarmTarget.Reputation or HarmTarget.NA,
+        exception := ExceptionType.TruthForPublicGood or ExceptionType.PublicConductOfPublicServant or ExceptionType.ConductInPublicMatter or ExceptionType.PublishedCourtReport or ExceptionType.MeritsOfPublicWork or ExceptionType.GoodFaithCensureOfAuthority or ExceptionType.GoodFaithAccusationToAuthority or ExceptionType.AuthorizedPersonGoodFaith or ExceptionType.CautionForBenefit or ExceptionType.NoExceptionApplies,
+
+        // ~ logical short circuiting ~
+            // Elements checked in sequence:
+            // 1. Method (how was imputation made)
+            // 2. Mens rea (what was the mental state)
+            // 3. Harm target (what was targeted)
+            // 4. Exception (does a defense apply) - FIRST-MATCH-WINS for exceptions
+
+        definition := match method {
+            case ImputationMethod.SpokenWords := consequence mensRea
+            case ImputationMethod.WrittenWords := consequence mensRea
+            case ImputationMethod.Signs := consequence mensRea
+            case ImputationMethod.VisibleRepresentations := consequence mensRea
+            case ImputationMethod.NA := consequence ConsequenceDefinition.DoesNotDefameVictim
+        },
+        definition := match mensRea {
+            case MensRea.IntendingToHarm := consequence harmTarget
+            case MensRea.KnowingHarmWillOccur := consequence harmTarget
+            case MensRea.ReasonToBelieveHarmWillOccur := consequence harmTarget
+            case MensRea.NA := consequence ConsequenceDefinition.DoesNotDefameVictim
+        },
+        definition := match harmTarget {
+            case HarmTarget.Reputation := consequence exception
+            case HarmTarget.NA := consequence ConsequenceDefinition.DoesNotDefameVictim
+        },
+        // Exception handling: if any exception applies, not defamation
+        definition := match exception {
+            case ExceptionType.TruthForPublicGood := consequence ConsequenceDefinition.DoesNotDefameVictim
+            case ExceptionType.PublicConductOfPublicServant := consequence ConsequenceDefinition.DoesNotDefameVictim
+            case ExceptionType.ConductInPublicMatter := consequence ConsequenceDefinition.DoesNotDefameVictim
+            case ExceptionType.PublishedCourtReport := consequence ConsequenceDefinition.DoesNotDefameVictim
+            case ExceptionType.MeritsOfPublicWork := consequence ConsequenceDefinition.DoesNotDefameVictim
+            case ExceptionType.GoodFaithCensureOfAuthority := consequence ConsequenceDefinition.DoesNotDefameVictim
+            case ExceptionType.GoodFaithAccusationToAuthority := consequence ConsequenceDefinition.DoesNotDefameVictim
+            case ExceptionType.AuthorizedPersonGoodFaith := consequence ConsequenceDefinition.DoesNotDefameVictim
+            case ExceptionType.CautionForBenefit := consequence ConsequenceDefinition.DoesNotDefameVictim
+            case ExceptionType.NoExceptionApplies := consequence ConsequenceDefinition.DefamesVictim
+        },
+
+    }
+
+}

@@ -1,0 +1,14 @@
+[statute]
+section_number = "499"
+title = "Defamation"
+jurisdiction = "Singapore"
+version = "2.0.0"
+
+[contributor]
+name = "Yuho Team"
+email = ""
+
+[description]
+summary = "Whoever, by words either spoken or intended to be read, or by signs, or by visible representations, makes or publishes any imputation concerning any person, intending to harm, or knowing or having reason to believe that such imputation will harm the reputation of such person, is said, except in the cases hereinafter excepted, to defame that person."
+source = "Singapore Penal Code 1871, Section 499"
+notes = "Speech-based offense demonstrating exception/defense handling for truth, public good, and good faith"
