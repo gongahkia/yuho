@@ -542,3 +542,157 @@ def publish_package(
     except Exception as e:
         logger.exception(f"Publish failed: {e}")
         return (False, f"Publish failed: {e}")
+
+
+def browse_registry(
+    page: int = 1,
+    per_page: int = 20,
+    search: Optional[str] = None,
+    jurisdiction: Optional[str] = None,
+    tags: Optional[List[str]] = None,
+    sort_by: str = "updated",
+    registry_url: Optional[str] = None,
+    timeout: int = 30,
+    verify_ssl: bool = True,
+) -> dict:
+    """
+    Browse packages in the registry with pagination and filtering.
+    
+    Args:
+        page: Page number (1-indexed)
+        per_page: Results per page (max 100)
+        search: Search query for title/description
+        jurisdiction: Filter by jurisdiction code
+        tags: Filter by tags
+        sort_by: Sort order: 'updated', 'name', 'downloads'
+        registry_url: Registry base URL
+        timeout: Request timeout
+        verify_ssl: Verify SSL certificates
+        
+    Returns:
+        Dict with:
+            - packages: List of package metadata
+            - total: Total number of matching packages
+            - page: Current page number
+            - per_page: Results per page
+            - pages: Total number of pages
+    """
+    registry = registry_url or "https://registry.yuho.dev"
+    
+    # Build query parameters
+    params = {
+        "page": str(page),
+        "per_page": str(min(per_page, 100)),
+        "sort": sort_by,
+    }
+    
+    if search:
+        params["q"] = search
+    if jurisdiction:
+        params["jurisdiction"] = jurisdiction
+    if tags:
+        params["tags"] = ",".join(tags)
+    
+    # Build URL
+    query_string = "&".join(f"{k}={v}" for k, v in params.items())
+    api_url = f"{registry.rstrip('/')}/api/v1/packages?{query_string}"
+    
+    try:
+        request = Request(api_url, headers={"User-Agent": "yuho-library/2.0"})
+        
+        import ssl
+        context = None
+        if not verify_ssl:
+            context = ssl.create_default_context()
+            context.check_hostname = False
+            context.verify_mode = ssl.CERT_NONE
+        
+        with urlopen(request, timeout=timeout, context=context) as response:
+            data = json.loads(response.read().decode("utf-8"))
+        
+        return {
+            "packages": data.get("packages", []),
+            "total": data.get("total", 0),
+            "page": data.get("page", page),
+            "per_page": data.get("per_page", per_page),
+            "pages": data.get("pages", 1),
+            "success": True,
+        }
+        
+    except HTTPError as e:
+        return {
+            "packages": [],
+            "total": 0,
+            "page": page,
+            "per_page": per_page,
+            "pages": 0,
+            "success": False,
+            "error": f"HTTP {e.code}: {e.reason}",
+        }
+    except URLError as e:
+        return {
+            "packages": [],
+            "total": 0,
+            "page": page,
+            "per_page": per_page,
+            "pages": 0,
+            "success": False,
+            "error": f"Connection failed: {e.reason}",
+        }
+    except Exception as e:
+        return {
+            "packages": [],
+            "total": 0,
+            "page": page,
+            "per_page": per_page,
+            "pages": 0,
+            "success": False,
+            "error": str(e),
+        }
+
+
+def get_registry_package_info(
+    section_number: str,
+    registry_url: Optional[str] = None,
+    timeout: int = 30,
+    verify_ssl: bool = True,
+) -> Optional[dict]:
+    """
+    Get detailed package information from registry.
+    
+    Args:
+        section_number: Package section number
+        registry_url: Registry base URL
+        timeout: Request timeout
+        verify_ssl: Verify SSL certificates
+        
+    Returns:
+        Package metadata dict or None if not found
+    """
+    registry = registry_url or "https://registry.yuho.dev"
+    api_url = f"{registry.rstrip('/')}/api/v1/packages/{section_number}"
+    
+    try:
+        request = Request(api_url, headers={"User-Agent": "yuho-library/2.0"})
+        
+        import ssl
+        context = None
+        if not verify_ssl:
+            context = ssl.create_default_context()
+            context.check_hostname = False
+            context.verify_mode = ssl.CERT_NONE
+        
+        with urlopen(request, timeout=timeout, context=context) as response:
+            return json.loads(response.read().decode("utf-8"))
+            
+    except HTTPError as e:
+        if e.code == 404:
+            return None
+        logger.warning(f"Registry error: HTTP {e.code}")
+        return None
+    except URLError as e:
+        logger.warning(f"Connection failed: {e.reason}")
+        return None
+    except Exception as e:
+        logger.exception(f"Failed to get package info: {e}")
+        return None
