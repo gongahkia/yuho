@@ -388,6 +388,113 @@ class Z3Solver:
         result = self.check_satisfiability(z3_constraints)
         return result.model if result.satisfiable else None
 
+    def check_statute_consistency(
+        self, ast: "ModuleNode"
+    ) -> Tuple[bool, List[Z3Diagnostic]]:
+        """
+        Check statute consistency using Z3 satisfiability.
+        
+        Generates constraints from the AST and verifies they are consistent
+        (satisfiable). Returns diagnostics for any issues found.
+        
+        Args:
+            ast: ModuleNode from Yuho AST
+            
+        Returns:
+            Tuple of (is_consistent, list of diagnostics)
+        """
+        generator = Z3Generator()
+        diagnostics = generator.generate_consistency_check(ast)
+        
+        is_consistent = all(d.passed for d in diagnostics)
+        return (is_consistent, diagnostics)
+
+    def verify_statute_elements(
+        self, ast: "ModuleNode"
+    ) -> List[Z3Diagnostic]:
+        """
+        Verify that statute elements are well-formed and consistent.
+        
+        Checks:
+        - Element names are unique within each statute
+        - Element types are valid (actus_reus, mens_rea, circumstance)
+        - Penalties have valid ranges (min <= max)
+        
+        Args:
+            ast: ModuleNode from Yuho AST
+            
+        Returns:
+            List of Z3Diagnostic results
+        """
+        diagnostics = []
+        
+        for statute in ast.statutes:
+            statute_id = statute.section_number
+            
+            # Check element uniqueness
+            element_names = [e.name for e in statute.elements]
+            if len(element_names) != len(set(element_names)):
+                duplicates = [n for n in element_names if element_names.count(n) > 1]
+                diagnostics.append(Z3Diagnostic(
+                    check_name=f"{statute_id}_element_uniqueness",
+                    passed=False,
+                    message=f"Duplicate element names: {set(duplicates)}"
+                ))
+            else:
+                diagnostics.append(Z3Diagnostic(
+                    check_name=f"{statute_id}_element_uniqueness",
+                    passed=True,
+                    message="All element names are unique"
+                ))
+            
+            # Check element types
+            valid_types = {"actus_reus", "mens_rea", "circumstance"}
+            for element in statute.elements:
+                if element.element_type not in valid_types:
+                    diagnostics.append(Z3Diagnostic(
+                        check_name=f"{statute_id}_{element.name}_type",
+                        passed=False,
+                        message=f"Invalid element type: {element.element_type}"
+                    ))
+            
+            # Check penalty ranges
+            if statute.penalty:
+                penalty = statute.penalty
+                
+                # Check imprisonment range
+                if penalty.imprisonment_min and penalty.imprisonment_max:
+                    min_days = penalty.imprisonment_min.total_days()
+                    max_days = penalty.imprisonment_max.total_days()
+                    if min_days > max_days:
+                        diagnostics.append(Z3Diagnostic(
+                            check_name=f"{statute_id}_imprisonment_range",
+                            passed=False,
+                            message=f"Imprisonment min ({min_days} days) > max ({max_days} days)"
+                        ))
+                    else:
+                        diagnostics.append(Z3Diagnostic(
+                            check_name=f"{statute_id}_imprisonment_range",
+                            passed=True,
+                            message="Imprisonment range is valid"
+                        ))
+                
+                # Check fine range
+                if penalty.fine_min and penalty.fine_max:
+                    if penalty.fine_min.amount > penalty.fine_max.amount:
+                        diagnostics.append(Z3Diagnostic(
+                            check_name=f"{statute_id}_fine_range",
+                            passed=False,
+                            message=f"Fine min ({penalty.fine_min.amount}) > max ({penalty.fine_max.amount})"
+                        ))
+                    else:
+                        diagnostics.append(Z3Diagnostic(
+                            check_name=f"{statute_id}_fine_range",
+                            passed=True,
+                            message="Fine range is valid"
+                        ))
+        
+        return diagnostics
+
 
 class Z3Generator:
     """
