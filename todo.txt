@@ -47,29 +47,14 @@
 # VERIFY: Formal verification with Alloy and Z3
 # ============================================================================
 
-(B) Implement Alloy model generator from statute AST for bounded model checking +verify
-(B) Implement Alloy analyzer subprocess invocation with timeout +verify
-(B) Implement Alloy counterexample parser to surface violations as diagnostics +verify
-(B) Define Alloy assertion: no_contradictory_elements (statute elements don't contradict) +verify
-(B) Define Alloy assertion: penalty_ordering (more serious crimes have higher penalties) +verify
-(C) Implement Z3 solver integration via z3-solver Python bindings +verify
-(C) Implement Z3 constraint generation from match-case conditions +verify
-(C) Implement Z3 satisfiability check for "is this pattern reachable?" queries +verify
-(C) Implement Z3 model extraction to generate concrete test cases +verify
 
 # ============================================================================
 # LIBRARY: User-contributed statute repository
 # ============================================================================
 
-(B) Define contribution format: directory with statute.yh, test_statute.yh, metadata.toml +library
-(B) Define metadata.toml schema: section_number, title, jurisdiction, contributor, version +library
-(B) Implement contribution validator: parse .yh, run tests, check metadata completeness +library
-(B) Implement .yhpkg archive format: gzipped tarball with signature file +library
-(B) Implement library index: JSON file mapping section numbers to package metadata +library
-(B) Implement library search by section number, title keyword, jurisdiction +library
-(B) Implement library install command: download .yhpkg, verify signature, extract to ~/.yuho/library +library
 (C) Implement library publish command: upload to configured registry URL +library
 (C) Implement library update command: check for newer versions of installed packages +library
+
 
 # ============================================================================
 # STATUTES: Implement 10+ Penal Code sections for language breadth
