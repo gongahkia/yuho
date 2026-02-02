@@ -6,7 +6,64 @@ Provides MCP tools for parsing, transpiling, and analyzing Yuho code.
 
 from typing import Dict, List, Optional, Any
 from pathlib import Path
+from enum import IntEnum
 import json
+import logging
+import time
+
+# Configure MCP logger
+logger = logging.getLogger("yuho.mcp")
+
+
+class LogVerbosity(IntEnum):
+    """Verbosity levels for MCP request logging."""
+    QUIET = 0      # No logging
+    MINIMAL = 1    # Log tool name only
+    STANDARD = 2   # Log tool name and execution time
+    VERBOSE = 3    # Log tool name, args summary, and execution time
+    DEBUG = 4      # Log everything including full args and responses
+
+
+class MCPRequestLogger:
+    """Logger for MCP requests with configurable verbosity."""
+    
+    def __init__(self, verbosity: LogVerbosity = LogVerbosity.STANDARD):
+        self.verbosity = verbosity
+        
+    def log_request(self, tool_name: str, args: Dict[str, Any]) -> float:
+        """Log incoming request, return start time."""
+        start = time.time()
+        
+        if self.verbosity >= LogVerbosity.MINIMAL:
+            logger.info(f"MCP request: {tool_name}")
+            
+        if self.verbosity >= LogVerbosity.VERBOSE:
+            args_summary = {k: f"{len(str(v))} chars" if len(str(v)) > 100 else v 
+                          for k, v in args.items()}
+            logger.info(f"  Args: {args_summary}")
+            
+        if self.verbosity >= LogVerbosity.DEBUG:
+            logger.debug(f"  Full args: {args}")
+            
+        return start
+    
+    def log_response(self, tool_name: str, result: Any, start_time: float, error: Optional[Exception] = None) -> None:
+        """Log response after tool execution."""
+        elapsed = time.time() - start_time
+        
+        if error:
+            logger.error(f"MCP error: {tool_name} failed after {elapsed:.3f}s - {error}")
+            return
+            
+        if self.verbosity >= LogVerbosity.STANDARD:
+            logger.info(f"MCP response: {tool_name} completed in {elapsed:.3f}s")
+            
+        if self.verbosity >= LogVerbosity.DEBUG:
+            result_str = str(result)
+            if len(result_str) > 500:
+                result_str = result_str[:500] + "..."
+            logger.debug(f"  Result: {result_str}")
+
 
 try:
     from mcp.server import Server
@@ -52,11 +109,17 @@ class YuhoMCPServer:
     - yuho://library/{section}: Statute by section
     """
 
-    def __init__(self):
+    def __init__(self, verbosity: LogVerbosity = LogVerbosity.STANDARD):
         self.server = Server("yuho-mcp")
+        self.request_logger = MCPRequestLogger(verbosity)
         self._register_tools()
         self._register_resources()
         self._register_prompts()
+
+    def set_verbosity(self, verbosity: LogVerbosity) -> None:
+        """Set the logging verbosity level."""
+        self.request_logger.verbosity = verbosity
+        logger.info(f"MCP logging verbosity set to: {verbosity.name}")
 
     def _register_tools(self):
         """Register MCP tools."""
