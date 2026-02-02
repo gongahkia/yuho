@@ -11,7 +11,6 @@
 # ============================================================================
 
 
-(B) Add package signature verification with Ed25519 key management +library
 (C) Implement semantic versioning validation and compatibility checking +library
 (C) Add package deprecation and replacement tracking +library
 
@@ -26,8 +25,6 @@
 # LSP: Enhanced capabilities
 # ============================================================================
 
-(B) Implement cross-file rename with workspace-wide symbol tracking +lsp
-(B) Implement quick fixes: add missing struct fields, fix enum variant typos +lsp
 (B) Implement code action: extract match arm to named pattern +lsp
 (C) Implement code action: inline variable at cursor +lsp
 (C) Implement code action: convert struct literal to explicit form +lsp
