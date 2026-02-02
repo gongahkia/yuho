@@ -27,40 +27,62 @@ Yuho is a DSL that seeks to *help law students* better understand statutes by pr
 Getting into the specifics, Yuho provides the following four products.
 
 1. [Yuho](./doc/SYNTAX.md), a DSL made to be readable and codeable by law students and lawyers
-2. [Formalised semantic](./test/) for legal reasoning modelled after the syntactical patterns of the law
-3. [CLI tool](./yuho_v4/cli/) for interacting with Yuho's primary functions in the CLI
-4. [Transpiler](./yuho_v4/transpilers/) that transpiles to the below targets
+2. [Formalised semantics](./tests/) for legal reasoning modelled after the syntactical patterns of the law
+3. [CLI tool](./src/yuho/cli/) for interacting with Yuho's primary functions in the CLI
+4. [LSP](./src/yuho/lsp/) for editor integration with diagnostics, completion, and hover
+5. [Transpiler](./src/yuho/transpile/) that transpiles to multiple targets
 
 ### Output formats
 
-| Target | Usage |   
-| :--- | :--- |  
-| Mermaid | Diagrammatic representations of statutory logic *(mindmap, flowchart)* | 
-| Alloy | Semantic and logical verification | 
+| Target | Usage |
+| :--- | :--- |
+| JSON | Machine-readable structured representation for tooling integration |
+| JSON-LD | Linked data format for semantic web applications |
+| English | Human-readable plain English explanation of statutory logic |
+| Alloy | Formal verification with Alloy Analyzer |
+| Z3 | SMT-based constraint solving and verification |
+| Mermaid | Diagrammatic representations of statutory logic *(mindmap, flowchart)* |
 
 Sold on Yuho? Check out the [quickstart](#quickstart) guide.
 
-> [!TIP]  
-> More transpilation outputs might be added in the future. Open an issue to contribute suggestions!
+> [!TIP]
+> More transpilation outputs can be added. Open an issue to contribute suggestions!
 
 ## Nerd stuff
 
-For those interested, Yuho provides a [grammatically-validated](https://www.usna.edu/Users/cs/wcbrown/courses/F19SI413/lec/l07/lec.html) syntax core that splays out all requirements and consequences for a given offence, providing assurance of logical correctness from the get-go. Yuho was also designed to be [exception-validated](https://www.reddit.com/r/learnjavascript/comments/y6663u/difference_between_input_validation_and_exception/) and [language-agnostic](https://softwareengineering.stackexchange.com/questions/28484/what-is-language-agnosticism-and-why-is-it-called-that), transpiling from one formally-specified source of truth to multiple target outputs, encouraging the development of tools that leverage off Yuho's logical core.   
+For those interested, Yuho v5 provides:
+
+* **Tree-sitter based parser** for robust, incremental parsing with excellent error recovery
+* **Full LSP implementation** with diagnostics, completion, hover, go-to-definition, and references
+* **Property-based testing** with [Hypothesis](https://hypothesis.readthedocs.io/) for thorough validation
+* **Formal verification** integration with [Alloy](https://alloytools.org/) and [Z3](https://github.com/Z3Prover/z3)
+* **LLM integration** for statute explanation and analysis (local-first with Ollama, cloud fallback)
+* **MCP server** exposing all functionality via Model Context Protocol
+
+Yuho is [grammatically-validated](https://www.usna.edu/Users/cs/wcbrown/courses/F19SI413/lec/l07/lec.html), [exception-validated](https://www.reddit.com/r/learnjavascript/comments/y6663u/difference_between_input_validation_and_exception/), and [language-agnostic](https://softwareengineering.stackexchange.com/questions/28484/what-is-language-agnosticism-and-why-is-it-called-that), transpiling from one formally-specified source of truth to multiple target outputs.
 
 Want to find out more? See Yuho's [documentation](#documentation).
 
 ### Documentation
 
 * [Language specification](./doc/SYNTAX.md)
-* [Grammer specification](./grammer)
-* [Formal verification](./test)
+* [Grammar specification](./grammar)
+* [Formal verification](./tests)
+* [Library statutes](./library/penal_code)
 * [Examples](./example)
 
 ## Quickstart
 
-**Yuho v4.0 (Python)**: See [`QUICKSTART_V4.md`](./doc/QUICKSTART_V4.md) for the latest implementation.
+**Yuho v5.0**: Install via pip and start using immediately:
 
-**Legacy versions**: Learn how Yuho works in 5 minutes at [`5_MINUTES.md`](./doc/5_MINUTES.md).
+```bash
+pip install yuho
+yuho --help
+```
+
+**Learn Yuho**: Understand the basics in 5 minutes at [`5_MINUTES.md`](./doc/5_MINUTES.md).
+
+**Legacy versions**: See [`archive/`](./archive/) for v1-v4 implementations.
 
 ## Roadmap
 
