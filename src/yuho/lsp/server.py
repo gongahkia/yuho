@@ -1173,6 +1173,7 @@ class YuhoLanguageServer(LanguageServer):
             
             # Fix for missing struct fields
             if "missing field" in msg:
+                import re
                 field_match = re.search(r"missing field[s]?\s*['\"]?(\w+)", msg)
                 if field_match:
                     field = field_match.group(1)
@@ -1192,7 +1193,31 @@ class YuhoLanguageServer(LanguageServer):
                             },
                         ),
                     ))
+            
+            # Fix for enum variant typos (unknown variant)
+            if "unknown variant" in msg or "invalid variant" in msg:
+                import re
+                variant_match = re.search(r"variant[:\s]+['\"]?(\w+)['\"]?", msg)
+                if variant_match:
+                    typo = variant_match.group(1)
+                    # Find similar variants using fuzzy matching
+                    suggestions = self._find_similar_variants(doc_state, typo)
+                    for suggestion in suggestions[:3]:  # Top 3 suggestions
+                        actions.append(lsp.CodeAction(
+                            title=f"Change to '{suggestion}'",
+                            kind=lsp.CodeActionKind.QuickFix,
+                            diagnostics=[diagnostic],
+                            edit=lsp.WorkspaceEdit(
+                                changes={
+                                    uri: [lsp.TextEdit(
+                                        range=diagnostic.range,
+                                        new_text=suggestion,
+                                    )],
+                                },
+                            ),
+                        ))
         
+
         # Context-based refactorings (not tied to diagnostics)
         if doc_state.ast:
             # If inside a match expression, offer to add case
@@ -1244,6 +1269,39 @@ class YuhoLanguageServer(LanguageServer):
         if match:
             return match.group(1)
         return None
+    
+    def _find_similar_variants(self, doc_state: DocumentState, typo: str) -> List[str]:
+        """Find enum variants similar to a typo using Levenshtein distance."""
+        if not doc_state.ast:
+            return []
+        
+        # Collect all enum variant names from AST
+        variants = []
+        for type_def in doc_state.ast.type_defs:
+            # Check if this is an enum (has variants)
+            if hasattr(type_def, 'variants'):
+                for variant in type_def.variants:
+                    variants.append(variant.name)
+        
+        # Simple similarity score (case-insensitive prefix/substring match)
+        def similarity(a: str, b: str) -> int:
+            a_lower, b_lower = a.lower(), b.lower()
+            if a_lower == b_lower:
+                return 100
+            if a_lower.startswith(b_lower) or b_lower.startswith(a_lower):
+                return 80
+            if a_lower in b_lower or b_lower in a_lower:
+                return 60
+            # Count matching characters
+            common = sum(1 for c in a_lower if c in b_lower)
+            return int(common * 100 / max(len(a), len(b)))
+        
+        # Score and sort variants
+        scored = [(v, similarity(v, typo)) for v in variants]
+        scored.sort(key=lambda x: -x[1])
+        
+        # Return variants with score > 40
+        return [v for v, score in scored if score > 40]
 
     def _get_code_lenses(self, uri: str) -> List[lsp.CodeLens]:
         """Provide code lenses (actionable annotations)."""
