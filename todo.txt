@@ -20,43 +20,16 @@
 # LSP: Full Language Server Protocol implementation
 # ============================================================================
 
-(B) Implement textDocument/rename with workspace-wide symbol renaming +lsp
-(B) Implement textDocument/documentSymbol returning statute/function/struct hierarchy +lsp
-(B) Implement workspace/symbol for project-wide symbol search +lsp
-(B) Implement textDocument/formatting using canonical formatter +lsp
-(B) Implement textDocument/rangeFormatting for selection formatting +lsp
-(B) Implement textDocument/codeAction for quick fixes (add missing import, fix typo) +lsp
-(B) Implement textDocument/codeLens showing "Run tests" above statute definitions +lsp
-(C) Implement textDocument/semanticTokens for enhanced syntax highlighting +lsp
-(C) Implement textDocument/inlayHints showing inferred types inline +lsp
-(C) Implement textDocument/foldingRange for code folding regions +lsp
-(C) Implement workspace/didChangeConfiguration for runtime config updates +lsp
 
 # ============================================================================
 # MCP: Model Context Protocol server exposing all functionality
 # ============================================================================
 
-(B) Define MCP tool: yuho_references(file_content: str, line: int, col: int) -> {locations: list} +mcp
-(B) Define MCP tool: yuho_symbols(file_content: str) -> {symbols: list} +mcp
-(B) Define MCP tool: yuho_diagnostics(file_content: str) -> {diagnostics: list} +mcp
-(B) Define MCP tool: yuho_validate_contribution(file_content: str, tests: list) -> {valid: bool, results: list} +mcp
-(B) Define MCP tool: yuho_library_search(query: str) -> {statutes: list} for statute library search +mcp
-(B) Define MCP tool: yuho_library_get(section: str) -> {statute: dict} to retrieve statute by section +mcp
-(B) Define MCP tool: yuho_statute_to_yuho(natural_text: str) -> {yuho_code: str} LLM-assisted transpilation +mcp
-(B) Define MCP resource: yuho://docs/{topic} returning reference documentation +mcp
-(B) Implement MCP prompts: explain_statute, convert_to_yuho, analyze_coverage +mcp
-(C) Add MCP server health check endpoint +mcp
-(C) Add MCP request logging with configurable verbosity +mcp
 
 # ============================================================================
 # LLM: Local-first with Ollama/HuggingFace, cloud fallback
 # ============================================================================
 
-(B) Implement streaming response support for real-time output in CLI +llm
-(B) Implement response caching with content-hash keys to avoid repeated LLM calls +llm
-(B) Implement rate limiting for cloud providers with exponential backoff +llm
-(C) Implement token counting for context window management +llm
-(C) Implement prompt compression for long statutes exceeding context window +llm
 
 # ============================================================================
 # CONFIG: User configuration system
