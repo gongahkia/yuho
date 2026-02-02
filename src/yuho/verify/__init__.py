@@ -18,6 +18,7 @@ from yuho.verify.z3_solver import (
     Z3Solver,
     Z3Generator,
     Z3Diagnostic,
+    Z3CounterexampleExtractor,
     ConstraintGenerator,
     SatisfiabilityResult,
 )
@@ -29,6 +30,7 @@ __all__ = [
     "Z3Solver",
     "Z3Generator",
     "Z3Diagnostic",
+    "Z3CounterexampleExtractor",
     "ConstraintGenerator",
     "SatisfiabilityResult",
 ]

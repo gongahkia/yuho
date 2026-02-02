@@ -55,6 +55,141 @@ class Z3Diagnostic:
         }
 
 
+class Z3CounterexampleExtractor:
+    """
+    Extracts and converts Z3 counterexamples to human-readable diagnostics.
+    
+    Uses Z3's unsat cores to identify minimal conflicting constraint sets
+    and converts satisfying models to test inputs.
+    """
+    
+    def __init__(self):
+        """Initialize the extractor."""
+        if not Z3_AVAILABLE:
+            logger.warning("Z3 not available - counterexample extraction disabled")
+    
+    def extract_unsat_core(
+        self, solver: Any, assertions: List[Tuple[str, Any]]
+    ) -> List[str]:
+        """
+        Extract unsat core from a solver with tracked assertions.
+        
+        Args:
+            solver: Z3 solver instance
+            assertions: List of (name, constraint) tuples
+            
+        Returns:
+            List of assertion names in the unsat core
+        """
+        if not Z3_AVAILABLE:
+            return []
+        
+        # Create solver with unsat core tracking
+        core_solver = z3.Solver()
+        core_solver.set(unsat_core=True)
+        
+        # Add tracked assertions
+        tracked_assertions = {}
+        for name, constraint in assertions:
+            tracker = z3.Bool(f"track_{name}")
+            tracked_assertions[str(tracker)] = name
+            core_solver.add(z3.Implies(tracker, constraint))
+            core_solver.add(tracker)  # Assume all are active initially
+        
+        result = core_solver.check()
+        
+        if result == z3.unsat:
+            core = core_solver.unsat_core()
+            return [tracked_assertions[str(c)] for c in core if str(c) in tracked_assertions]
+        
+        return []
+    
+    def model_to_counterexample(self, model: Any) -> Dict[str, Any]:
+        """
+        Convert Z3 model to counterexample dictionary.
+        
+        Args:
+            model: Z3 model from solver
+            
+        Returns:
+            Dictionary mapping variable names to values
+        """
+        if not Z3_AVAILABLE or model is None:
+            return {}
+        
+        counterexample = {}
+        
+        for decl in model.decls():
+            name = decl.name()
+            value = model[decl]
+            
+            # Convert Z3 values to Python primitives
+            if hasattr(value, 'as_long'):
+                counterexample[name] = value.as_long()
+            elif hasattr(value, 'as_fraction'):
+                counterexample[name] = str(value.as_fraction())
+            elif hasattr(value, 'as_string'):
+                counterexample[name] = value.as_string()
+            else:
+                counterexample[name] = str(value)
+        
+        return counterexample
+    
+    def generate_diagnostic_from_unsat_core(
+        self, core_names: List[str], check_name: str
+    ) -> Z3Diagnostic:
+        """
+        Generate diagnostic from unsat core.
+        
+        Args:
+            core_names: Names of constraints in unsat core
+            check_name: Name of the check being performed
+            
+        Returns:
+            Z3Diagnostic with conflict information
+        """
+        if not core_names:
+            return Z3Diagnostic(
+                check_name=check_name,
+                passed=False,
+                message="Constraints are unsatisfiable (no core extracted)"
+            )
+        
+        conflict_msg = f"Conflicting constraints: {', '.join(core_names[:5])}"
+        if len(core_names) > 5:
+            conflict_msg += f" and {len(core_names) - 5} more"
+        
+        return Z3Diagnostic(
+            check_name=check_name,
+            passed=False,
+            counterexample={"unsat_core": core_names},
+            message=conflict_msg
+        )
+    
+    def generate_diagnostic_from_model(
+        self, model: Any, check_name: str, message: str
+    ) -> Z3Diagnostic:
+        """
+        Generate diagnostic from satisfying model.
+        
+        Args:
+            model: Z3 model
+            check_name: Name of the check
+            message: Diagnostic message
+            
+        Returns:
+            Z3Diagnostic with model as counterexample
+        """
+        counterexample = self.model_to_counterexample(model)
+        
+        return Z3Diagnostic(
+            check_name=check_name,
+            passed=False,
+            counterexample=counterexample,
+            message=message
+        )
+
+
 class ConstraintGenerator:
     """
     Generates Z3 constraints from Yuho match-case conditions.
@@ -730,6 +865,8 @@ class Z3Generator:
         if solver is None:
             return diagnostics
         
+        extractor = Z3CounterexampleExtractor()
+        
         # Check overall satisfiability
         result = solver.check()
         if result == z3.sat:
@@ -739,12 +876,25 @@ class Z3Generator:
                 message="All statute constraints are satisfiable"
             ))
         elif result == z3.unsat:
-            # Try to get unsat core
-            diagnostics.append(Z3Diagnostic(
-                check_name="statute_consistency",
-                passed=False,
-                message="Statute constraints are contradictory"
-            ))
+            # Extract unsat core for better diagnostics
+            # Need to regenerate with tracked assertions
+            tracked_assertions = []
+            for i, assertion in enumerate(assertions):
+                tracked_assertions.append((f"assertion_{i}", assertion))
+            
+            core_names = extractor.extract_unsat_core(solver, tracked_assertions)
+            
+            if core_names:
+                diagnostic = extractor.generate_diagnostic_from_unsat_core(
+                    core_names, "statute_consistency"
+                )
+                diagnostics.append(diagnostic)
+            else:
+                diagnostics.append(Z3Diagnostic(
+                    check_name="statute_consistency",
+                    passed=False,
+                    message="Statute constraints are contradictory"
+                ))
         else:
             diagnostics.append(Z3Diagnostic(
                 check_name="statute_consistency",
