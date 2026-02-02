@@ -1,68 +1,72 @@
-# Yuho v5 PRD - Generated 2026-02-01
-# Priority: (A) MVP/critical path, (B) Important, (C) Can parallelize
-
-# ============================================================================
-# AST: Internal representation and semantic analysis
-# ============================================================================
-
-
-# ============================================================================
-# TRANSPILATION: Multi-target code generation
-# ============================================================================
-
-
-# ============================================================================
-# CLI: Command-line interface with rich error messages
-# ============================================================================
-
-
-# ============================================================================
-# LSP: Full Language Server Protocol implementation
-# ============================================================================
-
-
-# ============================================================================
-# MCP: Model Context Protocol server exposing all functionality
-# ============================================================================
-
-
-# ============================================================================
-# LLM: Local-first with Ollama/HuggingFace, cloud fallback
-# ============================================================================
-
-
-# ============================================================================
-# CONFIG: User configuration system
-# ============================================================================
-
-
-# ============================================================================
-# TEST: Property-based testing with Hypothesis
-# ============================================================================
-
-
+# Yuho v5 PRD - Updated 2026-02-02
+# Priority: (A) Critical/blocking, (B) Important, (C) Enhancement, (D) Future/v6
 
 # ============================================================================
 # VERIFY: Formal verification with Alloy and Z3
 # ============================================================================
 
+(A) Implement Z3 constraint generation from Yuho AST (parallel structure to Alloy) +verify
+(A) Implement Z3 satisfiability checking for statute consistency +verify
+(A) Implement Z3 counterexample extraction and diagnostic conversion +verify
+(B) Add Z3-based exhaustiveness checking for match expressions +verify
+(B) Implement Z3 model enumeration for finding all valid interpretations +verify
+(C) Add combined Alloy+Z3 verification mode with result comparison +verify
 
 # ============================================================================
-# LIBRARY: User-contributed statute repository
+# LIBRARY: Full registry and dependency management
 # ============================================================================
 
-
+(A) Implement library index with search by section/keyword/jurisdiction/tags +library
+(A) Implement dependency resolution with version constraint solving +library
+(A) Implement version locking (yuho.lock file) for reproducible installs +library
+(B) Implement conflict detection when multiple packages define same section +library
+(B) Implement registry browsing with pagination and filtering +library
+(B) Add package signature verification with Ed25519 key management +library
+(C) Implement semantic versioning validation and compatibility checking +library
+(C) Add package deprecation and replacement tracking +library
 
 # ============================================================================
-# STATUTES: Implement 10+ Penal Code sections for language breadth
+# CLI: Library subcommand
 # ============================================================================
 
+(A) Implement `yuho library search <query>` - search registry by keyword +cli
+(A) Implement `yuho library install <package>` - install from registry or path +cli
+(A) Implement `yuho library uninstall <package>` - remove installed package +cli
+(A) Implement `yuho library list` - show installed packages with versions +cli
+(B) Implement `yuho library update [package]` - update one or all packages +cli
+(B) Implement `yuho library publish <path>` - publish to registry +cli
+(B) Implement `yuho library info <package>` - show package details +cli
+(C) Implement `yuho library outdated` - show packages with updates available +cli
+(C) Implement `yuho library tree` - show dependency tree +cli
 
 # ============================================================================
-# NEOVIM: LSP extension with tree-sitter highlighting
+# LSP: Enhanced capabilities
 # ============================================================================
 
+(A) Implement code actions for common errors (missing match arms, type mismatches) +lsp
+(A) Implement signature help for function parameters +lsp
+(B) Implement cross-file rename with workspace-wide symbol tracking +lsp
+(B) Implement quick fixes: add missing struct fields, fix enum variant typos +lsp
+(B) Implement code action: extract match arm to named pattern +lsp
+(C) Implement code action: inline variable at cursor +lsp
+(C) Implement code action: convert struct literal to explicit form +lsp
+(C) Add selection range support for expand/shrink selection +lsp
 
+# ============================================================================
+# MCP: Complete TODO tools
+# ============================================================================
+
+(B) Implement `yuho_hover` tool - get hover info for position +mcp
+(B) Implement `yuho_definition` tool - find definition location +mcp
+(B) Implement `yuho_statute_to_yuho` tool - LLM-based natural language conversion +mcp
+
+# ============================================================================
+# TEST: User-facing test infrastructure
+# ============================================================================
+
+(C) Create pytest fixtures for Yuho file parsing in user tests +test
+(C) Add test coverage reporting for statute implementations +test
+(C) Implement `yuho test --coverage` flag with HTML report +test
 
 # ============================================================================
 # ROADMAP: v6 items (visual editor and beyond)
@@ -71,18 +75,18 @@
 (D) Design Scratch-like block palette for Yuho constructs with Svelte but ensure it is entirely localhost and is not meant for actaul web deployment +roadmap
 (D) Implement drag-and-drop block editor using Blockly or custom Svelte components +roadmap
 (D) Implement bidirectional sync between block editor and .yh source that allows export/import as well +roadmap
-(D) Integrate existing neovim LSP extension with tree-sitter highlighting 
+(D) Integrate existing neovim LSP extension with tree-sitter highlighting +roadmap
 (D) Add a neovim extension command to allow for opening the block editor and previewing .yh files as their block-like palette in localhost (functions simialr to markdown preview extension) +roadmap
 (D) Implement block-to-AST and AST-to-block converters +roadmap
 (D) Design guided statute builder wizard for non-programmers but don't need to make too fancy +roadmap
 
 # ============================================================================
-# DOCS
+# DOCS: Documentation updates for v5
 # ============================================================================
 
-(D) update doc/5_MINUTES.md to ensure all references point to v5 only and the content itself is v5 accurate
-(D) read through doc/ROADMAP.md to edit the status of all tasks that have been completed within sandbox/yuho_and_beyond 
-(D) for other items within docs/ROADMAP.md undone, add to this todo.txt first but highlight these are pending my clarification
-(D) examine doc/SYNTAX.md and ensure there is nothing to update per yuho v5, if there is then update accordingly
-(D) examine doc/FAQ.md and ensure there is nothing to update per yuho v5, if there is then update accordingly
-(D) examine doc/SCOPE.md and ensure there is nothing to update per yuho v5, if there is then update accordingly
+(D) Update doc/5_MINUTES.md to ensure all references point to v5 only and the content itself is v5 accurate +docs
+(D) Read through doc/ROADMAP.md to edit the status of all tasks that have been completed within sandbox/yuho_and_beyond +docs
+(D) For other items within docs/ROADMAP.md undone, add to this todo.txt first but highlight these are pending user clarification +docs
+(D) Examine doc/SYNTAX.md and ensure there is nothing to update per yuho v5, if there is then update accordingly +docs
+(D) Examine doc/FAQ.md and ensure there is nothing to update per yuho v5, if there is then update accordingly +docs
+(D) Examine doc/SCOPE.md and ensure there is nothing to update per yuho v5, if there is then update accordingly +docs
