@@ -21,6 +21,12 @@ from yuho.llm.prompts import (
     STATUTE_EXPLANATION_PROMPT,
     STATUTE_TO_YUHO_PROMPT,
 )
+from yuho.llm.utils import (
+    ResponseCache,
+    RateLimiter,
+    TokenCounter,
+    PromptCompressor,
+)
 
 __all__ = [
     "LLMConfig",
@@ -31,4 +37,9 @@ __all__ = [
     "LLMProviderFactory",
     "STATUTE_EXPLANATION_PROMPT",
     "STATUTE_TO_YUHO_PROMPT",
+    # Utilities
+    "ResponseCache",
+    "RateLimiter",
+    "TokenCounter",
+    "PromptCompressor",
 ]
