@@ -5,8 +5,7 @@
 # VERIFY: Formal verification with Alloy and Z3
 # ============================================================================
 
-(A) Implement Z3 constraint generation from Yuho AST (parallel structure to Alloy) +verify
-(A) Implement Z3 satisfiability checking for statute consistency +verify
+
 (A) Implement Z3 counterexample extraction and diagnostic conversion +verify
 (B) Add Z3-based exhaustiveness checking for match expressions +verify
 (B) Implement Z3 model enumeration for finding all valid interpretations +verify
