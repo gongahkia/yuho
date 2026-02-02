@@ -85,6 +85,7 @@ class IndexEntry:
         section: Optional[str] = None,
         keyword: Optional[str] = None,
         jurisdiction: Optional[str] = None,
+        tags: Optional[List[str]] = None,
     ) -> bool:
         """Check if entry matches search criteria."""
         if section and section.lower() not in self.section_number.lower():
@@ -97,6 +98,13 @@ class IndexEntry:
             keyword_lower = keyword.lower()
             searchable = f"{self.title} {self.description} {' '.join(self.tags)}".lower()
             if keyword_lower not in searchable:
+                return False
+        
+        if tags:
+            # Entry must have at least one of the specified tags
+            entry_tags_lower = [t.lower() for t in self.tags]
+            matching_tags = any(t.lower() in entry_tags_lower for t in tags)
+            if not matching_tags:
                 return False
         
         return True
@@ -184,6 +192,7 @@ class LibraryIndex:
         section: Optional[str] = None,
         keyword: Optional[str] = None,
         jurisdiction: Optional[str] = None,
+        tags: Optional[List[str]] = None,
         limit: int = 50,
     ) -> List[IndexEntry]:
         """
@@ -193,6 +202,7 @@ class LibraryIndex:
             section: Section number pattern to match
             keyword: Keyword to search in title/description/tags
             jurisdiction: Jurisdiction to filter by
+            tags: Tags to filter by (matches if entry has any)
             limit: Maximum results to return
             
         Returns:
@@ -201,7 +211,7 @@ class LibraryIndex:
         results = []
         
         for entry in self._entries.values():
-            if entry.matches(section, keyword, jurisdiction):
+            if entry.matches(section, keyword, jurisdiction, tags):
                 results.append(entry)
                 if len(results) >= limit:
                     break
@@ -255,6 +265,7 @@ def search_library(
     section: Optional[str] = None,
     keyword: Optional[str] = None,
     jurisdiction: Optional[str] = None,
+    tags: Optional[List[str]] = None,
 ) -> List[Dict[str, Any]]:
     """
     Convenience function to search the library.
@@ -263,10 +274,11 @@ def search_library(
         section: Section number pattern
         keyword: Search keyword
         jurisdiction: Jurisdiction filter
+        tags: Tags to filter by
         
     Returns:
         List of matching packages as dictionaries
     """
     index = LibraryIndex()
-    results = index.search(section, keyword, jurisdiction)
+    results = index.search(section, keyword, jurisdiction, tags)
     return [r.to_dict() for r in results]
