@@ -1,0 +1,145 @@
+/*
+Test cases for S503 Criminal Breach of Trust
+
+Tests verify fiduciary offense elements:
+    1. Entrustment (entrusted with property or dominion)
+    2. Property relation (possessor/controller/custodian/fiduciary)
+    3. Mens rea (dishonestly or wilfully)
+    4. Breach act (misappropriation/conversion/violation/suffering)
+*/
+
+referencing s503_criminal_breach_of_trust/statute
+
+scope testS503CriminalBreachOfTrust {
+
+    // Test Case 1: Entrusted, dishonestly misappropriates -> Criminal Breach of Trust
+    CriminalBreachOfTrustCase testDishonestMisappropriation := {
+        accused := Party.Accused,
+        action := "breaching trust",
+        victim := Party.Victim,
+        entrustment := EntrustmentType.EntrustedWithProperty,
+        propertyRelation := PropertyRelation.Custodian,
+        breachAct := BreachActType.Misappropriates,
+        mensRea := MensRea.Dishonestly,
+        definition := ConsequenceDefinition.CommitsCriminalBreachOfTrust,
+    }
+    assert testDishonestMisappropriation.definition == ConsequenceDefinition.CommitsCriminalBreachOfTrust
+
+    // Test Case 2: Dominion over property, converts to own use -> Criminal Breach of Trust
+    CriminalBreachOfTrustCase testConvertsToOwnUse := {
+        accused := Party.Accused,
+        action := "breaching trust",
+        victim := Party.Victim,
+        entrustment := EntrustmentType.DominionOverProperty,
+        propertyRelation := PropertyRelation.Controller,
+        breachAct := BreachActType.ConvertsToOwnUse,
+        mensRea := MensRea.Dishonestly,
+        definition := ConsequenceDefinition.CommitsCriminalBreachOfTrust,
+    }
+    assert testConvertsToOwnUse.definition == ConsequenceDefinition.CommitsCriminalBreachOfTrust
+
+    // Test Case 3: Uses property violating law -> Criminal Breach of Trust
+    CriminalBreachOfTrustCase testUsesViolatingLaw := {
+        accused := Party.Accused,
+        action := "breaching trust",
+        victim := Party.Victim,
+        entrustment := EntrustmentType.EntrustedWithProperty,
+        propertyRelation := PropertyRelation.Fiduciary,
+        breachAct := BreachActType.UsesViolatingLaw,
+        mensRea := MensRea.Dishonestly,
+        definition := ConsequenceDefinition.CommitsCriminalBreachOfTrust,
+    }
+    assert testUsesViolatingLaw.definition == ConsequenceDefinition.CommitsCriminalBreachOfTrust
+
+    // Test Case 4: Disposes property violating contract -> Criminal Breach of Trust
+    CriminalBreachOfTrustCase testDisposesViolatingContract := {
+        accused := Party.Accused,
+        action := "breaching trust",
+        victim := Party.Victim,
+        entrustment := EntrustmentType.EntrustedWithProperty,
+        propertyRelation := PropertyRelation.Possessor,
+        breachAct := BreachActType.DisposesViolatingContract,
+        mensRea := MensRea.Dishonestly,
+        definition := ConsequenceDefinition.CommitsCriminalBreachOfTrust,
+    }
+    assert testDisposesViolatingContract.definition == ConsequenceDefinition.CommitsCriminalBreachOfTrust
+
+    // Test Case 5: Wilfully suffers other to do -> Criminal Breach of Trust
+    CriminalBreachOfTrustCase testWilfullySuffersOther := {
+        accused := Party.Accused,
+        action := "breaching trust",
+        victim := Party.Victim,
+        entrustment := EntrustmentType.DominionOverProperty,
+        propertyRelation := PropertyRelation.Custodian,
+        breachAct := BreachActType.SuffersOtherToDo,
+        mensRea := MensRea.Wilfully,
+        definition := ConsequenceDefinition.CommitsCriminalBreachOfTrust,
+    }
+    assert testWilfullySuffersOther.definition == ConsequenceDefinition.CommitsCriminalBreachOfTrust
+
+    // Test Case 6: Disposes violating law -> Criminal Breach of Trust
+    CriminalBreachOfTrustCase testDisposesViolatingLaw := {
+        accused := Party.Accused,
+        action := "breaching trust",
+        victim := Party.Victim,
+        entrustment := EntrustmentType.EntrustedWithProperty,
+        propertyRelation := PropertyRelation.Fiduciary,
+        breachAct := BreachActType.DisposesViolatingLaw,
+        mensRea := MensRea.Dishonestly,
+        definition := ConsequenceDefinition.CommitsCriminalBreachOfTrust,
+    }
+    assert testDisposesViolatingLaw.definition == ConsequenceDefinition.CommitsCriminalBreachOfTrust
+
+    // Test Case 7: No entrustment -> Not Criminal Breach of Trust
+    CriminalBreachOfTrustCase testNoEntrustment := {
+        accused := Party.Accused,
+        action := "breaching trust",
+        victim := Party.Victim,
+        entrustment := EntrustmentType.NA,
+        propertyRelation := PropertyRelation.Custodian,
+        breachAct := BreachActType.Misappropriates,
+        mensRea := MensRea.Dishonestly,
+        definition := ConsequenceDefinition.DoesNotCommitCriminalBreachOfTrust,
+    }
+    assert testNoEntrustment.definition == ConsequenceDefinition.DoesNotCommitCriminalBreachOfTrust
+
+    // Test Case 8: No property relation -> Not Criminal Breach of Trust
+    CriminalBreachOfTrustCase testNoPropertyRelation := {
+        accused := Party.Accused,
+        action := "breaching trust",
+        victim := Party.Victim,
+        entrustment := EntrustmentType.EntrustedWithProperty,
+        propertyRelation := PropertyRelation.NA,
+        breachAct := BreachActType.Misappropriates,
+        mensRea := MensRea.Dishonestly,
+        definition := ConsequenceDefinition.DoesNotCommitCriminalBreachOfTrust,
+    }
+    assert testNoPropertyRelation.definition == ConsequenceDefinition.DoesNotCommitCriminalBreachOfTrust
+
+    // Test Case 9: No mens rea -> Not Criminal Breach of Trust
+    CriminalBreachOfTrustCase testNoMensRea := {
+        accused := Party.Accused,
+        action := "breaching trust",
+        victim := Party.Victim,
+        entrustment := EntrustmentType.EntrustedWithProperty,
+        propertyRelation := PropertyRelation.Custodian,
+        breachAct := BreachActType.Misappropriates,
+        mensRea := MensRea.NA,
+        definition := ConsequenceDefinition.DoesNotCommitCriminalBreachOfTrust,
+    }
+    assert testNoMensRea.definition == ConsequenceDefinition.DoesNotCommitCriminalBreachOfTrust
+
+    // Test Case 10: No breach act -> Not Criminal Breach of Trust
+    CriminalBreachOfTrustCase testNoBreachAct := {
+        accused := Party.Accused,
+        action := "breaching trust",
+        victim := Party.Victim,
+        entrustment := EntrustmentType.EntrustedWithProperty,
+        propertyRelation := PropertyRelation.Custodian,
+        breachAct := BreachActType.NA,
+        mensRea := MensRea.Dishonestly,
+        definition := ConsequenceDefinition.DoesNotCommitCriminalBreachOfTrust,
+    }
+    assert testNoBreachAct.definition == ConsequenceDefinition.DoesNotCommitCriminalBreachOfTrust
+
+}

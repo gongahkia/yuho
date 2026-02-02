@@ -1,0 +1,138 @@
+/*
+VERSION 2.0
+
+Based off the following statutory provisions on criminal breach of trust
+    * Singapore Penal Code S503
+
+Criminal breach of trust requires:
+    1. Being entrusted with property (or dominion over property)
+    2. Dishonestly:
+        - Misappropriates that property, OR
+        - Converts to his own use, OR
+        - Uses/disposes in violation of direction of law, OR
+        - Uses/disposes in violation of legal contract, OR
+        - Wilfully suffers any other person so to do
+
+This demonstrates fiduciary offense with trust relationship and breach elements.
+*/
+
+scope s503CriminalBreachOfTrust {
+
+    // ~ ENUMS ~
+
+    struct Party { // ENUM
+        Accused,
+        Victim,
+        ThirdParty,
+    }
+
+    struct EntrustmentType { // ENUM - Nature of entrustment
+        EntrustedWithProperty,
+        DominionOverProperty,
+        NA,
+    }
+
+    struct PropertyRelation { // ENUM - How accused relates to property
+        Possessor,
+        Controller,
+        Custodian,
+        Fiduciary,
+        NA,
+    }
+
+    struct BreachActType { // ENUM - How trust was breached
+        Misappropriates,
+        ConvertsToOwnUse,
+        UsesViolatingLaw,
+        DisposesViolatingLaw,
+        UsesViolatingContract,
+        DisposesViolatingContract,
+        SuffersOtherToDo,
+        NA,
+    }
+
+    struct MensRea { // ENUM - Mental state
+        Dishonestly,
+        Wilfully,
+        NA,
+    }
+
+    struct ConsequenceDefinition { // ENUM
+        CommitsCriminalBreachOfTrust,
+        DoesNotCommitCriminalBreachOfTrust,
+    }
+
+    // ~ STRUCT DEFINITION ~
+
+    struct CriminalBreachOfTrustCase {
+        string || Party accused,
+        string action,
+        string || Party victim,
+        EntrustmentType entrustment,
+        PropertyRelation propertyRelation,
+        BreachActType breachAct,
+        MensRea mensRea,
+        ConsequenceDefinition definition,
+    }
+
+    // ~ STRUCT LITERAL ~
+
+    CriminalBreachOfTrustCase criminalBreachOfTrustDefinition := {
+
+        // ~ struct literal attributes ~
+            // Whoever, being in any manner entrusted with property,
+            // or with any dominion over property,
+            // dishonestly misappropriates or converts to his own use that property,
+            // or dishonestly uses or disposes of that property in violation of
+            // any direction of law prescribing the mode in which such trust is to be discharged,
+            // or of any legal contract, express or implied, which he has made
+            // touching the discharge of such trust,
+            // or wilfully suffers any other person so to do,
+            // commits criminal breach of trust.
+
+        accused := Party.Accused,
+        action := "breaching trust",
+        victim := Party.Victim,
+        entrustment := EntrustmentType.EntrustedWithProperty or EntrustmentType.DominionOverProperty or EntrustmentType.NA,
+        propertyRelation := PropertyRelation.Possessor or PropertyRelation.Controller or PropertyRelation.Custodian or PropertyRelation.Fiduciary or PropertyRelation.NA,
+        breachAct := BreachActType.Misappropriates or BreachActType.ConvertsToOwnUse or BreachActType.UsesViolatingLaw or BreachActType.DisposesViolatingLaw or BreachActType.UsesViolatingContract or BreachActType.DisposesViolatingContract or BreachActType.SuffersOtherToDo or BreachActType.NA,
+        mensRea := MensRea.Dishonestly or MensRea.Wilfully or MensRea.NA,
+
+        // ~ logical short circuiting ~
+            // Elements checked in sequence:
+            // 1. Entrustment (was there a trust relationship)
+            // 2. Property relation (what was the nature of control)
+            // 3. Mens rea (mental state - dishonest or wilful)
+            // 4. Breach act (how was trust breached)
+
+        definition := match entrustment {
+            case EntrustmentType.EntrustedWithProperty := consequence propertyRelation
+            case EntrustmentType.DominionOverProperty := consequence propertyRelation
+            case EntrustmentType.NA := consequence ConsequenceDefinition.DoesNotCommitCriminalBreachOfTrust
+        },
+        definition := match propertyRelation {
+            case PropertyRelation.Possessor := consequence mensRea
+            case PropertyRelation.Controller := consequence mensRea
+            case PropertyRelation.Custodian := consequence mensRea
+            case PropertyRelation.Fiduciary := consequence mensRea
+            case PropertyRelation.NA := consequence ConsequenceDefinition.DoesNotCommitCriminalBreachOfTrust
+        },
+        definition := match mensRea {
+            case MensRea.Dishonestly := consequence breachAct
+            case MensRea.Wilfully := consequence breachAct
+            case MensRea.NA := consequence ConsequenceDefinition.DoesNotCommitCriminalBreachOfTrust
+        },
+        definition := match breachAct {
+            case BreachActType.Misappropriates := consequence ConsequenceDefinition.CommitsCriminalBreachOfTrust
+            case BreachActType.ConvertsToOwnUse := consequence ConsequenceDefinition.CommitsCriminalBreachOfTrust
+            case BreachActType.UsesViolatingLaw := consequence ConsequenceDefinition.CommitsCriminalBreachOfTrust
+            case BreachActType.DisposesViolatingLaw := consequence ConsequenceDefinition.CommitsCriminalBreachOfTrust
+            case BreachActType.UsesViolatingContract := consequence ConsequenceDefinition.CommitsCriminalBreachOfTrust
+            case BreachActType.DisposesViolatingContract := consequence ConsequenceDefinition.CommitsCriminalBreachOfTrust
+            case BreachActType.SuffersOtherToDo := consequence ConsequenceDefinition.CommitsCriminalBreachOfTrust
+            case BreachActType.NA := consequence ConsequenceDefinition.DoesNotCommitCriminalBreachOfTrust
+        },
+
+    }
+
+}

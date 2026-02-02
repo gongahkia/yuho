@@ -1,0 +1,14 @@
+[statute]
+section_number = "503"
+title = "Criminal Breach of Trust"
+jurisdiction = "Singapore"
+version = "2.0.0"
+
+[contributor]
+name = "Yuho Team"
+email = ""
+
+[description]
+summary = "Whoever, being in any manner entrusted with property, or with any dominion over property, dishonestly misappropriates or converts to his own use that property, or dishonestly uses or disposes of that property in violation of any direction of law prescribing the mode in which such trust is to be discharged, or of any legal contract, express or implied, which he has made touching the discharge of such trust, or wilfully suffers any other person so to do, commits criminal breach of trust."
+source = "Singapore Penal Code 1871, Section 503"
+notes = "Fiduciary offense demonstrating trust relationship and breach elements"
