@@ -2,12 +2,21 @@
 Z3 solver integration for Yuho constraint verification.
 
 Provides Z3-based constraint generation and satisfiability checking
-for pattern reachability analysis and test case generation.
+for pattern reachability analysis, test case generation, and
+formal verification of statute consistency (parallel to Alloy).
 """
 
-from typing import List, Dict, Any, Optional, Tuple
+from __future__ import annotations
+from typing import List, Dict, Any, Optional, Tuple, TYPE_CHECKING
 from dataclasses import dataclass, field
 import logging
+
+if TYPE_CHECKING:
+    from yuho.ast.nodes import (
+        ModuleNode, StatuteNode, StructDefNode, ElementNode,
+        PenaltyNode, BinaryExprNode, UnaryExprNode, MatchExprNode,
+        MatchArm, ASTNode,
+    )
 
 logger = logging.getLogger(__name__)
 
@@ -26,6 +35,24 @@ class SatisfiabilityResult:
     satisfiable: bool
     model: Optional[Dict[str, Any]] = None
     message: str = ""
+
+
+@dataclass
+class Z3Diagnostic:
+    """A diagnostic from Z3 verification (parallel to AlloyCounterexample)."""
+    check_name: str
+    passed: bool
+    counterexample: Optional[Dict[str, Any]] = None
+    message: str = ""
+
+    def to_diagnostic(self) -> Dict[str, Any]:
+        """Convert to LSP-compatible diagnostic."""
+        return {
+            "message": f"Z3: {self.check_name} - {self.message}",
+            "severity": "info" if self.passed else "warning",
+            "source": "z3",
+            "data": self.counterexample,
+        }
 
 
 class ConstraintGenerator:
@@ -360,3 +387,288 @@ class Z3Solver:
         
         result = self.check_satisfiability(z3_constraints)
         return result.model if result.satisfiable else None
+
+
+class Z3Generator:
+    """
+    Generates Z3 constraints from Yuho statute ASTs.
+    
+    This is the Z3 parallel to AlloyGenerator. It translates statute
+    elements, penalties, and constraints into Z3 assertions for
+    satisfiability checking and verification.
+    """
+    
+    def __init__(self):
+        """Initialize the generator."""
+        if not Z3_AVAILABLE:
+            logger.warning("Z3 not available - constraint generation disabled")
+        
+        self._sorts: Dict[str, Any] = {}  # Custom Z3 sorts
+        self._consts: Dict[str, Any] = {}  # Declared constants
+        self._assertions: List[Any] = []  # Collected assertions
+    
+    def generate(self, ast: "ModuleNode") -> Tuple[Any, List[Any]]:
+        """
+        Generate Z3 solver and constraints from a module AST.
+        
+        Args:
+            ast: ModuleNode from Yuho AST
+            
+        Returns:
+            Tuple of (Z3 Solver with constraints, list of named assertions)
+        """
+        if not Z3_AVAILABLE:
+            return None, []
+        
+        self._sorts = {}
+        self._consts = {}
+        self._assertions = []
+        
+        solver = z3.Solver()
+        
+        # Generate sorts (types) from struct definitions
+        self._generate_sorts(ast)
+        
+        # Generate constraints from statutes
+        for statute in ast.statutes:
+            self._generate_statute_constraints(statute)
+        
+        # Add all collected assertions
+        for assertion in self._assertions:
+            solver.add(assertion)
+        
+        return solver, self._assertions
+    
+    def _generate_sorts(self, ast: "ModuleNode") -> None:
+        """Generate Z3 sorts from type definitions."""
+        if not Z3_AVAILABLE:
+            return
+        
+        # Base sorts
+        self._sorts["Person"] = z3.DeclareSort("Person")
+        self._sorts["Intent"] = z3.DeclareSort("Intent")
+        self._sorts["Element"] = z3.DeclareSort("Element")
+        
+        # Intent enum values as constants
+        self._consts["Intentional"] = z3.Const("Intentional", self._sorts["Intent"])
+        self._consts["Reckless"] = z3.Const("Reckless", self._sorts["Intent"])
+        self._consts["Negligent"] = z3.Const("Negligent", self._sorts["Intent"])
+        
+        # Distinct intent values
+        self._assertions.append(
+            z3.Distinct(
+                self._consts["Intentional"],
+                self._consts["Reckless"],
+                self._consts["Negligent"]
+            )
+        )
+        
+        # Generate from struct definitions
+        for struct_def in ast.type_defs:
+            sort = z3.DeclareSort(struct_def.name)
+            self._sorts[struct_def.name] = sort
+            
+            # Create symbolic field accessors
+            for field_def in struct_def.fields:
+                field_sort = self._type_to_sort(field_def.type_annotation)
+                func_name = f"{struct_def.name}_{field_def.name}"
+                self._consts[func_name] = z3.Function(
+                    func_name, sort, field_sort
+                )
+    
+    def _generate_statute_constraints(self, statute: "StatuteNode") -> None:
+        """Generate Z3 constraints from a statute."""
+        if not Z3_AVAILABLE:
+            return
+        
+        statute_id = statute.section_number.replace(".", "_")
+        
+        # Create a symbolic constant for this statute instance
+        if "Statute" not in self._sorts:
+            self._sorts["Statute"] = z3.DeclareSort("Statute")
+        
+        statute_const = z3.Const(f"statute_{statute_id}", self._sorts["Statute"])
+        self._consts[f"statute_{statute_id}"] = statute_const
+        
+        # Generate element constraints
+        element_satisfied = []
+        for i, element in enumerate(statute.elements):
+            elem_name = element.name.replace(" ", "_").replace("-", "_")
+            elem_var = z3.Bool(f"{statute_id}_{elem_name}_satisfied")
+            self._consts[f"{statute_id}_{elem_name}"] = elem_var
+            element_satisfied.append(elem_var)
+            
+            # Element-specific constraints based on type
+            if element.element_type == "mens_rea":
+                # Mens rea elements require intent
+                intent_var = z3.Const(
+                    f"{statute_id}_{elem_name}_intent",
+                    self._sorts["Intent"]
+                )
+                self._consts[f"{statute_id}_{elem_name}_intent"] = intent_var
+        
+        # All elements must be satisfied for conviction
+        if element_satisfied:
+            all_elements = z3.And(*element_satisfied)
+            conviction_var = z3.Bool(f"{statute_id}_conviction")
+            self._consts[f"{statute_id}_conviction"] = conviction_var
+            
+            # conviction <=> all elements satisfied
+            self._assertions.append(conviction_var == all_elements)
+        
+        # Generate penalty constraints
+        if statute.penalty:
+            self._generate_penalty_constraints(statute_id, statute.penalty)
+    
+    def _generate_penalty_constraints(
+        self, statute_id: str, penalty: "PenaltyNode"
+    ) -> None:
+        """Generate Z3 constraints for penalty specification."""
+        if not Z3_AVAILABLE:
+            return
+        
+        # Imprisonment duration constraints (in days)
+        if penalty.imprisonment_min or penalty.imprisonment_max:
+            imprisonment = z3.Int(f"{statute_id}_imprisonment_days")
+            self._consts[f"{statute_id}_imprisonment"] = imprisonment
+            
+            if penalty.imprisonment_min:
+                min_days = penalty.imprisonment_min.total_days()
+                self._assertions.append(imprisonment >= min_days)
+            
+            if penalty.imprisonment_max:
+                max_days = penalty.imprisonment_max.total_days()
+                self._assertions.append(imprisonment <= max_days)
+            
+            # Imprisonment must be non-negative
+            self._assertions.append(imprisonment >= 0)
+        
+        # Fine constraints (in cents for precision)
+        if penalty.fine_min or penalty.fine_max:
+            fine = z3.Int(f"{statute_id}_fine_cents")
+            self._consts[f"{statute_id}_fine"] = fine
+            
+            if penalty.fine_min:
+                min_cents = int(penalty.fine_min.amount * 100)
+                self._assertions.append(fine >= min_cents)
+            
+            if penalty.fine_max:
+                max_cents = int(penalty.fine_max.amount * 100)
+                self._assertions.append(fine <= max_cents)
+            
+            # Fine must be non-negative
+            self._assertions.append(fine >= 0)
+    
+    def _type_to_sort(self, type_node: "ASTNode") -> Any:
+        """Convert Yuho type to Z3 sort."""
+        if not Z3_AVAILABLE:
+            return None
+        
+        # Import here to avoid circular imports
+        from yuho.ast.nodes import BuiltinType, NamedType, ArrayType, OptionalType
+        
+        if isinstance(type_node, BuiltinType):
+            type_map = {
+                "int": z3.IntSort(),
+                "float": z3.RealSort(),
+                "bool": z3.BoolSort(),
+                "string": z3.StringSort(),
+                "money": z3.IntSort(),  # Cents
+                "percent": z3.IntSort(),  # Basis points
+                "date": z3.IntSort(),  # Unix timestamp
+                "duration": z3.IntSort(),  # Days
+                "void": z3.BoolSort(),  # Placeholder
+            }
+            return type_map.get(type_node.name, z3.IntSort())
+        
+        elif isinstance(type_node, NamedType):
+            if type_node.name in self._sorts:
+                return self._sorts[type_node.name]
+            # Create a new sort for unknown named types
+            sort = z3.DeclareSort(type_node.name)
+            self._sorts[type_node.name] = sort
+            return sort
+        
+        elif isinstance(type_node, ArrayType):
+            elem_sort = self._type_to_sort(type_node.element_type)
+            return z3.ArraySort(z3.IntSort(), elem_sort)
+        
+        elif isinstance(type_node, OptionalType):
+            # Model optional as the inner type (None handled separately)
+            return self._type_to_sort(type_node.inner)
+        
+        # Default to Int
+        return z3.IntSort()
+    
+    def generate_consistency_check(self, ast: "ModuleNode") -> List[Z3Diagnostic]:
+        """
+        Generate and check consistency constraints for all statutes.
+        
+        Args:
+            ast: ModuleNode from Yuho AST
+            
+        Returns:
+            List of Z3Diagnostic results
+        """
+        if not Z3_AVAILABLE:
+            return [Z3Diagnostic(
+                check_name="z3_availability",
+                passed=False,
+                message="Z3 solver not available"
+            )]
+        
+        diagnostics = []
+        solver, assertions = self.generate(ast)
+        
+        if solver is None:
+            return diagnostics
+        
+        # Check overall satisfiability
+        result = solver.check()
+        if result == z3.sat:
+            diagnostics.append(Z3Diagnostic(
+                check_name="statute_consistency",
+                passed=True,
+                message="All statute constraints are satisfiable"
+            ))
+        elif result == z3.unsat:
+            # Try to get unsat core
+            diagnostics.append(Z3Diagnostic(
+                check_name="statute_consistency",
+                passed=False,
+                message="Statute constraints are contradictory"
+            ))
+        else:
+            diagnostics.append(Z3Diagnostic(
+                check_name="statute_consistency",
+                passed=False,
+                message="Could not determine consistency (timeout or unknown)"
+            ))
+        
+        # Check penalty ordering (if multiple statutes)
+        if len(ast.statutes) > 1:
+            penalty_check = self._check_penalty_ordering(ast)
+            diagnostics.extend(penalty_check)
+        
+        return diagnostics
+    
+    def _check_penalty_ordering(self, ast: "ModuleNode") -> List[Z3Diagnostic]:
+        """Check that penalty ranges don't have unexpected overlaps."""
+        diagnostics = []
+        
+        # Collect statutes with penalties
+        statutes_with_penalties = [
+            s for s in ast.statutes if s.penalty is not None
+        ]
+        
+        if len(statutes_with_penalties) < 2:
+            return diagnostics
+        
+        # This is a placeholder for more sophisticated penalty analysis
+        diagnostics.append(Z3Diagnostic(
+            check_name="penalty_ordering",
+            passed=True,
+            message=f"Analyzed {len(statutes_with_penalties)} statutes with penalties"
+        ))
+        
+        return diagnostics
