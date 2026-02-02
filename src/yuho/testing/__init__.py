@@ -6,6 +6,9 @@ Usage in your tests:
 
 Or import fixtures directly in conftest.py:
     pytest_plugins = ["yuho.testing.fixtures"]
+
+For coverage tracking:
+    from yuho.testing import CoverageTracker, analyze_test_coverage
 """
 
 from yuho.testing.fixtures import (
@@ -18,8 +21,16 @@ from yuho.testing.fixtures import (
     element_check,
     penalty_check,
 )
+from yuho.testing.coverage import (
+    CoverageTracker,
+    CoverageReport,
+    StatuteCoverage,
+    ElementCoverage,
+    analyze_test_coverage,
+)
 
 __all__ = [
+    # Fixtures
     "yuho_parser",
     "yuho_ast",
     "parse_statute",
@@ -28,4 +39,10 @@ __all__ = [
     "StatuteTestCase",
     "element_check",
     "penalty_check",
+    # Coverage
+    "CoverageTracker",
+    "CoverageReport",
+    "StatuteCoverage",
+    "ElementCoverage",
+    "analyze_test_coverage",
 ]
