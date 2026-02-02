@@ -6,14 +6,10 @@
 # ============================================================================
 
 
-(A) Implement Z3 counterexample extraction and diagnostic conversion +verify
-(B) Add Z3-based exhaustiveness checking for match expressions +verify
-(B) Implement Z3 model enumeration for finding all valid interpretations +verify
-(C) Add combined Alloy+Z3 verification mode with result comparison +verify
-
 # ============================================================================
 # LIBRARY: Full registry and dependency management
 # ============================================================================
+
 
 (A) Implement library index with search by section/keyword/jurisdiction/tags +library
 (A) Implement dependency resolution with version constraint solving +library
