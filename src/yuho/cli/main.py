@@ -614,6 +614,30 @@ def library_info(
     )
 
 
+@library.command("outdated")
+@click.option("--json", "json_output", is_flag=True, help="Output as JSON")
+@click.pass_context
+def library_outdated(
+    ctx: click.Context,
+    json_output: bool,
+) -> None:
+    """
+    Show packages with updates available.
+
+    Displays installed packages that have newer versions in the registry,
+    along with the type of update (major, minor, patch) and deprecation warnings.
+
+    Examples:
+        yuho library outdated
+        yuho library outdated --json
+    """
+    from yuho.cli.commands.library import run_library_outdated
+    run_library_outdated(
+        json_output=json_output,
+        verbose=ctx.obj["verbose"],
+    )
+
+
 def main() -> None:
     """Main entry point."""
     cli()

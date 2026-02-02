@@ -268,6 +268,100 @@ def run_library_publish(
         raise SystemExit(1)
 
 
+def run_library_outdated(
+    json_output: bool = False,
+    verbose: bool = False,
+) -> None:
+    """
+    Show packages with updates available.
+
+    Args:
+        json_output: Output as JSON
+        verbose: Verbose output including deprecation info
+    """
+    from yuho.library import check_updates, list_installed, LibraryIndex
+    from yuho.library.resolver import Version
+
+    # Get update info from registry
+    updates = check_updates()
+    installed = list_installed()
+
+    # Build installed lookup
+    installed_map = {
+        pkg.get("section_number"): pkg
+        for pkg in installed
+    }
+
+    # Check for deprecated packages
+    index = LibraryIndex()
+    deprecated_warnings = []
+    for pkg in installed:
+        section = pkg.get("section_number")
+        entry = index.get(section)
+        if entry and hasattr(entry, 'deprecation') and getattr(entry, 'is_deprecated', False):
+            deprecated_warnings.append({
+                "section_number": section,
+                "message": f"Package {section} is deprecated",
+            })
+
+    if json_output:
+        result = {
+            "outdated": updates,
+            "deprecated": deprecated_warnings,
+            "total_installed": len(installed),
+            "total_outdated": len(updates),
+        }
+        click.echo(json.dumps(result, indent=2))
+        return
+
+    if not updates and not deprecated_warnings:
+        click.echo(click.style("All packages are up to date!", fg="green"))
+        return
+
+    if updates:
+        click.echo(click.style(f"\nOutdated packages ({len(updates)}):\n", bold=True))
+
+        for u in updates:
+            section = u["section_number"]
+            current = u["current_version"]
+            available = u["available_version"]
+
+            # Determine upgrade type
+            try:
+                curr_v = Version.parse(current)
+                avail_v = Version.parse(available)
+                if avail_v.major > curr_v.major:
+                    change_type = click.style("MAJOR", fg="red", bold=True)
+                elif avail_v.minor > curr_v.minor:
+                    change_type = click.style("minor", fg="yellow")
+                else:
+                    change_type = click.style("patch", fg="green")
+            except Exception:
+                change_type = ""
+
+            click.echo(
+                f"  {click.style(section, fg='cyan', bold=True)}  "
+                f"{click.style(current, fg='yellow')} -> "
+                f"{click.style(available, fg='green')}  {change_type}"
+            )
+
+            if verbose:
+                pkg = installed_map.get(section, {})
+                title = pkg.get("title", "")
+                if title:
+                    click.echo(f"      {title}")
+
+        click.echo()
+
+    if deprecated_warnings:
+        click.echo(click.style(f"\nDeprecated packages ({len(deprecated_warnings)}):\n", fg="yellow", bold=True))
+        for d in deprecated_warnings:
+            click.echo(f"  {click.style('⚠', fg='yellow')} {d['message']}")
+        click.echo()
+
+    click.echo(f"Run 'yuho library update --all' to update outdated packages")
+
+
 def run_library_info(
     package: str,
     json_output: bool = False,
