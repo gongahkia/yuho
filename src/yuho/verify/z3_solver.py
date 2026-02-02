@@ -631,6 +631,122 @@ class Z3Solver:
         return diagnostics
 
 
+    def check_match_exhaustiveness(
+        self, match_expr: "MatchExprNode"
+    ) -> Tuple[bool, List[Z3Diagnostic]]:
+        """
+        Check if a match expression is exhaustive using Z3.
+        
+        Analyzes match arms to determine if all possible values of the
+        scrutinee are covered. Returns diagnostics with counterexamples
+        if match is non-exhaustive.
+        
+        Args:
+            match_expr: MatchExprNode from Yuho AST
+            
+        Returns:
+            Tuple of (is_exhaustive, list of diagnostics)
+        """
+        from yuho.ast.nodes import (
+            WildcardPattern, LiteralPattern, BindingPattern,
+            StructPattern, IntLit, StringLit, BoolLit
+        )
+        
+        diagnostics = []
+        
+        # If no scrutinee (bare match block), can't check exhaustiveness
+        if match_expr.scrutinee is None:
+            return (True, diagnostics)
+        
+        # Check if there's a wildcard pattern (always exhaustive)
+        has_wildcard = any(
+            isinstance(arm.pattern, WildcardPattern) or
+            isinstance(arm.pattern, BindingPattern)
+            for arm in match_expr.arms
+        )
+        
+        if has_wildcard:
+            diagnostics.append(Z3Diagnostic(
+                check_name="match_exhaustiveness",
+                passed=True,
+                message="Match has wildcard pattern (exhaustive)"
+            ))
+            return (True, diagnostics)
+        
+        # Extract pattern strings for Z3 checking
+        patterns = []
+        for arm in match_expr.arms:
+            pattern_str = self._pattern_to_constraint_string(arm.pattern)
+            if pattern_str:
+                patterns.append(pattern_str)
+        
+        # Check exhaustiveness with Z3
+        is_exhaustive, counterexample = self.check_exhaustiveness(patterns)
+        
+        if is_exhaustive:
+            diagnostics.append(Z3Diagnostic(
+                check_name="match_exhaustiveness",
+                passed=True,
+                message=f"Match expression is exhaustive ({len(patterns)} arms)"
+            ))
+        else:
+            extractor = Z3CounterexampleExtractor()
+            if counterexample:
+                diagnostic = extractor.generate_diagnostic_from_model(
+                    None,  # Would need Z3 model object here
+                    "match_exhaustiveness",
+                    f"Match is non-exhaustive, missing case for: {counterexample}"
+                )
+                diagnostic = Z3Diagnostic(
+                    check_name="match_exhaustiveness",
+                    passed=False,
+                    counterexample=counterexample,
+                    message=f"Match is non-exhaustive, example missing value: {counterexample}"
+                )
+            else:
+                diagnostic = Z3Diagnostic(
+                    check_name="match_exhaustiveness",
+                    passed=False,
+                    message="Match is non-exhaustive (no counterexample generated)"
+                )
+            diagnostics.append(diagnostic)
+        
+        return (is_exhaustive, diagnostics)
+    
+    def _pattern_to_constraint_string(self, pattern: "ASTNode") -> Optional[str]:
+        """
+        Convert a pattern AST node to a constraint string for Z3.
+        
+        Args:
+            pattern: Pattern node from AST
+            
+        Returns:
+            Constraint string or None if pattern can't be converted
+        """
+        from yuho.ast.nodes import (
+            WildcardPattern, LiteralPattern, BindingPattern,
+            IntLit, StringLit, BoolLit
+        )
+        
+        if isinstance(pattern, WildcardPattern):
+            return "_"
+        
+        if isinstance(pattern, BindingPattern):
+            return pattern.name
+        
+        if isinstance(pattern, LiteralPattern):
+            lit = pattern.literal
+            if isinstance(lit, IntLit):
+                return str(lit.value)
+            elif isinstance(lit, BoolLit):
+                return "true" if lit.value else "false"
+            elif isinstance(lit, StringLit):
+                return f'"{lit.value}"'
+        
+        # For other patterns, return None (can't easily convert)
+        return None
+
+
 class Z3Generator:
     """
     Generates Z3 constraints from Yuho statute ASTs.
