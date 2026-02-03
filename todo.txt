@@ -6,9 +6,7 @@
 # ============================================================================
 
 (B) Implement type checker in LSP server (lsp/server.py:356 TODO) +lsp +code-quality
-(B) Refactor lsp/server.py (1,427 lines) into separate handler modules +architecture
-    # Extract: completion_handler.py, hover_handler.py, code_action_handler.py, diagnostics.py
-
+(B) Refactor lsp/server.py (1,427 lines) into separate handler modules and specifically extract completion_handler.py, hover_handler.py, code_action_handler.py, diagnostics.py +architecture
 (C) Add --explain-error flag for detailed error diagnostics with suggestions +cli +ux
 (C) Add rate limiting to MCP server to prevent abuse +security +mcp
 (C) Refactor latex_transpiler.py (696 lines) into smaller focused modules +architecture
@@ -28,36 +26,15 @@
 # CLI ALTERNATIVES TO SVELTE WEB APP (v5.1)
 # ============================================================================
 
-# These provide the same functionality as the planned Svelte web app but in CLI:
-
-(C) Add interactive TUI wizard for statute creation (yuho new --wizard) +cli +alternative
-    # Replaces: Scratch-like block palette and guided statute builder wizard
-    # Uses: inquirer-style prompts to build statutes step-by-step
-
-(C) Implement AST visualization in terminal (yuho ast --tree) with ASCII art +cli +alternative
-    # Replaces: Block editor visual representation
-    # Uses: tree-like ASCII output showing statute structure
-
-(C) Add live preview mode with file watching (yuho preview statute.yh) +cli +alternative
-    # Replaces: Bidirectional sync between editor and source
-    # Uses: watches file, auto-transpiles to mermaid/english, opens in browser
-
-(C) Implement statute scaffold generator (yuho generate s500 --title "Theft") +cli +alternative
-    # Replaces: Guided statute builder wizard
-    # Uses: generates boilerplate .yh file with proper structure
-
-(C) Add block-notation output format (yuho transpile --target blocks) +cli +alternative
-    # Replaces: AST-to-block converters
-    # Uses: outputs a structured text representation of blocks
+(C) Add interactive TUI wizard for statute creation that uses inquirer-style prompts to build statutes step-by-step (yuho new --wizard) +cli +alternative 
+(C) Implement AST visualization in terminal that uses tree-like ASCII output showing statute structure (yuho ast --tree) with ASCII art +cli +alternative
+(C) Add live preview mode with file watching that watches file, auto-transpiles to mermaid/english, opens in browser (yuho preview statute.yh) +cli +alternative
+(C) Implement statute scaffold generator that generates boilerplate .yh file with proper structure (yuho generate s500 --title "Theft") +cli +alternative
+(C) Add block-notation output format that outputs a structured text representation of blocks (yuho transpile --target blocks) +cli +alternative
 
 # ============================================================================
-# ROADMAP: v6 items (visual editor and beyond)
+# NEOVIM EXTENSION SUPPORT
 # ============================================================================
 
-(D) Design Scratch-like block palette for Yuho constructs with Svelte but ensure it is entirely localhost and is not meant for actual web deployment +roadmap
-(D) Implement drag-and-drop block editor using Blockly or custom Svelte components +roadmap
-(D) Implement bidirectional sync between block editor and .yh source that allows export/import as well +roadmap
-(D) Integrate existing neovim LSP extension with tree-sitter highlighting +roadmap
-(D) Add a neovim extension command to allow for opening the block editor and previewing .yh files as their block-like palette in localhost (functions similar to markdown preview extension) +roadmap
-(D) Implement block-to-AST and AST-to-block converters +roadmap
-(D) Design guided statute builder wizard for non-programmers but don't need to make too fancy +roadmap
+(D) Further ideate and build out features for the yuho neovim extension, then suggest them to me via MCQ format
+(D) For those I select, break them down and add them to todo.txt as atomic tasks to be completed, ensuring that each single task can be completed by a coding agent without requiring it to posess too much prerequisite context
