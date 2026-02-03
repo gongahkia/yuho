@@ -213,6 +213,37 @@ def explain(
 
 
 # =============================================================================
+# Diff command
+# =============================================================================
+
+
+@cli.command()
+@click.argument("file1", type=click.Path(exists=True))
+@click.argument("file2", type=click.Path(exists=True))
+@click.option("--json", "json_output", is_flag=True, help="Output as JSON")
+@click.pass_context
+def diff(ctx: click.Context, file1: str, file2: str, json_output: bool) -> None:
+    """
+    Compare two Yuho files and show semantic differences.
+
+    Shows added, removed, and modified statutes, definitions, elements,
+    penalties, and illustrations between two versions.
+
+    Examples:
+        yuho diff old.yh new.yh
+        yuho diff v1/statute.yh v2/statute.yh --json
+    """
+    from yuho.cli.commands.diff import run_diff
+    run_diff(
+        file1,
+        file2,
+        json_output=json_output,
+        verbose=ctx.obj["verbose"],
+        color=ctx.obj["color"],
+    )
+
+
+# =============================================================================
 # Serve command
 # =============================================================================
 
