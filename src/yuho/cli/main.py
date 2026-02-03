@@ -113,7 +113,7 @@ def check(ctx: click.Context, file: str, json_output: bool, explain_errors: bool
 @click.argument("file", type=click.Path(exists=True))
 @click.option(
     "-t", "--target",
-    type=click.Choice(["json", "jsonld", "english", "latex", "mermaid", "alloy"], case_sensitive=False),
+    type=click.Choice(["json", "jsonld", "english", "latex", "mermaid", "alloy", "graphql"], case_sensitive=False),
     default="json",
     help="Transpilation target format"
 )
@@ -134,7 +134,7 @@ def transpile(
     """
     Transpile a Yuho source file to another format.
 
-    Supported targets: json, jsonld, english, latex, mermaid, alloy
+    Supported targets: json, jsonld, english, latex, mermaid, alloy, graphql
     """
     from yuho.cli.commands.transpile import run_transpile
     run_transpile(
@@ -146,6 +146,29 @@ def transpile(
         json_output=json_output,
         verbose=ctx.obj["verbose"]
     )
+
+
+# =============================================================================
+# REPL command
+# =============================================================================
+
+
+@cli.command()
+@click.pass_context
+def repl(ctx: click.Context) -> None:
+    """
+    Start interactive REPL for statute experimentation.
+
+    The REPL provides an interactive environment for:
+    - Parsing and validating Yuho code snippets
+    - Transpiling to various targets (json, english, mermaid, etc.)
+    - Exploring statute definitions and AST structure
+    - Testing legal logic interactively
+
+    Type 'help' within the REPL for available commands.
+    """
+    from yuho.cli.commands.repl import run_repl
+    sys.exit(run_repl(color=ctx.obj["color"], verbose=ctx.obj["verbose"]))
 
 
 # =============================================================================
