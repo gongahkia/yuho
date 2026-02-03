@@ -17,6 +17,7 @@ class TranspileTarget(Enum):
     LATEX = auto()
     MERMAID = auto()
     ALLOY = auto()
+    GRAPHQL = auto()
 
     @classmethod
     def from_string(cls, name: str) -> "TranspileTarget":
@@ -32,6 +33,8 @@ class TranspileTarget(Enum):
             "mermaid": cls.MERMAID,
             "mmd": cls.MERMAID,
             "alloy": cls.ALLOY,
+            "graphql": cls.GRAPHQL,
+            "gql": cls.GRAPHQL,
         }
         target = mapping.get(name.lower())
         if not target:
@@ -48,6 +51,7 @@ class TranspileTarget(Enum):
             TranspileTarget.LATEX: ".tex",
             TranspileTarget.MERMAID: ".mmd",
             TranspileTarget.ALLOY: ".als",
+            TranspileTarget.GRAPHQL: ".graphql",
         }
         return extensions.get(self, ".txt")
 
