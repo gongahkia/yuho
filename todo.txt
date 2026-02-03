@@ -11,7 +11,6 @@
 
 (C) Add --explain-error flag for detailed error diagnostics with suggestions +cli +ux
 (C) Add rate limiting to MCP server to prevent abuse +security +mcp
-(C) Add config file schema documentation with examples in docs +docs
 (C) Refactor latex_transpiler.py (696 lines) into smaller focused modules +architecture
 
 # ============================================================================
