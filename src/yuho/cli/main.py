@@ -283,6 +283,52 @@ def graph(ctx: click.Context, file: str, format: str, output: Optional[str]) -> 
 
 
 # =============================================================================
+# Lint command
+# =============================================================================
+
+
+@cli.command()
+@click.argument("files", nargs=-1, type=click.Path(exists=True), required=True)
+@click.option("--rule", "-r", "rules", multiple=True, help="Specific rules to run")
+@click.option("--exclude", "-e", "exclude_rules", multiple=True, help="Rules to exclude")
+@click.option("--json", "json_output", is_flag=True, help="Output as JSON")
+@click.option("--fix", is_flag=True, help="Auto-fix issues where possible")
+@click.pass_context
+def lint(
+    ctx: click.Context,
+    files: tuple,
+    rules: tuple,
+    exclude_rules: tuple,
+    json_output: bool,
+    fix: bool,
+) -> None:
+    """
+    Check Yuho files for style and best practice issues.
+
+    Analyzes files for:
+    - Missing statute titles, elements, or penalties
+    - Naming convention violations
+    - Unused definitions
+    - Duplicate section numbers
+
+    Examples:
+        yuho lint statute.yh
+        yuho lint *.yh --exclude missing-penalty
+        yuho lint src/ --json
+    """
+    from yuho.cli.commands.lint import run_lint
+    run_lint(
+        list(files),
+        rules=list(rules) if rules else None,
+        exclude_rules=list(exclude_rules) if exclude_rules else None,
+        json_output=json_output,
+        verbose=ctx.obj["verbose"],
+        color=ctx.obj["color"],
+        fix=fix,
+    )
+
+
+# =============================================================================
 # Serve command
 # =============================================================================
 
