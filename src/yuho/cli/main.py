@@ -105,6 +105,51 @@ def check(ctx: click.Context, file: str, json_output: bool, explain_errors: bool
 
 
 # =============================================================================
+# AST command
+# =============================================================================
+
+
+@cli.command()
+@click.argument("file", type=click.Path(exists=True))
+@click.option("-o", "--output", type=click.Path(), help="Output file path")
+@click.option("--tree", "show_tree", is_flag=True, default=True, help="Show tree visualization (default)")
+@click.option("--stats", is_flag=True, help="Show AST statistics")
+@click.option("--depth", type=int, default=0, help="Max depth (0 = unlimited)")
+@click.option("--ascii", "no_unicode", is_flag=True, help="Use ASCII-only characters")
+@click.pass_context
+def ast(
+    ctx: click.Context,
+    file: str,
+    output: Optional[str],
+    show_tree: bool,
+    stats: bool,
+    depth: int,
+    no_unicode: bool,
+) -> None:
+    """
+    Visualize AST structure as tree.
+
+    Displays the abstract syntax tree of a Yuho statute using
+    tree-like ASCII art in the terminal.
+
+    Examples:
+        yuho ast statute.yh
+        yuho ast statute.yh --stats
+        yuho ast statute.yh --ascii -o tree.txt
+    """
+    from yuho.cli.commands.ast_viz import run_ast_viz
+    run_ast_viz(
+        file=file,
+        output=output,
+        stats=stats,
+        depth=depth,
+        no_unicode=no_unicode,
+        verbose=ctx.obj["verbose"],
+        color=ctx.obj["color"],
+    )
+
+
+# =============================================================================
 # Transpile command
 # =============================================================================
 
