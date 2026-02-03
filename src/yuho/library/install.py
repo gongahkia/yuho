@@ -16,6 +16,7 @@ from urllib.parse import urljoin
 
 from yuho.library.package import Package, PackageValidator
 from yuho.library.index import LibraryIndex, IndexEntry, DEFAULT_LIBRARY_DIR
+from yuho.config.mask import mask_error, mask_url
 
 logger = logging.getLogger(__name__)
 
@@ -91,10 +92,10 @@ def install_package(
         return (True, f"Installed {package.metadata.section_number} v{package.metadata.version}")
         
     except FileNotFoundError as e:
-        return (False, f"File not found: {e}")
+        return (False, f"File not found: {mask_error(e)}")
     except Exception as e:
-        logger.exception(f"Installation failed: {e}")
-        return (False, f"Installation failed: {e}")
+        logger.exception(f"Installation failed: {mask_error(e)}")
+        return (False, f"Installation failed: {mask_error(e)}")
 
 
 def uninstall_package(
@@ -296,13 +297,13 @@ def check_updates(
         logger.error(f"Registry request failed: HTTP {e.code}")
         return []
     except URLError as e:
-        logger.error(f"Registry connection failed: {e.reason}")
+        logger.error(f"Registry connection failed: {mask_error(e)}")
         return []
     except json.JSONDecodeError as e:
-        logger.error(f"Invalid registry response: {e}")
+        logger.error(f"Invalid registry response: {mask_error(e)}")
         return []
     except Exception as e:
-        logger.exception(f"Update check failed: {e}")
+        logger.exception(f"Update check failed: {mask_error(e)}")
         return []
 
 
@@ -538,10 +539,10 @@ def publish_package(
             error_msg = f"HTTP {e.code}: {error_body or e.reason}"
         return (False, f"Publish failed: {error_msg}")
     except URLError as e:
-        return (False, f"Connection failed: {e.reason}")
+        return (False, f"Connection failed: {mask_error(e)}")
     except Exception as e:
-        logger.exception(f"Publish failed: {e}")
-        return (False, f"Publish failed: {e}")
+        logger.exception(f"Publish failed: {mask_error(e)}")
+        return (False, f"Publish failed: {mask_error(e)}")
 
 
 def browse_registry(
@@ -691,8 +692,8 @@ def get_registry_package_info(
         logger.warning(f"Registry error: HTTP {e.code}")
         return None
     except URLError as e:
-        logger.warning(f"Connection failed: {e.reason}")
+        logger.warning(f"Connection failed: {mask_error(e)}")
         return None
     except Exception as e:
-        logger.exception(f"Failed to get package info: {e}")
+        logger.exception(f"Failed to get package info: {mask_error(e)}")
         return None

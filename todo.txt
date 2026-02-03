@@ -8,7 +8,6 @@
 (B) Implement type checker in LSP server (lsp/server.py:356 TODO) +lsp +code-quality
 (B) Refactor lsp/server.py (1,427 lines) into separate handler modules +architecture
     # Extract: completion_handler.py, hover_handler.py, code_action_handler.py, diagnostics.py
-(B) Mask sensitive data (API keys, tokens) in logs and error output +security
 
 (C) Add --explain-error flag for detailed error diagnostics with suggestions +cli +ux
 (C) Implement parser instance caching for improved performance +performance

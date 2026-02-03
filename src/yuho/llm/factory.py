@@ -13,6 +13,7 @@ from yuho.llm.providers import (
     OpenAIProvider,
     AnthropicProvider,
 )
+from yuho.config.mask import mask_error
 
 logger = logging.getLogger(__name__)
 
@@ -68,7 +69,7 @@ class LLMProviderFactory:
                 logger.info(f"Using {config.provider} provider")
                 return primary
         except Exception as e:
-            logger.warning(f"Primary provider {config.provider} failed: {e}")
+            logger.warning(f"Primary provider {config.provider} failed: {mask_error(e)}")
 
         # Try fallback providers
         for fallback_name in config.fallback_providers:
@@ -89,7 +90,7 @@ class LLMProviderFactory:
                     logger.info(f"Falling back to {fallback_name} provider")
                     return fallback
             except Exception as e:
-                logger.warning(f"Fallback provider {fallback_name} failed: {e}")
+                logger.warning(f"Fallback provider {fallback_name} failed: {mask_error(e)}")
 
         # Last resort: try Ollama with default settings
         try:

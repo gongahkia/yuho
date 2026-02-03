@@ -17,6 +17,15 @@ from yuho.config.schema import (
     LSPSection,
     MCPSection,
 )
+from yuho.config.mask import (
+    mask_value,
+    mask_dict,
+    mask_string,
+    mask_error,
+    mask_url,
+    safe_repr,
+    is_sensitive_key,
+)
 
 __all__ = [
     "Config",
@@ -26,4 +35,12 @@ __all__ = [
     "TranspileSection",
     "LSPSection",
     "MCPSection",
+    # Masking utilities
+    "mask_value",
+    "mask_dict",
+    "mask_string",
+    "mask_error",
+    "mask_url",
+    "safe_repr",
+    "is_sensitive_key",
 ]
