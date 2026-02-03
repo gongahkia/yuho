@@ -54,6 +54,7 @@ module.exports = grammar({
       $.function_definition,
       $.statute_block,
       $.import_statement,
+      $.referencing_statement,
       $.variable_declaration,
     ),
 
@@ -424,6 +425,15 @@ module.exports = grammar({
       optional(';'),
     ),
 
+    // Referencing statement for test files to import statutes
+    referencing_statement: $ => seq(
+      'referencing',
+      field('path', $.reference_path),
+      optional(';'),
+    ),
+
+    reference_path: $ => /[a-zA-Z_][a-zA-Z_0-9]*(?:\/[a-zA-Z_][a-zA-Z_0-9]*)*/,
+
     import_path: $ => seq(
       '"',
       /[^"]+/,
@@ -482,6 +492,14 @@ module.exports = grammar({
       $.expression_statement,
       $.return_statement,
       $.pass_statement,
+      $.assert_statement,
+    ),
+
+    assert_statement: $ => seq(
+      'assert',
+      field('condition', $._expression),
+      optional(seq(',', field('message', $.string_literal))),
+      optional(';'),
     ),
 
     variable_declaration: $ => seq(

@@ -521,11 +521,13 @@ def library_install(
 
 @library.command("uninstall")
 @click.argument("package")
+@click.option("--dry-run", is_flag=True, help="Show what would be uninstalled without doing it")
 @click.option("--json", "json_output", is_flag=True, help="Output as JSON")
 @click.pass_context
 def library_uninstall(
     ctx: click.Context,
     package: str,
+    dry_run: bool,
     json_output: bool,
 ) -> None:
     """
@@ -533,10 +535,12 @@ def library_uninstall(
 
     Examples:
         yuho library uninstall S403
+        yuho library uninstall S403 --dry-run
     """
     from yuho.cli.commands.library import run_library_uninstall
     run_library_uninstall(
         package,
+        dry_run=dry_run,
         json_output=json_output,
         verbose=ctx.obj["verbose"],
     )
@@ -588,6 +592,7 @@ def library_update(
 @click.argument("path", type=click.Path(exists=True))
 @click.option("--registry", help="Registry URL")
 @click.option("--token", help="Auth token")
+@click.option("--dry-run", is_flag=True, help="Validate package without publishing")
 @click.option("--json", "json_output", is_flag=True, help="Output as JSON")
 @click.pass_context
 def library_publish(
@@ -595,6 +600,7 @@ def library_publish(
     path: str,
     registry: Optional[str],
     token: Optional[str],
+    dry_run: bool,
     json_output: bool,
 ) -> None:
     """
@@ -602,12 +608,14 @@ def library_publish(
 
     Examples:
         yuho library publish ./my-statute --token $YUHO_TOKEN
+        yuho library publish ./my-statute --dry-run
     """
     from yuho.cli.commands.library import run_library_publish
     run_library_publish(
         path,
         registry=registry,
         token=token,
+        dry_run=dry_run,
         json_output=json_output,
         verbose=ctx.obj["verbose"],
     )

@@ -83,10 +83,14 @@ class ASTBuilder:
         function_defs: List[nodes.FunctionDefNode] = []
         statutes: List[nodes.StatuteNode] = []
         variables: List[nodes.VariableDecl] = []
+        references: List[nodes.ReferencingStmt] = []
+        assertions: List[nodes.AssertStmt] = []
 
         for child in node.children:
             if child.type == "import_statement":
                 imports.append(self._build_import(child))
+            elif child.type == "referencing_statement":
+                references.append(self._build_referencing(child))
             elif child.type == "struct_definition":
                 type_defs.append(self._build_struct_def(child))
             elif child.type == "function_definition":
@@ -95,6 +99,8 @@ class ASTBuilder:
                 statutes.append(self._build_statute(child))
             elif child.type == "variable_declaration":
                 variables.append(self._build_variable_decl(child))
+            elif child.type == "assert_statement":
+                assertions.append(self._build_assert(child))
 
         return nodes.ModuleNode(
             imports=tuple(imports),
@@ -102,6 +108,31 @@ class ASTBuilder:
             function_defs=tuple(function_defs),
             statutes=tuple(statutes),
             variables=tuple(variables),
+            references=tuple(references),
+            assertions=tuple(assertions),
+            source_location=self._loc(node),
+        )
+
+    def _build_referencing(self, node) -> nodes.ReferencingStmt:
+        """Build ReferencingStmt from referencing_statement node."""
+        path_node = self._child_by_field(node, "path")
+        path = self._text(path_node) if path_node else ""
+        return nodes.ReferencingStmt(
+            path=path,
+            source_location=self._loc(node),
+        )
+
+    def _build_assert(self, node) -> nodes.AssertStmt:
+        """Build AssertStmt from assert_statement node."""
+        condition_node = self._child_by_field(node, "condition")
+        message_node = self._child_by_field(node, "message")
+
+        condition = self._build_expression(condition_node) if condition_node else nodes.BoolLit(value=True)
+        message = self._build_string_lit(message_node) if message_node else None
+
+        return nodes.AssertStmt(
+            condition=condition,
+            message=message,
             source_location=self._loc(node),
         )
 

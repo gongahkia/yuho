@@ -695,6 +695,33 @@ class PassStmt(ASTNode):
 
 
 @dataclass(frozen=True)
+class AssertStmt(ASTNode):
+    """Assert statement for test files."""
+
+    condition: ASTNode  # Usually a BinaryExprNode with ==
+    message: Optional[StringLit] = None
+
+    def accept(self, visitor: "Visitor"):
+        return visitor.visit_assert_stmt(self)
+
+    def children(self) -> List[ASTNode]:
+        result = [self.condition]
+        if self.message:
+            result.append(self.message)
+        return result
+
+
+@dataclass(frozen=True)
+class ReferencingStmt(ASTNode):
+    """Referencing statement for test files to import statutes."""
+
+    path: str  # e.g., "s300_murder/statute"
+
+    def accept(self, visitor: "Visitor"):
+        return visitor.visit_referencing_stmt(self)
+
+
+@dataclass(frozen=True)
 class ExpressionStmt(ASTNode):
     """Expression statement."""
 
@@ -862,6 +889,8 @@ class ModuleNode(ASTNode):
     function_defs: Tuple[FunctionDefNode, ...]
     statutes: Tuple[StatuteNode, ...]
     variables: Tuple[VariableDecl, ...]
+    references: Tuple["ReferencingStmt", ...] = ()
+    assertions: Tuple["AssertStmt", ...] = ()
 
     def accept(self, visitor: "Visitor"):
         return visitor.visit_module(self)
@@ -869,8 +898,10 @@ class ModuleNode(ASTNode):
     def children(self) -> List[ASTNode]:
         result: List[ASTNode] = []
         result.extend(self.imports)
+        result.extend(self.references)
         result.extend(self.type_defs)
         result.extend(self.function_defs)
         result.extend(self.statutes)
         result.extend(self.variables)
+        result.extend(self.assertions)
         return result

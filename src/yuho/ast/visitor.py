@@ -203,6 +203,12 @@ class Visitor:
     def visit_expression_stmt(self, node: nodes.ExpressionStmt) -> Any:
         return self.generic_visit(node)
 
+    def visit_assert_stmt(self, node: nodes.AssertStmt) -> Any:
+        return self.generic_visit(node)
+
+    def visit_referencing_stmt(self, node: nodes.ReferencingStmt) -> Any:
+        return self.generic_visit(node)
+
     # =========================================================================
     # Statute-specific nodes
     # =========================================================================

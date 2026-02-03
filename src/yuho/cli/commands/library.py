@@ -106,23 +106,53 @@ def run_library_install(
 
 def run_library_uninstall(
     package: str,
+    dry_run: bool = False,
     json_output: bool = False,
     verbose: bool = False,
 ) -> None:
     """
     Uninstall an installed package.
-    
+
     Args:
         package: Package section number
+        dry_run: Show what would be done without doing it
         json_output: Output as JSON
         verbose: Verbose output
     """
-    from yuho.library import uninstall_package
-    
+    from yuho.library import uninstall_package, list_installed
+
+    if dry_run:
+        # Check if package is installed
+        installed = list_installed()
+        pkg_info = next((p for p in installed if p.get("section_number") == package), None)
+
+        if pkg_info:
+            result = {
+                "dry_run": True,
+                "would_uninstall": package,
+                "version": pkg_info.get("version", "unknown"),
+                "title": pkg_info.get("title", ""),
+            }
+            if json_output:
+                click.echo(json.dumps(result, indent=2))
+            else:
+                click.echo(click.style("[DRY RUN] ", fg="yellow") +
+                          f"Would uninstall {package} v{pkg_info.get('version', '?')}")
+                if verbose:
+                    click.echo(f"  Title: {pkg_info.get('title', 'N/A')}")
+        else:
+            result = {"dry_run": True, "error": f"Package not found: {package}"}
+            if json_output:
+                click.echo(json.dumps(result))
+            else:
+                click.echo(click.style("[DRY RUN] ", fg="yellow") +
+                          f"Package not installed: {package}")
+        return
+
     success, message = uninstall_package(package)
-    
+
     result = {"success": success, "message": message}
-    
+
     if json_output:
         click.echo(json.dumps(result))
     elif success:
@@ -234,31 +264,114 @@ def run_library_publish(
     path: str,
     registry: Optional[str] = None,
     token: Optional[str] = None,
+    dry_run: bool = False,
     json_output: bool = False,
     verbose: bool = False,
 ) -> None:
     """
     Publish a package to the registry.
-    
+
     Args:
         path: Path to package directory or .yhpkg
         registry: Registry URL
         token: Auth token
+        dry_run: Validate package without actually publishing
         json_output: Output as JSON
         verbose: Verbose output
     """
-    from yuho.library import publish_package
-    
+    from yuho.library import publish_package, Package
+    from pathlib import Path as PathLib
+
     registry_url = registry or "https://registry.yuho.dev"
-    
+    pkg_path = PathLib(path)
+
+    if dry_run:
+        # Validate the package without publishing
+        errors = []
+        warnings = []
+        pkg_info = {}
+
+        try:
+            # Try to load and validate the package
+            if pkg_path.is_file() and pkg_path.suffix == ".yhpkg":
+                pkg = Package.from_yhpkg(pkg_path)
+            elif pkg_path.is_dir():
+                # Look for metadata.toml
+                meta_file = pkg_path / "metadata.toml"
+                if not meta_file.exists():
+                    errors.append("Missing metadata.toml")
+                else:
+                    import tomllib
+                    with open(meta_file, "rb") as f:
+                        pkg_info = tomllib.load(f)
+
+                # Check for statute.yh
+                statute_file = pkg_path / "statute.yh"
+                if not statute_file.exists():
+                    errors.append("Missing statute.yh")
+
+                # Validate with parser
+                if statute_file.exists():
+                    from yuho.parser import Parser
+                    parser = Parser()
+                    result = parser.parse_file(statute_file)
+                    if result.errors:
+                        errors.extend(f"Parse error: {e.message}" for e in result.errors)
+            else:
+                errors.append(f"Invalid package path: {path}")
+
+            if not token and not dry_run:
+                warnings.append("No auth token provided")
+
+        except Exception as e:
+            errors.append(f"Validation error: {e}")
+
+        result = {
+            "dry_run": True,
+            "path": str(pkg_path),
+            "registry": registry_url,
+            "valid": len(errors) == 0,
+            "errors": errors,
+            "warnings": warnings,
+            "package_info": pkg_info,
+        }
+
+        if json_output:
+            click.echo(json.dumps(result, indent=2))
+        else:
+            click.echo(click.style("[DRY RUN] ", fg="yellow") + f"Validating {path}")
+            if pkg_info.get("section_number"):
+                click.echo(f"  Section: {pkg_info.get('section_number')}")
+            if pkg_info.get("title"):
+                click.echo(f"  Title: {pkg_info.get('title')}")
+            if pkg_info.get("version"):
+                click.echo(f"  Version: {pkg_info.get('version')}")
+            click.echo(f"  Registry: {registry_url}")
+
+            if errors:
+                click.echo(click.style("\nErrors:", fg="red"))
+                for err in errors:
+                    click.echo(f"  - {err}")
+            if warnings:
+                click.echo(click.style("\nWarnings:", fg="yellow"))
+                for warn in warnings:
+                    click.echo(f"  - {warn}")
+
+            if not errors:
+                click.echo(click.style("\n✓ Package is valid and ready to publish", fg="green"))
+            else:
+                click.echo(click.style("\n✗ Package validation failed", fg="red"))
+                raise SystemExit(1)
+        return
+
     success, message = publish_package(
         source=path,
         registry_url=registry_url,
         auth_token=token,
     )
-    
+
     result = {"success": success, "message": message}
-    
+
     if json_output:
         click.echo(json.dumps(result))
     elif success:

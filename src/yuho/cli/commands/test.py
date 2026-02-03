@@ -154,6 +154,7 @@ def _run_test_file(test_file: Path, verbose: bool, coverage_tracker=None) -> dic
         "file": str(test_file),
         "passed": False,
         "errors": [],
+        "assertions": {"passed": 0, "failed": 0},
     }
 
     # Parse test file
@@ -182,6 +183,23 @@ def _run_test_file(test_file: Path, verbose: bool, coverage_tracker=None) -> dic
             coverage_tracker.add_test_result(passed=False)
         return result
 
+    # Evaluate assertions if present
+    if hasattr(ast, 'assertions') and ast.assertions:
+        env = _build_test_environment(ast)
+        for assertion in ast.assertions:
+            try:
+                passed, error_msg = _evaluate_assertion(assertion, env, verbose)
+                if passed:
+                    result["assertions"]["passed"] += 1
+                else:
+                    result["assertions"]["failed"] += 1
+                    loc = assertion.source_location
+                    loc_str = f"{loc.line}:{loc.col}" if loc else "?"
+                    result["errors"].append(f"Assertion failed at {loc_str}: {error_msg}")
+            except Exception as e:
+                result["assertions"]["failed"] += 1
+                result["errors"].append(f"Assertion evaluation error: {e}")
+
     # Track coverage if enabled
     if coverage_tracker:
         for statute in ast.statutes:
@@ -206,17 +224,111 @@ def _run_test_file(test_file: Path, verbose: bool, coverage_tracker=None) -> dic
                     if hasattr(ill, 'label') and ill.label:
                         coverage_tracker.mark_illustration_covered(section, ill.label)
 
-        coverage_tracker.add_test_result(passed=True)
+        coverage_tracker.add_test_result(passed=result["assertions"]["failed"] == 0)
 
-    # For now, just verify it parses successfully
-    # TODO: Implement actual test assertions once test format is defined
-    result["passed"] = True
+    # Test passes if no assertion failures and no parse errors
+    result["passed"] = result["assertions"]["failed"] == 0 and len(result["errors"]) == 0
     result["stats"] = {
         "statutes": len(ast.statutes),
         "functions": len(ast.function_defs),
+        "assertions_total": result["assertions"]["passed"] + result["assertions"]["failed"],
     }
 
     return result
+
+
+def _build_test_environment(ast) -> dict:
+    """Build an environment mapping variable names to their values."""
+    from yuho.ast import nodes
+
+    env = {}
+
+    # Add struct types to environment
+    for struct_def in ast.type_defs:
+        env[struct_def.name] = {"_type": "struct_def", "fields": {f.name: f for f in struct_def.fields}}
+
+    # Add variables to environment
+    for var in ast.variables:
+        if var.value:
+            env[var.name] = _evaluate_expr(var.value, env)
+
+    return env
+
+
+def _evaluate_expr(expr, env: dict):
+    """Evaluate an expression in the given environment."""
+    from yuho.ast import nodes
+
+    if isinstance(expr, nodes.BoolLit):
+        return expr.value
+    elif isinstance(expr, nodes.IntLit):
+        return expr.value
+    elif isinstance(expr, nodes.FloatLit):
+        return expr.value
+    elif isinstance(expr, nodes.StringLit):
+        return expr.value
+    elif isinstance(expr, nodes.IdentifierNode):
+        return env.get(expr.name, f"<unbound:{expr.name}>")
+    elif isinstance(expr, nodes.FieldAccessNode):
+        base = _evaluate_expr(expr.base, env)
+        if isinstance(base, dict):
+            return base.get(expr.field_name, f"<no field:{expr.field_name}>")
+        # Handle enum-style access like Party.Accused
+        if isinstance(base, str) and base.startswith("<unbound:"):
+            # This is an enum reference like ConsequenceDefinition.Murder
+            type_name = base.replace("<unbound:", "").replace(">", "")
+            return f"{type_name}.{expr.field_name}"
+        return f"<field access error>"
+    elif isinstance(expr, nodes.StructLiteralNode):
+        result = {"_struct_name": expr.struct_name}
+        for fa in expr.field_values:
+            result[fa.name] = _evaluate_expr(fa.value, env)
+        return result
+    elif isinstance(expr, nodes.BinaryExprNode):
+        left = _evaluate_expr(expr.left, env)
+        right = _evaluate_expr(expr.right, env)
+        if expr.operator == "==":
+            return left == right
+        elif expr.operator == "!=":
+            return left != right
+        elif expr.operator == "&&":
+            return left and right
+        elif expr.operator == "||":
+            return left or right
+        return f"<binary:{expr.operator}>"
+    elif isinstance(expr, nodes.PassExprNode):
+        return None
+    else:
+        return f"<unevaluated:{type(expr).__name__}>"
+
+
+def _evaluate_assertion(assertion, env: dict, verbose: bool) -> tuple:
+    """Evaluate an assertion and return (passed, error_message)."""
+    from yuho.ast import nodes
+
+    condition = assertion.condition
+
+    # Handle equality assertions like: assert var.field == ExpectedValue
+    if isinstance(condition, nodes.BinaryExprNode) and condition.operator == "==":
+        left = _evaluate_expr(condition.left, env)
+        right = _evaluate_expr(condition.right, env)
+
+        if left == right:
+            return (True, "")
+        else:
+            return (False, f"expected {right}, got {left}")
+
+    # Handle simple boolean assertions
+    result = _evaluate_expr(condition, env)
+    if result is True:
+        return (True, "")
+    elif result is False:
+        return (False, "assertion evaluated to FALSE")
+    else:
+        # Non-boolean result, check for truthiness
+        if result:
+            return (True, "")
+        return (False, f"assertion evaluated to: {result}")
 
 
 def _generate_html_coverage_report(report, output_path: Path) -> None:
