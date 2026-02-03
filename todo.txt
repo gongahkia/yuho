@@ -1,52 +1,5 @@
 # Yuho v5 PRD - Updated 2026-02-03
 # Priority: (A) Critical/blocking, (B) Important, (C) Enhancement, (D) Future/v6
 
-# ============================================================================
-# NEOVIM EXTENSION FEATURES
-# ============================================================================
+# All tasks completed.
 
-# --- (A) Statute Diff Split View ---
-(D) Create lua/yuho/diff.lua module with function to open two .yh files in vertical split +nvim
-(D) Add highlight groups (YuhoDiffAdd, YuhoDiffDelete, YuhoDiffChange) for semantic diff coloring +nvim
-(D) Implement ]c and [c keybindings to navigate between diff changes in split view +nvim
-(D) Add :YuhoDiff command and <leader>yD keybinding to trigger diff mode +nvim
-
-# --- (B) Inline Penalty Calculator ---
-(D) Create lua/yuho/penalty.lua module to parse penalty block from current buffer +nvim
-(D) Add virtual text display showing penalty range (e.g., "imprisonment 2Y-10Y | fine SGD 5000") +nvim
-(D) Set up autocmd to update penalty virtual text on TextChanged/TextChangedI events +nvim
-
-# --- (C) Smart Statute Completion ---
-(D) Create lua/yuho/completion.lua with nvim-cmp source for Yuho files +nvim
-(D) Add completion items for element types (actus_reus, mens_rea, circumstance) with documentation +nvim
-(D) Add completion items for block keywords (definitions, elements, penalty, illustrations) +nvim
-(D) Create lua/yuho/legal_terms.lua dictionary with common legal terms for completion suggestions +nvim
-
-# --- (D) Live Mermaid Preview Window ---
-(D) Create lua/yuho/mermaid_preview.lua module with floating window creation +nvim
-(D) Add buffer watcher that calls yuho transpile -t mermaid on changes +nvim
-(D) Render mermaid output in preview window with syntax highlighting +nvim
-(D) Add <leader>ym keybinding to toggle mermaid preview window +nvim
-
-# --- (E) Statute Reference Jump ---
-(D) Create lua/yuho/references.lua module to parse cross-references (see "300" patterns) +nvim
-(D) Implement custom gd handler that jumps to referenced statute file in library/ or statutes/ +nvim
-(D) Add function to build quickfix list of all statutes that reference current statute +nvim
-(D) Add <leader>yr keybinding to show incoming references in quickfix +nvim
-
-# --- (F) Statute Outline/TOC Panel ---
-(D) Create lua/yuho/outline.lua module with sidebar buffer creation +nvim
-(D) Parse current statute structure (section, definitions, elements, penalty, illustrations) into tree +nvim
-(D) Add cursor tracking to highlight current section in outline +nvim
-(D) Add <CR> mapping in outline to jump to selected section, <leader>yo to toggle panel +nvim
-
-# --- (G) Snippet Expansion ---
-(D) Create lua/yuho/snippets.lua with LuaSnip snippet definitions for Yuho +nvim
-(D) Add stat snippet expanding to full statute scaffold template +nvim
-(D) Add def snippet for definition block, elem for elements block, ill for illustration entry +nvim
-(D) Add penalty snippet with imprisonment/fine placeholders +nvim
-
-# --- (H) Diagnostic Inline Hints ---
-(D) Configure vim.diagnostic.config to show lint warnings as virtual text suffix +nvim
-(D) Create lua/yuho/hints.lua to add custom virtual text for missing elements warnings +nvim
-(D) Add highlight group YuhoHint for inline diagnostic styling +nvim
