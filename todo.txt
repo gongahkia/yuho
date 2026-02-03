@@ -5,7 +5,6 @@
 # CLI ALTERNATIVES TO SVELTE WEB APP (v5.1)
 # ============================================================================
 
-(C) Implement AST visualization in terminal that uses tree-like ASCII output showing statute structure (yuho ast --tree) with ASCII art +cli +alternative
 (C) Add live preview mode with file watching that watches file, auto-transpiles to mermaid/english, opens in browser (yuho preview statute.yh) +cli +alternative
 (C) Implement statute scaffold generator that generates boilerplate .yh file with proper structure (yuho generate s500 --title "Theft") +cli +alternative
 (C) Add block-notation output format that outputs a structured text representation of blocks (yuho transpile --target blocks) +cli +alternative
