@@ -5,7 +5,6 @@
 # CODE QUALITY & ARCHITECTURE (v5.1)
 # ============================================================================
 
-(B) Implement type checker in LSP server (lsp/server.py:356 TODO) +lsp +code-quality
 (B) Refactor lsp/server.py (1,427 lines) into separate handler modules and specifically extract completion_handler.py, hover_handler.py, code_action_handler.py, diagnostics.py +architecture
 (C) Add --explain-error flag for detailed error diagnostics with suggestions +cli +ux
 (C) Add rate limiting to MCP server to prevent abuse +security +mcp
