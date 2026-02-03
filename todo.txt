@@ -35,5 +35,6 @@
 # NEOVIM EXTENSION SUPPORT
 # ============================================================================
 
+(D) Ensure that all the previously added features work and are functioning since they were added by various AI agents
 (D) Further ideate and build out features for the yuho neovim extension, then suggest them to me via MCQ format
 (D) For those I select, break them down and add them to todo.txt as atomic tasks to be completed, ensuring that each single task can be completed by a coding agent without requiring it to posess too much prerequisite context
