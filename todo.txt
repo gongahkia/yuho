@@ -5,7 +5,6 @@
 # CLI ENHANCEMENTS (v5.1)
 # ============================================================================
 
-(B) Implement lint command for style checking and best practices (yuho lint) +cli +analysis
 (C) Add API server mode for remote transpilation and validation (yuho api --port 8080) +cli +integration
 
 # ============================================================================

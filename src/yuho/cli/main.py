@@ -329,6 +329,37 @@ def lint(
 
 
 # =============================================================================
+# API command
+# =============================================================================
+
+
+@cli.command()
+@click.option("-p", "--port", type=int, default=8080, help="Port to listen on")
+@click.option("--host", default="127.0.0.1", help="Host to bind to")
+@click.pass_context
+def api(ctx: click.Context, port: int, host: str) -> None:
+    """
+    Start the REST API server for remote operations.
+
+    Provides HTTP endpoints for:
+    - Parsing and validating Yuho source code
+    - Transpiling to various formats
+    - Running lint checks
+
+    Examples:
+        yuho api
+        yuho api --port 3000 --host 0.0.0.0
+    """
+    from yuho.cli.commands.api import run_api
+    run_api(
+        host=host,
+        port=port,
+        verbose=ctx.obj["verbose"],
+        color=ctx.obj["color"],
+    )
+
+
+# =============================================================================
 # Serve command
 # =============================================================================
 
