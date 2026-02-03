@@ -66,6 +66,9 @@ function M.setup(opts)
 
   -- Setup diff module
   require("yuho.diff").setup()
+
+  -- Setup penalty calculator
+  require("yuho.penalty").setup()
 end
 
 -- Setup LSP client
