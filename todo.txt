@@ -5,7 +5,6 @@
 # CLI ENHANCEMENTS (v5.1)
 # ============================================================================
 
-(B) Add GraphQL schema transpilation target for building legal APIs +cli +transpile
 (B) Implement REPL mode for interactive statute experimentation (yuho repl) +cli +workflow
 (B) Add diff command to compare statute versions and show changes (yuho diff) +cli +workflow
 (B) Add graph command to visualize statute dependencies (yuho graph --format dot/mermaid) +cli +workflow
