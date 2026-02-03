@@ -7,12 +7,194 @@ Provides MCP tools for parsing, transpiling, and analyzing Yuho code.
 from typing import Dict, List, Optional, Any
 from pathlib import Path
 from enum import IntEnum
+from dataclasses import dataclass, field
 import json
 import logging
 import time
+import threading
 
 # Configure MCP logger
 logger = logging.getLogger("yuho.mcp")
+
+
+class LogVerbosity(IntEnum):
+    """Verbosity levels for MCP request logging."""
+    QUIET = 0      # No logging
+    MINIMAL = 1    # Log tool name only
+    STANDARD = 2   # Log tool name and execution time
+    VERBOSE = 3    # Log tool name, args summary, and execution time
+    DEBUG = 4      # Log everything including full args and responses
+
+
+class RateLimitExceeded(Exception):
+    """Exception raised when rate limit is exceeded."""
+    
+    def __init__(self, retry_after: float):
+        self.retry_after = retry_after
+        super().__init__(f"Rate limit exceeded. Retry after {retry_after:.1f}s")
+
+
+@dataclass
+class RateLimitConfig:
+    """Configuration for rate limiting."""
+    
+    # Requests per second (token refill rate)
+    requests_per_second: float = 10.0
+    
+    # Maximum burst size (bucket capacity)
+    burst_size: int = 20
+    
+    # Per-client limits (by IP or client ID)
+    per_client_rps: float = 5.0
+    per_client_burst: int = 10
+    
+    # Enable/disable rate limiting
+    enabled: bool = True
+    
+    # Exempt tool names (no rate limiting)
+    exempt_tools: List[str] = field(default_factory=lambda: ["yuho_grammar", "yuho_types"])
+
+
+class TokenBucket:
+    """Token bucket rate limiter implementation."""
+    
+    def __init__(self, rate: float, capacity: int):
+        """
+        Initialize token bucket.
+        
+        Args:
+            rate: Token refill rate (tokens per second)
+            capacity: Maximum bucket capacity
+        """
+        self.rate = rate
+        self.capacity = capacity
+        self.tokens = float(capacity)
+        self.last_refill = time.monotonic()
+        self._lock = threading.Lock()
+    
+    def _refill(self) -> None:
+        """Refill tokens based on elapsed time."""
+        now = time.monotonic()
+        elapsed = now - self.last_refill
+        self.tokens = min(self.capacity, self.tokens + elapsed * self.rate)
+        self.last_refill = now
+    
+    def acquire(self, tokens: int = 1) -> bool:
+        """
+        Try to acquire tokens from the bucket.
+        
+        Args:
+            tokens: Number of tokens to acquire
+            
+        Returns:
+            True if tokens acquired, False if rate limited
+        """
+        with self._lock:
+            self._refill()
+            if self.tokens >= tokens:
+                self.tokens -= tokens
+                return True
+            return False
+    
+    def time_until_available(self, tokens: int = 1) -> float:
+        """
+        Calculate time until tokens will be available.
+        
+        Args:
+            tokens: Number of tokens needed
+            
+        Returns:
+            Seconds until tokens available (0 if available now)
+        """
+        with self._lock:
+            self._refill()
+            if self.tokens >= tokens:
+                return 0.0
+            deficit = tokens - self.tokens
+            return deficit / self.rate
+
+
+class RateLimiter:
+    """Rate limiter for MCP server with per-client tracking."""
+    
+    def __init__(self, config: RateLimitConfig):
+        self.config = config
+        self._global_bucket = TokenBucket(config.requests_per_second, config.burst_size)
+        self._client_buckets: Dict[str, TokenBucket] = {}
+        self._client_buckets_lock = threading.Lock()
+        self._stats = {
+            "total_requests": 0,
+            "rate_limited": 0,
+            "by_tool": {},
+        }
+    
+    def _get_client_bucket(self, client_id: str) -> TokenBucket:
+        """Get or create a token bucket for a client."""
+        with self._client_buckets_lock:
+            if client_id not in self._client_buckets:
+                self._client_buckets[client_id] = TokenBucket(
+                    self.config.per_client_rps,
+                    self.config.per_client_burst
+                )
+            return self._client_buckets[client_id]
+    
+    def check_rate_limit(
+        self,
+        tool_name: str,
+        client_id: Optional[str] = None,
+    ) -> None:
+        """
+        Check if request is rate limited.
+        
+        Args:
+            tool_name: Name of the tool being called
+            client_id: Optional client identifier
+            
+        Raises:
+            RateLimitExceeded: If rate limit is exceeded
+        """
+        if not self.config.enabled:
+            return
+        
+        # Track stats
+        self._stats["total_requests"] += 1
+        self._stats["by_tool"][tool_name] = self._stats["by_tool"].get(tool_name, 0) + 1
+        
+        # Check exempt tools
+        if tool_name in self.config.exempt_tools:
+            return
+        
+        # Check global rate limit
+        if not self._global_bucket.acquire():
+            self._stats["rate_limited"] += 1
+            retry_after = self._global_bucket.time_until_available()
+            logger.warning(f"Global rate limit exceeded for {tool_name}")
+            raise RateLimitExceeded(retry_after)
+        
+        # Check per-client rate limit if client_id provided
+        if client_id:
+            client_bucket = self._get_client_bucket(client_id)
+            if not client_bucket.acquire():
+                self._stats["rate_limited"] += 1
+                retry_after = client_bucket.time_until_available()
+                logger.warning(f"Client rate limit exceeded for {client_id} on {tool_name}")
+                raise RateLimitExceeded(retry_after)
+    
+    def get_stats(self) -> Dict[str, Any]:
+        """Get rate limiting statistics."""
+        return {
+            **self._stats,
+            "global_tokens": self._global_bucket.tokens,
+            "active_clients": len(self._client_buckets),
+        }
+    
+    def reset_stats(self) -> None:
+        """Reset rate limiting statistics."""
+        self._stats = {
+            "total_requests": 0,
+            "rate_limited": 0,
+            "by_tool": {},
+        }
 
 
 class LogVerbosity(IntEnum):
@@ -109,9 +291,14 @@ class YuhoMCPServer:
     - yuho://library/{section}: Statute by section
     """
 
-    def __init__(self, verbosity: LogVerbosity = LogVerbosity.STANDARD):
+    def __init__(
+        self,
+        verbosity: LogVerbosity = LogVerbosity.STANDARD,
+        rate_limit_config: Optional[RateLimitConfig] = None,
+    ):
         self.server = Server("yuho-mcp")
         self.request_logger = MCPRequestLogger(verbosity)
+        self.rate_limiter = RateLimiter(rate_limit_config or RateLimitConfig())
         self._register_tools()
         self._register_resources()
         self._register_prompts()
@@ -121,20 +308,39 @@ class YuhoMCPServer:
         self.request_logger.verbosity = verbosity
         logger.info(f"MCP logging verbosity set to: {verbosity.name}")
 
+    def set_rate_limit_config(self, config: RateLimitConfig) -> None:
+        """Update rate limiting configuration."""
+        self.rate_limiter = RateLimiter(config)
+        logger.info(f"MCP rate limiting updated: {config.requests_per_second} req/s, burst={config.burst_size}")
+
+    def get_rate_limit_stats(self) -> Dict[str, Any]:
+        """Get rate limiting statistics."""
+        return self.rate_limiter.get_stats()
+
+    def _check_rate_limit(self, tool_name: str, client_id: Optional[str] = None) -> None:
+        """Check rate limit and raise exception if exceeded."""
+        self.rate_limiter.check_rate_limit(tool_name, client_id)
+
     def _register_tools(self):
         """Register MCP tools."""
 
         @self.server.tool()
-        async def yuho_check(file_content: str) -> Dict[str, Any]:
+        async def yuho_check(file_content: str, client_id: Optional[str] = None) -> Dict[str, Any]:
             """
             Validate Yuho source code.
 
             Args:
                 file_content: The Yuho source code to validate
+                client_id: Optional client identifier for rate limiting
 
             Returns:
                 {valid: bool, errors: list of error dicts}
             """
+            try:
+                self._check_rate_limit("yuho_check", client_id)
+            except RateLimitExceeded as e:
+                return {"error": str(e), "retry_after": e.retry_after}
+            
             from yuho.parser import Parser
             from yuho.ast import ASTBuilder
 
@@ -173,17 +379,23 @@ class YuhoMCPServer:
                 }
 
         @self.server.tool()
-        async def yuho_transpile(file_content: str, target: str) -> Dict[str, Any]:
+        async def yuho_transpile(file_content: str, target: str, client_id: Optional[str] = None) -> Dict[str, Any]:
             """
             Transpile Yuho source to another format.
 
             Args:
                 file_content: The Yuho source code
                 target: Target format (json, jsonld, english, mermaid, alloy)
+                client_id: Optional client identifier for rate limiting
 
             Returns:
                 {output: str} or {error: str}
             """
+            try:
+                self._check_rate_limit("yuho_transpile", client_id)
+            except RateLimitExceeded as e:
+                return {"error": str(e), "retry_after": e.retry_after}
+            
             from yuho.parser import Parser
             from yuho.ast import ASTBuilder
             from yuho.transpile import TranspileTarget, get_transpiler
@@ -209,17 +421,23 @@ class YuhoMCPServer:
                 return {"error": str(e)}
 
         @self.server.tool()
-        async def yuho_explain(file_content: str, section: Optional[str] = None) -> Dict[str, Any]:
+        async def yuho_explain(file_content: str, section: Optional[str] = None, client_id: Optional[str] = None) -> Dict[str, Any]:
             """
             Generate natural language explanation.
 
             Args:
                 file_content: The Yuho source code
                 section: Optional section number to explain
+                client_id: Optional client identifier for rate limiting
 
             Returns:
                 {explanation: str} or {error: str}
             """
+            try:
+                self._check_rate_limit("yuho_explain", client_id)
+            except RateLimitExceeded as e:
+                return {"error": str(e), "retry_after": e.retry_after}
+            
             from yuho.parser import Parser
             from yuho.ast import ASTBuilder
             from yuho.transpile import EnglishTranspiler
@@ -948,6 +1166,17 @@ class YuhoMCPServer:
                 return {"error": f"LLM provider not configured. Missing: {missing}. Install with: pip install yuho[llm]"}
             except Exception as e:
                 return {"error": f"LLM generation failed: {str(e)}"}
+
+        @self.server.tool()
+        async def yuho_rate_limit_stats() -> Dict[str, Any]:
+            """
+            Get rate limiting statistics.
+
+            Returns:
+                Statistics about rate limiting including total requests,
+                rate-limited requests, per-tool breakdown, and current token counts.
+            """
+            return self.rate_limiter.get_stats()
 
     def _register_resources(self):
         """Register MCP resources."""
