@@ -72,6 +72,9 @@ function M.setup(opts)
 
   -- Setup completion (if nvim-cmp available)
   pcall(require("yuho.completion").setup)
+
+  -- Setup mermaid preview
+  require("yuho.mermaid_preview").setup()
 end
 
 -- Setup LSP client
@@ -182,6 +185,10 @@ function M.setup_keybindings()
   vim.keymap.set("n", prefix .. "D", function()
     require("yuho.diff").diff_prompt()
   end, { desc = "Diff statutes" })
+
+  vim.keymap.set("n", prefix .. "m", function()
+    require("yuho.mermaid_preview").toggle()
+  end, { desc = "Toggle mermaid preview" })
 
   -- Visual mode
   vim.keymap.set("v", prefix .. "e", function()
