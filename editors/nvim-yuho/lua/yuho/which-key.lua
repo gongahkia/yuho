@@ -7,10 +7,13 @@ local M = {}
 M.mappings = {
   y = {
     name = "+Yuho",
-    e = { "<cmd>lua require('yuho').explain_statute()<cr>", "Explain statute" },
+    e = { "<cmd>lua require('yuho').explain_statute()<cr>", "Explain statute (English)" },
     t = { "<cmd>lua require('yuho').transpile()<cr>", "Transpile to JSON" },
     c = { "<cmd>lua require('yuho').check()<cr>", "Check file" },
-    v = { "<cmd>lua require('yuho').verify()<cr>", "Verify with Alloy" },
+    v = { "<cmd>lua require('yuho').verify()<cr>", "Transpile to Alloy" },
+    L = { "<cmd>lua require('yuho').lint()<cr>", "Lint file" },
+    a = { "<cmd>lua require('yuho').show_ast()<cr>", "Show AST tree" },
+    p = { "<cmd>lua require('yuho').preview()<cr>", "Live preview in browser" },
     l = {
       name = "+LSP",
       r = { "<cmd>lua vim.lsp.buf.references()<cr>", "References" },
@@ -25,6 +28,7 @@ M.mappings = {
       s = { "<cmd>Telescope yuho symbols<cr>", "Search symbols" },
       e = { "<cmd>Telescope yuho elements<cr>", "Search elements" },
       i = { "<cmd>Telescope yuho illustrations<cr>", "Search illustrations" },
+      S = { "<cmd>Telescope yuho statutes<cr>", "Search statutes" },
     },
     d = {
       name = "+Diagnostics",
@@ -32,6 +36,17 @@ M.mappings = {
       p = { "<cmd>lua vim.diagnostic.goto_prev()<cr>", "Prev diagnostic" },
       l = { "<cmd>lua vim.diagnostic.setloclist()<cr>", "List all" },
       f = { "<cmd>lua vim.diagnostic.open_float()<cr>", "Show float" },
+    },
+    T = {
+      name = "+Transpile to",
+      j = { "<cmd>lua require('yuho').transpile_to('json')<cr>", "JSON" },
+      J = { "<cmd>lua require('yuho').transpile_to('jsonld')<cr>", "JSON-LD" },
+      e = { "<cmd>lua require('yuho').transpile_to('english')<cr>", "English" },
+      l = { "<cmd>lua require('yuho').transpile_to('latex')<cr>", "LaTeX" },
+      m = { "<cmd>lua require('yuho').transpile_to('mermaid')<cr>", "Mermaid" },
+      a = { "<cmd>lua require('yuho').transpile_to('alloy')<cr>", "Alloy" },
+      g = { "<cmd>lua require('yuho').transpile_to('graphql')<cr>", "GraphQL" },
+      b = { "<cmd>lua require('yuho').transpile_to('blocks')<cr>", "Blocks" },
     },
   },
 }

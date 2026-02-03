@@ -156,7 +156,24 @@ function M.setup_keybindings()
 
   vim.keymap.set("n", prefix .. "v", function()
     M.verify()
-  end, { desc = "Verify with Alloy" })
+  end, { desc = "Transpile to Alloy" })
+
+  vim.keymap.set("n", prefix .. "L", function()
+    M.lint()
+  end, { desc = "Lint file" })
+
+  vim.keymap.set("n", prefix .. "a", function()
+    M.show_ast()
+  end, { desc = "Show AST" })
+
+  vim.keymap.set("n", prefix .. "p", function()
+    M.preview()
+  end, { desc = "Live preview" })
+
+  -- Visual mode
+  vim.keymap.set("v", prefix .. "e", function()
+    M.explain_selection()
+  end, { desc = "Explain selection" })
 end
 
 -- Setup format on save
@@ -172,7 +189,24 @@ end
 -- Command functions
 function M.explain_statute()
   local bufname = vim.api.nvim_buf_get_name(0)
-  vim.cmd("split | terminal yuho explain " .. vim.fn.shellescape(bufname))
+  vim.cmd("split | terminal yuho transpile -t english " .. vim.fn.shellescape(bufname))
+end
+
+function M.explain_selection()
+  -- Get visual selection
+  local start_pos = vim.fn.getpos("'<")
+  local end_pos = vim.fn.getpos("'>")
+  local lines = vim.fn.getline(start_pos[2], end_pos[2])
+  
+  if type(lines) == "string" then
+    lines = { lines }
+  end
+  
+  -- Create temp file with selection
+  local tmpfile = vim.fn.tempname() .. ".yh"
+  vim.fn.writefile(lines, tmpfile)
+  
+  vim.cmd("split | terminal yuho transpile -t english " .. vim.fn.shellescape(tmpfile))
 end
 
 function M.transpile()
@@ -180,14 +214,35 @@ function M.transpile()
   vim.cmd("split | terminal yuho transpile -t json " .. vim.fn.shellescape(bufname))
 end
 
+function M.transpile_to(target)
+  local bufname = vim.api.nvim_buf_get_name(0)
+  vim.cmd("split | terminal yuho transpile -t " .. target .. " " .. vim.fn.shellescape(bufname))
+end
+
 function M.check()
   local bufname = vim.api.nvim_buf_get_name(0)
   vim.cmd("!yuho check " .. vim.fn.shellescape(bufname))
 end
 
+function M.lint()
+  local bufname = vim.api.nvim_buf_get_name(0)
+  vim.cmd("split | terminal yuho lint " .. vim.fn.shellescape(bufname))
+end
+
 function M.verify()
   local bufname = vim.api.nvim_buf_get_name(0)
-  vim.notify("Verification with Alloy not fully implemented yet", vim.log.levels.WARN)
+  vim.cmd("split | terminal yuho transpile -t alloy " .. vim.fn.shellescape(bufname))
+end
+
+function M.show_ast()
+  local bufname = vim.api.nvim_buf_get_name(0)
+  vim.cmd("split | terminal yuho ast " .. vim.fn.shellescape(bufname))
+end
+
+function M.preview()
+  local bufname = vim.api.nvim_buf_get_name(0)
+  vim.fn.jobstart({ "yuho", "preview", bufname }, { detach = true })
+  vim.notify("Started live preview server", vim.log.levels.INFO)
 end
 
 -- Get current statute section (for statusline integration)
