@@ -73,6 +73,7 @@ class TranspilerRegistry:
         from yuho.transpile.mermaid_transpiler import MermaidTranspiler
         from yuho.transpile.alloy_transpiler import AlloyTranspiler
         from yuho.transpile.graphql_transpiler import GraphQLTranspiler
+        from yuho.transpile.blocks_transpiler import BlocksTranspiler
 
         self._registry[TranspileTarget.JSON] = JSONTranspiler
         self._registry[TranspileTarget.JSON_LD] = JSONLDTranspiler
@@ -81,6 +82,7 @@ class TranspilerRegistry:
         self._registry[TranspileTarget.MERMAID] = MermaidTranspiler
         self._registry[TranspileTarget.ALLOY] = AlloyTranspiler
         self._registry[TranspileTarget.GRAPHQL] = GraphQLTranspiler
+        self._registry[TranspileTarget.BLOCKS] = BlocksTranspiler
 
     @classmethod
     def instance(cls) -> "TranspilerRegistry":

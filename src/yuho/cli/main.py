@@ -158,7 +158,7 @@ def ast(
 @click.argument("file", type=click.Path(exists=True))
 @click.option(
     "-t", "--target",
-    type=click.Choice(["json", "jsonld", "english", "latex", "mermaid", "alloy", "graphql"], case_sensitive=False),
+    type=click.Choice(["json", "jsonld", "english", "latex", "mermaid", "alloy", "graphql", "blocks"], case_sensitive=False),
     default="json",
     help="Transpilation target format"
 )
@@ -179,7 +179,7 @@ def transpile(
     """
     Transpile a Yuho source file to another format.
 
-    Supported targets: json, jsonld, english, latex, mermaid, alloy, graphql
+    Supported targets: json, jsonld, english, latex, mermaid, alloy, graphql, blocks
     """
     from yuho.cli.commands.transpile import run_transpile
     run_transpile(
