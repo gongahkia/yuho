@@ -69,6 +69,9 @@ function M.setup(opts)
 
   -- Setup penalty calculator
   require("yuho.penalty").setup()
+
+  -- Setup completion (if nvim-cmp available)
+  pcall(require("yuho.completion").setup)
 end
 
 -- Setup LSP client
