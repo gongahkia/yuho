@@ -17,6 +17,8 @@ except ImportError:
 from yuho.parser import Parser, SourceLocation
 from yuho.parser.wrapper import ParseError, ParseResult
 from yuho.ast import ASTBuilder, ModuleNode
+from yuho.ast.type_inference import TypeInferenceVisitor
+from yuho.ast.type_check import TypeCheckVisitor, TypeErrorInfo
 
 logger = logging.getLogger(__name__)
 
@@ -353,9 +355,31 @@ class YuhoLanguageServer(LanguageServer):
                 diag = self._error_to_diagnostic(error)
                 diagnostics.append(diag)
 
-        # Semantic errors (TODO: implement type checker)
+        # Semantic errors from type checker
+        if doc_state.ast:
+            type_errors = self._run_type_checker(doc_state.ast)
+            for type_error in type_errors:
+                diag = self._type_error_to_diagnostic(type_error)
+                diagnostics.append(diag)
 
         self.publish_diagnostics(uri, diagnostics)
+
+    def _run_type_checker(self, ast: ModuleNode) -> List[TypeErrorInfo]:
+        """Run type inference and type checking on AST, return errors."""
+        try:
+            # First run type inference
+            infer_visitor = TypeInferenceVisitor()
+            ast.accept(infer_visitor)
+            
+            # Then run type checking
+            check_visitor = TypeCheckVisitor(infer_visitor.result)
+            ast.accept(check_visitor)
+            
+            # Return all errors and warnings
+            return check_visitor.result.errors + check_visitor.result.warnings
+        except Exception as e:
+            logger.warning(f"Type checking failed: {e}")
+            return []
 
     def _error_to_diagnostic(self, error: ParseError) -> lsp.Diagnostic:
         """Convert ParseError to LSP Diagnostic."""
@@ -369,6 +393,28 @@ class YuhoLanguageServer(LanguageServer):
             message=error.message,
             severity=lsp.DiagnosticSeverity.Error,
             source="yuho",
+        )
+
+    def _type_error_to_diagnostic(self, error: TypeErrorInfo) -> lsp.Diagnostic:
+        """Convert TypeErrorInfo to LSP Diagnostic."""
+        # TypeErrorInfo has 1-based line numbers, LSP uses 0-based
+        line = max(0, error.line - 1)
+        column = max(0, error.column - 1)
+        
+        severity = (
+            lsp.DiagnosticSeverity.Error
+            if error.severity == "error"
+            else lsp.DiagnosticSeverity.Warning
+        )
+        
+        return lsp.Diagnostic(
+            range=lsp.Range(
+                start=lsp.Position(line=line, character=column),
+                end=lsp.Position(line=line, character=column + 1),
+            ),
+            message=error.message,
+            severity=severity,
+            source="yuho-typecheck",
         )
 
     def _get_completions(self, uri: str, position: lsp.Position) -> lsp.CompletionList:
