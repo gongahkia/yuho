@@ -450,6 +450,63 @@ def api(ctx: click.Context, port: int, host: str) -> None:
 
 
 # =============================================================================
+# Generate command
+# =============================================================================
+
+
+@cli.command()
+@click.argument("section")
+@click.option("-t", "--title", required=True, help="Statute title")
+@click.option("-o", "--output", type=click.Path(), help="Output file path")
+@click.option(
+    "--template",
+    type=click.Choice(["standard", "minimal", "full"], case_sensitive=False),
+    default="standard",
+    help="Scaffold template type"
+)
+@click.option("--no-definitions", is_flag=True, help="Skip definitions block")
+@click.option("--no-penalty", is_flag=True, help="Skip penalty block")
+@click.option("--no-illustrations", is_flag=True, help="Skip illustrations block")
+@click.option("-f", "--force", is_flag=True, help="Overwrite existing file")
+@click.pass_context
+def generate(
+    ctx: click.Context,
+    section: str,
+    title: str,
+    output: Optional[str],
+    template: str,
+    no_definitions: bool,
+    no_penalty: bool,
+    no_illustrations: bool,
+    force: bool,
+) -> None:
+    """
+    Generate statute scaffold with proper structure.
+
+    Creates a boilerplate .yh file with the specified section number
+    and title. Fill in the TODO markers to complete your statute.
+
+    Examples:
+        yuho generate 500 --title "Theft"
+        yuho generate s299 --title "Culpable Homicide" --template full
+        yuho generate 420 -t "Cheating" -o cheating.yh
+    """
+    from yuho.cli.commands.generate import run_generate
+    run_generate(
+        section=section,
+        title=title,
+        output=output,
+        template=template.lower(),
+        no_definitions=no_definitions,
+        no_penalty=no_penalty,
+        no_illustrations=no_illustrations,
+        force=force,
+        verbose=ctx.obj["verbose"],
+        color=ctx.obj["color"],
+    )
+
+
+# =============================================================================
 # Wizard command
 # =============================================================================
 
