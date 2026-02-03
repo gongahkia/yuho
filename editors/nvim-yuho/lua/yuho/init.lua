@@ -63,6 +63,9 @@ function M.setup(opts)
   if M.config.format.on_save then
     M.setup_format_on_save()
   end
+
+  -- Setup diff module
+  require("yuho.diff").setup()
 end
 
 -- Setup LSP client
@@ -169,6 +172,10 @@ function M.setup_keybindings()
   vim.keymap.set("n", prefix .. "p", function()
     M.preview()
   end, { desc = "Live preview" })
+
+  vim.keymap.set("n", prefix .. "D", function()
+    require("yuho.diff").diff_prompt()
+  end, { desc = "Diff statutes" })
 
   -- Visual mode
   vim.keymap.set("v", prefix .. "e", function()
