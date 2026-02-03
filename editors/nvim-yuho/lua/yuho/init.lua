@@ -81,6 +81,9 @@ function M.setup(opts)
 
   -- Setup outline
   require("yuho.outline").setup()
+
+  -- Setup snippets (if LuaSnip available)
+  pcall(require("yuho.snippets").setup)
 end
 
 -- Setup LSP client
