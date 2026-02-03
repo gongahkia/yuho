@@ -10,7 +10,6 @@
     # Extract: completion_handler.py, hover_handler.py, code_action_handler.py, diagnostics.py
 
 (C) Add --explain-error flag for detailed error diagnostics with suggestions +cli +ux
-(C) Implement parser instance caching for improved performance +performance
 (C) Add rate limiting to MCP server to prevent abuse +security +mcp
 (C) Add config file schema documentation with examples in docs +docs
 (C) Refactor latex_transpiler.py (696 lines) into smaller focused modules +architecture

@@ -6,8 +6,14 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional, List, Iterator
 import os
+import threading
 
 from yuho.parser.source_location import SourceLocation
+
+
+# Module-level parser cache for performance
+_parser_cache: Optional["Parser"] = None
+_parser_lock = threading.Lock()
 
 
 @dataclass
@@ -260,3 +266,46 @@ class Parser:
 
         query = self._language.query(query_string)
         return query.captures(tree.root_node)
+
+
+def get_parser() -> Parser:
+    """
+    Get a cached Parser instance for better performance.
+
+    This function returns a thread-safe singleton Parser instance.
+    Use this instead of creating new Parser() instances when parsing
+    multiple files to avoid repeated tree-sitter initialization overhead.
+
+    Returns:
+        A cached Parser instance
+
+    Usage:
+        from yuho.parser import get_parser
+        parser = get_parser()
+        result = parser.parse_file("statute.yh")
+    """
+    global _parser_cache
+
+    if _parser_cache is not None:
+        return _parser_cache
+
+    with _parser_lock:
+        # Double-check after acquiring lock
+        if _parser_cache is None:
+            _parser_cache = Parser()
+            _parser_cache._ensure_initialized()
+
+    return _parser_cache
+
+
+def clear_parser_cache() -> None:
+    """
+    Clear the cached parser instance.
+
+    This is mainly useful for testing or when you need to
+    reinitialize the parser (e.g., after grammar changes).
+    """
+    global _parser_cache
+
+    with _parser_lock:
+        _parser_cache = None
