@@ -360,6 +360,43 @@ def api(ctx: click.Context, port: int, host: str) -> None:
 
 
 # =============================================================================
+# Wizard command
+# =============================================================================
+
+
+@cli.command()
+@click.option("-o", "--output", type=click.Path(), help="Output file path")
+@click.option("--section", help="Pre-set section number")
+@click.option("--title", help="Pre-set statute title")
+@click.pass_context
+def wizard(
+    ctx: click.Context,
+    output: Optional[str],
+    section: Optional[str],
+    title: Optional[str],
+) -> None:
+    """
+    Interactive wizard for statute creation.
+
+    Guides you through building a Yuho statute step-by-step using
+    inquirer-style prompts. Generates valid .yh source files.
+
+    Examples:
+        yuho wizard
+        yuho wizard -o my_statute.yh
+        yuho wizard --section 299 --title "Culpable Homicide"
+    """
+    from yuho.cli.commands.wizard import run_wizard
+    run_wizard(
+        output=output,
+        section=section,
+        title=title,
+        verbose=ctx.obj["verbose"],
+        color=ctx.obj["color"],
+    )
+
+
+# =============================================================================
 # Serve command
 # =============================================================================
 

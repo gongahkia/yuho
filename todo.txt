@@ -2,12 +2,6 @@
 # Priority: (A) Critical/blocking, (B) Important, (C) Enhancement, (D) Future/v6
 
 # ============================================================================
-# CLI ENHANCEMENTS (v5.1)
-# ============================================================================
-
-(C) Add API server mode for remote transpilation and validation (yuho api --port 8080) +cli +integration
-
-# ============================================================================
 # CLI ALTERNATIVES TO SVELTE WEB APP (v5.1)
 # ============================================================================
 
