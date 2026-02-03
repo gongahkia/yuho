@@ -2,12 +2,6 @@
 # Priority: (A) Critical/blocking, (B) Important, (C) Enhancement, (D) Future/v6
 
 # ============================================================================
-# CLI ALTERNATIVES TO SVELTE WEB APP (v5.1)
-# ============================================================================
-
-(C) Add block-notation output format that outputs a structured text representation of blocks (yuho transpile --target blocks) +cli +alternative
-
-# ============================================================================
 # NEOVIM EXTENSION SUPPORT
 # ============================================================================
 
