@@ -1,5 +1,0 @@
-# Yuho v5 PRD - Updated 2026-02-03
-# Priority: (A) Critical/blocking, (B) Important, (C) Enhancement, (D) Future/v6
-
-# All tasks completed.
-
