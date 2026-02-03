@@ -78,6 +78,9 @@ function M.setup(opts)
 
   -- Setup references
   require("yuho.references").setup()
+
+  -- Setup outline
+  require("yuho.outline").setup()
 end
 
 -- Setup LSP client
@@ -196,6 +199,10 @@ function M.setup_keybindings()
   vim.keymap.set("n", prefix .. "r", function()
     require("yuho.references").show_incoming_references()
   end, { desc = "Show incoming references" })
+
+  vim.keymap.set("n", prefix .. "o", function()
+    require("yuho.outline").toggle()
+  end, { desc = "Toggle outline panel" })
 
   -- Visual mode
   vim.keymap.set("v", prefix .. "e", function()
