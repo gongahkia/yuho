@@ -84,6 +84,9 @@ function M.setup(opts)
 
   -- Setup snippets (if LuaSnip available)
   pcall(require("yuho.snippets").setup)
+
+  -- Setup hints
+  require("yuho.hints").setup()
 end
 
 -- Setup LSP client
