@@ -244,6 +244,45 @@ def diff(ctx: click.Context, file1: str, file2: str, json_output: bool) -> None:
 
 
 # =============================================================================
+# Graph command
+# =============================================================================
+
+
+@cli.command()
+@click.argument("file", type=click.Path(exists=True))
+@click.option(
+    "-f", "--format",
+    type=click.Choice(["dot", "mermaid"], case_sensitive=False),
+    default="mermaid",
+    help="Output format"
+)
+@click.option("-o", "--output", type=click.Path(), help="Output file path")
+@click.pass_context
+def graph(ctx: click.Context, file: str, format: str, output: Optional[str]) -> None:
+    """
+    Visualize statute dependencies as a graph.
+
+    Generates a dependency graph showing:
+    - Statute cross-references
+    - Import relationships
+    - Type and function definitions
+
+    Examples:
+        yuho graph statute.yh
+        yuho graph statute.yh --format dot -o deps.dot
+        yuho graph statute.yh --format mermaid > deps.md
+    """
+    from yuho.cli.commands.graph import run_graph
+    run_graph(
+        file,
+        format=format,
+        output=output,
+        verbose=ctx.obj["verbose"],
+        color=ctx.obj["color"],
+    )
+
+
+# =============================================================================
 # Serve command
 # =============================================================================
 
