@@ -12,17 +12,7 @@ Shows all 21 available CLI commands.
 yuho --help
 ```
 
-### 2. Syntax Highlighting & Code Example
-
-Open a statute file in Neovim with the nvim-yuho plugin to showcase syntax highlighting.
-
-```bash
-nvim library/penal_code/s415_cheating.yh
-```
-
-Screenshot the `.yh` file with syntax highlighting enabled.
-
-### 3. Validation with Error Messages
+### 2. Validation with Error Messages
 
 **Success case:**
 
