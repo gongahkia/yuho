@@ -1,4 +1,4 @@
-name: CI
+name: Yuho CI/CD on push
 
 on:
   push:
