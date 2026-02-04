@@ -1,4 +1,3 @@
-
 ### 1. CLI Help Overview
 
 Shows all 21 available CLI commands.
@@ -15,17 +14,13 @@ yuho --help
 yuho check library/penal_code/s415_cheating.yh
 ```
 
-**Error case:** Create a file with intentional errors and run check on it to demonstrate error reporting with explanations.
-
-### 4. Transpilation to Mermaid Diagrams
+### 3. Transpilation to Mermaid Diagrams
 
 ```bash
 yuho transpile library/penal_code/s415_cheating.yh --target mermaid
 ```
 
-Then render the Mermaid output in a Mermaid viewer (VS Code preview, mermaid.live, or similar) to capture the visual flowchart/mindmap.
-
-### 5. Transpilation to Plain English
+### 4. Transpilation to Plain English
 
 Shows how legal logic is converted to human-readable English.
 
@@ -33,7 +28,7 @@ Shows how legal logic is converted to human-readable English.
 yuho transpile library/penal_code/s415_cheating.yh --target english
 ```
 
-### 6. Live Preview
+### 5. Live Preview
 
 Shows auto-reloading preview with file changes.
 
@@ -41,7 +36,7 @@ Shows auto-reloading preview with file changes.
 yuho preview library/penal_code/s415_cheating.yh
 ```
 
-### 7. AST Visualization
+### 6. AST Visualization
 
 Shows the parsed AST tree structure with statistics.
 
@@ -49,7 +44,7 @@ Shows the parsed AST tree structure with statistics.
 yuho ast library/penal_code/s415_cheating.yh
 ```
 
-### 8. Interactive REPL
+### 7. Interactive REPL
 
 Screenshot the REPL interface with some sample commands executed.
 
@@ -66,13 +61,13 @@ Example REPL session to demonstrate:
 >>> exit
 ```
 
-### 10. Testing with Coverage
+### 8. Testing with Coverage
 
 ```bash
 yuho test library/penal_code/s415_cheating.yh --coverage
 ```
 
-### 11. Diff Between Files
+### 9. Diff Between Files
 
 Compare two Yuho files and show semantic differences.
 
@@ -80,7 +75,7 @@ Compare two Yuho files and show semantic differences.
 yuho diff file1.yh file2.yh
 ```
 
-### 13. JSON Output
+### 10. JSON Output
 
 Machine-readable structured output for tooling integration.
 
