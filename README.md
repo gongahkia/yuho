@@ -3,6 +3,8 @@
 [![](https://img.shields.io/badge/yuho_3.0-passing-%2332CD32)](https://github.com/gongahkia/yuho/releases/tag/3.0) 
 [![](https://img.shields.io/badge/yuho_4.0-passing-%237CFC00)](https://github.com/gongahkia/yuho/releases/tag/4.0) 
 [![](https://img.shields.io/badge/yuho_5.0-passing-%2398FB98)](https://github.com/gongahkia/yuho/releases/tag/5.0) 
+![](https://github.com/gongahkia/yuho/actions/workflows/ci.yml/badge.svg)
+![](https://github.com/gongahkia/yuho/actions/workflows/release.yml/badge.svg)
 
 # `Yuho`  
 
