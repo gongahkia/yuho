@@ -1,128 +1,53 @@
-/*
-VERSION 2.0
+// Singapore Penal Code Section 463 - Forgery
+// Yuho v5 Syntax
 
-Based off the following statutory provisions on forgery
-    * Singapore Penal Code S463
+struct ForgeryCase {
+    string accused,
+    string documentType,
+    string makingAct,
+    string intent,
+    string target,
+}
 
-Forgery requires:
-    1. Making a false document (or part of document)
-    2. Intent to:
-        - Cause damage or injury to the public or any person, OR
-        - Support any claim or title, OR
-        - Cause any person to part with property, OR
-        - Cause person to enter express or implied contract, OR
-        - Commit fraud or that fraud may be committed
+fn is_forgery(string docType, string intent) : bool {
+    match {
+        case TRUE if docType == "none" := consequence FALSE;
+        case TRUE if intent == "none" := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
 
-This demonstrates document-related offense with multiple intent types.
-*/
-
-scope s463Forgery {
-
-    // ~ ENUMS ~
-
-    struct Party { // ENUM
-        Accused,
-        Victim,
-        Public,
+statute 463 "Forgery" {
+    definitions {
+        forgery := "Making a false document with fraudulent intent";
+        false_document := "A document that dishonestly or fraudulently purports to be something it is not";
+        making := "Creating, altering, or signing a document falsely";
+        valuable_security := "Document purporting to create, transfer, or release any right";
     }
 
-    struct DocumentType { // ENUM - Nature of false document
-        FalseDocument,
-        PartOfDocument,
-        NA,
+    elements {
+        actus_reus making := "Making a false document or part of document";
+        mens_rea intent_damage := "Intent to cause damage or injury to public or person";
+        mens_rea intent_support := "Intent to support any claim or title";
+        mens_rea intent_property := "Intent to cause person to part with property";
+        mens_rea intent_contract := "Intent to cause person to enter contract";
+        mens_rea intent_fraud := "Intent to commit fraud";
     }
 
-    struct MakingActType { // ENUM - How document was made false
-        CreatingEntireDocument,
-        AlteringExistingDocument,
-        SigningFalsely,
-        NA,
+    penalty {
+        imprisonment := 0 days .. 4 years;
+        fine := $0.00 .. $10,000.00;
     }
 
-    struct IntentType { // ENUM - Intent behind forgery
-        CauseDamageInjury,
-        SupportClaimOrTitle,
-        CausePartWithProperty,
-        CauseEnterContract,
-        CommitFraud,
-        NA,
+    illustration example1 {
+        "A creates a false certificate purporting to be from a university. A has committed forgery."
     }
 
-    struct TargetType { // ENUM - Who is targeted by the intent
-        Public,
-        SpecificPerson,
-        NA,
+    illustration example2 {
+        "A alters the date on a document to make it appear earlier than it was. A has committed forgery."
     }
 
-    struct ConsequenceDefinition { // ENUM
-        CommitsForgery,
-        DoesNotCommitForgery,
+    illustration example3 {
+        "A signs B's name on a cheque without B's authority. A has committed forgery."
     }
-
-    // ~ STRUCT DEFINITION ~
-
-    struct ForgeryCase {
-        string || Party accused,
-        string action,
-        DocumentType documentType,
-        MakingActType makingAct,
-        IntentType intent,
-        TargetType target,
-        ConsequenceDefinition definition,
-    }
-
-    // ~ STRUCT LITERAL ~
-
-    ForgeryCase forgeryDefinition := {
-
-        // ~ struct literal attributes ~
-            // Whoever makes any false document or part of a document,
-            // with intent to cause damage or injury to the public or to any person,
-            // or to support any claim or title,
-            // or to cause any person to part with property,
-            // or to enter into any express or implied contract,
-            // or with intent to commit fraud or that fraud may be committed,
-            // commits forgery.
-
-        accused := Party.Accused,
-        action := "making false document",
-        documentType := DocumentType.FalseDocument or DocumentType.PartOfDocument or DocumentType.NA,
-        makingAct := MakingActType.CreatingEntireDocument or MakingActType.AlteringExistingDocument or MakingActType.SigningFalsely or MakingActType.NA,
-        intent := IntentType.CauseDamageInjury or IntentType.SupportClaimOrTitle or IntentType.CausePartWithProperty or IntentType.CauseEnterContract or IntentType.CommitFraud or IntentType.NA,
-        target := TargetType.Public or TargetType.SpecificPerson or TargetType.NA,
-
-        // ~ logical short circuiting ~
-            // Elements checked in sequence:
-            // 1. Document type (was there a false document)
-            // 2. Making act (how was it made false)
-            // 3. Intent (what was the purpose)
-            // 4. Target (who was intended to be affected)
-
-        definition := match documentType {
-            case DocumentType.FalseDocument := consequence makingAct
-            case DocumentType.PartOfDocument := consequence makingAct
-            case DocumentType.NA := consequence ConsequenceDefinition.DoesNotCommitForgery
-        },
-        definition := match makingAct {
-            case MakingActType.CreatingEntireDocument := consequence intent
-            case MakingActType.AlteringExistingDocument := consequence intent
-            case MakingActType.SigningFalsely := consequence intent
-            case MakingActType.NA := consequence ConsequenceDefinition.DoesNotCommitForgery
-        },
-        definition := match intent {
-            case IntentType.CauseDamageInjury := consequence target
-            case IntentType.SupportClaimOrTitle := consequence ConsequenceDefinition.CommitsForgery
-            case IntentType.CausePartWithProperty := consequence ConsequenceDefinition.CommitsForgery
-            case IntentType.CauseEnterContract := consequence ConsequenceDefinition.CommitsForgery
-            case IntentType.CommitFraud := consequence ConsequenceDefinition.CommitsForgery
-            case IntentType.NA := consequence ConsequenceDefinition.DoesNotCommitForgery
-        },
-        definition := match target {
-            case TargetType.Public := consequence ConsequenceDefinition.CommitsForgery
-            case TargetType.SpecificPerson := consequence ConsequenceDefinition.CommitsForgery
-            case TargetType.NA := consequence ConsequenceDefinition.DoesNotCommitForgery
-        },
-
-    }
-
 }
