@@ -1,146 +1,53 @@
-/*
-VERSION 1.0
+// Singapore Penal Code Section 319 - Hurt
+// Yuho v5 Syntax
 
-Based off the following statutory provisions on hurt
-    * Singapore Penal Code S319
+struct HurtCase {
+    string accused,
+    string victim,
+    string action,
+    string physicalElement,
+    bool causedToVictim,
+}
 
-"Hurt" is defined as causing:
-    1. Bodily pain
-    2. Disease
-    3. Infirmity
-    4. Unconsciousness
-to any person.
+fn is_hurt(string physicalElement, bool causedToVictim) : bool {
+    match {
+        case TRUE if physicalElement == "none" := consequence FALSE;
+        case TRUE if causedToVictim == FALSE := consequence FALSE;
+        case TRUE if physicalElement == "bodily_pain" := consequence TRUE;
+        case TRUE if physicalElement == "disease" := consequence TRUE;
+        case TRUE if physicalElement == "infirmity" := consequence TRUE;
+        case TRUE if physicalElement == "unconsciousness" := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
 
-This demonstrates physical element definitions in Yuho.
-*/
-
-scope s319Hurt {
-
-    // ~ ENUMS ~
-
-    struct Party { // ENUM
-        Accused,
-        Victim,
+statute 319 "Hurt" {
+    definitions {
+        hurt := "Causing bodily pain, disease, infirmity, or unconsciousness";
+        bodily_pain := "Physical pain to any part of the body";
+        disease := "A disorder of structure or function in a human body";
+        infirmity := "Physical or mental weakness";
+        unconsciousness := "State of being unaware of surroundings";
     }
 
-    struct PhysicalElement { // ENUM - Types of hurt under S319
-        BodilyPain,
-        Disease,
-        Infirmity,
-        Unconsciousness,
-        NA,
+    elements {
+        actus_reus cause := "Causing hurt to any person";
+        circumstance bodily_pain := "Bodily pain caused to victim";
+        circumstance disease := "Disease caused to victim";
+        circumstance infirmity := "Infirmity caused to victim";
+        circumstance unconsciousness := "Unconsciousness caused to victim";
     }
 
-    struct BodilyPainType { // ENUM - Severity of bodily pain
-        Minor,
-        Moderate,
-        Severe,
+    penalty {
+        imprisonment := 0 days .. 2 years;
+        fine := $0.00 .. $5,000.00;
     }
 
-    struct InfirmityType { // ENUM - Types of infirmity
-        Physical,
-        Psychological,
+    illustration example1 {
+        "A strikes B with a stick. B feels pain. A has caused hurt to B."
     }
 
-    struct CausationResult { // ENUM
-        HurtCaused,
-        HurtNotCaused,
+    illustration example2 {
+        "A intentionally administers a substance to B that causes B to become unconscious. A has caused hurt to B."
     }
-
-    struct ConsequenceDefinition { // ENUM
-        SaidToCauseHurt,
-        NotSaidToCauseHurt,
-    }
-
-    // ~ STRUCT DEFINITION ~
-
-    struct HurtCase {
-        string || Party accused,
-        string || Party victim,
-        string action,
-        PhysicalElement physicalElement,
-        boolean causedToVictim,
-        ConsequenceDefinition definition,
-    }
-
-    // ~ STRUCT LITERAL ~
-
-    HurtCase hurtDefinition := {
-
-        // ~ struct literal attributes ~
-            // Whoever causes bodily pain, disease, infirmity 
-            // or unconsciousness to any person is said to cause hurt
-
-        accused := Party.Accused,
-        victim := Party.Victim,
-        action := "causing",
-        physicalElement := PhysicalElement.BodilyPain or PhysicalElement.Disease or PhysicalElement.Infirmity or PhysicalElement.Unconsciousness or PhysicalElement.NA,
-        causedToVictim := TRUE or FALSE,
-
-        // ~ logical short circuiting ~
-            // First check if any physical element is present
-            // Then check if it was caused to the victim
-
-        definition := match physicalElement {
-            case PhysicalElement.BodilyPain := consequence causedToVictim
-            case PhysicalElement.Disease := consequence causedToVictim
-            case PhysicalElement.Infirmity := consequence causedToVictim
-            case PhysicalElement.Unconsciousness := consequence causedToVictim
-            case PhysicalElement.NA := consequence ConsequenceDefinition.NotSaidToCauseHurt
-        },
-        definition := match causedToVictim {
-            case TRUE := consequence ConsequenceDefinition.SaidToCauseHurt
-            case FALSE := consequence ConsequenceDefinition.NotSaidToCauseHurt
-        },
-
-    }
-
-    // ~ DETAILED STRUCT FOR BODILY PAIN ~
-        // Demonstrates nested physical element definitions
-
-    struct BodilyPainCase {
-        string || Party accused,
-        string || Party victim,
-        BodilyPainType painType,
-        string affectedBodyPart,
-        boolean painCaused,
-        ConsequenceDefinition definition,
-    }
-
-    BodilyPainCase bodilyPainDefinition := {
-        accused := Party.Accused,
-        victim := Party.Victim,
-        painType := BodilyPainType.Minor or BodilyPainType.Moderate or BodilyPainType.Severe,
-        affectedBodyPart := "any body part",
-        painCaused := TRUE or FALSE,
-
-        definition := match painCaused {
-            case TRUE := consequence ConsequenceDefinition.SaidToCauseHurt
-            case FALSE := consequence ConsequenceDefinition.NotSaidToCauseHurt
-        },
-    }
-
-    // ~ DETAILED STRUCT FOR INFIRMITY ~
-        // Demonstrates psychological infirmity is also covered
-
-    struct InfirmityCase {
-        string || Party accused,
-        string || Party victim,
-        InfirmityType infirmityType,
-        boolean infirmityCaused,
-        ConsequenceDefinition definition,
-    }
-
-    InfirmityCase infirmityDefinition := {
-        accused := Party.Accused,
-        victim := Party.Victim,
-        infirmityType := InfirmityType.Physical or InfirmityType.Psychological,
-        infirmityCaused := TRUE or FALSE,
-
-        definition := match infirmityCaused {
-            case TRUE := consequence ConsequenceDefinition.SaidToCauseHurt
-            case FALSE := consequence ConsequenceDefinition.NotSaidToCauseHurt
-        },
-    }
-
 }

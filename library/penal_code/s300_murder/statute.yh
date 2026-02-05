@@ -1,125 +1,60 @@
-/*
-VERSION 1.0
+// Singapore Penal Code Section 300 - Murder
+// Yuho v5 Syntax
 
-Based off the following statutory provisions on murder
-    * Singapore Penal Code S300
+struct MurderCase {
+    string accused,
+    string victim,
+    bool culpableHomicide,
+    string mensRea,
+    string exception,
+}
 
-Murder is culpable homicide UNLESS one of the special exceptions applies.
-The exceptions demonstrate first-match-wins priority:
-    Exception 1: Grave and sudden provocation
-    Exception 2: Exceeding right of private defence
-    Exception 3: Public servant exceeding powers
-    Exception 4: Sudden fight without premeditation
-    Exception 5: Consent (victim above 18)
-    Exception 6: Diminished responsibility (mental impairment)
-    Exception 7: Infanticide
-*/
+fn has_murder_intent(string mensRea) : bool {
+    match {
+        case TRUE if mensRea == "intention_to_cause_death" := consequence TRUE;
+        case TRUE if mensRea == "intention_to_inflict_fatal_injury" := consequence TRUE;
+        case TRUE if mensRea == "intention_to_inflict_sufficient_injury" := consequence TRUE;
+        case TRUE if mensRea == "knowledge_of_danger" := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
 
-scope s300Murder {
+fn exception_applies(string exception) : bool {
+    match {
+        case TRUE if exception == "none" := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
 
-    // ~ ENUMS ~
-
-    struct Party { // ENUM
-        Accused,
-        Victim,
+statute 300 "Murder" {
+    definitions {
+        culpable_homicide := "Causing death under Section 299 conditions";
+        intention_to_cause_death := "Acting with the intention of causing death";
+        bodily_injury := "Physical harm to the body";
+        murder := "Culpable homicide amounting to murder under Section 300";
     }
 
-    struct MensRea { // ENUM - Mental state categories for murder under S300
-        IntentionToCauseDeath,
-        IntentionToInflictInjuryKnownLikelyToCauseDeath,
-        IntentionToInflictBodilyInjurySufficientToKill,
-        KnowledgeActSoDangerousDeathLikely,
-        NA,
+    elements {
+        mens_rea intent1 := "Intention to cause death";
+        mens_rea intent2 := "Intention to cause bodily injury known likely to cause death";
+        mens_rea intent3 := "Intention to cause bodily injury sufficient in ordinary course to cause death";
+        mens_rea intent4 := "Knowledge that the act is so imminently dangerous that death is virtually certain";
     }
 
-    struct Exception { // ENUM - Special exceptions reducing murder to culpable homicide
-        GraveAndSuddenProvocation,
-        ExceedingPrivateDefence,
-        PublicServantExceedingPowers,
-        SuddenFight,
-        VictimConsent,
-        DiminishedResponsibility,
-        Infanticide,
-        NA,
+    penalty {
+        imprisonment := 20 years .. 99 years;
+        supplementary := "Death penalty may apply";
     }
 
-    struct ProvocationDetails { // ENUM - Sub-elements for provocation exception
-        DeprivedOfSelfControl,
-        NotDeprivedOfSelfControl,
+    illustration exception1 {
+        "A, under grave and sudden provocation, kills B. A may not be guilty of murder but of culpable homicide not amounting to murder."
     }
 
-    struct PrivateDefenceDetails { // ENUM - Sub-elements for private defence exception
-        ExceededWithoutPremeditation,
-        ExceededWithPremeditation,
-        DidNotExceed,
+    illustration exception2 {
+        "A, in exercising right of private defence, exceeds the power given by law and kills B. A may be guilty of culpable homicide not amounting to murder."
     }
 
-    struct SuddenFightDetails { // ENUM - Sub-elements for sudden fight exception
-        NoPremeditationNoUndueAdvantage,
-        WithPremediationOrUndueAdvantage,
+    illustration exception3 {
+        "A and B engage in a sudden fight without premeditation. A kills B. A may be guilty of culpable homicide not amounting to murder."
     }
-
-    struct ConsequenceDefinition { // ENUM
-        Murder,
-        CulpableHomicideNotAmountingToMurder,
-        NotCulpableHomicide,
-    }
-
-    // ~ STRUCT DEFINITION ~
-
-    struct MurderCase {
-        string || Party accused,
-        string || Party victim,
-        boolean culpableHomicide,
-        MensRea mensRea,
-        Exception exception,
-        ConsequenceDefinition definition,
-    }
-
-    // ~ STRUCT LITERAL ~
-        // Demonstrates first-match-wins priority: exceptions are checked in order
-        // First matching exception reduces murder to culpable homicide not amounting to murder
-
-    MurderCase murderDefinition := {
-
-        accused := Party.Accused,
-        victim := Party.Victim,
-        culpableHomicide := TRUE or FALSE,
-        mensRea := MensRea.IntentionToCauseDeath or MensRea.IntentionToInflictInjuryKnownLikelyToCauseDeath or MensRea.IntentionToInflictBodilyInjurySufficientToKill or MensRea.KnowledgeActSoDangerousDeathLikely or MensRea.NA,
-        exception := Exception.GraveAndSuddenProvocation or Exception.ExceedingPrivateDefence or Exception.PublicServantExceedingPowers or Exception.SuddenFight or Exception.VictimConsent or Exception.DiminishedResponsibility or Exception.Infanticide or Exception.NA,
-
-        // ~ logical short circuiting ~
-            // First check for culpable homicide (S299 conditions must be met)
-            // Then check mens rea for murder
-            // Finally, exceptions are applied in first-match-wins priority order
-
-        definition := match culpableHomicide {
-            case TRUE := consequence mensRea
-            case FALSE := consequence ConsequenceDefinition.NotCulpableHomicide
-        },
-        
-        // Murder requires one of the four mens rea conditions under S300
-        definition := match mensRea {
-            case MensRea.IntentionToCauseDeath := consequence exception
-            case MensRea.IntentionToInflictInjuryKnownLikelyToCauseDeath := consequence exception
-            case MensRea.IntentionToInflictBodilyInjurySufficientToKill := consequence exception
-            case MensRea.KnowledgeActSoDangerousDeathLikely := consequence exception
-            case MensRea.NA := consequence ConsequenceDefinition.CulpableHomicideNotAmountingToMurder
-        },
-
-        // Exceptions checked in first-match-wins priority order
-        // Any matching exception reduces murder to culpable homicide not amounting to murder
-        definition := match exception {
-            case Exception.GraveAndSuddenProvocation := consequence ConsequenceDefinition.CulpableHomicideNotAmountingToMurder
-            case Exception.ExceedingPrivateDefence := consequence ConsequenceDefinition.CulpableHomicideNotAmountingToMurder
-            case Exception.PublicServantExceedingPowers := consequence ConsequenceDefinition.CulpableHomicideNotAmountingToMurder
-            case Exception.SuddenFight := consequence ConsequenceDefinition.CulpableHomicideNotAmountingToMurder
-            case Exception.VictimConsent := consequence ConsequenceDefinition.CulpableHomicideNotAmountingToMurder
-            case Exception.DiminishedResponsibility := consequence ConsequenceDefinition.CulpableHomicideNotAmountingToMurder
-            case Exception.Infanticide := consequence ConsequenceDefinition.CulpableHomicideNotAmountingToMurder
-            case Exception.NA := consequence ConsequenceDefinition.Murder
-        },
-
-    }
-
 }

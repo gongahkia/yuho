@@ -1,95 +1,53 @@
-/*
-VERSION 1.0
+// Singapore Penal Code Section 299 - Culpable Homicide
+// Yuho v5 Syntax
 
-Based off the following statutory provisions on culpable homicide
-    * Singapore Penal Code S299
+struct CulpableHomicideCase {
+    string accused,
+    string victim,
+    string actusReus,
+    bool deathCaused,
+    string mensRea,
+}
 
-Culpable homicide is defined as causing death with one of 
-three mental states (mens rea):
-    1. Intention to cause death
-    2. Intention to cause bodily injury likely to cause death
-    3. Knowledge that the act is likely to cause death
-*/
+fn is_culpable_homicide(string actusReus, bool deathCaused, string mensRea) : bool {
+    match {
+        case TRUE if actusReus == "none" := consequence FALSE;
+        case TRUE if deathCaused == FALSE := consequence FALSE;
+        case TRUE if mensRea == "intention_to_cause_death" := consequence TRUE;
+        case TRUE if mensRea == "intention_to_cause_bodily_injury" := consequence TRUE;
+        case TRUE if mensRea == "knowledge_likely_to_cause_death" := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
 
-scope s299CulpableHomicide {
-
-    // ~ ENUMS ~
-
-    struct Party { // ENUM
-        Accused,
-        Victim,
+statute 299 "Culpable Homicide" {
+    definitions {
+        culpable_homicide := "Causing death by an act done with intention or knowledge";
+        death := "The cessation of life";
+        bodily_injury := "Physical harm to the body likely to cause death";
+        act := "Any voluntary physical movement";
     }
 
-    struct MensRea { // ENUM - Mental state of the accused
-        IntentionToCauseDeath,
-        IntentionToCauseBodilyInjuryLikelyToCauseDeath,
-        KnowledgeActLikelyToCauseDeath,
-        NA,
+    elements {
+        actus_reus act := "Doing an act that causes death";
+        actus_reus omission := "Omission that causes death";
+        circumstance death := "Death of the victim is caused";
+        mens_rea intent1 := "Intention of causing death";
+        mens_rea intent2 := "Intention of causing bodily injury likely to cause death";
+        mens_rea knowledge := "Knowledge that the act is likely to cause death";
     }
 
-    struct ActusReus { // ENUM - Physical act causing death
-        ActCausingDeath,
-        OmissionCausingDeath,
-        NA,
+    penalty {
+        imprisonment := 5 years .. 20 years;
+        fine := $0.00 .. $50,000.00;
+        supplementary := "May be liable to caning";
     }
 
-    struct CausationResult { // ENUM
-        DeathCaused,
-        DeathNotCaused,
+    illustration example1 {
+        "A lays sticks and turf over a pit, with the intention of causing death. B walks over and falls in and is killed. A has committed culpable homicide."
     }
 
-    struct ConsequenceDefinition { // ENUM
-        CulpableHomicide,
-        NotCulpableHomicide,
+    illustration example2 {
+        "A knows that B is behind a bush. C does not know it. A induces C to fire at the bush. C fires and kills B. A has committed culpable homicide."
     }
-
-    // ~ STRUCT DEFINITION ~
-
-    struct CulpableHomicideCase {
-        string || Party accused,
-        string || Party victim,
-        ActusReus actusReus,
-        boolean deathCaused,
-        MensRea mensRea,
-        ConsequenceDefinition definition,
-    }
-
-    // ~ STRUCT LITERAL ~
-
-    CulpableHomicideCase culpableHomicideDefinition := {
-
-        // ~ struct literal attributes ~
-            // The accused must perform an act that causes the death 
-            // of another person with one of the three mental states
-
-        accused := Party.Accused,
-        victim := Party.Victim,
-        actusReus := ActusReus.ActCausingDeath or ActusReus.OmissionCausingDeath or ActusReus.NA,
-        deathCaused := TRUE or FALSE,
-        mensRea := MensRea.IntentionToCauseDeath or MensRea.IntentionToCauseBodilyInjuryLikelyToCauseDeath or MensRea.KnowledgeActLikelyToCauseDeath or MensRea.NA,
-
-        // ~ logical short circuiting ~
-            // For culpable homicide, we need:
-            // 1. An actus reus (physical act or omission)
-            // 2. Death to have been caused
-            // 3. One of the three mens rea conditions
-
-        definition := match actusReus {
-            case ActusReus.ActCausingDeath := consequence deathCaused
-            case ActusReus.OmissionCausingDeath := consequence deathCaused
-            case ActusReus.NA := consequence ConsequenceDefinition.NotCulpableHomicide
-        },
-        definition := match deathCaused {
-            case TRUE := consequence mensRea
-            case FALSE := consequence ConsequenceDefinition.NotCulpableHomicide
-        },
-        definition := match mensRea {
-            case MensRea.IntentionToCauseDeath := consequence ConsequenceDefinition.CulpableHomicide
-            case MensRea.IntentionToCauseBodilyInjuryLikelyToCauseDeath := consequence ConsequenceDefinition.CulpableHomicide
-            case MensRea.KnowledgeActLikelyToCauseDeath := consequence ConsequenceDefinition.CulpableHomicide
-            case MensRea.NA := consequence ConsequenceDefinition.NotCulpableHomicide
-        },
-
-    }
-
 }

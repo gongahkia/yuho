@@ -1,125 +1,58 @@
-/*
-VERSION 1.0
+// Singapore Penal Code Section 378 - Theft
+// Yuho v5 Syntax
 
-Based off the following statutory provisions on theft
-    * Singapore Penal Code S378
+struct TheftCase {
+    string accused,
+    string victim,
+    string propertyType,
+    string dishonestIntention,
+    bool withoutConsent,
+    bool inPossessionOfAnother,
+    bool propertyMoved,
+}
 
-Theft requires:
-    1. Dishonest intention (wrongful gain/loss)
-    2. Movable property
-    3. Taking out of possession of another person
-    4. Without consent
-    5. Moving the property
+fn is_theft(string propertyType, string intention, bool consent, bool possession, bool moved) : bool {
+    match {
+        case TRUE if propertyType == "none" := consequence FALSE;
+        case TRUE if intention == "none" := consequence FALSE;
+        case TRUE if consent == TRUE := consequence FALSE;
+        case TRUE if possession == FALSE := consequence FALSE;
+        case TRUE if moved == FALSE := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
 
-This demonstrates property offense with intent elements.
-*/
-
-scope s378Theft {
-
-    // ~ ENUMS ~
-
-    struct Party { // ENUM
-        Accused,
-        Victim,
+statute 378 "Theft" {
+    definitions {
+        theft := "Dishonestly taking movable property out of possession of another without consent";
+        movable_property := "Corporeal property except land and things attached to earth";
+        dishonestly := "With intention of causing wrongful gain or wrongful loss";
+        wrongful_gain := "Gain by unlawful means of property to which the gainer is not legally entitled";
+        wrongful_loss := "Loss by unlawful means of property to which the loser is legally entitled";
     }
 
-    struct PropertyType { // ENUM - Types of movable property
-        Tangible,
-        Intangible,
-        SeveredFromLand,
-        NA,
+    elements {
+        mens_rea intention := "Dishonest intention to take property";
+        actus_reus taking := "Taking movable property";
+        circumstance possession := "Property in possession of another person";
+        circumstance consent := "Without consent of that person";
+        actus_reus movement := "Moving the property in order to such taking";
     }
 
-    struct IntentionType { // ENUM - Dishonest intention elements
-        WrongfulGain,
-        WrongfulLoss,
-        WrongfulGainAndLoss,
-        NA,
+    penalty {
+        imprisonment := 0 days .. 7 years;
+        fine := $0.00 .. $10,000.00;
     }
 
-    struct ConsentStatus { // ENUM
-        WithConsent,
-        WithoutConsent,
+    illustration example1 {
+        "A finds a watch on the road, not knowing to whom it belongs. A picks it up with intent to find the owner. A has not committed theft."
     }
 
-    struct PossessionStatus { // ENUM
-        InPossessionOfAnother,
-        NotInPossessionOfAnother,
+    illustration example2 {
+        "A finds a watch belonging to B. A picks it up intending to keep it. A has committed theft."
     }
 
-    struct MovementStatus { // ENUM
-        PropertyMoved,
-        PropertyNotMoved,
+    illustration example3 {
+        "A sees a watch belonging to B lying on a table. A, not intending to take the watch, moves it to see what is under it. A has not committed theft."
     }
-
-    struct ConsequenceDefinition { // ENUM
-        CommitsTheft,
-        DoesNotCommitTheft,
-    }
-
-    // ~ STRUCT DEFINITION ~
-
-    struct TheftCase {
-        string || Party accused,
-        string || Party victim,
-        PropertyType propertyType,
-        IntentionType dishonestIntention,
-        ConsentStatus consent,
-        PossessionStatus possession,
-        MovementStatus movement,
-        ConsequenceDefinition definition,
-    }
-
-    // ~ STRUCT LITERAL ~
-
-    TheftCase theftDefinition := {
-
-        // ~ struct literal attributes ~
-            // Whoever, intending to take dishonestly any movable property
-            // out of the possession of any person without that person's consent,
-            // moves that property in order to such taking, is said to commit theft
-
-        accused := Party.Accused,
-        victim := Party.Victim,
-        propertyType := PropertyType.Tangible or PropertyType.Intangible or PropertyType.SeveredFromLand or PropertyType.NA,
-        dishonestIntention := IntentionType.WrongfulGain or IntentionType.WrongfulLoss or IntentionType.WrongfulGainAndLoss or IntentionType.NA,
-        consent := ConsentStatus.WithConsent or ConsentStatus.WithoutConsent,
-        possession := PossessionStatus.InPossessionOfAnother or PossessionStatus.NotInPossessionOfAnother,
-        movement := MovementStatus.PropertyMoved or MovementStatus.PropertyNotMoved,
-
-        // ~ logical short circuiting ~
-            // All five elements must be present for theft:
-            // 1. Movable property
-            // 2. Dishonest intention
-            // 3. Without consent
-            // 4. Out of possession of another
-            // 5. Movement of property
-
-        definition := match propertyType {
-            case PropertyType.Tangible := consequence dishonestIntention
-            case PropertyType.Intangible := consequence dishonestIntention
-            case PropertyType.SeveredFromLand := consequence dishonestIntention
-            case PropertyType.NA := consequence ConsequenceDefinition.DoesNotCommitTheft
-        },
-        definition := match dishonestIntention {
-            case IntentionType.WrongfulGain := consequence consent
-            case IntentionType.WrongfulLoss := consequence consent
-            case IntentionType.WrongfulGainAndLoss := consequence consent
-            case IntentionType.NA := consequence ConsequenceDefinition.DoesNotCommitTheft
-        },
-        definition := match consent {
-            case ConsentStatus.WithoutConsent := consequence possession
-            case ConsentStatus.WithConsent := consequence ConsequenceDefinition.DoesNotCommitTheft
-        },
-        definition := match possession {
-            case PossessionStatus.InPossessionOfAnother := consequence movement
-            case PossessionStatus.NotInPossessionOfAnother := consequence ConsequenceDefinition.DoesNotCommitTheft
-        },
-        definition := match movement {
-            case MovementStatus.PropertyMoved := consequence ConsequenceDefinition.CommitsTheft
-            case MovementStatus.PropertyNotMoved := consequence ConsequenceDefinition.DoesNotCommitTheft
-        },
-
-    }
-
 }
