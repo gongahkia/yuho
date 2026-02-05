@@ -29,6 +29,18 @@ module.exports = grammar({
     [$.assignment_statement, $.expression_statement],
     // Match arm body can be expression or pass
     [$.match_arm],
+    // Return statement with optional expression
+    [$.return_statement],
+    // pass can be statement or expression
+    [$.pass_statement, $.pass_expression],
+    // struct literal vs various statement boundaries
+    [$.struct_literal, $.expression_statement],
+    [$.struct_literal, $.assert_statement],
+    [$.struct_literal, $.return_statement],
+    [$.struct_literal, $.variable_declaration],
+    [$.struct_literal, $.assignment_statement],
+    // duration literal with multiple parts
+    [$.duration_literal],
   ],
 
   // Inline rules that don't need their own node types
@@ -153,10 +165,10 @@ module.exports = grammar({
       optional(seq('.', /[0-9]{2}/))
     )),
 
-    percent_literal: $ => seq(
+    percent_literal: $ => prec(7, seq(
       $.integer_literal,
-      '%'
-    ),
+      token.immediate('%')
+    )),
 
     // ISO8601 date: YYYY-MM-DD
     date_literal: $ => token(seq(
