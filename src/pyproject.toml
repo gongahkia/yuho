@@ -63,7 +63,7 @@ Documentation = "https://yuho.dev/docs"
 Repository = "https://github.com/gongahkia/yuho"
 
 [tool.hatch.build.targets.wheel]
-packages = ["yuho"]
+packages = ["yuho", "tree_sitter_yuho"]
 
 [tool.hatch.build.targets.sdist]
 include = [
