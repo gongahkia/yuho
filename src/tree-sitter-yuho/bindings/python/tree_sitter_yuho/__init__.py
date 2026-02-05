@@ -8,6 +8,7 @@ from pathlib import Path
 
 __version__ = "0.1.0"
 
+
 def language():
     """
     Return the tree-sitter Language object for Yuho.
@@ -26,8 +27,12 @@ def language():
     lib_paths = [
         Path(__file__).parent / "libtree-sitter-yuho.so",
         Path(__file__).parent / "libtree-sitter-yuho.dylib",
-        Path(__file__).parent.parent.parent.parent / "build" / "libtree-sitter-yuho.so",
-        Path(__file__).parent.parent.parent.parent / "build" / "libtree-sitter-yuho.dylib",
+        Path(__file__).parent / "yuho.so",
+        Path(__file__).parent / "yuho.dylib",
+        Path(__file__).parent.parent.parent.parent / "libtree-sitter-yuho.so",
+        Path(__file__).parent.parent.parent.parent / "libtree-sitter-yuho.dylib",
+        Path(__file__).parent.parent.parent.parent / "yuho.so",
+        Path(__file__).parent.parent.parent.parent / "yuho.dylib",
     ]
 
     for lib_path in lib_paths:
@@ -36,12 +41,12 @@ def language():
 
     raise RuntimeError(
         "Could not find compiled tree-sitter-yuho library. "
-        "Run 'tree-sitter generate && tree-sitter build' first."
+        "Run './setup.sh' or 'make grammar' to build it."
     )
 
 
 def get_language_path():
-    """Return the path to the grammar.js file for building."""
+    """Return the path to the grammar directory for building."""
     return Path(__file__).parent.parent.parent.parent
 
 
