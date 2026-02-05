@@ -11,31 +11,31 @@ yuho --help
 ### 2. Validation with Error Messages
 
 ```bash
-yuho check library/penal_code/s415_cheating.yh
+yuho check library/penal_code/s415_cheating/statute.yh
 ```
 
 ### 3. Transpilation to Mermaid Diagrams
 
 ```bash
-yuho transpile library/penal_code/s415_cheating.yh --target mermaid
+yuho transpile library/penal_code/s415_cheating/statute.yh --target mermaid
 ```
 
 ### 4. Transpilation to Plain English
 
 ```bash
-yuho transpile library/penal_code/s415_cheating.yh --target english
+yuho transpile library/penal_code/s415_cheating/statute.yh --target english
 ```
 
 ### 5. Live Preview
 
 ```bash
-yuho preview library/penal_code/s415_cheating.yh
+yuho preview library/penal_code/s415_cheating/statute.yh
 ```
 
 ### 6. AST Visualization
 
 ```bash
-yuho ast library/penal_code/s415_cheating.yh
+yuho ast library/penal_code/s415_cheating/statute.yh
 ```
 
 ### 7. Interactive REPL
@@ -47,17 +47,17 @@ yuho repl
 ### 8. Testing with Coverage
 
 ```bash
-yuho test library/penal_code/s415_cheating.yh --coverage
+yuho test library/penal_code/s415_cheating/test_statute.yh --coverage
 ```
 
 ### 9. Diff Between Files
 
 ```bash
-yuho diff file1.yh file2.yh
+yuho diff library/penal_code/s300_murder/statute.yh library/penal_code/s299_culpable_homicide/statute.yh
 ```
 
 ### 10. JSON Output
 
 ```bash
-yuho transpile library/penal_code/s415_cheating.yh --target json
+yuho transpile library/penal_code/s415_cheating/statute.yh --target json
 ```

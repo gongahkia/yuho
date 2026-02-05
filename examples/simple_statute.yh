@@ -1,0 +1,49 @@
+// Example statute for demonstration
+// Singapore Penal Code Section 415 - Cheating (simplified)
+
+struct Person {
+    string name,
+    int age,
+}
+
+struct CheatingCase {
+    string accused,
+    string victim,
+    string action,
+    bool causedHarm,
+}
+
+fn is_adult(int age) : bool {
+    return age >= 18;
+}
+
+fn evaluate_case(bool deceived, bool causedHarm) : string {
+    match {
+        case TRUE if deceived && causedHarm := consequence "Guilty of cheating";
+        case TRUE if deceived := consequence "Partial liability";
+        case _ := consequence "Not guilty";
+    }
+}
+
+statute 415 "Cheating" {
+    definitions {
+        deceive := "To cause a person to believe something false";
+        fraudulently := "With intent to defraud";
+        dishonestly := "With intention of causing wrongful gain or loss";
+    }
+
+    elements {
+        actus_reus act := "Deceiving another person";
+        mens_rea intent := "Fraudulently or dishonestly";
+        circumstance result := "Induced to deliver property or do/omit an act";
+    }
+
+    penalty {
+        imprisonment := 1 year .. 7 years;
+        fine := $0.00 .. $10,000.00;
+    }
+
+    illustration example1 {
+        "A falsely pretends to be in government service and induces B to let him have goods on credit. A cheats."
+    }
+}
