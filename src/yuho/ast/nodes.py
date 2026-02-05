@@ -74,7 +74,7 @@ class ASTNode(ABC):
     information for error reporting and IDE features.
     """
 
-    source_location: Optional["SourceLocation"] = field(default=None, compare=False)
+    source_location: Optional["SourceLocation"] = field(default=None, compare=False, kw_only=True)
 
     @abstractmethod
     def accept(self, visitor: "Visitor"):

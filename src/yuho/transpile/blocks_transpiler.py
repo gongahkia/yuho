@@ -12,12 +12,12 @@ from yuho.transpile.base import TranspilerBase, TranspileTarget
 from yuho.ast.nodes import (
     ModuleNode,
     StatuteNode,
-    DefinitionNode,
+    DefinitionEntry,
     ElementNode,
     PenaltyNode,
     IllustrationNode,
 )
-from yuho.ast.visitor import ASTVisitor
+from yuho.ast.visitor import Visitor
 
 
 @dataclass
@@ -30,7 +30,7 @@ class Block:
     level: int = 0
 
 
-class BlockBuilder(ASTVisitor):
+class BlockBuilder(Visitor):
     """Builds block notation from AST."""
     
     def __init__(self):
