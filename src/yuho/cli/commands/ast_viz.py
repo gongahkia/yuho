@@ -280,19 +280,22 @@ def run_ast_viz(
     
     # Parse
     try:
-        from yuho.parser.scanner import Scanner
-        from yuho.parser.parser import Parser
+        from yuho.parser import Parser
         from yuho.ast.builder import ASTBuilder
-        
-        scanner = Scanner(source)
-        tokens = scanner.scan_tokens()
-        
-        parser = Parser(tokens)
-        tree = parser.parse()
-        
-        builder = ASTBuilder()
-        ast = builder.build(tree)
-        
+
+        parser = Parser()
+        result = parser.parse(source, str(path))
+
+        if result.errors:
+            for err in result.errors[:5]:
+                click.echo(f"Parse error: {err.message}", err=True)
+            raise SystemExit(1)
+
+        builder = ASTBuilder(source, str(path))
+        ast = builder.build(result.tree.root_node)
+
+    except SystemExit:
+        raise
     except Exception as e:
         click.echo(f"Parse error: {e}", err=True)
         raise SystemExit(1)
