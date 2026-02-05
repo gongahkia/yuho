@@ -382,8 +382,8 @@ def run_graph(
         sys.exit(1)
     
     # Build AST
-    builder = ASTBuilder()
-    ast = builder.build(result.tree)
+    builder = ASTBuilder(result.source, result.file)
+    ast = builder.build(result.tree.root_node)
     
     # Extract dependencies
     extractor = DependencyExtractor()

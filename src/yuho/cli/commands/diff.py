@@ -442,8 +442,8 @@ def run_diff(
             for err in result.errors[:3]:
                 click.echo(f"  {err.message}", err=True)
             return None
-        builder = ASTBuilder()
-        return builder.build(result.tree)
+        builder = ASTBuilder(result.source, result.file)
+        return builder.build(result.tree.root_node)
     
     ast1 = parse_file(path1)
     ast2 = parse_file(path2)

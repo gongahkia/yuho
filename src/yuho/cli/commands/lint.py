@@ -433,8 +433,8 @@ def run_lint(
                     click.echo(f"Skipping {path} (parse errors)")
                 continue
             
-            builder = ASTBuilder()
-            ast = builder.build(result.tree)
+            builder = ASTBuilder(source, str(path))
+            ast = builder.build(result.tree.root_node)
             
             # Run all rules
             file_issues: List[LintIssue] = []
