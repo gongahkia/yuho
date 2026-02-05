@@ -193,9 +193,9 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
         
         # Build AST
         try:
-            builder = ASTBuilder()
-            ast = builder.build(result.tree)
-            
+            builder = ASTBuilder(source, filename)
+            ast = builder.build(result.tree.root_node)
+
             # Return AST summary
             self._send_json_response(200, APIResponse(
                 success=True,
@@ -273,15 +273,15 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
         
         # Build AST
         try:
-            builder = ASTBuilder()
-            ast = builder.build(result.tree)
+            builder = ASTBuilder(source, filename)
+            ast = builder.build(result.tree.root_node)
         except Exception as e:
             self._send_json_response(500, APIResponse(
                 success=False,
                 error=f"AST build error: {e}"
             ))
             return
-        
+
         # Transpile
         try:
             target = TranspileTarget.from_string(target_name)
@@ -332,15 +332,15 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
         
         # Build AST
         try:
-            builder = ASTBuilder()
-            ast = builder.build(result.tree)
+            builder = ASTBuilder(source, filename)
+            ast = builder.build(result.tree.root_node)
         except Exception as e:
             self._send_json_response(500, APIResponse(
                 success=False,
                 error=f"AST build error: {e}"
             ))
             return
-        
+
         # Run lint
         from yuho.cli.commands.lint import ALL_RULES, Severity
         

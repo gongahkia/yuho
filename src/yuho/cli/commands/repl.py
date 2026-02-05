@@ -286,8 +286,8 @@ Type {self._colorize("help", Colors.YELLOW)} for commands, {self._colorize("exit
         
         # Build AST
         try:
-            builder = ASTBuilder()
-            ast = builder.build(result.tree)
+            builder = ASTBuilder(source, filename)
+            ast = builder.build(result.tree.root_node)
             
             self.last_ast = ast
             self.last_source = source
