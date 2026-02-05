@@ -189,32 +189,24 @@ build_grammar() {
 
     # Build the shared library
     log "Compiling shared library..."
-    cd "$SCRIPT_DIR"
     tree-sitter build
 
-    # Find the built library and copy to bindings
-    BINDINGS_DIR="$GRAMMAR_DIR/bindings/python/tree_sitter_yuho"
-    mkdir -p "$BINDINGS_DIR"
-
+    # Determine library extension
     if [[ "$(uname)" == "Darwin" ]]; then
         LIB_EXT="dylib"
     else
         LIB_EXT="so"
     fi
 
-    # tree-sitter 0.24+ creates yuho.dylib in current dir
-    # Older versions create libtree-sitter-yuho.dylib
-    copied=false
+    # Find and copy the built library to src/tree_sitter_yuho/
+    DEST_DIR="$SRC_DIR/tree_sitter_yuho"
+    mkdir -p "$DEST_DIR"
 
+    copied=false
     for lib_name in "yuho.$LIB_EXT" "libtree-sitter-yuho.$LIB_EXT"; do
-        if [[ -f "$SCRIPT_DIR/$lib_name" ]]; then
-            cp "$SCRIPT_DIR/$lib_name" "$BINDINGS_DIR/"
-            success "Copied $lib_name to Python bindings"
-            copied=true
-            break
-        elif [[ -f "$GRAMMAR_DIR/$lib_name" ]]; then
-            cp "$GRAMMAR_DIR/$lib_name" "$BINDINGS_DIR/"
-            success "Copied $lib_name to Python bindings"
+        if [[ -f "$GRAMMAR_DIR/$lib_name" ]]; then
+            cp "$GRAMMAR_DIR/$lib_name" "$DEST_DIR/"
+            success "Copied $lib_name to $DEST_DIR"
             copied=true
             break
         fi
@@ -224,6 +216,7 @@ build_grammar() {
         warn "Could not find built library, installation may still work"
     fi
 
+    cd "$SCRIPT_DIR"
     success "Grammar built successfully"
 }
 
