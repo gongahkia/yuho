@@ -98,7 +98,7 @@ class Parser:
 
             self._parser = TSParser()
             self._language = language()
-            self._parser.set_language(self._language)
+            self._parser.language = self._language
             self._initialized = True
         except ImportError as e:
             raise ImportError(
