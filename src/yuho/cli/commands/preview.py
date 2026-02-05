@@ -51,31 +51,31 @@ def transpile_file(path: Path, target: str) -> tuple[Optional[str], Optional[str
         (content, error) - one will be None
     """
     try:
-        from yuho.parser.scanner import Scanner
-        from yuho.parser.parser import Parser
+        from yuho.parser import Parser
         from yuho.ast.builder import ASTBuilder
         from yuho.transpile.registry import TranspilerRegistry
-        
+
         source = path.read_text()
-        
-        scanner = Scanner(source)
-        tokens = scanner.scan_tokens()
-        
-        parser = Parser(tokens)
-        tree = parser.parse()
-        
-        builder = ASTBuilder()
-        ast = builder.build(tree)
-        
-        registry = TranspilerRegistry()
+
+        parser = Parser()
+        result = parser.parse(source, str(path))
+
+        if result.errors:
+            errors = "; ".join(e.message for e in result.errors[:3])
+            return None, f"Parse errors: {errors}"
+
+        builder = ASTBuilder(source, str(path))
+        ast = builder.build(result.tree.root_node)
+
+        registry = TranspilerRegistry.instance()
         transpiler = registry.get(target)
-        
+
         if transpiler is None:
             return None, f"Unknown target format: {target}"
-        
-        result = transpiler.transpile(ast)
-        return result, None
-        
+
+        output = transpiler.transpile(ast)
+        return output, None
+
     except Exception as e:
         return None, str(e)
 
