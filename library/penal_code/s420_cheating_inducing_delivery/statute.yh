@@ -1,142 +1,47 @@
-/*
-VERSION 1.0
+// Singapore Penal Code Section 420 - Cheating and Dishonestly Inducing Delivery of Property
+// Yuho v5 Syntax
 
-Based off the following statutory provisions on cheating
-    * Singapore Penal Code S420
+struct CheatingDeliveryCase {
+    string accused,
+    string victim,
+    bool cheatingCommitted,
+    bool deliveryInduced,
+    string propertyType,
+}
 
-Cheating and Dishonestly Inducing Delivery is an AGGRAVATED form of S415 Cheating.
-It requires:
-    1. All elements of cheating (S415)
-    2. PLUS dishonest inducement to:
-        - Deliver property, OR
-        - Make/alter/destroy valuable security, OR
-        - Make/alter/destroy signed/sealed document convertible to valuable security
+fn is_s420_cheating(bool cheating, bool delivery) : bool {
+    match {
+        case TRUE if cheating == FALSE := consequence FALSE;
+        case TRUE if delivery == FALSE := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
 
-This demonstrates aggravated offense building on base offense.
-Note: Remote communication cheating is further aggravated.
-*/
-
-scope s420CheatingInducingDelivery {
-
-    // ~ ENUMS ~
-
-    struct Party { // ENUM
-        Accused,
-        Victim,
+statute 420 "Cheating and Dishonestly Inducing Delivery of Property" {
+    definitions {
+        cheating := "Deceiving a person fraudulently or dishonestly";
+        inducing := "Causing a person to act based on deception";
+        delivery := "Handing over property to another";
+        valuable_security := "Document purporting to create, transfer, or release any right";
     }
 
-    struct DeceptionType { // ENUM - Nature of deception (from S415)
-        Fraudulently,
-        Dishonestly,
-        NA,
+    elements {
+        actus_reus cheating := "Cheating under Section 415";
+        actus_reus inducement := "Dishonestly inducing delivery of property";
+        circumstance delivery := "Delivery of property or valuable security";
+        circumstance alteration := "Making, altering, or destroying valuable security";
     }
 
-    struct InducementType { // ENUM - What victim was induced to do (aggravated)
-        DeliverProperty,
-        MakeValuableSecurity,
-        AlterValuableSecurity,
-        DestroyValuableSecurity,
-        MakeSignedSealedDocument,
-        AlterSignedSealedDocument,
-        DestroySignedSealedDocument,
-        NA,
+    penalty {
+        imprisonment := 1 year .. 10 years;
+        fine := $0.00 .. $50,000.00;
     }
 
-    struct CommunicationMethod { // ENUM - Method of cheating
-        InPerson,
-        RemoteCommunication,
-        Other,
+    illustration example1 {
+        "A deceives B into believing A is a licensed contractor. B pays A in advance for work A never intends to do. A is guilty under Section 420."
     }
 
-    struct PropertyType { // ENUM - Type of property delivered
-        MovableProperty,
-        ValuableSecurity,
-        SignedDocument,
-        CreditCard,
-        StoredValueCard,
-        ATMCard,
-        Other,
-        NA,
+    illustration example2 {
+        "A, by false pretenses, induces B to sign a document transferring property to A. A is guilty under Section 420."
     }
-
-    struct ConsequenceDefinition { // ENUM
-        CommitsCheatingInducingDelivery,
-        CommitsAggravatedCheatingByRemote,
-        DoesNotCommitOffense,
-    }
-
-    // ~ STRUCT DEFINITION ~
-
-    struct CheatingInducingDeliveryCase {
-        string || Party accused,
-        string || Party victim,
-        boolean cheatingEstablished,
-        DeceptionType deceptionType,
-        InducementType inducementType,
-        PropertyType propertyType,
-        CommunicationMethod communicationMethod,
-        boolean deliveryOrActionOccurred,
-        ConsequenceDefinition definition,
-    }
-
-    // ~ STRUCT LITERAL ~
-
-    CheatingInducingDeliveryCase cheatingInducingDeliveryDefinition := {
-
-        // ~ struct literal attributes ~
-            // Whoever cheats and thereby dishonestly induces the person 
-            // deceived to deliver any property to any person, or to make, 
-            // alter or destroy the whole or any part of a valuable security, 
-            // or anything which is signed or sealed and capable of being 
-            // converted into a valuable security
-
-        accused := Party.Accused,
-        victim := Party.Victim,
-        cheatingEstablished := TRUE or FALSE,
-        deceptionType := DeceptionType.Fraudulently or DeceptionType.Dishonestly or DeceptionType.NA,
-        inducementType := InducementType.DeliverProperty or InducementType.MakeValuableSecurity or InducementType.AlterValuableSecurity or InducementType.DestroyValuableSecurity or InducementType.MakeSignedSealedDocument or InducementType.AlterSignedSealedDocument or InducementType.DestroySignedSealedDocument or InducementType.NA,
-        propertyType := PropertyType.MovableProperty or PropertyType.ValuableSecurity or PropertyType.SignedDocument or PropertyType.CreditCard or PropertyType.StoredValueCard or PropertyType.ATMCard or PropertyType.Other or PropertyType.NA,
-        communicationMethod := CommunicationMethod.InPerson or CommunicationMethod.RemoteCommunication or CommunicationMethod.Other,
-        deliveryOrActionOccurred := TRUE or FALSE,
-
-        // ~ logical short circuiting ~
-            // Aggravated offense requires:
-            // 1. Base cheating established (S415)
-            // 2. Dishonest deception
-            // 3. Specific inducement type
-            // 4. Delivery or action occurred
-            // Remote communication is further aggravated
-
-        definition := match cheatingEstablished {
-            case TRUE := consequence deceptionType
-            case FALSE := consequence ConsequenceDefinition.DoesNotCommitOffense
-        },
-        definition := match deceptionType {
-            case DeceptionType.Fraudulently := consequence inducementType
-            case DeceptionType.Dishonestly := consequence inducementType
-            case DeceptionType.NA := consequence ConsequenceDefinition.DoesNotCommitOffense
-        },
-        definition := match inducementType {
-            case InducementType.DeliverProperty := consequence deliveryOrActionOccurred
-            case InducementType.MakeValuableSecurity := consequence deliveryOrActionOccurred
-            case InducementType.AlterValuableSecurity := consequence deliveryOrActionOccurred
-            case InducementType.DestroyValuableSecurity := consequence deliveryOrActionOccurred
-            case InducementType.MakeSignedSealedDocument := consequence deliveryOrActionOccurred
-            case InducementType.AlterSignedSealedDocument := consequence deliveryOrActionOccurred
-            case InducementType.DestroySignedSealedDocument := consequence deliveryOrActionOccurred
-            case InducementType.NA := consequence ConsequenceDefinition.DoesNotCommitOffense
-        },
-        definition := match deliveryOrActionOccurred {
-            case TRUE := consequence communicationMethod
-            case FALSE := consequence ConsequenceDefinition.DoesNotCommitOffense
-        },
-        // Remote communication is aggravated further (higher penalty)
-        definition := match communicationMethod {
-            case CommunicationMethod.RemoteCommunication := consequence ConsequenceDefinition.CommitsAggravatedCheatingByRemote
-            case CommunicationMethod.InPerson := consequence ConsequenceDefinition.CommitsCheatingInducingDelivery
-            case CommunicationMethod.Other := consequence ConsequenceDefinition.CommitsCheatingInducingDelivery
-        },
-
-    }
-
 }

@@ -1,139 +1,49 @@
-/*
-VERSION 1.0
+// Singapore Penal Code Section 390 - Robbery
+// Yuho v5 Syntax
 
-Based off the following statutory provisions on robbery
-    * Singapore Penal Code S390
+struct RobberyCase {
+    string accused,
+    string victim,
+    bool theftCommitted,
+    bool extortionCommitted,
+    string violenceType,
+    bool violenceUsed,
+}
 
-Robbery is defined as either:
-    1. Theft + aggravating circumstances (death, hurt, wrongful restraint, fear of instant harm)
-    2. Extortion + presence + fear of instant harm + immediate delivery
+fn is_robbery(bool theft, bool extortion, bool violence) : bool {
+    match {
+        case TRUE if theft == FALSE && extortion == FALSE := consequence FALSE;
+        case TRUE if violence == FALSE := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
 
-This demonstrates offense defined by combination of other offenses.
-*/
-
-scope s390Robbery {
-
-    // ~ ENUMS ~
-
-    struct Party { // ENUM
-        Accused,
-        Victim,
+statute 390 "Robbery" {
+    definitions {
+        robbery := "Theft or extortion accompanied by violence or fear of violence";
+        theft := "Taking property dishonestly without consent";
+        extortion := "Inducing delivery of property through fear";
+        hurt := "Causing bodily pain, disease, or infirmity";
+        wrongful_restraint := "Voluntarily obstructing a person to prevent movement";
     }
 
-    struct BaseOffense { // ENUM - Robbery must be based on theft or extortion
-        Theft,
-        Extortion,
-        NA,
+    elements {
+        actus_reus theft := "Committing theft";
+        actus_reus extortion := "Committing extortion";
+        circumstance violence := "Causing or attempting to cause death, hurt, or wrongful restraint";
+        circumstance fear := "Fear of instant death, hurt, or wrongful restraint";
     }
 
-    struct TheftStage { // ENUM - When aggravating act occurs for theft-based robbery
-        DuringCommission,
-        CarryingAway,
-        AttemptingToCarryAway,
-        NA,
+    penalty {
+        imprisonment := 3 years .. 14 years;
+        supplementary := "Shall be liable to caning with not less than 12 strokes";
     }
 
-    struct AggravatingAct { // ENUM - Acts/threats that elevate theft/extortion to robbery
-        CausingDeath,
-        AttemptingToCauseDeath,
-        CausingHurt,
-        AttemptingToCauseHurt,
-        CausingWrongfulRestraint,
-        AttemptingToWrongfullyRestrain,
-        FearOfInstantDeath,
-        FearOfInstantHurt,
-        FearOfInstantWrongfulRestraint,
-        NA,
+    illustration example1 {
+        "A holds B and takes B's wallet while B is unable to resist. A commits robbery."
     }
 
-    struct PresenceStatus { // ENUM - For extortion-based robbery
-        InPresenceOfVictim,
-        NotInPresenceOfVictim,
+    illustration example2 {
+        "A threatens B with a knife and demands B's money. B, fearing for his life, hands over the money. A commits robbery."
     }
-
-    struct DeliveryTiming { // ENUM - For extortion-based robbery
-        ImmediateDelivery,
-        DelayedDelivery,
-        NA,
-    }
-
-    struct ConsequenceDefinition { // ENUM
-        CommitsRobbery,
-        DoesNotCommitRobbery,
-    }
-
-    // ~ STRUCT DEFINITION ~
-
-    struct RobberyCase {
-        string || Party accused,
-        string || Party victim,
-        BaseOffense baseOffense,
-        TheftStage theftStage,
-        AggravatingAct aggravatingAct,
-        PresenceStatus presenceStatus,
-        DeliveryTiming deliveryTiming,
-        ConsequenceDefinition definition,
-    }
-
-    // ~ STRUCT LITERAL ~
-        // Robbery is a combination offense: 
-        // Theft-based: theft + voluntary harm/threat during commission
-        // Extortion-based: extortion + presence + fear of instant harm + immediate delivery
-
-    RobberyCase robberyDefinition := {
-
-        accused := Party.Accused,
-        victim := Party.Victim,
-        baseOffense := BaseOffense.Theft or BaseOffense.Extortion or BaseOffense.NA,
-        theftStage := TheftStage.DuringCommission or TheftStage.CarryingAway or TheftStage.AttemptingToCarryAway or TheftStage.NA,
-        aggravatingAct := AggravatingAct.CausingDeath or AggravatingAct.AttemptingToCauseDeath or AggravatingAct.CausingHurt or AggravatingAct.AttemptingToCauseHurt or AggravatingAct.CausingWrongfulRestraint or AggravatingAct.AttemptingToWrongfullyRestrain or AggravatingAct.FearOfInstantDeath or AggravatingAct.FearOfInstantHurt or AggravatingAct.FearOfInstantWrongfulRestraint or AggravatingAct.NA,
-        presenceStatus := PresenceStatus.InPresenceOfVictim or PresenceStatus.NotInPresenceOfVictim,
-        deliveryTiming := DeliveryTiming.ImmediateDelivery or DeliveryTiming.DelayedDelivery or DeliveryTiming.NA,
-
-        // ~ logical short circuiting ~
-            // First determine base offense type, then apply appropriate conditions
-
-        definition := match baseOffense {
-            case BaseOffense.Theft := consequence theftStage
-            case BaseOffense.Extortion := consequence presenceStatus
-            case BaseOffense.NA := consequence ConsequenceDefinition.DoesNotCommitRobbery
-        },
-
-        // Theft-based robbery path: need valid stage + aggravating act
-        definition := match theftStage {
-            case TheftStage.DuringCommission := consequence aggravatingAct
-            case TheftStage.CarryingAway := consequence aggravatingAct
-            case TheftStage.AttemptingToCarryAway := consequence aggravatingAct
-            case TheftStage.NA := consequence ConsequenceDefinition.DoesNotCommitRobbery
-        },
-
-        // Extortion-based robbery path: need presence
-        definition := match presenceStatus {
-            case PresenceStatus.InPresenceOfVictim := consequence aggravatingAct
-            case PresenceStatus.NotInPresenceOfVictim := consequence ConsequenceDefinition.DoesNotCommitRobbery
-        },
-
-        // Both paths: need aggravating act
-        definition := match aggravatingAct {
-            case AggravatingAct.CausingDeath := consequence ConsequenceDefinition.CommitsRobbery
-            case AggravatingAct.AttemptingToCauseDeath := consequence ConsequenceDefinition.CommitsRobbery
-            case AggravatingAct.CausingHurt := consequence ConsequenceDefinition.CommitsRobbery
-            case AggravatingAct.AttemptingToCauseHurt := consequence ConsequenceDefinition.CommitsRobbery
-            case AggravatingAct.CausingWrongfulRestraint := consequence ConsequenceDefinition.CommitsRobbery
-            case AggravatingAct.AttemptingToWrongfullyRestrain := consequence ConsequenceDefinition.CommitsRobbery
-            case AggravatingAct.FearOfInstantDeath := consequence deliveryTiming
-            case AggravatingAct.FearOfInstantHurt := consequence deliveryTiming
-            case AggravatingAct.FearOfInstantWrongfulRestraint := consequence deliveryTiming
-            case AggravatingAct.NA := consequence ConsequenceDefinition.DoesNotCommitRobbery
-        },
-
-        // For fear-based aggravation: check delivery timing
-        definition := match deliveryTiming {
-            case DeliveryTiming.ImmediateDelivery := consequence ConsequenceDefinition.CommitsRobbery
-            case DeliveryTiming.DelayedDelivery := consequence ConsequenceDefinition.DoesNotCommitRobbery
-            case DeliveryTiming.NA := consequence ConsequenceDefinition.DoesNotCommitRobbery
-        },
-
-    }
-
 }
