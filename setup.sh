@@ -189,10 +189,12 @@ build_grammar() {
 
     # Build the shared library
     log "Compiling shared library..."
+    cd "$SCRIPT_DIR"
     tree-sitter build
 
     # Find the built library and copy to bindings
     BINDINGS_DIR="$GRAMMAR_DIR/bindings/python/tree_sitter_yuho"
+    mkdir -p "$BINDINGS_DIR"
 
     if [[ "$(uname)" == "Darwin" ]]; then
         LIB_EXT="dylib"
@@ -200,24 +202,28 @@ build_grammar() {
         LIB_EXT="so"
     fi
 
-    # tree-sitter build creates the library in the grammar dir
-    if [[ -f "$GRAMMAR_DIR/libtree-sitter-yuho.$LIB_EXT" ]]; then
-        cp "$GRAMMAR_DIR/libtree-sitter-yuho.$LIB_EXT" "$BINDINGS_DIR/"
-        success "Copied library to Python bindings"
-    elif [[ -f "$GRAMMAR_DIR/build/libtree-sitter-yuho.$LIB_EXT" ]]; then
-        cp "$GRAMMAR_DIR/build/libtree-sitter-yuho.$LIB_EXT" "$BINDINGS_DIR/"
-        success "Copied library to Python bindings"
-    else
-        # Try alternate naming
-        if ls "$GRAMMAR_DIR"/*.{so,dylib} 1> /dev/null 2>&1; then
-            cp "$GRAMMAR_DIR"/*.{so,dylib} "$BINDINGS_DIR/" 2>/dev/null || true
-            success "Copied library to Python bindings"
-        else
-            warn "Could not find built library, installation may still work"
+    # tree-sitter 0.24+ creates yuho.dylib in current dir
+    # Older versions create libtree-sitter-yuho.dylib
+    copied=false
+
+    for lib_name in "yuho.$LIB_EXT" "libtree-sitter-yuho.$LIB_EXT"; do
+        if [[ -f "$SCRIPT_DIR/$lib_name" ]]; then
+            cp "$SCRIPT_DIR/$lib_name" "$BINDINGS_DIR/"
+            success "Copied $lib_name to Python bindings"
+            copied=true
+            break
+        elif [[ -f "$GRAMMAR_DIR/$lib_name" ]]; then
+            cp "$GRAMMAR_DIR/$lib_name" "$BINDINGS_DIR/"
+            success "Copied $lib_name to Python bindings"
+            copied=true
+            break
         fi
+    done
+
+    if [[ "$copied" == false ]]; then
+        warn "Could not find built library, installation may still work"
     fi
 
-    cd "$SCRIPT_DIR"
     success "Grammar built successfully"
 }
 
