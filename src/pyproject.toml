@@ -21,13 +21,15 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Software Development :: Compilers",
     "Topic :: Text Processing :: Linguistic",
 ]
 requires-python = ">=3.10"
 dependencies = [
     "click>=8.0,<9.0",
-    "tree-sitter>=0.21.0,<0.24.0",
+    "tree-sitter>=0.21.0,<1.0",
 ]
 
 [project.optional-dependencies]
@@ -61,7 +63,15 @@ Documentation = "https://yuho.dev/docs"
 Repository = "https://github.com/gongahkia/yuho"
 
 [tool.hatch.build.targets.wheel]
-packages = ["yuho", "tree_sitter_yuho"]
+packages = ["yuho"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "yuho/**",
+    "tree-sitter-yuho/grammar.js",
+    "tree-sitter-yuho/src/**",
+    "tree-sitter-yuho/bindings/python/**",
+]
 
 [tool.black]
 line-length = 100
