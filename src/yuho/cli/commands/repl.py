@@ -273,7 +273,7 @@ Type {self._colorize("help", Colors.YELLOW)} for commands, {self._colorize("exit
         Returns:
             True if parsing succeeded
         """
-        result = self.parser.parse_string(source, filename)
+        result = self.parser.parse(source, filename)
         
         if result.errors:
             print(self._colorize("Parse errors:", Colors.RED))

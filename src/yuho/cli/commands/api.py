@@ -174,7 +174,7 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
             ))
             return
         
-        result = self.parser.parse_string(source, filename)
+        result = self.parser.parse(source, filename)
         
         if result.errors:
             errors = [
@@ -225,7 +225,7 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
             ))
             return
         
-        result = self.parser.parse_string(source, filename)
+        result = self.parser.parse(source, filename)
         
         errors = []
         if result.errors:
@@ -261,7 +261,7 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
             return
         
         # Parse
-        result = self.parser.parse_string(source, filename)
+        result = self.parser.parse(source, filename)
         
         if result.errors:
             errors = [{"message": e.message} for e in result.errors]
@@ -320,7 +320,7 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
             return
         
         # Parse
-        result = self.parser.parse_string(source, filename)
+        result = self.parser.parse(source, filename)
         
         if result.errors:
             errors = [{"message": e.message} for e in result.errors]
