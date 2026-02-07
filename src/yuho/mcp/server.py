@@ -922,6 +922,8 @@ class YuhoMCPServer:
             """
             from yuho.parser import Parser
             from yuho.ast import ASTBuilder
+            from yuho.ast.type_inference import TypeInferenceVisitor
+            from yuho.ast.type_check import TypeCheckVisitor
 
             diagnostics = []
             parser = Parser()
@@ -942,7 +944,28 @@ class YuhoMCPServer:
                     builder = ASTBuilder(file_content)
                     ast = builder.build(result.root_node)
 
-                    # TODO: Run semantic analysis for more diagnostics
+                    # Run semantic analysis (type inference + type checking)
+                    try:
+                        infer_visitor = TypeInferenceVisitor()
+                        ast.accept(infer_visitor)
+                        check_visitor = TypeCheckVisitor(infer_visitor.result)
+                        ast.accept(check_visitor)
+                        for err in check_visitor.result.errors:
+                            diagnostics.append({
+                                "message": err.message,
+                                "severity": "error",
+                                "line": err.line,
+                                "col": err.column,
+                            })
+                        for warn in check_visitor.result.warnings:
+                            diagnostics.append({
+                                "message": warn.message,
+                                "severity": "warning",
+                                "line": warn.line,
+                                "col": warn.column,
+                            })
+                    except Exception as e:
+                        logger.warning(f"Semantic analysis failed: {e}")
                 except Exception as e:
                     diagnostics.append({
                         "message": str(e),
