@@ -1,1 +1,0 @@
-(A) Mention in the README.md that Yuho is available via Pip install or on PyPi whatever it is
