@@ -275,9 +275,9 @@ install_yuho() {
     cd "$SRC_DIR"
 
     if [[ "$DEV_MODE" == true ]]; then
-        $PIP_CMD install -e ".[all]"
+        $PKG_CMD install -e ".[all]"
     else
-        $PIP_CMD install -e .
+        $PKG_CMD install -e .
     fi
 
     cd "$SCRIPT_DIR"
@@ -314,6 +314,7 @@ main() {
     echo ""
 
     check_python
+    install_uv
     setup_venv
     install_tree_sitter_cli
     build_grammar
