@@ -280,6 +280,10 @@ install_yuho() {
         $PKG_CMD install -e .
     fi
 
+    # Install pytest for testing
+    log "Installing pytest..."
+    $PKG_CMD install pytest
+
     cd "$SCRIPT_DIR"
     success "Yuho installed successfully"
 }
