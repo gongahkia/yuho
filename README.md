@@ -26,7 +26,7 @@ Criminal Law is often a [foundational module](https://law.smu.edu.sg/programmes/
 
 Yuho is a DSL that seeks to *help law students* better understand statutes by providing a flexible syntax which affords a programmatic representation of Singapore Criminal Law. By allowing users to decide how to represent statutory provisions in `.yh` code, the hope is that the statute's key elements and its underlying conditional relationships surface themselves. These representations can be coarse or granular, entirely scoped by their use-cases.  
 
-Getting into the specifics, Yuho provides the following four products.
+Getting into the specifics, Yuho provides the following five products.
 
 1. [Yuho](./doc/SYNTAX.md), a DSL made to be readable and codeable by law students and lawyers
 2. [Formalised semantics](./tests/) for legal reasoning modelled after the syntactical patterns of the law
