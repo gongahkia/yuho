@@ -3,6 +3,7 @@
 # Usage: ./setup.sh [--dev] [--no-venv]
 #
 # This script handles the complete installation of Yuho including:
+# - Installing uv (fast Python package manager)
 # - Creating a virtual environment (optional)
 # - Installing tree-sitter CLI
 # - Building the tree-sitter-yuho grammar
@@ -26,6 +27,7 @@ SRC_DIR="$SCRIPT_DIR/src"
 USE_VENV=true
 DEV_MODE=false
 VERBOSE=false
+USE_UV=true
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do
@@ -100,11 +102,49 @@ check_python() {
     success "Found Python $PYTHON_VERSION"
 }
 
+# Install uv package manager
+install_uv() {
+    if command -v uv &> /dev/null; then
+        UV_VERSION=$(uv --version 2>/dev/null || echo "unknown")
+        success "uv already installed: $UV_VERSION"
+        return 0
+    fi
+
+    log "Installing uv (fast Python package manager)..."
+
+    # Install uv using the official installer
+    if curl -LsSf https://astral.sh/uv/install.sh | sh; then
+        # Add to PATH for current session
+        export PATH="$HOME/.local/bin:$PATH"
+        if command -v uv &> /dev/null; then
+            success "Installed uv successfully"
+            return 0
+        fi
+    fi
+
+    # Fallback: try pip
+    if command -v pip &> /dev/null || command -v pip3 &> /dev/null; then
+        log "Trying pip install..."
+        pip install uv || pip3 install uv
+        if command -v uv &> /dev/null; then
+            success "Installed uv via pip"
+            return 0
+        fi
+    fi
+
+    warn "Could not install uv, falling back to pip"
+    USE_UV=false
+}
+
 # Setup virtual environment
 setup_venv() {
     if [[ "$USE_VENV" == false ]]; then
         log "Skipping virtual environment setup"
-        PIP_CMD="pip"
+        if [[ "$USE_UV" == true ]]; then
+            PKG_CMD="uv pip"
+        else
+            PKG_CMD="pip"
+        fi
         return
     fi
 
@@ -114,17 +154,25 @@ setup_venv() {
         log "Using existing virtual environment at .venv"
     else
         log "Creating virtual environment..."
-        $PYTHON_CMD -m venv "$VENV_DIR"
+        if [[ "$USE_UV" == true ]]; then
+            uv venv "$VENV_DIR"
+        else
+            $PYTHON_CMD -m venv "$VENV_DIR"
+        fi
         success "Created virtual environment at .venv"
     fi
 
     # Activate venv
     source "$VENV_DIR/bin/activate"
-    PIP_CMD="pip"
-
-    # Upgrade pip
-    log "Upgrading pip..."
-    $PIP_CMD install --upgrade pip -q
+    
+    if [[ "$USE_UV" == true ]]; then
+        PKG_CMD="uv pip"
+    else
+        PKG_CMD="pip"
+        # Upgrade pip
+        log "Upgrading pip..."
+        $PKG_CMD install --upgrade pip -q
+    fi
 }
 
 # Install tree-sitter CLI
