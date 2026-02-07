@@ -41,9 +41,11 @@ Getting into the specifics, Yuho provides the following five products.
 | JSON | Machine-readable structured representation for tooling integration |
 | JSON-LD | Linked data format for semantic web applications |
 | English | Human-readable plain English explanation of statutory logic |
+| LaTeX | PDF generation of formatted statute documents |
 | Alloy | Formal verification with Alloy Analyzer |
-| Z3 | SMT-based constraint solving and verification |
 | Mermaid | Diagrammatic representations of statutory logic *(mindmap, flowchart)* |
+| GraphQL | Schema definitions for building legal statute APIs |
+| Blocks | Visual block-based representation for drag-and-drop editing |
 
 Sold on Yuho? Check out the [quickstart](#quickstart) guide.
 
