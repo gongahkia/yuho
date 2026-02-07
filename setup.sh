@@ -284,6 +284,14 @@ install_yuho() {
     log "Installing pytest..."
     $PKG_CMD install pytest
 
+    # Install LSP dependencies
+    log "Installing LSP dependencies..."
+    $PKG_CMD install pygls lsprotocol
+
+    # Install MCP dependencies
+    log "Installing MCP dependencies..."
+    $PKG_CMD install mcp
+
     cd "$SCRIPT_DIR"
     success "Yuho installed successfully"
 }

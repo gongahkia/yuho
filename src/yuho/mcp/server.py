@@ -267,6 +267,11 @@ except ImportError:
                 return func
             return decorator
 
+        def prompt(self, name: str):
+            def decorator(func):
+                return func
+            return decorator
+
     def stdio_server():
         raise ImportError("MCP dependencies not installed. Install with: pip install yuho[mcp]")
 
