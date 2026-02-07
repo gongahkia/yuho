@@ -301,7 +301,7 @@ class YuhoMCPServer:
         verbosity: LogVerbosity = LogVerbosity.STANDARD,
         rate_limit_config: Optional[RateLimitConfig] = None,
     ):
-        self.server = Server("yuho-mcp")
+        self.server = FastMCP("yuho-mcp")
         self.request_logger = MCPRequestLogger(verbosity)
         self.rate_limiter = RateLimiter(rate_limit_config or RateLimitConfig())
         self._register_tools()
