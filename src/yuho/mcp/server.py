@@ -248,12 +248,12 @@ class MCPRequestLogger:
 
 
 try:
-    from mcp.server import Server
-    from mcp.server.stdio import stdio_server
-    from mcp.types import Tool, TextContent, Resource
+    from mcp.server.fastmcp import FastMCP
+    MCP_AVAILABLE = True
 except ImportError:
-    # Provide mock classes for when mcp is not installed
-    class Server:
+    MCP_AVAILABLE = False
+    # Provide mock class for when mcp is not installed
+    class FastMCP:
         def __init__(self, name: str):
             self.name = name
 
@@ -267,13 +267,13 @@ except ImportError:
                 return func
             return decorator
 
-        def prompt(self, name: str):
+        def prompt(self, name: str = None):
             def decorator(func):
                 return func
             return decorator
-
-    def stdio_server():
-        raise ImportError("MCP dependencies not installed. Install with: pip install yuho[mcp]")
+        
+        def run(self, transport: str = "stdio"):
+            raise ImportError("MCP dependencies not installed. Install with: pip install yuho[mcp]")
 
 
 class YuhoMCPServer:
