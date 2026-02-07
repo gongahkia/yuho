@@ -1418,21 +1418,19 @@ Provide a comprehensive test plan with specific values for each test case."""
 
     def run_stdio(self):
         """Run the server using stdio transport."""
-        import asyncio
-        asyncio.run(self._run_stdio())
-
-    async def _run_stdio(self):
-        """Async stdio runner."""
-        async with stdio_server() as streams:
-            await self.server.run(
-                streams[0],
-                streams[1],
-                self.server.create_initialization_options(),
-            )
+        if not MCP_AVAILABLE:
+            raise ImportError("MCP dependencies not installed. Install with: pip install yuho[mcp]")
+        self.server.run(transport="stdio")
 
     def run_http(self, host: str = "127.0.0.1", port: int = 8080):
         """Run the server using HTTP transport."""
-        import asyncio
+        if not MCP_AVAILABLE:
+            raise ImportError("MCP dependencies not installed. Install with: pip install yuho[mcp]")
+        # FastMCP uses SSE transport for HTTP
+        import os
+        os.environ["MCP_HOST"] = host
+        os.environ["MCP_PORT"] = str(port)
+        self.server.run(transport="sse")
         from aiohttp import web
 
         async def handle_mcp(request):
