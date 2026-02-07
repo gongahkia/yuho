@@ -54,6 +54,7 @@ def transpile_file(path: Path, target: str) -> tuple[Optional[str], Optional[str
         from yuho.parser import Parser
         from yuho.ast.builder import ASTBuilder
         from yuho.transpile.registry import TranspilerRegistry
+        from yuho.transpile.base import TranspileTarget
 
         source = path.read_text()
 
@@ -67,8 +68,11 @@ def transpile_file(path: Path, target: str) -> tuple[Optional[str], Optional[str
         builder = ASTBuilder(source, str(path))
         ast = builder.build(result.tree.root_node)
 
+        # Convert string target to TranspileTarget enum
+        target_enum = TranspileTarget.from_string(target)
+
         registry = TranspilerRegistry.instance()
-        transpiler = registry.get(target)
+        transpiler = registry.get(target_enum)
 
         if transpiler is None:
             return None, f"Unknown target format: {target}"
