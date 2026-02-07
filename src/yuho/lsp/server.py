@@ -1418,8 +1418,8 @@ class YuhoLanguageServer(LanguageServer):
 
     def start_io(self):
         """Start the server using stdio."""
-        self.start_io()
+        super().start_io()
 
     def start_tcp(self, host: str, port: int):
         """Start the server on TCP."""
-        self.start_tcp(host, port)
+        super().start_tcp(host, port)
