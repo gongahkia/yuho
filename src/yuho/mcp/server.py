@@ -1431,23 +1431,6 @@ Provide a comprehensive test plan with specific values for each test case."""
         os.environ["MCP_HOST"] = host
         os.environ["MCP_PORT"] = str(port)
         self.server.run(transport="sse")
-        from aiohttp import web
-
-        async def handle_mcp(request):
-            # Simple HTTP handler for MCP
-            data = await request.json()
-            # Process MCP request...
-            return web.json_response({"status": "ok"})
-
-        async def handle_health(request):
-            """Health check endpoint."""
-            return web.json_response(self.health_check())
-
-        app = web.Application()
-        app.router.add_post("/mcp", handle_mcp)
-        app.router.add_get("/health", handle_health)
-
-        web.run_app(app, host=host, port=port)
 
 
 def create_server() -> YuhoMCPServer:
