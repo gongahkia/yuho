@@ -48,25 +48,54 @@ def run_test(
             statute_files.extend(f for f in cwd.glob("**/*.yh") if "test" not in f.name.lower())
     elif file:
         file_path = Path(file)
-        if coverage:
-            statute_files.append(file_path)
-        # Look for associated test file
-        candidates = [
-            file_path.parent / f"test_{file_path.name}",
-            file_path.parent / "tests" / f"{file_path.stem}_test.yh",
-            file_path.parent / "tests" / f"test_{file_path.name}",
-        ]
-        for candidate in candidates:
-            if candidate.exists():
-                test_files.append(candidate)
-                break
+        
+        # Check if the file itself is a test file
+        is_test_file = file_path.name.startswith("test_") or file_path.name.endswith("_test.yh")
+        
+        if is_test_file:
+            # The file IS the test file, run it directly
+            if not file_path.exists():
+                click.echo(colorize(f"Test file not found: {file}", Colors.RED), err=True)
+                sys.exit(1)
+            test_files.append(file_path)
+            
+            # For coverage, find the associated statute file
+            if coverage:
+                # test_statute.yh -> statute.yh
+                if file_path.name.startswith("test_"):
+                    statute_name = file_path.name[5:]  # Remove "test_" prefix
+                    statute_path = file_path.parent / statute_name
+                    if statute_path.exists():
+                        statute_files.append(statute_path)
+                # statute_test.yh -> statute.yh
+                elif file_path.name.endswith("_test.yh"):
+                    statute_name = file_path.stem[:-5] + ".yh"  # Remove "_test" suffix
+                    statute_path = file_path.parent / statute_name
+                    if not statute_path.exists():
+                        # Check parent directory (tests/ -> parent)
+                        statute_path = file_path.parent.parent / statute_name
+                    if statute_path.exists():
+                        statute_files.append(statute_path)
+        else:
+            # File is a statute, look for associated test file
+            if coverage:
+                statute_files.append(file_path)
+            candidates = [
+                file_path.parent / f"test_{file_path.name}",
+                file_path.parent / "tests" / f"{file_path.stem}_test.yh",
+                file_path.parent / "tests" / f"test_{file_path.name}",
+            ]
+            for candidate in candidates:
+                if candidate.exists():
+                    test_files.append(candidate)
+                    break
 
-        if not test_files:
-            click.echo(colorize(f"No test file found for {file}", Colors.YELLOW))
-            click.echo("Expected:")
-            for c in candidates:
-                click.echo(f"  - {c}")
-            sys.exit(1)
+            if not test_files:
+                click.echo(colorize(f"No test file found for {file}", Colors.YELLOW))
+                click.echo("Expected:")
+                for c in candidates:
+                    click.echo(f"  - {c}")
+                sys.exit(1)
     else:
         click.echo(colorize("error: Specify a file or use --all", Colors.RED), err=True)
         sys.exit(1)
