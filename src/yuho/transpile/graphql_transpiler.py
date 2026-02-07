@@ -248,10 +248,28 @@ class GraphQLTranspiler(TranspilerBase, Visitor):
     # =========================================================================
 
     def _visit_statute(self, node: nodes.StatuteNode) -> None:
-        """Process statute for query type generation."""
-        # Statutes are represented by the generic Statute type
-        # Individual statute data will be resolved at runtime
-        pass
+        """Emit a dedicated GraphQL type for this statute's specific fields."""
+        section = node.section_number.replace(".", "_")
+        type_name = f"Statute_s{section}"
+        if type_name in self._defined_types:
+            return
+        self._defined_types.add(type_name)
+
+        title = node.title.value if node.title else f"Section {node.section_number}"
+        self._emit_description(f"s{node.section_number} - {title}")
+        self._emit(f"type {type_name} {{")
+        self._indent_level += 1
+
+        self._emit("sectionNumber: String!")
+        self._emit("title: String!")
+        self._emit("definitions: [Definition!]!")
+        self._emit("elements: [Element!]!")
+        self._emit("penalty: Penalty")
+        self._emit("illustrations: [Illustration!]!")
+
+        self._indent_level -= 1
+        self._emit("}")
+        self._emit_blank()
 
     # =========================================================================
     # Query Root
