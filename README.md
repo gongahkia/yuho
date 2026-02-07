@@ -5,6 +5,7 @@
 [![](https://img.shields.io/badge/yuho_5.0-passing-%2398FB98)](https://github.com/gongahkia/yuho/releases/tag/5.0) 
 ![](https://github.com/gongahkia/yuho/actions/workflows/ci.yml/badge.svg)
 ![](https://github.com/gongahkia/yuho/actions/workflows/release.yml/badge.svg)
+[![PyPI](https://img.shields.io/pypi/v/yuho)](https://pypi.org/project/yuho/)
 
 # `Yuho`  
 
