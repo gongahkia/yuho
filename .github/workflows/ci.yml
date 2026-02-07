@@ -38,11 +38,9 @@ jobs:
 
       - name: Check formatting with Black
         run: black --check --diff src/yuho tests 2>&1 | tee logs/black.log
-        continue-on-error: true
 
       - name: Type check with mypy
         run: mypy src/yuho --ignore-missing-imports 2>&1 | tee logs/mypy.log
-        continue-on-error: true
 
       - name: Upload lint logs
         if: always()
@@ -89,7 +87,6 @@ jobs:
       - name: Run tests
         run: |
           pytest tests/ -v --tb=long 2>&1 | tee logs/pytest.log
-        continue-on-error: true
 
       - name: Upload test logs
         if: always()
@@ -103,7 +100,6 @@ jobs:
     name: Build Package
     runs-on: ubuntu-latest
     needs: [lint, test]
-    if: always()
     steps:
       - uses: actions/checkout@v4
 
