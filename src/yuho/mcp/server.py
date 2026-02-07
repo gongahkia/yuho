@@ -1067,28 +1067,40 @@ class YuhoMCPServer:
             Returns:
                 {statutes: list of {section, title, jurisdiction, path}}
             """
-            # TODO: Implement proper library search using library index
+            import tomllib
+
             library_path = Path(__file__).parent.parent.parent.parent / "library"
             results = []
 
             query_lower = query.lower()
 
             if library_path.exists():
-                for yh_file in library_path.glob("**/*.yh"):
+                for meta_file in library_path.glob("**/metadata.toml"):
                     try:
-                        content = yh_file.read_text()
-                        # Simple search in content
-                        if query_lower in content.lower():
+                        with open(meta_file, "rb") as f:
+                            meta = tomllib.load(f)
+                        statute = meta.get("statute", {})
+                        description = meta.get("description", {})
+                        section = statute.get("section_number", "")
+                        title = statute.get("title", "")
+                        jurisdiction = statute.get("jurisdiction", "")
+                        summary = description.get("summary", "")
+
+                        searchable = f"{section} {title} {jurisdiction} {summary}".lower()
+                        if query_lower in searchable:
+                            statute_dir = meta_file.parent
+                            yh_files = list(statute_dir.glob("statute.yh"))
+                            path = str(yh_files[0]) if yh_files else str(statute_dir)
                             results.append({
-                                "section": yh_file.stem,
-                                "title": yh_file.stem,  # Simplified
-                                "jurisdiction": "unknown",
-                                "path": str(yh_file),
+                                "section": section,
+                                "title": title,
+                                "jurisdiction": jurisdiction,
+                                "path": path,
                             })
                     except Exception:
                         continue
 
-            return {"statutes": results[:20]}  # Limit results
+            return {"statutes": results[:20]}
 
         @self.server.tool()
         async def yuho_library_get(section: str) -> Dict[str, Any]:
