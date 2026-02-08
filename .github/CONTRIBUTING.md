@@ -2,7 +2,7 @@
 
 The following is a set of guidelines for contributing to Yuho lang spec, hosted [here](https://github.com/gongahkia/yuho) on GitHub. 
 
-These are guidelines, not rules. Use your best judgment, and feel free to propose changes to [this document](https://github.com/gongahkia/yuho/blob/main/CONTRIBUTING.md) in a pull request.
+These are guidelines, not rules. Use your best judgment, and feel free to propose changes to [this document](https://github.com/gongahkia/yuho/blob/main/.github/CONTRIBUTING.md) in a pull request.
 
 ## Table Of Contents
 
@@ -42,7 +42,7 @@ This section guides you through submitting a bug report for Yuho. **Following th
 1. Perform a cursory search [here](https://github.com/gongahkia/yuho/issues) for whether the issue has already been reported.
 2. If it has already been reported, add a comment to **that issue** instead of opening a new issue.
 3. If not already reported, please be as detailed as possible in describing the issue.
-4. Follow [this template](./BUG_REPORT.md) in the issue's description when opening a new issue.
+4. Follow [this template](./ISSUE_TEMPLATE/BUG_REPORT.md) in the issue's description when opening a new issue.
 
 > [!NOTE]
 > If you find a closed issue that seems like it is the same thing that you're experiencing, open a new issue and include a link to the original issue in the new issue description.
@@ -59,7 +59,7 @@ This section guides you through submitting an enhancement suggestion for Yuho. *
 1. Perform a cursory search [here](https://github.com/gongahkia/yuho/issues) for whether the enhancement has already been suggested.
 2. If it has already been suggested, add a comment to **that issue** instead of opening a new issue.
 3. If not already suggested, please be as detailed as possible in describing the suggestion.
-4. Follow [this template](./SUGGEST_ENHANCEMENT_FORM.md) in the issue's description when opening a new issue.
+4. Follow [this template](./ISSUE_TEMPLATE/SUGGEST_ENHANCEMENT_FORM.md) in the issue's description when opening a new issue.
 
 ### Your First Code Contribution
 
@@ -87,4 +87,4 @@ We follow [these guidelines](https://gist.github.com/robertpainsi/b632364184e709
 
 Our documentation is written in [Markdown](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax), and we follow the [Github Markdown Styleguide](https://github.com/google/styleguide/blob/gh-pages/docguide/style.md).
 
-## [FAQ](./FAQ.md)
+## [FAQ](../doc/FAQ.md)
