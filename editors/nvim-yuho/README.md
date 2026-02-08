@@ -162,14 +162,15 @@ require("telescope").load_extension("yuho")
 ## Tree-sitter Grammar
 
 The plugin includes tree-sitter queries. To use syntax highlighting, you need the
-Yuho tree-sitter grammar. Add to your nvim-treesitter config:
+Yuho tree-sitter grammar (bundled in `src/tree-sitter-yuho/` within the main repo).
+Add to your nvim-treesitter config:
 
 ```lua
 local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
 parser_config.yuho = {
   install_info = {
-    url = "https://github.com/gongahkia/tree-sitter-yuho",
-    files = { "src/parser.c" },
+    url = "https://github.com/gongahkia/yuho",
+    files = { "src/tree-sitter-yuho/src/parser.c" },
     branch = "main",
   },
   filetype = "yuho",
