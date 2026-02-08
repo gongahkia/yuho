@@ -9,7 +9,7 @@
 In fact, many even argue [legal jargon is a language unto itself](https://law.stackexchange.com/questions/95218/is-legalese-a-thing-in-languages-other-than-english).
 
 [Yuho](https://github.com/gongahkia/yuho) makes reading legalese easier to understand by reformatting and standardising the [informal logic of the law](https://plato.stanford.edu/entries/logic-informal/) into the [formal logic of mathematics and computer science](https://plato.stanford.edu/entries/logic-classical/).
-  
+
 Yuho is founded on the following beliefs.
 
 1. Legalese is hard to understand
@@ -18,9 +18,7 @@ Yuho is founded on the following beliefs.
 
 ## An example
 
-Statutes aren't always intuitive.  
-
-![](./asset/monkey.jpg)
+Statutes aren't always intuitive.
 
 Below is Section 415 of the [Penal Code 1871](https://sso.agc.gov.sg/Act/PC1871) on the offense of Cheating in plaintext.
 
@@ -31,7 +29,7 @@ Below is Section 415 of the [Penal Code 1871](https://sso.agc.gov.sg/Act/PC1871)
 Say we attempt to break the statute into its composite elements and include indentation to represent the logical relationship between those elements. You could end up with something like this.
 
 ```txt
-"Whoever, by deceiving any person, 
+"Whoever, by deceiving any person,
 WHETHER OR NOT such deception was the sole or main inducement,
     fraudulently OR dishonestly induces the person so deceived
         to deliver any property to any person,
@@ -49,113 +47,98 @@ WHETHER OR NOT such deception was the sole or main inducement,
 is said to cheat."
 ```
 
-Still, the conditional relationship each element shares with the overall offense is not explicit.  
+Still, the conditional relationship each element shares with the overall offense is not explicit.
 
-This is where Yuho comes in.  
+This is where Yuho comes in.
 
-Once someone has learnt the basics of Yuho's terse syntax, they will be able to structure that same statute in Yuho as below.
+Once someone has learnt the basics of Yuho's terse syntax, they will be able to model that same statute in Yuho as below. First, we define the types that capture each element of the offense:
 
 ```yh
-scope s415CheatingDefinition {
+// enum-like structs for each element category
 
-    struct Party { 
-        Accused,
-        Victim,
-    }
+struct AttributionType {
+    SoleInducement,
+    NotSoleInducement,
+    NA,
+}
 
-    struct AttributionType { 
-        SoleInducment,
-        NotSoleInducement,
-        NA,
-    }
+struct DeceptionType {
+    Fraudulently,
+    Dishonestly,
+    NA,
+}
 
-    struct DeceptionType { 
-        Fraudulently,
-        Dishonestly,
-        NA,
-    }
+struct InducementType {
+    DeliverProperty,
+    ConsentRetainProperty,
+    DoOrOmit,
+    NA,
+}
 
-    struct InducementType { 
-        DeliverProperty,
-        ConsentRetainProperty,
-        DoOrOmit,
-        NA,
-    }
+struct DamageHarmType {
+    Body,
+    Mind,
+    Reputation,
+    Property,
+    NA,
+}
 
-    struct DamageHarmType { 
-        Body,
-        Mind, 
-        Reputation,
-        Property,
-        NA,
-    }
-
-    struct ConsequenceDefinition { 
-        SaidToCheat,
-        NotSaidToCheat,
-    }
-
-    struct Cheating { 
-        string || Party accused,
-        string action,
-        string || Party victim,
-        AttributionType attribution,
-        DeceptionType deception,
-        InducementType inducement,
-        boolean causesDamageHarm,
-        {DamageHarmType} || DamageHarmType damageHarmResult, 
-        ConsequenceDefinition definition,
-    }
-
-    Cheating cheatingDefinition := { 
-
-        accused := Party.Accused,
-        action := "deceiving",
-        victim := Party.Victim,
-        attribution := AttributionType.SoleInducment or AttributionType.NotSoleInducement or AttributionType.NA,
-        deception := DeceptionType.Fraudulently or DeceptionType.Dishonestly or DeceptionType.NA,
-        inducement := InducementType.DeliverProperty or InducementType.ConsentRetainProperty or InducementType.DoOrOmit or InducementType.NA, 
-        causesDamageHarm := TRUE or FALSE,
-        damageHarmResult := {
-            DamageHarmType.Body,
-            DamageHarmType.Mind,
-            DamageHarmType.Reputation,
-            DamageHarmType.Property,
-        } or DamageHarmType.NA, 
-
-        definition := match attribution {
-            case AttributionType.SoleInducment := deception
-            case AttributionType.NotSoleInducement := deception
-            case AttributionType.NA := consequence ConsequenceDefinition.NotSaidToCheat
-        },
-        definition := match deception {
-            case DeceptionType.Fraudulently := consequence inducement
-            case DeceptionType.Dishonestly := consequence inducement
-            case DeceptionType.NA := consequence ConsequenceDefinition.NotSaidToCheat
-        },
-        definition := match inducement {
-            case InducementType.DeliverProperty := consequence causesDamageHarm
-            case InducementType.ConsentRetainProperty := consequence causesDamageHarm
-            case InducementType.DoOrOmit := consequence causesDamageHarm
-            case InducementType.NA := consequence ConsequenceDefinition.NotSaidToCheat
-        },
-        definition := match causesDamageHarm {
-            case TRUE := consequence damageHarmResult
-            case FALSE := consequence ConsequenceDefinition.NotSaidToCheat
-        },
-        definition := match {
-            case DamageHarmType.NA in damageHarmResult := consequence ConsequenceDefinition.NotSaidToCheat
-            case _ :=  consequence ConsequenceDefinition.SaidToCheat 
-        },
-
-    }
-
+// the case struct captures all relevant facts
+struct CheatingCase {
+    string accused,
+    string victim,
+    string action,
+    string deceptionType,
+    string inducementType,
+    bool causesDamageHarm,
+    string damageHarmType,
 }
 ```
 
-This Yuho code can then be transpiled using the Yuho CLI (`yuho transpile`) to various representations including [Mermaid](https://mermaid.js.org/) diagrams.  
+Then, we model the statute itself using Yuho's `statute` block with definitions, elements, penalty, and illustrations:
 
-Right now two primary Mermaid outputs are supported.  
+```yh
+fn evaluateCheating(string deceptionType, string inducementType, bool causesDamageHarm) : string {
+    match {
+        case TRUE if deceptionType == "none" := consequence "Not cheating - no deception";
+        case TRUE if inducementType == "none" := consequence "Not cheating - no inducement";
+        case TRUE if causesDamageHarm := consequence "Said to cheat";
+        case _ := consequence "Not said to cheat";
+    }
+}
+
+statute 415 "Cheating" {
+    definitions {
+        deceive := "To cause a person to believe something that is false";
+        fraudulently := "With intent to defraud another person";
+        dishonestly := "With intention of causing wrongful gain or wrongful loss";
+    }
+
+    elements {
+        actus_reus deception := "Deceiving any person";
+        mens_rea intent := "Fraudulently or dishonestly";
+        actus_reus inducement := "Inducing delivery of property, consent to retain, or act/omission";
+        circumstance harm := "Causing or likely to cause damage to body, mind, reputation, or property";
+    }
+
+    penalty {
+        imprisonment := 1 year .. 7 years;
+        fine := $0.00 .. $50,000.00;
+    }
+
+    illustration example1 {
+        "A intentionally deceives B into believing that a worthless article is valuable, and thus induces B to buy it. A cheats."
+    }
+
+    illustration example2 {
+        "A falsely pretends to be in government service and induces B to let him have goods on credit. A cheats."
+    }
+}
+```
+
+This Yuho code can then be transpiled using the Yuho CLI (`yuho transpile`) to various representations including [Mermaid](https://mermaid.js.org/) diagrams.
+
+Right now two primary Mermaid outputs are supported.
 
 1. Mindmap
     * displays key elements of a statute at a glance
@@ -168,7 +151,7 @@ mindmap
       Action: Deceiving
       Victim: Party.Victim
       Attribution
-        AttributionType.SoleInducment
+        AttributionType.SoleInducement
         AttributionType.NotSoleInducement
         AttributionType.NA
       Deception
@@ -200,13 +183,13 @@ mindmap
 ```mermaid
 flowchart TD
     A[Cheating] --> B[Accused := Party.Accused]
-    B --> C[Action := Deceiving] 
+    B --> C[Action := Deceiving]
     C --> D[Victim := Party.Victim]
     D --> E[Attribution]
     E --> |AttributionType.SoleInducement| F[Deception]
     E --> |AttributionType.NotSoleInducement| F
     E --> |AttributionType.NA| Z
-    F --> |DeceptionType.Fraudulently| G[Inducement] 
+    F --> |DeceptionType.Fraudulently| G[Inducement]
     F --> |DeceptionType.Dishonestly| G
     F --> |DeceptionType.NA| Z
     G --> |InducementType.DeliverProperty| H[CausesDamageHarm]
@@ -222,125 +205,26 @@ flowchart TD
     I --> |DamageHarmType.NA| Z
 ```
 
-Further, Yuho's flexible syntax means we can seperate concepts foundational to Criminal Law, such as *Material facts*, *Mens Rea* and *Actus Reus*.  
+Further, Yuho's flexible syntax means we can separate concepts foundational to Criminal Law, such as *Material facts*, *Mens Rea* and *Actus Reus*, by using the `elements` block inside a `statute`:
 
 ```yh
-scope s415DetailedCheatingDefinition {
+statute 415 "Cheating" {
+    elements {
+        // material facts
+        actus_reus deception := "Deceiving any person";
 
-    struct Party {
-        Accused,
-        Victim,
+        // mens rea (mental element)
+        mens_rea fraudulent := "Fraudulently inducing the person";
+        mens_rea dishonest := "Dishonestly inducing the person";
+
+        // actus reus (physical element)
+        actus_reus inducement := "Inducing delivery of property, consent to retain, or act/omission";
+        circumstance harm := "Causing or likely to cause damage to body, mind, reputation, or property";
     }
-
-    struct AttributionType {
-        SoleInducment,
-        NotSoleInducement,
-        NA,
-    }
-
-    struct DeceptionType {
-        Fraudulently,
-        Dishonestly,
-        NA,
-    }
-
-    struct InducementType {
-        DeliverProperty,
-        ConsentRetainProperty,
-        DoOrOmit,
-        NA,
-    }
-
-    struct DamageHarmType {
-        Body,
-        Mind, 
-        Reputation,
-        Property,
-        NA,
-    }
-
-    struct ConsequenceDefinition {
-        SaidToCheat,
-        NotSaidToCheat,
-    }
-
-    struct Facts {
-        string || Party accused,
-        string action,
-        string || Party victim,
-    }
-
-    struct MentalElement {
-        DeceptionType deception,
-    }
-
-    struct PhysicalElement {
-        AttributionType attribution,
-        InducementType inducement,
-        boolean causesDamageHarm,
-        {DamageHarmType} || DamageHarmType damageHarmResult, 
-    }
-
-    struct Cheating {
-        Facts materialFacts,
-        MentalElement mensRea,
-        PhysicalElement actusReus,
-        ConsequenceDefinition definition,
-    }
-
-    Cheating cheatingDefinition := { 
-
-        materialFacts := {
-            accused := Party.Accused,
-            action := "deceiving",
-            victim := Party.Victim,
-        },
-        mensRea := {
-            deception := DeceptionType.Fraudulently or DeceptionType.Dishonestly or DeceptionType.NA,
-        },
-        actusReus := {
-            attribution := AttributionType.SoleInducment or AttributionType.NotSoleInducement or AttributionType.NA,
-            inducement := InducementType.DeliverProperty or InducementType.ConsentRetainProperty or InducementType.DoOrOmit or InducementType.NA, 
-            causesDamageHarm := TRUE or FALSE,
-            damageHarmResult := {
-                DamageHarmType.Body,
-                DamageHarmType.Mind,
-                DamageHarmType.Reputation,
-                DamageHarmType.Property,
-            } or DamageHarmType.NA, 
-        },
-
-        definition := match attribution {
-            case AttributionType.SoleInducment := deception
-            case AttributionType.NotSoleInducement := deception
-            case AttributionType.NA := consequence ConsequenceDefinition.NotSaidToCheat
-        },
-        definition := match deception {
-            case DeceptionType.Fraudulently := consequence inducement
-            case DeceptionType.Dishonestly := consequence inducement
-            case DeceptionType.NA := consequence ConsequenceDefinition.NotSaidToCheat
-        },
-        definition := match inducement {
-            case InducementType.DeliverProperty := consequence causesDamageHarm
-            case InducementType.ConsentRetainProperty := consequence causesDamageHarm
-            case InducementType.DoOrOmit := consequence causesDamageHarm
-            case InducementType.NA := consequence ConsequenceDefinition.NotSaidToCheat
-        },
-        definition := match causesDamageHarm{
-            case TRUE := consequence damageHarmResult
-            case FALSE := consequence ConsequenceDefinition.NotSaidToCheat
-        },
-        definition := match {
-            case DamageHarmType.NA in damageHarmResult := consequence ConsequenceDefinition.NotSaidToCheat
-            case _ :=  consequence ConsequenceDefinition.SaidToCheat 
-        },
-
-    }
-
 }
 ```
 
-When transpiled, these are likewise displayed in both the mindmap    
+When transpiled, these are likewise displayed in both the mindmap
 
 ```mermaid
 mindmap
@@ -356,7 +240,7 @@ mindmap
                 DeceptionType.NA
         Actus Reus
             Attribution
-                AttributionType.SoleInducment
+                AttributionType.SoleInducement
                 AttributionType.NotSoleInducement
                 AttributionType.NA
             Inducement
@@ -384,16 +268,16 @@ and flowchart.
 flowchart LR
     A[Cheating] --> B[Accused := Party.Accused]
     subgraph Material facts
-        B --> C[Action := Deceiving] 
+        B --> C[Action := Deceiving]
         C --> D[Victim := Party.Victim]
-    end 
+    end
     D --> E[Attribution]
     E --> |AttributionType.SoleInducement| F[Deception]
     E --> |AttributionType.NotSoleInducement| F
     E --> |AttributionType.NA| Z
-    F --> |DeceptionType.Fraudulently| G[Inducement] 
+    F --> |DeceptionType.Fraudulently| G[Inducement]
     F --> |DeceptionType.Dishonestly| G
-    F --> |DeceptionType.NA| Z 
+    F --> |DeceptionType.NA| Z
     subgraph Mens Rea
         F
     end
@@ -416,29 +300,25 @@ flowchart LR
     I --> |DamageHarmType.NA| Z
 ```
 
-Moreover, we are able to visualise how a specific scenario plays out diagramatically when holding its Yuho statute literal against a Yuho statute definition as specified earlier.  
+Moreover, we are able to visualise how a specific scenario plays out diagrammatically when holding its Yuho illustration against a Yuho statute definition as specified earlier.
 
-Below is a Yuho statute literal of [*Illustration A*](https://sso.agc.gov.sg/Act/PC1871?ProvIds=P417-#pr415-) from Section 415 of the Penal Code 1871. 
+Below is an illustration of [*Illustration A*](https://sso.agc.gov.sg/Act/PC1871?ProvIds=P417-#pr415-) from Section 415 of the Penal Code 1871, modelled as a struct literal:
 
 ```yh
-referencing Cheating from s415_cheating_definition
+import "penal_code/s415_cheating"
 
-s415_cheating_definition.Cheating cheatingIllustrationA := { 
-
+CheatingCase illustrationA := CheatingCase {
     accused := "A",
-    action := "falsely pretending to be in the Government service, intentionally deceiving",
     victim := "Z",
-    attribution := AttributionType.SoleInducment, 
-    deception := DeceptionType.Dishonestly, 
-    inducement := InducementType.ConsentRetainProperty,
-    causesDamageHarm := TRUE, 
-    damageHarmResult := DamageHarmType.Property,
-    definition := ConsequenceDefinition.SaidToCheat,
-
+    action := "falsely pretending to be in the Government service, intentionally deceiving",
+    deceptionType := "dishonestly",
+    inducementType := "ConsentRetainProperty",
+    causesDamageHarm := TRUE,
+    damageHarmType := "Property",
 }
 ```
 
-When transpiled to a Mermaid flowchart, the path that the specified Yuho statute literal fulfills is highlighted.  
+When transpiled to a Mermaid flowchart, the path that the specified illustration fulfills is highlighted.
 
 ```mermaid
 flowchart TD
@@ -468,43 +348,43 @@ flowchart TD
            E1
            G1
            H1
-           I1 
+           I1
         end
     end
 
     subgraph flowchart1[Cheating statute Definition]
         A2[Cheating] --> B2[Accused := Party.Accused]
-        
+
         subgraph MaterialFacts2[Material Facts]
-            B2 --> C2[Action := Deceiving] 
+            B2 --> C2[Action := Deceiving]
             C2 --> D2[Victim := Party.Victim]
         end
-        
+
         D2 --> E2[Attribution]
         E2 --> |AttributionType.SoleInducement| F2[Deception]
         E2 --> |AttributionType.NotSoleInducement| F2
         E2 --> |AttributionType.NA| Z
-        
-        F2 --> |DeceptionType.Fraudulently| G2[Inducement] 
+
+        F2 --> |DeceptionType.Fraudulently| G2[Inducement]
         F2 --> |DeceptionType.Dishonestly| G2
         F2 --> |DeceptionType.NA| Z
-        
+
         subgraph MensRea2[Mens Rea]
             F2
         end
-        
+
         G2 --> |InducementType.DeliverProperty| H2[CausesDamageHarm]
         G2 --> |InducementType.ConsentRetainProperty| H2
         G2 --> |InducementType.DoOrOmit| H2
         G2 --> |InducementType.NA| Z
-        
+
         subgraph ActusReus2[Actus Reus]
             E2
             G2
             H2
             I2
         end
-        
+
         H2 --> |TRUE| I2[DamageHarmResult]
         H2 --> |FALSE| Z[ConsequenceDefinition.NotSaidToCheat]
         I2 --> |DamageHarmType.Body| Y[ConsequenceDefinition.SaidToCheat]
@@ -543,4 +423,4 @@ flowchart TD
 * Run formal verification with [Alloy Analyzer](https://alloytools.org/) using `yuho transpile --target alloy`
 * Install and try Yuho: `pip install yuho` then run `yuho --help`
 * Explore the CLI commands: `yuho check`, `yuho transpile`, `yuho explain`
-* Want to contribute? See [`CONTRIBUTING.md`](../admin/CONTRIBUTING.md)
+* Want to contribute? See [`CONTRIBUTING.md`](../.github/CONTRIBUTING.md)
