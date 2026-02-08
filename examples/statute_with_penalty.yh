@@ -1,0 +1,36 @@
+// demonstrates a full statute block with all sub-blocks
+
+struct TheftCase {
+    string accused,
+    string victim,
+    string propertyDescription,
+    money propertyValue,
+    bool propertyMoved,
+    bool dishonestIntent,
+}
+
+fn isTheft(bool moved, bool dishonest) : bool {
+    match {
+        case TRUE if moved && dishonest := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 378 "Theft" {
+    definitions {
+        dishonestly := "With the intention of causing wrongful gain to one person or wrongful loss to another";
+        moveableProperty := "Property of any description which is not attached to the earth";
+        taking := "Moving that property out of the possession of any person without that person's consent";
+    }
+    elements {
+        actus_reus taking := "Taking any moveable property out of the possession of any person without consent";
+        mens_rea intent := "Intending to take dishonestly";
+    }
+    penalty {
+        imprisonment := 0 days .. 3 years;
+        fine := $0.00 .. $10,000.00;
+    }
+    illustration example1 {
+        "A finds a ring on the road, not knowing to whom it belongs. A picks it up. This is not theft. But if A later discovers the owner and dishonestly keeps the ring, A has committed theft."
+    }
+}

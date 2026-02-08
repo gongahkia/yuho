@@ -1,0 +1,28 @@
+// demonstrates match-case expressions in v5 syntax
+
+struct Verdict {
+    guilty,
+    notGuilty,
+    mistrial,
+}
+
+fn sentenceLength(int severity) : string {
+    match {
+        case TRUE if severity >= 8 := consequence "Life imprisonment";
+        case TRUE if severity >= 5 := consequence "10 years";
+        case TRUE if severity >= 3 := consequence "5 years";
+        case _ := consequence "Fine only";
+    }
+}
+
+fn evaluateVerdict(bool evidenceSufficient, bool beyondReasonableDoubt) : string {
+    match {
+        case TRUE if evidenceSufficient && beyondReasonableDoubt := consequence "Guilty";
+        case TRUE if evidenceSufficient := consequence "Acquitted on reasonable doubt";
+        case _ := consequence "Acquitted - insufficient evidence";
+    }
+}
+
+assert sentenceLength(9) == "Life imprisonment";
+assert sentenceLength(5) == "10 years";
+assert evaluateVerdict(TRUE, TRUE) == "Guilty";

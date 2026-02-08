@@ -1,0 +1,19 @@
+// demonstrates imports, referencing, and assert testing
+
+import "penal_code/s415_cheating"
+
+struct TestCase {
+    string description,
+    bool expected,
+}
+
+fn isAdult(int age) : bool {
+    match {
+        case TRUE if age >= 18 := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+assert isAdult(21) == TRUE;
+assert isAdult(17) == FALSE;
+assert isAdult(18) == TRUE;
