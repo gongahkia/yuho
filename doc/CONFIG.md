@@ -65,7 +65,7 @@ temperature = 0.7
 fallback_providers = ["huggingface"]
 
 [transpile]
-# Default transpilation target: "json", "jsonld", "english", "mermaid", "alloy", "latex"
+# Default transpilation target: "json", "jsonld", "english", "mermaid", "alloy", "latex", "graphql", "blocks"
 default_target = "json"
 
 # LaTeX compiler for PDF generation
@@ -134,7 +134,7 @@ verify_ssl = true
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| `default_target` | string | `"json"` | Default output format |
+| `default_target` | string | `"json"` | Default output format (json, jsonld, english, mermaid, alloy, latex, graphql, blocks) |
 | `latex_compiler` | string | `"pdflatex"` | LaTeX compiler command |
 | `output_dir` | string | `null` | Output directory |
 | `include_source_locations` | bool | `true` | Include source locations |
