@@ -59,7 +59,7 @@ yuho = "yuho.cli:cli"
 
 [project.urls]
 Homepage = "https://github.com/gongahkia/yuho"
-Documentation = "https://yuho.dev/docs"
+Documentation = "https://github.com/gongahkia/yuho/tree/main/doc"
 Repository = "https://github.com/gongahkia/yuho"
 
 [tool.hatch.build.targets.wheel]
