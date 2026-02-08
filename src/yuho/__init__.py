@@ -9,7 +9,7 @@ This package provides:
 - MCP: Model Context Protocol server
 """
 
-__version__ = "5.0.0"
+__version__ = "5.1.0"
 
 from yuho.parser import Parser, SourceLocation
 
