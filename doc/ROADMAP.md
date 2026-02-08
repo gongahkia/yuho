@@ -2,7 +2,7 @@
 
 > **Status Legend:** ✅ Complete | 🔄 In Progress | ⏳ Planned | ❌ Not Started
 
-Development continues at [`yuho_and_beyond`](./../sandbox/yuho_and_beyond/).
+Development continues on the `main` branch.
 
 ![](../asset/memes/roadrunner_skinamarink.jpg)
 
