@@ -78,7 +78,7 @@ Want to find out more? See Yuho's [documentation](#documentation).
 
 ## Quickstart
 
-**Yuho v5.0**: Install via pip and start using immediately:
+**Yuho v5**: Install via pip and start using immediately:
 
 ```bash
 pip install yuho
