@@ -89,10 +89,6 @@ yuho --help
 
 **Legacy versions**: See [`archive/`](./archive/) for v1-v4 implementations.
 
-## Roadmap
-
-For more details on what's being implemented in the future, refer to [`ROADMAP.md`](./doc/ROADMAP.md).
-
 ## Scope
 
 Development is currently scoped by the following statutes at [`SCOPE.md`](./doc/SCOPE.md). 

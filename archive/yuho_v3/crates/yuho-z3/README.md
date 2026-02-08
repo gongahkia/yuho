@@ -47,11 +47,3 @@ Or from the workspace root:
 ```bash
 cargo build --package yuho-z3
 ```
-
-## Usage
-
-See the main README and roadmap.txt for planned Z3 integration features.
-
-## Current Status
-
-**Foundation only** - Core infrastructure exists but query generation and verification are not yet implemented. See roadmap.txt Phase 4 for planned features.
