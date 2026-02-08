@@ -71,10 +71,10 @@ Want to find out more? See Yuho's [documentation](#documentation).
 ### Documentation
 
 * [Language specification](./doc/SYNTAX.md)
-* [Grammar specification](./grammar)
+* [Grammar specification](./src/tree-sitter-yuho/grammar.js)
 * [Formal verification](./tests)
 * [Library statutes](./library/penal_code)
-* [Examples](./example)
+* [Examples](./examples)
 
 ## Quickstart
 
@@ -99,7 +99,7 @@ Development is currently scoped by the following statutes at [`SCOPE.md`](./doc/
 
 ## Contribute
 
-Yuho is open-source. Contribution guidelines are found at [`CONTRIBUTING.md`](./admin/CONTRIBUTING.md).
+Yuho is open-source. Contribution guidelines are found at [`CONTRIBUTING.md`](./.github/CONTRIBUTING.md).
 
 ## References
 
