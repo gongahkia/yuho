@@ -1,4 +1,4 @@
-name: GitHub release on push
+name: Yuho Release on push
 
 on:
   push:
@@ -48,3 +48,4 @@ jobs:
 
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
+
