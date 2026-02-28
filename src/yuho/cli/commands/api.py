@@ -111,6 +111,48 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
         self._finish_request_log(status, response.success)
+
+    def _validate_post_payload(self, path: str, data: Dict[str, Any]) -> Optional[str]:
+        """Validate endpoint payload shape before execution."""
+        if path == '/parse':
+            if not isinstance(data.get('source', ''), str):
+                return "'source' must be a string"
+            if 'filename' in data and not isinstance(data['filename'], str):
+                return "'filename' must be a string"
+            return None
+
+        if path == '/validate':
+            if not isinstance(data.get('source', ''), str):
+                return "'source' must be a string"
+            if 'filename' in data and not isinstance(data['filename'], str):
+                return "'filename' must be a string"
+            if 'include_metrics' in data and not isinstance(data['include_metrics'], bool):
+                return "'include_metrics' must be a boolean"
+            if 'explain_errors' in data and not isinstance(data['explain_errors'], bool):
+                return "'explain_errors' must be a boolean"
+            return None
+
+        if path == '/transpile':
+            if not isinstance(data.get('source', ''), str):
+                return "'source' must be a string"
+            if 'target' in data and not isinstance(data['target'], str):
+                return "'target' must be a string"
+            if 'filename' in data and not isinstance(data['filename'], str):
+                return "'filename' must be a string"
+            return None
+
+        if path == '/lint':
+            if not isinstance(data.get('source', ''), str):
+                return "'source' must be a string"
+            if 'filename' in data and not isinstance(data['filename'], str):
+                return "'filename' must be a string"
+            if 'rules' in data:
+                rules = data['rules']
+                if not isinstance(rules, list) or any(not isinstance(r, str) for r in rules):
+                    return "'rules' must be a list of strings"
+            return None
+
+        return None
     
     def _read_body(self) -> bytes:
         """Read request body."""
@@ -185,6 +227,14 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
             self._send_json_response(400, APIResponse(
                 success=False,
                 error=str(e)
+            ))
+            return
+
+        schema_error = self._validate_post_payload(path, data)
+        if schema_error:
+            self._send_json_response(400, APIResponse(
+                success=False,
+                error=f"Invalid payload: {schema_error}"
             ))
             return
         
