@@ -27,6 +27,33 @@ def _get_library_network_config(
     )
 
 
+def _is_offline_mode() -> bool:
+    """Check whether CLI global offline mode is enabled."""
+    ctx = click.get_current_context(silent=True)
+    while ctx and ctx.parent:
+        ctx = ctx.parent
+    if ctx and isinstance(ctx.obj, dict):
+        return bool(ctx.obj.get("offline", False))
+    return False
+
+
+def _offline_block_message(operation: str) -> str:
+    return (
+        f"Offline mode enabled: '{operation}' requires registry/network access. "
+        "Disable --offline to proceed."
+    )
+
+
+def _abort_offline(operation: str, json_output: bool) -> None:
+    """Exit with a consistent offline-blocked error message."""
+    message = _offline_block_message(operation)
+    if json_output:
+        click.echo(json.dumps({"success": False, "message": message}))
+    else:
+        click.echo(click.style("✗ ", fg="red") + message)
+    raise SystemExit(1)
+
+
 def run_library_search(
     query: str,
     jurisdiction: Optional[str] = None,
@@ -106,6 +133,8 @@ def run_library_install(
         # Local install
         success, message = install_package(str(path), force=force)
     else:
+        if _is_offline_mode():
+            _abort_offline("library install", json_output)
         # Registry install
         registry_url, auth_token, timeout, verify_ssl = _get_library_network_config()
         success, message = download_package(
@@ -237,6 +266,9 @@ def run_library_update(
         verbose: Verbose output
     """
     from yuho.library import update_all_packages, check_updates, download_package
+    if _is_offline_mode():
+        _abort_offline("library update", json_output)
+
     registry_url, auth_token, timeout, verify_ssl = _get_library_network_config()
     
     if package:
@@ -321,6 +353,9 @@ def run_library_publish(
     """
     from yuho.library import publish_package, Package
     from pathlib import Path as PathLib
+
+    if _is_offline_mode() and not dry_run:
+        _abort_offline("library publish", json_output)
 
     registry_url, auth_token, timeout, verify_ssl = _get_library_network_config(
         registry,
@@ -440,15 +475,19 @@ def run_library_outdated(
     from yuho.library import check_updates, list_installed, LibraryIndex
     from yuho.library.resolver import Version
 
-    registry_url, auth_token, timeout, verify_ssl = _get_library_network_config()
+    offline_mode = _is_offline_mode()
 
-    # Get update info from registry
-    updates = check_updates(
-        registry_url=registry_url,
-        auth_token=auth_token,
-        timeout=timeout,
-        verify_ssl=verify_ssl,
-    )
+    if offline_mode:
+        updates = []
+    else:
+        registry_url, auth_token, timeout, verify_ssl = _get_library_network_config()
+        # Get update info from registry
+        updates = check_updates(
+            registry_url=registry_url,
+            auth_token=auth_token,
+            timeout=timeout,
+            verify_ssl=verify_ssl,
+        )
     installed = list_installed()
 
     # Build installed lookup
@@ -475,9 +514,13 @@ def run_library_outdated(
             "deprecated": deprecated_warnings,
             "total_installed": len(installed),
             "total_outdated": len(updates),
+            "offline": offline_mode,
         }
         click.echo(json.dumps(result, indent=2))
         return
+
+    if offline_mode:
+        click.echo(click.style("[offline] ", fg="yellow") + "Skipped registry update check; showing local data only.")
 
     if not updates and not deprecated_warnings:
         click.echo(click.style("All packages are up to date!", fg="green"))

@@ -61,8 +61,19 @@ CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
     is_flag=True,
     help="Suppress non-error output"
 )
+@click.option(
+    "--offline",
+    is_flag=True,
+    help="Disable network operations and use local-only data paths where supported",
+)
 @click.pass_context
-def cli(ctx: click.Context, verbose: bool, use_color: Optional[bool], quiet: bool) -> None:
+def cli(
+    ctx: click.Context,
+    verbose: bool,
+    use_color: Optional[bool],
+    quiet: bool,
+    offline: bool,
+) -> None:
     """
     Yuho - A domain-specific language for encoding legal statutes.
 
@@ -71,6 +82,7 @@ def cli(ctx: click.Context, verbose: bool, use_color: Optional[bool], quiet: boo
     ctx.ensure_object(dict)
     ctx.obj["verbose"] = verbose and not quiet  # Quiet overrides verbose
     ctx.obj["quiet"] = quiet
+    ctx.obj["offline"] = offline
     
     # Determine color setting
     if use_color is None:
