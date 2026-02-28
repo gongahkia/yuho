@@ -36,7 +36,13 @@ def run_explain(
         verbose: Enable verbose output
         stream: Enable streaming output for real-time response
     """
-    if offline and provider in {"openai", "anthropic"}:
+    from yuho.config.loader import get_config
+
+    llm_config = get_config().llm
+    resolved_provider = provider or llm_config.provider
+    resolved_model = model or llm_config.model
+
+    if offline and resolved_provider in {"openai", "anthropic"}:
         click.echo(
             colorize("error: --offline mode does not allow cloud providers", Colors.RED),
             err=True,
@@ -84,14 +90,24 @@ def run_explain(
     base_explanation = english.transpile(ast)
 
     if interactive:
-        _run_interactive(base_explanation, ast, provider, model, stream)
+        _run_interactive(base_explanation, ast, resolved_provider, resolved_model, stream)
     else:
         # Try to use LLM for enhanced explanation
         try:
             if stream:
-                _enhance_with_llm_stream(base_explanation, provider, model, verbose)
+                _enhance_with_llm_stream(
+                    base_explanation,
+                    resolved_provider,
+                    resolved_model,
+                    verbose,
+                )
             else:
-                enhanced = _enhance_with_llm(base_explanation, provider, model, verbose)
+                enhanced = _enhance_with_llm(
+                    base_explanation,
+                    resolved_provider,
+                    resolved_model,
+                    verbose,
+                )
                 click.echo(enhanced)
         except Exception as e:
             if verbose:

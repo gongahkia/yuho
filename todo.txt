@@ -1,5 +1,4 @@
 
-(B) Wire `llm.provider` and `llm.model` defaults from config into `run_explain` in `src/yuho/cli/commands/explain.py`. +feature +config +llm
 (B) Wire `mcp.host` and `mcp.port` defaults from config into `run_serve` in `src/yuho/cli/commands/serve.py`. +feature +config +mcp
 (B) Wire `mcp.host` and `mcp.port` defaults from config into `run_api` in `src/yuho/cli/commands/api.py`. +feature +config +api
 (B) Add `clear_config_cache()` to `src/yuho/config/loader.py` and call it in `run_config_set` so edits are visible in the same process. +bugfix +config
