@@ -15,11 +15,12 @@ class CustomBuildHook(BuildHookInterface):
     """Compile the tree-sitter grammar shared library before wheel packaging."""
 
     def initialize(self, version: str, build_data: dict[str, object]) -> None:
-        if self.target_name != "wheel":
+        if self.target_name not in {"wheel", "editable"}:
             return
 
         root = Path(self.root)
         grammar_dir = root / "tree-sitter-yuho"
+        package_dir = root / "tree_sitter_yuho"
         parser_c = grammar_dir / "src" / "parser.c"
         scanner_c = grammar_dir / "src" / "scanner.c"
         include_dir = grammar_dir / "src"
@@ -41,6 +42,9 @@ class CustomBuildHook(BuildHookInterface):
             output_path=output_path,
         )
 
+        package_dir.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(output_path, package_dir / library_name)
+
         force_include = build_data.setdefault("force_include", {})
         if not isinstance(force_include, dict):
             raise RuntimeError("Unexpected build_data['force_include'] type")
@@ -48,6 +52,8 @@ class CustomBuildHook(BuildHookInterface):
 
 
 def _shared_library_suffix() -> str:
+    if os.name == "nt":
+        return "dll"
     if sys.platform == "darwin":
         return "dylib"
     return "so"
@@ -58,7 +64,9 @@ def _compile_tree_sitter_library(
 ) -> None:
     compiler = _resolve_c_compiler()
 
-    if sys.platform == "darwin":
+    if os.name == "nt":
+        linker_flags = ["-shared"]
+    elif sys.platform == "darwin":
         linker_flags = ["-dynamiclib", "-fPIC"]
     else:
         linker_flags = ["-shared", "-fPIC"]

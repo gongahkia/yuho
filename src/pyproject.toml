@@ -65,7 +65,7 @@ Repository = "https://github.com/gongahkia/yuho"
 [tool.hatch.build.targets.wheel]
 packages = ["yuho", "tree_sitter_yuho"]
 
-[tool.hatch.build.targets.wheel.hooks.custom]
+[tool.hatch.build.hooks.custom]
 path = "hatch_build.py"
 
 [tool.hatch.build.targets.sdist]
