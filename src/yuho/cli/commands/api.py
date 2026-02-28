@@ -324,7 +324,7 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
                 }
                 for e in analysis.parse_errors
             ]
-            self._send_json_response(200, APIResponse(
+            self._send_json_response(422, APIResponse(
                 success=False,
                 data={"errors": errors}
             ))
@@ -413,7 +413,8 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
                 analysis.clock_load_scale.to_dict() if analysis.clock_load_scale else None
             )
 
-        self._send_json_response(200, APIResponse(
+        status = 200 if len(errors) == 0 else 422
+        self._send_json_response(status, APIResponse(
             success=len(errors) == 0,
             data=response_data
         ))

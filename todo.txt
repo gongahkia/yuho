@@ -1,5 +1,4 @@
 
-(B) Validate API payload schemas in `src/yuho/cli/commands/api.py` before invoking parser or transpiler logic. +stability +api +validation
 (B) Return HTTP 422 for parse and semantic validation failures in `src/yuho/cli/commands/api.py` instead of always returning HTTP 200. +api +consistency +stability
 (B) Remove the duplicate `LogVerbosity` enum declaration in `src/yuho/mcp/server.py`. +bugfix +mcp +cleanup
 (B) Wrap every MCP tool in `src/yuho/mcp/server.py` with `MCPRequestLogger.log_request` and `MCPRequestLogger.log_response`. +observability +mcp +stability
