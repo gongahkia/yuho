@@ -14,7 +14,7 @@ import logging
 from pathlib import Path
 from typing import Optional, Dict, Any, List
 from dataclasses import dataclass, asdict
-from http.server import HTTPServer, BaseHTTPRequestHandler
+from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs
 import threading
 
@@ -508,7 +508,7 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
             click.echo(f"[API] {self.address_string()} - {message}")
 
 
-class YuhoAPIServer(HTTPServer):
+class YuhoAPIServer(ThreadingHTTPServer):
     """Custom HTTP server with additional configuration."""
     
     def __init__(self, server_address, RequestHandlerClass, verbose: bool = False):
