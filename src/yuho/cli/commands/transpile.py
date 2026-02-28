@@ -11,7 +11,7 @@ import click
 
 from yuho.transpile import TranspileTarget, get_transpiler
 from yuho.cli.error_formatter import Colors, colorize
-from yuho.services.analysis import analyze_file
+from yuho.services.analysis import analyze_file, analyze_source
 
 
 ALL_TARGETS = ["json", "jsonld", "english", "mermaid", "alloy"]
@@ -38,16 +38,21 @@ def run_transpile(
         json_output: Output metadata as JSON
         verbose: Enable verbose output
     """
-    file_path = Path(file)
+    stdin_mode = file == "-"
+    file_path = Path("stdin.yh") if stdin_mode else Path(file)
+    source_label = "<stdin>" if stdin_mode else str(file_path)
 
     if verbose:
-        click.echo(f"Parsing {file_path}...")
+        click.echo(f"Parsing {source_label}...")
 
     # Parse + AST via shared analysis service
-    analysis = analyze_file(file_path, run_semantic=False)
+    if stdin_mode:
+        analysis = analyze_source(sys.stdin.read(), file=source_label, run_semantic=False)
+    else:
+        analysis = analyze_file(file_path, run_semantic=False)
 
     if analysis.parse_errors:
-        click.echo(colorize(f"error: Parse errors in {file}", Colors.RED), err=True)
+        click.echo(colorize(f"error: Parse errors in {source_label}", Colors.RED), err=True)
         for err in analysis.parse_errors:
             click.echo(f"  {err.location}: {err.message}", err=True)
         sys.exit(1)

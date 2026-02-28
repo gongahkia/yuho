@@ -168,7 +168,7 @@ def ast(
 
 
 @cli.command()
-@click.argument("file", type=click.Path(exists=True))
+@click.argument("file", type=str)
 @click.option(
     "-t", "--target",
     type=click.Choice(["json", "jsonld", "english", "latex", "mermaid", "alloy", "graphql", "blocks"], case_sensitive=False),
