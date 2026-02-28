@@ -10,9 +10,10 @@ from dataclasses import dataclass, field
 from pathlib import Path
 import subprocess
 import tempfile
-import json
 import re
 import logging
+
+from yuho.ast import ArrayType, BuiltinType, GenericType, NamedType, OptionalType, TypeNode
 
 logger = logging.getLogger(__name__)
 
@@ -107,9 +108,9 @@ class AlloyGenerator:
         # Generate from struct definitions
         for struct in ast.type_defs:
             sig_lines = [f"sig {struct.name} {{"]
-            for field_name, field_type in struct.fields.items():
-                alloy_type = self._type_to_alloy(field_type)
-                sig_lines.append(f"    {field_name}: {alloy_type},")
+            for field_def in struct.fields:
+                alloy_type = self._type_to_alloy(field_def.type_annotation)
+                sig_lines.append(f"    {field_def.name}: {alloy_type},")
             if sig_lines[-1].endswith(","):
                 sig_lines[-1] = sig_lines[-1][:-1]  # Remove trailing comma
             sig_lines.append("}")
@@ -126,14 +127,14 @@ class AlloyGenerator:
             lines.append(f"// Statute {statute.section_number}")
             
             # Generate signature for this statute
-            statute_name = f"Statute_{statute.section_number.replace('.', '_')}"
+            statute_name = self._statute_name(statute.section_number)
             lines.append(f"one sig {statute_name} {{")
             
             # Add element fields
             if statute.elements:
                 element_names = []
-                for elem in statute.elements.elements:
-                    elem_name = elem.name.replace(" ", "_")
+                for elem in statute.elements:
+                    elem_name = self._safe_identifier(elem.name)
                     element_names.append(elem_name)
                     lines.append(f"    {elem_name}: one Element,")
                 
@@ -148,8 +149,10 @@ class AlloyGenerator:
                 lines.append(f"fact {statute_name}_elements {{")
                 lines.append(f"    // All elements must be satisfied for conviction")
                 
-                elem_refs = [f"{statute_name}.{e.name.replace(' ', '_')}.satisfied = True" 
-                            for e in statute.elements.elements]
+                elem_refs = [
+                    f"{statute_name}.{self._safe_identifier(e.name)}.satisfied = True"
+                    for e in statute.elements
+                ]
                 if elem_refs:
                     lines.append(f"    // {' and '.join(elem_refs)}")
                 
@@ -179,7 +182,7 @@ class AlloyGenerator:
         
         # Add statute-specific assertions
         for statute in ast.statutes:
-            statute_name = f"Statute_{statute.section_number.replace('.', '_')}"
+            statute_name = self._statute_name(statute.section_number)
             
             lines.append(f"// Assertions for {statute.section_number}")
             lines.append(f"assert {statute_name}_consistent {{")
@@ -200,18 +203,58 @@ class AlloyGenerator:
             f"run show_model for {self.scope}",
         ]
     
-    def _type_to_alloy(self, yuho_type: str) -> str:
+    def _type_to_alloy(self, yuho_type: TypeNode | str) -> str:
         """Convert Yuho type to Alloy type."""
-        type_map = {
-            "int": "Int",
-            "bool": "Bool",
-            "string": "String",
-            "money": "Int",  # Represent as cents
-            "percent": "Int",
-            "date": "Int",   # Unix timestamp
-            "duration": "Int",  # Days
-        }
-        return type_map.get(yuho_type, yuho_type)
+        if isinstance(yuho_type, BuiltinType):
+            type_map = {
+                "int": "Int",
+                "float": "Int",  # Alloy has no native float type
+                "bool": "Bool",
+                "string": "String",
+                "money": "Int",  # Represent as cents
+                "percent": "Int",
+                "date": "Int",  # Unix timestamp / day count
+                "duration": "Int",  # Days
+                "void": "none",
+            }
+            return type_map.get(yuho_type.name, "univ")
+        if isinstance(yuho_type, NamedType):
+            return yuho_type.name
+        if isinstance(yuho_type, OptionalType):
+            return f"lone {self._type_to_alloy(yuho_type.inner)}"
+        if isinstance(yuho_type, ArrayType):
+            return f"set {self._type_to_alloy(yuho_type.element_type)}"
+        if isinstance(yuho_type, GenericType):
+            return yuho_type.base
+        if isinstance(yuho_type, str):
+            type_map = {
+                "int": "Int",
+                "float": "Int",
+                "bool": "Bool",
+                "string": "String",
+                "money": "Int",
+                "percent": "Int",
+                "date": "Int",
+                "duration": "Int",
+                "void": "none",
+            }
+            return type_map.get(yuho_type, yuho_type)
+        return "univ"
+
+    def _safe_identifier(self, name: str) -> str:
+        """Convert arbitrary names to stable Alloy-safe identifiers."""
+        sanitized = re.sub(r"[^A-Za-z0-9_]", "_", name.strip())
+        if not sanitized:
+            return "unnamed"
+        if sanitized[0].isdigit():
+            return f"n_{sanitized}"
+        return sanitized
+
+    def _statute_name(self, section_number: str) -> str:
+        base = re.sub(r"[^A-Za-z0-9_]", "_", section_number.strip())
+        if not base:
+            base = "unnamed"
+        return f"Statute_{base}"
 
 
 class AlloyAnalyzer:
