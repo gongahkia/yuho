@@ -8,8 +8,11 @@ title, jurisdiction, and keywords.
 from typing import Optional, List, Dict, Any
 from dataclasses import dataclass, field
 from pathlib import Path
+from contextlib import contextmanager
 import json
 import logging
+import os
+import time
 
 from yuho.library.package import PackageMetadata
 
@@ -132,6 +135,7 @@ class LibraryIndex:
         """
         self.index_path = index_path or DEFAULT_LIBRARY_INDEX
         self.library_dir = library_dir or DEFAULT_LIBRARY_DIR
+        self._lock_path = self.index_path.with_suffix(f"{self.index_path.suffix}.lock")
         self._entries: Dict[str, IndexEntry] = {}
         self._load()
     
@@ -156,14 +160,31 @@ class LibraryIndex:
     def _save(self) -> None:
         """Save index to disk."""
         self.index_path.parent.mkdir(parents=True, exist_ok=True)
-        
-        data = {
-            "version": "1.0",
-            "entries": [e.to_dict() for e in self._entries.values()],
-        }
-        
-        with open(self.index_path, "w") as f:
-            json.dump(data, f, indent=2)
+
+        with self._write_lock():
+            data = {
+                "version": "1.0",
+                "entries": [e.to_dict() for e in self._entries.values()],
+            }
+
+            with open(self.index_path, "w") as f:
+                json.dump(data, f, indent=2)
+
+    @contextmanager
+    def _write_lock(self):
+        """
+        Acquire a process-level write lock for index mutations.
+
+        Uses a dedicated lock file beside the index so concurrent installs,
+        updates, or removals do not clobber each other's writes.
+        """
+        self._lock_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(self._lock_path, "a+") as lock_file:
+            _lock_file(lock_file)
+            try:
+                yield
+            finally:
+                _unlock_file(lock_file)
     
     def add(self, entry: IndexEntry) -> None:
         """Add or update an entry in the index."""
@@ -303,6 +324,37 @@ class LibraryIndex:
         
         self._save()
         return count
+
+
+def _lock_file(lock_file) -> None:
+    """Cross-platform exclusive file lock."""
+    if os.name == "nt":
+        import msvcrt  # type: ignore
+
+        lock_file.seek(0)
+        while True:
+            try:
+                msvcrt.locking(lock_file.fileno(), msvcrt.LK_LOCK, 1)
+                return
+            except OSError:
+                time.sleep(0.05)
+    else:
+        import fcntl
+
+        fcntl.flock(lock_file.fileno(), fcntl.LOCK_EX)
+
+
+def _unlock_file(lock_file) -> None:
+    """Release a previously acquired file lock."""
+    if os.name == "nt":
+        import msvcrt  # type: ignore
+
+        lock_file.seek(0)
+        msvcrt.locking(lock_file.fileno(), msvcrt.LK_UNLCK, 1)
+    else:
+        import fcntl
+
+        fcntl.flock(lock_file.fileno(), fcntl.LOCK_UN)
 
 
 def search_library(
