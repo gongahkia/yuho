@@ -14,7 +14,7 @@ from yuho.cli.error_formatter import Colors, colorize
 from yuho.services.analysis import analyze_file, analyze_source
 
 
-ALL_TARGETS = ["json", "jsonld", "english", "mermaid", "alloy"]
+ALL_TARGETS = ["json", "jsonld", "english", "latex", "mermaid", "alloy", "graphql", "blocks"]
 
 
 def run_transpile(
@@ -31,7 +31,7 @@ def run_transpile(
 
     Args:
         file: Path to the .yh file
-        target: Target format (json, jsonld, english, mermaid, alloy)
+        target: Target format (json, jsonld, english, latex, mermaid, alloy, graphql, blocks)
         output: Output file path
         output_dir: Output directory for multiple files
         all_targets: Generate all targets
