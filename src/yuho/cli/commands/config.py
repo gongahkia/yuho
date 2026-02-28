@@ -22,7 +22,7 @@ def validate_config_value(section: str, key: str, value: str) -> Any:
     Validate and convert a configuration value.
     
     Args:
-        section: Config section (llm, transpile, lsp, mcp)
+        section: Config section (llm, transpile, lsp, mcp, library)
         key: Configuration key
         value: String value to validate
         
@@ -38,6 +38,7 @@ def validate_config_value(section: str, key: str, value: str) -> Any:
         "transpile": [],
         "lsp": [],
         "mcp": ["port"],
+        "library": ["timeout"],
     }
     
     float_fields = {
@@ -45,6 +46,7 @@ def validate_config_value(section: str, key: str, value: str) -> Any:
         "transpile": [],
         "lsp": [],
         "mcp": [],
+        "library": [],
     }
     
     bool_fields = {
@@ -53,6 +55,7 @@ def validate_config_value(section: str, key: str, value: str) -> Any:
         "lsp": ["diagnostic_severity_error", "diagnostic_severity_warning",
                 "diagnostic_severity_info", "diagnostic_severity_hint"],
         "mcp": [],
+        "library": ["verify_ssl"],
     }
     
     list_fields = {
@@ -60,6 +63,7 @@ def validate_config_value(section: str, key: str, value: str) -> Any:
         "transpile": [],
         "lsp": ["completion_trigger_chars"],
         "mcp": ["allowed_origins"],
+        "library": [],
     }
     
     # Enum validations
@@ -75,10 +79,14 @@ def validate_config_value(section: str, key: str, value: str) -> Any:
         ("llm", "max_tokens"): (1, 100000),
         ("llm", "temperature"): (0.0, 2.0),
         ("mcp", "port"): (1, 65535),
+        ("library", "timeout"): (1, 600),
     }
     
-    if section not in ["llm", "transpile", "lsp", "mcp"]:
-        raise ConfigValidationError(f"Unknown configuration section: '{section}'. Valid sections: llm, transpile, lsp, mcp")
+    if section not in ["llm", "transpile", "lsp", "mcp", "library"]:
+        raise ConfigValidationError(
+            f"Unknown configuration section: '{section}'. "
+            "Valid sections: llm, transpile, lsp, mcp, library"
+        )
     
     # Check if key exists in section
     valid_keys = {
@@ -88,6 +96,7 @@ def validate_config_value(section: str, key: str, value: str) -> Any:
         "lsp": ["diagnostic_severity_error", "diagnostic_severity_warning",
                 "diagnostic_severity_info", "diagnostic_severity_hint", "completion_trigger_chars"],
         "mcp": ["host", "port", "allowed_origins", "auth_token"],
+        "library": ["registry_url", "registry_api_version", "auth_token", "timeout", "verify_ssl"],
     }
     
     if key not in valid_keys.get(section, []):

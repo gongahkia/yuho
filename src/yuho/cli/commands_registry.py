@@ -25,7 +25,7 @@ def register_group_commands(cli: click.Group) -> None:
         pass
 
     @config.command("show")
-    @click.option("-s", "--section", type=click.Choice(["llm", "transpile", "lsp", "mcp"]),
+    @click.option("-s", "--section", type=click.Choice(["llm", "transpile", "lsp", "mcp", "library"]),
                   help="Show only specific section")
     @click.option("-f", "--format", "fmt", type=click.Choice(["toml", "json"]),
                   default="toml", help="Output format")
