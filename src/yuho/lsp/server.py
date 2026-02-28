@@ -15,7 +15,7 @@ except ImportError:
     )
 
 from yuho import __version__
-from yuho.parser import Parser, SourceLocation
+from yuho.parser import SourceLocation, get_parser
 from yuho.parser.wrapper import ParseError, ParseResult
 from yuho.ast import ASTBuilder, ModuleNode
 
@@ -56,7 +56,7 @@ class DocumentState:
 
     def _parse(self):
         """Parse the document and build AST."""
-        parser = Parser()
+        parser = get_parser()
         self.parse_result = parser.parse(self.source, file=self.uri)
 
         if self.parse_result.is_valid:

@@ -510,11 +510,11 @@ class YuhoMCPServer:
             except RateLimitExceeded as e:
                 return {"error": str(e), "retry_after": e.retry_after}
             
-            from yuho.parser import Parser
+            from yuho.parser import get_parser
             from yuho.ast import ASTBuilder
             from yuho.transpile import TranspileTarget, get_transpiler
 
-            parser = Parser()
+            parser = get_parser()
             try:
                 result = run_parser_boundary(
                     parser.parse,
@@ -570,11 +570,11 @@ class YuhoMCPServer:
             except RateLimitExceeded as e:
                 return {"error": str(e), "retry_after": e.retry_after}
             
-            from yuho.parser import Parser
+            from yuho.parser import get_parser
             from yuho.ast import ASTBuilder
             from yuho.transpile import EnglishTranspiler
 
-            parser = Parser()
+            parser = get_parser()
             try:
                 result = run_parser_boundary(
                     parser.parse,
@@ -660,11 +660,11 @@ class YuhoMCPServer:
             Returns:
                 {formatted: str} or {error: str}
             """
-            from yuho.parser import Parser
+            from yuho.parser import get_parser
             from yuho.ast import ASTBuilder
             from yuho.cli.commands.fmt import _format_module
 
-            parser = Parser()
+            parser = get_parser()
             try:
                 result = run_parser_boundary(
                     parser.parse,
@@ -706,7 +706,7 @@ class YuhoMCPServer:
             Returns:
                 {completions: list of completion items}
             """
-            from yuho.parser import Parser
+            from yuho.parser import get_parser
             from yuho.ast import ASTBuilder
 
             completions = []
@@ -724,7 +724,7 @@ class YuhoMCPServer:
             completions.extend({"label": t, "kind": "type"} for t in types)
 
             # Parse to get symbols
-            parser = Parser()
+            parser = get_parser()
             result = parser.parse(file_content)
 
             if result.is_valid:
@@ -761,7 +761,7 @@ class YuhoMCPServer:
             Returns:
                 {info: str} or {info: null}
             """
-            from yuho.parser import Parser
+            from yuho.parser import get_parser
             from yuho.ast import ASTBuilder
             
             # Keywords and their docs
@@ -821,7 +821,7 @@ class YuhoMCPServer:
                 return {"info": f"**type** `{word}`\n\n{TYPE_DOCS[word]}"}
             
             # Parse for symbol info
-            parser = Parser()
+            parser = get_parser()
             result = parser.parse(file_content)
             
             if result.is_valid:
@@ -875,7 +875,7 @@ class YuhoMCPServer:
             Returns:
                 {location: {line, col}} or {location: null}
             """
-            from yuho.parser import Parser
+            from yuho.parser import get_parser
             from yuho.ast import ASTBuilder
             
             # Get word at position
@@ -901,7 +901,7 @@ class YuhoMCPServer:
             word = target_line[start:end]
             
             # Parse for symbol definitions
-            parser = Parser()
+            parser = get_parser()
             result = parser.parse(file_content)
             
             if result.is_valid:
@@ -962,7 +962,7 @@ class YuhoMCPServer:
             Returns:
                 {locations: list of {line, col, end_line, end_col}}
             """
-            from yuho.parser import Parser
+            from yuho.parser import get_parser
             from yuho.ast import ASTBuilder
 
             # Get word at position
@@ -1020,10 +1020,10 @@ class YuhoMCPServer:
             Returns:
                 {symbols: list of {name, kind, line, col}}
             """
-            from yuho.parser import Parser
+            from yuho.parser import get_parser
             from yuho.ast import ASTBuilder
 
-            parser = Parser()
+            parser = get_parser()
             result = parser.parse(file_content)
 
             if result.errors:
@@ -1081,13 +1081,13 @@ class YuhoMCPServer:
             Returns:
                 {diagnostics: list of {message, severity, line, col}}
             """
-            from yuho.parser import Parser
+            from yuho.parser import get_parser
             from yuho.ast import ASTBuilder
             from yuho.ast.type_inference import TypeInferenceVisitor
             from yuho.ast.type_check import TypeCheckVisitor
 
             diagnostics = []
-            parser = Parser()
+            parser = get_parser()
             result = parser.parse(file_content)
 
             # Parse errors
@@ -1149,14 +1149,14 @@ class YuhoMCPServer:
             Returns:
                 {valid: bool, results: list}
             """
-            from yuho.parser import Parser
+            from yuho.parser import get_parser
             from yuho.ast import ASTBuilder
 
             tests = tests or []
             results = []
 
             # Check parsing
-            parser = Parser()
+            parser = get_parser()
             result = parser.parse(file_content)
 
             if result.errors:
@@ -1312,7 +1312,7 @@ class YuhoMCPServer:
 
             try:
                 from yuho.llm import get_provider, STATUTE_TO_YUHO_PROMPT
-                from yuho.parser import Parser
+                from yuho.parser import get_parser
 
                 # Get LLM provider
                 provider = get_provider()
@@ -1338,7 +1338,7 @@ class YuhoMCPServer:
                         yuho_code = code_match.group(1).strip()
 
                 # Validate the generated code
-                parser = Parser()
+                parser = get_parser()
                 result = parser.parse(yuho_code)
 
                 if result.errors:
