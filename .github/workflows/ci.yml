@@ -84,6 +84,9 @@ jobs:
           pip install -e ./src[dev] 2>&1 | tee logs/install-yuho.log
           pip list 2>&1 | tee logs/pip-list.log
 
+      - name: Smoke test parser CLI
+        run: yuho check examples/simple_statute.yh 2>&1 | tee logs/smoke-check.log
+
       - name: Run tests
         run: |
           pytest tests/ -v --tb=long 2>&1 | tee logs/pytest.log
