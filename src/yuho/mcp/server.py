@@ -212,15 +212,6 @@ class RateLimiter:
         }
 
 
-class LogVerbosity(IntEnum):
-    """Verbosity levels for MCP request logging."""
-    QUIET = 0      # No logging
-    MINIMAL = 1    # Log tool name only
-    STANDARD = 2   # Log tool name and execution time
-    VERBOSE = 3    # Log tool name, args summary, and execution time
-    DEBUG = 4      # Log everything including full args and responses
-
-
 class MCPRequestLogger:
     """Logger for MCP requests with configurable verbosity."""
     
