@@ -332,7 +332,11 @@ class YuhoMCPServer:
         """Register MCP tools."""
 
         @self.server.tool()
-        async def yuho_check(file_content: str, client_id: Optional[str] = None) -> Dict[str, Any]:
+        async def yuho_check(
+            file_content: str,
+            include_metrics: bool = False,
+            client_id: Optional[str] = None,
+        ) -> Dict[str, Any]:
             """
             Validate Yuho source code.
 
@@ -351,7 +355,7 @@ class YuhoMCPServer:
             analysis = analyze_source(file_content, file="<mcp>", run_semantic=False)
 
             if analysis.parse_errors:
-                return {
+                payload = {
                     "valid": False,
                     "errors": [
                         {
@@ -362,21 +366,39 @@ class YuhoMCPServer:
                         for err in analysis.parse_errors
                     ],
                 }
+                if include_metrics:
+                    payload["code_scale"] = analysis.code_scale.to_dict() if analysis.code_scale else None
+                    payload["clock_load_scale"] = (
+                        analysis.clock_load_scale.to_dict() if analysis.clock_load_scale else None
+                    )
+                return payload
 
             if analysis.errors and not analysis.parse_errors:
-                return {
+                payload = {
                     "valid": False,
                     "errors": [{"message": analysis.errors[0].message, "line": 1, "col": 1}],
                 }
+                if include_metrics:
+                    payload["code_scale"] = analysis.code_scale.to_dict() if analysis.code_scale else None
+                    payload["clock_load_scale"] = (
+                        analysis.clock_load_scale.to_dict() if analysis.clock_load_scale else None
+                    )
+                return payload
 
             summary = analysis.ast_summary
             if summary is None:
-                return {
+                payload = {
                     "valid": False,
                     "errors": [{"message": "Failed to build AST", "line": 1, "col": 1}],
                 }
+                if include_metrics:
+                    payload["code_scale"] = analysis.code_scale.to_dict() if analysis.code_scale else None
+                    payload["clock_load_scale"] = (
+                        analysis.clock_load_scale.to_dict() if analysis.clock_load_scale else None
+                    )
+                return payload
 
-            return {
+            payload = {
                 "valid": True,
                 "errors": [],
                 "stats": {
@@ -385,6 +407,12 @@ class YuhoMCPServer:
                     "functions": summary.functions,
                 },
             }
+            if include_metrics:
+                payload["code_scale"] = analysis.code_scale.to_dict() if analysis.code_scale else None
+                payload["clock_load_scale"] = (
+                    analysis.clock_load_scale.to_dict() if analysis.clock_load_scale else None
+                )
+            return payload
 
         @self.server.tool()
         async def yuho_transpile(file_content: str, target: str, client_id: Optional[str] = None) -> Dict[str, Any]:
