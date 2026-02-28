@@ -13,6 +13,7 @@ import logging
 import time
 import threading
 
+from yuho.cli.commands.check import get_error_explanation
 from yuho.services.analysis import analyze_source
 
 # Configure MCP logger
@@ -335,6 +336,7 @@ class YuhoMCPServer:
         async def yuho_check(
             file_content: str,
             include_metrics: bool = False,
+            explain_errors: bool = False,
             client_id: Optional[str] = None,
         ) -> Dict[str, Any]:
             """
@@ -362,6 +364,12 @@ class YuhoMCPServer:
                             "message": err.message,
                             "line": err.location.line,
                             "col": err.location.col,
+                            "node_type": err.node_type,
+                            "explanation": (
+                                get_error_explanation(err.message, err.node_type)
+                                if explain_errors
+                                else None
+                            ),
                         }
                         for err in analysis.parse_errors
                     ],
