@@ -306,11 +306,14 @@ verify_installation() {
     fi
 
     # Check parser works
-    if echo 'struct Test { x: int }' | timeout 5 yuho check - 2>/dev/null; then
+    SMOKE_FILE="$(mktemp "${TMPDIR:-/tmp}/yuho-smoke-XXXXXX.yh")"
+    printf 'struct Test { x: int }\n' > "$SMOKE_FILE"
+    if timeout 5 yuho check "$SMOKE_FILE" 2>/dev/null; then
         success "Parser working"
     else
         warn "Parser check skipped or failed (may need grammar rebuild)"
     fi
+    rm -f "$SMOKE_FILE"
 }
 
 # Main installation
