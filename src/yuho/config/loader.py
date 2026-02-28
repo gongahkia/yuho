@@ -54,6 +54,11 @@ class Config:
         """Get MCP configuration section."""
         return self._schema.mcp
 
+    @property
+    def library(self):
+        """Get library configuration section."""
+        return self._schema.library
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary."""
         return self._schema.to_dict()

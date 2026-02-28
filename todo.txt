@@ -1,5 +1,4 @@
 
-(B) Add `library` property accessor to `Config` in `src/yuho/config/loader.py` for parity with schema sections. +bugfix +config
 (B) Wire `registry_url`, `auth_token`, `timeout`, and `verify_ssl` from config into `run_library_*` functions in `src/yuho/cli/commands/library.py`. +feature +config +library
 (B) Wire `llm.provider` and `llm.model` defaults from config into `run_explain` in `src/yuho/cli/commands/explain.py`. +feature +config +llm
 (B) Wire `mcp.host` and `mcp.port` defaults from config into `run_serve` in `src/yuho/cli/commands/serve.py`. +feature +config +mcp
