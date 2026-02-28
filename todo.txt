@@ -1,5 +1,4 @@
 
-(B) Add structured logger helpers in `src/yuho/logging_utils.py` with request_id and duration fields. +infra +observability +dx
 (B) Adopt structured request logs in `src/yuho/cli/commands/api.py` for each endpoint invocation and status code. +infra +api +observability
 (B) Adopt structured request logs in `src/yuho/mcp/server.py` for each tool call and completion status. +infra +mcp +observability
 (B) Add explicit exception classes for parser, AST, and transpile boundaries in `src/yuho/services/errors.py` and stop using generic `except Exception` at interface edges. +refactor +reliability
