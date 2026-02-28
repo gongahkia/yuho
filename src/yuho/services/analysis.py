@@ -352,16 +352,24 @@ def _build_clock_load_scale(result: AnalysisResult) -> ClockLoadScale:
 
 def _parse_errors_to_analysis_errors(parse_errors: list[ParseError]) -> list[AnalysisError]:
     """Convert parser errors to normalized analysis errors."""
-    return [
-        AnalysisError(
-            stage="parse",
-            message=error.message,
-            error_code="parse_error",
-            location=error.location,
-            node_type=error.node_type,
+    normalized: list[AnalysisError] = []
+    for error in parse_errors:
+        error_code = "parse_error"
+        if error.node_type and error.node_type.startswith("MISSING:"):
+            error_code = "parse_missing_node"
+        elif "Unexpected syntax" in error.message:
+            error_code = "parse_unexpected_syntax"
+
+        normalized.append(
+            AnalysisError(
+                stage="parse",
+                message=error.message,
+                error_code=error_code,
+                location=error.location,
+                node_type=error.node_type,
+            )
         )
-        for error in parse_errors
-    ]
+    return normalized
 
 
 def _run_semantic_checks(ast: ModuleNode) -> SemanticSummary:
