@@ -77,6 +77,7 @@ jobs:
       - name: Install tree-sitter CLI
         run: npm install -g tree-sitter-cli
 
+<<<<<<< HEAD
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -90,6 +91,21 @@ jobs:
       - name: Run tests
         run: |
           pytest tests/ -v --tb=long 2>&1 | tee logs/pytest.log
+=======
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ./src/tree-sitter-yuho/bindings/python 2>&1 | tee logs/install-tree-sitter-yuho.log
+          pip install -e ./src[dev] 2>&1 | tee logs/install-yuho.log
+          pip list 2>&1 | tee logs/pip-list.log
+
+      - name: Smoke test parser CLI
+        run: yuho check examples/simple_statute.yh 2>&1 | tee logs/smoke-check.log
+
+      - name: Run tests
+        run: |
+          pytest tests/ -v --tb=long 2>&1 | tee logs/pytest.log
+>>>>>>> 490bbe15de2c8c94edcede309301405f6ae578b9
 
       - name: Upload test logs
         if: always()
