@@ -85,6 +85,73 @@ def cli(ctx: click.Context, verbose: bool, use_color: Optional[bool], quiet: boo
 
 
 # =============================================================================
+# Verify command
+# =============================================================================
+
+
+@cli.command()
+@click.argument("file", type=click.Path(exists=True), required=False)
+@click.option(
+    "--engine",
+    type=click.Choice(["combined", "alloy", "z3"], case_sensitive=False),
+    default="combined",
+    show_default=True,
+    help="Verification backend",
+)
+@click.option("--alloy-jar", type=click.Path(exists=True), help="Path to Alloy analyzer JAR")
+@click.option(
+    "--alloy-timeout",
+    type=int,
+    default=30,
+    show_default=True,
+    help="Alloy timeout in seconds",
+)
+@click.option(
+    "--z3-timeout-ms",
+    type=int,
+    default=5000,
+    show_default=True,
+    help="Z3 timeout in milliseconds",
+)
+@click.option(
+    "--capabilities",
+    "capabilities_only",
+    is_flag=True,
+    help="Show verification backend availability and exit",
+)
+@click.option("--json", "json_output", is_flag=True, help="Output as JSON")
+@click.pass_context
+def verify(
+    ctx: click.Context,
+    file: Optional[str],
+    engine: str,
+    alloy_jar: Optional[str],
+    alloy_timeout: int,
+    z3_timeout_ms: int,
+    capabilities_only: bool,
+    json_output: bool,
+) -> None:
+    """
+    Run formal verification checks (Alloy, Z3, or combined).
+
+    Use --capabilities to inspect available verifier backends and
+    explicit unavailability reasons in your current environment.
+    """
+    from yuho.cli.commands.verify import run_verify
+
+    run_verify(
+        file,
+        engine=engine,
+        alloy_jar=alloy_jar,
+        alloy_timeout=alloy_timeout,
+        z3_timeout_ms=z3_timeout_ms,
+        capabilities_only=capabilities_only,
+        json_output=json_output,
+        verbose=ctx.obj["verbose"],
+    )
+
+
+# =============================================================================
 # Check command
 # =============================================================================
 
