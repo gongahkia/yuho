@@ -18,7 +18,7 @@ from enum import Enum, auto
 
 import click
 
-from yuho.parser import Parser
+from yuho.parser import get_parser
 from yuho.ast import ASTBuilder
 from yuho.ast.nodes import (
     ModuleNode, StatuteNode, ElementNode, PenaltyNode,
@@ -432,7 +432,7 @@ def run_diff(
             click.echo(colorize(f"error: File not found: {path}", Colors.RED), err=True)
             sys.exit(1)
     
-    parser = Parser()
+    parser = get_parser()
     
     # Parse both files
     def parse_file(path: Path) -> Optional[ModuleNode]:

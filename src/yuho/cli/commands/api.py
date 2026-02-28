@@ -21,7 +21,7 @@ import threading
 import click
 
 from yuho import __version__
-from yuho.parser import Parser
+from yuho.parser import get_parser
 from yuho.ast import ASTBuilder
 from yuho.transpile.base import TranspileTarget
 from yuho.transpile.registry import TranspilerRegistry
@@ -56,7 +56,7 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
     """HTTP request handler for Yuho API."""
     
     # Class-level parser and registry (shared across requests)
-    parser = Parser()
+    parser = get_parser()
     registry = TranspilerRegistry.instance()
     _request_context: Optional[RequestLogContext] = None
     _request_method: str = ""

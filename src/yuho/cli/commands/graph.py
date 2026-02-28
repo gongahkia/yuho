@@ -16,7 +16,7 @@ from enum import Enum, auto
 
 import click
 
-from yuho.parser import Parser
+from yuho.parser import get_parser
 from yuho.ast import ASTBuilder
 from yuho.ast.nodes import (
     ModuleNode, StatuteNode, ImportNode, IdentifierNode,
@@ -372,7 +372,7 @@ def run_graph(
         sys.exit(1)
     
     # Parse file
-    parser = Parser()
+    parser = get_parser()
     result = parser.parse_file(path)
     
     if result.errors:

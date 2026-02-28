@@ -10,7 +10,7 @@ from datetime import datetime
 
 import click
 
-from yuho.parser import Parser
+from yuho.parser import get_parser
 from yuho.ast import ASTBuilder
 from yuho.cli.error_formatter import Colors, colorize
 
@@ -113,7 +113,7 @@ def run_test(
         # Load statutes for coverage tracking
         for statute_file in statute_files:
             try:
-                parser = Parser()
+                parser = get_parser()
                 result = parser.parse_file(statute_file)
                 if result.is_valid:
                     builder = ASTBuilder(result.source, str(statute_file))
@@ -187,7 +187,7 @@ def _run_test_file(test_file: Path, verbose: bool, coverage_tracker=None) -> dic
     }
 
     # Parse test file
-    parser = Parser()
+    parser = get_parser()
     try:
         parse_result = parser.parse_file(test_file)
     except Exception as e:

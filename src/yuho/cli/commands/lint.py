@@ -17,7 +17,7 @@ from enum import Enum, auto
 
 import click
 
-from yuho.parser import Parser
+from yuho.parser import get_parser
 from yuho.ast import ASTBuilder
 from yuho.ast.nodes import (
     ModuleNode, StatuteNode, ElementNode, PenaltyNode,
@@ -413,7 +413,7 @@ def run_lint(
         click.echo(f"Running {len(active_rules)} lint rules")
     
     all_issues: Dict[str, List[LintIssue]] = {}
-    parser = Parser()
+    parser = get_parser()
     
     for file_path in files:
         path = Path(file_path)

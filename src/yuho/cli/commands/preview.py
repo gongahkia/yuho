@@ -54,14 +54,14 @@ def transpile_file(path: Path, target: str) -> tuple[Optional[str], Optional[str
         (content, error) - one will be None
     """
     try:
-        from yuho.parser import Parser
+        from yuho.parser import get_parser
         from yuho.ast.builder import ASTBuilder
         from yuho.transpile.registry import TranspilerRegistry
         from yuho.transpile.base import TranspileTarget
 
         source = path.read_text()
 
-        parser = Parser()
+        parser = get_parser()
         result = parser.parse(source, str(path))
 
         if result.errors:

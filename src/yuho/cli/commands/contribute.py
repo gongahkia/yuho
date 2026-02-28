@@ -10,7 +10,7 @@ from typing import Optional
 
 import click
 
-from yuho.parser import Parser
+from yuho.parser import get_parser
 from yuho.ast import ASTBuilder
 from yuho.cli.error_formatter import Colors, colorize
 
@@ -31,7 +31,7 @@ def run_contribute(file: str, package: bool = False, output: Optional[str] = Non
         click.echo(f"Validating {file_path}...")
 
     # Parse and validate
-    parser = Parser()
+    parser = get_parser()
     try:
         result = parser.parse_file(file_path)
     except FileNotFoundError:

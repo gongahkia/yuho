@@ -16,7 +16,7 @@ from typing import Optional, List, Dict, Any
 
 import click
 
-from yuho.parser import Parser
+from yuho.parser import get_parser
 from yuho.ast import ASTBuilder
 from yuho.ast.nodes import ModuleNode
 from yuho.transpile.base import TranspileTarget
@@ -61,7 +61,7 @@ class YuhoREPL:
         """
         self.color = color
         self.verbose = verbose
-        self.parser = Parser()
+        self.parser = get_parser()
         self.registry = TranspilerRegistry.instance()
         
         # Session state

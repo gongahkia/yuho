@@ -355,8 +355,8 @@ def run_library_publish(
 
                 # Validate with parser
                 if statute_file.exists():
-                    from yuho.parser import Parser
-                    parser = Parser()
+                    from yuho.parser import get_parser
+                    parser = get_parser()
                     result = parser.parse_file(statute_file)
                     if result.errors:
                         errors.extend(f"Parse error: {e.message}" for e in result.errors)

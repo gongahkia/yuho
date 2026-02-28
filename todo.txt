@@ -1,5 +1,4 @@
 
-(B) Add regression tests for `yuho transpile --all` target coverage in `tests/test_cli_transpile.py`. +test +transpile +cli
 (B) Replace repeated `Parser()` instantiations with `get_parser()` in CLI command modules under `src/yuho/cli/commands/`. +perf +refactor +cli
 (B) Replace repeated `Parser()` instantiations with `get_parser()` in `src/yuho/lsp/server.py` and `src/yuho/mcp/server.py`. +perf +lsp +mcp
 (B) Implement true incremental text patching in LSP `did_change` handler in `src/yuho/lsp/server.py` using range-based edits. +bugfix +lsp +scaling

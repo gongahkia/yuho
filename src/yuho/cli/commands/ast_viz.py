@@ -280,10 +280,10 @@ def run_ast_viz(
     
     # Parse
     try:
-        from yuho.parser import Parser
+        from yuho.parser import get_parser
         from yuho.ast.builder import ASTBuilder
 
-        parser = Parser()
+        parser = get_parser()
         result = parser.parse(source, str(path))
 
         if result.errors:
