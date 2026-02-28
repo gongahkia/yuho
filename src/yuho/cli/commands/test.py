@@ -106,6 +106,7 @@ def run_test(
 
     # Initialize coverage tracker if needed
     coverage_tracker = None
+    preflight_errors: List[str] = []
     if coverage:
         from yuho.testing.coverage import CoverageTracker
         coverage_tracker = CoverageTracker()
@@ -115,12 +116,22 @@ def run_test(
             try:
                 parser = get_parser()
                 result = parser.parse_file(statute_file)
-                if result.is_valid:
-                    builder = ASTBuilder(result.source, str(statute_file))
-                    ast = builder.build(result.root_node)
-                    coverage_tracker.load_statutes_from_ast(ast)
-            except Exception:
-                continue
+                if result.errors:
+                    for parse_error in result.errors:
+                        loc = parse_error.location
+                        line = loc.line if loc else "?"
+                        col = loc.col if loc else "?"
+                        preflight_errors.append(
+                            f"{statute_file}:{line}:{col}: "
+                            f"{parse_error.message}"
+                        )
+                    continue
+
+                builder = ASTBuilder(result.source, str(statute_file))
+                ast = builder.build(result.root_node)
+                coverage_tracker.load_statutes_from_ast(ast)
+            except Exception as e:
+                preflight_errors.append(f"{statute_file}: {e}")
 
     # Run tests
     results = []
@@ -164,6 +175,7 @@ def run_test(
             "passed": passed,
             "failed": failed,
             "results": results,
+            "preflight_errors": preflight_errors,
         }
         if coverage and coverage_tracker:
             output_data["coverage"] = coverage_tracker.generate_report().to_dict()
@@ -174,7 +186,14 @@ def run_test(
             click.echo(colorize(f"All {passed} tests passed", Colors.CYAN + Colors.BOLD))
         else:
             click.echo(colorize(f"{passed} passed, {failed} failed", Colors.RED + Colors.BOLD))
-            sys.exit(1)
+
+        if preflight_errors:
+            click.echo(colorize("\nCoverage preflight errors:", Colors.RED + Colors.BOLD), err=True)
+            for error in preflight_errors:
+                click.echo(f"  - {error}", err=True)
+
+    if failed > 0 or preflight_errors:
+        sys.exit(1)
 
 
 def _run_test_file(test_file: Path, verbose: bool, coverage_tracker=None) -> dict:

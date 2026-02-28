@@ -1,2 +1,1 @@
 
-(B) Stop silently swallowing file parse and AST exceptions in `run_test` in `src/yuho/cli/commands/test.py` and report deterministic failure output. +bugfix +cli +testing
