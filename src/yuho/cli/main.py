@@ -566,11 +566,11 @@ def wizard(
 
 
 @cli.command()
-@click.option("-p", "--port", type=int, default=8080, help="Port to listen on")
-@click.option("--host", default="127.0.0.1", help="Host to bind to")
+@click.option("-p", "--port", type=int, default=None, help="Port to listen on (defaults to config mcp.port)")
+@click.option("--host", default=None, help="Host to bind to (defaults to config mcp.host)")
 @click.option("--stdio", is_flag=True, help="Use stdio transport (for editor integration)")
 @click.pass_context
-def serve(ctx: click.Context, port: int, host: str, stdio: bool) -> None:
+def serve(ctx: click.Context, port: Optional[int], host: Optional[str], stdio: bool) -> None:
     """
     Start the MCP (Model Context Protocol) server.
 
