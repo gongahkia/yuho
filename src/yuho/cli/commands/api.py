@@ -424,8 +424,8 @@ class YuhoAPIServer(HTTPServer):
 
 
 def run_api(
-    host: str = "127.0.0.1",
-    port: int = 8080,
+    host: Optional[str] = None,
+    port: Optional[int] = None,
     verbose: bool = False,
     color: bool = True,
 ) -> None:
@@ -433,12 +433,18 @@ def run_api(
     Start the Yuho API server.
     
     Args:
-        host: Host to bind to
-        port: Port to listen on
+        host: Host to bind to (defaults to config mcp.host)
+        port: Port to listen on (defaults to config mcp.port)
         verbose: Enable verbose output
         color: Use colored output
     """
-    server_address = (host, port)
+    from yuho.config.loader import get_config
+
+    mcp_config = get_config().mcp
+    resolved_host = host or mcp_config.host
+    resolved_port = port if port is not None else mcp_config.port
+
+    server_address = (resolved_host, resolved_port)
     
     try:
         httpd = YuhoAPIServer(server_address, YuhoAPIHandler, verbose=verbose)
@@ -446,7 +452,7 @@ def run_api(
         click.echo(colorize(f"error: Could not start server: {e}", Colors.RED), err=True)
         sys.exit(1)
     
-    url = f"http://{host}:{port}"
+    url = f"http://{resolved_host}:{resolved_port}"
     click.echo(f"Starting Yuho API server at {colorize(url, Colors.CYAN) if color else url}")
     click.echo("Endpoints:")
     click.echo("  GET  /health    - Health check")

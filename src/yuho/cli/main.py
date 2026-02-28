@@ -441,10 +441,10 @@ def lint(
 
 
 @cli.command()
-@click.option("-p", "--port", type=int, default=8080, help="Port to listen on")
-@click.option("--host", default="127.0.0.1", help="Host to bind to")
+@click.option("-p", "--port", type=int, default=None, help="Port to listen on (defaults to config mcp.port)")
+@click.option("--host", default=None, help="Host to bind to (defaults to config mcp.host)")
 @click.pass_context
-def api(ctx: click.Context, port: int, host: str) -> None:
+def api(ctx: click.Context, port: Optional[int], host: Optional[str]) -> None:
     """
     Start the REST API server for remote operations.
 
