@@ -1,4 +1,3 @@
-(B) Route `run_transpile` in `src/yuho/cli/commands/transpile.py` through `src/yuho/services/analysis.py` for a single parse and AST pipeline. +refactor +cli +transpile
 (B) Route `run_explain` in `src/yuho/cli/commands/explain.py` through `src/yuho/services/analysis.py` to unify parse error behavior. +refactor +cli +llm
 (B) Route `/parse` and `/validate` in `src/yuho/cli/commands/api.py` through `src/yuho/services/analysis.py` for consistent response fields. +refactor +api
 (B) Route `yuho_check` and `yuho_parse` in `src/yuho/mcp/server.py` through `src/yuho/services/analysis.py` for consistent diagnostics across interfaces. +refactor +mcp
