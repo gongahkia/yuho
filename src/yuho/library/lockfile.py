@@ -12,6 +12,8 @@ from datetime import datetime
 import json
 import hashlib
 import logging
+import os
+import tempfile
 
 from yuho.library.resolver import Version, Resolution
 
@@ -96,6 +98,8 @@ class LockFile:
     
     def to_file(self, path: Path) -> None:
         """Save lock file to path."""
+        path.parent.mkdir(parents=True, exist_ok=True)
+
         data = {
             "lock_version": self.lock_version,
             "generated_at": self.generated_at or datetime.utcnow().isoformat() + "Z",
@@ -104,10 +108,23 @@ class LockFile:
                 for section, pkg in sorted(self.packages.items())
             },
         }
-        
-        with open(path, "w") as f:
-            json.dump(data, f, indent=2)
-            f.write("\n")
+
+        fd, temp_path_str = tempfile.mkstemp(
+            prefix=f"{path.name}.",
+            suffix=".tmp",
+            dir=str(path.parent),
+        )
+        temp_path = Path(temp_path_str)
+        try:
+            with os.fdopen(fd, "w") as f:
+                json.dump(data, f, indent=2)
+                f.write("\n")
+                f.flush()
+                os.fsync(f.fileno())
+            os.replace(temp_path, path)
+        finally:
+            if temp_path.exists():
+                temp_path.unlink(missing_ok=True)
     
     def add_package(
         self,
