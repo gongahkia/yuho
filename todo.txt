@@ -1,0 +1,70 @@
+(B) Route `run_check` in `src/yuho/cli/commands/check.py` through `src/yuho/services/analysis.py` to remove duplicated parse and AST logic. +refactor +cli
+(B) Route `run_transpile` in `src/yuho/cli/commands/transpile.py` through `src/yuho/services/analysis.py` for a single parse and AST pipeline. +refactor +cli +transpile
+(B) Route `run_explain` in `src/yuho/cli/commands/explain.py` through `src/yuho/services/analysis.py` to unify parse error behavior. +refactor +cli +llm
+(B) Route `/parse` and `/validate` in `src/yuho/cli/commands/api.py` through `src/yuho/services/analysis.py` for consistent response fields. +refactor +api
+(B) Route `yuho_check` and `yuho_parse` in `src/yuho/mcp/server.py` through `src/yuho/services/analysis.py` for consistent diagnostics across interfaces. +refactor +mcp
+(B) Add a `code_scale` calculator in `src/yuho/services/analysis.py` that reports source LOC, AST node count, statute count, and definition count. +feature +metrics +ux
+(B) Add a `clock_load_scale` calculator in `src/yuho/services/analysis.py` that reports parse time, AST build time, and total analysis time in milliseconds. +feature +metrics +ux
+(B) Add `--metrics` to `yuho check` in `src/yuho/cli/main.py` and print `code_scale` and `clock_load_scale` in text and JSON modes. +feature +cli +metrics
+(B) Add `include_metrics` support to API `/validate` in `src/yuho/cli/commands/api.py` and return `code_scale` and `clock_load_scale` in the response body. +feature +api +metrics
+(B) Add `include_metrics` support to MCP `yuho_check` in `src/yuho/mcp/server.py` and return `code_scale` and `clock_load_scale` in tool output. +feature +mcp +metrics
+(B) Add `error_code` fields for parser and AST failures in `src/yuho/services/analysis.py` to make BAL-student remediation easier in all clients. +feature +ux +diagnostics
+(B) Add `--explain-error` parity for API `/validate` in `src/yuho/cli/commands/api.py` by reusing explanations from `src/yuho/cli/commands/check.py`. +feature +api +ux
+(B) Add `explain_errors` parity for MCP `yuho_check` in `src/yuho/mcp/server.py` by reusing explanations from `src/yuho/cli/commands/check.py`. +feature +mcp +ux
+(B) Support stdin input with `FILE='-'` for `yuho check` by updating argument parsing in `src/yuho/cli/main.py` and source loading in `src/yuho/cli/commands/check.py`. +feature +cli +ux
+(B) Support stdin input with `FILE='-'` for `yuho transpile` by updating argument parsing in `src/yuho/cli/main.py` and source loading in `src/yuho/cli/commands/transpile.py`. +feature +cli +ux
+(B) Vendor Mermaid locally for preview mode by replacing CDN usage in `src/yuho/cli/commands/preview.py` with a bundled static asset. +feature +offline +preview
+(B) Add a `--offline` flag to `yuho explain` in `src/yuho/cli/main.py` that blocks cloud provider selection in `src/yuho/cli/commands/explain.py`. +feature +offline +llm
+
+(B) Split CLI command registration from `src/yuho/cli/main.py` into `src/yuho/cli/commands_registry.py` to reduce monolith size and merge conflicts. +refactor +cli +dx
+(B) Replace hardcoded `5.0.0` literals in `src/yuho/cli/commands/api.py` with `yuho.__version__`. +bugfix +api +consistency
+(B) Replace hardcoded `5.0.0` literal in `src/yuho/lsp/server.py` with `yuho.__version__`. +bugfix +lsp +consistency
+(B) Replace hardcoded `5.0.0` literal in `src/yuho/mcp/server.py` with `yuho.__version__`. +bugfix +mcp +consistency
+(B) Add `library` section support to `config show` choices in `src/yuho/cli/main.py` and `validate_config_value` in `src/yuho/cli/commands/config.py`. +bugfix +config +cli
+(B) Add `library` property accessor to `Config` in `src/yuho/config/loader.py` for parity with schema sections. +bugfix +config
+(B) Wire `registry_url`, `auth_token`, `timeout`, and `verify_ssl` from config into `run_library_*` functions in `src/yuho/cli/commands/library.py`. +feature +config +library
+(B) Wire `llm.provider` and `llm.model` defaults from config into `run_explain` in `src/yuho/cli/commands/explain.py`. +feature +config +llm
+(B) Wire `mcp.host` and `mcp.port` defaults from config into `run_serve` in `src/yuho/cli/commands/serve.py`. +feature +config +mcp
+(B) Wire `mcp.host` and `mcp.port` defaults from config into `run_api` in `src/yuho/cli/commands/api.py`. +feature +config +api
+(B) Add `clear_config_cache()` to `src/yuho/config/loader.py` and call it in `run_config_set` so edits are visible in the same process. +bugfix +config
+(B) Add structured logger helpers in `src/yuho/logging_utils.py` with request_id and duration fields. +infra +observability +dx
+(B) Adopt structured request logs in `src/yuho/cli/commands/api.py` for each endpoint invocation and status code. +infra +api +observability
+(B) Adopt structured request logs in `src/yuho/mcp/server.py` for each tool call and completion status. +infra +mcp +observability
+(B) Add explicit exception classes for parser, AST, and transpile boundaries in `src/yuho/services/errors.py` and stop using generic `except Exception` at interface edges. +refactor +reliability
+(B) Replace silent `except Exception: pass` blocks in `src/yuho/lsp/server.py` with warning logs that include file URI. +bugfix +lsp +observability
+(B) Replace silent `except Exception: pass` blocks in `src/yuho/mcp/server.py` with warning logs that include tool name and masked error details. +bugfix +mcp +observability
+(B) Add stricter mypy settings for `src/yuho/cli/commands/api.py`, `src/yuho/mcp/server.py`, and `src/yuho/library/*.py` in `src/pyproject.toml`. +dx +typing +quality
+
+(B) Fix `ALL_TARGETS` in `src/yuho/cli/commands/transpile.py` to include `latex`, `graphql`, and `blocks`. +bugfix +cli +transpile
+(B) Add regression tests for `yuho transpile --all` target coverage in `tests/test_cli_transpile.py`. +test +transpile +cli
+(B) Replace repeated `Parser()` instantiations with `get_parser()` in CLI command modules under `src/yuho/cli/commands/`. +perf +refactor +cli
+(B) Replace repeated `Parser()` instantiations with `get_parser()` in `src/yuho/lsp/server.py` and `src/yuho/mcp/server.py`. +perf +lsp +mcp
+(B) Implement true incremental text patching in LSP `did_change` handler in `src/yuho/lsp/server.py` using range-based edits. +bugfix +lsp +scaling
+(B) Add a debounce window for parse and diagnostics publication in `src/yuho/lsp/server.py` to reduce keystroke-time recomputation. +perf +lsp +scaling
+(B) Move workspace symbol indexing in `src/yuho/lsp/server.py` to a background worker and add cancellation for stale scans. +perf +lsp +scaling
+(B) Switch API server base class to `ThreadingHTTPServer` in `src/yuho/cli/commands/api.py` to avoid single-request blocking. +perf +api +scaling
+(B) Add a maximum request body size guard in `src/yuho/cli/commands/api.py` and return HTTP 413 for oversized payloads. +security +api +stability
+(B) Validate API payload schemas in `src/yuho/cli/commands/api.py` before invoking parser or transpiler logic. +stability +api +validation
+(B) Return HTTP 422 for parse and semantic validation failures in `src/yuho/cli/commands/api.py` instead of always returning HTTP 200. +api +consistency +stability
+(B) Remove the duplicate `LogVerbosity` enum declaration in `src/yuho/mcp/server.py`. +bugfix +mcp +cleanup
+(B) Wrap every MCP tool in `src/yuho/mcp/server.py` with `MCPRequestLogger.log_request` and `MCPRequestLogger.log_response`. +observability +mcp +stability
+(B) Add per-tool latency histograms and error counts to `RateLimiter.get_stats()` in `src/yuho/mcp/server.py`. +metrics +mcp +scaling
+(B) Replace env-var side-channel host binding in `run_http` at `src/yuho/mcp/server.py` with explicit FastMCP transport options. +bugfix +mcp +network
+(B) Enforce MCP HTTP auth token checks in `src/yuho/mcp/server.py` when `mcp.auth_token` is set. +security +mcp +stability
+(B) Fix byte-offset merge logic in `SourceLocation.merge` at `src/yuho/parser/source_location.py` by checking `is not None` instead of truthiness. +bugfix +parser +stability
+(B) Add unit tests for zero-offset merge behavior in `tests/test_source_location.py`. +test +parser +stability
+(B) Replace the invalid parser smoke command `yuho check -` in `setup.sh` with a temporary `.yh` file smoke check. +bugfix +installer +dx
+(B) Add CI smoke test in `.github/workflows/ci.yml` that runs `yuho check examples/simple_statute.yh` after install. +ci +stability +release
+(B) Add a build hook in `src/pyproject.toml` that compiles and packages the tree-sitter shared library into wheel artifacts. +build +packaging +stability
+(B) Add an integration test script in `tests/test_packaging_runtime.py` that verifies parser runtime works after `pip install -e ./src` in a clean venv. +test +packaging +stability
+(B) Improve missing-library runtime diagnostics in `src/tree_sitter_yuho/__init__.py` by printing attempted paths and platform-specific fix hints. +ux +packaging +diagnostics
+(B) Fix AST API mismatches in `src/yuho/verify/alloy.py` so it uses tuple-based fields from `src/yuho/ast/nodes.py`. +bugfix +verify +stability
+(B) Remove invalid `Z3Generator` import from `src/yuho/verify/combined.py` or implement the missing class in `src/yuho/verify/z3_solver.py`. +bugfix +verify +stability
+(B) Add a guarded `yuho verify` CLI command in `src/yuho/cli/main.py` that exposes current verify capabilities or explicit unavailability errors. +feature +cli +verify
+(B) Add file locks around index writes in `src/yuho/library/index.py` to prevent concurrent corruption. +stability +library +infra
+(B) Write `index.json` atomically in `src/yuho/library/index.py` using temporary files and rename semantics. +stability +library +infra
+(B) Write `yuho.lock` atomically in `src/yuho/library/lockfile.py` using temporary files and rename semantics. +stability +library +infra
+(B) Add retry with exponential backoff for transient HTTP failures in `check_updates` and `download_package` in `src/yuho/library/install.py`. +stability +library +network
+(B) Add `--offline` handling in `src/yuho/cli/main.py` and `src/yuho/cli/commands/library.py` that blocks network operations and uses local index only. +feature +offline +library
+(B) Stop silently skipping parse failures in `run_lint` in `src/yuho/cli/commands/lint.py` and report per-file parse diagnostics with non-zero exit on parse errors. +bugfix +cli +lint
+(B) Stop silently swallowing file parse and AST exceptions in `run_test` in `src/yuho/cli/commands/test.py` and report deterministic failure output. +bugfix +cli +testing
