@@ -1,5 +1,4 @@
 
-(B) Add a debounce window for parse and diagnostics publication in `src/yuho/lsp/server.py` to reduce keystroke-time recomputation. +perf +lsp +scaling
 (B) Move workspace symbol indexing in `src/yuho/lsp/server.py` to a background worker and add cancellation for stale scans. +perf +lsp +scaling
 (B) Switch API server base class to `ThreadingHTTPServer` in `src/yuho/cli/commands/api.py` to avoid single-request blocking. +perf +api +scaling
 (B) Add a maximum request body size guard in `src/yuho/cli/commands/api.py` and return HTTP 413 for oversized payloads. +security +api +stability

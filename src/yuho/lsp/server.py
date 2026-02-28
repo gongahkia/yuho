@@ -140,6 +140,8 @@ class YuhoLanguageServer(LanguageServer):
         
         # Symbol index for workspace-wide lookups
         self._symbol_index: Dict[str, Dict[str, Any]] = {}
+        self._symbol_index_lock = threading.Lock()
+        self._symbol_scan_generation = 0
 
         # Debounce parse+diagnostic work during rapid did_change updates.
         self._parse_debounce_seconds = 0.15
@@ -150,7 +152,20 @@ class YuhoLanguageServer(LanguageServer):
         self._register_handlers()
     
     def _index_workspace_symbols(self, folder_uri: str) -> None:
-        """Index all Yuho files in workspace folder."""
+        """Index workspace symbols in a background worker."""
+        with self._symbol_index_lock:
+            self._symbol_scan_generation += 1
+            generation = self._symbol_scan_generation
+
+        worker = threading.Thread(
+            target=self._index_workspace_symbols_worker,
+            args=(folder_uri, generation),
+            daemon=True,
+        )
+        worker.start()
+
+    def _index_workspace_symbols_worker(self, folder_uri: str, generation: int) -> None:
+        """Build a symbol index for a workspace folder, canceling stale scans."""
         from pathlib import Path
         from urllib.parse import urlparse, unquote
         
@@ -159,35 +174,50 @@ class YuhoLanguageServer(LanguageServer):
         
         if not folder_path.exists():
             return
+
+        local_index: Dict[str, Dict[str, Any]] = {}
         
         for yh_file in folder_path.rglob("*.yh"):
+            with self._symbol_index_lock:
+                if generation != self._symbol_scan_generation:
+                    return
+
             file_uri = f"file://{yh_file}"
-            if file_uri not in self._documents:
+            if file_uri in self._documents:
+                doc_state = self._documents[file_uri]
+            else:
                 try:
                     content = yh_file.read_text()
                     doc_state = DocumentState(file_uri, content)
                     doc_state._parse()
-                    
-                    # Index symbols
-                    if doc_state.ast:
-                        for struct in doc_state.ast.type_defs:
-                            self._symbol_index[struct.name] = {
-                                "kind": "struct",
-                                "uri": file_uri,
-                                "location": struct.source_location,
-                            }
-                        for func in doc_state.ast.function_defs:
-                            self._symbol_index[func.name] = {
-                                "kind": "function", 
-                                "uri": file_uri,
-                                "location": func.source_location,
-                            }
                 except Exception as exc:
                     logger.warning(
                         "Workspace symbol indexing failed for %s: %s",
                         file_uri,
                         exc,
                     )
+                    continue
+
+            if not doc_state.ast:
+                continue
+
+            for struct in doc_state.ast.type_defs:
+                local_index[struct.name] = {
+                    "kind": "struct",
+                    "uri": file_uri,
+                    "location": struct.source_location,
+                }
+            for func in doc_state.ast.function_defs:
+                local_index[func.name] = {
+                    "kind": "function",
+                    "uri": file_uri,
+                    "location": func.source_location,
+                }
+
+        with self._symbol_index_lock:
+            if generation != self._symbol_scan_generation:
+                return
+            self._symbol_index = local_index
 
 
     def _register_handlers(self):
@@ -205,6 +235,7 @@ class YuhoLanguageServer(LanguageServer):
             self._documents[uri] = doc_state
 
             self._publish_diagnostics(uri, doc_state)
+            self._ensure_workspace_index_for_uri(uri)
 
         @self.feature(lsp.TEXT_DOCUMENT_DID_CHANGE)
         def did_change(params: lsp.DidChangeTextDocumentParams):
@@ -437,6 +468,20 @@ class YuhoLanguageServer(LanguageServer):
             timer = self._parse_timers.pop(uri, None)
         if timer:
             timer.cancel()
+
+    def _ensure_workspace_index_for_uri(self, uri: str) -> None:
+        """Track workspace folder for a URI and trigger background indexing."""
+        from pathlib import Path
+        from urllib.parse import urlparse, unquote
+
+        parsed = urlparse(uri)
+        if parsed.scheme != "file":
+            return
+
+        folder_uri = f"file://{Path(unquote(parsed.path)).parent}"
+        if folder_uri not in self._workspace_folders:
+            self._workspace_folders.append(folder_uri)
+        self._index_workspace_symbols(folder_uri)
 
     def _publish_diagnostics(self, uri: str, doc_state: DocumentState):
         """Publish diagnostics for a document."""
@@ -1223,6 +1268,7 @@ class YuhoLanguageServer(LanguageServer):
         """Search for symbols matching query across all documents."""
         results: List[lsp.SymbolInformation] = []
         query_lower = query.lower()
+        seen: set[tuple[str, str, int, int]] = set()
 
         for uri, doc_state in self._documents.items():
             if not doc_state.ast:
@@ -1233,28 +1279,34 @@ class YuhoLanguageServer(LanguageServer):
                 if query_lower in struct.name.lower():
                     loc = struct.source_location
                     if loc:
-                        results.append(lsp.SymbolInformation(
-                            name=struct.name,
-                            kind=lsp.SymbolKind.Struct,
-                            location=lsp.Location(
-                                uri=uri,
-                                range=self._loc_to_range(loc),
-                            ),
-                        ))
+                        key = (uri, struct.name, loc.line, loc.col)
+                        if key not in seen:
+                            seen.add(key)
+                            results.append(lsp.SymbolInformation(
+                                name=struct.name,
+                                kind=lsp.SymbolKind.Struct,
+                                location=lsp.Location(
+                                    uri=uri,
+                                    range=self._loc_to_range(loc),
+                                ),
+                            ))
 
             # Search functions
             for func in doc_state.ast.function_defs:
                 if query_lower in func.name.lower():
                     loc = func.source_location
                     if loc:
-                        results.append(lsp.SymbolInformation(
-                            name=func.name,
-                            kind=lsp.SymbolKind.Function,
-                            location=lsp.Location(
-                                uri=uri,
-                                range=self._loc_to_range(loc),
-                            ),
-                        ))
+                        key = (uri, func.name, loc.line, loc.col)
+                        if key not in seen:
+                            seen.add(key)
+                            results.append(lsp.SymbolInformation(
+                                name=func.name,
+                                kind=lsp.SymbolKind.Function,
+                                location=lsp.Location(
+                                    uri=uri,
+                                    range=self._loc_to_range(loc),
+                                ),
+                            ))
 
             # Search statutes
             for statute in doc_state.ast.statutes:
@@ -1262,14 +1314,51 @@ class YuhoLanguageServer(LanguageServer):
                 if query_lower in f"s{statute.section_number}".lower() or query_lower in title.lower():
                     loc = statute.source_location
                     if loc:
-                        results.append(lsp.SymbolInformation(
-                            name=f"S{statute.section_number}: {title}",
-                            kind=lsp.SymbolKind.Module,
-                            location=lsp.Location(
-                                uri=uri,
-                                range=self._loc_to_range(loc),
-                            ),
-                        ))
+                        symbol_name = f"S{statute.section_number}: {title}"
+                        key = (uri, symbol_name, loc.line, loc.col)
+                        if key not in seen:
+                            seen.add(key)
+                            results.append(lsp.SymbolInformation(
+                                name=symbol_name,
+                                kind=lsp.SymbolKind.Module,
+                                location=lsp.Location(
+                                    uri=uri,
+                                    range=self._loc_to_range(loc),
+                                ),
+                            ))
+
+        with self._symbol_index_lock:
+            indexed_symbols = list(self._symbol_index.items())
+
+        for symbol_name, entry in indexed_symbols:
+            if query_lower not in symbol_name.lower():
+                continue
+            uri = entry.get("uri")
+            loc = entry.get("location")
+            kind = entry.get("kind", "")
+            if not uri or not loc:
+                continue
+
+            key = (uri, symbol_name, loc.line, loc.col)
+            if key in seen:
+                continue
+            seen.add(key)
+
+            symbol_kind = (
+                lsp.SymbolKind.Struct
+                if kind == "struct"
+                else lsp.SymbolKind.Function
+            )
+            results.append(
+                lsp.SymbolInformation(
+                    name=symbol_name,
+                    kind=symbol_kind,
+                    location=lsp.Location(
+                        uri=uri,
+                        range=self._loc_to_range(loc),
+                    ),
+                )
+            )
 
         return results
 
