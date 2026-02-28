@@ -165,6 +165,23 @@ class CodeScale:
 
 
 @dataclass
+class ClockLoadScale:
+    """Timing scale for analysis pipeline stages."""
+
+    parse_ms: float
+    ast_build_ms: float
+    total_ms: float
+
+    def to_dict(self) -> dict[str, float]:
+        """Convert timing scale to dictionary."""
+        return {
+            "parse_ms": self.parse_ms,
+            "ast_build_ms": self.ast_build_ms,
+            "total_ms": self.total_ms,
+        }
+
+
+@dataclass
 class AnalysisResult:
     """End-to-end parse/AST/semantic analysis output."""
 
@@ -177,6 +194,7 @@ class AnalysisResult:
     ast_summary: Optional[ASTSummary] = None
     semantic_summary: Optional[SemanticSummary] = None
     code_scale: Optional[CodeScale] = None
+    clock_load_scale: Optional[ClockLoadScale] = None
     parse_duration_ms: float = 0.0
     ast_duration_ms: float = 0.0
     semantic_duration_ms: float = 0.0
@@ -259,6 +277,7 @@ def analyze_source(
     if result.parse_errors:
         result.errors.extend(_parse_errors_to_analysis_errors(result.parse_errors))
         result.total_duration_ms = (perf_counter() - start_total) * 1000.0
+        result.clock_load_scale = _build_clock_load_scale(result)
         return result
 
     start_ast = perf_counter()
@@ -275,6 +294,7 @@ def analyze_source(
             )
         )
         result.total_duration_ms = (perf_counter() - start_total) * 1000.0
+        result.clock_load_scale = _build_clock_load_scale(result)
         return result
     result.ast_duration_ms = (perf_counter() - start_ast) * 1000.0
 
@@ -301,6 +321,7 @@ def analyze_source(
         result.semantic_duration_ms = (perf_counter() - start_semantic) * 1000.0
 
     result.total_duration_ms = (perf_counter() - start_total) * 1000.0
+    result.clock_load_scale = _build_clock_load_scale(result)
     return result
 
 
@@ -318,6 +339,15 @@ def _count_nodes(root: ASTNode) -> int:
 def _count_source_loc(source: str) -> int:
     """Count source lines for code-scale reporting."""
     return len(source.splitlines())
+
+
+def _build_clock_load_scale(result: AnalysisResult) -> ClockLoadScale:
+    """Create a timing scale payload from analysis durations."""
+    return ClockLoadScale(
+        parse_ms=result.parse_duration_ms,
+        ast_build_ms=result.ast_duration_ms,
+        total_ms=result.total_duration_ms,
+    )
 
 
 def _parse_errors_to_analysis_errors(parse_errors: list[ParseError]) -> list[AnalysisError]:
