@@ -1,5 +1,4 @@
 
-(B) Replace silent `except Exception: pass` blocks in `src/yuho/mcp/server.py` with warning logs that include tool name and masked error details. +bugfix +mcp +observability
 (B) Add stricter mypy settings for `src/yuho/cli/commands/api.py`, `src/yuho/mcp/server.py`, and `src/yuho/library/*.py` in `src/pyproject.toml`. +dx +typing +quality
 
 (B) Fix `ALL_TARGETS` in `src/yuho/cli/commands/transpile.py` to include `latex`, `graphql`, and `blocks`. +bugfix +cli +transpile

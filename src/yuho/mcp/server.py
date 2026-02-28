@@ -16,6 +16,7 @@ import threading
 
 from yuho import __version__
 from yuho.cli.commands.check import get_error_explanation
+from yuho.config.mask import mask_error
 from yuho.logging_utils import finish_request, start_request
 from yuho.services.analysis import analyze_source
 from yuho.services.errors import (
@@ -739,8 +740,11 @@ class YuhoMCPServer:
                     for func in ast.function_defs:
                         completions.append({"label": func.name, "kind": "function"})
 
-                except Exception:
-                    pass
+                except Exception as exc:
+                    logger.warning(
+                        "MCP tool yuho_complete symbol enrichment failed: %s",
+                        mask_error(exc),
+                    )
 
             return {"completions": completions}
 
@@ -849,8 +853,11 @@ class YuhoMCPServer:
                                     info += f"- {elem.element_type}: {elem.name}\n"
                             return {"info": info}
                             
-                except Exception:
-                    pass
+                except Exception as exc:
+                    logger.warning(
+                        "MCP tool yuho_hover symbol inspection failed: %s",
+                        mask_error(exc),
+                    )
             
             return {"info": None}
 
@@ -933,8 +940,11 @@ class YuhoMCPServer:
                                 }
                             }
                             
-                except Exception:
-                    pass
+                except Exception as exc:
+                    logger.warning(
+                        "MCP tool yuho_definition symbol lookup failed: %s",
+                        mask_error(exc),
+                    )
             
             return {"location": None}
 
@@ -1406,8 +1416,11 @@ void      - No value / null type
                     if section in yh_file.stem:
                         try:
                             return yh_file.read_text()
-                        except Exception:
-                            pass
+                        except Exception as exc:
+                            logger.warning(
+                                "MCP resource yuho://library/{section} read failed: %s",
+                                mask_error(exc),
+                            )
             return f"// Statute {section} not found in library"
 
         @self.server.resource("yuho://docs/{topic}")
