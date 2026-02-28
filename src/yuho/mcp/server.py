@@ -16,6 +16,7 @@ import threading
 
 from yuho import __version__
 from yuho.cli.commands.check import get_error_explanation
+from yuho.config.loader import get_config
 from yuho.config.mask import mask_error
 from yuho.services.analysis import analyze_source
 from yuho.services.errors import (
@@ -1656,6 +1657,7 @@ Provide a comprehensive test plan with specific values for each test case."""
             raise ImportError("MCP dependencies not installed. Install with: pip install yuho[mcp]")
         # FastMCP uses SSE transport for HTTP.
         run_kwargs: Dict[str, Any] = {"transport": "sse"}
+        auth_token = get_config().mcp.auth_token
 
         try:
             import inspect
@@ -1665,9 +1667,25 @@ Provide a comprehensive test plan with specific values for each test case."""
                 run_kwargs["host"] = host
             if "port" in run_signature.parameters:
                 run_kwargs["port"] = port
+            if auth_token:
+                if "auth_token" in run_signature.parameters:
+                    run_kwargs["auth_token"] = auth_token
+                elif "token" in run_signature.parameters:
+                    run_kwargs["token"] = auth_token
+                elif "bearer_token" in run_signature.parameters:
+                    run_kwargs["bearer_token"] = auth_token
+                elif "headers" in run_signature.parameters:
+                    run_kwargs["headers"] = {"Authorization": f"Bearer {auth_token}"}
+                else:
+                    raise RuntimeError(
+                        "mcp.auth_token is set but FastMCP.run() has no supported auth option; refusing insecure HTTP startup."
+                    )
         except (ValueError, TypeError):
             # Fallback to transport-only call if signature introspection fails.
-            pass
+            if auth_token:
+                raise RuntimeError(
+                    "mcp.auth_token is set but FastMCP.run() signature could not be inspected; refusing insecure HTTP startup."
+                )
 
         self.server.run(**run_kwargs)
 
