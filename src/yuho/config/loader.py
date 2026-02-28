@@ -115,6 +115,12 @@ def get_config() -> Config:
     return _config
 
 
+def clear_config_cache() -> None:
+    """Clear the cached config instance so the next read reloads from disk."""
+    global _config
+    _config = None
+
+
 def _load_from_file(path: Path) -> Dict[str, Any]:
     """Load config from TOML file."""
     try:

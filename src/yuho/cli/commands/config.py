@@ -8,7 +8,13 @@ from typing import Optional, List, Dict, Any
 
 import click
 
-from yuho.config.loader import get_config, load_config, DEFAULT_CONFIG_PATH, create_default_config
+from yuho.config.loader import (
+    DEFAULT_CONFIG_PATH,
+    clear_config_cache,
+    create_default_config,
+    get_config,
+    load_config,
+)
 from yuho.cli.error_formatter import Colors, colorize
 
 
@@ -273,6 +279,9 @@ def run_config_set(key_path: str, value: str, verbose: bool = False) -> None:
     except ImportError:
         # Fall back to basic TOML writing
         _write_config_basic(config_data)
+
+    # Ensure subsequent get_config() calls in this process reload updated values.
+    clear_config_cache()
     
     if verbose:
         click.echo(colorize(f"Updated {key_path} = {validated_value}", Colors.GREEN))
