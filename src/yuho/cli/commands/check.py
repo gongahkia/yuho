@@ -9,9 +9,8 @@ from typing import Optional
 
 import click
 
-from yuho.parser import Parser
-from yuho.ast import ASTBuilder
 from yuho.cli.error_formatter import format_errors, format_suggestion, Colors, colorize
+from yuho.services.analysis import analyze_file
 
 
 # Detailed explanations for common error patterns
@@ -124,25 +123,19 @@ def run_check(
     if verbose:
         click.echo(f"Checking {file_path}...")
 
-    # Parse the file
-    parser = Parser()
-    try:
-        result = parser.parse_file(file_path)
-    except FileNotFoundError:
+    # Parse + AST via shared analysis service
+    analysis = analyze_file(file_path, run_semantic=False)
+
+    if not analysis.parse_errors and analysis.errors:
+        first_error = analysis.errors[0]
         if json_output:
-            print(json.dumps({"valid": False, "errors": [{"message": f"File not found: {file}"}]}))
+            print(json.dumps({"valid": False, "errors": [{"message": first_error.message}]}))
         else:
-            click.echo(colorize(f"error: File not found: {file}", Colors.RED), err=True)
-        sys.exit(1)
-    except UnicodeDecodeError as e:
-        if json_output:
-            print(json.dumps({"valid": False, "errors": [{"message": f"Invalid UTF-8: {e}"}]}))
-        else:
-            click.echo(colorize(f"error: Invalid UTF-8 encoding: {e}", Colors.RED), err=True)
+            click.echo(colorize(f"error: {first_error.message}", Colors.RED), err=True)
         sys.exit(1)
 
     # Report parse errors
-    if result.errors:
+    if analysis.parse_errors:
         if json_output:
             errors_json = [
                 {
@@ -157,16 +150,16 @@ def run_check(
                     "node_type": err.node_type,
                     "explanation": get_error_explanation(err.message, err.node_type) if explain_errors else None,
                 }
-                for err in result.errors
+                for err in analysis.parse_errors
             ]
             print(json.dumps({"valid": False, "errors": errors_json}, indent=2))
         else:
-            error_output = format_errors(result.errors, result.source, str(file_path))
+            error_output = format_errors(analysis.parse_errors, analysis.source, str(file_path))
             click.echo(error_output, err=True)
 
             # Add suggestions
-            for err in result.errors:
-                suggestion = format_suggestion(err, result.source)
+            for err in analysis.parse_errors:
+                suggestion = format_suggestion(err, analysis.source)
                 if suggestion:
                     click.echo(colorize(f"  hint: {suggestion}", Colors.YELLOW), err=True)
 
@@ -181,15 +174,14 @@ def run_check(
 
         sys.exit(1)
 
-    # Build AST
-    try:
-        builder = ASTBuilder(result.source, str(file_path))
-        ast = builder.build(result.root_node)
-    except Exception as e:
+    # Shared analysis service already built AST
+    ast = analysis.ast
+    if ast is None:
+        ast_error = next((e.message for e in analysis.errors if e.stage == "ast"), "Unknown AST error")
         if json_output:
-            print(json.dumps({"valid": False, "errors": [{"message": f"AST error: {e}"}]}))
+            print(json.dumps({"valid": False, "errors": [{"message": ast_error}]}))
         else:
-            click.echo(colorize(f"error: Failed to build AST: {e}", Colors.RED), err=True)
+            click.echo(colorize(f"error: {ast_error}", Colors.RED), err=True)
         sys.exit(1)
 
     # Success
