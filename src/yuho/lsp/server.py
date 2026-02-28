@@ -4,6 +4,7 @@ Yuho Language Server Protocol implementation using pygls.
 
 from typing import Dict, List, Optional, Any, Tuple
 import logging
+import threading
 
 try:
     from lsprotocol import types as lsp
@@ -54,12 +55,21 @@ class DocumentState:
         self.version = version
         self._parse()
 
-    def apply_changes(self, changes: List[Any], version: int) -> None:
+    def apply_changes(
+        self,
+        changes: List[Any],
+        version: int,
+        *,
+        parse_immediately: bool = True,
+    ) -> None:
         """Apply LSP content changes (full or incremental) before reparsing."""
         updated_source = self.source
         for change in changes:
             updated_source = self._apply_change(updated_source, change)
-        self.update(updated_source, version)
+        self.source = updated_source
+        self.version = version
+        if parse_immediately:
+            self._parse()
 
     def _apply_change(self, source: str, change: Any) -> str:
         """Apply a single LSP text change to source."""
@@ -131,6 +141,11 @@ class YuhoLanguageServer(LanguageServer):
         # Symbol index for workspace-wide lookups
         self._symbol_index: Dict[str, Dict[str, Any]] = {}
 
+        # Debounce parse+diagnostic work during rapid did_change updates.
+        self._parse_debounce_seconds = 0.15
+        self._parse_timers: Dict[str, threading.Timer] = {}
+        self._parse_timers_lock = threading.Lock()
+
         # Register handlers
         self._register_handlers()
     
@@ -201,15 +216,19 @@ class YuhoLanguageServer(LanguageServer):
                 return
 
             doc_state = self._documents[uri]
-            doc_state.apply_changes(list(params.content_changes), version)
-
-            self._publish_diagnostics(uri, doc_state)
+            doc_state.apply_changes(
+                list(params.content_changes),
+                version,
+                parse_immediately=False,
+            )
+            self._schedule_parse_and_diagnostics(uri)
 
         @self.feature(lsp.TEXT_DOCUMENT_DID_CLOSE)
         def did_close(params: lsp.DidCloseTextDocumentParams):
             """Handle document close."""
             uri = params.text_document.uri
             if uri in self._documents:
+                self._cancel_parse_timer(uri)
                 del self._documents[uri]
 
         @self.feature(lsp.TEXT_DOCUMENT_DID_SAVE)
@@ -219,6 +238,7 @@ class YuhoLanguageServer(LanguageServer):
             if params.text:
                 uri = params.text_document.uri
                 if uri in self._documents:
+                    self._cancel_parse_timer(uri)
                     self._documents[uri].update(params.text, self._documents[uri].version + 1)
                     self._publish_diagnostics(uri, self._documents[uri])
 
@@ -378,6 +398,45 @@ class YuhoLanguageServer(LanguageServer):
             positions = params.positions
 
             return self._get_selection_ranges(uri, positions)
+
+    def _schedule_parse_and_diagnostics(self, uri: str) -> None:
+        """Debounce parse+diagnostic publication for rapid edits."""
+        doc_state = self._documents.get(uri)
+        if not doc_state:
+            return
+
+        target_version = doc_state.version
+        timer: Optional[threading.Timer] = None
+
+        def _flush() -> None:
+            with self._parse_timers_lock:
+                current = self._parse_timers.get(uri)
+                if current is not timer:
+                    return
+                self._parse_timers.pop(uri, None)
+
+            current_doc = self._documents.get(uri)
+            if not current_doc or current_doc.version != target_version:
+                return
+
+            current_doc._parse()
+            self._publish_diagnostics(uri, current_doc)
+
+        timer = threading.Timer(self._parse_debounce_seconds, _flush)
+        timer.daemon = True
+        with self._parse_timers_lock:
+            old_timer = self._parse_timers.pop(uri, None)
+            if old_timer:
+                old_timer.cancel()
+            self._parse_timers[uri] = timer
+        timer.start()
+
+    def _cancel_parse_timer(self, uri: str) -> None:
+        """Cancel pending debounced parse work for a URI."""
+        with self._parse_timers_lock:
+            timer = self._parse_timers.pop(uri, None)
+        if timer:
+            timer.cancel()
 
     def _publish_diagnostics(self, uri: str, doc_state: DocumentState):
         """Publish diagnostics for a document."""
