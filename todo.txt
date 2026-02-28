@@ -1,5 +1,4 @@
 
-(B) Add per-tool latency histograms and error counts to `RateLimiter.get_stats()` in `src/yuho/mcp/server.py`. +metrics +mcp +scaling
 (B) Replace env-var side-channel host binding in `run_http` at `src/yuho/mcp/server.py` with explicit FastMCP transport options. +bugfix +mcp +network
 (B) Enforce MCP HTTP auth token checks in `src/yuho/mcp/server.py` when `mcp.auth_token` is set. +security +mcp +stability
 (B) Fix byte-offset merge logic in `SourceLocation.merge` at `src/yuho/parser/source_location.py` by checking `is not None` instead of truthiness. +bugfix +parser +stability

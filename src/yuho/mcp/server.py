@@ -1654,11 +1654,22 @@ Provide a comprehensive test plan with specific values for each test case."""
         """Run the server using HTTP transport."""
         if not MCP_AVAILABLE:
             raise ImportError("MCP dependencies not installed. Install with: pip install yuho[mcp]")
-        # FastMCP uses SSE transport for HTTP
-        import os
-        os.environ["MCP_HOST"] = host
-        os.environ["MCP_PORT"] = str(port)
-        self.server.run(transport="sse")
+        # FastMCP uses SSE transport for HTTP.
+        run_kwargs: Dict[str, Any] = {"transport": "sse"}
+
+        try:
+            import inspect
+
+            run_signature = inspect.signature(self.server.run)
+            if "host" in run_signature.parameters:
+                run_kwargs["host"] = host
+            if "port" in run_signature.parameters:
+                run_kwargs["port"] = port
+        except (ValueError, TypeError):
+            # Fallback to transport-only call if signature introspection fails.
+            pass
+
+        self.server.run(**run_kwargs)
 
 
 def create_server() -> YuhoMCPServer:
