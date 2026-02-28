@@ -18,6 +18,9 @@ import json
 
 import click
 
+# Bundled static assets used by preview mode.
+ASSET_DIR = Path(__file__).resolve().parent.parent / "assets"
+
 
 class PreviewState:
     """Shared state for preview server."""
@@ -90,7 +93,7 @@ def get_html_template(format_type: str) -> str:
     mermaid_script = ""
     if format_type == "mermaid":
         mermaid_script = """
-        <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+        <script src="/assets/mermaid.min.js"></script>
         <script>mermaid.initialize({startOnLoad: true, theme: 'dark'});</script>
         """
     
@@ -273,6 +276,16 @@ class PreviewHandler(SimpleHTTPRequestHandler):
             self.send_header("Access-Control-Allow-Origin", "*")
             self.end_headers()
             self.wfile.write(json.dumps(_preview_state.to_dict()).encode())
+
+        elif self.path == "/assets/mermaid.min.js":
+            asset_path = ASSET_DIR / "mermaid.min.js"
+            if not asset_path.exists():
+                self.send_error(404)
+                return
+            self.send_response(200)
+            self.send_header("Content-type", "application/javascript")
+            self.end_headers()
+            self.wfile.write(asset_path.read_bytes())
         
         else:
             self.send_error(404)
