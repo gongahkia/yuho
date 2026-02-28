@@ -1,4 +1,3 @@
-(B) Add `--metrics` to `yuho check` in `src/yuho/cli/main.py` and print `code_scale` and `clock_load_scale` in text and JSON modes. +feature +cli +metrics
 (B) Add `include_metrics` support to API `/validate` in `src/yuho/cli/commands/api.py` and return `code_scale` and `clock_load_scale` in the response body. +feature +api +metrics
 (B) Add `include_metrics` support to MCP `yuho_check` in `src/yuho/mcp/server.py` and return `code_scale` and `clock_load_scale` in tool output. +feature +mcp +metrics
 (B) Add `error_code` fields for parser and AST failures in `src/yuho/services/analysis.py` to make BAL-student remediation easier in all clients. +feature +ux +diagnostics

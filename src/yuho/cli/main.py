@@ -93,15 +93,28 @@ def cli(ctx: click.Context, verbose: bool, use_color: Optional[bool], quiet: boo
 @click.option("--json", "json_output", is_flag=True, help="Output errors as JSON")
 @click.option("--explain-error", "explain_errors", is_flag=True,
               help="Show detailed explanations for errors with common causes and fixes")
+@click.option("--metrics", is_flag=True, help="Include code_scale and clock_load_scale metrics")
 @click.pass_context
-def check(ctx: click.Context, file: str, json_output: bool, explain_errors: bool) -> None:
+def check(
+    ctx: click.Context,
+    file: str,
+    json_output: bool,
+    explain_errors: bool,
+    metrics: bool,
+) -> None:
     """
     Parse and validate a Yuho source file.
 
     Runs syntax checking and semantic analysis, reporting any errors found.
     """
     from yuho.cli.commands.check import run_check
-    run_check(file, json_output=json_output, verbose=ctx.obj["verbose"], explain_errors=explain_errors)
+    run_check(
+        file,
+        json_output=json_output,
+        verbose=ctx.obj["verbose"],
+        explain_errors=explain_errors,
+        metrics=metrics,
+    )
 
 
 # =============================================================================

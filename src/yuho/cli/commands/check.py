@@ -108,6 +108,7 @@ def run_check(
     json_output: bool = False,
     verbose: bool = False,
     explain_errors: bool = False,
+    metrics: bool = False,
 ) -> None:
     """
     Parse and validate a Yuho source file.
@@ -117,6 +118,7 @@ def run_check(
         json_output: Output errors as JSON
         verbose: Enable verbose output
         explain_errors: Show detailed explanations for errors
+        metrics: Include code_scale and clock_load_scale metrics in output
     """
     file_path = Path(file)
 
@@ -197,6 +199,11 @@ def run_check(
                 "variables": len(ast.variables),
             }
         }
+        if metrics:
+            summary["code_scale"] = analysis.code_scale.to_dict() if analysis.code_scale else None
+            summary["clock_load_scale"] = (
+                analysis.clock_load_scale.to_dict() if analysis.clock_load_scale else None
+            )
         print(json.dumps(summary, indent=2))
     else:
         click.echo(colorize(f"OK: {file_path}", Colors.CYAN + Colors.BOLD))
@@ -206,5 +213,23 @@ def run_check(
             click.echo(f"  {len(ast.function_defs)} functions")
             click.echo(f"  {len(ast.statutes)} statutes")
             click.echo(f"  {len(ast.variables)} variables")
+        if metrics:
+            if analysis.code_scale:
+                code_scale = analysis.code_scale.to_dict()
+                click.echo(
+                    "  code_scale: "
+                    f"source_loc={code_scale['source_loc']}, "
+                    f"ast_nodes={code_scale['ast_nodes']}, "
+                    f"statute_count={code_scale['statute_count']}, "
+                    f"definition_count={code_scale['definition_count']}"
+                )
+            if analysis.clock_load_scale:
+                clock_load = analysis.clock_load_scale.to_dict()
+                click.echo(
+                    "  clock_load_scale: "
+                    f"parse_ms={clock_load['parse_ms']:.3f}, "
+                    f"ast_build_ms={clock_load['ast_build_ms']:.3f}, "
+                    f"total_ms={clock_load['total_ms']:.3f}"
+                )
 
     sys.exit(0)
