@@ -29,6 +29,14 @@ from yuho.cli.error_formatter import Colors, colorize
 from yuho.cli.commands.check import get_error_explanation
 from yuho.logging_utils import RequestLogContext, finish_request, start_request
 from yuho.services.analysis import analyze_source
+from yuho.services.errors import (
+    ASTBoundaryError,
+    ParserBoundaryError,
+    TranspileBoundaryError,
+    run_ast_boundary,
+    run_parser_boundary,
+    run_transpile_boundary,
+)
 
 logger = logging.getLogger("yuho.api")
 
@@ -345,7 +353,19 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
             return
         
         # Parse
-        result = self.parser.parse(source, filename)
+        try:
+            result = run_parser_boundary(
+                self.parser.parse,
+                source,
+                filename,
+                message="Failed to parse source",
+            )
+        except ParserBoundaryError as e:
+            self._send_json_response(500, APIResponse(
+                success=False,
+                error=str(e)
+            ))
+            return
         
         if result.errors:
             errors = [{"message": e.message} for e in result.errors]
@@ -358,11 +378,15 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
         # Build AST
         try:
             builder = ASTBuilder(source, filename)
-            ast = builder.build(result.tree.root_node)
-        except Exception as e:
+            ast = run_ast_boundary(
+                builder.build,
+                result.tree.root_node,
+                message="Failed to build AST",
+            )
+        except ASTBoundaryError as e:
             self._send_json_response(500, APIResponse(
                 success=False,
-                error=f"AST build error: {e}"
+                error=str(e)
             ))
             return
 
@@ -370,7 +394,11 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
         try:
             target = TranspileTarget.from_string(target_name)
             transpiler = self.registry.get(target)
-            output = transpiler.transpile(ast)
+            output = run_transpile_boundary(
+                transpiler.transpile,
+                ast,
+                message="Transpilation failed",
+            )
             
             self._send_json_response(200, APIResponse(
                 success=True,
@@ -384,10 +412,10 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
                 success=False,
                 error=f"Invalid target: {target_name}"
             ))
-        except Exception as e:
+        except TranspileBoundaryError as e:
             self._send_json_response(500, APIResponse(
                 success=False,
-                error=f"Transpilation error: {e}"
+                error=str(e)
             ))
     
     def _handle_lint(self, data: Dict[str, Any]) -> None:
@@ -404,7 +432,19 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
             return
         
         # Parse
-        result = self.parser.parse(source, filename)
+        try:
+            result = run_parser_boundary(
+                self.parser.parse,
+                source,
+                filename,
+                message="Failed to parse source",
+            )
+        except ParserBoundaryError as e:
+            self._send_json_response(500, APIResponse(
+                success=False,
+                error=str(e)
+            ))
+            return
         
         if result.errors:
             errors = [{"message": e.message} for e in result.errors]
@@ -417,11 +457,15 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
         # Build AST
         try:
             builder = ASTBuilder(source, filename)
-            ast = builder.build(result.tree.root_node)
-        except Exception as e:
+            ast = run_ast_boundary(
+                builder.build,
+                result.tree.root_node,
+                message="Failed to build AST",
+            )
+        except ASTBoundaryError as e:
             self._send_json_response(500, APIResponse(
                 success=False,
-                error=f"AST build error: {e}"
+                error=str(e)
             ))
             return
 

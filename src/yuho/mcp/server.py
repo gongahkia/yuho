@@ -18,6 +18,14 @@ from yuho import __version__
 from yuho.cli.commands.check import get_error_explanation
 from yuho.logging_utils import finish_request, start_request
 from yuho.services.analysis import analyze_source
+from yuho.services.errors import (
+    ASTBoundaryError,
+    ParserBoundaryError,
+    TranspileBoundaryError,
+    run_ast_boundary,
+    run_parser_boundary,
+    run_transpile_boundary,
+)
 
 # Configure MCP logger
 logger = logging.getLogger("yuho.mcp")
@@ -506,23 +514,41 @@ class YuhoMCPServer:
             from yuho.transpile import TranspileTarget, get_transpiler
 
             parser = Parser()
-            result = parser.parse(file_content)
+            try:
+                result = run_parser_boundary(
+                    parser.parse,
+                    file_content,
+                    message="Failed to parse source",
+                )
+            except ParserBoundaryError as e:
+                return {"error": str(e)}
 
             if result.errors:
                 return {"error": f"Parse error: {result.errors[0].message}"}
 
             try:
                 builder = ASTBuilder(file_content)
-                ast = builder.build(result.root_node)
+                ast = run_ast_boundary(
+                    builder.build,
+                    result.root_node,
+                    message="Failed to build AST",
+                )
+            except ASTBoundaryError as e:
+                return {"error": str(e)}
 
+            try:
                 transpile_target = TranspileTarget.from_string(target)
                 transpiler = get_transpiler(transpile_target)
-                output = transpiler.transpile(ast)
+                output = run_transpile_boundary(
+                    transpiler.transpile,
+                    ast,
+                    message="Transpilation failed",
+                )
 
                 return {"output": output}
             except ValueError as e:
                 return {"error": f"Invalid target: {e}"}
-            except Exception as e:
+            except TranspileBoundaryError as e:
                 return {"error": str(e)}
 
         @tool_with_structured_logging()
@@ -548,34 +574,51 @@ class YuhoMCPServer:
             from yuho.transpile import EnglishTranspiler
 
             parser = Parser()
-            result = parser.parse(file_content)
+            try:
+                result = run_parser_boundary(
+                    parser.parse,
+                    file_content,
+                    message="Failed to parse source",
+                )
+            except ParserBoundaryError as e:
+                return {"error": str(e)}
 
             if result.errors:
                 return {"error": f"Parse error: {result.errors[0].message}"}
 
             try:
                 builder = ASTBuilder(file_content)
-                ast = builder.build(result.root_node)
+                ast = run_ast_boundary(
+                    builder.build,
+                    result.root_node,
+                    message="Failed to build AST",
+                )
+            except ASTBoundaryError as e:
+                return {"error": str(e)}
 
-                # Filter to specific section if requested
-                if section:
-                    from yuho.ast.nodes import ModuleNode
-                    matching = [s for s in ast.statutes if section in s.section_number]
-                    if not matching:
-                        return {"error": f"Section {section} not found"}
-                    ast = ModuleNode(
-                        imports=ast.imports,
-                        type_defs=ast.type_defs,
-                        function_defs=ast.function_defs,
-                        statutes=tuple(matching),
-                        variables=ast.variables,
-                    )
+            # Filter to specific section if requested
+            if section:
+                from yuho.ast.nodes import ModuleNode
+                matching = [s for s in ast.statutes if section in s.section_number]
+                if not matching:
+                    return {"error": f"Section {section} not found"}
+                ast = ModuleNode(
+                    imports=ast.imports,
+                    type_defs=ast.type_defs,
+                    function_defs=ast.function_defs,
+                    statutes=tuple(matching),
+                    variables=ast.variables,
+                )
 
+            try:
                 transpiler = EnglishTranspiler()
-                explanation = transpiler.transpile(ast)
-
+                explanation = run_transpile_boundary(
+                    transpiler.transpile,
+                    ast,
+                    message="Failed to generate explanation",
+                )
                 return {"explanation": explanation}
-            except Exception as e:
+            except TranspileBoundaryError as e:
                 return {"error": str(e)}
 
         @tool_with_structured_logging()
@@ -621,18 +664,32 @@ class YuhoMCPServer:
             from yuho.cli.commands.fmt import _format_module
 
             parser = Parser()
-            result = parser.parse(file_content)
+            try:
+                result = run_parser_boundary(
+                    parser.parse,
+                    file_content,
+                    message="Failed to parse source",
+                )
+            except ParserBoundaryError as e:
+                return {"error": str(e)}
 
             if result.errors:
                 return {"error": f"Parse error: {result.errors[0].message}"}
 
             try:
                 builder = ASTBuilder(file_content)
-                ast = builder.build(result.root_node)
-                formatted = _format_module(ast)
+                ast = run_ast_boundary(
+                    builder.build,
+                    result.root_node,
+                    message="Failed to build AST",
+                )
+            except ASTBoundaryError as e:
+                return {"error": str(e)}
 
+            try:
+                formatted = _format_module(ast)
                 return {"formatted": formatted}
-            except Exception as e:
+            except (TypeError, ValueError, AttributeError, RuntimeError) as e:
                 return {"error": str(e)}
 
         @tool_with_structured_logging()

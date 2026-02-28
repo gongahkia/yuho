@@ -14,6 +14,12 @@ from yuho.ast.nodes import ASTNode, ModuleNode
 from yuho.parser import get_parser
 from yuho.parser.source_location import SourceLocation
 from yuho.parser.wrapper import ParseError
+from yuho.services.errors import (
+    ASTBoundaryError,
+    ParserBoundaryError,
+    run_ast_boundary,
+    run_parser_boundary,
+)
 
 
 @dataclass(frozen=True)
@@ -237,7 +243,7 @@ def analyze_file(
 
     try:
         source = file_path.read_text(encoding=encoding)
-    except Exception as exc:
+    except OSError as exc:
         return AnalysisResult(
             file=str(file_path),
             source="",
@@ -268,7 +274,25 @@ def analyze_source(
     parser = get_parser()
 
     start_parse = perf_counter()
-    parse_result = parser.parse(source, file=file)
+    try:
+        parse_result = run_parser_boundary(
+            parser.parse,
+            source,
+            file=file,
+            message="Failed to parse source",
+        )
+    except ParserBoundaryError as exc:
+        result.parse_duration_ms = (perf_counter() - start_parse) * 1000.0
+        result.errors.append(
+            AnalysisError(
+                stage="parse",
+                message=str(exc),
+                error_code="parser_failed",
+            )
+        )
+        result.total_duration_ms = (perf_counter() - start_total) * 1000.0
+        result.clock_load_scale = _build_clock_load_scale(result)
+        return result
     result.parse_duration_ms = (perf_counter() - start_parse) * 1000.0
 
     result.tree = parse_result.tree
@@ -283,13 +307,17 @@ def analyze_source(
     start_ast = perf_counter()
     try:
         builder = ASTBuilder(source, file)
-        result.ast = builder.build(parse_result.root_node)
-    except Exception as exc:
+        result.ast = run_ast_boundary(
+            builder.build,
+            parse_result.root_node,
+            message="Failed to build AST",
+        )
+    except ASTBoundaryError as exc:
         result.ast_duration_ms = (perf_counter() - start_ast) * 1000.0
         result.errors.append(
             AnalysisError(
                 stage="ast",
-                message=f"Failed to build AST: {exc}",
+                message=str(exc),
                 error_code="ast_build_failed",
             )
         )
@@ -310,7 +338,7 @@ def analyze_source(
         start_semantic = perf_counter()
         try:
             result.semantic_summary = _run_semantic_checks(result.ast)
-        except Exception as exc:
+        except (TypeError, ValueError, AttributeError, RuntimeError) as exc:
             result.errors.append(
                 AnalysisError(
                     stage="semantic",
