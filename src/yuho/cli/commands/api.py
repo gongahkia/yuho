@@ -19,6 +19,7 @@ import threading
 
 import click
 
+from yuho import __version__
 from yuho.parser import Parser
 from yuho.ast import ASTBuilder
 from yuho.transpile.base import TranspileTarget
@@ -121,7 +122,7 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
             success=True,
             data={
                 "status": "healthy",
-                "version": "5.0.0",
+                "version": __version__,
                 "endpoints": [
                     "GET /health",
                     "GET /targets",

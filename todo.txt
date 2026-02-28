@@ -1,5 +1,4 @@
 
-(B) Replace hardcoded `5.0.0` literals in `src/yuho/cli/commands/api.py` with `yuho.__version__`. +bugfix +api +consistency
 (B) Replace hardcoded `5.0.0` literal in `src/yuho/lsp/server.py` with `yuho.__version__`. +bugfix +lsp +consistency
 (B) Replace hardcoded `5.0.0` literal in `src/yuho/mcp/server.py` with `yuho.__version__`. +bugfix +mcp +consistency
 (B) Add `library` section support to `config show` choices in `src/yuho/cli/main.py` and `validate_config_value` in `src/yuho/cli/commands/config.py`. +bugfix +config +cli
