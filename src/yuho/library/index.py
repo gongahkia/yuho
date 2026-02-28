@@ -12,6 +12,7 @@ from contextlib import contextmanager
 import json
 import logging
 import os
+import tempfile
 import time
 
 from yuho.library.package import PackageMetadata
@@ -167,8 +168,21 @@ class LibraryIndex:
                 "entries": [e.to_dict() for e in self._entries.values()],
             }
 
-            with open(self.index_path, "w") as f:
-                json.dump(data, f, indent=2)
+            fd, temp_path_str = tempfile.mkstemp(
+                prefix=f"{self.index_path.name}.",
+                suffix=".tmp",
+                dir=str(self.index_path.parent),
+            )
+            temp_path = Path(temp_path_str)
+            try:
+                with os.fdopen(fd, "w") as f:
+                    json.dump(data, f, indent=2)
+                    f.flush()
+                    os.fsync(f.fileno())
+                os.replace(temp_path, self.index_path)
+            finally:
+                if temp_path.exists():
+                    temp_path.unlink(missing_ok=True)
 
     @contextmanager
     def _write_lock(self):

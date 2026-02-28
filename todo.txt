@@ -1,5 +1,4 @@
 
-(B) Write `index.json` atomically in `src/yuho/library/index.py` using temporary files and rename semantics. +stability +library +infra
 (B) Write `yuho.lock` atomically in `src/yuho/library/lockfile.py` using temporary files and rename semantics. +stability +library +infra
 (B) Add retry with exponential backoff for transient HTTP failures in `check_updates` and `download_package` in `src/yuho/library/install.py`. +stability +library +network
 (B) Add `--offline` handling in `src/yuho/cli/main.py` and `src/yuho/cli/commands/library.py` that blocks network operations and uses local index only. +feature +offline +library
