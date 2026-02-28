@@ -1,5 +1,4 @@
 
-(B) Add a build hook in `src/pyproject.toml` that compiles and packages the tree-sitter shared library into wheel artifacts. +build +packaging +stability
 (B) Add an integration test script in `tests/test_packaging_runtime.py` that verifies parser runtime works after `pip install -e ./src` in a clean venv. +test +packaging +stability
 (B) Improve missing-library runtime diagnostics in `src/tree_sitter_yuho/__init__.py` by printing attempted paths and platform-specific fix hints. +ux +packaging +diagnostics
 (B) Fix AST API mismatches in `src/yuho/verify/alloy.py` so it uses tuple-based fields from `src/yuho/ast/nodes.py`. +bugfix +verify +stability
