@@ -1,5 +1,4 @@
 
-(B) Replace repeated `Parser()` instantiations with `get_parser()` in `src/yuho/lsp/server.py` and `src/yuho/mcp/server.py`. +perf +lsp +mcp
 (B) Implement true incremental text patching in LSP `did_change` handler in `src/yuho/lsp/server.py` using range-based edits. +bugfix +lsp +scaling
 (B) Add a debounce window for parse and diagnostics publication in `src/yuho/lsp/server.py` to reduce keystroke-time recomputation. +perf +lsp +scaling
 (B) Move workspace symbol indexing in `src/yuho/lsp/server.py` to a background worker and add cancellation for stale scans. +perf +lsp +scaling

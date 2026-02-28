@@ -54,6 +54,43 @@ class DocumentState:
         self.version = version
         self._parse()
 
+    def apply_changes(self, changes: List[Any], version: int) -> None:
+        """Apply LSP content changes (full or incremental) before reparsing."""
+        updated_source = self.source
+        for change in changes:
+            updated_source = self._apply_change(updated_source, change)
+        self.update(updated_source, version)
+
+    def _apply_change(self, source: str, change: Any) -> str:
+        """Apply a single LSP text change to source."""
+        change_range = getattr(change, "range", None)
+        if change_range is None:
+            # Full document replacement.
+            return change.text
+
+        start = self._position_to_offset(source, change_range.start)
+        end = self._position_to_offset(source, change_range.end)
+        if end < start:
+            start, end = end, start
+        return source[:start] + change.text + source[end:]
+
+    def _position_to_offset(self, source: str, position: lsp.Position) -> int:
+        """Convert LSP line/character position to a source-string offset."""
+        if position.line < 0:
+            return 0
+
+        lines = source.splitlines(keepends=True)
+        if not lines:
+            return 0
+        if position.line >= len(lines):
+            return len(source)
+
+        line_start = sum(len(lines[i]) for i in range(position.line))
+        line_with_eol = lines[position.line]
+        line_text = line_with_eol.rstrip("\r\n")
+        character = max(0, min(position.character, len(line_text)))
+        return line_start + character
+
     def _parse(self):
         """Parse the document and build AST."""
         parser = get_parser()
@@ -164,15 +201,7 @@ class YuhoLanguageServer(LanguageServer):
                 return
 
             doc_state = self._documents[uri]
-
-            # Apply changes (incremental)
-            for change in params.content_changes:
-                if isinstance(change, lsp.TextDocumentContentChangeEvent_Type1):
-                    # Full document update
-                    doc_state.update(change.text, version)
-                else:
-                    # Incremental update - for now, just use full text
-                    doc_state.update(change.text, version)
+            doc_state.apply_changes(list(params.content_changes), version)
 
             self._publish_diagnostics(uri, doc_state)
 
