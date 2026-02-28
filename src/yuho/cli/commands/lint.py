@@ -413,26 +413,30 @@ def run_lint(
         click.echo(f"Running {len(active_rules)} lint rules")
     
     all_issues: Dict[str, List[LintIssue]] = {}
+    parse_diagnostics: Dict[str, List[str]] = {}
     parser = get_parser()
     
     for file_path in files:
         path = Path(file_path)
         
         if not path.exists():
-            click.echo(colorize(f"error: File not found: {file_path}", Colors.RED), err=True)
+            parse_diagnostics[str(path)] = [f"File not found: {file_path}"]
             continue
         
         # Parse file
         try:
-            source = path.read_text(encoding="utf-8")
             result = parser.parse_file(path)
             
             if result.errors:
-                # Skip files with parse errors
-                if verbose:
-                    click.echo(f"Skipping {path} (parse errors)")
+                diagnostics = []
+                for err in result.errors:
+                    line = err.location.line if err.location else "?"
+                    col = err.location.col if err.location else "?"
+                    diagnostics.append(f"{line}:{col}: {err.message}")
+                parse_diagnostics[str(path)] = diagnostics
                 continue
             
+            source = result.source
             builder = ASTBuilder(source, str(path))
             ast = builder.build(result.tree.root_node)
             
@@ -445,13 +449,13 @@ def run_lint(
                 all_issues[str(path)] = file_issues
                 
         except Exception as e:
-            if verbose:
-                click.echo(f"Error processing {path}: {e}", err=True)
+            parse_diagnostics[str(path)] = [f"Failed to process file: {e}"]
     
     # Output results
     if json_output:
         output = {
             "files": len(files),
+            "parse_errors": parse_diagnostics,
             "issues": {
                 path: [
                     {
@@ -466,6 +470,7 @@ def run_lint(
                 for path, issues in all_issues.items()
             },
             "summary": {
+                "parse_errors": sum(len(diags) for diags in parse_diagnostics.values()),
                 "errors": sum(1 for issues in all_issues.values() for i in issues if i.severity == Severity.ERROR),
                 "warnings": sum(1 for issues in all_issues.values() for i in issues if i.severity == Severity.WARNING),
                 "infos": sum(1 for issues in all_issues.values() for i in issues if i.severity == Severity.INFO),
@@ -474,7 +479,14 @@ def run_lint(
         }
         print(json_module.dumps(output, indent=2))
     else:
-        if not all_issues:
+        if parse_diagnostics:
+            for filename, diagnostics in parse_diagnostics.items():
+                click.echo(colorize(f"{filename}: parse failed", Colors.RED), err=True)
+                for diagnostic in diagnostics:
+                    click.echo(colorize(f"  - {diagnostic}", Colors.RED), err=True)
+                click.echo("", err=True)
+
+        if not all_issues and not parse_diagnostics:
             click.echo(colorize("✓ No issues found", Colors.GREEN))
             return
         
@@ -487,8 +499,13 @@ def run_lint(
         total_errors = sum(1 for issues in all_issues.values() for i in issues if i.severity == Severity.ERROR)
         total_warnings = sum(1 for issues in all_issues.values() for i in issues if i.severity == Severity.WARNING)
         total_other = sum(1 for issues in all_issues.values() for i in issues if i.severity not in (Severity.ERROR, Severity.WARNING))
+        total_parse = sum(len(diags) for diags in parse_diagnostics.values())
         
         summary_parts = []
+        if total_parse:
+            summary_parts.append(
+                colorize(f"{total_parse} parse error(s)", Colors.RED) if color else f"{total_parse} parse error(s)"
+            )
         if total_errors:
             summary_parts.append(colorize(f"{total_errors} error(s)", Colors.RED) if color else f"{total_errors} error(s)")
         if total_warnings:
@@ -498,6 +515,6 @@ def run_lint(
         
         click.echo(f"Found {', '.join(summary_parts)}")
     
-    # Exit with error if there are errors
-    if any(i.severity == Severity.ERROR for issues in all_issues.values() for i in issues):
+    # Exit with error if there are lint errors or parse failures
+    if parse_diagnostics or any(i.severity == Severity.ERROR for issues in all_issues.values() for i in issues):
         sys.exit(1)
