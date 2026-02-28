@@ -1,5 +1,4 @@
 
-(B) Improve missing-library runtime diagnostics in `src/tree_sitter_yuho/__init__.py` by printing attempted paths and platform-specific fix hints. +ux +packaging +diagnostics
 (B) Fix AST API mismatches in `src/yuho/verify/alloy.py` so it uses tuple-based fields from `src/yuho/ast/nodes.py`. +bugfix +verify +stability
 (B) Remove invalid `Z3Generator` import from `src/yuho/verify/combined.py` or implement the missing class in `src/yuho/verify/z3_solver.py`. +bugfix +verify +stability
 (B) Add a guarded `yuho verify` CLI command in `src/yuho/cli/main.py` that exposes current verify capabilities or explicit unavailability errors. +feature +cli +verify
