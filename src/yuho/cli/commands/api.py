@@ -24,6 +24,7 @@ from yuho.ast import ASTBuilder
 from yuho.transpile.base import TranspileTarget
 from yuho.transpile.registry import TranspilerRegistry
 from yuho.cli.error_formatter import Colors, colorize
+from yuho.services.analysis import analyze_source
 
 
 @dataclass
@@ -174,44 +175,50 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
             ))
             return
         
-        result = self.parser.parse(source, filename)
-        
-        if result.errors:
+        analysis = analyze_source(source, file=filename, run_semantic=False)
+
+        if analysis.parse_errors:
             errors = [
                 {
                     "message": e.message,
                     "line": e.location.line if e.location else None,
                     "column": e.location.col if e.location else None,
                 }
-                for e in result.errors
+                for e in analysis.parse_errors
             ]
             self._send_json_response(200, APIResponse(
                 success=False,
                 data={"errors": errors}
             ))
             return
-        
-        # Build AST
-        try:
-            builder = ASTBuilder(source, filename)
-            ast = builder.build(result.tree.root_node)
 
-            # Return AST summary
-            self._send_json_response(200, APIResponse(
-                success=True,
-                data={
-                    "statutes": len(ast.statutes),
-                    "types": len(ast.type_defs),
-                    "functions": len(ast.function_defs),
-                    "imports": len(ast.imports),
-                    "statute_sections": [s.section_number for s in ast.statutes],
-                }
-            ))
-        except Exception as e:
+        if analysis.errors and not analysis.parse_errors:
             self._send_json_response(500, APIResponse(
                 success=False,
-                error=f"AST build error: {e}"
+                error=analysis.errors[0].message
             ))
+            return
+
+        ast = analysis.ast
+        summary = analysis.ast_summary
+        if ast is None or summary is None:
+            self._send_json_response(500, APIResponse(
+                success=False,
+                error="AST build error: Unknown error"
+            ))
+            return
+
+        # Return AST summary
+        self._send_json_response(200, APIResponse(
+            success=True,
+            data={
+                "statutes": summary.statutes,
+                "types": summary.structs,
+                "functions": summary.functions,
+                "imports": summary.imports,
+                "statute_sections": [s.section_number for s in ast.statutes],
+            }
+        ))
     
     def _handle_validate(self, data: Dict[str, Any]) -> None:
         """Validate Yuho source code."""
@@ -225,10 +232,10 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
             ))
             return
         
-        result = self.parser.parse(source, filename)
-        
         errors = []
-        if result.errors:
+        analysis = analyze_source(source, file=filename, run_semantic=False)
+
+        if analysis.parse_errors:
             errors = [
                 {
                     "type": "parse",
@@ -236,8 +243,19 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
                     "line": e.location.line if e.location else None,
                     "column": e.location.col if e.location else None,
                 }
-                for e in result.errors
+                for e in analysis.parse_errors
             ]
+
+        if analysis.errors and not analysis.parse_errors:
+            errors.extend(
+                {
+                    "type": error.stage,
+                    "message": error.message,
+                    "line": error.location.line if error.location else None,
+                    "column": error.location.col if error.location else None,
+                }
+                for error in analysis.errors
+            )
         
         self._send_json_response(200, APIResponse(
             success=len(errors) == 0,
