@@ -1,5 +1,4 @@
 
-(B) Split CLI command registration from `src/yuho/cli/main.py` into `src/yuho/cli/commands_registry.py` to reduce monolith size and merge conflicts. +refactor +cli +dx
 (B) Replace hardcoded `5.0.0` literals in `src/yuho/cli/commands/api.py` with `yuho.__version__`. +bugfix +api +consistency
 (B) Replace hardcoded `5.0.0` literal in `src/yuho/lsp/server.py` with `yuho.__version__`. +bugfix +lsp +consistency
 (B) Replace hardcoded `5.0.0` literal in `src/yuho/mcp/server.py` with `yuho.__version__`. +bugfix +mcp +consistency
