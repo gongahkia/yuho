@@ -10,6 +10,7 @@ Provides a lightweight HTTP API for:
 
 import sys
 import json
+import logging
 from pathlib import Path
 from typing import Optional, Dict, Any, List
 from dataclasses import dataclass, asdict
@@ -26,7 +27,10 @@ from yuho.transpile.base import TranspileTarget
 from yuho.transpile.registry import TranspilerRegistry
 from yuho.cli.error_formatter import Colors, colorize
 from yuho.cli.commands.check import get_error_explanation
+from yuho.logging_utils import RequestLogContext, finish_request, start_request
 from yuho.services.analysis import analyze_source
+
+logger = logging.getLogger("yuho.api")
 
 
 @dataclass
@@ -46,6 +50,41 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
     # Class-level parser and registry (shared across requests)
     parser = Parser()
     registry = TranspilerRegistry.instance()
+    _request_context: Optional[RequestLogContext] = None
+    _request_method: str = ""
+    _request_path: str = ""
+
+    def _start_request_log(self, method: str, path: str) -> None:
+        """Start request logging context for this HTTP request."""
+        request_id = self.headers.get("X-Request-ID")
+        client_ip = self.client_address[0] if self.client_address else None
+        self._request_method = method
+        self._request_path = path
+        self._request_context = start_request(
+            logger,
+            "api.request.start",
+            request_id=request_id,
+            method=method,
+            path=path,
+            client_ip=client_ip,
+        )
+
+    def _finish_request_log(self, status_code: int, success: bool) -> None:
+        """Finish request logging context with status metadata."""
+        if self._request_context is None:
+            return
+
+        finish_request(
+            logger,
+            self._request_context,
+            "api.request.complete",
+            status="success" if success else "error",
+            method=self._request_method or self.command,
+            path=self._request_path or self.path,
+            status_code=status_code,
+            success=success,
+        )
+        self._request_context = None
     
     def _send_json_response(self, status: int, response: APIResponse) -> None:
         """Send a JSON response."""
@@ -54,8 +93,11 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
         self.send_header('Content-Type', 'application/json')
         self.send_header('Content-Length', str(len(body)))
         self.send_header('Access-Control-Allow-Origin', '*')
+        if self._request_context is not None:
+            self.send_header('X-Request-ID', self._request_context.request_id)
         self.end_headers()
         self.wfile.write(body)
+        self._finish_request_log(status, response.success)
     
     def _read_body(self) -> bytes:
         """Read request body."""
@@ -64,16 +106,22 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
     
     def do_OPTIONS(self) -> None:
         """Handle CORS preflight requests."""
+        parsed = urlparse(self.path)
+        path = parsed.path
+        self._start_request_log("OPTIONS", path)
+
         self.send_response(204)
         self.send_header('Access-Control-Allow-Origin', '*')
         self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
         self.send_header('Access-Control-Allow-Headers', 'Content-Type')
         self.end_headers()
+        self._finish_request_log(204, True)
     
     def do_GET(self) -> None:
         """Handle GET requests."""
         parsed = urlparse(self.path)
         path = parsed.path
+        self._start_request_log("GET", path)
         
         if path == '/health' or path == '/':
             self._handle_health()
@@ -91,6 +139,7 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
         """Handle POST requests."""
         parsed = urlparse(self.path)
         path = parsed.path
+        self._start_request_log("POST", path)
         
         try:
             body = self._read_body()

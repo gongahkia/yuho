@@ -1,5 +1,4 @@
 
-(B) Adopt structured request logs in `src/yuho/cli/commands/api.py` for each endpoint invocation and status code. +infra +api +observability
 (B) Adopt structured request logs in `src/yuho/mcp/server.py` for each tool call and completion status. +infra +mcp +observability
 (B) Add explicit exception classes for parser, AST, and transpile boundaries in `src/yuho/services/errors.py` and stop using generic `except Exception` at interface edges. +refactor +reliability
 (B) Replace silent `except Exception: pass` blocks in `src/yuho/lsp/server.py` with warning logs that include file URI. +bugfix +lsp +observability
