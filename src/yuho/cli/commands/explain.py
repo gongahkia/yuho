@@ -8,10 +8,9 @@ from typing import Optional
 
 import click
 
-from yuho.parser import Parser
-from yuho.ast import ASTBuilder
 from yuho.transpile import EnglishTranspiler
 from yuho.cli.error_formatter import Colors, colorize
+from yuho.services.analysis import analyze_file
 
 
 def run_explain(
@@ -37,20 +36,21 @@ def run_explain(
     """
     file_path = Path(file)
 
-    # Parse and build AST
-    parser = Parser()
-    try:
-        result = parser.parse_file(file_path)
-    except FileNotFoundError:
-        click.echo(colorize(f"error: File not found: {file}", Colors.RED), err=True)
-        sys.exit(1)
+    # Parse + AST via shared analysis service
+    analysis = analyze_file(file_path, run_semantic=False)
 
-    if result.errors:
+    if analysis.parse_errors:
         click.echo(colorize(f"error: Parse errors in {file}", Colors.RED), err=True)
         sys.exit(1)
 
-    builder = ASTBuilder(result.source, str(file_path))
-    ast = builder.build(result.root_node)
+    if analysis.errors and not analysis.parse_errors:
+        click.echo(colorize(f"error: {analysis.errors[0].message}", Colors.RED), err=True)
+        sys.exit(1)
+
+    ast = analysis.ast
+    if ast is None:
+        click.echo(colorize("error: Failed to build AST", Colors.RED), err=True)
+        sys.exit(1)
 
     # Filter to specific section if requested
     if section:
