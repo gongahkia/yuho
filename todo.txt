@@ -1,5 +1,4 @@
 
-(B) Enforce MCP HTTP auth token checks in `src/yuho/mcp/server.py` when `mcp.auth_token` is set. +security +mcp +stability
 (B) Fix byte-offset merge logic in `SourceLocation.merge` at `src/yuho/parser/source_location.py` by checking `is not None` instead of truthiness. +bugfix +parser +stability
 (B) Add unit tests for zero-offset merge behavior in `tests/test_source_location.py`. +test +parser +stability
 (B) Replace the invalid parser smoke command `yuho check -` in `setup.sh` with a temporary `.yh` file smoke check. +bugfix +installer +dx

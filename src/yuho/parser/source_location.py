@@ -103,6 +103,10 @@ class SourceLocation:
             col=self.col if self.line <= other.line else other.col,
             end_line=max(self.end_line, other.end_line),
             end_col=self.end_col if self.end_line >= other.end_line else other.end_col,
-            offset=min(self.offset, other.offset) if self.offset and other.offset else None,
-            end_offset=max(self.end_offset, other.end_offset) if self.end_offset and other.end_offset else None,
+            offset=min(self.offset, other.offset)
+            if self.offset is not None and other.offset is not None
+            else None,
+            end_offset=max(self.end_offset, other.end_offset)
+            if self.end_offset is not None and other.end_offset is not None
+            else None,
         )
