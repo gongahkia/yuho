@@ -19,6 +19,7 @@ def run_explain(
     interactive: bool = False,
     provider: Optional[str] = None,
     model: Optional[str] = None,
+    offline: bool = False,
     verbose: bool = False,
     stream: bool = True,
 ) -> None:
@@ -31,9 +32,17 @@ def run_explain(
         interactive: Enable interactive REPL mode
         provider: LLM provider (ollama, huggingface, openai, anthropic)
         model: Model name
+        offline: Disallow cloud providers
         verbose: Enable verbose output
         stream: Enable streaming output for real-time response
     """
+    if offline and provider in {"openai", "anthropic"}:
+        click.echo(
+            colorize("error: --offline mode does not allow cloud providers", Colors.RED),
+            err=True,
+        )
+        sys.exit(1)
+
     file_path = Path(file)
 
     # Parse + AST via shared analysis service

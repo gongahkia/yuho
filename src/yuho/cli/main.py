@@ -286,6 +286,7 @@ def repl(ctx: click.Context) -> None:
 @click.option("--provider", type=click.Choice(["ollama", "huggingface", "openai", "anthropic"]),
               help="LLM provider to use")
 @click.option("--model", help="Model name to use")
+@click.option("--offline", is_flag=True, help="Disallow cloud providers and run local-only")
 @click.option("--stream/--no-stream", "stream", default=True,
               help="Enable/disable streaming output for real-time response")
 @click.pass_context
@@ -296,6 +297,7 @@ def explain(
     interactive: bool,
     provider: Optional[str],
     model: Optional[str],
+    offline: bool,
     stream: bool,
 ) -> None:
     """
@@ -310,6 +312,7 @@ def explain(
         interactive=interactive,
         provider=provider,
         model=model,
+        offline=offline,
         verbose=ctx.obj["verbose"],
         stream=stream,
     )
