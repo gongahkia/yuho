@@ -1,4 +1,3 @@
-(B) Add `--explain-error` parity for API `/validate` in `src/yuho/cli/commands/api.py` by reusing explanations from `src/yuho/cli/commands/check.py`. +feature +api +ux
 (B) Add `explain_errors` parity for MCP `yuho_check` in `src/yuho/mcp/server.py` by reusing explanations from `src/yuho/cli/commands/check.py`. +feature +mcp +ux
 (B) Support stdin input with `FILE='-'` for `yuho check` by updating argument parsing in `src/yuho/cli/main.py` and source loading in `src/yuho/cli/commands/check.py`. +feature +cli +ux
 (B) Support stdin input with `FILE='-'` for `yuho transpile` by updating argument parsing in `src/yuho/cli/main.py` and source loading in `src/yuho/cli/commands/transpile.py`. +feature +cli +ux

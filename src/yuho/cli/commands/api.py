@@ -24,6 +24,7 @@ from yuho.ast import ASTBuilder
 from yuho.transpile.base import TranspileTarget
 from yuho.transpile.registry import TranspilerRegistry
 from yuho.cli.error_formatter import Colors, colorize
+from yuho.cli.commands.check import get_error_explanation
 from yuho.services.analysis import analyze_source
 
 
@@ -225,6 +226,7 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
         source = data.get('source', '')
         filename = data.get('filename', '<api>')
         include_metrics = bool(data.get('include_metrics', False))
+        explain_errors = bool(data.get('explain_errors', False))
         
         if not source:
             self._send_json_response(400, APIResponse(
@@ -243,6 +245,10 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
                     "message": e.message,
                     "line": e.location.line if e.location else None,
                     "column": e.location.col if e.location else None,
+                    "node_type": e.node_type,
+                    "explanation": (
+                        get_error_explanation(e.message, e.node_type) if explain_errors else None
+                    ),
                 }
                 for e in analysis.parse_errors
             ]
