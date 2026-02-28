@@ -14,6 +14,7 @@ except ImportError:
         "LSP dependencies not installed. Install with: pip install yuho[lsp]"
     )
 
+from yuho import __version__
 from yuho.parser import Parser, SourceLocation
 from yuho.parser.wrapper import ParseError, ParseResult
 from yuho.ast import ASTBuilder, ModuleNode
@@ -82,7 +83,7 @@ class YuhoLanguageServer(LanguageServer):
     """
 
     def __init__(self):
-        super().__init__(name="yuho-lsp", version="5.0.0")
+        super().__init__(name="yuho-lsp", version=__version__)
 
         # Document cache
         self._documents: Dict[str, DocumentState] = {}
