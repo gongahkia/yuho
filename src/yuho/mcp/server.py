@@ -8,6 +8,7 @@ from typing import Dict, List, Optional, Any
 from pathlib import Path
 from enum import IntEnum
 from dataclasses import dataclass, field
+from functools import wraps
 import json
 import logging
 import time
@@ -15,6 +16,7 @@ import threading
 
 from yuho import __version__
 from yuho.cli.commands.check import get_error_explanation
+from yuho.logging_utils import finish_request, start_request
 from yuho.services.analysis import analyze_source
 
 # Configure MCP logger
@@ -333,7 +335,65 @@ class YuhoMCPServer:
     def _register_tools(self):
         """Register MCP tools."""
 
-        @self.server.tool()
+        def summarize_args(args: Dict[str, Any]) -> Dict[str, Any]:
+            """Create compact argument summaries for structured logs."""
+            summary = {}
+            for key, value in args.items():
+                value_str = str(value)
+                if len(value_str) > 100:
+                    summary[key] = f"{len(value_str)} chars"
+                else:
+                    summary[key] = value
+            return summary
+
+        def tool_with_structured_logging():
+            """Wrap MCP tools with structured request/response logging."""
+
+            def decorator(func):
+                tool_name = func.__name__
+
+                @self.server.tool()
+                @wraps(func)
+                async def wrapped(*args, **kwargs):
+                    client_id = kwargs.get("client_id")
+                    context = start_request(
+                        logger,
+                        "mcp.tool.request",
+                        tool=tool_name,
+                        client_id=client_id,
+                        args=summarize_args(kwargs),
+                    )
+                    try:
+                        result = await func(*args, **kwargs)
+                        result_error = result.get("error") if isinstance(result, dict) else None
+                        finish_request(
+                            logger,
+                            context,
+                            "mcp.tool.response",
+                            status="error" if result_error else "success",
+                            tool=tool_name,
+                            client_id=client_id,
+                            error=result_error,
+                        )
+                        return result
+                    except Exception as exc:
+                        finish_request(
+                            logger,
+                            context,
+                            "mcp.tool.response",
+                            status="exception",
+                            level=logging.ERROR,
+                            tool=tool_name,
+                            client_id=client_id,
+                            error=str(exc),
+                        )
+                        raise
+
+                return wrapped
+
+            return decorator
+
+        @tool_with_structured_logging()
         async def yuho_check(
             file_content: str,
             include_metrics: bool = False,
@@ -423,7 +483,7 @@ class YuhoMCPServer:
                 )
             return payload
 
-        @self.server.tool()
+        @tool_with_structured_logging()
         async def yuho_transpile(file_content: str, target: str, client_id: Optional[str] = None) -> Dict[str, Any]:
             """
             Transpile Yuho source to another format.
@@ -465,7 +525,7 @@ class YuhoMCPServer:
             except Exception as e:
                 return {"error": str(e)}
 
-        @self.server.tool()
+        @tool_with_structured_logging()
         async def yuho_explain(file_content: str, section: Optional[str] = None, client_id: Optional[str] = None) -> Dict[str, Any]:
             """
             Generate natural language explanation.
@@ -518,7 +578,7 @@ class YuhoMCPServer:
             except Exception as e:
                 return {"error": str(e)}
 
-        @self.server.tool()
+        @tool_with_structured_logging()
         async def yuho_parse(file_content: str) -> Dict[str, Any]:
             """
             Parse Yuho source and return AST.
@@ -545,7 +605,7 @@ class YuhoMCPServer:
 
             return {"ast": json.loads(ast_json)}
 
-        @self.server.tool()
+        @tool_with_structured_logging()
         async def yuho_format(file_content: str) -> Dict[str, Any]:
             """
             Format Yuho source code.
@@ -575,7 +635,7 @@ class YuhoMCPServer:
             except Exception as e:
                 return {"error": str(e)}
 
-        @self.server.tool()
+        @tool_with_structured_logging()
         async def yuho_complete(file_content: str, line: int, col: int) -> Dict[str, Any]:
             """
             Get completions at position.
@@ -627,7 +687,7 @@ class YuhoMCPServer:
 
             return {"completions": completions}
 
-        @self.server.tool()
+        @tool_with_structured_logging()
         async def yuho_hover(file_content: str, line: int, col: int) -> Dict[str, Any]:
             """
             Get hover information at position.
@@ -738,7 +798,7 @@ class YuhoMCPServer:
             return {"info": None}
 
 
-        @self.server.tool()
+        @tool_with_structured_logging()
         async def yuho_definition(file_content: str, line: int, col: int) -> Dict[str, Any]:
             """
             Find definition location.
@@ -822,7 +882,7 @@ class YuhoMCPServer:
             return {"location": None}
 
 
-        @self.server.tool()
+        @tool_with_structured_logging()
         async def yuho_references(file_content: str, line: int, col: int) -> Dict[str, Any]:
             """
             Find all references to symbol at position.
@@ -882,7 +942,7 @@ class YuhoMCPServer:
 
             return {"locations": locations}
 
-        @self.server.tool()
+        @tool_with_structured_logging()
         async def yuho_symbols(file_content: str) -> Dict[str, Any]:
             """
             Get all symbols in the document.
@@ -943,7 +1003,7 @@ class YuhoMCPServer:
             except Exception as e:
                 return {"symbols": [], "error": str(e)}
 
-        @self.server.tool()
+        @tool_with_structured_logging()
         async def yuho_diagnostics(file_content: str) -> Dict[str, Any]:
             """
             Get diagnostics (errors, warnings) for the document.
@@ -1010,7 +1070,7 @@ class YuhoMCPServer:
 
             return {"diagnostics": diagnostics}
 
-        @self.server.tool()
+        @tool_with_structured_logging()
         async def yuho_validate_contribution(file_content: str, tests: List[str] = None) -> Dict[str, Any]:
             """
             Validate a statute file for contribution to the library.
@@ -1090,7 +1150,7 @@ class YuhoMCPServer:
             valid = all(r["passed"] for r in results)
             return {"valid": valid, "results": results}
 
-        @self.server.tool()
+        @tool_with_structured_logging()
         async def yuho_library_search(query: str) -> Dict[str, Any]:
             """
             Search statute library by section number, title, or jurisdiction.
@@ -1136,7 +1196,7 @@ class YuhoMCPServer:
 
             return {"statutes": results[:20]}
 
-        @self.server.tool()
+        @tool_with_structured_logging()
         async def yuho_library_get(section: str) -> Dict[str, Any]:
             """
             Get a statute from the library by section number.
@@ -1167,7 +1227,7 @@ class YuhoMCPServer:
 
             return {"error": f"Section {section} not found in library"}
 
-        @self.server.tool()
+        @tool_with_structured_logging()
         async def yuho_statute_to_yuho(natural_text: str) -> Dict[str, Any]:
             """
             Convert natural language statute text to Yuho code using LLM.
@@ -1241,7 +1301,7 @@ class YuhoMCPServer:
             except Exception as e:
                 return {"error": f"LLM generation failed: {str(e)}"}
 
-        @self.server.tool()
+        @tool_with_structured_logging()
         async def yuho_rate_limit_stats() -> Dict[str, Any]:
             """
             Get rate limiting statistics.
