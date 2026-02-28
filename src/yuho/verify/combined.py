@@ -10,7 +10,7 @@ from dataclasses import dataclass
 import logging
 
 from yuho.verify.alloy import AlloyGenerator, AlloyAnalyzer, AlloyCounterexample
-from yuho.verify.z3_solver import Z3Generator, Z3Solver, Z3Diagnostic
+from yuho.verify.z3_solver import Z3Solver, Z3Diagnostic
 
 logger = logging.getLogger(__name__)
 

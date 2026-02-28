@@ -1,5 +1,4 @@
 
-(B) Remove invalid `Z3Generator` import from `src/yuho/verify/combined.py` or implement the missing class in `src/yuho/verify/z3_solver.py`. +bugfix +verify +stability
 (B) Add a guarded `yuho verify` CLI command in `src/yuho/cli/main.py` that exposes current verify capabilities or explicit unavailability errors. +feature +cli +verify
 (B) Add file locks around index writes in `src/yuho/library/index.py` to prevent concurrent corruption. +stability +library +infra
 (B) Write `index.json` atomically in `src/yuho/library/index.py` using temporary files and rename semantics. +stability +library +infra
