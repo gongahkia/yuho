@@ -13,6 +13,8 @@ import logging
 import time
 import threading
 
+from yuho.services.analysis import analyze_source
+
 # Configure MCP logger
 logger = logging.getLogger("yuho.mcp")
 
@@ -346,13 +348,9 @@ class YuhoMCPServer:
             except RateLimitExceeded as e:
                 return {"error": str(e), "retry_after": e.retry_after}
             
-            from yuho.parser import Parser
-            from yuho.ast import ASTBuilder
+            analysis = analyze_source(file_content, file="<mcp>", run_semantic=False)
 
-            parser = Parser()
-            result = parser.parse(file_content)
-
-            if result.errors:
+            if analysis.parse_errors:
                 return {
                     "valid": False,
                     "errors": [
@@ -361,27 +359,32 @@ class YuhoMCPServer:
                             "line": err.location.line,
                             "col": err.location.col,
                         }
-                        for err in result.errors
+                        for err in analysis.parse_errors
                     ],
                 }
 
-            try:
-                builder = ASTBuilder(file_content)
-                ast = builder.build(result.root_node)
-                return {
-                    "valid": True,
-                    "errors": [],
-                    "stats": {
-                        "statutes": len(ast.statutes),
-                        "structs": len(ast.type_defs),
-                        "functions": len(ast.function_defs),
-                    },
-                }
-            except Exception as e:
+            if analysis.errors and not analysis.parse_errors:
                 return {
                     "valid": False,
-                    "errors": [{"message": str(e), "line": 1, "col": 1}],
+                    "errors": [{"message": analysis.errors[0].message, "line": 1, "col": 1}],
                 }
+
+            summary = analysis.ast_summary
+            if summary is None:
+                return {
+                    "valid": False,
+                    "errors": [{"message": "Failed to build AST", "line": 1, "col": 1}],
+                }
+
+            return {
+                "valid": True,
+                "errors": [],
+                "stats": {
+                    "statutes": summary.statutes,
+                    "structs": summary.structs,
+                    "functions": summary.functions,
+                },
+            }
 
         @self.server.tool()
         async def yuho_transpile(file_content: str, target: str, client_id: Optional[str] = None) -> Dict[str, Any]:
@@ -489,27 +492,21 @@ class YuhoMCPServer:
             Returns:
                 {ast: dict} or {error: str}
             """
-            from yuho.parser import Parser
-            from yuho.ast import ASTBuilder
             from yuho.transpile import JSONTranspiler
 
-            parser = Parser()
-            result = parser.parse(file_content)
+            analysis = analyze_source(file_content, file="<mcp>", run_semantic=False)
+            if analysis.parse_errors:
+                return {"error": f"Parse error: {analysis.parse_errors[0].message}"}
+            if analysis.errors and not analysis.parse_errors:
+                return {"error": analysis.errors[0].message}
+            if analysis.ast is None:
+                return {"error": "Failed to build AST"}
 
-            if result.errors:
-                return {"error": f"Parse error: {result.errors[0].message}"}
+            # Use JSON transpiler to serialize AST
+            json_transpiler = JSONTranspiler(include_locations=False)
+            ast_json = json_transpiler.transpile(analysis.ast)
 
-            try:
-                builder = ASTBuilder(file_content)
-                ast = builder.build(result.root_node)
-
-                # Use JSON transpiler to serialize AST
-                json_transpiler = JSONTranspiler(include_locations=False)
-                ast_json = json_transpiler.transpile(ast)
-
-                return {"ast": json.loads(ast_json)}
-            except Exception as e:
-                return {"error": str(e)}
+            return {"ast": json.loads(ast_json)}
 
         @self.server.tool()
         async def yuho_format(file_content: str) -> Dict[str, Any]:
