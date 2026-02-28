@@ -146,6 +146,25 @@ class SemanticSummary:
 
 
 @dataclass
+class CodeScale:
+    """Code complexity scale derived from parsed source and AST."""
+
+    source_loc: int
+    ast_nodes: int
+    statute_count: int
+    definition_count: int
+
+    def to_dict(self) -> dict[str, int]:
+        """Convert code scale to dictionary."""
+        return {
+            "source_loc": self.source_loc,
+            "ast_nodes": self.ast_nodes,
+            "statute_count": self.statute_count,
+            "definition_count": self.definition_count,
+        }
+
+
+@dataclass
 class AnalysisResult:
     """End-to-end parse/AST/semantic analysis output."""
 
@@ -157,6 +176,7 @@ class AnalysisResult:
     errors: list[AnalysisError] = field(default_factory=list)
     ast_summary: Optional[ASTSummary] = None
     semantic_summary: Optional[SemanticSummary] = None
+    code_scale: Optional[CodeScale] = None
     parse_duration_ms: float = 0.0
     ast_duration_ms: float = 0.0
     semantic_duration_ms: float = 0.0
@@ -259,6 +279,12 @@ def analyze_source(
     result.ast_duration_ms = (perf_counter() - start_ast) * 1000.0
 
     result.ast_summary = ASTSummary.from_module(result.ast)
+    result.code_scale = CodeScale(
+        source_loc=_count_source_loc(source),
+        ast_nodes=result.ast_summary.total_nodes,
+        statute_count=result.ast_summary.statutes,
+        definition_count=result.ast_summary.definitions,
+    )
 
     if run_semantic:
         start_semantic = perf_counter()
@@ -287,6 +313,11 @@ def _count_nodes(root: ASTNode) -> int:
         count += 1
         stack.extend(node.children())
     return count
+
+
+def _count_source_loc(source: str) -> int:
+    """Count source lines for code-scale reporting."""
+    return len(source.splitlines())
 
 
 def _parse_errors_to_analysis_errors(parse_errors: list[ParseError]) -> list[AnalysisError]:
