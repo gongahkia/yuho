@@ -224,6 +224,7 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
         """Validate Yuho source code."""
         source = data.get('source', '')
         filename = data.get('filename', '<api>')
+        include_metrics = bool(data.get('include_metrics', False))
         
         if not source:
             self._send_json_response(400, APIResponse(
@@ -257,12 +258,21 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
                 for error in analysis.errors
             )
         
+        response_data: Dict[str, Any] = {
+            "valid": len(errors) == 0,
+            "errors": errors,
+        }
+        if include_metrics:
+            response_data["code_scale"] = (
+                analysis.code_scale.to_dict() if analysis.code_scale else None
+            )
+            response_data["clock_load_scale"] = (
+                analysis.clock_load_scale.to_dict() if analysis.clock_load_scale else None
+            )
+
         self._send_json_response(200, APIResponse(
             success=len(errors) == 0,
-            data={
-                "valid": len(errors) == 0,
-                "errors": errors,
-            }
+            data=response_data
         ))
     
     def _handle_transpile(self, data: Dict[str, Any]) -> None:
