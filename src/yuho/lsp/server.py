@@ -130,8 +130,12 @@ class YuhoLanguageServer(LanguageServer):
                                 "uri": file_uri,
                                 "location": func.source_location,
                             }
-                except Exception:
-                    pass
+                except Exception as exc:
+                    logger.warning(
+                        "Workspace symbol indexing failed for %s: %s",
+                        file_uri,
+                        exc,
+                    )
 
 
     def _register_handlers(self):
@@ -1041,8 +1045,12 @@ class YuhoLanguageServer(LanguageServer):
                 if edits:
                     changes[file_uri] = edits
                     
-            except Exception:
-                pass
+            except Exception as exc:
+                logger.warning(
+                    "Workspace symbol rename scan failed for %s: %s",
+                    file_uri,
+                    exc,
+                )
 
 
     def _find_and_replace_symbol(
