@@ -10,7 +10,7 @@ from typing import Optional
 import click
 
 from yuho.cli.error_formatter import format_errors, format_suggestion, Colors, colorize
-from yuho.services.analysis import analyze_file
+from yuho.services.analysis import analyze_file, analyze_source
 
 
 # Detailed explanations for common error patterns
@@ -120,13 +120,17 @@ def run_check(
         explain_errors: Show detailed explanations for errors
         metrics: Include code_scale and clock_load_scale metrics in output
     """
-    file_path = Path(file)
+    file_label = "<stdin>" if file == "-" else str(Path(file))
 
     if verbose:
-        click.echo(f"Checking {file_path}...")
+        click.echo(f"Checking {file_label}...")
 
     # Parse + AST via shared analysis service
-    analysis = analyze_file(file_path, run_semantic=False)
+    if file == "-":
+        stdin_source = sys.stdin.read()
+        analysis = analyze_source(stdin_source, file=file_label, run_semantic=False)
+    else:
+        analysis = analyze_file(file, run_semantic=False)
 
     if not analysis.parse_errors and analysis.errors:
         first_error = analysis.errors[0]
@@ -156,7 +160,7 @@ def run_check(
             ]
             print(json.dumps({"valid": False, "errors": errors_json}, indent=2))
         else:
-            error_output = format_errors(analysis.parse_errors, analysis.source, str(file_path))
+            error_output = format_errors(analysis.parse_errors, analysis.source, file_label)
             click.echo(error_output, err=True)
 
             # Add suggestions
@@ -190,7 +194,7 @@ def run_check(
     if json_output:
         summary = {
             "valid": True,
-            "file": str(file_path),
+            "file": file_label,
             "stats": {
                 "imports": len(ast.imports),
                 "structs": len(ast.type_defs),
@@ -206,7 +210,7 @@ def run_check(
             )
         print(json.dumps(summary, indent=2))
     else:
-        click.echo(colorize(f"OK: {file_path}", Colors.CYAN + Colors.BOLD))
+        click.echo(colorize(f"OK: {file_label}", Colors.CYAN + Colors.BOLD))
         if verbose:
             click.echo(f"  {len(ast.imports)} imports")
             click.echo(f"  {len(ast.type_defs)} type definitions")

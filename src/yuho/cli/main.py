@@ -89,7 +89,7 @@ def cli(ctx: click.Context, verbose: bool, use_color: Optional[bool], quiet: boo
 
 
 @cli.command()
-@click.argument("file", type=click.Path(exists=True))
+@click.argument("file", type=str)
 @click.option("--json", "json_output", is_flag=True, help="Output errors as JSON")
 @click.option("--explain-error", "explain_errors", is_flag=True,
               help="Show detailed explanations for errors with common causes and fixes")

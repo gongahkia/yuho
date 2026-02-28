@@ -1,4 +1,3 @@
-(B) Support stdin input with `FILE='-'` for `yuho check` by updating argument parsing in `src/yuho/cli/main.py` and source loading in `src/yuho/cli/commands/check.py`. +feature +cli +ux
 (B) Support stdin input with `FILE='-'` for `yuho transpile` by updating argument parsing in `src/yuho/cli/main.py` and source loading in `src/yuho/cli/commands/transpile.py`. +feature +cli +ux
 (B) Vendor Mermaid locally for preview mode by replacing CDN usage in `src/yuho/cli/commands/preview.py` with a bundled static asset. +feature +offline +preview
 (B) Add a `--offline` flag to `yuho explain` in `src/yuho/cli/main.py` that blocks cloud provider selection in `src/yuho/cli/commands/explain.py`. +feature +offline +llm
