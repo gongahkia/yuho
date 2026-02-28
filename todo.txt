@@ -1,5 +1,4 @@
 
-(B) Switch API server base class to `ThreadingHTTPServer` in `src/yuho/cli/commands/api.py` to avoid single-request blocking. +perf +api +scaling
 (B) Add a maximum request body size guard in `src/yuho/cli/commands/api.py` and return HTTP 413 for oversized payloads. +security +api +stability
 (B) Validate API payload schemas in `src/yuho/cli/commands/api.py` before invoking parser or transpiler logic. +stability +api +validation
 (B) Return HTTP 422 for parse and semantic validation failures in `src/yuho/cli/commands/api.py` instead of always returning HTTP 200. +api +consistency +stability

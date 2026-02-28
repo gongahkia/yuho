@@ -39,6 +39,11 @@ from yuho.services.errors import (
 )
 
 logger = logging.getLogger("yuho.api")
+MAX_REQUEST_BODY_BYTES = 1_048_576
+
+
+class RequestBodyTooLargeError(Exception):
+    """Raised when an API request body exceeds the configured limit."""
 
 
 @dataclass
@@ -109,7 +114,19 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
     
     def _read_body(self) -> bytes:
         """Read request body."""
-        content_length = int(self.headers.get('Content-Length', 0))
+        content_length_header = self.headers.get('Content-Length', '0')
+        try:
+            content_length = int(content_length_header)
+        except ValueError as exc:
+            raise ValueError("Invalid Content-Length header") from exc
+
+        if content_length < 0:
+            raise ValueError("Invalid Content-Length header")
+        if content_length > MAX_REQUEST_BODY_BYTES:
+            raise RequestBodyTooLargeError(
+                f"Request body too large (max {MAX_REQUEST_BODY_BYTES} bytes)"
+            )
+
         return self.rfile.read(content_length)
     
     def do_OPTIONS(self) -> None:
@@ -152,10 +169,22 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
         try:
             body = self._read_body()
             data = json.loads(body) if body else {}
+        except RequestBodyTooLargeError as e:
+            self._send_json_response(413, APIResponse(
+                success=False,
+                error=str(e)
+            ))
+            return
         except json.JSONDecodeError as e:
             self._send_json_response(400, APIResponse(
                 success=False,
                 error=f"Invalid JSON: {e}"
+            ))
+            return
+        except ValueError as e:
+            self._send_json_response(400, APIResponse(
+                success=False,
+                error=str(e)
             ))
             return
         
