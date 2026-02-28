@@ -10,6 +10,7 @@ import shutil
 import logging
 import json
 import tempfile
+import time
 from urllib.request import Request, urlopen
 from urllib.error import URLError, HTTPError
 from urllib.parse import urljoin
@@ -19,6 +20,53 @@ from yuho.library.index import LibraryIndex, IndexEntry, DEFAULT_LIBRARY_DIR
 from yuho.config.mask import mask_error, mask_url
 
 logger = logging.getLogger(__name__)
+
+_NETWORK_MAX_ATTEMPTS = 4
+_NETWORK_INITIAL_BACKOFF_SECONDS = 0.5
+
+
+def _is_transient_http_error(error: HTTPError) -> bool:
+    """Return True for HTTP status codes likely to succeed on retry."""
+    return error.code in {408, 409, 425, 429, 500, 502, 503, 504}
+
+
+def _fetch_bytes_with_retry(
+    request: Request,
+    *,
+    timeout: int,
+    context,
+    operation: str,
+    max_attempts: int = _NETWORK_MAX_ATTEMPTS,
+) -> bytes:
+    """Fetch response bytes with exponential backoff for transient failures."""
+    delay = _NETWORK_INITIAL_BACKOFF_SECONDS
+    attempt = 1
+    while True:
+        try:
+            with urlopen(request, timeout=timeout, context=context) as response:
+                return response.read()
+        except HTTPError as e:
+            if attempt < max_attempts and _is_transient_http_error(e):
+                logger.warning(
+                    f"{operation} got transient HTTP {e.code}; retrying in {delay:.1f}s "
+                    f"(attempt {attempt}/{max_attempts})"
+                )
+                time.sleep(delay)
+                delay *= 2
+                attempt += 1
+                continue
+            raise
+        except (URLError, TimeoutError) as e:
+            if attempt < max_attempts:
+                logger.warning(
+                    f"{operation} network error: {mask_error(e)}; retrying in {delay:.1f}s "
+                    f"(attempt {attempt}/{max_attempts})"
+                )
+                time.sleep(delay)
+                delay *= 2
+                attempt += 1
+                continue
+            raise
 
 
 def install_package(
@@ -266,8 +314,13 @@ def check_updates(
             context.check_hostname = False
             context.verify_mode = ssl.CERT_NONE
 
-        with urlopen(request, timeout=timeout, context=context) as response:
-            registry_data = json.loads(response.read().decode("utf-8"))
+        response_bytes = _fetch_bytes_with_retry(
+            request,
+            timeout=timeout,
+            context=context,
+            operation="check_updates",
+        )
+        registry_data = json.loads(response_bytes.decode("utf-8"))
 
         # Build registry lookup
         registry_packages = {}
@@ -355,11 +408,17 @@ def download_package(
             context.check_hostname = False
             context.verify_mode = ssl.CERT_NONE
 
-        with urlopen(request, timeout=timeout, context=context) as response:
-            # Save to temp file
-            with tempfile.NamedTemporaryFile(suffix=".yhpkg", delete=False) as tmp:
-                tmp.write(response.read())
-                tmp_path = tmp.name
+        package_bytes = _fetch_bytes_with_retry(
+            request,
+            timeout=timeout,
+            context=context,
+            operation=f"download_package({section_number})",
+        )
+
+        # Save to temp file
+        with tempfile.NamedTemporaryFile(suffix=".yhpkg", delete=False) as tmp:
+            tmp.write(package_bytes)
+            tmp_path = tmp.name
 
         # Install the package
         success, message = install_package(tmp_path, library_dir, force=True)

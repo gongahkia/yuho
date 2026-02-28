@@ -1,5 +1,4 @@
 
-(B) Add retry with exponential backoff for transient HTTP failures in `check_updates` and `download_package` in `src/yuho/library/install.py`. +stability +library +network
 (B) Add `--offline` handling in `src/yuho/cli/main.py` and `src/yuho/cli/commands/library.py` that blocks network operations and uses local index only. +feature +offline +library
 (B) Stop silently skipping parse failures in `run_lint` in `src/yuho/cli/commands/lint.py` and report per-file parse diagnostics with non-zero exit on parse errors. +bugfix +cli +lint
 (B) Stop silently swallowing file parse and AST exceptions in `run_test` in `src/yuho/cli/commands/test.py` and report deterministic failure output. +bugfix +cli +testing
