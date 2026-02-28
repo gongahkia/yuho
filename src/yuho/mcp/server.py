@@ -136,10 +136,13 @@ class RateLimiter:
         self._global_bucket = TokenBucket(config.requests_per_second, config.burst_size)
         self._client_buckets: Dict[str, TokenBucket] = {}
         self._client_buckets_lock = threading.Lock()
+        self._stats_lock = threading.Lock()
         self._stats = {
             "total_requests": 0,
             "rate_limited": 0,
             "by_tool": {},
+            "error_counts": {},
+            "latency_histograms_ms": {},
         }
     
     def _get_client_bucket(self, client_id: str) -> TokenBucket:
@@ -171,8 +174,9 @@ class RateLimiter:
             return
         
         # Track stats
-        self._stats["total_requests"] += 1
-        self._stats["by_tool"][tool_name] = self._stats["by_tool"].get(tool_name, 0) + 1
+        with self._stats_lock:
+            self._stats["total_requests"] += 1
+            self._stats["by_tool"][tool_name] = self._stats["by_tool"].get(tool_name, 0) + 1
         
         # Check exempt tools
         if tool_name in self.config.exempt_tools:
@@ -180,7 +184,8 @@ class RateLimiter:
         
         # Check global rate limit
         if not self._global_bucket.acquire():
-            self._stats["rate_limited"] += 1
+            with self._stats_lock:
+                self._stats["rate_limited"] += 1
             retry_after = self._global_bucket.time_until_available()
             logger.warning(f"Global rate limit exceeded for {tool_name}")
             raise RateLimitExceeded(retry_after)
@@ -189,26 +194,74 @@ class RateLimiter:
         if client_id:
             client_bucket = self._get_client_bucket(client_id)
             if not client_bucket.acquire():
-                self._stats["rate_limited"] += 1
+                with self._stats_lock:
+                    self._stats["rate_limited"] += 1
                 retry_after = client_bucket.time_until_available()
                 logger.warning(f"Client rate limit exceeded for {client_id} on {tool_name}")
                 raise RateLimitExceeded(retry_after)
+
+    def record_tool_result(self, tool_name: str, elapsed_seconds: float, had_error: bool) -> None:
+        """Record per-tool latency and error statistics."""
+        elapsed_ms = max(0.0, elapsed_seconds * 1000.0)
+        bucket = self._latency_bucket_label(elapsed_ms)
+
+        with self._stats_lock:
+            histograms = self._stats["latency_histograms_ms"]
+            tool_histogram = histograms.setdefault(tool_name, {})
+            tool_histogram[bucket] = tool_histogram.get(bucket, 0) + 1
+
+            if had_error:
+                error_counts = self._stats["error_counts"]
+                error_counts[tool_name] = error_counts.get(tool_name, 0) + 1
+
+    def _latency_bucket_label(self, elapsed_ms: float) -> str:
+        """Return histogram bucket label for elapsed milliseconds."""
+        if elapsed_ms <= 10:
+            return "le_10ms"
+        if elapsed_ms <= 25:
+            return "le_25ms"
+        if elapsed_ms <= 50:
+            return "le_50ms"
+        if elapsed_ms <= 100:
+            return "le_100ms"
+        if elapsed_ms <= 250:
+            return "le_250ms"
+        if elapsed_ms <= 500:
+            return "le_500ms"
+        if elapsed_ms <= 1000:
+            return "le_1000ms"
+        return "gt_1000ms"
     
     def get_stats(self) -> Dict[str, Any]:
         """Get rate limiting statistics."""
+        with self._stats_lock:
+            stats_snapshot = {
+                "total_requests": self._stats["total_requests"],
+                "rate_limited": self._stats["rate_limited"],
+                "by_tool": dict(self._stats["by_tool"]),
+                "error_counts": dict(self._stats["error_counts"]),
+                "latency_histograms_ms": {
+                    tool: dict(hist)
+                    for tool, hist in self._stats["latency_histograms_ms"].items()
+                },
+            }
+
         return {
-            **self._stats,
+            **stats_snapshot,
             "global_tokens": self._global_bucket.tokens,
             "active_clients": len(self._client_buckets),
         }
     
     def reset_stats(self) -> None:
         """Reset rate limiting statistics."""
-        self._stats = {
-            "total_requests": 0,
-            "rate_limited": 0,
-            "by_tool": {},
-        }
+        with self._stats_lock:
+            self._stats = {
+                "total_requests": 0,
+                "rate_limited": 0,
+                "by_tool": {},
+                "error_counts": {},
+                "latency_histograms_ms": {},
+            }
 
 
 class MCPRequestLogger:
@@ -348,6 +401,11 @@ class YuhoMCPServer:
                         result = await func(*args, **kwargs)
                         result_error = result.get("error") if isinstance(result, dict) else None
                         response_error = RuntimeError(str(result_error)) if result_error else None
+                        self.rate_limiter.record_tool_result(
+                            tool_name,
+                            time.time() - start_time,
+                            had_error=response_error is not None,
+                        )
                         self.request_logger.log_response(
                             tool_name,
                             result,
@@ -356,6 +414,11 @@ class YuhoMCPServer:
                         )
                         return result
                     except Exception as exc:
+                        self.rate_limiter.record_tool_result(
+                            tool_name,
+                            time.time() - start_time,
+                            had_error=True,
+                        )
                         self.request_logger.log_response(
                             tool_name,
                             None,
