@@ -11,6 +11,22 @@ import json
 import click
 
 
+def _get_library_network_config(
+    registry_url: Optional[str] = None,
+    auth_token: Optional[str] = None,
+) -> tuple[str, Optional[str], int, bool]:
+    """Resolve network options from CLI overrides and config defaults."""
+    from yuho.config.loader import get_config
+
+    library_config = get_config().library
+    return (
+        registry_url or library_config.registry_url,
+        auth_token if auth_token is not None else library_config.auth_token,
+        library_config.timeout,
+        library_config.verify_ssl,
+    )
+
+
 def run_library_search(
     query: str,
     jurisdiction: Optional[str] = None,
@@ -91,7 +107,14 @@ def run_library_install(
         success, message = install_package(str(path), force=force)
     else:
         # Registry install
-        success, message = download_package(package)
+        registry_url, auth_token, timeout, verify_ssl = _get_library_network_config()
+        success, message = download_package(
+            package,
+            registry_url=registry_url,
+            auth_token=auth_token,
+            timeout=timeout,
+            verify_ssl=verify_ssl,
+        )
     
     result = {"success": success, "message": message}
     
@@ -214,14 +237,26 @@ def run_library_update(
         verbose: Verbose output
     """
     from yuho.library import update_all_packages, check_updates, download_package
+    registry_url, auth_token, timeout, verify_ssl = _get_library_network_config()
     
     if package:
         # Update single package
-        success, message = download_package(package)
+        success, message = download_package(
+            package,
+            registry_url=registry_url,
+            auth_token=auth_token,
+            timeout=timeout,
+            verify_ssl=verify_ssl,
+        )
         results = [(package, success, message)]
     else:
         # Check for updates first
-        updates = check_updates()
+        updates = check_updates(
+            registry_url=registry_url,
+            auth_token=auth_token,
+            timeout=timeout,
+            verify_ssl=verify_ssl,
+        )
         
         if not updates:
             if json_output:
@@ -245,7 +280,12 @@ def run_library_update(
             return
         
         # Update all
-        results = update_all_packages()
+        results = update_all_packages(
+            registry_url=registry_url,
+            auth_token=auth_token,
+            timeout=timeout,
+            verify_ssl=verify_ssl,
+        )
     
     if json_output:
         click.echo(json.dumps([
@@ -282,7 +322,10 @@ def run_library_publish(
     from yuho.library import publish_package, Package
     from pathlib import Path as PathLib
 
-    registry_url = registry or "https://registry.yuho.dev"
+    registry_url, auth_token, timeout, verify_ssl = _get_library_network_config(
+        registry,
+        token,
+    )
     pkg_path = PathLib(path)
 
     if dry_run:
@@ -320,7 +363,7 @@ def run_library_publish(
             else:
                 errors.append(f"Invalid package path: {path}")
 
-            if not token and not dry_run:
+            if not auth_token and not dry_run:
                 warnings.append("No auth token provided")
 
         except Exception as e:
@@ -367,7 +410,9 @@ def run_library_publish(
     success, message = publish_package(
         source=path,
         registry_url=registry_url,
-        auth_token=token,
+        auth_token=auth_token,
+        timeout=timeout,
+        verify_ssl=verify_ssl,
     )
 
     result = {"success": success, "message": message}
@@ -395,8 +440,15 @@ def run_library_outdated(
     from yuho.library import check_updates, list_installed, LibraryIndex
     from yuho.library.resolver import Version
 
+    registry_url, auth_token, timeout, verify_ssl = _get_library_network_config()
+
     # Get update info from registry
-    updates = check_updates()
+    updates = check_updates(
+        registry_url=registry_url,
+        auth_token=auth_token,
+        timeout=timeout,
+        verify_ssl=verify_ssl,
+    )
     installed = list_installed()
 
     # Build installed lookup
