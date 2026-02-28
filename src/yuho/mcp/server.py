@@ -17,7 +17,6 @@ import threading
 from yuho import __version__
 from yuho.cli.commands.check import get_error_explanation
 from yuho.config.mask import mask_error
-from yuho.logging_utils import finish_request, start_request
 from yuho.services.analysis import analyze_source
 from yuho.services.errors import (
     ASTBoundaryError,
@@ -335,17 +334,6 @@ class YuhoMCPServer:
     def _register_tools(self):
         """Register MCP tools."""
 
-        def summarize_args(args: Dict[str, Any]) -> Dict[str, Any]:
-            """Create compact argument summaries for structured logs."""
-            summary = {}
-            for key, value in args.items():
-                value_str = str(value)
-                if len(value_str) > 100:
-                    summary[key] = f"{len(value_str)} chars"
-                else:
-                    summary[key] = value
-            return summary
-
         def tool_with_structured_logging():
             """Wrap MCP tools with structured request/response logging."""
 
@@ -355,37 +343,24 @@ class YuhoMCPServer:
                 @self.server.tool()
                 @wraps(func)
                 async def wrapped(*args, **kwargs):
-                    client_id = kwargs.get("client_id")
-                    context = start_request(
-                        logger,
-                        "mcp.tool.request",
-                        tool=tool_name,
-                        client_id=client_id,
-                        args=summarize_args(kwargs),
-                    )
+                    start_time = self.request_logger.log_request(tool_name, kwargs)
                     try:
                         result = await func(*args, **kwargs)
                         result_error = result.get("error") if isinstance(result, dict) else None
-                        finish_request(
-                            logger,
-                            context,
-                            "mcp.tool.response",
-                            status="error" if result_error else "success",
-                            tool=tool_name,
-                            client_id=client_id,
-                            error=result_error,
+                        response_error = RuntimeError(str(result_error)) if result_error else None
+                        self.request_logger.log_response(
+                            tool_name,
+                            result,
+                            start_time,
+                            error=response_error,
                         )
                         return result
                     except Exception as exc:
-                        finish_request(
-                            logger,
-                            context,
-                            "mcp.tool.response",
-                            status="exception",
-                            level=logging.ERROR,
-                            tool=tool_name,
-                            client_id=client_id,
-                            error=str(exc),
+                        self.request_logger.log_response(
+                            tool_name,
+                            None,
+                            start_time,
+                            error=exc,
                         )
                         raise
 

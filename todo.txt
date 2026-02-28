@@ -1,5 +1,4 @@
 
-(B) Remove the duplicate `LogVerbosity` enum declaration in `src/yuho/mcp/server.py`. +bugfix +mcp +cleanup
 (B) Wrap every MCP tool in `src/yuho/mcp/server.py` with `MCPRequestLogger.log_request` and `MCPRequestLogger.log_response`. +observability +mcp +stability
 (B) Add per-tool latency histograms and error counts to `RateLimiter.get_stats()` in `src/yuho/mcp/server.py`. +metrics +mcp +scaling
 (B) Replace env-var side-channel host binding in `run_http` at `src/yuho/mcp/server.py` with explicit FastMCP transport options. +bugfix +mcp +network
