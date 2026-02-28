@@ -1,5 +1,4 @@
 
-(B) Replace hardcoded `5.0.0` literal in `src/yuho/mcp/server.py` with `yuho.__version__`. +bugfix +mcp +consistency
 (B) Add `library` section support to `config show` choices in `src/yuho/cli/main.py` and `validate_config_value` in `src/yuho/cli/commands/config.py`. +bugfix +config +cli
 (B) Add `library` property accessor to `Config` in `src/yuho/config/loader.py` for parity with schema sections. +bugfix +config
 (B) Wire `registry_url`, `auth_token`, `timeout`, and `verify_ssl` from config into `run_library_*` functions in `src/yuho/cli/commands/library.py`. +feature +config +library

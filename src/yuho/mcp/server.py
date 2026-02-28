@@ -13,6 +13,7 @@ import logging
 import time
 import threading
 
+from yuho import __version__
 from yuho.cli.commands.check import get_error_explanation
 from yuho.services.analysis import analyze_source
 
@@ -1479,7 +1480,7 @@ Provide a comprehensive test plan with specific values for each test case."""
         return {
             "status": "healthy",
             "name": "yuho-mcp",
-            "version": "5.0.0",
+            "version": __version__,
             "tools_registered": True,
             "resources_registered": True,
         }
