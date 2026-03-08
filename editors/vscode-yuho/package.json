@@ -1,0 +1,22 @@
+{
+  "name": "yuho",
+  "displayName": "Yuho",
+  "description": "Syntax highlighting for the Yuho legal DSL",
+  "version": "0.1.0",
+  "publisher": "yuho",
+  "engines": { "vscode": "^1.75.0" },
+  "categories": ["Programming Languages"],
+  "contributes": {
+    "languages": [{
+      "id": "yuho",
+      "aliases": ["Yuho", "yh"],
+      "extensions": [".yh"],
+      "configuration": "./language-configuration.json"
+    }],
+    "grammars": [{
+      "language": "yuho",
+      "scopeName": "source.yuho",
+      "path": "./syntaxes/yuho.tmLanguage.json"
+    }]
+  }
+}

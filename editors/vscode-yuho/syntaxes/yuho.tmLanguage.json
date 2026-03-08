@@ -1,0 +1,113 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Yuho",
+  "scopeName": "source.yuho",
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#strings" },
+    { "include": "#numbers" },
+    { "include": "#booleans" },
+    { "include": "#keywords" },
+    { "include": "#types" },
+    { "include": "#statute-keywords" },
+    { "include": "#element-kinds" },
+    { "include": "#operators" },
+    { "include": "#money" },
+    { "include": "#percent" },
+    { "include": "#date" },
+    { "include": "#duration" },
+    { "include": "#identifiers" }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        { "name": "comment.line.documentation.yuho", "match": "///.*$" },
+        { "name": "comment.line.double-slash.yuho", "match": "//.*$" },
+        { "name": "comment.block.yuho", "begin": "/\\*", "end": "\\*/", "captures": { "0": { "name": "punctuation.definition.comment.yuho" } } }
+      ]
+    },
+    "strings": {
+      "patterns": [{
+        "name": "string.quoted.double.yuho",
+        "begin": "\"",
+        "end": "\"",
+        "beginCaptures": { "0": { "name": "punctuation.definition.string.begin.yuho" } },
+        "endCaptures": { "0": { "name": "punctuation.definition.string.end.yuho" } },
+        "patterns": [
+          { "name": "constant.character.escape.yuho", "match": "\\\\." }
+        ]
+      }]
+    },
+    "numbers": {
+      "patterns": [
+        { "name": "constant.numeric.float.yuho", "match": "\\b[0-9][0-9,]*\\.[0-9]+\\b" },
+        { "name": "constant.numeric.integer.yuho", "match": "\\b[0-9][0-9,]*\\b" }
+      ]
+    },
+    "booleans": {
+      "patterns": [
+        { "name": "constant.language.boolean.yuho", "match": "\\b(TRUE|FALSE)\\b" }
+      ]
+    },
+    "keywords": {
+      "patterns": [
+        { "name": "keyword.control.yuho", "match": "\\b(match|case|if|return|consequence|assert|pass|import|from|referencing)\\b" },
+        { "name": "keyword.declaration.yuho", "match": "\\b(fn|struct|let|const|type)\\b" }
+      ]
+    },
+    "types": {
+      "patterns": [
+        { "name": "support.type.builtin.yuho", "match": "\\b(int|float|bool|string|money|percent|date|duration|void)\\b" },
+        { "name": "entity.name.type.yuho", "match": "\\b[A-Z][a-zA-Z0-9]*\\b" }
+      ]
+    },
+    "statute-keywords": {
+      "patterns": [
+        { "name": "keyword.other.statute.yuho", "match": "\\b(statute|definitions|elements|penalty|illustration|exception|caselaw)\\b" },
+        { "name": "keyword.other.penalty.yuho", "match": "\\b(imprisonment|fine|caning|death|supplementary|strokes)\\b" },
+        { "name": "keyword.other.group.yuho", "match": "\\b(all_of|any_of)\\b" }
+      ]
+    },
+    "element-kinds": {
+      "patterns": [
+        { "name": "storage.type.element.yuho", "match": "\\b(actus_reus|mens_rea|circumstance)\\b" }
+      ]
+    },
+    "operators": {
+      "patterns": [
+        { "name": "keyword.operator.assignment.yuho", "match": ":=" },
+        { "name": "keyword.operator.range.yuho", "match": "\\.\\." },
+        { "name": "keyword.operator.comparison.yuho", "match": "==|!=|>=|<=|>|<" },
+        { "name": "keyword.operator.logical.yuho", "match": "&&|\\|\\||!" },
+        { "name": "keyword.operator.arithmetic.yuho", "match": "[+\\-*/%]" },
+        { "name": "keyword.operator.arrow.yuho", "match": "->" }
+      ]
+    },
+    "money": {
+      "patterns": [
+        { "name": "constant.numeric.money.yuho", "match": "[$£€¥₹]\\s*[0-9][0-9,]*\\.?[0-9]*" },
+        { "name": "constant.numeric.money.yuho", "match": "\\b(SGD|USD|EUR|GBP|JPY|CNY|INR|AUD)\\s+[0-9][0-9,]*\\.?[0-9]*" }
+      ]
+    },
+    "percent": {
+      "patterns": [
+        { "name": "constant.numeric.percent.yuho", "match": "\\b[0-9]+%" }
+      ]
+    },
+    "date": {
+      "patterns": [
+        { "name": "constant.numeric.date.yuho", "match": "\\b[0-9]{4}-[0-9]{2}-[0-9]{2}\\b" }
+      ]
+    },
+    "duration": {
+      "patterns": [
+        { "name": "support.constant.duration.yuho", "match": "\\b(years?|months?|days?|hours?|minutes?|seconds?)\\b" }
+      ]
+    },
+    "identifiers": {
+      "patterns": [
+        { "name": "variable.other.yuho", "match": "\\b[a-z][a-zA-Z0-9]*\\b" }
+      ]
+    }
+  }
+}
