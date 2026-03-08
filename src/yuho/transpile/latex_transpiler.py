@@ -229,8 +229,8 @@ class LaTeXTranspiler(TranspilerBase, Visitor):
             self._emit(r"\paragraph{Case Law}")
             self._emit(r"\begin{itemize}")
             for cl in node.case_law:
-                name = escape_latex(cl.case_name)
-                citation = escape_latex(cl.citation) if cl.citation else ""
+                name = escape_latex(cl.case_name.value)
+                citation = escape_latex(cl.citation.value) if cl.citation else ""
                 holding = escape_latex(cl.holding.value)
                 cite_str = f" {citation}" if citation else ""
                 self._emit(rf"  \item \textit{{{name}}}{cite_str}: {holding}")

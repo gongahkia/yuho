@@ -190,9 +190,9 @@ class JSONTranspiler(TranspilerBase, Visitor):
             if node.effect:
                 result["effect"] = self._to_dict(node.effect)
         elif isinstance(node, nodes.CaseLawNode):
-            result["case_name"] = node.case_name
+            result["case_name"] = self._to_dict(node.case_name)
             if node.citation:
-                result["citation"] = node.citation
+                result["citation"] = self._to_dict(node.citation)
             result["holding"] = self._to_dict(node.holding)
             if node.element_ref:
                 result["element_ref"] = node.element_ref

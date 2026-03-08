@@ -40,16 +40,14 @@ class BlockBuilder(Visitor):
     
     def visit_module(self, node: ModuleNode) -> None:
         """Visit module node."""
-        for child in getattr(node, "children", []) or []:
-            self.visit(child)
-        
-        for statute in getattr(node, "statutes", []) or []:
-            self.visit(statute)
+        for statute in getattr(node, "statutes", ()) or ():
+            self.visit_statute(statute)
     
     def visit_statute(self, node: StatuteNode) -> None:
         """Visit statute node."""
         section = getattr(node, "section_number", "") or getattr(node, "section", "") or "?"
-        title = getattr(node, "title", "") or ""
+        title_node = getattr(node, "title", "") or ""
+        title = getattr(title_node, "value", str(title_node))
         
         statute_block = Block(
             block_type="STATUTE",
@@ -85,7 +83,7 @@ class BlockBuilder(Visitor):
         for defn in definitions:
             term = getattr(defn, "term", "") or getattr(defn, "name", "") or "?"
             definition = getattr(defn, "definition", "") or getattr(defn, "value", "") or ""
-            # Truncate long definitions
+            definition = getattr(definition, "value", str(definition)) # unwrap StringLit
             if len(definition) > 60:
                 definition = definition[:57] + "..."
             content.append(f"{term} := {definition}")
@@ -206,6 +204,7 @@ class BlockBuilder(Visitor):
         for illus in illustrations:
             label = getattr(illus, "label", "") or "?"
             text = getattr(illus, "text", "") or getattr(illus, "description", "") or ""
+            text = getattr(text, "value", str(text))
             if len(text) > 60:
                 text = text[:57] + "..."
             content.append(f"{label} {text}")
