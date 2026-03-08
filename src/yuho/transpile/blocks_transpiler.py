@@ -14,6 +14,7 @@ from yuho.ast.nodes import (
     StatuteNode,
     DefinitionEntry,
     ElementNode,
+    ElementGroupNode,
     PenaltyNode,
     IllustrationNode,
 )
@@ -110,22 +111,24 @@ class BlockBuilder(Visitor):
         mens_rea = []
         other = []
         
-        for elem in elements:
-            elem_type = getattr(elem, "element_type", "") or getattr(elem, "type", "") or "element"
-            name = getattr(elem, "name", "") or getattr(elem, "identifier", "") or "?"
-            desc = getattr(elem, "description", "") or getattr(elem, "value", "") or ""
-            
-            if len(desc) > 50:
-                desc = desc[:47] + "..."
-            
-            entry = f"{name}: {desc}"
-            
-            if "actus" in elem_type.lower():
-                actus_reus.append(entry)
-            elif "mens" in elem_type.lower():
-                mens_rea.append(entry)
-            else:
-                other.append(entry)
+        def _collect_elements(elems):
+            for elem in elems:
+                if isinstance(elem, ElementGroupNode):
+                    _collect_elements(elem.members)
+                    continue
+                elem_type = getattr(elem, "element_type", "") or "element"
+                name = getattr(elem, "name", "") or "?"
+                desc = getattr(elem, "description", "") or ""
+                if len(str(desc)) > 50:
+                    desc = str(desc)[:47] + "..."
+                entry = f"{name}: {desc}"
+                if "actus" in elem_type.lower():
+                    actus_reus.append(entry)
+                elif "mens" in elem_type.lower():
+                    mens_rea.append(entry)
+                else:
+                    other.append(entry)
+        _collect_elements(elements)
         
         if actus_reus:
             children.append(Block(
@@ -170,28 +173,19 @@ class BlockBuilder(Visitor):
         
         content = []
         
-        # Handle different penalty structures
-        if hasattr(penalty, "imprisonment"):
-            imp = penalty.imprisonment
-            if imp:
-                content.append(f"imprisonment: {imp}")
-        
-        if hasattr(penalty, "fine"):
-            fine = penalty.fine
-            if fine:
-                content.append(f"fine: {fine}")
-        
-        if hasattr(penalty, "supplementary"):
-            supp = penalty.supplementary
-            if supp:
-                content.append(f"supplementary: {supp}")
-        
-        # If penalty has clauses
-        if hasattr(penalty, "clauses"):
-            for clause in penalty.clauses or []:
-                clause_type = getattr(clause, "type", "") or getattr(clause, "penalty_type", "") or "?"
-                value = getattr(clause, "value", "") or ""
-                content.append(f"{clause_type}: {value}")
+        if getattr(penalty, "death_penalty", None):
+            content.append("death: applicable")
+        if getattr(penalty, "imprisonment_max", None):
+            min_str = str(penalty.imprisonment_min) if penalty.imprisonment_min else "---"
+            content.append(f"imprisonment: {min_str} to {penalty.imprisonment_max}")
+        if getattr(penalty, "fine_max", None):
+            min_str = str(penalty.fine_min) if penalty.fine_min else "---"
+            content.append(f"fine: {min_str} to {penalty.fine_max}")
+        if getattr(penalty, "caning_max", None):
+            min_str = str(penalty.caning_min) if penalty.caning_min else "---"
+            content.append(f"caning: {min_str} to {penalty.caning_max} strokes")
+        if getattr(penalty, "supplementary", None):
+            content.append(f"supplementary: {penalty.supplementary}")
         
         if content:
             block = Block(
