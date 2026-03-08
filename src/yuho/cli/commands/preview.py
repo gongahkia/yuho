@@ -341,12 +341,12 @@ def run_preview(
         color: Use colors
     """
     global _preview_state
-    
-    path = Path(file)
-    
-    if not path.exists():
-        click.echo(f"Error: File not found: {file}", err=True)
-        raise SystemExit(1)
+    from yuho.parser.wrapper import validate_file_path
+    try:
+        path = validate_file_path(file)
+    except (ValueError, FileNotFoundError) as e:
+        click.echo(f"error: {e}", err=True)
+        sys.exit(1)
     
     # Validate target
     valid_targets = ["english", "mermaid"]

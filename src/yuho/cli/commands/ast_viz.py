@@ -4,6 +4,7 @@ AST visualization command for Yuho.
 Displays statute AST structure as tree-like ASCII output in terminal.
 """
 
+import sys
 from pathlib import Path
 from typing import Optional, List, Dict, Any, Tuple
 
@@ -269,11 +270,12 @@ def run_ast_viz(
         verbose: Verbose output
         color: Use colors
     """
-    path = Path(file)
-    
-    if not path.exists():
-        click.echo(f"Error: File not found: {file}", err=True)
-        raise SystemExit(1)
+    from yuho.parser.wrapper import validate_file_path
+    try:
+        path = validate_file_path(file)
+    except (ValueError, FileNotFoundError) as e:
+        click.echo(f"error: {e}", err=True)
+        sys.exit(1)
     
     # Read source
     source = path.read_text()

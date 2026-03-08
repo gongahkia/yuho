@@ -365,10 +365,11 @@ def run_graph(
         verbose: Enable verbose output
         color: Use colored output
     """
-    path = Path(file)
-    
-    if not path.exists():
-        click.echo(colorize(f"error: File not found: {file}", Colors.RED), err=True)
+    from yuho.parser.wrapper import validate_file_path
+    try:
+        path = validate_file_path(file)
+    except (ValueError, FileNotFoundError) as e:
+        click.echo(f"error: {e}", err=True)
         sys.exit(1)
     
     # Parse file

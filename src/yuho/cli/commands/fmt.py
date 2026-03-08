@@ -23,7 +23,12 @@ def run_fmt(file: str, in_place: bool = False, check: bool = False, verbose: boo
         check: Check if formatted (exit 1 if not)
         verbose: Enable verbose output
     """
-    file_path = Path(file)
+    from yuho.parser.wrapper import validate_file_path
+    try:
+        file_path = validate_file_path(file)
+    except (ValueError, FileNotFoundError) as e:
+        click.echo(f"error: {e}", err=True)
+        sys.exit(1)
 
     # Parse file
     parser = get_parser()

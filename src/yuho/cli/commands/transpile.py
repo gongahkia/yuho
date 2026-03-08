@@ -39,7 +39,15 @@ def run_transpile(
         verbose: Enable verbose output
     """
     stdin_mode = file == "-"
-    file_path = Path("stdin.yh") if stdin_mode else Path(file)
+    if not stdin_mode:
+        from yuho.parser.wrapper import validate_file_path
+        try:
+            file_path = validate_file_path(file)
+        except (ValueError, FileNotFoundError) as e:
+            click.echo(f"error: {e}", err=True)
+            sys.exit(1)
+    else:
+        file_path = Path("stdin.yh")
     source_label = "<stdin>" if stdin_mode else str(file_path)
 
     if verbose:

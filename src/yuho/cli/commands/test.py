@@ -34,6 +34,15 @@ def run_test(
         coverage: Enable coverage tracking
         coverage_html: Path to write HTML coverage report
     """
+    if file is not None:
+        from yuho.parser.wrapper import validate_file_path
+        try:
+            file_path = validate_file_path(file)
+            file = str(file_path)
+        except (ValueError, FileNotFoundError) as e:
+            click.echo(f"error: {e}", err=True)
+            sys.exit(1)
+
     test_files: List[Path] = []
     statute_files: List[Path] = []
 

@@ -423,14 +423,13 @@ def run_diff(
         color: Use colored output
     """
     import json as json_module
-    
-    path1, path2 = Path(file1), Path(file2)
-    
-    # Validate files exist
-    for path in [path1, path2]:
-        if not path.exists():
-            click.echo(colorize(f"error: File not found: {path}", Colors.RED), err=True)
-            sys.exit(1)
+    from yuho.parser.wrapper import validate_file_path
+    try:
+        path1 = validate_file_path(file1)
+        path2 = validate_file_path(file2)
+    except (ValueError, FileNotFoundError) as e:
+        click.echo(f"error: {e}", err=True)
+        sys.exit(1)
     
     parser = get_parser()
     

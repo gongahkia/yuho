@@ -39,6 +39,12 @@ def run_explain(
         stream: Enable streaming output for real-time response
     """
     from yuho.config.loader import get_config
+    from yuho.parser.wrapper import validate_file_path
+    try:
+        validate_file_path(file)
+    except (ValueError, FileNotFoundError) as e:
+        click.echo(f"error: {e}", err=True)
+        sys.exit(1)
 
     llm_config = get_config().llm
     resolved_provider = provider or llm_config.provider

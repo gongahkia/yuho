@@ -399,7 +399,16 @@ def run_lint(
         fix: Attempt to auto-fix issues (not yet implemented)
     """
     import json as json_module
-    
+    from yuho.parser.wrapper import validate_file_path
+    validated_files = []
+    for f in files:
+        try:
+            validated_files.append(str(validate_file_path(f)))
+        except (ValueError, FileNotFoundError) as e:
+            click.echo(f"error: {e}", err=True)
+            sys.exit(1)
+    files = validated_files
+
     # Select rules to run
     active_rules = ALL_RULES
     

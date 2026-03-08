@@ -25,7 +25,12 @@ def run_contribute(file: str, package: bool = False, output: Optional[str] = Non
         output: Output path for package
         verbose: Enable verbose output
     """
-    file_path = Path(file)
+    from yuho.parser.wrapper import validate_file_path
+    try:
+        file_path = validate_file_path(file)
+    except (ValueError, FileNotFoundError) as e:
+        click.echo(f"error: {e}", err=True)
+        sys.exit(1)
 
     if verbose:
         click.echo(f"Validating {file_path}...")
