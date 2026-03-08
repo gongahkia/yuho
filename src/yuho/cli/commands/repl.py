@@ -250,17 +250,21 @@ Type {self._colorize("help", Colors.YELLOW)} for commands, {self._colorize("exit
 
     def _load_file(self, filepath: str) -> None:
         """Load and parse a Yuho file."""
-        path = Path(filepath).expanduser()
-        
-        if not path.exists():
-            print(self._colorize(f"File not found: {filepath}", Colors.RED))
+        from yuho.parser.wrapper import validate_file_path
+        try:
+            path = validate_file_path(Path(filepath).expanduser())
+        except (ValueError, FileNotFoundError) as e:
+            print(self._colorize(f"Error: {e}", Colors.RED))
             return
-        
         try:
             source = path.read_text(encoding="utf-8")
-            self._parse_and_validate(source, str(path))
-        except Exception as e:
-            print(self._colorize(f"Error loading file: {e}", Colors.RED))
+        except (UnicodeDecodeError, PermissionError, OSError) as e:
+            print(self._colorize(f"Error reading file: {e}", Colors.RED))
+            return
+        if "\x00" in source:
+            print(self._colorize("Error: file contains null bytes (binary file?)", Colors.RED))
+            return
+        self._parse_and_validate(source, str(path))
 
     def _parse_and_validate(self, source: str, filename: str = "<repl>") -> bool:
         """
@@ -401,7 +405,9 @@ Type {self._colorize("help", Colors.YELLOW)} for commands, {self._colorize("exit
                 
                 if not source.strip():
                     continue
-                
+                if len(source) > 1_000_000:
+                    print(self._colorize("Input too large (max 1MB)", Colors.RED))
+                    continue
                 # Add to history
                 self.history.append(source)
                 
