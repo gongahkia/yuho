@@ -5,11 +5,17 @@ Parser wrapper class for tree-sitter based Yuho parsing.
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional, List, Iterator
+import logging
 import os
 import threading
 
 from yuho.parser.source_location import SourceLocation
 
+logger = logging.getLogger(__name__)
+
+MAX_FILE_SIZE = 10 * 1024 * 1024
+MAX_SOURCE_LENGTH = 10 * 1024 * 1024
+VALID_EXTENSIONS = {".yh", ".yuho"}
 
 # Module-level parser cache for performance
 _parser_cache: Optional["Parser"] = None
@@ -63,6 +69,33 @@ class ParseResult:
         return self.tree.root_node if self.tree else None
 
 
+def validate_file_path(path: str | Path) -> Path:
+    """
+    Validate and resolve a file path for safe access.
+
+    Args:
+        path: The file path to validate
+
+    Returns:
+        The resolved Path object
+
+    Raises:
+        ValueError: If the path contains null bytes or path traversal components
+        FileNotFoundError: If the file does not exist
+    """
+    if isinstance(path, str) and "\x00" in path:
+        raise ValueError("path contains null bytes")
+    path = Path(path)
+    if ".." in path.parts:
+        raise ValueError("path contains '..' component (path traversal)")
+    path = path.resolve()
+    if not path.exists():
+        raise FileNotFoundError(f"file not found: {path}")
+    if not path.is_file():
+        raise ValueError(f"path is not a regular file: {path}")
+    return path
+
+
 class Parser:
     """
     Parser for Yuho source files using tree-sitter.
@@ -106,6 +139,30 @@ class Parser:
                 "Run: pip install tree-sitter tree-sitter-yuho"
             ) from e
 
+    def validate_source(self, source: str, file: str) -> str:
+        """
+        Validate and clean source code before parsing.
+
+        Args:
+            source: The raw source string
+            file: The file path (for error context)
+
+        Returns:
+            Cleaned source string
+
+        Raises:
+            ValueError: If source contains null bytes or exceeds max length
+        """
+        if "\x00" in source:
+            raise ValueError("source contains null bytes")
+        if len(source) > MAX_SOURCE_LENGTH:
+            raise ValueError(
+                f"source exceeds maximum length ({MAX_SOURCE_LENGTH} chars)"
+            )
+        if source.startswith("\ufeff"):
+            source = source[1:]
+        return source
+
     def parse(self, source: str, file: str = "<string>") -> ParseResult:
         """
         Parse a Yuho source string.
@@ -118,10 +175,18 @@ class Parser:
             ParseResult containing the tree and any errors
         """
         self._ensure_initialized()
+        source = self.validate_source(source, file)
 
-        # Encode source as bytes for tree-sitter
-        source_bytes = source.encode("utf-8")
-        tree = self._parser.parse(source_bytes)
+        try:
+            source_bytes = source.encode("utf-8")
+            tree = self._parser.parse(source_bytes)
+        except Exception as e:
+            error = ParseError(
+                message=f"internal parser error: {e}",
+                location=SourceLocation(file=file, line=1, col=1, end_line=1, end_col=1),
+                node_type="INTERNAL_ERROR",
+            )
+            return ParseResult(tree=None, errors=[error], source=source, file=file)
 
         # Collect errors by walking the tree
         errors = list(self._collect_errors(tree.root_node, source, file))
@@ -145,14 +210,37 @@ class Parser:
 
         Raises:
             FileNotFoundError: If the file does not exist
+            ValueError: If the file exceeds max size or is not a regular file
             UnicodeDecodeError: If the file is not valid UTF-8
+            PermissionError: If the file cannot be read
         """
-        path = Path(path)
+        path = Path(path).resolve()
 
         if not path.exists():
-            raise FileNotFoundError(f"File not found: {path}")
+            raise FileNotFoundError(f"file not found: {path}")
+        if not path.is_file():
+            raise ValueError(f"path is not a regular file: {path}")
 
-        source = path.read_text(encoding="utf-8")
+        stat = path.stat()
+        if stat.st_size > MAX_FILE_SIZE:
+            raise ValueError(
+                f"file exceeds maximum size ({MAX_FILE_SIZE} bytes): {path}"
+            )
+
+        ext = path.suffix.lower()
+        if ext not in VALID_EXTENSIONS:
+            logger.warning("file extension '%s' not in %s: %s", ext, VALID_EXTENSIONS, path)
+
+        try:
+            source = path.read_text(encoding="utf-8")
+        except UnicodeDecodeError as e:
+            raise UnicodeDecodeError(
+                e.encoding, e.object, e.start, e.end,
+                f"file is not valid UTF-8: {path} ({e.reason})"
+            ) from e
+        except PermissionError as e:
+            raise PermissionError(f"cannot read file: {path} ({e})") from e
+
         return self.parse(source, file=str(path))
 
     def _collect_errors(

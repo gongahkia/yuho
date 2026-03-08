@@ -830,6 +830,26 @@ def completion(ctx: click.Context, shell: str, show_install: bool) -> None:
 register_group_commands(cli)
 
 
+# =============================================================================
+# TUI command
+# =============================================================================
+
+
+@cli.command()
+def tui() -> None:
+    """
+    Launch the interactive Terminal User Interface.
+
+    Opens a full-screen TUI with sidebar navigation for all Yuho
+    features: check, transpile, wizard, REPL, lint, test, settings.
+
+    Examples:
+        yuho tui
+    """
+    from yuho.tui import run_tui
+    run_tui()
+
+
 def main() -> None:
     """Main entry point."""
     cli()
