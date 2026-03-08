@@ -1,0 +1,45 @@
+// demonstrates cross-referencing definitions between statutes
+// s24 defines "dishonestly", used by both s378 Theft and s415 Cheating
+
+// shared definition from s24
+fn dishonestly() : string {
+    return "doing anything with the intention of causing wrongful gain to one person or wrongful loss to another";
+}
+
+// s378 Theft uses "dishonestly" from s24
+struct TheftCase {
+    string accused,
+    string victim,
+    string property,
+    bool movedProperty,
+    bool withoutConsent,
+}
+
+fn evaluateTheft(bool movedProperty, bool withoutConsent) : string {
+    match {
+        case TRUE if movedProperty && withoutConsent := consequence "Commits theft";
+        case _ := consequence "Does not commit theft";
+    }
+}
+
+statute 378 "Theft" {
+    definitions {
+        dishonestly := "Doing anything with the intention of causing wrongful gain to one person or wrongful loss to another (s24)";
+        movableProperty := "Any corporeal property except land and things attached to the earth";
+    }
+    elements {
+        actus_reus taking := "Taking any moveable property out of the possession of any person";
+        mens_rea intent := "Intending to take dishonestly";
+        actus_reus moving := "Moving that property without that person's consent";
+    }
+    penalty {
+        imprisonment := 1 year .. 7 years;
+        fine := $0.00 .. $10,000.00;
+    }
+}
+
+// s415 Cheating also uses "dishonestly" from s24
+import "penal_code/s415_cheating"
+
+// test that both statutes share the same definition of dishonestly
+assert dishonestly() == "doing anything with the intention of causing wrongful gain to one person or wrongful loss to another";
