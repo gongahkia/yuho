@@ -20,6 +20,7 @@ def run_explain(
     provider: Optional[str] = None,
     model: Optional[str] = None,
     offline: bool = False,
+    no_llm: bool = False,
     verbose: bool = False,
     stream: bool = True,
 ) -> None:
@@ -33,6 +34,7 @@ def run_explain(
         provider: LLM provider (ollama, huggingface, openai, anthropic)
         model: Model name
         offline: Disallow cloud providers
+        no_llm: Skip LLM, use built-in English transpilation only
         verbose: Enable verbose output
         stream: Enable streaming output for real-time response
     """
@@ -89,6 +91,10 @@ def run_explain(
     english = EnglishTranspiler()
     base_explanation = english.transpile(ast)
 
+    if no_llm:
+        click.echo(base_explanation)
+        return
+
     if interactive:
         _run_interactive(base_explanation, ast, resolved_provider, resolved_model, stream)
     else:
@@ -112,6 +118,16 @@ def run_explain(
         except Exception as e:
             if verbose:
                 click.echo(colorize(f"LLM unavailable: {e}", Colors.YELLOW), err=True)
+            else:
+                click.echo(
+                    colorize(
+                        "LLM not configured. Showing basic English transpilation.\n"
+                        "For enhanced AI explanations, see: yuho config --help\n"
+                        "  or set YUHO_LLM_PROVIDER and YUHO_LLM_ANTHROPIC_API_KEY env vars.\n",
+                        Colors.YELLOW,
+                    ),
+                    err=True,
+                )
             # Fall back to basic English transpilation
             click.echo(base_explanation)
 

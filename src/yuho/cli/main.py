@@ -367,6 +367,7 @@ def repl(ctx: click.Context) -> None:
               help="LLM provider to use")
 @click.option("--model", help="Model name to use")
 @click.option("--offline", is_flag=True, help="Disallow cloud providers and run local-only")
+@click.option("--no-llm", is_flag=True, help="Skip LLM, use built-in English transpilation only")
 @click.option("--stream/--no-stream", "stream", default=True,
               help="Enable/disable streaming output for real-time response")
 @click.pass_context
@@ -378,12 +379,14 @@ def explain(
     provider: Optional[str],
     model: Optional[str],
     offline: bool,
+    no_llm: bool,
     stream: bool,
 ) -> None:
     """
     Generate natural language explanation of a Yuho file.
 
     Uses LLM to explain statutes in plain language.
+    Use --no-llm for built-in English transpilation without any LLM setup.
     """
     from yuho.cli.commands.explain import run_explain
     run_explain(
@@ -393,6 +396,7 @@ def explain(
         provider=provider,
         model=model,
         offline=offline,
+        no_llm=no_llm,
         verbose=ctx.obj["verbose"],
         stream=stream,
     )
