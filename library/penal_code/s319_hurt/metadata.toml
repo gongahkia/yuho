@@ -11,3 +11,9 @@ email = ""
 [description]
 summary = "Whoever causes bodily pain, disease or infirmity to any person is said to cause hurt."
 source = "Singapore Penal Code 1871, Section 319"
+
+[verification]
+last_verified = "2026-03-08"
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr319-#pr319-"
+verified_by = "Yuho Team"
+disclaimer = "Educational purposes only. Cross-reference with official SSO text."

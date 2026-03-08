@@ -12,3 +12,9 @@ email = ""
 summary = "Whoever, by words either spoken or intended to be read, or by signs, or by visible representations, makes or publishes any imputation concerning any person, intending to harm, or knowing or having reason to believe that such imputation will harm the reputation of such person, is said, except in the cases hereinafter excepted, to defame that person."
 source = "Singapore Penal Code 1871, Section 499"
 notes = "Speech-based offense demonstrating exception/defense handling for truth, public good, and good faith"
+
+[verification]
+last_verified = "2026-03-08"
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr499-#pr499-"
+verified_by = "Yuho Team"
+disclaimer = "Educational purposes only. Cross-reference with official SSO text."

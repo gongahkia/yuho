@@ -2,6 +2,8 @@
 
 Pre-built statute implementations in v5 syntax.
 
+> **Disclaimer:** These models are provided for educational purposes only and do not constitute legal advice. Each statute was verified against the official SSO text at the URL listed in its `metadata.toml`. Always cross-reference with the [official SSO text](https://sso.agc.gov.sg/).
+
 ## Structure
 
 Each statute directory contains:
@@ -59,4 +61,10 @@ version = "2.0.0"
 summary = "..."
 source = "Singapore Penal Code 1871, Section 415"
 notes = "..."
+
+[verification]
+last_verified = "2026-03-08"
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr415-#pr415-"
+verified_by = "Yuho Team"
+disclaimer = "Educational purposes only. Cross-reference with official SSO text."
 ```

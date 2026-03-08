@@ -11,3 +11,9 @@ email = ""
 [description]
 summary = "Whoever intentionally puts any person in fear of any injury to that person or to any other, and thereby dishonestly induces the person so put in fear to deliver to any person any property, or valuable security, or anything signed or sealed which may be converted into a valuable security, commits extortion."
 source = "Singapore Penal Code 1871, Section 383"
+
+[verification]
+last_verified = "2026-03-08"
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr383-#pr383-"
+verified_by = "Yuho Team"
+disclaimer = "Educational purposes only. Cross-reference with official SSO text."

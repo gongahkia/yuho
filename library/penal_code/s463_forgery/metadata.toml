@@ -12,3 +12,9 @@ email = ""
 summary = "Whoever makes any false document or part of a document, with intent to cause damage or injury to the public or to any person, or to support any claim or title, or to cause any person to part with property, or to enter into any express or implied contract, or with intent to commit fraud or that fraud may be committed, commits forgery."
 source = "Singapore Penal Code 1871, Section 463"
 notes = "Document-related offense demonstrating falsification with intent elements"
+
+[verification]
+last_verified = "2026-03-08"
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr463-#pr463-"
+verified_by = "Yuho Team"
+disclaimer = "Educational purposes only. Cross-reference with official SSO text."
