@@ -851,8 +851,26 @@ def tui() -> None:
 
 
 def main() -> None:
-    """Main entry point."""
-    cli()
+    """Main entry point with global error handling."""
+    try:
+        cli()
+    except KeyboardInterrupt:
+        click.echo("\nInterrupted.", err=True)
+        sys.exit(130)
+    except MemoryError:
+        click.echo("error: out of memory", err=True)
+        sys.exit(1)
+    except ImportError as e:
+        click.echo(f"error: missing dependency: {e}", err=True)
+        click.echo("hint: run 'pip install yuho[all]' to install all optional dependencies", err=True)
+        sys.exit(1)
+    except (ValueError, FileNotFoundError, PermissionError, UnicodeDecodeError) as e:
+        click.echo(f"error: {e}", err=True)
+        sys.exit(1)
+    except Exception as e:
+        click.echo(f"error: unexpected failure: {type(e).__name__}: {e}", err=True)
+        click.echo("hint: run with -v for verbose output, or report at github.com/gongahkia/yuho/issues", err=True)
+        sys.exit(1)
 
 
 if __name__ == "__main__":
