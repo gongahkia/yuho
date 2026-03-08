@@ -176,10 +176,26 @@ class JSONTranspiler(TranspilerBase, Visitor):
         elif isinstance(node, nodes.DefinitionEntry):
             result["term"] = node.term
             result["definition"] = self._to_dict(node.definition)
+        elif isinstance(node, nodes.ElementGroupNode):
+            result["combinator"] = node.combinator
+            result["members"] = [self._to_dict(m) for m in node.members]
         elif isinstance(node, nodes.ElementNode):
             result["element_type"] = node.element_type
             result["name"] = node.name
             result["description"] = self._to_dict(node.description)
+        elif isinstance(node, nodes.ExceptionNode):
+            if node.label:
+                result["label"] = node.label
+            result["condition"] = self._to_dict(node.condition)
+            if node.effect:
+                result["effect"] = self._to_dict(node.effect)
+        elif isinstance(node, nodes.CaseLawNode):
+            result["case_name"] = node.case_name
+            if node.citation:
+                result["citation"] = node.citation
+            result["holding"] = self._to_dict(node.holding)
+            if node.element_ref:
+                result["element_ref"] = node.element_ref
         elif isinstance(node, nodes.PenaltyNode):
             if node.imprisonment_min:
                 result["imprisonment_min"] = self._to_dict(node.imprisonment_min)
@@ -189,6 +205,12 @@ class JSONTranspiler(TranspilerBase, Visitor):
                 result["fine_min"] = self._to_dict(node.fine_min)
             if node.fine_max:
                 result["fine_max"] = self._to_dict(node.fine_max)
+            if node.caning_min is not None:
+                result["caning_min"] = node.caning_min
+            if node.caning_max is not None:
+                result["caning_max"] = node.caning_max
+            if node.death_penalty is not None:
+                result["death_penalty"] = node.death_penalty
             if node.supplementary:
                 result["supplementary"] = self._to_dict(node.supplementary)
         elif isinstance(node, nodes.IllustrationNode):
@@ -204,6 +226,10 @@ class JSONTranspiler(TranspilerBase, Visitor):
             if node.penalty:
                 result["penalty"] = self._to_dict(node.penalty)
             result["illustrations"] = [self._to_dict(i) for i in node.illustrations]
+            if node.exceptions:
+                result["exceptions"] = [self._to_dict(e) for e in node.exceptions]
+            if node.case_law:
+                result["case_law"] = [self._to_dict(c) for c in node.case_law]
         elif isinstance(node, nodes.ImportNode):
             result["path"] = node.path
             result["imported_names"] = list(node.imported_names)
