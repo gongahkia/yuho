@@ -240,7 +240,7 @@ def generate_yuho_code(data: StatuteData) -> str:
     lines: List[str] = []
     
     # Statute header
-    lines.append(f'statute "{data.section_number}" "{data.title}" {{')
+    lines.append(f'statute {data.section_number} "{data.title}" {{')
     
     # Definitions
     if data.definitions:
@@ -248,7 +248,7 @@ def generate_yuho_code(data: StatuteData) -> str:
         lines.append("    definitions {")
         for defn in data.definitions:
             escaped_def = defn.definition.replace('"', '\\"')
-            lines.append(f'        "{defn.term}" := "{escaped_def}";')
+            lines.append(f'        {defn.term} := "{escaped_def}";')
         lines.append("    }")
     
     # Elements
