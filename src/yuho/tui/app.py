@@ -11,12 +11,14 @@ from typing import Optional, Tuple
 from textual.app import App, ComposeResult
 from textual.binding import Binding
 from textual.containers import Container, Horizontal, Vertical, ScrollableContainer
+from textual.screen import ModalScreen
 from textual.widgets import (
     Header, Footer, Static, Button, Input, TextArea,
     Select, Label, RichLog, OptionList,
-    ContentSwitcher, Rule,
+    ContentSwitcher, Rule, DirectoryTree,
 )
 from textual import on, work
+from textual.message import Message
 
 from yuho import __version__
 from yuho.tui.ascii_art import YUHO_MASCOT, YUHO_LOGO_SMALL
@@ -56,6 +58,58 @@ def capture_cli(func, *args, **kwargs) -> Tuple[str, str]:
     except Exception as e:
         err.write(str(e))
     return out.getvalue(), err.getvalue()
+
+
+# ─── File Picker ─────────────────────────────────────────────────────────────
+
+
+class FilePickerScreen(ModalScreen[str]):
+    """Modal file picker using DirectoryTree."""
+    BINDINGS = [Binding("escape", "cancel", "Cancel")]
+    CSS = """
+    FilePickerScreen { align: center middle; }
+    #fp-container {
+        width: 70;
+        height: 30;
+        border: thick $primary;
+        background: $surface;
+        padding: 1;
+    }
+    #fp-tree { height: 1fr; }
+    #fp-selected { height: 3; margin-top: 1; }
+    #fp-actions { height: auto; margin-top: 1; layout: horizontal; }
+    #fp-actions Button { margin-right: 1; }
+    """
+
+    def __init__(self, start_dir: str = ".") -> None:
+        super().__init__()
+        self._start_dir = start_dir
+
+    def compose(self) -> ComposeResult:
+        with Container(id="fp-container"):
+            yield Static("[bold magenta]Select a .yh file[/bold magenta]")
+            yield DirectoryTree(self._start_dir, id="fp-tree")
+            yield Input(placeholder="Selected file...", id="fp-selected", disabled=True)
+            with Container(id="fp-actions"):
+                yield Button("Open", id="fp-open", variant="primary")
+                yield Button("Cancel", id="fp-cancel")
+
+    @on(DirectoryTree.FileSelected, "#fp-tree")
+    def on_file_selected(self, event: DirectoryTree.FileSelected) -> None:
+        self.query_one("#fp-selected", Input).value = str(event.path)
+
+    @on(Button.Pressed, "#fp-open")
+    def handle_open(self) -> None:
+        path = self.query_one("#fp-selected", Input).value
+        if path:
+            self.dismiss(path)
+
+    @on(Button.Pressed, "#fp-cancel")
+    def handle_cancel(self) -> None:
+        self.dismiss("")
+
+    def action_cancel(self) -> None:
+        self.dismiss("")
 
 
 # ─── Panels ─────────────────────────────────────────────────────────────────
@@ -99,6 +153,7 @@ class CheckPanel(Container):
         yield Static("[bold magenta]Check[/bold magenta] — Parse and validate a Yuho file\n")
         with Horizontal(classes="input-row"):
             yield Input(placeholder="Enter path to .yh file...", id="check-path")
+            yield Button("Browse", id="btn-check-browse")
             yield Button("Check", id="btn-check", variant="primary")
         yield RichLog(id="check-output", highlight=True, markup=True)
 
@@ -172,6 +227,7 @@ class TranspilePanel(Container):
         yield Static("[bold magenta]Transpile[/bold magenta] — Convert to another format\n")
         with Horizontal(classes="input-row"):
             yield Input(placeholder="Enter path to .yh file...", id="transpile-path")
+            yield Button("Browse", id="btn-transpile-browse")
             yield Select(options=TRANSPILE_TARGETS, value="json", id="transpile-target")
             yield Button("Transpile", id="btn-transpile", variant="primary")
         with Horizontal(classes="split-view"):
@@ -814,10 +870,25 @@ HomePanel, AboutPanel {
             timeout=8,
         )
 
+    def _open_file_picker(self, target_input_id: str) -> None:
+        """Open file picker and set result to target input."""
+        def on_dismiss(path: str) -> None:
+            if path:
+                self.query_one(f"#{target_input_id}", Input).value = path
+        self.push_screen(FilePickerScreen(), callback=on_dismiss)
+
+    @on(Button.Pressed, "#btn-check-browse")
+    def handle_check_browse(self) -> None:
+        self._open_file_picker("check-path")
+
+    @on(Button.Pressed, "#btn-transpile-browse")
+    def handle_transpile_browse(self) -> None:
+        self._open_file_picker("transpile-path")
+
     @on(Button.Pressed, "#btn-open")
     def handle_open_file(self) -> None:
         self.action_nav(1)
-        self.query_one("#check-path", Input).focus()
+        self._open_file_picker("check-path")
 
     @on(Button.Pressed, "#btn-wizard")
     def handle_new_wizard(self) -> None:
