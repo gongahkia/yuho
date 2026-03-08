@@ -123,13 +123,28 @@ class EnglishTranspiler(TranspilerBase, Visitor):
             self._emit("Elements of the offence:")
             self._indent_level += 1
             for elem in node.elements:
-                self._visit_element(elem)
+                if isinstance(elem, nodes.ElementGroupNode):
+                    self._visit_element_group(elem)
+                else:
+                    self._visit_element(elem)
             self._indent_level -= 1
             self._emit_blank()
 
         # Penalty
         if node.penalty:
             self._visit_penalty(node.penalty)
+            self._emit_blank()
+
+        # Exceptions
+        if node.exceptions:
+            self._emit("Exceptions:")
+            self._indent_level += 1
+            for exc in node.exceptions:
+                label = f"[{exc.label}] " if exc.label else ""
+                self._emit(f"{label}If {exc.condition.value}")
+                if exc.effect:
+                    self._emit(f"  Then: {exc.effect.value}")
+            self._indent_level -= 1
             self._emit_blank()
 
         # Illustrations
@@ -139,6 +154,21 @@ class EnglishTranspiler(TranspilerBase, Visitor):
             for i, illus in enumerate(node.illustrations, 1):
                 label = illus.label or f"({chr(ord('a') + i - 1)})"
                 self._emit(f"{label} {illus.description.value}")
+            self._emit_blank()
+
+        # Case law
+        if node.case_law:
+            self._emit("Case Law:")
+            self._indent_level += 1
+            for cl in node.case_law:
+                citation = f" {cl.citation.value}" if cl.citation else ""
+                self._emit(f"{cl.case_name.value}{citation}")
+                self._indent_level += 1
+                self._emit(f"Holding: {cl.holding.value}")
+                if cl.element_ref:
+                    self._emit(f"Relates to element: {cl.element_ref}")
+                self._indent_level -= 1
+            self._indent_level -= 1
             self._emit_blank()
 
     def _visit_element(self, node: nodes.ElementNode) -> None:
@@ -161,6 +191,18 @@ class EnglishTranspiler(TranspilerBase, Visitor):
         else:
             desc = self._expr_to_english(node.description)
             self._emit(f"{label}: {desc}")
+
+    def _visit_element_group(self, node: nodes.ElementGroupNode) -> None:
+        """Generate English for element group (all_of/any_of)."""
+        label = "ALL of the following" if node.combinator == "all_of" else "ANY of the following"
+        self._emit(f"{label}:")
+        self._indent_level += 1
+        for member in node.members:
+            if isinstance(member, nodes.ElementGroupNode):
+                self._visit_element_group(member)
+            else:
+                self._visit_element(member)
+        self._indent_level -= 1
 
     def _visit_penalty(self, node: nodes.PenaltyNode) -> None:
         """Generate English for penalty."""
@@ -189,9 +231,21 @@ class EnglishTranspiler(TranspilerBase, Visitor):
                 max_str = self._money_to_english(node.fine_max)
                 parts.append(f"a fine which may extend to {max_str}")
 
+        # Caning
+        if node.caning_min is not None:
+            if node.caning_min == node.caning_max:
+                parts.append(f"caning with {node.caning_min} strokes")
+            else:
+                parts.append(f"caning with not less than {node.caning_min} and not more than {node.caning_max} strokes")
+
+        # Death penalty
+        if node.death_penalty:
+            parts.append("death")
+
         # Combine parts
-        if len(parts) == 2:
-            self._emit(f"Shall be punished with {parts[0]}, or with {parts[1]}, or with both.")
+        if len(parts) >= 2:
+            combined = ", or with ".join(parts)
+            self._emit(f"Shall be punished with {combined}, or with any combination thereof.")
         elif len(parts) == 1:
             self._emit(f"Shall be punished with {parts[0]}.")
         else:
