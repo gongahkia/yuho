@@ -14,6 +14,8 @@ All commands support `-h` / `--help` for detailed usage.
 | `yuho diff <file1> <file2>` | Semantic diff between two `.yh` files |
 | `yuho test [file]` | Run `.yh` test assertions |
 | `yuho repl` | Interactive REPL |
+| `yuho verify <file>` | Run formal verification (Alloy/Z3) |
+| `yuho graph <file>` | Visualize statute dependency graph |
 
 ## Generation & Scaffolding
 
@@ -22,6 +24,7 @@ All commands support `-h` / `--help` for detailed usage.
 | `yuho generate <section> -t <title>` | Generate statute scaffold |
 | `yuho wizard` | Interactive step-by-step statute builder (recommended for beginners) |
 | `yuho init [name]` | Initialize a new Yuho project |
+| `yuho contribute <file>` | Validate a statute for library contribution |
 
 ### `yuho wizard`
 
@@ -66,6 +69,7 @@ Available commands inside the REPL:
 | `yuho lsp` | Start Language Server Protocol server |
 | `yuho api` | Start REST API server |
 | `yuho preview <file>` | Live preview with auto-reload in browser |
+| `yuho tui` | Launch interactive Terminal User Interface |
 
 ## Package Library
 
