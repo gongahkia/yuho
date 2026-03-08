@@ -104,11 +104,12 @@ class MermaidTranspiler(TranspilerBase, Visitor):
         # Process elements that contain match expressions
         prev_id = start_id
         for elem in statute.elements:
-            if isinstance(elem.description, nodes.MatchExprNode):
+            if isinstance(elem, nodes.ElementGroupNode):
+                prev_id = self._transpile_element_group(elem, prev_id)
+            elif isinstance(elem.description, nodes.MatchExprNode):
                 elem_start = self._new_node_id("ELEM")
                 self._emit(f"    {elem_start}[/{elem.name}/]")
                 self._emit(f"    {prev_id} --> {elem_start}")
-
                 end_id = self._transpile_match_expr(elem.description, elem_start)
                 prev_id = end_id
             else:
@@ -117,6 +118,22 @@ class MermaidTranspiler(TranspilerBase, Visitor):
                 self._emit(f"    {elem_id}[{label}]")
                 self._emit(f"    {prev_id} --> {elem_id}")
                 prev_id = elem_id
+
+        # Exceptions
+        if statute.exceptions:
+            exc_id = self._new_node_id("EXC")
+            self._emit(f"    {exc_id}{{{{Exceptions}}}}")
+            self._emit(f"    {prev_id} --> {exc_id}")
+            no_exc_id = self._new_node_id("NOEXC")
+            self._emit(f"    {no_exc_id}[No exception applies]")
+            self._emit(f"    {exc_id} -->|\"None\"| {no_exc_id}")
+            for exc in statute.exceptions:
+                exc_out_id = self._new_node_id("EXCOUT")
+                label = exc.label or "exception"
+                effect = self._escape_text(exc.effect.value) if exc.effect else "Exception applies"
+                self._emit(f"    {exc_out_id}[\"{effect}\"]")
+                self._emit(f"    {exc_id} -->|\"{self._escape_text(label)}\"| {exc_out_id}")
+            prev_id = no_exc_id
 
         # Penalty outcome
         if statute.penalty:
@@ -274,6 +291,30 @@ class MermaidTranspiler(TranspilerBase, Visitor):
                 return outcome_id
 
     # =========================================================================
+    # Element group processing
+    # =========================================================================
+
+    def _transpile_element_group(self, group: nodes.ElementGroupNode, prev_id: str) -> str:
+        """Generate flowchart nodes for an element group (all_of/any_of). Returns last node ID."""
+        combinator = group.combinator.upper().replace("_", " ") # ALL OF / ANY OF
+        group_id = self._new_node_id("GRP")
+        self._emit(f"    {group_id}{{{{{combinator}}}}}")
+        self._emit(f"    {prev_id} --> {group_id}")
+        end_id = self._new_node_id("GRPEND")
+        for member in group.members:
+            if isinstance(member, nodes.ElementGroupNode):
+                member_end = self._transpile_element_group(member, group_id)
+            else: # ElementNode
+                member_id = self._new_node_id("ELEM")
+                label = self._escape_text(self._expr_to_label(member.description))
+                self._emit(f"    {member_id}[{label}]")
+                self._emit(f"    {group_id} --> {member_id}")
+                member_end = member_id
+            self._emit(f"    {member_end} --> {end_id}")
+        self._emit(f"    {end_id}((*))")
+        return end_id
+
+    # =========================================================================
     # Label generation helpers
     # =========================================================================
 
@@ -343,15 +384,18 @@ class MermaidTranspiler(TranspilerBase, Visitor):
     def _penalty_to_label(self, penalty: nodes.PenaltyNode) -> str:
         """Convert penalty to label text."""
         parts: List[str] = []
-
+        if penalty.death_penalty:
+            parts.append("Death")
         if penalty.imprisonment_max:
             duration = str(penalty.imprisonment_max)
             parts.append(f"Imprisonment up to {duration}")
-
         if penalty.fine_max:
             parts.append(f"Fine up to ${penalty.fine_max.amount}")
-
+        if penalty.caning_max:
+            if penalty.caning_min:
+                parts.append(f"Caning {penalty.caning_min}-{penalty.caning_max} strokes")
+            else:
+                parts.append(f"Caning up to {penalty.caning_max} strokes")
         if penalty.supplementary:
             parts.append(penalty.supplementary.value)
-
         return "; ".join(parts) if parts else "Penalty TBD"
