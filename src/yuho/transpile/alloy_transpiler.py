@@ -228,8 +228,9 @@ class AlloyTranspiler(TranspilerBase, Visitor):
         self._emit(f"sig {safe_name}Offense {{")
         self._indent += 1
 
-        # Fields for each element
-        for elem in statute.elements:
+        # Fields for each element (flatten groups)
+        flat_elements = self._flatten_elements(statute.elements)
+        for elem in flat_elements:
             elem_name = self._safe_name(elem.name)
             self._emit(f"{elem_name}: Bool,")
 
@@ -239,6 +240,10 @@ class AlloyTranspiler(TranspilerBase, Visitor):
                 self._emit("imprisonmentApplies: Bool,")
             if statute.penalty.fine_max:
                 self._emit("fineApplies: Bool,")
+            if statute.penalty.caning_max:
+                self._emit("caningApplies: Bool,")
+            if statute.penalty.death_penalty:
+                self._emit("deathPenaltyApplies: Bool,")
 
         self._emit("guilty: Bool")
         self._indent -= 1
@@ -252,14 +257,14 @@ class AlloyTranspiler(TranspilerBase, Visitor):
         self._indent += 1
 
         # All elements must be true for guilt (conjunction)
-        actus_reus_elems = [self._safe_name(e.name) for e in statute.elements if e.element_type == "actus_reus"]
-        mens_rea_elems = [self._safe_name(e.name) for e in statute.elements if e.element_type == "mens_rea"]
+        actus_reus_elems = [self._safe_name(e.name) for e in flat_elements if e.element_type == "actus_reus"]
+        mens_rea_elems = [self._safe_name(e.name) for e in flat_elements if e.element_type == "mens_rea"]
 
         self._emit(f"all o: {safe_name}Offense |")
         self._indent += 1
 
         conditions = []
-        for elem in statute.elements:
+        for elem in flat_elements:
             elem_name = self._safe_name(elem.name)
             conditions.append(f"o.{elem_name} = True")
 
@@ -274,7 +279,7 @@ class AlloyTranspiler(TranspilerBase, Visitor):
         self._emit("")
 
         # Generate match expression constraints
-        for elem in statute.elements:
+        for elem in flat_elements:
             if isinstance(elem.description, nodes.MatchExprNode):
                 self._emit(f"-- Element: {elem.name}")
                 self._emit(f"fact {safe_name}_{self._safe_name(elem.name)} {{")
@@ -436,11 +441,12 @@ class AlloyTranspiler(TranspilerBase, Visitor):
             self._emit("")
             
             # Run with all elements satisfied
+            flat_elems = self._flatten_elements(statute.elements)
             self._emit(f"run show{safe_name}GuiltyScenario {{")
             self._indent += 1
             self._emit(f"some o: {offense_sig} |")
             self._indent += 1
-            conditions = [f"o.{self._safe_name(e.name)} = True" for e in statute.elements]
+            conditions = [f"o.{self._safe_name(e.name)} = True" for e in flat_elems]
             if conditions:
                 self._emit(" and ".join(conditions))
             else:
@@ -468,11 +474,12 @@ class AlloyTranspiler(TranspilerBase, Visitor):
             offense_sig = f"{safe_name}Offense"
             
             # Check that guilty implies all elements true
+            flat_elems = self._flatten_elements(statute.elements)
             self._emit(f"assert {safe_name}GuiltyImpliesElements {{")
             self._indent += 1
             self._emit(f"all o: {offense_sig} | o.guilty = True implies (")
             self._indent += 1
-            conditions = [f"o.{self._safe_name(e.name)} = True" for e in statute.elements]
+            conditions = [f"o.{self._safe_name(e.name)} = True" for e in flat_elems]
             if conditions:
                 self._emit(" and ".join(conditions))
             else:
@@ -485,7 +492,7 @@ class AlloyTranspiler(TranspilerBase, Visitor):
             self._emit("")
             
             # Check that all elements true implies guilty
-            if statute.elements:
+            if flat_elems:
                 self._emit(f"assert {safe_name}ElementsImplyGuilty {{")
                 self._indent += 1
                 self._emit(f"all o: {offense_sig} | (")
@@ -511,10 +518,11 @@ class AlloyTranspiler(TranspilerBase, Visitor):
             offense_sig = f"{safe_name}Offense"
             
             # Check: it's impossible to be guilty with no elements satisfied
-            if statute.elements:
+            flat_elems = self._flatten_elements(statute.elements)
+            if flat_elems:
                 self._emit(f"assert {safe_name}NoElementsNoGuilt {{")
                 self._indent += 1
-                no_conditions = [f"o.{self._safe_name(e.name)} = False" for e in statute.elements]
+                no_conditions = [f"o.{self._safe_name(e.name)} = False" for e in flat_elems]
                 self._emit(f"all o: {offense_sig} | (")
                 self._indent += 1
                 self._emit(" and ".join(no_conditions))
@@ -534,6 +542,16 @@ class AlloyTranspiler(TranspilerBase, Visitor):
         self._emit("--   4. Green checkmark = assertion holds within scope")
         self._emit("--   5. Red X = counterexample found (click to view)")
         self._emit("-- =========================================================================")
+
+    def _flatten_elements(self, elements: tuple) -> list:
+        """Recursively flatten ElementGroupNodes into a flat list of ElementNodes."""
+        result = []
+        for elem in elements:
+            if isinstance(elem, nodes.ElementGroupNode):
+                result.extend(self._flatten_elements(elem.members))
+            else:
+                result.append(elem)
+        return result
 
     def _safe_name(self, name: str) -> str:
         """Convert name to safe Alloy identifier."""
