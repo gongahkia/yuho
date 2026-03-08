@@ -357,7 +357,7 @@ module.exports = grammar({
     elements_block: $ => seq(
       'elements',
       '{',
-      repeat($.element_entry),
+      repeat(choice($.element_entry, $.element_group)),
       '}'
     ),
 
@@ -367,6 +367,13 @@ module.exports = grammar({
       ':=',
       field('description', $._expression),
       optional(';'),
+    ),
+
+    element_group: $ => seq(
+      field('combinator', choice('all_of', 'any_of')),
+      '{',
+      repeat(choice($.element_entry, $.element_group)),
+      '}'
     ),
 
     penalty_block: $ => seq(
