@@ -28,6 +28,7 @@ from yuho.transpile.registry import TranspilerRegistry
 from yuho.cli.error_formatter import Colors, colorize
 from yuho.cli.commands.check import get_error_explanation
 from yuho.logging_utils import RequestLogContext, finish_request, start_request
+from yuho.parser.wrapper import MAX_SOURCE_LENGTH
 from yuho.services.analysis import analyze_source
 from yuho.services.errors import (
     ASTBoundaryError,
@@ -208,6 +209,13 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
         path = parsed.path
         self._start_request_log("POST", path)
         
+        content_type = self.headers.get('Content-Type', '')
+        if content_type and 'application/json' not in content_type:
+            self._send_json_response(415, APIResponse(
+                success=False,
+                error="Content-Type must be application/json"
+            ))
+            return
         try:
             body = self._read_body()
             data = json.loads(body) if body else {}
@@ -301,18 +309,38 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
             data={"rules": rules}
         ))
     
+    @staticmethod
+    def _sanitize_filename(name: str) -> str:
+        """Sanitize user-provided filename for error messages only."""
+        name = name.replace("\x00", "").replace("/", "_").replace("\\", "_")
+        if len(name) > 255:
+            name = name[:255]
+        return name or "<api>"
+
+    @staticmethod
+    def _check_source_length(source: str) -> Optional[str]:
+        """Return error string if source exceeds limit, else None."""
+        if len(source) > MAX_SOURCE_LENGTH:
+            return f"Source exceeds maximum length ({MAX_SOURCE_LENGTH} chars)"
+        if "\x00" in source:
+            return "Source contains null bytes"
+        return None
+
     def _handle_parse(self, data: Dict[str, Any]) -> None:
         """Parse Yuho source code."""
         source = data.get('source', '')
-        filename = data.get('filename', '<api>')
-        
+        filename = self._sanitize_filename(data.get('filename', '<api>'))
+
         if not source:
             self._send_json_response(400, APIResponse(
                 success=False,
                 error="Missing 'source' field"
             ))
             return
-        
+        src_err = self._check_source_length(source)
+        if src_err:
+            self._send_json_response(400, APIResponse(success=False, error=src_err))
+            return
         analysis = analyze_source(source, file=filename, run_semantic=False)
 
         if analysis.parse_errors:
@@ -361,7 +389,7 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
     def _handle_validate(self, data: Dict[str, Any]) -> None:
         """Validate Yuho source code."""
         source = data.get('source', '')
-        filename = data.get('filename', '<api>')
+        filename = self._sanitize_filename(data.get('filename', '<api>'))
         include_metrics = bool(data.get('include_metrics', False))
         explain_errors = bool(data.get('explain_errors', False))
         
@@ -371,7 +399,10 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
                 error="Missing 'source' field"
             ))
             return
-        
+        src_err = self._check_source_length(source)
+        if src_err:
+            self._send_json_response(400, APIResponse(success=False, error=src_err))
+            return
         errors = []
         analysis = analyze_source(source, file=filename, run_semantic=False)
 
@@ -423,15 +454,17 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
         """Transpile Yuho source code."""
         source = data.get('source', '')
         target_name = data.get('target', 'json')
-        filename = data.get('filename', '<api>')
-        
+        filename = self._sanitize_filename(data.get('filename', '<api>'))
         if not source:
             self._send_json_response(400, APIResponse(
                 success=False,
                 error="Missing 'source' field"
             ))
             return
-        
+        src_err = self._check_source_length(source)
+        if src_err:
+            self._send_json_response(400, APIResponse(success=False, error=src_err))
+            return
         # Parse
         try:
             result = run_parser_boundary(
@@ -446,7 +479,7 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
                 error=str(e)
             ))
             return
-        
+
         if result.errors:
             errors = [{"message": e.message} for e in result.errors]
             self._send_json_response(200, APIResponse(
@@ -454,7 +487,7 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
                 data={"errors": errors}
             ))
             return
-        
+
         # Build AST
         try:
             builder = ASTBuilder(source, filename)
@@ -501,16 +534,18 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
     def _handle_lint(self, data: Dict[str, Any]) -> None:
         """Run lint checks on Yuho source code."""
         source = data.get('source', '')
-        rules = data.get('rules', None)  # Optional rule filter
-        filename = data.get('filename', '<api>')
-        
+        rules = data.get('rules', None)
+        filename = self._sanitize_filename(data.get('filename', '<api>'))
         if not source:
             self._send_json_response(400, APIResponse(
                 success=False,
                 error="Missing 'source' field"
             ))
             return
-        
+        src_err = self._check_source_length(source)
+        if src_err:
+            self._send_json_response(400, APIResponse(success=False, error=src_err))
+            return
         # Parse
         try:
             result = run_parser_boundary(
