@@ -181,8 +181,56 @@ class GraphQLTranspiler(TranspilerBase, Visitor):
         self._emit("fineMin: Money")
         self._emit_description("Maximum fine amount")
         self._emit("fineMax: Money")
+        self._emit_description("Minimum caning strokes")
+        self._emit("caningMin: Int")
+        self._emit_description("Maximum caning strokes")
+        self._emit("caningMax: Int")
+        self._emit_description("Whether death penalty applies")
+        self._emit("deathPenalty: Boolean")
         self._emit_description("Additional penalty information")
         self._emit("supplementary: String")
+        self._indent_level -= 1
+        self._emit("}")
+        self._emit_blank()
+
+        # ElementGroup type
+        self._emit_description("Logical grouping of elements (AND/OR)")
+        self._emit("type ElementGroup {")
+        self._indent_level += 1
+        self._emit_description("Combinator type: all_of (AND) or any_of (OR)")
+        self._emit("combinator: String!")
+        self._emit_description("Member elements or nested groups")
+        self._emit("members: [Element!]!")
+        self._indent_level -= 1
+        self._emit("}")
+        self._emit_blank()
+
+        # Exception type
+        self._emit_description("Statutory exception or defence")
+        self._emit("type Exception {")
+        self._indent_level += 1
+        self._emit_description("Exception label/identifier")
+        self._emit("label: String")
+        self._emit_description("Condition for exception to apply")
+        self._emit("condition: String!")
+        self._emit_description("Effect when exception applies")
+        self._emit("effect: String")
+        self._indent_level -= 1
+        self._emit("}")
+        self._emit_blank()
+
+        # CaseLaw type
+        self._emit_description("Case law reference")
+        self._emit("type CaseLaw {")
+        self._indent_level += 1
+        self._emit_description("Case name")
+        self._emit("caseName: String!")
+        self._emit_description("Citation reference")
+        self._emit("citation: String")
+        self._emit_description("Court holding")
+        self._emit("holding: String!")
+        self._emit_description("Referenced element identifier")
+        self._emit("elementRef: String")
         self._indent_level -= 1
         self._emit("}")
         self._emit_blank()
@@ -215,6 +263,10 @@ class GraphQLTranspiler(TranspilerBase, Visitor):
         self._emit("penalty: Penalty")
         self._emit_description("Illustrative examples")
         self._emit("illustrations: [Illustration!]!")
+        self._emit_description("Statutory exceptions and defences")
+        self._emit("exceptions: [Exception!]!")
+        self._emit_description("Associated case law")
+        self._emit("caseLaw: [CaseLaw!]!")
         self._indent_level -= 1
         self._emit("}")
         self._emit_blank()
