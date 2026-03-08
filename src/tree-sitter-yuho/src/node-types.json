@@ -453,9 +453,85 @@
     "fields": {}
   },
   {
+    "type": "caning_clause",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "integer_literal",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "caselaw_block",
+    "named": true,
+    "fields": {
+      "case_name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "string_literal",
+            "named": true
+          }
+        ]
+      },
+      "citation": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "string_literal",
+            "named": true
+          }
+        ]
+      },
+      "element_ref": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "holding": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "string_literal",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "currency_symbol",
     "named": true,
     "fields": {}
+  },
+  {
+    "type": "death_penalty_clause",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "boolean_literal",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "definition_entry",
@@ -650,6 +726,40 @@
     }
   },
   {
+    "type": "element_group",
+    "named": true,
+    "fields": {
+      "combinator": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "all_of",
+            "named": false
+          },
+          {
+            "type": "any_of",
+            "named": false
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "element_entry",
+          "named": true
+        },
+        {
+          "type": "element_group",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "elements_block",
     "named": true,
     "fields": {},
@@ -660,8 +770,48 @@
         {
           "type": "element_entry",
           "named": true
+        },
+        {
+          "type": "element_group",
+          "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "exception_block",
+    "named": true,
+    "fields": {
+      "condition": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "string_literal",
+            "named": true
+          }
+        ]
+      },
+      "effect": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "string_literal",
+            "named": true
+          }
+        ]
+      },
+      "label": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -1927,6 +2077,14 @@
       "required": false,
       "types": [
         {
+          "type": "caning_clause",
+          "named": true
+        },
+        {
+          "type": "death_penalty_clause",
+          "named": true
+        },
+        {
           "type": "fine_clause",
           "named": true
         },
@@ -2121,11 +2279,19 @@
       "required": false,
       "types": [
         {
+          "type": "caselaw_block",
+          "named": true
+        },
+        {
           "type": "definitions_block",
           "named": true
         },
         {
           "type": "elements_block",
+          "named": true
+        },
+        {
+          "type": "exception_block",
           "named": true
         },
         {
@@ -2618,6 +2784,14 @@
     "named": false
   },
   {
+    "type": "all_of",
+    "named": false
+  },
+  {
+    "type": "any_of",
+    "named": false
+  },
+  {
     "type": "assert",
     "named": false
   },
@@ -2626,7 +2800,15 @@
     "named": false
   },
   {
+    "type": "caning",
+    "named": false
+  },
+  {
     "type": "case",
+    "named": false
+  },
+  {
+    "type": "caselaw",
     "named": false
   },
   {
@@ -2659,11 +2841,19 @@
     "named": false
   },
   {
+    "type": "death",
+    "named": false
+  },
+  {
     "type": "definitions",
     "named": false
   },
   {
     "type": "duration",
+    "named": false
+  },
+  {
+    "type": "element",
     "named": false
   },
   {
@@ -2673,6 +2863,10 @@
   {
     "type": "escape_sequence",
     "named": true
+  },
+  {
+    "type": "exception",
+    "named": false
   },
   {
     "type": "fine",
@@ -2809,6 +3003,10 @@
   },
   {
     "type": "string",
+    "named": false
+  },
+  {
+    "type": "strokes",
     "named": false
   },
   {
