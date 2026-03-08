@@ -1,0 +1,60 @@
+// demonstrates exception blocks, caselaw, and element groups
+// s300 Murder with General Exceptions and case law
+
+statute 300 "Murder" {
+    definitions {
+        culpableHomicide := "Causing death by an act with intention or knowledge";
+        murder := "Culpable homicide amounting to murder under s300(a)-(d)";
+    }
+
+    elements {
+        all_of {
+            actus_reus causeDeath := "Causing the death of a person";
+            any_of {
+                mens_rea intentionDeath := "Intention of causing death";
+                mens_rea intentionInjuryLikely := "Intention of causing bodily injury known to be likely to cause death";
+                mens_rea intentionInjurySufficient := "Intention of causing bodily injury sufficient in the ordinary course of nature to cause death";
+                mens_rea knowledgeDangerous := "Knowledge that the act is so imminently dangerous that it must in all probability cause death";
+            }
+        }
+    }
+
+    penalty {
+        death := TRUE;
+        supplementary := "Or imprisonment for life if court is satisfied that death is not warranted";
+    }
+
+    exception provocation {
+        "If the offender whilst deprived of the power of self-control by grave and sudden provocation, causes the death of the person who gave the provocation"
+        "Culpable homicide not amounting to murder"
+    }
+
+    exception privateDefence {
+        "If the offender in the exercise in good faith of the right of private defence of person or property, exceeds the power given by law and causes the death of the person against whom he is exercising such right of defence"
+        "Culpable homicide not amounting to murder"
+    }
+
+    exception publicServant {
+        "If the offender, being a public servant, exceeds the powers given to him by law and causes death by doing an act which he in good faith believes to be lawful and necessary"
+        "Culpable homicide not amounting to murder"
+    }
+
+    exception suddenFight {
+        "If culpable homicide is committed without premeditation in a sudden fight in the heat of passion upon a sudden quarrel"
+        "Culpable homicide not amounting to murder"
+    }
+
+    exception consent {
+        "If the person whose death is caused, being above the age of 18 years, suffers death or takes the risk of death with his own consent"
+        "Culpable homicide not amounting to murder"
+    }
+
+    caselaw "PP v Lim Poh Lye" "[2005] 4 SLR 582" {
+        "The four limbs of s300 are to be read disjunctively — satisfaction of any one limb suffices for murder"
+        element intentionDeath
+    }
+
+    illustration exampleA {
+        "A shoots Z with the intention of killing him. Z dies in consequence. A commits murder."
+    }
+}
