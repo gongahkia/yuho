@@ -372,6 +372,8 @@ module.exports = grammar({
       '{',
       optional($.imprisonment_clause),
       optional($.fine_clause),
+      optional($.caning_clause),
+      optional($.death_penalty_clause),
       optional($.supplementary_clause),
       '}'
     ),
@@ -393,6 +395,24 @@ module.exports = grammar({
         $.money_literal,
         $.money_range,
       ),
+      optional(';'),
+    ),
+
+    caning_clause: $ => seq(
+      'caning',
+      ':=',
+      choice(
+        $.integer_literal,
+        seq($.integer_literal, '..', $.integer_literal),
+      ),
+      'strokes',
+      optional(';'),
+    ),
+
+    death_penalty_clause: $ => seq(
+      'death',
+      ':=',
+      $.boolean_literal,
       optional(';'),
     ),
 
