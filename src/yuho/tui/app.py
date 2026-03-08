@@ -890,6 +890,22 @@ class SettingsPanel(ScrollableContainer):
             yield Button("Reset Defaults", id="btn-settings-reset")
         yield Static("", id="settings-status")
 
+    def on_mount(self) -> None:
+        """Load existing config from ~/.config/yuho/config.toml if present."""
+        try:
+            from yuho.config.loader import get_config
+            cfg = get_config().to_dict()
+            llm = cfg.get("llm", {})
+            transpile = cfg.get("transpile", {})
+            if llm.get("provider"):
+                self.query_one("#settings-llm-provider", Select).value = llm["provider"]
+            if llm.get("model"):
+                self.query_one("#settings-llm-model", Input).value = llm["model"]
+            if transpile.get("default_target"):
+                self.query_one("#settings-default-target", Select).value = transpile["default_target"]
+        except Exception:
+            pass
+
     @on(Button.Pressed, "#btn-settings-save")
     def handle_save(self) -> None:
         status = self.query_one("#settings-status", Static)
