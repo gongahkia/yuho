@@ -332,3 +332,61 @@ assert add(1, 2) == 3;
 assert add(2, 3) == 5;
 assert add(3, 4) == 7, "Expected 3 + 4 to equal 7";
 ```
+
+## Modelling Ambiguity
+
+Statutes often have contested meanings (e.g., what counts as "dishonestly inducing"). Yuho handles this in two ways:
+
+### Doc comments for competing interpretations
+
+Use `///` doc comments to annotate elements with alternative readings:
+
+```yh
+statute 415 "Cheating" {
+    elements {
+        /// strict view: requires active misrepresentation (PP v Tan Cheng Bock)
+        /// liberal view: includes passive non-disclosure of material facts
+        actus_reus deception := "Deceiving any person";
+    }
+}
+```
+
+### Separate evaluation functions for alternative interpretations
+
+Model competing interpretations as distinct functions and test both:
+
+```yh
+fn evaluateStrict(string deceptionType, bool causesDamageHarm) : string {
+    match {
+        case TRUE if deceptionType == "active" && causesDamageHarm := consequence "Said to cheat";
+        case _ := consequence "Not said to cheat";
+    }
+}
+
+fn evaluateLiberal(string deceptionType, bool causesDamageHarm) : string {
+    match {
+        case TRUE if deceptionType != "none" && causesDamageHarm := consequence "Said to cheat";
+        case _ := consequence "Not said to cheat";
+    }
+}
+
+// test a fact pattern against both interpretations
+assert evaluateStrict("passive", TRUE) == "Not said to cheat";
+assert evaluateLiberal("passive", TRUE) == "Said to cheat";
+```
+
+### Cross-referencing statutes
+
+Import definitions from one statute into another to model how statutes reference shared terms:
+
+```yh
+// s24 defines "dishonestly" — import it into s415
+import { dishonestly } from "penal_code/s24_definitions"
+
+// s415 can now reference the imported definition
+statute 415 "Cheating" {
+    definitions {
+        dishonestly := dishonestly; // from s24
+    }
+}
+```
