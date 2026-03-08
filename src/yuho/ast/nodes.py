@@ -773,17 +773,39 @@ class ElementNode(ASTNode):
 
 
 @dataclass(frozen=True)
+class ElementGroupNode(ASTNode):
+    """
+    Group of elements with a logical combinator.
+
+    combinator: "all_of" (conjunctive/AND) or "any_of" (disjunctive/OR)
+    members: nested elements or element groups
+    """
+
+    combinator: str  # "all_of" or "any_of"
+    members: Tuple[Union["ElementNode", "ElementGroupNode"], ...]
+
+    def accept(self, visitor: "Visitor"):
+        return visitor.visit_element_group(self)
+
+    def children(self) -> List[ASTNode]:
+        return list(self.members)
+
+
+@dataclass(frozen=True)
 class PenaltyNode(ASTNode):
     """
     Penalty specification for a statute.
 
-    Can specify imprisonment, fine, or both, with optional ranges.
+    Can specify imprisonment, fine, caning, death penalty, or combinations.
     """
 
     imprisonment_min: Optional[DurationNode] = None
     imprisonment_max: Optional[DurationNode] = None
     fine_min: Optional[MoneyNode] = None
     fine_max: Optional[MoneyNode] = None
+    caning_min: Optional[int] = None
+    caning_max: Optional[int] = None
+    death_penalty: Optional[bool] = None
     supplementary: Optional[StringLit] = None
 
     def accept(self, visitor: "Visitor"):
@@ -819,20 +841,68 @@ class IllustrationNode(ASTNode):
 
 
 @dataclass(frozen=True)
+class ExceptionNode(ASTNode):
+    """
+    Exception/proviso/defence within a statute.
+
+    Models General Exceptions (e.g., Ch IV ss76-106), provisos, and
+    statutory defences that modify the main offense.
+    """
+
+    label: Optional[str]
+    condition: StringLit
+    effect: Optional[StringLit] = None
+
+    def accept(self, visitor: "Visitor"):
+        return visitor.visit_exception(self)
+
+    def children(self) -> List[ASTNode]:
+        result = [self.condition]
+        if self.effect:
+            result.append(self.effect)
+        return result
+
+
+@dataclass(frozen=True)
+class CaseLawNode(ASTNode):
+    """
+    Case law reference associated with a statute.
+
+    Links judicial interpretations to specific statutory elements.
+    """
+
+    case_name: StringLit
+    citation: Optional[StringLit] = None
+    holding: StringLit = field(default_factory=lambda: StringLit(value=""))
+    element_ref: Optional[str] = None  # name of element this case interprets
+
+    def accept(self, visitor: "Visitor"):
+        return visitor.visit_caselaw(self)
+
+    def children(self) -> List[ASTNode]:
+        result = [self.case_name, self.holding]
+        if self.citation:
+            result.append(self.citation)
+        return result
+
+
+@dataclass(frozen=True)
 class StatuteNode(ASTNode):
     """
     Statute block representing a legal provision.
 
     Contains section number, title, definitions, elements, penalties,
-    and illustrations.
+    illustrations, exceptions, and case law references.
     """
 
     section_number: str
     title: Optional[StringLit]
     definitions: Tuple[DefinitionEntry, ...]
-    elements: Tuple[ElementNode, ...]
+    elements: Tuple[Union[ElementNode, ElementGroupNode], ...]
     penalty: Optional[PenaltyNode]
     illustrations: Tuple[IllustrationNode, ...]
+    exceptions: Tuple[ExceptionNode, ...] = ()
+    case_law: Tuple[CaseLawNode, ...] = ()
 
     def accept(self, visitor: "Visitor"):
         return visitor.visit_statute(self)
@@ -846,6 +916,8 @@ class StatuteNode(ASTNode):
         if self.penalty:
             result.append(self.penalty)
         result.extend(self.illustrations)
+        result.extend(self.exceptions)
+        result.extend(self.case_law)
         return result
 
 
