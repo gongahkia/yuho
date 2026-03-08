@@ -38,10 +38,15 @@ statute 415 "Cheating" {
     }
 
     elements {
-        actus_reus deception := "Deceiving any person";
-        mens_rea intent := "Fraudulently or dishonestly";
-        actus_reus inducement := "Inducing delivery of property, consent to retain property, or act/omission";
-        circumstance harm := "Causing or likely to cause damage to body, mind, reputation, or property";
+        all_of {
+            actus_reus deception := "Deceiving any person";
+            any_of {
+                mens_rea fraudulent := "Fraudulently inducing the person";
+                mens_rea dishonest := "Dishonestly inducing the person";
+            }
+            actus_reus inducement := "Inducing delivery of property, consent to retain property, or act/omission";
+            circumstance harm := "Causing or likely to cause damage to body, mind, reputation, or property";
+        }
     }
 
     penalty {
