@@ -13,7 +13,7 @@ from yuho.ast import ASTBuilder
 from yuho.ast.nodes import ASTNode, ModuleNode
 from yuho.parser import get_parser
 from yuho.parser.source_location import SourceLocation
-from yuho.parser.wrapper import ParseError
+from yuho.parser.wrapper import ParseError, MAX_FILE_SIZE, MAX_SOURCE_LENGTH
 from yuho.services.errors import (
     ASTBoundaryError,
     ParserBoundaryError,
@@ -227,7 +227,7 @@ def analyze_file(
 
     Returns a structured result instead of raising for common failures.
     """
-    file_path = Path(path)
+    file_path = Path(path).resolve()
     if not file_path.exists():
         return AnalysisResult(
             file=str(file_path),
@@ -240,9 +240,49 @@ def analyze_file(
                 )
             ],
         )
+    if not file_path.is_file():
+        return AnalysisResult(
+            file=str(file_path),
+            source="",
+            errors=[
+                AnalysisError(
+                    stage="parse",
+                    message=f"Not a regular file: {file_path}",
+                    error_code="not_a_file",
+                )
+            ],
+        )
+    try:
+        fsize = file_path.stat().st_size
+    except OSError:
+        fsize = 0
+    if fsize > MAX_FILE_SIZE:
+        return AnalysisResult(
+            file=str(file_path),
+            source="",
+            errors=[
+                AnalysisError(
+                    stage="parse",
+                    message=f"File exceeds maximum size ({MAX_FILE_SIZE} bytes): {file_path}",
+                    error_code="file_too_large",
+                )
+            ],
+        )
 
     try:
         source = file_path.read_text(encoding=encoding)
+    except UnicodeDecodeError as exc:
+        return AnalysisResult(
+            file=str(file_path),
+            source="",
+            errors=[
+                AnalysisError(
+                    stage="parse",
+                    message=f"File is not valid {encoding}: {file_path} ({exc.reason})",
+                    error_code="encoding_error",
+                )
+            ],
+        )
     except OSError as exc:
         return AnalysisResult(
             file=str(file_path),
@@ -269,6 +309,32 @@ def analyze_source(
     Analyze source text through parse, AST build, and semantic checks.
     """
     start_total = perf_counter()
+    if "\x00" in source:
+        return AnalysisResult(
+            file=file,
+            source="",
+            errors=[
+                AnalysisError(
+                    stage="parse",
+                    message="Source contains null bytes (possible binary file)",
+                    error_code="null_bytes",
+                )
+            ],
+        )
+    if len(source) > MAX_SOURCE_LENGTH:
+        return AnalysisResult(
+            file=file,
+            source="",
+            errors=[
+                AnalysisError(
+                    stage="parse",
+                    message=f"Source exceeds maximum length ({MAX_SOURCE_LENGTH} chars)",
+                    error_code="source_too_large",
+                )
+            ],
+        )
+    if source.startswith("\ufeff"):
+        source = source[1:]
     result = AnalysisResult(file=file, source=source)
 
     parser = get_parser()
