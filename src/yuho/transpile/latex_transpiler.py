@@ -197,7 +197,10 @@ class LaTeXTranspiler(TranspilerBase, Visitor):
             self._emit(r"\paragraph{Elements of the Offence}")
             self._emit(r"\begin{enumerate}")
             for elem in node.elements:
-                self._visit_element(elem)
+                if isinstance(elem, nodes.ElementGroupNode):
+                    self._visit_element_group(elem)
+                else:
+                    self._visit_element(elem)
             self._emit(r"\end{enumerate}")
             self._emit_blank()
 
@@ -205,6 +208,33 @@ class LaTeXTranspiler(TranspilerBase, Visitor):
         if node.penalty:
             self._emit(r"\paragraph{Penalty}")
             self._visit_penalty(node.penalty)
+            self._emit_blank()
+
+        # Exceptions
+        if node.exceptions:
+            self._emit(r"\paragraph{Exceptions}")
+            self._emit(r"\begin{enumerate}")
+            for exc in node.exceptions:
+                label = escape_latex(exc.label) if exc.label else "Exception"
+                condition = escape_latex(exc.condition.value)
+                self._emit(rf"  \item[\textbf{{{label}}}] {condition}")
+                if exc.effect:
+                    effect = escape_latex(exc.effect.value)
+                    self._emit(rf"  \\ \textit{{Effect: {effect}}}")
+            self._emit(r"\end{enumerate}")
+            self._emit_blank()
+
+        # Case Law
+        if node.case_law:
+            self._emit(r"\paragraph{Case Law}")
+            self._emit(r"\begin{itemize}")
+            for cl in node.case_law:
+                name = escape_latex(cl.case_name)
+                citation = escape_latex(cl.citation) if cl.citation else ""
+                holding = escape_latex(cl.holding.value)
+                cite_str = f" {citation}" if citation else ""
+                self._emit(rf"  \item \textit{{{name}}}{cite_str}: {holding}")
+            self._emit(r"\end{itemize}")
             self._emit_blank()
 
         # Illustrations
@@ -243,6 +273,18 @@ class LaTeXTranspiler(TranspilerBase, Visitor):
             desc = expr_to_latex(node.description)
             self._emit(rf"  \item{margin} \element{{{label}}}{{{desc}}}")
 
+    def _visit_element_group(self, group: nodes.ElementGroupNode) -> None:
+        """Generate LaTeX for element group (all_of/any_of)."""
+        label = "All of the following" if group.combinator == "all_of" else "Any of the following"
+        self._emit(rf"  \item \textbf{{{label}:}}")
+        self._emit(r"  \begin{enumerate}")
+        for member in group.members:
+            if isinstance(member, nodes.ElementGroupNode):
+                self._visit_element_group(member)
+            else:
+                self._visit_element(member)
+        self._emit(r"  \end{enumerate}")
+
     def _visit_penalty(self, node: nodes.PenaltyNode) -> None:
         """Generate LaTeX penalty table."""
         self._emit(r"\begin{center}")
@@ -262,6 +304,15 @@ class LaTeXTranspiler(TranspilerBase, Visitor):
             min_str = money_to_latex(node.fine_min) if node.fine_min else "---"
             max_str = money_to_latex(node.fine_max)
             self._emit(rf"Fine & {min_str} & {max_str} \\")
+
+        # Caning row
+        if node.caning_max:
+            min_str = str(node.caning_min) if node.caning_min else "---"
+            self._emit(rf"Caning & {min_str} strokes & {node.caning_max} strokes \\")
+
+        # Death penalty row
+        if node.death_penalty:
+            self._emit(r"Death & \multicolumn{2}{c}{Applicable} \\")
 
         self._emit(r"\bottomrule")
         self._emit(r"\end{tabular}")
