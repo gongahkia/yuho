@@ -25,17 +25,25 @@ The law is innately complex.
 
 Criminal Law is often a [foundational module](https://law.smu.edu.sg/programmes/core-courses-description) most students take in their first year of law school. In particular, Singapore Criminal Law is nearly entirely statute-based, largely focusing on the [Penal Code](https://sso.agc.gov.sg/Act/PC1871).
 
-Yuho is a DSL that seeks to *help law students* better understand statutes by providing a flexible syntax which affords a programmatic representation of Singapore Criminal Law. By allowing users to decide how to represent statutory provisions in `.yh` code, the hope is that the statute's key elements and its underlying conditional relationships surface themselves. These representations can be coarse or granular, entirely scoped by their use-cases.  
+Yuho is a DSL that seeks to *help law students* better understand statutes by providing a flexible syntax which affords a programmatic representation of Singapore Criminal Law. By allowing users to decide how to represent statutory provisions in `.yh` code, the hope is that the statute's key elements and its underlying conditional relationships surface themselves. These representations can be coarse or granular, entirely scoped by their use-cases.
 
-Getting into the specifics, Yuho provides the following five products.
+> [!NOTE]
+> **No programming experience required.** Yuho's syntax reads like structured English. If you can read a statute and identify its elements, you can use Yuho.
 
-1. [Yuho](./doc/SYNTAX.md), a DSL made to be readable and codeable by law students and lawyers
-2. [Formalised semantics](./tests/) for legal reasoning modelled after the syntactical patterns of the law
-3. [CLI tool](./src/yuho/cli/) for interacting with Yuho's primary functions in the CLI
-4. [LSP](./src/yuho/lsp/) for editor integration with diagnostics, completion, and hover
-5. [Transpiler](./src/yuho/transpile/) that transpiles to multiple targets
+### For law students
 
-### Output formats
+Yuho helps you break down statutes into their constituent elements and visualise the logical relationships between them. Key features for study:
+
+* **Statute modelling** -- represent any statute's definitions, elements (actus reus, mens rea, circumstance), penalties, and illustrations in structured `.yh` files
+* **Plain English output** -- transpile your model back to a structured English explanation to verify your understanding
+* **Diagrams** -- auto-generate Mermaid mindmaps and flowcharts showing how a statute's elements relate
+* **Interactive wizard** -- `yuho wizard` guides you through creating a statute model step-by-step, no code required
+* **REPL** -- `yuho repl` lets you experiment with statute models interactively
+* **Fact pattern testing** -- model hypothetical scenarios and evaluate them against statute definitions
+
+### For developers
+
+Yuho also provides infrastructure for legal tech tooling:
 
 | Target | Usage |
 | :--- | :--- |
@@ -47,8 +55,6 @@ Getting into the specifics, Yuho provides the following five products.
 | Mermaid | Diagrammatic representations of statutory logic *(mindmap, flowchart)* |
 | GraphQL | Schema definitions for building legal statute APIs |
 | Blocks | Visual block-based representation for drag-and-drop editing |
-
-Sold on Yuho? Check out the [quickstart](#quickstart) guide.
 
 > [!TIP]
 > More transpilation outputs can be added. Open an issue to contribute suggestions!
@@ -78,11 +84,29 @@ Want to find out more? See Yuho's [documentation](#documentation).
 
 ## Quickstart
 
-**Yuho v5**: Install via pip and start using immediately:
+### Prerequisites
+
+* **Python 3.10+** required. Check with `python3 --version`.
+* If you don't have Python: macOS `brew install python`, or download from [python.org](https://www.python.org/downloads/).
+* `pip` may need to be invoked as `pip3` on some systems.
+
+### Your first 60 seconds
 
 ```bash
+# 1. install
 pip install yuho
-yuho --help
+
+# 2. create a statute interactively (no coding needed)
+yuho wizard
+
+# 3. validate your .yh file
+yuho check my_statute.yh
+
+# 4. see it in plain English
+yuho transpile my_statute.yh -t english
+
+# 5. generate a diagram
+yuho transpile my_statute.yh -t mermaid
 ```
 
 **Learn Yuho**: Understand the basics in 5 minutes at [`5_MINUTES.md`](./doc/5_MINUTES.md).
