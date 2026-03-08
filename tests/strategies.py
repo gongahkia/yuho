@@ -197,9 +197,17 @@ def yuho_match_arm(draw) -> str:
 
 @st.composite
 def yuho_match_expression(draw, min_arms: int = 1, max_arms: int = 5) -> str:
-    """Generate a valid match expression with N arms."""
+    """Generate a valid match expression with unique non-wildcard patterns."""
     num_arms = draw(st.integers(min_value=min_arms, max_value=max_arms))
-    arms = [draw(yuho_match_arm()) for _ in range(num_arms)]
+    seen_patterns = set()
+    arms = []
+    for _ in range(num_arms):
+        arm = draw(yuho_match_arm())
+        pattern = arm.split("case")[1].split(":=")[0].strip() if "case" in arm else ""
+        if pattern != "_" and pattern in seen_patterns:
+            continue # skip duplicate patterns
+        seen_patterns.add(pattern)
+        arms.append(arm)
 
     # Always add wildcard as last arm for exhaustiveness
     if not any("_" in arm for arm in arms):
