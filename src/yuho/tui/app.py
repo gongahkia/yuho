@@ -884,6 +884,10 @@ class SettingsPanel(ScrollableContainer):
         yield Static("")
         yield Static("[bold]Offline Mode[/bold]")
         yield Select(options=[("Enabled", "true"), ("Disabled", "false")], value="false", id="settings-offline")
+        yield Static("")
+        yield Static("[bold]Theme[/bold]")
+        with Horizontal(classes="action-row"):
+            yield Button("Toggle Dark/Light", id="btn-theme-toggle")
         yield Rule()
         with Horizontal(classes="action-row"):
             yield Button("Save Settings", id="btn-settings-save", variant="primary")
@@ -931,6 +935,12 @@ class SettingsPanel(ScrollableContainer):
         self.query_one("#settings-default-target", Select).value = "json"
         self.query_one("#settings-offline", Select).value = "false"
         self.query_one("#settings-status", Static).update("[dim]Defaults restored.[/dim]")
+
+    @on(Button.Pressed, "#btn-theme-toggle")
+    def handle_theme_toggle(self) -> None:
+        self.app.dark = not self.app.dark
+        mode = "dark" if self.app.dark else "light"
+        self.query_one("#settings-status", Static).update(f"[dim]Theme: {mode}[/dim]")
 
 
 class AboutPanel(ScrollableContainer):
@@ -1105,6 +1115,7 @@ HomePanel, AboutPanel {
     BINDINGS = [
         Binding("q", "quit", "Quit", show=True),
         Binding("f1", "help_screen", "Help", show=True),
+        Binding("t", "toggle_dark", "Theme", show=True),
         Binding("1", "nav(0)", "Home", show=False),
         Binding("2", "nav(1)", "Check", show=False),
         Binding("3", "nav(2)", "Transpile", show=False),
