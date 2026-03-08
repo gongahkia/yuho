@@ -77,17 +77,37 @@ NAV_IDS = [
 ]
 
 
-def capture_cli(func, *args, **kwargs) -> Tuple[str, str]:
-    """Run a function capturing stdout/stderr."""
+import re as _re
+_ANSI_RE = _re.compile(r"\x1b\[[0-9;]*[a-zA-Z]")
+
+def _strip_ansi(text: str) -> str:
+    return _ANSI_RE.sub("", text)
+
+def capture_cli(func, *args, strip_ansi: bool = True, **kwargs) -> Tuple[str, str]:
+    """Run a function capturing stdout/stderr, including click.echo output."""
+    import click as _click
     out, err = io.StringIO(), io.StringIO()
+    _orig_echo = _click.echo
+    def _patched_echo(message=None, file=None, nl=True, err_flag=False, color=None, **kw):
+        target = err if err_flag else (file if file not in (None, sys.stdout, sys.stderr) else out)
+        if message is not None:
+            target.write(str(message))
+        if nl:
+            target.write("\n")
     try:
+        _click.echo = _patched_echo
         with redirect_stdout(out), redirect_stderr(err):
             func(*args, **kwargs)
     except SystemExit:
         pass
     except Exception as e:
         err.write(str(e))
-    return out.getvalue(), err.getvalue()
+    finally:
+        _click.echo = _orig_echo
+    stdout_val, stderr_val = out.getvalue(), err.getvalue()
+    if strip_ansi:
+        stdout_val, stderr_val = _strip_ansi(stdout_val), _strip_ansi(stderr_val)
+    return stdout_val, stderr_val
 
 
 # ─── File Picker ─────────────────────────────────────────────────────────────
