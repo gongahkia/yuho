@@ -296,6 +296,83 @@ statute 415 "Cheating" {
 }
 ```
 
+### Element Groups (AND/OR relationships)
+
+```yh
+// elements can be grouped using all_of (AND) and any_of (OR)
+// groups can be nested to model complex logical relationships
+
+statute 415 "Cheating" {
+    elements {
+        all_of {
+            actus_reus deception := "Deceiving any person";
+            any_of {
+                mens_rea fraudulent := "Fraudulently inducing the person";
+                mens_rea dishonest := "Dishonestly inducing the person";
+            }
+            actus_reus inducement := "Inducing delivery of property, consent to retain, or act/omission";
+            circumstance harm := "Causing or likely to cause damage to body, mind, reputation, or property";
+        }
+    }
+}
+```
+
+### Exception Blocks
+
+```yh
+// exception blocks model statutory defences, provisos, and General Exceptions
+// syntax: exception [label] { "condition" "effect" }
+
+statute 300 "Murder" {
+    elements {
+        actus_reus act := "Causing death of a person";
+        mens_rea intent := "Intention of causing death";
+    }
+
+    exception provocation {
+        "If the offender was deprived of self-control by grave and sudden provocation"
+        "Culpable homicide not amounting to murder"
+    }
+
+    exception privateDefence {
+        "If the offender exercises the right of private defence that extends to causing death"
+        "Not an offence"
+    }
+}
+```
+
+### Case Law Blocks
+
+```yh
+// caselaw blocks associate judicial interpretations with statute elements
+// syntax: caselaw "case name" "citation" { "holding" element <name> }
+
+statute 415 "Cheating" {
+    elements {
+        actus_reus deception := "Deceiving any person";
+    }
+
+    caselaw "PP v Tan Cheng Bock" "[2019] SGCA 1" {
+        "Deception requires active misleading, not mere silence"
+        element deception
+    }
+}
+```
+
+### Extended Penalty
+
+```yh
+// penalty block supports caning and death penalty in addition to imprisonment and fine
+
+penalty {
+    imprisonment := 5 years .. 20 years;
+    fine := $0.00 .. $20,000.00;
+    caning := 6 .. 24 strokes;
+    death := TRUE;
+    supplementary := "Mandatory minimum of 6 strokes for repeat offenders";
+}
+```
+
 ## Imports
 
 ```yh
