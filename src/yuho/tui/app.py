@@ -41,10 +41,18 @@ NAV_ITEMS = [
     "  REPL",
     "  Lint",
     "  Test",
+    "  Format",
+    "  Diff",
+    "  Verify",
+    "  AST View",
+    "  Library",
     "  Settings",
     "  About",
 ]
-NAV_IDS = ["home", "check", "transpile", "wizard", "repl", "lint", "test", "settings", "about"]
+NAV_IDS = [
+    "home", "check", "transpile", "wizard", "repl", "lint", "test",
+    "fmt", "diff", "verify", "ast-view", "library", "settings", "about",
+]
 
 
 def capture_cli(func, *args, **kwargs) -> Tuple[str, str]:
@@ -134,8 +142,9 @@ class HomePanel(ScrollableContainer):
             "  [bold magenta]4[/] REPL      — Interactive experimentation\n"
             "  [bold magenta]5[/] Lint      — Style and best practice checks\n"
             "  [bold magenta]6[/] Test      — Run .yh test files\n"
-            "  [bold magenta]7[/] Settings  — Configure Yuho\n"
-            "  [bold magenta]8[/] About     — Version, links, attribution\n",
+            "  [bold magenta]7[/] Format    — Apply canonical formatting\n"
+            "  [bold magenta]8[/] Diff      — Compare two .yh files\n"
+            "  [dim]  + Verify, AST, Library, Settings, About via sidebar[/dim]\n",
         )
         yield Rule()
         yield Static(
@@ -595,6 +604,240 @@ class TestPanel(Container):
             self.app.call_from_thread(output.write, f"[bold red]Error:[/] {e}")
 
 
+class FmtPanel(Container):
+    """Format .yh files."""
+    def compose(self) -> ComposeResult:
+        yield Static("[bold magenta]Format[/bold magenta] — Apply canonical formatting\n")
+        with Horizontal(classes="input-row"):
+            yield Input(placeholder="Enter path to .yh file...", id="fmt-path")
+            yield Button("Format", id="btn-fmt", variant="primary")
+            yield Button("Check Only", id="btn-fmt-check")
+        yield RichLog(id="fmt-output", highlight=True, markup=True)
+
+    @on(Button.Pressed, "#btn-fmt")
+    def handle_fmt(self) -> None:
+        self._do_fmt(in_place=True)
+
+    @on(Button.Pressed, "#btn-fmt-check")
+    def handle_fmt_check(self) -> None:
+        self._do_fmt(in_place=False)
+
+    @on(Input.Submitted, "#fmt-path")
+    def handle_fmt_enter(self) -> None:
+        self._do_fmt(in_place=True)
+
+    def _do_fmt(self, in_place: bool) -> None:
+        output = self.query_one("#fmt-output", RichLog)
+        output.clear()
+        file_path = self.query_one("#fmt-path", Input).value.strip()
+        if not file_path:
+            output.write("[bold red]Error:[/] Please enter a file path.")
+            return
+        self._run_fmt(file_path, in_place)
+
+    @work(thread=True)
+    def _run_fmt(self, file_path: str, in_place: bool) -> None:
+        output = self.query_one("#fmt-output", RichLog)
+        try:
+            from yuho.cli.commands.fmt import run_fmt
+            if in_place:
+                stdout, stderr = capture_cli(run_fmt, file_path, in_place=True, check=False, verbose=False)
+            else:
+                stdout, stderr = capture_cli(run_fmt, file_path, in_place=False, check=True, verbose=False)
+            result = stdout.strip() or stderr.strip() or "[green]File is properly formatted.[/green]"
+            self.app.call_from_thread(output.write, result)
+        except Exception as e:
+            self.app.call_from_thread(output.write, f"[bold red]Error:[/] {e}")
+
+
+class DiffPanel(Container):
+    """Compare two .yh files."""
+    def compose(self) -> ComposeResult:
+        yield Static("[bold magenta]Diff[/bold magenta] — Compare two Yuho files\n")
+        with Horizontal(classes="input-row"):
+            yield Input(placeholder="File 1 path...", id="diff-path1")
+            yield Input(placeholder="File 2 path...", id="diff-path2")
+            yield Button("Compare", id="btn-diff", variant="primary")
+        yield RichLog(id="diff-output", highlight=True, markup=True)
+
+    @on(Button.Pressed, "#btn-diff")
+    def handle_diff(self) -> None:
+        output = self.query_one("#diff-output", RichLog)
+        output.clear()
+        p1 = self.query_one("#diff-path1", Input).value.strip()
+        p2 = self.query_one("#diff-path2", Input).value.strip()
+        if not p1 or not p2:
+            output.write("[bold red]Error:[/] Both file paths are required.")
+            return
+        self._run_diff(p1, p2)
+
+    @work(thread=True)
+    def _run_diff(self, file1: str, file2: str) -> None:
+        output = self.query_one("#diff-output", RichLog)
+        try:
+            from yuho.cli.commands.diff import run_diff
+            stdout, stderr = capture_cli(run_diff, file1, file2, verbose=False, color=False)
+            result = stdout.strip() or stderr.strip() or "[green]Files are identical.[/green]"
+            self.app.call_from_thread(output.write, result)
+        except Exception as e:
+            self.app.call_from_thread(output.write, f"[bold red]Error:[/] {e}")
+
+
+class VerifyPanel(Container):
+    """Formal verification with Alloy/Z3."""
+    def compose(self) -> ComposeResult:
+        yield Static("[bold magenta]Verify[/bold magenta] — Formal verification (Alloy/Z3)\n")
+        with Horizontal(classes="input-row"):
+            yield Input(placeholder="Enter path to .yh file...", id="verify-path")
+            yield Select(
+                options=[("Combined", "combined"), ("Alloy", "alloy"), ("Z3", "z3")],
+                value="combined",
+                id="verify-engine",
+            )
+            yield Button("Verify", id="btn-verify", variant="primary")
+            yield Button("Capabilities", id="btn-verify-caps")
+        yield RichLog(id="verify-output", highlight=True, markup=True)
+
+    @on(Button.Pressed, "#btn-verify")
+    def handle_verify(self) -> None:
+        output = self.query_one("#verify-output", RichLog)
+        output.clear()
+        file_path = self.query_one("#verify-path", Input).value.strip()
+        if not file_path:
+            output.write("[bold red]Error:[/] Please enter a file path.")
+            return
+        engine = self.query_one("#verify-engine", Select).value
+        engine_str = str(engine) if engine != Select.BLANK else "combined"
+        self._run_verify(file_path, engine_str)
+
+    @on(Button.Pressed, "#btn-verify-caps")
+    def handle_caps(self) -> None:
+        output = self.query_one("#verify-output", RichLog)
+        output.clear()
+        self._run_caps()
+
+    @work(thread=True)
+    def _run_verify(self, file_path: str, engine: str) -> None:
+        output = self.query_one("#verify-output", RichLog)
+        try:
+            from yuho.cli.commands.verify import run_verify
+            stdout, stderr = capture_cli(run_verify, file_path, engine=engine, verbose=False)
+            result = stdout.strip() or stderr.strip() or "[green]Verification passed.[/green]"
+            self.app.call_from_thread(output.write, result)
+        except Exception as e:
+            self.app.call_from_thread(output.write, f"[bold red]Error:[/] {e}")
+
+    @work(thread=True)
+    def _run_caps(self) -> None:
+        output = self.query_one("#verify-output", RichLog)
+        try:
+            from yuho.cli.commands.verify import run_verify
+            stdout, stderr = capture_cli(run_verify, None, capabilities_only=True, verbose=False)
+            result = stdout.strip() or stderr.strip() or "(no output)"
+            self.app.call_from_thread(output.write, result)
+        except Exception as e:
+            self.app.call_from_thread(output.write, f"[bold red]Error:[/] {e}")
+
+
+class ASTViewPanel(Container):
+    """Visualize AST structure."""
+    def compose(self) -> ComposeResult:
+        yield Static("[bold magenta]AST View[/bold magenta] — Visualize abstract syntax tree\n")
+        with Horizontal(classes="input-row"):
+            yield Input(placeholder="Enter path to .yh file...", id="ast-path")
+            yield Button("Show AST", id="btn-ast-show", variant="primary")
+            yield Button("Stats", id="btn-ast-stats")
+        yield RichLog(id="ast-output", highlight=True, markup=True)
+
+    @on(Button.Pressed, "#btn-ast-show")
+    def handle_ast(self) -> None:
+        output = self.query_one("#ast-output", RichLog)
+        output.clear()
+        file_path = self.query_one("#ast-path", Input).value.strip()
+        if not file_path:
+            output.write("[bold red]Error:[/] Please enter a file path.")
+            return
+        self._run_ast(file_path, stats=False)
+
+    @on(Button.Pressed, "#btn-ast-stats")
+    def handle_ast_stats(self) -> None:
+        output = self.query_one("#ast-output", RichLog)
+        output.clear()
+        file_path = self.query_one("#ast-path", Input).value.strip()
+        if not file_path:
+            output.write("[bold red]Error:[/] Please enter a file path.")
+            return
+        self._run_ast(file_path, stats=True)
+
+    @on(Input.Submitted, "#ast-path")
+    def handle_ast_enter(self) -> None:
+        self.handle_ast()
+
+    @work(thread=True)
+    def _run_ast(self, file_path: str, stats: bool) -> None:
+        output = self.query_one("#ast-output", RichLog)
+        try:
+            from yuho.cli.commands.ast_viz import run_ast_viz
+            stdout, stderr = capture_cli(run_ast_viz, file=file_path, stats=stats, verbose=False, color=False, depth=0, no_unicode=False)
+            result = stdout.strip() or stderr.strip() or "(no output)"
+            self.app.call_from_thread(output.write, result)
+        except Exception as e:
+            self.app.call_from_thread(output.write, f"[bold red]Error:[/] {e}")
+
+
+class LibraryPanel(Container):
+    """Statute package management."""
+    def compose(self) -> ComposeResult:
+        yield Static("[bold magenta]Library[/bold magenta] — Manage statute packages\n")
+        with Horizontal(classes="input-row"):
+            yield Input(placeholder="Search query or package name...", id="lib-query")
+            yield Button("Search", id="btn-lib-search", variant="primary")
+            yield Button("List Installed", id="btn-lib-list")
+        yield RichLog(id="lib-output", highlight=True, markup=True)
+
+    @on(Button.Pressed, "#btn-lib-search")
+    def handle_search(self) -> None:
+        output = self.query_one("#lib-output", RichLog)
+        output.clear()
+        query = self.query_one("#lib-query", Input).value.strip()
+        if not query:
+            output.write("[bold red]Error:[/] Please enter a search query.")
+            return
+        self._run_search(query)
+
+    @on(Button.Pressed, "#btn-lib-list")
+    def handle_list(self) -> None:
+        output = self.query_one("#lib-output", RichLog)
+        output.clear()
+        self._run_list()
+
+    @on(Input.Submitted, "#lib-query")
+    def handle_search_enter(self) -> None:
+        self.handle_search()
+
+    @work(thread=True)
+    def _run_search(self, query: str) -> None:
+        output = self.query_one("#lib-output", RichLog)
+        try:
+            from yuho.cli.commands.library import run_library_search
+            stdout, stderr = capture_cli(run_library_search, query, verbose=False)
+            result = stdout.strip() or stderr.strip() or "[dim]No packages found.[/dim]"
+            self.app.call_from_thread(output.write, result)
+        except Exception as e:
+            self.app.call_from_thread(output.write, f"[bold red]Error:[/] {e}")
+
+    @work(thread=True)
+    def _run_list(self) -> None:
+        output = self.query_one("#lib-output", RichLog)
+        try:
+            from yuho.cli.commands.library import run_library_list
+            stdout, stderr = capture_cli(run_library_list, verbose=False)
+            result = stdout.strip() or stderr.strip() or "[dim]No packages installed.[/dim]"
+            self.app.call_from_thread(output.write, result)
+        except Exception as e:
+            self.app.call_from_thread(output.write, f"[bold red]Error:[/] {e}")
+
+
 class SettingsPanel(ScrollableContainer):
     """Configuration management."""
     def compose(self) -> ComposeResult:
@@ -831,8 +1074,8 @@ HomePanel, AboutPanel {
         Binding("5", "nav(4)", "REPL", show=False),
         Binding("6", "nav(5)", "Lint", show=False),
         Binding("7", "nav(6)", "Test", show=False),
-        Binding("8", "nav(7)", "Settings", show=False),
-        Binding("9", "nav(8)", "About", show=False),
+        Binding("8", "nav(7)", "Format", show=False),
+        Binding("9", "nav(8)", "Diff", show=False),
     ]
 
     def compose(self) -> ComposeResult:
@@ -850,6 +1093,11 @@ HomePanel, AboutPanel {
                 yield ReplPanel(id="repl", classes="panel")
                 yield LintPanel(id="lint", classes="panel")
                 yield TestPanel(id="test", classes="panel")
+                yield FmtPanel(id="fmt", classes="panel")
+                yield DiffPanel(id="diff", classes="panel")
+                yield VerifyPanel(id="verify", classes="panel")
+                yield ASTViewPanel(id="ast-view", classes="panel")
+                yield LibraryPanel(id="library", classes="panel")
                 yield SettingsPanel(id="settings", classes="panel")
                 yield AboutPanel(id="about", classes="panel")
         yield Footer()
