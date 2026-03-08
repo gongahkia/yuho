@@ -336,6 +336,8 @@ module.exports = grammar({
       $.elements_block,
       $.penalty_block,
       $.illustration_block,
+      $.exception_block,
+      $.caselaw_block,
     ),
 
     definitions_block: $ => seq(
@@ -440,6 +442,25 @@ module.exports = grammar({
       optional(field('label', $.identifier)),
       '{',
       field('description', $.string_literal),
+      '}'
+    ),
+
+    exception_block: $ => seq(
+      'exception',
+      optional(field('label', $.identifier)),
+      '{',
+      field('condition', $.string_literal),
+      optional(field('effect', $.string_literal)),
+      '}'
+    ),
+
+    caselaw_block: $ => seq(
+      'caselaw',
+      field('case_name', $.string_literal),
+      optional(field('citation', $.string_literal)),
+      '{',
+      field('holding', $.string_literal),
+      optional(seq('element', field('element_ref', $.identifier))),
       '}'
     ),
 
