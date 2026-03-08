@@ -20,8 +20,37 @@ All commands support `-h` / `--help` for detailed usage.
 | Command | Description |
 |---------|-------------|
 | `yuho generate <section> -t <title>` | Generate statute scaffold |
-| `yuho wizard` | Interactive step-by-step statute builder |
+| `yuho wizard` | Interactive step-by-step statute builder (recommended for beginners) |
 | `yuho init [name]` | Initialize a new Yuho project |
+
+### `yuho wizard`
+
+The wizard asks you questions in plain English and generates valid `.yh` code. This is the recommended starting point for users who have never written a `.yh` file. It prompts for: section number, title, definitions, elements (with type selection), penalty ranges, and illustrations. Output is saved to a file of your choice.
+
+```bash
+yuho wizard                # interactive mode
+yuho wizard -o theft.yh    # specify output file
+```
+
+### `yuho repl`
+
+Interactive REPL for experimenting with Yuho without creating files. Supports multi-line input and loading existing files.
+
+```bash
+yuho repl
+```
+
+Available commands inside the REPL:
+
+| Command | Description |
+|---------|-------------|
+| `load <file>` | Load a `.yh` file into the session |
+| `transpile <target>` | Transpile current session (english, mermaid, json, etc.) |
+| `ast` | Show AST of current session |
+| `history` | Show input history |
+| `reset` | Clear the session |
+| `help` | Show available commands |
+| `exit` | Exit the REPL |
 
 ## LLM & AI Integration
 
@@ -59,6 +88,64 @@ All commands support `-h` / `--help` for detailed usage.
 | `yuho config show` | Display current config |
 | `yuho config set <key> <value>` | Set a config value |
 | `yuho config init` | Create default config file |
+
+## Transpilation Output Examples
+
+### English
+
+```bash
+yuho transpile my_statute.yh -t english
+```
+
+Produces a structured plain English breakdown of the statute with definitions, elements classified by type, penalties, and illustrations. Most useful output for law students verifying their model.
+
+### Mermaid
+
+```bash
+yuho transpile my_statute.yh -t mermaid
+```
+
+Generates Mermaid diagram code (mindmap or flowchart). View by pasting into [mermaid.live](https://mermaid.live), wrapping in a ` ```mermaid ` block on GitHub, or using `yuho preview`.
+
+### LaTeX / PDF
+
+```bash
+yuho transpile my_statute.yh -t latex > statute.tex
+pdflatex statute.tex    # generates statute.pdf
+```
+
+Produces formatted statute documents. Requires LaTeX installed (`brew install --cask mactex-no-gui` on macOS).
+
+### JSON
+
+```bash
+yuho transpile my_statute.yh -t json
+```
+
+Produces machine-readable structured output. Example:
+
+```json
+{
+  "statutes": [{
+    "section": "415",
+    "title": "Cheating",
+    "definitions": {
+      "deceive": "To cause a person to believe something that is false",
+      "fraudulently": "With intent to defraud another person"
+    },
+    "elements": [
+      {"type": "actus_reus", "name": "deception", "description": "Deceiving any person"},
+      {"type": "mens_rea", "name": "intent", "description": "Fraudulently or dishonestly"}
+    ],
+    "penalty": {
+      "imprisonment": {"min": "1 year", "max": "7 years"},
+      "fine": {"min": "$0.00", "max": "$50,000.00"}
+    }
+  }]
+}
+```
+
+JSON output is primarily for tool integration -- feeding statute data into web apps, databases, or other programs. For study purposes, English and Mermaid outputs are more useful.
 
 ## Shell Completion
 
