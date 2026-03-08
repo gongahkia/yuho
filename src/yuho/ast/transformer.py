@@ -42,6 +42,59 @@ class Transformer:
         """
         return node.accept(self)
 
+    # visit_* aliases so node.accept(self) dispatches correctly
+    def visit_builtin_type(self, node): return self.transform_builtin_type(node)
+    def visit_named_type(self, node): return self.transform_named_type(node)
+    def visit_generic_type(self, node): return self.transform_generic_type(node)
+    def visit_optional_type(self, node): return self.transform_optional_type(node)
+    def visit_array_type(self, node): return self.transform_array_type(node)
+    def visit_int_lit(self, node): return self.transform_int_lit(node)
+    def visit_float_lit(self, node): return self.transform_float_lit(node)
+    def visit_bool_lit(self, node): return self.transform_bool_lit(node)
+    def visit_string_lit(self, node): return self.transform_string_lit(node)
+    def visit_money(self, node): return self.transform_money(node)
+    def visit_percent(self, node): return self.transform_percent(node)
+    def visit_date(self, node): return self.transform_date(node)
+    def visit_duration(self, node): return self.transform_duration(node)
+    def visit_identifier(self, node): return self.transform_identifier(node)
+    def visit_field_access(self, node): return self.transform_field_access(node)
+    def visit_index_access(self, node): return self.transform_index_access(node)
+    def visit_function_call(self, node): return self.transform_function_call(node)
+    def visit_binary_expr(self, node): return self.transform_binary_expr(node)
+    def visit_unary_expr(self, node): return self.transform_unary_expr(node)
+    def visit_pass_expr(self, node): return self.transform_pass_expr(node)
+    def visit_wildcard_pattern(self, node): return self.transform_wildcard_pattern(node)
+    def visit_literal_pattern(self, node): return self.transform_literal_pattern(node)
+    def visit_binding_pattern(self, node): return self.transform_binding_pattern(node)
+    def visit_field_pattern(self, node): return self.transform_field_pattern(node)
+    def visit_struct_pattern(self, node): return self.transform_struct_pattern(node)
+    def visit_match_arm(self, node): return self.transform_match_arm(node)
+    def visit_match_expr(self, node): return self.transform_match_expr(node)
+    def visit_field_def(self, node): return self.transform_field_def(node)
+    def visit_struct_def(self, node): return self.transform_struct_def(node)
+    def visit_field_assignment(self, node): return self.transform_field_assignment(node)
+    def visit_struct_literal(self, node): return self.transform_struct_literal(node)
+    def visit_param_def(self, node): return self.transform_param_def(node)
+    def visit_block(self, node): return self.transform_block(node)
+    def visit_function_def(self, node): return self.transform_function_def(node)
+    def visit_variable_decl(self, node): return self.transform_variable_decl(node)
+    def visit_assignment_stmt(self, node): return self.transform_assignment_stmt(node)
+    def visit_return_stmt(self, node): return self.transform_return_stmt(node)
+    def visit_pass_stmt(self, node): return self.transform_pass_stmt(node)
+    def visit_expression_stmt(self, node): return self.transform_expression_stmt(node)
+    def visit_definition_entry(self, node): return self.transform_definition_entry(node)
+    def visit_element(self, node): return self.transform_element(node)
+    def visit_element_group(self, node): return self.transform_element_group(node)
+    def visit_penalty(self, node): return self.transform_penalty(node)
+    def visit_illustration(self, node): return self.transform_illustration(node)
+    def visit_exception(self, node): return self.transform_exception(node)
+    def visit_caselaw(self, node): return self.transform_caselaw(node)
+    def visit_statute(self, node): return self.transform_statute(node)
+    def visit_import(self, node): return self.transform_import(node)
+    def visit_module(self, node): return self.transform_module(node)
+    def visit_assert_stmt(self, node): return node
+    def visit_referencing_stmt(self, node): return node
+
     def _transform_children(self, children: List[nodes.ASTNode]) -> Tuple[Tuple[nodes.ASTNode, ...], bool]:
         """
         Transform a list of children and return whether any changed.
@@ -426,8 +479,23 @@ class Transformer:
             )
         return node
 
+    def transform_element_group(self, node: nodes.ElementGroupNode) -> nodes.ElementGroupNode:
+        new_members, changed = self._transform_children(list(node.members))
+        if changed:
+            return nodes.ElementGroupNode(
+                combinator=node.combinator,
+                members=new_members,
+                source_location=node.source_location,
+            )
+        return node
+
     def transform_penalty(self, node: nodes.PenaltyNode) -> nodes.PenaltyNode:
-        # Penalties contain immutable duration/money nodes, typically unchanged
+        return node
+
+    def transform_exception(self, node: nodes.ExceptionNode) -> nodes.ExceptionNode:
+        return node
+
+    def transform_caselaw(self, node: nodes.CaseLawNode) -> nodes.CaseLawNode:
         return node
 
     def transform_illustration(self, node: nodes.IllustrationNode) -> nodes.IllustrationNode:
@@ -446,12 +514,13 @@ class Transformer:
         new_elems, elems_changed = self._transform_children(list(node.elements))
         new_penalty = self.transform(node.penalty) if node.penalty else None
         new_illus, illus_changed = self._transform_children(list(node.illustrations))
+        new_exc, exc_changed = self._transform_children(list(node.exceptions))
+        new_cl, cl_changed = self._transform_children(list(node.case_law))
 
         if (new_title is not node.title or
-            defs_changed or
-            elems_changed or
+            defs_changed or elems_changed or
             new_penalty is not node.penalty or
-            illus_changed):
+            illus_changed or exc_changed or cl_changed):
             return nodes.StatuteNode(
                 section_number=node.section_number,
                 title=new_title,
@@ -459,6 +528,8 @@ class Transformer:
                 elements=new_elems,
                 penalty=new_penalty,
                 illustrations=new_illus,
+                exceptions=new_exc,
+                case_law=new_cl,
                 source_location=node.source_location,
             )
         return node
@@ -485,6 +556,8 @@ class Transformer:
                 function_defs=new_funcs,
                 statutes=new_statutes,
                 variables=new_vars,
+                references=node.references,
+                assertions=node.assertions,
                 source_location=node.source_location,
             )
         return node
