@@ -225,6 +225,15 @@ class Visitor:
     def visit_illustration(self, node: nodes.IllustrationNode) -> Any:
         return self.generic_visit(node)
 
+    def visit_exception(self, node: nodes.ExceptionNode) -> Any:
+        return self.generic_visit(node)
+
+    def visit_caselaw(self, node: nodes.CaseLawNode) -> Any:
+        return self.generic_visit(node)
+
+    def visit_element_group(self, node: nodes.ElementGroupNode) -> Any:
+        return self.generic_visit(node)
+
     def visit_statute(self, node: nodes.StatuteNode) -> Any:
         return self.generic_visit(node)
 
