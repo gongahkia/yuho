@@ -179,14 +179,50 @@ class HomePanel(ScrollableContainer):
 
 
 class CheckPanel(Container):
-    """Parse and validate .yh files."""
+    """Parse and validate .yh files with real-time feedback."""
+    _debounce_timer: Optional[object] = None
     def compose(self) -> ComposeResult:
         yield Static("[bold magenta]Check[/bold magenta] — Parse and validate a Yuho file\n")
         with Horizontal(classes="input-row"):
             yield Input(placeholder="Enter path to .yh file...", id="check-path")
             yield Button("Browse", id="btn-check-browse")
             yield Button("Check", id="btn-check", variant="primary")
+        yield Static("[dim]Or type/paste Yuho code below for real-time validation:[/dim]")
+        yield TextArea(language="python", id="check-editor")
+        yield Static("", id="check-live-status")
         yield RichLog(id="check-output", highlight=True, markup=True)
+
+    @on(TextArea.Changed, "#check-editor")
+    def handle_editor_change(self) -> None:
+        if self._debounce_timer is not None:
+            self._debounce_timer.stop()
+        self._debounce_timer = self.set_timer(0.5, self._validate_editor_content)
+
+    def _validate_editor_content(self) -> None:
+        text = self.query_one("#check-editor", TextArea).text.strip()
+        status = self.query_one("#check-live-status", Static)
+        if not text:
+            status.update("")
+            return
+        try:
+            from yuho.parser import get_parser
+            parser = get_parser()
+            result = parser.parse(text, "<editor>")
+            if result.errors:
+                msgs = [f"L{e.location.line}:{e.location.col} {e.message}" for e in result.errors[:3]]
+                status.update(f"[red]{len(result.errors)} error(s):[/red] " + "; ".join(msgs))
+            else:
+                from yuho.ast import ASTBuilder
+                builder = ASTBuilder(text, "<editor>")
+                ast = builder.build(result.tree.root_node)
+                parts = []
+                if ast.statutes: parts.append(f"{len(ast.statutes)} statute(s)")
+                if ast.type_defs: parts.append(f"{len(ast.type_defs)} type(s)")
+                if ast.function_defs: parts.append(f"{len(ast.function_defs)} fn(s)")
+                summary = ", ".join(parts) if parts else "valid (empty)"
+                status.update(f"[green]OK:[/green] {summary}")
+        except Exception as e:
+            status.update(f"[yellow]{e}[/yellow]")
 
     @on(Button.Pressed, "#btn-check")
     def handle_check(self) -> None:
