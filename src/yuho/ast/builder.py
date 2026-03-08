@@ -804,9 +804,11 @@ class ASTBuilder:
         title = self._build_string_lit(title_node) if title_node else None
 
         definitions: List[nodes.DefinitionEntry] = []
-        elements: List[nodes.ElementNode] = []
+        elements: list = []
         penalty: Optional[nodes.PenaltyNode] = None
         illustrations: List[nodes.IllustrationNode] = []
+        exceptions: List[nodes.ExceptionNode] = []
+        case_law: List[nodes.CaseLawNode] = []
 
         for child in node.children:
             if child.type == "definitions_block":
@@ -817,6 +819,10 @@ class ASTBuilder:
                 penalty = self._build_penalty_block(child)
             elif child.type == "illustration_block":
                 illustrations.append(self._build_illustration(child))
+            elif child.type == "exception_block":
+                exceptions.append(self._build_exception(child))
+            elif child.type == "caselaw_block":
+                case_law.append(self._build_caselaw(child))
 
         return nodes.StatuteNode(
             section_number=section_number,
@@ -825,6 +831,8 @@ class ASTBuilder:
             elements=tuple(elements),
             penalty=penalty,
             illustrations=tuple(illustrations),
+            exceptions=tuple(exceptions),
+            case_law=tuple(case_law),
             source_location=self._loc(node),
         )
 
@@ -846,9 +854,9 @@ class ASTBuilder:
                 ))
         return entries
 
-    def _build_elements_block(self, node) -> List[nodes.ElementNode]:
-        """Build list of ElementNode from elements_block node."""
-        elements: List[nodes.ElementNode] = []
+    def _build_elements_block(self, node) -> list:
+        """Build list of ElementNode/ElementGroupNode from elements_block node."""
+        elements: list = []
         for child in node.children:
             if child.type == "element_entry":
                 type_node = self._child_by_field(child, "element_type")
@@ -865,17 +873,45 @@ class ASTBuilder:
                     description=description,
                     source_location=self._loc(child),
                 ))
+            elif child.type == "element_group":
+                elements.append(self._build_element_group(child))
         return elements
+
+    def _build_element_group(self, node) -> nodes.ElementGroupNode:
+        """Build ElementGroupNode from element_group node."""
+        combinator_node = self._child_by_field(node, "combinator")
+        combinator = self._text(combinator_node) if combinator_node else "all_of"
+        members: list = []
+        for child in node.children:
+            if child.type == "element_entry":
+                type_node = self._child_by_field(child, "element_type")
+                name_node = self._child_by_field(child, "name")
+                desc_node = self._child_by_field(child, "description")
+                elem_type = self._text(type_node) if type_node else "actus_reus"
+                name = self._text(name_node) if name_node else ""
+                description = self._build_expression(desc_node) if desc_node else nodes.StringLit(value="")
+                members.append(nodes.ElementNode(
+                    element_type=elem_type, name=name, description=description,
+                    source_location=self._loc(child),
+                ))
+            elif child.type == "element_group":
+                members.append(self._build_element_group(child))
+        return nodes.ElementGroupNode(
+            combinator=combinator,
+            members=tuple(members),
+            source_location=self._loc(node),
+        )
 
     def _build_penalty_block(self, node) -> nodes.PenaltyNode:
         """Build PenaltyNode from penalty_block node."""
         imprisonment_min = imprisonment_max = None
         fine_min = fine_max = None
+        caning_min = caning_max = None
+        death_penalty = None
         supplementary = None
 
         for child in node.children:
             if child.type == "imprisonment_clause":
-                # Check for range or single value
                 duration_nodes = self._children_by_type(child, "duration_literal")
                 range_node = self._child_by_type(child, "duration_range")
                 if range_node:
@@ -885,7 +921,6 @@ class ASTBuilder:
                         imprisonment_max = self._build_duration(durs[1])
                 elif duration_nodes:
                     imprisonment_max = self._build_duration(duration_nodes[0])
-
             elif child.type == "fine_clause":
                 money_nodes = self._children_by_type(child, "money_literal")
                 range_node = self._child_by_type(child, "money_range")
@@ -896,7 +931,18 @@ class ASTBuilder:
                         fine_max = self._build_money(moneys[1])
                 elif money_nodes:
                     fine_max = self._build_money(money_nodes[0])
-
+            elif child.type == "caning_clause":
+                int_nodes = self._children_by_type(child, "integer_literal")
+                if len(int_nodes) >= 2:
+                    caning_min = int(self._text(int_nodes[0]))
+                    caning_max = int(self._text(int_nodes[1]))
+                elif int_nodes:
+                    caning_min = int(self._text(int_nodes[0]))
+                    caning_max = caning_min
+            elif child.type == "death_penalty_clause":
+                bool_node = self._child_by_type(child, "boolean_literal")
+                if bool_node:
+                    death_penalty = self._text(bool_node) == "TRUE"
             elif child.type == "supplementary_clause":
                 string_node = self._child_by_type(child, "string_literal")
                 if string_node:
@@ -907,6 +953,9 @@ class ASTBuilder:
             imprisonment_max=imprisonment_max,
             fine_min=fine_min,
             fine_max=fine_max,
+            caning_min=caning_min,
+            caning_max=caning_max,
+            death_penalty=death_penalty,
             supplementary=supplementary,
             source_location=self._loc(node),
         )
@@ -922,5 +971,42 @@ class ASTBuilder:
         return nodes.IllustrationNode(
             label=label,
             description=description,
+            source_location=self._loc(node),
+        )
+
+    def _build_exception(self, node) -> nodes.ExceptionNode:
+        """Build ExceptionNode from exception_block node."""
+        label_node = self._child_by_field(node, "label")
+        condition_node = self._child_by_field(node, "condition")
+        effect_node = self._child_by_field(node, "effect")
+
+        label = self._text(label_node) if label_node else None
+        condition = self._build_string_lit(condition_node) if condition_node else nodes.StringLit(value="")
+        effect = self._build_string_lit(effect_node) if effect_node else None
+
+        return nodes.ExceptionNode(
+            label=label,
+            condition=condition,
+            effect=effect,
+            source_location=self._loc(node),
+        )
+
+    def _build_caselaw(self, node) -> nodes.CaseLawNode:
+        """Build CaseLawNode from caselaw_block node."""
+        case_name_node = self._child_by_field(node, "case_name")
+        citation_node = self._child_by_field(node, "citation")
+        holding_node = self._child_by_field(node, "holding")
+        element_ref_node = self._child_by_field(node, "element_ref")
+
+        case_name = self._build_string_lit(case_name_node) if case_name_node else nodes.StringLit(value="")
+        citation = self._build_string_lit(citation_node) if citation_node else None
+        holding = self._build_string_lit(holding_node) if holding_node else nodes.StringLit(value="")
+        element_ref = self._text(element_ref_node) if element_ref_node else None
+
+        return nodes.CaseLawNode(
+            case_name=case_name,
+            citation=citation,
+            holding=holding,
+            element_ref=element_ref,
             source_location=self._loc(node),
         )
