@@ -304,7 +304,7 @@ class MermaidTranspiler(TranspilerBase, Visitor):
         for member in group.members:
             if isinstance(member, nodes.ElementGroupNode):
                 member_end = self._transpile_element_group(member, group_id)
-            else: # ElementNode
+            else:
                 member_id = self._new_node_id("ELEM")
                 label = self._escape_text(self._expr_to_label(member.description))
                 self._emit(f"    {member_id}[{label}]")
