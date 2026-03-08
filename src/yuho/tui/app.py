@@ -23,6 +23,28 @@ from textual.message import Message
 from yuho import __version__
 from yuho.tui.ascii_art import YUHO_MASCOT, YUHO_LOGO_SMALL
 
+def _copy_to_clipboard(text: str) -> bool:
+    """Cross-platform clipboard copy. Returns True on success."""
+    import subprocess, platform
+    if platform.system() == "Windows":
+        try:
+            subprocess.run(["clip"], input=text.encode("utf-16le"), check=True)
+            return True
+        except (FileNotFoundError, subprocess.CalledProcessError):
+            pass
+    for cmd in [
+        ["pbcopy"],
+        ["wl-copy"],
+        ["xclip", "-selection", "clipboard"],
+        ["xsel", "--clipboard", "--input"],
+    ]:
+        try:
+            subprocess.run(cmd, input=text.encode(), check=True, timeout=5)
+            return True
+        except (FileNotFoundError, subprocess.CalledProcessError, subprocess.TimeoutExpired):
+            continue
+    return False
+
 TRANSPILE_TARGETS = [
     ("JSON", "json"),
     ("JSON-LD", "jsonld"),
@@ -1148,15 +1170,10 @@ HomePanel, AboutPanel {
         if not text:
             self.notify("No output to copy.", severity="warning")
             return
-        import subprocess
-        for cmd in [["pbcopy"], ["xclip", "-selection", "clipboard"], ["xsel", "--clipboard", "--input"]]:
-            try:
-                subprocess.run(cmd, input=text.encode(), check=True)
-                self.notify("Copied to clipboard.")
-                return
-            except (FileNotFoundError, subprocess.CalledProcessError):
-                continue
-        self.notify("Clipboard not available. Use Save instead.", severity="warning")
+        if _copy_to_clipboard(text):
+            self.notify("Copied to clipboard.")
+        else:
+            self.notify("Clipboard not available. Use Save instead.", severity="warning")
 
     @on(Button.Pressed, "#btn-save-output")
     def handle_save_output(self) -> None:
@@ -1181,15 +1198,10 @@ HomePanel, AboutPanel {
         if not text:
             self.notify("Generate code first.", severity="warning")
             return
-        import subprocess
-        for cmd in [["pbcopy"], ["xclip", "-selection", "clipboard"]]:
-            try:
-                subprocess.run(cmd, input=text.encode(), check=True)
-                self.notify("Copied to clipboard.")
-                return
-            except (FileNotFoundError, subprocess.CalledProcessError):
-                continue
-        self.notify("Clipboard not available.", severity="warning")
+        if _copy_to_clipboard(text):
+            self.notify("Copied to clipboard.")
+        else:
+            self.notify("Clipboard not available.", severity="warning")
 
     @on(Button.Pressed, "#btn-wiz-save")
     def handle_wiz_save(self) -> None:
