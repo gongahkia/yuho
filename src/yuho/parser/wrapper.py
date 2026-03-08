@@ -85,14 +85,32 @@ def validate_file_path(path: str | Path) -> Path:
     """
     if isinstance(path, str) and "\x00" in path:
         raise ValueError("path contains null bytes")
-    path = Path(path)
-    if ".." in path.parts:
-        raise ValueError("path contains '..' component (path traversal)")
-    path = path.resolve()
+    path = Path(path).resolve()
     if not path.exists():
         raise FileNotFoundError(f"file not found: {path}")
     if not path.is_file():
         raise ValueError(f"path is not a regular file: {path}")
+    return path
+
+
+def validate_output_path(path: str | Path) -> Path:
+    """
+    Validate an output file path for safe writing.
+
+    Args:
+        path: The output file path to validate
+
+    Returns:
+        The resolved Path object
+
+    Raises:
+        ValueError: If the path contains null bytes or parent dir missing
+    """
+    if isinstance(path, str) and "\x00" in path:
+        raise ValueError("path contains null bytes")
+    path = Path(path).resolve()
+    if not path.parent.exists():
+        raise ValueError(f"parent directory does not exist: {path.parent}")
     return path
 
 
