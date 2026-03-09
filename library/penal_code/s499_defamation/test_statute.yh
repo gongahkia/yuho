@@ -3,12 +3,134 @@
 
 referencing penal_code/s499_defamation
 
-// Test case 1: Basic validation
-fn test_basic() : bool {
-    return TRUE;
+// ----- test structs -----
+
+struct DefamationTestCase {
+    string method,
+    string mensRea,
+    string exception,
 }
 
-// Test case 2: Edge case
-fn test_edge_case() : bool {
-    return TRUE;
+// ----- normal defamation: spoken words with intent -----
+
+DefamationTestCase normalDefamation := DefamationTestCase {
+    method := "spoken_words",
+    mensRea := "intent_to_harm_reputation",
+    exception := "none",
 }
+
+assert normalDefamation.method == "spoken_words"
+assert normalDefamation.mensRea == "intent_to_harm_reputation"
+assert normalDefamation.exception == "none"
+assert is_defamation(normalDefamation.method, normalDefamation.mensRea, normalDefamation.exception) == TRUE
+
+// ----- written defamation -----
+
+DefamationTestCase writtenDefamation := DefamationTestCase {
+    method := "written_words",
+    mensRea := "intent_to_harm_reputation",
+    exception := "none",
+}
+
+assert writtenDefamation.method == "written_words"
+assert is_defamation(writtenDefamation.method, writtenDefamation.mensRea, writtenDefamation.exception) == TRUE
+
+// ----- defamation by signs -----
+
+DefamationTestCase signDefamation := DefamationTestCase {
+    method := "visible_representation",
+    mensRea := "knowledge_of_harm",
+    exception := "none",
+}
+
+assert signDefamation.method == "visible_representation"
+assert signDefamation.mensRea == "knowledge_of_harm"
+assert is_defamation(signDefamation.method, signDefamation.mensRea, signDefamation.exception) == TRUE
+
+// ----- no method: not defamation -----
+
+DefamationTestCase noMethod := DefamationTestCase {
+    method := "none",
+    mensRea := "intent_to_harm_reputation",
+    exception := "none",
+}
+
+assert noMethod.method == "none"
+assert is_defamation(noMethod.method, noMethod.mensRea, noMethod.exception) == FALSE
+
+// ----- no mens rea: not defamation -----
+
+DefamationTestCase noMensRea := DefamationTestCase {
+    method := "spoken_words",
+    mensRea := "none",
+    exception := "none",
+}
+
+assert noMensRea.mensRea == "none"
+assert is_defamation(noMensRea.method, noMensRea.mensRea, noMensRea.exception) == FALSE
+
+// ----- exception: truth for public good -----
+
+DefamationTestCase truthPublicGoodCase := DefamationTestCase {
+    method := "written_words",
+    mensRea := "intent_to_harm_reputation",
+    exception := "truthPublicGood",
+}
+
+assert truthPublicGoodCase.exception == "truthPublicGood"
+assert is_defamation(truthPublicGoodCase.method, truthPublicGoodCase.mensRea, truthPublicGoodCase.exception) == FALSE
+
+// ----- exception: public conduct -----
+
+DefamationTestCase publicConductCase := DefamationTestCase {
+    method := "spoken_words",
+    mensRea := "intent_to_harm_reputation",
+    exception := "publicConduct",
+}
+
+assert publicConductCase.exception == "publicConduct"
+assert is_defamation(publicConductCase.method, publicConductCase.mensRea, publicConductCase.exception) == FALSE
+
+// ----- exception: court proceedings -----
+
+DefamationTestCase courtProceedingsCase := DefamationTestCase {
+    method := "written_words",
+    mensRea := "knowledge_of_harm",
+    exception := "courtProceedings",
+}
+
+assert courtProceedingsCase.exception == "courtProceedings"
+assert is_defamation(courtProceedingsCase.method, courtProceedingsCase.mensRea, courtProceedingsCase.exception) == FALSE
+
+// ----- exception: good faith opinion -----
+
+DefamationTestCase goodFaithOpinionCase := DefamationTestCase {
+    method := "spoken_words",
+    mensRea := "intent_to_harm_reputation",
+    exception := "goodFaithOpinion",
+}
+
+assert goodFaithOpinionCase.exception == "goodFaithOpinion"
+assert is_defamation(goodFaithOpinionCase.method, goodFaithOpinionCase.mensRea, goodFaithOpinionCase.exception) == FALSE
+
+// ----- exception: good faith accusation -----
+
+DefamationTestCase goodFaithAccusationCase := DefamationTestCase {
+    method := "spoken_words",
+    mensRea := "intent_to_harm_reputation",
+    exception := "goodFaithAccusation",
+}
+
+assert goodFaithAccusationCase.exception == "goodFaithAccusation"
+assert is_defamation(goodFaithAccusationCase.method, goodFaithAccusationCase.mensRea, goodFaithAccusationCase.exception) == FALSE
+
+// ----- exception: caution in good faith -----
+
+DefamationTestCase cautionCase := DefamationTestCase {
+    method := "spoken_words",
+    mensRea := "intent_to_harm_reputation",
+    exception := "cautionGoodFaith",
+}
+
+assert cautionCase.exception == "cautionGoodFaith"
+assert is_defamation(cautionCase.method, cautionCase.mensRea, cautionCase.exception) == FALSE

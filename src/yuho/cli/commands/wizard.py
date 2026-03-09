@@ -7,7 +7,7 @@ using inquirer-style prompts. Generates valid .yh files from user input.
 
 import sys
 from pathlib import Path
-from typing import Optional, List, Dict, Any
+from typing import Optional, List, Dict, Any, Tuple
 from dataclasses import dataclass, field
 
 import click
@@ -36,6 +36,24 @@ class IllustrationData:
 
 
 @dataclass
+class ExceptionData:
+    """Data for a statute exception."""
+    label: str
+    condition: str
+    effect: str = ""
+    guard: str = "" # optional when guard expression
+
+
+@dataclass
+class CaseLawData:
+    """Data for case law reference."""
+    case_name: str
+    citation: str = ""
+    holding: str = ""
+    element_ref: str = "" # element this case interprets
+
+
+@dataclass
 class PenaltyData:
     """Data for penalty specification."""
     has_imprisonment: bool = False
@@ -56,6 +74,11 @@ class StatuteData:
     elements: List[ElementData] = field(default_factory=list)
     penalty: Optional[PenaltyData] = None
     illustrations: List[IllustrationData] = field(default_factory=list)
+    exceptions: List[ExceptionData] = field(default_factory=list)
+    case_law: List[CaseLawData] = field(default_factory=list)
+    element_grouping: str = "" # "", "all_of", or "any_of"
+    auto_struct_name: str = ""
+    auto_struct_fields: List[Tuple[str, str]] = field(default_factory=list)
 
 
 def prompt_input(prompt: str, default: str = "", required: bool = False) -> str:
@@ -168,6 +191,23 @@ def collect_elements(data: StatuteData) -> None:
     
     click.echo(f"\nTotal elements: {len(data.elements)}")
 
+    # element grouping
+    if len(data.elements) >= 2:
+        if prompt_confirm("Group elements with all_of/any_of?", default=False):
+            combinator = prompt_choice("Combinator type:", ["all_of", "any_of"])
+            data.element_grouping = combinator
+            click.echo(click.style(f"  ✓ Elements grouped with {combinator}", fg="green"))
+
+    # auto-generate struct
+    if data.elements:
+        if prompt_confirm("Auto-generate a case struct from elements?", default=False):
+            default_name = f"Case{data.section_number}" if data.section_number else "CaseStruct"
+            struct_name = prompt_input("Struct name", default=default_name, required=True)
+            data.auto_struct_name = struct_name
+            for elem in data.elements:
+                data.auto_struct_fields.append(("bool", elem.name))
+            click.echo(click.style(f"  ✓ Struct '{struct_name}' will be generated with {len(data.auto_struct_fields)} fields", fg="green"))
+
 
 def collect_penalty(data: StatuteData) -> None:
     """Collect penalty specification."""
@@ -235,13 +275,73 @@ def collect_illustrations(data: StatuteData) -> None:
     click.echo(f"\nTotal illustrations: {len(data.illustrations)}")
 
 
+def collect_exceptions(data: StatuteData) -> None:
+    """Collect exception / defence entries."""
+    wizard_header("Exceptions / Defences")
+    click.echo("Define exceptions or defences that negate liability.")
+    click.echo("(Press Enter with empty label to finish)")
+    click.echo("")
+
+    while True:
+        label = prompt_input("Exception label")
+        if not label:
+            break
+
+        condition = prompt_input(f"  Condition for '{label}'", required=True)
+        effect = prompt_input(f"  Effect (consequence when exception applies)")
+        guard = prompt_input(f"  Guard expression (optional 'when' condition)")
+        data.exceptions.append(ExceptionData(
+            label=label,
+            condition=condition,
+            effect=effect,
+            guard=guard,
+        ))
+        click.echo(click.style(f"  ✓ Added exception: {label}", fg="green"))
+
+    click.echo(f"\nTotal exceptions: {len(data.exceptions)}")
+
+
+def collect_caselaw(data: StatuteData) -> None:
+    """Collect case law references."""
+    wizard_header("Case Law References")
+    click.echo("Add case law that interprets this statute.")
+    click.echo("(Press Enter with empty name to finish)")
+    click.echo("")
+
+    while True:
+        case_name = prompt_input("Case name")
+        if not case_name:
+            break
+
+        citation = prompt_input(f"  Citation for '{case_name}'")
+        holding = prompt_input(f"  Holding / ratio decidendi")
+        element_ref = prompt_input(f"  Element this case interprets (optional)")
+        data.case_law.append(CaseLawData(
+            case_name=case_name,
+            citation=citation,
+            holding=holding,
+            element_ref=element_ref,
+        ))
+        click.echo(click.style(f"  ✓ Added case: {case_name}", fg="green"))
+
+    click.echo(f"\nTotal case law references: {len(data.case_law)}")
+
+
 def generate_yuho_code(data: StatuteData) -> str:
     """Generate Yuho source code from collected data."""
     lines: List[str] = []
-    
+
+    # Auto-generated struct (emitted before statute block)
+    if data.auto_struct_name and data.auto_struct_fields:
+        lines.append(f"struct {data.auto_struct_name} {{")
+        for ftype, fname in data.auto_struct_fields:
+            lines.append(f"    {ftype} {fname};")
+        lines.append("}")
+        lines.append("")
+
     # Statute header
     lines.append(f'statute {data.section_number} "{data.title}" {{')
-    
+
     # Definitions
     if data.definitions:
         lines.append("")
@@ -250,16 +350,23 @@ def generate_yuho_code(data: StatuteData) -> str:
             escaped_def = defn.definition.replace('"', '\\"')
             lines.append(f'        {defn.term} := "{escaped_def}";')
         lines.append("    }")
-    
+
     # Elements
     if data.elements:
         lines.append("")
         lines.append("    elements {")
-        for elem in data.elements:
-            escaped_desc = elem.description.replace('"', '\\"')
-            lines.append(f'        {elem.element_type} {elem.name} := "{escaped_desc}";')
+        if data.element_grouping:
+            lines.append(f"        {data.element_grouping} {{")
+            for elem in data.elements:
+                escaped_desc = elem.description.replace('"', '\\"')
+                lines.append(f'            {elem.element_type} {elem.name} := "{escaped_desc}";')
+            lines.append("        }")
+        else:
+            for elem in data.elements:
+                escaped_desc = elem.description.replace('"', '\\"')
+                lines.append(f'        {elem.element_type} {elem.name} := "{escaped_desc}";')
         lines.append("    }")
-    
+
     # Penalty
     if data.penalty:
         lines.append("")
@@ -278,7 +385,7 @@ def generate_yuho_code(data: StatuteData) -> str:
             escaped = data.penalty.supplementary.replace('"', '\\"')
             lines.append(f'        supplementary := "{escaped}";')
         lines.append("    }")
-    
+
     # Illustrations
     if data.illustrations:
         lines.append("")
@@ -287,9 +394,38 @@ def generate_yuho_code(data: StatuteData) -> str:
             escaped = illus.description.replace('"', '\\"')
             lines.append(f'        {illus.label} "{escaped}";')
         lines.append("    }")
-    
+
+    # Exceptions
+    for exc in data.exceptions:
+        lines.append("")
+        escaped_cond = exc.condition.replace('"', '\\"')
+        lines.append(f"    exception {exc.label} {{")
+        lines.append(f'        "{escaped_cond}"')
+        if exc.effect:
+            escaped_eff = exc.effect.replace('"', '\\"')
+            lines.append(f'        "{escaped_eff}"')
+        if exc.guard:
+            lines.append(f"        when {exc.guard}")
+        lines.append("    }")
+
+    # Case law
+    for cl in data.case_law:
+        lines.append("")
+        escaped_name = cl.case_name.replace('"', '\\"')
+        cite_part = ""
+        if cl.citation:
+            escaped_cite = cl.citation.replace('"', '\\"')
+            cite_part = f' "{escaped_cite}"'
+        lines.append(f'    caselaw "{escaped_name}"{cite_part} {{')
+        if cl.holding:
+            escaped_hold = cl.holding.replace('"', '\\"')
+            lines.append(f'        "{escaped_hold}"')
+        if cl.element_ref:
+            lines.append(f"        element {cl.element_ref}")
+        lines.append("    }")
+
     lines.append("}")
-    
+
     return "\n".join(lines)
 
 
@@ -341,6 +477,8 @@ def run_wizard(
     collect_elements(data)
     collect_penalty(data)
     collect_illustrations(data)
+    collect_exceptions(data)
+    collect_caselaw(data)
     
     # Generate code
     wizard_header("Generated Code")

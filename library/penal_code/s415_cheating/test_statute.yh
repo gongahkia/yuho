@@ -3,12 +3,73 @@
 
 referencing penal_code/s415_cheating
 
-// Test case 1: Basic validation
-fn test_basic() : bool {
-    return TRUE;
+// ----- test structs -----
+
+struct CheatingTestCase {
+    string deceptionType,
+    string inducementType,
+    bool causesDamageHarm,
 }
 
-// Test case 2: Edge case
-fn test_edge_case() : bool {
-    return TRUE;
+// ----- normal cheating: fraudulent deception with harm -----
+
+CheatingTestCase fraudulentCheating := CheatingTestCase {
+    deceptionType := "fraudulently",
+    inducementType := "delivery_of_property",
+    causesDamageHarm := TRUE,
 }
+
+assert fraudulentCheating.deceptionType == "fraudulently"
+assert fraudulentCheating.inducementType == "delivery_of_property"
+assert fraudulentCheating.causesDamageHarm == TRUE
+assert is_fraudulent(fraudulentCheating.deceptionType) == TRUE
+assert is_dishonest(fraudulentCheating.deceptionType) == FALSE
+assert evaluate_cheating(fraudulentCheating.deceptionType, fraudulentCheating.inducementType, fraudulentCheating.causesDamageHarm) == "Said to cheat"
+
+// ----- dishonest deception with harm -----
+
+CheatingTestCase dishonestCheating := CheatingTestCase {
+    deceptionType := "dishonestly",
+    inducementType := "consent_to_retain",
+    causesDamageHarm := TRUE,
+}
+
+assert dishonestCheating.deceptionType == "dishonestly"
+assert is_dishonest(dishonestCheating.deceptionType) == TRUE
+assert is_fraudulent(dishonestCheating.deceptionType) == FALSE
+assert evaluate_cheating(dishonestCheating.deceptionType, dishonestCheating.inducementType, dishonestCheating.causesDamageHarm) == "Said to cheat"
+
+// ----- no deception: not cheating -----
+
+CheatingTestCase noDeception := CheatingTestCase {
+    deceptionType := "none",
+    inducementType := "delivery_of_property",
+    causesDamageHarm := TRUE,
+}
+
+assert noDeception.deceptionType == "none"
+assert is_fraudulent(noDeception.deceptionType) == FALSE
+assert is_dishonest(noDeception.deceptionType) == FALSE
+assert evaluate_cheating(noDeception.deceptionType, noDeception.inducementType, noDeception.causesDamageHarm) == "Not cheating - no deception"
+
+// ----- no inducement: not cheating -----
+
+CheatingTestCase noInducement := CheatingTestCase {
+    deceptionType := "fraudulently",
+    inducementType := "none",
+    causesDamageHarm := TRUE,
+}
+
+assert noInducement.inducementType == "none"
+assert evaluate_cheating(noInducement.deceptionType, noInducement.inducementType, noInducement.causesDamageHarm) == "Not cheating - no inducement"
+
+// ----- no harm: not said to cheat -----
+
+CheatingTestCase noHarm := CheatingTestCase {
+    deceptionType := "fraudulently",
+    inducementType := "delivery_of_property",
+    causesDamageHarm := FALSE,
+}
+
+assert noHarm.causesDamageHarm == FALSE
+assert evaluate_cheating(noHarm.deceptionType, noHarm.inducementType, noHarm.causesDamageHarm) == "Not said to cheat"

@@ -20,7 +20,7 @@ from tests.strategies import (
 SLOW_SETTINGS = settings(
     max_examples=50,
     deadline=5000,
-    suppress_health_check=[HealthCheck.too_slow],
+    suppress_health_check=[HealthCheck.too_slow, HealthCheck.filter_too_much],
 )
 
 

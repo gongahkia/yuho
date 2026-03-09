@@ -526,6 +526,7 @@ class FieldDef(ASTNode):
 
     type_annotation: TypeNode
     name: str
+    doc_comment: Optional[str] = None
 
     def accept(self, visitor: "Visitor"):
         return visitor.visit_field_def(self)
@@ -541,6 +542,7 @@ class StructDefNode(ASTNode):
     name: str
     fields: Tuple[FieldDef, ...]
     type_params: Tuple[str, ...] = ()  # Generic type parameters
+    doc_comment: Optional[str] = None
 
     def accept(self, visitor: "Visitor"):
         return visitor.visit_struct_def(self)
@@ -624,6 +626,7 @@ class FunctionDefNode(ASTNode):
     params: Tuple[ParamDef, ...]
     return_type: Optional[TypeNode]
     body: Block
+    doc_comment: Optional[str] = None
 
     def accept(self, visitor: "Visitor"):
         return visitor.visit_function_def(self)
@@ -764,6 +767,7 @@ class ElementNode(ASTNode):
     element_type: str
     name: str
     description: ASTNode  # Usually StringLit or match expression
+    doc_comment: Optional[str] = None
 
     def accept(self, visitor: "Visitor"):
         return visitor.visit_element(self)
@@ -852,6 +856,7 @@ class ExceptionNode(ASTNode):
     label: Optional[str]
     condition: StringLit
     effect: Optional[StringLit] = None
+    guard: Optional[ASTNode] = None
 
     def accept(self, visitor: "Visitor"):
         return visitor.visit_exception(self)
@@ -860,6 +865,8 @@ class ExceptionNode(ASTNode):
         result = [self.condition]
         if self.effect:
             result.append(self.effect)
+        if self.guard:
+            result.append(self.guard)
         return result
 
 
@@ -903,6 +910,7 @@ class StatuteNode(ASTNode):
     illustrations: Tuple[IllustrationNode, ...]
     exceptions: Tuple[ExceptionNode, ...] = ()
     case_law: Tuple[CaseLawNode, ...] = ()
+    doc_comment: Optional[str] = None
 
     def accept(self, visitor: "Visitor"):
         return visitor.visit_statute(self)

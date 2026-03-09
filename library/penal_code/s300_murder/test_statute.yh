@@ -3,12 +3,137 @@
 
 referencing penal_code/s300_murder
 
-// Test case 1: Basic validation
-fn test_basic() : bool {
-    return TRUE;
+// ----- test structs -----
+
+struct MurderTestCase {
+    bool causeDeath,
+    string mensRea,
+    string exception,
 }
 
-// Test case 2: Edge case
-fn test_edge_case() : bool {
-    return TRUE;
+// ----- normal murder (no exception) -----
+
+MurderTestCase normalMurder := MurderTestCase {
+    causeDeath := TRUE,
+    mensRea := "intention_to_cause_death",
+    exception := "none",
 }
+
+assert normalMurder.causeDeath == TRUE
+assert normalMurder.mensRea == "intention_to_cause_death"
+assert normalMurder.exception == "none"
+assert has_murder_intent(normalMurder.mensRea) == TRUE
+assert exception_applies(normalMurder.exception) == FALSE
+
+// ----- mens rea limb 2: fatal injury -----
+
+MurderTestCase fatalInjuryMurder := MurderTestCase {
+    causeDeath := TRUE,
+    mensRea := "intention_to_inflict_fatal_injury",
+    exception := "none",
+}
+
+assert fatalInjuryMurder.causeDeath == TRUE
+assert fatalInjuryMurder.mensRea == "intention_to_inflict_fatal_injury"
+assert has_murder_intent(fatalInjuryMurder.mensRea) == TRUE
+
+// ----- mens rea limb 3: sufficient injury -----
+
+MurderTestCase sufficientInjuryMurder := MurderTestCase {
+    causeDeath := TRUE,
+    mensRea := "intention_to_inflict_sufficient_injury",
+    exception := "none",
+}
+
+assert sufficientInjuryMurder.mensRea == "intention_to_inflict_sufficient_injury"
+assert has_murder_intent(sufficientInjuryMurder.mensRea) == TRUE
+
+// ----- mens rea limb 4: knowledge of danger -----
+
+MurderTestCase dangerKnowledgeMurder := MurderTestCase {
+    causeDeath := TRUE,
+    mensRea := "knowledge_of_danger",
+    exception := "none",
+}
+
+assert dangerKnowledgeMurder.mensRea == "knowledge_of_danger"
+assert has_murder_intent(dangerKnowledgeMurder.mensRea) == TRUE
+
+// ----- no mens rea: not murder -----
+
+MurderTestCase noMensRea := MurderTestCase {
+    causeDeath := TRUE,
+    mensRea := "negligence",
+    exception := "none",
+}
+
+assert noMensRea.mensRea == "negligence"
+assert has_murder_intent(noMensRea.mensRea) == FALSE
+
+// ----- exception 1: provocation -----
+
+MurderTestCase provocationCase := MurderTestCase {
+    causeDeath := TRUE,
+    mensRea := "intention_to_cause_death",
+    exception := "provocation",
+}
+
+assert provocationCase.causeDeath == TRUE
+assert provocationCase.mensRea == "intention_to_cause_death"
+assert provocationCase.exception == "provocation"
+assert has_murder_intent(provocationCase.mensRea) == TRUE
+assert exception_applies(provocationCase.exception) == TRUE
+
+// ----- exception 2: private defence -----
+
+MurderTestCase privateDefenceCase := MurderTestCase {
+    causeDeath := TRUE,
+    mensRea := "intention_to_cause_death",
+    exception := "privateDefence",
+}
+
+assert privateDefenceCase.exception == "privateDefence"
+assert exception_applies(privateDefenceCase.exception) == TRUE
+
+// ----- exception 3: public servant -----
+
+MurderTestCase publicServantCase := MurderTestCase {
+    causeDeath := TRUE,
+    mensRea := "intention_to_cause_death",
+    exception := "publicServant",
+}
+
+assert publicServantCase.exception == "publicServant"
+assert exception_applies(publicServantCase.exception) == TRUE
+
+// ----- exception 4: sudden fight -----
+
+MurderTestCase suddenFightCase := MurderTestCase {
+    causeDeath := TRUE,
+    mensRea := "intention_to_cause_death",
+    exception := "suddenFight",
+}
+
+assert suddenFightCase.exception == "suddenFight"
+assert exception_applies(suddenFightCase.exception) == TRUE
+
+// ----- exception 5: consent -----
+
+MurderTestCase consentCase := MurderTestCase {
+    causeDeath := TRUE,
+    mensRea := "intention_to_cause_death",
+    exception := "consent",
+}
+
+assert consentCase.exception == "consent"
+assert exception_applies(consentCase.exception) == TRUE
+
+// ----- no death caused: not murder -----
+
+MurderTestCase noDeathCase := MurderTestCase {
+    causeDeath := FALSE,
+    mensRea := "intention_to_cause_death",
+    exception := "none",
+}
+
+assert noDeathCase.causeDeath == FALSE

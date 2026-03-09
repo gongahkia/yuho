@@ -65,4 +65,6 @@ statute 415 "Cheating" {
     illustration example3 {
         "A deceives B into believing that A means to repay a loan, inducing B to lend money which A does not intend to repay. A cheats."
     }
+
+    // cross-reference: s420 applies enhanced punishment when s415 cheating induces delivery of property
 }

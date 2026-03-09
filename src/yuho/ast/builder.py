@@ -36,6 +36,29 @@ class ASTBuilder:
         self.source = source
         self.source_bytes = source.encode("utf-8")
         self.file = file
+        self._doc_comment_lines = self._extract_doc_comments()
+
+    def _extract_doc_comments(self) -> dict:
+        """Extract /// doc-comments indexed by end line number."""
+        result = {} # line_number -> comment text
+        lines = self.source.split("\n")
+        comment_block = []
+        for i, line in enumerate(lines):
+            stripped = line.strip()
+            if stripped.startswith("///"):
+                comment_block.append(stripped[3:].strip())
+            else:
+                if comment_block:
+                    result[i] = "\n".join(comment_block) # key = first non-comment line
+                    comment_block = []
+        return result
+
+    def _get_doc_comment(self, node) -> Optional[str]:
+        """Get doc-comment for a node by line proximity."""
+        if not self._doc_comment_lines:
+            return None
+        start_line = node.start_point[0]
+        return self._doc_comment_lines.get(start_line)
 
     def build(self, root_node) -> nodes.ModuleNode:
         """
@@ -182,6 +205,7 @@ class ASTBuilder:
             name=name,
             fields=tuple(fields),
             type_params=tuple(type_params),
+            doc_comment=self._get_doc_comment(node),
             source_location=self._loc(node),
         )
 
@@ -196,6 +220,7 @@ class ASTBuilder:
         return nodes.FieldDef(
             type_annotation=type_ann,
             name=name,
+            doc_comment=self._get_doc_comment(node),
             source_location=self._loc(node),
         )
 
@@ -229,6 +254,7 @@ class ASTBuilder:
             params=tuple(params),
             return_type=return_type,
             body=body,
+            doc_comment=self._get_doc_comment(node),
             source_location=self._loc(node),
         )
 
@@ -833,6 +859,7 @@ class ASTBuilder:
             illustrations=tuple(illustrations),
             exceptions=tuple(exceptions),
             case_law=tuple(case_law),
+            doc_comment=self._get_doc_comment(node),
             source_location=self._loc(node),
         )
 
@@ -871,6 +898,7 @@ class ASTBuilder:
                     element_type=elem_type,
                     name=name,
                     description=description,
+                    doc_comment=self._get_doc_comment(child),
                     source_location=self._loc(child),
                 ))
             elif child.type == "element_group":
@@ -892,6 +920,7 @@ class ASTBuilder:
                 description = self._build_expression(desc_node) if desc_node else nodes.StringLit(value="")
                 members.append(nodes.ElementNode(
                     element_type=elem_type, name=name, description=description,
+                    doc_comment=self._get_doc_comment(child),
                     source_location=self._loc(child),
                 ))
             elif child.type == "element_group":
@@ -979,15 +1008,18 @@ class ASTBuilder:
         label_node = self._child_by_field(node, "label")
         condition_node = self._child_by_field(node, "condition")
         effect_node = self._child_by_field(node, "effect")
+        guard_node = self._child_by_field(node, "guard")
 
         label = self._text(label_node) if label_node else None
         condition = self._build_string_lit(condition_node) if condition_node else nodes.StringLit(value="")
         effect = self._build_string_lit(effect_node) if effect_node else None
+        guard = self._build_expression(guard_node) if guard_node else None
 
         return nodes.ExceptionNode(
             label=label,
             condition=condition,
             effect=effect,
+            guard=guard,
             source_location=self._loc(node),
         )
 

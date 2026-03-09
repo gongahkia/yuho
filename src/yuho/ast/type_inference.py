@@ -259,7 +259,7 @@ class TypeInferenceVisitor(Visitor):
     def visit_function_call(self, node: nodes.FunctionCallNode) -> Any:
         """Infer return type from function signature."""
         # Visit arguments
-        for arg in node.arguments:
+        for arg in node.args:
             self.visit(arg)
         
         # Look up function return type
@@ -328,13 +328,12 @@ class TypeInferenceVisitor(Visitor):
     
     def visit_struct_literal(self, node: nodes.StructLiteralNode) -> Any:
         """Infer type from struct literal type name."""
-        if node.type_name:
-            inferred_type = TypeAnnotation(node.type_name)
+        if node.struct_name:
+            inferred_type = TypeAnnotation(node.struct_name)
         else:
             inferred_type = UNKNOWN_TYPE
-        
-        # Visit field assignments
-        for field_assign in node.field_assignments:
+        # visit field assignments
+        for field_assign in node.field_values:
             self.visit(field_assign)
         
         self.result.set_type(node, inferred_type)
@@ -368,7 +367,7 @@ class TypeInferenceVisitor(Visitor):
         
         # Record parameter types
         param_types: List[TypeAnnotation] = []
-        for param in node.parameters:
+        for param in node.params:
             if param.type_annotation:
                 p_type = self._type_node_to_annotation(param.type_annotation)
                 param_types.append(p_type)
@@ -406,20 +405,24 @@ class TypeInferenceVisitor(Visitor):
     
     def visit_module(self, node: nodes.ModuleNode) -> Any:
         """Entry point: visit all declarations in module."""
-        # First pass: collect struct definitions
-        for decl in node.declarations:
-            if isinstance(decl, nodes.StructDefNode):
-                self.visit_struct_def(decl)
-            elif isinstance(decl, nodes.FunctionDefNode):
-                # Just record signature
-                if decl.return_type:
-                    return_type = self._type_node_to_annotation(decl.return_type)
-                else:
-                    return_type = VOID_TYPE
-                self.result.function_sigs[decl.name] = ([], return_type)
-        
-        # Second pass: full traversal
-        for decl in node.declarations:
-            self.visit(decl)
-        
+        # first pass: collect struct definitions and function signatures
+        for struct_def in node.type_defs:
+            self.visit_struct_def(struct_def)
+        for func_def in node.function_defs:
+            if func_def.return_type:
+                return_type = self._type_node_to_annotation(func_def.return_type)
+            else:
+                return_type = VOID_TYPE
+            self.result.function_sigs[func_def.name] = ([], return_type)
+        # second pass: full traversal
+        for struct_def in node.type_defs:
+            self.visit(struct_def)
+        for func_def in node.function_defs:
+            self.visit(func_def)
+        for var_decl in node.variables:
+            self.visit(var_decl)
+        for statute in node.statutes:
+            self.visit(statute)
+        for assertion in node.assertions:
+            self.visit(assertion)
         return self.result

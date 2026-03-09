@@ -458,6 +458,7 @@ module.exports = grammar({
       '{',
       field('condition', $.string_literal),
       optional(field('effect', $.string_literal)),
+      optional(seq('when', field('guard', $._expression))),
       '}'
     ),
 

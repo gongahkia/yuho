@@ -55,26 +55,31 @@ statute 300 "Murder" {
     exception provocation {
         "If the offender whilst deprived of the power of self-control by grave and sudden provocation, causes the death of the person who gave the provocation"
         "Culpable homicide not amounting to murder"
+        when facts.exception == "provocation"
     }
 
     exception privateDefence {
         "If the offender in the exercise in good faith of the right of private defence of person or property, exceeds the power given by law and causes the death of the person against whom he is exercising such right of defence"
         "Culpable homicide not amounting to murder"
+        when facts.exception == "privateDefence"
     }
 
     exception publicServant {
         "If the offender, being a public servant, exceeds the powers given to him by law and causes death by doing an act which he in good faith believes to be lawful and necessary"
         "Culpable homicide not amounting to murder"
+        when facts.exception == "publicServant"
     }
 
     exception suddenFight {
         "If culpable homicide is committed without premeditation in a sudden fight in the heat of passion upon a sudden quarrel"
         "Culpable homicide not amounting to murder"
+        when facts.exception == "suddenFight"
     }
 
     exception consent {
         "If the person whose death is caused, being above the age of 18 years, suffers death or takes the risk of death with his own consent"
         "Culpable homicide not amounting to murder"
+        when facts.exception == "consent"
     }
 
     caselaw "PP v Lim Poh Lye" "[2005] 4 SLR 582" {

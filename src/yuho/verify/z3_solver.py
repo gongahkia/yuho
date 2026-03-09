@@ -7,16 +7,18 @@ formal verification of statute consistency (parallel to Alloy).
 """
 
 from __future__ import annotations
-from typing import List, Dict, Any, Optional, Tuple, TYPE_CHECKING
+from typing import List, Dict, Any, Optional, Tuple, Union, TYPE_CHECKING
 from dataclasses import dataclass, field
 import logging
 
 if TYPE_CHECKING:
     from yuho.ast.nodes import (
         ModuleNode, StatuteNode, StructDefNode, ElementNode,
+        ElementGroupNode, ExceptionNode,
         PenaltyNode, BinaryExprNode, UnaryExprNode, MatchExprNode,
         MatchArm, ASTNode,
     )
+    from yuho.parser.source_location import SourceLocation
 
 logger = logging.getLogger(__name__)
 
@@ -44,15 +46,23 @@ class Z3Diagnostic:
     passed: bool
     counterexample: Optional[Dict[str, Any]] = None
     message: str = ""
+    source_location: Optional["SourceLocation"] = None
 
     def to_diagnostic(self) -> Dict[str, Any]:
         """Convert to LSP-compatible diagnostic."""
-        return {
+        diag: Dict[str, Any] = {
             "message": f"Z3: {self.check_name} - {self.message}",
             "severity": "info" if self.passed else "warning",
             "source": "z3",
             "data": self.counterexample,
         }
+        if self.source_location is not None:
+            diag["range"] = {
+                "start": {"line": self.source_location.line - 1, "character": self.source_location.col - 1},
+                "end": {"line": self.source_location.end_line - 1, "character": self.source_location.end_col - 1},
+            }
+            diag["file"] = self.source_location.file
+        return diag
 
 
 class Z3CounterexampleExtractor:
@@ -167,26 +177,59 @@ class Z3CounterexampleExtractor:
         )
     
     def generate_diagnostic_from_model(
-        self, model: Any, check_name: str, message: str
+        self, model: Any, check_name: str, message: str,
+        source_location: Optional["SourceLocation"] = None,
     ) -> Z3Diagnostic:
         """
         Generate diagnostic from satisfying model.
-        
+
         Args:
             model: Z3 model
             check_name: Name of the check
             message: Diagnostic message
-            
+            source_location: Optional AST source location for mapping
+
         Returns:
             Z3Diagnostic with model as counterexample
         """
         counterexample = self.model_to_counterexample(model)
-        
+
         return Z3Diagnostic(
             check_name=check_name,
             passed=False,
             counterexample=counterexample,
-            message=message
+            message=message,
+            source_location=source_location,
+        )
+
+    def generate_source_mapped_diagnostic(
+        self,
+        check_name: str,
+        passed: bool,
+        message: str,
+        ast_node: "ASTNode",
+        counterexample: Optional[Dict[str, Any]] = None,
+    ) -> Z3Diagnostic:
+        """
+        Generate diagnostic mapped to an AST node's source location.
+
+        Args:
+            check_name: Name of the check
+            passed: Whether the check passed
+            message: Diagnostic message
+            ast_node: AST node to extract source location from
+            counterexample: Optional counterexample data
+
+        Returns:
+            Z3Diagnostic with source location from AST
+        """
+        loc = getattr(ast_node, "source_location", None)
+        return Z3Diagnostic(
+            check_name=check_name,
+            passed=passed,
+            counterexample=counterexample,
+            message=message,
+            source_location=loc,
         )
 
 
@@ -657,53 +700,80 @@ class Z3Solver:
     ) -> List[Z3Diagnostic]:
         """
         Verify that statute elements are well-formed and consistent.
-        
+
         Checks:
         - Element names are unique within each statute
         - Element types are valid (actus_reus, mens_rea, circumstance)
         - Penalties have valid ranges (min <= max)
-        
+
+        Diagnostics are source-mapped to AST node locations.
+
         Args:
             ast: ModuleNode from Yuho AST
-            
+
         Returns:
             List of Z3Diagnostic results
         """
+        from yuho.ast.nodes import ElementNode, ElementGroupNode
+
         diagnostics = []
-        
+        extractor = Z3CounterexampleExtractor()
+
+        def _collect_elements(elem):
+            """Recursively collect ElementNode instances from element tree."""
+            if isinstance(elem, ElementNode):
+                return [elem]
+            if isinstance(elem, ElementGroupNode):
+                result = []
+                for m in elem.members:
+                    result.extend(_collect_elements(m))
+                return result
+            return []
+
         for statute in ast.statutes:
             statute_id = statute.section_number
-            
+            statute_loc = getattr(statute, "source_location", None)
+
+            # Collect all leaf elements
+            all_elements = []
+            for e in statute.elements:
+                all_elements.extend(_collect_elements(e))
+
             # Check element uniqueness
-            element_names = [e.name for e in statute.elements]
+            element_names = [e.name for e in all_elements]
             if len(element_names) != len(set(element_names)):
                 duplicates = [n for n in element_names if element_names.count(n) > 1]
                 diagnostics.append(Z3Diagnostic(
                     check_name=f"{statute_id}_element_uniqueness",
                     passed=False,
-                    message=f"Duplicate element names: {set(duplicates)}"
+                    message=f"Duplicate element names: {set(duplicates)}",
+                    source_location=statute_loc,
                 ))
             else:
                 diagnostics.append(Z3Diagnostic(
                     check_name=f"{statute_id}_element_uniqueness",
                     passed=True,
-                    message="All element names are unique"
+                    message="All element names are unique",
+                    source_location=statute_loc,
                 ))
-            
+
             # Check element types
             valid_types = {"actus_reus", "mens_rea", "circumstance"}
-            for element in statute.elements:
+            for element in all_elements:
+                elem_loc = getattr(element, "source_location", None)
                 if element.element_type not in valid_types:
                     diagnostics.append(Z3Diagnostic(
                         check_name=f"{statute_id}_{element.name}_type",
                         passed=False,
-                        message=f"Invalid element type: {element.element_type}"
+                        message=f"Invalid element type: {element.element_type}",
+                        source_location=elem_loc,
                     ))
-            
+
             # Check penalty ranges
             if statute.penalty:
                 penalty = statute.penalty
-                
+                penalty_loc = getattr(penalty, "source_location", None)
+
                 # Check imprisonment range
                 if penalty.imprisonment_min and penalty.imprisonment_max:
                     min_days = penalty.imprisonment_min.total_days()
@@ -712,30 +782,34 @@ class Z3Solver:
                         diagnostics.append(Z3Diagnostic(
                             check_name=f"{statute_id}_imprisonment_range",
                             passed=False,
-                            message=f"Imprisonment min ({min_days} days) > max ({max_days} days)"
+                            message=f"Imprisonment min ({min_days} days) > max ({max_days} days)",
+                            source_location=penalty_loc,
                         ))
                     else:
                         diagnostics.append(Z3Diagnostic(
                             check_name=f"{statute_id}_imprisonment_range",
                             passed=True,
-                            message="Imprisonment range is valid"
+                            message="Imprisonment range is valid",
+                            source_location=penalty_loc,
                         ))
-                
+
                 # Check fine range
                 if penalty.fine_min and penalty.fine_max:
                     if penalty.fine_min.amount > penalty.fine_max.amount:
                         diagnostics.append(Z3Diagnostic(
                             check_name=f"{statute_id}_fine_range",
                             passed=False,
-                            message=f"Fine min ({penalty.fine_min.amount}) > max ({penalty.fine_max.amount})"
+                            message=f"Fine min ({penalty.fine_min.amount}) > max ({penalty.fine_max.amount})",
+                            source_location=penalty_loc,
                         ))
                     else:
                         diagnostics.append(Z3Diagnostic(
                             check_name=f"{statute_id}_fine_range",
                             passed=True,
-                            message="Fine range is valid"
+                            message="Fine range is valid",
+                            source_location=penalty_loc,
                         ))
-        
+
         return diagnostics
 
 
@@ -906,85 +980,339 @@ class Z3Generator:
         return solver, self._assertions
     
     def _generate_sorts(self, ast: "ModuleNode") -> None:
-        """Generate Z3 sorts from type definitions."""
+        """
+        Generate Z3 sorts dynamically from AST struct definitions.
+
+        Walks ast.type_defs to create Z3 DatatypeSorts for each
+        StructDefNode, with constructor fields matching the struct's
+        fields. Falls back to DeclareSort only for base infrastructure
+        sorts that are not user-defined.
+        """
         if not Z3_AVAILABLE:
             return
-        
-        # Base sorts
-        self._sorts["Person"] = z3.DeclareSort("Person")
-        self._sorts["Intent"] = z3.DeclareSort("Intent")
-        self._sorts["Element"] = z3.DeclareSort("Element")
-        
-        # Intent enum values as constants
-        self._consts["Intentional"] = z3.Const("Intentional", self._sorts["Intent"])
-        self._consts["Reckless"] = z3.Const("Reckless", self._sorts["Intent"])
-        self._consts["Negligent"] = z3.Const("Negligent", self._sorts["Intent"])
-        
-        # Distinct intent values
-        self._assertions.append(
-            z3.Distinct(
-                self._consts["Intentional"],
-                self._consts["Reckless"],
-                self._consts["Negligent"]
-            )
-        )
-        
-        # Generate from struct definitions
+
+        # Infrastructure sorts (kept for statute/element modeling)
+        self._sorts["Statute"] = z3.DeclareSort("Statute")
+
+        # Walk struct definitions to create DatatypeSorts
         for struct_def in ast.type_defs:
+            self._generate_struct_sort(struct_def)
+
+        # If no struct defined Intent-like enum, create a default one
+        if "Intent" not in self._sorts:
+            self._sorts["Intent"] = z3.DeclareSort("Intent")
+            self._consts["Intentional"] = z3.Const("Intentional", self._sorts["Intent"])
+            self._consts["Reckless"] = z3.Const("Reckless", self._sorts["Intent"])
+            self._consts["Negligent"] = z3.Const("Negligent", self._sorts["Intent"])
+            self._assertions.append(
+                z3.Distinct(
+                    self._consts["Intentional"],
+                    self._consts["Reckless"],
+                    self._consts["Negligent"],
+                )
+            )
+
+    def _generate_struct_sort(self, struct_def: "StructDefNode") -> None:
+        """
+        Create a Z3 DatatypeSort for a single StructDefNode.
+
+        Each struct becomes a Z3 Datatype with a single constructor
+        whose arguments correspond to the struct's fields.
+        """
+        if not Z3_AVAILABLE:
+            return
+
+        from yuho.ast.nodes import BuiltinType
+
+        dt = z3.Datatype(struct_def.name)
+
+        # Collect (accessor_name, sort) pairs; we need all field sorts
+        # resolved before declaring so we pre-compute them.
+        field_specs: List[Tuple[str, Any]] = []
+        for field_def in struct_def.fields:
+            acc_name = f"{struct_def.name}_{field_def.name}"
+            field_sort = self._type_to_sort(field_def.type_annotation)
+            field_specs.append((acc_name, field_sort))
+
+        # Declare the constructor with all fields
+        constructor_name = f"mk_{struct_def.name}"
+        dt.declare(constructor_name, *field_specs)
+
+        try:
+            created_sort = dt.create()
+            self._sorts[struct_def.name] = created_sort
+            # Store the constructor
+            self._consts[constructor_name] = getattr(created_sort, constructor_name)
+            # Store field accessor functions
+            for acc_name, _ in field_specs:
+                self._consts[acc_name] = getattr(created_sort, acc_name)
+        except Exception as e:
+            # Fallback: if Datatype creation fails (e.g. recursive types),
+            # use uninterpreted sort with function accessors
+            logger.debug(f"DatatypeSort creation failed for {struct_def.name}: {e}, using DeclareSort fallback")
             sort = z3.DeclareSort(struct_def.name)
             self._sorts[struct_def.name] = sort
-            
-            # Create symbolic field accessors
-            for field_def in struct_def.fields:
-                field_sort = self._type_to_sort(field_def.type_annotation)
-                func_name = f"{struct_def.name}_{field_def.name}"
-                self._consts[func_name] = z3.Function(
-                    func_name, sort, field_sort
-                )
+            for acc_name, field_sort in field_specs:
+                self._consts[acc_name] = z3.Function(acc_name, sort, field_sort)
     
     def _generate_statute_constraints(self, statute: "StatuteNode") -> None:
-        """Generate Z3 constraints from a statute."""
+        """
+        Generate Z3 constraints from a statute, driven by actual AST
+        ElementNode / ElementGroupNode structure.
+        """
         if not Z3_AVAILABLE:
             return
-        
+
+        from yuho.ast.nodes import ElementNode, ElementGroupNode
+
         statute_id = statute.section_number.replace(".", "_")
-        
+
         # Create a symbolic constant for this statute instance
-        if "Statute" not in self._sorts:
-            self._sorts["Statute"] = z3.DeclareSort("Statute")
-        
         statute_const = z3.Const(f"statute_{statute_id}", self._sorts["Statute"])
         self._consts[f"statute_{statute_id}"] = statute_const
-        
-        # Generate element constraints
-        element_satisfied = []
-        for i, element in enumerate(statute.elements):
-            elem_name = element.name.replace(" ", "_").replace("-", "_")
-            elem_var = z3.Bool(f"{statute_id}_{elem_name}_satisfied")
-            self._consts[f"{statute_id}_{elem_name}"] = elem_var
-            element_satisfied.append(elem_var)
-            
-            # Element-specific constraints based on type
-            if element.element_type == "mens_rea":
-                # Mens rea elements require intent
-                intent_var = z3.Const(
-                    f"{statute_id}_{elem_name}_intent",
-                    self._sorts["Intent"]
-                )
-                self._consts[f"{statute_id}_{elem_name}_intent"] = intent_var
-        
-        # All elements must be satisfied for conviction
-        if element_satisfied:
-            all_elements = z3.And(*element_satisfied)
+
+        # Recursively translate element tree into a Z3 boolean expression
+        element_exprs = []
+        for elem in statute.elements:
+            expr = self._translate_element(statute_id, elem)
+            if expr is not None:
+                element_exprs.append(expr)
+
+        # Top-level elements are implicitly conjunctive (all must hold)
+        if element_exprs:
+            if len(element_exprs) == 1:
+                all_elements = element_exprs[0]
+            else:
+                all_elements = z3.And(*element_exprs)
+
             conviction_var = z3.Bool(f"{statute_id}_conviction")
             self._consts[f"{statute_id}_conviction"] = conviction_var
-            
-            # conviction <=> all elements satisfied
+
+            # conviction <=> all top-level elements satisfied
             self._assertions.append(conviction_var == all_elements)
-        
-        # Generate penalty constraints
+
+        # Exception constraints
+        self._generate_exception_constraints(statute_id, statute)
+
+        # Penalty constraints
         if statute.penalty:
             self._generate_penalty_constraints(statute_id, statute.penalty)
+
+    def _translate_element(
+        self, statute_id: str, elem: "Union[ElementNode, ElementGroupNode]"
+    ) -> Optional[Any]:
+        """
+        Recursively translate an ElementNode or ElementGroupNode to Z3.
+
+        ElementNode -> Bool variable (+ intent variable for mens_rea)
+        ElementGroupNode(all_of) -> And(members...)
+        ElementGroupNode(any_of) -> Or(members...)
+        """
+        if not Z3_AVAILABLE:
+            return None
+
+        from yuho.ast.nodes import ElementNode, ElementGroupNode
+
+        if isinstance(elem, ElementNode):
+            safe_name = elem.name.replace(" ", "_").replace("-", "_")
+            var_name = f"{statute_id}_{safe_name}_satisfied"
+            elem_var = z3.Bool(var_name)
+            self._consts[var_name] = elem_var
+
+            # Mens rea elements carry an intent variable
+            if elem.element_type == "mens_rea":
+                intent_name = f"{statute_id}_{safe_name}_intent"
+                intent_var = z3.Const(intent_name, self._sorts["Intent"])
+                self._consts[intent_name] = intent_var
+
+            # Translate match-expression descriptions to constraints
+            self._translate_element_description(statute_id, safe_name, elem)
+
+            return elem_var
+
+        elif isinstance(elem, ElementGroupNode):
+            child_exprs = []
+            for child in elem.members:
+                child_expr = self._translate_element(statute_id, child)
+                if child_expr is not None:
+                    child_exprs.append(child_expr)
+
+            if not child_exprs:
+                return z3.BoolVal(True)
+
+            if elem.combinator == "all_of":
+                return z3.And(*child_exprs) if len(child_exprs) > 1 else child_exprs[0]
+            elif elem.combinator == "any_of":
+                return z3.Or(*child_exprs) if len(child_exprs) > 1 else child_exprs[0]
+            else:
+                # Unknown combinator, treat as conjunction
+                return z3.And(*child_exprs) if len(child_exprs) > 1 else child_exprs[0]
+
+        return None
+
+    def _translate_element_description(
+        self, statute_id: str, elem_name: str, elem: "ElementNode"
+    ) -> None:
+        """
+        Translate an element's description AST node to Z3 constraints.
+
+        If the description is a MatchExprNode, translate each arm to a
+        disjunctive constraint on the element's satisfaction.
+        """
+        if not Z3_AVAILABLE:
+            return
+
+        from yuho.ast.nodes import MatchExprNode, MatchArm, StringLit
+
+        desc = elem.description
+        if not isinstance(desc, MatchExprNode):
+            return  # StringLit descriptions don't generate constraints
+
+        var_name = f"{statute_id}_{elem_name}_satisfied"
+        if var_name not in self._consts:
+            return
+
+        elem_var = self._consts[var_name]
+        arm_constraints = []
+
+        for arm in desc.arms:
+            arm_c = self._translate_match_arm_to_constraint(statute_id, arm)
+            if arm_c is not None:
+                arm_constraints.append(arm_c)
+
+        # If any arm is satisfiable, the element can be satisfied
+        if arm_constraints:
+            arm_disjunction = z3.Or(*arm_constraints) if len(arm_constraints) > 1 else arm_constraints[0]
+            # Element satisfied => at least one arm condition holds
+            self._assertions.append(z3.Implies(elem_var, arm_disjunction))
+
+    def _translate_match_arm_to_constraint(
+        self, statute_id: str, arm: "MatchArm"
+    ) -> Optional[Any]:
+        """Translate a single MatchArm to a Z3 constraint."""
+        if not Z3_AVAILABLE:
+            return None
+
+        from yuho.ast.nodes import (
+            WildcardPattern, LiteralPattern, BindingPattern,
+            BinaryExprNode, UnaryExprNode, IdentifierNode,
+            IntLit, BoolLit, StringLit,
+        )
+
+        # Wildcard matches everything
+        if isinstance(arm.pattern, WildcardPattern):
+            constraint = z3.BoolVal(True)
+        elif isinstance(arm.pattern, LiteralPattern):
+            lit = arm.pattern.literal
+            if isinstance(lit, BoolLit):
+                constraint = z3.BoolVal(lit.value)
+            else:
+                constraint = z3.BoolVal(True)
+        elif isinstance(arm.pattern, BindingPattern):
+            constraint = z3.BoolVal(True)
+        else:
+            constraint = z3.BoolVal(True)
+
+        # Translate guard expression
+        if arm.guard is not None:
+            guard_c = self._translate_expr_to_z3(statute_id, arm.guard)
+            if guard_c is not None:
+                constraint = z3.And(constraint, guard_c) if constraint is not None else guard_c
+
+        return constraint
+
+    def _translate_expr_to_z3(self, statute_id: str, expr: "ASTNode") -> Optional[Any]:
+        """Translate an AST expression node to a Z3 formula."""
+        if not Z3_AVAILABLE:
+            return None
+
+        from yuho.ast.nodes import (
+            BinaryExprNode, UnaryExprNode, IdentifierNode,
+            IntLit, BoolLit, StringLit, FieldAccessNode,
+        )
+
+        if isinstance(expr, BoolLit):
+            return z3.BoolVal(expr.value)
+
+        if isinstance(expr, IntLit):
+            return z3.IntVal(expr.value)
+
+        if isinstance(expr, StringLit):
+            return z3.StringVal(expr.value)
+
+        if isinstance(expr, IdentifierNode):
+            name = f"{statute_id}_{expr.name}"
+            if name in self._consts:
+                return self._consts[name]
+            # Create as bool variable
+            var = z3.Bool(name)
+            self._consts[name] = var
+            return var
+
+        if isinstance(expr, UnaryExprNode):
+            operand = self._translate_expr_to_z3(statute_id, expr.operand)
+            if operand is None:
+                return None
+            if expr.operator == "!":
+                return z3.Not(operand)
+            if expr.operator == "-":
+                return -operand
+            return None
+
+        if isinstance(expr, BinaryExprNode):
+            left = self._translate_expr_to_z3(statute_id, expr.left)
+            right = self._translate_expr_to_z3(statute_id, expr.right)
+            if left is None or right is None:
+                return None
+            op_map = {
+                "&&": z3.And, "||": z3.Or,
+                "==": lambda a, b: a == b, "!=": lambda a, b: a != b,
+                "<": lambda a, b: a < b, ">": lambda a, b: a > b,
+                "<=": lambda a, b: a <= b, ">=": lambda a, b: a >= b,
+                "+": lambda a, b: a + b, "-": lambda a, b: a - b,
+                "*": lambda a, b: a * b,
+            }
+            fn = op_map.get(expr.operator)
+            if fn is not None:
+                return fn(left, right)
+            return None
+
+        return None
+
+    def _generate_exception_constraints(
+        self, statute_id: str, statute: "StatuteNode"
+    ) -> None:
+        """
+        Encode exception guards as Z3 implications.
+
+        For each ExceptionNode: if exception guard is satisfied,
+        then conviction is negated.
+            exception_guard_satisfied => NOT(conviction)
+        """
+        if not Z3_AVAILABLE:
+            return
+
+        conviction_key = f"{statute_id}_conviction"
+        if conviction_key not in self._consts:
+            return
+
+        conviction_var = self._consts[conviction_key]
+
+        for i, exc in enumerate(statute.exceptions):
+            exc_label = exc.label or f"exception_{i}"
+            safe_label = exc_label.replace(" ", "_").replace("-", "_")
+            exc_var = z3.Bool(f"{statute_id}_exc_{safe_label}")
+            self._consts[f"{statute_id}_exc_{safe_label}"] = exc_var
+
+            # If exception has a guard expression, translate it
+            if exc.guard is not None:
+                guard_z3 = self._translate_expr_to_z3(statute_id, exc.guard)
+                if guard_z3 is not None:
+                    # guard satisfied <=> exception variable
+                    self._assertions.append(exc_var == guard_z3)
+
+            # Core encoding: exception satisfied => NOT conviction
+            self._assertions.append(z3.Implies(exc_var, z3.Not(conviction_var)))
     
     def _generate_penalty_constraints(
         self, statute_id: str, penalty: "PenaltyNode"
@@ -1130,9 +1458,187 @@ class Z3Generator:
         if len(ast.statutes) > 1:
             penalty_check = self._check_penalty_ordering(ast)
             diagnostics.extend(penalty_check)
-        
+
+        # Cross-statute consistency (if multiple statutes)
+        if len(ast.statutes) > 1:
+            cross_diags = self.check_cross_statute_consistency(list(ast.statutes))
+            diagnostics.extend(cross_diags)
+
         return diagnostics
     
+    def check_cross_statute_consistency(
+        self, statutes: List["StatuteNode"]
+    ) -> List[Z3Diagnostic]:
+        """
+        Check logical relationships across multiple statutes.
+
+        Verifies implications such as:
+        - If s300 (murder) conviction holds, then s299 (culpable homicide)
+          conviction must also hold (murder is a subset of culpable homicide).
+        - Penalty severity ordering is respected across related statutes.
+
+        Args:
+            statutes: List of StatuteNode instances to cross-check
+
+        Returns:
+            List of Z3Diagnostic results
+        """
+        if not Z3_AVAILABLE:
+            return [Z3Diagnostic(
+                check_name="cross_statute_consistency",
+                passed=False,
+                message="Z3 not available",
+            )]
+
+        diagnostics = []
+        extractor = Z3CounterexampleExtractor()
+
+        # Build conviction var lookup: section_number -> conviction var name
+        conviction_map: Dict[str, str] = {}
+        for s in statutes:
+            sid = s.section_number.replace(".", "_")
+            key = f"{sid}_conviction"
+            if key in self._consts:
+                conviction_map[s.section_number] = key
+
+        # Detect subsumption relationships from statute metadata.
+        # Heuristic: statutes whose definitions reference another
+        # section number, or whose title references another offense,
+        # imply the referenced offense.
+        subsumption_pairs = self._detect_subsumption_pairs(statutes)
+
+        for parent_sec, child_sec in subsumption_pairs:
+            parent_key = conviction_map.get(parent_sec)
+            child_key = conviction_map.get(child_sec)
+            if parent_key is None or child_key is None:
+                continue
+
+            parent_var = self._consts[parent_key]
+            child_var = self._consts[child_key]
+
+            # parent conviction should imply child conviction
+            # (e.g., murder => culpable homicide)
+            check_solver = z3.Solver()
+            check_solver.set("timeout", 5000)
+
+            # Add all existing assertions as background
+            for a in self._assertions:
+                check_solver.add(a)
+
+            # Check: is it possible for parent to be convicted but NOT child?
+            check_solver.add(parent_var)
+            check_solver.add(z3.Not(child_var))
+
+            result = check_solver.check()
+            check_name = f"cross_{parent_sec}_implies_{child_sec}"
+
+            if result == z3.sat:
+                model = check_solver.model()
+                ce = extractor.model_to_counterexample(model)
+                diagnostics.append(Z3Diagnostic(
+                    check_name=check_name,
+                    passed=False,
+                    counterexample=ce,
+                    message=(
+                        f"Conviction under s{parent_sec} does not imply "
+                        f"conviction under s{child_sec}"
+                    ),
+                ))
+            elif result == z3.unsat:
+                diagnostics.append(Z3Diagnostic(
+                    check_name=check_name,
+                    passed=True,
+                    message=(
+                        f"Conviction under s{parent_sec} correctly implies "
+                        f"conviction under s{child_sec}"
+                    ),
+                ))
+            else:
+                diagnostics.append(Z3Diagnostic(
+                    check_name=check_name,
+                    passed=False,
+                    message="Solver returned unknown (timeout)",
+                ))
+
+        # Penalty severity cross-check
+        diagnostics.extend(self._check_cross_penalty_severity(statutes, subsumption_pairs))
+
+        if not diagnostics:
+            diagnostics.append(Z3Diagnostic(
+                check_name="cross_statute_consistency",
+                passed=True,
+                message=f"No cross-statute relationships detected among {len(statutes)} statutes",
+            ))
+
+        return diagnostics
+
+    def _detect_subsumption_pairs(
+        self, statutes: List["StatuteNode"]
+    ) -> List[Tuple[str, str]]:
+        """
+        Detect (parent, child) pairs where parent offense subsumes child.
+
+        Uses heuristics: checks definitions for section references,
+        title containment (e.g., "Murder" definition mentions "Section 299").
+
+        Returns:
+            List of (parent_section, child_section) tuples
+        """
+        import re
+        pairs = []
+        section_nums = {s.section_number for s in statutes}
+
+        for statute in statutes:
+            # Scan definitions for references to other section numbers
+            for defn in statute.definitions:
+                text = defn.definition.value if hasattr(defn.definition, 'value') else str(defn.definition)
+                for ref_match in re.finditer(r'[Ss]ection\s+(\d+[A-Za-z]*)', text):
+                    ref_sec = ref_match.group(1)
+                    if ref_sec in section_nums and ref_sec != statute.section_number:
+                        pairs.append((statute.section_number, ref_sec))
+
+        return pairs
+
+    def _check_cross_penalty_severity(
+        self,
+        statutes: List["StatuteNode"],
+        subsumption_pairs: List[Tuple[str, str]],
+    ) -> List[Z3Diagnostic]:
+        """Check that parent offenses have >= penalty maximums than child offenses."""
+        diagnostics = []
+
+        statute_map = {s.section_number: s for s in statutes}
+
+        for parent_sec, child_sec in subsumption_pairs:
+            parent = statute_map.get(parent_sec)
+            child = statute_map.get(child_sec)
+            if parent is None or child is None:
+                continue
+            if parent.penalty is None or child.penalty is None:
+                continue
+
+            # Compare imprisonment maximums
+            p_max = parent.penalty.imprisonment_max
+            c_max = child.penalty.imprisonment_max
+            if p_max is not None and c_max is not None:
+                if p_max.total_days() < c_max.total_days():
+                    diagnostics.append(Z3Diagnostic(
+                        check_name=f"penalty_severity_{parent_sec}_vs_{child_sec}",
+                        passed=False,
+                        message=(
+                            f"s{parent_sec} max imprisonment ({p_max.total_days()} days) "
+                            f"< s{child_sec} max ({c_max.total_days()} days)"
+                        ),
+                    ))
+                else:
+                    diagnostics.append(Z3Diagnostic(
+                        check_name=f"penalty_severity_{parent_sec}_vs_{child_sec}",
+                        passed=True,
+                        message="Penalty severity ordering is correct",
+                    ))
+
+        return diagnostics
+
     def _check_penalty_ordering(self, ast: "ModuleNode") -> List[Z3Diagnostic]:
         """Check that penalty ranges don't have unexpected overlaps."""
         diagnostics = []

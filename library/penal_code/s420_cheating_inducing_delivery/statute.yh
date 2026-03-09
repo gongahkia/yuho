@@ -44,4 +44,6 @@ statute 420 "Cheating and Dishonestly Inducing Delivery of Property" {
     illustration example2 {
         "A, by false pretenses, induces B to sign a document transferring property to A. A is guilty under Section 420."
     }
+
+    // cross-reference: s420 is an aggravated form of s415 cheating where delivery of property is induced
 }

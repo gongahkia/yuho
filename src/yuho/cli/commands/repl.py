@@ -21,6 +21,7 @@ from yuho.ast import ASTBuilder
 from yuho.ast.nodes import ModuleNode
 from yuho.transpile.base import TranspileTarget
 from yuho.transpile.registry import TranspilerRegistry
+from yuho.eval.interpreter import Interpreter, Environment, Value, InterpreterError, AssertionError_
 from yuho.cli.error_formatter import format_errors, Colors, colorize
 
 
@@ -48,6 +49,8 @@ class YuhoREPL:
         "transpile <target>": "Transpile last valid input (json, english, mermaid, latex, graphql)",
         "ast": "Show AST of last valid input",
         "targets": "List available transpile targets",
+        "eval": "Evaluate last parsed module using the interpreter",
+        "env": "Show current interpreter environment bindings",
         "reset": "Clear session state",
     }
 
@@ -69,6 +72,9 @@ class YuhoREPL:
         self.last_ast: Optional[ModuleNode] = None
         self.last_source: str = ""
         self.session_statutes: Dict[str, Any] = {}
+        # Persistent interpreter environment across REPL session
+        self.interp_env = Environment()
+        self.interpreter = Interpreter(self.interp_env)
         
         # Setup readline history
         self._setup_readline()
@@ -220,6 +226,8 @@ Type {self._colorize("help", Colors.YELLOW)} for commands, {self._colorize("exit
             self.last_ast = None
             self.last_source = ""
             self.session_statutes.clear()
+            self.interp_env = Environment()
+            self.interpreter = Interpreter(self.interp_env)
             print(self._colorize("Session state cleared", Colors.GREEN))
             return False
         
@@ -244,7 +252,15 @@ Type {self._colorize("help", Colors.YELLOW)} for commands, {self._colorize("exit
             else:
                 self._transpile(arg)
             return False
-        
+
+        if command == "eval":
+            self._eval_last_ast()
+            return False
+
+        if command == "env":
+            self._print_env()
+            return False
+
         # Unknown command - try parsing as code
         return False
 
@@ -350,6 +366,55 @@ Type {self._colorize("help", Colors.YELLOW)} for commands, {self._colorize("exit
                 import traceback
                 traceback.print_exc()
 
+    def _eval_last_ast(self) -> None:
+        """Evaluate the last parsed AST using the interpreter."""
+        if not self.last_ast:
+            print(self._colorize("No valid AST available. Parse some code first.", Colors.YELLOW))
+            return
+        try:
+            self.interpreter.interpret(self.last_ast)
+            bindings = self.interp_env.bindings
+            structs = self.interp_env.struct_defs
+            funcs = self.interp_env.function_defs
+            stats: List[str] = []
+            if bindings:
+                stats.append(f"{len(bindings)} binding(s)")
+            if structs:
+                stats.append(f"{len(structs)} struct(s)")
+            if funcs:
+                stats.append(f"{len(funcs)} function(s)")
+            if self.interp_env.statutes:
+                stats.append(f"{len(self.interp_env.statutes)} statute(s)")
+            msg = ", ".join(stats) if stats else "no definitions"
+            print(self._colorize(f"Evaluated: {msg}", Colors.GREEN))
+        except AssertionError_ as e:
+            print(self._colorize(f"Assertion failed: {e}", Colors.RED))
+        except InterpreterError as e:
+            print(self._colorize(f"Runtime error: {e}", Colors.RED))
+        except Exception as e:
+            print(self._colorize(f"Error: {e}", Colors.RED))
+            if self.verbose:
+                import traceback
+                traceback.print_exc()
+
+    def _print_env(self) -> None:
+        """Print current interpreter environment bindings."""
+        if not self.interp_env.bindings and not self.interp_env.struct_defs and not self.interp_env.function_defs:
+            print(self._colorize("Environment is empty. Use 'eval' after parsing code.", Colors.YELLOW))
+            return
+        print(f"\n{self._colorize('=== Environment ===', Colors.CYAN)}")
+        if self.interp_env.struct_defs:
+            print(f"Structs: {', '.join(self.interp_env.struct_defs.keys())}")
+        if self.interp_env.function_defs:
+            print(f"Functions: {', '.join(self.interp_env.function_defs.keys())}")
+        if self.interp_env.statutes:
+            print(f"Statutes: {', '.join(self.interp_env.statutes.keys())}")
+        if self.interp_env.bindings:
+            print("Bindings:")
+            for name, val in self.interp_env.bindings.items():
+                print(f"  {name} = {val.raw!r} ({val.type_tag})")
+        print()
+
     def _print_ast(self, ast: ModuleNode) -> None:
         """Print a simple representation of the AST."""
         print(f"\n{self._colorize('=== AST ===', Colors.CYAN)}")
@@ -414,7 +479,7 @@ Type {self._colorize("help", Colors.YELLOW)} for commands, {self._colorize("exit
                 # Check if it's a command
                 if source.strip() in self.COMMANDS or source.split()[0] in [
                     "help", "exit", "quit", "clear", "history", "load",
-                    "transpile", "ast", "targets", "reset"
+                    "transpile", "ast", "targets", "eval", "env", "reset"
                 ]:
                     if self._handle_command(source):
                         break  # Exit command

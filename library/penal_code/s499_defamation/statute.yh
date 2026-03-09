@@ -39,6 +39,42 @@ statute 499 "Defamation" {
         fine := $0.00 .. $5,000.00;
     }
 
+    exception truthPublicGood {
+        "It is not defamation to impute anything which is true, if it is for the public good that the imputation should be made"
+        "Not defamation"
+        when facts.exception == "truthPublicGood"
+    }
+
+    exception publicConduct {
+        "It is not defamation to express in good faith any opinion respecting the conduct of a public servant in the discharge of his public functions"
+        "Not defamation"
+        when facts.exception == "publicConduct"
+    }
+
+    exception courtProceedings {
+        "It is not defamation to publish a substantially true report of the proceedings of a court of justice"
+        "Not defamation"
+        when facts.exception == "courtProceedings"
+    }
+
+    exception goodFaithOpinion {
+        "It is not defamation to express in good faith any opinion respecting the merits of any case decided by a court of justice"
+        "Not defamation"
+        when facts.exception == "goodFaithOpinion"
+    }
+
+    exception goodFaithAccusation {
+        "It is not defamation to make in good faith an accusation against any person to any of those who have lawful authority over that person"
+        "Not defamation"
+        when facts.exception == "goodFaithAccusation"
+    }
+
+    exception cautionGoodFaith {
+        "It is not defamation to convey a caution in good faith to one person against another, for the good of the person to whom the caution is conveyed"
+        "Not defamation"
+        when facts.exception == "cautionGoodFaith"
+    }
+
     illustration example1 {
         "A says 'B is a thief' intending to harm B's reputation. A defames B."
     }

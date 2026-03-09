@@ -294,98 +294,37 @@ def _run_test_file(test_file: Path, verbose: bool, coverage_tracker=None) -> dic
     return result
 
 
-def _build_test_environment(ast) -> dict:
-    """Build an environment mapping variable names to their values."""
-    from yuho.ast import nodes
-
-    env = {}
-
-    # Add struct types to environment
-    for struct_def in ast.type_defs:
-        env[struct_def.name] = {"_type": "struct_def", "fields": {f.name: f for f in struct_def.fields}}
-
-    # Add variables to environment
-    for var in ast.variables:
-        if var.value:
-            env[var.name] = _evaluate_expr(var.value, env)
-
-    return env
+def _build_test_environment(ast):
+    """Build an interpreter environment from the AST."""
+    from yuho.eval.interpreter import Interpreter, Environment
+    interp = Interpreter()
+    interp.interpret(ast)
+    return interp
 
 
-def _evaluate_expr(expr, env: dict):
-    """Evaluate an expression in the given environment."""
-    from yuho.ast import nodes
-
-    if isinstance(expr, nodes.BoolLit):
-        return expr.value
-    elif isinstance(expr, nodes.IntLit):
-        return expr.value
-    elif isinstance(expr, nodes.FloatLit):
-        return expr.value
-    elif isinstance(expr, nodes.StringLit):
-        return expr.value
-    elif isinstance(expr, nodes.IdentifierNode):
-        return env.get(expr.name, f"<unbound:{expr.name}>")
-    elif isinstance(expr, nodes.FieldAccessNode):
-        base = _evaluate_expr(expr.base, env)
-        if isinstance(base, dict):
-            return base.get(expr.field_name, f"<no field:{expr.field_name}>")
-        # Handle enum-style access like Party.Accused
-        if isinstance(base, str) and base.startswith("<unbound:"):
-            # This is an enum reference like ConsequenceDefinition.Murder
-            type_name = base.replace("<unbound:", "").replace(">", "")
-            return f"{type_name}.{expr.field_name}"
-        return f"<field access error>"
-    elif isinstance(expr, nodes.StructLiteralNode):
-        result = {"_struct_name": expr.struct_name}
-        for fa in expr.field_values:
-            result[fa.name] = _evaluate_expr(fa.value, env)
-        return result
-    elif isinstance(expr, nodes.BinaryExprNode):
-        left = _evaluate_expr(expr.left, env)
-        right = _evaluate_expr(expr.right, env)
-        if expr.operator == "==":
-            return left == right
-        elif expr.operator == "!=":
-            return left != right
-        elif expr.operator == "&&":
-            return left and right
-        elif expr.operator == "||":
-            return left or right
-        return f"<binary:{expr.operator}>"
-    elif isinstance(expr, nodes.PassExprNode):
-        return None
+def _evaluate_expr(expr, interp_or_env):
+    """Evaluate an expression using the interpreter."""
+    from yuho.eval.interpreter import Interpreter
+    if isinstance(interp_or_env, Interpreter):
+        interp = interp_or_env
     else:
-        return f"<unevaluated:{type(expr).__name__}>"
+        interp = Interpreter(interp_or_env)
+    result = interp.visit(expr)
+    return result.raw
 
 
-def _evaluate_assertion(assertion, env: dict, verbose: bool) -> tuple:
+def _evaluate_assertion(assertion, interp_or_env, verbose: bool) -> tuple:
     """Evaluate an assertion and return (passed, error_message)."""
-    from yuho.ast import nodes
-
-    condition = assertion.condition
-
-    # Handle equality assertions like: assert var.field == ExpectedValue
-    if isinstance(condition, nodes.BinaryExprNode) and condition.operator == "==":
-        left = _evaluate_expr(condition.left, env)
-        right = _evaluate_expr(condition.right, env)
-
-        if left == right:
-            return (True, "")
-        else:
-            return (False, f"expected {right}, got {left}")
-
-    # Handle simple boolean assertions
-    result = _evaluate_expr(condition, env)
-    if result is True:
-        return (True, "")
-    elif result is False:
-        return (False, "assertion evaluated to FALSE")
+    from yuho.eval.interpreter import Interpreter, AssertionError_
+    if isinstance(interp_or_env, Interpreter):
+        interp = interp_or_env
     else:
-        # Non-boolean result, check for truthiness
-        if result:
-            return (True, "")
-        return (False, f"assertion evaluated to: {result}")
+        interp = Interpreter(interp_or_env)
+    try:
+        interp.visit(assertion)
+        return (True, "")
+    except AssertionError_ as e:
+        return (False, str(e))
 
 
 def _generate_html_coverage_report(report, output_path: Path) -> None:

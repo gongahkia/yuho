@@ -3,12 +3,80 @@
 
 referencing penal_code/s319_hurt
 
-// Test case 1: Basic validation
-fn test_basic() : bool {
-    return TRUE;
+// ----- test structs -----
+
+struct HurtTestCase {
+    string physicalElement,
+    bool causedToVictim,
 }
 
-// Test case 2: Edge case
-fn test_edge_case() : bool {
-    return TRUE;
+// ----- bodily pain -----
+
+HurtTestCase bodilyPainCase := HurtTestCase {
+    physicalElement := "bodily_pain",
+    causedToVictim := TRUE,
 }
+
+assert bodilyPainCase.physicalElement == "bodily_pain"
+assert bodilyPainCase.causedToVictim == TRUE
+assert is_hurt(bodilyPainCase.physicalElement, bodilyPainCase.causedToVictim) == TRUE
+
+// ----- disease -----
+
+HurtTestCase diseaseCase := HurtTestCase {
+    physicalElement := "disease",
+    causedToVictim := TRUE,
+}
+
+assert diseaseCase.physicalElement == "disease"
+assert is_hurt(diseaseCase.physicalElement, diseaseCase.causedToVictim) == TRUE
+
+// ----- infirmity -----
+
+HurtTestCase infirmityCase := HurtTestCase {
+    physicalElement := "infirmity",
+    causedToVictim := TRUE,
+}
+
+assert infirmityCase.physicalElement == "infirmity"
+assert is_hurt(infirmityCase.physicalElement, infirmityCase.causedToVictim) == TRUE
+
+// ----- unconsciousness -----
+
+HurtTestCase unconsciousnessCase := HurtTestCase {
+    physicalElement := "unconsciousness",
+    causedToVictim := TRUE,
+}
+
+assert unconsciousnessCase.physicalElement == "unconsciousness"
+assert is_hurt(unconsciousnessCase.physicalElement, unconsciousnessCase.causedToVictim) == TRUE
+
+// ----- no physical element: not hurt -----
+
+HurtTestCase noElement := HurtTestCase {
+    physicalElement := "none",
+    causedToVictim := TRUE,
+}
+
+assert noElement.physicalElement == "none"
+assert is_hurt(noElement.physicalElement, noElement.causedToVictim) == FALSE
+
+// ----- not caused to victim: not hurt -----
+
+HurtTestCase notCaused := HurtTestCase {
+    physicalElement := "bodily_pain",
+    causedToVictim := FALSE,
+}
+
+assert notCaused.causedToVictim == FALSE
+assert is_hurt(notCaused.physicalElement, notCaused.causedToVictim) == FALSE
+
+// ----- unrecognized element: not hurt -----
+
+HurtTestCase unknownElement := HurtTestCase {
+    physicalElement := "emotional_distress",
+    causedToVictim := TRUE,
+}
+
+assert unknownElement.physicalElement == "emotional_distress"
+assert is_hurt(unknownElement.physicalElement, unknownElement.causedToVictim) == FALSE
