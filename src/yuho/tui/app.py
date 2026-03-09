@@ -21,7 +21,7 @@ from textual import on, work
 from textual.message import Message
 
 from yuho import __version__
-from yuho.tui.ascii_art import YUHO_LOGO_SMALL, YUHO_MASCOT, YUHO_BANNER
+from yuho.tui.ascii_art import YUHO_LOGO_SMALL, YUHO_BANNER
 
 def _copy_to_clipboard(text: str) -> bool:
     """Cross-platform clipboard copy. Returns True on success."""
@@ -175,7 +175,6 @@ class FilePickerScreen(ModalScreen[str]):
 class HomePanel(ScrollableContainer):
     """Home dashboard with quick actions."""
     def compose(self) -> ComposeResult:
-        yield Static(YUHO_MASCOT, id="mascot")
         yield Static(YUHO_BANNER, id="banner")
         yield Static(
             f"[dim]v{__version__}[/dim]\n\n"
@@ -1661,7 +1660,7 @@ class SettingsPanel(ScrollableContainer):
 class AboutPanel(ScrollableContainer):
     """About, attribution, and links."""
     def compose(self) -> ComposeResult:
-        yield Static(YUHO_MASCOT, id="about-mascot")
+        yield Static(YUHO_BANNER, id="about-banner")
         yield Rule()
         yield Static(
             f"[bold magenta]Yuho[/bold magenta] [dim]v{__version__}[/dim]\n"
@@ -1792,14 +1791,9 @@ Screen {
 .quick-actions Button {
     margin: 0 1;
 }
-#mascot, #about-mascot {
+#banner, #about-banner {
     text-align: center;
-    color: $primary;
     margin: 1 0;
-}
-#banner {
-    text-align: center;
-    margin: 0 0 1 0;
 }
 #welcome-text {
     text-align: center;
