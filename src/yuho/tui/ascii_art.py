@@ -3,47 +3,58 @@ Yuho mascot ASCII art.
 """
 
 YUHO_MASCOT = """\
-[bold magenta]
-            ╭──────────────╮
-           ╱                ╲
-          │   [bold white]●[/]  [bold magenta]     [bold white]●[/]  [bold magenta]   │
-          │                  │
-           ╲                ╱
-            ╰──────┬───────╯
-                   │
-               ╭───┴───╮
-               │       │
-               │       │
-               └─┐   ┌─┘
-                 │   │
-                ╱     ╲
-               ╱       ╲
-              ╵         ╵
-                ┌─────┐
-                │[bold yellow] ═══ [/bold yellow]│
-                └─────┘
-[/bold magenta]\
-"""
-
-YUHO_MASCOT_PLAIN = """\
-            ╭──────────────╮
-           ╱                ╲
-          │   ●       ●     │
-          │                  │
-           ╲                ╱
-            ╰──────┬───────╯
-                   │
-               ╭───┴───╮
-               │       │
-               │       │
-               └─┐   ┌─┘
-                 │   │
-                ╱     ╲
-               ╱       ╲
-              ╵         ╵
-                ┌─────┐
-                │ ═══ │
-                └─────┘
+[dim]                                   @@@@@@@@@%
+                             %@@@@@         @@@@@
+                           @@@        @@@@      @@
+                         @@@   @@@@@@@@@@@      %@
+                        @@      @@@@@@@@@@@@@   @@
+                        @@     @@@@@@@@@@@%     @@
+                        @@     @@@@@@@@@@@@    @@
+                        @@     @@@@@@@@@@@    @@@              [bold magenta]*###############[/bold magenta]
+                        @@@      @@@%        @@             [bold magenta]##*+==-------=-====*####[/bold magenta]
+                          @@@             @@@           [bold magenta]###*==---------------======+*###[/bold magenta]
+                            %@@@@@@@@@@@ @@%          [bold magenta]##===-------------------------====*##[/bold magenta]
+                                       @@@@@@@      [bold magenta]#*===-------------------------------==+###[/bold magenta]
+                                        @@@@@@     [bold magenta]#==-------------------------------------==##[/bold magenta]
+                    ***                   @@@@@  [bold magenta]##==---------------------------------------==*#[/bold magenta]
+                    ***                   @@@@@  [bold magenta]#==-----------------------------------------==##[/bold magenta]
+            **     ********                 @@@ [bold magenta]#*=-------------------------------------------=##[/bold magenta]
+            **   +***********               @@@@[bold magenta]#*=-------------------------------------------=##[/bold magenta]
+            **+***** *********                  [bold magenta]#+===+++=------==+*===------------------------=#[/bold magenta]
+           +******   ***  *****                 [bold magenta]#*==@@@@@==----=%@@@@==----------------------==#[/bold magenta]
+           +*****   =***    ***                 [bold magenta]#*==@@@@@==----=%@@@@+=---------------------==*#[/bold magenta]
+           *****    +***     ***                 [bold magenta]#===%@%===----==%@@*=---------------------==*#[/bold magenta]
+           **** *********    ***                 [bold magenta]*#=====----------===----------------------=*#[/bold magenta]
+           ****   *************                    [bold magenta]#==-----------------------------------=*#[/bold magenta]
+            ***     ***  ******                     [bold magenta]#+==-----------------------------===*##[/bold magenta]
+            ***     ***                              [bold magenta]##*==------------------------===*##[/bold magenta]
+             *     ****                                 [bold magenta]##*==-------------======+*###[/bold magenta]
+                  +***                                    [bold magenta]#*=---=+***++=--=####[/bold magenta]
+                  ***                                     [bold magenta]#+=--==#   #+=-==#[/bold magenta]
+                 ****                                     [bold magenta]#+=--=*+   #+=--=#[/bold magenta]
+                 ***                                      [bold magenta]#==--=##   #+=--=#[/bold magenta]
+                ***                                       [bold magenta]#=---=##   #==--=#[/bold magenta]
+                **                                       [bold magenta]#*----=##   #=---=#[/bold magenta]
+                                                         [bold magenta]#+-----##   #=---+#[/bold magenta]
+                                                         [bold magenta]#==---=##   #=--=*#[/bold magenta]
+                                                         [bold magenta]#=---==##  #*=-==##[/bold magenta]
+             **      ++***********                      [bold magenta]##=---==#   #*=-=*#[/bold magenta]
+             **  *************                          [bold magenta]##=---==#   #+=-=*[/bold magenta]
+             **      *******                            [bold magenta]#*=---=+#   #====#[/bold magenta]
+             **          ***                            [bold magenta]#*=---=*#   #=-==#[/bold magenta]
+            +**          ***                            [bold magenta]#+----=*#   *=--+#[/bold magenta]
+            ***          **+******                      [bold magenta]#=----=*   #+--=*#[/bold magenta]
+            +**      *************                      [bold magenta]#=----=#   #=--=##[/bold magenta]
+             **    ***** ***                            [bold magenta]*=---==#   #=--=#[/bold magenta]
+             **          ****                           [bold magenta]*=---=+#   #=--+#[/bold magenta]
+             **     +********                           [bold magenta]*=---=**  ##===+#[/bold magenta]
+             **   *************                        [bold magenta]**=---=*#  #*=--+#[/bold magenta]
+             ***  ****   +********                    [bold magenta]##=--===+#  #*=--=#[/bold magenta]
+             ***  **** ****    *****                [bold magenta]*#*==----===*###=--=+###[/bold magenta]
+             +**   ********      ******             [bold magenta]#*==-------==*==-----==+#[/bold magenta]
+              **                                     [bold magenta]*#====---==*+=-------==*[/bold magenta]
+                                                       [bold magenta]##*++++*###*=--====+#[/bold magenta]
+                                                                   [bold magenta]#######*[/bold magenta][/dim]\
 """
 
 YUHO_LOGO_SMALL = "[bold magenta]ゆほ[/bold magenta] [dim]yuho[/dim]"

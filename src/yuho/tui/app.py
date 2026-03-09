@@ -21,7 +21,7 @@ from textual import on, work
 from textual.message import Message
 
 from yuho import __version__
-from yuho.tui.ascii_art import YUHO_MASCOT, YUHO_LOGO_SMALL
+from yuho.tui.ascii_art import YUHO_LOGO_SMALL, YUHO_MASCOT
 
 def _copy_to_clipboard(text: str) -> bool:
     """Cross-platform clipboard copy. Returns True on success."""
@@ -173,7 +173,7 @@ class FilePickerScreen(ModalScreen[str]):
 
 
 class HomePanel(ScrollableContainer):
-    """Home dashboard with mascot and quick actions."""
+    """Home dashboard with quick actions."""
     def compose(self) -> ComposeResult:
         yield Static(YUHO_MASCOT, id="mascot")
         yield Static(
