@@ -21,7 +21,7 @@ from textual import on, work
 from textual.message import Message
 
 from yuho import __version__
-from yuho.tui.ascii_art import YUHO_LOGO_SMALL, YUHO_MASCOT
+from yuho.tui.ascii_art import YUHO_LOGO_SMALL, YUHO_MASCOT, YUHO_BANNER
 
 def _copy_to_clipboard(text: str) -> bool:
     """Cross-platform clipboard copy. Returns True on success."""
@@ -176,8 +176,9 @@ class HomePanel(ScrollableContainer):
     """Home dashboard with quick actions."""
     def compose(self) -> ComposeResult:
         yield Static(YUHO_MASCOT, id="mascot")
+        yield Static(YUHO_BANNER, id="banner")
         yield Static(
-            f"[bold]Welcome to Yuho[/bold] [dim]v{__version__}[/dim]\n\n"
+            f"[dim]v{__version__}[/dim]\n\n"
             "[dim]A domain-specific language for encoding legal statutes.[/dim]\n"
             "[dim]Encode Singapore Penal Code sections as machine-readable models.[/dim]\n",
             id="welcome-text",
@@ -1795,6 +1796,10 @@ Screen {
     text-align: center;
     color: $primary;
     margin: 1 0;
+}
+#banner {
+    text-align: center;
+    margin: 0 0 1 0;
 }
 #welcome-text {
     text-align: center;
