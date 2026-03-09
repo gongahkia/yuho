@@ -7,7 +7,7 @@ the same value, creating potential interpretation conflicts.
 """
 
 from dataclasses import dataclass, field
-from typing import List, Optional, Set, Tuple, Any
+from typing import List, Optional, Set, Tuple
 
 from yuho.ast import nodes
 from yuho.ast.visitor import Visitor
@@ -241,7 +241,7 @@ class OverlapDetector(Visitor):
             overlaps=overlaps,
         )
     
-    def visit_match_expr(self, node: nodes.MatchExprNode) -> Any:
+    def visit_match_expr(self, node: nodes.MatchExprNode) -> None:
         """Check for overlapping patterns in match expression."""
         # Visit children first
         self.generic_visit(node)
@@ -268,7 +268,7 @@ class OverlapDetector(Visitor):
         
         return None
     
-    def visit_module(self, node: nodes.ModuleNode) -> Any:
+    def visit_module(self, node: nodes.ModuleNode) -> None:
         """Entry point: check all match expressions in module."""
         return self.generic_visit(node)
 

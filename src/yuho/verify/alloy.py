@@ -5,6 +5,7 @@ Generates Alloy models from statute ASTs for bounded model checking,
 invokes the Alloy analyzer, and parses counterexamples.
 """
 
+import sys
 from typing import List, Dict, Any, Optional, Tuple
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -471,6 +472,12 @@ class AlloyAnalyzer:
             Path("/usr/local/share/alloy/alloy.jar"),
             Path("/opt/alloy/alloy.jar"),
         ]
+        if sys.platform == "win32":
+            common_paths.extend([
+                Path.home() / "AppData" / "Local" / "alloy" / "alloy.jar",
+                Path("C:/Program Files/alloy/alloy.jar"),
+                Path("C:/Program Files (x86)/alloy/alloy.jar"),
+            ])
         
         for path in common_paths:
             if path.exists():

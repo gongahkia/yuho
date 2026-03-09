@@ -7,7 +7,7 @@ Uses the same pattern matrix techniques as exhaustiveness checking.
 """
 
 from dataclasses import dataclass, field
-from typing import List, Optional, Set, Dict, Any
+from typing import List, Optional, Set, Dict
 
 from yuho.ast import nodes
 from yuho.ast.visitor import Visitor
@@ -251,7 +251,7 @@ class ReachabilityChecker(Visitor):
             unreachable_arms=unreachable,
         )
     
-    def visit_match_expr(self, node: nodes.MatchExprNode) -> Any:
+    def visit_match_expr(self, node: nodes.MatchExprNode) -> None:
         """Check reachability of match expression arms."""
         # Visit children first
         self.generic_visit(node)
@@ -270,7 +270,7 @@ class ReachabilityChecker(Visitor):
         
         return None
     
-    def visit_module(self, node: nodes.ModuleNode) -> Any:
+    def visit_module(self, node: nodes.ModuleNode) -> None:
         """Entry point: check all match expressions in module."""
         return self.generic_visit(node)
 

@@ -11,7 +11,7 @@ Builds symbol tables and resolves references:
 """
 
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Set
+from typing import Dict, List, Optional, Set
 from dataclasses import dataclass, field
 from enum import Enum, auto
 import logging
@@ -263,7 +263,7 @@ class ScopeAnalysisVisitor(Visitor):
     # Import and referencing resolution
     # =========================================================================
 
-    def visit_import(self, node: nodes.ImportNode) -> Any:
+    def visit_import(self, node: nodes.ImportNode) -> None:
         """Resolve import and inject exported symbols into scope."""
         if self._resolver is None or self._source_file is None:
             return self.generic_visit(node)
@@ -280,7 +280,7 @@ class ScopeAnalysisVisitor(Visitor):
             )
         return self.generic_visit(node)
 
-    def visit_referencing_stmt(self, node: nodes.ReferencingStmt) -> Any:
+    def visit_referencing_stmt(self, node: nodes.ReferencingStmt) -> None:
         """Resolve referencing statement and inject exported symbols."""
         if self._resolver is None or self._source_file is None:
             return self.generic_visit(node)
@@ -300,7 +300,7 @@ class ScopeAnalysisVisitor(Visitor):
     # Struct definitions
     # =========================================================================
 
-    def visit_struct_def(self, node: nodes.StructDefNode) -> Any:
+    def visit_struct_def(self, node: nodes.StructDefNode) -> None:
         """Define struct and its fields."""
         struct_symbol = self._define_symbol(
             name=node.name,
@@ -340,7 +340,7 @@ class ScopeAnalysisVisitor(Visitor):
     # Function definitions
     # =========================================================================
 
-    def visit_function_def(self, node: nodes.FunctionDefNode) -> Any:
+    def visit_function_def(self, node: nodes.FunctionDefNode) -> None:
         """Define function and its parameters."""
         # only define if not already registered by first pass in visit_module
         if not self._current_scope.lookup_local(node.name):
@@ -373,7 +373,7 @@ class ScopeAnalysisVisitor(Visitor):
     # Variable declarations
     # =========================================================================
 
-    def visit_variable_decl(self, node: nodes.VariableDecl) -> Any:
+    def visit_variable_decl(self, node: nodes.VariableDecl) -> None:
         """Define variable in current scope."""
         var_type = None
         if node.type_annotation:
@@ -392,7 +392,7 @@ class ScopeAnalysisVisitor(Visitor):
     # Identifier references
     # =========================================================================
 
-    def visit_identifier(self, node: nodes.IdentifierNode) -> Any:
+    def visit_identifier(self, node: nodes.IdentifierNode) -> None:
         """Resolve identifier to its declaration."""
         symbol = self._resolve_identifier(node.name, node)
         if not symbol:
@@ -403,7 +403,7 @@ class ScopeAnalysisVisitor(Visitor):
                 )
         return self.generic_visit(node)
 
-    def visit_field_access(self, node: nodes.FieldAccessNode) -> Any:
+    def visit_field_access(self, node: nodes.FieldAccessNode) -> None:
         """Resolve field access, handling enum variant access."""
         self.visit(node.base)
         if isinstance(node.base, nodes.IdentifierNode):
@@ -418,7 +418,7 @@ class ScopeAnalysisVisitor(Visitor):
     # Match expression
     # =========================================================================
 
-    def visit_match_expr(self, node: nodes.MatchExprNode) -> Any:
+    def visit_match_expr(self, node: nodes.MatchExprNode) -> None:
         """Visit match expression, creating scope for each arm."""
         if node.scrutinee:
             self.visit(node.scrutinee)
@@ -426,7 +426,7 @@ class ScopeAnalysisVisitor(Visitor):
             self.visit(arm)
         return None
 
-    def visit_match_arm(self, node: nodes.MatchArm) -> Any:
+    def visit_match_arm(self, node: nodes.MatchArm) -> None:
         """Create scope for match arm bindings."""
         self._push_scope("match_arm")
         self.visit(node.pattern)
@@ -436,7 +436,7 @@ class ScopeAnalysisVisitor(Visitor):
         self._pop_scope()
         return None
 
-    def visit_binding_pattern(self, node: nodes.BindingPattern) -> Any:
+    def visit_binding_pattern(self, node: nodes.BindingPattern) -> None:
         """Define binding pattern as variable in current scope."""
         self._define_symbol(
             name=node.name,
@@ -449,7 +449,7 @@ class ScopeAnalysisVisitor(Visitor):
     # Block statements
     # =========================================================================
 
-    def visit_block(self, node: nodes.Block) -> Any:
+    def visit_block(self, node: nodes.Block) -> None:
         """Create new scope for block."""
         self._push_scope("block")
         for stmt in node.statements:
@@ -461,7 +461,7 @@ class ScopeAnalysisVisitor(Visitor):
     # Statute blocks
     # =========================================================================
 
-    def visit_statute(self, node: nodes.StatuteNode) -> Any:
+    def visit_statute(self, node: nodes.StatuteNode) -> None:
         """Create scope for statute definitions."""
         scope_name = f"statute_{node.section_number}"
         self._push_scope(scope_name)
@@ -476,7 +476,7 @@ class ScopeAnalysisVisitor(Visitor):
     # Module entry point
     # =========================================================================
 
-    def visit_module(self, node: nodes.ModuleNode) -> Any:
+    def visit_module(self, node: nodes.ModuleNode) -> ScopeAnalysisResult:
         """Entry point: analyze all declarations."""
         # resolve imports and references first so symbols are available
         for imp in node.imports:

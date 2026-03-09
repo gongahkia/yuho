@@ -17,6 +17,14 @@ from yuho.ast.nodes import (
     ElementGroupNode,
     PenaltyNode,
     IllustrationNode,
+    ExceptionNode,
+    CaseLawNode,
+    ImportNode,
+    StructDefNode,
+    FunctionDefNode,
+    VariableDecl,
+    StringLit,
+    MatchExprNode,
 )
 from yuho.ast.visitor import Visitor
 
@@ -40,8 +48,16 @@ class BlockBuilder(Visitor):
     
     def visit_module(self, node: ModuleNode) -> None:
         """Visit module node."""
+        if node.imports:
+            self._build_imports_block(node.imports)
+        if node.type_defs:
+            self._build_type_defs_block(node.type_defs)
+        if node.function_defs:
+            self._build_function_defs_block(node.function_defs)
         for statute in getattr(node, "statutes", ()) or ():
             self.visit_statute(statute)
+        if node.variables:
+            self._build_variables_block(node.variables)
     
     def visit_statute(self, node: StatuteNode) -> None:
         """Visit statute node."""
@@ -70,7 +86,13 @@ class BlockBuilder(Visitor):
         
         if hasattr(node, "illustrations") and node.illustrations:
             self._build_illustrations_block(node.illustrations)
-        
+
+        if hasattr(node, "exceptions") and node.exceptions:
+            self._build_exceptions_block(node.exceptions)
+
+        if hasattr(node, "case_law") and node.case_law:
+            self._build_case_law_block(node.case_law)
+
         self.blocks.append(statute_block)
         self.current_statute = None
     
@@ -219,6 +241,271 @@ class BlockBuilder(Visitor):
             )
             self.current_statute.children.append(block)
 
+    def _build_exceptions_block(self, exceptions: List[Any]) -> None:
+        """Build exceptions block."""
+        if not self.current_statute:
+            return
+
+        content = []
+        for exc in exceptions:
+            label = getattr(exc, "label", "") or "?"
+            condition = getattr(exc, "condition", "") or ""
+            condition = getattr(condition, "value", str(condition))
+            if len(condition) > 50:
+                condition = condition[:47] + "..."
+            effect = getattr(exc, "effect", None)
+            if effect:
+                effect_str = getattr(effect, "value", str(effect))
+                if len(effect_str) > 40:
+                    effect_str = effect_str[:37] + "..."
+                content.append(f"[{label}] IF {condition} THEN {effect_str}")
+            else:
+                content.append(f"[{label}] IF {condition}")
+
+        if content:
+            block = Block(
+                block_type="EXCEPTIONS",
+                name="exceptions",
+                content=content,
+                children=[],
+                level=1,
+            )
+            self.current_statute.children.append(block)
+
+    def _build_case_law_block(self, case_law: List[Any]) -> None:
+        """Build case law block."""
+        if not self.current_statute:
+            return
+
+        content = []
+        for cl in case_law:
+            case_name = getattr(cl, "case_name", "") or ""
+            case_name = getattr(case_name, "value", str(case_name))
+            citation = getattr(cl, "citation", None)
+            citation_str = ""
+            if citation:
+                citation_str = f" {getattr(citation, 'value', str(citation))}"
+            holding = getattr(cl, "holding", "") or ""
+            holding = getattr(holding, "value", str(holding))
+            if len(holding) > 40:
+                holding = holding[:37] + "..."
+            element_ref = getattr(cl, "element_ref", None)
+            ref_str = f" -> {element_ref}" if element_ref else ""
+            content.append(f"{case_name}{citation_str}")
+            content.append(f"  holding: {holding}{ref_str}")
+
+        if content:
+            block = Block(
+                block_type="CASE_LAW",
+                name="cases",
+                content=content,
+                children=[],
+                level=1,
+            )
+            self.current_statute.children.append(block)
+
+    def _build_imports_block(self, imports: List[Any]) -> None:
+        """Build imports block."""
+        content = []
+        for imp in imports:
+            path = getattr(imp, "path", "") or "?"
+            names = getattr(imp, "imported_names", ()) or ()
+            is_wildcard = "*" in names
+            if is_wildcard:
+                content.append(f"* FROM {path}")
+            elif names:
+                content.append(f"{', '.join(names)} FROM {path}")
+            else:
+                content.append(f"IMPORT {path}")
+
+        if content:
+            block = Block(
+                block_type="IMPORTS",
+                name="imports",
+                content=content,
+                children=[],
+                level=0,
+            )
+            self.blocks.append(block)
+
+    def _build_type_defs_block(self, type_defs: List[Any]) -> None:
+        """Build type definitions block."""
+        children = []
+        for struct in type_defs:
+            name = getattr(struct, "name", "") or "?"
+            fields = getattr(struct, "fields", ()) or ()
+            field_lines = []
+            for f in fields:
+                fname = getattr(f, "name", "") or "?"
+                ftype = getattr(f, "type_annotation", None)
+                type_str = self._type_to_str(ftype) if ftype else "?"
+                field_lines.append(f"{fname}: {type_str}")
+            children.append(Block(
+                block_type="STRUCT",
+                name=name,
+                content=field_lines,
+                children=[],
+                level=1,
+            ))
+
+        if children:
+            block = Block(
+                block_type="TYPE_DEFS",
+                name="types",
+                content=[],
+                children=children,
+                level=0,
+            )
+            self.blocks.append(block)
+
+    def _build_function_defs_block(self, function_defs: List[Any]) -> None:
+        """Build function definitions block."""
+        children = []
+        for func in function_defs:
+            name = getattr(func, "name", "") or "?"
+            params = getattr(func, "params", ()) or ()
+            ret = getattr(func, "return_type", None)
+            param_strs = []
+            for p in params:
+                pname = getattr(p, "name", "") or "?"
+                ptype = getattr(p, "type_annotation", None)
+                type_str = self._type_to_str(ptype) if ptype else "?"
+                param_strs.append(f"{pname}: {type_str}")
+            sig = f"({', '.join(param_strs)})"
+            if ret:
+                sig += f" -> {self._type_to_str(ret)}"
+            body = getattr(func, "body", None)
+            body_lines = []
+            if body:
+                stmts = getattr(body, "statements", ()) or ()
+                for stmt in stmts:
+                    body_lines.append(self._stmt_to_str(stmt))
+            content = [sig] + body_lines
+            children.append(Block(
+                block_type="FUNCTION",
+                name=name,
+                content=content,
+                children=[],
+                level=1,
+            ))
+
+        if children:
+            block = Block(
+                block_type="FUNC_DEFS",
+                name="functions",
+                content=[],
+                children=children,
+                level=0,
+            )
+            self.blocks.append(block)
+
+    def _build_variables_block(self, variables: List[Any]) -> None:
+        """Build variables block."""
+        content = []
+        for var in variables:
+            name = getattr(var, "name", "") or "?"
+            vtype = getattr(var, "type_annotation", None)
+            type_str = self._type_to_str(vtype) if vtype else "?"
+            value = getattr(var, "value", None)
+            if value:
+                val_str = self._expr_to_str(value)
+                content.append(f"{name}: {type_str} = {val_str}")
+            else:
+                content.append(f"{name}: {type_str}")
+
+        if content:
+            block = Block(
+                block_type="VARIABLES",
+                name="vars",
+                content=content,
+                children=[],
+                level=0,
+            )
+            self.blocks.append(block)
+
+    # -- helper formatters for expressions, types, statements --
+
+    def _type_to_str(self, node: Any) -> str:
+        """Convert a type node to a short string."""
+        from yuho.ast import nodes as n
+        if isinstance(node, n.BuiltinType):
+            return node.name
+        elif isinstance(node, n.NamedType):
+            return node.name
+        elif isinstance(node, n.OptionalType):
+            return f"{self._type_to_str(node.inner)}?"
+        elif isinstance(node, n.ArrayType):
+            return f"[{self._type_to_str(node.element_type)}]"
+        elif isinstance(node, n.GenericType):
+            args = ", ".join(self._type_to_str(a) for a in node.type_args)
+            return f"{node.base}<{args}>"
+        return str(node)
+
+    def _expr_to_str(self, node: Any) -> str:
+        """Convert an expression node to a short string."""
+        from yuho.ast import nodes as n
+        if isinstance(node, n.IntLit):
+            return str(node.value)
+        elif isinstance(node, n.FloatLit):
+            return str(node.value)
+        elif isinstance(node, n.BoolLit):
+            return "TRUE" if node.value else "FALSE"
+        elif isinstance(node, n.StringLit):
+            v = node.value
+            if len(v) > 30:
+                v = v[:27] + "..."
+            return f'"{v}"'
+        elif isinstance(node, n.MoneyNode):
+            return f"{node.currency.name} {node.amount}"
+        elif isinstance(node, n.PercentNode):
+            return f"{node.value}%"
+        elif isinstance(node, n.DateNode):
+            return node.value.isoformat()
+        elif isinstance(node, n.DurationNode):
+            return str(node)
+        elif isinstance(node, n.IdentifierNode):
+            return node.name
+        elif isinstance(node, n.FieldAccessNode):
+            return f"{self._expr_to_str(node.base)}.{node.field_name}"
+        elif isinstance(node, n.IndexAccessNode):
+            return f"{self._expr_to_str(node.base)}[{self._expr_to_str(node.index)}]"
+        elif isinstance(node, n.FunctionCallNode):
+            callee = self._expr_to_str(node.callee)
+            args = ", ".join(self._expr_to_str(a) for a in node.args)
+            return f"{callee}({args})"
+        elif isinstance(node, n.BinaryExprNode):
+            return f"{self._expr_to_str(node.left)} {node.operator} {self._expr_to_str(node.right)}"
+        elif isinstance(node, n.UnaryExprNode):
+            return f"{node.operator}{self._expr_to_str(node.operand)}"
+        elif isinstance(node, n.PassExprNode):
+            return "PASS"
+        elif isinstance(node, n.MatchExprNode):
+            return "MATCH {...}"
+        elif isinstance(node, n.StructLiteralNode):
+            name = node.struct_name or "anon"
+            return f"{name} {{...}}"
+        return str(node)
+
+    def _stmt_to_str(self, node: Any) -> str:
+        """Convert a statement node to a short string."""
+        from yuho.ast import nodes as n
+        if isinstance(node, n.VariableDecl):
+            type_str = self._type_to_str(node.type_annotation)
+            if node.value:
+                return f"LET {node.name}: {type_str} = {self._expr_to_str(node.value)}"
+            return f"LET {node.name}: {type_str}"
+        elif isinstance(node, n.AssignmentStmt):
+            return f"SET {self._expr_to_str(node.target)} = {self._expr_to_str(node.value)}"
+        elif isinstance(node, n.ReturnStmt):
+            if node.value:
+                return f"RETURN {self._expr_to_str(node.value)}"
+            return "RETURN"
+        elif isinstance(node, n.PassStmt):
+            return "PASS"
+        elif isinstance(node, n.ExpressionStmt):
+            return self._expr_to_str(node.expression)
+        return str(node)
+
 
 def format_blocks(blocks: List[Block], style: str = "box") -> str:
     """
@@ -326,6 +613,7 @@ class BlocksTranspiler(TranspilerBase):
         
         # Footer
         lines.append("")
-        lines.append(f"Total statutes: {len(builder.blocks)}")
+        statute_count = sum(1 for b in builder.blocks if b.block_type == "STATUTE")
+        lines.append(f"Total statutes: {statute_count}")
         
         return "\n".join(lines)

@@ -11,7 +11,7 @@ Validates type consistency and reports type errors:
 """
 
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Dict, List, Optional
 from dataclasses import dataclass, field
 import logging
 
@@ -276,7 +276,7 @@ class TypeCheckVisitor(Visitor):
             return TypeAnnotation(type_node.base)
         return UNKNOWN_TYPE
 
-    def visit_named_type(self, node: nodes.NamedType) -> Any:
+    def visit_named_type(self, node: nodes.NamedType) -> None:
         """Validate that a NamedType refers to a known type, including cross-module."""
         if not self._resolve_named_type(node.name):
             self.result.add_error(
@@ -290,7 +290,7 @@ class TypeCheckVisitor(Visitor):
     # Expression nodes
     # =========================================================================
 
-    def visit_binary_expr(self, node: nodes.BinaryExprNode) -> Any:
+    def visit_binary_expr(self, node: nodes.BinaryExprNode) -> None:
         """Check binary expression type compatibility."""
         self.visit(node.left)
         self.visit(node.right)
@@ -299,7 +299,7 @@ class TypeCheckVisitor(Visitor):
         self._check_binary_types(node, left_type, right_type)
         return self.generic_visit(node)
 
-    def visit_unary_expr(self, node: nodes.UnaryExprNode) -> Any:
+    def visit_unary_expr(self, node: nodes.UnaryExprNode) -> None:
         """Check unary expression type compatibility."""
         self.visit(node.operand)
         operand_type = self._get_type(node.operand)
@@ -322,7 +322,7 @@ class TypeCheckVisitor(Visitor):
     # Variable and assignment
     # =========================================================================
 
-    def visit_variable_decl(self, node: nodes.VariableDecl) -> Any:
+    def visit_variable_decl(self, node: nodes.VariableDecl) -> None:
         """Check variable declaration type matches initializer."""
         if node.type_annotation and node.value:
             declared_type = self.type_info.variable_types.get(node.name, UNKNOWN_TYPE)
@@ -336,7 +336,7 @@ class TypeCheckVisitor(Visitor):
             self.visit(node.value)
         return self.generic_visit(node)
 
-    def visit_assignment_stmt(self, node: nodes.AssignmentStmt) -> Any:
+    def visit_assignment_stmt(self, node: nodes.AssignmentStmt) -> None:
         """Check assignment type compatibility."""
         self.visit(node.target)
         self.visit(node.value)
@@ -353,7 +353,7 @@ class TypeCheckVisitor(Visitor):
     # Function calls and returns
     # =========================================================================
 
-    def visit_function_call(self, node: nodes.FunctionCallNode) -> Any:
+    def visit_function_call(self, node: nodes.FunctionCallNode) -> None:
         """Check function argument types match parameters."""
         func_name = node.callee if isinstance(node.callee, str) else getattr(node.callee, "name", "")
         if func_name in self.type_info.function_sigs:
@@ -377,7 +377,7 @@ class TypeCheckVisitor(Visitor):
                 self.visit(arg)
         return self.generic_visit(node)
 
-    def visit_function_def(self, node: nodes.FunctionDefNode) -> Any:
+    def visit_function_def(self, node: nodes.FunctionDefNode) -> None:
         """Check function body return statements match declared return type."""
         if node.return_type:
             if node.name in self.type_info.function_sigs:
@@ -392,7 +392,7 @@ class TypeCheckVisitor(Visitor):
         self._current_function_return = None
         return self.generic_visit(node)
 
-    def visit_return_stmt(self, node: nodes.ReturnStmt) -> Any:
+    def visit_return_stmt(self, node: nodes.ReturnStmt) -> None:
         """Check return statement type matches function return type."""
         if self._current_function_return:
             if node.value:
@@ -414,7 +414,7 @@ class TypeCheckVisitor(Visitor):
     # Match expression
     # =========================================================================
 
-    def visit_match_expr(self, node: nodes.MatchExprNode) -> Any:
+    def visit_match_expr(self, node: nodes.MatchExprNode) -> None:
         """Check all match arms have consistent types."""
         if node.scrutinee:
             self.visit(node.scrutinee)
@@ -435,7 +435,7 @@ class TypeCheckVisitor(Visitor):
                     )
         return self.generic_visit(node)
 
-    def visit_match_arm(self, node: nodes.MatchArm) -> Any:
+    def visit_match_arm(self, node: nodes.MatchArm) -> None:
         """Check guard expression is boolean."""
         self.visit(node.pattern)
         if node.guard:
@@ -453,7 +453,7 @@ class TypeCheckVisitor(Visitor):
     # Struct literal
     # =========================================================================
 
-    def visit_struct_literal(self, node: nodes.StructLiteralNode) -> Any:
+    def visit_struct_literal(self, node: nodes.StructLiteralNode) -> None:
         """Check struct field assignments match field types."""
         struct_name = node.struct_name
         struct_fields = None
@@ -482,7 +482,7 @@ class TypeCheckVisitor(Visitor):
     # Module entry point
     # =========================================================================
 
-    def visit_module(self, node: nodes.ModuleNode) -> Any:
+    def visit_module(self, node: nodes.ModuleNode) -> TypeCheckResult:
         """Entry point: check all declarations."""
         for struct_def in node.type_defs:
             self.visit(struct_def)

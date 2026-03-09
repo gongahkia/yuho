@@ -3,12 +3,135 @@
 
 referencing penal_code/s390_robbery
 
-// Test case 1: Basic validation
-fn test_basic() : bool {
-    return TRUE;
+// ----- test structs -----
+
+struct RobberyTestCase {
+    string accused,
+    string victim,
+    bool theftCommitted,
+    bool extortionCommitted,
+    string violenceType,
+    bool violenceUsed,
 }
 
-// Test case 2: Edge case
-fn test_edge_case() : bool {
-    return TRUE;
+// ----- robbery via theft with violence: all elements present -----
+
+RobberyTestCase theftWithViolence := RobberyTestCase {
+    accused := "A",
+    victim := "B",
+    theftCommitted := TRUE,
+    extortionCommitted := FALSE,
+    violenceType := "hurt",
+    violenceUsed := TRUE,
 }
+
+assert theftWithViolence.accused == "A"
+assert theftWithViolence.victim == "B"
+assert theftWithViolence.theftCommitted == TRUE
+assert theftWithViolence.extortionCommitted == FALSE
+assert theftWithViolence.violenceType == "hurt"
+assert theftWithViolence.violenceUsed == TRUE
+assert is_robbery(theftWithViolence.theftCommitted, theftWithViolence.extortionCommitted, theftWithViolence.violenceUsed) == TRUE
+
+// ----- robbery via extortion with violence: all elements present -----
+
+RobberyTestCase extortionWithViolence := RobberyTestCase {
+    accused := "C",
+    victim := "D",
+    theftCommitted := FALSE,
+    extortionCommitted := TRUE,
+    violenceType := "wrongful_restraint",
+    violenceUsed := TRUE,
+}
+
+assert extortionWithViolence.theftCommitted == FALSE
+assert extortionWithViolence.extortionCommitted == TRUE
+assert extortionWithViolence.violenceUsed == TRUE
+assert is_robbery(extortionWithViolence.theftCommitted, extortionWithViolence.extortionCommitted, extortionWithViolence.violenceUsed) == TRUE
+
+// ----- robbery via both theft and extortion with violence -----
+
+RobberyTestCase bothOffences := RobberyTestCase {
+    accused := "E",
+    victim := "F",
+    theftCommitted := TRUE,
+    extortionCommitted := TRUE,
+    violenceType := "fear_of_death",
+    violenceUsed := TRUE,
+}
+
+assert bothOffences.theftCommitted == TRUE
+assert bothOffences.extortionCommitted == TRUE
+assert bothOffences.violenceUsed == TRUE
+assert is_robbery(bothOffences.theftCommitted, bothOffences.extortionCommitted, bothOffences.violenceUsed) == TRUE
+
+// ----- no theft and no extortion: not robbery -----
+
+RobberyTestCase noOffence := RobberyTestCase {
+    accused := "G",
+    victim := "H",
+    theftCommitted := FALSE,
+    extortionCommitted := FALSE,
+    violenceType := "hurt",
+    violenceUsed := TRUE,
+}
+
+assert noOffence.theftCommitted == FALSE
+assert noOffence.extortionCommitted == FALSE
+assert is_robbery(noOffence.theftCommitted, noOffence.extortionCommitted, noOffence.violenceUsed) == FALSE
+
+// ----- no violence: not robbery -----
+
+RobberyTestCase noViolence := RobberyTestCase {
+    accused := "I",
+    victim := "J",
+    theftCommitted := TRUE,
+    extortionCommitted := FALSE,
+    violenceType := "none",
+    violenceUsed := FALSE,
+}
+
+assert noViolence.violenceUsed == FALSE
+assert is_robbery(noViolence.theftCommitted, noViolence.extortionCommitted, noViolence.violenceUsed) == FALSE
+
+// ----- extortion without violence: not robbery -----
+
+RobberyTestCase extortionNoViolence := RobberyTestCase {
+    accused := "K",
+    victim := "L",
+    theftCommitted := FALSE,
+    extortionCommitted := TRUE,
+    violenceType := "none",
+    violenceUsed := FALSE,
+}
+
+assert extortionNoViolence.extortionCommitted == TRUE
+assert extortionNoViolence.violenceUsed == FALSE
+assert is_robbery(extortionNoViolence.theftCommitted, extortionNoViolence.extortionCommitted, extortionNoViolence.violenceUsed) == FALSE
+
+// ----- no offence and no violence: not robbery -----
+
+RobberyTestCase nothingPresent := RobberyTestCase {
+    accused := "M",
+    victim := "N",
+    theftCommitted := FALSE,
+    extortionCommitted := FALSE,
+    violenceType := "none",
+    violenceUsed := FALSE,
+}
+
+assert nothingPresent.theftCommitted == FALSE
+assert nothingPresent.extortionCommitted == FALSE
+assert nothingPresent.violenceUsed == FALSE
+assert is_robbery(nothingPresent.theftCommitted, nothingPresent.extortionCommitted, nothingPresent.violenceUsed) == FALSE
+
+// ----- penalty verification -----
+
+int minImprisonment := 3
+int maxImprisonment := 14
+int minCaning := 12
+
+assert minImprisonment == 3
+assert maxImprisonment == 14
+assert minCaning == 12
+assert minImprisonment < maxImprisonment

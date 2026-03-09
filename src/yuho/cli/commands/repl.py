@@ -204,7 +204,8 @@ Type {self._colorize("help", Colors.YELLOW)} for commands, {self._colorize("exit
             return False
         
         if command == "clear":
-            os.system("clear" if os.name == "posix" else "cls")
+            import subprocess
+            subprocess.run(["clear" if os.name == "posix" else "cls"], shell=False, check=False)
             return False
         
         if command == "history":

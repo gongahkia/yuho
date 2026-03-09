@@ -9,7 +9,7 @@ Annotates each expression node with its inferred type based on:
 - Field access types (from struct definitions)
 """
 
-from typing import Any, Dict, Optional, List
+from typing import Dict, Optional, List, Union
 from dataclasses import dataclass, field
 
 from yuho.ast import nodes
@@ -123,39 +123,39 @@ class TypeInferenceVisitor(Visitor):
     # Literal nodes - direct type inference
     # =========================================================================
     
-    def visit_int_lit(self, node: nodes.IntLit) -> Any:
+    def visit_int_lit(self, node: nodes.IntLit) -> TypeAnnotation:
         self.result.set_type(node, INT_TYPE)
         return INT_TYPE
     
-    def visit_float_lit(self, node: nodes.FloatLit) -> Any:
+    def visit_float_lit(self, node: nodes.FloatLit) -> TypeAnnotation:
         self.result.set_type(node, FLOAT_TYPE)
         return FLOAT_TYPE
     
-    def visit_bool_lit(self, node: nodes.BoolLit) -> Any:
+    def visit_bool_lit(self, node: nodes.BoolLit) -> TypeAnnotation:
         self.result.set_type(node, BOOL_TYPE)
         return BOOL_TYPE
     
-    def visit_string_lit(self, node: nodes.StringLit) -> Any:
+    def visit_string_lit(self, node: nodes.StringLit) -> TypeAnnotation:
         self.result.set_type(node, STRING_TYPE)
         return STRING_TYPE
     
-    def visit_money(self, node: nodes.MoneyNode) -> Any:
+    def visit_money(self, node: nodes.MoneyNode) -> TypeAnnotation:
         self.result.set_type(node, MONEY_TYPE)
         return MONEY_TYPE
     
-    def visit_percent(self, node: nodes.PercentNode) -> Any:
+    def visit_percent(self, node: nodes.PercentNode) -> TypeAnnotation:
         self.result.set_type(node, PERCENT_TYPE)
         return PERCENT_TYPE
     
-    def visit_date(self, node: nodes.DateNode) -> Any:
+    def visit_date(self, node: nodes.DateNode) -> TypeAnnotation:
         self.result.set_type(node, DATE_TYPE)
         return DATE_TYPE
     
-    def visit_duration(self, node: nodes.DurationNode) -> Any:
+    def visit_duration(self, node: nodes.DurationNode) -> TypeAnnotation:
         self.result.set_type(node, DURATION_TYPE)
         return DURATION_TYPE
     
-    def visit_pass_expr(self, node: nodes.PassExprNode) -> Any:
+    def visit_pass_expr(self, node: nodes.PassExprNode) -> TypeAnnotation:
         self.result.set_type(node, PASS_TYPE)
         return PASS_TYPE
     
@@ -163,7 +163,7 @@ class TypeInferenceVisitor(Visitor):
     # Expression nodes
     # =========================================================================
     
-    def visit_identifier(self, node: nodes.IdentifierNode) -> Any:
+    def visit_identifier(self, node: nodes.IdentifierNode) -> TypeAnnotation:
         """Look up identifier in current scope."""
         name = node.name
         if name in self._current_scope:
@@ -179,7 +179,7 @@ class TypeInferenceVisitor(Visitor):
         self.result.set_type(node, inferred_type)
         return inferred_type
     
-    def visit_field_access(self, node: nodes.FieldAccessNode) -> Any:
+    def visit_field_access(self, node: nodes.FieldAccessNode) -> TypeAnnotation:
         """Infer type from struct field access."""
         base_type = self.visit(node.base)
         field_name = node.field_name
@@ -199,7 +199,7 @@ class TypeInferenceVisitor(Visitor):
         self.result.set_type(node, inferred_type)
         return inferred_type
     
-    def visit_index_access(self, node: nodes.IndexAccessNode) -> Any:
+    def visit_index_access(self, node: nodes.IndexAccessNode) -> TypeAnnotation:
         """Infer type from array indexing."""
         base_type = self.visit(node.base)
         self.visit(node.index)
@@ -212,7 +212,7 @@ class TypeInferenceVisitor(Visitor):
         self.result.set_type(node, inferred_type)
         return inferred_type
     
-    def visit_binary_expr(self, node: nodes.BinaryExprNode) -> Any:
+    def visit_binary_expr(self, node: nodes.BinaryExprNode) -> TypeAnnotation:
         """Infer type from binary expression based on operator and operands."""
         left_type = self.visit(node.left)
         right_type = self.visit(node.right)
@@ -241,7 +241,7 @@ class TypeInferenceVisitor(Visitor):
         self.result.set_type(node, inferred_type)
         return inferred_type
     
-    def visit_unary_expr(self, node: nodes.UnaryExprNode) -> Any:
+    def visit_unary_expr(self, node: nodes.UnaryExprNode) -> TypeAnnotation:
         """Infer type from unary expression."""
         operand_type = self.visit(node.operand)
         
@@ -256,7 +256,7 @@ class TypeInferenceVisitor(Visitor):
         self.result.set_type(node, inferred_type)
         return inferred_type
     
-    def visit_function_call(self, node: nodes.FunctionCallNode) -> Any:
+    def visit_function_call(self, node: nodes.FunctionCallNode) -> TypeAnnotation:
         """Infer return type from function signature."""
         # Visit arguments
         for arg in node.args:
@@ -277,7 +277,7 @@ class TypeInferenceVisitor(Visitor):
     # Match expression
     # =========================================================================
     
-    def visit_match_expr(self, node: nodes.MatchExprNode) -> Any:
+    def visit_match_expr(self, node: nodes.MatchExprNode) -> TypeAnnotation:
         """Infer type from match expression arms."""
         if node.scrutinee:
             self.visit(node.scrutinee)
@@ -300,7 +300,7 @@ class TypeInferenceVisitor(Visitor):
         self.result.set_type(node, inferred_type)
         return inferred_type
     
-    def visit_match_arm(self, node: nodes.MatchArm) -> Any:
+    def visit_match_arm(self, node: nodes.MatchArm) -> TypeAnnotation:
         """Infer type from match arm body."""
         self.visit(node.pattern)
         if node.guard:
@@ -313,7 +313,7 @@ class TypeInferenceVisitor(Visitor):
     # Struct definition and literal
     # =========================================================================
     
-    def visit_struct_def(self, node: nodes.StructDefNode) -> Any:
+    def visit_struct_def(self, node: nodes.StructDefNode) -> TypeAnnotation:
         """Record struct field types."""
         fields: Dict[str, TypeAnnotation] = {}
         for field_def in node.fields:
@@ -324,9 +324,10 @@ class TypeInferenceVisitor(Visitor):
                 fields[field_def.name] = TypeAnnotation(node.name)
         
         self.result.struct_defs[node.name] = fields
-        return self.generic_visit(node)
+        self.generic_visit(node)
+        return TypeAnnotation(node.name)
     
-    def visit_struct_literal(self, node: nodes.StructLiteralNode) -> Any:
+    def visit_struct_literal(self, node: nodes.StructLiteralNode) -> TypeAnnotation:
         """Infer type from struct literal type name."""
         if node.struct_name:
             inferred_type = TypeAnnotation(node.struct_name)
@@ -343,7 +344,7 @@ class TypeInferenceVisitor(Visitor):
     # Variable and function definitions
     # =========================================================================
     
-    def visit_variable_decl(self, node: nodes.VariableDecl) -> Any:
+    def visit_variable_decl(self, node: nodes.VariableDecl) -> TypeAnnotation:
         """Record variable type in scope."""
         if node.type_annotation:
             var_type = self._type_node_to_annotation(node.type_annotation)
@@ -357,7 +358,7 @@ class TypeInferenceVisitor(Visitor):
         self.result.set_type(node, var_type)
         return var_type
     
-    def visit_function_def(self, node: nodes.FunctionDefNode) -> Any:
+    def visit_function_def(self, node: nodes.FunctionDefNode) -> TypeAnnotation:
         """Record function signature and infer body types."""
         # Record return type
         if node.return_type:
@@ -386,16 +387,16 @@ class TypeInferenceVisitor(Visitor):
     # Pattern nodes
     # =========================================================================
     
-    def visit_wildcard_pattern(self, node: nodes.WildcardPattern) -> Any:
+    def visit_wildcard_pattern(self, node: nodes.WildcardPattern) -> TypeAnnotation:
         self.result.set_type(node, UNKNOWN_TYPE)
         return UNKNOWN_TYPE
     
-    def visit_literal_pattern(self, node: nodes.LiteralPattern) -> Any:
+    def visit_literal_pattern(self, node: nodes.LiteralPattern) -> TypeAnnotation:
         literal_type = self.visit(node.literal)
         self.result.set_type(node, literal_type)
         return literal_type
     
-    def visit_binding_pattern(self, node: nodes.BindingPattern) -> Any:
+    def visit_binding_pattern(self, node: nodes.BindingPattern) -> TypeAnnotation:
         self.result.set_type(node, UNKNOWN_TYPE)
         return UNKNOWN_TYPE
     
@@ -403,7 +404,7 @@ class TypeInferenceVisitor(Visitor):
     # Module entry point
     # =========================================================================
     
-    def visit_module(self, node: nodes.ModuleNode) -> Any:
+    def visit_module(self, node: nodes.ModuleNode) -> TypeInferenceResult:
         """Entry point: visit all declarations in module."""
         # first pass: collect struct definitions and function signatures
         for struct_def in node.type_defs:

@@ -8,7 +8,7 @@ scrutinee type. Uses the pattern matrix algorithm as described in
 
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import List, Optional, Set, Dict, Tuple, Any, FrozenSet
+from typing import Any, List, Optional, Set, Dict, Tuple, FrozenSet
 
 from yuho.ast import nodes
 from yuho.ast.visitor import Visitor
@@ -428,7 +428,7 @@ class ExhaustivenessChecker(Visitor):
         required = {(c.kind, c.value) for c in constructors}
         return required <= present
     
-    def visit_match_expr(self, node: nodes.MatchExprNode) -> Any:
+    def visit_match_expr(self, node: nodes.MatchExprNode) -> None:
         """Check exhaustiveness of match expression."""
         # Visit children first
         self.generic_visit(node)
@@ -479,7 +479,7 @@ class ExhaustivenessChecker(Visitor):
                 missing_patterns=result.missing_patterns,
             ))
     
-    def visit_module(self, node: nodes.ModuleNode) -> Any:
+    def visit_module(self, node: nodes.ModuleNode) -> None:
         """Entry point: check all match expressions in module."""
         self._collect_type_info(node)
         return self.generic_visit(node)

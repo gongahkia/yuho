@@ -3,12 +3,127 @@
 
 referencing penal_code/s383_extortion
 
-// Test case 1: Basic validation
-fn test_basic() : bool {
-    return TRUE;
+// ----- test structs -----
+
+struct ExtortionTestCase {
+    string accused,
+    string victim,
+    string fearType,
+    bool deliveryInduced,
+    string propertyType,
 }
 
-// Test case 2: Edge case
-fn test_edge_case() : bool {
-    return TRUE;
+// ----- normal extortion: all elements present -----
+
+ExtortionTestCase normalExtortion := ExtortionTestCase {
+    accused := "A",
+    victim := "B",
+    fearType := "injury_to_person",
+    deliveryInduced := TRUE,
+    propertyType := "money",
 }
+
+assert normalExtortion.accused == "A"
+assert normalExtortion.victim == "B"
+assert normalExtortion.fearType == "injury_to_person"
+assert normalExtortion.deliveryInduced == TRUE
+assert normalExtortion.propertyType == "money"
+assert is_extortion(normalExtortion.fearType, normalExtortion.deliveryInduced) == TRUE
+
+// ----- extortion via reputational harm -----
+
+ExtortionTestCase reputationExtortion := ExtortionTestCase {
+    accused := "A",
+    victim := "B",
+    fearType := "injury_to_reputation",
+    deliveryInduced := TRUE,
+    propertyType := "valuable_security",
+}
+
+assert reputationExtortion.fearType == "injury_to_reputation"
+assert reputationExtortion.deliveryInduced == TRUE
+assert is_extortion(reputationExtortion.fearType, reputationExtortion.deliveryInduced) == TRUE
+
+// ----- extortion via property harm -----
+
+ExtortionTestCase propertyExtortion := ExtortionTestCase {
+    accused := "A",
+    victim := "B",
+    fearType := "injury_to_property",
+    deliveryInduced := TRUE,
+    propertyType := "immovable_property",
+}
+
+assert propertyExtortion.fearType == "injury_to_property"
+assert is_extortion(propertyExtortion.fearType, propertyExtortion.deliveryInduced) == TRUE
+
+// ----- no fear induced: not extortion -----
+
+ExtortionTestCase noFear := ExtortionTestCase {
+    accused := "A",
+    victim := "B",
+    fearType := "none",
+    deliveryInduced := TRUE,
+    propertyType := "money",
+}
+
+assert noFear.fearType == "none"
+assert is_extortion(noFear.fearType, noFear.deliveryInduced) == FALSE
+
+// ----- no delivery induced: not extortion -----
+
+ExtortionTestCase noDelivery := ExtortionTestCase {
+    accused := "A",
+    victim := "B",
+    fearType := "injury_to_person",
+    deliveryInduced := FALSE,
+    propertyType := "money",
+}
+
+assert noDelivery.deliveryInduced == FALSE
+assert is_extortion(noDelivery.fearType, noDelivery.deliveryInduced) == FALSE
+
+// ----- no fear and no delivery: not extortion -----
+
+ExtortionTestCase noElements := ExtortionTestCase {
+    accused := "A",
+    victim := "B",
+    fearType := "none",
+    deliveryInduced := FALSE,
+    propertyType := "money",
+}
+
+assert noElements.fearType == "none"
+assert noElements.deliveryInduced == FALSE
+assert is_extortion(noElements.fearType, noElements.deliveryInduced) == FALSE
+
+// ----- penalty verification -----
+
+assert s383.penalty.imprisonment.min == 2
+assert s383.penalty.imprisonment.max == 7
+assert s383.penalty.fine.min == $0.00
+assert s383.penalty.fine.max == $10,000.00
+
+// ----- illustration 1: defamatory threat for money -----
+
+ExtortionTestCase illustration1 := ExtortionTestCase {
+    accused := "A",
+    victim := "B",
+    fearType := "injury_to_reputation",
+    deliveryInduced := TRUE,
+    propertyType := "money",
+}
+
+assert is_extortion(illustration1.fearType, illustration1.deliveryInduced) == TRUE
+
+// ----- illustration 2: threat to harm child for property -----
+
+ExtortionTestCase illustration2 := ExtortionTestCase {
+    accused := "A",
+    victim := "B",
+    fearType := "injury_to_person",
+    deliveryInduced := TRUE,
+    propertyType := "movable_property",
+}
+
+assert is_extortion(illustration2.fearType, illustration2.deliveryInduced) == TRUE
