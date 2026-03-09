@@ -59,21 +59,28 @@ NAV_ITEMS = [
     "  Home",
     "  Check",
     "  Transpile",
+    "  Eval",
     "  Wizard",
     "  REPL",
     "  Lint",
     "  Test",
     "  Format",
     "  Diff",
+    "  Graph",
     "  Verify",
     "  AST View",
+    "  Explain",
+    "  Generate",
+    "  Init",
+    "  Contribute",
     "  Library",
     "  Settings",
     "  About",
 ]
 NAV_IDS = [
-    "home", "check", "transpile", "wizard", "repl", "lint", "test",
-    "fmt", "diff", "verify", "ast-view", "library", "settings", "about",
+    "home", "check", "transpile", "eval", "wizard", "repl", "lint", "test",
+    "fmt", "diff", "graph", "verify", "ast-view", "explain", "generate",
+    "init", "contribute", "library", "settings", "about",
 ]
 
 
@@ -178,15 +185,17 @@ class HomePanel(ScrollableContainer):
         yield Rule()
         yield Static(
             "[bold]Quick Start[/bold]\n\n"
-            "  [bold magenta]1[/] Check     — Parse and validate a .yh file\n"
-            "  [bold magenta]2[/] Transpile — Convert to JSON, English, Mermaid, LaTeX...\n"
-            "  [bold magenta]3[/] Wizard    — Create a statute step-by-step\n"
-            "  [bold magenta]4[/] REPL      — Interactive experimentation\n"
-            "  [bold magenta]5[/] Lint      — Style and best practice checks\n"
-            "  [bold magenta]6[/] Test      — Run .yh test files\n"
-            "  [bold magenta]7[/] Format    — Apply canonical formatting\n"
-            "  [bold magenta]8[/] Diff      — Compare two .yh files\n"
-            "  [dim]  + Verify, AST, Library, Settings, About via sidebar[/dim]\n",
+            "  [bold magenta]1[/] Home      — This dashboard\n"
+            "  [bold magenta]2[/] Check     — Parse and validate a .yh file\n"
+            "  [bold magenta]3[/] Transpile — Convert to JSON, English, Mermaid, LaTeX...\n"
+            "  [bold magenta]4[/] Eval      — Evaluate and interpret a .yh file\n"
+            "  [bold magenta]5[/] Wizard    — Create a statute step-by-step\n"
+            "  [bold magenta]6[/] REPL      — Interactive experimentation\n"
+            "  [bold magenta]7[/] Lint      — Style and best practice checks\n"
+            "  [bold magenta]8[/] Test      — Run .yh test files\n"
+            "  [bold magenta]9[/] Format    — Apply canonical formatting\n"
+            "  [dim]  + Diff, Graph, Verify, AST, Explain, Generate, Init,\n"
+            "    Contribute, Library, Settings, About via sidebar[/dim]\n",
         )
         yield Rule()
         yield Static(
@@ -208,7 +217,7 @@ class CheckPanel(Container):
             yield Button("Browse", id="btn-check-browse")
             yield Button("Check", id="btn-check", variant="primary")
         yield Static("[dim]Or type/paste Yuho code below for real-time validation:[/dim]")
-        yield TextArea(language="python", id="check-editor")
+        yield TextArea(id="check-editor")
         yield Static("", id="check-live-status")
         yield RichLog(id="check-output", highlight=True, markup=True)
 
@@ -360,6 +369,100 @@ class TranspilePanel(Container):
             self.app.call_from_thread(output_area.load_text, f"Error: {e}")
 
 
+# ─── Eval Panel ──────────────────────────────────────────────────────────────
+
+
+class EvalPanel(Container):
+    """Evaluate and interpret a .yh file."""
+    def compose(self) -> ComposeResult:
+        yield Static("[bold magenta]Eval[/bold magenta] — Evaluate and interpret a Yuho file\n")
+        with Horizontal(classes="input-row"):
+            yield Input(placeholder="Enter path to .yh file...", id="eval-path")
+            yield Button("Browse", id="btn-eval-browse")
+            yield Button("Eval", id="btn-eval", variant="primary")
+        yield RichLog(id="eval-output", highlight=True, markup=True)
+
+    @on(Button.Pressed, "#btn-eval")
+    def handle_eval(self) -> None:
+        output = self.query_one("#eval-output", RichLog)
+        output.clear()
+        file_path = self.query_one("#eval-path", Input).value.strip()
+        if not file_path:
+            output.write("[bold red]Error:[/] Please enter a file path.")
+            return
+        path = Path(file_path).expanduser()
+        if not path.exists():
+            output.write(f"[bold red]Error:[/] File not found: {path}")
+            return
+        if not path.is_file():
+            output.write(f"[bold red]Error:[/] Not a file: {path}")
+            return
+        self._run_eval(str(path))
+
+    @on(Input.Submitted, "#eval-path")
+    def handle_eval_enter(self) -> None:
+        self.handle_eval()
+
+    @work(thread=True)
+    def _run_eval(self, file_path: str) -> None:
+        output = self.query_one("#eval-output", RichLog)
+        try:
+            from yuho.parser import get_parser
+            from yuho.ast import ASTBuilder
+            from yuho.eval.interpreter import Interpreter, AssertionError_, InterpreterError
+            parser = get_parser()
+            source = Path(file_path).read_text(encoding="utf-8")
+            result = parser.parse(source, file_path)
+            if result.errors:
+                self.app.call_from_thread(
+                    output.write,
+                    f"[bold red]Parse errors ({len(result.errors)}):[/]"
+                )
+                for err in result.errors:
+                    self.app.call_from_thread(
+                        output.write,
+                        f"  [red]L{err.location.line}:{err.location.col}[/] {err.message}"
+                    )
+                return
+            builder = ASTBuilder(source, file_path)
+            ast = builder.build(result.tree.root_node)
+            self.app.call_from_thread(output.write, f"[bold green]Parsed:[/] {file_path}")
+            self.app.call_from_thread(
+                output.write,
+                f"  Statutes:   {len(ast.statutes)}\n"
+                f"  Functions:  {len(ast.function_defs)}\n"
+                f"  Structs:    {len(ast.type_defs)}\n"
+                f"  Variables:  {len(ast.variables)}"
+            )
+            self.app.call_from_thread(output.write, "")
+            interp = Interpreter()
+            try:
+                env = interp.interpret(ast)
+                self.app.call_from_thread(output.write, "[bold green]Evaluation complete.[/bold green]")
+                if env.bindings:
+                    self.app.call_from_thread(output.write, "\n[bold]Variables:[/bold]")
+                    for name, val in env.bindings.items():
+                        self.app.call_from_thread(output.write, f"  {name} = {val}")
+                if env.statutes:
+                    self.app.call_from_thread(output.write, f"\n[bold]Statutes registered:[/bold] {len(env.statutes)}")
+                    for sec in env.statutes:
+                        self.app.call_from_thread(output.write, f"  s.{sec}")
+                if env.function_defs:
+                    self.app.call_from_thread(output.write, f"\n[bold]Functions:[/bold] {len(env.function_defs)}")
+                    for fn_name in env.function_defs:
+                        self.app.call_from_thread(output.write, f"  fn {fn_name}")
+                if env.struct_defs:
+                    self.app.call_from_thread(output.write, f"\n[bold]Structs:[/bold] {len(env.struct_defs)}")
+                    for sn in env.struct_defs:
+                        self.app.call_from_thread(output.write, f"  struct {sn}")
+            except AssertionError_ as ae:
+                self.app.call_from_thread(output.write, f"[bold yellow]Assertion failed:[/] {ae}")
+            except InterpreterError as ie:
+                self.app.call_from_thread(output.write, f"[bold red]Interpreter error:[/] {ie}")
+        except Exception as e:
+            self.app.call_from_thread(output.write, f"[bold red]Error:[/] {e}")
+
+
 class WizardPanel(ScrollableContainer):
     """Interactive statute creation wizard."""
     def compose(self) -> ComposeResult:
@@ -390,6 +493,12 @@ class WizardPanel(ScrollableContainer):
         yield Static("[bold]Step 5: Illustrations[/bold] [dim](one per line)[/dim]")
         yield TextArea(id="wiz-illustrations")
         yield Rule()
+        yield Static('[bold]Step 5.5: Exceptions[/bold] [dim](one per line: label: "condition" "effect")[/dim]')
+        yield TextArea(id="wiz-exceptions")
+        yield Rule()
+        yield Static('[bold]Step 5.6: Case Law[/bold] [dim](one per line: "case name" "citation" "holding")[/dim]')
+        yield TextArea(id="wiz-caselaw")
+        yield Rule()
         with Horizontal(classes="action-row"):
             yield Button("Generate", id="btn-wiz-generate", variant="primary")
             yield Button("Copy", id="btn-wiz-copy")
@@ -406,6 +515,8 @@ class WizardPanel(ScrollableContainer):
         imprisonment = self.query_one("#wiz-imprisonment", Input).value.strip()
         fine = self.query_one("#wiz-fine", Input).value.strip()
         illustrations = self.query_one("#wiz-illustrations", TextArea).text.strip()
+        exceptions = self.query_one("#wiz-exceptions", TextArea).text.strip()
+        caselaw = self.query_one("#wiz-caselaw", TextArea).text.strip()
         output_area = self.query_one("#wiz-output", TextArea)
         if not section or not title:
             output_area.load_text("Error: Section and Title are required.")
@@ -443,6 +554,22 @@ class WizardPanel(ScrollableContainer):
                     lines.append(f'        "{ill}"')
                     lines.append("    }")
                     lines.append("")
+        if exceptions:
+            lines.append("    exceptions {")
+            for ex in exceptions.splitlines():
+                ex = ex.strip()
+                if ex:
+                    lines.append(f"        {ex};")
+            lines.append("    }")
+            lines.append("")
+        if caselaw:
+            lines.append("    case_law {")
+            for cl in caselaw.splitlines():
+                cl = cl.strip()
+                if cl:
+                    lines.append(f"        {cl};")
+            lines.append("    }")
+            lines.append("")
         lines.append("}")
         output_area.load_text("\n".join(lines))
 
@@ -451,7 +578,7 @@ class ReplPanel(Container):
     """Interactive REPL for Yuho experimentation."""
     def compose(self) -> ComposeResult:
         yield Static("[bold magenta]REPL[/bold magenta] — Interactive Yuho experimentation\n")
-        yield Static("[dim]Commands: help, load <file>, transpile <target>, ast, check, targets, clear, exit[/dim]\n")
+        yield Static("[dim]Commands: help, load <file>, transpile <target>, ast, check, eval, env, targets, clear, exit[/dim]\n")
         yield RichLog(id="repl-output", highlight=True, markup=True)
         with Horizontal(classes="input-row"):
             yield Static("[bold magenta]yuho>[/bold magenta] ", classes="repl-prompt")
@@ -464,6 +591,16 @@ class ReplPanel(Container):
         output.write("[dim]Type 'help' for available commands.[/dim]\n")
         self._source_buffer = ""
         self._repl_file: Optional[str] = None
+        self._interpreter = None # lazy init
+        self._env = None # lazy init
+
+    def _ensure_interpreter(self):
+        """Lazily initialize interpreter and environment."""
+        if self._interpreter is None:
+            from yuho.eval.interpreter import Interpreter, Environment
+            self._env = Environment()
+            self._interpreter = Interpreter(env=self._env)
+        return self._interpreter, self._env
 
     @on(Input.Submitted, "#repl-input")
     def handle_repl_submit(self) -> None:
@@ -488,10 +625,12 @@ class ReplPanel(Container):
                 "  [bold]transpile <t>[/] — Transpile buffer (json, english, mermaid...)\n"
                 "  [bold]ast[/]           — Show AST of buffer\n"
                 "  [bold]check[/]         — Check buffer for errors\n"
+                "  [bold]eval[/]          — Evaluate buffer through interpreter\n"
+                "  [bold]env[/]           — Show current environment state\n"
                 "  [bold]targets[/]       — List transpile targets\n"
                 "  [bold]buffer[/]        — Show current buffer\n"
                 "  [bold]clear[/]         — Clear output\n"
-                "  [bold]reset[/]         — Clear buffer\n"
+                "  [bold]reset[/]         — Clear buffer and environment\n"
                 "  [bold]exit[/]          — Exit REPL"
             )
         elif cmd == "clear":
@@ -499,7 +638,9 @@ class ReplPanel(Container):
         elif cmd == "reset":
             self._source_buffer = ""
             self._repl_file = None
-            output.write("[dim](buffer cleared)[/dim]")
+            self._interpreter = None
+            self._env = None
+            output.write("[dim](buffer and environment cleared)[/dim]")
         elif cmd == "exit":
             self.app.exit()
         elif cmd == "targets":
@@ -523,6 +664,13 @@ class ReplPanel(Container):
                 output.write("[yellow]Buffer is empty. Load a file first.[/yellow]")
                 return
             self._repl_check()
+        elif cmd == "eval":
+            if not self._source_buffer:
+                output.write("[yellow]Buffer is empty. Load a file or type code first.[/yellow]")
+                return
+            self._repl_eval()
+        elif cmd == "env":
+            self._repl_show_env()
         elif cmd.startswith("transpile"):
             parts = cmd.split()
             target = parts[1] if len(parts) > 1 else "json"
@@ -538,6 +686,7 @@ class ReplPanel(Container):
         else:
             self._source_buffer += cmd + "\n"
             output.write("[dim](added to buffer)[/dim]")
+            self._repl_try_eval(cmd)
 
     @work(thread=True)
     def _repl_check(self) -> None:
@@ -553,6 +702,87 @@ class ReplPanel(Container):
                     self.app.call_from_thread(output.write, f"  [red]error[/] line {err.location.line}: {err.message}")
         except Exception as e:
             self.app.call_from_thread(output.write, f"[red]Error: {e}[/red]")
+
+    @work(thread=True)
+    def _repl_eval(self) -> None:
+        """Evaluate the full buffer through the interpreter."""
+        output = self.query_one("#repl-output", RichLog)
+        try:
+            from yuho.parser.wrapper import get_parser
+            from yuho.ast.builder import ASTBuilder
+            from yuho.eval.interpreter import Interpreter, AssertionError_, InterpreterError
+            parser = get_parser()
+            result = parser.parse(self._source_buffer, file=self._repl_file or "<repl>")
+            if not result.is_valid:
+                for err in result.errors:
+                    self.app.call_from_thread(output.write, f"  [red]error[/] line {err.location.line}: {err.message}")
+                return
+            builder = ASTBuilder(result.source, file=self._repl_file or "<repl>")
+            ast = builder.build(result.root_node)
+            interp, env = self._ensure_interpreter()
+            try:
+                interp.interpret(ast)
+                self.app.call_from_thread(output.write, "[green]Evaluated successfully.[/green]")
+                if env.bindings:
+                    for name, val in env.bindings.items():
+                        self.app.call_from_thread(output.write, f"  {name} = {val}")
+            except AssertionError_ as ae:
+                self.app.call_from_thread(output.write, f"[yellow]Assertion failed:[/] {ae}")
+            except InterpreterError as ie:
+                self.app.call_from_thread(output.write, f"[red]Interpreter error:[/] {ie}")
+        except Exception as e:
+            self.app.call_from_thread(output.write, f"[red]Error: {e}[/red]")
+
+    def _repl_show_env(self) -> None:
+        """Show current interpreter environment."""
+        output = self.query_one("#repl-output", RichLog)
+        if self._env is None:
+            output.write("[dim](no environment yet — run eval first)[/dim]")
+            return
+        env = self._env
+        if env.bindings:
+            output.write("[bold]Variables:[/bold]")
+            for name, val in env.bindings.items():
+                output.write(f"  {name} = {val}")
+        else:
+            output.write("[dim]No variables.[/dim]")
+        if env.struct_defs:
+            output.write(f"[bold]Structs:[/bold] {len(env.struct_defs)}")
+            for sn in env.struct_defs:
+                output.write(f"  struct {sn}")
+        if env.function_defs:
+            output.write(f"[bold]Functions:[/bold] {len(env.function_defs)}")
+            for fn_name in env.function_defs:
+                output.write(f"  fn {fn_name}")
+        if env.statutes:
+            output.write(f"[bold]Statutes:[/bold] {len(env.statutes)}")
+            for sec in env.statutes:
+                output.write(f"  s.{sec}")
+
+    @work(thread=True)
+    def _repl_try_eval(self, code: str) -> None:
+        """Try to parse and eval the newly entered code line."""
+        output = self.query_one("#repl-output", RichLog)
+        try:
+            from yuho.parser.wrapper import get_parser
+            from yuho.ast.builder import ASTBuilder
+            from yuho.eval.interpreter import AssertionError_, InterpreterError
+            parser = get_parser()
+            result = parser.parse(self._source_buffer, file="<repl>")
+            if not result.is_valid:
+                return # not valid yet, just accumulate
+            builder = ASTBuilder(result.source, file="<repl>")
+            ast = builder.build(result.root_node)
+            interp, env = self._ensure_interpreter()
+            try:
+                interp.interpret(ast)
+                if env.bindings:
+                    for name, val in env.bindings.items():
+                        self.app.call_from_thread(output.write, f"  [dim]{name} = {val}[/dim]")
+            except (AssertionError_, InterpreterError):
+                pass # silently ignore for incremental input
+        except Exception:
+            pass # code not complete yet
 
     @work(thread=True)
     def _repl_transpile(self, target: str) -> None:
@@ -761,6 +991,52 @@ class DiffPanel(Container):
             self.app.call_from_thread(output.write, f"[bold red]Error:[/] {e}")
 
 
+# ─── Graph Panel ─────────────────────────────────────────────────────────────
+
+
+class GraphPanel(Container):
+    """Generate dependency graphs for .yh files."""
+    def compose(self) -> ComposeResult:
+        yield Static("[bold magenta]Graph[/bold magenta] — Generate dependency graph\n")
+        with Horizontal(classes="input-row"):
+            yield Input(placeholder="Enter path to .yh file...", id="graph-path")
+            yield Button("Browse", id="btn-graph-browse")
+            yield Select(
+                options=[("Mermaid", "mermaid"), ("DOT", "dot")],
+                value="mermaid",
+                id="graph-format",
+            )
+            yield Button("Generate", id="btn-graph", variant="primary")
+        yield RichLog(id="graph-output", highlight=True, markup=True)
+
+    @on(Button.Pressed, "#btn-graph")
+    def handle_graph(self) -> None:
+        output = self.query_one("#graph-output", RichLog)
+        output.clear()
+        file_path = self.query_one("#graph-path", Input).value.strip()
+        if not file_path:
+            output.write("[bold red]Error:[/] Please enter a file path.")
+            return
+        fmt_select = self.query_one("#graph-format", Select)
+        fmt = str(fmt_select.value) if fmt_select.value != Select.BLANK else "mermaid"
+        self._run_graph(file_path, fmt)
+
+    @on(Input.Submitted, "#graph-path")
+    def handle_graph_enter(self) -> None:
+        self.handle_graph()
+
+    @work(thread=True)
+    def _run_graph(self, file_path: str, fmt: str) -> None:
+        output = self.query_one("#graph-output", RichLog)
+        try:
+            from yuho.cli.commands.graph import run_graph
+            stdout, stderr = capture_cli(run_graph, file_path, format=fmt, verbose=False)
+            result = stdout.strip() or stderr.strip() or "(no output)"
+            self.app.call_from_thread(output.write, result)
+        except Exception as e:
+            self.app.call_from_thread(output.write, f"[bold red]Error:[/] {e}")
+
+
 class VerifyPanel(Container):
     """Formal verification with Alloy/Z3."""
     def compose(self) -> ComposeResult:
@@ -863,6 +1139,240 @@ class ASTViewPanel(Container):
             self.app.call_from_thread(output.write, f"[bold red]Error:[/] {e}")
 
 
+# ─── Explain Panel ───────────────────────────────────────────────────────────
+
+
+class ExplainPanel(Container):
+    """Generate natural language explanations of .yh files."""
+    def compose(self) -> ComposeResult:
+        yield Static("[bold magenta]Explain[/bold magenta] — Generate natural language explanation\n")
+        with Horizontal(classes="input-row"):
+            yield Input(placeholder="Enter path to .yh file...", id="explain-path")
+            yield Button("Browse", id="btn-explain-browse")
+        with Horizontal(classes="input-row"):
+            yield Label("Section:", classes="form-label")
+            yield Input(placeholder="(optional) specific section to explain", id="explain-section")
+        with Horizontal(classes="input-row"):
+            yield Label("Provider:", classes="form-label")
+            yield Select(
+                options=[
+                    ("Ollama (local)", "ollama"),
+                    ("HuggingFace", "huggingface"),
+                    ("OpenAI", "openai"),
+                    ("Anthropic", "anthropic"),
+                ],
+                value="ollama",
+                id="explain-provider",
+            )
+        with Horizontal(classes="input-row"):
+            yield Label("Model:", classes="form-label")
+            yield Input(placeholder="e.g. llama3, gpt-4", id="explain-model")
+        with Horizontal(classes="input-row"):
+            yield Select(
+                options=[("Online", "online"), ("Offline", "offline")],
+                value="online",
+                id="explain-offline",
+            )
+            yield Select(
+                options=[("Use LLM", "use-llm"), ("No LLM", "no-llm")],
+                value="use-llm",
+                id="explain-no-llm",
+            )
+            yield Button("Explain", id="btn-explain", variant="primary")
+        yield RichLog(id="explain-output", highlight=True, markup=True)
+
+    @on(Button.Pressed, "#btn-explain")
+    def handle_explain(self) -> None:
+        output = self.query_one("#explain-output", RichLog)
+        output.clear()
+        file_path = self.query_one("#explain-path", Input).value.strip()
+        if not file_path:
+            output.write("[bold red]Error:[/] Please enter a file path.")
+            return
+        section = self.query_one("#explain-section", Input).value.strip() or None
+        provider_sel = self.query_one("#explain-provider", Select).value
+        provider = str(provider_sel) if provider_sel != Select.BLANK else None
+        model = self.query_one("#explain-model", Input).value.strip() or None
+        offline_sel = self.query_one("#explain-offline", Select).value
+        offline = (str(offline_sel) == "offline")
+        no_llm_sel = self.query_one("#explain-no-llm", Select).value
+        no_llm = (str(no_llm_sel) == "no-llm")
+        self._run_explain(file_path, section, provider, model, offline, no_llm)
+
+    @on(Input.Submitted, "#explain-path")
+    def handle_explain_enter(self) -> None:
+        self.handle_explain()
+
+    @work(thread=True)
+    def _run_explain(self, file_path: str, section: Optional[str], provider: Optional[str], model: Optional[str], offline: bool, no_llm: bool) -> None:
+        output = self.query_one("#explain-output", RichLog)
+        try:
+            from yuho.cli.commands.explain import run_explain
+            stdout, stderr = capture_cli(
+                run_explain, file_path,
+                section=section, provider=provider, model=model,
+                offline=offline, no_llm=no_llm, verbose=False, stream=False,
+            )
+            result = stdout.strip() or stderr.strip() or "(no output)"
+            self.app.call_from_thread(output.write, result)
+        except Exception as e:
+            self.app.call_from_thread(output.write, f"[bold red]Error:[/] {e}")
+
+
+# ─── Generate Panel ──────────────────────────────────────────────────────────
+
+
+class GeneratePanel(Container):
+    """Scaffold a new statute file from a template."""
+    def compose(self) -> ComposeResult:
+        yield Static("[bold magenta]Generate[/bold magenta] — Scaffold a new statute\n")
+        with Horizontal(classes="input-row"):
+            yield Label("Section:", classes="form-label")
+            yield Input(placeholder="e.g. 415", id="gen-section")
+        with Horizontal(classes="input-row"):
+            yield Label("Title:", classes="form-label")
+            yield Input(placeholder="e.g. Cheating", id="gen-title")
+        with Horizontal(classes="input-row"):
+            yield Label("Template:", classes="form-label")
+            yield Select(
+                options=[("Standard", "standard"), ("Minimal", "minimal"), ("Full", "full")],
+                value="standard",
+                id="gen-template",
+            )
+        with Horizontal(classes="input-row"):
+            yield Select(
+                options=[("Include Definitions", "yes"), ("No Definitions", "no")],
+                value="yes",
+                id="gen-definitions",
+            )
+            yield Select(
+                options=[("Include Penalty", "yes"), ("No Penalty", "no")],
+                value="yes",
+                id="gen-penalty",
+            )
+            yield Select(
+                options=[("Include Illustrations", "yes"), ("No Illustrations", "no")],
+                value="yes",
+                id="gen-illustrations",
+            )
+        with Horizontal(classes="action-row"):
+            yield Button("Generate", id="btn-generate", variant="primary")
+        yield RichLog(id="gen-output", highlight=True, markup=True)
+
+    @on(Button.Pressed, "#btn-generate")
+    def handle_generate(self) -> None:
+        output = self.query_one("#gen-output", RichLog)
+        output.clear()
+        section = self.query_one("#gen-section", Input).value.strip()
+        title = self.query_one("#gen-title", Input).value.strip()
+        if not section or not title:
+            output.write("[bold red]Error:[/] Section and Title are required.")
+            return
+        tmpl_sel = self.query_one("#gen-template", Select).value
+        template = str(tmpl_sel) if tmpl_sel != Select.BLANK else "standard"
+        no_defs = str(self.query_one("#gen-definitions", Select).value) == "no"
+        no_penalty = str(self.query_one("#gen-penalty", Select).value) == "no"
+        no_illust = str(self.query_one("#gen-illustrations", Select).value) == "no"
+        self._run_generate(section, title, template, no_defs, no_penalty, no_illust)
+
+    @work(thread=True)
+    def _run_generate(self, section: str, title: str, template: str, no_defs: bool, no_penalty: bool, no_illust: bool) -> None:
+        output = self.query_one("#gen-output", RichLog)
+        try:
+            from yuho.cli.commands.generate import run_generate
+            stdout, stderr = capture_cli(
+                run_generate, section, title,
+                template=template,
+                no_definitions=no_defs,
+                no_penalty=no_penalty,
+                no_illustrations=no_illust,
+                verbose=False, color=False,
+            )
+            result = stdout.strip() or stderr.strip() or "(no output)"
+            self.app.call_from_thread(output.write, result)
+        except Exception as e:
+            self.app.call_from_thread(output.write, f"[bold red]Error:[/] {e}")
+
+
+# ─── Init Panel ──────────────────────────────────────────────────────────────
+
+
+class InitPanel(Container):
+    """Initialize a new Yuho project."""
+    def compose(self) -> ComposeResult:
+        yield Static("[bold magenta]Init[/bold magenta] — Initialize a new Yuho project\n")
+        with Horizontal(classes="input-row"):
+            yield Label("Project Name:", classes="form-label")
+            yield Input(placeholder="e.g. my-statute-project", id="init-name")
+        with Horizontal(classes="input-row"):
+            yield Label("Directory:", classes="form-label")
+            yield Input(placeholder="(optional) target directory", id="init-dir")
+        with Horizontal(classes="action-row"):
+            yield Button("Init", id="btn-init", variant="primary")
+        yield RichLog(id="init-output", highlight=True, markup=True)
+
+    @on(Button.Pressed, "#btn-init")
+    def handle_init(self) -> None:
+        output = self.query_one("#init-output", RichLog)
+        output.clear()
+        name = self.query_one("#init-name", Input).value.strip() or None
+        directory = self.query_one("#init-dir", Input).value.strip() or None
+        self._run_init(name, directory)
+
+    @work(thread=True)
+    def _run_init(self, name: Optional[str], directory: Optional[str]) -> None:
+        output = self.query_one("#init-output", RichLog)
+        try:
+            from yuho.cli.commands.init import run_init
+            stdout, stderr = capture_cli(run_init, name=name, directory=directory, verbose=False)
+            result = stdout.strip() or stderr.strip() or "[green]Project initialized.[/green]"
+            self.app.call_from_thread(output.write, result)
+        except Exception as e:
+            self.app.call_from_thread(output.write, f"[bold red]Error:[/] {e}")
+
+
+# ─── Contribute Panel ────────────────────────────────────────────────────────
+
+
+class ContributePanel(Container):
+    """Validate .yh files for contribution."""
+    def compose(self) -> ComposeResult:
+        yield Static("[bold magenta]Contribute[/bold magenta] — Validate a file for contribution\n")
+        with Horizontal(classes="input-row"):
+            yield Input(placeholder="Enter path to .yh file...", id="contribute-path")
+            yield Button("Browse", id="btn-contribute-browse")
+            yield Button("Validate", id="btn-contribute", variant="primary")
+        yield RichLog(id="contribute-output", highlight=True, markup=True)
+
+    @on(Button.Pressed, "#btn-contribute")
+    def handle_contribute(self) -> None:
+        output = self.query_one("#contribute-output", RichLog)
+        output.clear()
+        file_path = self.query_one("#contribute-path", Input).value.strip()
+        if not file_path:
+            output.write("[bold red]Error:[/] Please enter a file path.")
+            return
+        self._run_contribute(file_path)
+
+    @on(Input.Submitted, "#contribute-path")
+    def handle_contribute_enter(self) -> None:
+        self.handle_contribute()
+
+    @work(thread=True)
+    def _run_contribute(self, file_path: str) -> None:
+        output = self.query_one("#contribute-output", RichLog)
+        try:
+            from yuho.cli.commands.contribute import run_contribute
+            stdout, stderr = capture_cli(run_contribute, file_path, verbose=False)
+            result = stdout.strip() or stderr.strip() or "[green]File is valid for contribution.[/green]"
+            self.app.call_from_thread(output.write, result)
+        except Exception as e:
+            self.app.call_from_thread(output.write, f"[bold red]Error:[/] {e}")
+
+
+# ─── Library Panel ───────────────────────────────────────────────────────────
+
+
 class LibraryPanel(Container):
     """Statute package management."""
     def compose(self) -> ComposeResult:
@@ -871,6 +1381,14 @@ class LibraryPanel(Container):
             yield Input(placeholder="Search query or package name...", id="lib-query")
             yield Button("Search", id="btn-lib-search", variant="primary")
             yield Button("List Installed", id="btn-lib-list")
+        with Horizontal(classes="action-row"):
+            yield Button("Install", id="btn-lib-install", variant="success")
+            yield Button("Uninstall", id="btn-lib-uninstall", variant="error")
+            yield Button("Update", id="btn-lib-update")
+            yield Button("Info", id="btn-lib-info")
+            yield Button("Outdated", id="btn-lib-outdated")
+            yield Button("Tree", id="btn-lib-tree")
+            yield Button("Publish", id="btn-lib-publish", variant="warning")
         yield RichLog(id="lib-output", highlight=True, markup=True)
 
     @on(Button.Pressed, "#btn-lib-search")
@@ -888,6 +1406,66 @@ class LibraryPanel(Container):
         output = self.query_one("#lib-output", RichLog)
         output.clear()
         self._run_list()
+
+    @on(Button.Pressed, "#btn-lib-install")
+    def handle_install(self) -> None:
+        output = self.query_one("#lib-output", RichLog)
+        output.clear()
+        pkg = self.query_one("#lib-query", Input).value.strip()
+        if not pkg:
+            output.write("[bold red]Error:[/] Please enter a package name.")
+            return
+        self._run_install(pkg)
+
+    @on(Button.Pressed, "#btn-lib-uninstall")
+    def handle_uninstall(self) -> None:
+        output = self.query_one("#lib-output", RichLog)
+        output.clear()
+        pkg = self.query_one("#lib-query", Input).value.strip()
+        if not pkg:
+            output.write("[bold red]Error:[/] Please enter a package name.")
+            return
+        self._run_uninstall(pkg)
+
+    @on(Button.Pressed, "#btn-lib-update")
+    def handle_update(self) -> None:
+        output = self.query_one("#lib-output", RichLog)
+        output.clear()
+        pkg = self.query_one("#lib-query", Input).value.strip() or None
+        self._run_update(pkg)
+
+    @on(Button.Pressed, "#btn-lib-info")
+    def handle_info(self) -> None:
+        output = self.query_one("#lib-output", RichLog)
+        output.clear()
+        pkg = self.query_one("#lib-query", Input).value.strip()
+        if not pkg:
+            output.write("[bold red]Error:[/] Please enter a package name.")
+            return
+        self._run_info(pkg)
+
+    @on(Button.Pressed, "#btn-lib-outdated")
+    def handle_outdated(self) -> None:
+        output = self.query_one("#lib-output", RichLog)
+        output.clear()
+        self._run_outdated()
+
+    @on(Button.Pressed, "#btn-lib-tree")
+    def handle_tree(self) -> None:
+        output = self.query_one("#lib-output", RichLog)
+        output.clear()
+        pkg = self.query_one("#lib-query", Input).value.strip() or None
+        self._run_tree(pkg)
+
+    @on(Button.Pressed, "#btn-lib-publish")
+    def handle_publish(self) -> None:
+        output = self.query_one("#lib-output", RichLog)
+        output.clear()
+        pkg = self.query_one("#lib-query", Input).value.strip()
+        if not pkg:
+            output.write("[bold red]Error:[/] Please enter a package path.")
+            return
+        self._run_publish(pkg)
 
     @on(Input.Submitted, "#lib-query")
     def handle_search_enter(self) -> None:
@@ -911,6 +1489,86 @@ class LibraryPanel(Container):
             from yuho.cli.commands.library import run_library_list
             stdout, stderr = capture_cli(run_library_list, verbose=False)
             result = stdout.strip() or stderr.strip() or "[dim]No packages installed.[/dim]"
+            self.app.call_from_thread(output.write, result)
+        except Exception as e:
+            self.app.call_from_thread(output.write, f"[bold red]Error:[/] {e}")
+
+    @work(thread=True)
+    def _run_install(self, package: str) -> None:
+        output = self.query_one("#lib-output", RichLog)
+        try:
+            from yuho.cli.commands.library import run_library_install
+            stdout, stderr = capture_cli(run_library_install, package, verbose=False)
+            result = stdout.strip() or stderr.strip() or f"[green]Installed {package}.[/green]"
+            self.app.call_from_thread(output.write, result)
+        except Exception as e:
+            self.app.call_from_thread(output.write, f"[bold red]Error:[/] {e}")
+
+    @work(thread=True)
+    def _run_uninstall(self, package: str) -> None:
+        output = self.query_one("#lib-output", RichLog)
+        try:
+            from yuho.cli.commands.library import run_library_uninstall
+            stdout, stderr = capture_cli(run_library_uninstall, package, verbose=False)
+            result = stdout.strip() or stderr.strip() or f"[green]Uninstalled {package}.[/green]"
+            self.app.call_from_thread(output.write, result)
+        except Exception as e:
+            self.app.call_from_thread(output.write, f"[bold red]Error:[/] {e}")
+
+    @work(thread=True)
+    def _run_update(self, package: Optional[str]) -> None:
+        output = self.query_one("#lib-output", RichLog)
+        try:
+            from yuho.cli.commands.library import run_library_update
+            if package:
+                stdout, stderr = capture_cli(run_library_update, package=package, verbose=False)
+            else:
+                stdout, stderr = capture_cli(run_library_update, all_packages=True, verbose=False)
+            result = stdout.strip() or stderr.strip() or "[green]Update complete.[/green]"
+            self.app.call_from_thread(output.write, result)
+        except Exception as e:
+            self.app.call_from_thread(output.write, f"[bold red]Error:[/] {e}")
+
+    @work(thread=True)
+    def _run_info(self, package: str) -> None:
+        output = self.query_one("#lib-output", RichLog)
+        try:
+            from yuho.cli.commands.library import run_library_info
+            stdout, stderr = capture_cli(run_library_info, package, verbose=False)
+            result = stdout.strip() or stderr.strip() or "[dim]No info available.[/dim]"
+            self.app.call_from_thread(output.write, result)
+        except Exception as e:
+            self.app.call_from_thread(output.write, f"[bold red]Error:[/] {e}")
+
+    @work(thread=True)
+    def _run_outdated(self) -> None:
+        output = self.query_one("#lib-output", RichLog)
+        try:
+            from yuho.cli.commands.library import run_library_outdated
+            stdout, stderr = capture_cli(run_library_outdated, verbose=False)
+            result = stdout.strip() or stderr.strip() or "[green]All packages up to date.[/green]"
+            self.app.call_from_thread(output.write, result)
+        except Exception as e:
+            self.app.call_from_thread(output.write, f"[bold red]Error:[/] {e}")
+
+    @work(thread=True)
+    def _run_tree(self, package: Optional[str]) -> None:
+        output = self.query_one("#lib-output", RichLog)
+        try:
+            from yuho.cli.commands.library import run_library_tree
+            stdout, stderr = capture_cli(run_library_tree, package=package, verbose=False)
+            result = stdout.strip() or stderr.strip() or "[dim]No dependency tree.[/dim]"
+            self.app.call_from_thread(output.write, result)
+        except Exception as e:
+            self.app.call_from_thread(output.write, f"[bold red]Error:[/] {e}")
+
+    @work(thread=True)
+    def _run_publish(self, path: str) -> None:
+        output = self.query_one("#lib-output", RichLog)
+        try:
+            from yuho.cli.commands.library import run_library_publish
+            stdout, stderr = capture_cli(run_library_publish, path, dry_run=True, verbose=False)
+            result = stdout.strip() or stderr.strip() or "[green]Publish dry-run complete.[/green]"
             self.app.call_from_thread(output.write, result)
         except Exception as e:
             self.app.call_from_thread(output.write, f"[bold red]Error:[/] {e}")
@@ -1175,12 +1833,12 @@ HomePanel, AboutPanel {
         Binding("1", "nav(0)", "Home", show=False),
         Binding("2", "nav(1)", "Check", show=False),
         Binding("3", "nav(2)", "Transpile", show=False),
-        Binding("4", "nav(3)", "Wizard", show=False),
-        Binding("5", "nav(4)", "REPL", show=False),
-        Binding("6", "nav(5)", "Lint", show=False),
-        Binding("7", "nav(6)", "Test", show=False),
-        Binding("8", "nav(7)", "Format", show=False),
-        Binding("9", "nav(8)", "Diff", show=False),
+        Binding("4", "nav(3)", "Eval", show=False),
+        Binding("5", "nav(4)", "Wizard", show=False),
+        Binding("6", "nav(5)", "REPL", show=False),
+        Binding("7", "nav(6)", "Lint", show=False),
+        Binding("8", "nav(7)", "Test", show=False),
+        Binding("9", "nav(8)", "Format", show=False),
     ]
 
     def compose(self) -> ComposeResult:
@@ -1194,14 +1852,20 @@ HomePanel, AboutPanel {
                 yield HomePanel(id="home", classes="panel")
                 yield CheckPanel(id="check", classes="panel")
                 yield TranspilePanel(id="transpile", classes="panel")
+                yield EvalPanel(id="eval", classes="panel")
                 yield WizardPanel(id="wizard", classes="panel")
                 yield ReplPanel(id="repl", classes="panel")
                 yield LintPanel(id="lint", classes="panel")
                 yield TestPanel(id="test", classes="panel")
                 yield FmtPanel(id="fmt", classes="panel")
                 yield DiffPanel(id="diff", classes="panel")
+                yield GraphPanel(id="graph", classes="panel")
                 yield VerifyPanel(id="verify", classes="panel")
                 yield ASTViewPanel(id="ast-view", classes="panel")
+                yield ExplainPanel(id="explain", classes="panel")
+                yield GeneratePanel(id="generate", classes="panel")
+                yield InitPanel(id="init", classes="panel")
+                yield ContributePanel(id="contribute", classes="panel")
                 yield LibraryPanel(id="library", classes="panel")
                 yield SettingsPanel(id="settings", classes="panel")
                 yield AboutPanel(id="about", classes="panel")
@@ -1238,6 +1902,22 @@ HomePanel, AboutPanel {
     def handle_transpile_browse(self) -> None:
         self._open_file_picker("transpile-path")
 
+    @on(Button.Pressed, "#btn-eval-browse")
+    def handle_eval_browse(self) -> None:
+        self._open_file_picker("eval-path")
+
+    @on(Button.Pressed, "#btn-graph-browse")
+    def handle_graph_browse(self) -> None:
+        self._open_file_picker("graph-path")
+
+    @on(Button.Pressed, "#btn-explain-browse")
+    def handle_explain_browse(self) -> None:
+        self._open_file_picker("explain-path")
+
+    @on(Button.Pressed, "#btn-contribute-browse")
+    def handle_contribute_browse(self) -> None:
+        self._open_file_picker("contribute-path")
+
     @on(Button.Pressed, "#btn-open")
     def handle_open_file(self) -> None:
         self.action_nav(1)
@@ -1245,7 +1925,7 @@ HomePanel, AboutPanel {
 
     @on(Button.Pressed, "#btn-wizard")
     def handle_new_wizard(self) -> None:
-        self.action_nav(3)
+        self.action_nav(4)
 
     @on(Button.Pressed, "#btn-copy-output")
     def handle_copy_output(self) -> None:
