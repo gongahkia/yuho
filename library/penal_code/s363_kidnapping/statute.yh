@@ -1,0 +1,47 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871
+// Singapore Penal Code Section 363 - Punishment for Kidnapping
+// Yuho v5 Syntax
+
+struct KidnappingCase {
+    string accused,
+    string victim,
+    string kidnappingType,
+    bool conveyedFromSingapore,
+    bool takenFromLawfulGuardian,
+}
+
+fn is_kidnapping(string kidnappingType, bool conveyedFromSingapore, bool takenFromLawfulGuardian) : bool {
+    match {
+        case TRUE if kidnappingType == "from_singapore" := consequence conveyedFromSingapore;
+        case TRUE if kidnappingType == "from_lawful_guardianship" := consequence takenFromLawfulGuardian;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 363 "Punishment for Kidnapping" {
+    definitions {
+        kidnapping_from_singapore := "Conveying any person beyond the limits of Singapore without the consent of that person";
+        kidnapping_from_lawful_guardianship := "Taking or enticing any minor under 14, or any person of unsound mind, out of the keeping of the lawful guardian without consent";
+    }
+
+    elements {
+        /// intent to kidnap
+        mens_rea intention := "Intention to kidnap the person";
+        /// the physical act of conveying or taking
+        actus_reus taking := "Conveying person beyond Singapore or taking from lawful guardianship";
+        /// victim is taken without consent
+        circumstance without_consent := "Without the consent of the person or lawful guardian";
+    }
+
+    penalty {
+        imprisonment := 0 days .. 10 years;
+        fine := $0.00 .. $30,000.00;
+        caning := 0 .. 12 strokes;
+    }
+
+    illustration example1 {
+        "A forcibly takes B, a child of 10, from B's parents and transports B to Malaysia. A has committed kidnapping."
+    }
+}

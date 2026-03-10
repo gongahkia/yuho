@@ -1,0 +1,42 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871
+// Singapore Penal Code Section 465 - Punishment for Forgery
+// Yuho v5 Syntax
+
+referencing penal_code/s463_forgery
+
+struct S465Case {
+    string accused,
+    bool forgeryCommitted,
+}
+
+fn s465_applies(bool forgeryCommitted) : bool {
+    match {
+        case TRUE if forgeryCommitted == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 465 "Punishment for Forgery" {
+    definitions {
+        forgery := "As defined under section 463";
+        punishment := "Imprisonment or fine or both for committing forgery";
+    }
+
+    elements {
+        /// the offence of forgery under s463 must be established
+        circumstance forgery_committed := "Forgery under section 463 is established";
+        /// conviction triggers punishment
+        actus_reus conviction := "Conviction for forgery";
+    }
+
+    penalty {
+        imprisonment := 0 days .. 4 years;
+        fine := $0.00 .. $10,000.00;
+    }
+
+    illustration example1 {
+        "A forges a document purporting to be a receipt from B for goods never delivered. A is convicted of forgery and may be imprisoned up to 4 years and fined."
+    }
+}

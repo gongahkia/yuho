@@ -251,7 +251,7 @@ def ast(
 @click.argument("file", type=str)
 @click.option(
     "-t", "--target",
-    type=click.Choice(["json", "jsonld", "english", "latex", "mermaid", "alloy", "graphql", "blocks"], case_sensitive=False),
+    type=click.Choice(["json", "jsonld", "english", "latex", "pdf", "mermaid", "svg", "png", "alloy", "graphql", "blocks", "bibtex", "html", "comparative"], case_sensitive=False),
     default="json",
     help="Transpilation target format"
 )
@@ -411,26 +411,41 @@ def explain(
 @click.argument("file1", type=click.Path(exists=True))
 @click.argument("file2", type=click.Path(exists=True))
 @click.option("--json", "json_output", is_flag=True, help="Output as JSON")
+@click.option("--score", is_flag=True, help="Score file2 against file1 as model answer")
 @click.pass_context
-def diff(ctx: click.Context, file1: str, file2: str, json_output: bool) -> None:
+def diff(ctx: click.Context, file1: str, file2: str, json_output: bool, score: bool) -> None:
     """
     Compare two Yuho files and show semantic differences.
 
     Shows added, removed, and modified statutes, definitions, elements,
     penalties, and illustrations between two versions.
 
+    Use --score to grade file2 against file1 as a model answer, showing
+    element coverage percentage.
+
     Examples:
         yuho diff old.yh new.yh
         yuho diff v1/statute.yh v2/statute.yh --json
+        yuho diff model.yh student.yh --score
     """
-    from yuho.cli.commands.diff import run_diff
-    run_diff(
-        file1,
-        file2,
-        json_output=json_output,
-        verbose=ctx.obj["verbose"],
-        color=ctx.obj["color"],
-    )
+    if score:
+        from yuho.cli.commands.diff import run_diff_score
+        run_diff_score(
+            file1,
+            file2,
+            json_output=json_output,
+            verbose=ctx.obj["verbose"],
+            color=ctx.obj["color"],
+        )
+    else:
+        from yuho.cli.commands.diff import run_diff
+        run_diff(
+            file1,
+            file2,
+            json_output=json_output,
+            verbose=ctx.obj["verbose"],
+            color=ctx.obj["color"],
+        )
 
 
 # =============================================================================
@@ -927,6 +942,198 @@ def tui() -> None:
     """
     from yuho.tui import run_tui
     run_tui()
+
+
+@cli.command()
+@click.option("-o", "--output", type=click.Path(), help="Output file path")
+def schema(output: Optional[str]) -> None:
+    """
+    Print JSON Schema for Yuho JSON transpiler output.
+
+    Useful for validating transpiler output or integrating with
+    downstream tools that consume Yuho JSON.
+
+    Examples:
+        yuho schema
+        yuho schema -o yuho-ast.schema.json
+    """
+    from yuho.transpile.json_schema import generate_json_schema
+    text = generate_json_schema()
+    if output:
+        Path(output).write_text(text, encoding="utf-8")
+        click.echo(f"Schema written to {output}")
+    else:
+        print(text)
+
+
+@cli.command("export-training")
+@click.option("-o", "--output", default="training_pairs.jsonl", type=click.Path(), help="Output JSONL file")
+@click.option("-d", "--directory", type=click.Path(exists=True), help="Statute directory (default: library/)")
+@click.option("--mermaid", "include_mermaid", is_flag=True, help="Include Mermaid diagrams in output")
+@click.pass_context
+def export_training(ctx: click.Context, output: str, directory: Optional[str], include_mermaid: bool) -> None:
+    """
+    Export statute/English pairs as JSONL for LLM fine-tuning.
+
+    Each line contains the raw .yh source, English explanation,
+    section number, and title. Optionally includes Mermaid diagrams.
+
+    Examples:
+        yuho export-training
+        yuho export-training -o pairs.jsonl --mermaid
+        yuho export-training -d ./my-statutes
+    """
+    from yuho.cli.commands.export_training import run_export_training
+    run_export_training(
+        output=output,
+        directory=directory,
+        include_mermaid=include_mermaid,
+        verbose=ctx.obj["verbose"],
+    )
+
+
+@cli.command("compliance-matrix")
+@click.argument("file", type=click.Path(exists=True))
+@click.option("-o", "--output", type=click.Path(), help="Output file path")
+@click.option("--json", "json_output", is_flag=True, help="Output as JSON")
+@click.pass_context
+def compliance_matrix(ctx: click.Context, file: str, output: Optional[str], json_output: bool) -> None:
+    """
+    Generate a compliance checklist from statute elements.
+
+    Produces a table of all statutory requirements with checkboxes
+    for compliance officers to audit.
+
+    Examples:
+        yuho compliance-matrix statute.yh
+        yuho compliance-matrix statute.yh -o matrix.md
+        yuho compliance-matrix statute.yh --json
+    """
+    from yuho.cli.commands.compliance import run_compliance_matrix
+    run_compliance_matrix(
+        file=file,
+        output=output,
+        json_output=json_output,
+        verbose=ctx.obj["verbose"],
+    )
+
+
+@cli.command("explain-all")
+@click.option("-d", "--directory", default="library", type=click.Path(exists=True), help="Source directory")
+@click.option("-o", "--output-dir", default="doc/explanations", type=click.Path(), help="Output directory")
+@click.pass_context
+def explain_all(ctx: click.Context, directory: str, output_dir: str) -> None:
+    """
+    Generate English explanations for all library statutes.
+
+    Produces pre-built .txt files alongside statute sources.
+
+    Examples:
+        yuho explain-all
+        yuho explain-all -o ./explanations
+    """
+    from yuho.cli.commands.explain_all import run_explain_all
+    run_explain_all(
+        directory=directory,
+        output_dir=output_dir,
+        verbose=ctx.obj["verbose"],
+    )
+
+
+@cli.command("static-site")
+@click.option("-d", "--directory", default="library", type=click.Path(exists=True), help="Source statute directory")
+@click.option("-o", "--output-dir", default="site", type=click.Path(), help="Output directory for HTML files")
+@click.pass_context
+def static_site(ctx: click.Context, directory: str, output_dir: str) -> None:
+    """
+    Generate a browsable HTML site from the statute library.
+
+    Produces an index page linking to individual statute pages,
+    each with English explanation, Mermaid diagram, and source.
+
+    Examples:
+        yuho static-site
+        yuho static-site -d ./my-library -o ./docs
+    """
+    from yuho.cli.commands.static_site import run_static_site
+    run_static_site(directory=directory, output_dir=output_dir, verbose=ctx.obj["verbose"])
+
+
+@cli.command()
+@click.option("-p", "--port", type=int, default=8080, show_default=True, help="Server port")
+@click.option("--host", default="127.0.0.1", show_default=True, help="Host to bind to")
+@click.pass_context
+def playground(ctx: click.Context, port: int, host: str) -> None:
+    """
+    Launch the web playground in your browser.
+
+    Serves a browser-based Yuho editor with live transpilation.
+    Supports all transpile targets with instant feedback.
+
+    Examples:
+        yuho playground
+        yuho playground --port 3000
+    """
+    from yuho.cli.commands.playground import run_playground
+    run_playground(port=port, host=host, verbose=ctx.obj["verbose"])
+
+
+@cli.command("generate-tests")
+@click.argument("file", type=click.Path(exists=True))
+@click.option("-o", "--output", type=click.Path(), help="Output file path")
+@click.option("-n", "--max-cases", type=int, default=10, show_default=True, help="Maximum test cases to generate")
+@click.option("--json", "json_output", is_flag=True, help="Output as JSON")
+@click.pass_context
+def generate_tests(ctx: click.Context, file: str, output: Optional[str], max_cases: int, json_output: bool) -> None:
+    """
+    Generate test cases using Z3 constraint solving.
+
+    Uses Z3 model enumeration to produce concrete fact patterns
+    that exercise different code paths through statute elements.
+
+    Examples:
+        yuho generate-tests statute.yh
+        yuho generate-tests statute.yh -n 20 --json -o tests.json
+    """
+    from yuho.cli.commands.generate_tests import run_generate_tests
+    run_generate_tests(
+        file=file,
+        output=output,
+        max_cases=max_cases,
+        json_output=json_output,
+        verbose=ctx.obj["verbose"],
+    )
+
+
+@cli.command("verify-report")
+@click.argument("file", type=click.Path(exists=True))
+@click.option("-o", "--output", type=click.Path(), help="Output .tex file path")
+@click.pass_context
+def verify_report(ctx: click.Context, file: str, output: Optional[str]) -> None:
+    """
+    Generate a LaTeX verification report for statute completeness.
+
+    Checks structural elements (title, actus reus, mens rea, penalty,
+    definitions, illustrations, exceptions, jurisdiction, doc-comments)
+    and produces a color-coded PASS/WARN/FAIL table.
+
+    Examples:
+        yuho verify-report statute.yh
+        yuho verify-report statute.yh -o report.tex
+    """
+    from yuho.services.analysis import analyze_file
+    from yuho.transpile.verification_report import generate_verification_report
+    result = analyze_file(file)
+    if not result.is_valid or result.ast is None:
+        for err in result.errors:
+            click.echo(f"  {err}", err=True)
+        sys.exit(1)
+    tex = generate_verification_report(result.ast)
+    if output:
+        Path(output).write_text(tex, encoding="utf-8")
+        click.echo(f"Report written to {output}")
+    else:
+        print(tex)
 
 
 def main() -> None:

@@ -320,3 +320,105 @@ def register_group_commands(cli: click.Group) -> None:
             json_output=json_output,
             verbose=ctx.obj["verbose"],
         )
+
+    @library.command("export")
+    @click.option("-t", "--target", default="json",
+                  type=click.Choice(["json", "jsonld", "english", "latex", "mermaid", "alloy", "graphql", "blocks", "bibtex", "html"]),
+                  help="Transpilation target")
+    @click.option("-o", "--output-dir", default="./library_export", type=click.Path(), help="Output directory")
+    @click.option("--json", "json_output", is_flag=True, help="Output as JSON")
+    @click.pass_context
+    def library_export(
+        ctx: click.Context,
+        target: str,
+        output_dir: str,
+        json_output: bool,
+    ) -> None:
+        """
+        Bulk-export all library statutes to a target format.
+
+        Transpiles every statute.yh in the library/ directory and writes
+        output preserving the directory structure.
+
+        Examples:
+            yuho library export
+            yuho library export -t english -o ./docs/statutes
+            yuho library export -t mermaid --json
+        """
+        from yuho.cli.commands.library import run_library_export
+        run_library_export(
+            target=target,
+            output_dir=output_dir,
+            json_output=json_output,
+            verbose=ctx.obj["verbose"],
+        )
+
+    # =========================================================================
+    # Batch command
+    # =========================================================================
+
+    @cli.group()
+    @click.pass_context
+    def batch(ctx: click.Context) -> None:
+        """
+        Batch operations on directories of .yh files.
+
+        Process multiple statute files at once for validation,
+        transpilation, or testing.
+        """
+        pass
+
+    @batch.command("check")
+    @click.argument("directory", type=click.Path(exists=True))
+    @click.option("--no-recursive", is_flag=True, help="Don't recurse into subdirectories")
+    @click.option("--json", "json_output", is_flag=True, help="Output as JSON")
+    @click.pass_context
+    def batch_check(ctx: click.Context, directory: str, no_recursive: bool, json_output: bool) -> None:
+        """
+        Check all .yh files in a directory.
+
+        Examples:
+            yuho batch check library/penal_code/
+            yuho batch check . --json
+        """
+        from yuho.cli.commands.batch import run_batch_check
+        run_batch_check(
+            directory,
+            recursive=not no_recursive,
+            json_output=json_output,
+            verbose=ctx.obj["verbose"],
+        )
+
+    @batch.command("transpile")
+    @click.argument("directory", type=click.Path(exists=True))
+    @click.option("-t", "--target", default="json",
+                  type=click.Choice(["json", "jsonld", "english", "latex", "mermaid", "alloy", "graphql", "blocks", "bibtex", "html"]),
+                  help="Transpilation target")
+    @click.option("-o", "--output-dir", type=click.Path(), help="Output directory")
+    @click.option("--no-recursive", is_flag=True, help="Don't recurse into subdirectories")
+    @click.option("--json", "json_output", is_flag=True, help="Output as JSON")
+    @click.pass_context
+    def batch_transpile(
+        ctx: click.Context,
+        directory: str,
+        target: str,
+        output_dir: Optional[str],
+        no_recursive: bool,
+        json_output: bool,
+    ) -> None:
+        """
+        Transpile all .yh files in a directory.
+
+        Examples:
+            yuho batch transpile library/ -t json -o ./output/
+            yuho batch transpile . -t english
+        """
+        from yuho.cli.commands.batch import run_batch_transpile
+        run_batch_transpile(
+            directory,
+            target=target,
+            output_dir=output_dir,
+            recursive=not no_recursive,
+            json_output=json_output,
+            verbose=ctx.obj["verbose"],
+        )

@@ -1,0 +1,19 @@
+[statute]
+section_number = "304"
+title = "Culpable Homicide not amounting to Murder"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[contributor]
+name = "Yuho Team"
+email = ""
+
+[description]
+summary = "Whoever commits culpable homicide not amounting to murder shall be punished with imprisonment for life, or imprisonment for a term which may extend to 20 years, and shall also be liable to fine or to caning."
+source = "Singapore Penal Code 1871, Section 304"
+
+[verification]
+last_verified = "2026-03-10"
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr304-#pr304-"
+verified_by = "Yuho Team"
+disclaimer = "Educational purposes only. Cross-reference with official SSO text."

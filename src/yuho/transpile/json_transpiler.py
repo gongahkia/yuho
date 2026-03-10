@@ -230,10 +230,16 @@ class JSONTranspiler(TranspilerBase, Visitor):
                 result["exceptions"] = [self._to_dict(e) for e in node.exceptions]
             if node.case_law:
                 result["case_law"] = [self._to_dict(c) for c in node.case_law]
+            if node.jurisdiction:
+                result["jurisdiction"] = node.jurisdiction
+            if node.jurisdiction_meta:
+                result["jurisdiction_meta"] = dict(node.jurisdiction_meta)
         elif isinstance(node, nodes.ImportNode):
             result["path"] = node.path
             result["imported_names"] = list(node.imported_names)
         elif isinstance(node, nodes.ModuleNode):
+            from yuho.transpile.json_schema import AST_SCHEMA_VERSION
+            result["_schema_version"] = AST_SCHEMA_VERSION
             result["imports"] = [self._to_dict(i) for i in node.imports]
             result["type_defs"] = [self._to_dict(t) for t in node.type_defs]
             result["function_defs"] = [self._to_dict(f) for f in node.function_defs]

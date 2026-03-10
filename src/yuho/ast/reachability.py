@@ -228,11 +228,11 @@ class ReachabilityChecker(Visitor):
                 line = 0
                 column = 0
                 if arm.source_location:
-                    line = arm.source_location.start_line
-                    column = arm.source_location.start_column
+                    line = arm.source_location.line
+                    column = arm.source_location.col
                 elif arm.pattern.source_location:
-                    line = arm.pattern.source_location.start_line
-                    column = arm.pattern.source_location.start_column
+                    line = arm.pattern.source_location.line
+                    column = arm.pattern.source_location.col
                 
                 unreachable.append(UnreachableArm(
                     arm_index=i,

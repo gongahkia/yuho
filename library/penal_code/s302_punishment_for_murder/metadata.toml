@@ -1,0 +1,19 @@
+[statute]
+section_number = "302"
+title = "Punishment for Murder"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[contributor]
+name = "Yuho Team"
+email = ""
+
+[description]
+summary = "Whoever commits murder shall be punished with death, or with imprisonment for life and shall also be liable to caning."
+source = "Singapore Penal Code 1871, Section 302"
+
+[verification]
+last_verified = "2026-03-10"
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr302-#pr302-"
+verified_by = "Yuho Team"
+disclaimer = "Educational purposes only. Cross-reference with official SSO text."

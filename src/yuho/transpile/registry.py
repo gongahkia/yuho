@@ -74,6 +74,9 @@ class TranspilerRegistry:
         from yuho.transpile.alloy_transpiler import AlloyTranspiler
         from yuho.transpile.graphql_transpiler import GraphQLTranspiler
         from yuho.transpile.blocks_transpiler import BlocksTranspiler
+        from yuho.transpile.bibtex_transpiler import BibTeXTranspiler
+        from yuho.transpile.html_transpiler import HTMLTranspiler
+        from yuho.transpile.comparative_transpiler import ComparativeTranspiler
 
         self._registry[TranspileTarget.JSON] = JSONTranspiler
         self._registry[TranspileTarget.JSON_LD] = JSONLDTranspiler
@@ -83,6 +86,9 @@ class TranspilerRegistry:
         self._registry[TranspileTarget.ALLOY] = AlloyTranspiler
         self._registry[TranspileTarget.GRAPHQL] = GraphQLTranspiler
         self._registry[TranspileTarget.BLOCKS] = BlocksTranspiler
+        self._registry[TranspileTarget.BIBTEX] = BibTeXTranspiler
+        self._registry[TranspileTarget.HTML] = HTMLTranspiler
+        self._registry[TranspileTarget.COMPARATIVE] = ComparativeTranspiler
 
     @classmethod
     def instance(cls) -> "TranspilerRegistry":

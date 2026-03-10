@@ -1,0 +1,56 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871
+// Singapore Penal Code Section 304 - Culpable Homicide not amounting to Murder
+// Yuho v5 Syntax
+
+referencing penal_code/s299_culpable_homicide
+
+struct CulpableHomicideCase {
+    string accused,
+    string victim,
+    string intention,
+    bool deathCaused,
+    bool amountsToMurder,
+}
+
+fn is_s304_offence(string intention, bool deathCaused, bool amountsToMurder) : bool {
+    match {
+        case TRUE if deathCaused == FALSE := consequence FALSE;
+        case TRUE if amountsToMurder == TRUE := consequence FALSE;
+        case TRUE if intention == "cause_death" := consequence TRUE;
+        case TRUE if intention == "cause_bodily_injury_likely_to_cause_death" := consequence TRUE;
+        case TRUE if intention == "knowledge_likely_to_cause_death" := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 304 "Culpable Homicide not amounting to Murder" {
+    definitions {
+        culpable_homicide := "As defined under section 299";
+        not_murder := "Culpable homicide that does not fall within section 300";
+    }
+
+    elements {
+        /// intent to cause death or bodily injury likely to cause death
+        mens_rea intention := "Intention to cause death or bodily injury likely to cause death";
+        /// actual causation of death
+        actus_reus causation := "Causing death of a human being";
+        /// must not amount to murder under s300
+        circumstance not_murder := "Act does not amount to murder under section 300";
+    }
+
+    penalty {
+        imprisonment := 0 days .. 20 years;
+        fine := $0.00 .. $50,000.00;
+        caning := 0 .. 24 strokes;
+    }
+
+    illustration example1 {
+        "A, in a sudden fight without premeditation, strikes B with a heavy object. B dies. A has committed culpable homicide not amounting to murder."
+    }
+
+    illustration example2 {
+        "A knows that B has a weak heart. A intentionally frightens B, causing B to have a heart attack and die. A is guilty of culpable homicide."
+    }
+}

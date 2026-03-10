@@ -1,0 +1,48 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871
+// Singapore Penal Code Section 406 - Punishment for Criminal Breach of Trust
+// Yuho v5 Syntax
+
+referencing penal_code/s403_dishonest_misappropriation
+
+struct S406Case {
+    string accused,
+    bool breachOfTrustCommitted,
+}
+
+fn s406_applies(bool breachOfTrustCommitted) : bool {
+    match {
+        case TRUE if breachOfTrustCommitted == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 406 "Punishment for Criminal Breach of Trust" {
+    definitions {
+        criminal_breach_of_trust := "Dishonest misappropriation or conversion of property entrusted to the person";
+        entrusted_property := "Property over which a person has dominion by virtue of trust";
+    }
+
+    elements {
+        /// property must have been entrusted
+        circumstance property_entrusted := "Property was entrusted to or placed under dominion of the accused";
+        /// dishonest misappropriation of entrusted property
+        actus_reus misappropriation := "Misappropriation or conversion of the entrusted property";
+        /// dishonest intention
+        mens_rea dishonesty := "Dishonest intention in dealing with the entrusted property";
+    }
+
+    penalty {
+        imprisonment := 0 days .. 7 years;
+        fine := $0.00 .. $50,000.00;
+    }
+
+    illustration example1 {
+        "A, a warehouse keeper, is entrusted with goods by B for safekeeping. A sells the goods and keeps the proceeds. A has committed criminal breach of trust."
+    }
+
+    illustration example2 {
+        "A, a clerk, is entrusted with money by his employer to deposit at the bank. A uses the money for his personal expenses. A has committed criminal breach of trust."
+    }
+}

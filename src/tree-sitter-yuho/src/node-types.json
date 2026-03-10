@@ -695,6 +695,16 @@
           }
         ]
       },
+      "doc_comment": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "doc_comment",
+            "named": true
+          }
+        ]
+      },
       "element_type": {
         "multiple": false,
         "required": true,
@@ -1167,6 +1177,16 @@
     "type": "field_definition",
     "named": true,
     "fields": {
+      "doc_comment": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "doc_comment",
+            "named": true
+          }
+        ]
+      },
       "name": {
         "multiple": false,
         "required": true,
@@ -1296,6 +1316,16 @@
     "type": "function_definition",
     "named": true,
     "fields": {
+      "doc_comment": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "doc_comment",
+            "named": true
+          }
+        ]
+      },
       "name": {
         "multiple": false,
         "required": true,
@@ -2331,6 +2361,16 @@
     "type": "statute_block",
     "named": true,
     "fields": {
+      "doc_comment": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "doc_comment",
+            "named": true
+          }
+        ]
+      },
       "section_number": {
         "multiple": false,
         "required": true,
@@ -2402,6 +2442,16 @@
     "type": "struct_definition",
     "named": true,
     "fields": {
+      "doc_comment": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "doc_comment",
+            "named": true
+          }
+        ]
+      },
       "name": {
         "multiple": false,
         "required": true,
@@ -2925,6 +2975,10 @@
   {
     "type": "definitions",
     "named": false
+  },
+  {
+    "type": "doc_comment",
+    "named": true
   },
   {
     "type": "duration",

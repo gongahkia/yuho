@@ -1,0 +1,52 @@
+// Test file for s354_assault_or_criminal_force_to_outrage_modesty
+// Yuho v5 Syntax
+
+referencing penal_code/s354_assault_or_criminal_force_to_outrage_modesty
+
+// ----- test structs -----
+
+struct S354TestCase {
+    bool intentToOutrageModesty,
+    bool knowledgeLikelyToOutrage,
+    bool useOfForceOrAssault,
+}
+
+// ----- intent with force: guilty -----
+
+S354TestCase intentForce := S354TestCase {
+    intentToOutrageModesty := TRUE,
+    knowledgeLikelyToOutrage := FALSE,
+    useOfForceOrAssault := TRUE,
+}
+
+assert is_outrage_modesty(intentForce.intentToOutrageModesty, intentForce.knowledgeLikelyToOutrage, intentForce.useOfForceOrAssault) == TRUE
+
+// ----- knowledge with force: guilty -----
+
+S354TestCase knowledgeForce := S354TestCase {
+    intentToOutrageModesty := FALSE,
+    knowledgeLikelyToOutrage := TRUE,
+    useOfForceOrAssault := TRUE,
+}
+
+assert is_outrage_modesty(knowledgeForce.intentToOutrageModesty, knowledgeForce.knowledgeLikelyToOutrage, knowledgeForce.useOfForceOrAssault) == TRUE
+
+// ----- no force: not guilty -----
+
+S354TestCase noForce := S354TestCase {
+    intentToOutrageModesty := TRUE,
+    knowledgeLikelyToOutrage := TRUE,
+    useOfForceOrAssault := FALSE,
+}
+
+assert is_outrage_modesty(noForce.intentToOutrageModesty, noForce.knowledgeLikelyToOutrage, noForce.useOfForceOrAssault) == FALSE
+
+// ----- no intent or knowledge: not guilty -----
+
+S354TestCase noMensRea := S354TestCase {
+    intentToOutrageModesty := FALSE,
+    knowledgeLikelyToOutrage := FALSE,
+    useOfForceOrAssault := TRUE,
+}
+
+assert is_outrage_modesty(noMensRea.intentToOutrageModesty, noMensRea.knowledgeLikelyToOutrage, noMensRea.useOfForceOrAssault) == FALSE

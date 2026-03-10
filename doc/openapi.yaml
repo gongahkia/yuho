@@ -1,0 +1,262 @@
+openapi: 3.1.0
+info:
+  title: Yuho REST API
+  description: |
+    HTTP API for parsing, validating, transpiling, and linting Yuho (.yh) statute files.
+    Start the server with `yuho serve --port 8080`.
+  version: 5.1.0
+  contact:
+    name: Yuho
+    url: https://github.com/gongahkia/yuho
+
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+
+paths:
+  /health:
+    get:
+      summary: Health check
+      operationId: healthCheck
+      responses:
+        "200":
+          description: Server is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+                  version:
+                    type: string
+                    example: 5.1.0
+
+  /targets:
+    get:
+      summary: List available transpilation targets
+      operationId: listTargets
+      responses:
+        "200":
+          description: List of supported target formats
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  targets:
+                    type: array
+                    items:
+                      type: string
+                    example: ["json", "english", "mermaid", "latex", "alloy"]
+
+  /rules:
+    get:
+      summary: List available lint rules
+      operationId: listRules
+      responses:
+        "200":
+          description: List of available lint rules
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  rules:
+                    type: array
+                    items:
+                      type: string
+
+  /parse:
+    post:
+      summary: Parse Yuho source code
+      operationId: parseSource
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SourceInput"
+      responses:
+        "200":
+          description: Parse result with AST
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ParseResponse"
+        "400":
+          description: Parse errors
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /validate:
+    post:
+      summary: Validate Yuho source (parse + semantic checks)
+      operationId: validateSource
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SourceInput"
+      responses:
+        "200":
+          description: Validation result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidateResponse"
+        "400":
+          description: Validation errors
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /transpile:
+    post:
+      summary: Transpile Yuho source to a target format
+      operationId: transpileSource
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [source, target]
+              properties:
+                source:
+                  type: string
+                  description: Yuho source code
+                target:
+                  type: string
+                  description: Target format
+                  enum: [json, jsonld, english, latex, mermaid, alloy, graphql, blocks, bibtex, html, comparative]
+      responses:
+        "200":
+          description: Transpiled output
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      output:
+                        type: string
+                      target:
+                        type: string
+        "400":
+          description: Transpilation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /lint:
+    post:
+      summary: Lint Yuho source code
+      operationId: lintSource
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [source]
+              properties:
+                source:
+                  type: string
+                rules:
+                  type: array
+                  items:
+                    type: string
+                  description: Specific rules to run (empty = all)
+      responses:
+        "200":
+          description: Lint results
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      violations:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            rule:
+                              type: string
+                            message:
+                              type: string
+                            line:
+                              type: integer
+
+components:
+  schemas:
+    SourceInput:
+      type: object
+      required: [source]
+      properties:
+        source:
+          type: string
+          description: Yuho (.yh) source code
+          maxLength: 1048576
+
+    ParseResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          type: object
+          properties:
+            ast:
+              type: object
+              description: JSON AST (same format as `yuho transpile -t json`)
+            statutes:
+              type: integer
+            functions:
+              type: integer
+            structs:
+              type: integer
+
+    ValidateResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          type: object
+          properties:
+            valid:
+              type: boolean
+            errors:
+              type: array
+              items:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  location:
+                    type: string
+
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: string

@@ -749,3 +749,80 @@ def run_library_info(
         click.echo(f"  Tags:         {', '.join(info['tags'])}")
 
     click.echo()
+
+
+def run_library_export(
+    target: str = "json",
+    output_dir: str = "./library_export",
+    json_output: bool = False,
+    verbose: bool = False,
+) -> None:
+    """
+    Bulk-export all installed library statutes to a target format.
+
+    Walks the library directory, parses each statute.yh, transpiles to the
+    requested target, and writes output preserving directory structure.
+    """
+    import sys
+    from yuho.services.analysis import analyze_file
+    from yuho.transpile import TranspileTarget, get_transpiler
+
+    library_dir = Path.cwd() / "library"
+    if not library_dir.is_dir():
+        msg = f"Library directory not found: {library_dir}"
+        if json_output:
+            click.echo(json.dumps({"error": msg}))
+        else:
+            click.echo(click.style(msg, fg="red"), err=True)
+        sys.exit(1)
+
+    statute_files = sorted(library_dir.rglob("statute.yh"))
+    if not statute_files:
+        msg = "No statute.yh files found in library/"
+        if json_output:
+            click.echo(json.dumps({"error": msg}))
+        else:
+            click.echo(click.style(msg, fg="red"), err=True)
+        sys.exit(1)
+
+    try:
+        transpile_target = TranspileTarget.from_string(target)
+        transpiler = get_transpiler(transpile_target)
+    except (ValueError, KeyError) as e:
+        click.echo(click.style(f"error: {e}", fg="red"), err=True)
+        sys.exit(1)
+
+    out_dir = Path(output_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    results = []
+    failed = 0
+    for f in statute_files:
+        result = analyze_file(f, run_semantic=False)
+        rel = f.relative_to(library_dir)
+        out_path = out_dir / rel.with_suffix(transpile_target.file_extension)
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        if not result.ast:
+            failed += 1
+            results.append({"file": str(rel), "error": "parse failed"})
+            if not json_output:
+                click.echo(click.style(f"  FAIL  {rel}", fg="red"))
+            continue
+        try:
+            text = transpiler.transpile(result.ast)
+            out_path.write_text(text, encoding="utf-8")
+            results.append({"file": str(rel), "output": str(out_path)})
+            if not json_output:
+                click.echo(f"  {rel} -> {out_path}")
+        except Exception as e:
+            failed += 1
+            results.append({"file": str(rel), "error": str(e)})
+            if not json_output:
+                click.echo(click.style(f"  FAIL  {rel}: {e}", fg="red"))
+
+    if json_output:
+        click.echo(json.dumps({"total": len(statute_files), "failed": failed, "target": target, "results": results}, indent=2))
+    else:
+        click.echo(f"\nExported {len(statute_files) - failed}/{len(statute_files)} statutes to {target} in {out_dir}")
+    if failed > 0:
+        sys.exit(1)

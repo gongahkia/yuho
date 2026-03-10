@@ -403,7 +403,7 @@ def analyze_source(
     if run_semantic:
         start_semantic = perf_counter()
         try:
-            result.semantic_summary = _run_semantic_checks(result.ast)
+            result.semantic_summary = _run_semantic_checks(result.ast, file=file)
         except (TypeError, ValueError, AttributeError, RuntimeError) as exc:
             result.errors.append(
                 AnalysisError(
@@ -466,20 +466,55 @@ def _parse_errors_to_analysis_errors(parse_errors: list[ParseError]) -> list[Ana
     return normalized
 
 
-def _run_semantic_checks(ast: ModuleNode) -> SemanticSummary:
-    """Run type inference and type checking and return a semantic summary."""
+def _run_semantic_checks(
+    ast: ModuleNode,
+    file: str = "<string>",
+) -> SemanticSummary:
+    """Run scope analysis, type inference, and type checking."""
+    from yuho.ast.scope_analysis import ScopeAnalysisVisitor
     from yuho.ast.type_check import TypeCheckVisitor
     from yuho.ast.type_inference import TypeInferenceVisitor
+    from yuho.resolver import ModuleResolver
+
+    source_path = Path(file) if file != "<string>" else None
+    resolver = None
+    if source_path and source_path.exists():
+        search_paths = [source_path.parent, Path.cwd()]
+        lib_path = Path.cwd() / "library"
+        if lib_path.is_dir():
+            search_paths.append(lib_path)
+        resolver = ModuleResolver(search_paths=search_paths)
+
+    scope_visitor = ScopeAnalysisVisitor(
+        resolver=resolver,
+        source_file=source_path,
+    )
+    ast.accept(scope_visitor)
 
     infer_visitor = TypeInferenceVisitor()
     ast.accept(infer_visitor)
 
-    check_visitor = TypeCheckVisitor(infer_visitor.result)
+    check_visitor = TypeCheckVisitor(
+        infer_visitor.result,
+        resolver=resolver,
+        source_file=source_path,
+    )
     ast.accept(check_visitor)
 
     issues: list[SemanticIssue] = []
     error_count = 0
     warning_count = 0
+
+    for scope_err in scope_visitor.result.errors:
+        severity = getattr(scope_err, "severity", "error")
+        line = getattr(scope_err, "line", 0)
+        column = getattr(scope_err, "column", 0)
+        msg = scope_err.message if hasattr(scope_err, "message") else str(scope_err)
+        if severity == "warning":
+            warning_count += 1
+        else:
+            error_count += 1
+        issues.append(SemanticIssue(severity=severity, message=msg, line=line, column=column))
 
     for item in check_visitor.result.errors + check_visitor.result.warnings:
         severity = getattr(item, "severity", "error")

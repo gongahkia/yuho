@@ -240,6 +240,43 @@ def _run_test_file(test_file: Path, verbose: bool, coverage_tracker=None) -> dic
             coverage_tracker.add_test_result(passed=False)
         return result
 
+    # Resolve referencing statements to merge imported symbols
+    if ast.references:
+        try:
+            from yuho.resolver import ModuleResolver
+            search_paths = [test_file.parent, Path.cwd()]
+            lib_path = Path.cwd() / "library"
+            if lib_path.is_dir():
+                search_paths.append(lib_path)
+            resolver = ModuleResolver(search_paths=search_paths)
+            merged_statutes = list(ast.statutes)
+            merged_type_defs = list(ast.type_defs)
+            merged_function_defs = list(ast.function_defs)
+            merged_variables = list(ast.variables)
+            for ref in ast.references:
+                try:
+                    ref_module = resolver.resolve_reference(ref, test_file)
+                    merged_statutes.extend(ref_module.statutes)
+                    merged_type_defs.extend(ref_module.type_defs)
+                    merged_function_defs.extend(ref_module.function_defs)
+                    merged_variables.extend(ref_module.variables)
+                except Exception as e:
+                    if verbose:
+                        click.echo(f"  warning: failed to resolve reference '{ref.path}': {e}")
+            from yuho.ast.nodes import ModuleNode
+            ast = ModuleNode(
+                imports=ast.imports,
+                type_defs=tuple(merged_type_defs),
+                function_defs=tuple(merged_function_defs),
+                statutes=tuple(merged_statutes),
+                variables=tuple(merged_variables),
+                references=ast.references,
+                assertions=ast.assertions,
+                source_location=ast.source_location,
+            )
+        except ImportError:
+            pass
+
     # Evaluate assertions if present
     if hasattr(ast, 'assertions') and ast.assertions:
         env = _build_test_environment(ast)

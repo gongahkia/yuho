@@ -1,0 +1,53 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871
+// Singapore Penal Code Section 411 - Dishonestly Receiving Stolen Property
+// Yuho v5 Syntax
+
+referencing penal_code/s378_theft
+
+struct StolenPropertyCase {
+    string accused,
+    string propertyDescription,
+    bool propertyIsStolen,
+    bool knowledgeOrReasonToBelieveStolen,
+    bool dishonestlyReceived,
+}
+
+fn is_receiving_stolen(bool propertyIsStolen, bool knowledgeOrReasonToBelieveStolen, bool dishonestlyReceived) : bool {
+    match {
+        case TRUE if propertyIsStolen == FALSE := consequence FALSE;
+        case TRUE if knowledgeOrReasonToBelieveStolen == FALSE := consequence FALSE;
+        case TRUE if dishonestlyReceived == FALSE := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
+
+statute 411 "Dishonestly Receiving Stolen Property" {
+    definitions {
+        stolen_property := "Property the possession of which has been transferred by theft, extortion, robbery, or criminal misappropriation";
+        dishonestly_receiving := "Receiving or retaining property knowing or having reason to believe it to be stolen";
+    }
+
+    elements {
+        /// property must be stolen
+        circumstance stolen := "Property is stolen property as defined";
+        /// knowledge or reason to believe it is stolen
+        mens_rea knowledge := "Knowing or having reason to believe the property to be stolen";
+        /// act of receiving or retaining
+        actus_reus receiving := "Dishonestly receiving or retaining the stolen property";
+    }
+
+    penalty {
+        imprisonment := 0 days .. 5 years;
+        fine := $0.00 .. $20,000.00;
+    }
+
+    illustration example1 {
+        "A buys a laptop from B at a suspiciously low price, knowing that B likely stole it. A has dishonestly received stolen property."
+    }
+
+    illustration example2 {
+        "A finds goods left at her doorstep. A has no reason to believe they are stolen and keeps them. A has not committed the offence."
+    }
+}

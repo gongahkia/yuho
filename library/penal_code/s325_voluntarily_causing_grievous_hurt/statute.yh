@@ -1,0 +1,61 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871
+// Singapore Penal Code Section 325 - Voluntarily Causing Grievous Hurt
+// Yuho v5 Syntax
+
+referencing penal_code/s321_voluntarily_causing_hurt
+
+struct GrievousHurtCase {
+    string accused,
+    string victim,
+    string hurtType,
+    bool intentToCauseGrievousHurt,
+    bool grievousHurtCaused,
+}
+
+fn is_grievous_hurt(string hurtType, bool intentToCauseGrievousHurt, bool grievousHurtCaused) : bool {
+    match {
+        case TRUE if grievousHurtCaused == FALSE := consequence FALSE;
+        case TRUE if intentToCauseGrievousHurt == FALSE := consequence FALSE;
+        case TRUE if hurtType == "emasculation" := consequence TRUE;
+        case TRUE if hurtType == "permanent_privation_of_sight" := consequence TRUE;
+        case TRUE if hurtType == "permanent_privation_of_hearing" := consequence TRUE;
+        case TRUE if hurtType == "privation_of_member_or_joint" := consequence TRUE;
+        case TRUE if hurtType == "permanent_disfiguration" := consequence TRUE;
+        case TRUE if hurtType == "fracture_or_dislocation" := consequence TRUE;
+        case TRUE if hurtType == "endangering_life" := consequence TRUE;
+        case TRUE if hurtType == "severe_bodily_pain" := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 325 "Voluntarily Causing Grievous Hurt" {
+    definitions {
+        grievous_hurt := "Hurt that involves emasculation, permanent privation of sight or hearing, privation of any member or joint, permanent disfiguration, fracture or dislocation, or any hurt which endangers life or causes severe bodily pain for 20 days";
+        voluntarily := "With intention or knowledge that the act is likely to cause grievous hurt";
+    }
+
+    elements {
+        /// intent to cause grievous hurt
+        mens_rea intention := "Intention to cause grievous hurt";
+        /// the act of causing grievous hurt
+        actus_reus causing := "Voluntarily causing grievous hurt to any person";
+        /// grievous hurt must actually result
+        circumstance grievous_result := "Grievous hurt as defined is actually caused";
+    }
+
+    penalty {
+        imprisonment := 0 days .. 10 years;
+        fine := $0.00 .. $30,000.00;
+        caning := 0 .. 12 strokes;
+    }
+
+    illustration example1 {
+        "A strikes B on the eye with an iron rod, permanently destroying B's sight in that eye. A has voluntarily caused grievous hurt."
+    }
+
+    illustration example2 {
+        "A throws acid at B, permanently disfiguring B's face. A has voluntarily caused grievous hurt."
+    }
+}

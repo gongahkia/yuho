@@ -77,6 +77,72 @@ As for **how** to contribute to Open Source projects, follow [this guide](https:
 * [freeCodeCamp: Open Sourcing](https://github.com/freeCodeCamp/how-to-contribute-to-open-source)
 * [Video on Open Source](https://youtu.be/8nq14dHrXgo?si=RiVCIzvGh6-WVkWj)
 
+## Developer Quickstart
+
+Set up a local development environment in under 5 minutes.
+
+### Prerequisites
+
+- Python 3.11+
+- Node.js 18+ (for tree-sitter grammar regeneration)
+- Git
+
+### Setup
+
+```bash
+git clone https://github.com/gongahkia/yuho.git
+cd yuho
+python -m venv .venv && source .venv/bin/activate
+pip install -e ".[dev]"
+```
+
+### Project Layout
+
+```
+src/
+  tree-sitter-yuho/    # grammar.js -> parser.c
+  yuho/
+    ast/               # AST nodes, builder, visitor, scope/type analysis
+    cli/               # Click CLI commands
+    transpile/         # JSON, English, LaTeX, Mermaid, Alloy, etc.
+    services/          # analysis pipeline (parse -> AST -> semantic checks)
+    resolver.py        # cross-file module resolution
+library/               # example statutes (.yh files)
+doc/                   # user-facing documentation
+```
+
+### Common Tasks
+
+| Task | Command |
+|:-----|:--------|
+| Run CLI | `yuho --help` |
+| Parse + check a file | `yuho check library/penal_code/s415_cheating/statute.yh` |
+| Transpile to English | `yuho transpile <file> -t english` |
+| Run tests | `yuho test library/penal_code/s415_cheating/test_statute.yh` |
+| Regenerate parser | `cd src/tree-sitter-yuho && npx tree-sitter generate` |
+| Lint | `yuho lint <file>` |
+
+### Adding a Transpiler
+
+1. Create `src/yuho/transpile/<name>_transpiler.py` implementing `TranspilerBase`
+2. Add a variant to `TranspileTarget` enum in `base.py`
+3. Register in `registry.py` `_register_builtins()`
+4. Add to `__init__.py` exports and CLI choice lists
+
+See `doc/ARCHITECTURE.md` for the full module dependency diagram.
+
+### Adding a CLI Command
+
+1. Add implementation in `src/yuho/cli/commands/<name>.py`
+2. Register in `main.py` (top-level) or `commands_registry.py` (grouped)
+
+### Modifying the Grammar
+
+1. Edit `src/tree-sitter-yuho/grammar.js`
+2. Run `cd src/tree-sitter-yuho && npx tree-sitter generate`
+3. Update `src/yuho/ast/builder.py` to handle new CST node types
+4. Verify: `yuho check <file>` on a sample
+
 ## Styleguides
 
 ### Git Commit Messages

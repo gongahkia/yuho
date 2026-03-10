@@ -1,0 +1,52 @@
+// Test file for s411_dishonestly_receiving_stolen_property
+// Yuho v5 Syntax
+
+referencing penal_code/s411_dishonestly_receiving_stolen_property
+
+// ----- test structs -----
+
+struct S411TestCase {
+    bool propertyIsStolen,
+    bool knowledgeOrReasonToBelieveStolen,
+    bool dishonestlyReceived,
+}
+
+// ----- all elements present: guilty -----
+
+S411TestCase allPresent := S411TestCase {
+    propertyIsStolen := TRUE,
+    knowledgeOrReasonToBelieveStolen := TRUE,
+    dishonestlyReceived := TRUE,
+}
+
+assert is_receiving_stolen(allPresent.propertyIsStolen, allPresent.knowledgeOrReasonToBelieveStolen, allPresent.dishonestlyReceived) == TRUE
+
+// ----- property not stolen: not guilty -----
+
+S411TestCase notStolen := S411TestCase {
+    propertyIsStolen := FALSE,
+    knowledgeOrReasonToBelieveStolen := TRUE,
+    dishonestlyReceived := TRUE,
+}
+
+assert is_receiving_stolen(notStolen.propertyIsStolen, notStolen.knowledgeOrReasonToBelieveStolen, notStolen.dishonestlyReceived) == FALSE
+
+// ----- no knowledge: not guilty -----
+
+S411TestCase noKnowledge := S411TestCase {
+    propertyIsStolen := TRUE,
+    knowledgeOrReasonToBelieveStolen := FALSE,
+    dishonestlyReceived := TRUE,
+}
+
+assert is_receiving_stolen(noKnowledge.propertyIsStolen, noKnowledge.knowledgeOrReasonToBelieveStolen, noKnowledge.dishonestlyReceived) == FALSE
+
+// ----- not dishonestly received: not guilty -----
+
+S411TestCase notDishonest := S411TestCase {
+    propertyIsStolen := TRUE,
+    knowledgeOrReasonToBelieveStolen := TRUE,
+    dishonestlyReceived := FALSE,
+}
+
+assert is_receiving_stolen(notDishonest.propertyIsStolen, notDishonest.knowledgeOrReasonToBelieveStolen, notDishonest.dishonestlyReceived) == FALSE

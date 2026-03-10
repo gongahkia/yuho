@@ -911,6 +911,8 @@ class StatuteNode(ASTNode):
     exceptions: Tuple[ExceptionNode, ...] = ()
     case_law: Tuple[CaseLawNode, ...] = ()
     doc_comment: Optional[str] = None
+    jurisdiction: Optional[str] = None
+    jurisdiction_meta: Optional[Dict[str, str]] = None
 
     def accept(self, visitor: "Visitor"):
         return visitor.visit_statute(self)

@@ -14,7 +14,7 @@ from yuho.cli.error_formatter import Colors, colorize
 from yuho.services.analysis import analyze_file, analyze_source
 
 
-ALL_TARGETS = ["json", "jsonld", "english", "latex", "mermaid", "alloy", "graphql", "blocks"]
+ALL_TARGETS = ["json", "jsonld", "english", "latex", "pdf", "mermaid", "alloy", "graphql", "blocks", "bibtex", "html"]
 
 
 def run_transpile(
@@ -90,6 +90,47 @@ def run_transpile(
     for tgt in targets:
         if verbose:
             click.echo(f"Transpiling to {tgt}...")
+
+        # PDF is a special case: runs LaTeX pipeline to produce binary PDF
+        if tgt.lower() == "pdf":
+            try:
+                from yuho.transpile.pdf_pipeline import generate_pdf, PDFGenerationError
+            except ImportError:
+                click.echo(colorize("error: PDF pipeline not available", Colors.RED), err=True)
+                sys.exit(1)
+            pdf_out = output or (
+                str(out_dir / f"{file_path.stem}.pdf") if out_dir
+                else str(file_path.with_suffix(".pdf"))
+            )
+            try:
+                pdf_path = generate_pdf(ast, pdf_out)
+                results.append({"target": "pdf", "output": pdf_path})
+                if not json_output:
+                    click.echo(f"  -> {pdf_path}")
+            except PDFGenerationError as e:
+                click.echo(colorize(f"error: {e}", Colors.RED), err=True)
+                sys.exit(1)
+            continue
+
+        # SVG/PNG: render Mermaid text via mmdc
+        if tgt.lower() in ("svg", "png"):
+            from yuho.transpile.mermaid_transpiler import MermaidTranspiler
+            from yuho.transpile.mermaid_renderer import render_mermaid
+            mermaid_text = MermaidTranspiler().transpile(ast)
+            ext = f".{tgt.lower()}"
+            render_out = output or (
+                str(out_dir / f"{file_path.stem}{ext}") if out_dir
+                else str(file_path.with_suffix(ext))
+            )
+            try:
+                render_mermaid(mermaid_text, render_out, output_format=tgt.lower())
+                results.append({"target": tgt, "output": render_out})
+                if not json_output:
+                    click.echo(f"  -> {render_out}")
+            except RuntimeError as e:
+                click.echo(colorize(f"error: {e}", Colors.RED), err=True)
+                sys.exit(1)
+            continue
 
         try:
             transpile_target = TranspileTarget.from_string(tgt)

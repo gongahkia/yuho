@@ -1,0 +1,19 @@
+[statute]
+section_number = "354"
+title = "Assault or Criminal Force to Outrage Modesty"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[contributor]
+name = "Yuho Team"
+email = ""
+
+[description]
+summary = "Whoever assaults or uses criminal force to any person, intending to outrage or knowing it to be likely that he will thereby outrage the modesty of that person, shall be punished with imprisonment for a term which may extend to 5 years, or with fine, or with caning, or with any combination of such punishments."
+source = "Singapore Penal Code 1871, Section 354"
+
+[verification]
+last_verified = "2026-03-10"
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr354-#pr354-"
+verified_by = "Yuho Team"
+disclaimer = "Educational purposes only. Cross-reference with official SSO text."

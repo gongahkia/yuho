@@ -1,0 +1,54 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871
+// Singapore Penal Code Section 354 - Assault or Criminal Force to Outrage Modesty
+// Yuho v5 Syntax
+
+struct OutrageModestyCase {
+    string accused,
+    string victim,
+    string act,
+    bool intentToOutrageModesty,
+    bool knowledgeLikelyToOutrage,
+    bool useOfForceOrAssault,
+}
+
+fn is_outrage_modesty(bool intentToOutrageModesty, bool knowledgeLikelyToOutrage, bool useOfForceOrAssault) : bool {
+    match {
+        case TRUE if useOfForceOrAssault == FALSE := consequence FALSE;
+        case TRUE if intentToOutrageModesty == TRUE := consequence TRUE;
+        case TRUE if knowledgeLikelyToOutrage == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 354 "Assault or Criminal Force to Outrage Modesty" {
+    definitions {
+        outrage_modesty := "Using criminal force or assault on any person with intent to or knowing it likely to outrage the modesty of that person";
+        criminal_force := "Intentionally using force on any person without that person's consent";
+        assault := "Making any gesture or preparation intending or knowing it to be likely to cause apprehension of criminal force";
+    }
+
+    elements {
+        /// intent to outrage modesty or knowledge of likelihood
+        mens_rea intention := "Intent to outrage modesty or knowledge that act is likely to outrage modesty";
+        /// use of criminal force or assault
+        actus_reus force_or_assault := "Assault or use of criminal force on any person";
+        /// the modesty of the person is outraged
+        circumstance modesty_outraged := "Act outrages the modesty of the person";
+    }
+
+    penalty {
+        imprisonment := 0 days .. 5 years;
+        fine := $0.00 .. $10,000.00;
+        caning := 0 .. 6 strokes;
+    }
+
+    illustration example1 {
+        "A grabs B's arm and touches B inappropriately without consent. A intends to outrage B's modesty. A is guilty under section 354."
+    }
+
+    illustration example2 {
+        "A, in a crowded place, deliberately presses against B knowing it is likely to outrage B's modesty. A is guilty under section 354."
+    }
+}

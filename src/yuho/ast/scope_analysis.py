@@ -136,8 +136,8 @@ class ScopeAnalysisResult:
         line = 0
         column = 0
         if node and node.source_location:
-            line = node.source_location.start_line
-            column = node.source_location.start_column
+            line = node.source_location.line
+            column = node.source_location.col
         error = ScopeError(
             message=message,
             line=line,
@@ -217,8 +217,8 @@ class ScopeAnalysisVisitor(Visitor):
         line = 0
         column = 0
         if node and node.source_location:
-            line = node.source_location.start_line
-            column = node.source_location.start_column
+            line = node.source_location.line
+            column = node.source_location.col
         symbol = Symbol(
             name=name,
             kind=kind,

@@ -1,3 +1,6 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871
 // Singapore Penal Code Section 415 - Cheating
 // Yuho v5 Syntax
 
@@ -39,12 +42,17 @@ statute 415 "Cheating" {
 
     elements {
         all_of {
+            /// deception is the foundational act -- whether or not it was sole inducement
             actus_reus deception := "Deceiving any person";
             any_of {
+                /// per s25: intent to defraud
                 mens_rea fraudulent := "Fraudulently inducing the person";
+                /// per s24: intent to cause wrongful gain/loss
                 mens_rea dishonest := "Dishonestly inducing the person";
             }
+            /// three forms: deliver property, consent to retain, or do/omit an act
             actus_reus inducement := "Inducing delivery of property, consent to retain property, or act/omission";
+            /// damage may be to body, mind, reputation, or property
             circumstance harm := "Causing or likely to cause damage to body, mind, reputation, or property";
         }
     }

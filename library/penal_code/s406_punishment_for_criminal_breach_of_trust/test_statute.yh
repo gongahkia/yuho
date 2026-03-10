@@ -1,0 +1,28 @@
+// Test file for s406_punishment_for_criminal_breach_of_trust
+// Yuho v5 Syntax
+
+referencing penal_code/s406_punishment_for_criminal_breach_of_trust
+
+// ----- test structs -----
+
+struct S406TestCase {
+    bool breachOfTrustCommitted,
+}
+
+// ----- breach committed: punishment applies -----
+
+S406TestCase guilty := S406TestCase {
+    breachOfTrustCommitted := TRUE,
+}
+
+assert guilty.breachOfTrustCommitted == TRUE
+assert s406_applies(guilty.breachOfTrustCommitted) == TRUE
+
+// ----- no breach: no punishment -----
+
+S406TestCase notGuilty := S406TestCase {
+    breachOfTrustCommitted := FALSE,
+}
+
+assert notGuilty.breachOfTrustCommitted == FALSE
+assert s406_applies(notGuilty.breachOfTrustCommitted) == FALSE
