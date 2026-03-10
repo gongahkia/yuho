@@ -1,0 +1,42 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871
+// Singapore Penal Code Section 379 - Punishment for Theft
+// Yuho v5 Syntax
+
+referencing penal_code/s378_theft
+
+struct S379Case {
+    string accused,
+    bool theftCommitted,
+}
+
+fn s379_applies(bool theftCommitted) : bool {
+    match {
+        case TRUE if theftCommitted == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 379 "Punishment for Theft" {
+    definitions {
+        theft := "As defined under section 378";
+        punishment := "Imprisonment or fine or both for committing theft";
+    }
+
+    elements {
+        /// the offence of theft under s378 must be established
+        circumstance theft_committed := "Theft under section 378 is established";
+        /// sentence upon conviction
+        actus_reus conviction := "Conviction for theft";
+    }
+
+    penalty {
+        imprisonment := 0 days .. 7 years;
+        fine := $0.00 .. $10,000.00;
+    }
+
+    illustration example1 {
+        "A picks B's pocket and steals B's wallet. A is convicted of theft and may be imprisoned up to 7 years and fined."
+    }
+}

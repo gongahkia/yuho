@@ -1,0 +1,45 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871
+// Singapore Penal Code Section 302 - Punishment for Murder
+// Yuho v5 Syntax
+
+referencing penal_code/s300_murder
+
+struct MurderPunishmentCase {
+    string accused,
+    string victim,
+    bool murderCommitted,
+    bool deathSentenceApplicable,
+}
+
+fn punishment_applies(bool murderCommitted) : bool {
+    match {
+        case TRUE if murderCommitted == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 302 "Punishment for Murder" {
+    definitions {
+        murder := "As defined under section 300";
+        death_sentence := "Mandatory death penalty for murder";
+        life_imprisonment := "Imprisonment for the remainder of the person's natural life";
+    }
+
+    elements {
+        /// accused must have committed murder under s300
+        circumstance murder_committed := "Murder as defined under section 300 is committed";
+        /// sentence is mandatory upon conviction
+        actus_reus conviction := "Conviction for murder under section 300";
+    }
+
+    penalty {
+        imprisonment := 20 years .. 99 years;
+        caning := 0 strokes .. 24 strokes;
+    }
+
+    illustration example1 {
+        "A is convicted of murdering B by stabbing with intent to kill. A shall be punished with death or imprisonment for life."
+    }
+}

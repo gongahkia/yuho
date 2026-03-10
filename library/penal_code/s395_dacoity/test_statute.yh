@@ -1,0 +1,62 @@
+// Test file for s395_dacoity
+// Yuho v5 Syntax
+
+referencing penal_code/s395_dacoity
+
+// ----- test structs -----
+
+struct S395TestCase {
+    int numberOfPersons,
+    bool robberyCommitted,
+    bool jointlyCommitted,
+}
+
+// ----- 5 persons jointly rob: dacoity -----
+
+S395TestCase fivePersons := S395TestCase {
+    numberOfPersons := 5,
+    robberyCommitted := TRUE,
+    jointlyCommitted := TRUE,
+}
+
+assert is_dacoity(fivePersons.numberOfPersons, fivePersons.robberyCommitted, fivePersons.jointlyCommitted) == TRUE
+
+// ----- 7 persons jointly rob: dacoity -----
+
+S395TestCase sevenPersons := S395TestCase {
+    numberOfPersons := 7,
+    robberyCommitted := TRUE,
+    jointlyCommitted := TRUE,
+}
+
+assert is_dacoity(sevenPersons.numberOfPersons, sevenPersons.robberyCommitted, sevenPersons.jointlyCommitted) == TRUE
+
+// ----- only 4 persons: not dacoity -----
+
+S395TestCase fourPersons := S395TestCase {
+    numberOfPersons := 4,
+    robberyCommitted := TRUE,
+    jointlyCommitted := TRUE,
+}
+
+assert is_dacoity(fourPersons.numberOfPersons, fourPersons.robberyCommitted, fourPersons.jointlyCommitted) == FALSE
+
+// ----- no robbery committed: not dacoity -----
+
+S395TestCase noRobbery := S395TestCase {
+    numberOfPersons := 5,
+    robberyCommitted := FALSE,
+    jointlyCommitted := TRUE,
+}
+
+assert is_dacoity(noRobbery.numberOfPersons, noRobbery.robberyCommitted, noRobbery.jointlyCommitted) == FALSE
+
+// ----- not jointly committed: not dacoity -----
+
+S395TestCase notJoint := S395TestCase {
+    numberOfPersons := 5,
+    robberyCommitted := TRUE,
+    jointlyCommitted := FALSE,
+}
+
+assert is_dacoity(notJoint.numberOfPersons, notJoint.robberyCommitted, notJoint.jointlyCommitted) == FALSE

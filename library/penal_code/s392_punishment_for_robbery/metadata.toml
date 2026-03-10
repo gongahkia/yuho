@@ -1,0 +1,19 @@
+[statute]
+section_number = "392"
+title = "Punishment for Robbery"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[contributor]
+name = "Yuho Team"
+email = ""
+
+[description]
+summary = "Whoever commits robbery shall be punished with imprisonment for a term of not less than 2 years and not more than 14 years, and shall also be punished with caning of not less than 6 strokes."
+source = "Singapore Penal Code 1871, Section 392"
+
+[verification]
+last_verified = "2026-03-10"
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr392-#pr392-"
+verified_by = "Yuho Team"
+disclaimer = "Educational purposes only. Cross-reference with official SSO text."

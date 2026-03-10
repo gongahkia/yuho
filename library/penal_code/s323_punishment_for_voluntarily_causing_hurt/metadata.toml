@@ -1,0 +1,19 @@
+[statute]
+section_number = "323"
+title = "Punishment for Voluntarily Causing Hurt"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[contributor]
+name = "Yuho Team"
+email = ""
+
+[description]
+summary = "Whoever, except in the case provided for by section 334, voluntarily causes hurt, shall be punished with imprisonment for a term which may extend to 3 years, or with fine which may extend to $5,000, or with both."
+source = "Singapore Penal Code 1871, Section 323"
+
+[verification]
+last_verified = "2026-03-10"
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr323-#pr323-"
+verified_by = "Yuho Team"
+disclaimer = "Educational purposes only. Cross-reference with official SSO text."

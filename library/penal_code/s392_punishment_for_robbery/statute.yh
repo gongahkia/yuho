@@ -1,0 +1,50 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871
+// Singapore Penal Code Section 392 - Punishment for Robbery
+// Yuho v5 Syntax
+
+referencing penal_code/s390_robbery
+
+struct S392Case {
+    string accused,
+    bool robberyCommitted,
+    string timeOfDay,
+}
+
+fn s392_punishment(bool robberyCommitted, string timeOfDay) : string {
+    match {
+        case TRUE if robberyCommitted == FALSE := consequence "none";
+        case TRUE if timeOfDay == "after_7pm_before_7am" := consequence "enhanced";
+        case _ := consequence "standard";
+    }
+}
+
+statute 392 "Punishment for Robbery" {
+    definitions {
+        robbery := "As defined under section 390";
+        enhanced_punishment := "If committed between 7pm and 7am, minimum imprisonment of 3 years";
+    }
+
+    elements {
+        /// robbery under s390 must be established
+        circumstance robbery_committed := "Robbery under section 390 is established";
+        /// time of offence affects sentencing
+        circumstance time_of_offence := "Time of day when robbery was committed";
+        /// conviction triggers punishment
+        actus_reus conviction := "Conviction for robbery";
+    }
+
+    penalty {
+        imprisonment := 2 years .. 14 years;
+        caning := 6 strokes .. 24 strokes;
+    }
+
+    illustration example1 {
+        "A robs B at 10pm. A shall be punished with imprisonment of not less than 3 years and not more than 14 years and with caning of not less than 12 strokes."
+    }
+
+    illustration example2 {
+        "A robs B at 2pm. A shall be punished with imprisonment of not less than 2 years and not more than 14 years and with not less than 6 strokes of the cane."
+    }
+}

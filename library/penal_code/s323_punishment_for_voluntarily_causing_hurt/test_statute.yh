@@ -1,0 +1,28 @@
+// Test file for s323_punishment_for_voluntarily_causing_hurt
+// Yuho v5 Syntax
+
+referencing penal_code/s323_punishment_for_voluntarily_causing_hurt
+
+// ----- test structs -----
+
+struct S323TestCase {
+    bool voluntaryHurtCommitted,
+}
+
+// ----- offence committed: punishment applies -----
+
+S323TestCase guilty := S323TestCase {
+    voluntaryHurtCommitted := TRUE,
+}
+
+assert guilty.voluntaryHurtCommitted == TRUE
+assert s323_applies(guilty.voluntaryHurtCommitted) == TRUE
+
+// ----- no offence: no punishment -----
+
+S323TestCase notGuilty := S323TestCase {
+    voluntaryHurtCommitted := FALSE,
+}
+
+assert notGuilty.voluntaryHurtCommitted == FALSE
+assert s323_applies(notGuilty.voluntaryHurtCommitted) == FALSE

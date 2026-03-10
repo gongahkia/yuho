@@ -1,0 +1,54 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871
+// Singapore Penal Code Section 321 - Voluntarily Causing Hurt
+// Yuho v5 Syntax
+
+referencing penal_code/s319_hurt
+
+struct VoluntaryHurtCase {
+    string accused,
+    string victim,
+    string action,
+    bool intentToCauseHurt,
+    bool knowledgeLikelyToCauseHurt,
+    bool hurtCaused,
+}
+
+fn is_voluntary_hurt(bool intentToCauseHurt, bool knowledgeLikelyToCauseHurt, bool hurtCaused) : bool {
+    match {
+        case TRUE if hurtCaused == FALSE := consequence FALSE;
+        case TRUE if intentToCauseHurt == TRUE := consequence TRUE;
+        case TRUE if knowledgeLikelyToCauseHurt == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 321 "Voluntarily Causing Hurt" {
+    definitions {
+        voluntarily := "With intention or knowledge that the act is likely to cause hurt";
+        hurt := "As defined under section 319";
+    }
+
+    elements {
+        /// intent or knowledge of likelihood of causing hurt
+        mens_rea intention := "Intention to cause hurt or knowledge that act is likely to cause hurt";
+        /// the physical act of causing hurt
+        actus_reus causing_hurt := "Doing any act that causes hurt to any person";
+        /// hurt must actually result
+        circumstance hurt_caused := "Hurt as defined in section 319 is actually caused";
+    }
+
+    penalty {
+        imprisonment := 0 days .. 3 years;
+        fine := $0.00 .. $5,000.00;
+    }
+
+    illustration example1 {
+        "A intentionally pushes B, causing B to fall and sustain injuries. A has voluntarily caused hurt to B."
+    }
+
+    illustration example2 {
+        "A throws a stone knowing it is likely to hit B. The stone hits B causing pain. A has voluntarily caused hurt."
+    }
+}

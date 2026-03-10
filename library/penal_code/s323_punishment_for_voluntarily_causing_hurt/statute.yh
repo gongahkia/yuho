@@ -1,0 +1,43 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871
+// Singapore Penal Code Section 323 - Punishment for Voluntarily Causing Hurt
+// Yuho v5 Syntax
+
+referencing penal_code/s321_voluntarily_causing_hurt
+
+struct S323Case {
+    string accused,
+    string victim,
+    bool voluntaryHurtCommitted,
+}
+
+fn s323_applies(bool voluntaryHurtCommitted) : bool {
+    match {
+        case TRUE if voluntaryHurtCommitted == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 323 "Punishment for Voluntarily Causing Hurt" {
+    definitions {
+        voluntary_hurt := "As defined under section 321";
+        punishment := "Imprisonment or fine or both for voluntarily causing hurt";
+    }
+
+    elements {
+        /// the offence under s321 must be established
+        circumstance offence_committed := "Voluntarily causing hurt under section 321 is established";
+        /// sentence upon conviction
+        actus_reus conviction := "Conviction for voluntarily causing hurt";
+    }
+
+    penalty {
+        imprisonment := 0 days .. 3 years;
+        fine := $0.00 .. $5,000.00;
+    }
+
+    illustration example1 {
+        "A punches B in the face causing a bruise. A is convicted of voluntarily causing hurt and may be imprisoned up to 3 years or fined up to $5,000 or both."
+    }
+}

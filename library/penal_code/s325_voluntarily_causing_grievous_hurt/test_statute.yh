@@ -1,0 +1,62 @@
+// Test file for s325_voluntarily_causing_grievous_hurt
+// Yuho v5 Syntax
+
+referencing penal_code/s325_voluntarily_causing_grievous_hurt
+
+// ----- test structs -----
+
+struct S325TestCase {
+    string hurtType,
+    bool intentToCauseGrievousHurt,
+    bool grievousHurtCaused,
+}
+
+// ----- permanent privation of sight with intent: guilty -----
+
+S325TestCase blindingCase := S325TestCase {
+    hurtType := "permanent_privation_of_sight",
+    intentToCauseGrievousHurt := TRUE,
+    grievousHurtCaused := TRUE,
+}
+
+assert is_grievous_hurt(blindingCase.hurtType, blindingCase.intentToCauseGrievousHurt, blindingCase.grievousHurtCaused) == TRUE
+
+// ----- fracture with intent: guilty -----
+
+S325TestCase fractureCase := S325TestCase {
+    hurtType := "fracture_or_dislocation",
+    intentToCauseGrievousHurt := TRUE,
+    grievousHurtCaused := TRUE,
+}
+
+assert is_grievous_hurt(fractureCase.hurtType, fractureCase.intentToCauseGrievousHurt, fractureCase.grievousHurtCaused) == TRUE
+
+// ----- no intent: not guilty -----
+
+S325TestCase noIntent := S325TestCase {
+    hurtType := "fracture_or_dislocation",
+    intentToCauseGrievousHurt := FALSE,
+    grievousHurtCaused := TRUE,
+}
+
+assert is_grievous_hurt(noIntent.hurtType, noIntent.intentToCauseGrievousHurt, noIntent.grievousHurtCaused) == FALSE
+
+// ----- no grievous hurt caused: not guilty -----
+
+S325TestCase noGrievousHurt := S325TestCase {
+    hurtType := "fracture_or_dislocation",
+    intentToCauseGrievousHurt := TRUE,
+    grievousHurtCaused := FALSE,
+}
+
+assert is_grievous_hurt(noGrievousHurt.hurtType, noGrievousHurt.intentToCauseGrievousHurt, noGrievousHurt.grievousHurtCaused) == FALSE
+
+// ----- non-qualifying hurt type: not guilty -----
+
+S325TestCase minorHurt := S325TestCase {
+    hurtType := "bruise",
+    intentToCauseGrievousHurt := TRUE,
+    grievousHurtCaused := TRUE,
+}
+
+assert is_grievous_hurt(minorHurt.hurtType, minorHurt.intentToCauseGrievousHurt, minorHurt.grievousHurtCaused) == FALSE

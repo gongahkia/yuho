@@ -1,0 +1,53 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871
+// Singapore Penal Code Section 395 - Punishment for Dacoity
+// Yuho v5 Syntax
+
+referencing penal_code/s390_robbery
+
+struct DacoityCase {
+    string accused,
+    int numberOfPersons,
+    bool robberyCommitted,
+    bool jointlyCommitted,
+}
+
+fn is_dacoity(int numberOfPersons, bool robberyCommitted, bool jointlyCommitted) : bool {
+    match {
+        case TRUE if robberyCommitted == FALSE := consequence FALSE;
+        case TRUE if jointlyCommitted == FALSE := consequence FALSE;
+        case TRUE if numberOfPersons == 5 := consequence TRUE;
+        case TRUE if numberOfPersons == 6 := consequence TRUE;
+        case TRUE if numberOfPersons == 7 := consequence TRUE;
+        case TRUE if numberOfPersons == 8 := consequence TRUE;
+        case TRUE if numberOfPersons == 9 := consequence TRUE;
+        case TRUE if numberOfPersons == 10 := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 395 "Punishment for Dacoity" {
+    definitions {
+        dacoity := "When 5 or more persons conjointly commit or attempt to commit a robbery";
+        conjointly := "Acting together in furtherance of common intention";
+    }
+
+    elements {
+        /// five or more persons must be involved
+        circumstance five_or_more := "5 or more persons acting conjointly";
+        /// robbery or attempt thereof
+        actus_reus robbery := "Committing or attempting to commit robbery";
+        /// joint action requirement
+        mens_rea common_intention := "Common intention to commit robbery";
+    }
+
+    penalty {
+        imprisonment := 5 years .. 20 years;
+        caning := 12 strokes .. 24 strokes;
+    }
+
+    illustration example1 {
+        "A, B, C, D and E jointly rob a bank. As 5 persons conjointly committed robbery, every one of them is guilty of dacoity."
+    }
+}

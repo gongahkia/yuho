@@ -1,0 +1,52 @@
+// Test file for s363_kidnapping
+// Yuho v5 Syntax
+
+referencing penal_code/s363_kidnapping
+
+// ----- test structs -----
+
+struct S363TestCase {
+    string kidnappingType,
+    bool conveyedFromSingapore,
+    bool takenFromLawfulGuardian,
+}
+
+// ----- kidnapping from Singapore: guilty -----
+
+S363TestCase fromSG := S363TestCase {
+    kidnappingType := "from_singapore",
+    conveyedFromSingapore := TRUE,
+    takenFromLawfulGuardian := FALSE,
+}
+
+assert is_kidnapping(fromSG.kidnappingType, fromSG.conveyedFromSingapore, fromSG.takenFromLawfulGuardian) == TRUE
+
+// ----- kidnapping from lawful guardianship: guilty -----
+
+S363TestCase fromGuardian := S363TestCase {
+    kidnappingType := "from_lawful_guardianship",
+    conveyedFromSingapore := FALSE,
+    takenFromLawfulGuardian := TRUE,
+}
+
+assert is_kidnapping(fromGuardian.kidnappingType, fromGuardian.conveyedFromSingapore, fromGuardian.takenFromLawfulGuardian) == TRUE
+
+// ----- not conveyed from Singapore: not guilty -----
+
+S363TestCase notConveyed := S363TestCase {
+    kidnappingType := "from_singapore",
+    conveyedFromSingapore := FALSE,
+    takenFromLawfulGuardian := FALSE,
+}
+
+assert is_kidnapping(notConveyed.kidnappingType, notConveyed.conveyedFromSingapore, notConveyed.takenFromLawfulGuardian) == FALSE
+
+// ----- unknown type: not guilty -----
+
+S363TestCase unknownType := S363TestCase {
+    kidnappingType := "none",
+    conveyedFromSingapore := TRUE,
+    takenFromLawfulGuardian := TRUE,
+}
+
+assert is_kidnapping(unknownType.kidnappingType, unknownType.conveyedFromSingapore, unknownType.takenFromLawfulGuardian) == FALSE

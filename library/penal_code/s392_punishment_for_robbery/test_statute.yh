@@ -1,0 +1,38 @@
+// Test file for s392_punishment_for_robbery
+// Yuho v5 Syntax
+
+referencing penal_code/s392_punishment_for_robbery
+
+// ----- test structs -----
+
+struct S392TestCase {
+    bool robberyCommitted,
+    string timeOfDay,
+}
+
+// ----- robbery at night: enhanced punishment -----
+
+S392TestCase nightRobbery := S392TestCase {
+    robberyCommitted := TRUE,
+    timeOfDay := "after_7pm_before_7am",
+}
+
+assert s392_punishment(nightRobbery.robberyCommitted, nightRobbery.timeOfDay) == "enhanced"
+
+// ----- robbery in daytime: standard punishment -----
+
+S392TestCase dayRobbery := S392TestCase {
+    robberyCommitted := TRUE,
+    timeOfDay := "daytime",
+}
+
+assert s392_punishment(dayRobbery.robberyCommitted, dayRobbery.timeOfDay) == "standard"
+
+// ----- no robbery: no punishment -----
+
+S392TestCase noRobbery := S392TestCase {
+    robberyCommitted := FALSE,
+    timeOfDay := "daytime",
+}
+
+assert s392_punishment(noRobbery.robberyCommitted, noRobbery.timeOfDay) == "none"

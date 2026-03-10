@@ -1,0 +1,28 @@
+// Test file for s465_punishment_for_forgery
+// Yuho v5 Syntax
+
+referencing penal_code/s465_punishment_for_forgery
+
+// ----- test structs -----
+
+struct S465TestCase {
+    bool forgeryCommitted,
+}
+
+// ----- forgery committed: punishment applies -----
+
+S465TestCase guilty := S465TestCase {
+    forgeryCommitted := TRUE,
+}
+
+assert guilty.forgeryCommitted == TRUE
+assert s465_applies(guilty.forgeryCommitted) == TRUE
+
+// ----- no forgery: no punishment -----
+
+S465TestCase notGuilty := S465TestCase {
+    forgeryCommitted := FALSE,
+}
+
+assert notGuilty.forgeryCommitted == FALSE
+assert s465_applies(notGuilty.forgeryCommitted) == FALSE
