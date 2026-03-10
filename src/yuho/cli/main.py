@@ -944,6 +944,28 @@ def tui() -> None:
     run_tui()
 
 
+@cli.command()
+@click.option("-o", "--output", type=click.Path(), help="Output file path")
+def schema(output: Optional[str]) -> None:
+    """
+    Print JSON Schema for Yuho JSON transpiler output.
+
+    Useful for validating transpiler output or integrating with
+    downstream tools that consume Yuho JSON.
+
+    Examples:
+        yuho schema
+        yuho schema -o yuho-ast.schema.json
+    """
+    from yuho.transpile.json_schema import generate_json_schema
+    text = generate_json_schema()
+    if output:
+        Path(output).write_text(text, encoding="utf-8")
+        click.echo(f"Schema written to {output}")
+    else:
+        print(text)
+
+
 def main() -> None:
     """Main entry point with global error handling."""
     try:
