@@ -484,3 +484,135 @@ def run_diff(
     # Exit with code 1 if there are changes (useful for CI)
     if changes:
         sys.exit(1)
+
+
+def run_diff_score(
+    model_file: str,
+    student_file: str,
+    json_output: bool = False,
+    verbose: bool = False,
+    color: bool = True,
+) -> None:
+    """
+    Score a student file against a model answer.
+
+    Computes element coverage: what fraction of the model's elements,
+    definitions, and penalties the student file also contains.
+    """
+    import json as json_module
+    from yuho.parser.wrapper import validate_file_path
+    try:
+        model_path = validate_file_path(model_file)
+        student_path = validate_file_path(student_file)
+    except (ValueError, FileNotFoundError) as e:
+        click.echo(f"error: {e}", err=True)
+        sys.exit(1)
+    parser = get_parser()
+
+    def parse_file(path: Path) -> Optional[ModuleNode]:
+        result = parser.parse_file(path)
+        if result.errors:
+            click.echo(colorize(f"error: Parse errors in {path}:", Colors.RED), err=True)
+            return None
+        builder = ASTBuilder(result.source, result.file)
+        return builder.build(result.tree.root_node)
+
+    model_ast = parse_file(model_path)
+    student_ast = parse_file(student_path)
+    if model_ast is None or student_ast is None:
+        sys.exit(1)
+
+    scores = _compute_coverage_score(model_ast, student_ast)
+    if json_output:
+        print(json_module.dumps(scores, indent=2))
+    else:
+        c = lambda t, clr: colorize(t, clr) if color else t
+        click.echo(f"Model: {model_path}")
+        click.echo(f"Student: {student_path}")
+        click.echo()
+        for statute_score in scores["statutes"]:
+            section = statute_score["section"]
+            click.echo(c(f"Section {section}:", Colors.BOLD))
+            for category, data in statute_score["categories"].items():
+                matched = data["matched"]
+                total = data["total"]
+                pct = (matched / total * 100) if total > 0 else 100
+                color_code = Colors.CYAN if pct == 100 else Colors.YELLOW if pct >= 50 else Colors.RED
+                click.echo(f"  {category}: {c(f'{matched}/{total}', color_code)} ({pct:.0f}%)")
+                for m in data.get("missing", []):
+                    click.echo(c(f"    missing: {m}", Colors.RED))
+        click.echo()
+        overall = scores["overall_percent"]
+        overall_color = Colors.CYAN if overall == 100 else Colors.YELLOW if overall >= 50 else Colors.RED
+        click.echo(f"Overall: {c(f'{overall:.0f}%', overall_color + Colors.BOLD)}")
+
+
+def _compute_coverage_score(model: ModuleNode, student: ModuleNode) -> dict:
+    """Compute coverage of model elements in student submission."""
+    model_statutes = {s.section_number: s for s in model.statutes}
+    student_statutes = {s.section_number: s for s in student.statutes}
+    total_items = 0
+    matched_items = 0
+    statute_scores = []
+    for section, model_s in model_statutes.items():
+        student_s = student_statutes.get(section)
+        categories = {}
+        # definitions
+        model_defs = {d.term for d in model_s.definitions}
+        student_defs = {d.term for d in student_s.definitions} if student_s else set()
+        matched_defs = model_defs & student_defs
+        missing_defs = model_defs - student_defs
+        categories["definitions"] = {
+            "total": len(model_defs), "matched": len(matched_defs),
+            "missing": sorted(missing_defs),
+        }
+        total_items += len(model_defs)
+        matched_items += len(matched_defs)
+        # elements
+        model_elems = _collect_element_names(model_s.elements)
+        student_elems = _collect_element_names(student_s.elements) if student_s else set()
+        matched_elems = model_elems & student_elems
+        missing_elems = model_elems - student_elems
+        categories["elements"] = {
+            "total": len(model_elems), "matched": len(matched_elems),
+            "missing": sorted(missing_elems),
+        }
+        total_items += len(model_elems)
+        matched_items += len(matched_elems)
+        # penalty
+        has_model_penalty = model_s.penalty is not None
+        has_student_penalty = student_s.penalty is not None if student_s else False
+        penalty_match = 1 if has_model_penalty and has_student_penalty else 0
+        penalty_total = 1 if has_model_penalty else 0
+        categories["penalty"] = {
+            "total": penalty_total, "matched": penalty_match,
+            "missing": ["penalty block"] if has_model_penalty and not has_student_penalty else [],
+        }
+        total_items += penalty_total
+        matched_items += penalty_match
+        # exceptions
+        model_exc = {e.label for e in model_s.exceptions if e.label}
+        student_exc = {e.label for e in student_s.exceptions if e.label} if student_s else set()
+        matched_exc = model_exc & student_exc
+        missing_exc = model_exc - student_exc
+        categories["exceptions"] = {
+            "total": len(model_exc), "matched": len(matched_exc),
+            "missing": sorted(missing_exc),
+        }
+        total_items += len(model_exc)
+        matched_items += len(matched_exc)
+        statute_scores.append({"section": section, "categories": categories})
+    overall = (matched_items / total_items * 100) if total_items > 0 else 100
+    return {"statutes": statute_scores, "total_items": total_items, "matched_items": matched_items, "overall_percent": round(overall, 1)}
+
+
+def _collect_element_names(elements) -> set:
+    """Recursively collect element names from elements/groups."""
+    from yuho.ast.nodes import ElementNode, ElementGroupNode
+    names = set()
+    for elem in elements:
+        if isinstance(elem, ElementNode):
+            names.add(elem.name)
+        elif isinstance(elem, ElementGroupNode):
+            names.update(_collect_element_names(elem.members))
+    return names
