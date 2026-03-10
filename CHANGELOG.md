@@ -23,10 +23,30 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 - **Grammar development guide** -- `src/tree-sitter-yuho/GRAMMAR.md`
 - **Developer quickstart** -- added to `.github/CONTRIBUTING.md`
 
+- **Comparative transpiler** -- side-by-side markdown table comparing multiple statutes (`yuho transpile -t comparative`)
+- **Verification report** -- LaTeX structural completeness report (`yuho verify-report`)
+- **Jurisdiction metadata** -- `@jurisdiction` and `@meta` doc-comment annotations on statutes
+- **Compliance matrix** -- checklist generator for compliance officers (`yuho compliance-matrix`)
+- **Training pair export** -- JSONL export for LLM fine-tuning (`yuho export-training`)
+- **Pre-built explanations** -- batch English explanation generator (`yuho explain-all`)
+- **Web playground** -- browser-based editor with live transpilation (`yuho playground`)
+- **Static site generator** -- browsable HTML site from statute library (`yuho static-site`)
+- **Z3 test generation** -- generate test cases via constraint solving (`yuho generate-tests`)
+- **Porting guide** -- `doc/PORTING_GUIDE.md` for modeling new jurisdictions
+- **Python SDK docs** -- `doc/SDK.md` covering all public APIs
+- **OpenAPI spec** -- `doc/openapi.yaml` for REST API endpoints
+- **Dockerfile** -- production container with tree-sitter and all dependencies
+- **GitHub Action** -- CI/CD workflow for Docker builds
+- **Schema versioning** -- `AST_SCHEMA_VERSION` constant in JSON Schema module
+- **Expanded library** -- 25 Singapore Penal Code sections (was 12)
+- **Real per-element tests** -- parametrized tests for all library statutes
+- **E2E transpiler tests** -- roundtrip tests for all transpile targets
+
 ### Changed
 - tree-sitter grammar: `doc_comment` now parsed as named children of declarations (prec 1 vs -1)
 - English transpiler accepts `plain_language=True` for simplified output
-- Transpile CLI now supports 13 target formats (was 9)
+- Transpile CLI now supports 16 target formats (was 9)
+- StatuteNode now carries `jurisdiction` and `jurisdiction_meta` fields
 
 ### Fixed
 - Module resolver not running during semantic analysis
