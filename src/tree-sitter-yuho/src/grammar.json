@@ -42,17 +42,21 @@
     "comment": {
       "type": "TOKEN",
       "content": {
-        "type": "SEQ",
-        "members": [
-          {
-            "type": "STRING",
-            "value": "//"
-          },
-          {
-            "type": "PATTERN",
-            "value": ".*"
-          }
-        ]
+        "type": "PREC",
+        "value": -1,
+        "content": {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "//"
+            },
+            {
+              "type": "PATTERN",
+              "value": "[^\\n]*"
+            }
+          ]
+        }
       }
     },
     "multiline_comment": {
@@ -78,17 +82,21 @@
     "doc_comment": {
       "type": "TOKEN",
       "content": {
-        "type": "SEQ",
-        "members": [
-          {
-            "type": "STRING",
-            "value": "///"
-          },
-          {
-            "type": "PATTERN",
-            "value": ".*"
-          }
-        ]
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "///"
+            },
+            {
+              "type": "PATTERN",
+              "value": "[^\\n]*"
+            }
+          ]
+        }
       }
     },
     "_literal": {
@@ -535,6 +543,17 @@
       "type": "SEQ",
       "members": [
         {
+          "type": "REPEAT",
+          "content": {
+            "type": "FIELD",
+            "name": "doc_comment",
+            "content": {
+              "type": "SYMBOL",
+              "name": "doc_comment"
+            }
+          }
+        },
+        {
           "type": "STRING",
           "value": "struct"
         },
@@ -616,6 +635,17 @@
     "field_definition": {
       "type": "SEQ",
       "members": [
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "FIELD",
+            "name": "doc_comment",
+            "content": {
+              "type": "SYMBOL",
+              "name": "doc_comment"
+            }
+          }
+        },
         {
           "type": "FIELD",
           "name": "type",
@@ -971,6 +1001,17 @@
       "type": "SEQ",
       "members": [
         {
+          "type": "REPEAT",
+          "content": {
+            "type": "FIELD",
+            "name": "doc_comment",
+            "content": {
+              "type": "SYMBOL",
+              "name": "doc_comment"
+            }
+          }
+        },
+        {
           "type": "STRING",
           "value": "fn"
         },
@@ -1102,6 +1143,17 @@
     "statute_block": {
       "type": "SEQ",
       "members": [
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "FIELD",
+            "name": "doc_comment",
+            "content": {
+              "type": "SYMBOL",
+              "name": "doc_comment"
+            }
+          }
+        },
         {
           "type": "STRING",
           "value": "statute"
@@ -1330,6 +1382,17 @@
     "element_entry": {
       "type": "SEQ",
       "members": [
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "FIELD",
+            "name": "doc_comment",
+            "content": {
+              "type": "SYMBOL",
+              "name": "doc_comment"
+            }
+          }
+        },
         {
           "type": "FIELD",
           "name": "element_type",
