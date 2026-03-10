@@ -41,7 +41,7 @@ statute 354 "Assault or Criminal Force to Outrage Modesty" {
     penalty {
         imprisonment := 0 days .. 5 years;
         fine := $0.00 .. $10,000.00;
-        caning := 0 strokes .. 6 strokes;
+        caning := 0 .. 6 strokes;
     }
 
     illustration example1 {

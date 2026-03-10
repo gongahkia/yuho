@@ -37,7 +37,7 @@ statute 392 "Punishment for Robbery" {
 
     penalty {
         imprisonment := 2 years .. 14 years;
-        caning := 6 strokes .. 24 strokes;
+        caning := 6 .. 24 strokes;
     }
 
     illustration example1 {

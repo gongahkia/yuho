@@ -36,7 +36,7 @@ statute 302 "Punishment for Murder" {
 
     penalty {
         imprisonment := 20 years .. 99 years;
-        caning := 0 strokes .. 24 strokes;
+        caning := 0 .. 24 strokes;
     }
 
     illustration example1 {

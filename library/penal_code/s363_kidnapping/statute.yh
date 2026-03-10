@@ -38,7 +38,7 @@ statute 363 "Punishment for Kidnapping" {
     penalty {
         imprisonment := 0 days .. 10 years;
         fine := $0.00 .. $30,000.00;
-        caning := 0 strokes .. 12 strokes;
+        caning := 0 .. 12 strokes;
     }
 
     illustration example1 {

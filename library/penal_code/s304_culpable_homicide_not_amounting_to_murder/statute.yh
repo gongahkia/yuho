@@ -43,7 +43,7 @@ statute 304 "Culpable Homicide not amounting to Murder" {
     penalty {
         imprisonment := 0 days .. 20 years;
         fine := $0.00 .. $50,000.00;
-        caning := 0 strokes .. 24 strokes;
+        caning := 0 .. 24 strokes;
     }
 
     illustration example1 {

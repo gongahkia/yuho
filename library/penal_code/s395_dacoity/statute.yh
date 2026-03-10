@@ -44,7 +44,7 @@ statute 395 "Punishment for Dacoity" {
 
     penalty {
         imprisonment := 5 years .. 20 years;
-        caning := 12 strokes .. 24 strokes;
+        caning := 12 .. 24 strokes;
     }
 
     illustration example1 {
