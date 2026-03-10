@@ -1040,6 +1040,25 @@ def explain_all(ctx: click.Context, directory: str, output_dir: str) -> None:
     )
 
 
+@cli.command("static-site")
+@click.option("-d", "--directory", default="library", type=click.Path(exists=True), help="Source statute directory")
+@click.option("-o", "--output-dir", default="site", type=click.Path(), help="Output directory for HTML files")
+@click.pass_context
+def static_site(ctx: click.Context, directory: str, output_dir: str) -> None:
+    """
+    Generate a browsable HTML site from the statute library.
+
+    Produces an index page linking to individual statute pages,
+    each with English explanation, Mermaid diagram, and source.
+
+    Examples:
+        yuho static-site
+        yuho static-site -d ./my-library -o ./docs
+    """
+    from yuho.cli.commands.static_site import run_static_site
+    run_static_site(directory=directory, output_dir=output_dir, verbose=ctx.obj["verbose"])
+
+
 @cli.command()
 @click.option("-p", "--port", type=int, default=8080, show_default=True, help="Server port")
 @click.option("--host", default="127.0.0.1", show_default=True, help="Host to bind to")
