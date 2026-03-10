@@ -966,6 +966,32 @@ def schema(output: Optional[str]) -> None:
         print(text)
 
 
+@cli.command("export-training")
+@click.option("-o", "--output", default="training_pairs.jsonl", type=click.Path(), help="Output JSONL file")
+@click.option("-d", "--directory", type=click.Path(exists=True), help="Statute directory (default: library/)")
+@click.option("--mermaid", "include_mermaid", is_flag=True, help="Include Mermaid diagrams in output")
+@click.pass_context
+def export_training(ctx: click.Context, output: str, directory: Optional[str], include_mermaid: bool) -> None:
+    """
+    Export statute/English pairs as JSONL for LLM fine-tuning.
+
+    Each line contains the raw .yh source, English explanation,
+    section number, and title. Optionally includes Mermaid diagrams.
+
+    Examples:
+        yuho export-training
+        yuho export-training -o pairs.jsonl --mermaid
+        yuho export-training -d ./my-statutes
+    """
+    from yuho.cli.commands.export_training import run_export_training
+    run_export_training(
+        output=output,
+        directory=directory,
+        include_mermaid=include_mermaid,
+        verbose=ctx.obj["verbose"],
+    )
+
+
 def main() -> None:
     """Main entry point with global error handling."""
     try:
