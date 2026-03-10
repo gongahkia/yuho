@@ -19,6 +19,7 @@ from yuho.transpile.alloy_transpiler import AlloyTranspiler
 from yuho.transpile.latex_transpiler import LaTeXTranspiler, compile_to_pdf
 from yuho.transpile.bibtex_transpiler import BibTeXTranspiler
 from yuho.transpile.html_transpiler import HTMLTranspiler
+from yuho.transpile.comparative_transpiler import ComparativeTranspiler
 from yuho.transpile.registry import TranspilerRegistry
 
 __all__ = [
@@ -34,6 +35,7 @@ __all__ = [
     "AlloyTranspiler",
     "BibTeXTranspiler",
     "HTMLTranspiler",
+    "ComparativeTranspiler",
     "get_transpiler",
 ]
 

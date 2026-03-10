@@ -21,6 +21,7 @@ class TranspileTarget(Enum):
     BLOCKS = auto()
     BIBTEX = auto()
     HTML = auto()
+    COMPARATIVE = auto()
 
     @classmethod
     def from_string(cls, name: str) -> "TranspileTarget":
@@ -43,6 +44,8 @@ class TranspileTarget(Enum):
             "bibtex": cls.BIBTEX,
             "bib": cls.BIBTEX,
             "html": cls.HTML,
+            "comparative": cls.COMPARATIVE,
+            "compare": cls.COMPARATIVE,
         }
         target = mapping.get(name.lower())
         if not target:
@@ -63,6 +66,7 @@ class TranspileTarget(Enum):
             TranspileTarget.BLOCKS: ".blocks",
             TranspileTarget.BIBTEX: ".bib",
             TranspileTarget.HTML: ".html",
+            TranspileTarget.COMPARATIVE: ".md",
         }
         return extensions.get(self, ".txt")
 
