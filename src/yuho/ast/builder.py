@@ -67,6 +67,24 @@ class ASTBuilder:
         start_line = node.start_point[0]
         return self._doc_comment_lines.get(start_line)
 
+    @staticmethod
+    def _extract_jurisdiction(doc: Optional[str]) -> tuple:
+        """Extract @jurisdiction and @meta annotations from doc-comment."""
+        if not doc:
+            return None, None
+        jurisdiction = None
+        meta = {}
+        for line in doc.split("\n"):
+            stripped = line.strip()
+            if stripped.startswith("@jurisdiction "):
+                jurisdiction = stripped[len("@jurisdiction "):].strip()
+            elif stripped.startswith("@meta "):
+                rest = stripped[len("@meta "):].strip()
+                if "=" in rest:
+                    k, _, v = rest.partition("=")
+                    meta[k.strip()] = v.strip()
+        return jurisdiction, meta if meta else None
+
     def build(self, root_node) -> nodes.ModuleNode:
         """
         Build a ModuleNode from a tree-sitter root node.
@@ -857,6 +875,9 @@ class ASTBuilder:
             elif child.type == "caselaw_block":
                 case_law.append(self._build_caselaw(child))
 
+        doc = self._get_doc_comment(node)
+        jurisdiction, jurisdiction_meta = self._extract_jurisdiction(doc)
+
         return nodes.StatuteNode(
             section_number=section_number,
             title=title,
@@ -866,7 +887,9 @@ class ASTBuilder:
             illustrations=tuple(illustrations),
             exceptions=tuple(exceptions),
             case_law=tuple(case_law),
-            doc_comment=self._get_doc_comment(node),
+            doc_comment=doc,
+            jurisdiction=jurisdiction,
+            jurisdiction_meta=jurisdiction_meta,
             source_location=self._loc(node),
         )
 

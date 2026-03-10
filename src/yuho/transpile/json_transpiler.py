@@ -230,6 +230,10 @@ class JSONTranspiler(TranspilerBase, Visitor):
                 result["exceptions"] = [self._to_dict(e) for e in node.exceptions]
             if node.case_law:
                 result["case_law"] = [self._to_dict(c) for c in node.case_law]
+            if node.jurisdiction:
+                result["jurisdiction"] = node.jurisdiction
+            if node.jurisdiction_meta:
+                result["jurisdiction_meta"] = dict(node.jurisdiction_meta)
         elif isinstance(node, nodes.ImportNode):
             result["path"] = node.path
             result["imported_names"] = list(node.imported_names)

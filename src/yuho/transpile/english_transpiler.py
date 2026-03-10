@@ -113,6 +113,11 @@ class EnglishTranspiler(TranspilerBase, Visitor):
         # Header
         self._emit(f"SECTION {node.section_number}: {title}")
         self._emit("=" * 60)
+        if node.jurisdiction:
+            self._emit(f"Jurisdiction: {node.jurisdiction}")
+            if node.jurisdiction_meta:
+                for k, v in node.jurisdiction_meta.items():
+                    self._emit(f"  {k}: {v}")
         self._emit_blank()
 
         # Definitions
