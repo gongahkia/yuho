@@ -1040,6 +1040,37 @@ def explain_all(ctx: click.Context, directory: str, output_dir: str) -> None:
     )
 
 
+@cli.command("verify-report")
+@click.argument("file", type=click.Path(exists=True))
+@click.option("-o", "--output", type=click.Path(), help="Output .tex file path")
+@click.pass_context
+def verify_report(ctx: click.Context, file: str, output: Optional[str]) -> None:
+    """
+    Generate a LaTeX verification report for statute completeness.
+
+    Checks structural elements (title, actus reus, mens rea, penalty,
+    definitions, illustrations, exceptions, jurisdiction, doc-comments)
+    and produces a color-coded PASS/WARN/FAIL table.
+
+    Examples:
+        yuho verify-report statute.yh
+        yuho verify-report statute.yh -o report.tex
+    """
+    from yuho.services.analysis import analyze_file
+    from yuho.transpile.verification_report import generate_verification_report
+    result = analyze_file(file)
+    if not result.is_valid or result.ast is None:
+        for err in result.errors:
+            click.echo(f"  {err}", err=True)
+        sys.exit(1)
+    tex = generate_verification_report(result.ast)
+    if output:
+        Path(output).write_text(tex, encoding="utf-8")
+        click.echo(f"Report written to {output}")
+    else:
+        print(tex)
+
+
 def main() -> None:
     """Main entry point with global error handling."""
     try:
