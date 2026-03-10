@@ -20,6 +20,7 @@ class TranspileTarget(Enum):
     GRAPHQL = auto()
     BLOCKS = auto()
     BIBTEX = auto()
+    HTML = auto()
 
     @classmethod
     def from_string(cls, name: str) -> "TranspileTarget":
@@ -41,6 +42,7 @@ class TranspileTarget(Enum):
             "block": cls.BLOCKS,
             "bibtex": cls.BIBTEX,
             "bib": cls.BIBTEX,
+            "html": cls.HTML,
         }
         target = mapping.get(name.lower())
         if not target:
@@ -60,6 +62,7 @@ class TranspileTarget(Enum):
             TranspileTarget.GRAPHQL: ".graphql",
             TranspileTarget.BLOCKS: ".blocks",
             TranspileTarget.BIBTEX: ".bib",
+            TranspileTarget.HTML: ".html",
         }
         return extensions.get(self, ".txt")
 
