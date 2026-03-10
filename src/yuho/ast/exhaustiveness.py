@@ -465,8 +465,8 @@ class ExhaustivenessChecker(Visitor):
             line = 0
             column = 0
             if node.source_location:
-                line = node.source_location.start_line
-                column = node.source_location.start_column
+                line = node.source_location.line
+                column = node.source_location.col
             
             patterns_str = ", ".join(result.missing_patterns[:5])
             if len(result.missing_patterns) > 5:

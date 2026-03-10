@@ -196,9 +196,9 @@ class OverlapDetector(Visitor):
     def _get_arm_location(self, arm: nodes.MatchArm) -> Tuple[int, int]:
         """Extract source location from match arm."""
         if arm.source_location:
-            return arm.source_location.start_line, arm.source_location.start_column
+            return arm.source_location.line, arm.source_location.col
         if arm.pattern.source_location:
-            return arm.pattern.source_location.start_line, arm.pattern.source_location.start_column
+            return arm.pattern.source_location.line, arm.pattern.source_location.col
         return 0, 0
     
     def _check_match_overlaps(

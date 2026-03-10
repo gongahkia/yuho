@@ -76,8 +76,8 @@ class TypeCheckResult:
         column = 0
         node_type = ""
         if node and node.source_location:
-            line = node.source_location.start_line
-            column = node.source_location.start_column
+            line = node.source_location.line
+            column = node.source_location.col
         if node:
             node_type = type(node).__name__
         error = TypeErrorInfo(
