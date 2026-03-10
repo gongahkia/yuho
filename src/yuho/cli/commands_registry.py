@@ -321,6 +321,38 @@ def register_group_commands(cli: click.Group) -> None:
             verbose=ctx.obj["verbose"],
         )
 
+    @library.command("export")
+    @click.option("-t", "--target", default="json",
+                  type=click.Choice(["json", "jsonld", "english", "latex", "mermaid", "alloy", "graphql", "blocks", "bibtex", "html"]),
+                  help="Transpilation target")
+    @click.option("-o", "--output-dir", default="./library_export", type=click.Path(), help="Output directory")
+    @click.option("--json", "json_output", is_flag=True, help="Output as JSON")
+    @click.pass_context
+    def library_export(
+        ctx: click.Context,
+        target: str,
+        output_dir: str,
+        json_output: bool,
+    ) -> None:
+        """
+        Bulk-export all library statutes to a target format.
+
+        Transpiles every statute.yh in the library/ directory and writes
+        output preserving the directory structure.
+
+        Examples:
+            yuho library export
+            yuho library export -t english -o ./docs/statutes
+            yuho library export -t mermaid --json
+        """
+        from yuho.cli.commands.library import run_library_export
+        run_library_export(
+            target=target,
+            output_dir=output_dir,
+            json_output=json_output,
+            verbose=ctx.obj["verbose"],
+        )
+
     # =========================================================================
     # Batch command
     # =========================================================================
