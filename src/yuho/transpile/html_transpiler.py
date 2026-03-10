@@ -44,8 +44,14 @@ footer {{ margin-top: 3rem; border-top: 1px solid #ccc; padding-top: .5rem; font
 </html>"""
 
 
+_MERMAID_CDN = "https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"
+
+
 class HTMLTranspiler(TranspilerBase):
     """Transpile Yuho AST to standalone HTML with embedded Mermaid."""
+
+    def __init__(self, offline: bool = False):
+        self._offline = offline
 
     @property
     def target(self) -> TranspileTarget:
@@ -63,6 +69,9 @@ class HTMLTranspiler(TranspilerBase):
             if s.title:
                 title += f": {s.title.value}"
         english_escaped = english_text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+        if self._offline:
+            # inline mermaid note when offline
+            mermaid_text = "<!-- Mermaid diagrams require network or local mermaid.min.js -->\n" + mermaid_text
         return _HTML_TEMPLATE.format(
             title=title,
             english=english_escaped,
