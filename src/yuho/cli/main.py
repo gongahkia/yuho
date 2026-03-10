@@ -1040,6 +1040,33 @@ def explain_all(ctx: click.Context, directory: str, output_dir: str) -> None:
     )
 
 
+@cli.command("generate-tests")
+@click.argument("file", type=click.Path(exists=True))
+@click.option("-o", "--output", type=click.Path(), help="Output file path")
+@click.option("-n", "--max-cases", type=int, default=10, show_default=True, help="Maximum test cases to generate")
+@click.option("--json", "json_output", is_flag=True, help="Output as JSON")
+@click.pass_context
+def generate_tests(ctx: click.Context, file: str, output: Optional[str], max_cases: int, json_output: bool) -> None:
+    """
+    Generate test cases using Z3 constraint solving.
+
+    Uses Z3 model enumeration to produce concrete fact patterns
+    that exercise different code paths through statute elements.
+
+    Examples:
+        yuho generate-tests statute.yh
+        yuho generate-tests statute.yh -n 20 --json -o tests.json
+    """
+    from yuho.cli.commands.generate_tests import run_generate_tests
+    run_generate_tests(
+        file=file,
+        output=output,
+        max_cases=max_cases,
+        json_output=json_output,
+        verbose=ctx.obj["verbose"],
+    )
+
+
 @cli.command("verify-report")
 @click.argument("file", type=click.Path(exists=True))
 @click.option("-o", "--output", type=click.Path(), help="Output .tex file path")
