@@ -131,14 +131,18 @@ _STATUTE_NODE = {
     "required": ["_type", "section_number", "definitions", "elements"],
 }
 
+AST_SCHEMA_VERSION = "1.0.0"
+
 _SCHEMA = {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "$id": "https://yuho.dev/schemas/ast.json",
     "title": "Yuho AST JSON",
     "description": "Schema for Yuho JSON transpiler output (ModuleNode).",
+    "version": AST_SCHEMA_VERSION,
     "type": "object",
     "properties": {
         "_type": {"const": "ModuleNode"},
+        "_schema_version": {"const": AST_SCHEMA_VERSION},
         "imports": {"type": "array", "items": {"type": "object"}},
         "type_defs": {"type": "array", "items": {"type": "object"}},
         "function_defs": {"type": "array", "items": {"type": "object"}},

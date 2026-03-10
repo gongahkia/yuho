@@ -234,6 +234,8 @@ class JSONTranspiler(TranspilerBase, Visitor):
             result["path"] = node.path
             result["imported_names"] = list(node.imported_names)
         elif isinstance(node, nodes.ModuleNode):
+            from yuho.transpile.json_schema import AST_SCHEMA_VERSION
+            result["_schema_version"] = AST_SCHEMA_VERSION
             result["imports"] = [self._to_dict(i) for i in node.imports]
             result["type_defs"] = [self._to_dict(t) for t in node.type_defs]
             result["function_defs"] = [self._to_dict(f) for f in node.function_defs]
