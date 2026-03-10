@@ -1018,6 +1018,28 @@ def compliance_matrix(ctx: click.Context, file: str, output: Optional[str], json
     )
 
 
+@cli.command("explain-all")
+@click.option("-d", "--directory", default="library", type=click.Path(exists=True), help="Source directory")
+@click.option("-o", "--output-dir", default="doc/explanations", type=click.Path(), help="Output directory")
+@click.pass_context
+def explain_all(ctx: click.Context, directory: str, output_dir: str) -> None:
+    """
+    Generate English explanations for all library statutes.
+
+    Produces pre-built .txt files alongside statute sources.
+
+    Examples:
+        yuho explain-all
+        yuho explain-all -o ./explanations
+    """
+    from yuho.cli.commands.explain_all import run_explain_all
+    run_explain_all(
+        directory=directory,
+        output_dir=output_dir,
+        verbose=ctx.obj["verbose"],
+    )
+
+
 def main() -> None:
     """Main entry point with global error handling."""
     try:
