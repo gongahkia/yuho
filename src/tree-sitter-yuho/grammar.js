@@ -74,7 +74,7 @@ module.exports = grammar({
     // Comments (single-line //, multi-line /* */, doc-comments ///)
     // =========================================================================
 
-    comment: $ => token(seq('//', /.*/)),
+    comment: $ => token(prec(-1, seq('//', /[^\n]*/))),
 
     multiline_comment: $ => token(seq(
       '/*',
@@ -82,7 +82,7 @@ module.exports = grammar({
       '/'
     )),
 
-    doc_comment: $ => token(seq('///', /.*/)),
+    doc_comment: $ => token(prec(1, seq('///', /[^\n]*/))),
 
     // =========================================================================
     // Literals: int, float, bool, string with escape sequences
@@ -203,6 +203,7 @@ module.exports = grammar({
     // =========================================================================
 
     struct_definition: $ => seq(
+      repeat(field('doc_comment', $.doc_comment)),
       'struct',
       field('name', $.identifier),
       optional($.type_parameters),
@@ -218,6 +219,7 @@ module.exports = grammar({
     ),
 
     field_definition: $ => seq(
+      repeat(field('doc_comment', $.doc_comment)),
       field('type', $._type),
       field('name', $.identifier),
       optional(','),
@@ -289,6 +291,7 @@ module.exports = grammar({
     // =========================================================================
 
     function_definition: $ => seq(
+      repeat(field('doc_comment', $.doc_comment)),
       'fn',
       field('name', $.identifier),
       '(',
@@ -316,6 +319,7 @@ module.exports = grammar({
     // =========================================================================
 
     statute_block: $ => seq(
+      repeat(field('doc_comment', $.doc_comment)),
       'statute',
       field('section_number', $.section_number),
       optional(field('title', $.string_literal)),
@@ -362,6 +366,7 @@ module.exports = grammar({
     ),
 
     element_entry: $ => seq(
+      repeat(field('doc_comment', $.doc_comment)),
       field('element_type', choice('actus_reus', 'mens_rea', 'circumstance')),
       field('name', $.identifier),
       ':=',
