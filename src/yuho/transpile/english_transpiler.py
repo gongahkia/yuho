@@ -20,9 +20,10 @@ class EnglishTranspiler(TranspilerBase, Visitor):
     connectors and penalty formatting.
     """
 
-    def __init__(self):
+    def __init__(self, plain_language: bool = False):
         self._output: List[str] = []
         self._indent_level = 0
+        self._plain_language = plain_language
 
     @property
     def target(self) -> TranspileTarget:
@@ -103,8 +104,13 @@ class EnglishTranspiler(TranspilerBase, Visitor):
 
     def _visit_statute(self, node: nodes.StatuteNode) -> None:
         """Generate English for statute."""
-        # Header
         title = node.title.value if node.title else "Untitled"
+
+        if self._plain_language:
+            self._visit_statute_plain(node, title)
+            return
+
+        # Header
         self._emit(f"SECTION {node.section_number}: {title}")
         self._emit("=" * 60)
         self._emit_blank()
@@ -170,6 +176,55 @@ class EnglishTranspiler(TranspilerBase, Visitor):
                 self._indent_level -= 1
             self._indent_level -= 1
             self._emit_blank()
+
+    def _visit_statute_plain(self, node: nodes.StatuteNode, title: str) -> None:
+        """Generate plain-language explainer for a statute."""
+        self._emit(f"What is {title} (Section {node.section_number})?")
+        self._emit("-" * 40)
+        self._emit_blank()
+        if node.elements:
+            self._emit("To prove this offence, the prosecution must show:")
+            self._emit_blank()
+            self._indent_level += 1
+            self._visit_elements_plain(node.elements)
+            self._indent_level -= 1
+            self._emit_blank()
+        if node.exceptions:
+            self._emit("Possible defences:")
+            self._emit_blank()
+            self._indent_level += 1
+            for exc in node.exceptions:
+                label = f"({exc.label}) " if exc.label else ""
+                self._emit(f"- {label}{exc.condition.value}")
+                if exc.effect:
+                    self._emit(f"  Result: {exc.effect.value}")
+            self._indent_level -= 1
+            self._emit_blank()
+        if node.penalty:
+            self._emit("If convicted:")
+            self._indent_level += 1
+            self._visit_penalty(node.penalty)
+            self._indent_level -= 1
+            self._emit_blank()
+
+    def _visit_elements_plain(self, elements) -> None:
+        """Recursively emit elements in plain language."""
+        for elem in elements:
+            if isinstance(elem, nodes.ElementGroupNode):
+                connector = "ALL of these" if elem.combinator == "all_of" else "ANY of these"
+                self._emit(f"{connector}:")
+                self._indent_level += 1
+                self._visit_elements_plain(elem.members)
+                self._indent_level -= 1
+            else:
+                kind_map = {
+                    "actus_reus": "What was done",
+                    "mens_rea": "What was intended",
+                    "circumstance": "The situation",
+                }
+                kind = kind_map.get(elem.element_type, elem.element_type)
+                desc = elem.description.value if isinstance(elem.description, nodes.StringLit) else str(elem.name)
+                self._emit(f"- {kind}: {desc}")
 
     def _visit_element(self, node: nodes.ElementNode) -> None:
         """Generate English for element."""
