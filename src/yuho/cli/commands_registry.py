@@ -360,7 +360,7 @@ def register_group_commands(cli: click.Group) -> None:
     @batch.command("transpile")
     @click.argument("directory", type=click.Path(exists=True))
     @click.option("-t", "--target", default="json",
-                  type=click.Choice(["json", "jsonld", "english", "latex", "mermaid", "alloy", "graphql", "blocks"]),
+                  type=click.Choice(["json", "jsonld", "english", "latex", "mermaid", "alloy", "graphql", "blocks", "bibtex"]),
                   help="Transpilation target")
     @click.option("-o", "--output-dir", type=click.Path(), help="Output directory")
     @click.option("--no-recursive", is_flag=True, help="Don't recurse into subdirectories")

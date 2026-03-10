@@ -19,6 +19,7 @@ class TranspileTarget(Enum):
     ALLOY = auto()
     GRAPHQL = auto()
     BLOCKS = auto()
+    BIBTEX = auto()
 
     @classmethod
     def from_string(cls, name: str) -> "TranspileTarget":
@@ -38,6 +39,8 @@ class TranspileTarget(Enum):
             "gql": cls.GRAPHQL,
             "blocks": cls.BLOCKS,
             "block": cls.BLOCKS,
+            "bibtex": cls.BIBTEX,
+            "bib": cls.BIBTEX,
         }
         target = mapping.get(name.lower())
         if not target:
@@ -56,6 +59,7 @@ class TranspileTarget(Enum):
             TranspileTarget.ALLOY: ".als",
             TranspileTarget.GRAPHQL: ".graphql",
             TranspileTarget.BLOCKS: ".blocks",
+            TranspileTarget.BIBTEX: ".bib",
         }
         return extensions.get(self, ".txt")
 
