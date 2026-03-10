@@ -54,7 +54,14 @@ class ASTBuilder:
         return result
 
     def _get_doc_comment(self, node) -> Optional[str]:
-        """Get doc-comment for a node by line proximity."""
+        """Get doc-comment for a node from named children or line proximity."""
+        doc_nodes = [c for c in node.children if c.type == "doc_comment"]
+        if doc_nodes:
+            lines = []
+            for dn in doc_nodes:
+                text = self._text(dn)
+                lines.append(text.lstrip("/").strip())
+            return "\n".join(lines)
         if not self._doc_comment_lines:
             return None
         start_line = node.start_point[0]
