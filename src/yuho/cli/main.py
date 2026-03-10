@@ -411,26 +411,41 @@ def explain(
 @click.argument("file1", type=click.Path(exists=True))
 @click.argument("file2", type=click.Path(exists=True))
 @click.option("--json", "json_output", is_flag=True, help="Output as JSON")
+@click.option("--score", is_flag=True, help="Score file2 against file1 as model answer")
 @click.pass_context
-def diff(ctx: click.Context, file1: str, file2: str, json_output: bool) -> None:
+def diff(ctx: click.Context, file1: str, file2: str, json_output: bool, score: bool) -> None:
     """
     Compare two Yuho files and show semantic differences.
 
     Shows added, removed, and modified statutes, definitions, elements,
     penalties, and illustrations between two versions.
 
+    Use --score to grade file2 against file1 as a model answer, showing
+    element coverage percentage.
+
     Examples:
         yuho diff old.yh new.yh
         yuho diff v1/statute.yh v2/statute.yh --json
+        yuho diff model.yh student.yh --score
     """
-    from yuho.cli.commands.diff import run_diff
-    run_diff(
-        file1,
-        file2,
-        json_output=json_output,
-        verbose=ctx.obj["verbose"],
-        color=ctx.obj["color"],
-    )
+    if score:
+        from yuho.cli.commands.diff import run_diff_score
+        run_diff_score(
+            file1,
+            file2,
+            json_output=json_output,
+            verbose=ctx.obj["verbose"],
+            color=ctx.obj["color"],
+        )
+    else:
+        from yuho.cli.commands.diff import run_diff
+        run_diff(
+            file1,
+            file2,
+            json_output=json_output,
+            verbose=ctx.obj["verbose"],
+            color=ctx.obj["color"],
+        )
 
 
 # =============================================================================
