@@ -1,3 +1,6 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871
 // Singapore Penal Code Section 378 - Theft
 // Yuho v5 Syntax
 
@@ -32,10 +35,15 @@ statute 378 "Theft" {
     }
 
     elements {
+        /// the mental element: accused must act dishonestly per s24
         mens_rea intention := "Dishonest intention to take property";
+        /// the primary physical act of taking
         actus_reus taking := "Taking movable property";
+        /// property must be in someone else's possession at time of taking
         circumstance possession := "Property in possession of another person";
+        /// absence of owner's consent is required
         circumstance consent := "Without consent of that person";
+        /// any movement suffices, however slight (Explanation 3)
         actus_reus movement := "Moving the property in order to such taking";
     }
 

@@ -1,3 +1,6 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871
 // Singapore Penal Code Section 300 - Murder
 // Yuho v5 Syntax
 
@@ -38,11 +41,16 @@ statute 300 "Murder" {
 
     elements {
         all_of {
+            /// the physical act -- must actually cause death
             actus_reus causeDeath := "Causing the death of a person";
             any_of {
+                /// limb (a): direct intention to kill
                 mens_rea intent1 := "Intention to cause death";
+                /// limb (b): intention to cause injury known to be likely fatal
                 mens_rea intent2 := "Intention to cause bodily injury known likely to cause death";
+                /// limb (c): intention to cause injury sufficient in ordinary course of nature
                 mens_rea intent3 := "Intention to cause bodily injury sufficient in ordinary course to cause death";
+                /// limb (d): knowledge that act is imminently dangerous -- PP v Lim Poh Lye [2005]
                 mens_rea intent4 := "Knowledge that the act is so imminently dangerous that death is virtually certain";
             }
         }
