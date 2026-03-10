@@ -1040,6 +1040,25 @@ def explain_all(ctx: click.Context, directory: str, output_dir: str) -> None:
     )
 
 
+@cli.command()
+@click.option("-p", "--port", type=int, default=8080, show_default=True, help="Server port")
+@click.option("--host", default="127.0.0.1", show_default=True, help="Host to bind to")
+@click.pass_context
+def playground(ctx: click.Context, port: int, host: str) -> None:
+    """
+    Launch the web playground in your browser.
+
+    Serves a browser-based Yuho editor with live transpilation.
+    Supports all transpile targets with instant feedback.
+
+    Examples:
+        yuho playground
+        yuho playground --port 3000
+    """
+    from yuho.cli.commands.playground import run_playground
+    run_playground(port=port, host=host, verbose=ctx.obj["verbose"])
+
+
 @cli.command("generate-tests")
 @click.argument("file", type=click.Path(exists=True))
 @click.option("-o", "--output", type=click.Path(), help="Output file path")
