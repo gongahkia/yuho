@@ -1,7 +1,7 @@
 // Singapore Penal Code Section 420 - Cheating and Dishonestly Inducing Delivery of Property
 // Yuho v5 Syntax
 
-referencing "penal_code/s415_cheating/statute"
+referencing penal_code/s415_cheating
 
 struct CheatingDeliveryCase {
     string accused,

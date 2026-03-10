@@ -1,8 +1,8 @@
 // Singapore Penal Code Section 390 - Robbery
 // Yuho v5 Syntax
 
-referencing "penal_code/s378_theft/statute"
-referencing "penal_code/s383_extortion/statute"
+referencing penal_code/s378_theft
+referencing penal_code/s383_extortion
 
 struct RobberyCase {
     string accused,

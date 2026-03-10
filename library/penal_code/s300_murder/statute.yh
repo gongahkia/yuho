@@ -4,7 +4,7 @@
 // Singapore Penal Code Section 300 - Murder
 // Yuho v5 Syntax
 
-referencing "penal_code/s299_culpable_homicide/statute"
+referencing penal_code/s299_culpable_homicide
 
 struct MurderCase {
     string accused,
@@ -57,8 +57,8 @@ statute 300 "Murder" {
     }
 
     penalty {
-        death := TRUE;
         imprisonment := 20 years .. 99 years;
+        death := TRUE;
         supplementary := "Or imprisonment for life if court is satisfied that death is not warranted";
     }
 

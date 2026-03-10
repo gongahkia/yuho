@@ -1,7 +1,7 @@
 // Singapore Penal Code Section 503 - Criminal Breach of Trust
 // Yuho v5 Syntax
 
-referencing "penal_code/s403_dishonest_misappropriation/statute"
+referencing penal_code/s403_dishonest_misappropriation
 
 struct BreachOfTrustCase {
     string accused,
