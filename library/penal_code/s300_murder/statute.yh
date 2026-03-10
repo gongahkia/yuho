@@ -1,6 +1,8 @@
 // Singapore Penal Code Section 300 - Murder
 // Yuho v5 Syntax
 
+referencing "penal_code/s299_culpable_homicide/statute"
+
 struct MurderCase {
     string accused,
     string victim,
