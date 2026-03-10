@@ -992,6 +992,32 @@ def export_training(ctx: click.Context, output: str, directory: Optional[str], i
     )
 
 
+@cli.command("compliance-matrix")
+@click.argument("file", type=click.Path(exists=True))
+@click.option("-o", "--output", type=click.Path(), help="Output file path")
+@click.option("--json", "json_output", is_flag=True, help="Output as JSON")
+@click.pass_context
+def compliance_matrix(ctx: click.Context, file: str, output: Optional[str], json_output: bool) -> None:
+    """
+    Generate a compliance checklist from statute elements.
+
+    Produces a table of all statutory requirements with checkboxes
+    for compliance officers to audit.
+
+    Examples:
+        yuho compliance-matrix statute.yh
+        yuho compliance-matrix statute.yh -o matrix.md
+        yuho compliance-matrix statute.yh --json
+    """
+    from yuho.cli.commands.compliance import run_compliance_matrix
+    run_compliance_matrix(
+        file=file,
+        output=output,
+        json_output=json_output,
+        verbose=ctx.obj["verbose"],
+    )
+
+
 def main() -> None:
     """Main entry point with global error handling."""
     try:
