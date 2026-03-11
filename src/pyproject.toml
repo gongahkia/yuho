@@ -30,7 +30,6 @@ requires-python = ">=3.10"
 dependencies = [
     "click>=8.0,<9.0",
     "tree-sitter>=0.21.0,<1.0",
-    "textual>=0.47.0",
 ]
 
 [project.optional-dependencies]
