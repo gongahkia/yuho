@@ -17,7 +17,7 @@ fn is_forgery(string docType, string intent) : bool {
     }
 }
 
-statute 463 "Forgery" {
+statute 463 "Forgery" effective 1872-01-01 {
     definitions {
         forgery := "Making a false document with fraudulent intent";
         false_document := "A document that dishonestly or fraudulently purports to be something it is not";
