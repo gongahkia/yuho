@@ -183,6 +183,12 @@ class JSONTranspiler(TranspilerBase, Visitor):
             result["element_type"] = node.element_type
             result["name"] = node.name
             result["description"] = self._to_dict(node.description)
+            if node.caused_by:
+                result["caused_by"] = node.caused_by
+            if node.burden:
+                result["burden"] = node.burden
+            if node.burden_standard:
+                result["burden_standard"] = node.burden_standard
         elif isinstance(node, nodes.ExceptionNode):
             if node.label:
                 result["label"] = node.label
@@ -213,6 +219,12 @@ class JSONTranspiler(TranspilerBase, Visitor):
                 result["death_penalty"] = node.death_penalty
             if node.supplementary:
                 result["supplementary"] = self._to_dict(node.supplementary)
+            if node.sentencing:
+                result["sentencing"] = node.sentencing
+            if node.mandatory_min_imprisonment:
+                result["mandatory_min_imprisonment"] = self._to_dict(node.mandatory_min_imprisonment)
+            if node.mandatory_min_fine:
+                result["mandatory_min_fine"] = self._to_dict(node.mandatory_min_fine)
         elif isinstance(node, nodes.IllustrationNode):
             if node.label:
                 result["label"] = node.label
@@ -234,6 +246,28 @@ class JSONTranspiler(TranspilerBase, Visitor):
                 result["jurisdiction"] = node.jurisdiction
             if node.jurisdiction_meta:
                 result["jurisdiction_meta"] = dict(node.jurisdiction_meta)
+            if node.effective_date:
+                result["effective_date"] = node.effective_date
+            if node.repealed_date:
+                result["repealed_date"] = node.repealed_date
+            if node.subsumes:
+                result["subsumes"] = node.subsumes
+            if node.amends:
+                result["amends"] = node.amends
+        elif isinstance(node, nodes.EnumVariant):
+            result["name"] = node.name
+            if node.payload_types:
+                result["payload_types"] = [self._to_dict(t) for t in node.payload_types]
+        elif isinstance(node, nodes.EnumDefNode):
+            result["name"] = node.name
+            result["variants"] = [self._to_dict(v) for v in node.variants]
+        elif isinstance(node, nodes.TypeAliasNode):
+            result["name"] = node.name
+            result["target_type"] = self._to_dict(node.target_type)
+        elif isinstance(node, nodes.RefinementTypeNode):
+            result["base_type"] = self._to_dict(node.base_type)
+            result["lower_bound"] = self._to_dict(node.lower_bound)
+            result["upper_bound"] = self._to_dict(node.upper_bound)
         elif isinstance(node, nodes.ImportNode):
             result["path"] = node.path
             result["imported_names"] = list(node.imported_names)
@@ -245,5 +279,9 @@ class JSONTranspiler(TranspilerBase, Visitor):
             result["function_defs"] = [self._to_dict(f) for f in node.function_defs]
             result["statutes"] = [self._to_dict(s) for s in node.statutes]
             result["variables"] = [self._to_dict(v) for v in node.variables]
+            if node.enum_defs:
+                result["enum_defs"] = [self._to_dict(e) for e in node.enum_defs]
+            if node.type_aliases:
+                result["type_aliases"] = [self._to_dict(t) for t in node.type_aliases]
 
         return result
