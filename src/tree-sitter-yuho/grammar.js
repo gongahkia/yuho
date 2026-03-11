@@ -636,9 +636,11 @@ module.exports = grammar({
     ),
 
     variable_declaration: $ => seq(
+      optional(field('qualifier', choice('fact', 'conclusion', 'presumed'))),
       field('type', $._type),
       field('name', $.identifier),
       optional(seq(':=', field('value', $._expression))),
+      optional(seq('unless', field('rebuttal', $._expression))),
       optional(';'),
     ),
 
