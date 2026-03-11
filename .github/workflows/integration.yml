@@ -1,0 +1,171 @@
+name: Integration Tests
+
+on:
+  workflow_call:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: integration-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  library-validation:
+    name: Validate Library Statutes
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node.js (for tree-sitter CLI)
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install tree-sitter CLI
+        run: npm install -g tree-sitter-cli
+
+      - name: Install Yuho
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ./src/tree-sitter-yuho/bindings/python
+          pip install -e ./src[dev]
+
+      - name: Check all library statutes
+        run: |
+          failed=0
+          for statute in library/penal_code/*/statute.yh; do
+            echo "--- Checking $statute ---"
+            if ! yuho check "$statute"; then
+              failed=1
+            fi
+          done
+          exit $failed
+
+      - name: Check all example files
+        run: |
+          failed=0
+          for example in examples/*.yh; do
+            echo "--- Checking $example ---"
+            if ! yuho check "$example"; then
+              failed=1
+            fi
+          done
+          exit $failed
+
+      - name: Check all test statute files
+        run: |
+          failed=0
+          for test_file in library/penal_code/*/test_statute.yh; do
+            if [ -f "$test_file" ]; then
+              echo "--- Checking $test_file ---"
+              if ! yuho check "$test_file"; then
+                failed=1
+              fi
+            fi
+          done
+          exit $failed
+
+  cli-commands:
+    name: CLI Command Coverage
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node.js (for tree-sitter CLI)
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install tree-sitter CLI
+        run: npm install -g tree-sitter-cli
+
+      - name: Install Yuho
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ./src/tree-sitter-yuho/bindings/python
+          pip install -e ./src[dev]
+
+      - name: Version check
+        run: yuho --version
+
+      - name: Graph command
+        run: |
+          yuho graph examples/simple_statute.yh
+          yuho graph examples/cross_reference.yh
+          yuho graph library/penal_code/s415_cheating/statute.yh --format dot
+
+      - name: AST command
+        run: yuho ast examples/simple_statute.yh
+
+      - name: Transpile to all text targets
+        run: |
+          mkdir -p /tmp/transpile-out
+          for target in json jsonld english latex mermaid alloy graphql blocks bibtex html; do
+            echo "--- Transpiling to $target ---"
+            yuho transpile library/penal_code/s415_cheating/statute.yh \
+              --target "$target" \
+              -o "/tmp/transpile-out/s415.$target"
+          done
+          echo "--- Files generated ---"
+          ls -la /tmp/transpile-out/
+
+      - name: Lint command
+        run: yuho lint library/penal_code/s378_theft/statute.yh
+
+      - name: Schema command
+        run: yuho schema > /dev/null
+
+      - name: Explain command
+        run: yuho explain library/penal_code/s378_theft/statute.yh
+
+  property-tests:
+    name: Property-Based Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node.js (for tree-sitter CLI)
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install tree-sitter CLI
+        run: npm install -g tree-sitter-cli
+
+      - name: Install Yuho
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ./src/tree-sitter-yuho/bindings/python
+          pip install -e ./src[dev]
+
+      - name: Run property-based tests with extended examples
+        run: pytest tests/test_properties.py tests/test_statutes.py -v --hypothesis-seed=0 -x
+
+      - name: Run E2E test suite
+        run: pytest tests/e2e/ -v -x
+
+      - name: Run library statute tests
+        run: pytest tests/test_library_statutes.py -v -x
