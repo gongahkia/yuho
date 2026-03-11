@@ -27,7 +27,7 @@ fn is_dacoity(int numberOfPersons, bool robberyCommitted, bool jointlyCommitted)
     }
 }
 
-statute 395 "Punishment for Dacoity" {
+statute 395 "Punishment for Dacoity" effective 1872-01-01 subsumes 390 {
     definitions {
         dacoity := "When 5 or more persons conjointly commit or attempt to commit a robbery";
         conjointly := "Acting together in furtherance of common intention";
