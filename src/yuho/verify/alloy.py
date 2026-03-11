@@ -358,6 +358,18 @@ class AlloyGenerator:
             lines.append("}")
             lines.append("")
 
+        # Phase 13: subsumption assertions
+        statute_map = {s.section_number: s for s in ast.statutes}
+        for statute in ast.statutes:
+            if statute.subsumes and statute.subsumes in statute_map:
+                sn = self._statute_name(statute.section_number)
+                sub_sn = self._statute_name(statute.subsumes)
+                lines.append(f"// Subsumption: s{statute.section_number} subsumes s{statute.subsumes}")
+                lines.append(f"assert {sn}_subsumes_{sub_sn} {{")
+                lines.append(f"    {sn}_Conviction.convicted = True implies {sub_sn}_Conviction.convicted = True")
+                lines.append("}")
+                lines.append("")
+
         return lines
     
     def _generate_commands(self, ast=None) -> List[str]:
