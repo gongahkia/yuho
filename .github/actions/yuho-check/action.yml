@@ -1,0 +1,32 @@
+name: 'Yuho Statute Check'
+description: 'Validate Yuho (.yh) statute files'
+inputs:
+  directory:
+    description: 'Directory to scan for .yh files'
+    required: false
+    default: '.'
+  python-version:
+    description: 'Python version'
+    required: false
+    default: '3.12'
+  format:
+    description: 'Output format (json or sarif)'
+    required: false
+    default: 'sarif'
+runs:
+  using: 'composite'
+  steps:
+    - uses: actions/setup-python@v5
+      with:
+        python-version: ${{ inputs.python-version }}
+    - shell: bash
+      run: pip install yuho
+    - shell: bash
+      run: |
+        yuho ci-report ${{ inputs.directory }} \
+          --format ${{ inputs.format }} \
+          -o yuho-results.${{ inputs.format == 'sarif' && 'sarif' || 'json' }}
+    - if: inputs.format == 'sarif' && always()
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: yuho-results.sarif
