@@ -133,6 +133,8 @@ class ASTBuilder:
         variables: List[nodes.VariableDecl] = []
         references: List[nodes.ReferencingStmt] = []
         assertions: List[nodes.AssertStmt] = []
+        enum_defs: List[nodes.EnumDefNode] = []
+        type_aliases: List[nodes.TypeAliasNode] = []
 
         for child in node.children:
             if child.type == "import_statement":
@@ -141,6 +143,10 @@ class ASTBuilder:
                 references.append(self._build_referencing(child))
             elif child.type == "struct_definition":
                 type_defs.append(self._build_struct_def(child))
+            elif child.type == "enum_definition":
+                enum_defs.append(self._build_enum_def(child))
+            elif child.type == "type_alias":
+                type_aliases.append(self._build_type_alias(child))
             elif child.type == "function_definition":
                 function_defs.append(self._build_function_def(child))
             elif child.type == "statute_block":
@@ -158,6 +164,8 @@ class ASTBuilder:
             variables=tuple(variables),
             references=tuple(references),
             assertions=tuple(assertions),
+            enum_defs=tuple(enum_defs),
+            type_aliases=tuple(type_aliases),
             source_location=self._loc(node),
         )
 
@@ -245,6 +253,52 @@ class ASTBuilder:
         return nodes.FieldDef(
             type_annotation=type_ann,
             name=name,
+            doc_comment=self._get_doc_comment(node),
+            source_location=self._loc(node),
+        )
+
+    # =========================================================================
+    # Enum definition (Phase 9A)
+    # =========================================================================
+
+    def _build_enum_def(self, node) -> nodes.EnumDefNode:
+        """Build EnumDefNode from enum_definition node."""
+        name_node = self._child_by_field(node, "name")
+        name = self._text(name_node) if name_node else ""
+        variants: List[nodes.EnumVariant] = []
+        for child in node.children:
+            if child.type == "enum_variant":
+                vname_node = self._child_by_field(child, "name")
+                vname = self._text(vname_node) if vname_node else ""
+                payload: List[nodes.TypeNode] = []
+                for tc in child.children:
+                    if tc.type in ("builtin_type", "identifier", "generic_type", "optional_type", "array_type"):
+                        payload.append(self._build_type(tc))
+                variants.append(nodes.EnumVariant(
+                    name=vname,
+                    payload_types=tuple(payload),
+                    source_location=self._loc(child),
+                ))
+        return nodes.EnumDefNode(
+            name=name,
+            variants=tuple(variants),
+            doc_comment=self._get_doc_comment(node),
+            source_location=self._loc(node),
+        )
+
+    # =========================================================================
+    # Type alias (Phase 9B)
+    # =========================================================================
+
+    def _build_type_alias(self, node) -> nodes.TypeAliasNode:
+        """Build TypeAliasNode from type_alias node."""
+        name_node = self._child_by_field(node, "name")
+        name = self._text(name_node) if name_node else ""
+        target_node = self._child_by_field(node, "target")
+        target = self._build_type(target_node) if target_node else nodes.BuiltinType(name="void")
+        return nodes.TypeAliasNode(
+            name=name,
+            target_type=target,
             doc_comment=self._get_doc_comment(node),
             source_location=self._loc(node),
         )
