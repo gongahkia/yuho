@@ -19,7 +19,7 @@ fn is_misappropriation(bool movable, bool dishonest, bool conversion) : bool {
     }
 }
 
-statute 403 "Dishonest Misappropriation of Property" {
+statute 403 "Dishonest Misappropriation of Property" effective 1872-01-01 {
     definitions {
         misappropriation := "Dishonestly converting to own use property in possession";
         movable_property := "Corporeal property except land and things attached to earth";
