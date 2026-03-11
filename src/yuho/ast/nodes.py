@@ -814,6 +814,9 @@ class PenaltyNode(ASTNode):
     caning_max: Optional[int] = None
     death_penalty: Optional[bool] = None
     supplementary: Optional[StringLit] = None
+    sentencing: Optional[str] = None # phase 14: "concurrent" or "consecutive"
+    mandatory_min_imprisonment: Optional[DurationNode] = None # phase 14
+    mandatory_min_fine: Optional[MoneyNode] = None # phase 14
 
     def accept(self, visitor: "Visitor"):
         return visitor.visit_penalty(self)
