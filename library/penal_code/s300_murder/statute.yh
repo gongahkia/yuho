@@ -31,7 +31,7 @@ fn exception_applies(string exception) : bool {
     }
 }
 
-statute 300 "Murder" {
+statute 300 "Murder" effective 1872-01-01 subsumes 299 {
     definitions {
         culpable_homicide := "Causing death under Section 299 conditions";
         intention_to_cause_death := "Acting with the intention of causing death";
@@ -42,7 +42,7 @@ statute 300 "Murder" {
     elements {
         all_of {
             /// the physical act -- must actually cause death
-            actus_reus causeDeath := "Causing the death of a person";
+            actus_reus causeDeath := "Causing the death of a person" caused_by causeDeath burden prosecution beyond_reasonable_doubt;
             any_of {
                 /// limb (a): direct intention to kill
                 mens_rea intent1 := "Intention to cause death";
