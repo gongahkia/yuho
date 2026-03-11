@@ -308,6 +308,8 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
                 self._handle_metrics()
             elif path == '/docs':
                 self._handle_docs()
+            elif path == '/openapi.yaml':
+                self._handle_openapi_yaml()
             elif path.startswith('/jobs/') and path.endswith('/stream'):
                 job_id = path.split('/')[2]
                 self._handle_job_stream(job_id)
@@ -450,7 +452,25 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
         self._finish_request_log(200, True)
-    
+
+    def _handle_openapi_yaml(self) -> None:
+        """Serve the OpenAPI spec."""
+        spec_path = Path(__file__).resolve().parents[4] / "doc" / "openapi.yaml"
+        if not spec_path.exists():
+            self._send_json_response(404, APIResponse(
+                success=False,
+                error=APIError(code="NOT_FOUND", message="openapi.yaml not found")
+            ))
+            return
+        body = spec_path.read_bytes()
+        self.send_response(200)
+        self.send_header('Content-Type', 'text/yaml; charset=utf-8')
+        self.send_header('Content-Length', str(len(body)))
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.end_headers()
+        self.wfile.write(body)
+        self._finish_request_log(200, True)
+
     def _paginate(self, items: list, params: dict) -> dict:
         """Apply offset/limit pagination to a list."""
         offset = max(int(params.get("offset", [0])[0]), 0)
