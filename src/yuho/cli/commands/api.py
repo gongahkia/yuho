@@ -866,6 +866,17 @@ def run_api(
         enabled=api_cfg.rate_limit_enabled,
     ))
 
+    # Load webhook endpoints from config
+    if cfg.webhooks.enabled and cfg.webhooks.endpoints:
+        from yuho.events.webhook import get_webhook_manager, WebhookEndpoint
+        mgr = get_webhook_manager()
+        for ep in cfg.webhooks.endpoints:
+            mgr.register(WebhookEndpoint(
+                id=ep.get("id", ""), url=ep.get("url", ""), secret=ep.get("secret", ""),
+                events=ep.get("events", ["*"]), enabled=ep.get("enabled", True),
+            ))
+        logger.info(f"Loaded {len(cfg.webhooks.endpoints)} webhook endpoint(s) from config")
+
     try:
         httpd = YuhoAPIServer(
             (resolved_host, resolved_port),
