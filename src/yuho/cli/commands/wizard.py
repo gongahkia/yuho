@@ -16,9 +16,11 @@ import click
 @dataclass
 class ElementData:
     """Data for a statute element."""
-    element_type: str  # "actus_reus", "mens_rea", "circumstance"
+    element_type: str  # "actus_reus", "mens_rea", "circumstance", "obligation", "prohibition", "permission"
     name: str
     description: str
+    caused_by: str = "" # optional causal link
+    burden: str = "" # "prosecution" or "defence"
 
 
 @dataclass
@@ -70,6 +72,7 @@ class StatuteData:
     """Complete data for a statute."""
     section_number: str = ""
     title: str = ""
+    effective_date: str = "" # e.g. "1872-01-01"
     definitions: List[DefinitionData] = field(default_factory=list)
     elements: List[ElementData] = field(default_factory=list)
     penalty: Optional[PenaltyData] = None
@@ -177,15 +180,24 @@ def collect_elements(data: StatuteData) -> None:
     while prompt_confirm("Add another element?", default=False):
         element_type = prompt_choice("Element type:", [
             "actus_reus",
-            "mens_rea", 
-            "circumstance"
+            "mens_rea",
+            "circumstance",
+            "obligation",
+            "prohibition",
+            "permission",
         ])
         name = prompt_input("  Element name", required=True)
         desc = prompt_input("  Description", required=True)
+        caused_by = prompt_input("  Caused by (optional, element name)")
+        burden = ""
+        if prompt_confirm("  Specify burden of proof?", default=False):
+            burden = prompt_choice("  Burden:", ["prosecution", "defence"])
         data.elements.append(ElementData(
             element_type=element_type,
             name=name,
-            description=desc
+            description=desc,
+            caused_by=caused_by,
+            burden=burden,
         ))
         click.echo(click.style(f"  ✓ Added {element_type}: {name}", fg="green"))
     
@@ -327,6 +339,16 @@ def collect_caselaw(data: StatuteData) -> None:
     click.echo(f"\nTotal case law references: {len(data.case_law)}")
 
 
+def _element_suffix(elem: ElementData) -> str:
+    """Build optional caused_by/burden suffix for an element."""
+    parts = []
+    if elem.caused_by:
+        parts.append(f" caused_by {elem.caused_by}")
+    if elem.burden:
+        parts.append(f" burden {elem.burden}")
+    return "".join(parts)
+
+
 def generate_yuho_code(data: StatuteData) -> str:
     """Generate Yuho source code from collected data."""
     lines: List[str] = []
@@ -340,7 +362,8 @@ def generate_yuho_code(data: StatuteData) -> str:
         lines.append("")
 
     # Statute header
-    lines.append(f'statute {data.section_number} "{data.title}" {{')
+    eff = f" effective {data.effective_date}" if data.effective_date else ""
+    lines.append(f'statute {data.section_number} "{data.title}"{eff} {{')
 
     # Definitions
     if data.definitions:
@@ -359,12 +382,14 @@ def generate_yuho_code(data: StatuteData) -> str:
             lines.append(f"        {data.element_grouping} {{")
             for elem in data.elements:
                 escaped_desc = elem.description.replace('"', '\\"')
-                lines.append(f'            {elem.element_type} {elem.name} := "{escaped_desc}";')
+                suffix = _element_suffix(elem)
+                lines.append(f'            {elem.element_type} {elem.name} := "{escaped_desc}"{suffix};')
             lines.append("        }")
         else:
             for elem in data.elements:
                 escaped_desc = elem.description.replace('"', '\\"')
-                lines.append(f'        {elem.element_type} {elem.name} := "{escaped_desc}";')
+                suffix = _element_suffix(elem)
+                lines.append(f'        {elem.element_type} {elem.name} := "{escaped_desc}"{suffix};')
         lines.append("    }")
 
     # Penalty
@@ -472,8 +497,11 @@ def run_wizard(
         required=True
     )
     
+    if prompt_confirm("Specify effective date?", default=False):
+        data.effective_date = prompt_input("  Effective date (YYYY-MM-DD)", required=True)
+
     click.echo(click.style(f"\n✓ Creating statute: Section {data.section_number} - {data.title}", fg="green"))
-    
+
     # Collect sections
     collect_definitions(data)
     collect_elements(data)
