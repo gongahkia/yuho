@@ -225,9 +225,9 @@ Yuho's type system mirrors general-purpose languages. Legal reasoning requires d
 
 ### 9D: Fact vs. Conclusion Distinction
 - [x] Add `fact` and `conclusion` type qualifiers (or marker types)
-- [ ] `fact movedProperty := TRUE` vs. `conclusion guiltyOfTheft := evaluateTheft(...)`
+- [x] `fact movedProperty := TRUE` vs. `conclusion guiltyOfTheft := evaluateTheft(...)`
 - [ ] Semantic analysis: conclusions must derive from facts, never the reverse
-- [ ] Transpile: clearly separate factual predicates from legal conclusions in English output
+- [x] Transpile: clearly separate factual predicates from legal conclusions in English output
 - **Why:** "The accused took the wallet" (fact) and "the accused committed theft" (conclusion) are epistemically different. Conflating them hides the inferential leap that legal reasoning requires.
 
 **Files:** `grammar.js`, `nodes.py`, `builder.py`, `type_inference.py`, `type_check.py`
