@@ -328,7 +328,7 @@ Statutes don't exist in isolation. They form hierarchies, reference each other, 
 - [ ] `ref s24.dishonestly` as an expression that resolves to the definition from s24
 - [ ] Reference validation at parse time: warn if target doesn't exist
 - [ ] Transpile: hyperlink references in HTML/LaTeX output
-- [ ] Dependency graph: `yuho deps <file>` shows which statutes depend on which
+- [x] Dependency graph: `yuho deps <file>` shows which statutes depend on which
 - **Why:** s378 (theft) requires "dishonestly" as defined in s24. Currently this must be duplicated or imported as a function. A first-class reference makes the dependency explicit and traceable.
 
 ### 13C: Conflict Resolution
