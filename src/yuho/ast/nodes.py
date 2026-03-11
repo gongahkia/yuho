@@ -942,6 +942,76 @@ class StatuteNode(ASTNode):
 
 
 # =============================================================================
+# Enum Definition (Phase 9A)
+# =============================================================================
+
+
+@dataclass(frozen=True)
+class EnumVariant(ASTNode):
+    """Single variant in an enum definition."""
+    name: str
+    payload_types: Tuple[TypeNode, ...] = () # optional carried data
+
+    def accept(self, visitor: "Visitor"):
+        return visitor.visit_enum_variant(self)
+
+    def children(self) -> List[ASTNode]:
+        return list(self.payload_types)
+
+
+@dataclass(frozen=True)
+class EnumDefNode(ASTNode):
+    """Enum type definition with named variants."""
+    name: str
+    variants: Tuple[EnumVariant, ...]
+    doc_comment: Optional[str] = None
+
+    def accept(self, visitor: "Visitor"):
+        return visitor.visit_enum_def(self)
+
+    def children(self) -> List[ASTNode]:
+        return list(self.variants)
+
+
+# =============================================================================
+# Type Alias (Phase 9B)
+# =============================================================================
+
+
+@dataclass(frozen=True)
+class TypeAliasNode(ASTNode):
+    """Type alias declaration: type MensRea = string"""
+    name: str
+    target_type: TypeNode
+    doc_comment: Optional[str] = None
+
+    def accept(self, visitor: "Visitor"):
+        return visitor.visit_type_alias(self)
+
+    def children(self) -> List[ASTNode]:
+        return [self.target_type]
+
+
+# =============================================================================
+# Refinement Type (Phase 9C)
+# =============================================================================
+
+
+@dataclass(frozen=True)
+class RefinementTypeNode(TypeNode):
+    """Refinement type with range constraint: int{0..99}"""
+    base_type: TypeNode
+    lower_bound: ASTNode
+    upper_bound: ASTNode
+
+    def accept(self, visitor: "Visitor"):
+        return visitor.visit_refinement_type(self)
+
+    def children(self) -> List[ASTNode]:
+        return [self.base_type, self.lower_bound, self.upper_bound]
+
+
+# =============================================================================
 # Import Node
 # =============================================================================
 
