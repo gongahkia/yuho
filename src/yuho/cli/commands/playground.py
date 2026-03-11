@@ -22,41 +22,14 @@ _PLAYGROUND_HTML = """\
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Yuho Playground</title>
-<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<link rel="icon" href="data:,">
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
 <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:system-ui,-apple-system,sans-serif;background:#0d1117;color:#c9d1d9;padding:12px}
-h1{font-size:1.3em;margin-bottom:8px;color:#58a6ff}
-.toolbar{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
-.toolbar select,.toolbar button{background:#21262d;color:#c9d1d9;border:1px solid #30363d;padding:4px 8px;border-radius:4px;font-size:0.85em;cursor:pointer}
-.toolbar button:hover{background:#30363d}
-.toolbar button.active{background:#1f6feb;border-color:#1f6feb;color:#fff}
-.toolbar label{font-size:0.85em;color:#8b949e}
-.columns{display:flex;gap:8px;height:calc(100vh - 100px)}
-.col{flex:1;display:flex;flex-direction:column;min-width:0}
-.col-header{font-size:0.8em;font-weight:600;color:#8b949e;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px}
-#source{flex:1;background:#161b22;color:#c9d1d9;border:1px solid #30363d;border-radius:4px;padding:8px;font-family:'SF Mono',Menlo,monospace;font-size:0.85em;resize:none;tab-size:4}
-#source:focus{outline:none;border-color:#1f6feb}
-.output-wrap{flex:1;background:#161b22;border:1px solid #30363d;border-radius:4px;overflow:auto;position:relative}
-#output{padding:8px;font-family:'SF Mono',Menlo,monospace;font-size:0.85em;white-space:pre-wrap;word-break:break-word}
-#rendered{padding:12px;display:none;overflow:auto;height:100%}
-#rendered svg{max-width:100%}
-.status{font-size:0.75em;color:#8b949e;margin-top:4px}
-.status.error{color:#f85149}
-.status.ok{color:#3fb950}
-.json-key{color:#79c0ff}.json-str{color:#a5d6ff}.json-num{color:#d2a8ff}.json-bool{color:#ff7b72}.json-null{color:#8b949e}
-.rendered-english{font-family:system-ui,sans-serif;font-size:0.95em;line-height:1.6;color:#c9d1d9}
-.rendered-english h1,.rendered-english h2,.rendered-english h3{color:#58a6ff;margin:12px 0 4px}
-.rendered-english p{margin:4px 0}
-.rendered-english ul,.rendered-english ol{margin:4px 0 4px 20px}
-.katex-block{margin:8px 0;overflow-x:auto}
-</style>
 </head>
 <body>
 <h1>Yuho Playground</h1>
-<div class="toolbar">
+<p>
   <label for="target">Target:</label>
   <select id="target">
     <option value="english" selected>English</option>
@@ -73,12 +46,13 @@ h1{font-size:1.3em;margin-bottom:8px;color:#58a6ff}
     <option value="prolog">Prolog</option>
   </select>
   <button onclick="run()">Transpile</button>
-  <button id="toggle-render" onclick="toggleRender()" title="Toggle rendered/raw view">Rendered</button>
-</div>
-<div class="columns">
-<div class="col">
-  <div class="col-header">Source (.yh)</div>
-  <textarea id="source" spellcheck="false" placeholder="// enter Yuho code here...
+  <button id="toggle-render" onclick="toggleRender()">Rendered</button>
+</p>
+<hr>
+<table width="100%"><tr>
+<td width="50%" valign="top">
+  <p><b>Source (.yh)</b></p>
+  <textarea id="source" rows="30" cols="60" spellcheck="false" placeholder="// enter Yuho code here...
 statute 1 &quot;Example&quot; {
     definitions {
         example := &quot;An example definition&quot;;
@@ -91,18 +65,17 @@ statute 1 &quot;Example&quot; {
         imprisonment := 0 days .. 5 years;
     }
 }"></textarea>
-</div>
-<div class="col">
-  <div class="col-header">Output &mdash; <span id="target-label">english</span></div>
-  <div class="output-wrap">
-    <pre id="output"></pre>
-    <div id="rendered"></div>
-  </div>
-</div>
-</div>
-<p class="status" id="status">Ready</p>
+</td>
+<td width="50%" valign="top">
+  <p><b>Output &mdash; <span id="target-label">english</span></b></p>
+  <pre id="output"></pre>
+  <div id="rendered" style="display:none"></div>
+</td>
+</tr></table>
+<hr>
+<p id="status">Ready</p>
 <script>
-mermaid.initialize({startOnLoad:false,theme:'dark',securityLevel:'loose'});
+mermaid.initialize({startOnLoad:false,theme:'default',securityLevel:'loose'});
 const src=document.getElementById('source'),out=document.getElementById('output'),ren=document.getElementById('rendered');
 const tgt=document.getElementById('target'),lbl=document.getElementById('target-label'),sts=document.getElementById('status');
 const togBtn=document.getElementById('toggle-render');
@@ -124,50 +97,50 @@ function updateToggleState(){
 
 function toggleRender(){
   showRendered=!showRendered;
-  togBtn.classList.toggle('active',showRendered);
   togBtn.textContent=showRendered?'Rendered':'Raw';
   if(lastOutput)displayOutput(lastOutput,tgt.value);
 }
 
-function showRaw(){out.style.display='block';ren.style.display='none';togBtn.classList.remove('active');togBtn.textContent='Raw'}
-function showRenderedView(){out.style.display='none';ren.style.display='block';togBtn.classList.add('active');togBtn.textContent='Rendered'}
+function showRaw(){out.style.display='block';ren.style.display='none';togBtn.textContent='Raw'}
+function showRenderedView(){out.style.display='none';ren.style.display='block';togBtn.textContent='Rendered'}
 
 function displayOutput(text,target){
   lastOutput=text;
-  if(showRendered&&RENDERABLE.has(target)){
-    showRenderedView();
-    renderOutput(text,target);
-  } else {
-    showRaw();
-    out.textContent=text;
-  }
+  if(showRendered&&RENDERABLE.has(target)){showRenderedView();renderOutput(text,target)}
+  else{showRaw();out.textContent=text}
 }
 
+let mermaidCounter=0;
 async function renderOutput(text,target){
   if(target==='mermaid'){
     try{
-      const{svg}=await mermaid.render('mermaid-'+Date.now(),text);
+      const id='mmd'+(mermaidCounter++);
+      const container=document.createElement('div');
+      container.id=id;
+      container.style.display='none';
+      document.body.appendChild(container);
+      const{svg}=await mermaid.render(id,text,container);
+      container.remove();
       ren.innerHTML=svg;
-    }catch(e){ren.innerHTML='<pre style="color:#f85149">Mermaid render error: '+esc(e.message)+'</pre>'}
+    }
+    catch(e){ren.innerHTML='<pre>Mermaid render error: '+esc(e.message)+'</pre>'}
   } else if(target==='json'||target==='jsonld'){
-    try{
-      const obj=JSON.parse(text);
-      ren.innerHTML=highlightJson(obj);
-    }catch(e){ren.innerHTML='<pre>'+esc(text)+'</pre>'}
+    try{const obj=JSON.parse(text);ren.innerHTML='<pre>'+highlightJson(obj)+'</pre>'}
+    catch(e){ren.innerHTML='<pre>'+esc(text)+'</pre>'}
   } else if(target==='latex'){
     renderLatex(text);
   } else if(target==='english'){
-    ren.innerHTML='<div class="rendered-english">'+renderEnglish(text)+'</div>';
+    ren.innerHTML=renderEnglish(text);
   }
 }
 
 function highlightJson(obj,indent){
   indent=indent||0;
   const pad='  '.repeat(indent);
-  if(obj===null)return'<span class="json-null">null</span>';
-  if(typeof obj==='boolean')return'<span class="json-bool">'+obj+'</span>';
-  if(typeof obj==='number')return'<span class="json-num">'+obj+'</span>';
-  if(typeof obj==='string')return'<span class="json-str">"'+esc(obj)+'"</span>';
+  if(obj===null)return'<b>null</b>';
+  if(typeof obj==='boolean')return'<b>'+obj+'</b>';
+  if(typeof obj==='number')return''+obj;
+  if(typeof obj==='string')return'"'+esc(obj)+'"';
   if(Array.isArray(obj)){
     if(obj.length===0)return'[]';
     let s='[\\n';
@@ -177,7 +150,7 @@ function highlightJson(obj,indent){
   const keys=Object.keys(obj);
   if(keys.length===0)return'{}';
   let s='{\\n';
-  keys.forEach((k,i)=>{s+='  '.repeat(indent+1)+'<span class="json-key">"'+esc(k)+'"</span>: '+highlightJson(obj[k],indent+1)+(i<keys.length-1?',':'')+'\\n'});
+  keys.forEach((k,i)=>{s+='  '.repeat(indent+1)+'<b>"'+esc(k)+'"</b>: '+highlightJson(obj[k],indent+1)+(i<keys.length-1?',':'')+'\\n'});
   return s+pad+'}';
 }
 
@@ -188,7 +161,7 @@ function renderLatex(text){
   let inMath=false,mathBuf='';
   for(const line of lines){
     if(!inMath&&mathEnv.test(line)){inMath=true;mathBuf=line+'\\n';continue}
-    if(inMath){mathBuf+=line+'\\n';if(/\\\\end\\{/.test(line)){inMath=false;try{const clean=mathBuf.replace(/\\\\begin\\{[^}]+\\}/g,'').replace(/\\\\end\\{[^}]+\\}/g,'').replace(/&/g,'').replace(/\\\\\\\\/g,'\\n').trim();html+='<div class="katex-block">';katex.render(clean,document.createElement('span'),{throwOnError:false,displayMode:true});html+=katex.renderToString(clean,{throwOnError:false,displayMode:true})+'</div>'}catch(e){html+='<pre>'+esc(mathBuf)+'</pre>'}mathBuf=''}continue}
+    if(inMath){mathBuf+=line+'\\n';if(/\\\\end\\{/.test(line)){inMath=false;try{const clean=mathBuf.replace(/\\\\begin\\{[^}]+\\}/g,'').replace(/\\\\end\\{[^}]+\\}/g,'').replace(/&/g,'').replace(/\\\\\\\\/g,'\\n').trim();html+=katex.renderToString(clean,{throwOnError:false,displayMode:true})}catch(e){html+='<pre>'+esc(mathBuf)+'</pre>'}mathBuf=''}continue}
     const inlineRendered=line.replace(/\\$([^$]+)\\$/g,(_,m)=>{try{return katex.renderToString(m,{throwOnError:false})}catch(e){return m}});
     if(inlineRendered!==line){html+='<p>'+inlineRendered+'</p>';continue}
     if(/^\\s*\\\\(section|subsection|title)\\{/.test(line)){const m=line.match(/\\\\(section|subsection|title)\\{(.*)\\}/);if(m){const tag=m[1]==='title'?'h1':m[1]==='section'?'h2':'h3';html+='<'+tag+'>'+esc(m[2])+'</'+tag+'>';continue}}
@@ -211,13 +184,13 @@ function renderEnglish(text){
 }
 
 async function run(){
-  sts.textContent='Transpiling...';sts.className='status';
+  sts.textContent='Transpiling...';
   try{
     const r=await fetch('/api/transpile',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({source:src.value,target:tgt.value})});
     const d=await r.json();
-    if(d.error){out.style.display='block';ren.style.display='none';out.innerHTML='<span style="color:#f85149"><b>Error:</b> '+esc(d.error)+'</span>';sts.textContent='Error';sts.className='status error'}
-    else{displayOutput(d.output,d.target);sts.textContent='OK ('+d.target+')';sts.className='status ok'}
-  }catch(e){out.style.display='block';ren.style.display='none';out.innerHTML='<span style="color:#f85149"><b>Error:</b> '+esc(e.message)+'</span>';sts.textContent='Error';sts.className='status error'}
+    if(d.error){out.style.display='block';ren.style.display='none';out.innerHTML='<b>Error:</b> '+esc(d.error);sts.textContent='Error'}
+    else{displayOutput(d.output,d.target);sts.textContent='OK ('+d.target+')'}
+  }catch(e){out.style.display='block';ren.style.display='none';out.innerHTML='<b>Error:</b> '+esc(e.message);sts.textContent='Error'}
 }
 
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
@@ -238,6 +211,10 @@ def run_playground(*, port: int = 8080, host: str = "127.0.0.1", verbose: bool =
                 BaseHTTPRequestHandler.log_message(self, format, *args)
 
         def do_GET(self):
+            if self.path == "/favicon.ico":
+                self.send_response(204)
+                self.end_headers()
+                return
             self.send_response(200)
             self.send_header("Content-Type", "text/html; charset=utf-8")
             self.end_headers()
