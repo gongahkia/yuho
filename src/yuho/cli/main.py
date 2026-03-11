@@ -1146,7 +1146,7 @@ def webhook(ctx: click.Context, action: str, target: Optional[str], events: tupl
 @cli.command("ci-report")
 @click.argument("directory", default=".", type=click.Path(exists=True))
 @click.option("-o", "--output", type=click.Path(), help="Output file path")
-@click.option("--format", "fmt", type=click.Choice(["json", "sarif"]), default="json", help="Output format")
+@click.option("--format", "fmt", type=click.Choice(["json", "sarif", "junit"]), default="json", help="Output format")
 @click.pass_context
 def ci_report(ctx: click.Context, directory: str, output: Optional[str], fmt: str) -> None:
     """Run check+lint on all .yh files and produce a unified report."""
