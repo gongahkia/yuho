@@ -988,10 +988,23 @@ class ASTBuilder:
                 name = self._text(name_node) if name_node else ""
                 description = self._build_expression(desc_node) if desc_node else nodes.StringLit(value="")
 
+                caused_by_node = self._child_by_field(child, "caused_by")
+                burden_node = self._child_by_type(child, "burden_qualifier")
+                burden = burden_standard = None
+                if burden_node:
+                    for bc in burden_node.children:
+                        t = self._text(bc)
+                        if t in ("prosecution", "defence"):
+                            burden = t
+                        elif t in ("beyond_reasonable_doubt", "balance_of_probabilities", "prima_facie"):
+                            burden_standard = t
                 elements.append(nodes.ElementNode(
                     element_type=elem_type,
                     name=name,
                     description=description,
+                    caused_by=self._text(caused_by_node) if caused_by_node else None,
+                    burden=burden,
+                    burden_standard=burden_standard,
                     doc_comment=self._get_doc_comment(child),
                     source_location=self._loc(child),
                 ))
