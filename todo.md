@@ -50,7 +50,7 @@ Phase 16 (interop)      ──── independent, can start anytime
 - [ ] Move `doc_comment` out of grammar `extras` into named children of declarations
 - [ ] Add `doc_comment: Optional[str]` to `StructDefNode`, `FunctionDefNode`, `StatuteNode`, `ElementNode`, `FieldDef`
 - [ ] Update `builder.py` to extract `///` text from preceding doc_comment nodes
-- [ ] Regenerate tree-sitter parser
+- [x] Regenerate tree-sitter parser
 
 **Files**: `grammar.js`, `nodes.py`, `builder.py`
 
@@ -123,14 +123,14 @@ Phase 16 (interop)      ──── independent, can start anytime
 
 ## Phase 4: Formal Semantics Document [L]
 
-- [ ] Create `doc/FORMAL_SEMANTICS.md`
-  - [ ] Abstract syntax (BNF at AST level)
-  - [ ] Type system judgment rules
-  - [ ] Big-step operational semantics (expressions, match-case, function calls, structs)
-  - [ ] Defeasible semantics (exception defeat relation, partial order)
-  - [ ] Module semantics (import resolution, scoping)
-  - [ ] Type soundness sketch (progress + preservation)
-- [ ] Create `tests/test_semantics.py` -- test cases validating interpreter matches formal rules
+- [x] Create `doc/FORMAL_SEMANTICS.md`
+  - [x] Abstract syntax (BNF at AST level)
+  - [x] Type system judgment rules
+  - [x] Big-step operational semantics (expressions, match-case, function calls, structs)
+  - [x] Defeasible semantics (exception defeat relation, partial order)
+  - [x] Module semantics (import resolution, scoping)
+  - [x] Type soundness sketch (progress + preservation)
+- [x] Create `tests/test_semantics.py` -- test cases validating interpreter matches formal rules
 
 **Files**: new `doc/FORMAL_SEMANTICS.md`, new `tests/test_semantics.py`
 
@@ -187,12 +187,12 @@ For each of 12 statutes (`library/penal_code/s{NNN}_{name}/`):
 
 ## Phase 8: E2E Tests [M]
 
-- [ ] `tests/e2e/test_parse_to_eval.py` -- parse -> AST -> analyze -> evaluate (all 12 statutes)
-- [ ] `tests/e2e/test_transpile_roundtrip.py` -- parse -> transpile -> verify output
-- [ ] `tests/e2e/test_verify_pipeline.py` -- parse -> Z3/Alloy -> check results
-- [ ] `tests/e2e/test_module_resolution.py` -- cross-file imports, cycles, type checking
-- [ ] `tests/e2e/test_defeasible.py` -- exception defeat, guards, multiple exceptions
-- [ ] `tests/e2e/conftest.py` -- shared fixtures
+- [x] `tests/e2e/test_parse_to_eval.py` -- parse -> AST -> analyze -> evaluate (all 12 statutes)
+- [x] `tests/e2e/test_transpile_roundtrip.py` -- parse -> transpile -> verify output
+- [x] `tests/e2e/test_verify_pipeline.py` -- parse -> Z3/Alloy -> check results
+- [x] `tests/e2e/test_module_resolution.py` -- cross-file imports, cycles, type checking
+- [x] `tests/e2e/test_defeasible.py` -- exception defeat, guards, multiple exceptions
+- [x] `tests/e2e/conftest.py` -- shared fixtures
 
 **Files**: new `tests/e2e/`
 
