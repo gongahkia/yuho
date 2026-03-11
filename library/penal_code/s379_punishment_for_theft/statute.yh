@@ -18,7 +18,7 @@ fn s379_applies(bool theftCommitted) : bool {
     }
 }
 
-statute 379 "Punishment for Theft" {
+statute 379 "Punishment for Theft" effective 1872-01-01 {
     definitions {
         theft := "As defined under section 378";
         punishment := "Imprisonment or fine or both for committing theft";
