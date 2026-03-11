@@ -22,7 +22,7 @@ fn is_outrage_modesty(bool intentToOutrageModesty, bool knowledgeLikelyToOutrage
     }
 }
 
-statute 354 "Assault or Criminal Force to Outrage Modesty" {
+statute 354 "Assault or Criminal Force to Outrage Modesty" effective 1872-01-01 {
     definitions {
         outrage_modesty := "Using criminal force or assault on any person with intent to or knowing it likely to outrage the modesty of that person";
         criminal_force := "Intentionally using force on any person without that person's consent";
