@@ -20,7 +20,7 @@ fn is_kidnapping(string kidnappingType, bool conveyedFromSingapore, bool takenFr
     }
 }
 
-statute 363 "Punishment for Kidnapping" {
+statute 363 "Punishment for Kidnapping" effective 1872-01-01 {
     definitions {
         kidnapping_from_singapore := "Conveying any person beyond the limits of Singapore without the consent of that person";
         kidnapping_from_lawful_guardianship := "Taking or enticing any minor under 14, or any person of unsound mind, out of the keeping of the lawful guardian without consent";
