@@ -73,6 +73,19 @@ class LSPSection:
 
 
 @dataclass
+class APISection:
+    """[api] configuration section."""
+
+    host: str = "127.0.0.1"
+    port: int = 8080
+    auth_token: Optional[str] = None
+    cors_origins: List[str] = field(default_factory=lambda: ["*"])
+    rate_limit_rps: float = 10.0
+    rate_limit_burst: int = 20
+    rate_limit_enabled: bool = True
+
+
+@dataclass
 class MCPSection:
     """[mcp] configuration section."""
 
@@ -94,14 +107,34 @@ class LibrarySection:
 
 
 @dataclass
+class WebhookSection:
+    """[webhooks] configuration section."""
+
+    enabled: bool = False
+    endpoints: List[Dict[str, Any]] = field(default_factory=list)
+
+
+@dataclass
+class WorkspaceSection:
+    """[workspace] configuration section."""
+
+    enabled: bool = False
+    default_workspace: str = "default"
+    data_dir: Optional[str] = None
+
+
+@dataclass
 class ConfigSchema:
     """Complete configuration schema."""
 
     llm: LLMSection = field(default_factory=LLMSection)
     transpile: TranspileSection = field(default_factory=TranspileSection)
     lsp: LSPSection = field(default_factory=LSPSection)
+    api: APISection = field(default_factory=APISection)
     mcp: MCPSection = field(default_factory=MCPSection)
     library: LibrarySection = field(default_factory=LibrarySection)
+    webhooks: WebhookSection = field(default_factory=WebhookSection)
+    workspace: WorkspaceSection = field(default_factory=WorkspaceSection)
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "ConfigSchema":
@@ -109,15 +142,21 @@ class ConfigSchema:
         llm_data = data.get("llm", {})
         transpile_data = data.get("transpile", {})
         lsp_data = data.get("lsp", {})
+        api_data = data.get("api", {})
         mcp_data = data.get("mcp", {})
         library_data = data.get("library", {})
+        webhooks_data = data.get("webhooks", {})
+        workspace_data = data.get("workspace", {})
 
         return cls(
             llm=LLMSection(**{k: v for k, v in llm_data.items() if k in LLMSection.__dataclass_fields__}),
             transpile=TranspileSection(**{k: v for k, v in transpile_data.items() if k in TranspileSection.__dataclass_fields__}),
             lsp=LSPSection(**{k: v for k, v in lsp_data.items() if k in LSPSection.__dataclass_fields__}),
+            api=APISection(**{k: v for k, v in api_data.items() if k in APISection.__dataclass_fields__}),
             mcp=MCPSection(**{k: v for k, v in mcp_data.items() if k in MCPSection.__dataclass_fields__}),
             library=LibrarySection(**{k: v for k, v in library_data.items() if k in LibrarySection.__dataclass_fields__}),
+            webhooks=WebhookSection(**{k: v for k, v in webhooks_data.items() if k in WebhookSection.__dataclass_fields__}),
+            workspace=WorkspaceSection(**{k: v for k, v in workspace_data.items() if k in WorkspaceSection.__dataclass_fields__}),
         )
 
     def to_dict(self) -> Dict[str, Any]:
@@ -146,6 +185,14 @@ class ConfigSchema:
                 "diagnostic_severity_hint": self.lsp.diagnostic_severity_hint,
                 "completion_trigger_chars": self.lsp.completion_trigger_chars,
             },
+            "api": {
+                "host": self.api.host,
+                "port": self.api.port,
+                "cors_origins": self.api.cors_origins,
+                "rate_limit_rps": self.api.rate_limit_rps,
+                "rate_limit_burst": self.api.rate_limit_burst,
+                "rate_limit_enabled": self.api.rate_limit_enabled,
+            },
             "mcp": {
                 "host": self.mcp.host,
                 "port": self.mcp.port,
@@ -156,5 +203,12 @@ class ConfigSchema:
                 "registry_api_version": self.library.registry_api_version,
                 "timeout": self.library.timeout,
                 "verify_ssl": self.library.verify_ssl,
+            },
+            "webhooks": {
+                "enabled": self.webhooks.enabled,
+            },
+            "workspace": {
+                "enabled": self.workspace.enabled,
+                "default_workspace": self.workspace.default_workspace,
             },
         }
