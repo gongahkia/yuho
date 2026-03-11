@@ -403,7 +403,10 @@ module.exports = grammar({
 
     element_entry: $ => seq(
       repeat(field('doc_comment', $.doc_comment)),
-      field('element_type', choice('actus_reus', 'mens_rea', 'circumstance')),
+      field('element_type', choice(
+        'actus_reus', 'mens_rea', 'circumstance',
+        'obligation', 'prohibition', 'permission', // phase 10: deontic
+      )),
       field('name', $.identifier),
       ':=',
       field('description', $._expression),
