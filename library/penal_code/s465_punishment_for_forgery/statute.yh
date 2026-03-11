@@ -18,7 +18,7 @@ fn s465_applies(bool forgeryCommitted) : bool {
     }
 }
 
-statute 465 "Punishment for Forgery" {
+statute 465 "Punishment for Forgery" effective 1872-01-01 {
     definitions {
         forgery := "As defined under section 463";
         punishment := "Imprisonment or fine or both for committing forgery";
