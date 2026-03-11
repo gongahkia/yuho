@@ -287,51 +287,6 @@ def transpile(
 
 
 # =============================================================================
-# Preview command
-# =============================================================================
-
-
-@cli.command()
-@click.argument("file", type=click.Path(exists=True))
-@click.option(
-    "-t", "--target",
-    type=click.Choice(["english", "mermaid"], case_sensitive=False),
-    default="english",
-    help="Preview format (english or mermaid)"
-)
-@click.option("-p", "--port", type=int, default=8000, help="Server port")
-@click.option("--no-browser", is_flag=True, help="Don't auto-open browser")
-@click.pass_context
-def preview(
-    ctx: click.Context,
-    file: str,
-    target: str,
-    port: int,
-    no_browser: bool,
-) -> None:
-    """
-    Live preview with auto-reload on file changes.
-
-    Watches the file for changes, transpiles to the target format,
-    and serves a live-reloading preview in your browser.
-
-    Examples:
-        yuho preview statute.yh
-        yuho preview statute.yh --target mermaid
-        yuho preview statute.yh --port 3000 --no-browser
-    """
-    from yuho.cli.commands.preview import run_preview
-    run_preview(
-        file=file,
-        target=target.lower(),
-        port=port,
-        no_browser=no_browser,
-        verbose=ctx.obj["verbose"],
-        color=ctx.obj["color"],
-    )
-
-
-# =============================================================================
 # REPL command
 # =============================================================================
 
@@ -922,26 +877,6 @@ def completion(ctx: click.Context, shell: str, show_install: bool) -> None:
 
 
 register_group_commands(cli)
-
-
-# =============================================================================
-# TUI command
-# =============================================================================
-
-
-@cli.command()
-def tui() -> None:
-    """
-    Launch the interactive Terminal User Interface.
-
-    Opens a full-screen TUI with sidebar navigation for all Yuho
-    features: check, transpile, wizard, REPL, lint, test, settings.
-
-    Examples:
-        yuho tui
-    """
-    from yuho.tui import run_tui
-    run_tui()
 
 
 @cli.command()

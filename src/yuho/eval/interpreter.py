@@ -528,12 +528,12 @@ class Interpreter(Visitor):
         saved = self.env
         self.env = call_env
         try:
-            self.visit(fn_def.body)
+            result = self.visit(fn_def.body)
         except ReturnSignal as rs:
             self.env = saved
             return rs.value
         self.env = saved
-        return Value(None, "none")
+        return result
 
     # ======================================================================
     # Struct literal

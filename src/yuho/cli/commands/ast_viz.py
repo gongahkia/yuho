@@ -145,44 +145,44 @@ class ASTVisualizer:
         prefix: str = "",
         is_last: bool = True,
         show_attr: str = "",
+        is_root: bool = True,
     ) -> None:
         """Recursively render a node and its children."""
-        # Determine connector
-        if prefix:
+        # Determine connector (root has none)
+        if is_root:
+            connector = ""
+        else:
             connector = self.chars["elbow"] if is_last else self.chars["tee"]
             connector += self.chars["dash"] * 2 + " "
-        else:
-            connector = ""
-        
+
         # Get display text
         display, color = self._get_node_display(node)
-        
+
         # Add attribute name if provided
         if show_attr:
             attr_text = self.colorize(f"{show_attr}: ", "white")
         else:
             attr_text = ""
-        
+
         # Build line
         node_text = self.colorize(display, color, bold=(color == "cyan"))
         self.lines.append(f"{prefix}{connector}{attr_text}{node_text}")
-        
+
         # Get children
         children = self._get_children(node)
-        
+
         # Calculate new prefix for children
-        if prefix:
-            if is_last:
-                new_prefix = prefix + "    "
-            else:
-                new_prefix = prefix + self.chars["pipe"] + "   "
-        else:
+        if is_root:
             new_prefix = ""
-        
+        elif is_last:
+            new_prefix = prefix + "    "
+        else:
+            new_prefix = prefix + self.chars["pipe"] + "   "
+
         # Render children
         for i, (attr, child) in enumerate(children):
             is_last_child = (i == len(children) - 1)
-            self._render_node(child, new_prefix, is_last_child, attr)
+            self._render_node(child, new_prefix, is_last_child, attr, is_root=False)
     
     def visualize(self, ast: Any) -> str:
         """

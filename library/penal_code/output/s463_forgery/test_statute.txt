@@ -1,0 +1,8 @@
+FUNCTIONS
+==================================================
+
+Function "test_basic"() returning boolean:
+  Return true.
+
+Function "test_edge_case"() returning boolean:
+  Return true.

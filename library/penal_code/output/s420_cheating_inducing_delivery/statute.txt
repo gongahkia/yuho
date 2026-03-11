@@ -1,0 +1,39 @@
+TYPE DEFINITIONS
+==================================================
+
+Type "CheatingDeliveryCase" consists of:
+  - accused: text
+  - victim: text
+  - cheatingCommitted: boolean
+  - deliveryInduced: boolean
+  - propertyType: text
+
+FUNCTIONS
+==================================================
+
+Function "is_s420_cheating"(cheating (boolean), delivery (boolean)) returning boolean:
+  (see decision tree below)
+
+SECTION 420: Cheating and Dishonestly Inducing Delivery of Property
+============================================================
+
+Definitions:
+  "cheating" means Deceiving a person fraudulently or dishonestly
+  "inducing" means Causing a person to act based on deception
+  "delivery" means Handing over property to another
+  "valuable_security" means Document purporting to create, transfer, or release any right
+
+Elements of the offence:
+  Physical element (actus reus): Cheating under Section 415
+  Physical element (actus reus): Dishonestly inducing delivery of property
+  Circumstance: Delivery of property or valuable security
+  Circumstance: Making, altering, or destroying valuable security
+
+Penalty:
+  Shall be punished with imprisonment for a term of not less than 1 year and not more than 10 years, or with a fine of not less than S$0.00 and not more than S$50,000.00, or with any combination thereof.
+
+Illustrations:
+
+example1 A deceives B into believing A is a licensed contractor. B pays A in advance for work A never intends to do. A is guilty under Section 420.
+example2 A, by false pretenses, induces B to sign a document transferring property to A. A is guilty under Section 420.
+

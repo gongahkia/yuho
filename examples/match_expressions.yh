@@ -1,9 +1,9 @@
 // demonstrates match-case expressions in v5 syntax
 
 struct Verdict {
-    guilty,
-    notGuilty,
-    mistrial,
+    bool guilty,
+    bool notGuilty,
+    bool mistrial,
 }
 
 fn sentenceLength(int severity) : string {

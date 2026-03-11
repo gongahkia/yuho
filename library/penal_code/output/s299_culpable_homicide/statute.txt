@@ -1,0 +1,43 @@
+TYPE DEFINITIONS
+==================================================
+
+Type "CulpableHomicideCase" consists of:
+  - accused: text
+  - victim: text
+  - actusReus: text
+  - deathCaused: boolean
+  - mensRea: text
+
+FUNCTIONS
+==================================================
+
+Function "is_culpable_homicide"(actusReus (text), deathCaused (boolean), mensRea (text)) returning boolean:
+  (see decision tree below)
+
+SECTION 299: Culpable Homicide
+============================================================
+
+Definitions:
+  "culpable_homicide" means Causing death by an act done with intention or knowledge
+  "death" means The cessation of life
+  "bodily_injury" means Physical harm to the body likely to cause death
+  "act" means Any voluntary physical movement
+
+Elements of the offence:
+  Physical element (actus reus): Doing an act that causes death
+  Physical element (actus reus): Omission that causes death
+  Circumstance: Death of the victim is caused
+  Mental element (mens rea): Intention of causing death
+  Mental element (mens rea): Intention of causing bodily injury likely to cause death
+  Mental element (mens rea): Knowledge that the act is likely to cause death
+
+Penalty:
+  Shall be punished with imprisonment for a term of not less than 5 years and not more than 20 years, or with a fine of not less than S$0.00 and not more than S$50,000.00, or with any combination thereof.
+
+  Additionally: May be liable to caning
+
+Illustrations:
+
+example1 A lays sticks and turf over a pit, with the intention of causing death. B walks over and falls in and is killed. A has committed culpable homicide.
+example2 A knows that B is behind a bush. C does not know it. A induces C to fire at the bush. C fires and kills B. A has committed culpable homicide.
+
