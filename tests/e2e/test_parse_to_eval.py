@@ -91,7 +91,7 @@ class TestParseToEval:
         statute_path = statute_dir / "statute.yh"
         if not statute_path.exists():
             pytest.skip()
-        valid_types = {"actus_reus", "mens_rea", "circumstance"}
+        valid_types = {"actus_reus", "mens_rea", "circumstance", "obligation", "prohibition", "permission"}
         ast = parse_file(statute_path)
         def _check_elements(members):
             for m in members:

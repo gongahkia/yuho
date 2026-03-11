@@ -120,6 +120,7 @@ class TestAllTargetsRoundtrip:
     TARGETS = [
         "json", "english", "mermaid", "latex", "alloy",
         "graphql", "blocks", "bibtex", "comparative",
+        "akomantoso", "prolog",
     ]
 
     @pytest.mark.parametrize("target_name", TARGETS)
