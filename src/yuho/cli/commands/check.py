@@ -11,6 +11,7 @@ import click
 
 from yuho.cli.error_formatter import format_errors, format_suggestion, Colors, colorize
 from yuho.services.analysis import analyze_file, analyze_source
+from yuho.output.sarif import make_sarif_result, to_sarif
 
 
 # Detailed explanations for common error patterns
@@ -109,6 +110,7 @@ def run_check(
     verbose: bool = False,
     explain_errors: bool = False,
     metrics: bool = False,
+    output_format: str = "text",
 ) -> None:
     """
     Parse and validate a Yuho source file.
@@ -120,6 +122,8 @@ def run_check(
         explain_errors: Show detailed explanations for errors
         metrics: Include code_scale and clock_load_scale metrics in output
     """
+    if output_format == "json":
+        json_output = True
     file_label = "<stdin>" if file == "-" else str(Path(file))
 
     if verbose:
@@ -134,7 +138,9 @@ def run_check(
 
     if not analysis.parse_errors and analysis.errors:
         first_error = analysis.errors[0]
-        if json_output:
+        if output_format == "sarif":
+            print(to_sarif([make_sarif_result("yuho/error", first_error.message, file_label, line=first_error.location.line if first_error.location else 1)]))
+        elif json_output:
             print(json.dumps({"valid": False, "errors": [{"message": first_error.message}]}))
         else:
             click.echo(colorize(f"error: {first_error.message}", Colors.RED), err=True)
@@ -142,6 +148,10 @@ def run_check(
 
     # Report parse errors
     if analysis.parse_errors:
+        if output_format == "sarif":
+            results = [make_sarif_result("yuho/parse", e.message, file_label, line=e.location.line if e.location else 1, col=e.location.col if e.location else 1) for e in analysis.parse_errors]
+            print(to_sarif(results))
+            sys.exit(1)
         if json_output:
             errors_json = [
                 {
