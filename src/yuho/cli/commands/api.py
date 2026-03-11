@@ -409,34 +409,40 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
         self.wfile.write(body)
         self._finish_request_log(200, True)
     
+    def _paginate(self, items: list, params: dict) -> dict:
+        """Apply offset/limit pagination to a list."""
+        offset = max(int(params.get("offset", [0])[0]), 0)
+        limit = min(max(int(params.get("limit", [50])[0]), 1), 200)
+        page = items[offset:offset + limit]
+        return {"items": page, "total": len(items), "offset": offset, "limit": limit}
+
     def _handle_targets(self) -> None:
         """List available transpile targets."""
+        parsed = urlparse(self.path)
+        params = parse_qs(parsed.query)
         targets = [
-            {
-                "name": t.name.lower(),
-                "extension": t.file_extension,
-            }
+            {"name": t.name.lower(), "extension": t.file_extension}
             for t in TranspileTarget
         ]
+        pg = self._paginate(targets, params)
         self._send_json_response(200, APIResponse(
             success=True,
-            data={"targets": targets}
+            data={"targets": pg["items"], "total": pg["total"], "offset": pg["offset"], "limit": pg["limit"]}
         ))
     
     def _handle_rules(self) -> None:
         """List available lint rules."""
         from yuho.cli.commands.lint import ALL_RULES
+        parsed = urlparse(self.path)
+        params = parse_qs(parsed.query)
         rules = [
-            {
-                "id": r.id,
-                "severity": r.severity.name.lower(),
-                "description": r.description,
-            }
+            {"id": r.id, "severity": r.severity.name.lower(), "description": r.description}
             for r in ALL_RULES
         ]
+        pg = self._paginate(rules, params)
         self._send_json_response(200, APIResponse(
             success=True,
-            data={"rules": rules}
+            data={"rules": pg["items"], "total": pg["total"], "offset": pg["offset"], "limit": pg["limit"]}
         ))
     
     @staticmethod
