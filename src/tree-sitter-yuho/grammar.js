@@ -63,6 +63,8 @@ module.exports = grammar({
 
     _declaration: $ => choice(
       $.struct_definition,
+      $.enum_definition,
+      $.type_alias,
       $.function_definition,
       $.statute_block,
       $.import_statement,
@@ -239,6 +241,38 @@ module.exports = grammar({
       ':=',
       field('value', $._expression),
       optional(','),
+    ),
+
+    // =========================================================================
+    // Enum definitions (Phase 9A)
+    // =========================================================================
+
+    enum_definition: $ => seq(
+      repeat(field('doc_comment', $.doc_comment)),
+      'enum',
+      field('name', $.identifier),
+      '{',
+      sepBy1(',', $.enum_variant),
+      optional(','),
+      '}'
+    ),
+
+    enum_variant: $ => seq(
+      field('name', $.identifier),
+      optional(seq('(', sepBy1(',', $._type), ')')),
+    ),
+
+    // =========================================================================
+    // Type aliases (Phase 9B)
+    // =========================================================================
+
+    type_alias: $ => seq(
+      repeat(field('doc_comment', $.doc_comment)),
+      'type',
+      field('name', $.identifier),
+      '=',
+      field('target', $._type),
+      optional(';'),
     ),
 
     // =========================================================================
