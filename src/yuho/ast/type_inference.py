@@ -73,6 +73,12 @@ class TypeInferenceResult:
     # Variable types in scope
     variable_types: Dict[str, TypeAnnotation] = field(default_factory=dict)
     
+    # Enum definitions: name -> set of variant names
+    enum_defs: Dict[str, set] = field(default_factory=dict)
+    # Enum variant -> parent enum name
+    enum_variants: Dict[str, str] = field(default_factory=dict)
+    # Type alias -> resolved type
+    type_aliases: Dict[str, TypeAnnotation] = field(default_factory=dict)
     # Inference errors
     errors: List[str] = field(default_factory=list)
     
@@ -115,8 +121,9 @@ class TypeInferenceVisitor(Visitor):
             elem = self._type_node_to_annotation(type_node.element_type)
             return TypeAnnotation("array", is_array=True, element_type=elem)
         elif isinstance(type_node, nodes.GenericType):
-            # Handle generic types like List<T>
             return TypeAnnotation(type_node.base)
+        elif isinstance(type_node, nodes.RefinementTypeNode):
+            return self._type_node_to_annotation(type_node.base_type)
         return UNKNOWN_TYPE
     
     # =========================================================================
@@ -171,8 +178,13 @@ class TypeInferenceVisitor(Visitor):
         elif name in self.result.variable_types:
             inferred_type = self.result.variable_types[name]
         elif name in self.result.struct_defs:
-            # It's a struct type reference
             inferred_type = TypeAnnotation(name)
+        elif name in getattr(self.result, 'enum_defs', {}):
+            inferred_type = TypeAnnotation(name)
+        elif name in getattr(self.result, 'enum_variants', {}):
+            inferred_type = TypeAnnotation(self.result.enum_variants[name])
+        elif name in getattr(self.result, 'type_aliases', {}):
+            inferred_type = self.result.type_aliases[name]
         else:
             inferred_type = UNKNOWN_TYPE
             
@@ -341,6 +353,28 @@ class TypeInferenceVisitor(Visitor):
         return inferred_type
     
     # =========================================================================
+    # Enum and type alias definitions
+    # =========================================================================
+
+    def visit_enum_def(self, node: nodes.EnumDefNode) -> TypeAnnotation:
+        """Record enum definition and variants."""
+        variant_names = set()
+        for variant in node.variants:
+            variant_names.add(variant.name)
+            self.result.enum_variants[variant.name] = node.name
+        self.result.enum_defs[node.name] = variant_names
+        enum_type = TypeAnnotation(node.name)
+        self.result.set_type(node, enum_type)
+        return enum_type
+
+    def visit_type_alias(self, node: nodes.TypeAliasNode) -> TypeAnnotation:
+        """Record type alias resolution."""
+        target = self._type_node_to_annotation(node.target_type)
+        self.result.type_aliases[node.name] = target
+        self.result.set_type(node, target)
+        return target
+
+    # =========================================================================
     # Variable and function definitions
     # =========================================================================
     
@@ -406,9 +440,13 @@ class TypeInferenceVisitor(Visitor):
     
     def visit_module(self, node: nodes.ModuleNode) -> TypeInferenceResult:
         """Entry point: visit all declarations in module."""
-        # first pass: collect struct definitions and function signatures
+        # first pass: collect struct/enum/alias definitions and function signatures
         for struct_def in node.type_defs:
             self.visit_struct_def(struct_def)
+        for enum_def in getattr(node, 'enum_defs', ()):
+            self.visit_enum_def(enum_def)
+        for type_alias in getattr(node, 'type_aliases', ()):
+            self.visit_type_alias(type_alias)
         for func_def in node.function_defs:
             if func_def.return_type:
                 return_type = self._type_node_to_annotation(func_def.return_type)
