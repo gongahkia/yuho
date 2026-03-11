@@ -19,7 +19,7 @@ fn s323_applies(bool voluntaryHurtCommitted) : bool {
     }
 }
 
-statute 323 "Punishment for Voluntarily Causing Hurt" {
+statute 323 "Punishment for Voluntarily Causing Hurt" effective 1872-01-01 {
     definitions {
         voluntary_hurt := "As defined under section 321";
         punishment := "Imprisonment or fine or both for voluntarily causing hurt";
