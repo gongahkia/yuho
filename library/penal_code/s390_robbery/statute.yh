@@ -21,7 +21,7 @@ fn is_robbery(bool theft, bool extortion, bool violence) : bool {
     }
 }
 
-statute 390 "Robbery" {
+statute 390 "Robbery" effective 1872-01-01 subsumes 378 {
     definitions {
         robbery := "Theft or extortion accompanied by violence or fear of violence";
         theft := "Taking property dishonestly without consent";
