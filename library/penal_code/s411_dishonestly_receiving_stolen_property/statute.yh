@@ -23,7 +23,7 @@ fn is_receiving_stolen(bool propertyIsStolen, bool knowledgeOrReasonToBelieveSto
     }
 }
 
-statute 411 "Dishonestly Receiving Stolen Property" {
+statute 411 "Dishonestly Receiving Stolen Property" effective 1872-01-01 {
     definitions {
         stolen_property := "Property the possession of which has been transferred by theft, extortion, robbery, or criminal misappropriation";
         dishonestly_receiving := "Receiving or retaining property knowing or having reason to believe it to be stolen";
