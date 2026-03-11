@@ -14,6 +14,7 @@ from yuho.ast.nodes import ASTNode, ModuleNode
 from yuho.parser import get_parser
 from yuho.parser.source_location import SourceLocation
 from yuho.parser.wrapper import ParseError, MAX_FILE_SIZE, MAX_SOURCE_LENGTH
+from yuho.ast.statute_lint import LintWarning, lint_module
 from yuho.services.errors import (
     ASTBoundaryError,
     ParserBoundaryError,
@@ -201,6 +202,7 @@ class AnalysisResult:
     semantic_summary: Optional[SemanticSummary] = None
     code_scale: Optional[CodeScale] = None
     clock_load_scale: Optional[ClockLoadScale] = None
+    lint_warnings: list[LintWarning] = field(default_factory=list)
     parse_duration_ms: float = 0.0
     ast_duration_ms: float = 0.0
     semantic_duration_ms: float = 0.0
@@ -399,6 +401,11 @@ def analyze_source(
         statute_count=result.ast_summary.statutes,
         definition_count=result.ast_summary.definitions,
     )
+
+    try:
+        result.lint_warnings = lint_module(result.ast)
+    except Exception:
+        pass # non-blocking: linter failures don't halt analysis
 
     if run_semantic:
         start_semantic = perf_counter()
