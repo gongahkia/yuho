@@ -419,11 +419,19 @@ class EnglishTranspiler(TranspilerBase, Visitor):
     def _visit_variable_decl(self, node: nodes.VariableDecl) -> None:
         """Generate English for variable declaration."""
         type_str = self._type_to_english(node.type_annotation)
+        qualifier = getattr(node, 'qualifier', None) or ""
+        prefix = ""
+        if qualifier == "fact":
+            prefix = "[FACT] "
+        elif qualifier == "conclusion":
+            prefix = "[CONCLUSION] "
+        elif qualifier == "presumed":
+            prefix = "[PRESUMED] "
         if node.value:
             value_str = self._expr_to_english(node.value)
-            self._emit(f"Let {node.name} be a {type_str} with value {value_str}.")
+            self._emit(f"{prefix}Let {node.name} be a {type_str} with value {value_str}.")
         else:
-            self._emit(f"Let {node.name} be a {type_str}.")
+            self._emit(f"{prefix}Let {node.name} be a {type_str}.")
 
     def _visit_statement(self, node: nodes.ASTNode) -> None:
         """Generate English for statement."""
