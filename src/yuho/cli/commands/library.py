@@ -5,7 +5,7 @@ Provides search, install, uninstall, list, update, publish, and info commands
 for managing Yuho statute packages.
 """
 
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 from pathlib import Path
 import json
 import click
@@ -37,6 +37,50 @@ def _is_offline_mode() -> bool:
     return False
 
 
+def _scan_local_library() -> List[Dict[str, Any]]:
+    """Scan the local library/ directory for statute files and return metadata."""
+    library_dir = Path.cwd() / "library"
+    if not library_dir.is_dir():
+        return []
+    results = []
+    for statute_file in sorted(library_dir.rglob("statute.yh")):
+        rel = statute_file.relative_to(library_dir)
+        parts = rel.parts  # e.g. ('penal_code', 's300_murder', 'statute.yh')
+        if len(parts) < 2:
+            continue
+        dir_name = parts[-2]  # e.g. 's300_murder'
+        category = parts[0] if len(parts) > 2 else ""
+        # Extract section number and title from dir name
+        title = dir_name.replace("_", " ").title()
+        section_number = ""
+        if dir_name.startswith("s") and "_" in dir_name:
+            num_part = dir_name.split("_")[0][1:]  # strip leading 's'
+            if num_part.isdigit():
+                section_number = num_part
+                title = " ".join(dir_name.split("_")[1:]).replace("_", " ").title()
+        # Try to get actual title from the file
+        try:
+            from yuho.services.analysis import analyze_file
+            analysis = analyze_file(str(statute_file), run_semantic=False)
+            if analysis.ast and analysis.ast.statutes:
+                s = analysis.ast.statutes[0]
+                if s.title:
+                    title = s.title.value if hasattr(s.title, 'value') else str(s.title)
+                if s.section_number:
+                    section_number = str(s.section_number)
+        except Exception:
+            pass
+        results.append({
+            "section_number": section_number,
+            "title": title,
+            "directory": dir_name,
+            "category": category,
+            "path": str(statute_file),
+            "source": "local",
+        })
+    return results
+
+
 def _offline_block_message(operation: str) -> str:
     return (
         f"Offline mode enabled: '{operation}' requires registry/network access. "
@@ -64,7 +108,7 @@ def run_library_search(
 ) -> None:
     """
     Search the library for packages matching query.
-    
+
     Args:
         query: Search query (keyword, section number, or title)
         jurisdiction: Filter by jurisdiction
@@ -74,35 +118,45 @@ def run_library_search(
         verbose: Verbose output
     """
     from yuho.library import search_library
-    
+
     results = search_library(
         keyword=query,
         jurisdiction=jurisdiction,
         tags=tags,
     )[:limit]
-    
+
+    # Also search local library
+    query_lower = query.lower()
+    for pkg in _scan_local_library():
+        searchable = f"{pkg.get('title', '')} {pkg.get('directory', '')} {pkg.get('section_number', '')}".lower()
+        if query_lower in searchable:
+            # Avoid duplicates
+            if not any(r.get("section_number") == pkg.get("section_number") for r in results):
+                results.append(pkg)
+
+    results = results[:limit]
+
     if json_output:
         click.echo(json.dumps(results, indent=2))
         return
-    
+
     if not results:
         click.echo(f"No packages found for '{query}'")
         return
-    
+
     click.echo(f"Found {len(results)} package(s):\n")
-    
+
     for pkg in results:
         section = pkg.get("section_number", "")
         title = pkg.get("title", "")
         version = pkg.get("version", "")
-        jurisdiction_val = pkg.get("jurisdiction", "")
         description = pkg.get("description", "")
-        
-        click.echo(click.style(f"  {section}", fg="cyan", bold=True) + 
-                   click.style(f" v{version}", fg="yellow"))
+
+        label = click.style(f"  S{section}", fg="cyan", bold=True)
+        if version:
+            label += click.style(f" v{version}", fg="yellow")
+        click.echo(label)
         click.echo(f"    {title}")
-        if jurisdiction_val:
-            click.echo(f"    Jurisdiction: {jurisdiction_val}")
         if description and verbose:
             click.echo(f"    {description[:80]}...")
         click.echo()
@@ -219,35 +273,54 @@ def run_library_list(
     verbose: bool = False,
 ) -> None:
     """
-    List all installed packages.
-    
+    List all installed packages and local library statutes.
+
     Args:
         json_output: Output as JSON
         verbose: Verbose output
     """
     from yuho.library import list_installed
-    
+
     packages = list_installed()
-    
+    local = _scan_local_library()
+
+    # Merge: local statutes + installed packages (dedup by section_number)
+    seen = set()
+    all_packages = []
+    for pkg in local:
+        sn = pkg.get("section_number", "")
+        if sn and sn not in seen:
+            seen.add(sn)
+            all_packages.append(pkg)
+    for pkg in packages:
+        sn = pkg.get("section_number", "")
+        if sn not in seen:
+            seen.add(sn)
+            all_packages.append(pkg)
+
     if json_output:
-        click.echo(json.dumps(packages, indent=2))
+        click.echo(json.dumps(all_packages, indent=2))
         return
-    
-    if not packages:
+
+    if not all_packages:
         click.echo("No packages installed")
         return
-    
-    click.echo(f"Installed packages ({len(packages)}):\n")
-    
-    for pkg in packages:
+
+    click.echo(f"Library statutes ({len(all_packages)}):\n")
+
+    for pkg in all_packages:
         section = pkg.get("section_number", "")
         title = pkg.get("title", "")
         version = pkg.get("version", "")
-        
-        click.echo(f"  {click.style(section, fg='cyan', bold=True)} " +
-                   f"{click.style(f'v{version}', fg='yellow')}")
-        if verbose:
-            click.echo(f"    {title}")
+        source = pkg.get("source", "registry")
+
+        label = f"  {click.style('S' + section, fg='cyan', bold=True)}"
+        if version:
+            label += f" {click.style(f'v{version}', fg='yellow')}"
+        label += f"  {title}"
+        if verbose and source == "local":
+            label += click.style(f"  [{pkg.get('path', '')}]", dim=True)
+        click.echo(label)
 
 
 def run_library_update(
@@ -714,7 +787,7 @@ def run_library_info(
     Show detailed package information.
 
     Args:
-        package: Package section number
+        package: Package section number or directory name
         json_output: Output as JSON
         verbose: Verbose output
     """
@@ -722,29 +795,45 @@ def run_library_info(
 
     index = LibraryIndex()
     entry = index.get(package)
+    info = entry.to_dict() if entry else None
 
-    if not entry:
+    # Fall back to local library
+    if not info:
+        for pkg in _scan_local_library():
+            if package in (pkg.get("section_number", ""), pkg.get("directory", "")):
+                info = pkg
+                break
+
+    if not info:
         if json_output:
             click.echo(json.dumps({"error": f"Package not found: {package}"}))
         else:
             click.echo(f"Package not found: {package}")
         raise SystemExit(1)
 
-    info = entry.to_dict()
-
     if json_output:
         click.echo(json.dumps(info, indent=2))
         return
 
-    click.echo(click.style(f"\n{info['section_number']}", fg="cyan", bold=True) +
-               click.style(f" v{info['version']}", fg="yellow"))
-    click.echo(f"\n  Title:        {info['title']}")
-    click.echo(f"  Jurisdiction: {info['jurisdiction']}")
-    click.echo(f"  Contributor:  {info['contributor']}")
+    section = info.get("section_number", "")
+    title = info.get("title", "")
+    version = info.get("version", "")
 
+    label = click.style(f"\nS{section}", fg="cyan", bold=True)
+    if version:
+        label += click.style(f" v{version}", fg="yellow")
+    click.echo(label)
+    click.echo(f"\n  Title:        {title}")
+    if info.get("jurisdiction"):
+        click.echo(f"  Jurisdiction: {info['jurisdiction']}")
+    if info.get("contributor"):
+        click.echo(f"  Contributor:  {info['contributor']}")
+    if info.get("category"):
+        click.echo(f"  Category:     {info['category']}")
+    if info.get("path"):
+        click.echo(f"  Path:         {info['path']}")
     if info.get("description"):
         click.echo(f"  Description:  {info['description']}")
-
     if info.get("tags"):
         click.echo(f"  Tags:         {', '.join(info['tags'])}")
 

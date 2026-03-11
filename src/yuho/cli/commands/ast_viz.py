@@ -214,37 +214,37 @@ def format_ast_stats(ast: Any) -> Dict[str, int]:
     Returns:
         Dict mapping node type to count
     """
+    import dataclasses
     stats: Dict[str, int] = {}
-    
+    seen: set = set()
+
     def visit(node: Any) -> None:
         if node is None:
             return
-        
+        node_id = id(node)
+        if node_id in seen:
+            return
+        seen.add(node_id)
         if isinstance(node, (list, tuple)):
             for item in node:
                 visit(item)
             return
-        
-        # Count this node type
+        if not dataclasses.is_dataclass(node) or isinstance(node, type):
+            return
         node_type = type(node).__name__
         stats[node_type] = stats.get(node_type, 0) + 1
-        
-        # Visit all attributes that might contain children
-        for attr in dir(node):
-            if attr.startswith("_"):
+        for f in dataclasses.fields(node):
+            if f.name == "source_location":
                 continue
-            try:
-                value = getattr(node, attr)
-                if isinstance(value, (list, tuple)):
-                    for item in value:
-                        if hasattr(item, "__class__") and not isinstance(item, (str, int, float, bool)):
-                            visit(item)
-                elif hasattr(value, "__class__") and not isinstance(value, (str, int, float, bool, type(None))):
-                    if not callable(value):
-                        visit(value)
-            except (AttributeError, TypeError):
-                pass
-    
+            value = getattr(node, f.name)
+            if isinstance(value, (str, int, float, bool, type(None))):
+                continue
+            if isinstance(value, (list, tuple)):
+                for item in value:
+                    visit(item)
+            else:
+                visit(value)
+
     visit(ast)
     return stats
 

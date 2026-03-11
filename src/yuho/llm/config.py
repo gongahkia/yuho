@@ -13,6 +13,9 @@ class ProviderType(Enum):
     HUGGINGFACE = "huggingface"
     OPENAI = "openai"
     ANTHROPIC = "anthropic"
+    GEMINI = "gemini"
+    PLEX = "plex"
+    KEYMEET = "keymeet"
 
 
 @dataclass

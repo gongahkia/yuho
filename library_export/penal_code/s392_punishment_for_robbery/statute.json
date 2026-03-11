@@ -1,0 +1,611 @@
+{
+  "_type": "ModuleNode",
+  "_loc": {
+    "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+    "line": 1,
+    "col": 1,
+    "end_line": 51,
+    "end_col": 1
+  },
+  "_schema_version": "1.0.0",
+  "imports": [],
+  "type_defs": [
+    {
+      "_type": "StructDefNode",
+      "_loc": {
+        "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+        "line": 9,
+        "col": 1,
+        "end_line": 13,
+        "end_col": 2
+      },
+      "name": "S392Case",
+      "fields": [
+        {
+          "_type": "FieldDef",
+          "_loc": {
+            "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+            "line": 10,
+            "col": 5,
+            "end_line": 10,
+            "end_col": 20
+          },
+          "type": {
+            "_type": "BuiltinType",
+            "_loc": {
+              "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+              "line": 10,
+              "col": 5,
+              "end_line": 10,
+              "end_col": 11
+            },
+            "name": "string"
+          },
+          "name": "accused"
+        },
+        {
+          "_type": "FieldDef",
+          "_loc": {
+            "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+            "line": 11,
+            "col": 5,
+            "end_line": 11,
+            "end_col": 27
+          },
+          "type": {
+            "_type": "BuiltinType",
+            "_loc": {
+              "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+              "line": 11,
+              "col": 5,
+              "end_line": 11,
+              "end_col": 9
+            },
+            "name": "bool"
+          },
+          "name": "robberyCommitted"
+        },
+        {
+          "_type": "FieldDef",
+          "_loc": {
+            "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+            "line": 12,
+            "col": 5,
+            "end_line": 12,
+            "end_col": 22
+          },
+          "type": {
+            "_type": "BuiltinType",
+            "_loc": {
+              "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+              "line": 12,
+              "col": 5,
+              "end_line": 12,
+              "end_col": 11
+            },
+            "name": "string"
+          },
+          "name": "timeOfDay"
+        }
+      ]
+    }
+  ],
+  "function_defs": [
+    {
+      "_type": "FunctionDefNode",
+      "_loc": {
+        "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+        "line": 15,
+        "col": 1,
+        "end_line": 21,
+        "end_col": 2
+      },
+      "name": "s392_punishment",
+      "params": [
+        {
+          "_type": "ParamDef",
+          "_loc": {
+            "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+            "line": 15,
+            "col": 20,
+            "end_line": 15,
+            "end_col": 41
+          },
+          "type": {
+            "_type": "BuiltinType",
+            "_loc": {
+              "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+              "line": 15,
+              "col": 20,
+              "end_line": 15,
+              "end_col": 24
+            },
+            "name": "bool"
+          },
+          "name": "robberyCommitted"
+        },
+        {
+          "_type": "ParamDef",
+          "_loc": {
+            "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+            "line": 15,
+            "col": 43,
+            "end_line": 15,
+            "end_col": 59
+          },
+          "type": {
+            "_type": "BuiltinType",
+            "_loc": {
+              "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+              "line": 15,
+              "col": 43,
+              "end_line": 15,
+              "end_col": 49
+            },
+            "name": "string"
+          },
+          "name": "timeOfDay"
+        }
+      ],
+      "return_type": {
+        "_type": "BuiltinType",
+        "_loc": {
+          "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+          "line": 15,
+          "col": 63,
+          "end_line": 15,
+          "end_col": 69
+        },
+        "name": "string"
+      },
+      "body": {
+        "_type": "Block",
+        "_loc": {
+          "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+          "line": 15,
+          "col": 70,
+          "end_line": 21,
+          "end_col": 2
+        },
+        "statements": [
+          {
+            "_type": "ExpressionStmt",
+            "_loc": {
+              "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+              "line": 16,
+              "col": 5,
+              "end_line": 20,
+              "end_col": 6
+            },
+            "expression": {
+              "_type": "MatchExprNode",
+              "_loc": {
+                "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+                "line": 16,
+                "col": 5,
+                "end_line": 20,
+                "end_col": 6
+              },
+              "arms": [
+                {
+                  "_type": "MatchArm",
+                  "_loc": {
+                    "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+                    "line": 17,
+                    "col": 9,
+                    "end_line": 17,
+                    "end_col": 70
+                  },
+                  "pattern": {
+                    "_type": "LiteralPattern",
+                    "_loc": {
+                      "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+                      "line": 17,
+                      "col": 14,
+                      "end_line": 17,
+                      "end_col": 18
+                    },
+                    "literal": {
+                      "_type": "BoolLit",
+                      "_loc": {
+                        "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+                        "line": 17,
+                        "col": 14,
+                        "end_line": 17,
+                        "end_col": 18
+                      },
+                      "value": true
+                    }
+                  },
+                  "guard": {
+                    "_type": "BinaryExprNode",
+                    "_loc": {
+                      "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+                      "line": 17,
+                      "col": 22,
+                      "end_line": 17,
+                      "end_col": 47
+                    },
+                    "left": {
+                      "_type": "IdentifierNode",
+                      "_loc": {
+                        "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+                        "line": 17,
+                        "col": 22,
+                        "end_line": 17,
+                        "end_col": 38
+                      },
+                      "name": "robberyCommitted"
+                    },
+                    "operator": "==",
+                    "right": {
+                      "_type": "BoolLit",
+                      "_loc": {
+                        "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+                        "line": 17,
+                        "col": 42,
+                        "end_line": 17,
+                        "end_col": 47
+                      },
+                      "value": false
+                    }
+                  },
+                  "body": {
+                    "_type": "StringLit",
+                    "_loc": {
+                      "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+                      "line": 17,
+                      "col": 63,
+                      "end_line": 17,
+                      "end_col": 69
+                    },
+                    "value": "none"
+                  }
+                },
+                {
+                  "_type": "MatchArm",
+                  "_loc": {
+                    "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+                    "line": 18,
+                    "col": 9,
+                    "end_line": 18,
+                    "end_col": 84
+                  },
+                  "pattern": {
+                    "_type": "LiteralPattern",
+                    "_loc": {
+                      "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+                      "line": 18,
+                      "col": 14,
+                      "end_line": 18,
+                      "end_col": 18
+                    },
+                    "literal": {
+                      "_type": "BoolLit",
+                      "_loc": {
+                        "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+                        "line": 18,
+                        "col": 14,
+                        "end_line": 18,
+                        "end_col": 18
+                      },
+                      "value": true
+                    }
+                  },
+                  "guard": {
+                    "_type": "BinaryExprNode",
+                    "_loc": {
+                      "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+                      "line": 18,
+                      "col": 22,
+                      "end_line": 18,
+                      "end_col": 57
+                    },
+                    "left": {
+                      "_type": "IdentifierNode",
+                      "_loc": {
+                        "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+                        "line": 18,
+                        "col": 22,
+                        "end_line": 18,
+                        "end_col": 31
+                      },
+                      "name": "timeOfDay"
+                    },
+                    "operator": "==",
+                    "right": {
+                      "_type": "StringLit",
+                      "_loc": {
+                        "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+                        "line": 18,
+                        "col": 35,
+                        "end_line": 18,
+                        "end_col": 57
+                      },
+                      "value": "after_7pm_before_7am"
+                    }
+                  },
+                  "body": {
+                    "_type": "StringLit",
+                    "_loc": {
+                      "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+                      "line": 18,
+                      "col": 73,
+                      "end_line": 18,
+                      "end_col": 83
+                    },
+                    "value": "enhanced"
+                  }
+                },
+                {
+                  "_type": "MatchArm",
+                  "_loc": {
+                    "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+                    "line": 19,
+                    "col": 9,
+                    "end_line": 19,
+                    "end_col": 42
+                  },
+                  "pattern": {
+                    "_type": "WildcardPattern",
+                    "_loc": {
+                      "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+                      "line": 19,
+                      "col": 14,
+                      "end_line": 19,
+                      "end_col": 15
+                    }
+                  },
+                  "body": {
+                    "_type": "StringLit",
+                    "_loc": {
+                      "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+                      "line": 19,
+                      "col": 31,
+                      "end_line": 19,
+                      "end_col": 41
+                    },
+                    "value": "standard"
+                  }
+                }
+              ],
+              "ensure_exhaustiveness": true
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "statutes": [
+    {
+      "_type": "StatuteNode",
+      "_loc": {
+        "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+        "line": 23,
+        "col": 1,
+        "end_line": 50,
+        "end_col": 2
+      },
+      "section_number": "392",
+      "title": {
+        "_type": "StringLit",
+        "_loc": {
+          "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+          "line": 23,
+          "col": 13,
+          "end_line": 23,
+          "end_col": 37
+        },
+        "value": "Punishment for Robbery"
+      },
+      "definitions": [
+        {
+          "_type": "DefinitionEntry",
+          "_loc": {
+            "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+            "line": 25,
+            "col": 9,
+            "end_line": 25,
+            "end_col": 51
+          },
+          "term": "robbery",
+          "definition": {
+            "_type": "StringLit",
+            "_loc": {
+              "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+              "line": 25,
+              "col": 20,
+              "end_line": 25,
+              "end_col": 50
+            },
+            "value": "As defined under section 390"
+          }
+        },
+        {
+          "_type": "DefinitionEntry",
+          "_loc": {
+            "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+            "line": 26,
+            "col": 9,
+            "end_line": 26,
+            "end_col": 100
+          },
+          "term": "enhanced_punishment",
+          "definition": {
+            "_type": "StringLit",
+            "_loc": {
+              "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+              "line": 26,
+              "col": 32,
+              "end_line": 26,
+              "end_col": 99
+            },
+            "value": "If committed between 7pm and 7am, minimum imprisonment of 3 years"
+          }
+        }
+      ],
+      "elements": [
+        {
+          "_type": "ElementNode",
+          "_loc": {
+            "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+            "line": 30,
+            "col": 9,
+            "end_line": 31,
+            "end_col": 86
+          },
+          "element_type": "circumstance",
+          "name": "robbery_committed",
+          "description": {
+            "_type": "StringLit",
+            "_loc": {
+              "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+              "line": 31,
+              "col": 43,
+              "end_line": 31,
+              "end_col": 85
+            },
+            "value": "Robbery under section 390 is established"
+          }
+        },
+        {
+          "_type": "ElementNode",
+          "_loc": {
+            "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+            "line": 32,
+            "col": 9,
+            "end_line": 33,
+            "end_col": 82
+          },
+          "element_type": "circumstance",
+          "name": "time_of_offence",
+          "description": {
+            "_type": "StringLit",
+            "_loc": {
+              "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+              "line": 33,
+              "col": 41,
+              "end_line": 33,
+              "end_col": 81
+            },
+            "value": "Time of day when robbery was committed"
+          }
+        },
+        {
+          "_type": "ElementNode",
+          "_loc": {
+            "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+            "line": 34,
+            "col": 9,
+            "end_line": 35,
+            "end_col": 59
+          },
+          "element_type": "actus_reus",
+          "name": "conviction",
+          "description": {
+            "_type": "StringLit",
+            "_loc": {
+              "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+              "line": 35,
+              "col": 34,
+              "end_line": 35,
+              "end_col": 58
+            },
+            "value": "Conviction for robbery"
+          }
+        }
+      ],
+      "penalty": {
+        "_type": "PenaltyNode",
+        "_loc": {
+          "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+          "line": 38,
+          "col": 5,
+          "end_line": 41,
+          "end_col": 6
+        },
+        "imprisonment_min": {
+          "_type": "DurationNode",
+          "_loc": {
+            "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+            "line": 39,
+            "col": 25,
+            "end_line": 39,
+            "end_col": 32
+          },
+          "years": 2,
+          "months": 0,
+          "days": 0,
+          "hours": 0,
+          "minutes": 0,
+          "seconds": 0
+        },
+        "imprisonment_max": {
+          "_type": "DurationNode",
+          "_loc": {
+            "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+            "line": 39,
+            "col": 36,
+            "end_line": 39,
+            "end_col": 44
+          },
+          "years": 14,
+          "months": 0,
+          "days": 0,
+          "hours": 0,
+          "minutes": 0,
+          "seconds": 0
+        },
+        "caning_min": 6,
+        "caning_max": 24
+      },
+      "illustrations": [
+        {
+          "_type": "IllustrationNode",
+          "_loc": {
+            "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+            "line": 43,
+            "col": 5,
+            "end_line": 45,
+            "end_col": 6
+          },
+          "label": "example1",
+          "description": {
+            "_type": "StringLit",
+            "_loc": {
+              "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+              "line": 44,
+              "col": 9,
+              "end_line": 44,
+              "end_col": 163
+            },
+            "value": "A robs B at 10pm. A shall be punished with imprisonment of not less than 3 years and not more than 14 years and with caning of not less than 12 strokes."
+          }
+        },
+        {
+          "_type": "IllustrationNode",
+          "_loc": {
+            "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+            "line": 47,
+            "col": 5,
+            "end_line": 49,
+            "end_col": 6
+          },
+          "label": "example2",
+          "description": {
+            "_type": "StringLit",
+            "_loc": {
+              "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s392_punishment_for_robbery/statute.yh",
+              "line": 48,
+              "col": 9,
+              "end_line": 48,
+              "end_col": 163
+            },
+            "value": "A robs B at 2pm. A shall be punished with imprisonment of not less than 2 years and not more than 14 years and with not less than 6 strokes of the cane."
+          }
+        }
+      ]
+    }
+  ],
+  "variables": []
+}

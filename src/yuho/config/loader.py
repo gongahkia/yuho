@@ -153,6 +153,9 @@ def _load_from_env(prefix: str) -> Dict[str, Any]:
         f"{prefix}LLM_HUGGINGFACE_CACHE": ("llm", "huggingface_cache"),
         f"{prefix}LLM_OPENAI_API_KEY": ("llm", "openai_api_key"),
         f"{prefix}LLM_ANTHROPIC_API_KEY": ("llm", "anthropic_api_key"),
+        f"{prefix}LLM_GEMINI_API_KEY": ("llm", "gemini_api_key"),
+        f"{prefix}LLM_PLEX_API_KEY": ("llm", "plex_api_key"),
+        f"{prefix}LLM_KEYMEET_API_KEY": ("llm", "keymeet_api_key"),
         f"{prefix}LLM_MAX_TOKENS": ("llm", "max_tokens"),
         f"{prefix}LLM_TEMPERATURE": ("llm", "temperature"),
         f"{prefix}TRANSPILE_DEFAULT_TARGET": ("transpile", "default_target"),
@@ -210,7 +213,7 @@ def create_default_config(path: Optional[Path] = None) -> Path:
 # https://yuho.dev/docs/configuration
 
 [llm]
-# LLM provider: ollama, huggingface, openai, anthropic
+# LLM provider: ollama, huggingface, openai, anthropic, gemini, plex, keymeet
 provider = "ollama"
 model = "llama3"
 ollama_host = "localhost"
@@ -218,6 +221,9 @@ ollama_port = 11434
 # huggingface_cache = "~/.cache/huggingface"
 # openai_api_key = ""
 # anthropic_api_key = ""
+# gemini_api_key = ""
+# plex_api_key = ""
+# keymeet_api_key = ""
 max_tokens = 2048
 temperature = 0.7
 fallback_providers = ["huggingface"]

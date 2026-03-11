@@ -20,7 +20,7 @@ import click
 from yuho.parser import get_parser
 from yuho.ast import ASTBuilder
 from yuho.ast.nodes import (
-    ModuleNode, StatuteNode, ElementNode, PenaltyNode,
+    ModuleNode, StatuteNode, ElementNode, ElementGroupNode, PenaltyNode,
     DefinitionEntry, IllustrationNode, StructDefNode,
     FunctionDefNode, StringLit
 )
@@ -108,17 +108,29 @@ class MissingElementsRule(LintRule):
         return issues
 
 
+def _flatten_elements(elements) -> List[ElementNode]:
+    """Recursively flatten ElementGroupNodes into a flat list of ElementNodes."""
+    result = []
+    for e in elements:
+        if isinstance(e, ElementGroupNode):
+            result.extend(_flatten_elements(e.members))
+        elif isinstance(e, ElementNode):
+            result.append(e)
+    return result
+
+
 class MissingActusReusRule(LintRule):
     """Check for statutes without actus reus element."""
-    
+
     id = "missing-actus-reus"
     severity = Severity.INFO
     description = "Statute should have an actus reus element"
-    
+
     def check(self, ast: ModuleNode, source: str) -> List[LintIssue]:
         issues = []
         for statute in ast.statutes:
-            has_actus = any(e.element_type == "actus_reus" for e in statute.elements)
+            flat = _flatten_elements(statute.elements)
+            has_actus = any(e.element_type == "actus_reus" for e in flat)
             if statute.elements and not has_actus:
                 loc = statute.source_location
                 issues.append(LintIssue(
@@ -132,15 +144,16 @@ class MissingActusReusRule(LintRule):
 
 class MissingMensReaRule(LintRule):
     """Check for statutes without mens rea element."""
-    
+
     id = "missing-mens-rea"
     severity = Severity.INFO
     description = "Statute should have a mens rea element"
-    
+
     def check(self, ast: ModuleNode, source: str) -> List[LintIssue]:
         issues = []
         for statute in ast.statutes:
-            has_mens = any(e.element_type == "mens_rea" for e in statute.elements)
+            flat = _flatten_elements(statute.elements)
+            has_mens = any(e.element_type == "mens_rea" for e in flat)
             if statute.elements and not has_mens:
                 loc = statute.source_location
                 issues.append(LintIssue(
@@ -210,7 +223,7 @@ class UnusedDefinitionRule(LintRule):
             
             # Collect all text content to search for term usage
             text_content = ""
-            for elem in statute.elements:
+            for elem in _flatten_elements(statute.elements):
                 if isinstance(elem.description, StringLit):
                     text_content += " " + elem.description.value
             for illus in statute.illustrations:

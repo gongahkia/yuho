@@ -15,6 +15,9 @@ from yuho.llm.providers import (
     LLMProvider,
     OllamaProvider,
     HuggingFaceProvider,
+    GeminiProvider,
+    PlexProvider,
+    KeyMeetProvider,
 )
 from yuho.llm.factory import get_provider, LLMProviderFactory
 from yuho.llm.prompts import (
@@ -33,6 +36,9 @@ __all__ = [
     "LLMProvider",
     "OllamaProvider",
     "HuggingFaceProvider",
+    "GeminiProvider",
+    "PlexProvider",
+    "KeyMeetProvider",
     "get_provider",
     "LLMProviderFactory",
     "STATUTE_EXPLANATION_PROMPT",

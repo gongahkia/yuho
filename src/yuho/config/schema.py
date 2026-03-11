@@ -18,6 +18,9 @@ class LLMSection:
     huggingface_cache: Optional[str] = None
     openai_api_key: Optional[str] = None
     anthropic_api_key: Optional[str] = None
+    gemini_api_key: Optional[str] = None
+    plex_api_key: Optional[str] = None
+    keymeet_api_key: Optional[str] = None
     max_tokens: int = 2048
     temperature: float = 0.7
     fallback_providers: List[str] = field(default_factory=lambda: ["huggingface"])
@@ -25,13 +28,23 @@ class LLMSection:
     def to_llm_config(self):
         """Convert to LLMConfig."""
         from yuho.llm import LLMConfig
+        api_key_map = {
+            "openai": self.openai_api_key,
+            "anthropic": self.anthropic_api_key,
+            "gemini": self.gemini_api_key,
+            "plex": self.plex_api_key,
+            "keymeet": self.keymeet_api_key,
+        }
+        api_key = api_key_map.get(self.provider) or next(
+            (v for v in api_key_map.values() if v), None
+        )
         return LLMConfig(
             provider=self.provider,
             model_name=self.model,
             ollama_host=self.ollama_host,
             ollama_port=self.ollama_port,
             huggingface_cache=self.huggingface_cache,
-            api_key=self.openai_api_key or self.anthropic_api_key,
+            api_key=api_key,
             max_tokens=self.max_tokens,
             temperature=self.temperature,
             fallback_providers=self.fallback_providers,

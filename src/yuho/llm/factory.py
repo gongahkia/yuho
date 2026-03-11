@@ -12,6 +12,9 @@ from yuho.llm.providers import (
     HuggingFaceProvider,
     OpenAIProvider,
     AnthropicProvider,
+    GeminiProvider,
+    PlexProvider,
+    KeyMeetProvider,
 )
 from yuho.config.mask import mask_error
 
@@ -30,6 +33,9 @@ class LLMProviderFactory:
         ProviderType.HUGGINGFACE: HuggingFaceProvider,
         ProviderType.OPENAI: OpenAIProvider,
         ProviderType.ANTHROPIC: AnthropicProvider,
+        ProviderType.GEMINI: GeminiProvider,
+        ProviderType.PLEX: PlexProvider,
+        ProviderType.KEYMEET: KeyMeetProvider,
     }
 
     @classmethod
@@ -103,7 +109,7 @@ class LLMProviderFactory:
 
         raise RuntimeError(
             "No LLM provider available. Install and configure at least one of: "
-            "Ollama, HuggingFace, OpenAI, or Anthropic"
+            "Ollama, HuggingFace, OpenAI, Anthropic, Gemini, Plex, or KeyMeet"
         )
 
 

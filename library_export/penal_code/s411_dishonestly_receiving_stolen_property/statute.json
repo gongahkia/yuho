@@ -1,0 +1,774 @@
+{
+  "_type": "ModuleNode",
+  "_loc": {
+    "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+    "line": 1,
+    "col": 1,
+    "end_line": 54,
+    "end_col": 1
+  },
+  "_schema_version": "1.0.0",
+  "imports": [],
+  "type_defs": [
+    {
+      "_type": "StructDefNode",
+      "_loc": {
+        "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+        "line": 9,
+        "col": 1,
+        "end_line": 15,
+        "end_col": 2
+      },
+      "name": "StolenPropertyCase",
+      "fields": [
+        {
+          "_type": "FieldDef",
+          "_loc": {
+            "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+            "line": 10,
+            "col": 5,
+            "end_line": 10,
+            "end_col": 20
+          },
+          "type": {
+            "_type": "BuiltinType",
+            "_loc": {
+              "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+              "line": 10,
+              "col": 5,
+              "end_line": 10,
+              "end_col": 11
+            },
+            "name": "string"
+          },
+          "name": "accused"
+        },
+        {
+          "_type": "FieldDef",
+          "_loc": {
+            "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+            "line": 11,
+            "col": 5,
+            "end_line": 11,
+            "end_col": 32
+          },
+          "type": {
+            "_type": "BuiltinType",
+            "_loc": {
+              "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+              "line": 11,
+              "col": 5,
+              "end_line": 11,
+              "end_col": 11
+            },
+            "name": "string"
+          },
+          "name": "propertyDescription"
+        },
+        {
+          "_type": "FieldDef",
+          "_loc": {
+            "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+            "line": 12,
+            "col": 5,
+            "end_line": 12,
+            "end_col": 27
+          },
+          "type": {
+            "_type": "BuiltinType",
+            "_loc": {
+              "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+              "line": 12,
+              "col": 5,
+              "end_line": 12,
+              "end_col": 9
+            },
+            "name": "bool"
+          },
+          "name": "propertyIsStolen"
+        },
+        {
+          "_type": "FieldDef",
+          "_loc": {
+            "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+            "line": 13,
+            "col": 5,
+            "end_line": 13,
+            "end_col": 43
+          },
+          "type": {
+            "_type": "BuiltinType",
+            "_loc": {
+              "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+              "line": 13,
+              "col": 5,
+              "end_line": 13,
+              "end_col": 9
+            },
+            "name": "bool"
+          },
+          "name": "knowledgeOrReasonToBelieveStolen"
+        },
+        {
+          "_type": "FieldDef",
+          "_loc": {
+            "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+            "line": 14,
+            "col": 5,
+            "end_line": 14,
+            "end_col": 30
+          },
+          "type": {
+            "_type": "BuiltinType",
+            "_loc": {
+              "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+              "line": 14,
+              "col": 5,
+              "end_line": 14,
+              "end_col": 9
+            },
+            "name": "bool"
+          },
+          "name": "dishonestlyReceived"
+        }
+      ]
+    }
+  ],
+  "function_defs": [
+    {
+      "_type": "FunctionDefNode",
+      "_loc": {
+        "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+        "line": 17,
+        "col": 1,
+        "end_line": 24,
+        "end_col": 2
+      },
+      "name": "is_receiving_stolen",
+      "params": [
+        {
+          "_type": "ParamDef",
+          "_loc": {
+            "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+            "line": 17,
+            "col": 24,
+            "end_line": 17,
+            "end_col": 45
+          },
+          "type": {
+            "_type": "BuiltinType",
+            "_loc": {
+              "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+              "line": 17,
+              "col": 24,
+              "end_line": 17,
+              "end_col": 28
+            },
+            "name": "bool"
+          },
+          "name": "propertyIsStolen"
+        },
+        {
+          "_type": "ParamDef",
+          "_loc": {
+            "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+            "line": 17,
+            "col": 47,
+            "end_line": 17,
+            "end_col": 84
+          },
+          "type": {
+            "_type": "BuiltinType",
+            "_loc": {
+              "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+              "line": 17,
+              "col": 47,
+              "end_line": 17,
+              "end_col": 51
+            },
+            "name": "bool"
+          },
+          "name": "knowledgeOrReasonToBelieveStolen"
+        },
+        {
+          "_type": "ParamDef",
+          "_loc": {
+            "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+            "line": 17,
+            "col": 86,
+            "end_line": 17,
+            "end_col": 110
+          },
+          "type": {
+            "_type": "BuiltinType",
+            "_loc": {
+              "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+              "line": 17,
+              "col": 86,
+              "end_line": 17,
+              "end_col": 90
+            },
+            "name": "bool"
+          },
+          "name": "dishonestlyReceived"
+        }
+      ],
+      "return_type": {
+        "_type": "BuiltinType",
+        "_loc": {
+          "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+          "line": 17,
+          "col": 114,
+          "end_line": 17,
+          "end_col": 118
+        },
+        "name": "bool"
+      },
+      "body": {
+        "_type": "Block",
+        "_loc": {
+          "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+          "line": 17,
+          "col": 119,
+          "end_line": 24,
+          "end_col": 2
+        },
+        "statements": [
+          {
+            "_type": "ExpressionStmt",
+            "_loc": {
+              "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+              "line": 18,
+              "col": 5,
+              "end_line": 23,
+              "end_col": 6
+            },
+            "expression": {
+              "_type": "MatchExprNode",
+              "_loc": {
+                "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+                "line": 18,
+                "col": 5,
+                "end_line": 23,
+                "end_col": 6
+              },
+              "arms": [
+                {
+                  "_type": "MatchArm",
+                  "_loc": {
+                    "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+                    "line": 19,
+                    "col": 9,
+                    "end_line": 19,
+                    "end_col": 69
+                  },
+                  "pattern": {
+                    "_type": "LiteralPattern",
+                    "_loc": {
+                      "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+                      "line": 19,
+                      "col": 14,
+                      "end_line": 19,
+                      "end_col": 18
+                    },
+                    "literal": {
+                      "_type": "BoolLit",
+                      "_loc": {
+                        "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+                        "line": 19,
+                        "col": 14,
+                        "end_line": 19,
+                        "end_col": 18
+                      },
+                      "value": true
+                    }
+                  },
+                  "guard": {
+                    "_type": "BinaryExprNode",
+                    "_loc": {
+                      "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+                      "line": 19,
+                      "col": 22,
+                      "end_line": 19,
+                      "end_col": 47
+                    },
+                    "left": {
+                      "_type": "IdentifierNode",
+                      "_loc": {
+                        "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+                        "line": 19,
+                        "col": 22,
+                        "end_line": 19,
+                        "end_col": 38
+                      },
+                      "name": "propertyIsStolen"
+                    },
+                    "operator": "==",
+                    "right": {
+                      "_type": "BoolLit",
+                      "_loc": {
+                        "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+                        "line": 19,
+                        "col": 42,
+                        "end_line": 19,
+                        "end_col": 47
+                      },
+                      "value": false
+                    }
+                  },
+                  "body": {
+                    "_type": "BoolLit",
+                    "_loc": {
+                      "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+                      "line": 19,
+                      "col": 63,
+                      "end_line": 19,
+                      "end_col": 68
+                    },
+                    "value": false
+                  }
+                },
+                {
+                  "_type": "MatchArm",
+                  "_loc": {
+                    "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+                    "line": 20,
+                    "col": 9,
+                    "end_line": 20,
+                    "end_col": 85
+                  },
+                  "pattern": {
+                    "_type": "LiteralPattern",
+                    "_loc": {
+                      "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+                      "line": 20,
+                      "col": 14,
+                      "end_line": 20,
+                      "end_col": 18
+                    },
+                    "literal": {
+                      "_type": "BoolLit",
+                      "_loc": {
+                        "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+                        "line": 20,
+                        "col": 14,
+                        "end_line": 20,
+                        "end_col": 18
+                      },
+                      "value": true
+                    }
+                  },
+                  "guard": {
+                    "_type": "BinaryExprNode",
+                    "_loc": {
+                      "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+                      "line": 20,
+                      "col": 22,
+                      "end_line": 20,
+                      "end_col": 63
+                    },
+                    "left": {
+                      "_type": "IdentifierNode",
+                      "_loc": {
+                        "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+                        "line": 20,
+                        "col": 22,
+                        "end_line": 20,
+                        "end_col": 54
+                      },
+                      "name": "knowledgeOrReasonToBelieveStolen"
+                    },
+                    "operator": "==",
+                    "right": {
+                      "_type": "BoolLit",
+                      "_loc": {
+                        "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+                        "line": 20,
+                        "col": 58,
+                        "end_line": 20,
+                        "end_col": 63
+                      },
+                      "value": false
+                    }
+                  },
+                  "body": {
+                    "_type": "BoolLit",
+                    "_loc": {
+                      "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+                      "line": 20,
+                      "col": 79,
+                      "end_line": 20,
+                      "end_col": 84
+                    },
+                    "value": false
+                  }
+                },
+                {
+                  "_type": "MatchArm",
+                  "_loc": {
+                    "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+                    "line": 21,
+                    "col": 9,
+                    "end_line": 21,
+                    "end_col": 72
+                  },
+                  "pattern": {
+                    "_type": "LiteralPattern",
+                    "_loc": {
+                      "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+                      "line": 21,
+                      "col": 14,
+                      "end_line": 21,
+                      "end_col": 18
+                    },
+                    "literal": {
+                      "_type": "BoolLit",
+                      "_loc": {
+                        "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+                        "line": 21,
+                        "col": 14,
+                        "end_line": 21,
+                        "end_col": 18
+                      },
+                      "value": true
+                    }
+                  },
+                  "guard": {
+                    "_type": "BinaryExprNode",
+                    "_loc": {
+                      "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+                      "line": 21,
+                      "col": 22,
+                      "end_line": 21,
+                      "end_col": 50
+                    },
+                    "left": {
+                      "_type": "IdentifierNode",
+                      "_loc": {
+                        "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+                        "line": 21,
+                        "col": 22,
+                        "end_line": 21,
+                        "end_col": 41
+                      },
+                      "name": "dishonestlyReceived"
+                    },
+                    "operator": "==",
+                    "right": {
+                      "_type": "BoolLit",
+                      "_loc": {
+                        "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+                        "line": 21,
+                        "col": 45,
+                        "end_line": 21,
+                        "end_col": 50
+                      },
+                      "value": false
+                    }
+                  },
+                  "body": {
+                    "_type": "BoolLit",
+                    "_loc": {
+                      "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+                      "line": 21,
+                      "col": 66,
+                      "end_line": 21,
+                      "end_col": 71
+                    },
+                    "value": false
+                  }
+                },
+                {
+                  "_type": "MatchArm",
+                  "_loc": {
+                    "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+                    "line": 22,
+                    "col": 9,
+                    "end_line": 22,
+                    "end_col": 36
+                  },
+                  "pattern": {
+                    "_type": "WildcardPattern",
+                    "_loc": {
+                      "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+                      "line": 22,
+                      "col": 14,
+                      "end_line": 22,
+                      "end_col": 15
+                    }
+                  },
+                  "body": {
+                    "_type": "BoolLit",
+                    "_loc": {
+                      "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+                      "line": 22,
+                      "col": 31,
+                      "end_line": 22,
+                      "end_col": 35
+                    },
+                    "value": true
+                  }
+                }
+              ],
+              "ensure_exhaustiveness": true
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "statutes": [
+    {
+      "_type": "StatuteNode",
+      "_loc": {
+        "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+        "line": 26,
+        "col": 1,
+        "end_line": 53,
+        "end_col": 2
+      },
+      "section_number": "411",
+      "title": {
+        "_type": "StringLit",
+        "_loc": {
+          "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+          "line": 26,
+          "col": 13,
+          "end_line": 26,
+          "end_col": 52
+        },
+        "value": "Dishonestly Receiving Stolen Property"
+      },
+      "definitions": [
+        {
+          "_type": "DefinitionEntry",
+          "_loc": {
+            "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+            "line": 28,
+            "col": 9,
+            "end_line": 28,
+            "end_col": 143
+          },
+          "term": "stolen_property",
+          "definition": {
+            "_type": "StringLit",
+            "_loc": {
+              "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+              "line": 28,
+              "col": 28,
+              "end_line": 28,
+              "end_col": 142
+            },
+            "value": "Property the possession of which has been transferred by theft, extortion, robbery, or criminal misappropriation"
+          }
+        },
+        {
+          "_type": "DefinitionEntry",
+          "_loc": {
+            "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+            "line": 29,
+            "col": 9,
+            "end_line": 29,
+            "end_col": 120
+          },
+          "term": "dishonestly_receiving",
+          "definition": {
+            "_type": "StringLit",
+            "_loc": {
+              "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+              "line": 29,
+              "col": 34,
+              "end_line": 29,
+              "end_col": 119
+            },
+            "value": "Receiving or retaining property knowing or having reason to believe it to be stolen"
+          }
+        }
+      ],
+      "elements": [
+        {
+          "_type": "ElementNode",
+          "_loc": {
+            "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+            "line": 33,
+            "col": 9,
+            "end_line": 34,
+            "end_col": 73
+          },
+          "element_type": "circumstance",
+          "name": "stolen",
+          "description": {
+            "_type": "StringLit",
+            "_loc": {
+              "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+              "line": 34,
+              "col": 32,
+              "end_line": 34,
+              "end_col": 72
+            },
+            "value": "Property is stolen property as defined"
+          }
+        },
+        {
+          "_type": "ElementNode",
+          "_loc": {
+            "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+            "line": 35,
+            "col": 9,
+            "end_line": 36,
+            "end_col": 95
+          },
+          "element_type": "mens_rea",
+          "name": "knowledge",
+          "description": {
+            "_type": "StringLit",
+            "_loc": {
+              "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+              "line": 36,
+              "col": 31,
+              "end_line": 36,
+              "end_col": 94
+            },
+            "value": "Knowing or having reason to believe the property to be stolen"
+          }
+        },
+        {
+          "_type": "ElementNode",
+          "_loc": {
+            "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+            "line": 37,
+            "col": 9,
+            "end_line": 38,
+            "end_col": 90
+          },
+          "element_type": "actus_reus",
+          "name": "receiving",
+          "description": {
+            "_type": "StringLit",
+            "_loc": {
+              "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+              "line": 38,
+              "col": 33,
+              "end_line": 38,
+              "end_col": 89
+            },
+            "value": "Dishonestly receiving or retaining the stolen property"
+          }
+        }
+      ],
+      "penalty": {
+        "_type": "PenaltyNode",
+        "_loc": {
+          "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+          "line": 41,
+          "col": 5,
+          "end_line": 44,
+          "end_col": 6
+        },
+        "imprisonment_min": {
+          "_type": "DurationNode",
+          "_loc": {
+            "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+            "line": 42,
+            "col": 25,
+            "end_line": 42,
+            "end_col": 31
+          },
+          "years": 0,
+          "months": 0,
+          "days": 0,
+          "hours": 0,
+          "minutes": 0,
+          "seconds": 0
+        },
+        "imprisonment_max": {
+          "_type": "DurationNode",
+          "_loc": {
+            "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+            "line": 42,
+            "col": 35,
+            "end_line": 42,
+            "end_col": 42
+          },
+          "years": 5,
+          "months": 0,
+          "days": 0,
+          "hours": 0,
+          "minutes": 0,
+          "seconds": 0
+        },
+        "fine_min": {
+          "_type": "MoneyNode",
+          "_loc": {
+            "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+            "line": 43,
+            "col": 17,
+            "end_line": 43,
+            "end_col": 22
+          },
+          "currency": "SGD",
+          "amount": "0.00"
+        },
+        "fine_max": {
+          "_type": "MoneyNode",
+          "_loc": {
+            "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+            "line": 43,
+            "col": 26,
+            "end_line": 43,
+            "end_col": 36
+          },
+          "currency": "SGD",
+          "amount": "20000.00"
+        }
+      },
+      "illustrations": [
+        {
+          "_type": "IllustrationNode",
+          "_loc": {
+            "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+            "line": 46,
+            "col": 5,
+            "end_line": 48,
+            "end_col": 6
+          },
+          "label": "example1",
+          "description": {
+            "_type": "StringLit",
+            "_loc": {
+              "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+              "line": 47,
+              "col": 9,
+              "end_line": 47,
+              "end_col": 138
+            },
+            "value": "A buys a laptop from B at a suspiciously low price, knowing that B likely stole it. A has dishonestly received stolen property."
+          }
+        },
+        {
+          "_type": "IllustrationNode",
+          "_loc": {
+            "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+            "line": 50,
+            "col": 5,
+            "end_line": 52,
+            "end_col": 6
+          },
+          "label": "example2",
+          "description": {
+            "_type": "StringLit",
+            "_loc": {
+              "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+              "line": 51,
+              "col": 9,
+              "end_line": 51,
+              "end_col": 138
+            },
+            "value": "A finds goods left at her doorstep. A has no reason to believe they are stolen and keeps them. A has not committed the offence."
+          }
+        }
+      ]
+    }
+  ],
+  "variables": []
+}

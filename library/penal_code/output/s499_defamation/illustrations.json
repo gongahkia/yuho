@@ -1,0 +1,16 @@
+{
+  "_type": "ModuleNode",
+  "_loc": {
+    "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s499_defamation/illustrations.yh",
+    "line": 1,
+    "col": 1,
+    "end_line": 6,
+    "end_col": 1
+  },
+  "_schema_version": "1.0.0",
+  "imports": [],
+  "type_defs": [],
+  "function_defs": [],
+  "statutes": [],
+  "variables": []
+}

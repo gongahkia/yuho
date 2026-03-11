@@ -381,3 +381,130 @@ class AnthropicProvider(LLMProvider):
     def is_available(self) -> bool:
         """Check if API key is configured."""
         return bool(self.config.api_key)
+
+
+class GeminiProvider(LLMProvider):
+    """Google Gemini API provider."""
+
+    def __init__(self, config: LLMConfig):
+        super().__init__(config)
+        self._client = None
+
+    def _get_client(self):
+        """Lazy-initialize Gemini client."""
+        if self._client is None:
+            try:
+                from google import genai
+                self._client = genai.Client(api_key=self.config.api_key)
+            except ImportError:
+                raise ImportError("google-genai required. Install with: pip install google-genai")
+        return self._client
+
+    def generate(self, prompt: str, max_tokens: Optional[int] = None) -> str:
+        """Generate text using Gemini API."""
+        client = self._get_client()
+        max_tokens = max_tokens or self.config.max_tokens
+        try:
+            from google.genai import types
+            response = client.models.generate_content(
+                model=self.config.model_name,
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    max_output_tokens=max_tokens,
+                    temperature=self.config.temperature,
+                ),
+            )
+            return response.text or ""
+        except Exception as e:
+            logger.error(f"Gemini generation error: {e}")
+            raise RuntimeError(f"Gemini error: {e}") from e
+
+    def is_available(self) -> bool:
+        """Check if API key is configured."""
+        return bool(self.config.api_key)
+
+
+class PlexProvider(LLMProvider):
+    """Perplexity (Plex) API provider. Uses OpenAI-compatible API."""
+
+    PLEX_BASE_URL = "https://api.perplexity.ai"
+
+    def __init__(self, config: LLMConfig):
+        super().__init__(config)
+        self._client = None
+
+    def _get_client(self):
+        """Lazy-initialize OpenAI-compatible client for Perplexity."""
+        if self._client is None:
+            try:
+                from openai import OpenAI
+                self._client = OpenAI(
+                    api_key=self.config.api_key,
+                    base_url=self.config.base_url or self.PLEX_BASE_URL,
+                )
+            except ImportError:
+                raise ImportError("openai required for Plex. Install with: pip install openai")
+        return self._client
+
+    def generate(self, prompt: str, max_tokens: Optional[int] = None) -> str:
+        """Generate text using Perplexity API."""
+        client = self._get_client()
+        max_tokens = max_tokens or self.config.max_tokens
+        try:
+            response = client.chat.completions.create(
+                model=self.config.model_name,
+                messages=[{"role": "user", "content": prompt}],
+                max_tokens=max_tokens,
+                temperature=self.config.temperature,
+            )
+            return response.choices[0].message.content or ""
+        except Exception as e:
+            logger.error(f"Plex generation error: {e}")
+            raise RuntimeError(f"Plex error: {e}") from e
+
+    def is_available(self) -> bool:
+        """Check if API key is configured."""
+        return bool(self.config.api_key)
+
+
+class KeyMeetProvider(LLMProvider):
+    """KeyMeet API provider. Uses OpenAI-compatible API."""
+
+    KEYMEET_BASE_URL = "https://api.keymeet.ai/v1"
+
+    def __init__(self, config: LLMConfig):
+        super().__init__(config)
+        self._client = None
+
+    def _get_client(self):
+        """Lazy-initialize OpenAI-compatible client for KeyMeet."""
+        if self._client is None:
+            try:
+                from openai import OpenAI
+                self._client = OpenAI(
+                    api_key=self.config.api_key,
+                    base_url=self.config.base_url or self.KEYMEET_BASE_URL,
+                )
+            except ImportError:
+                raise ImportError("openai required for KeyMeet. Install with: pip install openai")
+        return self._client
+
+    def generate(self, prompt: str, max_tokens: Optional[int] = None) -> str:
+        """Generate text using KeyMeet API."""
+        client = self._get_client()
+        max_tokens = max_tokens or self.config.max_tokens
+        try:
+            response = client.chat.completions.create(
+                model=self.config.model_name,
+                messages=[{"role": "user", "content": prompt}],
+                max_tokens=max_tokens,
+                temperature=self.config.temperature,
+            )
+            return response.choices[0].message.content or ""
+        except Exception as e:
+            logger.error(f"KeyMeet generation error: {e}")
+            raise RuntimeError(f"KeyMeet error: {e}") from e
+
+    def is_available(self) -> bool:
+        """Check if API key is configured."""
+        return bool(self.config.api_key)

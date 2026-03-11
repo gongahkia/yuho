@@ -1,0 +1,491 @@
+{
+  "_type": "ModuleNode",
+  "_loc": {
+    "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s323_punishment_for_voluntarily_causing_hurt/statute.yh",
+    "line": 1,
+    "col": 1,
+    "end_line": 44,
+    "end_col": 1
+  },
+  "_schema_version": "1.0.0",
+  "imports": [],
+  "type_defs": [
+    {
+      "_type": "StructDefNode",
+      "_loc": {
+        "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s323_punishment_for_voluntarily_causing_hurt/statute.yh",
+        "line": 9,
+        "col": 1,
+        "end_line": 13,
+        "end_col": 2
+      },
+      "name": "S323Case",
+      "fields": [
+        {
+          "_type": "FieldDef",
+          "_loc": {
+            "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s323_punishment_for_voluntarily_causing_hurt/statute.yh",
+            "line": 10,
+            "col": 5,
+            "end_line": 10,
+            "end_col": 20
+          },
+          "type": {
+            "_type": "BuiltinType",
+            "_loc": {
+              "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s323_punishment_for_voluntarily_causing_hurt/statute.yh",
+              "line": 10,
+              "col": 5,
+              "end_line": 10,
+              "end_col": 11
+            },
+            "name": "string"
+          },
+          "name": "accused"
+        },
+        {
+          "_type": "FieldDef",
+          "_loc": {
+            "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s323_punishment_for_voluntarily_causing_hurt/statute.yh",
+            "line": 11,
+            "col": 5,
+            "end_line": 11,
+            "end_col": 19
+          },
+          "type": {
+            "_type": "BuiltinType",
+            "_loc": {
+              "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s323_punishment_for_voluntarily_causing_hurt/statute.yh",
+              "line": 11,
+              "col": 5,
+              "end_line": 11,
+              "end_col": 11
+            },
+            "name": "string"
+          },
+          "name": "victim"
+        },
+        {
+          "_type": "FieldDef",
+          "_loc": {
+            "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s323_punishment_for_voluntarily_causing_hurt/statute.yh",
+            "line": 12,
+            "col": 5,
+            "end_line": 12,
+            "end_col": 33
+          },
+          "type": {
+            "_type": "BuiltinType",
+            "_loc": {
+              "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s323_punishment_for_voluntarily_causing_hurt/statute.yh",
+              "line": 12,
+              "col": 5,
+              "end_line": 12,
+              "end_col": 9
+            },
+            "name": "bool"
+          },
+          "name": "voluntaryHurtCommitted"
+        }
+      ]
+    }
+  ],
+  "function_defs": [
+    {
+      "_type": "FunctionDefNode",
+      "_loc": {
+        "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s323_punishment_for_voluntarily_causing_hurt/statute.yh",
+        "line": 15,
+        "col": 1,
+        "end_line": 20,
+        "end_col": 2
+      },
+      "name": "s323_applies",
+      "params": [
+        {
+          "_type": "ParamDef",
+          "_loc": {
+            "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s323_punishment_for_voluntarily_causing_hurt/statute.yh",
+            "line": 15,
+            "col": 17,
+            "end_line": 15,
+            "end_col": 44
+          },
+          "type": {
+            "_type": "BuiltinType",
+            "_loc": {
+              "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s323_punishment_for_voluntarily_causing_hurt/statute.yh",
+              "line": 15,
+              "col": 17,
+              "end_line": 15,
+              "end_col": 21
+            },
+            "name": "bool"
+          },
+          "name": "voluntaryHurtCommitted"
+        }
+      ],
+      "return_type": {
+        "_type": "BuiltinType",
+        "_loc": {
+          "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s323_punishment_for_voluntarily_causing_hurt/statute.yh",
+          "line": 15,
+          "col": 48,
+          "end_line": 15,
+          "end_col": 52
+        },
+        "name": "bool"
+      },
+      "body": {
+        "_type": "Block",
+        "_loc": {
+          "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s323_punishment_for_voluntarily_causing_hurt/statute.yh",
+          "line": 15,
+          "col": 53,
+          "end_line": 20,
+          "end_col": 2
+        },
+        "statements": [
+          {
+            "_type": "ExpressionStmt",
+            "_loc": {
+              "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s323_punishment_for_voluntarily_causing_hurt/statute.yh",
+              "line": 16,
+              "col": 5,
+              "end_line": 19,
+              "end_col": 6
+            },
+            "expression": {
+              "_type": "MatchExprNode",
+              "_loc": {
+                "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s323_punishment_for_voluntarily_causing_hurt/statute.yh",
+                "line": 16,
+                "col": 5,
+                "end_line": 19,
+                "end_col": 6
+              },
+              "arms": [
+                {
+                  "_type": "MatchArm",
+                  "_loc": {
+                    "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s323_punishment_for_voluntarily_causing_hurt/statute.yh",
+                    "line": 17,
+                    "col": 9,
+                    "end_line": 17,
+                    "end_col": 73
+                  },
+                  "pattern": {
+                    "_type": "LiteralPattern",
+                    "_loc": {
+                      "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s323_punishment_for_voluntarily_causing_hurt/statute.yh",
+                      "line": 17,
+                      "col": 14,
+                      "end_line": 17,
+                      "end_col": 18
+                    },
+                    "literal": {
+                      "_type": "BoolLit",
+                      "_loc": {
+                        "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s323_punishment_for_voluntarily_causing_hurt/statute.yh",
+                        "line": 17,
+                        "col": 14,
+                        "end_line": 17,
+                        "end_col": 18
+                      },
+                      "value": true
+                    }
+                  },
+                  "guard": {
+                    "_type": "BinaryExprNode",
+                    "_loc": {
+                      "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s323_punishment_for_voluntarily_causing_hurt/statute.yh",
+                      "line": 17,
+                      "col": 22,
+                      "end_line": 17,
+                      "end_col": 52
+                    },
+                    "left": {
+                      "_type": "IdentifierNode",
+                      "_loc": {
+                        "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s323_punishment_for_voluntarily_causing_hurt/statute.yh",
+                        "line": 17,
+                        "col": 22,
+                        "end_line": 17,
+                        "end_col": 44
+                      },
+                      "name": "voluntaryHurtCommitted"
+                    },
+                    "operator": "==",
+                    "right": {
+                      "_type": "BoolLit",
+                      "_loc": {
+                        "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s323_punishment_for_voluntarily_causing_hurt/statute.yh",
+                        "line": 17,
+                        "col": 48,
+                        "end_line": 17,
+                        "end_col": 52
+                      },
+                      "value": true
+                    }
+                  },
+                  "body": {
+                    "_type": "BoolLit",
+                    "_loc": {
+                      "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s323_punishment_for_voluntarily_causing_hurt/statute.yh",
+                      "line": 17,
+                      "col": 68,
+                      "end_line": 17,
+                      "end_col": 72
+                    },
+                    "value": true
+                  }
+                },
+                {
+                  "_type": "MatchArm",
+                  "_loc": {
+                    "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s323_punishment_for_voluntarily_causing_hurt/statute.yh",
+                    "line": 18,
+                    "col": 9,
+                    "end_line": 18,
+                    "end_col": 37
+                  },
+                  "pattern": {
+                    "_type": "WildcardPattern",
+                    "_loc": {
+                      "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s323_punishment_for_voluntarily_causing_hurt/statute.yh",
+                      "line": 18,
+                      "col": 14,
+                      "end_line": 18,
+                      "end_col": 15
+                    }
+                  },
+                  "body": {
+                    "_type": "BoolLit",
+                    "_loc": {
+                      "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s323_punishment_for_voluntarily_causing_hurt/statute.yh",
+                      "line": 18,
+                      "col": 31,
+                      "end_line": 18,
+                      "end_col": 36
+                    },
+                    "value": false
+                  }
+                }
+              ],
+              "ensure_exhaustiveness": true
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "statutes": [
+    {
+      "_type": "StatuteNode",
+      "_loc": {
+        "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s323_punishment_for_voluntarily_causing_hurt/statute.yh",
+        "line": 22,
+        "col": 1,
+        "end_line": 43,
+        "end_col": 2
+      },
+      "section_number": "323",
+      "title": {
+        "_type": "StringLit",
+        "_loc": {
+          "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s323_punishment_for_voluntarily_causing_hurt/statute.yh",
+          "line": 22,
+          "col": 13,
+          "end_line": 22,
+          "end_col": 54
+        },
+        "value": "Punishment for Voluntarily Causing Hurt"
+      },
+      "definitions": [
+        {
+          "_type": "DefinitionEntry",
+          "_loc": {
+            "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s323_punishment_for_voluntarily_causing_hurt/statute.yh",
+            "line": 24,
+            "col": 9,
+            "end_line": 24,
+            "end_col": 58
+          },
+          "term": "voluntary_hurt",
+          "definition": {
+            "_type": "StringLit",
+            "_loc": {
+              "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s323_punishment_for_voluntarily_causing_hurt/statute.yh",
+              "line": 24,
+              "col": 27,
+              "end_line": 24,
+              "end_col": 57
+            },
+            "value": "As defined under section 321"
+          }
+        },
+        {
+          "_type": "DefinitionEntry",
+          "_loc": {
+            "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s323_punishment_for_voluntarily_causing_hurt/statute.yh",
+            "line": 25,
+            "col": 9,
+            "end_line": 25,
+            "end_col": 83
+          },
+          "term": "punishment",
+          "definition": {
+            "_type": "StringLit",
+            "_loc": {
+              "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s323_punishment_for_voluntarily_causing_hurt/statute.yh",
+              "line": 25,
+              "col": 23,
+              "end_line": 25,
+              "end_col": 82
+            },
+            "value": "Imprisonment or fine or both for voluntarily causing hurt"
+          }
+        }
+      ],
+      "elements": [
+        {
+          "_type": "ElementNode",
+          "_loc": {
+            "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s323_punishment_for_voluntarily_causing_hurt/statute.yh",
+            "line": 30,
+            "col": 9,
+            "end_line": 30,
+            "end_col": 103
+          },
+          "element_type": "circumstance",
+          "name": "offence_committed",
+          "description": {
+            "_type": "StringLit",
+            "_loc": {
+              "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s323_punishment_for_voluntarily_causing_hurt/statute.yh",
+              "line": 30,
+              "col": 43,
+              "end_line": 30,
+              "end_col": 102
+            },
+            "value": "Voluntarily causing hurt under section 321 is established"
+          }
+        },
+        {
+          "_type": "ElementNode",
+          "_loc": {
+            "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s323_punishment_for_voluntarily_causing_hurt/statute.yh",
+            "line": 32,
+            "col": 9,
+            "end_line": 32,
+            "end_col": 76
+          },
+          "element_type": "actus_reus",
+          "name": "conviction",
+          "description": {
+            "_type": "StringLit",
+            "_loc": {
+              "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s323_punishment_for_voluntarily_causing_hurt/statute.yh",
+              "line": 32,
+              "col": 34,
+              "end_line": 32,
+              "end_col": 75
+            },
+            "value": "Conviction for voluntarily causing hurt"
+          }
+        }
+      ],
+      "penalty": {
+        "_type": "PenaltyNode",
+        "_loc": {
+          "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s323_punishment_for_voluntarily_causing_hurt/statute.yh",
+          "line": 35,
+          "col": 5,
+          "end_line": 38,
+          "end_col": 6
+        },
+        "imprisonment_min": {
+          "_type": "DurationNode",
+          "_loc": {
+            "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s323_punishment_for_voluntarily_causing_hurt/statute.yh",
+            "line": 36,
+            "col": 25,
+            "end_line": 36,
+            "end_col": 31
+          },
+          "years": 0,
+          "months": 0,
+          "days": 0,
+          "hours": 0,
+          "minutes": 0,
+          "seconds": 0
+        },
+        "imprisonment_max": {
+          "_type": "DurationNode",
+          "_loc": {
+            "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s323_punishment_for_voluntarily_causing_hurt/statute.yh",
+            "line": 36,
+            "col": 35,
+            "end_line": 36,
+            "end_col": 42
+          },
+          "years": 3,
+          "months": 0,
+          "days": 0,
+          "hours": 0,
+          "minutes": 0,
+          "seconds": 0
+        },
+        "fine_min": {
+          "_type": "MoneyNode",
+          "_loc": {
+            "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s323_punishment_for_voluntarily_causing_hurt/statute.yh",
+            "line": 37,
+            "col": 17,
+            "end_line": 37,
+            "end_col": 22
+          },
+          "currency": "SGD",
+          "amount": "0.00"
+        },
+        "fine_max": {
+          "_type": "MoneyNode",
+          "_loc": {
+            "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s323_punishment_for_voluntarily_causing_hurt/statute.yh",
+            "line": 37,
+            "col": 26,
+            "end_line": 37,
+            "end_col": 35
+          },
+          "currency": "SGD",
+          "amount": "5000.00"
+        }
+      },
+      "illustrations": [
+        {
+          "_type": "IllustrationNode",
+          "_loc": {
+            "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s323_punishment_for_voluntarily_causing_hurt/statute.yh",
+            "line": 40,
+            "col": 5,
+            "end_line": 42,
+            "end_col": 6
+          },
+          "label": "example1",
+          "description": {
+            "_type": "StringLit",
+            "_loc": {
+              "file": "/Users/gongahkia/Desktop/coding/projects/yuho/library/penal_code/s323_punishment_for_voluntarily_causing_hurt/statute.yh",
+              "line": 41,
+              "col": 9,
+              "end_line": 41,
+              "end_col": 162
+            },
+            "value": "A punches B in the face causing a bruise. A is convicted of voluntarily causing hurt and may be imprisoned up to 3 years or fined up to $5,000 or both."
+          }
+        }
+      ]
+    }
+  ],
+  "variables": []
+}
