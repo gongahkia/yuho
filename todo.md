@@ -47,9 +47,9 @@ Phase 16 (interop)      ──── independent, can start anytime
 
 ## Phase 0: Doc-comment Preservation [S]
 
-- [ ] Move `doc_comment` out of grammar `extras` into named children of declarations
-- [ ] Add `doc_comment: Optional[str]` to `StructDefNode`, `FunctionDefNode`, `StatuteNode`, `ElementNode`, `FieldDef`
-- [ ] Update `builder.py` to extract `///` text from preceding doc_comment nodes
+- [x] Move `doc_comment` out of grammar `extras` into named children of declarations
+- [x] Add `doc_comment: Optional[str]` to `StructDefNode`, `FunctionDefNode`, `StatuteNode`, `ElementNode`, `FieldDef`
+- [x] Update `builder.py` to extract `///` text from preceding doc_comment nodes
 - [x] Regenerate tree-sitter parser
 
 **Files**: `grammar.js`, `nodes.py`, `builder.py`
