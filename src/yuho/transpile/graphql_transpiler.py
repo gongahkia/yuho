@@ -59,6 +59,15 @@ class GraphQLTranspiler(TranspilerBase, Visitor):
         for struct in ast.type_defs:
             self._visit_struct_def(struct)
 
+        # Emit user-defined enums from AST
+        for enum_def in getattr(ast, 'enum_defs', ()):
+            self._visit_enum_def(enum_def)
+
+        # Emit type aliases as comments
+        for alias in getattr(ast, 'type_aliases', ()):
+            self._emit(f"# type alias: {alias.name} = {self._type_to_graphql(alias.target_type)}")
+            self._emit_blank()
+
         # Emit core legal types
         self._emit_core_types()
 
@@ -133,6 +142,27 @@ class GraphQLTranspiler(TranspilerBase, Visitor):
         self._emit("ACTUS_REUS")
         self._emit("MENS_REA")
         self._emit("CIRCUMSTANCE")
+        self._emit("OBLIGATION")
+        self._emit("PROHIBITION")
+        self._emit("PERMISSION")
+        self._indent_level -= 1
+        self._emit("}")
+        self._emit_blank()
+        # Sentencing mode enum
+        self._emit_description("Sentencing mode for penalties")
+        self._emit("enum SentencingMode {")
+        self._indent_level += 1
+        self._emit("CONCURRENT")
+        self._emit("CONSECUTIVE")
+        self._indent_level -= 1
+        self._emit("}")
+        self._emit_blank()
+        # Burden party enum
+        self._emit_description("Party bearing burden of proof")
+        self._emit("enum BurdenParty {")
+        self._indent_level += 1
+        self._emit("PROSECUTION")
+        self._emit("DEFENCE")
         self._indent_level -= 1
         self._emit("}")
         self._emit_blank()
@@ -165,6 +195,12 @@ class GraphQLTranspiler(TranspilerBase, Visitor):
         self._emit("name: String!")
         self._emit_description("Description of the element")
         self._emit("description: String!")
+        self._emit_description("Causal link to another element")
+        self._emit("causedBy: String")
+        self._emit_description("Party bearing burden of proof")
+        self._emit("burden: BurdenParty")
+        self._emit_description("Standard of proof")
+        self._emit("burdenStandard: String")
         self._indent_level -= 1
         self._emit("}")
         self._emit_blank()
@@ -189,6 +225,12 @@ class GraphQLTranspiler(TranspilerBase, Visitor):
         self._emit("deathPenalty: Boolean")
         self._emit_description("Additional penalty information")
         self._emit("supplementary: String")
+        self._emit_description("Sentencing mode")
+        self._emit("sentencing: SentencingMode")
+        self._emit_description("Mandatory minimum imprisonment")
+        self._emit("mandatoryMinImprisonment: Duration")
+        self._emit_description("Mandatory minimum fine")
+        self._emit("mandatoryMinFine: Money")
         self._indent_level -= 1
         self._emit("}")
         self._emit_blank()
@@ -267,6 +309,14 @@ class GraphQLTranspiler(TranspilerBase, Visitor):
         self._emit("exceptions: [Exception!]!")
         self._emit_description("Associated case law")
         self._emit("caseLaw: [CaseLaw!]!")
+        self._emit_description("Date statute became effective")
+        self._emit("effectiveDate: Date")
+        self._emit_description("Date statute was repealed")
+        self._emit("repealedDate: Date")
+        self._emit_description("Section this statute subsumes")
+        self._emit("subsumes: String")
+        self._emit_description("Section this statute amends")
+        self._emit("amends: String")
         self._indent_level -= 1
         self._emit("}")
         self._emit_blank()
@@ -291,6 +341,25 @@ class GraphQLTranspiler(TranspilerBase, Visitor):
             field_type = self._type_to_graphql(field.type_annotation)
             self._emit(f"{field_name}: {field_type}")
 
+        self._indent_level -= 1
+        self._emit("}")
+        self._emit_blank()
+
+    # =========================================================================
+    # Enum Definitions
+    # =========================================================================
+
+    def _visit_enum_def(self, node: nodes.EnumDefNode) -> None:
+        """Generate GraphQL enum for user-defined enum."""
+        type_name = self._to_pascal_case(node.name)
+        if type_name in self._defined_types:
+            return
+        self._defined_types.add(type_name)
+        self._emit_description(f"User-defined enum: {node.name}")
+        self._emit(f"enum {type_name} {{")
+        self._indent_level += 1
+        for variant in node.variants:
+            self._emit(variant.name.upper())
         self._indent_level -= 1
         self._emit("}")
         self._emit_blank()
