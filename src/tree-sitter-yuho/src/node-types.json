@@ -109,6 +109,10 @@
         {
           "type": "optional_type",
           "named": true
+        },
+        {
+          "type": "refinement_type",
+          "named": true
         }
       ]
     }
@@ -453,6 +457,11 @@
     "fields": {}
   },
   {
+    "type": "burden_qualifier",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "caning_clause",
     "named": true,
     "fields": {},
@@ -617,6 +626,26 @@
     "type": "element_entry",
     "named": true,
     "fields": {
+      "burden": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "burden_qualifier",
+            "named": true
+          }
+        ]
+      },
+      "caused_by": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
       "description": {
         "multiple": false,
         "required": true,
@@ -720,6 +749,18 @@
           {
             "type": "mens_rea",
             "named": false
+          },
+          {
+            "type": "obligation",
+            "named": false
+          },
+          {
+            "type": "permission",
+            "named": false
+          },
+          {
+            "type": "prohibition",
+            "named": false
           }
         ]
       },
@@ -783,6 +824,88 @@
         },
         {
           "type": "element_group",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "enum_definition",
+    "named": true,
+    "fields": {
+      "doc_comment": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "doc_comment",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "enum_variant",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "enum_variant",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "array_type",
+          "named": true
+        },
+        {
+          "type": "builtin_type",
+          "named": true
+        },
+        {
+          "type": "generic_type",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "optional_type",
+          "named": true
+        },
+        {
+          "type": "refinement_type",
           "named": true
         }
       ]
@@ -1220,6 +1343,10 @@
           {
             "type": "optional_type",
             "named": true
+          },
+          {
+            "type": "refinement_type",
+            "named": true
           }
         ]
       }
@@ -1359,6 +1486,10 @@
           {
             "type": "optional_type",
             "named": true
+          },
+          {
+            "type": "refinement_type",
+            "named": true
           }
         ]
       }
@@ -1404,6 +1535,10 @@
         },
         {
           "type": "optional_type",
+          "named": true
+        },
+        {
+          "type": "refinement_type",
           "named": true
         }
       ]
@@ -1678,6 +1813,25 @@
         },
         {
           "type": "string_literal",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "mandatory_minimum_clause",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "duration_literal",
+          "named": true
+        },
+        {
+          "type": "money_literal",
           "named": true
         }
       ]
@@ -2022,6 +2176,10 @@
         {
           "type": "optional_type",
           "named": true
+        },
+        {
+          "type": "refinement_type",
+          "named": true
         }
       ]
     }
@@ -2062,6 +2220,10 @@
           },
           {
             "type": "optional_type",
+            "named": true
+          },
+          {
+            "type": "refinement_type",
             "named": true
           }
         ]
@@ -2179,7 +2341,22 @@
   {
     "type": "penalty_block",
     "named": true,
-    "fields": {},
+    "fields": {
+      "sentencing": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "concurrent",
+            "named": false
+          },
+          {
+            "type": "consecutive",
+            "named": false
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": false,
@@ -2198,6 +2375,10 @@
         },
         {
           "type": "imprisonment_clause",
+          "named": true
+        },
+        {
+          "type": "mandatory_minimum_clause",
           "named": true
         },
         {
@@ -2242,6 +2423,182 @@
         "types": [
           {
             "type": "reference_path",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "refinement_type",
+    "named": true,
+    "fields": {
+      "base": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "builtin_type",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "lower": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "binary_expression",
+            "named": true
+          },
+          {
+            "type": "boolean_literal",
+            "named": true
+          },
+          {
+            "type": "date_literal",
+            "named": true
+          },
+          {
+            "type": "duration_literal",
+            "named": true
+          },
+          {
+            "type": "field_access",
+            "named": true
+          },
+          {
+            "type": "float_literal",
+            "named": true
+          },
+          {
+            "type": "function_call",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "index_access",
+            "named": true
+          },
+          {
+            "type": "integer_literal",
+            "named": true
+          },
+          {
+            "type": "match_expression",
+            "named": true
+          },
+          {
+            "type": "money_literal",
+            "named": true
+          },
+          {
+            "type": "parenthesized_expression",
+            "named": true
+          },
+          {
+            "type": "pass_expression",
+            "named": true
+          },
+          {
+            "type": "percent_literal",
+            "named": true
+          },
+          {
+            "type": "string_literal",
+            "named": true
+          },
+          {
+            "type": "struct_literal",
+            "named": true
+          },
+          {
+            "type": "unary_expression",
+            "named": true
+          }
+        ]
+      },
+      "upper": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "binary_expression",
+            "named": true
+          },
+          {
+            "type": "boolean_literal",
+            "named": true
+          },
+          {
+            "type": "date_literal",
+            "named": true
+          },
+          {
+            "type": "duration_literal",
+            "named": true
+          },
+          {
+            "type": "field_access",
+            "named": true
+          },
+          {
+            "type": "float_literal",
+            "named": true
+          },
+          {
+            "type": "function_call",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "index_access",
+            "named": true
+          },
+          {
+            "type": "integer_literal",
+            "named": true
+          },
+          {
+            "type": "match_expression",
+            "named": true
+          },
+          {
+            "type": "money_literal",
+            "named": true
+          },
+          {
+            "type": "parenthesized_expression",
+            "named": true
+          },
+          {
+            "type": "pass_expression",
+            "named": true
+          },
+          {
+            "type": "percent_literal",
+            "named": true
+          },
+          {
+            "type": "string_literal",
+            "named": true
+          },
+          {
+            "type": "struct_literal",
+            "named": true
+          },
+          {
+            "type": "unary_expression",
             "named": true
           }
         ]
@@ -2345,6 +2702,10 @@
           "named": true
         },
         {
+          "type": "enum_definition",
+          "named": true
+        },
+        {
           "type": "expression_statement",
           "named": true
         },
@@ -2369,6 +2730,10 @@
           "named": true
         },
         {
+          "type": "type_alias",
+          "named": true
+        },
+        {
           "type": "variable_declaration",
           "named": true
         }
@@ -2379,6 +2744,16 @@
     "type": "statute_block",
     "named": true,
     "fields": {
+      "amends": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "section_number",
+            "named": true
+          }
+        ]
+      },
       "doc_comment": {
         "multiple": true,
         "required": false,
@@ -2389,9 +2764,39 @@
           }
         ]
       },
+      "effective_date": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "date_literal",
+            "named": true
+          }
+        ]
+      },
+      "repealed_date": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "date_literal",
+            "named": true
+          }
+        ]
+      },
       "section_number": {
         "multiple": false,
         "required": true,
+        "types": [
+          {
+            "type": "section_number",
+            "named": true
+          }
+        ]
+      },
+      "subsumes": {
+        "multiple": false,
+        "required": false,
         "types": [
           {
             "type": "section_number",
@@ -2564,6 +2969,62 @@
     }
   },
   {
+    "type": "type_alias",
+    "named": true,
+    "fields": {
+      "doc_comment": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "doc_comment",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "target": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "array_type",
+            "named": true
+          },
+          {
+            "type": "builtin_type",
+            "named": true
+          },
+          {
+            "type": "generic_type",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "optional_type",
+            "named": true
+          },
+          {
+            "type": "refinement_type",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "type_parameters",
     "named": true,
     "fields": {},
@@ -2675,6 +3136,102 @@
           }
         ]
       },
+      "qualifier": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "conclusion",
+            "named": false
+          },
+          {
+            "type": "fact",
+            "named": false
+          },
+          {
+            "type": "presumed",
+            "named": false
+          }
+        ]
+      },
+      "rebuttal": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "binary_expression",
+            "named": true
+          },
+          {
+            "type": "boolean_literal",
+            "named": true
+          },
+          {
+            "type": "date_literal",
+            "named": true
+          },
+          {
+            "type": "duration_literal",
+            "named": true
+          },
+          {
+            "type": "field_access",
+            "named": true
+          },
+          {
+            "type": "float_literal",
+            "named": true
+          },
+          {
+            "type": "function_call",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "index_access",
+            "named": true
+          },
+          {
+            "type": "integer_literal",
+            "named": true
+          },
+          {
+            "type": "match_expression",
+            "named": true
+          },
+          {
+            "type": "money_literal",
+            "named": true
+          },
+          {
+            "type": "parenthesized_expression",
+            "named": true
+          },
+          {
+            "type": "pass_expression",
+            "named": true
+          },
+          {
+            "type": "percent_literal",
+            "named": true
+          },
+          {
+            "type": "string_literal",
+            "named": true
+          },
+          {
+            "type": "struct_literal",
+            "named": true
+          },
+          {
+            "type": "unary_expression",
+            "named": true
+          }
+        ]
+      },
       "type": {
         "multiple": false,
         "required": true,
@@ -2697,6 +3254,10 @@
           },
           {
             "type": "optional_type",
+            "named": true
+          },
+          {
+            "type": "refinement_type",
             "named": true
           }
         ]
@@ -2862,6 +3423,10 @@
     "named": false
   },
   {
+    "type": "=",
+    "named": false
+  },
+  {
     "type": "==",
     "named": false
   },
@@ -2934,6 +3499,10 @@
     "named": false
   },
   {
+    "type": "amends",
+    "named": false
+  },
+  {
     "type": "any_of",
     "named": false
   },
@@ -2942,7 +3511,19 @@
     "named": false
   },
   {
+    "type": "balance_of_probabilities",
+    "named": false
+  },
+  {
+    "type": "beyond_reasonable_doubt",
+    "named": false
+  },
+  {
     "type": "bool",
+    "named": false
+  },
+  {
+    "type": "burden",
     "named": false
   },
   {
@@ -2958,6 +3539,10 @@
     "named": false
   },
   {
+    "type": "caused_by",
+    "named": false
+  },
+  {
     "type": "circumstance",
     "named": false
   },
@@ -2965,6 +3550,18 @@
     "type": "comment",
     "named": true,
     "extra": true
+  },
+  {
+    "type": "conclusion",
+    "named": false
+  },
+  {
+    "type": "concurrent",
+    "named": false
+  },
+  {
+    "type": "consecutive",
+    "named": false
   },
   {
     "type": "consequence",
@@ -2991,6 +3588,10 @@
     "named": false
   },
   {
+    "type": "defence",
+    "named": false
+  },
+  {
     "type": "definitions",
     "named": false
   },
@@ -3003,6 +3604,10 @@
     "named": false
   },
   {
+    "type": "effective",
+    "named": false
+  },
+  {
     "type": "element",
     "named": false
   },
@@ -3011,11 +3616,19 @@
     "named": false
   },
   {
+    "type": "enum",
+    "named": false
+  },
+  {
     "type": "escape_sequence",
     "named": true
   },
   {
     "type": "exception",
+    "named": false
+  },
+  {
+    "type": "fact",
     "named": false
   },
   {
@@ -3083,6 +3696,10 @@
     "named": false
   },
   {
+    "type": "minimum",
+    "named": false
+  },
+  {
     "type": "minute",
     "named": false
   },
@@ -3112,6 +3729,10 @@
     "extra": true
   },
   {
+    "type": "obligation",
+    "named": false
+  },
+  {
     "type": "pass",
     "named": false
   },
@@ -3124,11 +3745,35 @@
     "named": false
   },
   {
+    "type": "permission",
+    "named": false
+  },
+  {
+    "type": "presumed",
+    "named": false
+  },
+  {
+    "type": "prima_facie",
+    "named": false
+  },
+  {
+    "type": "prohibition",
+    "named": false
+  },
+  {
+    "type": "prosecution",
+    "named": false
+  },
+  {
     "type": "reference_path",
     "named": true
   },
   {
     "type": "referencing",
+    "named": false
+  },
+  {
+    "type": "repealed",
     "named": false
   },
   {
@@ -3164,7 +3809,19 @@
     "named": false
   },
   {
+    "type": "subsumes",
+    "named": false
+  },
+  {
     "type": "supplementary",
+    "named": false
+  },
+  {
+    "type": "type",
+    "named": false
+  },
+  {
+    "type": "unless",
     "named": false
   },
   {

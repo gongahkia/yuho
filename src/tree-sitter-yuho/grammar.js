@@ -39,6 +39,10 @@ module.exports = grammar({
     [$.struct_literal, $.return_statement],
     [$.struct_literal, $.variable_declaration],
     [$.struct_literal, $.assignment_statement],
+    // refinement type vs struct literal vs expression statement
+    [$.struct_literal, $.refinement_type, $.expression_statement],
+    // type alias target vs refinement type
+    [$.type_alias, $.refinement_type],
     // duration literal with multiple parts
     [$.duration_literal],
   ],
@@ -422,11 +426,11 @@ module.exports = grammar({
     burden_qualifier: $ => seq(
       'burden',
       choice('prosecution', 'defence'),
-      optional(seq('standard', choice(
+      optional(choice(
         'beyond_reasonable_doubt',
         'balance_of_probabilities',
         'prima_facie',
-      ))),
+      )),
     ),
 
     element_group: $ => seq(
