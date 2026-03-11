@@ -251,7 +251,7 @@ def ast(
 @click.argument("file", type=str)
 @click.option(
     "-t", "--target",
-    type=click.Choice(["json", "jsonld", "english", "latex", "pdf", "mermaid", "svg", "png", "alloy", "graphql", "blocks", "bibtex", "comparative"], case_sensitive=False),
+    type=click.Choice(["json", "jsonld", "english", "latex", "pdf", "mermaid", "svg", "png", "alloy", "graphql", "blocks", "bibtex", "comparative", "akomantoso", "prolog"], case_sensitive=False),
     default="json",
     help="Transpilation target format"
 )
