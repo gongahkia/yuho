@@ -17,7 +17,7 @@ fn is_extortion(string fearType, bool deliveryInduced) : bool {
     }
 }
 
-statute 383 "Extortion" {
+statute 383 "Extortion" effective 1872-01-01 {
     definitions {
         extortion := "Intentionally putting any person in fear of injury to induce property delivery";
         injury := "Harm illegally caused to any person in body, mind, reputation, or property";
