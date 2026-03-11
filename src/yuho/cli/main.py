@@ -1075,6 +1075,27 @@ def verify_report(ctx: click.Context, file: str, output: Optional[str]) -> None:
         print(tex)
 
 
+@cli.command("workspace")
+@click.argument("action", type=click.Choice(["create", "list", "switch"]))
+@click.argument("name_or_id", required=False)
+@click.pass_context
+def workspace_cmd(ctx: click.Context, action: str, name_or_id: Optional[str]) -> None:
+    """Manage workspaces (create/list/switch)."""
+    from yuho.cli.commands.workspace import run_workspace_create, run_workspace_list, run_workspace_switch
+    if action == "create":
+        if not name_or_id:
+            click.echo("Name required for 'create'", err=True)
+            sys.exit(1)
+        run_workspace_create(name_or_id)
+    elif action == "list":
+        run_workspace_list()
+    elif action == "switch":
+        if not name_or_id:
+            click.echo("Workspace ID required for 'switch'", err=True)
+            sys.exit(1)
+        run_workspace_switch(name_or_id)
+
+
 @cli.command()
 @click.argument("directory", default=".", type=click.Path(exists=True))
 @click.option("--interval", type=float, default=2.0, help="Poll interval in seconds")
