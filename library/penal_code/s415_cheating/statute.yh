@@ -31,7 +31,7 @@ fn evaluate_cheating(string deceptionType, string inducementType, bool causesDam
     }
 }
 
-statute 415 "Cheating" {
+statute 415 "Cheating" effective 1872-01-01 {
     definitions {
         deceive := "To cause a person to believe something that is false";
         fraudulently := "With intent to defraud another person";
