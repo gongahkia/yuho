@@ -6,14 +6,16 @@ Provides a lightweight HTTP API for:
 - Transpiling to various formats
 - Running lint checks
 - Health checks
+- Metrics (Prometheus)
 """
 
 import sys
 import json
 import logging
+import time
 from pathlib import Path
 from typing import Optional, Dict, Any, List
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass, asdict, field
 from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs
 import threading
@@ -38,9 +40,13 @@ from yuho.services.errors import (
     run_parser_boundary,
     run_transpile_boundary,
 )
+from yuho.middleware.auth import get_auth_token, verify_bearer_token, SKIP_AUTH_PATHS
+from yuho.middleware.rate_limit import RateLimiter, RateLimitConfig, RateLimitExceeded
+from yuho.middleware.metrics import get_metrics
 
 logger = logging.getLogger("yuho.api")
 MAX_REQUEST_BODY_BYTES = 1_048_576
+API_VERSION = "v1"
 
 
 class RequestBodyTooLargeError(Exception):
@@ -48,19 +54,42 @@ class RequestBodyTooLargeError(Exception):
 
 
 @dataclass
+class APIError:
+    """Structured API error."""
+    code: str
+    message: str
+    details: List[Dict[str, Any]] = field(default_factory=list)
+
+
+@dataclass
 class APIResponse:
     """Standard API response structure."""
     success: bool
     data: Optional[Dict[str, Any]] = None
-    error: Optional[str] = None
-    
+    error: Optional[Any] = None
+
     def to_json(self) -> str:
-        return json.dumps(asdict(self), indent=2)
+        result: Dict[str, Any] = {"success": self.success}
+        if self.data is not None:
+            result["data"] = self.data
+        if self.error is not None:
+            if isinstance(self.error, APIError):
+                result["error"] = asdict(self.error)
+            else:
+                result["error"] = {"code": "UNKNOWN", "message": str(self.error)}
+        return json.dumps(result, indent=2)
+
+
+def _strip_version_prefix(path: str) -> str:
+    """Strip /v1 prefix from path for routing."""
+    if path.startswith(f"/{API_VERSION}/"):
+        return path[len(f"/{API_VERSION}"):]
+    return path
 
 
 class YuhoAPIHandler(BaseHTTPRequestHandler):
     """HTTP request handler for Yuho API."""
-    
+
     # Class-level parser and registry (shared across requests)
     parser = get_parser()
     registry = TranspilerRegistry.instance()
@@ -100,13 +129,25 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
         )
         self._request_context = None
     
+    def _get_cors_origin(self) -> str:
+        """Get configured CORS origin."""
+        if hasattr(self.server, 'cors_origins'):
+            origins = self.server.cors_origins
+            if origins and origins != ["*"]:
+                req_origin = self.headers.get("Origin", "")
+                if req_origin in origins:
+                    return req_origin
+                return origins[0]
+        return "*"
+
     def _send_json_response(self, status: int, response: APIResponse) -> None:
         """Send a JSON response."""
         body = response.to_json().encode('utf-8')
         self.send_response(status)
         self.send_header('Content-Type', 'application/json')
         self.send_header('Content-Length', str(len(body)))
-        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Origin', self._get_cors_origin())
+        self.send_header('X-API-Version', API_VERSION)
         if self._request_context is not None:
             self.send_header('X-Request-ID', self._request_context.request_id)
         self.end_headers()
@@ -172,112 +213,201 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
 
         return self.rfile.read(content_length)
     
+    def _check_auth(self, path: str) -> bool:
+        """Check auth. Returns True if OK, sends 401 and returns False if not."""
+        if path in SKIP_AUTH_PATHS:
+            return True
+        token = getattr(self.server, 'auth_token', None)
+        if not verify_bearer_token(self.headers.get("Authorization"), token):
+            self._send_json_response(401, APIResponse(
+                success=False,
+                error=APIError(code="UNAUTHORIZED", message="Missing or invalid Authorization header")
+            ))
+            return False
+        return True
+
+    def _check_rate_limit(self, path: str) -> bool:
+        """Check rate limit. Returns True if OK."""
+        limiter = getattr(self.server, 'rate_limiter', None)
+        if not limiter:
+            return True
+        try:
+            client_ip = self.client_address[0] if self.client_address else None
+            limiter.check(path, client_id=client_ip)
+            return True
+        except RateLimitExceeded as e:
+            self.send_response(429)
+            self.send_header('Content-Type', 'application/json')
+            self.send_header('Retry-After', str(int(e.retry_after) + 1))
+            body = APIResponse(success=False, error=APIError(code="RATE_LIMITED", message=str(e))).to_json().encode()
+            self.send_header('Content-Length', str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+            self._finish_request_log(429, False)
+            return False
+
     def do_OPTIONS(self) -> None:
         """Handle CORS preflight requests."""
         parsed = urlparse(self.path)
         path = parsed.path
         self._start_request_log("OPTIONS", path)
-
         self.send_response(204)
-        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Origin', self._get_cors_origin())
         self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
+        self.send_header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Request-ID')
         self.end_headers()
         self._finish_request_log(204, True)
-    
+
     def do_GET(self) -> None:
         """Handle GET requests."""
         parsed = urlparse(self.path)
-        path = parsed.path
+        raw_path = parsed.path
+        path = _strip_version_prefix(raw_path)
         self._start_request_log("GET", path)
-        
-        if path == '/health' or path == '/':
-            self._handle_health()
-        elif path == '/targets':
-            self._handle_targets()
-        elif path == '/rules':
-            self._handle_rules()
-        else:
-            self._send_json_response(404, APIResponse(
-                success=False,
-                error=f"Not found: {path}"
-            ))
-    
+        metrics = get_metrics()
+        metrics.inc_active()
+        t0 = time.monotonic()
+        try:
+            if not self._check_auth(path):
+                return
+            if not self._check_rate_limit(path):
+                return
+            if path == '/health' or path == '/':
+                self._handle_health()
+            elif path == '/targets':
+                self._handle_targets()
+            elif path == '/rules':
+                self._handle_rules()
+            elif path == '/metrics':
+                self._handle_metrics()
+            elif path == '/docs':
+                self._handle_docs()
+            else:
+                self._send_json_response(404, APIResponse(
+                    success=False,
+                    error=APIError(code="NOT_FOUND", message=f"Not found: {raw_path}")
+                ))
+        finally:
+            metrics.dec_active()
+            metrics.record_request(path, 200, time.monotonic() - t0)
+
     def do_POST(self) -> None:
         """Handle POST requests."""
         parsed = urlparse(self.path)
-        path = parsed.path
+        raw_path = parsed.path
+        path = _strip_version_prefix(raw_path)
         self._start_request_log("POST", path)
-        
-        content_type = self.headers.get('Content-Type', '')
-        if content_type and 'application/json' not in content_type:
-            self._send_json_response(415, APIResponse(
-                success=False,
-                error="Content-Type must be application/json"
-            ))
-            return
+        metrics = get_metrics()
+        metrics.inc_active()
+        t0 = time.monotonic()
         try:
-            body = self._read_body()
-            data = json.loads(body) if body else {}
-        except RequestBodyTooLargeError as e:
-            self._send_json_response(413, APIResponse(
-                success=False,
-                error=str(e)
-            ))
-            return
-        except json.JSONDecodeError as e:
-            self._send_json_response(400, APIResponse(
-                success=False,
-                error=f"Invalid JSON: {e}"
-            ))
-            return
-        except ValueError as e:
-            self._send_json_response(400, APIResponse(
-                success=False,
-                error=str(e)
-            ))
-            return
-
-        schema_error = self._validate_post_payload(path, data)
-        if schema_error:
-            self._send_json_response(400, APIResponse(
-                success=False,
-                error=f"Invalid payload: {schema_error}"
-            ))
-            return
-        
-        if path == '/parse':
-            self._handle_parse(data)
-        elif path == '/validate':
-            self._handle_validate(data)
-        elif path == '/transpile':
-            self._handle_transpile(data)
-        elif path == '/lint':
-            self._handle_lint(data)
-        else:
-            self._send_json_response(404, APIResponse(
-                success=False,
-                error=f"Not found: {path}"
-            ))
+            if not self._check_auth(path):
+                return
+            if not self._check_rate_limit(path):
+                return
+            content_type = self.headers.get('Content-Type', '')
+            if content_type and 'application/json' not in content_type:
+                self._send_json_response(415, APIResponse(
+                    success=False,
+                    error=APIError(code="UNSUPPORTED_MEDIA", message="Content-Type must be application/json")
+                ))
+                return
+            try:
+                body = self._read_body()
+                data = json.loads(body) if body else {}
+            except RequestBodyTooLargeError as e:
+                self._send_json_response(413, APIResponse(
+                    success=False,
+                    error=APIError(code="PAYLOAD_TOO_LARGE", message=str(e))
+                ))
+                return
+            except json.JSONDecodeError as e:
+                self._send_json_response(400, APIResponse(
+                    success=False,
+                    error=APIError(code="INVALID_JSON", message=f"Invalid JSON: {e}")
+                ))
+                return
+            except ValueError as e:
+                self._send_json_response(400, APIResponse(
+                    success=False,
+                    error=APIError(code="BAD_REQUEST", message=str(e))
+                ))
+                return
+            schema_error = self._validate_post_payload(path, data)
+            if schema_error:
+                self._send_json_response(400, APIResponse(
+                    success=False,
+                    error=APIError(code="VALIDATION_ERROR", message=f"Invalid payload: {schema_error}")
+                ))
+                return
+            if path == '/parse':
+                self._handle_parse(data)
+            elif path == '/validate':
+                self._handle_validate(data)
+            elif path == '/transpile':
+                self._handle_transpile(data)
+            elif path == '/lint':
+                self._handle_lint(data)
+            else:
+                self._send_json_response(404, APIResponse(
+                    success=False,
+                    error=APIError(code="NOT_FOUND", message=f"Not found: {raw_path}")
+                ))
+        finally:
+            metrics.dec_active()
+            metrics.record_request(path, 200, time.monotonic() - t0)
     
     def _handle_health(self) -> None:
         """Health check endpoint."""
+        m = get_metrics()
         self._send_json_response(200, APIResponse(
             success=True,
             data={
                 "status": "healthy",
                 "version": __version__,
+                "api_version": API_VERSION,
                 "endpoints": [
-                    "GET /health",
-                    "GET /targets",
-                    "GET /rules",
-                    "POST /parse",
-                    "POST /validate",
-                    "POST /transpile",
-                    "POST /lint",
-                ]
+                    "GET  /v1/health",
+                    "GET  /v1/targets",
+                    "GET  /v1/rules",
+                    "GET  /v1/metrics",
+                    "GET  /v1/docs",
+                    "POST /v1/parse",
+                    "POST /v1/validate",
+                    "POST /v1/transpile",
+                    "POST /v1/lint",
+                ],
             }
         ))
+
+    def _handle_metrics(self) -> None:
+        """Prometheus metrics endpoint."""
+        body = get_metrics().format_prometheus().encode('utf-8')
+        self.send_response(200)
+        self.send_header('Content-Type', 'text/plain; version=0.0.4; charset=utf-8')
+        self.send_header('Content-Length', str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+        self._finish_request_log(200, True)
+
+    def _handle_docs(self) -> None:
+        """Serve Swagger UI redirect."""
+        html = f"""<!DOCTYPE html>
+<html><head><title>Yuho API Docs</title>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui.css">
+</head><body>
+<div id="swagger-ui"></div>
+<script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-bundle.js"></script>
+<script>SwaggerUIBundle({{url:"/v1/openapi.yaml",dom_id:"#swagger-ui"}})</script>
+</body></html>"""
+        body = html.encode('utf-8')
+        self.send_response(200)
+        self.send_header('Content-Type', 'text/html; charset=utf-8')
+        self.send_header('Content-Length', str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+        self._finish_request_log(200, True)
     
     def _handle_targets(self) -> None:
         """List available transpile targets."""
@@ -624,11 +754,22 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
 
 
 class YuhoAPIServer(ThreadingHTTPServer):
-    """Custom HTTP server with additional configuration."""
-    
-    def __init__(self, server_address, RequestHandlerClass, verbose: bool = False):
+    """Custom HTTP server with auth, rate limiting, and metrics."""
+
+    def __init__(
+        self,
+        server_address,
+        RequestHandlerClass,
+        verbose: bool = False,
+        auth_token: Optional[str] = None,
+        cors_origins: Optional[List[str]] = None,
+        rate_limiter: Optional[RateLimiter] = None,
+    ):
         super().__init__(server_address, RequestHandlerClass)
         self.verbose = verbose
+        self.auth_token = auth_token
+        self.cors_origins = cors_origins or ["*"]
+        self.rate_limiter = rate_limiter
 
 
 def run_api(
@@ -637,42 +778,48 @@ def run_api(
     verbose: bool = False,
     color: bool = True,
 ) -> None:
-    """
-    Start the Yuho API server.
-    
-    Args:
-        host: Host to bind to (defaults to config mcp.host)
-        port: Port to listen on (defaults to config mcp.port)
-        verbose: Enable verbose output
-        color: Use colored output
-    """
+    """Start the Yuho API server."""
     from yuho.config.loader import get_config
 
-    mcp_config = get_config().mcp
-    resolved_host = host or mcp_config.host
-    resolved_port = port if port is not None else mcp_config.port
+    cfg = get_config()
+    api_cfg = cfg.api
+    resolved_host = host or api_cfg.host
+    resolved_port = port if port is not None else api_cfg.port
+    auth_token = get_auth_token()
+    limiter = RateLimiter(RateLimitConfig(
+        requests_per_second=api_cfg.rate_limit_rps,
+        burst_size=api_cfg.rate_limit_burst,
+        enabled=api_cfg.rate_limit_enabled,
+    ))
 
-    server_address = (resolved_host, resolved_port)
-    
     try:
-        httpd = YuhoAPIServer(server_address, YuhoAPIHandler, verbose=verbose)
+        httpd = YuhoAPIServer(
+            (resolved_host, resolved_port),
+            YuhoAPIHandler,
+            verbose=verbose,
+            auth_token=auth_token,
+            cors_origins=api_cfg.cors_origins,
+            rate_limiter=limiter,
+        )
     except OSError as e:
         click.echo(colorize(f"error: Could not start server: {e}", Colors.RED), err=True)
         sys.exit(1)
-    
+
     url = f"http://{resolved_host}:{resolved_port}"
-    click.echo(f"Starting Yuho API server at {colorize(url, Colors.CYAN) if color else url}")
+    click.echo(f"Yuho API {API_VERSION} at {colorize(url, Colors.CYAN) if color else url}")
+    click.echo(f"Auth: {'enabled' if auth_token else 'disabled'}")
     click.echo("Endpoints:")
-    click.echo("  GET  /health    - Health check")
-    click.echo("  GET  /targets   - List transpile targets")
-    click.echo("  GET  /rules     - List lint rules")
-    click.echo("  POST /parse     - Parse Yuho source")
-    click.echo("  POST /validate  - Validate Yuho source")
-    click.echo("  POST /transpile - Transpile to target format")
-    click.echo("  POST /lint      - Run lint checks")
-    click.echo("")
-    click.echo("Press Ctrl+C to stop")
-    
+    click.echo("  GET  /v1/health    - Health check")
+    click.echo("  GET  /v1/targets   - List transpile targets")
+    click.echo("  GET  /v1/rules     - List lint rules")
+    click.echo("  GET  /v1/metrics   - Prometheus metrics")
+    click.echo("  GET  /v1/docs      - Swagger UI")
+    click.echo("  POST /v1/parse     - Parse Yuho source")
+    click.echo("  POST /v1/validate  - Validate Yuho source")
+    click.echo("  POST /v1/transpile - Transpile to target format")
+    click.echo("  POST /v1/lint      - Run lint checks")
+    click.echo("\nPress Ctrl+C to stop")
+
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:
