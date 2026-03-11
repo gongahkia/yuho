@@ -333,6 +333,88 @@ class DuplicateSectionRule(LintRule):
         return issues
 
 
+class DuplicateExceptionGuardRule(LintRule):
+    """Check for exceptions with identical guards (likely copy-paste error)."""
+    id = "duplicate-exception-guard"
+    severity = Severity.WARNING
+    description = "Multiple exceptions should not have identical guards"
+
+    def check(self, ast: ModuleNode, source: str) -> List[LintIssue]:
+        issues = []
+        for statute in ast.statutes:
+            seen_labels: Dict[str, int] = {}
+            for exc in statute.exceptions:
+                key = exc.label or ""
+                if key in seen_labels and key:
+                    loc = exc.source_location if hasattr(exc, 'source_location') else None
+                    issues.append(LintIssue(
+                        rule=self.id, severity=self.severity,
+                        message=f"Duplicate exception label '{key}' in statute {statute.section_number}",
+                        line=loc.line if loc else None,
+                    ))
+                seen_labels[key] = seen_labels.get(key, 0) + 1
+        return issues
+
+
+class RepealedStatuteRule(LintRule):
+    """Warn if a statute is marked as repealed."""
+    id = "repealed-statute"
+    severity = Severity.WARNING
+    description = "Repealed statutes should not be evaluated"
+
+    def check(self, ast: ModuleNode, source: str) -> List[LintIssue]:
+        issues = []
+        for statute in ast.statutes:
+            if getattr(statute, 'repealed_date', None):
+                loc = statute.source_location
+                issues.append(LintIssue(
+                    rule=self.id, severity=self.severity,
+                    message=f"Statute {statute.section_number} is repealed (as of {statute.repealed_date})",
+                    line=loc.line if loc else None,
+                ))
+        return issues
+
+
+class ElementsWithoutPenaltyRule(LintRule):
+    """Check for statutes with elements but no penalty."""
+    id = "elements-without-penalty"
+    severity = Severity.WARNING
+    description = "Statutes with elements should define a penalty"
+
+    def check(self, ast: ModuleNode, source: str) -> List[LintIssue]:
+        issues = []
+        for statute in ast.statutes:
+            if statute.elements and not statute.penalty:
+                loc = statute.source_location
+                issues.append(LintIssue(
+                    rule=self.id, severity=self.severity,
+                    message=f"Statute {statute.section_number} has elements but no penalty",
+                    line=loc.line if loc else None,
+                ))
+        return issues
+
+
+class SubsumptionConsistencyRule(LintRule):
+    """Check that subsumption declarations reference existing statutes."""
+    id = "subsumption-target"
+    severity = Severity.WARNING
+    description = "Subsumption target must exist in module"
+
+    def check(self, ast: ModuleNode, source: str) -> List[LintIssue]:
+        issues = []
+        section_numbers = {s.section_number for s in ast.statutes}
+        for statute in ast.statutes:
+            target = getattr(statute, 'subsumes', None)
+            if target and target not in section_numbers:
+                loc = statute.source_location
+                issues.append(LintIssue(
+                    rule=self.id, severity=self.severity,
+                    message=f"Statute {statute.section_number} subsumes {target}, but {target} not found in module",
+                    line=loc.line if loc else None,
+                ))
+        return issues
+
+
 # All available lint rules
 ALL_RULES: List[LintRule] = [
     MissingStatuteTitleRule(),
@@ -345,6 +427,10 @@ ALL_RULES: List[LintRule] = [
     NamingConventionRule(),
     SectionNumberFormatRule(),
     DuplicateSectionRule(),
+    DuplicateExceptionGuardRule(),
+    RepealedStatuteRule(),
+    ElementsWithoutPenaltyRule(),
+    SubsumptionConsistencyRule(),
 ]
 
 
