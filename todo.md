@@ -174,12 +174,12 @@ For each of 12 statutes (`library/penal_code/s{NNN}_{name}/`):
 
 ## Phase 7: Wizard Completeness [M]
 
-- [ ] Add `ExceptionData` and `CaseLawData` dataclasses
-- [ ] Add `collect_exceptions()` interactive prompt
-- [ ] Add `collect_caselaw()` interactive prompt
-- [ ] Modify `collect_elements()` for `all_of`/`any_of` grouping (recursive prompts)
-- [ ] Add case struct generation prompt
-- [ ] Update `generate_yuho_code()` for exceptions, caselaw, nested groups
+- [x] Add `ExceptionData` and `CaseLawData` dataclasses
+- [x] Add `collect_exceptions()` interactive prompt
+- [x] Add `collect_caselaw()` interactive prompt
+- [x] Modify `collect_elements()` for `all_of`/`any_of` grouping (recursive prompts)
+- [x] Add case struct generation prompt
+- [x] Update `generate_yuho_code()` for exceptions, caselaw, nested groups
 
 **Files**: `wizard.py`
 
