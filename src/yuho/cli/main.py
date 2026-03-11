@@ -1075,6 +1075,17 @@ def verify_report(ctx: click.Context, file: str, output: Optional[str]) -> None:
         print(tex)
 
 
+@cli.command("ci-report")
+@click.argument("directory", default=".", type=click.Path(exists=True))
+@click.option("-o", "--output", type=click.Path(), help="Output file path")
+@click.option("--format", "fmt", type=click.Choice(["json", "sarif"]), default="json", help="Output format")
+@click.pass_context
+def ci_report(ctx: click.Context, directory: str, output: Optional[str], fmt: str) -> None:
+    """Run check+lint on all .yh files and produce a unified report."""
+    from yuho.cli.commands.ci_report import run_ci_report
+    sys.exit(run_ci_report(directory=directory, output=output, format=fmt))
+
+
 @cli.command()
 @click.argument("file", type=click.Path(exists=True))
 @click.option("--json", "json_output", is_flag=True, help="Output as JSON")
