@@ -20,7 +20,7 @@ fn s392_punishment(bool robberyCommitted, string timeOfDay) : string {
     }
 }
 
-statute 392 "Punishment for Robbery" {
+statute 392 "Punishment for Robbery" effective 1872-01-01 {
     definitions {
         robbery := "As defined under section 390";
         enhanced_punishment := "If committed between 7pm and 7am, minimum imprisonment of 3 years";
