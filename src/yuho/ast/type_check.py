@@ -157,6 +157,16 @@ class TypeCheckVisitor(Visitor):
         if allow_coercion:
             if expected.type_name == "float" and actual.type_name == "int":
                 return True
+        # type alias resolution
+        aliases = getattr(self.type_info, 'type_aliases', {})
+        resolved_expected = aliases.get(expected.type_name, expected)
+        resolved_actual = aliases.get(actual.type_name, actual)
+        if resolved_expected.type_name == resolved_actual.type_name:
+            return True
+        # enum variant is compatible with its enum type
+        enum_variants = getattr(self.type_info, 'enum_variants', {})
+        if actual.type_name in enum_variants and enum_variants[actual.type_name] == expected.type_name:
+            return True
         return False
 
     def _check_binary_types(
@@ -230,12 +240,16 @@ class TypeCheckVisitor(Visitor):
 
     def _resolve_named_type(self, type_name: str) -> bool:
         """
-        Try to resolve a NamedType by checking local struct defs first,
+        Try to resolve a NamedType by checking local struct/enum/alias defs first,
         then searching resolved modules via the resolver.
 
         Returns True if the type was found (locally or cross-module).
         """
         if type_name in self.type_info.struct_defs:
+            return True
+        if type_name in getattr(self.type_info, 'enum_defs', {}):
+            return True
+        if type_name in getattr(self.type_info, 'type_aliases', {}):
             return True
         if type_name in self._resolved_type_names:
             return True
@@ -486,6 +500,10 @@ class TypeCheckVisitor(Visitor):
         """Entry point: check all declarations."""
         for struct_def in node.type_defs:
             self.visit(struct_def)
+        for enum_def in getattr(node, 'enum_defs', ()):
+            self.visit(enum_def)
+        for type_alias in getattr(node, 'type_aliases', ()):
+            self.visit(type_alias)
         for func_def in node.function_defs:
             self.visit(func_def)
         for var_decl in node.variables:
