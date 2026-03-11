@@ -34,6 +34,31 @@ LEGAL_CONTEXT = {
     "actus_reus": "yuho:actusReus",
     "mens_rea": "yuho:mensRea",
     "circumstance": "yuho:circumstance",
+    "obligation": "yuho:obligation",
+    "prohibition": "yuho:prohibition",
+    "permission": "yuho:permission",
+
+    # Causation/Burden
+    "caused_by": "yuho:causedBy",
+    "burden": "yuho:burdenOfProof",
+    "burden_standard": "yuho:proofStandard",
+
+    # Temporal/Hierarchy
+    "effective_date": "eli:date_document",
+    "repealed_date": "eli:date_repeal",
+    "subsumes": "yuho:subsumes",
+    "amends": "eli:amends",
+
+    # Penalty composition
+    "sentencing": "yuho:sentencingMode",
+    "mandatory_min_imprisonment": "yuho:mandatoryMinImprisonment",
+    "mandatory_min_fine": "yuho:mandatoryMinFine",
+
+    # Enum/Type alias
+    "EnumDefNode": "yuho:EnumType",
+    "EnumVariant": "yuho:EnumVariant",
+    "TypeAliasNode": "yuho:TypeAlias",
+    "RefinementTypeNode": "yuho:RefinementType",
 
     # Penalty mappings
     "PenaltyNode": "yuho:Penalty",
@@ -175,6 +200,10 @@ class JSONLDTranspiler(TranspilerBase):
             "ImportNode": "yuho:Import",
             "IllustrationNode": "yuho:Illustration",
             "DefinitionEntry": "DefinedTerm",
+            "EnumDefNode": "yuho:EnumType",
+            "EnumVariant": "yuho:EnumVariant",
+            "TypeAliasNode": "yuho:TypeAlias",
+            "RefinementTypeNode": "yuho:RefinementType",
         }
         return type_mapping.get(node_type, f"yuho:{node_type}")
 
@@ -222,6 +251,24 @@ class JSONLDTranspiler(TranspilerBase):
             "statutes": "yuho:containsLegislation",
             "imports": "yuho:imports",
             "variables": "yuho:definesVariable",
+            "enum_defs": "yuho:definesEnum",
+            "type_aliases": "yuho:definesTypeAlias",
+            "caused_by": "yuho:causedBy",
+            "burden": "yuho:burdenOfProof",
+            "burden_standard": "yuho:proofStandard",
+            "effective_date": "eli:date_document",
+            "repealed_date": "eli:date_repeal",
+            "subsumes": "yuho:subsumes",
+            "amends": "eli:amends",
+            "sentencing": "yuho:sentencingMode",
+            "mandatory_min_imprisonment": "yuho:mandatoryMinImprisonment",
+            "mandatory_min_fine": "yuho:mandatoryMinFine",
+            "variants": "yuho:hasVariant",
+            "payload_types": "yuho:payloadTypes",
+            "target_type": "yuho:targetType",
+            "base_type": "yuho:baseType",
+            "lower_bound": "yuho:lowerBound",
+            "upper_bound": "yuho:upperBound",
             "params": "yuho:hasParameter",
             "return_type": "yuho:returnType",
             "type": "yuho:type",
