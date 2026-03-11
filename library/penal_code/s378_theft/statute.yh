@@ -4,7 +4,7 @@
 // Singapore Penal Code Section 378 - Theft
 // Yuho v5 Syntax
 
-import penal_code/s379_punishment_for_theft
+referencing penal_code/s379_punishment_for_theft
 
 struct TheftCase {
     string accused,
