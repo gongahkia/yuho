@@ -45,6 +45,11 @@ class AlloyTranspiler(TranspilerBase, Visitor):
         # Built-in types
         self._emit_builtins()
 
+        # Enum definitions -> abstract sig + extends
+        for enum_def in getattr(ast, 'enum_defs', ()):
+            self._transpile_enum(enum_def)
+            self._emit("")
+
         # Struct definitions -> sig declarations
         for struct in ast.type_defs:
             self._transpile_struct(struct)
@@ -113,6 +118,22 @@ class AlloyTranspiler(TranspilerBase, Visitor):
 
         # Track built-in sigs
         self._known_sigs.update(["Bool", "True", "False", "Money", "Duration", "Percent"])
+
+    # =========================================================================
+    # Enum -> abstract sig + extends
+    # =========================================================================
+
+    def _transpile_enum(self, enum_def: nodes.EnumDefNode) -> None:
+        """Generate Alloy abstract sig with variant sigs for enum."""
+        name = enum_def.name
+        self._emit(f"-- Enum: {name}")
+        self._emit(f"abstract sig {name} {{}}")
+        variant_names = [v.name for v in enum_def.variants]
+        if variant_names:
+            self._emit(f"one sig {', '.join(variant_names)} extends {name} {{}}")
+        self._known_sigs.add(name)
+        for v in variant_names:
+            self._known_sigs.add(v)
 
     # =========================================================================
     # Struct -> sig
@@ -223,6 +244,14 @@ class AlloyTranspiler(TranspilerBase, Visitor):
         safe_name = self._safe_name(statute.section_number)
 
         self._emit(f"-- Statute: Section {statute.section_number} - {title}")
+        if getattr(statute, 'effective_date', None):
+            self._emit(f"-- Effective: {statute.effective_date}")
+        if getattr(statute, 'repealed_date', None):
+            self._emit(f"-- REPEALED: {statute.repealed_date}")
+        if getattr(statute, 'subsumes', None):
+            self._emit(f"-- Subsumes: s{statute.subsumes}")
+        if getattr(statute, 'amends', None):
+            self._emit(f"-- Amends: s{statute.amends}")
 
         # Create sig for offense
         self._emit(f"sig {safe_name}Offense {{")
@@ -244,6 +273,12 @@ class AlloyTranspiler(TranspilerBase, Visitor):
                 self._emit("caningApplies: Bool,")
             if statute.penalty.death_penalty:
                 self._emit("deathPenaltyApplies: Bool,")
+            if getattr(statute.penalty, 'sentencing', None):
+                self._emit(f"-- sentencing mode: {statute.penalty.sentencing}")
+            if getattr(statute.penalty, 'mandatory_min_imprisonment', None):
+                self._emit("mandatoryMinImprisonment: Bool,")
+            if getattr(statute.penalty, 'mandatory_min_fine', None):
+                self._emit("mandatoryMinFine: Bool,")
 
         self._emit("guilty: Bool")
         self._indent -= 1
