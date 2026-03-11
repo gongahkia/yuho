@@ -2,9 +2,9 @@
 
 ## Overview
 
-17 workstreams. Phases 0-8 are implementation infrastructure. Phases 9-16 are language rigour -- making Yuho a legally sound DSL, not just a syntactically valid one.
+28 workstreams. Phases 0-8 are implementation infrastructure. Phases 9-16 are language rigour -- making Yuho a legally sound DSL, not just a syntactically valid one. Phases 17-27 are **developer integration** -- making Yuho adoptable as infrastructure for legal tech products.
 
-Priority: formal methods & execution > module resolution > defeasible reasoning > **type system & deontic logic** > library depth > tooling > interop.
+Priority: formal methods & execution > module resolution > defeasible reasoning > **type system & deontic logic** > library depth > tooling > interop > **containerization & API hardening > CI/CD & observability > SDKs & ecosystem > DX**.
 
 ## Dependency Graph
 
@@ -41,6 +41,26 @@ Phase 14 (penalty)      ──── depends on Phase 9 (refinement types)
 Phase 15 (sem hardening) ── depends on Phases 9, 13
 
 Phase 16 (interop)      ──── independent, can start anytime
+
+── developer integration (phases 17-27) ─────────────────
+
+Phase 17 (containers)   ──┐
+Phase 18 (API harden)   ──┤── parallel, no deps
+Phase 19 (CI/CD)        ──┘
+                           │
+              ┌────────────┼────────────┐
+              ▼            ▼            ▼
+Phase 20 (observability) Phase 22 (SDKs) Phase 27 (docs/DX)
+  depends on 18          depends on 18   depends on 17, 18
+              │
+              ▼
+Phase 21 (streaming)  ──── depends on Phase 18
+Phase 23 (registry)   ──── depends on Phase 17
+              │
+              ▼
+Phase 24 (webhooks)   ──── depends on Phase 23
+Phase 25 (WASM/embed) ──── independent, can start anytime
+Phase 26 (multi-tenant) ── depends on Phases 18, 20
 ```
 
 ---
@@ -428,10 +448,209 @@ Yuho should not be an island. Legal tech has standards and ecosystems worth conn
 
 ---
 
+## Phase 17: Containerization & Cloud-Ready Deployment [M]
+
+The archived v4 Dockerfile targets the old structure. v5 uses `pyproject.toml` with hatchling and a tree-sitter native lib that must be compiled. Without a Dockerfile, evaluation stops at `pip install`.
+
+- [ ] Multi-stage `Dockerfile` for v5 (builder stage compiles tree-sitter `.so`, prod stage is `python:3.12-slim` + venv copy)
+- [ ] `docker-compose.yml` with `yuho-api` and `yuho-mcp` services, shared volume for `library/`, health checks on `/health`
+- [ ] `.dockerignore` excluding `archive/`, `.git/`, `tests/`, `doc/`
+- [ ] `ENTRYPOINT ["yuho"]` with `CMD ["api"]` default; document `docker run yuho serve --stdio` for MCP
+- [ ] Helm chart scaffold (`deploy/helm/yuho/`) with configmap for `config.toml`, secret for auth tokens, liveness/readiness probes
+- [ ] ARM64 + AMD64 multi-arch CI build
+- [ ] `doc/DEPLOYMENT.md` covering Docker, Compose, K8s, Cloud Run patterns
+- **Why:** Compliance SaaS runs K8s. Without containers, Yuho can't be deployed behind a load balancer, can't autoscale, can't be included in IaC.
+
+**Files**: new `Dockerfile`, `docker-compose.yml`, `deploy/helm/yuho/`, `doc/DEPLOYMENT.md`
+
+---
+
+## Phase 18: API Hardening [L]
+
+REST server uses `http.server.ThreadingHTTPServer` with no auth, no versioning, no pagination. MCP already has token-bucket rate limiting and `auth_token` config, but REST has none of this. CORS is hardcoded `*`.
+
+- [ ] Bearer-token auth middleware on `YuhoAPIHandler` (reuse `mcp.auth_token` from config, check `Authorization` header, skip `/health`)
+- [ ] Extract `RateLimiter`/`TokenBucket` from `mcp/server.py` to shared `src/yuho/middleware/rate_limit.py`; wire into REST handler
+- [ ] API versioning: prefix routes with `/v1/`, add `X-API-Version` response header, keep unversioned as v1 aliases
+- [ ] Pagination for list endpoints: `/v1/rules?offset=0&limit=50`
+- [ ] Structured error codes: `{"error": {"code": "PARSE_ERROR", "message": "...", "details": [...]}}` matching `AnalysisError.error_code`
+- [ ] `X-Request-ID` propagation (consistent across REST and MCP)
+- [ ] CORS configurability via config instead of hardcoded `*`
+- [ ] OpenAPI spec update: auth scheme, versioned paths, error schemas, pagination params
+- **Why:** A contract analysis platform exposing Yuho as a microservice needs auth, rate limiting, and structured error codes for programmatic error handling.
+
+**Files**: modify `api.py`, new `src/yuho/middleware/{rate_limit,auth}.py`, modify `config/schema.py`, modify `doc/openapi.yaml`
+
+---
+
+## Phase 19: Machine-Readable CLI Output & CI/CD Integration [M]
+
+Legal tech devs integrate Yuho into CI/CD the same way ESLint runs in CI. No standardized exit-code contract, no SARIF output, no pre-commit hook config.
+
+- [ ] Standardize exit codes: 0=success, 1=error, 2=warnings-only (for `check`, `lint`, `test`); document in `doc/CLI_EXIT_CODES.md`
+- [ ] SARIF output for `yuho check` and `yuho lint`: `--format sarif` (GitHub Code Scanning compatible, annotations on PR diffs)
+- [ ] JUnit XML output for `yuho test`: `--format junit` for CI test result ingestion
+- [ ] GitHub Action: `.github/actions/yuho-check/action.yml` wrapping `pip install yuho && yuho batch check . --json`
+- [ ] Pre-commit hook config: `.pre-commit-hooks.yaml` at repo root
+- [ ] GitLab CI template: `doc/ci-templates/gitlab-ci.yml`
+- [ ] `yuho ci-report` command: runs check+lint+test, produces unified JSON/SARIF report
+- **Why:** A legislative drafting platform with 200+ `.yh` files needs statute validation in CI. SARIF = annotations on GitHub PRs. Pre-commit hooks catch errors before CI.
+
+**Files**: modify `main.py`, new `src/yuho/output/{sarif,junit}.py`, new `ci_report.py`, new `.github/actions/yuho-check/`, new `.pre-commit-hooks.yaml`
+
+---
+
+## Phase 20: Observability [M]
+
+Structured JSON logging exists. MCP tracks `_stats` with per-tool counts and latency histograms. But no Prometheus endpoint, no OTel traces, no way for ops teams to monitor Yuho in production.
+
+- [ ] Prometheus metrics endpoint: `GET /metrics` exposing `yuho_requests_total{endpoint,status}`, `yuho_request_duration_seconds{endpoint}` (histogram), `yuho_parse_errors_total`, `yuho_active_connections`
+- [ ] Export MCP server `_stats` as Prometheus metrics
+- [ ] OpenTelemetry tracing: optional `yuho[observability]` extra; auto-instrument parse->AST->transpile pipeline with spans; propagate `traceparent` header
+- [ ] Health endpoint enrichment: `{"status":"healthy","uptime_seconds":N,"requests_served":N,"parser_cache_size":N}`
+- [ ] Configurable log level via `YUHO_LOG_LEVEL` env var
+- **Why:** A compliance SaaS needs to know when parse times spike, which endpoints are hot, whether rate limiting is firing. Without observability, debugging = reading raw container logs.
+
+**Files**: modify `api.py`, new `src/yuho/middleware/metrics.py`, modify `mcp/server.py`, modify `logging_utils.py`, modify `pyproject.toml`
+
+**Dependencies**: Phase 18 (uses middleware pattern)
+
+---
+
+## Phase 21: Streaming & Real-time [L]
+
+Z3/Alloy verification takes 5-30s. REST API is sync request-response only. Legal tech devs building real-time editors or verification dashboards need streaming progress.
+
+- [ ] WebSocket endpoint: `ws://host:port/ws` accepting JSON-RPC messages (reuse MCP tool signatures)
+- [ ] SSE for long-running ops: `POST /v1/verify` returns `202 Accepted` + `Location: /v1/jobs/{id}`; `GET /v1/jobs/{id}/events` streams SSE progress (`parsing`, `z3_encoding`, `z3_solving`, `complete`)
+- [ ] Async job queue: in-memory for single-instance, clean interface for Redis-backed queue in multi-instance
+- [ ] WebSocket live validation: client sends partial source on keystroke, server debounces and pushes diagnostics
+- [ ] Batch transpile streaming: `POST /v1/batch/transpile` streams results as NDJSON
+- **Why:** A browser-based legislative drafting tool wants live validation (WS). A compliance dashboard wants verification progress for 50 statutes (SSE). Without streaming, UI freezes or client must poll.
+
+**Files**: new `src/yuho/api/{websocket,sse,jobs}.py`, modify `api.py`, modify `pyproject.toml`
+
+**Dependencies**: Phase 18 (auth and rate limiting cover WS connections)
+
+---
+
+## Phase 22: Multi-Language SDKs [L]
+
+Yuho is Python-only. Legal tech is built in TypeScript (frontend), Java (enterprise), Go (microservices). The OpenAPI spec is the natural starting point but needs completion first.
+
+- [ ] Complete OpenAPI spec: all endpoints, request/response schemas, auth, pagination
+- [ ] TypeScript/JavaScript SDK: generated or hand-written thin wrapper; publish to npm as `@yuho/sdk`; typed responses, async/await, streaming
+- [ ] Go SDK: generated via `oapi-codegen`; publish as `github.com/gongahkia/yuho-go`; context-based cancellation
+- [ ] Java SDK: generated via `openapi-generator`; Maven Central publish
+- [ ] All SDKs: retry logic, configurable base URL, auth token injection, timeout config
+- [ ] Integration tests: each SDK starts `yuho api`, runs parse/validate/transpile/lint, verifies results
+- [ ] `doc/SDK_QUICKSTART.md` with examples in Python, TypeScript, Go, Java
+- **Why:** An enterprise contract management system in Java can't call a Python SDK. A Next.js legal AI assistant needs a TS client. Without multi-lang SDKs, every non-Python consumer hand-rolls HTTP calls.
+
+**Files**: new `sdks/{typescript,go,java}/`, modify `doc/openapi.yaml`, new `doc/SDK_QUICKSTART.md`
+
+**Dependencies**: Phase 18 (versioned, authenticated API with proper error schemas)
+
+---
+
+## Phase 23: Registry & Package Ecosystem [L]
+
+Library system has `PackageMetadata`, `.yhpkg` format, `lockfile.py`, `signature.py`, registry client. Registry URL points to `registry.yuho.dev` but the server likely doesn't exist yet. Local package ops work; remote registry is the gap.
+
+- [ ] Registry server: minimal HTTP API (static JSON index on GitHub Pages as v1, or FastAPI); endpoints: `GET /v1/packages`, `GET /v1/packages/{name}/{version}`, `POST /v1/packages`, `GET /v1/search?q=`
+- [ ] Real package signature verification: Ed25519 (current `_verify_signature` only checks length==64)
+- [ ] Transitive dependency resolution with conflict detection (version ranges `>=1.0.0 <2.0.0`)
+- [ ] `yuho library init` -- create `metadata.toml` interactively
+- [ ] Package namespace: `{jurisdiction}/{section}` (e.g., `singapore/s300`) for multi-jurisdiction
+- [ ] Mirror support: organizations host private registries via `library.registry_url`
+- **Why:** A legal tech company encoding Indonesian statutes needs to publish packages their team can share. Without a real registry, consumers manually copy `.yh` files.
+
+**Files**: new `src/yuho/registry/server.py`, modify `library/{resolver,signature,package}.py`, modify `commands_registry.py`
+
+**Dependencies**: Phase 17 (registry server needs containerization)
+
+---
+
+## Phase 24: Webhook & Event System [M]
+
+Statutes change. When Singapore amends s300, every downstream system consuming that statute needs to know. No notification mechanism exists.
+
+- [ ] Event model: `statute.updated`, `statute.deprecated`, `statute.created`, `package.published`, `verification.failed` as typed dataclasses
+- [ ] Webhook registration: `POST /v1/webhooks` with `{url, events, secret}`; stored in config
+- [ ] Webhook delivery: HTTP POST with HMAC-SHA256 in `X-Yuho-Signature`, retry with exponential backoff (3 attempts)
+- [ ] CLI: `yuho webhook add <url> --events statute.updated`, `yuho webhook list`, `yuho webhook test <id>`
+- [ ] File-watch mode: `yuho watch <dir>` monitors `.yh` files, re-validates, fires events
+- [ ] Config section: `[webhooks]` in `config.toml`
+- **Why:** A compliance SaaS needs to re-run validation when a statute changes. A legal AI assistant needs to invalidate cache when `s300` gets a new exception. Without webhooks, consumers must poll.
+
+**Files**: new `src/yuho/events/{model,webhook}.py`, new `src/yuho/cli/commands/{watch,webhook}.py`, modify `config/schema.py`
+
+**Dependencies**: Phase 23 (registry events trigger webhooks)
+
+---
+
+## Phase 25: Embedding & WASM [XL]
+
+The playground is a local server with HTML served from Python. True browser embedding = tree-sitter parser as WASM, parsing client-side with zero server round-trips.
+
+- [ ] Tree-sitter WASM build: `tree-sitter build --wasm` for `tree-sitter-yuho`; publish to npm
+- [ ] JavaScript binding: thin JS wrapper over WASM parser providing `parse(source) -> AST JSON`
+- [ ] Pyodide bundle: package Yuho's Python code (minus native tree-sitter) for Pyodide; `validate()` and `transpile()` in-browser
+- [ ] Standalone playground: static HTML/JS site using WASM parser + client-side transpilation to JSON/English/Mermaid
+- [ ] Embeddable widget: `<script src="cdn.yuho.dev/embed.js">` renders code editor with live validation
+- [ ] Monaco/CodeMirror integration: syntax highlighting, error squiggles, completions from WASM parser
+- **Why:** A legal AI assistant wants to validate Yuho in-browser without a server call. A law school e-learning platform wants an embedded editor. Without WASM, every client-side use case requires network latency.
+
+**Files**: modify `src/tree-sitter-yuho/`, new `packages/{wasm,playground,embed}/`
+
+---
+
+## Phase 26: Multi-Tenancy & Workspace Isolation [L]
+
+When Yuho serves multiple organizations as a hosted service, each tenant needs isolated library packages, config, and usage tracking. Current server is single-tenant.
+
+- [ ] Workspace model: `Workspace(id, name, config_overrides, library_path, api_key)`
+- [ ] Tenant routing: `X-Workspace-ID` header or subdomain routes to appropriate workspace
+- [ ] Per-tenant rate limiting: extend `RateLimiter` with workspace-scoped buckets
+- [ ] Usage tracking: `POST /v1/usage` returns `{requests_today, parse_count, transpile_count, verify_count}` per workspace
+- [ ] Quota enforcement: configurable limits per workspace (`max_requests_per_day`, `max_source_length`, `allowed_transpile_targets`)
+- [ ] CLI: `yuho workspace create <name>`, `yuho workspace switch <name>`, `yuho workspace list`
+- **Why:** A hosted Yuho-as-a-service serving 10 law firms needs each firm's library isolated. A platform with free/premium tiers needs usage quotas. Without multi-tenancy, hosting for multiple customers = separate deployments.
+
+**Files**: new `src/yuho/workspace/{model,router}.py`, modify `api.py`, `middleware/rate_limit.py`, `config/schema.py`, new `commands/workspace.py`
+
+**Dependencies**: Phase 18 (auth), Phase 20 (metrics per workspace)
+
+---
+
+## Phase 27: Documentation & Developer Experience [M]
+
+Existing docs cover SDK, config, formal semantics, OpenAPI. No interactive API explorer, no cookbook for common integration patterns, no "getting started for legal tech devs" tutorial.
+
+- [ ] Interactive API explorer: Swagger UI served at `GET /docs` on the API server (auto-generated from OpenAPI spec)
+- [ ] Cookbook: `doc/cookbook/` with practical recipes:
+  - [ ] `compliance-saas.md` -- building a compliance checker with Yuho API
+  - [ ] `contract-analysis.md` -- parsing contracts and mapping to statute elements
+  - [ ] `legislative-drafting.md` -- CI/CD for statute version control
+  - [ ] `legal-ai-assistant.md` -- MCP integration with Claude/GPT
+  - [ ] `multi-jurisdiction.md` -- managing statutes across jurisdictions
+- [ ] `doc/GETTING_STARTED.md` -- 5-minute quickstart (Docker -> API call -> parse result)
+- [ ] Architecture diagram in `doc/ARCHITECTURE.md`
+- [ ] Changelog automation: `CHANGELOG.md` from git tags + conventional commits
+- [ ] Error catalog: `doc/ERROR_CODES.md` mapping every `error_code` to description, causes, fixes
+- **Why:** A dev evaluating Yuho spends 10 minutes before deciding to adopt or reject. Without quickstart, cookbook, and interactive explorer, they choose a simpler tool.
+
+**Files**: modify `api.py` (serve Swagger UI at `/docs`), new `doc/{cookbook/,GETTING_STARTED.md,ARCHITECTURE.md,ERROR_CODES.md}`
+
+**Dependencies**: Phase 17, 18 (Docker quickstart + complete OpenAPI spec)
+
+---
+
 ## Verification Checklist
 
 After all phases:
 
+### Language & Semantics (Phases 0-16)
 - [ ] `pytest tests/` -- all unit + property + E2E tests pass
 - [ ] `yuho check library/penal_code/s300_murder/statute.yh` -- parses clean
 - [ ] `yuho test library/penal_code/s300_murder/test_statute.yh` -- real assertions pass
@@ -446,3 +665,19 @@ After all phases:
 - [ ] Burden: prosecution elements distinguished from defence elements in traces
 - [ ] Penalty composition: concurrent/consecutive correctly modeled
 - [ ] Cross-statute lint: contradictory definitions flagged
+
+### Developer Integration (Phases 17-27)
+- [ ] `docker build -t yuho . && docker run -p 8080:8080 yuho` -- API server starts in <30s
+- [ ] `curl -H "Authorization: Bearer <token>" localhost:8080/v1/parse` -- auth works
+- [ ] `curl localhost:8080/v1/parse` without token returns 401
+- [ ] `yuho check --format sarif` produces valid SARIF JSON
+- [ ] `yuho test --format junit` produces valid JUnit XML
+- [ ] GitHub Action validates `.yh` files on PR and annotates diffs
+- [ ] `GET /metrics` returns Prometheus-format counters and histograms
+- [ ] WebSocket live validation: send source, receive diagnostics within 200ms
+- [ ] TypeScript SDK: `await yuho.parse(source)` returns typed AST
+- [ ] `yuho library install singapore/s300` resolves from registry with transitive deps
+- [ ] Webhook fires on `statute.updated` event with valid HMAC signature
+- [ ] Tree-sitter WASM: `parse()` works in browser with no server
+- [ ] Multi-tenant: two workspaces with separate libraries don't leak data
+- [ ] `GET /docs` serves Swagger UI with tryable endpoints
