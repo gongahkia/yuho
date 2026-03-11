@@ -1053,6 +1053,8 @@ class ModuleNode(ASTNode):
     variables: Tuple[VariableDecl, ...]
     references: Tuple["ReferencingStmt", ...] = ()
     assertions: Tuple["AssertStmt", ...] = ()
+    enum_defs: Tuple[EnumDefNode, ...] = ()
+    type_aliases: Tuple[TypeAliasNode, ...] = ()
 
     def accept(self, visitor: "Visitor"):
         return visitor.visit_module(self)
@@ -1062,6 +1064,8 @@ class ModuleNode(ASTNode):
         result.extend(self.imports)
         result.extend(self.references)
         result.extend(self.type_defs)
+        result.extend(self.enum_defs)
+        result.extend(self.type_aliases)
         result.extend(self.function_defs)
         result.extend(self.statutes)
         result.extend(self.variables)
