@@ -51,14 +51,36 @@ class RegistryIndex:
     def _save(self) -> None:
         self._index_path().write_text(json.dumps(self._packages, indent=2), encoding="utf-8")
 
-    def search(self, query: str = "") -> List[Dict[str, Any]]:
+    def search(self, query: str = "", namespace: str = "") -> List[Dict[str, Any]]:
         results = []
         for name, versions in self._packages.items():
             if query and query.lower() not in name.lower():
                 continue
+            if namespace:
+                latest_meta = self.get_package(name)
+                ns = (latest_meta or {}).get("namespace", "")
+                if ns != namespace:
+                    continue
             latest = max(versions.keys()) if versions else ""
             results.append({"name": name, "latest": latest, "versions": list(versions.keys())})
         return results
+
+    def resolve_deps(self, name: str, version: Optional[str] = None, _seen: Optional[set] = None) -> List[str]:
+        """Resolve transitive dependencies. Returns list of 'name@version' strings."""
+        if _seen is None:
+            _seen = set()
+        key = f"{name}@{version}" if version else name
+        if key in _seen:
+            return []
+        _seen.add(key)
+        pkg = self.get_package(name, version)
+        if not pkg:
+            return []
+        result = [key]
+        for dep in pkg.get("dependencies", []):
+            dep_name, _, dep_ver = dep.partition("@")
+            result.extend(self.resolve_deps(dep_name, dep_ver or None, _seen))
+        return result
 
     def get_package(self, name: str, version: Optional[str] = None) -> Optional[Dict[str, Any]]:
         pkg = self._packages.get(name)
@@ -106,7 +128,13 @@ class RegistryHandler(BaseHTTPRequestHandler):
         index: RegistryIndex = self.server.index # type: ignore
         if path == "/v1/packages":
             query = qs.get("q", [""])[0]
-            self._send_json(200, index.search(query))
+            namespace = qs.get("namespace", [""])[0]
+            self._send_json(200, index.search(query, namespace=namespace))
+        elif path.startswith("/v1/packages/") and path.endswith("/deps"):
+            parts = path.split("/")
+            name = parts[3] if len(parts) > 4 else ""
+            deps = index.resolve_deps(name)
+            self._send_json(200, {"package": name, "dependencies": deps})
         elif path.startswith("/v1/packages/"):
             parts = path.split("/")
             name = parts[3] if len(parts) > 3 else ""
