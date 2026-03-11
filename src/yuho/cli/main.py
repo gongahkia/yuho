@@ -179,6 +179,7 @@ def verify(
 @click.option("--explain-error", "explain_errors", is_flag=True,
               help="Show detailed explanations for errors with common causes and fixes")
 @click.option("--metrics", is_flag=True, help="Include code_scale and clock_load_scale metrics")
+@click.option("--format", "output_format", type=click.Choice(["text", "json", "sarif"]), default="text", help="Output format")
 @click.pass_context
 def check(
     ctx: click.Context,
@@ -186,6 +187,7 @@ def check(
     json_output: bool,
     explain_errors: bool,
     metrics: bool,
+    output_format: str,
 ) -> None:
     """
     Parse and validate a Yuho source file.
@@ -199,6 +201,7 @@ def check(
         verbose=ctx.obj["verbose"],
         explain_errors=explain_errors,
         metrics=metrics,
+        output_format=output_format,
     )
 
 
@@ -462,6 +465,7 @@ def graph(ctx: click.Context, file: str, format: str, output: Optional[str]) -> 
 @click.option("--exclude", "-e", "exclude_rules", multiple=True, help="Rules to exclude")
 @click.option("--json", "json_output", is_flag=True, help="Output as JSON")
 @click.option("--fix", is_flag=True, help="Auto-fix issues where possible")
+@click.option("--format", "output_format", type=click.Choice(["text", "json", "sarif"]), default="text", help="Output format")
 @click.pass_context
 def lint(
     ctx: click.Context,
@@ -470,6 +474,7 @@ def lint(
     exclude_rules: tuple,
     json_output: bool,
     fix: bool,
+    output_format: str,
 ) -> None:
     """
     Check Yuho files for style and best practice issues.
@@ -484,6 +489,7 @@ def lint(
         yuho lint statute.yh
         yuho lint *.yh --exclude missing-penalty
         yuho lint src/ --json
+        yuho lint src/ --format sarif
     """
     from yuho.cli.commands.lint import run_lint
     run_lint(
@@ -494,6 +500,7 @@ def lint(
         verbose=ctx.obj["verbose"],
         color=ctx.obj["color"],
         fix=fix,
+        output_format=output_format,
     )
 
 
@@ -712,6 +719,7 @@ def fmt(ctx: click.Context, file: str, in_place: bool, check: bool) -> None:
 @click.option("--json", "json_output", is_flag=True, help="Output results as JSON")
 @click.option("--coverage", is_flag=True, help="Enable coverage tracking")
 @click.option("--coverage-html", type=click.Path(), help="Generate HTML coverage report")
+@click.option("--format", "output_format", type=click.Choice(["text", "json", "junit"]), default="text", help="Output format")
 @click.pass_context
 def test(
     ctx: click.Context,
@@ -720,6 +728,7 @@ def test(
     json_output: bool,
     coverage: bool,
     coverage_html: Optional[str],
+    output_format: str,
 ) -> None:
     """
     Run tests for a Yuho statute file.
@@ -729,8 +738,7 @@ def test(
     Examples:
         yuho test statute.yh
         yuho test --all
-        yuho test --all --coverage
-        yuho test --all --coverage-html coverage.html
+        yuho test --all --format junit
     """
     from yuho.cli.commands.test import run_test
     run_test(
@@ -740,6 +748,7 @@ def test(
         verbose=ctx.obj["verbose"],
         coverage=coverage or bool(coverage_html),
         coverage_html=coverage_html,
+        output_format=output_format,
     )
 
 
