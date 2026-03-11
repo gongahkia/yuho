@@ -21,7 +21,7 @@ fn is_hurt(string physicalElement, bool causedToVictim) : bool {
     }
 }
 
-statute 319 "Hurt" {
+statute 319 "Hurt" effective 1872-01-01 {
     definitions {
         hurt := "Causing bodily pain, disease, infirmity, or unconsciousness";
         bodily_pain := "Physical pain to any part of the body";
