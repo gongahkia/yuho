@@ -932,6 +932,12 @@ class ASTBuilder:
         doc = self._get_doc_comment(node)
         jurisdiction, jurisdiction_meta = self._extract_jurisdiction(doc)
 
+        # phase 11/13: temporal and hierarchy metadata
+        effective_node = self._child_by_field(node, "effective_date")
+        repealed_node = self._child_by_field(node, "repealed_date")
+        subsumes_node = self._child_by_field(node, "subsumes")
+        amends_node = self._child_by_field(node, "amends")
+
         return nodes.StatuteNode(
             section_number=section_number,
             title=title,
@@ -944,6 +950,10 @@ class ASTBuilder:
             doc_comment=doc,
             jurisdiction=jurisdiction,
             jurisdiction_meta=jurisdiction_meta,
+            effective_date=self._text(effective_node) if effective_node else None,
+            repealed_date=self._text(repealed_node) if repealed_node else None,
+            subsumes=self._text(subsumes_node) if subsumes_node else None,
+            amends=self._text(amends_node) if amends_node else None,
             source_location=self._loc(node),
         )
 
