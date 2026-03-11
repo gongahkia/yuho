@@ -155,6 +155,8 @@ class Environment:
     struct_defs: Dict[str, nodes.StructDefNode] = field(default_factory=dict)
     function_defs: Dict[str, nodes.FunctionDefNode] = field(default_factory=dict)
     statutes: Dict[str, nodes.StatuteNode] = field(default_factory=dict)
+    enum_defs: Dict[str, nodes.EnumDefNode] = field(default_factory=dict)
+    type_aliases: Dict[str, nodes.TypeAliasNode] = field(default_factory=dict)
     parent: Optional["Environment"] = None
 
     def get(self, name: str) -> Optional[Value]:
@@ -200,6 +202,13 @@ class Environment:
             return self.parent.get_statute(section)
         return None
 
+    def get_enum_def(self, name: str) -> Optional[nodes.EnumDefNode]:
+        if name in self.enum_defs:
+            return self.enum_defs[name]
+        if self.parent:
+            return self.parent.get_enum_def(name)
+        return None
+
 
 # ---------------------------------------------------------------------------
 # Interpreter (tree-walking, visitor-based)
@@ -218,6 +227,14 @@ class Interpreter(Visitor):
         # register struct defs
         for sd in module.type_defs:
             self.env.struct_defs[sd.name] = sd
+        # register enum defs and variants as bindings
+        for ed in getattr(module, 'enum_defs', ()):
+            self.env.enum_defs[ed.name] = ed
+            for variant in ed.variants:
+                self.env.set(variant.name, Value(variant.name, "enum"))
+        # register type aliases (no runtime effect, stored for resolution)
+        for ta in getattr(module, 'type_aliases', ()):
+            self.env.type_aliases[ta.name] = ta
         # register function defs
         for fd in module.function_defs:
             self.env.function_defs[fd.name] = fd
@@ -292,14 +309,25 @@ class Interpreter(Visitor):
         sd = self.env.get_struct_def(node.name)
         if sd is not None:
             return Value(node.name, "string")
+        # check if it's an enum type name
+        ed = self.env.get_enum_def(node.name)
+        if ed is not None:
+            return Value(node.name, "enum")
         raise InterpreterError(f"Undefined variable '{node.name}'", node)
 
     def visit_field_access(self, node: nodes.FieldAccessNode) -> Value:
         base = self.visit(node.base)
         if base.type_tag == "struct":
             return base.raw.get_field(node.field_name)
+        # enum variant access: EnumType.Variant
+        if base.type_tag == "enum":
+            ed = self.env.get_enum_def(base.raw)
+            if ed:
+                for v in ed.variants:
+                    if v.name == node.field_name:
+                        return Value(node.field_name, "enum")
         # string base -> enum-style "Type.Field" reference
-        if base.type_tag == "string":
+        if base.type_tag in ("string", "enum"):
             return Value(f"{base.raw}.{node.field_name}", "string")
         raise InterpreterError(f"Cannot access field '{node.field_name}' on {base.type_tag}", node)
 
@@ -627,6 +655,19 @@ class Interpreter(Visitor):
 
     def visit_struct_def(self, node: nodes.StructDefNode) -> Value:
         self.env.struct_defs[node.name] = node
+        return Value(None, "none")
+
+    def visit_enum_def(self, node: nodes.EnumDefNode) -> Value:
+        self.env.enum_defs[node.name] = node
+        return Value(None, "none")
+
+    def visit_enum_variant(self, node: nodes.EnumVariant) -> Value:
+        return Value(node.name, "enum")
+
+    def visit_type_alias(self, node: nodes.TypeAliasNode) -> Value:
+        return Value(None, "none")
+
+    def visit_refinement_type(self, node: nodes.RefinementTypeNode) -> Value:
         return Value(None, "none")
 
     # ======================================================================
