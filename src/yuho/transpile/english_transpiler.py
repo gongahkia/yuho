@@ -118,6 +118,14 @@ class EnglishTranspiler(TranspilerBase, Visitor):
             if node.jurisdiction_meta:
                 for k, v in node.jurisdiction_meta.items():
                     self._emit(f"  {k}: {v}")
+        if getattr(node, 'effective_date', None):
+            self._emit(f"Effective: {node.effective_date}")
+        if getattr(node, 'repealed_date', None):
+            self._emit(f"REPEALED: {node.repealed_date}")
+        if getattr(node, 'subsumes', None):
+            self._emit(f"Subsumes: Section {node.subsumes}")
+        if getattr(node, 'amends', None):
+            self._emit(f"Amends: Section {node.amends}")
         self._emit_blank()
 
         # Definitions
@@ -237,14 +245,28 @@ class EnglishTranspiler(TranspilerBase, Visitor):
             "actus_reus": "Physical element (actus reus)",
             "mens_rea": "Mental element (mens rea)",
             "circumstance": "Circumstance",
+            "obligation": "Legal obligation",
+            "prohibition": "Prohibition",
+            "permission": "Permission",
         }
         label = type_labels.get(node.element_type, node.element_type)
 
+        # phase 12: append causation and burden info
+        suffixes = []
+        if getattr(node, 'caused_by', None):
+            suffixes.append(f"caused by '{node.caused_by}'")
+        if getattr(node, 'burden', None):
+            burden_text = f"burden on {node.burden}"
+            if getattr(node, 'burden_standard', None):
+                burden_text += f" ({node.burden_standard.replace('_', ' ')})"
+            suffixes.append(burden_text)
+
+        suffix = (" [" + "; ".join(suffixes) + "]") if suffixes else ""
         # Handle description
         if isinstance(node.description, nodes.StringLit):
-            self._emit(f"{label}: {node.description.value}")
+            self._emit(f"{label}: {node.description.value}{suffix}")
         elif isinstance(node.description, nodes.MatchExprNode):
-            self._emit(f"{label}: {node.name}")
+            self._emit(f"{label}: {node.name}{suffix}")
             self._indent_level += 1
             self._visit_match_expr_english(node.description)
             self._indent_level -= 1
