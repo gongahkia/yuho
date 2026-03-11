@@ -65,10 +65,19 @@ class BlockBuilder(Visitor):
         title_node = getattr(node, "title", "") or ""
         title = getattr(title_node, "value", str(title_node))
         
+        meta = [f"title: {title}"]
+        if getattr(node, 'effective_date', None):
+            meta.append(f"effective: {node.effective_date}")
+        if getattr(node, 'repealed_date', None):
+            meta.append(f"repealed: {node.repealed_date}")
+        if getattr(node, 'subsumes', None):
+            meta.append(f"subsumes: s{node.subsumes}")
+        if getattr(node, 'amends', None):
+            meta.append(f"amends: s{node.amends}")
         statute_block = Block(
             block_type="STATUTE",
             name=f"S{section}",
-            content=[f"title: {title}"],
+            content=meta,
             children=[],
             level=0,
         )
@@ -127,10 +136,15 @@ class BlockBuilder(Visitor):
         children = []
         
         # Group by type
-        actus_reus = []
-        mens_rea = []
-        other = []
-        
+        groups = {
+            "actus_reus": [],
+            "mens_rea": [],
+            "circumstance": [],
+            "obligation": [],
+            "prohibition": [],
+            "permission": [],
+        }
+
         def _collect_elements(elems):
             for elem in elems:
                 if isinstance(elem, ElementGroupNode):
@@ -142,40 +156,35 @@ class BlockBuilder(Visitor):
                 if len(str(desc)) > 50:
                     desc = str(desc)[:47] + "..."
                 entry = f"{name}: {desc}"
-                if "actus" in elem_type.lower():
-                    actus_reus.append(entry)
-                elif "mens" in elem_type.lower():
-                    mens_rea.append(entry)
-                else:
-                    other.append(entry)
+                if getattr(elem, 'caused_by', None):
+                    entry += f" [caused_by: {elem.caused_by}]"
+                if getattr(elem, 'burden', None):
+                    burden_str = elem.burden
+                    if getattr(elem, 'burden_standard', None):
+                        burden_str += f"/{elem.burden_standard}"
+                    entry += f" [burden: {burden_str}]"
+                bucket = elem_type if elem_type in groups else "circumstance"
+                groups[bucket].append(entry)
         _collect_elements(elements)
-        
-        if actus_reus:
-            children.append(Block(
-                block_type="ACTUS_REUS",
-                name="act",
-                content=actus_reus,
-                children=[],
-                level=2,
-            ))
-        
-        if mens_rea:
-            children.append(Block(
-                block_type="MENS_REA",
-                name="intent",
-                content=mens_rea,
-                children=[],
-                level=2,
-            ))
-        
-        if other:
-            children.append(Block(
-                block_type="CIRCUMSTANCE",
-                name="context",
-                content=other,
-                children=[],
-                level=2,
-            ))
+
+        type_labels = {
+            "actus_reus": ("ACTUS_REUS", "act"),
+            "mens_rea": ("MENS_REA", "intent"),
+            "circumstance": ("CIRCUMSTANCE", "context"),
+            "obligation": ("OBLIGATION", "obligation"),
+            "prohibition": ("PROHIBITION", "prohibition"),
+            "permission": ("PERMISSION", "permission"),
+        }
+        for key, entries in groups.items():
+            if entries:
+                bt, nm = type_labels[key]
+                children.append(Block(
+                    block_type=bt,
+                    name=nm,
+                    content=entries,
+                    children=[],
+                    level=2,
+                ))
         
         block = Block(
             block_type="ELEMENTS",
@@ -206,7 +215,13 @@ class BlockBuilder(Visitor):
             content.append(f"caning: {min_str} to {penalty.caning_max} strokes")
         if getattr(penalty, "supplementary", None):
             content.append(f"supplementary: {penalty.supplementary}")
-        
+        if getattr(penalty, "sentencing", None):
+            content.append(f"sentencing: {penalty.sentencing}")
+        if getattr(penalty, "mandatory_min_imprisonment", None):
+            content.append(f"mandatory_min_imprisonment: {penalty.mandatory_min_imprisonment}")
+        if getattr(penalty, "mandatory_min_fine", None):
+            content.append(f"mandatory_min_fine: {penalty.mandatory_min_fine}")
+
         if content:
             block = Block(
                 block_type="PENALTY",
