@@ -59,6 +59,21 @@ class Config:
         """Get library configuration section."""
         return self._schema.library
 
+    @property
+    def api(self):
+        """Get API configuration section."""
+        return self._schema.api
+
+    @property
+    def webhooks(self):
+        """Get webhooks configuration section."""
+        return self._schema.webhooks
+
+    @property
+    def workspace(self):
+        """Get workspace configuration section."""
+        return self._schema.workspace
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary."""
         return self._schema.to_dict()
