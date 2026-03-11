@@ -1,5 +1,5 @@
 """
-E2E tests for new transpiler targets: BibTeX, HTML, Comparative, Verification Report.
+E2E tests for new transpiler targets: BibTeX, Comparative, Verification Report.
 
 Tests the full pipeline: parse → AST → transpile for each new target.
 """
@@ -66,26 +66,6 @@ def two_statute_ast():
     return result.ast
 
 
-class TestHTMLTranspiler:
-    def test_produces_valid_html(self, single_ast):
-        t = get_transpiler(TranspileTarget.HTML)
-        output = t.transpile(single_ast)
-        assert "<!DOCTYPE html>" in output
-        assert "<html" in output
-        assert "</html>" in output
-
-    def test_contains_english_and_mermaid(self, single_ast):
-        t = get_transpiler(TranspileTarget.HTML)
-        output = t.transpile(single_ast)
-        assert "mermaid" in output.lower()
-        assert "Test Offence" in output
-
-    def test_title_extraction(self, single_ast):
-        t = get_transpiler(TranspileTarget.HTML)
-        output = t.transpile(single_ast)
-        assert "Section 1" in output
-
-
 class TestBibTeXTranspiler:
     def test_produces_output(self, single_ast):
         t = get_transpiler(TranspileTarget.BIBTEX)
@@ -139,7 +119,7 @@ class TestAllTargetsRoundtrip:
 
     TARGETS = [
         "json", "english", "mermaid", "latex", "alloy",
-        "graphql", "blocks", "bibtex", "html", "comparative",
+        "graphql", "blocks", "bibtex", "comparative",
     ]
 
     @pytest.mark.parametrize("target_name", TARGETS)

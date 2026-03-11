@@ -20,7 +20,6 @@ class TranspileTarget(Enum):
     GRAPHQL = auto()
     BLOCKS = auto()
     BIBTEX = auto()
-    HTML = auto()
     COMPARATIVE = auto()
 
     @classmethod
@@ -43,7 +42,6 @@ class TranspileTarget(Enum):
             "block": cls.BLOCKS,
             "bibtex": cls.BIBTEX,
             "bib": cls.BIBTEX,
-            "html": cls.HTML,
             "comparative": cls.COMPARATIVE,
             "compare": cls.COMPARATIVE,
         }
@@ -65,7 +63,6 @@ class TranspileTarget(Enum):
             TranspileTarget.GRAPHQL: ".graphql",
             TranspileTarget.BLOCKS: ".blocks",
             TranspileTarget.BIBTEX: ".bib",
-            TranspileTarget.HTML: ".html",
             TranspileTarget.COMPARATIVE: ".md",
         }
         return extensions.get(self, ".txt")

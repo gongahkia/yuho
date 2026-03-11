@@ -22,27 +22,11 @@ _PLAYGROUND_HTML = """\
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Yuho Playground</title>
-<style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, monospace; background: #1e1e2e; color: #cdd6f4; }
-.header { background: #313244; padding: .75rem 1.5rem; display: flex; align-items: center; gap: 1rem; border-bottom: 1px solid #45475a; }
-.header h1 { font-size: 1.1rem; color: #89b4fa; }
-.header select, .header button { padding: .4rem .8rem; border-radius: 6px; border: 1px solid #585b70; background: #45475a; color: #cdd6f4; cursor: pointer; font-size: .85rem; }
-.header button { background: #89b4fa; color: #1e1e2e; font-weight: 600; }
-.header button:hover { background: #74c7ec; }
-.container { display: grid; grid-template-columns: 1fr 1fr; height: calc(100vh - 50px); }
-.pane { display: flex; flex-direction: column; }
-.pane-header { background: #313244; padding: .5rem 1rem; font-size: .8rem; color: #a6adc8; border-bottom: 1px solid #45475a; }
-textarea { flex: 1; background: #1e1e2e; color: #cdd6f4; border: none; padding: 1rem; font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: .9rem; resize: none; tab-size: 4; line-height: 1.6; }
-textarea:focus { outline: none; }
-pre { flex: 1; background: #181825; padding: 1rem; font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: .85rem; overflow: auto; white-space: pre-wrap; line-height: 1.6; }
-.error { color: #f38ba8; }
-.status { padding: .3rem 1rem; background: #313244; font-size: .75rem; color: #a6adc8; border-top: 1px solid #45475a; text-align: right; }
-</style>
 </head>
 <body>
-<div class="header">
-  <h1>Yuho Playground</h1>
+<h1>Yuho Playground</h1>
+<p>
+  <label for="target">Target:</label>
   <select id="target">
     <option value="english" selected>English</option>
     <option value="json">JSON</option>
@@ -51,14 +35,14 @@ pre { flex: 1; background: #181825; padding: 1rem; font-family: 'JetBrains Mono'
     <option value="alloy">Alloy</option>
     <option value="graphql">GraphQL</option>
     <option value="bibtex">BibTeX</option>
-    <option value="html">HTML</option>
   </select>
   <button onclick="run()">Transpile</button>
-</div>
-<div class="container">
-  <div class="pane">
-    <div class="pane-header">Source (.yh)</div>
-    <textarea id="source" spellcheck="false" placeholder="// Enter Yuho code here...
+</p>
+<hr>
+<table width="100%"><tr>
+<td width="50%" valign="top">
+  <p><b>Source (.yh)</b></p>
+  <textarea id="source" rows="30" cols="60" spellcheck="false" placeholder="// Enter Yuho code here...
 statute 1 &quot;Example&quot; {
     definitions {
         example := &quot;An example definition&quot;;
@@ -71,13 +55,14 @@ statute 1 &quot;Example&quot; {
         imprisonment := 0 days .. 5 years;
     }
 }"></textarea>
-  </div>
-  <div class="pane">
-    <div class="pane-header">Output — <span id="target-label">english</span></div>
-    <pre id="output"></pre>
-  </div>
-</div>
-<div class="status" id="status">Ready</div>
+</td>
+<td width="50%" valign="top">
+  <p><b>Output &mdash; <span id="target-label">english</span></b></p>
+  <pre id="output"></pre>
+</td>
+</tr></table>
+<hr>
+<p id="status">Ready</p>
 <script>
 const src = document.getElementById('source');
 const out = document.getElementById('output');
@@ -102,9 +87,9 @@ async function run() {
       body: JSON.stringify({source: src.value, target: tgt.value})
     });
     const d = await r.json();
-    if (d.error) { out.innerHTML = '<span class="error">' + esc(d.error) + '</span>'; sts.textContent = 'Error'; }
+    if (d.error) { out.innerHTML = '<b>Error:</b> ' + esc(d.error); sts.textContent = 'Error'; }
     else { out.textContent = d.output; sts.textContent = 'OK (' + d.target + ')'; }
-  } catch(e) { out.innerHTML = '<span class="error">' + esc(e.message) + '</span>'; sts.textContent = 'Error'; }
+  } catch(e) { out.innerHTML = '<b>Error:</b> ' + esc(e.message); sts.textContent = 'Error'; }
 }
 
 function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }

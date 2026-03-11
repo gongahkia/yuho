@@ -14,7 +14,7 @@ from yuho.cli.error_formatter import Colors, colorize
 from yuho.services.analysis import analyze_file, analyze_source
 
 
-ALL_TARGETS = ["json", "jsonld", "english", "latex", "pdf", "mermaid", "alloy", "graphql", "blocks", "bibtex", "html"]
+ALL_TARGETS = ["json", "jsonld", "english", "latex", "pdf", "mermaid", "alloy", "graphql", "blocks", "bibtex"]
 
 
 def run_transpile(

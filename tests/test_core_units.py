@@ -869,7 +869,6 @@ class TestTranspileTarget:
         assert TranspileTarget.LATEX.file_extension == ".tex"
         assert TranspileTarget.MERMAID.file_extension == ".mmd"
         assert TranspileTarget.ALLOY.file_extension == ".als"
-        assert TranspileTarget.HTML.file_extension == ".html"
         assert TranspileTarget.COMPARATIVE.file_extension == ".md"
 
 

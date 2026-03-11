@@ -251,7 +251,7 @@ def ast(
 @click.argument("file", type=str)
 @click.option(
     "-t", "--target",
-    type=click.Choice(["json", "jsonld", "english", "latex", "pdf", "mermaid", "svg", "png", "alloy", "graphql", "blocks", "bibtex", "html", "comparative"], case_sensitive=False),
+    type=click.Choice(["json", "jsonld", "english", "latex", "pdf", "mermaid", "svg", "png", "alloy", "graphql", "blocks", "bibtex", "comparative"], case_sensitive=False),
     default="json",
     help="Transpilation target format"
 )
@@ -318,9 +318,11 @@ def repl(ctx: click.Context) -> None:
 @click.argument("file", type=click.Path(exists=True))
 @click.option("-s", "--section", help="Explain specific section only")
 @click.option("-i", "--interactive", is_flag=True, help="Interactive REPL mode")
-@click.option("--provider", type=click.Choice(["ollama", "huggingface", "openai", "anthropic"]),
+@click.option("--provider", type=click.Choice(
+              ["ollama", "huggingface", "openai", "anthropic", "gemini", "plex", "keymeet"]),
               help="LLM provider to use")
 @click.option("--model", help="Model name to use")
+@click.option("--api-key", "api_key", help="API key for the selected cloud provider")
 @click.option("--offline", is_flag=True, help="Disallow cloud providers and run local-only")
 @click.option("--no-llm", is_flag=True, help="Skip LLM, use built-in English transpilation only")
 @click.option("--stream/--no-stream", "stream", default=True,
@@ -333,6 +335,7 @@ def explain(
     interactive: bool,
     provider: Optional[str],
     model: Optional[str],
+    api_key: Optional[str],
     offline: bool,
     no_llm: bool,
     stream: bool,
@@ -350,6 +353,7 @@ def explain(
         interactive=interactive,
         provider=provider,
         model=model,
+        api_key=api_key,
         offline=offline,
         no_llm=no_llm,
         verbose=ctx.obj["verbose"],

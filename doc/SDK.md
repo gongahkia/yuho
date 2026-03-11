@@ -81,7 +81,6 @@ targets = [
     TranspileTarget.MERMAID,
     TranspileTarget.LATEX,
     TranspileTarget.ALLOY,
-    TranspileTarget.HTML,
     TranspileTarget.BIBTEX,
     TranspileTarget.COMPARATIVE,
     TranspileTarget.GRAPHQL,
