@@ -366,6 +366,9 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
                 "status": "healthy",
                 "version": __version__,
                 "api_version": API_VERSION,
+                "uptime_seconds": round(m.uptime_s, 1),
+                "requests_served": m.total_requests,
+                "parse_errors_total": m.total_parse_errors,
                 "endpoints": [
                     "GET  /v1/health",
                     "GET  /v1/targets",
@@ -376,6 +379,9 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
                     "POST /v1/validate",
                     "POST /v1/transpile",
                     "POST /v1/lint",
+                    "POST /v1/jobs/submit",
+                    "GET  /v1/jobs/{id}",
+                    "GET  /v1/jobs/{id}/stream",
                 ],
             }
         ))
