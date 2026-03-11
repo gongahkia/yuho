@@ -1,0 +1,42 @@
+TYPE DEFINITIONS
+==================================================
+
+Type "ForgeryCase" consists of:
+  - accused: text
+  - documentType: text
+  - makingAct: text
+  - intent: text
+  - target: text
+
+FUNCTIONS
+==================================================
+
+Function "is_forgery"(docType (text), intent (text)) returning boolean:
+  (see decision tree below)
+
+SECTION 463: Forgery
+============================================================
+
+Definitions:
+  "forgery" means Making a false document with fraudulent intent
+  "false_document" means A document that dishonestly or fraudulently purports to be something it is not
+  "making" means Creating, altering, or signing a document falsely
+  "valuable_security" means Document purporting to create, transfer, or release any right
+
+Elements of the offence:
+  Physical element (actus reus): Making a false document or part of document
+  Mental element (mens rea): Intent to cause damage or injury to public or person
+  Mental element (mens rea): Intent to support any claim or title
+  Mental element (mens rea): Intent to cause person to part with property
+  Mental element (mens rea): Intent to cause person to enter contract
+  Mental element (mens rea): Intent to commit fraud
+
+Penalty:
+  Shall be punished with imprisonment for a term of not less than no time and not more than 4 years, or with a fine of not less than S$0.00 and not more than S$10,000.00, or with any combination thereof.
+
+Illustrations:
+
+example1 A creates a false certificate purporting to be from a university. A has committed forgery.
+example2 A alters the date on a document to make it appear earlier than it was. A has committed forgery.
+example3 A signs B's name on a cheque without B's authority. A has committed forgery.
+

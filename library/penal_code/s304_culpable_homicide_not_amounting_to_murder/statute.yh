@@ -6,7 +6,7 @@
 
 referencing penal_code/s299_culpable_homicide
 
-struct CulpableHomicideCase {
+struct CulpableHomicideNotMurderCase {
     string accused,
     string victim,
     string intention,

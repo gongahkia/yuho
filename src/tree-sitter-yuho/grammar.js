@@ -68,6 +68,8 @@ module.exports = grammar({
       $.import_statement,
       $.referencing_statement,
       $.variable_declaration,
+      $.assert_statement,
+      $.expression_statement,
     ),
 
     // =========================================================================
@@ -493,6 +495,7 @@ module.exports = grammar({
 
     // Referencing statement for test files to import statutes
     referencing_statement: $ => seq(
+      repeat(field('doc_comment', $.doc_comment)),
       'referencing',
       field('path', $.reference_path),
       optional(';'),

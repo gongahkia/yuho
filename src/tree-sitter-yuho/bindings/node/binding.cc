@@ -1,27 +1,20 @@
-#include "nan.h"
-#include "tree_sitter/parser.h"
+#include <napi.h>
+
+typedef struct TSLanguage TSLanguage;
 
 extern "C" TSLanguage *tree_sitter_yuho();
 
-namespace {
+// "tree-sitter", "language" hashed with BLAKE2
+const napi_type_tag LANGUAGE_TYPE_TAG = {
+  0x8AF2E5212AD58ABF, 0xD5006CAD83ABBA16
+};
 
-NAN_METHOD(New) {}
-
-void Init(v8::Local<v8::Object> exports, v8::Local<v8::Object> module) {
-  v8::Local<v8::FunctionTemplate> tpl = Nan::New<v8::FunctionTemplate>(New);
-  tpl->SetClassName(Nan::New("Language").ToLocalChecked());
-  tpl->InstanceTemplate()->SetInternalFieldCount(1);
-
-  v8::Local<v8::Function> constructor = Nan::GetFunction(tpl).ToLocalChecked();
-  v8::Local<v8::Object> instance =
-      Nan::NewInstance(constructor, 0, nullptr).ToLocalChecked();
-  Nan::SetInternalFieldPointer(instance, 0, tree_sitter_yuho());
-
-  Nan::Set(instance, Nan::New("name").ToLocalChecked(),
-           Nan::New("yuho").ToLocalChecked());
-  Nan::Set(module, Nan::New("exports").ToLocalChecked(), instance);
+Napi::Object Init(Napi::Env env, Napi::Object exports) {
+    exports["name"] = Napi::String::New(env, "yuho");
+    auto language = Napi::External<TSLanguage>::New(env, tree_sitter_yuho());
+    language.TypeTag(&LANGUAGE_TYPE_TAG);
+    exports["language"] = language;
+    return exports;
 }
 
-NODE_MODULE(tree_sitter_yuho_binding, Init)
-
-}  // namespace
+NODE_API_MODULE(tree_sitter_yuho_binding, Init)

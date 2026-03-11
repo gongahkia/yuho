@@ -2226,6 +2226,16 @@
     "type": "referencing_statement",
     "named": true,
     "fields": {
+      "doc_comment": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "doc_comment",
+            "named": true
+          }
+        ]
+      },
       "path": {
         "multiple": false,
         "required": true,
@@ -2330,6 +2340,14 @@
       "multiple": true,
       "required": false,
       "types": [
+        {
+          "type": "assert_statement",
+          "named": true
+        },
+        {
+          "type": "expression_statement",
+          "named": true
+        },
         {
           "type": "function_definition",
           "named": true

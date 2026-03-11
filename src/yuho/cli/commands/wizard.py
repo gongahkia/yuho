@@ -446,14 +446,16 @@ def run_wizard(
         verbose: Enable verbose output
         color: Use colored output
     """
-    click.echo(click.style("""
-╔═══════════════════════════════════════════════════════════╗
-║           YUHO STATUTE CREATION WIZARD                     ║
-║                                                            ║
-║  This wizard will guide you through creating a new         ║
-║  Yuho statute definition step by step.                     ║
-╚═══════════════════════════════════════════════════════════╝
-    """, fg="cyan"))
+    w = 59
+    box_lines = [
+        "╔" + "═" * w + "╗",
+        "║" + "YUHO STATUTE CREATION WIZARD".center(w) + "║",
+        "║" + " " * w + "║",
+        "║" + "  This wizard will guide you through creating a new".ljust(w) + "║",
+        "║" + "  Yuho statute definition step by step.".ljust(w) + "║",
+        "╚" + "═" * w + "╝",
+    ]
+    click.echo(click.style("\n".join(box_lines), fg="cyan"))
     
     data = StatuteData()
     

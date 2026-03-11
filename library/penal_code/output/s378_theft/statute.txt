@@ -1,0 +1,44 @@
+TYPE DEFINITIONS
+==================================================
+
+Type "TheftCase" consists of:
+  - accused: text
+  - victim: text
+  - propertyType: text
+  - dishonestIntention: text
+  - withoutConsent: boolean
+  - inPossessionOfAnother: boolean
+  - propertyMoved: boolean
+
+FUNCTIONS
+==================================================
+
+Function "is_theft"(propertyType (text), intention (text), consent (boolean), possession (boolean), moved (boolean)) returning boolean:
+  (see decision tree below)
+
+SECTION 378: Theft
+============================================================
+
+Definitions:
+  "theft" means Dishonestly taking movable property out of possession of another without consent
+  "movable_property" means Corporeal property except land and things attached to earth
+  "dishonestly" means With intention of causing wrongful gain or wrongful loss
+  "wrongful_gain" means Gain by unlawful means of property to which the gainer is not legally entitled
+  "wrongful_loss" means Loss by unlawful means of property to which the loser is legally entitled
+
+Elements of the offence:
+  Mental element (mens rea): Dishonest intention to take property
+  Physical element (actus reus): Taking movable property
+  Circumstance: Property in possession of another person
+  Circumstance: Without consent of that person
+  Physical element (actus reus): Moving the property in order to such taking
+
+Penalty:
+  Shall be punished with imprisonment for a term of not less than no time and not more than 7 years, or with a fine of not less than S$0.00 and not more than S$10,000.00, or with any combination thereof.
+
+Illustrations:
+
+example1 A finds a watch on the road, not knowing to whom it belongs. A picks it up with intent to find the owner. A has not committed theft.
+example2 A finds a watch belonging to B. A picks it up intending to keep it. A has committed theft.
+example3 A sees a watch belonging to B lying on a table. A, not intending to take the watch, moves it to see what is under it. A has not committed theft.
+
