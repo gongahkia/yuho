@@ -111,3 +111,9 @@ dmypy.json
 
 # Profiling
 *.prof
+
+# CLI-generated output
+training_pairs.jsonl
+doc/explanations/
+s999_*.yh
+library_export/
