@@ -414,7 +414,19 @@ module.exports = grammar({
       field('name', $.identifier),
       ':=',
       field('description', $._expression),
+      optional(seq('caused_by', field('caused_by', $.identifier))),
+      optional(field('burden', $.burden_qualifier)),
       optional(';'),
+    ),
+
+    burden_qualifier: $ => seq(
+      'burden',
+      choice('prosecution', 'defence'),
+      optional(seq('standard', choice(
+        'beyond_reasonable_doubt',
+        'balance_of_probabilities',
+        'prima_facie',
+      ))),
     ),
 
     element_group: $ => seq(
