@@ -2,6 +2,7 @@
 Main CLI entry point using Click.
 """
 
+import logging
 import os
 import sys
 from pathlib import Path
@@ -94,6 +95,10 @@ def cli(
     # Set global color state for error_formatter
     from yuho.cli import error_formatter
     error_formatter.COLOR_ENABLED = ctx.obj["color"]
+
+    # Wire YUHO_LOG_LEVEL env var
+    log_level = os.environ.get("YUHO_LOG_LEVEL", "WARNING").upper()
+    logging.basicConfig(level=getattr(logging, log_level, logging.WARNING), format="%(name)s %(levelname)s %(message)s")
 
 
 # =============================================================================
