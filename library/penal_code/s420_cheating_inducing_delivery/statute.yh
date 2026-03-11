@@ -19,7 +19,7 @@ fn is_s420_cheating(bool cheating, bool delivery) : bool {
     }
 }
 
-statute 420 "Cheating and Dishonestly Inducing Delivery of Property" {
+statute 420 "Cheating and Dishonestly Inducing Delivery of Property" effective 1872-01-01 {
     definitions {
         cheating := "Deceiving a person fraudulently or dishonestly";
         inducing := "Causing a person to act based on deception";
