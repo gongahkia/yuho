@@ -14,7 +14,7 @@ The abstract syntax is presented in BNF at the AST level (corresponding to
 ### 1.1 Modules
 
 ```
-Module     ::= Import* StructDef* FunctionDef* Statute* VarDecl* Assert*
+Module     ::= Import* StructDef* EnumDef* TypeAlias* FunctionDef* Statute* VarDecl* Assert*
 Import     ::= 'import' Path Names?
 Referencing ::= 'referencing' Path
 ```
@@ -29,9 +29,18 @@ NamedType  ::= Identifier
 GenericType ::= Identifier '<' Type (',' Type)* '>'
 OptionalType ::= Type '?'
 ArrayType  ::= '[' Type ']'
+RefinementType ::= Type '{' Expr '..' Expr '}'
 ```
 
-### 1.3 Expressions
+### 1.3 Enums and Type Aliases
+
+```
+EnumDef    ::= 'enum' Identifier '{' EnumVariant (',' EnumVariant)* '}'
+EnumVariant ::= Identifier ('(' Type (',' Type)* ')')?
+TypeAlias  ::= 'type' Identifier '=' Type
+```
+
+### 1.4 Expressions
 
 ```
 Expr       ::= Literal | Identifier | FieldAccess | IndexAccess
@@ -80,7 +89,9 @@ ParamDef   ::= Type Identifier
 ### 1.6 Statute Structure
 
 ```
-Statute    ::= 'statute' SectionNum StringLit? '{' StatuteMember* '}'
+Statute    ::= 'statute' SectionNum StringLit? TemporalMeta? HierarchyMeta? '{' StatuteMember* '}'
+TemporalMeta ::= ('effective' DateLit)? ('repealed' DateLit)?
+HierarchyMeta ::= ('subsumes' SectionNum)? ('amends' SectionNum)?
 StatuteMember ::= Definitions | Elements | Penalty | Illustration
                | Exception | CaseLaw
 
@@ -88,11 +99,17 @@ Definitions ::= 'definitions' '{' DefEntry* '}'
 DefEntry    ::= Identifier ':=' StringLit
 
 Elements    ::= 'elements' '{' (Element | ElementGroup)* '}'
-Element     ::= ElementType Identifier ':=' Expr
+Element     ::= ElementType Identifier ':=' Expr CausedBy? BurdenQual?
 ElementType ::= 'actus_reus' | 'mens_rea' | 'circumstance'
+              | 'obligation' | 'prohibition' | 'permission'
+CausedBy    ::= 'caused_by' Identifier
+BurdenQual  ::= 'burden' ('prosecution' | 'defence') ProofStandard?
+ProofStandard ::= 'beyond_reasonable_doubt' | 'balance_of_probabilities' | 'prima_facie'
 ElementGroup ::= ('all_of' | 'any_of') '{' (Element | ElementGroup)* '}'
 
-Penalty     ::= 'penalty' '{' PenaltyClauses '}'
+Penalty     ::= 'penalty' Sentencing? '{' PenaltyClauses MandatoryMin? '}'
+Sentencing  ::= 'concurrent' | 'consecutive'
+MandatoryMin ::= 'minimum' ('imprisonment' ':=' DurationLit | 'fine' ':=' MoneyLit)
 Exception   ::= 'exception' Identifier? '{' StringLit StringLit? ('when' Expr)? '}'
 CaseLaw     ::= 'caselaw' StringLit StringLit? '{' StringLit ('element' Identifier)? '}'
 Illustration ::= 'illustration' Identifier? '{' StringLit '}'
@@ -434,6 +451,8 @@ Yuho uses **lexical scoping** with chained environments:
 ```
 Env = { bindings: Map<Name, Value>,
         struct_defs: Map<Name, StructDef>,
+        enum_defs: Map<Name, EnumDef>,
+        type_aliases: Map<Name, Type>,
         function_defs: Map<Name, FunctionDef>,
         statutes: Map<Section, Statute>,
         parent: Env? }
