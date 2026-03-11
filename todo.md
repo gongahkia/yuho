@@ -401,13 +401,13 @@ Static checks that catch legal modeling errors before runtime.
 Yuho should not be an island. Legal tech has standards and ecosystems worth connecting to.
 
 ### 16A: Akoma Ntoso XML Export
-- [ ] Transpile statutes to Akoma Ntoso (the international standard for legislative XML)
-- [ ] Map elements to `<section>`, `<paragraph>`, `<point>` structures
-- [ ] Embed metadata as FRBR expressions
+- [x] Transpile statutes to Akoma Ntoso (the international standard for legislative XML)
+- [x] Map elements to `<section>`, `<paragraph>`, `<point>` structures
+- [x] Embed metadata as FRBR expressions
 - **Why:** Akoma Ntoso is used by parliaments worldwide. Exporting to it makes Yuho statutes interoperable with legislative drafting systems (e.g., EU N-Lex, Kenya Law).
 
 ### 16B: Prolog / Answer Set Programming Backend
-- [ ] Transpile statute logic to Prolog facts and rules
+- [x] Transpile statute logic to Prolog facts and rules
 - [ ] Use ASP (clingo) for defeasible reasoning with priorities
 - [ ] Compare ASP results with Yuho's interpreter for soundness checking
 - **Why:** Prolog is the de facto language for legal expert systems. ASP handles defeasibility natively. Using them as a backend gives Yuho access to decades of logic programming research.
