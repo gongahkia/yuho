@@ -3,35 +3,32 @@ info:
   title: Yuho REST API
   description: |
     HTTP API for parsing, validating, transpiling, and linting Yuho (.yh) statute files.
-    Start the server with `yuho serve --port 8080`.
+    Start the server with `yuho api --port 8080`.
   version: 5.1.0
   contact:
     name: Yuho
     url: https://github.com/gongahkia/yuho
 
 servers:
-  - url: http://localhost:8080
+  - url: http://localhost:8080/v1
     description: Local development server
+
+security:
+  - bearerAuth: []
 
 paths:
   /health:
     get:
       summary: Health check
       operationId: healthCheck
+      security: []
       responses:
         "200":
           description: Server is healthy
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: ok
-                  version:
-                    type: string
-                    example: 5.1.0
+                $ref: "#/components/schemas/HealthResponse"
 
   /targets:
     get:
@@ -43,30 +40,56 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  targets:
-                    type: array
-                    items:
-                      type: string
-                    example: ["json", "english", "mermaid", "latex", "alloy"]
+                $ref: "#/components/schemas/TargetsResponse"
 
   /rules:
     get:
       summary: List available lint rules
       operationId: listRules
+      parameters:
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
       responses:
         "200":
           description: List of available lint rules
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  rules:
-                    type: array
-                    items:
-                      type: string
+                $ref: "#/components/schemas/RulesResponse"
+
+  /metrics:
+    get:
+      summary: Prometheus metrics
+      operationId: getMetrics
+      security: []
+      responses:
+        "200":
+          description: Prometheus text exposition format
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /docs:
+    get:
+      summary: Swagger UI
+      operationId: getDocs
+      security: []
+      responses:
+        "200":
+          description: HTML Swagger UI page
+          content:
+            text/html:
+              schema:
+                type: string
 
   /parse:
     post:
@@ -80,17 +103,19 @@ paths:
               $ref: "#/components/schemas/SourceInput"
       responses:
         "200":
-          description: Parse result with AST
+          description: Parse result with AST summary
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ParseResponse"
         "400":
-          description: Parse errors
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "422":
+          $ref: "#/components/responses/ValidationError"
+        "429":
+          $ref: "#/components/responses/RateLimited"
 
   /validate:
     post:
@@ -101,7 +126,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/SourceInput"
+              $ref: "#/components/schemas/ValidateInput"
       responses:
         "200":
           description: Validation result
@@ -110,11 +135,11 @@ paths:
               schema:
                 $ref: "#/components/schemas/ValidateResponse"
         "400":
-          description: Validation errors
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "422":
+          $ref: "#/components/responses/ValidationError"
 
   /transpile:
     post:
@@ -125,39 +150,18 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required: [source, target]
-              properties:
-                source:
-                  type: string
-                  description: Yuho source code
-                target:
-                  type: string
-                  description: Target format
-                  enum: [json, jsonld, english, latex, mermaid, alloy, graphql, blocks, bibtex, html, comparative]
+              $ref: "#/components/schemas/TranspileInput"
       responses:
         "200":
           description: Transpiled output
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  data:
-                    type: object
-                    properties:
-                      output:
-                        type: string
-                      target:
-                        type: string
+                $ref: "#/components/schemas/TranspileResponse"
         "400":
-          description: Transpilation error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
 
   /lint:
     post:
@@ -168,42 +172,56 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required: [source]
-              properties:
-                source:
-                  type: string
-                rules:
-                  type: array
-                  items:
-                    type: string
-                  description: Specific rules to run (empty = all)
+              $ref: "#/components/schemas/LintInput"
       responses:
         "200":
           description: Lint results
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  data:
-                    type: object
-                    properties:
-                      violations:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            rule:
-                              type: string
-                            message:
-                              type: string
-                            line:
-                              type: integer
+                $ref: "#/components/schemas/LintResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
 
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Optional API token (set via YUHO_API_AUTH_TOKEN or config)
+
+  responses:
+    BadRequest:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorEnvelope"
+    Unauthorized:
+      description: Missing or invalid auth token
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorEnvelope"
+    ValidationError:
+      description: Yuho source has errors
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorEnvelope"
+    RateLimited:
+      description: Rate limit exceeded
+      headers:
+        Retry-After:
+          schema:
+            type: integer
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorEnvelope"
+
   schemas:
     SourceInput:
       type: object
@@ -213,6 +231,129 @@ components:
           type: string
           description: Yuho (.yh) source code
           maxLength: 1048576
+        filename:
+          type: string
+          description: Optional filename for error messages
+
+    ValidateInput:
+      type: object
+      required: [source]
+      properties:
+        source:
+          type: string
+          maxLength: 1048576
+        filename:
+          type: string
+        include_metrics:
+          type: boolean
+          default: false
+        explain_errors:
+          type: boolean
+          default: false
+
+    TranspileInput:
+      type: object
+      required: [source]
+      properties:
+        source:
+          type: string
+          maxLength: 1048576
+        target:
+          type: string
+          enum: [json, jsonld, english, latex, mermaid, alloy, graphql, blocks, bibtex, comparative, akomantoso, prolog]
+          default: json
+        filename:
+          type: string
+
+    LintInput:
+      type: object
+      required: [source]
+      properties:
+        source:
+          type: string
+          maxLength: 1048576
+        filename:
+          type: string
+        rules:
+          type: array
+          items:
+            type: string
+          description: Specific rules to run (empty = all)
+
+    ErrorEnvelope:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              example: PARSE_ERROR
+            message:
+              type: string
+            details:
+              type: array
+              items:
+                type: object
+
+    HealthResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          type: object
+          properties:
+            status:
+              type: string
+              example: healthy
+            version:
+              type: string
+              example: 5.1.0
+            api_version:
+              type: string
+              example: v1
+
+    TargetsResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          type: object
+          properties:
+            targets:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  extension:
+                    type: string
+
+    RulesResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          type: object
+          properties:
+            rules:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  severity:
+                    type: string
+                  description:
+                    type: string
 
     ParseResponse:
       type: object
@@ -222,15 +363,18 @@ components:
         data:
           type: object
           properties:
-            ast:
-              type: object
-              description: JSON AST (same format as `yuho transpile -t json`)
             statutes:
+              type: integer
+            types:
               type: integer
             functions:
               type: integer
-            structs:
+            imports:
               type: integer
+            statute_sections:
+              type: array
+              items:
+                type: integer
 
     ValidateResponse:
       type: object
@@ -247,16 +391,62 @@ components:
               items:
                 type: object
                 properties:
+                  type:
+                    type: string
                   message:
                     type: string
-                  location:
-                    type: string
+                  line:
+                    type: integer
+                    nullable: true
+                  column:
+                    type: integer
+                    nullable: true
 
-    ErrorResponse:
+    TranspileResponse:
       type: object
       properties:
         success:
           type: boolean
-          example: false
-        error:
-          type: string
+        data:
+          type: object
+          properties:
+            target:
+              type: string
+            output:
+              type: string
+
+    LintResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          type: object
+          properties:
+            issues:
+              type: array
+              items:
+                type: object
+                properties:
+                  rule:
+                    type: string
+                  severity:
+                    type: string
+                  message:
+                    type: string
+                  line:
+                    type: integer
+                  suggestion:
+                    type: string
+                    nullable: true
+            summary:
+              type: object
+              properties:
+                errors:
+                  type: integer
+                warnings:
+                  type: integer
+                infos:
+                  type: integer
+                hints:
+                  type: integer
