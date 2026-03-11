@@ -359,6 +359,10 @@ module.exports = grammar({
       'statute',
       field('section_number', $.section_number),
       optional(field('title', $.string_literal)),
+      optional(seq('effective', field('effective_date', $.date_literal))),
+      optional(seq('repealed', field('repealed_date', $.date_literal))),
+      optional(seq('subsumes', field('subsumes', $.section_number))),
+      optional(seq('amends', field('amends', $.section_number))),
       '{',
       repeat($._statute_member),
       '}'
