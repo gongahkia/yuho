@@ -20,7 +20,7 @@ fn is_breach_of_trust(string entrustment, string breach, bool dishonest) : bool 
     }
 }
 
-statute 503 "Criminal Breach of Trust" {
+statute 503 "Criminal Breach of Trust" effective 1872-01-01 {
     definitions {
         breach_of_trust := "Dishonestly misappropriating property entrusted to the accused";
         entrustment := "Being given property or dominion over property";
