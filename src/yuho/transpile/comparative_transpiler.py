@@ -30,6 +30,8 @@ class ComparativeTranspiler(TranspilerBase):
         lines.append(self._penalty_table(statutes))
         lines.append("")
         lines.append(self._definitions_table(statutes))
+        lines.append("")
+        lines.append(self._temporal_table(statutes))
         return "\n".join(lines) + "\n"
 
     def _title(self, s: nodes.StatuteNode) -> str:
@@ -45,7 +47,7 @@ class ComparativeTranspiler(TranspilerBase):
         headers = ["Element Type"] + [self._title(s) for s in statutes]
         lines.append("| " + " | ".join(headers) + " |")
         lines.append("| " + " | ".join(["---"] * len(headers)) + " |")
-        all_types = ["actus_reus", "mens_rea", "circumstance"]
+        all_types = ["actus_reus", "mens_rea", "circumstance", "obligation", "prohibition", "permission"]
         for etype in all_types:
             row = [etype]
             for s in statutes:
@@ -67,6 +69,8 @@ class ComparativeTranspiler(TranspilerBase):
             ("Fine", lambda p: f"${p.fine_min.amount if p.fine_min else 0} to ${p.fine_max.amount if p.fine_max else '?'}" if p else "--"),
             ("Death", lambda p: "Yes" if p and p.death_penalty else "No"),
             ("Caning", lambda p: f"{p.caning_min or 0}-{p.caning_max}" if p and p.caning_max else "--"),
+            ("Sentencing", lambda p: getattr(p, 'sentencing', None) or "--" if p else "--"),
+            ("Mandatory Min", lambda p: "Yes" if p and (getattr(p, 'mandatory_min_imprisonment', None) or getattr(p, 'mandatory_min_fine', None)) else "No"),
         ]:
             row = [field_label]
             for s in statutes:
@@ -93,5 +97,22 @@ class ComparativeTranspiler(TranspilerBase):
                     row.append(defs[0].definition.value[:80])
                 else:
                     row.append("--")
+            lines.append("| " + " | ".join(row) + " |")
+        return "\n".join(lines)
+
+    def _temporal_table(self, statutes: List[nodes.StatuteNode]) -> str:
+        lines = ["## Temporal & Hierarchy"]
+        headers = ["Property"] + [self._title(s) for s in statutes]
+        lines.append("| " + " | ".join(headers) + " |")
+        lines.append("| " + " | ".join(["---"] * len(headers)) + " |")
+        for label, getter in [
+            ("Effective", lambda s: getattr(s, 'effective_date', None) or "--"),
+            ("Repealed", lambda s: getattr(s, 'repealed_date', None) or "--"),
+            ("Subsumes", lambda s: f"s{s.subsumes}" if getattr(s, 'subsumes', None) else "--"),
+            ("Amends", lambda s: f"s{s.amends}" if getattr(s, 'amends', None) else "--"),
+        ]:
+            row = [label]
+            for s in statutes:
+                row.append(getter(s))
             lines.append("| " + " | ".join(row) + " |")
         return "\n".join(lines)
