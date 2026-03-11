@@ -4,6 +4,8 @@
 // Singapore Penal Code Section 378 - Theft
 // Yuho v5 Syntax
 
+import penal_code/s379_punishment_for_theft
+
 struct TheftCase {
     string accused,
     string victim,
@@ -25,18 +27,19 @@ fn is_theft(string propertyType, string intention, bool consent, bool possession
     }
 }
 
-statute 378 "Theft" {
+statute 378 "Theft" effective 1872-01-01 {
     definitions {
         theft := "Dishonestly taking movable property out of possession of another without consent";
         movable_property := "Corporeal property except land and things attached to earth";
+        /// as defined in s24 of the Penal Code
         dishonestly := "With intention of causing wrongful gain or wrongful loss";
         wrongful_gain := "Gain by unlawful means of property to which the gainer is not legally entitled";
         wrongful_loss := "Loss by unlawful means of property to which the loser is legally entitled";
     }
 
     elements {
-        /// the mental element: accused must act dishonestly per s24
-        mens_rea intention := "Dishonest intention to take property";
+        /// s24 dishonesty: prosecution must prove beyond reasonable doubt
+        mens_rea intention := "Dishonest intention to take property" burden prosecution beyond_reasonable_doubt;
         /// the primary physical act of taking
         actus_reus taking := "Taking movable property";
         /// property must be in someone else's possession at time of taking
@@ -44,12 +47,27 @@ statute 378 "Theft" {
         /// absence of owner's consent is required
         circumstance consent := "Without consent of that person";
         /// any movement suffices, however slight (Explanation 3)
-        actus_reus movement := "Moving the property in order to such taking";
+        actus_reus movement := "Moving the property in order to such taking" caused_by taking;
     }
 
     penalty {
         imprisonment := 0 days .. 7 years;
         fine := $0.00 .. $10,000.00;
+    }
+
+    exception claimOfRight {
+        "Taking of property in good faith believing oneself to have a legal right to it"
+        "Not theft"
+    }
+
+    caselaw "Wong Seng Kwan v PP" "[2012] 3 SLR 12" {
+        "Dishonest intention must exist at the time of the taking, not formed afterwards"
+        element intention
+    }
+
+    caselaw "Chia Kok Weng v PP" "[1999] 2 SLR 1" {
+        "Any moving of the property, however slight, constitutes the taking required for theft"
+        element movement
     }
 
     illustration example1 {
@@ -62,5 +80,9 @@ statute 378 "Theft" {
 
     illustration example3 {
         "A sees a watch belonging to B lying on a table. A, not intending to take the watch, moves it to see what is under it. A has not committed theft."
+    }
+
+    illustration example4 {
+        "A cuts down a tree on B's land with intent to dishonestly take the timber. A has committed theft as soon as the tree is severed from the earth."
     }
 }
