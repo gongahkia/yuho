@@ -24,7 +24,7 @@ fn is_voluntary_hurt(bool intentToCauseHurt, bool knowledgeLikelyToCauseHurt, bo
     }
 }
 
-statute 321 "Voluntarily Causing Hurt" {
+statute 321 "Voluntarily Causing Hurt" effective 1872-01-01 {
     definitions {
         voluntarily := "With intention or knowledge that the act is likely to cause hurt";
         hurt := "As defined under section 319";
