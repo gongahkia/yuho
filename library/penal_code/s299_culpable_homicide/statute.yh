@@ -1,3 +1,6 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871
 // Singapore Penal Code Section 299 - Culpable Homicide
 // Yuho v5 Syntax
 
@@ -20,7 +23,7 @@ fn is_culpable_homicide(string actusReus, bool deathCaused, string mensRea) : bo
     }
 }
 
-statute 299 "Culpable Homicide" {
+statute 299 "Culpable Homicide" effective 1872-01-01 {
     definitions {
         culpable_homicide := "Causing death by an act done with intention or knowledge";
         death := "The cessation of life";
@@ -29,12 +32,15 @@ statute 299 "Culpable Homicide" {
     }
 
     elements {
-        actus_reus act := "Doing an act that causes death";
+        /// the physical act must cause death
+        actus_reus act := "Doing an act that causes death" caused_by act;
         actus_reus omission := "Omission that causes death";
-        circumstance death := "Death of the victim is caused";
-        mens_rea intent1 := "Intention of causing death";
-        mens_rea intent2 := "Intention of causing bodily injury likely to cause death";
-        mens_rea knowledge := "Knowledge that the act is likely to cause death";
+        /// death must result -- causal link required
+        circumstance death := "Death of the victim is caused" caused_by act;
+        /// prosecution bears burden of proving mens rea
+        mens_rea intent1 := "Intention of causing death" burden prosecution beyond_reasonable_doubt;
+        mens_rea intent2 := "Intention of causing bodily injury likely to cause death" burden prosecution beyond_reasonable_doubt;
+        mens_rea knowledge := "Knowledge that the act is likely to cause death" burden prosecution beyond_reasonable_doubt;
     }
 
     penalty {
@@ -43,11 +49,25 @@ statute 299 "Culpable Homicide" {
         supplementary := "May be liable to caning";
     }
 
+    exception generalExceptions {
+        "General exceptions under Chapter IV (ss76-106) apply"
+        "Not an offence if general exception applies"
+    }
+
+    caselaw "Virsa Singh v State of Punjab" "AIR 1958 SC 465" {
+        "Intention to inflict the particular bodily injury which is sufficient to cause death must be proved"
+        element intent2
+    }
+
     illustration example1 {
         "A lays sticks and turf over a pit, with the intention of causing death. B walks over and falls in and is killed. A has committed culpable homicide."
     }
 
     illustration example2 {
         "A knows that B is behind a bush. C does not know it. A induces C to fire at the bush. C fires and kills B. A has committed culpable homicide."
+    }
+
+    illustration example3 {
+        "A fires a loaded cannon into a crowd knowing it is likely to kill someone. A person is killed. A is guilty of culpable homicide."
     }
 }
