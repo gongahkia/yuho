@@ -1,4 +1,4 @@
-"""Tests for parser hardening, input validation, and TUI utilities."""
+"""Tests for parser hardening and input validation."""
 
 import io
 import os
@@ -148,49 +148,3 @@ class TestAnalysisService:
         assert "\ufeff" not in result.source
 
 
-class TestCaptureCliUtil:
-    """Tests for TUI capture_cli utility."""
-
-    def test_capture_stdout(self):
-        from yuho.tui.app import capture_cli
-        def writer():
-            print("hello")
-        out, err = capture_cli(writer)
-        assert "hello" in out
-
-    def test_capture_systemexit(self):
-        from yuho.tui.app import capture_cli
-        def exiter():
-            print("before")
-            sys.exit(1)
-        out, err = capture_cli(exiter)
-        assert "before" in out
-
-    def test_capture_exception(self):
-        from yuho.tui.app import capture_cli
-        def raiser():
-            raise RuntimeError("boom")
-        out, err = capture_cli(raiser)
-        assert "boom" in err
-
-    def test_strip_ansi(self):
-        from yuho.tui.app import _strip_ansi
-        assert _strip_ansi("\x1b[31mred\x1b[0m") == "red"
-        assert _strip_ansi("no ansi") == "no ansi"
-
-    def test_capture_click_echo(self):
-        import click
-        from yuho.tui.app import capture_cli
-        def clicker():
-            click.echo("click output")
-        out, err = capture_cli(clicker)
-        assert "click output" in out
-
-
-class TestClipboardHelper:
-    """Tests for clipboard helper."""
-
-    def test_copy_returns_bool(self):
-        from yuho.tui.app import _copy_to_clipboard
-        result = _copy_to_clipboard("test")
-        assert isinstance(result, bool)
