@@ -163,6 +163,66 @@ paths:
         "401":
           $ref: "#/components/responses/Unauthorized"
 
+  /jobs/submit:
+    post:
+      summary: Submit an async transpile job
+      operationId: submitJob
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TranspileInput"
+      responses:
+        "202":
+          description: Job accepted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JobSubmitResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+
+  /jobs/{jobId}:
+    get:
+      summary: Get job status
+      operationId: getJobStatus
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Job status and result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JobStatusResponse"
+        "404":
+          description: Job not found
+
+  /jobs/{jobId}/stream:
+    get:
+      summary: Stream job events via SSE
+      operationId: streamJobEvents
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: SSE event stream
+          content:
+            text/event-stream:
+              schema:
+                type: string
+        "404":
+          description: Job not found
+
   /lint:
     post:
       summary: Lint Yuho source code
@@ -414,6 +474,52 @@ components:
               type: string
             output:
               type: string
+
+    JobSubmitResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          type: object
+          properties:
+            job_id:
+              type: string
+            status:
+              type: string
+              enum: [pending, running, complete, failed]
+
+    JobStatusResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          type: object
+          properties:
+            id:
+              type: string
+            status:
+              type: string
+              enum: [pending, running, complete, failed]
+            events:
+              type: array
+              items:
+                type: object
+                properties:
+                  stage:
+                    type: string
+                  message:
+                    type: string
+                  progress:
+                    type: number
+                    nullable: true
+            result:
+              type: object
+              nullable: true
+            error:
+              type: string
+              nullable: true
 
     LintResponse:
       type: object
