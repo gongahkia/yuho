@@ -4,6 +4,7 @@ Test command - run tests for Yuho statute files.
 
 import json
 import sys
+import time
 from pathlib import Path
 from typing import Optional, List
 from datetime import datetime
@@ -13,6 +14,7 @@ import click
 from yuho.parser import get_parser
 from yuho.ast import ASTBuilder
 from yuho.cli.error_formatter import Colors, colorize
+from yuho.output.junit import TestResult as JUnitTestResult, to_junit_xml
 
 
 def run_test(
@@ -22,6 +24,7 @@ def run_test(
     verbose: bool = False,
     coverage: bool = False,
     coverage_html: Optional[str] = None,
+    output_format: str = "text",
 ) -> None:
     """
     Run tests for Yuho statute files.
@@ -142,10 +145,14 @@ def run_test(
             except Exception as e:
                 preflight_errors.append(f"{statute_file}: {e}")
 
+    if output_format == "json":
+        json_output = True
+
     # Run tests
     results = []
     passed = 0
     failed = 0
+    t0 = time.monotonic()
 
     for test_file in test_files:
         if verbose:
@@ -176,6 +183,20 @@ def run_test(
                 click.echo(f"\nCoverage report written to: {html_path}")
         elif not json_output:
             coverage_tracker.print_summary()
+
+    suite_time = time.monotonic() - t0
+
+    # JUnit XML output
+    if output_format == "junit":
+        junit_results = []
+        for r in results:
+            fail_msg = "; ".join(r.get("errors", [])) if not r["passed"] else None
+            junit_results.append(JUnitTestResult(
+                name=Path(r["file"]).name, classname="yuho.test",
+                passed=r["passed"], failure_message=fail_msg,
+            ))
+        print(to_junit_xml(junit_results, suite_name="yuho", suite_time=suite_time))
+        sys.exit(1 if failed > 0 else 0)
 
     # Summary
     if json_output:
