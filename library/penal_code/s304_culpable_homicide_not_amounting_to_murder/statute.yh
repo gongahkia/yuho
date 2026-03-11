@@ -25,7 +25,7 @@ fn is_s304_offence(string intention, bool deathCaused, bool amountsToMurder) : b
     }
 }
 
-statute 304 "Culpable Homicide not amounting to Murder" {
+statute 304 "Culpable Homicide not amounting to Murder" effective 1872-01-01 {
     definitions {
         culpable_homicide := "As defined under section 299";
         not_murder := "Culpable homicide that does not fall within section 300";
