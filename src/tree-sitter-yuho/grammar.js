@@ -583,6 +583,16 @@ module.exports = grammar({
       $.generic_type,
       $.optional_type,
       $.array_type,
+      $.refinement_type,
+    ),
+
+    refinement_type: $ => seq(
+      field('base', choice($.builtin_type, $.identifier)),
+      '{',
+      field('lower', $._expression),
+      '..',
+      field('upper', $._expression),
+      '}',
     ),
 
     builtin_type: $ => choice(
