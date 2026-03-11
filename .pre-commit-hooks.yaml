@@ -1,0 +1,23 @@
+- id: yuho-check
+  name: Yuho statute validation
+  entry: yuho check
+  language: python
+  types: [file]
+  files: '\.yh$'
+  additional_dependencies: ['yuho']
+
+- id: yuho-lint
+  name: Yuho lint
+  entry: yuho lint
+  language: python
+  types: [file]
+  files: '\.yh$'
+  additional_dependencies: ['yuho']
+
+- id: yuho-fmt-check
+  name: Yuho format check
+  entry: yuho fmt --check
+  language: python
+  types: [file]
+  files: '\.yh$'
+  additional_dependencies: ['yuho']
