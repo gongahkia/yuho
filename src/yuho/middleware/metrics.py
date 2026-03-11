@@ -36,6 +36,20 @@ class MetricsCollector:
         with self._lock:
             self._active -= 1
 
+    @property
+    def uptime_s(self) -> float:
+        return time.monotonic() - self._started_at
+
+    @property
+    def total_requests(self) -> int:
+        with self._lock:
+            return sum(self._request_count.values())
+
+    @property
+    def total_parse_errors(self) -> int:
+        with self._lock:
+            return self._parse_errors
+
     def format_prometheus(self) -> str:
         """Render metrics in Prometheus text exposition format."""
         lines = []
