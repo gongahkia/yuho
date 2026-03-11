@@ -98,7 +98,7 @@ Phase 16 (interop)      ──── independent, can start anytime
 
 ### 2D: CLI Wiring
 - [ ] Replace `test.py` ad-hoc `_evaluate_expr` with real `Interpreter`
-- [ ] Add `:eval` to REPL with persistent `Environment`
+- [x] Add `:eval` to REPL with persistent `Environment`
 - [x] Add `yuho eval <file>` CLI command
 
 **Files**: new `eval/`, modify `test.py`, `repl.py`, `main.py`
