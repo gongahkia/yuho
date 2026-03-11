@@ -998,6 +998,10 @@ class Z3Generator:
         for struct_def in ast.type_defs:
             self._generate_struct_sort(struct_def)
 
+        # Walk enum definitions to create Z3 EnumSorts
+        for enum_def in getattr(ast, 'enum_defs', ()):
+            self._generate_enum_sort(enum_def)
+
         # If no struct defined Intent-like enum, create a default one
         if "Intent" not in self._sorts:
             self._sorts["Intent"] = z3.DeclareSort("Intent")
@@ -1055,6 +1059,19 @@ class Z3Generator:
             for acc_name, field_sort in field_specs:
                 self._consts[acc_name] = z3.Function(acc_name, sort, field_sort)
     
+    def _generate_enum_sort(self, enum_def) -> None:
+        """Create a Z3 EnumSort for an EnumDefNode."""
+        if not Z3_AVAILABLE:
+            return
+        variant_names = [v.name for v in enum_def.variants]
+        if not variant_names:
+            return
+        sort, consts = z3.EnumSort(enum_def.name, variant_names)
+        self._sorts[enum_def.name] = sort
+        for vname, const in zip(variant_names, consts):
+            self._consts[vname] = const
+        # all variants are distinct (Z3 EnumSort guarantees this)
+
     def _generate_statute_constraints(self, statute: "StatuteNode") -> None:
         """
         Generate Z3 constraints from a statute, driven by actual AST
