@@ -1075,6 +1075,39 @@ def verify_report(ctx: click.Context, file: str, output: Optional[str]) -> None:
         print(tex)
 
 
+@cli.command()
+@click.argument("directory", default=".", type=click.Path(exists=True))
+@click.option("--interval", type=float, default=2.0, help="Poll interval in seconds")
+@click.pass_context
+def watch(ctx: click.Context, directory: str, interval: float) -> None:
+    """Watch .yh files for changes and re-validate."""
+    from yuho.cli.commands.watch import run_watch
+    run_watch(directory=directory, interval=interval, verbose=ctx.obj["verbose"])
+
+
+@cli.command("webhook")
+@click.argument("action", type=click.Choice(["add", "list", "test"]))
+@click.argument("target", required=False)
+@click.option("--events", "-e", multiple=True, help="Event types to subscribe")
+@click.option("--secret", help="Webhook secret")
+@click.pass_context
+def webhook(ctx: click.Context, action: str, target: Optional[str], events: tuple, secret: Optional[str]) -> None:
+    """Manage webhooks (add/list/test)."""
+    from yuho.cli.commands.webhook import run_webhook_add, run_webhook_list, run_webhook_test
+    if action == "add":
+        if not target:
+            click.echo("URL required for 'add'", err=True)
+            sys.exit(1)
+        run_webhook_add(target, list(events), secret)
+    elif action == "list":
+        run_webhook_list()
+    elif action == "test":
+        if not target:
+            click.echo("Endpoint ID required for 'test'", err=True)
+            sys.exit(1)
+        run_webhook_test(target)
+
+
 @cli.command("ci-report")
 @click.argument("directory", default=".", type=click.Path(exists=True))
 @click.option("-o", "--output", type=click.Path(), help="Output file path")
