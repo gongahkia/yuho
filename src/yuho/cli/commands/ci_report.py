@@ -10,6 +10,7 @@ import click
 
 from yuho.services.analysis import analyze_file
 from yuho.output.sarif import make_sarif_result, to_sarif
+from yuho.output.junit import TestResult, to_junit_xml
 
 
 def _find_yh_files(directory: str) -> List[Path]:
@@ -67,6 +68,14 @@ def run_ci_report(
     elapsed = time.monotonic() - t0
     if format == "sarif":
         text = to_sarif(all_sarif_results)
+    elif format == "junit":
+        junit_results = []
+        for f in files:
+            errors_for_file = [e for e in all_errors if e["file"] == str(f)]
+            passed = len(errors_for_file) == 0
+            fail_msg = "; ".join(e["message"] for e in errors_for_file) if not passed else None
+            junit_results.append(TestResult(name=str(f), classname="yuho.ci", passed=passed, failure_message=fail_msg))
+        text = to_junit_xml(junit_results, suite_name="yuho-ci", suite_time=elapsed)
     else:
         text = json.dumps({
             "files_checked": len(files),
