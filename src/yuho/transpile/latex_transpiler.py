@@ -181,6 +181,20 @@ class LaTeXTranspiler(TranspilerBase, Visitor):
         if self.use_margins:
             self._emit(rf"\marginnote{{S. {section_num}}}")
 
+        # Temporal/hierarchy metadata
+        meta_parts = []
+        if getattr(node, 'effective_date', None):
+            meta_parts.append(f"Effective: {escape_latex(node.effective_date)}")
+        if getattr(node, 'repealed_date', None):
+            meta_parts.append(f"Repealed: {escape_latex(node.repealed_date)}")
+        if getattr(node, 'subsumes', None):
+            meta_parts.append(f"Subsumes s.{escape_latex(node.subsumes)}")
+        if getattr(node, 'amends', None):
+            meta_parts.append(f"Amends s.{escape_latex(node.amends)}")
+        if meta_parts:
+            self._emit(rf"\textit{{{'; '.join(meta_parts)}}}")
+            self._emit_blank()
+
         # Definitions
         if node.definitions:
             self._emit(r"\paragraph{Definitions}")
@@ -250,6 +264,9 @@ class LaTeXTranspiler(TranspilerBase, Visitor):
             "actus_reus": "Actus Reus",
             "mens_rea": "Mens Rea",
             "circumstance": "Circumstance",
+            "obligation": "Obligation",
+            "prohibition": "Prohibition",
+            "permission": "Permission",
         }
         label = type_labels.get(node.element_type, node.element_type.replace("_", " ").title())
 
@@ -272,6 +289,14 @@ class LaTeXTranspiler(TranspilerBase, Visitor):
         else:
             desc = expr_to_latex(node.description)
             self._emit(rf"  \item{margin} \element{{{label}}}{{{desc}}}")
+        # causation/burden annotations
+        if getattr(node, 'caused_by', None):
+            self._emit(rf"  \\ \textit{{Caused by: {escape_latex(node.caused_by)}}}")
+        if getattr(node, 'burden', None):
+            burden_str = escape_latex(node.burden)
+            if getattr(node, 'burden_standard', None):
+                burden_str += f" ({escape_latex(node.burden_standard)})"
+            self._emit(rf"  \\ \textit{{Burden: {burden_str}}}")
 
     def _visit_element_group(self, group: nodes.ElementGroupNode) -> None:
         """Generate LaTeX for element group (all_of/any_of)."""
@@ -314,9 +339,22 @@ class LaTeXTranspiler(TranspilerBase, Visitor):
         if node.death_penalty:
             self._emit(r"Death & \multicolumn{2}{c}{Applicable} \\")
 
+        # Mandatory minimums row
+        if getattr(node, 'mandatory_min_imprisonment', None):
+            min_str = duration_to_latex(node.mandatory_min_imprisonment)
+            self._emit(rf"Mandatory Min Imprisonment & \multicolumn{{2}}{{c}}{{{min_str}}} \\")
+        if getattr(node, 'mandatory_min_fine', None):
+            min_str = money_to_latex(node.mandatory_min_fine)
+            self._emit(rf"Mandatory Min Fine & \multicolumn{{2}}{{c}}{{{min_str}}} \\")
+
         self._emit(r"\bottomrule")
         self._emit(r"\end{tabular}")
         self._emit(r"\end{center}")
+
+        # Sentencing mode
+        if getattr(node, 'sentencing', None):
+            self._emit_blank()
+            self._emit(rf"\textit{{Sentencing: {escape_latex(node.sentencing)}}}")
 
         # Supplementary information
         if node.supplementary:
