@@ -429,7 +429,7 @@ class TypeCheckVisitor(Visitor):
     # =========================================================================
 
     def visit_match_expr(self, node: nodes.MatchExprNode) -> None:
-        """Check all match arms have consistent types."""
+        """Check all match arms have consistent types and enum exhaustiveness."""
         if node.scrutinee:
             self.visit(node.scrutinee)
         arm_types: List[TypeAnnotation] = []
@@ -447,7 +447,50 @@ class TypeCheckVisitor(Visitor):
                         node.arms[i] if i < len(node.arms) else node,
                         severity="warning",
                     )
+        self._check_enum_exhaustiveness(node)
         return self.generic_visit(node)
+
+    def _check_enum_exhaustiveness(self, node: nodes.MatchExprNode) -> None:
+        """Warn when a match over an enum type does not cover all variants."""
+        if not node.scrutinee:
+            return
+        if not getattr(node, 'ensure_exhaustiveness', True):
+            return
+        scrutinee_type = self._get_type(node.scrutinee)
+        enum_defs = getattr(self.type_info, 'enum_defs', {})
+        type_name = scrutinee_type.type_name
+        # resolve type aliases to underlying enum
+        aliases = getattr(self.type_info, 'type_aliases', {})
+        if type_name in aliases:
+            type_name = aliases[type_name].type_name
+        if type_name not in enum_defs:
+            return
+        all_variants: set = enum_defs[type_name]
+        has_wildcard = False
+        covered: set = set()
+        for arm in node.arms:
+            pat = arm.pattern
+            if isinstance(pat, nodes.WildcardPattern):
+                has_wildcard = True
+                break
+            if isinstance(pat, nodes.BindingPattern):
+                covered.add(pat.name)
+            elif isinstance(pat, nodes.StructPattern):
+                covered.add(pat.type_name)
+            elif isinstance(pat, nodes.LiteralPattern):
+                lit = pat.literal
+                if isinstance(lit, nodes.IdentifierNode):
+                    covered.add(lit.name)
+        if has_wildcard:
+            return
+        missing = all_variants - covered
+        if missing:
+            names = ", ".join(sorted(missing))
+            self.result.add_error(
+                f"Non-exhaustive match on enum '{type_name}': missing variants {names}",
+                node,
+                severity="warning",
+            )
 
     def visit_match_arm(self, node: nodes.MatchArm) -> None:
         """Check guard expression is boolean."""
