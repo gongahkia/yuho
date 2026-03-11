@@ -45,6 +45,8 @@ from yuho.middleware.rate_limit import RateLimiter, RateLimitConfig, RateLimitEx
 from yuho.middleware.metrics import get_metrics
 from yuho.api.jobs import get_job_queue, Job, JobStatus
 from yuho.api.sse import stream_job_events
+from yuho.workspace.router import WorkspaceRouter
+from yuho.workspace.model import WorkspaceStore
 
 logger = logging.getLogger("yuho.api")
 MAX_REQUEST_BODY_BYTES = 1_048_576
@@ -228,6 +230,26 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
             return False
         return True
 
+    def _check_workspace(self, path: str) -> bool:
+        """Check workspace quota if workspace routing is enabled. Returns True if OK."""
+        router = getattr(self.server, 'workspace_router', None)
+        if not router:
+            return True
+        ws_id = self.headers.get("X-Workspace-ID")
+        ws_key = self.headers.get("X-Workspace-Key")
+        if not ws_id and not ws_key:
+            return True # no workspace header = default workspace
+        ws = router.resolve(workspace_id=ws_id, api_key=ws_key)
+        if not ws:
+            self._send_json_response(404, APIResponse(success=False, error=APIError(code="WORKSPACE_NOT_FOUND", message="Workspace not found")))
+            return False
+        if not router.check_quota(ws):
+            self._send_json_response(429, APIResponse(success=False, error=APIError(code="QUOTA_EXCEEDED", message="Workspace daily quota exceeded")))
+            return False
+        op = path.lstrip("/").split("/")[0] if "/" in path else path.lstrip("/")
+        router.record_usage(ws, op)
+        return True
+
     def _check_rate_limit(self, path: str) -> bool:
         """Check rate limit. Returns True if OK."""
         limiter = getattr(self.server, 'rate_limiter', None)
@@ -272,6 +294,8 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
         try:
             if not self._check_auth(path):
                 return
+            if not self._check_workspace(path):
+                return
             if not self._check_rate_limit(path):
                 return
             if path == '/health' or path == '/':
@@ -310,6 +334,8 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
         t0 = time.monotonic()
         try:
             if not self._check_auth(path):
+                return
+            if not self._check_workspace(path):
                 return
             if not self._check_rate_limit(path):
                 return
@@ -838,12 +864,14 @@ class YuhoAPIServer(ThreadingHTTPServer):
         auth_token: Optional[str] = None,
         cors_origins: Optional[List[str]] = None,
         rate_limiter: Optional[RateLimiter] = None,
+        workspace_router: Optional[WorkspaceRouter] = None,
     ):
         super().__init__(server_address, RequestHandlerClass)
         self.verbose = verbose
         self.auth_token = auth_token
         self.cors_origins = cors_origins or ["*"]
         self.rate_limiter = rate_limiter
+        self.workspace_router = workspace_router
 
 
 def run_api(
@@ -866,6 +894,13 @@ def run_api(
         enabled=api_cfg.rate_limit_enabled,
     ))
 
+    # Setup workspace routing
+    ws_router = None
+    if cfg.workspace.enabled:
+        store = WorkspaceStore(data_dir=cfg.workspace.data_dir)
+        ws_router = WorkspaceRouter(store)
+        logger.info("Workspace routing enabled")
+
     # Load webhook endpoints from config
     if cfg.webhooks.enabled and cfg.webhooks.endpoints:
         from yuho.events.webhook import get_webhook_manager, WebhookEndpoint
@@ -885,6 +920,7 @@ def run_api(
             auth_token=auth_token,
             cors_origins=api_cfg.cors_origins,
             rate_limiter=limiter,
+            workspace_router=ws_router,
         )
     except OSError as e:
         click.echo(colorize(f"error: Could not start server: {e}", Colors.RED), err=True)
