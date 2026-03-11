@@ -44,6 +44,10 @@ llm = [
     "httpx>=0.24,<1.0",
     "transformers>=4.30,<5.0",
 ]
+observability = [
+    "opentelemetry-sdk>=1.20,<2.0",
+    "opentelemetry-api>=1.20,<2.0",
+]
 dev = [
     "pytest>=7.0,<9.0",
     "hypothesis>=6.0,<7.0",
@@ -51,7 +55,7 @@ dev = [
     "mypy>=1.0,<2.0",
 ]
 all = [
-    "yuho[lsp,mcp,llm,dev]",
+    "yuho[lsp,mcp,llm,observability,dev]",
 ]
 
 [project.scripts]
