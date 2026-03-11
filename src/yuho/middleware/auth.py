@@ -29,4 +29,4 @@ def verify_bearer_token(authorization: Optional[str], expected: Optional[str]) -
     return hmac.compare_digest(parts[1], expected)
 
 
-SKIP_AUTH_PATHS = frozenset(["/health", "/v1/health", "/"])
+SKIP_AUTH_PATHS = frozenset(["/health", "/v1/health", "/", "/docs", "/openapi.yaml", "/metrics"])
