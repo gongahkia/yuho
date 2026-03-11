@@ -1045,6 +1045,12 @@ class ASTBuilder:
         caning_min = caning_max = None
         death_penalty = None
         supplementary = None
+        mandatory_min_imprisonment = None
+        mandatory_min_fine = None
+
+        # phase 14: sentencing mode
+        sentencing_node = self._child_by_field(node, "sentencing")
+        sentencing = self._text(sentencing_node) if sentencing_node else None
 
         for child in node.children:
             if child.type == "imprisonment_clause":
@@ -1083,6 +1089,13 @@ class ASTBuilder:
                 string_node = self._child_by_type(child, "string_literal")
                 if string_node:
                     supplementary = self._build_string_lit(string_node)
+            elif child.type == "mandatory_minimum_clause":
+                dur_node = self._child_by_type(child, "duration_literal")
+                money_node = self._child_by_type(child, "money_literal")
+                if dur_node:
+                    mandatory_min_imprisonment = self._build_duration(dur_node)
+                if money_node:
+                    mandatory_min_fine = self._build_money(money_node)
 
         return nodes.PenaltyNode(
             imprisonment_min=imprisonment_min,
@@ -1093,6 +1106,9 @@ class ASTBuilder:
             caning_max=caning_max,
             death_penalty=death_penalty,
             supplementary=supplementary,
+            sentencing=sentencing,
+            mandatory_min_imprisonment=mandatory_min_imprisonment,
+            mandatory_min_fine=mandatory_min_fine,
             source_location=self._loc(node),
         )
 
