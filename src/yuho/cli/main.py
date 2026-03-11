@@ -1075,6 +1075,50 @@ def verify_report(ctx: click.Context, file: str, output: Optional[str]) -> None:
         print(tex)
 
 
+@cli.command()
+@click.argument("file", type=click.Path(exists=True))
+@click.option("--json", "json_output", is_flag=True, help="Output as JSON")
+@click.pass_context
+def eval(ctx: click.Context, file: str, json_output: bool) -> None:
+    """
+    Evaluate a Yuho file through the interpreter.
+
+    Parses, analyzes, and evaluates the file, reporting
+    registered statutes, structs, functions, and bindings.
+
+    Examples:
+        yuho eval statute.yh
+        yuho eval statute.yh --json
+    """
+    import json as json_mod
+    from yuho.services.analysis import analyze_file
+    from yuho.eval.interpreter import Interpreter
+    result = analyze_file(file)
+    if not result.is_valid or result.ast is None:
+        for err in result.errors:
+            click.echo(f"  {err}", err=True)
+        sys.exit(1)
+    interp = Interpreter()
+    env = interp.interpret(result.ast)
+    if json_output:
+        data = {
+            "statutes": list(env.statutes.keys()),
+            "struct_defs": list(env.struct_defs.keys()),
+            "function_defs": [k for k in env.function_defs.keys()] if hasattr(env, 'function_defs') else [],
+            "enum_defs": list(env.enum_defs.keys()) if hasattr(env, 'enum_defs') else [],
+            "bindings": {k: str(v) for k, v in env.bindings.items()},
+        }
+        print(json_mod.dumps(data, indent=2))
+    else:
+        click.echo(f"Evaluated {file}")
+        click.echo(f"  Statutes: {', '.join(env.statutes.keys()) or 'none'}")
+        click.echo(f"  Structs: {', '.join(env.struct_defs.keys()) or 'none'}")
+        if hasattr(env, 'enum_defs') and env.enum_defs:
+            click.echo(f"  Enums: {', '.join(env.enum_defs.keys())}")
+        if env.bindings:
+            click.echo(f"  Bindings: {len(env.bindings)}")
+
+
 def main() -> None:
     """Main entry point with global error handling."""
     try:
