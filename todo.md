@@ -240,8 +240,8 @@ Criminal statutes are inherently deontic -- they define what is prohibited, obli
 
 ### 10A: Deontic Operators
 - [x] Add keywords `obligation`, `prohibition`, `permission` as element qualifiers
-- [ ] Syntax: `obligation duty_to_report := "Must report knowledge of felony";`
-- [ ] These are distinct from `actus_reus`/`mens_rea` -- they encode what the law *requires*, not what constitutes an offense
+- [x] Syntax: `obligation duty_to_report := "Must report knowledge of felony";`
+- [x] These are distinct from `actus_reus`/`mens_rea` -- they encode what the law *requires*, not what constitutes an offense
 - **Why:** s202 (intentional omission to give information of offence) creates an *obligation*. Encoding it as `actus_reus` loses the normative force -- it's not an act, it's a failure to act.
 
 ### 10B: Conditional Duties
@@ -265,7 +265,7 @@ Statutes are not timeless -- they are enacted, amended, repealed, and have trans
 
 ### 11A: Statute Validity Windows
 - [x] Add `effective` and `repealed` metadata to statute blocks
-- [ ] Syntax: `statute 300 "Murder" effective 1872-01-01 { ... }`
+- [x] Syntax: `statute 300 "Murder" effective 1872-01-01 { ... }`
 - [x] Semantic check: warn if evaluating a repealed statute
 - [x] Support `amended_by` references with dates
 - **Why:** The Penal Code 1871 has been amended dozens of times. s377A (repealing s377) changed the law on a specific date. Without temporal scoping, Yuho can't model which version of a statute applies to facts occurring on a given date.
@@ -292,7 +292,7 @@ These are foundational to criminal law but entirely absent from Yuho.
 
 ### 12A: Causal Operators
 - [x] Add `caused_by` as a first-class relation between elements
-- [ ] Syntax: `actus_reus death := "Death of the victim" caused_by act;`
+- [x] Syntax: `actus_reus death := "Death of the victim" caused_by act;`
 - [ ] Distinguish factual causation ("but for") from legal causation ("proximate cause")
 - [ ] Model novus actus interveniens (intervening acts breaking the chain)
 - **Why:** s299 (culpable homicide) *requires* a causal link: the act must *cause* death. Currently this is just a string description. Making it structural lets verification check that every homicide offense actually specifies a causal chain.
@@ -300,7 +300,7 @@ These are foundational to criminal law but entirely absent from Yuho.
 ### 12B: Burden of Proof Constructs
 - [x] `burden` qualifier on elements: `burden prosecution` (default) vs. `burden defence`
 - [x] `presumed` modifier: `presumed TRUE` means the fact is assumed unless rebutted
-- [ ] `standard` qualifier: `beyond_reasonable_doubt`, `balance_of_probabilities`, `prima_facie`
+- [x] `standard` qualifier: `beyond_reasonable_doubt`, `balance_of_probabilities`, `prima_facie`
 - **Why:** s300 requires prosecution to prove intent *beyond reasonable doubt*. Exceptions shift the burden: provocation must be raised by the defence on a *balance of probabilities*. Without this, the evaluator treats all elements identically regardless of who must prove them.
 
 ### 12C: Presumption & Rebuttal
@@ -319,7 +319,7 @@ Statutes don't exist in isolation. They form hierarchies, reference each other, 
 
 ### 13A: Offense Subsumption
 - [x] Add `subsumes` relation between statutes
-- [ ] Syntax: `statute 300 "Murder" subsumes 299 { ... }`
+- [x] Syntax: `statute 300 "Murder" subsumes 299 { ... }`
 - [ ] Semantic: if s300 is satisfied, s299 is necessarily satisfied
 - [x] Verification: Z3 checks that subsumption claims are consistent with element definitions
 - **Why:** Murder (s300) is a special case of culpable homicide (s299). Dacoity (s395) subsumes robbery (s390) which subsumes theft (s378). These hierarchies are legally significant -- charging the subsuming offense includes the subsumed one.
