@@ -764,9 +764,12 @@ class ElementNode(ASTNode):
     element_type: "actus_reus", "mens_rea", or "circumstance"
     """
 
-    element_type: str
+    element_type: str # actus_reus, mens_rea, circumstance, obligation, prohibition, permission
     name: str
-    description: ASTNode  # Usually StringLit or match expression
+    description: ASTNode # usually StringLit or match expression
+    caused_by: Optional[str] = None # phase 12: causal link to another element
+    burden: Optional[str] = None # phase 12: "prosecution" or "defence"
+    burden_standard: Optional[str] = None # phase 12: proof standard
     doc_comment: Optional[str] = None
 
     def accept(self, visitor: "Visitor"):
