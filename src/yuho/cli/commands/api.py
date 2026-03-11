@@ -43,6 +43,8 @@ from yuho.services.errors import (
 from yuho.middleware.auth import get_auth_token, verify_bearer_token, SKIP_AUTH_PATHS
 from yuho.middleware.rate_limit import RateLimiter, RateLimitConfig, RateLimitExceeded
 from yuho.middleware.metrics import get_metrics
+from yuho.api.jobs import get_job_queue, Job, JobStatus
+from yuho.api.sse import stream_job_events
 
 logger = logging.getLogger("yuho.api")
 MAX_REQUEST_BODY_BYTES = 1_048_576
@@ -282,6 +284,12 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
                 self._handle_metrics()
             elif path == '/docs':
                 self._handle_docs()
+            elif path.startswith('/jobs/') and path.endswith('/stream'):
+                job_id = path.split('/')[2]
+                self._handle_job_stream(job_id)
+            elif path.startswith('/jobs/'):
+                job_id = path.split('/')[2]
+                self._handle_job_status(job_id)
             else:
                 self._send_json_response(404, APIResponse(
                     success=False,
@@ -348,6 +356,8 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
                 self._handle_transpile(data)
             elif path == '/lint':
                 self._handle_lint(data)
+            elif path == '/jobs/submit':
+                self._handle_job_submit(data)
             else:
                 self._send_json_response(404, APIResponse(
                     success=False,
@@ -758,6 +768,58 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
             }
         ))
     
+    def _handle_job_submit(self, data: Dict[str, Any]) -> None:
+        """Submit an async transpile job."""
+        source = data.get('source', '')
+        target_name = data.get('target', 'json')
+        if not source:
+            self._send_json_response(400, APIResponse(success=False, error="Missing 'source' field"))
+            return
+        def _run_transpile(job: Job) -> Dict[str, Any]:
+            job.add_event("parse", "Parsing source", progress=0.2)
+            result = run_parser_boundary(self.parser.parse, source, "<job>", message="Parse failed")
+            if result.errors:
+                raise ValueError("; ".join(e.message for e in result.errors))
+            job.add_event("ast", "Building AST", progress=0.4)
+            builder = ASTBuilder(source, "<job>")
+            ast = run_ast_boundary(builder.build, result.tree.root_node, message="AST failed")
+            job.add_event("transpile", f"Transpiling to {target_name}", progress=0.7)
+            target = TranspileTarget.from_string(target_name)
+            transpiler = self.registry.get(target)
+            output = run_transpile_boundary(transpiler.transpile, ast, message="Transpile failed")
+            return {"target": target_name, "output": output}
+        queue = get_job_queue()
+        job = queue.submit(_run_transpile)
+        self._send_json_response(202, APIResponse(success=True, data={"job_id": job.id, "status": job.status.value}))
+
+    def _handle_job_status(self, job_id: str) -> None:
+        """Get job status."""
+        job = get_job_queue().get(job_id)
+        if not job:
+            self._send_json_response(404, APIResponse(success=False, error=APIError(code="NOT_FOUND", message=f"Job {job_id} not found")))
+            return
+        self._send_json_response(200, APIResponse(success=True, data=job.to_dict()))
+
+    def _handle_job_stream(self, job_id: str) -> None:
+        """SSE stream for job events."""
+        job = get_job_queue().get(job_id)
+        if not job:
+            self._send_json_response(404, APIResponse(success=False, error=APIError(code="NOT_FOUND", message=f"Job {job_id} not found")))
+            return
+        self.send_response(200)
+        self.send_header('Content-Type', 'text/event-stream')
+        self.send_header('Cache-Control', 'no-cache')
+        self.send_header('Connection', 'keep-alive')
+        self.send_header('Access-Control-Allow-Origin', self._get_cors_origin())
+        self.end_headers()
+        try:
+            for chunk in stream_job_events(job):
+                self.wfile.write(chunk.encode('utf-8'))
+                self.wfile.flush()
+        except (BrokenPipeError, ConnectionResetError):
+            pass
+        self._finish_request_log(200, True)
+
     def log_message(self, format: str, *args) -> None:
         """Override to use our logging."""
         if hasattr(self.server, 'verbose') and self.server.verbose:
