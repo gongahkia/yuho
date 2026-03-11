@@ -97,9 +97,19 @@ class MermaidTranspiler(TranspilerBase, Visitor):
         title = statute.title.value if statute.title else statute.section_number
         self._emit(f"    %% Statute: {self._escape_text(title)}")
 
-        # Start node
+        # Start node with temporal info
         start_id = self._new_node_id("START")
-        self._emit(f"    {start_id}([Section {statute.section_number}])")
+        start_label = f"Section {statute.section_number}"
+        meta_parts = []
+        if getattr(statute, 'effective_date', None):
+            meta_parts.append(f"eff: {statute.effective_date}")
+        if getattr(statute, 'repealed_date', None):
+            meta_parts.append(f"repealed: {statute.repealed_date}")
+        if getattr(statute, 'subsumes', None):
+            meta_parts.append(f"subsumes s{statute.subsumes}")
+        if meta_parts:
+            start_label += f" ({', '.join(meta_parts)})"
+        self._emit(f"    {start_id}([{self._escape_text(start_label)}])")
 
         # Process elements that contain match expressions
         prev_id = start_id
@@ -108,13 +118,18 @@ class MermaidTranspiler(TranspilerBase, Visitor):
                 prev_id = self._transpile_element_group(elem, prev_id)
             elif isinstance(elem.description, nodes.MatchExprNode):
                 elem_start = self._new_node_id("ELEM")
-                self._emit(f"    {elem_start}[/{elem.name}/]")
+                prefix = self._deontic_prefix(elem.element_type)
+                self._emit(f"    {elem_start}[/{prefix}{elem.name}/]")
                 self._emit(f"    {prev_id} --> {elem_start}")
                 end_id = self._transpile_match_expr(elem.description, elem_start)
                 prev_id = end_id
             else:
                 elem_id = self._new_node_id("ELEM")
-                label = self._escape_text(self._expr_to_label(elem.description))
+                prefix = self._deontic_prefix(elem.element_type)
+                label = self._escape_text(prefix + self._expr_to_label(elem.description))
+                suffix = self._element_suffix(elem)
+                if suffix:
+                    label += f" {suffix}"
                 self._emit(f"    {elem_id}[{label}]")
                 self._emit(f"    {prev_id} --> {elem_id}")
                 prev_id = elem_id
@@ -398,4 +413,31 @@ class MermaidTranspiler(TranspilerBase, Visitor):
                 parts.append(f"Caning up to {penalty.caning_max} strokes")
         if penalty.supplementary:
             parts.append(penalty.supplementary.value)
+        if getattr(penalty, 'sentencing', None):
+            parts.append(f"({penalty.sentencing})")
+        if getattr(penalty, 'mandatory_min_imprisonment', None):
+            parts.append(f"Min imprisonment: {penalty.mandatory_min_imprisonment}")
+        if getattr(penalty, 'mandatory_min_fine', None):
+            parts.append(f"Min fine: ${penalty.mandatory_min_fine.amount}")
         return "; ".join(parts) if parts else "Penalty TBD"
+
+    def _deontic_prefix(self, element_type: str) -> str:
+        """Return prefix for deontic element types."""
+        prefixes = {
+            "obligation": "[OBL] ",
+            "prohibition": "[PRH] ",
+            "permission": "[PRM] ",
+        }
+        return prefixes.get(element_type, "")
+
+    def _element_suffix(self, elem: nodes.ElementNode) -> str:
+        """Return suffix for causation/burden info."""
+        parts = []
+        if getattr(elem, 'caused_by', None):
+            parts.append(f"caused by: {elem.caused_by}")
+        if getattr(elem, 'burden', None):
+            b = elem.burden
+            if getattr(elem, 'burden_standard', None):
+                b += f"/{elem.burden_standard}"
+            parts.append(f"burden: {b}")
+        return f"({', '.join(parts)})" if parts else ""
