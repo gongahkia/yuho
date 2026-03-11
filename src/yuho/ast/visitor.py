@@ -172,6 +172,22 @@ class Visitor:
         return self.generic_visit(node)
 
     # =========================================================================
+    # Enum and type alias (Phase 9)
+    # =========================================================================
+
+    def visit_enum_variant(self, node: nodes.EnumVariant) -> Any:
+        return self.generic_visit(node)
+
+    def visit_enum_def(self, node: nodes.EnumDefNode) -> Any:
+        return self.generic_visit(node)
+
+    def visit_type_alias(self, node: nodes.TypeAliasNode) -> Any:
+        return self.generic_visit(node)
+
+    def visit_refinement_type(self, node: nodes.RefinementTypeNode) -> Any:
+        return self.generic_visit(node)
+
+    # =========================================================================
     # Function definition
     # =========================================================================
 
