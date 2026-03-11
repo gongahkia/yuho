@@ -369,13 +369,13 @@ Static checks that catch legal modeling errors before runtime.
 
 ### 15A: Statute Completeness Linting
 - [x] Warn if a statute has `elements` but no `penalty`
-- [ ] Warn if a statute has no `actus_reus` element (every offense needs a physical act)
-- [ ] Warn if a statute has no `mens_rea` element and is not marked `strict_liability`
+- [x] Warn if a statute has no `actus_reus` element (every offense needs a physical act)
+- [x] Warn if a statute has no `mens_rea` element and is not marked `strict_liability`
 - [ ] Warn if `illustrations` reference elements not defined in the statute
 - **Why:** An offense without actus reus is legally malformed. Catching this statically is better than discovering it at evaluation time.
 
 ### 15B: Exception Coherence
-- [ ] Check that exception guards reference variables available in the fact pattern
+- [x] Check that exception guards reference variables available in the fact pattern
 - [ ] Check that exceptions defeat at least one element (an exception that defeats nothing is dead code)
 - [x] Warn if multiple exceptions have identical guards (likely copy-paste error)
 - **Why:** s300 has 5 exceptions. If exception 3 accidentally uses the same guard as exception 1, it's either redundant or a mistake. Static analysis should flag this.
