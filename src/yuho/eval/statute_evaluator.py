@@ -94,15 +94,21 @@ class StatuteEvaluator:
 
         penalty = statute.penalty if overall else None
 
-        # check exceptions -- if any exception's matching field is truthy, it negates the result
+        # check exceptions via defeasible reasoning
         if overall and statute.exceptions:
+            from yuho.eval.defeasible import DefeasibleReasoner
+            reasoner = DefeasibleReasoner()
+            facts_dict = {k: v.raw for k, v in facts.fields.items()}
             for exc in statute.exceptions:
-                exc_key = self._exception_key(exc)
-                if exc_key and exc_key in facts.fields:
-                    exc_val = facts.fields[exc_key]
-                    if exc_val.is_truthy():
+                app = reasoner._evaluate_exception(exc, facts_dict, env)
+                if app.guard_satisfied:
+                    overall = False
+                    reasoning.append(f"Exception '{app.label}' defeated conviction: {app.effect}")
+                    break
+                elif self._exception_key(exc) and self._exception_key(exc) in facts.fields:
+                    if facts.fields[self._exception_key(exc)].is_truthy():
                         overall = False
-                        reasoning.append(f"Exception '{exc_key}' applies")
+                        reasoning.append(f"Exception '{self._exception_key(exc)}' applies")
                         break
 
         return EvaluationResult(
