@@ -73,28 +73,28 @@ Phase 16 (interop)      ──── independent, can start anytime
 ## Phase 2: Interpreter/Evaluator [XL]
 
 ### 2A: Core Evaluator
-- [ ] Create `src/yuho/eval/interpreter.py`
-  - [ ] `Environment` class (chained scopes, struct/function/statute defs)
-  - [ ] `Value` class (tagged union of runtime values)
-  - [ ] `StructInstance` (type_name + field values)
-  - [ ] `Interpreter(Visitor)` with visit methods for all expression types
-  - [ ] Full operator semantics (+,-,*,/,%,==,!=,<,>,<=,>=,&&,||)
-  - [ ] Pattern matching (wildcard, literal, binding, struct destructure)
-  - [ ] Match-case evaluation with guards and consequences
-  - [ ] Function calls with scoped environments
+- [x] Create `src/yuho/eval/interpreter.py`
+  - [x] `Environment` class (chained scopes, struct/function/statute defs)
+  - [x] `Value` class (tagged union of runtime values)
+  - [x] `StructInstance` (type_name + field values)
+  - [x] `Interpreter(Visitor)` with visit methods for all expression types
+  - [x] Full operator semantics (+,-,*,/,%,==,!=,<,>,<=,>=,&&,||)
+  - [x] Pattern matching (wildcard, literal, binding, struct destructure)
+  - [x] Match-case evaluation with guards and consequences
+  - [x] Function calls with scoped environments
 
 ### 2B: Statement Execution
-- [ ] `VariableDecl` -- declare + init in scope
-- [ ] `ReturnStmt` -- exception-based control flow
-- [ ] `AssertStmt` -- evaluate condition, raise with source location
-- [ ] `Block` -- sequential execution
+- [x] `VariableDecl` -- declare + init in scope
+- [x] `ReturnStmt` -- exception-based control flow
+- [x] `AssertStmt` -- evaluate condition, raise with source location
+- [x] `Block` -- sequential execution
 
 ### 2C: Statute Evaluator
-- [ ] Create `src/yuho/eval/statute_evaluator.py`
-  - [ ] `StatuteEvaluator.evaluate(statute, facts, env)` -> `EvaluationResult`
-  - [ ] Per-element satisfaction checking
-  - [ ] `all_of`/`any_of` group evaluation
-  - [ ] Penalty range output
+- [x] Create `src/yuho/eval/statute_evaluator.py`
+  - [x] `StatuteEvaluator.evaluate(statute, facts, env)` -> `EvaluationResult`
+  - [x] Per-element satisfaction checking
+  - [x] `all_of`/`any_of` group evaluation
+  - [x] Penalty range output
 
 ### 2D: CLI Wiring
 - [ ] Replace `test.py` ad-hoc `_evaluate_expr` with real `Interpreter`
@@ -107,15 +107,15 @@ Phase 16 (interop)      ──── independent, can start anytime
 
 ## Phase 3: Defeasible Reasoning [L]
 
-- [ ] Grammar change: add `when <guard>` to `exception_block`
-- [ ] Add `guard: Optional[ASTNode]` to `ExceptionNode`
-- [ ] Update `builder.py` to extract exception guards
-- [ ] Create `src/yuho/eval/defeasible.py`
-  - [ ] `DefeasibleReasoner.evaluate_with_exceptions(statute, facts, env)`
-  - [ ] Base element evaluation -> exception guard checking -> defeat logic
-  - [ ] `DefeasibleResult` with reasoning chain (exportable trace)
-- [ ] Integrate into `StatuteEvaluator` so exceptions auto-apply
-- [ ] Update s300 (murder) exceptions with structured `when` guards
+- [x] Grammar change: add `when <guard>` to `exception_block`
+- [x] Add `guard: Optional[ASTNode]` to `ExceptionNode`
+- [x] Update `builder.py` to extract exception guards
+- [x] Create `src/yuho/eval/defeasible.py`
+  - [x] `DefeasibleReasoner.evaluate_with_exceptions(statute, facts, env)`
+  - [x] Base element evaluation -> exception guard checking -> defeat logic
+  - [x] `DefeasibleResult` with reasoning chain (exportable trace)
+- [x] Integrate into `StatuteEvaluator` so exceptions auto-apply
+- [x] Update s300 (murder) exceptions with structured `when` guards
 
 **Files**: `grammar.js`, `nodes.py`, `builder.py`, new `defeasible.py`, `statute_evaluator.py`
 
