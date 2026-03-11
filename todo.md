@@ -58,12 +58,12 @@ Phase 16 (interop)      ──── independent, can start anytime
 
 ## Phase 1: Module Resolution [L]
 
-- [ ] Create `src/yuho/resolver/module_resolver.py` with `ModuleResolver` class
-  - [ ] Module cache to avoid re-parsing
-  - [ ] Path resolution: relative imports + library `referencing` paths
-  - [ ] Cycle detection
-- [ ] Wire `scope_analysis.py` to resolve imports and inject exported symbols
-- [ ] Wire `type_check.py` for cross-module `NamedType` resolution
+- [x] Create `src/yuho/resolver/module_resolver.py` with `ModuleResolver` class
+  - [x] Module cache to avoid re-parsing
+  - [x] Path resolution: relative imports + library `referencing` paths
+  - [x] Cycle detection
+- [x] Wire `scope_analysis.py` to resolve imports and inject exported symbols
+- [x] Wire `type_check.py` for cross-module `NamedType` resolution
 - [ ] Wire `test.py` to resolve `referencing` before running tests
 
 **Files**: new `resolver/`, modify `scope_analysis.py`, `type_check.py`, `test.py`
