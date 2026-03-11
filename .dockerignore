@@ -2,6 +2,7 @@
 .github
 __pycache__
 *.pyc
+*.pyo
 .venv
 .env
 archive
@@ -12,3 +13,12 @@ dist
 build
 .mypy_cache
 .pytest_cache
+tests/
+doc/
+*.dylib
+.DS_Store
+CLAUDE.md
+todo.md
+sdks/
+packages/
+deploy/
