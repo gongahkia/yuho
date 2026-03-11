@@ -18,7 +18,7 @@ fn is_defamation(string method, string mensRea, string exception) : bool {
     }
 }
 
-statute 499 "Defamation" {
+statute 499 "Defamation" effective 1872-01-01 {
     definitions {
         defamation := "Making imputation concerning person intending to harm reputation";
         imputation := "A statement suggesting something discreditable about a person";
