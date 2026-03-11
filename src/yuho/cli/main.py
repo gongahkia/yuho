@@ -1079,6 +1079,49 @@ def verify_report(ctx: click.Context, file: str, output: Optional[str]) -> None:
 @click.argument("file", type=click.Path(exists=True))
 @click.option("--json", "json_output", is_flag=True, help="Output as JSON")
 @click.pass_context
+def deps(ctx: click.Context, file: str, json_output: bool) -> None:
+    """
+    Show statute dependencies for a Yuho file.
+
+    Lists all imports, references, and subsumption relations.
+
+    Examples:
+        yuho deps statute.yh
+        yuho deps statute.yh --json
+    """
+    import json as json_mod
+    from yuho.services.analysis import analyze_file
+    result = analyze_file(file)
+    if not result.is_valid or result.ast is None:
+        for err in result.errors:
+            click.echo(f"  {err}", err=True)
+        sys.exit(1)
+    ast = result.ast
+    imports = [imp.path for imp in ast.imports]
+    refs = [ref.path for ref in ast.references]
+    subsumes = []
+    for s in ast.statutes:
+        if getattr(s, 'subsumes', None):
+            subsumes.append({"from": s.section_number, "subsumes": s.subsumes})
+    if json_output:
+        print(json_mod.dumps({"imports": imports, "references": refs, "subsumes": subsumes}, indent=2))
+    else:
+        click.echo(f"Dependencies for {file}:")
+        if imports:
+            click.echo(f"  Imports: {', '.join(imports)}")
+        if refs:
+            click.echo(f"  References: {', '.join(refs)}")
+        if subsumes:
+            for s in subsumes:
+                click.echo(f"  s{s['from']} subsumes s{s['subsumes']}")
+        if not imports and not refs and not subsumes:
+            click.echo("  No dependencies")
+
+
+@cli.command()
+@click.argument("file", type=click.Path(exists=True))
+@click.option("--json", "json_output", is_flag=True, help="Output as JSON")
+@click.pass_context
 def eval(ctx: click.Context, file: str, json_output: bool) -> None:
     """
     Evaluate a Yuho file through the interpreter.
