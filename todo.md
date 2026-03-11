@@ -205,26 +205,26 @@ For each of 12 statutes (`library/penal_code/s{NNN}_{name}/`):
 Yuho's type system mirrors general-purpose languages. Legal reasoning requires domain-specific type distinctions that the current system cannot express.
 
 ### 9A: Sum Types / Enums
-- [ ] Add `enum` declaration to grammar: `enum Verdict { guilty, notGuilty, mistrial }`
-- [ ] `EnumDefNode` in AST with named variants (optionally carrying data)
+- [x] Add `enum` declaration to grammar: `enum Verdict { guilty, notGuilty, mistrial }`
+- [x] `EnumDefNode` in AST with named variants (optionally carrying data)
 - [ ] Exhaustiveness checking: match arms over enums must cover all variants
-- [ ] Transpile enums to JSON (string union), GraphQL (enum), Alloy (abstract sig)
+- [x] Transpile enums to JSON (string union), GraphQL (enum), Alloy (abstract sig)
 - **Why:** Verdicts, offense categories, and element types are finite closed sets, not structs with bool flags. `struct Verdict { bool guilty, bool notGuilty }` allows the impossible state `{ guilty: TRUE, notGuilty: TRUE }`.
 
 ### 9B: Type Aliases
-- [ ] Add `type` declaration: `type MensRea = string`
-- [ ] Aliases are transparent for type checking but improve readability
+- [x] Add `type` declaration: `type MensRea = string`
+- [x] Aliases are transparent for type checking but improve readability
 - [ ] Show alias names in error messages and transpiler output
 - **Why:** Repeating `string` for every definition obscures intent. `type StatuteRef = string` documents that a value is a cross-reference, not arbitrary text.
 
 ### 9C: Refinement Types
-- [ ] Integer/money/percent ranges: `int{0..99}`, `money{$0.00..$10000.00}`
+- [x] Integer/money/percent ranges: `int{0..99}`, `money{$0.00..$10000.00}`
 - [ ] Checked at assignment, function boundaries, and struct construction
 - [ ] Encode as Z3 range constraints for verification
 - **Why:** `imprisonment := 1 year .. 7 years` is a range but the type system can't prevent assigning `99 years` to it. Refinements make penalty constraints machine-checkable.
 
 ### 9D: Fact vs. Conclusion Distinction
-- [ ] Add `fact` and `conclusion` type qualifiers (or marker types)
+- [x] Add `fact` and `conclusion` type qualifiers (or marker types)
 - [ ] `fact movedProperty := TRUE` vs. `conclusion guiltyOfTheft := evaluateTheft(...)`
 - [ ] Semantic analysis: conclusions must derive from facts, never the reverse
 - [ ] Transpile: clearly separate factual predicates from legal conclusions in English output
@@ -239,7 +239,7 @@ Yuho's type system mirrors general-purpose languages. Legal reasoning requires d
 Criminal statutes are inherently deontic -- they define what is prohibited, obligatory, or permitted. Yuho currently has no way to express these modalities; everything is descriptive.
 
 ### 10A: Deontic Operators
-- [ ] Add keywords `obligation`, `prohibition`, `permission` as element qualifiers
+- [x] Add keywords `obligation`, `prohibition`, `permission` as element qualifiers
 - [ ] Syntax: `obligation duty_to_report := "Must report knowledge of felony";`
 - [ ] These are distinct from `actus_reus`/`mens_rea` -- they encode what the law *requires*, not what constitutes an offense
 - **Why:** s202 (intentional omission to give information of offence) creates an *obligation*. Encoding it as `actus_reus` loses the normative force -- it's not an act, it's a failure to act.
@@ -264,10 +264,10 @@ Criminal statutes are inherently deontic -- they define what is prohibited, obli
 Statutes are not timeless -- they are enacted, amended, repealed, and have transition provisions. Yuho has `date` and `duration` literals but no temporal semantics.
 
 ### 11A: Statute Validity Windows
-- [ ] Add `effective` and `repealed` metadata to statute blocks
+- [x] Add `effective` and `repealed` metadata to statute blocks
 - [ ] Syntax: `statute 300 "Murder" effective 1872-01-01 { ... }`
-- [ ] Semantic check: warn if evaluating a repealed statute
-- [ ] Support `amended_by` references with dates
+- [x] Semantic check: warn if evaluating a repealed statute
+- [x] Support `amended_by` references with dates
 - **Why:** The Penal Code 1871 has been amended dozens of times. s377A (repealing s377) changed the law on a specific date. Without temporal scoping, Yuho can't model which version of a statute applies to facts occurring on a given date.
 
 ### 11B: Temporal Operators for Facts
@@ -277,7 +277,7 @@ Statutes are not timeless -- they are enacted, amended, repealed, and have trans
 - **Why:** s300 exception 1 (provocation) requires the act to occur while "deprived of the power of self-control" -- a temporal condition. Limitation periods require date arithmetic.
 
 ### 11C: Amendment Chains
-- [ ] `amends` keyword to reference prior versions
+- [x] `amends` keyword to reference prior versions
 - [ ] Diff-aware transpilation: show what changed between versions
 - [ ] Library support: maintain amendment history per statute
 - **Why:** Tracing how a statute evolved is essential for statutory interpretation. Courts apply the version in force at the time of the offense.
@@ -291,15 +291,15 @@ Statutes are not timeless -- they are enacted, amended, repealed, and have trans
 These are foundational to criminal law but entirely absent from Yuho.
 
 ### 12A: Causal Operators
-- [ ] Add `caused_by` as a first-class relation between elements
+- [x] Add `caused_by` as a first-class relation between elements
 - [ ] Syntax: `actus_reus death := "Death of the victim" caused_by act;`
 - [ ] Distinguish factual causation ("but for") from legal causation ("proximate cause")
 - [ ] Model novus actus interveniens (intervening acts breaking the chain)
 - **Why:** s299 (culpable homicide) *requires* a causal link: the act must *cause* death. Currently this is just a string description. Making it structural lets verification check that every homicide offense actually specifies a causal chain.
 
 ### 12B: Burden of Proof Constructs
-- [ ] `burden` qualifier on elements: `burden prosecution` (default) vs. `burden defence`
-- [ ] `presumed` modifier: `presumed TRUE` means the fact is assumed unless rebutted
+- [x] `burden` qualifier on elements: `burden prosecution` (default) vs. `burden defence`
+- [x] `presumed` modifier: `presumed TRUE` means the fact is assumed unless rebutted
 - [ ] `standard` qualifier: `beyond_reasonable_doubt`, `balance_of_probabilities`, `prima_facie`
 - **Why:** s300 requires prosecution to prove intent *beyond reasonable doubt*. Exceptions shift the burden: provocation must be raised by the defence on a *balance of probabilities*. Without this, the evaluator treats all elements identically regardless of who must prove them.
 
@@ -318,10 +318,10 @@ These are foundational to criminal law but entirely absent from Yuho.
 Statutes don't exist in isolation. They form hierarchies, reference each other, and sometimes conflict.
 
 ### 13A: Offense Subsumption
-- [ ] Add `subsumes` relation between statutes
+- [x] Add `subsumes` relation between statutes
 - [ ] Syntax: `statute 300 "Murder" subsumes 299 { ... }`
 - [ ] Semantic: if s300 is satisfied, s299 is necessarily satisfied
-- [ ] Verification: Z3 checks that subsumption claims are consistent with element definitions
+- [x] Verification: Z3 checks that subsumption claims are consistent with element definitions
 - **Why:** Murder (s300) is a special case of culpable homicide (s299). Dacoity (s395) subsumes robbery (s390) which subsumes theft (s378). These hierarchies are legally significant -- charging the subsuming offense includes the subsumed one.
 
 ### 13B: First-class Cross-references
@@ -351,8 +351,8 @@ Statutes don't exist in isolation. They form hierarchies, reference each other, 
 
 Real sentencing is far more complex than min/max ranges.
 
-- [ ] Add `concurrent` vs. `consecutive` sentencing modifiers
-- [ ] Model mandatory minimums: `minimum imprisonment := 2 years` (court cannot go below)
+- [x] Add `concurrent` vs. `consecutive` sentencing modifiers
+- [x] Model mandatory minimums: `minimum imprisonment := 2 years` (court cannot go below)
 - [ ] Alternative penalties: `penalty either { imprisonment ... } or { fine ... }`
 - [ ] Aggravating/mitigating factors as modifiers on penalty ranges
 - [ ] Penalty scaling: `if repeat_offender { imprisonment := imprisonment * 2 }`
@@ -368,7 +368,7 @@ Real sentencing is far more complex than min/max ranges.
 Static checks that catch legal modeling errors before runtime.
 
 ### 15A: Statute Completeness Linting
-- [ ] Warn if a statute has `elements` but no `penalty`
+- [x] Warn if a statute has `elements` but no `penalty`
 - [ ] Warn if a statute has no `actus_reus` element (every offense needs a physical act)
 - [ ] Warn if a statute has no `mens_rea` element and is not marked `strict_liability`
 - [ ] Warn if `illustrations` reference elements not defined in the statute
@@ -377,11 +377,11 @@ Static checks that catch legal modeling errors before runtime.
 ### 15B: Exception Coherence
 - [ ] Check that exception guards reference variables available in the fact pattern
 - [ ] Check that exceptions defeat at least one element (an exception that defeats nothing is dead code)
-- [ ] Warn if multiple exceptions have identical guards (likely copy-paste error)
+- [x] Warn if multiple exceptions have identical guards (likely copy-paste error)
 - **Why:** s300 has 5 exceptions. If exception 3 accidentally uses the same guard as exception 1, it's either redundant or a mistake. Static analysis should flag this.
 
 ### 15C: Cross-statute Consistency
-- [ ] If statute A `subsumes` statute B, check that A's elements are a superset of B's
+- [x] If statute A `subsumes` statute B, check that A's elements are a superset of B's
 - [ ] If two statutes share a definition term, check that the definitions are compatible
 - [ ] Detect contradictory penalty ranges across related statutes
 - **Why:** If s300 (murder, max: death) subsumes s299 (culpable homicide, max: life), the penalty for the subsuming offense should be >= the subsumed one. This is a checkable invariant.
