@@ -919,6 +919,10 @@ class StatuteNode(ASTNode):
     doc_comment: Optional[str] = None
     jurisdiction: Optional[str] = None
     jurisdiction_meta: Optional[Dict[str, str]] = None
+    effective_date: Optional[str] = None # phase 11: ISO date
+    repealed_date: Optional[str] = None # phase 11: ISO date
+    subsumes: Optional[str] = None # phase 13: section number
+    amends: Optional[str] = None # phase 11: section number
 
     def accept(self, visitor: "Visitor"):
         return visitor.visit_statute(self)
