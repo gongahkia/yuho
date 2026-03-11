@@ -30,7 +30,7 @@ fn is_grievous_hurt(string hurtType, bool intentToCauseGrievousHurt, bool grievo
     }
 }
 
-statute 325 "Voluntarily Causing Grievous Hurt" {
+statute 325 "Voluntarily Causing Grievous Hurt" effective 1872-01-01 {
     definitions {
         grievous_hurt := "Hurt that involves emasculation, permanent privation of sight or hearing, privation of any member or joint, permanent disfiguration, fracture or dislocation, or any hurt which endangers life or causes severe bodily pain for 20 days";
         voluntarily := "With intention or knowledge that the act is likely to cause grievous hurt";
