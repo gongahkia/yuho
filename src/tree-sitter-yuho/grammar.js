@@ -438,13 +438,24 @@ module.exports = grammar({
 
     penalty_block: $ => seq(
       'penalty',
+      optional(field('sentencing', choice('concurrent', 'consecutive'))),
       '{',
       optional($.imprisonment_clause),
       optional($.fine_clause),
       optional($.caning_clause),
       optional($.death_penalty_clause),
       optional($.supplementary_clause),
+      optional($.mandatory_minimum_clause),
       '}'
+    ),
+
+    mandatory_minimum_clause: $ => seq(
+      'minimum',
+      choice(
+        seq('imprisonment', ':=', $.duration_literal),
+        seq('fine', ':=', $.money_literal),
+      ),
+      optional(';'),
     ),
 
     imprisonment_clause: $ => seq(
