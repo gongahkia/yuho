@@ -29,7 +29,9 @@ class SymbolKind(Enum):
     STRUCT = auto()
     PARAMETER = auto()
     FIELD = auto()
+    ENUM = auto()
     ENUM_VARIANT = auto()
+    TYPE_ALIAS = auto()
     IMPORTED = auto() # symbol injected from another module
 
 
@@ -248,6 +250,10 @@ class ScopeAnalysisVisitor(Visitor):
             kind = SymbolKind.IMPORTED
             if isinstance(decl_node, nodes.StructDefNode):
                 kind = SymbolKind.STRUCT
+            elif isinstance(decl_node, nodes.EnumDefNode):
+                kind = SymbolKind.ENUM
+            elif isinstance(decl_node, nodes.TypeAliasNode):
+                kind = SymbolKind.TYPE_ALIAS
             elif isinstance(decl_node, nodes.FunctionDefNode):
                 kind = SymbolKind.FUNCTION
             elif isinstance(decl_node, nodes.VariableDecl):
@@ -335,6 +341,37 @@ class ScopeAnalysisVisitor(Visitor):
         elif isinstance(type_node, nodes.GenericType):
             return type_node.base
         return "unknown"
+
+    # =========================================================================
+    # Enum and type alias definitions
+    # =========================================================================
+
+    def visit_enum_def(self, node: nodes.EnumDefNode) -> None:
+        """Define enum type and its variants."""
+        enum_symbol = self._define_symbol(
+            name=node.name,
+            kind=SymbolKind.ENUM,
+            node=node,
+        )
+        for variant in node.variants:
+            variant_symbol = self._define_symbol(
+                name=variant.name,
+                kind=SymbolKind.ENUM_VARIANT,
+                node=variant,
+                type_annotation=node.name,
+            )
+            enum_symbol.members[variant.name] = variant_symbol
+        return self.generic_visit(node)
+
+    def visit_type_alias(self, node: nodes.TypeAliasNode) -> None:
+        """Define type alias in current scope."""
+        self._define_symbol(
+            name=node.name,
+            kind=SymbolKind.TYPE_ALIAS,
+            node=node,
+            type_annotation=self._type_to_string(node.target_type),
+        )
+        return self.generic_visit(node)
 
     # =========================================================================
     # Function definitions
@@ -483,9 +520,13 @@ class ScopeAnalysisVisitor(Visitor):
             self.visit_import(imp)
         for ref in node.references:
             self.visit_referencing_stmt(ref)
-        # first pass: collect struct and function definitions
+        # first pass: collect struct, enum, type alias, and function definitions
         for struct_def in node.type_defs:
             self.visit_struct_def(struct_def)
+        for enum_def in getattr(node, 'enum_defs', ()):
+            self.visit_enum_def(enum_def)
+        for type_alias in getattr(node, 'type_aliases', ()):
+            self.visit_type_alias(type_alias)
         for func_def in node.function_defs:
             return_type = None
             if func_def.return_type:
