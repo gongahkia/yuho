@@ -20,7 +20,7 @@ fn punishment_applies(bool murderCommitted) : bool {
     }
 }
 
-statute 302 "Punishment for Murder" {
+statute 302 "Punishment for Murder" effective 1872-01-01 {
     definitions {
         murder := "As defined under section 300";
         death_sentence := "Mandatory death penalty for murder";
