@@ -25,6 +25,7 @@ from yuho.ast.nodes import (
     FunctionDefNode, StringLit
 )
 from yuho.cli.error_formatter import Colors, colorize
+from yuho.output.sarif import make_sarif_result, to_sarif
 
 
 class Severity(Enum):
@@ -484,6 +485,7 @@ def run_lint(
     verbose: bool = False,
     color: bool = True,
     fix: bool = False,
+    output_format: str = "text",
 ) -> None:
     """
     Run lint checks on Yuho files.
@@ -559,6 +561,31 @@ def run_lint(
         except Exception as e:
             parse_diagnostics[str(path)] = [f"Failed to process file: {e}"]
     
+    if output_format == "json":
+        json_output = True
+
+    # SARIF output
+    if output_format == "sarif":
+        sarif_results = []
+        severity_map = {Severity.ERROR: "error", Severity.WARNING: "warning", Severity.INFO: "note", Severity.HINT: "note"}
+        for filepath, issues in all_issues.items():
+            for i in issues:
+                sarif_results.append(make_sarif_result(
+                    rule_id=f"yuho/lint/{i.rule}", message=i.message, file=filepath,
+                    line=i.line or 1, level=severity_map.get(i.severity, "warning"),
+                ))
+        for filepath, diags in parse_diagnostics.items():
+            for d in diags:
+                sarif_results.append(make_sarif_result(rule_id="yuho/parse", message=d, file=filepath))
+        print(to_sarif(sarif_results))
+        has_errors = any(i.severity == Severity.ERROR for issues in all_issues.values() for i in issues) or parse_diagnostics
+        has_warnings = any(i.severity == Severity.WARNING for issues in all_issues.values() for i in issues)
+        if has_errors:
+            sys.exit(1)
+        if has_warnings:
+            sys.exit(2)
+        return
+
     # Output results
     if json_output:
         output = {
@@ -624,5 +651,9 @@ def run_lint(
         click.echo(f"Found {', '.join(summary_parts)}")
     
     # Exit with error if there are lint errors or parse failures
-    if parse_diagnostics or any(i.severity == Severity.ERROR for issues in all_issues.values() for i in issues):
+    has_errors = parse_diagnostics or any(i.severity == Severity.ERROR for issues in all_issues.values() for i in issues)
+    has_warnings = any(i.severity == Severity.WARNING for issues in all_issues.values() for i in issues)
+    if has_errors:
         sys.exit(1)
+    if has_warnings:
+        sys.exit(2)
