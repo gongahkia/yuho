@@ -328,8 +328,8 @@ class DebugInterpreter(Interpreter):
             self.call_stack.pop()
             return rs.value
         except DebuggerPause:
-            # Re-raise without popping -- the frame is still active
-            self.env = saved
+            # Re-raise without popping or restoring env -- the frame
+            # is still active and user needs to inspect local scope.
             raise
         self.env = saved
         self.call_stack.pop()
