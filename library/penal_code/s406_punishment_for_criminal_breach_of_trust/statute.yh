@@ -18,7 +18,7 @@ fn s406_applies(bool breachOfTrustCommitted) : bool {
     }
 }
 
-statute 406 "Punishment for Criminal Breach of Trust" {
+statute 406 "Punishment for Criminal Breach of Trust" effective 1872-01-01 {
     definitions {
         criminal_breach_of_trust := "Dishonest misappropriation or conversion of property entrusted to the person";
         entrusted_property := "Property over which a person has dominion by virtue of trust";
