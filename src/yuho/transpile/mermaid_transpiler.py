@@ -46,7 +46,6 @@ class MermaidTranspiler(TranspilerBase, Visitor):
         self._subgraph_counter = 0
         self._nesting_depth = 0
         self._emit(f"flowchart {self.direction}")
-        self._emit("    classDef merge fill:#fff,stroke:#999,font-size:1px,min-width:1px,min-height:1px")
         for statute in ast.statutes:
             self._transpile_statute(statute)
         for func in ast.function_defs:
@@ -202,7 +201,7 @@ class MermaidTranspiler(TranspilerBase, Visitor):
         for i, arm in enumerate(match.arms):
             arm_outcome_id = self._transpile_match_arm(arm, decision_id, i)
             self._emit(f"{self._indent()}{arm_outcome_id} --> {end_id}")
-        self._emit(f"{self._indent()}{end_id}(" "):::merge")
+        self._emit(self._indent() + end_id + '(["&middot;"])')
         if use_subgraph:
             self._nesting_depth -= 1
             self._emit(f"{self._indent()}end")
@@ -229,7 +228,7 @@ class MermaidTranspiler(TranspilerBase, Visitor):
         else:
             if isinstance(arm.body, nodes.MatchExprNode):
                 connector_id = self._new_node_id("C")
-                self._emit(f"{self._indent()}{connector_id}(" "):::merge")
+                self._emit(self._indent() + connector_id + '(["&middot;"])')
                 self._emit(f"{self._indent()}{from_id} -->|{self._q(pattern_label)}| {connector_id}")
                 nested_label = f"when {pattern_label}"
                 end_id = self._transpile_match_expr(arm.body, connector_id, nested_label)
@@ -262,7 +261,7 @@ class MermaidTranspiler(TranspilerBase, Visitor):
                 self._emit(f"    {group_id} --> {member_id}")
                 member_end = member_id
             self._emit(f"    {member_end} --> {end_id}")
-        self._emit(f"    {end_id}(" "):::merge")
+        self._emit("    " + end_id + '(["&middot;"])')
         return end_id
 
     # =========================================================================
