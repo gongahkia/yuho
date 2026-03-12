@@ -177,6 +177,20 @@ def _check_subsumption(statutes: Tuple[StatuteNode, ...]) -> List[LintWarning]:
     return warnings
 
 
+def _check_defeats_target(statute: StatuteNode) -> List[LintWarning]:
+    """Verify defeats label references an existing exception in the same statute."""
+    warnings: List[LintWarning] = []
+    labels = {exc.label for exc in statute.exceptions if exc.label}
+    for exc in statute.exceptions:
+        if exc.defeats and exc.defeats not in labels:
+            warnings.append(LintWarning(
+                statute_section=statute.section_number,
+                message=f"exception '{exc.label or '<unlabeled>'}' defeats unknown label '{exc.defeats}'",
+                severity="warning",
+            ))
+    return warnings
+
+
 def lint_statute(statute: StatuteNode) -> List[LintWarning]:
     """Run all single-statute lint checks."""
     warnings: List[LintWarning] = []
@@ -185,6 +199,7 @@ def lint_statute(statute: StatuteNode) -> List[LintWarning]:
     warnings.extend(_check_missing_mens_rea(statute))
     warnings.extend(_check_exception_guards(statute))
     warnings.extend(_check_duplicate_exceptions(statute))
+    warnings.extend(_check_defeats_target(statute))
     return warnings
 
 
