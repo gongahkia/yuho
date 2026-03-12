@@ -626,6 +626,16 @@
     "type": "element_entry",
     "named": true,
     "fields": {
+      "actor": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
       "burden": {
         "multiple": false,
         "required": false,
@@ -767,6 +777,16 @@
       "name": {
         "multiple": false,
         "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "patient": {
+        "multiple": false,
+        "required": false,
         "types": [
           {
             "type": "identifier",
@@ -2349,6 +2369,77 @@
     }
   },
   {
+    "type": "parties_block",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "party_entry",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "party_entry",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "role": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "type": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "array_type",
+            "named": true
+          },
+          {
+            "type": "builtin_type",
+            "named": true
+          },
+          {
+            "type": "generic_type",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "optional_type",
+            "named": true
+          },
+          {
+            "type": "refinement_type",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "pass_expression",
     "named": true,
     "fields": {}
@@ -2857,6 +2948,10 @@
         },
         {
           "type": "illustration_block",
+          "named": true
+        },
+        {
+          "type": "parties_block",
           "named": true
         },
         {
@@ -3511,6 +3606,10 @@
     "named": false
   },
   {
+    "type": "actor",
+    "named": false
+  },
+  {
     "type": "actus_reus",
     "named": false
   },
@@ -3757,7 +3856,15 @@
     "named": false
   },
   {
+    "type": "parties",
+    "named": false
+  },
+  {
     "type": "pass",
+    "named": false
+  },
+  {
+    "type": "patient",
     "named": false
   },
   {
