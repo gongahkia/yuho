@@ -904,6 +904,17 @@ class CaseLawNode(ASTNode):
 
 
 @dataclass(frozen=True)
+class TemporalConstraintNode(ASTNode):
+    """Temporal ordering constraint between elements (e.g., act precedes death)."""
+    subject: str
+    relation: str # "precedes", "during", "after"
+    object: str
+
+    def accept(self, visitor: "Visitor"):
+        return visitor.visit_temporal_constraint(self)
+
+
+@dataclass(frozen=True)
 class PartyNode(ASTNode):
     """Party/role declaration within a statute (e.g., offender, victim)."""
     role: str
@@ -942,6 +953,7 @@ class StatuteNode(ASTNode):
     subsumes: Optional[str] = None # phase 13: section number
     amends: Optional[str] = None # phase 11: section number
     parties: Tuple["PartyNode", ...] = ()
+    temporal_constraints: Tuple["TemporalConstraintNode", ...] = ()
 
     def accept(self, visitor: "Visitor"):
         return visitor.visit_statute(self)
