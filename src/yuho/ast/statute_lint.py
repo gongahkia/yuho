@@ -177,6 +177,33 @@ def _check_subsumption(statutes: Tuple[StatuteNode, ...]) -> List[LintWarning]:
     return warnings
 
 
+def _check_deontic_conflict(statute: StatuteNode) -> List[LintWarning]:
+    """Warn if obligation+prohibition share same name. Info if permission has no matching obligation/prohibition."""
+    warnings: List[LintWarning] = []
+    flat = _flatten_elements(statute.elements)
+    by_type: dict[str, set[str]] = {}
+    for e in flat:
+        by_type.setdefault(e.element_type, set()).add(e.name)
+    obligations = by_type.get("obligation", set())
+    prohibitions = by_type.get("prohibition", set())
+    permissions = by_type.get("permission", set())
+    conflict = obligations & prohibitions
+    for name in sorted(conflict):
+        warnings.append(LintWarning(
+            statute_section=statute.section_number,
+            message=f"deontic conflict: '{name}' is both obligation and prohibition",
+            severity="warning",
+        ))
+    orphans = permissions - obligations - prohibitions
+    for name in sorted(orphans):
+        warnings.append(LintWarning(
+            statute_section=statute.section_number,
+            message=f"orphan permission: '{name}' has no corresponding obligation or prohibition",
+            severity="info",
+        ))
+    return warnings
+
+
 def _check_defeats_target(statute: StatuteNode) -> List[LintWarning]:
     """Verify defeats label references an existing exception in the same statute."""
     warnings: List[LintWarning] = []
@@ -200,6 +227,7 @@ def lint_statute(statute: StatuteNode) -> List[LintWarning]:
     warnings.extend(_check_exception_guards(statute))
     warnings.extend(_check_duplicate_exceptions(statute))
     warnings.extend(_check_defeats_target(statute))
+    warnings.extend(_check_deontic_conflict(statute))
     return warnings
 
 
