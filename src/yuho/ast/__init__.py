@@ -61,6 +61,9 @@ from yuho.ast.nodes import (
     IllustrationNode,
     PartyNode,
     TemporalConstraintNode,
+    AnnotationNode,
+    LegalTestNode,
+    ConflictCheckNode,
     StatuteNode,
     # Enums / Type Aliases
     EnumDefNode,
@@ -169,6 +172,9 @@ __all__ = [
     "IllustrationNode",
     "PartyNode",
     "TemporalConstraintNode",
+    "AnnotationNode",
+    "LegalTestNode",
+    "ConflictCheckNode",
     "StatuteNode",
     # Enums / Type Aliases
     "EnumDefNode",
