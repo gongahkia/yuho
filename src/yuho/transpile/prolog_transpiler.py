@@ -26,6 +26,7 @@ class PrologTranspiler(TranspilerBase):
         lines.append("%%% Do not edit manually")
         lines.append(":- discontiguous statute/2, element/4, definition/3.")
         lines.append(":- discontiguous penalty/3, exception/3, caselaw/4.")
+        lines.append(":- discontiguous exception_priority/3, defeats/3.")
         lines.append(":- discontiguous guilty/2, element_satisfied/3.")
         lines.append("")
         for statute in ast.statutes:
@@ -73,6 +74,10 @@ class PrologTranspiler(TranspilerBase):
             label = self._safe_atom(exc.label) if exc.label else "exception"
             cond = self._safe_str(exc.condition.value) if hasattr(exc.condition, 'value') else "''"
             lines.append(f"exception(s{sec}, {label}, {cond}).")
+            if getattr(exc, 'priority', None) is not None:
+                lines.append(f"exception_priority(s{sec}, {label}, {exc.priority}).")
+            if getattr(exc, 'defeats', None):
+                lines.append(f"defeats(s{sec}, {label}, {self._safe_atom(exc.defeats)}).")
         # caselaw
         for cl in statute.case_law:
             case_name = self._safe_str(cl.case_name.value)
