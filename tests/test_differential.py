@@ -11,10 +11,7 @@ from pathlib import Path
 from hypothesis import given, settings, assume, HealthCheck
 from hypothesis import strategies as st
 
-# Add archive path for v4 imports
-archive_path = Path(__file__).parent.parent / "archive"
-if str(archive_path) not in sys.path:
-    sys.path.insert(0, str(archive_path))
+# v4 archive removed; differential tests skip when v4 unavailable
 
 
 DIFFERENTIAL_SETTINGS = settings(
