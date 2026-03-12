@@ -1142,17 +1142,23 @@ class ASTBuilder:
         condition_node = self._child_by_field(node, "condition")
         effect_node = self._child_by_field(node, "effect")
         guard_node = self._child_by_field(node, "guard")
+        priority_node = self._child_by_field(node, "priority")
+        defeats_node = self._child_by_field(node, "defeats")
 
         label = self._text(label_node) if label_node else None
         condition = self._build_string_lit(condition_node) if condition_node else nodes.StringLit(value="")
         effect = self._build_string_lit(effect_node) if effect_node else None
         guard = self._build_expression(guard_node) if guard_node else None
+        priority = int(self._text(priority_node)) if priority_node else None
+        defeats = self._text(defeats_node) if defeats_node else None
 
         return nodes.ExceptionNode(
             label=label,
             condition=condition,
             effect=effect,
             guard=guard,
+            priority=priority,
+            defeats=defeats,
             source_location=self._loc(node),
         )
 
