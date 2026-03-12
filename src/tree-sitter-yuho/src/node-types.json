@@ -1,5 +1,47 @@
 [
   {
+    "type": "annotation",
+    "named": true,
+    "fields": {
+      "args": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": ",",
+            "named": false
+          },
+          {
+            "type": "string_literal",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "amended",
+            "named": false
+          },
+          {
+            "type": "hierarchy",
+            "named": false
+          },
+          {
+            "type": "precedent",
+            "named": false
+          },
+          {
+            "type": "presumed",
+            "named": false
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "argument_list",
     "named": true,
     "fields": {},
@@ -520,6 +562,52 @@
           }
         ]
       }
+    }
+  },
+  {
+    "type": "conflict_check_block",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "source": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "string_literal",
+            "named": true
+          }
+        ]
+      },
+      "target": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "string_literal",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "annotation",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -1820,6 +1908,160 @@
     }
   },
   {
+    "type": "legal_test_block",
+    "named": true,
+    "fields": {
+      "condition": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "binary_expression",
+            "named": true
+          },
+          {
+            "type": "boolean_literal",
+            "named": true
+          },
+          {
+            "type": "date_literal",
+            "named": true
+          },
+          {
+            "type": "duration_literal",
+            "named": true
+          },
+          {
+            "type": "field_access",
+            "named": true
+          },
+          {
+            "type": "float_literal",
+            "named": true
+          },
+          {
+            "type": "function_call",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "index_access",
+            "named": true
+          },
+          {
+            "type": "integer_literal",
+            "named": true
+          },
+          {
+            "type": "match_expression",
+            "named": true
+          },
+          {
+            "type": "money_literal",
+            "named": true
+          },
+          {
+            "type": "parenthesized_expression",
+            "named": true
+          },
+          {
+            "type": "pass_expression",
+            "named": true
+          },
+          {
+            "type": "percent_literal",
+            "named": true
+          },
+          {
+            "type": "string_literal",
+            "named": true
+          },
+          {
+            "type": "struct_literal",
+            "named": true
+          },
+          {
+            "type": "unary_expression",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "annotation",
+          "named": true
+        },
+        {
+          "type": "legal_test_field",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "legal_test_field",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "array_type",
+            "named": true
+          },
+          {
+            "type": "builtin_type",
+            "named": true
+          },
+          {
+            "type": "generic_type",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "optional_type",
+            "named": true
+          },
+          {
+            "type": "refinement_type",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "literal_pattern",
     "named": true,
     "fields": {},
@@ -2817,6 +3059,10 @@
           "named": true
         },
         {
+          "type": "conflict_check_block",
+          "named": true
+        },
+        {
           "type": "enum_definition",
           "named": true
         },
@@ -2830,6 +3076,10 @@
         },
         {
           "type": "import_statement",
+          "named": true
+        },
+        {
+          "type": "legal_test_block",
           "named": true
         },
         {
@@ -2934,6 +3184,10 @@
       "multiple": true,
       "required": false,
       "types": [
+        {
+          "type": "annotation",
+          "named": true
+        },
         {
           "type": "caselaw_block",
           "named": true
@@ -3606,6 +3860,10 @@
     "named": false
   },
   {
+    "type": "@",
+    "named": false
+  },
+  {
     "type": "AUD",
     "named": false
   },
@@ -3670,6 +3928,10 @@
     "named": false
   },
   {
+    "type": "amended",
+    "named": false
+  },
+  {
     "type": "amends",
     "named": false
   },
@@ -3728,6 +3990,10 @@
   },
   {
     "type": "concurrent",
+    "named": false
+  },
+  {
+    "type": "conflict_check",
     "named": false
   },
   {
@@ -3831,6 +4097,10 @@
     "named": false
   },
   {
+    "type": "hierarchy",
+    "named": false
+  },
+  {
     "type": "hour",
     "named": false
   },
@@ -3865,6 +4135,10 @@
   {
     "type": "integer_literal",
     "named": true
+  },
+  {
+    "type": "legal_test",
+    "named": false
   },
   {
     "type": "match",
@@ -3936,6 +4210,10 @@
     "named": false
   },
   {
+    "type": "precedent",
+    "named": false
+  },
+  {
     "type": "precedes",
     "named": false
   },
@@ -3972,6 +4250,10 @@
     "named": false
   },
   {
+    "type": "requires",
+    "named": false
+  },
+  {
     "type": "return",
     "named": false
   },
@@ -3986,6 +4268,10 @@
   {
     "type": "section_number",
     "named": true
+  },
+  {
+    "type": "source",
+    "named": false
   },
   {
     "type": "statute",
@@ -4009,6 +4295,10 @@
   },
   {
     "type": "supplementary",
+    "named": false
+  },
+  {
+    "type": "target",
     "named": false
   },
   {
