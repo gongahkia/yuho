@@ -32,6 +32,10 @@ class PrologTranspiler(TranspilerBase):
         lines.append("")
         for statute in ast.statutes:
             self._emit_statute(lines, statute)
+        for lt in getattr(ast, 'legal_tests', ()):
+            self._emit_legal_test(lines, lt)
+        for cc in getattr(ast, 'conflict_checks', ()):
+            self._emit_conflict_check(lines, cc)
         lines.append("")
         lines.append("%%% Guilt inference rule")
         lines.append("%%% guilty(Section, Facts) :- all elements satisfied, no exception applies")
@@ -145,6 +149,27 @@ class PrologTranspiler(TranspilerBase):
         if s and s[0].isdigit():
             s = "s" + s
         return s
+
+    def _emit_legal_test(self, lines: List[str], lt: nodes.LegalTestNode) -> None:
+        name = self._safe_atom(lt.name)
+        lines.append(f"%%% Legal test: {lt.name}")
+        for req in lt.requirements:
+            if isinstance(req, nodes.VariableDecl):
+                rname = self._safe_atom(req.name)
+                lines.append(f"legal_test_requirement({name}, {rname}).")
+        if lt.requirements:
+            req_conds = [f"requirement_met({name}, {self._safe_atom(r.name)}, Facts)"
+                         for r in lt.requirements if isinstance(r, nodes.VariableDecl)]
+            body = ",\n    ".join(req_conds)
+            lines.append(f"legal_test_satisfied({name}, Facts) :-")
+            lines.append(f"    {body}.")
+        lines.append("")
+
+    def _emit_conflict_check(self, lines: List[str], cc: nodes.ConflictCheckNode) -> None:
+        name = self._safe_atom(cc.name)
+        lines.append(f"%%% Conflict check: {cc.name}")
+        lines.append(f"conflict_check({name}, {self._safe_str(cc.source)}, {self._safe_str(cc.target)}).")
+        lines.append("")
 
     def _safe_str(self, s: str) -> str:
         """Make a safe Prolog string."""
