@@ -925,6 +925,16 @@
           }
         ]
       },
+      "defeats": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
       "effect": {
         "multiple": false,
         "required": false,
@@ -1019,6 +1029,16 @@
         "types": [
           {
             "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "priority": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "integer_literal",
             "named": true
           }
         ]
@@ -3588,6 +3608,10 @@
     "named": false
   },
   {
+    "type": "defeats",
+    "named": false
+  },
+  {
     "type": "defence",
     "named": false
   },
@@ -3754,6 +3778,10 @@
   },
   {
     "type": "prima_facie",
+    "named": false
+  },
+  {
+    "type": "priority",
     "named": false
   },
   {
