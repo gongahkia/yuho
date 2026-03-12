@@ -534,6 +534,8 @@ module.exports = grammar({
       field('condition', $.string_literal),
       optional(field('effect', $.string_literal)),
       optional(seq('when', field('guard', $._expression))),
+      optional(seq('priority', field('priority', $.integer_literal))),
+      optional(seq('defeats', field('defeats', $.identifier))),
       '}'
     ),
 
