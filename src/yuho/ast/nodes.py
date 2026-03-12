@@ -915,6 +915,46 @@ class TemporalConstraintNode(ASTNode):
 
 
 @dataclass(frozen=True)
+class AnnotationNode(ASTNode):
+    """Metadata annotation (@presumed, @precedent, @hierarchy, @amended)."""
+    name: str # "presumed", "precedent", "hierarchy", "amended"
+    args: Tuple[str, ...] = ()
+
+    def accept(self, visitor: "Visitor"):
+        return visitor.visit_annotation(self)
+
+
+@dataclass(frozen=True)
+class LegalTestNode(ASTNode):
+    """Conjunctive legal test: all requirements must hold for the test to pass."""
+    name: str
+    requirements: Tuple[ASTNode, ...] # variable decls (bool fields)
+    condition: Optional[ASTNode] = None # requires expression (conjunction)
+    annotations: Tuple[AnnotationNode, ...] = ()
+
+    def accept(self, visitor: "Visitor"):
+        return visitor.visit_legal_test(self)
+
+    def children(self) -> List[ASTNode]:
+        result: List[ASTNode] = list(self.requirements)
+        if self.condition:
+            result.append(self.condition)
+        return result
+
+
+@dataclass(frozen=True)
+class ConflictCheckNode(ASTNode):
+    """Inter-file contradiction detection between statutes."""
+    name: str
+    source: str # path or section reference
+    target: str # path or section reference
+    annotations: Tuple[AnnotationNode, ...] = ()
+
+    def accept(self, visitor: "Visitor"):
+        return visitor.visit_conflict_check(self)
+
+
+@dataclass(frozen=True)
 class PartyNode(ASTNode):
     """Party/role declaration within a statute (e.g., offender, victim)."""
     role: str
@@ -954,6 +994,7 @@ class StatuteNode(ASTNode):
     amends: Optional[str] = None # phase 11: section number
     parties: Tuple["PartyNode", ...] = ()
     temporal_constraints: Tuple["TemporalConstraintNode", ...] = ()
+    annotations: Tuple["AnnotationNode", ...] = ()
 
     def accept(self, visitor: "Visitor"):
         return visitor.visit_statute(self)
@@ -1086,6 +1127,8 @@ class ModuleNode(ASTNode):
     assertions: Tuple["AssertStmt", ...] = ()
     enum_defs: Tuple[EnumDefNode, ...] = ()
     type_aliases: Tuple[TypeAliasNode, ...] = ()
+    legal_tests: Tuple[LegalTestNode, ...] = ()
+    conflict_checks: Tuple[ConflictCheckNode, ...] = ()
 
     def accept(self, visitor: "Visitor"):
         return visitor.visit_module(self)
@@ -1101,4 +1144,6 @@ class ModuleNode(ASTNode):
         result.extend(self.statutes)
         result.extend(self.variables)
         result.extend(self.assertions)
+        result.extend(self.legal_tests)
+        result.extend(self.conflict_checks)
         return result
