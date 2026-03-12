@@ -863,6 +863,8 @@ class ExceptionNode(ASTNode):
     condition: StringLit
     effect: Optional[StringLit] = None
     guard: Optional[ASTNode] = None
+    priority: Optional[int] = None
+    defeats: Optional[str] = None
 
     def accept(self, visitor: "Visitor"):
         return visitor.visit_exception(self)
