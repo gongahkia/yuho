@@ -1,3 +1,0 @@
-"""
-Transpilers for Yuho language
-"""
