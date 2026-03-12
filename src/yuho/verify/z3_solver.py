@@ -1128,12 +1128,35 @@ class Z3Generator:
             # conviction <=> all top-level elements satisfied
             self._assertions.append(conviction_var == all_elements)
 
+        # Temporal ordering constraints
+        self._generate_temporal_constraints(statute_id, statute)
+
         # Exception constraints
         self._generate_exception_constraints(statute_id, statute)
 
         # Penalty constraints
         if statute.penalty:
             self._generate_penalty_constraints(statute_id, statute.penalty)
+
+    def _generate_temporal_constraints(self, statute_id: str, statute: "StatuteNode") -> None:
+        """Create Int time variables per element and assert ordering from temporal constraints."""
+        if not Z3_AVAILABLE:
+            return
+        for tc in getattr(statute, 'temporal_constraints', ()):
+            subj_name = f"{statute_id}_{tc.subject}_time"
+            obj_name = f"{statute_id}_{tc.object}_time"
+            if subj_name not in self._consts:
+                self._consts[subj_name] = z3.Int(subj_name)
+            if obj_name not in self._consts:
+                self._consts[obj_name] = z3.Int(obj_name)
+            subj_var = self._consts[subj_name]
+            obj_var = self._consts[obj_name]
+            if tc.relation == "precedes":
+                self._assertions.append(subj_var < obj_var)
+            elif tc.relation == "after":
+                self._assertions.append(subj_var > obj_var)
+            elif tc.relation == "during":
+                self._assertions.append(subj_var == obj_var)
 
     def _translate_element(
         self, statute_id: str, elem: "Union[ElementNode, ElementGroupNode]"
