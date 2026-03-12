@@ -23,6 +23,8 @@ class TranspileTarget(Enum):
     COMPARATIVE = auto()
     AKOMA_NTOSO = auto()
     PROLOG = auto()
+    CATALA = auto()
+    FSTAR = auto()
 
     @classmethod
     def from_string(cls, name: str) -> "TranspileTarget":
@@ -50,6 +52,10 @@ class TranspileTarget(Enum):
             "akn": cls.AKOMA_NTOSO,
             "prolog": cls.PROLOG,
             "pl": cls.PROLOG,
+            "catala": cls.CATALA,
+            "fstar": cls.FSTAR,
+            "f*": cls.FSTAR,
+            "fst": cls.FSTAR,
         }
         target = mapping.get(name.lower())
         if not target:
@@ -72,6 +78,8 @@ class TranspileTarget(Enum):
             TranspileTarget.COMPARATIVE: ".md",
             TranspileTarget.AKOMA_NTOSO: ".xml",
             TranspileTarget.PROLOG: ".pl",
+            TranspileTarget.CATALA: ".catala_en",
+            TranspileTarget.FSTAR: ".fst",
         }
         return extensions.get(self, ".txt")
 
