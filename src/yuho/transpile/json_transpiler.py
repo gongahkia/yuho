@@ -269,6 +269,8 @@ class JSONTranspiler(TranspilerBase, Visitor):
                 result["amends"] = node.amends
             if node.parties:
                 result["parties"] = [self._to_dict(p) for p in node.parties]
+            if getattr(node, 'annotations', ()):
+                result["annotations"] = [self._to_dict(a) for a in node.annotations]
         elif isinstance(node, nodes.EnumVariant):
             result["name"] = node.name
             if node.payload_types:
@@ -286,6 +288,22 @@ class JSONTranspiler(TranspilerBase, Visitor):
         elif isinstance(node, nodes.ImportNode):
             result["path"] = node.path
             result["imported_names"] = list(node.imported_names)
+        elif isinstance(node, nodes.AnnotationNode):
+            result["name"] = node.name
+            result["args"] = list(node.args)
+        elif isinstance(node, nodes.LegalTestNode):
+            result["name"] = node.name
+            result["requirements"] = [self._to_dict(r) for r in node.requirements]
+            if node.condition:
+                result["condition"] = self._to_dict(node.condition)
+            if node.annotations:
+                result["annotations"] = [self._to_dict(a) for a in node.annotations]
+        elif isinstance(node, nodes.ConflictCheckNode):
+            result["name"] = node.name
+            result["source"] = node.source
+            result["target"] = node.target
+            if node.annotations:
+                result["annotations"] = [self._to_dict(a) for a in node.annotations]
         elif isinstance(node, nodes.ModuleNode):
             from yuho.transpile.json_schema import AST_SCHEMA_VERSION
             result["_schema_version"] = AST_SCHEMA_VERSION
@@ -298,5 +316,9 @@ class JSONTranspiler(TranspilerBase, Visitor):
                 result["enum_defs"] = [self._to_dict(e) for e in node.enum_defs]
             if node.type_aliases:
                 result["type_aliases"] = [self._to_dict(t) for t in node.type_aliases]
+            if node.legal_tests:
+                result["legal_tests"] = [self._to_dict(lt) for lt in node.legal_tests]
+            if node.conflict_checks:
+                result["conflict_checks"] = [self._to_dict(cc) for cc in node.conflict_checks]
 
         return result
