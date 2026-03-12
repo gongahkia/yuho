@@ -153,8 +153,9 @@ class BlockBuilder(Visitor):
                 elem_type = getattr(elem, "element_type", "") or "element"
                 name = getattr(elem, "name", "") or "?"
                 desc = getattr(elem, "description", "") or ""
-                if len(str(desc)) > 50:
-                    desc = str(desc)[:47] + "..."
+                desc = self._expr_to_str(desc) if hasattr(desc, 'children') else getattr(desc, "value", str(desc))
+                if len(desc) > 50:
+                    desc = desc[:47] + "..."
                 entry = f"{name}: {desc}"
                 if getattr(elem, 'caused_by', None):
                     entry += f" [caused_by: {elem.caused_by}]"
@@ -208,19 +209,21 @@ class BlockBuilder(Visitor):
             min_str = str(penalty.imprisonment_min) if penalty.imprisonment_min else "---"
             content.append(f"imprisonment: {min_str} to {penalty.imprisonment_max}")
         if getattr(penalty, "fine_max", None):
-            min_str = str(penalty.fine_min) if penalty.fine_min else "---"
-            content.append(f"fine: {min_str} to {penalty.fine_max}")
+            min_str = self._expr_to_str(penalty.fine_min) if penalty.fine_min else "---"
+            max_str = self._expr_to_str(penalty.fine_max)
+            content.append(f"fine: {min_str} to {max_str}")
         if getattr(penalty, "caning_max", None):
             min_str = str(penalty.caning_min) if penalty.caning_min else "---"
             content.append(f"caning: {min_str} to {penalty.caning_max} strokes")
         if getattr(penalty, "supplementary", None):
-            content.append(f"supplementary: {penalty.supplementary}")
+            supp = getattr(penalty.supplementary, "value", str(penalty.supplementary))
+            content.append(f"supplementary: {supp}")
         if getattr(penalty, "sentencing", None):
             content.append(f"sentencing: {penalty.sentencing}")
         if getattr(penalty, "mandatory_min_imprisonment", None):
-            content.append(f"mandatory_min_imprisonment: {penalty.mandatory_min_imprisonment}")
+            content.append(f"mandatory_min_imprisonment: {self._expr_to_str(penalty.mandatory_min_imprisonment)}")
         if getattr(penalty, "mandatory_min_fine", None):
-            content.append(f"mandatory_min_fine: {penalty.mandatory_min_fine}")
+            content.append(f"mandatory_min_fine: {self._expr_to_str(penalty.mandatory_min_fine)}")
 
         if content:
             block = Block(
