@@ -113,17 +113,18 @@ function displayOutput(text,target){
 let mermaidCounter=0;
 async function renderOutput(text,target){
   if(target==='mermaid'){
+    let container=null;
     try{
       const id='mmd'+(mermaidCounter++);
-      const container=document.createElement('div');
+      container=document.createElement('div');
       container.id=id;
       container.style.display='none';
       document.body.appendChild(container);
       const{svg}=await mermaid.render(id,text,container);
-      container.remove();
       ren.innerHTML=svg;
     }
     catch(e){ren.innerHTML='<pre>Mermaid render error: '+esc(e.message)+'</pre>'}
+    finally{if(container&&container.parentNode)container.remove();document.querySelectorAll('[id^=dmmd]').forEach(el=>el.remove())}
   } else if(target==='blocks'){
     ren.innerHTML='<pre style="font-family:monospace;line-height:1.4">'+esc(text)+'</pre>';
   } else if(target==='json'||target==='jsonld'){
