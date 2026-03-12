@@ -117,7 +117,7 @@ jobs:
       - name: Transpile to all text targets
         run: |
           mkdir -p /tmp/transpile-out
-          for target in json jsonld english latex mermaid alloy graphql blocks bibtex html; do
+          for target in json jsonld english latex mermaid alloy graphql blocks bibtex comparative akomantoso prolog; do
             echo "--- Transpiling to $target ---"
             yuho transpile library/penal_code/s415_cheating/statute.yh \
               --target "$target" \
