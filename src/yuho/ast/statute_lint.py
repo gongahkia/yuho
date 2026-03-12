@@ -17,9 +17,13 @@ from yuho.ast.nodes import (
     ElementGroupNode,
     ElementNode,
     ExceptionNode,
+    IntLit,
+    FloatLit,
     ModuleNode,
+    RefinementTypeNode,
     StatuteNode,
     StringLit,
+    VariableDecl,
 )
 
 
@@ -184,10 +188,38 @@ def lint_statute(statute: StatuteNode) -> List[LintWarning]:
     return warnings
 
 
+def _check_refinement_bounds(module: ModuleNode) -> List[LintWarning]:
+    """For VariableDecl with RefinementTypeNode + literal value, check value in range."""
+    warnings: List[LintWarning] = []
+    for var in module.variables:
+        if not isinstance(var.type_annotation, RefinementTypeNode):
+            continue
+        rt = var.type_annotation
+        lo = rt.lower_bound.value if isinstance(rt.lower_bound, (IntLit, FloatLit)) else None
+        hi = rt.upper_bound.value if isinstance(rt.upper_bound, (IntLit, FloatLit)) else None
+        if lo is None or hi is None:
+            continue
+        val = None
+        if isinstance(var.value, IntLit):
+            val = var.value.value
+        elif isinstance(var.value, FloatLit):
+            val = var.value.value
+        if val is None:
+            continue
+        if not (lo <= val <= hi):
+            warnings.append(LintWarning(
+                statute_section="<module>",
+                message=f"variable '{var.name}' value {val} outside refinement bounds [{lo}..{hi}]",
+                severity="warning",
+            ))
+    return warnings
+
+
 def lint_module(module: ModuleNode) -> List[LintWarning]:
     """Run all lint checks across a module's statutes."""
     warnings: List[LintWarning] = []
     for statute in module.statutes:
         warnings.extend(lint_statute(statute))
     warnings.extend(_check_subsumption(module.statutes))
+    warnings.extend(_check_refinement_bounds(module))
     return warnings
