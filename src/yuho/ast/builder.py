@@ -920,6 +920,7 @@ class ASTBuilder:
 
         definitions: List[nodes.DefinitionEntry] = []
         elements: list = []
+        temporal_constraints: List[nodes.TemporalConstraintNode] = []
         penalty: Optional[nodes.PenaltyNode] = None
         illustrations: List[nodes.IllustrationNode] = []
         exceptions: List[nodes.ExceptionNode] = []
@@ -930,7 +931,9 @@ class ASTBuilder:
             if child.type == "definitions_block":
                 definitions.extend(self._build_definitions_block(child))
             elif child.type == "elements_block":
-                elements.extend(self._build_elements_block(child))
+                elems, temps = self._build_elements_block(child)
+                elements.extend(elems)
+                temporal_constraints.extend(temps)
             elif child.type == "penalty_block":
                 penalty = self._build_penalty_block(child)
             elif child.type == "illustration_block":
@@ -968,6 +971,7 @@ class ASTBuilder:
             subsumes=self._text(subsumes_node) if subsumes_node else None,
             amends=self._text(amends_node) if amends_node else None,
             parties=tuple(parties),
+            temporal_constraints=tuple(temporal_constraints),
             source_location=self._loc(node),
         )
 
@@ -1005,9 +1009,10 @@ class ASTBuilder:
                 ))
         return parties
 
-    def _build_elements_block(self, node) -> list:
-        """Build list of ElementNode/ElementGroupNode from elements_block node."""
+    def _build_elements_block(self, node) -> tuple:
+        """Build list of ElementNode/ElementGroupNode and TemporalConstraintNode from elements_block."""
         elements: list = []
+        temporals: List[nodes.TemporalConstraintNode] = []
         for child in node.children:
             if child.type == "element_entry":
                 type_node = self._child_by_field(child, "element_type")
@@ -1044,7 +1049,17 @@ class ASTBuilder:
                 ))
             elif child.type == "element_group":
                 elements.append(self._build_element_group(child))
-        return elements
+            elif child.type == "temporal_constraint":
+                subj_node = self._child_by_field(child, "subject")
+                rel_node = self._child_by_field(child, "relation")
+                obj_node = self._child_by_field(child, "object")
+                temporals.append(nodes.TemporalConstraintNode(
+                    subject=self._text(subj_node) if subj_node else "",
+                    relation=self._text(rel_node) if rel_node else "precedes",
+                    object=self._text(obj_node) if obj_node else "",
+                    source_location=self._loc(child),
+                ))
+        return elements, temporals
 
     def _build_element_group(self, node) -> nodes.ElementGroupNode:
         """Build ElementGroupNode from element_group node."""
