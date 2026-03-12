@@ -79,13 +79,17 @@ class MermaidTranspiler(TranspilerBase, Visitor):
 
     def _escape_text(self, text: str) -> str:
         """Escape text for Mermaid labels."""
-        # Escape quotes and special chars
         text = text.replace('"', "'")
         text = text.replace("<", "&lt;")
         text = text.replace(">", "&gt;")
-        # Truncate long text
-        if len(text) > 50:
-            text = text[:47] + "..."
+        text = text.replace("(", "#40;")
+        text = text.replace(")", "#41;")
+        text = text.replace("[", "#91;")
+        text = text.replace("]", "#93;")
+        text = text.replace("{", "#123;")
+        text = text.replace("}", "#125;")
+        if len(text) > 80:
+            text = text[:77] + "..."
         return text
 
     # =========================================================================

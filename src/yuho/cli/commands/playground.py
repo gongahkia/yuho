@@ -80,7 +80,7 @@ const src=document.getElementById('source'),out=document.getElementById('output'
 const tgt=document.getElementById('target'),lbl=document.getElementById('target-label'),sts=document.getElementById('status');
 const togBtn=document.getElementById('toggle-render');
 let debounce=null,lastOutput='',showRendered=true;
-const RENDERABLE=new Set(['mermaid','json','jsonld','latex','english']);
+const RENDERABLE=new Set(['mermaid','json','jsonld','latex','english','blocks']);
 
 tgt.addEventListener('change',()=>{lbl.textContent=tgt.value;updateToggleState();run()});
 src.addEventListener('input',()=>{clearTimeout(debounce);debounce=setTimeout(run,500)});
@@ -124,6 +124,8 @@ async function renderOutput(text,target){
       ren.innerHTML=svg;
     }
     catch(e){ren.innerHTML='<pre>Mermaid render error: '+esc(e.message)+'</pre>'}
+  } else if(target==='blocks'){
+    ren.innerHTML='<pre style="font-family:monospace;line-height:1.4">'+esc(text)+'</pre>';
   } else if(target==='json'||target==='jsonld'){
     try{const obj=JSON.parse(text);ren.innerHTML='<pre>'+highlightJson(obj)+'</pre>'}
     catch(e){ren.innerHTML='<pre>'+esc(text)+'</pre>'}
