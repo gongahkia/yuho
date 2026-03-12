@@ -20,13 +20,6 @@ class MermaidTranspiler(TranspilerBase, Visitor):
     """
 
     def __init__(self, direction: str = "TD", use_subgraphs: bool = True):
-        """
-        Initialize the Mermaid transpiler.
-
-        Args:
-            direction: Flowchart direction (TD=top-down, LR=left-right)
-            use_subgraphs: Whether to wrap nested match expressions in subgraphs
-        """
         self.direction = direction
         self.use_subgraphs = use_subgraphs
         self._output: List[str] = []
@@ -53,25 +46,21 @@ class MermaidTranspiler(TranspilerBase, Visitor):
         return "\n".join(self._output)
 
     def _emit(self, line: str) -> None:
-        """Add a line to output."""
         self._output.append(line)
 
     def _new_node_id(self, prefix: str = "N") -> str:
-        """Generate a new unique node ID."""
         self._node_counter += 1
         return f"{prefix}{self._node_counter}"
 
     def _new_subgraph_id(self, name: str = "sub") -> str:
-        """Generate a new unique subgraph ID."""
         self._subgraph_counter += 1
         return f"{name}_{self._subgraph_counter}"
 
     def _indent(self) -> str:
-        """Get current indentation string based on nesting depth."""
         return "    " * (self._nesting_depth + 1)
 
     def _q(self, text: str) -> str:
-        """Quote and escape text for use inside Mermaid node labels."""
+        """Quote and escape text for Mermaid node labels."""
         text = text.replace('"', "'")
         text = text.replace("<", "&lt;")
         text = text.replace(">", "&gt;")
@@ -108,8 +97,7 @@ class MermaidTranspiler(TranspilerBase, Visitor):
                 prefix = self._deontic_prefix(elem.element_type)
                 self._emit(f"    {elem_start}[/{self._q(prefix + elem.name)}/]")
                 self._emit(f"    {prev_id} --> {elem_start}")
-                end_id = self._transpile_match_expr(elem.description, elem_start)
-                prev_id = end_id
+                prev_id = self._transpile_match_expr(elem.description, elem_start)
             else:
                 elem_id = self._new_node_id("ELEM")
                 prefix = self._deontic_prefix(elem.element_type)
@@ -156,8 +144,7 @@ class MermaidTranspiler(TranspilerBase, Visitor):
         self._emit(f"    {start_id}([{self._q(f'{func.name}({params})')}])")
         prev_id = start_id
         for match_expr in match_exprs:
-            end_id = self._transpile_match_expr(match_expr, prev_id)
-            prev_id = end_id
+            prev_id = self._transpile_match_expr(match_expr, prev_id)
         self._emit("")
 
     def _find_match_exprs(self, node: nodes.ASTNode) -> List[nodes.MatchExprNode]:
@@ -170,7 +157,7 @@ class MermaidTranspiler(TranspilerBase, Visitor):
         return matches
 
     # =========================================================================
-    # Match expression to flowchart
+    # Match expression to flowchart (no merge nodes)
     # =========================================================================
 
     def _transpile_match_expr(
@@ -179,16 +166,15 @@ class MermaidTranspiler(TranspilerBase, Visitor):
         start_id: str,
         subgraph_name: Optional[str] = None,
     ) -> str:
-        """Generate flowchart nodes for a match expression. Returns the ID of the end/merge node."""
+        """Generate flowchart nodes for a match expression. Returns the decision node ID."""
         use_subgraph = (
             self.use_subgraphs and
             (self._nesting_depth > 0 or subgraph_name is not None)
         )
-        subgraph_id = None
         if use_subgraph:
-            subgraph_id = self._new_subgraph_id("match")
+            sg_id = self._new_subgraph_id("match")
             label = subgraph_name or "nested decision"
-            self._emit(f"{self._indent()}subgraph {subgraph_id}[{self._q(label)}]")
+            self._emit(f"{self._indent()}subgraph {sg_id}[{self._q(label)}]")
             self._nesting_depth += 1
         if match.scrutinee:
             scrutinee_label = self._expr_to_label(match.scrutinee)
@@ -197,18 +183,15 @@ class MermaidTranspiler(TranspilerBase, Visitor):
             self._emit(f"{self._indent()}{start_id} --> {decision_id}")
         else:
             decision_id = start_id
-        end_id = self._new_node_id("END")
-        for i, arm in enumerate(match.arms):
-            arm_outcome_id = self._transpile_match_arm(arm, decision_id, i)
-            self._emit(f"{self._indent()}{arm_outcome_id} --> {end_id}")
-        self._emit(self._indent() + end_id + '(["&middot;"])')
+        for arm in match.arms:
+            self._transpile_match_arm(arm, decision_id)
         if use_subgraph:
             self._nesting_depth -= 1
             self._emit(f"{self._indent()}end")
-        return end_id
+        return decision_id
 
-    def _transpile_match_arm(self, arm: nodes.MatchArm, from_id: str, index: int) -> str:
-        """Generate nodes for a match arm. Returns the ID of the outcome node."""
+    def _transpile_match_arm(self, arm: nodes.MatchArm, from_id: str) -> None:
+        """Generate nodes for a match arm (terminal — no merge)."""
         pattern_label = self._pattern_to_label(arm.pattern)
         if arm.guard:
             guard_id = self._new_node_id("G")
@@ -216,53 +199,42 @@ class MermaidTranspiler(TranspilerBase, Visitor):
             self._emit(f"{self._indent()}{guard_id}{{{{{self._q(guard_label)}}}}}")
             self._emit(f"{self._indent()}{from_id} -->|{self._q(pattern_label)}| {guard_id}")
             if isinstance(arm.body, nodes.MatchExprNode):
-                nested_label = f"when {pattern_label} (guarded)"
-                end_id = self._transpile_match_expr(arm.body, guard_id, nested_label)
-                return end_id
+                self._transpile_match_expr(arm.body, guard_id, f"when {pattern_label} (guarded)")
             else:
                 outcome_id = self._new_node_id("O")
                 body_label = self._expr_to_label(arm.body)
                 self._emit(f"{self._indent()}{outcome_id}[{self._q(body_label)}]")
                 self._emit(f"{self._indent()}{guard_id} -->|{self._q('Yes')}| {outcome_id}")
-                return outcome_id
         else:
             if isinstance(arm.body, nodes.MatchExprNode):
-                connector_id = self._new_node_id("C")
-                self._emit(self._indent() + connector_id + '(["&middot;"])')
-                self._emit(f"{self._indent()}{from_id} -->|{self._q(pattern_label)}| {connector_id}")
-                nested_label = f"when {pattern_label}"
-                end_id = self._transpile_match_expr(arm.body, connector_id, nested_label)
-                return end_id
+                self._transpile_match_expr(arm.body, from_id, f"when {pattern_label}")
             else:
                 outcome_id = self._new_node_id("O")
                 body_label = self._expr_to_label(arm.body)
                 self._emit(f"{self._indent()}{outcome_id}[{self._q(body_label)}]")
                 self._emit(f"{self._indent()}{from_id} -->|{self._q(pattern_label)}| {outcome_id}")
-                return outcome_id
 
     # =========================================================================
-    # Element group processing
+    # Element group processing (linear chain — no fan-in merge)
     # =========================================================================
 
     def _transpile_element_group(self, group: nodes.ElementGroupNode, prev_id: str) -> str:
-        """Generate flowchart nodes for an element group (all_of/any_of). Returns last node ID."""
+        """Generate flowchart nodes for an element group. Returns last node ID."""
         combinator = group.combinator.upper().replace("_", " ")
         group_id = self._new_node_id("GRP")
         self._emit(f"    {group_id}{{{{{self._q(combinator)}}}}}")
         self._emit(f"    {prev_id} --> {group_id}")
-        end_id = self._new_node_id("GRPEND")
+        current = group_id
         for member in group.members:
             if isinstance(member, nodes.ElementGroupNode):
-                member_end = self._transpile_element_group(member, group_id)
+                current = self._transpile_element_group(member, current)
             else:
                 member_id = self._new_node_id("ELEM")
                 label = self._expr_to_label(member.description)
                 self._emit(f"    {member_id}[{self._q(label)}]")
-                self._emit(f"    {group_id} --> {member_id}")
-                member_end = member_id
-            self._emit(f"    {member_end} --> {end_id}")
-        self._emit("    " + end_id + '(["&middot;"])')
-        return end_id
+                self._emit(f"    {current} --> {member_id}")
+                current = member_id
+        return current
 
     # =========================================================================
     # Label generation helpers
