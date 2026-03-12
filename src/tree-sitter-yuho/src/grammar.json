@@ -1755,6 +1755,10 @@
               {
                 "type": "SYMBOL",
                 "name": "element_group"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "temporal_constraint"
               }
             ]
           }
@@ -1762,6 +1766,64 @@
         {
           "type": "STRING",
           "value": "}"
+        }
+      ]
+    },
+    "temporal_constraint": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "temporal"
+        },
+        {
+          "type": "FIELD",
+          "name": "subject",
+          "content": {
+            "type": "SYMBOL",
+            "name": "identifier"
+          }
+        },
+        {
+          "type": "FIELD",
+          "name": "relation",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "precedes"
+              },
+              {
+                "type": "STRING",
+                "value": "during"
+              },
+              {
+                "type": "STRING",
+                "value": "after"
+              }
+            ]
+          }
+        },
+        {
+          "type": "FIELD",
+          "name": "object",
+          "content": {
+            "type": "SYMBOL",
+            "name": "identifier"
+          }
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "STRING",
+              "value": ";"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
         }
       ]
     },
