@@ -178,7 +178,8 @@ class MermaidTranspiler(TranspilerBase, Visitor):
 
         start_id = self._new_node_id("FN")
         params = ", ".join(p.name for p in func.params)
-        self._emit(f"    {start_id}([{func.name}({params})])")
+        label = self._escape_text(f"{func.name}({params})")
+        self._emit(f"    {start_id}([{label}])")
 
         prev_id = start_id
         for match_expr in match_exprs:
