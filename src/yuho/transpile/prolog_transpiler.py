@@ -27,6 +27,7 @@ class PrologTranspiler(TranspilerBase):
         lines.append(":- discontiguous statute/2, element/4, definition/3.")
         lines.append(":- discontiguous penalty/3, exception/3, caselaw/4.")
         lines.append(":- discontiguous exception_priority/3, defeats/3.")
+        lines.append(":- discontiguous party/3, actor/3, patient/3.")
         lines.append(":- discontiguous guilty/2, element_satisfied/3.")
         lines.append("")
         for statute in ast.statutes:
@@ -50,6 +51,11 @@ class PrologTranspiler(TranspilerBase):
             lines.append(f"repealed(s{sec}, '{statute.repealed_date}').")
         if getattr(statute, 'subsumes', None):
             lines.append(f"subsumes(s{sec}, s{self._safe_atom(statute.subsumes)}).")
+        # parties
+        for party in getattr(statute, 'parties', ()):
+            role = self._safe_atom(party.role)
+            pname = self._safe_atom(party.name)
+            lines.append(f"party(s{sec}, {role}, {pname}).")
         # definitions
         for defn in statute.definitions:
             term = self._safe_atom(defn.term)
@@ -66,6 +72,10 @@ class PrologTranspiler(TranspilerBase):
                 lines.append(f"caused_by(s{sec}, {ename}, {self._safe_atom(elem.caused_by)}).")
             if getattr(elem, 'burden', None):
                 lines.append(f"burden(s{sec}, {ename}, {self._safe_atom(elem.burden)}).")
+            if getattr(elem, 'actor', None):
+                lines.append(f"actor(s{sec}, {ename}, {self._safe_atom(elem.actor)}).")
+            if getattr(elem, 'patient', None):
+                lines.append(f"patient(s{sec}, {ename}, {self._safe_atom(elem.patient)}).")
         # penalty
         if statute.penalty:
             self._emit_penalty(lines, sec, statute.penalty)
