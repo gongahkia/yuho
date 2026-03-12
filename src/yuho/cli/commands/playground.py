@@ -23,7 +23,7 @@ _PLAYGROUND_HTML = """\
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Yuho Playground</title>
 <link rel="icon" href="data:,">
-<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
 <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
 </head>

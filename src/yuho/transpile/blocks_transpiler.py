@@ -618,10 +618,15 @@ class BlocksTranspiler(TranspilerBase):
         builder.visit(ast)
         
         # Header
+        width = 60
+        title = "BLOCK NOTATION VIEW"
+        pad = width - 2 - len(title)
+        lpad = pad // 2
+        rpad = pad - lpad
         lines = [
-            "╔════════════════════════════════════════════════════════════╗",
-            "║                    BLOCK NOTATION VIEW                      ║",
-            "╚════════════════════════════════════════════════════════════╝",
+            f"┌{'─' * (width - 2)}┐",
+            f"│{' ' * lpad}{title}{' ' * rpad}│",
+            f"└{'─' * (width - 2)}┘",
             "",
         ]
         
