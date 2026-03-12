@@ -924,6 +924,7 @@ class ASTBuilder:
         illustrations: List[nodes.IllustrationNode] = []
         exceptions: List[nodes.ExceptionNode] = []
         case_law: List[nodes.CaseLawNode] = []
+        parties: List[nodes.PartyNode] = []
 
         for child in node.children:
             if child.type == "definitions_block":
@@ -938,6 +939,8 @@ class ASTBuilder:
                 exceptions.append(self._build_exception(child))
             elif child.type == "caselaw_block":
                 case_law.append(self._build_caselaw(child))
+            elif child.type == "parties_block":
+                parties.extend(self._build_parties_block(child))
 
         doc = self._get_doc_comment(node)
         jurisdiction, jurisdiction_meta = self._extract_jurisdiction(doc)
@@ -964,6 +967,7 @@ class ASTBuilder:
             repealed_date=self._text(repealed_node) if repealed_node else None,
             subsumes=self._text(subsumes_node) if subsumes_node else None,
             amends=self._text(amends_node) if amends_node else None,
+            parties=tuple(parties),
             source_location=self._loc(node),
         )
 
@@ -985,6 +989,22 @@ class ASTBuilder:
                 ))
         return entries
 
+    def _build_parties_block(self, node) -> List[nodes.PartyNode]:
+        """Build list of PartyNode from parties_block node."""
+        parties: List[nodes.PartyNode] = []
+        for child in node.children:
+            if child.type == "party_entry":
+                role_node = self._child_by_field(child, "role")
+                name_node = self._child_by_field(child, "name")
+                type_node = self._child_by_field(child, "type")
+                parties.append(nodes.PartyNode(
+                    role=self._text(role_node) if role_node else "",
+                    name=self._text(name_node) if name_node else "",
+                    type_annotation=self._build_type(type_node) if type_node else None,
+                    source_location=self._loc(child),
+                ))
+        return parties
+
     def _build_elements_block(self, node) -> list:
         """Build list of ElementNode/ElementGroupNode from elements_block node."""
         elements: list = []
@@ -1000,6 +1020,8 @@ class ASTBuilder:
 
                 caused_by_node = self._child_by_field(child, "caused_by")
                 burden_node = self._child_by_type(child, "burden_qualifier")
+                actor_node = self._child_by_field(child, "actor")
+                patient_node = self._child_by_field(child, "patient")
                 burden = burden_standard = None
                 if burden_node:
                     for bc in burden_node.children:
@@ -1016,6 +1038,8 @@ class ASTBuilder:
                     burden=burden,
                     burden_standard=burden_standard,
                     doc_comment=self._get_doc_comment(child),
+                    actor=self._text(actor_node) if actor_node else None,
+                    patient=self._text(patient_node) if patient_node else None,
                     source_location=self._loc(child),
                 ))
             elif child.type == "element_group":
