@@ -189,12 +189,25 @@ class JSONTranspiler(TranspilerBase, Visitor):
                 result["burden"] = node.burden
             if node.burden_standard:
                 result["burden_standard"] = node.burden_standard
+            if node.actor:
+                result["actor"] = node.actor
+            if node.patient:
+                result["patient"] = node.patient
+        elif isinstance(node, nodes.PartyNode):
+            result["role"] = node.role
+            result["name"] = node.name
+            if node.type_annotation:
+                result["type"] = self._to_dict(node.type_annotation)
         elif isinstance(node, nodes.ExceptionNode):
             if node.label:
                 result["label"] = node.label
             result["condition"] = self._to_dict(node.condition)
             if node.effect:
                 result["effect"] = self._to_dict(node.effect)
+            if node.priority is not None:
+                result["priority"] = node.priority
+            if node.defeats:
+                result["defeats"] = node.defeats
         elif isinstance(node, nodes.CaseLawNode):
             result["case_name"] = self._to_dict(node.case_name)
             if node.citation:
@@ -254,6 +267,8 @@ class JSONTranspiler(TranspilerBase, Visitor):
                 result["subsumes"] = node.subsumes
             if node.amends:
                 result["amends"] = node.amends
+            if node.parties:
+                result["parties"] = [self._to_dict(p) for p in node.parties]
         elif isinstance(node, nodes.EnumVariant):
             result["name"] = node.name
             if node.payload_types:

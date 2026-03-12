@@ -889,6 +889,16 @@ class ASTBuilder:
                 element_type=self._build_type(elem),
                 source_location=self._loc(node),
             )
+        elif node_type == "refinement_type":
+            base_node = self._child_by_field(node, "base")
+            lower_node = self._child_by_field(node, "lower")
+            upper_node = self._child_by_field(node, "upper")
+            return nodes.RefinementTypeNode(
+                base_type=self._build_type(base_node),
+                lower_bound=self._build_expression(lower_node) if lower_node else nodes.IntLit(value=0),
+                upper_bound=self._build_expression(upper_node) if upper_node else nodes.IntLit(value=0),
+                source_location=self._loc(node),
+            )
         else:
             # Fallback - treat as identifier type
             text = self._text(node)
@@ -910,16 +920,20 @@ class ASTBuilder:
 
         definitions: List[nodes.DefinitionEntry] = []
         elements: list = []
+        temporal_constraints: List[nodes.TemporalConstraintNode] = []
         penalty: Optional[nodes.PenaltyNode] = None
         illustrations: List[nodes.IllustrationNode] = []
         exceptions: List[nodes.ExceptionNode] = []
         case_law: List[nodes.CaseLawNode] = []
+        parties: List[nodes.PartyNode] = []
 
         for child in node.children:
             if child.type == "definitions_block":
                 definitions.extend(self._build_definitions_block(child))
             elif child.type == "elements_block":
-                elements.extend(self._build_elements_block(child))
+                elems, temps = self._build_elements_block(child)
+                elements.extend(elems)
+                temporal_constraints.extend(temps)
             elif child.type == "penalty_block":
                 penalty = self._build_penalty_block(child)
             elif child.type == "illustration_block":
@@ -928,6 +942,8 @@ class ASTBuilder:
                 exceptions.append(self._build_exception(child))
             elif child.type == "caselaw_block":
                 case_law.append(self._build_caselaw(child))
+            elif child.type == "parties_block":
+                parties.extend(self._build_parties_block(child))
 
         doc = self._get_doc_comment(node)
         jurisdiction, jurisdiction_meta = self._extract_jurisdiction(doc)
@@ -954,6 +970,8 @@ class ASTBuilder:
             repealed_date=self._text(repealed_node) if repealed_node else None,
             subsumes=self._text(subsumes_node) if subsumes_node else None,
             amends=self._text(amends_node) if amends_node else None,
+            parties=tuple(parties),
+            temporal_constraints=tuple(temporal_constraints),
             source_location=self._loc(node),
         )
 
@@ -975,9 +993,26 @@ class ASTBuilder:
                 ))
         return entries
 
-    def _build_elements_block(self, node) -> list:
-        """Build list of ElementNode/ElementGroupNode from elements_block node."""
+    def _build_parties_block(self, node) -> List[nodes.PartyNode]:
+        """Build list of PartyNode from parties_block node."""
+        parties: List[nodes.PartyNode] = []
+        for child in node.children:
+            if child.type == "party_entry":
+                role_node = self._child_by_field(child, "role")
+                name_node = self._child_by_field(child, "name")
+                type_node = self._child_by_field(child, "type")
+                parties.append(nodes.PartyNode(
+                    role=self._text(role_node) if role_node else "",
+                    name=self._text(name_node) if name_node else "",
+                    type_annotation=self._build_type(type_node) if type_node else None,
+                    source_location=self._loc(child),
+                ))
+        return parties
+
+    def _build_elements_block(self, node) -> tuple:
+        """Build list of ElementNode/ElementGroupNode and TemporalConstraintNode from elements_block."""
         elements: list = []
+        temporals: List[nodes.TemporalConstraintNode] = []
         for child in node.children:
             if child.type == "element_entry":
                 type_node = self._child_by_field(child, "element_type")
@@ -990,6 +1025,8 @@ class ASTBuilder:
 
                 caused_by_node = self._child_by_field(child, "caused_by")
                 burden_node = self._child_by_type(child, "burden_qualifier")
+                actor_node = self._child_by_field(child, "actor")
+                patient_node = self._child_by_field(child, "patient")
                 burden = burden_standard = None
                 if burden_node:
                     for bc in burden_node.children:
@@ -1006,11 +1043,23 @@ class ASTBuilder:
                     burden=burden,
                     burden_standard=burden_standard,
                     doc_comment=self._get_doc_comment(child),
+                    actor=self._text(actor_node) if actor_node else None,
+                    patient=self._text(patient_node) if patient_node else None,
                     source_location=self._loc(child),
                 ))
             elif child.type == "element_group":
                 elements.append(self._build_element_group(child))
-        return elements
+            elif child.type == "temporal_constraint":
+                subj_node = self._child_by_field(child, "subject")
+                rel_node = self._child_by_field(child, "relation")
+                obj_node = self._child_by_field(child, "object")
+                temporals.append(nodes.TemporalConstraintNode(
+                    subject=self._text(subj_node) if subj_node else "",
+                    relation=self._text(rel_node) if rel_node else "precedes",
+                    object=self._text(obj_node) if obj_node else "",
+                    source_location=self._loc(child),
+                ))
+        return elements, temporals
 
     def _build_element_group(self, node) -> nodes.ElementGroupNode:
         """Build ElementGroupNode from element_group node."""
@@ -1132,17 +1181,23 @@ class ASTBuilder:
         condition_node = self._child_by_field(node, "condition")
         effect_node = self._child_by_field(node, "effect")
         guard_node = self._child_by_field(node, "guard")
+        priority_node = self._child_by_field(node, "priority")
+        defeats_node = self._child_by_field(node, "defeats")
 
         label = self._text(label_node) if label_node else None
         condition = self._build_string_lit(condition_node) if condition_node else nodes.StringLit(value="")
         effect = self._build_string_lit(effect_node) if effect_node else None
         guard = self._build_expression(guard_node) if guard_node else None
+        priority = int(self._text(priority_node)) if priority_node else None
+        defeats = self._text(defeats_node) if defeats_node else None
 
         return nodes.ExceptionNode(
             label=label,
             condition=condition,
             effect=effect,
             guard=guard,
+            priority=priority,
+            defeats=defeats,
             source_location=self._loc(node),
         )
 

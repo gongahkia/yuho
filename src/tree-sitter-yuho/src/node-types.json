@@ -626,6 +626,16 @@
     "type": "element_entry",
     "named": true,
     "fields": {
+      "actor": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
       "burden": {
         "multiple": false,
         "required": false,
@@ -773,6 +783,16 @@
             "named": true
           }
         ]
+      },
+      "patient": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
       }
     }
   },
@@ -824,6 +844,10 @@
         },
         {
           "type": "element_group",
+          "named": true
+        },
+        {
+          "type": "temporal_constraint",
           "named": true
         }
       ]
@@ -925,6 +949,16 @@
           }
         ]
       },
+      "defeats": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
       "effect": {
         "multiple": false,
         "required": false,
@@ -1019,6 +1053,16 @@
         "types": [
           {
             "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "priority": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "integer_literal",
             "named": true
           }
         ]
@@ -2329,6 +2373,77 @@
     }
   },
   {
+    "type": "parties_block",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "party_entry",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "party_entry",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "role": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "type": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "array_type",
+            "named": true
+          },
+          {
+            "type": "builtin_type",
+            "named": true
+          },
+          {
+            "type": "generic_type",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "optional_type",
+            "named": true
+          },
+          {
+            "type": "refinement_type",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "pass_expression",
     "named": true,
     "fields": {}
@@ -2840,6 +2955,10 @@
           "named": true
         },
         {
+          "type": "parties_block",
+          "named": true
+        },
+        {
           "type": "penalty_block",
           "named": true
         }
@@ -2966,6 +3085,50 @@
           "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "temporal_constraint",
+    "named": true,
+    "fields": {
+      "object": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "relation": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "after",
+            "named": false
+          },
+          {
+            "type": "during",
+            "named": false
+          },
+          {
+            "type": "precedes",
+            "named": false
+          }
+        ]
+      },
+      "subject": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -3491,7 +3654,15 @@
     "named": false
   },
   {
+    "type": "actor",
+    "named": false
+  },
+  {
     "type": "actus_reus",
+    "named": false
+  },
+  {
+    "type": "after",
     "named": false
   },
   {
@@ -3588,6 +3759,10 @@
     "named": false
   },
   {
+    "type": "defeats",
+    "named": false
+  },
+  {
     "type": "defence",
     "named": false
   },
@@ -3601,6 +3776,10 @@
   },
   {
     "type": "duration",
+    "named": false
+  },
+  {
+    "type": "during",
     "named": false
   },
   {
@@ -3733,7 +3912,15 @@
     "named": false
   },
   {
+    "type": "parties",
+    "named": false
+  },
+  {
     "type": "pass",
+    "named": false
+  },
+  {
+    "type": "patient",
     "named": false
   },
   {
@@ -3749,11 +3936,19 @@
     "named": false
   },
   {
+    "type": "precedes",
+    "named": false
+  },
+  {
     "type": "presumed",
     "named": false
   },
   {
     "type": "prima_facie",
+    "named": false
+  },
+  {
+    "type": "priority",
     "named": false
   },
   {
@@ -3814,6 +4009,10 @@
   },
   {
     "type": "supplementary",
+    "named": false
+  },
+  {
+    "type": "temporal",
     "named": false
   },
   {

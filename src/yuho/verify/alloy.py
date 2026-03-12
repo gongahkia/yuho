@@ -88,12 +88,24 @@ class AlloyGenerator:
     
     def _generate_signatures(self, ast) -> List[str]:
         """Generate Alloy signatures from type definitions."""
+        # collect party roles across all statutes for dynamic sigs
+        party_roles = set()
+        for statute in ast.statutes:
+            for party in getattr(statute, 'parties', ()):
+                party_roles.add(party.name)
+
         lines = [
             "// Base types",
             "abstract sig Person {}",
-            "sig Defendant extends Person {}",
-            "sig Victim extends Person {}",
-            "",
+        ]
+        if party_roles:
+            for name in sorted(party_roles):
+                lines.append(f"sig {name} extends Person {{}}")
+        else:
+            lines.append("sig Defendant extends Person {}")
+            lines.append("sig Victim extends Person {}")
+        lines.append("")
+        lines.extend([
             "abstract sig Intent {}",
             "one sig Intentional, Reckless, Negligent extends Intent {}",
             "",
@@ -104,7 +116,7 @@ class AlloyGenerator:
             "abstract sig Bool {}",
             "one sig True, False extends Bool {}",
             "",
-        ]
+        ])
         
         # Generate from struct definitions
         for struct in ast.type_defs:
@@ -165,6 +177,29 @@ class AlloyGenerator:
                 lines.append(f"    ({expr}) implies {statute_name}_Conviction.convicted = True")
                 lines.append("}")
                 lines.append("")
+
+            # Temporal ordering facts
+            for tc in getattr(statute, 'temporal_constraints', ()):
+                subj = self._safe_identifier(tc.subject)
+                obj = self._safe_identifier(tc.object)
+                if tc.relation == "precedes":
+                    lines.append(f"fact {statute_name}_{subj}_precedes_{obj} {{")
+                    lines.append(f"    // {tc.subject} must occur before {tc.object}")
+                    lines.append(f"    {statute_name}.{subj}.satisfied = True implies {statute_name}.{obj}.satisfied = True")
+                    lines.append("}")
+                    lines.append("")
+                elif tc.relation == "after":
+                    lines.append(f"fact {statute_name}_{subj}_after_{obj} {{")
+                    lines.append(f"    // {tc.subject} must occur after {tc.object}")
+                    lines.append(f"    {statute_name}.{subj}.satisfied = True implies {statute_name}.{obj}.satisfied = True")
+                    lines.append("}")
+                    lines.append("")
+                elif tc.relation == "during":
+                    lines.append(f"fact {statute_name}_{subj}_during_{obj} {{")
+                    lines.append(f"    // {tc.subject} occurs during {tc.object}")
+                    lines.append(f"    {statute_name}.{subj}.satisfied = True iff {statute_name}.{obj}.satisfied = True")
+                    lines.append("}")
+                    lines.append("")
 
             # Generate exception predicates
             lines.extend(self._generate_exception_preds(statute, statute_name))
@@ -345,6 +380,22 @@ class AlloyGenerator:
                 ar_expr = " and ".join(ar_refs[:1])  # at least one AR
                 mr_expr = " or ".join(mr_refs[:1])   # at least one MR
                 lines.append(f"        ({ar_expr}) and ({mr_expr})")
+                lines.append("}")
+                lines.append("")
+
+        # Deontic conflict assertions
+        for statute in ast.statutes:
+            statute_name = self._statute_name(statute.section_number)
+            leaf_elements = self._collect_leaf_elements(statute.elements)
+            obl_names = {e.name for e in leaf_elements if e.element_type == "obligation"}
+            pro_names = {e.name for e in leaf_elements if e.element_type == "prohibition"}
+            if obl_names & pro_names:
+                lines.append(f"// Deontic conflict detection for {statute.section_number}")
+                lines.append(f"assert {statute_name}_no_deontic_conflict {{")
+                for name in sorted(obl_names & pro_names):
+                    sn = self._safe_identifier(name)
+                    lines.append(f"    // '{name}' cannot be both obligation and prohibition")
+                    lines.append(f"    not ({statute_name}.{sn}.satisfied = True)")
                 lines.append("}")
                 lines.append("")
 

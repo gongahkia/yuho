@@ -17,9 +17,13 @@ from yuho.ast.nodes import (
     ElementGroupNode,
     ElementNode,
     ExceptionNode,
+    IntLit,
+    FloatLit,
     ModuleNode,
+    RefinementTypeNode,
     StatuteNode,
     StringLit,
+    VariableDecl,
 )
 
 
@@ -173,6 +177,47 @@ def _check_subsumption(statutes: Tuple[StatuteNode, ...]) -> List[LintWarning]:
     return warnings
 
 
+def _check_deontic_conflict(statute: StatuteNode) -> List[LintWarning]:
+    """Warn if obligation+prohibition share same name. Info if permission has no matching obligation/prohibition."""
+    warnings: List[LintWarning] = []
+    flat = _flatten_elements(statute.elements)
+    by_type: dict[str, set[str]] = {}
+    for e in flat:
+        by_type.setdefault(e.element_type, set()).add(e.name)
+    obligations = by_type.get("obligation", set())
+    prohibitions = by_type.get("prohibition", set())
+    permissions = by_type.get("permission", set())
+    conflict = obligations & prohibitions
+    for name in sorted(conflict):
+        warnings.append(LintWarning(
+            statute_section=statute.section_number,
+            message=f"deontic conflict: '{name}' is both obligation and prohibition",
+            severity="warning",
+        ))
+    orphans = permissions - obligations - prohibitions
+    for name in sorted(orphans):
+        warnings.append(LintWarning(
+            statute_section=statute.section_number,
+            message=f"orphan permission: '{name}' has no corresponding obligation or prohibition",
+            severity="info",
+        ))
+    return warnings
+
+
+def _check_defeats_target(statute: StatuteNode) -> List[LintWarning]:
+    """Verify defeats label references an existing exception in the same statute."""
+    warnings: List[LintWarning] = []
+    labels = {exc.label for exc in statute.exceptions if exc.label}
+    for exc in statute.exceptions:
+        if exc.defeats and exc.defeats not in labels:
+            warnings.append(LintWarning(
+                statute_section=statute.section_number,
+                message=f"exception '{exc.label or '<unlabeled>'}' defeats unknown label '{exc.defeats}'",
+                severity="warning",
+            ))
+    return warnings
+
+
 def lint_statute(statute: StatuteNode) -> List[LintWarning]:
     """Run all single-statute lint checks."""
     warnings: List[LintWarning] = []
@@ -181,6 +226,35 @@ def lint_statute(statute: StatuteNode) -> List[LintWarning]:
     warnings.extend(_check_missing_mens_rea(statute))
     warnings.extend(_check_exception_guards(statute))
     warnings.extend(_check_duplicate_exceptions(statute))
+    warnings.extend(_check_defeats_target(statute))
+    warnings.extend(_check_deontic_conflict(statute))
+    return warnings
+
+
+def _check_refinement_bounds(module: ModuleNode) -> List[LintWarning]:
+    """For VariableDecl with RefinementTypeNode + literal value, check value in range."""
+    warnings: List[LintWarning] = []
+    for var in module.variables:
+        if not isinstance(var.type_annotation, RefinementTypeNode):
+            continue
+        rt = var.type_annotation
+        lo = rt.lower_bound.value if isinstance(rt.lower_bound, (IntLit, FloatLit)) else None
+        hi = rt.upper_bound.value if isinstance(rt.upper_bound, (IntLit, FloatLit)) else None
+        if lo is None or hi is None:
+            continue
+        val = None
+        if isinstance(var.value, IntLit):
+            val = var.value.value
+        elif isinstance(var.value, FloatLit):
+            val = var.value.value
+        if val is None:
+            continue
+        if not (lo <= val <= hi):
+            warnings.append(LintWarning(
+                statute_section="<module>",
+                message=f"variable '{var.name}' value {val} outside refinement bounds [{lo}..{hi}]",
+                severity="warning",
+            ))
     return warnings
 
 
@@ -190,4 +264,5 @@ def lint_module(module: ModuleNode) -> List[LintWarning]:
     for statute in module.statutes:
         warnings.extend(lint_statute(statute))
     warnings.extend(_check_subsumption(module.statutes))
+    warnings.extend(_check_refinement_bounds(module))
     return warnings

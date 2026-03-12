@@ -972,7 +972,10 @@ class Z3Generator:
         # Generate constraints from statutes
         for statute in ast.statutes:
             self._generate_statute_constraints(statute)
-        
+
+        # Apply refinement type bounds to variable declarations
+        self._apply_refinement_bounds(ast)
+
         # Add all collected assertions
         for assertion in self._assertions:
             solver.add(assertion)
@@ -1015,6 +1018,23 @@ class Z3Generator:
                     self._consts["Negligent"],
                 )
             )
+
+    def _apply_refinement_bounds(self, ast: "ModuleNode") -> None:
+        """Emit z3.And(var >= lo, var <= hi) for variables with RefinementTypeNode."""
+        if not Z3_AVAILABLE:
+            return
+        from yuho.ast.nodes import RefinementTypeNode, IntLit, FloatLit
+        for var_decl in ast.variables:
+            if not isinstance(var_decl.type_annotation, RefinementTypeNode):
+                continue
+            rt = var_decl.type_annotation
+            lo = rt.lower_bound.value if isinstance(rt.lower_bound, (IntLit, FloatLit)) else None
+            hi = rt.upper_bound.value if isinstance(rt.upper_bound, (IntLit, FloatLit)) else None
+            if lo is None or hi is None:
+                continue
+            var = z3.Int(var_decl.name)
+            self._consts[var_decl.name] = var
+            self._assertions.append(z3.And(var >= int(lo), var <= int(hi)))
 
     def _generate_struct_sort(self, struct_def: "StructDefNode") -> None:
         """
@@ -1108,12 +1128,35 @@ class Z3Generator:
             # conviction <=> all top-level elements satisfied
             self._assertions.append(conviction_var == all_elements)
 
+        # Temporal ordering constraints
+        self._generate_temporal_constraints(statute_id, statute)
+
         # Exception constraints
         self._generate_exception_constraints(statute_id, statute)
 
         # Penalty constraints
         if statute.penalty:
             self._generate_penalty_constraints(statute_id, statute.penalty)
+
+    def _generate_temporal_constraints(self, statute_id: str, statute: "StatuteNode") -> None:
+        """Create Int time variables per element and assert ordering from temporal constraints."""
+        if not Z3_AVAILABLE:
+            return
+        for tc in getattr(statute, 'temporal_constraints', ()):
+            subj_name = f"{statute_id}_{tc.subject}_time"
+            obj_name = f"{statute_id}_{tc.object}_time"
+            if subj_name not in self._consts:
+                self._consts[subj_name] = z3.Int(subj_name)
+            if obj_name not in self._consts:
+                self._consts[obj_name] = z3.Int(obj_name)
+            subj_var = self._consts[subj_name]
+            obj_var = self._consts[obj_name]
+            if tc.relation == "precedes":
+                self._assertions.append(subj_var < obj_var)
+            elif tc.relation == "after":
+                self._assertions.append(subj_var > obj_var)
+            elif tc.relation == "during":
+                self._assertions.append(subj_var == obj_var)
 
     def _translate_element(
         self, statute_id: str, elem: "Union[ElementNode, ElementGroupNode]"
@@ -1376,7 +1419,7 @@ class Z3Generator:
             return None
         
         # Import here to avoid circular imports
-        from yuho.ast.nodes import BuiltinType, NamedType, ArrayType, OptionalType
+        from yuho.ast.nodes import BuiltinType, NamedType, ArrayType, OptionalType, RefinementTypeNode
         
         if isinstance(type_node, BuiltinType):
             type_map = {
@@ -1407,7 +1450,10 @@ class Z3Generator:
         elif isinstance(type_node, OptionalType):
             # Model optional as the inner type (None handled separately)
             return self._type_to_sort(type_node.inner)
-        
+
+        elif isinstance(type_node, RefinementTypeNode):
+            return self._type_to_sort(type_node.base_type)
+
         # Default to Int
         return z3.IntSort()
     

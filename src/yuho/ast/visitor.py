@@ -247,6 +247,12 @@ class Visitor:
     def visit_caselaw(self, node: nodes.CaseLawNode) -> Any:
         return self.generic_visit(node)
 
+    def visit_party(self, node: nodes.PartyNode) -> Any:
+        return self.generic_visit(node)
+
+    def visit_temporal_constraint(self, node: nodes.TemporalConstraintNode) -> Any:
+        return self.generic_visit(node)
+
     def visit_element_group(self, node: nodes.ElementGroupNode) -> Any:
         return self.generic_visit(node)
 

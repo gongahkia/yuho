@@ -386,6 +386,21 @@ module.exports = grammar({
       $.illustration_block,
       $.exception_block,
       $.caselaw_block,
+      $.parties_block,
+    ),
+
+    parties_block: $ => seq(
+      'parties',
+      '{',
+      repeat($.party_entry),
+      '}'
+    ),
+
+    party_entry: $ => seq(
+      field('role', $.identifier),
+      field('name', $.identifier),
+      optional(seq(':', field('type', $._type))),
+      optional(','),
     ),
 
     definitions_block: $ => seq(
@@ -405,8 +420,16 @@ module.exports = grammar({
     elements_block: $ => seq(
       'elements',
       '{',
-      repeat(choice($.element_entry, $.element_group)),
+      repeat(choice($.element_entry, $.element_group, $.temporal_constraint)),
       '}'
+    ),
+
+    temporal_constraint: $ => seq(
+      'temporal',
+      field('subject', $.identifier),
+      field('relation', choice('precedes', 'during', 'after')),
+      field('object', $.identifier),
+      optional(';'),
     ),
 
     element_entry: $ => seq(
@@ -420,6 +443,8 @@ module.exports = grammar({
       field('description', $._expression),
       optional(seq('caused_by', field('caused_by', $.identifier))),
       optional(field('burden', $.burden_qualifier)),
+      optional(seq('actor', field('actor', $.identifier))),
+      optional(seq('patient', field('patient', $.identifier))),
       optional(';'),
     ),
 
@@ -534,6 +559,8 @@ module.exports = grammar({
       field('condition', $.string_literal),
       optional(field('effect', $.string_literal)),
       optional(seq('when', field('guard', $._expression))),
+      optional(seq('priority', field('priority', $.integer_literal))),
+      optional(seq('defeats', field('defeats', $.identifier))),
       '}'
     ),
 
