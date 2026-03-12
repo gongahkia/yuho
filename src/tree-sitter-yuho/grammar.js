@@ -420,8 +420,16 @@ module.exports = grammar({
     elements_block: $ => seq(
       'elements',
       '{',
-      repeat(choice($.element_entry, $.element_group)),
+      repeat(choice($.element_entry, $.element_group, $.temporal_constraint)),
       '}'
+    ),
+
+    temporal_constraint: $ => seq(
+      'temporal',
+      field('subject', $.identifier),
+      field('relation', choice('precedes', 'during', 'after')),
+      field('object', $.identifier),
+      optional(';'),
     ),
 
     element_entry: $ => seq(
