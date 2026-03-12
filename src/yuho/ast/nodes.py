@@ -771,6 +771,8 @@ class ElementNode(ASTNode):
     burden: Optional[str] = None # phase 12: "prosecution" or "defence"
     burden_standard: Optional[str] = None # phase 12: proof standard
     doc_comment: Optional[str] = None
+    actor: Optional[str] = None # party role performing the act
+    patient: Optional[str] = None # party role receiving the act
 
     def accept(self, visitor: "Visitor"):
         return visitor.visit_element(self)
@@ -902,6 +904,20 @@ class CaseLawNode(ASTNode):
 
 
 @dataclass(frozen=True)
+class PartyNode(ASTNode):
+    """Party/role declaration within a statute (e.g., offender, victim)."""
+    role: str
+    name: str
+    type_annotation: Optional[TypeNode] = None
+
+    def accept(self, visitor: "Visitor"):
+        return visitor.visit_party(self)
+
+    def children(self) -> List[ASTNode]:
+        return [self.type_annotation] if self.type_annotation else []
+
+
+@dataclass(frozen=True)
 class StatuteNode(ASTNode):
     """
     Statute block representing a legal provision.
@@ -925,6 +941,7 @@ class StatuteNode(ASTNode):
     repealed_date: Optional[str] = None # phase 11: ISO date
     subsumes: Optional[str] = None # phase 13: section number
     amends: Optional[str] = None # phase 11: section number
+    parties: Tuple["PartyNode", ...] = ()
 
     def accept(self, visitor: "Visitor"):
         return visitor.visit_statute(self)
