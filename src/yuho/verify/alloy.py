@@ -177,6 +177,29 @@ class AlloyGenerator:
                 lines.append("}")
                 lines.append("")
 
+            # Temporal ordering facts
+            for tc in getattr(statute, 'temporal_constraints', ()):
+                subj = self._safe_identifier(tc.subject)
+                obj = self._safe_identifier(tc.object)
+                if tc.relation == "precedes":
+                    lines.append(f"fact {statute_name}_{subj}_precedes_{obj} {{")
+                    lines.append(f"    // {tc.subject} must occur before {tc.object}")
+                    lines.append(f"    {statute_name}.{subj}.satisfied = True implies {statute_name}.{obj}.satisfied = True")
+                    lines.append("}")
+                    lines.append("")
+                elif tc.relation == "after":
+                    lines.append(f"fact {statute_name}_{subj}_after_{obj} {{")
+                    lines.append(f"    // {tc.subject} must occur after {tc.object}")
+                    lines.append(f"    {statute_name}.{subj}.satisfied = True implies {statute_name}.{obj}.satisfied = True")
+                    lines.append("}")
+                    lines.append("")
+                elif tc.relation == "during":
+                    lines.append(f"fact {statute_name}_{subj}_during_{obj} {{")
+                    lines.append(f"    // {tc.subject} occurs during {tc.object}")
+                    lines.append(f"    {statute_name}.{subj}.satisfied = True iff {statute_name}.{obj}.satisfied = True")
+                    lines.append("}")
+                    lines.append("")
+
             # Generate exception predicates
             lines.extend(self._generate_exception_preds(statute, statute_name))
 
