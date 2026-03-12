@@ -105,6 +105,7 @@ class AlloyGenerator:
             lines.append("sig Defendant extends Person {}")
             lines.append("sig Victim extends Person {}")
         lines.append("")
+        lines.extend([
             "abstract sig Intent {}",
             "one sig Intentional, Reckless, Negligent extends Intent {}",
             "",
@@ -115,7 +116,7 @@ class AlloyGenerator:
             "abstract sig Bool {}",
             "one sig True, False extends Bool {}",
             "",
-        ]
+        ])
         
         # Generate from struct definitions
         for struct in ast.type_defs:
