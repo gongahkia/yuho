@@ -88,12 +88,23 @@ class AlloyGenerator:
     
     def _generate_signatures(self, ast) -> List[str]:
         """Generate Alloy signatures from type definitions."""
+        # collect party roles across all statutes for dynamic sigs
+        party_roles = set()
+        for statute in ast.statutes:
+            for party in getattr(statute, 'parties', ()):
+                party_roles.add(party.name)
+
         lines = [
             "// Base types",
             "abstract sig Person {}",
-            "sig Defendant extends Person {}",
-            "sig Victim extends Person {}",
-            "",
+        ]
+        if party_roles:
+            for name in sorted(party_roles):
+                lines.append(f"sig {name} extends Person {{}}")
+        else:
+            lines.append("sig Defendant extends Person {}")
+            lines.append("sig Victim extends Person {}")
+        lines.append("")
             "abstract sig Intent {}",
             "one sig Intentional, Reckless, Negligent extends Intent {}",
             "",
