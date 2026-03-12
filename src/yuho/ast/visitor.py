@@ -259,6 +259,15 @@ class Visitor:
     def visit_statute(self, node: nodes.StatuteNode) -> Any:
         return self.generic_visit(node)
 
+    def visit_annotation(self, node: nodes.AnnotationNode) -> Any:
+        return self.generic_visit(node)
+
+    def visit_legal_test(self, node: nodes.LegalTestNode) -> Any:
+        return self.generic_visit(node)
+
+    def visit_conflict_check(self, node: nodes.ConflictCheckNode) -> Any:
+        return self.generic_visit(node)
+
     # =========================================================================
     # Import and module
     # =========================================================================
