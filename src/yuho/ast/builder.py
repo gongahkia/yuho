@@ -889,6 +889,16 @@ class ASTBuilder:
                 element_type=self._build_type(elem),
                 source_location=self._loc(node),
             )
+        elif node_type == "refinement_type":
+            base_node = self._child_by_field(node, "base")
+            lower_node = self._child_by_field(node, "lower")
+            upper_node = self._child_by_field(node, "upper")
+            return nodes.RefinementTypeNode(
+                base_type=self._build_type(base_node),
+                lower_bound=self._build_expression(lower_node) if lower_node else nodes.IntLit(value=0),
+                upper_bound=self._build_expression(upper_node) if upper_node else nodes.IntLit(value=0),
+                source_location=self._loc(node),
+            )
         else:
             # Fallback - treat as identifier type
             text = self._text(node)
