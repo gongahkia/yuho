@@ -71,6 +71,8 @@ module.exports = grammar({
       $.type_alias,
       $.function_definition,
       $.statute_block,
+      $.legal_test_block,
+      $.conflict_check_block,
       $.import_statement,
       $.referencing_statement,
       $.variable_declaration,
@@ -359,6 +361,7 @@ module.exports = grammar({
     // =========================================================================
 
     statute_block: $ => seq(
+      repeat($.annotation),
       repeat(field('doc_comment', $.doc_comment)),
       'statute',
       field('section_number', $.section_number),
@@ -779,6 +782,56 @@ module.exports = grammar({
       '(',
       $._expression,
       ')',
+    ),
+
+    // =========================================================================
+    // Annotations (@presumed, @precedent, @hierarchy, @amended)
+    // =========================================================================
+
+    annotation: $ => seq(
+      '@',
+      field('name', choice('presumed', 'precedent', 'hierarchy', 'amended')),
+      optional(seq(
+        '(',
+        field('args', sepBy1(',', $.string_literal)),
+        ')',
+      )),
+    ),
+
+    // =========================================================================
+    // Legal test blocks (conjunctive requirement testing)
+    // =========================================================================
+
+    legal_test_block: $ => seq(
+      repeat($.annotation),
+      'legal_test',
+      field('name', $.identifier),
+      '{',
+      repeat($.legal_test_field),
+      optional(seq('requires', field('condition', $._expression))),
+      '}'
+    ),
+
+    legal_test_field: $ => seq(
+      field('type', $._type),
+      field('name', $.identifier),
+      optional(','),
+    ),
+
+    // =========================================================================
+    // Conflict check blocks (inter-file contradiction detection)
+    // =========================================================================
+
+    conflict_check_block: $ => seq(
+      repeat($.annotation),
+      'conflict_check',
+      field('name', $.identifier),
+      '{',
+      'source', ':=', field('source', $.string_literal),
+      optional(';'),
+      'target', ':=', field('target', $.string_literal),
+      optional(';'),
+      '}'
     ),
 
     // =========================================================================
