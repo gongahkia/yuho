@@ -1,7 +1,3 @@
-[![](https://img.shields.io/badge/yuho_1.0-passing-%23004D00)](https://github.com/gongahkia/yuho/releases/tag/1.0) 
-[![](https://img.shields.io/badge/yuho_2.0-passing-%23228B22)](https://github.com/gongahkia/yuho/releases/tag/2.0) 
-[![](https://img.shields.io/badge/yuho_3.0-passing-%2332CD32)](https://github.com/gongahkia/yuho/releases/tag/3.0) 
-[![](https://img.shields.io/badge/yuho_4.0-passing-%237CFC00)](https://github.com/gongahkia/yuho/releases/tag/4.0) 
 [![](https://img.shields.io/badge/yuho_5.0-passing-%2398FB98)](https://github.com/gongahkia/yuho/releases/tag/5.0) 
 ![](https://github.com/gongahkia/yuho/actions/workflows/ci.yml/badge.svg)
 ![](https://github.com/gongahkia/yuho/actions/workflows/release.yml/badge.svg)
@@ -13,9 +9,9 @@
     <img src="./asset/logo/yuho_mascot.png" width=40% height=40%>
 </p>
 
-Yuho is a domain-specific language dedicated to simplifying [legalese](https://www.merriam-webster.com/dictionary/legalese) by providing a programmatic representation of Singapore Law.  
+Yuho is a [domain-specific language](https://en.wikipedia.org/wiki/Domain-specific_language) that simplifies [legalese](https://www.merriam-webster.com/dictionary/legalese) by providing a programmatic representation of Singapore Law.  
 
-Current applications are focused on Singapore Criminal Law but really can be applied to any jurisdiction that relies on [statutes](https://www.merriam-webster.com/dictionary/statute).
+Current applications are focused on [Singapore Criminal Law](https://sso.agc.gov.sg/act/pc1871) but really can be applied to any [jurisdiction](https://en.wikipedia.org/wiki/Jurisdiction) that is [statute](https://www.merriam-webster.com/dictionary/statute)-reliant.
 
 ## Rationale
 
@@ -23,27 +19,26 @@ The law is innately complex.
 
 [Statutes](https://sso.agc.gov.sg/) are not always easy to understand, especially for incoming law students new to [legalese](https://www.merriam-webster.com/dictionary/legalese) and its [logical structure](https://law.stanford.edu/wp-content/uploads/2018/04/ILEI-Forms-of-Legal-Reasoning-2014.pdf).  
 
-Criminal Law is often a [foundational module](https://law.smu.edu.sg/programmes/core-courses-description) most students take in their first year of law school. In particular, Singapore Criminal Law is nearly entirely statute-based, largely focusing on the [Penal Code](https://sso.agc.gov.sg/Act/PC1871).
+Criminal Law is often a [foundational module](https://law.smu.edu.sg/programmes/core-courses-description) most students take in their first year of law school. In particular, Singapore Criminal Law is nearly entirely statute-based, largely focusing on [Singapore's 1871 Penal Code](https://sso.agc.gov.sg/Act/PC1871).
 
-Yuho is a DSL that seeks to *help law students* better understand statutes by providing a flexible syntax which affords a programmatic representation of Singapore Criminal Law. By allowing users to decide how to represent statutory provisions in `.yh` code, the hope is that the statute's key elements and its underlying conditional relationships surface themselves. These representations can be coarse or granular, entirely scoped by their use-cases.
+Yuho is a DSL that seeks to *help law students* better understand statutes by providing a flexible syntax which affords a [rules-as-code](https://www.beinformed.com/what-is-rules-as-code/) representation of Singapore Criminal Law. 
 
-> [!NOTE]
-> **No programming experience required.** Yuho's syntax reads like structured English. If you can read a statute and identify its elements, you can use Yuho.
+By allowing users to decide how to represent statutory provisions in `.yh` code, the hope is that the statute's key elements *(and their underlying conditional relationships)* surface themselves. These representations can be coarse or granular, entirely scoped by each person's use-case.
 
 ### For law students
 
-Yuho helps you break down statutes into their constituent elements and visualise the logical relationships between them. Key features for study:
+`Yuho` breaks down statutes into their constituent elements and visualises the logical relationships between them.
 
-* **Statute modelling** -- represent any statute's definitions, elements (actus reus, mens rea, circumstance), penalties, and illustrations in structured `.yh` files
-* **Plain English output** -- transpile your model back to a structured English explanation to verify your understanding
-* **Diagrams** -- auto-generate Mermaid mindmaps and flowcharts showing how a statute's elements relate
-* **Interactive wizard** -- `yuho wizard` guides you through creating a statute model step-by-step, no code required
-* **REPL** -- `yuho repl` lets you experiment with statute models interactively
-* **Fact pattern testing** -- model hypothetical scenarios and evaluate them against statute definitions
+* **Statute modelling**: Represent any statute's definitions, elements (actus reus, mens rea, circumstance), penalties, and illustrations in structured `.yh` files
+* **Plain English output**: Ttranspile your model back to a structured English explanation to verify your understanding
+* **Fact pattern testing**: Model hypothetical scenarios and evaluate them against statute definitions
+* **Diagrams**: Generate Mermaid mindmaps and flowcharts showing how a statute's elements relate
+* **Interactive wizard**: `yuho wizard` guides you through creating a statute model step-by-step, no code required
+* **REPL**: `yuho repl` lets you experiment with statute models interactively
 
 ### For developers
 
-Yuho also provides infrastructure for legal tech tooling:
+`Yuho` provides the infrastructure to extend your existing legal tech tooling.
 
 | Target | Usage |
 | :--- | :--- |
@@ -56,12 +51,9 @@ Yuho also provides infrastructure for legal tech tooling:
 | GraphQL | Schema definitions for building legal statute APIs |
 | Blocks | Visual block-based representation for drag-and-drop editing |
 
-> [!TIP]
-> More transpilation outputs can be added. Open an issue to contribute suggestions!
-
 ## Nerd stuff
 
-For those interested, Yuho v5 provides:
+For those interested, `Yuho` provides the following.
 
 * **Tree-sitter based parser** for robust, incremental parsing with excellent error recovery
 * **Full LSP implementation** with diagnostics, completion, hover, go-to-definition, and references
