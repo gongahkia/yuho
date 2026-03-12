@@ -78,6 +78,8 @@ class TranspilerRegistry:
         from yuho.transpile.comparative_transpiler import ComparativeTranspiler
         from yuho.transpile.akomantoso_transpiler import AkomaNtosoTranspiler
         from yuho.transpile.prolog_transpiler import PrologTranspiler
+        from yuho.transpile.catala_transpiler import CatalaTranspiler
+        from yuho.transpile.fstar_transpiler import FStarTranspiler
 
         self._registry[TranspileTarget.JSON] = JSONTranspiler
         self._registry[TranspileTarget.JSON_LD] = JSONLDTranspiler
@@ -91,6 +93,8 @@ class TranspilerRegistry:
         self._registry[TranspileTarget.COMPARATIVE] = ComparativeTranspiler
         self._registry[TranspileTarget.AKOMA_NTOSO] = AkomaNtosoTranspiler
         self._registry[TranspileTarget.PROLOG] = PrologTranspiler
+        self._registry[TranspileTarget.CATALA] = CatalaTranspiler
+        self._registry[TranspileTarget.FSTAR] = FStarTranspiler
 
     @classmethod
     def instance(cls) -> "TranspilerRegistry":
