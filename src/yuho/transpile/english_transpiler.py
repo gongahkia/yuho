@@ -128,6 +128,16 @@ class EnglishTranspiler(TranspilerBase, Visitor):
             self._emit(f"Amends: Section {node.amends}")
         self._emit_blank()
 
+        # Parties
+        if getattr(node, 'parties', None):
+            self._emit("Parties:")
+            self._indent_level += 1
+            for party in node.parties:
+                type_str = f" ({self._type_to_english(party.type_annotation)})" if party.type_annotation else ""
+                self._emit(f"{party.name} ({party.role}){type_str}")
+            self._indent_level -= 1
+            self._emit_blank()
+
         # Definitions
         if node.definitions:
             self._emit("Definitions:")
