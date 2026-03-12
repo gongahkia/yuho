@@ -135,6 +135,8 @@ class ASTBuilder:
         assertions: List[nodes.AssertStmt] = []
         enum_defs: List[nodes.EnumDefNode] = []
         type_aliases: List[nodes.TypeAliasNode] = []
+        legal_tests: List[nodes.LegalTestNode] = []
+        conflict_checks: List[nodes.ConflictCheckNode] = []
 
         for child in node.children:
             if child.type == "import_statement":
@@ -155,6 +157,10 @@ class ASTBuilder:
                 variables.append(self._build_variable_decl(child))
             elif child.type == "assert_statement":
                 assertions.append(self._build_assert(child))
+            elif child.type == "legal_test_block":
+                legal_tests.append(self._build_legal_test(child))
+            elif child.type == "conflict_check_block":
+                conflict_checks.append(self._build_conflict_check(child))
 
         return nodes.ModuleNode(
             imports=tuple(imports),
@@ -166,6 +172,8 @@ class ASTBuilder:
             assertions=tuple(assertions),
             enum_defs=tuple(enum_defs),
             type_aliases=tuple(type_aliases),
+            legal_tests=tuple(legal_tests),
+            conflict_checks=tuple(conflict_checks),
             source_location=self._loc(node),
         )
 
@@ -945,6 +953,8 @@ class ASTBuilder:
             elif child.type == "parties_block":
                 parties.extend(self._build_parties_block(child))
 
+        annotations = self._build_annotations(node)
+
         doc = self._get_doc_comment(node)
         jurisdiction, jurisdiction_meta = self._extract_jurisdiction(doc)
 
@@ -972,6 +982,7 @@ class ASTBuilder:
             amends=self._text(amends_node) if amends_node else None,
             parties=tuple(parties),
             temporal_constraints=tuple(temporal_constraints),
+            annotations=tuple(annotations),
             source_location=self._loc(node),
         )
 
@@ -1218,5 +1229,83 @@ class ASTBuilder:
             citation=citation,
             holding=holding,
             element_ref=element_ref,
+            source_location=self._loc(node),
+        )
+
+    # =========================================================================
+    # Annotations
+    # =========================================================================
+
+    def _build_annotations(self, node) -> List[nodes.AnnotationNode]:
+        """Build list of AnnotationNode from children."""
+        annotations: List[nodes.AnnotationNode] = []
+        for child in node.children:
+            if child.type == "annotation":
+                annotations.append(self._build_annotation(child))
+        return annotations
+
+    def _build_annotation(self, node) -> nodes.AnnotationNode:
+        """Build AnnotationNode from annotation node."""
+        name_node = self._child_by_field(node, "name")
+        name = self._text(name_node) if name_node else ""
+        args: List[str] = []
+        for child in node.children:
+            if child.type == "string_literal":
+                args.append(self._build_string_lit(child).value)
+        return nodes.AnnotationNode(
+            name=name,
+            args=tuple(args),
+            source_location=self._loc(node),
+        )
+
+    # =========================================================================
+    # Legal test blocks
+    # =========================================================================
+
+    def _build_legal_test(self, node) -> nodes.LegalTestNode:
+        """Build LegalTestNode from legal_test_block node."""
+        name_node = self._child_by_field(node, "name")
+        name = self._text(name_node) if name_node else ""
+        condition_node = self._child_by_field(node, "condition")
+        condition = self._build_expression(condition_node) if condition_node else None
+        requirements: List[nodes.ASTNode] = []
+        for child in node.children:
+            if child.type == "legal_test_field":
+                type_node = self._child_by_field(child, "type")
+                fname_node = self._child_by_field(child, "name")
+                type_ann = self._build_type(type_node) if type_node else nodes.BuiltinType(name="bool")
+                fname = self._text(fname_node) if fname_node else ""
+                requirements.append(nodes.VariableDecl(
+                    type_annotation=type_ann,
+                    name=fname,
+                    source_location=self._loc(child),
+                ))
+        annotations = self._build_annotations(node)
+        return nodes.LegalTestNode(
+            name=name,
+            requirements=tuple(requirements),
+            condition=condition,
+            annotations=tuple(annotations),
+            source_location=self._loc(node),
+        )
+
+    # =========================================================================
+    # Conflict check blocks
+    # =========================================================================
+
+    def _build_conflict_check(self, node) -> nodes.ConflictCheckNode:
+        """Build ConflictCheckNode from conflict_check_block node."""
+        name_node = self._child_by_field(node, "name")
+        name = self._text(name_node) if name_node else ""
+        source_node = self._child_by_field(node, "source")
+        target_node = self._child_by_field(node, "target")
+        source = self._build_string_lit(source_node).value if source_node else ""
+        target = self._build_string_lit(target_node).value if target_node else ""
+        annotations = self._build_annotations(node)
+        return nodes.ConflictCheckNode(
+            name=name,
+            source=source,
+            target=target,
+            annotations=tuple(annotations),
             source_location=self._loc(node),
         )
