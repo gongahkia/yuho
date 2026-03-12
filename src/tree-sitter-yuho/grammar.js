@@ -386,6 +386,21 @@ module.exports = grammar({
       $.illustration_block,
       $.exception_block,
       $.caselaw_block,
+      $.parties_block,
+    ),
+
+    parties_block: $ => seq(
+      'parties',
+      '{',
+      repeat($.party_entry),
+      '}'
+    ),
+
+    party_entry: $ => seq(
+      field('role', $.identifier),
+      field('name', $.identifier),
+      optional(seq(':', field('type', $._type))),
+      optional(','),
     ),
 
     definitions_block: $ => seq(
@@ -420,6 +435,8 @@ module.exports = grammar({
       field('description', $._expression),
       optional(seq('caused_by', field('caused_by', $.identifier))),
       optional(field('burden', $.burden_qualifier)),
+      optional(seq('actor', field('actor', $.identifier))),
+      optional(seq('patient', field('patient', $.identifier))),
       optional(';'),
     ),
 
