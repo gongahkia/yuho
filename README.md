@@ -74,38 +74,19 @@ Want to find out more? See Yuho's [documentation](#documentation).
 * [Library statutes](./library/penal_code)
 * [Examples](./examples)
 
-## Quickstart
+## Quickstart (your first 60 seconds with `Yuho`)
 
-### Prerequisites
-
-* **Python 3.10+** required. Check with `python3 --version`.
-* If you don't have Python: macOS `brew install python`, or download from [python.org](https://www.python.org/downloads/).
-* `pip` may need to be invoked as `pip3` on some systems.
-
-### Your first 60 seconds
-
-```bash
-# 1. install
-pip install yuho
-
-# 2. create a statute interactively (no coding needed)
-yuho wizard
-
-# 3. validate your .yh file
-yuho check my_statute.yh
-
-# 4. see it in plain English
-yuho transpile my_statute.yh -t english
-
-# 5. generate a diagram
-yuho transpile my_statute.yh -t mermaid
+```console
+$ pip install yuho
+$ yuho wizard
+$ yuho check my_statute.yh
+$ yuho transpile my_statute.yh -t english
+$ yuho transpile my_statute.yh -t mermaid
 ```
 
-**Learn Yuho**: Understand the basics in 5 minutes at [`5_MINUTES.md`](./doc/5_MINUTES.md).
+## If you have 5 minutes...
 
-## Scope
-
-Development is currently scoped by the following statutes at [`SCOPE.md`](./doc/SCOPE.md). 
+Understand the basics of `Yuho` at [`5_MINUTES.md`](./doc/5_MINUTES.md).
 
 ## Contribute
 
