@@ -111,8 +111,6 @@ yuho transpile my_statute.yh -t mermaid
 
 **Learn Yuho**: Understand the basics in 5 minutes at [`5_MINUTES.md`](./doc/5_MINUTES.md).
 
-**Legacy versions**: See [`archive/`](./archive/) for v1-v4 implementations.
-
 ## Scope
 
 Development is currently scoped by the following statutes at [`SCOPE.md`](./doc/SCOPE.md). 
