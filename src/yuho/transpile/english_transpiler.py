@@ -80,6 +80,16 @@ class EnglishTranspiler(TranspilerBase, Visitor):
             self._visit_statute(statute)
             self._emit_blank()
 
+        # Legal tests
+        for lt in getattr(node, 'legal_tests', ()):
+            self._visit_legal_test(lt)
+            self._emit_blank()
+
+        # Conflict checks
+        for cc in getattr(node, 'conflict_checks', ()):
+            self._visit_conflict_check(cc)
+            self._emit_blank()
+
         # Variables
         if node.variables:
             self._emit("DECLARATIONS")
@@ -622,3 +632,36 @@ class EnglishTranspiler(TranspilerBase, Visitor):
         # Format with thousands separator
         amount_str = f"{node.amount:,.2f}"
         return f"{symbol}{amount_str}"
+
+    def _visit_legal_test(self, node: nodes.LegalTestNode) -> None:
+        """Generate English for a legal test."""
+        self._emit(f"LEGAL TEST: {node.name}")
+        self._emit("-" * 40)
+        for ann in getattr(node, 'annotations', ()):
+            args = ", ".join(ann.args)
+            self._emit(f"  [{ann.name}: {args}]")
+        self._emit("Requirements:")
+        self._indent_level += 1
+        for req in node.requirements:
+            if isinstance(req, nodes.VariableDecl):
+                self._emit(f"- {req.name} (type: {self._type_name(req.type_annotation)})")
+        self._indent_level -= 1
+        if node.condition:
+            self._emit(f"All of the above requirements must be satisfied.")
+        self._emit_blank()
+
+    def _visit_conflict_check(self, node: nodes.ConflictCheckNode) -> None:
+        """Generate English for a conflict check."""
+        self._emit(f"CONFLICT CHECK: {node.name}")
+        self._emit("-" * 40)
+        self._emit(f"  Source: {node.source}")
+        self._emit(f"  Target: {node.target}")
+        self._emit(f"  Purpose: Verify no contradictory elements between source and target.")
+        self._emit_blank()
+
+    def _type_name(self, t: nodes.TypeNode) -> str:
+        if isinstance(t, nodes.BuiltinType):
+            return t.name
+        elif isinstance(t, nodes.NamedType):
+            return t.name
+        return "unknown"
