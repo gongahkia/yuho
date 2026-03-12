@@ -348,6 +348,22 @@ class AlloyGenerator:
                 lines.append("}")
                 lines.append("")
 
+        # Deontic conflict assertions
+        for statute in ast.statutes:
+            statute_name = self._statute_name(statute.section_number)
+            leaf_elements = self._collect_leaf_elements(statute.elements)
+            obl_names = {e.name for e in leaf_elements if e.element_type == "obligation"}
+            pro_names = {e.name for e in leaf_elements if e.element_type == "prohibition"}
+            if obl_names & pro_names:
+                lines.append(f"// Deontic conflict detection for {statute.section_number}")
+                lines.append(f"assert {statute_name}_no_deontic_conflict {{")
+                for name in sorted(obl_names & pro_names):
+                    sn = self._safe_identifier(name)
+                    lines.append(f"    // '{name}' cannot be both obligation and prohibition")
+                    lines.append(f"    not ({statute_name}.{sn}.satisfied = True)")
+                lines.append("}")
+                lines.append("")
+
         # Cross-statute penalty ordering assertion
         statutes_with_penalty = [s for s in ast.statutes if s.penalty is not None]
         if len(statutes_with_penalty) > 1:
