@@ -180,6 +180,11 @@ def verify(
               help="Show detailed explanations for errors with common causes and fixes")
 @click.option("--metrics", is_flag=True, help="Include code_scale and clock_load_scale metrics")
 @click.option("--format", "output_format", type=click.Choice(["text", "json", "sarif"]), default="text", help="Output format")
+@click.option(
+    "--syntax-only",
+    is_flag=True,
+    help="Skip semantic analysis and report only parse/AST validity",
+)
 @click.pass_context
 def check(
     ctx: click.Context,
@@ -188,6 +193,7 @@ def check(
     explain_errors: bool,
     metrics: bool,
     output_format: str,
+    syntax_only: bool,
 ) -> None:
     """
     Parse and validate a Yuho source file.
@@ -202,6 +208,7 @@ def check(
         explain_errors=explain_errors,
         metrics=metrics,
         output_format=output_format,
+        syntax_only=syntax_only,
     )
 
 
