@@ -9,14 +9,19 @@ operational semantics, and a defeasible reasoning layer for exception defeat.
 ## 1. Abstract Syntax
 
 The abstract syntax is presented in BNF at the AST level (corresponding to
-`src/yuho/ast/nodes.py`).
+`src/yuho/ast/nodes.py`). In addition to statutes and functions, Yuho also
+supports annotation metadata, `legal_test` blocks, and `conflict_check`
+declarations for jurisprudential and study-oriented workflows.
 
 ### 1.1 Modules
 
 ```
-Module     ::= Import* StructDef* EnumDef* TypeAlias* FunctionDef* Statute* VarDecl* Assert*
+Module     ::= Import* StructDef* EnumDef* TypeAlias* FunctionDef* Statute*
+               LegalTest* ConflictCheck* VarDecl* Assert*
 Import     ::= 'import' Path Names?
 Referencing ::= 'referencing' Path
+Annotation ::= '@' AnnotationName ('(' StringLit (',' StringLit)* ')')?
+AnnotationName ::= 'presumed' | 'precedent' | 'hierarchy' | 'amended'
 ```
 
 ### 1.2 Types
@@ -89,7 +94,7 @@ ParamDef   ::= Type Identifier
 ### 1.6 Statute Structure
 
 ```
-Statute    ::= 'statute' SectionNum StringLit? TemporalMeta? HierarchyMeta? '{' StatuteMember* '}'
+Statute    ::= Annotation* 'statute' SectionNum StringLit? TemporalMeta? HierarchyMeta? '{' StatuteMember* '}'
 TemporalMeta ::= ('effective' DateLit)? ('repealed' DateLit)?
 HierarchyMeta ::= ('subsumes' SectionNum)? ('amends' SectionNum)?
 StatuteMember ::= Definitions | Elements | Penalty | Illustration
@@ -113,6 +118,19 @@ MandatoryMin ::= 'minimum' ('imprisonment' ':=' DurationLit | 'fine' ':=' MoneyL
 Exception   ::= 'exception' Identifier? '{' StringLit StringLit? ('when' Expr)? '}'
 CaseLaw     ::= 'caselaw' StringLit StringLit? '{' StringLit ('element' Identifier)? '}'
 Illustration ::= 'illustration' Identifier? '{' StringLit '}'
+```
+
+### 1.7 Legal Tests And Conflict Checks
+
+```
+LegalTest ::= Annotation* 'legal_test' Identifier '{' LegalTestField* RequiresClause? '}'
+LegalTestField ::= Type Identifier
+RequiresClause ::= 'requires' Expr
+
+ConflictCheck ::= Annotation* 'conflict_check' Identifier '{'
+                  'source' ':=' StringLit
+                  'target' ':=' StringLit
+                  '}'
 ```
 
 ---
@@ -228,6 +246,14 @@ Gamma |- f(e1,...,en) : Tr
 
 We define big-step (natural) semantics. We write `<e, sigma> => v` to mean
 "expression e evaluated in store sigma produces value v."
+
+`Annotation` nodes are semantically inert in evaluation: they enrich the model
+with provenance or doctrinal metadata but do not change the runtime value of an
+expression. `legal_test` blocks denote named requirement bundles whose
+`requires` clause evaluates to a boolean condition over declared fields.
+`conflict_check` blocks denote named metadata relations between two sources and
+are consumed by higher-level analysis or transpilation layers rather than the
+core evaluator.
 
 ### 3.1 Values
 
