@@ -265,7 +265,7 @@ After running `yuho transpile my_statute.yh -t mermaid`, you can view the output
 
 1. **Browser** -- paste the output into [mermaid.live](https://mermaid.live) for instant rendering
 2. **GitHub** -- wrap the output in a ` ```mermaid ` code block in any `.md` file. GitHub renders it natively
-3. **Live preview** -- run `yuho preview my_statute.yh` to open a browser with auto-reloading diagrams
+3. **Local notes or docs** -- paste the output into any Mermaid-capable editor, notes app, or documentation page
 
 ## Using the wizard (no code required)
 
