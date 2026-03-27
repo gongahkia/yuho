@@ -138,20 +138,33 @@ yuho test my_statute.yh
 
 ## Explore the library
 
-Yuho ships with 12 pre-modelled Penal Code sections:
+Yuho currently ships with 25 pre-modelled Penal Code sections, including:
 
 | Section | Offence |
 |---|---|
 | s299 | Culpable Homicide |
 | s300 | Murder |
+| s302 | Punishment for Murder |
+| s304 | Culpable Homicide not amounting to Murder |
 | s319 | Hurt |
+| s321 | Voluntarily Causing Hurt |
+| s323 | Punishment for Voluntarily Causing Hurt |
+| s325 | Voluntarily Causing Grievous Hurt |
+| s354 | Assault or Criminal Force to Outrage Modesty |
+| s363 | Kidnapping |
 | s378 | Theft |
+| s379 | Punishment for Theft |
 | s383 | Extortion |
 | s390 | Robbery |
+| s392 | Punishment for Robbery |
+| s395 | Dacoity |
 | s403 | Dishonest Misappropriation |
+| s406 | Punishment for Criminal Breach of Trust |
+| s411 | Dishonestly Receiving Stolen Property |
 | s415 | Cheating |
 | s420 | Cheating Inducing Delivery |
 | s463 | Forgery |
+| s465 | Punishment for Forgery |
 | s499 | Defamation |
 | s503 | Criminal Breach of Trust |
 
