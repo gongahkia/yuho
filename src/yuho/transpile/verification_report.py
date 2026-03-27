@@ -54,7 +54,13 @@ def _check_statute(statute: nodes.StatuteNode) -> list:
     """Run structural checks on a statute and return (name, pass, detail) tuples."""
     checks = []
     # title
-    checks.append(("Has title", statute.title is not None, statute.title.value if statute.title else "missing"))
+    checks.append(
+        (
+            "Has title",
+            statute.title is not None,
+            statute.title.value if statute.title else "missing",
+        )
+    )
     # elements
     elem_count = _count_elements(statute.elements)
     checks.append(("Has elements", elem_count > 0, f"{elem_count} element(s)"))
@@ -65,20 +71,42 @@ def _check_statute(statute: nodes.StatuteNode) -> list:
     mr = _count_by_type(statute.elements, "mens_rea")
     checks.append(("Mens rea present", mr > 0, f"{mr} mens rea"))
     # penalty
-    checks.append(("Has penalty", statute.penalty is not None, "present" if statute.penalty else "missing"))
+    checks.append(
+        ("Has penalty", statute.penalty is not None, "present" if statute.penalty else "missing")
+    )
     # definitions
-    checks.append(("Has definitions", len(statute.definitions) > 0, f"{len(statute.definitions)} definition(s)"))
+    checks.append(
+        (
+            "Has definitions",
+            len(statute.definitions) > 0,
+            f"{len(statute.definitions)} definition(s)",
+        )
+    )
     # illustrations
-    checks.append(("Has illustrations", len(statute.illustrations) > 0, f"{len(statute.illustrations)} illustration(s)"))
+    checks.append(
+        (
+            "Has illustrations",
+            len(statute.illustrations) > 0,
+            f"{len(statute.illustrations)} illustration(s)",
+        )
+    )
     # exceptions
     exc_count = len(statute.exceptions)
     if exc_count > 0:
         guarded = sum(1 for e in statute.exceptions if e.guard)
         checks.append(("Exception guards", guarded == exc_count, f"{guarded}/{exc_count} guarded"))
     # jurisdiction
-    checks.append(("Jurisdiction set", statute.jurisdiction is not None, statute.jurisdiction or "not set"))
+    checks.append(
+        ("Jurisdiction set", statute.jurisdiction is not None, statute.jurisdiction or "not set")
+    )
     # doc-comment
-    checks.append(("Doc-comment", statute.doc_comment is not None, "present" if statute.doc_comment else "missing"))
+    checks.append(
+        (
+            "Doc-comment",
+            statute.doc_comment is not None,
+            "present" if statute.doc_comment else "missing",
+        )
+    )
     return checks
 
 
