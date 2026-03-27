@@ -203,6 +203,8 @@ class AnalysisResult:
     code_scale: Optional[CodeScale] = None
     clock_load_scale: Optional[ClockLoadScale] = None
     lint_warnings: list[LintWarning] = field(default_factory=list)
+    semantic_checked: bool = False
+    lint_checked: bool = False
     parse_duration_ms: float = 0.0
     ast_duration_ms: float = 0.0
     semantic_duration_ms: float = 0.0
@@ -216,6 +218,201 @@ class AnalysisResult:
         if self.semantic_summary is None:
             return self.ast is not None
         return not self.semantic_summary.has_errors
+
+    @property
+    def parse_valid(self) -> bool:
+        """Return True when the parse phase completed without diagnostics."""
+        return not self.parse_errors and not self._stage_errors("parse")
+
+    @property
+    def ast_valid(self) -> bool:
+        """Return True when AST building succeeded."""
+        return self.parse_valid and self.ast is not None and not self._stage_errors("ast")
+
+    @property
+    def semantic_valid(self) -> Optional[bool]:
+        """Return semantic validity, or None when semantic checks were skipped."""
+        if not self.semantic_checked:
+            return None
+        if self._stage_errors("semantic"):
+            return False
+        if self.semantic_summary is None:
+            return False
+        return not self.semantic_summary.has_errors
+
+    @property
+    def lint_valid(self) -> Optional[bool]:
+        """Return lint validity, or None when lint did not run."""
+        if not self.lint_checked:
+            return None
+        if self._stage_errors("lint"):
+            return False
+        return len(self.lint_warnings) == 0
+
+    def _stage_errors(self, stage: str) -> list[AnalysisError]:
+        """Return normalized errors for a specific analysis stage."""
+        return [error for error in self.errors if error.stage == stage]
+
+    def _parse_diagnostics(self) -> list[dict[str, Any]]:
+        """Return parse diagnostics without duplicating normalized parse errors."""
+        if self.parse_errors:
+            return [
+                {
+                    "stage": "parse",
+                    "severity": "error",
+                    "message": err.message,
+                    "error_code": "parse_error",
+                    "node_type": err.node_type,
+                    "line": err.location.line,
+                    "column": err.location.col,
+                    "end_line": err.location.end_line,
+                    "end_column": err.location.end_col,
+                }
+                for err in self.parse_errors
+            ]
+        return [
+            {
+                "stage": error.stage,
+                "severity": "error",
+                "message": error.message,
+                "error_code": error.error_code,
+                "node_type": error.node_type,
+                "line": error.location.line if error.location else None,
+                "column": error.location.col if error.location else None,
+                "end_line": error.location.end_line if error.location else None,
+                "end_column": error.location.end_col if error.location else None,
+            }
+            for error in self._stage_errors("parse")
+        ]
+
+    def diagnostics(self) -> list[dict[str, Any]]:
+        """Return unified diagnostics across parse, AST, and semantic phases."""
+        diagnostics = self._parse_diagnostics()
+        for stage in ("ast", "lint"):
+            diagnostics.extend(
+                {
+                    "stage": error.stage,
+                    "severity": "error",
+                    "message": error.message,
+                    "error_code": error.error_code,
+                    "node_type": error.node_type,
+                    "line": error.location.line if error.location else None,
+                    "column": error.location.col if error.location else None,
+                    "end_line": error.location.end_line if error.location else None,
+                    "end_column": error.location.end_col if error.location else None,
+                }
+                for error in self._stage_errors(stage)
+            )
+
+        if self.semantic_summary is not None:
+            diagnostics.extend(
+                {
+                    "stage": "semantic",
+                    "severity": issue.severity,
+                    "message": issue.message,
+                    "error_code": "semantic_issue",
+                    "node_type": None,
+                    "line": issue.line,
+                    "column": issue.column,
+                    "end_line": None,
+                    "end_column": None,
+                }
+                for issue in self.semantic_summary.issues
+            )
+
+        diagnostics.extend(
+            {
+                "stage": error.stage,
+                "severity": "error",
+                "message": error.message,
+                "error_code": error.error_code,
+                "node_type": error.node_type,
+                "line": error.location.line if error.location else None,
+                "column": error.location.col if error.location else None,
+                "end_line": error.location.end_line if error.location else None,
+                "end_column": error.location.end_col if error.location else None,
+            }
+            for error in self._stage_errors("semantic")
+        )
+        return diagnostics
+
+    def lint_warning_payload(self) -> list[dict[str, Any]]:
+        """Return lint warnings as serializable dictionaries."""
+        return [
+            {
+                "stage": "lint",
+                "severity": warning.severity,
+                "message": warning.message,
+                "statute_section": warning.statute_section,
+            }
+            for warning in self.lint_warnings
+        ]
+
+    def phase_status(self) -> dict[str, dict[str, Any]]:
+        """Return status for parse, AST, semantic, and lint phases."""
+        semantic_error_count = len(self._stage_errors("semantic"))
+        semantic_warning_count = 0
+        if self.semantic_summary is not None:
+            semantic_error_count += self.semantic_summary.errors
+            semantic_warning_count = self.semantic_summary.warnings
+
+        return {
+            "parse": {
+                "ran": True,
+                "valid": self.parse_valid,
+                "error_count": len(self._parse_diagnostics()),
+                "warning_count": 0,
+            },
+            "ast": {
+                "ran": self.parse_valid,
+                "valid": self.ast_valid if self.parse_valid else None,
+                "error_count": len(self._stage_errors("ast")),
+                "warning_count": 0,
+            },
+            "semantic": {
+                "ran": self.semantic_checked,
+                "valid": self.semantic_valid,
+                "error_count": semantic_error_count if self.semantic_checked else 0,
+                "warning_count": semantic_warning_count if self.semantic_checked else 0,
+            },
+            "lint": {
+                "ran": self.lint_checked,
+                "valid": self.lint_valid,
+                "error_count": len(self._stage_errors("lint")) if self.lint_checked else 0,
+                "warning_count": len(self.lint_warnings) if self.lint_checked else 0,
+            },
+        }
+
+    def validation_payload(
+        self,
+        *,
+        include_metrics: bool = False,
+        include_stats: bool = True,
+    ) -> dict[str, Any]:
+        """Return a reusable machine-readable validation contract."""
+        diagnostics = self.diagnostics()
+        payload: dict[str, Any] = {
+            "valid": self.is_valid,
+            "file": self.file,
+            "parse_valid": self.parse_valid,
+            "ast_valid": self.ast_valid,
+            "semantic_checked": self.semantic_checked,
+            "semantic_valid": self.semantic_valid,
+            "lint_checked": self.lint_checked,
+            "lint_valid": self.lint_valid,
+            "phases": self.phase_status(),
+            "errors": [item for item in diagnostics if item["severity"] == "error"],
+            "warnings": [item for item in diagnostics if item["severity"] != "error"],
+            "lint_warnings": self.lint_warning_payload(),
+        }
+        if include_stats and self.ast_summary is not None:
+            payload["stats"] = self.ast_summary.to_dict()
+        if include_metrics:
+            payload["code_scale"] = self.code_scale.to_dict() if self.code_scale else None
+            payload["clock_load_scale"] = (
+                self.clock_load_scale.to_dict() if self.clock_load_scale else None
+            )
+        return payload
 
 
 def analyze_file(
@@ -403,11 +600,19 @@ def analyze_source(
     )
 
     try:
+        result.lint_checked = True
         result.lint_warnings = lint_module(result.ast)
-    except Exception:
-        pass # non-blocking: linter failures don't halt analysis
+    except Exception as exc:
+        result.errors.append(
+            AnalysisError(
+                stage="lint",
+                message=f"Lint analysis failed: {exc}",
+                error_code="lint_analysis_failed",
+            )
+        )
 
     if run_semantic:
+        result.semantic_checked = True
         start_semantic = perf_counter()
         try:
             result.semantic_summary = _run_semantic_checks(result.ast, file=file)
