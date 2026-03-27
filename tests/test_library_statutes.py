@@ -114,6 +114,13 @@ class TestStatuteTestFiles:
         result = analyze_file(str(test_file), run_semantic=False)
         assert result.ast is not None, f"{name}: test file has parse errors: {result.errors}"
 
+    def test_test_file_is_semantically_valid(self, name, path):
+        test_file = path.parent / "test_statute.yh"
+        if not test_file.exists():
+            pytest.skip("no test file")
+        result = analyze_file(str(test_file))
+        assert result.is_valid, f"{name}: test file has semantic errors: {result.errors}"
+
     def test_metadata_exists(self, name, path):
         meta = path.parent / "metadata.toml"
         assert meta.exists(), f"{name}: missing metadata.toml"
