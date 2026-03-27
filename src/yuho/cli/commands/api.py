@@ -524,6 +524,24 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
             return "Source contains null bytes"
         return None
 
+    @staticmethod
+    def _decorate_validation_payload(
+        payload: Dict[str, Any],
+        *,
+        explain_errors: bool = False,
+    ) -> Dict[str, Any]:
+        """Attach human-facing parse explanations when requested."""
+        if not explain_errors:
+            return payload
+        for item in payload.get("errors", []):
+            if item.get("stage") != "parse":
+                continue
+            item["explanation"] = get_error_explanation(
+                item["message"],
+                item.get("node_type"),
+            )
+        return payload
+
     def _handle_parse(self, data: Dict[str, Any]) -> None:
         """Parse Yuho source code."""
         source = data.get('source', '')
@@ -540,49 +558,18 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
             self._send_json_response(400, APIResponse(success=False, error=src_err))
             return
         analysis = analyze_source(source, file=filename, run_semantic=False)
+        payload = analysis.validation_payload()
+        payload["valid"] = bool(payload["parse_valid"] and payload["ast_valid"])
+        if analysis.ast is not None:
+            payload["statute_sections"] = [s.section_number for s in analysis.ast.statutes]
 
-        if analysis.parse_errors:
-            errors = [
-                {
-                    "message": e.message,
-                    "line": e.location.line if e.location else None,
-                    "column": e.location.col if e.location else None,
-                }
-                for e in analysis.parse_errors
-            ]
-            self._send_json_response(422, APIResponse(
-                success=False,
-                data={"errors": errors}
-            ))
-            return
-
-        if analysis.errors and not analysis.parse_errors:
-            self._send_json_response(500, APIResponse(
-                success=False,
-                error=analysis.errors[0].message
-            ))
-            return
-
-        ast = analysis.ast
-        summary = analysis.ast_summary
-        if ast is None or summary is None:
-            self._send_json_response(500, APIResponse(
-                success=False,
-                error="AST build error: Unknown error"
-            ))
-            return
-
-        # Return AST summary
-        self._send_json_response(200, APIResponse(
-            success=True,
-            data={
-                "statutes": summary.statutes,
-                "types": summary.structs,
-                "functions": summary.functions,
-                "imports": summary.imports,
-                "statute_sections": [s.section_number for s in ast.statutes],
-            }
-        ))
+        status = 200
+        success = True
+        if payload["errors"]:
+            success = False
+            parse_like = all(item["stage"] == "parse" for item in payload["errors"])
+            status = 422 if parse_like else 500
+        self._send_json_response(status, APIResponse(success=success, data=payload))
     
     def _handle_validate(self, data: Dict[str, Any]) -> None:
         """Validate Yuho source code."""
@@ -601,52 +588,20 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
         if src_err:
             self._send_json_response(400, APIResponse(success=False, error=src_err))
             return
-        errors = []
-        analysis = analyze_source(source, file=filename, run_semantic=False)
+        analysis = analyze_source(source, file=filename, run_semantic=True)
+        response_data = self._decorate_validation_payload(
+            analysis.validation_payload(include_metrics=include_metrics),
+            explain_errors=explain_errors,
+        )
 
-        if analysis.parse_errors:
-            errors = [
-                {
-                    "type": "parse",
-                    "message": e.message,
-                    "line": e.location.line if e.location else None,
-                    "column": e.location.col if e.location else None,
-                    "node_type": e.node_type,
-                    "explanation": (
-                        get_error_explanation(e.message, e.node_type) if explain_errors else None
-                    ),
-                }
-                for e in analysis.parse_errors
-            ]
-
-        if analysis.errors and not analysis.parse_errors:
-            errors.extend(
-                {
-                    "type": error.stage,
-                    "message": error.message,
-                    "line": error.location.line if error.location else None,
-                    "column": error.location.col if error.location else None,
-                }
-                for error in analysis.errors
-            )
-        
-        response_data: Dict[str, Any] = {
-            "valid": len(errors) == 0,
-            "errors": errors,
-        }
-        if include_metrics:
-            response_data["code_scale"] = (
-                analysis.code_scale.to_dict() if analysis.code_scale else None
-            )
-            response_data["clock_load_scale"] = (
-                analysis.clock_load_scale.to_dict() if analysis.clock_load_scale else None
-            )
-
-        status = 200 if len(errors) == 0 else 422
-        self._send_json_response(status, APIResponse(
-            success=len(errors) == 0,
-            data=response_data
-        ))
+        status = 200 if not response_data["errors"] else 422
+        self._send_json_response(
+            status,
+            APIResponse(
+                success=not response_data["errors"],
+                data=response_data,
+            ),
+        )
     
     def _handle_transpile(self, data: Dict[str, Any]) -> None:
         """Transpile Yuho source code."""
