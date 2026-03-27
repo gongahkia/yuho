@@ -23,7 +23,7 @@ This project and everyone contributing to it is governed by this [Code of Conduc
 
 ## What should I know before I get started?
 
-1. Read through the [README](README.md) file for prerequisites, installation details and configuration requirements.
+1. Read through the [README](../README.md) file for prerequisites, installation details and configuration requirements.
 2. If you want to contribute, see [here](#how-can-i-contribute).
 3. If you have a question, see the [FAQ](#faq) before opening an issue. It could be answered already
 
