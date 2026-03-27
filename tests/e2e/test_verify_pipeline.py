@@ -1,11 +1,17 @@
 """E2E tests: verification pipeline."""
+
 import pytest
 from yuho.ast.nodes import (
-    StatuteNode, StringLit, ElementNode, ElementGroupNode,
-    PenaltyNode, DurationNode, ExceptionNode,
+    StatuteNode,
+    StringLit,
+    ElementNode,
+    ElementGroupNode,
+    PenaltyNode,
+    DurationNode,
+    ExceptionNode,
 )
 
-MINIMAL_SOURCE = '''
+MINIMAL_SOURCE = """
 struct TestCase { bool guilty, }
 statute 999 "Test Statute" {
     elements {
@@ -16,7 +22,8 @@ statute 999 "Test Statute" {
         imprisonment := 1 years .. 5 years;
     }
 }
-'''
+"""
+
 
 class TestVerifyPipeline:
     def test_z3_generates_constraints(self, statute_dir, parse_file):
@@ -79,9 +86,9 @@ class TestVerifyPipeline:
         gen = Z3Generator()
         solver, assertions = gen.generate(ast)
         # the generator should have created a conviction variable
-        assert "999_conviction" in gen._consts, (
-            "Z3Generator should create a conviction variable for statute 999"
-        )
+        assert (
+            "999_conviction" in gen._consts
+        ), "Z3Generator should create a conviction variable for statute 999"
 
     def test_z3_element_variables_created(self, parse_source):
         """Z3 should create boolean variables for each leaf element."""
@@ -96,12 +103,12 @@ class TestVerifyPipeline:
         solver, assertions = gen.generate(ast)
         # should have element variables for act and intent
         const_names = set(gen._consts.keys())
-        assert any("act" in name and "satisfied" in name for name in const_names), (
-            "Z3 should create a satisfied variable for element 'act'"
-        )
-        assert any("intent" in name and "satisfied" in name for name in const_names), (
-            "Z3 should create a satisfied variable for element 'intent'"
-        )
+        assert any(
+            "act" in name and "satisfied" in name for name in const_names
+        ), "Z3 should create a satisfied variable for element 'act'"
+        assert any(
+            "intent" in name and "satisfied" in name for name in const_names
+        ), "Z3 should create a satisfied variable for element 'intent'"
 
     def test_z3_sorts_include_statute(self, parse_source):
         """Z3 should create a Statute sort."""
@@ -127,9 +134,7 @@ class TestVerifyPipeline:
         ast = parse_source(MINIMAL_SOURCE)
         gen = Z3Generator()
         gen.generate(ast)
-        assert "TestCase" in gen._sorts, (
-            "Z3Generator should create a sort for struct TestCase"
-        )
+        assert "TestCase" in gen._sorts, "Z3Generator should create a sort for struct TestCase"
 
     def test_z3_element_group_all_of(self, parse_source):
         """Z3 should encode all_of groups as conjunction."""
@@ -140,7 +145,7 @@ class TestVerifyPipeline:
             pytest.skip("z3 module not importable")
         if not Z3_AVAILABLE:
             pytest.skip("z3-solver package not installed")
-        source = '''
+        source = """
 statute 500 "Grouped" {
     elements {
         all_of {
@@ -149,7 +154,7 @@ statute 500 "Grouped" {
         }
     }
 }
-'''
+"""
         ast = parse_source(source)
         gen = Z3Generator()
         solver, assertions = gen.generate(ast)
@@ -165,7 +170,7 @@ statute 500 "Grouped" {
             pytest.skip("z3 module not importable")
         if not Z3_AVAILABLE:
             pytest.skip("z3-solver package not installed")
-        source = '''
+        source = """
 statute 501 "Disjunctive" {
     elements {
         any_of {
@@ -174,7 +179,7 @@ statute 501 "Disjunctive" {
         }
     }
 }
-'''
+"""
         ast = parse_source(source)
         gen = Z3Generator()
         solver, assertions = gen.generate(ast)
@@ -266,7 +271,7 @@ statute 501 "Disjunctive" {
             from yuho.verify.alloy import AlloyGenerator
         except ImportError:
             pytest.skip("alloy not available")
-        source = '''
+        source = """
 statute 600 "With Exception" {
     elements {
         actus_reus act := "The act";
@@ -276,7 +281,7 @@ statute 600 "With Exception" {
         "Acquitted"
     }
 }
-'''
+"""
         ast = parse_source(source)
         gen = AlloyGenerator()
         try:
