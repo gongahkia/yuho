@@ -6,7 +6,7 @@ import logging
 import os
 import sys
 from pathlib import Path
-from typing import Optional, List
+from typing import Dict, List, Literal, Optional, cast
 
 import click
 
@@ -834,85 +834,6 @@ def test(
 
 
 # =============================================================================
-# Eval command
-# =============================================================================
-
-
-@cli.command()
-@click.argument("file", type=click.Path(exists=True))
-@click.option("--json", "json_output", is_flag=True, help="Output results as JSON")
-@click.pass_context
-def eval(
-    ctx: click.Context,
-    file: str,
-    json_output: bool,
-) -> None:
-    """
-    Evaluate a Yuho file through the interpreter.
-
-    Parses the file, builds the AST, and executes it through the
-    tree-walking interpreter. Functions, variables, and assertions
-    are all evaluated.
-
-    Examples:
-        yuho eval statute.yh
-        yuho eval test_statute.yh --json
-    """
-    import json as json_mod
-    from yuho.parser import get_parser
-    from yuho.ast import ASTBuilder
-    from yuho.eval.interpreter import Interpreter, AssertionError_, InterpreterError
-
-    parser = get_parser()
-    try:
-        result = parser.parse_file(file)
-    except Exception as e:
-        click.echo(f"Parse error: {e}", err=True)
-        sys.exit(1)
-
-    if result.errors:
-        for err in result.errors:
-            click.echo(f"  {err.location}: {err.message}", err=True)
-        sys.exit(1)
-
-    builder = ASTBuilder(result.source, file)
-    ast = builder.build(result.root_node)
-
-    interp = Interpreter()
-    try:
-        env = interp.interpret(ast)
-    except AssertionError_ as e:
-        click.echo(f"ASSERTION FAILED: {e}", err=True)
-        sys.exit(1)
-    except InterpreterError as e:
-        click.echo(f"Runtime error: {e}", err=True)
-        sys.exit(1)
-
-    if json_output:
-        output = {
-            "file": file,
-            "statutes": len(env.statutes),
-            "functions": len(env.function_defs),
-            "structs": len(env.struct_defs),
-            "variables": {k: repr(v.raw) for k, v in env.bindings.items()},
-        }
-        click.echo(json_mod.dumps(output, indent=2))
-    else:
-        click.echo(f"Evaluated {file}:")
-        if env.statutes:
-            click.echo(f"  Statutes: {len(env.statutes)}")
-        if env.function_defs:
-            click.echo(f"  Functions: {len(env.function_defs)}")
-        if env.struct_defs:
-            click.echo(f"  Structs: {len(env.struct_defs)}")
-        if env.bindings:
-            click.echo(f"  Variables: {len(env.bindings)}")
-            if ctx.obj["verbose"]:
-                for k, v in env.bindings.items():
-                    click.echo(f"    {k} = {v.raw!r}")
-
-
-# =============================================================================
 # LSP command
 # =============================================================================
 
@@ -965,11 +886,12 @@ def completion(ctx: click.Context, shell: str, show_install: bool) -> None:
     from yuho.cli.completions import get_completion_script, get_install_instructions
 
     shell_lower = shell.lower()
+    shell_name = cast(Literal["bash", "zsh", "fish"], shell_lower)
 
     if show_install:
-        click.echo(get_install_instructions(shell_lower))
+        click.echo(get_install_instructions(shell_name))
     else:
-        click.echo(get_completion_script(shell_lower))
+        click.echo(get_completion_script(shell_name))
 
 
 register_group_commands(cli)
@@ -1312,7 +1234,7 @@ def deps(ctx: click.Context, file: str, json_output: bool) -> None:
     ast = result.ast
     imports = [imp.path for imp in ast.imports]
     refs = [ref.path for ref in ast.references]
-    subsumes = []
+    subsumes: List[Dict[str, str]] = []
     for s in ast.statutes:
         if getattr(s, "subsumes", None):
             subsumes.append({"from": s.section_number, "subsumes": s.subsumes})
