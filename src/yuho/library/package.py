@@ -23,6 +23,7 @@ METADATA_VERSION = "1.0"
 @dataclass
 class DeprecationInfo:
     """Information about package deprecation status."""
+
     deprecated: bool = False
     reason: str = ""
     deprecated_since: str = ""  # Version when deprecated
@@ -62,6 +63,7 @@ class PackageMetadata:
 
     Defined in metadata.toml within the contribution directory.
     """
+
     section_number: str
     title: str
     jurisdiction: str
@@ -72,20 +74,22 @@ class PackageMetadata:
     dependencies: List[str] = field(default_factory=list)
     license: str = "CC-BY-4.0"
     deprecation: DeprecationInfo = field(default_factory=DeprecationInfo)
-    
+
     @classmethod
     def from_toml(cls, path: Path) -> "PackageMetadata":
         """Load metadata from TOML file."""
         try:
-            import tomllib
-        except ImportError:
+            import importlib
+
             try:
-                import tomli as tomllib
+                toml_loader = importlib.import_module("tomllib")
             except ImportError:
-                raise RuntimeError("tomllib/tomli required for metadata parsing")
+                toml_loader = importlib.import_module("tomli")
+        except ImportError:
+            raise RuntimeError("tomllib/tomli required for metadata parsing")
 
         with open(path, "rb") as f:
-            data = tomllib.load(f)
+            data = toml_loader.load(f)
 
         # Parse deprecation info if present
         deprecation_data = data.get("deprecation", {})
@@ -103,10 +107,10 @@ class PackageMetadata:
             license=data.get("license", "CC-BY-4.0"),
             deprecation=deprecation,
         )
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary."""
-        result = {
+        result: Dict[str, Any] = {
             "section_number": self.section_number,
             "title": self.title,
             "jurisdiction": self.jurisdiction,
@@ -139,7 +143,7 @@ class PackageMetadata:
         if self.deprecation.removal_version:
             msg += f". Will be removed in version {self.deprecation.removal_version}"
         return msg
-    
+
     def is_valid(self) -> tuple[bool, List[str]]:
         """
         Validate metadata completeness including semver validation.
@@ -174,7 +178,7 @@ class PackageMetadata:
 class Package:
     """
     A Yuho statute package (.yhpkg).
-    
+
     Package format:
     - Gzipped tarball containing:
       - statute.yh       - Main statute file
@@ -182,106 +186,107 @@ class Package:
       - metadata.toml    - Package metadata
       - signature        - Ed25519 signature (optional)
     """
+
     metadata: PackageMetadata
     statute_content: str
     test_content: Optional[str] = None
     signature: Optional[bytes] = None
-    
+
     @classmethod
     def from_directory(cls, path: Path) -> "Package":
         """
         Create package from a contribution directory.
-        
+
         Expected structure:
         - path/statute.yh
         - path/test_statute.yh (optional)
         - path/metadata.toml
         """
         path = Path(path)
-        
+
         # Load metadata
         metadata_path = path / "metadata.toml"
         if not metadata_path.exists():
             raise FileNotFoundError(f"metadata.toml not found in {path}")
         metadata = PackageMetadata.from_toml(metadata_path)
-        
+
         # Load statute
         statute_path = path / "statute.yh"
         if not statute_path.exists():
             raise FileNotFoundError(f"statute.yh not found in {path}")
         statute_content = statute_path.read_text()
-        
+
         # Load tests (optional)
         test_path = path / "test_statute.yh"
         test_content = test_path.read_text() if test_path.exists() else None
-        
+
         # Load signature (optional)
         sig_path = path / "signature"
         signature = sig_path.read_bytes() if sig_path.exists() else None
-        
+
         return cls(
             metadata=metadata,
             statute_content=statute_content,
             test_content=test_content,
             signature=signature,
         )
-    
+
     @classmethod
     def from_yhpkg(cls, path: Path) -> "Package":
         """
         Load package from .yhpkg file.
         """
         import tempfile
-        
+
         with tempfile.TemporaryDirectory() as tmpdir:
             tmpdir_path = Path(tmpdir)
-            
+
             # Extract tarball
             with tarfile.open(path, "r:gz") as tar:
                 tar.extractall(tmpdir_path)
-            
+
             return cls.from_directory(tmpdir_path)
-    
+
     def to_yhpkg(self, output_path: Path) -> Path:
         """
         Save package as .yhpkg file.
-        
+
         Args:
             output_path: Path to write .yhpkg file
-            
+
         Returns:
             Path to created file
         """
         import tempfile
-        
+
         output_path = Path(output_path)
         if not output_path.suffix == ".yhpkg":
             output_path = output_path.with_suffix(".yhpkg")
-        
+
         with tempfile.TemporaryDirectory() as tmpdir:
             tmpdir_path = Path(tmpdir)
-            
+
             # Write statute
             (tmpdir_path / "statute.yh").write_text(self.statute_content)
-            
+
             # Write tests if present
             if self.test_content:
                 (tmpdir_path / "test_statute.yh").write_text(self.test_content)
-            
+
             # Write metadata as TOML
             self._write_metadata_toml(tmpdir_path / "metadata.toml")
-            
+
             # Write signature if present
             if self.signature:
                 (tmpdir_path / "signature").write_bytes(self.signature)
-            
+
             # Create gzipped tarball
             with tarfile.open(output_path, "w:gz") as tar:
                 for item in tmpdir_path.iterdir():
                     tar.add(item, arcname=item.name)
-        
+
         return output_path
-    
+
     def _write_metadata_toml(self, path: Path) -> None:
         """Write metadata as TOML file."""
         lines = [
@@ -292,8 +297,8 @@ class Package:
             f'version = "{self.metadata.version}"',
             f'description = "{self.metadata.description}"',
             f'license = "{self.metadata.license}"',
-            f'tags = {json.dumps(self.metadata.tags)}',
-            f'dependencies = {json.dumps(self.metadata.dependencies)}',
+            f"tags = {json.dumps(self.metadata.tags)}",
+            f"dependencies = {json.dumps(self.metadata.dependencies)}",
         ]
         # Add deprecation section if deprecated
         if self.metadata.deprecation.deprecated:
@@ -309,11 +314,11 @@ class Package:
             if self.metadata.deprecation.removal_version:
                 lines.append(f'removal_version = "{self.metadata.deprecation.removal_version}"')
         path.write_text("\n".join(lines))
-    
+
     def content_hash(self) -> str:
         """
         Calculate content hash for package.
-        
+
         Returns:
             SHA-256 hash of statute content
         """
@@ -323,23 +328,23 @@ class Package:
 class PackageValidator:
     """
     Validates Yuho statute packages.
-    
+
     Checks:
     - Metadata completeness
     - Statute parsability
     - Test execution
     - Signature verification (if provided)
     """
-    
+
     def __init__(self, strict: bool = True):
         """
         Initialize validator.
-        
+
         Args:
             strict: If True, fail on warnings. If False, only fail on errors.
         """
         self.strict = strict
-    
+
     def validate(self, package: Package) -> tuple[bool, List[str], List[str]]:
         """
         Validate a package.
@@ -350,8 +355,8 @@ class PackageValidator:
         Returns:
             Tuple of (is_valid, errors, warnings)
         """
-        errors = []
-        warnings = []
+        errors: List[str] = []
+        warnings: List[str] = []
 
         # Validate metadata
         meta_valid, meta_errors = package.metadata.is_valid()
@@ -390,28 +395,29 @@ class PackageValidator:
             is_valid = False
 
         return (is_valid, errors, warnings)
-    
+
     def _check_parsability(self, content: str) -> List[str]:
         """Check if content parses successfully."""
-        errors = []
-        
+        errors: List[str] = []
+
         try:
             from yuho.parser import Parser
+
             parser = Parser()
             result = parser.parse(content)
-            
+
             if result.errors:
                 errors.extend(str(e) for e in result.errors)
         except Exception as e:
             errors.append(f"Parse error: {e}")
-        
+
         return errors
-    
+
     def _verify_signature(self, package: Package) -> bool:
         """Verify package signature."""
         if not package.signature:
             return True
-        
+
         # In production, this would verify against contributor's public key
         # For now, just check signature format
         try:
