@@ -9,11 +9,7 @@ from yuho.transpile.fstar_transpiler import FStarTranspiler
 
 
 STATUTE_PATH = (
-    Path(__file__).resolve().parents[1]
-    / "library"
-    / "penal_code"
-    / "s300_murder"
-    / "statute.yh"
+    Path(__file__).resolve().parents[1] / "library" / "penal_code" / "s300_murder" / "statute.yh"
 )
 
 
