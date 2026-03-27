@@ -46,7 +46,7 @@ jobs:
           pip install -e ./src[dev] 2>&1 | tee logs/install-yuho.log
 
       - name: Check formatting with Black
-        run: black --check --diff src/yuho tests 2>&1 | tee logs/black.log
+        run: black --check --diff --config src/pyproject.toml src/yuho tests 2>&1 | tee logs/black.log
 
       - name: Type check with mypy
         run: mypy src/yuho --ignore-missing-imports 2>&1 | tee logs/mypy.log
