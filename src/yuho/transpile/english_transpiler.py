@@ -295,8 +295,9 @@ class EnglishTranspiler(TranspilerBase, Visitor):
             suffixes.append(f"caused by '{node.caused_by}'")
         if getattr(node, "burden", None):
             burden_text = f"burden on {node.burden}"
-            if getattr(node, "burden_standard", None):
-                burden_text += f" ({node.burden_standard.replace('_', ' ')})"
+            burden_standard = getattr(node, "burden_standard", None)
+            if isinstance(burden_standard, str):
+                burden_text += f" ({burden_standard.replace('_', ' ')})"
             suffixes.append(burden_text)
 
         suffix = (" [" + "; ".join(suffixes) + "]") if suffixes else ""
