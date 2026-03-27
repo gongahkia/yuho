@@ -42,6 +42,7 @@ def run_explain(
     """
     from yuho.config.loader import get_config
     from yuho.parser.wrapper import validate_file_path
+
     try:
         validate_file_path(file)
     except (ValueError, FileNotFoundError) as e:
@@ -51,7 +52,7 @@ def run_explain(
     llm_config = get_config().llm
     resolved_provider = provider or llm_config.provider
     resolved_model = model or llm_config.model
-    resolved_api_key = api_key # cli --api-key takes highest priority
+    resolved_api_key = api_key  # cli --api-key takes highest priority
     if not resolved_api_key:
         _key_map = {
             "openai": llm_config.openai_api_key,
@@ -86,7 +87,9 @@ def run_explain(
     if analysis.semantic_valid is False:
         payload = analysis.validation_payload()
         semantic_errors = [item for item in payload["errors"] if item["stage"] == "semantic"]
-        first_error = semantic_errors[0]["message"] if semantic_errors else "Semantic validation failed"
+        first_error = (
+            semantic_errors[0]["message"] if semantic_errors else "Semantic validation failed"
+        )
         click.echo(colorize(f"error: {first_error}", Colors.RED), err=True)
         sys.exit(1)
 
@@ -107,6 +110,7 @@ def run_explain(
                 click.echo(colorize(f"error: Section {section} not found", Colors.RED), err=True)
                 sys.exit(1)
             from yuho.ast.nodes import ModuleNode
+
             ast = ModuleNode(
                 imports=ast.imports,
                 type_defs=ast.type_defs,
@@ -127,9 +131,16 @@ def run_explain(
         capturing = False
         for line in lines:
             line_lower = line.strip().lower()
-            if sub_section_filter in line_lower and (":" in line or line_lower.startswith(sub_section_filter)):
+            if sub_section_filter in line_lower and (
+                ":" in line or line_lower.startswith(sub_section_filter)
+            ):
                 capturing = True
-            elif capturing and line.strip() and not line.startswith(" ") and not line.startswith("\t"):
+            elif (
+                capturing
+                and line.strip()
+                and not line.startswith(" ")
+                and not line.startswith("\t")
+            ):
                 if any(k in line_lower for k in sub_sections if k != sub_section_filter):
                     capturing = False
             if capturing:
@@ -142,7 +153,9 @@ def run_explain(
         return
 
     if interactive:
-        _run_interactive(base_explanation, ast, resolved_provider, resolved_model, stream, resolved_api_key)
+        _run_interactive(
+            base_explanation, ast, resolved_provider, resolved_model, stream, resolved_api_key
+        )
     else:
         # Try to use LLM for enhanced explanation
         try:
@@ -180,7 +193,13 @@ def run_explain(
             click.echo(base_explanation)
 
 
-def _enhance_with_llm(text: str, provider: Optional[str], model: Optional[str], verbose: bool, api_key: Optional[str] = None) -> str:
+def _enhance_with_llm(
+    text: str,
+    provider: Optional[str],
+    model: Optional[str],
+    verbose: bool,
+    api_key: Optional[str] = None,
+) -> str:
     """Use LLM to enhance the explanation."""
     try:
         from yuho.llm import get_provider, LLMConfig
@@ -213,7 +232,13 @@ Clear explanation:"""
         return text
 
 
-def _enhance_with_llm_stream(text: str, provider: Optional[str], model: Optional[str], verbose: bool, api_key: Optional[str] = None) -> None:
+def _enhance_with_llm_stream(
+    text: str,
+    provider: Optional[str],
+    model: Optional[str],
+    verbose: bool,
+    api_key: Optional[str] = None,
+) -> None:
     """Use LLM to enhance the explanation with streaming output."""
     try:
         from yuho.llm import get_provider, LLMConfig
@@ -240,7 +265,7 @@ Structured explanation:
 Clear explanation:"""
 
         # Check if provider supports streaming
-        if hasattr(llm, 'stream'):
+        if hasattr(llm, "stream"):
             # Stream tokens to stdout
             for token in llm.stream(prompt, max_tokens=2000):
                 click.echo(token, nl=False)
@@ -268,7 +293,9 @@ def _run_interactive(
 ) -> None:
     """Run interactive REPL for follow-up questions."""
     click.echo(colorize("Yuho Explain - Interactive Mode", Colors.CYAN + Colors.BOLD))
-    click.echo(colorize("Type 'quit' or 'exit' to leave. Type 'show' to see the statute.\n", Colors.DIM))
+    click.echo(
+        colorize("Type 'quit' or 'exit' to leave. Type 'show' to see the statute.\n", Colors.DIM)
+    )
 
     # Show initial explanation
     click.echo(base_explanation)
@@ -276,10 +303,13 @@ def _run_interactive(
 
     try:
         from yuho.llm import get_provider, LLMConfig
-        config = LLMConfig(provider=provider or "ollama", model_name=model or "llama3", api_key=api_key)
+
+        config = LLMConfig(
+            provider=provider or "ollama", model_name=model or "llama3", api_key=api_key
+        )
         llm = get_provider(config)
         has_llm = True
-        can_stream = stream and hasattr(llm, 'stream')
+        can_stream = stream and hasattr(llm, "stream")
     except Exception:
         has_llm = False
         can_stream = False
