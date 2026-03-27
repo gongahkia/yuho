@@ -102,6 +102,8 @@ def run_generate_tests(
     if output:
         Path(output).write_text(text, encoding="utf-8")
         click.echo(f"Generated {len(all_cases)} test case(s) → {output}")
+    elif json_output:
+        click.echo(text)
     else:
         click.echo(text)
         click.echo(f"\n{len(all_cases)} test case(s) generated.")
