@@ -40,11 +40,12 @@ logger = logging.getLogger(__name__)
 @dataclass
 class TypeErrorInfo:
     """Represents a type error with location and context."""
+
     message: str
     line: int = 0
     column: int = 0
     node_type: str = ""
-    severity: str = "error" # "error" or "warning"
+    severity: str = "error"  # "error" or "warning"
 
     def __str__(self) -> str:
         loc = f"{self.line}:{self.column}" if self.line else ""
@@ -54,6 +55,7 @@ class TypeErrorInfo:
 @dataclass
 class TypeCheckResult:
     """Result of type checking including all errors and warnings."""
+
     errors: List[TypeErrorInfo] = field(default_factory=list)
     warnings: List[TypeErrorInfo] = field(default_factory=list)
 
@@ -113,13 +115,11 @@ class TypeCheckVisitor(Visitor):
     # types compatible with each other for numeric operations
     NUMERIC_TYPES = frozenset({"int", "float", "money", "percent"})
     # types that can be compared with equality
-    COMPARABLE_TYPES = frozenset({
-        "int", "float", "bool", "string", "money", "percent", "date", "duration"
-    })
+    COMPARABLE_TYPES = frozenset(
+        {"int", "float", "bool", "string", "money", "percent", "date", "duration"}
+    )
     # types that can be ordered (< > <= >=)
-    ORDERABLE_TYPES = frozenset({
-        "int", "float", "money", "percent", "date", "duration"
-    })
+    ORDERABLE_TYPES = frozenset({"int", "float", "money", "percent", "date", "duration"})
 
     def __init__(
         self,
@@ -130,7 +130,7 @@ class TypeCheckVisitor(Visitor):
         self.type_info = type_info
         self.result = TypeCheckResult()
         self._current_function_return: Optional[TypeAnnotation] = None
-        self._resolver = resolver # Optional[ModuleResolver]
+        self._resolver = resolver  # Optional[ModuleResolver]
         self._source_file = Path(source_file) if source_file else None
         # cache of cross-module struct defs resolved via the resolver
         self._resolved_type_names: Dict[str, Dict[str, TypeAnnotation]] = {}
@@ -158,14 +158,17 @@ class TypeCheckVisitor(Visitor):
             if expected.type_name == "float" and actual.type_name == "int":
                 return True
         # type alias resolution
-        aliases = getattr(self.type_info, 'type_aliases', {})
+        aliases = getattr(self.type_info, "type_aliases", {})
         resolved_expected = aliases.get(expected.type_name, expected)
         resolved_actual = aliases.get(actual.type_name, actual)
         if resolved_expected.type_name == resolved_actual.type_name:
             return True
         # enum variant is compatible with its enum type
-        enum_variants = getattr(self.type_info, 'enum_variants', {})
-        if actual.type_name in enum_variants and enum_variants[actual.type_name] == expected.type_name:
+        enum_variants = getattr(self.type_info, "enum_variants", {})
+        if (
+            actual.type_name in enum_variants
+            and enum_variants[actual.type_name] == expected.type_name
+        ):
             return True
         return False
 
@@ -247,9 +250,9 @@ class TypeCheckVisitor(Visitor):
         """
         if type_name in self.type_info.struct_defs:
             return True
-        if type_name in getattr(self.type_info, 'enum_defs', {}):
+        if type_name in getattr(self.type_info, "enum_defs", {}):
             return True
-        if type_name in getattr(self.type_info, 'type_aliases', {}):
+        if type_name in getattr(self.type_info, "type_aliases", {}):
             return True
         if type_name in self._resolved_type_names:
             return True
@@ -263,12 +266,11 @@ class TypeCheckVisitor(Visitor):
                 if isinstance(decl, nodes.StructDefNode):
                     # build field type map so type_check can use it
                     from yuho.ast.type_inference import TypeAnnotation as TA
+
                     fields: Dict[str, TypeAnnotation] = {}
                     for fld in decl.fields:
                         if fld.type_annotation:
-                            fields[fld.name] = self._type_node_to_annotation(
-                                fld.type_annotation
-                            )
+                            fields[fld.name] = self._type_node_to_annotation(fld.type_annotation)
                     self._resolved_type_names[type_name] = fields
                 return True
         return False
@@ -369,7 +371,12 @@ class TypeCheckVisitor(Visitor):
 
     def visit_function_call(self, node: nodes.FunctionCallNode) -> None:
         """Check function argument types match parameters."""
-        func_name = node.callee if isinstance(node.callee, str) else getattr(node.callee, "name", "")
+        if isinstance(node.callee, nodes.IdentifierNode):
+            func_name = node.callee.name
+        elif isinstance(node.callee, nodes.FieldAccessNode):
+            func_name = node.callee.field_name
+        else:
+            func_name = ""
         if func_name in self.type_info.function_sigs:
             param_types, _ = self.type_info.function_sigs[func_name]
             if len(node.args) != len(param_types):
@@ -454,13 +461,13 @@ class TypeCheckVisitor(Visitor):
         """Warn when a match over an enum type does not cover all variants."""
         if not node.scrutinee:
             return
-        if not getattr(node, 'ensure_exhaustiveness', True):
+        if not getattr(node, "ensure_exhaustiveness", True):
             return
         scrutinee_type = self._get_type(node.scrutinee)
-        enum_defs = getattr(self.type_info, 'enum_defs', {})
+        enum_defs = getattr(self.type_info, "enum_defs", {})
         type_name = scrutinee_type.type_name
         # resolve type aliases to underlying enum
-        aliases = getattr(self.type_info, 'type_aliases', {})
+        aliases = getattr(self.type_info, "type_aliases", {})
         if type_name in aliases:
             type_name = aliases[type_name].type_name
         if type_name not in enum_defs:
@@ -543,9 +550,9 @@ class TypeCheckVisitor(Visitor):
         """Entry point: check all declarations."""
         for struct_def in node.type_defs:
             self.visit(struct_def)
-        for enum_def in getattr(node, 'enum_defs', ()):
+        for enum_def in getattr(node, "enum_defs", ()):
             self.visit(enum_def)
-        for type_alias in getattr(node, 'type_aliases', ()):
+        for type_alias in getattr(node, "type_aliases", ()):
             self.visit(type_alias)
         for func_def in node.function_defs:
             self.visit(func_def)
