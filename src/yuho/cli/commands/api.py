@@ -60,6 +60,7 @@ class RequestBodyTooLargeError(Exception):
 @dataclass
 class APIError:
     """Structured API error."""
+
     code: str
     message: str
     details: List[Dict[str, Any]] = field(default_factory=list)
@@ -68,6 +69,7 @@ class APIError:
 @dataclass
 class APIResponse:
     """Standard API response structure."""
+
     success: bool
     data: Optional[Dict[str, Any]] = None
     error: Optional[Any] = None
@@ -87,7 +89,7 @@ class APIResponse:
 def _strip_version_prefix(path: str) -> str:
     """Strip /v1 prefix from path for routing."""
     if path.startswith(f"/{API_VERSION}/"):
-        return path[len(f"/{API_VERSION}"):]
+        return path[len(f"/{API_VERSION}") :]
     return path
 
 
@@ -132,10 +134,10 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
             success=success,
         )
         self._request_context = None
-    
+
     def _get_cors_origin(self) -> str:
         """Get configured CORS origin."""
-        if hasattr(self.server, 'cors_origins'):
+        if hasattr(self.server, "cors_origins"):
             origins = self.server.cors_origins
             if origins and origins != ["*"]:
                 req_origin = self.headers.get("Origin", "")
@@ -146,63 +148,63 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
 
     def _send_json_response(self, status: int, response: APIResponse) -> None:
         """Send a JSON response."""
-        body = response.to_json().encode('utf-8')
+        body = response.to_json().encode("utf-8")
         self.send_response(status)
-        self.send_header('Content-Type', 'application/json')
-        self.send_header('Content-Length', str(len(body)))
-        self.send_header('Access-Control-Allow-Origin', self._get_cors_origin())
-        self.send_header('X-API-Version', API_VERSION)
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Content-Length", str(len(body)))
+        self.send_header("Access-Control-Allow-Origin", self._get_cors_origin())
+        self.send_header("X-API-Version", API_VERSION)
         if self._request_context is not None:
-            self.send_header('X-Request-ID', self._request_context.request_id)
+            self.send_header("X-Request-ID", self._request_context.request_id)
         self.end_headers()
         self.wfile.write(body)
         self._finish_request_log(status, response.success)
 
     def _validate_post_payload(self, path: str, data: Dict[str, Any]) -> Optional[str]:
         """Validate endpoint payload shape before execution."""
-        if path == '/parse':
-            if not isinstance(data.get('source', ''), str):
+        if path == "/parse":
+            if not isinstance(data.get("source", ""), str):
                 return "'source' must be a string"
-            if 'filename' in data and not isinstance(data['filename'], str):
+            if "filename" in data and not isinstance(data["filename"], str):
                 return "'filename' must be a string"
             return None
 
-        if path == '/validate':
-            if not isinstance(data.get('source', ''), str):
+        if path == "/validate":
+            if not isinstance(data.get("source", ""), str):
                 return "'source' must be a string"
-            if 'filename' in data and not isinstance(data['filename'], str):
+            if "filename" in data and not isinstance(data["filename"], str):
                 return "'filename' must be a string"
-            if 'include_metrics' in data and not isinstance(data['include_metrics'], bool):
+            if "include_metrics" in data and not isinstance(data["include_metrics"], bool):
                 return "'include_metrics' must be a boolean"
-            if 'explain_errors' in data and not isinstance(data['explain_errors'], bool):
+            if "explain_errors" in data and not isinstance(data["explain_errors"], bool):
                 return "'explain_errors' must be a boolean"
             return None
 
-        if path == '/transpile':
-            if not isinstance(data.get('source', ''), str):
+        if path == "/transpile":
+            if not isinstance(data.get("source", ""), str):
                 return "'source' must be a string"
-            if 'target' in data and not isinstance(data['target'], str):
+            if "target" in data and not isinstance(data["target"], str):
                 return "'target' must be a string"
-            if 'filename' in data and not isinstance(data['filename'], str):
+            if "filename" in data and not isinstance(data["filename"], str):
                 return "'filename' must be a string"
             return None
 
-        if path == '/lint':
-            if not isinstance(data.get('source', ''), str):
+        if path == "/lint":
+            if not isinstance(data.get("source", ""), str):
                 return "'source' must be a string"
-            if 'filename' in data and not isinstance(data['filename'], str):
+            if "filename" in data and not isinstance(data["filename"], str):
                 return "'filename' must be a string"
-            if 'rules' in data:
-                rules = data['rules']
+            if "rules" in data:
+                rules = data["rules"]
                 if not isinstance(rules, list) or any(not isinstance(r, str) for r in rules):
                     return "'rules' must be a list of strings"
             return None
 
         return None
-    
+
     def _read_body(self) -> bytes:
         """Read request body."""
-        content_length_header = self.headers.get('Content-Length', '0')
+        content_length_header = self.headers.get("Content-Length", "0")
         try:
             content_length = int(content_length_header)
         except ValueError as exc:
@@ -216,35 +218,52 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
             )
 
         return self.rfile.read(content_length)
-    
+
     def _check_auth(self, path: str) -> bool:
         """Check auth. Returns True if OK, sends 401 and returns False if not."""
         if path in SKIP_AUTH_PATHS:
             return True
-        token = getattr(self.server, 'auth_token', None)
+        token = getattr(self.server, "auth_token", None)
         if not verify_bearer_token(self.headers.get("Authorization"), token):
-            self._send_json_response(401, APIResponse(
-                success=False,
-                error=APIError(code="UNAUTHORIZED", message="Missing or invalid Authorization header")
-            ))
+            self._send_json_response(
+                401,
+                APIResponse(
+                    success=False,
+                    error=APIError(
+                        code="UNAUTHORIZED", message="Missing or invalid Authorization header"
+                    ),
+                ),
+            )
             return False
         return True
 
     def _check_workspace(self, path: str) -> bool:
         """Check workspace quota if workspace routing is enabled. Returns True if OK."""
-        router = getattr(self.server, 'workspace_router', None)
+        router = getattr(self.server, "workspace_router", None)
         if not router:
             return True
         ws_id = self.headers.get("X-Workspace-ID")
         ws_key = self.headers.get("X-Workspace-Key")
         if not ws_id and not ws_key:
-            return True # no workspace header = default workspace
+            return True  # no workspace header = default workspace
         ws = router.resolve(workspace_id=ws_id, api_key=ws_key)
         if not ws:
-            self._send_json_response(404, APIResponse(success=False, error=APIError(code="WORKSPACE_NOT_FOUND", message="Workspace not found")))
+            self._send_json_response(
+                404,
+                APIResponse(
+                    success=False,
+                    error=APIError(code="WORKSPACE_NOT_FOUND", message="Workspace not found"),
+                ),
+            )
             return False
         if not router.check_quota(ws):
-            self._send_json_response(429, APIResponse(success=False, error=APIError(code="QUOTA_EXCEEDED", message="Workspace daily quota exceeded")))
+            self._send_json_response(
+                429,
+                APIResponse(
+                    success=False,
+                    error=APIError(code="QUOTA_EXCEEDED", message="Workspace daily quota exceeded"),
+                ),
+            )
             return False
         op = path.lstrip("/").split("/")[0] if "/" in path else path.lstrip("/")
         router.record_usage(ws, op)
@@ -252,7 +271,7 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
 
     def _check_rate_limit(self, path: str) -> bool:
         """Check rate limit. Returns True if OK."""
-        limiter = getattr(self.server, 'rate_limiter', None)
+        limiter = getattr(self.server, "rate_limiter", None)
         if not limiter:
             return True
         try:
@@ -261,10 +280,14 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
             return True
         except RateLimitExceeded as e:
             self.send_response(429)
-            self.send_header('Content-Type', 'application/json')
-            self.send_header('Retry-After', str(int(e.retry_after) + 1))
-            body = APIResponse(success=False, error=APIError(code="RATE_LIMITED", message=str(e))).to_json().encode()
-            self.send_header('Content-Length', str(len(body)))
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Retry-After", str(int(e.retry_after) + 1))
+            body = (
+                APIResponse(success=False, error=APIError(code="RATE_LIMITED", message=str(e)))
+                .to_json()
+                .encode()
+            )
+            self.send_header("Content-Length", str(len(body)))
             self.end_headers()
             self.wfile.write(body)
             self._finish_request_log(429, False)
@@ -276,9 +299,11 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
         path = parsed.path
         self._start_request_log("OPTIONS", path)
         self.send_response(204)
-        self.send_header('Access-Control-Allow-Origin', self._get_cors_origin())
-        self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-        self.send_header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Request-ID')
+        self.send_header("Access-Control-Allow-Origin", self._get_cors_origin())
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+        self.send_header(
+            "Access-Control-Allow-Headers", "Content-Type, Authorization, X-Request-ID"
+        )
         self.end_headers()
         self._finish_request_log(204, True)
 
@@ -298,29 +323,32 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
                 return
             if not self._check_rate_limit(path):
                 return
-            if path == '/health' or path == '/':
+            if path == "/health" or path == "/":
                 self._handle_health()
-            elif path == '/targets':
+            elif path == "/targets":
                 self._handle_targets()
-            elif path == '/rules':
+            elif path == "/rules":
                 self._handle_rules()
-            elif path == '/metrics':
+            elif path == "/metrics":
                 self._handle_metrics()
-            elif path == '/docs':
+            elif path == "/docs":
                 self._handle_docs()
-            elif path == '/openapi.yaml':
+            elif path == "/openapi.yaml":
                 self._handle_openapi_yaml()
-            elif path.startswith('/jobs/') and path.endswith('/stream'):
-                job_id = path.split('/')[2]
+            elif path.startswith("/jobs/") and path.endswith("/stream"):
+                job_id = path.split("/")[2]
                 self._handle_job_stream(job_id)
-            elif path.startswith('/jobs/'):
-                job_id = path.split('/')[2]
+            elif path.startswith("/jobs/"):
+                job_id = path.split("/")[2]
                 self._handle_job_status(job_id)
             else:
-                self._send_json_response(404, APIResponse(
-                    success=False,
-                    error=APIError(code="NOT_FOUND", message=f"Not found: {raw_path}")
-                ))
+                self._send_json_response(
+                    404,
+                    APIResponse(
+                        success=False,
+                        error=APIError(code="NOT_FOUND", message=f"Not found: {raw_path}"),
+                    ),
+                )
         finally:
             metrics.dec_active()
             metrics.record_request(path, 200, time.monotonic() - t0)
@@ -341,95 +369,117 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
                 return
             if not self._check_rate_limit(path):
                 return
-            content_type = self.headers.get('Content-Type', '')
-            if content_type and 'application/json' not in content_type:
-                self._send_json_response(415, APIResponse(
-                    success=False,
-                    error=APIError(code="UNSUPPORTED_MEDIA", message="Content-Type must be application/json")
-                ))
+            content_type = self.headers.get("Content-Type", "")
+            if content_type and "application/json" not in content_type:
+                self._send_json_response(
+                    415,
+                    APIResponse(
+                        success=False,
+                        error=APIError(
+                            code="UNSUPPORTED_MEDIA",
+                            message="Content-Type must be application/json",
+                        ),
+                    ),
+                )
                 return
             try:
                 body = self._read_body()
                 data = json.loads(body) if body else {}
             except RequestBodyTooLargeError as e:
-                self._send_json_response(413, APIResponse(
-                    success=False,
-                    error=APIError(code="PAYLOAD_TOO_LARGE", message=str(e))
-                ))
+                self._send_json_response(
+                    413,
+                    APIResponse(
+                        success=False, error=APIError(code="PAYLOAD_TOO_LARGE", message=str(e))
+                    ),
+                )
                 return
             except json.JSONDecodeError as e:
-                self._send_json_response(400, APIResponse(
-                    success=False,
-                    error=APIError(code="INVALID_JSON", message=f"Invalid JSON: {e}")
-                ))
+                self._send_json_response(
+                    400,
+                    APIResponse(
+                        success=False,
+                        error=APIError(code="INVALID_JSON", message=f"Invalid JSON: {e}"),
+                    ),
+                )
                 return
             except ValueError as e:
-                self._send_json_response(400, APIResponse(
-                    success=False,
-                    error=APIError(code="BAD_REQUEST", message=str(e))
-                ))
+                self._send_json_response(
+                    400,
+                    APIResponse(success=False, error=APIError(code="BAD_REQUEST", message=str(e))),
+                )
                 return
             schema_error = self._validate_post_payload(path, data)
             if schema_error:
-                self._send_json_response(400, APIResponse(
-                    success=False,
-                    error=APIError(code="VALIDATION_ERROR", message=f"Invalid payload: {schema_error}")
-                ))
+                self._send_json_response(
+                    400,
+                    APIResponse(
+                        success=False,
+                        error=APIError(
+                            code="VALIDATION_ERROR", message=f"Invalid payload: {schema_error}"
+                        ),
+                    ),
+                )
                 return
-            if path == '/parse':
+            if path == "/parse":
                 self._handle_parse(data)
-            elif path == '/validate':
+            elif path == "/validate":
                 self._handle_validate(data)
-            elif path == '/transpile':
+            elif path == "/transpile":
                 self._handle_transpile(data)
-            elif path == '/lint':
+            elif path == "/lint":
                 self._handle_lint(data)
-            elif path == '/jobs/submit':
+            elif path == "/jobs/submit":
                 self._handle_job_submit(data)
             else:
-                self._send_json_response(404, APIResponse(
-                    success=False,
-                    error=APIError(code="NOT_FOUND", message=f"Not found: {raw_path}")
-                ))
+                self._send_json_response(
+                    404,
+                    APIResponse(
+                        success=False,
+                        error=APIError(code="NOT_FOUND", message=f"Not found: {raw_path}"),
+                    ),
+                )
         finally:
             metrics.dec_active()
             metrics.record_request(path, 200, time.monotonic() - t0)
-    
+
     def _handle_health(self) -> None:
         """Health check endpoint."""
         m = get_metrics()
-        self._send_json_response(200, APIResponse(
-            success=True,
-            data={
-                "status": "healthy",
-                "version": __version__,
-                "api_version": API_VERSION,
-                "uptime_seconds": round(m.uptime_s, 1),
-                "requests_served": m.total_requests,
-                "parse_errors_total": m.total_parse_errors,
-                "endpoints": [
-                    "GET  /v1/health",
-                    "GET  /v1/targets",
-                    "GET  /v1/rules",
-                    "GET  /v1/metrics",
-                    "GET  /v1/docs",
-                    "POST /v1/parse",
-                    "POST /v1/validate",
-                    "POST /v1/transpile",
-                    "POST /v1/lint",
-                    "POST /v1/jobs/submit",
-                    "GET  /v1/jobs/{id}",
-                    "GET  /v1/jobs/{id}/stream",
-                ],
-            }
-        ))
+        self._send_json_response(
+            200,
+            APIResponse(
+                success=True,
+                data={
+                    "status": "healthy",
+                    "version": __version__,
+                    "api_version": API_VERSION,
+                    "uptime_seconds": round(m.uptime_s, 1),
+                    "requests_served": m.total_requests,
+                    "parse_errors_total": m.total_parse_errors,
+                    "endpoints": [
+                        "GET  /v1/health",
+                        "GET  /v1/targets",
+                        "GET  /v1/rules",
+                        "GET  /v1/metrics",
+                        "GET  /v1/docs",
+                        "POST /v1/parse",
+                        "POST /v1/validate",
+                        "POST /v1/transpile",
+                        "POST /v1/lint",
+                        "POST /v1/jobs/submit",
+                        "GET  /v1/jobs/{id}",
+                        "GET  /v1/jobs/{id}/stream",
+                    ],
+                },
+            ),
+        )
 
     def _handle_metrics(self) -> None:
         """Prometheus metrics endpoint."""
-        body = get_metrics().format_prometheus().encode('utf-8')
+        body = get_metrics().format_prometheus().encode("utf-8")
         self.send_response(200)
-        self.send_header('Content-Type', 'text/plain; version=0.0.4; charset=utf-8')
-        self.send_header('Content-Length', str(len(body)))
+        self.send_header("Content-Type", "text/plain; version=0.0.4; charset=utf-8")
+        self.send_header("Content-Length", str(len(body)))
         self.end_headers()
         self.wfile.write(body)
         self._finish_request_log(200, True)
@@ -445,10 +495,10 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
 <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-bundle.js"></script>
 <script>SwaggerUIBundle({{url:"/v1/openapi.yaml",dom_id:"#swagger-ui"}})</script>
 </body></html>"""
-        body = html.encode('utf-8')
+        body = html.encode("utf-8")
         self.send_response(200)
-        self.send_header('Content-Type', 'text/html; charset=utf-8')
-        self.send_header('Content-Length', str(len(body)))
+        self.send_header("Content-Type", "text/html; charset=utf-8")
+        self.send_header("Content-Length", str(len(body)))
         self.end_headers()
         self.wfile.write(body)
         self._finish_request_log(200, True)
@@ -457,16 +507,19 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
         """Serve the OpenAPI spec."""
         spec_path = Path(__file__).resolve().parents[4] / "doc" / "openapi.yaml"
         if not spec_path.exists():
-            self._send_json_response(404, APIResponse(
-                success=False,
-                error=APIError(code="NOT_FOUND", message="openapi.yaml not found")
-            ))
+            self._send_json_response(
+                404,
+                APIResponse(
+                    success=False,
+                    error=APIError(code="NOT_FOUND", message="openapi.yaml not found"),
+                ),
+            )
             return
         body = spec_path.read_bytes()
         self.send_response(200)
-        self.send_header('Content-Type', 'text/yaml; charset=utf-8')
-        self.send_header('Content-Length', str(len(body)))
-        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header("Content-Type", "text/yaml; charset=utf-8")
+        self.send_header("Content-Length", str(len(body)))
+        self.send_header("Access-Control-Allow-Origin", "*")
         self.end_headers()
         self.wfile.write(body)
         self._finish_request_log(200, True)
@@ -475,26 +528,32 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
         """Apply offset/limit pagination to a list."""
         offset = max(int(params.get("offset", [0])[0]), 0)
         limit = min(max(int(params.get("limit", [50])[0]), 1), 200)
-        page = items[offset:offset + limit]
+        page = items[offset : offset + limit]
         return {"items": page, "total": len(items), "offset": offset, "limit": limit}
 
     def _handle_targets(self) -> None:
         """List available transpile targets."""
         parsed = urlparse(self.path)
         params = parse_qs(parsed.query)
-        targets = [
-            {"name": t.name.lower(), "extension": t.file_extension}
-            for t in TranspileTarget
-        ]
+        targets = [{"name": t.name.lower(), "extension": t.file_extension} for t in TranspileTarget]
         pg = self._paginate(targets, params)
-        self._send_json_response(200, APIResponse(
-            success=True,
-            data={"targets": pg["items"], "total": pg["total"], "offset": pg["offset"], "limit": pg["limit"]}
-        ))
-    
+        self._send_json_response(
+            200,
+            APIResponse(
+                success=True,
+                data={
+                    "targets": pg["items"],
+                    "total": pg["total"],
+                    "offset": pg["offset"],
+                    "limit": pg["limit"],
+                },
+            ),
+        )
+
     def _handle_rules(self) -> None:
         """List available lint rules."""
         from yuho.cli.commands.lint import ALL_RULES
+
         parsed = urlparse(self.path)
         params = parse_qs(parsed.query)
         rules = [
@@ -502,11 +561,19 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
             for r in ALL_RULES
         ]
         pg = self._paginate(rules, params)
-        self._send_json_response(200, APIResponse(
-            success=True,
-            data={"rules": pg["items"], "total": pg["total"], "offset": pg["offset"], "limit": pg["limit"]}
-        ))
-    
+        self._send_json_response(
+            200,
+            APIResponse(
+                success=True,
+                data={
+                    "rules": pg["items"],
+                    "total": pg["total"],
+                    "offset": pg["offset"],
+                    "limit": pg["limit"],
+                },
+            ),
+        )
+
     @staticmethod
     def _sanitize_filename(name: str) -> str:
         """Sanitize user-provided filename for error messages only."""
@@ -544,14 +611,13 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
 
     def _handle_parse(self, data: Dict[str, Any]) -> None:
         """Parse Yuho source code."""
-        source = data.get('source', '')
-        filename = self._sanitize_filename(data.get('filename', '<api>'))
+        source = data.get("source", "")
+        filename = self._sanitize_filename(data.get("filename", "<api>"))
 
         if not source:
-            self._send_json_response(400, APIResponse(
-                success=False,
-                error="Missing 'source' field"
-            ))
+            self._send_json_response(
+                400, APIResponse(success=False, error="Missing 'source' field")
+            )
             return
         src_err = self._check_source_length(source)
         if src_err:
@@ -570,19 +636,18 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
             parse_like = all(item["stage"] == "parse" for item in payload["errors"])
             status = 422 if parse_like else 500
         self._send_json_response(status, APIResponse(success=success, data=payload))
-    
+
     def _handle_validate(self, data: Dict[str, Any]) -> None:
         """Validate Yuho source code."""
-        source = data.get('source', '')
-        filename = self._sanitize_filename(data.get('filename', '<api>'))
-        include_metrics = bool(data.get('include_metrics', False))
-        explain_errors = bool(data.get('explain_errors', False))
-        
+        source = data.get("source", "")
+        filename = self._sanitize_filename(data.get("filename", "<api>"))
+        include_metrics = bool(data.get("include_metrics", False))
+        explain_errors = bool(data.get("explain_errors", False))
+
         if not source:
-            self._send_json_response(400, APIResponse(
-                success=False,
-                error="Missing 'source' field"
-            ))
+            self._send_json_response(
+                400, APIResponse(success=False, error="Missing 'source' field")
+            )
             return
         src_err = self._check_source_length(source)
         if src_err:
@@ -602,17 +667,16 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
                 data=response_data,
             ),
         )
-    
+
     def _handle_transpile(self, data: Dict[str, Any]) -> None:
         """Transpile Yuho source code."""
-        source = data.get('source', '')
-        target_name = data.get('target', 'json')
-        filename = self._sanitize_filename(data.get('filename', '<api>'))
+        source = data.get("source", "")
+        target_name = data.get("target", "json")
+        filename = self._sanitize_filename(data.get("filename", "<api>"))
         if not source:
-            self._send_json_response(400, APIResponse(
-                success=False,
-                error="Missing 'source' field"
-            ))
+            self._send_json_response(
+                400, APIResponse(success=False, error="Missing 'source' field")
+            )
             return
         src_err = self._check_source_length(source)
         if src_err:
@@ -627,18 +691,12 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
                 message="Failed to parse source",
             )
         except ParserBoundaryError as e:
-            self._send_json_response(500, APIResponse(
-                success=False,
-                error=str(e)
-            ))
+            self._send_json_response(500, APIResponse(success=False, error=str(e)))
             return
 
         if result.errors:
             errors = [{"message": e.message} for e in result.errors]
-            self._send_json_response(200, APIResponse(
-                success=False,
-                data={"errors": errors}
-            ))
+            self._send_json_response(200, APIResponse(success=False, data={"errors": errors}))
             return
 
         # Build AST
@@ -650,10 +708,7 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
                 message="Failed to build AST",
             )
         except ASTBoundaryError as e:
-            self._send_json_response(500, APIResponse(
-                success=False,
-                error=str(e)
-            ))
+            self._send_json_response(500, APIResponse(success=False, error=str(e)))
             return
 
         # Transpile
@@ -665,35 +720,33 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
                 ast,
                 message="Transpilation failed",
             )
-            
-            self._send_json_response(200, APIResponse(
-                success=True,
-                data={
-                    "target": target.name.lower(),
-                    "output": output,
-                }
-            ))
+
+            self._send_json_response(
+                200,
+                APIResponse(
+                    success=True,
+                    data={
+                        "target": target.name.lower(),
+                        "output": output,
+                    },
+                ),
+            )
         except ValueError as e:
-            self._send_json_response(400, APIResponse(
-                success=False,
-                error=f"Invalid target: {target_name}"
-            ))
+            self._send_json_response(
+                400, APIResponse(success=False, error=f"Invalid target: {target_name}")
+            )
         except TranspileBoundaryError as e:
-            self._send_json_response(500, APIResponse(
-                success=False,
-                error=str(e)
-            ))
-    
+            self._send_json_response(500, APIResponse(success=False, error=str(e)))
+
     def _handle_lint(self, data: Dict[str, Any]) -> None:
         """Run lint checks on Yuho source code."""
-        source = data.get('source', '')
-        rules = data.get('rules', None)
-        filename = self._sanitize_filename(data.get('filename', '<api>'))
+        source = data.get("source", "")
+        rules = data.get("rules", None)
+        filename = self._sanitize_filename(data.get("filename", "<api>"))
         if not source:
-            self._send_json_response(400, APIResponse(
-                success=False,
-                error="Missing 'source' field"
-            ))
+            self._send_json_response(
+                400, APIResponse(success=False, error="Missing 'source' field")
+            )
             return
         src_err = self._check_source_length(source)
         if src_err:
@@ -708,20 +761,14 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
                 message="Failed to parse source",
             )
         except ParserBoundaryError as e:
-            self._send_json_response(500, APIResponse(
-                success=False,
-                error=str(e)
-            ))
+            self._send_json_response(500, APIResponse(success=False, error=str(e)))
             return
-        
+
         if result.errors:
             errors = [{"message": e.message} for e in result.errors]
-            self._send_json_response(200, APIResponse(
-                success=False,
-                data={"parse_errors": errors}
-            ))
+            self._send_json_response(200, APIResponse(success=False, data={"parse_errors": errors}))
             return
-        
+
         # Build AST
         try:
             builder = ASTBuilder(source, filename)
@@ -731,51 +778,56 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
                 message="Failed to build AST",
             )
         except ASTBoundaryError as e:
-            self._send_json_response(500, APIResponse(
-                success=False,
-                error=str(e)
-            ))
+            self._send_json_response(500, APIResponse(success=False, error=str(e)))
             return
 
         # Run lint
         from yuho.cli.commands.lint import ALL_RULES, Severity
-        
+
         active_rules = ALL_RULES
         if rules:
             active_rules = [r for r in ALL_RULES if r.id in rules]
-        
+
         all_issues = []
         for rule in active_rules:
             issues = rule.check(ast, source)
             for issue in issues:
-                all_issues.append({
-                    "rule": issue.rule,
-                    "severity": issue.severity.name.lower(),
-                    "message": issue.message,
-                    "line": issue.line,
-                    "suggestion": issue.suggestion,
-                })
-        
-        self._send_json_response(200, APIResponse(
-            success=True,
-            data={
-                "issues": all_issues,
-                "summary": {
-                    "errors": len([i for i in all_issues if i["severity"] == "error"]),
-                    "warnings": len([i for i in all_issues if i["severity"] == "warning"]),
-                    "infos": len([i for i in all_issues if i["severity"] == "info"]),
-                    "hints": len([i for i in all_issues if i["severity"] == "hint"]),
-                }
-            }
-        ))
-    
+                all_issues.append(
+                    {
+                        "rule": issue.rule,
+                        "severity": issue.severity.name.lower(),
+                        "message": issue.message,
+                        "line": issue.line,
+                        "suggestion": issue.suggestion,
+                    }
+                )
+
+        self._send_json_response(
+            200,
+            APIResponse(
+                success=True,
+                data={
+                    "issues": all_issues,
+                    "summary": {
+                        "errors": len([i for i in all_issues if i["severity"] == "error"]),
+                        "warnings": len([i for i in all_issues if i["severity"] == "warning"]),
+                        "infos": len([i for i in all_issues if i["severity"] == "info"]),
+                        "hints": len([i for i in all_issues if i["severity"] == "hint"]),
+                    },
+                },
+            ),
+        )
+
     def _handle_job_submit(self, data: Dict[str, Any]) -> None:
         """Submit an async transpile job."""
-        source = data.get('source', '')
-        target_name = data.get('target', 'json')
+        source = data.get("source", "")
+        target_name = data.get("target", "json")
         if not source:
-            self._send_json_response(400, APIResponse(success=False, error="Missing 'source' field"))
+            self._send_json_response(
+                400, APIResponse(success=False, error="Missing 'source' field")
+            )
             return
+
         def _run_transpile(job: Job) -> Dict[str, Any]:
             job.add_event("parse", "Parsing source", progress=0.2)
             result = run_parser_boundary(self.parser.parse, source, "<job>", message="Parse failed")
@@ -789,15 +841,24 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
             transpiler = self.registry.get(target)
             output = run_transpile_boundary(transpiler.transpile, ast, message="Transpile failed")
             return {"target": target_name, "output": output}
+
         queue = get_job_queue()
         job = queue.submit(_run_transpile)
-        self._send_json_response(202, APIResponse(success=True, data={"job_id": job.id, "status": job.status.value}))
+        self._send_json_response(
+            202, APIResponse(success=True, data={"job_id": job.id, "status": job.status.value})
+        )
 
     def _handle_job_status(self, job_id: str) -> None:
         """Get job status."""
         job = get_job_queue().get(job_id)
         if not job:
-            self._send_json_response(404, APIResponse(success=False, error=APIError(code="NOT_FOUND", message=f"Job {job_id} not found")))
+            self._send_json_response(
+                404,
+                APIResponse(
+                    success=False,
+                    error=APIError(code="NOT_FOUND", message=f"Job {job_id} not found"),
+                ),
+            )
             return
         self._send_json_response(200, APIResponse(success=True, data=job.to_dict()))
 
@@ -805,17 +866,23 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
         """SSE stream for job events."""
         job = get_job_queue().get(job_id)
         if not job:
-            self._send_json_response(404, APIResponse(success=False, error=APIError(code="NOT_FOUND", message=f"Job {job_id} not found")))
+            self._send_json_response(
+                404,
+                APIResponse(
+                    success=False,
+                    error=APIError(code="NOT_FOUND", message=f"Job {job_id} not found"),
+                ),
+            )
             return
         self.send_response(200)
-        self.send_header('Content-Type', 'text/event-stream')
-        self.send_header('Cache-Control', 'no-cache')
-        self.send_header('Connection', 'keep-alive')
-        self.send_header('Access-Control-Allow-Origin', self._get_cors_origin())
+        self.send_header("Content-Type", "text/event-stream")
+        self.send_header("Cache-Control", "no-cache")
+        self.send_header("Connection", "keep-alive")
+        self.send_header("Access-Control-Allow-Origin", self._get_cors_origin())
         self.end_headers()
         try:
             for chunk in stream_job_events(job):
-                self.wfile.write(chunk.encode('utf-8'))
+                self.wfile.write(chunk.encode("utf-8"))
                 self.wfile.flush()
         except (BrokenPipeError, ConnectionResetError):
             pass
@@ -823,7 +890,7 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
 
     def log_message(self, format: str, *args) -> None:
         """Override to use our logging."""
-        if hasattr(self.server, 'verbose') and self.server.verbose:
+        if hasattr(self.server, "verbose") and self.server.verbose:
             message = format % args
             click.echo(f"[API] {self.address_string()} - {message}")
 
@@ -863,11 +930,13 @@ def run_api(
     resolved_host = host or api_cfg.host
     resolved_port = port if port is not None else api_cfg.port
     auth_token = get_auth_token()
-    limiter = RateLimiter(RateLimitConfig(
-        requests_per_second=api_cfg.rate_limit_rps,
-        burst_size=api_cfg.rate_limit_burst,
-        enabled=api_cfg.rate_limit_enabled,
-    ))
+    limiter = RateLimiter(
+        RateLimitConfig(
+            requests_per_second=api_cfg.rate_limit_rps,
+            burst_size=api_cfg.rate_limit_burst,
+            enabled=api_cfg.rate_limit_enabled,
+        )
+    )
 
     # Setup workspace routing
     ws_router = None
@@ -879,12 +948,18 @@ def run_api(
     # Load webhook endpoints from config
     if cfg.webhooks.enabled and cfg.webhooks.endpoints:
         from yuho.events.webhook import get_webhook_manager, WebhookEndpoint
+
         mgr = get_webhook_manager()
         for ep in cfg.webhooks.endpoints:
-            mgr.register(WebhookEndpoint(
-                id=ep.get("id", ""), url=ep.get("url", ""), secret=ep.get("secret", ""),
-                events=ep.get("events", ["*"]), enabled=ep.get("enabled", True),
-            ))
+            mgr.register(
+                WebhookEndpoint(
+                    id=ep.get("id", ""),
+                    url=ep.get("url", ""),
+                    secret=ep.get("secret", ""),
+                    events=ep.get("events", ["*"]),
+                    enabled=ep.get("enabled", True),
+                )
+            )
         logger.info(f"Loaded {len(cfg.webhooks.endpoints)} webhook endpoint(s) from config")
 
     try:
