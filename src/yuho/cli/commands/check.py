@@ -5,7 +5,7 @@ Check command - parse and validate Yuho files.
 import json
 import sys
 from pathlib import Path
-from typing import Optional
+from typing import Any, Optional
 
 import click
 
@@ -111,6 +111,7 @@ def run_check(
     explain_errors: bool = False,
     metrics: bool = False,
     output_format: str = "text",
+    syntax_only: bool = False,
 ) -> None:
     """
     Parse and validate a Yuho source file.
@@ -121,6 +122,7 @@ def run_check(
         verbose: Enable verbose output
         explain_errors: Show detailed explanations for errors
         metrics: Include code_scale and clock_load_scale metrics in output
+        syntax_only: Skip semantic analysis and lint phase reporting beyond parse/AST
     """
     if output_format == "json":
         json_output = True
@@ -132,118 +134,126 @@ def run_check(
     # Parse + AST via shared analysis service
     if file == "-":
         stdin_source = sys.stdin.read()
-        analysis = analyze_source(stdin_source, file=file_label, run_semantic=False)
+        analysis = analyze_source(stdin_source, file=file_label, run_semantic=not syntax_only)
     else:
-        analysis = analyze_file(file, run_semantic=False)
+        analysis = analyze_file(file, run_semantic=not syntax_only)
 
-    if not analysis.parse_errors and analysis.errors:
-        first_error = analysis.errors[0]
-        if output_format == "sarif":
-            print(to_sarif([make_sarif_result("yuho/error", first_error.message, file_label, line=first_error.location.line if first_error.location else 1)]))
-        elif json_output:
-            print(json.dumps({"valid": False, "errors": [{"message": first_error.message}]}))
-        else:
-            click.echo(colorize(f"error: {first_error.message}", Colors.RED), err=True)
-        sys.exit(1)
+    payload = analysis.validation_payload(include_metrics=metrics)
+    payload["mode"] = "syntax-only" if syntax_only else "full"
 
-    # Report parse errors
-    if analysis.parse_errors:
-        if output_format == "sarif":
-            results = [make_sarif_result("yuho/parse", e.message, file_label, line=e.location.line if e.location else 1, col=e.location.col if e.location else 1) for e in analysis.parse_errors]
-            print(to_sarif(results))
-            sys.exit(1)
-        if json_output:
-            errors_json = [
-                {
-                    "message": err.message,
-                    "location": {
-                        "file": err.location.file,
-                        "line": err.location.line,
-                        "col": err.location.col,
-                        "end_line": err.location.end_line,
-                        "end_col": err.location.end_col,
-                    },
-                    "node_type": err.node_type,
-                    "explanation": get_error_explanation(err.message, err.node_type) if explain_errors else None,
-                }
-                for err in analysis.parse_errors
-            ]
-            print(json.dumps({"valid": False, "errors": errors_json}, indent=2))
-        else:
-            error_output = format_errors(analysis.parse_errors, analysis.source, file_label)
-            click.echo(error_output, err=True)
-
-            # Add suggestions
-            for err in analysis.parse_errors:
-                suggestion = format_suggestion(err, analysis.source)
-                if suggestion:
-                    click.echo(colorize(f"  hint: {suggestion}", Colors.YELLOW), err=True)
-
-                # Add detailed explanation if requested
-                if explain_errors:
-                    explanation = get_error_explanation(err.message, err.node_type)
-                    if explanation:
-                        click.echo(colorize("\n  Explanation:", Colors.CYAN + Colors.BOLD), err=True)
-                        for line in explanation.strip().split("\n"):
-                            click.echo(colorize(f"    {line}", Colors.DIM), err=True)
-                        click.echo("", err=True)
-
-        sys.exit(1)
-
-    # Shared analysis service already built AST
-    ast = analysis.ast
-    if ast is None:
-        ast_error = next((e.message for e in analysis.errors if e.stage == "ast"), "Unknown AST error")
-        if json_output:
-            print(json.dumps({"valid": False, "errors": [{"message": ast_error}]}))
-        else:
-            click.echo(colorize(f"error: {ast_error}", Colors.RED), err=True)
-        sys.exit(1)
-
-    # Success
-    if json_output:
-        summary = {
-            "valid": True,
-            "file": file_label,
-            "stats": {
-                "imports": len(ast.imports),
-                "structs": len(ast.type_defs),
-                "functions": len(ast.function_defs),
-                "statutes": len(ast.statutes),
-                "variables": len(ast.variables),
-            }
-        }
-        if metrics:
-            summary["code_scale"] = analysis.code_scale.to_dict() if analysis.code_scale else None
-            summary["clock_load_scale"] = (
-                analysis.clock_load_scale.to_dict() if analysis.clock_load_scale else None
+    if explain_errors:
+        for item in payload["errors"]:
+            if item["stage"] != "parse":
+                continue
+            item["explanation"] = get_error_explanation(
+                item["message"],
+                item.get("node_type"),
             )
-        print(json.dumps(summary, indent=2))
-    else:
-        click.echo(colorize(f"OK: {file_label}", Colors.CYAN + Colors.BOLD))
-        if verbose:
-            click.echo(f"  {len(ast.imports)} imports")
-            click.echo(f"  {len(ast.type_defs)} type definitions")
-            click.echo(f"  {len(ast.function_defs)} functions")
-            click.echo(f"  {len(ast.statutes)} statutes")
-            click.echo(f"  {len(ast.variables)} variables")
-        if metrics:
-            if analysis.code_scale:
-                code_scale = analysis.code_scale.to_dict()
-                click.echo(
-                    "  code_scale: "
-                    f"source_loc={code_scale['source_loc']}, "
-                    f"ast_nodes={code_scale['ast_nodes']}, "
-                    f"statute_count={code_scale['statute_count']}, "
-                    f"definition_count={code_scale['definition_count']}"
-                )
-            if analysis.clock_load_scale:
-                clock_load = analysis.clock_load_scale.to_dict()
-                click.echo(
-                    "  clock_load_scale: "
-                    f"parse_ms={clock_load['parse_ms']:.3f}, "
-                    f"ast_build_ms={clock_load['ast_build_ms']:.3f}, "
-                    f"total_ms={clock_load['total_ms']:.3f}"
-                )
 
-    sys.exit(0)
+    if output_format == "sarif":
+        sarif_results = [
+            make_sarif_result(
+                f"yuho/{item['stage']}",
+                item["message"],
+                file_label,
+                line=item.get("line") or 1,
+                col=item.get("column") or 1,
+                level=item.get("severity", "error"),
+            )
+            for item in payload["errors"] + payload["warnings"] + payload["lint_warnings"]
+        ]
+        print(to_sarif(sarif_results))
+        sys.exit(1 if payload["errors"] else 0)
+
+    if json_output:
+        print(json.dumps(payload, indent=2))
+        sys.exit(1 if payload["errors"] else 0)
+
+    phase_labels = []
+    for name, phase in payload["phases"].items():
+        valid = phase["valid"]
+        if valid is True:
+            status = "OK"
+        elif valid is False:
+            status = "FAIL"
+        else:
+            status = "SKIP"
+        phase_labels.append(f"{name}={status}")
+
+    if payload["errors"]:
+        click.echo(
+            colorize(f"INVALID: {file_label}", Colors.RED + Colors.BOLD),
+            err=True,
+        )
+    else:
+        click.echo(colorize(f"VALID: {file_label}", Colors.CYAN + Colors.BOLD))
+    click.echo(f"  phases: {', '.join(phase_labels)}")
+
+    if analysis.parse_errors:
+        error_output = format_errors(analysis.parse_errors, analysis.source, file_label)
+        click.echo(error_output, err=True)
+        for err in analysis.parse_errors:
+            suggestion = format_suggestion(err, analysis.source)
+            if suggestion:
+                click.echo(colorize(f"  hint: {suggestion}", Colors.YELLOW), err=True)
+            if explain_errors:
+                explanation = get_error_explanation(err.message, err.node_type)
+                if explanation:
+                    click.echo(
+                        colorize("\n  Explanation:", Colors.CYAN + Colors.BOLD),
+                        err=True,
+                    )
+                    for line in explanation.strip().split("\n"):
+                        click.echo(colorize(f"    {line}", Colors.DIM), err=True)
+                    click.echo("", err=True)
+
+    for item in payload["errors"]:
+        if item["stage"] == "parse":
+            continue
+        location = ""
+        if item.get("line") is not None:
+            location = f" {item['line']}:{item.get('column') or 1}"
+        click.echo(
+            colorize(
+                f"  {item['stage']}{location}: {item['message']}",
+                Colors.RED,
+            ),
+            err=True,
+        )
+
+    combined_warnings = payload["warnings"] + payload["lint_warnings"]
+    for warning in combined_warnings:
+        stage = warning.get("stage", "warning")
+        detail = warning["message"]
+        if warning.get("statute_section"):
+            detail = f"s{warning['statute_section']}: {detail}"
+        click.echo(colorize(f"  {stage}: {detail}", Colors.YELLOW))
+
+    if verbose and analysis.ast_summary is not None:
+        stats = analysis.ast_summary.to_dict()
+        click.echo(f"  imports: {stats['imports']}")
+        click.echo(f"  structs: {stats['structs']}")
+        click.echo(f"  functions: {stats['functions']}")
+        click.echo(f"  statutes: {stats['statutes']}")
+        click.echo(f"  variables: {stats['variables']}")
+
+    if metrics:
+        if analysis.code_scale:
+            code_scale = analysis.code_scale.to_dict()
+            click.echo(
+                "  code_scale: "
+                f"source_loc={code_scale['source_loc']}, "
+                f"ast_nodes={code_scale['ast_nodes']}, "
+                f"statute_count={code_scale['statute_count']}, "
+                f"definition_count={code_scale['definition_count']}"
+            )
+        if analysis.clock_load_scale:
+            clock_load = analysis.clock_load_scale.to_dict()
+            click.echo(
+                "  clock_load_scale: "
+                f"parse_ms={clock_load['parse_ms']:.3f}, "
+                f"ast_build_ms={clock_load['ast_build_ms']:.3f}, "
+                f"total_ms={clock_load['total_ms']:.3f}"
+            )
+
+    sys.exit(1 if payload["errors"] else 0)
