@@ -10,16 +10,31 @@ from yuho.ast import nodes
 from yuho.transpile.base import TranspileTarget
 from yuho.transpile.registry import TranspilerRegistry
 from yuho.verify.logic_engine import (
-    Formula, FormulaType, var, and_, or_, not_, implies,
-    TRUE, FALSE, simplify, is_tautology, is_contradiction,
-    is_satisfiable, evaluate, detect_circular_dependencies,
-    analyze_formulas, statute_to_formulas, variables,
+    Formula,
+    FormulaType,
+    var,
+    and_,
+    or_,
+    not_,
+    implies,
+    TRUE,
+    FALSE,
+    simplify,
+    is_tautology,
+    is_contradiction,
+    is_satisfiable,
+    evaluate,
+    detect_circular_dependencies,
+    analyze_formulas,
+    statute_to_formulas,
+    variables,
 )
 
 
 # =========================================================================
 # Parsing helpers
 # =========================================================================
+
 
 def parse(source: str) -> nodes.ModuleNode:
     parser = Parser()
@@ -32,16 +47,17 @@ def parse(source: str) -> nodes.ModuleNode:
 # Legal test construct
 # =========================================================================
 
+
 class TestLegalTest:
     def test_parse_basic_legal_test(self):
-        src = '''
+        src = """
 legal_test ValidContract {
     bool offer_made,
     bool acceptance,
     bool consideration,
     requires offer_made && acceptance && consideration
 }
-'''
+"""
         mod = parse(src)
         assert len(mod.legal_tests) == 1
         lt = mod.legal_tests[0]
@@ -50,13 +66,13 @@ legal_test ValidContract {
         assert lt.condition is not None
 
     def test_legal_test_requirement_names(self):
-        src = '''
+        src = """
 legal_test SimpleMurder {
     bool actus_reus_present,
     bool mens_rea_present,
     requires actus_reus_present && mens_rea_present
 }
-'''
+"""
         mod = parse(src)
         lt = mod.legal_tests[0]
         names = [r.name for r in lt.requirements if isinstance(r, nodes.VariableDecl)]
@@ -64,24 +80,24 @@ legal_test SimpleMurder {
         assert "mens_rea_present" in names
 
     def test_legal_test_without_requires(self):
-        src = '''
+        src = """
 legal_test EmptyTest {
     bool field_a,
 }
-'''
+"""
         mod = parse(src)
         assert len(mod.legal_tests) == 1
         lt = mod.legal_tests[0]
         assert lt.condition is None
 
     def test_legal_test_with_annotation(self):
-        src = '''
+        src = """
 @precedent("PP v Tan [2020]")
 legal_test AnnotatedTest {
     bool element_one,
     requires element_one
 }
-'''
+"""
         mod = parse(src)
         lt = mod.legal_tests[0]
         assert len(lt.annotations) == 1
@@ -93,14 +109,15 @@ legal_test AnnotatedTest {
 # Conflict check construct
 # =========================================================================
 
+
 class TestConflictCheck:
     def test_parse_basic_conflict_check(self):
-        src = '''
+        src = """
 conflict_check S299_vs_S300 {
     source := "s299_culpable_homicide"
     target := "s300_murder"
 }
-'''
+"""
         mod = parse(src)
         assert len(mod.conflict_checks) == 1
         cc = mod.conflict_checks[0]
@@ -109,25 +126,25 @@ conflict_check S299_vs_S300 {
         assert cc.target == "s300_murder"
 
     def test_conflict_check_with_semicolons(self):
-        src = '''
+        src = """
 conflict_check TheftVsRobbery {
     source := "s378_theft";
     target := "s390_robbery";
 }
-'''
+"""
         mod = parse(src)
         cc = mod.conflict_checks[0]
         assert cc.source == "s378_theft"
         assert cc.target == "s390_robbery"
 
     def test_conflict_check_with_annotation(self):
-        src = '''
+        src = """
 @hierarchy("subsidiary", "S300")
 conflict_check HierarchyCheck {
     source := "s299"
     target := "s300"
 }
-'''
+"""
         mod = parse(src)
         cc = mod.conflict_checks[0]
         assert len(cc.annotations) == 1
@@ -138,9 +155,10 @@ conflict_check HierarchyCheck {
 # Annotation system
 # =========================================================================
 
+
 class TestAnnotations:
     def test_annotation_on_statute(self):
-        src = '''
+        src = """
 @amended("2020-01-01", "Criminal Law Reform Act 2019")
 statute 415 "Cheating" effective 1872-01-01 {
     definitions {
@@ -150,7 +168,7 @@ statute 415 "Cheating" effective 1872-01-01 {
         actus_reus deception := "deceives any person"
     }
 }
-'''
+"""
         mod = parse(src)
         statute = mod.statutes[0]
         assert len(statute.annotations) == 1
@@ -160,20 +178,20 @@ statute 415 "Cheating" effective 1872-01-01 {
         assert ann.args[1] == "Criminal Law Reform Act 2019"
 
     def test_presumed_annotation(self):
-        src = '''
+        src = """
 @presumed("innocent")
 statute 100 "Test" {
     elements {
         actus_reus act := "some act"
     }
 }
-'''
+"""
         mod = parse(src)
         assert mod.statutes[0].annotations[0].name == "presumed"
         assert mod.statutes[0].annotations[0].args[0] == "innocent"
 
     def test_multiple_annotations(self):
-        src = '''
+        src = """
 @precedent("Case A v B [2020]")
 @amended("2021-06-15", "Act 2021")
 statute 200 "MultiAnnotation" {
@@ -181,7 +199,7 @@ statute 200 "MultiAnnotation" {
         actus_reus act := "test"
     }
 }
-'''
+"""
         mod = parse(src)
         anns = mod.statutes[0].annotations
         assert len(anns) == 2
@@ -190,14 +208,14 @@ statute 200 "MultiAnnotation" {
         assert "amended" in names
 
     def test_annotation_no_args(self):
-        src = '''
+        src = """
 @presumed
 statute 300 "NoArgs" {
     elements {
         actus_reus act := "test"
     }
 }
-'''
+"""
         mod = parse(src)
         ann = mod.statutes[0].annotations[0]
         assert ann.name == "presumed"
@@ -208,6 +226,7 @@ statute 300 "NoArgs" {
 # Catala transpiler
 # =========================================================================
 
+
 class TestCatalaTranspiler:
     def _transpile(self, source: str) -> str:
         mod = parse(source)
@@ -216,7 +235,7 @@ class TestCatalaTranspiler:
         return transpiler.transpile(mod)
 
     def test_catala_statute(self):
-        src = '''
+        src = """
 statute 378 "Theft" effective 1872-01-01 {
     definitions {
         theft := "dishonest taking of property"
@@ -230,7 +249,7 @@ statute 378 "Theft" effective 1872-01-01 {
         fine := $10,000
     }
 }
-'''
+"""
         output = self._transpile(src)
         assert "Section 378" in output
         assert "declaration scope" in output
@@ -239,30 +258,30 @@ statute 378 "Theft" effective 1872-01-01 {
         assert "guilty" in output
 
     def test_catala_legal_test(self):
-        src = '''
+        src = """
 legal_test ValidOffer {
     bool definite,
     bool communicated,
     requires definite && communicated
 }
-'''
+"""
         output = self._transpile(src)
         assert "LegalTest" in output
         assert "test_satisfied" in output
 
     def test_catala_conflict_check(self):
-        src = '''
+        src = """
 conflict_check TestConflict {
     source := "file_a"
     target := "file_b"
 }
-'''
+"""
         output = self._transpile(src)
         assert "Conflict check" in output
         assert "file_a" in output
 
     def test_catala_with_exception(self):
-        src = '''
+        src = """
 statute 100 "Test" {
     elements {
         actus_reus act := "some act"
@@ -271,7 +290,7 @@ statute 100 "Test" {
         "acted in self-defence"
     }
 }
-'''
+"""
         output = self._transpile(src)
         assert "exception" in output
 
@@ -279,6 +298,7 @@ statute 100 "Test" {
 # =========================================================================
 # F* transpiler
 # =========================================================================
+
 
 class TestFStarTranspiler:
     def _transpile(self, source: str) -> str:
@@ -288,7 +308,7 @@ class TestFStarTranspiler:
         return transpiler.transpile(mod)
 
     def test_fstar_statute(self):
-        src = '''
+        src = """
 statute 378 "Theft" effective 1872-01-01 {
     definitions {
         theft := "dishonest taking of property"
@@ -301,7 +321,7 @@ statute 378 "Theft" effective 1872-01-01 {
         imprisonment := 3 years
     }
 }
-'''
+"""
         output = self._transpile(src)
         assert "module YuhoStatutes" in output
         assert "section_" in output
@@ -310,50 +330,50 @@ statute 378 "Theft" effective 1872-01-01 {
         assert "is_guilty" in output
 
     def test_fstar_struct(self):
-        src = '''
+        src = """
 struct Party {
     string name,
     int age,
 }
-'''
+"""
         output = self._transpile(src)
         assert "type" in output
         assert "name" in output
         assert "string" in output
 
     def test_fstar_legal_test(self):
-        src = '''
+        src = """
 legal_test ValidContract {
     bool offer,
     bool acceptance,
     requires offer && acceptance
 }
-'''
+"""
         output = self._transpile(src)
         assert "Legal test" in output
         assert "test_" in output
 
     def test_fstar_enum(self):
-        src = '''
+        src = """
 enum Verdict {
     Guilty,
     NotGuilty,
     Acquitted,
 }
-'''
+"""
         output = self._transpile(src)
         assert "Guilty" in output
         assert "NotGuilty" in output
 
     def test_fstar_with_annotations(self):
-        src = '''
+        src = """
 @amended("2020-01-01", "Reform Act")
 statute 100 "Annotated" {
     elements {
         actus_reus act := "test"
     }
 }
-'''
+"""
         output = self._transpile(src)
         assert "@amended" in output
 
@@ -361,6 +381,7 @@ statute 100 "Annotated" {
 # =========================================================================
 # Logic engine
 # =========================================================================
+
 
 class TestLogicEngine:
     # --- simplification ---
@@ -508,7 +529,7 @@ class TestLogicEngine:
 
     # --- statute_to_formulas ---
     def test_statute_to_formulas(self):
-        src = '''
+        src = """
 statute 100 "Test" {
     elements {
         actus_reus act := "did something"
@@ -518,7 +539,7 @@ statute 100 "Test" {
         "self defence"
     }
 }
-'''
+"""
         mod = parse(src)
         formulas = statute_to_formulas(mod.statutes[0])
         assert "guilt" in formulas
@@ -528,6 +549,7 @@ statute 100 "Test" {
 # =========================================================================
 # Transpiler target enum
 # =========================================================================
+
 
 class TestTranspileTargets:
     def test_catala_from_string(self):
@@ -549,9 +571,10 @@ class TestTranspileTargets:
 # Integration: parse + transpile roundtrip
 # =========================================================================
 
+
 class TestIntegration:
     def test_full_program_with_all_constructs(self):
-        src = '''
+        src = """
 struct Facts {
     bool act_done,
     bool intent_present,
@@ -586,7 +609,7 @@ conflict_check S100_vs_S200 {
     source := "s100_test"
     target := "s200_other"
 }
-'''
+"""
         mod = parse(src)
         assert len(mod.statutes) == 1
         assert len(mod.legal_tests) == 1
@@ -594,16 +617,20 @@ conflict_check S100_vs_S200 {
         assert len(mod.statutes[0].annotations) == 2
         # transpile to all new targets
         registry = TranspilerRegistry.instance()
-        for target in [TranspileTarget.CATALA, TranspileTarget.FSTAR,
-                       TranspileTarget.JSON, TranspileTarget.ENGLISH,
-                       TranspileTarget.PROLOG]:
+        for target in [
+            TranspileTarget.CATALA,
+            TranspileTarget.FSTAR,
+            TranspileTarget.JSON,
+            TranspileTarget.ENGLISH,
+            TranspileTarget.PROLOG,
+        ]:
             transpiler = registry.get(target)
             output = transpiler.transpile(mod)
             assert len(output) > 0, f"Empty output for {target}"
 
     def test_existing_statutes_still_parse(self):
         """Ensure existing statute syntax is unaffected."""
-        src = '''
+        src = """
 statute 299 "Culpable Homicide" effective 1872-01-01 {
     definitions {
         culpableHomicide := "causing death by doing an act"
@@ -623,7 +650,7 @@ statute 299 "Culpable Homicide" effective 1872-01-01 {
         "the offender was deprived of self-control by sudden provocation"
     }
 }
-'''
+"""
         mod = parse(src)
         assert len(mod.statutes) == 1
         s = mod.statutes[0]
