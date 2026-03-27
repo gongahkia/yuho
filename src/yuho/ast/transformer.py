@@ -8,11 +8,12 @@ Transformer returns new AST nodes allowing immutable transformations.
 from typing import Any, List, Optional, Tuple, TypeVar, cast
 
 from yuho.ast import nodes
+from yuho.ast.visitor import Visitor
 
 TNode = TypeVar("TNode", bound=nodes.ASTNode)
 
 
-class Transformer:
+class Transformer(Visitor):
     """
     Base transformer class for immutable AST transformation.
 
