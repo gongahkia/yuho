@@ -18,15 +18,17 @@ class JobStatus(Enum):
 @dataclass
 class JobEvent:
     """A single event in a job's lifecycle."""
+
     stage: str
     message: str
     timestamp: float = field(default_factory=time.monotonic)
-    progress: Optional[float] = None # 0.0-1.0
+    progress: Optional[float] = None  # 0.0-1.0
 
 
 @dataclass
 class Job:
     """An async job with event stream."""
+
     id: str
     status: JobStatus = JobStatus.PENDING
     events: List[JobEvent] = field(default_factory=list)
@@ -41,7 +43,10 @@ class Job:
         return {
             "id": self.id,
             "status": self.status.value,
-            "events": [{"stage": e.stage, "message": e.message, "progress": e.progress} for e in self.events],
+            "events": [
+                {"stage": e.stage, "message": e.message, "progress": e.progress}
+                for e in self.events
+            ],
             "result": self.result,
             "error": self.error,
         }
@@ -49,6 +54,7 @@ class Job:
 
 class JobQueue:
     """In-memory job queue with background execution."""
+
     def __init__(self, max_jobs: int = 1000) -> None:
         self._jobs: Dict[str, Job] = {}
         self._lock = threading.Lock()
@@ -63,6 +69,7 @@ class JobQueue:
                 oldest = min(self._jobs.values(), key=lambda j: j.created_at)
                 del self._jobs[oldest.id]
             self._jobs[job_id] = job
+
         def _run() -> None:
             job.status = JobStatus.RUNNING
             job.add_event("start", "Job started")
@@ -74,6 +81,7 @@ class JobQueue:
                 job.status = JobStatus.FAILED
                 job.error = str(e)
                 job.add_event("error", str(e))
+
         t = threading.Thread(target=_run, daemon=True)
         t.start()
         return job
