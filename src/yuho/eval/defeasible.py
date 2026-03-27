@@ -14,6 +14,7 @@ from yuho.ast import nodes
 @dataclass
 class ReasoningStep:
     """Single step in defeasible reasoning chain."""
+
     description: str
     result: bool
     details: str = ""
@@ -22,6 +23,7 @@ class ReasoningStep:
 @dataclass
 class ExceptionApplication:
     """Result of evaluating a single exception."""
+
     label: str
     condition: str
     guard_satisfied: bool
@@ -31,11 +33,12 @@ class ExceptionApplication:
 @dataclass
 class DefeasibleResult:
     """Result of defeasible evaluation of a statute against facts."""
+
     statute_section: str
     statute_title: str
-    base_satisfied: bool # whether base elements are all satisfied
+    base_satisfied: bool  # whether base elements are all satisfied
     exceptions_applied: List[ExceptionApplication]
-    final_verdict: str # "convicted", "exception_applied", "not_satisfied"
+    final_verdict: str  # "convicted", "exception_applied", "not_satisfied"
     reasoning_chain: List[ReasoningStep]
 
     @property
@@ -48,6 +51,7 @@ class DefeasibleReasoner:
 
     def __init__(self):
         from yuho.eval.interpreter import Interpreter, Environment
+
         self.interpreter = Interpreter()
 
     def evaluate_with_exceptions(
@@ -68,6 +72,7 @@ class DefeasibleReasoner:
             DefeasibleResult with base satisfaction, exception applications, and final verdict
         """
         from yuho.eval.interpreter import Environment, Value, StructInstance
+
         if env is None:
             env = Environment()
 
@@ -76,30 +81,34 @@ class DefeasibleReasoner:
         reasoning: List[ReasoningStep] = []
 
         # step 1: evaluate base elements
-        base_satisfied, element_steps = self._evaluate_base_elements(
-            statute.elements, facts, env
-        )
+        base_satisfied, element_steps = self._evaluate_base_elements(statute.elements, facts, env)
         reasoning.extend(element_steps)
-        reasoning.append(ReasoningStep(
-            description=f"Base elements {'satisfied' if base_satisfied else 'not satisfied'}",
-            result=base_satisfied,
-        ))
+        reasoning.append(
+            ReasoningStep(
+                description=f"Base elements {'satisfied' if base_satisfied else 'not satisfied'}",
+                result=base_satisfied,
+            )
+        )
 
         # step 2: if base satisfied, check exceptions
         exceptions_applied: List[ExceptionApplication] = []
         if base_satisfied and statute.exceptions:
-            reasoning.append(ReasoningStep(
-                description=f"Checking {len(statute.exceptions)} exception(s)",
-                result=True,
-            ))
+            reasoning.append(
+                ReasoningStep(
+                    description=f"Checking {len(statute.exceptions)} exception(s)",
+                    result=True,
+                )
+            )
             for exc in statute.exceptions:
                 app = self._evaluate_exception(exc, facts, env)
                 exceptions_applied.append(app)
-                reasoning.append(ReasoningStep(
-                    description=f"Exception '{app.label}': guard {'satisfied' if app.guard_satisfied else 'not satisfied'}",
-                    result=app.guard_satisfied,
-                    details=app.effect if app.guard_satisfied else "",
-                ))
+                reasoning.append(
+                    ReasoningStep(
+                        description=f"Exception '{app.label}': guard {'satisfied' if app.guard_satisfied else 'not satisfied'}",
+                        result=app.guard_satisfied,
+                        details=app.effect if app.guard_satisfied else "",
+                    )
+                )
 
         # step 3: determine final verdict
         if not base_satisfied:
@@ -109,10 +118,12 @@ class DefeasibleReasoner:
         else:
             final_verdict = "convicted"
 
-        reasoning.append(ReasoningStep(
-            description=f"Final verdict: {final_verdict}",
-            result=(final_verdict == "convicted"),
-        ))
+        reasoning.append(
+            ReasoningStep(
+                description=f"Final verdict: {final_verdict}",
+                result=(final_verdict == "convicted"),
+            )
+        )
 
         return DefeasibleResult(
             statute_section=section,
@@ -143,11 +154,17 @@ class DefeasibleReasoner:
                     all_satisfied = False
             elif isinstance(elem, nodes.ElementNode):
                 satisfied = self._check_element(elem, facts)
-                steps.append(ReasoningStep(
-                    description=f"{elem.element_type} '{elem.name}'",
-                    result=satisfied,
-                    details=elem.description.value if isinstance(elem.description, nodes.StringLit) else str(elem.description),
-                ))
+                steps.append(
+                    ReasoningStep(
+                        description=f"{elem.element_type} '{elem.name}'",
+                        result=satisfied,
+                        details=(
+                            elem.description.value
+                            if isinstance(elem.description, nodes.StringLit)
+                            else str(elem.description)
+                        ),
+                    )
+                )
                 if not satisfied:
                     all_satisfied = False
 
@@ -170,21 +187,25 @@ class DefeasibleReasoner:
                 results.append(satisfied)
             elif isinstance(member, nodes.ElementNode):
                 satisfied = self._check_element(member, facts)
-                steps.append(ReasoningStep(
-                    description=f"{member.element_type} '{member.name}'",
-                    result=satisfied,
-                ))
+                steps.append(
+                    ReasoningStep(
+                        description=f"{member.element_type} '{member.name}'",
+                        result=satisfied,
+                    )
+                )
                 results.append(satisfied)
 
         if group.combinator == "all_of":
             overall = all(results) if results else True
-        else: # any_of
+        else:  # any_of
             overall = any(results) if results else False
 
-        steps.append(ReasoningStep(
-            description=f"{group.combinator} group: {'satisfied' if overall else 'not satisfied'}",
-            result=overall,
-        ))
+        steps.append(
+            ReasoningStep(
+                description=f"{group.combinator} group: {'satisfied' if overall else 'not satisfied'}",
+                result=overall,
+            )
+        )
         return overall, steps
 
     def _check_element(self, element: nodes.ElementNode, facts: dict) -> bool:
@@ -197,7 +218,7 @@ class DefeasibleReasoner:
                 return val
             if val is None:
                 return False
-            return True # non-None truthy
+            return True  # non-None truthy
         return False
 
     def _evaluate_exception(
@@ -218,7 +239,7 @@ class DefeasibleReasoner:
         else:
             # no guard - check if facts have a matching exception field
             if "exception" in facts:
-                guard_satisfied = (facts["exception"] == label)
+                guard_satisfied = facts["exception"] == label
 
         return ExceptionApplication(
             label=label,
