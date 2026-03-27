@@ -18,6 +18,7 @@ from yuho.ast.transformer import Transformer
 
 class ConstantFoldingError(Exception):
     """Error during constant folding (e.g., division by zero)."""
+
     pass
 
 
@@ -62,16 +63,18 @@ class ConstantFolder(Transformer):
         to evaluate if both operands are literals.
         """
         # First, transform children to fold nested expressions
-        node = super().transform_binary_expr(node)
+        transformed = super().transform_binary_expr(node)
+        if not isinstance(transformed, nodes.BinaryExprNode):
+            return transformed
 
         # Check if both operands are now literals
-        left = node.left
-        right = node.right
-        op = node.operator
+        left = transformed.left
+        right = transformed.right
+        op = transformed.operator
 
         # Integer operations
         if isinstance(left, nodes.IntLit) and isinstance(right, nodes.IntLit):
-            result = self._fold_int_binary(left.value, op, right.value, node)
+            result = self._fold_int_binary(left.value, op, right.value, transformed)
             if result is not None:
                 return result
 
@@ -79,13 +82,13 @@ class ConstantFolder(Transformer):
         if self._is_numeric_literal(left) and self._is_numeric_literal(right):
             left_val = self._get_numeric_value(left)
             right_val = self._get_numeric_value(right)
-            result = self._fold_float_binary(left_val, op, right_val, node)
+            result = self._fold_float_binary(left_val, op, right_val, transformed)
             if result is not None:
                 return result
 
         # Boolean operations
         if isinstance(left, nodes.BoolLit) and isinstance(right, nodes.BoolLit):
-            result = self._fold_bool_binary(left.value, op, right.value, node)
+            result = self._fold_bool_binary(left.value, op, right.value, transformed)
             if result is not None:
                 return result
 
@@ -94,11 +97,11 @@ class ConstantFolder(Transformer):
             if op == "+":
                 return nodes.StringLit(
                     value=left.value + right.value,
-                    source_location=node.source_location,
+                    source_location=transformed.source_location,
                 )
 
         # Cannot fold, return transformed node
-        return node
+        return transformed
 
     def transform_unary_expr(self, node: nodes.UnaryExprNode) -> nodes.ASTNode:
         """
@@ -109,22 +112,24 @@ class ConstantFolder(Transformer):
             - Logical not of booleans: !TRUE -> FALSE
         """
         # First, transform the operand
-        node = super().transform_unary_expr(node)
+        transformed = super().transform_unary_expr(node)
+        if not isinstance(transformed, nodes.UnaryExprNode):
+            return transformed
 
-        operand = node.operand
-        op = node.operator
+        operand = transformed.operand
+        op = transformed.operator
 
         # Numeric negation
         if op == "-":
             if isinstance(operand, nodes.IntLit):
                 return nodes.IntLit(
                     value=-operand.value,
-                    source_location=node.source_location,
+                    source_location=transformed.source_location,
                 )
             if isinstance(operand, nodes.FloatLit):
                 return nodes.FloatLit(
                     value=-operand.value,
-                    source_location=node.source_location,
+                    source_location=transformed.source_location,
                 )
 
         # Logical not
@@ -132,11 +137,11 @@ class ConstantFolder(Transformer):
             if isinstance(operand, nodes.BoolLit):
                 return nodes.BoolLit(
                     value=not operand.value,
-                    source_location=node.source_location,
+                    source_location=transformed.source_location,
                 )
 
         # Cannot fold, return transformed node
-        return node
+        return transformed
 
     def _is_numeric_literal(self, node: nodes.ASTNode) -> bool:
         """Check if a node is a numeric literal (int or float)."""
