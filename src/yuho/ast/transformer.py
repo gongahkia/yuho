@@ -5,9 +5,11 @@ Unlike Visitor which traverses without returning new nodes,
 Transformer returns new AST nodes allowing immutable transformations.
 """
 
-from typing import Any, Optional, Tuple, List
+from typing import Any, List, Optional, Tuple, TypeVar, cast
 
 from yuho.ast import nodes
+
+TNode = TypeVar("TNode", bound=nodes.ASTNode)
 
 
 class Transformer:
@@ -43,59 +45,162 @@ class Transformer:
         return node.accept(self)
 
     # visit_* aliases so node.accept(self) dispatches correctly
-    def visit_builtin_type(self, node): return self.transform_builtin_type(node)
-    def visit_named_type(self, node): return self.transform_named_type(node)
-    def visit_generic_type(self, node): return self.transform_generic_type(node)
-    def visit_optional_type(self, node): return self.transform_optional_type(node)
-    def visit_array_type(self, node): return self.transform_array_type(node)
-    def visit_int_lit(self, node): return self.transform_int_lit(node)
-    def visit_float_lit(self, node): return self.transform_float_lit(node)
-    def visit_bool_lit(self, node): return self.transform_bool_lit(node)
-    def visit_string_lit(self, node): return self.transform_string_lit(node)
-    def visit_money(self, node): return self.transform_money(node)
-    def visit_percent(self, node): return self.transform_percent(node)
-    def visit_date(self, node): return self.transform_date(node)
-    def visit_duration(self, node): return self.transform_duration(node)
-    def visit_identifier(self, node): return self.transform_identifier(node)
-    def visit_field_access(self, node): return self.transform_field_access(node)
-    def visit_index_access(self, node): return self.transform_index_access(node)
-    def visit_function_call(self, node): return self.transform_function_call(node)
-    def visit_binary_expr(self, node): return self.transform_binary_expr(node)
-    def visit_unary_expr(self, node): return self.transform_unary_expr(node)
-    def visit_pass_expr(self, node): return self.transform_pass_expr(node)
-    def visit_wildcard_pattern(self, node): return self.transform_wildcard_pattern(node)
-    def visit_literal_pattern(self, node): return self.transform_literal_pattern(node)
-    def visit_binding_pattern(self, node): return self.transform_binding_pattern(node)
-    def visit_field_pattern(self, node): return self.transform_field_pattern(node)
-    def visit_struct_pattern(self, node): return self.transform_struct_pattern(node)
-    def visit_match_arm(self, node): return self.transform_match_arm(node)
-    def visit_match_expr(self, node): return self.transform_match_expr(node)
-    def visit_field_def(self, node): return self.transform_field_def(node)
-    def visit_struct_def(self, node): return self.transform_struct_def(node)
-    def visit_field_assignment(self, node): return self.transform_field_assignment(node)
-    def visit_struct_literal(self, node): return self.transform_struct_literal(node)
-    def visit_param_def(self, node): return self.transform_param_def(node)
-    def visit_block(self, node): return self.transform_block(node)
-    def visit_function_def(self, node): return self.transform_function_def(node)
-    def visit_variable_decl(self, node): return self.transform_variable_decl(node)
-    def visit_assignment_stmt(self, node): return self.transform_assignment_stmt(node)
-    def visit_return_stmt(self, node): return self.transform_return_stmt(node)
-    def visit_pass_stmt(self, node): return self.transform_pass_stmt(node)
-    def visit_expression_stmt(self, node): return self.transform_expression_stmt(node)
-    def visit_definition_entry(self, node): return self.transform_definition_entry(node)
-    def visit_element(self, node): return self.transform_element(node)
-    def visit_element_group(self, node): return self.transform_element_group(node)
-    def visit_penalty(self, node): return self.transform_penalty(node)
-    def visit_illustration(self, node): return self.transform_illustration(node)
-    def visit_exception(self, node): return self.transform_exception(node)
-    def visit_caselaw(self, node): return self.transform_caselaw(node)
-    def visit_statute(self, node): return self.transform_statute(node)
-    def visit_import(self, node): return self.transform_import(node)
-    def visit_module(self, node): return self.transform_module(node)
-    def visit_assert_stmt(self, node): return node
-    def visit_referencing_stmt(self, node): return node
+    def visit_builtin_type(self, node):
+        return self.transform_builtin_type(node)
 
-    def _transform_children(self, children: List[nodes.ASTNode]) -> Tuple[Tuple[nodes.ASTNode, ...], bool]:
+    def visit_named_type(self, node):
+        return self.transform_named_type(node)
+
+    def visit_generic_type(self, node):
+        return self.transform_generic_type(node)
+
+    def visit_optional_type(self, node):
+        return self.transform_optional_type(node)
+
+    def visit_array_type(self, node):
+        return self.transform_array_type(node)
+
+    def visit_int_lit(self, node):
+        return self.transform_int_lit(node)
+
+    def visit_float_lit(self, node):
+        return self.transform_float_lit(node)
+
+    def visit_bool_lit(self, node):
+        return self.transform_bool_lit(node)
+
+    def visit_string_lit(self, node):
+        return self.transform_string_lit(node)
+
+    def visit_money(self, node):
+        return self.transform_money(node)
+
+    def visit_percent(self, node):
+        return self.transform_percent(node)
+
+    def visit_date(self, node):
+        return self.transform_date(node)
+
+    def visit_duration(self, node):
+        return self.transform_duration(node)
+
+    def visit_identifier(self, node):
+        return self.transform_identifier(node)
+
+    def visit_field_access(self, node):
+        return self.transform_field_access(node)
+
+    def visit_index_access(self, node):
+        return self.transform_index_access(node)
+
+    def visit_function_call(self, node):
+        return self.transform_function_call(node)
+
+    def visit_binary_expr(self, node):
+        return self.transform_binary_expr(node)
+
+    def visit_unary_expr(self, node):
+        return self.transform_unary_expr(node)
+
+    def visit_pass_expr(self, node):
+        return self.transform_pass_expr(node)
+
+    def visit_wildcard_pattern(self, node):
+        return self.transform_wildcard_pattern(node)
+
+    def visit_literal_pattern(self, node):
+        return self.transform_literal_pattern(node)
+
+    def visit_binding_pattern(self, node):
+        return self.transform_binding_pattern(node)
+
+    def visit_field_pattern(self, node):
+        return self.transform_field_pattern(node)
+
+    def visit_struct_pattern(self, node):
+        return self.transform_struct_pattern(node)
+
+    def visit_match_arm(self, node):
+        return self.transform_match_arm(node)
+
+    def visit_match_expr(self, node):
+        return self.transform_match_expr(node)
+
+    def visit_field_def(self, node):
+        return self.transform_field_def(node)
+
+    def visit_struct_def(self, node):
+        return self.transform_struct_def(node)
+
+    def visit_field_assignment(self, node):
+        return self.transform_field_assignment(node)
+
+    def visit_struct_literal(self, node):
+        return self.transform_struct_literal(node)
+
+    def visit_param_def(self, node):
+        return self.transform_param_def(node)
+
+    def visit_block(self, node):
+        return self.transform_block(node)
+
+    def visit_function_def(self, node):
+        return self.transform_function_def(node)
+
+    def visit_variable_decl(self, node):
+        return self.transform_variable_decl(node)
+
+    def visit_assignment_stmt(self, node):
+        return self.transform_assignment_stmt(node)
+
+    def visit_return_stmt(self, node):
+        return self.transform_return_stmt(node)
+
+    def visit_pass_stmt(self, node):
+        return self.transform_pass_stmt(node)
+
+    def visit_expression_stmt(self, node):
+        return self.transform_expression_stmt(node)
+
+    def visit_definition_entry(self, node):
+        return self.transform_definition_entry(node)
+
+    def visit_element(self, node):
+        return self.transform_element(node)
+
+    def visit_element_group(self, node):
+        return self.transform_element_group(node)
+
+    def visit_penalty(self, node):
+        return self.transform_penalty(node)
+
+    def visit_illustration(self, node):
+        return self.transform_illustration(node)
+
+    def visit_exception(self, node):
+        return self.transform_exception(node)
+
+    def visit_caselaw(self, node):
+        return self.transform_caselaw(node)
+
+    def visit_statute(self, node):
+        return self.transform_statute(node)
+
+    def visit_import(self, node):
+        return self.transform_import(node)
+
+    def visit_module(self, node):
+        return self.transform_module(node)
+
+    def visit_assert_stmt(self, node):
+        return node
+
+    def visit_referencing_stmt(self, node):
+        return node
+
+    def _transform_children(
+        self, children: List[nodes.ASTNode]
+    ) -> Tuple[Tuple[nodes.ASTNode, ...], bool]:
         """
         Transform a list of children and return whether any changed.
 
@@ -109,6 +214,21 @@ class Transformer:
                 changed = True
             transformed.append(new_child)
         return tuple(transformed), changed
+
+    def _transform_typed(self, node: TNode) -> TNode:
+        """Transform a node while preserving its declared static type."""
+        return cast(TNode, self.transform(node))
+
+    def _transform_optional_typed(self, node: Optional[TNode]) -> Optional[TNode]:
+        """Transform an optional node while preserving its declared type."""
+        if node is None:
+            return None
+        return cast(TNode, self.transform(node))
+
+    def _transform_children_typed(self, children: List[TNode]) -> Tuple[Tuple[TNode, ...], bool]:
+        """Transform a homogeneous child collection with a preserved element type."""
+        transformed, changed = self._transform_children(cast(List[nodes.ASTNode], children))
+        return cast(Tuple[TNode, ...], transformed), changed
 
     # =========================================================================
     # Type nodes
@@ -124,7 +244,7 @@ class Transformer:
         return node
 
     def transform_generic_type(self, node: nodes.GenericType) -> nodes.GenericType:
-        new_args, changed = self._transform_children(list(node.type_args))
+        new_args, changed = self._transform_children_typed(list(node.type_args))
         if changed:
             return nodes.GenericType(
                 base=node.base,
@@ -134,7 +254,7 @@ class Transformer:
         return node
 
     def transform_optional_type(self, node: nodes.OptionalType) -> nodes.OptionalType:
-        new_inner = self.transform(node.inner)
+        new_inner = self._transform_typed(node.inner)
         if new_inner is not node.inner:
             return nodes.OptionalType(
                 inner=new_inner,
@@ -143,7 +263,7 @@ class Transformer:
         return node
 
     def transform_array_type(self, node: nodes.ArrayType) -> nodes.ArrayType:
-        new_elem = self.transform(node.element_type)
+        new_elem = self._transform_typed(node.element_type)
         if new_elem is not node.element_type:
             return nodes.ArrayType(
                 element_type=new_elem,
@@ -208,8 +328,8 @@ class Transformer:
         return node
 
     def transform_function_call(self, node: nodes.FunctionCallNode) -> nodes.ASTNode:
-        new_callee = self.transform(node.callee)
-        new_args, args_changed = self._transform_children(list(node.args))
+        new_callee = self._transform_typed(node.callee)
+        new_args, args_changed = self._transform_children_typed(list(node.args))
         if new_callee is not node.callee or args_changed:
             return nodes.FunctionCallNode(
                 callee=new_callee,
@@ -267,7 +387,7 @@ class Transformer:
 
     def transform_field_pattern(self, node: nodes.FieldPattern) -> nodes.FieldPattern:
         if node.pattern:
-            new_pattern = self.transform(node.pattern)
+            new_pattern = self._transform_typed(node.pattern)
             if new_pattern is not node.pattern:
                 return nodes.FieldPattern(
                     name=node.name,
@@ -277,7 +397,7 @@ class Transformer:
         return node
 
     def transform_struct_pattern(self, node: nodes.StructPattern) -> nodes.StructPattern:
-        new_fields, changed = self._transform_children(list(node.fields))
+        new_fields, changed = self._transform_children_typed(list(node.fields))
         if changed:
             return nodes.StructPattern(
                 type_name=node.type_name,
@@ -291,13 +411,15 @@ class Transformer:
     # =========================================================================
 
     def transform_match_arm(self, node: nodes.MatchArm) -> nodes.MatchArm:
-        new_pattern = self.transform(node.pattern)
-        new_guard = self.transform(node.guard) if node.guard else None
-        new_body = self.transform(node.body)
+        new_pattern = self._transform_typed(node.pattern)
+        new_guard = self._transform_optional_typed(node.guard)
+        new_body = self._transform_typed(node.body)
 
-        if (new_pattern is not node.pattern or
-            new_guard is not node.guard or
-            new_body is not node.body):
+        if (
+            new_pattern is not node.pattern
+            or new_guard is not node.guard
+            or new_body is not node.body
+        ):
             return nodes.MatchArm(
                 pattern=new_pattern,
                 guard=new_guard,
@@ -307,8 +429,8 @@ class Transformer:
         return node
 
     def transform_match_expr(self, node: nodes.MatchExprNode) -> nodes.ASTNode:
-        new_scrutinee = self.transform(node.scrutinee) if node.scrutinee else None
-        new_arms, changed = self._transform_children(list(node.arms))
+        new_scrutinee = self._transform_optional_typed(node.scrutinee)
+        new_arms, changed = self._transform_children_typed(list(node.arms))
 
         if new_scrutinee is not node.scrutinee or changed:
             return nodes.MatchExprNode(
@@ -324,7 +446,7 @@ class Transformer:
     # =========================================================================
 
     def transform_field_def(self, node: nodes.FieldDef) -> nodes.FieldDef:
-        new_type = self.transform(node.type_annotation)
+        new_type = self._transform_typed(node.type_annotation)
         if new_type is not node.type_annotation:
             return nodes.FieldDef(
                 type_annotation=new_type,
@@ -334,7 +456,7 @@ class Transformer:
         return node
 
     def transform_struct_def(self, node: nodes.StructDefNode) -> nodes.StructDefNode:
-        new_fields, changed = self._transform_children(list(node.fields))
+        new_fields, changed = self._transform_children_typed(list(node.fields))
         if changed:
             return nodes.StructDefNode(
                 name=node.name,
@@ -355,7 +477,7 @@ class Transformer:
         return node
 
     def transform_struct_literal(self, node: nodes.StructLiteralNode) -> nodes.ASTNode:
-        new_fields, changed = self._transform_children(list(node.field_values))
+        new_fields, changed = self._transform_children_typed(list(node.field_values))
         if changed:
             return nodes.StructLiteralNode(
                 struct_name=node.struct_name,
@@ -369,7 +491,7 @@ class Transformer:
     # =========================================================================
 
     def transform_param_def(self, node: nodes.ParamDef) -> nodes.ParamDef:
-        new_type = self.transform(node.type_annotation)
+        new_type = self._transform_typed(node.type_annotation)
         if new_type is not node.type_annotation:
             return nodes.ParamDef(
                 type_annotation=new_type,
@@ -388,13 +510,11 @@ class Transformer:
         return node
 
     def transform_function_def(self, node: nodes.FunctionDefNode) -> nodes.FunctionDefNode:
-        new_params, params_changed = self._transform_children(list(node.params))
-        new_return_type = self.transform(node.return_type) if node.return_type else None
-        new_body = self.transform(node.body)
+        new_params, params_changed = self._transform_children_typed(list(node.params))
+        new_return_type = self._transform_optional_typed(node.return_type)
+        new_body = self._transform_typed(node.body)
 
-        if (params_changed or
-            new_return_type is not node.return_type or
-            new_body is not node.body):
+        if params_changed or new_return_type is not node.return_type or new_body is not node.body:
             return nodes.FunctionDefNode(
                 name=node.name,
                 params=new_params,
@@ -409,8 +529,8 @@ class Transformer:
     # =========================================================================
 
     def transform_variable_decl(self, node: nodes.VariableDecl) -> nodes.VariableDecl:
-        new_type = self.transform(node.type_annotation)
-        new_value = self.transform(node.value) if node.value else None
+        new_type = self._transform_typed(node.type_annotation)
+        new_value = self._transform_optional_typed(node.value)
 
         if new_type is not node.type_annotation or new_value is not node.value:
             return nodes.VariableDecl(
@@ -459,7 +579,7 @@ class Transformer:
     # =========================================================================
 
     def transform_definition_entry(self, node: nodes.DefinitionEntry) -> nodes.DefinitionEntry:
-        new_def = self.transform(node.definition)
+        new_def = self._transform_typed(node.definition)
         if new_def is not node.definition:
             return nodes.DefinitionEntry(
                 term=node.term,
@@ -480,7 +600,7 @@ class Transformer:
         return node
 
     def transform_element_group(self, node: nodes.ElementGroupNode) -> nodes.ElementGroupNode:
-        new_members, changed = self._transform_children(list(node.members))
+        new_members, changed = self._transform_children_typed(list(node.members))
         if changed:
             return nodes.ElementGroupNode(
                 combinator=node.combinator,
@@ -499,7 +619,7 @@ class Transformer:
         return node
 
     def transform_illustration(self, node: nodes.IllustrationNode) -> nodes.IllustrationNode:
-        new_desc = self.transform(node.description)
+        new_desc = self._transform_typed(node.description)
         if new_desc is not node.description:
             return nodes.IllustrationNode(
                 label=node.label,
@@ -509,18 +629,23 @@ class Transformer:
         return node
 
     def transform_statute(self, node: nodes.StatuteNode) -> nodes.StatuteNode:
-        new_title = self.transform(node.title) if node.title else None
-        new_defs, defs_changed = self._transform_children(list(node.definitions))
-        new_elems, elems_changed = self._transform_children(list(node.elements))
-        new_penalty = self.transform(node.penalty) if node.penalty else None
-        new_illus, illus_changed = self._transform_children(list(node.illustrations))
-        new_exc, exc_changed = self._transform_children(list(node.exceptions))
-        new_cl, cl_changed = self._transform_children(list(node.case_law))
+        new_title = self._transform_optional_typed(node.title)
+        new_defs, defs_changed = self._transform_children_typed(list(node.definitions))
+        new_elems, elems_changed = self._transform_children_typed(list(node.elements))
+        new_penalty = self._transform_optional_typed(node.penalty)
+        new_illus, illus_changed = self._transform_children_typed(list(node.illustrations))
+        new_exc, exc_changed = self._transform_children_typed(list(node.exceptions))
+        new_cl, cl_changed = self._transform_children_typed(list(node.case_law))
 
-        if (new_title is not node.title or
-            defs_changed or elems_changed or
-            new_penalty is not node.penalty or
-            illus_changed or exc_changed or cl_changed):
+        if (
+            new_title is not node.title
+            or defs_changed
+            or elems_changed
+            or new_penalty is not node.penalty
+            or illus_changed
+            or exc_changed
+            or cl_changed
+        ):
             return nodes.StatuteNode(
                 section_number=node.section_number,
                 title=new_title,
@@ -542,14 +667,13 @@ class Transformer:
         return node
 
     def transform_module(self, node: nodes.ModuleNode) -> nodes.ModuleNode:
-        new_imports, imports_changed = self._transform_children(list(node.imports))
-        new_types, types_changed = self._transform_children(list(node.type_defs))
-        new_funcs, funcs_changed = self._transform_children(list(node.function_defs))
-        new_statutes, statutes_changed = self._transform_children(list(node.statutes))
-        new_vars, vars_changed = self._transform_children(list(node.variables))
+        new_imports, imports_changed = self._transform_children_typed(list(node.imports))
+        new_types, types_changed = self._transform_children_typed(list(node.type_defs))
+        new_funcs, funcs_changed = self._transform_children_typed(list(node.function_defs))
+        new_statutes, statutes_changed = self._transform_children_typed(list(node.statutes))
+        new_vars, vars_changed = self._transform_children_typed(list(node.variables))
 
-        if (imports_changed or types_changed or funcs_changed or
-            statutes_changed or vars_changed):
+        if imports_changed or types_changed or funcs_changed or statutes_changed or vars_changed:
             return nodes.ModuleNode(
                 imports=new_imports,
                 type_defs=new_types,
