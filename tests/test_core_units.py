@@ -254,8 +254,13 @@ class TestASTNodeChildren:
         struct = StructDefNode(name="S", fields=())
         fn = FunctionDefNode(name="f", params=(), return_type=None, body=Block(statements=()))
         mod = ModuleNode(
-            imports=(imp,), type_defs=(struct,), function_defs=(fn,),
-            statutes=(), variables=(), references=(), assertions=(),
+            imports=(imp,),
+            type_defs=(struct,),
+            function_defs=(fn,),
+            statutes=(),
+            variables=(),
+            references=(),
+            assertions=(),
         )
         children = mod.children()
         assert imp in children
@@ -298,11 +303,17 @@ class TestASTNodeChildren:
 
     def test_statute_node_children(self):
         title = StringLit(value="Theft")
-        elem = ElementNode(element_type="actus_reus", name="taking", description=StringLit(value="taking property"))
+        elem = ElementNode(
+            element_type="actus_reus", name="taking", description=StringLit(value="taking property")
+        )
         illus = IllustrationNode(label="a", description=StringLit(value="example"))
         statute = StatuteNode(
-            section_number="378", title=title, definitions=(),
-            elements=(elem,), penalty=None, illustrations=(illus,),
+            section_number="378",
+            title=title,
+            definitions=(),
+            elements=(elem,),
+            penalty=None,
+            illustrations=(illus,),
         )
         children = statute.children()
         assert title in children
@@ -351,8 +362,12 @@ class TestSourceLocation:
         assert merged.end_line == 8
 
     def test_merge_preserves_zero_offset(self):
-        a = SourceLocation(file="a.yh", line=1, col=1, end_line=1, end_col=5, offset=0, end_offset=5)
-        b = SourceLocation(file="a.yh", line=2, col=1, end_line=2, end_col=3, offset=10, end_offset=13)
+        a = SourceLocation(
+            file="a.yh", line=1, col=1, end_line=1, end_col=5, offset=0, end_offset=5
+        )
+        b = SourceLocation(
+            file="a.yh", line=2, col=1, end_line=2, end_col=3, offset=10, end_offset=13
+        )
         merged = SourceLocation.merge(a, b)
         assert merged.offset == 0
         assert merged.end_offset == 13
@@ -368,6 +383,7 @@ class TestConstantFolder:
 
     def test_fold_int_addition(self):
         from yuho.ast.constant_folder import ConstantFolder
+
         folder = ConstantFolder()
         expr = BinaryExprNode(left=IntLit(value=3), operator="+", right=IntLit(value=4))
         result = folder.transform(expr)
@@ -376,6 +392,7 @@ class TestConstantFolder:
 
     def test_fold_int_subtraction(self):
         from yuho.ast.constant_folder import ConstantFolder
+
         folder = ConstantFolder()
         expr = BinaryExprNode(left=IntLit(value=10), operator="-", right=IntLit(value=3))
         result = folder.transform(expr)
@@ -384,6 +401,7 @@ class TestConstantFolder:
 
     def test_fold_int_multiplication(self):
         from yuho.ast.constant_folder import ConstantFolder
+
         folder = ConstantFolder()
         expr = BinaryExprNode(left=IntLit(value=6), operator="*", right=IntLit(value=7))
         result = folder.transform(expr)
@@ -392,6 +410,7 @@ class TestConstantFolder:
 
     def test_fold_int_division(self):
         from yuho.ast.constant_folder import ConstantFolder
+
         folder = ConstantFolder()
         expr = BinaryExprNode(left=IntLit(value=10), operator="/", right=IntLit(value=3))
         result = folder.transform(expr)
@@ -400,6 +419,7 @@ class TestConstantFolder:
 
     def test_fold_division_by_zero_left_unchanged(self):
         from yuho.ast.constant_folder import ConstantFolder
+
         folder = ConstantFolder(fold_division_by_zero=False)
         expr = BinaryExprNode(left=IntLit(value=1), operator="/", right=IntLit(value=0))
         result = folder.transform(expr)
@@ -407,6 +427,7 @@ class TestConstantFolder:
 
     def test_fold_division_by_zero_raises_when_enabled(self):
         from yuho.ast.constant_folder import ConstantFolder, ConstantFoldingError
+
         folder = ConstantFolder(fold_division_by_zero=True)
         expr = BinaryExprNode(left=IntLit(value=1), operator="/", right=IntLit(value=0))
         with pytest.raises(ConstantFoldingError):
@@ -414,6 +435,7 @@ class TestConstantFolder:
 
     def test_fold_float_arithmetic(self):
         from yuho.ast.constant_folder import ConstantFolder
+
         folder = ConstantFolder()
         expr = BinaryExprNode(left=FloatLit(value=1.5), operator="*", right=FloatLit(value=2.0))
         result = folder.transform(expr)
@@ -422,6 +444,7 @@ class TestConstantFolder:
 
     def test_fold_bool_and(self):
         from yuho.ast.constant_folder import ConstantFolder
+
         folder = ConstantFolder()
         expr = BinaryExprNode(left=BoolLit(value=True), operator="&&", right=BoolLit(value=False))
         result = folder.transform(expr)
@@ -430,6 +453,7 @@ class TestConstantFolder:
 
     def test_fold_bool_or(self):
         from yuho.ast.constant_folder import ConstantFolder
+
         folder = ConstantFolder()
         expr = BinaryExprNode(left=BoolLit(value=False), operator="||", right=BoolLit(value=True))
         result = folder.transform(expr)
@@ -438,14 +462,18 @@ class TestConstantFolder:
 
     def test_fold_string_concat(self):
         from yuho.ast.constant_folder import ConstantFolder
+
         folder = ConstantFolder()
-        expr = BinaryExprNode(left=StringLit(value="hello "), operator="+", right=StringLit(value="world"))
+        expr = BinaryExprNode(
+            left=StringLit(value="hello "), operator="+", right=StringLit(value="world")
+        )
         result = folder.transform(expr)
         assert isinstance(result, StringLit)
         assert result.value == "hello world"
 
     def test_fold_comparison(self):
         from yuho.ast.constant_folder import ConstantFolder
+
         folder = ConstantFolder()
         expr = BinaryExprNode(left=IntLit(value=5), operator=">", right=IntLit(value=3))
         result = folder.transform(expr)
@@ -454,6 +482,7 @@ class TestConstantFolder:
 
     def test_fold_unary_negation(self):
         from yuho.ast.constant_folder import ConstantFolder
+
         folder = ConstantFolder()
         expr = UnaryExprNode(operator="-", operand=IntLit(value=42))
         result = folder.transform(expr)
@@ -462,6 +491,7 @@ class TestConstantFolder:
 
     def test_fold_unary_not(self):
         from yuho.ast.constant_folder import ConstantFolder
+
         folder = ConstantFolder()
         expr = UnaryExprNode(operator="!", operand=BoolLit(value=True))
         result = folder.transform(expr)
@@ -470,6 +500,7 @@ class TestConstantFolder:
 
     def test_fold_nested_expression(self):
         from yuho.ast.constant_folder import fold_constants
+
         # (2 + 3) * 4 -> 5 * 4 -> 20
         inner = BinaryExprNode(left=IntLit(value=2), operator="+", right=IntLit(value=3))
         outer = BinaryExprNode(left=inner, operator="*", right=IntLit(value=4))
@@ -479,6 +510,7 @@ class TestConstantFolder:
 
     def test_fold_mixed_int_float(self):
         from yuho.ast.constant_folder import ConstantFolder
+
         folder = ConstantFolder()
         expr = BinaryExprNode(left=IntLit(value=3), operator="+", right=FloatLit(value=0.5))
         result = folder.transform(expr)
@@ -496,6 +528,7 @@ class TestScopeAnalysis:
 
     def _analyze(self, module: ModuleNode):
         from yuho.ast.scope_analysis import ScopeAnalysisVisitor
+
         visitor = ScopeAnalysisVisitor()
         return module.accept(visitor)
 
@@ -504,7 +537,9 @@ class TestScopeAnalysis:
             name="Foo",
             fields=(FieldDef(type_annotation=BuiltinType(name="int"), name="x"),),
         )
-        mod = ModuleNode(imports=(), type_defs=(struct,), function_defs=(), statutes=(), variables=())
+        mod = ModuleNode(
+            imports=(), type_defs=(struct,), function_defs=(), statutes=(), variables=()
+        )
         result = self._analyze(mod)
         assert result.is_valid
         sym = result.root_scope.lookup("Foo")
@@ -514,25 +549,25 @@ class TestScopeAnalysis:
     def test_duplicate_struct_is_error(self):
         s1 = StructDefNode(name="Foo", fields=())
         s2 = StructDefNode(name="Foo", fields=())
-        mod = ModuleNode(imports=(), type_defs=(s1, s2), function_defs=(), statutes=(), variables=())
+        mod = ModuleNode(
+            imports=(), type_defs=(s1, s2), function_defs=(), statutes=(), variables=()
+        )
         result = self._analyze(mod)
         assert result.has_errors
         assert any("already declared" in e.message for e in result.errors)
 
     def test_function_params_in_scope(self):
         param = ParamDef(type_annotation=BuiltinType(name="int"), name="x")
-        body = Block(statements=(
-            ReturnStmt(value=IdentifierNode(name="x")),
-        ))
-        fn = FunctionDefNode(name="f", params=(param,), return_type=BuiltinType(name="int"), body=body)
+        body = Block(statements=(ReturnStmt(value=IdentifierNode(name="x")),))
+        fn = FunctionDefNode(
+            name="f", params=(param,), return_type=BuiltinType(name="int"), body=body
+        )
         mod = ModuleNode(imports=(), type_defs=(), function_defs=(fn,), statutes=(), variables=())
         result = self._analyze(mod)
         assert result.is_valid
 
     def test_undeclared_identifier_error(self):
-        body = Block(statements=(
-            ExpressionStmt(expression=IdentifierNode(name="unknown_var")),
-        ))
+        body = Block(statements=(ExpressionStmt(expression=IdentifierNode(name="unknown_var")),))
         fn = FunctionDefNode(name="f", params=(), return_type=None, body=body)
         mod = ModuleNode(imports=(), type_defs=(), function_defs=(fn,), statutes=(), variables=())
         result = self._analyze(mod)
@@ -541,15 +576,24 @@ class TestScopeAnalysis:
 
     def test_function_forward_reference_ok(self):
         """Functions should be able to call each other regardless of definition order."""
-        body_a = Block(statements=(
-            ExpressionStmt(expression=FunctionCallNode(
-                callee=IdentifierNode(name="b"), args=(),
-            )),
-        ))
+        body_a = Block(
+            statements=(
+                ExpressionStmt(
+                    expression=FunctionCallNode(
+                        callee=IdentifierNode(name="b"),
+                        args=(),
+                    )
+                ),
+            )
+        )
         body_b = Block(statements=(ReturnStmt(value=IntLit(value=1)),))
         fn_a = FunctionDefNode(name="a", params=(), return_type=None, body=body_a)
-        fn_b = FunctionDefNode(name="b", params=(), return_type=BuiltinType(name="int"), body=body_b)
-        mod = ModuleNode(imports=(), type_defs=(), function_defs=(fn_a, fn_b), statutes=(), variables=())
+        fn_b = FunctionDefNode(
+            name="b", params=(), return_type=BuiltinType(name="int"), body=body_b
+        )
+        mod = ModuleNode(
+            imports=(), type_defs=(), function_defs=(fn_a, fn_b), statutes=(), variables=()
+        )
         result = self._analyze(mod)
         assert result.is_valid
 
@@ -564,12 +608,16 @@ class TestInterpreterEdgeCases:
 
     def _interp(self):
         from yuho.eval.interpreter import Interpreter, Environment
+
         return Interpreter()
 
     def test_string_concatenation(self):
         from yuho.eval.interpreter import Value
+
         interp = self._interp()
-        expr = BinaryExprNode(left=StringLit(value="foo"), operator="+", right=StringLit(value="bar"))
+        expr = BinaryExprNode(
+            left=StringLit(value="foo"), operator="+", right=StringLit(value="bar")
+        )
         result = interp.visit(expr)
         assert result.raw == "foobar"
         assert result.type_tag == "string"
@@ -582,6 +630,7 @@ class TestInterpreterEdgeCases:
 
     def test_modulo_by_zero_raises(self):
         from yuho.eval.interpreter import InterpreterError
+
         interp = self._interp()
         expr = BinaryExprNode(left=IntLit(value=10), operator="%", right=IntLit(value=0))
         with pytest.raises(InterpreterError, match="Modulo by zero"):
@@ -589,6 +638,7 @@ class TestInterpreterEdgeCases:
 
     def test_division_by_zero_raises(self):
         from yuho.eval.interpreter import InterpreterError
+
         interp = self._interp()
         expr = BinaryExprNode(left=IntLit(value=10), operator="/", right=IntLit(value=0))
         with pytest.raises(InterpreterError, match="Division by zero"):
@@ -611,6 +661,7 @@ class TestInterpreterEdgeCases:
     def test_short_circuit_and(self):
         """&& should not evaluate right side when left is false."""
         from yuho.eval.interpreter import InterpreterError
+
         interp = self._interp()
         # right side would error if evaluated (undefined var)
         expr = BinaryExprNode(
@@ -641,12 +692,14 @@ class TestInterpreterEdgeCases:
 
     def test_undefined_variable_raises(self):
         from yuho.eval.interpreter import InterpreterError
+
         interp = self._interp()
         with pytest.raises(InterpreterError, match="Undefined variable"):
             interp.visit(IdentifierNode(name="no_such_var"))
 
     def test_undefined_function_raises(self):
         from yuho.eval.interpreter import InterpreterError
+
         interp = self._interp()
         call = FunctionCallNode(callee=IdentifierNode(name="no_func"), args=())
         with pytest.raises(InterpreterError, match="Undefined function"):
@@ -660,6 +713,7 @@ class TestInterpreterEdgeCases:
 
     def test_assert_fail(self):
         from yuho.eval.interpreter import AssertionError_
+
         interp = self._interp()
         stmt = AssertStmt(condition=BoolLit(value=False))
         with pytest.raises(AssertionError_):
@@ -687,50 +741,62 @@ class TestValueTruthiness:
 
     def test_bool_true(self):
         from yuho.eval.interpreter import Value
+
         assert Value(True, "bool").is_truthy() is True
 
     def test_bool_false(self):
         from yuho.eval.interpreter import Value
+
         assert Value(False, "bool").is_truthy() is False
 
     def test_none_is_falsy(self):
         from yuho.eval.interpreter import Value
+
         assert Value(None, "none").is_truthy() is False
 
     def test_zero_int_is_falsy(self):
         from yuho.eval.interpreter import Value
+
         assert Value(0, "int").is_truthy() is False
 
     def test_nonzero_int_is_truthy(self):
         from yuho.eval.interpreter import Value
+
         assert Value(42, "int").is_truthy() is True
 
     def test_empty_string_is_falsy(self):
         from yuho.eval.interpreter import Value
+
         assert Value("", "string").is_truthy() is False
 
     def test_nonempty_string_is_truthy(self):
         from yuho.eval.interpreter import Value
+
         assert Value("hello", "string").is_truthy() is True
 
     def test_zero_decimal_is_falsy(self):
         from yuho.eval.interpreter import Value
+
         assert Value(Decimal(0), "money").is_truthy() is False
 
     def test_nonzero_decimal_is_truthy(self):
         from yuho.eval.interpreter import Value
+
         assert Value(Decimal("10.50"), "money").is_truthy() is True
 
     def test_empty_list_is_falsy(self):
         from yuho.eval.interpreter import Value
+
         assert Value([], "list").is_truthy() is False
 
     def test_nonempty_list_is_truthy(self):
         from yuho.eval.interpreter import Value
+
         assert Value([1], "list").is_truthy() is True
 
     def test_zero_float_is_falsy(self):
         from yuho.eval.interpreter import Value
+
         assert Value(0.0, "float").is_truthy() is False
 
 
@@ -744,37 +810,44 @@ class TestValueFromNode:
 
     def test_from_int_lit(self):
         from yuho.eval.interpreter import Value
+
         v = Value.from_node(IntLit(value=42))
         assert v.raw == 42 and v.type_tag == "int"
 
     def test_from_float_lit(self):
         from yuho.eval.interpreter import Value
+
         v = Value.from_node(FloatLit(value=3.14))
         assert v.type_tag == "float"
 
     def test_from_bool_lit(self):
         from yuho.eval.interpreter import Value
+
         v = Value.from_node(BoolLit(value=True))
         assert v.raw is True and v.type_tag == "bool"
 
     def test_from_string_lit(self):
         from yuho.eval.interpreter import Value
+
         v = Value.from_node(StringLit(value="hello"))
         assert v.raw == "hello" and v.type_tag == "string"
 
     def test_from_pass_expr(self):
         from yuho.eval.interpreter import Value
+
         v = Value.from_node(PassExprNode())
         assert v.type_tag == "none"
 
     def test_from_money_node(self):
         from yuho.eval.interpreter import Value
+
         v = Value.from_node(MoneyNode(currency=Currency.SGD, amount=Decimal("99.99")))
         assert v.type_tag == "money"
         assert v.raw == Decimal("99.99")
 
     def test_from_unsupported_raises(self):
         from yuho.eval.interpreter import Value, InterpreterError
+
         with pytest.raises(InterpreterError):
             Value.from_node(IdentifierNode(name="x"))
 
@@ -789,6 +862,7 @@ class TestEnvironment:
 
     def test_child_inherits_parent(self):
         from yuho.eval.interpreter import Environment, Value
+
         parent = Environment()
         parent.set("x", Value(10, "int"))
         child = parent.child()
@@ -796,6 +870,7 @@ class TestEnvironment:
 
     def test_child_shadows_parent(self):
         from yuho.eval.interpreter import Environment, Value
+
         parent = Environment()
         parent.set("x", Value(10, "int"))
         child = parent.child()
@@ -805,6 +880,7 @@ class TestEnvironment:
 
     def test_assign_updates_nearest_scope(self):
         from yuho.eval.interpreter import Environment, Value
+
         parent = Environment()
         parent.set("x", Value(10, "int"))
         child = parent.child()
@@ -813,11 +889,13 @@ class TestEnvironment:
 
     def test_assign_returns_false_if_not_found(self):
         from yuho.eval.interpreter import Environment, Value
+
         env = Environment()
         assert env.assign("missing", Value(1, "int")) is False
 
     def test_get_struct_def_from_parent(self):
         from yuho.eval.interpreter import Environment
+
         parent = Environment()
         struct = StructDefNode(name="Foo", fields=())
         parent.struct_defs["Foo"] = struct
@@ -826,6 +904,7 @@ class TestEnvironment:
 
     def test_get_function_def_from_parent(self):
         from yuho.eval.interpreter import Environment
+
         parent = Environment()
         fn = FunctionDefNode(name="f", params=(), return_type=None, body=Block(statements=()))
         parent.function_defs["f"] = fn
@@ -843,6 +922,7 @@ class TestTranspileTarget:
 
     def test_from_string_aliases(self):
         from yuho.transpile.base import TranspileTarget
+
         assert TranspileTarget.from_string("json") == TranspileTarget.JSON
         assert TranspileTarget.from_string("jsonld") == TranspileTarget.JSON_LD
         assert TranspileTarget.from_string("json-ld") == TranspileTarget.JSON_LD
@@ -855,16 +935,19 @@ class TestTranspileTarget:
 
     def test_from_string_case_insensitive(self):
         from yuho.transpile.base import TranspileTarget
+
         assert TranspileTarget.from_string("JSON") == TranspileTarget.JSON
         assert TranspileTarget.from_string("English") == TranspileTarget.ENGLISH
 
     def test_from_string_unknown_raises(self):
         from yuho.transpile.base import TranspileTarget
+
         with pytest.raises(ValueError, match="Unknown"):
             TranspileTarget.from_string("foobar")
 
     def test_file_extensions(self):
         from yuho.transpile.base import TranspileTarget
+
         assert TranspileTarget.JSON.file_extension == ".json"
         assert TranspileTarget.LATEX.file_extension == ".tex"
         assert TranspileTarget.MERMAID.file_extension == ".mmd"
@@ -882,6 +965,7 @@ class TestScopeObject:
 
     def test_lookup_local_only(self):
         from yuho.ast.scope_analysis import Scope, Symbol, SymbolKind
+
         parent = Scope(name="module", level=0)
         parent.define(Symbol(name="x", kind=SymbolKind.VARIABLE))
         child = Scope(name="block", parent=parent, level=1)
@@ -890,6 +974,7 @@ class TestScopeObject:
 
     def test_define_duplicate_returns_error(self):
         from yuho.ast.scope_analysis import Scope, Symbol, SymbolKind
+
         scope = Scope(name="test", level=0)
         scope.define(Symbol(name="x", kind=SymbolKind.VARIABLE, line=1))
         err = scope.define(Symbol(name="x", kind=SymbolKind.VARIABLE, line=5))
@@ -898,6 +983,7 @@ class TestScopeObject:
 
     def test_all_symbols_merges_parent(self):
         from yuho.ast.scope_analysis import Scope, Symbol, SymbolKind
+
         parent = Scope(name="module", level=0)
         parent.define(Symbol(name="a", kind=SymbolKind.VARIABLE))
         child = Scope(name="block", parent=parent, level=1)
@@ -917,6 +1003,7 @@ class TestInterpreterStructs:
 
     def test_struct_literal_creates_instance(self):
         from yuho.eval.interpreter import Interpreter, StructInstance
+
         interp = Interpreter()
         fa = FieldAssignment(name="x", value=IntLit(value=42))
         sl = StructLiteralNode(struct_name="Point", field_values=(fa,))
@@ -927,8 +1014,11 @@ class TestInterpreterStructs:
 
     def test_struct_field_access(self):
         from yuho.eval.interpreter import Interpreter, Value, StructInstance
+
         interp = Interpreter()
-        inst = StructInstance(type_name="Point", fields={"x": Value(10, "int"), "y": Value(20, "int")})
+        inst = StructInstance(
+            type_name="Point", fields={"x": Value(10, "int"), "y": Value(20, "int")}
+        )
         interp.env.set("p", Value(inst, "struct"))
         expr = FieldAccessNode(base=IdentifierNode(name="p"), field_name="x")
         result = interp.visit(expr)
@@ -936,6 +1026,7 @@ class TestInterpreterStructs:
 
     def test_struct_missing_field_raises(self):
         from yuho.eval.interpreter import Interpreter, Value, StructInstance, InterpreterError
+
         interp = Interpreter()
         inst = StructInstance(type_name="Point", fields={"x": Value(10, "int")})
         interp.env.set("p", Value(inst, "struct"))
@@ -954,6 +1045,7 @@ class TestInterpreterMatch:
 
     def test_wildcard_always_matches(self):
         from yuho.eval.interpreter import Interpreter
+
         interp = Interpreter()
         match = MatchExprNode(
             scrutinee=IntLit(value=42),
@@ -964,12 +1056,17 @@ class TestInterpreterMatch:
 
     def test_literal_match(self):
         from yuho.eval.interpreter import Interpreter
+
         interp = Interpreter()
         match = MatchExprNode(
             scrutinee=IntLit(value=1),
             arms=(
-                MatchArm(pattern=LiteralPattern(literal=IntLit(value=2)), body=StringLit(value="two")),
-                MatchArm(pattern=LiteralPattern(literal=IntLit(value=1)), body=StringLit(value="one")),
+                MatchArm(
+                    pattern=LiteralPattern(literal=IntLit(value=2)), body=StringLit(value="two")
+                ),
+                MatchArm(
+                    pattern=LiteralPattern(literal=IntLit(value=1)), body=StringLit(value="one")
+                ),
                 MatchArm(pattern=WildcardPattern(), body=StringLit(value="other")),
             ),
         )
@@ -978,11 +1075,14 @@ class TestInterpreterMatch:
 
     def test_no_match_returns_none(self):
         from yuho.eval.interpreter import Interpreter
+
         interp = Interpreter()
         match = MatchExprNode(
             scrutinee=IntLit(value=99),
             arms=(
-                MatchArm(pattern=LiteralPattern(literal=IntLit(value=1)), body=StringLit(value="one")),
+                MatchArm(
+                    pattern=LiteralPattern(literal=IntLit(value=1)), body=StringLit(value="one")
+                ),
             ),
             ensure_exhaustiveness=False,
         )
@@ -991,6 +1091,7 @@ class TestInterpreterMatch:
 
     def test_binding_pattern_captures_value(self):
         from yuho.eval.interpreter import Interpreter
+
         interp = Interpreter()
         match = MatchExprNode(
             scrutinee=IntLit(value=42),
@@ -1006,6 +1107,7 @@ class TestInterpreterMatch:
 
     def test_guard_filters_arms(self):
         from yuho.eval.interpreter import Interpreter
+
         interp = Interpreter()
         match = MatchExprNode(
             scrutinee=None,
@@ -1035,25 +1137,36 @@ class TestInterpreterModule:
 
     def test_interpret_registers_statutes(self):
         from yuho.eval.interpreter import Interpreter
+
         interp = Interpreter()
         statute = StatuteNode(
-            section_number="999", title=StringLit(value="Test"),
-            definitions=(), elements=(), penalty=None, illustrations=(),
+            section_number="999",
+            title=StringLit(value="Test"),
+            definitions=(),
+            elements=(),
+            penalty=None,
+            illustrations=(),
         )
-        mod = ModuleNode(imports=(), type_defs=(), function_defs=(), statutes=(statute,), variables=())
+        mod = ModuleNode(
+            imports=(), type_defs=(), function_defs=(), statutes=(statute,), variables=()
+        )
         env = interp.interpret(mod)
         assert "999" in env.statutes
 
     def test_interpret_registers_structs(self):
         from yuho.eval.interpreter import Interpreter
+
         interp = Interpreter()
         struct = StructDefNode(name="Foo", fields=())
-        mod = ModuleNode(imports=(), type_defs=(struct,), function_defs=(), statutes=(), variables=())
+        mod = ModuleNode(
+            imports=(), type_defs=(struct,), function_defs=(), statutes=(), variables=()
+        )
         env = interp.interpret(mod)
         assert "Foo" in env.struct_defs
 
     def test_interpret_registers_functions(self):
         from yuho.eval.interpreter import Interpreter
+
         interp = Interpreter()
         fn = FunctionDefNode(name="greet", params=(), return_type=None, body=Block(statements=()))
         mod = ModuleNode(imports=(), type_defs=(), function_defs=(fn,), statutes=(), variables=())
@@ -1062,8 +1175,11 @@ class TestInterpreterModule:
 
     def test_interpret_executes_variable_decls(self):
         from yuho.eval.interpreter import Interpreter
+
         interp = Interpreter()
-        var = VariableDecl(type_annotation=BuiltinType(name="int"), name="x", value=IntLit(value=42))
+        var = VariableDecl(
+            type_annotation=BuiltinType(name="int"), name="x", value=IntLit(value=42)
+        )
         mod = ModuleNode(imports=(), type_defs=(), function_defs=(), statutes=(), variables=(var,))
         env = interp.interpret(mod)
         assert env.get("x").raw == 42
