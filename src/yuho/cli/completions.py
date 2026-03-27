@@ -10,7 +10,7 @@ import click
 
 # Shell completion templates
 
-BASH_COMPLETION_SCRIPT = '''
+BASH_COMPLETION_SCRIPT = """
 # Yuho bash completion script
 # Add to ~/.bashrc or ~/.bash_completion:
 #   source <(yuho --show-completion bash)
@@ -25,9 +25,9 @@ _yuho_completion() {
 }
 
 complete -o default -F _yuho_completion yuho
-'''
+"""
 
-ZSH_COMPLETION_SCRIPT = '''
+ZSH_COMPLETION_SCRIPT = """
 #compdef yuho
 # Yuho zsh completion script
 # Add to ~/.zshrc:
@@ -60,9 +60,9 @@ _yuho() {
 }
 
 compdef _yuho yuho
-'''
+"""
 
-FISH_COMPLETION_SCRIPT = '''
+FISH_COMPLETION_SCRIPT = """
 # Yuho fish completion script
 # Add to ~/.config/fish/completions/yuho.fish
 # Or source directly: yuho --show-completion fish | source
@@ -86,7 +86,7 @@ function _yuho_completion
 end
 
 complete -c yuho -f -a "(_yuho_completion)"
-'''
+"""
 
 
 ShellType = Literal["bash", "zsh", "fish"]
@@ -112,9 +112,7 @@ def get_completion_script(shell: ShellType) -> str:
     }
 
     if shell not in scripts:
-        raise ValueError(
-            f"Unsupported shell: {shell}. Supported: {', '.join(scripts.keys())}"
-        )
+        raise ValueError(f"Unsupported shell: {shell}. Supported: {', '.join(scripts.keys())}")
 
     return scripts[shell].strip()
 
