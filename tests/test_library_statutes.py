@@ -17,6 +17,7 @@ from yuho.services.analysis import analyze_file
 
 LIBRARY_DIR = Path(__file__).parent.parent / "library" / "penal_code"
 
+
 def _statute_dirs():
     """Yield (dir_name, statute_path) for each statute in the library."""
     if not LIBRARY_DIR.exists():
@@ -25,6 +26,7 @@ def _statute_dirs():
         yh = d / "statute.yh"
         if d.is_dir() and yh.exists():
             yield d.name, yh
+
 
 STATUTE_DIRS = list(_statute_dirs())
 
@@ -71,6 +73,7 @@ class TestStatuteElements:
     def _flat_elements(self, elements):
         """Flatten element groups into individual elements."""
         from yuho.ast.nodes import ElementNode, ElementGroupNode
+
         flat = []
         for e in elements:
             if isinstance(e, ElementGroupNode):
@@ -91,9 +94,9 @@ class TestStatuteElements:
         for s in result.ast.statutes:
             flat = self._flat_elements(s.elements)
             names = [e.name for e in flat]
-            assert len(names) == len(set(names)), (
-                f"{name} s{s.section_number}: duplicate element names: {names}"
-            )
+            assert len(names) == len(
+                set(names)
+            ), f"{name} s{s.section_number}: duplicate element names: {names}"
 
 
 @pytest.mark.parametrize("name,path", STATUTE_DIRS, ids=[s[0] for s in STATUTE_DIRS])
