@@ -174,9 +174,7 @@ class Parser:
         if "\x00" in source:
             raise ValueError("source contains null bytes")
         if len(source) > MAX_SOURCE_LENGTH:
-            raise ValueError(
-                f"source exceeds maximum length ({MAX_SOURCE_LENGTH} chars)"
-            )
+            raise ValueError(f"source exceeds maximum length ({MAX_SOURCE_LENGTH} chars)")
         if source.startswith("\ufeff"):
             source = source[1:]
         return source
@@ -241,9 +239,7 @@ class Parser:
 
         stat = path.stat()
         if stat.st_size > MAX_FILE_SIZE:
-            raise ValueError(
-                f"file exceeds maximum size ({MAX_FILE_SIZE} bytes): {path}"
-            )
+            raise ValueError(f"file exceeds maximum size ({MAX_FILE_SIZE} bytes): {path}")
 
         ext = path.suffix.lower()
         if ext not in VALID_EXTENSIONS:
@@ -253,17 +249,18 @@ class Parser:
             source = path.read_text(encoding="utf-8")
         except UnicodeDecodeError as e:
             raise UnicodeDecodeError(
-                e.encoding, e.object, e.start, e.end,
-                f"file is not valid UTF-8: {path} ({e.reason})"
+                e.encoding,
+                e.object,
+                e.start,
+                e.end,
+                f"file is not valid UTF-8: {path} ({e.reason})",
             ) from e
         except PermissionError as e:
             raise PermissionError(f"cannot read file: {path} ({e})") from e
 
         return self.parse(source, file=str(path))
 
-    def _collect_errors(
-        self, node, source: str, file: str
-    ) -> Iterator[ParseError]:
+    def _collect_errors(self, node, source: str, file: str) -> Iterator[ParseError]:
         """
         Walk the parse tree and collect error nodes.
 
