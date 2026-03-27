@@ -11,7 +11,7 @@ Analyzes Yuho files for:
 import sys
 import re
 from pathlib import Path
-from typing import Optional, List, Set, Dict
+from typing import Dict, List, Optional
 from dataclasses import dataclass
 from enum import Enum, auto
 
@@ -20,9 +20,16 @@ import click
 from yuho.parser import get_parser
 from yuho.ast import ASTBuilder
 from yuho.ast.nodes import (
-    ModuleNode, StatuteNode, ElementNode, ElementGroupNode, PenaltyNode,
-    DefinitionEntry, IllustrationNode, StructDefNode,
-    FunctionDefNode, StringLit
+    ModuleNode,
+    StatuteNode,
+    ElementNode,
+    ElementGroupNode,
+    PenaltyNode,
+    DefinitionEntry,
+    IllustrationNode,
+    StructDefNode,
+    FunctionDefNode,
+    StringLit,
 )
 from yuho.cli.error_formatter import Colors, colorize
 from yuho.output.sarif import make_sarif_result, to_sarif
@@ -30,22 +37,24 @@ from yuho.output.sarif import make_sarif_result, to_sarif
 
 class Severity(Enum):
     """Lint issue severity levels."""
-    ERROR = auto()    # Must fix
+
+    ERROR = auto()  # Must fix
     WARNING = auto()  # Should fix
-    INFO = auto()     # Style suggestion
-    HINT = auto()     # Optional improvement
+    INFO = auto()  # Style suggestion
+    HINT = auto()  # Optional improvement
 
 
 @dataclass
 class LintIssue:
     """A single lint issue."""
+
     rule: str
     severity: Severity
     message: str
     line: Optional[int] = None
     column: Optional[int] = None
     suggestion: Optional[str] = None
-    
+
     def __str__(self) -> str:
         loc = f":{self.line}" if self.line else ""
         if self.column:
@@ -53,13 +62,24 @@ class LintIssue:
         return f"[{self.rule}] {self.message}{loc}"
 
 
+@dataclass(frozen=True)
+class AutoFixEdit:
+    """A concrete source rewrite applied by `yuho lint --fix`."""
+
+    start: int
+    end: int
+    replacement: str
+    rule: str
+    description: str
+
+
 class LintRule:
     """Base class for lint rules."""
-    
+
     id: str = "base"
     severity: Severity = Severity.WARNING
     description: str = "Base lint rule"
-    
+
     def check(self, ast: ModuleNode, source: str) -> List[LintIssue]:
         """Run the lint check. Override in subclasses."""
         return []
@@ -67,45 +87,49 @@ class LintRule:
 
 class MissingStatuteTitleRule(LintRule):
     """Check for statutes without titles."""
-    
+
     id = "missing-title"
     severity = Severity.WARNING
     description = "Statute should have a descriptive title"
-    
+
     def check(self, ast: ModuleNode, source: str) -> List[LintIssue]:
         issues = []
         for statute in ast.statutes:
             if not statute.title or not statute.title.value.strip():
                 loc = statute.source_location
-                issues.append(LintIssue(
-                    rule=self.id,
-                    severity=self.severity,
-                    message=f"Statute {statute.section_number} is missing a title",
-                    line=loc.line if loc else None,
-                    suggestion="Add a descriptive title for the statute"
-                ))
+                issues.append(
+                    LintIssue(
+                        rule=self.id,
+                        severity=self.severity,
+                        message=f"Statute {statute.section_number} is missing a title",
+                        line=loc.line if loc else None,
+                        suggestion="Add a descriptive title for the statute",
+                    )
+                )
         return issues
 
 
 class MissingElementsRule(LintRule):
     """Check for statutes without elements."""
-    
+
     id = "missing-elements"
     severity = Severity.WARNING
     description = "Statute should define offense elements"
-    
+
     def check(self, ast: ModuleNode, source: str) -> List[LintIssue]:
         issues = []
         for statute in ast.statutes:
             if not statute.elements:
                 loc = statute.source_location
-                issues.append(LintIssue(
-                    rule=self.id,
-                    severity=self.severity,
-                    message=f"Statute {statute.section_number} has no elements defined",
-                    line=loc.line if loc else None,
-                    suggestion="Define actus_reus and mens_rea elements"
-                ))
+                issues.append(
+                    LintIssue(
+                        rule=self.id,
+                        severity=self.severity,
+                        message=f"Statute {statute.section_number} has no elements defined",
+                        line=loc.line if loc else None,
+                        suggestion="Define actus_reus and mens_rea elements",
+                    )
+                )
         return issues
 
 
@@ -134,12 +158,14 @@ class MissingActusReusRule(LintRule):
             has_actus = any(e.element_type == "actus_reus" for e in flat)
             if statute.elements and not has_actus:
                 loc = statute.source_location
-                issues.append(LintIssue(
-                    rule=self.id,
-                    severity=self.severity,
-                    message=f"Statute {statute.section_number} has no actus_reus element",
-                    line=loc.line if loc else None,
-                ))
+                issues.append(
+                    LintIssue(
+                        rule=self.id,
+                        severity=self.severity,
+                        message=f"Statute {statute.section_number} has no actus_reus element",
+                        line=loc.line if loc else None,
+                    )
+                )
         return issues
 
 
@@ -157,71 +183,77 @@ class MissingMensReaRule(LintRule):
             has_mens = any(e.element_type == "mens_rea" for e in flat)
             if statute.elements and not has_mens:
                 loc = statute.source_location
-                issues.append(LintIssue(
-                    rule=self.id,
-                    severity=self.severity,
-                    message=f"Statute {statute.section_number} has no mens_rea element",
-                    line=loc.line if loc else None,
-                ))
+                issues.append(
+                    LintIssue(
+                        rule=self.id,
+                        severity=self.severity,
+                        message=f"Statute {statute.section_number} has no mens_rea element",
+                        line=loc.line if loc else None,
+                    )
+                )
         return issues
 
 
 class MissingPenaltyRule(LintRule):
     """Check for statutes without penalty clause."""
-    
+
     id = "missing-penalty"
     severity = Severity.INFO
     description = "Statute should specify a penalty"
-    
+
     def check(self, ast: ModuleNode, source: str) -> List[LintIssue]:
         issues = []
         for statute in ast.statutes:
             if not statute.penalty:
                 loc = statute.source_location
-                issues.append(LintIssue(
-                    rule=self.id,
-                    severity=self.severity,
-                    message=f"Statute {statute.section_number} has no penalty defined",
-                    line=loc.line if loc else None,
-                ))
+                issues.append(
+                    LintIssue(
+                        rule=self.id,
+                        severity=self.severity,
+                        message=f"Statute {statute.section_number} has no penalty defined",
+                        line=loc.line if loc else None,
+                    )
+                )
         return issues
 
 
 class EmptyIllustrationRule(LintRule):
     """Check for empty illustrations."""
-    
+
     id = "empty-illustration"
     severity = Severity.WARNING
     description = "Illustrations should have meaningful content"
-    
+
     def check(self, ast: ModuleNode, source: str) -> List[LintIssue]:
         issues = []
         for statute in ast.statutes:
             for illus in statute.illustrations:
                 if not illus.description.value.strip():
                     loc = illus.source_location
-                    issues.append(LintIssue(
-                        rule=self.id,
-                        severity=self.severity,
-                        message=f"Empty illustration in statute {statute.section_number}",
-                        line=loc.line if loc else None,
-                    ))
+                    issues.append(
+                        LintIssue(
+                            rule=self.id,
+                            severity=self.severity,
+                            message=f"Empty illustration in statute {statute.section_number}",
+                            line=loc.line if loc else None,
+                        )
+                    )
         return issues
 
 
 class UnusedDefinitionRule(LintRule):
     """Check for definitions that are never referenced."""
-    
+
     id = "unused-definition"
     severity = Severity.HINT
     description = "Definition is never referenced"
-    
+
     def check(self, ast: ModuleNode, source: str) -> List[LintIssue]:
         issues = []
-        
+
         for statute in ast.statutes:
             defined_terms = {d.term.lower() for d in statute.definitions}
-            
+
             # Collect all text content to search for term usage
             text_content = ""
             for elem in _flatten_elements(statute.elements):
@@ -229,113 +261,124 @@ class UnusedDefinitionRule(LintRule):
                     text_content += " " + elem.description.value
             for illus in statute.illustrations:
                 text_content += " " + illus.description.value
-            
+
             text_lower = text_content.lower()
-            
+
             for defn in statute.definitions:
                 term = defn.term
                 # Check if term is used in element descriptions or illustrations
                 if term.lower() not in text_lower:
                     loc = defn.source_location
-                    issues.append(LintIssue(
-                        rule=self.id,
-                        severity=self.severity,
-                        message=f"Definition '{term}' is never referenced in statute {statute.section_number}",
-                        line=loc.line if loc else None,
-                    ))
-        
+                    issues.append(
+                        LintIssue(
+                            rule=self.id,
+                            severity=self.severity,
+                            message=f"Definition '{term}' is never referenced in statute {statute.section_number}",
+                            line=loc.line if loc else None,
+                        )
+                    )
+
         return issues
 
 
 class NamingConventionRule(LintRule):
     """Check naming conventions."""
-    
+
     id = "naming-convention"
     severity = Severity.INFO
     description = "Follow naming conventions"
-    
+
     def check(self, ast: ModuleNode, source: str) -> List[LintIssue]:
         issues = []
-        
+
         # Check struct names (should be PascalCase)
         for struct in ast.type_defs:
-            if not re.match(r'^[A-Z][a-zA-Z0-9]*$', struct.name):
+            if not re.match(r"^[A-Z][a-zA-Z0-9]*$", struct.name):
                 loc = struct.source_location
-                issues.append(LintIssue(
-                    rule=self.id,
-                    severity=self.severity,
-                    message=f"Type '{struct.name}' should use PascalCase",
-                    line=loc.line if loc else None,
-                    suggestion=f"Rename to '{struct.name.title().replace('_', '')}'"
-                ))
-        
+                issues.append(
+                    LintIssue(
+                        rule=self.id,
+                        severity=self.severity,
+                        message=f"Type '{struct.name}' should use PascalCase",
+                        line=loc.line if loc else None,
+                        suggestion=f"Rename to '{struct.name.title().replace('_', '')}'",
+                    )
+                )
+
         # Check function names (should be snake_case)
         for func in ast.function_defs:
-            if not re.match(r'^[a-z][a-z0-9_]*$', func.name):
+            if not re.match(r"^[a-z][a-z0-9_]*$", func.name):
                 loc = func.source_location
-                issues.append(LintIssue(
-                    rule=self.id,
-                    severity=self.severity,
-                    message=f"Function '{func.name}' should use snake_case",
-                    line=loc.line if loc else None,
-                ))
-        
+                issues.append(
+                    LintIssue(
+                        rule=self.id,
+                        severity=self.severity,
+                        message=f"Function '{func.name}' should use snake_case",
+                        line=loc.line if loc else None,
+                    )
+                )
+
         return issues
 
 
 class SectionNumberFormatRule(LintRule):
     """Check section number format."""
-    
+
     id = "section-format"
     severity = Severity.WARNING
     description = "Section numbers should follow standard format"
-    
+
     def check(self, ast: ModuleNode, source: str) -> List[LintIssue]:
         issues = []
-        
+
         for statute in ast.statutes:
             # Allow digits with optional letter suffix (e.g., "299", "300A")
-            if not re.match(r'^\d+[A-Za-z]?$', statute.section_number):
+            if not re.match(r"^\d+[A-Za-z]?$", statute.section_number):
                 loc = statute.source_location
-                issues.append(LintIssue(
-                    rule=self.id,
-                    severity=self.severity,
-                    message=f"Non-standard section number format: '{statute.section_number}'",
-                    line=loc.line if loc else None,
-                    suggestion="Use numeric format with optional letter suffix (e.g., '299', '300A')"
-                ))
-        
+                issues.append(
+                    LintIssue(
+                        rule=self.id,
+                        severity=self.severity,
+                        message=f"Non-standard section number format: '{statute.section_number}'",
+                        line=loc.line if loc else None,
+                        suggestion="Use numeric format with optional letter suffix (e.g., '299', '300A')",
+                    )
+                )
+
         return issues
 
 
 class DuplicateSectionRule(LintRule):
     """Check for duplicate section numbers."""
-    
+
     id = "duplicate-section"
     severity = Severity.ERROR
     description = "Section numbers must be unique"
-    
+
     def check(self, ast: ModuleNode, source: str) -> List[LintIssue]:
         issues = []
         seen: Dict[str, int] = {}
-        
+
         for statute in ast.statutes:
             section = statute.section_number
             if section in seen:
                 loc = statute.source_location
-                issues.append(LintIssue(
-                    rule=self.id,
-                    severity=self.severity,
-                    message=f"Duplicate section number: '{section}'",
-                    line=loc.line if loc else None,
-                ))
+                issues.append(
+                    LintIssue(
+                        rule=self.id,
+                        severity=self.severity,
+                        message=f"Duplicate section number: '{section}'",
+                        line=loc.line if loc else None,
+                    )
+                )
             seen[section] = seen.get(section, 0) + 1
-        
+
         return issues
 
 
 class DuplicateExceptionGuardRule(LintRule):
     """Check for exceptions with identical guards (likely copy-paste error)."""
+
     id = "duplicate-exception-guard"
     severity = Severity.WARNING
     description = "Multiple exceptions should not have identical guards"
@@ -347,18 +390,22 @@ class DuplicateExceptionGuardRule(LintRule):
             for exc in statute.exceptions:
                 key = exc.label or ""
                 if key in seen_labels and key:
-                    loc = exc.source_location if hasattr(exc, 'source_location') else None
-                    issues.append(LintIssue(
-                        rule=self.id, severity=self.severity,
-                        message=f"Duplicate exception label '{key}' in statute {statute.section_number}",
-                        line=loc.line if loc else None,
-                    ))
+                    loc = exc.source_location if hasattr(exc, "source_location") else None
+                    issues.append(
+                        LintIssue(
+                            rule=self.id,
+                            severity=self.severity,
+                            message=f"Duplicate exception label '{key}' in statute {statute.section_number}",
+                            line=loc.line if loc else None,
+                        )
+                    )
                 seen_labels[key] = seen_labels.get(key, 0) + 1
         return issues
 
 
 class RepealedStatuteRule(LintRule):
     """Warn if a statute is marked as repealed."""
+
     id = "repealed-statute"
     severity = Severity.WARNING
     description = "Repealed statutes should not be evaluated"
@@ -366,18 +413,22 @@ class RepealedStatuteRule(LintRule):
     def check(self, ast: ModuleNode, source: str) -> List[LintIssue]:
         issues = []
         for statute in ast.statutes:
-            if getattr(statute, 'repealed_date', None):
+            if getattr(statute, "repealed_date", None):
                 loc = statute.source_location
-                issues.append(LintIssue(
-                    rule=self.id, severity=self.severity,
-                    message=f"Statute {statute.section_number} is repealed (as of {statute.repealed_date})",
-                    line=loc.line if loc else None,
-                ))
+                issues.append(
+                    LintIssue(
+                        rule=self.id,
+                        severity=self.severity,
+                        message=f"Statute {statute.section_number} is repealed (as of {statute.repealed_date})",
+                        line=loc.line if loc else None,
+                    )
+                )
         return issues
 
 
 class ElementsWithoutPenaltyRule(LintRule):
     """Check for statutes with elements but no penalty."""
+
     id = "elements-without-penalty"
     severity = Severity.WARNING
     description = "Statutes with elements should define a penalty"
@@ -387,16 +438,20 @@ class ElementsWithoutPenaltyRule(LintRule):
         for statute in ast.statutes:
             if statute.elements and not statute.penalty:
                 loc = statute.source_location
-                issues.append(LintIssue(
-                    rule=self.id, severity=self.severity,
-                    message=f"Statute {statute.section_number} has elements but no penalty",
-                    line=loc.line if loc else None,
-                ))
+                issues.append(
+                    LintIssue(
+                        rule=self.id,
+                        severity=self.severity,
+                        message=f"Statute {statute.section_number} has elements but no penalty",
+                        line=loc.line if loc else None,
+                    )
+                )
         return issues
 
 
 class SubsumptionConsistencyRule(LintRule):
     """Check that subsumption declarations reference existing statutes."""
+
     id = "subsumption-target"
     severity = Severity.WARNING
     description = "Subsumption target must exist in module"
@@ -405,14 +460,17 @@ class SubsumptionConsistencyRule(LintRule):
         issues = []
         section_numbers = {s.section_number for s in ast.statutes}
         for statute in ast.statutes:
-            target = getattr(statute, 'subsumes', None)
+            target = getattr(statute, "subsumes", None)
             if target and target not in section_numbers:
                 loc = statute.source_location
-                issues.append(LintIssue(
-                    rule=self.id, severity=self.severity,
-                    message=f"Statute {statute.section_number} subsumes {target}, but {target} not found in module",
-                    line=loc.line if loc else None,
-                ))
+                issues.append(
+                    LintIssue(
+                        rule=self.id,
+                        severity=self.severity,
+                        message=f"Statute {statute.section_number} subsumes {target}, but {target} not found in module",
+                        line=loc.line if loc else None,
+                    )
+                )
         return issues
 
 
@@ -435,45 +493,41 @@ ALL_RULES: List[LintRule] = [
 ]
 
 
-def format_issues(
-    issues: List[LintIssue],
-    filename: str,
-    color: bool = True
-) -> str:
+def format_issues(issues: List[LintIssue], filename: str, color: bool = True) -> str:
     """Format lint issues for display."""
     if not issues:
         return ""
-    
+
     lines = []
-    
+
     # Group by severity
     errors = [i for i in issues if i.severity == Severity.ERROR]
     warnings = [i for i in issues if i.severity == Severity.WARNING]
     infos = [i for i in issues if i.severity == Severity.INFO]
     hints = [i for i in issues if i.severity == Severity.HINT]
-    
+
     def c(text: str, col: str) -> str:
         return colorize(text, col) if color else text
-    
+
     def format_issue(issue: LintIssue, prefix: str, col: str) -> str:
         loc = f":{issue.line}" if issue.line else ""
         msg = f"{filename}{loc}: {c(prefix, col)} [{issue.rule}] {issue.message}"
         if issue.suggestion:
             msg += f"\n  → {issue.suggestion}"
         return msg
-    
+
     for issue in errors:
         lines.append(format_issue(issue, "error", Colors.RED))
-    
+
     for issue in warnings:
         lines.append(format_issue(issue, "warning", Colors.YELLOW))
-    
+
     for issue in infos:
         lines.append(format_issue(issue, "info", Colors.CYAN))
-    
+
     for issue in hints:
         lines.append(format_issue(issue, "hint", Colors.DIM))
-    
+
     return "\n".join(lines)
 
 
@@ -489,7 +543,7 @@ def run_lint(
 ) -> None:
     """
     Run lint checks on Yuho files.
-    
+
     Args:
         files: List of file paths to lint
         rules: Specific rules to run (None = all)
@@ -497,10 +551,11 @@ def run_lint(
         json_output: Output as JSON
         verbose: Enable verbose output
         color: Use colored output
-        fix: Attempt to auto-fix issues (not yet implemented)
+        fix: Attempt to auto-fix issues where a rewrite is low-risk
     """
     import json as json_module
     from yuho.parser.wrapper import validate_file_path
+
     validated_files = []
     for f in files:
         try:
@@ -512,31 +567,32 @@ def run_lint(
 
     # Select rules to run
     active_rules = ALL_RULES
-    
+
     if rules:
         active_rules = [r for r in ALL_RULES if r.id in rules]
-    
+
     if exclude_rules:
         active_rules = [r for r in active_rules if r.id not in exclude_rules]
-    
+
     if verbose:
         click.echo(f"Running {len(active_rules)} lint rules")
-    
+
     all_issues: Dict[str, List[LintIssue]] = {}
+    applied_fixes: Dict[str, List[AutoFixEdit]] = {}
     parse_diagnostics: Dict[str, List[str]] = {}
     parser = get_parser()
-    
+
     for file_path in files:
         path = Path(file_path)
-        
+
         if not path.exists():
             parse_diagnostics[str(path)] = [f"File not found: {file_path}"]
             continue
-        
+
         # Parse file
         try:
             result = parser.parse_file(path)
-            
+
             if result.errors:
                 diagnostics = []
                 for err in result.errors:
@@ -545,44 +601,85 @@ def run_lint(
                     diagnostics.append(f"{line}:{col}: {err.message}")
                 parse_diagnostics[str(path)] = diagnostics
                 continue
-            
+
             source = result.source
             builder = ASTBuilder(source, str(path))
             ast = builder.build(result.tree.root_node)
-            
+
             # Run all rules
             file_issues: List[LintIssue] = []
             for rule in active_rules:
                 file_issues.extend(rule.check(ast, source))
-            
+
+            if fix and file_issues:
+                auto_fixes = _collect_auto_fixes(ast, source, active_rules)
+                if auto_fixes:
+                    fixed_source = _apply_auto_fix_edits(source, auto_fixes)
+                    if fixed_source != source:
+                        path.write_text(fixed_source, encoding="utf-8")
+                        applied_fixes[str(path)] = auto_fixes
+                        result = parser.parse_file(path)
+                        if result.errors:
+                            diagnostics = []
+                            for err in result.errors:
+                                line = err.location.line if err.location else "?"
+                                col = err.location.col if err.location else "?"
+                                diagnostics.append(f"{line}:{col}: {err.message}")
+                            parse_diagnostics[str(path)] = diagnostics
+                            continue
+
+                        source = result.source
+                        builder = ASTBuilder(source, str(path))
+                        ast = builder.build(result.tree.root_node)
+                        file_issues = []
+                        for rule in active_rules:
+                            file_issues.extend(rule.check(ast, source))
+
             if file_issues:
                 all_issues[str(path)] = file_issues
-                
+
         except Exception as e:
             parse_diagnostics[str(path)] = [f"Failed to process file: {e}"]
-    
+
     if output_format == "json":
         json_output = True
 
     # SARIF output
     if output_format == "sarif":
         sarif_results = []
-        severity_map = {Severity.ERROR: "error", Severity.WARNING: "warning", Severity.INFO: "note", Severity.HINT: "note"}
+        severity_map = {
+            Severity.ERROR: "error",
+            Severity.WARNING: "warning",
+            Severity.INFO: "note",
+            Severity.HINT: "note",
+        }
         for filepath, issues in all_issues.items():
             for i in issues:
-                sarif_results.append(make_sarif_result(
-                    rule_id=f"yuho/lint/{i.rule}", message=i.message, file=filepath,
-                    line=i.line or 1, level=severity_map.get(i.severity, "warning"),
-                ))
+                sarif_results.append(
+                    make_sarif_result(
+                        rule_id=f"yuho/lint/{i.rule}",
+                        message=i.message,
+                        file=filepath,
+                        line=i.line or 1,
+                        level=severity_map.get(i.severity, "warning"),
+                    )
+                )
         for filepath, diags in parse_diagnostics.items():
             for d in diags:
-                sarif_results.append(make_sarif_result(rule_id="yuho/parse", message=d, file=filepath))
+                sarif_results.append(
+                    make_sarif_result(rule_id="yuho/parse", message=d, file=filepath)
+                )
         print(to_sarif(sarif_results))
-        has_errors = any(i.severity == Severity.ERROR for issues in all_issues.values() for i in issues) or parse_diagnostics
-        has_warnings = any(i.severity == Severity.WARNING for issues in all_issues.values() for i in issues)
-        if has_errors:
+        sarif_has_errors = (
+            any(i.severity == Severity.ERROR for issues in all_issues.values() for i in issues)
+            or parse_diagnostics
+        )
+        sarif_has_warnings = any(
+            i.severity == Severity.WARNING for issues in all_issues.values() for i in issues
+        )
+        if sarif_has_errors:
             sys.exit(1)
-        if has_warnings:
+        if sarif_has_warnings:
             sys.exit(2)
         return
 
@@ -591,6 +688,16 @@ def run_lint(
         output = {
             "files": len(files),
             "parse_errors": parse_diagnostics,
+            "fixed": {
+                path: [
+                    {
+                        "rule": edit.rule,
+                        "description": edit.description,
+                    }
+                    for edit in edits
+                ]
+                for path, edits in applied_fixes.items()
+            },
             "issues": {
                 path: [
                     {
@@ -606,11 +713,31 @@ def run_lint(
             },
             "summary": {
                 "parse_errors": sum(len(diags) for diags in parse_diagnostics.values()),
-                "errors": sum(1 for issues in all_issues.values() for i in issues if i.severity == Severity.ERROR),
-                "warnings": sum(1 for issues in all_issues.values() for i in issues if i.severity == Severity.WARNING),
-                "infos": sum(1 for issues in all_issues.values() for i in issues if i.severity == Severity.INFO),
-                "hints": sum(1 for issues in all_issues.values() for i in issues if i.severity == Severity.HINT),
-            }
+                "errors": sum(
+                    1
+                    for issues in all_issues.values()
+                    for i in issues
+                    if i.severity == Severity.ERROR
+                ),
+                "warnings": sum(
+                    1
+                    for issues in all_issues.values()
+                    for i in issues
+                    if i.severity == Severity.WARNING
+                ),
+                "infos": sum(
+                    1
+                    for issues in all_issues.values()
+                    for i in issues
+                    if i.severity == Severity.INFO
+                ),
+                "hints": sum(
+                    1
+                    for issues in all_issues.values()
+                    for i in issues
+                    if i.severity == Severity.HINT
+                ),
+            },
         }
         print(json_module.dumps(output, indent=2))
     else:
@@ -621,39 +748,181 @@ def run_lint(
                     click.echo(colorize(f"  - {diagnostic}", Colors.RED), err=True)
                 click.echo("", err=True)
 
+        if applied_fixes:
+            for filename, edits in applied_fixes.items():
+                summary = ", ".join(f"{edit.rule}" for edit in edits)
+                click.echo(
+                    colorize(
+                        f"Fixed {len(edits)} issue(s) in {filename}: {summary}",
+                        Colors.GREEN,
+                    )
+                    if color
+                    else f"Fixed {len(edits)} issue(s) in {filename}: {summary}"
+                )
+            if all_issues or parse_diagnostics:
+                click.echo("")
+
         if not all_issues and not parse_diagnostics:
             click.echo(colorize("✓ No issues found", Colors.GREEN))
             return
-        
+
         for filename, issues in all_issues.items():
-            output = format_issues(issues, filename, color=color)
-            click.echo(output)
+            formatted_output = format_issues(issues, filename, color=color)
+            click.echo(formatted_output)
             click.echo()
-        
+
         # Summary
-        total_errors = sum(1 for issues in all_issues.values() for i in issues if i.severity == Severity.ERROR)
-        total_warnings = sum(1 for issues in all_issues.values() for i in issues if i.severity == Severity.WARNING)
-        total_other = sum(1 for issues in all_issues.values() for i in issues if i.severity not in (Severity.ERROR, Severity.WARNING))
+        total_errors = sum(
+            1 for issues in all_issues.values() for i in issues if i.severity == Severity.ERROR
+        )
+        total_warnings = sum(
+            1 for issues in all_issues.values() for i in issues if i.severity == Severity.WARNING
+        )
+        total_other = sum(
+            1
+            for issues in all_issues.values()
+            for i in issues
+            if i.severity not in (Severity.ERROR, Severity.WARNING)
+        )
         total_parse = sum(len(diags) for diags in parse_diagnostics.values())
-        
+
         summary_parts = []
         if total_parse:
             summary_parts.append(
-                colorize(f"{total_parse} parse error(s)", Colors.RED) if color else f"{total_parse} parse error(s)"
+                colorize(f"{total_parse} parse error(s)", Colors.RED)
+                if color
+                else f"{total_parse} parse error(s)"
             )
         if total_errors:
-            summary_parts.append(colorize(f"{total_errors} error(s)", Colors.RED) if color else f"{total_errors} error(s)")
+            summary_parts.append(
+                colorize(f"{total_errors} error(s)", Colors.RED)
+                if color
+                else f"{total_errors} error(s)"
+            )
         if total_warnings:
-            summary_parts.append(colorize(f"{total_warnings} warning(s)", Colors.YELLOW) if color else f"{total_warnings} warning(s)")
+            summary_parts.append(
+                colorize(f"{total_warnings} warning(s)", Colors.YELLOW)
+                if color
+                else f"{total_warnings} warning(s)"
+            )
         if total_other:
             summary_parts.append(f"{total_other} info/hint(s)")
-        
+
         click.echo(f"Found {', '.join(summary_parts)}")
-    
+
     # Exit with error if there are lint errors or parse failures
-    has_errors = parse_diagnostics or any(i.severity == Severity.ERROR for issues in all_issues.values() for i in issues)
-    has_warnings = any(i.severity == Severity.WARNING for issues in all_issues.values() for i in issues)
+    has_errors = bool(parse_diagnostics) or any(
+        i.severity == Severity.ERROR for issues in all_issues.values() for i in issues
+    )
+    has_warnings = any(
+        i.severity == Severity.WARNING for issues in all_issues.values() for i in issues
+    )
     if has_errors:
         sys.exit(1)
     if has_warnings:
         sys.exit(2)
+
+
+def _collect_auto_fixes(
+    ast: ModuleNode, source: str, active_rules: List[LintRule]
+) -> List[AutoFixEdit]:
+    """Build a list of safe automatic rewrites for the current source."""
+    active_rule_ids = {rule.id for rule in active_rules}
+    fixes: List[AutoFixEdit] = []
+
+    if "missing-title" in active_rule_ids:
+        fixes.extend(_build_missing_title_fixes(ast, source))
+    if "empty-illustration" in active_rule_ids:
+        fixes.extend(_build_empty_illustration_fixes(ast))
+
+    fixes.sort(key=lambda edit: (edit.start, edit.end, edit.rule))
+    deduped: List[AutoFixEdit] = []
+    seen_ranges = set()
+    for fix in fixes:
+        key = (fix.start, fix.end, fix.replacement)
+        if key in seen_ranges:
+            continue
+        deduped.append(fix)
+        seen_ranges.add(key)
+    return deduped
+
+
+def _build_missing_title_fixes(ast: ModuleNode, source: str) -> List[AutoFixEdit]:
+    """Insert or replace empty statute titles with a deterministic placeholder."""
+    fixes: List[AutoFixEdit] = []
+    for statute in ast.statutes:
+        if statute.title and statute.title.value.strip():
+            continue
+
+        replacement = f'"Untitled Section {statute.section_number}"'
+        title_loc = statute.title.source_location if statute.title else None
+        if (
+            title_loc is not None
+            and title_loc.offset is not None
+            and title_loc.end_offset is not None
+        ):
+            fixes.append(
+                AutoFixEdit(
+                    start=title_loc.offset,
+                    end=title_loc.end_offset,
+                    replacement=replacement,
+                    rule="missing-title",
+                    description=f"Added placeholder title for statute {statute.section_number}",
+                )
+            )
+            continue
+
+        loc = statute.source_location
+        if loc is None or loc.offset is None:
+            continue
+
+        line_end = source.find("\n", loc.offset)
+        if line_end == -1:
+            line_end = len(source)
+        line_text = source[loc.offset : line_end]
+        match = re.match(rf"(\s*statute\s+{re.escape(statute.section_number)})(.*)", line_text)
+        if not match:
+            continue
+
+        insert_at = loc.offset + len(match.group(1))
+        fixes.append(
+            AutoFixEdit(
+                start=insert_at,
+                end=insert_at,
+                replacement=f" {replacement}",
+                rule="missing-title",
+                description=f"Added placeholder title for statute {statute.section_number}",
+            )
+        )
+
+    return fixes
+
+
+def _build_empty_illustration_fixes(ast: ModuleNode) -> List[AutoFixEdit]:
+    """Replace empty illustration strings with a visible placeholder."""
+    fixes: List[AutoFixEdit] = []
+    for statute in ast.statutes:
+        for illustration in statute.illustrations:
+            if illustration.description.value.strip():
+                continue
+            loc = illustration.description.source_location
+            if loc is None or loc.offset is None or loc.end_offset is None:
+                continue
+            fixes.append(
+                AutoFixEdit(
+                    start=loc.offset,
+                    end=loc.end_offset,
+                    replacement='"Illustration pending."',
+                    rule="empty-illustration",
+                    description=f"Filled empty illustration in statute {statute.section_number}",
+                )
+            )
+    return fixes
+
+
+def _apply_auto_fix_edits(source: str, edits: List[AutoFixEdit]) -> str:
+    """Apply source edits from right to left to preserve offsets."""
+    updated = source
+    for edit in sorted(edits, key=lambda item: (item.start, item.end), reverse=True):
+        updated = updated[: edit.start] + edit.replacement + updated[edit.end :]
+    return updated
