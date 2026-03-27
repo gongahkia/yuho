@@ -12,6 +12,7 @@ def get_auth_token() -> Optional[str]:
         return token
     try:
         from yuho.config.loader import get_config
+
         return get_config().api.auth_token
     except Exception:
         return None
@@ -20,7 +21,7 @@ def get_auth_token() -> Optional[str]:
 def verify_bearer_token(authorization: Optional[str], expected: Optional[str]) -> bool:
     """Verify Authorization header against expected token. Returns True if no token configured."""
     if not expected:
-        return True # no auth configured
+        return True  # no auth configured
     if not authorization:
         return False
     parts = authorization.split(" ", 1)
