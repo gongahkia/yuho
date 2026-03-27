@@ -4,7 +4,7 @@ Yuho MCP Server implementation.
 Provides MCP tools for parsing, transpiling, and analyzing Yuho code.
 """
 
-from typing import Dict, List, Optional, Any
+from typing import TYPE_CHECKING, Any, Dict, Iterator, List, Optional, TypedDict
 from pathlib import Path
 from enum import IntEnum
 from dataclasses import dataclass, field
@@ -30,6 +30,32 @@ from yuho.services.errors import (
 
 # Configure MCP logger
 logger = logging.getLogger("yuho.mcp")
+
+if TYPE_CHECKING:
+    from yuho.ast import nodes
+
+
+class RateLimitStats(TypedDict):
+    total_requests: int
+    rate_limited: int
+    by_tool: Dict[str, int]
+    error_counts: Dict[str, int]
+    latency_histograms_ms: Dict[str, Dict[str, int]]
+
+
+def _iter_leaf_elements(
+    elements: (
+        tuple["nodes.ElementNode | nodes.ElementGroupNode", ...]
+        | list["nodes.ElementNode | nodes.ElementGroupNode"]
+    ),
+) -> Iterator["nodes.ElementNode"]:
+    from yuho.ast import nodes
+
+    for elem in elements:
+        if isinstance(elem, nodes.ElementNode):
+            yield elem
+            continue
+        yield from _iter_leaf_elements(list(elem.members))
 
 
 class LogVerbosity(IntEnum):
@@ -139,7 +165,7 @@ class RateLimiter:
         self._client_buckets: Dict[str, TokenBucket] = {}
         self._client_buckets_lock = threading.Lock()
         self._stats_lock = threading.Lock()
-        self._stats = {
+        self._stats: RateLimitStats = {
             "total_requests": 0,
             "rate_limited": 0,
             "by_tool": {},
@@ -309,14 +335,14 @@ class MCPRequestLogger:
 
 
 try:
-    from mcp.server.fastmcp import FastMCP
+    from mcp.server.fastmcp import FastMCP as _FastMCPImpl
 
     MCP_AVAILABLE = True
 except ImportError:
     MCP_AVAILABLE = False
 
     # Provide mock class for when mcp is not installed
-    class FastMCP:
+    class _FallbackFastMCP:
         def __init__(self, name: str):
             self.name = name
 
@@ -332,7 +358,7 @@ except ImportError:
 
             return decorator
 
-        def prompt(self, name: str = None):
+        def prompt(self, name: Optional[str] = None):
             def decorator(func):
                 return func
 
@@ -340,6 +366,8 @@ except ImportError:
 
         def run(self, transport: str = "stdio"):
             raise ImportError("MCP dependencies not installed. Install with: pip install yuho[mcp]")
+
+    _FastMCPImpl = _FallbackFastMCP
 
 
 class YuhoMCPServer:
@@ -367,7 +395,7 @@ class YuhoMCPServer:
         verbosity: LogVerbosity = LogVerbosity.STANDARD,
         rate_limit_config: Optional[RateLimitConfig] = None,
     ):
-        self.server = FastMCP("yuho-mcp")
+        self.server = _FastMCPImpl("yuho-mcp")
         self.request_logger = MCPRequestLogger(verbosity)
         self.rate_limiter = RateLimiter(rate_limit_config or RateLimitConfig())
         self._register_tools()
@@ -701,7 +729,7 @@ class YuhoMCPServer:
             from yuho.parser import get_parser
             from yuho.ast import ASTBuilder
 
-            completions = []
+            completions: List[Dict[str, str]] = []
 
             # Keywords
             keywords = [
@@ -864,7 +892,7 @@ class YuhoMCPServer:
                             info = f"**Statute Section {statute.section_number}**: {title}"
                             if statute.elements:
                                 info += "\n\n**Elements:**\n"
-                                for elem in statute.elements:
+                                for elem in _iter_leaf_elements(list(statute.elements)):
                                     info += f"- {elem.element_type}: {elem.name}\n"
                             return {"info": info}
 
@@ -1119,13 +1147,13 @@ class YuhoMCPServer:
             result = parser.parse(file_content)
 
             # Parse errors
-            for err in result.errors:
+            for parse_error in result.errors:
                 diagnostics.append(
                     {
-                        "message": err.message,
+                        "message": parse_error.message,
                         "severity": "error",
-                        "line": err.location.line,
-                        "col": err.location.col,
+                        "line": parse_error.location.line,
+                        "col": parse_error.location.col,
                     }
                 )
 
@@ -1141,22 +1169,22 @@ class YuhoMCPServer:
                         ast.accept(infer_visitor)
                         check_visitor = TypeCheckVisitor(infer_visitor.result)
                         ast.accept(check_visitor)
-                        for err in check_visitor.result.errors:
+                        for type_error in check_visitor.result.errors:
                             diagnostics.append(
                                 {
-                                    "message": err.message,
+                                    "message": type_error.message,
                                     "severity": "error",
-                                    "line": err.line,
-                                    "col": err.column,
+                                    "line": type_error.line,
+                                    "col": type_error.column,
                                 }
                             )
-                        for warn in check_visitor.result.warnings:
+                        for warning in check_visitor.result.warnings:
                             diagnostics.append(
                                 {
-                                    "message": warn.message,
+                                    "message": warning.message,
                                     "severity": "warning",
-                                    "line": warn.line,
-                                    "col": warn.column,
+                                    "line": warning.line,
+                                    "col": warning.column,
                                 }
                             )
                     except Exception as e:
@@ -1175,7 +1203,7 @@ class YuhoMCPServer:
 
         @tool_with_structured_logging()
         async def yuho_validate_contribution(
-            file_content: str, tests: List[str] = None
+            file_content: str, tests: Optional[List[str]] = None
         ) -> Dict[str, Any]:
             """
             Validate a statute file for contribution to the library.
