@@ -6,10 +6,13 @@ from yuho.workspace.model import Workspace, WorkspaceStore
 
 class WorkspaceRouter:
     """Routes requests to the appropriate workspace based on headers."""
+
     def __init__(self, store: Optional[WorkspaceStore] = None) -> None:
         self._store = store or WorkspaceStore()
 
-    def resolve(self, workspace_id: Optional[str] = None, api_key: Optional[str] = None) -> Optional[Workspace]:
+    def resolve(
+        self, workspace_id: Optional[str] = None, api_key: Optional[str] = None
+    ) -> Optional[Workspace]:
         """Resolve workspace from X-Workspace-ID header or API key."""
         if workspace_id:
             return self._store.get(workspace_id)
