@@ -11,9 +11,7 @@ from yuho.cli.main import cli
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-S299_STATUTE = (
-    REPO_ROOT / "library" / "penal_code" / "s299_culpable_homicide" / "statute.yh"
-)
+S299_STATUTE = REPO_ROOT / "library" / "penal_code" / "s299_culpable_homicide" / "statute.yh"
 S300_STATUTE = REPO_ROOT / "library" / "penal_code" / "s300_murder" / "statute.yh"
 
 
