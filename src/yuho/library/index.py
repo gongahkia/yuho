@@ -28,6 +28,7 @@ DEFAULT_LIBRARY_DIR = Path.home() / ".yuho" / "library" / "packages"
 @dataclass
 class IndexEntry:
     """An entry in the library index."""
+
     section_number: str
     title: str
     jurisdiction: str
@@ -37,7 +38,7 @@ class IndexEntry:
     tags: List[str]
     package_path: str  # Relative path within library
     content_hash: str
-    
+
     @classmethod
     def from_metadata(
         cls, metadata: PackageMetadata, package_path: str, content_hash: str
@@ -54,7 +55,7 @@ class IndexEntry:
             package_path=package_path,
             content_hash=content_hash,
         )
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary."""
         return {
@@ -68,7 +69,7 @@ class IndexEntry:
             "package_path": self.package_path,
             "content_hash": self.content_hash,
         }
-    
+
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "IndexEntry":
         """Create from dictionary."""
@@ -83,7 +84,7 @@ class IndexEntry:
             package_path=data["package_path"],
             content_hash=data.get("content_hash", ""),
         )
-    
+
     def matches(
         self,
         section: Optional[str] = None,
@@ -94,34 +95,34 @@ class IndexEntry:
         """Check if entry matches search criteria."""
         if section and section.lower() not in self.section_number.lower():
             return False
-        
+
         if jurisdiction and jurisdiction.lower() not in self.jurisdiction.lower():
             return False
-        
+
         if keyword:
             keyword_lower = keyword.lower()
             searchable = f"{self.title} {self.description} {' '.join(self.tags)}".lower()
             if keyword_lower not in searchable:
                 return False
-        
+
         if tags:
             # Entry must have at least one of the specified tags
             entry_tags_lower = [t.lower() for t in self.tags]
             matching_tags = any(t.lower() in entry_tags_lower for t in tags)
             if not matching_tags:
                 return False
-        
+
         return True
 
 
 class LibraryIndex:
     """
     Index of installed statute packages.
-    
+
     Provides efficient lookup by section number, jurisdiction,
     and keyword search.
     """
-    
+
     def __init__(
         self,
         index_path: Optional[Path] = None,
@@ -129,7 +130,7 @@ class LibraryIndex:
     ):
         """
         Initialize the library index.
-        
+
         Args:
             index_path: Path to index JSON file
             library_dir: Path to library directory
@@ -139,25 +140,25 @@ class LibraryIndex:
         self._lock_path = self.index_path.with_suffix(f"{self.index_path.suffix}.lock")
         self._entries: Dict[str, IndexEntry] = {}
         self._load()
-    
+
     def _load(self) -> None:
         """Load index from disk."""
         if not self.index_path.exists():
             logger.debug(f"No index found at {self.index_path}")
             return
-        
+
         try:
             with open(self.index_path) as f:
                 data = json.load(f)
-            
+
             for entry_data in data.get("entries", []):
                 entry = IndexEntry.from_dict(entry_data)
                 self._entries[entry.section_number] = entry
-            
+
             logger.debug(f"Loaded {len(self._entries)} index entries")
         except Exception as e:
             logger.warning(f"Failed to load index: {e}")
-    
+
     def _save(self) -> None:
         """Save index to disk."""
         self.index_path.parent.mkdir(parents=True, exist_ok=True)
@@ -199,16 +200,16 @@ class LibraryIndex:
                 yield
             finally:
                 _unlock_file(lock_file)
-    
+
     def add(self, entry: IndexEntry) -> None:
         """Add or update an entry in the index."""
         self._entries[entry.section_number] = entry
         self._save()
-    
+
     def remove(self, section_number: str) -> bool:
         """
         Remove an entry from the index.
-        
+
         Returns:
             True if entry was removed, False if not found
         """
@@ -217,11 +218,11 @@ class LibraryIndex:
             self._save()
             return True
         return False
-    
+
     def get(self, section_number: str) -> Optional[IndexEntry]:
         """Get an entry by section number."""
         return self._entries.get(section_number)
-    
+
     def search(
         self,
         section: Optional[str] = None,
@@ -232,77 +233,79 @@ class LibraryIndex:
     ) -> List[IndexEntry]:
         """
         Search the library index.
-        
+
         Args:
             section: Section number pattern to match
             keyword: Keyword to search in title/description/tags
             jurisdiction: Jurisdiction to filter by
             tags: Tags to filter by (matches if entry has any)
             limit: Maximum results to return
-            
+
         Returns:
             List of matching entries
         """
         results = []
-        
+
         for entry in self._entries.values():
             if entry.matches(section, keyword, jurisdiction, tags):
                 results.append(entry)
                 if len(results) >= limit:
                     break
-        
+
         # Sort by section number
         results.sort(key=lambda e: e.section_number)
-        
+
         return results
-    
+
     def list_all(self) -> List[IndexEntry]:
         """List all entries in the index."""
         return sorted(self._entries.values(), key=lambda e: e.section_number)
-    
+
     def count(self) -> int:
         """Get total number of indexed packages."""
         return len(self._entries)
-    
+
     def detect_conflicts(self) -> List[Dict[str, Any]]:
         """
         Detect conflicts where multiple packages define the same section.
-        
+
         Returns:
             List of conflicts, each with 'section_number', 'packages' list
         """
         from collections import defaultdict
-        
+
         # This implementation tracks if multiple sources provide same section
         # In current implementation, each section maps to one entry
         # Conflicts occur when trying to install a package with existing section
         conflicts = []
-        
+
         # For enhanced conflict detection, check package_path uniqueness
         path_to_sections: Dict[str, List[str]] = defaultdict(list)
-        
+
         for entry in self._entries.values():
             path_to_sections[entry.package_path].append(entry.section_number)
-        
+
         # Find duplicate paths (shouldn't happen in normal operation)
         for path, sections in path_to_sections.items():
             if len(sections) > 1:
-                conflicts.append({
-                    "type": "duplicate_path",
-                    "package_path": path,
-                    "sections": sections,
-                    "message": f"Package {path} provides multiple sections",
-                })
-        
+                conflicts.append(
+                    {
+                        "type": "duplicate_path",
+                        "package_path": path,
+                        "sections": sections,
+                        "message": f"Package {path} provides multiple sections",
+                    }
+                )
+
         return conflicts
-    
+
     def check_section_conflict(self, section_number: str) -> Optional[IndexEntry]:
         """
         Check if installing a section would conflict with existing package.
-        
+
         Args:
             section_number: Section number to check
-            
+
         Returns:
             Existing conflicting entry, or None if no conflict
         """
@@ -311,17 +314,17 @@ class LibraryIndex:
     def rebuild(self) -> int:
         """
         Rebuild index from installed packages.
-        
+
         Returns:
             Number of packages indexed
         """
         self._entries.clear()
-        
+
         if not self.library_dir.exists():
             return 0
-        
+
         from yuho.library.package import Package
-        
+
         count = 0
         for pkg_path in self.library_dir.glob("*.yhpkg"):
             try:
@@ -335,7 +338,7 @@ class LibraryIndex:
                 count += 1
             except Exception as e:
                 logger.warning(f"Failed to index {pkg_path}: {e}")
-        
+
         self._save()
         return count
 
@@ -345,10 +348,14 @@ def _lock_file(lock_file) -> None:
     if os.name == "nt":
         import msvcrt  # type: ignore
 
+        locker = getattr(msvcrt, "locking", None)
+        lock_mode = getattr(msvcrt, "LK_LOCK", None)
+        if locker is None or lock_mode is None:
+            raise RuntimeError("msvcrt locking API is unavailable")
         lock_file.seek(0)
         while True:
             try:
-                msvcrt.locking(lock_file.fileno(), msvcrt.LK_LOCK, 1)
+                locker(lock_file.fileno(), lock_mode, 1)
                 return
             except OSError:
                 time.sleep(0.05)
@@ -363,8 +370,12 @@ def _unlock_file(lock_file) -> None:
     if os.name == "nt":
         import msvcrt  # type: ignore
 
+        locker = getattr(msvcrt, "locking", None)
+        unlock_mode = getattr(msvcrt, "LK_UNLCK", None)
+        if locker is None or unlock_mode is None:
+            raise RuntimeError("msvcrt locking API is unavailable")
         lock_file.seek(0)
-        msvcrt.locking(lock_file.fileno(), msvcrt.LK_UNLCK, 1)
+        locker(lock_file.fileno(), unlock_mode, 1)
     else:
         import fcntl
 
@@ -379,13 +390,13 @@ def search_library(
 ) -> List[Dict[str, Any]]:
     """
     Convenience function to search the library.
-    
+
     Args:
         section: Section number pattern
         keyword: Search keyword
         jurisdiction: Jurisdiction filter
         tags: Tags to filter by
-        
+
     Returns:
         List of matching packages as dictionaries
     """
