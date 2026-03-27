@@ -95,9 +95,7 @@ class Z3CounterexampleExtractor:
         if not Z3_AVAILABLE:
             logger.warning("Z3 not available - counterexample extraction disabled")
 
-    def extract_unsat_core(
-        self, solver: Any, assertions: List[Tuple[str, Any]]
-    ) -> List[str]:
+    def extract_unsat_core(self, solver: Any, assertions: List[Tuple[str, Any]]) -> List[str]:
         """
         Extract unsat core from a solver with tracked assertions.
 
@@ -127,9 +125,7 @@ class Z3CounterexampleExtractor:
 
         if result == z3.unsat:
             core = core_solver.unsat_core()
-            return [
-                tracked_assertions[str(c)] for c in core if str(c) in tracked_assertions
-            ]
+            return [tracked_assertions[str(c)] for c in core if str(c) in tracked_assertions]
 
         return []
 
@@ -313,15 +309,11 @@ class ConstraintGenerator:
         # Handle boolean operators
         if " && " in expr:
             parts = expr.split(" && ", 1)
-            return z3.And(
-                self._parse_condition(parts[0]), self._parse_condition(parts[1])
-            )
+            return z3.And(self._parse_condition(parts[0]), self._parse_condition(parts[1]))
 
         if " || " in expr:
             parts = expr.split(" || ", 1)
-            return z3.Or(
-                self._parse_condition(parts[0]), self._parse_condition(parts[1])
-            )
+            return z3.Or(self._parse_condition(parts[0]), self._parse_condition(parts[1]))
 
         if expr.startswith("!"):
             return z3.Not(self._parse_condition(expr[1:].strip()))
@@ -369,9 +361,7 @@ class ConstraintGenerator:
         # Must be a variable
         return self._get_or_create_var(val, "int")
 
-    def generate_from_match_arm(
-        self, pattern: str, guard: Optional[str] = None
-    ) -> Optional[Any]:
+    def generate_from_match_arm(self, pattern: str, guard: Optional[str] = None) -> Optional[Any]:
         """
         Generate constraint for a match arm.
 
@@ -463,16 +453,10 @@ class Z3Solver:
         if result == z3.sat:
             model = solver.model()
             model_dict = {
-                str(d): (
-                    model[d].as_long()
-                    if hasattr(model[d], "as_long")
-                    else str(model[d])
-                )
+                str(d): (model[d].as_long() if hasattr(model[d], "as_long") else str(model[d]))
                 for d in model.decls()
             }
-            return SatisfiabilityResult(
-                satisfiable=True, model=model_dict, message="Satisfiable"
-            )
+            return SatisfiabilityResult(satisfiable=True, model=model_dict, message="Satisfiable")
         elif result == z3.unsat:
             return SatisfiabilityResult(satisfiable=False, message="Unsatisfiable")
         else:
@@ -685,9 +669,7 @@ class Z3Solver:
 
         return interpretations
 
-    def check_statute_consistency(
-        self, ast: "ModuleNode"
-    ) -> Tuple[bool, List[Z3Diagnostic]]:
+    def check_statute_consistency(self, ast: "ModuleNode") -> Tuple[bool, List[Z3Diagnostic]]:
         """
         Check statute consistency using Z3 satisfiability.
 
@@ -869,8 +851,7 @@ class Z3Solver:
 
         # Check if there's a wildcard pattern (always exhaustive)
         has_wildcard = any(
-            isinstance(arm.pattern, WildcardPattern)
-            or isinstance(arm.pattern, BindingPattern)
+            isinstance(arm.pattern, WildcardPattern) or isinstance(arm.pattern, BindingPattern)
             for arm in match_expr.arms
         )
 
@@ -1064,16 +1045,8 @@ class Z3Generator:
             if not isinstance(var_decl.type_annotation, RefinementTypeNode):
                 continue
             rt = var_decl.type_annotation
-            lo = (
-                rt.lower_bound.value
-                if isinstance(rt.lower_bound, (IntLit, FloatLit))
-                else None
-            )
-            hi = (
-                rt.upper_bound.value
-                if isinstance(rt.upper_bound, (IntLit, FloatLit))
-                else None
-            )
+            lo = rt.lower_bound.value if isinstance(rt.lower_bound, (IntLit, FloatLit)) else None
+            hi = rt.upper_bound.value if isinstance(rt.upper_bound, (IntLit, FloatLit)) else None
             if lo is None or hi is None:
                 continue
             var = z3.Int(var_decl.name)
@@ -1184,9 +1157,7 @@ class Z3Generator:
         if statute.penalty:
             self._generate_penalty_constraints(statute_id, statute.penalty)
 
-    def _generate_temporal_constraints(
-        self, statute_id: str, statute: "StatuteNode"
-    ) -> None:
+    def _generate_temporal_constraints(self, statute_id: str, statute: "StatuteNode") -> None:
         """Create Int time variables per element and assert ordering from temporal constraints."""
         if not Z3_AVAILABLE:
             return
@@ -1291,16 +1262,12 @@ class Z3Generator:
         # If any arm is satisfiable, the element can be satisfied
         if arm_constraints:
             arm_disjunction = (
-                z3.Or(*arm_constraints)
-                if len(arm_constraints) > 1
-                else arm_constraints[0]
+                z3.Or(*arm_constraints) if len(arm_constraints) > 1 else arm_constraints[0]
             )
             # Element satisfied => at least one arm condition holds
             self._assertions.append(z3.Implies(elem_var, arm_disjunction))
 
-    def _translate_match_arm_to_constraint(
-        self, statute_id: str, arm: "MatchArm"
-    ) -> Optional[Any]:
+    def _translate_match_arm_to_constraint(self, statute_id: str, arm: "MatchArm") -> Optional[Any]:
         """Translate a single MatchArm to a Z3 constraint."""
         if not Z3_AVAILABLE:
             return None
@@ -1335,9 +1302,7 @@ class Z3Generator:
         if arm.guard is not None:
             guard_c = self._translate_expr_to_z3(statute_id, arm.guard)
             if guard_c is not None:
-                constraint = (
-                    z3.And(constraint, guard_c) if constraint is not None else guard_c
-                )
+                constraint = z3.And(constraint, guard_c) if constraint is not None else guard_c
 
         return constraint
 
@@ -1409,9 +1374,7 @@ class Z3Generator:
 
         return None
 
-    def _generate_exception_constraints(
-        self, statute_id: str, statute: "StatuteNode"
-    ) -> None:
+    def _generate_exception_constraints(self, statute_id: str, statute: "StatuteNode") -> None:
         """
         Encode exception guards as Z3 implications.
 
@@ -1444,9 +1407,7 @@ class Z3Generator:
             # Core encoding: exception satisfied => NOT conviction
             self._assertions.append(z3.Implies(exc_var, z3.Not(conviction_var)))
 
-    def _generate_penalty_constraints(
-        self, statute_id: str, penalty: "PenaltyNode"
-    ) -> None:
+    def _generate_penalty_constraints(self, statute_id: str, penalty: "PenaltyNode") -> None:
         """Generate Z3 constraints for penalty specification."""
         if not Z3_AVAILABLE:
             return
@@ -1613,9 +1574,7 @@ class Z3Generator:
 
         return diagnostics
 
-    def check_cross_statute_consistency(
-        self, statutes: List["StatuteNode"]
-    ) -> List[Z3Diagnostic]:
+    def check_cross_statute_consistency(self, statutes: List["StatuteNode"]) -> List[Z3Diagnostic]:
         """
         Check logical relationships across multiple statutes.
 
@@ -1716,9 +1675,7 @@ class Z3Generator:
                 )
 
         # Penalty severity cross-check
-        diagnostics.extend(
-            self._check_cross_penalty_severity(statutes, subsumption_pairs)
-        )
+        diagnostics.extend(self._check_cross_penalty_severity(statutes, subsumption_pairs))
 
         if not diagnostics:
             diagnostics.append(
@@ -1731,9 +1688,7 @@ class Z3Generator:
 
         return diagnostics
 
-    def _detect_subsumption_pairs(
-        self, statutes: List["StatuteNode"]
-    ) -> List[Tuple[str, str]]:
+    def _detect_subsumption_pairs(self, statutes: List["StatuteNode"]) -> List[Tuple[str, str]]:
         """
         Detect (parent, child) pairs where parent offense subsumes child.
 
@@ -1830,18 +1785,11 @@ class Z3Generator:
         for parent_sec, child_sec in related_pairs:
             parent = statute_map.get(parent_sec)
             child = statute_map.get(child_sec)
-            if (
-                parent is None
-                or child is None
-                or parent.penalty is None
-                or child.penalty is None
-            ):
+            if parent is None or child is None or parent.penalty is None or child.penalty is None:
                 continue
 
             comparable_pairs += 1
-            issues = self._describe_penalty_ordering_issues(
-                parent.penalty, child.penalty
-            )
+            issues = self._describe_penalty_ordering_issues(parent.penalty, child.penalty)
             if issues:
                 diagnostics.append(
                     Z3Diagnostic(
@@ -1851,9 +1799,7 @@ class Z3Generator:
                             f"s{parent_sec} subsumes s{child_sec} but its penalty structure is weaker "
                             f"or indistinguishable: {'; '.join(issues)}"
                         ),
-                        source_location=getattr(
-                            parent.penalty, "source_location", None
-                        ),
+                        source_location=getattr(parent.penalty, "source_location", None),
                     )
                 )
                 continue
@@ -1905,18 +1851,13 @@ class Z3Generator:
             _, parent_max = parent_fine
             _, child_max = child_fine
             if parent_max < child_max:
-                issues.append(
-                    f"max fine {parent_max} cents is below child max {child_max} cents"
-                )
+                issues.append(f"max fine {parent_max} cents is below child max {child_max} cents")
             elif parent_fine == child_fine:
                 issues.append("fine range is identical")
 
         if child.death_penalty and not parent.death_penalty:
             issues.append("child statute allows death penalty but parent does not")
-        elif (
-            parent.death_penalty is not None
-            and parent.death_penalty == child.death_penalty
-        ):
+        elif parent.death_penalty is not None and parent.death_penalty == child.death_penalty:
             issues.append("death-penalty exposure is identical")
 
         if parent.caning_max is not None and child.caning_max is not None:
@@ -1924,30 +1865,22 @@ class Z3Generator:
                 issues.append(
                     f"max caning {parent.caning_max} strokes is below child max {child.caning_max}"
                 )
-            elif (
-                parent.caning_min == child.caning_min
-                and parent.caning_max == child.caning_max
-            ):
+            elif parent.caning_min == child.caning_min and parent.caning_max == child.caning_max:
                 issues.append("caning range is identical")
 
         if issues and not self._has_penalty_distinction(parent, child):
-            issues.append(
-                "no distinguishing penalty feature remains between the two statutes"
-            )
+            issues.append("no distinguishing penalty feature remains between the two statutes")
 
         return issues
 
-    def _has_penalty_distinction(
-        self, parent: "PenaltyNode", child: "PenaltyNode"
-    ) -> bool:
+    def _has_penalty_distinction(self, parent: "PenaltyNode", child: "PenaltyNode") -> bool:
         """Check whether any declared penalty dimension differentiates the statutes."""
         return any(
             (
                 self._penalty_imprisonment_bounds(parent)
                 != self._penalty_imprisonment_bounds(child),
                 self._penalty_fine_bounds(parent) != self._penalty_fine_bounds(child),
-                (parent.caning_min, parent.caning_max)
-                != (child.caning_min, child.caning_max),
+                (parent.caning_min, parent.caning_max) != (child.caning_min, child.caning_max),
                 parent.death_penalty != child.death_penalty,
                 parent.supplementary != child.supplementary,
                 parent.sentencing != child.sentencing,
@@ -1956,14 +1889,10 @@ class Z3Generator:
             )
         )
 
-    def _penalty_imprisonment_bounds(
-        self, penalty: "PenaltyNode"
-    ) -> Optional[Tuple[int, int]]:
+    def _penalty_imprisonment_bounds(self, penalty: "PenaltyNode") -> Optional[Tuple[int, int]]:
         """Return imprisonment bounds in days when a statute declares them."""
         min_days = (
-            penalty.imprisonment_min.total_days()
-            if penalty.imprisonment_min is not None
-            else 0
+            penalty.imprisonment_min.total_days() if penalty.imprisonment_min is not None else 0
         )
         max_duration = penalty.imprisonment_max or penalty.imprisonment_min
         if max_duration is None:
@@ -1972,9 +1901,7 @@ class Z3Generator:
 
     def _penalty_fine_bounds(self, penalty: "PenaltyNode") -> Optional[Tuple[int, int]]:
         """Return fine bounds in cents when a statute declares them."""
-        min_cents = (
-            int(penalty.fine_min.amount * 100) if penalty.fine_min is not None else 0
-        )
+        min_cents = int(penalty.fine_min.amount * 100) if penalty.fine_min is not None else 0
         max_fine = penalty.fine_max or penalty.fine_min
         if max_fine is None:
             return None
