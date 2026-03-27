@@ -25,7 +25,9 @@ def yuho_int_literal(draw) -> str:
 @st.composite
 def yuho_float_literal(draw) -> str:
     """Generate a valid float literal."""
-    value = draw(st.floats(min_value=-1000000, max_value=1000000, allow_nan=False, allow_infinity=False))
+    value = draw(
+        st.floats(min_value=-1000000, max_value=1000000, allow_nan=False, allow_infinity=False)
+    )
     return f"{value:.2f}"
 
 
@@ -39,12 +41,15 @@ def yuho_bool_literal(draw) -> str:
 def yuho_string_literal(draw) -> str:
     """Generate a valid string literal."""
     # Avoid problematic characters
-    text = draw(st.text(
-        alphabet=st.characters(whitelist_categories=("L", "N", "P", "S", "Z"),
-                               blacklist_characters='"\\'),
-        min_size=0,
-        max_size=100
-    ))
+    text = draw(
+        st.text(
+            alphabet=st.characters(
+                whitelist_categories=("L", "N", "P", "S", "Z"), blacklist_characters='"\\'
+            ),
+            min_size=0,
+            max_size=100,
+        )
+    )
     return f'"{text}"'
 
 
@@ -92,14 +97,16 @@ def yuho_duration_literal(draw) -> str:
 @st.composite
 def yuho_literal(draw) -> str:
     """Generate any valid literal."""
-    return draw(st.one_of(
-        yuho_int_literal(),
-        yuho_float_literal(),
-        yuho_bool_literal(),
-        yuho_string_literal(),
-        yuho_money_literal(),
-        yuho_percent_literal(),
-    ))
+    return draw(
+        st.one_of(
+            yuho_int_literal(),
+            yuho_float_literal(),
+            yuho_bool_literal(),
+            yuho_string_literal(),
+            yuho_money_literal(),
+            yuho_percent_literal(),
+        )
+    )
 
 
 # =============================================================================
@@ -111,19 +118,48 @@ def yuho_literal(draw) -> str:
 def yuho_identifier(draw) -> str:
     """Generate a valid identifier."""
     # Start with letter or underscore
-    first_char = draw(st.sampled_from(list("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_")))
+    first_char = draw(
+        st.sampled_from(list("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_"))
+    )
     # Rest can include digits
-    rest = draw(st.text(
-        alphabet=st.sampled_from(list("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789")),
-        min_size=0,
-        max_size=20
-    ))
+    rest = draw(
+        st.text(
+            alphabet=st.sampled_from(
+                list("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789")
+            ),
+            min_size=0,
+            max_size=20,
+        )
+    )
     name = first_char + rest
     # Avoid keywords
-    keywords = {"struct", "fn", "match", "case", "consequence", "pass", "return",
-                "statute", "definitions", "elements", "penalty", "illustration",
-                "import", "from", "TRUE", "FALSE", "int", "float", "bool", "string",
-                "money", "percent", "date", "duration", "void"}
+    keywords = {
+        "struct",
+        "fn",
+        "match",
+        "case",
+        "consequence",
+        "pass",
+        "return",
+        "statute",
+        "definitions",
+        "elements",
+        "penalty",
+        "illustration",
+        "import",
+        "from",
+        "TRUE",
+        "FALSE",
+        "int",
+        "float",
+        "bool",
+        "string",
+        "money",
+        "percent",
+        "date",
+        "duration",
+        "void",
+    }
     if name.lower() in keywords or name in keywords:
         return "var_" + name
     return name
