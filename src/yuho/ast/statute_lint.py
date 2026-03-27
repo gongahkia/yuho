@@ -75,11 +75,13 @@ def _has_strict_liability_marker(statute: StatuteNode) -> bool:
 def _check_no_penalty(statute: StatuteNode) -> List[LintWarning]:
     """Warn if statute has elements but no penalty."""
     if statute.elements and statute.penalty is None:
-        return [LintWarning(
-            statute_section=statute.section_number,
-            message="statute has elements but no penalty defined",
-            severity="warning",
-        )]
+        return [
+            LintWarning(
+                statute_section=statute.section_number,
+                message="statute has elements but no penalty defined",
+                severity="warning",
+            )
+        ]
     return []
 
 
@@ -89,11 +91,13 @@ def _check_missing_actus_reus(statute: StatuteNode) -> List[LintWarning]:
         return []
     types = _element_types(statute)
     if statute.elements and "actus_reus" not in types:
-        return [LintWarning(
-            statute_section=statute.section_number,
-            message="statute has no actus_reus element and is not marked strict_liability",
-            severity="warning",
-        )]
+        return [
+            LintWarning(
+                statute_section=statute.section_number,
+                message="statute has no actus_reus element and is not marked strict_liability",
+                severity="warning",
+            )
+        ]
     return []
 
 
@@ -103,11 +107,13 @@ def _check_missing_mens_rea(statute: StatuteNode) -> List[LintWarning]:
         return []
     types = _element_types(statute)
     if statute.elements and "mens_rea" not in types:
-        return [LintWarning(
-            statute_section=statute.section_number,
-            message="statute has no mens_rea element and is not marked strict_liability",
-            severity="warning",
-        )]
+        return [
+            LintWarning(
+                statute_section=statute.section_number,
+                message="statute has no mens_rea element and is not marked strict_liability",
+                severity="warning",
+            )
+        ]
     return []
 
 
@@ -116,37 +122,43 @@ def _check_exception_guards(statute: StatuteNode) -> List[LintWarning]:
     warnings: List[LintWarning] = []
     for exc in statute.exceptions:
         if exc.guard is None:
-            warnings.append(LintWarning(
-                statute_section=statute.section_number,
-                message=f"exception '{exc.label or '<unlabeled>'}' has no guard expression",
-                severity="info",
-            ))
+            warnings.append(
+                LintWarning(
+                    statute_section=statute.section_number,
+                    message=f"exception '{exc.label or '<unlabeled>'}' has no guard expression",
+                    severity="info",
+                )
+            )
         elif isinstance(exc.guard, StringLit) and not exc.guard.value.strip():
-            warnings.append(LintWarning(
-                statute_section=statute.section_number,
-                message=f"exception '{exc.label or '<unlabeled>'}' has empty guard expression",
-                severity="warning",
-            ))
+            warnings.append(
+                LintWarning(
+                    statute_section=statute.section_number,
+                    message=f"exception '{exc.label or '<unlabeled>'}' has empty guard expression",
+                    severity="warning",
+                )
+            )
     return warnings
 
 
 def _check_duplicate_exceptions(statute: StatuteNode) -> List[LintWarning]:
     """Check that multiple exceptions don't have identical conditions (likely copy-paste)."""
     warnings: List[LintWarning] = []
-    seen: dict[str, str] = {} # condition_value -> label
+    seen: dict[str, str] = {}  # condition_value -> label
     for exc in statute.exceptions:
         cond_val = exc.condition.value if isinstance(exc.condition, StringLit) else None
         if cond_val is None:
             continue
         if cond_val in seen:
-            warnings.append(LintWarning(
-                statute_section=statute.section_number,
-                message=(
-                    f"exception '{exc.label or '<unlabeled>'}' has identical condition "
-                    f"to '{seen[cond_val]}' (possible copy-paste error)"
-                ),
-                severity="warning",
-            ))
+            warnings.append(
+                LintWarning(
+                    statute_section=statute.section_number,
+                    message=(
+                        f"exception '{exc.label or '<unlabeled>'}' has identical condition "
+                        f"to '{seen[cond_val]}' (possible copy-paste error)"
+                    ),
+                    severity="warning",
+                )
+            )
         else:
             seen[cond_val] = exc.label or "<unlabeled>"
     return warnings
@@ -161,19 +173,21 @@ def _check_subsumption(statutes: Tuple[StatuteNode, ...]) -> List[LintWarning]:
             continue
         target = by_section.get(statute.subsumes)
         if target is None:
-            continue # target not in this module, can't check
+            continue  # target not in this module, can't check
         a_names = _element_names(statute)
         b_names = _element_names(target)
         if not a_names.issuperset(b_names):
             missing = b_names - a_names
-            warnings.append(LintWarning(
-                statute_section=statute.section_number,
-                message=(
-                    f"statute subsumes s{statute.subsumes} but is missing elements: "
-                    f"{', '.join(sorted(missing))}"
-                ),
-                severity="warning",
-            ))
+            warnings.append(
+                LintWarning(
+                    statute_section=statute.section_number,
+                    message=(
+                        f"statute subsumes s{statute.subsumes} but is missing elements: "
+                        f"{', '.join(sorted(missing))}"
+                    ),
+                    severity="warning",
+                )
+            )
     return warnings
 
 
@@ -189,18 +203,22 @@ def _check_deontic_conflict(statute: StatuteNode) -> List[LintWarning]:
     permissions = by_type.get("permission", set())
     conflict = obligations & prohibitions
     for name in sorted(conflict):
-        warnings.append(LintWarning(
-            statute_section=statute.section_number,
-            message=f"deontic conflict: '{name}' is both obligation and prohibition",
-            severity="warning",
-        ))
+        warnings.append(
+            LintWarning(
+                statute_section=statute.section_number,
+                message=f"deontic conflict: '{name}' is both obligation and prohibition",
+                severity="warning",
+            )
+        )
     orphans = permissions - obligations - prohibitions
     for name in sorted(orphans):
-        warnings.append(LintWarning(
-            statute_section=statute.section_number,
-            message=f"orphan permission: '{name}' has no corresponding obligation or prohibition",
-            severity="info",
-        ))
+        warnings.append(
+            LintWarning(
+                statute_section=statute.section_number,
+                message=f"orphan permission: '{name}' has no corresponding obligation or prohibition",
+                severity="info",
+            )
+        )
     return warnings
 
 
@@ -210,11 +228,13 @@ def _check_defeats_target(statute: StatuteNode) -> List[LintWarning]:
     labels = {exc.label for exc in statute.exceptions if exc.label}
     for exc in statute.exceptions:
         if exc.defeats and exc.defeats not in labels:
-            warnings.append(LintWarning(
-                statute_section=statute.section_number,
-                message=f"exception '{exc.label or '<unlabeled>'}' defeats unknown label '{exc.defeats}'",
-                severity="warning",
-            ))
+            warnings.append(
+                LintWarning(
+                    statute_section=statute.section_number,
+                    message=f"exception '{exc.label or '<unlabeled>'}' defeats unknown label '{exc.defeats}'",
+                    severity="warning",
+                )
+            )
     return warnings
 
 
@@ -242,7 +262,7 @@ def _check_refinement_bounds(module: ModuleNode) -> List[LintWarning]:
         hi = rt.upper_bound.value if isinstance(rt.upper_bound, (IntLit, FloatLit)) else None
         if lo is None or hi is None:
             continue
-        val = None
+        val: int | float | None = None
         if isinstance(var.value, IntLit):
             val = var.value.value
         elif isinstance(var.value, FloatLit):
@@ -250,11 +270,13 @@ def _check_refinement_bounds(module: ModuleNode) -> List[LintWarning]:
         if val is None:
             continue
         if not (lo <= val <= hi):
-            warnings.append(LintWarning(
-                statute_section="<module>",
-                message=f"variable '{var.name}' value {val} outside refinement bounds [{lo}..{hi}]",
-                severity="warning",
-            ))
+            warnings.append(
+                LintWarning(
+                    statute_section="<module>",
+                    message=f"variable '{var.name}' value {val} outside refinement bounds [{lo}..{hi}]",
+                    severity="warning",
+                )
+            )
     return warnings
 
 
