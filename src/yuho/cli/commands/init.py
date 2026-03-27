@@ -16,23 +16,24 @@ TEMPLATE_STATUTE = """// {name} - Yuho statute definition
 
 statute {section} "{name}" {{
     definitions {{
-        // Define key terms here
-        // term := "definition";
+        // Replace these working definitions with the statute's own terms.
+        prohibited_conduct := "The conduct prohibited by this section";
+        required_fault := "The mental state or fault element required for liability";
     }}
 
     elements {{
-        // Define the elements of the offense
-        // actus_reus physical_act := "description";
-        // mens_rea mental_state := "description";
+        // Refine these working elements to match the enacted rule.
+        actus_reus conduct := "The accused engaged in the prohibited conduct";
+        mens_rea fault := "The accused acted with the fault element required by the section";
     }}
 
     penalty {{
-        // imprisonment := 0 years .. 1 year;
-        // fine := $0 .. $10,000;
+        imprisonment := 0 days .. 1 year;
+        fine := $0.00 .. $10,000.00;
     }}
 
     illustration A {{
-        "Example scenario illustrating the statute."
+        "A engages in the prohibited conduct with the required fault element. Tailor this illustration to the section."
     }}
 }}
 """
@@ -55,8 +56,13 @@ current = "1.0.0"
 TEMPLATE_TEST = """// Tests for {name}
 // Run with: yuho test {filename}
 
-// Test case 1: Basic scenario
-// TODO: Add test cases
+// Replace this smoke test with statute-specific scenarios and assertions.
+
+fn scaffold_ready() : bool {{
+    return TRUE;
+}}
+
+assert scaffold_ready() == TRUE;
 """
 
 
