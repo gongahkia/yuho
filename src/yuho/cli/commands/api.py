@@ -698,13 +698,18 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
             errors = [{"message": e.message} for e in result.errors]
             self._send_json_response(200, APIResponse(success=False, data={"errors": errors}))
             return
+        if result.root_node is None:
+            self._send_json_response(
+                500, APIResponse(success=False, error="Parser returned no root node")
+            )
+            return
 
         # Build AST
         try:
             builder = ASTBuilder(source, filename)
             ast = run_ast_boundary(
                 builder.build,
-                result.tree.root_node,
+                result.root_node,
                 message="Failed to build AST",
             )
         except ASTBoundaryError as e:
@@ -768,13 +773,18 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
             errors = [{"message": e.message} for e in result.errors]
             self._send_json_response(200, APIResponse(success=False, data={"parse_errors": errors}))
             return
+        if result.root_node is None:
+            self._send_json_response(
+                500, APIResponse(success=False, error="Parser returned no root node")
+            )
+            return
 
         # Build AST
         try:
             builder = ASTBuilder(source, filename)
             ast = run_ast_boundary(
                 builder.build,
-                result.tree.root_node,
+                result.root_node,
                 message="Failed to build AST",
             )
         except ASTBoundaryError as e:
@@ -833,9 +843,11 @@ class YuhoAPIHandler(BaseHTTPRequestHandler):
             result = run_parser_boundary(self.parser.parse, source, "<job>", message="Parse failed")
             if result.errors:
                 raise ValueError("; ".join(e.message for e in result.errors))
+            if result.root_node is None:
+                raise ValueError("Parser returned no root node")
             job.add_event("ast", "Building AST", progress=0.4)
             builder = ASTBuilder(source, "<job>")
-            ast = run_ast_boundary(builder.build, result.tree.root_node, message="AST failed")
+            ast = run_ast_boundary(builder.build, result.root_node, message="AST failed")
             job.add_event("transpile", f"Transpiling to {target_name}", progress=0.7)
             target = TranspileTarget.from_string(target_name)
             transpiler = self.registry.get(target)
