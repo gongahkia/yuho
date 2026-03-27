@@ -50,13 +50,23 @@ def run_batch_check(
                 for e in result.errors:
                     click.echo(f"        {e.message}")
     if json_output:
-        print(json.dumps({"total": len(files), "passed": passed, "failed": failed, "results": results}, indent=2))
+        print(
+            json.dumps(
+                {"total": len(files), "passed": passed, "failed": failed, "results": results},
+                indent=2,
+            )
+        )
     else:
         click.echo()
         if failed == 0:
             click.echo(colorize(f"All {passed} files passed", Colors.CYAN + Colors.BOLD))
         else:
-            click.echo(colorize(f"{passed} passed, {failed} failed out of {len(files)}", Colors.RED + Colors.BOLD))
+            click.echo(
+                colorize(
+                    f"{passed} passed, {failed} failed out of {len(files)}",
+                    Colors.RED + Colors.BOLD,
+                )
+            )
     if failed > 0:
         sys.exit(1)
 
@@ -74,6 +84,7 @@ def run_batch_transpile(
     Transpile all .yh files in a directory.
     """
     from yuho.transpile import TranspileTarget, get_transpiler
+
     files = _find_yh_files(directory, recursive)
     if not files:
         click.echo(colorize(f"No .yh files found in {directory}", Colors.RED), err=True)
@@ -111,7 +122,12 @@ def run_batch_transpile(
             if not json_output:
                 click.echo(colorize(f"  FAIL  {f}: {e}", Colors.RED))
     if json_output:
-        print(json.dumps({"total": len(files), "failed": failed, "target": target, "results": results}, indent=2))
+        print(
+            json.dumps(
+                {"total": len(files), "failed": failed, "target": target, "results": results},
+                indent=2,
+            )
+        )
     else:
         click.echo(f"\nTranspiled {len(files) - failed}/{len(files)} files to {target}")
     if failed > 0:
