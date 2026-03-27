@@ -162,8 +162,8 @@ def run_verify(
         else:
             click.echo(f"Z3 verification: {'PASS' if ok else 'FAIL'}")
             if z3_failures:
-                for failure in z3_failures:
-                    click.echo(f"  - {failure.check_name}: {failure.message}", err=True)
+                for z3_failure in z3_failures:
+                    click.echo(f"  - {z3_failure.check_name}: {z3_failure.message}", err=True)
         sys.exit(0 if ok else 1)
 
     verifier = CombinedVerifier(
