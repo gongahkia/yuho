@@ -73,7 +73,7 @@ def run_explain(
     file_path = Path(file)
 
     # Parse + AST via shared analysis service
-    analysis = analyze_file(file_path, run_semantic=False)
+    analysis = analyze_file(file_path, run_semantic=True)
 
     if analysis.parse_errors:
         click.echo(colorize(f"error: Parse errors in {file}", Colors.RED), err=True)
@@ -81,6 +81,13 @@ def run_explain(
 
     if analysis.errors and not analysis.parse_errors:
         click.echo(colorize(f"error: {analysis.errors[0].message}", Colors.RED), err=True)
+        sys.exit(1)
+
+    if analysis.semantic_valid is False:
+        payload = analysis.validation_payload()
+        semantic_errors = [item for item in payload["errors"] if item["stage"] == "semantic"]
+        first_error = semantic_errors[0]["message"] if semantic_errors else "Semantic validation failed"
+        click.echo(colorize(f"error: {first_error}", Colors.RED), err=True)
         sys.exit(1)
 
     ast = analysis.ast
