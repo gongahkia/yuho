@@ -165,15 +165,22 @@ def _esc(text: str) -> str:
 def _categorize(name: str) -> str:
     """derive category from directory name for card tags."""
     categories = {
-        "murder": "Homicide", "culpable_homicide": "Homicide",
+        "murder": "Homicide",
+        "culpable_homicide": "Homicide",
         "punishment_for_murder": "Homicide",
-        "hurt": "Bodily Harm", "grievous_hurt": "Bodily Harm",
+        "hurt": "Bodily Harm",
+        "grievous_hurt": "Bodily Harm",
         "voluntarily_causing": "Bodily Harm",
-        "assault": "Bodily Harm", "criminal_force": "Bodily Harm",
-        "theft": "Property", "robbery": "Property", "dacoity": "Property",
-        "extortion": "Property", "misappropriation": "Property",
+        "assault": "Bodily Harm",
+        "criminal_force": "Bodily Harm",
+        "theft": "Property",
+        "robbery": "Property",
+        "dacoity": "Property",
+        "extortion": "Property",
+        "misappropriation": "Property",
         "stolen_property": "Property",
-        "cheating": "Fraud", "forgery": "Fraud",
+        "cheating": "Fraud",
+        "forgery": "Fraud",
         "breach_of_trust": "Fraud",
         "kidnapping": "Kidnapping",
         "defamation": "Defamation",
@@ -201,7 +208,7 @@ def run_static_site(
 
     statute_files = sorted(lib_path.rglob("statute.yh"))
     cards = []
-    pages: List[Dict] = [] # collect for prev/next nav
+    pages: List[Dict] = []  # collect for prev/next nav
     generated = 0
     categories = set()
 
@@ -255,19 +262,21 @@ def run_static_site(
                 )
                 meta_block = f'<div class="meta-grid">{items}</div>'
 
-            pages.append({
-                "section": section,
-                "title": title,
-                "slug": slug,
-                "category": category,
-                "english": english,
-                "mermaid": mermaid,
-                "source": source_text,
-                "meta_block": meta_block,
-                "dir_name": yh_file.parent.name,
-                "element_count": element_count,
-                "exception_count": exception_count,
-            })
+            pages.append(
+                {
+                    "section": section,
+                    "title": title,
+                    "slug": slug,
+                    "category": category,
+                    "english": english,
+                    "mermaid": mermaid,
+                    "source": source_text,
+                    "meta_block": meta_block,
+                    "dir_name": yh_file.parent.name,
+                    "element_count": element_count,
+                    "exception_count": exception_count,
+                }
+            )
 
     # generate statute pages with prev/next navigation
     for i, page in enumerate(pages):
@@ -302,7 +311,9 @@ def run_static_site(
         if page["exception_count"]:
             desc_parts.append(f'{page["exception_count"]} exceptions')
         desc = " &middot; ".join(desc_parts) if desc_parts else page["dir_name"]
-        search_text = f's{page["section"]} {page["title"]} {page["category"]} {page["dir_name"]}'.lower()
+        search_text = (
+            f's{page["section"]} {page["title"]} {page["category"]} {page["dir_name"]}'.lower()
+        )
 
         cards.append(
             f'<a class="card" href="{page["slug"]}.html" data-search="{_esc(search_text)}">'
