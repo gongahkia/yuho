@@ -18,18 +18,33 @@ s<number>_<name>/
 
 ## Available Statutes (Penal Code)
 
+The bundled library currently contains 25 Singapore Penal Code sections:
+
 | Section | Offense |
 |---------|---------|
 | S299 | Culpable Homicide |
 | S300 | Murder |
+| S302 | Punishment for Murder |
+| S304 | Culpable Homicide not amounting to Murder |
 | S319 | Hurt |
+| S321 | Voluntarily Causing Hurt |
+| S323 | Punishment for Voluntarily Causing Hurt |
+| S325 | Voluntarily Causing Grievous Hurt |
+| S354 | Assault or Criminal Force to Outrage Modesty |
+| S363 | Kidnapping |
 | S378 | Theft |
+| S379 | Punishment for Theft |
 | S383 | Extortion |
 | S390 | Robbery |
+| S392 | Punishment for Robbery |
+| S395 | Dacoity |
 | S403 | Dishonest Misappropriation |
+| S406 | Punishment for Criminal Breach of Trust |
+| S411 | Dishonestly Receiving Stolen Property |
 | S415 | Cheating |
 | S420 | Cheating and Inducing Delivery |
 | S463 | Forgery |
+| S465 | Punishment for Forgery |
 | S499 | Defamation |
 | S503 | Criminal Breach of Trust |
 
@@ -61,6 +76,13 @@ version = "2.0.0"
 summary = "..."
 source = "Singapore Penal Code 1871, Section 415"
 notes = "..."
+
+[study]
+offence_family = "property_offences"
+related_sections = ["378", "379", "390", "392"]
+exception_topics = ["claim_of_right"]
+doctrine_tags = ["actus_reus", "mens_rea", "dishonesty"]
+difficulty = "introductory"
 
 [verification]
 last_verified = "2026-03-08"
