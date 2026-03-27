@@ -259,11 +259,7 @@ class TranspilerRegistry:
         Returns:
             True if a transpiler is registered.
         """
-        return (
-            target in self._registry
-            or target in self._factories
-            or target in self._instances
-        )
+        return target in self._registry or target in self._factories or target in self._instances
 
     def registered_targets(self) -> list[TranspileTarget]:
         """
