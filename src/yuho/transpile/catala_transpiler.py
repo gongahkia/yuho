@@ -32,9 +32,9 @@ class CatalaTranspiler(TranspilerBase):
             self._emit_enum(lines, enum)
         for statute in ast.statutes:
             self._emit_statute(lines, statute)
-        for lt in getattr(ast, 'legal_tests', ()):
+        for lt in getattr(ast, "legal_tests", ()):
             self._emit_legal_test(lines, lt)
-        for cc in getattr(ast, 'conflict_checks', ()):
+        for cc in getattr(ast, "conflict_checks", ()):
             self._emit_conflict_check(lines, cc)
         return "\n".join(lines)
 
@@ -62,7 +62,7 @@ class CatalaTranspiler(TranspilerBase):
         lines.append("")
         lines.append("```catala")
         # annotations
-        for ann in getattr(statute, 'annotations', ()):
+        for ann in getattr(statute, "annotations", ()):
             args = ", ".join(f'"{a}"' for a in ann.args)
             lines.append(f"# @{ann.name}({args})")
         # scope declaration
@@ -93,7 +93,7 @@ class CatalaTranspiler(TranspilerBase):
             name = self._safe_name(elem.name)
             desc = self._desc_text(elem.description)
             lines.append(f"  # {elem.element_type}: {desc}")
-            if getattr(elem, 'burden', None):
+            if getattr(elem, "burden", None):
                 lines.append(f"  # burden: {elem.burden}")
         lines.append("")
         # guilt rule: all elements required
@@ -107,7 +107,7 @@ class CatalaTranspiler(TranspilerBase):
             label = exc.label or f"exception_{i}"
             lines.append(f"  exception {self._safe_name(label)}")
             lines.append(f"  definition guilty equals false")
-            cond = exc.condition.value if hasattr(exc.condition, 'value') else str(exc.condition)
+            cond = exc.condition.value if hasattr(exc.condition, "value") else str(exc.condition)
             lines.append(f'  # condition: "{cond}"')
             lines.append("")
         # illustrations as comments
@@ -177,9 +177,15 @@ class CatalaTranspiler(TranspilerBase):
     def _catala_type(self, t: nodes.TypeNode) -> str:
         if isinstance(t, nodes.BuiltinType):
             mapping = {
-                "int": "integer", "float": "decimal", "bool": "boolean",
-                "string": "text", "money": "money", "date": "date",
-                "duration": "duration", "percent": "decimal", "void": "boolean",
+                "int": "integer",
+                "float": "decimal",
+                "bool": "boolean",
+                "string": "text",
+                "money": "money",
+                "date": "date",
+                "duration": "duration",
+                "percent": "decimal",
+                "void": "boolean",
             }
             return mapping.get(t.name, t.name)
         elif isinstance(t, nodes.NamedType):
@@ -206,7 +212,7 @@ class CatalaTranspiler(TranspilerBase):
 
     def _safe_name(self, s: str) -> str:
         s = s.replace(" ", "_").replace(".", "_").replace("-", "_")
-        s = "".join(c if c.isalnum() or c == '_' else '_' for c in s)
+        s = "".join(c if c.isalnum() or c == "_" else "_" for c in s)
         if s and s[0].isdigit():
             s = "s" + s
         return s
