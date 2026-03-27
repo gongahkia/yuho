@@ -40,9 +40,14 @@ def _is_offline_mode() -> bool:
 def _scan_local_library() -> List[Dict[str, Any]]:
     """Scan the local library/ directory for statute files and return metadata."""
     try:
-        import tomllib
+        import importlib
+
+        try:
+            toml_loader = importlib.import_module("tomllib")
+        except ImportError:  # pragma: no cover - Python 3.10+ always has tomllib
+            toml_loader = None
     except ImportError:  # pragma: no cover - Python 3.10+ always has tomllib
-        tomllib = None
+        toml_loader = None
 
     library_dir = Path.cwd() / "library"
     if not library_dir.is_dir():
@@ -66,10 +71,10 @@ def _scan_local_library() -> List[Dict[str, Any]]:
 
         metadata: Dict[str, Any] = {}
         meta_file = statute_file.parent / "metadata.toml"
-        if tomllib is not None and meta_file.exists():
+        if toml_loader is not None and meta_file.exists():
             try:
                 with open(meta_file, "rb") as f:
-                    metadata = tomllib.load(f)
+                    metadata = toml_loader.load(f)
             except (OSError, ValueError):
                 metadata = {}
 
@@ -479,8 +484,8 @@ def run_library_publish(
 
     if dry_run:
         # Validate the package without publishing
-        errors = []
-        warnings = []
+        errors: List[str] = []
+        warnings: List[str] = []
         pkg_info = {}
 
         try:
@@ -520,7 +525,7 @@ def run_library_publish(
         except Exception as e:
             errors.append(f"Validation error: {e}")
 
-        result = {
+        dry_run_result = {
             "dry_run": True,
             "path": str(pkg_path),
             "registry": registry_url,
@@ -531,7 +536,7 @@ def run_library_publish(
         }
 
         if json_output:
-            click.echo(json.dumps(result, indent=2))
+            click.echo(json.dumps(dry_run_result, indent=2))
         else:
             click.echo(click.style("[DRY RUN] ", fg="yellow") + f"Validating {path}")
             if pkg_info.get("section_number"):
@@ -566,10 +571,10 @@ def run_library_publish(
         verify_ssl=verify_ssl,
     )
 
-    result = {"success": success, "message": message}
+    publish_result = {"success": success, "message": message}
 
     if json_output:
-        click.echo(json.dumps(result))
+        click.echo(json.dumps(publish_result))
     elif success:
         click.echo(click.style("✓ ", fg="green") + message)
     else:
@@ -614,6 +619,8 @@ def run_library_outdated(
     deprecated_warnings = []
     for pkg in installed:
         section = pkg.get("section_number")
+        if not isinstance(section, str):
+            continue
         entry = index.get(section)
         if entry and hasattr(entry, "deprecation") and getattr(entry, "is_deprecated", False):
             deprecated_warnings.append(
@@ -786,7 +793,12 @@ def run_library_tree(
         packages = [package]
     else:
         installed = list_installed()
-        packages = [pkg.get("section_number") for pkg in installed if pkg.get("section_number")]
+        packages = [
+            section
+            for pkg in installed
+            for section in [pkg.get("section_number")]
+            if isinstance(section, str)
+        ]
 
     if not packages:
         if json_output:
