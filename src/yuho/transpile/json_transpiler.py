@@ -235,7 +235,9 @@ class JSONTranspiler(TranspilerBase, Visitor):
             if node.sentencing:
                 result["sentencing"] = node.sentencing
             if node.mandatory_min_imprisonment:
-                result["mandatory_min_imprisonment"] = self._to_dict(node.mandatory_min_imprisonment)
+                result["mandatory_min_imprisonment"] = self._to_dict(
+                    node.mandatory_min_imprisonment
+                )
             if node.mandatory_min_fine:
                 result["mandatory_min_fine"] = self._to_dict(node.mandatory_min_fine)
         elif isinstance(node, nodes.IllustrationNode):
@@ -269,7 +271,7 @@ class JSONTranspiler(TranspilerBase, Visitor):
                 result["amends"] = node.amends
             if node.parties:
                 result["parties"] = [self._to_dict(p) for p in node.parties]
-            if getattr(node, 'annotations', ()):
+            if getattr(node, "annotations", ()):
                 result["annotations"] = [self._to_dict(a) for a in node.annotations]
         elif isinstance(node, nodes.EnumVariant):
             result["name"] = node.name
@@ -306,6 +308,7 @@ class JSONTranspiler(TranspilerBase, Visitor):
                 result["annotations"] = [self._to_dict(a) for a in node.annotations]
         elif isinstance(node, nodes.ModuleNode):
             from yuho.transpile.json_schema import AST_SCHEMA_VERSION
+
             result["_schema_version"] = AST_SCHEMA_VERSION
             result["imports"] = [self._to_dict(i) for i in node.imports]
             result["type_defs"] = [self._to_dict(t) for t in node.type_defs]
