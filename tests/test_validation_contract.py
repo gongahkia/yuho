@@ -65,6 +65,18 @@ def test_cli_check_syntax_only_skips_semantic_validation(tmp_path: Path) -> None
     assert "semantic=SKIP" in result.output
 
 
+def test_cli_explain_rejects_semantic_invalid_source(tmp_path: Path) -> None:
+    """`yuho explain` should not explain semantically invalid models."""
+    runner = CliRunner()
+    source_path = tmp_path / "broken.yh"
+    source_path.write_text(SEMANTICALLY_INVALID_SOURCE, encoding="utf-8")
+
+    result = runner.invoke(cli, ["explain", str(source_path), "--no-llm"])
+
+    assert result.exit_code == 1
+    assert "Undeclared identifier 'unknown_var'" in result.output
+
+
 def test_websocket_validate_returns_phase_aware_semantic_payload() -> None:
     """WebSocket validate should expose semantic phase status explicitly."""
     payload = handle_validate({"source": SEMANTICALLY_INVALID_SOURCE})
