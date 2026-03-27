@@ -76,7 +76,7 @@ def duration_to_latex(node: "nodes.DurationNode") -> str:
 def money_to_latex(node: "nodes.MoneyNode") -> str:
     """Convert money to LaTeX string."""
     from yuho.ast.nodes import Currency
-    
+
     currency_symbols = {
         Currency.SGD: r"S\$",
         Currency.USD: r"US\$",
@@ -98,7 +98,7 @@ def money_to_latex(node: "nodes.MoneyNode") -> str:
 def type_to_latex(node: "nodes.TypeNode") -> str:
     """Convert type to LaTeX string."""
     from yuho.ast import nodes
-    
+
     if isinstance(node, nodes.BuiltinType):
         type_names = {
             "int": "integer",
@@ -126,7 +126,7 @@ def type_to_latex(node: "nodes.TypeNode") -> str:
 def expr_to_latex(node: "nodes.ASTNode") -> str:
     """Convert expression to LaTeX string."""
     from yuho.ast import nodes
-    
+
     if isinstance(node, nodes.IntLit):
         return str(node.value)
     elif isinstance(node, nodes.FloatLit):
@@ -168,7 +168,7 @@ def expr_to_latex(node: "nodes.ASTNode") -> str:
 def pattern_to_latex(node: "nodes.PatternNode") -> str:
     """Convert pattern to LaTeX string."""
     from yuho.ast import nodes
-    
+
     if isinstance(node, nodes.WildcardPattern):
         return r"\textit{otherwise}"
     elif isinstance(node, nodes.LiteralPattern):
@@ -186,7 +186,7 @@ def pattern_to_latex(node: "nodes.PatternNode") -> str:
 def statement_to_latex(node: "nodes.ASTNode") -> str:
     """Convert statement to LaTeX string."""
     from yuho.ast import nodes
-    
+
     if isinstance(node, nodes.VariableDecl):
         type_str = type_to_latex(node.type_annotation)
         name = escape_latex(node.name)
