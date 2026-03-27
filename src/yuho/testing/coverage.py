@@ -9,10 +9,13 @@ from dataclasses import dataclass, field
 from pathlib import Path
 import json
 
+from yuho.ast import nodes
+
 
 @dataclass
 class ElementCoverage:
     """Coverage tracking for a single statute element."""
+
     element_type: str  # actus_reus, mens_rea, circumstance
     name: str
     covered: bool = False
@@ -23,6 +26,7 @@ class ElementCoverage:
 @dataclass
 class StatuteCoverage:
     """Coverage tracking for a single statute."""
+
     section_number: str
     title: str = ""
     elements: Dict[str, ElementCoverage] = field(default_factory=dict)
@@ -56,6 +60,7 @@ class StatuteCoverage:
 @dataclass
 class CoverageReport:
     """Complete coverage report for a test run."""
+
     statutes: Dict[str, StatuteCoverage] = field(default_factory=dict)
     total_tests: int = 0
     passed_tests: int = 0
@@ -68,6 +73,19 @@ class CoverageReport:
             return 0.0
         total = sum(s.overall_coverage_percent for s in self.statutes.values())
         return total / len(self.statutes)
+
+
+def _iter_leaf_elements(
+    elements: (
+        tuple[nodes.ElementNode | nodes.ElementGroupNode, ...]
+        | list[nodes.ElementNode | nodes.ElementGroupNode]
+    )
+):
+    for elem in elements:
+        if isinstance(elem, nodes.ElementNode):
+            yield elem
+            continue
+        yield from _iter_leaf_elements(list(elem.members))
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for JSON serialization."""
@@ -128,7 +146,7 @@ class CoverageTracker:
             cov = StatuteCoverage(section_number=section, title=title)
 
             # Track elements
-            for element in (statute.elements or []):
+            for element in statute.elements or []:
                 elem_key = f"{element.element_type}:{element.name}"
                 cov.elements[elem_key] = ElementCoverage(
                     element_type=element.element_type,
@@ -136,7 +154,7 @@ class CoverageTracker:
                 )
 
             # Track illustrations
-            if hasattr(statute, 'illustrations') and statute.illustrations:
+            if hasattr(statute, "illustrations") and statute.illustrations:
                 cov.total_illustrations = len(statute.illustrations)
 
             self.report.statutes[section] = cov
@@ -254,7 +272,7 @@ def analyze_test_coverage(
                     section = statute.section_number
 
                     # Mark elements as covered if they appear in test assertions
-                    for elem in (statute.elements or []):
+                    for elem in _iter_leaf_elements(list(statute.elements or [])):
                         tracker.mark_element_covered(
                             section,
                             elem.element_type,
