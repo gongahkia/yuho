@@ -484,7 +484,7 @@ class MatchArm(ASTNode):
         return visitor.visit_match_arm(self)
 
     def children(self) -> List[ASTNode]:
-        result = [self.pattern]
+        result: List[ASTNode] = [self.pattern]
         if self.guard:
             result.append(self.guard)
         result.append(self.body)
@@ -508,7 +508,7 @@ class MatchExprNode(ASTNode):
         return visitor.visit_match_expr(self)
 
     def children(self) -> List[ASTNode]:
-        result = []
+        result: List[ASTNode] = []
         if self.scrutinee:
             result.append(self.scrutinee)
         result.extend(self.arms)
@@ -656,7 +656,7 @@ class VariableDecl(ASTNode):
         return visitor.visit_variable_decl(self)
 
     def children(self) -> List[ASTNode]:
-        result = [self.type_annotation]
+        result: List[ASTNode] = [self.type_annotation]
         if self.value:
             result.append(self.value)
         return result
@@ -764,15 +764,15 @@ class ElementNode(ASTNode):
     element_type: "actus_reus", "mens_rea", or "circumstance"
     """
 
-    element_type: str # actus_reus, mens_rea, circumstance, obligation, prohibition, permission
+    element_type: str  # actus_reus, mens_rea, circumstance, obligation, prohibition, permission
     name: str
-    description: ASTNode # usually StringLit or match expression
-    caused_by: Optional[str] = None # phase 12: causal link to another element
-    burden: Optional[str] = None # phase 12: "prosecution" or "defence"
-    burden_standard: Optional[str] = None # phase 12: proof standard
+    description: ASTNode  # usually StringLit or match expression
+    caused_by: Optional[str] = None  # phase 12: causal link to another element
+    burden: Optional[str] = None  # phase 12: "prosecution" or "defence"
+    burden_standard: Optional[str] = None  # phase 12: proof standard
     doc_comment: Optional[str] = None
-    actor: Optional[str] = None # party role performing the act
-    patient: Optional[str] = None # party role receiving the act
+    actor: Optional[str] = None  # party role performing the act
+    patient: Optional[str] = None  # party role receiving the act
 
     def accept(self, visitor: "Visitor"):
         return visitor.visit_element(self)
@@ -816,15 +816,15 @@ class PenaltyNode(ASTNode):
     caning_max: Optional[int] = None
     death_penalty: Optional[bool] = None
     supplementary: Optional[StringLit] = None
-    sentencing: Optional[str] = None # phase 14: "concurrent" or "consecutive"
-    mandatory_min_imprisonment: Optional[DurationNode] = None # phase 14
-    mandatory_min_fine: Optional[MoneyNode] = None # phase 14
+    sentencing: Optional[str] = None  # phase 14: "concurrent" or "consecutive"
+    mandatory_min_imprisonment: Optional[DurationNode] = None  # phase 14
+    mandatory_min_fine: Optional[MoneyNode] = None  # phase 14
 
     def accept(self, visitor: "Visitor"):
         return visitor.visit_penalty(self)
 
     def children(self) -> List[ASTNode]:
-        result = []
+        result: List[ASTNode] = []
         if self.imprisonment_min:
             result.append(self.imprisonment_min)
         if self.imprisonment_max:
@@ -872,7 +872,7 @@ class ExceptionNode(ASTNode):
         return visitor.visit_exception(self)
 
     def children(self) -> List[ASTNode]:
-        result = [self.condition]
+        result: List[ASTNode] = [self.condition]
         if self.effect:
             result.append(self.effect)
         if self.guard:
@@ -897,7 +897,7 @@ class CaseLawNode(ASTNode):
         return visitor.visit_caselaw(self)
 
     def children(self) -> List[ASTNode]:
-        result = [self.case_name, self.holding]
+        result: List[ASTNode] = [self.case_name, self.holding]
         if self.citation:
             result.append(self.citation)
         return result
@@ -906,8 +906,9 @@ class CaseLawNode(ASTNode):
 @dataclass(frozen=True)
 class TemporalConstraintNode(ASTNode):
     """Temporal ordering constraint between elements (e.g., act precedes death)."""
+
     subject: str
-    relation: str # "precedes", "during", "after"
+    relation: str  # "precedes", "during", "after"
     object: str
 
     def accept(self, visitor: "Visitor"):
@@ -917,7 +918,8 @@ class TemporalConstraintNode(ASTNode):
 @dataclass(frozen=True)
 class AnnotationNode(ASTNode):
     """Metadata annotation (@presumed, @precedent, @hierarchy, @amended)."""
-    name: str # "presumed", "precedent", "hierarchy", "amended"
+
+    name: str  # "presumed", "precedent", "hierarchy", "amended"
     args: Tuple[str, ...] = ()
 
     def accept(self, visitor: "Visitor"):
@@ -927,9 +929,10 @@ class AnnotationNode(ASTNode):
 @dataclass(frozen=True)
 class LegalTestNode(ASTNode):
     """Conjunctive legal test: all requirements must hold for the test to pass."""
+
     name: str
-    requirements: Tuple[ASTNode, ...] # variable decls (bool fields)
-    condition: Optional[ASTNode] = None # requires expression (conjunction)
+    requirements: Tuple[ASTNode, ...]  # variable decls (bool fields)
+    condition: Optional[ASTNode] = None  # requires expression (conjunction)
     annotations: Tuple[AnnotationNode, ...] = ()
 
     def accept(self, visitor: "Visitor"):
@@ -945,9 +948,10 @@ class LegalTestNode(ASTNode):
 @dataclass(frozen=True)
 class ConflictCheckNode(ASTNode):
     """Inter-file contradiction detection between statutes."""
+
     name: str
-    source: str # path or section reference
-    target: str # path or section reference
+    source: str  # path or section reference
+    target: str  # path or section reference
     annotations: Tuple[AnnotationNode, ...] = ()
 
     def accept(self, visitor: "Visitor"):
@@ -957,6 +961,7 @@ class ConflictCheckNode(ASTNode):
 @dataclass(frozen=True)
 class PartyNode(ASTNode):
     """Party/role declaration within a statute (e.g., offender, victim)."""
+
     role: str
     name: str
     type_annotation: Optional[TypeNode] = None
@@ -988,10 +993,10 @@ class StatuteNode(ASTNode):
     doc_comment: Optional[str] = None
     jurisdiction: Optional[str] = None
     jurisdiction_meta: Optional[Dict[str, str]] = None
-    effective_date: Optional[str] = None # phase 11: ISO date
-    repealed_date: Optional[str] = None # phase 11: ISO date
-    subsumes: Optional[str] = None # phase 13: section number
-    amends: Optional[str] = None # phase 11: section number
+    effective_date: Optional[str] = None  # phase 11: ISO date
+    repealed_date: Optional[str] = None  # phase 11: ISO date
+    subsumes: Optional[str] = None  # phase 13: section number
+    amends: Optional[str] = None  # phase 11: section number
     parties: Tuple["PartyNode", ...] = ()
     temporal_constraints: Tuple["TemporalConstraintNode", ...] = ()
     annotations: Tuple["AnnotationNode", ...] = ()
@@ -1021,8 +1026,9 @@ class StatuteNode(ASTNode):
 @dataclass(frozen=True)
 class EnumVariant(ASTNode):
     """Single variant in an enum definition."""
+
     name: str
-    payload_types: Tuple[TypeNode, ...] = () # optional carried data
+    payload_types: Tuple[TypeNode, ...] = ()  # optional carried data
 
     def accept(self, visitor: "Visitor"):
         return visitor.visit_enum_variant(self)
@@ -1034,6 +1040,7 @@ class EnumVariant(ASTNode):
 @dataclass(frozen=True)
 class EnumDefNode(ASTNode):
     """Enum type definition with named variants."""
+
     name: str
     variants: Tuple[EnumVariant, ...]
     doc_comment: Optional[str] = None
@@ -1053,6 +1060,7 @@ class EnumDefNode(ASTNode):
 @dataclass(frozen=True)
 class TypeAliasNode(ASTNode):
     """Type alias declaration: type MensRea = string"""
+
     name: str
     target_type: TypeNode
     doc_comment: Optional[str] = None
@@ -1072,6 +1080,7 @@ class TypeAliasNode(ASTNode):
 @dataclass(frozen=True)
 class RefinementTypeNode(TypeNode):
     """Refinement type with range constraint: int{0..99}"""
+
     base_type: TypeNode
     lower_bound: ASTNode
     upper_bound: ASTNode
