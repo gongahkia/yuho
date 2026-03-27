@@ -4,7 +4,7 @@ Coverage tracking for Yuho statute test implementations.
 Tracks which elements, conditions, and branches are exercised by tests.
 """
 
-from typing import Dict, List, Set, Optional, Any
+from typing import Any, Dict, Iterator, List, Set
 from dataclasses import dataclass, field
 from pathlib import Path
 import json
@@ -74,19 +74,6 @@ class CoverageReport:
         total = sum(s.overall_coverage_percent for s in self.statutes.values())
         return total / len(self.statutes)
 
-
-def _iter_leaf_elements(
-    elements: (
-        tuple[nodes.ElementNode | nodes.ElementGroupNode, ...]
-        | list[nodes.ElementNode | nodes.ElementGroupNode]
-    )
-):
-    for elem in elements:
-        if isinstance(elem, nodes.ElementNode):
-            yield elem
-            continue
-        yield from _iter_leaf_elements(list(elem.members))
-
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for JSON serialization."""
         return {
@@ -123,6 +110,19 @@ def _iter_leaf_elements(
         return json.dumps(self.to_dict(), indent=indent)
 
 
+def _iter_leaf_elements(
+    elements: (
+        tuple[nodes.ElementNode | nodes.ElementGroupNode, ...]
+        | list[nodes.ElementNode | nodes.ElementGroupNode]
+    )
+) -> Iterator[nodes.ElementNode]:
+    for elem in elements:
+        if isinstance(elem, nodes.ElementNode):
+            yield elem
+            continue
+        yield from _iter_leaf_elements(list(elem.members))
+
+
 class CoverageTracker:
     """
     Tracks test coverage for Yuho statute implementations.
@@ -146,7 +146,7 @@ class CoverageTracker:
             cov = StatuteCoverage(section_number=section, title=title)
 
             # Track elements
-            for element in statute.elements or []:
+            for element in _iter_leaf_elements(list(statute.elements or [])):
                 elem_key = f"{element.element_type}:{element.name}"
                 cov.elements[elem_key] = ElementCoverage(
                     element_type=element.element_type,
