@@ -9,9 +9,7 @@ from typing import List, TYPE_CHECKING
 try:
     from lsprotocol import types as lsp
 except ImportError:
-    raise ImportError(
-        "LSP dependencies not installed. Install with: pip install yuho[lsp]"
-    )
+    raise ImportError("LSP dependencies not installed. Install with: pip install yuho[lsp]")
 
 from yuho.parser.wrapper import ParseError
 from yuho.ast.type_inference import TypeInferenceVisitor
@@ -32,11 +30,11 @@ def run_type_checker(ast: "ModuleNode") -> List[TypeErrorInfo]:
         # First run type inference
         infer_visitor = TypeInferenceVisitor()
         ast.accept(infer_visitor)
-        
+
         # Then run type checking
         check_visitor = TypeCheckVisitor(infer_visitor.result)
         ast.accept(check_visitor)
-        
+
         # Return all errors and warnings
         return check_visitor.result.errors + check_visitor.result.warnings
     except Exception as e:
@@ -64,13 +62,13 @@ def type_error_to_diagnostic(error: TypeErrorInfo) -> lsp.Diagnostic:
     # TypeErrorInfo has 1-based line numbers, LSP uses 0-based
     line = max(0, error.line - 1)
     column = max(0, error.column - 1)
-    
+
     severity = (
         lsp.DiagnosticSeverity.Error
         if error.severity == "error"
         else lsp.DiagnosticSeverity.Warning
     )
-    
+
     return lsp.Diagnostic(
         range=lsp.Range(
             start=lsp.Position(line=line, character=column),
