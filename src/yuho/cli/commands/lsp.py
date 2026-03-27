@@ -21,7 +21,12 @@ def run_lsp(tcp: Optional[int] = None, verbose: bool = False) -> None:
     try:
         from yuho.lsp import YuhoLanguageServer
     except ImportError:
-        click.echo(colorize("error: LSP module not available. Install with: pip install yuho[lsp]", Colors.RED), err=True)
+        click.echo(
+            colorize(
+                "error: LSP module not available. Install with: pip install yuho[lsp]", Colors.RED
+            ),
+            err=True,
+        )
         sys.exit(1)
 
     server = YuhoLanguageServer()
