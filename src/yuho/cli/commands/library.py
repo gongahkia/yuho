@@ -39,6 +39,11 @@ def _is_offline_mode() -> bool:
 
 def _scan_local_library() -> List[Dict[str, Any]]:
     """Scan the local library/ directory for statute files and return metadata."""
+    try:
+        import tomllib
+    except ImportError:  # pragma: no cover - Python 3.10+ always has tomllib
+        tomllib = None
+
     library_dir = Path.cwd() / "library"
     if not library_dir.is_dir():
         return []
@@ -58,6 +63,25 @@ def _scan_local_library() -> List[Dict[str, Any]]:
             if num_part.isdigit():
                 section_number = num_part
                 title = " ".join(dir_name.split("_")[1:]).replace("_", " ").title()
+
+        metadata: Dict[str, Any] = {}
+        meta_file = statute_file.parent / "metadata.toml"
+        if tomllib is not None and meta_file.exists():
+            try:
+                with open(meta_file, "rb") as f:
+                    metadata = tomllib.load(f)
+            except (OSError, ValueError):
+                metadata = {}
+
+        statute_meta = metadata.get("statute", {})
+        description_meta = metadata.get("description", {})
+        study_meta = metadata.get("study", {})
+
+        if statute_meta.get("title"):
+            title = statute_meta["title"]
+        if statute_meta.get("section_number"):
+            section_number = str(statute_meta["section_number"])
+
         # Try to get actual title from the file
         try:
             from yuho.services.analysis import analyze_file
@@ -77,6 +101,15 @@ def _scan_local_library() -> List[Dict[str, Any]]:
             "category": category,
             "path": str(statute_file),
             "source": "local",
+            "jurisdiction": statute_meta.get("jurisdiction"),
+            "version": statute_meta.get("version"),
+            "description": description_meta.get("summary"),
+            "source_text": description_meta.get("source"),
+            "offence_family": study_meta.get("offence_family"),
+            "related_sections": study_meta.get("related_sections", []),
+            "exception_topics": study_meta.get("exception_topics", []),
+            "doctrine_tags": study_meta.get("doctrine_tags", []),
+            "difficulty": study_meta.get("difficulty"),
         })
     return results
 
@@ -834,8 +867,20 @@ def run_library_info(
         click.echo(f"  Path:         {info['path']}")
     if info.get("description"):
         click.echo(f"  Description:  {info['description']}")
+    if info.get("source_text"):
+        click.echo(f"  Source Text:  {info['source_text']}")
     if info.get("tags"):
         click.echo(f"  Tags:         {', '.join(info['tags'])}")
+    if info.get("offence_family"):
+        click.echo(f"  Family:       {info['offence_family']}")
+    if info.get("difficulty"):
+        click.echo(f"  Difficulty:   {info['difficulty']}")
+    if info.get("related_sections"):
+        click.echo(f"  Related:      {', '.join(info['related_sections'])}")
+    if info.get("exception_topics"):
+        click.echo(f"  Exceptions:   {', '.join(info['exception_topics'])}")
+    if info.get("doctrine_tags"):
+        click.echo(f"  Doctrine:     {', '.join(info['doctrine_tags'])}")
 
     click.echo()
 
