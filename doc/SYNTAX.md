@@ -11,15 +11,19 @@
 7. [Control Structures](#control-structures)
 8. [Functions](#functions)
 9. [Statute Blocks](#statute-blocks)
-10. [Imports](#imports)
-11. [Testing](#testing)
+10. [Annotations](#annotations)
+11. [Legal Tests](#legal-tests)
+12. [Conflict Checks](#conflict-checks)
+13. [Imports](#imports)
+14. [Testing](#testing)
 
 ## Introduction
 
 * Yuho source files have the file extension `.yh`
 * strongly, statically-typed
 * Yuho source files follow the snake_case naming scheme
-* variables, functions, structs and all user-defined constructs follow the camelCase naming scheme
+* variables and functions in the standard library and examples follow snake_case
+* structs, enums, and type-like declarations follow PascalCase
 * indentation is optional but recommended for readability with nested `{}` curly braces
 * features limited syntax out of the box
     * allows language to be quickly picked up and used
@@ -370,6 +374,46 @@ penalty {
     caning := 6 .. 24 strokes;
     death := TRUE;
     supplementary := "Mandatory minimum of 6 strokes for repeat offenders";
+}
+```
+
+## Annotations
+
+```yh
+// annotations attach metadata to statutes, legal_test blocks, and conflict_check blocks
+// supported annotation names are: presumed, precedent, hierarchy, amended
+
+@presumed("innocent")
+@amended("2021-06-15", "Criminal Law Reform Act 2021")
+statute 200 "Annotated Offence" {
+    elements {
+        actus_reus act := "Some prohibited act";
+    }
+}
+```
+
+## Legal Tests
+
+```yh
+// legal_test defines a reusable conjunctive requirement block
+// the requires clause is optional
+
+legal_test ValidOffer {
+    bool definite,
+    bool communicated,
+    requires definite && communicated
+}
+```
+
+## Conflict Checks
+
+```yh
+// conflict_check records a contradiction or hierarchy comparison between two models
+
+@hierarchy("subsidiary", "S300")
+conflict_check S299_vs_S300 {
+    source := "s299_culpable_homicide";
+    target := "s300_murder";
 }
 ```
 
