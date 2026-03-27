@@ -1,11 +1,17 @@
 """E2E tests: parse library statutes through to evaluation."""
+
 import pytest
 from pathlib import Path
 from yuho.eval.interpreter import Interpreter, Environment, Value
 from yuho.ast.nodes import (
-    StatuteNode, ElementNode, ElementGroupNode, StringLit,
-    StructDefNode, FunctionDefNode,
+    StatuteNode,
+    ElementNode,
+    ElementGroupNode,
+    StringLit,
+    StructDefNode,
+    FunctionDefNode,
 )
+
 
 class TestParseToEval:
     def test_statute_parses_cleanly(self, statute_dir, parse_file):
@@ -91,38 +97,47 @@ class TestParseToEval:
         statute_path = statute_dir / "statute.yh"
         if not statute_path.exists():
             pytest.skip()
-        valid_types = {"actus_reus", "mens_rea", "circumstance", "obligation", "prohibition", "permission"}
+        valid_types = {
+            "actus_reus",
+            "mens_rea",
+            "circumstance",
+            "obligation",
+            "prohibition",
+            "permission",
+        }
         ast = parse_file(statute_path)
+
         def _check_elements(members):
             for m in members:
                 if isinstance(m, ElementNode):
-                    assert m.element_type in valid_types, (
-                        f"Unexpected element_type '{m.element_type}' for '{m.name}'"
-                    )
+                    assert (
+                        m.element_type in valid_types
+                    ), f"Unexpected element_type '{m.element_type}' for '{m.name}'"
                     assert len(m.name) > 0
                 elif isinstance(m, ElementGroupNode):
                     assert m.combinator in ("all_of", "any_of")
                     _check_elements(m.members)
+
         for statute in ast.statutes:
             _check_elements(statute.elements)
 
     def test_environment_child_scope_isolation(self, parse_source):
         """Variables set in a child scope should not leak to the parent."""
-        source = '''
+        source = """
 struct Dummy { bool flag, }
 statute 100 "Test" {
     elements {
         actus_reus act := "An act";
     }
 }
-'''
+"""
         ast = parse_source(source)
         interp = Interpreter()
         env = interp.interpret(ast)
         child = env.child()
         child.set("localVar", Value(42, "int"))
         assert child.get("localVar") is not None
-        assert env.get("localVar") is None # parent unaffected
+        assert env.get("localVar") is None  # parent unaffected
 
     def test_function_defs_have_correct_param_count(self, statute_dir, parse_file):
         """Registered function defs should match AST param counts."""
@@ -139,14 +154,14 @@ statute 100 "Test" {
 
     def test_multiple_statutes_all_registered(self, parse_source):
         """Multiple statutes in a single module should all be registered."""
-        source = '''
+        source = """
 statute 101 "First" {
     elements { actus_reus a1 := "Act 1"; }
 }
 statute 102 "Second" {
     elements { actus_reus a2 := "Act 2"; }
 }
-'''
+"""
         ast = parse_source(source)
         interp = Interpreter()
         env = interp.interpret(ast)

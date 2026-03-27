@@ -1,4 +1,5 @@
 """Tree-walking interpreter for Yuho."""
+
 from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import date
@@ -12,14 +13,17 @@ from yuho.ast.visitor import Visitor
 # Control flow / error signals
 # ---------------------------------------------------------------------------
 
+
 class ReturnSignal(Exception):
     """Exception-based control flow for return statements."""
+
     def __init__(self, value: "Value"):
         self.value = value
 
 
 class InterpreterError(Exception):
     """Runtime error during interpretation."""
+
     def __init__(self, message: str, node: Optional[nodes.ASTNode] = None):
         self.node = node
         loc = ""
@@ -30,6 +34,7 @@ class InterpreterError(Exception):
 
 class AssertionError_(Exception):
     """Assertion failure with source location."""
+
     def __init__(self, message: str, node: Optional[nodes.ASTNode] = None):
         self.node = node
         loc = ""
@@ -42,11 +47,15 @@ class AssertionError_(Exception):
 # Runtime value wrapper
 # ---------------------------------------------------------------------------
 
+
 @dataclass
 class Value:
     """Runtime value wrapper with type tag."""
-    raw: Any # int, float, bool, str, Decimal, date, nodes.DurationNode, StructInstance, list, None
-    type_tag: str = "" # "int","float","bool","string","money","percent","date","duration","struct","list","none"
+
+    raw: Any  # int, float, bool, str, Decimal, date, nodes.DurationNode, StructInstance, list, None
+    type_tag: str = (
+        ""  # "int","float","bool","string","money","percent","date","duration","struct","list","none"
+    )
 
     def __post_init__(self):
         if self.type_tag:
@@ -63,7 +72,7 @@ class Value:
         elif isinstance(self.raw, str):
             self.type_tag = "string"
         elif isinstance(self.raw, Decimal):
-            self.type_tag = "money" # ambiguous with percent; caller should set explicitly
+            self.type_tag = "money"  # ambiguous with percent; caller should set explicitly
         elif isinstance(self.raw, date):
             self.type_tag = "date"
         elif isinstance(self.raw, nodes.DurationNode):
@@ -125,9 +134,11 @@ class Value:
 # Runtime struct instance
 # ---------------------------------------------------------------------------
 
+
 @dataclass
 class StructInstance:
     """Runtime representation of a struct value."""
+
     type_name: str
     fields: Dict[str, Value]
 
@@ -148,9 +159,11 @@ class StructInstance:
 # Environment (chained scopes)
 # ---------------------------------------------------------------------------
 
+
 @dataclass
 class Environment:
     """Chained-scope environment for variable/function/struct/statute bindings."""
+
     bindings: Dict[str, Value] = field(default_factory=dict)
     struct_defs: Dict[str, nodes.StructDefNode] = field(default_factory=dict)
     function_defs: Dict[str, nodes.FunctionDefNode] = field(default_factory=dict)
@@ -214,6 +227,7 @@ class Environment:
 # Interpreter (tree-walking, visitor-based)
 # ---------------------------------------------------------------------------
 
+
 class Interpreter(Visitor):
     """Tree-walking interpreter for Yuho AST."""
 
@@ -228,12 +242,12 @@ class Interpreter(Visitor):
         for sd in module.type_defs:
             self.env.struct_defs[sd.name] = sd
         # register enum defs and variants as bindings
-        for ed in getattr(module, 'enum_defs', ()):
+        for ed in getattr(module, "enum_defs", ()):
             self.env.enum_defs[ed.name] = ed
             for variant in ed.variants:
                 self.env.set(variant.name, Value(variant.name, "enum"))
         # register type aliases (no runtime effect, stored for resolution)
-        for ta in getattr(module, 'type_aliases', ()):
+        for ta in getattr(module, "type_aliases", ()):
             self.env.type_aliases[ta.name] = ta
         # register function defs
         for fd in module.function_defs:
@@ -263,7 +277,11 @@ class Interpreter(Visitor):
         ra, rb = a.raw, b.raw
         # Decimal stays Decimal
         if isinstance(ra, Decimal) or isinstance(rb, Decimal):
-            return (Decimal(str(ra)), Decimal(str(rb)), a.type_tag if isinstance(ra, Decimal) else b.type_tag)
+            return (
+                Decimal(str(ra)),
+                Decimal(str(rb)),
+                a.type_tag if isinstance(ra, Decimal) else b.type_tag,
+            )
         # int + float -> float
         if isinstance(ra, float) or isinstance(rb, float):
             return (float(ra), float(rb), "float")
@@ -380,7 +398,12 @@ class Interpreter(Visitor):
             return Value(left.raw != right.raw, "bool")
 
         # arithmetic & comparison require numeric
-        if left.type_tag in ("int", "float", "money", "percent") and right.type_tag in ("int", "float", "money", "percent"):
+        if left.type_tag in ("int", "float", "money", "percent") and right.type_tag in (
+            "int",
+            "float",
+            "money",
+            "percent",
+        ):
             la, ra, tag = self._coerce_pair(left, right)
             if op == "+":
                 return Value(la + ra, tag)
@@ -392,7 +415,7 @@ class Interpreter(Visitor):
                 if ra == 0:
                     raise InterpreterError("Division by zero", node)
                 if tag == "int":
-                    return Value(la // ra, tag) # integer division
+                    return Value(la // ra, tag)  # integer division
                 return Value(la / ra, tag)
             if op == "%":
                 if ra == 0:
@@ -431,7 +454,9 @@ class Interpreter(Visitor):
             if op == ">=":
                 return Value(ld >= rd, "bool")
 
-        raise InterpreterError(f"Unsupported operator '{op}' for types {left.type_tag}, {right.type_tag}", node)
+        raise InterpreterError(
+            f"Unsupported operator '{op}' for types {left.type_tag}, {right.type_tag}", node
+        )
 
     def visit_unary_expr(self, node: nodes.UnaryExprNode) -> Value:
         operand = self.visit(node.operand)
@@ -458,7 +483,7 @@ class Interpreter(Visitor):
         if node.scrutinee is not None:
             scrutinee = self.visit(node.scrutinee)
         else:
-            scrutinee = Value(True, "bool") # bare match -> match TRUE against guards
+            scrutinee = Value(True, "bool")  # bare match -> match TRUE against guards
 
         for arm in node.arms:
             bindings = self._match_pattern(arm.pattern, scrutinee)
@@ -486,7 +511,9 @@ class Interpreter(Visitor):
         # no arm matched
         return Value(None, "none")
 
-    def _match_pattern(self, pattern: nodes.PatternNode, value: Value) -> Optional[Dict[str, Value]]:
+    def _match_pattern(
+        self, pattern: nodes.PatternNode, value: Value
+    ) -> Optional[Dict[str, Value]]:
         """Try to match a value against a pattern. Returns bindings dict or None."""
         if isinstance(pattern, nodes.WildcardPattern):
             return {}

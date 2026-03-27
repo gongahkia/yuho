@@ -136,20 +136,31 @@ def clear_config_cache() -> None:
     _config = None
 
 
-def _load_from_file(path: Path) -> Dict[str, Any]:
-    """Load config from TOML file."""
+def _get_toml_module() -> Any:
+    """Return the available TOML loader module, if any."""
     try:
         import tomllib
+
+        return tomllib
     except ImportError:
         try:
-            import tomli as tomllib
+            import tomli
+
+            return tomli
         except ImportError:
-            logger.warning("tomllib/tomli not available, skipping config file")
-            return {}
+            return None
+
+
+def _load_from_file(path: Path) -> Dict[str, Any]:
+    """Load config from TOML file."""
+    toml_module = _get_toml_module()
+    if toml_module is None:
+        logger.warning("tomllib/tomli not available, skipping config file")
+        return {}
 
     try:
         with open(path, "rb") as f:
-            return tomllib.load(f)
+            return toml_module.load(f)
     except Exception as e:
         logger.warning(f"Failed to load config file: {e}")
         return {}
@@ -182,16 +193,17 @@ def _load_from_env(prefix: str) -> Dict[str, Any]:
     }
 
     for env_var, (section, key) in env_mapping.items():
-        value = os.environ.get(env_var)
-        if value is not None:
+        raw_value = os.environ.get(env_var)
+        if raw_value is not None:
             if section not in config:
                 config[section] = {}
 
             # Type conversion
+            value: Any = raw_value
             if key in ("ollama_port", "max_tokens", "port"):
-                value = int(value)
+                value = int(raw_value)
             elif key == "temperature":
-                value = float(value)
+                value = float(raw_value)
 
             config[section][key] = value
 

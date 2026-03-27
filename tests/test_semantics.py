@@ -5,15 +5,45 @@ defined in doc/FORMAL_SEMANTICS.md.
 
 import pytest
 from decimal import Decimal
-from yuho.eval.interpreter import Interpreter, Environment, Value, StructInstance, InterpreterError, AssertionError_
+from yuho.eval.interpreter import (
+    Interpreter,
+    Environment,
+    Value,
+    StructInstance,
+    InterpreterError,
+    AssertionError_,
+)
 from yuho.ast.nodes import (
-    IntLit, FloatLit, BoolLit, StringLit, MoneyNode, PercentNode,
-    DateNode, DurationNode, Currency,
-    BinaryExprNode, UnaryExprNode, IdentifierNode, PassExprNode,
-    MatchExprNode, MatchArm, WildcardPattern, LiteralPattern, BindingPattern,
-    FunctionDefNode, ParamDef, Block, ReturnStmt, VariableDecl,
-    BuiltinType, AssertStmt, StructDefNode, FieldDef, StructLiteralNode,
-    FieldAssignment, FieldAccessNode,
+    IntLit,
+    FloatLit,
+    BoolLit,
+    StringLit,
+    MoneyNode,
+    PercentNode,
+    DateNode,
+    DurationNode,
+    Currency,
+    BinaryExprNode,
+    UnaryExprNode,
+    IdentifierNode,
+    PassExprNode,
+    MatchExprNode,
+    MatchArm,
+    WildcardPattern,
+    LiteralPattern,
+    BindingPattern,
+    FunctionDefNode,
+    ParamDef,
+    Block,
+    ReturnStmt,
+    VariableDecl,
+    BuiltinType,
+    AssertStmt,
+    StructDefNode,
+    FieldDef,
+    StructLiteralNode,
+    FieldAssignment,
+    FieldAccessNode,
     ModuleNode,
 )
 from datetime import date
@@ -87,7 +117,7 @@ class TestArithmeticSemantics:
     def test_int_division(self):
         interp = Interpreter()
         expr = BinaryExprNode(left=IntLit(value=10), operator="/", right=IntLit(value=3))
-        assert interp.visit(expr).raw == 3 # integer division
+        assert interp.visit(expr).raw == 3  # integer division
 
     def test_float_promotion(self):
         """T-ArithFloat: int + float -> float."""
@@ -133,7 +163,9 @@ class TestComparisonSemantics:
 
     def test_string_equality(self):
         interp = Interpreter()
-        expr = BinaryExprNode(left=StringLit(value="abc"), operator="==", right=StringLit(value="abc"))
+        expr = BinaryExprNode(
+            left=StringLit(value="abc"), operator="==", right=StringLit(value="abc")
+        )
         assert interp.visit(expr).raw is True
 
 
@@ -149,14 +181,18 @@ class TestLogicSemantics:
         """&& should not evaluate right side if left is false."""
         interp = Interpreter()
         # if && evaluates right, it would error on undefined var
-        expr = BinaryExprNode(left=BoolLit(value=False), operator="&&", right=IdentifierNode(name="undefined_var"))
+        expr = BinaryExprNode(
+            left=BoolLit(value=False), operator="&&", right=IdentifierNode(name="undefined_var")
+        )
         v = interp.visit(expr)
         assert v.raw is False
 
     def test_or_short_circuit(self):
         """|| should not evaluate right side if left is true."""
         interp = Interpreter()
-        expr = BinaryExprNode(left=BoolLit(value=True), operator="||", right=IdentifierNode(name="undefined_var"))
+        expr = BinaryExprNode(
+            left=BoolLit(value=True), operator="||", right=IdentifierNode(name="undefined_var")
+        )
         v = interp.visit(expr)
         assert v.raw is True
 
@@ -207,9 +243,7 @@ class TestMatchSemantics:
         interp = Interpreter()
         expr = MatchExprNode(
             scrutinee=IntLit(value=42),
-            arms=(
-                MatchArm(pattern=WildcardPattern(), body=StringLit(value="matched")),
-            ),
+            arms=(MatchArm(pattern=WildcardPattern(), body=StringLit(value="matched")),),
         )
         v = interp.visit(expr)
         assert v.raw == "matched"
@@ -219,7 +253,9 @@ class TestMatchSemantics:
         expr = MatchExprNode(
             scrutinee=IntLit(value=1),
             arms=(
-                MatchArm(pattern=LiteralPattern(literal=IntLit(value=1)), body=StringLit(value="one")),
+                MatchArm(
+                    pattern=LiteralPattern(literal=IntLit(value=1)), body=StringLit(value="one")
+                ),
                 MatchArm(pattern=WildcardPattern(), body=StringLit(value="other")),
             ),
         )
@@ -270,16 +306,21 @@ class TestFunctionSemantics:
             name="double",
             params=(ParamDef(type_annotation=BuiltinType(name="int"), name="x"),),
             return_type=BuiltinType(name="int"),
-            body=Block(statements=(
-                ReturnStmt(value=BinaryExprNode(
-                    left=IdentifierNode(name="x"),
-                    operator="*",
-                    right=IntLit(value=2),
-                )),
-            )),
+            body=Block(
+                statements=(
+                    ReturnStmt(
+                        value=BinaryExprNode(
+                            left=IdentifierNode(name="x"),
+                            operator="*",
+                            right=IntLit(value=2),
+                        )
+                    ),
+                )
+            ),
         )
         interp.env.function_defs["double"] = fn
         from yuho.ast.nodes import FunctionCallNode
+
         call = FunctionCallNode(
             callee=IdentifierNode(name="double"),
             args=(IntLit(value=21),),
@@ -349,9 +390,10 @@ class TestModuleInterpret:
         module = ModuleNode(
             imports=(),
             type_defs=(
-                StructDefNode(name="Case", fields=(
-                    FieldDef(type_annotation=BuiltinType(name="bool"), name="guilty"),
-                )),
+                StructDefNode(
+                    name="Case",
+                    fields=(FieldDef(type_annotation=BuiltinType(name="bool"), name="guilty"),),
+                ),
             ),
             function_defs=(),
             statutes=(),
@@ -363,11 +405,13 @@ class TestModuleInterpret:
                 ),
             ),
             assertions=(
-                AssertStmt(condition=BinaryExprNode(
-                    left=IdentifierNode(name="x"),
-                    operator="==",
-                    right=IntLit(value=42),
-                )),
+                AssertStmt(
+                    condition=BinaryExprNode(
+                        left=IdentifierNode(name="x"),
+                        operator="==",
+                        right=IntLit(value=42),
+                    )
+                ),
             ),
         )
         interp = Interpreter()

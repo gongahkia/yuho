@@ -56,6 +56,6 @@ class BibTeXTranspiler(TranspilerBase):
         parts = cleaned.split()
         if not parts:
             return "unknown"
-        if len(parts) >= 3: # e.g. "Tan v State" -> "Tan2026"
+        if len(parts) >= 3:  # e.g. "Tan v State" -> "Tan2026"
             return parts[0].lower() + "Case"
         return parts[0].lower() + "Case"

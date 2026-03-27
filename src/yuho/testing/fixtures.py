@@ -31,6 +31,7 @@ def yuho_parser():
             assert result.is_valid
     """
     from yuho.parser import Parser
+
     return Parser()
 
 
@@ -72,6 +73,7 @@ def parse_statute(yuho_ast):
             ''')
             assert statute.section_number == "378"
     """
+
     def _parse(source: str):
         ast = yuho_ast(source)
         if not ast.statutes:
@@ -91,6 +93,7 @@ def parse_file(yuho_ast):
             ast = parse_file("path/to/statute.yh")
             assert len(ast.statutes) >= 1
     """
+
     def _parse_file(path: str):
         file_path = Path(path)
         if not file_path.exists():
@@ -113,6 +116,7 @@ def statute_validator():
             assert result.valid
             assert not result.errors
     """
+
     @dataclass
     class ValidationResult:
         valid: bool
@@ -134,18 +138,12 @@ def statute_validator():
             errors.append("No elements defined")
         else:
             # Check for at least one actus_reus
-            has_actus = any(
-                e.element_type == "actus_reus"
-                for e in statute.elements
-            )
+            has_actus = any(e.element_type == "actus_reus" for e in statute.elements)
             if not has_actus:
                 warnings.append("No actus_reus element defined")
 
             # Check for mens_rea
-            has_mens = any(
-                e.element_type == "mens_rea"
-                for e in statute.elements
-            )
+            has_mens = any(e.element_type == "mens_rea" for e in statute.elements)
             if not has_mens:
                 warnings.append("No mens_rea element defined")
 
@@ -181,6 +179,7 @@ class StatuteTestCase:
             statute = parse_statute(case.source)
             case.verify(statute)
     """
+
     name: str
     source: str
     expected_section: Optional[str] = None
@@ -192,22 +191,22 @@ class StatuteTestCase:
     def verify(self, statute) -> None:
         """Verify statute against expected values. Raises AssertionError on mismatch."""
         if self.expected_section:
-            assert statute.section_number == self.expected_section, \
-                f"Section mismatch: expected {self.expected_section}, got {statute.section_number}"
+            assert (
+                statute.section_number == self.expected_section
+            ), f"Section mismatch: expected {self.expected_section}, got {statute.section_number}"
 
         if self.expected_title:
             title = statute.title.value if statute.title else None
-            assert title == self.expected_title, \
-                f"Title mismatch: expected {self.expected_title}, got {title}"
+            assert (
+                title == self.expected_title
+            ), f"Title mismatch: expected {self.expected_title}, got {title}"
 
         if self.expected_elements:
-            actual_elements = [
-                f"{e.element_type}:{e.name}"
-                for e in (statute.elements or [])
-            ]
+            actual_elements = [f"{e.element_type}:{e.name}" for e in (statute.elements or [])]
             for expected in self.expected_elements:
-                assert expected in actual_elements, \
-                    f"Missing element: {expected}. Found: {actual_elements}"
+                assert (
+                    expected in actual_elements
+                ), f"Missing element: {expected}. Found: {actual_elements}"
 
 
 def element_check(statute, element_type: str, name: str) -> bool:
@@ -221,10 +220,7 @@ def element_check(statute, element_type: str, name: str) -> bool:
     """
     if not statute.elements:
         return False
-    return any(
-        e.element_type == element_type and e.name == name
-        for e in statute.elements
-    )
+    return any(e.element_type == element_type and e.name == name for e in statute.elements)
 
 
 def penalty_check(statute, penalty_type: str, max_value: Any = None) -> bool:
@@ -245,7 +241,7 @@ def penalty_check(statute, penalty_type: str, max_value: Any = None) -> bool:
         penalty_val = getattr(penalty, penalty_type)
         if penalty_val is None:
             return False
-        if max_value is not None and hasattr(penalty_val, 'max'):
+        if max_value is not None and hasattr(penalty_val, "max"):
             return penalty_val.max is not None
         return True
 
@@ -258,6 +254,4 @@ def pytest_configure(config):
     config.addinivalue_line(
         "markers", "statute(section): mark test as testing a specific statute section"
     )
-    config.addinivalue_line(
-        "markers", "slow: mark test as slow running"
-    )
+    config.addinivalue_line("markers", "slow: mark test as slow running")

@@ -76,9 +76,9 @@ class ModuleResolver:
             self._search_paths = [Path(p).resolve() for p in search_paths]
         else:
             self._search_paths = [Path.cwd()]
-        self._cache: Dict[str, ModuleNode] = {} # abs path str -> ModuleNode
+        self._cache: Dict[str, ModuleNode] = {}  # abs path str -> ModuleNode
         self._currently_resolving: Set[str] = set()
-        self._parser = None # lazily initialized on first resolve
+        self._parser = None  # lazily initialized on first resolve
 
     @property
     def search_paths(self) -> List[Path]:
@@ -118,9 +118,7 @@ class ModuleResolver:
             str(from_file),
         )
 
-    def resolve_reference(
-        self, ref: ReferencingStmt, from_file: Path
-    ) -> ModuleNode:
+    def resolve_reference(self, ref: ReferencingStmt, from_file: Path) -> ModuleNode:
         """
         Resolve a ReferencingStmt (e.g. referencing penal_code/s300_murder).
 
@@ -197,11 +195,9 @@ class ModuleResolver:
         module = self.resolve(import_node, from_file)
         all_symbols = self.get_exported_symbols(module)
         if not import_node.imported_names or import_node.is_wildcard:
-            return all_symbols # import all
+            return all_symbols  # import all
         return {
-            name: node
-            for name, node in all_symbols.items()
-            if name in import_node.imported_names
+            name: node for name, node in all_symbols.items() if name in import_node.imported_names
         }
 
     def clear_cache(self) -> None:
@@ -223,9 +219,7 @@ class ModuleResolver:
             self._parser = get_parser()
         return self._parser
 
-    def _import_candidates(
-        self, import_path: str, from_dir: Path
-    ) -> List[Path]:
+    def _import_candidates(self, import_path: str, from_dir: Path) -> List[Path]:
         """Generate candidate file paths for an import statement."""
         candidates: List[Path] = []
         raw = Path(import_path)
@@ -240,9 +234,7 @@ class ModuleResolver:
                 candidates.append(sp / f"{import_path}.yh")
         return candidates
 
-    def _reference_candidates(
-        self, ref_path: str, from_dir: Path
-    ) -> List[Path]:
+    def _reference_candidates(self, ref_path: str, from_dir: Path) -> List[Path]:
         """Generate candidate file paths for a referencing statement."""
         candidates: List[Path] = []
         # library/{path}/statute.yh relative to search paths
@@ -274,15 +266,12 @@ class ModuleResolver:
                 return self._parse_module(resolved, original_path, from_file)
         tried = "\n  ".join(str(c.resolve()) for c in candidates)
         raise ModuleResolutionError(
-            f"Cannot resolve '{original_path}' from '{from_file}'. "
-            f"Tried:\n  {tried}",
+            f"Cannot resolve '{original_path}' from '{from_file}'. " f"Tried:\n  {tried}",
             path=original_path,
             from_file=from_file,
         )
 
-    def _parse_module(
-        self, file_path: Path, original_path: str, from_file: str
-    ) -> ModuleNode:
+    def _parse_module(self, file_path: Path, original_path: str, from_file: str) -> ModuleNode:
         """
         Parse a .yh file into a ModuleNode, with caching and cycle detection.
         """

@@ -6,7 +6,7 @@ import logging
 import os
 import sys
 from pathlib import Path
-from typing import Optional, List
+from typing import Dict, List, Literal, Optional, cast
 
 import click
 
@@ -17,7 +17,7 @@ from yuho.cli.commands_registry import register_group_commands
 def _detect_color_support() -> bool:
     """
     Auto-detect terminal color support.
-    
+
     Checks for:
     - TTY attached to stdout
     - NO_COLOR environment variable (force disable)
@@ -27,20 +27,20 @@ def _detect_color_support() -> bool:
     # NO_COLOR spec: https://no-color.org/
     if os.environ.get("NO_COLOR"):
         return False
-    
+
     # FORCE_COLOR always wins
     if os.environ.get("FORCE_COLOR"):
         return True
-    
+
     # Check if stdout is a TTY
     if not hasattr(sys.stdout, "isatty") or not sys.stdout.isatty():
         return False
-    
+
     # Check TERM variable
     term = os.environ.get("TERM", "")
     if term == "dumb":
         return False
-    
+
     return True
 
 
@@ -55,13 +55,9 @@ CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
     "--color/--no-color",
     "use_color",
     default=None,
-    help="Force color output on/off (auto-detected by default)"
+    help="Force color output on/off (auto-detected by default)",
 )
-@click.option(
-    "-q", "--quiet",
-    is_flag=True,
-    help="Suppress non-error output"
-)
+@click.option("-q", "--quiet", is_flag=True, help="Suppress non-error output")
 @click.option(
     "--offline",
     is_flag=True,
@@ -84,21 +80,25 @@ def cli(
     ctx.obj["verbose"] = verbose and not quiet  # Quiet overrides verbose
     ctx.obj["quiet"] = quiet
     ctx.obj["offline"] = offline
-    
+
     # Determine color setting
     if use_color is None:
         # Auto-detect
         ctx.obj["color"] = _detect_color_support()
     else:
         ctx.obj["color"] = use_color
-    
+
     # Set global color state for error_formatter
     from yuho.cli import error_formatter
+
     error_formatter.COLOR_ENABLED = ctx.obj["color"]
 
     # Wire YUHO_LOG_LEVEL env var
     log_level = os.environ.get("YUHO_LOG_LEVEL", "WARNING").upper()
-    logging.basicConfig(level=getattr(logging, log_level, logging.WARNING), format="%(name)s %(levelname)s %(message)s")
+    logging.basicConfig(
+        level=getattr(logging, log_level, logging.WARNING),
+        format="%(name)s %(levelname)s %(message)s",
+    )
 
 
 # =============================================================================
@@ -176,10 +176,25 @@ def verify(
 @cli.command()
 @click.argument("file", type=str)
 @click.option("--json", "json_output", is_flag=True, help="Output errors as JSON")
-@click.option("--explain-error", "explain_errors", is_flag=True,
-              help="Show detailed explanations for errors with common causes and fixes")
+@click.option(
+    "--explain-error",
+    "explain_errors",
+    is_flag=True,
+    help="Show detailed explanations for errors with common causes and fixes",
+)
 @click.option("--metrics", is_flag=True, help="Include code_scale and clock_load_scale metrics")
-@click.option("--format", "output_format", type=click.Choice(["text", "json", "sarif"]), default="text", help="Output format")
+@click.option(
+    "--format",
+    "output_format",
+    type=click.Choice(["text", "json", "sarif"]),
+    default="text",
+    help="Output format",
+)
+@click.option(
+    "--syntax-only",
+    is_flag=True,
+    help="Skip semantic analysis and report only parse/AST validity",
+)
 @click.pass_context
 def check(
     ctx: click.Context,
@@ -188,6 +203,7 @@ def check(
     explain_errors: bool,
     metrics: bool,
     output_format: str,
+    syntax_only: bool,
 ) -> None:
     """
     Parse and validate a Yuho source file.
@@ -195,6 +211,7 @@ def check(
     Runs syntax checking and semantic analysis, reporting any errors found.
     """
     from yuho.cli.commands.check import run_check
+
     run_check(
         file,
         json_output=json_output,
@@ -202,6 +219,7 @@ def check(
         explain_errors=explain_errors,
         metrics=metrics,
         output_format=output_format,
+        syntax_only=syntax_only,
     )
 
 
@@ -213,7 +231,9 @@ def check(
 @cli.command()
 @click.argument("file", type=click.Path(exists=True))
 @click.option("-o", "--output", type=click.Path(), help="Output file path")
-@click.option("--tree", "show_tree", is_flag=True, default=True, help="Show tree visualization (default)")
+@click.option(
+    "--tree", "show_tree", is_flag=True, default=True, help="Show tree visualization (default)"
+)
 @click.option("--stats", is_flag=True, help="Show AST statistics")
 @click.option("--depth", type=int, default=0, help="Max depth (0 = unlimited)")
 @click.option("--ascii", "no_unicode", is_flag=True, help="Use ASCII-only characters")
@@ -239,6 +259,7 @@ def ast(
         yuho ast statute.yh --ascii -o tree.txt
     """
     from yuho.cli.commands.ast_viz import run_ast_viz
+
     run_ast_viz(
         file=file,
         output=output,
@@ -258,10 +279,30 @@ def ast(
 @cli.command()
 @click.argument("file", type=str)
 @click.option(
-    "-t", "--target",
-    type=click.Choice(["json", "jsonld", "english", "latex", "pdf", "mermaid", "svg", "png", "alloy", "graphql", "blocks", "bibtex", "comparative", "akomantoso", "prolog"], case_sensitive=False),
+    "-t",
+    "--target",
+    type=click.Choice(
+        [
+            "json",
+            "jsonld",
+            "english",
+            "latex",
+            "pdf",
+            "mermaid",
+            "svg",
+            "png",
+            "alloy",
+            "graphql",
+            "blocks",
+            "bibtex",
+            "comparative",
+            "akomantoso",
+            "prolog",
+        ],
+        case_sensitive=False,
+    ),
     default="json",
-    help="Transpilation target format"
+    help="Transpilation target format",
 )
 @click.option("-o", "--output", type=click.Path(), help="Output file path")
 @click.option("--dir", "output_dir", type=click.Path(), help="Output directory for multiple files")
@@ -275,7 +316,7 @@ def transpile(
     output: Optional[str],
     output_dir: Optional[str],
     all_targets: bool,
-    json_output: bool
+    json_output: bool,
 ) -> None:
     """
     Transpile a Yuho source file to another format.
@@ -283,6 +324,7 @@ def transpile(
     Supported targets: json, jsonld, english, latex, mermaid, alloy, graphql, blocks
     """
     from yuho.cli.commands.transpile import run_transpile
+
     run_transpile(
         file,
         target=target,
@@ -290,7 +332,7 @@ def transpile(
         output_dir=output_dir,
         all_targets=all_targets,
         json_output=json_output,
-        verbose=ctx.obj["verbose"]
+        verbose=ctx.obj["verbose"],
     )
 
 
@@ -314,6 +356,7 @@ def repl(ctx: click.Context) -> None:
     Type 'help' within the REPL for available commands.
     """
     from yuho.cli.commands.repl import run_repl
+
     sys.exit(run_repl(color=ctx.obj["color"], verbose=ctx.obj["verbose"]))
 
 
@@ -326,15 +369,23 @@ def repl(ctx: click.Context) -> None:
 @click.argument("file", type=click.Path(exists=True))
 @click.option("-s", "--section", help="Explain specific section only")
 @click.option("-i", "--interactive", is_flag=True, help="Interactive REPL mode")
-@click.option("--provider", type=click.Choice(
-              ["ollama", "huggingface", "openai", "anthropic", "gemini", "plex", "keymeet"]),
-              help="LLM provider to use")
+@click.option(
+    "--provider",
+    type=click.Choice(
+        ["ollama", "huggingface", "openai", "anthropic", "gemini", "plex", "keymeet"]
+    ),
+    help="LLM provider to use",
+)
 @click.option("--model", help="Model name to use")
 @click.option("--api-key", "api_key", help="API key for the selected cloud provider")
 @click.option("--offline", is_flag=True, help="Disallow cloud providers and run local-only")
 @click.option("--no-llm", is_flag=True, help="Skip LLM, use built-in English transpilation only")
-@click.option("--stream/--no-stream", "stream", default=True,
-              help="Enable/disable streaming output for real-time response")
+@click.option(
+    "--stream/--no-stream",
+    "stream",
+    default=True,
+    help="Enable/disable streaming output for real-time response",
+)
 @click.pass_context
 def explain(
     ctx: click.Context,
@@ -355,6 +406,7 @@ def explain(
     Use --no-llm for built-in English transpilation without any LLM setup.
     """
     from yuho.cli.commands.explain import run_explain
+
     run_explain(
         file,
         section=section,
@@ -397,6 +449,7 @@ def diff(ctx: click.Context, file1: str, file2: str, json_output: bool, score: b
     """
     if score:
         from yuho.cli.commands.diff import run_diff_score
+
         run_diff_score(
             file1,
             file2,
@@ -406,6 +459,7 @@ def diff(ctx: click.Context, file1: str, file2: str, json_output: bool, score: b
         )
     else:
         from yuho.cli.commands.diff import run_diff
+
         run_diff(
             file1,
             file2,
@@ -423,10 +477,11 @@ def diff(ctx: click.Context, file1: str, file2: str, json_output: bool, score: b
 @cli.command()
 @click.argument("file", type=click.Path(exists=True))
 @click.option(
-    "-f", "--format",
+    "-f",
+    "--format",
     type=click.Choice(["dot", "mermaid"], case_sensitive=False),
     default="mermaid",
-    help="Output format"
+    help="Output format",
 )
 @click.option("-o", "--output", type=click.Path(), help="Output file path")
 @click.pass_context
@@ -445,6 +500,7 @@ def graph(ctx: click.Context, file: str, format: str, output: Optional[str]) -> 
         yuho graph statute.yh --format mermaid > deps.md
     """
     from yuho.cli.commands.graph import run_graph
+
     run_graph(
         file,
         format=format,
@@ -465,7 +521,13 @@ def graph(ctx: click.Context, file: str, format: str, output: Optional[str]) -> 
 @click.option("--exclude", "-e", "exclude_rules", multiple=True, help="Rules to exclude")
 @click.option("--json", "json_output", is_flag=True, help="Output as JSON")
 @click.option("--fix", is_flag=True, help="Auto-fix issues where possible")
-@click.option("--format", "output_format", type=click.Choice(["text", "json", "sarif"]), default="text", help="Output format")
+@click.option(
+    "--format",
+    "output_format",
+    type=click.Choice(["text", "json", "sarif"]),
+    default="text",
+    help="Output format",
+)
 @click.pass_context
 def lint(
     ctx: click.Context,
@@ -492,6 +554,7 @@ def lint(
         yuho lint src/ --format sarif
     """
     from yuho.cli.commands.lint import run_lint
+
     run_lint(
         list(files),
         rules=list(rules) if rules else None,
@@ -510,7 +573,9 @@ def lint(
 
 
 @cli.command()
-@click.option("-p", "--port", type=int, default=None, help="Port to listen on (defaults to config mcp.port)")
+@click.option(
+    "-p", "--port", type=int, default=None, help="Port to listen on (defaults to config mcp.port)"
+)
 @click.option("--host", default=None, help="Host to bind to (defaults to config mcp.host)")
 @click.pass_context
 def api(ctx: click.Context, port: Optional[int], host: Optional[str]) -> None:
@@ -527,6 +592,7 @@ def api(ctx: click.Context, port: Optional[int], host: Optional[str]) -> None:
         yuho api --port 3000 --host 0.0.0.0
     """
     from yuho.cli.commands.api import run_api
+
     run_api(
         host=host,
         port=port,
@@ -548,7 +614,7 @@ def api(ctx: click.Context, port: Optional[int], host: Optional[str]) -> None:
     "--template",
     type=click.Choice(["standard", "minimal", "full"], case_sensitive=False),
     default="standard",
-    help="Scaffold template type"
+    help="Scaffold template type",
 )
 @click.option("--no-definitions", is_flag=True, help="Skip definitions block")
 @click.option("--no-penalty", is_flag=True, help="Skip penalty block")
@@ -578,6 +644,7 @@ def generate(
         yuho generate 420 -t "Cheating" -o cheating.yh
     """
     from yuho.cli.commands.generate import run_generate
+
     run_generate(
         section=section,
         title=title,
@@ -620,6 +687,7 @@ def wizard(
         yuho wizard --section 299 --title "Culpable Homicide"
     """
     from yuho.cli.commands.wizard import run_wizard
+
     run_wizard(
         output=output,
         section=section,
@@ -635,7 +703,9 @@ def wizard(
 
 
 @cli.command()
-@click.option("-p", "--port", type=int, default=None, help="Port to listen on (defaults to config mcp.port)")
+@click.option(
+    "-p", "--port", type=int, default=None, help="Port to listen on (defaults to config mcp.port)"
+)
 @click.option("--host", default=None, help="Host to bind to (defaults to config mcp.host)")
 @click.option("--stdio", is_flag=True, help="Use stdio transport (for editor integration)")
 @click.pass_context
@@ -646,6 +716,7 @@ def serve(ctx: click.Context, port: Optional[int], host: Optional[str], stdio: b
     Exposes Yuho functionality to AI assistants and editors.
     """
     from yuho.cli.commands.serve import run_serve
+
     run_serve(port=port, host=host, stdio=stdio, verbose=ctx.obj["verbose"])
 
 
@@ -666,6 +737,7 @@ def contribute(ctx: click.Context, file: str, package: bool, output: Optional[st
     Checks that the file parses correctly and has associated tests.
     """
     from yuho.cli.commands.contribute import run_contribute
+
     run_contribute(file, package=package, output=output, verbose=ctx.obj["verbose"])
 
 
@@ -685,6 +757,7 @@ def init(ctx: click.Context, name: Optional[str], directory: Optional[str]) -> N
     Creates a directory structure with template files.
     """
     from yuho.cli.commands.init import run_init
+
     run_init(name=name, directory=directory, verbose=ctx.obj["verbose"])
 
 
@@ -705,6 +778,7 @@ def fmt(ctx: click.Context, file: str, in_place: bool, check: bool) -> None:
     Applies canonical formatting to the file.
     """
     from yuho.cli.commands.fmt import run_fmt
+
     run_fmt(file, in_place=in_place, check=check, verbose=ctx.obj["verbose"])
 
 
@@ -719,7 +793,13 @@ def fmt(ctx: click.Context, file: str, in_place: bool, check: bool) -> None:
 @click.option("--json", "json_output", is_flag=True, help="Output results as JSON")
 @click.option("--coverage", is_flag=True, help="Enable coverage tracking")
 @click.option("--coverage-html", type=click.Path(), help="Generate HTML coverage report")
-@click.option("--format", "output_format", type=click.Choice(["text", "json", "junit"]), default="text", help="Output format")
+@click.option(
+    "--format",
+    "output_format",
+    type=click.Choice(["text", "json", "junit"]),
+    default="text",
+    help="Output format",
+)
 @click.pass_context
 def test(
     ctx: click.Context,
@@ -741,6 +821,7 @@ def test(
         yuho test --all --format junit
     """
     from yuho.cli.commands.test import run_test
+
     run_test(
         file,
         run_all=run_all,
@@ -750,85 +831,6 @@ def test(
         coverage_html=coverage_html,
         output_format=output_format,
     )
-
-
-# =============================================================================
-# Eval command
-# =============================================================================
-
-
-@cli.command()
-@click.argument("file", type=click.Path(exists=True))
-@click.option("--json", "json_output", is_flag=True, help="Output results as JSON")
-@click.pass_context
-def eval(
-    ctx: click.Context,
-    file: str,
-    json_output: bool,
-) -> None:
-    """
-    Evaluate a Yuho file through the interpreter.
-
-    Parses the file, builds the AST, and executes it through the
-    tree-walking interpreter. Functions, variables, and assertions
-    are all evaluated.
-
-    Examples:
-        yuho eval statute.yh
-        yuho eval test_statute.yh --json
-    """
-    import json as json_mod
-    from yuho.parser import get_parser
-    from yuho.ast import ASTBuilder
-    from yuho.eval.interpreter import Interpreter, AssertionError_, InterpreterError
-
-    parser = get_parser()
-    try:
-        result = parser.parse_file(file)
-    except Exception as e:
-        click.echo(f"Parse error: {e}", err=True)
-        sys.exit(1)
-
-    if result.errors:
-        for err in result.errors:
-            click.echo(f"  {err.location}: {err.message}", err=True)
-        sys.exit(1)
-
-    builder = ASTBuilder(result.source, file)
-    ast = builder.build(result.root_node)
-
-    interp = Interpreter()
-    try:
-        env = interp.interpret(ast)
-    except AssertionError_ as e:
-        click.echo(f"ASSERTION FAILED: {e}", err=True)
-        sys.exit(1)
-    except InterpreterError as e:
-        click.echo(f"Runtime error: {e}", err=True)
-        sys.exit(1)
-
-    if json_output:
-        output = {
-            "file": file,
-            "statutes": len(env.statutes),
-            "functions": len(env.function_defs),
-            "structs": len(env.struct_defs),
-            "variables": {k: repr(v.raw) for k, v in env.bindings.items()},
-        }
-        click.echo(json_mod.dumps(output, indent=2))
-    else:
-        click.echo(f"Evaluated {file}:")
-        if env.statutes:
-            click.echo(f"  Statutes: {len(env.statutes)}")
-        if env.function_defs:
-            click.echo(f"  Functions: {len(env.function_defs)}")
-        if env.struct_defs:
-            click.echo(f"  Structs: {len(env.struct_defs)}")
-        if env.bindings:
-            click.echo(f"  Variables: {len(env.bindings)}")
-            if ctx.obj["verbose"]:
-                for k, v in env.bindings.items():
-                    click.echo(f"    {k} = {v.raw!r}")
 
 
 # =============================================================================
@@ -846,6 +848,7 @@ def lsp(ctx: click.Context, tcp: Optional[int]) -> None:
     For editor integration (VS Code, Neovim, etc.).
     """
     from yuho.cli.commands.lsp import run_lsp
+
     run_lsp(tcp=tcp, verbose=ctx.obj["verbose"])
 
 
@@ -859,11 +862,7 @@ def lsp(ctx: click.Context, tcp: Optional[int]) -> None:
     "shell",
     type=click.Choice(["bash", "zsh", "fish"], case_sensitive=False),
 )
-@click.option(
-    "--install", "show_install",
-    is_flag=True,
-    help="Show installation instructions"
-)
+@click.option("--install", "show_install", is_flag=True, help="Show installation instructions")
 @click.pass_context
 def completion(ctx: click.Context, shell: str, show_install: bool) -> None:
     """
@@ -887,11 +886,12 @@ def completion(ctx: click.Context, shell: str, show_install: bool) -> None:
     from yuho.cli.completions import get_completion_script, get_install_instructions
 
     shell_lower = shell.lower()
+    shell_name = cast(Literal["bash", "zsh", "fish"], shell_lower)
 
     if show_install:
-        click.echo(get_install_instructions(shell_lower))
+        click.echo(get_install_instructions(shell_name))
     else:
-        click.echo(get_completion_script(shell_lower))
+        click.echo(get_completion_script(shell_name))
 
 
 register_group_commands(cli)
@@ -911,6 +911,7 @@ def schema(output: Optional[str]) -> None:
         yuho schema -o yuho-ast.schema.json
     """
     from yuho.transpile.json_schema import generate_json_schema
+
     text = generate_json_schema()
     if output:
         Path(output).write_text(text, encoding="utf-8")
@@ -920,11 +921,19 @@ def schema(output: Optional[str]) -> None:
 
 
 @cli.command("export-training")
-@click.option("-o", "--output", default="training_pairs.jsonl", type=click.Path(), help="Output JSONL file")
-@click.option("-d", "--directory", type=click.Path(exists=True), help="Statute directory (default: library/)")
-@click.option("--mermaid", "include_mermaid", is_flag=True, help="Include Mermaid diagrams in output")
+@click.option(
+    "-o", "--output", default="training_pairs.jsonl", type=click.Path(), help="Output JSONL file"
+)
+@click.option(
+    "-d", "--directory", type=click.Path(exists=True), help="Statute directory (default: library/)"
+)
+@click.option(
+    "--mermaid", "include_mermaid", is_flag=True, help="Include Mermaid diagrams in output"
+)
 @click.pass_context
-def export_training(ctx: click.Context, output: str, directory: Optional[str], include_mermaid: bool) -> None:
+def export_training(
+    ctx: click.Context, output: str, directory: Optional[str], include_mermaid: bool
+) -> None:
     """
     Export statute/English pairs as JSONL for LLM fine-tuning.
 
@@ -937,6 +946,7 @@ def export_training(ctx: click.Context, output: str, directory: Optional[str], i
         yuho export-training -d ./my-statutes
     """
     from yuho.cli.commands.export_training import run_export_training
+
     run_export_training(
         output=output,
         directory=directory,
@@ -950,7 +960,9 @@ def export_training(ctx: click.Context, output: str, directory: Optional[str], i
 @click.option("-o", "--output", type=click.Path(), help="Output file path")
 @click.option("--json", "json_output", is_flag=True, help="Output as JSON")
 @click.pass_context
-def compliance_matrix(ctx: click.Context, file: str, output: Optional[str], json_output: bool) -> None:
+def compliance_matrix(
+    ctx: click.Context, file: str, output: Optional[str], json_output: bool
+) -> None:
     """
     Generate a compliance checklist from statute elements.
 
@@ -963,6 +975,7 @@ def compliance_matrix(ctx: click.Context, file: str, output: Optional[str], json
         yuho compliance-matrix statute.yh --json
     """
     from yuho.cli.commands.compliance import run_compliance_matrix
+
     run_compliance_matrix(
         file=file,
         output=output,
@@ -972,8 +985,12 @@ def compliance_matrix(ctx: click.Context, file: str, output: Optional[str], json
 
 
 @cli.command("explain-all")
-@click.option("-d", "--directory", default="library", type=click.Path(exists=True), help="Source directory")
-@click.option("-o", "--output-dir", default="doc/explanations", type=click.Path(), help="Output directory")
+@click.option(
+    "-d", "--directory", default="library", type=click.Path(exists=True), help="Source directory"
+)
+@click.option(
+    "-o", "--output-dir", default="doc/explanations", type=click.Path(), help="Output directory"
+)
 @click.pass_context
 def explain_all(ctx: click.Context, directory: str, output_dir: str) -> None:
     """
@@ -986,6 +1003,7 @@ def explain_all(ctx: click.Context, directory: str, output_dir: str) -> None:
         yuho explain-all -o ./explanations
     """
     from yuho.cli.commands.explain_all import run_explain_all
+
     run_explain_all(
         directory=directory,
         output_dir=output_dir,
@@ -994,8 +1012,16 @@ def explain_all(ctx: click.Context, directory: str, output_dir: str) -> None:
 
 
 @cli.command("static-site")
-@click.option("-d", "--directory", default="library", type=click.Path(exists=True), help="Source statute directory")
-@click.option("-o", "--output-dir", default="site", type=click.Path(), help="Output directory for HTML files")
+@click.option(
+    "-d",
+    "--directory",
+    default="library",
+    type=click.Path(exists=True),
+    help="Source statute directory",
+)
+@click.option(
+    "-o", "--output-dir", default="site", type=click.Path(), help="Output directory for HTML files"
+)
 @click.pass_context
 def static_site(ctx: click.Context, directory: str, output_dir: str) -> None:
     """
@@ -1009,6 +1035,7 @@ def static_site(ctx: click.Context, directory: str, output_dir: str) -> None:
         yuho static-site -d ./my-library -o ./docs
     """
     from yuho.cli.commands.static_site import run_static_site
+
     run_static_site(directory=directory, output_dir=output_dir, verbose=ctx.obj["verbose"])
 
 
@@ -1028,16 +1055,26 @@ def playground(ctx: click.Context, port: int, host: str) -> None:
         yuho playground --port 3000
     """
     from yuho.cli.commands.playground import run_playground
+
     run_playground(port=port, host=host, verbose=ctx.obj["verbose"])
 
 
 @cli.command("generate-tests")
 @click.argument("file", type=click.Path(exists=True))
 @click.option("-o", "--output", type=click.Path(), help="Output file path")
-@click.option("-n", "--max-cases", type=int, default=10, show_default=True, help="Maximum test cases to generate")
+@click.option(
+    "-n",
+    "--max-cases",
+    type=int,
+    default=10,
+    show_default=True,
+    help="Maximum test cases to generate",
+)
 @click.option("--json", "json_output", is_flag=True, help="Output as JSON")
 @click.pass_context
-def generate_tests(ctx: click.Context, file: str, output: Optional[str], max_cases: int, json_output: bool) -> None:
+def generate_tests(
+    ctx: click.Context, file: str, output: Optional[str], max_cases: int, json_output: bool
+) -> None:
     """
     Generate test cases using Z3 constraint solving.
 
@@ -1049,6 +1086,7 @@ def generate_tests(ctx: click.Context, file: str, output: Optional[str], max_cas
         yuho generate-tests statute.yh -n 20 --json -o tests.json
     """
     from yuho.cli.commands.generate_tests import run_generate_tests
+
     run_generate_tests(
         file=file,
         output=output,
@@ -1076,6 +1114,7 @@ def verify_report(ctx: click.Context, file: str, output: Optional[str]) -> None:
     """
     from yuho.services.analysis import analyze_file
     from yuho.transpile.verification_report import generate_verification_report
+
     result = analyze_file(file)
     if not result.is_valid or result.ast is None:
         for err in result.errors:
@@ -1095,7 +1134,12 @@ def verify_report(ctx: click.Context, file: str, output: Optional[str]) -> None:
 @click.pass_context
 def workspace_cmd(ctx: click.Context, action: str, name_or_id: Optional[str]) -> None:
     """Manage workspaces (create/list/switch)."""
-    from yuho.cli.commands.workspace import run_workspace_create, run_workspace_list, run_workspace_switch
+    from yuho.cli.commands.workspace import (
+        run_workspace_create,
+        run_workspace_list,
+        run_workspace_switch,
+    )
+
     if action == "create":
         if not name_or_id:
             click.echo("Name required for 'create'", err=True)
@@ -1117,6 +1161,7 @@ def workspace_cmd(ctx: click.Context, action: str, name_or_id: Optional[str]) ->
 def watch(ctx: click.Context, directory: str, interval: float) -> None:
     """Watch .yh files for changes and re-validate."""
     from yuho.cli.commands.watch import run_watch
+
     run_watch(directory=directory, interval=interval, verbose=ctx.obj["verbose"])
 
 
@@ -1126,9 +1171,12 @@ def watch(ctx: click.Context, directory: str, interval: float) -> None:
 @click.option("--events", "-e", multiple=True, help="Event types to subscribe")
 @click.option("--secret", help="Webhook secret")
 @click.pass_context
-def webhook(ctx: click.Context, action: str, target: Optional[str], events: tuple, secret: Optional[str]) -> None:
+def webhook(
+    ctx: click.Context, action: str, target: Optional[str], events: tuple, secret: Optional[str]
+) -> None:
     """Manage webhooks (add/list/test)."""
     from yuho.cli.commands.webhook import run_webhook_add, run_webhook_list, run_webhook_test
+
     if action == "add":
         if not target:
             click.echo("URL required for 'add'", err=True)
@@ -1146,11 +1194,18 @@ def webhook(ctx: click.Context, action: str, target: Optional[str], events: tupl
 @cli.command("ci-report")
 @click.argument("directory", default=".", type=click.Path(exists=True))
 @click.option("-o", "--output", type=click.Path(), help="Output file path")
-@click.option("--format", "fmt", type=click.Choice(["json", "sarif", "junit"]), default="json", help="Output format")
+@click.option(
+    "--format",
+    "fmt",
+    type=click.Choice(["json", "sarif", "junit"]),
+    default="json",
+    help="Output format",
+)
 @click.pass_context
 def ci_report(ctx: click.Context, directory: str, output: Optional[str], fmt: str) -> None:
     """Run check+lint on all .yh files and produce a unified report."""
     from yuho.cli.commands.ci_report import run_ci_report
+
     sys.exit(run_ci_report(directory=directory, output=output, format=fmt))
 
 
@@ -1170,6 +1225,7 @@ def deps(ctx: click.Context, file: str, json_output: bool) -> None:
     """
     import json as json_mod
     from yuho.services.analysis import analyze_file
+
     result = analyze_file(file)
     if not result.is_valid or result.ast is None:
         for err in result.errors:
@@ -1178,12 +1234,15 @@ def deps(ctx: click.Context, file: str, json_output: bool) -> None:
     ast = result.ast
     imports = [imp.path for imp in ast.imports]
     refs = [ref.path for ref in ast.references]
-    subsumes = []
-    for s in ast.statutes:
-        if getattr(s, 'subsumes', None):
-            subsumes.append({"from": s.section_number, "subsumes": s.subsumes})
+    subsumes: List[Dict[str, str]] = []
+    for statute in ast.statutes:
+        subsumed_section = getattr(statute, "subsumes", None)
+        if isinstance(subsumed_section, str):
+            subsumes.append({"from": statute.section_number, "subsumes": subsumed_section})
     if json_output:
-        print(json_mod.dumps({"imports": imports, "references": refs, "subsumes": subsumes}, indent=2))
+        print(
+            json_mod.dumps({"imports": imports, "references": refs, "subsumes": subsumes}, indent=2)
+        )
     else:
         click.echo(f"Dependencies for {file}:")
         if imports:
@@ -1191,8 +1250,8 @@ def deps(ctx: click.Context, file: str, json_output: bool) -> None:
         if refs:
             click.echo(f"  References: {', '.join(refs)}")
         if subsumes:
-            for s in subsumes:
-                click.echo(f"  s{s['from']} subsumes s{s['subsumes']}")
+            for relation in subsumes:
+                click.echo(f"  s{relation['from']} subsumes s{relation['subsumes']}")
         if not imports and not refs and not subsumes:
             click.echo("  No dependencies")
 
@@ -1215,6 +1274,7 @@ def eval(ctx: click.Context, file: str, json_output: bool) -> None:
     import json as json_mod
     from yuho.services.analysis import analyze_file
     from yuho.eval.interpreter import Interpreter
+
     result = analyze_file(file)
     if not result.is_valid or result.ast is None:
         for err in result.errors:
@@ -1226,8 +1286,10 @@ def eval(ctx: click.Context, file: str, json_output: bool) -> None:
         data = {
             "statutes": list(env.statutes.keys()),
             "struct_defs": list(env.struct_defs.keys()),
-            "function_defs": [k for k in env.function_defs.keys()] if hasattr(env, 'function_defs') else [],
-            "enum_defs": list(env.enum_defs.keys()) if hasattr(env, 'enum_defs') else [],
+            "function_defs": (
+                [k for k in env.function_defs.keys()] if hasattr(env, "function_defs") else []
+            ),
+            "enum_defs": list(env.enum_defs.keys()) if hasattr(env, "enum_defs") else [],
             "bindings": {k: str(v) for k, v in env.bindings.items()},
         }
         print(json_mod.dumps(data, indent=2))
@@ -1235,7 +1297,7 @@ def eval(ctx: click.Context, file: str, json_output: bool) -> None:
         click.echo(f"Evaluated {file}")
         click.echo(f"  Statutes: {', '.join(env.statutes.keys()) or 'none'}")
         click.echo(f"  Structs: {', '.join(env.struct_defs.keys()) or 'none'}")
-        if hasattr(env, 'enum_defs') and env.enum_defs:
+        if hasattr(env, "enum_defs") and env.enum_defs:
             click.echo(f"  Enums: {', '.join(env.enum_defs.keys())}")
         if env.bindings:
             click.echo(f"  Bindings: {len(env.bindings)}")
@@ -1253,14 +1315,19 @@ def main() -> None:
         sys.exit(1)
     except ImportError as e:
         click.echo(f"error: missing dependency: {e}", err=True)
-        click.echo("hint: run 'pip install yuho[all]' to install all optional dependencies", err=True)
+        click.echo(
+            "hint: run 'pip install yuho[all]' to install all optional dependencies", err=True
+        )
         sys.exit(1)
     except (ValueError, FileNotFoundError, PermissionError, UnicodeDecodeError) as e:
         click.echo(f"error: {e}", err=True)
         sys.exit(1)
     except Exception as e:
         click.echo(f"error: unexpected failure: {type(e).__name__}: {e}", err=True)
-        click.echo("hint: run with -v for verbose output, or report at github.com/gongahkia/yuho/issues", err=True)
+        click.echo(
+            "hint: run with -v for verbose output, or report at github.com/gongahkia/yuho/issues",
+            err=True,
+        )
         sys.exit(1)
 
 

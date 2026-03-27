@@ -1,11 +1,20 @@
 """E2E tests: defeasible reasoning."""
+
 import pytest
 from yuho.ast import nodes
 from yuho.ast.nodes import (
-    StatuteNode, StringLit, ElementNode, ElementGroupNode,
-    PenaltyNode, ExceptionNode, DurationNode, MoneyNode,
-    BinaryExprNode, IdentifierNode,
+    StatuteNode,
+    StringLit,
+    ElementNode,
+    ElementGroupNode,
+    PenaltyNode,
+    ExceptionNode,
+    DurationNode,
+    MoneyNode,
+    BinaryExprNode,
+    IdentifierNode,
 )
+
 
 def make_simple_statute(with_exception=False, guard_expr=None):
     """Create a simple statute for testing."""
@@ -13,8 +22,14 @@ def make_simple_statute(with_exception=False, guard_expr=None):
         ElementGroupNode(
             combinator="all_of",
             members=(
-                ElementNode(element_type="actus_reus", name="act", description=StringLit(value="The act")),
-                ElementNode(element_type="mens_rea", name="intent", description=StringLit(value="The intent")),
+                ElementNode(
+                    element_type="actus_reus", name="act", description=StringLit(value="The act")
+                ),
+                ElementNode(
+                    element_type="mens_rea",
+                    name="intent",
+                    description=StringLit(value="The intent"),
+                ),
             ),
         ),
     )
@@ -38,10 +53,12 @@ def make_simple_statute(with_exception=False, guard_expr=None):
         exceptions=exceptions,
     )
 
+
 class TestDefeasibleReasoning:
     def test_base_satisfied(self):
         """All elements satisfied -> base_satisfied=True."""
         from yuho.eval.defeasible import DefeasibleReasoner
+
         reasoner = DefeasibleReasoner()
         statute = make_simple_statute()
         facts = {"act": True, "intent": True}
@@ -52,6 +69,7 @@ class TestDefeasibleReasoning:
     def test_base_not_satisfied(self):
         """Missing element -> base_satisfied=False."""
         from yuho.eval.defeasible import DefeasibleReasoner
+
         reasoner = DefeasibleReasoner()
         statute = make_simple_statute()
         facts = {"act": True, "intent": False}
@@ -62,6 +80,7 @@ class TestDefeasibleReasoning:
     def test_exception_defeats_conviction(self):
         """Exception with matching label defeats conviction."""
         from yuho.eval.defeasible import DefeasibleReasoner
+
         reasoner = DefeasibleReasoner()
         statute = make_simple_statute(with_exception=True)
         facts = {"act": True, "intent": True, "exception": "selfDefence"}
@@ -73,6 +92,7 @@ class TestDefeasibleReasoning:
     def test_exception_not_triggered(self):
         """Exception label doesn't match -> conviction stands."""
         from yuho.eval.defeasible import DefeasibleReasoner
+
         reasoner = DefeasibleReasoner()
         statute = make_simple_statute(with_exception=True)
         facts = {"act": True, "intent": True, "exception": "other"}
@@ -84,6 +104,7 @@ class TestDefeasibleReasoning:
     def test_reasoning_chain_populated(self):
         """Reasoning chain should have entries for all steps."""
         from yuho.eval.defeasible import DefeasibleReasoner
+
         reasoner = DefeasibleReasoner()
         statute = make_simple_statute(with_exception=True)
         facts = {"act": True, "intent": True, "exception": "selfDefence"}
@@ -93,13 +114,16 @@ class TestDefeasibleReasoning:
     def test_multiple_exceptions(self):
         """Multiple exceptions - first matching one applies."""
         from yuho.eval.defeasible import DefeasibleReasoner
+
         reasoner = DefeasibleReasoner()
         statute = StatuteNode(
             section_number="999",
             title=StringLit(value="Test"),
             definitions=(),
             elements=(
-                ElementNode(element_type="actus_reus", name="act", description=StringLit(value="act")),
+                ElementNode(
+                    element_type="actus_reus", name="act", description=StringLit(value="act")
+                ),
             ),
             penalty=None,
             illustrations=(),
@@ -118,6 +142,7 @@ class TestDefeasibleReasoning:
     def test_no_exceptions_defined(self):
         """Statute with no exceptions -> convicted when base satisfied."""
         from yuho.eval.defeasible import DefeasibleReasoner
+
         reasoner = DefeasibleReasoner()
         statute = make_simple_statute(with_exception=False)
         facts = {"act": True, "intent": True}
@@ -130,9 +155,10 @@ class TestDefeasibleReasoning:
     def test_no_exceptions_base_not_satisfied(self):
         """Statute with no exceptions and missing element -> not_satisfied."""
         from yuho.eval.defeasible import DefeasibleReasoner
+
         reasoner = DefeasibleReasoner()
         statute = make_simple_statute(with_exception=False)
-        facts = {"act": True} # missing intent
+        facts = {"act": True}  # missing intent
         result = reasoner.evaluate_with_exceptions(statute, facts)
         assert result.base_satisfied is False
         assert result.final_verdict == "not_satisfied"
@@ -141,13 +167,16 @@ class TestDefeasibleReasoning:
     def test_all_exceptions_matching(self):
         """When all exceptions match, result should be exception_applied."""
         from yuho.eval.defeasible import DefeasibleReasoner
+
         reasoner = DefeasibleReasoner()
         statute = StatuteNode(
             section_number="777",
             title=StringLit(value="Multi Exception"),
             definitions=(),
             elements=(
-                ElementNode(element_type="actus_reus", name="act", description=StringLit(value="act")),
+                ElementNode(
+                    element_type="actus_reus", name="act", description=StringLit(value="act")
+                ),
             ),
             penalty=None,
             illustrations=(),
@@ -170,6 +199,7 @@ class TestDefeasibleReasoning:
     def test_empty_facts_all_unsatisfied(self):
         """Empty facts dict -> all elements unsatisfied."""
         from yuho.eval.defeasible import DefeasibleReasoner
+
         reasoner = DefeasibleReasoner()
         statute = make_simple_statute()
         facts = {}
@@ -180,6 +210,7 @@ class TestDefeasibleReasoning:
     def test_reasoning_chain_has_final_verdict_step(self):
         """Reasoning chain should always end with a final verdict step."""
         from yuho.eval.defeasible import DefeasibleReasoner
+
         reasoner = DefeasibleReasoner()
         statute = make_simple_statute()
         facts = {"act": True, "intent": True}
@@ -191,22 +222,24 @@ class TestDefeasibleReasoning:
     def test_reasoning_chain_records_element_checks(self):
         """Reasoning chain should include individual element check steps."""
         from yuho.eval.defeasible import DefeasibleReasoner
+
         reasoner = DefeasibleReasoner()
         statute = make_simple_statute()
         facts = {"act": True, "intent": True}
         result = reasoner.evaluate_with_exceptions(statute, facts)
         descriptions = [s.description.lower() for s in result.reasoning_chain]
         # should mention act and intent elements
-        assert any("act" in d for d in descriptions), (
-            "Reasoning chain should reference element 'act'"
-        )
-        assert any("intent" in d for d in descriptions), (
-            "Reasoning chain should reference element 'intent'"
-        )
+        assert any(
+            "act" in d for d in descriptions
+        ), "Reasoning chain should reference element 'act'"
+        assert any(
+            "intent" in d for d in descriptions
+        ), "Reasoning chain should reference element 'intent'"
 
     def test_reasoning_chain_records_exception_checks(self):
         """Reasoning chain should include exception check steps when exceptions exist."""
         from yuho.eval.defeasible import DefeasibleReasoner
+
         reasoner = DefeasibleReasoner()
         statute = make_simple_statute(with_exception=True)
         facts = {"act": True, "intent": True, "exception": "selfDefence"}
@@ -218,6 +251,7 @@ class TestDefeasibleReasoning:
     def test_defeated_property(self):
         """The defeated property should be True iff any exception has guard_satisfied."""
         from yuho.eval.defeasible import DefeasibleReasoner, DefeasibleResult, ExceptionApplication
+
         # manually construct result to test the property
         result_defeated = DefeasibleResult(
             statute_section="1",
@@ -246,6 +280,7 @@ class TestDefeasibleReasoning:
     def test_any_of_element_group(self):
         """any_of element group: only one element needed for base satisfaction."""
         from yuho.eval.defeasible import DefeasibleReasoner
+
         reasoner = DefeasibleReasoner()
         statute = StatuteNode(
             section_number="888",
@@ -255,8 +290,12 @@ class TestDefeasibleReasoning:
                 ElementGroupNode(
                     combinator="any_of",
                     members=(
-                        ElementNode(element_type="actus_reus", name="a", description=StringLit(value="A")),
-                        ElementNode(element_type="actus_reus", name="b", description=StringLit(value="B")),
+                        ElementNode(
+                            element_type="actus_reus", name="a", description=StringLit(value="A")
+                        ),
+                        ElementNode(
+                            element_type="actus_reus", name="b", description=StringLit(value="B")
+                        ),
                     ),
                 ),
             ),
@@ -278,6 +317,7 @@ class TestDefeasibleReasoning:
     def test_nested_element_groups(self):
         """Nested all_of inside any_of should evaluate correctly."""
         from yuho.eval.defeasible import DefeasibleReasoner
+
         reasoner = DefeasibleReasoner()
         statute = StatuteNode(
             section_number="777",
@@ -287,12 +327,24 @@ class TestDefeasibleReasoning:
                 ElementGroupNode(
                     combinator="all_of",
                     members=(
-                        ElementNode(element_type="actus_reus", name="act", description=StringLit(value="act")),
+                        ElementNode(
+                            element_type="actus_reus",
+                            name="act",
+                            description=StringLit(value="act"),
+                        ),
                         ElementGroupNode(
                             combinator="any_of",
                             members=(
-                                ElementNode(element_type="mens_rea", name="intent1", description=StringLit(value="i1")),
-                                ElementNode(element_type="mens_rea", name="intent2", description=StringLit(value="i2")),
+                                ElementNode(
+                                    element_type="mens_rea",
+                                    name="intent1",
+                                    description=StringLit(value="i1"),
+                                ),
+                                ElementNode(
+                                    element_type="mens_rea",
+                                    name="intent2",
+                                    description=StringLit(value="i2"),
+                                ),
                             ),
                         ),
                     ),
@@ -303,21 +355,30 @@ class TestDefeasibleReasoning:
             exceptions=(),
         )
         # act + intent1 -> satisfied (all_of: act=True, any_of: intent1=True)
-        r1 = reasoner.evaluate_with_exceptions(statute, {"act": True, "intent1": True, "intent2": False})
+        r1 = reasoner.evaluate_with_exceptions(
+            statute, {"act": True, "intent1": True, "intent2": False}
+        )
         assert r1.base_satisfied is True
         # act + intent2 -> satisfied
-        r2 = reasoner.evaluate_with_exceptions(statute, {"act": True, "intent1": False, "intent2": True})
+        r2 = reasoner.evaluate_with_exceptions(
+            statute, {"act": True, "intent1": False, "intent2": True}
+        )
         assert r2.base_satisfied is True
         # act only, no intent -> not satisfied (any_of fails)
-        r3 = reasoner.evaluate_with_exceptions(statute, {"act": True, "intent1": False, "intent2": False})
+        r3 = reasoner.evaluate_with_exceptions(
+            statute, {"act": True, "intent1": False, "intent2": False}
+        )
         assert r3.base_satisfied is False
         # intent but no act -> not satisfied (all_of fails)
-        r4 = reasoner.evaluate_with_exceptions(statute, {"act": False, "intent1": True, "intent2": True})
+        r4 = reasoner.evaluate_with_exceptions(
+            statute, {"act": False, "intent1": True, "intent2": True}
+        )
         assert r4.base_satisfied is False
 
     def test_guard_expression_evaluation(self):
         """Exception with a guard expression that evaluates against facts."""
         from yuho.eval.defeasible import DefeasibleReasoner
+
         # guard: facts.provoked == True -> IdentifierNode("provoked")
         guard = IdentifierNode(name="provoked")
         statute = StatuteNode(
@@ -325,7 +386,9 @@ class TestDefeasibleReasoning:
             title=StringLit(value="Guard Test"),
             definitions=(),
             elements=(
-                ElementNode(element_type="actus_reus", name="act", description=StringLit(value="act")),
+                ElementNode(
+                    element_type="actus_reus", name="act", description=StringLit(value="act")
+                ),
             ),
             penalty=None,
             illustrations=(),
@@ -353,6 +416,7 @@ class TestDefeasibleReasoning:
     def test_guard_complex_binary_expression(self):
         """Exception with a complex binary guard expression (age > 18)."""
         from yuho.eval.defeasible import DefeasibleReasoner
+
         # guard: age > 18
         guard = BinaryExprNode(
             left=IdentifierNode(name="age"),
@@ -364,7 +428,9 @@ class TestDefeasibleReasoning:
             title=StringLit(value="Binary Guard"),
             definitions=(),
             elements=(
-                ElementNode(element_type="actus_reus", name="act", description=StringLit(value="act")),
+                ElementNode(
+                    element_type="actus_reus", name="act", description=StringLit(value="act")
+                ),
             ),
             penalty=None,
             illustrations=(),
@@ -390,6 +456,7 @@ class TestDefeasibleReasoning:
     def test_exception_application_details(self):
         """ExceptionApplication should record condition, effect, and label."""
         from yuho.eval.defeasible import DefeasibleReasoner
+
         reasoner = DefeasibleReasoner()
         statute = make_simple_statute(with_exception=True)
         facts = {"act": True, "intent": True, "exception": "selfDefence"}
@@ -404,6 +471,7 @@ class TestDefeasibleReasoning:
     def test_statute_section_and_title_in_result(self):
         """DefeasibleResult should carry the statute section and title."""
         from yuho.eval.defeasible import DefeasibleReasoner
+
         reasoner = DefeasibleReasoner()
         statute = make_simple_statute()
         facts = {"act": True, "intent": True}
@@ -414,6 +482,7 @@ class TestDefeasibleReasoning:
     def test_none_valued_facts_treated_as_false(self):
         """Facts with None values should be treated as not satisfied."""
         from yuho.eval.defeasible import DefeasibleReasoner
+
         reasoner = DefeasibleReasoner()
         statute = make_simple_statute()
         facts = {"act": True, "intent": None}
@@ -423,6 +492,7 @@ class TestDefeasibleReasoning:
     def test_extra_facts_ignored(self):
         """Extra facts not referenced by elements should be ignored."""
         from yuho.eval.defeasible import DefeasibleReasoner
+
         reasoner = DefeasibleReasoner()
         statute = make_simple_statute()
         facts = {"act": True, "intent": True, "irrelevant": "data", "extra": 42}

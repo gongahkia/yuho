@@ -1,4 +1,5 @@
 """E2E tests: transpilation roundtrip."""
+
 import pytest
 import json
 from yuho.transpile.base import TranspileTarget
@@ -6,7 +7,7 @@ from yuho.transpile.registry import TranspilerRegistry
 
 TARGETS = [t for t in TranspileTarget]
 
-MINIMAL_SOURCE = '''
+MINIMAL_SOURCE = """
 struct TestCase { bool guilty, }
 statute 999 "Test Statute" {
     elements {
@@ -17,9 +18,9 @@ statute 999 "Test Statute" {
         imprisonment := 1 years .. 5 years;
     }
 }
-'''
+"""
 
-MULTI_STATUTE_SOURCE = '''
+MULTI_STATUTE_SOURCE = """
 statute 100 "First Offence" {
     elements {
         actus_reus a1 := "First act";
@@ -31,7 +32,8 @@ statute 200 "Second Offence" {
         mens_rea m2 := "Second intent";
     }
 }
-'''
+"""
+
 
 class TestTranspileRoundtrip:
     def test_transpile_to_json(self, statute_dir, parse_file):
@@ -44,7 +46,7 @@ class TestTranspileRoundtrip:
         transpiler = registry.get(TranspileTarget.JSON)
         output = transpiler.transpile(ast)
         assert len(output) > 0
-        parsed = json.loads(output) # should be valid JSON
+        parsed = json.loads(output)  # should be valid JSON
         assert isinstance(parsed, dict)
 
     def test_transpile_to_english(self, statute_dir, parse_file):
@@ -114,9 +116,9 @@ class TestTranspileRoundtrip:
         output = transpiler.transpile(ast)
         # at least one statute section number should appear
         for statute in ast.statutes:
-            assert statute.section_number in output, (
-                f"Section number {statute.section_number} not found in English output"
-            )
+            assert (
+                statute.section_number in output
+            ), f"Section number {statute.section_number} not found in English output"
 
     def test_english_contains_element_descriptions(self, parse_source):
         """English output should include element descriptions."""
@@ -136,15 +138,15 @@ class TestTranspileRoundtrip:
             output = transpiler.transpile(ast)
             assert len(output) > 0
             # LaTeX should have document structure commands
-            assert "\\" in output # must contain at least some LaTeX commands
+            assert "\\" in output  # must contain at least some LaTeX commands
             # check for common LaTeX patterns
             has_section = "\\section" in output or "\\subsection" in output
             has_begin = "\\begin" in output
             has_textbf = "\\textbf" in output
             has_item = "\\item" in output
-            assert has_section or has_begin or has_textbf or has_item, (
-                "LaTeX output lacks expected structural commands"
-            )
+            assert (
+                has_section or has_begin or has_textbf or has_item
+            ), "LaTeX output lacks expected structural commands"
         except (KeyError, Exception):
             pytest.skip("LaTeX transpiler not available")
 
@@ -170,10 +172,18 @@ class TestTranspileRoundtrip:
             assert len(output) > 0
             first_line = output.strip().split("\n")[0].strip().lower()
             # mermaid diagrams start with graph, flowchart, classDiagram, etc.
-            valid_starts = ("graph", "flowchart", "classdiagram", "statediagram", "sequencediagram", "erdiagram", "---")
-            assert any(first_line.startswith(s) for s in valid_starts), (
-                f"Mermaid output doesn't start with valid diagram type: '{first_line}'"
+            valid_starts = (
+                "graph",
+                "flowchart",
+                "classdiagram",
+                "statediagram",
+                "sequencediagram",
+                "erdiagram",
+                "---",
             )
+            assert any(
+                first_line.startswith(s) for s in valid_starts
+            ), f"Mermaid output doesn't start with valid diagram type: '{first_line}'"
         except (KeyError, Exception):
             pytest.skip("Mermaid transpiler not available")
 

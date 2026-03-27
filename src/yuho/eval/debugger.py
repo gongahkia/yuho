@@ -1,4 +1,5 @@
 """GDB-style interactive debugger for Yuho interpreter."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass, field
@@ -19,18 +20,21 @@ from yuho.eval.interpreter import (
 # Debugger data types
 # ---------------------------------------------------------------------------
 
+
 class StepMode(Enum):
     """Debugger execution mode."""
-    RUN = auto()       # Run until breakpoint
-    STEP = auto()      # Step into (stop at next statement-level node)
-    NEXT = auto()      # Step over (stop at next statement in same or parent frame)
+
+    RUN = auto()  # Run until breakpoint
+    STEP = auto()  # Step into (stop at next statement-level node)
+    NEXT = auto()  # Step over (stop at next statement in same or parent frame)
     CONTINUE = auto()  # Continue until next breakpoint
-    FINISH = auto()    # Run until current function returns
+    FINISH = auto()  # Run until current function returns
 
 
 @dataclass
 class Breakpoint:
     """A debugger breakpoint."""
+
     id: int
     file: str = ""
     line: int = 0
@@ -68,6 +72,7 @@ class Breakpoint:
 @dataclass
 class StackFrame:
     """A call stack frame."""
+
     function_name: str
     source_file: str
     line: int
@@ -127,6 +132,7 @@ def _node_file(node: nodes.ASTNode) -> str:
 # DebugInterpreter
 # ---------------------------------------------------------------------------
 
+
 class DebugInterpreter(Interpreter):
     """Interpreter subclass with breakpoint and stepping support.
 
@@ -137,13 +143,14 @@ class DebugInterpreter(Interpreter):
 
     def __init__(self, env: Optional[Environment] = None):
         super().__init__(env)
+        self.env: Environment
         self.breakpoints: List[Breakpoint] = []
         self._bp_counter = 0
         self.call_stack: List[StackFrame] = []
         self.mode = StepMode.RUN
         self._step_frame_depth: int = 0  # depth when NEXT was issued
         self._source_lines: Dict[str, List[str]] = {}
-        self._watchpoints: Dict[str, Value] = {}  # var name -> last seen value
+        self._watchpoints: Dict[str, Optional[Value]] = {}  # var name -> last seen value
         self._paused_node: Optional[nodes.ASTNode] = None
         self._last_listed_line: int = 0  # for 'list' continuation
 
@@ -207,17 +214,16 @@ class DebugInterpreter(Interpreter):
     def load_source(self, file: str, source: str) -> None:
         self._source_lines[file] = source.splitlines()
 
-    def get_source_lines(self, file: str, center: int, radius: int = 5) -> List[Tuple[int, str, bool]]:
+    def get_source_lines(
+        self, file: str, center: int, radius: int = 5
+    ) -> List[Tuple[int, str, bool]]:
         """Return (line_number, text, is_current) tuples around *center*."""
         lines = self._source_lines.get(file, [])
         if not lines:
             return []
         start = max(0, center - 1 - radius)
         end = min(len(lines), center + radius)
-        return [
-            (i + 1, lines[i], (i + 1) == center)
-            for i in range(start, end)
-        ]
+        return [(i + 1, lines[i], (i + 1) == center) for i in range(start, end)]
 
     # -- core: intercept visit() -------------------------------------------
 
@@ -276,8 +282,10 @@ class DebugInterpreter(Interpreter):
         result = parser.parse(wrapped, "<condition>")
         if result.errors:
             raise InterpreterError(f"Bad condition expression: {expr_str}")
+        if result.root_node is None:
+            raise InterpreterError(f"Cannot build condition AST: {expr_str}")
         builder = ASTBuilder(wrapped, "<condition>")
-        module = builder.build(result.tree.root_node)
+        module = builder.build(result.root_node)
         if module.variables:
             val_node = module.variables[0].value
             if val_node:
@@ -353,8 +361,10 @@ class DebugInterpreter(Interpreter):
         result = parser.parse(wrapped, "<debug>")
         if result.errors:
             raise InterpreterError(f"Cannot parse: {expr_str}")
+        if result.root_node is None:
+            raise InterpreterError(f"Cannot build debug AST: {expr_str}")
         builder = ASTBuilder(wrapped, "<debug>")
-        module = builder.build(result.tree.root_node)
+        module = builder.build(result.root_node)
         if module.variables and module.variables[0].value:
             return Interpreter.visit(self, module.variables[0].value)
         raise InterpreterError(f"Cannot evaluate: {expr_str}")

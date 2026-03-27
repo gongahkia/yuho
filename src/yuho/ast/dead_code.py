@@ -89,20 +89,20 @@ class DeadCodeEliminator(Transformer):
         4. If only one arm remains and it's a wildcard, simplify
         """
         # First, transform children (arm bodies, guards, etc.)
-        node = super().transform_match_expr(node)
+        transformed = super().transform_match_expr(node)
+        if not isinstance(transformed, nodes.MatchExprNode):
+            return transformed
 
         # Run reachability check on this match
         checker = ReachabilityChecker(self.type_info)
-        result = checker._check_match_reachability(node)
+        result = checker._check_match_reachability(transformed)
 
         # Get indices of unreachable arms
-        unreachable_indices: Set[int] = {
-            arm.arm_index for arm in result.unreachable_arms
-        }
+        unreachable_indices: Set[int] = {arm.arm_index for arm in result.unreachable_arms}
 
         # Filter and transform arms
         new_arms = []
-        for i, arm in enumerate(node.arms):
+        for i, arm in enumerate(transformed.arms):
             if i in unreachable_indices:
                 self.stats.removed_match_arms += 1
                 continue
@@ -113,7 +113,7 @@ class DeadCodeEliminator(Transformer):
 
         # If no arms remain (shouldn't happen in valid code), return unchanged
         if not new_arms:
-            return node
+            return transformed
 
         # If only one arm remains and it's a wildcard, simplify to just the body
         if len(new_arms) == 1:
@@ -124,15 +124,15 @@ class DeadCodeEliminator(Transformer):
                 return single_arm.body
 
         # Check if arms changed
-        if len(new_arms) != len(node.arms):
+        if len(new_arms) != len(transformed.arms):
             return nodes.MatchExprNode(
-                scrutinee=node.scrutinee,
+                scrutinee=transformed.scrutinee,
                 arms=tuple(new_arms),
-                ensure_exhaustiveness=node.ensure_exhaustiveness,
-                source_location=node.source_location,
+                ensure_exhaustiveness=transformed.ensure_exhaustiveness,
+                source_location=transformed.source_location,
             )
 
-        return node
+        return transformed
 
     def _simplify_arm_guard(self, arm: nodes.MatchArm) -> nodes.MatchArm:
         """

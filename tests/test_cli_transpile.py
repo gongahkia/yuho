@@ -32,12 +32,10 @@ def test_transpile_all_generates_every_target_output(tmp_path: Path, monkeypatch
         Path(output_path).write_text("generated:pdf", encoding="utf-8")
         return str(Path(output_path).resolve())
 
-    monkeypatch.setattr(
-        "yuho.transpile.pdf_pipeline.generate_pdf", fake_generate_pdf
-    )
+    monkeypatch.setattr("yuho.transpile.pdf_pipeline.generate_pdf", fake_generate_pdf)
 
     source_path = tmp_path / "sample.yh"
-    source_path.write_text("statute 1 \"Dummy\" { elements { } }", encoding="utf-8")
+    source_path.write_text('statute 1 "Dummy" { elements { } }', encoding="utf-8")
     output_dir = tmp_path / "all-targets"
 
     run_transpile(
@@ -56,11 +54,12 @@ def test_transpile_all_generates_every_target_output(tmp_path: Path, monkeypatch
             expected_outputs.add(output_dir / f"{source_path.stem}{SPECIAL_TARGETS[target]}")
         else:
             expected_outputs.add(
-                output_dir / f"{source_path.stem}{TranspileTarget.from_string(target).file_extension}"
+                output_dir
+                / f"{source_path.stem}{TranspileTarget.from_string(target).file_extension}"
             )
 
     for artifact in expected_outputs:
         assert artifact.exists(), f"Missing transpile output: {artifact.name}"
-        assert artifact.read_text(encoding="utf-8").strip(), (
-            f"Empty transpile output: {artifact.name}"
-        )
+        assert artifact.read_text(
+            encoding="utf-8"
+        ).strip(), f"Empty transpile output: {artifact.name}"

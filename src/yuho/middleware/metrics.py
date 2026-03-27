@@ -8,11 +8,12 @@ from typing import Dict, Optional
 
 class MetricsCollector:
     """Collects request metrics for /metrics endpoint."""
+
     def __init__(self) -> None:
         self._lock = threading.Lock()
         self._started_at = time.monotonic()
-        self._request_count: Dict[str, int] = defaultdict(int) # key: "endpoint:status"
-        self._request_duration: Dict[str, list] = defaultdict(list) # key: endpoint
+        self._request_count: Dict[str, int] = defaultdict(int)  # key: "endpoint:status"
+        self._request_duration: Dict[str, list] = defaultdict(list)  # key: endpoint
         self._parse_errors: int = 0
         self._active: int = 0
 
@@ -21,7 +22,7 @@ class MetricsCollector:
             self._request_count[f"{endpoint}:{status}"] += 1
             bucket = self._request_duration[endpoint]
             bucket.append(duration_s)
-            if len(bucket) > 10000: # cap memory
+            if len(bucket) > 10000:  # cap memory
                 bucket[:] = bucket[-5000:]
 
     def record_parse_error(self) -> None:
@@ -58,16 +59,26 @@ class MetricsCollector:
             lines.append("# TYPE yuho_requests_total counter")
             for key, count in sorted(self._request_count.items()):
                 endpoint, status = key.rsplit(":", 1)
-                lines.append(f'yuho_requests_total{{endpoint="{endpoint}",status="{status}"}} {count}')
+                lines.append(
+                    f'yuho_requests_total{{endpoint="{endpoint}",status="{status}"}} {count}'
+                )
             lines.append("# HELP yuho_request_duration_seconds Request duration histogram")
             lines.append("# TYPE yuho_request_duration_seconds summary")
             for endpoint, durations in sorted(self._request_duration.items()):
                 if durations:
                     s = sorted(durations)
-                    lines.append(f'yuho_request_duration_seconds{{endpoint="{endpoint}",quantile="0.5"}} {s[len(s)//2]:.6f}')
-                    lines.append(f'yuho_request_duration_seconds{{endpoint="{endpoint}",quantile="0.99"}} {s[int(len(s)*0.99)]:.6f}')
-                    lines.append(f'yuho_request_duration_seconds_count{{endpoint="{endpoint}"}} {len(s)}')
-                    lines.append(f'yuho_request_duration_seconds_sum{{endpoint="{endpoint}"}} {sum(s):.6f}')
+                    lines.append(
+                        f'yuho_request_duration_seconds{{endpoint="{endpoint}",quantile="0.5"}} {s[len(s)//2]:.6f}'
+                    )
+                    lines.append(
+                        f'yuho_request_duration_seconds{{endpoint="{endpoint}",quantile="0.99"}} {s[int(len(s)*0.99)]:.6f}'
+                    )
+                    lines.append(
+                        f'yuho_request_duration_seconds_count{{endpoint="{endpoint}"}} {len(s)}'
+                    )
+                    lines.append(
+                        f'yuho_request_duration_seconds_sum{{endpoint="{endpoint}"}} {sum(s):.6f}'
+                    )
             lines.append("# HELP yuho_parse_errors_total Total parse errors")
             lines.append("# TYPE yuho_parse_errors_total counter")
             lines.append(f"yuho_parse_errors_total {self._parse_errors}")

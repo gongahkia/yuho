@@ -51,10 +51,14 @@ def render_mermaid(
     try:
         cmd = [
             mmdc,
-            "-i", tmp_path,
-            "-o", output_path,
-            "-t", theme,
-            "-b", background,
+            "-i",
+            tmp_path,
+            "-o",
+            output_path,
+            "-t",
+            theme,
+            "-b",
+            background,
         ]
         if output_format == "png":
             cmd.extend(["-w", str(width), "-H", str(height)])
@@ -76,7 +80,9 @@ def _find_mmdc() -> Optional[str]:
         try:
             result = subprocess.run(
                 [npx, "--yes", "mmdc", "--version"],
-                capture_output=True, text=True, timeout=15,
+                capture_output=True,
+                text=True,
+                timeout=15,
             )
             if result.returncode == 0:
                 return f"{npx} --yes mmdc"

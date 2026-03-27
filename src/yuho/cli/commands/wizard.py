@@ -16,16 +16,20 @@ import click
 @dataclass
 class ElementData:
     """Data for a statute element."""
-    element_type: str  # "actus_reus", "mens_rea", "circumstance", "obligation", "prohibition", "permission"
+
+    element_type: (
+        str  # "actus_reus", "mens_rea", "circumstance", "obligation", "prohibition", "permission"
+    )
     name: str
     description: str
-    caused_by: str = "" # optional causal link
-    burden: str = "" # "prosecution" or "defence"
+    caused_by: str = ""  # optional causal link
+    burden: str = ""  # "prosecution" or "defence"
 
 
 @dataclass
 class DefinitionData:
     """Data for a definition entry."""
+
     term: str
     definition: str
 
@@ -33,6 +37,7 @@ class DefinitionData:
 @dataclass
 class IllustrationData:
     """Data for an illustration."""
+
     label: str
     description: str
 
@@ -40,24 +45,27 @@ class IllustrationData:
 @dataclass
 class ExceptionData:
     """Data for a statute exception."""
+
     label: str
     condition: str
     effect: str = ""
-    guard: str = "" # optional when guard expression
+    guard: str = ""  # optional when guard expression
 
 
 @dataclass
 class CaseLawData:
     """Data for case law reference."""
+
     case_name: str
     citation: str = ""
     holding: str = ""
-    element_ref: str = "" # element this case interprets
+    element_ref: str = ""  # element this case interprets
 
 
 @dataclass
 class PenaltyData:
     """Data for penalty specification."""
+
     has_imprisonment: bool = False
     imprisonment_min: str = ""
     imprisonment_max: str = ""
@@ -70,16 +78,17 @@ class PenaltyData:
 @dataclass
 class StatuteData:
     """Complete data for a statute."""
+
     section_number: str = ""
     title: str = ""
-    effective_date: str = "" # e.g. "1872-01-01"
+    effective_date: str = ""  # e.g. "1872-01-01"
     definitions: List[DefinitionData] = field(default_factory=list)
     elements: List[ElementData] = field(default_factory=list)
     penalty: Optional[PenaltyData] = None
     illustrations: List[IllustrationData] = field(default_factory=list)
     exceptions: List[ExceptionData] = field(default_factory=list)
     case_law: List[CaseLawData] = field(default_factory=list)
-    element_grouping: str = "" # "", "all_of", or "any_of"
+    element_grouping: str = ""  # "", "all_of", or "any_of"
     auto_struct_name: str = ""
     auto_struct_fields: List[Tuple[str, str]] = field(default_factory=list)
 
@@ -91,11 +100,11 @@ def prompt_input(prompt: str, default: str = "", required: bool = False) -> str:
             result = click.prompt(prompt, default=default, show_default=True)
         else:
             result = click.prompt(prompt, default="", show_default=False)
-        
+
         if required and not result.strip():
             click.echo("  This field is required.")
             continue
-        
+
         return result.strip()
 
 
@@ -110,7 +119,7 @@ def prompt_choice(prompt: str, choices: List[str], default: int = 0) -> str:
     for i, choice in enumerate(choices):
         marker = ">" if i == default else " "
         click.echo(f"  {marker} [{i + 1}] {choice}")
-    
+
     while True:
         value = click.prompt("Enter number", default=str(default + 1))
         try:
@@ -135,16 +144,16 @@ def collect_definitions(data: StatuteData) -> None:
     click.echo("Define key terms used in the statute.")
     click.echo("(Press Enter with empty term to finish)")
     click.echo("")
-    
+
     while True:
         term = prompt_input("Term to define")
         if not term:
             break
-        
+
         definition = prompt_input(f"  Definition of '{term}'", required=True)
         data.definitions.append(DefinitionData(term=term, definition=definition))
         click.echo(click.style(f"  ✓ Added definition: {term}", fg="green"))
-    
+
     click.echo(f"\nTotal definitions: {len(data.definitions)}")
 
 
@@ -153,54 +162,51 @@ def collect_elements(data: StatuteData) -> None:
     wizard_header("Elements of the Offense")
     click.echo("Define the elements (actus reus, mens rea, circumstances)")
     click.echo("")
-    
+
     # Actus Reus
     if prompt_confirm("Add actus reus (physical act) element?", default=True):
         name = prompt_input("  Element name/identifier", default="act", required=True)
         desc = prompt_input("  Description of the act", required=True)
-        data.elements.append(ElementData(
-            element_type="actus_reus",
-            name=name,
-            description=desc
-        ))
+        data.elements.append(ElementData(element_type="actus_reus", name=name, description=desc))
         click.echo(click.style(f"  ✓ Added actus_reus: {name}", fg="green"))
-    
+
     # Mens Rea
     if prompt_confirm("Add mens rea (mental state) element?", default=True):
         name = prompt_input("  Element name/identifier", default="intent", required=True)
         desc = prompt_input("  Description of required mental state", required=True)
-        data.elements.append(ElementData(
-            element_type="mens_rea",
-            name=name,
-            description=desc
-        ))
+        data.elements.append(ElementData(element_type="mens_rea", name=name, description=desc))
         click.echo(click.style(f"  ✓ Added mens_rea: {name}", fg="green"))
-    
+
     # Additional elements
     while prompt_confirm("Add another element?", default=False):
-        element_type = prompt_choice("Element type:", [
-            "actus_reus",
-            "mens_rea",
-            "circumstance",
-            "obligation",
-            "prohibition",
-            "permission",
-        ])
+        element_type = prompt_choice(
+            "Element type:",
+            [
+                "actus_reus",
+                "mens_rea",
+                "circumstance",
+                "obligation",
+                "prohibition",
+                "permission",
+            ],
+        )
         name = prompt_input("  Element name", required=True)
         desc = prompt_input("  Description", required=True)
         caused_by = prompt_input("  Caused by (optional, element name)")
         burden = ""
         if prompt_confirm("  Specify burden of proof?", default=False):
             burden = prompt_choice("  Burden:", ["prosecution", "defence"])
-        data.elements.append(ElementData(
-            element_type=element_type,
-            name=name,
-            description=desc,
-            caused_by=caused_by,
-            burden=burden,
-        ))
+        data.elements.append(
+            ElementData(
+                element_type=element_type,
+                name=name,
+                description=desc,
+                caused_by=caused_by,
+                burden=burden,
+            )
+        )
         click.echo(click.style(f"  ✓ Added {element_type}: {name}", fg="green"))
-    
+
     click.echo(f"\nTotal elements: {len(data.elements)}")
 
     # element grouping
@@ -218,42 +224,45 @@ def collect_elements(data: StatuteData) -> None:
             data.auto_struct_name = struct_name
             for elem in data.elements:
                 data.auto_struct_fields.append(("bool", elem.name))
-            click.echo(click.style(f"  ✓ Struct '{struct_name}' will be generated with {len(data.auto_struct_fields)} fields", fg="green"))
+            click.echo(
+                click.style(
+                    f"  ✓ Struct '{struct_name}' will be generated with {len(data.auto_struct_fields)} fields",
+                    fg="green",
+                )
+            )
 
 
 def collect_penalty(data: StatuteData) -> None:
     """Collect penalty specification."""
     wizard_header("Penalty")
-    
+
     if not prompt_confirm("Does this statute have a penalty clause?", default=True):
         return
-    
+
     penalty = PenaltyData()
-    
+
     # Imprisonment
     if prompt_confirm("Include imprisonment?", default=True):
         penalty.has_imprisonment = True
         penalty.imprisonment_max = prompt_input(
-            "  Maximum imprisonment (e.g., '10 years', '3Y')",
-            required=True
+            "  Maximum imprisonment (e.g., '10 years', '3Y')", required=True
         )
         if prompt_confirm("  Specify minimum imprisonment?", default=False):
             penalty.imprisonment_min = prompt_input("  Minimum imprisonment")
-    
+
     # Fine
     if prompt_confirm("Include fine?", default=True):
         penalty.has_fine = True
         penalty.fine_max = prompt_input(
-            "  Maximum fine (e.g., 'SGD 10000', '$5000')",
-            required=True
+            "  Maximum fine (e.g., 'SGD 10000', '$5000')", required=True
         )
         if prompt_confirm("  Specify minimum fine?", default=False):
             penalty.fine_min = prompt_input("  Minimum fine")
-    
+
     # Supplementary
     if prompt_confirm("Add supplementary penalty info?", default=False):
         penalty.supplementary = prompt_input("  Supplementary information")
-    
+
     data.penalty = penalty
     click.echo(click.style("  ✓ Penalty configured", fg="green"))
 
@@ -264,26 +273,26 @@ def collect_illustrations(data: StatuteData) -> None:
     click.echo("Add examples to illustrate the statute's application.")
     click.echo("(Press Enter with empty label to finish)")
     click.echo("")
-    
-    label_counter = ord('a')
-    
+
+    label_counter = ord("a")
+
     while True:
         default_label = f"({chr(label_counter)})"
         label = prompt_input(f"Illustration label", default=default_label)
-        
+
         if not label or label == default_label:
             # Check if user wants to add with default label
             if not label:
                 break
-        
+
         desc = prompt_input("  Illustration text", required=True)
         data.illustrations.append(IllustrationData(label=label, description=desc))
         click.echo(click.style(f"  ✓ Added illustration {label}", fg="green"))
         label_counter += 1
-        
+
         if not prompt_confirm("Add another illustration?", default=False):
             break
-    
+
     click.echo(f"\nTotal illustrations: {len(data.illustrations)}")
 
 
@@ -302,12 +311,14 @@ def collect_exceptions(data: StatuteData) -> None:
         condition = prompt_input(f"  Condition for '{label}'", required=True)
         effect = prompt_input(f"  Effect (consequence when exception applies)")
         guard = prompt_input(f"  Guard expression (optional 'when' condition)")
-        data.exceptions.append(ExceptionData(
-            label=label,
-            condition=condition,
-            effect=effect,
-            guard=guard,
-        ))
+        data.exceptions.append(
+            ExceptionData(
+                label=label,
+                condition=condition,
+                effect=effect,
+                guard=guard,
+            )
+        )
         click.echo(click.style(f"  ✓ Added exception: {label}", fg="green"))
 
     click.echo(f"\nTotal exceptions: {len(data.exceptions)}")
@@ -328,12 +339,14 @@ def collect_caselaw(data: StatuteData) -> None:
         citation = prompt_input(f"  Citation for '{case_name}'")
         holding = prompt_input(f"  Holding / ratio decidendi")
         element_ref = prompt_input(f"  Element this case interprets (optional)")
-        data.case_law.append(CaseLawData(
-            case_name=case_name,
-            citation=citation,
-            holding=holding,
-            element_ref=element_ref,
-        ))
+        data.case_law.append(
+            CaseLawData(
+                case_name=case_name,
+                citation=citation,
+                holding=holding,
+                element_ref=element_ref,
+            )
+        )
         click.echo(click.style(f"  ✓ Added case: {case_name}", fg="green"))
 
     click.echo(f"\nTotal case law references: {len(data.case_law)}")
@@ -383,13 +396,17 @@ def generate_yuho_code(data: StatuteData) -> str:
             for elem in data.elements:
                 escaped_desc = elem.description.replace('"', '\\"')
                 suffix = _element_suffix(elem)
-                lines.append(f'            {elem.element_type} {elem.name} := "{escaped_desc}"{suffix};')
+                lines.append(
+                    f'            {elem.element_type} {elem.name} := "{escaped_desc}"{suffix};'
+                )
             lines.append("        }")
         else:
             for elem in data.elements:
                 escaped_desc = elem.description.replace('"', '\\"')
                 suffix = _element_suffix(elem)
-                lines.append(f'        {elem.element_type} {elem.name} := "{escaped_desc}"{suffix};')
+                lines.append(
+                    f'        {elem.element_type} {elem.name} := "{escaped_desc}"{suffix};'
+                )
         lines.append("    }")
 
     # Penalty
@@ -398,7 +415,9 @@ def generate_yuho_code(data: StatuteData) -> str:
         lines.append("    penalty {")
         if data.penalty.has_imprisonment:
             if data.penalty.imprisonment_min:
-                lines.append(f"        imprisonment := {data.penalty.imprisonment_min} to {data.penalty.imprisonment_max};")
+                lines.append(
+                    f"        imprisonment := {data.penalty.imprisonment_min} to {data.penalty.imprisonment_max};"
+                )
             else:
                 lines.append(f"        imprisonment := {data.penalty.imprisonment_max};")
         if data.penalty.has_fine:
@@ -463,7 +482,7 @@ def run_wizard(
 ) -> None:
     """
     Run the interactive statute creation wizard.
-    
+
     Args:
         output: Output file path (None = stdout)
         section: Pre-set section number
@@ -481,26 +500,24 @@ def run_wizard(
         "╚" + "═" * w + "╝",
     ]
     click.echo(click.style("\n".join(box_lines), fg="cyan"))
-    
+
     data = StatuteData()
-    
+
     # Basic info
     wizard_header("Basic Information")
-    
-    data.section_number = section or prompt_input(
-        "Section number (e.g., 299, 300A)",
-        required=True
-    )
-    
-    data.title = title or prompt_input(
-        "Statute title (e.g., 'Culpable Homicide')",
-        required=True
-    )
-    
+
+    data.section_number = section or prompt_input("Section number (e.g., 299, 300A)", required=True)
+
+    data.title = title or prompt_input("Statute title (e.g., 'Culpable Homicide')", required=True)
+
     if prompt_confirm("Specify effective date?", default=False):
         data.effective_date = prompt_input("  Effective date (YYYY-MM-DD)", required=True)
 
-    click.echo(click.style(f"\n✓ Creating statute: Section {data.section_number} - {data.title}", fg="green"))
+    click.echo(
+        click.style(
+            f"\n✓ Creating statute: Section {data.section_number} - {data.title}", fg="green"
+        )
+    )
 
     # Collect sections
     collect_definitions(data)
@@ -509,22 +526,24 @@ def run_wizard(
     collect_illustrations(data)
     collect_exceptions(data)
     collect_caselaw(data)
-    
+
     # Generate code
     wizard_header("Generated Code")
     code = generate_yuho_code(data)
-    
+
     click.echo(click.style("```yuho", fg="yellow"))
     click.echo(code)
     click.echo(click.style("```", fg="yellow"))
-    
+
     # Save or output
     if output:
         path = Path(output)
-        if path.exists() and not prompt_confirm(f"\nOverwrite existing file {path}?", default=False):
+        if path.exists() and not prompt_confirm(
+            f"\nOverwrite existing file {path}?", default=False
+        ):
             click.echo("Cancelled.")
             return
-        
+
         path.write_text(code + "\n")
         click.echo(click.style(f"\n✓ Saved to {path}", fg="green"))
     else:
@@ -534,5 +553,5 @@ def run_wizard(
             path = Path(filename)
             path.write_text(code + "\n")
             click.echo(click.style(f"✓ Saved to {path}", fg="green"))
-    
+
     click.echo(click.style("\n✓ Wizard complete!", fg="green", bold=True))

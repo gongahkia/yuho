@@ -66,6 +66,7 @@ class OllamaProvider(LLMProvider):
         if self._client is None:
             try:
                 import httpx
+
                 self._client = httpx.Client(
                     base_url=self.config.ollama_url,
                     timeout=120.0,
@@ -123,6 +124,7 @@ class OllamaProvider(LLMProvider):
             ) as response:
                 response.raise_for_status()
                 import json as json_module
+
                 for line in response.iter_lines():
                     if line:
                         data = json_module.loads(line)
@@ -234,6 +236,8 @@ class HuggingFaceProvider(LLMProvider):
     def generate(self, prompt: str, max_tokens: Optional[int] = None) -> str:
         """Generate text using HuggingFace Transformers."""
         self._load_model()
+        if self._model is None or self._tokenizer is None or self._device is None:
+            raise RuntimeError("HuggingFace model failed to initialize")
 
         max_tokens = max_tokens or self.config.max_tokens
 
@@ -253,7 +257,7 @@ class HuggingFaceProvider(LLMProvider):
 
             # Decode only the new tokens
             generated = self._tokenizer.decode(
-                outputs[0][inputs["input_ids"].shape[1]:],
+                outputs[0][inputs["input_ids"].shape[1] :],
                 skip_special_tokens=True,
             )
 
@@ -268,6 +272,7 @@ class HuggingFaceProvider(LLMProvider):
         try:
             import torch
             from transformers import AutoModelForCausalLM
+
             return True
         except ImportError:
             return False
@@ -395,6 +400,7 @@ class GeminiProvider(LLMProvider):
         if self._client is None:
             try:
                 from google import genai
+
                 self._client = genai.Client(api_key=self.config.api_key)
             except ImportError:
                 raise ImportError("google-genai required. Install with: pip install google-genai")
@@ -406,6 +412,7 @@ class GeminiProvider(LLMProvider):
         max_tokens = max_tokens or self.config.max_tokens
         try:
             from google.genai import types
+
             response = client.models.generate_content(
                 model=self.config.model_name,
                 contents=prompt,
@@ -438,6 +445,7 @@ class PlexProvider(LLMProvider):
         if self._client is None:
             try:
                 from openai import OpenAI
+
                 self._client = OpenAI(
                     api_key=self.config.api_key,
                     base_url=self.config.base_url or self.PLEX_BASE_URL,
@@ -481,6 +489,7 @@ class KeyMeetProvider(LLMProvider):
         if self._client is None:
             try:
                 from openai import OpenAI
+
                 self._client = OpenAI(
                     api_key=self.config.api_key,
                     base_url=self.config.base_url or self.KEYMEET_BASE_URL,

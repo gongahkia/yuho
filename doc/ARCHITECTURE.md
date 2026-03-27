@@ -46,7 +46,6 @@ graph TD
 
     LSP[lsp/server.py] --> Services
     MCP[mcp/server.py] --> Services
-    TUI[tui/app.py] --> CLI
 
     Library[library/penal_code/*] --> Resolver
 ```
@@ -117,10 +116,7 @@ src/yuho/
 ├── transpile/           # Transpiler framework
 │   ├── base.py          # TranspilerBase ABC + TranspileTarget enum
 │   ├── registry.py      # Singleton transpiler registry
-│   └── *_transpiler.py  # 8 transpiler implementations
-├── tui/                 # Terminal UI (Textual)
-│   ├── app.py           # Main TUI application
-│   └── ascii_art.py     # ASCII art assets
+│   └── *_transpiler.py  # text, diagram, and formal-model emitters
 └── verify/              # Formal verification
     ├── combined.py      # Combined Z3+Alloy runner
     ├── z3_solver.py     # Z3 constraint generation (60k)

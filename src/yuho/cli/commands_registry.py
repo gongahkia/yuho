@@ -25,10 +25,20 @@ def register_group_commands(cli: click.Group) -> None:
         pass
 
     @config.command("show")
-    @click.option("-s", "--section", type=click.Choice(["llm", "transpile", "lsp", "mcp", "library"]),
-                  help="Show only specific section")
-    @click.option("-f", "--format", "fmt", type=click.Choice(["toml", "json"]),
-                  default="toml", help="Output format")
+    @click.option(
+        "-s",
+        "--section",
+        type=click.Choice(["llm", "transpile", "lsp", "mcp", "library"]),
+        help="Show only specific section",
+    )
+    @click.option(
+        "-f",
+        "--format",
+        "fmt",
+        type=click.Choice(["toml", "json"]),
+        default="toml",
+        help="Output format",
+    )
     @click.pass_context
     def config_show(ctx: click.Context, section: Optional[str], fmt: str) -> None:
         """
@@ -42,6 +52,7 @@ def register_group_commands(cli: click.Group) -> None:
             yuho config show -f json
         """
         from yuho.cli.commands.config import run_config_show
+
         run_config_show(section=section, format=fmt, verbose=ctx.obj["verbose"])
 
     @config.command("set")
@@ -60,6 +71,7 @@ def register_group_commands(cli: click.Group) -> None:
             yuho config set mcp.port 9000
         """
         from yuho.cli.commands.config import run_config_set
+
         run_config_set(key, value, verbose=ctx.obj["verbose"])
 
     @config.command("init")
@@ -72,6 +84,7 @@ def register_group_commands(cli: click.Group) -> None:
         Creates ~/.config/yuho/config.toml with sensible defaults.
         """
         from yuho.cli.commands.config import run_config_init
+
         run_config_init(force=force, verbose=ctx.obj["verbose"])
 
     # =========================================================================
@@ -111,6 +124,7 @@ def register_group_commands(cli: click.Group) -> None:
             yuho library search S403 --jurisdiction singapore
         """
         from yuho.cli.commands.library import run_library_search
+
         run_library_search(
             query,
             jurisdiction=jurisdiction,
@@ -141,6 +155,7 @@ def register_group_commands(cli: click.Group) -> None:
             yuho library install ./my-package.yhpkg
         """
         from yuho.cli.commands.library import run_library_install
+
         run_library_install(
             package,
             force=force,
@@ -167,6 +182,7 @@ def register_group_commands(cli: click.Group) -> None:
             yuho library uninstall S403
         """
         from yuho.cli.commands.library import run_library_uninstall
+
         run_library_uninstall(
             package,
             dry_run=dry_run,
@@ -182,6 +198,7 @@ def register_group_commands(cli: click.Group) -> None:
         List all installed packages.
         """
         from yuho.cli.commands.library import run_library_list
+
         run_library_list(json_output=json_output, verbose=ctx.obj["verbose"])
 
     @library.command("update")
@@ -207,6 +224,7 @@ def register_group_commands(cli: click.Group) -> None:
             yuho library update S403      # Update specific package
         """
         from yuho.cli.commands.library import run_library_update
+
         run_library_update(
             package,
             all_packages=all_packages,
@@ -237,6 +255,7 @@ def register_group_commands(cli: click.Group) -> None:
             yuho library publish ./my-statute --dry-run
         """
         from yuho.cli.commands.library import run_library_publish
+
         run_library_publish(
             path,
             registry=registry,
@@ -262,6 +281,7 @@ def register_group_commands(cli: click.Group) -> None:
             yuho library info S403
         """
         from yuho.cli.commands.library import run_library_info
+
         run_library_info(
             package,
             json_output=json_output,
@@ -286,6 +306,7 @@ def register_group_commands(cli: click.Group) -> None:
             yuho library outdated --json
         """
         from yuho.cli.commands.library import run_library_outdated
+
         run_library_outdated(
             json_output=json_output,
             verbose=ctx.obj["verbose"],
@@ -314,6 +335,7 @@ def register_group_commands(cli: click.Group) -> None:
             yuho library tree --depth 3
         """
         from yuho.cli.commands.library import run_library_tree
+
         run_library_tree(
             package=package,
             depth=depth,
@@ -322,10 +344,31 @@ def register_group_commands(cli: click.Group) -> None:
         )
 
     @library.command("export")
-    @click.option("-t", "--target", default="json",
-                  type=click.Choice(["json", "jsonld", "english", "latex", "mermaid", "alloy", "graphql", "blocks", "bibtex", "comparative", "akomantoso", "prolog"]),
-                  help="Transpilation target")
-    @click.option("-o", "--output-dir", default="./library_export", type=click.Path(), help="Output directory")
+    @click.option(
+        "-t",
+        "--target",
+        default="json",
+        type=click.Choice(
+            [
+                "json",
+                "jsonld",
+                "english",
+                "latex",
+                "mermaid",
+                "alloy",
+                "graphql",
+                "blocks",
+                "bibtex",
+                "comparative",
+                "akomantoso",
+                "prolog",
+            ]
+        ),
+        help="Transpilation target",
+    )
+    @click.option(
+        "-o", "--output-dir", default="./library_export", type=click.Path(), help="Output directory"
+    )
     @click.option("--json", "json_output", is_flag=True, help="Output as JSON")
     @click.pass_context
     def library_export(
@@ -346,6 +389,7 @@ def register_group_commands(cli: click.Group) -> None:
             yuho library export -t mermaid --json
         """
         from yuho.cli.commands.library import run_library_export
+
         run_library_export(
             target=target,
             output_dir=output_dir,
@@ -373,7 +417,9 @@ def register_group_commands(cli: click.Group) -> None:
     @click.option("--no-recursive", is_flag=True, help="Don't recurse into subdirectories")
     @click.option("--json", "json_output", is_flag=True, help="Output as JSON")
     @click.pass_context
-    def batch_check(ctx: click.Context, directory: str, no_recursive: bool, json_output: bool) -> None:
+    def batch_check(
+        ctx: click.Context, directory: str, no_recursive: bool, json_output: bool
+    ) -> None:
         """
         Check all .yh files in a directory.
 
@@ -382,6 +428,7 @@ def register_group_commands(cli: click.Group) -> None:
             yuho batch check . --json
         """
         from yuho.cli.commands.batch import run_batch_check
+
         run_batch_check(
             directory,
             recursive=not no_recursive,
@@ -391,9 +438,28 @@ def register_group_commands(cli: click.Group) -> None:
 
     @batch.command("transpile")
     @click.argument("directory", type=click.Path(exists=True))
-    @click.option("-t", "--target", default="json",
-                  type=click.Choice(["json", "jsonld", "english", "latex", "mermaid", "alloy", "graphql", "blocks", "bibtex", "comparative", "akomantoso", "prolog"]),
-                  help="Transpilation target")
+    @click.option(
+        "-t",
+        "--target",
+        default="json",
+        type=click.Choice(
+            [
+                "json",
+                "jsonld",
+                "english",
+                "latex",
+                "mermaid",
+                "alloy",
+                "graphql",
+                "blocks",
+                "bibtex",
+                "comparative",
+                "akomantoso",
+                "prolog",
+            ]
+        ),
+        help="Transpilation target",
+    )
     @click.option("-o", "--output-dir", type=click.Path(), help="Output directory")
     @click.option("--no-recursive", is_flag=True, help="Don't recurse into subdirectories")
     @click.option("--json", "json_output", is_flag=True, help="Output as JSON")
@@ -414,6 +480,7 @@ def register_group_commands(cli: click.Group) -> None:
             yuho batch transpile . -t english
         """
         from yuho.cli.commands.batch import run_batch_transpile
+
         run_batch_transpile(
             directory,
             target=target,

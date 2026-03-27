@@ -6,7 +6,7 @@ API keys, tokens, and passwords before they appear in logs or error messages.
 """
 
 import re
-from typing import Any, Dict, List, Optional, Set
+from typing import Any, Dict, Set
 
 # Sensitive field names that should always be masked
 SENSITIVE_FIELDS: Set[str] = {
@@ -83,7 +83,7 @@ def mask_dict(data: Dict[str, Any], deep: bool = True) -> Dict[str, Any]:
     Returns:
         New dictionary with sensitive values masked
     """
-    result = {}
+    result: Dict[str, Any] = {}
     for key, value in data.items():
         if is_sensitive_key(key):
             if isinstance(value, str) and value:
@@ -95,10 +95,7 @@ def mask_dict(data: Dict[str, Any], deep: bool = True) -> Dict[str, Any]:
         elif deep and isinstance(value, dict):
             result[key] = mask_dict(value, deep=True)
         elif deep and isinstance(value, list):
-            result[key] = [
-                mask_dict(v, deep=True) if isinstance(v, dict) else v
-                for v in value
-            ]
+            result[key] = [mask_dict(v, deep=True) if isinstance(v, dict) else v for v in value]
         else:
             result[key] = value
     return result
@@ -161,14 +158,16 @@ def mask_url(url: str) -> str:
 
         # Rebuild URL with masked params
         masked_query = urlencode(masked_params, doseq=True)
-        return urlunparse((
-            parsed.scheme,
-            parsed.netloc,
-            parsed.path,
-            parsed.params,
-            masked_query,
-            parsed.fragment,
-        ))
+        return urlunparse(
+            (
+                parsed.scheme,
+                parsed.netloc,
+                parsed.path,
+                parsed.params,
+                masked_query,
+                parsed.fragment,
+            )
+        )
     except Exception:
         # If URL parsing fails, just return original
         return url

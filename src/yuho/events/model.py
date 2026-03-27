@@ -18,8 +18,9 @@ class EventType(Enum):
 @dataclass
 class Event:
     """An event that can trigger webhooks."""
+
     type: EventType
-    source: str # file path or package name
+    source: str  # file path or package name
     timestamp: float = field(default_factory=time.time)
     data: Dict[str, Any] = field(default_factory=dict)
     event_id: str = ""
@@ -27,6 +28,7 @@ class Event:
     def __post_init__(self) -> None:
         if not self.event_id:
             import uuid
+
             self.event_id = uuid.uuid4().hex[:16]
 
     def to_dict(self) -> Dict[str, Any]:

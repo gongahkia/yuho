@@ -183,14 +183,18 @@ class LaTeXTranspiler(TranspilerBase, Visitor):
 
         # Temporal/hierarchy metadata
         meta_parts = []
-        if getattr(node, 'effective_date', None):
-            meta_parts.append(f"Effective: {escape_latex(node.effective_date)}")
-        if getattr(node, 'repealed_date', None):
-            meta_parts.append(f"Repealed: {escape_latex(node.repealed_date)}")
-        if getattr(node, 'subsumes', None):
-            meta_parts.append(f"Subsumes s.{escape_latex(node.subsumes)}")
-        if getattr(node, 'amends', None):
-            meta_parts.append(f"Amends s.{escape_latex(node.amends)}")
+        effective_date = getattr(node, "effective_date", None)
+        if isinstance(effective_date, str):
+            meta_parts.append(f"Effective: {escape_latex(effective_date)}")
+        repealed_date = getattr(node, "repealed_date", None)
+        if isinstance(repealed_date, str):
+            meta_parts.append(f"Repealed: {escape_latex(repealed_date)}")
+        subsumes = getattr(node, "subsumes", None)
+        if isinstance(subsumes, str):
+            meta_parts.append(f"Subsumes s.{escape_latex(subsumes)}")
+        amends = getattr(node, "amends", None)
+        if isinstance(amends, str):
+            meta_parts.append(f"Amends s.{escape_latex(amends)}")
         if meta_parts:
             self._emit(rf"\textit{{{'; '.join(meta_parts)}}}")
             self._emit_blank()
@@ -290,12 +294,15 @@ class LaTeXTranspiler(TranspilerBase, Visitor):
             desc = expr_to_latex(node.description)
             self._emit(rf"  \item{margin} \element{{{label}}}{{{desc}}}")
         # causation/burden annotations
-        if getattr(node, 'caused_by', None):
-            self._emit(rf"  \\ \textit{{Caused by: {escape_latex(node.caused_by)}}}")
-        if getattr(node, 'burden', None):
-            burden_str = escape_latex(node.burden)
-            if getattr(node, 'burden_standard', None):
-                burden_str += f" ({escape_latex(node.burden_standard)})"
+        caused_by = getattr(node, "caused_by", None)
+        if isinstance(caused_by, str):
+            self._emit(rf"  \\ \textit{{Caused by: {escape_latex(caused_by)}}}")
+        burden = getattr(node, "burden", None)
+        if isinstance(burden, str):
+            burden_str = escape_latex(burden)
+            burden_standard = getattr(node, "burden_standard", None)
+            if isinstance(burden_standard, str):
+                burden_str += f" ({escape_latex(burden_standard)})"
             self._emit(rf"  \\ \textit{{Burden: {burden_str}}}")
 
     def _visit_element_group(self, group: nodes.ElementGroupNode) -> None:
@@ -340,11 +347,13 @@ class LaTeXTranspiler(TranspilerBase, Visitor):
             self._emit(r"Death & \multicolumn{2}{c}{Applicable} \\")
 
         # Mandatory minimums row
-        if getattr(node, 'mandatory_min_imprisonment', None):
-            min_str = duration_to_latex(node.mandatory_min_imprisonment)
+        mandatory_min_imprisonment = getattr(node, "mandatory_min_imprisonment", None)
+        if mandatory_min_imprisonment is not None:
+            min_str = duration_to_latex(mandatory_min_imprisonment)
             self._emit(rf"Mandatory Min Imprisonment & \multicolumn{{2}}{{c}}{{{min_str}}} \\")
-        if getattr(node, 'mandatory_min_fine', None):
-            min_str = money_to_latex(node.mandatory_min_fine)
+        mandatory_min_fine = getattr(node, "mandatory_min_fine", None)
+        if mandatory_min_fine is not None:
+            min_str = money_to_latex(mandatory_min_fine)
             self._emit(rf"Mandatory Min Fine & \multicolumn{{2}}{{c}}{{{min_str}}} \\")
 
         self._emit(r"\bottomrule")
@@ -352,9 +361,10 @@ class LaTeXTranspiler(TranspilerBase, Visitor):
         self._emit(r"\end{center}")
 
         # Sentencing mode
-        if getattr(node, 'sentencing', None):
+        sentencing = getattr(node, "sentencing", None)
+        if isinstance(sentencing, str):
             self._emit_blank()
-            self._emit(rf"\textit{{Sentencing: {escape_latex(node.sentencing)}}}")
+            self._emit(rf"\textit{{Sentencing: {escape_latex(sentencing)}}}")
 
         # Supplementary information
         if node.supplementary:

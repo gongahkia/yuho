@@ -28,8 +28,9 @@ class FormulaType(Enum):
 @dataclass(frozen=True)
 class Formula:
     """Immutable boolean formula node."""
+
     kind: FormulaType
-    name: str = "" # for VAR
+    name: str = ""  # for VAR
     children: Tuple["Formula", ...] = ()
 
     def __repr__(self) -> str:
@@ -53,12 +54,14 @@ class Formula:
 def var(name: str) -> Formula:
     return Formula(FormulaType.VAR, name=name)
 
+
 def and_(*args: Formula) -> Formula:
     if not args:
         return Formula(FormulaType.TRUE)
     if len(args) == 1:
         return args[0]
     return Formula(FormulaType.AND, children=args)
+
 
 def or_(*args: Formula) -> Formula:
     if not args:
@@ -67,11 +70,14 @@ def or_(*args: Formula) -> Formula:
         return args[0]
     return Formula(FormulaType.OR, children=args)
 
+
 def not_(f: Formula) -> Formula:
     return Formula(FormulaType.NOT, children=(f,))
 
+
 def implies(a: Formula, b: Formula) -> Formula:
     return Formula(FormulaType.IMPLIES, children=(a, b))
+
 
 TRUE = Formula(FormulaType.TRUE)
 FALSE = Formula(FormulaType.FALSE)
@@ -109,7 +115,7 @@ def evaluate(f: Formula, assignment: Dict[str, bool]) -> bool:
 def _all_assignments(vars_list: List[str]):
     """Generate all possible truth assignments for given variables."""
     n = len(vars_list)
-    for i in range(2 ** n):
+    for i in range(2**n):
         assignment = {}
         for j, v in enumerate(vars_list):
             assignment[v] = bool((i >> j) & 1)
@@ -159,20 +165,20 @@ def simplify(f: Formula) -> Formula:
     f = Formula(f.kind, f.name, children)
     if f.kind == FormulaType.NOT:
         inner = f.children[0]
-        if inner.kind == FormulaType.TRUE: # !TRUE = FALSE
+        if inner.kind == FormulaType.TRUE:  # !TRUE = FALSE
             return FALSE
-        if inner.kind == FormulaType.FALSE: # !FALSE = TRUE
+        if inner.kind == FormulaType.FALSE:  # !FALSE = TRUE
             return TRUE
-        if inner.kind == FormulaType.NOT: # !!x = x
+        if inner.kind == FormulaType.NOT:  # !!x = x
             return inner.children[0]
     elif f.kind == FormulaType.AND:
         flat: List[Formula] = []
         for c in f.children:
-            if c.kind == FormulaType.FALSE: # x && FALSE = FALSE
+            if c.kind == FormulaType.FALSE:  # x && FALSE = FALSE
                 return FALSE
-            if c.kind == FormulaType.TRUE: # x && TRUE = x
+            if c.kind == FormulaType.TRUE:  # x && TRUE = x
                 continue
-            if c.kind == FormulaType.AND: # flatten nested AND
+            if c.kind == FormulaType.AND:  # flatten nested AND
                 flat.extend(c.children)
             else:
                 flat.append(c)
@@ -196,11 +202,11 @@ def simplify(f: Formula) -> Formula:
     elif f.kind == FormulaType.OR:
         flat = []
         for c in f.children:
-            if c.kind == FormulaType.TRUE: # x || TRUE = TRUE
+            if c.kind == FormulaType.TRUE:  # x || TRUE = TRUE
                 return TRUE
-            if c.kind == FormulaType.FALSE: # x || FALSE = x
+            if c.kind == FormulaType.FALSE:  # x || FALSE = x
                 continue
-            if c.kind == FormulaType.OR: # flatten nested OR
+            if c.kind == FormulaType.OR:  # flatten nested OR
                 flat.extend(c.children)
             else:
                 flat.append(c)
@@ -222,11 +228,13 @@ def simplify(f: Formula) -> Formula:
         return Formula(FormulaType.OR, children=tuple(deduped))
     elif f.kind == FormulaType.IMPLIES:
         a, b = f.children
-        if a.kind == FormulaType.FALSE or b.kind == FormulaType.TRUE: # FALSE => x = TRUE, x => TRUE = TRUE
+        if (
+            a.kind == FormulaType.FALSE or b.kind == FormulaType.TRUE
+        ):  # FALSE => x = TRUE, x => TRUE = TRUE
             return TRUE
-        if a.kind == FormulaType.TRUE: # TRUE => x = x
+        if a.kind == FormulaType.TRUE:  # TRUE => x = x
             return b
-        if a == b: # x => x = TRUE
+        if a == b:  # x => x = TRUE
             return TRUE
     return f
 
@@ -270,6 +278,7 @@ def detect_circular_dependencies(deps: Dict[str, Set[str]]) -> List[List[str]]:
 @dataclass
 class LogicAnalysisResult:
     """Result of analyzing a set of formulas."""
+
     tautologies: List[Tuple[str, Formula]] = field(default_factory=list)
     contradictions: List[Tuple[str, Formula]] = field(default_factory=list)
     simplified: Dict[str, Formula] = field(default_factory=dict)
@@ -277,8 +286,9 @@ class LogicAnalysisResult:
     satisfiable: Dict[str, Optional[Dict[str, bool]]] = field(default_factory=dict)
 
 
-def analyze_formulas(named_formulas: Dict[str, Formula],
-                     deps: Optional[Dict[str, Set[str]]] = None) -> LogicAnalysisResult:
+def analyze_formulas(
+    named_formulas: Dict[str, Formula], deps: Optional[Dict[str, Set[str]]] = None
+) -> LogicAnalysisResult:
     """
     Comprehensive analysis of named boolean formulas.
 
@@ -318,7 +328,10 @@ def statute_to_formulas(statute) -> Dict[str, Formula]:
             if isinstance(elem, nodes.ElementGroupNode):
                 sub = _elements_to_formula(elem.members)
                 if elem.combinator == "any_of":
-                    sub = Formula(FormulaType.OR, children=sub.children if sub.kind == FormulaType.AND else (sub,))
+                    sub = Formula(
+                        FormulaType.OR,
+                        children=sub.children if sub.kind == FormulaType.AND else (sub,),
+                    )
                 parts.append(sub)
             elif isinstance(elem, nodes.ElementNode):
                 parts.append(var(elem.name))
@@ -330,7 +343,7 @@ def statute_to_formulas(statute) -> Dict[str, Formula]:
     guilt = _elements_to_formula(statute.elements)
     formulas["guilt"] = guilt
     # add exception formulas
-    for exc in getattr(statute, 'exceptions', ()):
+    for exc in getattr(statute, "exceptions", ()):
         label = exc.label or "exception"
         formulas[f"exception_{label}"] = var(f"exc_{label}")
     # effective guilt = guilt && !exceptions

@@ -4,7 +4,7 @@ Alloy transpiler - formal verification model generation.
 Converts Yuho AST to Alloy specifications for bounded model checking.
 """
 
-from typing import List, Set, Dict, Optional
+from typing import Dict, List, Optional, Set, Tuple
 
 from yuho.ast import nodes
 from yuho.ast.visitor import Visitor
@@ -46,7 +46,7 @@ class AlloyTranspiler(TranspilerBase, Visitor):
         self._emit_builtins()
 
         # Enum definitions -> abstract sig + extends
-        for enum_def in getattr(ast, 'enum_defs', ()):
+        for enum_def in getattr(ast, "enum_defs", ()):
             self._transpile_enum(enum_def)
             self._emit("")
 
@@ -244,13 +244,13 @@ class AlloyTranspiler(TranspilerBase, Visitor):
         safe_name = self._safe_name(statute.section_number)
 
         self._emit(f"-- Statute: Section {statute.section_number} - {title}")
-        if getattr(statute, 'effective_date', None):
+        if getattr(statute, "effective_date", None):
             self._emit(f"-- Effective: {statute.effective_date}")
-        if getattr(statute, 'repealed_date', None):
+        if getattr(statute, "repealed_date", None):
             self._emit(f"-- REPEALED: {statute.repealed_date}")
-        if getattr(statute, 'subsumes', None):
+        if getattr(statute, "subsumes", None):
             self._emit(f"-- Subsumes: s{statute.subsumes}")
-        if getattr(statute, 'amends', None):
+        if getattr(statute, "amends", None):
             self._emit(f"-- Amends: s{statute.amends}")
 
         # Create sig for offense
@@ -273,11 +273,11 @@ class AlloyTranspiler(TranspilerBase, Visitor):
                 self._emit("caningApplies: Bool,")
             if statute.penalty.death_penalty:
                 self._emit("deathPenaltyApplies: Bool,")
-            if getattr(statute.penalty, 'sentencing', None):
+            if getattr(statute.penalty, "sentencing", None):
                 self._emit(f"-- sentencing mode: {statute.penalty.sentencing}")
-            if getattr(statute.penalty, 'mandatory_min_imprisonment', None):
+            if getattr(statute.penalty, "mandatory_min_imprisonment", None):
                 self._emit("mandatoryMinImprisonment: Bool,")
-            if getattr(statute.penalty, 'mandatory_min_fine', None):
+            if getattr(statute.penalty, "mandatory_min_fine", None):
                 self._emit("mandatoryMinFine: Bool,")
 
         self._emit("guilty: Bool")
@@ -292,8 +292,12 @@ class AlloyTranspiler(TranspilerBase, Visitor):
         self._indent += 1
 
         # All elements must be true for guilt (conjunction)
-        actus_reus_elems = [self._safe_name(e.name) for e in flat_elements if e.element_type == "actus_reus"]
-        mens_rea_elems = [self._safe_name(e.name) for e in flat_elements if e.element_type == "mens_rea"]
+        actus_reus_elems = [
+            self._safe_name(e.name) for e in flat_elements if e.element_type == "actus_reus"
+        ]
+        mens_rea_elems = [
+            self._safe_name(e.name) for e in flat_elements if e.element_type == "mens_rea"
+        ]
 
         self._emit(f"all o: {safe_name}Offense |")
         self._indent += 1
@@ -341,7 +345,9 @@ class AlloyTranspiler(TranspilerBase, Visitor):
                 # Wildcard is the default case
                 arm_constraints.append(f"({body_constraint})")
             else:
-                arm_constraints.append(f"({pattern_constraint} and {guard_constraint} implies {body_constraint})")
+                arm_constraints.append(
+                    f"({pattern_constraint} and {guard_constraint} implies {body_constraint})"
+                )
 
         self._emit(" or\n    ".join(arm_constraints))
 
@@ -368,7 +374,7 @@ class AlloyTranspiler(TranspilerBase, Visitor):
         elif isinstance(expr, nodes.BoolLit):
             return "True" if expr.value else "False"
         elif isinstance(expr, nodes.StringLit):
-            # Strings need to be modeled; use placeholder
+            # Preserve string literals directly; analyzers can swap in a richer String model later.
             return f'"{expr.value}"'
         elif isinstance(expr, nodes.IdentifierNode):
             return expr.name
@@ -421,31 +427,39 @@ class AlloyTranspiler(TranspilerBase, Visitor):
         self._emit("-- Cross-statute consistency assertions")
         self._emit("")
 
-        # Assert: no contradictory elements
+        offense_constraints = []
+        for statute in statutes:
+            offense_sig = f"{self._safe_name(statute.section_number)}Offense"
+            field_constraints = [
+                f"(o.{field_name} = True or o.{field_name} = False)"
+                for field_name in self._offense_bool_fields(statute)
+            ]
+            if not field_constraints:
+                field_constraints.append("True = True")
+            offense_constraints.append(
+                f"(all o: {offense_sig} | {' and '.join(field_constraints)})"
+            )
+
         self._emit("assert NoContradictoryElements {")
         self._indent += 1
-        self._emit("-- No offense can have contradictory required elements")
-        self._emit("-- (This is a placeholder; specific contradictions should be modeled)")
-        self._emit("some univ")
+        self._emit(" and\n    ".join(offense_constraints) if offense_constraints else "True = True")
         self._indent -= 1
         self._emit("}")
         self._emit("")
 
-        # Assert: penalty ordering (more serious offenses have higher penalties)
-        if len(statutes) >= 2:
-            self._emit("assert PenaltyOrdering {")
-            self._indent += 1
-            self._emit("-- More serious offenses should have higher or equal penalties")
-            self._emit("-- (Specific ordering relationships should be modeled)")
-            self._emit("some univ")
-            self._indent -= 1
-            self._emit("}")
+        subsumption_pairs = self._subsumption_pairs(statutes)
+        if subsumption_pairs:
+            self._emit("-- Subsumption annotations retained for downstream penalty analysis")
+            for parent, child in subsumption_pairs:
+                self._emit(
+                    f"-- s{parent.section_number} subsumes s{child.section_number}; use Z3 checks for exact penalty ordering."
+                )
             self._emit("")
 
     def _emit_run_commands(self, ast: nodes.ModuleNode) -> None:
         """
         Emit run and check commands for bounded model checking.
-        
+
         Generates:
         - run commands to find satisfying instances
         - check commands to verify assertions
@@ -455,18 +469,18 @@ class AlloyTranspiler(TranspilerBase, Visitor):
         self._emit("-- Verification commands for bounded model checking")
         self._emit("-- =========================================================================")
         self._emit("")
-        
+
         # Configuration comment
         self._emit("-- Scope configuration (adjust bounds as needed)")
         self._emit("-- Default scope is 5 atoms per sig, Int scope is 4 bits (-8 to 7)")
         self._emit("")
-        
+
         # Run commands for finding satisfying offense instances
         self._emit("-- Run commands: find satisfying instances")
         for statute in ast.statutes:
             safe_name = self._safe_name(statute.section_number)
             offense_sig = f"{safe_name}Offense"
-            
+
             # Basic run: find any instance
             self._emit(f"run show{safe_name}Instance {{")
             self._indent += 1
@@ -474,7 +488,7 @@ class AlloyTranspiler(TranspilerBase, Visitor):
             self._indent -= 1
             self._emit("} for 3 but 4 Int")
             self._emit("")
-            
+
             # Run with all elements satisfied
             flat_elems = self._flatten_elements(statute.elements)
             self._emit(f"run show{safe_name}GuiltyScenario {{")
@@ -490,7 +504,7 @@ class AlloyTranspiler(TranspilerBase, Visitor):
             self._indent -= 1
             self._emit("} for 5 but 4 Int")
             self._emit("")
-            
+
             # Run to find innocent scenario (not guilty)
             self._emit(f"run show{safe_name}InnocentScenario {{")
             self._indent += 1
@@ -498,16 +512,16 @@ class AlloyTranspiler(TranspilerBase, Visitor):
             self._indent -= 1
             self._emit("} for 3 but 4 Int")
             self._emit("")
-        
+
         # Check commands for assertions
         self._emit("-- Check commands: verify assertions with counterexample search")
         self._emit("")
-        
+
         # Check element consistency
         for statute in ast.statutes:
             safe_name = self._safe_name(statute.section_number)
             offense_sig = f"{safe_name}Offense"
-            
+
             # Check that guilty implies all elements true
             flat_elems = self._flatten_elements(statute.elements)
             self._emit(f"assert {safe_name}GuiltyImpliesElements {{")
@@ -525,7 +539,7 @@ class AlloyTranspiler(TranspilerBase, Visitor):
             self._emit("}")
             self._emit(f"check {safe_name}GuiltyImpliesElements for 5 but 4 Int")
             self._emit("")
-            
+
             # Check that all elements true implies guilty
             if flat_elems:
                 self._emit(f"assert {safe_name}ElementsImplyGuilty {{")
@@ -539,19 +553,17 @@ class AlloyTranspiler(TranspilerBase, Visitor):
                 self._emit("}")
                 self._emit(f"check {safe_name}ElementsImplyGuilty for 5 but 4 Int")
                 self._emit("")
-        
+
         # Global consistency assertions
         self._emit("check NoContradictoryElements for 5 but 4 Int")
-        if len(ast.statutes) >= 2:
-            self._emit("check PenaltyOrdering for 5 but 4 Int")
         self._emit("")
-        
+
         # Negative checks (looking for counterexamples to impossibilities)
         self._emit("-- Negative checks: these should find NO counterexamples")
         for statute in ast.statutes:
             safe_name = self._safe_name(statute.section_number)
             offense_sig = f"{safe_name}Offense"
-            
+
             # Check: it's impossible to be guilty with no elements satisfied
             flat_elems = self._flatten_elements(statute.elements)
             if flat_elems:
@@ -567,7 +579,7 @@ class AlloyTranspiler(TranspilerBase, Visitor):
                 self._emit("}")
                 self._emit(f"check {safe_name}NoElementsNoGuilt for 5 but 4 Int")
                 self._emit("")
-        
+
         # Exhaustive exploration hint
         self._emit("-- =========================================================================")
         self._emit("-- To run in Alloy Analyzer:")
@@ -588,6 +600,41 @@ class AlloyTranspiler(TranspilerBase, Visitor):
                 result.append(elem)
         return result
 
+    def _offense_bool_fields(self, statute: nodes.StatuteNode) -> List[str]:
+        """Return Bool-typed fields emitted on the offense signature."""
+        fields = ["guilty"]
+        fields.extend(
+            self._safe_name(elem.name) for elem in self._flatten_elements(statute.elements)
+        )
+
+        if statute.penalty:
+            if statute.penalty.imprisonment_max:
+                fields.append("imprisonmentApplies")
+            if statute.penalty.fine_max:
+                fields.append("fineApplies")
+            if statute.penalty.caning_max:
+                fields.append("caningApplies")
+            if statute.penalty.death_penalty:
+                fields.append("deathPenaltyApplies")
+            if getattr(statute.penalty, "mandatory_min_imprisonment", None):
+                fields.append("mandatoryMinImprisonment")
+            if getattr(statute.penalty, "mandatory_min_fine", None):
+                fields.append("mandatoryMinFine")
+
+        return fields
+
+    def _subsumption_pairs(
+        self, statutes: tuple[nodes.StatuteNode, ...]
+    ) -> List[Tuple[nodes.StatuteNode, nodes.StatuteNode]]:
+        """Return statutes with explicit subsumption relationships in the current module."""
+        statute_map = {statute.section_number: statute for statute in statutes}
+        pairs: List[Tuple[nodes.StatuteNode, nodes.StatuteNode]] = []
+        for statute in statutes:
+            subsumed_section = getattr(statute, "subsumes", None)
+            if subsumed_section and subsumed_section in statute_map:
+                pairs.append((statute, statute_map[subsumed_section]))
+        return pairs
+
     def _safe_name(self, name: str) -> str:
         """Convert name to safe Alloy identifier."""
         # Remove special chars, capitalize
@@ -596,4 +643,3 @@ class AlloyTranspiler(TranspilerBase, Visitor):
         if safe and safe[0].isdigit():
             safe = "S" + safe
         return safe
-

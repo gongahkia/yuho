@@ -11,7 +11,7 @@ from yuho.services.analysis import analyze_file, analyze_source
 from yuho.transpile import TranspileTarget, get_transpiler
 
 
-SAMPLE_SOURCE = '''\
+SAMPLE_SOURCE = """\
 statute 1 "Test Offence" {
     definitions {
         offence := "A test offence";
@@ -29,9 +29,9 @@ statute 1 "Test Offence" {
         "A does X intending Y. A is guilty."
     }
 }
-'''
+"""
 
-SAMPLE_TWO_STATUTES = '''\
+SAMPLE_TWO_STATUTES = """\
 statute 1 "First Offence" {
     definitions { first := "The first offence"; }
     elements {
@@ -49,7 +49,7 @@ statute 2 "Second Offence" {
     }
     penalty { imprisonment := 0 days .. 7 years; }
 }
-'''
+"""
 
 
 @pytest.fixture
@@ -96,6 +96,7 @@ class TestComparativeTranspiler:
 class TestVerificationReport:
     def test_produces_latex(self, single_ast):
         from yuho.transpile.verification_report import generate_verification_report
+
         output = generate_verification_report(single_ast)
         assert r"\documentclass" in output
         assert r"\begin{document}" in output
@@ -103,6 +104,7 @@ class TestVerificationReport:
 
     def test_checks_structural_elements(self, single_ast):
         from yuho.transpile.verification_report import generate_verification_report
+
         output = generate_verification_report(single_ast)
         assert "Has title" in output
         assert "Actus reus present" in output
@@ -110,6 +112,7 @@ class TestVerificationReport:
 
     def test_pass_status_for_complete_statute(self, single_ast):
         from yuho.transpile.verification_report import generate_verification_report
+
         output = generate_verification_report(single_ast)
         assert r"\pass" in output
 
@@ -118,9 +121,17 @@ class TestAllTargetsRoundtrip:
     """Ensure all transpile targets produce non-empty output."""
 
     TARGETS = [
-        "json", "english", "mermaid", "latex", "alloy",
-        "graphql", "blocks", "bibtex", "comparative",
-        "akomantoso", "prolog",
+        "json",
+        "english",
+        "mermaid",
+        "latex",
+        "alloy",
+        "graphql",
+        "blocks",
+        "bibtex",
+        "comparative",
+        "akomantoso",
+        "prolog",
     ]
 
     @pytest.mark.parametrize("target_name", TARGETS)
@@ -156,6 +167,7 @@ class TestLibraryFileTranspilation:
 
     def test_json_transpilation(self):
         import json
+
         path = self._first_statute()
         result = analyze_file(path)
         assert result.is_valid

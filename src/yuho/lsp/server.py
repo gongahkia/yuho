@@ -11,9 +11,7 @@ try:
     from pygls.lsp.server import LanguageServer
     from pygls.workspace import TextDocument
 except ImportError:
-    raise ImportError(
-        "LSP dependencies not installed. Install with: pip install yuho[lsp]"
-    )
+    raise ImportError("LSP dependencies not installed. Install with: pip install yuho[lsp]")
 
 from yuho import __version__
 from yuho.parser import SourceLocation, get_parser
@@ -134,10 +132,10 @@ class YuhoLanguageServer(LanguageServer):
 
         # Document cache
         self._documents: Dict[str, DocumentState] = {}
-        
+
         # Workspace folders for cross-file operations
         self._workspace_folders: List[str] = []
-        
+
         # Symbol index for workspace-wide lookups
         self._symbol_index: Dict[str, Dict[str, Any]] = {}
         self._symbol_index_lock = threading.Lock()
@@ -150,7 +148,7 @@ class YuhoLanguageServer(LanguageServer):
 
         # Register handlers
         self._register_handlers()
-    
+
     def _index_workspace_symbols(self, folder_uri: str) -> None:
         """Index workspace symbols in a background worker."""
         with self._symbol_index_lock:
@@ -168,15 +166,15 @@ class YuhoLanguageServer(LanguageServer):
         """Build a symbol index for a workspace folder, canceling stale scans."""
         from pathlib import Path
         from urllib.parse import urlparse, unquote
-        
+
         parsed = urlparse(folder_uri)
         folder_path = Path(unquote(parsed.path))
-        
+
         if not folder_path.exists():
             return
 
         local_index: Dict[str, Dict[str, Any]] = {}
-        
+
         for yh_file in folder_path.rglob("*.yh"):
             with self._symbol_index_lock:
                 if generation != self._symbol_scan_generation:
@@ -218,7 +216,6 @@ class YuhoLanguageServer(LanguageServer):
             if generation != self._symbol_scan_generation:
                 return
             self._symbol_index = local_index
-
 
     def _register_handlers(self):
         """Register LSP request/notification handlers."""
@@ -337,7 +334,9 @@ class YuhoLanguageServer(LanguageServer):
             return self._rename_symbol(uri, position, new_name)
 
         @self.feature(lsp.TEXT_DOCUMENT_PREPARE_RENAME)
-        def prepare_rename(params: lsp.PrepareRenameParams) -> Optional[lsp.PrepareRenameResult_Type1]:
+        def prepare_rename(
+            params: lsp.PrepareRenameParams,
+        ) -> Optional[lsp.PrepareRenameResult_Type1]:
             """Check if rename is valid at position."""
             uri = params.text_document.uri
             position = params.position
@@ -385,16 +384,40 @@ class YuhoLanguageServer(LanguageServer):
             lsp.SemanticTokensOptions(
                 legend=lsp.SemanticTokensLegend(
                     token_types=[
-                        "namespace", "type", "class", "enum", "interface",
-                        "struct", "typeParameter", "parameter", "variable",
-                        "property", "enumMember", "event", "function", "method",
-                        "macro", "keyword", "modifier", "comment", "string",
-                        "number", "regexp", "operator",
+                        "namespace",
+                        "type",
+                        "class",
+                        "enum",
+                        "interface",
+                        "struct",
+                        "typeParameter",
+                        "parameter",
+                        "variable",
+                        "property",
+                        "enumMember",
+                        "event",
+                        "function",
+                        "method",
+                        "macro",
+                        "keyword",
+                        "modifier",
+                        "comment",
+                        "string",
+                        "number",
+                        "regexp",
+                        "operator",
                     ],
                     token_modifiers=[
-                        "declaration", "definition", "readonly", "static",
-                        "deprecated", "abstract", "async", "modification",
-                        "documentation", "defaultLibrary",
+                        "declaration",
+                        "definition",
+                        "readonly",
+                        "static",
+                        "deprecated",
+                        "abstract",
+                        "async",
+                        "modification",
+                        "documentation",
+                        "defaultLibrary",
                     ],
                 ),
                 full=True,
@@ -498,7 +521,7 @@ class YuhoLanguageServer(LanguageServer):
         doc_state = self._documents.get(uri)
         if not doc_state:
             return None
-        
+
         word = self._get_word_at_position(doc_state.source, position)
         return get_hover(doc_state, word, self._type_to_str)
 
@@ -507,11 +530,11 @@ class YuhoLanguageServer(LanguageServer):
         doc_state = self._documents.get(uri)
         if not doc_state:
             return None
-        
+
         word = self._get_word_at_position(doc_state.source, position)
         if not word:
             return None
-        
+
         # Check AST for definitions
         if doc_state.ast:
             # Check struct definitions
@@ -521,7 +544,7 @@ class YuhoLanguageServer(LanguageServer):
                         uri=uri,
                         range=self._loc_to_range(struct.source_location),
                     )
-            
+
             # Check function definitions
             for func in doc_state.ast.function_defs:
                 if func.name == word and func.source_location:
@@ -529,16 +552,17 @@ class YuhoLanguageServer(LanguageServer):
                         uri=uri,
                         range=self._loc_to_range(func.source_location),
                     )
-            
+
             # Check statute definitions (by section number)
             for statute in doc_state.ast.statutes:
-                if (statute.section_number == word or 
-                    f"S{statute.section_number}" == word) and statute.source_location:
+                if (
+                    statute.section_number == word or f"S{statute.section_number}" == word
+                ) and statute.source_location:
                     return lsp.Location(
                         uri=uri,
                         range=self._loc_to_range(statute.source_location),
                     )
-            
+
             # Check imports - navigate to the .yh file
             for imp in doc_state.ast.imports:
                 # If user clicked on an imported name
@@ -553,7 +577,7 @@ class YuhoLanguageServer(LanguageServer):
                                 end=lsp.Position(line=0, character=0),
                             ),
                         )
-        
+
         return None
 
     def _get_references(self, uri: str, position: lsp.Position) -> List[lsp.Location]:
@@ -561,13 +585,13 @@ class YuhoLanguageServer(LanguageServer):
         doc_state = self._documents.get(uri)
         if not doc_state:
             return []
-        
+
         word = self._get_word_at_position(doc_state.source, position)
         if not word:
             return []
-        
+
         locations: List[lsp.Location] = []
-        
+
         # Find all occurrences of the word in the source
         lines = doc_state.source.splitlines()
         for line_num, line in enumerate(lines):
@@ -576,23 +600,27 @@ class YuhoLanguageServer(LanguageServer):
                 pos = line.find(word, col)
                 if pos == -1:
                     break
-                
+
                 # Check if it's a whole word (not part of a larger identifier)
-                before_ok = (pos == 0 or not (line[pos - 1].isalnum() or line[pos - 1] == '_'))
+                before_ok = pos == 0 or not (line[pos - 1].isalnum() or line[pos - 1] == "_")
                 after_pos = pos + len(word)
-                after_ok = (after_pos >= len(line) or not (line[after_pos].isalnum() or line[after_pos] == '_'))
-                
+                after_ok = after_pos >= len(line) or not (
+                    line[after_pos].isalnum() or line[after_pos] == "_"
+                )
+
                 if before_ok and after_ok:
-                    locations.append(lsp.Location(
-                        uri=uri,
-                        range=lsp.Range(
-                            start=lsp.Position(line=line_num, character=pos),
-                            end=lsp.Position(line=line_num, character=pos + len(word)),
-                        ),
-                    ))
-                
+                    locations.append(
+                        lsp.Location(
+                            uri=uri,
+                            range=lsp.Range(
+                                start=lsp.Position(line=line_num, character=pos),
+                                end=lsp.Position(line=line_num, character=pos + len(word)),
+                            ),
+                        )
+                    )
+
                 col = after_pos
-        
+
         return locations
 
     def _get_word_at_position(self, source: str, position: lsp.Position) -> Optional[str]:
@@ -600,34 +628,35 @@ class YuhoLanguageServer(LanguageServer):
         lines = source.splitlines()
         if position.line >= len(lines):
             return None
-        
+
         line = lines[position.line]
         if position.character >= len(line):
             return None
-        
+
         # Find word boundaries
         start = position.character
         end = position.character
-        
+
         # Expand backwards
-        while start > 0 and (line[start - 1].isalnum() or line[start - 1] == '_'):
+        while start > 0 and (line[start - 1].isalnum() or line[start - 1] == "_"):
             start -= 1
-        
+
         # Expand forwards
-        while end < len(line) and (line[end].isalnum() or line[end] == '_'):
+        while end < len(line) and (line[end].isalnum() or line[end] == "_"):
             end += 1
-        
+
         if start == end:
             return None
-        
+
         return line[start:end]
 
     def _type_to_str(self, type_node) -> str:
         """Convert a type node to a string representation."""
         if type_node is None:
             return "unknown"
-        
+
         from yuho.ast import nodes
+
         if isinstance(type_node, nodes.BuiltinType):
             return type_node.name
         elif isinstance(type_node, nodes.NamedType):
@@ -645,12 +674,12 @@ class YuhoLanguageServer(LanguageServer):
         """Resolve an import path to a file URI."""
         import os
         from urllib.parse import urlparse, unquote
-        
+
         # Parse current URI to get directory
         parsed = urlparse(current_uri)
         current_path = unquote(parsed.path)
         current_dir = os.path.dirname(current_path)
-        
+
         # Try different resolution strategies
         candidates = [
             os.path.join(current_dir, import_path),
@@ -658,124 +687,125 @@ class YuhoLanguageServer(LanguageServer):
             os.path.join(current_dir, "lib", import_path),
             os.path.join(current_dir, "lib", f"{import_path}.yh"),
         ]
-        
+
         for candidate in candidates:
             if os.path.isfile(candidate):
                 return f"file://{candidate}"
-        
+
         return None
 
-    def _get_signature_help(
-        self, uri: str, position: lsp.Position
-    ) -> Optional[lsp.SignatureHelp]:
+    def _get_signature_help(self, uri: str, position: lsp.Position) -> Optional[lsp.SignatureHelp]:
         """Get signature help for function call at position."""
         doc_state = self._documents.get(uri)
         if not doc_state:
             return None
-        
+
         # Get the line up to cursor
         lines = doc_state.source.splitlines()
         if position.line >= len(lines):
             return None
-        
+
         line = lines[position.line]
-        line_to_cursor = line[:position.character]
-        
+        line_to_cursor = line[: position.character]
+
         # Find function call context
         func_name, param_index = self._parse_function_call_context(line_to_cursor)
         if not func_name:
             return None
-        
+
         # Find the function definition
         if doc_state.ast:
             for func in doc_state.ast.function_defs:
                 if func.name == func_name:
                     return self._build_signature_help(func, param_index)
-        
+
         return None
-    
+
     def _parse_function_call_context(self, line_to_cursor: str) -> tuple:
         """
         Parse the line to find function call context.
-        
+
         Returns:
             Tuple of (function_name, parameter_index) or (None, 0)
         """
         # Find the last unclosed parenthesis
         paren_depth = 0
         func_end = -1
-        
+
         for i in range(len(line_to_cursor) - 1, -1, -1):
             char = line_to_cursor[i]
-            if char == ')':
+            if char == ")":
                 paren_depth += 1
-            elif char == '(':
+            elif char == "(":
                 if paren_depth == 0:
                     func_end = i
                     break
                 paren_depth -= 1
-        
+
         if func_end < 0:
             return (None, 0)
-        
+
         # Extract function name before the opening paren
         func_name_part = line_to_cursor[:func_end].rstrip()
-        
+
         # Find start of identifier
         func_start = len(func_name_part)
-        while func_start > 0 and (func_name_part[func_start - 1].isalnum() or 
-                                   func_name_part[func_start - 1] == '_'):
+        while func_start > 0 and (
+            func_name_part[func_start - 1].isalnum() or func_name_part[func_start - 1] == "_"
+        ):
             func_start -= 1
-        
+
         func_name = func_name_part[func_start:]
         if not func_name or not func_name[0].isalpha():
             return (None, 0)
-        
+
         # Count commas to determine parameter index
-        args_part = line_to_cursor[func_end + 1:]
+        args_part = line_to_cursor[func_end + 1 :]
         param_index = 0
         paren_depth = 0
-        
+
         for char in args_part:
-            if char == '(':
+            if char == "(":
                 paren_depth += 1
-            elif char == ')':
+            elif char == ")":
                 paren_depth -= 1
-            elif char == ',' and paren_depth == 0:
+            elif char == "," and paren_depth == 0:
                 param_index += 1
-        
+
         return (func_name, param_index)
-    
+
     def _build_signature_help(self, func, active_param: int) -> lsp.SignatureHelp:
         """Build SignatureHelp from function definition."""
         # Build parameter info
         parameters = []
         params_str_parts = []
-        
+
         for param in func.params:
             type_str = self._type_to_str(param.type_annotation)
             param_str = f"{param.name}: {type_str}"
             params_str_parts.append(param_str)
-            
-            parameters.append(lsp.ParameterInformation(
-                label=param_str,
-                documentation=f"Parameter `{param.name}` of type `{type_str}`",
-            ))
-        
+
+            parameters.append(
+                lsp.ParameterInformation(
+                    label=param_str,
+                    documentation=f"Parameter `{param.name}` of type `{type_str}`",
+                )
+            )
+
         # Build full signature string
         params_str = ", ".join(params_str_parts)
         ret_str = ""
         if func.return_type:
             ret_str = f" -> {self._type_to_str(func.return_type)}"
-        
+
         signature_str = f"fn {func.name}({params_str}){ret_str}"
-        
+
         signature = lsp.SignatureInformation(
             label=signature_str,
             parameters=parameters,
             active_parameter=min(active_param, len(parameters) - 1) if parameters else None,
         )
-        
+
         return lsp.SignatureHelp(
             signatures=[signature],
             active_signature=0,
@@ -813,9 +843,7 @@ class YuhoLanguageServer(LanguageServer):
 
         if line >= len(lines):
             # Return minimal range
-            return lsp.SelectionRange(
-                range=lsp.Range(start=position, end=position)
-            )
+            return lsp.SelectionRange(range=lsp.Range(start=position, end=position))
 
         line_text = lines[line]
         ranges: List[lsp.Range] = []
@@ -824,31 +852,37 @@ class YuhoLanguageServer(LanguageServer):
         word_start = char
         word_end = char
 
-        while word_start > 0 and (line_text[word_start - 1].isalnum() or line_text[word_start - 1] == '_'):
+        while word_start > 0 and (
+            line_text[word_start - 1].isalnum() or line_text[word_start - 1] == "_"
+        ):
             word_start -= 1
-        while word_end < len(line_text) and (line_text[word_end].isalnum() or line_text[word_end] == '_'):
+        while word_end < len(line_text) and (
+            line_text[word_end].isalnum() or line_text[word_end] == "_"
+        ):
             word_end += 1
 
         if word_start != word_end:
-            ranges.append(lsp.Range(
-                start=lsp.Position(line=line, character=word_start),
-                end=lsp.Position(line=line, character=word_end),
-            ))
+            ranges.append(
+                lsp.Range(
+                    start=lsp.Position(line=line, character=word_start),
+                    end=lsp.Position(line=line, character=word_end),
+                )
+            )
 
         # Level 2: String literal if inside one
         for match in re.finditer(r'"[^"]*"', line_text):
             if match.start() <= char <= match.end():
-                ranges.append(lsp.Range(
-                    start=lsp.Position(line=line, character=match.start()),
-                    end=lsp.Position(line=line, character=match.end()),
-                ))
+                ranges.append(
+                    lsp.Range(
+                        start=lsp.Position(line=line, character=match.start()),
+                        end=lsp.Position(line=line, character=match.end()),
+                    )
+                )
                 break
 
         # Level 3: Bracketed expression (parentheses, braces, brackets)
-        for open_char, close_char in [('(', ')'), ('{', '}'), ('[', ']')]:
-            bracket_range = self._find_enclosing_brackets(
-                lines, line, char, open_char, close_char
-            )
+        for open_char, close_char in [("(", ")"), ("{", "}"), ("[", "]")]:
+            bracket_range = self._find_enclosing_brackets(lines, line, char, open_char, close_char)
             if bracket_range:
                 ranges.append(bracket_range)
 
@@ -856,16 +890,20 @@ class YuhoLanguageServer(LanguageServer):
         line_content_start = len(line_text) - len(line_text.lstrip())
         line_content_end = len(line_text.rstrip())
         if line_content_end > line_content_start:
-            ranges.append(lsp.Range(
-                start=lsp.Position(line=line, character=line_content_start),
-                end=lsp.Position(line=line, character=line_content_end),
-            ))
+            ranges.append(
+                lsp.Range(
+                    start=lsp.Position(line=line, character=line_content_start),
+                    end=lsp.Position(line=line, character=line_content_end),
+                )
+            )
 
         # Level 5: Full line including newline
-        ranges.append(lsp.Range(
-            start=lsp.Position(line=line, character=0),
-            end=lsp.Position(line=line + 1, character=0),
-        ))
+        ranges.append(
+            lsp.Range(
+                start=lsp.Position(line=line, character=0),
+                end=lsp.Position(line=line + 1, character=0),
+            )
+        )
 
         # Level 6: Block (based on indentation)
         block_range = self._find_indentation_block(lines, line)
@@ -873,10 +911,12 @@ class YuhoLanguageServer(LanguageServer):
             ranges.append(block_range)
 
         # Level 7: Entire document
-        ranges.append(lsp.Range(
-            start=lsp.Position(line=0, character=0),
-            end=lsp.Position(line=len(lines), character=0),
-        ))
+        ranges.append(
+            lsp.Range(
+                start=lsp.Position(line=0, character=0),
+                end=lsp.Position(line=len(lines), character=0),
+            )
+        )
 
         # Remove duplicates and sort by size (smallest first)
         unique_ranges = []
@@ -897,9 +937,7 @@ class YuhoLanguageServer(LanguageServer):
 
         # Build nested SelectionRange (smallest to largest)
         if not unique_ranges:
-            return lsp.SelectionRange(
-                range=lsp.Range(start=position, end=position)
-            )
+            return lsp.SelectionRange(range=lsp.Range(start=position, end=position))
 
         # Build from largest to smallest (parent first)
         result = lsp.SelectionRange(range=unique_ranges[-1])
@@ -1024,35 +1062,41 @@ class YuhoLanguageServer(LanguageServer):
         for struct in doc_state.ast.type_defs:
             loc = struct.source_location
             if loc:
-                symbols.append(lsp.DocumentSymbol(
-                    name=struct.name,
-                    kind=lsp.SymbolKind.Struct,
-                    range=self._loc_to_range(loc),
-                    selection_range=self._loc_to_range(loc),
-                ))
+                symbols.append(
+                    lsp.DocumentSymbol(
+                        name=struct.name,
+                        kind=lsp.SymbolKind.Struct,
+                        range=self._loc_to_range(loc),
+                        selection_range=self._loc_to_range(loc),
+                    )
+                )
 
         # Functions
         for func in doc_state.ast.function_defs:
             loc = func.source_location
             if loc:
-                symbols.append(lsp.DocumentSymbol(
-                    name=func.name,
-                    kind=lsp.SymbolKind.Function,
-                    range=self._loc_to_range(loc),
-                    selection_range=self._loc_to_range(loc),
-                ))
+                symbols.append(
+                    lsp.DocumentSymbol(
+                        name=func.name,
+                        kind=lsp.SymbolKind.Function,
+                        range=self._loc_to_range(loc),
+                        selection_range=self._loc_to_range(loc),
+                    )
+                )
 
         # Statutes
         for statute in doc_state.ast.statutes:
             loc = statute.source_location
             if loc:
                 title = statute.title.value if statute.title else statute.section_number
-                symbols.append(lsp.DocumentSymbol(
-                    name=f"S{statute.section_number}: {title}",
-                    kind=lsp.SymbolKind.Module,
-                    range=self._loc_to_range(loc),
-                    selection_range=self._loc_to_range(loc),
-                ))
+                symbols.append(
+                    lsp.DocumentSymbol(
+                        name=f"S{statute.section_number}: {title}",
+                        kind=lsp.SymbolKind.Module,
+                        range=self._loc_to_range(loc),
+                        selection_range=self._loc_to_range(loc),
+                    )
+                )
 
         return symbols
 
@@ -1065,17 +1109,20 @@ class YuhoLanguageServer(LanguageServer):
         # Use the formatter from CLI
         try:
             from yuho.cli.commands.fmt import _format_module
+
             formatted = _format_module(doc_state.ast)
 
             # Create edit replacing entire document
             lines = doc_state.source.splitlines()
-            return [lsp.TextEdit(
-                range=lsp.Range(
-                    start=lsp.Position(line=0, character=0),
-                    end=lsp.Position(line=len(lines), character=0),
-                ),
-                new_text=formatted,
-            )]
+            return [
+                lsp.TextEdit(
+                    range=lsp.Range(
+                        start=lsp.Position(line=0, character=0),
+                        end=lsp.Position(line=len(lines), character=0),
+                    ),
+                    new_text=formatted,
+                )
+            ]
         except Exception as e:
             logger.warning(f"Format error: {e}")
             return []
@@ -1103,9 +1150,9 @@ class YuhoLanguageServer(LanguageServer):
             return None
 
         # Validate new name is a valid identifier
-        if not new_name or not new_name[0].isalpha() and new_name[0] != '_':
+        if not new_name or not new_name[0].isalpha() and new_name[0] != "_":
             return None
-        if not all(c.isalnum() or c == '_' for c in new_name):
+        if not all(c.isalnum() or c == "_" for c in new_name):
             return None
 
         # Check if this is a renameable symbol (struct, function, variable, statute)
@@ -1130,7 +1177,7 @@ class YuhoLanguageServer(LanguageServer):
             edits = self._find_and_replace_symbol(doc, word, new_name)
             if edits:
                 changes[doc_uri] = edits
-        
+
         # Also search workspace files not currently open
         for folder_uri in self._workspace_folders:
             self._search_workspace_for_symbol(folder_uri, word, new_name, changes)
@@ -1139,7 +1186,7 @@ class YuhoLanguageServer(LanguageServer):
             return None
 
         return lsp.WorkspaceEdit(changes=changes)
-    
+
     def _search_workspace_for_symbol(
         self,
         folder_uri: str,
@@ -1150,41 +1197,40 @@ class YuhoLanguageServer(LanguageServer):
         """Search workspace folder for symbol occurrences."""
         from pathlib import Path
         from urllib.parse import urlparse, unquote
-        
+
         parsed = urlparse(folder_uri)
         folder_path = Path(unquote(parsed.path))
-        
+
         if not folder_path.exists():
             return
-        
+
         for yh_file in folder_path.rglob("*.yh"):
             file_uri = f"file://{yh_file}"
-            
+
             # Skip already-open documents
             if file_uri in self._documents:
                 continue
-            
+
             try:
                 content = yh_file.read_text()
-                
+
                 # Quick check if symbol appears in file
                 if old_name not in content:
                     continue
-                
+
                 # Create temporary doc state for editing
                 temp_doc = DocumentState(file_uri, content)
                 edits = self._find_and_replace_symbol(temp_doc, old_name, new_name)
-                
+
                 if edits:
                     changes[file_uri] = edits
-                    
+
             except Exception as exc:
                 logger.warning(
                     "Workspace symbol rename scan failed for %s: %s",
                     file_uri,
                     exc,
                 )
-
 
     def _find_and_replace_symbol(
         self, doc_state: DocumentState, old_name: str, new_name: str
@@ -1201,18 +1247,22 @@ class YuhoLanguageServer(LanguageServer):
                     break
 
                 # Check if it's a whole word
-                before_ok = pos == 0 or not (line[pos - 1].isalnum() or line[pos - 1] == '_')
+                before_ok = pos == 0 or not (line[pos - 1].isalnum() or line[pos - 1] == "_")
                 after_pos = pos + len(old_name)
-                after_ok = after_pos >= len(line) or not (line[after_pos].isalnum() or line[after_pos] == '_')
+                after_ok = after_pos >= len(line) or not (
+                    line[after_pos].isalnum() or line[after_pos] == "_"
+                )
 
                 if before_ok and after_ok:
-                    edits.append(lsp.TextEdit(
-                        range=lsp.Range(
-                            start=lsp.Position(line=line_num, character=pos),
-                            end=lsp.Position(line=line_num, character=after_pos),
-                        ),
-                        new_text=new_name,
-                    ))
+                    edits.append(
+                        lsp.TextEdit(
+                            range=lsp.Range(
+                                start=lsp.Position(line=line_num, character=pos),
+                                end=lsp.Position(line=line_num, character=after_pos),
+                            ),
+                            new_text=new_name,
+                        )
+                    )
 
                 col = after_pos
 
@@ -1251,9 +1301,9 @@ class YuhoLanguageServer(LanguageServer):
         start = position.character
         end = position.character
 
-        while start > 0 and (line[start - 1].isalnum() or line[start - 1] == '_'):
+        while start > 0 and (line[start - 1].isalnum() or line[start - 1] == "_"):
             start -= 1
-        while end < len(line) and (line[end].isalnum() or line[end] == '_'):
+        while end < len(line) and (line[end].isalnum() or line[end] == "_"):
             end += 1
 
         return lsp.PrepareRenameResult_Type1(
@@ -1282,14 +1332,16 @@ class YuhoLanguageServer(LanguageServer):
                         key = (uri, struct.name, loc.line, loc.col)
                         if key not in seen:
                             seen.add(key)
-                            results.append(lsp.SymbolInformation(
-                                name=struct.name,
-                                kind=lsp.SymbolKind.Struct,
-                                location=lsp.Location(
-                                    uri=uri,
-                                    range=self._loc_to_range(loc),
-                                ),
-                            ))
+                            results.append(
+                                lsp.SymbolInformation(
+                                    name=struct.name,
+                                    kind=lsp.SymbolKind.Struct,
+                                    location=lsp.Location(
+                                        uri=uri,
+                                        range=self._loc_to_range(loc),
+                                    ),
+                                )
+                            )
 
             # Search functions
             for func in doc_state.ast.function_defs:
@@ -1299,33 +1351,40 @@ class YuhoLanguageServer(LanguageServer):
                         key = (uri, func.name, loc.line, loc.col)
                         if key not in seen:
                             seen.add(key)
-                            results.append(lsp.SymbolInformation(
-                                name=func.name,
-                                kind=lsp.SymbolKind.Function,
-                                location=lsp.Location(
-                                    uri=uri,
-                                    range=self._loc_to_range(loc),
-                                ),
-                            ))
+                            results.append(
+                                lsp.SymbolInformation(
+                                    name=func.name,
+                                    kind=lsp.SymbolKind.Function,
+                                    location=lsp.Location(
+                                        uri=uri,
+                                        range=self._loc_to_range(loc),
+                                    ),
+                                )
+                            )
 
             # Search statutes
             for statute in doc_state.ast.statutes:
                 title = statute.title.value if statute.title else ""
-                if query_lower in f"s{statute.section_number}".lower() or query_lower in title.lower():
+                if (
+                    query_lower in f"s{statute.section_number}".lower()
+                    or query_lower in title.lower()
+                ):
                     loc = statute.source_location
                     if loc:
                         symbol_name = f"S{statute.section_number}: {title}"
                         key = (uri, symbol_name, loc.line, loc.col)
                         if key not in seen:
                             seen.add(key)
-                            results.append(lsp.SymbolInformation(
-                                name=symbol_name,
-                                kind=lsp.SymbolKind.Module,
-                                location=lsp.Location(
-                                    uri=uri,
-                                    range=self._loc_to_range(loc),
-                                ),
-                            ))
+                            results.append(
+                                lsp.SymbolInformation(
+                                    name=symbol_name,
+                                    kind=lsp.SymbolKind.Module,
+                                    location=lsp.Location(
+                                        uri=uri,
+                                        range=self._loc_to_range(loc),
+                                    ),
+                                )
+                            )
 
         with self._symbol_index_lock:
             indexed_symbols = list(self._symbol_index.items())
@@ -1333,9 +1392,10 @@ class YuhoLanguageServer(LanguageServer):
         for symbol_name, entry in indexed_symbols:
             if query_lower not in symbol_name.lower():
                 continue
-            uri = entry.get("uri")
+            raw_uri = entry.get("uri")
             loc = entry.get("location")
             kind = entry.get("kind", "")
+            uri = raw_uri if isinstance(raw_uri, str) else ""
             if not uri or not loc:
                 continue
 
@@ -1344,11 +1404,7 @@ class YuhoLanguageServer(LanguageServer):
                 continue
             seen.add(key)
 
-            symbol_kind = (
-                lsp.SymbolKind.Struct
-                if kind == "struct"
-                else lsp.SymbolKind.Function
-            )
+            symbol_kind = lsp.SymbolKind.Struct if kind == "struct" else lsp.SymbolKind.Function
             results.append(
                 lsp.SymbolInformation(
                     name=symbol_name,
@@ -1381,33 +1437,37 @@ class YuhoLanguageServer(LanguageServer):
         for statute in doc_state.ast.statutes:
             loc = statute.source_location
             if loc:
-                lenses.append(lsp.CodeLens(
-                    range=lsp.Range(
-                        start=lsp.Position(line=loc.line - 1, character=0),
-                        end=lsp.Position(line=loc.line - 1, character=0),
-                    ),
-                    command=lsp.Command(
-                        title=f"▶ Run tests for S{statute.section_number}",
-                        command="yuho.runStatuteTests",
-                        arguments=[uri, statute.section_number],
-                    ),
-                ))
+                lenses.append(
+                    lsp.CodeLens(
+                        range=lsp.Range(
+                            start=lsp.Position(line=loc.line - 1, character=0),
+                            end=lsp.Position(line=loc.line - 1, character=0),
+                        ),
+                        command=lsp.Command(
+                            title=f"▶ Run tests for S{statute.section_number}",
+                            command="yuho.runStatuteTests",
+                            arguments=[uri, statute.section_number],
+                        ),
+                    )
+                )
 
         # Add "Transpile" lens above statute definitions
         for statute in doc_state.ast.statutes:
             loc = statute.source_location
             if loc:
-                lenses.append(lsp.CodeLens(
-                    range=lsp.Range(
-                        start=lsp.Position(line=loc.line - 1, character=0),
-                        end=lsp.Position(line=loc.line - 1, character=0),
-                    ),
-                    command=lsp.Command(
-                        title="📄 Transpile to English",
-                        command="yuho.transpileStatute",
-                        arguments=[uri, statute.section_number, "english"],
-                    ),
-                ))
+                lenses.append(
+                    lsp.CodeLens(
+                        range=lsp.Range(
+                            start=lsp.Position(line=loc.line - 1, character=0),
+                            end=lsp.Position(line=loc.line - 1, character=0),
+                        ),
+                        command=lsp.Command(
+                            title="📄 Transpile to English",
+                            command="yuho.transpileStatute",
+                            arguments=[uri, statute.section_number, "english"],
+                        ),
+                    )
+                )
 
         return lenses
 
@@ -1423,31 +1483,37 @@ class YuhoLanguageServer(LanguageServer):
         for struct in doc_state.ast.type_defs:
             loc = struct.source_location
             if loc and loc.end_line > loc.line:
-                ranges.append(lsp.FoldingRange(
-                    start_line=loc.line - 1,
-                    end_line=loc.end_line - 1,
-                    kind=lsp.FoldingRangeKind.Region,
-                ))
+                ranges.append(
+                    lsp.FoldingRange(
+                        start_line=loc.line - 1,
+                        end_line=loc.end_line - 1,
+                        kind=lsp.FoldingRangeKind.Region,
+                    )
+                )
 
         # Fold functions
         for func in doc_state.ast.function_defs:
             loc = func.source_location
             if loc and loc.end_line > loc.line:
-                ranges.append(lsp.FoldingRange(
-                    start_line=loc.line - 1,
-                    end_line=loc.end_line - 1,
-                    kind=lsp.FoldingRangeKind.Region,
-                ))
+                ranges.append(
+                    lsp.FoldingRange(
+                        start_line=loc.line - 1,
+                        end_line=loc.end_line - 1,
+                        kind=lsp.FoldingRangeKind.Region,
+                    )
+                )
 
         # Fold statutes
         for statute in doc_state.ast.statutes:
             loc = statute.source_location
             if loc and loc.end_line > loc.line:
-                ranges.append(lsp.FoldingRange(
-                    start_line=loc.line - 1,
-                    end_line=loc.end_line - 1,
-                    kind=lsp.FoldingRangeKind.Region,
-                ))
+                ranges.append(
+                    lsp.FoldingRange(
+                        start_line=loc.line - 1,
+                        end_line=loc.end_line - 1,
+                        kind=lsp.FoldingRangeKind.Region,
+                    )
+                )
 
         return ranges
 
@@ -1475,18 +1541,42 @@ class YuhoLanguageServer(LanguageServer):
 
         # Token type indices (matching the legend defined in handler)
         TOKEN_TYPES = {
-            "namespace": 0, "type": 1, "class": 2, "enum": 3, "interface": 4,
-            "struct": 5, "typeParameter": 6, "parameter": 7, "variable": 8,
-            "property": 9, "enumMember": 10, "event": 11, "function": 12,
-            "method": 13, "macro": 14, "keyword": 15, "modifier": 16,
-            "comment": 17, "string": 18, "number": 19, "regexp": 20, "operator": 21,
+            "namespace": 0,
+            "type": 1,
+            "class": 2,
+            "enum": 3,
+            "interface": 4,
+            "struct": 5,
+            "typeParameter": 6,
+            "parameter": 7,
+            "variable": 8,
+            "property": 9,
+            "enumMember": 10,
+            "event": 11,
+            "function": 12,
+            "method": 13,
+            "macro": 14,
+            "keyword": 15,
+            "modifier": 16,
+            "comment": 17,
+            "string": 18,
+            "number": 19,
+            "regexp": 20,
+            "operator": 21,
         }
 
         # Modifier bit flags
         MODIFIERS = {
-            "declaration": 0, "definition": 1, "readonly": 2, "static": 3,
-            "deprecated": 4, "abstract": 5, "async": 6, "modification": 7,
-            "documentation": 8, "defaultLibrary": 9,
+            "declaration": 0,
+            "definition": 1,
+            "readonly": 2,
+            "static": 3,
+            "deprecated": 4,
+            "abstract": 5,
+            "async": 6,
+            "modification": 7,
+            "documentation": 8,
+            "defaultLibrary": 9,
         }
 
         tokens: List[tuple] = []  # (line, col, length, type_idx, modifier_bits)
@@ -1496,48 +1586,56 @@ class YuhoLanguageServer(LanguageServer):
             loc = struct.source_location
             if loc:
                 # Struct name token
-                tokens.append((
-                    loc.line - 1,  # 0-indexed
-                    loc.col - 1,
-                    len(struct.name),
-                    TOKEN_TYPES["struct"],
-                    (1 << MODIFIERS["definition"]),
-                ))
+                tokens.append(
+                    (
+                        loc.line - 1,  # 0-indexed
+                        loc.col - 1,
+                        len(struct.name),
+                        TOKEN_TYPES["struct"],
+                        (1 << MODIFIERS["definition"]),
+                    )
+                )
 
         # Collect tokens from functions
         for func in doc_state.ast.function_defs:
             loc = func.source_location
             if loc:
-                tokens.append((
-                    loc.line - 1,
-                    loc.col - 1,
-                    len(func.name),
-                    TOKEN_TYPES["function"],
-                    (1 << MODIFIERS["definition"]),
-                ))
+                tokens.append(
+                    (
+                        loc.line - 1,
+                        loc.col - 1,
+                        len(func.name),
+                        TOKEN_TYPES["function"],
+                        (1 << MODIFIERS["definition"]),
+                    )
+                )
 
             # Parameters
             for param in func.params:
                 if param.source_location:
-                    tokens.append((
-                        param.source_location.line - 1,
-                        param.source_location.col - 1,
-                        len(param.name),
-                        TOKEN_TYPES["parameter"],
-                        0,
-                    ))
+                    tokens.append(
+                        (
+                            param.source_location.line - 1,
+                            param.source_location.col - 1,
+                            len(param.name),
+                            TOKEN_TYPES["parameter"],
+                            0,
+                        )
+                    )
 
         # Collect tokens from statutes
         for statute in doc_state.ast.statutes:
             loc = statute.source_location
             if loc:
-                tokens.append((
-                    loc.line - 1,
-                    loc.col - 1,
-                    len(f"statute"),
-                    TOKEN_TYPES["keyword"],
-                    0,
-                ))
+                tokens.append(
+                    (
+                        loc.line - 1,
+                        loc.col - 1,
+                        len(f"statute"),
+                        TOKEN_TYPES["keyword"],
+                        0,
+                    )
+                )
 
         # Sort tokens by position
         tokens.sort(key=lambda t: (t[0], t[1]))
@@ -1579,16 +1677,18 @@ class YuhoLanguageServer(LanguageServer):
             # If variable has a value but type could be inferred
             if var.value and var.type_annotation:
                 type_str = self._type_to_str(var.type_annotation)
-                hints.append(lsp.InlayHint(
-                    position=lsp.Position(
-                        line=loc.line - 1,
-                        character=loc.col + len(var.name),
-                    ),
-                    label=f": {type_str}",
-                    kind=lsp.InlayHintKind.Type,
-                    padding_left=False,
-                    padding_right=True,
-                ))
+                hints.append(
+                    lsp.InlayHint(
+                        position=lsp.Position(
+                            line=loc.line - 1,
+                            character=loc.col + len(var.name),
+                        ),
+                        label=f": {type_str}",
+                        kind=lsp.InlayHintKind.Type,
+                        padding_left=False,
+                        padding_right=True,
+                    )
+                )
 
         # Add parameter name hints for function calls
         # (Requires deeper AST traversal - simplified for now)

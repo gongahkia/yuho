@@ -81,12 +81,12 @@ class EnglishTranspiler(TranspilerBase, Visitor):
             self._emit_blank()
 
         # Legal tests
-        for lt in getattr(node, 'legal_tests', ()):
+        for lt in getattr(node, "legal_tests", ()):
             self._visit_legal_test(lt)
             self._emit_blank()
 
         # Conflict checks
-        for cc in getattr(node, 'conflict_checks', ()):
+        for cc in getattr(node, "conflict_checks", ()):
             self._visit_conflict_check(cc)
             self._emit_blank()
 
@@ -101,12 +101,12 @@ class EnglishTranspiler(TranspilerBase, Visitor):
     def _visit_import(self, node: nodes.ImportNode) -> None:
         """Generate English for import."""
         if node.is_wildcard:
-            self._emit(f"Reference: All definitions from \"{node.path}\"")
+            self._emit(f'Reference: All definitions from "{node.path}"')
         elif node.imported_names:
             names = ", ".join(node.imported_names)
-            self._emit(f"Reference: {names} from \"{node.path}\"")
+            self._emit(f'Reference: {names} from "{node.path}"')
         else:
-            self._emit(f"Reference: \"{node.path}\"")
+            self._emit(f'Reference: "{node.path}"')
 
     # =========================================================================
     # Statute blocks
@@ -128,22 +128,26 @@ class EnglishTranspiler(TranspilerBase, Visitor):
             if node.jurisdiction_meta:
                 for k, v in node.jurisdiction_meta.items():
                     self._emit(f"  {k}: {v}")
-        if getattr(node, 'effective_date', None):
+        if getattr(node, "effective_date", None):
             self._emit(f"Effective: {node.effective_date}")
-        if getattr(node, 'repealed_date', None):
+        if getattr(node, "repealed_date", None):
             self._emit(f"REPEALED: {node.repealed_date}")
-        if getattr(node, 'subsumes', None):
+        if getattr(node, "subsumes", None):
             self._emit(f"Subsumes: Section {node.subsumes}")
-        if getattr(node, 'amends', None):
+        if getattr(node, "amends", None):
             self._emit(f"Amends: Section {node.amends}")
         self._emit_blank()
 
         # Parties
-        if getattr(node, 'parties', None):
+        if getattr(node, "parties", None):
             self._emit("Parties:")
             self._indent_level += 1
             for party in node.parties:
-                type_str = f" ({self._type_to_english(party.type_annotation)})" if party.type_annotation else ""
+                type_str = (
+                    f" ({self._type_to_english(party.type_annotation)})"
+                    if party.type_annotation
+                    else ""
+                )
                 self._emit(f"{party.name} ({party.role}){type_str}")
             self._indent_level -= 1
             self._emit_blank()
@@ -180,9 +184,15 @@ class EnglishTranspiler(TranspilerBase, Visitor):
             self._indent_level += 1
             for exc in node.exceptions:
                 label = f"[{exc.label}] " if exc.label else ""
-                self._emit(f"{label}If {exc.condition.value}")
+                self._emit(f"{label}{self._exception_trigger(exc)}")
                 if exc.effect:
                     self._emit(f"  Then: {exc.effect.value}")
+                if exc.guard:
+                    self._emit(f"  Guard: {self._expr_to_english(exc.guard)}")
+                if exc.priority is not None:
+                    self._emit(f"  Priority: {exc.priority}")
+                if exc.defeats:
+                    self._emit(f"  Defeats: {exc.defeats}")
             self._indent_level -= 1
             self._emit_blank()
 
@@ -192,7 +202,10 @@ class EnglishTranspiler(TranspilerBase, Visitor):
             self._emit_blank()
             for i, illus in enumerate(node.illustrations, 1):
                 label = illus.label or f"({chr(ord('a') + i - 1)})"
-                self._emit(f"{label} {illus.description.value}")
+                self._emit(f"Illustration {label}: {illus.description.value}")
+                self._emit(
+                    f"  Provenance: statutory illustration attached to Section {node.section_number}."
+                )
             self._emit_blank()
 
         # Case law
@@ -206,6 +219,7 @@ class EnglishTranspiler(TranspilerBase, Visitor):
                 self._emit(f"Holding: {cl.holding.value}")
                 if cl.element_ref:
                     self._emit(f"Relates to element: {cl.element_ref}")
+                self._emit(self._case_law_provenance(cl))
                 self._indent_level -= 1
             self._indent_level -= 1
             self._emit_blank()
@@ -256,7 +270,11 @@ class EnglishTranspiler(TranspilerBase, Visitor):
                     "circumstance": "The situation",
                 }
                 kind = kind_map.get(elem.element_type, elem.element_type)
-                desc = elem.description.value if isinstance(elem.description, nodes.StringLit) else str(elem.name)
+                desc = (
+                    elem.description.value
+                    if isinstance(elem.description, nodes.StringLit)
+                    else str(elem.name)
+                )
                 self._emit(f"- {kind}: {desc}")
 
     def _visit_element(self, node: nodes.ElementNode) -> None:
@@ -273,12 +291,13 @@ class EnglishTranspiler(TranspilerBase, Visitor):
 
         # phase 12: append causation and burden info
         suffixes = []
-        if getattr(node, 'caused_by', None):
+        if getattr(node, "caused_by", None):
             suffixes.append(f"caused by '{node.caused_by}'")
-        if getattr(node, 'burden', None):
+        if getattr(node, "burden", None):
             burden_text = f"burden on {node.burden}"
-            if getattr(node, 'burden_standard', None):
-                burden_text += f" ({node.burden_standard.replace('_', ' ')})"
+            burden_standard = getattr(node, "burden_standard", None)
+            if isinstance(burden_standard, str):
+                burden_text += f" ({burden_standard.replace('_', ' ')})"
             suffixes.append(burden_text)
 
         suffix = (" [" + "; ".join(suffixes) + "]") if suffixes else ""
@@ -296,7 +315,11 @@ class EnglishTranspiler(TranspilerBase, Visitor):
 
     def _visit_element_group(self, node: nodes.ElementGroupNode) -> None:
         """Generate English for element group (all_of/any_of)."""
-        label = "ALL of the following" if node.combinator == "all_of" else "ANY of the following"
+        label = (
+            "Conjunctive requirement (all_of): every following limb must be proved"
+            if node.combinator == "all_of"
+            else "Alternative requirement (any_of): proving one following limb is enough"
+        )
         self._emit(f"{label}:")
         self._indent_level += 1
         for member in node.members:
@@ -318,7 +341,9 @@ class EnglishTranspiler(TranspilerBase, Visitor):
             if node.imprisonment_min:
                 min_str = self._duration_to_english(node.imprisonment_min)
                 max_str = self._duration_to_english(node.imprisonment_max)
-                parts.append(f"imprisonment for a term of not less than {min_str} and not more than {max_str}")
+                parts.append(
+                    f"imprisonment for a term of not less than {min_str} and not more than {max_str}"
+                )
             else:
                 max_str = self._duration_to_english(node.imprisonment_max)
                 parts.append(f"imprisonment for a term which may extend to {max_str}")
@@ -338,7 +363,9 @@ class EnglishTranspiler(TranspilerBase, Visitor):
             if node.caning_min == node.caning_max:
                 parts.append(f"caning with {node.caning_min} strokes")
             else:
-                parts.append(f"caning with not less than {node.caning_min} and not more than {node.caning_max} strokes")
+                parts.append(
+                    f"caning with not less than {node.caning_min} and not more than {node.caning_max} strokes"
+                )
 
         # Death penalty
         if node.death_penalty:
@@ -407,7 +434,7 @@ class EnglishTranspiler(TranspilerBase, Visitor):
 
     def _visit_struct_def(self, node: nodes.StructDefNode) -> None:
         """Generate English for struct definition."""
-        self._emit(f"Type \"{node.name}\" consists of:")
+        self._emit(f'Type "{node.name}" consists of:')
         self._indent_level += 1
         for field in node.fields:
             type_str = self._type_to_english(field.type_annotation)
@@ -421,12 +448,13 @@ class EnglishTranspiler(TranspilerBase, Visitor):
     def _visit_function_def(self, node: nodes.FunctionDefNode) -> None:
         """Generate English for function definition."""
         params_str = ", ".join(
-            f"{p.name} ({self._type_to_english(p.type_annotation)})"
-            for p in node.params
+            f"{p.name} ({self._type_to_english(p.type_annotation)})" for p in node.params
         )
-        ret_str = f" returning {self._type_to_english(node.return_type)}" if node.return_type else ""
+        ret_str = (
+            f" returning {self._type_to_english(node.return_type)}" if node.return_type else ""
+        )
 
-        self._emit(f"Function \"{node.name}\"({params_str}){ret_str}:")
+        self._emit(f'Function "{node.name}"({params_str}){ret_str}:')
         self._indent_level += 1
         for stmt in node.body.statements:
             self._visit_statement(stmt)
@@ -439,7 +467,7 @@ class EnglishTranspiler(TranspilerBase, Visitor):
     def _visit_variable_decl(self, node: nodes.VariableDecl) -> None:
         """Generate English for variable declaration."""
         type_str = self._type_to_english(node.type_annotation)
-        qualifier = getattr(node, 'qualifier', None) or ""
+        qualifier = getattr(node, "qualifier", None) or ""
         prefix = ""
         if qualifier == "fact":
             prefix = "[FACT] "
@@ -572,6 +600,19 @@ class EnglishTranspiler(TranspilerBase, Visitor):
         else:
             return "value"
 
+    def _exception_trigger(self, node: nodes.ExceptionNode) -> str:
+        """Explain the doctrinal trigger for an exception."""
+        trigger = node.condition.value.strip()
+        if trigger.lower().startswith("if "):
+            return trigger
+        return f"If {trigger}"
+
+    def _case_law_provenance(self, node: nodes.CaseLawNode) -> str:
+        """Describe how a judicial authority is being used."""
+        if node.element_ref:
+            return f"Provenance: judicial authority linked to element {node.element_ref}."
+        return "Provenance: judicial authority linked to this statute."
+
     def _operator_to_english(self, op: str) -> str:
         """Convert operator to English."""
         operators = {
@@ -637,7 +678,7 @@ class EnglishTranspiler(TranspilerBase, Visitor):
         """Generate English for a legal test."""
         self._emit(f"LEGAL TEST: {node.name}")
         self._emit("-" * 40)
-        for ann in getattr(node, 'annotations', ()):
+        for ann in getattr(node, "annotations", ()):
             args = ", ".join(ann.args)
             self._emit(f"  [{ann.name}: {args}]")
         self._emit("Requirements:")

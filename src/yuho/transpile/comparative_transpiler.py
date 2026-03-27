@@ -47,11 +47,22 @@ class ComparativeTranspiler(TranspilerBase):
         headers = ["Element Type"] + [self._title(s) for s in statutes]
         lines.append("| " + " | ".join(headers) + " |")
         lines.append("| " + " | ".join(["---"] * len(headers)) + " |")
-        all_types = ["actus_reus", "mens_rea", "circumstance", "obligation", "prohibition", "permission"]
+        all_types = [
+            "actus_reus",
+            "mens_rea",
+            "circumstance",
+            "obligation",
+            "prohibition",
+            "permission",
+        ]
         for etype in all_types:
             row = [etype]
             for s in statutes:
-                elems = [e for e in s.elements if isinstance(e, nodes.ElementNode) and e.element_type == etype]
+                elems = [
+                    e
+                    for e in s.elements
+                    if isinstance(e, nodes.ElementNode) and e.element_type == etype
+                ]
                 if elems:
                     row.append("; ".join(e.name for e in elems))
                 else:
@@ -65,12 +76,38 @@ class ComparativeTranspiler(TranspilerBase):
         lines.append("| " + " | ".join(headers) + " |")
         lines.append("| " + " | ".join(["---"] * len(headers)) + " |")
         for field_label, getter in [
-            ("Imprisonment", lambda p: f"{p.imprisonment_min or '--'} to {p.imprisonment_max or '--'}" if p else "--"),
-            ("Fine", lambda p: f"${p.fine_min.amount if p.fine_min else 0} to ${p.fine_max.amount if p.fine_max else '?'}" if p else "--"),
+            (
+                "Imprisonment",
+                lambda p: (
+                    f"{p.imprisonment_min or '--'} to {p.imprisonment_max or '--'}" if p else "--"
+                ),
+            ),
+            (
+                "Fine",
+                lambda p: (
+                    f"${p.fine_min.amount if p.fine_min else 0} to ${p.fine_max.amount if p.fine_max else '?'}"
+                    if p
+                    else "--"
+                ),
+            ),
             ("Death", lambda p: "Yes" if p and p.death_penalty else "No"),
-            ("Caning", lambda p: f"{p.caning_min or 0}-{p.caning_max}" if p and p.caning_max else "--"),
-            ("Sentencing", lambda p: getattr(p, 'sentencing', None) or "--" if p else "--"),
-            ("Mandatory Min", lambda p: "Yes" if p and (getattr(p, 'mandatory_min_imprisonment', None) or getattr(p, 'mandatory_min_fine', None)) else "No"),
+            (
+                "Caning",
+                lambda p: f"{p.caning_min or 0}-{p.caning_max}" if p and p.caning_max else "--",
+            ),
+            ("Sentencing", lambda p: getattr(p, "sentencing", None) or "--" if p else "--"),
+            (
+                "Mandatory Min",
+                lambda p: (
+                    "Yes"
+                    if p
+                    and (
+                        getattr(p, "mandatory_min_imprisonment", None)
+                        or getattr(p, "mandatory_min_fine", None)
+                    )
+                    else "No"
+                ),
+            ),
         ]:
             row = [field_label]
             for s in statutes:
@@ -106,10 +143,10 @@ class ComparativeTranspiler(TranspilerBase):
         lines.append("| " + " | ".join(headers) + " |")
         lines.append("| " + " | ".join(["---"] * len(headers)) + " |")
         for label, getter in [
-            ("Effective", lambda s: getattr(s, 'effective_date', None) or "--"),
-            ("Repealed", lambda s: getattr(s, 'repealed_date', None) or "--"),
-            ("Subsumes", lambda s: f"s{s.subsumes}" if getattr(s, 'subsumes', None) else "--"),
-            ("Amends", lambda s: f"s{s.amends}" if getattr(s, 'amends', None) else "--"),
+            ("Effective", lambda s: getattr(s, "effective_date", None) or "--"),
+            ("Repealed", lambda s: getattr(s, "repealed_date", None) or "--"),
+            ("Subsumes", lambda s: f"s{s.subsumes}" if getattr(s, "subsumes", None) else "--"),
+            ("Amends", lambda s: f"s{s.amends}" if getattr(s, "amends", None) else "--"),
         ]:
             row = [label]
             for s in statutes:

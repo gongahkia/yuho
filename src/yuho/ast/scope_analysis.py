@@ -24,6 +24,7 @@ logger = logging.getLogger(__name__)
 
 class SymbolKind(Enum):
     """Type of symbol in the symbol table."""
+
     VARIABLE = auto()
     FUNCTION = auto()
     STRUCT = auto()
@@ -32,12 +33,13 @@ class SymbolKind(Enum):
     ENUM = auto()
     ENUM_VARIANT = auto()
     TYPE_ALIAS = auto()
-    IMPORTED = auto() # symbol injected from another module
+    IMPORTED = auto()  # symbol injected from another module
 
 
 @dataclass
 class Symbol:
     """Represents a symbol in the symbol table."""
+
     name: str
     kind: SymbolKind
     declaration_node: Optional[nodes.ASTNode] = None
@@ -54,6 +56,7 @@ class Symbol:
 @dataclass
 class Scope:
     """Represents a lexical scope with its own symbol table."""
+
     name: str
     parent: Optional["Scope"] = None
     symbols: Dict[str, Symbol] = field(default_factory=dict)
@@ -96,6 +99,7 @@ class Scope:
 @dataclass
 class ScopeError:
     """Represents a scope-related error."""
+
     message: str
     line: int = 0
     column: int = 0
@@ -109,6 +113,7 @@ class ScopeError:
 @dataclass
 class ScopeAnalysisResult:
     """Result of scope analysis."""
+
     # root scope (module level)
     root_scope: Scope = field(default_factory=lambda: Scope(name="module", level=0))
     # all errors found
@@ -187,7 +192,7 @@ class ScopeAnalysisVisitor(Visitor):
         self.result = ScopeAnalysisResult()
         self._current_scope = self.result.root_scope
         self.result.all_scopes.append(self._current_scope)
-        self._resolver = resolver # Optional[ModuleResolver]
+        self._resolver = resolver  # Optional[ModuleResolver]
         self._source_file = Path(source_file) if source_file else None
 
     def _push_scope(self, name: str) -> Scope:
@@ -274,9 +279,7 @@ class ScopeAnalysisVisitor(Visitor):
         if self._resolver is None or self._source_file is None:
             return self.generic_visit(node)
         try:
-            symbols = self._resolver.resolve_and_get_symbols(
-                node, self._source_file
-            )
+            symbols = self._resolver.resolve_and_get_symbols(node, self._source_file)
             self._inject_imported_symbols(symbols, node.path)
         except Exception as exc:
             self.result.add_error(
@@ -404,7 +407,7 @@ class ScopeAnalysisVisitor(Visitor):
         if node.body:
             self.visit(node.body)
         self._pop_scope()
-        return None # don't call generic_visit to avoid re-visiting
+        return None  # don't call generic_visit to avoid re-visiting
 
     # =========================================================================
     # Variable declarations
@@ -502,10 +505,10 @@ class ScopeAnalysisVisitor(Visitor):
         """Create scope for statute definitions."""
         scope_name = f"statute_{node.section_number}"
         self._push_scope(scope_name)
-        for member in node.definitions:
-            self.visit(member)
-        for member in node.elements:
-            self.visit(member)
+        for definition in node.definitions:
+            self.visit(definition)
+        for element in node.elements:
+            self.visit(element)
         self._pop_scope()
         return None
 
@@ -523,9 +526,9 @@ class ScopeAnalysisVisitor(Visitor):
         # first pass: collect struct, enum, type alias, and function definitions
         for struct_def in node.type_defs:
             self.visit_struct_def(struct_def)
-        for enum_def in getattr(node, 'enum_defs', ()):
+        for enum_def in getattr(node, "enum_defs", ()):
             self.visit_enum_def(enum_def)
-        for type_alias in getattr(node, 'type_aliases', ()):
+        for type_alias in getattr(node, "type_aliases", ()):
             self.visit_type_alias(type_alias)
         for func_def in node.function_defs:
             return_type = None

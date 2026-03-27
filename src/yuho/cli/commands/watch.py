@@ -41,17 +41,21 @@ def run_watch(directory: str = ".", interval: float = 2.0, verbose: bool = False
                 result = analyze_file(f)
                 if result.errors or result.parse_errors:
                     click.echo(f"    Errors: {len(result.errors) + len(result.parse_errors)}")
-                    manager.dispatch(Event(
-                        type=EventType.VALIDATION_ERROR,
-                        source=f,
-                        data={"error_count": len(result.errors) + len(result.parse_errors)},
-                    ))
+                    manager.dispatch(
+                        Event(
+                            type=EventType.VALIDATION_ERROR,
+                            source=f,
+                            data={"error_count": len(result.errors) + len(result.parse_errors)},
+                        )
+                    )
                 else:
                     click.echo(f"    Valid")
-                    manager.dispatch(Event(
-                        type=EventType.STATUTE_UPDATED,
-                        source=f,
-                    ))
+                    manager.dispatch(
+                        Event(
+                            type=EventType.STATUTE_UPDATED,
+                            source=f,
+                        )
+                    )
             prev = curr
     except KeyboardInterrupt:
         click.echo("\nStopped watching.")

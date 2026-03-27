@@ -259,7 +259,7 @@ class TestTransformerIdentity:
 
 class TestJSONRoundTrip:
     """Tests for JSON serialization round-trip invariant.
-    
+
     Invariant: from_json(to_json(ast)) == ast
     """
 
@@ -321,7 +321,7 @@ class TestJSONRoundTrip:
         assert "type_defs" in parsed
         assert "function_defs" in parsed
         assert "statutes" in parsed
-        
+
         # Count invariants
         assert len(parsed["type_defs"]) == len(ast.type_defs)
         assert len(parsed["function_defs"]) == len(ast.function_defs)
@@ -330,7 +330,7 @@ class TestJSONRoundTrip:
 
 class TestMatchExhaustivenessInvariant:
     """Tests for match expression exhaustiveness invariant.
-    
+
     Invariant: All generated match expressions should pass exhaustiveness check.
     """
 
@@ -359,16 +359,16 @@ fn test_match(x: int) -> int {{
         # Check string representation includes wildcard or default
         has_wildcard = "_" in match_expr or "case _" in match_expr
         has_default = "default" in match_expr.lower()
-        
+
         # At minimum, should have some case handling
         has_case = "case" in match_expr
-        
+
         assert has_case, "Match expression should have at least one case"
 
 
 class TestPatternReachabilityInvariant:
     """Tests for pattern reachability invariant.
-    
+
     Invariant: No generated match arms should be trivially unreachable.
     """
 
@@ -377,25 +377,26 @@ class TestPatternReachabilityInvariant:
     def test_no_duplicate_patterns(self, match_expr):
         """Match expressions should not have duplicate patterns."""
         import re
-        
+
         # Extract case patterns
-        case_pattern = r'case\s+([^:]+):'
+        case_pattern = r"case\s+([^:]+):"
         matches = re.findall(case_pattern, match_expr)
-        
+
         # Filter out wildcards (they're special)
         non_wildcard = [m.strip() for m in matches if m.strip() != "_"]
-        
+
         # Check for duplicates
         if non_wildcard:
             unique = set(non_wildcard)
             # Allow some flexibility for generated code
-            assert len(unique) >= len(non_wildcard) * 0.8, \
-                f"Too many duplicate patterns: {non_wildcard}"
+            assert (
+                len(unique) >= len(non_wildcard) * 0.8
+            ), f"Too many duplicate patterns: {non_wildcard}"
 
 
 class TestCrossTranspilerConsistency:
     """Tests for cross-transpiler consistency.
-    
+
     Invariant: JSON AST parsed back should match original structural properties.
     """
 
@@ -428,7 +429,7 @@ class TestCrossTranspilerConsistency:
         assert "@context" in jsonld_output or "statutes" in jsonld_output
 
     @given(yuho_module())
-    @SLOW_SETTINGS  
+    @SLOW_SETTINGS
     def test_transpiler_produces_valid_output(self, module):
         """All transpilers should produce valid, non-empty output."""
         from yuho.parser import Parser
@@ -456,7 +457,7 @@ class TestCrossTranspilerConsistency:
 
 class TestParserFuzzing:
     """Fuzzing tests for parser robustness.
-    
+
     Tests that the parser handles arbitrary input gracefully.
     """
 
@@ -467,7 +468,7 @@ class TestParserFuzzing:
         from yuho.parser import Parser
 
         parser = Parser()
-        
+
         # Should not raise unhandled exceptions
         try:
             result = parser.parse(literal)
@@ -475,8 +476,7 @@ class TestParserFuzzing:
             assert result is not None
         except Exception as e:
             # Only syntax-related errors are acceptable
-            assert "syntax" in str(e).lower() or "parse" in str(e).lower(), \
-                f"Unexpected error: {e}"
+            assert "syntax" in str(e).lower() or "parse" in str(e).lower(), f"Unexpected error: {e}"
 
     @given(yuho_struct_definition())
     @SLOW_SETTINGS
@@ -485,10 +485,10 @@ class TestParserFuzzing:
         from yuho.parser import Parser
 
         parser = Parser()
-        
+
         # Corrupt the struct slightly
         corrupted = struct.replace("{", "{{").replace("}", "}}")
-        
+
         try:
             result = parser.parse(corrupted)
             # May fail to parse, but should not crash
@@ -504,12 +504,12 @@ class TestParserFuzzing:
         from yuho.parser import Parser
 
         parser = Parser()
-        
+
         # Try various truncation points
         for truncate_at in [len(module) // 4, len(module) // 2, len(module) * 3 // 4]:
             if truncate_at > 0:
                 truncated = module[:truncate_at]
-                
+
                 try:
                     result = parser.parse(truncated)
                     # Result may be invalid, but should exist

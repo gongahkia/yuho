@@ -68,8 +68,27 @@ Available commands inside the REPL:
 |---------|-------------|
 | `yuho lsp` | Start Language Server Protocol server |
 | `yuho api` | Start REST API server |
-| `yuho preview <file>` | Live preview with auto-reload in browser |
-| `yuho tui` | Launch interactive Terminal User Interface |
+
+## Advanced Commands
+
+| Command | Description |
+|---------|-------------|
+| `yuho batch` | Run batch analysis or transpilation over many files |
+| `yuho ci-report` | Generate machine-readable CI summaries |
+| `yuho completion` | Emit shell completion scripts |
+| `yuho compliance-matrix` | Build compliance comparison views |
+| `yuho deps` | Inspect Yuho dependency information |
+| `yuho eval` | Evaluate facts or expressions against Yuho models |
+| `yuho explain-all <dir>` | Explain multiple Yuho files in one pass |
+| `yuho export-training` | Export training-ready statute data |
+| `yuho generate-tests <file>` | Generate test cases from statute constraints |
+| `yuho playground` | Start the local playground server |
+| `yuho schema` | Print the config or data schema |
+| `yuho static-site` | Build a static study site from Yuho sources |
+| `yuho verify-report` | Generate verification-focused reports |
+| `yuho watch <file>` | Re-run checks as files change |
+| `yuho webhook` | Start webhook integration endpoints |
+| `yuho workspace` | Manage multi-file Yuho workspaces |
 
 ## Package Library
 
@@ -103,13 +122,22 @@ yuho transpile my_statute.yh -t english
 
 Produces a structured plain English breakdown of the statute with definitions, elements classified by type, penalties, and illustrations. Most useful output for law students verifying their model.
 
+### Validation Modes
+
+```bash
+yuho check my_statute.yh
+yuho check my_statute.yh --syntax-only
+```
+
+`yuho check` runs parse, AST, semantic, and lint phases by default. Use `--syntax-only` when you explicitly want parse/AST validation without semantic checks.
+
 ### Mermaid
 
 ```bash
 yuho transpile my_statute.yh -t mermaid
 ```
 
-Generates Mermaid diagram code (mindmap or flowchart). View by pasting into [mermaid.live](https://mermaid.live), wrapping in a ` ```mermaid ` block on GitHub, or using `yuho preview`.
+Generates Mermaid diagram code (mindmap or flowchart). View by pasting into [mermaid.live](https://mermaid.live) or wrapping in a ` ```mermaid ` block on GitHub.
 
 ### LaTeX / PDF
 

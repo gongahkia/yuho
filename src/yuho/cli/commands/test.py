@@ -6,7 +6,7 @@ import json
 import sys
 import time
 from pathlib import Path
-from typing import Optional, List
+from typing import TYPE_CHECKING, Dict, List, Optional, TypedDict
 from datetime import datetime
 
 import click
@@ -15,6 +15,38 @@ from yuho.parser import get_parser
 from yuho.ast import ASTBuilder
 from yuho.cli.error_formatter import Colors, colorize
 from yuho.output.junit import TestResult as JUnitTestResult, to_junit_xml
+
+if TYPE_CHECKING:
+    from yuho.testing.coverage import CoverageTracker
+    from yuho.ast import nodes
+
+
+class AssertionSummary(TypedDict):
+    passed: int
+    failed: int
+
+
+class TestFileResult(TypedDict, total=False):
+    file: str
+    passed: bool
+    errors: List[str]
+    assertions: AssertionSummary
+    stats: Dict[str, int]
+
+
+def _iter_leaf_elements(
+    elements: (
+        tuple["nodes.ElementNode | nodes.ElementGroupNode", ...]
+        | list["nodes.ElementNode | nodes.ElementGroupNode"]
+    )
+):
+    from yuho.ast import nodes
+
+    for elem in elements:
+        if isinstance(elem, nodes.ElementNode):
+            yield elem
+            continue
+        yield from _iter_leaf_elements(list(elem.members))
 
 
 def run_test(
@@ -39,6 +71,7 @@ def run_test(
     """
     if file is not None:
         from yuho.parser.wrapper import validate_file_path
+
         try:
             file_path = validate_file_path(file)
             file = str(file_path)
@@ -60,17 +93,17 @@ def run_test(
             statute_files.extend(f for f in cwd.glob("**/*.yh") if "test" not in f.name.lower())
     elif file:
         file_path = Path(file)
-        
+
         # Check if the file itself is a test file
         is_test_file = file_path.name.startswith("test_") or file_path.name.endswith("_test.yh")
-        
+
         if is_test_file:
             # The file IS the test file, run it directly
             if not file_path.exists():
                 click.echo(colorize(f"Test file not found: {file}", Colors.RED), err=True)
                 sys.exit(1)
             test_files.append(file_path)
-            
+
             # For coverage, find the associated statute file
             if coverage:
                 # test_statute.yh -> statute.yh
@@ -117,30 +150,30 @@ def run_test(
         sys.exit(0)
 
     # Initialize coverage tracker if needed
-    coverage_tracker = None
+    coverage_tracker: Optional["CoverageTracker"] = None
     preflight_errors: List[str] = []
     if coverage:
         from yuho.testing.coverage import CoverageTracker
+
         coverage_tracker = CoverageTracker()
 
         # Load statutes for coverage tracking
         for statute_file in statute_files:
             try:
                 parser = get_parser()
-                result = parser.parse_file(statute_file)
-                if result.errors:
-                    for parse_error in result.errors:
+                parse_result = parser.parse_file(statute_file)
+                if parse_result.errors:
+                    for parse_error in parse_result.errors:
                         loc = parse_error.location
                         line = loc.line if loc else "?"
                         col = loc.col if loc else "?"
                         preflight_errors.append(
-                            f"{statute_file}:{line}:{col}: "
-                            f"{parse_error.message}"
+                            f"{statute_file}:{line}:{col}: " f"{parse_error.message}"
                         )
                     continue
 
-                builder = ASTBuilder(result.source, str(statute_file))
-                ast = builder.build(result.root_node)
+                builder = ASTBuilder(parse_result.source, str(statute_file))
+                ast = builder.build(parse_result.root_node)
                 coverage_tracker.load_statutes_from_ast(ast)
             except Exception as e:
                 preflight_errors.append(f"{statute_file}: {e}")
@@ -158,10 +191,10 @@ def run_test(
         if verbose:
             click.echo(f"Running {test_file}...")
 
-        result = _run_test_file(test_file, verbose, coverage_tracker)
-        results.append(result)
+        test_result = _run_test_file(test_file, verbose, coverage_tracker)
+        results.append(test_result)
 
-        if result["passed"]:
+        if test_result["passed"]:
             passed += 1
             if not json_output:
                 click.echo(colorize(f"  PASS: {test_file.name}", Colors.CYAN))
@@ -169,7 +202,7 @@ def run_test(
             failed += 1
             if not json_output:
                 click.echo(colorize(f"  FAIL: {test_file.name}", Colors.RED))
-                for err in result.get("errors", []):
+                for err in test_result.get("errors", []):
                     click.echo(f"    - {err}")
 
     # Generate coverage report
@@ -191,10 +224,14 @@ def run_test(
         junit_results = []
         for r in results:
             fail_msg = "; ".join(r.get("errors", [])) if not r["passed"] else None
-            junit_results.append(JUnitTestResult(
-                name=Path(r["file"]).name, classname="yuho.test",
-                passed=r["passed"], failure_message=fail_msg,
-            ))
+            junit_results.append(
+                JUnitTestResult(
+                    name=Path(r["file"]).name,
+                    classname="yuho.test",
+                    passed=r["passed"],
+                    failure_message=fail_msg,
+                )
+            )
         print(to_junit_xml(junit_results, suite_name="yuho", suite_time=suite_time))
         sys.exit(1 if failed > 0 else 0)
 
@@ -226,9 +263,13 @@ def run_test(
         sys.exit(1)
 
 
-def _run_test_file(test_file: Path, verbose: bool, coverage_tracker=None) -> dict:
+def _run_test_file(
+    test_file: Path,
+    verbose: bool,
+    coverage_tracker: Optional["CoverageTracker"] = None,
+) -> TestFileResult:
     """Run a single test file and return results."""
-    result = {
+    result: TestFileResult = {
         "file": str(test_file),
         "passed": False,
         "errors": [],
@@ -265,6 +306,7 @@ def _run_test_file(test_file: Path, verbose: bool, coverage_tracker=None) -> dic
     if ast.references:
         try:
             from yuho.resolver import ModuleResolver
+
             search_paths = [test_file.parent, Path.cwd()]
             lib_path = Path.cwd() / "library"
             if lib_path.is_dir():
@@ -285,6 +327,7 @@ def _run_test_file(test_file: Path, verbose: bool, coverage_tracker=None) -> dic
                     if verbose:
                         click.echo(f"  warning: failed to resolve reference '{ref.path}': {e}")
             from yuho.ast.nodes import ModuleNode
+
             ast = ModuleNode(
                 imports=ast.imports,
                 type_defs=tuple(merged_type_defs),
@@ -299,7 +342,7 @@ def _run_test_file(test_file: Path, verbose: bool, coverage_tracker=None) -> dic
             pass
 
     # Evaluate assertions if present
-    if hasattr(ast, 'assertions') and ast.assertions:
+    if hasattr(ast, "assertions") and ast.assertions:
         env = _build_test_environment(ast)
         for assertion in ast.assertions:
             try:
@@ -321,7 +364,7 @@ def _run_test_file(test_file: Path, verbose: bool, coverage_tracker=None) -> dic
             section = statute.section_number
 
             # Mark elements as covered
-            for elem in (statute.elements or []):
+            for elem in _iter_leaf_elements(list(statute.elements or [])):
                 coverage_tracker.mark_element_covered(
                     section,
                     elem.element_type,
@@ -334,9 +377,9 @@ def _run_test_file(test_file: Path, verbose: bool, coverage_tracker=None) -> dic
                 coverage_tracker.mark_penalty_covered(section)
 
             # Mark illustrations as covered
-            if hasattr(statute, 'illustrations') and statute.illustrations:
+            if hasattr(statute, "illustrations") and statute.illustrations:
                 for ill in statute.illustrations:
-                    if hasattr(ill, 'label') and ill.label:
+                    if hasattr(ill, "label") and ill.label:
                         coverage_tracker.mark_illustration_covered(section, ill.label)
 
         coverage_tracker.add_test_result(passed=result["assertions"]["failed"] == 0)
@@ -355,6 +398,7 @@ def _run_test_file(test_file: Path, verbose: bool, coverage_tracker=None) -> dic
 def _build_test_environment(ast):
     """Build an interpreter environment from the AST."""
     from yuho.eval.interpreter import Interpreter, Environment
+
     interp = Interpreter()
     interp.interpret(ast)
     return interp
@@ -363,6 +407,7 @@ def _build_test_environment(ast):
 def _evaluate_expr(expr, interp_or_env):
     """Evaluate an expression using the interpreter."""
     from yuho.eval.interpreter import Interpreter
+
     if isinstance(interp_or_env, Interpreter):
         interp = interp_or_env
     else:
@@ -374,6 +419,7 @@ def _evaluate_expr(expr, interp_or_env):
 def _evaluate_assertion(assertion, interp_or_env, verbose: bool) -> tuple:
     """Evaluate an assertion and return (passed, error_message)."""
     from yuho.eval.interpreter import Interpreter, AssertionError_
+
     if isinstance(interp_or_env, Interpreter):
         interp = interp_or_env
     else:
@@ -520,7 +566,7 @@ def _generate_html_coverage_report(report, output_path: Path) -> None:
 """
 
     for section, data in statutes.items():
-        coverage_pct = float(data['overall_coverage'].rstrip('%'))
+        coverage_pct = float(data["overall_coverage"].rstrip("%"))
         if coverage_pct >= 80:
             badge_class = "coverage-high"
         elif coverage_pct >= 50:
@@ -545,9 +591,9 @@ def _generate_html_coverage_report(report, output_path: Path) -> None:
                 </thead>
                 <tbody>
 """
-        for elem_name, elem_data in data['elements'].items():
-            status_class = "status-covered" if elem_data['covered'] else "status-uncovered"
-            status_text = "COVERED" if elem_data['covered'] else "NOT COVERED"
+        for elem_name, elem_data in data["elements"].items():
+            status_class = "status-covered" if elem_data["covered"] else "status-uncovered"
+            status_text = "COVERED" if elem_data["covered"] else "NOT COVERED"
             html += f"""
                     <tr>
                         <td>{elem_name.split(':')[1] if ':' in elem_name else elem_name}</td>
@@ -557,8 +603,8 @@ def _generate_html_coverage_report(report, output_path: Path) -> None:
                     </tr>
 """
 
-        penalty_status = "COVERED" if data['penalty_covered'] else "NOT COVERED"
-        penalty_class = "status-covered" if data['penalty_covered'] else "status-uncovered"
+        penalty_status = "COVERED" if data["penalty_covered"] else "NOT COVERED"
+        penalty_class = "status-covered" if data["penalty_covered"] else "status-uncovered"
         html += f"""
                     <tr>
                         <td>Penalty</td>
@@ -579,4 +625,3 @@ def _generate_html_coverage_report(report, output_path: Path) -> None:
 """
 
     output_path.write_text(html)
-

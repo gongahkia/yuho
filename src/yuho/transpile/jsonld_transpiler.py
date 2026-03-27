@@ -19,7 +19,6 @@ LEGAL_CONTEXT = {
     "@vocab": "https://schema.org/",
     "yuho": "https://yuho.dev/ontology#",
     "eli": "http://data.europa.eu/eli/ontology#",
-
     # Schema.org Legislation mappings
     "Statute": "Legislation",
     "section_number": "legislationIdentifier",
@@ -28,7 +27,6 @@ LEGAL_CONTEXT = {
     "elements": "yuho:elements",
     "penalty": "yuho:penalty",
     "illustrations": "yuho:illustrations",
-
     # Element types
     "ElementNode": "yuho:LegalElement",
     "actus_reus": "yuho:actusReus",
@@ -37,49 +35,40 @@ LEGAL_CONTEXT = {
     "obligation": "yuho:obligation",
     "prohibition": "yuho:prohibition",
     "permission": "yuho:permission",
-
     # Causation/Burden
     "caused_by": "yuho:causedBy",
     "burden": "yuho:burdenOfProof",
     "burden_standard": "yuho:proofStandard",
-
     # Temporal/Hierarchy
     "effective_date": "eli:date_document",
     "repealed_date": "eli:date_repeal",
     "subsumes": "yuho:subsumes",
     "amends": "eli:amends",
-
     # Penalty composition
     "sentencing": "yuho:sentencingMode",
     "mandatory_min_imprisonment": "yuho:mandatoryMinImprisonment",
     "mandatory_min_fine": "yuho:mandatoryMinFine",
-
     # Enum/Type alias
     "EnumDefNode": "yuho:EnumType",
     "EnumVariant": "yuho:EnumVariant",
     "TypeAliasNode": "yuho:TypeAlias",
     "RefinementTypeNode": "yuho:RefinementType",
-
     # Penalty mappings
     "PenaltyNode": "yuho:Penalty",
     "imprisonment": "yuho:imprisonment",
     "fine": "yuho:fine",
     "supplementary": "yuho:supplementaryPunishment",
-
     # Duration/Money
     "DurationNode": "Duration",
     "MoneyNode": "MonetaryAmount",
     "currency": "currency",
     "amount": "value",
-
     # Struct mappings
     "StructDefNode": "yuho:TypeDefinition",
     "StructLiteralNode": "yuho:Instance",
     "FieldDef": "yuho:Field",
-
     # Function mappings
     "FunctionDefNode": "yuho:Function",
-
     # Match expression
     "MatchExprNode": "yuho:DecisionTree",
     "MatchArm": "yuho:DecisionBranch",
@@ -96,7 +85,9 @@ class JSONLDTranspiler(TranspilerBase):
     and integration with legal knowledge graphs.
     """
 
-    def __init__(self, base_uri: str = "https://yuho.dev/statutes/", include_locations: bool = False):
+    def __init__(
+        self, base_uri: str = "https://yuho.dev/statutes/", include_locations: bool = False
+    ):
         """
         Initialize the JSON-LD transpiler.
 
@@ -136,7 +127,7 @@ class JSONLDTranspiler(TranspilerBase):
 
     def _transform_to_jsonld(self, data: Dict[str, Any], node: nodes.ASTNode) -> Dict[str, Any]:
         """Transform a JSON dict to JSON-LD format."""
-        result = {}
+        result: Dict[str, Any] = {}
 
         # Map _type to @type
         if "_type" in data:
@@ -161,14 +152,21 @@ class JSONLDTranspiler(TranspilerBase):
             if isinstance(value, dict):
                 # Recursively transform nested objects
                 child_node = self._get_child_node(node, key)
-                result[new_key] = self._transform_to_jsonld(value, child_node) if child_node else value
+                result[new_key] = (
+                    self._transform_to_jsonld(value, child_node) if child_node else value
+                )
             elif isinstance(value, list):
                 # Transform list items
-                result[new_key] = [
-                    self._transform_to_jsonld(item, self._get_list_item_node(node, key, i))
-                    if isinstance(item, dict) else item
-                    for i, item in enumerate(value)
-                ]
+                transformed_items: List[Any] = []
+                for i, item in enumerate(value):
+                    if not isinstance(item, dict):
+                        transformed_items.append(item)
+                        continue
+                    item_node = self._get_list_item_node(node, key, i)
+                    transformed_items.append(
+                        self._transform_to_jsonld(item, item_node) if item_node else item
+                    )
+                result[new_key] = transformed_items
             else:
                 result[new_key] = value
 
@@ -302,7 +300,9 @@ class JSONLDTranspiler(TranspilerBase):
                 return child
         return None
 
-    def _get_list_item_node(self, parent: nodes.ASTNode, field: str, index: int) -> Optional[nodes.ASTNode]:
+    def _get_list_item_node(
+        self, parent: nodes.ASTNode, field: str, index: int
+    ) -> Optional[nodes.ASTNode]:
         """Get node for list item at index."""
         if hasattr(parent, field):
             children = getattr(parent, field)

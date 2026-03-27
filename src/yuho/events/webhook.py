@@ -19,16 +19,18 @@ logger = logging.getLogger("yuho.events.webhook")
 @dataclass
 class WebhookEndpoint:
     """A registered webhook endpoint."""
+
     id: str
     url: str
     secret: str
-    events: List[str] = field(default_factory=lambda: ["*"]) # event types to subscribe
+    events: List[str] = field(default_factory=lambda: ["*"])  # event types to subscribe
     enabled: bool = True
     max_retries: int = 3
 
 
 class WebhookManager:
     """Manages webhook registrations and delivery."""
+
     def __init__(self) -> None:
         self._endpoints: Dict[str, WebhookEndpoint] = {}
         self._lock = threading.Lock()
@@ -73,8 +75,10 @@ class WebhookManager:
                 if 200 <= resp.status < 300:
                     return True
             except (URLError, OSError) as e:
-                wait = 2 ** attempt # exponential backoff
-                logger.warning(f"Webhook delivery failed (attempt {attempt+1}): {e}, retrying in {wait}s")
+                wait = 2**attempt  # exponential backoff
+                logger.warning(
+                    f"Webhook delivery failed (attempt {attempt+1}): {e}, retrying in {wait}s"
+                )
                 time.sleep(wait)
         logger.error(f"Webhook delivery exhausted retries for {endpoint.url}")
         return False
@@ -82,7 +86,9 @@ class WebhookManager:
     def dispatch(self, event: Event) -> None:
         """Dispatch event to all matching endpoints (async)."""
         with self._lock:
-            targets = [ep for ep in self._endpoints.values() if ep.enabled and self._matches(ep, event)]
+            targets = [
+                ep for ep in self._endpoints.values() if ep.enabled and self._matches(ep, event)
+            ]
         for ep in targets:
             t = threading.Thread(target=self._deliver, args=(ep, event), daemon=True)
             t.start()

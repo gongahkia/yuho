@@ -22,11 +22,12 @@ logger = logging.getLogger(__name__)
 @dataclass
 class AlloyCounterexample:
     """A counterexample from Alloy analysis."""
+
     assertion_name: str
     violated: bool
     witness: Dict[str, Any] = field(default_factory=dict)
     message: str = ""
-    
+
     def to_diagnostic(self) -> Dict[str, Any]:
         """Convert to LSP-compatible diagnostic."""
         return {
@@ -40,27 +41,27 @@ class AlloyCounterexample:
 class AlloyGenerator:
     """
     Generates Alloy models from Yuho statute ASTs.
-    
+
     Translates statute elements, penalties, and constraints into
     Alloy's relational modeling language for bounded verification.
     """
-    
+
     def __init__(self, scope: int = 5):
         """
         Initialize the generator.
-        
+
         Args:
             scope: Default scope for bounded model checking (max instances)
         """
         self.scope = scope
-    
+
     def generate(self, ast) -> str:
         """
         Generate Alloy model from a module AST.
-        
+
         Args:
             ast: ModuleNode from Yuho AST
-            
+
         Returns:
             Alloy model as string
         """
@@ -71,27 +72,27 @@ class AlloyGenerator:
             "module yuho_statute",
             "",
         ]
-        
+
         # Generate signatures for types
         lines.extend(self._generate_signatures(ast))
-        
+
         # Generate facts from statutes
         lines.extend(self._generate_facts(ast))
-        
+
         # Generate assertions
         lines.extend(self._generate_assertions(ast))
-        
+
         # Generate run/check commands
         lines.extend(self._generate_commands(ast))
-        
+
         return "\n".join(lines)
-    
+
     def _generate_signatures(self, ast) -> List[str]:
         """Generate Alloy signatures from type definitions."""
         # collect party roles across all statutes for dynamic sigs
         party_roles = set()
         for statute in ast.statutes:
-            for party in getattr(statute, 'parties', ()):
+            for party in getattr(statute, "parties", ()):
                 party_roles.add(party.name)
 
         lines = [
@@ -105,19 +106,21 @@ class AlloyGenerator:
             lines.append("sig Defendant extends Person {}")
             lines.append("sig Victim extends Person {}")
         lines.append("")
-        lines.extend([
-            "abstract sig Intent {}",
-            "one sig Intentional, Reckless, Negligent extends Intent {}",
-            "",
-            "abstract sig Element {",
-            "    satisfied: one Bool",
-            "}",
-            "",
-            "abstract sig Bool {}",
-            "one sig True, False extends Bool {}",
-            "",
-        ])
-        
+        lines.extend(
+            [
+                "abstract sig Intent {}",
+                "one sig Intentional, Reckless, Negligent extends Intent {}",
+                "",
+                "abstract sig Element {",
+                "    satisfied: one Bool",
+                "}",
+                "",
+                "abstract sig Bool {}",
+                "one sig True, False extends Bool {}",
+                "",
+            ]
+        )
+
         # Generate from struct definitions
         for struct in ast.type_defs:
             sig_lines = [f"sig {struct.name} {{"]
@@ -129,9 +132,9 @@ class AlloyGenerator:
             sig_lines.append("}")
             lines.extend(sig_lines)
             lines.append("")
-        
+
         return lines
-    
+
     def _generate_facts(self, ast) -> List[str]:
         """
         Generate Alloy facts from statutes using actual
@@ -169,9 +172,7 @@ class AlloyGenerator:
             # using the actual element group structure
             if statute.elements:
                 lines.append(f"fact {statute_name}_elements {{")
-                expr = self._element_group_to_alloy_expr(
-                    statute.elements, statute_name
-                )
+                expr = self._element_group_to_alloy_expr(statute.elements, statute_name)
                 lines.append(f"    {statute_name}_Conviction.convicted = True implies ({expr})")
                 # Reverse: if all elements satisfied => conviction
                 lines.append(f"    ({expr}) implies {statute_name}_Conviction.convicted = True")
@@ -179,25 +180,31 @@ class AlloyGenerator:
                 lines.append("")
 
             # Temporal ordering facts
-            for tc in getattr(statute, 'temporal_constraints', ()):
+            for tc in getattr(statute, "temporal_constraints", ()):
                 subj = self._safe_identifier(tc.subject)
                 obj = self._safe_identifier(tc.object)
                 if tc.relation == "precedes":
                     lines.append(f"fact {statute_name}_{subj}_precedes_{obj} {{")
                     lines.append(f"    // {tc.subject} must occur before {tc.object}")
-                    lines.append(f"    {statute_name}.{subj}.satisfied = True implies {statute_name}.{obj}.satisfied = True")
+                    lines.append(
+                        f"    {statute_name}.{subj}.satisfied = True implies {statute_name}.{obj}.satisfied = True"
+                    )
                     lines.append("}")
                     lines.append("")
                 elif tc.relation == "after":
                     lines.append(f"fact {statute_name}_{subj}_after_{obj} {{")
                     lines.append(f"    // {tc.subject} must occur after {tc.object}")
-                    lines.append(f"    {statute_name}.{subj}.satisfied = True implies {statute_name}.{obj}.satisfied = True")
+                    lines.append(
+                        f"    {statute_name}.{subj}.satisfied = True implies {statute_name}.{obj}.satisfied = True"
+                    )
                     lines.append("}")
                     lines.append("")
                 elif tc.relation == "during":
                     lines.append(f"fact {statute_name}_{subj}_during_{obj} {{")
                     lines.append(f"    // {tc.subject} occurs during {tc.object}")
-                    lines.append(f"    {statute_name}.{subj}.satisfied = True iff {statute_name}.{obj}.satisfied = True")
+                    lines.append(
+                        f"    {statute_name}.{subj}.satisfied = True iff {statute_name}.{obj}.satisfied = True"
+                    )
                     lines.append("}")
                     lines.append("")
 
@@ -206,9 +213,7 @@ class AlloyGenerator:
 
         return lines
 
-    def _collect_leaf_elements(
-        self, elements
-    ) -> list:
+    def _collect_leaf_elements(self, elements) -> list:
         """Recursively collect all leaf ElementNode instances."""
         from yuho.ast.nodes import ElementNode, ElementGroupNode
 
@@ -220,9 +225,7 @@ class AlloyGenerator:
                 result.extend(self._collect_leaf_elements(elem.members))
         return result
 
-    def _element_group_to_alloy_expr(
-        self, elements, statute_name: str
-    ) -> str:
+    def _element_group_to_alloy_expr(self, elements, statute_name: str) -> str:
         """
         Recursively translate element tree to Alloy boolean expression.
 
@@ -238,9 +241,7 @@ class AlloyGenerator:
                 ename = self._safe_identifier(elem.name)
                 parts.append(f"{statute_name}.{ename}.satisfied = True")
             elif isinstance(elem, ElementGroupNode):
-                sub_expr = self._element_group_to_alloy_expr(
-                    elem.members, statute_name
-                )
+                sub_expr = self._element_group_to_alloy_expr(elem.members, statute_name)
                 if elem.combinator == "any_of":
                     parts.append(f"({sub_expr})")
                 else:
@@ -257,12 +258,14 @@ class AlloyGenerator:
         if len(elements) == 1:
             e = elements[0]
             from yuho.ast.nodes import ElementGroupNode as EG
+
             if isinstance(e, EG) and e.combinator == "any_of":
                 is_any_of = True
         # For a tuple of top-level elements, check if they share a parent group
-        if hasattr(elements, '__len__') and len(elements) > 0:
+        if hasattr(elements, "__len__") and len(elements) > 0:
             first = elements[0] if not isinstance(elements, tuple) else elements[0]
             from yuho.ast.nodes import ElementGroupNode as EG2
+
             if isinstance(first, EG2):
                 if first.combinator == "any_of":
                     is_any_of = True
@@ -277,7 +280,7 @@ class AlloyGenerator:
         Each exception becomes a predicate that, when satisfied,
         negates the conviction.
         """
-        lines = []
+        lines: List[str] = []
         if not statute.exceptions:
             return lines
 
@@ -289,7 +292,9 @@ class AlloyGenerator:
             lines.append(f"pred {pred_name} {{")
 
             # Encode exception condition as a comment + constraint
-            cond_text = exc.condition.value if hasattr(exc.condition, 'value') else str(exc.condition)
+            cond_text = (
+                exc.condition.value if hasattr(exc.condition, "value") else str(exc.condition)
+            )
             lines.append(f"    // Condition: {cond_text}")
 
             # The exception predicate: if this pred holds, conviction is negated
@@ -307,7 +312,7 @@ class AlloyGenerator:
                 lines.append("")
 
         return lines
-    
+
     def _generate_assertions(self, ast) -> List[str]:
         """
         Generate real Alloy assertions from actual statute AST properties.
@@ -338,9 +343,7 @@ class AlloyGenerator:
 
             # Conviction biconditional assertion
             if leaf_elements:
-                expr = self._element_group_to_alloy_expr(
-                    statute.elements, statute_name
-                )
+                expr = self._element_group_to_alloy_expr(statute.elements, statute_name)
                 lines.append(f"// Conviction biconditional for {statute.section_number}")
                 lines.append(f"assert {statute_name}_conviction_iff_elements {{")
                 lines.append(f"    {statute_name}_Conviction.convicted = True iff ({expr})")
@@ -359,26 +362,26 @@ class AlloyGenerator:
                 lines.append("")
 
             # Element type consistency: actus_reus and mens_rea must both exist
-            has_ar = any(
-                e.element_type == "actus_reus" for e in leaf_elements
-            )
-            has_mr = any(
-                e.element_type == "mens_rea" for e in leaf_elements
-            )
+            has_ar = any(e.element_type == "actus_reus" for e in leaf_elements)
+            has_mr = any(e.element_type == "mens_rea" for e in leaf_elements)
             if has_ar and has_mr:
                 ar_refs = [
                     f"{statute_name}.{self._safe_identifier(e.name)}.satisfied = True"
-                    for e in leaf_elements if e.element_type == "actus_reus"
+                    for e in leaf_elements
+                    if e.element_type == "actus_reus"
                 ]
                 mr_refs = [
                     f"{statute_name}.{self._safe_identifier(e.name)}.satisfied = True"
-                    for e in leaf_elements if e.element_type == "mens_rea"
+                    for e in leaf_elements
+                    if e.element_type == "mens_rea"
                 ]
-                lines.append(f"// Conviction requires both actus reus and mens rea for {statute.section_number}")
+                lines.append(
+                    f"// Conviction requires both actus reus and mens rea for {statute.section_number}"
+                )
                 lines.append(f"assert {statute_name}_requires_ar_and_mr {{")
                 lines.append(f"    {statute_name}_Conviction.convicted = True implies")
                 ar_expr = " and ".join(ar_refs[:1])  # at least one AR
-                mr_expr = " or ".join(mr_refs[:1])   # at least one MR
+                mr_expr = " or ".join(mr_refs[:1])  # at least one MR
                 lines.append(f"        ({ar_expr}) and ({mr_expr})")
                 lines.append("}")
                 lines.append("")
@@ -415,14 +418,18 @@ class AlloyGenerator:
             if statute.subsumes and statute.subsumes in statute_map:
                 sn = self._statute_name(statute.section_number)
                 sub_sn = self._statute_name(statute.subsumes)
-                lines.append(f"// Subsumption: s{statute.section_number} subsumes s{statute.subsumes}")
+                lines.append(
+                    f"// Subsumption: s{statute.section_number} subsumes s{statute.subsumes}"
+                )
                 lines.append(f"assert {sn}_subsumes_{sub_sn} {{")
-                lines.append(f"    {sn}_Conviction.convicted = True implies {sub_sn}_Conviction.convicted = True")
+                lines.append(
+                    f"    {sn}_Conviction.convicted = True implies {sub_sn}_Conviction.convicted = True"
+                )
                 lines.append("}")
                 lines.append("")
 
         return lines
-    
+
     def _generate_commands(self, ast=None) -> List[str]:
         """Generate Alloy run/check commands for all assertions."""
         lines = [
@@ -432,6 +439,7 @@ class AlloyGenerator:
 
         if ast is not None:
             from yuho.ast.nodes import ElementNode, ElementGroupNode
+
             for statute in ast.statutes:
                 statute_name = self._statute_name(statute.section_number)
                 leaf_elements = self._collect_leaf_elements(statute.elements)
@@ -451,7 +459,7 @@ class AlloyGenerator:
         lines.append("// Run command for exploration")
         lines.append(f"run show_model for {self.scope}")
         return lines
-    
+
     def _type_to_alloy(self, yuho_type: TypeNode | str) -> str:
         """Convert Yuho type to Alloy type."""
         if isinstance(yuho_type, BuiltinType):
@@ -509,10 +517,10 @@ class AlloyGenerator:
 class AlloyAnalyzer:
     """
     Invokes the Alloy analyzer and parses results.
-    
+
     Requires Alloy to be installed and accessible.
     """
-    
+
     def __init__(
         self,
         alloy_jar: Optional[str] = None,
@@ -520,14 +528,14 @@ class AlloyAnalyzer:
     ):
         """
         Initialize the analyzer.
-        
+
         Args:
             alloy_jar: Path to Alloy JAR file (auto-detect if None)
             timeout: Timeout in seconds for analysis
         """
         self.alloy_jar = alloy_jar or self._find_alloy_jar()
         self.timeout = timeout
-    
+
     def _find_alloy_jar(self) -> Optional[str]:
         """Try to find Alloy JAR in common locations."""
         common_paths = [
@@ -536,45 +544,48 @@ class AlloyAnalyzer:
             Path("/opt/alloy/alloy.jar"),
         ]
         if sys.platform == "win32":
-            common_paths.extend([
-                Path.home() / "AppData" / "Local" / "alloy" / "alloy.jar",
-                Path("C:/Program Files/alloy/alloy.jar"),
-                Path("C:/Program Files (x86)/alloy/alloy.jar"),
-            ])
-        
+            common_paths.extend(
+                [
+                    Path.home() / "AppData" / "Local" / "alloy" / "alloy.jar",
+                    Path("C:/Program Files/alloy/alloy.jar"),
+                    Path("C:/Program Files (x86)/alloy/alloy.jar"),
+                ]
+            )
+
         for path in common_paths:
             if path.exists():
                 return str(path)
-        
+
         return None
-    
+
     def is_available(self) -> bool:
         """Check if Alloy analyzer is available."""
         if not self.alloy_jar:
             return False
         return Path(self.alloy_jar).exists()
-    
+
     def analyze(self, model: str) -> List[AlloyCounterexample]:
         """
         Run Alloy analyzer on a model.
-        
+
         Args:
             model: Alloy model as string
-            
+
         Returns:
             List of counterexamples found
         """
         if not self.is_available():
             logger.warning("Alloy analyzer not available")
             return []
-        
+        if self.alloy_jar is None:
+            logger.warning("Alloy analyzer configured without a jar path")
+            return []
+
         # Write model to temp file
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".als", delete=False
-        ) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".als", delete=False) as f:
             f.write(model)
-            model_path = f.name
-        
+            model_path: str = f.name
+
         try:
             result = subprocess.run(
                 ["java", "-jar", self.alloy_jar, "-c", model_path],
@@ -582,69 +593,71 @@ class AlloyAnalyzer:
                 text=True,
                 timeout=self.timeout,
             )
-            
+
             return self._parse_output(result.stdout, result.stderr)
-            
+
         except subprocess.TimeoutExpired:
             logger.warning(f"Alloy analysis timed out after {self.timeout}s")
-            return [AlloyCounterexample(
-                assertion_name="timeout",
-                violated=False,
-                message=f"Analysis timed out after {self.timeout} seconds",
-            )]
+            return [
+                AlloyCounterexample(
+                    assertion_name="timeout",
+                    violated=False,
+                    message=f"Analysis timed out after {self.timeout} seconds",
+                )
+            ]
         except FileNotFoundError:
             logger.error("Java not found - required for Alloy")
             return []
         finally:
             Path(model_path).unlink(missing_ok=True)
-    
-    def _parse_output(
-        self, stdout: str, stderr: str
-    ) -> List[AlloyCounterexample]:
+
+    def _parse_output(self, stdout: str, stderr: str) -> List[AlloyCounterexample]:
         """Parse Alloy analyzer output into counterexamples."""
         counterexamples = []
-        
+
         # Parse "Assertion X may be violated" patterns
         violation_pattern = r"Assertion\s+(\w+)\s+(?:may be violated|is invalid)"
         for match in re.finditer(violation_pattern, stdout + stderr):
-            counterexamples.append(AlloyCounterexample(
-                assertion_name=match.group(1),
-                violated=True,
-                message="Assertion may be violated",
-            ))
-        
+            counterexamples.append(
+                AlloyCounterexample(
+                    assertion_name=match.group(1),
+                    violated=True,
+                    message="Assertion may be violated",
+                )
+            )
+
         # Parse "No counterexample found" patterns
         valid_pattern = r"Assertion\s+(\w+)\s+is valid"
         for match in re.finditer(valid_pattern, stdout + stderr):
-            counterexamples.append(AlloyCounterexample(
-                assertion_name=match.group(1),
-                violated=False,
-                message="No counterexample found within scope",
-            ))
-        
+            counterexamples.append(
+                AlloyCounterexample(
+                    assertion_name=match.group(1),
+                    violated=False,
+                    message="No counterexample found within scope",
+                )
+            )
+
         return counterexamples
-    
-    def check_assertion(
-        self, model: str, assertion_name: str
-    ) -> Tuple[bool, Optional[str]]:
+
+    def check_assertion(self, model: str, assertion_name: str) -> Tuple[bool, Optional[str]]:
         """
         Check a specific assertion in a model.
-        
+
         Args:
             model: Alloy model string
             assertion_name: Name of assertion to check
-            
+
         Returns:
             Tuple of (is_valid, counterexample_message)
         """
         # Append check command if not present
         if f"check {assertion_name}" not in model:
             model = f"{model}\ncheck {assertion_name} for {self.alloy_jar or 5}"
-        
+
         results = self.analyze(model)
-        
+
         for result in results:
             if result.assertion_name == assertion_name:
                 return (not result.violated, result.message if result.violated else None)
-        
+
         return (True, None)  # Default: no counterexample found

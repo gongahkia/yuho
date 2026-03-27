@@ -82,13 +82,16 @@ def _compile_latex(engine: str, tex_file: Path, work_dir: str) -> None:
     """Run the LaTeX engine to produce PDF."""
     if engine == "latexmk":
         cmd = [
-            engine, "-pdf", "-interaction=nonstopmode",
+            engine,
+            "-pdf",
+            "-interaction=nonstopmode",
             "-output-directory=" + work_dir,
             str(tex_file),
         ]
     else:
         cmd = [
-            engine, "-interaction=nonstopmode",
+            engine,
+            "-interaction=nonstopmode",
             "-output-directory=" + work_dir,
             str(tex_file),
         ]
@@ -106,6 +109,5 @@ def _compile_latex(engine: str, tex_file: Path, work_dir: str) -> None:
             lines = log_file.read_text(errors="replace").splitlines()
             log_tail = "\n".join(lines[-30:])
         raise PDFGenerationError(
-            f"LaTeX compilation failed (exit {result.returncode}).\n"
-            f"Log tail:\n{log_tail}"
+            f"LaTeX compilation failed (exit {result.returncode}).\n" f"Log tail:\n{log_tail}"
         )

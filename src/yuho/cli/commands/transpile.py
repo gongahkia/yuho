@@ -14,7 +14,21 @@ from yuho.cli.error_formatter import Colors, colorize
 from yuho.services.analysis import analyze_file, analyze_source
 
 
-ALL_TARGETS = ["json", "jsonld", "english", "latex", "pdf", "mermaid", "alloy", "graphql", "blocks", "bibtex", "comparative", "akomantoso", "prolog"]
+ALL_TARGETS = [
+    "json",
+    "jsonld",
+    "english",
+    "latex",
+    "pdf",
+    "mermaid",
+    "alloy",
+    "graphql",
+    "blocks",
+    "bibtex",
+    "comparative",
+    "akomantoso",
+    "prolog",
+]
 
 
 def run_transpile(
@@ -24,7 +38,7 @@ def run_transpile(
     output_dir: Optional[str] = None,
     all_targets: bool = False,
     json_output: bool = False,
-    verbose: bool = False
+    verbose: bool = False,
 ) -> None:
     """
     Transpile a Yuho file to another format.
@@ -41,6 +55,7 @@ def run_transpile(
     stdin_mode = file == "-"
     if not stdin_mode:
         from yuho.parser.wrapper import validate_file_path
+
         try:
             file_path = validate_file_path(file)
         except (ValueError, FileNotFoundError) as e:
@@ -99,7 +114,8 @@ def run_transpile(
                 click.echo(colorize("error: PDF pipeline not available", Colors.RED), err=True)
                 sys.exit(1)
             pdf_out = output or (
-                str(out_dir / f"{file_path.stem}.pdf") if out_dir
+                str(out_dir / f"{file_path.stem}.pdf")
+                if out_dir
                 else str(file_path.with_suffix(".pdf"))
             )
             try:
@@ -116,10 +132,12 @@ def run_transpile(
         if tgt.lower() in ("svg", "png"):
             from yuho.transpile.mermaid_transpiler import MermaidTranspiler
             from yuho.transpile.mermaid_renderer import render_mermaid
+
             mermaid_text = MermaidTranspiler().transpile(ast)
             ext = f".{tgt.lower()}"
             render_out = output or (
-                str(out_dir / f"{file_path.stem}{ext}") if out_dir
+                str(out_dir / f"{file_path.stem}{ext}")
+                if out_dir
                 else str(file_path.with_suffix(ext))
             )
             try:
@@ -170,7 +188,12 @@ def run_transpile(
             results.append({"target": tgt, "output": "stdout"})
 
     if json_output:
-        print(json.dumps({
-            "source": str(file_path),
-            "results": results,
-        }, indent=2))
+        print(
+            json.dumps(
+                {
+                    "source": str(file_path),
+                    "results": results,
+                },
+                indent=2,
+            )
+        )

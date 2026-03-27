@@ -108,6 +108,7 @@ class YuhoREPL:
         except FileNotFoundError:
             pass
         import atexit
+
         atexit.register(lambda: readline.write_history_file(history_file))
         readline.set_history_length(1000)
 
@@ -136,8 +137,8 @@ Type {self._colorize("help", Colors.YELLOW)} for commands, {self._colorize("exit
         print(f"\n{self._colorize('Yuho Syntax Examples:', Colors.CYAN)}")
         examples = [
             'statute "299" "Culpable Homicide" { ... }',
-            'struct Person { name: string, age: int }',
-            'fn is_adult(age: int) -> bool { return age >= 18; }',
+            "struct Person { name: string, age: int }",
+            "fn is_adult(age: int) -> bool { return age >= 18; }",
         ]
         for ex in examples:
             print(f"  {ex}")
@@ -203,6 +204,7 @@ Type {self._colorize("help", Colors.YELLOW)} for commands, {self._colorize("exit
 
         if command == "clear":
             import subprocess
+
             subprocess.run(["clear" if os.name == "posix" else "cls"], shell=False, check=False)
             return False
 
@@ -234,7 +236,9 @@ Type {self._colorize("help", Colors.YELLOW)} for commands, {self._colorize("exit
 
         if command == "ast":
             if not self.last_ast:
-                print(self._colorize("No valid AST available. Parse some code first.", Colors.YELLOW))
+                print(
+                    self._colorize("No valid AST available. Parse some code first.", Colors.YELLOW)
+                )
             else:
                 self._print_ast(self.last_ast)
             return False
@@ -297,6 +301,7 @@ Type {self._colorize("help", Colors.YELLOW)} for commands, {self._colorize("exit
 
     def _load_file(self, filepath: str) -> None:
         from yuho.parser.wrapper import validate_file_path
+
         try:
             path = validate_file_path(Path(filepath).expanduser())
         except (ValueError, FileNotFoundError) as e:
@@ -326,8 +331,11 @@ Type {self._colorize("help", Colors.YELLOW)} for commands, {self._colorize("exit
             return False
 
         try:
+            if result.root_node is None:
+                print(self._colorize("Parser returned no root node.", Colors.RED))
+                return False
             builder = ASTBuilder(source, filename)
-            ast = builder.build(result.tree.root_node)
+            ast = builder.build(result.root_node)
 
             self.last_ast = ast
             self.last_source = source
@@ -358,6 +366,7 @@ Type {self._colorize("help", Colors.YELLOW)} for commands, {self._colorize("exit
             print(self._colorize(f"AST build error: {e}", Colors.RED))
             if self.verbose:
                 import traceback
+
                 traceback.print_exc()
             return False
 
@@ -385,6 +394,7 @@ Type {self._colorize("help", Colors.YELLOW)} for commands, {self._colorize("exit
             print(self._colorize(f"Transpilation error: {e}", Colors.RED))
             if self.verbose:
                 import traceback
+
                 traceback.print_exc()
 
     # ======================================================================
@@ -419,6 +429,7 @@ Type {self._colorize("help", Colors.YELLOW)} for commands, {self._colorize("exit
             print(self._colorize(f"Error: {e}", Colors.RED))
             if self.verbose:
                 import traceback
+
                 traceback.print_exc()
 
     # ======================================================================
@@ -426,8 +437,16 @@ Type {self._colorize("help", Colors.YELLOW)} for commands, {self._colorize("exit
     # ======================================================================
 
     def _print_env(self) -> None:
-        if not self.interp_env.bindings and not self.interp_env.struct_defs and not self.interp_env.function_defs:
-            print(self._colorize("Environment is empty. Use 'eval' after parsing code.", Colors.YELLOW))
+        if (
+            not self.interp_env.bindings
+            and not self.interp_env.struct_defs
+            and not self.interp_env.function_defs
+        ):
+            print(
+                self._colorize(
+                    "Environment is empty. Use 'eval' after parsing code.", Colors.YELLOW
+                )
+            )
             return
         print(f"\n{self._colorize('=== Environment ===', Colors.CYAN)}")
         if self.interp_env.struct_defs:
@@ -535,7 +554,11 @@ Type {self._colorize("help", Colors.YELLOW)} for commands, {self._colorize("exit
             else:
                 print(f"\n{self._colorize('Breakpoints:', Colors.CYAN)}")
                 for bp in self.debugger.breakpoints:
-                    status = self._colorize("on", Colors.GREEN) if bp.enabled else self._colorize("off", Colors.RED)
+                    status = (
+                        self._colorize("on", Colors.GREEN)
+                        if bp.enabled
+                        else self._colorize("off", Colors.RED)
+                    )
                     print(f"  {bp}  [{status}]")
             return
 
@@ -594,7 +617,9 @@ Type {self._colorize("help", Colors.YELLOW)} for commands, {self._colorize("exit
                                 print(f"    {etype} {ename}")
             return
 
-        print(self._colorize("Usage: info <locals|functions|statutes|breakpoints|watch>", Colors.RED))
+        print(
+            self._colorize("Usage: info <locals|functions|statutes|breakpoints|watch>", Colors.RED)
+        )
 
     # ======================================================================
     # Debugger: run & interactive debug loop
@@ -618,11 +643,13 @@ Type {self._colorize("help", Colors.YELLOW)} for commands, {self._colorize("exit
 
         has_bp = bool(self.debugger.breakpoints) or bool(self.debugger._watchpoints)
         if has_bp:
-            print(self._colorize(
-                f"Starting with {len(self.debugger.breakpoints)} breakpoint(s), "
-                f"{len(self.debugger._watchpoints)} watchpoint(s)",
-                Colors.CYAN,
-            ))
+            print(
+                self._colorize(
+                    f"Starting with {len(self.debugger.breakpoints)} breakpoint(s), "
+                    f"{len(self.debugger._watchpoints)} watchpoint(s)",
+                    Colors.CYAN,
+                )
+            )
         else:
             # No breakpoints -- start in STEP mode so user can interact
             self.debugger.mode = StepMode.STEP
@@ -632,6 +659,9 @@ Type {self._colorize("help", Colors.YELLOW)} for commands, {self._colorize("exit
 
     def _run_debug_loop(self) -> None:
         """Execute the AST, pausing at breakpoints/steps for user commands."""
+        if self.last_ast is None:
+            print(self._colorize("No program loaded for debugging.", Colors.RED))
+            return
         try:
             self.debugger.interpret(self.last_ast)
             # Finished without pause
@@ -647,6 +677,7 @@ Type {self._colorize("help", Colors.YELLOW)} for commands, {self._colorize("exit
             print(self._colorize(f"Error: {e}", Colors.RED))
             if self.verbose:
                 import traceback
+
                 traceback.print_exc()
 
     def _show_pause_location(self, dp: DebuggerPause) -> None:
@@ -700,7 +731,9 @@ Type {self._colorize("help", Colors.YELLOW)} for commands, {self._colorize("exit
                 return
 
             if verb in ("c", "continue"):
-                self.debugger.mode = StepMode.CONTINUE if self.debugger.breakpoints else StepMode.RUN
+                self.debugger.mode = (
+                    StepMode.CONTINUE if self.debugger.breakpoints else StepMode.RUN
+                )
                 self._resume_after_pause(dp)
                 return
 
@@ -769,6 +802,9 @@ Type {self._colorize("help", Colors.YELLOW)} for commands, {self._colorize("exit
         A cleaner approach is to use a coroutine / continuation, but
         re-interpretation is simpler and sufficient for a REPL debugger.
         """
+        if self.last_ast is None:
+            print(self._colorize("No program loaded for debugging.", Colors.RED))
+            return
         try:
             self.debugger.interpret(self.last_ast)
             print(self._colorize("Program finished.", Colors.GREEN))
@@ -783,6 +819,7 @@ Type {self._colorize("help", Colors.YELLOW)} for commands, {self._colorize("exit
             print(self._colorize(f"Error: {e}", Colors.RED))
             if self.verbose:
                 import traceback
+
                 traceback.print_exc()
 
     def _dbg_print(self, expr: str) -> None:
@@ -860,10 +897,26 @@ Type {self._colorize("help", Colors.YELLOW)} for commands, {self._colorize("exit
                 # Check if it's a command
                 first_word = source.split()[0].lower()
                 known_commands = [
-                    "help", "exit", "quit", "clear", "history", "load",
-                    "transpile", "ast", "targets", "eval", "env", "reset",
-                    "break", "b", "run", "r", "delete", "info",
-                    "watch", "unwatch",
+                    "help",
+                    "exit",
+                    "quit",
+                    "clear",
+                    "history",
+                    "load",
+                    "transpile",
+                    "ast",
+                    "targets",
+                    "eval",
+                    "env",
+                    "reset",
+                    "break",
+                    "b",
+                    "run",
+                    "r",
+                    "delete",
+                    "info",
+                    "watch",
+                    "unwatch",
                 ]
                 if first_word in known_commands:
                     if self._handle_command(source):
@@ -880,6 +933,7 @@ Type {self._colorize("help", Colors.YELLOW)} for commands, {self._colorize("exit
                 print(self._colorize(f"Error: {e}", Colors.RED))
                 if self.verbose:
                     import traceback
+
                     traceback.print_exc()
 
         return 0

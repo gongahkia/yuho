@@ -3,7 +3,7 @@ LLM provider factory with fallback support.
 """
 
 import logging
-from typing import Optional, List
+from typing import Callable, List, Optional, cast
 
 from yuho.llm.config import LLMConfig, ProviderType
 from yuho.llm.providers import (
@@ -58,7 +58,8 @@ class LLMProviderFactory:
         if not provider_class:
             raise ValueError(f"Unknown provider type: {config.provider}")
 
-        return provider_class(config)
+        creator = cast(Callable[[LLMConfig], LLMProvider], provider_class)
+        return creator(config)
 
     @classmethod
     def create_with_fallback(cls, config: LLMConfig) -> LLMProvider:

@@ -6,12 +6,12 @@ Provides hover information for keywords, types, and user-defined symbols.
 
 from typing import List, Optional, TYPE_CHECKING, Callable
 
+from yuho.ast import nodes
+
 try:
     from lsprotocol import types as lsp
 except ImportError:
-    raise ImportError(
-        "LSP dependencies not installed. Install with: pip install yuho[lsp]"
-    )
+    raise ImportError("LSP dependencies not installed. Install with: pip install yuho[lsp]")
 
 if TYPE_CHECKING:
     from yuho.lsp.server import DocumentState
@@ -19,15 +19,41 @@ if TYPE_CHECKING:
 
 # Yuho keywords for hover
 YUHO_KEYWORDS = [
-    "struct", "fn", "match", "case", "consequence", "pass", "return",
-    "statute", "definitions", "elements", "penalty", "illustration",
-    "import", "from", "actus_reus", "mens_rea", "circumstance",
-    "imprisonment", "fine", "supplementary", "TRUE", "FALSE",
+    "struct",
+    "fn",
+    "match",
+    "case",
+    "consequence",
+    "pass",
+    "return",
+    "statute",
+    "definitions",
+    "elements",
+    "penalty",
+    "illustration",
+    "import",
+    "from",
+    "actus_reus",
+    "mens_rea",
+    "circumstance",
+    "imprisonment",
+    "fine",
+    "supplementary",
+    "TRUE",
+    "FALSE",
 ]
 
 # Yuho built-in types
 YUHO_TYPES = [
-    "int", "float", "bool", "string", "money", "percent", "date", "duration", "void",
+    "int",
+    "float",
+    "bool",
+    "string",
+    "money",
+    "percent",
+    "date",
+    "duration",
+    "void",
 ]
 
 KEYWORD_DOCS = {
@@ -64,64 +90,79 @@ def get_hover(
     """Get hover information for word at position."""
     if not word:
         return None
-    
+
     hover_content: List[str] = []
-    
+
+    def _append_element_summary(
+        elements: (
+            List[nodes.ElementNode | nodes.ElementGroupNode]
+            | tuple[nodes.ElementNode | nodes.ElementGroupNode, ...]
+        )
+    ) -> None:
+        for elem in elements:
+            if isinstance(elem, nodes.ElementNode):
+                hover_content.append(f"- {elem.element_type}: {elem.name}")
+                continue
+            _append_element_summary(elem.members)
+
     # Check if it's a keyword
     if word in YUHO_KEYWORDS:
         hover_content.append(f"**keyword** `{word}`")
         if word in KEYWORD_DOCS:
             hover_content.append(KEYWORD_DOCS[word])
-    
+
     # Check if it's a built-in type
     elif word in YUHO_TYPES:
         hover_content.append(f"**type** `{word}`")
         if word in TYPE_DOCS:
             hover_content.append(TYPE_DOCS[word])
-    
+
     # Check AST for user-defined symbols
     elif doc_state and doc_state.ast:
         # Check structs
         for struct in doc_state.ast.type_defs:
             if struct.name == word:
-                fields = ", ".join(f"{f.name}: {type_to_str(f.type_annotation)}" 
-                                   for f in struct.fields)
+                fields = ", ".join(
+                    f"{f.name}: {type_to_str(f.type_annotation)}" for f in struct.fields
+                )
                 hover_content.append(f"```yuho\nstruct {struct.name} {{\n  {fields}\n}}\n```")
                 break
-        
+
         # Check functions
         for func in doc_state.ast.function_defs:
             if func.name == word:
-                params = ", ".join(f"{p.name}: {type_to_str(p.type_annotation)}" 
-                                  for p in func.params)
+                params = ", ".join(
+                    f"{p.name}: {type_to_str(p.type_annotation)}" for p in func.params
+                )
                 ret = f" -> {type_to_str(func.return_type)}" if func.return_type else ""
                 hover_content.append(f"```yuho\nfn {func.name}({params}){ret}\n```")
                 break
-        
+
         # Check statutes
         for statute in doc_state.ast.statutes:
             if statute.section_number == word or f"S{statute.section_number}" == word:
                 title = statute.title.value if statute.title else "Untitled"
                 hover_content.append(f"**Statute Section {statute.section_number}**: {title}")
-                
+
                 # Add element summary
                 if statute.elements:
                     hover_content.append("\n**Elements:**")
-                    for elem in statute.elements:
-                        hover_content.append(f"- {elem.element_type}: {elem.name}")
-                
+                    _append_element_summary(statute.elements)
+
                 # Add penalty summary
                 if statute.penalty:
                     hover_content.append("\n**Penalty:**")
                     if statute.penalty.imprisonment_max:
-                        hover_content.append(f"- Imprisonment: up to {statute.penalty.imprisonment_max}")
+                        hover_content.append(
+                            f"- Imprisonment: up to {statute.penalty.imprisonment_max}"
+                        )
                     if statute.penalty.fine_max:
                         hover_content.append(f"- Fine: up to {statute.penalty.fine_max}")
                 break
-    
+
     if not hover_content:
         return None
-    
+
     return lsp.Hover(
         contents=lsp.MarkupContent(
             kind=lsp.MarkupKind.Markdown,

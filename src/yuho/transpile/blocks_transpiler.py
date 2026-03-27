@@ -5,7 +5,7 @@ Outputs a structured text representation of statute blocks,
 providing a hierarchical view of the statute structure.
 """
 
-from typing import List, Any, Optional
+from typing import Any, Dict, List, Optional, Sequence
 from dataclasses import dataclass
 
 from yuho.transpile.base import TranspilerBase, TranspileTarget
@@ -32,6 +32,7 @@ from yuho.ast.visitor import Visitor
 @dataclass
 class Block:
     """Represents a block in block-notation."""
+
     block_type: str
     name: str
     content: List[str]
@@ -41,11 +42,11 @@ class Block:
 
 class BlockBuilder(Visitor):
     """Builds block notation from AST."""
-    
+
     def __init__(self):
         self.blocks: List[Block] = []
         self.current_statute: Optional[Block] = None
-    
+
     def visit_module(self, node: ModuleNode) -> None:
         """Visit module node."""
         if node.imports:
@@ -58,21 +59,21 @@ class BlockBuilder(Visitor):
             self.visit_statute(statute)
         if node.variables:
             self._build_variables_block(node.variables)
-    
+
     def visit_statute(self, node: StatuteNode) -> None:
         """Visit statute node."""
         section = getattr(node, "section_number", "") or getattr(node, "section", "") or "?"
         title_node = getattr(node, "title", "") or ""
         title = getattr(title_node, "value", str(title_node))
-        
+
         meta = [f"title: {title}"]
-        if getattr(node, 'effective_date', None):
+        if getattr(node, "effective_date", None):
             meta.append(f"effective: {node.effective_date}")
-        if getattr(node, 'repealed_date', None):
+        if getattr(node, "repealed_date", None):
             meta.append(f"repealed: {node.repealed_date}")
-        if getattr(node, 'subsumes', None):
+        if getattr(node, "subsumes", None):
             meta.append(f"subsumes: s{node.subsumes}")
-        if getattr(node, 'amends', None):
+        if getattr(node, "amends", None):
             meta.append(f"amends: s{node.amends}")
         statute_block = Block(
             block_type="STATUTE",
@@ -82,17 +83,17 @@ class BlockBuilder(Visitor):
             level=0,
         )
         self.current_statute = statute_block
-        
+
         # Visit children
         if hasattr(node, "definitions") and node.definitions:
             self._build_definitions_block(node.definitions)
-        
+
         if hasattr(node, "elements") and node.elements:
             self._build_elements_block(node.elements)
-        
+
         if hasattr(node, "penalty") and node.penalty:
             self._build_penalty_block(node.penalty)
-        
+
         if hasattr(node, "illustrations") and node.illustrations:
             self._build_illustrations_block(node.illustrations)
 
@@ -104,21 +105,21 @@ class BlockBuilder(Visitor):
 
         self.blocks.append(statute_block)
         self.current_statute = None
-    
-    def _build_definitions_block(self, definitions: List[Any]) -> None:
+
+    def _build_definitions_block(self, definitions: Sequence[DefinitionEntry]) -> None:
         """Build definitions block."""
         if not self.current_statute:
             return
-        
+
         content = []
         for defn in definitions:
             term = getattr(defn, "term", "") or getattr(defn, "name", "") or "?"
             definition = getattr(defn, "definition", "") or getattr(defn, "value", "") or ""
-            definition = getattr(definition, "value", str(definition)) # unwrap StringLit
+            definition = getattr(definition, "value", str(definition))  # unwrap StringLit
             if len(definition) > 60:
                 definition = definition[:57] + "..."
             content.append(f"{term} := {definition}")
-        
+
         block = Block(
             block_type="DEFINITIONS",
             name="defs",
@@ -127,16 +128,16 @@ class BlockBuilder(Visitor):
             level=1,
         )
         self.current_statute.children.append(block)
-    
-    def _build_elements_block(self, elements: List[Any]) -> None:
+
+    def _build_elements_block(self, elements: Sequence[ElementNode | ElementGroupNode]) -> None:
         """Build elements block."""
         if not self.current_statute:
             return
-        
-        children = []
-        
+
+        children: List[Block] = []
+
         # Group by type
-        groups = {
+        groups: Dict[str, List[str]] = {
             "actus_reus": [],
             "mens_rea": [],
             "circumstance": [],
@@ -145,7 +146,7 @@ class BlockBuilder(Visitor):
             "permission": [],
         }
 
-        def _collect_elements(elems):
+        def _collect_elements(elems: Sequence[ElementNode | ElementGroupNode]) -> None:
             for elem in elems:
                 if isinstance(elem, ElementGroupNode):
                     _collect_elements(elem.members)
@@ -153,19 +154,27 @@ class BlockBuilder(Visitor):
                 elem_type = getattr(elem, "element_type", "") or "element"
                 name = getattr(elem, "name", "") or "?"
                 desc = getattr(elem, "description", "") or ""
-                desc = self._expr_to_str(desc) if hasattr(desc, 'children') else getattr(desc, "value", str(desc))
+                desc = (
+                    self._expr_to_str(desc)
+                    if hasattr(desc, "children")
+                    else getattr(desc, "value", str(desc))
+                )
                 if len(desc) > 50:
                     desc = desc[:47] + "..."
                 entry = f"{name}: {desc}"
-                if getattr(elem, 'caused_by', None):
-                    entry += f" [caused_by: {elem.caused_by}]"
-                if getattr(elem, 'burden', None):
-                    burden_str = elem.burden
-                    if getattr(elem, 'burden_standard', None):
-                        burden_str += f"/{elem.burden_standard}"
+                caused_by = getattr(elem, "caused_by", None)
+                if isinstance(caused_by, str):
+                    entry += f" [caused_by: {caused_by}]"
+                burden = getattr(elem, "burden", None)
+                if isinstance(burden, str):
+                    burden_str = burden
+                    burden_standard = getattr(elem, "burden_standard", None)
+                    if isinstance(burden_standard, str):
+                        burden_str += f"/{burden_standard}"
                     entry += f" [burden: {burden_str}]"
                 bucket = elem_type if elem_type in groups else "circumstance"
                 groups[bucket].append(entry)
+
         _collect_elements(elements)
 
         type_labels = {
@@ -179,14 +188,16 @@ class BlockBuilder(Visitor):
         for key, entries in groups.items():
             if entries:
                 bt, nm = type_labels[key]
-                children.append(Block(
-                    block_type=bt,
-                    name=nm,
-                    content=entries,
-                    children=[],
-                    level=2,
-                ))
-        
+                children.append(
+                    Block(
+                        block_type=bt,
+                        name=nm,
+                        content=entries,
+                        children=[],
+                        level=2,
+                    )
+                )
+
         block = Block(
             block_type="ELEMENTS",
             name="elements",
@@ -195,14 +206,14 @@ class BlockBuilder(Visitor):
             level=1,
         )
         self.current_statute.children.append(block)
-    
+
     def _build_penalty_block(self, penalty: Any) -> None:
         """Build penalty block."""
         if not self.current_statute:
             return
-        
+
         content = []
-        
+
         if getattr(penalty, "death_penalty", None):
             content.append("death: applicable")
         if getattr(penalty, "imprisonment_max", None):
@@ -221,7 +232,9 @@ class BlockBuilder(Visitor):
         if getattr(penalty, "sentencing", None):
             content.append(f"sentencing: {penalty.sentencing}")
         if getattr(penalty, "mandatory_min_imprisonment", None):
-            content.append(f"mandatory_min_imprisonment: {self._expr_to_str(penalty.mandatory_min_imprisonment)}")
+            content.append(
+                f"mandatory_min_imprisonment: {self._expr_to_str(penalty.mandatory_min_imprisonment)}"
+            )
         if getattr(penalty, "mandatory_min_fine", None):
             content.append(f"mandatory_min_fine: {self._expr_to_str(penalty.mandatory_min_fine)}")
 
@@ -234,12 +247,12 @@ class BlockBuilder(Visitor):
                 level=1,
             )
             self.current_statute.children.append(block)
-    
-    def _build_illustrations_block(self, illustrations: List[Any]) -> None:
+
+    def _build_illustrations_block(self, illustrations: Sequence[IllustrationNode]) -> None:
         """Build illustrations block."""
         if not self.current_statute:
             return
-        
+
         content = []
         for illus in illustrations:
             label = getattr(illus, "label", "") or "?"
@@ -248,7 +261,7 @@ class BlockBuilder(Visitor):
             if len(text) > 60:
                 text = text[:57] + "..."
             content.append(f"{label} {text}")
-        
+
         if content:
             block = Block(
                 block_type="ILLUSTRATIONS",
@@ -259,7 +272,7 @@ class BlockBuilder(Visitor):
             )
             self.current_statute.children.append(block)
 
-    def _build_exceptions_block(self, exceptions: List[Any]) -> None:
+    def _build_exceptions_block(self, exceptions: Sequence[ExceptionNode]) -> None:
         """Build exceptions block."""
         if not self.current_statute:
             return
@@ -290,7 +303,7 @@ class BlockBuilder(Visitor):
             )
             self.current_statute.children.append(block)
 
-    def _build_case_law_block(self, case_law: List[Any]) -> None:
+    def _build_case_law_block(self, case_law: Sequence[CaseLawNode]) -> None:
         """Build case law block."""
         if not self.current_statute:
             return
@@ -322,7 +335,7 @@ class BlockBuilder(Visitor):
             )
             self.current_statute.children.append(block)
 
-    def _build_imports_block(self, imports: List[Any]) -> None:
+    def _build_imports_block(self, imports: Sequence[ImportNode]) -> None:
         """Build imports block."""
         content = []
         for imp in imports:
@@ -346,7 +359,7 @@ class BlockBuilder(Visitor):
             )
             self.blocks.append(block)
 
-    def _build_type_defs_block(self, type_defs: List[Any]) -> None:
+    def _build_type_defs_block(self, type_defs: Sequence[StructDefNode]) -> None:
         """Build type definitions block."""
         children = []
         for struct in type_defs:
@@ -358,13 +371,15 @@ class BlockBuilder(Visitor):
                 ftype = getattr(f, "type_annotation", None)
                 type_str = self._type_to_str(ftype) if ftype else "?"
                 field_lines.append(f"{fname}: {type_str}")
-            children.append(Block(
-                block_type="STRUCT",
-                name=name,
-                content=field_lines,
-                children=[],
-                level=1,
-            ))
+            children.append(
+                Block(
+                    block_type="STRUCT",
+                    name=name,
+                    content=field_lines,
+                    children=[],
+                    level=1,
+                )
+            )
 
         if children:
             block = Block(
@@ -376,7 +391,7 @@ class BlockBuilder(Visitor):
             )
             self.blocks.append(block)
 
-    def _build_function_defs_block(self, function_defs: List[Any]) -> None:
+    def _build_function_defs_block(self, function_defs: Sequence[FunctionDefNode]) -> None:
         """Build function definitions block."""
         children = []
         for func in function_defs:
@@ -399,13 +414,15 @@ class BlockBuilder(Visitor):
                 for stmt in stmts:
                     body_lines.append(self._stmt_to_str(stmt))
             content = [sig] + body_lines
-            children.append(Block(
-                block_type="FUNCTION",
-                name=name,
-                content=content,
-                children=[],
-                level=1,
-            ))
+            children.append(
+                Block(
+                    block_type="FUNCTION",
+                    name=name,
+                    content=content,
+                    children=[],
+                    level=1,
+                )
+            )
 
         if children:
             block = Block(
@@ -417,7 +434,7 @@ class BlockBuilder(Visitor):
             )
             self.blocks.append(block)
 
-    def _build_variables_block(self, variables: List[Any]) -> None:
+    def _build_variables_block(self, variables: Sequence[VariableDecl]) -> None:
         """Build variables block."""
         content = []
         for var in variables:
@@ -446,6 +463,7 @@ class BlockBuilder(Visitor):
     def _type_to_str(self, node: Any) -> str:
         """Convert a type node to a short string."""
         from yuho.ast import nodes as n
+
         if isinstance(node, n.BuiltinType):
             return node.name
         elif isinstance(node, n.NamedType):
@@ -462,6 +480,7 @@ class BlockBuilder(Visitor):
     def _expr_to_str(self, node: Any) -> str:
         """Convert an expression node to a short string."""
         from yuho.ast import nodes as n
+
         if isinstance(node, n.IntLit):
             return str(node.value)
         elif isinstance(node, n.FloatLit):
@@ -507,6 +526,7 @@ class BlockBuilder(Visitor):
     def _stmt_to_str(self, node: Any) -> str:
         """Convert a statement node to a short string."""
         from yuho.ast import nodes as n
+
         if isinstance(node, n.VariableDecl):
             type_str = self._type_to_str(node.type_annotation)
             if node.value:
@@ -528,95 +548,95 @@ class BlockBuilder(Visitor):
 def format_blocks(blocks: List[Block], style: str = "box") -> str:
     """
     Format blocks into text output.
-    
+
     Args:
         blocks: List of Block objects
         style: "box" for box drawing, "indent" for simple indentation
-    
+
     Returns:
         Formatted string
     """
     lines: List[str] = []
-    
+
     def render_block_box(block: Block, indent: int = 0) -> None:
         """Render a block with box drawing characters."""
         prefix = "  " * indent
         width = 60 - (indent * 2)
-        
+
         # Top border
         lines.append(f"{prefix}┌{'─' * (width - 2)}┐")
-        
+
         # Header
         header = f" [{block.block_type}] {block.name} "
         padding = width - 4 - len(header)
         lines.append(f"{prefix}│{header}{'─' * max(0, padding)}│")
-        
+
         # Separator
         lines.append(f"{prefix}├{'─' * (width - 2)}┤")
-        
+
         # Content
         for line in block.content:
             # Wrap long lines
             if len(line) > width - 4:
-                line = line[:width - 7] + "..."
+                line = line[: width - 7] + "..."
             padding = width - 4 - len(line)
             lines.append(f"{prefix}│ {line}{' ' * max(0, padding)} │")
-        
+
         if not block.content and not block.children:
             lines.append(f"{prefix}│{' ' * (width - 2)}│")
-        
+
         # Children
         if block.children:
             if block.content:
                 lines.append(f"{prefix}├{'─' * (width - 2)}┤")
             for child in block.children:
                 render_block_box(child, indent + 1)
-        
+
         # Bottom border
         lines.append(f"{prefix}└{'─' * (width - 2)}┘")
-    
+
     def render_block_indent(block: Block, indent: int = 0) -> None:
         """Render a block with simple indentation."""
         prefix = "  " * indent
-        
+
         lines.append(f"{prefix}[{block.block_type}] {block.name}")
-        
+
         for line in block.content:
             lines.append(f"{prefix}  | {line}")
-        
+
         for child in block.children:
             render_block_indent(child, indent + 1)
-    
+
     # Choose renderer
     renderer = render_block_box if style == "box" else render_block_indent
-    
+
     for block in blocks:
         renderer(block)
         lines.append("")
-    
+
     return "\n".join(lines)
 
 
 class BlocksTranspiler(TranspilerBase):
     """Transpiler that outputs block-notation format."""
-    
+
     @property
     def target(self) -> TranspileTarget:
         return TranspileTarget.BLOCKS
-    
+
     def transpile(self, ast: ModuleNode) -> str:
         """
         Transpile AST to block-notation format.
-        
+
         Args:
             ast: The root ModuleNode
-            
+
         Returns:
             Block-notation string
         """
         builder = BlockBuilder()
         builder.visit(ast)
-        
+
         # Header
         width = 60
         title = "BLOCK NOTATION VIEW"
@@ -629,14 +649,14 @@ class BlocksTranspiler(TranspilerBase):
             f"└{'─' * (width - 2)}┘",
             "",
         ]
-        
+
         # Render blocks
         output = format_blocks(builder.blocks, style="box")
         lines.append(output)
-        
+
         # Footer
         lines.append("")
         statute_count = sum(1 for b in builder.blocks if b.block_type == "STATUTE")
         lines.append(f"Total statutes: {statute_count}")
-        
+
         return "\n".join(lines)

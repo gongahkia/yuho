@@ -77,11 +77,13 @@ class SourceLocation:
         if self.file != other.file:
             return False
 
-        if self.offset is not None and other.offset is not None:
-            return (
-                self.offset <= other.offset
-                and self.end_offset >= other.end_offset
-            )
+        if (
+            self.offset is not None
+            and self.end_offset is not None
+            and other.offset is not None
+            and other.end_offset is not None
+        ):
+            return self.offset <= other.offset and self.end_offset >= other.end_offset
 
         # Fallback to line/col comparison
         start_before = (self.line < other.line) or (
@@ -95,7 +97,17 @@ class SourceLocation:
     def merge(self, other: "SourceLocation") -> "SourceLocation":
         """Create a new location spanning from this location to another."""
         if self.file != other.file:
-            raise ValueError(f"Cannot merge locations from different files: {self.file} and {other.file}")
+            raise ValueError(
+                f"Cannot merge locations from different files: {self.file} and {other.file}"
+            )
+
+        offset = None
+        if self.offset is not None and other.offset is not None:
+            offset = min(self.offset, other.offset)
+
+        end_offset = None
+        if self.end_offset is not None and other.end_offset is not None:
+            end_offset = max(self.end_offset, other.end_offset)
 
         return SourceLocation(
             file=self.file,
@@ -103,10 +115,6 @@ class SourceLocation:
             col=self.col if self.line <= other.line else other.col,
             end_line=max(self.end_line, other.end_line),
             end_col=self.end_col if self.end_line >= other.end_line else other.end_col,
-            offset=min(self.offset, other.offset)
-            if self.offset is not None and other.offset is not None
-            else None,
-            end_offset=max(self.end_offset, other.end_offset)
-            if self.end_offset is not None and other.end_offset is not None
-            else None,
+            offset=offset,
+            end_offset=end_offset,
         )

@@ -24,6 +24,7 @@ def run_fmt(file: str, in_place: bool = False, check: bool = False, verbose: boo
         verbose: Enable verbose output
     """
     from yuho.parser.wrapper import validate_file_path
+
     try:
         file_path = validate_file_path(file)
     except (ValueError, FileNotFoundError) as e:
@@ -103,10 +104,7 @@ def _format_module(ast) -> str:
 
     # Function definitions
     for func in ast.function_defs:
-        params = ", ".join(
-            f"{_format_type(p.type_annotation)} {p.name}"
-            for p in func.params
-        )
+        params = ", ".join(f"{_format_type(p.type_annotation)} {p.name}" for p in func.params)
         ret = f": {_format_type(func.return_type)}" if func.return_type else ""
         lines.append(f"fn {func.name}({params}){ret} {{")
         for stmt in func.body.statements:
@@ -157,7 +155,7 @@ def _format_module(ast) -> str:
 
         for illus in statute.illustrations:
             label = illus.label or ""
-            lines.append(f'    illustration {label} {{')
+            lines.append(f"    illustration {label} {{")
             lines.append(f'        "{illus.description.value}"')
             lines.append("    }")
             lines.append("")

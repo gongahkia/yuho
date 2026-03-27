@@ -15,7 +15,9 @@ from yuho.ast import ASTBuilder
 from yuho.cli.error_formatter import Colors, colorize
 
 
-def run_contribute(file: str, package: bool = False, output: Optional[str] = None, verbose: bool = False) -> None:
+def run_contribute(
+    file: str, package: bool = False, output: Optional[str] = None, verbose: bool = False
+) -> None:
     """
     Validate a statute file for contribution.
 
@@ -26,6 +28,7 @@ def run_contribute(file: str, package: bool = False, output: Optional[str] = Non
         verbose: Enable verbose output
     """
     from yuho.parser.wrapper import validate_file_path
+
     try:
         file_path = validate_file_path(file)
     except (ValueError, FileNotFoundError) as e:
@@ -92,7 +95,9 @@ def run_contribute(file: str, package: bool = False, output: Optional[str] = Non
 
     # Package if requested
     if package:
-        _create_package(file_path, test_file, metadata_path if has_metadata else None, output, verbose)
+        _create_package(
+            file_path, test_file, metadata_path if has_metadata else None, output, verbose
+        )
 
 
 def _create_package(
@@ -100,7 +105,7 @@ def _create_package(
     test_file: Optional[Path],
     metadata_file: Optional[Path],
     output: Optional[str],
-    verbose: bool
+    verbose: bool,
 ) -> None:
     """Create a .yhpkg archive."""
     # Determine output path

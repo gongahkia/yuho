@@ -4,7 +4,7 @@ Mermaid transpiler - decision tree flowchart generation.
 Converts match expressions to Mermaid flowchart diagrams.
 """
 
-from typing import List, Optional, Dict, Set
+from typing import Dict, List, Optional
 
 from yuho.ast import nodes
 from yuho.ast.visitor import Visitor
@@ -26,6 +26,7 @@ class MermaidTranspiler(TranspilerBase, Visitor):
         self._node_counter = 0
         self._subgraph_counter = 0
         self._node_ids: Dict[int, str] = {}
+        self._element_nodes: Dict[str, str] = {}
         self._nesting_depth = 0
 
     @property
@@ -37,6 +38,7 @@ class MermaidTranspiler(TranspilerBase, Visitor):
         self._output = []
         self._node_counter = 0
         self._subgraph_counter = 0
+        self._element_nodes = {}
         self._nesting_depth = 0
         self._emit(f"flowchart {self.direction}")
         for statute in ast.statutes:
@@ -77,13 +79,13 @@ class MermaidTranspiler(TranspilerBase, Visitor):
         title = statute.title.value if statute.title else statute.section_number
         self._emit(f"    %% Statute: {title}")
         start_id = self._new_node_id("START")
-        start_label = f"Section {statute.section_number}"
+        start_label = f"Section {statute.section_number}: {title}"
         meta_parts = []
-        if getattr(statute, 'effective_date', None):
+        if getattr(statute, "effective_date", None):
             meta_parts.append(f"eff: {statute.effective_date}")
-        if getattr(statute, 'repealed_date', None):
+        if getattr(statute, "repealed_date", None):
             meta_parts.append(f"repealed: {statute.repealed_date}")
-        if getattr(statute, 'subsumes', None):
+        if getattr(statute, "subsumes", None):
             meta_parts.append(f"subsumes s{statute.subsumes}")
         if meta_parts:
             start_label += f" ({', '.join(meta_parts)})"
@@ -97,6 +99,7 @@ class MermaidTranspiler(TranspilerBase, Visitor):
                 prefix = self._deontic_prefix(elem.element_type)
                 self._emit(f"    {elem_start}[/{self._q(prefix + elem.name)}/]")
                 self._emit(f"    {prev_id} --> {elem_start}")
+                self._element_nodes[elem.name] = elem_start
                 prev_id = self._transpile_match_expr(elem.description, elem_start)
             else:
                 elem_id = self._new_node_id("ELEM")
@@ -107,18 +110,19 @@ class MermaidTranspiler(TranspilerBase, Visitor):
                     label += f" {suffix}"
                 self._emit(f"    {elem_id}[{self._q(label)}]")
                 self._emit(f"    {prev_id} --> {elem_id}")
+                self._element_nodes[elem.name] = elem_id
                 prev_id = elem_id
         if statute.exceptions:
             exc_id = self._new_node_id("EXC")
-            self._emit(f"    {exc_id}{{{{{self._q('Exceptions')}}}}}")
+            self._emit(f"    {exc_id}{{{{{self._q('Exceptions / defences')}}}}}")
             self._emit(f"    {prev_id} --> {exc_id}")
             no_exc_id = self._new_node_id("NOEXC")
-            self._emit(f"    {no_exc_id}[{self._q('No exception applies')}]")
+            self._emit(f"    {no_exc_id}[{self._q('No exception defeats liability')}]")
             self._emit(f"    {exc_id} -->|{self._q('None')}| {no_exc_id}")
             for exc in statute.exceptions:
                 exc_out_id = self._new_node_id("EXCOUT")
                 label = exc.label or "exception"
-                effect = exc.effect.value if exc.effect else "Exception applies"
+                effect = self._exception_outcome_label(exc)
                 self._emit(f"    {exc_out_id}[{self._q(effect)}]")
                 self._emit(f"    {exc_id} -->|{self._q(label)}| {exc_out_id}")
             prev_id = no_exc_id
@@ -127,6 +131,8 @@ class MermaidTranspiler(TranspilerBase, Visitor):
             penalty_text = self._penalty_to_label(statute.penalty)
             self._emit(f"    {penalty_id}[[{self._q(penalty_text)}]]")
             self._emit(f"    {prev_id} --> {penalty_id}")
+            prev_id = penalty_id
+        self._emit_provenance_nodes(statute, start_id=start_id, fallback_id=prev_id)
         self._emit("")
 
     # =========================================================================
@@ -167,10 +173,7 @@ class MermaidTranspiler(TranspilerBase, Visitor):
         subgraph_name: Optional[str] = None,
     ) -> str:
         """Generate flowchart nodes for a match expression. Returns the decision node ID."""
-        use_subgraph = (
-            self.use_subgraphs and
-            (self._nesting_depth > 0 or subgraph_name is not None)
-        )
+        use_subgraph = self.use_subgraphs and (self._nesting_depth > 0 or subgraph_name is not None)
         if use_subgraph:
             sg_id = self._new_subgraph_id("match")
             label = subgraph_name or "nested decision"
@@ -220,7 +223,9 @@ class MermaidTranspiler(TranspilerBase, Visitor):
 
     def _transpile_element_group(self, group: nodes.ElementGroupNode, prev_id: str) -> str:
         """Generate flowchart nodes for an element group. Returns last node ID."""
-        combinator = group.combinator.upper().replace("_", " ")
+        combinator = (
+            "ALL OF (conjunctive)" if group.combinator == "all_of" else "ANY OF (alternative limb)"
+        )
         group_id = self._new_node_id("GRP")
         self._emit(f"    {group_id}{{{{{self._q(combinator)}}}}}")
         self._emit(f"    {prev_id} --> {group_id}")
@@ -233,6 +238,7 @@ class MermaidTranspiler(TranspilerBase, Visitor):
                 label = self._expr_to_label(member.description)
                 self._emit(f"    {member_id}[{self._q(label)}]")
                 self._emit(f"    {current} --> {member_id}")
+                self._element_nodes[member.name] = member_id
                 current = member_id
         return current
 
@@ -320,12 +326,13 @@ class MermaidTranspiler(TranspilerBase, Visitor):
                 parts.append(f"Caning up to {penalty.caning_max} strokes")
         if penalty.supplementary:
             parts.append(penalty.supplementary.value)
-        if getattr(penalty, 'sentencing', None):
+        if getattr(penalty, "sentencing", None):
             parts.append(f"({penalty.sentencing})")
-        if getattr(penalty, 'mandatory_min_imprisonment', None):
+        if getattr(penalty, "mandatory_min_imprisonment", None):
             parts.append(f"Min imprisonment: {penalty.mandatory_min_imprisonment}")
-        if getattr(penalty, 'mandatory_min_fine', None):
-            parts.append(f"Min fine: ${penalty.mandatory_min_fine.amount}")
+        mandatory_min_fine = getattr(penalty, "mandatory_min_fine", None)
+        if mandatory_min_fine is not None:
+            parts.append(f"Min fine: ${mandatory_min_fine.amount}")
         return "; ".join(parts) if parts else "Penalty TBD"
 
     def _deontic_prefix(self, element_type: str) -> str:
@@ -340,11 +347,47 @@ class MermaidTranspiler(TranspilerBase, Visitor):
     def _element_suffix(self, elem: nodes.ElementNode) -> str:
         """Return suffix for causation/burden info."""
         parts = []
-        if getattr(elem, 'caused_by', None):
+        if getattr(elem, "caused_by", None):
             parts.append(f"caused by: {elem.caused_by}")
-        if getattr(elem, 'burden', None):
-            b = elem.burden
-            if getattr(elem, 'burden_standard', None):
-                b += f"/{elem.burden_standard}"
+        burden = getattr(elem, "burden", None)
+        if isinstance(burden, str):
+            b = burden
+            burden_standard = getattr(elem, "burden_standard", None)
+            if isinstance(burden_standard, str):
+                b += f"/{burden_standard}"
             parts.append(f"burden: {b}")
         return f"({', '.join(parts)})" if parts else ""
+
+    def _exception_outcome_label(self, exception: nodes.ExceptionNode) -> str:
+        """Explain how an exception path defeats or redirects liability."""
+        effect = exception.effect.value if exception.effect else "Exception applies"
+        parts = [effect]
+        if exception.guard:
+            parts.append(f"guard: {self._expr_to_label(exception.guard)}")
+        if exception.priority is not None:
+            parts.append(f"priority {exception.priority}")
+        if exception.defeats:
+            parts.append(f"defeats {exception.defeats}")
+        return " | ".join(parts)
+
+    def _emit_provenance_nodes(
+        self, statute: nodes.StatuteNode, *, start_id: str, fallback_id: str
+    ) -> None:
+        """Link illustrations and case law back to the graph as provenance."""
+        for illustration in statute.illustrations:
+            illustration_id = self._new_node_id("ILLUS")
+            label = illustration.label or "illustration"
+            text = f"Illustration {label}: {illustration.description.value}"
+            self._emit(f"    {illustration_id}[{self._q(text)}]")
+            self._emit(
+                f"    {start_id} -.->|{self._q('illustration provenance')}| {illustration_id}"
+            )
+
+        for case_law in statute.case_law:
+            case_id = self._new_node_id("CASE")
+            citation = f" {case_law.citation.value}" if case_law.citation else ""
+            text = f"Case law: {case_law.case_name.value}{citation}"
+            self._emit(f"    {case_id}[{self._q(text)}]")
+            anchor_id = self._element_nodes.get(case_law.element_ref or "", fallback_id)
+            edge_label = "interprets" if case_law.element_ref else "judicial authority"
+            self._emit(f"    {anchor_id} -.->|{self._q(edge_label)}| {case_id}")

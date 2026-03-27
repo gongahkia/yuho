@@ -40,7 +40,7 @@ class ASTBuilder:
 
     def _extract_doc_comments(self) -> dict:
         """Extract /// doc-comments indexed by end line number."""
-        result = {} # line_number -> comment text
+        result = {}  # line_number -> comment text
         lines = self.source.split("\n")
         comment_block = []
         for i, line in enumerate(lines):
@@ -49,7 +49,7 @@ class ASTBuilder:
                 comment_block.append(stripped[3:].strip())
             else:
                 if comment_block:
-                    result[i] = "\n".join(comment_block) # key = first non-comment line
+                    result[i] = "\n".join(comment_block)  # key = first non-comment line
                     comment_block = []
         return result
 
@@ -77,9 +77,9 @@ class ASTBuilder:
         for line in doc.split("\n"):
             stripped = line.strip()
             if stripped.startswith("@jurisdiction "):
-                jurisdiction = stripped[len("@jurisdiction "):].strip()
+                jurisdiction = stripped[len("@jurisdiction ") :].strip()
             elif stripped.startswith("@meta "):
-                rest = stripped[len("@meta "):].strip()
+                rest = stripped[len("@meta ") :].strip()
                 if "=" in rest:
                     k, _, v = rest.partition("=")
                     meta[k.strip()] = v.strip()
@@ -103,7 +103,7 @@ class ASTBuilder:
 
     def _text(self, node) -> str:
         """Extract text content from a tree-sitter node."""
-        return self.source_bytes[node.start_byte:node.end_byte].decode("utf-8")
+        return self.source_bytes[node.start_byte : node.end_byte].decode("utf-8")
 
     def _children_by_type(self, node, *types: str):
         """Get all children matching the given types."""
@@ -191,7 +191,9 @@ class ASTBuilder:
         condition_node = self._child_by_field(node, "condition")
         message_node = self._child_by_field(node, "message")
 
-        condition = self._build_expression(condition_node) if condition_node else nodes.BoolLit(value=True)
+        condition = (
+            self._build_expression(condition_node) if condition_node else nodes.BoolLit(value=True)
+        )
         message = self._build_string_lit(message_node) if message_node else None
 
         return nodes.AssertStmt(
@@ -280,13 +282,21 @@ class ASTBuilder:
                 vname = self._text(vname_node) if vname_node else ""
                 payload: List[nodes.TypeNode] = []
                 for tc in child.children:
-                    if tc.type in ("builtin_type", "identifier", "generic_type", "optional_type", "array_type"):
+                    if tc.type in (
+                        "builtin_type",
+                        "identifier",
+                        "generic_type",
+                        "optional_type",
+                        "array_type",
+                    ):
                         payload.append(self._build_type(tc))
-                variants.append(nodes.EnumVariant(
-                    name=vname,
-                    payload_types=tuple(payload),
-                    source_location=self._loc(child),
-                ))
+                variants.append(
+                    nodes.EnumVariant(
+                        name=vname,
+                        payload_types=tuple(payload),
+                        source_location=self._loc(child),
+                    )
+                )
         return nodes.EnumDefNode(
             name=name,
             variants=tuple(variants),
@@ -426,7 +436,9 @@ class ASTBuilder:
         target_node = self._child_by_field(node, "target")
         value_node = self._child_by_field(node, "value")
 
-        target = self._build_expression(target_node) if target_node else nodes.IdentifierNode(name="")
+        target = (
+            self._build_expression(target_node) if target_node else nodes.IdentifierNode(name="")
+        )
         value = self._build_expression(value_node) if value_node else nodes.PassExprNode()
 
         return nodes.AssignmentStmt(
@@ -542,12 +554,13 @@ class ASTBuilder:
         if text.startswith('"') and text.endswith('"'):
             text = text[1:-1]
         # Process common escape sequences
-        text = (text
-            .replace("\\n", "\n")
+        text = (
+            text.replace("\\n", "\n")
             .replace("\\t", "\t")
             .replace("\\r", "\r")
             .replace('\\"', '"')
-            .replace("\\\\", "\\"))
+            .replace("\\\\", "\\")
+        )
         return nodes.StringLit(
             value=text,
             source_location=self._loc(node),
@@ -653,7 +666,18 @@ class ASTBuilder:
     def _build_function_call(self, node) -> nodes.FunctionCallNode:
         """Build FunctionCallNode from function_call node."""
         callee_node = self._child_by_field(node, "callee")
-        callee = self._build_expression(callee_node) if callee_node else nodes.IdentifierNode(name="")
+        callee_expr = (
+            self._build_expression(callee_node)
+            if callee_node
+            else nodes.IdentifierNode(name="", source_location=self._loc(node))
+        )
+        if isinstance(callee_expr, (nodes.IdentifierNode, nodes.FieldAccessNode)):
+            callee = callee_expr
+        else:
+            callee = nodes.IdentifierNode(
+                name=self._text(callee_node) if callee_node else "",
+                source_location=self._loc(node),
+            )
 
         args: List[nodes.ASTNode] = []
         arg_list = self._child_by_type(node, "argument_list")
@@ -756,7 +780,9 @@ class ASTBuilder:
         elif node.type == "literal_pattern":
             literal_child = node.children[0] if node.children else None
             return nodes.LiteralPattern(
-                literal=self._build_expression(literal_child) if literal_child else nodes.PassExprNode(),
+                literal=(
+                    self._build_expression(literal_child) if literal_child else nodes.PassExprNode()
+                ),
                 source_location=self._loc(node),
             )
         elif node.type == "binding_pattern" or node.type == "identifier":
@@ -861,7 +887,17 @@ class ASTBuilder:
             )
         elif node_type == "identifier":
             text = self._text(node)
-            if text in ("int", "float", "bool", "string", "money", "percent", "date", "duration", "void"):
+            if text in (
+                "int",
+                "float",
+                "bool",
+                "string",
+                "money",
+                "percent",
+                "date",
+                "duration",
+                "void",
+            ):
                 return nodes.BuiltinType(name=text, source_location=self._loc(node))
             return nodes.NamedType(
                 name=text,
@@ -903,14 +939,28 @@ class ASTBuilder:
             upper_node = self._child_by_field(node, "upper")
             return nodes.RefinementTypeNode(
                 base_type=self._build_type(base_node),
-                lower_bound=self._build_expression(lower_node) if lower_node else nodes.IntLit(value=0),
-                upper_bound=self._build_expression(upper_node) if upper_node else nodes.IntLit(value=0),
+                lower_bound=(
+                    self._build_expression(lower_node) if lower_node else nodes.IntLit(value=0)
+                ),
+                upper_bound=(
+                    self._build_expression(upper_node) if upper_node else nodes.IntLit(value=0)
+                ),
                 source_location=self._loc(node),
             )
         else:
             # Fallback - treat as identifier type
             text = self._text(node)
-            if text in ("int", "float", "bool", "string", "money", "percent", "date", "duration", "void"):
+            if text in (
+                "int",
+                "float",
+                "bool",
+                "string",
+                "money",
+                "percent",
+                "date",
+                "duration",
+                "void",
+            ):
                 return nodes.BuiltinType(name=text, source_location=self._loc(node))
             return nodes.NamedType(name=text, source_location=self._loc(node))
 
@@ -995,13 +1045,17 @@ class ASTBuilder:
                 def_node = self._child_by_field(child, "definition")
 
                 term = self._text(term_node) if term_node else ""
-                definition = self._build_string_lit(def_node) if def_node else nodes.StringLit(value="")
+                definition = (
+                    self._build_string_lit(def_node) if def_node else nodes.StringLit(value="")
+                )
 
-                entries.append(nodes.DefinitionEntry(
-                    term=term,
-                    definition=definition,
-                    source_location=self._loc(child),
-                ))
+                entries.append(
+                    nodes.DefinitionEntry(
+                        term=term,
+                        definition=definition,
+                        source_location=self._loc(child),
+                    )
+                )
         return entries
 
     def _build_parties_block(self, node) -> List[nodes.PartyNode]:
@@ -1012,12 +1066,14 @@ class ASTBuilder:
                 role_node = self._child_by_field(child, "role")
                 name_node = self._child_by_field(child, "name")
                 type_node = self._child_by_field(child, "type")
-                parties.append(nodes.PartyNode(
-                    role=self._text(role_node) if role_node else "",
-                    name=self._text(name_node) if name_node else "",
-                    type_annotation=self._build_type(type_node) if type_node else None,
-                    source_location=self._loc(child),
-                ))
+                parties.append(
+                    nodes.PartyNode(
+                        role=self._text(role_node) if role_node else "",
+                        name=self._text(name_node) if name_node else "",
+                        type_annotation=self._build_type(type_node) if type_node else None,
+                        source_location=self._loc(child),
+                    )
+                )
         return parties
 
     def _build_elements_block(self, node) -> tuple:
@@ -1032,7 +1088,9 @@ class ASTBuilder:
 
                 elem_type = self._text(type_node) if type_node else "actus_reus"
                 name = self._text(name_node) if name_node else ""
-                description = self._build_expression(desc_node) if desc_node else nodes.StringLit(value="")
+                description = (
+                    self._build_expression(desc_node) if desc_node else nodes.StringLit(value="")
+                )
 
                 caused_by_node = self._child_by_field(child, "caused_by")
                 burden_node = self._child_by_type(child, "burden_qualifier")
@@ -1044,32 +1102,40 @@ class ASTBuilder:
                         t = self._text(bc)
                         if t in ("prosecution", "defence"):
                             burden = t
-                        elif t in ("beyond_reasonable_doubt", "balance_of_probabilities", "prima_facie"):
+                        elif t in (
+                            "beyond_reasonable_doubt",
+                            "balance_of_probabilities",
+                            "prima_facie",
+                        ):
                             burden_standard = t
-                elements.append(nodes.ElementNode(
-                    element_type=elem_type,
-                    name=name,
-                    description=description,
-                    caused_by=self._text(caused_by_node) if caused_by_node else None,
-                    burden=burden,
-                    burden_standard=burden_standard,
-                    doc_comment=self._get_doc_comment(child),
-                    actor=self._text(actor_node) if actor_node else None,
-                    patient=self._text(patient_node) if patient_node else None,
-                    source_location=self._loc(child),
-                ))
+                elements.append(
+                    nodes.ElementNode(
+                        element_type=elem_type,
+                        name=name,
+                        description=description,
+                        caused_by=self._text(caused_by_node) if caused_by_node else None,
+                        burden=burden,
+                        burden_standard=burden_standard,
+                        doc_comment=self._get_doc_comment(child),
+                        actor=self._text(actor_node) if actor_node else None,
+                        patient=self._text(patient_node) if patient_node else None,
+                        source_location=self._loc(child),
+                    )
+                )
             elif child.type == "element_group":
                 elements.append(self._build_element_group(child))
             elif child.type == "temporal_constraint":
                 subj_node = self._child_by_field(child, "subject")
                 rel_node = self._child_by_field(child, "relation")
                 obj_node = self._child_by_field(child, "object")
-                temporals.append(nodes.TemporalConstraintNode(
-                    subject=self._text(subj_node) if subj_node else "",
-                    relation=self._text(rel_node) if rel_node else "precedes",
-                    object=self._text(obj_node) if obj_node else "",
-                    source_location=self._loc(child),
-                ))
+                temporals.append(
+                    nodes.TemporalConstraintNode(
+                        subject=self._text(subj_node) if subj_node else "",
+                        relation=self._text(rel_node) if rel_node else "precedes",
+                        object=self._text(obj_node) if obj_node else "",
+                        source_location=self._loc(child),
+                    )
+                )
         return elements, temporals
 
     def _build_element_group(self, node) -> nodes.ElementGroupNode:
@@ -1084,12 +1150,18 @@ class ASTBuilder:
                 desc_node = self._child_by_field(child, "description")
                 elem_type = self._text(type_node) if type_node else "actus_reus"
                 name = self._text(name_node) if name_node else ""
-                description = self._build_expression(desc_node) if desc_node else nodes.StringLit(value="")
-                members.append(nodes.ElementNode(
-                    element_type=elem_type, name=name, description=description,
-                    doc_comment=self._get_doc_comment(child),
-                    source_location=self._loc(child),
-                ))
+                description = (
+                    self._build_expression(desc_node) if desc_node else nodes.StringLit(value="")
+                )
+                members.append(
+                    nodes.ElementNode(
+                        element_type=elem_type,
+                        name=name,
+                        description=description,
+                        doc_comment=self._get_doc_comment(child),
+                        source_location=self._loc(child),
+                    )
+                )
             elif child.type == "element_group":
                 members.append(self._build_element_group(child))
         return nodes.ElementGroupNode(
@@ -1196,7 +1268,9 @@ class ASTBuilder:
         defeats_node = self._child_by_field(node, "defeats")
 
         label = self._text(label_node) if label_node else None
-        condition = self._build_string_lit(condition_node) if condition_node else nodes.StringLit(value="")
+        condition = (
+            self._build_string_lit(condition_node) if condition_node else nodes.StringLit(value="")
+        )
         effect = self._build_string_lit(effect_node) if effect_node else None
         guard = self._build_expression(guard_node) if guard_node else None
         priority = int(self._text(priority_node)) if priority_node else None
@@ -1219,9 +1293,13 @@ class ASTBuilder:
         holding_node = self._child_by_field(node, "holding")
         element_ref_node = self._child_by_field(node, "element_ref")
 
-        case_name = self._build_string_lit(case_name_node) if case_name_node else nodes.StringLit(value="")
+        case_name = (
+            self._build_string_lit(case_name_node) if case_name_node else nodes.StringLit(value="")
+        )
         citation = self._build_string_lit(citation_node) if citation_node else None
-        holding = self._build_string_lit(holding_node) if holding_node else nodes.StringLit(value="")
+        holding = (
+            self._build_string_lit(holding_node) if holding_node else nodes.StringLit(value="")
+        )
         element_ref = self._text(element_ref_node) if element_ref_node else None
 
         return nodes.CaseLawNode(
@@ -1273,13 +1351,17 @@ class ASTBuilder:
             if child.type == "legal_test_field":
                 type_node = self._child_by_field(child, "type")
                 fname_node = self._child_by_field(child, "name")
-                type_ann = self._build_type(type_node) if type_node else nodes.BuiltinType(name="bool")
+                type_ann = (
+                    self._build_type(type_node) if type_node else nodes.BuiltinType(name="bool")
+                )
                 fname = self._text(fname_node) if fname_node else ""
-                requirements.append(nodes.VariableDecl(
-                    type_annotation=type_ann,
-                    name=fname,
-                    source_location=self._loc(child),
-                ))
+                requirements.append(
+                    nodes.VariableDecl(
+                        type_annotation=type_ann,
+                        name=fname,
+                        source_location=self._loc(child),
+                    )
+                )
         annotations = self._build_annotations(node)
         return nodes.LegalTestNode(
             name=name,

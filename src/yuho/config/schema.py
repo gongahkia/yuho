@@ -28,6 +28,7 @@ class LLMSection:
     def to_llm_config(self):
         """Convert to LLMConfig."""
         from yuho.llm import LLMConfig
+
         api_key_map = {
             "openai": self.openai_api_key,
             "anthropic": self.anthropic_api_key,
@@ -149,14 +150,46 @@ class ConfigSchema:
         workspace_data = data.get("workspace", {})
 
         return cls(
-            llm=LLMSection(**{k: v for k, v in llm_data.items() if k in LLMSection.__dataclass_fields__}),
-            transpile=TranspileSection(**{k: v for k, v in transpile_data.items() if k in TranspileSection.__dataclass_fields__}),
-            lsp=LSPSection(**{k: v for k, v in lsp_data.items() if k in LSPSection.__dataclass_fields__}),
-            api=APISection(**{k: v for k, v in api_data.items() if k in APISection.__dataclass_fields__}),
-            mcp=MCPSection(**{k: v for k, v in mcp_data.items() if k in MCPSection.__dataclass_fields__}),
-            library=LibrarySection(**{k: v for k, v in library_data.items() if k in LibrarySection.__dataclass_fields__}),
-            webhooks=WebhookSection(**{k: v for k, v in webhooks_data.items() if k in WebhookSection.__dataclass_fields__}),
-            workspace=WorkspaceSection(**{k: v for k, v in workspace_data.items() if k in WorkspaceSection.__dataclass_fields__}),
+            llm=LLMSection(
+                **{k: v for k, v in llm_data.items() if k in LLMSection.__dataclass_fields__}
+            ),
+            transpile=TranspileSection(
+                **{
+                    k: v
+                    for k, v in transpile_data.items()
+                    if k in TranspileSection.__dataclass_fields__
+                }
+            ),
+            lsp=LSPSection(
+                **{k: v for k, v in lsp_data.items() if k in LSPSection.__dataclass_fields__}
+            ),
+            api=APISection(
+                **{k: v for k, v in api_data.items() if k in APISection.__dataclass_fields__}
+            ),
+            mcp=MCPSection(
+                **{k: v for k, v in mcp_data.items() if k in MCPSection.__dataclass_fields__}
+            ),
+            library=LibrarySection(
+                **{
+                    k: v
+                    for k, v in library_data.items()
+                    if k in LibrarySection.__dataclass_fields__
+                }
+            ),
+            webhooks=WebhookSection(
+                **{
+                    k: v
+                    for k, v in webhooks_data.items()
+                    if k in WebhookSection.__dataclass_fields__
+                }
+            ),
+            workspace=WorkspaceSection(
+                **{
+                    k: v
+                    for k, v in workspace_data.items()
+                    if k in WorkspaceSection.__dataclass_fields__
+                }
+            ),
         )
 
     def to_dict(self) -> Dict[str, Any]:
