@@ -28,7 +28,12 @@ def run_serve(
     try:
         from yuho.mcp import create_server
     except ImportError:
-        click.echo(colorize("error: MCP module not available. Install with: pip install yuho[mcp]", Colors.RED), err=True)
+        click.echo(
+            colorize(
+                "error: MCP module not available. Install with: pip install yuho[mcp]", Colors.RED
+            ),
+            err=True,
+        )
         sys.exit(1)
 
     from yuho.config.loader import get_config
@@ -46,7 +51,12 @@ def run_serve(
     else:
         if verbose:
             click.echo(f"Starting MCP server on {resolved_host}:{resolved_port}...")
-        click.echo(colorize(f"Yuho MCP server listening on http://{resolved_host}:{resolved_port}", Colors.CYAN + Colors.BOLD))
+        click.echo(
+            colorize(
+                f"Yuho MCP server listening on http://{resolved_host}:{resolved_port}",
+                Colors.CYAN + Colors.BOLD,
+            )
+        )
         click.echo(colorize("Press Ctrl+C to stop", Colors.DIM))
 
         try:
