@@ -33,16 +33,16 @@ class Colors:
 def supports_color() -> bool:
     """
     Check if terminal supports color.
-    
+
     Respects the global COLOR_ENABLED flag if set,
     otherwise auto-detects based on terminal capabilities.
     """
     global COLOR_ENABLED
-    
+
     # If explicitly set, use that value
     if COLOR_ENABLED is not None:
         return COLOR_ENABLED
-    
+
     # Auto-detect
     if not hasattr(sys.stdout, "isatty"):
         return False
@@ -56,7 +56,6 @@ def colorize(text: str, color: str) -> str:
     if supports_color():
         return f"{color}{text}{Colors.RESET}"
     return text
-
 
 
 def format_error(error: ParseError, source: str) -> str:
@@ -131,7 +130,7 @@ def levenshtein_distance(s1: str, s2: str) -> int:
     if len(s2) == 0:
         return len(s1)
 
-    previous_row = range(len(s2) + 1)
+    previous_row = list(range(len(s2) + 1))
     for i, c1 in enumerate(s1):
         current_row = [i + 1]
         for j, c2 in enumerate(s2):
@@ -159,14 +158,40 @@ def find_similar(word: str, candidates: List[str], max_distance: int = 2) -> Lis
 
 # Known keywords and types for suggestions
 YUHO_KEYWORDS = [
-    "struct", "fn", "match", "case", "consequence", "pass", "return",
-    "statute", "definitions", "elements", "penalty", "illustration",
-    "import", "from", "actus_reus", "mens_rea", "circumstance",
-    "imprisonment", "fine", "supplementary", "TRUE", "FALSE",
+    "struct",
+    "fn",
+    "match",
+    "case",
+    "consequence",
+    "pass",
+    "return",
+    "statute",
+    "definitions",
+    "elements",
+    "penalty",
+    "illustration",
+    "import",
+    "from",
+    "actus_reus",
+    "mens_rea",
+    "circumstance",
+    "imprisonment",
+    "fine",
+    "supplementary",
+    "TRUE",
+    "FALSE",
 ]
 
 YUHO_TYPES = [
-    "int", "float", "bool", "string", "money", "percent", "date", "duration", "void",
+    "int",
+    "float",
+    "bool",
+    "string",
+    "money",
+    "percent",
+    "date",
+    "duration",
+    "void",
 ]
 
 
@@ -183,6 +208,7 @@ def format_suggestion(error: ParseError, source: str) -> Optional[str]:
     if "Unexpected" in error.message:
         # Extract the token text
         import re
+
         match = re.search(r"Unexpected syntax: ['\"]?([^'\"]+)['\"]?", error.message)
         if match:
             token = match.group(1).strip()
