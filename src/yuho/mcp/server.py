@@ -34,16 +34,17 @@ logger = logging.getLogger("yuho.mcp")
 
 class LogVerbosity(IntEnum):
     """Verbosity levels for MCP request logging."""
-    QUIET = 0      # No logging
-    MINIMAL = 1    # Log tool name only
-    STANDARD = 2   # Log tool name and execution time
-    VERBOSE = 3    # Log tool name, args summary, and execution time
-    DEBUG = 4      # Log everything including full args and responses
+
+    QUIET = 0  # No logging
+    MINIMAL = 1  # Log tool name only
+    STANDARD = 2  # Log tool name and execution time
+    VERBOSE = 3  # Log tool name, args summary, and execution time
+    DEBUG = 4  # Log everything including full args and responses
 
 
 class RateLimitExceeded(Exception):
     """Exception raised when rate limit is exceeded."""
-    
+
     def __init__(self, retry_after: float):
         self.retry_after = retry_after
         super().__init__(f"Rate limit exceeded. Retry after {retry_after:.1f}s")
@@ -52,31 +53,31 @@ class RateLimitExceeded(Exception):
 @dataclass
 class RateLimitConfig:
     """Configuration for rate limiting."""
-    
+
     # Requests per second (token refill rate)
     requests_per_second: float = 10.0
-    
+
     # Maximum burst size (bucket capacity)
     burst_size: int = 20
-    
+
     # Per-client limits (by IP or client ID)
     per_client_rps: float = 5.0
     per_client_burst: int = 10
-    
+
     # Enable/disable rate limiting
     enabled: bool = True
-    
+
     # Exempt tool names (no rate limiting)
     exempt_tools: List[str] = field(default_factory=lambda: ["yuho_grammar", "yuho_types"])
 
 
 class TokenBucket:
     """Token bucket rate limiter implementation."""
-    
+
     def __init__(self, rate: float, capacity: int):
         """
         Initialize token bucket.
-        
+
         Args:
             rate: Token refill rate (tokens per second)
             capacity: Maximum bucket capacity
@@ -86,21 +87,21 @@ class TokenBucket:
         self.tokens = float(capacity)
         self.last_refill = time.monotonic()
         self._lock = threading.Lock()
-    
+
     def _refill(self) -> None:
         """Refill tokens based on elapsed time."""
         now = time.monotonic()
         elapsed = now - self.last_refill
         self.tokens = min(self.capacity, self.tokens + elapsed * self.rate)
         self.last_refill = now
-    
+
     def acquire(self, tokens: int = 1) -> bool:
         """
         Try to acquire tokens from the bucket.
-        
+
         Args:
             tokens: Number of tokens to acquire
-            
+
         Returns:
             True if tokens acquired, False if rate limited
         """
@@ -110,14 +111,14 @@ class TokenBucket:
                 self.tokens -= tokens
                 return True
             return False
-    
+
     def time_until_available(self, tokens: int = 1) -> float:
         """
         Calculate time until tokens will be available.
-        
+
         Args:
             tokens: Number of tokens needed
-            
+
         Returns:
             Seconds until tokens available (0 if available now)
         """
@@ -131,7 +132,7 @@ class TokenBucket:
 
 class RateLimiter:
     """Rate limiter for MCP server with per-client tracking."""
-    
+
     def __init__(self, config: RateLimitConfig):
         self.config = config
         self._global_bucket = TokenBucket(config.requests_per_second, config.burst_size)
@@ -145,17 +146,16 @@ class RateLimiter:
             "error_counts": {},
             "latency_histograms_ms": {},
         }
-    
+
     def _get_client_bucket(self, client_id: str) -> TokenBucket:
         """Get or create a token bucket for a client."""
         with self._client_buckets_lock:
             if client_id not in self._client_buckets:
                 self._client_buckets[client_id] = TokenBucket(
-                    self.config.per_client_rps,
-                    self.config.per_client_burst
+                    self.config.per_client_rps, self.config.per_client_burst
                 )
             return self._client_buckets[client_id]
-    
+
     def check_rate_limit(
         self,
         tool_name: str,
@@ -163,26 +163,26 @@ class RateLimiter:
     ) -> None:
         """
         Check if request is rate limited.
-        
+
         Args:
             tool_name: Name of the tool being called
             client_id: Optional client identifier
-            
+
         Raises:
             RateLimitExceeded: If rate limit is exceeded
         """
         if not self.config.enabled:
             return
-        
+
         # Track stats
         with self._stats_lock:
             self._stats["total_requests"] += 1
             self._stats["by_tool"][tool_name] = self._stats["by_tool"].get(tool_name, 0) + 1
-        
+
         # Check exempt tools
         if tool_name in self.config.exempt_tools:
             return
-        
+
         # Check global rate limit
         if not self._global_bucket.acquire():
             with self._stats_lock:
@@ -190,7 +190,7 @@ class RateLimiter:
             retry_after = self._global_bucket.time_until_available()
             logger.warning(f"Global rate limit exceeded for {tool_name}")
             raise RateLimitExceeded(retry_after)
-        
+
         # Check per-client rate limit if client_id provided
         if client_id:
             client_bucket = self._get_client_bucket(client_id)
@@ -232,7 +232,7 @@ class RateLimiter:
         if elapsed_ms <= 1000:
             return "le_1000ms"
         return "gt_1000ms"
-    
+
     def get_stats(self) -> Dict[str, Any]:
         """Get rate limiting statistics."""
         with self._stats_lock:
@@ -242,8 +242,7 @@ class RateLimiter:
                 "by_tool": dict(self._stats["by_tool"]),
                 "error_counts": dict(self._stats["error_counts"]),
                 "latency_histograms_ms": {
-                    tool: dict(hist)
-                    for tool, hist in self._stats["latency_histograms_ms"].items()
+                    tool: dict(hist) for tool, hist in self._stats["latency_histograms_ms"].items()
                 },
             }
 
@@ -252,7 +251,7 @@ class RateLimiter:
             "global_tokens": self._global_bucket.tokens,
             "active_clients": len(self._client_buckets),
         }
-    
+
     def reset_stats(self) -> None:
         """Reset rate limiting statistics."""
         with self._stats_lock:
@@ -267,38 +266,41 @@ class RateLimiter:
 
 class MCPRequestLogger:
     """Logger for MCP requests with configurable verbosity."""
-    
+
     def __init__(self, verbosity: LogVerbosity = LogVerbosity.STANDARD):
         self.verbosity = verbosity
-        
+
     def log_request(self, tool_name: str, args: Dict[str, Any]) -> float:
         """Log incoming request, return start time."""
         start = time.time()
-        
+
         if self.verbosity >= LogVerbosity.MINIMAL:
             logger.info(f"MCP request: {tool_name}")
-            
+
         if self.verbosity >= LogVerbosity.VERBOSE:
-            args_summary = {k: f"{len(str(v))} chars" if len(str(v)) > 100 else v 
-                          for k, v in args.items()}
+            args_summary = {
+                k: f"{len(str(v))} chars" if len(str(v)) > 100 else v for k, v in args.items()
+            }
             logger.info(f"  Args: {args_summary}")
-            
+
         if self.verbosity >= LogVerbosity.DEBUG:
             logger.debug(f"  Full args: {args}")
-            
+
         return start
-    
-    def log_response(self, tool_name: str, result: Any, start_time: float, error: Optional[Exception] = None) -> None:
+
+    def log_response(
+        self, tool_name: str, result: Any, start_time: float, error: Optional[Exception] = None
+    ) -> None:
         """Log response after tool execution."""
         elapsed = time.time() - start_time
-        
+
         if error:
             logger.error(f"MCP error: {tool_name} failed after {elapsed:.3f}s - {error}")
             return
-            
+
         if self.verbosity >= LogVerbosity.STANDARD:
             logger.info(f"MCP response: {tool_name} completed in {elapsed:.3f}s")
-            
+
         if self.verbosity >= LogVerbosity.DEBUG:
             result_str = str(result)
             if len(result_str) > 500:
@@ -308,9 +310,11 @@ class MCPRequestLogger:
 
 try:
     from mcp.server.fastmcp import FastMCP
+
     MCP_AVAILABLE = True
 except ImportError:
     MCP_AVAILABLE = False
+
     # Provide mock class for when mcp is not installed
     class FastMCP:
         def __init__(self, name: str):
@@ -319,18 +323,21 @@ except ImportError:
         def tool(self):
             def decorator(func):
                 return func
+
             return decorator
 
         def resource(self, uri: str):
             def decorator(func):
                 return func
+
             return decorator
 
         def prompt(self, name: str = None):
             def decorator(func):
                 return func
+
             return decorator
-        
+
         def run(self, transport: str = "stdio"):
             raise ImportError("MCP dependencies not installed. Install with: pip install yuho[mcp]")
 
@@ -375,7 +382,9 @@ class YuhoMCPServer:
     def set_rate_limit_config(self, config: RateLimitConfig) -> None:
         """Update rate limiting configuration."""
         self.rate_limiter = RateLimiter(config)
-        logger.info(f"MCP rate limiting updated: {config.requests_per_second} req/s, burst={config.burst_size}")
+        logger.info(
+            f"MCP rate limiting updated: {config.requests_per_second} req/s, burst={config.burst_size}"
+        )
 
     def get_rate_limit_stats(self) -> Dict[str, Any]:
         """Get rate limiting statistics."""
@@ -453,7 +462,7 @@ class YuhoMCPServer:
                 self._check_rate_limit("yuho_check", client_id)
             except RateLimitExceeded as e:
                 return {"error": str(e), "retry_after": e.retry_after}
-            
+
             analysis = analyze_source(file_content, file="<mcp>", run_semantic=True)
             payload = analysis.validation_payload(include_metrics=include_metrics)
             if explain_errors:
@@ -467,7 +476,9 @@ class YuhoMCPServer:
             return payload
 
         @tool_with_structured_logging()
-        async def yuho_transpile(file_content: str, target: str, client_id: Optional[str] = None) -> Dict[str, Any]:
+        async def yuho_transpile(
+            file_content: str, target: str, client_id: Optional[str] = None
+        ) -> Dict[str, Any]:
             """
             Transpile Yuho source to another format.
 
@@ -483,7 +494,7 @@ class YuhoMCPServer:
                 self._check_rate_limit("yuho_transpile", client_id)
             except RateLimitExceeded as e:
                 return {"error": str(e), "retry_after": e.retry_after}
-            
+
             from yuho.parser import get_parser
             from yuho.ast import ASTBuilder
             from yuho.transpile import TranspileTarget, get_transpiler
@@ -527,7 +538,9 @@ class YuhoMCPServer:
                 return {"error": str(e)}
 
         @tool_with_structured_logging()
-        async def yuho_explain(file_content: str, section: Optional[str] = None, client_id: Optional[str] = None) -> Dict[str, Any]:
+        async def yuho_explain(
+            file_content: str, section: Optional[str] = None, client_id: Optional[str] = None
+        ) -> Dict[str, Any]:
             """
             Generate natural language explanation.
 
@@ -543,7 +556,7 @@ class YuhoMCPServer:
                 self._check_rate_limit("yuho_explain", client_id)
             except RateLimitExceeded as e:
                 return {"error": str(e), "retry_after": e.retry_after}
-            
+
             from yuho.parser import get_parser
             from yuho.ast import ASTBuilder
             from yuho.transpile import EnglishTranspiler
@@ -574,6 +587,7 @@ class YuhoMCPServer:
             # Filter to specific section if requested
             if section:
                 from yuho.ast.nodes import ModuleNode
+
                 matching = [s for s in ast.statutes if section in s.section_number]
                 if not matching:
                     return {"error": f"Section {section} not found"}
@@ -612,9 +626,13 @@ class YuhoMCPServer:
             analysis = analyze_source(file_content, file="<mcp>", run_semantic=False)
             if not analysis.parse_valid or not analysis.ast_valid or analysis.ast is None:
                 payload = analysis.validation_payload()
-                first_error = payload["errors"][0] if payload["errors"] else {
-                    "message": "Failed to build AST",
-                }
+                first_error = (
+                    payload["errors"][0]
+                    if payload["errors"]
+                    else {
+                        "message": "Failed to build AST",
+                    }
+                )
                 return {"error": first_error["message"], "validation": payload}
 
             # Use JSON transpiler to serialize AST
@@ -687,9 +705,22 @@ class YuhoMCPServer:
 
             # Keywords
             keywords = [
-                "struct", "fn", "match", "case", "consequence", "pass", "return",
-                "statute", "definitions", "elements", "penalty", "illustration",
-                "import", "from", "TRUE", "FALSE",
+                "struct",
+                "fn",
+                "match",
+                "case",
+                "consequence",
+                "pass",
+                "return",
+                "statute",
+                "definitions",
+                "elements",
+                "penalty",
+                "illustration",
+                "import",
+                "from",
+                "TRUE",
+                "FALSE",
             ]
             completions.extend({"label": kw, "kind": "keyword"} for kw in keywords)
 
@@ -737,7 +768,7 @@ class YuhoMCPServer:
             """
             from yuho.parser import get_parser
             from yuho.ast import ASTBuilder
-            
+
             # Keywords and their docs
             KEYWORD_DOCS = {
                 "struct": "Defines a structured type with named fields.",
@@ -751,7 +782,7 @@ class YuhoMCPServer:
                 "mens_rea": "Mental element of an offense (guilty mind).",
                 "circumstance": "Circumstantial element required for the offense.",
             }
-            
+
             TYPE_DOCS = {
                 "int": "Integer number type (whole numbers).",
                 "float": "Floating-point number type (decimals).",
@@ -763,59 +794,69 @@ class YuhoMCPServer:
                 "duration": "Time duration (years, months, days, etc.).",
                 "void": "No value type (for procedures).",
             }
-            
+
             # Get word at position
             lines = file_content.splitlines()
             if line < 1 or line > len(lines):
                 return {"info": None}
-            
+
             target_line = lines[line - 1]
             if col < 1 or col > len(target_line):
                 return {"info": None}
-            
+
             # Extract word at position
             start = col - 1
             end = col - 1
-            while start > 0 and (target_line[start - 1].isalnum() or target_line[start - 1] == '_'):
+            while start > 0 and (target_line[start - 1].isalnum() or target_line[start - 1] == "_"):
                 start -= 1
-            while end < len(target_line) and (target_line[end].isalnum() or target_line[end] == '_'):
+            while end < len(target_line) and (
+                target_line[end].isalnum() or target_line[end] == "_"
+            ):
                 end += 1
-            
+
             if start == end:
                 return {"info": None}
-            
+
             word = target_line[start:end]
-            
+
             # Check keywords
             if word in KEYWORD_DOCS:
                 return {"info": f"**keyword** `{word}`\n\n{KEYWORD_DOCS[word]}"}
-            
+
             # Check types
             if word in TYPE_DOCS:
                 return {"info": f"**type** `{word}`\n\n{TYPE_DOCS[word]}"}
-            
+
             # Parse for symbol info
             parser = get_parser()
             result = parser.parse(file_content)
-            
+
             if result.is_valid:
                 try:
                     builder = ASTBuilder(file_content)
                     ast = builder.build(result.root_node)
-                    
+
                     # Check structs
                     for struct in ast.type_defs:
                         if struct.name == word:
-                            fields = ", ".join(f"{f.name}: {f.type_annotation}" for f in struct.fields)
-                            return {"info": f"**struct** `{struct.name}`\n\n```yuho\nstruct {struct.name} {{ {fields} }}\n```"}
-                    
+                            fields = ", ".join(
+                                f"{f.name}: {f.type_annotation}" for f in struct.fields
+                            )
+                            return {
+                                "info": f"**struct** `{struct.name}`\n\n```yuho\nstruct {struct.name} {{ {fields} }}\n```"
+                            }
+
                     # Check functions
                     for func in ast.function_defs:
                         if func.name == word:
-                            params = ", ".join(f"{p.name}: {p.type_annotation}" for p in func.params)
+                            params = ", ".join(
+                                f"{p.name}: {p.type_annotation}" for p in func.params
+                            )
                             ret = f" -> {func.return_type}" if func.return_type else ""
-                            return {"info": f"**function** `{func.name}`\n\n```yuho\nfn {func.name}({params}){ret}\n```"}
-                    
+                            return {
+                                "info": f"**function** `{func.name}`\n\n```yuho\nfn {func.name}({params}){ret}\n```"
+                            }
+
                     # Check statutes
                     for statute in ast.statutes:
                         if statute.section_number == word or f"S{statute.section_number}" == word:
@@ -826,15 +867,14 @@ class YuhoMCPServer:
                                 for elem in statute.elements:
                                     info += f"- {elem.element_type}: {elem.name}\n"
                             return {"info": info}
-                            
+
                 except Exception as exc:
                     logger.warning(
                         "MCP tool yuho_hover symbol inspection failed: %s",
                         mask_error(exc),
                     )
-            
-            return {"info": None}
 
+            return {"info": None}
 
         @tool_with_structured_logging()
         async def yuho_definition(file_content: str, line: int, col: int) -> Dict[str, Any]:
@@ -851,38 +891,40 @@ class YuhoMCPServer:
             """
             from yuho.parser import get_parser
             from yuho.ast import ASTBuilder
-            
+
             # Get word at position
             lines = file_content.splitlines()
             if line < 1 or line > len(lines):
                 return {"location": None}
-            
+
             target_line = lines[line - 1]
             if col < 1 or col > len(target_line):
                 return {"location": None}
-            
+
             # Extract word at position
             start = col - 1
             end = col - 1
-            while start > 0 and (target_line[start - 1].isalnum() or target_line[start - 1] == '_'):
+            while start > 0 and (target_line[start - 1].isalnum() or target_line[start - 1] == "_"):
                 start -= 1
-            while end < len(target_line) and (target_line[end].isalnum() or target_line[end] == '_'):
+            while end < len(target_line) and (
+                target_line[end].isalnum() or target_line[end] == "_"
+            ):
                 end += 1
-            
+
             if start == end:
                 return {"location": None}
-            
+
             word = target_line[start:end]
-            
+
             # Parse for symbol definitions
             parser = get_parser()
             result = parser.parse(file_content)
-            
+
             if result.is_valid:
                 try:
                     builder = ASTBuilder(file_content)
                     ast = builder.build(result.root_node)
-                    
+
                     # Check struct definitions
                     for struct in ast.type_defs:
                         if struct.name == word and struct.source_location:
@@ -892,7 +934,7 @@ class YuhoMCPServer:
                                     "col": struct.source_location.col,
                                 }
                             }
-                    
+
                     # Check function definitions
                     for func in ast.function_defs:
                         if func.name == word and func.source_location:
@@ -902,26 +944,26 @@ class YuhoMCPServer:
                                     "col": func.source_location.col,
                                 }
                             }
-                    
+
                     # Check statute definitions (by section number)
                     for statute in ast.statutes:
-                        if (statute.section_number == word or 
-                            f"S{statute.section_number}" == word) and statute.source_location:
+                        if (
+                            statute.section_number == word or f"S{statute.section_number}" == word
+                        ) and statute.source_location:
                             return {
                                 "location": {
                                     "line": statute.source_location.line,
                                     "col": statute.source_location.col,
                                 }
                             }
-                            
+
                 except Exception as exc:
                     logger.warning(
                         "MCP tool yuho_definition symbol lookup failed: %s",
                         mask_error(exc),
                     )
-            
-            return {"location": None}
 
+            return {"location": None}
 
         @tool_with_structured_logging()
         async def yuho_references(file_content: str, line: int, col: int) -> Dict[str, Any]:
@@ -951,9 +993,11 @@ class YuhoMCPServer:
             # Extract word at position
             start = col - 1
             end = col - 1
-            while start > 0 and (target_line[start - 1].isalnum() or target_line[start - 1] == '_'):
+            while start > 0 and (target_line[start - 1].isalnum() or target_line[start - 1] == "_"):
                 start -= 1
-            while end < len(target_line) and (target_line[end].isalnum() or target_line[end] == '_'):
+            while end < len(target_line) and (
+                target_line[end].isalnum() or target_line[end] == "_"
+            ):
                 end += 1
 
             if start == end:
@@ -969,16 +1013,20 @@ class YuhoMCPServer:
                     pos = ln.find(word, c)
                     if pos == -1:
                         break
-                    before_ok = pos == 0 or not (ln[pos - 1].isalnum() or ln[pos - 1] == '_')
+                    before_ok = pos == 0 or not (ln[pos - 1].isalnum() or ln[pos - 1] == "_")
                     after_pos = pos + len(word)
-                    after_ok = after_pos >= len(ln) or not (ln[after_pos].isalnum() or ln[after_pos] == '_')
+                    after_ok = after_pos >= len(ln) or not (
+                        ln[after_pos].isalnum() or ln[after_pos] == "_"
+                    )
                     if before_ok and after_ok:
-                        locations.append({
-                            "line": i,
-                            "col": pos + 1,
-                            "end_line": i,
-                            "end_col": after_pos + 1,
-                        })
+                        locations.append(
+                            {
+                                "line": i,
+                                "col": pos + 1,
+                                "end_line": i,
+                                "end_col": after_pos + 1,
+                            }
+                        )
                     c = after_pos
 
             return {"locations": locations}
@@ -1012,33 +1060,39 @@ class YuhoMCPServer:
                 # Structs
                 for struct in ast.type_defs:
                     loc = struct.source_location
-                    symbols.append({
-                        "name": struct.name,
-                        "kind": "struct",
-                        "line": loc.line if loc else 0,
-                        "col": loc.col if loc else 0,
-                    })
+                    symbols.append(
+                        {
+                            "name": struct.name,
+                            "kind": "struct",
+                            "line": loc.line if loc else 0,
+                            "col": loc.col if loc else 0,
+                        }
+                    )
 
                 # Functions
                 for func in ast.function_defs:
                     loc = func.source_location
-                    symbols.append({
-                        "name": func.name,
-                        "kind": "function",
-                        "line": loc.line if loc else 0,
-                        "col": loc.col if loc else 0,
-                    })
+                    symbols.append(
+                        {
+                            "name": func.name,
+                            "kind": "function",
+                            "line": loc.line if loc else 0,
+                            "col": loc.col if loc else 0,
+                        }
+                    )
 
                 # Statutes
                 for statute in ast.statutes:
                     loc = statute.source_location
                     title = statute.title.value if statute.title else ""
-                    symbols.append({
-                        "name": f"S{statute.section_number}: {title}",
-                        "kind": "statute",
-                        "line": loc.line if loc else 0,
-                        "col": loc.col if loc else 0,
-                    })
+                    symbols.append(
+                        {
+                            "name": f"S{statute.section_number}: {title}",
+                            "kind": "statute",
+                            "line": loc.line if loc else 0,
+                            "col": loc.col if loc else 0,
+                        }
+                    )
 
                 return {"symbols": symbols}
             except Exception as e:
@@ -1066,12 +1120,14 @@ class YuhoMCPServer:
 
             # Parse errors
             for err in result.errors:
-                diagnostics.append({
-                    "message": err.message,
-                    "severity": "error",
-                    "line": err.location.line,
-                    "col": err.location.col,
-                })
+                diagnostics.append(
+                    {
+                        "message": err.message,
+                        "severity": "error",
+                        "line": err.location.line,
+                        "col": err.location.col,
+                    }
+                )
 
             # Try AST build for more diagnostics
             if result.is_valid:
@@ -1086,33 +1142,41 @@ class YuhoMCPServer:
                         check_visitor = TypeCheckVisitor(infer_visitor.result)
                         ast.accept(check_visitor)
                         for err in check_visitor.result.errors:
-                            diagnostics.append({
-                                "message": err.message,
-                                "severity": "error",
-                                "line": err.line,
-                                "col": err.column,
-                            })
+                            diagnostics.append(
+                                {
+                                    "message": err.message,
+                                    "severity": "error",
+                                    "line": err.line,
+                                    "col": err.column,
+                                }
+                            )
                         for warn in check_visitor.result.warnings:
-                            diagnostics.append({
-                                "message": warn.message,
-                                "severity": "warning",
-                                "line": warn.line,
-                                "col": warn.column,
-                            })
+                            diagnostics.append(
+                                {
+                                    "message": warn.message,
+                                    "severity": "warning",
+                                    "line": warn.line,
+                                    "col": warn.column,
+                                }
+                            )
                     except Exception as e:
                         logger.warning(f"Semantic analysis failed: {e}")
                 except Exception as e:
-                    diagnostics.append({
-                        "message": str(e),
-                        "severity": "error",
-                        "line": 1,
-                        "col": 1,
-                    })
+                    diagnostics.append(
+                        {
+                            "message": str(e),
+                            "severity": "error",
+                            "line": 1,
+                            "col": 1,
+                        }
+                    )
 
             return {"diagnostics": diagnostics}
 
         @tool_with_structured_logging()
-        async def yuho_validate_contribution(file_content: str, tests: List[str] = None) -> Dict[str, Any]:
+        async def yuho_validate_contribution(
+            file_content: str, tests: List[str] = None
+        ) -> Dict[str, Any]:
             """
             Validate a statute file for contribution to the library.
 
@@ -1136,11 +1200,13 @@ class YuhoMCPServer:
             if result.errors:
                 return {
                     "valid": False,
-                    "results": [{
-                        "check": "parse",
-                        "passed": False,
-                        "message": result.errors[0].message,
-                    }],
+                    "results": [
+                        {
+                            "check": "parse",
+                            "passed": False,
+                            "message": result.errors[0].message,
+                        }
+                    ],
                 }
 
             results.append({"check": "parse", "passed": True, "message": "Parses successfully"})
@@ -1149,44 +1215,57 @@ class YuhoMCPServer:
             try:
                 builder = ASTBuilder(file_content)
                 ast = builder.build(result.root_node)
-                results.append({"check": "ast", "passed": True, "message": "AST builds successfully"})
+                results.append(
+                    {"check": "ast", "passed": True, "message": "AST builds successfully"}
+                )
             except Exception as e:
                 return {
                     "valid": False,
-                    "results": results + [{
-                        "check": "ast",
-                        "passed": False,
-                        "message": str(e),
-                    }],
+                    "results": results
+                    + [
+                        {
+                            "check": "ast",
+                            "passed": False,
+                            "message": str(e),
+                        }
+                    ],
                 }
 
             # Check has statutes
             if not ast.statutes:
-                results.append({
-                    "check": "statute",
-                    "passed": False,
-                    "message": "No statutes defined",
-                })
+                results.append(
+                    {
+                        "check": "statute",
+                        "passed": False,
+                        "message": "No statutes defined",
+                    }
+                )
             else:
-                results.append({
-                    "check": "statute",
-                    "passed": True,
-                    "message": f"Contains {len(ast.statutes)} statute(s)",
-                })
+                results.append(
+                    {
+                        "check": "statute",
+                        "passed": True,
+                        "message": f"Contains {len(ast.statutes)} statute(s)",
+                    }
+                )
 
             # Check tests exist
             if not tests:
-                results.append({
-                    "check": "tests",
-                    "passed": False,
-                    "message": "No test files provided",
-                })
+                results.append(
+                    {
+                        "check": "tests",
+                        "passed": False,
+                        "message": "No test files provided",
+                    }
+                )
             else:
-                results.append({
-                    "check": "tests",
-                    "passed": True,
-                    "message": f"{len(tests)} test file(s) provided",
-                })
+                results.append(
+                    {
+                        "check": "tests",
+                        "passed": True,
+                        "message": f"{len(tests)} test file(s) provided",
+                    }
+                )
 
             valid = all(r["passed"] for r in results)
             return {"valid": valid, "results": results}
@@ -1226,12 +1305,14 @@ class YuhoMCPServer:
                             statute_dir = meta_file.parent
                             yh_files = list(statute_dir.glob("statute.yh"))
                             path = str(yh_files[0]) if yh_files else str(statute_dir)
-                            results.append({
-                                "section": section,
-                                "title": title,
-                                "jurisdiction": jurisdiction,
-                                "path": path,
-                            })
+                            results.append(
+                                {
+                                    "section": section,
+                                    "title": title,
+                                    "jurisdiction": jurisdiction,
+                                    "path": path,
+                                }
+                            )
                     except Exception:
                         continue
 
@@ -1307,6 +1388,7 @@ class YuhoMCPServer:
                 if "```" in yuho_code:
                     # Extract code from markdown code block
                     import re
+
                     code_match = re.search(r"```(?:yuho)?\s*\n(.*?)```", yuho_code, re.DOTALL)
                     if code_match:
                         yuho_code = code_match.group(1).strip()
@@ -1338,7 +1420,9 @@ class YuhoMCPServer:
 
             except ImportError as e:
                 missing = str(e).split("'")[-2] if "'" in str(e) else "llm dependencies"
-                return {"error": f"LLM provider not configured. Missing: {missing}. Install with: pip install yuho[llm]"}
+                return {
+                    "error": f"LLM provider not configured. Missing: {missing}. Install with: pip install yuho[llm]"
+                }
             except Exception as e:
                 return {"error": f"LLM generation failed: {str(e)}"}
 
@@ -1521,7 +1605,10 @@ supplementary {
 ```
 """,
             }
-            return docs.get(topic.lower(), f"# Topic '{topic}' not found\n\nAvailable topics: {', '.join(docs.keys())}")
+            return docs.get(
+                topic.lower(),
+                f"# Topic '{topic}' not found\n\nAvailable topics: {', '.join(docs.keys())}",
+            )
 
     def _register_prompts(self):
         """Register MCP prompts."""
