@@ -1,4 +1,5 @@
 """Statute evaluation against fact patterns."""
+
 from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Tuple, Union
@@ -10,11 +11,13 @@ from yuho.eval.interpreter import Interpreter, Environment, Value, StructInstanc
 # Result data classes
 # ---------------------------------------------------------------------------
 
+
 @dataclass
 class ElementResult:
     """Result of evaluating a single element."""
+
     element_name: str
-    element_type: str # actus_reus, mens_rea, circumstance
+    element_type: str  # actus_reus, mens_rea, circumstance
     satisfied: bool
     description: str = ""
 
@@ -22,6 +25,7 @@ class ElementResult:
 @dataclass
 class EvaluationResult:
     """Result of evaluating a statute against facts."""
+
     statute_section: str
     statute_title: str
     element_results: List[ElementResult]
@@ -49,6 +53,7 @@ class EvaluationResult:
 # ---------------------------------------------------------------------------
 # Evaluator
 # ---------------------------------------------------------------------------
+
 
 class StatuteEvaluator:
     """Evaluates statutes against fact patterns (StructInstance)."""
@@ -84,7 +89,9 @@ class StatuteEvaluator:
                 all_element_results.append(er)
                 if not er.satisfied:
                     overall = False
-                    reasoning.append(f"Element '{er.element_name}' ({er.element_type}) not satisfied")
+                    reasoning.append(
+                        f"Element '{er.element_name}' ({er.element_type}) not satisfied"
+                    )
             elif isinstance(member, nodes.ElementGroupNode):
                 group_results, group_ok = self._evaluate_group(member, facts, env)
                 all_element_results.extend(group_results)
@@ -97,6 +104,7 @@ class StatuteEvaluator:
         # check exceptions via defeasible reasoning
         if overall and statute.exceptions:
             from yuho.eval.defeasible import DefeasibleReasoner
+
             reasoner = DefeasibleReasoner()
             facts_dict = {k: v.raw for k, v in facts.fields.items()}
             for exc in statute.exceptions:
@@ -105,10 +113,13 @@ class StatuteEvaluator:
                     overall = False
                     reasoning.append(f"Exception '{app.label}' defeated conviction: {app.effect}")
                     break
-                elif self._exception_key(exc) and self._exception_key(exc) in facts.fields:
-                    if facts.fields[self._exception_key(exc)].is_truthy():
+                else:
+                    exception_key = self._exception_key(exc)
+                    if exception_key is None or exception_key not in facts.fields:
+                        continue
+                    if facts.fields[exception_key].is_truthy():
                         overall = False
-                        reasoning.append(f"Exception '{self._exception_key(exc)}' applies")
+                        reasoning.append(f"Exception '{exception_key}' applies")
                         break
 
         return EvaluationResult(
@@ -185,7 +196,7 @@ class StatuteEvaluator:
         elif group.combinator == "any_of":
             ok = any(r.satisfied for r in results)
         else:
-            ok = all(r.satisfied for r in results) # default to all_of
+            ok = all(r.satisfied for r in results)  # default to all_of
 
         return results, ok
 
