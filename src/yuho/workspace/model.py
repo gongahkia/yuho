@@ -9,14 +9,16 @@ from typing import Any, Dict, List, Optional
 @dataclass
 class WorkspaceQuota:
     """Per-workspace usage limits."""
+
     max_requests_per_day: int = 10000
     max_source_length: int = 1_048_576
-    allowed_transpile_targets: List[str] = field(default_factory=list) # empty = all
+    allowed_transpile_targets: List[str] = field(default_factory=list)  # empty = all
 
 
 @dataclass
 class WorkspaceUsage:
     """Usage counters for a workspace."""
+
     requests_today: int = 0
     parse_count: int = 0
     transpile_count: int = 0
@@ -27,6 +29,7 @@ class WorkspaceUsage:
 @dataclass
 class Workspace:
     """An isolated workspace with its own library and config."""
+
     id: str
     name: str
     api_key: str = ""
@@ -47,6 +50,7 @@ class Workspace:
 
 class WorkspaceStore:
     """Persistent workspace storage."""
+
     def __init__(self, data_dir: Optional[str] = None) -> None:
         self._dir = Path(data_dir) if data_dir else Path.home() / ".config" / "yuho" / "workspaces"
         self._dir.mkdir(parents=True, exist_ok=True)
