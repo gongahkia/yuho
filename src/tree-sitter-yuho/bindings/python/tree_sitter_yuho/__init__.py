@@ -13,6 +13,18 @@ __version__ = "0.1.0"
 _language = None
 
 
+def _make_language_capsule(lang_ptr: int):
+    """Wrap a raw TSLanguage pointer in a Python capsule."""
+    py_capsule_new = ctypes.pythonapi.PyCapsule_New
+    py_capsule_new.restype = ctypes.py_object
+    py_capsule_new.argtypes = [ctypes.c_void_p, ctypes.c_char_p, ctypes.c_void_p]
+    return py_capsule_new(
+        ctypes.c_void_p(lang_ptr),
+        b"tree_sitter.Language",
+        None,
+    )
+
+
 def language():
     """
     Return the tree-sitter Language object for Yuho.
@@ -48,7 +60,7 @@ def language():
                 lib = ctypes.CDLL(str(lib_path))
                 lib.tree_sitter_yuho.restype = ctypes.c_void_p
                 lang_ptr = lib.tree_sitter_yuho()
-                _language = Language(lang_ptr)
+                _language = Language(_make_language_capsule(lang_ptr))
                 return _language
             except (OSError, AttributeError) as e:
                 continue
