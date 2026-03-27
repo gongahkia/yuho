@@ -73,7 +73,7 @@ def generate_standard_scaffold(config: ScaffoldConfig) -> str:
     lines.append("")
 
     # Statute declaration
-    lines.append(f'statute "{section}" "{config.title}" {{')
+    lines.append(f'statute {section} "{config.title}" {{')
 
     # Definitions
     if config.with_definitions:
@@ -81,7 +81,9 @@ def generate_standard_scaffold(config: ScaffoldConfig) -> str:
         lines.append("    definitions {")
         for i in range(config.num_definitions):
             term = f"term_{i + 1}" if config.num_definitions > 1 else "key_term"
-            lines.append(f'        "{term}" := "TODO: Define {term}";')
+            lines.append(
+                f'        {term} := "Replace with the statutory meaning used for {term} in this section.";'
+            )
         lines.append("    }")
 
     # Elements
@@ -89,10 +91,14 @@ def generate_standard_scaffold(config: ScaffoldConfig) -> str:
     lines.append("    elements {")
 
     if config.with_actus_reus:
-        lines.append('        actus_reus act := "TODO: Describe the physical act or conduct";')
+        lines.append(
+            '        actus_reus act := "The accused engaged in the prohibited conduct described by this section.";'
+        )
 
     if config.with_mens_rea:
-        lines.append('        mens_rea intent := "TODO: Describe the required mental state";')
+        lines.append(
+            '        mens_rea intent := "The accused acted with the mental state required by this section.";'
+        )
 
     lines.append("    }")
 
@@ -100,20 +106,20 @@ def generate_standard_scaffold(config: ScaffoldConfig) -> str:
     if config.with_penalty:
         lines.append("")
         lines.append("    penalty {")
-        lines.append("        imprisonment := 10Y;  // TODO: Set appropriate term")
-        lines.append("        fine := SGD 10000;    // TODO: Set appropriate fine")
+        lines.append("        imprisonment := 0 days .. 10 years;")
+        lines.append("        fine := $0.00 .. $10,000.00;")
         lines.append("    }")
 
     # Illustrations
     if config.with_illustrations:
         lines.append("")
-        lines.append("    illustrations {")
         for i in range(config.num_illustrations):
             label = chr(ord("a") + i)
+            lines.append(f"    illustration example_{label} {{")
             lines.append(
-                f'        ({label}) "TODO: Provide example {label} illustrating application";'
+                f'        "Illustration {label}: describe a fact pattern showing how this section applies."'
             )
-        lines.append("    }")
+            lines.append("    }")
 
     lines.append("}")
 
@@ -126,10 +132,12 @@ def generate_minimal_scaffold(config: ScaffoldConfig) -> str:
 
     section = normalize_section(config.section)
 
-    lines.append(f'statute "{section}" "{config.title}" {{')
+    lines.append(f'statute {section} "{config.title}" {{')
     lines.append("")
     lines.append("    elements {")
-    lines.append('        actus_reus act := "TODO: Define";')
+    lines.append(
+        '        actus_reus act := "The accused engaged in the prohibited act described by this section.";'
+    )
     lines.append("    }")
     lines.append("")
     lines.append("}")
@@ -148,56 +156,78 @@ def generate_full_scaffold(config: ScaffoldConfig) -> str:
     lines.append(f"// SECTION {section}: {config.title.upper()}")
     lines.append("// ============================================================================")
     lines.append("//")
-    lines.append("// Description: TODO: Provide overview of this statute")
-    lines.append("// Source: TODO: Reference source legislation")
-    lines.append("// Effective: TODO: Date")
+    lines.append("// Description: Summarise the legal rule captured by this section.")
+    lines.append("// Source: Record the legislation, regulation, or authority for this draft.")
+    lines.append("// Effective: Record the commencement or revision date if known.")
     lines.append("//")
     lines.append("")
 
-    lines.append(f'statute "{section}" "{config.title}" {{')
+    lines.append(f'statute {section} "{config.title}" {{')
 
     # Definitions
     lines.append("")
     lines.append("    // Define key legal terms used in this statute")
     lines.append("    definitions {")
-    lines.append('        "perpetrator" := "The person who commits the act";')
-    lines.append('        "victim" := "The person against whom the act is committed";')
-    lines.append('        "property" := "Any movable or immovable asset";')
+    lines.append('        perpetrator := "The person who commits the act";')
+    lines.append('        victim := "The person against whom the act is committed";')
+    lines.append('        property := "Any movable or immovable asset";')
     lines.append("    }")
 
     # Elements
     lines.append("")
     lines.append("    // Elements that must be proven for conviction")
     lines.append("    elements {")
-    lines.append('        actus_reus physical_act := "TODO: The physical conduct or act";')
-    lines.append('        actus_reus result := "TODO: The result or consequence (if any)";')
-    lines.append('        mens_rea intention := "TODO: The required mental state";')
-    lines.append('        circumstance context := "TODO: Circumstances that must exist";')
+    lines.append(
+        '        actus_reus physical_act := "The accused engaged in the physical conduct prohibited by this section.";'
+    )
+    lines.append(
+        '        actus_reus result := "The conduct caused the result or state of affairs required by this section.";'
+    )
+    lines.append(
+        '        mens_rea intention := "The accused acted with the fault element required by this section.";'
+    )
+    lines.append(
+        '        circumstance context := "The surrounding circumstances bringing the conduct within this section were present.";'
+    )
     lines.append("    }")
 
     # Exceptions / Defenses
     lines.append("")
     lines.append("    // Exceptions or defenses to liability")
     lines.append("    // exceptions {")
-    lines.append("    //     defense := TODO;")
+    lines.append(
+        '    //     defense := "Describe the defense or exception that defeats liability";'
+    )
     lines.append("    // }")
 
     # Penalty
     lines.append("")
     lines.append("    // Punishment upon conviction")
     lines.append("    penalty {")
-    lines.append("        imprisonment := 2Y to 10Y;")
-    lines.append("        fine := SGD 5000 to SGD 50000;")
+    lines.append("        imprisonment := 2 years .. 10 years;")
+    lines.append("        fine := $5,000.00 .. $50,000.00;")
     lines.append('        supplementary := "Or both imprisonment and fine";')
     lines.append("    }")
 
     # Illustrations
     lines.append("")
     lines.append("    // Examples illustrating application of this statute")
-    lines.append("    illustrations {")
-    lines.append('        (a) "Example showing when the offense IS committed: TODO";')
-    lines.append('        (b) "Example showing when the offense is NOT committed: TODO";')
-    lines.append('        (c) "Borderline case for consideration: TODO";')
+    lines.append("    illustration example_a {")
+    lines.append(
+        '        "Illustration where all required elements are satisfied and liability is made out."'
+    )
+    lines.append("    }")
+    lines.append("")
+    lines.append("    illustration example_b {")
+    lines.append(
+        '        "Illustration where a required element is missing and liability does not arise."'
+    )
+    lines.append("    }")
+    lines.append("")
+    lines.append("    illustration example_c {")
+    lines.append(
+        '        "Borderline illustration that should be analysed carefully against the statutory language."'
+    )
     lines.append("    }")
 
     # Cross-references
@@ -314,6 +344,6 @@ def run_generate(
     # Show tips
     click.echo("")
     click.echo(click.style("Next steps:", fg="yellow"))
-    click.echo(f"  1. Edit {path} to fill in TODO sections")
+    click.echo(f"  1. Refine the scaffold language in {path} to match the enacted section")
     click.echo(f"  2. Run: yuho check {path}")
     click.echo(f"  3. Run: yuho transpile {path} --target english")
