@@ -162,12 +162,15 @@ class BlockBuilder(Visitor):
                 if len(desc) > 50:
                     desc = desc[:47] + "..."
                 entry = f"{name}: {desc}"
-                if getattr(elem, "caused_by", None):
-                    entry += f" [caused_by: {elem.caused_by}]"
-                if getattr(elem, "burden", None):
-                    burden_str = elem.burden
-                    if getattr(elem, "burden_standard", None):
-                        burden_str += f"/{elem.burden_standard}"
+                caused_by = getattr(elem, "caused_by", None)
+                if isinstance(caused_by, str):
+                    entry += f" [caused_by: {caused_by}]"
+                burden = getattr(elem, "burden", None)
+                if isinstance(burden, str):
+                    burden_str = burden
+                    burden_standard = getattr(elem, "burden_standard", None)
+                    if isinstance(burden_standard, str):
+                        burden_str += f"/{burden_standard}"
                     entry += f" [burden: {burden_str}]"
                 bucket = elem_type if elem_type in groups else "circumstance"
                 groups[bucket].append(entry)
