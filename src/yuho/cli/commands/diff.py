@@ -146,7 +146,8 @@ class StatuteDiffer:
         for section in sorted(all_sections):
             if section not in old:
                 # Added statute
-                title = new[section].title.value if new[section].title else "(untitled)"
+                title_node = new[section].title
+                title = title_node.value if title_node is not None else "(untitled)"
                 self.changes.append(
                     Change(
                         change_type=ChangeType.ADDED,
@@ -157,7 +158,8 @@ class StatuteDiffer:
                 )
             elif section not in new:
                 # Removed statute
-                title = old[section].title.value if old[section].title else "(untitled)"
+                title_node = old[section].title
+                title = title_node.value if title_node is not None else "(untitled)"
                 self.changes.append(
                     Change(
                         change_type=ChangeType.REMOVED,
@@ -788,8 +790,11 @@ def run_diff(
             for err in result.errors[:3]:
                 click.echo(f"  {err.message}", err=True)
             return None
+        if result.root_node is None:
+            click.echo(colorize(f"error: No parse tree available for {path}", Colors.RED), err=True)
+            return None
         builder = ASTBuilder(result.source, result.file)
-        return builder.build(result.tree.root_node)
+        return builder.build(result.root_node)
 
     ast1 = parse_file(path1)
     ast2 = parse_file(path2)
@@ -862,8 +867,11 @@ def run_diff_score(
         if result.errors:
             click.echo(colorize(f"error: Parse errors in {path}:", Colors.RED), err=True)
             return None
+        if result.root_node is None:
+            click.echo(colorize(f"error: No parse tree available for {path}", Colors.RED), err=True)
+            return None
         builder = ASTBuilder(result.source, result.file)
-        return builder.build(result.tree.root_node)
+        return builder.build(result.root_node)
 
     model_ast = parse_file(model_path)
     student_ast = parse_file(student_path)
