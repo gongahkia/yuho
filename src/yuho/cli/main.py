@@ -1235,9 +1235,10 @@ def deps(ctx: click.Context, file: str, json_output: bool) -> None:
     imports = [imp.path for imp in ast.imports]
     refs = [ref.path for ref in ast.references]
     subsumes: List[Dict[str, str]] = []
-    for s in ast.statutes:
-        if getattr(s, "subsumes", None):
-            subsumes.append({"from": s.section_number, "subsumes": s.subsumes})
+    for statute in ast.statutes:
+        subsumed_section = getattr(statute, "subsumes", None)
+        if isinstance(subsumed_section, str):
+            subsumes.append({"from": statute.section_number, "subsumes": subsumed_section})
     if json_output:
         print(
             json_mod.dumps({"imports": imports, "references": refs, "subsumes": subsumes}, indent=2)
@@ -1249,8 +1250,8 @@ def deps(ctx: click.Context, file: str, json_output: bool) -> None:
         if refs:
             click.echo(f"  References: {', '.join(refs)}")
         if subsumes:
-            for s in subsumes:
-                click.echo(f"  s{s['from']} subsumes s{s['subsumes']}")
+            for relation in subsumes:
+                click.echo(f"  s{relation['from']} subsumes s{relation['subsumes']}")
         if not imports and not refs and not subsumes:
             click.echo("  No dependencies")
 
