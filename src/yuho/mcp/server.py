@@ -454,72 +454,16 @@ class YuhoMCPServer:
             except RateLimitExceeded as e:
                 return {"error": str(e), "retry_after": e.retry_after}
             
-            analysis = analyze_source(file_content, file="<mcp>", run_semantic=False)
-
-            if analysis.parse_errors:
-                payload = {
-                    "valid": False,
-                    "errors": [
-                        {
-                            "message": err.message,
-                            "line": err.location.line,
-                            "col": err.location.col,
-                            "node_type": err.node_type,
-                            "explanation": (
-                                get_error_explanation(err.message, err.node_type)
-                                if explain_errors
-                                else None
-                            ),
-                        }
-                        for err in analysis.parse_errors
-                    ],
-                }
-                if include_metrics:
-                    payload["code_scale"] = analysis.code_scale.to_dict() if analysis.code_scale else None
-                    payload["clock_load_scale"] = (
-                        analysis.clock_load_scale.to_dict() if analysis.clock_load_scale else None
+            analysis = analyze_source(file_content, file="<mcp>", run_semantic=True)
+            payload = analysis.validation_payload(include_metrics=include_metrics)
+            if explain_errors:
+                for item in payload["errors"]:
+                    if item["stage"] != "parse":
+                        continue
+                    item["explanation"] = get_error_explanation(
+                        item["message"],
+                        item.get("node_type"),
                     )
-                return payload
-
-            if analysis.errors and not analysis.parse_errors:
-                payload = {
-                    "valid": False,
-                    "errors": [{"message": analysis.errors[0].message, "line": 1, "col": 1}],
-                }
-                if include_metrics:
-                    payload["code_scale"] = analysis.code_scale.to_dict() if analysis.code_scale else None
-                    payload["clock_load_scale"] = (
-                        analysis.clock_load_scale.to_dict() if analysis.clock_load_scale else None
-                    )
-                return payload
-
-            summary = analysis.ast_summary
-            if summary is None:
-                payload = {
-                    "valid": False,
-                    "errors": [{"message": "Failed to build AST", "line": 1, "col": 1}],
-                }
-                if include_metrics:
-                    payload["code_scale"] = analysis.code_scale.to_dict() if analysis.code_scale else None
-                    payload["clock_load_scale"] = (
-                        analysis.clock_load_scale.to_dict() if analysis.clock_load_scale else None
-                    )
-                return payload
-
-            payload = {
-                "valid": True,
-                "errors": [],
-                "stats": {
-                    "statutes": summary.statutes,
-                    "structs": summary.structs,
-                    "functions": summary.functions,
-                },
-            }
-            if include_metrics:
-                payload["code_scale"] = analysis.code_scale.to_dict() if analysis.code_scale else None
-                payload["clock_load_scale"] = (
-                    analysis.clock_load_scale.to_dict() if analysis.clock_load_scale else None
-                )
             return payload
 
         @tool_with_structured_logging()
@@ -666,12 +610,12 @@ class YuhoMCPServer:
             from yuho.transpile import JSONTranspiler
 
             analysis = analyze_source(file_content, file="<mcp>", run_semantic=False)
-            if analysis.parse_errors:
-                return {"error": f"Parse error: {analysis.parse_errors[0].message}"}
-            if analysis.errors and not analysis.parse_errors:
-                return {"error": analysis.errors[0].message}
-            if analysis.ast is None:
-                return {"error": "Failed to build AST"}
+            if not analysis.parse_valid or not analysis.ast_valid or analysis.ast is None:
+                payload = analysis.validation_payload()
+                first_error = payload["errors"][0] if payload["errors"] else {
+                    "message": "Failed to build AST",
+                }
+                return {"error": first_error["message"], "validation": payload}
 
             # Use JSON transpiler to serialize AST
             json_transpiler = JSONTranspiler(include_locations=False)
