@@ -601,10 +601,13 @@ def run_lint(
                     diagnostics.append(f"{line}:{col}: {err.message}")
                 parse_diagnostics[str(path)] = diagnostics
                 continue
+            if result.root_node is None:
+                parse_diagnostics[str(path)] = ["?:?: parser returned no root node"]
+                continue
 
             source = result.source
             builder = ASTBuilder(source, str(path))
-            ast = builder.build(result.tree.root_node)
+            ast = builder.build(result.root_node)
 
             # Run all rules
             file_issues: List[LintIssue] = []
@@ -627,10 +630,13 @@ def run_lint(
                                 diagnostics.append(f"{line}:{col}: {err.message}")
                             parse_diagnostics[str(path)] = diagnostics
                             continue
+                        if result.root_node is None:
+                            parse_diagnostics[str(path)] = ["?:?: parser returned no root node"]
+                            continue
 
                         source = result.source
                         builder = ASTBuilder(source, str(path))
-                        ast = builder.build(result.tree.root_node)
+                        ast = builder.build(result.root_node)
                         file_issues = []
                         for rule in active_rules:
                             file_issues.extend(rule.check(ast, source))
