@@ -4,11 +4,11 @@ F* transpiler -- export statute logic as F* (FStar) definitions.
 Generates F* (https://www.fstar-lang.org/) compatible output with:
 - Record types for statute structures
 - Refinement types for constrained fields
-- Lemma stubs for formal proofs
 - Total functions for element evaluation
+- Guard-aware exception predicates where the source supplies machine-checkable guards
 """
 
-from typing import List
+from typing import Dict, List
 
 from yuho.ast import nodes
 from yuho.transpile.base import TranspileTarget, TranspilerBase
@@ -38,9 +38,9 @@ class FStarTranspiler(TranspilerBase):
             self._emit_enum(lines, enum)
         for statute in ast.statutes:
             self._emit_statute(lines, statute)
-        for lt in getattr(ast, 'legal_tests', ()):
+        for lt in getattr(ast, "legal_tests", ()):
             self._emit_legal_test(lines, lt)
-        for cc in getattr(ast, 'conflict_checks', ()):
+        for cc in getattr(ast, "conflict_checks", ()):
             self._emit_conflict_check(lines, cc)
         return "\n".join(lines)
 
@@ -71,16 +71,21 @@ class FStarTranspiler(TranspilerBase):
         lines.append(f"(* Section {statute.section_number}: {title} *)")
         lines.append("")
         # annotations as comments
-        for ann in getattr(statute, 'annotations', ()):
+        for ann in getattr(statute, "annotations", ()):
             args = ", ".join(f'"{a}"' for a in ann.args)
             lines.append(f"(* @{ann.name}({args}) *)")
         # record type for the statute's fact pattern
         flat = self._flatten_elements(statute.elements)
+        guard_fields = self._collect_guard_fields(statute)
         if flat:
             lines.append(f"type section_{sec}_facts = {{")
             for elem in flat:
                 ename = self._safe_name(elem.name)
                 lines.append(f"  {ename}: bool; (* {elem.element_type} *)")
+            for field_name, field_type in guard_fields.items():
+                if field_name in {self._safe_name(elem.name) for elem in flat}:
+                    continue
+                lines.append(f"  {field_name}: {field_type}; (* exception guard input *)")
             lines.append("}")
             lines.append("")
         # definitions as let bindings
@@ -93,17 +98,16 @@ class FStarTranspiler(TranspilerBase):
         # guilt predicate
         if flat:
             lines.append(f"let is_guilty_{sec} (facts: section_{sec}_facts) : bool =")
-            conditions = " &&\n  ".join(f"facts.{self._safe_name(e.name)}" for e in flat)
-            lines.append(f"  {conditions}")
+            lines.append(f"  {self._elements_to_fstar(statute.elements, 'facts', 'all_of')}")
             lines.append("")
         # exception predicates
         for i, exc in enumerate(statute.exceptions):
             label = self._safe_name(exc.label) if exc.label else f"exc_{i}"
-            cond = exc.condition.value if hasattr(exc.condition, 'value') else str(exc.condition)
+            cond = exc.condition.value if hasattr(exc.condition, "value") else str(exc.condition)
             lines.append(f'(* exception {label}: "{self._safe_str(cond)}" *)')
             if flat:
                 lines.append(f"let exception_{label}_{sec} (facts: section_{sec}_facts) : bool =")
-                lines.append(f"  false (* placeholder: encode exception condition *)")
+                lines.append(f"  {self._exception_guard_to_fstar(exc, 'facts')}")
                 lines.append("")
         # effective guilt with exceptions
         if flat and statute.exceptions:
@@ -139,7 +143,9 @@ class FStarTranspiler(TranspilerBase):
         lines.append("}")
         lines.append("")
         if lt.condition:
-            lines.append(f"let test_{self._lower(name)} (r: {self._lower(name)}_requirements) : bool =")
+            lines.append(
+                f"let test_{self._lower(name)} (r: {self._lower(name)}_requirements) : bool ="
+            )
             lines.append(f"  {self._expr_to_fstar(lt.condition, 'r')}")
             lines.append("")
 
@@ -176,18 +182,35 @@ class FStarTranspiler(TranspilerBase):
             return f"{expr.operator}{operand}"
         elif isinstance(expr, nodes.IdentifierNode):
             return f"{record_var}.{self._safe_name(expr.name)}"
+        elif isinstance(expr, nodes.FieldAccessNode):
+            if isinstance(expr.base, nodes.IdentifierNode):
+                base_name = self._safe_name(expr.base.name)
+                field_name = self._safe_name(expr.field_name)
+                if base_name == record_var:
+                    return f"{record_var}.{field_name}"
+                return f"{base_name}.{field_name}"
+            base = self._expr_to_fstar(expr.base, record_var)
+            return f"{base}.{self._safe_name(expr.field_name)}"
         elif isinstance(expr, nodes.BoolLit):
             return "true" if expr.value else "false"
         elif isinstance(expr, nodes.IntLit):
             return str(expr.value)
+        elif isinstance(expr, nodes.StringLit):
+            return f'"{self._safe_str(expr.value)}"'
         return "false"
 
     def _fstar_type(self, t: nodes.TypeNode) -> str:
         if isinstance(t, nodes.BuiltinType):
             mapping = {
-                "int": "int", "float": "float", "bool": "bool",
-                "string": "string", "money": "int", "date": "string",
-                "duration": "int", "percent": "int", "void": "unit",
+                "int": "int",
+                "float": "float",
+                "bool": "bool",
+                "string": "string",
+                "money": "int",
+                "date": "string",
+                "duration": "int",
+                "percent": "int",
+                "void": "unit",
             }
             return mapping.get(t.name, t.name)
         elif isinstance(t, nodes.NamedType):
@@ -207,9 +230,67 @@ class FStarTranspiler(TranspilerBase):
                 result.append(elem)
         return result
 
+    def _elements_to_fstar(self, elements, record_var: str, combinator: str) -> str:
+        """Preserve all_of/any_of structure when emitting guilt predicates."""
+        parts: List[str] = []
+        for elem in elements:
+            if isinstance(elem, nodes.ElementGroupNode):
+                parts.append(self._elements_to_fstar(elem.members, record_var, elem.combinator))
+            else:
+                parts.append(f"{record_var}.{self._safe_name(elem.name)}")
+
+        if not parts:
+            return "true"
+        if len(parts) == 1:
+            return parts[0]
+
+        joiner = " || " if combinator == "any_of" else " && "
+        return f"({joiner.join(parts)})"
+
+    def _collect_guard_fields(self, statute: nodes.StatuteNode) -> Dict[str, str]:
+        """Infer additional fact-record fields referenced by exception guards."""
+        fields: Dict[str, str] = {}
+        for exc in statute.exceptions:
+            if exc.guard:
+                self._collect_guard_fields_from_expr(exc.guard, fields)
+        return fields
+
+    def _collect_guard_fields_from_expr(self, expr: nodes.ASTNode, fields: Dict[str, str]) -> None:
+        """Walk an expression and capture `facts.<field>` accesses."""
+        if isinstance(expr, nodes.BinaryExprNode):
+            if isinstance(expr.left, nodes.FieldAccessNode) and isinstance(
+                expr.left.base, nodes.IdentifierNode
+            ):
+                if expr.left.base.name == "facts":
+                    fields[self._safe_name(expr.left.field_name)] = self._infer_expr_type(expr)
+            if isinstance(expr.right, nodes.FieldAccessNode) and isinstance(
+                expr.right.base, nodes.IdentifierNode
+            ):
+                if expr.right.base.name == "facts":
+                    fields[self._safe_name(expr.right.field_name)] = self._infer_expr_type(expr)
+        for child in expr.children():
+            self._collect_guard_fields_from_expr(child, fields)
+
+    def _infer_expr_type(self, expr: nodes.ASTNode) -> str:
+        """Best-effort F* type inference for guard-record fields."""
+        if isinstance(expr, nodes.BinaryExprNode):
+            if isinstance(expr.right, nodes.BoolLit):
+                return "bool"
+            if isinstance(expr.right, nodes.IntLit):
+                return "int"
+            if isinstance(expr.right, nodes.StringLit):
+                return "string"
+        return "string"
+
+    def _exception_guard_to_fstar(self, exc: nodes.ExceptionNode, record_var: str) -> str:
+        """Emit the machine-checkable guard for an exception when available."""
+        if exc.guard is not None:
+            return self._expr_to_fstar(exc.guard, record_var)
+        return "false"
+
     def _safe_name(self, s: str) -> str:
         s = s.replace(" ", "_").replace(".", "_").replace("-", "_")
-        s = "".join(c if c.isalnum() or c == '_' else '_' for c in s)
+        s = "".join(c if c.isalnum() or c == "_" else "_" for c in s)
         if s and s[0].isdigit():
             s = "s" + s
         return s
