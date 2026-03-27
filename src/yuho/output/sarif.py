@@ -18,12 +18,14 @@ def make_sarif_result(
         "ruleId": rule_id,
         "level": level,
         "message": {"text": message},
-        "locations": [{
-            "physicalLocation": {
-                "artifactLocation": {"uri": file, "uriBaseId": "%SRCROOT%"},
-                "region": {"startLine": line, "startColumn": col},
+        "locations": [
+            {
+                "physicalLocation": {
+                    "artifactLocation": {"uri": file, "uriBaseId": "%SRCROOT%"},
+                    "region": {"startLine": line, "startColumn": col},
+                }
             }
-        }],
+        ],
     }
 
 
@@ -35,24 +37,28 @@ def to_sarif(
     tool_rules = []
     if rules:
         for r in rules:
-            tool_rules.append({
-                "id": r.get("id", "unknown"),
-                "shortDescription": {"text": r.get("description", "")},
-                "defaultConfiguration": {"level": r.get("level", "warning")},
-            })
+            tool_rules.append(
+                {
+                    "id": r.get("id", "unknown"),
+                    "shortDescription": {"text": r.get("description", "")},
+                    "defaultConfiguration": {"level": r.get("level", "warning")},
+                }
+            )
     sarif = {
         "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
         "version": "2.1.0",
-        "runs": [{
-            "tool": {
-                "driver": {
-                    "name": "yuho",
-                    "version": __version__,
-                    "informationUri": "https://github.com/gongahkia/yuho",
-                    "rules": tool_rules,
-                }
-            },
-            "results": results,
-        }],
+        "runs": [
+            {
+                "tool": {
+                    "driver": {
+                        "name": "yuho",
+                        "version": __version__,
+                        "informationUri": "https://github.com/gongahkia/yuho",
+                        "rules": tool_rules,
+                    }
+                },
+                "results": results,
+            }
+        ],
     }
     return json.dumps(sarif, indent=2)
