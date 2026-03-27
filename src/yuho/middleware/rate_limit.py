@@ -8,6 +8,7 @@ from typing import Dict, List, Optional
 
 class RateLimitExceeded(Exception):
     """Raised when rate limit is exceeded."""
+
     def __init__(self, retry_after: float):
         self.retry_after = retry_after
         super().__init__(f"Rate limit exceeded. Retry after {retry_after:.1f}s")
@@ -16,6 +17,7 @@ class RateLimitExceeded(Exception):
 @dataclass
 class RateLimitConfig:
     """Rate limiting configuration."""
+
     requests_per_second: float = 10.0
     burst_size: int = 20
     per_client_rps: float = 5.0
@@ -26,6 +28,7 @@ class RateLimitConfig:
 
 class TokenBucket:
     """Token bucket rate limiter."""
+
     def __init__(self, rate: float, capacity: int):
         self.rate = rate
         self.capacity = capacity
@@ -57,6 +60,7 @@ class TokenBucket:
 
 class RateLimiter:
     """Rate limiter with global and per-client buckets."""
+
     def __init__(self, config: Optional[RateLimitConfig] = None):
         self.config = config or RateLimitConfig()
         self._global = TokenBucket(self.config.requests_per_second, self.config.burst_size)
@@ -66,7 +70,9 @@ class RateLimiter:
     def _get_client_bucket(self, client_id: str) -> TokenBucket:
         with self._lock:
             if client_id not in self._clients:
-                self._clients[client_id] = TokenBucket(self.config.per_client_rps, self.config.per_client_burst)
+                self._clients[client_id] = TokenBucket(
+                    self.config.per_client_rps, self.config.per_client_burst
+                )
             return self._clients[client_id]
 
     def check(self, path: str, client_id: Optional[str] = None) -> None:
