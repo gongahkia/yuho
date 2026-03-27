@@ -1,11 +1,13 @@
 """E2E tests: module resolution."""
+
 import pytest
 from pathlib import Path
+
 
 class TestModuleResolution:
     def test_referencing_resolves(self, parse_source):
         """referencing statements should be parseable."""
-        source = 'referencing penal_code/s300_murder;'
+        source = "referencing penal_code/s300_murder;"
         ast = parse_source(source)
         assert len(ast.references) > 0
         assert ast.references[0].path == "penal_code/s300_murder"
@@ -20,6 +22,7 @@ class TestModuleResolution:
         """Module resolver should detect import cycles."""
         try:
             from yuho.resolver import ModuleResolver
+
             resolver = ModuleResolver()
             # basic instantiation test
             assert resolver is not None
@@ -30,6 +33,7 @@ class TestModuleResolution:
         """Resolver should search configured paths."""
         try:
             from yuho.resolver import ModuleResolver
+
             resolver = ModuleResolver(search_paths=[tmp_path])
             assert tmp_path.resolve() in resolver._search_paths
         except (ImportError, AttributeError):
@@ -44,10 +48,10 @@ class TestModuleResolution:
 
     def test_multiple_references(self, parse_source):
         """Multiple referencing statements should all be captured."""
-        source = '''
+        source = """
 referencing penal_code/s300_murder;
 referencing penal_code/s378_theft;
-'''
+"""
         ast = parse_source(source)
         assert len(ast.references) == 2
         paths = {r.path for r in ast.references}
@@ -58,6 +62,7 @@ referencing penal_code/s378_theft;
         """Resolver with no search_paths should default to cwd."""
         try:
             from yuho.resolver import ModuleResolver
+
             resolver = ModuleResolver()
             assert len(resolver._search_paths) >= 1
             assert Path.cwd() in resolver._search_paths
@@ -68,6 +73,7 @@ referencing penal_code/s378_theft;
         """Resolver should accept and store multiple search paths."""
         try:
             from yuho.resolver import ModuleResolver
+
             dir_a = tmp_path / "a"
             dir_b = tmp_path / "b"
             dir_a.mkdir()
@@ -157,10 +163,12 @@ referencing penal_code/s378_theft;
         except ImportError:
             pytest.skip("resolver not available")
         module_file = tmp_path / "exports.yh"
-        module_file.write_text('''
+        module_file.write_text(
+            """
 struct Foo { bool x, }
 statute 10 "Exported" { elements { actus_reus e := "E"; } }
-''')
+"""
+        )
         resolver = ModuleResolver(search_paths=[tmp_path])
         imp = ImportNode(path="exports.yh", imported_names=())
         from_file = tmp_path / "main.yh"
@@ -196,11 +204,11 @@ statute 10 "Exported" { elements { actus_reus e := "E"; } }
             resolver.resolve(imp, from_file)
             # if it didn't raise, the resolver handled it gracefully via logging
         except CycleError:
-            pass # expected
+            pass  # expected
 
     def test_referencing_path_no_extension(self, parse_source):
         """referencing paths should not include .yh extension."""
-        source = 'referencing some/path/to/statute;'
+        source = "referencing some/path/to/statute;"
         ast = parse_source(source)
         assert len(ast.references) > 0
         assert ast.references[0].path == "some/path/to/statute"
