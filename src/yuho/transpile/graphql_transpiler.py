@@ -60,11 +60,11 @@ class GraphQLTranspiler(TranspilerBase, Visitor):
             self._visit_struct_def(struct)
 
         # Emit user-defined enums from AST
-        for enum_def in getattr(ast, 'enum_defs', ()):
+        for enum_def in getattr(ast, "enum_defs", ()):
             self._visit_enum_def(enum_def)
 
         # Emit type aliases as comments
-        for alias in getattr(ast, 'type_aliases', ()):
+        for alias in getattr(ast, "type_aliases", ()):
             self._emit(f"# type alias: {alias.name} = {self._type_to_graphql(alias.target_type)}")
             self._emit_blank()
 
