@@ -20,10 +20,11 @@ logger = logging.getLogger("yuho.registry")
 @dataclass
 class PackageEntry:
     """A package in the registry index."""
+
     name: str
     version: str
     description: str = ""
-    namespace: str = "" # e.g. "singapore"
+    namespace: str = ""  # e.g. "singapore"
     checksum: str = ""
     dependencies: List[str] = field(default_factory=list)
     published_at: str = ""
@@ -31,8 +32,9 @@ class PackageEntry:
 
 class RegistryIndex:
     """In-memory package index."""
+
     def __init__(self, data_dir: Optional[str] = None) -> None:
-        self._packages: Dict[str, Dict[str, Any]] = {} # name -> version_map
+        self._packages: Dict[str, Dict[str, Any]] = {}  # name -> version_map
         self._data_dir = Path(data_dir) if data_dir else Path.home() / ".yuho-registry"
         self._data_dir.mkdir(parents=True, exist_ok=True)
         self._load()
@@ -65,7 +67,9 @@ class RegistryIndex:
             results.append({"name": name, "latest": latest, "versions": list(versions.keys())})
         return results
 
-    def resolve_deps(self, name: str, version: Optional[str] = None, _seen: Optional[set] = None) -> List[str]:
+    def resolve_deps(
+        self, name: str, version: Optional[str] = None, _seen: Optional[set] = None
+    ) -> List[str]:
         """Resolve transitive dependencies. Returns list of 'name@version' strings."""
         if _seen is None:
             _seen = set()
@@ -107,7 +111,9 @@ class RegistryIndex:
         for name, versions in self._packages.items():
             pkg_dir = out / "packages" / name
             pkg_dir.mkdir(parents=True, exist_ok=True)
-            (pkg_dir / "index.json").write_text(json.dumps({"name": name, "versions": versions}, indent=2), encoding="utf-8")
+            (pkg_dir / "index.json").write_text(
+                json.dumps({"name": name, "versions": versions}, indent=2), encoding="utf-8"
+            )
 
 
 class RegistryHandler(BaseHTTPRequestHandler):
@@ -125,7 +131,7 @@ class RegistryHandler(BaseHTTPRequestHandler):
         parsed = urlparse(self.path)
         path = parsed.path
         qs = parse_qs(parsed.query)
-        index: RegistryIndex = self.server.index # type: ignore
+        index: RegistryIndex = self.server.index  # type: ignore
         if path == "/v1/packages":
             query = qs.get("q", [""])[0]
             namespace = qs.get("namespace", [""])[0]
@@ -157,7 +163,7 @@ class RegistryHandler(BaseHTTPRequestHandler):
             if not name or not version:
                 self._send_json(400, {"error": "name and version required"})
                 return
-            index: RegistryIndex = self.server.index # type: ignore
+            index: RegistryIndex = self.server.index  # type: ignore
             index.publish(name, version, body)
             self._send_json(201, {"published": f"{name}@{version}"})
         else:
@@ -182,4 +188,3 @@ def run_registry(host: str = "127.0.0.1", port: int = 8082, data_dir: Optional[s
         server.serve_forever()
     except KeyboardInterrupt:
         server.shutdown()
-
