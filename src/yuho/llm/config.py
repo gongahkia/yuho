@@ -9,6 +9,7 @@ from enum import Enum
 
 class ProviderType(Enum):
     """Supported LLM providers."""
+
     OLLAMA = "ollama"
     HUGGINGFACE = "huggingface"
     OPENAI = "openai"
