@@ -19,23 +19,23 @@ def generate_preamble(
 ) -> List[str]:
     """
     Generate LaTeX preamble for legal documents.
-    
+
     Args:
         document_title: Title for the document
         author: Document author
         use_margins: Whether to use margin notes
-        
+
     Returns:
         List of preamble lines
     """
     lines: List[str] = []
-    
+
     def emit(text: str) -> None:
         lines.append(text)
-    
+
     def emit_blank() -> None:
         lines.append("")
-    
+
     # Document class
     emit(r"\documentclass[11pt,a4paper]{article}")
     emit_blank()
@@ -50,7 +50,9 @@ def generate_preamble(
     # Page geometry
     emit(r"% Page layout")
     if use_margins:
-        emit(r"\usepackage[a4paper,left=3cm,right=4cm,top=2.5cm,bottom=2.5cm,marginparwidth=3cm]{geometry}")
+        emit(
+            r"\usepackage[a4paper,left=3cm,right=4cm,top=2.5cm,bottom=2.5cm,marginparwidth=3cm]{geometry}"
+        )
     else:
         emit(r"\usepackage[a4paper,margin=2.5cm]{geometry}")
     emit_blank()
@@ -157,5 +159,5 @@ def generate_preamble(
         emit(r"\author{}")
     emit(r"\date{\today}")
     emit_blank()
-    
+
     return lines
