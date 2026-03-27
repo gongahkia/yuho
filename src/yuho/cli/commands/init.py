@@ -11,7 +11,7 @@ import click
 from yuho.cli.error_formatter import Colors, colorize
 
 
-TEMPLATE_STATUTE = '''// {name} - Yuho statute definition
+TEMPLATE_STATUTE = """// {name} - Yuho statute definition
 // Section: S{section}
 
 statute {section} "{name}" {{
@@ -35,9 +35,9 @@ statute {section} "{name}" {{
         "Example scenario illustrating the statute."
     }}
 }}
-'''
+"""
 
-TEMPLATE_METADATA = '''# Metadata for {name}
+TEMPLATE_METADATA = """# Metadata for {name}
 
 [statute]
 section_number = "{section}"
@@ -50,17 +50,19 @@ email = ""
 
 [version]
 current = "1.0.0"
-'''
+"""
 
-TEMPLATE_TEST = '''// Tests for {name}
+TEMPLATE_TEST = """// Tests for {name}
 // Run with: yuho test {filename}
 
 // Test case 1: Basic scenario
 // TODO: Add test cases
-'''
+"""
 
 
-def run_init(name: Optional[str] = None, directory: Optional[str] = None, verbose: bool = False) -> None:
+def run_init(
+    name: Optional[str] = None, directory: Optional[str] = None, verbose: bool = False
+) -> None:
     """
     Initialize a new Yuho statute project.
 
