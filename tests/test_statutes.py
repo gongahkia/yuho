@@ -34,21 +34,26 @@ def money_strategy(draw):
 @st.composite
 def person_name_strategy(draw):
     """Generate valid person names."""
-    return draw(st.text(
-        alphabet=st.characters(whitelist_categories=('L',)),
-        min_size=1,
-        max_size=50
-    ).filter(lambda x: x.strip() != ""))
+    return draw(
+        st.text(
+            alphabet=st.characters(whitelist_categories=("L",)), min_size=1, max_size=50
+        ).filter(lambda x: x.strip() != "")
+    )
 
 
 @st.composite
 def forgery_case_strategy(draw):
     """Generate forgery case data."""
-    doc_types = ["PublicDocument", "PrivateDocument", "ElectronicRecord", 
-                 "Signature", "Seal", "ValueSecurity"]
-    intent_types = ["CausePropertyDamage", "SupportClaim", "CauseDishonor",
-                    "CommitFraud", "Other"]
-    
+    doc_types = [
+        "PublicDocument",
+        "PrivateDocument",
+        "ElectronicRecord",
+        "Signature",
+        "Seal",
+        "ValueSecurity",
+    ]
+    intent_types = ["CausePropertyDamage", "SupportClaim", "CauseDishonor", "CommitFraud", "Other"]
+
     return {
         "accused_name": draw(person_name_strategy()),
         "document_type": draw(st.sampled_from(doc_types)),
@@ -64,7 +69,7 @@ def defamation_case_strategy(draw):
     """Generate defamation case data."""
     pub_types = ["Spoken", "Written", "Printed", "Electronic", "Broadcast", "Visual"]
     defenses = ["Truth", "PublicInterest", "FairComment", "PrivilegedOccasion", "Consent"]
-    
+
     return {
         "accused_name": draw(person_name_strategy()),
         "victim_name": draw(person_name_strategy()),
@@ -81,9 +86,17 @@ def defamation_case_strategy(draw):
 @st.composite
 def cbt_case_strategy(draw):
     """Generate criminal breach of trust case data."""
-    entrustment_types = ["Employment", "Agency", "Partnership", "Trust",
-                         "JointProperty", "Guardianship", "BankingRelation", "PublicOffice"]
-    
+    entrustment_types = [
+        "Employment",
+        "Agency",
+        "Partnership",
+        "Trust",
+        "JointProperty",
+        "Guardianship",
+        "BankingRelation",
+        "PublicOffice",
+    ]
+
     return {
         "accused_name": draw(person_name_strategy()),
         "entrustment_type": draw(st.sampled_from(entrustment_types)),
@@ -99,76 +112,75 @@ def cbt_case_strategy(draw):
 
 class TestStatuteParsing:
     """Test that statute files parse correctly."""
-    
+
     def test_s463_forgery_parses(self):
         """S463 Forgery statute should parse without errors."""
         from yuho.parser import Parser
-        
+
         statute_path = Path(__file__).parent.parent / "statutes" / "s463_forgery.yh"
         if not statute_path.exists():
             pytest.skip("Statute file not found")
-        
+
         parser = Parser()
         result = parser.parse_file(statute_path)
-        
+
         assert result.tree is not None, "Statute should parse successfully"
-    
+
     def test_s499_defamation_parses(self):
         """S499 Defamation statute should parse without errors."""
         from yuho.parser import Parser
-        
+
         statute_path = Path(__file__).parent.parent / "statutes" / "s499_defamation.yh"
         if not statute_path.exists():
             pytest.skip("Statute file not found")
-        
+
         parser = Parser()
         result = parser.parse_file(statute_path)
-        
+
         assert result.tree is not None, "Statute should parse successfully"
-    
+
     def test_s503_cbt_parses(self):
         """S503 Criminal Breach of Trust statute should parse without errors."""
         from yuho.parser import Parser
-        
-        statute_path = Path(__file__).parent.parent / "statutes" / "s503_criminal_breach_of_trust.yh"
+
+        statute_path = (
+            Path(__file__).parent.parent / "statutes" / "s503_criminal_breach_of_trust.yh"
+        )
         if not statute_path.exists():
             pytest.skip("Statute file not found")
-        
+
         parser = Parser()
         result = parser.parse_file(statute_path)
-        
+
         assert result.tree is not None, "Statute should parse successfully"
 
 
 class TestForgeryInvariants:
     """Property-based tests for Forgery (S463) invariants."""
-    
+
     @given(forgery_case_strategy())
     @STATUTE_SETTINGS
     def test_forgery_requires_false_document(self, case):
         """Forgery cannot be established without a false document."""
         if not case["false_document_made"]:
             # If no false document, cannot be forgery regardless of intent
-            assert not self._is_forgery(case), \
-                "Forgery cannot exist without false document"
-    
+            assert not self._is_forgery(case), "Forgery cannot exist without false document"
+
     @given(forgery_case_strategy())
     @STATUTE_SETTINGS
     def test_forgery_requires_intent(self, case):
         """Forgery requires intent to deceive."""
         if not case["intent_to_deceive"]:
             # Without intent, even a false document is not forgery
-            assert not self._is_forgery(case), \
-                "Forgery requires intent to deceive"
-    
+            assert not self._is_forgery(case), "Forgery requires intent to deceive"
+
     @given(forgery_case_strategy())
     @STATUTE_SETTINGS
     def test_both_elements_implies_forgery(self, case):
         """Both elements present implies forgery."""
         if case["false_document_made"] and case["intent_to_deceive"]:
-            assert self._is_forgery(case), \
-                "Both elements present should establish forgery"
-    
+            assert self._is_forgery(case), "Both elements present should establish forgery"
+
     def _is_forgery(self, case):
         """Simple forgery determination."""
         return case["false_document_made"] and case["intent_to_deceive"]
@@ -176,23 +188,21 @@ class TestForgeryInvariants:
 
 class TestDefamationInvariants:
     """Property-based tests for Defamation (S499) invariants."""
-    
+
     @given(defamation_case_strategy())
     @STATUTE_SETTINGS
     def test_defamation_requires_publication(self, case):
         """Defamation requires publication to third party."""
         if not case["published_to_third_party"]:
-            assert not self._is_defamation(case), \
-                "Defamation requires publication to third party"
-    
+            assert not self._is_defamation(case), "Defamation requires publication to third party"
+
     @given(defamation_case_strategy())
     @STATUTE_SETTINGS
     def test_defamation_requires_identification(self, case):
         """Defamation requires identification of victim."""
         if not case["identified_person"]:
-            assert not self._is_defamation(case), \
-                "Defamation requires identified victim"
-    
+            assert not self._is_defamation(case), "Defamation requires identified victim"
+
     @given(defamation_case_strategy())
     @STATUTE_SETTINGS
     def test_truth_defense_negates_defamation(self, case):
@@ -201,22 +211,25 @@ class TestDefamationInvariants:
             # Truth defense should negate liability
             has_defense = self._has_valid_defense(case)
             assert has_defense, "Truth should be valid defense"
-    
+
     @given(defamation_case_strategy())
     @STATUTE_SETTINGS
     def test_public_interest_defense_for_public_figures(self, case):
         """Public interest defense valid for public figures."""
         if case["claimed_defense"] == "PublicInterest" and case["public_figure"]:
-            assert self._has_valid_defense(case), \
-                "Public interest defense should apply to public figures"
-    
+            assert self._has_valid_defense(
+                case
+            ), "Public interest defense should apply to public figures"
+
     def _is_defamation(self, case):
         """Simple defamation determination without defense."""
-        return (case["imputation_made"] and 
-                case["published_to_third_party"] and 
-                case["identified_person"] and 
-                case["intention_to_harm"])
-    
+        return (
+            case["imputation_made"]
+            and case["published_to_third_party"]
+            and case["identified_person"]
+            and case["intention_to_harm"]
+        )
+
     def _has_valid_defense(self, case):
         """Check if claimed defense is valid."""
         defense = case["claimed_defense"]
@@ -235,68 +248,66 @@ class TestDefamationInvariants:
 
 class TestCBTInvariants:
     """Property-based tests for Criminal Breach of Trust (S503) invariants."""
-    
+
     @given(cbt_case_strategy())
     @STATUTE_SETTINGS
     def test_cbt_requires_entrustment(self, case):
         """CBT cannot exist without entrustment."""
         if not case["property_entrusted"]:
-            assert not self._is_cbt(case), \
-                "CBT requires property entrustment"
-    
+            assert not self._is_cbt(case), "CBT requires property entrustment"
+
     @given(cbt_case_strategy())
     @STATUTE_SETTINGS
     def test_cbt_requires_dominion(self, case):
         """CBT requires dominion over property."""
         if not case["dominion_over_property"]:
-            assert not self._is_cbt(case), \
-                "CBT requires dominion over property"
-    
+            assert not self._is_cbt(case), "CBT requires dominion over property"
+
     @given(cbt_case_strategy())
     @STATUTE_SETTINGS
     def test_cbt_requires_dishonesty(self, case):
         """CBT requires dishonest misappropriation."""
         if not case["dishonest_misappropriation"] and not case["conversion_for_own_use"]:
             assume(case["property_entrusted"] and case["dominion_over_property"])
-            assert not self._is_cbt(case), \
-                "CBT requires dishonest act"
-    
+            assert not self._is_cbt(case), "CBT requires dishonest act"
+
     @given(cbt_case_strategy())
     @STATUTE_SETTINGS
     def test_aggravated_cbt_for_public_servants(self, case):
         """Public servants face aggravated CBT charges."""
         if case["public_servant"] and self._is_cbt(case):
             applicable_section = self._determine_section(case)
-            assert applicable_section == "S409", \
-                "Public servants should be charged under S409"
-    
+            assert applicable_section == "S409", "Public servants should be charged under S409"
+
     @given(cbt_case_strategy())
     @STATUTE_SETTINGS
     def test_aggravated_cbt_for_bankers(self, case):
         """Bankers/merchants face aggravated CBT charges."""
         if case["banker_merchant"] and self._is_cbt(case):
             applicable_section = self._determine_section(case)
-            assert applicable_section == "S409", \
-                "Bankers should be charged under S409"
-    
+            assert applicable_section == "S409", "Bankers should be charged under S409"
+
     @given(cbt_case_strategy())
     @STATUTE_SETTINGS
     def test_employment_cbt_is_s408(self, case):
         """Employment-based CBT falls under S408."""
-        if (case["entrustment_type"] == "Employment" and 
-            self._is_cbt(case) and 
-            not case["public_servant"] and 
-            not case["banker_merchant"]):
+        if (
+            case["entrustment_type"] == "Employment"
+            and self._is_cbt(case)
+            and not case["public_servant"]
+            and not case["banker_merchant"]
+        ):
             applicable_section = self._determine_section(case)
-            assert applicable_section == "S408", \
-                "Employment CBT should be S408"
-    
+            assert applicable_section == "S408", "Employment CBT should be S408"
+
     def _is_cbt(self, case):
         """Simple CBT determination."""
-        return (case["property_entrusted"] and 
-                case["dominion_over_property"] and 
-                (case["dishonest_misappropriation"] or case["conversion_for_own_use"]))
-    
+        return (
+            case["property_entrusted"]
+            and case["dominion_over_property"]
+            and (case["dishonest_misappropriation"] or case["conversion_for_own_use"])
+        )
+
     def _determine_section(self, case):
         """Determine applicable section."""
         if case["public_servant"] or case["banker_merchant"]:
@@ -308,51 +319,54 @@ class TestCBTInvariants:
 
 class TestCrossStatuteInvariants:
     """Tests for invariants across multiple statutes."""
-    
+
     @given(st.booleans(), st.booleans())
     @STATUTE_SETTINGS
     def test_intent_is_essential_element(self, element1, element2):
         """All offenses require some form of intent/mens rea."""
         # Without dishonest/fraudulent intent, no crime
         # This tests the fundamental mens rea requirement
-        
+
         # Forgery without intent to deceive
         forgery_case = {
             "false_document_made": True,
             "intent_to_deceive": element1,
         }
-        
+
         if not element1:
-            assert not (forgery_case["false_document_made"] and 
-                       forgery_case["intent_to_deceive"]), \
-                "No forgery without intent"
-    
+            assert not (
+                forgery_case["false_document_made"] and forgery_case["intent_to_deceive"]
+            ), "No forgery without intent"
+
     @given(cbt_case_strategy())
     @STATUTE_SETTINGS
     def test_penalty_ordering_by_position(self, case):
         """More serious positions carry higher penalties."""
         if not self._is_cbt(case):
             return
-        
+
         section = self._determine_section(case)
-        
+
         penalty_order = {
-            "S406": 7,   # Basic CBT - 7 years
+            "S406": 7,  # Basic CBT - 7 years
             "S407": 15,  # Carrier - 15 years
             "S408": 15,  # Clerk/Servant - 15 years
             "S409": 20,  # Public servant/Banker - life/20 years
         }
-        
+
         # Higher trust positions should have higher penalties
         if case["public_servant"] or case["banker_merchant"]:
-            assert penalty_order.get(section, 0) >= 15, \
-                "Trust positions should have higher penalties"
-    
+            assert (
+                penalty_order.get(section, 0) >= 15
+            ), "Trust positions should have higher penalties"
+
     def _is_cbt(self, case):
-        return (case["property_entrusted"] and 
-                case["dominion_over_property"] and 
-                (case["dishonest_misappropriation"] or case["conversion_for_own_use"]))
-    
+        return (
+            case["property_entrusted"]
+            and case["dominion_over_property"]
+            and (case["dishonest_misappropriation"] or case["conversion_for_own_use"])
+        )
+
     def _determine_section(self, case):
         if case["public_servant"] or case["banker_merchant"]:
             return "S409"
@@ -362,6 +376,7 @@ class TestCrossStatuteInvariants:
 
 
 # Additional strategies for other statutes
+
 
 @st.composite
 def murder_case_strategy(draw):
@@ -440,8 +455,9 @@ class TestMurderInvariants:
     def test_murder_requires_culpable_homicide(self, case):
         """Murder requires underlying culpable homicide."""
         if not case["culpable_homicide"]:
-            assert not self._is_murder(case), \
-                "Murder requires culpable homicide (S299) as foundation"
+            assert not self._is_murder(
+                case
+            ), "Murder requires culpable homicide (S299) as foundation"
 
     @given(murder_case_strategy())
     @STATUTE_SETTINGS
@@ -449,8 +465,7 @@ class TestMurderInvariants:
         """Murder requires one of four mens rea conditions."""
         assume(case["culpable_homicide"])
         if case["mens_rea"] == "NA":
-            assert not self._is_murder(case), \
-                "Murder requires specific mens rea under S300"
+            assert not self._is_murder(case), "Murder requires specific mens rea under S300"
 
     @given(murder_case_strategy())
     @STATUTE_SETTINGS
@@ -460,8 +475,9 @@ class TestMurderInvariants:
         if case["exception"] != "NA":
             # Exception should reduce murder to culpable homicide not amounting to murder
             result = self._determine_offense(case)
-            assert result == "CulpableHomicideNotAmountingToMurder", \
-                "Exception should reduce murder to culpable homicide"
+            assert (
+                result == "CulpableHomicideNotAmountingToMurder"
+            ), "Exception should reduce murder to culpable homicide"
 
     @given(murder_case_strategy())
     @STATUTE_SETTINGS
@@ -471,8 +487,7 @@ class TestMurderInvariants:
         if not case["deprived_of_self_control"]:
             # Provocation defense should fail
             valid_defense = self._is_valid_provocation(case)
-            assert not valid_defense, \
-                "Provocation requires loss of self-control"
+            assert not valid_defense, "Provocation requires loss of self-control"
 
     @given(murder_case_strategy())
     @STATUTE_SETTINGS
@@ -481,8 +496,7 @@ class TestMurderInvariants:
         assume(case["exception"] == "SuddenFight")
         if case["premeditation"]:
             valid_defense = self._is_valid_sudden_fight(case)
-            assert not valid_defense, \
-                "Sudden fight defense fails with premeditation"
+            assert not valid_defense, "Sudden fight defense fails with premeditation"
 
     def _is_murder(self, case):
         """Determine if case constitutes murder."""
@@ -521,53 +535,50 @@ class TestTheftInvariants:
     def test_theft_requires_movable_property(self, case):
         """Theft requires movable property."""
         if case["property_type"] == "NA":
-            assert not self._is_theft(case), \
-                "Theft requires movable property"
+            assert not self._is_theft(case), "Theft requires movable property"
 
     @given(theft_case_strategy())
     @STATUTE_SETTINGS
     def test_theft_requires_dishonest_intention(self, case):
         """Theft requires dishonest intention."""
         if case["dishonest_intention"] == "NA":
-            assert not self._is_theft(case), \
-                "Theft requires dishonest intention"
+            assert not self._is_theft(case), "Theft requires dishonest intention"
 
     @given(theft_case_strategy())
     @STATUTE_SETTINGS
     def test_theft_requires_without_consent(self, case):
         """Theft requires taking without consent."""
         if not case["without_consent"]:
-            assert not self._is_theft(case), \
-                "Theft requires absence of consent"
+            assert not self._is_theft(case), "Theft requires absence of consent"
 
     @given(theft_case_strategy())
     @STATUTE_SETTINGS
     def test_theft_requires_movement(self, case):
         """Theft requires movement of property."""
         if not case["property_moved"]:
-            assert not self._is_theft(case), \
-                "Theft requires movement of property"
+            assert not self._is_theft(case), "Theft requires movement of property"
 
     @given(theft_case_strategy())
     @STATUTE_SETTINGS
     def test_all_elements_implies_theft(self, case):
         """All five elements present implies theft."""
-        if (case["property_type"] != "NA" and
-            case["dishonest_intention"] != "NA" and
-            case["without_consent"] and
-            case["in_possession_of_another"] and
-            case["property_moved"]):
-            assert self._is_theft(case), \
-                "All elements present should establish theft"
+        if (
+            case["property_type"] != "NA"
+            and case["dishonest_intention"] != "NA"
+            and case["without_consent"]
+            and case["in_possession_of_another"]
+            and case["property_moved"]
+        ):
+            assert self._is_theft(case), "All elements present should establish theft"
 
     def _is_theft(self, case):
         """Determine if case constitutes theft."""
         return (
-            case["property_type"] != "NA" and
-            case["dishonest_intention"] != "NA" and
-            case["without_consent"] and
-            case["in_possession_of_another"] and
-            case["property_moved"]
+            case["property_type"] != "NA"
+            and case["dishonest_intention"] != "NA"
+            and case["without_consent"]
+            and case["in_possession_of_another"]
+            and case["property_moved"]
         )
 
 
@@ -579,24 +590,21 @@ class TestCheatingInvariants:
     def test_cheating_requires_deception(self, case):
         """Cheating requires deception (fraudulent or dishonest)."""
         if case["deception_type"] == "NA":
-            assert not self._is_cheating(case), \
-                "Cheating requires deception"
+            assert not self._is_cheating(case), "Cheating requires deception"
 
     @given(cheating_case_strategy())
     @STATUTE_SETTINGS
     def test_cheating_requires_inducement(self, case):
         """Cheating requires inducement of some kind."""
         if case["inducement_type"] == "NA":
-            assert not self._is_cheating(case), \
-                "Cheating requires inducement"
+            assert not self._is_cheating(case), "Cheating requires inducement"
 
     @given(cheating_case_strategy())
     @STATUTE_SETTINGS
     def test_cheating_requires_harm(self, case):
         """Cheating requires actual or likely harm."""
         if not case["causes_harm"]:
-            assert not self._is_cheating(case), \
-                "Cheating requires damage or harm"
+            assert not self._is_cheating(case), "Cheating requires damage or harm"
 
     @given(cheating_case_strategy())
     @STATUTE_SETTINGS
@@ -604,54 +612,56 @@ class TestCheatingInvariants:
         """Harm must have a specific type."""
         assume(case["causes_harm"])
         if case["harm_type"] == "NA":
-            assert not self._is_cheating(case), \
-                "Harm must have specific type"
+            assert not self._is_cheating(case), "Harm must have specific type"
 
     @given(cheating_case_strategy())
     @STATUTE_SETTINGS
     def test_all_elements_implies_cheating(self, case):
         """All elements present implies cheating."""
-        if (case["deception_type"] != "NA" and
-            case["inducement_type"] != "NA" and
-            case["causes_harm"] and
-            case["harm_type"] != "NA"):
-            assert self._is_cheating(case), \
-                "All elements present should establish cheating"
+        if (
+            case["deception_type"] != "NA"
+            and case["inducement_type"] != "NA"
+            and case["causes_harm"]
+            and case["harm_type"] != "NA"
+        ):
+            assert self._is_cheating(case), "All elements present should establish cheating"
 
     def _is_cheating(self, case):
         """Determine if case constitutes cheating."""
         return (
-            case["deception_type"] != "NA" and
-            case["inducement_type"] != "NA" and
-            case["causes_harm"] and
-            case["harm_type"] != "NA"
+            case["deception_type"] != "NA"
+            and case["inducement_type"] != "NA"
+            and case["causes_harm"]
+            and case["harm_type"] != "NA"
         )
 
 
 class TestLibraryStatuteParsing:
     """Test that library statute files parse correctly."""
 
-    @pytest.mark.parametrize("statute_dir", [
-        "s299_culpable_homicide",
-        "s300_murder",
-        "s319_hurt",
-        "s378_theft",
-        "s383_extortion",
-        "s390_robbery",
-        "s403_dishonest_misappropriation",
-        "s415_cheating",
-        "s420_cheating_inducing_delivery",
-        "s463_forgery",
-        "s499_defamation",
-        "s503_criminal_breach_of_trust",
-    ])
+    @pytest.mark.parametrize(
+        "statute_dir",
+        [
+            "s299_culpable_homicide",
+            "s300_murder",
+            "s319_hurt",
+            "s378_theft",
+            "s383_extortion",
+            "s390_robbery",
+            "s403_dishonest_misappropriation",
+            "s415_cheating",
+            "s420_cheating_inducing_delivery",
+            "s463_forgery",
+            "s499_defamation",
+            "s503_criminal_breach_of_trust",
+        ],
+    )
     def test_library_statute_parses(self, statute_dir):
         """Library statutes should parse without errors."""
         from yuho.parser import Parser
 
         statute_path = (
-            Path(__file__).parent.parent /
-            "library" / "penal_code" / statute_dir / "statute.yh"
+            Path(__file__).parent.parent / "library" / "penal_code" / statute_dir / "statute.yh"
         )
         if not statute_path.exists():
             pytest.skip(f"Statute file not found: {statute_path}")
@@ -661,21 +671,27 @@ class TestLibraryStatuteParsing:
 
         assert result.tree is not None, f"{statute_dir} should parse successfully"
 
-    @pytest.mark.parametrize("statute_dir", [
-        "s300_murder",
-        "s378_theft",
-        "s415_cheating",
-        "s463_forgery",
-        "s499_defamation",
-        "s503_criminal_breach_of_trust",
-    ])
+    @pytest.mark.parametrize(
+        "statute_dir",
+        [
+            "s300_murder",
+            "s378_theft",
+            "s415_cheating",
+            "s463_forgery",
+            "s499_defamation",
+            "s503_criminal_breach_of_trust",
+        ],
+    )
     def test_library_illustrations_parse(self, statute_dir):
         """Library illustrations should parse without errors."""
         from yuho.parser import Parser
 
         illustration_path = (
-            Path(__file__).parent.parent /
-            "library" / "penal_code" / statute_dir / "illustrations.yh"
+            Path(__file__).parent.parent
+            / "library"
+            / "penal_code"
+            / statute_dir
+            / "illustrations.yh"
         )
         if not illustration_path.exists():
             pytest.skip(f"Illustration file not found: {illustration_path}")
