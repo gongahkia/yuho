@@ -21,7 +21,8 @@ def _local_markdown_links(markdown_text: str) -> list[str]:
     """Return local markdown link targets from a markdown document."""
     targets = re.findall(r"\[[^\]]+\]\(([^)]+)\)", markdown_text)
     return [
-        target for target in targets
+        target
+        for target in targets
         if not target.startswith(("http://", "https://", "#", "mailto:"))
     ]
 
