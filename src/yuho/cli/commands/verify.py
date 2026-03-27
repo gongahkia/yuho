@@ -107,7 +107,9 @@ def run_verify(
         sys.exit(1)
 
     if analysis.ast is None:
-        ast_error = next((e.message for e in analysis.errors if e.stage == "ast"), "Unknown AST error")
+        ast_error = next(
+            (e.message for e in analysis.errors if e.stage == "ast"), "Unknown AST error"
+        )
         if json_output:
             print(json.dumps({"ok": False, "engine": engine_key, "error": ast_error}, indent=2))
         else:
@@ -119,8 +121,8 @@ def run_verify(
         generator = AlloyGenerator()
         model = generator.generate(ast)
         results = alloy_analyzer.analyze(model)
-        failures = [r for r in results if r.violated]
-        ok = len(failures) == 0
+        alloy_failures = [result for result in results if result.violated]
+        ok = len(alloy_failures) == 0
         if json_output:
             print(
                 json.dumps(
@@ -128,7 +130,7 @@ def run_verify(
                         "ok": ok,
                         "engine": "alloy",
                         "capabilities": capabilities,
-                        "failures": [f.__dict__ for f in failures],
+                        "failures": [result.__dict__ for result in alloy_failures],
                         "results": [r.__dict__ for r in results],
                     },
                     indent=2,
@@ -137,13 +139,13 @@ def run_verify(
         else:
             click.echo(f"Alloy verification: {'PASS' if ok else 'FAIL'}")
             if not ok:
-                for failure in failures:
+                for failure in alloy_failures:
                     click.echo(f"  - {failure.assertion_name}: {failure.message}", err=True)
         sys.exit(0 if ok else 1)
 
     if engine_key == "z3":
         ok, diagnostics = z3_solver.check_statute_consistency(ast)
-        failures = [d for d in diagnostics if not d.passed]
+        z3_failures = [diagnostic for diagnostic in diagnostics if not diagnostic.passed]
         if json_output:
             print(
                 json.dumps(
@@ -151,7 +153,7 @@ def run_verify(
                         "ok": ok,
                         "engine": "z3",
                         "capabilities": capabilities,
-                        "failures": [d.__dict__ for d in failures],
+                        "failures": [diagnostic.__dict__ for diagnostic in z3_failures],
                         "results": [d.__dict__ for d in diagnostics],
                     },
                     indent=2,
@@ -159,8 +161,8 @@ def run_verify(
             )
         else:
             click.echo(f"Z3 verification: {'PASS' if ok else 'FAIL'}")
-            if failures:
-                for failure in failures:
+            if z3_failures:
+                for failure in z3_failures:
                     click.echo(f"  - {failure.check_name}: {failure.message}", err=True)
         sys.exit(0 if ok else 1)
 
@@ -170,7 +172,9 @@ def run_verify(
         z3_timeout_ms=z3_timeout_ms,
     )
     combined = verifier.verify(ast)
-    alloy_failed = any(r.violated for r in combined.alloy_results) if combined.alloy_available else False
+    alloy_failed = (
+        any(r.violated for r in combined.alloy_results) if combined.alloy_available else False
+    )
     z3_failed = any(not d.passed for d in combined.z3_results) if combined.z3_available else False
     ok = not alloy_failed and not z3_failed and (combined.alloy_available or combined.z3_available)
 
