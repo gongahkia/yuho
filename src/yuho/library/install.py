@@ -77,21 +77,21 @@ def install_package(
 ) -> Tuple[bool, str]:
     """
     Install a statute package to the library.
-    
+
     Args:
         source: Path to .yhpkg file or contribution directory
         library_dir: Library directory (default: ~/.yuho/library/packages)
         verify_signature: Whether to verify package signature
         force: Overwrite existing package
-        
+
     Returns:
         Tuple of (success, message)
     """
     library_dir = library_dir or DEFAULT_LIBRARY_DIR
     library_dir.mkdir(parents=True, exist_ok=True)
-    
+
     source_path = Path(source)
-    
+
     try:
         # Load package
         if source_path.suffix == ".yhpkg":
@@ -100,34 +100,37 @@ def install_package(
             package = Package.from_directory(source_path)
         else:
             return (False, f"Invalid source: {source}")
-        
+
         # Validate
         validator = PackageValidator(strict=False)
         is_valid, errors, warnings = validator.validate(package)
-        
+
         if not is_valid:
             return (False, f"Validation failed: {'; '.join(errors)}")
-        
+
         if warnings:
             logger.warning(f"Package warnings: {'; '.join(warnings)}")
-        
+
         # Check signature if required
         if verify_signature and not package.signature:
             logger.warning("Package has no signature, proceeding anyway")
-        
+
         # Check for existing package
         section_safe = package.metadata.section_number.replace("/", "_").replace(".", "_")
         dest_path = library_dir / f"{section_safe}.yhpkg"
-        
+
         if dest_path.exists() and not force:
-            return (False, f"Package already installed: {package.metadata.section_number}. Use --force to overwrite.")
-        
+            return (
+                False,
+                f"Package already installed: {package.metadata.section_number}. Use --force to overwrite.",
+            )
+
         # Create .yhpkg if from directory
         if source_path.is_dir():
             package.to_yhpkg(dest_path)
         else:
             shutil.copy2(source_path, dest_path)
-        
+
         # Update index
         index = LibraryIndex()
         entry = IndexEntry.from_metadata(
@@ -136,9 +139,9 @@ def install_package(
             package.content_hash(),
         )
         index.add(entry)
-        
+
         return (True, f"Installed {package.metadata.section_number} v{package.metadata.version}")
-        
+
     except FileNotFoundError as e:
         return (False, f"File not found: {mask_error(e)}")
     except Exception as e:
@@ -152,39 +155,39 @@ def uninstall_package(
 ) -> Tuple[bool, str]:
     """
     Uninstall a statute package from the library.
-    
+
     Args:
         section_number: Section number of package to remove
         library_dir: Library directory
-        
+
     Returns:
         Tuple of (success, message)
     """
     library_dir = library_dir or DEFAULT_LIBRARY_DIR
     index = LibraryIndex()
-    
+
     entry = index.get(section_number)
     if not entry:
         return (False, f"Package not found: {section_number}")
-    
+
     # Remove package file
     pkg_path = library_dir / entry.package_path
     if pkg_path.exists():
         pkg_path.unlink()
-    
+
     # Remove from index
     index.remove(section_number)
-    
+
     return (True, f"Uninstalled {section_number}")
 
 
 def list_installed(library_dir: Optional[Path] = None) -> List[dict]:
     """
     List all installed packages.
-    
+
     Args:
         library_dir: Library directory
-        
+
     Returns:
         List of package metadata dictionaries
     """
@@ -199,30 +202,30 @@ def update_package(
 ) -> Tuple[bool, str]:
     """
     Update an installed package.
-    
+
     Args:
         section_number: Section number to update
         new_source: Path to new version
         library_dir: Library directory
-        
+
     Returns:
         Tuple of (success, message)
     """
     index = LibraryIndex()
-    
+
     current = index.get(section_number)
     if not current:
         return (False, f"Package not found: {section_number}")
-    
+
     # Install new version (force overwrite)
     success, message = install_package(new_source, library_dir, force=True)
-    
+
     if success:
         # Get new version info
         new_entry = index.get(section_number)
         if new_entry:
             message = f"Updated {section_number}: {current.version} -> {new_entry.version}"
-    
+
     return (success, message)
 
 
@@ -233,6 +236,7 @@ def _compare_versions(v1: str, v2: str) -> int:
     Returns:
         -1 if v1 < v2, 0 if equal, 1 if v1 > v2
     """
+
     def parse_version(v: str) -> Tuple[int, ...]:
         parts = v.lstrip("v").split(".")
         result = []
@@ -308,6 +312,7 @@ def check_updates(
         request = Request(api_url, headers=headers, method="GET")
 
         import ssl
+
         context = None
         if not verify_ssl:
             context = ssl.create_default_context()
@@ -337,12 +342,14 @@ def check_updates(
                 registry_version = registry_pkg.get("version", "0.0.0")
 
                 if _compare_versions(entry.version, registry_version) < 0:
-                    updates.append({
-                        "section_number": section,
-                        "current_version": entry.version,
-                        "available_version": registry_version,
-                        "title": entry.title,
-                    })
+                    updates.append(
+                        {
+                            "section_number": section,
+                            "current_version": entry.version,
+                            "available_version": registry_version,
+                            "title": entry.title,
+                        }
+                    )
 
         return updates
 
@@ -388,8 +395,7 @@ def download_package(
     try:
         # Fetch package
         api_url = urljoin(
-            registry_url.rstrip("/") + "/",
-            f"api/v1/packages/{section_number}/download"
+            registry_url.rstrip("/") + "/", f"api/v1/packages/{section_number}/download"
         )
 
         headers = {
@@ -402,6 +408,7 @@ def download_package(
         request = Request(api_url, headers=headers, method="GET")
 
         import ssl
+
         context = None
         if not verify_ssl:
             context = ssl.create_default_context()
@@ -528,7 +535,10 @@ def publish_package(
 
         # Require authentication for publishing
         if not auth_token:
-            return (False, "Authentication token required for publishing. Set via --auth-token or config.")
+            return (
+                False,
+                "Authentication token required for publishing. Set via --auth-token or config.",
+            )
 
         # Upload to registry
         api_url = urljoin(registry_url.rstrip("/") + "/", "api/v1/packages")
@@ -574,6 +584,7 @@ def publish_package(
         request = Request(api_url, data=body, headers=headers, method="POST")
 
         import ssl
+
         context = None
         if not verify_ssl:
             context = ssl.create_default_context()
@@ -584,7 +595,10 @@ def publish_package(
             result = json.loads(response.read().decode("utf-8"))
 
         if result.get("success"):
-            return (True, f"Published {package.metadata.section_number} v{package.metadata.version}")
+            return (
+                True,
+                f"Published {package.metadata.section_number} v{package.metadata.version}",
+            )
         else:
             return (False, result.get("error", "Unknown error"))
 
@@ -617,7 +631,7 @@ def browse_registry(
 ) -> dict:
     """
     Browse packages in the registry with pagination and filtering.
-    
+
     Args:
         page: Page number (1-indexed)
         per_page: Results per page (max 100)
@@ -628,7 +642,7 @@ def browse_registry(
         registry_url: Registry base URL
         timeout: Request timeout
         verify_ssl: Verify SSL certificates
-        
+
     Returns:
         Dict with:
             - packages: List of package metadata
@@ -638,38 +652,39 @@ def browse_registry(
             - pages: Total number of pages
     """
     registry = registry_url or "https://registry.yuho.dev"
-    
+
     # Build query parameters
     params = {
         "page": str(page),
         "per_page": str(min(per_page, 100)),
         "sort": sort_by,
     }
-    
+
     if search:
         params["q"] = search
     if jurisdiction:
         params["jurisdiction"] = jurisdiction
     if tags:
         params["tags"] = ",".join(tags)
-    
+
     # Build URL
     query_string = "&".join(f"{k}={v}" for k, v in params.items())
     api_url = f"{registry.rstrip('/')}/api/v1/packages?{query_string}"
-    
+
     try:
         request = Request(api_url, headers={"User-Agent": "yuho-library/2.0"})
-        
+
         import ssl
+
         context = None
         if not verify_ssl:
             context = ssl.create_default_context()
             context.check_hostname = False
             context.verify_mode = ssl.CERT_NONE
-        
+
         with urlopen(request, timeout=timeout, context=context) as response:
             data = json.loads(response.read().decode("utf-8"))
-        
+
         return {
             "packages": data.get("packages", []),
             "total": data.get("total", 0),
@@ -678,7 +693,7 @@ def browse_registry(
             "pages": data.get("pages", 1),
             "success": True,
         }
-        
+
     except HTTPError as e:
         return {
             "packages": [],
@@ -719,32 +734,33 @@ def get_registry_package_info(
 ) -> Optional[dict]:
     """
     Get detailed package information from registry.
-    
+
     Args:
         section_number: Package section number
         registry_url: Registry base URL
         timeout: Request timeout
         verify_ssl: Verify SSL certificates
-        
+
     Returns:
         Package metadata dict or None if not found
     """
     registry = registry_url or "https://registry.yuho.dev"
     api_url = f"{registry.rstrip('/')}/api/v1/packages/{section_number}"
-    
+
     try:
         request = Request(api_url, headers={"User-Agent": "yuho-library/2.0"})
-        
+
         import ssl
+
         context = None
         if not verify_ssl:
             context = ssl.create_default_context()
             context.check_hostname = False
             context.verify_mode = ssl.CERT_NONE
-        
+
         with urlopen(request, timeout=timeout, context=context) as response:
             return json.loads(response.read().decode("utf-8"))
-            
+
     except HTTPError as e:
         if e.code == 404:
             return None
