@@ -85,32 +85,35 @@ def _scan_local_library() -> List[Dict[str, Any]]:
         # Try to get actual title from the file
         try:
             from yuho.services.analysis import analyze_file
+
             analysis = analyze_file(str(statute_file), run_semantic=False)
             if analysis.ast and analysis.ast.statutes:
                 s = analysis.ast.statutes[0]
                 if s.title:
-                    title = s.title.value if hasattr(s.title, 'value') else str(s.title)
+                    title = s.title.value if hasattr(s.title, "value") else str(s.title)
                 if s.section_number:
                     section_number = str(s.section_number)
         except Exception:
             pass
-        results.append({
-            "section_number": section_number,
-            "title": title,
-            "directory": dir_name,
-            "category": category,
-            "path": str(statute_file),
-            "source": "local",
-            "jurisdiction": statute_meta.get("jurisdiction"),
-            "version": statute_meta.get("version"),
-            "description": description_meta.get("summary"),
-            "source_text": description_meta.get("source"),
-            "offence_family": study_meta.get("offence_family"),
-            "related_sections": study_meta.get("related_sections", []),
-            "exception_topics": study_meta.get("exception_topics", []),
-            "doctrine_tags": study_meta.get("doctrine_tags", []),
-            "difficulty": study_meta.get("difficulty"),
-        })
+        results.append(
+            {
+                "section_number": section_number,
+                "title": title,
+                "directory": dir_name,
+                "category": category,
+                "path": str(statute_file),
+                "source": "local",
+                "jurisdiction": statute_meta.get("jurisdiction"),
+                "version": statute_meta.get("version"),
+                "description": description_meta.get("summary"),
+                "source_text": description_meta.get("source"),
+                "offence_family": study_meta.get("offence_family"),
+                "related_sections": study_meta.get("related_sections", []),
+                "exception_topics": study_meta.get("exception_topics", []),
+                "doctrine_tags": study_meta.get("doctrine_tags", []),
+                "difficulty": study_meta.get("difficulty"),
+            }
+        )
     return results
 
 
@@ -204,7 +207,7 @@ def run_library_install(
 ) -> None:
     """
     Install a package from registry or local path.
-    
+
     Args:
         package: Package section number or path to .yhpkg
         force: Overwrite existing package
@@ -213,9 +216,9 @@ def run_library_install(
         verbose: Verbose output
     """
     from yuho.library import install_package, download_package
-    
+
     path = Path(package)
-    
+
     if path.exists():
         # Local install
         success, message = install_package(str(path), force=force)
@@ -231,9 +234,9 @@ def run_library_install(
             timeout=timeout,
             verify_ssl=verify_ssl,
         )
-    
+
     result = {"success": success, "message": message}
-    
+
     if json_output:
         click.echo(json.dumps(result))
     elif success:
@@ -275,8 +278,10 @@ def run_library_uninstall(
             if json_output:
                 click.echo(json.dumps(result, indent=2))
             else:
-                click.echo(click.style("[DRY RUN] ", fg="yellow") +
-                          f"Would uninstall {package} v{pkg_info.get('version', '?')}")
+                click.echo(
+                    click.style("[DRY RUN] ", fg="yellow")
+                    + f"Would uninstall {package} v{pkg_info.get('version', '?')}"
+                )
                 if verbose:
                     click.echo(f"  Title: {pkg_info.get('title', 'N/A')}")
         else:
@@ -284,8 +289,9 @@ def run_library_uninstall(
             if json_output:
                 click.echo(json.dumps(result))
             else:
-                click.echo(click.style("[DRY RUN] ", fg="yellow") +
-                          f"Package not installed: {package}")
+                click.echo(
+                    click.style("[DRY RUN] ", fg="yellow") + f"Package not installed: {package}"
+                )
         return
 
     success, message = uninstall_package(package)
@@ -364,7 +370,7 @@ def run_library_update(
 ) -> None:
     """
     Update one or all packages.
-    
+
     Args:
         package: Specific package to update (None for all)
         all_packages: Update all packages
@@ -372,11 +378,12 @@ def run_library_update(
         verbose: Verbose output
     """
     from yuho.library import update_all_packages, check_updates, download_package
+
     if _is_offline_mode():
         _abort_offline("library update", json_output)
 
     registry_url, auth_token, timeout, verify_ssl = _get_library_network_config()
-    
+
     if package:
         # Update single package
         success, message = download_package(
@@ -395,14 +402,14 @@ def run_library_update(
             timeout=timeout,
             verify_ssl=verify_ssl,
         )
-        
+
         if not updates:
             if json_output:
                 click.echo(json.dumps({"updates": []}))
             else:
                 click.echo("All packages are up to date")
             return
-        
+
         if not all_packages:
             # Just show available updates
             if json_output:
@@ -416,7 +423,7 @@ def run_library_update(
                     click.echo(f"  {section}: {current} -> {available}")
                 click.echo("\nRun 'yuho library update --all' to update all")
             return
-        
+
         # Update all
         results = update_all_packages(
             registry_url=registry_url,
@@ -424,12 +431,13 @@ def run_library_update(
             timeout=timeout,
             verify_ssl=verify_ssl,
         )
-    
+
     if json_output:
-        click.echo(json.dumps([
-            {"package": r[0], "success": r[1], "message": r[2]}
-            for r in results
-        ], indent=2))
+        click.echo(
+            json.dumps(
+                [{"package": r[0], "success": r[1], "message": r[2]} for r in results], indent=2
+            )
+        )
     else:
         for section, success, message in results:
             if success:
@@ -486,6 +494,7 @@ def run_library_publish(
                     errors.append("Missing metadata.toml")
                 else:
                     import tomllib
+
                     with open(meta_file, "rb") as f:
                         pkg_info = tomllib.load(f)
 
@@ -497,6 +506,7 @@ def run_library_publish(
                 # Validate with parser
                 if statute_file.exists():
                     from yuho.parser import get_parser
+
                     parser = get_parser()
                     result = parser.parse_file(statute_file)
                     if result.errors:
@@ -597,10 +607,7 @@ def run_library_outdated(
     installed = list_installed()
 
     # Build installed lookup
-    installed_map = {
-        pkg.get("section_number"): pkg
-        for pkg in installed
-    }
+    installed_map = {pkg.get("section_number"): pkg for pkg in installed}
 
     # Check for deprecated packages
     index = LibraryIndex()
@@ -608,11 +615,13 @@ def run_library_outdated(
     for pkg in installed:
         section = pkg.get("section_number")
         entry = index.get(section)
-        if entry and hasattr(entry, 'deprecation') and getattr(entry, 'is_deprecated', False):
-            deprecated_warnings.append({
-                "section_number": section,
-                "message": f"Package {section} is deprecated",
-            })
+        if entry and hasattr(entry, "deprecation") and getattr(entry, "is_deprecated", False):
+            deprecated_warnings.append(
+                {
+                    "section_number": section,
+                    "message": f"Package {section} is deprecated",
+                }
+            )
 
     if json_output:
         result = {
@@ -626,7 +635,10 @@ def run_library_outdated(
         return
 
     if offline_mode:
-        click.echo(click.style("[offline] ", fg="yellow") + "Skipped registry update check; showing local data only.")
+        click.echo(
+            click.style("[offline] ", fg="yellow")
+            + "Skipped registry update check; showing local data only."
+        )
 
     if not updates and not deprecated_warnings:
         click.echo(click.style("All packages are up to date!", fg="green"))
@@ -668,7 +680,11 @@ def run_library_outdated(
         click.echo()
 
     if deprecated_warnings:
-        click.echo(click.style(f"\nDeprecated packages ({len(deprecated_warnings)}):\n", fg="yellow", bold=True))
+        click.echo(
+            click.style(
+                f"\nDeprecated packages ({len(deprecated_warnings)}):\n", fg="yellow", bold=True
+            )
+        )
         for d in deprecated_warnings:
             click.echo(f"  {click.style('⚠', fg='yellow')} {d['message']}")
         click.echo()
@@ -703,7 +719,7 @@ def run_library_tree(
         if not entry:
             return []
         # Load package to get dependencies
-        pkg_path = Path(entry.package_path) if hasattr(entry, 'package_path') else None
+        pkg_path = Path(entry.package_path) if hasattr(entry, "package_path") else None
         if pkg_path and pkg_path.exists():
             try:
                 pkg = Package.from_yhpkg(pkg_path)
@@ -955,8 +971,20 @@ def run_library_export(
                 click.echo(click.style(f"  FAIL  {rel}: {e}", fg="red"))
 
     if json_output:
-        click.echo(json.dumps({"total": len(statute_files), "failed": failed, "target": target, "results": results}, indent=2))
+        click.echo(
+            json.dumps(
+                {
+                    "total": len(statute_files),
+                    "failed": failed,
+                    "target": target,
+                    "results": results,
+                },
+                indent=2,
+            )
+        )
     else:
-        click.echo(f"\nExported {len(statute_files) - failed}/{len(statute_files)} statutes to {target} in {out_dir}")
+        click.echo(
+            f"\nExported {len(statute_files) - failed}/{len(statute_files)} statutes to {target} in {out_dir}"
+        )
     if failed > 0:
         sys.exit(1)
