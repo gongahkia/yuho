@@ -330,8 +330,9 @@ class MermaidTranspiler(TranspilerBase, Visitor):
             parts.append(f"({penalty.sentencing})")
         if getattr(penalty, "mandatory_min_imprisonment", None):
             parts.append(f"Min imprisonment: {penalty.mandatory_min_imprisonment}")
-        if getattr(penalty, "mandatory_min_fine", None):
-            parts.append(f"Min fine: ${penalty.mandatory_min_fine.amount}")
+        mandatory_min_fine = getattr(penalty, "mandatory_min_fine", None)
+        if mandatory_min_fine is not None:
+            parts.append(f"Min fine: ${mandatory_min_fine.amount}")
         return "; ".join(parts) if parts else "Penalty TBD"
 
     def _deontic_prefix(self, element_type: str) -> str:
@@ -348,10 +349,12 @@ class MermaidTranspiler(TranspilerBase, Visitor):
         parts = []
         if getattr(elem, "caused_by", None):
             parts.append(f"caused by: {elem.caused_by}")
-        if getattr(elem, "burden", None):
-            b = elem.burden
-            if getattr(elem, "burden_standard", None):
-                b += f"/{elem.burden_standard}"
+        burden = getattr(elem, "burden", None)
+        if isinstance(burden, str):
+            b = burden
+            burden_standard = getattr(elem, "burden_standard", None)
+            if isinstance(burden_standard, str):
+                b += f"/{burden_standard}"
             parts.append(f"burden: {b}")
         return f"({', '.join(parts)})" if parts else ""
 
