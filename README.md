@@ -95,12 +95,15 @@ Yuho is open-source. Contribution guidelines are found at [`CONTRIBUTING.md`](./
 Yuho takes much inspiration from the following projects.  
 
 * [Natural L4](https://github.com/smucclaw/dsl): Language with an English-like syntax that transpiles to multiple targets, focused on codification of Singapore law at large and Contract Law in specific.
+* [lam4](https://github.com/smucclaw/lam4): Functional DSL for law from SMU CCLAW (Natural L4 successor), with Haskell backend, Grisette/Z3 solver-aided verification, and modular reparation clauses built on an `IS_INFRINGED` predicate.
 * [Catala](https://github.com/CatalaLang): Language syntax that explicitly mimicks logical structure of the Law, focused on general Socio-fiscal legislature in most jurisidictions.
 * [Blawx](https://github.com/Lexpedite/blawx): User-friendly web-based tool for Rules as Code, a declarative logic knowledge representation tool for encoding, testing and using rules.
 * [Morphir](https://github.com/finos/morphir): Technology agnostic toolkit for digitisation of business models and their underlying decision logic, enabling automation in fintech.
 * [OpenFisca](https://github.com/openfisca/openfisca-core): Open-source platform for modelling social policies through tax and benefits systems across jurisdictions.
 * [Docassemble](https://docassemble.org/): Document automation system for generating guided interview documents through a question-and-answer interface.
 * [Akoma Ntoso](https://github.com/oasis-open/legaldocml-akomantoso): Standardised XML schema for representing parliamentary, legislative and judiciary documents across jurisdictions.
+* [LexScript](https://github.com/codeNinja62/LexScript): Go DSL that compiles state-machine contract definitions to legally-formatted Markdown and PDF, enforcing contract completeness and deadlock-freedom via Tarjan SCC + BFS reachability analysis over the state graph.
+* [LDOC](https://github.com/arismoko/LDOC): Plain-text DSL for authoring legal documents that compiles to real DOCX/OOXML, using directive syntax with JSON5 arguments, recovery-oriented diagnostics, and an LSP for in-editor drafting.
 
 ### Research
 

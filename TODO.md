@@ -243,14 +243,6 @@ Discovered while auditing LexScript, Intellect, lam4, LDOC, Catala.
       emits every diagnostic, and only fails after. Better UX for
       editors.
 
-### Outreach / collaboration `[ ]`
-
-- [ ] File an issue / email SMU CCLAW about lam4 collaboration. Yuho +
-      SG Penal Code corpus could feed their solver work; shared
-      `IS_INFRINGED` / named-norm surface convention for interoperability.
-      Physically adjacent (Singapore).
-- [ ] File an issue on arismoko/LDOC asking for an SPDX license header
-      so any future code-borrowing is safe.
 
 ---
 
