@@ -63,14 +63,19 @@
     },
     "statute-keywords": {
       "patterns": [
-        { "name": "keyword.other.statute.yuho", "match": "\\b(statute|definitions|elements|penalty|illustration|exception|caselaw)\\b" },
-        { "name": "keyword.other.penalty.yuho", "match": "\\b(imprisonment|fine|caning|death|supplementary|strokes)\\b" },
+        { "name": "keyword.other.statute.yuho", "match": "\\b(statute|subsection|definitions|elements|penalty|illustration|exception|caselaw|parties)\\b" },
+        { "name": "keyword.other.penalty.yuho", "match": "\\b(imprisonment|fine|caning|death|supplementary|strokes|minimum|unlimited|unspecified)\\b" },
+        { "name": "keyword.other.combinator.yuho", "match": "\\b(cumulative|alternative|or_both|concurrent|consecutive|when)\\b" },
+        { "name": "keyword.other.lifecycle.yuho", "match": "\\b(effective|repealed|subsumes|amends|priority|defeats)\\b" },
+        { "name": "keyword.other.burden.yuho", "match": "\\b(burden|prosecution|defence|beyond_reasonable_doubt|balance_of_probabilities|prima_facie)\\b" },
         { "name": "keyword.other.group.yuho", "match": "\\b(all_of|any_of)\\b" }
       ]
     },
     "element-kinds": {
       "patterns": [
-        { "name": "storage.type.element.yuho", "match": "\\b(actus_reus|mens_rea|circumstance)\\b" }
+        { "name": "storage.type.element.yuho", "match": "\\b(actus_reus|mens_rea|circumstance|obligation|prohibition|permission)\\b" },
+        { "name": "storage.modifier.defeasible.yuho", "match": "\\b(fact|conclusion|presumed|unless)\\b" },
+        { "name": "storage.modifier.relation.yuho", "match": "\\b(caused_by|actor|patient|temporal|precedes|during|after)\\b" }
       ]
     },
     "operators": {

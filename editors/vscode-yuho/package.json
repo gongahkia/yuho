@@ -1,11 +1,16 @@
 {
   "name": "yuho",
   "displayName": "Yuho",
-  "description": "Syntax highlighting for the Yuho legal DSL",
-  "version": "0.1.0",
+  "description": "Language server, syntax highlighting, snippets, and commands for the Yuho legal DSL (Singapore Penal Code).",
+  "version": "0.2.0",
   "publisher": "yuho",
   "engines": { "vscode": "^1.75.0" },
-  "categories": ["Programming Languages"],
+  "categories": ["Programming Languages", "Linters", "Snippets"],
+  "activationEvents": [
+    "onLanguage:yuho",
+    "workspaceContains:**/*.yh"
+  ],
+  "main": "./out/extension.js",
   "contributes": {
     "languages": [{
       "id": "yuho",
@@ -17,6 +22,79 @@
       "language": "yuho",
       "scopeName": "source.yuho",
       "path": "./syntaxes/yuho.tmLanguage.json"
-    }]
+    }],
+    "snippets": [{
+      "language": "yuho",
+      "path": "./snippets/yuho.json"
+    }],
+    "commands": [
+      {
+        "command": "yuho.openSSO",
+        "title": "Yuho: Open SSO page for section under cursor"
+      },
+      {
+        "command": "yuho.check",
+        "title": "Yuho: Run check on active file"
+      },
+      {
+        "command": "yuho.transpileMermaid",
+        "title": "Yuho: Transpile to Mermaid → open preview"
+      },
+      {
+        "command": "yuho.transpileEnglish",
+        "title": "Yuho: Transpile to plain English"
+      },
+      {
+        "command": "yuho.showCoverage",
+        "title": "Yuho: Show coverage dashboard"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "when": "editorLangId == yuho",
+          "command": "yuho.openSSO",
+          "group": "yuho@1"
+        },
+        {
+          "when": "editorLangId == yuho",
+          "command": "yuho.transpileMermaid",
+          "group": "yuho@2"
+        }
+      ]
+    },
+    "configuration": {
+      "type": "object",
+      "title": "Yuho",
+      "properties": {
+        "yuho.lsp.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Launch the `yuho lsp` server on activation."
+        },
+        "yuho.lsp.command": {
+          "type": "string",
+          "default": "yuho",
+          "description": "Path to the `yuho` executable."
+        },
+        "yuho.lsp.args": {
+          "type": "array",
+          "default": ["lsp"],
+          "items": { "type": "string" },
+          "description": "Arguments passed to the `yuho` binary to start the LSP server."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "tsc -p ."
+  },
+  "dependencies": {
+    "vscode-languageclient": "^9.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "@types/vscode": "^1.75.0",
+    "typescript": "^5.0.0"
   }
 }

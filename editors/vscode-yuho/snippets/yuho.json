@@ -1,0 +1,180 @@
+{
+  "Statute header": {
+    "prefix": "statute-header",
+    "description": "Full Yuho statute header with jurisdiction + amendment meta",
+    "body": [
+      "/// @jurisdiction singapore",
+      "/// @meta act=Penal Code 1871",
+      "/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr${1:N}-#pr${1:N}-",
+      "/// @amendment ${2:[15/2019]}",
+      "",
+      "statute ${1:N} \"${3:Marginal note}\" effective ${4:1872-01-01} {",
+      "    definitions {",
+      "        $0",
+      "    }",
+      "}"
+    ]
+  },
+
+  "Offence shape": {
+    "prefix": "shape-offence",
+    "description": "Offence statute — elements (actus reus + mens rea) + penalty",
+    "body": [
+      "statute ${1:N} \"${2:Title}\" effective ${3:1872-01-01} {",
+      "    definitions {",
+      "        ${4:term} := \"${5:definition}\";",
+      "    }",
+      "    elements {",
+      "        /// ${6:rationale}",
+      "        all_of {",
+      "            actus_reus ${7:act_name} := \"${8:description}\";",
+      "            mens_rea ${9:mens_name} := \"${10:description}\";",
+      "        }",
+      "    }",
+      "    penalty or_both {",
+      "        imprisonment := 0 years .. ${11:3} years;",
+      "        fine := unlimited;",
+      "    }",
+      "}"
+    ]
+  },
+
+  "Pure punishment shape": {
+    "prefix": "shape-punishment",
+    "description": "Pure punishment section that references an offence defined elsewhere",
+    "body": [
+      "// Cross-reference: punishment section for the offence defined in s${2:N}",
+      "statute ${1:N} \"${3:Title}\" effective ${4:1872-01-01} {",
+      "    penalty or_both {",
+      "        imprisonment := 0 years .. ${5:5} years;",
+      "        fine := unlimited;",
+      "    }",
+      "}"
+    ]
+  },
+
+  "Interpretation shape": {
+    "prefix": "shape-interpretation",
+    "description": "Interpretation section — definitions only, no elements or penalty",
+    "body": [
+      "statute ${1:N} \"${2:Title}\" effective ${3:1872-01-01} {",
+      "    definitions {",
+      "        ${4:term} := \"${5:definition}\";",
+      "    }",
+      "}"
+    ]
+  },
+
+  "Subsection block": {
+    "prefix": "subsection",
+    "description": "G5 — nested subsection (accepts (1), (2A), (a), (iii))",
+    "body": [
+      "subsection (${1:1}) {",
+      "    definitions {",
+      "        ${2:term} := \"${3:definition}\";",
+      "    }",
+      "    elements {",
+      "        all_of {",
+      "            actus_reus ${4:act} := \"${5:description}\";",
+      "        }",
+      "    }",
+      "    $0",
+      "}"
+    ]
+  },
+
+  "Penalty or_both": {
+    "prefix": "penalty-or-both",
+    "description": "G8 — typical SG PC: imprisonment, or fine, or both",
+    "body": [
+      "penalty or_both {",
+      "    imprisonment := 0 years .. ${1:3} years;",
+      "    fine := unlimited;",
+      "}"
+    ]
+  },
+
+  "Penalty cumulative with nested or_both (G12)": {
+    "prefix": "penalty-nested",
+    "description": "G12 — imprisonment AND ALSO liable to fine or caning or both",
+    "body": [
+      "penalty cumulative {",
+      "    imprisonment := 0 years .. ${1:10} years;",
+      "    or_both {",
+      "        fine := unlimited;",
+      "        caning := unspecified;",
+      "    }",
+      "}"
+    ]
+  },
+
+  "Penalty when branches (G9)": {
+    "prefix": "penalty-when",
+    "description": "G9 — conditional sibling penalty blocks (e.g. rash vs negligent)",
+    "body": [
+      "penalty or_both when ${1:rash_act} {",
+      "    imprisonment := 0 years .. ${2:5} years;",
+      "    fine := unlimited;",
+      "}",
+      "penalty or_both when ${3:negligent_act} {",
+      "    imprisonment := 0 years .. ${4:2} years;",
+      "    fine := unlimited;",
+      "}"
+    ]
+  },
+
+  "Exception with priority (G13)": {
+    "prefix": "exception",
+    "description": "G13 — prioritised exception with defeats edge",
+    "body": [
+      "exception ${1:label} {",
+      "    \"${2:condition text from canonical}\"",
+      "    when ${3:guard_expr}",
+      "    priority ${4:1}",
+      "    defeats ${5:other_label}",
+      "}"
+    ]
+  },
+
+  "Illustration": {
+    "prefix": "illustration",
+    "description": "Illustration with verbatim canonical text",
+    "body": [
+      "illustration ${1:label} {",
+      "    \"${2:verbatim text from canonical}\"",
+      "}"
+    ]
+  },
+
+  "Match expression": {
+    "prefix": "match",
+    "description": "Match expression with cases",
+    "body": [
+      "match {",
+      "    case TRUE if ${1:condition} := consequence ${2:result};",
+      "    case _ := consequence ${3:fallback};",
+      "}"
+    ]
+  },
+
+  "Struct": {
+    "prefix": "struct",
+    "description": "Struct definition",
+    "body": [
+      "struct ${1:Name} {",
+      "    ${2:string} ${3:field},",
+      "    $0",
+      "}"
+    ]
+  },
+
+  "Function": {
+    "prefix": "fn",
+    "description": "Function definition",
+    "body": [
+      "fn ${1:name}(${2:type param}) : ${3:return_type} {",
+      "    $0",
+      "}"
+    ]
+  }
+}
