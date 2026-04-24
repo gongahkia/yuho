@@ -1,23 +1,17 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr180-#pr180-
-// Singapore Penal Code Section 180
 
 statute 180 "Refusing to sign statement" effective 1872-01-01 {
-    definitions {
-        statement := "Any statement made by the accused which a public servant legally competent requires to be signed";
-    }
-
     elements {
+        /// The offence requires refusal, a statement made by the accused, and a lawful requirement by a legally competent public servant.
         all_of {
-            /// competent public servant requires signing
-            circumstance requirement := "A public servant legally competent requires the accused to sign the statement made by him";
-            /// refusal
-            actus_reus refusal := "Refusing to sign the statement";
+            actus_reus refusal_to_sign := "Refuses to sign any statement made by him";
+            circumstance competent_requirement := "Required to sign that statement by a public servant legally competent to require that he shall sign that statement";
         }
     }
 
-    penalty {
+    penalty or_both {
         imprisonment := 0 months .. 3 months;
         fine := $0.00 .. $2,500.00;
     }

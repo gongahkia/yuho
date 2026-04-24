@@ -2,18 +2,18 @@
 section_number = "186"
 title = "Obstructing public servant in discharge of his public functions"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "A person who voluntarily obstructs any public servant in the discharge of the public servant's public functions is liable; obstruction need not be physical."
+summary = "Section 186 criminalises voluntarily obstructing a public servant in the discharge of the public servant’s public functions, with different punishments for individuals and other cases."
 source = "Singapore Penal Code 1871, Section 186"
 
 [verification]
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr186-#pr186-"
-disclaimer = "Educational purposes only. Cross-reference with official SSO text."

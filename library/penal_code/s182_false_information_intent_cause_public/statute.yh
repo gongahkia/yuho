@@ -1,45 +1,46 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr182-#pr182-
-// Singapore Penal Code Section 182
-
 /// @amendment [15/2019]
 /// @amendment [Act 23 of 2021 wef 01/03/2022]
-statute 182 "False information, with intent to cause a public servant to use his lawful power to the injury of another person" effective 1872-01-01 {
-    definitions {
-        false_information := "Information given to a public servant which the accused knows or believes to be false";
-        target_consequence := "Causing a public servant to use his lawful power to the injury or annoyance of another person, or to do or omit what he ought not to, or would not, do or omit if the true facts were known";
-    }
 
+statute 182 "False information, with intent to cause a public servant to use his lawful power to the injury of another person" effective 1872-01-01 effective 2019-12-31 effective 2022-03-01 {
     elements {
+        /// The section requires the false information to be given to a public servant.
         all_of {
-            /// giving information to a public servant
-            actus_reus giving_information := "Giving information to a public servant";
-            /// falsity known or believed
-            mens_rea falsity := "Knowing or believing the information to be false";
-            /// intent or knowledge of likely consequence
-            mens_rea fault := "Intending, or knowing it to be likely, that the public servant will thereby use his lawful power to the injury or annoyance of another, or do or omit anything he would not if the true facts were known";
+            actus_reus giving_information := "Giving to any public servant any information.";
+            mens_rea falsity := "Knowing or believing the information to be false.";
+            /// The ulterior consequence may be intended or merely known to be likely.
+            any_of {
+                mens_rea intends_consequence := "Intending thereby to cause such public servant to use the lawful power of such public servant.";
+                mens_rea knows_likely_consequence := "Knowing it to be likely that he will thereby cause such public servant to use the lawful power of such public servant.";
+            }
+            /// The intended or likely use of lawful power may take either statutory form.
+            any_of {
+                circumstance injury_or_annoyance := "Such public servant uses the lawful power of such public servant to the injury or annoyance of any person.";
+                circumstance improper_action_or_omission := "Such public servant does or omits anything which such public servant ought not to, or would not, do or omit if the true state of facts respecting which such information is given were known by him.";
+            }
         }
     }
 
-    penalty {
-        imprisonment := 0 months .. 2 years;
-        fine := $0.00 .. $10,000.00;
+    penalty or_both {
+        imprisonment := 0 days .. 2 years;
+        fine := unlimited;
     }
 
-    illustration example_a {
-        "A informs a superintendent of police that Z, a police officer subordinate to such superintendent, has been guilty of neglect of duty or misconduct, knowing such information to be false, and knowing it to be likely that the information will cause the superintendent to dismiss Z. A has committed the offence defined in this section."
+    illustration illustration_a {
+        "( a ) A informs a superintendent of police that Z , a police officer subordinate to such superintendent, has been guilty of neglect of duty or misconduct, knowing such information to be false, and knowing it to be likely that the information will cause the superintendent to dismiss Z . A has committed the offence defined in this section."
     }
 
-    illustration example_b {
-        "A falsely informs a public servant that Z has contraband opium in a secret place, knowing such information to be false, and knowing that it is likely that the consequence of the information will be a search of Z's premises, attended with annoyance to Z. A has committed the offence defined in this section."
+    illustration illustration_b {
+        "( b ) A falsely informs a public servant that Z has contraband opium in a secret place, knowing such information to be false, and knowing that it is likely that the consequence of the information will be a search of Z ’s premises, attended with annoyance to Z. A has committed the offence defined in this section."
     }
 
-    illustration example_c {
-        "A falsely informs a policeman that he has been assaulted and robbed by a person whose identity he does not know. A also mentions that he often sees that person going in and out of a block of flats, knowing it to be likely that in consequence of this information, the police will make inquiries and institute searches in the block of flats to the annoyance of the flat dwellers or some of them. A has committed an offence under this section."
+    illustration illustration_c {
+        "( c ) A falsely informs a policeman that he has been assaulted and robbed by a person whose identity he does not know. A also mentions that he often sees that person going in and out of a block of flats, knowing it to be likely that in consequence of this information, the police will make inquiries and institute searches in the block of flats to the annoyance of the flat dwellers or some of them. A has committed an offence under this section."
     }
 
-    illustration example_d {
-        "A informs a policeman that A does not know the identity of the suspect of a criminal offence, knowing such information to be false, and knowing it to be likely that in consequence of this information, the policeman will expend additional time and resources to identify the suspect which will not be so expended if A had informed the policeman that A knew the identity of the suspect. A has committed an offence under this section."
+    illustration illustration_d {
+        "( d ) A informs a policeman that A does not know the identity of the suspect of a criminal offence, knowing such information to be false, and knowing it to be likely that in consequence of this information, the policeman will expend additional time and resources to identify the suspect which will not be so expended if A had informed the policeman that A knew the identity of the suspect. A has committed an offence under this section."
     }
 }

@@ -2,18 +2,18 @@
 section_number = "187"
 title = "Omission to assist public servant when bound by law to give assistance"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "A person bound by law to assist a public servant in executing public duty, who intentionally omits to do so, is liable; aggravated where assistance is demanded by a legally competent public servant."
+summary = "Section 187 makes it an offence to intentionally withhold legally required assistance from a public servant, with enhanced punishment when competent demand is made for specified enforcement purposes."
 source = "Singapore Penal Code 1871, Section 187"
 
 [verification]
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr187-#pr187-"
-disclaimer = "Educational purposes only. Cross-reference with official SSO text."

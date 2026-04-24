@@ -2,16 +2,17 @@
 section_number = "181"
 title = "False statement on oath to public servant or person authorised to administer an oath"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Making a false statement under oath to a public servant or person authorised to administer oaths, knowing it to be false, is punishable with up to 3 years' imprisonment and fine."
+summary = "A person who is legally bound by oath to tell the truth commits an offence by making a false statement on that subject to an authorised oath-taker while knowing or believing it is false or not true."
 source = "Singapore Penal Code 1871, Section 181"
 
 [verification]

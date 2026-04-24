@@ -2,16 +2,17 @@
 section_number = "182"
 title = "False information, with intent to cause a public servant to use his lawful power to the injury of another person"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Giving a public servant information known or believed false with intent or knowledge that he will use his lawful power to another's injury or to act on untrue facts."
+summary = "Giving a public servant information known or believed to be false, intending or knowing it is likely to cause misuse of lawful power against another person."
 source = "Singapore Penal Code 1871, Section 182"
 
 [verification]

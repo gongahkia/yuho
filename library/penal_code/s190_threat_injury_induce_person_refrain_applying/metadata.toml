@@ -2,18 +2,18 @@
 section_number = "190"
 title = "Threat of injury to induce any person to refrain from applying for protection to a public servant"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Threatening injury to any person to deter them from making a legal application for protection to a legally empowered public servant."
+summary = "Threatening a person to make them refrain from seeking protection from a legally empowered public servant is an offence."
 source = "Singapore Penal Code 1871, Section 190"
 
 [verification]
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr190-#pr190-"
-disclaimer = "Educational purposes only. Cross-reference with official SSO text."

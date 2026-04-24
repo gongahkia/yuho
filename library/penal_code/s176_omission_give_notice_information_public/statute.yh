@@ -1,27 +1,56 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr176-#pr176-
-// Singapore Penal Code Section 176
-
 /// @amendment [15/2019]
-statute 176 "Omission to give notice or information to public servant by person legally bound to give such notice or information" effective 1872-01-01 {
-    definitions {
-        notice_or_information := "Any notice or information on a subject which the accused is legally bound to give or furnish to a public servant as such";
-    }
+statute 176 "Omission to give notice or information to public servant by person legally bound to give such notice or information" effective 1872-01-01 effective 2020-01-01 {
+    subsection (1) {
+        elements {
+            /// Subsection (1) requires the legal duty, the intentional omission, and one offender-type branch for punishment.
+            all_of {
+                circumstance legal_duty := "A person is legally bound to give any notice or to furnish information on any subject to any public servant, as such";
+                mens_rea intention := "The omission is intentional";
+                actus_reus omission := "Omits to give such notice or to furnish such information in the manner and at the time required by law" caused_by intention;
+                any_of {
+                    circumstance individual_case := "The case is one of an individual";
+                    circumstance non_individual_case := "The case is any other case";
+                }
+            }
+        }
 
-    elements {
-        all_of {
-            /// legal obligation to give notice or information
-            circumstance legal_duty := "Legally bound to give a notice or furnish information on a subject to a public servant as such";
-            /// intentional omission in required manner or time
-            actus_reus omission := "Intentionally omitting to give such notice or furnish such information in the manner and at the time required by law";
+        penalty or_both when individual_case {
+            imprisonment := 0 days .. 1 month;
+            fine := $0.00 .. $1,500.00;
+        }
+
+        penalty when non_individual_case {
+            fine := $0.00 .. $10,000.00;
         }
     }
 
-    penalty {
-        imprisonment := 0 months .. 1 months;
-        fine := $0.00 .. $10,000.00;
-    }
+    subsection (2) {
+        elements {
+            /// Subsection (2) escalates punishment only where subsection (1) is already made out and the omitted notice or information concerns offence-related matters.
+            all_of {
+                circumstance subsection_1_offence := "A person is guilty of an offence under subsection (1)";
+                any_of {
+                    circumstance respects_commission_of_offence := "The notice or information required to be given respects the commission of an offence";
+                    circumstance prevention_of_offence := "The notice or information is required for the purpose of preventing the commission of an offence";
+                    circumstance apprehension_of_offender := "The notice or information is required in order to the apprehension of an offender";
+                }
+                any_of {
+                    circumstance individual_case := "The case is one of an individual";
+                    circumstance non_individual_case := "The case is any other case";
+                }
+            }
+        }
 
-    /// For individuals -- imprisonment up to 1 month, or fine up to $1,500, or both. For any other case -- fine up to $10,000. Enhanced penalty where information concerns commission of an offence, its prevention, or apprehension of an offender.
+        penalty or_both when individual_case {
+            imprisonment := 0 days .. 6 months;
+            fine := $0.00 .. $5,000.00;
+        }
+
+        penalty when non_individual_case {
+            fine := $0.00 .. $10,000.00;
+        }
+    }
 }

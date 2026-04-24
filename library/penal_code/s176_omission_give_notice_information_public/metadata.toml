@@ -2,16 +2,17 @@
 section_number = "176"
 title = "Omission to give notice or information to public servant by person legally bound to give such notice or information"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Intentional omission by a person legally bound to give notice or furnish information to a public servant, in the manner and time required by law."
+summary = "Intentional failure to give legally required notice or information to a public servant is punishable, with higher punishment when the omission concerns an offence, its prevention, or the apprehension of an offender."
 source = "Singapore Penal Code 1871, Section 176"
 
 [verification]

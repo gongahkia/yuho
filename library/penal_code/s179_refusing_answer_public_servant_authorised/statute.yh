@@ -1,29 +1,28 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr179-#pr179-
-// Singapore Penal Code Section 179
-
 /// @amendment [15/2019]
 statute 179 "Refusing to answer public servant authorised to question" effective 1872-01-01 {
-    definitions {
-        authorised_question := "A question touching a subject which the accused is legally bound to answer truthfully, demanded by a public servant exercising legal powers";
-    }
-
     elements {
+        /// The offence requires a legal duty to state the truth, refusal to answer a demanded question touching that subject, and that the demand is made by a public servant exercising legal powers.
         all_of {
-            /// legal duty to state the truth on the subject
-            circumstance legal_duty := "Legally bound to state the truth on the subject to the public servant";
-            /// public servant demands a question in exercise of legal powers
-            circumstance authorised_demand := "Public servant demands a question touching that subject in the exercise of his legal powers";
-            /// refusal to answer
-            actus_reus refusal := "Refusing to answer the question demanded";
+            circumstance legal_truth_duty := "Being legally bound to state the truth on any subject to any public servant";
+            actus_reus refusal_to_answer := "Refuses to answer any question demanded of the person touching that subject";
+            circumstance authorised_questioning := "The question is demanded by that public servant, in the exercise of the legal powers of such public servant";
+            /// The amended text separates punishment between cases involving an individual and any other case.
+            any_of {
+                circumstance individual_case := "The case is the case of an individual";
+                circumstance other_case := "The case is any other case";
+            }
         }
     }
 
-    penalty {
+    penalty or_both when individual_case {
         imprisonment := 0 months .. 6 months;
-        fine := $0.00 .. $10,000.00;
+        fine := $0.00 .. $5,000.00;
     }
 
-    /// For individuals -- imprisonment up to 6 months, or fine up to $5,000, or both. For any other case -- fine up to $10,000.
+    penalty when other_case {
+        fine := $0.00 .. $10,000.00;
+    }
 }

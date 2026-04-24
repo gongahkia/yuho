@@ -1,33 +1,64 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr177-#pr177-
-// Singapore Penal Code Section 177
-
 /// @amendment [15/2019]
-statute 177 "Furnishing false information" effective 1872-01-01 {
+
+statute 177 "Furnishing false information" effective 1872-01-01 effective 2019-12-31 {
+    /// Explanation .—In this section and section 176, “offence” includes any act committed at any place out of Singapore, which if committed in Singapore would be punishable under any of the following sections, namely, 302, 304, 382, 392, 393, 394, 395, 396, 397, 399, 402, 435, 436, 449, 450, 459 and 460, and “offender” includes any person who is alleged to have been guilty of any such act.
     definitions {
-        information := "Information on a subject which the accused is legally bound to furnish to a public servant as such";
+        offence := "Any act committed at any place out of Singapore, which if committed in Singapore would be punishable under any of the following sections, namely, 302, 304, 382, 392, 393, 394, 395, 396, 397, 399, 402, 435, 436, 449, 450, 459 and 460.";
+        offender := "Any person who is alleged to have been guilty of any such act.";
     }
 
-    elements {
-        all_of {
-            /// legal obligation to furnish information
-            circumstance legal_duty := "Legally bound to furnish information on the subject to a public servant as such";
-            /// act of furnishing false information as true
-            actus_reus furnishing := "Furnishing information, as true, on the subject";
-            /// falsity known or believed
-            mens_rea falsity := "Knowing or having reason to believe the information to be false";
+    subsection (1) {
+        elements {
+            /// Subsection (1) requires the legal duty, the furnishing as true, the falsity, and knowledge or reason to believe the falsity.
+            all_of {
+                circumstance legal_duty := "The person is legally bound to furnish information on any subject to any public servant, as such.";
+                actus_reus furnishing_as_true := "The person furnishes, as true, information on the subject.";
+                mens_rea knowledge_of_falsity := "The person knows or has reason to believe the information to be false.";
+            }
+        }
+
+        /// Paragraph (a): in the case of an individual.
+        penalty or_both when individual_case {
+            imprisonment := 0 months .. 6 months;
+            fine := $0.00 .. $5,000.00;
+        }
+
+        /// Paragraph (b): in any other case.
+        penalty when other_case {
+            fine := $0.00 .. $10,000.00;
         }
     }
 
-    penalty {
-        imprisonment := 0 months .. 6 months;
-        fine := $0.00 .. $10,000.00;
+    subsection (2) {
+        elements {
+            /// Subsection (2) aggravates an offence under subsection (1) where the required information concerns offences or offenders.
+            all_of {
+                circumstance subsection_1_offence := "The person is guilty of an offence under subsection (1).";
+                any_of {
+                    circumstance respects_commission_of_offence := "The information which the person mentioned in subsection (1) is legally bound to furnish respects the commission of an offence.";
+                    circumstance preventing_commission_of_offence := "The information is required for the purpose of preventing the commission of an offence.";
+                    circumstance apprehension_of_offender := "The information is required in order to the apprehension of an offender.";
+                }
+            }
+        }
+
+        /// Paragraph (a): in the case of an individual.
+        penalty or_both when individual_case {
+            imprisonment := 0 years .. 3 years;
+            fine := unlimited;
+        }
+
+        /// Paragraph (b): in any other case.
+        penalty when other_case {
+            fine := unlimited;
+        }
     }
 
-    illustration example1 {
-        "A, a landholder, knowing of the commission of a murder, within the limits of his commercial property, intentionally misinforms the police that the death has occurred by accident in consequence of the bite of a snake. A is guilty of the offence defined in this section."
+    /// Illustration
+    illustration illustration_a {
+        "A , a landholder, knowing of the commission of a murder, within the limits of his commercial property, intentionally misinforms the police that the death has occurred by accident in consequence of the bite of a snake. A is guilty of the offence defined in this section."
     }
-
-    /// Explanation. In sections 176 and 177, 'offence' includes any act committed outside Singapore which if committed in Singapore would be punishable under sections 302, 304, 382, 392, 393, 394, 395, 396, 397, 399, 402, 435, 436, 449, 450, 459 and 460, and 'offender' includes any person alleged to have been guilty of any such act.
 }

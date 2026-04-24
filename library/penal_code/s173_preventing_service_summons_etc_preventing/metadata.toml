@@ -2,16 +2,17 @@
 section_number = "173"
 title = "Preventing service of summons, etc., or preventing publication thereof"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Intentionally preventing service, lawful affixing, or lawful publication of a summons, notice, order, or proclamation from a competent public servant."
+summary = "This section makes it an offence intentionally to prevent service, lawful affixing, or lawful proclamation of specified process from a legally competent public servant, with a higher penalty where the process concerns attendance or production before a court."
 source = "Singapore Penal Code 1871, Section 173"
 
 [verification]

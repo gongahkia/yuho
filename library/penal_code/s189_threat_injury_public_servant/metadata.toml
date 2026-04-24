@@ -2,18 +2,18 @@
 section_number = "189"
 title = "Threat of injury to a public servant"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Threatening injury to a public servant, or to a person the public servant is believed to be interested in, to induce or deter the public servant in the exercise of public functions."
+summary = "Threatening injury to a public servant, or to a person the offender believes the public servant to be interested in, in order to induce action, forbearance, or delay in the exercise of public functions."
 source = "Singapore Penal Code 1871, Section 189"
 
 [verification]
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr189-#pr189-"
-disclaimer = "Educational purposes only. Cross-reference with official SSO text."

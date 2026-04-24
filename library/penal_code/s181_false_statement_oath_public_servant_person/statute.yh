@@ -1,51 +1,18 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr181-#pr181-
-// Singapore Penal Code Section 181 - False statement on oath to public servant
-// Yuho v5 Syntax
-
-struct S181Case {
-    string accused,
-    bool legallyBoundByOath,
-    bool statementFalse,
-    bool knewOrBelievedFalse,
-}
-
-fn s181_applies(bool legallyBoundByOath, bool statementFalse, bool knewOrBelievedFalse) : bool {
-    match {
-        case TRUE if legallyBoundByOath == FALSE := consequence FALSE;
-        case TRUE if statementFalse == FALSE := consequence FALSE;
-        case TRUE if knewOrBelievedFalse == FALSE := consequence FALSE;
-        case _ := consequence TRUE;
-    }
-}
 
 statute 181 "False statement on oath to public servant or person authorised to administer an oath" effective 1872-01-01 {
-    definitions {
-        oath := "An oath or solemn affirmation which the person is legally bound to take";
-        public_servant := "Person defined as a public servant under section 21";
-        false_statement := "A statement which is untrue on a subject";
-    }
-
     elements {
         all_of {
-            /// accused legally bound by an oath to state truth
-            circumstance legally_bound := "Being legally bound by an oath to state the truth on any subject";
-            /// statement made to public servant or person authorised by law
-            actus_reus statement_made := "Makes a statement to such public servant or person authorised by law";
-            /// the statement is false
-            circumstance statement_false := "The statement is false";
-            /// mental state: knows or believes false, or does not believe to be true
-            mens_rea knowledge := "Knows or believes the statement to be false, or does not believe it to be true";
+            circumstance legal_oath := "Being legally bound by an oath to state the truth on any subject";
+            actus_reus statement_to_authorised_person := "Making to any public servant or other person authorised by law to administer such oaths, touching that subject, a statement which is false";
+            mens_rea falsity_knowledge := "Knowing or believing that statement to be false, or not believing it to be true";
         }
     }
 
-    penalty {
+    penalty cumulative {
         imprisonment := 0 days .. 3 years;
-        fine := $0.00 .. $10,000.00;
-    }
-
-    illustration example1 {
-        "A, being sworn before a magistrate to state the truth, falsely states that he witnessed Z signing a document. A has committed the offence under section 181."
+        fine := unlimited;
     }
 }

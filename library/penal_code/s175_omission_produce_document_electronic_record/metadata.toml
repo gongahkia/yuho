@@ -2,16 +2,17 @@
 section_number = "175"
 title = "Omission to produce document or electronic record to public servant by person legally bound to produce such document or electronic record"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Intentional omission by a person legally bound to produce or deliver up a document or electronic record to a public servant."
+summary = "This section criminalises intentionally omitting to produce or deliver up a document or electronic record to a public servant when legally bound to do so."
 source = "Singapore Penal Code 1871, Section 175"
 
 [verification]

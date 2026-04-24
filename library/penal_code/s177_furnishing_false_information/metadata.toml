@@ -2,16 +2,17 @@
 section_number = "177"
 title = "Furnishing false information"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Furnishing, as true, information one is legally bound to give to a public servant, knowing or having reason to believe it false."
+summary = "Section 177 penalises furnishing false information to a public servant, with heavier punishment where the information concerns an offence or apprehending an offender."
 source = "Singapore Penal Code 1871, Section 177"
 
 [verification]

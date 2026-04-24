@@ -2,16 +2,17 @@
 section_number = "174"
 title = "Failure to attend in obedience to order from public servant"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Intentional omission to attend or premature departure by a person legally bound to attend before a competent public servant in obedience to process."
+summary = "This section criminalises intentional non-attendance or premature departure in breach of a lawful summons, notice, order or proclamation, with higher penalties where the process requires attendance before a court."
 source = "Singapore Penal Code 1871, Section 174"
 
 [verification]

@@ -1,27 +1,33 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr175-#pr175-
-// Singapore Penal Code Section 175
-
 /// @amendment [15/2019]
-statute 175 "Omission to produce document or electronic record to public servant by person legally bound to produce such document or electronic record" effective 1872-01-01 {
+
+statute 175 "Omission to produce document or electronic record to public servant by person legally bound to produce such document or electronic record" effective 1872-01-01 effective 2019-12-31 {
     definitions {
-        producible_item := "Any document or electronic record which the accused is legally bound to produce or deliver up to a public servant as such";
+        document_or_electronic_record := "Any document or electronic record which the person is legally bound to produce or deliver up to any public servant, as such. [15/2019]";
     }
 
     elements {
+        /// Section 175 requires the legal duty, the public-servant recipient, the omission to produce or deliver up, and intentionality.
         all_of {
-            /// legal obligation to produce
-            circumstance legal_duty := "Legally bound to produce or deliver up a document or electronic record to a public servant as such";
-            /// intentional omission
-            actus_reus omission := "Intentionally omitting to produce or deliver up the document or electronic record";
+            circumstance legal_duty := "The person is legally bound to produce or deliver up a document or electronic record to any public servant, as such. [15/2019]";
+            actus_reus omission := "The person omits to produce or deliver up the same. [15/2019]";
+            mens_rea intentional_omission := "The omission is intentional. [15/2019]";
+            /// Paragraphs (a) and (b) split punishment by offender type.
+            any_of {
+                circumstance individual_case := "The case is the case of an individual. [15/2019]";
+                circumstance other_case := "The case is any other case. [15/2019]";
+            }
         }
     }
 
-    penalty {
+    penalty or_both when individual_case {
         imprisonment := 0 months .. 1 months;
-        fine := $0.00 .. $10,000.00;
+        fine := $0.00 .. $1,500.00;
     }
 
-    /// For individuals -- imprisonment up to 1 month, or fine up to $1,500, or both. For any other case -- fine up to $10,000.
+    penalty when other_case {
+        fine := $0.00 .. $10,000.00;
+    }
 }

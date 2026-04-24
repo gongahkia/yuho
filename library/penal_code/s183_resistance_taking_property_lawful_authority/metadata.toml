@@ -2,16 +2,17 @@
 section_number = "183"
 title = "Resistance to taking of property by lawful authority of public servant"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Offering resistance to the taking of property under the lawful authority of a public servant, knowing or having reason to believe his status."
+summary = "This section criminalises resisting the lawful taking of property by a public servant while knowing or having reason to believe the person is such a public servant."
 source = "Singapore Penal Code 1871, Section 183"
 
 [verification]

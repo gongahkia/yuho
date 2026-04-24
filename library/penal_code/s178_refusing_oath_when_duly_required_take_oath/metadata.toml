@@ -2,16 +2,17 @@
 section_number = "178"
 title = "Refusing oath when duly required to take oath by a public servant"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Refusing to bind oneself by an oath to state the truth when duly required by a competent public servant."
+summary = "Refusing to take an oath to state the truth when a legally competent public servant requires it is an offence punishable by up to 6 months’ imprisonment, a fine up to $5,000, or both."
 source = "Singapore Penal Code 1871, Section 178"
 
 [verification]

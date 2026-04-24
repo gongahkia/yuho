@@ -1,29 +1,31 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr183-#pr183-
-// Singapore Penal Code Section 183
-
 /// @amendment [15/2019]
-statute 183 "Resistance to taking of property by lawful authority of public servant" effective 1872-01-01 {
-    definitions {
-        lawful_taking := "The taking of any property by the lawful authority of a public servant";
-    }
 
+statute 183 "Resistance to taking of property by lawful authority of public servant" effective 1872-01-01 {
     elements {
+        /// Section 183 requires resistance to a lawful taking of property by a public servant, with knowledge or reason to believe that status.
         all_of {
-            /// lawful authority to take property
-            circumstance lawful_authority := "Property is being taken by the lawful authority of a public servant";
-            /// physical act of resisting
-            actus_reus resistance := "Offering resistance to the taking of the property";
-            /// knowledge or reason to believe status
-            mens_rea knowledge := "Knowing or having reason to believe that the person is a public servant acting under such authority";
+            actus_reus resistance := "Offers any resistance to the taking of any property";
+            circumstance lawful_authority := "The taking of the property is by the lawful authority of a public servant";
+            mens_rea knowledge_of_status := "Knowing or having reason to believe that the person is such public servant";
+            /// The amended text separates punishment between the case of an individual and any other case.
+            any_of {
+                circumstance individual_case := "The case is the case of an individual";
+                circumstance other_case := "The case is any other case";
+            }
         }
     }
 
-    penalty {
+    /// Paragraph (a): in the case of an individual.
+    penalty or_both when individual_case {
         imprisonment := 0 months .. 6 months;
-        fine := $0.00 .. $10,000.00;
+        fine := $0.00 .. $5,000.00;
     }
 
-    /// For individuals -- imprisonment up to 6 months, or fine up to $5,000, or both. For any other case -- fine up to $10,000.
+    /// Paragraph (b): in any other case.
+    penalty when other_case {
+        fine := $0.00 .. $10,000.00;
+    }
 }
