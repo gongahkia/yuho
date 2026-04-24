@@ -233,6 +233,30 @@ raw statute text's logical connectives against the element-group
 structure. Hard in general but feasible with an LLM judge or pattern
 matching on "or" / "and" in the raw text near element markers.
 
+### G14 — caning liability without stroke count
+
+Surfaced from the Phase D L3 re-review. Several sections (s21, s73,
+s304C, s376, s376H, s377, s377BB, s377BD, s377BG) say *"liable to
+fine or to caning"* with no stroke-count range. Current grammar:
+`caning := <int> strokes` or `caning := <int> .. <int> strokes`.
+Nothing expresses "caning liability without a statutory numeric cap."
+
+Fix-agents correctly refuse to invent a range and instead write the
+caning clause into `supplementary := "…"` strings, which the L3
+reviewer then flags as "not structured penalty facts." Genuine
+expressiveness gap, not a fabrication or encoding bug.
+
+**Fix direction:**
+
+    caning := unspecified            // or: caning := liable
+    caning := 12 .. unspecified      // minimum stated, no cap
+
+Grammar: add `"unspecified"` as a valid `caning_clause` value alongside
+`integer_literal` and `integer_literal .. integer_literal`. AST:
+`caning_min` / `caning_max` remain `Optional[int]`, add
+`caning_unspecified: bool` parallel to `fine_unlimited`. Grammar
+change is <10 lines; AST builder patch similar.
+
 ## Fabrication findings (not grammar gaps, but require fixing)
 
 These surfaced during the L3 review and go beyond what Phase D grammar

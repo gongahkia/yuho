@@ -107,6 +107,25 @@ after the current priority sweep completes — anything not in
       (medium is fine for these; trivial) with parallel 8. Expected wall
       time ≤ 2 hours.
 
+### G14 grammar fix — caning without stroke count `[ ]`
+
+Surfaced during the Phase D L3 re-review. 9 sections (s21, s73, s304C,
+s376, s376H, s377, s377BB, s377BD, s377BG) say "liable to fine or to
+caning" with no numeric stroke range. Current grammar forces an integer
+or integer-range. Fix-agents correctly refused to invent a range; the
+L3 reviewer then flagged the resulting `supplementary := "…"` fallback
+as "not structured penalty facts."
+
+Blocking ~9 L3 stamps until fixed.
+
+- [ ] Grammar: add `"unspecified"` keyword for `caning_clause` (parallel
+      to the existing `fine := unlimited`).
+- [ ] AST: `PenaltyNode.caning_unspecified: bool = False`.
+- [ ] Builder: wire it through like `fine_unlimited`.
+- [ ] Re-dispatch fix-agent on the 9 sections so they can write
+      `caning := unspecified;` instead of stuffing into supplementary.
+- [ ] Re-run L3 review on those 9 for a clean stamp.
+
 ### G13 grammar fix — default-logic exception priority `[ ]`
 
 New gap identified from studying Catala (Apache-2.0). SG Penal Code uses
