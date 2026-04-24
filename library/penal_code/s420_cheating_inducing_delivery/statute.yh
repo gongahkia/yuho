@@ -9,17 +9,18 @@ statute 420 "Cheating and dishonestly inducing a delivery of property" effective
             /// Subsection (1) requires cheating, dishonest inducement of the deceived person, and one of the specified induced acts.
             all_of {
                 actus_reus cheating := "Cheats";
-                mens_rea dishonest_inducement := "Dishonestly induces the person deceived";
+                actus_reus inducement := "Thereby induces the person deceived" caused_by cheating;
+                mens_rea dishonesty := "The inducement is dishonest";
                 /// The statutory objects are alternatives separated by "or".
                 any_of {
-                    actus_reus deliver_property := "Induces the person deceived to deliver any property to any person";
-                    actus_reus cause_delivery_property := "Induces the person deceived to cause the delivery of any property to any person";
-                    actus_reus make_valuable_security := "Induces the person deceived to make the whole or any part of a valuable security";
-                    actus_reus alter_valuable_security := "Induces the person deceived to alter the whole or any part of a valuable security";
-                    actus_reus destroy_valuable_security := "Induces the person deceived to destroy the whole or any part of a valuable security";
-                    actus_reus make_convertible_security := "Induces the person deceived to make anything which is signed or sealed and capable of being converted into a valuable security";
-                    actus_reus alter_convertible_security := "Induces the person deceived to alter anything which is signed or sealed and capable of being converted into a valuable security";
-                    actus_reus destroy_convertible_security := "Induces the person deceived to destroy anything which is signed or sealed and capable of being converted into a valuable security";
+                    actus_reus deliver_property := "The person deceived delivers any property to any person" caused_by inducement;
+                    actus_reus cause_delivery_property := "The person deceived causes the delivery of any property to any person" caused_by inducement;
+                    actus_reus make_valuable_security := "The person deceived makes the whole or any part of a valuable security" caused_by inducement;
+                    actus_reus alter_valuable_security := "The person deceived alters the whole or any part of a valuable security" caused_by inducement;
+                    actus_reus destroy_valuable_security := "The person deceived destroys the whole or any part of a valuable security" caused_by inducement;
+                    actus_reus make_convertible_security := "The person deceived makes anything which is signed or sealed and capable of being converted into a valuable security" caused_by inducement;
+                    actus_reus alter_convertible_security := "The person deceived alters anything which is signed or sealed and capable of being converted into a valuable security" caused_by inducement;
+                    actus_reus destroy_convertible_security := "The person deceived destroys anything which is signed or sealed and capable of being converted into a valuable security" caused_by inducement;
                 }
             }
         }
@@ -41,8 +42,8 @@ statute 420 "Cheating and dishonestly inducing a delivery of property" effective
             /// Subsection (2) adds remote communication to cheating and dishonest inducement of any act mentioned in subsection (1).
             all_of {
                 actus_reus remote_cheating := "Cheats by remote communication";
-                mens_rea dishonest_inducement := "Dishonestly induces";
-                circumstance induced_subsection_1_act := "Induces any of the acts mentioned in subsection (1)";
+                actus_reus inducement := "Thereby induces any of the acts mentioned in subsection (1)" caused_by remote_cheating;
+                mens_rea dishonesty := "The inducement is dishonest";
             }
         }
 
