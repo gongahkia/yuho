@@ -1,38 +1,32 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr293-#pr293-
-// Singapore Penal Code Section 293 - Sale, etc., of obscene objects to young person
-// Yuho v5 Syntax
-
-struct S293Case {
-    bool obsceneObjectUnderSection292,
-    bool recipientBelowTwentyOne,
-    bool saleHireDistributionExhibitionCirculationOrOffer,
-}
-
-fn applies_s293(bool obsceneObjectUnderSection292, bool recipientBelowTwentyOne, bool saleHireDistributionExhibitionCirculationOrOffer) : bool {
-    match {
-        case TRUE if obsceneObjectUnderSection292 && recipientBelowTwentyOne && saleHireDistributionExhibitionCirculationOrOffer := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
 
 statute 293 "Sale, etc., of obscene objects to young person" effective 1872-01-01 {
     definitions {
-        provision_text := "Whoever sells, lets to hire, distributes, exhibits or circulates to any person below 21 years of age any such obscene object as is referred to in section 292, or offers or attempts to do so, shall be punished with imprisonment for a term which may extend to one year, or with fine, or with both.";
-        young_person := "A person below 21 years of age.";
+        obscene_object_referred_to_in_section_292 := "Any such obscene object as is referred to in section 292";
+        young_person := "Any person below 21 years of age";
     }
 
     elements {
         all_of {
-            actus_reus obsceneObjectUnderSection292 := "The object is an obscene object referred to in section 292.";
-            circumstance recipientBelowTwentyOne := "The recipient is below 21 years of age.";
-            actus_reus saleHireDistributionExhibitionCirculationOrOffer := "The person sells, lets to hire, distributes, exhibits, circulates, offers, or attempts to do so.";
+            circumstance recipient_below_21_years_of_age := "To any person below 21 years of age";
+            circumstance obscene_object := "Any such obscene object as is referred to in section 292";
+            /// The listed acts are alternatives.
+            any_of {
+                actus_reus sells := "Sells";
+                actus_reus lets_to_hire := "Lets to hire";
+                actus_reus distributes := "Distributes";
+                actus_reus exhibits := "Exhibits";
+                actus_reus circulates := "Circulates";
+                actus_reus offers := "Offers to do so";
+                actus_reus attempts := "Attempts to do so";
+            }
         }
     }
 
-    penalty {
+    penalty or_both {
         imprisonment := 0 years .. 1 year;
-        supplementary := "Fine may also be imposed, or both imprisonment and fine.";
+        fine := unlimited;
     }
 }

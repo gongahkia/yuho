@@ -284,7 +284,6 @@ def ast(
     type=click.Choice(
         [
             "json",
-            "jsonld",
             "english",
             "latex",
             "pdf",
@@ -292,12 +291,6 @@ def ast(
             "svg",
             "png",
             "alloy",
-            "graphql",
-            "blocks",
-            "bibtex",
-            "comparative",
-            "akomantoso",
-            "prolog",
         ],
         case_sensitive=False,
     ),
@@ -321,7 +314,7 @@ def transpile(
     """
     Transpile a Yuho source file to another format.
 
-    Supported targets: json, jsonld, english, latex, mermaid, alloy, graphql, blocks
+    Supported targets: json, english, latex, pdf, mermaid, alloy
     """
     from yuho.cli.commands.transpile import run_transpile
 
@@ -365,65 +358,12 @@ def repl(ctx: click.Context) -> None:
 # =============================================================================
 
 
-@cli.command()
-@click.argument("file", type=click.Path(exists=True))
-@click.option("-s", "--section", help="Explain specific section only")
-@click.option("-i", "--interactive", is_flag=True, help="Interactive REPL mode")
-@click.option(
-    "--provider",
-    type=click.Choice(
-        ["ollama", "huggingface", "openai", "anthropic", "gemini", "plex", "keymeet"]
-    ),
-    help="LLM provider to use",
-)
-@click.option("--model", help="Model name to use")
-@click.option("--api-key", "api_key", help="API key for the selected cloud provider")
-@click.option("--offline", is_flag=True, help="Disallow cloud providers and run local-only")
-@click.option("--no-llm", is_flag=True, help="Skip LLM, use built-in English transpilation only")
-@click.option(
-    "--stream/--no-stream",
-    "stream",
-    default=True,
-    help="Enable/disable streaming output for real-time response",
-)
-@click.pass_context
-def explain(
-    ctx: click.Context,
-    file: str,
-    section: Optional[str],
-    interactive: bool,
-    provider: Optional[str],
-    model: Optional[str],
-    api_key: Optional[str],
-    offline: bool,
-    no_llm: bool,
-    stream: bool,
-) -> None:
-    """
-    Generate natural language explanation of a Yuho file.
-
-    Uses LLM to explain statutes in plain language.
-    Use --no-llm for built-in English transpilation without any LLM setup.
-    """
-    from yuho.cli.commands.explain import run_explain
-
-    run_explain(
-        file,
-        section=section,
-        interactive=interactive,
-        provider=provider,
-        model=model,
-        api_key=api_key,
-        offline=offline,
-        no_llm=no_llm,
-        verbose=ctx.obj["verbose"],
-        stream=stream,
-    )
-
-
 # =============================================================================
 # Diff command
 # =============================================================================
+# (The LLM-backed `explain` command was cut in the Phase D endpoint trim.
+# For narrative output, use `yuho transpile <file> --target english`.
+# For interactive AI explanation, connect via the MCP server.)
 
 
 @cli.command()
@@ -568,42 +508,10 @@ def lint(
 
 
 # =============================================================================
-# API command
-# =============================================================================
-
-
-@cli.command()
-@click.option(
-    "-p", "--port", type=int, default=None, help="Port to listen on (defaults to config mcp.port)"
-)
-@click.option("--host", default=None, help="Host to bind to (defaults to config mcp.host)")
-@click.pass_context
-def api(ctx: click.Context, port: Optional[int], host: Optional[str]) -> None:
-    """
-    Start the REST API server for remote operations.
-
-    Provides HTTP endpoints for:
-    - Parsing and validating Yuho source code
-    - Transpiling to various formats
-    - Running lint checks
-
-    Examples:
-        yuho api
-        yuho api --port 3000 --host 0.0.0.0
-    """
-    from yuho.cli.commands.api import run_api
-
-    run_api(
-        host=host,
-        port=port,
-        verbose=ctx.obj["verbose"],
-        color=ctx.obj["color"],
-    )
-
-
-# =============================================================================
 # Generate command
 # =============================================================================
+# (The REST `api` command was cut in the Phase D endpoint trim.
+# The CLI is now the primary interface; for AI integration use the MCP server.)
 
 
 @cli.command()
@@ -920,41 +828,6 @@ def schema(output: Optional[str]) -> None:
         print(text)
 
 
-@cli.command("export-training")
-@click.option(
-    "-o", "--output", default="training_pairs.jsonl", type=click.Path(), help="Output JSONL file"
-)
-@click.option(
-    "-d", "--directory", type=click.Path(exists=True), help="Statute directory (default: library/)"
-)
-@click.option(
-    "--mermaid", "include_mermaid", is_flag=True, help="Include Mermaid diagrams in output"
-)
-@click.pass_context
-def export_training(
-    ctx: click.Context, output: str, directory: Optional[str], include_mermaid: bool
-) -> None:
-    """
-    Export statute/English pairs as JSONL for LLM fine-tuning.
-
-    Each line contains the raw .yh source, English explanation,
-    section number, and title. Optionally includes Mermaid diagrams.
-
-    Examples:
-        yuho export-training
-        yuho export-training -o pairs.jsonl --mermaid
-        yuho export-training -d ./my-statutes
-    """
-    from yuho.cli.commands.export_training import run_export_training
-
-    run_export_training(
-        output=output,
-        directory=directory,
-        include_mermaid=include_mermaid,
-        verbose=ctx.obj["verbose"],
-    )
-
-
 @cli.command("compliance-matrix")
 @click.argument("file", type=click.Path(exists=True))
 @click.option("-o", "--output", type=click.Path(), help="Output file path")
@@ -982,81 +855,6 @@ def compliance_matrix(
         json_output=json_output,
         verbose=ctx.obj["verbose"],
     )
-
-
-@cli.command("explain-all")
-@click.option(
-    "-d", "--directory", default="library", type=click.Path(exists=True), help="Source directory"
-)
-@click.option(
-    "-o", "--output-dir", default="doc/explanations", type=click.Path(), help="Output directory"
-)
-@click.pass_context
-def explain_all(ctx: click.Context, directory: str, output_dir: str) -> None:
-    """
-    Generate English explanations for all library statutes.
-
-    Produces pre-built .txt files alongside statute sources.
-
-    Examples:
-        yuho explain-all
-        yuho explain-all -o ./explanations
-    """
-    from yuho.cli.commands.explain_all import run_explain_all
-
-    run_explain_all(
-        directory=directory,
-        output_dir=output_dir,
-        verbose=ctx.obj["verbose"],
-    )
-
-
-@cli.command("static-site")
-@click.option(
-    "-d",
-    "--directory",
-    default="library",
-    type=click.Path(exists=True),
-    help="Source statute directory",
-)
-@click.option(
-    "-o", "--output-dir", default="site", type=click.Path(), help="Output directory for HTML files"
-)
-@click.pass_context
-def static_site(ctx: click.Context, directory: str, output_dir: str) -> None:
-    """
-    Generate a browsable HTML site from the statute library.
-
-    Produces an index page linking to individual statute pages,
-    each with English explanation, Mermaid diagram, and source.
-
-    Examples:
-        yuho static-site
-        yuho static-site -d ./my-library -o ./docs
-    """
-    from yuho.cli.commands.static_site import run_static_site
-
-    run_static_site(directory=directory, output_dir=output_dir, verbose=ctx.obj["verbose"])
-
-
-@cli.command()
-@click.option("-p", "--port", type=int, default=8080, show_default=True, help="Server port")
-@click.option("--host", default="127.0.0.1", show_default=True, help="Host to bind to")
-@click.pass_context
-def playground(ctx: click.Context, port: int, host: str) -> None:
-    """
-    Launch the web playground in your browser.
-
-    Serves a browser-based Yuho editor with live transpilation.
-    Supports all transpile targets with instant feedback.
-
-    Examples:
-        yuho playground
-        yuho playground --port 3000
-    """
-    from yuho.cli.commands.playground import run_playground
-
-    run_playground(port=port, host=host, verbose=ctx.obj["verbose"])
 
 
 @cli.command("generate-tests")
@@ -1126,69 +924,6 @@ def verify_report(ctx: click.Context, file: str, output: Optional[str]) -> None:
         click.echo(f"Report written to {output}")
     else:
         print(tex)
-
-
-@cli.command("workspace")
-@click.argument("action", type=click.Choice(["create", "list", "switch"]))
-@click.argument("name_or_id", required=False)
-@click.pass_context
-def workspace_cmd(ctx: click.Context, action: str, name_or_id: Optional[str]) -> None:
-    """Manage workspaces (create/list/switch)."""
-    from yuho.cli.commands.workspace import (
-        run_workspace_create,
-        run_workspace_list,
-        run_workspace_switch,
-    )
-
-    if action == "create":
-        if not name_or_id:
-            click.echo("Name required for 'create'", err=True)
-            sys.exit(1)
-        run_workspace_create(name_or_id)
-    elif action == "list":
-        run_workspace_list()
-    elif action == "switch":
-        if not name_or_id:
-            click.echo("Workspace ID required for 'switch'", err=True)
-            sys.exit(1)
-        run_workspace_switch(name_or_id)
-
-
-@cli.command()
-@click.argument("directory", default=".", type=click.Path(exists=True))
-@click.option("--interval", type=float, default=2.0, help="Poll interval in seconds")
-@click.pass_context
-def watch(ctx: click.Context, directory: str, interval: float) -> None:
-    """Watch .yh files for changes and re-validate."""
-    from yuho.cli.commands.watch import run_watch
-
-    run_watch(directory=directory, interval=interval, verbose=ctx.obj["verbose"])
-
-
-@cli.command("webhook")
-@click.argument("action", type=click.Choice(["add", "list", "test"]))
-@click.argument("target", required=False)
-@click.option("--events", "-e", multiple=True, help="Event types to subscribe")
-@click.option("--secret", help="Webhook secret")
-@click.pass_context
-def webhook(
-    ctx: click.Context, action: str, target: Optional[str], events: tuple, secret: Optional[str]
-) -> None:
-    """Manage webhooks (add/list/test)."""
-    from yuho.cli.commands.webhook import run_webhook_add, run_webhook_list, run_webhook_test
-
-    if action == "add":
-        if not target:
-            click.echo("URL required for 'add'", err=True)
-            sys.exit(1)
-        run_webhook_add(target, list(events), secret)
-    elif action == "list":
-        run_webhook_list()
-    elif action == "test":
-        if not target:
-            click.echo("Endpoint ID required for 'test'", err=True)
-            sys.exit(1)
-        run_webhook_test(target)
 
 
 @cli.command("ci-report")

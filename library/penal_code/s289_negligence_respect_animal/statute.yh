@@ -2,37 +2,59 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr289-#pr289-
 /// @amendment [15/2019]
-// Singapore Penal Code Section 289 - Negligence with respect to any animal
-// Yuho v5 Syntax
 
-struct S289Case {
-    bool animalMeasureOmitted,
-    bool knowingOrNegligent,
-    bool animalDangerOutcome,
-}
-
-fn applies_s289(bool animalMeasureOmitted, bool knowingOrNegligent, bool animalDangerOutcome) : bool {
-    match {
-        case TRUE if animalMeasureOmitted && knowingOrNegligent && animalDangerOutcome := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
-statute 289 "Negligence with respect to any animal" effective 1872-01-01 {
-    definitions {
-        provision_text := "—(1) A person shall be guilty of an offence who knowingly or negligently omits to take such measure with any animal as is sufficient to guard against any probable danger to human life, or any probable danger of grievous hurt from such animal and such omission — ( a ) is likely to cause grievous hurt; ( b ) endangers human life; ( c ) causes grievous hurt to any other person; or ( d ) causes the death of any other person. [15/2019] (2) Any person who is guilty of an offence under subsection (1) shall on conviction be punished —";
-        animal_danger := "Probable danger to human life or probable danger of grievous hurt from the animal.";
-    }
-
-    elements {
-        all_of {
-            actus_reus animalMeasureOmitted := "The person omits sufficient measures with an animal.";
-            mens_rea knowingOrNegligent := "The omission is knowing or negligent.";
-            circumstance animalDangerOutcome := "The omission is likely to cause grievous hurt, endangers human life, causes grievous hurt, or causes death.";
+statute 289 "Negligence with respect to any animal" effective 1872-01-01 effective 2020-01-01 {
+    subsection (1) {
+        elements {
+            /// Subsection (1) requires a knowing or negligent omission of sufficient animal-control measures and one specified endangerment or harm outcome.
+            all_of {
+                actus_reus omission_of_measure := "Omits to take such measure with any animal as is sufficient to guard against any probable danger to human life, or any probable danger of grievous hurt from such animal.";
+                any_of {
+                    mens_rea knowingly := "The omission is done knowingly.";
+                    mens_rea negligently := "The omission is done negligently.";
+                }
+                any_of {
+                    circumstance likely_to_cause_grievous_hurt := "The omission is likely to cause grievous hurt.";
+                    circumstance endangers_human_life := "The omission endangers human life.";
+                    circumstance causes_grievous_hurt := "The omission causes grievous hurt to any other person.";
+                    circumstance causes_death := "The omission causes the death of any other person.";
+                }
+            }
         }
     }
 
-    penalty {
-        supplementary := "Punishment applies on conviction under subsection (2); detailed punishment range is not present in the canonical raw text.";
+    subsection (2) {
+        elements {
+            /// Subsection (2) ties punishment to which subsection (1) outcome is established.
+            all_of {
+                circumstance offence_under_subsection_1 := "The person is guilty of an offence under subsection (1).";
+                any_of {
+                    circumstance offence_under_subsection_1_a := "The offence is an offence under subsection (1)(a).";
+                    circumstance offence_under_subsection_1_b := "The offence is an offence under subsection (1)(b).";
+                    circumstance offence_under_subsection_1_c := "The offence is an offence under subsection (1)(c).";
+                    circumstance offence_under_subsection_1_d := "The offence is an offence under subsection (1)(d).";
+                }
+            }
+        }
+
+        penalty or_both when offence_under_subsection_1_a {
+            imprisonment := 0 years .. 1 year;
+            fine := $0.00 .. $5,000.00;
+        }
+
+        penalty or_both when offence_under_subsection_1_b {
+            imprisonment := 0 years .. 1 year;
+            fine := $0.00 .. $5,000.00;
+        }
+
+        penalty or_both when offence_under_subsection_1_c {
+            imprisonment := 0 years .. 6 years;
+            fine := unlimited;
+        }
+
+        penalty or_both when offence_under_subsection_1_d {
+            imprisonment := 0 years .. 7 years;
+            fine := unlimited;
+        }
     }
 }

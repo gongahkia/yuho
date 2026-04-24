@@ -2,39 +2,60 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr285-#pr285-
 /// @amendment [15/2019]
-// Singapore Penal Code Section 285 - Causing or contributing to risk of dangerous fire
-// Yuho v5 Syntax
-
-struct S285Case {
-    bool fireRiskAct,
-    bool rashOrNegligent,
-    bool fireOccurs,
-    bool fireOutcome,
-}
-
-fn applies_s285(bool fireRiskAct, bool rashOrNegligent, bool fireOccurs, bool fireOutcome) : bool {
-    match {
-        case TRUE if fireRiskAct && rashOrNegligent && fireOccurs && fireOutcome := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
-statute 285 "Causing or contributing to risk of dangerous fire" effective 1872-01-01 {
-    definitions {
-        provision_text := "—(1) Whoever, with any fire or any thing that is likely to cause fire, rashly or negligently causes or substantially contributes to the risk of causing a fire, shall be guilty of an offence if such fire occurs and any of the following applies: ( a ) that fire is likely to cause hurt or injury to any other person; ( b ) that fire endangers human life; ( c ) that fire causes damage to or diminishes the value or utility of any property belonging to any other person or the Government; ( d ) that fire causes hurt or injury to any other person; ( e ) that fire causes grievous hurt to any other person; ( f ) that fire causes death to any other person. [15/2019] (2) Any person who is guilty of an offence under subsection (1) shall on conviction be punished —";
-        fire_causing_thing := "Fire or any thing that is likely to cause fire.";
-    }
-
-    elements {
-        all_of {
-            circumstance fireRiskAct := "The person causes or substantially contributes to the risk of causing a fire with fire or a thing likely to cause fire.";
-            mens_rea rashOrNegligent := "The conduct is done rashly or negligently.";
-            circumstance fireOccurs := "A fire occurs.";
-            circumstance fireOutcome := "The fire has one of the listed harmful consequences.";
+statute 285 "Causing or contributing to risk of dangerous fire" effective 1872-01-01 effective 2019-12-31 {
+    subsection (1) {
+        elements {
+            /// Subsection (1) requires the specified fire-related conduct, rashness or negligence, occurrence of fire, and one statutory harm or risk outcome.
+            all_of {
+                circumstance fire_or_fire_likely_thing := "With any fire or any thing that is likely to cause fire";
+                any_of {
+                    mens_rea rashly := "Rashly";
+                    mens_rea negligently := "Negligently";
+                }
+                actus_reus causes_fire_risk := "Causes or substantially contributes to the risk of causing a fire";
+                circumstance fire_occurs := "Such fire occurs" caused_by causes_fire_risk;
+                any_of {
+                    circumstance likely_hurt_or_injury := "That fire is likely to cause hurt or injury to any other person";
+                    circumstance endangers_human_life := "That fire endangers human life";
+                    circumstance property_damage_or_diminution := "That fire causes damage to or diminishes the value or utility of any property belonging to any other person or the Government";
+                    circumstance causes_hurt_or_injury := "That fire causes hurt or injury to any other person";
+                    circumstance causes_grievous_hurt := "That fire causes grievous hurt to any other person";
+                    circumstance causes_death := "That fire causes death to any other person";
+                }
+            }
         }
     }
 
-    penalty {
-        supplementary := "Punishment applies on conviction under subsection (2); detailed punishment range is not present in the canonical raw text.";
+    subsection (2) {
+        /// This subsection sets punishment by reference to the outcome limb in subsection (1).
+        penalty or_both when likely_hurt_or_injury {
+            imprisonment := 0 days .. 1 year;
+            fine := $0.00 .. $5,000.00;
+        }
+
+        penalty or_both when endangers_human_life {
+            imprisonment := 0 days .. 1 year;
+            fine := $0.00 .. $5,000.00;
+        }
+
+        penalty or_both when property_damage_or_diminution {
+            imprisonment := 0 days .. 18 months;
+            fine := unlimited;
+        }
+
+        penalty or_both when causes_hurt_or_injury {
+            imprisonment := 0 days .. 3 years;
+            fine := unlimited;
+        }
+
+        penalty or_both when causes_grievous_hurt {
+            imprisonment := 0 days .. 6 years;
+            fine := unlimited;
+        }
+
+        penalty or_both when causes_death {
+            imprisonment := 0 days .. 7 years;
+            fine := unlimited;
+        }
     }
 }

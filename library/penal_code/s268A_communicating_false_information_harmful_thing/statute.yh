@@ -1,45 +1,18 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr268A-#pr268A-
-// Singapore Penal Code Section 268A - Communicating false information of harmful thing
-// Yuho v5 Syntax
-
-struct S268ACase {
-    string accused,
-    bool transmitsInformation,
-    bool referencesHarmfulThing,
-    bool knowsReferenceFalse,
-}
-fn s268A_applies(bool transmitsInformation, bool referencesHarmfulThing, bool knowsReferenceFalse) : bool {
-    match {
-        case TRUE if transmitsInformation == FALSE := consequence FALSE;
-        case TRUE if referencesHarmfulThing == FALSE := consequence FALSE;
-        case TRUE if knowsReferenceFalse == FALSE := consequence FALSE;
-        case _ := consequence TRUE;
-    }
-}
 /// @amendment [15/2019]
-statute 268A "Communicating false information of harmful thing" effective 1872-01-01 {
-    definitions {
-        harmful_thing := "Any thing likely to cause hurt or damage to property by any means";
-        false_reference := "A reference the person knows to be false or fabricated";
-    }
-
+statute 268A "Communicating false information of harmful thing" effective 1872-01-01 effective 2019-12-31 {
     elements {
         all_of {
-            actus_reus communicates := "Transmits or communicates, or causes to be transmitted or communicated, information";
-            circumstance harmful_reference := "The information contains a reference to the presence in any place, location, conveyance or means of transportation of any thing likely to cause hurt or damage to property";
-            mens_rea knowledge := "Knows that such reference is false or fabricated";
+            actus_reus transmit_or_communicate := "Transmits or communicates or causes to be transmitted or communicated information";
+            circumstance false_reference_to_harmful_thing := "The information contains a reference to the presence in any place or location or in any conveyance or means of transportation of any thing that is likely to cause hurt or damage to property by any means";
+            mens_rea knowledge_of_falsity := "Knows that such reference is false or fabricated";
         }
     }
 
-    penalty {
-        imprisonment := 0 years .. 7 years;
+    penalty or_both {
+        imprisonment := 0 days .. 7 years;
         fine := $0.00 .. $50,000.00;
     }
-
-    illustration example1 {
-        "A phones a school falsely reporting a bomb on the premises, knowing the claim is fabricated. A commits an offence under s268A."
-    }
-
 }

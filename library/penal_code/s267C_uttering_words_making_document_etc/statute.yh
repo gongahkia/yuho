@@ -1,54 +1,52 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr267C-#pr267C-
-// Singapore Penal Code Section 267C - Uttering words, making document, etc., containing incitement to violence, etc.
-// Yuho v5 Syntax
-
-struct S267CCase {
-    string accused,
-    bool utteredOrDistributedContent,
-    bool contentContainsIncitement,
-    bool intendsOrKnowsLikelyResult,
-}
-fn s267C_applies(bool utteredOrDistributedContent, bool contentContainsIncitement, bool intendsOrKnowsLikelyResult) : bool {
-    match {
-        case TRUE if utteredOrDistributedContent == FALSE := consequence FALSE;
-        case TRUE if contentContainsIncitement == FALSE := consequence FALSE;
-        case TRUE if intendsOrKnowsLikelyResult == FALSE := consequence FALSE;
-        case _ := consequence TRUE;
-    }
-}
 /// @amendment [Act 30 of 2021 wef 02/11/2022]
-statute 267C "Uttering words, making document, etc., containing incitement to violence, etc." effective 1872-01-01 {
-    definitions {
-        incitement := "Encouragement or advocacy of violence, disobedience to the law, or to a lawful order of a public servant, or likely to lead to a breach of the peace";
-        counselling_disobedience := "Providing instruction, advice or information promoting disobedience to the law or to a lawful order of a public servant";
-        electronic_record := "An electronic record as defined under s29B";
-    }
 
-    elements {
-        all_of {
-            any_of {
-                actus_reus utters := "Utters any words, or makes any sign or visible representation";
-                actus_reus places_object := "Places before a person any object";
-                actus_reus distributes_document := "Posts, publishes, distributes, sells or offers for sale any document";
-                actus_reus communicates_record := "Communicates any electronic record";
-            }
-            circumstance incitement_content := "The words, sign, object, document or electronic record contains incitement to violence, counselling disobedience to the law or to a lawful order, or is likely to lead to a breach of the peace";
-            any_of {
-                mens_rea intent := "Intending for violence, disobedience or breach of the peace to occur";
-                mens_rea knowledge := "Knowing or having reason to believe that violence, disobedience or breach of the peace is likely to occur as a result";
+statute 267C "Uttering words, making document, etc., containing incitement to violence, etc." effective 1872-01-01 effective 2022-11-02 {
+    subsection (1) {
+        elements {
+            all_of {
+                any_of {
+                    actus_reus utter_words := "Utters any words, or makes any sign or visible representation";
+                    actus_reus place_object := "Places before a person any object";
+                    actus_reus deal_in_document := "Posts, publishes, distributes, sells or offers for sale any document";
+                    actus_reus communicate_electronic_record := "Communicates any electronic record";
+                }
+                circumstance prohibited_content := "Containing any incitement to violence, counselling disobedience to the law or to a lawful order of a public servant, or likely to lead to any breach of the peace";
+                any_of {
+                    mens_rea intent_for_occurrence := "Intending for violence, disobedience to the law or such lawful order, or breach of the peace to occur";
+                    mens_rea knowledge_or_reason_to_believe := "Knowing or having reason to believe that violence, disobedience to the law or such lawful order, or breach of the peace, is likely to occur as a result";
+                }
             }
         }
     }
 
-    penalty {
-        imprisonment := 0 years .. 5 years;
-        fine := $0.00 .. $50,000.00;
+    subsection (2) {
+        elements {
+            all_of {
+                any_of {
+                    actus_reus preparatory_document_conduct := "Makes, prints or otherwise reproduces, imports, possesses or has under the person’s control any document mentioned in subsection (1), for the purpose of posting, publishing, distributing, selling or offering for sale that document";
+                    actus_reus make_electronic_record := "Makes any electronic record mentioned in subsection (1) for the purpose of communicating that electronic record";
+                }
+                any_of {
+                    mens_rea intent_for_occurrence := "Intending for violence, disobedience to the law or such lawful order, or breach of the peace to occur by the carrying out of the purpose mentioned in paragraph (a) or (b), as the case may be";
+                    mens_rea knowledge_or_reason_to_believe := "Knowing or having reason to believe that violence, disobedience to the law or such lawful order, or breach of the peace, is likely to occur by the carrying out of that purpose";
+                }
+            }
+        }
     }
 
-    illustration example1 {
-        "A distributes pamphlets urging readers to violently attack police officers, knowing violence is likely to occur. A commits an offence under s267C."
+    subsection (3) {
+        penalty or_both {
+            imprisonment := 0 years .. 5 years;
+            fine := unlimited;
+        }
     }
 
+    subsection (4) {
+        definitions {
+            counselling_disobedience_to_the_law_or_to_a_lawful_order_of_a_public_servant := "In subsection (1), “counselling disobedience to the law or to a lawful order of a public servant” includes (but is not limited to) providing instruction, advice or information that promotes disobedience to the law or such order. [Act 30 of 2021 wef 02/11/2022]";
+        }
+    }
 }

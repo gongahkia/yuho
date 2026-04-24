@@ -1,50 +1,32 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr268C-#pr268C-
-// Singapore Penal Code Section 268C - Placing or sending thing causing fear of harm
-// Yuho v5 Syntax
-
-struct S268CCase {
-    string accused,
-    bool placesOrSendsThing,
-    bool intentionalAndWithoutReasonableExcuse,
-    bool knowsRealRiskOfBelief,
-}
-fn s268C_applies(bool placesOrSendsThing, bool intentionalAndWithoutReasonableExcuse, bool knowsRealRiskOfBelief) : bool {
-    match {
-        case TRUE if placesOrSendsThing == FALSE := consequence FALSE;
-        case TRUE if intentionalAndWithoutReasonableExcuse == FALSE := consequence FALSE;
-        case TRUE if knowsRealRiskOfBelief == FALSE := consequence FALSE;
-        case _ := consequence TRUE;
-    }
-}
 /// @amendment [15/2019]
-statute 268C "Placing or sending thing causing fear of harm" effective 1872-01-01 {
-    definitions {
-        real_risk := "A real, not merely theoretical, risk that one or more persons would believe the thing likely to cause hurt or damage";
-        reasonable_excuse := "A lawful justification for placing or sending the thing";
-    }
 
-    elements {
-        all_of {
-            any_of {
-                actus_reus places := "Places any thing in any place, location, conveyance or means of transportation";
-                actus_reus sends := "Sends any thing from one place to another by post, courier or any other means";
+statute 268C "Placing or sending thing causing fear of harm" effective 1872-01-01 effective 2019-12-31 {
+    subsection (1) {
+        elements {
+            /// Subsection (1)(a) and (b) state alternative ways of committing the same offence.
+            all_of {
+                mens_rea intentional_conduct := "Any person who intentionally";
+                circumstance without_reasonable_excuse := "Without reasonable excuse";
+                any_of {
+                    actus_reus placing_thing := "Places any thing in any place or location or in any conveyance or means of transportation";
+                    actus_reus sending_thing := "Sends any thing from one place to another place by post, courier or any other means";
+                }
+                mens_rea knowledge_of_real_risk := "Knowing that there is a real risk (in either case) that one or more persons would believe that this thing is likely to cause hurt or damage to property by any means";
             }
-            circumstance no_excuse := "Without reasonable excuse";
-            mens_rea intent := "Intentionally";
-            mens_rea knowledge_risk := "Knowing there is a real risk that one or more persons would believe this thing is likely to cause hurt or damage to property";
+        }
+
+        penalty or_both {
+            imprisonment := 0 days .. 6 months;
+            fine := $0.00 .. $5,000.00;
         }
     }
 
-    penalty {
-        imprisonment := 0 years .. 1 year;
-        fine := $0.00 .. $5,000.00;
+    subsection (2) {
+        definitions {
+            no_particular_person_required := "To avoid doubt, it is not necessary for the accused person to have any particular person or persons in mind as being at risk of having the belief mentioned in subsection (1). [15/2019]";
+        }
     }
-
-    illustration example1 {
-        "A deliberately leaves a wrapped package in a crowded mall knowing shoppers are likely to believe it is dangerous. A commits an offence under s268C."
-    }
-
-    // sub-(2): it is not necessary for the accused to have any particular person in mind as being at risk of having the belief
 }

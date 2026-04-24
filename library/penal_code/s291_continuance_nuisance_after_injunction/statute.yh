@@ -1,38 +1,22 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr291-#pr291-
-// Singapore Penal Code Section 291 - Continuance of nuisance after injunction to discontinue
-// Yuho v5 Syntax
-
-struct S291Case {
-    bool publicNuisance,
-    bool lawfulInjunction,
-    bool repeatOrContinue,
-}
-
-fn applies_s291(bool publicNuisance, bool lawfulInjunction, bool repeatOrContinue) : bool {
-    match {
-        case TRUE if publicNuisance && lawfulInjunction && repeatOrContinue := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
 
 statute 291 "Continuance of nuisance after injunction to discontinue" effective 1872-01-01 {
     definitions {
-        provision_text := "Whoever repeats or continues a public nuisance, having been enjoined by any public servant who has lawful authority to issue such injunction not to repeat or continue such nuisance, shall be punished with imprisonment for a term which may extend to 6 months, or with fine, or with both.";
-        injunction := "An injunction issued by a public servant with lawful authority not to repeat or continue the nuisance.";
+        public_nuisance := "A public nuisance";
+        injunction := "An injunction issued by a public servant who has lawful authority to issue such injunction not to repeat or continue such nuisance";
     }
 
     elements {
         all_of {
-            circumstance publicNuisance := "The person commits a public nuisance.";
-            actus_reus lawfulInjunction := "A public servant with lawful authority has enjoined the person not to repeat or continue the nuisance.";
-            actus_reus repeatOrContinue := "The person repeats or continues the public nuisance.";
+            actus_reus repeats_or_continues := "Repeats or continues a public nuisance";
+            circumstance prior_injunction := "Having been enjoined by a public servant who has lawful authority to issue such injunction not to repeat or continue such nuisance";
         }
     }
 
-    penalty {
+    penalty or_both {
         imprisonment := 0 months .. 6 months;
-        supplementary := "Fine may also be imposed, or both imprisonment and fine.";
+        fine := unlimited;
     }
 }

@@ -1,36 +1,11 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr267B-#pr267B-
-// Singapore Penal Code Section 267B - Punishment for committing affray
-// Yuho v5 Syntax
 
-struct S267BCase {
-    string accused,
-    bool committedAffray,
-}
-fn s267B_applies(bool committedAffray) : bool {
-    match {
-        case TRUE if committedAffray == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
 statute 267B "Punishment for committing affray" effective 1872-01-01 {
-    definitions {
-        affray := "As defined under section 267A";
-    }
-
-    elements {
-        circumstance committed_affray := "Commits an affray as defined in s267A";
-    }
-
-    penalty {
-        imprisonment := 0 years .. 1 year;
+    /// Punishment for committing an affray; see section 267A for the underlying offence.
+    penalty or_both {
+        imprisonment := 0 days .. 1 year;
         fine := $0.00 .. $5,000.00;
     }
-
-    illustration example1 {
-        "A and B fight in a crowded street disturbing the public peace. Both commit affray and are punishable under s267B."
-    }
-
-    // cross-reference: offence defined in s267A
 }

@@ -2,18 +2,18 @@
 section_number = "267A"
 title = "Affray"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Defines 'commit an affray' as two or more persons disturbing the public peace by fighting in a public place."
+summary = "Defines affray as 2 or more persons disturbing the public peace by fighting in a public place."
 source = "Singapore Penal Code 1871, Section 267A"
 
 [verification]
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr267A-#pr267A-"
-disclaimer = "Educational purposes only. Cross-reference with official SSO text."

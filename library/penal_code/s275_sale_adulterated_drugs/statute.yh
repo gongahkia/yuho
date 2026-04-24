@@ -1,45 +1,30 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr275-#pr275-
-// Singapore Penal Code Section 275 - Sale of adulterated drugs
-// Yuho v5 Syntax
-
-struct SaleAdulteratedDrugCase { string accused, bool knewAdulterated, bool soldOrIssued, }
-
-fn is_offence(bool knew, bool sold) : bool {
-    match {
-        case TRUE if knew == FALSE := consequence FALSE;
-        case TRUE if sold == FALSE := consequence FALSE;
-        case _ := consequence TRUE;
-    }
-}
-
 /// @amendment [15/2019]
-statute 275 "Sale of adulterated drugs" effective 1872-01-01 {
-    definitions {
-        dispensary := "A place at which medicines are dispensed";
-        adulterated_drug := "A drug or medical preparation altered to lessen efficacy, change operation, or render it noxious";
-    }
 
+statute 275 "Sale of adulterated drugs" effective 1872-01-01 effective 2020-01-01 {
     elements {
+        /// The offence requires knowledge of adulteration of the drug or medical preparation in one of the specified ways, plus one of four alternative forms of dealing with it.
         all_of {
-            /// fault -- knowledge of adulteration
-            mens_rea knowledge := "Knowing the drug has been adulterated";
+            actus_reus subject_matter := "Any drug or medical preparation";
+            mens_rea knowledge_of_adulteration := "Knowing the drug or medical preparation to have been adulterated";
             any_of {
-                /// alternative conduct -- sale
-                actus_reus sell := "Selling the adulterated drug";
-                /// alternative conduct -- offering for sale
-                actus_reus offer := "Offering or exposing the drug for sale";
-                /// alternative conduct -- issuing from dispensary
-                actus_reus issue := "Issuing the drug from a dispensary for medicinal purposes as unadulterated";
-                /// alternative conduct -- causing use by another
-                actus_reus cause_use := "Causing the drug to be used for medicinal purposes by any person not knowing of the adulteration";
+                circumstance adulteration_lowers_efficacy := "The adulteration is in such a manner as to lessen its efficacy";
+                circumstance adulteration_changes_operation := "The adulteration is in such a manner as to change its operation";
+                circumstance adulteration_renders_noxious := "The adulteration is in such a manner as to render it noxious";
+            }
+            any_of {
+                actus_reus sells_same := "Sells the same";
+                actus_reus offers_or_exposes_for_sale := "Offers or exposes it for sale";
+                actus_reus issues_from_dispensary := "Issues it from any dispensary for medicinal purposes as unadulterated";
+                actus_reus causes_use := "Causes it to be used for medicinal purposes by any person not knowing of the adulteration";
             }
         }
     }
 
-    penalty {
+    penalty or_both {
         imprisonment := 0 days .. 3 years;
-        fine := $0.00 .. $10,000.00;
+        fine := unlimited;
     }
 }

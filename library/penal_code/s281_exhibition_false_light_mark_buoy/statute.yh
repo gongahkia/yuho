@@ -1,45 +1,20 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr281-#pr281-
-// Singapore Penal Code Section 281 - Exhibition of a false light, mark or buoy
-
-struct FalseLightCase {
-    string accused,
-    bool exhibited,
-    bool intendedMislead,
-    bool knewLikelyMislead,
-}
-
-fn is_false_light_offence(bool exhibited, bool intendedMislead, bool knewLikelyMislead) : bool {
-    match {
-        case TRUE if exhibited == FALSE := consequence FALSE;
-        case TRUE if intendedMislead == TRUE := consequence TRUE;
-        case TRUE if knewLikelyMislead == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
 
 statute 281 "Exhibition of a false light, mark or buoy" effective 1872-01-01 {
-    definitions {
-        false_light := "A light, mark or buoy that is not genuine and is capable of misleading a navigator";
-        navigator := "Any person engaged in navigation of a vessel or aircraft";
-    }
-
     elements {
         all_of {
-            /// physical act: exhibiting the false light, mark or buoy
-            actus_reus exhibition := "Exhibits any false light, mark or buoy";
+            actus_reus exhibition := "Whoever exhibits any false light, mark or buoy";
             any_of {
-                /// either intent to mislead a navigator
-                mens_rea intent := "Intending that the exhibition will mislead any navigator";
-                /// or knowledge of likelihood of misleading
+                mens_rea intention := "Intending that such exhibition will mislead any navigator";
                 mens_rea knowledge := "Knowing it to be likely that such exhibition will mislead any navigator";
             }
         }
     }
 
-    penalty {
+    penalty or_both {
         imprisonment := 0 days .. 7 years;
-        fine := $0.00 .. $10,000.00;
+        fine := unlimited;
     }
 }

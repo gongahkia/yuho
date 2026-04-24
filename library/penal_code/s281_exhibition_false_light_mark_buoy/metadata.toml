@@ -2,13 +2,14 @@
 section_number = "281"
 title = "Exhibition of a false light, mark or buoy"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
 summary = "Criminalises exhibiting a false light, mark or buoy with intent or knowledge that it is likely to mislead any navigator."

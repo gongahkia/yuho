@@ -2,16 +2,17 @@
 section_number = "273"
 title = "Sale of noxious food or drink"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Criminalises selling, offering or exposing for sale any food or drink that has become noxious or unfit, knowing or having reason to believe it noxious."
+summary = "Criminalises selling, offering, or exposing for sale any food or drink article that is noxious or unfit, knowing or having reason to believe it is noxious as food or drink."
 source = "Singapore Penal Code 1871, Section 273"
 
 [verification]

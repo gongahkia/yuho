@@ -2,16 +2,17 @@
 section_number = "291"
 title = "Continuance of nuisance after injunction to discontinue"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Encodes Singapore Penal Code section 291, Continuance of nuisance after injunction to discontinue, as a offence provision."
+summary = "Creates an offence where a person repeats or continues a public nuisance after a lawful injunction to stop it."
 source = "Singapore Penal Code 1871, Section 291"
 
 [verification]

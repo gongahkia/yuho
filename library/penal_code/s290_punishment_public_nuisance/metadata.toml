@@ -2,16 +2,17 @@
 section_number = "290"
 title = "Punishment for public nuisance"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Encodes Singapore Penal Code section 290, Punishment for public nuisance, as a punishment provision."
+summary = "Section 290 makes it an offence to commit a public nuisance not otherwise punishable by the Penal Code and prescribes a base fine with enhanced punishment for knowing harm-risk cases and repeat convictions."
 source = "Singapore Penal Code 1871, Section 290"
 
 [verification]

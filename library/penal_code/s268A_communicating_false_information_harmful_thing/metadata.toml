@@ -2,18 +2,18 @@
 section_number = "268A"
 title = "Communicating false information of harmful thing"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Transmitting or communicating false or fabricated information about a thing likely to cause hurt or damage to property in any place or conveyance."
+summary = "Criminalises transmitting or communicating information that falsely refers to a harmful thing being present in a place, location, conveyance, or means of transportation."
 source = "Singapore Penal Code 1871, Section 268A"
 
 [verification]
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr268A-#pr268A-"
-disclaimer = "Educational purposes only. Cross-reference with official SSO text."

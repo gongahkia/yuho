@@ -2,16 +2,17 @@
 section_number = "274"
 title = "Adulteration of drugs"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Criminalises adulterating drugs to lessen efficacy, change operation, or make them noxious, intending or knowing they will be sold for medicinal purposes."
+summary = "Criminalises adulterating any drug or medical preparation so that it is less efficacious, operates differently, or becomes noxious, where it is intended or likely to be sold or used for medicinal purposes as unadulterated."
 source = "Singapore Penal Code 1871, Section 274"
 
 [verification]

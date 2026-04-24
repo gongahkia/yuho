@@ -2,16 +2,17 @@
 section_number = "294"
 title = "Obscene acts"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Encodes Singapore Penal Code section 294, Obscene acts, as a offence provision."
+summary = "Section 294 criminalises obscene acts in a public place, and obscene words in or near a public place, when done to the annoyance of others."
 source = "Singapore Penal Code 1871, Section 294"
 
 [verification]

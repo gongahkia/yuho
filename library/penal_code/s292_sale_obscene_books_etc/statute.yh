@@ -2,45 +2,59 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr292-#pr292-
 /// @amendment [15/2019]
-// Singapore Penal Code Section 292 - Sale of obscene books, etc.
-// Yuho v5 Syntax
 
-struct S292Case {
-    bool obsceneObject,
-    bool prohibitedDealing,
-    bool notAuthorisedByWrittenLaw,
-    bool notReligiousException,
-}
+statute 292 "Sale of obscene books, etc." effective 1872-01-01 effective 2020-01-01 {
+    subsection (1) {
+        elements {
+            /// Subsection (1) creates one offence with five alternative forms of dealing in obscene objects.
+            all_of {
+                circumstance obscene_object := "Any book, pamphlet, paper, drawing, painting, representation, figure, or other object concerned is an obscene object.";
+                circumstance not_authorised_by_written_law := "The object is not deemed not to be obscene by subsection (3).";
+                any_of {
+                    actus_reus paragraph_a := "Sells, lets to hire, distributes, transmits by electronic means, publicly exhibits or in any manner puts into circulation, or for purposes of sale, hire, distribution, transmission, public exhibition or circulation, makes, produces, or has in his possession any obscene object whatsoever.";
+                    actus_reus paragraph_b := "Imports, exports, transmits by electronic means or conveys any obscene object for any of the purposes aforesaid, or knowing or having reason to believe that such object will be sold, let to hire, distributed or publicly exhibited, or in any manner put into circulation.";
+                    actus_reus paragraph_c := "Takes part in, or receives profits from, any business in the course of which he knows or has reason to believe that any such obscene objects are, for any of the purposes aforesaid, made, produced, transmitted by electronic means, purchased, kept, imported, exported, conveyed, publicly exhibited, or in any manner put into circulation.";
+                    actus_reus paragraph_d := "Advertises, or makes known by any means whatsoever, that any person is engaged or is ready to engage in any act which is an offence under this section, or that any such obscene object can be procured from or through any person.";
+                    actus_reus paragraph_e := "Offers or attempts to do any act which is an offence under this section.";
+                }
+            }
+        }
 
-fn applies_s292(bool obsceneObject, bool prohibitedDealing, bool notAuthorisedByWrittenLaw, bool notReligiousException) : bool {
-    match {
-        case TRUE if obsceneObject && prohibitedDealing && notAuthorisedByWrittenLaw && notReligiousException := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
-statute 292 "Sale of obscene books, etc." effective 1872-01-01 {
-    definitions {
-        provision_text := "—(1) Whoever — ( a ) sells, lets to hire, distributes, transmits by electronic means, publicly exhibits or in any manner puts into circulation, or for purposes of sale, hire, distribution, transmission, public exhibition or circulation, makes, produces, or has in his possession any obscene book, pamphlet, paper, drawing, painting, representation or figure, or any other obscene object whatsoever; ( b ) imports, exports, transmits by electronic means or conveys any obscene object for any of the purposes aforesaid, or knowing or having reason to believe that such object will be sold, let to hire, distributed or publicly exhibited, or in any manner put into circulation; ( c ) takes part in, or receives profits from, any business in the course of which he knows or has reason to believe that any such obscene objects are, for any of the purposes aforesaid, made, produced, transmitted by electronic means, purchased, kept, imported, exported, conveyed, publicly exhibited, or in any manner put into circulation; ( d ) advertises, or makes known by any means whatsoever, that any person is engaged or is ready to engage in any act which is an offence under this section, or that any such obscene object can be procured from or through any person; or ( e ) offers or attempts to do any act which is an offence under this section, shall be punished with imprisonment for a term which may extend to 3 months, or with fine, or with both. (1A) A person who is guilty of an offence under subsection (1) in the case where the obscene object mentioned in that subsection depicts an image of a person who is or who appears to a reasonable observer to be or is implied to be below 16 years of age shall be punished with imprisonment for a term which may extend to 2 years, or with fine, or with both. [15/2019] (2) For the purposes of this section, “object” includes data stored in a computer disc, or by other electronic means, that is capable of conversion to images, writing or any other form of representation. (3) For the purposes of this section and section 293, an object shall be deemed not to be obscene if the sale, letting to hire, distribution, exhibition, circulation, import, export or conveyance of, or any other dealing in, the object is authorised by or under any written law.";
-        object := "Object includes data stored in a computer disc, or by other electronic means, capable of conversion to images, writing or representation.";
-    }
-
-    elements {
-        all_of {
-            actus_reus obsceneObject := "The object is an obscene book, pamphlet, paper, drawing, painting, representation, figure, or other obscene object.";
-            actus_reus prohibitedDealing := "The person performs one of the prohibited dealings, business participation, advertisement, offer, or attempt.";
-            circumstance notAuthorisedByWrittenLaw := "The dealing is not authorised by or under written law.";
-            circumstance notReligiousException := "The religious-purpose exception does not apply.";
+        penalty or_both {
+            imprisonment := 0 months .. 3 months;
+            fine := unlimited;
         }
     }
 
-    penalty {
-        imprisonment := 0 months .. 2 years;
-        supplementary := "Base punishment may extend to 3 months; enhanced punishment may extend to 2 years where the obscene object depicts a person below 16 years of age, or apparently or impliedly so. Fine may also be imposed.";
+    subsection (1A) {
+        elements {
+            /// Subsection (1A) enhances punishment where the subsection (1) obscene object depicts a person below 16 years of age.
+            all_of {
+                circumstance offence_under_subsection_1 := "A person is guilty of an offence under subsection (1).";
+                circumstance child_depiction := "The obscene object mentioned in subsection (1) depicts an image of a person who is or who appears to a reasonable observer to be or is implied to be below 16 years of age.";
+            }
+        }
+
+        penalty or_both {
+            imprisonment := 0 months .. 2 years;
+            fine := unlimited;
+        }
     }
 
-    exception statutoryException {
+    subsection (2) {
+        definitions {
+            object := "For the purposes of this section, “object” includes data stored in a computer disc, or by other electronic means, that is capable of conversion to images, writing or any other form of representation.";
+        }
+    }
+
+    subsection (3) {
+        definitions {
+            deemed_not_obscene := "For the purposes of this section and section 293, an object shall be deemed not to be obscene if the sale, letting to hire, distribution, exhibition, circulation, import, export or conveyance of, or any other dealing in, the object is authorised by or under any written law.";
+        }
+    }
+
+    exception religious_purposes {
         "Exception. — This section does not extend to any book, pamphlet, writing, drawing or painting kept or used bona fide for religious purposes, or any representation sculptured, engraved, painted or otherwise represented on or in any temple, or on any car used for the conveyance of idols, or kept or used for any religious purpose."
-        "This section does not extend to the excepted material or use."
+        "This section does not extend to the religious materials or representations described in the exception."
     }
 }

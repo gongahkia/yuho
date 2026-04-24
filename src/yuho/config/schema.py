@@ -4,52 +4,6 @@ Configuration schema definitions.
 
 from dataclasses import dataclass, field
 from typing import Optional, List, Dict, Any
-from pathlib import Path
-
-
-@dataclass
-class LLMSection:
-    """[llm] configuration section."""
-
-    provider: str = "ollama"
-    model: str = "llama3"
-    ollama_host: str = "localhost"
-    ollama_port: int = 11434
-    huggingface_cache: Optional[str] = None
-    openai_api_key: Optional[str] = None
-    anthropic_api_key: Optional[str] = None
-    gemini_api_key: Optional[str] = None
-    plex_api_key: Optional[str] = None
-    keymeet_api_key: Optional[str] = None
-    max_tokens: int = 2048
-    temperature: float = 0.7
-    fallback_providers: List[str] = field(default_factory=lambda: ["huggingface"])
-
-    def to_llm_config(self):
-        """Convert to LLMConfig."""
-        from yuho.llm import LLMConfig
-
-        api_key_map = {
-            "openai": self.openai_api_key,
-            "anthropic": self.anthropic_api_key,
-            "gemini": self.gemini_api_key,
-            "plex": self.plex_api_key,
-            "keymeet": self.keymeet_api_key,
-        }
-        api_key = api_key_map.get(self.provider) or next(
-            (v for v in api_key_map.values() if v), None
-        )
-        return LLMConfig(
-            provider=self.provider,
-            model_name=self.model,
-            ollama_host=self.ollama_host,
-            ollama_port=self.ollama_port,
-            huggingface_cache=self.huggingface_cache,
-            api_key=api_key,
-            max_tokens=self.max_tokens,
-            temperature=self.temperature,
-            fallback_providers=self.fallback_providers,
-        )
 
 
 @dataclass
@@ -74,19 +28,6 @@ class LSPSection:
 
 
 @dataclass
-class APISection:
-    """[api] configuration section."""
-
-    host: str = "127.0.0.1"
-    port: int = 8080
-    auth_token: Optional[str] = None
-    cors_origins: List[str] = field(default_factory=lambda: ["*"])
-    rate_limit_rps: float = 10.0
-    rate_limit_burst: int = 20
-    rate_limit_enabled: bool = True
-
-
-@dataclass
 class MCPSection:
     """[mcp] configuration section."""
 
@@ -108,103 +49,42 @@ class LibrarySection:
 
 
 @dataclass
-class WebhookSection:
-    """[webhooks] configuration section."""
-
-    enabled: bool = False
-    endpoints: List[Dict[str, Any]] = field(default_factory=list)
-
-
-@dataclass
-class WorkspaceSection:
-    """[workspace] configuration section."""
-
-    enabled: bool = False
-    default_workspace: str = "default"
-    data_dir: Optional[str] = None
-
-
-@dataclass
 class ConfigSchema:
     """Complete configuration schema."""
 
-    llm: LLMSection = field(default_factory=LLMSection)
     transpile: TranspileSection = field(default_factory=TranspileSection)
     lsp: LSPSection = field(default_factory=LSPSection)
-    api: APISection = field(default_factory=APISection)
     mcp: MCPSection = field(default_factory=MCPSection)
     library: LibrarySection = field(default_factory=LibrarySection)
-    webhooks: WebhookSection = field(default_factory=WebhookSection)
-    workspace: WorkspaceSection = field(default_factory=WorkspaceSection)
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "ConfigSchema":
         """Create config from dictionary."""
-        llm_data = data.get("llm", {})
         transpile_data = data.get("transpile", {})
         lsp_data = data.get("lsp", {})
-        api_data = data.get("api", {})
         mcp_data = data.get("mcp", {})
         library_data = data.get("library", {})
-        webhooks_data = data.get("webhooks", {})
-        workspace_data = data.get("workspace", {})
 
         return cls(
-            llm=LLMSection(
-                **{k: v for k, v in llm_data.items() if k in LLMSection.__dataclass_fields__}
-            ),
             transpile=TranspileSection(
-                **{
-                    k: v
-                    for k, v in transpile_data.items()
-                    if k in TranspileSection.__dataclass_fields__
-                }
+                **{k: v for k, v in transpile_data.items()
+                   if k in TranspileSection.__dataclass_fields__}
             ),
             lsp=LSPSection(
                 **{k: v for k, v in lsp_data.items() if k in LSPSection.__dataclass_fields__}
-            ),
-            api=APISection(
-                **{k: v for k, v in api_data.items() if k in APISection.__dataclass_fields__}
             ),
             mcp=MCPSection(
                 **{k: v for k, v in mcp_data.items() if k in MCPSection.__dataclass_fields__}
             ),
             library=LibrarySection(
-                **{
-                    k: v
-                    for k, v in library_data.items()
-                    if k in LibrarySection.__dataclass_fields__
-                }
-            ),
-            webhooks=WebhookSection(
-                **{
-                    k: v
-                    for k, v in webhooks_data.items()
-                    if k in WebhookSection.__dataclass_fields__
-                }
-            ),
-            workspace=WorkspaceSection(
-                **{
-                    k: v
-                    for k, v in workspace_data.items()
-                    if k in WorkspaceSection.__dataclass_fields__
-                }
+                **{k: v for k, v in library_data.items()
+                   if k in LibrarySection.__dataclass_fields__}
             ),
         )
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary."""
         return {
-            "llm": {
-                "provider": self.llm.provider,
-                "model": self.llm.model,
-                "ollama_host": self.llm.ollama_host,
-                "ollama_port": self.llm.ollama_port,
-                "huggingface_cache": self.llm.huggingface_cache,
-                "max_tokens": self.llm.max_tokens,
-                "temperature": self.llm.temperature,
-                "fallback_providers": self.llm.fallback_providers,
-            },
             "transpile": {
                 "default_target": self.transpile.default_target,
                 "latex_compiler": self.transpile.latex_compiler,
@@ -218,14 +98,6 @@ class ConfigSchema:
                 "diagnostic_severity_hint": self.lsp.diagnostic_severity_hint,
                 "completion_trigger_chars": self.lsp.completion_trigger_chars,
             },
-            "api": {
-                "host": self.api.host,
-                "port": self.api.port,
-                "cors_origins": self.api.cors_origins,
-                "rate_limit_rps": self.api.rate_limit_rps,
-                "rate_limit_burst": self.api.rate_limit_burst,
-                "rate_limit_enabled": self.api.rate_limit_enabled,
-            },
             "mcp": {
                 "host": self.mcp.host,
                 "port": self.mcp.port,
@@ -236,12 +108,5 @@ class ConfigSchema:
                 "registry_api_version": self.library.registry_api_version,
                 "timeout": self.library.timeout,
                 "verify_ssl": self.library.verify_ssl,
-            },
-            "webhooks": {
-                "enabled": self.webhooks.enabled,
-            },
-            "workspace": {
-                "enabled": self.workspace.enabled,
-                "default_workspace": self.workspace.default_workspace,
             },
         }

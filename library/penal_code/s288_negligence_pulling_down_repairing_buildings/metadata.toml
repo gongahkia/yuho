@@ -2,16 +2,17 @@
 section_number = "288"
 title = "Negligence in pulling down or repairing buildings"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Encodes Singapore Penal Code section 288, Negligence in pulling down or repairing buildings, as a offence provision."
+summary = "Creates an offence for knowingly or negligently failing to take sufficient safety measures when pulling down or repairing a building, where the omission endangers life or causes death."
 source = "Singapore Penal Code 1871, Section 288"
 
 [verification]

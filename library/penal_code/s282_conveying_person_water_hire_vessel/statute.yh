@@ -1,44 +1,21 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr282-#pr282-
-// Singapore Penal Code Section 282 - Conveying person by water for hire in a vessel overloaded or unsafe
-// Yuho v5 Syntax
-
-struct ConveyHireCase { string accused, bool conveyed, bool forHire, bool vesselUnsafe, bool knowingOrNegligent, }
-
-fn is_offence(bool conveyed, bool forHire, bool unsafe, bool mens) : bool {
-    match {
-        case TRUE if conveyed == FALSE := consequence FALSE;
-        case TRUE if forHire == FALSE := consequence FALSE;
-        case TRUE if unsafe == FALSE := consequence FALSE;
-        case TRUE if mens == FALSE := consequence FALSE;
-        case _ := consequence TRUE;
-    }
-}
 
 statute 282 "Conveying person by water for hire in a vessel overloaded or unsafe" effective 1872-01-01 {
-    definitions {
-        for_hire := "In exchange for remuneration";
-    }
-
     elements {
         all_of {
-            /// physical act -- conveyance
-            actus_reus convey := "Conveying, or causing to be conveyed, a person by water in a vessel";
-            /// circumstance -- for hire
-            circumstance for_hire := "The conveyance is for hire";
-            /// circumstance -- vessel dangerous
-            circumstance unsafe_vessel := "Vessel is in such a state or so loaded as to endanger the life of the person conveyed";
+            /// The section covers actual conveyance and causing the conveyance.
+            actus_reus conveyance := "Conveys, or causes to be conveyed, for hire any person by water in any vessel";
             any_of {
-                /// knowingly
-                mens_rea knowing := "Knowingly conveying";
-                /// negligently
-                mens_rea negligent := "Negligently conveying";
+                mens_rea knowingly := "Knowingly";
+                mens_rea negligently := "Negligently";
             }
+            circumstance unsafe_vessel := "That vessel is in such a state or so loaded as to endanger the life of that person";
         }
     }
 
-    penalty {
+    penalty or_both {
         imprisonment := 0 days .. 1 year;
         fine := $0.00 .. $3,000.00;
     }

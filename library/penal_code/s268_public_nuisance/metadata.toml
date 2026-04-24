@@ -2,18 +2,18 @@
 section_number = "268"
 title = "Public nuisance"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Defines 'public nuisance' as any act or illegal omission causing common injury, danger or annoyance to the public or persons in the vicinity, or obstructing public rights."
+summary = "Defines public nuisance as an act or illegal omission that causes common public injury, danger, annoyance, obstruction, or related harm."
 source = "Singapore Penal Code 1871, Section 268"
 
 [verification]
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr268-#pr268-"
-disclaimer = "Educational purposes only. Cross-reference with official SSO text."

@@ -1,14 +1,24 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr268-#pr268-
-// Singapore Penal Code Section 268 - Public nuisance
-// Yuho v5 Syntax
 
 statute 268 "Public nuisance" effective 1872-01-01 {
     definitions {
-        public_nuisance := "Any act or illegal omission causing common injury, danger or annoyance to the public or to persons dwelling or occupying property in the vicinity, or which must necessarily cause injury, obstruction, danger or annoyance to persons having occasion to use any public right";
-        common_injury := "Injury affecting the public generally or a class of persons";
-        public_right := "A right the public may exercise, such as the right to use public highways";
+        explanation_common_nuisance_not_excused := "Explanation. — A common nuisance is not excused on the ground that it causes some convenience or advantage."
     }
-    /// Explanation: a common nuisance is not excused on the ground that it causes some convenience or advantage.
+
+    elements {
+        all_of {
+            any_of {
+                actus_reus act := "A person does any act";
+                actus_reus illegal_omission := "A person is guilty of an illegal omission";
+            }
+
+            any_of {
+                actus_reus common_injury_danger_or_annoyance := "Which causes any common injury, danger or annoyance to the public";
+                actus_reus injury_danger_or_annoyance_in_vicinity := "Which causes any common injury, danger or annoyance to the people in general who dwell or occupy property in the vicinity";
+                actus_reus injury_obstruction_danger_or_annoyance_to_users_of_public_right := "Which must necessarily cause injury, obstruction, danger or annoyance to persons who may have occasion to use any public right";
+            }
+        }
+    }
 }

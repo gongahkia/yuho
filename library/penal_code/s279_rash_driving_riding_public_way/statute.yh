@@ -1,46 +1,24 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr279-#pr279-
-// Singapore Penal Code Section 279 - Rash driving or riding on a public way
-// Yuho v5 Syntax
-
-struct RashDrivingCase { string accused, bool droveOrRode, bool onPublicWay, bool rashOrNegligent, bool endangersLifeOrLikelyHurt, }
-
-fn is_offence(bool drove, bool publicWay, bool rash, bool endanger) : bool {
-    match {
-        case TRUE if drove == FALSE := consequence FALSE;
-        case TRUE if publicWay == FALSE := consequence FALSE;
-        case TRUE if rash == FALSE := consequence FALSE;
-        case TRUE if endanger == FALSE := consequence FALSE;
-        case _ := consequence TRUE;
-    }
-}
 
 statute 279 "Rash driving or riding on a public way" effective 1872-01-01 {
-    definitions {
-        public_way := "A road, street or passage ordinarily open to members of the public";
-        rashly := "With knowledge of risk but without care to prevent it";
-        negligently := "Without reasonable care";
-    }
-
     elements {
+        /// Section 279 requires driving or riding on a public way, done in a rash or negligent manner, with the requisite endangerment or likelihood of harm.
         all_of {
-            /// physical act -- driving or riding
-            actus_reus drive := "Driving a vehicle or riding on a public way";
-            /// circumstance -- public way
-            circumstance public_way := "The conduct occurs on a public way";
             any_of {
-                /// rashness
-                mens_rea rash := "Acting rashly";
-                /// negligence
-                mens_rea negligent := "Acting negligently";
+                actus_reus drives_vehicle := "Drives any vehicle";
+                actus_reus rides := "Rides";
             }
-            /// result element
-            circumstance endanger := "Manner endangers human life or is likely to cause hurt or injury to any other person";
+            circumstance public_way := "On any public way";
+            any_of {
+                mens_rea rash_manner := "In a manner so rash as to endanger human life, or to be likely to cause hurt or injury to any other person";
+                mens_rea negligent_manner := "In a manner so negligent as to endanger human life, or to be likely to cause hurt or injury to any other person";
+            }
         }
     }
 
-    penalty {
+    penalty or_both {
         imprisonment := 0 days .. 1 year;
         fine := $0.00 .. $5,000.00;
     }

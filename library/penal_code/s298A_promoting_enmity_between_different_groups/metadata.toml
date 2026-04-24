@@ -2,16 +2,17 @@
 section_number = "298A"
 title = "Promoting enmity between different groups on grounds of race and doing acts prejudicial to maintenance of harmony"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Encodes Singapore Penal Code section 298A, Promoting enmity between different groups on grounds of race and doing acts prejudicial to maintenance of harmony, as a offence provision."
+summary = "Creates an offence for knowingly promoting racial disharmony or committing acts prejudicial to racial harmony that disturb public tranquility."
 source = "Singapore Penal Code 1871, Section 298A"
 
 [verification]

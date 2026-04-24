@@ -2,37 +2,32 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr290-#pr290-
 /// @amendment [15/2019]
-// Singapore Penal Code Section 290 - Punishment for public nuisance
-// Yuho v5 Syntax
 
-struct S290Case {
-    bool publicNuisance,
-    bool notOtherwisePunishable,
-}
-
-fn applies_s290(bool publicNuisance, bool notOtherwisePunishable) : bool {
-    match {
-        case TRUE if publicNuisance && notOtherwisePunishable := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
-statute 290 "Punishment for public nuisance" effective 1872-01-01 {
-    definitions {
-        provision_text := "Whoever commits a public nuisance in any case not otherwise punishable by this Code, shall be guilty of an offence and shall be punished — ( a ) with fine which may extend to $2,000; ( b ) in the case where the offender knew that the act or omission constituting the public nuisance will cause or will probably cause any common injury, danger or annoyance to the public, or to the people in general who dwell or occupy property in the vicinity, with imprisonment for a term which may extend to 3 months, or with fine which may extend to $2,000, or with both; or ( c ) on a second or subsequent conviction, with imprisonment for a term which may extend to 3 months, or with fine which may extend to $2,000, or with both. [15/2019]";
-        public_nuisance := "Public nuisance in any case not otherwise punishable by this Code.";
-    }
-
+statute 290 "Punishment for public nuisance" effective 1872-01-01 effective 2019-12-31 {
+    /// Section 290 punishes the commission of public nuisance where the nuisance is not otherwise punishable by this Code.
     elements {
         all_of {
-            circumstance publicNuisance := "The person commits a public nuisance.";
-            circumstance notOtherwisePunishable := "The public nuisance is not otherwise punishable by the Penal Code.";
+            actus_reus commits_public_nuisance := "Whoever commits a public nuisance";
+            circumstance not_otherwise_punishable := "The case is not otherwise punishable by this Code";
+            any_of {
+                circumstance baseline_case := "The case is one not falling within paragraph (b) or paragraph (c).";
+                mens_rea knows_probable_common_injury := "The offender knew that the act or omission constituting the public nuisance will cause or will probably cause any common injury, danger or annoyance to the public, or to the people in general who dwell or occupy property in the vicinity.";
+                circumstance second_or_subsequent_conviction := "It is a second or subsequent conviction.";
+            }
         }
     }
 
-    penalty {
-        imprisonment := 0 months .. 3 months;
+    penalty when baseline_case {
         fine := $0.00 .. $2,000.00;
-        supplementary := "Enhanced punishment applies where knowledge of probable common injury, danger or annoyance is proved, or on a second or subsequent conviction.";
+    }
+
+    penalty or_both when knows_probable_common_injury {
+        imprisonment := 0 days .. 3 months;
+        fine := $0.00 .. $2,000.00;
+    }
+
+    penalty or_both when second_or_subsequent_conviction {
+        imprisonment := 0 days .. 3 months;
+        fine := $0.00 .. $2,000.00;
     }
 }

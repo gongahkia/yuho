@@ -2,37 +2,33 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr288-#pr288-
 /// @amendment [15/2019]
-// Singapore Penal Code Section 288 - Negligence in pulling down or repairing buildings
-// Yuho v5 Syntax
 
-struct S288Case {
-    bool pullingDownOrRepairing,
-    bool knowingOrNegligentOmission,
-    bool buildingDangerOutcome,
-}
-
-fn applies_s288(bool pullingDownOrRepairing, bool knowingOrNegligentOmission, bool buildingDangerOutcome) : bool {
-    match {
-        case TRUE if pullingDownOrRepairing && knowingOrNegligentOmission && buildingDangerOutcome := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
-statute 288 "Negligence in pulling down or repairing buildings" effective 1872-01-01 {
-    definitions {
-        provision_text := "—(1) A person shall be guilty of an offence who, in pulling down or repairing any building, knowingly or negligently omits to take such measure as is sufficient to guard against any probable danger to human life from the fall of that building or any part of the building and such omission — ( a ) endangers human life; or ( b ) causes the death of any other person. [15/2019] (2) Any person who is guilty of an offence under subsection (1) shall on conviction be punished —";
-        building_fall_danger := "Probable danger to human life from the fall of that building or any part of the building.";
-    }
-
-    elements {
-        all_of {
-            actus_reus pullingDownOrRepairing := "The person is pulling down or repairing a building.";
-            mens_rea knowingOrNegligentOmission := "The person knowingly or negligently omits sufficient guarding measures.";
-            circumstance buildingDangerOutcome := "The omission endangers human life or causes death.";
+statute 288 "Negligence in pulling down or repairing buildings" effective 1872-01-01 effective 2019-12-31 {
+    subsection (1) {
+        elements {
+            /// Subsection (1) requires the demolition or repair context, the knowing or negligent omission, the insufficiency of the safety measure, and one of the two outcome limbs.
+            all_of {
+                actus_reus pulling_down_or_repairing := "The person is pulling down or repairing any building.";
+                mens_rea knowing_or_negligent_omission := "The person knowingly or negligently omits to take such measure as is sufficient to guard against any probable danger to human life from the fall of that building or any part of the building.";
+                any_of {
+                    circumstance endangers_human_life := "The omission endangers human life.";
+                    circumstance causes_death := "The omission causes the death of any other person.";
+                }
+            }
         }
     }
 
-    penalty {
-        supplementary := "Punishment applies on conviction under subsection (2); detailed punishment range is not present in the canonical raw text.";
+    subsection (2) {
+        /// Paragraph (a): in the case of an offence under subsection (1)(a).
+        penalty or_both when endangers_human_life {
+            imprisonment := 0 years .. 1 year;
+            fine := $0.00 .. $5,000.00;
+        }
+
+        /// Paragraph (b): in the case of an offence under subsection (1)(b).
+        penalty or_both when causes_death {
+            imprisonment := 0 years .. 7 years;
+            fine := unlimited;
+        }
     }
 }

@@ -2,16 +2,17 @@
 section_number = "286"
 title = "Presumption of cause of fire"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Encodes Singapore Penal Code section 286, Presumption of cause of fire, as a other provision."
+summary = "Creates a rebuttable presumption in section 285 proceedings where a listed fire-causing item is deposited and a nearby fire occurs within 60 minutes."
 source = "Singapore Penal Code 1871, Section 286"
 
 [verification]

@@ -2,16 +2,17 @@
 section_number = "292"
 title = "Sale of obscene books, etc."
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Encodes Singapore Penal Code section 292, Sale of obscene books, etc., as a offence provision."
+summary = "Section 292 criminalises five alternative forms of dealing in obscene objects, with an enhanced punishment where the obscene object depicts a person below 16 years of age."
 source = "Singapore Penal Code 1871, Section 292"
 
 [verification]

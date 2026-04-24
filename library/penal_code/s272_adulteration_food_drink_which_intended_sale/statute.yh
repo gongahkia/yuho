@@ -1,49 +1,21 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr272-#pr272-
-// Singapore Penal Code Section 272 - Adulteration of food or drink which is intended for sale
-// Yuho v5 Syntax
-
-struct AdulterationFoodCase {
-    string accused,
-    bool adulterated,
-    bool madeNoxious,
-    bool intendedOrKnownToBeSold,
-}
-
-fn is_offence(bool adulterated, bool noxious, bool intentOrKnowledge) : bool {
-    match {
-        case TRUE if adulterated == FALSE := consequence FALSE;
-        case TRUE if noxious == FALSE := consequence FALSE;
-        case TRUE if intentOrKnowledge == FALSE := consequence FALSE;
-        case _ := consequence TRUE;
-    }
-}
-
 /// @amendment [15/2019]
-statute 272 "Adulteration of food or drink which is intended for sale" effective 1872-01-01 {
-    definitions {
-        adulterate := "To add an impure substance to food or drink";
-        noxious := "Harmful or injurious to health";
-    }
-
+statute 272 "Adulteration of food or drink which is intended for sale" effective 1872-01-01 effective 2019-12-31 {
     elements {
         all_of {
-            /// physical act of adulteration
-            actus_reus adulterate_act := "Adulterating an article of food or drink";
-            /// result -- the article is rendered noxious
-            circumstance noxious_result := "Article is rendered noxious as food or drink";
+            actus_reus adulteration := "Whoever adulterates any article of food or drink";
+            circumstance noxious_result := "So as to make such article noxious as food or drink";
             any_of {
-                /// alternative fault -- intent to sell
-                mens_rea intent_sell := "Intending to sell the adulterated article as food or drink";
-                /// alternative fault -- knowledge it is likely to be sold
-                mens_rea knowledge_sell := "Knowing it to be likely that the article will be sold as food or drink";
+                mens_rea intent_to_sell := "Intending to sell such article as food or drink";
+                mens_rea knowledge_likely_sale := "Knowing it to be likely that the same will be sold as food or drink";
             }
         }
     }
 
-    penalty {
+    penalty or_both {
         imprisonment := 0 days .. 3 years;
-        fine := $0.00 .. $10,000.00;
+        fine := unlimited;
     }
 }

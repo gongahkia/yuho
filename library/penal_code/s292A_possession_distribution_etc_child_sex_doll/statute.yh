@@ -2,36 +2,38 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr292A-#pr292A-
 /// @amendment [15/2019]
-// Singapore Penal Code Section 292A - Possession, distribution, etc., of child sex-doll
-// Yuho v5 Syntax
 
-struct S292ACase {
-    bool childSexDoll,
-    bool prohibitedDealing,
-}
+statute 292A "Possession, distribution, etc., of child sex-doll" effective 1872-01-01 effective 2019-12-31 {
+    subsection (1) {
+        elements {
+            /// Subsection (1) requires the item to be a child sex-doll and any one prohibited dealing with that item.
+            all_of {
+                circumstance child_sex_doll := "The item is a child sex-doll.";
+                /// The listed dealings are alternative physical acts joined by "or".
+                any_of {
+                    actus_reus import_child_sex_doll := "Imports a child sex-doll.";
+                    actus_reus export_child_sex_doll := "Exports a child sex-doll.";
+                    actus_reus convey_child_sex_doll := "Conveys a child sex-doll.";
+                    actus_reus sell_child_sex_doll := "Sells a child sex-doll.";
+                    actus_reus let_to_hire_child_sex_doll := "Lets to hire a child sex-doll.";
+                    actus_reus distribute_child_sex_doll := "Distributes a child sex-doll.";
+                    actus_reus put_into_circulation_child_sex_doll := "Puts into circulation a child sex-doll.";
+                    actus_reus make_child_sex_doll := "Makes a child sex-doll.";
+                    actus_reus produce_child_sex_doll := "Produces a child sex-doll.";
+                    actus_reus possess_child_sex_doll := "Is in possession of a child sex-doll.";
+                }
+            }
+        }
 
-fn applies_s292a(bool childSexDoll, bool prohibitedDealing) : bool {
-    match {
-        case TRUE if childSexDoll && prohibitedDealing := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
-statute 292A "Possession, distribution, etc., of child sex-doll" effective 1872-01-01 {
-    definitions {
-        provision_text := "—(1) Any person who imports, exports, conveys, sells, lets to hire, distributes, puts into circulation, makes, produces or is in possession of a child sex-doll shall be guilty of an offence and shall on conviction be punished with imprisonment for a term which may extend to 2 years, or with fine, or with both. [15/2019] (2) In subsection (1), “child sex-doll” means an anatomically correct doll, mannequin or robot, with the features of, or with features that appear to a reasonable observer to resemble a person below 16 years of age and intended for use in sexual activities. [15/2019]";
-        child_sex_doll := "An anatomically correct doll, mannequin or robot, with features of or apparently resembling a person below 16 years of age and intended for use in sexual activities.";
-    }
-
-    elements {
-        all_of {
-            circumstance childSexDoll := "The item is a child sex-doll.";
-            actus_reus prohibitedDealing := "The person performs one of the prohibited dealings, business participation, advertisement, offer, or attempt.";
+        penalty or_both {
+            imprisonment := 0 years .. 2 years;
+            fine := unlimited;
         }
     }
 
-    penalty {
-        imprisonment := 0 years .. 2 years;
-        supplementary := "Fine may also be imposed, or both imprisonment and fine.";
+    subsection (2) {
+        definitions {
+            child_sex_doll := "In subsection (1), “child sex-doll” means an anatomically correct doll, mannequin or robot, with the features of, or with features that appear to a reasonable observer to resemble a person below 16 years of age and intended for use in sexual activities. [15/2019]";
+        }
     }
 }

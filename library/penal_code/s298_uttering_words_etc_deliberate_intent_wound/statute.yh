@@ -2,38 +2,24 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr298-#pr298-
 /// @amendment [Act 31 of 2019 wef 01/11/2022]
-// Singapore Penal Code Section 298 - Uttering words, etc., with deliberate intent to wound the racial feelings of any person
-// Yuho v5 Syntax
 
-struct S298Case {
-    bool expressiveActSeenOrHeard,
-    bool racialFeelingsTargeted,
-    bool deliberateIntent,
-}
-
-fn applies_s298(bool expressiveActSeenOrHeard, bool racialFeelingsTargeted, bool deliberateIntent) : bool {
-    match {
-        case TRUE if expressiveActSeenOrHeard && racialFeelingsTargeted && deliberateIntent := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
-statute 298 "Uttering words, etc., with deliberate intent to wound the racial feelings of any person" effective 1872-01-01 {
-    definitions {
-        provision_text := "Whoever, with deliberate intention of wounding the racial feelings of any person, utters any word or makes any sound in the hearing of that person, or makes any gesture in the sight of that person, or places any object in the sight of that person, or causes any matter however represented to be seen or heard by that person, shall be punished with imprisonment for a term which may extend to 3 years, or with fine, or with both. [Act 31 of 2019 wef 01/11/2022]";
-        racial_feelings := "The racial feelings of any person.";
-    }
-
+statute 298 "Uttering words, etc., with deliberate intent to wound the racial feelings of any person" effective 1872-01-01 effective 2022-11-01 {
     elements {
         all_of {
-            actus_reus expressiveActSeenOrHeard := "The person utters words, makes sounds or gestures, places an object, or causes matter to be seen or heard by the target person.";
-            actus_reus racialFeelingsTargeted := "The target is the racial feelings of any person.";
-            mens_rea deliberateIntent := "The person acts with deliberate intention of wounding those racial feelings.";
+            mens_rea deliberate_intention := "With deliberate intention of wounding the racial feelings of any person";
+            /// The prohibited conduct is disjunctive: any one expressive act listed in the section is sufficient.
+            any_of {
+                actus_reus utter_words := "Utters any word in the hearing of that person";
+                actus_reus make_sound := "Makes any sound in the hearing of that person";
+                actus_reus make_gesture := "Makes any gesture in the sight of that person";
+                actus_reus place_object := "Places any object in the sight of that person";
+                actus_reus cause_matter_seen_or_heard := "Causes any matter however represented to be seen or heard by that person";
+            }
         }
     }
 
-    penalty {
-        imprisonment := 0 years .. 3 years;
-        supplementary := "Fine may also be imposed, or both imprisonment and fine.";
+    penalty or_both {
+        imprisonment := 0 days .. 3 years;
+        fine := unlimited;
     }
 }

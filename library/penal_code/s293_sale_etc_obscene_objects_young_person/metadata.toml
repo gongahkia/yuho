@@ -2,16 +2,17 @@
 section_number = "293"
 title = "Sale, etc., of obscene objects to young person"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Encodes Singapore Penal Code section 293, Sale, etc., of obscene objects to young person, as a offence provision."
+summary = "Creates an offence for selling, hiring out, distributing, exhibiting, circulating, offering, or attempting to provide a section 292 obscene object to a person below 21 years of age."
 source = "Singapore Penal Code 1871, Section 293"
 
 [verification]

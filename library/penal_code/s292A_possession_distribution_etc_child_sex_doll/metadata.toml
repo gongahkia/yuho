@@ -2,16 +2,17 @@
 section_number = "292A"
 title = "Possession, distribution, etc., of child sex-doll"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Encodes Singapore Penal Code section 292A, Possession, distribution, etc., of child sex-doll, as a offence provision."
+summary = "Criminalises importing, exporting, conveying, selling, hiring out, distributing, circulating, making, producing, or possessing a child sex-doll."
 source = "Singapore Penal Code 1871, Section 292A"
 
 [verification]

@@ -2,16 +2,17 @@
 section_number = "275"
 title = "Sale of adulterated drugs"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Criminalises selling, offering for sale, or issuing from a dispensary any drug known to have been adulterated."
+summary = "Criminalises knowingly selling, offering, dispensing as unadulterated, or causing medicinal use of an adulterated drug or medical preparation."
 source = "Singapore Penal Code 1871, Section 275"
 
 [verification]

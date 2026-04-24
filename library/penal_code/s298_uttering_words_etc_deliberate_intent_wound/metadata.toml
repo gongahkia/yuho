@@ -2,16 +2,17 @@
 section_number = "298"
 title = "Uttering words, etc., with deliberate intent to wound the racial feelings of any person"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Encodes Singapore Penal Code section 298, Uttering words, etc., with deliberate intent to wound the racial feelings of any person, as a offence provision."
+summary = "Creates an offence for deliberately wounding a person's racial feelings by words, sounds, gestures, objects, or other represented matter seen or heard by that person."
 source = "Singapore Penal Code 1871, Section 298"
 
 [verification]

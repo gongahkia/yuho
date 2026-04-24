@@ -2,16 +2,17 @@
 section_number = "276"
 title = "Sale of any drug as a different drug or preparation"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Criminalises knowingly selling, offering, or issuing any drug or medical preparation as a different drug or preparation."
+summary = "Makes it an offence knowingly to sell, offer, expose, or issue any drug or medical preparation as a different drug or medical preparation."
 source = "Singapore Penal Code 1871, Section 276"
 
 [verification]

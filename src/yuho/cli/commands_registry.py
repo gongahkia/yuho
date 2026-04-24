@@ -351,17 +351,10 @@ def register_group_commands(cli: click.Group) -> None:
         type=click.Choice(
             [
                 "json",
-                "jsonld",
                 "english",
                 "latex",
                 "mermaid",
                 "alloy",
-                "graphql",
-                "blocks",
-                "bibtex",
-                "comparative",
-                "akomantoso",
-                "prolog",
             ]
         ),
         help="Transpilation target",
@@ -445,17 +438,10 @@ def register_group_commands(cli: click.Group) -> None:
         type=click.Choice(
             [
                 "json",
-                "jsonld",
                 "english",
                 "latex",
                 "mermaid",
                 "alloy",
-                "graphql",
-                "blocks",
-                "bibtex",
-                "comparative",
-                "akomantoso",
-                "prolog",
             ]
         ),
         help="Transpilation target",

@@ -2,38 +2,34 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr298A-#pr298A-
 /// @amendment [Act 31 of 2019 wef 01/11/2022]
-// Singapore Penal Code Section 298A - Promoting enmity between different groups on grounds of race and doing acts prejudicial to maintenance of harmony
-// Yuho v5 Syntax
 
-struct S298ACase {
-    bool racialGroupAct,
-    bool knowledge,
-    bool disharmonyOrPublicTranquilityRisk,
-}
-
-fn applies_s298a(bool racialGroupAct, bool knowledge, bool disharmonyOrPublicTranquilityRisk) : bool {
-    match {
-        case TRUE if racialGroupAct && knowledge && disharmonyOrPublicTranquilityRisk := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
-statute 298A "Promoting enmity between different groups on grounds of race and doing acts prejudicial to maintenance of harmony" effective 1872-01-01 {
+statute 298A "Promoting enmity between different groups on grounds of race and doing acts prejudicial to maintenance of harmony" effective 1872-01-01 effective 2022-11-01 {
     definitions {
-        provision_text := "Whoever — ( a ) by words, either spoken or written, or by signs or by visible representations or otherwise, knowingly promotes or attempts to promote, on grounds of race, disharmony or feelings of enmity, hatred or ill will between different racial groups; or [Act 31 of 2019 wef 01/11/2022] ( b ) commits any act which he knows is prejudicial to the maintenance of harmony between different racial groups and which disturbs or is likely to disturb the public tranquility, shall be punished with imprisonment for a term which may extend to 3 years, or with fine, or with both. [Act 31 of 2019 wef 01/11/2022]";
-        racial_groups := "Different racial groups.";
+        grounds_of_race := "Grounds of race";
+        public_tranquility := "The public tranquility";
     }
 
     elements {
-        all_of {
-            circumstance racialGroupAct := "The person uses words, signs, visible representations or other means, or commits an act affecting racial group harmony.";
-            mens_rea knowledge := "The person acts knowingly.";
-            circumstance disharmonyOrPublicTranquilityRisk := "The conduct promotes or attempts to promote racial disharmony or is prejudicial to racial harmony and disturbs or is likely to disturb public tranquility.";
+        /// The offence is committed by either limb (a) or limb (b).
+        any_of {
+            /// Limb (a): promoting or attempting to promote racial disharmony or enmity.
+            all_of {
+                actus_reus promote_or_attempt_promote := "By words, either spoken or written, or by signs or by visible representations or otherwise, promotes or attempts to promote";
+                mens_rea knowingly_promotes := "Knowingly";
+                circumstance racial_disharmony := "On grounds of race, disharmony or feelings of enmity, hatred or ill will between different racial groups";
+            }
+
+            /// Limb (b) was inserted by [Act 31 of 2019 wef 01/11/2022].
+            all_of {
+                actus_reus commits_act := "Commits any act";
+                mens_rea knows_prejudicial := "Knows the act is prejudicial to the maintenance of harmony between different racial groups";
+                circumstance disturbance_to_public_tranquility := "The act disturbs or is likely to disturb the public tranquility";
+            }
         }
     }
 
-    penalty {
-        imprisonment := 0 years .. 3 years;
-        supplementary := "Fine may also be imposed, or both imprisonment and fine.";
+    penalty or_both {
+        imprisonment := 0 days .. 3 years;
+        fine := unlimited;
     }
 }

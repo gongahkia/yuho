@@ -79,8 +79,7 @@ def validate_config_value(section: str, key: str, value: str) -> Any:
 
     # Enum validations
     enum_fields = {
-        ("llm", "provider"): ["ollama", "huggingface", "openai", "anthropic"],
-        ("transpile", "default_target"): ["json", "jsonld", "english", "mermaid", "alloy", "latex"],
+        ("transpile", "default_target"): ["json", "english", "mermaid", "alloy", "latex"],
         ("transpile", "latex_compiler"): ["pdflatex", "xelatex", "lualatex"],
     }
 

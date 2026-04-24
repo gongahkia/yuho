@@ -2,16 +2,17 @@
 section_number = "280"
 title = "Rash navigation of a vessel"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Criminalises navigating any vessel in a rash or negligent manner so as to endanger human life or likely to cause hurt or injury."
+summary = "Criminalises navigating a vessel rashly or negligently in a way that endangers human life or is likely to cause hurt or injury to another person."
 source = "Singapore Penal Code 1871, Section 280"
 
 [verification]

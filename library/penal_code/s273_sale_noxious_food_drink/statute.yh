@@ -1,44 +1,25 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr273-#pr273-
-// Singapore Penal Code Section 273 - Sale of noxious food or drink
-// Yuho v5 Syntax
-
-struct NoxiousFoodCase {
-    string accused,
-    bool soldOrExposed,
-    bool articleNoxious,
-    bool knowledgeOrReasonToBelieve,
-}
-
-fn is_offence(bool sold, bool noxious, bool knowledge) : bool {
-    match {
-        case TRUE if sold == FALSE := consequence FALSE;
-        case TRUE if noxious == FALSE := consequence FALSE;
-        case TRUE if knowledge == FALSE := consequence FALSE;
-        case _ := consequence TRUE;
-    }
-}
-
 /// @amendment [15/2019]
-statute 273 "Sale of noxious food or drink" effective 1872-01-01 {
-    definitions {
-        noxious := "Rendered harmful or in a state unfit for food or drink";
-    }
-
+statute 273 "Sale of noxious food or drink" effective 1872-01-01 effective 2019-12-31 {
     elements {
+        /// Section 273 requires sale-side conduct, a noxious or unfit article sold as food or drink, and knowledge or reason to believe the article is noxious as food or drink.
         all_of {
-            /// selling or exposing for sale
-            actus_reus sell := "Selling, offering or exposing for sale as food or drink";
-            /// the article has become noxious or unfit
-            circumstance noxious := "Article has become noxious or is in a state unfit for food or drink";
-            /// fault element -- knowledge or reason to believe
-            mens_rea knowledge := "Knowing or having reason to believe the article is noxious";
+            actus_reus sale_conduct := "Sells, or offers or exposes for sale, as food or drink, any article";
+            any_of {
+                circumstance article_noxious := "The article has been rendered or has become noxious as food or drink";
+                circumstance article_unfit := "The article is in a state unfit for food or drink";
+            }
+            any_of {
+                mens_rea knowing_noxious := "Knowing that the same is noxious as food or drink";
+                mens_rea reason_to_believe_noxious := "Having reason to believe that the same is noxious as food or drink";
+            }
         }
     }
 
-    penalty {
+    penalty or_both {
         imprisonment := 0 days .. 3 years;
-        fine := $0.00 .. $10,000.00;
+        fine := unlimited;
     }
 }

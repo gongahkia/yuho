@@ -2,18 +2,18 @@
 section_number = "259"
 title = "Having possession of a counterfeit Government stamp"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Possessing a counterfeit of a Government revenue stamp with intent to use or dispose of it as genuine."
+summary = "Possessing a counterfeit Government revenue stamp with knowledge of its counterfeit nature and intent that it be used or disposed of as genuine is an offence punishable by up to 7 years' imprisonment, or fine, or both."
 source = "Singapore Penal Code 1871, Section 259"
 
 [verification]
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr259-#pr259-"
-disclaimer = "Educational purposes only. Cross-reference with official SSO text."

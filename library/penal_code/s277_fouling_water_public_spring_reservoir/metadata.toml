@@ -2,16 +2,17 @@
 section_number = "277"
 title = "Fouling the water of a public spring or reservoir"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Criminalises voluntarily corrupting or fouling the water of any public spring or reservoir so as to render it less fit for its ordinary use."
+summary = "Criminalises voluntarily corrupting or fouling the water of a public spring or reservoir so that it becomes less fit for its ordinary use."
 source = "Singapore Penal Code 1871, Section 277"
 
 [verification]

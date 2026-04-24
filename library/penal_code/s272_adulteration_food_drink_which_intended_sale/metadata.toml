@@ -2,16 +2,17 @@
 section_number = "272"
 title = "Adulteration of food or drink which is intended for sale"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Criminalises adulterating any article of food or drink to make it noxious, with intent or knowledge that it will be sold as food or drink."
+summary = "Criminalises adulterating food or drink so that it becomes noxious where it is intended or known to be likely to be sold as food or drink."
 source = "Singapore Penal Code 1871, Section 272"
 
 [verification]

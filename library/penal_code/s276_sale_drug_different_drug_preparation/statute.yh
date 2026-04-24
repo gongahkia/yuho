@@ -1,39 +1,19 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr276-#pr276-
-// Singapore Penal Code Section 276 - Sale of any drug as a different drug or preparation
-// Yuho v5 Syntax
-
-struct SaleDifferentDrugCase { string accused, bool soldOrOffered, bool asDifferentDrug, bool knowingly, }
-
-fn is_offence(bool sold, bool asDifferent, bool knowingly) : bool {
-    match {
-        case TRUE if sold == FALSE := consequence FALSE;
-        case TRUE if asDifferent == FALSE := consequence FALSE;
-        case TRUE if knowingly == FALSE := consequence FALSE;
-        case _ := consequence TRUE;
-    }
-}
-
 /// @amendment [15/2019]
-statute 276 "Sale of any drug as a different drug or preparation" effective 1872-01-01 {
-    definitions {
-        knowingly := "With actual knowledge of the misrepresentation";
-    }
 
+statute 276 "Sale of any drug as a different drug or preparation" effective 1872-01-01 effective 2019-12-31 {
     elements {
         all_of {
-            /// conduct -- sale or offer
-            actus_reus sell := "Selling, offering or exposing for sale, or issuing from a dispensary for medicinal purposes any drug or medical preparation";
-            /// the drug is represented as a different drug
-            circumstance different := "The drug is represented as a different drug or medical preparation";
-            /// fault element
-            mens_rea knowledge := "Acting knowingly";
+            actus_reus sells_offers_exposes_or_issues := "Sells, or offers or exposes for sale, or issues from a dispensary for medicinal purposes, any drug or medical preparation";
+            mens_rea knowingly := "Knowingly";
+            circumstance as_different_drug_or_preparation := "As a different drug or medical preparation";
         }
     }
 
-    penalty {
+    penalty or_both {
         imprisonment := 0 days .. 3 years;
-        fine := $0.00 .. $10,000.00;
+        fine := unlimited;
     }
 }
