@@ -1,30 +1,21 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr439-#pr439-
-// Singapore Penal Code Section 439 - Punishment for intentionally running vessel aground or ashore with intent to commit theft, etc.
 
 statute 439 "Punishment for intentionally running vessel aground or ashore with intent to commit theft, etc." effective 1872-01-01 {
-    definitions {
-        run_aground := "Intentionally causing a vessel to run aground or ashore";
-    }
-
     elements {
         all_of {
-            /// actus reus -- running vessel aground
-            actus_reus run_aground_act := "Intentionally runs a vessel aground or ashore";
+            actus_reus runs_vessel_aground_or_ashore := "Whoever intentionally runs any vessel aground or ashore";
             any_of {
-                /// intent to commit theft of property on board
-                mens_rea intent_theft := "Intends to commit theft of property contained in the vessel";
-                /// intent to dishonestly misappropriate
-                mens_rea intent_misappropriate := "Intends to dishonestly misappropriate property contained in the vessel";
-                /// intent that theft/misappropriation be committed
-                mens_rea intent_facilitate := "Intends that such theft or misappropriation be committed";
+                mens_rea intent_to_commit_theft := "Intending to commit theft of any property contained therein";
+                mens_rea intent_to_dishonestly_misappropriate := "To dishonestly misappropriate any such property";
+                mens_rea intent_that_theft_or_misappropriation_may_be_committed := "With intent that such theft or misappropriation of property may be committed";
             }
         }
     }
 
-    penalty {
+    penalty cumulative {
         imprisonment := 0 days .. 10 years;
-        fine := $0.00 .. $30,000.00;
+        fine := unlimited;
     }
 }

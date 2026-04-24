@@ -2,16 +2,17 @@
 section_number = "449"
 title = "House-breaking in order to commit an offence punishable with death"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "House-breaking committed in order to commit an offence punishable with death."
+summary = "This section punishes house-breaking committed for the purpose of committing an offence punishable with death."
 source = "Singapore Penal Code 1871, Section 449"
 
 [verification]

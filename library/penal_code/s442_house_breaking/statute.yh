@@ -1,38 +1,31 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr442-#pr442-
-// Singapore Penal Code Section 442 - House-breaking
-
 /// @amendment [15/2019]
 
 referencing penal_code/s441_criminal_trespass
 
 statute 442 "House-breaking" effective 1872-01-01 {
     definitions {
-        house_breaking := "Criminal trespass into a building used as a dwelling or as a place of worship or custody of property";
-        criminal_trespass := "As defined in section 441";
+        house_breaking := "Whoever commits criminal trespass by entering into, or remaining in, any building, tent, container or vessel used as a human dwelling, or any building used as a place for worship or as a place for the custody of property, is said to commit “house‑breaking”.";
+        explanation_entering := "Explanation. —The introduction of any part of the criminal trespasser’s body is entering sufficient to constitute house-breaking.";
     }
 
     elements {
+        /// Section 442 applies only where the underlying offence is criminal trespass and the trespass is by entering into, or remaining in, one of the specified premises.
         all_of {
-            /// base offence -- criminal trespass under s441
-            actus_reus base_trespass := "Commits criminal trespass under section 441";
+            actus_reus base_criminal_trespass := "Commits criminal trespass";
+
             any_of {
-                /// by entering
-                actus_reus enter := "Enters into a qualifying building, tent, container, or vessel";
-                /// or by remaining
-                actus_reus remain := "Remains in a qualifying building, tent, container, or vessel";
+                actus_reus entering := "By entering into";
+                actus_reus remaining := "By remaining in";
             }
+
             any_of {
-                /// target -- human dwelling
-                circumstance dwelling := "Target is a building, tent, container, or vessel used as a human dwelling";
-                /// target -- place of worship
-                circumstance worship := "Target is a building used as a place for worship";
-                /// target -- custody of property
-                circumstance custody := "Target is a building used as a place for the custody of property";
+                circumstance human_dwelling := "Any building, tent, container or vessel used as a human dwelling";
+                circumstance place_of_worship := "Any building used as a place for worship";
+                circumstance custody_of_property := "Any building used as a place for the custody of property";
             }
         }
     }
-
-    // Explanation: introduction of any part of the trespassers body suffices as entering
 }

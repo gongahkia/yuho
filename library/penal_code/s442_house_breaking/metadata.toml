@@ -2,16 +2,17 @@
 section_number = "442"
 title = "House-breaking"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Defines house-breaking as criminal trespass involving a human dwelling, place of worship, or place for custody of property."
+summary = "Defines house-breaking as criminal trespass by entering into or remaining in specified premises such as dwellings, places of worship, and places for custody of property."
 source = "Singapore Penal Code 1871, Section 442"
 
 [verification]

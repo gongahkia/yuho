@@ -2,16 +2,17 @@
 section_number = "447"
 title = "Punishment for criminal trespass"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Punishment for the offence of criminal trespass under section 441."
+summary = "Prescribes the punishment for committing criminal trespass under section 441."
 source = "Singapore Penal Code 1871, Section 447"
 
 [verification]

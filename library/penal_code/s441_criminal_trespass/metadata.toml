@@ -2,16 +2,17 @@
 section_number = "441"
 title = "Criminal trespass"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Defines the offence of criminal trespass as unlawful entry or remaining on property with intent to commit an offence or to intimidate, insult or annoy."
+summary = "Defines criminal trespass as entry onto property in another's possession, or unlawful remaining after lawful entry, with intent to commit an offence or to intimidate, insult or annoy."
 source = "Singapore Penal Code 1871, Section 441"
 
 [verification]

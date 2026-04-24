@@ -1,37 +1,19 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr438-#pr438-
-// Singapore Penal Code Section 438 - Punishment for the mischief described in section 437 when committed by fire or any explosive substance
-
 /// @amendment [15/2019]
 
 referencing penal_code/s437_mischief_intent_destroy_make_unsafe_decked
 
-statute 438 "Punishment for the mischief described in section 437 when committed by fire or any explosive substance" effective 1872-01-01 {
-    definitions {
-        section_437_mischief := "Mischief described in section 437";
-        explosive_substance := "Any substance capable of producing a practical effect by explosion";
+statute 438 "Punishment for the mischief described in section 437 when committed by fire or any explosive substance" effective 1872-01-01 effective 2019-12-31 {
+    /// Punishment for the predicate offence in section 437 where the offender commits or attempts to commit that mischief by fire or any explosive substance.
+    penalty alternative {
+        imprisonment := 0 days .. 10 years;
+        supplementary := "Whoever commits or attempts to commit by fire or any explosive substance, such mischief as is described in section 437, shall be punished with imprisonment for life, or with imprisonment for a term which may extend to 10 years. [15/2019]";
     }
 
-    elements {
-        all_of {
-            any_of {
-                /// commission
-                actus_reus commits := "Commits mischief described in section 437";
-                /// attempt
-                actus_reus attempts := "Attempts to commit mischief described in section 437";
-            }
-            any_of {
-                /// by fire
-                circumstance by_fire := "Committed or attempted by fire";
-                /// by explosive
-                circumstance by_explosive := "Committed or attempted by explosive substance";
-            }
-        }
-    }
-
-    penalty {
-        imprisonment := 0 days .. 99 years;
-        fine := $0.00 .. $50,000.00;
+    penalty when non_life_sentence {
+        fine := unlimited;
+        supplementary := "The offender shall, if he is not sentenced to imprisonment for life, also be liable to fine. [15/2019]";
     }
 }

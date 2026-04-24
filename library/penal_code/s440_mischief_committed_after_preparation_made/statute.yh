@@ -1,27 +1,20 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr440-#pr440-
-// Singapore Penal Code Section 440 - Mischief committed after preparation made for causing death or hurt
 
 referencing penal_code/s425_mischief
 
 statute 440 "Mischief committed after preparation made for causing death or hurt" effective 1872-01-01 {
-    definitions {
-        mischief := "As defined in section 425";
-        preparation := "Steps taken in advance to cause death, hurt, wrongful restraint, or fear of any such thing";
-    }
-
     elements {
+        /// Section 440 aggravates mischief where the offender has already made preparation to cause violence, restraint, or fear of it to any person.
         all_of {
-            /// base offence -- mischief under s425
-            actus_reus base_mischief := "Commits mischief under section 425";
-            /// aggravating preparation
-            circumstance prepared := "Has made preparation for causing death, hurt, wrongful restraint, or fear of any of these to another person";
+            actus_reus commits_mischief := "Whoever commits mischief";
+            circumstance aggravated_preparation := "Having made preparation for causing to any person death or hurt or wrongful restraint, or fear of death or of hurt or of wrongful restraint";
         }
     }
 
-    penalty {
+    penalty cumulative {
         imprisonment := 0 days .. 5 years;
-        fine := $0.00 .. $20,000.00;
+        fine := unlimited;
     }
 }

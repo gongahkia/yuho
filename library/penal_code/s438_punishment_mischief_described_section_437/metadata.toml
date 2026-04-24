@@ -2,16 +2,17 @@
 section_number = "438"
 title = "Punishment for the mischief described in section 437 when committed by fire or any explosive substance"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Punishment for section 437 mischief when committed by fire or any explosive substance."
+summary = "Sets the punishment for committing or attempting the section 437 mischief by fire or any explosive substance."
 source = "Singapore Penal Code 1871, Section 438"
 
 [verification]

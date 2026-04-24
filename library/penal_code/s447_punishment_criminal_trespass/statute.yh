@@ -1,22 +1,13 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr447-#pr447-
-// Singapore Penal Code Section 447 - Punishment for criminal trespass
 
 referencing penal_code/s441_criminal_trespass
 
 statute 447 "Punishment for criminal trespass" effective 1872-01-01 {
-    definitions {
-        criminal_trespass := "As defined in section 441";
-    }
-
-    elements {
-        /// conviction for criminal trespass under s441 is required
-        circumstance trespass_committed := "Criminal trespass under section 441 is committed";
-    }
-
-    penalty {
+    /// Punishment for the offence of criminal trespass under section 441.
+    penalty or_both {
         imprisonment := 0 days .. 3 months;
-        fine := $0.00 .. $1,500.00;
+        fine := $1,500.00;
     }
 }

@@ -1,40 +1,32 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr436-#pr436-
-// Singapore Penal Code Section 436 - Mischief by fire or explosive substance with intent to destroy a house, etc.
 
 referencing penal_code/s425_mischief
 
 statute 436 "Mischief by fire or explosive substance with intent to destroy a house, etc." effective 1872-01-01 {
-    definitions {
-        mischief := "As defined in section 425";
-        explosive_substance := "Any substance capable of producing a practical effect by explosion";
-        protected_building := "A building used for worship, administration of justice, public affairs, education, art, public use or ornament, human dwelling, or custody of property";
-    }
-
     elements {
         all_of {
-            /// base offence -- mischief under s425
-            actus_reus base_mischief := "Commits mischief under section 425";
+            actus_reus commits_mischief := "Commits mischief";
             any_of {
-                /// mode -- by fire
-                circumstance by_fire := "Mischief committed by fire";
-                /// mode -- by explosive
-                circumstance by_explosive := "Mischief committed by an explosive substance";
+                circumstance by_fire := "The mischief is committed by fire";
+                circumstance by_explosive_substance := "The mischief is committed by any explosive substance";
             }
-            /// target is a protected building
-            circumstance target_building := "Target is a building used for worship, justice, public affairs, education, art, public use, ornament, human dwelling, or custody of property";
+            circumstance protected_building := "The destruction is of a building which is ordinarily used as a place for worship, or for the administration of justice, or for the transaction of public affairs, or for education, or art, or for public use or ornament, or as a human dwelling, or as a place for the custody of property";
             any_of {
-                /// intent to destroy that building
-                mens_rea intent_destroy := "Intends to cause destruction of the building";
-                /// knowledge destruction is likely
-                mens_rea know_destroy := "Knows it to be likely that the destruction will be caused";
+                mens_rea intending_to_cause_destruction := "Intending to cause the destruction of that building";
+                mens_rea knowing_destruction_likely := "Knowing it to be likely that he will thereby cause the destruction of that building";
             }
         }
     }
 
-    penalty {
-        imprisonment := 0 days .. 99 years;
-        fine := $0.00 .. $100,000.00;
+    penalty alternative {
+        imprisonment := 0 days .. 10 years;
+        supplementary := "The offender shall be punished with imprisonment for life, or with imprisonment for a term which may extend to 10 years.";
+    }
+
+    penalty when non_life_sentence {
+        fine := unlimited;
+        supplementary := "If the offender is not sentenced to imprisonment for life, the offender is also liable to fine.";
     }
 }

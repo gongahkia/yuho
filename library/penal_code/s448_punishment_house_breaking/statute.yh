@@ -1,24 +1,14 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr448-#pr448-
-// Singapore Penal Code Section 448 - Punishment for house-breaking
-
 /// @amendment [15/2019]
 
 referencing penal_code/s442_house_breaking
 
-statute 448 "Punishment for house-breaking" effective 1872-01-01 {
-    definitions {
-        house_breaking := "As defined in section 442";
-    }
-
-    elements {
-        /// conviction for house-breaking under s442 is required
-        circumstance house_breaking_committed := "House-breaking under section 442 is committed";
-    }
-
-    penalty {
+statute 448 "Punishment for house-breaking" effective 1872-01-01 effective 2019-12-31 {
+    /// Section 448 prescribes the punishment for the offence of house-breaking under section 442.
+    penalty or_both {
         imprisonment := 0 days .. 3 years;
-        fine := $0.00 .. $10,000.00;
+        fine := unlimited;
     }
 }

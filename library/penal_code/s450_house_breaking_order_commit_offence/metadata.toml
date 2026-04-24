@@ -2,16 +2,17 @@
 section_number = "450"
 title = "House-breaking in order to commit an offence punishable with imprisonment for life"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "House-breaking committed in order to commit an offence punishable with imprisonment for life."
+summary = "Makes it an offence to commit house-breaking in order to commit an offence punishable with imprisonment for life, punishable by up to 15 years' imprisonment and an uncapped fine."
 source = "Singapore Penal Code 1871, Section 450"
 
 [verification]
