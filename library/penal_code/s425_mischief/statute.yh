@@ -1,42 +1,55 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr425-#pr425-
-// Singapore Penal Code Section 425 - Mischief
-
 /// @amendment [Act 25 of 2021 wef 01/04/2022]
 /// @amendment [ Deleted by Act 51 of 2007 ]
 
-statute 425 "Mischief" effective 1872-01-01 {
+statute 425 "Mischief" effective 1872-01-01 effective 2022-04-01 {
     definitions {
-        mischief := "Causing destruction of property or injurious change to property with intent or knowledge of likely wrongful loss or damage";
-        wrongful_loss := "As defined in section 23";
+        explanation_1 := "Explanation 1.—It is not essential to the offence of mischief that the offender should intend to cause loss or damage to the owner of the property injured or destroyed. It is sufficient if he intends to cause, or knows that he is likely to cause, wrongful loss or damage to any person by injuring any property, whether it belongs to that person or not.";
+        explanation_2 := "Explanation 2.—Mischief may be committed by an act affecting property belonging to the person who commits the act, or to that person and others jointly.";
     }
 
     elements {
+        /// Section 425 requires the culpable state of mind and one of the listed property interferences that injures property value, utility, or condition.
         all_of {
             any_of {
-                /// intent to cause wrongful loss or damage
-                mens_rea intent := "Intent to cause wrongful loss or damage to the public or any person";
-                /// knowledge it is likely to cause such loss or damage
-                mens_rea knowledge := "Knowledge that wrongful loss or damage is likely to be caused";
+                mens_rea intent_to_cause_wrongful_loss_or_damage := "With intent to cause wrongful loss or damage to the public or any person";
+                mens_rea knowledge_of_likely_wrongful_loss_or_damage := "Knowing that he is likely to cause wrongful loss or damage to the public or any person";
             }
+
             any_of {
-                /// destruction
-                actus_reus destroy := "Causes the destruction of any property";
-                /// injurious change
-                actus_reus alter := "Causes any change in property or its situation that destroys or diminishes value, utility, or affects it injuriously";
+                actus_reus destruction_of_property := "Causes the destruction of any property";
+                actus_reus change_in_property := "Causes any such change in any property, or in the situation thereof, as destroys or diminishes its value or utility, or affects it injuriously";
             }
         }
     }
 
-    illustration example1 {
-        "A voluntarily burns a valuable security belonging to Z, intending to cause wrongful loss to Z. A has committed mischief."
+    illustration illustration_a {
+        "( a ) A voluntarily burns a valuable security belonging to Z , intending to cause wrongful loss to Z . A has committed mischief."
     }
 
-    illustration example2 {
-        "A introduces water into an ice-house belonging to Z, and thus causes the ice to melt, intending wrongful loss to Z. A has committed mischief."
+    illustration illustration_b {
+        "( b ) [ Deleted by Act 51 of 2007 ]"
     }
 
-    // Explanation 1: not essential that offender intends loss to owner -- sufficient if he intends wrongful loss or damage to any person
-    // Explanation 2: mischief may be committed by an act affecting property belonging jointly or wholly to the offender
+    illustration illustration_c {
+        "( c ) A voluntarily throws into a river a ring belonging to Z , with the intention of thereby causing wrongful loss to Z . A has committed mischief."
+    }
+
+    illustration illustration_d {
+        "( d ) A , knowing that his effects are about to be taken in execution, or under or pursuant to an enforcement order, in order to satisfy a debt due from him to Z , destroys those effects, with the intention of thereby preventing Z from obtaining satisfaction of the debt, and of thus causing damage to Z . A has committed mischief."
+    }
+
+    illustration illustration_e {
+        "( e ) A , having insured a ship, voluntarily causes the same to be cast away, with the intention of causing damage to the underwriters. A has committed mischief."
+    }
+
+    illustration illustration_f {
+        "( f ) A causes a ship to be cast away, intending thereby to cause damage to Z , who has lent money on bottomry on the ship. A has committed mischief."
+    }
+
+    illustration illustration_g {
+        "( g ) A , having joint property with Z in a horse, shoots the horse, intending thereby to cause wrongful loss to Z . A has committed mischief."
+    }
 }

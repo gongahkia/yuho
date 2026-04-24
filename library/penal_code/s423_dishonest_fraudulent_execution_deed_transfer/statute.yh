@@ -1,44 +1,30 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr423-#pr423-
-// Singapore Penal Code Section 423 - Dishonest or fraudulent execution of deed of transfer containing a false statement of consideration
 
 statute 423 "Dishonest or fraudulent execution of deed of transfer containing a false statement of consideration" effective 1872-01-01 {
-    definitions {
-        deed := "A deed or instrument purporting to transfer or subject to charge any property";
-        dishonestly := "As defined in section 24";
-        fraudulently := "As defined in section 25";
-    }
-
     elements {
+        /// The offence requires execution-party conduct, a deed or instrument affecting property or an interest therein, a false statement in one of the two statutory subjects, and dishonesty or fraud.
         all_of {
             any_of {
-                /// signing
-                actus_reus sign := "Signs the deed or instrument";
-                /// executing
-                actus_reus execute := "Executes the deed or instrument";
-                /// becoming a party
-                actus_reus become_party := "Becomes a party to the deed or instrument";
+                actus_reus signs := "Whoever signs any deed or instrument";
+                actus_reus executes := "Whoever executes any deed or instrument";
+                actus_reus becomes_a_party := "Whoever becomes a party to any deed or instrument";
             }
-            /// deed concerns transfer or charge over property
-            circumstance deed_on_property := "Deed purports to transfer property or subject property to a charge";
+            circumstance deed_or_instrument_affecting_property := "The deed or instrument purports to transfer or subject to any charge any property, or any interest therein";
             any_of {
-                /// false statement of consideration
-                circumstance false_consideration := "Deed contains a false statement relating to the consideration";
-                /// false statement of beneficiary
-                circumstance false_beneficiary := "Deed contains a false statement relating to the person for whose benefit the deed is really intended";
+                circumstance false_statement_of_consideration := "The deed or instrument contains any false statement relating to the consideration for such transfer or charge";
+                circumstance false_statement_of_beneficiary := "The deed or instrument contains any false statement relating to the person or persons for whose use or benefit it is really intended to operate";
             }
             any_of {
-                /// dishonest state of mind
-                mens_rea dishonest := "Acts dishonestly";
-                /// fraudulent state of mind
-                mens_rea fraudulent := "Acts fraudulently";
+                mens_rea dishonestly := "Whoever dishonestly";
+                mens_rea fraudulently := "Whoever fraudulently";
             }
         }
     }
 
-    penalty {
+    penalty or_both {
         imprisonment := 0 days .. 3 years;
-        fine := $0.00 .. $10,000.00;
+        fine := unlimited;
     }
 }

@@ -1,48 +1,55 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr427-#pr427-
-// Singapore Penal Code Section 427 - Punishment for committing mischief causing disruption to key service, etc.
-
 /// @amendment [15/2019]
 
 referencing penal_code/s425_mischief
 
-statute 427 "Punishment for committing mischief causing disruption to key service, etc." effective 2020-01-01 {
-    definitions {
-        mischief := "As defined in section 425";
-        key_service := "A service declared to be a key service under subsection 2";
-        public_agency := "An agency exercising a public function of government";
-    }
+statute 427 "Punishment for committing mischief causing disruption to key service, etc." effective 1872-01-01 effective 2020-01-01 {
+    subsection (1) {
+        elements {
+            /// Subsection (1) requires mischief and one of the four statutory disruption limbs.
+            all_of {
+                actus_reus commits_mischief := "Whoever commits mischief by doing any act";
+                any_of {
+                    circumstance causes_disruption_to_key_service := "The act causes a disruption to the provision of any key service";
+                    all_of {
+                        mens_rea knowledge_of_likely_disruption := "The person knows the act is likely to cause a disruption";
+                        circumstance likely_disruption_to_key_service := "The likely disruption is to the provision of any key service";
+                    }
+                    circumstance causes_disruption_to_government_or_public_agency := "The act causes a disruption to the performance of any duty or function of, or the exercise of any power by the Government or a public agency";
+                    all_of {
+                        mens_rea knowledge_of_likely_disruption := "The person knows the act is likely to cause a disruption";
+                        circumstance likely_disruption_to_government_or_public_agency := "The likely disruption is to the performance of any duty or function of, or the exercise of any power by the Government or a public agency";
+                    }
+                }
+            }
+        }
 
-    elements {
-        all_of {
-            /// base offence -- mischief under s425
-            actus_reus base_mischief := "Commits mischief under section 425";
-            any_of {
-                /// target (a) -- disruption to a key service
-                circumstance disrupt_key_service := "Causes disruption to the provision of any key service";
-                /// target (b) -- disruption to government function
-                circumstance disrupt_government := "Causes disruption to the performance of any duty, function or power of the Government or a public agency";
-            }
-            any_of {
-                /// intent to cause that disruption
-                mens_rea intent_disrupt := "Intends to cause the disruption";
-                /// knowledge that such disruption is likely
-                mens_rea know_disrupt := "Knows that the disruption is likely to be caused";
-            }
+        /// Punishment for the offence under subsection (1).
+        penalty or_both {
+            imprisonment := 0 days .. 10 years;
+            fine := unlimited;
         }
     }
 
-    penalty {
-        imprisonment := 0 days .. 10 years;
-        fine := $0.00 .. $50,000.00;
+    subsection (2) {
+        /// Canonical `_raw/act.json` provides only the subsection lead-in for subsection (2).
+        definitions {
+            subsection_2_lead_in := "In subsection (1) —";
+        }
     }
 
-    illustration example1 {
-        "An act which causes damage to enforcement cameras installed in a public place by a statutory board responsible for land transport to detect illegal parking in a public road is an act which causes disruption to the performance of a duty or function of a public agency under section 427."
+    /// Illustrations
+    illustration illustration_a {
+        "( a ) An act which causes damage to enforcement cameras installed in a public place by a statutory board responsible for land transport to detect illegal parking in a public road is an act which causes disruption to the performance of the function of that statutory board."
     }
 
-    illustration example2 {
-        "Unauthorised destruction of the records and files of a department of the Government which role is to promote Singapore as a sound and reputable financial centre is an act which causes disruption to the performance of a duty or function of the Government under section 427."
+    illustration illustration_b {
+        "( b ) Unauthorised destruction of the records and files of a department of the Government which role is to promote Singapore as a sound and reputable financial centre is an act which causes disruption to the performance of the function of that department."
+    }
+
+    illustration illustration_c {
+        "( c ) An act of mischief which damages an electricity licensee’s power generation facility that is used to supply electricity to a public housing estate, is an act which is likely to cause disruption to a key service even though there is no actual disruption to that power supply."
     }
 }

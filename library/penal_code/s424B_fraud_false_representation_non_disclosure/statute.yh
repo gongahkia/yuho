@@ -1,38 +1,45 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr424B-#pr424B-
-// Singapore Penal Code Section 424B - Fraud by false representation, non-disclosure or abuse of position
-
 /// @amendment [Act 15 of 2019 wef 28/07/2023]
 
-statute 424B "Fraud by false representation, non-disclosure or abuse of position" effective 2020-01-01 {
-    definitions {
-        false_representation := "A representation which is untrue or misleading made dishonestly or fraudulently";
-        legal_duty_to_disclose := "A duty to disclose arising under law or contract";
-        abuse_of_position := "Acting in breach of a position expected to safeguard anothers financial interests";
-    }
-
-    elements {
-        all_of {
-            any_of {
-                /// false representation
-                actus_reus false_rep := "Makes a false representation";
-                /// failure to disclose
-                actus_reus nondisclosure := "Fails to disclose information which he is under a legal duty to disclose";
-                /// abuse of position
-                actus_reus abuse_position := "Abuses by act or omission a position expected to safeguard anothers financial interests";
-            }
-            any_of {
-                /// dishonest state of mind
-                mens_rea dishonest := "Acts dishonestly";
-                /// fraudulent state of mind
-                mens_rea fraudulent := "Acts fraudulently";
+statute 424B "Fraud by false representation, non-disclosure or abuse of position" effective 1872-01-01 effective 2023-07-28 {
+    subsection (1) {
+        elements {
+            /// Subsection (1) requires one prohibited fraud limb and one fault limb.
+            all_of {
+                /// The actus reus is satisfied by any one of the three statutory alternatives.
+                any_of {
+                    actus_reus false_representation := "A person makes a false representation";
+                    actus_reus failure_to_disclose := "A person fails to disclose to another person information which he is under a legal duty to disclose";
+                    actus_reus abuse_of_position := "A person abuses, whether by act or omission, a position which he occupies in which he is expected to safeguard, or not to act against, the financial interests of another person";
+                }
+                /// The statute is disjunctive as to fault: fraudulently or dishonestly.
+                any_of {
+                    mens_rea fraudulent := "The person acts fraudulently";
+                    mens_rea dishonest := "The person acts dishonestly";
+                }
             }
         }
     }
 
-    penalty {
-        imprisonment := 0 days .. 20 years;
-        fine := $0.00 .. $100,000.00;
+    subsection (2) {
+        definitions {
+            materiality_irrelevant := "A person may be guilty of an offence under subsection (1) whether or not the acts in subsection (1)( a ), ( b ) or ( c ) were material.";
+        }
+    }
+
+    subsection (3) {
+        penalty or_both {
+            imprisonment := 0 days .. 20 years;
+            fine := unlimited;
+        }
+    }
+
+    subsection (4) {
+        exception section_424a_overlap {
+            "This section does not apply to any act mentioned in subsection (1) which would constitute an offence under section 424A."
+            "No offence under this section arises for that act."
+        }
     }
 }

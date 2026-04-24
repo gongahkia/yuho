@@ -2,16 +2,17 @@
 section_number = "424B"
 title = "Fraud by false representation, non-disclosure or abuse of position"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Fraud by false representation, non-disclosure, or abuse of position."
+summary = "Section 424B creates an offence of fraud committed by false representation, non-disclosure, or abuse of position, subject to an exclusion for acts covered by section 424A."
 source = "Singapore Penal Code 1871, Section 424B"
 
 [verification]

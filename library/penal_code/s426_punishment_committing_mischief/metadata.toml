@@ -2,16 +2,17 @@
 section_number = "426"
 title = "Punishment for committing mischief"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Punishment for the offence of mischief under section 425."
+summary = "Sets the punishment for committing mischief under section 425."
 source = "Singapore Penal Code 1871, Section 426"
 
 [verification]

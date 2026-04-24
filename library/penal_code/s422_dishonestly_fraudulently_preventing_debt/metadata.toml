@@ -2,16 +2,17 @@
 section_number = "422"
 title = "Dishonestly or fraudulently preventing a debt or demand due to the offender from being made available for his creditors"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Dishonestly or fraudulently preventing a debt or demand due to the offender from being made available for his creditors."
+summary = "Creates an offence where a person dishonestly or fraudulently prevents a debt or demand from being legally available to satisfy debts."
 source = "Singapore Penal Code 1871, Section 422"
 
 [verification]

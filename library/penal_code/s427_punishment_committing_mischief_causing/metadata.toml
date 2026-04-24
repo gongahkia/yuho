@@ -2,16 +2,17 @@
 section_number = "427"
 title = "Punishment for committing mischief causing disruption to key service, etc."
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Punishment for mischief causing disruption to key services or to government functions."
+summary = "Prescribes punishment for mischief that causes, or is known to be likely to cause, disruption to a key service or to governmental or public-agency functions or powers."
 source = "Singapore Penal Code 1871, Section 427"
 
 [verification]

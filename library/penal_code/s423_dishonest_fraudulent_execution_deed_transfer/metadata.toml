@@ -2,16 +2,17 @@
 section_number = "423"
 title = "Dishonest or fraudulent execution of deed of transfer containing a false statement of consideration"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Dishonestly or fraudulently executing a deed of transfer containing a false statement of consideration or beneficiary."
+summary = "Section 423 criminalises dishonestly or fraudulently signing, executing, or becoming a party to a deed or instrument affecting property that contains a false statement about consideration or the true beneficiary."
 source = "Singapore Penal Code 1871, Section 423"
 
 [verification]
