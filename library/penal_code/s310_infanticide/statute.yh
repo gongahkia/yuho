@@ -1,0 +1,37 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr310-#pr310-
+/// @amendment [15/2019]
+// Singapore Penal Code Section 310 - Infanticide
+// Yuho v5 Syntax
+
+struct S310Case {
+    bool womanCausesChildDeath,
+    bool childBelowTwelveMonths,
+    bool intentionalActOrOmission,
+    bool disturbedBalanceOfMind,
+}
+
+fn applies_s310(bool womanCausesChildDeath, bool childBelowTwelveMonths, bool intentionalActOrOmission, bool disturbedBalanceOfMind) : bool {
+    match {
+        case TRUE if womanCausesChildDeath && childBelowTwelveMonths && intentionalActOrOmission && disturbedBalanceOfMind := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 310 "Infanticide" effective 1872-01-01 {
+    definitions {
+        provision_text := "When any woman by any intentional act or omission causes the death of her child being a child below 12 months of age, but at the time of the act or omission the balance of her mind was disturbed by reason of her not having fully recovered from the effect of giving birth to the child or by reason of the effect of lactation consequent upon the birth of the child, she shall, notwithstanding that the circumstances were such that but for this section the offence would have amounted to murder, be guilty of the offence of infanticide. [15/2019]";
+        infanticide := "The offence committed where the stated mental disturbance condition reduces what would otherwise amount to murder to infanticide.";
+    }
+
+    elements {
+        all_of {
+            circumstance womanCausesChildDeath := "A woman causes the death of her child.";
+            circumstance childBelowTwelveMonths := "The child is below 12 months of age.";
+            mens_rea intentionalActOrOmission := "The death is caused by intentional act or omission.";
+            actus_reus disturbedBalanceOfMind := "At the time, the balance of her mind was disturbed for the statutory childbirth or lactation reason.";
+        }
+    }
+
+}

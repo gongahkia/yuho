@@ -1,0 +1,37 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr294-#pr294-
+/// @amendment [15/2019]
+// Singapore Penal Code Section 294 - Obscene acts
+// Yuho v5 Syntax
+
+struct S294Case {
+    bool annoyanceOfOthers,
+    bool publicObscenity,
+}
+
+fn applies_s294(bool annoyanceOfOthers, bool publicObscenity) : bool {
+    match {
+        case TRUE if annoyanceOfOthers && publicObscenity := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 294 "Obscene acts" effective 1872-01-01 {
+    definitions {
+        provision_text := "Whoever, to the annoyance of others — ( a ) does any obscene act in any public place; or ( b ) sings, recites or utters any obscene words in or near any public place, shall be punished with imprisonment for a term which may extend to 3 months, or with fine, or with both. [15/2019]";
+        public_place := "A public place, or a place near a public place for obscene words.";
+    }
+
+    elements {
+        all_of {
+            actus_reus annoyanceOfOthers := "The conduct is to the annoyance of others.";
+            actus_reus publicObscenity := "The person does an obscene act in a public place or sings, recites, or utters obscene words in or near a public place.";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 months .. 3 months;
+        supplementary := "Fine may also be imposed, or both imprisonment and fine.";
+    }
+}

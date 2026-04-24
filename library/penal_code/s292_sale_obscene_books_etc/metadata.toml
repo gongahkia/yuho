@@ -1,0 +1,18 @@
+[statute]
+section_number = "292"
+title = "Sale of obscene books, etc."
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Encodes Singapore Penal Code section 292, Sale of obscene books, etc., as a offence provision."
+source = "Singapore Penal Code 1871, Section 292"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr292-#pr292-"

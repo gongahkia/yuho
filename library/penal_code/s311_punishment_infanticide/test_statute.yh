@@ -1,0 +1,20 @@
+// Test file for s311
+// Yuho v5 Syntax
+
+referencing penal_code/s311_punishment_infanticide
+
+struct S311CaseTestCase {
+    bool infanticideCommitted,
+}
+
+S311CaseTestCase matching := S311CaseTestCase {
+    infanticideCommitted := TRUE,
+}
+
+assert applies_s311(matching.infanticideCommitted) == TRUE
+
+S311CaseTestCase missing := S311CaseTestCase {
+    infanticideCommitted := FALSE,
+}
+
+assert applies_s311(missing.infanticideCommitted) == FALSE

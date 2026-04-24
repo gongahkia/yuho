@@ -1,0 +1,26 @@
+// Test file for s298
+// Yuho v5 Syntax
+
+referencing penal_code/s298_uttering_words_etc_deliberate_intent_wound
+
+struct S298CaseTestCase {
+    bool expressiveActSeenOrHeard,
+    bool racialFeelingsTargeted,
+    bool deliberateIntent,
+}
+
+S298CaseTestCase matching := S298CaseTestCase {
+    expressiveActSeenOrHeard := TRUE,
+    racialFeelingsTargeted := TRUE,
+    deliberateIntent := TRUE,
+}
+
+assert applies_s298(matching.expressiveActSeenOrHeard, matching.racialFeelingsTargeted, matching.deliberateIntent) == TRUE
+
+S298CaseTestCase missing := S298CaseTestCase {
+    expressiveActSeenOrHeard := FALSE,
+    racialFeelingsTargeted := TRUE,
+    deliberateIntent := TRUE,
+}
+
+assert applies_s298(missing.expressiveActSeenOrHeard, missing.racialFeelingsTargeted, missing.deliberateIntent) == FALSE

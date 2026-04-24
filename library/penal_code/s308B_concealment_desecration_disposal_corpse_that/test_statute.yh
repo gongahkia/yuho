@@ -1,0 +1,26 @@
+// Test file for s308B
+// Yuho v5 Syntax
+
+referencing penal_code/s308B_concealment_desecration_disposal_corpse_that
+
+struct S308BCaseTestCase {
+    bool humanCorpse,
+    bool intentionalOrKnowingAct,
+    bool impedesDiscoveryIdentificationInvestigationOrProsecution,
+}
+
+S308BCaseTestCase matching := S308BCaseTestCase {
+    humanCorpse := TRUE,
+    intentionalOrKnowingAct := TRUE,
+    impedesDiscoveryIdentificationInvestigationOrProsecution := TRUE,
+}
+
+assert applies_s308b(matching.humanCorpse, matching.intentionalOrKnowingAct, matching.impedesDiscoveryIdentificationInvestigationOrProsecution) == TRUE
+
+S308BCaseTestCase missing := S308BCaseTestCase {
+    humanCorpse := FALSE,
+    intentionalOrKnowingAct := TRUE,
+    impedesDiscoveryIdentificationInvestigationOrProsecution := TRUE,
+}
+
+assert applies_s308b(missing.humanCorpse, missing.intentionalOrKnowingAct, missing.impedesDiscoveryIdentificationInvestigationOrProsecution) == FALSE

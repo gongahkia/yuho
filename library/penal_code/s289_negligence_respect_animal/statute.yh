@@ -1,0 +1,38 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr289-#pr289-
+/// @amendment [15/2019]
+// Singapore Penal Code Section 289 - Negligence with respect to any animal
+// Yuho v5 Syntax
+
+struct S289Case {
+    bool animalMeasureOmitted,
+    bool knowingOrNegligent,
+    bool animalDangerOutcome,
+}
+
+fn applies_s289(bool animalMeasureOmitted, bool knowingOrNegligent, bool animalDangerOutcome) : bool {
+    match {
+        case TRUE if animalMeasureOmitted && knowingOrNegligent && animalDangerOutcome := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 289 "Negligence with respect to any animal" effective 1872-01-01 {
+    definitions {
+        provision_text := "—(1) A person shall be guilty of an offence who knowingly or negligently omits to take such measure with any animal as is sufficient to guard against any probable danger to human life, or any probable danger of grievous hurt from such animal and such omission — ( a ) is likely to cause grievous hurt; ( b ) endangers human life; ( c ) causes grievous hurt to any other person; or ( d ) causes the death of any other person. [15/2019] (2) Any person who is guilty of an offence under subsection (1) shall on conviction be punished —";
+        animal_danger := "Probable danger to human life or probable danger of grievous hurt from the animal.";
+    }
+
+    elements {
+        all_of {
+            actus_reus animalMeasureOmitted := "The person omits sufficient measures with an animal.";
+            mens_rea knowingOrNegligent := "The omission is knowing or negligent.";
+            circumstance animalDangerOutcome := "The omission is likely to cause grievous hurt, endangers human life, causes grievous hurt, or causes death.";
+        }
+    }
+
+    penalty {
+        supplementary := "Punishment applies on conviction under subsection (2); detailed punishment range is not present in the canonical raw text.";
+    }
+}

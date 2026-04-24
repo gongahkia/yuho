@@ -1,0 +1,18 @@
+[statute]
+section_number = "286"
+title = "Presumption of cause of fire"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Encodes Singapore Penal Code section 286, Presumption of cause of fire, as a other provision."
+source = "Singapore Penal Code 1871, Section 286"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr286-#pr286-"

@@ -1,0 +1,26 @@
+// Test file for s304A
+// Yuho v5 Syntax
+
+referencing penal_code/s304A_causing_death_rash_negligent_act
+
+struct S304ACaseTestCase {
+    bool deathCaused,
+    bool rashOrNegligentAct,
+    bool notCulpableHomicide,
+}
+
+S304ACaseTestCase matching := S304ACaseTestCase {
+    deathCaused := TRUE,
+    rashOrNegligentAct := TRUE,
+    notCulpableHomicide := TRUE,
+}
+
+assert applies_s304a(matching.deathCaused, matching.rashOrNegligentAct, matching.notCulpableHomicide) == TRUE
+
+S304ACaseTestCase missing := S304ACaseTestCase {
+    deathCaused := FALSE,
+    rashOrNegligentAct := TRUE,
+    notCulpableHomicide := TRUE,
+}
+
+assert applies_s304a(missing.deathCaused, missing.rashOrNegligentAct, missing.notCulpableHomicide) == FALSE

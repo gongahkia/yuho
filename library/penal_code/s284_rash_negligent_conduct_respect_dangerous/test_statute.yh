@@ -1,0 +1,26 @@
+// Test file for s284
+// Yuho v5 Syntax
+
+referencing penal_code/s284_rash_negligent_conduct_respect_dangerous
+
+struct S284CaseTestCase {
+    bool dangerousSubstance,
+    bool rashOrNegligent,
+    bool dangerOutcome,
+}
+
+S284CaseTestCase matching := S284CaseTestCase {
+    dangerousSubstance := TRUE,
+    rashOrNegligent := TRUE,
+    dangerOutcome := TRUE,
+}
+
+assert applies_s284(matching.dangerousSubstance, matching.rashOrNegligent, matching.dangerOutcome) == TRUE
+
+S284CaseTestCase missing := S284CaseTestCase {
+    dangerousSubstance := FALSE,
+    rashOrNegligent := TRUE,
+    dangerOutcome := TRUE,
+}
+
+assert applies_s284(missing.dangerousSubstance, missing.rashOrNegligent, missing.dangerOutcome) == FALSE

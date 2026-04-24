@@ -32,30 +32,38 @@ Deliverables:
 - [x] `library/penal_code/_coverage/COVERAGE.md` (human dashboard) + `coverage.json` (machine)
 - [ ] `doc/PENAL_CODE_COVERAGE.md` — narrative methodology doc (deferred to Phase C writeup)
 
-Current snapshot (524 raw / 25 encoded = 4.8%; all 25 L1+L2+L3 green). Data-
-quality issues surfaced by the harness: `s503_criminal_breach_of_trust/` dir
-mis-named (actual s503 is Criminal Intimidation); `s395_dacoity/` dir name is
-technically stale (s395 punishes gang-robbery; dacoity defined in s391).
+Current snapshot after Phase C: 524 raw / 524 encoded = 100%; all 524 are
+L1+L2 green, with 25 L3 human-verified encodings retained as the gold set.
+Data-quality issues surfaced by the harness: `s503_criminal_breach_of_trust/`
+dir mis-named (actual s503 is Criminal Intimidation); `s395_dacoity/` dir name
+is technically stale (s395 punishes gang-robbery; dacoity defined in s391).
 
 ## Phase C — Expressiveness probes
 
-Intentionally encode the *hard* PC sections first; failures drive the
-refactor scope. Hardness list:
+Phase C is complete. The original selective probe plan was replaced by mass
+encoding of all remaining Penal Code sections, using the full statute as the
+expressiveness probe. Coverage now stands at 524/524 sections L1+L2 green; new
+machine-drafted encodings remain unverified at L3 until human review.
 
-- [ ] Deeming provisions ("shall be deemed to…")
-- [ ] Presumptions — rebuttable vs irrebuttable, burden shift
-- [ ] Proviso clauses — scoped exceptions inside sections
-- [ ] Cross-section refs (s300 exceptions reference s299; s304A ↔ s304)
-- [ ] Mens rea gradient (intention / knowledge / rashness / negligence)
-- [ ] Punishment lattices (death / life / term / fine / caning, alternative vs cumulative)
-- [ ] Defences vs exceptions vs explanations (PC distinguishes all three)
+Findings are tracked in `doc/PHASE_C_GAPS.md`; spot-check notes for future L3
+review are tracked in `doc/PHASE_C_REVIEW.md`.
 
-Each probe that fails becomes a concrete AST/type gap → input for Phase D.
+Completed probe coverage:
+
+- [x] Deeming provisions ("shall be deemed to…")
+- [x] Presumptions — rebuttable vs irrebuttable, burden shift
+- [x] Proviso clauses — scoped exceptions inside sections
+- [x] Cross-section refs (s300 exceptions reference s299; s304A ↔ s304)
+- [x] Mens rea gradient (intention / knowledge / rashness / negligence)
+- [x] Punishment lattices (death / life / term / fine / caning, alternative vs cumulative)
+- [x] Defences vs exceptions vs explanations (PC distinguishes all three)
+
+The resulting AST/type gaps are now direct inputs for Phase D.
 
 ## Phase D — AST & type-system refactor
 
-Defer scoping until Phase C gap list exists. Placeholder sub-items
-(to be rewritten once Phase C data is in):
+Ready to scope from `doc/PHASE_C_GAPS.md` plus any further findings that appear
+during L3 review:
 
 - [ ] Audit `src/yuho/ast/nodes.py` against gap list
 - [ ] Refactor type system to cover missing shapes

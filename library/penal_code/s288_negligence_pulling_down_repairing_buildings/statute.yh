@@ -1,0 +1,38 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr288-#pr288-
+/// @amendment [15/2019]
+// Singapore Penal Code Section 288 - Negligence in pulling down or repairing buildings
+// Yuho v5 Syntax
+
+struct S288Case {
+    bool pullingDownOrRepairing,
+    bool knowingOrNegligentOmission,
+    bool buildingDangerOutcome,
+}
+
+fn applies_s288(bool pullingDownOrRepairing, bool knowingOrNegligentOmission, bool buildingDangerOutcome) : bool {
+    match {
+        case TRUE if pullingDownOrRepairing && knowingOrNegligentOmission && buildingDangerOutcome := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 288 "Negligence in pulling down or repairing buildings" effective 1872-01-01 {
+    definitions {
+        provision_text := "—(1) A person shall be guilty of an offence who, in pulling down or repairing any building, knowingly or negligently omits to take such measure as is sufficient to guard against any probable danger to human life from the fall of that building or any part of the building and such omission — ( a ) endangers human life; or ( b ) causes the death of any other person. [15/2019] (2) Any person who is guilty of an offence under subsection (1) shall on conviction be punished —";
+        building_fall_danger := "Probable danger to human life from the fall of that building or any part of the building.";
+    }
+
+    elements {
+        all_of {
+            actus_reus pullingDownOrRepairing := "The person is pulling down or repairing a building.";
+            mens_rea knowingOrNegligentOmission := "The person knowingly or negligently omits sufficient guarding measures.";
+            circumstance buildingDangerOutcome := "The omission endangers human life or causes death.";
+        }
+    }
+
+    penalty {
+        supplementary := "Punishment applies on conviction under subsection (2); detailed punishment range is not present in the canonical raw text.";
+    }
+}

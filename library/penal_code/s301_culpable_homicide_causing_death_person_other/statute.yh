@@ -1,0 +1,35 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr301-#pr301-
+/// @amendment [15/2019]
+// Singapore Penal Code Section 301 - Culpable homicide by causing the death of a person other than the person whose death was intended
+// Yuho v5 Syntax
+
+struct S301Case {
+    bool intendedOrKnownLikelyDeath,
+    bool actualDifferentVictimDeath,
+    bool culpableHomicideCommitted,
+}
+
+fn applies_s301(bool intendedOrKnownLikelyDeath, bool actualDifferentVictimDeath, bool culpableHomicideCommitted) : bool {
+    match {
+        case TRUE if intendedOrKnownLikelyDeath && actualDifferentVictimDeath && culpableHomicideCommitted := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 301 "Culpable homicide by causing the death of a person other than the person whose death was intended" effective 1872-01-01 {
+    definitions {
+        provision_text := "—(1) If a person, by doing anything which he intends or knows to be likely to cause death, commits culpable homicide by causing the death of any person whose death he neither intends nor knows himself to be likely to cause, the culpable homicide committed by the offender is of the description of which it would have been if he had caused the death of the person whose death he intended or knew himself to be likely to cause. [15/2019] (2) To avoid doubt, in the circumstances mentioned in subsection (1), the accused person may rely on any defence or exception in law as though the accused person had caused the death of the person whose death he intended or knew himself to be likely to cause. [15/2019]";
+        transferred_description := "The culpable homicide is of the description it would have been if the intended or known-likely victim had died.";
+    }
+
+    elements {
+        all_of {
+            actus_reus intendedOrKnownLikelyDeath := "The person does anything intended or known to be likely to cause death.";
+            circumstance actualDifferentVictimDeath := "The death caused is of a person whose death the offender neither intended nor knew likely.";
+            actus_reus culpableHomicideCommitted := "Culpable homicide is committed by causing that death.";
+        }
+    }
+
+}

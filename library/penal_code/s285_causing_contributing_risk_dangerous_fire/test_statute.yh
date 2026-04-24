@@ -1,0 +1,29 @@
+// Test file for s285
+// Yuho v5 Syntax
+
+referencing penal_code/s285_causing_contributing_risk_dangerous_fire
+
+struct S285CaseTestCase {
+    bool fireRiskAct,
+    bool rashOrNegligent,
+    bool fireOccurs,
+    bool fireOutcome,
+}
+
+S285CaseTestCase matching := S285CaseTestCase {
+    fireRiskAct := TRUE,
+    rashOrNegligent := TRUE,
+    fireOccurs := TRUE,
+    fireOutcome := TRUE,
+}
+
+assert applies_s285(matching.fireRiskAct, matching.rashOrNegligent, matching.fireOccurs, matching.fireOutcome) == TRUE
+
+S285CaseTestCase missing := S285CaseTestCase {
+    fireRiskAct := FALSE,
+    rashOrNegligent := TRUE,
+    fireOccurs := TRUE,
+    fireOutcome := TRUE,
+}
+
+assert applies_s285(missing.fireRiskAct, missing.rashOrNegligent, missing.fireOccurs, missing.fireOutcome) == FALSE

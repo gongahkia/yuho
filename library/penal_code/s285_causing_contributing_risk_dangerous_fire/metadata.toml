@@ -1,0 +1,18 @@
+[statute]
+section_number = "285"
+title = "Causing or contributing to risk of dangerous fire"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Encodes Singapore Penal Code section 285, Causing or contributing to risk of dangerous fire, as a offence provision."
+source = "Singapore Penal Code 1871, Section 285"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr285-#pr285-"

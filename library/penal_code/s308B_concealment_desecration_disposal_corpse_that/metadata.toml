@@ -1,0 +1,18 @@
+[statute]
+section_number = "308B"
+title = "Concealment, desecration or disposal of corpse that impedes discovery, identification, criminal investigations or prosecutions"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Encodes Singapore Penal Code section 308B, Concealment, desecration or disposal of corpse that impedes discovery, identification, criminal investigations or prosecutions, as a offence provision."
+source = "Singapore Penal Code 1871, Section 308B"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr308B-#pr308B-"

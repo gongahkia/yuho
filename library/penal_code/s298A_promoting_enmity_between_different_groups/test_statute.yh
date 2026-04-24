@@ -1,0 +1,26 @@
+// Test file for s298A
+// Yuho v5 Syntax
+
+referencing penal_code/s298A_promoting_enmity_between_different_groups
+
+struct S298ACaseTestCase {
+    bool racialGroupAct,
+    bool knowledge,
+    bool disharmonyOrPublicTranquilityRisk,
+}
+
+S298ACaseTestCase matching := S298ACaseTestCase {
+    racialGroupAct := TRUE,
+    knowledge := TRUE,
+    disharmonyOrPublicTranquilityRisk := TRUE,
+}
+
+assert applies_s298a(matching.racialGroupAct, matching.knowledge, matching.disharmonyOrPublicTranquilityRisk) == TRUE
+
+S298ACaseTestCase missing := S298ACaseTestCase {
+    racialGroupAct := FALSE,
+    knowledge := TRUE,
+    disharmonyOrPublicTranquilityRisk := TRUE,
+}
+
+assert applies_s298a(missing.racialGroupAct, missing.knowledge, missing.disharmonyOrPublicTranquilityRisk) == FALSE

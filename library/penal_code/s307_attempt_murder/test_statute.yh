@@ -1,0 +1,26 @@
+// Test file for s307
+// Yuho v5 Syntax
+
+referencing penal_code/s307_attempt_murder
+
+struct S307CaseTestCase {
+    bool actDone,
+    bool intentionCausingDeath,
+    bool wouldBeMurderIfDeathCaused,
+}
+
+S307CaseTestCase matching := S307CaseTestCase {
+    actDone := TRUE,
+    intentionCausingDeath := TRUE,
+    wouldBeMurderIfDeathCaused := TRUE,
+}
+
+assert applies_s307(matching.actDone, matching.intentionCausingDeath, matching.wouldBeMurderIfDeathCaused) == TRUE
+
+S307CaseTestCase missing := S307CaseTestCase {
+    actDone := FALSE,
+    intentionCausingDeath := TRUE,
+    wouldBeMurderIfDeathCaused := TRUE,
+}
+
+assert applies_s307(missing.actDone, missing.intentionCausingDeath, missing.wouldBeMurderIfDeathCaused) == FALSE

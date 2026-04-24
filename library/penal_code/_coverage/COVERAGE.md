@@ -1,6 +1,6 @@
 # Coverage — Penal Code 1871 (PC1871)
 
-_Generated: 2026-04-24T05:06:31+00:00_  
+_Generated: 2026-04-24T05:20:03+00:00_  
 _Scraped: 2026-04-24T03:48:44Z_  
 _Valid date: n/a_
 
@@ -9,9 +9,9 @@ _Valid date: n/a_
 | Metric | Count | % of raw |
 |---|---|---|
 | raw sections (canonical) | 524 | — |
-| encoded (.yh present) | 475 | 90.6% |
-| **L1** — parses | **475** | **90.6%** |
-| **L2** — typechecks | **475** | **90.6%** |
+| encoded (.yh present) | 524 | 100.0% |
+| **L1** — parses | **524** | **100.0%** |
+| **L2** — typechecks | **524** | **100.0%** |
 | **L3** — verified | **25** | **4.8%** |
 
 ## Encoded sections
@@ -293,10 +293,36 @@ _Valid date: n/a_
 | s281 | Exhibition of a false light, mark or buoy | ✓ | ✓ | · | — | `library/penal_code/s281_exhibition_false_light_mark_buoy/statute.yh` |
 | s282 | Conveying person by water for hire in a vessel overloaded or | ✓ | ✓ | · | — | `library/penal_code/s282_conveying_person_water_hire_vessel/statute.yh` |
 | s283 | Danger or obstruction in a public way or navigation | ✓ | ✓ | · | — | `library/penal_code/s283_danger_obstruction_public_way_navigation/statute.yh` |
+| s284 | Rash or negligent conduct with respect to dangerous or harmf | ✓ | ✓ | · | — | `library/penal_code/s284_rash_negligent_conduct_respect_dangerous/statute.yh` |
+| s285 | Causing or contributing to risk of dangerous fire | ✓ | ✓ | · | — | `library/penal_code/s285_causing_contributing_risk_dangerous_fire/statute.yh` |
+| s286 | Presumption of cause of fire | ✓ | ✓ | · | — | `library/penal_code/s286_presumption_cause_fire/statute.yh` |
+| s287 | Rash or negligent conduct with respect to any machinery in p | ✓ | ✓ | · | — | `library/penal_code/s287_rash_negligent_conduct_respect_machinery/statute.yh` |
+| s288 | Negligence in pulling down or repairing buildings | ✓ | ✓ | · | — | `library/penal_code/s288_negligence_pulling_down_repairing_buildings/statute.yh` |
+| s289 | Negligence with respect to any animal | ✓ | ✓ | · | — | `library/penal_code/s289_negligence_respect_animal/statute.yh` |
+| s290 | Punishment for public nuisance | ✓ | ✓ | · | — | `library/penal_code/s290_punishment_public_nuisance/statute.yh` |
+| s291 | Continuance of nuisance after injunction to discontinue | ✓ | ✓ | · | — | `library/penal_code/s291_continuance_nuisance_after_injunction/statute.yh` |
+| s292 | Sale of obscene books, etc. | ✓ | ✓ | · | — | `library/penal_code/s292_sale_obscene_books_etc/statute.yh` |
+| s292A | Possession, distribution, etc., of child sex-doll | ✓ | ✓ | · | — | `library/penal_code/s292A_possession_distribution_etc_child_sex_doll/statute.yh` |
+| s293 | Sale, etc., of obscene objects to young person | ✓ | ✓ | · | — | `library/penal_code/s293_sale_etc_obscene_objects_young_person/statute.yh` |
+| s294 | Obscene acts | ✓ | ✓ | · | — | `library/penal_code/s294_obscene_acts/statute.yh` |
+| s298 | Uttering words, etc., with deliberate intent to wound the ra | ✓ | ✓ | · | — | `library/penal_code/s298_uttering_words_etc_deliberate_intent_wound/statute.yh` |
+| s298A | Promoting enmity between different groups on grounds of race | ✓ | ✓ | · | — | `library/penal_code/s298A_promoting_enmity_between_different_groups/statute.yh` |
 | s299 | Culpable homicide | ✓ | ✓ | ✓ | 2026-03-08 Yuho Team | `library/penal_code/s299_culpable_homicide/statute.yh` |
 | s300 | Murder | ✓ | ✓ | ✓ | 2026-03-08 Yuho Team | `library/penal_code/s300_murder/statute.yh` |
+| s301 | Culpable homicide by causing the death of a person other tha | ✓ | ✓ | · | — | `library/penal_code/s301_culpable_homicide_causing_death_person_other/statute.yh` |
 | s302 | Punishment for murder | ✓ | ✓ | ✓ | 2026-03-10 Yuho Team | `library/penal_code/s302_punishment_for_murder/statute.yh` |
 | s304 | Punishment for culpable homicide not amounting to murder | ✓ | ✓ | ✓ | 2026-03-10 Yuho Team | `library/penal_code/s304_culpable_homicide_not_amounting_to_murder/statute.yh` |
+| s304A | Causing death by rash or negligent act | ✓ | ✓ | · | — | `library/penal_code/s304A_causing_death_rash_negligent_act/statute.yh` |
+| s304B | Causing death of child below 14 years of age, domestic worke | ✓ | ✓ | · | — | `library/penal_code/s304B_causing_death_child_below_14_years_age/statute.yh` |
+| s304C | Causing or allowing death of child below 14 years of age, do | ✓ | ✓ | · | — | `library/penal_code/s304C_causing_allowing_death_child_below_14_years/statute.yh` |
+| s305 | Abetment of suicide or attempted suicide of minor or person  | ✓ | ✓ | · | — | `library/penal_code/s305_abetment_suicide_attempted_suicide_minor/statute.yh` |
+| s306 | Abetment of suicide or attempted suicide | ✓ | ✓ | · | — | `library/penal_code/s306_abetment_suicide_attempted_suicide/statute.yh` |
+| s307 | Attempt to murder | ✓ | ✓ | · | — | `library/penal_code/s307_attempt_murder/statute.yh` |
+| s308 | Attempt to commit culpable homicide | ✓ | ✓ | · | — | `library/penal_code/s308_attempt_commit_culpable_homicide/statute.yh` |
+| s308A | Causing death in furtherance of group’s object | ✓ | ✓ | · | — | `library/penal_code/s308A_causing_death_furtherance_group_s_object/statute.yh` |
+| s308B | Concealment, desecration or disposal of corpse that impedes  | ✓ | ✓ | · | — | `library/penal_code/s308B_concealment_desecration_disposal_corpse_that/statute.yh` |
+| s310 | Infanticide | ✓ | ✓ | · | — | `library/penal_code/s310_infanticide/statute.yh` |
+| s311 | Punishment for infanticide | ✓ | ✓ | · | — | `library/penal_code/s311_punishment_infanticide/statute.yh` |
 | s312 | Causing miscarriage | ✓ | ✓ | · | — | `library/penal_code/s312_causing_miscarriage/statute.yh` |
 | s313 | Causing miscarriage without woman’s consent | ✓ | ✓ | · | — | `library/penal_code/s313_causing_miscarriage_without_woman_s_consent/statute.yh` |
 | s314 | Death caused by act done with intent to cause miscarriage | ✓ | ✓ | · | — | `library/penal_code/s314_death_caused_act_done_intent_cause/statute.yh` |
@@ -367,16 +393,39 @@ _Valid date: n/a_
 | s375 | Rape | ✓ | ✓ | · | — | `library/penal_code/s375_rape/statute.yh` |
 | s376 | Sexual assault involving penetration | ✓ | ✓ | · | — | `library/penal_code/s376_sexual_assault_involving_penetration/statute.yh` |
 | s376A | Sexual penetration of minor below 16 years of age | ✓ | ✓ | · | — | `library/penal_code/s376A_sexual_penetration_minor_below_16_years_age/statute.yh` |
+| s376AA | Exploitative sexual penetration of minor of or above 16 but  | ✓ | ✓ | · | — | `library/penal_code/s376AA_exploitative_sexual_penetration_minor_above/statute.yh` |
 | s376B | Commercial sex with minor below 18 years of age | ✓ | ✓ | · | — | `library/penal_code/s376B_commercial_sex_minor_below_18_years_age/statute.yh` |
 | s376C | Commercial sex with minor below 18 years of age outside Sing | ✓ | ✓ | · | — | `library/penal_code/s376C_commercial_sex_minor_below_18_years_age/statute.yh` |
 | s376D | Tour outside Singapore for commercial sex with minor below 1 | ✓ | ✓ | · | — | `library/penal_code/s376D_tour_outside_singapore_commercial_sex_minor/statute.yh` |
 | s376E | Sexual grooming of minor below 16 years of age | ✓ | ✓ | · | — | `library/penal_code/s376E_sexual_grooming_minor_below_16_years_age/statute.yh` |
+| s376EA | Exploitative sexual grooming of minor of or above 16 but bel | ✓ | ✓ | · | — | `library/penal_code/s376EA_exploitative_sexual_grooming_minor_above_16/statute.yh` |
+| s376EB | Sexual communication with minor below 16 years of age | ✓ | ✓ | · | — | `library/penal_code/s376EB_sexual_communication_minor_below_16_years_age/statute.yh` |
+| s376EC | Exploitative sexual communication with minor of or above 16  | ✓ | ✓ | · | — | `library/penal_code/s376EC_exploitative_sexual_communication_minor/statute.yh` |
+| s376ED | Sexual activity or image in presence of minor below 16 years | ✓ | ✓ | · | — | `library/penal_code/s376ED_sexual_activity_image_presence_minor_below/statute.yh` |
+| s376EE | Exploitative sexual activity or image in presence of minor o | ✓ | ✓ | · | — | `library/penal_code/s376EE_exploitative_sexual_activity_image_presence/statute.yh` |
 | s376F | Procurement of sexual activity with person with mental disab | ✓ | ✓ | · | — | `library/penal_code/s376F_procurement_sexual_activity_person_mental/statute.yh` |
 | s376G | Incest | ✓ | ✓ | · | — | `library/penal_code/s376G_incest/statute.yh` |
 | s376H | Procurement of sexual activity by deception or false represe | ✓ | ✓ | · | — | `library/penal_code/s376H_procurement_sexual_activity_deception_false/statute.yh` |
 | s377 | Sexual penetration, etc., of a corpse | ✓ | ✓ | · | — | `library/penal_code/s377_sexual_penetration_etc_corpse/statute.yh` |
 | s377B | Sexual penetration with living animal | ✓ | ✓ | · | — | `library/penal_code/s377B_sexual_penetration_living_animal/statute.yh` |
+| s377BA | Word or gesture intended to insult modesty of any person | ✓ | ✓ | · | — | `library/penal_code/s377BA_word_gesture_intended_insult_modesty_person/statute.yh` |
+| s377BB | Voyeurism | ✓ | ✓ | · | — | `library/penal_code/s377BB_voyeurism/statute.yh` |
+| s377BC | Distribution of voyeuristic image or recording | ✓ | ✓ | · | — | `library/penal_code/s377BC_distribution_voyeuristic_image_recording/statute.yh` |
+| s377BD | Possession of or gaining access to voyeuristic or intimate i | ✓ | ✓ | · | — | `library/penal_code/s377BD_possession_gaining_access_voyeuristic/statute.yh` |
+| s377BE | Distributing or threatening to distribute intimate image or  | ✓ | ✓ | · | — | `library/penal_code/s377BE_distributing_threatening_distribute_intimate/statute.yh` |
+| s377BF | Sexual exposure | ✓ | ✓ | · | — | `library/penal_code/s377BF_sexual_exposure/statute.yh` |
+| s377BG | Using or involving child in production of child abuse materi | ✓ | ✓ | · | — | `library/penal_code/s377BG_using_involving_child_production_child_abuse/statute.yh` |
+| s377BH | Producing child abuse material | ✓ | ✓ | · | — | `library/penal_code/s377BH_producing_child_abuse_material/statute.yh` |
+| s377BI | Distributing or selling child abuse material | ✓ | ✓ | · | — | `library/penal_code/s377BI_distributing_selling_child_abuse_material/statute.yh` |
+| s377BJ | Advertising or seeking child abuse material | ✓ | ✓ | · | — | `library/penal_code/s377BJ_advertising_seeking_child_abuse_material/statute.yh` |
+| s377BK | Possession of or gaining access to child abuse material | ✓ | ✓ | · | — | `library/penal_code/s377BK_possession_gaining_access_child_abuse/statute.yh` |
+| s377BL | Exploitation by abusive material of minor of or above 16 but | ✓ | ✓ | · | — | `library/penal_code/s377BL_exploitation_abusive_material_minor_above_16/statute.yh` |
+| s377BM | Defences to offences relating to intimate image or recording | ✓ | ✓ | · | — | `library/penal_code/s377BM_defences_offences_relating_intimate_image/statute.yh` |
+| s377BN | Defences to child abuse material offences | ✓ | ✓ | · | — | `library/penal_code/s377BN_defences_child_abuse_material_offences/statute.yh` |
+| s377BO | Child abuse material offences outside or partially outside S | ✓ | ✓ | · | — | `library/penal_code/s377BO_child_abuse_material_offences_outside/statute.yh` |
 | s377C | Interpretation of sections 375 to 377BO (sexual offences) | ✓ | ✓ | · | — | `library/penal_code/s377C_interpretation_sections_375_377bo_sexual/statute.yh` |
+| s377CA | Meaning of exploitative relationship | ✓ | ✓ | · | — | `library/penal_code/s377CA_meaning_exploitative_relationship/statute.yh` |
+| s377CB | Consent given under misconception in sexual offences | ✓ | ✓ | · | — | `library/penal_code/s377CB_consent_given_under_misconception_sexual/statute.yh` |
 | s377D | Mistake as to age in sexual offences | ✓ | ✓ | · | — | `library/penal_code/s377D_mistake_age_sexual_offences/statute.yh` |
 | s378 | Theft | ✓ | ✓ | ✓ | 2026-03-08 Yuho Team | `library/penal_code/s378_theft/statute.yh` |
 | s379 | Punishment for theft | ✓ | ✓ | ✓ | 2026-03-10 Yuho Team | `library/penal_code/s379_punishment_for_theft/statute.yh` |
@@ -494,56 +543,7 @@ _Valid date: n/a_
 | s511 | Attempt to commit offence | ✓ | ✓ | · | — | `library/penal_code/s511_attempt_commit_offence/statute.yh` |
 | s512 | Punishment for attempting to commit offences | ✓ | ✓ | · | — | `library/penal_code/s512_punishment_attempting_commit_offences/statute.yh` |
 
-## Unencoded sections (49)
+## Unencoded sections (0)
 
 | § | Marginal note | SSO |
 |---|---|---|
-| s284 | Rash or negligent conduct with respect to dangerous or harmful substance | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr284-#pr284-) |
-| s285 | Causing or contributing to risk of dangerous fire | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr285-#pr285-) |
-| s286 | Presumption of cause of fire | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr286-#pr286-) |
-| s287 | Rash or negligent conduct with respect to any machinery in possession or under c | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr287-#pr287-) |
-| s288 | Negligence in pulling down or repairing buildings | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr288-#pr288-) |
-| s289 | Negligence with respect to any animal | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr289-#pr289-) |
-| s290 | Punishment for public nuisance | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr290-#pr290-) |
-| s291 | Continuance of nuisance after injunction to discontinue | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr291-#pr291-) |
-| s292 | Sale of obscene books, etc. | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr292-#pr292-) |
-| s292A | Possession, distribution, etc., of child sex-doll | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr292A-#pr292A-) |
-| s293 | Sale, etc., of obscene objects to young person | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr293-#pr293-) |
-| s294 | Obscene acts | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr294-#pr294-) |
-| s298 | Uttering words, etc., with deliberate intent to wound the racial feelings of any | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr298-#pr298-) |
-| s298A | Promoting enmity between different groups on grounds of race and doing acts prej | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr298A-#pr298A-) |
-| s301 | Culpable homicide by causing the death of a person other than the person whose d | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr301-#pr301-) |
-| s304A | Causing death by rash or negligent act | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr304A-#pr304A-) |
-| s304B | Causing death of child below 14 years of age, domestic worker or vulnerable pers | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr304B-#pr304B-) |
-| s304C | Causing or allowing death of child below 14 years of age, domestic worker or vul | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr304C-#pr304C-) |
-| s305 | Abetment of suicide or attempted suicide of minor or person who lacks mental cap | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr305-#pr305-) |
-| s306 | Abetment of suicide or attempted suicide | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr306-#pr306-) |
-| s307 | Attempt to murder | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr307-#pr307-) |
-| s308 | Attempt to commit culpable homicide | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr308-#pr308-) |
-| s308A | Causing death in furtherance of group’s object | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr308A-#pr308A-) |
-| s308B | Concealment, desecration or disposal of corpse that impedes discovery, identific | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr308B-#pr308B-) |
-| s310 | Infanticide | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr310-#pr310-) |
-| s311 | Punishment for infanticide | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr311-#pr311-) |
-| s376AA | Exploitative sexual penetration of minor of or above 16 but below 18 years of ag | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr376AA-#pr376AA-) |
-| s376EA | Exploitative sexual grooming of minor of or above 16 but below 18 years of age | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr376EA-#pr376EA-) |
-| s376EB | Sexual communication with minor below 16 years of age | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr376EB-#pr376EB-) |
-| s376EC | Exploitative sexual communication with minor of or above 16 but below 18 years o | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr376EC-#pr376EC-) |
-| s376ED | Sexual activity or image in presence of minor below 16 years of age | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr376ED-#pr376ED-) |
-| s376EE | Exploitative sexual activity or image in presence of minor of or above 16 but be | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr376EE-#pr376EE-) |
-| s377BA | Word or gesture intended to insult modesty of any person | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BA-#pr377BA-) |
-| s377BB | Voyeurism | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BB-#pr377BB-) |
-| s377BC | Distribution of voyeuristic image or recording | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BC-#pr377BC-) |
-| s377BD | Possession of or gaining access to voyeuristic or intimate image or recording | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BD-#pr377BD-) |
-| s377BE | Distributing or threatening to distribute intimate image or recording | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BE-#pr377BE-) |
-| s377BF | Sexual exposure | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BF-#pr377BF-) |
-| s377BG | Using or involving child in production of child abuse material | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BG-#pr377BG-) |
-| s377BH | Producing child abuse material | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BH-#pr377BH-) |
-| s377BI | Distributing or selling child abuse material | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BI-#pr377BI-) |
-| s377BJ | Advertising or seeking child abuse material | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BJ-#pr377BJ-) |
-| s377BK | Possession of or gaining access to child abuse material | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BK-#pr377BK-) |
-| s377BL | Exploitation by abusive material of minor of or above 16 but below 18 years of a | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BL-#pr377BL-) |
-| s377BM | Defences to offences relating to intimate image or recording and voyeurism | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BM-#pr377BM-) |
-| s377BN | Defences to child abuse material offences | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BN-#pr377BN-) |
-| s377BO | Child abuse material offences outside or partially outside Singapore | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BO-#pr377BO-) |
-| s377CA | Meaning of exploitative relationship | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377CA-#pr377CA-) |
-| s377CB | Consent given under misconception in sexual offences | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377CB-#pr377CB-) |

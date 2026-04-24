@@ -1,0 +1,40 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr285-#pr285-
+/// @amendment [15/2019]
+// Singapore Penal Code Section 285 - Causing or contributing to risk of dangerous fire
+// Yuho v5 Syntax
+
+struct S285Case {
+    bool fireRiskAct,
+    bool rashOrNegligent,
+    bool fireOccurs,
+    bool fireOutcome,
+}
+
+fn applies_s285(bool fireRiskAct, bool rashOrNegligent, bool fireOccurs, bool fireOutcome) : bool {
+    match {
+        case TRUE if fireRiskAct && rashOrNegligent && fireOccurs && fireOutcome := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 285 "Causing or contributing to risk of dangerous fire" effective 1872-01-01 {
+    definitions {
+        provision_text := "—(1) Whoever, with any fire or any thing that is likely to cause fire, rashly or negligently causes or substantially contributes to the risk of causing a fire, shall be guilty of an offence if such fire occurs and any of the following applies: ( a ) that fire is likely to cause hurt or injury to any other person; ( b ) that fire endangers human life; ( c ) that fire causes damage to or diminishes the value or utility of any property belonging to any other person or the Government; ( d ) that fire causes hurt or injury to any other person; ( e ) that fire causes grievous hurt to any other person; ( f ) that fire causes death to any other person. [15/2019] (2) Any person who is guilty of an offence under subsection (1) shall on conviction be punished —";
+        fire_causing_thing := "Fire or any thing that is likely to cause fire.";
+    }
+
+    elements {
+        all_of {
+            circumstance fireRiskAct := "The person causes or substantially contributes to the risk of causing a fire with fire or a thing likely to cause fire.";
+            mens_rea rashOrNegligent := "The conduct is done rashly or negligently.";
+            circumstance fireOccurs := "A fire occurs.";
+            circumstance fireOutcome := "The fire has one of the listed harmful consequences.";
+        }
+    }
+
+    penalty {
+        supplementary := "Punishment applies on conviction under subsection (2); detailed punishment range is not present in the canonical raw text.";
+    }
+}

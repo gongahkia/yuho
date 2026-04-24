@@ -1,0 +1,37 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr292A-#pr292A-
+/// @amendment [15/2019]
+// Singapore Penal Code Section 292A - Possession, distribution, etc., of child sex-doll
+// Yuho v5 Syntax
+
+struct S292ACase {
+    bool childSexDoll,
+    bool prohibitedDealing,
+}
+
+fn applies_s292a(bool childSexDoll, bool prohibitedDealing) : bool {
+    match {
+        case TRUE if childSexDoll && prohibitedDealing := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 292A "Possession, distribution, etc., of child sex-doll" effective 1872-01-01 {
+    definitions {
+        provision_text := "—(1) Any person who imports, exports, conveys, sells, lets to hire, distributes, puts into circulation, makes, produces or is in possession of a child sex-doll shall be guilty of an offence and shall on conviction be punished with imprisonment for a term which may extend to 2 years, or with fine, or with both. [15/2019] (2) In subsection (1), “child sex-doll” means an anatomically correct doll, mannequin or robot, with the features of, or with features that appear to a reasonable observer to resemble a person below 16 years of age and intended for use in sexual activities. [15/2019]";
+        child_sex_doll := "An anatomically correct doll, mannequin or robot, with features of or apparently resembling a person below 16 years of age and intended for use in sexual activities.";
+    }
+
+    elements {
+        all_of {
+            circumstance childSexDoll := "The item is a child sex-doll.";
+            actus_reus prohibitedDealing := "The person performs one of the prohibited dealings, business participation, advertisement, offer, or attempt.";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 years .. 2 years;
+        supplementary := "Fine may also be imposed, or both imprisonment and fine.";
+    }
+}

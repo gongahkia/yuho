@@ -1,0 +1,18 @@
+[statute]
+section_number = "301"
+title = "Culpable homicide by causing the death of a person other than the person whose death was intended"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Encodes Singapore Penal Code section 301, Culpable homicide by causing the death of a person other than the person whose death was intended, as a other provision."
+source = "Singapore Penal Code 1871, Section 301"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr301-#pr301-"

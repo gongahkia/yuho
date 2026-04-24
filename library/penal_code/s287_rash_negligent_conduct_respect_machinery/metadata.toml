@@ -1,0 +1,18 @@
+[statute]
+section_number = "287"
+title = "Rash or negligent conduct with respect to any machinery in possession or under charge of offender"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Encodes Singapore Penal Code section 287, Rash or negligent conduct with respect to any machinery in possession or under charge of offender, as a offence provision."
+source = "Singapore Penal Code 1871, Section 287"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr287-#pr287-"

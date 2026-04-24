@@ -1,0 +1,45 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr308A-#pr308A-
+/// @amendment [15/2019]
+// Singapore Penal Code Section 308A - Causing death in furtherance of group’s object
+// Yuho v5 Syntax
+
+struct S308ACase {
+    bool memberOfGroup,
+    bool knowledgeCommonObjectOffence,
+    bool knowledgeViolenceOrWeapon,
+    bool deathFurtheranceCommonObject,
+}
+
+fn applies_s308a(bool memberOfGroup, bool knowledgeCommonObjectOffence, bool knowledgeViolenceOrWeapon, bool deathFurtheranceCommonObject) : bool {
+    match {
+        case TRUE if memberOfGroup && knowledgeCommonObjectOffence && knowledgeViolenceOrWeapon && deathFurtheranceCommonObject := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 308A "Causing death in furtherance of group’s object" effective 1872-01-01 {
+    definitions {
+        provision_text := "—(1) Any person shall be guilty of an offence who is or acts as a member of a group — ( a ) knowing that the common object of the members of the group is to commit an offence under this Code or any written law; ( b ) knowing that — ( c ) the death of a person was caused in furtherance of the group’s common object. [15/2019] (2) A person who is guilty of an offence under subsection (1) shall be punished with imprisonment for life or imprisonment for a term which may extend to 20 years, and shall also be liable to caning. [15/2019] (3) In subsection (1), “group” has the meaning given by section 2(1) of the Organised Crime Act 2015. [15/2019]";
+        group := "Group has the meaning given by section 2(1) of the Organised Crime Act 2015.";
+    }
+
+    elements {
+        all_of {
+            circumstance memberOfGroup := "The person is or acts as a member of a group.";
+            mens_rea knowledgeCommonObjectOffence := "The person knows the group’s common object is to commit an offence under the Penal Code or any written law.";
+            mens_rea knowledgeViolenceOrWeapon := "The person knows the relevant violent or weapon-related circumstance stated in subsection (1)(b).";
+            actus_reus deathFurtheranceCommonObject := "A person’s death was caused in furtherance of the group’s common object.";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 years .. 99 years;
+        supplementary := "Punishment is imprisonment for life or imprisonment up to 20 years, and liability to caning.";
+    }
+
+    illustration example {
+        "Three members of a group including A decide to rob a neighbourhood shop. The group leader, B brings a sharp knife but B reassures A that the knife is only to be used to threaten the shopkeeper, C , and not to harm C . A believes B and takes part in the robbery. C however refuses to surrender his cash to the group. B then stabs C with the knife and C dies from his stab wounds. A is guilty of an offence under this section because A knew that the knife was to be used to threaten another person, C , in furtherance of the group’s common object to commit robbery."
+    }
+}

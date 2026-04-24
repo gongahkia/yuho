@@ -1,0 +1,18 @@
+[statute]
+section_number = "304C"
+title = "Causing or allowing death of child below 14 years of age, domestic worker or vulnerable person in same household"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Encodes Singapore Penal Code section 304C, Causing or allowing death of child below 14 years of age, domestic worker or vulnerable person in same household, as a offence provision."
+source = "Singapore Penal Code 1871, Section 304C"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr304C-#pr304C-"

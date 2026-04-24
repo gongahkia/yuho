@@ -1,0 +1,26 @@
+// Test file for s288
+// Yuho v5 Syntax
+
+referencing penal_code/s288_negligence_pulling_down_repairing_buildings
+
+struct S288CaseTestCase {
+    bool pullingDownOrRepairing,
+    bool knowingOrNegligentOmission,
+    bool buildingDangerOutcome,
+}
+
+S288CaseTestCase matching := S288CaseTestCase {
+    pullingDownOrRepairing := TRUE,
+    knowingOrNegligentOmission := TRUE,
+    buildingDangerOutcome := TRUE,
+}
+
+assert applies_s288(matching.pullingDownOrRepairing, matching.knowingOrNegligentOmission, matching.buildingDangerOutcome) == TRUE
+
+S288CaseTestCase missing := S288CaseTestCase {
+    pullingDownOrRepairing := FALSE,
+    knowingOrNegligentOmission := TRUE,
+    buildingDangerOutcome := TRUE,
+}
+
+assert applies_s288(missing.pullingDownOrRepairing, missing.knowingOrNegligentOmission, missing.buildingDangerOutcome) == FALSE

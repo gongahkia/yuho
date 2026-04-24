@@ -1,0 +1,26 @@
+// Test file for s286
+// Yuho v5 Syntax
+
+referencing penal_code/s286_presumption_cause_fire
+
+struct S286CaseTestCase {
+    bool fireSourceAct,
+    bool samePlaceOrVicinity,
+    bool withinSixtyMinutes,
+}
+
+S286CaseTestCase matching := S286CaseTestCase {
+    fireSourceAct := TRUE,
+    samePlaceOrVicinity := TRUE,
+    withinSixtyMinutes := TRUE,
+}
+
+assert applies_s286(matching.fireSourceAct, matching.samePlaceOrVicinity, matching.withinSixtyMinutes) == TRUE
+
+S286CaseTestCase missing := S286CaseTestCase {
+    fireSourceAct := FALSE,
+    samePlaceOrVicinity := TRUE,
+    withinSixtyMinutes := TRUE,
+}
+
+assert applies_s286(missing.fireSourceAct, missing.samePlaceOrVicinity, missing.withinSixtyMinutes) == FALSE

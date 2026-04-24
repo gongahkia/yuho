@@ -1,0 +1,38 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr304A-#pr304A-
+// Singapore Penal Code Section 304A - Causing death by rash or negligent act
+// Yuho v5 Syntax
+
+struct S304ACase {
+    bool deathCaused,
+    bool rashOrNegligentAct,
+    bool notCulpableHomicide,
+}
+
+fn applies_s304a(bool deathCaused, bool rashOrNegligentAct, bool notCulpableHomicide) : bool {
+    match {
+        case TRUE if deathCaused && rashOrNegligentAct && notCulpableHomicide := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 304A "Causing death by rash or negligent act" effective 1872-01-01 {
+    definitions {
+        provision_text := "Whoever causes the death of any person by doing any rash or negligent act not amounting to culpable homicide, shall be punished — ( a ) in the case of a rash act, with imprisonment for a term which may extend to 5 years, or with fine, or with both; or ( b ) in the case of a negligent act, with imprisonment for a term which may extend to 2 years, or with fine, or with both.";
+        rash_or_negligent_act := "A rash or negligent act not amounting to culpable homicide.";
+    }
+
+    elements {
+        all_of {
+            circumstance deathCaused := "Death of any person is caused.";
+            mens_rea rashOrNegligentAct := "The death is caused by doing a rash or negligent act.";
+            circumstance notCulpableHomicide := "The act does not amount to culpable homicide.";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 years .. 5 years;
+        supplementary := "Rash act punishment may extend to 5 years; negligent act punishment may extend to 2 years. Fine may also be imposed.";
+    }
+}

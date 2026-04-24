@@ -1,0 +1,18 @@
+[statute]
+section_number = "304A"
+title = "Causing death by rash or negligent act"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Encodes Singapore Penal Code section 304A, Causing death by rash or negligent act, as a offence provision."
+source = "Singapore Penal Code 1871, Section 304A"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr304A-#pr304A-"

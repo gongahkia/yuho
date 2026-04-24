@@ -1,0 +1,26 @@
+// Test file for s289
+// Yuho v5 Syntax
+
+referencing penal_code/s289_negligence_respect_animal
+
+struct S289CaseTestCase {
+    bool animalMeasureOmitted,
+    bool knowingOrNegligent,
+    bool animalDangerOutcome,
+}
+
+S289CaseTestCase matching := S289CaseTestCase {
+    animalMeasureOmitted := TRUE,
+    knowingOrNegligent := TRUE,
+    animalDangerOutcome := TRUE,
+}
+
+assert applies_s289(matching.animalMeasureOmitted, matching.knowingOrNegligent, matching.animalDangerOutcome) == TRUE
+
+S289CaseTestCase missing := S289CaseTestCase {
+    animalMeasureOmitted := FALSE,
+    knowingOrNegligent := TRUE,
+    animalDangerOutcome := TRUE,
+}
+
+assert applies_s289(missing.animalMeasureOmitted, missing.knowingOrNegligent, missing.animalDangerOutcome) == FALSE

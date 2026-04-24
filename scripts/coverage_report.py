@@ -22,7 +22,7 @@ from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Optional
 
-_DIR_NUM_RE = re.compile(r"^s(\d+[A-Z]?)_")
+_DIR_NUM_RE = re.compile(r"^s(\d+[A-Z]*)_")
 _SSO_TMPL = "https://sso.agc.gov.sg/Act/{code}?ProvIds={pid}#{pid}"
 
 @dataclass

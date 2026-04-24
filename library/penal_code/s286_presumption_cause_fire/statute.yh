@@ -1,0 +1,35 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr286-#pr286-
+/// @amendment [15/2019]
+// Singapore Penal Code Section 286 - Presumption of cause of fire
+// Yuho v5 Syntax
+
+struct S286Case {
+    bool fireSourceAct,
+    bool samePlaceOrVicinity,
+    bool withinSixtyMinutes,
+}
+
+fn applies_s286(bool fireSourceAct, bool samePlaceOrVicinity, bool withinSixtyMinutes) : bool {
+    match {
+        case TRUE if fireSourceAct && samePlaceOrVicinity && withinSixtyMinutes := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 286 "Presumption of cause of fire" effective 1872-01-01 {
+    definitions {
+        provision_text := "In any proceedings for an offence under section 285, where any person deposits, drops, places or throws a cigarette or part thereof, cigar, match stick, charcoal, incense, any form of embers or any thing that is likely to cause fire in any place, and a fire occurs at that place or in the vicinity of that place within 60 minutes from the time of that act, that person is, until the contrary is proved, presumed to have substantially contributed to the risk of causing that fire. [15/2019]";
+        presumption := "Until the contrary is proved, the person is presumed to have substantially contributed to the risk of causing that fire.";
+    }
+
+    elements {
+        all_of {
+            actus_reus fireSourceAct := "The person deposits, drops, places or throws a listed fire source or thing likely to cause fire in a place.";
+            circumstance samePlaceOrVicinity := "A fire occurs at that place or in the vicinity of that place.";
+            actus_reus withinSixtyMinutes := "The fire occurs within 60 minutes from the time of that act.";
+        }
+    }
+
+}

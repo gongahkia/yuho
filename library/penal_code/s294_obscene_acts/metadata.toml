@@ -1,0 +1,18 @@
+[statute]
+section_number = "294"
+title = "Obscene acts"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Encodes Singapore Penal Code section 294, Obscene acts, as a offence provision."
+source = "Singapore Penal Code 1871, Section 294"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr294-#pr294-"

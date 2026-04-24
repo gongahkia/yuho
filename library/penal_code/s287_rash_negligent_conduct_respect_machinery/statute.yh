@@ -1,0 +1,38 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr287-#pr287-
+/// @amendment [15/2019]
+// Singapore Penal Code Section 287 - Rash or negligent conduct with respect to any machinery in possession or under charge of offender
+// Yuho v5 Syntax
+
+struct S287Case {
+    bool machineryPossessionOrCare,
+    bool rashOrNegligent,
+    bool dangerOutcome,
+}
+
+fn applies_s287(bool machineryPossessionOrCare, bool rashOrNegligent, bool dangerOutcome) : bool {
+    match {
+        case TRUE if machineryPossessionOrCare && rashOrNegligent && dangerOutcome := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 287 "Rash or negligent conduct with respect to any machinery in possession or under charge of offender" effective 1872-01-01 {
+    definitions {
+        provision_text := "—(1) A person shall be guilty of an offence who does, with any machinery in the person’s possession or under the person’s care, any act so rashly or negligently as — ( a ) to be likely to cause hurt or injury to any other person; ( b ) to endanger human life; ( c ) to cause hurt or injury to any other person; ( d ) to cause grievous hurt to any other person; or ( e ) to cause the death of any other person. [15/2019] (2) In subsection (1), an act includes an omission to take such measure with any machinery in the person’s possession or under the person’s care as is sufficient to guard against any probable danger to human life, grievous hurt or hurt from such machinery. [15/2019] (3) Any person who is guilty of an offence under subsection (1) shall on conviction be punished —";
+        act_includes_omission := "An act includes an omission to take sufficient measures with machinery in possession or care to guard against probable danger.";
+    }
+
+    elements {
+        all_of {
+            actus_reus machineryPossessionOrCare := "The conduct concerns machinery in the person’s possession or under the person’s care.";
+            mens_rea rashOrNegligent := "The conduct is done rashly or negligently.";
+            circumstance dangerOutcome := "The conduct is likely to cause hurt or injury, endangers human life, causes hurt, causes grievous hurt or injury, or causes death.";
+        }
+    }
+
+    penalty {
+        supplementary := "Punishment applies on conviction under subsection (3); detailed punishment range is not present in the canonical raw text.";
+    }
+}

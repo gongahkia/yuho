@@ -1,0 +1,29 @@
+// Test file for s304C
+// Yuho v5 Syntax
+
+referencing penal_code/s304C_causing_allowing_death_child_below_14_years
+
+struct S304CCaseTestCase {
+    bool sameHouseholdFrequentContact,
+    bool deathFromUnlawfulAct,
+    bool significantRiskGrievousHurt,
+    bool causedDeathOrFailedSteps,
+}
+
+S304CCaseTestCase matching := S304CCaseTestCase {
+    sameHouseholdFrequentContact := TRUE,
+    deathFromUnlawfulAct := TRUE,
+    significantRiskGrievousHurt := TRUE,
+    causedDeathOrFailedSteps := TRUE,
+}
+
+assert applies_s304c(matching.sameHouseholdFrequentContact, matching.deathFromUnlawfulAct, matching.significantRiskGrievousHurt, matching.causedDeathOrFailedSteps) == TRUE
+
+S304CCaseTestCase missing := S304CCaseTestCase {
+    sameHouseholdFrequentContact := FALSE,
+    deathFromUnlawfulAct := TRUE,
+    significantRiskGrievousHurt := TRUE,
+    causedDeathOrFailedSteps := TRUE,
+}
+
+assert applies_s304c(missing.sameHouseholdFrequentContact, missing.deathFromUnlawfulAct, missing.significantRiskGrievousHurt, missing.causedDeathOrFailedSteps) == FALSE

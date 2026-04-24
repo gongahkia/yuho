@@ -1,0 +1,41 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr304C-#pr304C-
+/// @amendment [15/2019]
+// Singapore Penal Code Section 304C - Causing or allowing death of child below 14 years of age, domestic worker or vulnerable person in same household
+// Yuho v5 Syntax
+
+struct S304CCase {
+    bool sameHouseholdFrequentContact,
+    bool deathFromUnlawfulAct,
+    bool significantRiskGrievousHurt,
+    bool causedDeathOrFailedSteps,
+}
+
+fn applies_s304c(bool sameHouseholdFrequentContact, bool deathFromUnlawfulAct, bool significantRiskGrievousHurt, bool causedDeathOrFailedSteps) : bool {
+    match {
+        case TRUE if sameHouseholdFrequentContact && deathFromUnlawfulAct && significantRiskGrievousHurt && causedDeathOrFailedSteps := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 304C "Causing or allowing death of child below 14 years of age, domestic worker or vulnerable person in same household" effective 1872-01-01 {
+    definitions {
+        provision_text := "—(1) A person ( A ) shall be guilty of an offence if — ( a ) a person below 14 years of age, a domestic worker or a vulnerable person ( B ) dies as a result of the unlawful act of a person who — ( b ) A was a member of the same household as B , and had frequent contact with B at the time of that act; ( c ) at that time there was a significant risk of grievous hurt being caused to B by the unlawful act of such a person; and ( d ) either A was the person whose act caused B ’s death or — (2) The prosecution does not have to prove whether it is the first alternative element in subsection (1)( d ) or the second alternative element (sub‑paragraphs (i), (ii) and (iii) of subsection (1)( d )) that applies. [15/2019] (3) A is not guilty of an offence under this section if A could not have been expected in A ’s circumstances to take any such step as is mentioned in subsection (1)( d )(ii). [15/2019] (4) Any person who is guilty of an offence under this section shall be punished with imprisonment for a term which may extend to 20 years, and shall also be liable to fine or to caning. [15/2019] (5) For the purposes of this section —";
+        same_household := "A was a member of the same household as B and had frequent contact with B at the time of the unlawful act.";
+    }
+
+    elements {
+        all_of {
+            circumstance sameHouseholdFrequentContact := "A was in the same household as B and had frequent contact with B at the time of the act.";
+            actus_reus deathFromUnlawfulAct := "B dies as a result of the unlawful act of a qualifying person.";
+            circumstance significantRiskGrievousHurt := "At that time there was a significant risk of grievous hurt to B by such unlawful act.";
+            actus_reus causedDeathOrFailedSteps := "A either caused B’s death or met the statutory alternative involving awareness, failure to take steps, and causation allowance.";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 years .. 20 years;
+        supplementary := "The offender is also liable to fine or to caning. Subsection (3) excludes guilt where A could not have been expected in A’s circumstances to take the relevant step.";
+    }
+}

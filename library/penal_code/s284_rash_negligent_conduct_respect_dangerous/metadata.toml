@@ -1,0 +1,18 @@
+[statute]
+section_number = "284"
+title = "Rash or negligent conduct with respect to dangerous or harmful substance"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Encodes Singapore Penal Code section 284, Rash or negligent conduct with respect to dangerous or harmful substance, as a offence provision."
+source = "Singapore Penal Code 1871, Section 284"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr284-#pr284-"

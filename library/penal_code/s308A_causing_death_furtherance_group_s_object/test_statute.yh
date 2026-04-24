@@ -1,0 +1,29 @@
+// Test file for s308A
+// Yuho v5 Syntax
+
+referencing penal_code/s308A_causing_death_furtherance_group_s_object
+
+struct S308ACaseTestCase {
+    bool memberOfGroup,
+    bool knowledgeCommonObjectOffence,
+    bool knowledgeViolenceOrWeapon,
+    bool deathFurtheranceCommonObject,
+}
+
+S308ACaseTestCase matching := S308ACaseTestCase {
+    memberOfGroup := TRUE,
+    knowledgeCommonObjectOffence := TRUE,
+    knowledgeViolenceOrWeapon := TRUE,
+    deathFurtheranceCommonObject := TRUE,
+}
+
+assert applies_s308a(matching.memberOfGroup, matching.knowledgeCommonObjectOffence, matching.knowledgeViolenceOrWeapon, matching.deathFurtheranceCommonObject) == TRUE
+
+S308ACaseTestCase missing := S308ACaseTestCase {
+    memberOfGroup := FALSE,
+    knowledgeCommonObjectOffence := TRUE,
+    knowledgeViolenceOrWeapon := TRUE,
+    deathFurtheranceCommonObject := TRUE,
+}
+
+assert applies_s308a(missing.memberOfGroup, missing.knowledgeCommonObjectOffence, missing.knowledgeViolenceOrWeapon, missing.deathFurtheranceCommonObject) == FALSE

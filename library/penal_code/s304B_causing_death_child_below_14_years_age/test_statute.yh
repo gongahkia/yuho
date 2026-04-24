@@ -1,0 +1,26 @@
+// Test file for s304B
+// Yuho v5 Syntax
+
+referencing penal_code/s304B_causing_death_child_below_14_years_age
+
+struct S304BCaseTestCase {
+    bool relevantPerson,
+    bool protectedVictim,
+    bool deathBySustainedAbuse,
+}
+
+S304BCaseTestCase matching := S304BCaseTestCase {
+    relevantPerson := TRUE,
+    protectedVictim := TRUE,
+    deathBySustainedAbuse := TRUE,
+}
+
+assert applies_s304b(matching.relevantPerson, matching.protectedVictim, matching.deathBySustainedAbuse) == TRUE
+
+S304BCaseTestCase missing := S304BCaseTestCase {
+    relevantPerson := FALSE,
+    protectedVictim := TRUE,
+    deathBySustainedAbuse := TRUE,
+}
+
+assert applies_s304b(missing.relevantPerson, missing.protectedVictim, missing.deathBySustainedAbuse) == FALSE

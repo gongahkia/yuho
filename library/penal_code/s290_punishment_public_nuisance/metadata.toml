@@ -1,0 +1,18 @@
+[statute]
+section_number = "290"
+title = "Punishment for public nuisance"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Encodes Singapore Penal Code section 290, Punishment for public nuisance, as a punishment provision."
+source = "Singapore Penal Code 1871, Section 290"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr290-#pr290-"
