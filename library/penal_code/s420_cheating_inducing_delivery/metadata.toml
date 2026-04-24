@@ -16,4 +16,6 @@ summary = "Section 420 punishes cheating that dishonestly induces delivery of pr
 source = "Singapore Penal Code 1871, Section 420"
 
 [verification]
+last_verified = "2026-04-24"
+verified_by = "Opus 4.7 (automated reviewer, phase D priority batch)"
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr420-#pr420-"

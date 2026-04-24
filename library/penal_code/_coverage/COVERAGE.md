@@ -1,6 +1,6 @@
 # Coverage — Penal Code 1871 (PC1871)
 
-_Generated: 2026-04-24T07:46:36+00:00_  
+_Generated: 2026-04-24T08:14:00+00:00_  
 _Scraped: 2026-04-24T03:48:44Z_  
 _Valid date: n/a_
 
@@ -12,7 +12,7 @@ _Valid date: n/a_
 | encoded (.yh present) | 524 | 100.0% |
 | **L1** — parses | **524** | **100.0%** |
 | **L2** — typechecks | **524** | **100.0%** |
-| **L3** — verified | **34** | **6.5%** |
+| **L3** — verified | **40** | **7.6%** |
 
 ## Encoded sections
 
@@ -278,7 +278,7 @@ _Valid date: n/a_
 | s268A | Communicating false information of harmful thing | ✓ | ✓ | · | — | `library/penal_code/s268A_communicating_false_information_harmful_thing/statute.yh` |
 | s268B | Placing or sending thing with intent to cause fear of harm | ✓ | ✓ | · | — | `library/penal_code/s268B_placing_sending_thing_intent_cause_fear_harm/statute.yh` |
 | s268C | Placing or sending thing causing fear of harm | ✓ | ✓ | · | — | `library/penal_code/s268C_placing_sending_thing_causing_fear_harm/statute.yh` |
-| s269 | Negligent act likely to spread infection of any disease dang | ✓ | ✓ | · | — | `library/penal_code/s269_negligent_act_likely_spread_infection/statute.yh` |
+| s269 | Negligent act likely to spread infection of any disease dang | ✓ | ✓ | ✓ | 2026-04-24 Opus 4.7 (automated reviewer, phase D priority batch) | `library/penal_code/s269_negligent_act_likely_spread_infection/statute.yh` |
 | s270 | Intentional or rash act likely to spread infection of any di | ✓ | ✓ | · | — | `library/penal_code/s270_intentional_rash_act_likely_spread_infection/statute.yh` |
 | s271 | Disobedience to a quarantine rule | ✓ | ✓ | · | — | `library/penal_code/s271_disobedience_quarantine_rule/statute.yh` |
 | s272 | Adulteration of food or drink which is intended for sale | ✓ | ✓ | · | — | `library/penal_code/s272_adulteration_food_drink_which_intended_sale/statute.yh` |
@@ -312,7 +312,7 @@ _Valid date: n/a_
 | s301 | Culpable homicide by causing the death of a person other tha | ✓ | ✓ | · | — | `library/penal_code/s301_culpable_homicide_causing_death_person_other/statute.yh` |
 | s302 | Punishment for murder | ✓ | ✓ | ✓ | 2026-03-10 Yuho Team | `library/penal_code/s302_punishment_for_murder/statute.yh` |
 | s304 | Punishment for culpable homicide not amounting to murder | ✓ | ✓ | ✓ | 2026-03-10 Yuho Team | `library/penal_code/s304_culpable_homicide_not_amounting_to_murder/statute.yh` |
-| s304A | Causing death by rash or negligent act | ✓ | ✓ | · | — | `library/penal_code/s304A_causing_death_rash_negligent_act/statute.yh` |
+| s304A | Causing death by rash or negligent act | ✓ | ✓ | ✓ | 2026-04-24 Opus 4.7 (automated reviewer, phase D priority batch) | `library/penal_code/s304A_causing_death_rash_negligent_act/statute.yh` |
 | s304B | Causing death of child below 14 years of age, domestic worke | ✓ | ✓ | · | — | `library/penal_code/s304B_causing_death_child_below_14_years_age/statute.yh` |
 | s304C | Causing or allowing death of child below 14 years of age, do | ✓ | ✓ | · | — | `library/penal_code/s304C_causing_allowing_death_child_below_14_years/statute.yh` |
 | s305 | Abetment of suicide or attempted suicide of minor or person  | ✓ | ✓ | · | — | `library/penal_code/s305_abetment_suicide_attempted_suicide_minor/statute.yh` |
@@ -363,7 +363,7 @@ _Valid date: n/a_
 | s347 | Wrongful confinement for the purpose of extorting property o | ✓ | ✓ | · | — | `library/penal_code/s347_wrongful_confinement_purpose_extorting/statute.yh` |
 | s348 | Wrongful confinement for the purpose of extorting confession | ✓ | ✓ | · | — | `library/penal_code/s348_wrongful_confinement_purpose_extorting_confess/statute.yh` |
 | s349 | Force | ✓ | ✓ | · | — | `library/penal_code/s349_force/statute.yh` |
-| s350 | Criminal force | ✓ | ✓ | · | — | `library/penal_code/s350_criminal_force/statute.yh` |
+| s350 | Criminal force | ✓ | ✓ | ✓ | 2026-04-24 Opus 4.7 (automated reviewer, phase D priority batch) | `library/penal_code/s350_criminal_force/statute.yh` |
 | s351 | Assault | ✓ | ✓ | · | — | `library/penal_code/s351_assault/statute.yh` |
 | s352 | Punishment for using criminal force otherwise than on grave  | ✓ | ✓ | · | — | `library/penal_code/s352_punishment_using_criminal_force_otherwise/statute.yh` |
 | s353 | Using criminal force to deter a public servant from discharg | ✓ | ✓ | · | — | `library/penal_code/s353_using_criminal_force_deter_public_servant/statute.yh` |
@@ -471,7 +471,7 @@ _Valid date: n/a_
 | s417 | Punishment for cheating | ✓ | ✓ | · | — | `library/penal_code/s417_punishment_cheating/statute.yh` |
 | s418 | Cheating with knowledge that wrongful loss may be thereby ca | ✓ | ✓ | · | — | `library/penal_code/s418_cheating_knowledge_that_wrongful_loss_may/statute.yh` |
 | s419 | Punishment for cheating by personation | ✓ | ✓ | · | — | `library/penal_code/s419_punishment_cheating_personation/statute.yh` |
-| s420 | Cheating and dishonestly inducing a delivery of property | ✓ | ✓ | ✓ | 2026-03-08 Yuho Team | `library/penal_code/s420_cheating_inducing_delivery/statute.yh` |
+| s420 | Cheating and dishonestly inducing a delivery of property | ✓ | ✓ | ✓ | 2026-04-24 Opus 4.7 (automated reviewer, phase D priority batch) | `library/penal_code/s420_cheating_inducing_delivery/statute.yh` |
 | s420A | Obtaining services dishonestly or fraudulently | ✓ | ✓ | · | — | `library/penal_code/s420A_obtaining_services_dishonestly_fraudulently/statute.yh` |
 | s421 | Dishonest or fraudulent removal or concealment of property t | ✓ | ✓ | · | — | `library/penal_code/s421_dishonest_fraudulent_removal_concealment/statute.yh` |
 | s422 | Dishonestly or fraudulently preventing a debt or demand due  | ✓ | ✓ | · | — | `library/penal_code/s422_dishonestly_fraudulently_preventing_debt/statute.yh` |
@@ -504,7 +504,7 @@ _Valid date: n/a_
 | s461 | Dishonestly breaking open any closed receptacle containing o | ✓ | ✓ | · | — | `library/penal_code/s461_dishonestly_breaking_open_closed_receptacle/statute.yh` |
 | s462 | Punishment for same offence when committed by person entrust | ✓ | ✓ | · | — | `library/penal_code/s462_punishment_same_offence_when_committed/statute.yh` |
 | s463 | Forgery | ✓ | ✓ | ✓ | 2026-03-08 Yuho Team | `library/penal_code/s463_forgery/statute.yh` |
-| s464 | Making a false document or false electronic record | ✓ | ✓ | · | — | `library/penal_code/s464_making_false_document_false_electronic_record/statute.yh` |
+| s464 | Making a false document or false electronic record | ✓ | ✓ | ✓ | 2026-04-24 Opus 4.7 (automated reviewer, phase D priority batch) | `library/penal_code/s464_making_false_document_false_electronic_record/statute.yh` |
 | s465 | Punishment for forgery | ✓ | ✓ | ✓ | 2026-03-10 Yuho Team | `library/penal_code/s465_punishment_for_forgery/statute.yh` |
 | s466 | Forgery of a record of a court of justice, or a public regis | ✓ | ✓ | · | — | `library/penal_code/s466_forgery_record_court_justice_public_register/statute.yh` |
 | s467 | Forgery of a valuable security or will | ✓ | ✓ | · | — | `library/penal_code/s467_forgery_valuable_security_will/statute.yh` |
@@ -537,10 +537,10 @@ _Valid date: n/a_
 | s502 | Sale of printed or engraved substance containing defamatory  | ✓ | ✓ | · | — | `library/penal_code/s502_sale_printed_engraved_substance_containing/statute.yh` |
 | s503 | Criminal intimidation | ✓ | ✓ | ✓ | 2026-03-08 Yuho Team | `library/penal_code/s503_criminal_breach_of_trust/statute.yh` |
 | s504 | Intentional insult with intent to provoke a breach of the pe | ✓ | ✓ | · | — | `library/penal_code/s504_intentional_insult_intent_provoke_breach/statute.yh` |
-| s505 | Statements conducing to public mischief | ✓ | ✓ | · | — | `library/penal_code/s505_statements_conducing_public_mischief/statute.yh` |
+| s505 | Statements conducing to public mischief | ✓ | ✓ | ✓ | 2026-04-24 Opus 4.7 (automated reviewer, phase D priority batch) | `library/penal_code/s505_statements_conducing_public_mischief/statute.yh` |
 | s506 | Punishment for criminal intimidation | ✓ | ✓ | · | — | `library/penal_code/s506_punishment_criminal_intimidation/statute.yh` |
 | s507 | Criminal intimidation by an anonymous communication | ✓ | ✓ | · | — | `library/penal_code/s507_criminal_intimidation_anonymous_communication/statute.yh` |
-| s511 | Attempt to commit offence | ✓ | ✓ | · | — | `library/penal_code/s511_attempt_commit_offence/statute.yh` |
+| s511 | Attempt to commit offence | ✓ | ✓ | ✓ | 2026-04-24 Opus 4.7 (automated reviewer, phase D priority batch) | `library/penal_code/s511_attempt_commit_offence/statute.yh` |
 | s512 | Punishment for attempting to commit offences | ✓ | ✓ | · | — | `library/penal_code/s512_punishment_attempting_commit_offences/statute.yh` |
 
 ## Unencoded sections (0)

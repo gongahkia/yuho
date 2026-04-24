@@ -184,6 +184,38 @@ doesn't traverse `referencing` edges to load the referenced statute's
 AST. Cross-section queries ("show me all sections that extend s415
 cheating") aren't wired yet. This is tooling, not grammar — deferred.
 
+### G12 — mixed cumulative + alternative penalty clauses
+
+Surfaced during the Phase D priority-batch re-encoding of s420: "imprisonment
+for a term which may extend to 10 years, and shall also be liable to fine or
+to caning or to both." This is cumulative imprisonment AND alternative
+(fine | caning | both). Neither `penalty cumulative { ... }` nor `penalty
+or_both { ... }` alone expresses it — the imprisonment is always imposed,
+the fine/caning is a separate choice.
+
+**Workaround used by the Codex agent on s420:** split into two sibling
+penalty blocks, one `cumulative` with imprisonment, one `or_both` with fine
+and caning, plus `supplementary` string notes to document the relationship.
+Parses cleanly but isn't semantically integrated — a downstream tool can't
+easily tell that the second block modifies the first.
+
+**Fix direction:** allow nested penalty combinators, e.g.:
+
+    penalty cumulative {
+      imprisonment := 0 years .. 10 years;
+      or_both {
+        fine := unlimited;
+        caning := 0 .. 24 strokes;
+      }
+    }
+
+Or: allow a `penalty` block to own a `then or_both { ... }` sub-block for
+"and also liable to" semantics.
+
+Known affected sections from a spot check: s420, s325, likely 50+ others
+that use the "… and shall also be liable to fine …" pattern. Re-encoding
+wave can use the workaround until the grammar lands the fix.
+
 ### G11 — `any_of` vs `all_of` misclassification risk
 
 s505 has three alternative mens-rea arms: intent to cause mutiny OR

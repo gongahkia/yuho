@@ -16,4 +16,6 @@ summary = "Defines when a person is said to make a false document or false elect
 source = "Singapore Penal Code 1871, Section 464"
 
 [verification]
+last_verified = "2026-04-24"
+verified_by = "Opus 4.7 (automated reviewer, phase D priority batch)"
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr464-#pr464-"
