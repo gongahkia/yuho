@@ -1,24 +1,80 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr376F-#pr376F-
-// Singapore Penal Code Section 376F
+/// @amendment [15/2019]
+/// @amendment [27/2018]
+/// @amendment [ Deleted by Act 15 of 2019 ]
 
-statute 376F "Procurement of sexual activity with person with mental disability" effective 1872-01-01 {
-    definitions {
-        mental_disability := "A mental impairment as defined in section 377C";
+statute 376F "Procurement of sexual activity with person with mental disability" effective 1872-01-01 effective 2008-02-01 effective 2018-12-19 effective 2020-01-01 {
+    subsection (1) {
+        elements {
+            /// Subsection (1) is conjunctive overall: one touching limb, the sexual-consent limb, one consent-obtaining branch, mental disability, and A's knowledge must all be present.
+            all_of {
+                /// Paragraph (a) is disjunctive between direct touching and intentional incitement to touch.
+                any_of {
+                    actus_reus intentional_touching := "A intentionally touches another person ( B )";
+                    actus_reus intentional_incitement := "A intentionally incites B to touch A or B or another person";
+                }
+                circumstance touching_is_sexual := "The touching is sexual";
+                circumstance b_consents_to_touching := "B consents to the touching";
+
+                /// Paragraph (c) differs depending on whether B is A's spouse.
+                any_of {
+                    all_of {
+                        circumstance b_not_a_spouse := "B is not A’s spouse";
+                        actus_reus consent_obtained_by_inducement_threat_or_deception := "A obtains B’s consent by means of an inducement offered or given, a threat made or a deception practised by A for that purpose";
+                    }
+                    all_of {
+                        circumstance b_is_a_spouse := "B is A’s spouse";
+                        actus_reus consent_obtained_by_threat_or_deception := "A obtains B’s consent by means of a threat made or a deception practised by A for that purpose";
+                    }
+                }
+
+                circumstance mental_disability := "B has a mental disability";
+                mens_rea knowledge_of_mental_disability := "A knows or could reasonably be expected to know that B has a mental disability";
+            }
+        }
     }
 
-    elements {
-        /// procure sexual activity with a person with mental disability
-        actus_reus procure_sexual_activity := "Procures a person with mental disability to engage in sexual activity";
-        /// the other person has a mental disability
-        circumstance mental_disability := "The other person is a person with mental disability";
-        /// procurement is via inducement, threat or deception
-        mens_rea exploitation := "The procurement is obtained through inducement, threat or deception";
+    subsection (2) {
+        penalty or_both {
+            imprisonment := 0 years .. 5 years;
+            fine := unlimited;
+            caning := 0 .. 24 strokes;
+            supplementary := "Subject to subsection (3), a person who is guilty of an offence under this section shall be punished with imprisonment for a term which may extend to 5 years, or with fine, or with caning, or with any combination of such punishments. [27/2018]";
+        }
     }
 
-    penalty {
-        imprisonment := 0 years .. 10 years;
+    subsection (3) {
+        elements {
+            all_of {
+                circumstance offence_under_this_section := "A person is guilty of an offence under this section";
+                any_of {
+                    circumstance penetration_of_vagina_or_anus := "The touching involved penetration of the vagina or anus, as the case may be, with a part of the body or anything else";
+                    circumstance penetration_of_mouth_with_penis := "The touching involved penetration of the mouth with the penis";
+                }
+            }
+        }
+
+        penalty cumulative {
+            imprisonment := 0 years .. 20 years;
+            supplementary := "If the touching involved penetration of the vagina or anus, as the case may be, with a part of the body or anything else, or penetration of the mouth with the penis, a person who is guilty of an offence under this section shall be punished with imprisonment for a term which may extend to 20 years.";
+        }
+
+        penalty alternative {
+            fine := unlimited;
+            caning := 0 .. 24 strokes;
+            supplementary := "The offender shall also be liable to a fine or to caning. [27/2018]";
+        }
     }
 
+    subsection (4) {
+        /// Deleted by Act 15 of 2019.
+    }
+
+    subsection (5) {
+        definitions {
+            mental_disability := "An impairment of or a disturbance in the functioning of the mind or brain resulting from any disability or disorder of the mind or brain which impairs the ability to make a proper judgement in the giving of consent to sexual touching. [15/2019]";
+        }
+    }
 }

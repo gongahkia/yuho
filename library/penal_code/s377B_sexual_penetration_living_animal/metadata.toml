@@ -2,16 +2,17 @@
 section_number = "377B"
 title = "Sexual penetration with living animal"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Sexual penetration with a living animal."
+summary = "Creates offences for sexual penetration involving a living animal and sets separate punishments for the subsection (1) and subsection (3) offences."
 source = "Singapore Penal Code 1871, Section 377B"
 
 [verification]

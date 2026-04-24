@@ -2,16 +2,17 @@
 section_number = "377"
 title = "Sexual penetration, etc., of a corpse"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Sexual penetration, in various forms, of a corpse."
+summary = "Section 377 criminalises eight alternative forms of sexual penetration involving a human corpse, with separate punishment tiers for paragraphs (a) to (d) and for paragraphs (e) to (h)."
 source = "Singapore Penal Code 1871, Section 377"
 
 [verification]

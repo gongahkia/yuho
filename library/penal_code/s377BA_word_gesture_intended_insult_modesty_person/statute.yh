@@ -1,23 +1,35 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BA-#pr377BA-
-// Singapore Penal Code Section 377BA
+/// @amendment [15/2019]
 
-statute 377BA "Word or gesture intended to insult modesty of any person" effective 1872-01-01 {
-    definitions {
-        insult_modesty := "Uttering, making, gesturing or exhibiting anything to insult modesty";
-    }
-
+statute 377BA "Word or gesture intended to insult modesty of any person" effective 1872-01-01 effective 2019-12-31 {
     elements {
-        /// word, sound, gesture or object intended to insult modesty
-        actus_reus insult_modesty := "Utters a word, makes a sound or gesture, or exhibits an object, intending to insult the modesty of any person";
-        /// intent that word, sound or gesture be heard or seen
-        mens_rea intent_insult_modesty := "Intending that such word, sound or gesture be heard or seen by that person, or that such object be seen";
+        /// Section 377BA requires the intent to insult modesty plus either an expressive act with the required hearing/sight intent, or intrusion upon privacy.
+        all_of {
+            mens_rea insult_modesty := "Intending to insult the modesty of any person";
+            any_of {
+                all_of {
+                    any_of {
+                        actus_reus utter_word := "Utters any word";
+                        actus_reus make_sound := "Makes any sound";
+                    }
+                    mens_rea heard_by_person := "Intending that such word or sound will be heard by such person";
+                }
+                all_of {
+                    any_of {
+                        actus_reus make_gesture := "Makes any gesture";
+                        actus_reus exhibit_object := "Exhibits any object";
+                    }
+                    mens_rea seen_by_person := "Intending that such gesture or object will be seen by such person";
+                }
+                actus_reus intrude_privacy := "Intrudes upon the privacy of such person";
+            }
+        }
     }
 
-    penalty {
-        imprisonment := 0 years .. 1 years;
-        fine := $0.00 .. $5,000.00;
+    penalty or_both {
+        imprisonment := 0 days .. 1 year;
+        fine := unlimited;
     }
-
 }

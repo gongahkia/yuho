@@ -1,23 +1,43 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377-#pr377-
-// Singapore Penal Code Section 377
+/// @amendment [Act 23 of 2021 wef 01/03/2022]
 
-statute 377 "Sexual penetration, etc., of a corpse" effective 1872-01-01 {
-    definitions {
-        corpse := "The dead body of a human being";
+statute 377 "Sexual penetration, etc., of a corpse" effective 1872-01-01 effective 2022-03-01 {
+    subsection (1) {
+        elements {
+            /// Subsection (1) is satisfied by any one of the eight statutory alternatives.
+            any_of {
+                actus_reus paragraph_a := "A person ( A ) penetrates, with A's penis, the vagina, anus or mouth of a human corpse";
+                actus_reus paragraph_b := "A person ( A ) sexually penetrates, with a part of A's body (other than A's penis, if A is a man) or anything else, the vagina or anus of a human corpse";
+                actus_reus paragraph_c := "A person ( A ) causes A's vagina, anus or mouth to be penetrated by the penis of a human corpse";
+                actus_reus paragraph_d := "A person ( A ) causes A's vagina or anus to be sexually penetrated by a part of a human corpse (other than the penis, if the human corpse is that of a deceased man)";
+                actus_reus paragraph_e := "A person ( A ) causes a person ( B ) to penetrate, with B's penis (if B is a man), the vagina, anus or mouth of a human corpse, without B's consent";
+                actus_reus paragraph_f := "A person ( A ) causes B to sexually penetrate, with a part of B's body (other than B's penis, if B is a man) or anything else, the vagina or anus of a human corpse, without B's consent";
+                actus_reus paragraph_g := "A person ( A ) causes B's vagina, anus or mouth to be penetrated by the penis of a human corpse, without B's consent";
+                actus_reus paragraph_h := "A person ( A ) causes B's vagina or anus to be sexually penetrated by a part of a human corpse (other than the penis, if the human corpse is that of a deceased man), without B's consent";
+            }
+        }
     }
 
-    elements {
-        /// sexual penetration of a corpse
-        actus_reus sexual_corpse := "Penetrates the vagina, anus or mouth of a dead person, or sexually penetrates with an object";
-        /// the body is that of a dead person
-        circumstance victim_is_corpse := "The person penetrated is dead";
+    subsection (2) {
+        penalty or_both {
+            imprisonment := 0 years .. 5 years;
+            fine := unlimited;
+            supplementary := "A person who is guilty of an offence under subsection (1)( a ), ( b ), ( c ) or ( d ) shall be punished with imprisonment for a term that may extend to 5 years, or with fine, or with both.";
+        }
     }
 
-    penalty {
-        imprisonment := 0 years .. 5 years;
-        fine := $0.00 .. $10,000.00;
-    }
+    subsection (3) {
+        penalty cumulative {
+            imprisonment := 0 years .. 20 years;
+            supplementary := "A person who is guilty of an offence under subsection (1)( e ), ( f ), ( g ) or ( h ) shall be punished with imprisonment for a term that may extend to 20 years. [Act 23 of 2021 wef 01/03/2022]";
+        }
 
+        penalty alternative {
+            fine := unlimited;
+            caning := 0 .. 24 strokes;
+            supplementary := "The offender shall also be liable to fine or to caning. [Act 23 of 2021 wef 01/03/2022]";
+        }
+    }
 }

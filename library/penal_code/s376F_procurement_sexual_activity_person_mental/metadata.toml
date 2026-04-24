@@ -2,16 +2,17 @@
 section_number = "376F"
 title = "Procurement of sexual activity with person with mental disability"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Procuring sexual activity with a person with mental disability by inducement, threat or deception."
+summary = "This section criminalises obtaining consent to sexual touching from a person with a mental disability through inducement, threat or deception, with higher punishment where penetration is involved."
 source = "Singapore Penal Code 1871, Section 376F"
 
 [verification]

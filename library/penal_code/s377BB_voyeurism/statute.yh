@@ -1,27 +1,66 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BB-#pr377BB-
-// Singapore Penal Code Section 377BB
+/// @amendment [15/2019]
+/// @amendment [Act 23 of 2021 wef 01/03/2022]
 
-statute 377BB "Voyeurism" effective 1872-01-01 {
-    definitions {
-        voyeurism := "Observing or recording a private act without consent for sexual or distressing purpose";
-        private_act := "Act done in circumstances that would reasonably be expected to provide privacy";
+statute 377BB "Voyeurism" effective 1872-01-01 effective 2019-12-31 effective 2022-03-01 {
+    subsection (1) {
+        elements {
+            /// Subsection (1) is conjunctive: the intentional observation, the private act without consent, and A's knowledge or reason to believe of non-consent must all be present.
+            all_of {
+                actus_reus intentional_observation := "Any person ( A ) intentionally observes another person ( B ) doing a private act without B ’s consent";
+                mens_rea knowledge_or_reason_to_believe_non_consent := "A knows or has reason to believe that B does not consent to being observed. [15/2019]";
+            }
+        }
     }
 
-    elements {
-        /// observe or record a private act without consent
-        actus_reus observe_or_record := "Intentionally observes, operates equipment to observe, or records another person doing a private act";
-        /// without the consent of the observed person
-        circumstance no_consent := "Without the consent of the other person";
-        /// for purpose of sexual gratification or causing distress
-        mens_rea sexual_purpose := "For the purpose of obtaining sexual gratification, or knowing it is likely to cause humiliation, alarm or distress";
+    subsection (2) {
     }
 
-    penalty {
-        imprisonment := 0 years .. 2 years;
-        fine := $0.00 .. $10,000.00;
-        caning := 0 .. 6 strokes;
+    subsection (3) {
     }
 
+    subsection (4) {
+    }
+
+    subsection (5) {
+    }
+
+    subsection (6) {
+        elements {
+            all_of {
+                actus_reus installs_or_constructs_or_adapts := "Any person ( A ) installs equipment, or constructs or adapts a structure or part of a structure";
+                mens_rea intention_to_enable_voyeurism_offence := "With the intention of enabling A or another person to commit an offence under subsection (1), (2), (3), (4) or (5). [15/2019]";
+            }
+        }
+    }
+
+    subsection (7) {
+        penalty or_both {
+            imprisonment := 0 years .. 2 years;
+            fine := unlimited;
+            caning := 0 .. 24 strokes;
+            supplementary := "Subject to subsection (8), a person who is guilty of an offence under this section shall on conviction be punished with imprisonment for a term which may extend to 2 years, or with fine, or with caning, or with any combination of such punishments. [15/2019]";
+        }
+    }
+
+    subsection (8) {
+        penalty cumulative {
+            imprisonment := 0 years .. 2 years;
+            supplementary := "A person who commits an offence under this section against a person who is below 14 years of age shall on conviction be punished with imprisonment for a term which may extend to 2 years.";
+        }
+
+        penalty alternative {
+            fine := unlimited;
+            caning := 0 .. 24 strokes;
+            supplementary := "The offender shall also be liable to fine or to caning. [15/2019]";
+        }
+    }
+
+    subsection (9) {
+        definitions {
+            recording_non_consent_presumption := "In any proceedings for an offence under this section, where a person ( A ) has made a recording of another person ( B ) doing a private act or of B ’s genital region, breasts if B is female, or buttocks (whether exposed or covered), in circumstances where the genital region, breasts or buttocks would not otherwise be visible, it is presumed until the contrary is proved that B did not consent to A making the recording. [15/2019] [Act 23 of 2021 wef 01/03/2022]";
+        }
+    }
 }

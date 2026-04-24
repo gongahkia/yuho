@@ -2,16 +2,17 @@
 section_number = "377BB"
 title = "Voyeurism"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Voyeurism -- observing or recording a private act without consent for a sexual purpose."
+summary = "Creates voyeurism offences, installation liability, sentencing rules, and a recording-based non-consent presumption."
 source = "Singapore Penal Code 1871, Section 377BB"
 
 [verification]

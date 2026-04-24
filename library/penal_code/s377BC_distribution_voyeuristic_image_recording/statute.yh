@@ -1,25 +1,42 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BC-#pr377BC-
-// Singapore Penal Code Section 377BC
+/// @amendment [15/2019]
 
-statute 377BC "Distribution of voyeuristic image or recording" effective 1872-01-01 {
-    definitions {
-        voyeuristic_image := "An image obtained in circumstances constituting voyeurism under s377BB";
+statute 377BC "Distribution of voyeuristic image or recording" effective 1872-01-01 effective 2019-12-31 {
+    subsection (1) {
+        elements {
+            /// subsection (1) requires distribution plus all three knowledge/consent conditions
+            all_of {
+                actus_reus distribution := "A intentionally or knowingly distributes an image or recording of another person ( B ) without B ’s consent to the distribution. [15/2019]";
+                circumstance obtained_through_377BB := "A knows or has reason to believe that the image or recording was obtained through the commission of an offence under section 377BB. [15/2019]";
+                mens_rea knows_no_consent := "A knows or has reason to believe that B does not consent to the distribution. [15/2019]";
+            }
+        }
     }
 
-    elements {
-        /// distribute a voyeuristic image or recording
-        actus_reus distribute_voyeuristic := "Intentionally distributes an image or recording of another person";
-        /// the image or recording is a voyeuristic one
-        circumstance voyeuristic_image := "The image or recording is a voyeuristic image or recording";
-        /// without consent of the depicted person
-        circumstance no_consent := "Without the consent of the other person depicted";
+    subsection (2) {
+        /// Canonical source text in library/penal_code/_raw/act.json is truncated at:
+        /// "Any person ( A ) shall be guilty of an offence who —"
     }
 
-    penalty {
-        imprisonment := 0 years .. 5 years;
-        caning := 0 .. 6 strokes;
+    subsection (3) {
+        penalty or_both {
+            imprisonment := 0 years .. 5 years;
+            fine := unlimited;
+            supplementary := "Subject to subsection (4), a person who is guilty of an offence under subsection (1) or (2) shall on conviction be punished with imprisonment for a term which may extend to 5 years, or with fine, or with caning, or any combination of such punishments. [15/2019]";
+        }
     }
 
+    subsection (4) {
+        elements {
+            circumstance victim_below_14 := "Where the image or recording in subsection (1) or (2) is of a person below 14 years of age. [15/2019]";
+        }
+
+        penalty {
+            imprisonment := 0 years .. 5 years;
+            fine := unlimited;
+            supplementary := "A person who is guilty of an offence under subsection (1) or (2) shall on conviction be punished with imprisonment for a term which may extend to 5 years, and shall also be liable to fine or to caning. [15/2019]";
+        }
+    }
 }

@@ -1,23 +1,54 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr376H-#pr376H-
-// Singapore Penal Code Section 376H
+/// @amendment [Act 23 of 2021 wef 01/03/2022]
+/// @amendment [15/2019]
 
-statute 376H "Procurement of sexual activity by deception or false representation" effective 1872-01-01 {
-    definitions {
-        deception_false_representation := "Any false statement or conduct that induces consent or participation";
+statute 376H "Procurement of sexual activity by deception or false representation" effective 1872-01-01 effective 2019-12-31 effective 2022-03-01 {
+    subsection (1) {
+        elements {
+            /// Subsection (1) is conjunctive overall, with paragraphs (a) and (d) each containing statutory alternatives.
+            all_of {
+                any_of {
+                    actus_reus intentional_touching := "Any person (A) intentionally touches another person (B)";
+                    actus_reus intentional_incitement_to_touch_a_or_a_bodily_fluids := "Any person (A) intentionally incites B to touch A or the bodily fluids of A";
+                    actus_reus intentional_incitement_to_touch_b := "Any person (A) intentionally incites B to touch B";
+                    actus_reus intentional_incitement_to_touch_c_or_c_bodily_fluids := "Any person (A) intentionally incites B to touch another person (C) or the bodily fluids of C";
+                    actus_reus intentional_incitement_to_be_touched_by_c := "Any person (A) intentionally incites B to be touched by C";
+                }
+
+                circumstance sexual_touching_with_b_consent := "The touching is sexual and B consents to the touching";
+                mens_rea fraudulent_obtaining_of_consent := "A fraudulently obtains B's consent by means of deception or false representation practised or made by A for that purpose";
+
+                any_of {
+                    circumstance deception_relates_to_use_of_sexually_protective_measure := "The deception or false representation mentioned in paragraph (c) relates to the use or manner of use of any sexually protective measure";
+                    circumstance deception_relates_to_std_risk := "The deception or false representation mentioned in paragraph (c) relates to the risk of B contracting a sexually transmitted disease from the touching";
+                }
+
+                mens_rea knowledge_consent_given_in_consequence := "A knows or has reason to believe that the consent was given in consequence of such deception or false representation";
+            }
+        }
     }
 
-    elements {
-        /// procure sexual activity by deception
-        actus_reus procure_by_deception := "Procures another person to engage in sexual activity";
-        /// by deception or false representation
-        mens_rea deception_or_false := "By deception or false representation made by or on behalf of that person";
+    subsection (2) {
+        penalty or_both when penetrative_touching_case {
+            imprisonment := 0 years .. 10 years;
+            fine := unlimited;
+            supplementary := "Applies in the case where the sexual touching mentioned in subsection (1) involved penetration of the vagina or anus (as the case may be) with a part of the body or anything else, or penetration of the mouth with the penis; the exact statutory caning limb is preserved in GAPS.md because the grammar cannot encode uncapped caning without inventing a stroke count.";
+        }
+
+        penalty or_both when other_case {
+            imprisonment := 0 years .. 2 years;
+            fine := unlimited;
+            supplementary := "Applies in any other case.";
+        }
     }
 
-    penalty {
-        imprisonment := 0 years .. 10 years;
-        fine := $0.00 .. $10,000.00;
+    subsection (3) {
+        definitions {
+            false_representation := "A person makes a false representation if it is untrue or misleading, and that person knows that it is, or might be, untrue or misleading.";
+            representation := "A representation may be express or implied.";
+            sexually_protective_measure := "Where B is female, a device, drug or medical procedure to prevent pregnancy or sexually transmitted diseases as a result of sexual intercourse; or where B is male, a device, drug or medical procedure to prevent sexually transmitted diseases as a result of sexual intercourse.";
+        }
     }
-
 }

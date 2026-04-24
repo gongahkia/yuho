@@ -2,16 +2,17 @@
 section_number = "377BC"
 title = "Distribution of voyeuristic image or recording"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Distribution of a voyeuristic image or recording without consent."
+summary = "Section 377BC criminalises distributing a voyeuristic image or recording and prescribes enhanced punishment where the depicted person is below 14 years of age."
 source = "Singapore Penal Code 1871, Section 377BC"
 
 [verification]

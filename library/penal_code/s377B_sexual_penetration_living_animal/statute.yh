@@ -1,21 +1,41 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377B-#pr377B-
-// Singapore Penal Code Section 377B
 
 statute 377B "Sexual penetration with living animal" effective 1872-01-01 {
-    definitions {
-        living_animal := "Any living animal capable of being penetrated";
+    subsection (1) {
+        elements {
+            /// Subsection (1) is conjunctive overall: the actor must be a person A and must commit one of the two penetration alternatives.
+            all_of {
+                circumstance person_a := "Any person ( A )";
+                any_of {
+                    actus_reus penile_penetration_of_animal := "Penetrates, with A ’s penis, the vagina, anus or any orifice of an animal";
+                    actus_reus causes_or_permits_penetration_by_animal := "Causes or permits A ’s vagina, anus or mouth, as the case may be, to be penetrated by the penis of an animal";
+                }
+            }
+        }
     }
 
-    elements {
-        /// sexual penetration with a living animal
-        actus_reus sexual_animal := "Penetrates the vagina, anus or mouth of a living animal, or permits an animal to penetrate him or her";
+    subsection (2) {
+        penalty or_both {
+            imprisonment := 0 days .. 2 years;
+            fine := unlimited;
+        }
     }
 
-    penalty {
-        imprisonment := 0 years .. 2 years;
-        fine := $0.00 .. $40,000.00;
+    subsection (3) {
     }
 
+    subsection (4) {
+        penalty cumulative {
+            imprisonment := 0 days .. 20 years;
+            supplementary := "A person who is guilty of an offence under subsection (3) shall be punished with imprisonment for a term which may extend to 20 years.";
+        }
+
+        penalty alternative {
+            fine := unlimited;
+            caning := 0 .. 24 strokes;
+            supplementary := "The offender shall also be liable to fine or to caning.";
+        }
+    }
 }

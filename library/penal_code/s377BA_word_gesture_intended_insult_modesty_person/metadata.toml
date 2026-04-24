@@ -2,16 +2,17 @@
 section_number = "377BA"
 title = "Word or gesture intended to insult modesty of any person"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Word, sound, gesture or object intended to insult the modesty of any person."
+summary = "Creates an offence for insulting a person's modesty through specified words, sounds, gestures, objects, or privacy intrusion."
 source = "Singapore Penal Code 1871, Section 377BA"
 
 [verification]
