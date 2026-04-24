@@ -1,6 +1,6 @@
 # Coverage — Penal Code 1871 (PC1871)
 
-_Generated: 2026-04-24T17:16:40+00:00_  
+_Generated: 2026-04-24T17:20:55+00:00_  
 _Scraped: 2026-04-24T17:04:28Z_  
 _Valid date: n/a_
 

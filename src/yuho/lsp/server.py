@@ -8,7 +8,12 @@ import threading
 
 try:
     from lsprotocol import types as lsp
-    from pygls.lsp.server import LanguageServer
+    # pygls 1.0 exposed LanguageServer at `pygls.server`; some intermediate
+    # releases used `pygls.lsp.server`. Try both so the server works on both.
+    try:
+        from pygls.server import LanguageServer
+    except ImportError:
+        from pygls.lsp.server import LanguageServer  # type: ignore[no-redef]
     from pygls.workspace import TextDocument
 except ImportError:
     raise ImportError("LSP dependencies not installed. Install with: pip install yuho[lsp]")
@@ -1433,43 +1438,82 @@ class YuhoLanguageServer(LanguageServer):
         if not doc_state or not doc_state.ast:
             return lenses
 
-        # Add "Run tests" lens above statute definitions
+        coverage_by_section = self._load_coverage()
+
         for statute in doc_state.ast.statutes:
             loc = statute.source_location
-            if loc:
+            if not loc: continue
+            line_range = lsp.Range(
+                start=lsp.Position(line=loc.line - 1, character=0),
+                end=lsp.Position(line=loc.line - 1, character=0),
+            )
+
+            # L1/L2/L3 status badge (LSP buff-up, code-lens inline per statute)
+            row = coverage_by_section.get(statute.section_number)
+            if row:
+                l1 = "✓" if row.get("L1") else "·"
+                l2 = "✓" if row.get("L2") else "·"
+                l3 = "✓" if row.get("L3") else "·"
+                ver = row.get("L3_verified_on") or ""
+                title_suffix = f" (verified {ver})" if ver else ""
                 lenses.append(
                     lsp.CodeLens(
-                        range=lsp.Range(
-                            start=lsp.Position(line=loc.line - 1, character=0),
-                            end=lsp.Position(line=loc.line - 1, character=0),
-                        ),
+                        range=line_range,
                         command=lsp.Command(
-                            title=f"▶ Run tests for S{statute.section_number}",
-                            command="yuho.runStatuteTests",
+                            title=f"L1 {l1} · L2 {l2} · L3 {l3}{title_suffix}",
+                            command="yuho.showCoverage",
                             arguments=[uri, statute.section_number],
                         ),
                     )
                 )
 
-        # Add "Transpile" lens above statute definitions
-        for statute in doc_state.ast.statutes:
-            loc = statute.source_location
-            if loc:
-                lenses.append(
-                    lsp.CodeLens(
-                        range=lsp.Range(
-                            start=lsp.Position(line=loc.line - 1, character=0),
-                            end=lsp.Position(line=loc.line - 1, character=0),
-                        ),
-                        command=lsp.Command(
-                            title="📄 Transpile to English",
-                            command="yuho.transpileStatute",
-                            arguments=[uri, statute.section_number, "english"],
-                        ),
-                    )
+            lenses.append(
+                lsp.CodeLens(
+                    range=line_range,
+                    command=lsp.Command(
+                        title=f"▶ Run tests for S{statute.section_number}",
+                        command="yuho.runStatuteTests",
+                        arguments=[uri, statute.section_number],
+                    ),
                 )
+            )
+            lenses.append(
+                lsp.CodeLens(
+                    range=line_range,
+                    command=lsp.Command(
+                        title="📄 Transpile to English",
+                        command="yuho.transpileStatute",
+                        arguments=[uri, statute.section_number, "english"],
+                    ),
+                )
+            )
 
         return lenses
+
+    # LSP buff-up: cache coverage.json keyed by section number
+    _coverage_cache: dict | None = None
+
+    def _load_coverage(self) -> dict[str, dict]:
+        """Load coverage.json keyed by section number; cached in-process."""
+        if self._coverage_cache is not None:
+            return self._coverage_cache
+        try:
+            import json
+            from pathlib import Path
+            cov_path = (
+                Path(__file__).resolve().parent.parent.parent.parent
+                / "library" / "penal_code" / "_coverage" / "coverage.json"
+            )
+            if not cov_path.is_file():
+                self._coverage_cache = {}
+                return self._coverage_cache
+            d = json.loads(cov_path.read_text())
+            self._coverage_cache = {
+                row["number"]: row for row in d.get("sections", []) if row.get("number")
+            }
+        except Exception:
+            self._coverage_cache = {}
+        return self._coverage_cache
 
     def _get_folding_ranges(self, uri: str) -> List[lsp.FoldingRange]:
         """Provide folding ranges for code folding."""
@@ -1692,6 +1736,38 @@ class YuhoLanguageServer(LanguageServer):
 
         # Add parameter name hints for function calls
         # (Requires deeper AST traversal - simplified for now)
+
+        # LSP buff-up: statute-level summary hints — element count,
+        # illustration count, effective-date range, subsection count.
+        for statute in doc_state.ast.statutes:
+            loc = statute.source_location
+            if not loc: continue
+            if loc.line - 1 < range_.start.line or loc.line - 1 > range_.end.line:
+                continue
+            bits: list[str] = []
+            n_elems = sum(1 for _ in statute.elements)
+            if n_elems: bits.append(f"{n_elems} element{'s' if n_elems != 1 else ''}")
+            n_ills = len(statute.illustrations)
+            if n_ills: bits.append(f"{n_ills} illustration{'s' if n_ills != 1 else ''}")
+            n_subs = len(statute.subsections)
+            if n_subs: bits.append(f"{n_subs} subsection{'s' if n_subs != 1 else ''}")
+            n_excs = len(statute.exceptions)
+            if n_excs: bits.append(f"{n_excs} exception{'s' if n_excs != 1 else ''}")
+            effs = statute.effective_dates or ((statute.effective_date,) if statute.effective_date else ())
+            if effs: bits.append("effective " + " / ".join(effs))
+            if not bits: continue
+            # place hint at end of the statute's header line (approximation:
+            # right after the opening column of the statute keyword).
+            hint_col = max(0, loc.col + len("statute") + len(statute.section_number) + 30)
+            hints.append(
+                lsp.InlayHint(
+                    position=lsp.Position(line=loc.line - 1, character=hint_col),
+                    label=f"  ⟨{' · '.join(bits)}⟩",
+                    kind=lsp.InlayHintKind.Type,
+                    padding_left=True,
+                    padding_right=False,
+                )
+            )
 
         return hints
 
