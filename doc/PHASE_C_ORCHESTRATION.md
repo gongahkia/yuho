@@ -27,27 +27,56 @@ git status --short library/penal_code/
 
 ## Dispatch patterns
 
-### Sequential (safe, slow)
+### One section per agent (fine control, max parallelism)
 
 One agent at a time:
+
+```bash
+.venv-scrape/bin/python scripts/phase_c_prompt.py 34 | pbcopy     # → one agent
+.venv-scrape/bin/python scripts/phase_c_prompt.py 35 | pbcopy     # → another
+```
+
+Or pull the next unencoded in section order:
 
 ```bash
 .venv-scrape/bin/python scripts/phase_c_prompt.py --next 1 | pbcopy
 ```
 
-### Batched parallel (recommended)
+### Range → N prompts for N agents (scripted fan-out)
 
-Copy multiple prompts at once, split by sentinel:
+Split one invocation's output into per-agent files:
 
 ```bash
-.venv-scrape/bin/python scripts/phase_c_prompt.py --next 10 --stdout-split \
-    > /tmp/batch.txt
+.venv-scrape/bin/python scripts/phase_c_prompt.py 1-20 > /tmp/batch.txt
 csplit -z -f /tmp/batch_ -b '%02d.md' /tmp/batch.txt \
     '/<<<---NEXT_SECTION--->>>/' '{*}'
-# each /tmp/batch_NN.md is a standalone prompt for one section
+# each /tmp/batch_NN.md is a standalone prompt — paste into a separate agent
 ```
 
-Hand each file to a separate agent session.
+### Range → one prompt for one long-running agent (`--batch`)
+
+Best for Codex Cloud / Claude Code sessions that can run unattended:
+
+```bash
+.venv-scrape/bin/python scripts/phase_c_prompt.py 1-20 --batch | pbcopy
+.venv-scrape/bin/python scripts/phase_c_prompt.py 21-40 --batch | pbcopy
+.venv-scrape/bin/python scripts/phase_c_prompt.py 41-60 --batch | pbcopy
+# paste each into a separate Codex/Claude tab — each agent works through its
+# 20 sections sequentially, reports `completed: sN` after each one
+```
+
+### Mixed specs
+
+```bash
+.venv-scrape/bin/python scripts/phase_c_prompt.py 34 35 36           # space-separated
+.venv-scrape/bin/python scripts/phase_c_prompt.py 34,35,36           # comma-separated
+.venv-scrape/bin/python scripts/phase_c_prompt.py 1-10,34,304A       # range + list
+.venv-scrape/bin/python scripts/phase_c_prompt.py 300-310 --batch    # single agent, range
+```
+
+Ranges auto-expand letter-suffix variants present in the corpus
+(e.g. `300-310` picks up `304A`, `304B`, `304C`, `308A`, `308B`). Already-
+encoded sections are dropped silently (override with `--include-encoded`).
 
 ## Codex vs Claude — soft allocation heuristic
 
