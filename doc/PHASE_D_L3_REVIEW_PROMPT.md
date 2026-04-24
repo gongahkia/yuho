@@ -54,21 +54,22 @@ For each, decide PASS / FAIL and note the reason.
     ```
   Preserve any other `[verification]` fields that were already present (sso_url, disclaimer, etc.). Only set `last_verified` and `verified_by`.
 
-- **FLAG** — one or more checklist items fails, OR the decision requires human judgment you are not comfortable making. Do NOT write to `metadata.toml`. Instead, append a new entry to `library/penal_code/_L3_flags.md` with the format:
+- **FLAG** — one or more checklist items fails, OR the decision requires human judgment you are not comfortable making. Do NOT write to `metadata.toml`. Instead, write a per-section flag file at `library/penal_code/s{N}_<slug>/_L3_FLAG.md` with exactly this content:
     ```markdown
-    ## s{N}
+    # s{N} — L3 flag
+
     - failed: <checklist item number(s)>
     - reason: <one-sentence explanation>
     - suggested fix: <one sentence, optional>
     ```
-  If the file doesn't exist yet, create it with a `# Phase D L3 — flagged sections for human review` header.
+  **Do not** touch `library/penal_code/_L3_flags.md` or any other shared file — the dispatcher aggregates the per-section `_L3_FLAG.md` files at the end of the run so parallel agents never collide.
 
 ### Hard rules
 
 - Do NOT edit the `statute.yh` file. Review only.
 - Do NOT rewrite canonical text.
 - Do NOT stamp sections that fail any checklist item.
-- Do NOT create any files other than `_L3_flags.md`.
+- Do NOT create any files other than this section's `_L3_FLAG.md`.
 - If `metadata.toml` doesn't exist, create a minimal one with `[statute]` + `[verification]` fields (use the statute number, jurisdiction = "Singapore").
 - No git commands.
 

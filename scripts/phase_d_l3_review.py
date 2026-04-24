@@ -224,5 +224,28 @@ def main() -> None:
         except Exception: continue
     print(f"[end] STAMP={counts.get('STAMP',0)} FLAG={counts.get('FLAG',0)} ERROR={counts.get('ERROR',0)}", flush=True)
 
+    # aggregate per-section _L3_FLAG.md files into the canonical combined file.
+    # Parallel agents write to disjoint per-section files; we stitch them here.
+    flags_dir = REPO / "library" / "penal_code"
+    out_path = flags_dir / "_L3_flags.md"
+    entries: list[tuple[str, str]] = []
+    for p in sorted(flags_dir.glob("s*/_L3_FLAG.md")):
+        section_dir = p.parent
+        m = re.match(r"s(\d+[A-Z]*)_", section_dir.name)
+        if not m: continue
+        section = m.group(1)
+        entries.append((section, p.read_text()))
+    entries.sort(key=lambda e: _sortkey(e[0]))
+
+    with open(out_path, "w") as f:
+        f.write("# Phase D L3 — flagged sections for human review\n\n")
+        f.write("_Aggregated from per-section `_L3_FLAG.md` files. "
+                "Regenerate by re-running `phase_d_l3_review.py`._\n\n")
+        for _section, content in entries:
+            # per-section files start with a `# sN — L3 flag` header; demote to `##` for the combined doc
+            demoted = re.sub(r"^#\s+", "## ", content, count=1, flags=re.MULTILINE)
+            f.write(demoted.rstrip() + "\n\n")
+    print(f"[aggregate] {len(entries)} flags → {out_path}", flush=True)
+
 if __name__ == "__main__":
     main()

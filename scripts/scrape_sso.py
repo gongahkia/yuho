@@ -171,17 +171,59 @@ def _txt(el) -> str:
     return re.sub(r"\s+", " ", el.get_text(" ", strip=True)).strip()
 
 def _body_text(body_el: Tag) -> str:
-    """extract prov1Txt main-paragraph text, excluding nested tables and the
-    leading <strong>N.</strong> section marker."""
+    """extract prov1Txt / prov2Txt main-paragraph text, excluding nested tables
+    (which carry (a)(b)(c) subitems captured separately) and the leading
+    <strong>N.</strong> section marker. Also drops amendNote children so
+    amendment markers stay in their own field."""
     clone = BeautifulSoup(str(body_el), "lxml")
-    for t in clone.find_all(["div"], class_="table-responsive"):
-        t.decompose()
-    for t in clone.find_all("table"):                     # belt-and-braces: any nested table
+    # nested tables hold (a)(b)(c) alternates + (i)(ii)(iii) deeper lists
+    for t in clone.find_all("table"):
         if t.find_parent("table") is not None: t.decompose()
-    # drop the very first <strong> (section-number prefix)
+    for d in clone.find_all("div", class_="table-responsive"):
+        d.decompose()
+    for d in clone.find_all("div", class_="amendNote"):
+        d.decompose()
+    # drop a leading "N." section-number span
     lead = clone.find("strong")
     if lead and _LEAD_NUM_RE.match(_txt(lead)): lead.decompose()
     return _txt(clone)
+
+def _walk_nested_items(container: Tag, parent_label: str = "") -> list[tuple[str, str, str]]:
+    """Recursively extract (kind, label, text) tuples from nested SSO list
+    tables (p1_1 holding p1No/pTxt pairs; p2_1 holding p2No/p2Txt; etc.).
+
+    Returns a flat list with hierarchical labels like "(2)(a)", "(2)(a)(i)"
+    so the canonical corpus is complete end-to-end.
+    """
+    out: list[tuple[str, str, str]] = []
+    # direct-child tables only; deeper tables are reached via recursion on the
+    # row's text cell. Walk the tbody non-recursively to avoid finding the
+    # same <tr> twice when a row contains its own sub-table.
+    for tbl in container.find_all("table", recursive=False):
+        bodies = tbl.find_all("tbody", recursive=False) or [tbl]
+        for tbody in bodies:
+            for row in tbody.find_all("tr", recursive=False):
+                label_cell = row.find(["td", "th"], class_=re.compile(r"^p\d*No$"),
+                                      recursive=False)
+                text_cell = row.find(["td", "th"],
+                                     class_=re.compile(r"^p\d*Txt$|^pTxt$"),
+                                     recursive=False)
+                if not text_cell: continue
+                raw_label = _txt(label_cell) if label_cell else ""
+                # normalise "( a )" → "(a)", "(i)" stays "(i)"
+                label_clean = re.sub(r"\s+", "", raw_label) if raw_label else ""
+                combined_label = f"{parent_label}{label_clean}"
+                # cell text minus its own nested tables (those surface via recursion)
+                clone = BeautifulSoup(str(text_cell), "lxml")
+                for t in clone.find_all("table"):
+                    t.decompose()
+                for d in clone.find_all("div", class_="amendNote"):
+                    d.decompose()
+                text = _txt(clone)
+                if text:
+                    out.append(("item", combined_label, text))
+                out.extend(_walk_nested_items(text_cell, combined_label))
+    return out
 
 def _classify_fs(fs: Tag, text: str) -> tuple[str, str]:
     em = fs.find("em")
@@ -205,9 +247,16 @@ def _classify_fs(fs: Tag, text: str) -> tuple[str, str]:
     return "raw", ""
 
 def _parse_section(prov: Tag) -> Section | None:
-    # SSO layout: td.prov1Hdr (marginal note + anchor id); td.prov1Txt (body with
-    # leading <strong>N.</strong>); td.fs cells (all sub-items, nested in prov1tbl
-    # tables); .amendNote (amendments).
+    # SSO layout for a fully-featured offence section:
+    #   td.prov1Hdr (marginal note + anchor id)
+    #   td.prov1Txt (body for subsection (1) or the only body — leading
+    #                <strong>N.</strong> + main text + nested p1_1 table
+    #                carrying (a)(b)(c) alternates)
+    #   td.prov2Txt [repeated] (each is one numbered subsection (N) with its
+    #                own body and its own nested (a)(b)(c)/(i)(ii)(iii) tables)
+    #   td.prov1tbl > … > td.fs (cells carrying illustrations / explanations /
+    #                exceptions / provisos — legacy layout)
+    #   .amendNote (inline amendment markers)
     hdr = prov.select_one(".prov1Hdr, td.prov1Hdr")
     anchor = hdr.get("id") if hdr else prov.get("id")
     marginal = _txt(hdr)
@@ -222,6 +271,30 @@ def _parse_section(prov: Tag) -> Section | None:
         body = _body_text(body_el)
 
     sub_items: list[SubItem] = []
+
+    # (1) nested (a)(b)(c)/(i)(ii)(iii) items inside the prov1Txt body
+    if body_el:
+        for kind, label, text in _walk_nested_items(body_el, parent_label=""):
+            sub_items.append(SubItem(kind=kind, label=label, text=text))
+
+    # (2) each prov2Txt is a fresh subsection with its own body + nested tree
+    for sub in prov.select("td.prov2Txt"):
+        sub_text = _body_text(sub)
+        sub_num_match = _SUB_RE.match(sub_text)
+        sub_label = sub_num_match.group(0).strip() if sub_num_match else ""
+        if sub_text:
+            sub_items.append(SubItem(
+                kind="subsection",
+                label=sub_label,
+                text=sub_text,
+            ))
+        # walk its nested p1_1 / p2_1 tables; prefix child labels with the
+        # parent subsection marker so "(2)(a)(i)" reads hierarchically.
+        for kind, label, text in _walk_nested_items(sub, parent_label=sub_label):
+            sub_items.append(SubItem(kind=kind, label=label, text=text))
+
+    # (3) legacy td.fs items (illustrations/explanations/exceptions). These
+    # usually live inside prov1tbl tables and don't overlap with prov2Txt.
     for fs in prov.select("td.fs"):
         t = _txt(fs)
         if not t: continue
