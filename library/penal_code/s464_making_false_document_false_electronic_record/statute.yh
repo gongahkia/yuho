@@ -1,16 +1,117 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr464-#pr464-
-/// @amendment [15/2019]
-// Singapore Penal Code Section 464 - Making a false document or false electronic record
-/// interpretation section, defines terms used in related offences
-
 statute 464 "Making a false document or false electronic record" effective 1872-01-01 {
-    definitions {
-        false_document := "A document made dishonestly or fraudulently by affixing, altering or causing signature";
-        electronic_signature := "As defined in the Electronic Transactions Act 2010";
-        making_false_document_a := "Dishonestly or fraudulently makes, signs, seals, executes or affixes electronic signature to a document";
-        making_false_document_b := "Without lawful authority alters a document or electronic record in any material part after execution";
-        making_false_document_c := "Dishonestly or fraudulently causes another to sign knowing the person cannot know the contents";
+    subsection (1) {
+        definitions {
+            making_false_document_or_false_electronic_record := "A person is said to make a false document or false electronic record";
+            paragraph_a := "who dishonestly or fraudulently —";
+            paragraph_b := "who without lawful authority, dishonestly or fraudulently, by cancellation or otherwise, alters a document or an electronic record in any material part thereof, after it has been made, executed or affixed with an electronic signature, either by himself or by any other person, whether that person is living or dead at the time of the alteration";
+            paragraph_c := "who dishonestly or fraudulently causes any person to sign, seal, execute or alter a document or an electronic record or to affix his electronic signature on an electronic record, knowing that such person by reason of unsoundness of mind or intoxication cannot, or that by reason of deception practised upon him he does not, know the contents of the document or electronic record or the nature of the alteration";
+        }
+
+        elements {
+            /// paragraphs (a), (b), and (c) are disjunctive alternatives in subsection (1)
+            any_of {
+                /// canonical raw text supplies paragraph (a) only up to this retained phrase
+                mens_rea paragraph_a_dishonesty_or_fraud := "who dishonestly or fraudulently —";
+                all_of {
+                    circumstance paragraph_b_no_lawful_authority := "without lawful authority";
+                    mens_rea paragraph_b_dishonesty_or_fraud := "dishonestly or fraudulently";
+                    actus_reus paragraph_b_material_alteration := "by cancellation or otherwise, alters a document or an electronic record in any material part thereof";
+                    circumstance paragraph_b_after_made_executed_or_signed := "after it has been made, executed or affixed with an electronic signature, either by himself or by any other person, whether that person is living or dead at the time of the alteration";
+                }
+                all_of {
+                    mens_rea paragraph_c_dishonesty_or_fraud := "dishonestly or fraudulently";
+                    actus_reus paragraph_c_causing_signature_or_alteration := "causes any person to sign, seal, execute or alter a document or an electronic record or to affix his electronic signature on an electronic record";
+                    mens_rea paragraph_c_knowledge_of_incapacity_or_deception := "knowing that such person by reason of unsoundness of mind or intoxication cannot, or that by reason of deception practised upon him he does not, know the contents of the document or electronic record or the nature of the alteration";
+                }
+            }
+        }
+
+        // heading: Illustrations
+        illustration first_a {
+            "( a ) A has a letter of credit upon B for $1,000 written by Z . A , in order to defraud B , adds a cypher to the 1,000, and makes the sum $10,000, intending that it may be believed by B that Z so wrote the letter. A has committed forgery."
+        }
+
+        illustration first_b {
+            "( b ) A , without Z ’s authority, affixes Z ’s seal to a document, purporting to be a conveyance of an estate from Z to A , with the intention of selling the estate to B , and thereby of obtaining from B the purchase money. A has committed forgery."
+        }
+
+        illustration first_c {
+            "( c ) A picks up a cheque on a banker signed by B , payable to bearer, but without any sum having been inserted in the cheque. A fraudulently fills up the cheque by inserting the sum of $1,000. A commits forgery."
+        }
+
+        illustration first_d {
+            "( d ) A leaves with B , his agent, a cheque on a banker, signed by A , without inserting the sum payable, and authorises B to fill up the cheque by inserting a sum not exceeding $1,000 for the purpose of making certain payments. B fraudulently fills up the cheque by inserting the sum of $10,000. B commits forgery."
+        }
+
+        illustration first_e {
+            "( e ) A draws a bill of exchange on himself in the name of B without B ’s authority, intending to discount it as a genuine bill with a banker, and intending to take up the bill on its maturity. Here, as A draws the bill with intent to deceive the banker by leading him to suppose that he had the security of B , and thereby to discount the bill, A is guilty of forgery."
+        }
+
+        illustration first_f {
+            "( f ) Z ’s will contains these words: “I direct that all my remaining property be equally divided between A , B and C ”. A dishonestly scratches out B ’s name, intending that it may be believed that the whole was left to himself and C . A has committed forgery."
+        }
+
+        illustration first_g {
+            "( g ) A endorses a promissory note and makes it payable to Z , or his order, by writing on the bill the words “Pay to Z or his order”, and signing the endorsement. B dishonestly erases the words “Pay to Z , or his order”, and thereby converts the special endorsement into a blank endorsement. B commits forgery."
+        }
+
+        illustration first_h {
+            "( h ) A sells and conveys an estate to Z . A afterwards, in order to defraud Z of his estate, executes a conveyance of the same estate to B , dated 6 months earlier than the date of the conveyance to Z , intending it to be believed that he had conveyed the estate to B before he conveyed it to Z . A has committed forgery."
+        }
+
+        illustration first_i {
+            "( i ) Z dictates his will to A . A intentionally writes down a different legatee from the legatee named by Z , and by representing to Z that he has prepared the will according to his instructions, induces Z to sign the will. A has committed forgery."
+        }
+
+        illustration first_j {
+            "( j ) A writes a letter and signs it with B ’s name without B ’s authority, certifying that A is a man of good character and in distressed circumstances from unforeseen misfortune, intending by means of such letter to obtain alms from Z and other persons. Here, as A made a false document in order to induce Z to part with property, A has committed forgery."
+        }
+
+        illustration first_k {
+            "( k ) A without B ’s authority writes a letter and signs it in B ’s name, certifying to A ’s character, intending thereby to obtain employment under Z . A has committed forgery, inasmuch as he intended to deceive Z by the forged certificate, and thereby to induce Z to enter into an express or implied contract for service."
+        }
+
+        definitions {
+            explanation_1 := "Explanation 1.—A man’s signature of his own name may amount to forgery.";
+        }
+
+        // heading: Illustrations
+        illustration explanation_1_a {
+            "( a ) A signs his own name to a bill of exchange, intending that it may be believed that the bill was drawn by another person of the same name. A has committed forgery."
+        }
+
+        illustration explanation_1_b {
+            "( b ) A writes the word “accepted” on a piece of paper and signs it with Z ’s name, in order that B may afterwards write on the paper a bill of exchange drawn by B upon Z , and negotiate the bill as though it had been accepted by Z . A is guilty of forgery; and if B knowing the fact draws the bill upon the paper pursuant to A ’s intention, B is also guilty of forgery."
+        }
+
+        illustration explanation_1_c {
+            "( c ) A picks up a bill of exchange payable to the order of a different person of the same name. A endorses the bill in his own name, intending to cause it to be believed that it was endorsed by the person to whose order it was payable: here A has committed forgery."
+        }
+
+        illustration explanation_1_d {
+            "( d ) A purchases an estate sold under execution of a decree against B . B after the seizure of the estate, in collusion with Z , executes a lease of the estate to Z at a nominal rent and for a long period, and dates the lease 6 months prior to the seizure with intent to defraud A , and to cause it to be believed that the lease was granted before the seizure. B , though he executes the lease in his own name, commits forgery by antedating it."
+        }
+
+        illustration explanation_1_e {
+            "( e ) A , a trader, in anticipation of insolvency, lodges effects with B for A ’s benefit, and with intent to defraud his creditors, and in order to give a colour to the transaction, writes a promissory note binding himself to pay to B a sum for value received, and antedates the note, intending that it may be believed to have been made before A was on the point of insolvency. A has committed forgery under the first head of the definition."
+        }
+
+        definitions {
+            explanation_2 := "Explanation 2.—The making of a false document in the name of a fictitious person, intending it to be believed that the document was made by a real person, or in the name of a deceased person, intending it to be believed that the document was made by the person in his lifetime, may amount to forgery.";
+        }
+
+        // heading: Illustration
+        illustration explanation_2 {
+            "A draws a bill of exchange upon a fictitious person, and fraudulently accepts the bill in the name of such fictitious person with intent to negotiate it. A commits forgery."
+        }
+    }
+
+    subsection (2) {
+        definitions {
+            electronic_signature := "“electronic signature” has the same meaning as in the Electronic Transactions Act 2010";
+        }
     }
 }

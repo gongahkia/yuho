@@ -2,16 +2,17 @@
 section_number = "464"
 title = "Making a false document or false electronic record"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "A person is said to make a false document or false electronic record — ( a ) who dishonestly or fraudulently — ( b ) who without lawful authority, dishonestly or fraudulently, by cancellation or otherwise, alters a document or an electronic record in any material part thereof, after it has been made, executed or affixed with an electronic signature, either by himself or by any other person, whether that person is living or dead at the time of ..."
+summary = "Defines when a person is said to make a false document or false electronic record, including the electronic signature definition."
 source = "Singapore Penal Code 1871, Section 464"
 
 [verification]

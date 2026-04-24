@@ -1,51 +1,56 @@
-// Singapore Penal Code Section 420 - Cheating and Dishonestly Inducing Delivery of Property
-// Yuho v5 Syntax
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr420-#pr420-
+/// @amendment [Act 21 of 2025 wef 30/12/2025]
+/// @amendment [15/2019]
+statute 420 "Cheating and dishonestly inducing a delivery of property" effective 1872-01-01 effective 2020-01-01 effective 2025-12-30 {
+    subsection (1) {
+        elements {
+            /// Subsection (1) requires cheating, dishonest inducement of the deceived person, and one of the specified induced acts.
+            all_of {
+                actus_reus cheating := "Cheats";
+                mens_rea dishonest_inducement := "Dishonestly induces the person deceived";
+                /// The statutory objects are alternatives separated by "or".
+                any_of {
+                    actus_reus deliver_property := "Induces the person deceived to deliver any property to any person";
+                    actus_reus cause_delivery_property := "Induces the person deceived to cause the delivery of any property to any person";
+                    actus_reus make_valuable_security := "Induces the person deceived to make the whole or any part of a valuable security";
+                    actus_reus alter_valuable_security := "Induces the person deceived to alter the whole or any part of a valuable security";
+                    actus_reus destroy_valuable_security := "Induces the person deceived to destroy the whole or any part of a valuable security";
+                    actus_reus make_convertible_security := "Induces the person deceived to make anything which is signed or sealed and capable of being converted into a valuable security";
+                    actus_reus alter_convertible_security := "Induces the person deceived to alter anything which is signed or sealed and capable of being converted into a valuable security";
+                    actus_reus destroy_convertible_security := "Induces the person deceived to destroy anything which is signed or sealed and capable of being converted into a valuable security";
+                }
+            }
+        }
 
-referencing penal_code/s415_cheating
+        penalty cumulative {
+            imprisonment := 0 years .. 10 years;
+            supplementary := "Imprisonment is imposed under subsection (1); the additional liability to fine or caning or both is encoded separately.";
+        }
 
-struct CheatingDeliveryCase {
-    string accused,
-    string victim,
-    bool cheatingCommitted,
-    bool deliveryInduced,
-    string propertyType,
-}
-
-fn is_s420_cheating(bool cheating, bool delivery) : bool {
-    match {
-        case TRUE if cheating == FALSE := consequence FALSE;
-        case TRUE if delivery == FALSE := consequence FALSE;
-        case _ := consequence TRUE;
-    }
-}
-
-statute 420 "Cheating and Dishonestly Inducing Delivery of Property" effective 1872-01-01 subsumes 415 {
-    definitions {
-        cheating := "Deceiving a person fraudulently or dishonestly";
-        inducing := "Causing a person to act based on deception";
-        delivery := "Handing over property to another";
-        valuable_security := "Document purporting to create, transfer, or release any right";
-    }
-
-    elements {
-        actus_reus cheating := "Cheating under Section 415";
-        actus_reus inducement := "Dishonestly inducing delivery of property";
-        circumstance delivery := "Delivery of property or valuable security";
-        circumstance alteration := "Making, altering, or destroying valuable security";
-    }
-
-    penalty {
-        imprisonment := 1 year .. 10 years;
-        fine := $0.00 .. $50,000.00;
+        penalty or_both {
+            fine := unlimited;
+            caning := 0 .. 24 strokes;
+            supplementary := "The offender is also liable to fine or to caning or to both.";
+        }
     }
 
-    illustration example1 {
-        "A deceives B into believing A is a licensed contractor. B pays A in advance for work A never intends to do. A is guilty under Section 420."
-    }
+    subsection (2) {
+        elements {
+            /// Subsection (2) adds remote communication to cheating and dishonest inducement of any act mentioned in subsection (1).
+            all_of {
+                actus_reus remote_cheating := "Cheats by remote communication";
+                mens_rea dishonest_inducement := "Dishonestly induces";
+                circumstance induced_subsection_1_act := "Induces any of the acts mentioned in subsection (1)";
+            }
+        }
 
-    illustration example2 {
-        "A, by false pretenses, induces B to sign a document transferring property to A. A is guilty under Section 420."
+        penalty cumulative {
+            imprisonment := 0 years .. 10 years;
+            fine := unlimited;
+            caning := 6 .. 24 strokes;
+            supplementary := "Subsection (2) imposes caning with not less than 6 strokes and also liability to fine.";
+        }
     }
-
-    // cross-reference: s420 is an aggravated form of s415 cheating where delivery of property is induced
 }
