@@ -1,44 +1,22 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr334-#pr334-
-// Singapore Penal Code Section 334 -- Voluntarily causing hurt on provocation
-// Yuho v5 Syntax
-
-struct S334Case {
-    string accused,
-    string victim,
-    bool actusReus,
-    bool mensRea,
-}
-
-fn s334_applies(bool actusReus, bool mensRea) : bool {
-    match {
-        case TRUE if actusReus == TRUE && mensRea == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
 /// @amendment [15/2019]
-statute 334 "Voluntarily causing hurt on provocation" effective 1872-01-01 {
-    definitions {
-        offence_summary := "Voluntarily causing hurt on grave and sudden provocation.";
-    }
 
+statute 334 "Voluntarily causing hurt on provocation" effective 1872-01-01 effective 2019-12-31 {
     elements {
-        /// mental element required for the offence
-        mens_rea intent := "Intent or knowledge as required by the section";
-        /// physical act constituting the offence
-        actus_reus act := "The prohibited act defined by the section";
-        /// contextual requirement -- victim, circumstances, or result
-        circumstance context := "Statutory circumstances are satisfied";
+        /// The offence applies only where all stated conditions are present.
+        all_of {
+            actus_reus voluntarily_causes_hurt := "Whoever voluntarily causes hurt";
+            circumstance grave_and_sudden_provocation := "The hurt is caused on grave and sudden provocation";
+            mens_rea no_intent_to_hurt_another := "He neither intends to cause hurt to any person other than the person who gave the provocation";
+            mens_rea no_knowledge_likely_to_hurt_another := "He knows himself not to be likely to cause hurt to any person other than the person who gave the provocation";
+        }
     }
 
-    penalty {
+    penalty or_both {
         imprisonment := 0 months .. 6 months;
         fine := $0.00 .. $2,500.00;
-    }
-
-    illustration example1 {
-        "A commits the conduct described in section 334 against B. A is guilty of the offence under section 334."
+        supplementary := "Whoever voluntarily causes hurt on grave and sudden provocation, if he neither intends nor knows himself to be likely to cause hurt to any person other than the person who gave the provocation, shall be punished with imprisonment for a term which may extend to 6 months, or with fine which may extend to $2,500, or with both. [15/2019]";
     }
 }

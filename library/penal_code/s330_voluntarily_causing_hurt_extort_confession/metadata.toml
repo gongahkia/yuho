@@ -2,16 +2,17 @@
 section_number = "330"
 title = "Voluntarily causing hurt to extort confession or to compel restoration of property"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Voluntarily causing hurt to extort confession or compel restoration of property."
+summary = "This section criminalises voluntarily causing hurt in order to extort a confession or information, or to compel restoration of property or satisfaction of a claim."
 source = "Singapore Penal Code 1871, Section 330"
 
 [verification]

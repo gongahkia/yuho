@@ -2,16 +2,17 @@
 section_number = "326"
 title = "Voluntarily causing grievous hurt by dangerous weapons or means"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Voluntarily causing grievous hurt by dangerous weapons or means."
+summary = "This section criminalises voluntarily causing grievous hurt by specified dangerous weapons or means and prescribes life imprisonment or up to 15 years, with caning liability and fine liability if no life sentence is imposed."
 source = "Singapore Penal Code 1871, Section 326"
 
 [verification]

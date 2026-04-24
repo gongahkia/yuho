@@ -1,45 +1,38 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr329-#pr329-
-// Singapore Penal Code Section 329 -- Voluntarily causing grievous hurt to extort property, or to constrain to an illegal act
-// Yuho v5 Syntax
-
-struct S329Case {
-    string accused,
-    string victim,
-    bool actusReus,
-    bool mensRea,
-}
-
-fn s329_applies(bool actusReus, bool mensRea) : bool {
-    match {
-        case TRUE if actusReus == TRUE && mensRea == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
-
 statute 329 "Voluntarily causing grievous hurt to extort property, or to constrain to an illegal act" effective 1872-01-01 {
-    definitions {
-        offence_summary := "Voluntarily causing grievous hurt to extort property or constrain an illegal act.";
-    }
-
     elements {
-        /// mental element required for the offence
-        mens_rea intent := "Intent or knowledge as required by the section";
-        /// physical act constituting the offence
-        actus_reus act := "The prohibited act defined by the section";
-        /// contextual requirement -- victim, circumstances, or result
-        circumstance context := "Statutory circumstances are satisfied";
+        /// The offence requires both voluntary causation of grievous hurt and one of the two prohibited purposes.
+        all_of {
+            actus_reus grievous_hurt := "Voluntarily causes grievous hurt";
+            any_of {
+                all_of {
+                    mens_rea extortion_purpose := "For the purpose of extorting from the sufferer, or from any person interested in the sufferer";
+                    any_of {
+                        actus_reus property := "Any property" caused_by extortion_purpose;
+                        actus_reus valuable_security := "Any valuable security" caused_by extortion_purpose;
+                    }
+                }
+                all_of {
+                    mens_rea constraint_purpose := "For the purpose of constraining the sufferer, or any person interested in such sufferer";
+                    any_of {
+                        actus_reus illegal_act := "To do anything which is illegal" caused_by constraint_purpose;
+                        actus_reus facilitate_offence := "To do anything which may facilitate the commission of an offence" caused_by constraint_purpose;
+                    }
+                }
+            }
+        }
     }
 
-    penalty {
-        imprisonment := 0 years .. 99 years;
-        fine := $0.00 .. $50,000.00;
+    penalty alternative {
+        imprisonment := 0 years .. 10 years;
+        supplementary := "Whoever voluntarily causes grievous hurt for the purpose of extorting from the sufferer, or from any person interested in the sufferer, any property or valuable security, or of constraining the sufferer, or any person interested in such sufferer, to do anything which is illegal or which may facilitate the commission of an offence, shall be punished with imprisonment for life, or imprisonment for a term which may extend to 10 years.";
+    }
+
+    penalty alternative {
+        fine := unlimited;
         caning := 0 .. 24 strokes;
-    }
-
-    illustration example1 {
-        "A commits the conduct described in section 329 against B. A is guilty of the offence under section 329."
+        supplementary := "The offender shall also be liable to fine or to caning.";
     }
 }

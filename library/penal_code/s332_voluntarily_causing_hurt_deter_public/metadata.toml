@@ -2,16 +2,17 @@
 section_number = "332"
 title = "Voluntarily causing hurt to deter public servant from his duty"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Voluntarily causing hurt to a public servant in discharge of duty, or to deter discharge."
+summary = "Creates an offence of voluntarily causing hurt to a public servant in connection with the discharge of public duty."
 source = "Singapore Penal Code 1871, Section 332"
 
 [verification]

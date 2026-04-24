@@ -1,45 +1,34 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr332-#pr332-
-// Singapore Penal Code Section 332 -- Voluntarily causing hurt to deter public servant from his duty
-// Yuho v5 Syntax
-
-struct S332Case {
-    string accused,
-    string victim,
-    bool actusReus,
-    bool mensRea,
-}
-
-fn s332_applies(bool actusReus, bool mensRea) : bool {
-    match {
-        case TRUE if actusReus == TRUE && mensRea == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
 /// @amendment [15/2019]
-statute 332 "Voluntarily causing hurt to deter public servant from his duty" effective 1872-01-01 {
-    definitions {
-        offence_summary := "Voluntarily causing hurt to a public servant in discharge of duty, or to deter discharge.";
-    }
-
+statute 332 "Voluntarily causing hurt to deter public servant from his duty" effective 1872-01-01 effective 2019-12-31 {
     elements {
-        /// mental element required for the offence
-        mens_rea intent := "Intent or knowledge as required by the section";
-        /// physical act constituting the offence
-        actus_reus act := "The prohibited act defined by the section";
-        /// contextual requirement -- victim, circumstances, or result
-        circumstance context := "Statutory circumstances are satisfied";
+        /// Section 332 requires the voluntary causing of hurt to a public servant, plus one of the three statutory duty-related nexuses.
+        all_of {
+            actus_reus voluntarily_causes_hurt := "Voluntarily causes hurt";
+            circumstance person_is_public_servant := "The person to whom hurt is caused is a public servant";
+
+            /// The statute is disjunctive across the three duty-related limbs separated by "or".
+            any_of {
+                circumstance hurt_caused_in_discharge_of_duty := "The hurt is caused to that person in the discharge of his duty as such public servant";
+
+                all_of {
+                    mens_rea intent_to_prevent_or_deter_public_servant := "With intent to prevent or deter that person or any other public servant from discharging his duty as such public servant";
+                }
+
+                circumstance hurt_caused_in_consequence_of_lawful_discharge := "The hurt is caused in consequence of anything done or attempted to be done by that person in the lawful discharge of his duty as such public servant";
+            }
+        }
     }
 
     penalty {
         imprisonment := 0 years .. 7 years;
-        fine := $0.00 .. $50,000.00;
-        caning := 0 .. 24 strokes;
+        supplementary := "Whoever voluntarily causes hurt to any person being a public servant in the discharge of his duty as such public servant, or with intent to prevent or deter that person or any other public servant from discharging his duty as such public servant, or in consequence of anything done or attempted to be done by that person in the lawful discharge of his duty as such public servant, shall be punished with imprisonment for a term which may extend to 7 years, and shall also be liable to fine or to caning, provided that in exceptional circumstances imprisonment need not be imposed. [15/2019]";
     }
 
-    illustration example1 {
-        "A commits the conduct described in section 332 against B. A is guilty of the offence under section 332."
+    penalty alternative when additional_non_imprisonment_liability {
+        fine := unlimited;
+        supplementary := "The offender shall also be liable to fine or to caning, provided that in exceptional circumstances imprisonment need not be imposed. [15/2019]";
     }
 }

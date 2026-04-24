@@ -2,16 +2,17 @@
 section_number = "334"
 title = "Voluntarily causing hurt on provocation"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Voluntarily causing hurt on grave and sudden provocation."
+summary = "Creates an offence for voluntarily causing hurt on grave and sudden provocation, subject to limits on intending or foreseeing harm to others."
 source = "Singapore Penal Code 1871, Section 334"
 
 [verification]

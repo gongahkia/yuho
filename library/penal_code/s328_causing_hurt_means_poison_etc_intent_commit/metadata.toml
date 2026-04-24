@@ -2,16 +2,17 @@
 section_number = "328"
 title = "Causing hurt by means of poison, etc., with intent to commit an offence"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Administering poison or stupefying/harmful substance with intent to cause hurt or commit an offence."
+summary = "This section criminalises administering or causing the taking of poison, stupefying or intoxicating substances, or other harmful substances with intent to cause hurt or to commit or facilitate an offence, or knowing hurt is likely."
 source = "Singapore Penal Code 1871, Section 328"
 
 [verification]

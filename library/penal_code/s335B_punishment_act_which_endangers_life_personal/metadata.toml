@@ -2,16 +2,17 @@
 section_number = "335B"
 title = "Punishment for act which endangers life or personal safety of others with knowledge or belief that it is likely to cause death"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Endangering life or personal safety with knowledge or belief it is likely to cause death."
+summary = "Makes it an offence to do an act endangering life or personal safety while knowing or believing that the act is likely to cause death."
 source = "Singapore Penal Code 1871, Section 335B"
 
 [verification]

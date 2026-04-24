@@ -1,45 +1,39 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr326-#pr326-
-// Singapore Penal Code Section 326 -- Voluntarily causing grievous hurt by dangerous weapons or means
-// Yuho v5 Syntax
-
-struct S326Case {
-    string accused,
-    string victim,
-    bool actusReus,
-    bool mensRea,
-}
-
-fn s326_applies(bool actusReus, bool mensRea) : bool {
-    match {
-        case TRUE if actusReus == TRUE && mensRea == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
 /// @amendment [15/2019]
-statute 326 "Voluntarily causing grievous hurt by dangerous weapons or means" effective 1872-01-01 {
-    definitions {
-        offence_summary := "Voluntarily causing grievous hurt by dangerous weapons or means.";
-    }
 
+statute 326 "Voluntarily causing grievous hurt by dangerous weapons or means" effective 1872-01-01 effective 2019-12-31 {
     elements {
-        /// mental element required for the offence
-        mens_rea intent := "Intent or knowledge as required by the section";
-        /// physical act constituting the offence
-        actus_reus act := "The prohibited act defined by the section";
-        /// contextual requirement -- victim, circumstances, or result
-        circumstance context := "Statutory circumstances are satisfied";
+        /// Section 326 is conjunctive overall: the section 335 exclusion, voluntary causing of grievous hurt, and one dangerous weapon or means must all be present.
+        all_of {
+            circumstance not_section_335_case := "Except in the case provided for by section 335";
+            mens_rea voluntary := "Voluntarily";
+            actus_reus causes_grievous_hurt := "Causes grievous hurt";
+            /// The dangerous weapon or means limb is disjunctive; any one statutory means suffices.
+            any_of {
+                circumstance instrument_for_shooting_stabbing_or_cutting := "By means of any instrument for shooting, stabbing or cutting";
+                circumstance weapon_likely_to_cause_death := "By means of any instrument which, used as a weapon of offence, is likely to cause death";
+                circumstance fire_or_heated_substance := "By means of fire or any heated substance";
+                circumstance poison_or_corrosive_substance := "By means of any poison or any corrosive substance";
+                circumstance explosive_substance := "By means of any explosive substance";
+                circumstance harmful_substance_to_inhale_swallow_or_receive_into_blood := "By means of any substance which it is harmful to the human body to inhale, to swallow, or to receive into the blood";
+                circumstance animal := "By means of any animal";
+            }
+        }
     }
 
-    penalty {
-        imprisonment := 0 years .. 99 years;
-        fine := $0.00 .. $50,000.00;
-        caning := 0 .. 24 strokes;
+    penalty alternative {
+        imprisonment := 0 years .. 15 years;
+        supplementary := "Whoever, except in the case provided for by section 335, voluntarily causes grievous hurt by means of any instrument for shooting, stabbing or cutting, or any instrument which, used as a weapon of offence, is likely to cause death, or by means of fire or any heated substance, or by means of any poison or any corrosive substance, or by means of any explosive substance, or by means of any substance which it is harmful to the human body to inhale, to swallow, or to receive into the blood, or by means of any animal, shall be punished with imprisonment for life, or with imprisonment for a term which may extend to 15 years. [15/2019]";
     }
 
-    illustration example1 {
-        "A commits the conduct described in section 326 against B. A is guilty of the offence under section 326."
+    penalty when caning_liability {
+        supplementary := "The offender shall also be liable to caning. [15/2019]";
+    }
+
+    penalty when non_life_sentence {
+        fine := unlimited;
+        supplementary := "If the offender is not sentenced to imprisonment for life, the offender is liable to fine. [15/2019]";
     }
 }

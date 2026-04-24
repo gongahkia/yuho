@@ -1,45 +1,34 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr330-#pr330-
-// Singapore Penal Code Section 330 -- Voluntarily causing hurt to extort confession or to compel restoration of property
-// Yuho v5 Syntax
-
-struct S330Case {
-    string accused,
-    string victim,
-    bool actusReus,
-    bool mensRea,
-}
-
-fn s330_applies(bool actusReus, bool mensRea) : bool {
-    match {
-        case TRUE if actusReus == TRUE && mensRea == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
 
 statute 330 "Voluntarily causing hurt to extort confession or to compel restoration of property" effective 1872-01-01 {
-    definitions {
-        offence_summary := "Voluntarily causing hurt to extort confession or compel restoration of property.";
-    }
-
     elements {
-        /// mental element required for the offence
-        mens_rea intent := "Intent or knowledge as required by the section";
-        /// physical act constituting the offence
-        actus_reus act := "The prohibited act defined by the section";
-        /// contextual requirement -- victim, circumstances, or result
-        circumstance context := "Statutory circumstances are satisfied";
+        /// The offence requires the causing of hurt and one of the two prohibited purposes.
+        all_of {
+            actus_reus voluntarily_causes_hurt := "Whoever voluntarily causes hurt";
+            any_of {
+                mens_rea purpose_of_extorting_confession_or_detection_information := "For the purpose of extorting from the sufferer, or from any person interested in the sufferer, any confession or any information which may lead to the detection of an offence or misconduct";
+                mens_rea purpose_of_constraining_restoration_or_satisfaction := "For the purpose of constraining the sufferer, or any person interested in the sufferer, to restore or to cause the restoration of any property or valuable security, or to satisfy any claim or demand, or to give information which may lead to the restoration of any property or valuable security";
+            }
+        }
     }
 
-    penalty {
+    penalty cumulative {
         imprisonment := 0 years .. 7 years;
-        fine := $0.00 .. $50,000.00;
-        caning := 0 .. 24 strokes;
+        fine := unlimited;
+        supplementary := "Whoever voluntarily causes hurt for the purpose of extorting from the sufferer, or from any person interested in the sufferer, any confession or any information which may lead to the detection of an offence or misconduct, or for the purpose of constraining the sufferer, or any person interested in the sufferer, to restore or to cause the restoration of any property or valuable security, or to satisfy any claim or demand, or to give information which may lead to the restoration of any property or valuable security, shall be punished with imprisonment for a term which may extend to 7 years, and shall also be liable to fine or to caning.";
     }
 
-    illustration example1 {
-        "A commits the conduct described in section 330 against B. A is guilty of the offence under section 330."
+    illustration illustration_a {
+        "( a ) A , a police officer, tortures Z in order to induce Z to confess that he committed a crime. A is guilty of an offence under this section."
+    }
+
+    illustration illustration_b {
+        "( b ) A , a police officer, tortures B to induce him to point out where certain stolen property is deposited. A is guilty of an offence under this section."
+    }
+
+    illustration illustration_c {
+        "( c ) A , a customs officer, tortures Z in order to compel him to confess to a pretended offence against the customs laws. A is guilty of an offence under this section."
     }
 }

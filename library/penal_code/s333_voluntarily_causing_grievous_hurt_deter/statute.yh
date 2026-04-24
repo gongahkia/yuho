@@ -1,45 +1,30 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr333-#pr333-
-// Singapore Penal Code Section 333 -- Voluntarily causing grievous hurt to deter public servant from his duty
-// Yuho v5 Syntax
-
-struct S333Case {
-    string accused,
-    string victim,
-    bool actusReus,
-    bool mensRea,
-}
-
-fn s333_applies(bool actusReus, bool mensRea) : bool {
-    match {
-        case TRUE if actusReus == TRUE && mensRea == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
 
 statute 333 "Voluntarily causing grievous hurt to deter public servant from his duty" effective 1872-01-01 {
-    definitions {
-        offence_summary := "Voluntarily causing grievous hurt to a public servant in discharge of duty.";
-    }
-
     elements {
-        /// mental element required for the offence
-        mens_rea intent := "Intent or knowledge as required by the section";
-        /// physical act constituting the offence
-        actus_reus act := "The prohibited act defined by the section";
-        /// contextual requirement -- victim, circumstances, or result
-        circumstance context := "Statutory circumstances are satisfied";
+        /// Section 333 requires voluntary causation of grievous hurt to a person who is a public servant, plus one of the three statutory public-duty contexts.
+        all_of {
+            actus_reus causes_grievous_hurt := "Voluntarily causes grievous hurt";
+            circumstance victim_is_public_servant := "To any person being a public servant";
+
+            /// The public-duty nexus is disjunctive because the statute uses repeated "or".
+            any_of {
+                circumstance discharge_of_duty := "That person is in the discharge of his duty as such public servant";
+                mens_rea intent_to_prevent_or_deter := "With intent to prevent or deter that person or any other public servant from discharging his duty as such public servant";
+                circumstance consequence_of_lawful_discharge := "In consequence of anything done or attempted to be done by that person in the lawful discharge of his duty as such public servant";
+            }
+        }
     }
 
-    penalty {
+    penalty cumulative {
         imprisonment := 0 years .. 15 years;
-        fine := $0.00 .. $50,000.00;
-        caning := 0 .. 24 strokes;
+        supplementary := "Whoever voluntarily causes grievous hurt to any person being a public servant in the discharge of his duty as such public servant, or with intent to prevent or deter that person or any other public servant from discharging his duty as such public servant, or in consequence of anything done or attempted to be done by that person in the lawful discharge of his duty as such public servant, shall be punished with imprisonment for a term which may extend to 15 years.";
     }
 
-    illustration example1 {
-        "A commits the conduct described in section 333 against B. A is guilty of the offence under section 333."
+    penalty alternative {
+        fine := unlimited;
+        supplementary := "The offender shall also be liable to fine or to caning.";
     }
 }

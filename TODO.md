@@ -82,6 +82,28 @@ to read each encoded section against `_raw/act.json` and stamp when safe.
       single-sentence statute text).
 - [ ] Manual / human review for everything flagged.
 
+### G13 grammar fix — default-logic exception priority `[ ]`
+
+New gap identified from studying Catala (Apache-2.0). SG Penal Code uses
+prioritised provisos heavily — s300 Exception 1 (grave provocation)
+overrides the base murder definition and has its own sub-provisos.
+Yuho's current `exception` block is flat, no priority DAG, no conflict
+resolution semantics. This is Catala's `label e1` / `exception e1
+definition` pattern with prioritised rewriting based on Prof. Sarah
+Lawsky's default-logic formalisation of statutes.
+
+Inspect first: `src/yuho/ast/nodes.py` already lists `priority: int` and
+`defeats: str` on `ExceptionNode` — verify whether these are actually
+wired into (a) the grammar, (b) the semantic analyzer, (c) the Z3
+encoder. If partially wired, finish the job; if grammar-only, build the
+rest.
+
+- [ ] Confirm `exception { priority <N> defeats <name> }` parses.
+- [ ] Semantic analyzer: build the exception DAG per statute, detect cycles.
+- [ ] Z3 encoder: emit default-logic-style exception priority so "no two
+      unrelated exceptions fire simultaneously" is verifiable.
+- [ ] Doc: walk through s300 Murder as the worked example.
+
 ### G12 grammar fix — mixed cumulative + alternative penalties `[ ]`
 
 Sections like s420, s115, s325 need "imprisonment X AND ALSO fine or caning or

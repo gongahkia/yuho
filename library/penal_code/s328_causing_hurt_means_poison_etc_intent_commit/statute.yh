@@ -1,45 +1,38 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr328-#pr328-
-// Singapore Penal Code Section 328 -- Causing hurt by means of poison, etc., with intent to commit an offence
-// Yuho v5 Syntax
-
-struct S328Case {
-    string accused,
-    string victim,
-    bool actusReus,
-    bool mensRea,
-}
-
-fn s328_applies(bool actusReus, bool mensRea) : bool {
-    match {
-        case TRUE if actusReus == TRUE && mensRea == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
 /// @amendment [15/2019]
-statute 328 "Causing hurt by means of poison, etc., with intent to commit an offence" effective 1872-01-01 {
-    definitions {
-        offence_summary := "Administering poison or stupefying/harmful substance with intent to cause hurt or commit an offence.";
-    }
 
+statute 328 "Causing hurt by means of poison, etc., with intent to commit an offence" effective 1872-01-01 effective 2019-12-31 {
     elements {
-        /// mental element required for the offence
-        mens_rea intent := "Intent or knowledge as required by the section";
-        /// physical act constituting the offence
-        actus_reus act := "The prohibited act defined by the section";
-        /// contextual requirement -- victim, circumstances, or result
-        circumstance context := "Statutory circumstances are satisfied";
+        /// Section 328 requires the prohibited administration or caused ingestion, one listed harmful substance category, and one listed fault element.
+        all_of {
+            actus_reus administers_or_causes_taken := "Administers to, or causes to be taken by, any person a substance";
+
+            /// The prohibited means are disjunctive; any one listed substance category is sufficient.
+            any_of {
+                circumstance poison := "The substance is any poison";
+                circumstance stupefying_or_intoxicating_substance := "The substance is any stupefying or intoxicating substance";
+                circumstance harmful_substance_to_inhale_swallow_or_receive_into_blood := "The substance is any substance which is harmful to the human body to inhale, swallow or receive into the blood";
+            }
+
+            /// The fault element is disjunctive; intent to cause hurt, intent to commit or facilitate an offence, or knowledge of likely hurt each satisfies the section.
+            any_of {
+                mens_rea intent_to_cause_hurt := "With intent to cause hurt to such person";
+                mens_rea intent_to_commit_or_facilitate_offence := "With intent to commit or to facilitate the commission of an offence";
+                mens_rea knowledge_likely_to_cause_hurt := "Knowing it to be likely that he will thereby cause hurt";
+            }
+        }
     }
 
-    penalty {
+    penalty cumulative {
         imprisonment := 0 years .. 10 years;
-        fine := $0.00 .. $50,000.00;
-        caning := 0 .. 24 strokes;
+        supplementary := "Whoever administers to, or causes to be taken by, any person any poison or any stupefying or intoxicating substance, or any substance which is harmful to the human body to inhale, swallow or receive into the blood, with intent to cause hurt to such person, or with intent to commit or to facilitate the commission of an offence, or knowing it to be likely that he will thereby cause hurt, shall be punished with imprisonment for a term which may extend to 10 years.";
     }
 
-    illustration example1 {
-        "A commits the conduct described in section 328 against B. A is guilty of the offence under section 328."
+    penalty alternative {
+        fine := unlimited;
+        caning := 0 .. 24 strokes;
+        supplementary := "The offender shall also be liable to fine or to caning. [15/2019]";
     }
 }
