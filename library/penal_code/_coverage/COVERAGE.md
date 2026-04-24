@@ -1,6 +1,6 @@
 # Coverage — Penal Code 1871 (PC1871)
 
-_Generated: 2026-04-24T04:53:48+00:00_  
+_Generated: 2026-04-24T05:06:31+00:00_  
 _Scraped: 2026-04-24T03:48:44Z_  
 _Valid date: n/a_
 
@@ -9,9 +9,9 @@ _Valid date: n/a_
 | Metric | Count | % of raw |
 |---|---|---|
 | raw sections (canonical) | 524 | — |
-| encoded (.yh present) | 286 | 54.6% |
-| **L1** — parses | **286** | **54.6%** |
-| **L2** — typechecks | **286** | **54.6%** |
+| encoded (.yh present) | 475 | 90.6% |
+| **L1** — parses | **475** | **90.6%** |
+| **L2** — typechecks | **475** | **90.6%** |
 | **L3** — verified | **25** | **4.8%** |
 
 ## Encoded sections
@@ -278,51 +278,226 @@ _Valid date: n/a_
 | s268A | Communicating false information of harmful thing | ✓ | ✓ | · | — | `library/penal_code/s268A_communicating_false_information_harmful_thing/statute.yh` |
 | s268B | Placing or sending thing with intent to cause fear of harm | ✓ | ✓ | · | — | `library/penal_code/s268B_placing_sending_thing_intent_cause_fear_harm/statute.yh` |
 | s268C | Placing or sending thing causing fear of harm | ✓ | ✓ | · | — | `library/penal_code/s268C_placing_sending_thing_causing_fear_harm/statute.yh` |
+| s269 | Negligent act likely to spread infection of any disease dang | ✓ | ✓ | · | — | `library/penal_code/s269_negligent_act_likely_spread_infection/statute.yh` |
+| s270 | Intentional or rash act likely to spread infection of any di | ✓ | ✓ | · | — | `library/penal_code/s270_intentional_rash_act_likely_spread_infection/statute.yh` |
+| s271 | Disobedience to a quarantine rule | ✓ | ✓ | · | — | `library/penal_code/s271_disobedience_quarantine_rule/statute.yh` |
+| s272 | Adulteration of food or drink which is intended for sale | ✓ | ✓ | · | — | `library/penal_code/s272_adulteration_food_drink_which_intended_sale/statute.yh` |
+| s273 | Sale of noxious food or drink | ✓ | ✓ | · | — | `library/penal_code/s273_sale_noxious_food_drink/statute.yh` |
+| s274 | Adulteration of drugs | ✓ | ✓ | · | — | `library/penal_code/s274_adulteration_drugs/statute.yh` |
+| s275 | Sale of adulterated drugs | ✓ | ✓ | · | — | `library/penal_code/s275_sale_adulterated_drugs/statute.yh` |
+| s276 | Sale of any drug as a different drug or preparation | ✓ | ✓ | · | — | `library/penal_code/s276_sale_drug_different_drug_preparation/statute.yh` |
+| s277 | Fouling the water of a public spring or reservoir | ✓ | ✓ | · | — | `library/penal_code/s277_fouling_water_public_spring_reservoir/statute.yh` |
+| s278 | Making atmosphere noxious to health | ✓ | ✓ | · | — | `library/penal_code/s278_making_atmosphere_noxious_health/statute.yh` |
+| s279 | Rash driving or riding on a public way | ✓ | ✓ | · | — | `library/penal_code/s279_rash_driving_riding_public_way/statute.yh` |
+| s280 | Rash navigation of a vessel | ✓ | ✓ | · | — | `library/penal_code/s280_rash_navigation_vessel/statute.yh` |
 | s281 | Exhibition of a false light, mark or buoy | ✓ | ✓ | · | — | `library/penal_code/s281_exhibition_false_light_mark_buoy/statute.yh` |
+| s282 | Conveying person by water for hire in a vessel overloaded or | ✓ | ✓ | · | — | `library/penal_code/s282_conveying_person_water_hire_vessel/statute.yh` |
+| s283 | Danger or obstruction in a public way or navigation | ✓ | ✓ | · | — | `library/penal_code/s283_danger_obstruction_public_way_navigation/statute.yh` |
 | s299 | Culpable homicide | ✓ | ✓ | ✓ | 2026-03-08 Yuho Team | `library/penal_code/s299_culpable_homicide/statute.yh` |
 | s300 | Murder | ✓ | ✓ | ✓ | 2026-03-08 Yuho Team | `library/penal_code/s300_murder/statute.yh` |
 | s302 | Punishment for murder | ✓ | ✓ | ✓ | 2026-03-10 Yuho Team | `library/penal_code/s302_punishment_for_murder/statute.yh` |
 | s304 | Punishment for culpable homicide not amounting to murder | ✓ | ✓ | ✓ | 2026-03-10 Yuho Team | `library/penal_code/s304_culpable_homicide_not_amounting_to_murder/statute.yh` |
+| s312 | Causing miscarriage | ✓ | ✓ | · | — | `library/penal_code/s312_causing_miscarriage/statute.yh` |
+| s313 | Causing miscarriage without woman’s consent | ✓ | ✓ | · | — | `library/penal_code/s313_causing_miscarriage_without_woman_s_consent/statute.yh` |
+| s314 | Death caused by act done with intent to cause miscarriage | ✓ | ✓ | · | — | `library/penal_code/s314_death_caused_act_done_intent_cause/statute.yh` |
+| s315 | Child destruction before, at or immediately after birth | ✓ | ✓ | · | — | `library/penal_code/s315_child_destruction_before_immediately_after/statute.yh` |
+| s316 | Causing death of a quick unborn child by an act amounting to | ✓ | ✓ | · | — | `library/penal_code/s316_causing_death_quick_unborn_child_act/statute.yh` |
+| s317 | Exposure and abandonment of a child below 12 years of age by | ✓ | ✓ | · | — | `library/penal_code/s317_exposure_abandonment_child_below_12_years/statute.yh` |
+| s318 | Concealment of birth by secret disposal of dead body | ✓ | ✓ | · | — | `library/penal_code/s318_concealment_birth_secret_disposal_dead_body/statute.yh` |
 | s319 | Hurt | ✓ | ✓ | ✓ | 2026-03-08 Yuho Team | `library/penal_code/s319_hurt/statute.yh` |
+| s320 | Grievous hurt | ✓ | ✓ | · | — | `library/penal_code/s320_grievous_hurt/statute.yh` |
 | s321 | Voluntarily causing hurt | ✓ | ✓ | ✓ | 2026-03-10 Yuho Team | `library/penal_code/s321_voluntarily_causing_hurt/statute.yh` |
+| s322 | Voluntarily causing grievous hurt | ✓ | ✓ | · | — | `library/penal_code/s322_voluntarily_causing_grievous_hurt/statute.yh` |
 | s323 | Punishment for voluntarily causing hurt | ✓ | ✓ | ✓ | 2026-03-10 Yuho Team | `library/penal_code/s323_punishment_for_voluntarily_causing_hurt/statute.yh` |
+| s323A | Punishment for voluntarily causing hurt which causes grievou | ✓ | ✓ | · | — | `library/penal_code/s323A_punishment_voluntarily_causing_hurt_which/statute.yh` |
+| s324 | Voluntarily causing hurt by dangerous weapons or means | ✓ | ✓ | · | — | `library/penal_code/s324_voluntarily_causing_hurt_dangerous_weapons/statute.yh` |
 | s325 | Punishment for voluntarily causing grievous hurt | ✓ | ✓ | ✓ | 2026-03-10 Yuho Team | `library/penal_code/s325_voluntarily_causing_grievous_hurt/statute.yh` |
+| s326 | Voluntarily causing grievous hurt by dangerous weapons or me | ✓ | ✓ | · | — | `library/penal_code/s326_voluntarily_causing_grievous_hurt_dangerous/statute.yh` |
+| s327 | Voluntarily causing hurt to extort property or to constrain  | ✓ | ✓ | · | — | `library/penal_code/s327_voluntarily_causing_hurt_extort_property/statute.yh` |
+| s328 | Causing hurt by means of poison, etc., with intent to commit | ✓ | ✓ | · | — | `library/penal_code/s328_causing_hurt_means_poison_etc_intent_commit/statute.yh` |
+| s329 | Voluntarily causing grievous hurt to extort property, or to  | ✓ | ✓ | · | — | `library/penal_code/s329_voluntarily_causing_grievous_hurt_extort/statute.yh` |
+| s330 | Voluntarily causing hurt to extort confession or to compel r | ✓ | ✓ | · | — | `library/penal_code/s330_voluntarily_causing_hurt_extort_confession/statute.yh` |
+| s331 | Voluntarily causing grievous hurt to extort confession or to | ✓ | ✓ | · | — | `library/penal_code/s331_voluntarily_causing_grievous_hurt_extort/statute.yh` |
+| s332 | Voluntarily causing hurt to deter public servant from his du | ✓ | ✓ | · | — | `library/penal_code/s332_voluntarily_causing_hurt_deter_public/statute.yh` |
+| s333 | Voluntarily causing grievous hurt to deter public servant fr | ✓ | ✓ | · | — | `library/penal_code/s333_voluntarily_causing_grievous_hurt_deter/statute.yh` |
+| s334 | Voluntarily causing hurt on provocation | ✓ | ✓ | · | — | `library/penal_code/s334_voluntarily_causing_hurt_provocation/statute.yh` |
+| s334A | Punishment for voluntarily causing hurt on provocation which | ✓ | ✓ | · | — | `library/penal_code/s334A_punishment_voluntarily_causing_hurt/statute.yh` |
+| s335 | Causing grievous hurt on provocation | ✓ | ✓ | · | — | `library/penal_code/s335_causing_grievous_hurt_provocation/statute.yh` |
+| s335A | Allowing neglect, physical or sexual abuse of domestic worke | ✓ | ✓ | · | — | `library/penal_code/s335A_allowing_neglect_physical_sexual_abuse/statute.yh` |
+| s335B | Punishment for act which endangers life or personal safety o | ✓ | ✓ | · | — | `library/penal_code/s335B_punishment_act_which_endangers_life_personal/statute.yh` |
+| s336 | Punishment for act which endangers life or the personal safe | ✓ | ✓ | · | — | `library/penal_code/s336_punishment_act_which_endangers_life_personal/statute.yh` |
+| s337 | Causing hurt by an act which endangers life or the personal  | ✓ | ✓ | · | — | `library/penal_code/s337_causing_hurt_act_which_endangers_life/statute.yh` |
+| s338 | Causing grievous hurt by an act which endangers life or the  | ✓ | ✓ | · | — | `library/penal_code/s338_causing_grievous_hurt_act_which_endangers/statute.yh` |
+| s339 | Wrongful restraint | ✓ | ✓ | · | — | `library/penal_code/s339_wrongful_restraint/statute.yh` |
+| s340 | Wrongful confinement | ✓ | ✓ | · | — | `library/penal_code/s340_wrongful_confinement/statute.yh` |
+| s341 | Punishment for wrongful restraint | ✓ | ✓ | · | — | `library/penal_code/s341_punishment_wrongful_restraint/statute.yh` |
+| s342 | Punishment for wrongful confinement | ✓ | ✓ | · | — | `library/penal_code/s342_punishment_wrongful_confinement/statute.yh` |
+| s345 | Wrongful confinement of person for whose liberation a writ h | ✓ | ✓ | · | — | `library/penal_code/s345_wrongful_confinement_person_whose_liberation/statute.yh` |
+| s346 | Wrongful confinement in secret | ✓ | ✓ | · | — | `library/penal_code/s346_wrongful_confinement_secret/statute.yh` |
+| s347 | Wrongful confinement for the purpose of extorting property o | ✓ | ✓ | · | — | `library/penal_code/s347_wrongful_confinement_purpose_extorting/statute.yh` |
+| s348 | Wrongful confinement for the purpose of extorting confession | ✓ | ✓ | · | — | `library/penal_code/s348_wrongful_confinement_purpose_extorting_confess/statute.yh` |
+| s349 | Force | ✓ | ✓ | · | — | `library/penal_code/s349_force/statute.yh` |
+| s350 | Criminal force | ✓ | ✓ | · | — | `library/penal_code/s350_criminal_force/statute.yh` |
+| s351 | Assault | ✓ | ✓ | · | — | `library/penal_code/s351_assault/statute.yh` |
+| s352 | Punishment for using criminal force otherwise than on grave  | ✓ | ✓ | · | — | `library/penal_code/s352_punishment_using_criminal_force_otherwise/statute.yh` |
+| s353 | Using criminal force to deter a public servant from discharg | ✓ | ✓ | · | — | `library/penal_code/s353_using_criminal_force_deter_public_servant/statute.yh` |
 | s354 | Assault or use of criminal force to a person with intent to  | ✓ | ✓ | ✓ | 2026-03-10 Yuho Team | `library/penal_code/s354_assault_or_criminal_force_to_outrage_modesty/statute.yh` |
+| s354A | Outraging modesty in certain circumstances | ✓ | ✓ | · | — | `library/penal_code/s354A_outraging_modesty_certain_circumstances/statute.yh` |
+| s355 | Assault or criminal force with intent to dishonour otherwise | ✓ | ✓ | · | — | `library/penal_code/s355_assault_criminal_force_intent_dishonour/statute.yh` |
+| s356 | Assault or criminal force in committing or attempting to com | ✓ | ✓ | · | — | `library/penal_code/s356_assault_criminal_force_committing_attempting/statute.yh` |
+| s357 | Assault or criminal force in attempting wrongfully to confin | ✓ | ✓ | · | — | `library/penal_code/s357_assault_criminal_force_attempting_wrongfully/statute.yh` |
+| s358 | Assaulting or using criminal force on grave and sudden provo | ✓ | ✓ | · | — | `library/penal_code/s358_assaulting_using_criminal_force_grave_sudden/statute.yh` |
+| s359 | Kidnapping | ✓ | ✓ | · | — | `library/penal_code/s359_kidnapping/statute.yh` |
+| s360 | Kidnapping from Singapore | ✓ | ✓ | · | — | `library/penal_code/s360_kidnapping_singapore/statute.yh` |
+| s361 | Kidnapping from lawful guardianship | ✓ | ✓ | · | — | `library/penal_code/s361_kidnapping_lawful_guardianship/statute.yh` |
+| s362 | Abduction | ✓ | ✓ | · | — | `library/penal_code/s362_abduction/statute.yh` |
 | s363 | Punishment for kidnapping | ✓ | ✓ | ✓ | 2026-03-10 Yuho Team | `library/penal_code/s363_kidnapping/statute.yh` |
+| s363A | Punishment for abduction | ✓ | ✓ | · | — | `library/penal_code/s363A_punishment_abduction/statute.yh` |
+| s364 | Kidnapping or abducting in order to murder | ✓ | ✓ | · | — | `library/penal_code/s364_kidnapping_abducting_order_murder/statute.yh` |
+| s365 | Kidnapping or abducting with intent secretly and wrongfully  | ✓ | ✓ | · | — | `library/penal_code/s365_kidnapping_abducting_intent_secretly/statute.yh` |
+| s366 | Kidnapping or abducting a woman to compel her marriage, etc. | ✓ | ✓ | · | — | `library/penal_code/s366_kidnapping_abducting_woman_compel_her/statute.yh` |
+| s367 | Kidnapping or abducting in order to subject a person to grie | ✓ | ✓ | · | — | `library/penal_code/s367_kidnapping_abducting_order_subject_person/statute.yh` |
+| s368 | Wrongfully concealing or keeping in confinement a kidnapped  | ✓ | ✓ | · | — | `library/penal_code/s368_wrongfully_concealing_keeping_confinement/statute.yh` |
+| s370 | Buying or disposing of any person as a slave | ✓ | ✓ | · | — | `library/penal_code/s370_buying_disposing_person_slave/statute.yh` |
+| s371 | Habitual dealing in slaves | ✓ | ✓ | · | — | `library/penal_code/s371_habitual_dealing_slaves/statute.yh` |
+| s372 | Selling minor for purposes of prostitution, etc. | ✓ | ✓ | · | — | `library/penal_code/s372_selling_minor_purposes_prostitution_etc/statute.yh` |
+| s373 | Buying minor for purposes of prostitution, etc. | ✓ | ✓ | · | — | `library/penal_code/s373_buying_minor_purposes_prostitution_etc/statute.yh` |
+| s373A | Importing woman for purposes of prostitution, etc. | ✓ | ✓ | · | — | `library/penal_code/s373A_importing_woman_purposes_prostitution_etc/statute.yh` |
+| s374 | Unlawful compulsory labour | ✓ | ✓ | · | — | `library/penal_code/s374_unlawful_compulsory_labour/statute.yh` |
+| s375 | Rape | ✓ | ✓ | · | — | `library/penal_code/s375_rape/statute.yh` |
+| s376 | Sexual assault involving penetration | ✓ | ✓ | · | — | `library/penal_code/s376_sexual_assault_involving_penetration/statute.yh` |
+| s376A | Sexual penetration of minor below 16 years of age | ✓ | ✓ | · | — | `library/penal_code/s376A_sexual_penetration_minor_below_16_years_age/statute.yh` |
+| s376B | Commercial sex with minor below 18 years of age | ✓ | ✓ | · | — | `library/penal_code/s376B_commercial_sex_minor_below_18_years_age/statute.yh` |
+| s376C | Commercial sex with minor below 18 years of age outside Sing | ✓ | ✓ | · | — | `library/penal_code/s376C_commercial_sex_minor_below_18_years_age/statute.yh` |
+| s376D | Tour outside Singapore for commercial sex with minor below 1 | ✓ | ✓ | · | — | `library/penal_code/s376D_tour_outside_singapore_commercial_sex_minor/statute.yh` |
+| s376E | Sexual grooming of minor below 16 years of age | ✓ | ✓ | · | — | `library/penal_code/s376E_sexual_grooming_minor_below_16_years_age/statute.yh` |
+| s376F | Procurement of sexual activity with person with mental disab | ✓ | ✓ | · | — | `library/penal_code/s376F_procurement_sexual_activity_person_mental/statute.yh` |
+| s376G | Incest | ✓ | ✓ | · | — | `library/penal_code/s376G_incest/statute.yh` |
+| s376H | Procurement of sexual activity by deception or false represe | ✓ | ✓ | · | — | `library/penal_code/s376H_procurement_sexual_activity_deception_false/statute.yh` |
+| s377 | Sexual penetration, etc., of a corpse | ✓ | ✓ | · | — | `library/penal_code/s377_sexual_penetration_etc_corpse/statute.yh` |
+| s377B | Sexual penetration with living animal | ✓ | ✓ | · | — | `library/penal_code/s377B_sexual_penetration_living_animal/statute.yh` |
+| s377C | Interpretation of sections 375 to 377BO (sexual offences) | ✓ | ✓ | · | — | `library/penal_code/s377C_interpretation_sections_375_377bo_sexual/statute.yh` |
+| s377D | Mistake as to age in sexual offences | ✓ | ✓ | · | — | `library/penal_code/s377D_mistake_age_sexual_offences/statute.yh` |
 | s378 | Theft | ✓ | ✓ | ✓ | 2026-03-08 Yuho Team | `library/penal_code/s378_theft/statute.yh` |
 | s379 | Punishment for theft | ✓ | ✓ | ✓ | 2026-03-10 Yuho Team | `library/penal_code/s379_punishment_for_theft/statute.yh` |
+| s379A | Punishment for theft of a motor vehicle | ✓ | ✓ | · | — | `library/penal_code/s379A_punishment_theft_motor_vehicle/statute.yh` |
+| s380 | Theft in dwelling house, etc. | ✓ | ✓ | · | — | `library/penal_code/s380_theft_dwelling_house_etc/statute.yh` |
+| s381 | Theft by clerk or servant of property in possession of maste | ✓ | ✓ | · | — | `library/penal_code/s381_theft_clerk_servant_property_possession/statute.yh` |
+| s382 | Theft after preparation made for causing death or hurt in or | ✓ | ✓ | · | — | `library/penal_code/s382_theft_after_preparation_made_causing_death/statute.yh` |
 | s383 | Extortion | ✓ | ✓ | ✓ | 2026-03-08 Yuho Team | `library/penal_code/s383_extortion/statute.yh` |
+| s384 | Punishment for extortion | ✓ | ✓ | · | — | `library/penal_code/s384_punishment_extortion/statute.yh` |
+| s385 | Putting person in fear of harm in order to commit extortion | ✓ | ✓ | · | — | `library/penal_code/s385_putting_person_fear_harm_order_commit/statute.yh` |
+| s386 | Extortion by putting a person in fear of death or grievous h | ✓ | ✓ | · | — | `library/penal_code/s386_extortion_putting_person_fear_death_grievous/statute.yh` |
+| s387 | Putting person in fear of death or of grievous hurt in order | ✓ | ✓ | · | — | `library/penal_code/s387_putting_person_fear_death_grievous_hurt/statute.yh` |
+| s388 | Extortion by threat of accusation of an offence punishable w | ✓ | ✓ | · | — | `library/penal_code/s388_extortion_threat_accusation_offence/statute.yh` |
+| s389 | Putting person in fear of accusation of offence, in order to | ✓ | ✓ | · | — | `library/penal_code/s389_putting_person_fear_accusation_offence_order/statute.yh` |
 | s390 | Robbery | ✓ | ✓ | ✓ | 2026-03-08 Yuho Team | `library/penal_code/s390_robbery/statute.yh` |
+| s391 | Gang-robbery | ✓ | ✓ | · | — | `library/penal_code/s391_gang_robbery/statute.yh` |
 | s392 | Punishment for robbery | ✓ | ✓ | ✓ | 2026-03-10 Yuho Team | `library/penal_code/s392_punishment_for_robbery/statute.yh` |
+| s393 | Attempt to commit robbery | ✓ | ✓ | · | — | `library/penal_code/s393_attempt_commit_robbery/statute.yh` |
+| s394 | Voluntarily causing hurt in committing robbery | ✓ | ✓ | · | — | `library/penal_code/s394_voluntarily_causing_hurt_committing_robbery/statute.yh` |
 | s395 | Punishment for gang-robbery | ✓ | ✓ | ✓ | 2026-03-10 Yuho Team | `library/penal_code/s395_dacoity/statute.yh` |
+| s396 | Gang-robbery with murder | ✓ | ✓ | · | — | `library/penal_code/s396_gang_robbery_murder/statute.yh` |
+| s397 | Robbery when armed or with attempt to cause death or grievou | ✓ | ✓ | · | — | `library/penal_code/s397_robbery_when_armed_attempt_cause_death/statute.yh` |
+| s399 | Making preparation to commit gang-robbery | ✓ | ✓ | · | — | `library/penal_code/s399_making_preparation_commit_gang_robbery/statute.yh` |
+| s400 | Punishment for belonging to gang-robbers | ✓ | ✓ | · | — | `library/penal_code/s400_punishment_belonging_gang_robbers/statute.yh` |
+| s401 | Punishment for belonging to gang of thieves | ✓ | ✓ | · | — | `library/penal_code/s401_punishment_belonging_gang_thieves/statute.yh` |
+| s402 | Assembling for purpose of committing gang-robbery | ✓ | ✓ | · | — | `library/penal_code/s402_assembling_purpose_committing_gang_robbery/statute.yh` |
 | s403 | Dishonest misappropriation of property | ✓ | ✓ | ✓ | 2026-03-08 Yuho Team | `library/penal_code/s403_dishonest_misappropriation/statute.yh` |
+| s404 | Dishonest misappropriation of property possessed by a deceas | ✓ | ✓ | · | — | `library/penal_code/s404_dishonest_misappropriation_property/statute.yh` |
+| s405 | Criminal breach of trust | ✓ | ✓ | · | — | `library/penal_code/s405_criminal_breach_trust/statute.yh` |
 | s406 | Punishment of criminal breach of trust | ✓ | ✓ | ✓ | 2026-03-10 Yuho Team | `library/penal_code/s406_punishment_for_criminal_breach_of_trust/statute.yh` |
+| s407 | Criminal breach of trust of property entrusted for purposes  | ✓ | ✓ | · | — | `library/penal_code/s407_criminal_breach_trust_property_entrusted/statute.yh` |
+| s408 | Criminal breach of trust by employees | ✓ | ✓ | · | — | `library/penal_code/s408_criminal_breach_trust_employees/statute.yh` |
+| s409 | Criminal breach of trust by public servant, or by banker, me | ✓ | ✓ | · | — | `library/penal_code/s409_criminal_breach_trust_public_servant_banker/statute.yh` |
+| s410 | Stolen property | ✓ | ✓ | · | — | `library/penal_code/s410_stolen_property/statute.yh` |
 | s411 | Receiving stolen property | ✓ | ✓ | ✓ | 2026-03-10 Yuho Team | `library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh` |
+| s412 | Receiving property stolen in the commission of a gang-robber | ✓ | ✓ | · | — | `library/penal_code/s412_receiving_property_stolen_commission_gang/statute.yh` |
+| s413 | Habitually dealing in stolen property | ✓ | ✓ | · | — | `library/penal_code/s413_habitually_dealing_stolen_property/statute.yh` |
+| s414 | Assisting in concealment or disposal of stolen property | ✓ | ✓ | · | — | `library/penal_code/s414_assisting_concealment_disposal_stolen/statute.yh` |
 | s415 | Cheating | ✓ | ✓ | ✓ | 2026-03-08 Yuho Team | `library/penal_code/s415_cheating/statute.yh` |
+| s416 | Cheating by personation | ✓ | ✓ | · | — | `library/penal_code/s416_cheating_personation/statute.yh` |
+| s416A | Illegally obtained personal information | ✓ | ✓ | · | — | `library/penal_code/s416A_illegally_obtained_personal_information/statute.yh` |
+| s416B | Cheating by remote communication | ✓ | ✓ | · | — | `library/penal_code/s416B_cheating_remote_communication/statute.yh` |
+| s417 | Punishment for cheating | ✓ | ✓ | · | — | `library/penal_code/s417_punishment_cheating/statute.yh` |
+| s418 | Cheating with knowledge that wrongful loss may be thereby ca | ✓ | ✓ | · | — | `library/penal_code/s418_cheating_knowledge_that_wrongful_loss_may/statute.yh` |
+| s419 | Punishment for cheating by personation | ✓ | ✓ | · | — | `library/penal_code/s419_punishment_cheating_personation/statute.yh` |
 | s420 | Cheating and dishonestly inducing a delivery of property | ✓ | ✓ | ✓ | 2026-03-08 Yuho Team | `library/penal_code/s420_cheating_inducing_delivery/statute.yh` |
+| s420A | Obtaining services dishonestly or fraudulently | ✓ | ✓ | · | — | `library/penal_code/s420A_obtaining_services_dishonestly_fraudulently/statute.yh` |
+| s421 | Dishonest or fraudulent removal or concealment of property t | ✓ | ✓ | · | — | `library/penal_code/s421_dishonest_fraudulent_removal_concealment/statute.yh` |
+| s422 | Dishonestly or fraudulently preventing a debt or demand due  | ✓ | ✓ | · | — | `library/penal_code/s422_dishonestly_fraudulently_preventing_debt/statute.yh` |
+| s423 | Dishonest or fraudulent execution of deed of transfer contai | ✓ | ✓ | · | — | `library/penal_code/s423_dishonest_fraudulent_execution_deed_transfer/statute.yh` |
+| s424 | Dishonest or fraudulent removal or concealment of property o | ✓ | ✓ | · | — | `library/penal_code/s424_dishonest_fraudulent_removal_concealment/statute.yh` |
+| s424A | Fraud by false representation, non-disclosure or abuse of po | ✓ | ✓ | · | — | `library/penal_code/s424A_fraud_false_representation_non_disclosure/statute.yh` |
+| s424B | Fraud by false representation, non-disclosure or abuse of po | ✓ | ✓ | · | — | `library/penal_code/s424B_fraud_false_representation_non_disclosure/statute.yh` |
+| s425 | Mischief | ✓ | ✓ | · | — | `library/penal_code/s425_mischief/statute.yh` |
+| s426 | Punishment for committing mischief | ✓ | ✓ | · | — | `library/penal_code/s426_punishment_committing_mischief/statute.yh` |
+| s427 | Punishment for committing mischief causing disruption to key | ✓ | ✓ | · | — | `library/penal_code/s427_punishment_committing_mischief_causing/statute.yh` |
+| s428 | Mischief by killing or maiming any animal | ✓ | ✓ | · | — | `library/penal_code/s428_mischief_killing_maiming_animal/statute.yh` |
+| s435 | Mischief by fire or explosive substance with intent to cause | ✓ | ✓ | · | — | `library/penal_code/s435_mischief_fire_explosive_substance_intent/statute.yh` |
+| s436 | Mischief by fire or explosive substance with intent to destr | ✓ | ✓ | · | — | `library/penal_code/s436_mischief_fire_explosive_substance_intent/statute.yh` |
+| s437 | Mischief with intent to destroy or make unsafe a decked vess | ✓ | ✓ | · | — | `library/penal_code/s437_mischief_intent_destroy_make_unsafe_decked/statute.yh` |
+| s438 | Punishment for the mischief described in section 437 when co | ✓ | ✓ | · | — | `library/penal_code/s438_punishment_mischief_described_section_437/statute.yh` |
+| s439 | Punishment for intentionally running vessel aground or ashor | ✓ | ✓ | · | — | `library/penal_code/s439_punishment_intentionally_running_vessel/statute.yh` |
+| s440 | Mischief committed after preparation made for causing death  | ✓ | ✓ | · | — | `library/penal_code/s440_mischief_committed_after_preparation_made/statute.yh` |
+| s441 | Criminal trespass | ✓ | ✓ | · | — | `library/penal_code/s441_criminal_trespass/statute.yh` |
+| s442 | House-breaking | ✓ | ✓ | · | — | `library/penal_code/s442_house_breaking/statute.yh` |
+| s447 | Punishment for criminal trespass | ✓ | ✓ | · | — | `library/penal_code/s447_punishment_criminal_trespass/statute.yh` |
+| s448 | Punishment for house-breaking | ✓ | ✓ | · | — | `library/penal_code/s448_punishment_house_breaking/statute.yh` |
+| s449 | House-breaking in order to commit an offence punishable with | ✓ | ✓ | · | — | `library/penal_code/s449_house_breaking_order_commit_offence/statute.yh` |
+| s450 | House-breaking in order to commit an offence punishable with | ✓ | ✓ | · | — | `library/penal_code/s450_house_breaking_order_commit_offence/statute.yh` |
+| s451 | House-breaking in order to commit an offence punishable with | ✓ | ✓ | · | — | `library/penal_code/s451_house_breaking_order_commit_offence/statute.yh` |
+| s452 | House-breaking after preparation made for causing hurt, etc. | ✓ | ✓ | · | — | `library/penal_code/s452_house_breaking_after_preparation_made/statute.yh` |
+| s453 | Possession of house-breaking implements or offensive weapons | ✓ | ✓ | · | — | `library/penal_code/s453_possession_house_breaking_implements/statute.yh` |
+| s458A | Punishment for subsequent offence under section 449, 450, 45 | ✓ | ✓ | · | — | `library/penal_code/s458A_punishment_subsequent_offence_under_section/statute.yh` |
+| s459 | Grievous hurt caused while committing house-breaking | ✓ | ✓ | · | — | `library/penal_code/s459_grievous_hurt_caused_while_committing_house/statute.yh` |
+| s460 | House-breaking when death or grievous hurt caused | ✓ | ✓ | · | — | `library/penal_code/s460_house_breaking_when_death_grievous_hurt/statute.yh` |
+| s461 | Dishonestly breaking open any closed receptacle containing o | ✓ | ✓ | · | — | `library/penal_code/s461_dishonestly_breaking_open_closed_receptacle/statute.yh` |
+| s462 | Punishment for same offence when committed by person entrust | ✓ | ✓ | · | — | `library/penal_code/s462_punishment_same_offence_when_committed/statute.yh` |
 | s463 | Forgery | ✓ | ✓ | ✓ | 2026-03-08 Yuho Team | `library/penal_code/s463_forgery/statute.yh` |
+| s464 | Making a false document or false electronic record | ✓ | ✓ | · | — | `library/penal_code/s464_making_false_document_false_electronic_record/statute.yh` |
 | s465 | Punishment for forgery | ✓ | ✓ | ✓ | 2026-03-10 Yuho Team | `library/penal_code/s465_punishment_for_forgery/statute.yh` |
+| s466 | Forgery of a record of a court of justice, or a public regis | ✓ | ✓ | · | — | `library/penal_code/s466_forgery_record_court_justice_public_register/statute.yh` |
+| s467 | Forgery of a valuable security or will | ✓ | ✓ | · | — | `library/penal_code/s467_forgery_valuable_security_will/statute.yh` |
+| s468 | Forgery for the purpose of cheating | ✓ | ✓ | · | — | `library/penal_code/s468_forgery_purpose_cheating/statute.yh` |
+| s469 | Forgery for the purpose of harming the reputation of any per | ✓ | ✓ | · | — | `library/penal_code/s469_forgery_purpose_harming_reputation_person/statute.yh` |
+| s470 | “A forged document” or “a forged electronic record” | ✓ | ✓ | · | — | `library/penal_code/s470_forged_document_forged_electronic_record/statute.yh` |
+| s471 | Using as genuine a forged document or forged electronic reco | ✓ | ✓ | · | — | `library/penal_code/s471_using_genuine_forged_document_forged/statute.yh` |
+| s472 | Making or possessing a counterfeit seal, plate, etc., with i | ✓ | ✓ | · | — | `library/penal_code/s472_making_possessing_counterfeit_seal_plate_etc/statute.yh` |
+| s473 | Making or possessing a counterfeit seal, plate, etc., with i | ✓ | ✓ | · | — | `library/penal_code/s473_making_possessing_counterfeit_seal_plate_etc/statute.yh` |
+| s473A | Making or possessing equipment for making a false instrument | ✓ | ✓ | · | — | `library/penal_code/s473A_making_possessing_equipment_making_false/statute.yh` |
+| s473B | Making or possessing equipment for making a false instrument | ✓ | ✓ | · | — | `library/penal_code/s473B_making_possessing_equipment_making_false/statute.yh` |
+| s473C | Meaning of “prejudice” and “induce” | ✓ | ✓ | · | — | `library/penal_code/s473C_meaning_prejudice_induce/statute.yh` |
+| s474 | Having possession of certain document or electronic record k | ✓ | ✓ | · | — | `library/penal_code/s474_having_possession_certain_document/statute.yh` |
+| s475 | Counterfeiting a device or mark used for authenticating docu | ✓ | ✓ | · | — | `library/penal_code/s475_counterfeiting_device_mark_used/statute.yh` |
+| s476 | Counterfeiting a device or mark used for authenticating docu | ✓ | ✓ | · | — | `library/penal_code/s476_counterfeiting_device_mark_used/statute.yh` |
+| s477 | Fraudulent cancellation, destruction, etc., of a will | ✓ | ✓ | · | — | `library/penal_code/s477_fraudulent_cancellation_destruction_etc_will/statute.yh` |
+| s477A | Falsification of accounts | ✓ | ✓ | · | — | `library/penal_code/s477A_falsification_accounts/statute.yh` |
+| s489A | Forging or counterfeiting currency or bank notes | ✓ | ✓ | · | — | `library/penal_code/s489A_forging_counterfeiting_currency_bank_notes/statute.yh` |
+| s489B | Using as genuine forged or counterfeit currency or bank note | ✓ | ✓ | · | — | `library/penal_code/s489B_using_genuine_forged_counterfeit_currency/statute.yh` |
+| s489C | Possession of forged or counterfeit currency or bank notes | ✓ | ✓ | · | — | `library/penal_code/s489C_possession_forged_counterfeit_currency_bank/statute.yh` |
+| s489D | Making or possessing instruments or materials for forging or | ✓ | ✓ | · | — | `library/penal_code/s489D_making_possessing_instruments_materials/statute.yh` |
+| s489E | Abetting in Singapore counterfeiting of currency out of Sing | ✓ | ✓ | · | — | `library/penal_code/s489E_abetting_singapore_counterfeiting_currency/statute.yh` |
+| s489F | Fraudulently or dishonestly diminishing weight or altering c | ✓ | ✓ | · | — | `library/penal_code/s489F_fraudulently_dishonestly_diminishing_weight/statute.yh` |
+| s489G | Altering appearance of currency with intent that it shall pa | ✓ | ✓ | · | — | `library/penal_code/s489G_altering_appearance_currency_intent_that_it/statute.yh` |
+| s489H | Delivery to another of altered currency | ✓ | ✓ | · | — | `library/penal_code/s489H_delivery_another_altered_currency/statute.yh` |
+| s489I | Possession of altered currency | ✓ | ✓ | · | — | `library/penal_code/s489I_possession_altered_currency/statute.yh` |
 | s499 | Defamation | ✓ | ✓ | ✓ | 2026-03-08 Yuho Team | `library/penal_code/s499_defamation/statute.yh` |
+| s500 | Punishment for defamation | ✓ | ✓ | · | — | `library/penal_code/s500_punishment_defamation/statute.yh` |
+| s501 | Printing or engraving matter known to be defamatory | ✓ | ✓ | · | — | `library/penal_code/s501_printing_engraving_matter_known_defamatory/statute.yh` |
+| s502 | Sale of printed or engraved substance containing defamatory  | ✓ | ✓ | · | — | `library/penal_code/s502_sale_printed_engraved_substance_containing/statute.yh` |
 | s503 | Criminal intimidation | ✓ | ✓ | ✓ | 2026-03-08 Yuho Team | `library/penal_code/s503_criminal_breach_of_trust/statute.yh` |
+| s504 | Intentional insult with intent to provoke a breach of the pe | ✓ | ✓ | · | — | `library/penal_code/s504_intentional_insult_intent_provoke_breach/statute.yh` |
+| s505 | Statements conducing to public mischief | ✓ | ✓ | · | — | `library/penal_code/s505_statements_conducing_public_mischief/statute.yh` |
+| s506 | Punishment for criminal intimidation | ✓ | ✓ | · | — | `library/penal_code/s506_punishment_criminal_intimidation/statute.yh` |
+| s507 | Criminal intimidation by an anonymous communication | ✓ | ✓ | · | — | `library/penal_code/s507_criminal_intimidation_anonymous_communication/statute.yh` |
+| s511 | Attempt to commit offence | ✓ | ✓ | · | — | `library/penal_code/s511_attempt_commit_offence/statute.yh` |
+| s512 | Punishment for attempting to commit offences | ✓ | ✓ | · | — | `library/penal_code/s512_punishment_attempting_commit_offences/statute.yh` |
 
-## Unencoded sections (238)
+## Unencoded sections (49)
 
 | § | Marginal note | SSO |
 |---|---|---|
-| s269 | Negligent act likely to spread infection of any disease dangerous to life | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr269-#pr269-) |
-| s270 | Intentional or rash act likely to spread infection of any disease dangerous to l | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr270-#pr270-) |
-| s271 | Disobedience to a quarantine rule | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr271-#pr271-) |
-| s272 | Adulteration of food or drink which is intended for sale | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr272-#pr272-) |
-| s273 | Sale of noxious food or drink | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr273-#pr273-) |
-| s274 | Adulteration of drugs | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr274-#pr274-) |
-| s275 | Sale of adulterated drugs | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr275-#pr275-) |
-| s276 | Sale of any drug as a different drug or preparation | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr276-#pr276-) |
-| s277 | Fouling the water of a public spring or reservoir | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr277-#pr277-) |
-| s278 | Making atmosphere noxious to health | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr278-#pr278-) |
-| s279 | Rash driving or riding on a public way | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr279-#pr279-) |
-| s280 | Rash navigation of a vessel | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr280-#pr280-) |
-| s282 | Conveying person by water for hire in a vessel overloaded or unsafe | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr282-#pr282-) |
-| s283 | Danger or obstruction in a public way or navigation | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr283-#pr283-) |
 | s284 | Rash or negligent conduct with respect to dangerous or harmful substance | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr284-#pr284-) |
 | s285 | Causing or contributing to risk of dangerous fire | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr285-#pr285-) |
 | s286 | Presumption of cause of fire | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr286-#pr286-) |
@@ -349,85 +524,12 @@ _Valid date: n/a_
 | s308B | Concealment, desecration or disposal of corpse that impedes discovery, identific | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr308B-#pr308B-) |
 | s310 | Infanticide | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr310-#pr310-) |
 | s311 | Punishment for infanticide | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr311-#pr311-) |
-| s312 | Causing miscarriage | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr312-#pr312-) |
-| s313 | Causing miscarriage without woman’s consent | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr313-#pr313-) |
-| s314 | Death caused by act done with intent to cause miscarriage | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr314-#pr314-) |
-| s315 | Child destruction before, at or immediately after birth | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr315-#pr315-) |
-| s316 | Causing death of a quick unborn child by an act amounting to culpable homicide | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr316-#pr316-) |
-| s317 | Exposure and abandonment of a child below 12 years of age by parent or person ha | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr317-#pr317-) |
-| s318 | Concealment of birth by secret disposal of dead body | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr318-#pr318-) |
-| s320 | Grievous hurt | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr320-#pr320-) |
-| s322 | Voluntarily causing grievous hurt | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr322-#pr322-) |
-| s323A | Punishment for voluntarily causing hurt which causes grievous hurt | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr323A-#pr323A-) |
-| s324 | Voluntarily causing hurt by dangerous weapons or means | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr324-#pr324-) |
-| s326 | Voluntarily causing grievous hurt by dangerous weapons or means | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr326-#pr326-) |
-| s327 | Voluntarily causing hurt to extort property or to constrain to an illegal act | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr327-#pr327-) |
-| s328 | Causing hurt by means of poison, etc., with intent to commit an offence | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr328-#pr328-) |
-| s329 | Voluntarily causing grievous hurt to extort property, or to constrain to an ille | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr329-#pr329-) |
-| s330 | Voluntarily causing hurt to extort confession or to compel restoration of proper | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr330-#pr330-) |
-| s331 | Voluntarily causing grievous hurt to extort confession or to compel restoration  | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr331-#pr331-) |
-| s332 | Voluntarily causing hurt to deter public servant from his duty | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr332-#pr332-) |
-| s333 | Voluntarily causing grievous hurt to deter public servant from his duty | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr333-#pr333-) |
-| s334 | Voluntarily causing hurt on provocation | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr334-#pr334-) |
-| s334A | Punishment for voluntarily causing hurt on provocation which causes grievous hur | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr334A-#pr334A-) |
-| s335 | Causing grievous hurt on provocation | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr335-#pr335-) |
-| s335A | Allowing neglect, physical or sexual abuse of domestic worker or vulnerable pers | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr335A-#pr335A-) |
-| s335B | Punishment for act which endangers life or personal safety of others with knowle | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr335B-#pr335B-) |
-| s336 | Punishment for act which endangers life or the personal safety of others | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr336-#pr336-) |
-| s337 | Causing hurt by an act which endangers life or the personal safety of others | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr337-#pr337-) |
-| s338 | Causing grievous hurt by an act which endangers life or the personal safety of o | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr338-#pr338-) |
-| s339 | Wrongful restraint | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr339-#pr339-) |
-| s340 | Wrongful confinement | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr340-#pr340-) |
-| s341 | Punishment for wrongful restraint | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr341-#pr341-) |
-| s342 | Punishment for wrongful confinement | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr342-#pr342-) |
-| s345 | Wrongful confinement of person for whose liberation a writ has been issued | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr345-#pr345-) |
-| s346 | Wrongful confinement in secret | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr346-#pr346-) |
-| s347 | Wrongful confinement for the purpose of extorting property or constraining to an | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr347-#pr347-) |
-| s348 | Wrongful confinement for the purpose of extorting confession or of compelling re | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr348-#pr348-) |
-| s349 | Force | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr349-#pr349-) |
-| s350 | Criminal force | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr350-#pr350-) |
-| s351 | Assault | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr351-#pr351-) |
-| s352 | Punishment for using criminal force otherwise than on grave and sudden provocati | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr352-#pr352-) |
-| s353 | Using criminal force to deter a public servant from discharge of his duty | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr353-#pr353-) |
-| s354A | Outraging modesty in certain circumstances | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr354A-#pr354A-) |
-| s355 | Assault or criminal force with intent to dishonour otherwise than on grave and s | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr355-#pr355-) |
-| s356 | Assault or criminal force in committing or attempting to commit theft of propert | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr356-#pr356-) |
-| s357 | Assault or criminal force in attempting wrongfully to confine a person | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr357-#pr357-) |
-| s358 | Assaulting or using criminal force on grave and sudden provocation | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr358-#pr358-) |
-| s359 | Kidnapping | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr359-#pr359-) |
-| s360 | Kidnapping from Singapore | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr360-#pr360-) |
-| s361 | Kidnapping from lawful guardianship | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr361-#pr361-) |
-| s362 | Abduction | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr362-#pr362-) |
-| s363A | Punishment for abduction | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr363A-#pr363A-) |
-| s364 | Kidnapping or abducting in order to murder | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr364-#pr364-) |
-| s365 | Kidnapping or abducting with intent secretly and wrongfully to confine a person | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr365-#pr365-) |
-| s366 | Kidnapping or abducting a woman to compel her marriage, etc. | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr366-#pr366-) |
-| s367 | Kidnapping or abducting in order to subject a person to grievous hurt, slavery,  | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr367-#pr367-) |
-| s368 | Wrongfully concealing or keeping in confinement a kidnapped person | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr368-#pr368-) |
-| s370 | Buying or disposing of any person as a slave | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr370-#pr370-) |
-| s371 | Habitual dealing in slaves | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr371-#pr371-) |
-| s372 | Selling minor for purposes of prostitution, etc. | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr372-#pr372-) |
-| s373 | Buying minor for purposes of prostitution, etc. | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr373-#pr373-) |
-| s373A | Importing woman for purposes of prostitution, etc. | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr373A-#pr373A-) |
-| s374 | Unlawful compulsory labour | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr374-#pr374-) |
-| s375 | Rape | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr375-#pr375-) |
-| s376 | Sexual assault involving penetration | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr376-#pr376-) |
-| s376A | Sexual penetration of minor below 16 years of age | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr376A-#pr376A-) |
 | s376AA | Exploitative sexual penetration of minor of or above 16 but below 18 years of ag | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr376AA-#pr376AA-) |
-| s376B | Commercial sex with minor below 18 years of age | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr376B-#pr376B-) |
-| s376C | Commercial sex with minor below 18 years of age outside Singapore | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr376C-#pr376C-) |
-| s376D | Tour outside Singapore for commercial sex with minor below 18 years of age | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr376D-#pr376D-) |
-| s376E | Sexual grooming of minor below 16 years of age | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr376E-#pr376E-) |
 | s376EA | Exploitative sexual grooming of minor of or above 16 but below 18 years of age | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr376EA-#pr376EA-) |
 | s376EB | Sexual communication with minor below 16 years of age | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr376EB-#pr376EB-) |
 | s376EC | Exploitative sexual communication with minor of or above 16 but below 18 years o | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr376EC-#pr376EC-) |
 | s376ED | Sexual activity or image in presence of minor below 16 years of age | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr376ED-#pr376ED-) |
 | s376EE | Exploitative sexual activity or image in presence of minor of or above 16 but be | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr376EE-#pr376EE-) |
-| s376F | Procurement of sexual activity with person with mental disability | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr376F-#pr376F-) |
-| s376G | Incest | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr376G-#pr376G-) |
-| s376H | Procurement of sexual activity by deception or false representation | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr376H-#pr376H-) |
-| s377 | Sexual penetration, etc., of a corpse | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377-#pr377-) |
-| s377B | Sexual penetration with living animal | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377B-#pr377B-) |
 | s377BA | Word or gesture intended to insult modesty of any person | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BA-#pr377BA-) |
 | s377BB | Voyeurism | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BB-#pr377BB-) |
 | s377BC | Distribution of voyeuristic image or recording | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BC-#pr377BC-) |
@@ -443,107 +545,5 @@ _Valid date: n/a_
 | s377BM | Defences to offences relating to intimate image or recording and voyeurism | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BM-#pr377BM-) |
 | s377BN | Defences to child abuse material offences | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BN-#pr377BN-) |
 | s377BO | Child abuse material offences outside or partially outside Singapore | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BO-#pr377BO-) |
-| s377C | Interpretation of sections 375 to 377BO (sexual offences) | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377C-#pr377C-) |
 | s377CA | Meaning of exploitative relationship | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377CA-#pr377CA-) |
 | s377CB | Consent given under misconception in sexual offences | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377CB-#pr377CB-) |
-| s377D | Mistake as to age in sexual offences | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377D-#pr377D-) |
-| s379A | Punishment for theft of a motor vehicle | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr379A-#pr379A-) |
-| s380 | Theft in dwelling house, etc. | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr380-#pr380-) |
-| s381 | Theft by clerk or servant of property in possession of master | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr381-#pr381-) |
-| s382 | Theft after preparation made for causing death or hurt in order to commit theft | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr382-#pr382-) |
-| s384 | Punishment for extortion | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr384-#pr384-) |
-| s385 | Putting person in fear of harm in order to commit extortion | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr385-#pr385-) |
-| s386 | Extortion by putting a person in fear of death or grievous hurt | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr386-#pr386-) |
-| s387 | Putting person in fear of death or of grievous hurt in order to commit extortion | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr387-#pr387-) |
-| s388 | Extortion by threat of accusation of an offence punishable with death, or impris | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr388-#pr388-) |
-| s389 | Putting person in fear of accusation of offence, in order to commit extortion | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr389-#pr389-) |
-| s391 | Gang-robbery | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr391-#pr391-) |
-| s393 | Attempt to commit robbery | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr393-#pr393-) |
-| s394 | Voluntarily causing hurt in committing robbery | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr394-#pr394-) |
-| s396 | Gang-robbery with murder | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr396-#pr396-) |
-| s397 | Robbery when armed or with attempt to cause death or grievous hurt | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr397-#pr397-) |
-| s399 | Making preparation to commit gang-robbery | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr399-#pr399-) |
-| s400 | Punishment for belonging to gang-robbers | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr400-#pr400-) |
-| s401 | Punishment for belonging to gang of thieves | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr401-#pr401-) |
-| s402 | Assembling for purpose of committing gang-robbery | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr402-#pr402-) |
-| s404 | Dishonest misappropriation of property possessed by a deceased person at the tim | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr404-#pr404-) |
-| s405 | Criminal breach of trust | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr405-#pr405-) |
-| s407 | Criminal breach of trust of property entrusted for purposes of transportation or | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr407-#pr407-) |
-| s408 | Criminal breach of trust by employees | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr408-#pr408-) |
-| s409 | Criminal breach of trust by public servant, or by banker, merchant, agent, direc | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr409-#pr409-) |
-| s410 | Stolen property | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr410-#pr410-) |
-| s412 | Receiving property stolen in the commission of a gang-robbery | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr412-#pr412-) |
-| s413 | Habitually dealing in stolen property | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr413-#pr413-) |
-| s414 | Assisting in concealment or disposal of stolen property | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr414-#pr414-) |
-| s416 | Cheating by personation | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr416-#pr416-) |
-| s416A | Illegally obtained personal information | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr416A-#pr416A-) |
-| s416B | Cheating by remote communication | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr416B-#pr416B-) |
-| s417 | Punishment for cheating | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr417-#pr417-) |
-| s418 | Cheating with knowledge that wrongful loss may be thereby caused to a person who | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr418-#pr418-) |
-| s419 | Punishment for cheating by personation | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr419-#pr419-) |
-| s420A | Obtaining services dishonestly or fraudulently | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr420A-#pr420A-) |
-| s421 | Dishonest or fraudulent removal or concealment of property to prevent distributi | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr421-#pr421-) |
-| s422 | Dishonestly or fraudulently preventing a debt or demand due to the offender from | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr422-#pr422-) |
-| s423 | Dishonest or fraudulent execution of deed of transfer containing a false stateme | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr423-#pr423-) |
-| s424 | Dishonest or fraudulent removal or concealment of property or release of claim | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr424-#pr424-) |
-| s424A | Fraud by false representation, non-disclosure or abuse of position not connected | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr424A-#pr424A-) |
-| s424B | Fraud by false representation, non-disclosure or abuse of position | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr424B-#pr424B-) |
-| s425 | Mischief | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr425-#pr425-) |
-| s426 | Punishment for committing mischief | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr426-#pr426-) |
-| s427 | Punishment for committing mischief causing disruption to key service, etc. | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr427-#pr427-) |
-| s428 | Mischief by killing or maiming any animal | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr428-#pr428-) |
-| s435 | Mischief by fire or explosive substance with intent to cause damage | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr435-#pr435-) |
-| s436 | Mischief by fire or explosive substance with intent to destroy a house, etc. | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr436-#pr436-) |
-| s437 | Mischief with intent to destroy or make unsafe a decked vessel or a vessel of 20 | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr437-#pr437-) |
-| s438 | Punishment for the mischief described in section 437 when committed by fire or a | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr438-#pr438-) |
-| s439 | Punishment for intentionally running vessel aground or ashore with intent to com | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr439-#pr439-) |
-| s440 | Mischief committed after preparation made for causing death or hurt | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr440-#pr440-) |
-| s441 | Criminal trespass | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr441-#pr441-) |
-| s442 | House-breaking | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr442-#pr442-) |
-| s447 | Punishment for criminal trespass | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr447-#pr447-) |
-| s448 | Punishment for house-breaking | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr448-#pr448-) |
-| s449 | House-breaking in order to commit an offence punishable with death | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr449-#pr449-) |
-| s450 | House-breaking in order to commit an offence punishable with imprisonment for li | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr450-#pr450-) |
-| s451 | House-breaking in order to commit an offence punishable with imprisonment | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr451-#pr451-) |
-| s452 | House-breaking after preparation made for causing hurt, etc. | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr452-#pr452-) |
-| s453 | Possession of house-breaking implements or offensive weapons | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr453-#pr453-) |
-| s458A | Punishment for subsequent offence under section 449, 450, 451 or 452 | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr458A-#pr458A-) |
-| s459 | Grievous hurt caused while committing house-breaking | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr459-#pr459-) |
-| s460 | House-breaking when death or grievous hurt caused | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr460-#pr460-) |
-| s461 | Dishonestly breaking open any closed receptacle containing or supposed to contai | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr461-#pr461-) |
-| s462 | Punishment for same offence when committed by person entrusted with custody | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr462-#pr462-) |
-| s464 | Making a false document or false electronic record | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr464-#pr464-) |
-| s466 | Forgery of a record of a court of justice, or a public register of births, etc. | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr466-#pr466-) |
-| s467 | Forgery of a valuable security or will | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr467-#pr467-) |
-| s468 | Forgery for the purpose of cheating | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr468-#pr468-) |
-| s469 | Forgery for the purpose of harming the reputation of any person | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr469-#pr469-) |
-| s470 | “A forged document” or “a forged electronic record” | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr470-#pr470-) |
-| s471 | Using as genuine a forged document or forged electronic record | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr471-#pr471-) |
-| s472 | Making or possessing a counterfeit seal, plate, etc., with intent to commit a fo | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr472-#pr472-) |
-| s473 | Making or possessing a counterfeit seal, plate, etc., with intent to commit a fo | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr473-#pr473-) |
-| s473A | Making or possessing equipment for making a false instrument | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr473A-#pr473A-) |
-| s473B | Making or possessing equipment for making a false instrument with intent to indu | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr473B-#pr473B-) |
-| s473C | Meaning of “prejudice” and “induce” | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr473C-#pr473C-) |
-| s474 | Having possession of certain document or electronic record known to be forged, w | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr474-#pr474-) |
-| s475 | Counterfeiting a device or mark used for authenticating documents described in s | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr475-#pr475-) |
-| s476 | Counterfeiting a device or mark used for authenticating documents or electronic  | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr476-#pr476-) |
-| s477 | Fraudulent cancellation, destruction, etc., of a will | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr477-#pr477-) |
-| s477A | Falsification of accounts | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr477A-#pr477A-) |
-| s489A | Forging or counterfeiting currency or bank notes | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr489A-#pr489A-) |
-| s489B | Using as genuine forged or counterfeit currency or bank notes | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr489B-#pr489B-) |
-| s489C | Possession of forged or counterfeit currency or bank notes | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr489C-#pr489C-) |
-| s489D | Making or possessing instruments or materials for forging or counterfeiting curr | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr489D-#pr489D-) |
-| s489E | Abetting in Singapore counterfeiting of currency out of Singapore | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr489E-#pr489E-) |
-| s489F | Fraudulently or dishonestly diminishing weight or altering composition of any co | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr489F-#pr489F-) |
-| s489G | Altering appearance of currency with intent that it shall pass as currency of di | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr489G-#pr489G-) |
-| s489H | Delivery to another of altered currency | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr489H-#pr489H-) |
-| s489I | Possession of altered currency | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr489I-#pr489I-) |
-| s500 | Punishment for defamation | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr500-#pr500-) |
-| s501 | Printing or engraving matter known to be defamatory | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr501-#pr501-) |
-| s502 | Sale of printed or engraved substance containing defamatory matter | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr502-#pr502-) |
-| s504 | Intentional insult with intent to provoke a breach of the peace | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr504-#pr504-) |
-| s505 | Statements conducing to public mischief | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr505-#pr505-) |
-| s506 | Punishment for criminal intimidation | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr506-#pr506-) |
-| s507 | Criminal intimidation by an anonymous communication | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr507-#pr507-) |
-| s511 | Attempt to commit offence | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr511-#pr511-) |
-| s512 | Punishment for attempting to commit offences | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr512-#pr512-) |
