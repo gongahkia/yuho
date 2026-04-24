@@ -1,0 +1,2502 @@
+[
+  {
+    "act_code": "IA1965",
+    "title": "Interpretation Act",
+    "href": "/Act/IA1965"
+  },
+  {
+    "act_code": "AA2004",
+    "title": "Accountants Act 2004",
+    "href": "/Act/AA2004"
+  },
+  {
+    "act_code": "ACRAA2004",
+    "title": "Accounting and Corporate Regulatory Authority Act 2004",
+    "href": "/Act/ACRAA2004"
+  },
+  {
+    "act_code": "ASA2007",
+    "title": "Accounting Standards Act 2007",
+    "href": "/Act/ASA2007"
+  },
+  {
+    "act_code": "AMA2017",
+    "title": "Active Mobility Act 2017",
+    "href": "/Act/AMA2017"
+  },
+  {
+    "act_code": "AJPA2016",
+    "title": "Administration of Justice (Protection) Act 2016",
+    "href": "/Act/AJPA2016"
+  },
+  {
+    "act_code": "AMLA1966",
+    "title": "Administration of Muslim Law Act 1966",
+    "href": "/Act/AMLA1966"
+  },
+  {
+    "act_code": "ACA2022",
+    "title": "Adoption of Children Act 2022",
+    "href": "/Act/ACA2022"
+  },
+  {
+    "act_code": "AMDA1996",
+    "title": "Advance Medical Directive Act 1996",
+    "href": "/Act/AMDA1996"
+  },
+  {
+    "act_code": "ASTRA1990",
+    "title": "Agency for Science, Technology and Research Act 1990",
+    "href": "/Act/ASTRA1990"
+  },
+  {
+    "act_code": "ANA1966",
+    "title": "Air Navigation Act 1966",
+    "href": "/Act/ANA1966"
+  },
+  {
+    "act_code": "AHPA2011",
+    "title": "Allied Health Professions Act 2011",
+    "href": "/Act/AHPA2011"
+  },
+  {
+    "act_code": "ARSA2011",
+    "title": "Amusement Rides Safety Act 2011",
+    "href": "/Act/ARSA2011"
+  },
+  {
+    "act_code": "ABA1965",
+    "title": "Animals and Birds Act 1965",
+    "href": "/Act/ABA1965"
+  },
+  {
+    "act_code": "AA2020",
+    "title": "Apostille Act 2020",
+    "href": "/Act/AA2020"
+  },
+  {
+    "act_code": "AELA1993",
+    "title": "Application of English Law Act 1993",
+    "href": "/Act/AELA1993"
+  },
+  {
+    "act_code": "AA1928",
+    "title": "Apportionment Act 1928",
+    "href": "/Act/AA1928"
+  },
+  {
+    "act_code": "ARA1909",
+    "title": "Apportionment of Rents Act 1909",
+    "href": "/Act/ARA1909"
+  },
+  {
+    "act_code": "AA1906",
+    "title": "Appraisers Act 1906",
+    "href": "/Act/AA1906"
+  },
+  {
+    "act_code": "AIIDA1968",
+    "title": "Arbitration (International Investment Disputes) Act 1968",
+    "href": "/Act/AIIDA1968"
+  },
+  {
+    "act_code": "AA2001",
+    "title": "Arbitration Act 2001",
+    "href": "/Act/AA2001"
+  },
+  {
+    "act_code": "AA1991",
+    "title": "Architects Act 1991",
+    "href": "/Act/AA1991"
+  },
+  {
+    "act_code": "AOA1973",
+    "title": "Arms Offences Act 1973",
+    "href": "/Act/AOA1973"
+  },
+  {
+    "act_code": "ADBA1966",
+    "title": "Asian Development Bank Act 1966",
+    "href": "/Act/ADBA1966"
+  },
+  {
+    "act_code": "AIIBA2015",
+    "title": "Asian Infrastructure Investment Bank Act 2015",
+    "href": "/Act/AIIBA2015"
+  },
+  {
+    "act_code": "AGAFA2014",
+    "title": "Attorney-General (Additional Functions) Act 2014",
+    "href": "/Act/AGAFA2014"
+  },
+  {
+    "act_code": "AA1966",
+    "title": "Audit Act 1966",
+    "href": "/Act/AA1966"
+  },
+  {
+    "act_code": "BA1970",
+    "title": "Banking Act 1970",
+    "href": "/Act/BA1970"
+  },
+  {
+    "act_code": "BEA1949",
+    "title": "Bills of Exchange Act 1949",
+    "href": "/Act/BEA1949"
+  },
+  {
+    "act_code": "BLA1992",
+    "title": "Bills of Lading Act 1992",
+    "href": "/Act/BLA1992"
+  },
+  {
+    "act_code": "BSA1886",
+    "title": "Bills of Sale Act 1886",
+    "href": "/Act/BSA1886"
+  },
+  {
+    "act_code": "BATA2005",
+    "title": "Biological Agents and Toxins Act 2005",
+    "href": "/Act/BATA2005"
+  },
+  {
+    "act_code": "BSO1911",
+    "title": "Bishop of Singapore Ordinance 1911",
+    "href": "/Act/BSO1911"
+  },
+  {
+    "act_code": "BSMA1998",
+    "title": "Boundaries and Survey Maps Act 1998",
+    "href": "/Act/BSMA1998"
+  },
+  {
+    "act_code": "BSAA1926",
+    "title": "Boy Scouts Association Act 1926",
+    "href": "/Act/BSAA1926"
+  },
+  {
+    "act_code": "BWAA1966",
+    "title": "Bretton Woods Agreements Act 1966",
+    "href": "/Act/BWAA1966"
+  },
+  {
+    "act_code": "BA1994",
+    "title": "Broadcasting Act 1994",
+    "href": "/Act/BA1994"
+  },
+  {
+    "act_code": "BSGO1950",
+    "title": "Brothers of St. Gabriel Ordinance 1950",
+    "href": "/Act/BSGO1950"
+  },
+  {
+    "act_code": "BSMA2004",
+    "title": "Building (Strata Management) Act 2004",
+    "href": "/Act/BSMA2004"
+  },
+  {
+    "act_code": "BCAA1999",
+    "title": "Building and Construction Authority Act 1999",
+    "href": "/Act/BCAA1999"
+  },
+  {
+    "act_code": "BCISPA2004",
+    "title": "Building and Construction Industry Security of Payment Act 2004",
+    "href": "/Act/BCISPA2004"
+  },
+  {
+    "act_code": "BCA1989",
+    "title": "Building Control Act 1989",
+    "href": "/Act/BCA1989"
+  },
+  {
+    "act_code": "BSIA2015",
+    "title": "Bus Services Industry Act 2015",
+    "href": "/Act/BSIA2015"
+  },
+  {
+    "act_code": "BNRA2014",
+    "title": "Business Names Registration Act 2014",
+    "href": "/Act/BNRA2014"
+  },
+  {
+    "act_code": "BTA2004",
+    "title": "Business Trusts Act 2004",
+    "href": "/Act/BTA2004"
+  },
+  {
+    "act_code": "CPA2018",
+    "title": "Carbon Pricing Act 2018",
+    "href": "/Act/CPA2018"
+  },
+  {
+    "act_code": "CLLTCA2019",
+    "title": "CareShield Life and Long-Term Care Act 2019",
+    "href": "/Act/CLLTCA2019"
+  },
+  {
+    "act_code": "CAMC1999A2007",
+    "title": "Carriage by Air (Montreal Convention, 1999) Act 2007",
+    "href": "/Act/CAMC1999A2007"
+  },
+  {
+    "act_code": "CAA1988",
+    "title": "Carriage by Air Act 1988",
+    "href": "/Act/CAA1988"
+  },
+  {
+    "act_code": "CGSA1972",
+    "title": "Carriage of Goods by Sea Act 1972",
+    "href": "/Act/CGSA1972"
+  },
+  {
+    "act_code": "CCA2006",
+    "title": "Casino Control Act 2006",
+    "href": "/Act/CCA2006"
+  },
+  {
+    "act_code": "CA1973",
+    "title": "Census Act 1973",
+    "href": "/Act/CA1973"
+  },
+  {
+    "act_code": "CPFA1953",
+    "title": "Central Provident Fund Act 1953",
+    "href": "/Act/CPFA1953"
+  },
+  {
+    "act_code": "CSGBA1981",
+    "title": "Central Sikh Gurdwara Board Act 1981",
+    "href": "/Act/CSGBA1981"
+  },
+  {
+    "act_code": "CA1994",
+    "title": "Charities Act 1994",
+    "href": "/Act/CA1994"
+  },
+  {
+    "act_code": "CWPA2000",
+    "title": "Chemical Weapons (Prohibition) Act 2000",
+    "href": "/Act/CWPA2000"
+  },
+  {
+    "act_code": "CDCSA2001",
+    "title": "Child Development Co-Savings Act 2001",
+    "href": "/Act/CDCSA2001"
+  },
+  {
+    "act_code": "CYPA1993",
+    "title": "Children and Young Persons Act 1993",
+    "href": "/Act/CYPA1993"
+  },
+  {
+    "act_code": "CFA1971",
+    "title": "Chit Funds Act 1971",
+    "href": "/Act/CFA1971"
+  },
+  {
+    "act_code": "CCAA2016",
+    "title": "Choice of Court Agreements Act 2016",
+    "href": "/Act/CCAA2016"
+  },
+  {
+    "act_code": "CBSVO1915",
+    "title": "Christian Brothers’ Schools Visitor Ordinance 1915",
+    "href": "/Act/CBSVO1915"
+  },
+  {
+    "act_code": "CAASA2009",
+    "title": "Civil Aviation Authority of Singapore Act 2009",
+    "href": "/Act/CAASA2009"
+  },
+  {
+    "act_code": "CDA1986",
+    "title": "Civil Defence Act 1986",
+    "href": "/Act/CDA1986"
+  },
+  {
+    "act_code": "CDSA1997",
+    "title": "Civil Defence Shelter Act 1997",
+    "href": "/Act/CDSA1997"
+  },
+  {
+    "act_code": "CLA1909",
+    "title": "Civil Law Act 1909",
+    "href": "/Act/CLA1909"
+  },
+  {
+    "act_code": "CLGA1970",
+    "title": "Civil List and Gratuity Act 1970",
+    "href": "/Act/CLGA1970"
+  },
+  {
+    "act_code": "CSCA2001",
+    "title": "Civil Service College Act 2001",
+    "href": "/Act/CSCA2001"
+  },
+  {
+    "act_code": "CTA1992",
+    "title": "Commodity Trading Act 1992",
+    "href": "/Act/CTA1992"
+  },
+  {
+    "act_code": "CSTA2018",
+    "title": "Common Services Tunnels Act 2018",
+    "href": "/Act/CSTA2018"
+  },
+  {
+    "act_code": "CDAA2025",
+    "title": "Communicable Diseases Agency Act 2025",
+    "href": "/Act/CDAA2025"
+  },
+  {
+    "act_code": "CCEFA2005",
+    "title": "Community Care Endowment Fund Act 2005",
+    "href": "/Act/CCEFA2005"
+  },
+  {
+    "act_code": "CDRA2015",
+    "title": "Community Disputes Resolution Act 2015",
+    "href": "/Act/CDRA2015"
+  },
+  {
+    "act_code": "CMCA1997",
+    "title": "Community Mediation Centres Act 1997",
+    "href": "/Act/CMCA1997"
+  },
+  {
+    "act_code": "CoA1967",
+    "title": "Companies Act 1967",
+    "href": "/Act/CoA1967"
+  },
+  {
+    "act_code": "CA2004",
+    "title": "Competition Act 2004",
+    "href": "/Act/CA2004"
+  },
+  {
+    "act_code": "CEA2000",
+    "title": "Compulsory Education Act 2000",
+    "href": "/Act/CEA2000"
+  },
+  {
+    "act_code": "CMA1993",
+    "title": "Computer Misuse Act 1993",
+    "href": "/Act/CMA1993"
+  },
+  {
+    "act_code": "CONS1963",
+    "title": "Constitution of the Republic of Singapore",
+    "href": "/Act/CONS1963"
+  },
+  {
+    "act_code": "CPFTA2003",
+    "title": "Consumer Protection (Fair Trading) Act 2003",
+    "href": "/Act/CPFTA2003"
+  },
+  {
+    "act_code": "CPTDSRA1975",
+    "title": "Consumer Protection (Trade Descriptions and Safety Requirements) Act 1975",
+    "href": "/Act/CPTDSRA1975"
+  },
+  {
+    "act_code": "CRTPA2001",
+    "title": "Contracts (Rights of Third Parties) Act 2001",
+    "href": "/Act/CRTPA2001"
+  },
+  {
+    "act_code": "CNPIA1953",
+    "title": "Contributory Negligence and Personal Injuries Act 1953",
+    "href": "/Act/CNPIA1953"
+  },
+  {
+    "act_code": "CESA1973",
+    "title": "Control of Essential Supplies Act 1973",
+    "href": "/Act/CESA1973"
+  },
+  {
+    "act_code": "CMA1959",
+    "title": "Control of Manufacture Act 1959",
+    "href": "/Act/CMA1959"
+  },
+  {
+    "act_code": "CPA1993",
+    "title": "Control of Plants Act 1993",
+    "href": "/Act/CPA1993"
+  },
+  {
+    "act_code": "CVPA1998",
+    "title": "Control of Vectors and Pesticides Act 1998",
+    "href": "/Act/CVPA1998"
+  },
+  {
+    "act_code": "CLPA1886",
+    "title": "Conveyancing and Law of Property Act 1886",
+    "href": "/Act/CLPA1886"
+  },
+  {
+    "act_code": "CSA1979",
+    "title": "Co-operative Societies Act 1979",
+    "href": "/Act/CSA1979"
+  },
+  {
+    "act_code": "CA2021",
+    "title": "Copyright Act 2021",
+    "href": "/Act/CA2021"
+  },
+  {
+    "act_code": "CA2010",
+    "title": "Coroners Act 2010",
+    "href": "/Act/CA2010"
+  },
+  {
+    "act_code": "CBCA1960",
+    "title": "Corporate Bodies’ Contracts Act 1960",
+    "href": "/Act/CBCA1960"
+  },
+  {
+    "act_code": "CSPA2024",
+    "title": "Corporate Service Providers Act 2024",
+    "href": "/Act/CSPA2024"
+  },
+  {
+    "act_code": "CESOWA1958",
+    "title": "Corrosive and Explosive Substances and Offensive Weapons Act 1958",
+    "href": "/Act/CESOWA1958"
+  },
+  {
+    "act_code": "CDTOSCCBA1992",
+    "title": "Corruption, Drug Trafficking and Other Serious Crimes (Confiscation of Benefits) Act 1992",
+    "href": "/Act/CDTOSCCBA1992"
+  },
+  {
+    "act_code": "CADDA1996",
+    "title": "Countervailing and Anti-Dumping Duties Act 1996",
+    "href": "/Act/CADDA1996"
+  },
+  {
+    "act_code": "COVID19TMA2020",
+    "title": "COVID-19 (Temporary Measures) Act 2020",
+    "href": "/Act/COVID19TMA2020"
+  },
+  {
+    "act_code": "CBA2016",
+    "title": "Credit Bureau Act 2016",
+    "href": "/Act/CBA2016"
+  },
+  {
+    "act_code": "CLTPA1955",
+    "title": "Criminal Law (Temporary Provisions) Act 1955",
+    "href": "/Act/CLTPA1955"
+  },
+  {
+    "act_code": "CPC2010",
+    "title": "Criminal Procedure Code 2010",
+    "href": "/Act/CPC2010"
+  },
+  {
+    "act_code": "CBRA2018",
+    "title": "Cross-Border Railways Act 2018",
+    "href": "/Act/CBRA2018"
+  },
+  {
+    "act_code": "CA1967",
+    "title": "Currency Act 1967",
+    "href": "/Act/CA1967"
+  },
+  {
+    "act_code": "CA1960",
+    "title": "Customs Act 1960",
+    "href": "/Act/CA1960"
+  },
+  {
+    "act_code": "CA2018",
+    "title": "Cybersecurity Act 2018",
+    "href": "/Act/CA2018"
+  },
+  {
+    "act_code": "DCCIIO1949",
+    "title": "Daughters of Charity of the Canossian Institute Incorporation Ordinance 1949",
+    "href": "/Act/DCCIIO1949"
+  },
+  {
+    "act_code": "DCA2022",
+    "title": "Debt Collection Act 2022",
+    "href": "/Act/DCA2022"
+  },
+  {
+    "act_code": "DeA1934",
+    "title": "Debtors Act 1934",
+    "href": "/Act/DeA1934"
+  },
+  {
+    "act_code": "DUA1922",
+    "title": "Decorations and Uniforms Act 1922",
+    "href": "/Act/DUA1922"
+  },
+  {
+    "act_code": "DSMA2015",
+    "title": "Deep Seabed Mining Act 2015",
+    "href": "/Act/DSMA2015"
+  },
+  {
+    "act_code": "DA1957",
+    "title": "Defamation Act 1957",
+    "href": "/Act/DA1957"
+  },
+  {
+    "act_code": "DSTAA2000",
+    "title": "Defence Science and Technology Agency Act 2000",
+    "href": "/Act/DSTAA2000"
+  },
+  {
+    "act_code": "DRA1999",
+    "title": "Dental Registration Act 1999",
+    "href": "/Act/DRA1999"
+  },
+  {
+    "act_code": "DTAA1950",
+    "title": "Departmental Titles (Alteration) Act 1950",
+    "href": "/Act/DTAA1950"
+  },
+  {
+    "act_code": "DIPOPSA2011",
+    "title": "Deposit Insurance and Policy Owners’ Protection Schemes Act 2011",
+    "href": "/Act/DIPOPSA2011"
+  },
+  {
+    "act_code": "DPA1989",
+    "title": "Destitute Persons Act 1989",
+    "href": "/Act/DPA1989"
+  },
+  {
+    "act_code": "DFA1959",
+    "title": "Development Fund Act 1959",
+    "href": "/Act/DFA1959"
+  },
+  {
+    "act_code": "DIFA2000",
+    "title": "Developmental Investment Fund Act 2000",
+    "href": "/Act/DIFA2000"
+  },
+  {
+    "act_code": "DCOOFA1968",
+    "title": "Diplomatic and Consular Officers (Oaths and Fees) Act 1968",
+    "href": "/Act/DCOOFA1968"
+  },
+  {
+    "act_code": "DCRA2005",
+    "title": "Diplomatic and Consular Relations Act 2005",
+    "href": "/Act/DCRA2005"
+  },
+  {
+    "act_code": "DA1934",
+    "title": "Distress Act 1934",
+    "href": "/Act/DA1934"
+  },
+  {
+    "act_code": "DCA2001",
+    "title": "District Cooling Act 2001",
+    "href": "/Act/DCA2001"
+  },
+  {
+    "act_code": "DGMEAO1939",
+    "title": "District Grand Master of the Eastern Archipelago Ordinance 1939",
+    "href": "/Act/DGMEAO1939"
+  },
+  {
+    "act_code": "ECDCA2017",
+    "title": "Early Childhood Development Centres Act 2017",
+    "href": "/Act/ECDCA2017"
+  },
+  {
+    "act_code": "EDBA1961",
+    "title": "Economic Development Board Act 1961",
+    "href": "/Act/EDBA1961"
+  },
+  {
+    "act_code": "EEIRITA1967",
+    "title": "Economic Expansion Incentives (Relief from Income Tax) Act 1967",
+    "href": "/Act/EEIRITA1967"
+  },
+  {
+    "act_code": "EA1957",
+    "title": "Education Act 1957",
+    "href": "/Act/EA1957"
+  },
+  {
+    "act_code": "EESSA1992",
+    "title": "Education Endowment and Savings Schemes Act 1992",
+    "href": "/Act/EESSA1992"
+  },
+  {
+    "act_code": "ESIPA2001",
+    "title": "Education Service Incentive Payment Act 2001",
+    "href": "/Act/ESIPA2001"
+  },
+  {
+    "act_code": "EVCA2022",
+    "title": "Electric Vehicles Charging Act 2022",
+    "href": "/Act/EVCA2022"
+  },
+  {
+    "act_code": "EA2001",
+    "title": "Electricity Act 2001",
+    "href": "/Act/EA2001"
+  },
+  {
+    "act_code": "ETA2010",
+    "title": "Electronic Transactions Act 2010",
+    "href": "/Act/ETA2010"
+  },
+  {
+    "act_code": "EmA1968",
+    "title": "Employment Act 1968",
+    "href": "/Act/EmA1968"
+  },
+  {
+    "act_code": "EAA1958",
+    "title": "Employment Agencies Act 1958",
+    "href": "/Act/EAA1958"
+  },
+  {
+    "act_code": "ECA2016",
+    "title": "Employment Claims Act 2016",
+    "href": "/Act/ECA2016"
+  },
+  {
+    "act_code": "EFMA1990",
+    "title": "Employment of Foreign Manpower Act 1990",
+    "href": "/Act/EFMA1990"
+  },
+  {
+    "act_code": "ESIEA2006",
+    "title": "Endangered Species (Import and Export) Act 2006",
+    "href": "/Act/ESIEA2006"
+  },
+  {
+    "act_code": "ECA2012",
+    "title": "Energy Conservation Act 2012",
+    "href": "/Act/ECA2012"
+  },
+  {
+    "act_code": "EMASA2001",
+    "title": "Energy Market Authority of Singapore Act 2001",
+    "href": "/Act/EMASA2001"
+  },
+  {
+    "act_code": "EA1970",
+    "title": "Enlistment Act 1970",
+    "href": "/Act/EA1970"
+  },
+  {
+    "act_code": "ESBA2018",
+    "title": "Enterprise Singapore Board Act 2018",
+    "href": "/Act/ESBA2018"
+  },
+  {
+    "act_code": "EPMA1999",
+    "title": "Environmental Protection and Management Act 1999",
+    "href": "/Act/EPMA1999"
+  },
+  {
+    "act_code": "EPHA1987",
+    "title": "Environmental Public Health Act 1987",
+    "href": "/Act/EPHA1987"
+  },
+  {
+    "act_code": "EAA2010",
+    "title": "Estate Agents Act 2010",
+    "href": "/Act/EAA2010"
+  },
+  {
+    "act_code": "EDA1929",
+    "title": "Estate Duty Act 1929",
+    "href": "/Act/EDA1929"
+  },
+  {
+    "act_code": "ECPOJA1979",
+    "title": "Evidence (Civil Proceedings in Other Jurisdictions) Act 1979",
+    "href": "/Act/ECPOJA1979"
+  },
+  {
+    "act_code": "EA1893",
+    "title": "Evidence Act 1893",
+    "href": "/Act/EA1893"
+  },
+  {
+    "act_code": "ECA1953",
+    "title": "Exchange Control Act 1953",
+    "href": "/Act/ECA1953"
+  },
+  {
+    "act_code": "EDMA1999",
+    "title": "Exchanges (Demutualisation and Merger) Act 1999",
+    "href": "/Act/EDMA1999"
+  },
+  {
+    "act_code": "ECHSA1996",
+    "title": "Executive Condominium Housing Scheme Act 1996",
+    "href": "/Act/ECHSA1996"
+  },
+  {
+    "act_code": "EA1968",
+    "title": "Extradition Act 1968",
+    "href": "/Act/EA1968"
+  },
+  {
+    "act_code": "FA1889",
+    "title": "Factors Act 1889",
+    "href": "/Act/FA1889"
+  },
+  {
+    "act_code": "FJA2014",
+    "title": "Family Justice Act 2014",
+    "href": "/Act/FJA2014"
+  },
+  {
+    "act_code": "FLCMIA1959",
+    "title": "Federal Lands Commissioner, Malaysia (Incorporation) Act 1959",
+    "href": "/Act/FLCMIA1959"
+  },
+  {
+    "act_code": "FSA1965",
+    "title": "Feeding Stuffs Act 1965",
+    "href": "/Act/FSA1965"
+  },
+  {
+    "act_code": "FeA1920",
+    "title": "Fees Act 1920",
+    "href": "/Act/FeA1920"
+  },
+  {
+    "act_code": "FA1981",
+    "title": "Films Act 1981",
+    "href": "/Act/FA1981"
+  },
+  {
+    "act_code": "FCA1967",
+    "title": "Finance Companies Act 1967",
+    "href": "/Act/FCA1967"
+  },
+  {
+    "act_code": "FAA2001",
+    "title": "Financial Advisers Act 2001",
+    "href": "/Act/FAA2001"
+  },
+  {
+    "act_code": "FHCA2013",
+    "title": "Financial Holding Companies Act 2013",
+    "href": "/Act/FHCA2013"
+  },
+  {
+    "act_code": "FPA1966",
+    "title": "Financial Procedure Act 1966",
+    "href": "/Act/FPA1966"
+  },
+  {
+    "act_code": "FSMA2022",
+    "title": "Financial Services and Markets Act 2022",
+    "href": "/Act/FSMA2022"
+  },
+  {
+    "act_code": "FSA1993",
+    "title": "Fire Safety Act 1993",
+    "href": "/Act/FSA1993"
+  },
+  {
+    "act_code": "FA1966",
+    "title": "Fisheries Act 1966",
+    "href": "/Act/FA1966"
+  },
+  {
+    "act_code": "FSSA2025",
+    "title": "Food Safety and Security Act 2025",
+    "href": "/Act/FSSA2025"
+  },
+  {
+    "act_code": "FEDA2015",
+    "title": "Foreign Employee Dormitories Act 2015",
+    "href": "/Act/FEDA2015"
+  },
+  {
+    "act_code": "FICA2021",
+    "title": "Foreign Interference (Countermeasures) Act 2021",
+    "href": "/Act/FICA2021"
+  },
+  {
+    "act_code": "FLPA2012",
+    "title": "Foreign Limitation Periods Act 2012",
+    "href": "/Act/FLPA2012"
+  },
+  {
+    "act_code": "FNECDA1949",
+    "title": "Foreign National Emblems (Control of Display) Act 1949",
+    "href": "/Act/FNECDA1949"
+  },
+  {
+    "act_code": "FRA1875",
+    "title": "Foreign Recruiting Act 1875",
+    "href": "/Act/FRA1875"
+  },
+  {
+    "act_code": "FA1920",
+    "title": "Foreshores Act 1920",
+    "href": "/Act/FA1920"
+  },
+  {
+    "act_code": "FMDMO1954",
+    "title": "Franciscan Missionaries of the Divine Motherhood Ordinance 1954",
+    "href": "/Act/FMDMO1954"
+  },
+  {
+    "act_code": "FTZA1966",
+    "title": "Free Trade Zones Act 1966",
+    "href": "/Act/FTZA1966"
+  },
+  {
+    "act_code": "FCA1959",
+    "title": "Frustrated Contracts Act 1959",
+    "href": "/Act/FCA1959"
+  },
+  {
+    "act_code": "GCA2022",
+    "title": "Gambling Control Act 2022",
+    "href": "/Act/GCA2022"
+  },
+  {
+    "act_code": "GDA2022",
+    "title": "Gambling Duties Act 2022",
+    "href": "/Act/GDA2022"
+  },
+  {
+    "act_code": "GRASA2022",
+    "title": "Gambling Regulatory Authority of Singapore Act 2022",
+    "href": "/Act/GRASA2022"
+  },
+  {
+    "act_code": "GA2001",
+    "title": "Gas Act 2001",
+    "href": "/Act/GA2001"
+  },
+  {
+    "act_code": "GCA1973",
+    "title": "Geneva Conventions Act 1973",
+    "href": "/Act/GCA1973"
+  },
+  {
+    "act_code": "GIA2014",
+    "title": "Geographical Indications Act 2014",
+    "href": "/Act/GIA2014"
+  },
+  {
+    "act_code": "GSFDA2024",
+    "title": "Good Samaritan Food Donation Act 2024",
+    "href": "/Act/GSFDA2024"
+  },
+  {
+    "act_code": "GSNO1958",
+    "title": "Good Shepherd Nuns Ordinance 1958",
+    "href": "/Act/GSNO1958"
+  },
+  {
+    "act_code": "GSTA1993",
+    "title": "Goods and Services Tax Act 1993",
+    "href": "/Act/GSTA1993"
+  },
+  {
+    "act_code": "GSTVFA2012",
+    "title": "Goods and Services Tax Voucher Fund Act 2012",
+    "href": "/Act/GSTVFA2012"
+  },
+  {
+    "act_code": "GCA1966",
+    "title": "Government Contracts Act 1966",
+    "href": "/Act/GCA1966"
+  },
+  {
+    "act_code": "GPA1956",
+    "title": "Government Proceedings Act 1956",
+    "href": "/Act/GPA1956"
+  },
+  {
+    "act_code": "GPA1997",
+    "title": "Government Procurement Act 1997",
+    "href": "/Act/GPA1997"
+  },
+  {
+    "act_code": "GSDMIA1992",
+    "title": "Government Securities (Debt Market and Investment) Act 1992",
+    "href": "/Act/GSDMIA1992"
+  },
+  {
+    "act_code": "GTAA2016",
+    "title": "Government Technology Agency Act 2016",
+    "href": "/Act/GTAA2016"
+  },
+  {
+    "act_code": "GIA1934",
+    "title": "Guardianship of Infants Act 1934",
+    "href": "/Act/GIA1934"
+  },
+  {
+    "act_code": "GEWCA2021",
+    "title": "Guns, Explosives and Weapons Control Act 2021",
+    "href": "/Act/GEWCA2021"
+  },
+  {
+    "act_code": "HWCEITA1997",
+    "title": "Hazardous Waste (Control of Export, Import and Transit) Act 1997",
+    "href": "/Act/HWCEITA1997"
+  },
+  {
+    "act_code": "HPA2007",
+    "title": "Health Products Act 2007",
+    "href": "/Act/HPA2007"
+  },
+  {
+    "act_code": "HPBA2001",
+    "title": "Health Promotion Board Act 2001",
+    "href": "/Act/HPBA2001"
+  },
+  {
+    "act_code": "HSAA2001",
+    "title": "Health Sciences Authority Act 2001",
+    "href": "/Act/HSAA2001"
+  },
+  {
+    "act_code": "HSA2020",
+    "title": "Healthcare Services Act 2020",
+    "href": "/Act/HSA2020"
+  },
+  {
+    "act_code": "HCAJA1961",
+    "title": "High Court (Admiralty Jurisdiction) Act 1961",
+    "href": "/Act/HCAJA1961"
+  },
+  {
+    "act_code": "HAPAIAA1978",
+    "title": "Hijacking of Aircraft and Protection of Aircraft and International Airports Act 1978",
+    "href": "/Act/HAPAIAA1978"
+  },
+  {
+    "act_code": "HEA1968",
+    "title": "Hindu Endowments Act 1968",
+    "href": "/Act/HEA1968"
+  },
+  {
+    "act_code": "HPA1969",
+    "title": "Hire-Purchase Act 1969",
+    "href": "/Act/HPA1969"
+  },
+  {
+    "act_code": "HA1998",
+    "title": "Holidays Act 1998",
+    "href": "/Act/HA1998"
+  },
+  {
+    "act_code": "HAUSSA2001",
+    "title": "Home Affairs Uniformed Services Superannuation Act 2001",
+    "href": "/Act/HAUSSA2001"
+  },
+  {
+    "act_code": "HTCA2017",
+    "title": "Home Team Corps Act 2017",
+    "href": "/Act/HTCA2017"
+  },
+  {
+    "act_code": "HTSTAA2019",
+    "title": "Home Team Science and Technology Agency Act 2019",
+    "href": "/Act/HTSTAA2019"
+  },
+  {
+    "act_code": "HAA1988",
+    "title": "Homes for the Aged Act 1988",
+    "href": "/Act/HAA1988"
+  },
+  {
+    "act_code": "HTA2010",
+    "title": "Hostage-Taking Act 2010",
+    "href": "/Act/HTA2010"
+  },
+  {
+    "act_code": "HA1954",
+    "title": "Hotels Act 1954",
+    "href": "/Act/HA1954"
+  },
+  {
+    "act_code": "HHSCA1947",
+    "title": "House to House and Street Collections Act 1947",
+    "href": "/Act/HHSCA1947"
+  },
+  {
+    "act_code": "HDA1959",
+    "title": "Housing and Development Act 1959",
+    "href": "/Act/HDA1959"
+  },
+  {
+    "act_code": "HDCLA1965",
+    "title": "Housing Developers (Control and Licensing) Act 1965",
+    "href": "/Act/HDCLA1965"
+  },
+  {
+    "act_code": "HBRA2015",
+    "title": "Human Biomedical Research Act 2015",
+    "href": "/Act/HBRA2015"
+  },
+  {
+    "act_code": "HCOPPA2004",
+    "title": "Human Cloning and Other Prohibited Practices Act 2004",
+    "href": "/Act/HCOPPA2004"
+  },
+  {
+    "act_code": "HOTA1987",
+    "title": "Human Organ Transplant Act 1987",
+    "href": "/Act/HOTA1987"
+  },
+  {
+    "act_code": "HCFA1947",
+    "title": "Hydrogen Cyanide (Fumigation) Act 1947",
+    "href": "/Act/HCFA1947"
+  },
+  {
+    "act_code": "IA1959",
+    "title": "Immigration Act 1959",
+    "href": "/Act/IA1959"
+  },
+  {
+    "act_code": "ITA1947",
+    "title": "Income Tax Act 1947",
+    "href": "/Act/ITA1947"
+  },
+  {
+    "act_code": "ISA1965",
+    "title": "Independence of Singapore Agreement 1965",
+    "href": "/Act/ISA1965"
+  },
+  {
+    "act_code": "IRA1960",
+    "title": "Industrial Relations Act 1960",
+    "href": "/Act/IRA1960"
+  },
+  {
+    "act_code": "IDA1976",
+    "title": "Infectious Diseases Act 1976",
+    "href": "/Act/IDA1976"
+  },
+  {
+    "act_code": "IMDAA2016",
+    "title": "Info-communications Media Development Authority Act 2016",
+    "href": "/Act/IMDAA2016"
+  },
+  {
+    "act_code": "IPA2017",
+    "title": "Infrastructure Protection Act 2017",
+    "href": "/Act/IPA2017"
+  },
+  {
+    "act_code": "IFPA1966",
+    "title": "Inheritance (Family Provision) Act 1966",
+    "href": "/Act/IFPA1966"
+  },
+  {
+    "act_code": "IRASA1992",
+    "title": "Inland Revenue Authority of Singapore Act 1992",
+    "href": "/Act/IRASA1992"
+  },
+  {
+    "act_code": "IA1970",
+    "title": "Innkeepers Act 1970",
+    "href": "/Act/IA1970"
+  },
+  {
+    "act_code": "IA2007",
+    "title": "Inquiries Act 2007",
+    "href": "/Act/IA2007"
+  },
+  {
+    "act_code": "IRDA2018",
+    "title": "Insolvency, Restructuring and Dissolution Act 2018",
+    "href": "/Act/IRDA2018"
+  },
+  {
+    "act_code": "ITEA1992",
+    "title": "Institute of Technical Education Act 1992",
+    "href": "/Act/ITEA1992"
+  },
+  {
+    "act_code": "IA1966",
+    "title": "Insurance Act 1966",
+    "href": "/Act/IA1966"
+  },
+  {
+    "act_code": "IPOSA2001",
+    "title": "Intellectual Property Office of Singapore Act 2001",
+    "href": "/Act/IPOSA2001"
+  },
+  {
+    "act_code": "ISA1960",
+    "title": "Internal Security Act 1960",
+    "href": "/Act/ISA1960"
+  },
+  {
+    "act_code": "IAA1994",
+    "title": "International Arbitration Act 1994",
+    "href": "/Act/IAA1994"
+  },
+  {
+    "act_code": "ICAA2010",
+    "title": "International Child Abduction Act 2010",
+    "href": "/Act/ICAA2010"
+  },
+  {
+    "act_code": "IDAA2002",
+    "title": "International Development Association Act 2002",
+    "href": "/Act/IDAA2002"
+  },
+  {
+    "act_code": "IFCA1968",
+    "title": "International Finance Corporation Act 1968",
+    "href": "/Act/IFCA1968"
+  },
+  {
+    "act_code": "IIAEA2009",
+    "title": "International Interests in Aircraft Equipment Act 2009",
+    "href": "/Act/IIAEA2009"
+  },
+  {
+    "act_code": "IOIPA1948",
+    "title": "International Organisations (Immunities and Privileges) Act 1948",
+    "href": "/Act/IOIPA1948"
+  },
+  {
+    "act_code": "IPPA2008",
+    "title": "Internationally Protected Persons Act 2008",
+    "href": "/Act/IPPA2008"
+  },
+  {
+    "act_code": "ISA1967",
+    "title": "Intestate Succession Act 1967",
+    "href": "/Act/ISA1967"
+  },
+  {
+    "act_code": "ISA1987",
+    "title": "Intoxicating Substances Act 1987",
+    "href": "/Act/ISA1987"
+  },
+  {
+    "act_code": "ISEASYIIA1968",
+    "title": "ISEAS – Yusof Ishak Institute Act 1968",
+    "href": "/Act/ISEASYIIA1968"
+  },
+  {
+    "act_code": "JSO1878",
+    "title": "Jewish Synagogue Ordinance 1878",
+    "href": "/Act/JSO1878"
+  },
+  {
+    "act_code": "JRA1994",
+    "title": "Judges’ Remuneration Act 1994",
+    "href": "/Act/JRA1994"
+  },
+  {
+    "act_code": "JPRRA1960",
+    "title": "Judicial Proceedings (Regulation of Reports) Act 1960",
+    "href": "/Act/JPRRA1960"
+  },
+  {
+    "act_code": "JTCA1968",
+    "title": "Jurong Town Corporation Act 1968",
+    "href": "/Act/JTCA1968"
+  },
+  {
+    "act_code": "KA1961",
+    "title": "Kidnapping Act 1961",
+    "href": "/Act/KA1961"
+  },
+  {
+    "act_code": "LAA1966",
+    "title": "Land Acquisition Act 1966",
+    "href": "/Act/LAA1966"
+  },
+  {
+    "act_code": "LBCA2021",
+    "title": "Land Betterment Charge Act 2021",
+    "href": "/Act/LBCA2021"
+  },
+  {
+    "act_code": "LRCA1940",
+    "title": "Land Revenue Collection Act 1940",
+    "href": "/Act/LRCA1940"
+  },
+  {
+    "act_code": "LSA1991",
+    "title": "Land Surveyors Act 1991",
+    "href": "/Act/LSA1991"
+  },
+  {
+    "act_code": "LTSA1967",
+    "title": "Land Titles (Strata) Act 1967",
+    "href": "/Act/LTSA1967"
+  },
+  {
+    "act_code": "LTA1993",
+    "title": "Land Titles Act 1993",
+    "href": "/Act/LTA1993"
+  },
+  {
+    "act_code": "LTASA1995",
+    "title": "Land Transport Authority of Singapore Act 1995",
+    "href": "/Act/LTASA1995"
+  },
+  {
+    "act_code": "LDICA1999",
+    "title": "Layout-Designs of Integrated Circuits Act 1999",
+    "href": "/Act/LDICA1999"
+  },
+  {
+    "act_code": "LARPA2023",
+    "title": "Lease Agreements for Retail Premises Act 2023",
+    "href": "/Act/LARPA2023"
+  },
+  {
+    "act_code": "LAAA1995",
+    "title": "Legal Aid and Advice Act 1995",
+    "href": "/Act/LAAA1995"
+  },
+  {
+    "act_code": "LPA1966",
+    "title": "Legal Profession Act 1966",
+    "href": "/Act/LPA1966"
+  },
+  {
+    "act_code": "LA1934",
+    "title": "Legitimacy Act 1934",
+    "href": "/Act/LA1934"
+  },
+  {
+    "act_code": "LLEFA2001",
+    "title": "Lifelong Learning Endowment Fund Act 2001",
+    "href": "/Act/LLEFA2001"
+  },
+  {
+    "act_code": "LA1959",
+    "title": "Limitation Act 1959",
+    "href": "/Act/LA1959"
+  },
+  {
+    "act_code": "LLPA2005",
+    "title": "Limited Liability Partnerships Act 2005",
+    "href": "/Act/LLPA2005"
+  },
+  {
+    "act_code": "LPA2008",
+    "title": "Limited Partnerships Act 2008",
+    "href": "/Act/LPA2008"
+  },
+  {
+    "act_code": "LCSCA2015",
+    "title": "Liquor Control (Supply and Consumption) Act 2015",
+    "href": "/Act/LCSCA2015"
+  },
+  {
+    "act_code": "LSPO1957",
+    "title": "Little Sisters of the Poor Ordinance 1957",
+    "href": "/Act/LSPO1957"
+  },
+  {
+    "act_code": "LIBA1958",
+    "title": "Loans (International Banks) Act 1958",
+    "href": "/Act/LIBA1958"
+  },
+  {
+    "act_code": "LFRFHA1953",
+    "title": "Local Forces (Relief of Financial Hardship) Act 1953",
+    "href": "/Act/LFRFHA1953"
+  },
+  {
+    "act_code": "MPA1995",
+    "title": "Maintenance of Parents Act 1995",
+    "href": "/Act/MPA1995"
+  },
+  {
+    "act_code": "MRHA1990",
+    "title": "Maintenance of Religious Harmony Act 1990",
+    "href": "/Act/MRHA1990"
+  },
+  {
+    "act_code": "MOREA1975",
+    "title": "Maintenance Orders (Reciprocal Enforcement) Act 1975",
+    "href": "/Act/MOREA1975"
+  },
+  {
+    "act_code": "MODA2004",
+    "title": "Manufacture of Optical Discs Act 2004",
+    "href": "/Act/MODA2004"
+  },
+  {
+    "act_code": "MIA1906",
+    "title": "Marine Insurance Act 1906",
+    "href": "/Act/MIA1906"
+  },
+  {
+    "act_code": "MPASA1996",
+    "title": "Maritime and Port Authority of Singapore Act 1996",
+    "href": "/Act/MPASA1996"
+  },
+  {
+    "act_code": "MCA1911",
+    "title": "Maritime Conventions Act 1911",
+    "href": "/Act/MCA1911"
+  },
+  {
+    "act_code": "MOA2003",
+    "title": "Maritime Offences Act 2003",
+    "href": "/Act/MOA2003"
+  },
+  {
+    "act_code": "MEA2017",
+    "title": "Massage Establishments Act 2017",
+    "href": "/Act/MEA2017"
+  },
+  {
+    "act_code": "MA2017",
+    "title": "Mediation Act 2017",
+    "href": "/Act/MA2017"
+  },
+  {
+    "act_code": "MTERA1972",
+    "title": "Medical (Therapy, Education and Research) Act 1972",
+    "href": "/Act/MTERA1972"
+  },
+  {
+    "act_code": "MECESA2000",
+    "title": "Medical and Elderly Care Endowment Schemes Act 2000",
+    "href": "/Act/MECESA2000"
+  },
+  {
+    "act_code": "MRA1997",
+    "title": "Medical Registration Act 1997",
+    "href": "/Act/MRA1997"
+  },
+  {
+    "act_code": "MASA1955",
+    "title": "Medicines (Advertisement and Sale) Act 1955",
+    "href": "/Act/MASA1955"
+  },
+  {
+    "act_code": "MA1975",
+    "title": "Medicines Act 1975",
+    "href": "/Act/MA1975"
+  },
+  {
+    "act_code": "MLSA2015",
+    "title": "MediShield Life Scheme Act 2015",
+    "href": "/Act/MLSA2015"
+  },
+  {
+    "act_code": "MCA2008",
+    "title": "Mental Capacity Act 2008",
+    "href": "/Act/MCA2008"
+  },
+  {
+    "act_code": "MHCTA2008",
+    "title": "Mental Health (Care and Treatment) Act 2008",
+    "href": "/Act/MHCTA2008"
+  },
+  {
+    "act_code": "MLAA1856",
+    "title": "Mercantile Law Amendment Act 1856",
+    "href": "/Act/MLAA1856"
+  },
+  {
+    "act_code": "MSCLCBOPA2008",
+    "title": "Merchant Shipping (Civil Liability and Compensation for Bunker Oil Pollution) Act 2008",
+    "href": "/Act/MSCLCBOPA2008"
+  },
+  {
+    "act_code": "MSCLCOPA1998",
+    "title": "Merchant Shipping (Civil Liability and Compensation for Oil Pollution) Act 1998",
+    "href": "/Act/MSCLCOPA1998"
+  },
+  {
+    "act_code": "MSMLCA2014",
+    "title": "Merchant Shipping (Maritime Labour Convention) Act 2014",
+    "href": "/Act/MSMLCA2014"
+  },
+  {
+    "act_code": "MSWRA2017",
+    "title": "Merchant Shipping (Wreck Removal) Act 2017",
+    "href": "/Act/MSWRA2017"
+  },
+  {
+    "act_code": "MSA1995",
+    "title": "Merchant Shipping Act 1995",
+    "href": "/Act/MSA1995"
+  },
+  {
+    "act_code": "MELBO1908",
+    "title": "Methodist Episcopal Location Board Ordinance 1908",
+    "href": "/Act/MELBO1908"
+  },
+  {
+    "act_code": "MA1970",
+    "title": "Metrication Act 1970",
+    "href": "/Act/MA1970"
+  },
+  {
+    "act_code": "MMA1905",
+    "title": "Military Manoeuvres Act 1905",
+    "href": "/Act/MMA1905"
+  },
+  {
+    "act_code": "MFIA1959",
+    "title": "Minister for Finance (Incorporation) Act 1959",
+    "href": "/Act/MFIA1959"
+  },
+  {
+    "act_code": "MCA1987",
+    "title": "Minors’ Contracts Act 1987",
+    "href": "/Act/MCA1987"
+  },
+  {
+    "act_code": "MOPONA1906",
+    "title": "Miscellaneous Offences (Public Order and Nuisance) Act 1906",
+    "href": "/Act/MOPONA1906"
+  },
+  {
+    "act_code": "MA1967",
+    "title": "Misrepresentation Act 1967",
+    "href": "/Act/MA1967"
+  },
+  {
+    "act_code": "MEO1891",
+    "title": "Missions Étrangères Ordinance 1891",
+    "href": "/Act/MEO1891"
+  },
+  {
+    "act_code": "MDA1973",
+    "title": "Misuse of Drugs Act 1973",
+    "href": "/Act/MDA1973"
+  },
+  {
+    "act_code": "MASA1970",
+    "title": "Monetary Authority of Singapore Act 1970",
+    "href": "/Act/MASA1970"
+  },
+  {
+    "act_code": "MA2008",
+    "title": "Moneylenders Act 2008",
+    "href": "/Act/MA2008"
+  },
+  {
+    "act_code": "MVTPRCA1960",
+    "title": "Motor Vehicles (Third-Party Risks and Compensation) Act 1960",
+    "href": "/Act/MVTPRCA1960"
+  },
+  {
+    "act_code": "MLMPSPA1973",
+    "title": "Multi-Level Marketing and Pyramid Selling (Prohibition) Act 1973",
+    "href": "/Act/MLMPSPA1973"
+  },
+  {
+    "act_code": "MTA2021",
+    "title": "Multimodal Transport Act 2021",
+    "href": "/Act/MTA2021"
+  },
+  {
+    "act_code": "MEMTA2024",
+    "title": "Multinational Enterprise (Minimum Tax) Act 2024",
+    "href": "/Act/MEMTA2024"
+  },
+  {
+    "act_code": "MACMA2000",
+    "title": "Mutual Assistance in Criminal Matters Act 2000",
+    "href": "/Act/MACMA2000"
+  },
+  {
+    "act_code": "MBOA1960",
+    "title": "Mutual Benefit Organisations Act 1960",
+    "href": "/Act/MBOA1960"
+  },
+  {
+    "act_code": "NPA1992",
+    "title": "Nanyang Polytechnic Act 1992",
+    "href": "/Act/NPA1992"
+  },
+  {
+    "act_code": "NTUCA2005",
+    "title": "Nanyang Technological University (Corporatisation) Act 2005",
+    "href": "/Act/NTUCA2005"
+  },
+  {
+    "act_code": "NACA1991",
+    "title": "National Arts Council Act 1991",
+    "href": "/Act/NACA1991"
+  },
+  {
+    "act_code": "NCCA1972",
+    "title": "National Cadet Corps Act 1972",
+    "href": "/Act/NCCA1972"
+  },
+  {
+    "act_code": "NCSSA1992",
+    "title": "National Council of Social Service Act 1992",
+    "href": "/Act/NCSSA1992"
+  },
+  {
+    "act_code": "NEAA2002",
+    "title": "National Environment Agency Act 2002",
+    "href": "/Act/NEAA2002"
+  },
+  {
+    "act_code": "NHBA1993",
+    "title": "National Heritage Board Act 1993",
+    "href": "/Act/NHBA1993"
+  },
+  {
+    "act_code": "NLBA1995",
+    "title": "National Library Board Act 1995",
+    "href": "/Act/NLBA1995"
+  },
+  {
+    "act_code": "NPBA1996",
+    "title": "National Parks Board Act 1996",
+    "href": "/Act/NPBA1996"
+  },
+  {
+    "act_code": "NPFA2010",
+    "title": "National Productivity Fund Act 2010",
+    "href": "/Act/NPFA2010"
+  },
+  {
+    "act_code": "NRA1965",
+    "title": "National Registration Act 1965",
+    "href": "/Act/NRA1965"
+  },
+  {
+    "act_code": "NRDA2007",
+    "title": "National Registry of Diseases Act 2007",
+    "href": "/Act/NRDA2007"
+  },
+  {
+    "act_code": "NRFA2006",
+    "title": "National Research Fund Act 2006",
+    "href": "/Act/NRFA2006"
+  },
+  {
+    "act_code": "NSEA1970",
+    "title": "National Servicemen (Employment) Act 1970",
+    "href": "/Act/NSEA1970"
+  },
+  {
+    "act_code": "NSA2022",
+    "title": "National Symbols Act 2022",
+    "href": "/Act/NSA2022"
+  },
+  {
+    "act_code": "NUSCA2005",
+    "title": "National University of Singapore (Corporatisation) Act 2005",
+    "href": "/Act/NUSCA2005"
+  },
+  {
+    "act_code": "NPPA1974",
+    "title": "Newspaper and Printing Presses Act 1974",
+    "href": "/Act/NPPA1974"
+  },
+  {
+    "act_code": "NAKIO1933",
+    "title": "Ngee Ann Kongsi (Incorporation) Ordinance 1933",
+    "href": "/Act/NAKIO1933"
+  },
+  {
+    "act_code": "NAPA1967",
+    "title": "Ngee Ann Polytechnic Act 1967",
+    "href": "/Act/NAPA1967"
+  },
+  {
+    "act_code": "NPA1959",
+    "title": "Notaries Public Act 1959",
+    "href": "/Act/NPA1959"
+  },
+  {
+    "act_code": "NMA1999",
+    "title": "Nurses and Midwives Act 1999",
+    "href": "/Act/NMA1999"
+  },
+  {
+    "act_code": "ODA2000",
+    "title": "Oaths and Declarations Act 2000",
+    "href": "/Act/ODA2000"
+  },
+  {
+    "act_code": "OSA1935",
+    "title": "Official Secrets Act 1935",
+    "href": "/Act/OSA1935"
+  },
+  {
+    "act_code": "OCHA2023",
+    "title": "Online Criminal Harms Act 2023",
+    "href": "/Act/OCHA2023"
+  },
+  {
+    "act_code": "OOA2007",
+    "title": "Optometrists and Opticians Act 2007",
+    "href": "/Act/OOA2007"
+  },
+  {
+    "act_code": "OCA2015",
+    "title": "Organised Crime Act 2015",
+    "href": "/Act/OCA2015"
+  },
+  {
+    "act_code": "PPSA1975",
+    "title": "Parking Places (Surcharge) Act 1975",
+    "href": "/Act/PPSA1975"
+  },
+  {
+    "act_code": "PPA1974",
+    "title": "Parking Places Act 1974",
+    "href": "/Act/PPA1974"
+  },
+  {
+    "act_code": "PTA2005",
+    "title": "Parks and Trees Act 2005",
+    "href": "/Act/PTA2005"
+  },
+  {
+    "act_code": "PPIPA1962",
+    "title": "Parliament (Privileges, Immunities and Powers) Act 1962",
+    "href": "/Act/PPIPA1962"
+  },
+  {
+    "act_code": "PEA1954",
+    "title": "Parliamentary Elections Act 1954",
+    "href": "/Act/PEA1954"
+  },
+  {
+    "act_code": "PPAA2012",
+    "title": "Parliamentary Pensions (Abolition) Act 2012",
+    "href": "/Act/PPAA2012"
+  },
+  {
+    "act_code": "PPA1978",
+    "title": "Parliamentary Pensions Act 1978",
+    "href": "/Act/PPA1978"
+  },
+  {
+    "act_code": "PA1890",
+    "title": "Partnership Act 1890",
+    "href": "/Act/PA1890"
+  },
+  {
+    "act_code": "PA2007",
+    "title": "Passports Act 2007",
+    "href": "/Act/PA2007"
+  },
+  {
+    "act_code": "PA1994",
+    "title": "Patents Act 1994",
+    "href": "/Act/PA1994"
+  },
+  {
+    "act_code": "PA2015",
+    "title": "Pawnbrokers Act 2015",
+    "href": "/Act/PA2015"
+  },
+  {
+    "act_code": "PSSFNA2002",
+    "title": "Payment and Settlement Systems (Finality and Netting) Act 2002",
+    "href": "/Act/PSSFNA2002"
+  },
+  {
+    "act_code": "PSA2019",
+    "title": "Payment Services Act 2019",
+    "href": "/Act/PSA2019"
+  },
+  {
+    "act_code": "PTA1965",
+    "title": "Payroll Tax Act 1965",
+    "href": "/Act/PTA1965"
+  },
+  {
+    "act_code": "PC1871",
+    "title": "Penal Code 1871",
+    "href": "/Act/PC1871"
+  },
+  {
+    "act_code": "PFA1995",
+    "title": "Pension Fund Act 1995",
+    "href": "/Act/PFA1995"
+  },
+  {
+    "act_code": "PEOA1976",
+    "title": "Pensions (Expatriate Officers) Act",
+    "href": "/Act/PEOA1976"
+  },
+  {
+    "act_code": "PA1956",
+    "title": "Pensions Act 1956",
+    "href": "/Act/PA1956"
+  },
+  {
+    "act_code": "PAA1960",
+    "title": "People’s Association Act 1960",
+    "href": "/Act/PAA1960"
+  },
+  {
+    "act_code": "PDPA2012",
+    "title": "Personal Data Protection Act 2012",
+    "href": "/Act/PDPA2012"
+  },
+  {
+    "act_code": "PRA2007",
+    "title": "Pharmacists Registration Act 2007",
+    "href": "/Act/PRA2007"
+  },
+  {
+    "act_code": "PGMGFA2014",
+    "title": "Pioneer Generation and Merdeka Generation Funds Act 2014",
+    "href": "/Act/PGMGFA2014"
+  },
+  {
+    "act_code": "PA1998",
+    "title": "Planning Act 1998",
+    "href": "/Act/PA1998"
+  },
+  {
+    "act_code": "PVPA2004",
+    "title": "Plant Varieties Protection Act 2004",
+    "href": "/Act/PVPA2004"
+  },
+  {
+    "act_code": "PWA2024",
+    "title": "Platform Workers Act 2024",
+    "href": "/Act/PWA2024"
+  },
+  {
+    "act_code": "PPPTIA2019",
+    "title": "Point-to-Point Passenger Transport Industry Act 2019",
+    "href": "/Act/PPPTIA2019"
+  },
+  {
+    "act_code": "PA1938",
+    "title": "Poisons Act 1938",
+    "href": "/Act/PA1938"
+  },
+  {
+    "act_code": "PFA2004",
+    "title": "Police Force Act 2004",
+    "href": "/Act/PFA2004"
+  },
+  {
+    "act_code": "PAA1867",
+    "title": "Policies of Assurance Act 1867",
+    "href": "/Act/PAA1867"
+  },
+  {
+    "act_code": "PMO1910",
+    "title": "Portuguese Missions Ordinance 1910",
+    "href": "/Act/PMO1910"
+  },
+  {
+    "act_code": "PSA1999",
+    "title": "Postal Services Act 1999",
+    "href": "/Act/PSA1999"
+  },
+  {
+    "act_code": "PSPMPMLTFPFA2019",
+    "title": "Precious Stones and Precious Metals (Prevention of Money Laundering, Terrorism Financing and Proliferation Financing) Act 2019",
+    "href": "/Act/PSPMPMLTFPFA2019"
+  },
+  {
+    "act_code": "PCEMO1903",
+    "title": "Presbyterian Church of England Mission Ordinance 1903",
+    "href": "/Act/PCEMO1903"
+  },
+  {
+    "act_code": "PCO1876",
+    "title": "Presbyterian Church Ordinance 1876",
+    "href": "/Act/PCO1876"
+  },
+  {
+    "act_code": "PMA2009",
+    "title": "Preservation of Monuments Act 2009",
+    "href": "/Act/PMA2009"
+  },
+  {
+    "act_code": "PrEA1991",
+    "title": "Presidential Elections Act 1991",
+    "href": "/Act/PrEA1991"
+  },
+  {
+    "act_code": "PCA1960",
+    "title": "Prevention of Corruption Act 1960",
+    "href": "/Act/PCA1960"
+  },
+  {
+    "act_code": "PHTA2014",
+    "title": "Prevention of Human Trafficking Act 2014",
+    "href": "/Act/PHTA2014"
+  },
+  {
+    "act_code": "PPSA1990",
+    "title": "Prevention of Pollution of the Sea Act 1990",
+    "href": "/Act/PPSA1990"
+  },
+  {
+    "act_code": "PCA1950",
+    "title": "Price Control Act 1950",
+    "href": "/Act/PCA1950"
+  },
+  {
+    "act_code": "PA1933",
+    "title": "Prisons Act 1933",
+    "href": "/Act/PA1933"
+  },
+  {
+    "act_code": "PEA2009",
+    "title": "Private Education Act 2009",
+    "href": "/Act/PEA2009"
+  },
+  {
+    "act_code": "PSIA2007",
+    "title": "Private Security Industry Act 2007",
+    "href": "/Act/PSIA2007"
+  },
+  {
+    "act_code": "PAA1934",
+    "title": "Probate and Administration Act 1934",
+    "href": "/Act/PAA1934"
+  },
+  {
+    "act_code": "POA1951",
+    "title": "Probation of Offenders Act 1951",
+    "href": "/Act/POA1951"
+  },
+  {
+    "act_code": "PEA1991",
+    "title": "Professional Engineers Act 1991",
+    "href": "/Act/PEA1991"
+  },
+  {
+    "act_code": "PTA1960",
+    "title": "Property Tax Act 1960",
+    "href": "/Act/PTA1960"
+  },
+  {
+    "act_code": "PHA2014",
+    "title": "Protection from Harassment Act 2014",
+    "href": "/Act/PHA2014"
+  },
+  {
+    "act_code": "POFMA2019",
+    "title": "Protection from Online Falsehoods and Manipulation Act 2019",
+    "href": "/Act/POFMA2019"
+  },
+  {
+    "act_code": "PSA2025",
+    "title": "Protection from Scams Act 2025",
+    "href": "/Act/PSA2025"
+  },
+  {
+    "act_code": "PDA2022",
+    "title": "Public Defenders Act 2022",
+    "href": "/Act/PDA2022"
+  },
+  {
+    "act_code": "PEA1958",
+    "title": "Public Entertainments Act 1958",
+    "href": "/Act/PEA1958"
+  },
+  {
+    "act_code": "POA2009",
+    "title": "Public Order Act 2009",
+    "href": "/Act/POA2009"
+  },
+  {
+    "act_code": "POSSPA2018",
+    "title": "Public Order and Safety (Special Powers) Act 2018",
+    "href": "/Act/POSSPA2018"
+  },
+  {
+    "act_code": "PSGA2018",
+    "title": "Public Sector (Governance) Act 2018",
+    "href": "/Act/PSGA2018"
+  },
+  {
+    "act_code": "PSMVCNAAA1988",
+    "title": "Public Service (Monthly Variable Component and Non-pensionable Annual Allowance) Act 1988",
+    "href": "/Act/PSMVCNAAA1988"
+  },
+  {
+    "act_code": "PSSCA1956",
+    "title": "Public Service (Service Commissions) Act 1956",
+    "href": "/Act/PSSCA1956"
+  },
+  {
+    "act_code": "PTCA1987",
+    "title": "Public Transport Council Act 1987",
+    "href": "/Act/PTCA1987"
+  },
+  {
+    "act_code": "PTA1915",
+    "title": "Public Trustee Act 1915",
+    "href": "/Act/PTA1915"
+  },
+  {
+    "act_code": "PUA2001",
+    "title": "Public Utilities Act 2001",
+    "href": "/Act/PUA2001"
+  },
+  {
+    "act_code": "RPA2007",
+    "title": "Radiation Protection Act 2007",
+    "href": "/Act/RPA2007"
+  },
+  {
+    "act_code": "RA1905",
+    "title": "Railways Act 1905",
+    "href": "/Act/RA1905"
+  },
+  {
+    "act_code": "RTSA1995",
+    "title": "Rapid Transit Systems Act 1995",
+    "href": "/Act/RTSA1995"
+  },
+  {
+    "act_code": "RECJRA2019",
+    "title": "Reciprocal Enforcement of Commonwealth Judgments (Repeal) Act 2019",
+    "href": "/Act/RECJRA2019"
+  },
+  {
+    "act_code": "REFJA1959",
+    "title": "Reciprocal Enforcement of Foreign Judgments Act 1959",
+    "href": "/Act/REFJA1959"
+  },
+  {
+    "act_code": "RFO1948",
+    "title": "Redemptorist Fathers Ordinance 1948",
+    "href": "/Act/RFO1948"
+  },
+  {
+    "act_code": "RDA2000",
+    "title": "Registered Designs Act 2000",
+    "href": "/Act/RDA2000"
+  },
+  {
+    "act_code": "RBDA2021",
+    "title": "Registration of Births and Deaths Act 2021",
+    "href": "/Act/RBDA2021"
+  },
+  {
+    "act_code": "RCA1949",
+    "title": "Registration of Criminals Act 1949",
+    "href": "/Act/RCA1949"
+  },
+  {
+    "act_code": "RDA1988",
+    "title": "Registration of Deeds Act 1988",
+    "href": "/Act/RDA1988"
+  },
+  {
+    "act_code": "RIEA1995",
+    "title": "Regulation of Imports and Exports Act 1995",
+    "href": "/Act/RIEA1995"
+  },
+  {
+    "act_code": "RSIA1965",
+    "title": "Republic of Singapore Independence Act 1965",
+    "href": "/Act/RSIA1965"
+  },
+  {
+    "act_code": "RPA2002",
+    "title": "Republic Polytechnic Act 2002",
+    "href": "/Act/RPA2002"
+  },
+  {
+    "act_code": "RRA1985",
+    "title": "Requisition of Resources Act 1985",
+    "href": "/Act/RRA1985"
+  },
+  {
+    "act_code": "RPA1976",
+    "title": "Residential Property Act 1976",
+    "href": "/Act/RPA1976"
+  },
+  {
+    "act_code": "RSA2019",
+    "title": "Resource Sustainability Act 2019",
+    "href": "/Act/RSA2019"
+  },
+  {
+    "act_code": "RRA1993",
+    "title": "Retirement and Re-employment Act 1993",
+    "href": "/Act/RRA1993"
+  },
+  {
+    "act_code": "RELA1983",
+    "title": "Revised Edition of the Laws Act 1983",
+    "href": "/Act/RELA1983"
+  },
+  {
+    "act_code": "RTA1961",
+    "title": "Road Traffic Act 1961",
+    "href": "/Act/RTA1961"
+  },
+  {
+    "act_code": "RVSPA1960",
+    "title": "Road Vehicles (Special Powers) Act 1960",
+    "href": "/Act/RVSPA1960"
+  },
+  {
+    "act_code": "RCAA1975",
+    "title": "Roman Catholic Archbishop Act 1975",
+    "href": "/Act/RCAA1975"
+  },
+  {
+    "act_code": "RIA1992",
+    "title": "Rubber Industry Act 1992",
+    "href": "/Act/RIA1992"
+  },
+  {
+    "act_code": "SAMHO1934",
+    "title": "Saint Andrew’s Mission Hospital Ordinance 1934",
+    "href": "/Act/SAMHO1934"
+  },
+  {
+    "act_code": "SCPA1979",
+    "title": "Sale of Commercial Properties Act 1979",
+    "href": "/Act/SCPA1979"
+  },
+  {
+    "act_code": "SFA1973",
+    "title": "Sale of Food Act 1973",
+    "href": "/Act/SFA1973"
+  },
+  {
+    "act_code": "SGUNCA1995",
+    "title": "Sale of Goods (United Nations Convention) Act 1995",
+    "href": "/Act/SGUNCA1995"
+  },
+  {
+    "act_code": "SGA1979",
+    "title": "Sale of Goods Act 1979",
+    "href": "/Act/SGA1979"
+  },
+  {
+    "act_code": "SAO1939",
+    "title": "Salvation Army Ordinance 1939",
+    "href": "/Act/SAO1939"
+  },
+  {
+    "act_code": "SGQA1970",
+    "title": "Sand and Granite Quarries Act 1970",
+    "href": "/Act/SGQA1970"
+  },
+  {
+    "act_code": "SMO1938",
+    "title": "Scheut Missions Ordinance 1938",
+    "href": "/Act/SMO1938"
+  },
+  {
+    "act_code": "SBIA1990",
+    "title": "School Boards (Incorporation) Act 1990",
+    "href": "/Act/SBIA1990"
+  },
+  {
+    "act_code": "ScCA1970",
+    "title": "Science Centre Act 1970",
+    "href": "/Act/ScCA1970"
+  },
+  {
+    "act_code": "SGDA2007",
+    "title": "Secondhand Goods Dealers Act 2007",
+    "href": "/Act/SGDA2007"
+  },
+  {
+    "act_code": "SSDSO1959",
+    "title": "Secretary of the Synod of the Diocese of Singapore Ordinance 1959",
+    "href": "/Act/SSDSO1959"
+  },
+  {
+    "act_code": "SFA2001",
+    "title": "Securities and Futures Act 2001",
+    "href": "/Act/SFA2001"
+  },
+  {
+    "act_code": "SDCA1972",
+    "title": "Sentosa Development Corporation Act 1972",
+    "href": "/Act/SDCA1972"
+  },
+  {
+    "act_code": "SLA1963",
+    "title": "Service Lands Act 1963",
+    "href": "/Act/SLA1963"
+  },
+  {
+    "act_code": "SEA1934",
+    "title": "Settled Estates Act 1934",
+    "href": "/Act/SEA1934"
+  },
+  {
+    "act_code": "SDA1999",
+    "title": "Sewerage and Drainage Act 1999",
+    "href": "/Act/SDA1999"
+  },
+  {
+    "act_code": "SMECLA2020",
+    "title": "Shared Mobility Enterprises (Control and Licensing) Act 2020",
+    "href": "/Act/SMECLA2020"
+  },
+  {
+    "act_code": "SIGLA2021",
+    "title": "Significant Infrastructure Government Loan Act 2021",
+    "href": "/Act/SIGLA2021"
+  },
+  {
+    "act_code": "SIRA2024",
+    "title": "Significant Investments Review Act 2024",
+    "href": "/Act/SIRA2024"
+  },
+  {
+    "act_code": "SSSA2015",
+    "title": "Silver Support Scheme Act 2015",
+    "href": "/Act/SSSA2015"
+  },
+  {
+    "act_code": "SALA1988",
+    "title": "Singapore Academy of Law Act 1988",
+    "href": "/Act/SALA1988"
+  },
+  {
+    "act_code": "SAFA1972",
+    "title": "Singapore Armed Forces Act 1972",
+    "href": "/Act/SAFA1972"
+  },
+  {
+    "act_code": "SBFA2001",
+    "title": "Singapore Business Federation Act 2001",
+    "href": "/Act/SBFA2001"
+  },
+  {
+    "act_code": "SCMA2020",
+    "title": "Singapore Convention on Mediation Act 2020",
+    "href": "/Act/SCMA2020"
+  },
+  {
+    "act_code": "SCREA1975",
+    "title": "Singapore Corporation of Rehabilitative Enterprises Act 1975",
+    "href": "/Act/SCREA1975"
+  },
+  {
+    "act_code": "SEABA2003",
+    "title": "Singapore Examinations and Assessment Board Act 2003",
+    "href": "/Act/SEABA2003"
+  },
+  {
+    "act_code": "SFAA2019",
+    "title": "Singapore Food Agency Act 2019",
+    "href": "/Act/SFAA2019"
+  },
+  {
+    "act_code": "SITA2014",
+    "title": "Singapore Institute of Technology Act 2014",
+    "href": "/Act/SITA2014"
+  },
+  {
+    "act_code": "SLFA1977",
+    "title": "Singapore Labour Foundation Act 1977",
+    "href": "/Act/SLFA1977"
+  },
+  {
+    "act_code": "SLAA2001",
+    "title": "Singapore Land Authority Act 2001",
+    "href": "/Act/SLAA2001"
+  },
+  {
+    "act_code": "SMUA2000",
+    "title": "Singapore Management University Act 2000",
+    "href": "/Act/SMUA2000"
+  },
+  {
+    "act_code": "SPA1954",
+    "title": "Singapore Polytechnic Act 1954",
+    "href": "/Act/SPA1954"
+  },
+  {
+    "act_code": "SRTO1918",
+    "title": "Singapore Railway Transfer Ordinance 1918",
+    "href": "/Act/SRTO1918"
+  },
+  {
+    "act_code": "SRCSA1973",
+    "title": "Singapore Red Cross Society Act 1973",
+    "href": "/Act/SRCSA1973"
+  },
+  {
+    "act_code": "SSCA1973",
+    "title": "Singapore Sports Council Act 1973",
+    "href": "/Act/SSCA1973"
+  },
+  {
+    "act_code": "STBA1987",
+    "title": "Singapore Totalisator Board Act 1987",
+    "href": "/Act/STBA1987"
+  },
+  {
+    "act_code": "STCCA1972",
+    "title": "Singapore Tourism (Cess Collection) Act 1972",
+    "href": "/Act/STCCA1972"
+  },
+  {
+    "act_code": "STBA1963",
+    "title": "Singapore Tourism Board Act 1963",
+    "href": "/Act/STBA1963"
+  },
+  {
+    "act_code": "SUSSA2017",
+    "title": "Singapore University of Social Sciences Act 2017",
+    "href": "/Act/SUSSA2017"
+  },
+  {
+    "act_code": "SUTDA2011",
+    "title": "Singapore University of Technology and Design Act 2011",
+    "href": "/Act/SUTDA2011"
+  },
+  {
+    "act_code": "SDLA1979",
+    "title": "Skills Development Levy Act 1979",
+    "href": "/Act/SDLA1979"
+  },
+  {
+    "act_code": "SSAA2016",
+    "title": "SkillsFuture Singapore Agency Act 2016",
+    "href": "/Act/SSAA2016"
+  },
+  {
+    "act_code": "SCTA1984",
+    "title": "Small Claims Tribunals Act 1984",
+    "href": "/Act/SCTA1984"
+  },
+  {
+    "act_code": "SMVSA2020",
+    "title": "Small Motorised Vehicles (Safety) Act 2020",
+    "href": "/Act/SMVSA2020"
+  },
+  {
+    "act_code": "SPCPA1992",
+    "title": "Smoking (Prohibition in Certain Places) Act 1992",
+    "href": "/Act/SPCPA1992"
+  },
+  {
+    "act_code": "SA1966",
+    "title": "Societies Act 1966",
+    "href": "/Act/SA1966"
+  },
+  {
+    "act_code": "SSMIO1923",
+    "title": "Society of Saint Maur Incorporation Ordinance 1923",
+    "href": "/Act/SSMIO1923"
+  },
+  {
+    "act_code": "SCA2007",
+    "title": "Spam Control Act 2007",
+    "href": "/Act/SCA2007"
+  },
+  {
+    "act_code": "SDA1929",
+    "title": "Stamp Duties Act 1929",
+    "href": "/Act/SDA1929"
+  },
+  {
+    "act_code": "SCA1970",
+    "title": "State Courts Act 1970",
+    "href": "/Act/SCA1970"
+  },
+  {
+    "act_code": "SIA1979",
+    "title": "State Immunity Act 1979",
+    "href": "/Act/SIA1979"
+  },
+  {
+    "act_code": "SLA1920",
+    "title": "State Lands Act 1920",
+    "href": "/Act/SLA1920"
+  },
+  {
+    "act_code": "SLPA2022",
+    "title": "State Lands Protection Act 2022",
+    "href": "/Act/SLPA2022"
+  },
+  {
+    "act_code": "SMCDCA1958",
+    "title": "States of Malaya Customs Duties Collection Act 1958",
+    "href": "/Act/SMCDCA1958"
+  },
+  {
+    "act_code": "SA1973",
+    "title": "Statistics Act 1973",
+    "href": "/Act/SA1973"
+  },
+  {
+    "act_code": "SCARTA2013",
+    "title": "Status of Children (Assisted Reproduction Technology) Act 2013",
+    "href": "/Act/SCARTA2013"
+  },
+  {
+    "act_code": "SBTSA1968",
+    "title": "Statutory Boards (Taxable Services) Act 1968",
+    "href": "/Act/SBTSA1968"
+  },
+  {
+    "act_code": "SBGCPSA1983",
+    "title": "Statutory Bodies and Government Companies (Protection of Secrecy) Act 1983",
+    "href": "/Act/SBGCPSA1983"
+  },
+  {
+    "act_code": "SCCCFA1989",
+    "title": "Statutory Corporations (Contributions to Consolidated Fund) Act 1989",
+    "href": "/Act/SCCCFA1989"
+  },
+  {
+    "act_code": "SSJTWAA1928",
+    "title": "Straits Settlements and Johore Territorial Waters (Agreement) Act 1928",
+    "href": "/Act/SSJTWAA1928"
+  },
+  {
+    "act_code": "SGCA2002",
+    "title": "Strategic Goods (Control) Act 2002",
+    "href": "/Act/SGCA2002"
+  },
+  {
+    "act_code": "SWA1995",
+    "title": "Street Works Act 1995",
+    "href": "/Act/SWA1995"
+  },
+  {
+    "act_code": "SHO1904",
+    "title": "Sultan Hussain Ordinance 1904",
+    "href": "/Act/SHO1904"
+  },
+  {
+    "act_code": "SSFY2024A2025",
+    "title": "Supplementary Supply (FY 2024) Act 2025",
+    "href": "/Act/SSFY2024A2025"
+  },
+  {
+    "act_code": "SSFY2025A2026",
+    "title": "Supplementary Supply (FY 2025) Act 2026",
+    "href": "/Act/SSFY2025A2026"
+  },
+  {
+    "act_code": "SA2024",
+    "title": "Supply Act 2024",
+    "href": "/Act/SA2024"
+  },
+  {
+    "act_code": "SA2025",
+    "title": "Supply Act 2025",
+    "href": "/Act/SA2025"
+  },
+  {
+    "act_code": "SA2026",
+    "title": "Supply Act 2026",
+    "href": "/Act/SA2026"
+  },
+  {
+    "act_code": "SGA1982",
+    "title": "Supply of Goods Act 1982",
+    "href": "/Act/SGA1982"
+  },
+  {
+    "act_code": "SCJA1969",
+    "title": "Supreme Court of Judicature Act 1969",
+    "href": "/Act/SCJA1969"
+  },
+  {
+    "act_code": "TA1999",
+    "title": "Telecommunications Act 1999",
+    "href": "/Act/TA1999"
+  },
+  {
+    "act_code": "TPA1990",
+    "title": "Temasek Polytechnic Act 1990",
+    "href": "/Act/TPA1990"
+  },
+  {
+    "act_code": "TPA1974",
+    "title": "Termination of Pregnancy Act 1974",
+    "href": "/Act/TPA1974"
+  },
+  {
+    "act_code": "TSBA2007",
+    "title": "Terrorism (Suppression of Bombings) Act 2007",
+    "href": "/Act/TSBA2007"
+  },
+  {
+    "act_code": "TSFA2002",
+    "title": "Terrorism (Suppression of Financing) Act 2002",
+    "href": "/Act/TSFA2002"
+  },
+  {
+    "act_code": "TSMRMA2017",
+    "title": "Terrorism (Suppression of Misuse of Radioactive Material) Act 2017",
+    "href": "/Act/TSMRMA2017"
+  },
+  {
+    "act_code": "TKWSFHTUDA2017",
+    "title": "The Kwong-Wai-Shiu Free Hospital (Transfer of Undertaking and Dissolution) Act 2017",
+    "href": "/Act/TKWSFHTUDA2017"
+  },
+  {
+    "act_code": "TPRAIA1930",
+    "title": "Third Parties (Rights Against Insurers) Act 1930",
+    "href": "/Act/TPRAIA1930"
+  },
+  {
+    "act_code": "TCASA1993",
+    "title": "Tobacco (Control of Advertisements and Sale) Act 1993",
+    "href": "/Act/TCASA1993"
+  },
+  {
+    "act_code": "TCA1971",
+    "title": "Tokyo Convention Act 1971",
+    "href": "/Act/TCA1971"
+  },
+  {
+    "act_code": "TCA1988",
+    "title": "Town Councils Act 1988",
+    "href": "/Act/TCA1988"
+  },
+  {
+    "act_code": "TDA1941",
+    "title": "Trade Disputes Act 1941",
+    "href": "/Act/TDA1941"
+  },
+  {
+    "act_code": "TMA1998",
+    "title": "Trade Marks Act 1998",
+    "href": "/Act/TMA1998"
+  },
+  {
+    "act_code": "TUA1940",
+    "title": "Trade Unions Act 1940",
+    "href": "/Act/TUA1940"
+  },
+  {
+    "act_code": "TCMPA2000",
+    "title": "Traditional Chinese Medicine Practitioners Act 2000",
+    "href": "/Act/TCMPA2000"
+  },
+  {
+    "act_code": "THPA2014",
+    "title": "Transboundary Haze Pollution Act 2014",
+    "href": "/Act/THPA2014"
+  },
+  {
+    "act_code": "TSIA2018",
+    "title": "Transport Safety Investigations Act 2018",
+    "href": "/Act/TSIA2018"
+  }
+]

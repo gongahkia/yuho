@@ -54,8 +54,13 @@ dev = [
     "black>=23.0,<25.0",
     "mypy>=1.0,<2.0",
 ]
+scrape = [
+    "playwright>=1.40,<2.0",
+    "beautifulsoup4>=4.12,<5.0",
+    "lxml>=5.0,<6.0",
+]
 all = [
-    "yuho[lsp,mcp,llm,observability,dev]",
+    "yuho[lsp,mcp,llm,observability,dev,scrape]",
 ]
 
 [project.scripts]
