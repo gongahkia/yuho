@@ -2,16 +2,17 @@
 section_number = "370"
 title = "Buying or disposing of any person as a slave"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Importing, exporting, buying, selling or disposing of a person as a slave."
+summary = "Section 370 criminalises importing, exporting, removing, buying, selling, disposing of, accepting, receiving, or detaining a person as a slave."
 source = "Singapore Penal Code 1871, Section 370"
 
 [verification]

@@ -2,16 +2,17 @@
 section_number = "364"
 title = "Kidnapping or abducting in order to murder"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Kidnapping or abducting with intent to have victim murdered or placed in danger of being murdered."
+summary = "Makes it an offence to kidnap or abduct a person for the purpose of murder or exposing the person to danger of being murdered."
 source = "Singapore Penal Code 1871, Section 364"
 
 [verification]

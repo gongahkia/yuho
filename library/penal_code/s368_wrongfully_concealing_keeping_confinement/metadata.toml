@@ -2,16 +2,17 @@
 section_number = "368"
 title = "Wrongfully concealing or keeping in confinement a kidnapped person"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Wrongfully concealing or confining a person knowing them to have been kidnapped or abducted."
+summary = "This section criminalises knowingly wrongfully concealing or confining a person who has been kidnapped or abducted, with punishment tracking the corresponding kidnapping or abduction offence."
 source = "Singapore Penal Code 1871, Section 368"
 
 [verification]

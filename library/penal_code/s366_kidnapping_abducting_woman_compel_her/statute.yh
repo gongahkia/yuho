@@ -1,23 +1,31 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr366-#pr366-
-// Singapore Penal Code Section 366
 
 statute 366 "Kidnapping or abducting a woman to compel her marriage, etc." effective 1872-01-01 {
-    definitions {
-        compel_marriage := "Compelling a woman to marry against her will, or forcing or seducing to illicit intercourse";
-    }
-
     elements {
-        /// kidnaps or abducts a woman
-        actus_reus kidnap_or_abduct_woman := "Kidnaps or abducts any woman";
-        /// intent to compel marriage, illicit intercourse, or to force or seduce to illicit intercourse
-        mens_rea intent_compel_marriage := "With intent to compel marriage against will, or to force or seduce to illicit intercourse, or knowing it likely she will be so compelled, forced or seduced";
+        /// Section 366 requires the kidnapping or abduction of a woman plus one of the listed marriage, intercourse, or prostitution purposes or likelihood states.
+        all_of {
+            actus_reus kidnaps_or_abducts_woman := "Whoever kidnaps or abducts any woman";
+            any_of {
+                mens_rea intent_compelled_to_marry := "With intent that she may be compelled to marry any person against her will";
+                mens_rea knowledge_likely_compelled_to_marry := "Knowing it to be likely that she will be compelled to marry any person against her will";
+                mens_rea purpose_forced_or_seduced_to_illicit_intercourse := "In order that she may be forced or seduced to illicit intercourse";
+                mens_rea purpose_forced_or_seduced_to_life_of_prostitution := "In order that she may be forced or seduced to a life of prostitution";
+                mens_rea knowledge_likely_forced_or_seduced_to_illicit_intercourse := "Knowing it to be likely that she will be forced or seduced to illicit intercourse";
+                mens_rea knowledge_likely_forced_or_seduced_to_life_of_prostitution := "Knowing it to be likely that she will be forced or seduced to a life of prostitution";
+            }
+        }
     }
 
-    penalty {
+    penalty cumulative {
         imprisonment := 0 years .. 10 years;
-        fine := $0.00 .. $10,000.00;
+        supplementary := "Whoever kidnaps or abducts any woman with intent that she may be compelled, or knowing it to be likely that she will be compelled to marry any person against her will, or in order that she may be forced or seduced to illicit intercourse, or to a life of prostitution, or knowing it to be likely that she will be forced or seduced to illicit intercourse, or to a life of prostitution, shall be punished with imprisonment for a term which may extend to 10 years.";
     }
 
+    penalty alternative {
+        fine := unlimited;
+        caning := 0 .. 24 strokes;
+        supplementary := "The offender shall also be liable to fine or to caning.";
+    }
 }

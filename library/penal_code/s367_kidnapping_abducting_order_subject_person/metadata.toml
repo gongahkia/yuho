@@ -2,16 +2,17 @@
 section_number = "367"
 title = "Kidnapping or abducting in order to subject a person to grievous hurt, slavery, etc."
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Kidnapping or abducting with intent to subject to grievous hurt, slavery, or unnatural lust."
+summary = "Criminalises kidnapping or abducting a person to subject the person, or expose the person to danger of being subjected, to grievous hurt, slavery, or non-consensual penile penetration of the anus or mouth."
 source = "Singapore Penal Code 1871, Section 367"
 
 [verification]

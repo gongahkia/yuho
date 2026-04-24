@@ -2,16 +2,17 @@
 section_number = "365"
 title = "Kidnapping or abducting with intent secretly and wrongfully to confine a person"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Kidnapping or abducting with intent that victim be secretly and wrongfully confined."
+summary = "Makes it an offence to kidnap or abduct a person with intent to keep that person secretly and wrongfully confined."
 source = "Singapore Penal Code 1871, Section 365"
 
 [verification]
