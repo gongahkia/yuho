@@ -12,7 +12,6 @@ Later sources override earlier ones.
 
 from yuho.config.loader import Config, load_config, get_config
 from yuho.config.schema import (
-    LLMSection,
     TranspileSection,
     LSPSection,
     MCPSection,
@@ -31,7 +30,6 @@ __all__ = [
     "Config",
     "load_config",
     "get_config",
-    "LLMSection",
     "TranspileSection",
     "LSPSection",
     "MCPSection",

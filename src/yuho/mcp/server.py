@@ -1381,6 +1381,231 @@ class YuhoMCPServer:
         # MCP clients own the LLM; they can construct Yuho code themselves
         # using the schema and examples exposed by other MCP resources.)
 
+        # ====================================================================
+        # Phase D expansion — workflow + library-nav tools
+        # ====================================================================
+
+        @tool_with_structured_logging()
+        async def yuho_find_by_anchor(anchor: str) -> Dict[str, Any]:
+            """
+            Resolve an SSO provision anchor (e.g. `pr415-`) to its encoded
+            section in the library.
+
+            Args:
+                anchor: SSO anchor id. Leading `pr` and trailing `-` optional.
+
+            Returns:
+                {section, title, path} or {error}.
+            """
+            import re, tomllib
+            # normalise to bare section number
+            a = anchor.strip()
+            m = re.match(r"^(?:pr)?(\d+[A-Za-z]*)-?$", a)
+            if not m: return {"error": f"anchor not recognised: {anchor!r}"}
+            section = m.group(1)
+            library_path = Path(__file__).parent.parent.parent.parent / "library"
+            for meta_file in library_path.glob("**/metadata.toml"):
+                try:
+                    with open(meta_file, "rb") as f: meta = tomllib.load(f)
+                    if meta.get("statute", {}).get("section_number", "") == section:
+                        yh = meta_file.parent / "statute.yh"
+                        return {
+                            "section": section,
+                            "title": meta.get("statute", {}).get("title", ""),
+                            "path": str(yh) if yh.exists() else str(meta_file.parent),
+                            "sso_url": meta.get("verification", {}).get("sso_url", ""),
+                        }
+                except Exception: continue
+            return {"error": f"section {section} not found"}
+
+        @tool_with_structured_logging()
+        async def yuho_find_citations_to(section: str) -> Dict[str, Any]:
+            """
+            List sections in the library whose encoded `.yh` text references a
+            given section — useful for "what extends s415?" queries.
+
+            Args:
+                section: Section number (e.g., "415").
+
+            Returns:
+                {citers: list of {section, title, path, snippet}}.
+            """
+            import re, tomllib
+            library_path = Path(__file__).parent.parent.parent.parent / "library"
+            # match "s<num>", "section <num>", and bare `referencing … s<num>` patterns
+            pat = re.compile(rf"(?<![A-Za-z0-9]){re.escape(section)}(?![A-Za-z0-9])")
+            citers: list[Dict[str, Any]] = []
+            for yh in library_path.glob("**/statute.yh"):
+                # skip self-references
+                m = re.match(r"s(\d+[A-Z]*)_", yh.parent.name)
+                if m and m.group(1) == section: continue
+                try:
+                    text = yh.read_text()
+                except Exception: continue
+                if pat.search(text):
+                    # best-effort snippet
+                    snip_m = pat.search(text)
+                    lo = max(0, snip_m.start() - 40)
+                    hi = min(len(text), snip_m.end() + 40)
+                    meta_file = yh.parent / "metadata.toml"
+                    title = ""
+                    if meta_file.exists():
+                        try:
+                            with open(meta_file, "rb") as f:
+                                title = tomllib.load(f).get("statute", {}).get("title", "")
+                        except Exception: pass
+                    citers.append({
+                        "section": m.group(1) if m else yh.parent.name,
+                        "title": title,
+                        "path": str(yh),
+                        "snippet": text[lo:hi].replace("\n", " "),
+                    })
+            return {"citers": citers[:50], "count": len(citers)}
+
+        @tool_with_structured_logging()
+        async def yuho_section_pair(section: str) -> Dict[str, Any]:
+            """
+            Return canonical raw SSO text + encoded `.yh` source side by side
+            for a given PC section. The primary tool for fidelity review — an
+            MCP client uses this to decide STAMP vs FLAG.
+
+            Args:
+                section: Section number (e.g., "415").
+
+            Returns:
+                {section, marginal_note, canonical: {text, sub_items, amendments},
+                 encoded: {path, source, metadata_toml}} or {error}.
+            """
+            import json as _j, re, tomllib
+            repo = Path(__file__).parent.parent.parent.parent
+            raw_path = repo / "library" / "penal_code" / "_raw" / "act.json"
+            if not raw_path.is_file():
+                return {"error": "_raw/act.json not found"}
+            raw = _j.loads(raw_path.read_text())
+            by_num = {s["number"]: s for s in raw.get("sections", []) if s.get("number")}
+            sec = by_num.get(section)
+            if not sec: return {"error": f"section {section} not in canonical corpus"}
+            # find encoded dir
+            encoded = {"path": None, "source": None, "metadata_toml": None}
+            for p in (repo / "library" / "penal_code").iterdir():
+                if p.is_dir() and re.match(rf"s{section}_", p.name):
+                    yh = p / "statute.yh"
+                    meta = p / "metadata.toml"
+                    encoded["path"] = str(yh) if yh.exists() else str(p)
+                    if yh.exists(): encoded["source"] = yh.read_text()
+                    if meta.exists(): encoded["metadata_toml"] = meta.read_text()
+                    break
+            return {
+                "section": section,
+                "marginal_note": sec.get("marginal_note", ""),
+                "canonical": {
+                    "text": sec.get("text", ""),
+                    "sub_items": sec.get("sub_items", []),
+                    "amendments": sec.get("amendments", []),
+                    "anchor_id": sec.get("anchor_id", ""),
+                },
+                "encoded": encoded,
+            }
+
+        @tool_with_structured_logging()
+        async def yuho_coverage_status() -> Dict[str, Any]:
+            """
+            Return the current L1 / L2 / L3 coverage summary for the Penal Code
+            library, plus which sections are still unencoded.
+
+            Returns:
+                {totals, l3_pct, unencoded: list of section numbers,
+                 flagged: list of section numbers with open L3 flags}.
+            """
+            import json as _j
+            repo = Path(__file__).parent.parent.parent.parent
+            cov_path = repo / "library" / "penal_code" / "_coverage" / "coverage.json"
+            if not cov_path.is_file():
+                return {"error": "coverage.json missing — run scripts/coverage_report.py"}
+            cov = _j.loads(cov_path.read_text())
+            totals = cov.get("totals", {})
+            unencoded = [
+                r["number"] for r in cov.get("sections", [])
+                if not r.get("encoded_path") and r.get("number")
+            ]
+            flagged: list[str] = []
+            for flag_file in (repo / "library" / "penal_code").glob("s*/_L3_FLAG.md"):
+                import re
+                m = re.match(r"s(\d+[A-Z]*)_", flag_file.parent.name)
+                if m: flagged.append(m.group(1))
+            return {
+                "totals": totals,
+                "unencoded": unencoded[:50],
+                "unencoded_count": len(unencoded),
+                "flagged": flagged,
+                "flagged_count": len(flagged),
+            }
+
+        @tool_with_structured_logging()
+        async def yuho_propose_encoding_skeleton(
+            section: str, shape: str = "auto"
+        ) -> Dict[str, Any]:
+            """
+            Return a skeleton `.yh` file for a given canonical PC section —
+            boilerplate headers, `statute {N} "<marginal>" effective …`,
+            pre-filled with the canonical text as comments. The MCP client's
+            LLM then fills in the semantics.
+
+            Args:
+                section: Section number (e.g., "415").
+                shape: One of `auto | offence | punishment | interpretation |
+                       scope | defence`. `auto` leaves it to the client.
+
+            Returns:
+                {section, slug, skeleton_yh} or {error}.
+            """
+            import json as _j, re
+            repo = Path(__file__).parent.parent.parent.parent
+            raw_path = repo / "library" / "penal_code" / "_raw" / "act.json"
+            if not raw_path.is_file(): return {"error": "_raw/act.json not found"}
+            raw = _j.loads(raw_path.read_text())
+            by_num = {s["number"]: s for s in raw.get("sections", []) if s.get("number")}
+            sec = by_num.get(section)
+            if not sec: return {"error": f"section {section} not in canonical corpus"}
+            marginal = sec.get("marginal_note", f"Section {section}")
+            anchor = sec.get("anchor_id", f"pr{section}-")
+            # slug: snake-case from marginal, dropping stopwords
+            stop = {"of","and","the","in","for","to","with","by","on","or","a","an"}
+            words = re.findall(r"[A-Za-z0-9]+", marginal.lower())
+            slug = "_".join(w for w in words if w not in stop)[:45]
+            amendments = sec.get("amendments", [])
+            amend_lines = "\n".join(f"/// @amendment {a.get('marker','')}" for a in amendments)
+            canonical_excerpt = (sec.get("text", "")[:500] + "…") if sec.get("text") else ""
+
+            skeleton = f'''/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds={anchor}#{anchor}
+{amend_lines}
+
+// Canonical text (for reference during encoding; do not treat as Yuho source):
+//   {canonical_excerpt}
+
+statute {section} "{marginal}" effective 1872-01-01 {{
+    // TODO: fill in based on `shape` ({shape}).
+    // - offence: elements {{ all_of {{ actus_reus …; mens_rea …; }} }} + penalty
+    // - punishment: penalty only, cross-ref target offence in a doc comment
+    // - interpretation: definitions {{ term := "…"; }}
+    // - scope: minimal body; provision text in definitions or doc comment
+    // - defence: encode as a function returning a bool, or exception block
+
+    definitions {{
+    }}
+}}
+'''
+            return {
+                "section": section,
+                "slug": slug,
+                "dir_hint": f"library/penal_code/s{section}_{slug}/",
+                "skeleton_yh": skeleton,
+                "canonical_sub_item_count": len(sec.get("sub_items", [])),
+                "hint_shape": shape,
+            }
+
         @tool_with_structured_logging()
         async def yuho_rate_limit_stats() -> Dict[str, Any]:
             """
@@ -1435,6 +1660,42 @@ void      - No value / null type
                                 mask_error(exc),
                             )
             return f"// Statute {section} not found in library"
+
+        @self.server.resource("yuho://prompts/phase-d-reencoding")
+        async def get_phase_d_reencoding_prompt() -> str:
+            """Strict re-encoding prompt used during Phase D."""
+            p = Path(__file__).parent.parent.parent.parent / "doc" / "PHASE_D_REENCODING_PROMPT.md"
+            return p.read_text() if p.exists() else "// Phase D re-encoding prompt not found"
+
+        @self.server.resource("yuho://prompts/phase-d-l3-review")
+        async def get_phase_d_l3_prompt() -> str:
+            """11-point L3 audit checklist used by the automated reviewer."""
+            p = Path(__file__).parent.parent.parent.parent / "doc" / "PHASE_D_L3_REVIEW_PROMPT.md"
+            return p.read_text() if p.exists() else "// Phase D L3 review prompt not found"
+
+        @self.server.resource("yuho://prompts/phase-d-flag-fix")
+        async def get_phase_d_flag_fix_prompt() -> str:
+            """Minimum-edit flag-fix prompt used to patch flagged sections."""
+            p = Path(__file__).parent.parent.parent.parent / "doc" / "PHASE_D_FLAG_FIX_PROMPT.md"
+            return p.read_text() if p.exists() else "// Phase D flag-fix prompt not found"
+
+        @self.server.resource("yuho://coverage")
+        async def get_coverage() -> str:
+            """Current L1/L2/L3 coverage dashboard (coverage.json)."""
+            p = Path(__file__).parent.parent.parent.parent / "library" / "penal_code" / "_coverage" / "coverage.json"
+            return p.read_text() if p.exists() else "{\"error\": \"coverage.json missing\"}"
+
+        @self.server.resource("yuho://flags")
+        async def get_flags() -> str:
+            """Aggregated list of currently flagged sections awaiting human review."""
+            p = Path(__file__).parent.parent.parent.parent / "library" / "penal_code" / "_L3_flags.md"
+            return p.read_text() if p.exists() else "# No flags currently open\n"
+
+        @self.server.resource("yuho://gaps")
+        async def get_gaps() -> str:
+            """The Phase C/D grammar gap log (G1-G14)."""
+            p = Path(__file__).parent.parent.parent.parent / "doc" / "PHASE_C_GAPS.md"
+            return p.read_text() if p.exists() else "// Gap log not found"
 
         @self.server.resource("yuho://docs/{topic}")
         async def get_docs(topic: str) -> str:
@@ -1620,6 +1881,66 @@ Yuho code:
 ```
 
 Provide a comprehensive test plan with specific values for each test case."""
+
+        @self.server.prompt("find_fidelity_issues")
+        async def find_fidelity_issues_prompt(section: str) -> str:
+            """Prompt for auditing an encoded section against canonical SSO text.
+
+            Expects the client to pair this with a `yuho_section_pair` call so
+            both sides are on the table.
+            """
+            return f"""You are auditing the encoded Yuho file for Singapore Penal Code 1871 section {section} against the canonical statute text.
+
+Do these in order:
+1. Call the `yuho_section_pair` tool with section="{section}". That returns canonical (raw SSO text + sub_items + amendments) alongside the encoded .yh source.
+2. Walk the 11-point fidelity checklist at `yuho://prompts/phase-d-l3-review`: section number match, marginal note verbatim, all canonical illustrations present, explanations preserved, exceptions preserved, subsections not flattened, no fabricated penalty values (no invented fine caps, no invented caning strokes, no penalty on definition-only sections), all_of vs any_of matches English connectives, effective date sane, no placeholder text, yuho check still passes.
+3. For each item that fails, report: (a) what canonical says vs what the encoding says; (b) which of the existing grammar primitives (G1-G14 — see `yuho://gaps`) should fix it; (c) the minimum edit needed.
+
+If every item passes, report "STAMP candidate" and recommend the L3 metadata stamp."""
+
+        @self.server.prompt("recommend_l3")
+        async def recommend_l3_prompt(section: str) -> str:
+            """Prompt for a quick STAMP/FLAG decision with concise reasoning."""
+            return f"""Decide whether Singapore Penal Code 1871 section {section} should be L3-stamped now.
+
+Use these tools in order:
+1. `yuho_section_pair` with section="{section}" — get canonical + encoded side by side.
+2. `yuho_check_encoding` (if available) or read the encoded source to confirm it parses.
+3. Spot-check: illustration count match, no fabricated fine/caning values, subsections present if canonical has them, all_of/any_of matches English.
+
+Respond in at most 6 lines:
+```
+decision: STAMP | FLAG
+checklist: <which of the 11 points fail, if any>
+edit_if_flagged: <one-sentence minimum fix>
+confidence: high | medium | low
+```
+
+Do not rewrite the encoding. If you'd stamp, just say so — the human will actually set metadata.toml."""
+
+        @self.server.prompt("encode_new_section")
+        async def encode_new_section_prompt(section: str) -> str:
+            """Prompt for encoding a fresh, unencoded PC section from canonical text."""
+            # use plain concat, not an f-string — the prompt body contains
+            # literal `{` / `}` braces from Yuho syntax examples that would
+            # otherwise be interpreted as f-string placeholders.
+            return (
+                "You are encoding Singapore Penal Code 1871 section "
+                + section
+                + " into Yuho from scratch.\n\n"
+                "Do these:\n"
+                '1. Call `yuho_propose_encoding_skeleton` with section="'
+                + section
+                + '" to get the boilerplate header, the right directory slug, and canonical excerpt as a reference comment.\n'
+                "2. Read `yuho://prompts/phase-d-reencoding` for the strict encoding rules — no fabricated fine caps, illustration preservation, use of new grammar primitives (G1-G14), etc.\n"
+                "3. Read `yuho://grammar` for exact syntax.\n"
+                "4. Fill the skeleton. Every claim must be supported by the canonical text returned by `yuho_section_pair` — if something isn't in canonical, don't invent it.\n"
+                "5. Call `yuho_check` to verify the encoding parses + type-checks. Iterate until it passes.\n\n"
+                "Grammar primitives you may need: `subsection (N) { ... }`, `effective <date>` (multiple allowed), `fine := unlimited`, `caning := unspecified`, `penalty or_both / alternative / cumulative`, `penalty when <ident>`, nested combinators (`penalty cumulative { imprisonment; or_both { fine; caning } }`), `exception { priority N defeats <label> }`.\n\n"
+                "Report the final .yh + metadata.toml contents in fenced code blocks keyed by the target file path (e.g. `library/penal_code/s"
+                + section
+                + "_<slug>/statute.yh`)."
+            )
 
     def health_check(self) -> Dict[str, Any]:
         """Return server health status."""
