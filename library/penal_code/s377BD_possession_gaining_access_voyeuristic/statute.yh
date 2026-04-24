@@ -11,9 +11,10 @@ statute 377BD "Possession of or gaining access to voyeuristic or intimate image 
                 any_of {
                     circumstance obtained_through_377BB := "The person knows or has reason to believe that the image or recording was obtained through the commission of an offence under section 377BB";
                     all_of {
-                        circumstance intimate_image_or_recording := "The person knows or has reason to believe that the image or recording is an intimate image or recording as defined in section 377BE(5)";
-                        circumstance without_depicted_person_consent := "The person knows or has reason to believe that the possession of or access to the image or recording was without the consent of the person depicted in the image or recording";
-                        circumstance likely_humiliation_alarm_or_distress := "The person knows or has reason to believe that the possession of or access to the image or recording will or is likely to cause humiliation, alarm or distress to the person depicted in the image or recording";
+                        mens_rea knows_or_has_reason_to_believe := "The person knows or has reason to believe that";
+                        circumstance intimate_image_or_recording := "the image or recording is an intimate image or recording as defined in section 377BE(5)";
+                        circumstance without_depicted_person_consent := "the possession of or access to the image or recording was without the consent of the person depicted in the image or recording";
+                        circumstance likely_humiliation_alarm_or_distress := "the possession of or access to the image or recording will or is likely to cause humiliation, alarm or distress to the person depicted in the image or recording";
                     }
                 }
             }

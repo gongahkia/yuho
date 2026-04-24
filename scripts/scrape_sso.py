@@ -272,8 +272,25 @@ def _parse_section(prov: Tag) -> Section | None:
 
     sub_items: list[SubItem] = []
 
-    # (1) nested (a)(b)(c)/(i)(ii)(iii) items inside the prov1Txt body
+    # (1a) Some sections (s377BD, others) wrap subsection (1) in a
+    # `span.prov2TxtIL` nested inside prov1Txt. If present, treat it like any
+    # prov2Txt subsection — extract its body text + walk its nested tables.
     if body_el:
+        for span in body_el.select("span.prov2TxtIL"):
+            span_text = _body_text(span)
+            span_num_match = _SUB_RE.match(span_text)
+            span_label = span_num_match.group(0).strip() if span_num_match else ""
+            if span_text:
+                sub_items.append(SubItem(
+                    kind="subsection", label=span_label, text=span_text,
+                ))
+            for kind, label, text in _walk_nested_items(span, parent_label=span_label):
+                sub_items.append(SubItem(kind=kind, label=label, text=text))
+
+    # (1b) nested (a)(b)(c)/(i)(ii)(iii) items directly inside prov1Txt (no
+    # span wrapper) — e.g. s415-style sections. Only runs if we didn't already
+    # handle them via span.prov2TxtIL above, to avoid double-emission.
+    if body_el and not body_el.select("span.prov2TxtIL"):
         for kind, label, text in _walk_nested_items(body_el, parent_label=""):
             sub_items.append(SubItem(kind=kind, label=label, text=text))
 

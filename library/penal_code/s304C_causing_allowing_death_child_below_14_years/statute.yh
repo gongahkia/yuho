@@ -3,7 +3,7 @@
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr304C-#pr304C-
 /// @amendment [15/2019]
 
-statute 304C "Causing or allowing death of child below 14 years of age, domestic worker or vulnerable person in same household" effective 1872-01-01 effective 2019-12-31 {
+statute 304C "Causing or allowing death of child below 14 years of age, domestic worker or vulnerable person in same household" effective 2019-12-31 {
     subsection (1) {
         elements {
             /// Subsection (1) requires the protected person's death, household proximity, significant risk, and one of the paragraph (d) alternatives.

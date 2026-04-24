@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-04-24T16:56:57+00:00",
+  "generated_at": "2026-04-24T17:11:22+00:00",
   "act": {
     "act_code": "PC1871",
     "title": "Penal Code 1871",
     "valid_date": null,
-    "scraped_at": "2026-04-24T15:50:03Z"
+    "scraped_at": "2026-04-24T17:04:28Z"
   },
   "totals": {
     "raw_sections": 524,
     "encoded": 524,
     "L1_pass": 524,
     "L2_pass": 524,
-    "L3_pass": 118,
+    "L3_pass": 122,
     "L1_pct": 100.0,
     "L2_pct": 100.0,
-    "L3_pct": 22.5
+    "L3_pct": 23.3
   },
   "sections": [
     {
@@ -3873,9 +3873,9 @@
       "sso_url": "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr304C-#pr304C-",
       "L1": true,
       "L2": true,
-      "L3": false,
-      "L3_verified_by": null,
-      "L3_verified_on": null,
+      "L3": true,
+      "L3_verified_by": "gpt-5.4 high (automated L3 reviewer)",
+      "L3_verified_on": "2026-04-25",
       "errors": []
     },
     {
@@ -4874,9 +4874,9 @@
       "sso_url": "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr376-#pr376-",
       "L1": true,
       "L2": true,
-      "L3": false,
-      "L3_verified_by": null,
-      "L3_verified_on": null,
+      "L3": true,
+      "L3_verified_by": "gpt-5.4 high (automated L3 reviewer)",
+      "L3_verified_on": "2026-04-25",
       "errors": []
     },
     {
@@ -5056,9 +5056,9 @@
       "sso_url": "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr376H-#pr376H-",
       "L1": true,
       "L2": true,
-      "L3": false,
-      "L3_verified_by": null,
-      "L3_verified_on": null,
+      "L3": true,
+      "L3_verified_by": "gpt-5.4 high (automated L3 reviewer)",
+      "L3_verified_on": "2026-04-25",
       "errors": []
     },
     {
@@ -5134,9 +5134,9 @@
       "sso_url": "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BD-#pr377BD-",
       "L1": true,
       "L2": true,
-      "L3": false,
-      "L3_verified_by": null,
-      "L3_verified_on": null,
+      "L3": true,
+      "L3_verified_by": "gpt-5.4 high (automated L3 reviewer)",
+      "L3_verified_on": "2026-04-25",
       "errors": []
     },
     {

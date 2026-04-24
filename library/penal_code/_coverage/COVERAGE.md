@@ -1,7 +1,7 @@
 # Coverage — Penal Code 1871 (PC1871)
 
-_Generated: 2026-04-24T16:56:57+00:00_  
-_Scraped: 2026-04-24T15:50:03Z_  
+_Generated: 2026-04-24T17:11:22+00:00_  
+_Scraped: 2026-04-24T17:04:28Z_  
 _Valid date: n/a_
 
 ## Totals
@@ -12,7 +12,7 @@ _Valid date: n/a_
 | encoded (.yh present) | 524 | 100.0% |
 | **L1** — parses | **524** | **100.0%** |
 | **L2** — typechecks | **524** | **100.0%** |
-| **L3** — verified | **118** | **22.5%** |
+| **L3** — verified | **122** | **23.3%** |
 
 ## Encoded sections
 
@@ -314,7 +314,7 @@ _Valid date: n/a_
 | s304 | Punishment for culpable homicide not amounting to murder | ✓ | ✓ | ✓ | 2026-03-10 Yuho Team | `library/penal_code/s304_culpable_homicide_not_amounting_to_murder/statute.yh` |
 | s304A | Causing death by rash or negligent act | ✓ | ✓ | ✓ | 2026-04-24 Opus 4.7 (automated reviewer, phase D priority batch) | `library/penal_code/s304A_causing_death_rash_negligent_act/statute.yh` |
 | s304B | Causing death of child below 14 years of age, domestic worke | ✓ | ✓ | · | — | `library/penal_code/s304B_causing_death_child_below_14_years_age/statute.yh` |
-| s304C | Causing or allowing death of child below 14 years of age, do | ✓ | ✓ | · | — | `library/penal_code/s304C_causing_allowing_death_child_below_14_years/statute.yh` |
+| s304C | Causing or allowing death of child below 14 years of age, do | ✓ | ✓ | ✓ | 2026-04-25 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s304C_causing_allowing_death_child_below_14_years/statute.yh` |
 | s305 | Abetment of suicide or attempted suicide of minor or person  | ✓ | ✓ | ✓ | 2026-04-25 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s305_abetment_suicide_attempted_suicide_minor/statute.yh` |
 | s306 | Abetment of suicide or attempted suicide | ✓ | ✓ | · | — | `library/penal_code/s306_abetment_suicide_attempted_suicide/statute.yh` |
 | s307 | Attempt to murder | ✓ | ✓ | ✓ | 2026-04-24 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s307_attempt_murder/statute.yh` |
@@ -391,7 +391,7 @@ _Valid date: n/a_
 | s373A | Importing woman for purposes of prostitution, etc. | ✓ | ✓ | · | — | `library/penal_code/s373A_importing_woman_purposes_prostitution_etc/statute.yh` |
 | s374 | Unlawful compulsory labour | ✓ | ✓ | · | — | `library/penal_code/s374_unlawful_compulsory_labour/statute.yh` |
 | s375 | Rape | ✓ | ✓ | ✓ | 2026-04-25 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s375_rape/statute.yh` |
-| s376 | Sexual assault involving penetration | ✓ | ✓ | · | — | `library/penal_code/s376_sexual_assault_involving_penetration/statute.yh` |
+| s376 | Sexual assault involving penetration | ✓ | ✓ | ✓ | 2026-04-25 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s376_sexual_assault_involving_penetration/statute.yh` |
 | s376A | Sexual penetration of minor below 16 years of age | ✓ | ✓ | ✓ | 2026-04-24 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s376A_sexual_penetration_minor_below_16_years_age/statute.yh` |
 | s376AA | Exploitative sexual penetration of minor of or above 16 but  | ✓ | ✓ | · | — | `library/penal_code/s376AA_exploitative_sexual_penetration_minor_above/statute.yh` |
 | s376B | Commercial sex with minor below 18 years of age | ✓ | ✓ | · | — | `library/penal_code/s376B_commercial_sex_minor_below_18_years_age/statute.yh` |
@@ -405,13 +405,13 @@ _Valid date: n/a_
 | s376EE | Exploitative sexual activity or image in presence of minor o | ✓ | ✓ | · | — | `library/penal_code/s376EE_exploitative_sexual_activity_image_presence/statute.yh` |
 | s376F | Procurement of sexual activity with person with mental disab | ✓ | ✓ | ✓ | 2026-04-25 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s376F_procurement_sexual_activity_person_mental/statute.yh` |
 | s376G | Incest | ✓ | ✓ | ✓ | 2026-04-25 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s376G_incest/statute.yh` |
-| s376H | Procurement of sexual activity by deception or false represe | ✓ | ✓ | · | — | `library/penal_code/s376H_procurement_sexual_activity_deception_false/statute.yh` |
+| s376H | Procurement of sexual activity by deception or false represe | ✓ | ✓ | ✓ | 2026-04-25 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s376H_procurement_sexual_activity_deception_false/statute.yh` |
 | s377 | Sexual penetration, etc., of a corpse | ✓ | ✓ | ✓ | 2026-04-25 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s377_sexual_penetration_etc_corpse/statute.yh` |
 | s377B | Sexual penetration with living animal | ✓ | ✓ | · | — | `library/penal_code/s377B_sexual_penetration_living_animal/statute.yh` |
 | s377BA | Word or gesture intended to insult modesty of any person | ✓ | ✓ | · | — | `library/penal_code/s377BA_word_gesture_intended_insult_modesty_person/statute.yh` |
 | s377BB | Voyeurism | ✓ | ✓ | ✓ | 2026-04-25 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s377BB_voyeurism/statute.yh` |
 | s377BC | Distribution of voyeuristic image or recording | ✓ | ✓ | · | — | `library/penal_code/s377BC_distribution_voyeuristic_image_recording/statute.yh` |
-| s377BD | Possession of or gaining access to voyeuristic or intimate i | ✓ | ✓ | · | — | `library/penal_code/s377BD_possession_gaining_access_voyeuristic/statute.yh` |
+| s377BD | Possession of or gaining access to voyeuristic or intimate i | ✓ | ✓ | ✓ | 2026-04-25 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s377BD_possession_gaining_access_voyeuristic/statute.yh` |
 | s377BE | Distributing or threatening to distribute intimate image or  | ✓ | ✓ | ✓ | 2026-04-24 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s377BE_distributing_threatening_distribute_intimate/statute.yh` |
 | s377BF | Sexual exposure | ✓ | ✓ | · | — | `library/penal_code/s377BF_sexual_exposure/statute.yh` |
 | s377BG | Using or involving child in production of child abuse materi | ✓ | ✓ | ✓ | 2026-04-25 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s377BG_using_involving_child_production_child_abuse/statute.yh` |
