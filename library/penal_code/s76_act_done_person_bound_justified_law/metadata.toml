@@ -2,16 +2,17 @@
 section_number = "76"
 title = "Act done by person bound, or justified by law"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Nothing is an offence which is done by a person who is bound by law to do it or justified by law in doing it."
+summary = "Section 76 excludes criminal liability for acts done by a person who is bound by law to do the act or justified by law in doing it."
 source = "Singapore Penal Code 1871, Section 76"
 
 [verification]

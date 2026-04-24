@@ -1,17 +1,18 @@
 [statute]
 section_number = "43"
-title = "Illegal, unlawful and legally bound to do"
+title = "“Illegal”, “unlawful” and “legally bound to do”"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Defines 'illegal' and 'unlawful' as conduct that is an offence, prohibited by law, or actionable; 'legally bound to do' means anything illegal to omit."
+summary = "Defines “illegal” and “unlawful” as things that are offences, prohibited by law, or civilly actionable, and defines when a person is legally bound to do something."
 source = "Singapore Penal Code 1871, Section 43"
 
 [verification]

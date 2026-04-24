@@ -1,13 +1,88 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr74D-#pr74D-
-// Singapore Penal Code Section 74D
-
 /// @amendment [15/2019]
 
-statute 74D "Enhanced penalties for offences against victims in close relationships" effective 1872-01-01 {
-    definitions {
-        rule := "Where A is convicted of a Chapter 16 offence (except one punishable with death or life imprisonment) against B who was or is in a close relationship with A, the court may sentence up to twice the maximum punishment if at the time A knew or ought reasonably to have known of that relationship.";
-        rebuttal := "Does not apply where A proves the relationship did not adversely affect B's ability to protect B from A.";
+statute 74D "Enhanced penalties for offences against victims in close relationships" effective 1872-01-01 effective 2019-12-31 {
+    subsection (1) {
+        definitions {
+            offender_a := "The offender referred to as A.";
+            victim_b := "The person against whom the offence is committed, referred to as B.";
+            close_relationship := "A close relationship between A and B as determined under subsection (5).";
+        }
+
+        elements {
+            /// Subsection (2) applies only when every threshold condition in subsection (1) is met.
+            all_of {
+                actus_reus conviction := "A is convicted of an offence.";
+                circumstance chapter_16_offence := "The offence is under Chapter 16.";
+                circumstance excluded_punishment_absent := "The offence is not punishable with death or imprisonment for life.";
+                circumstance committed_against_b := "The offence is committed against B.";
+                circumstance close_relationship_with_a := "B was or is in a close relationship with A.";
+            }
+        }
+    }
+
+    subsection (2) {
+        elements {
+            /// Enhanced punishment under subsection (2) requires the offence against B and the specified knowledge condition.
+            all_of {
+                actus_reus offence_against_b := "A commits an offence against B.";
+                any_of {
+                    mens_rea actual_knowledge := "At the time of committing the offence A knew that B was or is in a close relationship with A.";
+                    mens_rea constructive_knowledge := "At the time of committing the offence A ought reasonably to have known that B was or is in a close relationship with A.";
+                }
+            }
+        }
+
+        /// Enhanced punishment applies to the underlying Chapter 16 offence; this section does not create a standalone fixed punishment.
+        penalty {
+            supplementary := "The court may sentence the person convicted of the offence to punishment not exceeding twice the maximum punishment that the court could, but for this section, impose for the offence.";
+        }
+    }
+
+    subsection (3) {
+        exception relationship_not_affecting_protection {
+            "The offender A proves that, despite A having been or being in a close relationship with B, the relationship between A and B did not adversely affect B's ability to protect B from A in respect of the harm caused by the offence."
+            "This section does not apply."
+        }
+    }
+
+    subsection (4) {
+        definitions {
+            criminal_procedure_code_override := "Despite anything to the contrary in the Criminal Procedure Code 2010, the court jurisdiction rules in subsection (4)(a) and subsection (4)(b) apply.";
+        }
+
+        subsection (a) {
+            definitions {
+                magistrates_court_jurisdiction := "A Magistrate's Court has jurisdiction to try the offences to which subsection (2) applies, where no imprisonment is prescribed or where twice the maximum term of imprisonment prescribed for the offence does not exceed 5 years, and has power to impose the full punishment provided under subsection (2) in respect of those offences.";
+            }
+        }
+
+        subsection (b) {
+            definitions {
+                district_court_jurisdiction := "A District Court has jurisdiction to try the offences to which subsection (2) applies and has power to impose the full punishment provided under subsection (2) in respect of those offences.";
+            }
+        }
+    }
+
+    subsection (5) {
+        elements {
+            /// A close relationship for this section requires both same-household status and frequent contact.
+            all_of {
+                circumstance same_household := "A is a member of the same household as B.";
+                circumstance frequent_contact := "A and B had frequent contact with each other.";
+            }
+        }
+    }
+
+    subsection (6) {
+        elements {
+            /// A and B are treated as members of the same household if either statutory household condition is satisfied.
+            any_of {
+                circumstance live_same_household := "A and B live in the same household.";
+                circumstance frequent_household_visits := "A and B do not live in the same household, but A or B visits the household to which the other belongs so often and for such periods of time that it is reasonable to regard A and B as being members of the same household.";
+            }
+        }
     }
 }

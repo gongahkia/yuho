@@ -2,16 +2,17 @@
 section_number = "72"
 title = "Punishment of a person found guilty of one of several offences, the judgment stating that it is doubtful of which"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Where guilt is certain for one of several offences but doubtful which, the offender is punished for the offence with the lowest punishment."
+summary = "Where judgment finds guilt for one of several specified offences but leaves doubt about which offence, punishment is for the offence carrying the lowest punishment unless all carry the same punishment."
 source = "Singapore Penal Code 1871, Section 72"
 
 [verification]

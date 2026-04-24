@@ -2,16 +2,17 @@
 section_number = "79"
 title = "Act done by person by mistake of fact believing himself bound or justified by law"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Excuses an act done by a person who, by mistake of fact or in ignorance of a fact, in good faith believes themselves bound or justified by law."
+summary = "Provides a mistake-of-fact defence for acts done in good faith under a believed legal duty or justification, and preserves the prosecution's burden to prove fault where factual mistake may negate it."
 source = "Singapore Penal Code 1871, Section 79"
 
 [verification]

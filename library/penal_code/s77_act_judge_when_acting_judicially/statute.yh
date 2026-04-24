@@ -1,44 +1,29 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr77-#pr77-
-// Singapore Penal Code Section 77 - Act of judge when acting judicially
-// Yuho v5 Syntax
-
-struct JudgeActCase {
-    string judge,
-    bool actingJudicially,
-    bool powerGivenByLaw,
-    bool goodFaithBelief,
-}
-
-fn judge_defence_applies(bool actingJudicially, bool powerGivenByLaw, bool goodFaithBelief) : bool {
-    match {
-        case TRUE if actingJudicially == FALSE := consequence FALSE;
-        case TRUE if powerGivenByLaw == TRUE := consequence TRUE;
-        case TRUE if goodFaithBelief == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
 statute 77 "Act of judge when acting judicially" effective 1872-01-01 {
     definitions {
-        judge := "As defined under section 19";
-        acting_judicially := "Performing judicial function in exercise of power";
-        good_faith := "As defined under section 52";
+        judge := "judge";
+        acting_judicially := "acting judicially";
+        power_given_by_law := "any power which is given to him by law";
+        good_faith_belief_in_power := "any power which in good faith he believes to be given to him by law";
     }
 
     elements {
+        /// Section 77 applies conjunctively to a judge acting judicially, with either legal power or a good-faith belief in legal power.
         all_of {
-            /// actor must be a judge per s19
-            circumstance is_judge := "Person is a judge";
-            /// must be acting judicially
-            circumstance judicial_act := "Act is done when acting judicially";
+            circumstance done_by_judge := "done by a judge";
+            circumstance acting_judicially := "when acting judicially";
+            circumstance exercise_of_power := "in the exercise of any power";
             any_of {
-                /// power actually conferred by law
-                circumstance power_in_law := "Power is given to the judge by law";
-                /// or good faith belief that power is conferred
-                mens_rea good_faith_belief := "Judge in good faith believes the power is given by law";
+                circumstance power_given_by_law := "which is given to him by law";
+                mens_rea good_faith_belief := "which in good faith he believes to be given to him by law";
             }
         }
+    }
+
+    exception judicial_act {
+        "Nothing is an offence which is done by a judge when acting judicially in the exercise of any power which is, or which in good faith he believes to be, given to him by law."
+        "Not an offence"
     }
 }

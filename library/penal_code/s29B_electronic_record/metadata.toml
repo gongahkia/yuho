@@ -2,16 +2,17 @@
 section_number = "29B"
 title = "“Electronic record”"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Defines 'electronic record' by reference to the Electronic Transactions Act 2010."
+summary = "Defines “electronic record” by reference to the Electronic Transactions Act 2010."
 source = "Singapore Penal Code 1871, Section 29B"
 
 [verification]

@@ -2,13 +2,14 @@
 section_number = "31"
 title = "“A will”"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
 summary = "Defines 'a will' as any testamentary document."

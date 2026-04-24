@@ -2,16 +2,17 @@
 section_number = "79A"
 title = "Mistake of law or ignorance of law not defence"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Provides that mistake of law or ignorance of the law is not a defence unless otherwise provided by written law."
+summary = "Provides that mistake of law or ignorance of law is not a defence unless written law provides otherwise, while preserving the prosecution's burden to prove any fault element."
 source = "Singapore Penal Code 1871, Section 79A"
 
 [verification]

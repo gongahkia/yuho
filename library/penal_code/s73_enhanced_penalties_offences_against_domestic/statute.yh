@@ -1,14 +1,54 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr73-#pr73-
-// Singapore Penal Code Section 73
-
 /// @amendment [15/2019]
 /// @amendment [Act 23 of 2021 wef 01/03/2022]
+statute 73 "Enhanced penalties for offences against domestic workers" effective 1872-01-01 effective 2020-01-01 effective 2022-03-01 {
+    subsection (1) {
+        elements {
+            /// Section 73(1) applies only when the offender's domestic-worker relationship, the Penal Code offence, and the victim nexus are all present.
+            all_of {
+                any_of {
+                    circumstance employer := "The person convicted is an employer of a domestic worker.";
+                    circumstance household_member := "The person convicted is a member of the employer’s household.";
+                    circumstance employment_agent := "The person convicted is an employment agent of a domestic worker.";
+                }
+                actus_reus conviction := "The person is convicted of an offence under this Code.";
+                circumstance not_excluded_offence := "The offence is other than an excluded offence.";
+                circumstance against_domestic_worker := "The offence is committed against that domestic worker.";
+            }
+        }
 
-statute 73 "Enhanced penalties for offences against domestic workers" effective 1872-01-01 {
-    definitions {
-        rule := "Where an employer of a domestic worker, a member of the employer's household or an employment agent of a domestic worker is convicted of an offence under this Code (other than an excluded offence) committed against that domestic worker, the court may sentence twice the maximum punishment otherwise imposable.";
-        rebuttal := "Section does not apply where offender proves the relationship did not adversely affect the worker's ability to protect herself from the harm caused.";
+        penalty {
+            supplementary := "The court may sentence the person convicted to twice the maximum punishment that the court could, but for this section, impose for that offence.";
+        }
+    }
+
+    subsection (2) {
+        exception relationship_no_adverse_effect {
+            "The offender (A) proves that, despite A being an employer of the domestic worker (B), a member of B’s employer’s household or an employment agent of B, the relationship between A and B did not adversely affect B’s ability to protect herself from A in respect of the harm caused by the offence."
+            "This section does not apply."
+        }
+    }
+
+    subsection (3) {
+        elements {
+            all_of {
+                permission magistrates_court_jurisdiction := "Despite anything to the contrary in the Criminal Procedure Code 2010, a Magistrate’s Court has jurisdiction to try the offences in subsection (1), where no imprisonment is prescribed or where twice the maximum term of imprisonment prescribed for the offence does not exceed 5 years, and has power to impose the full punishment provided under that subsection in respect of those offences.";
+                permission district_court_jurisdiction := "Despite anything to the contrary in the Criminal Procedure Code 2010, a District Court has jurisdiction to try the offences in subsection (1) and has power to impose the full punishment provided under that subsection in respect of those offences.";
+            }
+        }
+    }
+
+    subsection (4) {
+        definitions {
+            domestic_worker := "Any female house servant employed in, or in connection with, the domestic services of her employer’s private dwelling house and who is required to reside in her employer’s private dwelling house.";
+            dwelling_house := "A place of residence and includes a building or tenement wholly or principally used, constructed or adapted for use for human habitation.";
+            employer := "In relation to a domestic worker, includes a person who has the same fundamental qualities as an employer of the domestic worker and whose orders the domestic worker has reasonable grounds for believing she is expected to obey.";
+            employment_agency_personnel := "Has the meaning given by section 2 of the Employment Agencies Act 1958.";
+            employment_agent := "In relation to a domestic worker, means an employment agency personnel or a person who performs work similar to an employment agency personnel, and whose orders the domestic worker has reasonable grounds for believing she is expected to obey.";
+            excluded_offence := "An offence under section 304B, 304C or 335A, or an offence under this Code which is punishable with death or imprisonment for life.";
+            member_of_employers_household := "In relation to a domestic worker, means a person residing in the private dwelling house of the domestic worker’s employer at the time the offence was committed, and whose orders the domestic worker has reasonable grounds for believing she is expected to obey.";
+        }
     }
 }

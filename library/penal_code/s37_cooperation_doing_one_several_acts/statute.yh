@@ -1,11 +1,35 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr37-#pr37-
-// Singapore Penal Code Section 37
-// Yuho v5 Syntax
 
 statute 37 "Cooperation by doing one of several acts constituting an offence" effective 1872-01-01 {
     definitions {
-        cooperation_in_offence := "When an offence is committed by means of several acts, whoever intentionally cooperates in the commission of that offence by doing any one of those acts, either singly or jointly with any other person, commits that offence. Illustrations ( a ) A and B agree to murder Z , by severally, and at different times, giving him small doses of poison. A and B administer the poison, according to the agreement, with intent to murder Z . Z dies from the effects of the several doses of poison so administered to him. Here A and B intentionally cooperate in the commission of murder, and as each of them does an act by which the death is caused, they are both guilty of the offence, though their acts are separate. ( b ) A and B are joint jailors, and as such have the charge of Z , a prisoner, alternately for 6 hours at a time. A and B , intending to cause Z ’s death, knowingly cooperate in causing that effect by illegally omitting, each during the time of his attendance, to furnish Z with food supplied to them for that purpose. Z dies of hunger. Both A and B are guilty of the murder of Z . ( c ) A , a jailor, has the charge of Z , a prisoner. A , intending to cause Z ’s death, illegally omits to supply Z with food; in consequence of which Z is much reduced in strength, but the starvation is not sufficient to cause his death. A is dismissed from his office, and B succeeds him. B , without collusion or cooperation with A , illegally omits to supply Z with food, knowing that he is likely thereby to cause Z ’s death. Z dies of hunger. B is guilty of murder; but as A did not cooperate with B , A is guilty only of an attempt to commit murder.";
+        offence_by_several_acts := "An offence committed by means of several acts";
+        intentional_cooperation := "Intentional cooperation in the commission of that offence";
+        qualifying_act := "Doing any one of those acts, either singly or jointly with any other person";
+        liability_effect := "The person commits that offence";
+    }
+
+    elements {
+        /// Section 37 attaches liability only when the several-act offence, intentional cooperation, and one-act participation are all present.
+        all_of {
+            circumstance offence_committed_by_several_acts := "An offence is committed by means of several acts";
+            mens_rea intentional_cooperation := "The person intentionally cooperates in the commission of that offence";
+            actus_reus doing_one_act := "The person does any one of those acts";
+            circumstance singly_or_jointly := "The act is done either singly or jointly with any other person";
+            circumstance commits_that_offence := "The person commits that offence";
+        }
+    }
+
+    illustration illustration_a {
+        "( a ) A and B agree to murder Z , by severally, and at different times, giving him small doses of poison. A and B administer the poison, according to the agreement, with intent to murder Z . Z dies from the effects of the several doses of poison so administered to him. Here A and B intentionally cooperate in the commission of murder, and as each of them does an act by which the death is caused, they are both guilty of the offence, though their acts are separate."
+    }
+
+    illustration illustration_b {
+        "( b ) A and B are joint jailors, and as such have the charge of Z , a prisoner, alternately for 6 hours at a time. A and B , intending to cause Z ’s death, knowingly cooperate in causing that effect by illegally omitting, each during the time of his attendance, to furnish Z with food supplied to them for that purpose. Z dies of hunger. Both A and B are guilty of the murder of Z ."
+    }
+
+    illustration illustration_c {
+        "( c ) A , a jailor, has the charge of Z , a prisoner. A , intending to cause Z ’s death, illegally omits to supply Z with food; in consequence of which Z is much reduced in strength, but the starvation is not sufficient to cause his death. A is dismissed from his office, and B succeeds him. B , without collusion or cooperation with A , illegally omits to supply Z with food, knowing that he is likely thereby to cause Z ’s death. Z dies of hunger. B is guilty of murder; but as A did not cooperate with B , A is guilty only of an attempt to commit murder."
     }
 }

@@ -2,13 +2,14 @@
 section_number = "54"
 title = "Imprisonment for life"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
 summary = "Defines 'imprisonment for life' as imprisonment for the duration of a person's natural life."

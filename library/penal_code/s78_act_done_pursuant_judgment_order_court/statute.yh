@@ -1,40 +1,24 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr78-#pr78-
-// Singapore Penal Code Section 78 - Act done pursuant to the judgment or order of a court of justice
-// Yuho v5 Syntax
-
-struct CourtOrderCase {
-    string accused,
-    bool pursuantToJudgment,
-    bool judgmentInForce,
-    bool goodFaithBelievedJurisdiction,
-}
-
-fn court_order_defence(bool pursuantToJudgment, bool judgmentInForce, bool goodFaithBelievedJurisdiction) : bool {
-    match {
-        case TRUE if pursuantToJudgment == FALSE := consequence FALSE;
-        case TRUE if judgmentInForce == FALSE := consequence FALSE;
-        case TRUE if goodFaithBelievedJurisdiction == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
 statute 78 "Act done pursuant to the judgment or order of a court of justice" effective 1872-01-01 {
     definitions {
-        court_of_justice := "As defined under section 20";
-        judgment_in_force := "Judgment or order has not been set aside or reversed";
-        good_faith := "As defined under section 52";
+        rule := "Nothing which is done in pursuance of, or which is warranted by, the judgment or order of a court of justice, if done while the judgment or order remains in force, is an offence, notwithstanding the court may have had no jurisdiction to pass the judgment or order, provided the person doing the act in good faith believes that the court had such jurisdiction.";
+        judgment_or_order := "The judgment or order of a court of justice.";
+        jurisdictional_defect := "The court may have had no jurisdiction to pass the judgment or order.";
     }
 
     elements {
+        /// Defence applies only when the act is connected to a court judgment or order, the judgment or order remains in force, and the actor has the required good-faith belief about jurisdiction.
         all_of {
-            /// act must be done pursuant to or warranted by the judgment/order
-            actus_reus pursuant_act := "Act is done in pursuance of or warranted by the judgment or order of a court of justice";
-            /// judgment must still be in force
-            circumstance in_force := "Judgment or order remains in force at the time of the act";
-            /// jurisdictional defect is irrelevant if good faith belief exists
-            mens_rea good_faith_jurisdiction := "Person in good faith believes the court had jurisdiction to pass the judgment or order";
+            /// The statute covers either an act done in pursuance of the judgment or order, or an act warranted by it.
+            any_of {
+                actus_reus pursuance := "Act is done in pursuance of the judgment or order of a court of justice.";
+                actus_reus warranted := "Act is warranted by the judgment or order of a court of justice.";
+            }
+            circumstance in_force := "Act is done while the judgment or order remains in force.";
+            circumstance no_jurisdiction_notwithstanding := "The court may have had no jurisdiction to pass the judgment or order.";
+            mens_rea good_faith_jurisdiction_belief := "Person doing the act in good faith believes that the court had such jurisdiction.";
         }
     }
 }

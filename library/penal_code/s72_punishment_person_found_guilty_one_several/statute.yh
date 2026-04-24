@@ -5,6 +5,14 @@
 
 statute 72 "Punishment of a person found guilty of one of several offences, the judgment stating that it is doubtful of which" effective 1872-01-01 {
     definitions {
-        rule := "In all cases in which judgment is given that a person is guilty of one of several offences specified in the judgment, but that it is doubtful of which of these offences he is guilty, the offender shall be punished for the offence for which the lowest punishment is provided, if the same punishment is not provided for all.";
+        triggering_judgment := "Judgment is given that a person is guilty of one of several offences specified in the judgment";
+        doubtful_which_offence := "It is doubtful of which of these offences he is guilty";
+        lowest_punishment := "The punishment provided for the offence for which the lowest punishment is provided";
+        different_punishments := "The same punishment is not provided for all";
+    }
+
+    /// This section does not create a fixed penalty range; it selects the applicable punishment from the several offences specified in the judgment.
+    penalty {
+        supplementary := "In all cases in which judgment is given that a person is guilty of one of several offences specified in the judgment, but that it is doubtful of which of these offences he is guilty, the offender shall be punished for the offence for which the lowest punishment is provided, if the same punishment is not provided for all.";
     }
 }

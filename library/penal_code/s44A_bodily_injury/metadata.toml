@@ -1,19 +1,19 @@
 [statute]
 section_number = "44A"
-title = "Bodily injury"
+title = "“Bodily injury”"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "'Bodily injury' denotes both a single bodily injury and a series of bodily injuries."
+summary = "Defines “bodily injury” to include both a series of bodily injuries and a single bodily injury."
 source = "Singapore Penal Code 1871, Section 44A"
-notes = "Inserted by Act 15 of 2019."
 
 [verification]
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr44A-#pr44A-"

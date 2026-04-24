@@ -2,16 +2,17 @@
 section_number = "74"
 title = "Enhanced penalties for racially or religiously aggravated offences"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Allows up to double the maximum punishment for specified offences that are racially or religiously aggravated."
+summary = "Allows a court to double the otherwise applicable punishment for specified Penal Code offences that are racially or religiously aggravated."
 source = "Singapore Penal Code 1871, Section 74"
 
 [verification]

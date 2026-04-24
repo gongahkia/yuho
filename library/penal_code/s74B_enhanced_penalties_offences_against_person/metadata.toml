@@ -2,16 +2,17 @@
 section_number = "74B"
 title = "Enhanced penalties for offences against person below 14 years of age"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Allows up to double the maximum punishment for certain offences against persons below 14 years of age."
+summary = "Allows the court to impose up to twice the otherwise available maximum punishment for qualifying Penal Code offences committed against persons below 14 years of age."
 source = "Singapore Penal Code 1871, Section 74B"
 
 [verification]

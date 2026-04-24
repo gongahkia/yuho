@@ -2,16 +2,17 @@
 section_number = "81"
 title = "Act likely to cause harm but done to prevent other harm"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "General exception of necessity: an act done in good faith to prevent or avoid other harm to person or property is not an offence merely because of its known likelihood of causing harm."
+summary = "Section 81 provides a necessity-style general exception for acts done in good faith to prevent or avoid other harm to person or property despite knowledge that the act is likely to cause harm."
 source = "Singapore Penal Code 1871, Section 81"
 
 [verification]

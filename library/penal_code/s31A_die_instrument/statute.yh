@@ -1,11 +1,10 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr31A-#pr31A-
-// Singapore Penal Code Section 31A
-// Yuho v5 Syntax
 
 statute 31A "“Die” and “instrument”" effective 1872-01-01 {
     definitions {
-        die_and_instrument := "For the purposes of Chapters 12 and 18 — “die” includes any plate, type, tool, chop or implement and also any part of any die, plate, type, tool, chop or implement, and any stamp or impression thereof or any part of such stamp or impression; “instrument” includes any document whether of a formal or an informal nature, any postage stamp or revenue stamp, any seal or die, and any disc, card, tape, microchip, soundtrack or other device on or in which information is recorded or stored by mechanical, electronic, optical or other means.";
+        die := "For the purposes of Chapters 12 and 18 — “die” includes any plate, type, tool, chop or implement and also any part of any die, plate, type, tool, chop or implement, and any stamp or impression thereof or any part of such stamp or impression.";
+        instrument := "For the purposes of Chapters 12 and 18 — “instrument” includes any document whether of a formal or an informal nature, any postage stamp or revenue stamp, any seal or die, and any disc, card, tape, microchip, soundtrack or other device on or in which information is recorded or stored by mechanical, electronic, optical or other means.";
     }
 }

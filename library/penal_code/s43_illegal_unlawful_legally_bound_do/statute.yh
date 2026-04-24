@@ -1,13 +1,11 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr43-#pr43-
-// Singapore Penal Code Section 43 - "Illegal", "unlawful" and "legally bound to do"
-// Interpretation provision defining three related terms
 
-statute 43 "Illegal, unlawful and legally bound to do" effective 1872-01-01 {
+statute 43 "“Illegal”, “unlawful” and “legally bound to do”" effective 1872-01-01 {
     definitions {
-        illegal := "Applicable to every thing which is an offence, or which is prohibited by law, or which furnishes ground for a civil action";
-        unlawful := "Applicable to every thing which is an offence, or which is prohibited by law, or which furnishes ground for a civil action";
-        legally_bound_to_do := "A person is said to be legally bound to do whatever it is illegal or unlawful in him to omit";
+        illegal := "The word “illegal” is applicable to every thing which is an offence, or which is prohibited by law, or which furnishes ground for a civil action";
+        unlawful := "The word “unlawful” is applicable to every thing which is an offence, or which is prohibited by law, or which furnishes ground for a civil action";
+        legally_bound_to_do := "A person is said to be “legally bound to do” whatever it is illegal or unlawful in him to omit";
     }
 }

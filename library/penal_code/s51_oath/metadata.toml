@@ -1,17 +1,18 @@
 [statute]
 section_number = "51"
-title = "Oath"
+title = "“Oath”"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Defines 'oath' to include solemn affirmations and legally required declarations made before a public servant or for proof."
+summary = "Defines “oath” to include legally substituted solemn affirmations and declarations required or authorised by law for public-servant or proof purposes."
 source = "Singapore Penal Code 1871, Section 51"
 
 [verification]

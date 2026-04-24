@@ -2,16 +2,17 @@
 section_number = "38"
 title = "Several persons engaged in the commission of a criminal act may be guilty of different offences"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Several persons engaged in a criminal act may be guilty of different offences by means of that act."
+summary = "Several persons involved in the same criminal act may still be guilty of different offences by means of that act."
 source = "Singapore Penal Code 1871, Section 38"
 
 [verification]

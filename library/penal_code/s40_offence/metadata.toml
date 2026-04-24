@@ -2,16 +2,17 @@
 section_number = "40"
 title = "“Offence”"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Defines 'offence' with specific Chapter/section-based variants."
+summary = "Defines the meaning of “offence” generally and for specified chapters and sections."
 source = "Singapore Penal Code 1871, Section 40"
 
 [verification]

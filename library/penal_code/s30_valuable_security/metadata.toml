@@ -2,16 +2,17 @@
 section_number = "30"
 title = "“Valuable security”"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Defines 'valuable security' as documents/electronic records creating or evidencing legal rights."
+summary = "Defines valuable security to include documents or electronic records affecting legal rights and specified financial cards."
 source = "Singapore Penal Code 1871, Section 30"
 
 [verification]

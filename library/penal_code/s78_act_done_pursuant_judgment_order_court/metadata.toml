@@ -2,16 +2,17 @@
 section_number = "78"
 title = "Act done pursuant to the judgment or order of a court of justice"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Nothing done pursuant to or warranted by a judgment or order of a court of justice is an offence, while the judgment remains in force, provided the actor in good faith believes the court had jurisdiction."
+summary = "Provides a general exception for acts done pursuant to or warranted by a court judgment or order that remains in force, where the actor believes in good faith that the court had jurisdiction."
 source = "Singapore Penal Code 1871, Section 78"
 
 [verification]

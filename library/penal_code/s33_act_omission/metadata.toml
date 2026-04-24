@@ -2,16 +2,17 @@
 section_number = "33"
 title = "“Act” and “omission”"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Defines 'act' and 'omission' as including both a single act/omission and a series thereof."
+summary = "Defines act and omission to include both single occurrences and series, and treats an uncertain causative act within a series as causation by the series."
 source = "Singapore Penal Code 1871, Section 33"
 
 [verification]

@@ -1,16 +1,84 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr74A-#pr74A-
-// Singapore Penal Code Section 74A
-
 /// @amendment [27/2018; 15/2019]
 /// @amendment [Act 23 of 2021 wef 01/03/2022]
 /// @amendment [S 759/2022]
 /// @amendment [15/2019]
 
-statute 74A "Enhanced penalties for offences against vulnerable persons" effective 1872-01-01 {
-    definitions {
-        rule := "Where a person is convicted of a specified offence against a vulnerable person, the court may sentence up to twice the maximum punishment otherwise imposable if the offender knew or ought reasonably to have known of the vulnerability.";
-        rebuttal := "Does not apply where offender proves the victim was capable of protecting themselves in the same manner as an ordinary person.";
+statute 74A "Enhanced penalties for offences against vulnerable persons" effective 1872-01-01 effective 2018-12-19 effective 2019-12-31 effective 2022-03-01 {
+    subsection (1) {
+        elements {
+            all_of {
+                circumstance conviction := "This section applies where a person is convicted of an offence specified in subsection (3) (called in this section the offender) against a vulnerable person.";
+            }
+        }
+    }
+
+    subsection (2) {
+        elements {
+            all_of {
+                circumstance conviction_under_subsection_3 := "The offender is convicted of an offence specified in subsection (3).";
+                mens_rea knowledge_of_vulnerability := "At the time of committing the offence the offender knew or ought reasonably to have known that the victim was a vulnerable person.";
+            }
+        }
+
+        /// enhanced punishment for the offence specified in subsection (3)
+        penalty {
+            supplementary := "The court may sentence the offender to punishment not exceeding twice the maximum punishment that the court could, but for this section, impose for the offence.";
+        }
+    }
+
+    subsection (2A) {
+        exception capable_of_self_protection {
+            "This section does not apply where the offender proves that despite being a vulnerable person the victim was capable of protecting himself from the offender in respect of the harm caused by the offence in the same manner as an ordinary person who is not a vulnerable person."
+            "Section 74A does not apply."
+        }
+    }
+
+    subsection (3) {
+        definitions {
+            applicable_offence := "The offence to which this section applies is any offence under this Code which may be committed against a vulnerable person except an offence specified in subsection (3)(a) or subsection (3)(b).";
+        }
+
+        subsection (a) {
+            exception excluded_sections {
+                "An offence under section 304B, 304C, 335A or 376F."
+                "Excluded from the offence to which this section applies."
+            }
+        }
+
+        subsection (b) {
+            exception capital_or_life_imprisonment {
+                "An offence punishable with death or imprisonment for life."
+                "Excluded from the offence to which this section applies."
+            }
+        }
+    }
+
+    subsection (4) {
+        definitions {
+            criminal_procedure_code_override := "Despite anything to the contrary in the Criminal Procedure Code 2010, the jurisdiction and sentencing powers in subsection (4)(a) and subsection (4)(b) apply.";
+        }
+
+        subsection (a) {
+            definitions {
+                magistrates_court_jurisdiction := "A Magistrate's Court has jurisdiction to try the offences specified in subsection (3), where no imprisonment is prescribed or where twice the maximum term of imprisonment prescribed for the offence does not exceed 5 years, and has power to impose the full punishment provided under subsection (2) in respect of those offences.";
+            }
+        }
+
+        subsection (b) {
+            definitions {
+                district_court_jurisdiction := "A District Court has jurisdiction to try the offences specified in subsection (3) and has power to impose the full punishment provided under subsection (2) in respect of those offences.";
+            }
+        }
+    }
+
+    subsection (5) {
+        definitions {
+            abuse := "Has the meaning given by section 2(1) of the Vulnerable Adults Act 2018.";
+            self_neglect := "Has the meaning given by section 2(1) of the Vulnerable Adults Act 2018.";
+            vulnerable_person := "An individual who is, by reason of mental or physical infirmity, disability or incapacity, substantially unable to protect himself from abuse, neglect or self-neglect.";
+        }
     }
 }

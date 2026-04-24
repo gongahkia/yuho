@@ -2,13 +2,14 @@
 section_number = "36"
 title = "Effect caused partly by act and partly by omission"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
 summary = "Where causing an effect is an offence, causing it partly by act and partly by omission is the same offence."

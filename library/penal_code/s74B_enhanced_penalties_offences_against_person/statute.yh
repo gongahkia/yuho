@@ -1,14 +1,64 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr74B-#pr74B-
-// Singapore Penal Code Section 74B
-
 /// @amendment [15/2019]
+statute 74B "Enhanced penalties for offences against person below 14 years of age" effective 1872-01-01 effective 2019-12-31 {
+    subsection (1) {
+        elements {
+            /// Subsection (2) applies to Code offences against persons below 14 years of age, unless one of the statutory exclusions applies.
+            all_of {
+                circumstance code_offence_against_person_below_14 := "any offence under this Code which may be committed against a person below 14 years of age";
+            }
+        }
 
-statute 74B "Enhanced penalties for offences against person below 14 years of age" effective 1872-01-01 {
-    definitions {
-        rule := "Where a person commits an offence under this Code against a person below 14 years of age, the court may sentence up to twice the maximum punishment if at the time the offender knew or ought reasonably to have known of the age.";
-        exclusions := "Does not apply where enhanced or mandatory minimum sentence already provided, for sections 304B, 304C, 377BG, 377BH, 377BI, 377BJ or 377BK, or where the offence is punishable with death or life imprisonment.";
-        rebuttal := "Does not apply where offender proves the victim was capable of protecting themselves in the same manner as a person of or above 14 years of age.";
+        exception enhanced_or_mandatory_minimum_already_provided {
+            "it is expressly provided that an enhanced or mandatory minimum sentence will apply to the offence when it is committed against a person below 14 years of age"
+            "Subsection (2) does not apply"
+        }
+
+        exception excluded_sections {
+            "the offence is under section 304B, 304C, 377BG, 377BH, 377BI, 377BJ or 377BK"
+            "Subsection (2) does not apply"
+        }
+
+        exception death_or_life_imprisonment {
+            "the offence is punishable with death or imprisonment for life"
+            "Subsection (2) does not apply"
+        }
+
+        definitions {
+            subsection_2_application_rule := "Subsection (2) applies to any offence under this Code which may be committed against a person below 14 years of age except where —";
+        }
+    }
+
+    subsection (2) {
+        elements {
+            /// The enhanced penalty is available only for an offence under this Code committed against a person below 14 years of age with the specified knowledge condition.
+            all_of {
+                actus_reus offence_against_person_below_14 := "any person commits an offence under this Code against a person below 14 years of age";
+                any_of {
+                    mens_rea knew_victim_below_14 := "at the time of committing the offence the offender knew that the victim was a person below 14 years of age";
+                    mens_rea ought_reasonably_to_have_known_victim_below_14 := "at the time of committing the offence the offender ought reasonably to have known that the victim was a person below 14 years of age";
+                }
+            }
+        }
+
+        /// Enhanced punishment applies to the underlying Code offence; this section does not create a standalone offence or fixed fine/caning term.
+        penalty {
+            supplementary := "the court may sentence the person convicted of the offence to punishment not exceeding twice the maximum punishment that the court could, but for this section, impose for the offence";
+        }
+    }
+
+    subsection (3) {
+        exception victim_capable_of_protection {
+            "the offender proves that the victim despite being a person below 14 years of age, was capable of protecting himself from the offender in respect of the harm caused by the offence in the same manner as a person of or above 14 years of age"
+            "This section does not apply"
+        }
+    }
+
+    subsection (4) {
+        definitions {
+            criminal_procedure_code_override := "Despite anything to the contrary in the Criminal Procedure Code 2010 —";
+        }
     }
 }

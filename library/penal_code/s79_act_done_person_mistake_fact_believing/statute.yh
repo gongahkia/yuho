@@ -1,42 +1,74 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr79-#pr79-
-// Singapore Penal Code Section 79
-
 /// @amendment [15/2019]
 /// @amendment [Act 23 of 2021 wef 01/03/2022]
 
-statute 79 "Act done by person by mistake of fact believing himself bound or justified by law" effective 1872-01-01 {
-    definitions {
-        rule := "Unless otherwise provided by written law, nothing is an offence which is done by any person who by reason of a mistake of fact or in ignorance of a fact in good faith believes himself to be bound by law to do it or justified by law in doing it.";
-        prosecution_burden := "Where a person alleges a mistake of fact or ignorance of a fact that may negate the fault element, the prosecution must prove the fault element in order to establish liability.";
+statute 79 "Act done by person by mistake of fact believing himself bound or justified by law" effective 1872-01-01 effective 2020-01-01 effective 2022-03-01 {
+    subsection (1) {
+        definitions {
+            mistake_of_fact_defence := "Unless otherwise provided by written law, nothing is an offence which is done by any person who by reason of a mistake of fact or in ignorance of a fact in good faith believes himself to be bound by law to do it or justified by law in doing it. [15/2019]";
+            explanation_1 := "Explanation 1 .—Where the physical and fault elements of an offence are proven, and the accused person proves the defence under subsection (1), the accused person is not guilty of that offence.";
+        }
+
+        elements {
+            /// Subsection (1) is conjunctive: the act is not an offence only when the carve-out and the good-faith mistake basis are satisfied.
+            all_of {
+                circumstance no_written_law_override := "Unless otherwise provided by written law";
+                actus_reus act_done := "An act is done by any person";
+                any_of {
+                    circumstance mistake_of_fact := "By reason of a mistake of fact";
+                    circumstance ignorance_of_fact := "In ignorance of a fact";
+                }
+                mens_rea good_faith_belief := "In good faith believes himself to be bound by law to do it or justified by law in doing it";
+            }
+        }
+
+        exception mistake_of_fact {
+            "A person, by reason of a mistake of fact or in ignorance of a fact, in good faith believes himself to be bound by law to do the act or justified by law in doing it, unless otherwise provided by written law."
+            "Nothing is an offence; where the physical and fault elements are proven and the accused person proves the defence, the accused person is not guilty of that offence."
+        }
     }
 
-    /// Explanation 1 .—Where the physical and fault elements of an offence are proven, and the accused person proves the defence under subsection (1), the accused person is not guilty of that offence.
+    subsection (2) {
+        definitions {
+            fault_element_burden := "To avoid doubt, where a person alleges a mistake of fact or ignorance of a fact that may negate the fault element of the offence that the person is charged with, the prosecution must prove the fault element in order to establish liability under the offence. [15/2019] [Act 23 of 2021 wef 01/03/2022]";
+            explanation_2 := "Explanation 2 .—Where an alleged mistake of fact or ignorance of a fact may negate the fault element of an offence, the accused person does not need to rely on the defence of mistake. The accused person may allege the mistake of fact or ignorance of the fact for the purpose of raising a reasonable doubt that the accused person had the requisite fault element as a result of labouring under the mistake of fact or ignorance of fact. The prosecution must prove the fault element in order to establish liability under the offence.";
+        }
 
-    /// Explanation 2 .—Where an alleged mistake of fact or ignorance of a fact may negate the fault element of an offence, the accused person does not need to rely on the defence of mistake. The accused person may allege the mistake of fact or ignorance of the fact for the purpose of raising a reasonable doubt that the accused person had the requisite fault element as a result of labouring under the mistake of fact or ignorance of fact. The prosecution must prove the fault element in order to establish liability under the offence.
+        elements {
+            /// Subsection (2) preserves the prosecution's burden where the alleged factual mistake may negate fault.
+            all_of {
+                any_of {
+                    circumstance alleged_mistake_of_fact := "A person alleges a mistake of fact that may negate the fault element of the offence that the person is charged with";
+                    circumstance alleged_ignorance_of_fact := "A person alleges ignorance of a fact that may negate the fault element of the offence that the person is charged with";
+                }
+                obligation prosecution_proves_fault := "The prosecution must prove the fault element in order to establish liability under the offence" burden prosecution beyond_reasonable_doubt;
+            }
+        }
+    }
 
-    illustration example_a {
+    illustration illustration_a {
         "( a ) A sees Z commit what appears to A to be a murder. A , in the exercise, to the best of his judgment exerted in good faith, of the power which the law gives to all persons of apprehending murderers in the act, seizes Z , in order to bring Z before the proper authorities. A has committed no offence, though it may turn out that Z was acting in self-defence."
     }
 
-    illustration example_b {
+    illustration illustration_b {
         "( b ) A , a police officer, is deployed to perform the duty of screening passengers boarding a flight at the airport. A sees Z , a passenger queuing up to be screened, acting suspiciously. As A approaches Z , Z suddenly shouts aloud that he is carrying a bomb and warns A not to approach further. As A draws his revolver, Z suddenly starts to run away. A , after assessing the circumstances of the case, and to the best of his judgment exerted in good faith, believes that Z has a bomb and will set it off. A shoots Z and Z dies as a result. A has committed no offence, even though it may turn out that Z was not carrying a bomb."
     }
 
-    illustration example_c {
+    illustration illustration_c {
         "( c ) A , a police officer, is deployed to perform patrol duty at an underground train station. A receives information from police headquarters that someone is attempting to plant a bomb in the public transport system. The profile of the suspect is also provided. While patrolling the underground train station, A sees Z , who fits the profile. Z is seen carrying a backpack and behaving suspiciously. A approaches Z and orders him to stop. Z suddenly starts running towards a crowd in the station. A , after assessing the circumstances of the case, and to the best of his judgment exerted in good faith, believes that Z has a bomb and will set it off. A shoots Z and Z dies as a result. A has committed no offence, even though it may turn out that Z was not carrying a bomb."
     }
 
-    illustration example_d {
+    illustration illustration_d {
         "( d ) X , the commander of a naval vessel, is patrolling Singapore territorial waters. X receives information that someone may hijack a vessel in order to commit a terrorist act. X spots vessel A which is proceeding at high speed towards a cruise liner. X orders vessel A to stop her manoeuvre immediately and fires a warning signal. Vessel A instead starts accelerating towards the cruise liner. X , after assessing the circumstances of the case, and to the best of his judgment exerted in good faith, believes that vessel A is going to ram into the cruise liner. X gives an order to fire at vessel A . The persons on board vessel A die as a result. X has committed no offence, even though it may turn out that vessel A was not hijacked nor were there any terrorist on board."
     }
 
-    illustration example_e {
+    illustration illustration_e {
         "( e ) A , an officer of a court, being ordered by that court to arrest Y , and, after due enquiry, believing Z to be Y , arrests Z . A has committed no offence."
     }
 
-    illustration example_f {
+    illustration illustration_f {
         "( f ) A sees a watch on Z ’s desk, which is identical to one that A owns, and mistakenly believes the watch is actually his. A intentionally takes the watch out of Z ’s possession without Z ’s consent while labouring under such mistaken belief. A has not committed an offence of theft as A did not possess the requisite fault element of dishonesty when A took the watch out of Z ’s possession. There is no need for A to rely on a defence under this section."
     }
 }

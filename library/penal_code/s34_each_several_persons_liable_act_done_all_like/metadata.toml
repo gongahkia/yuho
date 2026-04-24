@@ -2,16 +2,17 @@
 section_number = "34"
 title = "Each of several persons liable for an act done by all, in like manner as if done by him alone"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Each of several persons doing a criminal act in furtherance of common intention is liable as if acting alone."
+summary = "When a criminal act is done by several persons in furtherance of their common intention, each is liable as if acting alone."
 source = "Singapore Penal Code 1871, Section 34"
 
 [verification]

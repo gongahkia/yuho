@@ -1,11 +1,23 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr35-#pr35-
-// Singapore Penal Code Section 35
-// Yuho v5 Syntax
 
 statute 35 "When such an act is criminal by reason of its being done with a criminal knowledge or intention" effective 1872-01-01 {
     definitions {
-        criminal_knowledge_intention := "Whenever an act, which is criminal only by reason of its being done with a criminal knowledge or intention, is done by several persons, each of such persons who joins in the act with such knowledge or intention, is liable for the act in the same manner as if the act were done by him alone with that knowledge or intention.";
+        knowledge_or_intention_dependent_act := "An act, which is criminal only by reason of its being done with a criminal knowledge or intention";
+        several_persons := "Several persons by whom the act is done";
+        joining_person := "Each of such persons who joins in the act with such knowledge or intention";
+        same_manner_liability := "Liable for the act in the same manner as if the act were done by him alone with that knowledge or intention";
+    }
+
+    elements {
+        /// Section 35 applies only where the act, plurality of actors, and matching knowledge or intention are all present.
+        all_of {
+            circumstance criminal_only_by_knowledge_or_intention := "The act is criminal only by reason of its being done with a criminal knowledge or intention";
+            actus_reus done_by_several_persons := "The act is done by several persons";
+            actus_reus joins_in_act := "The person joins in the act";
+            mens_rea with_such_knowledge_or_intention := "The person joins in the act with such knowledge or intention";
+            circumstance liable_as_if_done_alone := "The person is liable for the act in the same manner as if the act were done by him alone with that knowledge or intention";
+        }
     }
 }

@@ -1,12 +1,10 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr44A-#pr44A-
-// Singapore Penal Code Section 44A - "Bodily injury"
-// Interpretation provision; inserted by Act 15 of 2019
 /// @amendment [15/2019]
 
-statute 44A "Bodily injury" effective 2020-01-01 {
+statute 44A "“Bodily injury”" effective 1872-01-01 effective 2020-01-01 {
     definitions {
-        bodily_injury := "Denotes as well a series of bodily injuries as a single bodily injury";
+        bodily_injury := "The words “bodily injury” denote as well a series of bodily injuries as a single bodily injury. [15/2019]";
     }
 }

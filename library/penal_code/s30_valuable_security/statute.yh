@@ -1,13 +1,26 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr30-#pr30-
-// Singapore Penal Code Section 30
-// Yuho v5 Syntax
-
 /// @amendment [15/2019]
 
-statute 30 "“Valuable security”" effective 1872-01-01 {
-    definitions {
-        valuable_security := "—(1) The words “valuable security” denote a document or an electronic record which is, or purports to be, a document or an electronic record whereby any legal right is created, extended, transferred, restricted, extinguished, or released, or whereby any person acknowledges that he lies under legal liability, or has not a certain legal right. [15/2019] (2) Notwithstanding the generality of subsection (1), “valuable security” includes credit cards, charge cards, stored value cards, automated teller machine cards and such other cards which have money or money’s worth or other financial rights attached. [15/2019] Illustrations ( a ) A writes his name on the back of a bill of exchange. As the effect of this endorsement is to transfer the right to the bill to any person who may become the lawful holder of it, the endorsement is a “valuable security”. ( b ) An electronic bill of lading in the form of an electronic record in a secure electronic trading system is a “valuable security”.";
+statute 30 "“Valuable security”" effective 1872-01-01 effective 2020-01-01 {
+    subsection (1) {
+        definitions {
+            valuable_security := "The words “valuable security” denote a document or an electronic record which is, or purports to be, a document or an electronic record whereby any legal right is created, extended, transferred, restricted, extinguished, or released, or whereby any person acknowledges that he lies under legal liability, or has not a certain legal right. [15/2019]";
+        }
+    }
+
+    subsection (2) {
+        definitions {
+            valuable_security_includes := "Notwithstanding the generality of subsection (1), “valuable security” includes credit cards, charge cards, stored value cards, automated teller machine cards and such other cards which have money or money’s worth or other financial rights attached. [15/2019]";
+        }
+    }
+
+    illustration illustration_a {
+        "( a ) A writes his name on the back of a bill of exchange. As the effect of this endorsement is to transfer the right to the bill to any person who may become the lawful holder of it, the endorsement is a “valuable security”."
+    }
+
+    illustration illustration_b {
+        "( b ) An electronic bill of lading in the form of an electronic record in a secure electronic trading system is a “valuable security”."
     }
 }

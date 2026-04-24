@@ -2,16 +2,17 @@
 section_number = "74E"
 title = "Application of enhanced penalties"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Limits enhanced-penalty stacking: where multiple of sections 73 to 74D apply, only one enhancement may be imposed."
+summary = "Limits overlapping enhanced-penalty provisions so only one of sections 73 to 74D enhances punishment for the same offence, with the court choosing the applicable section."
 source = "Singapore Penal Code 1871, Section 74E"
 
 [verification]

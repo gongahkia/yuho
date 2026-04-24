@@ -1,13 +1,22 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr74E-#pr74E-
-// Singapore Penal Code Section 74E
-
 /// @amendment [15/2019]
+statute 74E "Application of enhanced penalties" effective 1872-01-01 effective 2019-12-31 {
+    subsection (1) {
+        elements {
+            /// Subsection (1) governs overlap where two or more enhanced-penalty sections from sections 73 to 74D would otherwise apply to the same offence.
+            all_of {
+                circumstance multiple_enhancement_sections_applicable := "Where 2 or more of the sections from amongst sections 73 to 74D are applicable to enhance the punishment for an offence from that which the offender would otherwise have been liable for";
+                prohibition multiple_enhancement_application := "the punishment for the same offence shall not be enhanced by the application of more than one of those sections";
+                permission court_determines_applicable_section := "the court may determine which section should apply to enhance the punishment";
+            }
+        }
+    }
 
-statute 74E "Application of enhanced penalties" effective 1872-01-01 {
-    definitions {
-        single_enhancement := "Where 2 or more of sections 73 to 74D are applicable, the punishment for the same offence shall not be enhanced by the application of more than one of those sections.";
-        court_discretion := "The court may determine which section should apply to enhance the punishment.";
+    subsection (2) {
+        definitions {
+            prescribed_punishment_rule_intro := "Where any punishment prescribed for an offence is —";
+        }
     }
 }

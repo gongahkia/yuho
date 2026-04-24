@@ -1,16 +1,79 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr74-#pr74-
-// Singapore Penal Code Section 74
-
 /// @amendment [Act 31 of 2019 wef 01/11/2022]
 /// @amendment [15/2019]
 /// @amendment [Act 23 of 2021 wef 01/11/2022]
 /// @amendment [†Updated to be consistent with the 2020 Revised Edition]
+statute 74 "Enhanced penalties for racially or religiously aggravated offences" effective 1872-01-01 effective 2022-11-01 {
+    subsection (1) {
+        elements {
+            /// Section 74(1) applies when the conviction is for a subsection (2) offence and the subsection (4) aggravation test is satisfied.
+            all_of {
+                actus_reus conviction := "A person is convicted of an offence specified in subsection (2).";
+                circumstance racially_or_religiously_aggravated := "The offence is racially or religiously aggravated.";
+            }
+        }
 
-statute 74 "Enhanced penalties for racially or religiously aggravated offences" effective 1872-01-01 {
-    definitions {
-        rule := "Where a person is convicted of a specified offence that is racially or religiously aggravated, the court may sentence up to 2 times the maximum punishment otherwise imposable.";
-        aggravation_test := "An offence is racially or religiously aggravated as defined in subsection (4).";
+        penalty {
+            supplementary := "The court may sentence the person to 2 times the amount of punishment to which he would otherwise have been liable for that offence.";
+        }
+    }
+
+    subsection (2) {
+        elements {
+            /// Paragraphs (a) and (b) are alternative categories of offences referred to in subsection (1).
+            any_of {
+                circumstance penal_code_offence_except_excluded := "An offence under this Code except sections 298 and 298A, and an offence which is punishable with death or imprisonment for life.";
+                circumstance inchoate_or_conspiracy_offence := "An offence of attempting to commit, abetting the commission of, or being a party to a criminal conspiracy to commit, any offence under paragraph (a).";
+            }
+        }
+    }
+
+    subsection (3) {
+        definitions {
+            criminal_procedure_code_override := "Despite anything to the contrary in the Criminal Procedure Code 2010, the jurisdiction and sentencing powers in subsection (3)(a) and subsection (3)(b) apply.";
+        }
+
+        subsection (a) {
+            elements {
+                all_of {
+                    permission magistrates_court_jurisdiction := "A Magistrate’s Court has jurisdiction to try any offence specified in subsection (2), where no imprisonment is prescribed or where twice the maximum term of imprisonment prescribed for the offence does not exceed 5 years.";
+                    permission magistrates_court_sentencing_power := "A Magistrate’s Court has power to impose the full punishment provided under subsection (1) in respect of the offence.";
+                }
+            }
+        }
+
+        subsection (b) {
+            elements {
+                all_of {
+                    permission district_court_jurisdiction := "A District Court has jurisdiction to try any offence specified in subsection (2).";
+                    permission district_court_sentencing_power := "A District Court has power to impose the full punishment provided under subsection (1) in respect of the offence.";
+                }
+            }
+        }
+    }
+
+    subsection (4) {
+        elements {
+            /// Paragraphs (a) and (b) are disjunctive ways an offence is racially or religiously aggravated.
+            any_of {
+                circumstance demonstrated_hostility := "At the time of committing the offence, or immediately before or after committing such offence, the offender demonstrates towards the victim of the offence hostility based on the victim’s membership (or presumed membership) of a racial or religious group.";
+                circumstance motivated_by_hostility := "The offence is motivated (wholly or partly) by hostility towards members of a racial or religious group based on their membership of that group.";
+            }
+        }
+    }
+
+    subsection (5) {
+        definitions {
+            immaterial_additional_hostility_factor := "It is immaterial for the purposes of paragraph (a) or (b) of subsection (4) whether or not the offender’s hostility is also based, to any extent, on any other factor not mentioned in that paragraph.";
+        }
+    }
+
+    subsection (6) {
+        definitions {
+            membership := "In relation to a racial or religious group, includes association with members of that group.";
+            presumed := "Presumed by the offender.";
+        }
     }
 }

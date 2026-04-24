@@ -2,16 +2,17 @@
 section_number = "74A"
 title = "Enhanced penalties for offences against vulnerable persons"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Allows up to double the maximum punishment for certain offences against vulnerable persons when the offender knew or ought to have known of the vulnerability."
+summary = "Allows enhanced punishment for specified Penal Code offences committed against vulnerable persons when the offender knew or ought reasonably to have known of the vulnerability."
 source = "Singapore Penal Code 1871, Section 74A"
 
 [verification]

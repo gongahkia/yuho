@@ -2,13 +2,14 @@
 section_number = "26F"
 title = "“Negligently”"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
 summary = "Defines 'negligently' as omitting/doing an act contrary to how a reasonable person would act."

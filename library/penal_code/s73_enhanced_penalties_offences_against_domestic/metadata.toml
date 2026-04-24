@@ -2,16 +2,17 @@
 section_number = "73"
 title = "Enhanced penalties for offences against domestic workers"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Allows up to double the maximum punishment where an employer, household member, or employment agent of a domestic worker commits an offence against that worker."
+summary = "Allows enhanced sentencing for specified Penal Code offences committed against domestic workers by employers, household members, or employment agents."
 source = "Singapore Penal Code 1871, Section 73"
 
 [verification]

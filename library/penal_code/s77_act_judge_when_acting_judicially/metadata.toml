@@ -2,16 +2,17 @@
 section_number = "77"
 title = "Act of judge when acting judicially"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Nothing is an offence which is done by a judge when acting judicially in the exercise of any power given, or believed in good faith to be given, by law."
+summary = "A judge acting judicially is not committing an offence when exercising a power given by law or believed in good faith to be given by law."
 source = "Singapore Penal Code 1871, Section 77"
 
 [verification]

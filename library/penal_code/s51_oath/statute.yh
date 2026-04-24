@@ -1,11 +1,9 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr51-#pr51-
-// Singapore Penal Code Section 51 - "Oath"
-// Interpretation provision defining "oath"
 
-statute 51 "Oath" effective 1872-01-01 {
+statute 51 "“Oath”" effective 1872-01-01 {
     definitions {
-        oath := "Includes a solemn affirmation substituted by law for an oath, and any declaration required or authorised by law to be made before a public servant, or to be used for the purpose of proof, whether in a court of justice or not";
+        oath := "includes a solemn affirmation substituted by law for an oath, and any declaration required or authorised by law to be made before a public servant, or to be used for the purpose of proof, whether in a court of justice or not.";
     }
 }

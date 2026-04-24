@@ -1,11 +1,15 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr36-#pr36-
-// Singapore Penal Code Section 36
-// Yuho v5 Syntax
 
 statute 36 "Effect caused partly by act and partly by omission" effective 1872-01-01 {
     definitions {
-        effect_caused_partly_by_act_and_partly_by_omission := "Wherever the causing of a certain effect, or an attempt to cause that effect, by an act or by an omission, is an offence, it is to be understood that the causing of that effect partly by an act and partly by an omission is the same offence. Illustration A intentionally causes Z ’s death, partly by illegally omitting to give Z food, and partly by beating Z . A has committed murder.";
+        covered_offence := "Wherever the causing of a certain effect, or an attempt to cause that effect, by an act or by an omission, is an offence";
+        partly_act_partly_omission := "The causing of that effect partly by an act and partly by an omission";
+        same_offence := "The causing of that effect partly by an act and partly by an omission is the same offence";
+    }
+
+    illustration illustration {
+        "A intentionally causes Z ’s death, partly by illegally omitting to give Z food, and partly by beating Z . A has committed murder."
     }
 }

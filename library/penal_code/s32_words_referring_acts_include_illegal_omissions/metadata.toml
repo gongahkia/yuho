@@ -2,16 +2,17 @@
 section_number = "32"
 title = "Words referring to acts include illegal omissions"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Words referring to acts in the Code extend also to illegal omissions, unless contrary intention appears."
+summary = "Words in the Code that refer to acts done also include illegal omissions unless the context shows a contrary intention."
 source = "Singapore Penal Code 1871, Section 32"
 
 [verification]

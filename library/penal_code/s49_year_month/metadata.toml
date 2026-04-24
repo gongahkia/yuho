@@ -1,17 +1,18 @@
 [statute]
 section_number = "49"
-title = "Year and month"
+title = "“Year” and “month”"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "'Year' and 'month' are reckoned according to the Gregorian calendar."
+summary = "The words “year” and “month” are to be reckoned according to the Gregorian calendar."
 source = "Singapore Penal Code 1871, Section 49"
 
 [verification]

@@ -6,6 +6,8 @@
 
 statute 32 "Words referring to acts include illegal omissions" effective 1872-01-01 {
     definitions {
-        words_referring_to_acts_include_illegal_omissions := "In every part of this Code, except where a contrary intention appears from the context, words which refer to acts done extend also to illegal omissions.";
+        codewide_scope := "In every part of this Code";
+        contrary_context_exception := "Except where a contrary intention appears from the context";
+        words_which_refer_to_acts_done := "Extend also to illegal omissions";
     }
 }
