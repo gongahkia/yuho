@@ -1463,7 +1463,7 @@ class YuhoMCPServer:
             return {"citers": citers[:50], "count": len(citers)}
 
         @tool_with_structured_logging()
-        async def yuho_section_pair(section: str) -> Dict[str, Any]:
+        async def yuho_section_pair(section: str, include_ast: bool = False) -> Dict[str, Any]:
             """
             Return canonical raw SSO text + encoded `.yh` source side by side
             for a given PC section. The primary tool for fidelity review — an
@@ -1471,10 +1471,13 @@ class YuhoMCPServer:
 
             Args:
                 section: Section number (e.g., "415").
+                include_ast: if True, also parse the encoded file and return a
+                    JSON-serialised AST summary (saves a separate yuho_parse
+                    round-trip for structural reasoning).
 
             Returns:
                 {section, marginal_note, canonical: {text, sub_items, amendments},
-                 encoded: {path, source, metadata_toml}} or {error}.
+                 encoded: {path, source, metadata_toml, ast?}} or {error}.
             """
             import json as _j, re, tomllib
             repo = Path(__file__).parent.parent.parent.parent
@@ -1495,6 +1498,32 @@ class YuhoMCPServer:
                     if yh.exists(): encoded["source"] = yh.read_text()
                     if meta.exists(): encoded["metadata_toml"] = meta.read_text()
                     break
+            # optional AST payload
+            if include_ast and encoded.get("source"):
+                try:
+                    from yuho.services.analysis import analyze_source
+                    ar = analyze_source(encoded["source"], file="section.yh")
+                    if ar.ast is not None:
+                        encoded["ast_summary"] = {
+                            "statute_count": len(ar.ast.statutes),
+                            "statutes": [
+                                {
+                                    "section_number": s.section_number,
+                                    "title": s.title.value if s.title else None,
+                                    "definition_count": len(s.definitions),
+                                    "element_count": sum(1 for _ in s.elements),
+                                    "illustration_count": len(s.illustrations),
+                                    "exception_count": len(s.exceptions),
+                                    "subsection_count": len(s.subsections),
+                                    "has_penalty": bool(s.penalty),
+                                    "effective_dates": list(s.effective_dates or (
+                                        (s.effective_date,) if s.effective_date else ())),
+                                }
+                                for s in ar.ast.statutes
+                            ],
+                        }
+                except Exception as exc:
+                    encoded["ast_error"] = mask_error(exc)
             return {
                 "section": section,
                 "marginal_note": sec.get("marginal_note", ""),
@@ -1604,6 +1633,229 @@ statute {section} "{marginal}" effective 1872-01-01 {{
                 "skeleton_yh": skeleton,
                 "canonical_sub_item_count": len(sec.get("sub_items", [])),
                 "hint_shape": shape,
+            }
+
+        @tool_with_structured_logging()
+        async def yuho_run_l3_review(section: str) -> Dict[str, Any]:
+            """
+            Run the Phase-D 11-point L3 checklist on a section and return a
+            structured STAMP/FLAG decision. Unlike the `recommend_l3` prompt
+            (which instructs an LLM to audit), this tool does the mechanical
+            parts directly — illustration count, penalty-clause sanity, date
+            sanity, placeholder-text grep — and returns the results as data.
+
+            The client still has to make the final judgement call on
+            semantic items (all_of vs any_of matching English, etc.); this
+            tool surfaces the evidence.
+
+            Args:
+                section: Section number (e.g., "415").
+
+            Returns:
+                {section, checklist: [{item, passed, detail}],
+                 mechanical_decision: "STAMP_CANDIDATE" | "FLAG",
+                 encoded_exists, canonical_exists}
+            """
+            import json as _j, re as _re, tomllib
+            repo = Path(__file__).parent.parent.parent.parent
+            raw_path = repo / "library" / "penal_code" / "_raw" / "act.json"
+            if not raw_path.is_file():
+                return {"error": "_raw/act.json not found"}
+            raw = _j.loads(raw_path.read_text())
+            by_num = {s["number"]: s for s in raw.get("sections", []) if s.get("number")}
+            sec = by_num.get(section)
+            if not sec:
+                return {"error": f"section {section} not in canonical corpus"}
+
+            d = None
+            for p in (repo / "library" / "penal_code").iterdir():
+                if p.is_dir() and _re.match(rf"s{section}_", p.name):
+                    d = p; break
+            if not d or not (d / "statute.yh").exists():
+                return {"error": f"no encoded statute.yh for s{section}"}
+            source = (d / "statute.yh").read_text()
+
+            checklist: list[Dict[str, Any]] = []
+            def _rec(item: int, name: str, passed: bool, detail: str = "") -> None:
+                checklist.append({"item": item, "name": name, "passed": passed, "detail": detail})
+
+            # 1 — section number matches
+            m = _re.search(r"statute\s+(\d+[A-Za-z]*)", source)
+            _rec(1, "section number matches", m is not None and m.group(1) == section,
+                 f"found `statute {m.group(1) if m else '?'}`")
+
+            # 2 — marginal note present (we can't do verbatim without fuzzy match)
+            marginal = sec.get("marginal_note", "")
+            _rec(2, "marginal note present", marginal.split()[0] in source if marginal else True,
+                 f"marginal: {marginal[:60]}")
+
+            # 3 — illustration count match
+            canonical_ills = sum(1 for it in sec.get("sub_items", [])
+                                 if it.get("kind") == "illustration"
+                                 or (it.get("kind") == "item" and _re.match(r"^\s*\([a-z]\)", it.get("text","").strip())))
+            encoded_ills = len(_re.findall(r"^\s*illustration\s+\w+\s*\{", source, _re.MULTILINE))
+            _rec(3, "illustration count ≥ canonical", encoded_ills >= canonical_ills,
+                 f"encoded={encoded_ills}, canonical≈{canonical_ills}")
+
+            # 4 — explanations preserved
+            canonical_expls = sum(1 for it in sec.get("sub_items", []) if it.get("kind") == "explanation")
+            # check presence as doc comment, refinement, or definitions entry
+            encoded_expls = len(_re.findall(r"Explanation\s*\d*", source))
+            _rec(4, "explanations preserved", (canonical_expls == 0) or (encoded_expls >= canonical_expls),
+                 f"encoded={encoded_expls}, canonical={canonical_expls}")
+
+            # 5 — exceptions preserved
+            canonical_excs = sum(1 for it in sec.get("sub_items", []) if it.get("kind") == "exception")
+            encoded_excs = len(_re.findall(r"^\s*exception\s", source, _re.MULTILINE))
+            _rec(5, "exceptions preserved", canonical_excs == 0 or encoded_excs >= canonical_excs,
+                 f"encoded={encoded_excs}, canonical={canonical_excs}")
+
+            # 6 — subsections preserved
+            canonical_subs = sum(1 for it in sec.get("sub_items", []) if it.get("kind") == "subsection")
+            encoded_subs = len(_re.findall(r"^\s*subsection\s+\(", source, _re.MULTILINE))
+            _rec(6, "subsections preserved (if canonical has any)",
+                 canonical_subs == 0 or encoded_subs >= canonical_subs,
+                 f"encoded={encoded_subs}, canonical={canonical_subs}")
+
+            # 7 — no fabricated caning stroke range
+            canonical_text = sec.get("text", "")
+            # only check statutes that DO mention caning
+            has_caning_liability = "liable to caning" in canonical_text or "caning" in canonical_text
+            # canonical gives explicit number?
+            canonical_has_stroke_num = bool(_re.search(r"(not less than|at least|up to|may extend to)?\s*\d+\s*strokes", canonical_text))
+            # encoding uses a fabricated 0 .. N caning range
+            fabricated = bool(_re.search(r"caning\s*:=\s*0\s*\.\.\s*\d+\s*strokes", source))
+            _rec(7, "no fabricated caning range",
+                 (not fabricated) or canonical_has_stroke_num,
+                 f"has_caning_liability={has_caning_liability}, canonical_has_number={canonical_has_stroke_num}, encoding_fabricates={fabricated}")
+
+            # 8 — no fabricated fine cap
+            canonical_has_fine_number = bool(_re.search(r"\$[0-9,]+", canonical_text) or
+                                              _re.search(r"fine\s+(of|which may extend to)\s+[^\.]+\d", canonical_text))
+            has_fine_clause = bool(_re.search(r"^\s*fine\s*:=", source, _re.MULTILINE))
+            uses_numeric_fine = bool(_re.search(r"fine\s*:=\s*\$[^\.]+\.\.\s*\$", source))
+            _rec(8, "no fabricated fine cap",
+                 (not uses_numeric_fine) or canonical_has_fine_number,
+                 f"canonical_has_number={canonical_has_fine_number}, uses_numeric={uses_numeric_fine}")
+
+            # 9 — no placeholder text
+            has_placeholder = bool(_re.search(r"\b(TODO|lorem|placeholder|xxx|FIXME)\b", source, _re.IGNORECASE))
+            _rec(9, "no placeholder text", not has_placeholder,
+                 f"has_placeholder={has_placeholder}")
+
+            # 10 — effective date sane (if amendment present, need multi-effective)
+            has_amendment = bool(sec.get("amendments"))
+            effective_count = len(_re.findall(r"effective\s+\d{4}-\d{2}-\d{2}", source))
+            _rec(10, "effective date count matches amendment presence",
+                 (effective_count >= 2) if has_amendment else (effective_count >= 1),
+                 f"has_amendment={has_amendment}, effective_count={effective_count}")
+
+            # 11 — yuho check passes
+            check_ok = False
+            try:
+                import subprocess as _sp
+                r = _sp.run(
+                    [str(repo / ".venv-scrape" / "bin" / "yuho"),
+                     "check", "--format", "json", str(d / "statute.yh")],
+                    capture_output=True, text=True, timeout=60,
+                )
+                check_ok = _j.loads(r.stdout).get("valid", False) if r.stdout else False
+            except Exception: check_ok = False
+            _rec(11, "yuho check passes", check_ok, "")
+
+            mechanical_decision = "STAMP_CANDIDATE" if all(c["passed"] for c in checklist) else "FLAG"
+            return {
+                "section": section,
+                "checklist": checklist,
+                "mechanical_decision": mechanical_decision,
+                "encoded_exists": True,
+                "canonical_exists": True,
+                "note": (
+                    "Mechanical-only: items 1-3,5-11 are regex/count-based. "
+                    "Items 4 (explanations structure), 8 (fabricated caps that are structurally fine), "
+                    "and semantic all_of/any_of matching still need LLM judgement."
+                ),
+            }
+
+        @tool_with_structured_logging()
+        async def yuho_apply_flag_fix(
+            section: str, failed: str, reason: str, suggested_fix: str = ""
+        ) -> Dict[str, Any]:
+            """
+            Trigger the minimum-edit flag-fix workflow on a section. Writes
+            a transient `_L3_FLAG.md` in the section's dir, invokes the
+            same script (`scripts/phase_d_flag_fix.py`) used in Phase D
+            to patch the encoding, runs `yuho check`, and returns the
+            outcome.
+
+            NOTE: this tool requires `codex` to be on PATH (uses Codex
+            for the actual edit). Returns an ERROR outcome if codex is
+            not available.
+
+            Args:
+                section: Section number.
+                failed: checklist items that fail (e.g. "7" or "7, 8").
+                reason: one-sentence explanation.
+                suggested_fix: optional one-sentence fix direction.
+
+            Returns:
+                {section, outcome: "FIXED" | "PARTIAL" | "UNCHANGED" | "BROKEN" | "ERROR",
+                 error?, yuho_check?, flag_deleted?}
+            """
+            import subprocess as _sp, re as _re, json as _j
+            repo = Path(__file__).parent.parent.parent.parent
+            d = None
+            for p in (repo / "library" / "penal_code").iterdir():
+                if p.is_dir() and _re.match(rf"s{section}_", p.name): d = p; break
+            if not d:
+                return {"section": section, "outcome": "ERROR",
+                        "error": f"no directory for s{section}"}
+            # seed the flag file
+            flag_body = (
+                f"# s{section} — L3 flag\n\n"
+                f"- failed: {failed}\n"
+                f"- reason: {reason}\n"
+            )
+            if suggested_fix:
+                flag_body += f"- suggested fix: {suggested_fix}\n"
+            (d / "_L3_FLAG.md").write_text(flag_body)
+
+            # run the dispatcher on this one section
+            try:
+                r = _sp.run(
+                    [str(repo / ".venv-scrape" / "bin" / "python"),
+                     str(repo / "scripts" / "phase_d_flag_fix.py"),
+                     section, "--dispatch", "--parallel", "1",
+                     "--timeout", "600", "--model", "gpt-5.4",
+                     "--reasoning", "high"],
+                    capture_output=True, text=True, timeout=900,
+                )
+            except _sp.TimeoutExpired:
+                return {"section": section, "outcome": "ERROR", "error": "timeout"}
+            except FileNotFoundError:
+                return {"section": section, "outcome": "ERROR",
+                        "error": "codex not available on PATH"}
+            # determine outcome
+            flag_still_there = (d / "_L3_FLAG.md").exists()
+            check_ok = False
+            try:
+                rc = _sp.run(
+                    [str(repo / ".venv-scrape" / "bin" / "yuho"),
+                     "check", "--format", "json", str(d / "statute.yh")],
+                    capture_output=True, text=True, timeout=60,
+                )
+                check_ok = _j.loads(rc.stdout).get("valid", False) if rc.stdout else False
+            except Exception: pass
+            if not flag_still_there and check_ok: outcome = "FIXED"
+            elif not flag_still_there and not check_ok: outcome = "BROKEN"
+            elif flag_still_there and check_ok: outcome = "PARTIAL"
+            else: outcome = "UNCHANGED"
+            return {
+                "section": section,
+                "outcome": outcome,
+                "yuho_check": check_ok,
+                "flag_deleted": not flag_still_there,
+                "dispatcher_stdout_tail": r.stdout[-400:] if r.stdout else "",
             }
 
         @tool_with_structured_logging()
@@ -1752,6 +2004,161 @@ void      - No value / null type
                                 mask_error(exc),
                             )
             return f"// Statute {section} not found in library"
+
+        @self.server.resource("yuho://grammar/summary")
+        async def get_grammar_summary() -> str:
+            """Condensed plain-English summary of the statute-level grammar
+            primitives. Designed for AI clients — smaller + easier to reason
+            about than the full 850-line tree-sitter grammar."""
+            return """# Yuho grammar — statute-body primitives
+
+Full grammar at `yuho://grammar`. Worked examples per primitive at
+`yuho://examples/{primitive}`. Gap log at `yuho://gaps`.
+
+## Top-level shape
+
+```yh
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=prN-#prN-
+/// @amendment [15/2019]
+
+statute N "Title"
+    effective 1872-01-01
+    effective 2020-01-01          // G6: multiple effective dates allowed
+{
+    definitions   { ... }
+    elements      { ... }
+    penalty ...   { ... }
+    illustration <label> { "..." }
+    exception <label> { ... }
+    subsection (N) { ... }        // G5: nested subsections
+    caselaw ... { ... }
+    parties { ... }
+}
+```
+
+## `definitions`
+
+Flat list of named term/string pairs.
+
+```yh
+definitions {
+    deceive := "to cause a person to believe something that is false";
+    fraudulently := "with intent to defraud another person";
+}
+```
+
+## `elements` + `all_of` / `any_of`
+
+Supports `actus_reus`, `mens_rea`, `circumstance`, plus deontic triple
+`obligation` / `prohibition` / `permission`. Groups can nest; doc
+comments (`///`) can precede groups (G1).
+
+```yh
+elements {
+    /// conjunctive criteria for cheating
+    all_of {
+        actus_reus deception := "deceiving any person";
+        any_of {
+            mens_rea fraud := "fraudulently";
+            mens_rea dish := "dishonestly";
+        }
+    }
+}
+```
+
+Element-entry attributes: `caused_by <ident>`, `burden prosecution|defence [beyond_reasonable_doubt|balance_of_probabilities|prima_facie]`, `actor <ident>`, `patient <ident>`.
+
+## `penalty` (G8 + G9 + G12 + G14)
+
+Outer combinator: `cumulative` (default — all apply together), `alternative` (exactly one), `or_both` (any / both, the typical PC pattern). `when <ident>` branches penalties by named condition (G9). Nested combinator (G12): one level of sub-block for "imprisonment AND ALSO fine or caning" patterns.
+
+```yh
+// G8: the standard X years, or fine, or both
+penalty or_both {
+    imprisonment := 0 years .. 3 years;
+    fine := unlimited;           // G8 sentinel — no numeric cap
+}
+
+// G9: conditional branches
+penalty or_both when rash_act {
+    imprisonment := 0 years .. 5 years;
+    fine := unlimited;
+}
+penalty or_both when negligent_act {
+    imprisonment := 0 years .. 2 years;
+    fine := unlimited;
+}
+
+// G12 + G14: "imprisonment AND ALSO liable to fine or caning or both"
+penalty cumulative {
+    imprisonment := 0 years .. 10 years;
+    or_both {
+        fine := unlimited;
+        caning := unspecified;   // G14 sentinel — liable to caning, no stroke count
+    }
+}
+```
+
+Penalty clause forms:
+- `imprisonment := <duration>` or `<duration> .. <duration>`
+- `fine := <money>` or `<money> .. <money>` or `unlimited`
+- `caning := <int> strokes`, `<int> .. <int> strokes`, or `unspecified`
+- `death := TRUE`
+- `supplementary := "..."`
+- `minimum imprisonment := <duration>` / `minimum fine := <money>`
+
+## `exception` (G13 — prioritised)
+
+```yh
+exception grave_provocation {
+    "Culpable homicide is not murder if the offender ..."
+    when provoked_and_lost_control
+    priority 1
+    defeats <other_label>
+}
+```
+
+Lower `priority` integer = higher precedence. `defeats <label>` explicit
+override. Z3 encoder emits priority-aware firing (G13 semantic).
+
+## `subsection` (G5)
+
+Arbitrary-depth nesting of subsection blocks, accepting the same member
+types as a statute.
+
+```yh
+statute 377BO "Child abuse material extraterritoriality" {
+    subsection (1) { definitions { ... } elements { ... } }
+    subsection (2) { definitions { ... } }
+    subsection (3) { ... }
+}
+```
+
+Subsection labels accept `(1)`, `(2A)`, `(a)`, `(iii)`, or bare numerics.
+
+## Section suffix (G3)
+
+Multi-letter suffixes on section numbers: `376AA`, `377BO`, `377CA`, etc.
+Grammar accepts `[0-9]+[A-Za-z]*`.
+
+## Value qualifiers (defeasible logic)
+
+Variable declarations accept `fact`, `conclusion`, `presumed` qualifiers
+and a trailing `unless <expr>` rebuttal clause.
+
+## Legal-native types
+
+`int`, `float`, `bool`, `string`, `money` (`$10,000.00`, `SGD1000`),
+`percent` (`50%`), `date` (ISO-8601), `duration` (`3 years`, `6 months`,
+combinations like `1 year .. 7 years`), `void`.
+
+## Statute-level clauses
+
+`subsumes <section>`, `amends <section>` — declare lifecycle
+relationships. Doc comments `///` accept arbitrary text including colons.
+"""
 
         @self.server.resource("yuho://library/index")
         async def get_library_index() -> str:

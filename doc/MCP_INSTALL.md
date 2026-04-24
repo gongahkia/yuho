@@ -78,16 +78,19 @@ clients send `Authorization: Bearer <token>` on every request.
 
 ## What the server exposes
 
-### Tools (20)
+### Tools (22)
 
 Core language ops: `yuho_check`, `yuho_transpile`, `yuho_parse`,
 `yuho_format`. LSP-like: `yuho_complete`, `yuho_hover`, `yuho_definition`,
 `yuho_references`, `yuho_symbols`, `yuho_diagnostics`. Library:
 `yuho_library_search`, `yuho_library_get`, `yuho_library_list`,
 `yuho_validate_contribution`. Phase-D workflow:
-`yuho_find_by_anchor`, `yuho_find_citations_to`, `yuho_section_pair`,
+`yuho_find_by_anchor`, `yuho_find_citations_to`, `yuho_section_pair`
+(optional `include_ast=true` for structural AST summary),
 `yuho_coverage_status`, `yuho_propose_encoding_skeleton`,
-`yuho_grammar_example`. Admin: `yuho_rate_limit_stats`.
+`yuho_grammar_example`, `yuho_run_l3_review` (mechanical checklist
+audit, structured result), `yuho_apply_flag_fix` (trigger a
+minimum-edit flag-fix via Codex). Admin: `yuho_rate_limit_stats`.
 
 ### Resources
 
@@ -97,7 +100,8 @@ Core language ops: `yuho_check`, `yuho_transpile`, `yuho_parse`,
 - `yuho://coverage` — live `coverage.json`.
 - `yuho://flags` — currently flagged sections awaiting review.
 - `yuho://gaps` — grammar gap log (G1–G14).
-- `yuho://grammar` — tree-sitter grammar source.
+- `yuho://grammar` — full tree-sitter grammar source (~850 lines).
+- `yuho://grammar/summary` — condensed plain-English summary of statute-body primitives (recommended for LLMs).
 - `yuho://types` — built-in type reference.
 - `yuho://examples/{primitive}` — worked example per grammar primitive (subsection, effective, fine_unlimited, caning_unspecified, penalty_or_both, penalty_when, nested_penalty, exception_priority, doc_comment_on_group, section_suffix, illustration, element_group).
 - `yuho://prompts/phase-d-reencoding` — strict re-encoding prompt.
