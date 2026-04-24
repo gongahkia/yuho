@@ -144,9 +144,50 @@ Discovered while auditing LexScript (MIT), lam4 (Apache-2.0), LDOC,
 Catala (Apache-2.0).
 
 - [ ] **Tarjan SCC + BFS over the statute reference graph** (LexScript). Catches unreachable exception branches and cyclic cross-refs. Unlocks after G10 gives a real graph to traverse.
-- [ ] **DOCX transpile target** (LDOC concept). Generates a formatted Word-compatible statute summary: elements as headings, penalty + illustrations as numbered clauses, SSO footnote anchors. Complements the Word extension work.
+- [x] **DOCX transpile target** (LDOC concept). `yuho transpile -t docx` emits a minimal OOXML .docx via stdlib zipfile + WordprocessingML (no python-docx dep). Statute heading, styled definitions/elements/penalty/illustrations/exceptions/case-law/subsections.
 - [ ] **Named-norm references / `IS_INFRINGED` predicate** (lam4). Lets `s107` abetment express "if `s299` IS_INFRINGED, then …" in grammar. Composes with G10.
 - [ ] **Scope composition** (Catala). Callable statute scopes so s34 common intention and s107 abetment can wrap arbitrary base offences as functions.
+
+---
+
+### Repository restructure + documentation overhaul `[ ]`
+
+Bring the repo's presentation layer to PAR. Goal: on-brand, navigable,
+comparable to top-tier OSS/knowledge projects.
+
+- [ ] Audit current top-level layout (`src/`, `library/`, `editors/`, `doc/`, `scripts/`, `tests/`) — decide keep / rename / collapse / split. Write the proposed tree before moving anything.
+- [ ] Update every README (`README.md`, `src/README.md`, `library/penal_code/README.md`, `editors/*/README.md`, `doc/*.md`) to the new structure.
+- [ ] Reference benchmarks for README / docs styling:
+    - Hugging Face (model/dataset cards, badges, tabbed quickstart)
+    - Catala (legal DSL — narrative intro + example-first docs)
+    - Obsidian (graph-style cross-linking, callouts)
+    - Notion (block-based, heavy use of toggles + callouts)
+    - Logseq (outliner style, knowledge-graph emphasis)
+- [ ] New top-level `README.md` with: hero banner, 1-paragraph pitch, live-demo badge row, "what is Yuho" diagram, 60-sec quickstart, feature matrix, architecture diagram, citation block, contribution blurb.
+- [ ] Unified doc index at `doc/INDEX.md` grouped by audience (user / contributor / researcher).
+- [ ] Cross-link `.md` files like an Obsidian vault (relative-path wikilinks where sensible).
+- [ ] Generate a dependency/architecture SVG (Mermaid → rendered) showing: grammar → AST → analyzers → transpilers → CLI / LSP / MCP / TUI.
+- [ ] Add per-phase "lessons learned" appendix in `doc/RETROSPECTIVE.md` (pulling from `PHASE_C_REVIEW.md`, `PHASE_D_*`, etc.).
+- [ ] Normalize heading styles, badge order, and code-block language tags across all `.md` files.
+
+### Research paper (LaTeX) `[ ]`
+
+Draft a full academic paper about Yuho from scratch, suitable for submission
+to a legal-tech or PL venue (ICAIL, JURIX, CoNLL demo track, SPLASH OOPSLA
+Onward!, PLDI SRC).
+
+- [ ] Scaffold `paper/` with `main.tex`, `references.bib`, `paper/sections/` (intro, background, design, implementation, evaluation, related-work, limitations, conclusion), `paper/figures/`, `paper/Makefile`.
+- [ ] Pick template: ACM primary-article or LNCS. Default to ACM `acmart` + `\documentclass[sigconf,review,anonymous]{acmart}`.
+- [ ] **Introduction**: thesis — legal statutes are executable-adjacent artefacts, and SG Penal Code is a tractable testbed.
+- [ ] **Background**: brief survey of legal DSLs (Catala, lam4, LexScript, LDOC, Akoma Ntoso) + formal methods (Z3, Alloy) usage in law.
+- [ ] **Design**: Yuho grammar (14 grammar gaps G1–G14), element/penalty/exception model, deontic types, burden qualifiers, Catala-style defaults, temporal/causal constraints.
+- [ ] **Implementation**: tree-sitter parser, Python AST, 6 transpilers (JSON/English/LaTeX/Mermaid/Alloy/DOCX), LSP + MCP surfaces, fidelity diagnostics, Z3/Alloy verification hookup, scraper + 3-tier coverage (L1/L2/L3).
+- [ ] **Evaluation**: 524/524 L1+L2, 122 L3 signoff; fidelity-diagnostic hit rate; encoding time per section; qualitative analysis of grammar gaps uncovered.
+- [ ] **Related work** matrix comparing Yuho vs Catala/lam4/LexScript/LDOC across: expressivity (deontic, defaults, temporal), tooling (LSP/MCP), target coverage, formal-verification hookup.
+- [ ] **Limitations** — common-law doctrines not yet modelled, precedent integration shallow, no live SSO diffing, single-jurisdiction.
+- [ ] Figures: AST diagram, penalty-combinator tree (G12), Catala-style default chain (G13), coverage Sankey.
+- [ ] Auto-include repo stats from `coverage.json` via Makefile preprocessing.
+- [ ] `paper/Makefile` with `make paper` (latexmk), `make figures`, `make arxiv` (tar the sources).
 
 ---
 

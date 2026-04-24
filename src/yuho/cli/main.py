@@ -291,6 +291,7 @@ def ast(
             "svg",
             "png",
             "alloy",
+            "docx",
         ],
         case_sensitive=False,
     ),

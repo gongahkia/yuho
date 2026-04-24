@@ -71,12 +71,14 @@ class TranspilerRegistry:
         from yuho.transpile.latex_transpiler import LaTeXTranspiler
         from yuho.transpile.mermaid_transpiler import MermaidTranspiler
         from yuho.transpile.alloy_transpiler import AlloyTranspiler
+        from yuho.transpile.docx_transpiler import DOCXTranspiler
 
         self._registry[TranspileTarget.JSON] = JSONTranspiler
         self._registry[TranspileTarget.ENGLISH] = EnglishTranspiler
         self._registry[TranspileTarget.LATEX] = LaTeXTranspiler
         self._registry[TranspileTarget.MERMAID] = MermaidTranspiler
         self._registry[TranspileTarget.ALLOY] = AlloyTranspiler
+        self._registry[TranspileTarget.DOCX] = DOCXTranspiler
 
     @classmethod
     def instance(cls) -> "TranspilerRegistry":

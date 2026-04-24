@@ -21,6 +21,7 @@ ALL_TARGETS = [
     "pdf",
     "mermaid",
     "alloy",
+    "docx",
 ]
 
 
@@ -118,6 +119,26 @@ def run_transpile(
                     click.echo(f"  -> {pdf_path}")
             except PDFGenerationError as e:
                 click.echo(colorize(f"error: {e}", Colors.RED), err=True)
+                sys.exit(1)
+            continue
+
+        # DOCX is binary: write the zipped OOXML package directly.
+        if tgt.lower() in ("docx", "word"):
+            from yuho.transpile.docx_transpiler import DOCXTranspiler
+
+            docx_out = output or (
+                str(out_dir / f"{file_path.stem}.docx")
+                if out_dir
+                else str(file_path.with_suffix(".docx"))
+            )
+            try:
+                Path(docx_out).parent.mkdir(parents=True, exist_ok=True)
+                DOCXTranspiler().write_docx(ast, docx_out)
+                results.append({"target": "docx", "output": docx_out})
+                if not json_output:
+                    click.echo(f"  -> {docx_out}")
+            except Exception as e:
+                click.echo(colorize(f"error: docx transpile failed: {e}", Colors.RED), err=True)
                 sys.exit(1)
             continue
 

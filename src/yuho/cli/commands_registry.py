@@ -355,6 +355,7 @@ def register_group_commands(cli: click.Group) -> None:
                 "latex",
                 "mermaid",
                 "alloy",
+                "docx",
             ]
         ),
         help="Transpilation target",
@@ -442,6 +443,7 @@ def register_group_commands(cli: click.Group) -> None:
                 "latex",
                 "mermaid",
                 "alloy",
+                "docx",
             ]
         ),
         help="Transpilation target",
