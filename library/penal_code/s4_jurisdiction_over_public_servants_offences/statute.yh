@@ -1,14 +1,24 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr4-#pr4-
-// Singapore Penal Code Section 4 - Jurisdiction over public servants for offences committed outside Singapore
-// Shape: scope / jurisdiction
 
 statute 4 "Jurisdiction over public servants for offences committed outside Singapore" effective 1872-01-01 {
     definitions {
         public_servant_subject := "Every public servant who is a citizen or a permanent resident of Singapore";
-        employment_context := "Acting or purporting to act in the course of his employment";
-        extraterritorial_act := "An act or omission outside Singapore that if committed in Singapore would constitute an offence under the law in force in Singapore";
-        deemed_locus := "Such act or omission is deemed to have been committed in Singapore";
+        employment_context := "When acting or purporting to act in the course of his employment";
+        extraterritorial_act_or_omission := "Commits an act or omission outside Singapore";
+        singapore_offence_equivalence := "The act or omission, if committed in Singapore, would constitute an offence under the law in force in Singapore";
+        deemed_commission_in_singapore := "The public servant is deemed to have committed that act or omission in Singapore";
+    }
+
+    elements {
+        /// Section 4 applies only when every jurisdictional condition in the statutory sentence is satisfied.
+        all_of {
+            circumstance public_servant_status := "Every public servant who, being a citizen or a permanent resident of Singapore";
+            circumstance employment_course := "When acting or purporting to act in the course of his employment";
+            actus_reus extraterritorial_conduct := "Commits an act or omission outside Singapore";
+            circumstance domestic_offence_equivalence := "That if committed in Singapore would constitute an offence under the law in force in Singapore";
+            circumstance deemed_locus := "Is deemed to have committed that act or omission in Singapore";
+        }
     }
 }

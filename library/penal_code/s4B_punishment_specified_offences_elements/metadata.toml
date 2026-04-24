@@ -2,16 +2,17 @@
 section_number = "4B"
 title = "Punishment of specified offences with elements occurring in Singapore but others occurring outside Singapore"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Deems specified offences to have been committed in Singapore when relevant acts or harm straddle the border."
+summary = "Deems specified offences to have been committed in Singapore when the statutory territorial or harm-location conditions are met."
 source = "Singapore Penal Code 1871, Section 4B"
 
 [verification]

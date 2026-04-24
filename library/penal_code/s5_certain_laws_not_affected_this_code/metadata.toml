@@ -2,16 +2,17 @@
 section_number = "5"
 title = "Certain laws not to be affected by this Code"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Saves military and other in-force laws from repeal or variation by the Penal Code."
+summary = "Preserves existing military discipline laws and other in-force laws from being repealed, varied, suspended, or affected by the Penal Code."
 source = "Singapore Penal Code 1871, Section 5"
 
 [verification]

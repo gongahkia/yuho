@@ -2,16 +2,17 @@
 section_number = "4A"
 title = "Offences against State and genocide committed outside Singapore by citizen or permanent resident"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Singapore citizens or PRs committing Chapter 6 or 6B offences abroad are deemed to have committed them in Singapore."
+summary = "Singapore citizens and permanent residents who commit overseas acts or omissions that would be Chapter 6 or 6B offences in Singapore are deemed to have committed them in Singapore."
 source = "Singapore Penal Code 1871, Section 4A"
 
 [verification]

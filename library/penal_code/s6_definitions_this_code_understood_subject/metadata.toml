@@ -2,13 +2,14 @@
 section_number = "6"
 title = "Definitions in this Code to be understood subject to exceptions"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
 summary = "All offence definitions and penal provisions are read subject to the General Exceptions and Right of Private Defence chapters."

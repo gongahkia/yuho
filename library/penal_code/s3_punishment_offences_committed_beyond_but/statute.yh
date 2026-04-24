@@ -1,12 +1,10 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr3-#pr3-
-// Singapore Penal Code Section 3 - Punishment of offences committed beyond, but which by law may be tried within Singapore
-// Shape: scope / jurisdiction
 
-statute 3 "Punishment of offences committed beyond but which by law may be tried within Singapore" effective 1872-01-01 {
+statute 3 "Punishment of offences committed beyond, but which by law may be tried within Singapore" effective 1872-01-01 {
     definitions {
-        extraterritorial_rule := "Any person liable by law to be tried for an offence committed beyond the limits of Singapore shall be dealt with according to the provisions of this Code for any act committed beyond Singapore in the same manner as if such act had been committed within Singapore";
-        deemed_locus := "Act committed outside Singapore treated as if committed within Singapore for the purposes of this Code";
+        liable_person := "Any person liable by law to be tried for an offence committed beyond the limits of Singapore";
+        code_treatment := "shall be dealt with according to the provisions of this Code for any act committed beyond Singapore, in the same manner as if such act had been committed within Singapore.";
     }
 }

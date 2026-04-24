@@ -3,14 +3,14 @@
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr4A-#pr4A-
 /// @amendment [15/2019]
 // Singapore Penal Code Section 4A - Offences against State and genocide committed outside Singapore by citizen or permanent resident
-// Shape: scope / jurisdiction
+// Shape: scope / jurisdictional deeming rule
 
-statute 4A "Offences against State and genocide committed outside Singapore by citizen or permanent resident" effective 2019-11-01 {
+statute 4A "Offences against State and genocide committed outside Singapore by citizen or permanent resident" effective 1872-01-01 effective 2019-11-01 {
     definitions {
         subject_person := "Every person who is a citizen or permanent resident of Singapore";
-        extraterritorial_act := "An act or omission outside Singapore that if committed in Singapore would constitute an offence under Chapter 6 (Offences against the State) or Chapter 6B (Genocide)";
-        deemed_locus := "Such act or omission is deemed to have been committed in Singapore";
-        chapter_6_reference := "Offences against the State";
-        chapter_6B_reference := "Genocide";
+        relevant_conduct := "An act or omission committed outside Singapore";
+        qualifying_offence := "Conduct that if committed in Singapore would constitute an offence under Chapter 6 (Offences against the State) or 6B (Genocide)";
+        deemed_place := "The person is deemed to have committed that act or omission in Singapore";
     }
+
 }

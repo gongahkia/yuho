@@ -2,13 +2,14 @@
 section_number = "1"
 title = "Short title"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
 summary = "Declares the short title of the Act as the Penal Code 1871."
