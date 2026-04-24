@@ -1,38 +1,28 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr304A-#pr304A-
-// Singapore Penal Code Section 304A - Causing death by rash or negligent act
-// Yuho v5 Syntax
-
-struct S304ACase {
-    bool deathCaused,
-    bool rashOrNegligentAct,
-    bool notCulpableHomicide,
-}
-
-fn applies_s304a(bool deathCaused, bool rashOrNegligentAct, bool notCulpableHomicide) : bool {
-    match {
-        case TRUE if deathCaused && rashOrNegligentAct && notCulpableHomicide := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
 statute 304A "Causing death by rash or negligent act" effective 1872-01-01 {
-    definitions {
-        provision_text := "Whoever causes the death of any person by doing any rash or negligent act not amounting to culpable homicide, shall be punished — ( a ) in the case of a rash act, with imprisonment for a term which may extend to 5 years, or with fine, or with both; or ( b ) in the case of a negligent act, with imprisonment for a term which may extend to 2 years, or with fine, or with both.";
-        rash_or_negligent_act := "A rash or negligent act not amounting to culpable homicide.";
-    }
-
     elements {
+        /// Section 304A requires death caused by doing an act, the act to be rash or negligent, and the act not to amount to culpable homicide.
         all_of {
-            circumstance deathCaused := "Death of any person is caused.";
-            mens_rea rashOrNegligentAct := "The death is caused by doing a rash or negligent act.";
-            circumstance notCulpableHomicide := "The act does not amount to culpable homicide.";
+            actus_reus doing_act := "Doing an act";
+            actus_reus causing_death := "Causing the death of any person" caused_by doing_act;
+            /// The statute separates punishment according to whether the act is rash or negligent.
+            any_of {
+                mens_rea rash_act := "The act is a rash act";
+                mens_rea negligent_act := "The act is a negligent act";
+            }
+            circumstance not_culpable_homicide := "The act does not amount to culpable homicide";
         }
     }
 
-    penalty {
+    penalty or_both when rash_act {
         imprisonment := 0 years .. 5 years;
-        supplementary := "Rash act punishment may extend to 5 years; negligent act punishment may extend to 2 years. Fine may also be imposed.";
+        fine := unlimited;
+    }
+
+    penalty or_both when negligent_act {
+        imprisonment := 0 years .. 2 years;
+        fine := unlimited;
     }
 }

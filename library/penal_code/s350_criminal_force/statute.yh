@@ -1,37 +1,59 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr350-#pr350-
-// Singapore Penal Code Section 350 -- Criminal force
-// Yuho v5 Syntax
-
-struct S350Case {
-    string actor,
-    bool criteriaMet,
-}
-
-fn s350_matches(bool criteriaMet) : bool {
-    match {
-        case TRUE if criteriaMet == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
-
 statute 350 "Criminal force" effective 1872-01-01 {
     definitions {
-        term_summary := "Definition of criminal force.";
+        criminal_force := "Whoever intentionally uses force to any person, without that person’s consent, and with one of the required statutory purpose, intention, or knowledge branches, is said to use criminal force to that other.";
+        intentional_force_to_person := "intentionally uses force to any person";
+        no_consent := "without that person’s consent";
+        offence_purpose := "in order to cause the committing of any offence";
+        illegal_injury_fear_annoyance_intent := "intending by the use of such force illegally to cause injury, fear or annoyance to the person to whom the force is used";
+        illegal_injury_fear_annoyance_knowledge := "knowing it to be likely that by the use of such force he will illegally cause injury, fear or annoyance to the person to whom the force is used";
     }
 
     elements {
-        /// statutory criteria for the defined term
-        circumstance criteria := "Statutory criteria for the defined term are satisfied";
+        /// conjunctive criteria for the defined term "criminal force"
+        all_of {
+            actus_reus intentional_use_of_force := "Whoever intentionally uses force to any person";
+            circumstance absence_of_consent := "without that person’s consent";
+            /// alternative statutory branches after intentional non-consensual force
+            any_of {
+                mens_rea purpose_to_cause_offence := "in order to cause the committing of any offence";
+                mens_rea intent_to_cause_illegally := "intending by the use of such force illegally to cause injury, fear or annoyance to the person to whom the force is used";
+                mens_rea knowledge_likely_to_cause_illegally := "knowing it to be likely that by the use of such force he will illegally cause injury, fear or annoyance to the person to whom the force is used";
+            }
+        }
     }
 
-    penalty {
-        fine := $0.00 .. $1,000.00;
+    illustration illustration_a {
+        "( a ) Z is sitting in a moored boat on a river. A unfastens the moorings, and thus intentionally causes the boat to drift down the stream. Here A intentionally causes motion to Z , and he does this by disposing substances in such a manner that the motion is produced without any other act on any person’s part. A has therefore intentionally used force to Z ; and if he has done so without Z ’s consent, in order to cause the committing of any offence, or intending or knowing it to be likely that this use of force will cause injury, fear or annoyance to Z , A has used criminal force to Z ."
     }
 
-    illustration example1 {
-        "The conduct of A matches the statutory criteria defined under section 350."
+    illustration illustration_b {
+        "( b ) Z is riding a horse. A lashes Z ’s horse, and thereby causes it to quicken its pace. Here A has caused change of motion to Z by inducing the horse to change its motion. A has therefore used force to Z ; and if A has done this without Z ’s consent, intending or knowing it to be likely that he may thereby injure, frighten or annoy Z , A has used criminal force to Z ."
+    }
+
+    illustration illustration_c {
+        "( c ) Z is riding a horse. A , intending to cause hurt to Z , seizes the horse and stops it. Here A has caused cessation of motion to Z , and he has done this by his own bodily power. A has therefore used force to Z ; and as A has acted thus intentionally without Z ’s consent, in order to cause the commission of an offence, A has used criminal force to Z ."
+    }
+
+    illustration illustration_d {
+        "( d ) A intentionally pushes against Z in the street. Here A has by his own bodily power moved his own person so as to bring it into contact with Z . He has therefore intentionally used force to Z , and if he has done so without Z ’s consent, intending or knowing it to be likely that he may thereby injure, frighten or annoy Z , he has used criminal force to Z ."
+    }
+
+    illustration illustration_e {
+        "( e ) A throws a stone, intending or knowing it to be likely that the stone will be thus brought into contact with Z , or with Z ’s clothes, or with something carried by Z , or that it will strike water and dash up the water against Z ’s clothes, or something carried by Z . Here if the throwing of the stone produces the effect of causing any substance to come into contact with Z , or Z ’s clothes, A has used force to Z ; and if he has done so without Z ’s consent, intending thereby to injure, frighten or annoy Z , he has used criminal force to Z ."
+    }
+
+    illustration illustration_f {
+        "( f ) A intentionally pulls up a woman’s veil. Here A intentionally uses force to her; and if he does so without her consent, intending or knowing it to be likely that he may thereby injure, frighten or annoy her, he has used criminal force to her."
+    }
+
+    illustration illustration_g {
+        "( g ) Z is bathing. A pours into the bath water which he knows to be boiling. Here A intentionally by his own bodily power causes such motion in the boiling water as brings that water into contact with Z , or with other water so situated that such contact must affect Z ’s sense of feeling; A has therefore intentionally used force to Z ; and if he has done this without Z ’s consent, intending or knowing it to be likely that he may thereby cause injury, fear or annoyance to Z , A has used criminal force to Z ."
+    }
+
+    illustration illustration_h {
+        "( h ) A incites a dog to spring upon Z , without Z ’s consent. Here, if A intends to cause injury, fear or annoyance to Z , he uses criminal force to Z ."
     }
 }

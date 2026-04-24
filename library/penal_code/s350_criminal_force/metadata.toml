@@ -2,16 +2,17 @@
 section_number = "350"
 title = "Criminal force"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Definition of criminal force."
+summary = "Defines criminal force as intentional non-consensual force used with the required offence purpose, illegal intent, or knowledge."
 source = "Singapore Penal Code 1871, Section 350"
 
 [verification]
