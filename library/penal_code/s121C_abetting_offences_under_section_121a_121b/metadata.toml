@@ -2,16 +2,17 @@
 section_number = "121C"
 title = "Abetting offences under section 121A or 121B"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Whoever abets the commission of any offence punishable under section 121A or 121B is punishable with the punishment provided for those offences."
+summary = "This section makes it an offence to abet the commission of an offence punishable under section 121A or 121B, with punishment tracking the punishment for that offence."
 source = "Singapore Penal Code 1871, Section 121C"
 
 [verification]

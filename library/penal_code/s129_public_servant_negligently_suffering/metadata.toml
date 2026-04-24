@@ -2,16 +2,17 @@
 section_number = "129"
 title = "Public servant negligently suffering prisoner of State or war in his custody to escape"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Criminalises a public servant negligently allowing a prisoner of State or war in his custody to escape."
+summary = "Makes it an offence for a public servant who has custody of a prisoner of State or prisoner of war to negligently allow that prisoner to escape."
 source = "Singapore Penal Code 1871, Section 129"
 
 [verification]

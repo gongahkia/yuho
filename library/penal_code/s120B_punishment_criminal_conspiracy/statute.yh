@@ -2,35 +2,9 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr120B-#pr120B-
 /// @amendment [15/2019]
-// Singapore Penal Code Section 120B - Punishment of criminal conspiracy
-// Yuho v5 Syntax
-
-referencing penal_code/s120A_definition_criminal_conspiracy
-
-struct S120BCase {
-    string party,
-    bool partyToCriminalConspiracy,
-    bool noExpressProvision,
-}
-
-fn s120B_applies(bool partyToCriminalConspiracy, bool noExpressProvision) : bool {
-    match {
-        case TRUE if partyToCriminalConspiracy == TRUE && noExpressProvision == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
-statute 120B "Punishment of criminal conspiracy" effective 2020-01-01 {
-    definitions {
-        criminal_conspiracy := "As defined in section 120A";
-        no_express_provision := "No express provision made in this Code for punishment of such conspiracy";
-        punished_as_abetment := "Punished in the same manner as if the person had abetted the offence that is the subject of the conspiracy";
-    }
-
-    elements {
-        all_of {
-            circumstance party_to_conspiracy := "Person is a party to a criminal conspiracy under section 120A";
-            circumstance no_express_provision := "No express provision made in this Code for such conspiracy";
-        }
+statute 120B "Punishment of criminal conspiracy" effective 1872-01-01 effective 2020-01-01 {
+    /// Punishment section cross-referring to the offence definition in section 120A.
+    penalty {
+        supplementary := "Whoever is a party to a criminal conspiracy shall, where no express provision is made in this Code for the punishment of such a conspiracy, be punished in the same manner as if he had abetted the offence that is the subject of the conspiracy. [15/2019]";
     }
 }

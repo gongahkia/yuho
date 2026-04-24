@@ -2,42 +2,26 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr122-#pr122-
 /// @amendment [15/2019]
-// Singapore Penal Code Section 122 - Collecting arms, etc., with the intention of waging war against the Government
-// Yuho v5 Syntax
 
-struct S122Case {
-    string accused,
-    bool collectsMenArmsOrAmmunition,
-    bool otherwisePreparesToWageWar,
-    bool intendsToWageOrBePreparedToWageWar,
-}
-
-fn s122_applies(bool collectsMenArmsOrAmmunition, bool otherwisePreparesToWageWar, bool intendsToWageOrBePreparedToWageWar) : bool {
-    match {
-        case TRUE if collectsMenArmsOrAmmunition == TRUE && intendsToWageOrBePreparedToWageWar == TRUE := consequence TRUE;
-        case TRUE if otherwisePreparesToWageWar == TRUE && intendsToWageOrBePreparedToWageWar == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
-statute 122 "Collecting arms, etc., with the intention of waging war against the Government" effective 2020-01-01 {
-    definitions {
-        preparation := "Preparation to wage war or to be prepared to wage war against the Government";
-        targets := "Men, arms, or ammunition, or otherwise preparations";
-    }
-
+statute 122 "Collecting arms, etc., with the intention of waging war against the Government" effective 1872-01-01 effective 2019-12-31 {
     elements {
         all_of {
+            /// The physical limb is disjunctive: collecting men, arms or ammunition, or otherwise preparing to wage war.
             any_of {
-                actus_reus collects := "Collects men, arms or ammunition";
-                actus_reus prepares := "Otherwise prepares to wage war";
+                actus_reus collects_men_arms_or_ammunition := "Collects men, arms or ammunition";
+                actus_reus otherwise_prepares_to_wage_war := "Otherwise prepares to wage war";
             }
-            mens_rea intention := "Intending either to wage war or to be prepared to wage war against the Government";
+            mens_rea intention_to_wage_or_be_prepared := "With the intention of either waging or being prepared to wage war against the Government";
         }
     }
 
-    penalty {
-        imprisonment := 0 days .. 99 years;
-        fine := $0.00 .. $1,000,000.00;
+    penalty alternative {
+        imprisonment := 0 years .. 20 years;
+        supplementary := "The offender may instead be punished with imprisonment for life. [15/2019]";
+    }
+
+    penalty when term_imprisonment {
+        fine := unlimited;
+        supplementary := "If the offender is not sentenced to imprisonment for life, the offender is also liable to fine. [15/2019]";
     }
 }

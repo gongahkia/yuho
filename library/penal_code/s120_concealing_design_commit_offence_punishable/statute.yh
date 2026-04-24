@@ -1,37 +1,31 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr120-#pr120-
-// Singapore Penal Code Section 120 - Concealing a design to commit an offence punishable with imprisonment
-// Yuho v5 Syntax
-
-struct S120Case {
-    string concealer,
-    bool intendsOrKnowsLikelyToFacilitate,
-    bool offencePunishableByImprisonment,
-    bool concealsOrMakesFalseRepresentation,
-}
-
-fn s120_applies(bool intendsOrKnowsLikelyToFacilitate, bool offencePunishableByImprisonment, bool concealsOrMakesFalseRepresentation) : bool {
-    match {
-        case TRUE if intendsOrKnowsLikelyToFacilitate == TRUE && offencePunishableByImprisonment == TRUE && concealsOrMakesFalseRepresentation == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
 statute 120 "Concealing a design to commit an offence punishable with imprisonment" effective 1872-01-01 {
-    definitions {
-        qualifying_offence := "An offence punishable with imprisonment";
-        intent_to_facilitate := "Intending to facilitate, or knowing concealment likely will facilitate, commission of the offence";
-    }
-
     elements {
+        /// Section 120 requires the facilitation intent or likelihood knowledge, a qualifying predicate offence, and either concealment or a knowingly false representation about the design.
         all_of {
-            mens_rea intent_or_knowledge := "Intending to facilitate, or knowing it likely to facilitate, commission of the offence";
-            circumstance qualifying_offence := "Offence concealed is punishable with imprisonment";
             any_of {
-                actus_reus conceals_design := "Voluntarily conceals, by any act or illegal omission, existence of a design to commit the offence";
-                actus_reus makes_false_rep := "Makes any representation known to be false respecting such design";
+                mens_rea intending_to_facilitate := "Intending to facilitate the commission of an offence punishable with imprisonment";
+                mens_rea knowing_likely_to_facilitate := "Knowing it to be likely that he will thereby facilitate the commission of an offence punishable with imprisonment";
+            }
+            circumstance predicate_offence := "The design concerns an offence punishable with imprisonment";
+            any_of {
+                actus_reus conceals_design := "Voluntarily conceals, by any act or illegal omission, the existence of a design to commit such offence";
+                actus_reus false_representation := "Makes any representation which he knows to be false respecting such design";
+            }
+            any_of {
+                circumstance offence_committed := "The offence is committed";
+                circumstance offence_not_committed := "The offence is not committed";
             }
         }
+    }
+
+    penalty or_both when offence_committed {
+        supplementary := "If the offence is committed, the offender shall be punished with imprisonment for a term which may extend to one-fourth of the longest term provided for that offence; or with such fine as is provided for the offence, or with both."
+    }
+
+    penalty or_both when offence_not_committed {
+        supplementary := "If the offence is not committed, the offender shall be punished with imprisonment for a term which may extend to one-eighth of the longest term provided for that offence; or with such fine as is provided for the offence, or with both."
     }
 }

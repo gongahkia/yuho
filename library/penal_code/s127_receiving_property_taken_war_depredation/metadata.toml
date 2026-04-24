@@ -2,16 +2,17 @@
 section_number = "127"
 title = "Receiving property taken by war or depredation mentioned in sections 125 and 126"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Criminalises knowingly receiving property taken in the commission of offences under sections 125 or 126, with forfeiture of that property."
+summary = "Criminalises receiving property known to have been taken in the commission of the offences mentioned in sections 125 and 126, with forfeiture of that property."
 source = "Singapore Penal Code 1871, Section 127"
 
 [verification]

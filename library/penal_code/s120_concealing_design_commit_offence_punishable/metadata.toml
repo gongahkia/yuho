@@ -2,16 +2,17 @@
 section_number = "120"
 title = "Concealing a design to commit an offence punishable with imprisonment"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Whoever intending or knowing likely facilitation conceals the design or makes false representation respecting a design to commit an offence punishable with imprisonment, is punishable with up to one-fourth (or one-eighth if not committed) of the longest imprisonment term or fine provided for the offence."
+summary = "Concealing or falsely representing a design to commit an imprisonable offence, with intent or likely knowledge of facilitation, is punishable by a fraction of the predicate offence's imprisonment term or the predicate fine or both."
 source = "Singapore Penal Code 1871, Section 120"
 
 [verification]

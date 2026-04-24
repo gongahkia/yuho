@@ -2,16 +2,17 @@
 section_number = "115"
 title = "Abetment of offence punishable with death or imprisonment for life"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Whoever abets an offence punishable with death or imprisonment for life, where the offence is not committed and no express provision is made for such abetment, is punishable with imprisonment up to 20 years, and is liable to fine or caning."
+summary = "Section 115 punishes abetment of an offence punishable with death or life imprisonment where the offence is not committed and no other law expressly provides the punishment for that abetment."
 source = "Singapore Penal Code 1871, Section 115"
 
 [verification]

@@ -2,16 +2,17 @@
 section_number = "120A"
 title = "Definition of criminal conspiracy"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "A criminal conspiracy is an agreement between a person and another to commit an offence or cause an offence to be committed; a person may still be party despite impossibility unknown to them or where co-parties do not intend to carry out the agreement."
+summary = "Section 120A defines criminal conspiracy and clarifies when a person may still be a party despite impossibility, lack of intention by another party, or cross-border conduct."
 source = "Singapore Penal Code 1871, Section 120A"
 
 [verification]

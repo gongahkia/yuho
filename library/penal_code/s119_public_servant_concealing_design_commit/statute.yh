@@ -1,44 +1,66 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr119-#pr119-
-// Singapore Penal Code Section 119 - A public servant concealing a design to commit an offence which it is his duty to prevent
-// Yuho v5 Syntax
-
-struct S119Case {
-    string concealer,
-    bool isPublicServant,
-    bool intendsOrKnowsLikelyToFacilitate,
-    bool dutyToPreventOffence,
-    bool concealsOrMakesFalseRepresentation,
-}
-
-fn s119_applies(bool isPublicServant, bool intendsOrKnowsLikelyToFacilitate, bool dutyToPreventOffence, bool concealsOrMakesFalseRepresentation) : bool {
-    match {
-        case TRUE if isPublicServant == TRUE && intendsOrKnowsLikelyToFacilitate == TRUE && dutyToPreventOffence == TRUE && concealsOrMakesFalseRepresentation == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
 statute 119 "A public servant concealing a design to commit an offence which it is his duty to prevent" effective 1872-01-01 {
     definitions {
-        public_servant := "As defined in section 21";
-        duty_to_prevent := "Commission of the offence is one which it is the public servant's duty as such to prevent";
-        intent_to_facilitate := "Intending to facilitate, or knowing concealment likely will facilitate, commission of the offence";
+        public_servant := "A public servant";
+        design_to_commit_offence := "A design to commit such offence";
+        illegal_omission := "An illegal omission";
     }
 
     elements {
+        /// Section 119 requires public-servant status, facilitative intent or knowledge, a duty to prevent the target offence, and concealment or a false representation.
         all_of {
-            circumstance public_servant := "Person is a public servant";
-            mens_rea intent_or_knowledge := "Intending to facilitate, or knowing it likely to facilitate, commission of the offence";
-            circumstance duty_to_prevent := "Commission of the offence is one which it is the public servant's duty to prevent";
+            circumstance public_servant_status := "Whoever, being a public servant";
             any_of {
-                actus_reus conceals_design := "Voluntarily conceals, by any act or illegal omission, existence of a design to commit the offence";
-                actus_reus makes_false_rep := "Makes any representation known to be false respecting such design";
+                mens_rea intent_to_facilitate := "Intending to facilitate the commission of an offence";
+                mens_rea knowledge_likely_facilitate := "Knowing it to be likely that he will thereby facilitate the commission of an offence";
             }
+            circumstance duty_to_prevent_target_offence := "The commission of the offence is one which it is his duty as such public servant to prevent";
+            any_of {
+                actus_reus conceal_design := "Voluntarily conceals, by any act or illegal omission, the existence of a design to commit such offence";
+                actus_reus false_representation := "Makes any representation which he knows to be false respecting such design";
+            }
+        }
+
+        /// Sentencing turns on whether the target offence is committed and whether that target offence is punishable with death or imprisonment for life.
+        any_of {
+            circumstance offence_committed_noncapital := "The offence is committed, and the offence is not punishable with death or imprisonment for life";
+            circumstance offence_committed_capital_or_life := "The offence is committed, and the offence is punishable with death or imprisonment for life";
+            circumstance offence_not_committed_noncapital := "The offence is not committed, and the offence not committed is not punishable with death or imprisonment for life";
+            circumstance offence_not_committed_capital_or_life := "The offence is not committed, and the offence not committed is punishable with death or imprisonment for life";
         }
     }
 
-    illustration example1 {
-        "A, an officer of police, being legally bound to give information of all designs to commit robbery which may come to his knowledge, and knowing that B designs to commit robbery, omits to give such information, with intent to facilitate the commission of that offence. A has committed the offence defined in this section."
+    penalty or_both when offence_committed_noncapital {
+        supplementary := "If the offence is committed, the offender shall be punished with imprisonment for a term which may extend to one-half of the longest term provided for that offence, or with such fine as is provided for that offence, or with both.";
+    }
+
+    penalty cumulative when offence_committed_capital_or_life {
+        imprisonment := 0 years .. 15 years;
+        supplementary := "If the offence is punishable with death or imprisonment for life and is committed, the offender shall be punished with imprisonment for a term which may extend to 15 years, and also be liable to fine.";
+    }
+
+    penalty alternative when offence_committed_capital_or_life {
+        fine := unlimited;
+        supplementary := "If the offence is punishable with death or imprisonment for life and is committed, the offender is also liable to fine.";
+    }
+
+    penalty or_both when offence_not_committed_noncapital {
+        supplementary := "If the offence is not committed, the offender shall be punished with imprisonment for a term which may extend to one-fourth part of the longest term provided for that offence, or with such fine as is provided for that offence, or with both.";
+    }
+
+    penalty cumulative when offence_not_committed_capital_or_life {
+        imprisonment := 0 years .. 7 years;
+        supplementary := "If the offence not committed is punishable with death or imprisonment for life, the offender shall be punished with imprisonment for a term which may extend to 7 years, and also be liable to fine.";
+    }
+
+    penalty alternative when offence_not_committed_capital_or_life {
+        fine := unlimited;
+        supplementary := "If the offence not committed is punishable with death or imprisonment for life, the offender is also liable to fine.";
+    }
+
+    illustration illustration_1 {
+        "A , an officer of police, being legally bound to give information of all designs to commit robbery which may come to his knowledge, and knowing that B designs to commit robbery, omits to give such information, with intent to facilitate the commission of that offence. Here A has by an illegal omission concealed the existence of B ’s design, and is liable to punishment according to this section."
     }
 }

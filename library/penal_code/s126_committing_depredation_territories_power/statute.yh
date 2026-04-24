@@ -1,27 +1,20 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr126-#pr126-
-// Singapore Penal Code Section 126 - Committing depredation on the territories of any power in alliance or at peace with Singapore
-
 statute 126 "Committing depredation on the territories of any power in alliance or at peace with Singapore" effective 1872-01-01 {
-    definitions {
-        depredation := "Plunder, pillage, or ravaging of property or territory";
-        alliance_power := "Any power in alliance or at peace with the Government of Singapore";
-        forfeiture := "Any property used, intended to be used, or acquired by such depredation shall be forfeited";
-    }
-
     elements {
-        any_of {
-            /// limb 1 - actual depredation
-            actus_reus commit_depredation := "Committing depredation on the territories of any power in alliance or at peace with the Government";
-            /// limb 2 - preparation to commit depredation
-            actus_reus prepare_depredation := "Making preparations to commit depredation on the territories of any power in alliance or at peace with the Government";
+        all_of {
+            any_of {
+                actus_reus commits_depredation := "Commits depredation";
+                actus_reus makes_preparations := "Makes preparations to commit depredation";
+            }
+            circumstance territories_of_power := "On the territories of any power in alliance or at peace with the Government";
         }
     }
 
     penalty {
         imprisonment := 0 years .. 10 years;
-        fine := $0.00 .. $50,000.00;
-        supplementary := "Any property used, or intended to be used, in committing such depredation, or acquired by such depredation, shall be forfeited";
+        fine := unlimited;
+        supplementary := "Any property used, or intended to be used, in committing such depredation, or acquired by such depredation, shall be forfeited.";
     }
 }

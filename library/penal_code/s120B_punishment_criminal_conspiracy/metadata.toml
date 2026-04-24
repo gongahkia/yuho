@@ -2,16 +2,17 @@
 section_number = "120B"
 title = "Punishment of criminal conspiracy"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Whoever is a party to a criminal conspiracy is, where no express provision for punishment is made in the Code, punished in the same manner as if he had abetted the offence that is the subject of the conspiracy."
+summary = "Section 120B punishes a party to a criminal conspiracy, where the Code makes no express punishment provision for that conspiracy, in the same manner as if the person had abetted the offence that is the subject of the conspiracy."
 source = "Singapore Penal Code 1871, Section 120B"
 
 [verification]

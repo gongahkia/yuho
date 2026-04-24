@@ -1,38 +1,23 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr113-#pr113-
-// Singapore Penal Code Section 113 - Liability of abettor for an offence caused by the act abetted different from that intended by the abettor
-// Yuho v5 Syntax
-
-struct S113Case {
-    string abettor,
-    bool abetmentIntendedParticularEffect,
-    bool differentEffectCaused,
-    bool abettorKnewActLikelyToCauseDifferentEffect,
-}
-
-fn s113_liable(bool abetmentIntendedParticularEffect, bool differentEffectCaused, bool abettorKnewActLikelyToCauseDifferentEffect) : bool {
-    match {
-        case TRUE if abetmentIntendedParticularEffect == TRUE && differentEffectCaused == TRUE && abettorKnewActLikelyToCauseDifferentEffect == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
 
 statute 113 "Liability of abettor for an offence caused by the act abetted different from that intended by the abettor" effective 1872-01-01 {
-    definitions {
-        different_effect := "An effect different from that intended by the abettor, caused by an act for which abettor is liable in consequence of the abetment";
-        abettor_knowledge := "Abettor knew the act abetted was likely to cause that different effect";
-    }
-
     elements {
+        /// Section 113 applies only where the abetment carried an intended effect, the liable act caused a different effect, and the abettor knew that different effect was likely.
         all_of {
-            mens_rea particular_effect_intention := "Abettor intended a particular effect when the act was abetted";
-            circumstance different_effect_caused := "Act for which abettor is liable causes a different effect from that intended";
-            mens_rea likelihood_knowledge := "Abettor knew the act abetted was likely to cause that different effect";
+            actus_reus act_abetted := "An act is abetted";
+            mens_rea intention_to_cause_particular_effect := "The abetment is with the intention on the part of the abettor of causing a particular effect";
+            circumstance liable_act_causes_different_effect := "An act for which the abettor is liable in consequence of the abetment causes a different effect from that intended by the abettor";
+            mens_rea knowledge_of_likely_effect := "The abettor knew that the act abetted was likely to cause that effect";
         }
     }
 
-    illustration example1 {
-        "A instigates B to cause grievous hurt to Z. B, in consequence of the instigation, causes grievous hurt to Z. Z dies in consequence. Here, if A knew that the grievous hurt abetted was likely to cause death, A is liable to be punished with the punishment provided for murder."
+    penalty {
+        supplementary := "The abettor is liable for the effect caused, in the same manner, and to the same extent, as if he had abetted the act with the intention of causing that effect.";
+    }
+
+    illustration illustration {
+        "A instigates B to cause grievous hurt to Z . B , in consequence of the instigation, causes grievous hurt to Z . Z dies in consequence. Here, if A knew that the grievous hurt abetted was likely to cause death, A is liable to be punished with the punishment provided for murder."
     }
 }

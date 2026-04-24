@@ -2,16 +2,17 @@
 section_number = "121B"
 title = "Offences against authority"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Whoever plans the unlawful deprivation or deposition of the President from sovereignty of Singapore, or the overawing by criminal force of the Government, is punishable with imprisonment for life or up to 20 years and, if not sentenced to life, is also liable to fine."
+summary = "Planning the unlawful deprivation or deposition of the President from Singapore’s sovereignty, or the overawing of the Government by criminal force, is an offence punishable with life imprisonment or up to 20 years’ imprisonment and, if life imprisonment is not imposed, an unlimited fine."
 source = "Singapore Penal Code 1871, Section 121B"
 
 [verification]

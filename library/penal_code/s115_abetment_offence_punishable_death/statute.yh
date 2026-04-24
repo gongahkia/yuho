@@ -2,45 +2,28 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr115-#pr115-
 /// @amendment [Act 23 of 2021 wef 01/03/2022]
-// Singapore Penal Code Section 115 - Abetment of offence punishable with death or imprisonment for life
-// Yuho v5 Syntax
-
-struct S115Case {
-    string abettor,
-    bool offenceCarriesDeathOrLife,
-    bool offenceNotCommittedInConsequence,
-    bool noExpressProvision,
-}
-
-fn s115_applies(bool offenceCarriesDeathOrLife, bool offenceNotCommittedInConsequence, bool noExpressProvision) : bool {
-    match {
-        case TRUE if offenceCarriesDeathOrLife == TRUE && offenceNotCommittedInConsequence == TRUE && noExpressProvision == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
-statute 115 "Abetment of offence punishable with death or imprisonment for life" effective 2022-03-01 {
-    definitions {
-        qualifying_offence := "An offence punishable with death or imprisonment for life";
-        not_committed := "The offence is not committed in consequence of the abetment";
-        no_express_provision := "No express provision made by this Code or any other written law for the punishment of such abetment";
-    }
-
+statute 115 "Abetment of offence punishable with death or imprisonment for life" effective 1872-01-01 effective 2022-03-01 {
     elements {
+        /// The offence requires abetment of a qualifying offence plus the two statutory limiting conditions.
         all_of {
-            actus_reus abets_commission := "Abets the commission of an offence punishable with death or imprisonment for life";
-            circumstance not_committed := "Offence is not committed in consequence of the abetment";
-            circumstance no_express_provision := "No express provision is made for punishment of such abetment";
+            actus_reus abetment := "Abets the commission of an offence punishable with death or imprisonment for life";
+            circumstance offence_not_committed := "That offence is not committed in consequence of the abetment";
+            circumstance no_express_provision := "No express provision is made by this Code or by any other written law for the punishment of such abetment";
         }
     }
 
-    penalty {
-        imprisonment := 0 days .. 20 years;
-        fine := $0.00 .. $1,000,000.00;
-        caning := 0 .. 24 strokes;
+    penalty cumulative {
+        imprisonment := 0 years .. 20 years;
+        supplementary := "The offender shall be punished with imprisonment for a term that may extend to 20 years.";
     }
 
-    illustration example1 {
-        "A instigates B to murder Z. The offence is not committed. If B had murdered Z, B would have been subject to the punishment of death. Therefore A shall be punished with imprisonment for a term that may extend to 20 years, and shall also be liable to fine or to caning."
+    penalty alternative {
+        fine := unlimited;
+        supplementary := "The offender shall also be liable to fine or to caning.";
+    }
+
+    /// Illustration
+    illustration illustration_1 {
+        "A instigates B to murder Z . The offence is not committed. If B had murdered Z , B would have been subject to the punishment of death. Therefore, A shall be punished with imprisonment for a term that may extend to 20 years, and shall also be liable to fine or to caning."
     }
 }

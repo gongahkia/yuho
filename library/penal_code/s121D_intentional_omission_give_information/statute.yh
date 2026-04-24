@@ -1,39 +1,17 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr121D-#pr121D-
-// Singapore Penal Code Section 121D - Intentional omission to give information of offences against section 121, 121A, 121B or 121C by a person bound to inform
-// Yuho v5 Syntax
-
-struct S121DCase {
-    string accused,
-    bool knowingOrReasonToBelieveOffenceCommitted,
-    bool intentionallyOmittedInformation,
-    bool legallyBoundToGive,
-}
-
-fn s121D_applies(bool knowingOrReasonToBelieveOffenceCommitted, bool intentionallyOmittedInformation, bool legallyBoundToGive) : bool {
-    match {
-        case TRUE if knowingOrReasonToBelieveOffenceCommitted == TRUE && intentionallyOmittedInformation == TRUE && legallyBoundToGive == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
 statute 121D "Intentional omission to give information of offences against section 121, 121A, 121B or 121C by a person bound to inform" effective 1872-01-01 {
-    definitions {
-        qualifying_offence := "Any offence punishable under section 121, 121A, 121B or 121C";
-        legally_bound := "Person is legally bound to give information respecting the offence";
-    }
-
     elements {
         all_of {
-            mens_rea knowledge := "Knowing or having reason to believe that an offence punishable under section 121, 121A, 121B or 121C has been committed";
-            actus_reus omission := "Intentionally omits to give any information respecting that offence";
-            circumstance legally_bound := "Person is legally bound to give that information";
+            mens_rea knowledge_or_reason_to_believe := "Whoever knowing or having reason to believe that any offence punishable under section 121, 121A, 121B or 121C has been committed";
+            actus_reus intentional_omission := "Intentionally omits to give any information respecting that offence" caused_by knowledge_or_reason_to_believe;
+            circumstance legal_duty_to_inform := "Which he is legally bound to give" caused_by intentional_omission;
         }
     }
 
-    penalty {
-        imprisonment := 0 days .. 10 years;
-        fine := $0.00 .. $1,000,000.00;
+    penalty or_both {
+        imprisonment := 0 years .. 10 years;
+        fine := unlimited;
     }
 }

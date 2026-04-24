@@ -2,39 +2,28 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr121A-#pr121A-
 /// @amendment [15/2019]
-// Singapore Penal Code Section 121A - Offences against the President's person
-// Yuho v5 Syntax
-
-struct S121ACase {
-    string accused,
-    bool plansDeathOrHurt,
-    bool plansUnlawfulImprisonmentOrRestraint,
-}
-
-fn s121A_applies(bool plansDeathOrHurt, bool plansUnlawfulImprisonmentOrRestraint) : bool {
-    match {
-        case TRUE if plansDeathOrHurt == TRUE := consequence TRUE;
-        case TRUE if plansUnlawfulImprisonmentOrRestraint == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
-statute 121A "Offences against the President's person" effective 2020-01-01 {
-    definitions {
-        president := "The President of Singapore";
-        plan := "Forming a plan to carry out the act, whether or not executed";
-    }
-
+statute 121A "Offences against the President’s person" effective 1872-01-01 effective 2019-12-31 {
     elements {
-        any_of {
-            actus_reus plans_death := "Plans the death of the President";
-            actus_reus plans_hurt := "Plans hurt to the President";
-            actus_reus plans_unlawful_imprisonment := "Plans unlawful imprisonment or restraint of the President";
+        /// The offence is complete where the accused plans one of the listed harms against the President.
+        all_of {
+            actus_reus planning := "Plans";
+            circumstance protected_person := "The person who is the subject of the plan is the President";
+            any_of {
+                actus_reus death_of_president := "The death of the President" caused_by planning;
+                actus_reus hurt_to_president := "Hurt to the President" caused_by planning;
+                actus_reus unlawful_imprisonment_of_president := "Unlawful imprisonment of the President" caused_by planning;
+                actus_reus restraint_of_president := "Restraint of the President" caused_by planning;
+            }
         }
     }
 
-    penalty {
-        imprisonment := 0 days .. 99 years;
-        fine := $0.00 .. $1,000,000.00;
+    penalty alternative {
+        imprisonment := 0 years .. 20 years;
+        supplementary := "The offender shall be punished with imprisonment for life, or with imprisonment for a term which may extend to 20 years.";
+    }
+
+    penalty when non_life_sentence {
+        fine := unlimited;
+        supplementary := "If the offender is not sentenced to imprisonment for life, the offender is also liable to fine.";
     }
 }

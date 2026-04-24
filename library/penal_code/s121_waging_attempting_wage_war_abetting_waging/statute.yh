@@ -2,43 +2,23 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr121-#pr121-
 /// @amendment [15/2019]
-// Singapore Penal Code Section 121 - Waging or attempting to wage war or abetting the waging of war against the Government
-// Yuho v5 Syntax
 
-struct S121Case {
-    string accused,
-    string mode,
-}
-
-fn s121_applies(string mode) : bool {
-    match {
-        case TRUE if mode == "wages_war" := consequence TRUE;
-        case TRUE if mode == "attempts_to_wage_war" := consequence TRUE;
-        case TRUE if mode == "abets_waging_of_war" := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
-statute 121 "Waging or attempting to wage war or abetting the waging of war against the Government" effective 2020-01-01 {
-    definitions {
-        wages_war := "Wages war against the Government";
-        attempts_to_wage_war := "Attempts to wage war against the Government";
-        abets_waging := "Abets the waging of war against the Government";
-    }
-
+statute 121 "Waging or attempting to wage war or abetting the waging of war against the Government" effective 1872-01-01 effective 2019-12-31 {
     elements {
         any_of {
-            actus_reus wages := "Wages war against the Government";
-            actus_reus attempts := "Attempts to wage war against the Government";
-            actus_reus abets := "Abets the waging of war against the Government";
+            actus_reus wages_war := "Wages war against the Government";
+            actus_reus attempts_wage_war := "Attempts to wage such war";
+            actus_reus abets_waging_war := "Abets the waging of such war";
         }
     }
 
-    penalty {
-        imprisonment := 20 years .. 99 years;
+    penalty alternative {
+        death := TRUE;
+        supplementary := "Whoever wages war against the Government, or attempts to wage such war, or abets the waging of such war, shall be punished with death, or with imprisonment for life. [15/2019]";
     }
 
-    illustration example1 {
+    /// Illustration
+    illustration illustration {
         "A joins an insurrection against the Government. A has committed the offence defined in this section."
     }
 }

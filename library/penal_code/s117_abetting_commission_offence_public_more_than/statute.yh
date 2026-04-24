@@ -1,42 +1,24 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr117-#pr117-
-// Singapore Penal Code Section 117 - Abetting the commission of an offence by the public or by more than 10 persons
-// Yuho v5 Syntax
-
-struct S117Case {
-    string abettor,
-    bool abetmentToPublicGenerally,
-    int classOrNumberOfPersons,
-}
-
-fn s117_applies(bool abetmentToPublicGenerally, int classOrNumberOfPersons) : bool {
-    match {
-        case TRUE if abetmentToPublicGenerally == TRUE := consequence TRUE;
-        case TRUE if classOrNumberOfPersons > 10 := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
 statute 117 "Abetting the commission of an offence by the public or by more than 10 persons" effective 1872-01-01 {
-    definitions {
-        public_generally := "The public at large, not a specific individual or small group";
-        class_of_persons := "Any number or class of persons exceeding 10";
-    }
-
     elements {
-        any_of {
-            actus_reus abets_public := "Abets the commission of an offence by the public generally";
-            actus_reus abets_large_group := "Abets the commission of an offence by any number or class of persons exceeding 10";
+        all_of {
+            actus_reus abetment := "Abets the commission of an offence";
+            /// The section applies where the abetment is directed either at the public generally or at a number or class of persons exceeding 10.
+            any_of {
+                circumstance public_generally := "By the public generally";
+                circumstance number_or_class_exceeding_10 := "By any number or class of persons exceeding 10";
+            }
         }
     }
 
-    penalty {
+    penalty or_both {
         imprisonment := 0 days .. 5 years;
-        fine := $0.00 .. $1,000,000.00;
+        fine := unlimited;
     }
 
-    illustration example1 {
-        "A, an employee at a worksite, affixes a placard at the worksite where more than 10 persons are employed. A instigates the workers to damage property at the worksite if their demand for a pay rise is not met. A has committed an offence under this section."
+    illustration illustration {
+        "A , an employee at a worksite, affixes a placard at the worksite where more than 10 persons are employed. A instigates the workers to damage property at the worksite if their demand for a pay rise is not met. A has committed an offence under this section."
     }
 }

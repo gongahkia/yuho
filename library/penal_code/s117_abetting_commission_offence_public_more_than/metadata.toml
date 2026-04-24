@@ -2,16 +2,17 @@
 section_number = "117"
 title = "Abetting the commission of an offence by the public or by more than 10 persons"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Whoever abets the commission of an offence by the public generally, or by a number or class of persons exceeding 10, is punishable with imprisonment up to 5 years, or with fine, or both."
+summary = "This section criminalises abetting an offence to be committed by the public generally or by any number or class of persons exceeding 10."
 source = "Singapore Penal Code 1871, Section 117"
 
 [verification]

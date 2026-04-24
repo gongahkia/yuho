@@ -2,52 +2,61 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr116-#pr116-
 /// @amendment [15/2019]
-// Singapore Penal Code Section 116 - Abetment of offence punishable with imprisonment
-// Yuho v5 Syntax
+statute 116 "Abetment of offence punishable with imprisonment" effective 1872-01-01 effective 2020-01-01 {
+    subsection (1) {
+        elements {
+            /// Subsection (1) applies only where the qualifying abetment and both limiting conditions coexist.
+            all_of {
+                actus_reus abets_offence := "Whoever abets an offence punishable with imprisonment";
+                circumstance offence_not_committed := "That offence is not committed in consequence of the abetment";
+                circumstance no_express_provision := "No express provision is made by this Code or any other written law for the punishment of such abetment";
+            }
+        }
 
-struct S116Case {
-    string abettor,
-    bool offencePunishableByImprisonment,
-    bool offenceNotCommittedInConsequence,
-    bool noExpressProvision,
-    bool punishmentFixedOrMandatoryMinimum,
-}
-
-fn s116_applies(bool offencePunishableByImprisonment, bool offenceNotCommittedInConsequence, bool noExpressProvision) : bool {
-    match {
-        case TRUE if offencePunishableByImprisonment == TRUE && offenceNotCommittedInConsequence == TRUE && noExpressProvision == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
-statute 116 "Abetment of offence punishable with imprisonment" effective 2020-01-01 {
-    definitions {
-        same_manner_punishment := "Punished in the same manner as if the abettor had committed the offence";
-        fixed_punishment := "Punishment prescribed is fixed by law";
-        mandatory_minimum := "A specified minimum sentence or mandatory minimum sentence of imprisonment, fine or caning";
-    }
-
-    elements {
-        all_of {
-            actus_reus abets_commission := "Abets an offence punishable with imprisonment";
-            circumstance not_committed := "Offence is not committed in consequence of the abetment";
-            circumstance no_express_provision := "No express provision is made by this Code or any other written law for such abetment";
+        penalty {
+            supplementary := "The person shall be punished in the same manner as if the abettor had committed the offence.";
         }
     }
 
-    illustration example_a {
-        "A offers a bribe to B, a public servant, as a reward for showing A some favour in the exercise of Bs official functions. B refuses to accept the bribe. A is punishable under this section for abetting the offence in section 161."
+    subsection (2) {
+        elements {
+            /// Subsection (2) modifies sentencing only for the fixed-minimum and mandatory-minimum cases described in the opening clause.
+            all_of {
+                circumstance subsection_1_offence := "The offence is an offence mentioned in subsection (1)";
+                any_of {
+                    circumstance punishment_fixed_by_law := "The punishment prescribed for that offence is fixed by law";
+                    circumstance specified_minimum_sentence := "The punishment prescribed for that offence is a specified minimum sentence";
+                    circumstance mandatory_minimum_imprisonment := "The punishment prescribed for that offence is a mandatory minimum sentence of imprisonment";
+                    circumstance mandatory_minimum_fine := "The punishment prescribed for that offence is a mandatory minimum sentence of fine";
+                    circumstance mandatory_minimum_caning := "The punishment prescribed for that offence is a mandatory minimum sentence of caning";
+                }
+            }
+        }
+
+        penalty {
+            supplementary := "Despite subsection (1), the court sentencing the person who abetted the offence shall not be bound to impose the fixed, specified minimum or mandatory minimum sentence, and may sentence the abettor to such sentence or combination of sentences as the court thinks fit but not exceeding the maximum punishment prescribed for that offence.";
+        }
     }
 
-    illustration example_b {
-        "A instigates B to give false evidence. Here, if B does not give false evidence, A has nevertheless committed the offence defined in this section, and is punishable accordingly."
+    subsection (3) {
+        definitions {
+            avoidance_of_doubt := "Nothing in subsection (2)(b) empowers a court to impose a type of punishment that is not prescribed for an offence mentioned in subsection (1) or otherwise provided by any written law for that offence.";
+        }
     }
 
-    illustration example_c {
-        "A, a police officer, whose duty it is to prevent robbery, abets the commission of robbery. Here, though the robbery is not committed, A is liable to the maximum term of imprisonment provided for that offence."
+    illustration illustration_a {
+        "( a ) A offers a bribe to B , a public servant, as a reward for showing A some favour in the exercise of B ’s official functions. B refuses to accept the bribe. A is punishable under this section for abetting the offence in section 161."
     }
 
-    illustration example_d {
-        "B abets the commission of a robbery by A, a police officer, whose duty it is to prevent that offence. Here, though the robbery is not committed, B is liable to the same punishment as if he had committed the offence of robbery."
+    illustration illustration_b {
+        "( b ) A instigates B to give false evidence. Here, if B does not give false evidence, A has nevertheless committed the offence defined in this section, and is punishable accordingly."
+    }
+
+    illustration illustration_c {
+        "( c ) A , a police officer, whose duty it is to prevent robbery, abets the commission of robbery. Here, though the robbery is not committed, A is liable to the maximum term of imprisonment provided for that offence."
+    }
+
+    illustration illustration_d {
+        "( d ) B abets the commission of a robbery by A , a police officer, whose duty it is to prevent that offence. Here, though the robbery is not committed, B is liable to the same punishment as if he had committed the offence of robbery."
     }
 }

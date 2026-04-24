@@ -1,17 +1,18 @@
 [statute]
 section_number = "130A"
-title = "Harbour"
+title = "“Harbour”"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Interpretation section defining 'harbour' for Chapter VI as supplying shelter, food, money, arms, conveyance, or any assistance to evade apprehension."
+summary = "Defines the meaning of “harbour” for the purposes of Chapter VI of the Penal Code."
 source = "Singapore Penal Code 1871, Section 130A"
 
 [verification]

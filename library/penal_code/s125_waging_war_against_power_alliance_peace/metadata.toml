@@ -2,16 +2,17 @@
 section_number = "125"
 title = "Waging war against any power in alliance or at peace with Singapore"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Whoever wages war against the government of any power in alliance or at peace with the Government of Singapore, or attempts to wage such war, or abets the waging of such war, is punishable with life imprisonment or up to 15 years, to which fine may be added, or with fine."
+summary = "Waging war against, attempting to wage war against, or abetting war against the government of a power allied with or at peace with Singapore is punishable with life imprisonment or up to 15 years' imprisonment, with an uncapped fine available on the non-life branch."
 source = "Singapore Penal Code 1871, Section 125"
 
 [verification]

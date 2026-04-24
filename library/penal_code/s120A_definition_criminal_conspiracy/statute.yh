@@ -2,35 +2,50 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr120A-#pr120A-
 /// @amendment [15/2019]
-// Singapore Penal Code Section 120A - Definition of criminal conspiracy
-// Yuho v5 Syntax
 
-struct CriminalConspiracyCase {
-    string partyA,
-    string partyB,
-    bool agreementExists,
-    bool agreementToCommitOrCauseOffence,
-}
-
-fn is_criminal_conspiracy(bool agreementExists, bool agreementToCommitOrCauseOffence) : bool {
-    match {
-        case TRUE if agreementExists == TRUE && agreementToCommitOrCauseOffence == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
-statute 120A "Definition of criminal conspiracy" effective 2020-01-01 {
-    definitions {
-        criminal_conspiracy := "An agreement between two or more persons to commit an offence or cause an offence to be committed";
-        impossibility_immaterial := "A person may be party to a conspiracy despite unknown facts that make commission impossible";
-        mere_agreement_sufficient := "A person may be party even though other parties do not intend to carry out the agreement";
-        immaterial_ultimate_object := "Per Explanation: immaterial whether the offence is the ultimate object of the agreement or merely incidental";
-    }
-
-    elements {
-        all_of {
-            actus_reus agreement := "Agreement between two or more persons";
-            mens_rea objective := "Agreement is to commit an offence or cause an offence to be committed";
+statute 120A "Definition of criminal conspiracy" effective 1872-01-01 effective 2020-01-01 {
+    subsection (1) {
+        definitions {
+            criminal_conspiracy := "When a person agrees with another person to commit an offence or cause an offence to be committed, such an agreement is designated a criminal conspiracy. [15/2019]";
         }
+
+        elements {
+            /// Subsection (1) defines criminal conspiracy through an agreement plus its unlawful object.
+            all_of {
+                actus_reus agreement := "When a person agrees with another person";
+                any_of {
+                    actus_reus commit_offence := "To commit an offence";
+                    actus_reus cause_offence_to_be_committed := "To cause an offence to be committed";
+                }
+            }
+        }
+    }
+
+    subsection (2) {
+        definitions {
+            impossibility_despite_unknown_facts := "A person may be a party to a criminal conspiracy despite the existence of facts of which he is unaware which make the commission of the offence impossible. [15/2019]";
+        }
+    }
+
+    subsection (3) {
+        definitions {
+            party_despite_other_not_intending_to_carry_out := "A person may be a party to a criminal conspiracy even though any other person who agrees to commit the offence that is the subject of the conspiracy or to cause that offence to be committed does not intend to carry out that agreement. [15/2019]";
+        }
+    }
+
+    subsection (4) {
+        definitions {
+            conspiracy_in_singapore_for_offence_outside_singapore := "A person may be a party to a criminal conspiracy in Singapore to commit an offence outside Singapore, which would constitute an offence if committed in Singapore. [15/2019]";
+        }
+    }
+
+    subsection (5) {
+        definitions {
+            conspiracy_to_commit_offence_in_singapore_despite_outside_acts := "A person may be a party to a criminal conspiracy to commit an offence in Singapore even though all or any of the acts constituting the criminal conspiracy were done outside Singapore. [15/2019]";
+        }
+    }
+
+    definitions {
+        explanation_incidental_object := "Explanation .—It is immaterial whether the offence is the ultimate object of such agreement, or is merely incidental to that object.";
     }
 }

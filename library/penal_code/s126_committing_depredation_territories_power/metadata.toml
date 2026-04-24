@@ -2,16 +2,17 @@
 section_number = "126"
 title = "Committing depredation on the territories of any power in alliance or at peace with Singapore"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Criminalises committing or preparing depredation on the territories of a power in alliance or at peace with Singapore, with forfeiture of related property."
+summary = "Criminalises committing depredation, or making preparations to commit depredation, on the territories of a power in alliance or at peace with Singapore, with forfeiture of related property."
 source = "Singapore Penal Code 1871, Section 126"
 
 [verification]

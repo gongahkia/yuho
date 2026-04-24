@@ -2,16 +2,17 @@
 section_number = "124"
 title = "Assaulting President, etc., with intent to compel or restrain the exercise of any lawful power"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Whoever, intending to induce or compel the President, a Member of Parliament, or a member of the Cabinet, to exercise or refrain from exercising any lawful power, assaults, wrongfully restrains (or attempts), or overawes (or attempts) by criminal force or show of criminal force, is punishable with life imprisonment or up to 20 years and, if not sentenced to life, is also liable to fine."
+summary = "Section 124 criminalises assaulting, wrongfully restraining, or overawing the President or a Member of Parliament with intent to compel or restrain the exercise of lawful powers."
 source = "Singapore Penal Code 1871, Section 124"
 
 [verification]

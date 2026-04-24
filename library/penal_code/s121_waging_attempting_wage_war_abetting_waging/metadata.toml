@@ -2,16 +2,17 @@
 section_number = "121"
 title = "Waging or attempting to wage war or abetting the waging of war against the Government"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Whoever wages war against the Government, attempts to wage such war, or abets the waging of such war, is punishable with death or imprisonment for life."
+summary = "Section 121 makes it an offence to wage war against the Government, attempt to wage such war, or abet the waging of such war, punishable with death or imprisonment for life."
 source = "Singapore Penal Code 1871, Section 121"
 
 [verification]
