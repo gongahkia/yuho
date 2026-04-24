@@ -1,25 +1,20 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr171-#pr171-
-// Singapore Penal Code Section 171
 
 statute 171 "Wearing garb or carrying token used by public servant, with fraudulent intent" effective 1872-01-01 {
-    definitions {
-        garb_or_token := "Any garb or token resembling any garb or token used by a particular class of public servants";
-    }
-
     elements {
         all_of {
-            /// accused does not belong to the relevant class of public servants
-            circumstance status := "Accused does not belong to a certain class of public servants";
-            /// wears or carries the resembling garb or token
-            actus_reus wearing_or_carrying := "Wearing any garb or carrying any token resembling that used by that class of public servants";
-            /// fraudulent mens rea -- intention or knowledge of likely belief
-            mens_rea fault := "Intending that it may be believed, or knowing it to be likely that it will be believed, that he belongs to that class of public servants";
+            circumstance excluded_class := "Whoever, not belonging to a certain class of public servants";
+            actus_reus prohibited_appearance := "Wears any garb or carries any token resembling any garb or token used by that class of public servants";
+            any_of {
+                mens_rea intention_of_belief := "With the intention that it may be believed that he belongs to that class of public servants";
+                mens_rea knowledge_of_likely_belief := "With the knowledge that it is likely to be believed that he belongs to that class of public servants";
+            }
         }
     }
 
-    penalty {
+    penalty or_both {
         imprisonment := 0 months .. 6 months;
         fine := $0.00 .. $1,000.00;
     }
