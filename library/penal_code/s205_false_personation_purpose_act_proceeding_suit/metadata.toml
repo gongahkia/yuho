@@ -2,18 +2,18 @@
 section_number = "205"
 title = "False personation for the purpose of any act or proceeding in a suit"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Falsely personating another and in that assumed character making admissions, statements, confessing judgment, or otherwise acting in a civil suit or criminal prosecution."
+summary = "This section makes it an offence to falsely personate another and, in that assumed character, carry out specified acts in any suit or criminal prosecution."
 source = "Singapore Penal Code 1871, Section 205"
 
 [verification]
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr205-#pr205-"
-disclaimer = "Educational purposes only. Cross-reference with official SSO text."

@@ -1,44 +1,18 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr196-#pr196-
-// Singapore Penal Code Section 196 - Using evidence known to be false
-// Yuho v5 Syntax
 
 referencing penal_code/s193_punishment_false_evidence
 
-struct S196Case {
-    string accused,
-    bool corruptlyUsesAsTrue,
-    bool knowsEvidenceFalse,
-}
-
-fn evaluate_s196(bool corruptlyUsesAsTrue, bool knowsEvidenceFalse) : string {
-    match {
-        case TRUE if corruptlyUsesAsTrue == FALSE := consequence "Not liable - no corrupt use";
-        case TRUE if knowsEvidenceFalse == FALSE := consequence "Not liable - no knowledge of falsity";
-        case _ := consequence "Liable under s196";
-    }
-}
-
 statute 196 "Using evidence known to be false" effective 1872-01-01 {
-    definitions {
-        corruptly := "With dishonest or fraudulent purpose";
-        evidence := "Any evidence known to be false or fabricated";
-    }
-
     elements {
         all_of {
-            /// actus reus: using or attempting to use as true/genuine
-            actus_reus useAsTrue := "Corruptly uses or attempts to use as true or genuine evidence any evidence";
-            /// mens rea: knowledge the evidence is false or fabricated
-            mens_rea knowledge := "Knowing the evidence to be false or fabricated";
+            actus_reus use_false_evidence := "corruptly uses or attempts to use as true or genuine evidence any evidence";
+            mens_rea knowledge_of_falsity := "which he knows to be false or fabricated";
         }
     }
 
     penalty {
-        imprisonment := 0 years .. 7 years;
-        fine := $0.00 .. $50,000.00;
+        supplementary := "shall be punished in the same manner as if he gave or fabricated false evidence.";
     }
-
-    // punishable in the same manner as if he gave or fabricated false evidence (s193)
 }

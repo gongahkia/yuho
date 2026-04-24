@@ -1,46 +1,19 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr197-#pr197-
-// Singapore Penal Code Section 197 - Issuing or signing a false certificate
-// Yuho v5 Syntax
-
-referencing penal_code/s193_punishment_false_evidence
-
-struct S197Case {
-    string accused,
-    bool issuesOrSignsCertificate,
-    bool certificateRequiredOrAdmissibleByLaw,
-    bool knowsOrBelievesFalseInMaterialPoint,
-}
-
-fn evaluate_s197(bool issuesOrSignsCertificate, bool certificateRequiredOrAdmissibleByLaw, bool knowsOrBelievesFalseInMaterialPoint) : string {
-    match {
-        case TRUE if issuesOrSignsCertificate == FALSE := consequence "Not liable - no issue or signature";
-        case TRUE if certificateRequiredOrAdmissibleByLaw == FALSE := consequence "Not liable - certificate not required or admissible";
-        case TRUE if knowsOrBelievesFalseInMaterialPoint == FALSE := consequence "Not liable - no knowledge of material falsity";
-        case _ := consequence "Liable under s197";
-    }
-}
 
 statute 197 "Issuing or signing a false certificate" effective 1872-01-01 {
-    definitions {
-        certificate := "A certificate required by law to be given or signed, or relating to any fact of which such certificate is by law admissible in evidence";
-        material_point := "A point material to the object for which the certificate is made or used";
-    }
-
     elements {
+        /// The offence requires issuance or signature of a legally required or legally admissible certificate, plus knowledge or belief of material falsity.
         all_of {
-            /// actus reus: issuing or signing
-            actus_reus issueSign := "Issues or signs any certificate required by law to be given or signed, or relating to any fact of which such certificate is by law admissible in evidence";
-            /// mens rea: knowledge or belief of material falsity
-            mens_rea knowledge := "Knowing or believing that such certificate is false in any material point";
+            actus_reus issues_or_signs_certificate := "Issues or signs any certificate";
+            circumstance certificate_required_or_admissible_by_law := "The certificate is required by law to be given or signed, or relates to any fact of which such certificate is by law admissible in evidence";
+            mens_rea knows_or_believes_material_falsity := "Knowing or believing that such certificate is false in any material point";
         }
     }
 
+    /// Punishment tracks section 193 because section 197 provides that the offender is punished in the same manner as if he gave false evidence.
     penalty {
-        imprisonment := 0 years .. 7 years;
-        fine := $0.00 .. $50,000.00;
+        supplementary := "Whoever issues or signs any certificate required by law to be given or signed, or relating to any fact of which such certificate is by law admissible in evidence, knowing or believing that such certificate is false in any material point, shall be punished in the same manner as if he gave false evidence."
     }
-
-    // punished in the same manner as if he gave false evidence (s193)
 }

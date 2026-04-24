@@ -1,44 +1,23 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr202-#pr202-
-// Singapore Penal Code Section 202 - Intentional omission to give information of an offence, by person bound to inform
-// Yuho v5 Syntax
-
-struct S202Case {
-    string accused,
-    bool knowsOrReasonToBelieveOffenceCommitted,
-    bool legallyBoundToGiveInformation,
-    bool intentionallyOmits,
-}
-
-fn evaluate_s202(bool knowsOrReasonToBelieveOffenceCommitted, bool legallyBoundToGiveInformation, bool intentionallyOmits) : string {
-    match {
-        case TRUE if knowsOrReasonToBelieveOffenceCommitted == FALSE := consequence "Not liable - no knowledge of offence";
-        case TRUE if legallyBoundToGiveInformation == FALSE := consequence "Not liable - no legal duty to inform";
-        case TRUE if intentionallyOmits == FALSE := consequence "Not liable - omission not intentional";
-        case _ := consequence "Liable under s202";
-    }
-}
 
 statute 202 "Intentional omission to give information of an offence, by person bound to inform" effective 1872-01-01 {
-    definitions {
-        offence := "An act which is punishable under the Penal Code or any other law";
-        legal_duty := "A duty imposed by law to give information respecting the offence";
-    }
-
     elements {
         all_of {
-            /// mens rea: knowledge or reason to believe offence committed
-            mens_rea knowledge := "Knowing or having reason to believe that an offence has been committed";
-            /// circumstance: legal duty to inform
-            circumstance duty := "Legally bound to give information respecting that offence";
-            /// actus reus + mens rea: intentional omission
-            mens_rea intentional := "Intentionally omits to give such information";
+            /// The knowledge limb is satisfied by actual knowledge or reason to believe.
+            any_of {
+                mens_rea knowledge := "Knowing that an offence has been committed";
+                mens_rea reason_to_believe := "Having reason to believe that an offence has been committed";
+            }
+            actus_reus omission := "Omitting to give any information respecting that offence";
+            mens_rea intentional := "The omission is intentional";
+            circumstance legal_duty := "The information omitted is information which he is legally bound to give";
         }
     }
 
-    penalty {
-        imprisonment := 0 years .. 6 months;
-        fine := $0.00 .. $5,000.00;
+    penalty or_both {
+        imprisonment := 0 days .. 6 months;
+        fine := unlimited;
     }
 }

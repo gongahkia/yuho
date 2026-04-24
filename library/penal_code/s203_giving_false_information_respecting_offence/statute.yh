@@ -2,46 +2,23 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr203-#pr203-
 /// @amendment [15/2019]
-// Singapore Penal Code Section 203 - Giving false information respecting an offence committed
-// Yuho v5 Syntax
 
-struct S203Case {
-    string accused,
-    bool knowsOrReasonToBelieveOffenceCommitted,
-    bool givesInformation,
-    bool knowsOrBelievesInformationFalse,
-}
-
-fn evaluate_s203(bool knowsOrReasonToBelieveOffenceCommitted, bool givesInformation, bool knowsOrBelievesInformationFalse) : string {
-    match {
-        case TRUE if knowsOrReasonToBelieveOffenceCommitted == FALSE := consequence "Not liable - no knowledge of offence";
-        case TRUE if givesInformation == FALSE := consequence "Not liable - no information given";
-        case TRUE if knowsOrBelievesInformationFalse == FALSE := consequence "Not liable - no knowledge of falsity";
-        case _ := consequence "Liable under s203";
-    }
-}
-
-statute 203 "Giving false information respecting an offence committed" effective 1872-01-01 {
+statute 203 "Giving false information respecting an offence committed" effective 1872-01-01 effective 2019-12-31 {
     definitions {
-        offence := "An act committed at any place out of Singapore which if committed in Singapore would be punishable under the Code (per explanation)";
-        false_information := "Information given respecting the offence which the giver knows or believes to be false";
+        explanation_offence_includes_extraterritorial_listed_acts := "Explanations.-- In sections 201 and 202 and in this section “offence” includes any act committed at any place out of Singapore which if committed in Singapore would be punishable under any of the following sections, namely, 302, 304, 382, 392, 393, 394, 395, 396, 397, 399, 402, 435, 436, 449, 450, 459 and 460.";
     }
 
     elements {
+        /// The offence is complete only if the belief that an offence was committed, the giving of information about it, and the accused's knowledge or belief in that information's falsity all coexist.
         all_of {
-            /// mens rea: knowledge or reason to believe offence committed
-            mens_rea knowledge := "Knowing or having reason to believe that an offence has been committed";
-            /// actus reus: giving information
-            actus_reus giveInfo := "Gives any information respecting that offence";
-            /// mens rea: knowledge or belief of falsity
-            mens_rea falseBelief := "Knowing or believing the information to be false";
+            mens_rea knowledge_of_commission := "Knowing or having reason to believe that an offence has been committed.";
+            actus_reus giving_information := "Gives any information respecting that offence.";
+            mens_rea knowledge_of_falsity := "Knows or believes that information to be false.";
         }
     }
 
-    penalty {
-        imprisonment := 0 years .. 2 years;
-        fine := $0.00 .. $5,000.00;
+    penalty or_both {
+        imprisonment := 0 days .. 2 years;
+        fine := unlimited;
     }
-
-    /// Explanation: In sections 201, 202, and this section, "offence" includes any act committed at any place out of Singapore which if committed in Singapore would be punishable under the Penal Code.
 }

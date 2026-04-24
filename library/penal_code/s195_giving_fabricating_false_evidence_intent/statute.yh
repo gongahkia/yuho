@@ -2,54 +2,57 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr195-#pr195-
 /// @amendment [15/2019]
-// Singapore Penal Code Section 195 - Giving or fabricating false evidence with intent to procure conviction of an offence punishable with imprisonment
-// Yuho v5 Syntax
 
-referencing penal_code/s191_giving_false_evidence
-referencing penal_code/s192_fabricating_false_evidence
-
-struct S195Case {
-    string accused,
-    bool givesOrFabricatesFalseEvidence,
-    bool intendsSevenYearPlusConviction,
-    bool intendsLifeImprisonmentConviction,
-}
-
-fn evaluate_s195(bool givesOrFabricatesFalseEvidence, bool intendsSevenYearPlusConviction, bool intendsLifeImprisonmentConviction) : string {
-    match {
-        case TRUE if givesOrFabricatesFalseEvidence == FALSE := consequence "Not liable - no false evidence";
-        case TRUE if intendsLifeImprisonmentConviction == TRUE := consequence "Liable under s195(2) - up to 20 years";
-        case TRUE if intendsSevenYearPlusConviction == TRUE := consequence "Liable under s195(1) - as convicted would be punished";
-        case _ := consequence "Not liable under s195";
-    }
-}
-
-statute 195 "Giving or fabricating false evidence with intent to procure conviction of an offence punishable with imprisonment" effective 1872-01-01 {
+statute 195 "Giving or fabricating false evidence with intent to procure conviction of an offence punishable with imprisonment" effective 1872-01-01 effective 2019-12-31 {
     definitions {
-        non_capital_offence := "An offence not capital but punishable with imprisonment for 7 years or more";
-        life_offence := "An offence punishable with imprisonment for life, but not capital";
-        false_evidence := "As defined in section 191";
-        fabricated_evidence := "As defined in section 192";
+        giving_false_evidence := "Giving false evidence as defined in section 191.";
+        fabricating_false_evidence := "Fabricating false evidence as defined in section 192.";
     }
 
-    elements {
-        all_of {
-            /// actus reus: giving or fabricating false evidence
-            actus_reus giveOrFabricate := "Gives or fabricates false evidence";
-            /// mens rea: intent or knowledge of likely conviction for 7yr+/life offence
-            mens_rea convictionIntent := "Intending thereby to cause, or knowing it to be likely that he will thereby cause, any person to be convicted of an offence which is not capital but punishable with imprisonment for 7 years or more, or for life";
+    subsection (1) {
+        elements {
+            /// Subsection (1) requires false evidence, the intent or likelihood knowledge, and a non-capital target offence punishable with imprisonment for 7 years or upwards.
+            all_of {
+                any_of {
+                    actus_reus gives_false_evidence := "Whoever gives false evidence";
+                    actus_reus fabricates_false_evidence := "Whoever fabricates false evidence";
+                }
+                any_of {
+                    mens_rea intending_to_cause_conviction := "Intending thereby to cause any person to be convicted of an offence.";
+                    mens_rea knowing_likely_to_cause_conviction := "Knowing it to be likely that he will thereby cause any person to be convicted of an offence.";
+                }
+                circumstance qualifying_noncapital_offence := "The offence is one which by this Code or under any other law for the time being in force is not capital, but punishable with imprisonment for a term of 7 years or upwards.";
+            }
+        }
+
+        penalty {
+            supplementary := "The offender shall be punished as a person convicted of that offence would be liable to be punished."
         }
     }
 
-    illustration example1 {
-        "A gives false evidence before a court of justice, intending thereby to cause Z to be convicted of a gang-robbery. The punishment of gang-robbery is imprisonment for a term of not less than 5 years and up to 20 years. A is liable under this section."
+    subsection (2) {
+        elements {
+            /// Subsection (2) applies where the target offence is non-capital but punishable with imprisonment for life.
+            all_of {
+                any_of {
+                    actus_reus gives_false_evidence := "Whoever gives false evidence";
+                    actus_reus fabricates_false_evidence := "Whoever fabricates false evidence";
+                }
+                any_of {
+                    mens_rea intending_to_cause_conviction := "Intending thereby to cause any person to be convicted of an offence.";
+                    mens_rea knowing_likely_to_cause_conviction := "Knowing it to be likely that he will thereby cause any person to be convicted of an offence.";
+                }
+                circumstance qualifying_life_imprisonment_offence := "The offence is one which by this Code or under any other law for the time being in force is not capital, but punishable with imprisonment for life.";
+            }
+        }
+
+        penalty {
+            imprisonment := 0 years .. 20 years;
+        }
     }
 
-    penalty {
-        imprisonment := 0 years .. 20 years;
-        fine := $0.00 .. $50,000.00;
+    /// Illustration
+    illustration illustration_a {
+        "A gives false evidence before a court of justice, intending thereby to cause Z to be convicted of a gang‑robbery. The punishment of gang-robbery is imprisonment for a term of not less than 5 years and not more than 20 years and also caning with not less than 12 strokes. A , therefore, is liable to such imprisonment, with caning."
     }
-
-    // s195(1) offence punishable with imprisonment 7 years or upwards: punished as a person convicted of that offence would be liable
-    // s195(2) offence punishable with life imprisonment: up to 20 years
 }

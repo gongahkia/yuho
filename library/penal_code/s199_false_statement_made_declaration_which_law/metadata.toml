@@ -2,18 +2,18 @@
 section_number = "199"
 title = "False statement made in any declaration which is by law receivable as evidence"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "False statement made in a legally-receivable declaration, touching a material point, known or believed to be false; punished as if giving false evidence."
+summary = "Making a false statement in a declaration that the law receives as evidence, on a material point, is punishable as giving false evidence."
 source = "Singapore Penal Code 1871, Section 199"
 
 [verification]
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr199-#pr199-"
-disclaimer = "Educational purposes only. Cross-reference with official SSO text."

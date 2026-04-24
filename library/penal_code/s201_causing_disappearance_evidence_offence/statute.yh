@@ -1,62 +1,42 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr201-#pr201-
-// Singapore Penal Code Section 201 - Causing disappearance of evidence of an offence committed
-// Yuho v5 Syntax
-
-struct EvidenceDisappearanceCase {
-    string accused,
-    string offender,
-    bool knowsOffenceCommitted,
-    bool causesEvidenceToDisappear,
-    bool givesFalseInformation,
-    bool intentionToScreen,
-    string underlyingOffencePunishment,
-}
-
-fn evaluate_s201(bool knowsOffenceCommitted, bool causesEvidenceToDisappear, bool givesFalseInformation, bool intentionToScreen) : string {
-    match {
-        case TRUE if knowsOffenceCommitted == FALSE := consequence "Not liable - no knowledge of offence";
-        case TRUE if intentionToScreen == FALSE := consequence "Not liable - no screening intent";
-        case TRUE if causesEvidenceToDisappear == TRUE := consequence "Liable under s201";
-        case TRUE if givesFalseInformation == TRUE := consequence "Liable under s201";
-        case _ := consequence "Not liable";
-    }
-}
 
 statute 201 "Causing disappearance of evidence of an offence committed, or giving false information touching it, to screen the offender" effective 1872-01-01 {
-    definitions {
-        offender := "The person who has committed the underlying offence";
-        evidence := "Any evidence of the commission of the offence";
-        screening := "Preventing legal punishment of the offender";
-    }
-
     elements {
+        /// Section 201 requires knowledge or reason to believe that an offence has been committed, a screening intention, and either disappearance of evidence or false information.
         all_of {
-            /// knowledge or reason to believe offence committed
-            mens_rea knowledge := "Knowing or having reason to believe that an offence has been committed";
+            mens_rea knowledge_of_offence := "Knowing or having reason to believe that an offence has been committed";
+            mens_rea intention_to_screen := "With the intention of screening the offender from legal punishment";
             any_of {
-                /// causing evidence to disappear
-                actus_reus destroy_evidence := "Causing any evidence of the commission of that offence to disappear";
-                /// or giving false information about the offence
-                actus_reus false_information := "Giving any information respecting the offence which he knows or believes to be false";
+                actus_reus disappearance_of_evidence := "Causes any evidence of the commission of that offence to disappear";
+                actus_reus false_information := "Gives any information respecting the offence which he knows or believes to be false";
             }
-            /// specific intent to screen the offender
-            mens_rea screening_intent := "Intention of screening the offender from legal punishment";
+            any_of {
+                circumstance death_punishable_offence := "The offence which he knows or believes to have been committed is punishable with death";
+                circumstance life_or_20_year_offence := "The offence is punishable with imprisonment for life or with imprisonment which may extend to 20 years";
+                circumstance below_20_year_offence := "The offence is punishable with imprisonment for any term not extending to 20 years";
+            }
         }
     }
 
-    penalty {
+    penalty when death_punishable_offence {
         imprisonment := 0 years .. 10 years;
-        fine := $0.00 .. $10,000.00;
+        fine := unlimited;
     }
 
-    illustration example1 {
-        "A, knowing that B has murdered Z, assists B to hide the body with the intention of screening B from punishment. A is liable to imprisonment for 10 years, and also to fine."
+    penalty when life_or_20_year_offence {
+        imprisonment := 0 years .. 7 years;
+        fine := unlimited;
     }
 
-    // penalty is tiered by underlying offence:
-    // (a) death-punishable: up to 10 years + fine
-    // (b) life or up to 10 years imprisonment: up to 3 years + fine
-    // (c) less than 10 years imprisonment: up to 1/4 of longest term, or fine, or both
+    penalty or_both when below_20_year_offence {
+        fine := unlimited;
+        supplementary := "Shall be punished with imprisonment for a term which may extend to one‑fourth part of the longest term of the imprisonment provided for the offence, or with fine, or with both.";
+    }
+
+    /// Illustration
+    illustration illustration {
+        "A , knowing that B has murdered Z , assists B to hide the body with the intention of screening B from punishment. A is liable to imprisonment for 10 years, and also to fine."
+    }
 }

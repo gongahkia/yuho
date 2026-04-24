@@ -2,18 +2,18 @@
 section_number = "204"
 title = "Destruction of document or electronic record to prevent its production as evidence"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Secreting, destroying, or obliterating a document or electronic record lawfully compellable as evidence, with intent to prevent its production before a court or public servant."
+summary = "Section 204 criminalises secreting, destroying, obliterating, or rendering illegible a document or electronic record to prevent its production or use as evidence."
 source = "Singapore Penal Code 1871, Section 204"
 
 [verification]
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr204-#pr204-"
-disclaimer = "Educational purposes only. Cross-reference with official SSO text."

@@ -1,54 +1,25 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr199-#pr199-
-// Singapore Penal Code Section 199 - False statement made in any declaration which is by law receivable as evidence
-// Yuho v5 Syntax
 
 referencing penal_code/s193_punishment_false_evidence
 
-struct S199Case {
-    string accused,
-    bool makesDeclaration,
-    bool declarationReceivableAsEvidence,
-    bool statementFalse,
-    bool touchingMaterialPoint,
-    bool knowsOrBelievesFalse,
-}
-
-fn evaluate_s199(bool makesDeclaration, bool declarationReceivableAsEvidence, bool statementFalse, bool touchingMaterialPoint, bool knowsOrBelievesFalse) : string {
-    match {
-        case TRUE if makesDeclaration == FALSE := consequence "Not liable - no declaration";
-        case TRUE if declarationReceivableAsEvidence == FALSE := consequence "Not liable - declaration not receivable as evidence";
-        case TRUE if statementFalse == FALSE := consequence "Not liable - statement true";
-        case TRUE if touchingMaterialPoint == FALSE := consequence "Not liable - not touching material point";
-        case TRUE if knowsOrBelievesFalse == FALSE := consequence "Not liable - no knowledge of falsity";
-        case _ := consequence "Liable under s199";
-    }
-}
-
 statute 199 "False statement made in any declaration which is by law receivable as evidence" effective 1872-01-01 {
     definitions {
-        declaration := "A declaration which a court of justice, public servant, or other person is bound or authorised by law to receive as evidence of any fact";
-        material_point := "A point material to the object for which the declaration is made or used";
+        declaration := "Any declaration made or subscribed by the person which any court of justice, or any public servant or other person, is bound or authorised by law to receive as evidence of any fact.";
+        material_point := "Any point material to the object for which the declaration is made or used.";
     }
 
     elements {
         all_of {
-            /// actus reus: making a declaration containing false statement
-            actus_reus makeStatement := "Makes or subscribes a declaration and makes any statement which is false";
-            /// circumstance: declaration legally receivable as evidence
-            circumstance receivable := "Declaration is one which a court of justice, public servant or other person is bound or authorised by law to receive as evidence";
-            /// circumstance: statement touches material point
-            circumstance material := "Statement touches any point material to the object for which the declaration is made or used";
-            /// mens rea: knowledge or belief of falsity
-            mens_rea knowledge := "Either knows or believes the statement to be false, or does not believe it to be true";
+            actus_reus makes_false_statement := "Whoever, in any declaration made or subscribed by him, makes any statement which is false";
+            circumstance declaration_receivable_as_evidence := "The declaration is one which any court of justice, or any public servant or other person, is bound or authorised by law to receive as evidence of any fact";
+            mens_rea falsity_fault := "He either knows or believes the statement to be false or does not believe it to be true";
+            circumstance materiality := "The false statement touches a point material to the object for which the declaration is made or used";
         }
     }
 
     penalty {
-        imprisonment := 0 years .. 7 years;
-        fine := $0.00 .. $50,000.00;
+        supplementary := "Shall be punished in the same manner as if he gave false evidence.";
     }
-
-    // punished in the same manner as if he gave false evidence (s193)
 }

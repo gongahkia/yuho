@@ -2,18 +2,18 @@
 section_number = "204B"
 title = "Bribery of witnesses"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Offering, giving, attempting to induce, or receiving gratification to suppress reporting of an offence or to cause a witness to give false or withheld testimony in a judicial proceeding."
+summary = "Section 204B criminalises giving, offering, procuring, inducing, asking for, or receiving gratification tied to suppressing offence reports or false witness testimony."
 source = "Singapore Penal Code 1871, Section 204B"
 
 [verification]
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr204B-#pr204B-"
-disclaimer = "Educational purposes only. Cross-reference with official SSO text."
