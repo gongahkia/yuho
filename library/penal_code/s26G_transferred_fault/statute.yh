@@ -1,13 +1,75 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr26G-#pr26G-
-// Singapore Penal Code Section 26G
-// Yuho v5 Syntax
-
 /// @amendment [15/2019]
+statute 26G "“Transferred fault”" effective 1872-01-01 effective 2020-01-01 {
+    subsection (1) {
+        definitions {
+            applicable_offence := "This section applies to any offence under this Code or any other written law where a fault element of the offence is intention or knowledge, except where section 301(1) applies to that offence. [15/2019]";
+            excluded_offence := "An offence to which section 301(1) applies is excluded from this section.";
+        }
+    }
 
-statute 26G "“Transferred fault”" effective 1872-01-01 {
-    definitions {
-        transferred_fault := "—(1) This section applies to any offence under this Code or any other written law where a fault element of the offence is intention or knowledge, except where section 301(1) applies to that offence. [15/2019] (2) Where all the fault elements and physical elements of the offence have been proven in respect of an accused person, and assuming no defence or exception applies, the accused person shall be guilty of the offence despite the following circumstances: (3) Subsection (2) applies only where the accused person did or caused the physical elements in subsection (2)( a ) negligently in respect of the person or thing mentioned in that subsection. [15/2019] (4) To avoid doubt, nothing in this section affects the requirement to prove all the fault elements of an offence in order for guilt to be established for that offence. [15/2019] (5) Where the circumstances mentioned in subsection (2)( a ) and ( b ) exist, the accused person may rely on any defence or exception in law as though the act or effect mentioned in subsection (2)( a ) concerned the person or thing the accused person believed or intended that act or effect to concern. [15/2019] Illustrations ( a ) A throws a stone at B intending to hurt B (but not intending, knowing or having reason to believe that anyone else would be hurt), but the stone hurts C . A commits an offence of voluntarily causing hurt in respect of C if A threw the stone negligently in respect of C . ( b ) A throws a stone at a porcelain vase intending to cause loss to its owner, B (but not intending or knowing it likely that A would cause wrongful loss or damage in respect of any other property), but the stone damages a clay pot belonging to C . A commits mischief in respect of C if A threw the stone negligently in respect of C . ( c ) A threatens injury to B ’s person by shouting at B the words, “ B , I will kill you”, with intent to cause alarm to B . C hears these words and is alarmed. A does not commit the offence of criminal intimidation against C as A did not threaten C with any injury. Illustrations ( a ) A throws a stone at B intending to hurt B (but not intending or not knowing that A is likely to cause wrongful loss or damage in respect of any property), but the stone hits a porcelain vase. A does not commit mischief in respect of the vase. This is because A did not possess the fault element required to commit mischief. ( b ) A throws a stone at B intending to hurt B (but not intending, knowing or having reason to believe that anyone else would be hurt), but the stone hurts P , a police officer in discharge of his duty. A commits an offence of voluntarily causing hurt against P . A does not commit an offence of voluntarily causing hurt to P in the discharge of P ’s duty as a public servant because A did not possess the fault element required to commit this offence. ( c ) A throws a stone at B intending to hurt B (but not intending or not knowing that A is likely to cause grievous hurt), but the stone causes grievous hurt to C . A commits an offence against C of voluntarily causing hurt where grievous hurt is caused under section 323A. A does not commit an offence of voluntarily causing grievous hurt against C because A did not possess the fault element required to commit this offence. Illustration A throws a stone at B in exercise of A ’s right of private defence against B , but the stone hurts C . A may rely on the defence of private defence against B if A is charged for voluntarily causing hurt to C .";
+    subsection (2) {
+        elements {
+            /// Subsection (2) is conjunctive: all elements must be proven and no defence or exception must apply before transferred fault can establish guilt.
+            all_of {
+                circumstance all_elements_proven := "All the fault elements and physical elements of the offence have been proven in respect of an accused person";
+                circumstance no_defence_or_exception := "Assuming no defence or exception applies";
+                actus_reus act_or_effect_concerning_person_or_thing := "The physical elements of the offence included the doing of an act or the causing of an effect concerning a person or thing";
+                mens_rea believed_or_intended_different_person_or_thing := "At the time such act or effect was done or caused, the accused person believed or intended that the act or effect would concern a person or thing different from the person or thing mentioned in paragraph (a)";
+                circumstance guilt_despite_transfer := "The accused person shall be guilty of the offence despite the circumstances in subsection (2)(a) and (b)";
+            }
+        }
+    }
+
+    subsection (3) {
+        elements {
+            all_of {
+                circumstance subsection_2_applies := "Subsection (2) applies";
+                actus_reus did_or_caused_physical_elements := "The accused person did or caused the physical elements in subsection (2)(a)";
+                mens_rea negligent_as_to_actual_person_or_thing := "The accused person did or caused those physical elements negligently in respect of the person or thing mentioned in subsection (2)(a). [15/2019]";
+            }
+        }
+
+        illustration illustration_3_a {
+            "( a ) A throws a stone at B intending to hurt B (but not intending, knowing or having reason to believe that anyone else would be hurt), but the stone hurts C . A commits an offence of voluntarily causing hurt in respect of C if A threw the stone negligently in respect of C ."
+        }
+
+        illustration illustration_3_b {
+            "( b ) A throws a stone at a porcelain vase intending to cause loss to its owner, B (but not intending or knowing it likely that A would cause wrongful loss or damage in respect of any other property), but the stone damages a clay pot belonging to C . A commits mischief in respect of C if A threw the stone negligently in respect of C ."
+        }
+
+        illustration illustration_3_c {
+            "( c ) A threatens injury to B ’s person by shouting at B the words, “ B , I will kill you”, with intent to cause alarm to B . C hears these words and is alarmed. A does not commit the offence of criminal intimidation against C as A did not threaten C with any injury."
+        }
+    }
+
+    subsection (4) {
+        definitions {
+            fault_elements_still_required := "To avoid doubt, nothing in this section affects the requirement to prove all the fault elements of an offence in order for guilt to be established for that offence. [15/2019]";
+        }
+
+        illustration illustration_4_a {
+            "( a ) A throws a stone at B intending to hurt B (but not intending or not knowing that A is likely to cause wrongful loss or damage in respect of any property), but the stone hits a porcelain vase. A does not commit mischief in respect of the vase. This is because A did not possess the fault element required to commit mischief."
+        }
+
+        illustration illustration_4_b {
+            "( b ) A throws a stone at B intending to hurt B (but not intending, knowing or having reason to believe that anyone else would be hurt), but the stone hurts P , a police officer in discharge of his duty. A commits an offence of voluntarily causing hurt against P . A does not commit an offence of voluntarily causing hurt to P in the discharge of P ’s duty as a public servant because A did not possess the fault element required to commit this offence."
+        }
+
+        illustration illustration_4_c {
+            "( c ) A throws a stone at B intending to hurt B (but not intending or not knowing that A is likely to cause grievous hurt), but the stone causes grievous hurt to C . A commits an offence against C of voluntarily causing hurt where grievous hurt is caused under section 323A. A does not commit an offence of voluntarily causing grievous hurt against C because A did not possess the fault element required to commit this offence."
+        }
+    }
+
+    subsection (5) {
+        definitions {
+            transferred_defence_or_exception := "Where the circumstances mentioned in subsection (2)( a ) and ( b ) exist, the accused person may rely on any defence or exception in law as though the act or effect mentioned in subsection (2)( a ) concerned the person or thing the accused person believed or intended that act or effect to concern. [15/2019]";
+        }
+
+        illustration illustration_5 {
+            "A throws a stone at B in exercise of A ’s right of private defence against B , but the stone hurts C . A may rely on the defence of private defence against B if A is charged for voluntarily causing hurt to C ."
+        }
     }
 }

@@ -1,11 +1,16 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr29-#pr29-
-// Singapore Penal Code Section 29
-// Yuho v5 Syntax
 
 statute 29 "“Document”" effective 1872-01-01 {
     definitions {
-        document := "The word “document” includes, in addition to a document in writing — ( a ) any map, plan, graph or drawing; ( b ) any photograph; ( c ) any label, marking or other writing which identifies or describes anything of which it forms a part, or to which it is attached by any means whatsoever; ( d ) any disc, tape, soundtrack or other device in which sounds or other data (not being visual images) are embodied so as to be capable (with or without the aid of some other equipment) of being reproduced therefrom; ( e ) any film (including microfilm), negative, tape, disc or other device in which one or more visual images are embodied so as to be capable (with or without the aid of some other equipment) of being reproduced therefrom; and ( f ) any paper or other material on which there are marks, impressions, figures, letters, symbols or perforations having a meaning for persons qualified to interpret them.";
+        document := "The word “document” includes, in addition to a document in writing";
+        document_in_writing := "a document in writing";
+        map_plan_graph_or_drawing := "any map, plan, graph or drawing";
+        photograph := "any photograph";
+        identifying_label_marking_or_writing := "any label, marking or other writing which identifies or describes anything of which it forms a part, or to which it is attached by any means whatsoever";
+        sound_or_data_device := "any disc, tape, soundtrack or other device in which sounds or other data (not being visual images) are embodied so as to be capable (with or without the aid of some other equipment) of being reproduced therefrom";
+        visual_image_device := "any film (including microfilm), negative, tape, disc or other device in which one or more visual images are embodied so as to be capable (with or without the aid of some other equipment) of being reproduced therefrom";
+        interpretable_marked_material := "any paper or other material on which there are marks, impressions, figures, letters, symbols or perforations having a meaning for persons qualified to interpret them";
     }
 }

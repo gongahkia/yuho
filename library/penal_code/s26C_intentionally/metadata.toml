@@ -2,16 +2,17 @@
 section_number = "26C"
 title = "“Intentionally”"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Defines 'intentionally' as doing an act deliberately."
+summary = "Defines when a person acts or causes an effect intentionally, and clarifies the role of motive, desire, natural consequences, and foresight."
 source = "Singapore Penal Code 1871, Section 26C"
 
 [verification]

@@ -1,13 +1,29 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr26H-#pr26H-
-// Singapore Penal Code Section 26H
-// Yuho v5 Syntax
-
 /// @amendment [15/2019]
+statute 26H "“Strict liability”" effective 1872-01-01 effective 2020-01-01 {
+    subsection (1) {
+        definitions {
+            strict_liability_offence := "An offence of strict liability under this Code or any written law is one where, for every physical element of the offence, there is no corresponding fault element. [15/2019]";
+        }
+    }
 
-statute 26H "“Strict liability”" effective 1872-01-01 {
-    definitions {
-        strict_liability := "—(1) An offence of strict liability under this Code or any written law is one where, for every physical element of the offence, there is no corresponding fault element. [15/2019] (2) Strict liability is said to apply to a particular physical element of an offence where there is no corresponding fault element for that physical element, regardless of whether or not the offence is one of strict liability. [15/2019] (3) To avoid doubt, an offence may be a strict liability offence even though it is not so expressly described by any written law; and strict liability may apply to a particular physical element of any offence even though it is not so expressly described in any written law. [15/2019] (4) It is a defence for any person charged with a strict liability offence to prove that in committing all the acts or omissions that are physical elements of the offence, he exercised reasonable care. [15/2019]";
+    subsection (2) {
+        definitions {
+            strict_liability_physical_element := "Strict liability is said to apply to a particular physical element of an offence where there is no corresponding fault element for that physical element, regardless of whether or not the offence is one of strict liability. [15/2019]";
+        }
+    }
+
+    subsection (3) {
+        definitions {
+            strict_liability_not_expressly_described := "To avoid doubt, an offence may be a strict liability offence even though it is not so expressly described by any written law; and strict liability may apply to a particular physical element of any offence even though it is not so expressly described in any written law. [15/2019]";
+        }
+    }
+
+    subsection (4) {
+        definitions {
+            reasonable_care_defence := "It is a defence for any person charged with a strict liability offence to prove that in committing all the acts or omissions that are physical elements of the offence, he exercised reasonable care. [15/2019]";
+        }
     }
 }

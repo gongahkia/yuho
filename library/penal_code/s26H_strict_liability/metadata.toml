@@ -2,16 +2,17 @@
 section_number = "26H"
 title = "“Strict liability”"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Defines 'strict liability' — offences with no fault element for any physical element."
+summary = "Defines strict liability for offences and physical elements, and states the reasonable-care defence for strict liability offences."
 source = "Singapore Penal Code 1871, Section 26H"
 
 [verification]

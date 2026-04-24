@@ -2,16 +2,17 @@
 section_number = "26D"
 title = "“Knowingly”"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Defines 'knowingly' as acting with awareness of a circumstance existing or virtually certain to exist."
+summary = "Defines knowingly for circumstances and effects, and states when knowledge is established by intention or wilful blindness."
 source = "Singapore Penal Code 1871, Section 26D"
 
 [verification]

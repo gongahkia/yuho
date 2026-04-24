@@ -6,6 +6,7 @@
 
 statute 27 "Property in possession of spouse, clerk or servant" effective 1872-01-01 {
     definitions {
-        property_in_possession_of_spouse_clerk_servant := "When property is in the possession of a person’s spouse, clerk or servant, on account of that person, it is in that person’s possession within the meaning of this Code. Explanation.— A person employed temporarily or on a particular occasion in the capacity of a clerk or servant is a clerk or servant within the meaning of this section.";
+        possession_through_spouse_clerk_or_servant := "When property is in the possession of a person’s spouse, clerk or servant, on account of that person, it is in that person’s possession within the meaning of this Code.";
+        temporary_clerk_or_servant := "Explanation.— A person employed temporarily or on a particular occasion in the capacity of a clerk or servant is a clerk or servant within the meaning of this section.";
     }
 }

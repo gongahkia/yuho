@@ -2,16 +2,17 @@
 section_number = "29A"
 title = "“Writing”"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Defines 'writing' to include any mode of representing words/figures/drawings/symbols in visible form."
+summary = "Defines “writing” as including visible representations or reproductions of words, figures, drawings, or symbols."
 source = "Singapore Penal Code 1871, Section 29A"
 
 [verification]

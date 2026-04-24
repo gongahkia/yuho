@@ -2,16 +2,17 @@
 section_number = "29"
 title = "“Document”"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Defines 'document' broadly to include maps, photographs, labels, electronic records and similar writings."
+summary = "Defines “document” to include writings and specified physical, photographic, audio/data, visual-image, and interpretable marked materials."
 source = "Singapore Penal Code 1871, Section 29"
 
 [verification]

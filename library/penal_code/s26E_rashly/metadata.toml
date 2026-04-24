@@ -2,16 +2,17 @@
 section_number = "26E"
 title = "“Rashly”"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Defines 'rashly' as acting with knowledge of a real risk that a circumstance exists."
+summary = "Defines when an act is done rashly in respect of a circumstance or effect, and when intention or knowledge also establishes rashness as a fault element."
 source = "Singapore Penal Code 1871, Section 26E"
 
 [verification]

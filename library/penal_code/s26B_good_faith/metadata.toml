@@ -2,16 +2,17 @@
 section_number = "26B"
 title = "“Good faith”"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Defines 'good faith' requiring due care and attention."
+summary = "Defines good faith by excluding acts or beliefs done without due care and attention."
 source = "Singapore Penal Code 1871, Section 26B"
 
 [verification]

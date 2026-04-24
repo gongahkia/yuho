@@ -2,13 +2,14 @@
 section_number = "27"
 title = "Property in possession of spouse, clerk or servant"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
 summary = "Property in possession of a person's spouse, clerk or servant on the person's account is in that person's possession."

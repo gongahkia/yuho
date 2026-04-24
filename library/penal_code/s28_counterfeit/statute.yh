@@ -1,11 +1,11 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr28-#pr28-
-// Singapore Penal Code Section 28
-// Yuho v5 Syntax
 
 statute 28 "“Counterfeit”" effective 1872-01-01 {
     definitions {
-        counterfeit := "A person is said to “counterfeit” who causes one thing to resemble another thing, intending by means of that resemblance to practise deception, or knowing it to be likely that deception will thereby be practised. Explanation 1.—It is not essential to counterfeiting that the imitation should be exact. Explanation 2.—Where a person causes one thing to resemble another thing and the resemblance is such that a person might be deceived thereby, it shall be presumed until the contrary is proved that the person so causing the one thing to resemble the other thing intended by means of that resemblance to practise deception or knew it to be likely that deception would thereby be practised.";
+        counterfeit := "A person is said to “counterfeit” who causes one thing to resemble another thing, intending by means of that resemblance to practise deception, or knowing it to be likely that deception will thereby be practised.";
+        explanation_1_imitation_need_not_be_exact := "Explanation 1.—It is not essential to counterfeiting that the imitation should be exact.";
+        explanation_2_presumption_of_deceptive_intent_or_knowledge := "Explanation 2.—Where a person causes one thing to resemble another thing and the resemblance is such that a person might be deceived thereby, it shall be presumed until the contrary is proved that the person so causing the one thing to resemble the other thing intended by means of that resemblance to practise deception or knew it to be likely that deception would thereby be practised.";
     }
 }

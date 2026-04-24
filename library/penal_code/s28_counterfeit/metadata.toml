@@ -2,16 +2,17 @@
 section_number = "28"
 title = "“Counterfeit”"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Defines 'counterfeit' as causing one thing to resemble another to practise or enable deception."
+summary = "Defines counterfeiting as causing one thing to resemble another with deceptive intent or knowledge, with rules on exact imitation and a rebuttable presumption."
 source = "Singapore Penal Code 1871, Section 28"
 
 [verification]
