@@ -1,6 +1,6 @@
 # Coverage — Penal Code 1871 (PC1871)
 
-_Generated: 2026-04-24T15:51:33+00:00_  
+_Generated: 2026-04-24T16:04:43+00:00_  
 _Scraped: 2026-04-24T15:50:03Z_  
 _Valid date: n/a_
 
@@ -12,7 +12,7 @@ _Valid date: n/a_
 | encoded (.yh present) | 524 | 100.0% |
 | **L1** — parses | **524** | **100.0%** |
 | **L2** — typechecks | **524** | **100.0%** |
-| **L3** — verified | **82** | **15.6%** |
+| **L3** — verified | **102** | **19.5%** |
 
 ## Encoded sections
 
@@ -23,10 +23,10 @@ _Valid date: n/a_
 | s3 | Punishment of offences committed beyond, but which by law ma | ✓ | ✓ | ✓ | 2026-04-24 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s3_punishment_offences_committed_beyond_but/statute.yh` |
 | s4 | Jurisdiction over public servants for offences committed out | ✓ | ✓ | ✓ | 2026-04-24 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s4_jurisdiction_over_public_servants_offences/statute.yh` |
 | s4A | Offences against State and genocide committed outside Singap | ✓ | ✓ | · | — | `library/penal_code/s4A_offences_against_state_genocide_committed/statute.yh` |
-| s4B | Punishment of specified offences with elements occurring in  | ✓ | ✓ | · | — | `library/penal_code/s4B_punishment_specified_offences_elements/statute.yh` |
+| s4B | Punishment of specified offences with elements occurring in  | ✓ | ✓ | ✓ | 2026-04-24 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s4B_punishment_specified_offences_elements/statute.yh` |
 | s5 | Certain laws not to be affected by this Code | ✓ | ✓ | ✓ | 2026-04-24 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s5_certain_laws_not_affected_this_code/statute.yh` |
-| s6 | Definitions in this Code to be understood subject to excepti | ✓ | ✓ | · | — | `library/penal_code/s6_definitions_this_code_understood_subject/statute.yh` |
-| s6A | Definitions to apply to this Code and other written law | ✓ | ✓ | · | — | `library/penal_code/s6A_definitions_apply_this_code_other_written_law/statute.yh` |
+| s6 | Definitions in this Code to be understood subject to excepti | ✓ | ✓ | ✓ | 2026-04-24 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s6_definitions_this_code_understood_subject/statute.yh` |
+| s6A | Definitions to apply to this Code and other written law | ✓ | ✓ | ✓ | 2026-04-24 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s6A_definitions_apply_this_code_other_written_law/statute.yh` |
 | s7 | Expression once explained is used in the same sense througho | ✓ | ✓ | ✓ | 2026-04-24 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s7_expression_once_explained_used_same_sense/statute.yh` |
 | s8 | “Gender” | ✓ | ✓ | ✓ | 2026-04-24 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s8_gender/statute.yh` |
 | s9 | “Number” | ✓ | ✓ | ✓ | 2026-04-24 Opus 4.7 (automated reviewer) | `library/penal_code/s9_number/statute.yh` |
@@ -40,7 +40,7 @@ _Valid date: n/a_
 | s22 | “Property” | ✓ | ✓ | ✓ | 2026-04-24 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s22_property/statute.yh` |
 | s22A | “Fault element” and “physical element” | ✓ | ✓ | ✓ | 2026-04-24 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s22A_fault_element_physical_element/statute.yh` |
 | s23 | “Wrongful gain” and “wrongful loss” | ✓ | ✓ | ✓ | 2026-04-24 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s23_wrongful_gain_wrongful_loss/statute.yh` |
-| s24 | “Dishonestly” | ✓ | ✓ | · | — | `library/penal_code/s24_dishonestly/statute.yh` |
+| s24 | “Dishonestly” | ✓ | ✓ | ✓ | 2026-04-24 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s24_dishonestly/statute.yh` |
 | s25 | “Fraudulently” | ✓ | ✓ | ✓ | 2026-04-24 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s25_fraudulently/statute.yh` |
 | s26 | “Reason to believe” | ✓ | ✓ | ✓ | 2026-04-24 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s26_reason_believe/statute.yh` |
 | s26A | “Voluntarily” | ✓ | ✓ | ✓ | 2026-04-24 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s26A_voluntarily/statute.yh` |
@@ -49,7 +49,7 @@ _Valid date: n/a_
 | s26D | “Knowingly” | ✓ | ✓ | · | — | `library/penal_code/s26D_knowingly/statute.yh` |
 | s26E | “Rashly” | ✓ | ✓ | · | — | `library/penal_code/s26E_rashly/statute.yh` |
 | s26F | “Negligently” | ✓ | ✓ | · | — | `library/penal_code/s26F_negligently/statute.yh` |
-| s26G | “Transferred fault” | ✓ | ✓ | · | — | `library/penal_code/s26G_transferred_fault/statute.yh` |
+| s26G | “Transferred fault” | ✓ | ✓ | ✓ | 2026-04-24 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s26G_transferred_fault/statute.yh` |
 | s26H | “Strict liability” | ✓ | ✓ | · | — | `library/penal_code/s26H_strict_liability/statute.yh` |
 | s27 | Property in possession of spouse, clerk or servant | ✓ | ✓ | · | — | `library/penal_code/s27_property_possession_spouse_clerk_servant/statute.yh` |
 | s28 | “Counterfeit” | ✓ | ✓ | · | — | `library/penal_code/s28_counterfeit/statute.yh` |
@@ -83,11 +83,11 @@ _Valid date: n/a_
 | s54 | Imprisonment for life | ✓ | ✓ | · | — | `library/penal_code/s54_imprisonment_life/statute.yh` |
 | s72 | Punishment of a person found guilty of one of several offenc | ✓ | ✓ | · | — | `library/penal_code/s72_punishment_person_found_guilty_one_several/statute.yh` |
 | s73 | Enhanced penalties for offences against domestic workers | ✓ | ✓ | · | — | `library/penal_code/s73_enhanced_penalties_offences_against_domestic/statute.yh` |
-| s74 | Enhanced penalties for racially or religiously aggravated of | ✓ | ✓ | · | — | `library/penal_code/s74_enhanced_penalties_racially_religiously/statute.yh` |
-| s74A | Enhanced penalties for offences against vulnerable persons | ✓ | ✓ | · | — | `library/penal_code/s74A_enhanced_penalties_offences_against/statute.yh` |
+| s74 | Enhanced penalties for racially or religiously aggravated of | ✓ | ✓ | ✓ | 2026-04-24 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s74_enhanced_penalties_racially_religiously/statute.yh` |
+| s74A | Enhanced penalties for offences against vulnerable persons | ✓ | ✓ | ✓ | 2026-04-24 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s74A_enhanced_penalties_offences_against/statute.yh` |
 | s74B | Enhanced penalties for offences against person below 14 year | ✓ | ✓ | ✓ | 2026-04-24 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s74B_enhanced_penalties_offences_against_person/statute.yh` |
 | s74C | Enhanced penalties for offences against victims in intimate  | ✓ | ✓ | · | — | `library/penal_code/s74C_enhanced_penalties_offences_against_victims/statute.yh` |
-| s74D | Enhanced penalties for offences against victims in close rel | ✓ | ✓ | · | — | `library/penal_code/s74D_enhanced_penalties_offences_against_victims/statute.yh` |
+| s74D | Enhanced penalties for offences against victims in close rel | ✓ | ✓ | ✓ | 2026-04-24 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s74D_enhanced_penalties_offences_against_victims/statute.yh` |
 | s74E | Application of enhanced penalties | ✓ | ✓ | · | — | `library/penal_code/s74E_application_enhanced_penalties/statute.yh` |
 | s76 | Act done by person bound, or justified by law | ✓ | ✓ | · | — | `library/penal_code/s76_act_done_person_bound_justified_law/statute.yh` |
 | s77 | Act of judge when acting judicially | ✓ | ✓ | · | — | `library/penal_code/s77_act_judge_when_acting_judicially/statute.yh` |
@@ -133,7 +133,7 @@ _Valid date: n/a_
 | s113 | Liability of abettor for an offence caused by the act abette | ✓ | ✓ | · | — | `library/penal_code/s113_liability_abettor_offence_caused_act_abetted/statute.yh` |
 | s114 | Abettor present when offence committed | ✓ | ✓ | · | — | `library/penal_code/s114_abettor_present_when_offence_committed/statute.yh` |
 | s115 | Abetment of offence punishable with death or imprisonment fo | ✓ | ✓ | · | — | `library/penal_code/s115_abetment_offence_punishable_death/statute.yh` |
-| s116 | Abetment of offence punishable with imprisonment | ✓ | ✓ | · | — | `library/penal_code/s116_abetment_offence_punishable_imprisonment/statute.yh` |
+| s116 | Abetment of offence punishable with imprisonment | ✓ | ✓ | ✓ | 2026-04-24 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s116_abetment_offence_punishable_imprisonment/statute.yh` |
 | s117 | Abetting the commission of an offence by the public or by mo | ✓ | ✓ | · | — | `library/penal_code/s117_abetting_commission_offence_public_more_than/statute.yh` |
 | s118 | Concealing a design to commit an offence punishable with dea | ✓ | ✓ | · | — | `library/penal_code/s118_concealing_design_commit_offence_punishable/statute.yh` |
 | s119 | A public servant concealing a design to commit an offence wh | ✓ | ✓ | ✓ | 2026-04-24 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s119_public_servant_concealing_design_commit/statute.yh` |
@@ -201,11 +201,11 @@ _Valid date: n/a_
 | s170 | Personating a public servant | ✓ | ✓ | · | — | `library/penal_code/s170_personating_public_servant/statute.yh` |
 | s171 | Wearing garb or carrying token used by public servant, with  | ✓ | ✓ | · | — | `library/penal_code/s171_wearing_garb_carrying_token_used_public/statute.yh` |
 | s172 | Absconding to avoid arrest on warrant or service of summons, | ✓ | ✓ | · | — | `library/penal_code/s172_absconding_avoid_arrest_warrant_service/statute.yh` |
-| s173 | Preventing service of summons, etc., or preventing publicati | ✓ | ✓ | · | — | `library/penal_code/s173_preventing_service_summons_etc_preventing/statute.yh` |
-| s174 | Failure to attend in obedience to order from public servant | ✓ | ✓ | · | — | `library/penal_code/s174_failure_attend_obedience_order_public_servant/statute.yh` |
+| s173 | Preventing service of summons, etc., or preventing publicati | ✓ | ✓ | ✓ | 2026-04-25 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s173_preventing_service_summons_etc_preventing/statute.yh` |
+| s174 | Failure to attend in obedience to order from public servant | ✓ | ✓ | ✓ | 2026-04-24 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s174_failure_attend_obedience_order_public_servant/statute.yh` |
 | s175 | Omission to produce document or electronic record to public  | ✓ | ✓ | · | — | `library/penal_code/s175_omission_produce_document_electronic_record/statute.yh` |
 | s176 | Omission to give notice or information to public servant by  | ✓ | ✓ | · | — | `library/penal_code/s176_omission_give_notice_information_public/statute.yh` |
-| s177 | Furnishing false information | ✓ | ✓ | · | — | `library/penal_code/s177_furnishing_false_information/statute.yh` |
+| s177 | Furnishing false information | ✓ | ✓ | ✓ | 2026-04-24 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s177_furnishing_false_information/statute.yh` |
 | s178 | Refusing oath when duly required to take oath by a public se | ✓ | ✓ | · | — | `library/penal_code/s178_refusing_oath_when_duly_required_take_oath/statute.yh` |
 | s179 | Refusing to answer public servant authorised to question | ✓ | ✓ | · | — | `library/penal_code/s179_refusing_answer_public_servant_authorised/statute.yh` |
 | s180 | Refusing to sign statement | ✓ | ✓ | · | — | `library/penal_code/s180_refusing_sign_statement/statute.yh` |
@@ -215,7 +215,7 @@ _Valid date: n/a_
 | s184 | Obstructing sale of property offered for sale by authority o | ✓ | ✓ | · | — | `library/penal_code/s184_obstructing_sale_property_offered_sale/statute.yh` |
 | s185 | Illegal purchase or bid for property offered for sale by aut | ✓ | ✓ | · | — | `library/penal_code/s185_illegal_purchase_bid_property_offered_sale/statute.yh` |
 | s186 | Obstructing public servant in discharge of his public functi | ✓ | ✓ | · | — | `library/penal_code/s186_obstructing_public_servant_discharge_his/statute.yh` |
-| s187 | Omission to assist public servant when bound by law to give  | ✓ | ✓ | · | — | `library/penal_code/s187_omission_assist_public_servant_when_bound/statute.yh` |
+| s187 | Omission to assist public servant when bound by law to give  | ✓ | ✓ | ✓ | 2026-04-25 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s187_omission_assist_public_servant_when_bound/statute.yh` |
 | s188 | Disobedience to order duly promulgated by public servant | ✓ | ✓ | · | — | `library/penal_code/s188_disobedience_order_duly_promulgated_public/statute.yh` |
 | s189 | Threat of injury to a public servant | ✓ | ✓ | · | — | `library/penal_code/s189_threat_injury_public_servant/statute.yh` |
 | s190 | Threat of injury to induce any person to refrain from applyi | ✓ | ✓ | · | — | `library/penal_code/s190_threat_injury_induce_person_refrain_applying/statute.yh` |
@@ -273,7 +273,7 @@ _Valid date: n/a_
 | s263 | Erasure of mark denoting that stamp has been used | ✓ | ✓ | · | — | `library/penal_code/s263_erasure_mark_denoting_that_stamp_has_been/statute.yh` |
 | s267A | Affray | ✓ | ✓ | · | — | `library/penal_code/s267A_affray/statute.yh` |
 | s267B | Punishment for committing affray | ✓ | ✓ | · | — | `library/penal_code/s267B_punishment_committing_affray/statute.yh` |
-| s267C | Uttering words, making document, etc., containing incitement | ✓ | ✓ | · | — | `library/penal_code/s267C_uttering_words_making_document_etc/statute.yh` |
+| s267C | Uttering words, making document, etc., containing incitement | ✓ | ✓ | ✓ | 2026-04-25 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s267C_uttering_words_making_document_etc/statute.yh` |
 | s268 | Public nuisance | ✓ | ✓ | · | — | `library/penal_code/s268_public_nuisance/statute.yh` |
 | s268A | Communicating false information of harmful thing | ✓ | ✓ | · | — | `library/penal_code/s268A_communicating_false_information_harmful_thing/statute.yh` |
 | s268B | Placing or sending thing with intent to cause fear of harm | ✓ | ✓ | · | — | `library/penal_code/s268B_placing_sending_thing_intent_cause_fear_harm/statute.yh` |
@@ -349,7 +349,7 @@ _Valid date: n/a_
 | s334 | Voluntarily causing hurt on provocation | ✓ | ✓ | · | — | `library/penal_code/s334_voluntarily_causing_hurt_provocation/statute.yh` |
 | s334A | Punishment for voluntarily causing hurt on provocation which | ✓ | ✓ | · | — | `library/penal_code/s334A_punishment_voluntarily_causing_hurt/statute.yh` |
 | s335 | Causing grievous hurt on provocation | ✓ | ✓ | · | — | `library/penal_code/s335_causing_grievous_hurt_provocation/statute.yh` |
-| s335A | Allowing neglect, physical or sexual abuse of domestic worke | ✓ | ✓ | · | — | `library/penal_code/s335A_allowing_neglect_physical_sexual_abuse/statute.yh` |
+| s335A | Allowing neglect, physical or sexual abuse of domestic worke | ✓ | ✓ | ✓ | 2026-04-24 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s335A_allowing_neglect_physical_sexual_abuse/statute.yh` |
 | s335B | Punishment for act which endangers life or personal safety o | ✓ | ✓ | · | — | `library/penal_code/s335B_punishment_act_which_endangers_life_personal/statute.yh` |
 | s336 | Punishment for act which endangers life or the personal safe | ✓ | ✓ | · | — | `library/penal_code/s336_punishment_act_which_endangers_life_personal/statute.yh` |
 | s337 | Causing hurt by an act which endangers life or the personal  | ✓ | ✓ | · | — | `library/penal_code/s337_causing_hurt_act_which_endangers_life/statute.yh` |
@@ -392,7 +392,7 @@ _Valid date: n/a_
 | s374 | Unlawful compulsory labour | ✓ | ✓ | · | — | `library/penal_code/s374_unlawful_compulsory_labour/statute.yh` |
 | s375 | Rape | ✓ | ✓ | · | — | `library/penal_code/s375_rape/statute.yh` |
 | s376 | Sexual assault involving penetration | ✓ | ✓ | · | — | `library/penal_code/s376_sexual_assault_involving_penetration/statute.yh` |
-| s376A | Sexual penetration of minor below 16 years of age | ✓ | ✓ | · | — | `library/penal_code/s376A_sexual_penetration_minor_below_16_years_age/statute.yh` |
+| s376A | Sexual penetration of minor below 16 years of age | ✓ | ✓ | ✓ | 2026-04-24 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s376A_sexual_penetration_minor_below_16_years_age/statute.yh` |
 | s376AA | Exploitative sexual penetration of minor of or above 16 but  | ✓ | ✓ | · | — | `library/penal_code/s376AA_exploitative_sexual_penetration_minor_above/statute.yh` |
 | s376B | Commercial sex with minor below 18 years of age | ✓ | ✓ | · | — | `library/penal_code/s376B_commercial_sex_minor_below_18_years_age/statute.yh` |
 | s376C | Commercial sex with minor below 18 years of age outside Sing | ✓ | ✓ | · | — | `library/penal_code/s376C_commercial_sex_minor_below_18_years_age/statute.yh` |
@@ -401,7 +401,7 @@ _Valid date: n/a_
 | s376EA | Exploitative sexual grooming of minor of or above 16 but bel | ✓ | ✓ | · | — | `library/penal_code/s376EA_exploitative_sexual_grooming_minor_above_16/statute.yh` |
 | s376EB | Sexual communication with minor below 16 years of age | ✓ | ✓ | · | — | `library/penal_code/s376EB_sexual_communication_minor_below_16_years_age/statute.yh` |
 | s376EC | Exploitative sexual communication with minor of or above 16  | ✓ | ✓ | · | — | `library/penal_code/s376EC_exploitative_sexual_communication_minor/statute.yh` |
-| s376ED | Sexual activity or image in presence of minor below 16 years | ✓ | ✓ | · | — | `library/penal_code/s376ED_sexual_activity_image_presence_minor_below/statute.yh` |
+| s376ED | Sexual activity or image in presence of minor below 16 years | ✓ | ✓ | ✓ | 2026-04-24 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s376ED_sexual_activity_image_presence_minor_below/statute.yh` |
 | s376EE | Exploitative sexual activity or image in presence of minor o | ✓ | ✓ | · | — | `library/penal_code/s376EE_exploitative_sexual_activity_image_presence/statute.yh` |
 | s376F | Procurement of sexual activity with person with mental disab | ✓ | ✓ | · | — | `library/penal_code/s376F_procurement_sexual_activity_person_mental/statute.yh` |
 | s376G | Incest | ✓ | ✓ | · | — | `library/penal_code/s376G_incest/statute.yh` |
@@ -412,16 +412,16 @@ _Valid date: n/a_
 | s377BB | Voyeurism | ✓ | ✓ | · | — | `library/penal_code/s377BB_voyeurism/statute.yh` |
 | s377BC | Distribution of voyeuristic image or recording | ✓ | ✓ | · | — | `library/penal_code/s377BC_distribution_voyeuristic_image_recording/statute.yh` |
 | s377BD | Possession of or gaining access to voyeuristic or intimate i | ✓ | ✓ | · | — | `library/penal_code/s377BD_possession_gaining_access_voyeuristic/statute.yh` |
-| s377BE | Distributing or threatening to distribute intimate image or  | ✓ | ✓ | · | — | `library/penal_code/s377BE_distributing_threatening_distribute_intimate/statute.yh` |
+| s377BE | Distributing or threatening to distribute intimate image or  | ✓ | ✓ | ✓ | 2026-04-24 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s377BE_distributing_threatening_distribute_intimate/statute.yh` |
 | s377BF | Sexual exposure | ✓ | ✓ | · | — | `library/penal_code/s377BF_sexual_exposure/statute.yh` |
 | s377BG | Using or involving child in production of child abuse materi | ✓ | ✓ | · | — | `library/penal_code/s377BG_using_involving_child_production_child_abuse/statute.yh` |
 | s377BH | Producing child abuse material | ✓ | ✓ | · | — | `library/penal_code/s377BH_producing_child_abuse_material/statute.yh` |
 | s377BI | Distributing or selling child abuse material | ✓ | ✓ | · | — | `library/penal_code/s377BI_distributing_selling_child_abuse_material/statute.yh` |
 | s377BJ | Advertising or seeking child abuse material | ✓ | ✓ | · | — | `library/penal_code/s377BJ_advertising_seeking_child_abuse_material/statute.yh` |
 | s377BK | Possession of or gaining access to child abuse material | ✓ | ✓ | · | — | `library/penal_code/s377BK_possession_gaining_access_child_abuse/statute.yh` |
-| s377BL | Exploitation by abusive material of minor of or above 16 but | ✓ | ✓ | · | — | `library/penal_code/s377BL_exploitation_abusive_material_minor_above_16/statute.yh` |
+| s377BL | Exploitation by abusive material of minor of or above 16 but | ✓ | ✓ | ✓ | 2026-04-24 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s377BL_exploitation_abusive_material_minor_above_16/statute.yh` |
 | s377BM | Defences to offences relating to intimate image or recording | ✓ | ✓ | ✓ | 2026-04-24 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s377BM_defences_offences_relating_intimate_image/statute.yh` |
-| s377BN | Defences to child abuse material offences | ✓ | ✓ | · | — | `library/penal_code/s377BN_defences_child_abuse_material_offences/statute.yh` |
+| s377BN | Defences to child abuse material offences | ✓ | ✓ | ✓ | 2026-04-24 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s377BN_defences_child_abuse_material_offences/statute.yh` |
 | s377BO | Child abuse material offences outside or partially outside S | ✓ | ✓ | ✓ | 2026-04-24 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s377BO_child_abuse_material_offences_outside/statute.yh` |
 | s377C | Interpretation of sections 375 to 377BO (sexual offences) | ✓ | ✓ | · | — | `library/penal_code/s377C_interpretation_sections_375_377bo_sexual/statute.yh` |
 | s377CA | Meaning of exploitative relationship | ✓ | ✓ | · | — | `library/penal_code/s377CA_meaning_exploitative_relationship/statute.yh` |

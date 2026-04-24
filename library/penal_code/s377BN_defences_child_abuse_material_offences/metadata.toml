@@ -16,4 +16,6 @@ summary = "This section sets out specific defences to selected child abuse mater
 source = "Singapore Penal Code 1871, Section 377BN"
 
 [verification]
+last_verified = "2026-04-24"
+verified_by = "gpt-5.4 high (automated L3 reviewer)"
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BN-#pr377BN-"
