@@ -2,18 +2,18 @@
 section_number = "262"
 title = "Using a Government stamp known to have been before used"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Fraudulently or with intent to cause loss to Government using a Government revenue stamp known to have been used before."
+summary = "Using a Government revenue stamp that is known to have been previously used, fraudulently or with intent to cause loss to the Government, is an offence."
 source = "Singapore Penal Code 1871, Section 262"
 
 [verification]
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr262-#pr262-"
-disclaimer = "Educational purposes only. Cross-reference with official SSO text."

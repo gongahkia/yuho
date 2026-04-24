@@ -2,18 +2,18 @@
 section_number = "260"
 title = "Using as genuine a Government stamp known to be counterfeit"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Using as genuine a stamp known to be a counterfeit of a Government revenue stamp."
+summary = "Using as genuine a Government revenue stamp that the offender knows is counterfeit is an offence punishable by imprisonment, fine, or both."
 source = "Singapore Penal Code 1871, Section 260"
 
 [verification]
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr260-#pr260-"
-disclaimer = "Educational purposes only. Cross-reference with official SSO text."

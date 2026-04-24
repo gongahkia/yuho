@@ -1,54 +1,38 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr255-#pr255-
-// Singapore Penal Code Section 255 - Counterfeiting a Government stamp
-// Yuho v5 Syntax
-
-struct CounterfeitStampCase {
-    string accused,
-    string stampType,
-    bool isGovernmentRevenue,
-    bool counterfeited,
-    bool knowinglyPartOfProcess,
-}
-
-fn is_counterfeiting_stamp(bool counterfeited, bool knowinglyPartOfProcess, bool isGovernmentRevenue) : bool {
-    match {
-        case TRUE if isGovernmentRevenue == FALSE := consequence FALSE;
-        case TRUE if counterfeited == TRUE := consequence TRUE;
-        case TRUE if knowinglyPartOfProcess == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
 
 statute 255 "Counterfeiting a Government stamp" effective 1872-01-01 {
-    definitions {
-        government_stamp := "A stamp issued by the Government for the purpose of revenue, including a stamp certificate issued under the Stamp Duties Act 1929";
-        counterfeit := "Causing one thing to resemble another thing with intent to deceive";
-        revenue_purpose := "Issued by the Government to collect revenue";
-    }
-
-    elements {
-        any_of {
-            /// direct counterfeiting of the stamp
-            actus_reus counterfeits := "Counterfeiting any stamp issued by the Government for revenue";
-            /// knowingly performing any part of the counterfeiting process
-            actus_reus part_of_process := "Knowingly performing any part of the process of counterfeiting";
+    subsection (1) {
+        elements {
+            /// The offence is committed either by direct counterfeiting or by knowingly doing any part of that process.
+            all_of {
+                /// The target of the conduct must be a Government revenue stamp.
+                circumstance government_revenue_stamp := "Any stamp issued by the Government for the purpose of revenue.";
+                /// The actus reus is disjunctive: direct counterfeiting, or knowingly doing any part of the process of counterfeiting.
+                any_of {
+                    actus_reus counterfeits := "Whoever counterfeits any stamp issued by the Government for the purpose of revenue.";
+                    all_of {
+                        actus_reus performs_part_of_process := "Whoever performs any part of the process of counterfeiting any stamp issued by the Government for the purpose of revenue.";
+                        mens_rea knowingly := "The person knowingly performs that part of the process of counterfeiting.";
+                    }
+                }
+            }
         }
-        /// the stamp must be one issued by Government for revenue purposes
-        circumstance government_revenue_stamp := "Stamp issued by the Government for the purpose of revenue";
-        /// mens rea required where accused performs part of process
-        mens_rea knowledge := "Knowledge that the act is part of the counterfeiting process";
+
+        penalty {
+            imprisonment := 0 years .. 10 years;
+            fine := unlimited;
+        }
     }
 
-    penalty {
-        imprisonment := 0 years .. 10 years;
-        fine := $0.00 .. $50,000.00;
+    subsection (2) {
+        definitions {
+            government_stamp_or_stamp := "In this section and sections 256 to 262, a reference to a Government stamp or stamp includes a reference to a stamp certificate issued under the Stamp Duties Act 1929.";
+        }
     }
 
-    illustration example1 {
-        "A person who counterfeits by causing a genuine stamp of one denomination to appear like a genuine stamp of a different denomination commits this offence."
+    definitions {
+        explanation_counterfeiting_by_changed_denomination := "Explanation. —A person who counterfeits by causing a genuine stamp of one denomination to appear like a genuine stamp of a different denomination commits this offence.";
     }
-
-    // cross-reference: sections 256 to 262 extend to stamp certificates under the Stamp Duties Act 1929
 }

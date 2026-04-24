@@ -1,0 +1,19 @@
+[statute]
+section_number = "255"
+title = "Counterfeiting a Government stamp"
+jurisdiction = "Singapore"
+version = "2.0.0"
+
+[encoding]
+depth = "deep"
+revision = "phase-D"
+
+[contributor]
+name = "agent-reencoding-phase-D"
+
+[description]
+summary = "Creates the offence of counterfeiting a Government revenue stamp or knowingly performing part of that counterfeiting process, and extends stamp references to stamp certificates."
+source = "Singapore Penal Code 1871, Section 255"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr255-#pr255-"

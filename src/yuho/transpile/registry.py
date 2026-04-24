@@ -67,34 +67,16 @@ class TranspilerRegistry:
         """Register all built-in transpilers."""
         # Import lazily to avoid circular imports
         from yuho.transpile.json_transpiler import JSONTranspiler
-        from yuho.transpile.jsonld_transpiler import JSONLDTranspiler
         from yuho.transpile.english_transpiler import EnglishTranspiler
         from yuho.transpile.latex_transpiler import LaTeXTranspiler
         from yuho.transpile.mermaid_transpiler import MermaidTranspiler
         from yuho.transpile.alloy_transpiler import AlloyTranspiler
-        from yuho.transpile.graphql_transpiler import GraphQLTranspiler
-        from yuho.transpile.blocks_transpiler import BlocksTranspiler
-        from yuho.transpile.bibtex_transpiler import BibTeXTranspiler
-        from yuho.transpile.comparative_transpiler import ComparativeTranspiler
-        from yuho.transpile.akomantoso_transpiler import AkomaNtosoTranspiler
-        from yuho.transpile.prolog_transpiler import PrologTranspiler
-        from yuho.transpile.catala_transpiler import CatalaTranspiler
-        from yuho.transpile.fstar_transpiler import FStarTranspiler
 
         self._registry[TranspileTarget.JSON] = JSONTranspiler
-        self._registry[TranspileTarget.JSON_LD] = JSONLDTranspiler
         self._registry[TranspileTarget.ENGLISH] = EnglishTranspiler
         self._registry[TranspileTarget.LATEX] = LaTeXTranspiler
         self._registry[TranspileTarget.MERMAID] = MermaidTranspiler
         self._registry[TranspileTarget.ALLOY] = AlloyTranspiler
-        self._registry[TranspileTarget.GRAPHQL] = GraphQLTranspiler
-        self._registry[TranspileTarget.BLOCKS] = BlocksTranspiler
-        self._registry[TranspileTarget.BIBTEX] = BibTeXTranspiler
-        self._registry[TranspileTarget.COMPARATIVE] = ComparativeTranspiler
-        self._registry[TranspileTarget.AKOMA_NTOSO] = AkomaNtosoTranspiler
-        self._registry[TranspileTarget.PROLOG] = PrologTranspiler
-        self._registry[TranspileTarget.CATALA] = CatalaTranspiler
-        self._registry[TranspileTarget.FSTAR] = FStarTranspiler
 
     @classmethod
     def instance(cls) -> "TranspilerRegistry":

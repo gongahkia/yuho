@@ -12,27 +12,16 @@ class TranspileTarget(Enum):
     """Supported transpilation targets."""
 
     JSON = auto()
-    JSON_LD = auto()
     ENGLISH = auto()
     LATEX = auto()
     MERMAID = auto()
     ALLOY = auto()
-    GRAPHQL = auto()
-    BLOCKS = auto()
-    BIBTEX = auto()
-    COMPARATIVE = auto()
-    AKOMA_NTOSO = auto()
-    PROLOG = auto()
-    CATALA = auto()
-    FSTAR = auto()
 
     @classmethod
     def from_string(cls, name: str) -> "TranspileTarget":
         """Convert string to TranspileTarget."""
         mapping = {
             "json": cls.JSON,
-            "jsonld": cls.JSON_LD,
-            "json-ld": cls.JSON_LD,
             "english": cls.ENGLISH,
             "en": cls.ENGLISH,
             "latex": cls.LATEX,
@@ -40,22 +29,6 @@ class TranspileTarget(Enum):
             "mermaid": cls.MERMAID,
             "mmd": cls.MERMAID,
             "alloy": cls.ALLOY,
-            "graphql": cls.GRAPHQL,
-            "gql": cls.GRAPHQL,
-            "blocks": cls.BLOCKS,
-            "block": cls.BLOCKS,
-            "bibtex": cls.BIBTEX,
-            "bib": cls.BIBTEX,
-            "comparative": cls.COMPARATIVE,
-            "compare": cls.COMPARATIVE,
-            "akomantoso": cls.AKOMA_NTOSO,
-            "akn": cls.AKOMA_NTOSO,
-            "prolog": cls.PROLOG,
-            "pl": cls.PROLOG,
-            "catala": cls.CATALA,
-            "fstar": cls.FSTAR,
-            "f*": cls.FSTAR,
-            "fst": cls.FSTAR,
         }
         target = mapping.get(name.lower())
         if not target:
@@ -67,19 +40,10 @@ class TranspileTarget(Enum):
         """Return the file extension for this target."""
         extensions = {
             TranspileTarget.JSON: ".json",
-            TranspileTarget.JSON_LD: ".jsonld",
             TranspileTarget.ENGLISH: ".txt",
             TranspileTarget.LATEX: ".tex",
             TranspileTarget.MERMAID: ".mmd",
             TranspileTarget.ALLOY: ".als",
-            TranspileTarget.GRAPHQL: ".graphql",
-            TranspileTarget.BLOCKS: ".blocks",
-            TranspileTarget.BIBTEX: ".bib",
-            TranspileTarget.COMPARATIVE: ".md",
-            TranspileTarget.AKOMA_NTOSO: ".xml",
-            TranspileTarget.PROLOG: ".pl",
-            TranspileTarget.CATALA: ".catala_en",
-            TranspileTarget.FSTAR: ".fst",
         }
         return extensions.get(self, ".txt")
 

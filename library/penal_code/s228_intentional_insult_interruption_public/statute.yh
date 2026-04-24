@@ -8,9 +8,10 @@ statute 228 "Intentional insult or interruption to a public servant sitting in a
         /// Section 228 is conjunctive as to the accused's intentional conduct and the public servant's adjudicative or ADR setting.
         all_of {
             any_of {
-                actus_reus insult := "Whoever intentionally offers any insult to any public servant";
-                actus_reus interruption := "Whoever intentionally causes any interruption to any public servant";
+                actus_reus insult := "Offers any insult to any public servant";
+                actus_reus interruption := "Causes any interruption to any public servant";
             }
+            mens_rea intention := "Whoever intentionally does so";
             circumstance protected_setting := "Such public servant is sitting in any stage of a judicial proceeding or conducting any mediation or other alternative dispute resolution process under any written law";
         }
     }

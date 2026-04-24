@@ -3,7 +3,6 @@ Yuho transpilation module - multi-target code generation.
 
 Supports transpilation to:
 - JSON: Structured AST representation
-- JSON-LD: Linked data with legal ontology
 - English: Controlled natural language
 - LaTeX: Legal document formatting
 - Mermaid: Decision tree flowcharts
@@ -12,15 +11,10 @@ Supports transpilation to:
 
 from yuho.transpile.base import TranspileTarget, TranspilerBase
 from yuho.transpile.json_transpiler import JSONTranspiler
-from yuho.transpile.jsonld_transpiler import JSONLDTranspiler
 from yuho.transpile.english_transpiler import EnglishTranspiler
 from yuho.transpile.mermaid_transpiler import MermaidTranspiler
 from yuho.transpile.alloy_transpiler import AlloyTranspiler
 from yuho.transpile.latex_transpiler import LaTeXTranspiler, compile_to_pdf
-from yuho.transpile.bibtex_transpiler import BibTeXTranspiler
-from yuho.transpile.comparative_transpiler import ComparativeTranspiler
-from yuho.transpile.akomantoso_transpiler import AkomaNtosoTranspiler
-from yuho.transpile.prolog_transpiler import PrologTranspiler
 from yuho.transpile.registry import TranspilerRegistry
 
 __all__ = [
@@ -28,16 +22,11 @@ __all__ = [
     "TranspilerBase",
     "TranspilerRegistry",
     "JSONTranspiler",
-    "JSONLDTranspiler",
     "EnglishTranspiler",
     "LaTeXTranspiler",
     "compile_to_pdf",
     "MermaidTranspiler",
     "AlloyTranspiler",
-    "BibTeXTranspiler",
-    "ComparativeTranspiler",
-    "AkomaNtosoTranspiler",
-    "PrologTranspiler",
     "get_transpiler",
 ]
 
