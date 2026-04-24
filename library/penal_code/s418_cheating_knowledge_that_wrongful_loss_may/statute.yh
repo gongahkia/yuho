@@ -1,30 +1,19 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr418-#pr418-
-// Singapore Penal Code Section 418 - Cheating with knowledge that wrongful loss may be thereby caused to a person whose interest the offender is bound to protect
-
-referencing penal_code/s415_cheating
 
 statute 418 "Cheating with knowledge that wrongful loss may be thereby caused to a person whose interest the offender is bound to protect" effective 1872-01-01 {
-    definitions {
-        cheating := "As defined in section 415";
-        wrongful_loss := "As defined in section 23";
-        protected_interest := "An interest which the offender is bound by law or by legal contract to protect";
-    }
-
     elements {
+        /// Section 418 requires cheating, the specified knowledge, and the protected-interest relationship in the same transaction.
         all_of {
-            /// base cheating under s415
-            actus_reus base_cheating := "Cheats within the meaning of section 415";
-            /// knowledge that wrongful loss is likely
-            mens_rea knowledge_loss := "Knows he is likely to cause wrongful loss";
-            /// victim is a person whose interest offender bound to protect
-            circumstance duty_to_protect := "Victims interest in the transaction is one the offender was bound by law or legal contract to protect";
+            actus_reus cheating := "Whoever cheats";
+            mens_rea knowledge_wrongful_loss := "With the knowledge that he is likely thereby to cause wrongful loss to a person";
+            circumstance protected_interest := "Whose interest, in the transaction to which the cheating relates, he was bound either by law or by a legal contract to protect";
         }
     }
 
-    penalty {
+    penalty or_both {
         imprisonment := 0 days .. 5 years;
-        fine := $0.00 .. $20,000.00;
+        fine := unlimited;
     }
 }

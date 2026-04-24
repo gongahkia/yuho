@@ -1,22 +1,13 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr417-#pr417-
-// Singapore Penal Code Section 417 - Punishment for cheating
 
 referencing penal_code/s415_cheating
 
 statute 417 "Punishment for cheating" effective 1872-01-01 {
-    definitions {
-        cheating := "As defined in section 415";
-    }
-
-    elements {
-        /// conviction for cheating under s415 is required
-        circumstance cheating_committed := "Cheating under section 415 is committed";
-    }
-
-    penalty {
+    /// Punishment for the offence of cheating under section 415.
+    penalty or_both {
         imprisonment := 0 days .. 3 years;
-        fine := $0.00 .. $10,000.00;
+        fine := unlimited;
     }
 }

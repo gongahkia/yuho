@@ -2,16 +2,17 @@
 section_number = "412"
 title = "Receiving property stolen in the commission of a gang-robbery"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Receiving or retaining property known or believed to have been stolen in a gang-robbery."
+summary = "This section makes it an offence to receive or retain stolen property connected to gang-robbery, subject to a statutory defence of reasonable excuse and reasonable care."
 source = "Singapore Penal Code 1871, Section 412"
 
 [verification]

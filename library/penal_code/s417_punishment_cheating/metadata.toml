@@ -2,16 +2,17 @@
 section_number = "417"
 title = "Punishment for cheating"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Punishment for the offence of cheating under section 415."
+summary = "Prescribes up to 3 years' imprisonment, an unlimited fine, or both for the offence of cheating."
 source = "Singapore Penal Code 1871, Section 417"
 
 [verification]

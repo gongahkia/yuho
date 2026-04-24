@@ -1,31 +1,44 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr414-#pr414-
-// Singapore Penal Code Section 414 - Assisting in concealment or disposal of stolen property
-
 /// @amendment [15/2019]
 
+referencing penal_code/s379A_punishment_theft_motor_vehicle
 referencing penal_code/s410_stolen_property
 
-statute 414 "Assisting in concealment or disposal of stolen property" effective 1872-01-01 {
-    definitions {
-        stolen_property := "As defined in section 410";
-        assistance := "Voluntary help in concealing, disposing of, or making away with property";
-    }
+statute 414 "Assisting in concealment or disposal of stolen property" effective 1872-01-01 effective 2019-12-31 {
+    subsection (1) {
+        elements {
+            /// The offence requires voluntary assistance, tainted property, and knowledge or reason to believe of that taint.
+            all_of {
+                actus_reus assists_concealment_or_disposal := "Voluntarily assists in concealing or disposing of or making away with property";
+                circumstance tainted_property := "The property is stolen property or property obtained in whole or in part through any criminal offence involving fraud or dishonesty";
+                mens_rea knows_or_has_reason_to_believe := "Knows or has reason to believe that the property is stolen property or property obtained in whole or in part through any criminal offence involving fraud or dishonesty";
+            }
+        }
 
-    elements {
-        all_of {
-            /// voluntary assistance is the actus reus
-            actus_reus voluntary_assistance := "Voluntarily assists in concealing or disposing of or making away with the property";
-            /// the property must be stolen or fraud proceeds
-            circumstance tainted_property := "Property is stolen or obtained through a criminal offence involving fraud or dishonesty";
-            /// knowledge or reason to believe about the taint
-            mens_rea knowledge := "Knows or has reason to believe the taint";
+        penalty or_both {
+            imprisonment := 0 years .. 5 years;
+            fine := unlimited;
         }
     }
 
-    penalty {
-        imprisonment := 0 days .. 5 years;
-        fine := $0.00 .. $20,000.00;
+    subsection (2) {
+        elements {
+            all_of {
+                circumstance motor_vehicle_property := "The property mentioned in subsection (1) is a motor vehicle or any component part of a motor vehicle as defined in section 379A(3)";
+                actus_reus conviction_under_section := "A person is convicted of an offence under this section";
+            }
+        }
+
+        penalty cumulative {
+            imprisonment := 0 years .. 5 years;
+            fine := unlimited;
+            supplementary := "A person convicted of an offence under this section shall be punished with imprisonment for a term which may extend to 5 years, and shall also be liable to fine.";
+        }
+
+        penalty cumulative {
+            supplementary := "A person convicted of an offence under this section may be disqualified for such period as the court may order from the date of his release from imprisonment from holding or obtaining a driving licence under the Road Traffic Act (Cap. 276).";
+        }
     }
 }

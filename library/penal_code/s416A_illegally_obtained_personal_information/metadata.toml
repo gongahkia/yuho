@@ -2,16 +2,17 @@
 section_number = "416A"
 title = "Illegally obtained personal information"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Obtaining, retaining, supplying or transmitting personal information known to have been obtained without the data subject consent."
+summary = "Section 416A criminalises dealing in personal information known or believed to have been obtained without the individual's consent, subject to stated carve-outs."
 source = "Singapore Penal Code 1871, Section 416A"
 
 [verification]

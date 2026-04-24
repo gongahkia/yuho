@@ -1,40 +1,31 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr421-#pr421-
-// Singapore Penal Code Section 421 - Dishonest or fraudulent removal or concealment of property to prevent distribution among creditors
 
 statute 421 "Dishonest or fraudulent removal or concealment of property to prevent distribution among creditors" effective 1872-01-01 {
-    definitions {
-        dishonestly := "As defined in section 24";
-        fraudulently := "As defined in section 25";
-        adequate_consideration := "Consideration reasonably equivalent to the value of the property";
-    }
-
     elements {
+        /// Section 421 requires one of the listed dealings with property, absence of adequate consideration, and an intention or knowledge tied to preventing lawful distribution among creditors.
         all_of {
             any_of {
-                /// removal
-                actus_reus remove := "Dishonestly or fraudulently removes property";
-                /// concealment
-                actus_reus conceal := "Dishonestly or fraudulently conceals property";
-                /// delivery to another
-                actus_reus deliver := "Dishonestly or fraudulently delivers property to another";
-                /// transfer to another
-                actus_reus transfer := "Dishonestly or fraudulently transfers or causes property to be transferred to another";
+                actus_reus removes_property := "Removes any property";
+                actus_reus conceals_property := "Conceals any property";
+                actus_reus delivers_property := "Delivers any property to any person";
+                actus_reus transfers_property := "Transfers or causes to be transferred to any person any property";
             }
-            /// without adequate consideration
-            circumstance no_consideration := "The transaction occurs without adequate consideration";
             any_of {
-                /// intent to prevent creditor distribution
-                mens_rea intend_prevent := "Intending to prevent the distribution of the property according to law among creditors";
-                /// or knowledge that prevention is likely
-                mens_rea know_likely := "Knowing it to be likely that the act will prevent such distribution";
+                mens_rea dishonestly := "Acts dishonestly";
+                mens_rea fraudulently := "Acts fraudulently";
+            }
+            circumstance without_adequate_consideration := "The property is removed, concealed, delivered, transferred, or caused to be transferred without adequate consideration";
+            any_of {
+                mens_rea intent_to_prevent_distribution := "Intending thereby to prevent the distribution of that property according to law among his creditors or the creditors of any other person";
+                mens_rea knowledge_likely_prevent_distribution := "Knowing it to be likely that he will thereby prevent the distribution of that property according to law among his creditors or the creditors of any other person";
             }
         }
     }
 
-    penalty {
+    penalty or_both {
         imprisonment := 0 days .. 3 years;
-        fine := $0.00 .. $10,000.00;
+        fine := unlimited;
     }
 }

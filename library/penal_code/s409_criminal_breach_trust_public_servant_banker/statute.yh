@@ -1,38 +1,52 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr409-#pr409-
-// Singapore Penal Code Section 409 - Criminal breach of trust by public servant, or by banker, merchant, agent, director, officer, partner, key executive or fiduciary
-
 /// @amendment [15/2019]
 
-referencing penal_code/s406_punishment_for_criminal_breach_of_trust
+referencing penal_code/s405_criminal_breach_trust
 
-statute 409 "Criminal breach of trust by public servant, banker, agent, director, officer, partner, key executive or fiduciary" effective 1872-01-01 {
-    definitions {
-        public_servant := "As defined in section 21";
-        banker := "A person carrying on the business of banking";
-        agent := "A person employed to act for another in business";
-        fiduciary := "A person in a position of trust or confidence towards another";
-        criminal_breach_of_trust := "Dishonest misappropriation or conversion of entrusted property (see section 405)";
-    }
+statute 409 "Criminal breach of trust by public servant, or by banker, merchant, agent, director, officer, partner, key executive or fiduciary" effective 1872-01-01 effective 2019-12-31 {
+    subsection (1) {
+        elements {
+            all_of {
+                circumstance entrusted_with_property_or_dominion := "Whoever, being in any manner entrusted with property, or with any dominion over property";
+                /// The enumerated capacities are disjunctive because subsection (1) uses paragraphs (a) to (h) joined by "or".
+                any_of {
+                    circumstance public_servant_capacity := "In his capacity as a public servant";
+                    circumstance banker_merchant_factor_broker_attorney_agent_capacity := "In the way of his trade, profession or business as a banker, a merchant, a factor, a broker, an attorney or an agent";
+                    circumstance professional_capacity_other_than_paragraph_b := "In his professional capacity (other than by way of a trade, profession or business mentioned in paragraph ( b ))";
+                    circumstance director_capacity := "In his capacity as a director of a corporation";
+                    circumstance officer_capacity := "In his capacity as an officer of an unincorporated association";
+                    circumstance partner_capacity := "In his capacity as a partner in a partnership";
+                    circumstance key_executive_capacity := "In his capacity as a key executive of a corporation, an unincorporated association or a partnership";
+                    circumstance fiduciary_capacity := "In his capacity as a fiduciary";
+                }
+                actus_reus commits_criminal_breach_of_trust := "Commits criminal breach of trust in respect of that property. [15/2019]";
+            }
+        }
 
-    elements {
-        all_of {
-            /// accused must occupy one of the enumerated capacities
-            circumstance enumerated_capacity := "Accused acts in a public-servant, banking, professional, directorial, officer, partner, key-executive or fiduciary capacity";
-            /// property entrusted in that capacity
-            circumstance entrusted := "Entrusted with property or dominion over property in that capacity";
-            /// the breach of trust itself
-            actus_reus breach_of_trust := "Commits criminal breach of trust in respect of that property";
+        penalty {
+            imprisonment := 0 days .. 20 years;
+            fine := unlimited;
+            supplementary := "Shall be punished with imprisonment for a term which may extend to 20 years, and shall also be liable to fine. [15/2019]";
         }
     }
 
-    penalty {
-        imprisonment := 0 days .. 20 years;
-        fine := $0.00 .. $200,000.00;
+    subsection (2) {
+        definitions {
+            director := "“director” includes — ( a ) any person occupying the position of director of a corporation by whatever name called, and includes a person in accordance with whose directions or instructions the directors or the majority of the directors of a corporation are accustomed to act, and an alternate or substitute director; or ( b ) a member of a corporation in the case where the affairs of the corporation are managed by its members, and includes a person in accordance with whose directions or instructions the members or the majority of the members of such corporation are accustomed to act, and an alternate or substitute member;";
+            fiduciary := "“fiduciary” means a person who has undertaken to act for or on behalf of another person in a matter in circumstances which give rise to a relationship of trust, confidence and loyalty, and includes but is not limited to an executor, an administrator, a liquidator, a receiver and a trustee (other than the trustee of an implied, a constructive or a resulting trust);";
+            key_executive := "“key executive” means a person who, whether or not an employee of the corporation, unincorporated association or partnership, and whether acting alone or together with any other person, has general control and management of the administration of that corporation, unincorporated association or partnership;";
+            officer := "“officer”, in relation to an unincorporated association (other than a partnership), means the president, the secretary or any member of the committee of the unincorporated association, and includes — ( a ) any person holding a position analogous to that of president, secretary or member of a committee of the unincorporated association; ( b ) a person in accordance with whose directions or instructions the president, secretary or member of a committee of the unincorporated association or a majority of such persons are accustomed to act; and ( c ) any person purporting to act in any such capacity;";
+            partner := "“partner” includes a person purporting to act as a partner;";
+            partnership := "“partnership” includes a limited partnership and a limited liability partnership within the meaning of section 2(1) of the Limited Liability Partnerships Act (Cap. 163A).";
+        }
     }
 
-    illustration example1 {
-        "A, a director of B Ltd, is entrusted with company funds. A dishonestly transfers company funds into a personal account. A commits criminal breach of trust under section 409."
+    subsection (3) {
+        definitions {
+            no_remuneration_needed := "For the purposes of this section and to avoid doubt — ( a ) a person may be a director of a corporation, officer of an unincorporated association, partner in a partnership, key executive of a corporation, unincorporated association or partnership even though that person does not receive any salary or other remuneration from that corporation, unincorporated association or partnership, as the case may be; and";
+            fiduciary_despite_contractual_disclaimer := "( b ) a person may be a fiduciary even though it is stated in a contract or an agreement between the parties that a fiduciary relationship does not arise. [15/2019]";
+        }
     }
 }

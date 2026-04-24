@@ -2,16 +2,17 @@
 section_number = "413"
 title = "Habitually dealing in stolen property"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Habitually receiving or dealing in stolen property or property obtained through offences involving fraud or dishonesty."
+summary = "This section makes it an offence to habitually receive or deal in property known or believed to be stolen or obtained through fraud or dishonesty."
 source = "Singapore Penal Code 1871, Section 413"
 
 [verification]

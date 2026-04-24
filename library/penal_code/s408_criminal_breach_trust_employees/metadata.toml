@@ -2,16 +2,17 @@
 section_number = "408"
 title = "Criminal breach of trust by employees"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Criminal breach of trust committed by an employee entrusted with property."
+summary = "Creates an aggravated criminal breach of trust offence where the offender is an employee or equivalent and is entrusted with property in that capacity."
 source = "Singapore Penal Code 1871, Section 408"
 
 [verification]

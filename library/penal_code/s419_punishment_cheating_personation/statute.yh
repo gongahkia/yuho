@@ -1,22 +1,13 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr419-#pr419-
-// Singapore Penal Code Section 419 - Punishment for cheating by personation
 
 referencing penal_code/s416_cheating_personation
 
 statute 419 "Punishment for cheating by personation" effective 1872-01-01 {
-    definitions {
-        cheating_by_personation := "As defined in section 416";
-    }
-
-    elements {
-        /// conviction for s416 cheating by personation is required
-        circumstance personation_committed := "Cheating by personation under section 416 is committed";
-    }
-
-    penalty {
+    /// Punishment for the offence of cheating by personation under section 416.
+    penalty or_both {
         imprisonment := 0 days .. 5 years;
-        fine := $0.00 .. $20,000.00;
+        fine := unlimited;
     }
 }

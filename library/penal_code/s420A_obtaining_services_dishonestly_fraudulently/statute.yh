@@ -1,40 +1,37 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr420A-#pr420A-
-// Singapore Penal Code Section 420A - Obtaining services dishonestly or fraudulently
-
 /// @amendment [15/2019]
+statute 420A "Obtaining services dishonestly or fraudulently" effective 1872-01-01 effective 2020-01-01 {
+    subsection (1) {
+        elements {
+            /// The canonical source preserves subsection (1) as obtaining services plus the statutory payment conditions in paragraphs (a) and (b), but truncates paragraph (c) after its lead-in.
+            all_of {
+                actus_reus obtaining_services := "A person obtains services for himself or another person";
 
-statute 420A "Obtaining services dishonestly or fraudulently" effective 2020-01-01 {
-    definitions {
-        services := "Services made available on the basis that payment is or will be made";
-        dishonestly := "As defined in section 24";
-        fraudulently := "As defined in section 25";
-    }
+                any_of {
+                    mens_rea dishonestly := "The person obtains the services dishonestly";
+                    mens_rea fraudulently := "The person obtains the services fraudulently";
+                }
 
-    elements {
-        all_of {
-            /// the actus reus -- obtaining services
-            actus_reus obtain_services := "Obtains services for himself or another person";
-            /// services are paid-for services
-            circumstance paid_services := "Services are made available on the basis that payment has been, is being or will be made";
-            /// payment is not made in full (or at all)
-            circumstance no_full_payment := "Services obtained without any or full payment";
-            any_of {
-                /// dishonest state of mind
-                mens_rea dishonest := "Obtains services dishonestly";
-                /// fraudulent state of mind
-                mens_rea fraudulent := "Obtains services fraudulently";
+                circumstance payment_basis := "The services are made available on the basis that payment has been, is being or will be made for or in respect of them";
+                circumstance unpaid_or_not_paid_in_full := "The person obtains the services without any payment having been made for or in respect of them or without payment having been made in full";
             }
         }
     }
 
-    penalty {
-        imprisonment := 0 days .. 10 years;
-        fine := $0.00 .. $50,000.00;
+    subsection (2) {
+        penalty or_both {
+            imprisonment := 0 days .. 10 years;
+            fine := unlimited;
+        }
     }
 
-    illustration example1 {
-        "A obtains services in the form of air transportation on an airline from Singapore to an overseas destination. A has obtained services within the meaning of this section even though the services also involve food and beverages."
+    definitions {
+        explanation_services_and_goods := "Explanation .—The services obtained are not excluded from this section merely because such services also involve the provision of goods or other things.";
+    }
+
+    illustration illustration_a {
+        "A obtains services in the form of air transportation on an airline from Singapore to an overseas destination. A is also served food and beverages on the airline. A has obtained services even though A has also been provided with food and beverages."
     }
 }

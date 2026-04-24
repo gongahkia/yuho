@@ -2,16 +2,17 @@
 section_number = "421"
 title = "Dishonest or fraudulent removal or concealment of property to prevent distribution among creditors"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Dishonest or fraudulent removal, concealment, delivery or transfer of property to prevent its distribution among creditors."
+summary = "This section criminalises dishonest or fraudulent dealings with property without adequate consideration to prevent its lawful distribution among creditors."
 source = "Singapore Penal Code 1871, Section 421"
 
 [verification]

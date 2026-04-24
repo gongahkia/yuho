@@ -2,16 +2,17 @@
 section_number = "420A"
 title = "Obtaining services dishonestly or fraudulently"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Dishonestly or fraudulently obtaining services for oneself or another without full payment."
+summary = "Section 420A criminalises obtaining services dishonestly or fraudulently where the services are provided on a payment basis but are obtained without payment or without full payment."
 source = "Singapore Penal Code 1871, Section 420A"
 
 [verification]

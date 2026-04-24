@@ -2,16 +2,17 @@
 section_number = "414"
 title = "Assisting in concealment or disposal of stolen property"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Voluntarily assisting in concealing, disposing of, or making away with stolen property."
+summary = "This section criminalises voluntarily helping to conceal, dispose of, or make away with stolen or fraud-linked property while knowing or having reason to believe its tainted character."
 source = "Singapore Penal Code 1871, Section 414"
 
 [verification]

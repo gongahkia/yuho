@@ -1,24 +1,18 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr416B-#pr416B-
-// Singapore Penal Code Section 416B - Cheating by remote communication
-
 /// @amendment [Act 21 of 2025 wef 30/12/2025]
 
-referencing penal_code/s415_cheating
-
-statute 416B "Cheating by remote communication" effective 2025-12-30 {
-    definitions {
-        cheating := "As defined in section 415";
-        remote_communication := "Communication conducted by electronic, online, or other distance means";
+statute 416B "Cheating by remote communication" effective 1872-01-01 effective 2025-12-30 {
+    subsection (1) {
+        definitions {
+            cheat_by_remote_communication := "A person ( A ) is said to “cheat by remote communication” if A cheats by deceiving another person ( Z ), and the deception is conducted mainly by way of remote communication with Z .";
+        }
     }
 
-    elements {
-        all_of {
-            /// base offence -- cheating under s415
-            actus_reus base_cheating := "Cheats within the meaning of section 415";
-            /// mode -- deception mainly via remote communication
-            circumstance mode_remote := "Deception conducted mainly by way of remote communication with the victim";
+    subsection (2) {
+        definitions {
+            remote_communication := "In this section, “remote communication” means communication through — [Act 21 of 2025 wef 30/12/2025]";
         }
     }
 }

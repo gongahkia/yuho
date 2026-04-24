@@ -1,40 +1,53 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr412-#pr412-
-// Singapore Penal Code Section 412 - Receiving property stolen in the commission of a gang-robbery
-
 /// @amendment [15/2019]
 
+referencing penal_code/s391_gang_robbery
 referencing penal_code/s410_stolen_property
 
-statute 412 "Receiving property stolen in the commission of a gang-robbery" effective 1872-01-01 {
+statute 412 "Receiving property stolen in the commission of a gang-robbery" effective 1872-01-01 effective 2019-12-31 {
     definitions {
-        gang_robbery := "Robbery committed conjointly by five or more persons (see section 391)";
-        stolen_property := "As defined in section 410";
+        stolen_property := "“stolen property” has the meaning given by section 410.";
+        gang_robbery := "“gang-robbery” is robbery committed by 5 or more persons conjointly under section 391.";
     }
 
-    elements {
-        all_of {
-            /// property must be stolen
-            circumstance stolen := "Property is stolen property as defined in section 410";
-            /// knowledge or reason to believe it came from gang-robbery
-            mens_rea knowledge_gang := "Knowing or having reason to believe possession was transferred by gang-robbery, or receiving from a person known or believed to be a gang-robber";
-            /// act of receiving or retaining
-            actus_reus receiving := "Receives or retains the property";
+    subsection (1) {
+        elements {
+            /// Subsection (1) is satisfied if either statutory receiving route is proved.
+            any_of {
+                all_of {
+                    actus_reus receives_or_retains_stolen_property := "Whoever receives or retains any stolen property";
+                    mens_rea knowledge_possession_transferred_by_gang_robbery := "He knows or has reason to believe the possession whereof to have been transferred by the commission of gang-robbery";
+                }
+
+                all_of {
+                    actus_reus receives_property_from_person := "Whoever receives from a person property";
+                    mens_rea knowledge_person_belongs_or_belonged_to_gang_robbers := "He knows or has reason to believe that person to belong or to have belonged to gang-robbers";
+                    mens_rea knowledge_property_stolen := "He knows or has reason to believe the property to have been stolen";
+                }
+            }
+        }
+
+        penalty {
+            imprisonment := 0 days .. 20 years;
+            fine := unlimited;
         }
     }
 
-    penalty {
-        imprisonment := 0 days .. 20 years;
-        fine := $0.00 .. $100,000.00;
+    subsection (2) {
+        elements {
+            /// Subsection (2) is a conjunctive statutory defence that the accused must prove.
+            all_of {
+                circumstance charge_under_subsection_1 := "A person is charged with an offence under subsection (1)" burden defence balance_of_probabilities;
+                circumstance reasonable_excuse_to_receive_or_retain := "He has a reasonable excuse to receive or retain the property" burden defence balance_of_probabilities;
+                circumstance exercised_reasonable_care_as_soon_as_practicable := "He exercised reasonable care as soon as practicable after having the knowledge or reason to believe mentioned in that subsection" burden defence balance_of_probabilities;
+            }
+        }
     }
 
-    exception reasonableExcuse {
-        "Accused had a reasonable excuse for receiving or retaining the property"
-        "And exercised reasonable care in relation to the property"
-    }
-
-    illustration example1 {
-        "A box of valuable jewels is delivered by courier to As office. A later discovers the jewels and learns from the news reports that there was a gang robbery of jewels in the vicinity. A has reason to believe that the jewels were stolen in the gang robbery. As soon as practicable after this discovery, A keeps the jewels in the safe and travels to the police station to make a report of the jewels and express his belief that the jewels were stolen by gang-robbers. A has a reasonable excuse for receiving and retaining the jewels pending their retrieval by the police and has exercised reasonable care."
+    /// Illustration
+    illustration illustration {
+        "A box of valuable jewels is delivered by courier to A ’s office. A later discovers the jewels and learns from the news reports that there was a gang robbery of jewels in the vicinity. A has reason to believe that the jewels were stolen in the gang robbery. As soon as practicable after this discovery, A keeps the jewels in the safe and travels to the police station to make a report of the jewels and express his belief that the jewels were stolen by gang‑robbers. A has a reasonable excuse for receiving and retaining the jewels pending their retrieval by the police and has exercised reasonable care."
     }
 }

@@ -2,16 +2,17 @@
 section_number = "416"
 title = "Cheating by personation"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Cheating by pretending to be another person or substituting one person for another."
+summary = "Section 416 defines cheating by personation as cheating committed through impersonation, substitution, or false identity representation."
 source = "Singapore Penal Code 1871, Section 416"
 
 [verification]
