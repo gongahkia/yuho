@@ -1,37 +1,24 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr435-#pr435-
-// Singapore Penal Code Section 435 - Mischief by fire or explosive substance with intent to cause damage
-
-referencing penal_code/s425_mischief
 
 statute 435 "Mischief by fire or explosive substance with intent to cause damage" effective 1872-01-01 {
-    definitions {
-        mischief := "As defined in section 425";
-        explosive_substance := "Any substance capable of producing a practical effect by explosion";
-    }
-
     elements {
         all_of {
-            /// base offence -- mischief under s425
-            actus_reus base_mischief := "Commits mischief under section 425";
+            actus_reus mischief := "Commits mischief";
             any_of {
-                /// mode -- by fire
-                circumstance by_fire := "Mischief committed by fire";
-                /// mode -- by explosive
-                circumstance by_explosive := "Mischief committed by an explosive substance";
+                circumstance by_fire := "The mischief is committed by fire";
+                circumstance by_explosive_substance := "The mischief is committed by any explosive substance";
             }
             any_of {
-                /// intent to cause damage
-                mens_rea intent_damage := "Intends to cause damage to property";
-                /// knowledge damage is likely
-                mens_rea know_damage := "Knows it to be likely that damage to property will be caused";
+                mens_rea intent_to_cause_damage := "Intending to cause damage to any property";
+                mens_rea knowledge_damage_likely := "Knowing it to be likely that he will thereby cause damage to any property";
             }
         }
     }
 
-    penalty {
+    penalty cumulative {
         imprisonment := 0 days .. 7 years;
-        fine := $0.00 .. $20,000.00;
+        fine := unlimited;
     }
 }

@@ -1,38 +1,53 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr424A-#pr424A-
-// Singapore Penal Code Section 424A - Fraud by false representation, non-disclosure or abuse of position not connected with contracts for goods or services
-
 /// @amendment [15/2019]
 
-statute 424A "Fraud by false representation, non-disclosure or abuse of position not connected with contracts for goods or services" effective 2020-01-01 {
-    definitions {
-        false_representation := "A representation which is untrue or misleading made dishonestly or fraudulently";
-        legal_duty_to_disclose := "A duty to disclose arising under law or contract";
-        abuse_of_position := "Acting in breach of a position expected to safeguard anothers financial interests";
-    }
+statute 424A "Fraud by false representation, non-disclosure or abuse of position not connected with contracts for goods or services" effective 1872-01-01 effective 2020-01-01 {
+    subsection (1) {
+        elements {
+            /// The offence requires fraudulent or dishonest fault plus one of the three prohibited acts.
+            all_of {
+                any_of {
+                    mens_rea fraudulent := "He acts fraudulently";
+                    mens_rea dishonest := "He acts dishonestly";
+                }
 
-    elements {
-        all_of {
-            any_of {
-                /// false representation
-                actus_reus false_rep := "Makes a false representation";
-                /// failure to disclose
-                actus_reus nondisclosure := "Fails to disclose information which he is under a legal duty to disclose";
-                /// abuse of position
-                actus_reus abuse_position := "Abuses by act or omission a position expected to safeguard anothers financial interests";
-            }
-            any_of {
-                /// dishonest state of mind
-                mens_rea dishonest := "Acts dishonestly";
-                /// fraudulent state of mind
-                mens_rea fraudulent := "Acts fraudulently";
+                any_of {
+                    actus_reus false_representation := "Makes a false representation";
+                    actus_reus failure_to_disclose := "Fails to disclose to another person information which he is under a legal duty to disclose";
+                    actus_reus abuse_of_position := "Abuses, whether by act or omission, a position which he occupies in which he is expected to safeguard, or not to act against, the financial interests of another person";
+                }
             }
         }
     }
 
-    penalty {
-        imprisonment := 0 days .. 20 years;
-        fine := $0.00 .. $100,000.00;
+    subsection (2) {
+        definitions {
+            materiality_not_required := "A person may be guilty of an offence under subsection (1) whether or not the acts in subsection (1)( a ), ( b ) or ( c ) were material. [15/2019]";
+        }
+    }
+
+    subsection (3) {
+        penalty or_both {
+            imprisonment := 0 days .. 20 years;
+            fine := unlimited;
+        }
+    }
+
+    subsection (4) {
+        exception contracts_for_goods_or_services {
+            "This section does not apply where the false representation, failure to disclose or abuse of position mentioned in subsection (1) is directly connected with a written or oral contract for the supply of goods or services. [15/2019]"
+            "This section does not apply."
+        }
+    }
+
+    subsection (5) {
+        definitions {
+            representation := "Representation means any representation as to fact or law, including a representation as to the state of mind of the person making the representation, or any other person. [15/2019]";
+            false_representation := "A person makes a false representation if it is untrue or misleading, and that person knows that it is, or might be, untrue or misleading. [15/2019]";
+            representation_may_be_express_or_implied := "A representation may be express or implied. [15/2019]";
+            representation_may_be_regarded_as_made := "A representation may be regarded as made if it (or anything implying it) is submitted in any form to any system or device designed to receive, convey or respond to communications (with or without human intervention). [15/2019]";
+        }
     }
 }

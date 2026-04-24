@@ -2,16 +2,17 @@
 section_number = "424A"
 title = "Fraud by false representation, non-disclosure or abuse of position not connected with contracts for goods or services"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Fraud by false representation, non-disclosure, or abuse of position not connected with contracts for goods or services."
+summary = "Creates an offence for fraudulent or dishonest false representation, non-disclosure, or abuse of position not directly connected with contracts for goods or services."
 source = "Singapore Penal Code 1871, Section 424A"
 
 [verification]

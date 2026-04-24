@@ -2,16 +2,17 @@
 section_number = "435"
 title = "Mischief by fire or explosive substance with intent to cause damage"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Mischief by fire or explosive substance with intent to cause damage to property."
+summary = "Punishes mischief committed by fire or explosive substance where the offender intends or knows that property damage is likely."
 source = "Singapore Penal Code 1871, Section 435"
 
 [verification]
