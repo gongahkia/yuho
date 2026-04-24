@@ -16,4 +16,6 @@ summary = "Allocates liability under sections 377BG, 377BH, and 377BL for specif
 source = "Singapore Penal Code 1871, Section 377BO"
 
 [verification]
+last_verified = "2026-04-24"
+verified_by = "gpt-5.4 high (automated L3 reviewer)"
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BO-#pr377BO-"

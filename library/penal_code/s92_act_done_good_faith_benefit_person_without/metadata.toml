@@ -16,4 +16,6 @@ summary = "Section 92 excuses harm done in good faith for a person's benefit wit
 source = "Singapore Penal Code 1871, Section 92"
 
 [verification]
+last_verified = "2026-04-24"
+verified_by = "gpt-5.4 high (automated L3 reviewer)"
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr92-#pr92-"

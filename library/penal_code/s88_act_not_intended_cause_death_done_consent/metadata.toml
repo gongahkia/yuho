@@ -16,4 +16,6 @@ summary = "An act not intended to cause death is not an offence by reason of qua
 source = "Singapore Penal Code 1871, Section 88"
 
 [verification]
+last_verified = "2026-04-24"
+verified_by = "gpt-5.4 high (automated L3 reviewer)"
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr88-#pr88-"

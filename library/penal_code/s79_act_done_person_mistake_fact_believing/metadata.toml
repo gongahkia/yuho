@@ -16,4 +16,6 @@ summary = "Provides a mistake-of-fact defence for acts done in good faith under 
 source = "Singapore Penal Code 1871, Section 79"
 
 [verification]
+last_verified = "2026-04-24"
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr79-#pr79-"
+verified_by = "gpt-5.4 high (automated L3 reviewer)"
