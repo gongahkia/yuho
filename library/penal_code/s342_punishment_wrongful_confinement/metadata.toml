@@ -2,16 +2,17 @@
 section_number = "342"
 title = "Punishment for wrongful confinement"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Punishment for wrongful confinement."
+summary = "Sets the punishment for committing wrongful confinement."
 source = "Singapore Penal Code 1871, Section 342"
 
 [verification]

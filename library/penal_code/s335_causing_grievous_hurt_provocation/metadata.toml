@@ -2,16 +2,17 @@
 section_number = "335"
 title = "Causing grievous hurt on provocation"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Voluntarily causing grievous hurt on grave and sudden provocation."
+summary = "This section criminalises voluntarily causing grievous hurt on grave and sudden provocation, subject to the provisos to Exception 1 of section 300."
 source = "Singapore Penal Code 1871, Section 335"
 
 [verification]

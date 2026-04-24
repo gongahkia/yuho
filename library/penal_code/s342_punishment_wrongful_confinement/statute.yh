@@ -1,41 +1,15 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr342-#pr342-
-// Singapore Penal Code Section 342 -- Punishment for wrongful confinement
-// Yuho v5 Syntax
-
-struct S342Case {
-    string accused,
-    string victim,
-    bool offenceCommitted,
-}
-
-fn s342_applies(bool offenceCommitted) : bool {
-    match {
-        case TRUE if offenceCommitted == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
 /// @amendment [15/2019]
-statute 342 "Punishment for wrongful confinement" effective 1872-01-01 {
-    definitions {
-        offence_summary := "Punishment for wrongful confinement.";
-    }
 
-    elements {
-        /// the predicate offence must be established
-        circumstance offence_committed := "The statutory conduct is proved";
-        /// sentence applies on conviction
-        actus_reus conviction := "Conviction under this section";
-    }
+referencing penal_code/s340_wrongful_confinement
 
-    penalty {
-        imprisonment := 0 years .. 3 years;
-        fine := $0.00 .. $50,000.00;
-    }
-
-    illustration example1 {
-        "A is convicted under section 342. A shall be punished as prescribed by section 342."
+statute 342 "Punishment for wrongful confinement" effective 1872-01-01 effective 2019-12-31 {
+    /// Punishment for wrongful confinement; see section 340 for the underlying offence.
+    penalty or_both {
+        imprisonment := 0 days .. 3 years;
+        fine := unlimited;
+        supplementary := "Whoever wrongfully confines any person shall be punished with imprisonment for a term which may extend to 3 years, or with fine, or with both. [15/2019]";
     }
 }

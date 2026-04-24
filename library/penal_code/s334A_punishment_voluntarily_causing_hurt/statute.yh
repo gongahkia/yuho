@@ -1,0 +1,23 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr334A-#pr334A-
+/// @amendment [15/2019]
+
+statute 334A "Punishment for voluntarily causing hurt on provocation which causes grievous hurt" effective 1872-01-01 effective 2019-12-31 {
+    elements {
+        all_of {
+            actus_reus voluntarily_causes_hurt := "Whoever voluntarily causes hurt";
+            circumstance grave_and_sudden_provocation := "The hurt is caused on grave and sudden provocation";
+            mens_rea no_intent_to_hurt_another := "He neither intends to cause hurt to any person other than the person who gave the provocation";
+            mens_rea no_knowledge_likely_to_hurt_another := "He does not know himself to be likely to cause hurt to any person other than the person who gave the provocation";
+            mens_rea intended_or_known_hurt_not_grievous := "The hurt which he intends to cause or knows himself to be likely to cause is not grievous";
+            circumstance actual_hurt_grievous := "The hurt which he actually causes is grievous";
+        }
+    }
+
+    penalty or_both {
+        imprisonment := 0 years .. 1 years;
+        fine := $0.00 .. $7,500.00;
+        supplementary := "Whoever voluntarily causes hurt on grave and sudden provocation, if he neither intends nor knows himself to be likely to cause hurt to any person other than the person who gave the provocation and if the hurt which he intends to cause or knows himself to be likely to cause is not grievous, but the hurt which he actually causes is grievous, shall be punished with imprisonment for a term which may extend to one year, or with fine which may extend to $7,500, or with both. [15/2019]";
+    }
+}

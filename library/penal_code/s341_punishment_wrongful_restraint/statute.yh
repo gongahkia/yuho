@@ -1,41 +1,13 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr341-#pr341-
-// Singapore Penal Code Section 341 -- Punishment for wrongful restraint
-// Yuho v5 Syntax
 
-struct S341Case {
-    string accused,
-    string victim,
-    bool offenceCommitted,
-}
-
-fn s341_applies(bool offenceCommitted) : bool {
-    match {
-        case TRUE if offenceCommitted == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
+referencing penal_code/s339_wrongful_restraint
 
 statute 341 "Punishment for wrongful restraint" effective 1872-01-01 {
-    definitions {
-        offence_summary := "Punishment for wrongful restraint.";
-    }
-
-    elements {
-        /// the predicate offence must be established
-        circumstance offence_committed := "The statutory conduct is proved";
-        /// sentence applies on conviction
-        actus_reus conviction := "Conviction under this section";
-    }
-
-    penalty {
-        imprisonment := 0 months .. 1 months;
+    /// Punishment for the offence of wrongful restraint under section 339.
+    penalty or_both {
+        imprisonment := 0 days .. 1 month;
         fine := $0.00 .. $1,500.00;
-    }
-
-    illustration example1 {
-        "A is convicted under section 341. A shall be punished as prescribed by section 341."
     }
 }

@@ -2,16 +2,17 @@
 section_number = "346"
 title = "Wrongful confinement in secret"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Wrongful confinement with intent that confinement or place may not be known."
+summary = "This section punishes wrongful confinement carried out with intent to conceal either the confinement itself or the place of confinement."
 source = "Singapore Penal Code 1871, Section 346"
 
 [verification]

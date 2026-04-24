@@ -1,37 +1,18 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr340-#pr340-
-// Singapore Penal Code Section 340 -- Wrongful confinement
-// Yuho v5 Syntax
-
-struct S340Case {
-    string actor,
-    bool criteriaMet,
-}
-
-fn s340_matches(bool criteriaMet) : bool {
-    match {
-        case TRUE if criteriaMet == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
-
 statute 340 "Wrongful confinement" effective 1872-01-01 {
     definitions {
-        term_summary := "Definition of wrongful confinement.";
+        wrongful_confinement := "Whoever wrongfully restrains any person in such a manner as to prevent that person from proceeding beyond certain circumscribing limits, is said “wrongfully to confine” that person.";
+        wrongful_restraint := "wrongfully restrains any person";
+        preventing_proceeding_beyond_limits := "prevent that person from proceeding beyond certain circumscribing limits";
     }
 
-    elements {
-        /// statutory criteria for the defined term
-        circumstance criteria := "Statutory criteria for the defined term are satisfied";
+    illustration illustration_a {
+        "( a ) A causes Z to go within a walled space, and locks Z in. Z is thus prevented from proceeding in any direction beyond the circumscribing line of wall. A wrongfully confines Z ."
     }
 
-    penalty {
-        fine := $0.00 .. $1,000.00;
-    }
-
-    illustration example1 {
-        "The conduct of A matches the statutory criteria defined under section 340."
+    illustration illustration_b {
+        "( b ) A places men with firearms at the outlets of a building and tells Z that they will fire at Z if Z attempts to leave the building. A wrongfully confines Z ."
     }
 }

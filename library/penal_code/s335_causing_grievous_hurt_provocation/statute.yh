@@ -1,44 +1,26 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr335-#pr335-
-// Singapore Penal Code Section 335 -- Causing grievous hurt on provocation
-// Yuho v5 Syntax
-
-struct S335Case {
-    string accused,
-    string victim,
-    bool actusReus,
-    bool mensRea,
-}
-
-fn s335_applies(bool actusReus, bool mensRea) : bool {
-    match {
-        case TRUE if actusReus == TRUE && mensRea == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
 /// @amendment [Act 23 of 2021 wef 01/03/2022]
-statute 335 "Causing grievous hurt on provocation" effective 1872-01-01 {
+
+statute 335 "Causing grievous hurt on provocation" effective 1872-01-01 effective 2022-03-01 {
     definitions {
-        offence_summary := "Voluntarily causing grievous hurt on grave and sudden provocation.";
+        explanation_provisos := "Explanation .—Sections 334, 334A and 335 are subject to the same provisos as exception 1 of section 300.";
     }
 
     elements {
-        /// mental element required for the offence
-        mens_rea intent := "Intent or knowledge as required by the section";
-        /// physical act constituting the offence
-        actus_reus act := "The prohibited act defined by the section";
-        /// contextual requirement -- victim, circumstances, or result
-        circumstance context := "Statutory circumstances are satisfied";
+        /// Section 335 is conjunctive: the voluntary causing of grievous hurt, the provocation context, and both exclusionary mental-state conditions must all be present.
+        all_of {
+            actus_reus voluntarily_causes_grievous_hurt := "Whoever voluntarily causes grievous hurt";
+            circumstance grave_and_sudden_provocation := "The grievous hurt is caused on grave and sudden provocation";
+            mens_rea no_intent_to_cause_grievous_hurt_other_person := "He neither intends to cause grievous hurt to any person other than the person who gave the provocation";
+            mens_rea no_knowledge_likely_to_cause_grievous_hurt_other_person := "He knows himself not to be likely to cause grievous hurt to any person other than the person who gave the provocation";
+        }
     }
 
-    penalty {
+    penalty or_both {
         imprisonment := 0 years .. 6 years;
         fine := $0.00 .. $10,000.00;
-    }
-
-    illustration example1 {
-        "A commits the conduct described in section 335 against B. A is guilty of the offence under section 335."
+        supplementary := "Whoever voluntarily causes grievous hurt on grave and sudden provocation, if he neither intends nor knows himself to be likely to cause grievous hurt to any person other than the person who gave the provocation, shall be punished with imprisonment for a term which may extend to 6 years, or with fine which may extend to $10,000, or with both. [Act 23 of 2021 wef 01/03/2022]";
     }
 }

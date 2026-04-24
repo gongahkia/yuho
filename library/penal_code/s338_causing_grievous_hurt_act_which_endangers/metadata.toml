@@ -2,16 +2,17 @@
 section_number = "338"
 title = "Causing grievous hurt by an act which endangers life or the personal safety of others"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Causing grievous hurt by rash or negligent act endangering life or personal safety."
+summary = "Section 338 criminalises causing grievous hurt by a rash or negligent act that endangers human life or the personal safety of others."
 source = "Singapore Penal Code 1871, Section 338"
 
 [verification]

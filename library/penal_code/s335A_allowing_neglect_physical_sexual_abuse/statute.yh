@@ -1,44 +1,77 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr335A-#pr335A-
-// Singapore Penal Code Section 335A -- Allowing neglect, physical or sexual abuse of domestic worker or vulnerable person
-// Yuho v5 Syntax
-
-struct S335aCase {
-    string accused,
-    string victim,
-    bool actusReus,
-    bool mensRea,
-}
-
-fn s335a_applies(bool actusReus, bool mensRea) : bool {
-    match {
-        case TRUE if actusReus == TRUE && mensRea == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
 /// @amendment [15/2019]
-statute 335A "Allowing neglect, physical or sexual abuse of domestic worker or vulnerable person" effective 1872-01-01 {
-    definitions {
-        offence_summary := "Employer or household member allowing neglect or abuse of a domestic worker or vulnerable person.";
+
+statute 335A "Allowing neglect, physical or sexual abuse of domestic worker or vulnerable person" effective 1872-01-01 effective 2020-01-01 {
+    subsection (1) {
+        elements {
+            /// Subsection (1) requires the domestic-worker harm, A's awareness of the risk, A's specified relationship to B, A's failure to protect, and foreseeability of the circumstances.
+            all_of {
+                actus_reus domestic_worker_suffers_harm := "A domestic worker (B) suffers neglect, hurt, grievous hurt, sexual abuse or any injury to B's mental health as a result of the unlawful act of another person (C).";
+                mens_rea knowledge_or_reason_to_believe_risk := "A knew or had reason to believe that B was at risk of such neglect, hurt, grievous hurt, sexual abuse or injury caused by C.";
+                any_of {
+                    circumstance employer_of_b := "A was at the time of the risk mentioned in paragraph (b) the employer of B.";
+                    circumstance household_member_of_employer := "A was at the time of the risk mentioned in paragraph (b) a member of B's employer's household.";
+                    circumstance employment_agent_of_b := "A was at the time of the risk mentioned in paragraph (b) an employment agent of B.";
+                }
+                actus_reus failure_to_take_protective_steps := "A failed to take such steps as A could reasonably have been expected to take in A's circumstances to protect B from the risk mentioned in paragraph (b).";
+                circumstance foreseen_or_ought_to_have_foreseen_circumstances := "The act occurred in circumstances of the kind that A foresaw or ought to have foreseen.";
+            }
+        }
     }
 
-    elements {
-        /// mental element required for the offence
-        mens_rea intent := "Intent or knowledge as required by the section";
-        /// physical act constituting the offence
-        actus_reus act := "The prohibited act defined by the section";
-        /// contextual requirement -- victim, circumstances, or result
-        circumstance context := "Statutory circumstances are satisfied";
+    subsection (2) {
+        elements {
+            /// Subsection (2) mirrors subsection (1) for a vulnerable person and A's custody, charge or care of B.
+            all_of {
+                actus_reus vulnerable_person_suffers_harm := "A vulnerable person (B) suffers neglect, hurt, grievous hurt, sexual abuse or any injury to B's mental health as a result of the unlawful act of another person (C).";
+                mens_rea knowledge_or_reason_to_believe_risk := "A knew or had reason to believe that B was at risk of neglect, hurt, grievous hurt, sexual abuse or injury caused by C.";
+                circumstance custody_charge_or_care := "A had, at the time of the risk mentioned in paragraph (b), the custody, charge or care of B.";
+                actus_reus failure_to_take_protective_steps := "A failed to take such steps as A could reasonably have been expected to take in A's circumstances to protect B from the risk mentioned in paragraph (b).";
+                circumstance foreseen_or_ought_to_have_foreseen_circumstances := "The act occurred in circumstances of the kind that A foresaw or ought to have foreseen.";
+            }
+        }
     }
 
-    penalty {
-        imprisonment := 0 years .. 4 years;
-        fine := $0.00 .. $50,000.00;
+    subsection (3) {
+        definitions {
+            unlawful_act_other_than_act_by_a := "For the purposes of this section, an unlawful act, other than an act by A, is one that constitutes an offence that causes neglect, hurt, grievous hurt or sexual abuse to B or injury to B's mental health.";
+            unlawful_act_includes_act_of_person_below_section_82_age := "An unlawful act also includes an act that would constitute such an offence but for being the act of a person below the age specified in section 82.";
+            unlawful_act_includes_act_of_person_within_section_83 := "An unlawful act also includes an act that would constitute such an offence but for being the act of a person of the age specified in section 83 who had not attained sufficient maturity of understanding to judge of the nature and consequence of the act.";
+            unlawful_act_includes_act_of_person_entitled_to_unsoundness_defence := "An unlawful act also includes an act that would constitute such an offence but for being the act of a person entitled to rely on a defence of unsoundness of mind.";
+            unlawful_act_includes_act_of_person_entitled_to_intoxication_defence := "An unlawful act also includes an act that would constitute such an offence but for being the act of a person entitled to rely on a defence of intoxication.";
+            unlawful_act_includes_act_of_person_entitled_to_mistake_of_fact_defence := "An unlawful act also includes an act that would constitute such an offence but for being the act of a person entitled to rely on a defence of mistake of fact.";
+        }
     }
 
-    illustration example1 {
-        "A commits the conduct described in section 335A against B. A is guilty of the offence under section 335A."
+    subsection (4) {
+        definitions {
+            as_circumstances_include_past_or_present_experiences := "A's circumstances mentioned in subsections (1)(d) and (2)(d), include but is not limited to A's past or present experiences of suffering neglect, hurt, grievous hurt, sexual abuse or any injury to A's mental health as a result of an unlawful act by C. [15/2019]";
+        }
+    }
+
+    subsection (5) {
+        penalty or_both when death_caused {
+            imprisonment := 0 years .. 7 years;
+            fine := $0.00 .. $20,000.00;
+        }
+
+        penalty or_both when other_case {
+            imprisonment := 0 years .. 4 years;
+            fine := $0.00 .. $4,000.00;
+        }
+    }
+
+    subsection (6) {
+        definitions {
+            domestic_worker := "\"Domestic worker\" has the meaning given by section 73(4).";
+            employer := "\"Employer\" has the meaning given by section 73(4).";
+            employment_agent := "\"Employment agent\" has the meaning given by section 73(4).";
+            member_of_employers_household := "\"Member of the employer's household\" has the meaning given by section 73(4).";
+            neglect := "\"Neglect\" has the meaning given by section 304B(2).";
+            sexual_abuse := "\"Sexual abuse\" means abuse caused to a victim by the commission of a sexual offence within the meaning of section 2(1) of the Criminal Procedure Code 2010.";
+            vulnerable_person := "\"Vulnerable person\" has the meaning given by section 74A(5).";
+        }
     }
 }

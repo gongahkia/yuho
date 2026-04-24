@@ -2,16 +2,17 @@
 section_number = "335A"
 title = "Allowing neglect, physical or sexual abuse of domestic worker or vulnerable person"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Employer or household member allowing neglect or abuse of a domestic worker or vulnerable person."
+summary = "This section criminalises failing to take reasonable steps to protect a domestic worker or vulnerable person from a foreseen risk of neglect, hurt, grievous hurt, sexual abuse, or injury to mental health caused by another person's unlawful act."
 source = "Singapore Penal Code 1871, Section 335A"
 
 [verification]

@@ -1,37 +1,28 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr339-#pr339-
-// Singapore Penal Code Section 339 -- Wrongful restraint
-// Yuho v5 Syntax
-
-struct S339Case {
-    string actor,
-    bool criteriaMet,
-}
-
-fn s339_matches(bool criteriaMet) : bool {
-    match {
-        case TRUE if criteriaMet == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
-
 statute 339 "Wrongful restraint" effective 1872-01-01 {
     definitions {
-        term_summary := "Definition of wrongful restraint.";
+        wrongful_restraint := "Whoever voluntarily obstructs any person, so as to prevent that person from proceeding in any direction in which that person has a right to proceed, is said wrongfully to restrain that person.";
+        voluntarily_obstructs := "voluntarily obstructs any person";
+        prevents_proceeding := "prevent that person from proceeding in any direction";
+        right_to_proceed := "in which that person has a right to proceed";
     }
 
     elements {
-        /// statutory criteria for the defined term
-        circumstance criteria := "Statutory criteria for the defined term are satisfied";
+        /// the definition is satisfied only where obstruction, prevention, and right to proceed all coincide
+        all_of {
+            actus_reus obstruction := "Whoever voluntarily obstructs any person";
+            actus_reus prevention := "so as to prevent that person from proceeding in any direction";
+            circumstance right_to_proceed := "in which that person has a right to proceed";
+        }
     }
 
-    penalty {
-        fine := $0.00 .. $1,000.00;
+    exception private_way_good_faith {
+        "The obstruction of a private way over land or water which a person in good faith believes himself to have a lawful right to obstruct, is not an offence within the meaning of this section."
     }
 
-    illustration example1 {
-        "The conduct of A matches the statutory criteria defined under section 339."
+    illustration illustration_a {
+        "A obstructs a path along which Z has a right to pass, A not believing in good faith that he has a right to stop the path. Z is thereby prevented from passing. A wrongfully restrains Z ."
     }
 }

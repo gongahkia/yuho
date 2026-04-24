@@ -2,16 +2,17 @@
 section_number = "341"
 title = "Punishment for wrongful restraint"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Punishment for wrongful restraint."
+summary = "Section 341 prescribes the punishment for committing wrongful restraint."
 source = "Singapore Penal Code 1871, Section 341"
 
 [verification]

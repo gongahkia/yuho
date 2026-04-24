@@ -1,44 +1,26 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr337-#pr337-
-// Singapore Penal Code Section 337 -- Causing hurt by an act which endangers life or the personal safety of others
-// Yuho v5 Syntax
-
-struct S337Case {
-    string accused,
-    string victim,
-    bool actusReus,
-    bool mensRea,
-}
-
-fn s337_applies(bool actusReus, bool mensRea) : bool {
-    match {
-        case TRUE if actusReus == TRUE && mensRea == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
-
 statute 337 "Causing hurt by an act which endangers life or the personal safety of others" effective 1872-01-01 {
-    definitions {
-        offence_summary := "Causing hurt by rash or negligent act endangering life or personal safety.";
-    }
-
     elements {
-        /// mental element required for the offence
-        mens_rea intent := "Intent or knowledge as required by the section";
-        /// physical act constituting the offence
-        actus_reus act := "The prohibited act defined by the section";
-        /// contextual requirement -- victim, circumstances, or result
-        circumstance context := "Statutory circumstances are satisfied";
+        /// Section 337 requires hurt caused by an act, that act to be rash or negligent, and danger to human life or the personal safety of others.
+        all_of {
+            actus_reus doing_act := "Doing any act";
+            actus_reus causing_hurt := "Causes hurt to any person" caused_by doing_act;
+            any_of {
+                mens_rea rash_act := "Doing the act so rashly as to endanger human life or the personal safety of others";
+                mens_rea negligent_act := "Doing the act so negligently as to endanger human life or the personal safety of others";
+            }
+        }
     }
 
-    penalty {
-        imprisonment := 0 years .. 1 years;
+    penalty or_both when rash_act {
+        imprisonment := 0 days .. 1 year;
         fine := $0.00 .. $5,000.00;
     }
 
-    illustration example1 {
-        "A commits the conduct described in section 337 against B. A is guilty of the offence under section 337."
+    penalty or_both when negligent_act {
+        imprisonment := 0 days .. 6 months;
+        fine := $0.00 .. $2,500.00;
     }
 }
