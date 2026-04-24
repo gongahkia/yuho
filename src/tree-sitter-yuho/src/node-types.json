@@ -3243,6 +3243,10 @@
         {
           "type": "penalty_block",
           "named": true
+        },
+        {
+          "type": "subsection_block",
+          "named": true
         }
       ]
     }
@@ -3349,6 +3353,70 @@
       "types": [
         {
           "type": "field_pattern",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "subsection_block",
+    "named": true,
+    "fields": {
+      "doc_comment": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "doc_comment",
+            "named": true
+          }
+        ]
+      },
+      "number": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "subsection_number",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "caselaw_block",
+          "named": true
+        },
+        {
+          "type": "definitions_block",
+          "named": true
+        },
+        {
+          "type": "elements_block",
+          "named": true
+        },
+        {
+          "type": "exception_block",
+          "named": true
+        },
+        {
+          "type": "illustration_block",
+          "named": true
+        },
+        {
+          "type": "parties_block",
+          "named": true
+        },
+        {
+          "type": "penalty_block",
+          "named": true
+        },
+        {
+          "type": "subsection_block",
           "named": true
         }
       ]
@@ -4328,6 +4396,14 @@
   {
     "type": "struct",
     "named": false
+  },
+  {
+    "type": "subsection",
+    "named": false
+  },
+  {
+    "type": "subsection_number",
+    "named": true
   },
   {
     "type": "subsumes",

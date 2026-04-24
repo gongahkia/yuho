@@ -390,7 +390,28 @@ module.exports = grammar({
       $.exception_block,
       $.caselaw_block,
       $.parties_block,
+      $.subsection_block,                                  // G5
     ),
+
+    // G5: subsection nesting — numbered subsections can contain their own
+    // definitions / elements / penalty / illustrations, matching the real
+    // structure of sections like s377BO (7 subsections) and s511 (3).
+    subsection_block: $ => seq(
+      repeat(field('doc_comment', $.doc_comment)),
+      'subsection',
+      field('number', $.subsection_number),
+      '{',
+      repeat($._statute_member),                            // recursively allow nested subsections
+      '}'
+    ),
+
+    // Accept the same numbering shapes that real PC subsections use:
+    // (1), (2A), (a), (iii) — plus naked numerics like 1, 2A for brevity.
+    subsection_number: $ => token(choice(
+      seq('(', /[0-9]+[A-Za-z]*/, ')'),
+      seq('(', /[a-z]+/, ')'),
+      /[0-9]+[A-Za-z]*/,
+    )),
 
     parties_block: $ => seq(
       'parties',

@@ -120,6 +120,19 @@ class ASTBuilder:
         """Get child by field name."""
         return node.child_by_field_name(field_name)
 
+    def _children_by_field(self, node, field_name: str):
+        """Get all children matching a field name (for grammar `repeat(field(...))`)."""
+        result = []
+        cursor = node.walk()
+        if cursor.goto_first_child():
+            while True:
+                fname = cursor.field_name
+                if fname == field_name:
+                    result.append(cursor.node)
+                if not cursor.goto_next_sibling():
+                    break
+        return result
+
     # =========================================================================
     # Module and top-level declarations
     # =========================================================================
@@ -984,6 +997,7 @@ class ASTBuilder:
         exceptions: List[nodes.ExceptionNode] = []
         case_law: List[nodes.CaseLawNode] = []
         parties: List[nodes.PartyNode] = []
+        subsections: List[nodes.SubsectionNode] = []           # G5
 
         for child in node.children:
             if child.type == "definitions_block":
@@ -1002,6 +1016,8 @@ class ASTBuilder:
                 case_law.append(self._build_caselaw(child))
             elif child.type == "parties_block":
                 parties.extend(self._build_parties_block(child))
+            elif child.type == "subsection_block":              # G5
+                subsections.append(self._build_subsection(child))
 
         annotations = self._build_annotations(node)
 
@@ -1009,7 +1025,9 @@ class ASTBuilder:
         jurisdiction, jurisdiction_meta = self._extract_jurisdiction(doc)
 
         # phase 11/13: temporal and hierarchy metadata
-        effective_node = self._child_by_field(node, "effective_date")
+        # G6: collect all effective_date fields (the grammar now allows `repeat(...)`)
+        effective_nodes = self._children_by_field(node, "effective_date")
+        effective_dates = tuple(self._text(n) for n in effective_nodes)
         repealed_node = self._child_by_field(node, "repealed_date")
         subsumes_node = self._child_by_field(node, "subsumes")
         amends_node = self._child_by_field(node, "amends")
@@ -1023,16 +1041,59 @@ class ASTBuilder:
             illustrations=tuple(illustrations),
             exceptions=tuple(exceptions),
             case_law=tuple(case_law),
+            subsections=tuple(subsections),                     # G5
             doc_comment=doc,
             jurisdiction=jurisdiction,
             jurisdiction_meta=jurisdiction_meta,
-            effective_date=self._text(effective_node) if effective_node else None,
+            effective_date=effective_dates[0] if effective_dates else None,
+            effective_dates=effective_dates,                    # G6
             repealed_date=self._text(repealed_node) if repealed_node else None,
             subsumes=self._text(subsumes_node) if subsumes_node else None,
             amends=self._text(amends_node) if amends_node else None,
             parties=tuple(parties),
             temporal_constraints=tuple(temporal_constraints),
             annotations=tuple(annotations),
+            source_location=self._loc(node),
+        )
+
+    def _build_subsection(self, node) -> nodes.SubsectionNode:
+        """G5: build a SubsectionNode from subsection_block. Recursively walks
+        its children for the same member types a statute accepts."""
+        number_node = self._child_by_field(node, "number")
+        number = self._text(number_node) if number_node else ""
+
+        definitions: List[nodes.DefinitionEntry] = []
+        elements: list = []
+        penalty: Optional[nodes.PenaltyNode] = None
+        illustrations: List[nodes.IllustrationNode] = []
+        exceptions: List[nodes.ExceptionNode] = []
+        subsections: List[nodes.SubsectionNode] = []
+
+        for child in node.children:
+            if child.type == "definitions_block":
+                definitions.extend(self._build_definitions_block(child))
+            elif child.type == "elements_block":
+                elems, _temps = self._build_elements_block(child)
+                elements.extend(elems)
+            elif child.type == "penalty_block":
+                penalty = self._build_penalty_block(child)
+            elif child.type == "illustration_block":
+                illustrations.append(self._build_illustration(child))
+            elif child.type == "exception_block":
+                exceptions.append(self._build_exception(child))
+            elif child.type == "subsection_block":
+                subsections.append(self._build_subsection(child))
+
+        doc = self._get_doc_comment(node)
+        return nodes.SubsectionNode(
+            number=number,
+            definitions=tuple(definitions),
+            elements=tuple(elements),
+            penalty=penalty,
+            illustrations=tuple(illustrations),
+            exceptions=tuple(exceptions),
+            subsections=tuple(subsections),
+            doc_comment=doc,
             source_location=self._loc(node),
         )
 

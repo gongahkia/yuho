@@ -976,6 +976,39 @@ class PartyNode(ASTNode):
 
 
 @dataclass(frozen=True)
+class SubsectionNode(ASTNode):
+    """
+    G5: a numbered subsection inside a statute. Carries its own members
+    (definitions / elements / penalty / illustrations / exceptions / nested
+    subsections), matching the real structure of sections like s377BO (7
+    subsections) and s511 (3). Effective/repealed dates are inherited from
+    the parent statute unless overridden later.
+    """
+
+    number: str  # e.g. "(1)", "(2A)", "(a)"
+    definitions: Tuple[DefinitionEntry, ...] = ()
+    elements: Tuple[Union[ElementNode, ElementGroupNode], ...] = ()
+    penalty: Optional[PenaltyNode] = None
+    illustrations: Tuple[IllustrationNode, ...] = ()
+    exceptions: Tuple[ExceptionNode, ...] = ()
+    subsections: Tuple["SubsectionNode", ...] = ()           # nested subsections
+    doc_comment: Optional[str] = None
+
+    def accept(self, visitor: "Visitor"):
+        return visitor.visit_subsection(self) if hasattr(visitor, "visit_subsection") else None
+
+    def children(self) -> List[ASTNode]:
+        result: List[ASTNode] = []
+        result.extend(self.definitions)
+        result.extend(self.elements)
+        if self.penalty: result.append(self.penalty)
+        result.extend(self.illustrations)
+        result.extend(self.exceptions)
+        result.extend(self.subsections)
+        return result
+
+
+@dataclass(frozen=True)
 class StatuteNode(ASTNode):
     """
     Statute block representing a legal provision.
@@ -992,10 +1025,12 @@ class StatuteNode(ASTNode):
     illustrations: Tuple[IllustrationNode, ...]
     exceptions: Tuple[ExceptionNode, ...] = ()
     case_law: Tuple[CaseLawNode, ...] = ()
+    subsections: Tuple[SubsectionNode, ...] = ()             # G5
     doc_comment: Optional[str] = None
     jurisdiction: Optional[str] = None
     jurisdiction_meta: Optional[Dict[str, str]] = None
-    effective_date: Optional[str] = None  # phase 11: ISO date
+    effective_date: Optional[str] = None  # phase 11: ISO date; first `effective` clause
+    effective_dates: Tuple[str, ...] = ()  # G6: all effective clauses (orig + amendments)
     repealed_date: Optional[str] = None  # phase 11: ISO date
     subsumes: Optional[str] = None  # phase 13: section number
     amends: Optional[str] = None  # phase 11: section number
@@ -1017,6 +1052,7 @@ class StatuteNode(ASTNode):
         result.extend(self.illustrations)
         result.extend(self.exceptions)
         result.extend(self.case_law)
+        result.extend(self.subsections)
         return result
 
 

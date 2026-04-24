@@ -1596,8 +1596,101 @@
         {
           "type": "SYMBOL",
           "name": "parties_block"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "subsection_block"
         }
       ]
+    },
+    "subsection_block": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "FIELD",
+            "name": "doc_comment",
+            "content": {
+              "type": "SYMBOL",
+              "name": "doc_comment"
+            }
+          }
+        },
+        {
+          "type": "STRING",
+          "value": "subsection"
+        },
+        {
+          "type": "FIELD",
+          "name": "number",
+          "content": {
+            "type": "SYMBOL",
+            "name": "subsection_number"
+          }
+        },
+        {
+          "type": "STRING",
+          "value": "{"
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_statute_member"
+          }
+        },
+        {
+          "type": "STRING",
+          "value": "}"
+        }
+      ]
+    },
+    "subsection_number": {
+      "type": "TOKEN",
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "("
+              },
+              {
+                "type": "PATTERN",
+                "value": "[0-9]+[A-Za-z]*"
+              },
+              {
+                "type": "STRING",
+                "value": ")"
+              }
+            ]
+          },
+          {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "("
+              },
+              {
+                "type": "PATTERN",
+                "value": "[a-z]+"
+              },
+              {
+                "type": "STRING",
+                "value": ")"
+              }
+            ]
+          },
+          {
+            "type": "PATTERN",
+            "value": "[0-9]+[A-Za-z]*"
+          }
+        ]
+      }
     },
     "parties_block": {
       "type": "SEQ",
