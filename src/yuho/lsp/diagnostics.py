@@ -42,16 +42,72 @@ def run_type_checker(ast: "ModuleNode") -> List[TypeErrorInfo]:
         return []
 
 
+# Yuho's statute-level reserved words. When a parse error mentions one of
+# these near an unknown token, the LSP's did-you-mean shim proposes the
+# nearest match. Keeping the list inline so the LSP doesn't re-depend on
+# the grammar just for this.
+_YUHO_KEYWORDS = (
+    "statute", "subsection", "definitions", "elements", "penalty",
+    "illustration", "exception", "caselaw", "parties",
+    "all_of", "any_of",
+    "actus_reus", "mens_rea", "circumstance",
+    "obligation", "prohibition", "permission",
+    "imprisonment", "fine", "caning", "death", "supplementary", "minimum",
+    "cumulative", "alternative", "or_both",
+    "concurrent", "consecutive", "when",
+    "effective", "repealed", "subsumes", "amends",
+    "priority", "defeats", "unless", "fact", "conclusion", "presumed",
+    "unlimited", "unspecified", "strokes",
+    "referencing", "import",
+    "struct", "enum", "fn", "match", "case", "consequence",
+    "TRUE", "FALSE",
+)
+
+
+def _suggest_nearest_keyword(token: str) -> str | None:
+    """If `token` looks like a typo of a known Yuho keyword, return the
+    closest match. Uses Levenshtein-like edit distance via difflib so we
+    don't pull in a new dependency.
+    """
+    if not token or len(token) < 2:
+        return None
+    import difflib
+    matches = difflib.get_close_matches(token, _YUHO_KEYWORDS, n=1, cutoff=0.7)
+    if matches and matches[0] != token:
+        return matches[0]
+    return None
+
+
 def parse_error_to_diagnostic(error: ParseError) -> lsp.Diagnostic:
-    """Convert ParseError to LSP Diagnostic."""
+    """Convert ParseError to LSP Diagnostic. LDOC-inspired did-you-mean:
+    if the error's problematic token looks like a typo of a Yuho keyword,
+    append a `(did you mean `…`?)` hint."""
     loc = error.location
+
+    msg = error.message
+    # heuristic: many parser errors carry the offending token as a bare word
+    # in backticks, quotes, or after "Unexpected token". Pull the first
+    # identifier-shaped fragment and run did-you-mean on it.
+    import re as _re
+    token = None
+    for patt in (r"`([A-Za-z_][A-Za-z_0-9]{1,})`",
+                 r"\"([A-Za-z_][A-Za-z_0-9]{1,})\"",
+                 r"'([A-Za-z_][A-Za-z_0-9]{1,})'",
+                 r"Unexpected (?:token|keyword)\s+([A-Za-z_][A-Za-z_0-9]{1,})"):
+        m = _re.search(patt, msg)
+        if m:
+            token = m.group(1)
+            break
+    suggestion = _suggest_nearest_keyword(token) if token else None
+    if suggestion:
+        msg = f"{msg} (did you mean `{suggestion}`?)"
 
     return lsp.Diagnostic(
         range=lsp.Range(
             start=lsp.Position(line=loc.line - 1, character=loc.col - 1),
             end=lsp.Position(line=loc.end_line - 1, character=loc.end_col - 1),
         ),
-        message=error.message,
+        message=msg,
         severity=lsp.DiagnosticSeverity.Error,
         source="yuho",
     )

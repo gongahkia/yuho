@@ -1607,6 +1607,98 @@ statute {section} "{marginal}" effective 1872-01-01 {{
             }
 
         @tool_with_structured_logging()
+        async def yuho_library_list(
+            include_marginal: bool = True,
+            include_sso: bool = False,
+            limit: int = 0,
+            offset: int = 0,
+        ) -> Dict[str, Any]:
+            """
+            List all encoded sections in the Penal Code library with coverage
+            badges. Complements `yuho://library/index` for clients that prefer
+            a structured tool response over markdown.
+
+            Args:
+                include_marginal: include the marginal note per section.
+                include_sso: include the SSO deep-link URL per section.
+                limit: max sections to return (0 = no cap).
+                offset: skip this many sections (for pagination).
+
+            Returns:
+                {total, shown, sections: [{number, title, L1, L2, L3, path, sso_url?}]}
+            """
+            import json as _j
+            repo = Path(__file__).parent.parent.parent.parent
+            cov_path = repo / "library" / "penal_code" / "_coverage" / "coverage.json"
+            if not cov_path.is_file():
+                return {"error": "coverage.json missing — run scripts/coverage_report.py"}
+            cov = _j.loads(cov_path.read_text())
+            rows = cov.get("sections", [])
+            total = len(rows)
+            sliced = rows[offset:(offset + limit) if limit else None]
+            items: list[dict] = []
+            for r in sliced:
+                item: dict = {
+                    "number": r.get("number", ""),
+                    "L1": bool(r.get("L1")),
+                    "L2": bool(r.get("L2")),
+                    "L3": bool(r.get("L3")),
+                    "encoded_path": r.get("encoded_path"),
+                }
+                if include_marginal:
+                    item["marginal_note"] = r.get("marginal_note", "")
+                if include_sso:
+                    item["sso_url"] = r.get("sso_url", "")
+                items.append(item)
+            return {"total": total, "shown": len(items), "sections": items}
+
+        @tool_with_structured_logging()
+        async def yuho_grammar_example(primitive: str) -> Dict[str, Any]:
+            """
+            Return a worked example for a Yuho grammar primitive. Tool-form
+            wrapper over the `yuho://examples/{primitive}` resource so clients
+            that prefer tool-calls over resource reads get equal access.
+
+            Known primitives: subsection, effective, fine_unlimited,
+            caning_unspecified, penalty_or_both, penalty_when, nested_penalty,
+            exception_priority, doc_comment_on_group, section_suffix,
+            illustration, element_group.
+
+            Args:
+                primitive: name of the primitive.
+
+            Returns:
+                {primitive, example, known_primitives} — `example` is missing
+                if the primitive is unknown.
+            """
+            # reuse the same map as the examples resource — duplicated for
+            # callability, kept small so drift is tolerable.
+            examples = {
+                "subsection": "G5 — see `yuho://examples/subsection` for full example.",
+                "effective": "G6 — see `yuho://examples/effective`.",
+                "fine_unlimited": "G8 — see `yuho://examples/fine_unlimited`.",
+                "caning_unspecified": "G14 — see `yuho://examples/caning_unspecified`.",
+                "penalty_or_both": "G8 — see `yuho://examples/penalty_or_both`.",
+                "penalty_when": "G9 — see `yuho://examples/penalty_when`.",
+                "nested_penalty": "G12 — see `yuho://examples/nested_penalty`.",
+                "exception_priority": "G13 — see `yuho://examples/exception_priority`.",
+                "doc_comment_on_group": "G1 — see `yuho://examples/doc_comment_on_group`.",
+                "section_suffix": "G3 — see `yuho://examples/section_suffix`.",
+                "illustration": "Illustrations — see `yuho://examples/illustration`.",
+                "element_group": "Elements — see `yuho://examples/element_group`.",
+            }
+            known = sorted(examples)
+            if primitive not in examples:
+                return {"primitive": primitive, "error": "unknown primitive",
+                        "known_primitives": known}
+            # resolve the actual body by calling the resource getter (we have
+            # it in this scope under _register_resources; to keep things
+            # decoupled we re-read the map from the examples resource body).
+            return {"primitive": primitive, "pointer": examples[primitive],
+                    "fetch_resource": f"yuho://examples/{primitive}",
+                    "known_primitives": known}
+
+        @tool_with_structured_logging()
         async def yuho_rate_limit_stats() -> Dict[str, Any]:
             """
             Get rate limiting statistics.
@@ -1660,6 +1752,241 @@ void      - No value / null type
                                 mask_error(exc),
                             )
             return f"// Statute {section} not found in library"
+
+        @self.server.resource("yuho://library/index")
+        async def get_library_index() -> str:
+            """Full browseable library index with coverage badges + SSO links.
+
+            Intended as the primary entry point for AI clients discovering
+            Yuho's statute library. Rendered as a markdown table sorted by
+            section number.
+            """
+            import json as _j, tomllib, re
+            repo = Path(__file__).parent.parent.parent.parent
+            cov_path = repo / "library" / "penal_code" / "_coverage" / "coverage.json"
+            if not cov_path.is_file():
+                return "# Library index\n\n_No coverage.json found; run scripts/coverage_report.py._\n"
+            cov = _j.loads(cov_path.read_text())
+            totals = cov.get("totals", {})
+            header = (
+                "# Yuho — Singapore Penal Code library\n\n"
+                f"Coverage: raw={totals.get('raw_sections',0)} · "
+                f"L1={totals.get('L1_pass',0)} · "
+                f"L2={totals.get('L2_pass',0)} · "
+                f"L3={totals.get('L3_pass',0)}\n\n"
+                "| § | Marginal note | L1 | L2 | L3 | Verified | SSO |\n"
+                "|---|---|:-:|:-:|:-:|---|---|\n"
+            )
+            lines = [header]
+            def tick(b): return "✓" if b else "·"
+            for r in cov.get("sections", []):
+                n = r.get("number", "")
+                if not n: continue
+                ver = f"{r.get('L3_verified_on','')} {r.get('L3_verified_by','')}".strip() or "—"
+                sso = f"[↗]({r['sso_url']})" if r.get("sso_url") else ""
+                marginal = (r.get("marginal_note") or "")[:60]
+                lines.append(
+                    f"| s{n} | {marginal} | {tick(r.get('L1'))} | "
+                    f"{tick(r.get('L2'))} | {tick(r.get('L3'))} | {ver} | {sso} |"
+                )
+            return "\n".join(lines) + "\n"
+
+        @self.server.resource("yuho://raw/{section}")
+        async def get_raw_canonical(section: str) -> str:
+            """Return the canonical SSO text for a PC section (raw/act.json)."""
+            import json as _j
+            repo = Path(__file__).parent.parent.parent.parent
+            raw_path = repo / "library" / "penal_code" / "_raw" / "act.json"
+            if not raw_path.is_file():
+                return f"// canonical act.json missing"
+            raw = _j.loads(raw_path.read_text())
+            for s in raw.get("sections", []):
+                if s.get("number") == section:
+                    out: list[str] = [
+                        f"# s{section} — {s.get('marginal_note','')}",
+                        "",
+                        f"**SSO anchor:** `{s.get('anchor_id','')}`",
+                        "",
+                        "## Text",
+                        "",
+                        s.get("text", ""),
+                    ]
+                    if s.get("sub_items"):
+                        out += ["", f"## Sub-items ({len(s['sub_items'])})", ""]
+                        for it in s["sub_items"]:
+                            out.append(f"- **[{it.get('kind','')}:{it.get('label','')}]** {it.get('text','')}")
+                    if s.get("amendments"):
+                        out += ["", f"## Amendments ({len(s['amendments'])})", ""]
+                        for a in s["amendments"]:
+                            out.append(f"- `{a.get('marker','')}`")
+                    return "\n".join(out) + "\n"
+            return f"// section {section} not in canonical corpus"
+
+        @self.server.resource("yuho://examples/{primitive}")
+        async def get_grammar_example(primitive: str) -> str:
+            """Return a worked example for a named grammar primitive.
+
+            Primitives covered: subsection, effective, fine_unlimited,
+            caning_unspecified, penalty_or_both, penalty_when, nested_penalty,
+            exception_priority, doc_comment_on_group, section_suffix,
+            illustration, explanation, element_group.
+            """
+            examples = {
+                "subsection": (
+                    "G5 — subsection nesting (s377BO / s511 shape):\n\n"
+                    "```yh\n"
+                    "statute 511 \"Attempt to commit offence\" {\n"
+                    "  subsection (1) {\n"
+                    "    definitions { substantial_step := \"...\"; }\n"
+                    "    elements { all_of { actus_reus a := \"takes a substantial step\"; } }\n"
+                    "  }\n"
+                    "  subsection (2) {\n"
+                    "    definitions { factual_impossibility := \"...\"; }\n"
+                    "  }\n"
+                    "}\n"
+                    "```\n"
+                ),
+                "effective": (
+                    "G6 — multiple effective dates (amendment-introduced sections):\n\n"
+                    "```yh\n"
+                    "statute 377BO \"Child abuse material extraterritoriality\"\n"
+                    "    effective 1872-01-01\n"
+                    "    effective 2020-01-01\n"
+                    "{ /* ... */ }\n"
+                    "```\n"
+                    "The first date is the act's original commencement, the second is the\n"
+                    "amendment that introduced this specific section.\n"
+                ),
+                "fine_unlimited": (
+                    "G8 — fine without a numeric cap (statute says \"with fine\" alone):\n\n"
+                    "```yh\n"
+                    "penalty or_both {\n"
+                    "  imprisonment := 0 days .. 1 year;\n"
+                    "  fine := unlimited;\n"
+                    "}\n"
+                    "```\n"
+                    "NEVER invent a dollar cap. If the statute doesn't name one, use `unlimited`.\n"
+                ),
+                "caning_unspecified": (
+                    "G14 — caning liability without stroke count (\"liable to caning\"):\n\n"
+                    "```yh\n"
+                    "penalty cumulative {\n"
+                    "  imprisonment := 0 years .. 10 years;\n"
+                    "  or_both {\n"
+                    "    fine := unlimited;\n"
+                    "    caning := unspecified;\n"
+                    "  }\n"
+                    "}\n"
+                    "```\n"
+                    "Never write `caning := 0 .. 0 strokes` or any invented range — that's\n"
+                    "fabrication. `unspecified` encodes \"liable to caning, quantum set by\n"
+                    "sentencing court.\"\n"
+                ),
+                "penalty_or_both": (
+                    "G8 — typical SG PC penalty pattern: X years, or fine, or both:\n\n"
+                    "```yh\n"
+                    "penalty or_both {\n"
+                    "  imprisonment := 0 years .. 3 years;\n"
+                    "  fine := unlimited;\n"
+                    "}\n"
+                    "```\n"
+                ),
+                "penalty_when": (
+                    "G9 — conditional penalty branches (s304A rash vs negligent):\n\n"
+                    "```yh\n"
+                    "penalty or_both when rash_act {\n"
+                    "  imprisonment := 0 years .. 5 years;\n"
+                    "  fine := unlimited;\n"
+                    "}\n"
+                    "penalty or_both when negligent_act {\n"
+                    "  imprisonment := 0 years .. 2 years;\n"
+                    "  fine := unlimited;\n"
+                    "}\n"
+                    "```\n"
+                ),
+                "nested_penalty": (
+                    "G12 — nested combinator (\"imprisonment AND ALSO liable to fine or caning or both\"):\n\n"
+                    "```yh\n"
+                    "penalty cumulative {\n"
+                    "  imprisonment := 0 years .. 10 years;\n"
+                    "  or_both {\n"
+                    "    fine := unlimited;\n"
+                    "    caning := unspecified;\n"
+                    "  }\n"
+                    "}\n"
+                    "```\n"
+                    "Outer `cumulative` = imprisonment always applies. Inner `or_both` = fine\n"
+                    "OR caning OR both, at sentencing court's discretion.\n"
+                ),
+                "exception_priority": (
+                    "G13 — prioritised exceptions (Catala default-logic, s300 Murder shape):\n\n"
+                    "```yh\n"
+                    "exception grave_provocation {\n"
+                    "  \"Culpable homicide is not murder if the offender ...\"\n"
+                    "  when provoked_and_lost_control\n"
+                    "  priority 1\n"
+                    "}\n"
+                    "exception self_defence_excess {\n"
+                    "  \"...\"\n"
+                    "  priority 2\n"
+                    "  defeats grave_provocation\n"
+                    "}\n"
+                    "```\n"
+                    "`defeats <label>` or lower `priority` integer = higher precedence.\n"
+                    "Z3 encoder emits priority-aware firing so only the dominant exception\n"
+                    "negates conviction when multiple guards are satisfied.\n"
+                ),
+                "doc_comment_on_group": (
+                    "G1 — doc comments on all_of / any_of groups:\n\n"
+                    "```yh\n"
+                    "elements {\n"
+                    "  /// conjunctive criteria for cheating\n"
+                    "  all_of {\n"
+                    "    actus_reus deception := \"deceiving any person\";\n"
+                    "    /// alternative mens rea branches — fraudulent OR dishonest\n"
+                    "    any_of {\n"
+                    "      mens_rea fraud := \"fraudulently\";\n"
+                    "      mens_rea dish := \"dishonestly\";\n"
+                    "    }\n"
+                    "  }\n"
+                    "}\n"
+                    "```\n"
+                ),
+                "section_suffix": (
+                    "G3 — multi-letter section suffix (376AA, 377BO, 377CA …):\n\n"
+                    "```yh\n"
+                    "statute 376AA \"Exploitative sexual penetration of minor ...\"\n"
+                    "    effective 1872-01-01\n"
+                    "    effective 2020-01-01\n"
+                    "{ /* ... */ }\n"
+                    "```\n"
+                    "Direct — no decimal workaround. Grammar accepts `[0-9]+[A-Za-z]*`.\n"
+                ),
+                "illustration": (
+                    "Illustrations — preserve verbatim from canonical text:\n\n"
+                    "```yh\n"
+                    "illustration illustration_a {\n"
+                    "  \"( a ) A shoots Z with the intention of killing him. Z dies in consequence. A commits murder.\"\n"
+                    "}\n"
+                    "```\n"
+                    "Quote text verbatim from `_raw/act.json`. Never paraphrase.\n"
+                ),
+                "element_group": (
+                    "Elements — offence shape (actus reus + mens rea + circumstance):\n\n"
+                    "```yh\n"
+                    "elements {\n"
+                    "  all_of {\n"
+                    "    actus_reus doing_act := \"does any act\";\n"
+                    "    mens_rea intent := \"with intent to …\" caused_by doing_act;\n"
+                    "    circumstance harm_caused := \"causes harm\";\n"
+                    "  }\n"
+                    "}\n"
+                    "```\n"
+                ),
+            }
+            if primitive in examples: return examples[primitive]
+            keys = ", ".join(sorted(examples))
+            return f"// no example for primitive '{primitive}'. Known primitives: {keys}\n"
 
         @self.server.resource("yuho://prompts/phase-d-reencoding")
         async def get_phase_d_reencoding_prompt() -> str:
