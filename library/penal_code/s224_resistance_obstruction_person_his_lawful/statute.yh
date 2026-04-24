@@ -1,46 +1,29 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr224-#pr224-
-// Singapore Penal Code Section 224 - Resistance or obstruction by a person to his lawful apprehension
-// Yuho v5 Syntax
 
-struct S224Case {
-    string accused,
-    bool intentionallyResistsOrEscapes,
-    bool lawfulApprehensionOrCustody,
-}
-fn s224_applies(bool intentionallyResistsOrEscapes, bool lawfulApprehensionOrCustody) : bool {
-    match {
-        case TRUE if intentionallyResistsOrEscapes == FALSE := consequence FALSE;
-        case TRUE if lawfulApprehensionOrCustody == FALSE := consequence FALSE;
-        case _ := consequence TRUE;
-    }
-}
 statute 224 "Resistance or obstruction by a person to his lawful apprehension" effective 1872-01-01 {
-    definitions {
-        lawful_apprehension := "Apprehension pursuant to a valid charge or conviction";
-        illegal_obstruction := "Any obstruction not authorised by law";
-    }
-
     elements {
+        /// Section 224 is conjunctive as to intention, lawful apprehension or detention, and one prohibited resistance or escape act.
         all_of {
-            circumstance lawful_basis := "Accused is being lawfully apprehended or lawfully detained for an offence charged or of which convicted";
+            mens_rea intention := "Whoever intentionally";
             any_of {
-                actus_reus resist := "Offers resistance or illegal obstruction to lawful apprehension";
-                actus_reus escape := "Escapes or attempts to escape from lawful custody";
+                actus_reus resistance_or_illegal_obstruction := "Offers any resistance or illegal obstruction to the lawful apprehension of himself";
+                any_of {
+                    actus_reus escape := "Escapes from any custody in which he is lawfully detained for any such offence";
+                    actus_reus attempt_to_escape := "Attempts to escape from any custody in which he is lawfully detained for any such offence";
+                }
             }
-            mens_rea intent := "Intentionally";
+            circumstance charged_or_convicted_offence := "For any offence with which he is charged, or of which he has been convicted";
         }
     }
 
-    penalty {
-        imprisonment := 0 years .. 2 years;
-        fine := $0.00 .. $20,000.00;
+    penalty or_both {
+        imprisonment := 0 days .. 2 years;
+        fine := unlimited;
     }
 
-    illustration example1 {
-        "A, lawfully charged with theft, intentionally fights off a police officer attempting arrest. A commits an offence under s224."
+    definitions {
+        explanation_additional_punishment := "Explanation. — The punishment in this section is in addition to the punishment for which the person to be apprehended or detained in custody was liable for the offence with which he was charged or of which he was convicted.";
     }
-
-    /// Explanation: punishment under this section is in addition to any punishment for the underlying charged or convicted offence.
 }

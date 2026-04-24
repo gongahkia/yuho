@@ -2,18 +2,18 @@
 section_number = "225A"
 title = "Public servant omitting to apprehend or suffering other persons to escape in cases not already provided for"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Catch-all for public servants legally bound to apprehend or confine who intentionally or negligently omit to do so, where not covered by s221, s222 or s223."
+summary = "This section criminalises a public servant's intentional or negligent omission to apprehend a person, or allowing that person to escape from confinement, in residual cases not otherwise specially provided for."
 source = "Singapore Penal Code 1871, Section 225A"
 
 [verification]
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr225A-#pr225A-"
-disclaimer = "Educational purposes only. Cross-reference with official SSO text."

@@ -2,18 +2,18 @@
 section_number = "225B"
 title = "Resistance or obstruction to lawful apprehension, or escape, or rescue, in cases not otherwise provided for"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Catch-all for intentional resistance, obstruction, escape or rescue in cases not covered by s224 or s225."
+summary = "Creates a residual offence for intentionally resisting lawful apprehension, escaping lawful custody, or rescuing a lawfully detained person where no more specific provision applies."
 source = "Singapore Penal Code 1871, Section 225B"
 
 [verification]
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr225B-#pr225B-"
-disclaimer = "Educational purposes only. Cross-reference with official SSO text."

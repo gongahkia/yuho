@@ -9,10 +9,11 @@ statute 221 "Intentional omission to apprehend on the part of a public servant b
             circumstance public_servant_status := "Whoever, being a public servant";
             circumstance legal_duty := "Legally bound as such public servant to apprehend or to keep in confinement any person charged with or liable to be apprehended for an offence";
             any_of {
-                actus_reus omission_to_apprehend := "Intentionally omits to apprehend such person";
-                actus_reus suffering_escape := "Intentionally suffers such person to escape";
-                actus_reus aiding_escape := "Intentionally aids such person in escaping or attempting to escape from such confinement";
+                actus_reus omission_to_apprehend := "Omits to apprehend such person";
+                actus_reus suffering_escape := "Suffers such person to escape";
+                actus_reus aiding_escape := "Aids such person in escaping or attempting to escape from such confinement";
             }
+            mens_rea intentional := "Intentionally";
             any_of {
                 circumstance offence_punishable_with_death := "The person in confinement, or who ought to have been apprehended, was charged with or liable to be apprehended for an offence punishable with death";
                 circumstance offence_punishable_with_life_or_20_years := "The person in confinement, or who ought to have been apprehended, was charged with or liable to be apprehended for an offence punishable with imprisonment for life, or imprisonment for a term which may extend to 20 years";

@@ -2,18 +2,18 @@
 section_number = "224"
 title = "Resistance or obstruction by a person to his lawful apprehension"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Person intentionally offering resistance or illegal obstruction to his own lawful apprehension, or escaping or attempting to escape from lawful custody."
+summary = "This section criminalises intentionally resisting one’s own lawful apprehension or escaping or attempting to escape from lawful custody for an offence charged or convicted."
 source = "Singapore Penal Code 1871, Section 224"
 
 [verification]
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr224-#pr224-"
-disclaimer = "Educational purposes only. Cross-reference with official SSO text."

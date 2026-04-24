@@ -1,47 +1,52 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr225-#pr225-
-// Singapore Penal Code Section 225 - Resistance or obstruction to the lawful apprehension of another person
-// Yuho v5 Syntax
 
-struct S225Case {
-    string accused,
-    bool intentionallyResistsOrRescues,
-    bool lawfulApprehensionOfAnother,
-    string underlyingOffenceSeverity,
-}
-fn s225_applies(bool intentionallyResistsOrRescues, bool lawfulApprehensionOfAnother) : bool {
-    match {
-        case TRUE if intentionallyResistsOrRescues == FALSE := consequence FALSE;
-        case TRUE if lawfulApprehensionOfAnother == FALSE := consequence FALSE;
-        case _ := consequence TRUE;
-    }
-}
 statute 225 "Resistance or obstruction to the lawful apprehension of another person" effective 1872-01-01 {
-    definitions {
-        lawful_apprehension := "Apprehension pursuant to valid charge, conviction or lawful authority";
-        rescue := "Unlawfully freeing a person from lawful custody";
-    }
-
     elements {
         all_of {
-            circumstance lawful_basis := "Another person is being lawfully apprehended for an offence or is in lawful custody";
+            mens_rea intentionally := "Whoever intentionally";
             any_of {
-                actus_reus resist := "Offers resistance or illegal obstruction to the lawful apprehension of another";
-                actus_reus rescue := "Rescues or attempts to rescue another from lawful custody";
+                actus_reus resistance_or_illegal_obstruction := "Offers any resistance or illegal obstruction to the lawful apprehension of any other person for an offence";
+                actus_reus rescue_or_attempted_rescue := "Rescues or attempts to rescue any other person from any custody in which that person is lawfully detained for an offence";
             }
-            mens_rea intent := "Intentionally";
+            any_of {
+                circumstance baseline_case := "The person to be apprehended, or the person rescued, or attempted to be rescued, does not fall within paragraph (b), (c), (d) or (e)";
+                circumstance life_or_20_year_offence := "The person to be apprehended, or the person rescued, or attempted to be rescued, is charged with or liable to be apprehended for an offence punishable with imprisonment for life or imprisonment for a term which may extend to 20 years";
+                circumstance death_punishable_offence := "The person to be apprehended or rescued, or attempted to be rescued, is charged with or liable to be apprehended for an offence punishable with death";
+                circumstance sentence_of_10_years_or_upwards := "The person to be apprehended or rescued, or attempted to be rescued, is liable, under the sentence of a court of justice, or by virtue of a commutation of such a sentence, to imprisonment for a term of 10 years or upwards";
+                circumstance sentence_of_death := "The person to be apprehended or rescued, or attempted to be rescued, is under sentence of death";
+            }
         }
     }
 
-    penalty {
+    penalty or_both when baseline_case {
+        imprisonment := 0 years .. 5 years;
+        fine := unlimited;
+    }
+
+    penalty when life_or_20_year_offence {
+        imprisonment := 0 years .. 7 years;
+        fine := unlimited;
+    }
+
+    penalty when death_punishable_offence {
+        imprisonment := 0 years .. 10 years;
+        fine := unlimited;
+    }
+
+    penalty when sentence_of_10_years_or_upwards {
+        imprisonment := 0 years .. 10 years;
+        fine := unlimited;
+    }
+
+    penalty alternative when sentence_of_death {
         imprisonment := 0 years .. 15 years;
-        fine := $0.00 .. $100,000.00;
+        supplementary := "Shall be punished with imprisonment for life or imprisonment for a term not exceeding 15 years.";
     }
 
-    illustration example1 {
-        "A forcibly attempts to free B from police custody while B is being arrested on a murder charge. A is punishable under s225(c) with imprisonment up to 10 years and fine."
+    penalty when sentence_of_death {
+        fine := unlimited;
+        supplementary := "The offender shall also be liable to fine.";
     }
-
-    // penalty tiered: (a) baseline: up to 5 years or fine or both; (b) life/20yr offence: up to 7 years + fine; (c) death-punishable: up to 10 years + fine; (d) 10yr+ sentence: up to 10 years + fine; (e) sentence of death: life or up to 15 years + fine
 }

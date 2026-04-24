@@ -2,18 +2,18 @@
 section_number = "222"
 title = "Intentional omission to apprehend on the part of a public servant bound by law to apprehend person under sentence of a court of justice"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Public servant legally bound to apprehend or keep in confinement a person under sentence of court or lawfully committed intentionally fails; punishment tiered by sentence severity."
+summary = "A public servant who is legally bound to apprehend or confine a person under sentence or lawfully committed to custody commits an offence by intentionally omitting to apprehend, suffering escape, or aiding escape, with punishment tiered by the person’s sentence status."
 source = "Singapore Penal Code 1871, Section 222"
 
 [verification]
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr222-#pr222-"
-disclaimer = "Educational purposes only. Cross-reference with official SSO text."
