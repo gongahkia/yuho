@@ -2,16 +2,17 @@
 section_number = "396"
 title = "Gang-robbery with murder"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Where any one of 5 or more persons conjointly committing gang-robbery commits murder, every one of them is punishable with death or life imprisonment, and if not sentenced to death, with caning of not less than 12 strokes."
+summary = "Where one member of five or more persons conjointly committing gang-robbery commits murder in doing so, every member faces death or life imprisonment, and non-death sentences also carry caning of at least 12 strokes."
 source = "Singapore Penal Code 1871, Section 396"
 
 [verification]

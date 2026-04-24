@@ -1,12 +1,119 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BO-#pr377BO-
-// Singapore Penal Code Section 377BO
+/// @amendment [15/2019]
 
-statute 377BO "Child abuse material offences outside or partially outside Singapore" effective 1872-01-01 {
-    definitions {
-        extraterritorial_jurisdiction := "Jurisdiction over acts committed outside Singapore by citizens or PRs";
-        partial_extraterritorial := "Acts in Singapore involving victims outside Singapore, treated as if done in Singapore";
+statute 377BO "Child abuse material offences outside or partially outside Singapore" effective 1872-01-01 effective 2019-12-31 {
+    subsection (1) {
+        elements {
+            /// Subsection (1) extends liability to citizens and permanent residents for specified child abuse material acts done wholly outside Singapore.
+            all_of {
+                circumstance citizen_or_permanent_resident_of_singapore := "Any person, being a citizen or a permanent resident of Singapore";
+                actus_reus act_done_outside_singapore := "Who does, outside Singapore, any act";
+                circumstance hypothetical_offence_if_done_in_singapore := "That would, if done in Singapore, constitute an offence under section 377BG, 377BH or 377BL(2) or (3). [15/2019]";
+            }
+        }
+
+        definitions {
+            attributed_offence_under_specified_section := "The person shall be guilty of an offence under section 377BG, 377BH or 377BL(2) or (3), as the case may be. [15/2019]";
+        }
     }
 
+    subsection (2) {
+        elements {
+            /// Subsection (2) covers acts done in Singapore involving a person below 16 years of age who is outside Singapore.
+            all_of {
+                actus_reus act_done_in_singapore := "Any person ( A ) who does in Singapore, any act involving a person below 16 years of age ( B )";
+                circumstance person_b_outside_singapore := "B is outside Singapore";
+                circumstance hypothetical_offence_if_b_were_in_singapore := "That would if B were in Singapore constitute an offence under section 377BG or 377BH. [15/2019]";
+            }
+        }
+
+        definitions {
+            attributed_offence_under_section_377BG_or_377BH := "To avoid doubt, the person shall be guilty of an offence under section 377BG or 377BH, as the case may be. [15/2019]";
+        }
+    }
+
+    subsection (3) {
+        elements {
+            /// Subsection (3) covers acts done outside Singapore involving a person below 16 years of age who is in Singapore.
+            all_of {
+                actus_reus act_done_outside_singapore_involving_person_below_16 := "Any person who does outside Singapore, any act involving a person below 16 years of age ( B )";
+                circumstance person_b_in_singapore := "B is in Singapore";
+                circumstance hypothetical_offence_if_done_in_singapore_under_377BG_or_377BH := "That would if done in Singapore constitute an offence under section 377BG or 377BH. [15/2019]";
+            }
+        }
+
+        definitions {
+            attributed_offence_under_section_377BG_or_377BH_from_outside_singapore := "The person shall be guilty of an offence under section 377BG or 377BH, as the case may be. [15/2019]";
+        }
+    }
+
+    subsection (4) {
+        definitions {
+            exploitative_relationship_gate_for_subsections_5_and_6 := "Subsections (5) and (6) apply only where A is in a relationship that is exploitative of B . [15/2019]";
+        }
+    }
+
+    subsection (5) {
+        elements {
+            /// Subsection (5) applies only through subsection (4), which requires that A be in a relationship that is exploitative of B.
+            all_of {
+                actus_reus act_done_in_singapore_involving_person_16_to_18 := "Any person ( A ) who does in Singapore, any act involving a person who is of or above 16 but below 18 years of age ( B )";
+                circumstance person_b_outside_singapore_and_exploitative_relationship_gate := "B is outside Singapore, and subsection (4) applies";
+                circumstance hypothetical_offence_if_b_were_in_singapore_under_377BL := "That would if B were in Singapore constitute an offence under section 377BL(2) or (3). [15/2019]";
+            }
+        }
+
+        definitions {
+            attributed_offence_under_section_377BL_for_act_done_in_singapore := "To avoid doubt, the person shall be guilty of an offence under section 377BL(2) or (3), as the case may be. [15/2019]";
+        }
+    }
+
+    subsection (6) {
+        elements {
+            /// Subsection (6) applies only through subsection (4), which requires that A be in a relationship that is exploitative of B.
+            all_of {
+                actus_reus act_done_outside_singapore_involving_person_16_to_18 := "Any person ( A ) who does outside Singapore, any act involving a person who is of or above 16 but below 18 years of age ( B )";
+                circumstance person_b_in_singapore_and_exploitative_relationship_gate := "B is in Singapore, and subsection (4) applies";
+                circumstance hypothetical_offence_if_done_in_singapore_under_377BL := "That would if done in Singapore constitute an offence under section 377BL(2) or (3), as the case may be. [15/2019]";
+            }
+        }
+
+        definitions {
+            attributed_offence_under_section_377BL_for_act_done_outside_singapore := "The person shall be guilty of an offence under section 377BL(2) or (3), as the case may be. [15/2019]";
+        }
+    }
+
+    subsection (7) {
+        elements {
+            /// Subsection (7) preserves liability where one physical element occurs in Singapore and other physical elements occur outside Singapore.
+            all_of {
+                actus_reus physical_element_done_in_singapore := "Any person does in Singapore an act which is a physical element of an offence under section 377BG, 377BH or 377BL(2) or (3)";
+                circumstance all_fault_elements_proven := "All the fault elements of the offence are proven";
+                circumstance all_physical_elements_proven := "All the physical elements of the offence are proven";
+                circumstance other_physical_elements_occurred_outside_singapore := "Other physical elements of the same offence occurred outside Singapore. [15/2019]";
+            }
+        }
+
+        definitions {
+            attributed_offence_despite_other_physical_elements_outside_singapore := "To avoid doubt, the person shall be guilty of an offence under section 377BG, 377BH or 377BL(2) or (3), as the case may be, even though other physical elements of the same offence occurred outside Singapore. [15/2019]";
+        }
+    }
+
+    illustration illustration_a {
+        "( a ) A , a citizen or a permanent resident of Singapore, films in a foreign country a video recording of child abuse material involving a person below 16 years of age ( B ). B is in that foreign country during the filming. A is guilty of an offence under section 377BG or 377BH read with section 377BO(1)."
+    }
+
+    illustration illustration_b {
+        "( b ) A , who is in Singapore, uses remote video facilities to film a video recording of child abuse material involving a person below 16 years of age ( B ). B is in a foreign country during the filming. A is guilty of an offence under section 377BG or 377BH read with section 377BO(2)."
+    }
+
+    illustration illustration_c {
+        "( c ) A , who is in a foreign country and is not a citizen or a permanent resident of Singapore, uses remote video facilities to film a video recording of child abuse material involving a person below 16 years of age ( B ). B is in Singapore during the filming. A is guilty of an offence under section 377BG or 377BH read with section 377BO(3)."
+    }
+
+    illustration illustration_d {
+        "( d ) A , who is in Singapore, uses computer software to alter and reproduce child abuse material which was not filmed in Singapore. The child abuse material is not stored in Singapore but in a computer server in a foreign country which A accesses through A ’s computer in Singapore. A is guilty of an offence under section 377BH read with section 377BO(7)."
+    }
 }

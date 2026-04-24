@@ -1,42 +1,23 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr410-#pr410-
-// Singapore Penal Code Section 410 - Stolen property
-
 /// @amendment [15/2019]
 
-referencing penal_code/s378_theft
-
-statute 410 "Stolen property" effective 1872-01-01 {
-    definitions {
-        stolen_property := "Property transferred by theft, extortion, robbery, criminal misappropriation, criminal breach of trust, or cheating";
-        theft := "As defined in section 378";
-        extortion := "As defined in section 383";
-        robbery := "As defined in section 390";
-        criminal_misappropriation := "As defined in section 403";
-        criminal_breach_of_trust := "As defined in section 405";
-        cheating := "As defined in section 415";
-    }
-
-    elements {
-        any_of {
-            /// property transferred by theft falls within definition
-            circumstance from_theft := "Possession transferred by theft";
-            /// property transferred by extortion
-            circumstance from_extortion := "Possession transferred by extortion";
-            /// property transferred by robbery
-            circumstance from_robbery := "Possession transferred by robbery";
-            /// property obtained by criminal misappropriation
-            circumstance from_misappropriation := "Property criminally misappropriated";
-            /// property obtained by criminal breach of trust
-            circumstance from_cbt := "Property in respect of which criminal breach of trust committed";
-            /// property obtained by cheating
-            circumstance from_cheating := "Property in respect of which cheating committed";
+statute 410 "Stolen property" effective 1872-01-01 effective 2019-12-31 {
+    subsection (1) {
+        definitions {
+            stolen_property := "Property the possession whereof has been transferred by theft, or by extortion, or by robbery, and property which has been criminally misappropriated, or in respect of which criminal breach of trust or cheating has been committed, is designated as “stolen property”, whether the transfer has been made or the misappropriation or breach of trust or cheating has been committed within or without Singapore.";
+            stolen_property_ceases := "But if such property subsequently comes into the possession of a person legally entitled to the possession thereof, it then ceases to be stolen property.";
         }
     }
 
-    exception legallyReclaimed {
-        "Property subsequently comes into the possession of a person legally entitled to it"
-        "Ceases to be stolen property"
+    subsection (2) {
+        definitions {
+            stolen_property_includes_converted_or_exchanged_property := "The expression “stolen property” includes any property into or for which stolen property has been converted or exchanged and anything acquired by such conversion or exchange, whether immediately or otherwise. [15/2019]";
+        }
+    }
+
+    definitions {
+        explanation_proof_of_stolen_property := "Explanation .—For the purpose of proving whether the whole or any part of any property constitutes “stolen property”, it is not necessary for the prosecution to prove the elements or particulars of any offence that caused or contributed to the designation of the property as stolen property.";
     }
 }

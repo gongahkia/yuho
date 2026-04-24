@@ -2,16 +2,17 @@
 section_number = "377C"
 title = "Interpretation of sections 375 to 377BO (sexual offences)"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Interpretation of terms used in sections 375 to 377BO (sexual offences)."
+summary = "Provides interpretation rules and defined terms used across sections 375 to 377BO on sexual offences."
 source = "Singapore Penal Code 1871, Section 377C"
 
 [verification]

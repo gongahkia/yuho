@@ -2,16 +2,17 @@
 section_number = "394"
 title = "Voluntarily causing hurt in committing robbery"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Voluntarily causing hurt while committing or attempting robbery exposes all jointly concerned to 5 to 20 years imprisonment and caning with not less than 12 strokes."
+summary = "Section 394 punishes any participant in a robbery or attempted robbery where one participant voluntarily causes hurt, with mandatory imprisonment and minimum caning."
 source = "Singapore Penal Code 1871, Section 394"
 
 [verification]

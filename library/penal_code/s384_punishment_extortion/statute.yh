@@ -1,41 +1,11 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr384-#pr384-
-// Singapore Penal Code Section 384 - Punishment for extortion
-// Yuho v5 Syntax
-
-referencing penal_code/s383_extortion
-
-struct S384Case {
-    string accused,
-    bool extortionCommitted,
-}
-
-fn s384_applies(bool extortionCommitted) : bool {
-    match {
-        case TRUE if extortionCommitted == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
 
 statute 384 "Punishment for extortion" effective 1872-01-01 {
-    definitions {
-        extortion := "As defined under section 383";
-    }
-
-    elements {
-        /// extortion under s383 must be established
-        circumstance extortion_committed := "Extortion under section 383 is established" burden prosecution beyond_reasonable_doubt;
-        /// sentence upon conviction
-        actus_reus conviction := "Conviction for extortion";
-    }
-
-    penalty {
+    /// Punishment for the offence of extortion under section 383.
+    penalty cumulative {
         imprisonment := 2 years .. 7 years;
-        caning := 1 .. 24 strokes;
-    }
-
-    illustration example1 {
-        "A is convicted of extortion under s383. A shall be punished with imprisonment of not less than 2 and not more than 7 years, and caning."
+        supplementary := "Whoever commits extortion shall be punished with imprisonment for a term of not less than 2 years and not more than 7 years and with caning.";
     }
 }

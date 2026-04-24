@@ -1,13 +1,38 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377C-#pr377C-
-// Singapore Penal Code Section 377C
+/// @amendment [Act 23 of 2021 wef 01/03/2022]
+/// @amendment [15/2019]
 
-statute 377C "Interpretation of sections 375 to 377BO (sexual offences)" effective 1872-01-01 {
-    definitions {
-        interpretation_scope := "Definitions applicable to sections 375 to 377BO";
-        buttocks := "In relation to a person, includes the anal region of the person";
-        distribute_interpretation := "To share, communicate, transmit or make available by any means";
+statute 377C "Interpretation of sections 375 to 377BO (sexual offences)" effective 1872-01-01 effective 2019-12-31 effective 2022-03-01 {
+    subsection (1) {
+        definitions {
+            application_subsection_1 := "In this section and in sections 375 to 377BO —";
+            buttocks := "“buttocks”, in relation to a person, includes the anal region of the person; [Act 23 of 2021 wef 01/03/2022]";
+            child_abuse_material := "“child abuse material” means material that depicts an image of any of the following:";
+            distribute := "“distribute” includes any of the following conduct, whether done in person, electronically, digitally or in any other way:";
+            image_general := "“image” means a still, moving, recorded or unrecorded image and includes an image produced by any means and, where the context requires, a three-dimensional image;";
+            image_in_relation_to_person := "“image”, in relation to a person, means an image of a human being that is not fictional or imaginary but includes an image that so closely resembles that of a human being as to make it difficult for an ordinary person to distinguish it from an image of a human being that is not fictional or imaginary;";
+            material := "“material” means —";
+            structure := "“structure” includes a tent, vehicle or vessel or other temporary or movable structure;";
+            touching := "“touching” includes touching —";
+            vagina := "“vagina” includes vulva. [15/2019] [Act 23 of 2021 wef 01/03/2022]";
+        }
     }
 
+    subsection (2) {
+        definitions {
+            distribute_deemed_distribution := "For the purposes of the definition of “distribute” in subsection (1), a person is treated as having distributed an image or recording whether or not another person views or gains access to the image. [15/2019]";
+        }
+    }
+
+    subsection (3) {
+        definitions {
+            application_subsection_3 := "In sections 375 to 377BO —";
+        }
+
+        illustration illustration {
+            "A is showering in an open-concept shower cubicle at the changing room of a swimming pool and cannot reasonably expect not to be casually observed. However, A has a reasonable expectation that A will not be surreptitiously recorded by a video camera."
+        }
+    }
 }

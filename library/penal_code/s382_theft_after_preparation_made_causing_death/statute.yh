@@ -1,52 +1,33 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr382-#pr382-
-// Singapore Penal Code Section 382 - Theft after preparation made for causing death or hurt in order to commit theft
-// Yuho v5 Syntax
 
 referencing penal_code/s378_theft
 
-struct S382Case {
-    string accused,
-    bool theftCommitted,
-    bool preparationMade,
-    string preparationPurpose,
-}
-
-fn s382_applies(bool theft, bool preparation) : bool {
-    match {
-        case TRUE if theft == FALSE := consequence FALSE;
-        case TRUE if preparation == FALSE := consequence FALSE;
-        case _ := consequence TRUE;
-    }
-}
-
 statute 382 "Theft after preparation made for causing death or hurt in order to commit theft" effective 1872-01-01 {
-    definitions {
-        preparation := "Readiness or provision for causing death, hurt, or restraint";
-        hurt := "Causing bodily pain, disease, or infirmity";
-        restraint := "Wrongful restraint of a person";
-    }
-
     elements {
-        /// theft under s378 must be committed
-        circumstance theft_committed := "Theft under section 378 is established" burden prosecution beyond_reasonable_doubt;
-        /// preparation for causing death, hurt, or restraint -- or fear thereof
-        mens_rea preparation_intent := "Preparation for causing death, hurt, or restraint, or fear of such";
-        /// purpose must be to commit theft, effect escape, or retain stolen property
-        circumstance preparation_purpose := "Preparation made to commit theft, effect escape after theft, or retain property taken";
+        /// the underlying theft remains the physical offence cross-referred from s378
+        all_of {
+            actus_reus commits_theft := "Whoever commits theft";
+            actus_reus made_preparation := "Having made preparation for causing death or hurt or restraint, or fear of death or of hurt or of restraint, to any person";
+            any_of {
+                mens_rea purpose_commit_theft := "In order to commit such theft";
+                mens_rea purpose_escape := "In order to effect his escape after committing such theft";
+                mens_rea purpose_retain_property := "In order to retain property taken by such theft";
+            }
+        }
     }
 
     penalty {
         imprisonment := 0 days .. 10 years;
-        caning := 3 .. 24 strokes;
+        supplementary := "Shall also be punished with caning with not less than 3 strokes.";
     }
 
-    illustration example1 {
-        "A commits theft of property in Z's possession; and, while committing this theft, he has a loaded pistol under his garment, having provided this pistol for the purpose of hurting Z in case Z should resist. A has committed the offence defined in this section."
+    illustration illustration_a {
+        "( a ) A commits theft of property in Z ’s possession; and, while committing this theft, he has a loaded pistol under his garment, having provided this pistol for the purpose of hurting Z in case Z should resist. A has committed the offence defined in this section."
     }
 
-    illustration example2 {
-        "A picks Z's pocket, having posted several of his companions near him, in order that they may restrain Z, if Z should perceive what is passing and should resist, or should attempt to apprehend A. A has committed the offence defined in this section."
+    illustration illustration_b {
+        "( b ) A picks Z ’s pocket, having posted several of his companions near him, in order that they may restrain Z , if Z should perceive what is passing and should resist, or should attempt to apprehend A . A has committed the offence defined in this section."
     }
 }

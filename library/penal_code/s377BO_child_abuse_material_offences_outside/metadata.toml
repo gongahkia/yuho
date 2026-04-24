@@ -2,16 +2,17 @@
 section_number = "377BO"
 title = "Child abuse material offences outside or partially outside Singapore"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Child abuse material offences committed outside or partially outside Singapore by citizens or PRs."
+summary = "Allocates liability under sections 377BG, 377BH, and 377BL for specified child abuse material conduct occurring outside Singapore or across Singapore’s borders."
 source = "Singapore Penal Code 1871, Section 377BO"
 
 [verification]

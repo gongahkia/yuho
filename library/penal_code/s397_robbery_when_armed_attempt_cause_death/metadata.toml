@@ -2,16 +2,17 @@
 section_number = "397"
 title = "Robbery when armed or with attempt to cause death or grievous hurt"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Aggravated robbery -- being armed with or using a deadly weapon, causing grievous hurt, or attempting to cause death or grievous hurt -- attracts caning of not less than 12 strokes in addition to other applicable punishment, and liability extends to all jointly concerned."
+summary = "Aggravated robbery involving a deadly weapon, grievous hurt, or an attempt to cause death or grievous hurt attracts additional caning for the offender and any person jointly concerned."
 source = "Singapore Penal Code 1871, Section 397"
 
 [verification]

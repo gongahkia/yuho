@@ -1,12 +1,50 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377D-#pr377D-
-// Singapore Penal Code Section 377D
+/// @amendment [15/2019]
+/// @amendment [Act 23 of 2021 wef 01/03/2022]
 
-statute 377D "Mistake as to age in sexual offences" effective 1872-01-01 {
-    definitions {
-        mistake_age_rule := "Reasonable mistake as to age is generally not a defence to sexual offences";
-        mistake_age_exception := "Limited defence available where minor is 16-18 and accused reasonably believed they were 18 or above";
+statute 377D "Mistake as to age in sexual offences" effective 1872-01-01 effective 2019-12-31 effective 2022-03-01 {
+    subsection (1) {
+        definitions {
+            reasonable_mistake_as_to_age_not_defence := "Subject to subsections (2) and (3) and despite section 79, a reasonable mistake as to the age of a person cannot be a defence to any charge for a sexual offence. [15/2019]";
+        }
     }
 
+    subsection (2) {
+        definitions {
+            defence_for_minor_16_to_18_physical_element := "The presence of a reasonable mistaken belief that a minor was of or above 18 years of age is a valid defence to a charge for a sexual offence where the fact that a minor is of or above 16 years of age but below 18 years of age is a physical element of the offence. [15/2019]";
+        }
+
+        elements {
+            all_of {
+                circumstance charge_for_sexual_offence := "A charge is brought for a sexual offence" burden defence balance_of_probabilities;
+                mens_rea reasonable_mistaken_belief_minor_over_18 := "There is a reasonable mistaken belief that a minor was of or above 18 years of age" burden defence balance_of_probabilities;
+                circumstance minor_16_to_18_is_physical_element := "The fact that a minor is of or above 16 years of age but below 18 years of age is a physical element of the offence" burden defence balance_of_probabilities;
+            }
+        }
+    }
+
+    subsection (3) {
+        definitions {
+            defence_unavailable_disqualifiers := "For the purposes of subsection (2), the defence under that subsection is no longer available if at the time of the offence, the person charged with that offence —";
+            explanation_reasonable_basis_or_steps := "Explanation .—The fact that the minor was observed to be participating in activities which are restricted to persons of or above 18 years of age, such as smoking a cigarette or admission to premises with access restricted to persons of or above 18 years of age (such as a nightclub) is neither sufficient to constitute a reasonable basis for the mistaken belief nor reasonable steps to verify that minor’s age.";
+        }
+
+        elements {
+            all_of {
+                circumstance defence_under_subsection_2_invoked := "The defence under subsection (2) is invoked";
+                any_of {
+                    circumstance previously_charged_for_listed_offence := "At the time of the offence, the person charged with that offence has previously been charged in court for an offence under section 375(1)(b), 375(1A)(b), 376(1) (if the victim B is below 14 years of age), 376(2) (if the victim B is below 14 years of age), 376A, 376AA, 376B, 376C, 376E, 376EA, 376EB, 376EC, 376ED, 376EE, 377BG, 377BH, 377BI, 377BJ, 377BK or 377BL or section 7 of the Children and Young Persons Act or section 140(1)(i) or 145(1) of the Women’s Charter" burden prosecution beyond_reasonable_doubt;
+                    circumstance failed_to_take_all_reasonable_steps := "At the time of the offence, the person charged with that offence failed to take all reasonable steps to verify that the minor was of or above 18 years of age" burden prosecution beyond_reasonable_doubt;
+                }
+            }
+        }
+    }
+
+    subsection (4) {
+        definitions {
+            sexual_offence := "In this section, “sexual offence” has the meaning given by section 377CB. [15/2019]";
+        }
+    }
 }

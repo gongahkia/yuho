@@ -2,16 +2,17 @@
 section_number = "404"
 title = "Dishonest misappropriation of property possessed by a deceased person at the time of his death"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Dishonestly misappropriating property known to have been in a deceased person's possession at time of death, before any legally entitled person took possession, is punishable with up to 3 years imprisonment and fine (up to 7 years if offender was the deceased's clerk or servant)."
+summary = "Section 404 criminalises dishonestly misappropriating or converting property known to have been in a deceased person's possession at death before any legally entitled person has taken possession, with a higher imprisonment ceiling for the deceased's clerk or servant."
 source = "Singapore Penal Code 1871, Section 404"
 
 [verification]

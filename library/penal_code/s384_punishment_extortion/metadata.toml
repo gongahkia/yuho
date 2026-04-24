@@ -2,16 +2,17 @@
 section_number = "384"
 title = "Punishment for extortion"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Extortion is punishable with imprisonment of 2 to 7 years and caning."
+summary = "Prescribes punishment for the offence of extortion under section 383."
 source = "Singapore Penal Code 1871, Section 384"
 
 [verification]

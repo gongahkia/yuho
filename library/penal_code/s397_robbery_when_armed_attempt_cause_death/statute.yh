@@ -1,57 +1,21 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr397-#pr397-
-// Singapore Penal Code Section 397 - Robbery when armed or with attempt to cause death or grievous hurt
-// Yuho v5 Syntax
-
-referencing penal_code/s390_robbery
-
-struct S397Case {
-    string accused,
-    bool robberyOrAttempt,
-    bool armedWithDeadlyWeapon,
-    bool grievousHurtCaused,
-    bool attemptCauseDeathOrGrievous,
-    bool jointlyConcerned,
-}
-
-fn s397_applies(bool robbery, bool armed, bool grievous, bool attemptDeath) : bool {
-    match {
-        case TRUE if robbery == FALSE := consequence FALSE;
-        case TRUE if armed == TRUE := consequence TRUE;
-        case TRUE if grievous == TRUE := consequence TRUE;
-        case TRUE if attemptDeath == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
 
 statute 397 "Robbery when armed or with attempt to cause death or grievous hurt" effective 1872-01-01 {
-    definitions {
-        deadly_weapon := "A weapon capable of causing death";
-        grievous_hurt := "Hurt of the kinds specified under section 320";
-        robbery := "As defined under section 390";
-    }
-
     elements {
         all_of {
-            /// robbery or attempted robbery is predicate
-            actus_reus predicate_robbery := "Committing or attempting to commit robbery" burden prosecution beyond_reasonable_doubt;
+            actus_reus robbery_or_attempt := "At the time of committing or attempting to commit robbery";
             any_of {
-                circumstance armed := "Offender armed with or uses any deadly weapon";
-                circumstance grievous_hurt_caused := "Offender causes grievous hurt to any person";
-                circumstance attempt_death_or_grievous := "Offender attempts to cause death or grievous hurt to any person";
+                circumstance armed_or_uses_deadly_weapon := "The offender is armed with or uses any deadly weapon";
+                actus_reus causes_grievous_hurt := "Causes grievous hurt to any person" caused_by robbery_or_attempt;
+                actus_reus attempts_cause_death_or_grievous_hurt := "Attempts to cause death or grievous hurt to any person" caused_by robbery_or_attempt;
             }
-            /// liability extends to all persons jointly concerned
-            circumstance joint_liability := "All persons jointly concerned in committing or attempting the robbery share liability";
+            circumstance offender_or_jointly_concerned_person := "The accused is such offender, or any other person jointly concerned in committing or attempting to commit such robbery";
         }
     }
 
-    penalty {
-        caning := 12 .. 24 strokes;
-        supplementary := "Caning with not less than 12 strokes, in addition to any other punishment to which he may be liable under any other section of this Code";
-    }
-
-    illustration example1 {
-        "A and B rob C while A brandishes a knife. Both A and B are punishable under s397 with caning of at least 12 strokes, in addition to punishment under other applicable sections."
+    penalty cumulative {
+        supplementary := "Such offender, and any other person jointly concerned in committing or attempting to commit such robbery, shall be punished with caning with not less than 12 strokes, in addition to any other punishment to which he may be liable under any other section of this Code."
     }
 }

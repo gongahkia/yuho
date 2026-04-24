@@ -1,49 +1,20 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr381-#pr381-
-// Singapore Penal Code Section 381 - Theft by clerk or servant of property in possession of master
-// Yuho v5 Syntax
-
-referencing penal_code/s378_theft
-
-struct S381Case {
-    string accused,
-    bool theftCommitted,
-    bool clerkOrServant,
-    bool propertyInMastersPossession,
-}
-
-fn s381_applies(bool theft, bool clerkOrServant, bool mastersProperty) : bool {
-    match {
-        case TRUE if theft == FALSE := consequence FALSE;
-        case TRUE if clerkOrServant == FALSE := consequence FALSE;
-        case TRUE if mastersProperty == FALSE := consequence FALSE;
-        case _ := consequence TRUE;
-    }
-}
 
 statute 381 "Theft by clerk or servant of property in possession of master" effective 1872-01-01 {
-    definitions {
-        clerk_or_servant := "A person employed in the capacity of a clerk or servant";
-        master := "The employer of the clerk or servant";
-        possession_of_master := "Property in the possession of the accused's master or employer";
-    }
-
     elements {
-        /// theft under s378 must be established
-        circumstance theft_committed := "Theft under section 378 is established" burden prosecution beyond_reasonable_doubt;
-        /// accused must be clerk, servant, or employed in such capacity
-        circumstance employment_status := "Accused is a clerk, servant, or employed in capacity of clerk or servant";
-        /// stolen property must be in master's possession
-        circumstance masters_property := "Property stolen was in the possession of the accused's master or employer";
+        /// Section 381 aggravates theft where the offender is in service to the person possessing the property.
+        all_of {
+            circumstance clerk_or_servant_status := "Whoever, being a clerk or servant, or being employed in the capacity of a clerk or servant";
+            /// Theft remains the underlying offence and must be proved.
+            actus_reus commits_theft := "Commits theft";
+            circumstance property_in_master_possession := "In respect of any property in the possession of his master or employer";
+        }
     }
 
     penalty {
         imprisonment := 0 days .. 7 years;
-        fine := $0.00 .. $10,000.00;
-    }
-
-    illustration example1 {
-        "A is a clerk employed by B. A dishonestly takes cash from B's till. A has committed theft under s381."
+        fine := unlimited;
     }
 }

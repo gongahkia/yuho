@@ -2,16 +2,17 @@
 section_number = "410"
 title = "Stolen property"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Defines property transferred by theft, extortion, robbery, criminal misappropriation, criminal breach of trust or cheating as stolen property."
+summary = "Defines when property is designated as stolen property, when that designation ceases, and how converted or exchanged property is included."
 source = "Singapore Penal Code 1871, Section 410"
 
 [verification]

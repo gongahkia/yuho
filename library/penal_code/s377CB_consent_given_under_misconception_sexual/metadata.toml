@@ -2,16 +2,17 @@
 section_number = "377CB"
 title = "Consent given under misconception in sexual offences"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "When consent is vitiated by misconception in sexual offences."
+summary = "Defines the limited misconceptions of fact that negate consent for acts forming the physical element of a sexual offence."
 source = "Singapore Penal Code 1871, Section 377CB"
 
 [verification]

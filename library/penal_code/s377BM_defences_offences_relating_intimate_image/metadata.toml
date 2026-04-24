@@ -2,16 +2,17 @@
 section_number = "377BM"
 title = "Defences to offences relating to intimate image or recording and voyeurism"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Defences available to offences relating to intimate image or recording and voyeurism."
+summary = "This section sets out two statutory defences to specified voyeurism and intimate image offences, including inadvertent possession and legitimate-purpose handling with reasonable retention limits."
 source = "Singapore Penal Code 1871, Section 377BM"
 
 [verification]

@@ -1,44 +1,21 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr402-#pr402-
-// Singapore Penal Code Section 402 - Assembling for purpose of committing gang-robbery
-// Yuho v5 Syntax
 
 referencing penal_code/s391_gang_robbery
 
-struct S402Case {
-    string accused,
-    int totalAssembled,
-    bool purposeGangRobbery,
-}
-
-fn s402_applies(int total, bool purpose) : bool {
-    match {
-        case TRUE if total < 5 := consequence FALSE;
-        case TRUE if purpose == FALSE := consequence FALSE;
-        case _ := consequence TRUE;
-    }
-}
-
 statute 402 "Assembling for purpose of committing gang-robbery" effective 1872-01-01 {
-    definitions {
-        assembly := "A gathering of persons with a common purpose";
-        gang_robbery := "As defined under section 391";
-    }
-
     elements {
-        /// accused must be one of 5 or more persons assembled
-        circumstance assembly_size := "Accused is one of 5 or more persons assembled" burden prosecution beyond_reasonable_doubt;
-        /// purpose of assembly must be to commit gang-robbery
-        mens_rea purpose := "Purpose of assembly is committing gang-robbery";
+        /// The offence requires participation in an assembly of at least 5 persons formed for the purpose of committing gang-robbery.
+        all_of {
+            actus_reus assembling := "Being assembled with other persons";
+            circumstance one_of_five_or_more_persons := "The person is one of 5 or more persons assembled";
+            mens_rea purpose_of_committing_gang_robbery := "The assembly is for the purpose of committing gang-robbery";
+        }
     }
 
     penalty {
         imprisonment := 0 days .. 7 years;
-        caning := 4 .. 24 strokes;
-    }
-
-    illustration example1 {
-        "A, B, C, D, and E gather at a forest track with weapons, intending to rob the next traveller. Before any robbery occurs, they are apprehended. Each is punishable under s402."
+        supplementary := "Whoever shall be one of 5 or more persons assembled for the purpose of committing gang‑robbery, shall be punished with imprisonment for a term which may extend to 7 years, and shall also be punished with caning with not less than 4 strokes.";
     }
 }

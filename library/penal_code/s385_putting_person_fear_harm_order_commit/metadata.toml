@@ -2,16 +2,17 @@
 section_number = "385"
 title = "Putting person in fear of harm in order to commit extortion"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Putting or attempting to put any person in fear of harm to body, mind, reputation, or property in order to commit extortion is punishable with 2 to 5 years imprisonment and caning."
+summary = "This section criminalises putting or attempting to put a person in fear of harm in order to commit extortion."
 source = "Singapore Penal Code 1871, Section 385"
 
 [verification]

@@ -1,12 +1,119 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BN-#pr377BN-
-// Singapore Penal Code Section 377BN
+/// @amendment [15/2019]
+/// @amendment [Act 23 of 2021 wef 01/03/2022]
 
-statute 377BN "Defences to child abuse material offences" effective 1872-01-01 {
-    definitions {
-        law_enforcement_defence := "A defence for law enforcement, court order, bona fide research or similar";
-        classification_defence := "Defence for material classified by a regulator or similar authority";
+statute 377BN "Defences to child abuse material offences" effective 1872-01-01 effective 2019-12-31 effective 2022-03-01 {
+    subsection (1) {
+        exception unintentional_possession_or_access {
+            "It is a defence to a charge for an offence of having possession of or gaining access to child abuse material under section 377BK for the accused person to prove that the accused person did not intentionally come into possession of or gain access to child abuse material, and on becoming aware of having come into possession of or gaining access to child abuse material, as soon as it was practicable to do so, took all reasonable steps in the circumstances to cease possession of or access to the material. [15/2019]"
+            "Defence to a charge for an offence under section 377BK."
+        }
+
+        elements {
+            all_of {
+                circumstance charge_under_377BK := "A charge is for an offence of having possession of or gaining access to child abuse material under section 377BK";
+                circumstance unintentional_possession_or_access := "The accused person did not intentionally come into possession of or gain access to child abuse material";
+                circumstance reasonable_steps_to_cease := "On becoming aware of having come into possession of or gaining access to child abuse material, as soon as it was practicable to do so, the accused person took all reasonable steps in the circumstances to cease possession of or access to the material";
+            }
+        }
     }
 
+    subsection (2) {
+        exception law_enforcement_proceedings_safety_defence {
+            "It is a defence to a charge for an offence under sections 377BH to 377BK if the act that is alleged to constitute the offence was done for any of the following purposes without intent to cause injury to the person depicted in the child abuse material and with reasonable cause: the prevention, detection, investigation or punishment of any offence; the conduct of contemplated or pending proceedings in any court or tribunal or to obtain evidence for the purpose of contemplating such proceedings; or safety or national security, and the child abuse material or the abusive material, as the case may be, was not kept for a period longer than what was reasonably necessary or required for the purposes mentioned in paragraph (a). [15/2019] [Act 23 of 2021 wef 01/03/2022]"
+            "Defence to a charge for an offence under sections 377BH to 377BK."
+        }
+
+        elements {
+            all_of {
+                circumstance charge_under_377BH_to_377BK := "A charge is for an offence under sections 377BH to 377BK";
+                circumstance without_intent_to_cause_injury := "The act that is alleged to constitute the offence was done without intent to cause injury to the person depicted in the child abuse material and with reasonable cause";
+                any_of {
+                    /// paragraph (a) states three alternative legitimate purposes
+                    circumstance prevention_detection_investigation_punishment := "The act was done for the prevention, detection, investigation or punishment of any offence";
+                    circumstance proceedings_or_evidence := "The act was done for the conduct of contemplated or pending proceedings in any court or tribunal or to obtain evidence for the purpose of contemplating such proceedings";
+                    circumstance safety_or_national_security := "The act was done for safety or national security";
+                }
+                circumstance kept_no_longer_than_reasonably_necessary := "The child abuse material or the abusive material, as the case may be, was not kept for a period longer than what was reasonably necessary or required for the purposes mentioned in paragraph (a)";
+            }
+        }
+    }
+
+    subsection (3) {
+        definitions {
+            legitimate_purpose_related_to_art := "Explanation .—An act has a legitimate purpose related to art which reasonable persons would regard as art.";
+        }
+
+        exception legitimate_purpose_defence {
+            "It is a defence to a charge for an offence under sections 377BH to 377BK if the act that is alleged to constitute the offence has a legitimate purpose related to science, medicine, education or art, and did not pose an undue risk of harm to any person below 16 years of age. [15/2019]"
+            "Defence to a charge for an offence under sections 377BH to 377BK."
+        }
+
+        elements {
+            all_of {
+                circumstance charge_under_377BH_to_377BK := "A charge is for an offence under sections 377BH to 377BK";
+                circumstance legitimate_purpose := "The act that is alleged to constitute the offence has a legitimate purpose related to science, medicine, education or art";
+                circumstance no_undue_risk_of_harm := "The act did not pose an undue risk of harm to any person below 16 years of age";
+            }
+        }
+
+        /// Illustrations
+        illustration illustration_a {
+            "( a ) A university researcher has child abuse material in his possession for the purposes of studying the psychological effects of exposure to such material. The researcher’s possession of the child abuse material has a legitimate purpose."
+        }
+
+        illustration illustration_b {
+            "( b ) A is a photo-journalist in a war zone. A takes a photo of a child victim of torture and submits this together with an article on the plight of such children to a news organisation for publication. The taking and sending of the photo has a legitimate purpose."
+        }
+    }
+
+    subsection (4) {
+        exception self_image_minor_defence {
+            "It is a defence to a charge for an offence under sections 377BH to 377BK if the accused person ( A ) is below 16 years of age, and the child abuse material that is alleged to constitute the offence is an image of A alone. [15/2019]"
+            "Defence to a charge for an offence under sections 377BH to 377BK."
+        }
+
+        elements {
+            all_of {
+                circumstance charge_under_377BH_to_377BK := "A charge is for an offence under sections 377BH to 377BK";
+                circumstance accused_below_16 := "The accused person ( A ) is below 16 years of age";
+                circumstance image_of_A_alone := "The child abuse material that is alleged to constitute the offence is an image of A alone";
+            }
+        }
+
+        /// Illustration
+        illustration illustration {
+            "A is 15 years old and takes a photo of herself alone posing in the nude. A stores the photo in her mobile phone. A has not committed the offence of producing or possessing child abuse material."
+        }
+    }
+
+    subsection (5) {
+        definitions {
+            mistaken_belief_not_a_defence := "To avoid doubt, it is not a defence to a charge for an offence relating to child abuse material under sections 377BG to 377BL that, at the time of the conduct constituting the offence, the accused was under a mistaken but honest and reasonable belief that reasonable persons would not regard the child abuse material as being, in the circumstances, offensive. [15/2019]";
+        }
+    }
+
+    subsection (6) {
+        exception marriage_defence_production {
+            "It is a defence to a charge for an offence under section 377BG(1) or 377BH(1) in circumstances where the offender ( A ) and the person below 16 years of age ( B ) are married if the child abuse material involves only A and B in its production, depicts B only, A and B only, or A only if A is below 16 years of age, and was produced with B’s consent."
+            "Defence to a charge for an offence under section 377BG(1) or 377BH(1)."
+        }
+
+        exception marriage_defence_distribution {
+            "It is a defence to a charge for an offence under section 377BI in circumstances where the offender ( A ) and the person below 16 years of age ( B ) are married if the distribution of the child abuse material occurs between A and B only, involves material depicting B only, A and B only, or A only if A is below 16 years of age, and was distributed with B’s consent."
+            "Defence to a charge for an offence under section 377BI."
+        }
+
+        exception marriage_defence_offer {
+            "It is a defence to a charge for an offence under section 377BJ(2) in circumstances where the offender ( A ) and the person below 16 years of age ( B ) are married if the offer to acquire, buy, or gain access to the child abuse material occurs between A and B only, and involves material depicting B only, A and B only, or A only if A is below 16 years of age."
+            "Defence to a charge for an offence under section 377BJ(2)."
+        }
+
+        exception marriage_defence_possession {
+            "It is a defence to a charge for an offence under section 377BK(1) in circumstances where the offender ( A ) and the person below 16 years of age ( B ) are married if the possession of the child abuse material was with B’s consent and the material depicts B only, A and B only, or A only if A is below 16 years of age."
+            "Defence to a charge for an offence under section 377BK(1)."
+        }
+    }
 }

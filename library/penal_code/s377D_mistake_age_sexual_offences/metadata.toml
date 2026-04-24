@@ -2,16 +2,17 @@
 section_number = "377D"
 title = "Mistake as to age in sexual offences"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Mistake as to age is generally not a defence to sexual offences, subject to limited statutory exceptions."
+summary = "Section 377D generally bars mistake as to age as a defence to sexual offences, subject to a limited defence for certain 16-to-18 age-band offences and specified disqualifiers."
 source = "Singapore Penal Code 1871, Section 377D"
 
 [verification]

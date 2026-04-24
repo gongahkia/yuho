@@ -1,46 +1,21 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr380-#pr380-
-// Singapore Penal Code Section 380 - Theft in dwelling house, etc.
-// Yuho v5 Syntax
 
 referencing penal_code/s378_theft
 
-struct S380Case {
-    string accused,
-    bool theftCommitted,
-    string locationType,
-    bool usedAsDwellingOrCustody,
-}
-
-fn s380_applies(bool theftCommitted, bool usedAsDwellingOrCustody) : bool {
-    match {
-        case TRUE if theftCommitted == FALSE := consequence FALSE;
-        case TRUE if usedAsDwellingOrCustody == FALSE := consequence FALSE;
-        case _ := consequence TRUE;
-    }
-}
-
 statute 380 "Theft in dwelling house, etc." effective 1872-01-01 {
-    definitions {
-        building := "Any structure with walls and roof, including a tent or vessel";
-        human_dwelling := "A place used for habitation by human beings";
-        custody_of_property := "Place used to keep or safeguard property";
-    }
-
     elements {
-        /// theft under s378 must be established
-        circumstance theft_committed := "Theft under section 378 is established" burden prosecution beyond_reasonable_doubt;
-        /// aggravating location -- building, tent, or vessel used for dwelling or property custody
-        circumstance aggravating_location := "Theft occurs in building, tent, or vessel used as human dwelling or for custody of property";
+        /// The section aggravates theft where the place is a building, tent or vessel used as a human dwelling or for the custody of property.
+        all_of {
+            actus_reus commission_of_theft := "Whoever commits theft.";
+            mens_rea dishonest_intention := "The theft is committed with the dishonest intention required for theft under section 378.";
+            circumstance aggravating_place := "The theft is committed in any building, tent or vessel, which building, tent or vessel is used as a human dwelling, or for the custody of property.";
+        }
     }
 
-    penalty {
+    penalty cumulative {
         imprisonment := 0 days .. 7 years;
-        fine := $0.00 .. $10,000.00;
-    }
-
-    illustration example1 {
-        "A breaks into B's house at night and steals a laptop. A has committed theft in a dwelling house under s380."
+        fine := unlimited;
     }
 }

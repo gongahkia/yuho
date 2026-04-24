@@ -1,11 +1,46 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377CB-#pr377CB-
-// Singapore Penal Code Section 377CB
+/// @amendment [15/2019]
 
-statute 377CB "Consent given under misconception in sexual offences" effective 1872-01-01 {
-    definitions {
-        misconception_consent := "Consent is vitiated if given under a misconception about the nature or purpose of the act, or identity of the actor";
+statute 377CB "Consent given under misconception in sexual offences" effective 1872-01-01 effective 2019-12-31 {
+    subsection (1) {
+        elements {
+            /// Subsection (1) is conjunctive overall: the consent must concern the physical element of a sexual offence, the misconception must fall within one statutory category, and the actor must know or have reason to believe the consent followed from that misconception.
+            all_of {
+                circumstance consent_for_physical_element_of_sexual_offence := "Despite section 90( a )(ii), a consent for the purposes of an act which is the physical element of a sexual offence is not a consent given by a person under a misconception of fact only if it is directly related to —";
+                /// The statutory alternatives are disjunctive.
+                any_of {
+                    circumstance misconception_as_to_nature := "( a ) the nature of the act, namely that it is not of a sexual nature;";
+                    circumstance misconception_as_to_purpose := "( b ) the purpose of the act, namely that it is not for a sexual purpose; or";
+                    circumstance misconception_as_to_identity := "( c ) the identity of the person doing the act,";
+                }
+                mens_rea knowledge_or_reason_to_believe_consent_consequence := "and the person doing the act knows, or has reason to believe, that the consent was given in consequence of such misconception. [15/2019]";
+            }
+        }
     }
 
+    subsection (2) {
+        /// Canonical `_raw/act.json` provides only the subsection lead-in for subsection (2).
+        definitions {
+            subsection_2_lead_in := "In subsection (1) —";
+        }
+    }
+
+    /// Illustrations
+    illustration illustration_a {
+        "( a ) A deceives B into allowing him to penetrate her vagina by inducing the misconception that he is extracting an evil spirit from B ’s body. B believes A and thinks that what she has consented to is a procedure to extract an evil spirit, not sexual intercourse. B has given her consent under a misconception as to the sexual nature of the act. B ’s apparent consent is therefore not a valid consent."
+    }
+
+    illustration illustration_b {
+        "( b ) A deceives B into believing that he can heal B ’s chronic disease by treatment involving sexual penetration. B gives her consent under the misconception that the act is treatment for a health purpose and not for a sexual purpose. B ’s apparent consent is therefore not a valid consent."
+    }
+
+    illustration illustration_c {
+        "( c ) A deceives B into believing that A is her husband. A is an imposter. B consents to sexual intercourse with A because she believes A is her husband. B ’s consent is given under a misconception of the identity of A and is therefore not a valid consent."
+    }
+
+    illustration illustration_d {
+        "( d ) A deceives B into believing that A is an influential movie director. A is in fact only an administrative assistant to that movie director. B consents to sexual intercourse with A because she believes A is that movie director. B ’s misconception is as to A ’s attributes and not of A ’s identity. B ’s consent is therefore a valid consent."
+    }
 }

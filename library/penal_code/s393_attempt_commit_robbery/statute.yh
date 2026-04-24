@@ -1,40 +1,25 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr393-#pr393-
-// Singapore Penal Code Section 393 - Attempt to commit robbery
-// Yuho v5 Syntax
 
 referencing penal_code/s390_robbery
 
-struct S393Case {
-    string accused,
-    bool robberyAttempted,
-}
-
-fn s393_applies(bool attempted) : bool {
-    match {
-        case TRUE if attempted == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
 statute 393 "Attempt to commit robbery" effective 1872-01-01 {
     definitions {
-        attempt := "Acts amounting to an attempt to commit the offence of robbery";
-        robbery := "As defined under section 390";
+        robbery := "Robbery as defined in section 390.";
+        attempt_to_commit_robbery := "Attempting to commit robbery.";
     }
 
     elements {
-        /// accused must attempt to commit robbery as defined in s390
-        actus_reus robbery_attempt := "Attempting to commit robbery" burden prosecution beyond_reasonable_doubt;
+        all_of {
+            /// the prohibited conduct is an attempt to commit the cross-referenced robbery offence
+            actus_reus attempt := "Attempts to commit robbery" burden prosecution beyond_reasonable_doubt;
+            circumstance target_offence := "The offence attempted is robbery under section 390";
+        }
     }
 
-    penalty {
+    penalty cumulative {
         imprisonment := 2 years .. 7 years;
-        caning := 6 .. 24 strokes;
-    }
-
-    illustration example1 {
-        "A attacks B intending to steal B's wallet, but B escapes before A can take anything. A has attempted robbery under s393."
+        supplementary := "The offender shall also be punished with caning with not less than 6 strokes.";
     }
 }
