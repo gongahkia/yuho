@@ -1,44 +1,27 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr318-#pr318-
-// Singapore Penal Code Section 318 -- Concealment of birth by secret disposal of dead body
-// Yuho v5 Syntax
-
-struct S318Case {
-    string accused,
-    string victim,
-    bool actusReus,
-    bool mensRea,
-}
-
-fn s318_applies(bool actusReus, bool mensRea) : bool {
-    match {
-        case TRUE if actusReus == TRUE && mensRea == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
 
 statute 318 "Concealment of birth by secret disposal of dead body" effective 1872-01-01 {
-    definitions {
-        offence_summary := "Concealing the birth of a child by secret disposal of its dead body.";
-    }
-
     elements {
-        /// mental element required for the offence
-        mens_rea intent := "Intent or knowledge as required by the section";
-        /// physical act constituting the offence
-        actus_reus act := "The prohibited act defined by the section";
-        /// contextual requirement -- victim, circumstances, or result
-        circumstance context := "Statutory circumstances are satisfied";
+        /// The offence requires secret disposal of the dead body of a child, coupled with intentional concealment or attempted concealment of the birth.
+        all_of {
+            any_of {
+                actus_reus secretly_burying := "Secretly burying the dead body of a child";
+                actus_reus otherwise_secretly_disposing := "Otherwise secretly disposing of the dead body of a child";
+            }
+            circumstance child_dead_body := "The dead body is the dead body of a child";
+            circumstance child_death_timing := "Such child dies before or after or during its birth";
+            any_of {
+                actus_reus conceal_birth := "Conceals the birth of such child";
+                actus_reus endeavour_conceal_birth := "Endeavours to conceal the birth of such child";
+            }
+            mens_rea intentional_concealment := "Intentionally conceals or endeavours to conceal the birth of such child";
+        }
     }
 
-    penalty {
-        imprisonment := 0 years .. 2 years;
-        fine := $0.00 .. $50,000.00;
-    }
-
-    illustration example1 {
-        "A commits the conduct described in section 318 against B. A is guilty of the offence under section 318."
+    penalty or_both {
+        imprisonment := 0 days .. 2 years;
+        fine := unlimited;
     }
 }

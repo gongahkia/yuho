@@ -1,37 +1,18 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr320-#pr320-
-// Singapore Penal Code Section 320 -- Grievous hurt
-// Yuho v5 Syntax
-
-struct S320Case {
-    string actor,
-    bool criteriaMet,
-}
-
-fn s320_matches(bool criteriaMet) : bool {
-    match {
-        case TRUE if criteriaMet == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
-
 statute 320 "Grievous hurt" effective 1872-01-01 {
     definitions {
-        term_summary := "Definition of the kinds of hurt designated as grievous.";
-    }
-
-    elements {
-        /// statutory criteria for the defined term
-        circumstance criteria := "Statutory criteria for the defined term are satisfied";
-    }
-
-    penalty {
-        fine := $0.00 .. $1,000.00;
-    }
-
-    illustration example1 {
-        "The conduct of A matches the statutory criteria defined under section 320."
+        grievous_hurt := "The following kinds of hurt only are designated as grievous:";
+        emasculation := "emasculation";
+        death := "death";
+        permanent_privation_of_sight_of_either_eye := "permanent privation of the sight of either eye";
+        permanent_privation_of_hearing_of_either_ear := "permanent privation of the hearing of either ear";
+        privation_of_any_member_or_joint := "privation of any member or joint";
+        destruction_or_permanent_impairing_of_powers_of_any_member_or_joint := "destruction or permanent impairing of the powers of any member or joint";
+        permanent_disfiguration_of_head_or_face := "permanent disfiguration of the head or face";
+        fracture_or_dislocation_of_a_bone := "fracture or dislocation of a bone";
+        hurt_endangering_life_or_causing_20_days_severe_bodily_pain_or_inability_to_follow_ordinary_pursuits := "any hurt which endangers life, or which causes the sufferer to be, during the space of 20 days, in severe bodily pain, or unable to follow his ordinary pursuits";
+        penetration_of_vagina_or_anus_without_consent_causing_severe_bodily_pain := "penetration of the vagina or anus, as the case may be, of a person without that person’s consent, which causes severe bodily pain";
     }
 }

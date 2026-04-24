@@ -1,44 +1,37 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr315-#pr315-
-// Singapore Penal Code Section 315 -- Child destruction before, at or immediately after birth
-// Yuho v5 Syntax
-
-struct S315Case {
-    string accused,
-    string victim,
-    bool actusReus,
-    bool mensRea,
-}
-
-fn s315_applies(bool actusReus, bool mensRea) : bool {
-    match {
-        case TRUE if actusReus == TRUE && mensRea == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
 /// @amendment [15/2019]
-statute 315 "Child destruction before, at or immediately after birth" effective 1872-01-01 {
-    definitions {
-        offence_summary := "Intentional act destroying the life of a child capable of being born alive.";
+
+statute 315 "Child destruction before, at or immediately after birth" effective 1872-01-01 effective 2019-12-31 {
+    subsection (1) {
+        elements {
+            /// Section 315(1) is conjunctive: the offence requires the statutory qualification, the specific intent, an intentional act, and one of the two prohibited death results.
+            all_of {
+                circumstance subject_to_termination_of_pregnancy_act := "Subject to the provisions of the Termination of Pregnancy Act 1974";
+                mens_rea intent_to_destroy_life := "With intent to destroy the life of a child capable of being born alive";
+                actus_reus intentional_act := "By any intentional act";
+                any_of {
+                    actus_reus death_before_independent_existence := "Causes a child to die before it has an existence independent of its mother" caused_by intentional_act;
+                    actus_reus death_after_birth := "By such act causes the child to die after its birth" caused_by intentional_act;
+                }
+            }
+        }
+
+        exception save_life_of_mother {
+            "Such act is immediately necessary to save the life of the mother"
+            "No offence under section 315(1)"
+        }
+
+        penalty or_both {
+            imprisonment := 0 years .. 10 years;
+            fine := unlimited;
+        }
     }
 
-    elements {
-        /// mental element required for the offence
-        mens_rea intent := "Intent or knowledge as required by the section";
-        /// physical act constituting the offence
-        actus_reus act := "The prohibited act defined by the section";
-        /// contextual requirement -- victim, circumstances, or result
-        circumstance context := "Statutory circumstances are satisfied";
-    }
-
-    penalty {
-        imprisonment := 0 years .. 10 years;
-        fine := $0.00 .. $50,000.00;
-    }
-
-    illustration example1 {
-        "A commits the conduct described in section 315 against B. A is guilty of the offence under section 315."
+    subsection (2) {
+        definitions {
+            prima_facie_rule := "For the purposes of this section, evidence that a woman had at any material time been pregnant for a period of 28 weeks or more shall be prima facie evidence that she was at that time pregnant of a child capable of being born alive."
+        }
     }
 }

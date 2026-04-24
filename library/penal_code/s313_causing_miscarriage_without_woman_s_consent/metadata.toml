@@ -1,17 +1,18 @@
 [statute]
 section_number = "313"
-title = "Causing miscarriage without woman's consent"
+title = "Causing miscarriage without woman’s consent"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Committing miscarriage as in s312 without the woman's consent."
+summary = "This section makes it an offence to commit the section 312 miscarriage offence without the woman’s consent."
 source = "Singapore Penal Code 1871, Section 313"
 
 [verification]

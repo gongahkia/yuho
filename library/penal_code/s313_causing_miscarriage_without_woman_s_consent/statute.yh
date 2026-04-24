@@ -1,44 +1,25 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr313-#pr313-
-// Singapore Penal Code Section 313 -- Causing miscarriage without woman's consent
-// Yuho v5 Syntax
-
-struct S313Case {
-    string accused,
-    string victim,
-    bool actusReus,
-    bool mensRea,
-}
-
-fn s313_applies(bool actusReus, bool mensRea) : bool {
-    match {
-        case TRUE if actusReus == TRUE && mensRea == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
 /// @amendment [15/2019]
-statute 313 "Causing miscarriage without woman's consent" effective 1872-01-01 {
-    definitions {
-        offence_summary := "Committing miscarriage as in s312 without the woman's consent.";
-    }
 
+statute 313 "Causing miscarriage without woman’s consent" effective 1872-01-01 effective 2019-12-31 {
     elements {
-        /// mental element required for the offence
-        mens_rea intent := "Intent or knowledge as required by the section";
-        /// physical act constituting the offence
-        actus_reus act := "The prohibited act defined by the section";
-        /// contextual requirement -- victim, circumstances, or result
-        circumstance context := "Statutory circumstances are satisfied";
+        /// Section 313 incorporates the offence in section 312 and adds the woman's lack of consent.
+        all_of {
+            actus_reus section_312_offence := "Commits the offence defined in section 312";
+            circumstance without_womans_consent := "Without the consent of the woman";
+            circumstance pregnancy_duration_irrelevant := "Whether the woman’s pregnancy is of more than 16 weeks’ duration or not as mentioned in that section";
+        }
     }
 
-    penalty {
-        imprisonment := 0 years .. 99 years;
-        fine := $0.00 .. $50,000.00;
+    penalty alternative {
+        imprisonment := 0 days .. 10 years;
+        supplementary := "Whoever commits the offence defined in section 312, without the consent of the woman, whether the woman’s pregnancy is of more than 16 weeks’ duration or not as mentioned in that section, shall be punished with imprisonment for life, or with imprisonment for a term which may extend to 10 years. [15/2019]";
     }
 
-    illustration example1 {
-        "A commits the conduct described in section 313 against B. A is guilty of the offence under section 313."
+    penalty when non_life_sentence {
+        fine := unlimited;
+        supplementary := "The offender shall, if he is not sentenced to imprisonment for life, also be liable to fine. [15/2019]";
     }
 }

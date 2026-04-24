@@ -2,16 +2,17 @@
 section_number = "318"
 title = "Concealment of birth by secret disposal of dead body"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Concealing the birth of a child by secret disposal of its dead body."
+summary = "This section criminalises intentionally concealing or attempting to conceal a child's birth by secretly burying or otherwise secretly disposing of the child's dead body."
 source = "Singapore Penal Code 1871, Section 318"
 
 [verification]

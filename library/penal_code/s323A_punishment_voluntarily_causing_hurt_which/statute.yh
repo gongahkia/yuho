@@ -1,41 +1,25 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr323A-#pr323A-
-// Singapore Penal Code Section 323A -- Punishment for voluntarily causing hurt which causes grievous hurt
-// Yuho v5 Syntax
-
-struct S323aCase {
-    string accused,
-    string victim,
-    bool offenceCommitted,
-}
-
-fn s323a_applies(bool offenceCommitted) : bool {
-    match {
-        case TRUE if offenceCommitted == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
 /// @amendment [15/2019]
-statute 323A "Punishment for voluntarily causing hurt which causes grievous hurt" effective 1872-01-01 {
-    definitions {
-        offence_summary := "Punishment where intended hurt is not grievous but actual hurt is grievous.";
-    }
 
+statute 323A "Punishment for voluntarily causing hurt which causes grievous hurt" effective 1872-01-01 effective 2019-12-31 {
     elements {
-        /// the predicate offence must be established
-        circumstance offence_committed := "The statutory conduct is proved";
-        /// sentence applies on conviction
-        actus_reus conviction := "Conviction under this section";
+        all_of {
+            actus_reus voluntarily_causes_hurt := "Whoever voluntarily causes hurt";
+            mens_rea intends_or_knows_non_grievous_hurt := "The hurt which he intends to cause or knows himself to be likely to cause is not grievous";
+            circumstance actual_hurt_grievous := "The hurt which he actually causes is grievous";
+        }
     }
 
-    penalty {
+    penalty or_both {
         imprisonment := 0 years .. 5 years;
         fine := $0.00 .. $10,000.00;
+        supplementary := "Whoever voluntarily causes hurt, if the hurt which he intends to cause or knows himself to be likely to cause is not grievous, but the hurt which he actually causes is grievous, shall be punished with imprisonment for a term which may extend to 5 years, or with fine which may extend to $10,000, or with both. [15/2019]";
     }
 
-    illustration example1 {
-        "A is convicted under section 323A. A shall be punished as prescribed by section 323A."
+    /// Illustration
+    illustration illustration {
+        "At a club, A notices one of A ’s friends fighting with Z . A runs towards Z and punches Z in the face intending or knowing himself to be likely to cause minor injuries to Z ’s face. Z loses his balance, falls and hits his head against a ledge. Z suffers from severe brain injuries and is permanently paralysed. A did not intend to cause grievous hurt but A ’s action has actually caused grievous hurt to Z ."
     }
 }

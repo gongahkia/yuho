@@ -1,44 +1,27 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr316-#pr316-
-// Singapore Penal Code Section 316 -- Causing death of a quick unborn child by an act amounting to culpable homicide
-// Yuho v5 Syntax
-
-struct S316Case {
-    string accused,
-    string victim,
-    bool actusReus,
-    bool mensRea,
-}
-
-fn s316_applies(bool actusReus, bool mensRea) : bool {
-    match {
-        case TRUE if actusReus == TRUE && mensRea == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
 
 statute 316 "Causing death of a quick unborn child by an act amounting to culpable homicide" effective 1872-01-01 {
     definitions {
-        offence_summary := "Act that would be culpable homicide if it caused death, causing death of a quick unborn child.";
+        quick_unborn_child := "A quick unborn child.";
+        culpable_homicide := "Conduct amounting to culpable homicide if death were thereby caused.";
     }
 
     elements {
-        /// mental element required for the offence
-        mens_rea intent := "Intent or knowledge as required by the section";
-        /// physical act constituting the offence
-        actus_reus act := "The prohibited act defined by the section";
-        /// contextual requirement -- victim, circumstances, or result
-        circumstance context := "Statutory circumstances are satisfied";
+        all_of {
+            actus_reus act := "Whoever does any act";
+            mens_rea culpable_homicide_circumstances := "Under such circumstances that if he thereby caused death he would be guilty of culpable homicide";
+            circumstance death_of_quick_unborn_child := "By such act causes the death of a quick unborn child";
+        }
     }
 
     penalty {
         imprisonment := 0 years .. 10 years;
-        fine := $0.00 .. $50,000.00;
+        fine := unlimited;
     }
 
-    illustration example1 {
-        "A commits the conduct described in section 316 against B. A is guilty of the offence under section 316."
+    illustration illustration {
+        "A , knowing that he is likely to cause the death of a pregnant woman, does an act which, if it caused the death of the woman, would amount to culpable homicide. The woman is injured, but does not die; but the death of an unborn quick child with which she is pregnant is thereby caused. A is guilty of the offence defined in this section."
     }
 }

@@ -1,37 +1,27 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr322-#pr322-
-// Singapore Penal Code Section 322 -- Voluntarily causing grievous hurt
-// Yuho v5 Syntax
-
-struct S322Case {
-    string actor,
-    bool criteriaMet,
-}
-
-fn s322_matches(bool criteriaMet) : bool {
-    match {
-        case TRUE if criteriaMet == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
 
 statute 322 "Voluntarily causing grievous hurt" effective 1872-01-01 {
     definitions {
-        term_summary := "Definition of voluntarily causing grievous hurt.";
+        voluntarily_causing_grievous_hurt := "Whoever voluntarily causes hurt, if the hurt which he intends to cause or knows himself to be likely to cause is grievous hurt, and if the hurt which he causes is grievous hurt, is said “voluntarily to cause grievous hurt”.";
+        explanation_grievous_hurt_kind := "Explanation. — A person is not said voluntarily to cause grievous hurt except when he both causes grievous hurt and intends or knows himself to be likely to cause grievous hurt. But he is said voluntarily to cause grievous hurt if, intending or knowing himself to be likely to cause grievous hurt of one kind, he actually causes grievous hurt of another kind.";
     }
 
     elements {
-        /// statutory criteria for the defined term
-        circumstance criteria := "Statutory criteria for the defined term are satisfied";
+        /// Section 322 is conjunctive: voluntary hurt, the grievous-hurt fault element, and grievous hurt actually caused must all be present.
+        all_of {
+            actus_reus voluntarily_causes_hurt := "Whoever voluntarily causes hurt";
+            /// The statute treats intention and knowledge as alternative fault-element branches for the hurt to be caused.
+            any_of {
+                mens_rea intends_grievous_hurt := "The hurt which the person intends to cause is grievous hurt";
+                mens_rea knows_likely_grievous_hurt := "The person knows himself to be likely to cause grievous hurt";
+            }
+            circumstance hurt_caused_is_grievous_hurt := "The hurt which the person causes is grievous hurt";
+        }
     }
 
-    penalty {
-        fine := $0.00 .. $1,000.00;
-    }
-
-    illustration example1 {
-        "The conduct of A matches the statutory criteria defined under section 322."
+    illustration illustration_a {
+        "A , intending or knowing himself to be likely permanently to disfigure Z ’s face, gives Z a blow which does not permanently disfigure Z ’s face but which causes Z to suffer severe bodily pain for the space of 20 days. A has voluntarily caused grievous hurt."
     }
 }

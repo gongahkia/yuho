@@ -160,6 +160,27 @@ Primary editor. Neovim plugin was cut in the endpoint trim.
 - [ ] Status bar indicator: coverage summary for the open workspace.
 - [ ] Marketplace publish — stretch goal.
 
+### Microsoft Word extension `[ ]`
+
+Lawyers live in Word. A Word add-in that lets a drafter hover over a
+Yuho-encoded citation or drop in a rendered statute block makes Yuho
+useful inside the editor real practitioners use.
+
+- [ ] Office Add-in (JavaScript/TypeScript) targeting Word desktop + web.
+- [ ] Ribbon command: "Insert encoded statute" — open a picker over the
+      local library, insert the English transpilation as formatted text
+      plus a footnote link to the SSO anchor.
+- [ ] Context menu on a SG Penal Code citation (e.g. "s415") →
+      hover card with marginal note, penalty range, illustrations
+      count, and SSO link.
+- [ ] Side panel: search/browse the library by section number, title,
+      or element keyword, with per-section L1/L2/L3 badges.
+- [ ] Live check: paste a Yuho snippet into Word, the add-in streams
+      it to `yuho check` and marks errors inline.
+- [ ] Stretch — "Convert statute citation → Yuho skeleton" button that
+      drafts a statute block the practitioner can refine.
+- [ ] Office.js app manifest + Microsoft AppSource publish (stretch).
+
 ### Remaining tooling gaps `[ ]`
 
 - [ ] **G4** illustration-count validator — `yuho check` fails lint when an

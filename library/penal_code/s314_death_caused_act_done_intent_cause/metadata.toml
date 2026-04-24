@@ -2,16 +2,17 @@
 section_number = "314"
 title = "Death caused by act done with intent to cause miscarriage"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Act intending miscarriage that causes death of the woman."
+summary = "Causing the death of a pregnant woman by an act done with intent to cause her miscarriage is an offence, with a higher punishment if done without her consent."
 source = "Singapore Penal Code 1871, Section 314"
 
 [verification]

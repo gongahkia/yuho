@@ -2,16 +2,17 @@
 section_number = "322"
 title = "Voluntarily causing grievous hurt"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Definition of voluntarily causing grievous hurt."
+summary = "Defines when a person voluntarily causes grievous hurt by voluntarily causing hurt with the requisite intention or knowledge and actually causing grievous hurt."
 source = "Singapore Penal Code 1871, Section 322"
 
 [verification]

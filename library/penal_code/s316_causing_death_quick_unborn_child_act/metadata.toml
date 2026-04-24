@@ -2,16 +2,17 @@
 section_number = "316"
 title = "Causing death of a quick unborn child by an act amounting to culpable homicide"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Act that would be culpable homicide if it caused death, causing death of a quick unborn child."
+summary = "Causing the death of a quick unborn child by an act that would amount to culpable homicide if it caused death is an offence punishable with up to 10 years' imprisonment and an unlimited fine."
 source = "Singapore Penal Code 1871, Section 316"
 
 [verification]

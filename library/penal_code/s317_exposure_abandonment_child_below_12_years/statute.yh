@@ -1,44 +1,30 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr317-#pr317-
-// Singapore Penal Code Section 317 -- Exposure and abandonment of a child below 12 years of age by parent or person having care of it
-// Yuho v5 Syntax
-
-struct S317Case {
-    string accused,
-    string victim,
-    bool actusReus,
-    bool mensRea,
-}
-
-fn s317_applies(bool actusReus, bool mensRea) : bool {
-    match {
-        case TRUE if actusReus == TRUE && mensRea == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
 
 statute 317 "Exposure and abandonment of a child below 12 years of age by parent or person having care of it" effective 1872-01-01 {
     definitions {
-        offence_summary := "Exposing or leaving a child below 12 with intent to wholly abandon.";
+        explanation_child_dies_in_consequence := "Explanation. — This section is not intended to prevent the trial of the offender for murder or culpable homicide as the case may be, if the child dies in consequence of the exposure."
     }
 
     elements {
-        /// mental element required for the offence
-        mens_rea intent := "Intent or knowledge as required by the section";
-        /// physical act constituting the offence
-        actus_reus act := "The prohibited act defined by the section";
-        /// contextual requirement -- victim, circumstances, or result
-        circumstance context := "Statutory circumstances are satisfied";
+        all_of {
+            circumstance protected_child := "A child below 12 years of age";
+            any_of {
+                circumstance father := "The offender is the father of such child";
+                circumstance mother := "The offender is the mother of such child";
+                circumstance person_having_care := "The offender has the care of such child";
+            }
+            any_of {
+                actus_reus exposes_child := "Exposes such child in any place";
+                actus_reus leaves_child := "Leaves such child in any place";
+            }
+            mens_rea intention_wholly_abandoning_child := "With the intention of wholly abandoning such child";
+        }
     }
 
-    penalty {
+    penalty or_both {
         imprisonment := 0 years .. 7 years;
-        fine := $0.00 .. $50,000.00;
-    }
-
-    illustration example1 {
-        "A commits the conduct described in section 317 against B. A is guilty of the offence under section 317."
+        fine := unlimited;
     }
 }
