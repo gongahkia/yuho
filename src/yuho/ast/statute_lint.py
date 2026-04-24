@@ -238,6 +238,49 @@ def _check_defeats_target(statute: StatuteNode) -> List[LintWarning]:
     return warnings
 
 
+def _check_defeats_cycles(statute: StatuteNode) -> List[LintWarning]:
+    """G13: detect cycles in the exception-defeats DAG. Cyclic `defeats` edges
+    make the priority order indeterminate — warn so the author picks a base."""
+    warnings: List[LintWarning] = []
+    # build adjacency: exc.label -> exc.defeats (the label the exc overrides)
+    edges: dict[str, str] = {}
+    for exc in statute.exceptions:
+        if exc.label and exc.defeats:
+            edges[exc.label] = exc.defeats
+
+    # classic DFS cycle detection
+    WHITE, GRAY, BLACK = 0, 1, 2
+    colour: dict[str, int] = {k: WHITE for k in edges}
+    found_cycles: set[tuple[str, ...]] = set()
+
+    def visit(node: str, path: list[str]) -> None:
+        colour[node] = GRAY
+        path.append(node)
+        nxt = edges.get(node)
+        if nxt and nxt in colour:
+            if colour[nxt] == GRAY:
+                cycle = path[path.index(nxt):] + [nxt]
+                found_cycles.add(tuple(cycle))
+            elif colour[nxt] == WHITE:
+                visit(nxt, path)
+        path.pop()
+        colour[node] = BLACK
+
+    for label in list(edges):
+        if colour[label] == WHITE:
+            visit(label, [])
+
+    for cycle in found_cycles:
+        warnings.append(
+            LintWarning(
+                statute_section=statute.section_number,
+                message=f"exception defeats chain forms a cycle: {' → '.join(cycle)}",
+                severity="error",
+            )
+        )
+    return warnings
+
+
 def lint_statute(statute: StatuteNode) -> List[LintWarning]:
     """Run all single-statute lint checks."""
     warnings: List[LintWarning] = []
@@ -247,6 +290,7 @@ def lint_statute(statute: StatuteNode) -> List[LintWarning]:
     warnings.extend(_check_exception_guards(statute))
     warnings.extend(_check_duplicate_exceptions(statute))
     warnings.extend(_check_defeats_target(statute))
+    warnings.extend(_check_defeats_cycles(statute))  # G13: DAG validity
     warnings.extend(_check_deontic_conflict(statute))
     return warnings
 

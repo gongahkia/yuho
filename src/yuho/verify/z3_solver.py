@@ -1380,7 +1380,12 @@ class Z3Generator:
 
         For each ExceptionNode: if exception guard is satisfied,
         then conviction is negated.
-            exception_guard_satisfied => NOT(conviction)
+            exception_satisfied && NOT(defeated_by_higher) => NOT(conviction)
+
+        G13: respect the `defeats` edges and the `priority` ordering. A higher-
+        priority exception (lower priority integer, or explicit `defeats`)
+        suppresses a lower-priority exception when both would fire — this
+        encodes Catala-style default-logic / prioritised-rewriting semantics.
         """
         if not Z3_AVAILABLE:
             return
@@ -1391,21 +1396,61 @@ class Z3Generator:
 
         conviction_var = self._consts[conviction_key]
 
+        # First pass: build exc_var per exception, with guard equivalence.
+        exc_vars: dict[str, Any] = {}        # label -> z3 Bool
+        exc_fires: dict[str, Any] = {}       # label -> z3 Bool (after priority suppression)
+        label_of_index: list[str | None] = []
+        priorities: dict[str, int] = {}
+        defeats_of: dict[str, str] = {}
         for i, exc in enumerate(statute.exceptions):
             exc_label = exc.label or f"exception_{i}"
             safe_label = exc_label.replace(" ", "_").replace("-", "_")
             exc_var = z3.Bool(f"{statute_id}_exc_{safe_label}")
             self._consts[f"{statute_id}_exc_{safe_label}"] = exc_var
+            exc_vars[exc_label] = exc_var
+            label_of_index.append(exc_label)
+            if exc.priority is not None:
+                priorities[exc_label] = exc.priority
+            if exc.defeats:
+                defeats_of[exc_label] = exc.defeats
 
-            # If exception has a guard expression, translate it
             if exc.guard is not None:
                 guard_z3 = self._translate_expr_to_z3(statute_id, exc.guard)
                 if guard_z3 is not None:
-                    # guard satisfied <=> exception variable
                     self._assertions.append(exc_var == guard_z3)
 
-            # Core encoding: exception satisfied => NOT conviction
-            self._assertions.append(z3.Implies(exc_var, z3.Not(conviction_var)))
+        # Second pass: compute "fires" for each exception — fires iff guard
+        # satisfied AND not defeated by a higher-priority or explicitly-
+        # dominating exception.
+        for exc_label, exc_var in exc_vars.items():
+            defeaters: list[Any] = []
+            # explicit `defeats <me>` edges from other exceptions
+            for other_label, other_defeats in defeats_of.items():
+                if other_defeats == exc_label and other_label != exc_label:
+                    defeaters.append(exc_vars[other_label])
+            # implicit priority: lower priority integer = higher precedence
+            my_pri = priorities.get(exc_label)
+            if my_pri is not None:
+                for other_label, other_pri in priorities.items():
+                    if other_label == exc_label: continue
+                    if other_pri < my_pri:  # other has higher precedence (lower number)
+                        defeaters.append(exc_vars[other_label])
+
+            if defeaters:
+                # fires = exc_var AND NOT any defeater
+                safe_label = exc_label.replace(" ", "_").replace("-", "_")
+                fires_var = z3.Bool(f"{statute_id}_exc_{safe_label}_fires")
+                self._consts[f"{statute_id}_exc_{safe_label}_fires"] = fires_var
+                self._assertions.append(
+                    fires_var == z3.And(exc_var, z3.Not(z3.Or(*defeaters)))
+                )
+                exc_fires[exc_label] = fires_var
+            else:
+                # no defeaters — fires == satisfied
+                exc_fires[exc_label] = exc_var
+
+            # Core encoding: effective firing => NOT conviction
+            self._assertions.append(z3.Implies(exc_fires[exc_label], z3.Not(conviction_var)))
 
     def _generate_penalty_constraints(self, statute_id: str, penalty: "PenaltyNode") -> None:
         """Generate Z3 constraints for penalty specification."""
