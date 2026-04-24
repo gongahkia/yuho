@@ -1,23 +1,30 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr373-#pr373-
-// Singapore Penal Code Section 373
 
 statute 373 "Buying minor for purposes of prostitution, etc." effective 1872-01-01 {
     definitions {
-        acquisition_of_minor := "Buying, hiring, or obtaining possession of a person below 18";
+        explanation_presumption := "Explanation. —Any prostitute, or any person keeping or managing a brothel, who buys, hires or otherwise obtains possession of a female below 21 years of age shall, until the contrary is proved, be presumed to have obtained possession of such female with the intent that she shall be used for the purpose of prostitution."
     }
 
     elements {
-        /// buy, hire, or otherwise obtain possession of a minor
-        actus_reus buy_hire_minor := "Buys, hires or otherwise obtains possession of any person below 18 years of age";
-        /// for purposes of prostitution or unlawful or immoral purpose
-        mens_rea purpose_prostitution := "With intent or knowledge that the person will be employed or used for prostitution, illicit intercourse, or any unlawful and immoral purpose";
+        /// Section 373 is conjunctive: obtaining possession of a person below 21 years of age must coincide with either the stated intent or knowledge of likely future use.
+        all_of {
+            actus_reus buys_hires_or_obtains_possession := "Whoever buys, hires or otherwise obtains possession of any person below 21 years of age";
+            any_of {
+                mens_rea intent_future_employment_or_use := "With intent that such person shall at any age be employed or used for the purpose of prostitution or illicit intercourse with any person or for any unlawful and immoral purpose";
+                mens_rea knowledge_likely_future_employment_or_use := "Knowing it to be likely that such person will at any age be employed or used for any such purpose";
+            }
+        }
     }
 
-    penalty {
+    penalty cumulative {
         imprisonment := 0 years .. 10 years;
-        fine := $0.00 .. $10,000.00;
+        supplementary := "Whoever buys, hires or otherwise obtains possession of any person below 21 years of age with intent that such person shall at any age be employed or used for the purpose of prostitution or illicit intercourse with any person or for any unlawful and immoral purpose, or knowing it to be likely that such person will at any age be employed or used for any such purpose, shall be punished with imprisonment for a term which may extend to 10 years.";
     }
 
+    penalty alternative {
+        fine := unlimited;
+        supplementary := "The offender shall also be liable to fine.";
+    }
 }

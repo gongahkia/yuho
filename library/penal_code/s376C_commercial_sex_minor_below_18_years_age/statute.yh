@@ -1,25 +1,43 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr376C-#pr376C-
-// Singapore Penal Code Section 376C
+/// @amendment [15/2019]
 
-statute 376C "Commercial sex with minor below 18 years of age outside Singapore" effective 1872-01-01 {
-    definitions {
-        extraterritorial_application := "Offence committed outside Singapore by a citizen or permanent resident";
+statute 376C "Commercial sex with minor below 18 years of age outside Singapore" effective 1872-01-01 effective 2020-01-01 {
+    subsection (1) {
+        elements {
+            /// Subsection (1) applies only where both the Singapore-status limb and the outside-Singapore conduct limb are satisfied.
+            all_of {
+                circumstance singapore_status := "Any person, being a citizen or a permanent resident of Singapore";
+                actus_reus extraterritorial_act := "Who does, outside Singapore, any act that would, if done in Singapore, constitute an offence under section 376B";
+            }
+        }
     }
 
-    elements {
-        /// commercial sex with a minor outside Singapore
-        actus_reus commercial_sex_abroad := "Being a citizen or permanent resident, outside Singapore obtains for consideration the sexual services of a person below 18 years of age, or communicates for that purpose";
-        /// the other person is below 18 years of age
-        circumstance minor_below_18 := "The other person is below 18 years of age";
-        /// act occurs outside Singapore
-        circumstance outside_singapore := "The act occurs outside Singapore";
+    subsection (1A) {
+        elements {
+            /// Subsection (1A) covers an act done in Singapore involving a minor who is outside Singapore.
+            all_of {
+                actus_reus in_singapore_act := "Any person ( A ) who does in Singapore, any act involving a person below 18 years of age ( B ) who is outside Singapore";
+                circumstance hypothetical_s376B_offence := "That would if B were in Singapore constitute an offence under section 376B";
+            }
+        }
     }
 
-    penalty {
-        imprisonment := 0 years .. 7 years;
-        fine := $0.00 .. $10,000.00;
+    subsection (1B) {
+        elements {
+            /// Subsection (1B) covers an act done outside Singapore involving a minor who is in Singapore.
+            all_of {
+                actus_reus outside_singapore_act := "Any person who does outside Singapore, any act involving a person below 18 years of age who is in Singapore";
+                circumstance hypothetical_s376B_offence := "That would if done in Singapore constitute an offence under section 376B";
+            }
+        }
     }
 
+    subsection (2) {
+        /// Punishment tracks the punishment for the predicate offence under section 376B.
+        penalty {
+            supplementary := "A person who is guilty of an offence under this section shall be punished with the same punishment with which he would have been punished had he been convicted of an offence under section 376B. [15/2019]"
+        }
+    }
 }

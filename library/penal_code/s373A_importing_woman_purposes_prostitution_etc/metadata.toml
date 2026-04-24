@@ -2,16 +2,17 @@
 section_number = "373A"
 title = "Importing woman for purposes of prostitution, etc."
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Importing a woman into Singapore with intent or knowledge she will be forced or seduced to illicit intercourse."
+summary = "Section 373A criminalises specified acts of bringing a woman into Singapore, or selling or buying a woman, for the purpose of prostitution."
 source = "Singapore Penal Code 1871, Section 373A"
 
 [verification]

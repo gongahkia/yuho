@@ -2,16 +2,17 @@
 section_number = "376A"
 title = "Sexual penetration of minor below 16 years of age"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Sexual penetration of a minor below 16 years of age."
+summary = "Creates the offence of sexual penetration of a person below 16 years of age, with aggravated punishment where the victim is below 14 or the offender is in an exploitative relationship with a 14- or 15-year-old victim."
 source = "Singapore Penal Code 1871, Section 376A"
 
 [verification]

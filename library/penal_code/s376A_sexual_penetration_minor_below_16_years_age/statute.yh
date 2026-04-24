@@ -1,23 +1,83 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr376A-#pr376A-
-// Singapore Penal Code Section 376A
+/// @amendment [15/2019]
+/// @amendment [Act 23 of 2021 wef 01/03/2022]
 
-statute 376A "Sexual penetration of minor below 16 years of age" effective 1872-01-01 {
-    definitions {
-        minor_below_16 := "A person below 16 years of age";
+statute 376A "Sexual penetration of minor below 16 years of age" effective 1872-01-01 effective 2019-12-31 effective 2022-03-01 {
+    subsection (1) {
+        elements {
+            /// Subsection (1) is conjunctive overall: one of the four penetration forms and the victim's age below 16 must both be present.
+            all_of {
+                /// Paragraphs (a) to (d) are alternatives.
+                any_of {
+                    actus_reus penile_penetration := "A penetrates, with A’s penis, the vagina, anus or mouth, as the case may be, of a person below 16 years of age (B)";
+                    actus_reus sexual_penetration_of_vagina_or_anus := "A sexually penetrates, with a part of A’s body (other than A’s penis, if a man) or anything else, the vagina or anus, as the case may be, of a person below 16 years of age (B)";
+                    actus_reus causes_male_b_to_penetrate := "A causes a man below 16 years of age (B) to penetrate, with B’s penis, the vagina, anus or mouth, as the case may be, of another person including A";
+                    actus_reus causes_b_to_sexually_penetrate := "A causes a person below 16 years of age (B) to sexually penetrate, with a part of B’s body (other than B’s penis, if a man) or anything else, the vagina or anus, as the case may be, of any person including A or B";
+                }
+                circumstance victim_below_16 := "B is a person below 16 years of age";
+            }
+        }
     }
 
-    elements {
-        /// sexual penetration of a minor below 16
-        actus_reus penetrate_minor := "Sexually penetrates a person below 16 years of age";
-        /// victim is below 16 years of age
-        circumstance minor_below_16 := "The other person is below 16 years of age";
+    subsection (1A) {
+        definitions {
+            section_375_and_376_exclusion := "This section does not apply to an act of penetration mentioned in subsection (1) which would constitute an offence under section 375(1)(a), 375(1)(b) read with section 375(3), 375(1A)(a), 375(1A)(b) read with section 375(3), 376(2) (if the victim B is of or above 14 years of age) or 376(2) (if the victim B is below 14 years of age) read with section 376(4). [15/2019] [Act 23 of 2021 wef 01/03/2022]";
+        }
     }
 
-    penalty {
-        imprisonment := 0 years .. 10 years;
-        fine := $0.00 .. $10,000.00;
+    subsection (1B) {
+        definitions {
+            consent_proof_not_required := "To avoid doubt, it is not necessary for the prosecution to prove that B did consent to an act of penetration mentioned in subsection (1).";
+            consent_not_a_defence := "To avoid doubt, it is not a defence that B did consent to that act.";
+        }
     }
 
+    subsection (2) {
+        definitions {
+            protected_age_band := "This subsection applies where the offence under this section is committed against a person (B) who is of or above 14 years of age but below 16 years of age.";
+        }
+
+        penalty cumulative when exploitative_case {
+            imprisonment := 0 years .. 20 years;
+            supplementary := "In a case where the offender is in a relationship that is exploitative of B, the offender shall be punished with imprisonment for a term which may extend to 20 years.";
+        }
+
+        penalty alternative when exploitative_case {
+            fine := unlimited;
+            caning := 0 .. 24 strokes;
+            supplementary := "In a case where the offender is in a relationship that is exploitative of B, the offender shall also be liable to fine or to caning.";
+        }
+
+        penalty or_both when non_exploitative_case {
+            imprisonment := 0 years .. 10 years;
+            fine := unlimited;
+            supplementary := "In any other case, the offender shall be punished with imprisonment for a term which may extend to 10 years, or with fine, or with both.";
+        }
+    }
+
+    subsection (3) {
+        definitions {
+            victim_below_14 := "This subsection applies where the offence under this section is committed against a person (B) who is below 14 years of age.";
+        }
+
+        penalty cumulative {
+            imprisonment := 0 years .. 20 years;
+            supplementary := "Whoever commits an offence under this section against a person (B) who is below 14 years of age shall be punished with imprisonment for a term which may extend to 20 years.";
+        }
+
+        penalty alternative {
+            fine := unlimited;
+            caning := 0 .. 24 strokes;
+            supplementary := "The offender shall also be liable to fine or to caning.";
+        }
+    }
+
+    subsection (4) {
+        exception spouse_consent {
+            "The act of penetration is against the offender's spouse with the consent of that spouse."
+            "No person shall be guilty of an offence under this section for that act of penetration."
+        }
+    }
 }

@@ -1,24 +1,96 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr375-#pr375-
-// Singapore Penal Code Section 375
+/// @amendment [15/2019]
 
-statute 375 "Rape" effective 1872-01-01 {
-    definitions {
-        penile_penetration := "Penile penetration of the vagina, anus or mouth of another person";
-        consent := "Free, voluntary and informed agreement to the sexual act";
+statute 375 "Rape" effective 1872-01-01 effective 2020-01-01 {
+    subsection (1) {
+        elements {
+            /// Subsection (1) is conjunctive: penile-vaginal penetration plus one of the two consent/age alternatives.
+            all_of {
+                actus_reus penetrate_vagina := "Any man who penetrates the vagina of a woman with his penis";
+                any_of {
+                    circumstance without_her_consent := "Without her consent";
+                    circumstance below_14_with_or_without_consent := "With or without her consent, when she is below 14 years of age";
+                }
+            }
+        }
     }
 
-    elements {
-        /// penile penetration of vagina, anus or mouth
-        actus_reus penile_penetration := "Penetrates with his penis the vagina, anus or mouth of another person";
-        /// without consent, or where victim is below 14
-        circumstance no_consent_or_minor := "Without consent of the other person, or with or without consent where the other person is below 14 years of age";
+    subsection (1A) {
+        definitions {
+            man_a := "Any man (A).";
+            person_b := "Another person (B).";
+        }
+
+        elements {
+            /// Subsection (1A) is conjunctive: penile anal/oral penetration plus one of the two consent/age alternatives.
+            all_of {
+                actus_reus penetrate_anus_or_mouth := "Any man (A) who penetrates, with A’s penis, the anus or mouth of another person (B)";
+                any_of {
+                    circumstance without_b_consent := "Without B’s consent";
+                    circumstance b_below_14_with_or_without_consent := "With or without B’s consent, when B is below 14 years of age";
+                }
+            }
+        }
     }
 
-    penalty {
-        imprisonment := 8 years .. 20 years;
-        caning := 0 .. 12 strokes;
+    subsection (2) {
+        penalty or_both {
+            imprisonment := 0 days .. 20 years;
+            fine := unlimited;
+            supplementary := "Subject to subsection (3), a man who is guilty of an offence under this section shall also be liable to caning.";
+        }
     }
 
+    subsection (3) {
+        elements {
+            /// Subsection (3) is aggravated if any one of the statutory branches is satisfied.
+            any_of {
+                /// Paragraph (a) requires commission or facilitation of subsection (1) or (1A) plus one of the two coercive acts.
+                all_of {
+                    circumstance commission_or_facilitation := "In order to commit or to facilitate the commission of an offence under subsection (1) or (1A)";
+                    any_of {
+                        actus_reus voluntarily_causes_hurt := "Voluntarily causes hurt to any person";
+                        actus_reus fear_of_death_or_hurt := "Puts a person in fear of death or hurt to that person or any other person";
+                    }
+                }
+                all_of {
+                    actus_reus commit_subsection_1_or_1A_offence := "Commits an offence under subsection (1) or (1A)";
+                    circumstance below_14_without_consent := "Against a person below 14 years of age without that person’s consent";
+                }
+                all_of {
+                    actus_reus commit_subsection_1_or_1A_offence := "Commits an offence under subsection (1) or (1A)";
+                    circumstance below_14_exploitative_relationship := "Against a person below 14 years of age with whom the offender is in a relationship that is exploitative of that person";
+                }
+            }
+        }
+
+        penalty cumulative {
+            imprisonment := 8 years .. 20 years;
+            supplementary := "The offender shall also be punished with caning of not less than 12 strokes.";
+            minimum imprisonment := 8 years;
+        }
+    }
+
+    subsection (4) {
+        exception wife_consent_under_subsection_1b_or_1ab {
+            "No man shall be guilty of an offence under subsection (1)(b) or (1A)(b) for an act of penetration against his wife with her consent."
+            "No man shall be guilty of the subsection (1)(b) or subsection (1A)(b) offence in that case."
+        }
+    }
+
+    subsection (5) {
+        exception mistake_of_fact_good_faith_consent {
+            "Despite section 79, no man shall be guilty of an offence under subsection (1)(a) or (1A)(a) if he proves that by reason of mistake of fact in good faith, he believed that the act of penetration against a person was done with consent."
+            "No man shall be guilty of the subsection (1)(a) or subsection (1A)(a) offence in that case."
+        }
+    }
+
+    subsection (6) {
+        exception mistake_of_fact_good_faith_consent_under_subsection_3b {
+            "No man shall be punished under subsection (3)(b) if he proves that by reason of mistake of fact in good faith, he believed that the act of penetration against a person below 14 years of age was done with consent."
+            "No man shall be punished under subsection (3)(b) in that case."
+        }
+    }
 }

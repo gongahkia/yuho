@@ -1,21 +1,43 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr376D-#pr376D-
-// Singapore Penal Code Section 376D
 
-statute 376D "Tour outside Singapore for commercial sex with minor below 18 years of age" effective 1872-01-01 {
-    definitions {
-        travel_promotion := "Making, printing, publishing, distributing or organising travel arrangements for commercial sex with minors abroad";
+statute 376D "Tour outside Singapore for commercial sex with minor below 18 years of age" effective 1872-01-01 effective 2008-02-01 {
+    subsection (1) {
+        elements {
+            /// Subsection (1) is satisfied by any one of the three alternative acts in paragraphs (a), (b), or (c).
+            any_of {
+                all_of {
+                    actus_reus make_or_organise_travel_arrangements := "Makes or organises any travel arrangements for or on behalf of any other person";
+                    mens_rea facilitate_section_376C_offence := "With the intention of facilitating the commission by that other person of an offence under section 376C";
+                    circumstance actual_section_376C_offence_not_required := "Whether or not such an offence is actually committed by that other person";
+                }
+                all_of {
+                    actus_reus transport_other_person_outside_singapore := "Transports any other person to a place outside Singapore";
+                    mens_rea facilitate_section_376C_offence := "With the intention of facilitating the commission by that other person of an offence under section 376C";
+                    circumstance actual_section_376C_offence_not_required := "Whether or not such an offence is actually committed by that other person";
+                }
+                all_of {
+                    actus_reus print_publish_or_distribute_information := "Prints, publishes or distributes any information";
+                    any_of {
+                        mens_rea promote_section_376C_conduct := "That is intended to promote conduct that would constitute an offence under section 376C";
+                        mens_rea assist_other_person_section_376C_conduct := "That is intended to assist any other person to engage in such conduct";
+                    }
+                }
+            }
+        }
     }
 
-    elements {
-        /// make, organise, transport or promote travel for commercial sex with minor abroad
-        actus_reus tour_arrangement := "Makes, prints, publishes, distributes, transports any document, or organises or assists in arranging travel, for facilitating commercial sex with a person below 18 years of age outside Singapore";
+    subsection (2) {
+        definitions {
+            publication_of_information := "For the purposes of subsection (1)(c), the publication of information means publication of information by any means, whether by written, electronic, or other form of communication.";
+        }
     }
 
-    penalty {
-        imprisonment := 0 years .. 10 years;
-        fine := $0.00 .. $10,000.00;
+    subsection (3) {
+        penalty or_both {
+            imprisonment := 0 years .. 10 years;
+            fine := unlimited;
+        }
     }
-
 }

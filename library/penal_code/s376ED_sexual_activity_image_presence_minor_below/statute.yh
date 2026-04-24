@@ -1,25 +1,61 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr376ED-#pr376ED-
-// Singapore Penal Code Section 376ED
+/// @amendment [15/2019]
+/// @amendment [Act 23 of 2021 wef 01/03/2022]
 
-statute 376ED "Sexual activity or image in presence of minor below 16 years of age" effective 1872-01-01 {
-    definitions {
-        sexual_activity_presence := "Engaging in sexual activity or causing sexual image to be seen in the presence of a minor";
+statute 376ED "Sexual activity or image in presence of minor below 16 years of age" effective 1872-01-01 effective 2019-12-31 effective 2022-03-01 {
+    subsection (1) {
+        elements {
+            /// Subsection (1) requires all stated limbs, with paragraph (c) containing its own conjunctive sub-limbs.
+            all_of {
+                circumstance accused_age := "Any person of or above 18 years of age (A)";
+                actus_reus intentional_engagement := "For the purpose of obtaining sexual gratification or of causing another person (B) humiliation, alarm or distress, A intentionally engages in an activity";
+                circumstance activity_is_sexual := "The activity is sexual";
+                /// Paragraph (c) is conjunctive: presence/observability, Singapore nexus, and awareness/intended awareness must all be present.
+                all_of {
+                    actus_reus presence_or_observability := "A engages in the activity when B is present or is in a place from which A can be observed";
+                    circumstance singapore_nexus := "A engages in the activity when either A or B is or both are in Singapore";
+                    mens_rea awareness_requirement := "A engages in the activity knowing or believing that B is aware, or intending that B should be aware, that A is engaging in it";
+                }
+                circumstance victim_below_16 := "B is below 16 years of age";
+                mens_rea no_reasonable_belief_b_is_16_or_above := "A does not reasonably believe that B is of or above 16 years of age";
+            }
+        }
     }
 
-    elements {
-        /// engage in sexual activity or show sexual image in presence of minor
-        actus_reus sexual_activity_presence := "Intentionally engages in a sexual activity, or causes a sexual image to be seen, in the presence of another person";
-        /// the other person is below 16 years of age
-        circumstance minor_below_16 := "The other person is below 16 years of age";
-        /// for purpose of sexual gratification
-        mens_rea purpose_gratification := "For the purpose of obtaining sexual gratification";
+    subsection (2) {
+        elements {
+            /// Subsection (2) creates a separate offence for intentionally causing B to observe a sexual image.
+            all_of {
+                circumstance accused_age := "Any person of or above 18 years of age (A)";
+                actus_reus causes_observation_of_image := "For the purpose of obtaining sexual gratification or of causing another person (B) humiliation, alarm or distress, A intentionally causes B to observe an image";
+                circumstance image_is_sexual := "The image is sexual";
+                circumstance victim_below_16 := "B is below 16 years of age";
+                mens_rea no_reasonable_belief_b_is_16_or_above := "A does not reasonably believe that B is of or above 16 years of age";
+                circumstance singapore_nexus := "Either A or B is or both are in Singapore";
+            }
+        }
     }
 
-    penalty {
-        imprisonment := 0 years .. 2 years;
-        fine := $0.00 .. $10,000.00;
+    subsection (3) {
+        penalty or_both when victim_below_14_case {
+            imprisonment := 0 years .. 3 years;
+            fine := unlimited;
+            supplementary := "In the case where the offence is committed against a victim who is below 14 years of age and A does not reasonably believe that B is of or above that age.";
+        }
+
+        penalty or_both when other_case {
+            imprisonment := 0 years .. 2 years;
+            fine := unlimited;
+            supplementary := "In any other case.";
+        }
     }
 
+    subsection (4) {
+        exception spouse_consent {
+            "B is his or her spouse with the consent of that spouse."
+            "No person shall be guilty of an offence under this section against B."
+        }
+    }
 }

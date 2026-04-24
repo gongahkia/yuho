@@ -2,16 +2,17 @@
 section_number = "374"
 title = "Unlawful compulsory labour"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Unlawfully compelling a person to labour against that person's will."
+summary = "Makes it an offence to unlawfully compel a person to labour against that person's will."
 source = "Singapore Penal Code 1871, Section 374"
 
 [verification]

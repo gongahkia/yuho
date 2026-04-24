@@ -1,25 +1,38 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr376E-#pr376E-
-// Singapore Penal Code Section 376E
+/// @amendment [15/2019]
+/// @amendment [Act 23 of 2021 wef 01/03/2022]
+/// @amendment [Act 39 of 2022 wef 03/01/2023]
 
-statute 376E "Sexual grooming of minor below 16 years of age" effective 1872-01-01 {
-    definitions {
-        sexual_grooming := "Prior communication followed by intentional meeting or travel to meet a minor";
+statute 376E "Sexual grooming of minor below 16 years of age" effective 1872-01-01 effective 2019-12-31 effective 2022-03-01 effective 2023-01-03 {
+    subsection (1) {
+        elements {
+            /// The canonical source preserves subsection (1) as an offence with conjunctive limbs, but truncates paragraph (b) after its opening words.
+            all_of {
+                circumstance accused_age := "Any person of or above 18 years of age ( A )";
+                actus_reus prior_contact := "Having met or communicated with another person ( B ) on at least one previous occasion";
+                actus_reus meeting_or_travel := "A intentionally meets B or travels with the intention of meeting B or B travels to attend a meeting with A which A has either initiated or agreed to whether expressly or by implication";
+                circumstance paragraph_b_opening := "At the time of the acts referred to in paragraph ( a ) —";
+            }
+        }
     }
 
-    elements {
-        /// meet or travel to meet a minor after sexual communication
-        actus_reus grooming_meeting := "Having met or communicated with another person on at least one previous occasion, intentionally meets that person or travels to meet that person";
-        /// the other person is below 16 years of age
-        circumstance minor_below_16 := "The other person is below 16 years of age";
-        /// intent to commit a relevant sexual offence
-        mens_rea intent_sexual_offence := "With the intention of doing anything which would be a relevant offence";
+    subsection (2) {
+        definitions {
+            relevant_offence := "In subsection (1), “relevant offence” means an offence under —";
+        }
     }
 
-    penalty {
-        imprisonment := 0 years .. 3 years;
-        fine := $0.00 .. $10,000.00;
+    subsection (3) {
+        definitions {
+            extraterritorial_previous_occasion := "For the purposes of this section, it is immaterial whether the previous occasion of A having met or communicated with B referred to in subsection (1) took place in or outside Singapore. [15/2019]";
+        }
     }
 
+    subsection (4) {
+        definitions {
+            punishment_opening := "A person who is guilty of an offence under this section shall on conviction —";
+        }
+    }
 }

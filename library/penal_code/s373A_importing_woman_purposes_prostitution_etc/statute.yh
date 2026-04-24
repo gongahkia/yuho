@@ -1,23 +1,25 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr373A-#pr373A-
-// Singapore Penal Code Section 373A
 
 statute 373A "Importing woman for purposes of prostitution, etc." effective 1872-01-01 {
-    definitions {
-        importation := "Importing a woman into Singapore from any country";
-    }
-
     elements {
-        /// import a woman from any country
-        actus_reus import_woman := "Imports into Singapore from any country any woman";
-        /// intent or knowledge she will be forced or seduced to illicit intercourse
-        mens_rea purpose_illicit_intercourse := "With intent or knowledge that she will be forced or seduced to illicit intercourse with another person";
+        /// Section 373A is satisfied by any one of the three prostitution-related transaction or importation limbs, together with the purpose stated in that limb.
+        any_of {
+            all_of {
+                actus_reus brings_or_assists_by_false_means := "By any false pretence, false representation, or fraudulent or deceitful means, brings, or assists in bringing, into Singapore any woman";
+                mens_rea intent_employed_or_used_for_prostitution := "With intent that such woman may be employed or used for the purpose of prostitution";
+            }
+            all_of {
+                actus_reus brings_or_assists_for_sale_or_purchase := "Brings, or assists in bringing, into Singapore any woman";
+                mens_rea intent_sold_or_bought_for_prostitution := "With intent that such woman may be sold or bought for the purpose of prostitution";
+            }
+            actus_reus sells_or_buys_for_prostitution := "Sells or buys any woman for the purpose of prostitution";
+        }
     }
 
-    penalty {
+    penalty cumulative {
         imprisonment := 0 years .. 10 years;
-        fine := $0.00 .. $10,000.00;
+        fine := unlimited;
     }
-
 }

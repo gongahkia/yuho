@@ -2,16 +2,17 @@
 section_number = "376C"
 title = "Commercial sex with minor below 18 years of age outside Singapore"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Commercial sex with a minor below 18 years of age outside Singapore by a citizen or PR."
+summary = "Section 376C extends section 376B to specified conduct involving minors below 18 years of age across Singapore’s borders and applies the same punishment as section 376B."
 source = "Singapore Penal Code 1871, Section 376C"
 
 [verification]

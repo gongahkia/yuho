@@ -1,23 +1,50 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr376B-#pr376B-
-// Singapore Penal Code Section 376B
+/// @amendment [15/2019]
 
-statute 376B "Commercial sex with minor below 18 years of age" effective 1872-01-01 {
-    definitions {
-        commercial_sex := "Obtaining sexual services for consideration";
+statute 376B "Commercial sex with minor below 18 years of age" effective 1872-01-01 effective 2019-12-31 {
+    subsection (1) {
+        elements {
+            all_of {
+                actus_reus obtain_sexual_services_for_consideration := "Obtains for consideration the sexual services of a person";
+                circumstance person_below_18_years_of_age := "That person is below 18 years of age";
+            }
+        }
+
+        penalty or_both {
+            imprisonment := 0 days .. 7 years;
+            fine := unlimited;
+        }
     }
 
-    elements {
-        /// obtain or communicate for commercial sexual services of a minor
-        actus_reus commercial_sex := "Obtains for consideration the sexual services of a person below 18 years of age, or communicates for that purpose";
-        /// the other person is below 18 years of age
-        circumstance minor_below_18 := "The other person is below 18 years of age";
+    subsection (2) {
+        elements {
+            all_of {
+                actus_reus communicate_for_obtaining_sexual_services := "Communicates with another person for the purpose of obtaining for consideration, the sexual services of a person";
+                circumstance person_below_18_years_of_age := "That person is below 18 years of age";
+            }
+        }
+
+        penalty or_both {
+            imprisonment := 0 days .. 2 years;
+            fine := unlimited;
+        }
     }
 
-    penalty {
-        imprisonment := 0 years .. 7 years;
-        fine := $0.00 .. $10,000.00;
+    subsection (3) {
+        exception spouse {
+            "No person shall be guilty of an offence under this section for any sexual services obtained from that person's spouse."
+            "No offence under this section."
+        }
     }
 
+    subsection (4) {
+        definitions {
+            sexual_services := "In this section, \"sexual services\" means any sexual services involving -";
+            sexual_services_penetration_vagina_or_anus := "sexual penetration of the vagina or anus, as the case may be, of a person by a part of another person's body (other than the penis) or by anything else;";
+            sexual_services_penile_penetration := "penetration of the vagina, anus or mouth, as the case may be, of a person by a man's penis; or";
+            sexual_services_sexual_touching := "touching which is sexual of another person or of himself or herself. [15/2019]";
+        }
+    }
 }

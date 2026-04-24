@@ -2,16 +2,17 @@
 section_number = "375"
 title = "Rape"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Rape -- penile penetration of vagina, anus or mouth without consent, or where victim is below 14."
+summary = "Section 375 defines rape through penile vaginal, anal, or oral penetration without consent or, in specified cases, where the victim is below 14, and sets baseline and aggravated punishments plus statutory exceptions."
 source = "Singapore Penal Code 1871, Section 375"
 
 [verification]

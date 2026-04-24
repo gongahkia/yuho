@@ -2,16 +2,17 @@
 section_number = "376D"
 title = "Tour outside Singapore for commercial sex with minor below 18 years of age"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Arranging or promoting tours outside Singapore for commercial sex with minors below 18."
+summary = "This section criminalises arranging, transporting, or publishing information to facilitate commercial sex with a person below 18 years of age outside Singapore."
 source = "Singapore Penal Code 1871, Section 376D"
 
 [verification]

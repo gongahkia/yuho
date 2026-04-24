@@ -1,23 +1,24 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr372-#pr372-
-// Singapore Penal Code Section 372
 
 statute 372 "Selling minor for purposes of prostitution, etc." effective 1872-01-01 {
     definitions {
-        disposition_of_minor := "Selling, letting to hire, or otherwise disposing of a person below 18";
+        explanation_presumption_female_below_21_disposed_to_prostitute_or_brothel_keeper := "Explanation. —When a female below 21 years of age is sold, let for hire, or otherwise disposed of to a prostitute or to any person who keeps or manages a brothel, the person so disposing of such female shall, until the contrary is proved, be presumed to have disposed of her with the intent that she shall be used for the purpose of prostitution.";
     }
 
     elements {
-        /// sell, let to hire, or otherwise dispose of a minor
-        actus_reus sell_let_minor := "Sells, lets to hire, or otherwise disposes of any person below 18 years of age";
-        /// for purposes of prostitution or unlawful or immoral purpose
-        mens_rea purpose_prostitution := "With intent or knowledge that the person will be employed or used for prostitution, illicit intercourse, or any unlawful and immoral purpose";
+        all_of {
+            actus_reus disposal_of_person_below_21 := "Whoever sells, lets to hire, or otherwise disposes of any person below 21 years of age";
+            any_of {
+                mens_rea intent_person_employed_or_used_for_prohibited_purpose := "With intent that such person shall at any age be employed or used for the purpose of prostitution or illicit intercourse with any person or for any unlawful and immoral purpose";
+                mens_rea knowledge_likely_person_employed_or_used_for_prohibited_purpose := "Knowing it to be likely that such person will at any age be employed or used for any such purpose";
+            }
+        }
     }
 
     penalty {
-        imprisonment := 0 years .. 10 years;
-        fine := $0.00 .. $10,000.00;
+        imprisonment := 0 days .. 10 years;
+        fine := unlimited;
     }
-
 }

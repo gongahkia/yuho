@@ -1,23 +1,111 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr376-#pr376-
-// Singapore Penal Code Section 376
+/// @amendment [15/2019]
+/// @amendment [Act 23 of 2021 wef 01/03/2022]
+/// @amendment [ Deleted by Act 23 of 2021 wef 01/03/2022 ]
 
-statute 376 "Sexual assault involving penetration" effective 1872-01-01 {
-    definitions {
-        sexual_penetration := "Sexual penetration with a part of the body other than the penis, or any object";
+statute 376 "Sexual assault involving penetration" effective 1872-01-01 effective 2020-01-01 effective 2022-03-01 {
+    subsection (1) {
+        definitions {
+            deleted_subsection := "[ Deleted by Act 23 of 2021 wef 01/03/2022 ]";
+        }
     }
 
-    elements {
-        /// sexual penetration with body part or object
-        actus_reus nonpenile_penetration := "Sexually penetrates with a part of the body other than the penis, or anything else, the vagina or anus of another person";
-        /// without consent, or where victim is below 14
-        circumstance no_consent_or_minor := "Without the consent of that person, or with or without consent where that person is below 14 years of age";
+    subsection (2) {
+        elements {
+            /// Subsection (2) is conjunctive: one of the three penetration modes plus one of the two consent/age alternatives.
+            all_of {
+                any_of {
+                    actus_reus sexual_penetration_of_vagina_or_anus := "Any person (A) who sexually penetrates, with a part of A's body (other than A's penis, if a man) or anything else, the vagina or anus, as the case may be, of another person (B)";
+                    actus_reus causes_man_to_penetrate := "Any person (A) who causes a man (B) to penetrate, with B's penis, the vagina, anus or mouth, as the case may be, of another person including A";
+                    actus_reus causes_person_to_sexually_penetrate := "Any person (A) who causes another person (B) to sexually penetrate, with a part of B's body (other than B's penis, if a man) or anything else, the vagina or anus, as the case may be, of any person including A or B";
+                }
+
+                any_of {
+                    circumstance without_b_consent := "B did not consent to the penetration";
+                    circumstance b_below_14 := "B is below 14 years of age, whether B did or did not consent to the penetration";
+                }
+            }
+        }
     }
 
-    penalty {
-        imprisonment := 3 years .. 20 years;
-        caning := 0 .. 12 strokes;
+    subsection (3) {
+        penalty cumulative {
+            imprisonment := 0 days .. 20 years;
+            supplementary := "Subject to subsection (4), a person who is guilty of an offence under this section shall be punished with imprisonment for a term which may extend to 20 years.";
+        }
+
+        penalty alternative {
+            fine := unlimited;
+            supplementary := "The offender shall also be liable to fine or to caning.";
+        }
     }
 
+    subsection (4) {
+        definitions {
+            aggravated_punishment_rule := "Whoever satisfies any of paragraphs (a), (b) or (c) of subsection (4) shall be punished with imprisonment for a term of not less than 8 years and not more than 20 years and shall also be punished with caning with not less than 12 strokes.";
+        }
+
+        penalty cumulative {
+            imprisonment := 8 years .. 20 years;
+            supplementary := "Whoever satisfies subsection (4) shall be punished with imprisonment for a term of not less than 8 years and not more than 20 years and shall also be punished with caning with not less than 12 strokes.";
+            minimum imprisonment := 8 years;
+        }
+
+        subsection (a) {
+            elements {
+                /// Paragraph (a) requires commission or facilitation of a subsection (2) offence plus one of the two coercive acts.
+                all_of {
+                    circumstance commission_or_facilitation_of_subsection_2 := "In order to commit or to facilitate the commission of an offence under subsection (2)";
+
+                    any_of {
+                        actus_reus voluntarily_causes_hurt := "Voluntarily causes hurt to any person";
+                        actus_reus puts_in_fear_of_death_or_hurt := "Puts any person in fear of death or hurt to himself or any other person";
+                    }
+                }
+            }
+        }
+
+        subsection (b) {
+            elements {
+                all_of {
+                    actus_reus commits_subsection_2_offence := "Commits an offence under subsection (2)";
+                    circumstance against_person_below_14_without_consent := "Against a person below 14 years of age without that person's consent";
+                }
+            }
+        }
+
+        subsection (c) {
+            elements {
+                all_of {
+                    actus_reus commits_subsection_2_offence := "Commits an offence under subsection (2)";
+                    circumstance against_person_below_14_in_exploitative_relationship := "Against a person below 14 years of age with whom the offender is in a relationship that is exploitative of that person";
+                }
+            }
+        }
+    }
+
+    subsection (5) {
+        subsection (a) {
+            exception spouse_consent {
+                "No person shall be guilty of an offence under subsection (2) for an act of penetration against his or her spouse with the consent of that spouse."
+                "No person shall be guilty of the subsection (2) offence in that case."
+            }
+        }
+
+        subsection (b) {
+            exception mistake_of_fact_good_faith_consent_and_age {
+                "No person shall be guilty of an offence under subsection (2) if despite section 79, that person proves that by reason of mistake of fact in good faith, the person believed that B mentioned in subsection (2) did consent to the penetration and B was not below 14 years of age."
+                "No person shall be guilty of the subsection (2) offence in that case."
+            }
+        }
+    }
+
+    subsection (6) {
+        exception mistake_of_fact_good_faith_consent_under_subsection_4b {
+            "No person shall be punished under subsection (4)(b) if the person proves that by reason of mistake of fact in good faith, the person believed that the act of penetration against a person below 14 years of age was done with consent."
+            "No person shall be punished under subsection (4)(b) in that case."
+        }
+    }
 }
