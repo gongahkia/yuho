@@ -1,6 +1,6 @@
 # Coverage — Penal Code 1871 (PC1871)
 
-_Generated: 2026-04-24T05:20:03+00:00_  
+_Generated: 2026-04-24T07:21:47+00:00_  
 _Scraped: 2026-04-24T03:48:44Z_  
 _Valid date: n/a_
 
@@ -12,7 +12,7 @@ _Valid date: n/a_
 | encoded (.yh present) | 524 | 100.0% |
 | **L1** — parses | **524** | **100.0%** |
 | **L2** — typechecks | **524** | **100.0%** |
-| **L3** — verified | **25** | **4.8%** |
+| **L3** — verified | **34** | **6.5%** |
 
 ## Encoded sections
 
@@ -29,13 +29,13 @@ _Valid date: n/a_
 | s6A | Definitions to apply to this Code and other written law | ✓ | ✓ | · | — | `library/penal_code/s6A_definitions_apply_this_code_other_written_law/statute.yh` |
 | s7 | Expression once explained is used in the same sense througho | ✓ | ✓ | · | — | `library/penal_code/s7_expression_once_explained_used_same_sense/statute.yh` |
 | s8 | “Gender” | ✓ | ✓ | · | — | `library/penal_code/s8_gender/statute.yh` |
-| s9 | “Number” | ✓ | ✓ | · | — | `library/penal_code/s9_number/statute.yh` |
+| s9 | “Number” | ✓ | ✓ | ✓ | 2026-04-24 Opus 4.7 (automated reviewer) | `library/penal_code/s9_number/statute.yh` |
 | s10 | “Man” and “woman” | ✓ | ✓ | · | — | `library/penal_code/s10_man_woman/statute.yh` |
-| s11 | “Person” | ✓ | ✓ | · | — | `library/penal_code/s11_person/statute.yh` |
+| s11 | “Person” | ✓ | ✓ | ✓ | 2026-04-24 Opus 4.7 (automated reviewer) | `library/penal_code/s11_person/statute.yh` |
 | s12 | “Public” | ✓ | ✓ | · | — | `library/penal_code/s12_public/statute.yh` |
-| s17 | “Government” | ✓ | ✓ | · | — | `library/penal_code/s17_government/statute.yh` |
+| s17 | “Government” | ✓ | ✓ | ✓ | 2026-04-24 Opus 4.7 (automated reviewer) | `library/penal_code/s17_government/statute.yh` |
 | s19 | “Judge” | ✓ | ✓ | · | — | `library/penal_code/s19_judge/statute.yh` |
-| s20 | “Court of justice” | ✓ | ✓ | · | — | `library/penal_code/s20_court_justice/statute.yh` |
+| s20 | “Court of justice” | ✓ | ✓ | ✓ | 2026-04-24 Opus 4.7 (automated reviewer) | `library/penal_code/s20_court_justice/statute.yh` |
 | s21 | “Public servant” | ✓ | ✓ | · | — | `library/penal_code/s21_public_servant/statute.yh` |
 | s22 | “Property” | ✓ | ✓ | · | — | `library/penal_code/s22_property/statute.yh` |
 | s22A | “Fault element” and “physical element” | ✓ | ✓ | · | — | `library/penal_code/s22A_fault_element_physical_element/statute.yh` |
@@ -72,12 +72,12 @@ _Valid date: n/a_
 | s43 | “Illegal”, “unlawful” and “legally bound to do” | ✓ | ✓ | · | — | `library/penal_code/s43_illegal_unlawful_legally_bound_do/statute.yh` |
 | s44 | “Injury” | ✓ | ✓ | · | — | `library/penal_code/s44_injury/statute.yh` |
 | s44A | “Bodily injury” | ✓ | ✓ | · | — | `library/penal_code/s44A_bodily_injury/statute.yh` |
-| s45 | “Life” | ✓ | ✓ | · | — | `library/penal_code/s45_life/statute.yh` |
-| s46 | “Death” | ✓ | ✓ | · | — | `library/penal_code/s46_death/statute.yh` |
-| s47 | “Animal” | ✓ | ✓ | · | — | `library/penal_code/s47_animal/statute.yh` |
-| s48 | “Vessel” | ✓ | ✓ | · | — | `library/penal_code/s48_vessel/statute.yh` |
+| s45 | “Life” | ✓ | ✓ | ✓ | 2026-04-24 Opus 4.7 (automated reviewer) | `library/penal_code/s45_life/statute.yh` |
+| s46 | “Death” | ✓ | ✓ | ✓ | 2026-04-24 Opus 4.7 (automated reviewer) | `library/penal_code/s46_death/statute.yh` |
+| s47 | “Animal” | ✓ | ✓ | ✓ | 2026-04-24 Opus 4.7 (automated reviewer) | `library/penal_code/s47_animal/statute.yh` |
+| s48 | “Vessel” | ✓ | ✓ | ✓ | 2026-04-24 Opus 4.7 (automated reviewer) | `library/penal_code/s48_vessel/statute.yh` |
 | s49 | “Year” and “month” | ✓ | ✓ | · | — | `library/penal_code/s49_year_month/statute.yh` |
-| s50 | “Section” | ✓ | ✓ | · | — | `library/penal_code/s50_section/statute.yh` |
+| s50 | “Section” | ✓ | ✓ | ✓ | 2026-04-24 Opus 4.7 (automated reviewer) | `library/penal_code/s50_section/statute.yh` |
 | s51 | “Oath” | ✓ | ✓ | · | — | `library/penal_code/s51_oath/statute.yh` |
 | s53 | Punishments | ✓ | ✓ | · | — | `library/penal_code/s53_punishments/statute.yh` |
 | s54 | Imprisonment for life | ✓ | ✓ | · | — | `library/penal_code/s54_imprisonment_life/statute.yh` |

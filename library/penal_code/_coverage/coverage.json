@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-24T05:20:03+00:00",
+  "generated_at": "2026-04-24T07:21:47+00:00",
   "act": {
     "act_code": "PC1871",
     "title": "Penal Code 1871",
@@ -11,10 +11,10 @@
     "encoded": 524,
     "L1_pass": 524,
     "L2_pass": 524,
-    "L3_pass": 25,
+    "L3_pass": 34,
     "L1_pct": 100.0,
     "L2_pct": 100.0,
-    "L3_pct": 4.8
+    "L3_pct": 6.5
   },
   "sections": [
     {
@@ -168,9 +168,9 @@
       "sso_url": "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr9-#pr9-",
       "L1": true,
       "L2": true,
-      "L3": false,
-      "L3_verified_by": null,
-      "L3_verified_on": null,
+      "L3": true,
+      "L3_verified_by": "Opus 4.7 (automated reviewer)",
+      "L3_verified_on": "2026-04-24",
       "errors": []
     },
     {
@@ -194,9 +194,9 @@
       "sso_url": "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr11-#pr11-",
       "L1": true,
       "L2": true,
-      "L3": false,
-      "L3_verified_by": null,
-      "L3_verified_on": null,
+      "L3": true,
+      "L3_verified_by": "Opus 4.7 (automated reviewer)",
+      "L3_verified_on": "2026-04-24",
       "errors": []
     },
     {
@@ -220,9 +220,9 @@
       "sso_url": "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr17-#pr17-",
       "L1": true,
       "L2": true,
-      "L3": false,
-      "L3_verified_by": null,
-      "L3_verified_on": null,
+      "L3": true,
+      "L3_verified_by": "Opus 4.7 (automated reviewer)",
+      "L3_verified_on": "2026-04-24",
       "errors": []
     },
     {
@@ -246,9 +246,9 @@
       "sso_url": "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr20-#pr20-",
       "L1": true,
       "L2": true,
-      "L3": false,
-      "L3_verified_by": null,
-      "L3_verified_on": null,
+      "L3": true,
+      "L3_verified_by": "Opus 4.7 (automated reviewer)",
+      "L3_verified_on": "2026-04-24",
       "errors": []
     },
     {
@@ -727,9 +727,9 @@
       "sso_url": "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr45-#pr45-",
       "L1": true,
       "L2": true,
-      "L3": false,
-      "L3_verified_by": null,
-      "L3_verified_on": null,
+      "L3": true,
+      "L3_verified_by": "Opus 4.7 (automated reviewer)",
+      "L3_verified_on": "2026-04-24",
       "errors": []
     },
     {
@@ -740,9 +740,9 @@
       "sso_url": "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr46-#pr46-",
       "L1": true,
       "L2": true,
-      "L3": false,
-      "L3_verified_by": null,
-      "L3_verified_on": null,
+      "L3": true,
+      "L3_verified_by": "Opus 4.7 (automated reviewer)",
+      "L3_verified_on": "2026-04-24",
       "errors": []
     },
     {
@@ -753,9 +753,9 @@
       "sso_url": "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr47-#pr47-",
       "L1": true,
       "L2": true,
-      "L3": false,
-      "L3_verified_by": null,
-      "L3_verified_on": null,
+      "L3": true,
+      "L3_verified_by": "Opus 4.7 (automated reviewer)",
+      "L3_verified_on": "2026-04-24",
       "errors": []
     },
     {
@@ -766,9 +766,9 @@
       "sso_url": "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr48-#pr48-",
       "L1": true,
       "L2": true,
-      "L3": false,
-      "L3_verified_by": null,
-      "L3_verified_on": null,
+      "L3": true,
+      "L3_verified_by": "Opus 4.7 (automated reviewer)",
+      "L3_verified_on": "2026-04-24",
       "errors": []
     },
     {
@@ -792,9 +792,9 @@
       "sso_url": "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr50-#pr50-",
       "L1": true,
       "L2": true,
-      "L3": false,
-      "L3_verified_by": null,
-      "L3_verified_on": null,
+      "L3": true,
+      "L3_verified_by": "Opus 4.7 (automated reviewer)",
+      "L3_verified_on": "2026-04-24",
       "errors": []
     },
     {
