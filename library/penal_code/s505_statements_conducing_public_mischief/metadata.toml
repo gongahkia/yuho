@@ -2,16 +2,17 @@
 section_number = "505"
 title = "Statements conducing to public mischief"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Whoever makes, publishes or circulates any statement, rumour or report in written, electronic or other media — ( a ) with intent to cause, or which is likely to cause any officer or serviceman in the Singapore Armed Forces or any visiting forces lawfully present in Singapore, or any person to whom section 140B refers, to mutiny or otherwise disregard or fail in his duty as such; ( b ) with intent to cause, or which is likely to cause, fear or ..."
+summary = "Criminalises making, publishing or circulating statements, rumours or reports that intend or are likely to cause mutiny, public fear leading to offences, or inter-class or inter-community offences."
 source = "Singapore Penal Code 1871, Section 505"
 
 [verification]

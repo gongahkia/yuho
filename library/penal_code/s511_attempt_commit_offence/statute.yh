@@ -2,13 +2,49 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr511-#pr511-
 /// @amendment [15/2019]
-// Singapore Penal Code Section 511 - Attempt to commit offence
-/// interpretation section, defines terms used in related offences
+statute 511 "Attempt to commit offence" effective 1872-01-01 effective 2020-01-01 {
+    subsection (1) {
+        definitions {
+            attempt := "A person attempts to commit an offence punishable by this Code or by any other written law who, with the intention of committing that offence takes a substantial step towards the commission of that offence.";
+        }
 
-statute 511 "Attempt to commit offence" effective 1872-01-01 {
-    definitions {
-        attempt := "A person attempts to commit an offence when, with intention of committing it, takes a substantial step towards commission";
-        substantial_step := "An act strongly corroborative of an intention to commit the offence";
-        factual_impossibility_irrelevant := "A person may attempt despite existence of facts unknown to them which make the thing impossible";
+        elements {
+            /// Subsection (1) is conjunctive: the target offence, intention, and substantial step must all be present.
+            all_of {
+                circumstance punishable_offence := "Offence punishable by this Code or by any other written law";
+                mens_rea intention := "With the intention of committing that offence";
+                actus_reus substantial_step := "Takes a substantial step towards the commission of that offence";
+            }
+        }
+    }
+
+    subsection (2) {
+        definitions {
+            substantial_step := "For the purposes of subsection (1), an act is a substantial step towards the commission of an offence if it is strongly corroborative of an intention to commit the offence";
+            examples_may_constitute := "The following are examples of acts which in the circumstances of each case may constitute taking a substantial step";
+        }
+
+        // Illustrations
+        illustration illustration_a {
+            "( a ) A makes an attempt to steal some jewels by breaking open a box, and finds after so opening the box that there is no jewel in it. He has taken a substantial step towards the commission of theft, and therefore is guilty of attempted theft."
+        }
+
+        illustration illustration_b {
+            "( b ) A makes an attempt to pick the pocket of Z by thrusting his hand into Z ’s pocket. A fails in the attempt in consequence of Z ’s having nothing in his pocket. A is guilty of attempted theft even though it was not possible for A to steal any thing from Z ’s empty pocket."
+        }
+
+        illustration illustration_c {
+            "( c ) When Z is not looking, A opens Z ’s bag and takes away an electronic device with the intention of stealing it from Z . A genuinely believes that the electronic device belongs to Z but it in fact belongs to A , who had previously lent it to Z . A is guilty of attempted theft even though it was not possible for A to have committed theft of A ’s own device."
+        }
+
+        illustration illustration_d {
+            "( d ) A and Z are friends who share a room in which Z keeps a personal safe with a combination lock. A peeps at Z opening the safe in order to memorise the combination code to the safe. When Z is out of the room, A attempts to remember the code to unlock Z ’s safe with the intention of stealing the cash in the safe. A tries several times but is unable to remember the code correctly before Z returns. A is guilty of an offence of attempted theft even though he could not have opened the safe because of his inept memory of the code."
+        }
+    }
+
+    subsection (3) {
+        definitions {
+            impossibility_immaterial := "A person may attempt the doing of a thing despite the existence of facts of which he is unaware which make the doing of the thing impossible.";
+        }
     }
 }

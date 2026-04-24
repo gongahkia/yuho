@@ -1,37 +1,33 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr505-#pr505-
-// Singapore Penal Code Section 505 - Statements conducing to public mischief
-// Yuho v5 Syntax
-
-struct PublicMischiefStatementCase {
-    string accused,
-    bool elementsSatisfied,
-}
-
-fn is_liable(bool elementsSatisfied) : bool {
-    match {
-        case TRUE if elementsSatisfied == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
 statute 505 "Statements conducing to public mischief" effective 1872-01-01 {
-    definitions {
-        mutiny := "Rebellion against lawful authority";
-        public_tranquillity := "The peace and order of society";
-    }
-
     elements {
         all_of {
-            actus_reus makes_publishes_circulates := "Makes, publishes or circulates any statement, rumour or report in written, electronic or other media";
-            mens_rea intent_or_likely_mutiny := "With intent to cause or likely to cause mutiny among armed forces";
-            mens_rea intent_or_likely_public_fear := "With intent to cause or likely to cause fear or alarm to public inducing offence against State";
-            mens_rea intent_or_likely_incite_class := "With intent to incite or likely to incite any class or community to commit offence against another class";
+            actus_reus make_publish_circulate := "Makes, publishes or circulates any statement, rumour or report in written, electronic or other media";
+            /// paragraphs (a), (b), and (c) are alternatives separated by "or"
+            any_of {
+                any_of {
+                    mens_rea intent_mutiny_or_duty_failure := "With intent to cause any officer or serviceman in the Singapore Armed Forces or any visiting forces lawfully present in Singapore, or any person to whom section 140B refers, to mutiny or otherwise disregard or fail in his duty as such";
+                    circumstance likely_mutiny_or_duty_failure := "Likely to cause any officer or serviceman in the Singapore Armed Forces or any visiting forces lawfully present in Singapore, or any person to whom section 140B refers, to mutiny or otherwise disregard or fail in his duty as such";
+                }
+                all_of {
+                    any_of {
+                        mens_rea intent_fear_alarm := "With intent to cause fear or alarm to the public, or to any section of the public";
+                        circumstance likely_fear_alarm := "Likely to cause fear or alarm to the public, or to any section of the public";
+                    }
+                    circumstance induced_state_or_tranquillity_offence := "Whereby any person may be induced to commit an offence against the State or against the public tranquillity";
+                }
+                any_of {
+                    mens_rea intent_incite_class_offence := "With intent to incite any class or community of persons to commit any offence against any other class or community of persons";
+                    circumstance likely_incite_class_offence := "Likely to incite any class or community of persons to commit any offence against any other class or community of persons";
+                }
+            }
         }
     }
 
-    penalty {
+    penalty or_both {
         imprisonment := 0 days .. 3 years;
+        fine := unlimited;
     }
 }
