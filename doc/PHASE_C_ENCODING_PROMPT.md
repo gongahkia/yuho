@@ -89,15 +89,30 @@ Create `library/penal_code/s{N}_<slug>/` with these files:
 
 `s{N}_<slug>` where `<slug>` is snake_case of the marginal note, with stopwords (of/and/the/in/for/to/with/by/on) removed and punctuation stripped. Cap the whole directory name at 50 chars; truncate at a word boundary. Example: marginal "Cheating and dishonestly inducing a delivery of property" → `s{N}_cheating_dishonestly_inducing_delivery`.
 
-### Success gate — run and verify yourself
+### Success gate — depends on your execution access
 
-You are **not done** until all of these are true:
+**If you have shell + filesystem access** (e.g. Claude Code, Codex CLI, Aider):
+1. Write the files directly into `library/penal_code/s{N}_<slug>/`.
+2. Run `./.venv-scrape/bin/yuho check --format json library/penal_code/s{N}_<slug>/statute.yh`. Iterate on `statute.yh` until the JSON shows `"valid": true` AND `"parse_valid": true` AND `"semantic_valid": true`.
+3. You are not done until every mandatory file exists and the check passes.
 
-1. `./.venv-scrape/bin/yuho check --format json library/penal_code/s{N}_<slug>/statute.yh` produces JSON with `"valid": true` AND `"parse_valid": true` AND `"semantic_valid": true`.
-2. Every mandatory file above exists (or is explicitly skipped per the rules).
-3. `GAPS.md` exists **iff** you hit a real gap.
+**If you do NOT have execution access** (e.g. chat session with no tools):
+1. Emit every file's full contents as a fenced code block, with the path on the line immediately above the block, exactly like:
 
-If `yuho check` fails, read the errors, fix `statute.yh`, and re-run. Do not submit failing encodings. Do not weaken the encoding (e.g. delete elements) just to make it pass — if you cannot satisfy the checker without lying about the statute, that is a gap — document it in `GAPS.md` and use the minimum surgery needed to get `valid: true`.
+       library/penal_code/s{N}_<slug>/statute.yh
+       ```yh
+       <full file contents>
+       ```
+
+       library/penal_code/s{N}_<slug>/metadata.toml
+       ```toml
+       <full file contents>
+       ```
+
+2. Explicitly state in your report: `check not run; human verifies via .venv-scrape/bin/yuho check <path>`.
+3. Even without execution, produce encodings you have high confidence will pass — mentally trace the grammar in `src/tree-sitter-yuho/grammar.js`.
+
+**Either mode:** do not submit encodings you know to be failing. Do not weaken the encoding (e.g. delete elements) to paper over a failure — if you cannot satisfy the checker without lying about the statute, that is a gap — document it in `GAPS.md` and apply the minimum surgery needed to get `valid: true`.
 
 ### Hard rules
 
@@ -124,17 +139,20 @@ Do not summarise the statute text; the dashboard and SSO link already cover that
 
 ---
 
-## Orchestration tips (for the human dispatching agents)
+## Orchestration (for the human dispatching agents)
 
-- Pull the list of unencoded sections from `library/penal_code/_coverage/coverage.json`:
-  ```bash
-  jq -r '.sections[] | select(.encoded_path == null) | .number' \
-    library/penal_code/_coverage/coverage.json
-  ```
-- Batch in groups of ~10. Running 100+ in parallel risks rate-limiting, merge confusion, or `yuho check` contention (fine in principle — different files — but CPU-bound).
-- After each batch, re-run `scripts/coverage_report.py --act-dir library/penal_code --yuho ./.venv-scrape/bin/yuho` and commit the new sections.
-- Any section that ended with a `GAPS.md` is a Phase C finding — those feed Phase D (AST refactor). Keep a running index:
-  ```bash
-  find library/penal_code -name GAPS.md | xargs -I{} sh -c 'echo; echo "=== {} ==="; cat {}'
-  ```
-- The 25 existing hand-verified encodings are authoritative — do not re-dispatch agents on those section numbers. The coverage report already protects this (agents refuse if the directory exists).
+Dispatcher: `scripts/phase_c_prompt.py` renders this template with section
+context pre-filled. Usage and parallel-dispatch best practices live in
+`doc/PHASE_C_ORCHESTRATION.md`.
+
+Quick list of unencoded sections:
+
+```bash
+.venv-scrape/bin/python scripts/phase_c_prompt.py --list | head
+```
+
+Dispatch a single section (copy to clipboard on macOS):
+
+```bash
+.venv-scrape/bin/python scripts/phase_c_prompt.py 34 | pbcopy
+```
