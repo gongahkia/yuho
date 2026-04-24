@@ -43,13 +43,10 @@ By allowing users to decide how to represent statutory provisions in `.yh` code,
 | Target | Usage |
 | :--- | :--- |
 | JSON | Machine-readable structured representation for tooling integration |
-| JSON-LD | Linked data format for semantic web applications |
 | English | Human-readable plain English explanation of statutory logic |
 | LaTeX | PDF generation of formatted statute documents |
 | Alloy | Formal verification with Alloy Analyzer |
 | Mermaid | Diagrammatic representations of statutory logic *(mindmap, flowchart)* |
-| GraphQL | Schema definitions for building legal statute APIs |
-| Blocks | Visual block-based representation for drag-and-drop editing |
 
 ## Nerd stuff
 
@@ -59,8 +56,7 @@ For those interested, `Yuho` provides the following.
 * **Full LSP implementation** with diagnostics, completion, hover, go-to-definition, and references
 * **Property-based testing** with [Hypothesis](https://hypothesis.readthedocs.io/) for thorough validation
 * **Formal verification** integration with [Alloy](https://alloytools.org/) and [Z3](https://github.com/Z3Prover/z3)
-* **LLM integration** for statute explanation and analysis (local-first with Ollama, cloud fallback)
-* **MCP server** exposing all functionality via Model Context Protocol
+* **MCP server** exposing statute data, the strict encoding prompt, grammar reference, and validation tools to AI clients via the Model Context Protocol
 
 Yuho is [grammatically-validated](https://www.usna.edu/Users/cs/wcbrown/courses/F19SI413/lec/l07/lec.html), [exception-validated](https://www.reddit.com/r/learnjavascript/comments/y6663u/difference_between_input_validation_and_exception/), and [language-agnostic](https://softwareengineering.stackexchange.com/questions/28484/what-is-language-agnosticism-and-why-is-it-called-that), transpiling from one formally-specified source of truth to multiple target outputs.
 
