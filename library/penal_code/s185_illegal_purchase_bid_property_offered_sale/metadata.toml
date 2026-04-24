@@ -1,0 +1,19 @@
+[statute]
+section_number = "185"
+title = "Illegal purchase or bid for property offered for sale by authority of public servant"
+jurisdiction = "Singapore"
+version = "2.0.0"
+
+[encoding]
+depth = "deep"
+revision = "phase-D"
+
+[contributor]
+name = "agent-reencoding-phase-D"
+
+[description]
+summary = "Section 185 criminalises purchasing or bidding at a public-servant-authorised sale for a legally incapacitated person, or bidding without intent to perform the bidding obligations."
+source = "Singapore Penal Code 1871, Section 185"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr185-#pr185-"

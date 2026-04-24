@@ -19,11 +19,11 @@ statute 187 "Omission to assist public servant when bound by law to give assista
 
         penalty or_both when individual_case {
             imprisonment := 0 days .. 1 month;
-            fine := $0.00 .. $1500.00;
+            fine := $0.00 .. $1,500.00;
         }
 
         penalty when other_case {
-            fine := $0.00 .. $10000.00;
+            fine := $0.00 .. $10,000.00;
         }
     }
 
@@ -49,11 +49,11 @@ statute 187 "Omission to assist public servant when bound by law to give assista
 
         penalty or_both when individual_case {
             imprisonment := 0 days .. 6 months;
-            fine := $0.00 .. $5000.00;
+            fine := $0.00 .. $5,000.00;
         }
 
         penalty when other_case {
-            fine := $0.00 .. $10000.00;
+            fine := $0.00 .. $10,000.00;
         }
     }
 }

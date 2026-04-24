@@ -2,18 +2,18 @@
 section_number = "188"
 title = "Disobedience to order duly promulgated by public servant"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Knowingly disobeying an order duly promulgated by a public servant, where the disobedience causes or risks obstruction, annoyance or injury to persons lawfully employed."
+summary = "Section 188 criminalises knowingly disobeying a duly promulgated public-servant order when the disobedience causes specified harm or risk, with higher penalties for danger to life, health, safety, riot or affray."
 source = "Singapore Penal Code 1871, Section 188"
 
 [verification]
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr188-#pr188-"
-disclaimer = "Educational purposes only. Cross-reference with official SSO text."

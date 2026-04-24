@@ -2,18 +2,18 @@
 section_number = "191"
 title = "Giving false evidence"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Defines 'giving false evidence': a person legally bound by oath or law to state truth makes a statement which is false and which he knows, believes, or does not believe to be true."
+summary = "Defines the offence of giving false evidence where a legally bound person makes a false statement knowing or believing it to be false, or not believing it to be true."
 source = "Singapore Penal Code 1871, Section 191"
 
 [verification]
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr191-#pr191-"
-disclaimer = "Educational purposes only. Cross-reference with official SSO text."

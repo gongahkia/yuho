@@ -2,58 +2,62 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr188-#pr188-
 /// @amendment [15/2019]
-// Singapore Penal Code Section 188 - Disobedience to order duly promulgated by public servant
-// Yuho v5 Syntax
 
-struct S188Case {
-    string accused,
-    bool knowledgeOfOrder,
-    bool disobeys,
-    bool causesObstructionAnnoyanceInjury,
-    bool endangersHumanLife,
-}
+statute 188 "Disobedience to order duly promulgated by public servant" effective 1872-01-01 effective 2019-12-31 {
+    /// Explanation .—It is not necessary that the offender should intend to produce harm, or contemplate his disobedience as likely to produce harm. It is sufficient that he knows of the order which he disobeys, and that his disobedience produces, or is likely to produce, harm.
 
-fn evaluate_s188(bool knowledgeOfOrder, bool disobeys, bool causesObstructionAnnoyanceInjury, bool endangersHumanLife) : string {
-    match {
-        case TRUE if knowledgeOfOrder == FALSE := consequence "Not liable - no knowledge of order";
-        case TRUE if disobeys == FALSE := consequence "Not liable - no disobedience";
-        case TRUE if endangersHumanLife == TRUE := consequence "Liable under s188 - aggravated (danger to life)";
-        case TRUE if causesObstructionAnnoyanceInjury == TRUE := consequence "Liable under s188 - simple disobedience";
-        case _ := consequence "Not liable - no harm caused or risked";
-    }
-}
+    subsection (1) {
+        elements {
+            /// Subsection (1) requires knowledge of the duly promulgated order, disobedience of that direction, the lower-tier harm or risk result, and the applicable case category.
+            all_of {
+                mens_rea knowledge_of_order := "A person who, knowing that by an order promulgated by a public servant lawfully empowered to promulgate such order the person is directed to abstain from a certain act, or to take certain order with certain property in the person’s possession or under the person’s management";
+                actus_reus disobeys_direction := "Disobeys such direction";
+                circumstance lower_tier_harm_or_risk := "Such disobedience causes or tends to cause obstruction, annoyance or injury, or risk of obstruction, annoyance or injury, to any person lawfully employed";
+                any_of {
+                    circumstance individual_case := "In the case of an individual";
+                    circumstance other_case := "In any other case";
+                }
+            }
+        }
 
-statute 188 "Disobedience to order duly promulgated by public servant" effective 1872-01-01 {
-    definitions {
-        order := "Direction promulgated by a public servant lawfully empowered to do so";
-        promulgated := "Duly made and published";
-    }
+        penalty or_both when individual_case {
+            imprisonment := 0 days .. 1 month;
+            fine := $0.00 .. $1,500.00;
+        }
 
-    elements {
-        all_of {
-            /// mens rea: knowledge of the order
-            mens_rea knowledge := "Knowing that an order has been promulgated by a public servant lawfully empowered";
-            /// actus reus: disobedience
-            actus_reus disobey := "Disobeys such direction";
-            /// circumstance: harm or risk of harm caused
-            circumstance harm := "Causes or tends to cause obstruction, annoyance, or injury, or risk thereof, to any person lawfully employed";
+        penalty when other_case {
+            fine := $0.00 .. $10,000.00;
         }
     }
 
-    penalty {
-        imprisonment := 0 years .. 6 months;
-        fine := $0.00 .. $10,000.00;
+    subsection (2) {
+        elements {
+            /// Subsection (2) aggravates an offence under subsection (1) where the disobedience creates danger to life, health, or safety, or causes or tends to cause riot or affray.
+            all_of {
+                actus_reus offence_under_subsection_1 := "The person who is guilty of an offence under subsection (1)";
+                any_of {
+                    circumstance danger_to_human_life_health_or_safety := "Such disobedience mentioned in subsection (1) causes or tends to cause danger to human life, health or safety";
+                    circumstance riot_or_affray := "Such disobedience mentioned in subsection (1) causes or tends to cause a riot or an affray";
+                }
+                any_of {
+                    circumstance individual_case := "In the case of an individual";
+                    circumstance other_case := "In any other case";
+                }
+            }
+        }
+
+        penalty or_both when individual_case {
+            imprisonment := 0 days .. 6 months;
+            fine := $0.00 .. $2,500.00;
+        }
+
+        penalty when other_case {
+            fine := $0.00 .. $20,000.00;
+        }
     }
 
-    /// Explanation: it is not necessary that the offender should intend to produce harm, or contemplate his disobedience as likely to produce harm; it is sufficient that he knows of the order which he disobeys and that his disobedience produces or is likely to produce harm.
-
-    illustration example1 {
+    /// Illustration
+    illustration illustration_a {
         "An order is promulgated by a public servant lawfully empowered to promulgate such order, directing that a religious procession must not pass down a certain street. A knowingly disobeys the order, and thereby causes danger of riot. A has committed the offence defined in this section."
     }
-
-    // s188(1)(a) individual: up to 1 month imprisonment, fine up to $1,500, or both
-    // s188(1)(b) other case: fine up to $5,000
-    // s188(2) where disobedience causes or tends to cause danger to human life, health or safety, or riot or affray:
-    //   (a) individual: up to 6 months imprisonment, fine up to $2,500, or both
-    //   (b) other case: fine up to $5,000
 }
