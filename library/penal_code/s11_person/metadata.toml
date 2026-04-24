@@ -15,4 +15,6 @@ summary = "The word 'person' includes any company, association, or body of perso
 source = "Singapore Penal Code 1871, Section 11"
 
 [verification]
+last_verified = "2026-04-24"
+verified_by = "Opus 4.7 (automated reviewer)"
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr11-#pr11-"

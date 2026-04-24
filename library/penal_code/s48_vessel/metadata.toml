@@ -15,4 +15,6 @@ summary = "Defines 'vessel' as anything made for the conveyance by water of huma
 source = "Singapore Penal Code 1871, Section 48"
 
 [verification]
+last_verified = "2026-04-24"
+verified_by = "Opus 4.7 (automated reviewer)"
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr48-#pr48-"
