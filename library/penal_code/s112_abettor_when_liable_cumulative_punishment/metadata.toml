@@ -2,16 +2,17 @@
 section_number = "112"
 title = "Abettor, when liable to cumulative punishment for act abetted and for act done"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "If the act for which the abettor is liable under section 111 is committed in addition to the act abetted and constitutes a distinct offence, the abettor is liable to punishment for each offence."
+summary = "Section 112 makes an abettor liable to punishment for each offence where the additional act attracting section 111 liability is committed in addition to the act abetted and is a distinct offence."
 source = "Singapore Penal Code 1871, Section 112"
 
 [verification]
