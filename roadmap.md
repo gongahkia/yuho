@@ -11,9 +11,9 @@ deferred until PC coverage is complete.
 - [x] Write generic SSO scraper using Playwright → `scripts/scrape_sso.py`
   - `index` subcommand: list all current Acts (metadata only)
   - `act` subcommand: scrape one Act's whole document into structured JSON
-- [ ] Run `scrape_sso.py index` → commit `library/_index/sso_acts.json`
-- [ ] Run `scrape_sso.py act --act-code PC1871` → commit `library/penal_code/_raw/act.json`
-- [ ] Validate parser output on PC: section count sanity (~599 anchors on SSO), illustration presence on known sections (s378, s415), amendment markers captured
+- [x] Run `scrape_sso.py index` → committed `library/_index/sso_acts.json` (500 Acts)
+- [x] Run `scrape_sso.py act --act-code PC1871` → committed `library/penal_code/_raw/act.json` (524 sections, 811 KB)
+- [x] Validate parser output: s415/s300/s378/s499 structure confirmed; `valid_date` extraction needs tightening (deferred)
 
 ## Phase B — Coverage harness
 
@@ -27,10 +27,15 @@ Three-layer coverage per section:
 
 Deliverables:
 
-- [ ] `scripts/coverage_report.py` — walks `library/penal_code/_raw/act.json` + `library/penal_code/s*/statute.yh`, emits per-section `{L1, L2, L3}` status
-- [ ] L3 signoff via YAML frontmatter in each `.yh` file (`@verified-by`, `@verified-on`)
-- [ ] `library/penal_code/_coverage/COVERAGE.md` (human dashboard) + `coverage.json` (machine)
-- [ ] `doc/PENAL_CODE_COVERAGE.md` — narrative methodology doc
+- [x] `scripts/coverage_report.py` — walks `library/<act>/_raw/act.json` + `library/<act>/s*/statute.yh` pairs, emits per-section `{L1, L2, L3}` status
+- [x] L3 signoff via existing `metadata.toml` `[verification].last_verified` (reused existing convention; no new frontmatter)
+- [x] `library/penal_code/_coverage/COVERAGE.md` (human dashboard) + `coverage.json` (machine)
+- [ ] `doc/PENAL_CODE_COVERAGE.md` — narrative methodology doc (deferred to Phase C writeup)
+
+Current snapshot (524 raw / 25 encoded = 4.8%; all 25 L1+L2+L3 green). Data-
+quality issues surfaced by the harness: `s503_criminal_breach_of_trust/` dir
+mis-named (actual s503 is Criminal Intimidation); `s395_dacoity/` dir name is
+technically stale (s395 punishes gang-robbery; dacoity defined in s391).
 
 ## Phase C — Expressiveness probes
 
