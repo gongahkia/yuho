@@ -217,6 +217,41 @@ useful inside the editor real practitioners use.
 - [ ] Sub-linter: if raw text says "with fine" without a number, encoding
       must use `fine := unlimited` (prevents fabricated-cap regressions).
 
+### Ideas borrowed from other legal DSLs `[ ]`
+
+Discovered while auditing LexScript, Intellect, lam4, LDOC, Catala.
+
+- [ ] **Tarjan SCC + BFS over the statute reference graph** (LexScript,
+      MIT). Catches unreachable exception branches and cyclic cross-refs.
+      Unlocks after G10 gives us a real graph to traverse.
+- [ ] **DOCX transpile target** (LDOC, unlicensed — concept only).
+      Generates a formatted Word-compatible statute summary: elements as
+      headings, penalty + illustrations as numbered clauses, SSO footnote
+      anchors. Complements the Word extension work; probably the cleanest
+      way to ship Word support is "DOCX transpiler + Word add-in that
+      calls `yuho transpile --target docx`."
+- [ ] **Named-norm references / `IS_INFRINGED` predicate** (lam4,
+      Apache-2.0). Lets `s107` abetment express "if `s299` IS_INFRINGED,
+      then ..." in grammar, not doc comments. Composes with G10.
+- [ ] **Scope composition** (Catala, Apache-2.0). Callable statute scopes
+      so s34 common intention and s107 abetment can wrap arbitrary base
+      offences as functions rather than flat text references.
+- [ ] **LSP "did-you-mean" for unknown directives** (LDOC). Low-cost
+      usability win; slots into the LSP buff-up tasks.
+- [ ] **Aggregate-all-errors compilation** (LexScript). Yuho currently
+      short-circuits on first parse error; LexScript walks the tree,
+      emits every diagnostic, and only fails after. Better UX for
+      editors.
+
+### Outreach / collaboration `[ ]`
+
+- [ ] File an issue / email SMU CCLAW about lam4 collaboration. Yuho +
+      SG Penal Code corpus could feed their solver work; shared
+      `IS_INFRINGED` / named-norm surface convention for interoperability.
+      Physically adjacent (Singapore).
+- [ ] File an issue on arismoko/LDOC asking for an SPDX license header
+      so any future code-borrowing is safe.
+
 ---
 
 ## Deferred — run only after everything above is stable
