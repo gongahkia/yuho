@@ -2,16 +2,17 @@
 section_number = "376G"
 title = "Incest"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Incest -- sexual penetration with a close relative by blood or adoption."
+summary = "Creates an incest offence for certain sexual penetration acts with a close family relative aged 16 or above, defines the relationship, sets punishment, and states specific exclusions."
 source = "Singapore Penal Code 1871, Section 376G"
 
 [verification]

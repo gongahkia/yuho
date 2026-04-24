@@ -1,24 +1,55 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr376G-#pr376G-
-// Singapore Penal Code Section 376G
+/// @amendment [15/2019]
+/// @amendment [Act 23 of 2021 wef 01/03/2022]
 
-statute 376G "Incest" effective 1872-01-01 {
-    definitions {
-        close_relative := "Grandparent, parent, sibling, child or grandchild, whether of whole or half blood, or by adoption";
+statute 376G "Incest" effective 1872-01-01 effective 2019-12-31 effective 2022-03-01 {
+    subsection (1) {
+        elements {
+            /// Subsection (1) requires A to be 16 or above, one of paragraphs (a) to (d), and knowledge that B is a close family relative.
+            all_of {
+                circumstance person_a_of_or_above_16 := "Any person (A) of or above 16 years of age";
+                /// Paragraphs (a) to (d) are alternative penetration acts.
+                any_of {
+                    actus_reus penile_penetration := "A penetrates, with A’s penis, the vagina, anus or mouth, as the case may be, of a person of or above 16 years of age who is a close family relative (B)";
+                    actus_reus sexual_penetration := "A sexually penetrates, with a part of A’s body (other than A’s penis, if A is a man) or anything else, the vagina or anus, as the case may be, of a person of or above 16 years of age who is a close family relative (B)";
+                    actus_reus causes_or_permits_male_relative_penetration := "A causes or permits a man of or above 16 years of age who is a close family relative (B) to penetrate, with B’s penis, the vagina, anus or mouth, as the case may be, of A";
+                    actus_reus causes_or_permits_relative_sexual_penetration := "A causes or permits a person of or above 16 years of age who is a close family relative (B) to sexually penetrate, with a part of B’s body (other than B’s penis, if B is a man) or anything else, the vagina or anus, as the case may be, of A";
+                }
+                mens_rea knowledge_close_family_relative := "A knows that B is a close family relative";
+            }
+        }
     }
 
-    elements {
-        /// sexual penetration with close relative
-        actus_reus incest_sexual_act := "Sexually penetrates or permits sexual penetration by a close relative";
-        /// the other person is a close relative by blood or adoption
-        circumstance close_relative := "The other person is a grandparent, parent, sibling, child or grandchild by blood or adoption";
-        /// knowledge of the relationship
-        mens_rea knowledge_relation := "Knowing the other person is such a relation";
+    subsection (2) {
+        definitions {
+            close_family_relative := "For the purposes of subsection (1), B is a close family relative of A if B is A’s grandchild, child, sibling, half-sibling, parent or grandparent (whether such relationship is or is not traced through lawful wedlock). [15/2019]";
+        }
     }
 
-    penalty {
-        imprisonment := 0 years .. 14 years;
+    subsection (3) {
+        penalty {
+            imprisonment := 0 years .. 5 years;
+        }
     }
 
+    subsection (4) {
+        exception overlapping_penetration_offence {
+            "An act of penetration mentioned in subsection (1) would constitute an offence under section 375(1)(a), 375(1A)(a), 376(2) or 376AA(1)."
+            "This section does not apply to that act of penetration. [15/2019] [Act 23 of 2021 wef 01/03/2022]"
+        }
+    }
+
+    subsection (5) {
+        definitions {
+            avoidance_of_doubt_opening := "To avoid doubt —";
+        }
+    }
+
+    subsection (6) {
+        definitions {
+            victim_of_section_376AA_not_guilty_under_this_section := "A person below 18 years of age who is a victim of an offence under section 376AA is not guilty of an offence under this section in respect of the same acts constituting the offence under that section. [15/2019]";
+        }
+    }
 }
