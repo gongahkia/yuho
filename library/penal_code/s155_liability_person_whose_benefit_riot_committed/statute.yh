@@ -1,27 +1,32 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr155-#pr155-
-// Singapore Penal Code Section 155
 
 statute 155 "Liability of person for whose benefit a riot is committed" effective 1872-01-01 {
-    definitions {
-        benefited_person := "Owner or occupier of the relevant land, or person claiming interest in land or subject of dispute, or person who accepted or derived benefit from the riot";
-    }
-
     elements {
         all_of {
-            /// a riot is committed for the benefit of the accused
-            circumstance riot_for_benefit := "A riot is committed for the benefit or on behalf of the accused";
-            /// accused fits the benefited_person definition
-            circumstance qualifying_interest := "Accused is owner, occupier, claimant of interest, party to the dispute, or recipient of benefit from the riot";
-            /// reason to believe the riot or unlawful assembly was likely
-            mens_rea reason_to_believe := "Accused or his agent or manager had reason to believe the riot was likely to be committed or the assembly was likely to be held";
-            /// omission to use lawful means to prevent or suppress
-            actus_reus failure_to_prevent := "Failure to use all lawful means to prevent the riot or assembly and to suppress or disperse the same";
+            actus_reus riot_benefit := "A riot is committed for the benefit or on behalf of a person";
+
+            /// The section applies if the person is connected to the land, the dispute, or the benefit derived from the riot.
+            any_of {
+                circumstance owner_of_land := "The person is the owner of land respecting which the riot takes place";
+                circumstance occupier_of_land := "The person is the occupier of land respecting which the riot takes place";
+                circumstance claims_interest_in_land := "The person claims an interest in such land";
+                circumstance claims_interest_in_dispute_subject := "The person claims an interest in the subject of a dispute which gave rise to the riot";
+                circumstance accepted_or_derived_benefit := "The person has accepted or derived a benefit from the riot";
+            }
+
+            /// Liability attaches if the person, or the person's agent or manager, had reason to foresee the riot or the unlawful assembly.
+            any_of {
+                mens_rea reason_to_believe_riot_likely := "The person or the person's agent or manager had reason to believe that the riot was likely to be committed";
+                mens_rea reason_to_believe_unlawful_assembly_likely := "The person or the person's agent or manager had reason to believe that the unlawful assembly by which the riot was committed was likely to be held";
+            }
+
+            actus_reus failure_to_use_lawful_means := "The person or the person's agent or manager did not use all lawful means in his or their power to prevent the riot or assembly from taking place, and for suppressing and dispersing the same";
         }
     }
 
     penalty {
-        fine := $0.00 .. $10,000.00;
+        fine := unlimited;
     }
 }

@@ -1,29 +1,37 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr163-#pr163-
-// Singapore Penal Code Section 163
 
 statute 163 "Taking a gratification, for the exercise of personal influence with a public servant" effective 1872-01-01 {
-    definitions {
-        gratification := "Any gratification whatever";
-        personal_influence := "The exercise of personal influence, as distinguished from advocacy or professional representation";
-    }
-
     elements {
+        /// The offence requires one gratification-taking mode, the motive-or-reward nexus, personal influence over a public servant, and one of the listed intended official outcomes.
         all_of {
-            /// acceptance of gratification
-            actus_reus taking := "Accepting, obtaining, agreeing to accept, or attempting to obtain any gratification for himself or another";
-            /// motive or reward linked to exercising personal influence
-            mens_rea motive := "As a motive or reward for inducing, by the exercise of personal influence, any public servant to do or forbear an official act, to show favour or disfavour, or to render service or disservice, with the Government, Parliament, Cabinet, or any public servant";
+            any_of {
+                actus_reus accepts := "Accepts any gratification whatever";
+                actus_reus obtains := "Obtains any gratification whatever";
+                actus_reus agrees_to_accept := "Agrees to accept any gratification whatever";
+                actus_reus attempts_to_obtain := "Attempts to obtain any gratification whatever";
+            }
+            circumstance source_person := "From any person";
+            circumstance for_self_or_other := "For himself or for any other person";
+            mens_rea motive_or_reward := "As a motive or reward";
+            actus_reus inducing_by_personal_influence := "Inducing, by the exercise of personal influence, any public servant";
+            /// The intended official outcome is disjunctive in the statutory text.
+            any_of {
+                actus_reus do_or_forbear_official_act := "To do or to forbear to do any official act" caused_by inducing_by_personal_influence;
+                actus_reus show_favour_or_disfavour := "In the exercise of the official functions of such public servant to show favour or disfavour to any person" caused_by inducing_by_personal_influence;
+                actus_reus render_or_attempt_service_or_disservice := "To render or attempt to render any service or disservice to any person with the Government, or with any Member of Parliament or the Cabinet, or with any public servant, as such" caused_by inducing_by_personal_influence;
+            }
         }
     }
 
-    penalty {
-        imprisonment := 0 months .. 1 years;
-        fine := $0.00 .. $50,000.00;
+    penalty or_both {
+        imprisonment := 0 days .. 1 year;
+        fine := unlimited;
     }
 
-    illustration example1 {
-        "An advocate who receives a fee for arguing a case before a judge; a person who receives pay for arranging and correcting a memorial addressed to Government, setting forth the services and claims of the memorialist; a paid agent for a condemned criminal, who lays before the Government statements tending to show that the condemnation was unjust -- are not within this section, inasmuch as they do not exercise or profess to exercise personal influence."
+    /// Illustration
+    illustration illustration_1 {
+        "An advocate who receives a fee for arguing a case before a judge; a person who receives pay for arranging and correcting a memorial addressed to Government, setting forth the services and claims of the memorialist; a paid agent for a condemned criminal, who lays before the Government statements tending to show that the condemnation was unjust — are not within this section, inasmuch as they do not exercise or profess to exercise personal influence."
     }
 }

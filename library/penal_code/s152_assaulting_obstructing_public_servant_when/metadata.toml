@@ -2,16 +2,17 @@
 section_number = "152"
 title = "Assaulting or obstructing public servant when suppressing riot, etc."
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Assaulting, threatening, obstructing or using criminal force against a public servant dispersing an unlawful assembly, riot, or affray."
+summary = "Assaulting, threatening, obstructing, or using criminal force against a public servant performing duty to disperse an unlawful assembly or suppress a riot or affray is punishable."
 source = "Singapore Penal Code 1871, Section 152"
 
 [verification]

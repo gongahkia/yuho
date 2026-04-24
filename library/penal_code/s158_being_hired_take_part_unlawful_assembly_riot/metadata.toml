@@ -2,16 +2,17 @@
 section_number = "158"
 title = "Being hired to take part in an unlawful assembly or riot"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Being engaged, hired, or offering to be hired to do acts specified in section 141; aggravated punishment if going armed with a deadly weapon."
+summary = "Hiring, engagement, or offers to be hired to do acts specified in section 141 is an offence, with higher punishment if the person goes armed with a deadly weapon or a likely fatal weapon."
 source = "Singapore Penal Code 1871, Section 158"
 
 [verification]

@@ -2,16 +2,17 @@
 section_number = "170"
 title = "Personating a public servant"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Pretending to hold a public office one does not hold, or falsely personating one who does, and acting under colour of that office."
+summary = "This section criminalises pretending to hold a public office or falsely personating its holder and then acting or attempting to act under colour of that office."
 source = "Singapore Penal Code 1871, Section 170"
 
 [verification]

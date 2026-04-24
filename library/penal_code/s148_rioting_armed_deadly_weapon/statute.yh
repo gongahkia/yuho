@@ -1,31 +1,22 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr148-#pr148-
-// Singapore Penal Code Section 148 - Rioting, armed with a deadly weapon
-
-/// Illustration - The last section is subject to the same illustration as section 144 (a wooden pole sharpened at the end is a thing which, used as a weapon of offence, is likely to cause death).
 statute 148 "Rioting, armed with a deadly weapon" effective 1872-01-01 {
-    definitions {
-        deadly_weapon := "Any weapon inherently capable of causing death";
-        weapon_of_offence := "Anything which, used as a weapon of offence, is likely to cause death";
-        rioting := "As defined under section 146";
-    }
-
     elements {
+        /// Section 148 is conjunctive: the accused must be guilty of rioting and be armed in the specified way.
         all_of {
-            /// circumstance - guilty of rioting under s146
-            circumstance guilty_of_rioting := "Being guilty of rioting within the meaning of section 146";
-            /// circumstance - armed with a deadly or offence-likely weapon
-            circumstance armed := "Being armed with a deadly weapon, or with anything which, used as a weapon of offence, is likely to cause death";
+            circumstance guilty_of_rioting := "Whoever is guilty of rioting";
+            circumstance armed_with_deadly_weapon := "Being armed with a deadly weapon, or with anything which, used as a weapon of offence, is likely to cause death";
         }
     }
 
     penalty {
         imprisonment := 0 years .. 10 years;
-        caning := 0 .. 24 strokes;
+        supplementary := "The offender shall also be liable to caning.";
     }
 
-    illustration example1 {
-        "A wooden pole sharpened at the end is a thing which, used as a weapon of offence, is likely to cause death (applicable illustration per section 144)."
-    }
+    // Heading
+    // Illustration
+    // Raw sub-item preserved verbatim from the canonical text.
+    // The last section is subject to the same illustration as section 144.
 }

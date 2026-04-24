@@ -2,16 +2,17 @@
 section_number = "157"
 title = "Harbouring persons hired for an unlawful assembly"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Harbouring, receiving or assembling persons known to be hired to join an unlawful assembly, intending to facilitate them or screen them from punishment."
+summary = "Punishes harbouring, receiving, or assembling persons known to be hired to join an unlawful assembly, with intent to facilitate that joining or screen them from punishment."
 source = "Singapore Penal Code 1871, Section 157"
 
 [verification]

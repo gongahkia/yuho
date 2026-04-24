@@ -2,16 +2,17 @@
 section_number = "164"
 title = "Punishment for abetment by public servant of the offences above defined"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Public servant in respect of whom a section 162 or 163 offence is committed, who abets that offence, is liable to enhanced punishment."
+summary = "A public servant who abets a section 162 or 163 offence committed in respect of that public servant is punishable with imprisonment up to 3 years, fine, or both."
 source = "Singapore Penal Code 1871, Section 164"
 
 [verification]

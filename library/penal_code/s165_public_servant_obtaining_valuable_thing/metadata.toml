@@ -2,16 +2,17 @@
 section_number = "165"
 title = "Public servant obtaining any valuable thing, without consideration, from person concerned in any proceeding or business transacted by such public servant"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Public servant obtaining a valuable thing without consideration (or at known-inadequate consideration) from a person connected to proceedings or business transacted by him."
+summary = "Makes it an offence for a public servant to receive or seek a valuable thing without consideration or for known inadequate consideration from a person connected to proceedings, business, or official functions involving that public servant."
 source = "Singapore Penal Code 1871, Section 165"
 
 [verification]

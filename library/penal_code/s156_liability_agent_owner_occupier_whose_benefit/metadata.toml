@@ -2,16 +2,17 @@
 section_number = "156"
 title = "Liability of agent of owner or occupier for whose benefit a riot is committed"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Fine liability for an agent or manager who, having reason to believe a riot or unlawful assembly was likely, fails to use all lawful means to prevent or suppress it."
+summary = "This section makes an agent or manager liable to an uncapped fine if, despite reason to believe a riot or its unlawful assembly was likely, he fails to use all lawful means to prevent or suppress it when it is committed for the benefit of a qualifying principal."
 source = "Singapore Penal Code 1871, Section 156"
 
 [verification]

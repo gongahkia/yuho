@@ -1,41 +1,49 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr165-#pr165-
-// Singapore Penal Code Section 165
 
 statute 165 "Public servant obtaining any valuable thing, without consideration, from person concerned in any proceeding or business transacted by such public servant" effective 1872-01-01 {
-    definitions {
-        valuable_thing := "Any valuable thing obtained without consideration, or for a consideration known to be inadequate";
-        concerned_person := "A person concerned in any proceedings or business transacted, or about to be transacted, by the public servant, or connected with the official functions of the public servant or a superior, or a person interested in or related to such concerned person";
-    }
-
     elements {
+        /// Section 165 requires public-servant status, receipt or attempted receipt of a valuable thing for self or another without consideration or for known inadequate consideration, and knowledge of the giver's connection to the relevant proceeding, business, or official function.
         all_of {
-            /// accused is a public servant
-            circumstance status := "Accused is a public servant";
-            /// accepting or obtaining a valuable thing
-            actus_reus taking := "Accepting, obtaining, agreeing to accept, or attempting to obtain any valuable thing, for himself or another, without consideration or for a consideration he knows to be inadequate";
-            /// from a person with qualifying connection
-            circumstance source := "From a person whom the accused knows to be or have been or to be likely to be concerned in proceedings or business transacted by him, or connected with his official functions or those of a subordinate public servant, or a person interested in or related to such a concerned person";
-            /// knowledge element
-            mens_rea knowledge := "Knowledge that the source person has the qualifying connection and that consideration is absent or inadequate";
+            circumstance public_servant := "Whoever, being a public servant";
+            any_of {
+                actus_reus accepts_or_obtains := "Accepts or obtains, for himself or for any other person, any valuable thing";
+                actus_reus agrees_to_accept := "Agrees to accept, for himself or for any other person, any valuable thing";
+                actus_reus attempts_to_obtain := "Attempts to obtain, for himself or for any other person, any valuable thing";
+            }
+            any_of {
+                circumstance no_consideration := "Without consideration";
+                all_of {
+                    circumstance consideration_given := "For a consideration";
+                    mens_rea knows_inadequate := "Which he knows to be inadequate";
+                }
+            }
+            all_of {
+                mens_rea knows_person_connection := "From any person whom he knows";
+                any_of {
+                    circumstance person_concerned := "To have been, or to be, or to be likely to be concerned in any proceedings or business transacted, or about to be transacted, by such public servant";
+                    circumstance official_connection := "To have any connection with the official functions of himself or of any public servant to whom he is subordinate";
+                    circumstance interested_or_related_person := "To be interested in or related to the person so concerned";
+                }
+            }
         }
     }
 
-    penalty {
-        imprisonment := 0 months .. 2 years;
-        fine := $0.00 .. $100,000.00;
+    penalty or_both {
+        imprisonment := 0 years .. 2 years;
+        fine := unlimited;
     }
 
-    illustration example_a {
-        "A, a judge, hires a house of Z, who has a case pending before him. It is agreed that A shall pay $50 a month, the house being such that, if the bargain were made in good faith, A would be required to pay $200 a month. A has obtained a valuable thing from Z without adequate consideration."
+    illustration illustration_a {
+        "( a ) A , a judge, hires a house of Z , who has a case pending before him. It is agreed that A shall pay $50 a month, the house being such that, if the bargain were made in good faith, A would be required to pay $200 a month. A has obtained a valuable thing from Z without adequate consideration."
     }
 
-    illustration example_b {
-        "A, a judge, buys of Z, who has a cause pending in A's court, Government promissory notes at a discount, when they are selling in the market at a premium. A has obtained a valuable thing from Z without adequate consideration."
+    illustration illustration_b {
+        "( b ) A , a judge, buys of Z , who has a cause pending in A ’s court, Government promissory notes at a discount, when they are selling in the market at a premium. A has obtained a valuable thing from Z without adequate consideration."
     }
 
-    illustration example_c {
-        "Z's brother is apprehended and taken before A, a Magistrate, on a charge of perjury. A sells to Z shares in a bank at a premium, when they are selling in the market at a discount. Z pays A for the shares accordingly. The money so obtained by A is a valuable thing obtained by him without adequate consideration."
+    illustration illustration_c {
+        "( c ) Z ’s brother is apprehended and taken before A , a Magistrate, on a charge of perjury. A sells to Z shares in a bank at a premium, when they are selling in the market at a discount. Z pays A for the shares accordingly. The money so obtained by A is a valuable thing obtained by him without adequate consideration."
     }
 }

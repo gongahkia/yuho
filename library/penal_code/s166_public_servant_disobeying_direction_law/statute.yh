@@ -1,32 +1,23 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr166-#pr166-
-// Singapore Penal Code Section 166
-
 /// @amendment [Act 25 of 2021 wef 01/04/2022]
-statute 166 "Public servant disobeying a direction of the law, with intent to cause injury to any person" effective 1872-01-01 {
-    definitions {
-        direction_of_law := "A direction of the law as to the way in which the public servant is to conduct himself as such public servant";
-        injury := "Injury to any person as a consequence of the disobedience";
-    }
 
+statute 166 "Public servant disobeying a direction of the law, with intent to cause injury to any person" effective 1872-01-01 {
     elements {
         all_of {
-            /// accused is a public servant
-            circumstance status := "Accused is a public servant";
-            /// physical act of disobeying a legal direction
-            actus_reus disobedience := "Knowingly disobeying a direction of the law as to how he is to conduct himself as such public servant";
-            /// mental element -- intent or knowledge of likely injury
-            mens_rea fault := "Intending to cause injury to any person, or knowing it to be likely that such disobedience will cause injury to any person";
+            circumstance public_servant_status := "Whoever, being a public servant";
+            actus_reus disobedience_of_direction := "Knowingly disobeys any direction of the law as to the way in which he is to conduct himself as such public servant";
+            mens_rea injury_intent_or_knowledge := "Intending to cause, or knowing it to be likely that he will, by such disobedience, cause injury to any person";
         }
     }
 
-    penalty {
-        imprisonment := 0 months .. 1 years;
-        fine := $0.00 .. $20,000.00;
+    penalty or_both {
+        imprisonment := 0 days .. 1 years;
+        fine := unlimited;
     }
 
-    illustration example1 {
-        "A, being an officer directed by law to take property under or pursuant to an enforcement order, or in execution in order to satisfy a decree, pronounced in Z's favour by a court of justice, knowingly disobeys that direction of law, with the knowledge that he is likely thereby to cause injury to Z. A has committed the offence defined in this section."
+    illustration illustration {
+        "A , being an officer directed by law to take property under or pursuant to an enforcement order, or in execution in order to satisfy a decree, pronounced in Z ’s favour by a court of justice, knowingly disobeys that direction of law, with the knowledge that he is likely thereby to cause injury to Z . A has committed the offence defined in this section."
     }
 }

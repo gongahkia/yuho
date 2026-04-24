@@ -1,25 +1,26 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr152-#pr152-
-// Singapore Penal Code Section 152
 
 statute 152 "Assaulting or obstructing public servant when suppressing riot, etc." effective 1872-01-01 {
-    definitions {
-        public_servant := "Any public servant as defined under section 21";
-        relevant_duty := "Dispersing an unlawful assembly or suppressing a riot or an affray";
-    }
-
     elements {
         all_of {
-            /// any of the prohibited physical acts against a public servant
-            actus_reus prohibited_act := "Assaulting, threatening to assault, obstructing, attempting to obstruct, or using/threatening/attempting criminal force against a public servant";
-            /// target must be a public servant discharging the relevant duty
-            circumstance duty_context := "Public servant is in the discharge of duty in dispersing an unlawful assembly or suppressing a riot or affray";
+            /// any one of the listed acts satisfies the physical conduct limb
+            any_of {
+                actus_reus assaults := "Assaults any public servant";
+                actus_reus threatens_to_assault := "Threatens to assault any public servant";
+                actus_reus obstructs := "Obstructs any public servant";
+                actus_reus attempts_to_obstruct := "Attempts to obstruct any public servant";
+                actus_reus uses_criminal_force := "Uses criminal force to such public servant";
+                actus_reus threatens_criminal_force := "Threatens to use criminal force to such public servant";
+                actus_reus attempts_criminal_force := "Attempts to use criminal force to such public servant";
+            }
+            circumstance duty_context := "That public servant is in the discharge of his duty as such public servant in endeavouring to disperse an unlawful assembly or to suppress a riot or an affray";
         }
     }
 
-    penalty {
-        imprisonment := 0 months .. 8 years;
-        fine := $0.00 .. $20,000.00;
+    penalty or_both {
+        imprisonment := 0 days .. 8 years;
+        fine := unlimited;
     }
 }

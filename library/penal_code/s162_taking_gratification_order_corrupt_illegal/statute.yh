@@ -1,25 +1,28 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr162-#pr162-
-// Singapore Penal Code Section 162
 
 statute 162 "Taking a gratification in order, by corrupt or illegal means, to influence a public servant" effective 1872-01-01 {
     definitions {
         gratification := "Any gratification whatever";
-        corrupt_or_illegal_means := "Corrupt or illegal means used to induce a public servant to do or forbear an official act, or to show favour or disfavour, or to render service or disservice";
+        corrupt_or_illegal_means := "Corrupt or illegal means";
     }
 
     elements {
+        /// The offence is complete only if the gratification is connected to influencing a public servant through corrupt or illegal means.
         all_of {
-            /// acceptance or attempt to obtain gratification
-            actus_reus taking := "Accepting, obtaining, agreeing to accept, or attempting to obtain any gratification for himself or another";
-            /// motive/reward element linked to inducing a public servant by corrupt or illegal means
-            mens_rea motive := "As a motive or reward for inducing, by corrupt or illegal means, any public servant to do or forbear an official act, to show favour or disfavour, or to render service or disservice, with the Government, Parliament, Cabinet, or any public servant";
+            actus_reus acceptance_or_obtainment := "Accepts or obtains, or agrees to accept or attempts to obtain, from any person, for himself or for any other person, any gratification whatever";
+            mens_rea motive_or_reward := "As a motive or reward for inducing, by corrupt or illegal means, any public servant";
+            any_of {
+                actus_reus official_act := "To do or to forbear to do any official act";
+                actus_reus favour_or_disfavour := "In the exercise of the official functions of such public servant to show favour or disfavour to any person";
+                actus_reus service_or_disservice := "To render or attempt to render any service or disservice to any person, with the Government, or with any Member of Parliament or the Cabinet, or with any public servant, as such";
+            }
         }
     }
 
-    penalty {
-        imprisonment := 0 months .. 3 years;
-        fine := $0.00 .. $100,000.00;
+    penalty or_both {
+        imprisonment := 0 days .. 3 years;
+        fine := unlimited;
     }
 }

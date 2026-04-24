@@ -1,27 +1,31 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr156-#pr156-
-// Singapore Penal Code Section 156
 
 statute 156 "Liability of agent of owner or occupier for whose benefit a riot is committed" effective 1872-01-01 {
-    definitions {
-        agent_or_manager := "Agent or manager of a person who is owner, occupier, claimant of interest, party to dispute, or recipient of benefit from the riot";
-    }
-
     elements {
         all_of {
-            /// riot committed for benefit of principal with qualifying interest
-            circumstance principal_benefit := "A riot is committed for the benefit or on behalf of a person who is owner, occupier, claimant of interest, party to the dispute, or recipient of benefit";
-            /// accused is the agent or manager of that person
-            circumstance accused_is_agent := "Accused is the agent or manager of that person";
-            /// reason to believe the riot or assembly was likely
-            mens_rea reason_to_believe := "Agent or manager had reason to believe the riot was likely to be committed or the assembly was likely to be held";
-            /// failure to use lawful means personally
-            actus_reus failure_to_prevent := "Agent or manager failed to use all lawful means in his power to prevent the riot or assembly and to suppress or disperse the same";
+            actus_reus riot_committed := "A riot is committed";
+            circumstance principal_benefit := "The riot is committed for the benefit or on behalf of a person";
+            /// The benefiting person must fall within at least one of the statutory classes.
+            any_of {
+                circumstance owner_of_land := "That person is the owner of any land respecting which the riot takes place";
+                circumstance occupier_of_land := "That person is the occupier of any land respecting which the riot takes place";
+                circumstance claims_interest_in_land := "That person claims an interest in that land";
+                circumstance claims_interest_in_subject_of_dispute := "That person claims an interest in the subject of a dispute which gave rise to the riot";
+                circumstance accepted_or_derived_benefit := "That person has accepted or derived a benefit from the riot";
+            }
+            circumstance accused_is_agent_or_manager := "The accused is the agent or manager of that person";
+            /// The statute is satisfied if the agent or manager had reason to believe either event was likely.
+            any_of {
+                mens_rea reason_to_believe_riot_likely := "The agent or manager had reason to believe that the riot was likely to be committed";
+                mens_rea reason_to_believe_assembly_likely := "The agent or manager had reason to believe that the unlawful assembly by which the riot was committed was likely to be held";
+            }
+            actus_reus failure_to_use_lawful_means := "The agent or manager did not use all lawful means in his power to prevent the riot or assembly from taking place, and for suppressing and dispersing the same";
         }
     }
 
     penalty {
-        fine := $0.00 .. $5,000.00;
+        fine := unlimited;
     }
 }

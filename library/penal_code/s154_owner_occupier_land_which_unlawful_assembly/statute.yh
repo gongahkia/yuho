@@ -1,24 +1,16 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr154-#pr154-
-// Singapore Penal Code Section 154
 
 statute 154 "Owner or occupier of land on which an unlawful assembly is held" effective 1872-01-01 {
-    definitions {
-        relevant_person := "Owner or occupier of land, or any person having or claiming an interest in such land";
-        knowledge_or_belief := "Knowing of the offence or having reason to believe it is likely to be committed";
-    }
-
     elements {
+        /// The section is conjunctive: the qualifying status, the assembly-or-riot event, the knowledge threshold, and both omission limbs must all be present.
         all_of {
-            /// an unlawful assembly or riot takes place on the land
-            circumstance assembly_on_land := "An unlawful assembly or riot takes place on the land";
-            /// the accused stands in the relevant relationship to the land
-            circumstance owner_occupier := "Accused is the owner, occupier, or a person claiming interest in such land";
-            /// knowledge element attributed directly or through agent or manager
-            mens_rea knowledge := "Accused or his agent or manager knows the offence is being or has been committed, or has reason to believe it is likely to be committed";
-            /// omission to give earliest notice and omission to take lawful preventive or suppressive action
-            actus_reus failure_to_act := "Failure to give earliest notice to the principal officer at the nearest police station, and failure to use all lawful means to prevent, disperse or suppress the riot or unlawful assembly";
+            circumstance qualifying_person := "The person is the owner or occupier of the land upon which such unlawful assembly is held or such riot is committed, or a person having or claiming an interest in such land";
+            circumstance event := "An unlawful assembly takes place on that land or a riot is committed on that land";
+            mens_rea knowledge_threshold := "He or his agent or manager knows that such offence is being or has been committed, or has reason to believe it is likely to be committed";
+            actus_reus no_earliest_notice := "He or his agent or manager does not give the earliest notice thereof in his or their power to the principal officer at the nearest police station";
+            actus_reus no_lawful_means := "He or his agent or manager does not, in the case of his or their having reason to believe that it is about to be committed, use all lawful means in his or their power to prevent it, and in the event of its taking place, use all lawful means in his or their power to disperse or suppress the riot or unlawful assembly";
         }
     }
 

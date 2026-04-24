@@ -2,16 +2,17 @@
 section_number = "148"
 title = "Rioting, armed with a deadly weapon"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Enhanced punishment for rioting while armed with a deadly weapon or an article likely to cause death if used as a weapon."
+summary = "Makes rioting an aggravated offence where the rioter is armed with a deadly weapon or an article likely to cause death if used as a weapon of offence."
 source = "Singapore Penal Code 1871, Section 148"
 
 [verification]

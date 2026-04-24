@@ -2,16 +2,17 @@
 section_number = "155"
 title = "Liability of person for whose benefit a riot is committed"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Fine liability for a person (or via agent/manager) for whose benefit a riot is committed and who failed to use lawful means to prevent or suppress it."
+summary = "Imposes fine liability on a person for whose benefit a riot is committed if that person or the person's agent or manager had reason to foresee it and failed to use lawful means to prevent, suppress, and disperse it."
 source = "Singapore Penal Code 1871, Section 155"
 
 [verification]

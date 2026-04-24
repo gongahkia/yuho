@@ -2,16 +2,17 @@
 section_number = "167"
 title = "Public servant framing an incorrect document or electronic record with intent to cause injury"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Public servant framing or translating a document or electronic record in a manner known or believed incorrect, intending or knowing likely injury."
+summary = "A public servant commits an offence by knowingly or believingly preparing or translating an incorrect document or electronic record with intent to cause injury, or with knowledge that injury is likely."
 source = "Singapore Penal Code 1871, Section 167"
 
 [verification]

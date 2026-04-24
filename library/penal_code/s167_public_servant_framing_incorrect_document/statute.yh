@@ -1,26 +1,27 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr167-#pr167-
-// Singapore Penal Code Section 167
 
 statute 167 "Public servant framing an incorrect document or electronic record with intent to cause injury" effective 1872-01-01 {
-    definitions {
-        document_or_record := "Any document or electronic record which the public servant is charged with preparing or translating as such";
-    }
-
     elements {
+        /// The offence requires public-servant status, official responsibility for the document or electronic record, one of the listed acts, awareness of incorrectness, and one of the listed injury states.
         all_of {
-            /// accused is a public servant charged with preparation or translation
-            circumstance status := "Accused is a public servant charged with the preparation or translation of a document or electronic record";
-            /// physical act of framing or translating incorrectly
-            actus_reus framing := "Framing or translating the document or electronic record in a manner he knows or believes to be incorrect";
-            /// fault element -- intent or knowledge of likely injury
-            mens_rea fault := "Intending thereby to cause injury to any person, or knowing it to be likely that he may thereby cause injury to any person";
+            circumstance public_servant_status := "Whoever, being a public servant";
+            circumstance official_charge := "Being, as such public servant, charged with the preparation or translation of any document or electronic record";
+            any_of {
+                actus_reus frames := "Frames that document or electronic record";
+                actus_reus translates := "Translates that document or electronic record";
+            }
+            mens_rea knows_or_believes_incorrect := "In a manner which he knows or believes to be incorrect";
+            any_of {
+                mens_rea intends_injury := "Intending thereby to cause injury to any person";
+                mens_rea knows_likely_injury := "Knowing it to be likely that he may thereby cause injury to any person";
+            }
         }
     }
 
-    penalty {
-        imprisonment := 0 months .. 3 years;
-        fine := $0.00 .. $30,000.00;
+    penalty or_both {
+        imprisonment := 0 days .. 3 years;
+        fine := unlimited;
     }
 }

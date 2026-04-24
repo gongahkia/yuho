@@ -2,16 +2,17 @@
 section_number = "162"
 title = "Taking a gratification in order, by corrupt or illegal means, to influence a public servant"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Taking any gratification as motive or reward for inducing, by corrupt or illegal means, a public servant to do or forbear an official act or related conduct."
+summary = "This section criminalises taking gratification as a motive or reward for influencing a public servant by corrupt or illegal means."
 source = "Singapore Penal Code 1871, Section 162"
 
 [verification]

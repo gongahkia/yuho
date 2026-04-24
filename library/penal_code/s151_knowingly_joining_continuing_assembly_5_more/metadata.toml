@@ -2,16 +2,17 @@
 section_number = "151"
 title = "Knowingly joining or continuing in any assembly of 5 or more persons after it has been commanded to disperse"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Knowingly joining or continuing in an assembly of 5+ persons likely to disturb the peace after a lawful order to disperse."
+summary = "Makes it an offence to knowingly join or remain in a 5-person assembly likely to disturb the peace after a lawful dispersal command."
 source = "Singapore Penal Code 1871, Section 151"
 
 [verification]

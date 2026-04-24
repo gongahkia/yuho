@@ -2,16 +2,17 @@
 section_number = "169"
 title = "Public servant unlawfully buying or bidding for property"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Public servant legally bound not to purchase or bid for certain property who purchases or bids for it, directly or through another; property confiscated."
+summary = "A public servant who is legally barred from buying or bidding for certain property commits an offence by purchasing or bidding for that property and faces imprisonment, fine, or both, with confiscation if purchased."
 source = "Singapore Penal Code 1871, Section 169"
 
 [verification]

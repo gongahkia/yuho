@@ -2,16 +2,17 @@
 section_number = "166"
 title = "Public servant disobeying a direction of the law, with intent to cause injury to any person"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Public servant knowingly disobeying a direction of the law with intent to cause injury, or knowing injury likely, to any person."
+summary = "This section criminalises a public servant knowingly disobeying a legal direction governing official conduct with intent to cause injury, or knowledge that injury is likely."
 source = "Singapore Penal Code 1871, Section 166"
 
 [verification]

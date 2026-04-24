@@ -1,34 +1,36 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr153-#pr153-
-// Singapore Penal Code Section 153
-
 /// @amendment [Act 23 of 2021 wef 01/03/2022]
-statute 153 "Intentionally or rashly giving provocation, with intent to cause riot" effective 1872-01-01 {
-    definitions {
-        provocation := "Any act capable of inciting another to commit the offence of rioting";
-        rioting := "The offence of rioting as defined in the Code";
-    }
 
+statute 153 "Intentionally or rashly giving provocation, with intent to cause riot" effective 1872-01-01 effective 2022-03-01 {
     elements {
+        /// Section 153 requires the illegal provocation act and the riot-related fault element together.
         all_of {
-            /// accused does something illegal
-            actus_reus illegal_act := "Doing anything which is illegal";
-            /// giving provocation to a person -- fault element intentional or rash
-            actus_reus provoking := "Giving provocation to any person";
             any_of {
-                mens_rea intent := "Intentionally giving the provocation";
-                mens_rea rashness := "Rashly giving the provocation";
+                mens_rea intentional := "Whoever intentionally";
+                mens_rea rash := "Whoever rashly";
             }
-            /// further mental element -- intent or knowledge regarding riot
-            mens_rea riot_intent := "Intending or knowing it to be likely that the provocation will cause the offence of rioting to be committed";
+            actus_reus illegal_act := "By doing anything which is illegal";
+            actus_reus giving_provocation := "Gives provocation to any person" caused_by illegal_act;
+            any_of {
+                mens_rea riot_intent := "Intending that such provocation will cause the offence of rioting to be committed";
+                mens_rea riot_knowledge := "Knowing it to be likely that such provocation will cause the offence of rioting to be committed";
+            }
+            any_of {
+                circumstance riot_committed := "The offence of rioting is committed in consequence of such provocation";
+                circumstance riot_not_committed := "The offence of rioting is not committed";
+            }
         }
     }
 
-    penalty {
-        imprisonment := 0 months .. 3 years;
-        fine := $0.00 .. $10,000.00;
+    penalty or_both when riot_committed {
+        imprisonment := 0 years .. 3 years;
+        fine := unlimited;
     }
 
-    /// If the offence of rioting is committed in consequence, punishment may extend to 3 years; if not committed, up to 1 year.
+    penalty or_both when riot_not_committed {
+        imprisonment := 0 days .. 1 year;
+        fine := unlimited;
+    }
 }

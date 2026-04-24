@@ -1,33 +1,26 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr164-#pr164-
-// Singapore Penal Code Section 164
 
 referencing penal_code/s162_taking_gratification_order_corrupt_illegal
 referencing penal_code/s163_taking_gratification_exercise_personal
 
 statute 164 "Punishment for abetment by public servant of the offences above defined" effective 1872-01-01 {
-    definitions {
-        abetted_offence := "Either of the offences defined in sections 162 and 163, where committed in respect of the accused public servant";
-    }
-
     elements {
+        /// Section 164 is conjunctive: the accused must be a public servant, a section 162 or 163 offence must be committed in respect of that public servant, and the accused must abet that offence.
         all_of {
-            /// accused is a public servant
-            circumstance public_servant := "Accused is a public servant";
-            /// one of s162 or s163 is committed in respect of him
-            circumstance triggering_offence := "An offence under section 162 or section 163 is committed in respect of the accused";
-            /// accused abets that offence
-            actus_reus abetment := "Abetting the commission of that offence";
+            circumstance public_servant := "Whoever, being a public servant";
+            circumstance offence_in_respect_of_public_servant := "In respect of whom either of the offences defined in sections 162 and 163 is committed" caused_by public_servant;
+            actus_reus abetment := "Abets the offence" caused_by offence_in_respect_of_public_servant;
         }
     }
 
-    penalty {
-        imprisonment := 0 months .. 3 years;
-        fine := $0.00 .. $100,000.00;
+    penalty or_both {
+        imprisonment := 0 days .. 3 years;
+        fine := unlimited;
     }
 
-    illustration example1 {
-        "A is a public servant. B, A's wife, receives a present as a motive for soliciting A to give an office to a particular person. A abets her doing so. B is punishable with imprisonment for a term not exceeding one year, or with fine, or with both. A is punishable with imprisonment for a term which may extend to 3 years, or with fine, or with both."
+    illustration illustration {
+        "A is a public servant. B , A ’s wife, receives a present as a motive for soliciting A to give an office to a particular person. A abets her doing so. B is punishable with imprisonment for a term not exceeding one year, or with fine, or with both. A is punishable with imprisonment for a term which may extend to 3 years, or with fine, or with both."
     }
 }

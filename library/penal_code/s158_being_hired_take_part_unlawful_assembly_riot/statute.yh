@@ -1,30 +1,35 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr158-#pr158-
-// Singapore Penal Code Section 158
 
 statute 158 "Being hired to take part in an unlawful assembly or riot" effective 1872-01-01 {
-    definitions {
-        hiring := "Being engaged or hired, or offering or attempting to be hired or engaged";
-        specified_acts := "The acts specified in section 141 constituting an unlawful assembly";
-        deadly_weapon := "Any deadly weapon or anything which used as a weapon of offence is likely to cause death";
-    }
-
     elements {
+        /// Section 158 criminalises being hired or offering to be hired to do or assist in doing acts specified in section 141, with a higher punishment where the person goes armed.
         all_of {
-            /// basic offence -- hiring to take part
-            actus_reus hired := "Being engaged or hired, or offering or attempting to be hired or engaged, to do or assist in doing any of the acts specified in section 141";
+            actus_reus hired_or_engaged := "Is engaged or hired, or offers or attempts to be hired or engaged";
+            actus_reus unlawful_assembly_acts := "To do or assist in doing any of the acts specified in section 141";
+            any_of {
+                circumstance base_offence := "The person is engaged or hired, or offers or attempts to be hired or engaged to do or assist in doing any of the acts specified in section 141";
+                /// The aggravated limb applies where the person, being so engaged or hired as aforesaid, goes armed or engages or offers to go armed.
+                all_of {
+                    circumstance engaged_or_hired_as_aforesaid := "Being so engaged or hired as aforesaid";
+                    actus_reus goes_armed := "Goes armed, or engages or offers to go armed, with any deadly weapon, or with anything which used as a weapon of offence is likely to cause death";
+                }
+            }
         }
     }
 
-    penalty {
-        imprisonment := 0 months .. 2 years;
-        fine := $0.00 .. $10,000.00;
+    penalty or_both when base_offence {
+        imprisonment := 0 days .. 2 years;
+        fine := unlimited;
     }
 
-    illustration example1 {
+    penalty or_both when goes_armed {
+        imprisonment := 0 days .. 5 years;
+        fine := unlimited;
+    }
+
+    illustration same_as_section_144 {
         "The last section is subject to the same illustration as section 144."
     }
-
-    /// If the accused goes armed or offers to go armed with a deadly weapon, imprisonment may extend to 5 years, with fine, or with both.
 }

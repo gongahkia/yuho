@@ -1,28 +1,20 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr157-#pr157-
-// Singapore Penal Code Section 157
-
 /// @amendment [15/2019]
-statute 157 "Harbouring persons hired for an unlawful assembly" effective 1872-01-01 {
-    definitions {
-        hired_persons := "Persons hired, engaged or employed, or about to be hired, engaged or employed, to join or become members of an unlawful assembly";
-        premises := "Any house or premises in the occupation or charge of the accused, or under his control";
-    }
 
+statute 157 "Harbouring persons hired for an unlawful assembly" effective 1872-01-01 effective 2019-12-31 {
     elements {
         all_of {
-            /// physical act of harbouring receiving or assembling
-            actus_reus harbouring := "Harbouring, receiving or assembling such persons in premises in the accused's occupation, charge or control";
-            /// knowledge of hiring status
-            mens_rea knowledge := "Knowing such persons have been or are about to be hired, engaged or employed to join an unlawful assembly";
-            /// intention to facilitate or screen
-            mens_rea intention := "Intending to permit or facilitate their joining an unlawful assembly, or to screen them from punishment";
+            actus_reus harbouring_receiving_or_assembling := "Harbours, receives or assembles any persons in any house or premises";
+            circumstance premises_control := "That house or premises is in his occupation or charge, or under his control";
+            mens_rea knowledge := "Knowing that such persons have been hired, engaged or employed, or are about to be hired, engaged or employed, to join or become members of an unlawful assembly";
+            mens_rea intention := "With the intention of permitting or facilitating them to join or become members of an unlawful assembly, or of screening them or any of them from punishment";
         }
     }
 
-    penalty {
-        imprisonment := 0 months .. 2 years;
-        fine := $0.00 .. $10,000.00;
+    penalty or_both {
+        imprisonment := 0 days .. 2 years;
+        fine := unlimited;
     }
 }

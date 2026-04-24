@@ -1,26 +1,21 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr150-#pr150-
-// Singapore Penal Code Section 150 - Hiring, or conniving at hiring, of persons to join an unlawful assembly
-// Shape: constructive liability for hirers/connivers at hiring (punishment tracks s143 and offences under s149)
 
 statute 150 "Hiring, or conniving at hiring, of persons to join an unlawful assembly" effective 1872-01-01 {
-    definitions {
-        unlawful_assembly := "As defined under section 141";
-        hirer := "A person who hires, engages, employs, promotes, or connives at the hiring, engagement, or employment of another to join or become a member of an unlawful assembly";
-        pursuance := "In pursuance of such hiring, engagement, or employment";
-    }
-
     elements {
+        /// Section 150 is framed disjunctively as to the prohibited recruiting conduct.
         any_of {
-            /// limb 1 - direct hiring or engagement
-            actus_reus hire_engage := "Hiring, engaging, or employing any person to join or become a member of any unlawful assembly";
-            /// limb 2 - promoting hiring
-            actus_reus promote_hiring := "Promoting the hiring, engagement, or employment of any person to join or become a member of any unlawful assembly";
-            /// limb 3 - conniving at hiring
-            actus_reus connive := "Conniving at the hiring, engagement, or employment of any person to join or become a member of any unlawful assembly";
+            actus_reus hires := "Hires any person to join or become a member of any unlawful assembly";
+            actus_reus engages := "Engages any person to join or become a member of any unlawful assembly";
+            actus_reus employs := "Employs any person to join or become a member of any unlawful assembly";
+            actus_reus promotes := "Promotes the hiring, engagement, or employment of any person to join or become a member of any unlawful assembly";
+            actus_reus connives := "Connives at the hiring, engagement, or employment of any person to join or become a member of any unlawful assembly";
         }
     }
 
-    // punishment: as a member of the unlawful assembly (cross-ref s143) and for any offence committed by the hired person in pursuance of the hiring, as if the hirer had committed such offence
+    penalty {
+        /// Punishment tracks membership liability and extends to offences committed in pursuance of the recruiting conduct.
+        supplementary := "Shall be punishable as a member of such unlawful assembly, and for any offence which may be committed by any such person as a member of such unlawful assembly, in pursuance of such hiring, engagement, or employment, in the same manner as if he had been a member of such unlawful assembly, or himself had committed such offence.";
+    }
 }
