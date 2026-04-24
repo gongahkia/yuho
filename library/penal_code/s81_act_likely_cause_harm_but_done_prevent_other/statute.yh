@@ -11,6 +11,7 @@ statute 81 "Act likely to cause harm but done to prevent other harm" effective 1
     elements {
         /// The defence is conjunctive: the act is excused only where knowledge of likely harm, good faith, preventive purpose, and sufficient factual justification are all present.
         all_of {
+            actus_reus act_likely_to_cause_harm := "Act done that is likely to cause harm";
             mens_rea knowledge_likely_harm := "Act done with the knowledge that it is likely to cause harm";
             mens_rea good_faith := "Act done in good faith";
             circumstance preventive_purpose := "Purpose of preventing or avoiding other harm to person or property";

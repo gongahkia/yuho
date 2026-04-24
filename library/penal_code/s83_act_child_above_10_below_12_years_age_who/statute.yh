@@ -2,36 +2,26 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr83-#pr83-
 /// @amendment [15/2019]
-// Singapore Penal Code Section 83 - Act of child 10-12 without sufficient maturity
-// general exception (defence): doli incapax, rebuttable
-
-struct ChildMaturityCase {
-    string accused,
-    int age,
-    bool hasSufficientMaturity,
-}
-
-fn child_10_to_12_defence(int age, bool hasSufficientMaturity) : bool {
-    match {
-        case TRUE if age < 10 := consequence FALSE;
-        case TRUE if age >= 12 := consequence FALSE;
-        case TRUE if hasSufficientMaturity == TRUE := consequence FALSE;
-        case _ := consequence TRUE;
-    }
-}
-
-statute 83 "Act of a child of or above 10 and below 12 years of age, who has not sufficient maturity of understanding" effective 2020-01-01 {
+statute 83 "Act of a child of or above 10 and below 12 years of age, who has not sufficient maturity of understanding" effective 1872-01-01 effective 2020-01-01 {
     definitions {
-        child := "A person of or above 10 years and below 12 years of age";
-        maturity := "Sufficient maturity of understanding to judge the nature and consequence of conduct on the occasion";
+        child := "a child";
+        age_range := "of or above 10 years and below 12";
+        sufficient_maturity_of_understanding := "sufficient maturity of understanding to judge of the nature and consequence of his conduct on that occasion";
     }
 
     elements {
+        /// Section 83 applies conjunctively: the actor must be a child in the specified age range and must lack the specified maturity on the occasion of the conduct.
         all_of {
-            /// age between 10 (inclusive) and 12 (exclusive) at time of act
-            circumstance ageRange := "Accused was of or above 10 years and below 12 years of age";
-            /// lacked sufficient maturity on that occasion -- fact-specific
-            circumstance lackMaturity := "Accused had not attained sufficient maturity of understanding to judge nature and consequence of conduct on that occasion";
+            circumstance actor_is_child := "done by a child";
+            circumstance age_range := "of or above 10 years and below 12";
+            circumstance lacks_sufficient_maturity := "has not attained sufficient maturity of understanding";
+            circumstance judgment_scope := "to judge of the nature and consequence of his conduct";
+            circumstance occasion := "on that occasion";
         }
+    }
+
+    exception child_without_sufficient_maturity {
+        "Nothing is an offence which is done by a child of or above 10 years and below 12, who has not attained sufficient maturity of understanding to judge of the nature and consequence of his conduct on that occasion. [15/2019]"
+        "Not an offence"
     }
 }

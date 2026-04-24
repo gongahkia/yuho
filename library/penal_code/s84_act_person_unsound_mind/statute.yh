@@ -1,18 +1,37 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr84-#pr84-
-// Singapore Penal Code Section 84
-
 /// @amendment [Act 23 of 2021 wef 01/03/2022]
 /// @amendment [15/2019]
 
-statute 84 "Act of person of unsound mind" effective 1872-01-01 {
-    definitions {
-        rule := "Nothing is an offence which is done by a person who, at the time of doing it, by reason of unsoundness of mind, is incapable of knowing the nature of the act, or incapable of knowing that what he is doing is wrong, or completely deprived of any power to control his actions.";
-        wrongness_scope := "Subsection (1)(b) applies only if the person is incapable of knowing that the act is wrong by reference to the standards specified in that provision.";
+statute 84 "Act of person of unsound mind" effective 1872-01-01 effective 2019-12-31 effective 2022-03-01 {
+    subsection (1) {
+        definitions {
+            no_offence_rule := "Nothing is an offence which is done by a person who, at the time of doing it, by reason of unsoundness of mind, satisfies one of the incapacity conditions in subsection (1)(a), (b), or (c).";
+        }
+
+        elements {
+            all_of {
+                actus_reus act_done := "An act is done by a person";
+                temporal unsoundness during act_done;
+                circumstance unsoundness := "At the time of doing the act, the person acts by reason of unsoundness of mind";
+                /// subsection (1) uses disjunctive limbs (a), (b), and (c), with limb (c) added by Act 23 of 2021.
+                any_of {
+                    circumstance incapable_nature := "The person is incapable of knowing the nature of the act";
+                    circumstance incapable_wrong := "The person is incapable of knowing that what he is doing is wrong";
+                    circumstance deprived_control := "The person is completely deprived of any power to control his actions";
+                }
+            }
+        }
     }
 
-    illustration example1 {
+    subsection (2) {
+        definitions {
+            subsection_1_b_limitation := "Subsection (1)( b ) applies only if the person is incapable of knowing that his act —";
+        }
+    }
+
+    illustration illustration_a {
         "A , while labouring under a delusion, believes that he has received divine instructions to kill Z and that it is morally right for him to do so. A however knows that it is contrary to law to kill Z . A kills Z . Here, the defence of unsoundness of mind is not available to A as he is capable of knowing that it is contrary to law to kill Z ."
     }
 }
