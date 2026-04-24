@@ -2,35 +2,68 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr512-#pr512-
 /// @amendment [15/2019]
-// Singapore Penal Code Section 512 - Punishment for attempting to commit offences
-/// punishment provision, cross-references section 511
+statute 512 "Punishment for attempting to commit offences" effective 1872-01-01 effective 2020-01-01 {
+    subsection (1) {
+        elements {
+            /// Subsection (1) applies only where the attempt concerns a death-or-life offence and no other attempt-punishment provision exists.
+            all_of {
+                actus_reus attempts_offence := "A person attempts to commit an offence punishable by this Code or by any other written law with death or imprisonment for life";
+                circumstance no_express_provision := "No express provision is made by this Code or by such other written law for the punishment of such attempt";
+            }
+        }
 
-struct AttemptPunishmentCase {
-    string accused,
-    bool offenceCommitted,
-}
-
-fn punishment_applies(bool offenceCommitted) : bool {
-    match {
-        case TRUE if offenceCommitted == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
-statute 512 "Punishment for attempting to commit offences" effective 1872-01-01 {
-    definitions {
-        attempt := "As defined under section 511";
-        capital_attempt_cap := "Attempt of an offence punishable by death or life imprisonment punishable up to 20 years";
-        ordinary_attempt_punishment := "Attempts of other offences punishable as prescribed for that offence";
-        mandatory_minimum_exception := "Where punishment is a mandatory minimum, court is not bound to impose it for an attempt";
+        penalty cumulative {
+            imprisonment := 0 years .. 20 years;
+            fine := unlimited;
+            supplementary := "The offender shall be punished with imprisonment for a term which may extend to 20 years, and shall also be liable to fine or to caning. [15/2019]";
+        }
     }
 
-    elements {
-        /// triggering predicate -- the underlying offence must be established
-        circumstance offence_committed := "The underlying offence is established";
+    subsection (2) {
+        elements {
+            /// Subsection (2) covers attempts for all other offences, subject to the minimum-sentence carve-out in subsection (3).
+            all_of {
+                actus_reus attempts_other_offence := "Any person attempts to commit an offence punishable by this Code or by any other written law (other than an offence mentioned in subsection (1))";
+                circumstance no_express_provision := "No express provision is made by this Code or by such other written law for the punishment of such attempt";
+            }
+        }
+
+        penalty {
+            supplementary := "Subject to subsection (3), the person shall be punished with such punishment as is prescribed for that offence. [15/2019]";
+        }
     }
 
-    penalty {
-        imprisonment := 0 days .. 20 years;
+    subsection (3) {
+        elements {
+            /// The triggering punishments are alternatives separated by \"or\" in the statute text.
+            all_of {
+                circumstance offence_in_subsection_2 := "The punishment prescribed is for an offence mentioned in subsection (2)";
+                any_of {
+                    circumstance punishment_fixed_by_law := "The punishment prescribed for that offence is fixed by law";
+                    circumstance specified_minimum_sentence := "The punishment prescribed for that offence is a specified minimum sentence";
+                    circumstance mandatory_minimum_imprisonment := "The punishment prescribed for that offence is a mandatory minimum sentence of imprisonment";
+                    circumstance mandatory_minimum_fine := "The punishment prescribed for that offence is a mandatory minimum sentence of fine";
+                    circumstance mandatory_minimum_caning := "The punishment prescribed for that offence is a mandatory minimum sentence of caning";
+                }
+            }
+        }
+
+        penalty {
+            supplementary := "Despite subsection (2), where the punishment prescribed for an offence mentioned in that subsection is fixed by law, a specified minimum sentence or a mandatory minimum sentence of imprisonment or fine or caning, the court sentencing the person who attempted to commit the offence shall not be bound to impose such fixed, specified or mandatory minimum sentence, and may sentence the offender to such sentence or combination of sentences as the court thinks fit but not exceeding the maximum punishment prescribed for that offence."
+        }
+    }
+
+    subsection (4) {
+        definitions {
+            avoidance_of_doubt := "To avoid doubt, nothing in subsection (3)( b ) empowers a court to impose a type of punishment that is not prescribed for an offence mentioned in subsection (2) or otherwise provided by any written law for that offence. [15/2019]";
+        }
+    }
+
+    illustration illustration_a {
+        "A attempts to commit kidnapping of B in order that B may be murdered but did not succeed. If A had committed kidnapping in order to murder, he would have been punished with death or imprisonment for life (and would, if not sentenced to death, also be liable to caning). A shall be punished with imprisonment for a term which may extend to 20 years, and shall also be liable to fine or to caning."
+    }
+
+    illustration illustration_b {
+        "A attempts to commit robbery but did not succeed. If A had committed robbery, he would have been subject to a mandatory minimum term of imprisonment of not less than 2 years and mandatory caning of a minimum of 6 strokes. As the court is not bound to impose the minimum mandatory punishment prescribed for robbery, A may be sentenced to 6 months imprisonment with no caning for attempted robbery. However, the court may not sentence A to a fine, as this is not a prescribed punishment for robbery but the court may sentence A to probation if he is a young offender."
     }
 }

@@ -2,16 +2,17 @@
 section_number = "489C"
 title = "Possession of forged or counterfeit currency or bank notes"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Whoever has in his possession any forged or counterfeit currency or bank note, knowing or having reason to believe the same to be forged or counterfeit and intending to use the same as genuine or that it may be used as genuine, shall be punished with imprisonment for a term which may extend to 15 years and shall also be liable to fine. [15/2019]"
+summary = "Makes it an offence to possess forged or counterfeit currency or bank notes while knowing or having reason to believe they are forged or counterfeit and intending that they be used as genuine."
 source = "Singapore Penal Code 1871, Section 489C"
 
 [verification]

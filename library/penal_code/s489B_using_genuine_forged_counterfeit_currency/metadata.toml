@@ -2,16 +2,17 @@
 section_number = "489B"
 title = "Using as genuine forged or counterfeit currency or bank notes"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Whoever delivers or sells to, or buys or receives from, any other person, or otherwise imports, exports or traffics in or uses as genuine, any forged or counterfeit currency or bank note, knowing or having reason to believe the same to be forged or counterfeit, shall be guilty of an offence and shall on conviction be punished with imprisonment for a term which may extend to 20 years, and shall also be liable to fine. [15/2019]"
+summary = "Section 489B makes it an offence to deal in or use forged or counterfeit currency or bank notes as genuine while knowing or having reason to believe they are forged or counterfeit."
 source = "Singapore Penal Code 1871, Section 489B"
 
 [verification]

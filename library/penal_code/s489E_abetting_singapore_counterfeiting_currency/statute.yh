@@ -2,35 +2,15 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr489E-#pr489E-
 /// @amendment [15/2019]
-// Singapore Penal Code Section 489E - Abetting in Singapore counterfeiting of currency out of Singapore
-// Yuho v5 Syntax
-
-struct AbettingExtraterritorialCase {
-    string accused,
-    bool elementsSatisfied,
-}
-
-fn is_liable(bool elementsSatisfied) : bool {
-    match {
-        case TRUE if elementsSatisfied == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
-statute 489E "Abetting in Singapore counterfeiting of currency out of Singapore" effective 1946-01-01 {
-    definitions {
-        abetment := "As defined in section 107";
-        extraterritorial := "Counterfeiting taking place outside Singapore";
-    }
-
+statute 489E "Abetting in Singapore counterfeiting of currency out of Singapore" effective 1872-01-01 effective 2019-12-31 {
     elements {
         all_of {
-            circumstance within_singapore := "The accused is within Singapore";
-            actus_reus abets_counterfeiting := "Abets the counterfeiting of currency out of Singapore";
+            circumstance within_singapore := "Whoever, being within Singapore";
+            actus_reus abets_counterfeiting_out_of_singapore := "Abets the counterfeiting of any currency out of Singapore";
         }
     }
 
     penalty {
-        imprisonment := 0 days .. 20 years;
+        supplementary := "Whoever, being within Singapore, abets the counterfeiting of any currency out of Singapore, shall be punished in the same manner as if he abetted the counterfeiting of such currency within Singapore. [15/2019]";
     }
 }

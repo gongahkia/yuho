@@ -2,16 +2,17 @@
 section_number = "477"
 title = "Fraudulent cancellation, destruction, etc., of a will"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Whoever fraudulently or dishonestly, or with intent to cause damage or injury to the public or to any person, cancels, destroys, or defaces, or attempts to cancel, destroy, or deface, or secretes, or attempts to secrete any document which is or purports to be a will, or an authority to adopt a child, or any valuable security, or commits mischief in respect to such document, shall be punished with imprisonment for a term which may extend to 15 ..."
+summary = "Section 477 criminalises fraudulent, dishonest, or intentionally harmful cancellation, destruction, defacement, secreting, attempted such conduct, or mischief in relation to a will, authority to adopt a child, or valuable security."
 source = "Singapore Penal Code 1871, Section 477"
 
 [verification]

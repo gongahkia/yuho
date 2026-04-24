@@ -1,36 +1,19 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr504-#pr504-
-// Singapore Penal Code Section 504 - Intentional insult with intent to provoke a breach of the peace
-// Yuho v5 Syntax
-
-struct IntentionalInsultCase {
-    string accused,
-    bool elementsSatisfied,
-}
-
-fn is_liable(bool elementsSatisfied) : bool {
-    match {
-        case TRUE if elementsSatisfied == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
 
 statute 504 "Intentional insult with intent to provoke a breach of the peace" effective 1872-01-01 {
-    definitions {
-        provocation := "An act that arouses anger or indignation";
-        breach_of_peace := "Public disturbance or disorder";
-    }
-
     elements {
+        /// Section 504 is conjunctive: the insult must be intentional, it must thereby provoke a person, and the accused must intend or know the likely breach-of-peace or other-offence consequence.
         all_of {
-            actus_reus insults_intentionally := "Intentionally insults another person";
-            actus_reus provocation_given := "Thereby gives provocation";
-            mens_rea intent_or_knowledge_breach_peace := "Intending or knowing it likely the provocation will cause breach of public peace or another offence";
+            actus_reus intentional_insult := "Whoever intentionally insults";
+            actus_reus provocation := "Thereby gives provocation to any person" caused_by intentional_insult;
+            mens_rea intent_or_knowledge := "Intending or knowing it to be likely that such provocation will cause him to break the public peace, or to commit any other offence";
         }
     }
 
-    penalty {
+    penalty or_both {
         imprisonment := 0 days .. 2 years;
+        fine := unlimited;
     }
 }

@@ -2,34 +2,25 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr489F-#pr489F-
 /// @amendment [15/2019]
-// Singapore Penal Code Section 489F - Fraudulently or dishonestly diminishing weight or altering composition of any coin
-// Yuho v5 Syntax
 
-struct DiminishingCoinCase {
-    string accused,
-    bool elementsSatisfied,
-}
-
-fn is_liable(bool elementsSatisfied) : bool {
-    match {
-        case TRUE if elementsSatisfied == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
-statute 489F "Fraudulently or dishonestly diminishing weight or altering composition of any coin" effective 2008-02-01 {
+statute 489F "Fraudulently or dishonestly diminishing weight or altering composition of any coin" effective 1872-01-01 effective 2019-12-31 {
     definitions {
-        coin := "A metal piece of currency";
+        explanation_altering_composition := "Explanation .—A person who scoops out part of the coin and puts anything else into the cavity, alters the composition of that coin.";
     }
 
     elements {
+        /// The offence requires an operation on any coin that either diminishes its weight or alters its composition, together with either fraudulence or dishonesty.
         all_of {
-            actus_reus diminish_or_alter_coin := "Performs on any coin any operation which diminishes weight or alters composition";
-            mens_rea fraudulently_or_dishonestly := "Acts fraudulently or dishonestly";
+            actus_reus operation_on_coin := "Performs on any coin any operation which diminishes the weight or alters the composition of that coin";
+            any_of {
+                mens_rea fraudulently := "Acts fraudulently";
+                mens_rea dishonestly := "Acts dishonestly";
+            }
         }
     }
 
-    penalty {
+    penalty cumulative {
         imprisonment := 0 days .. 7 years;
+        fine := unlimited;
     }
 }

@@ -2,16 +2,17 @@
 section_number = "489D"
 title = "Making or possessing instruments or materials for forging or counterfeiting currency or bank notes"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Whoever makes, mends or performs any part of the process of making or mending or buys, sells or disposes of, or has in his possession, any die, machinery, instrument or material for the purpose of being used, or knowing or having reason to believe that it is intended to be used, for forging or counterfeiting any currency or bank note, shall be punished with imprisonment for a term which may extend to 20 years, and shall also be liable to fine."
+summary = "This section makes it an offence to make, deal in, or possess instruments or materials intended for use in forging or counterfeiting currency or bank notes."
 source = "Singapore Penal Code 1871, Section 489D"
 
 [verification]

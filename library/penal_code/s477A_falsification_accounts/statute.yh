@@ -3,36 +3,33 @@
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr477A-#pr477A-
 /// @amendment [15/2019]
 /// @amendment [Act 23 of 2021 wef 01/03/2022]
-// Singapore Penal Code Section 477A - Falsification of accounts
-// Yuho v5 Syntax
 
-struct FalsificationAccountsCase {
-    string accused,
-    bool elementsSatisfied,
-}
-
-fn is_liable(bool elementsSatisfied) : bool {
-    match {
-        case TRUE if elementsSatisfied == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
-statute 477A "Falsification of accounts" effective 1910-01-01 {
+statute 477A "Falsification of accounts" effective 1872-01-01 effective 2019-12-31 {
     definitions {
-        clerk := "An employed recordkeeper";
-        employer := "The person on whose behalf records are kept";
+        explanation_1 := "Explanation 1 . —It shall be sufficient in any charge under this section to allege a general intent to defraud without naming any particular person intended to be defrauded, or specifying any particular sum of money intended to be the subject of the fraud or any particular day on which the offence was committed.";
+        explanation_2 := "Explanation 2.—Any books, electronic records, papers, writings, valuable securities or accounts or any combination thereof form a set if they serve the same function or purpose in relation to the employer’s affairs or business.";
     }
 
     elements {
+        /// Section 477A requires the employment relationship, the fraudulent mental element, one falsification mode, and the employer-linked record context.
         all_of {
-            circumstance clerk_officer_servant := "Being a clerk, officer or servant, or employed as such";
-            actus_reus falsify_records := "Destroys, alters, conceals, mutilates or falsifies any book, electronic record, paper, writing, valuable security or account belonging to the employer";
-            mens_rea intent_defraud := "Acts intentionally and with intent to defraud";
+            circumstance clerk_officer_or_servant_status := "Being a clerk, officer or servant, or employed or acting in the capacity of a clerk, officer or servant";
+            mens_rea intentional_with_intent_to_defraud := "Intentionally and with intent to defraud";
+
+            any_of {
+                actus_reus destroys_alters_conceals_mutilates_or_falsifies := "Destroys, alters, conceals, mutilates or falsifies any book, electronic record, paper, writing, valuable security or account or a set thereof";
+                actus_reus false_entry_or_material_omission_or_alteration := "Makes or abets the making of any false entry in, or omits or alters or abets the omission or alteration of any material particular from or in any such book, electronic record, paper, writing, valuable security or account or a set thereof";
+            }
+
+            any_of {
+                circumstance employer_possession_or_ownership := "Which belongs to or is in the possession of his employer";
+                circumstance received_for_employer := "Has been received by him for or on behalf of his employer";
+            }
         }
     }
 
-    penalty {
+    penalty or_both {
         imprisonment := 0 days .. 10 years;
+        fine := unlimited;
     }
 }

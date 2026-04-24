@@ -2,16 +2,17 @@
 section_number = "489G"
 title = "Altering appearance of currency with intent that it shall pass as currency of different description"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Whoever performs on any currency any operation which alters the appearance of that currency, with the intention that that currency will pass as currency of a different description, shall be guilty of an offence and shall on conviction be punished with imprisonment for a term which may extend to 7 years, and shall also be liable to fine. [15/2019]"
+summary = "Makes it an offence to alter the appearance of currency intending it to pass as currency of a different description."
 source = "Singapore Penal Code 1871, Section 489G"
 
 [verification]

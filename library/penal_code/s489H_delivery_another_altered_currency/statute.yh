@@ -2,34 +2,18 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr489H-#pr489H-
 /// @amendment [15/2019]
-// Singapore Penal Code Section 489H - Delivery to another of altered currency
-// Yuho v5 Syntax
 
-struct DeliveryAlteredCurrencyCase {
-    string accused,
-    bool elementsSatisfied,
-}
-
-fn is_liable(bool elementsSatisfied) : bool {
-    match {
-        case TRUE if elementsSatisfied == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
-statute 489H "Delivery to another of altered currency" effective 2008-02-01 {
-    definitions {
-        altered_currency := "Currency affected by operations under sections 489F or 489G";
-    }
-
+statute 489H "Delivery to another of altered currency" effective 1872-01-01 effective 2019-12-31 {
     elements {
         all_of {
-            actus_reus deliver_or_induce_acceptance := "Delivers or attempts to induce another to receive any currency as genuine or of different description";
-            mens_rea knows_altered := "Knows or has reason to believe the currency has been altered under section 489F or 489G";
+            actus_reus delivery_or_inducement := "Delivers to any other person as genuine, or as currency of a different description from what it is, or attempts to induce any person to receive as genuine or as a currency of a different description from what it is, any currency";
+            mens_rea knowledge_or_reason_to_believe := "Knows or has reason to believe that any operation mentioned in section 489F or 489G has been performed in respect of that currency";
         }
     }
 
-    penalty {
+    penalty cumulative {
         imprisonment := 0 days .. 10 years;
+        fine := unlimited;
+        supplementary := "Whoever delivers to any other person as genuine, or as currency of a different description from what it is, or attempts to induce any person to receive as genuine or as a currency of a different description from what it is, any currency in respect of which he knows or has reason to believe that any operation mentioned in section 489F or 489G has been performed, shall be guilty of an offence and shall on conviction be punished with imprisonment for a term which may extend to 10 years, and shall also be liable to fine. [15/2019]";
     }
 }

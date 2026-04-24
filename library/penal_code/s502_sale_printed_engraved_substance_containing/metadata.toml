@@ -2,16 +2,17 @@
 section_number = "502"
 title = "Sale of printed or engraved substance containing defamatory matter"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Whoever sells or offers for sale any printed or engraved substance, containing defamatory matter, knowing that it contains such matter, shall be punished with imprisonment for a term which may extend to 2 years, or with fine, or with both."
+summary = "Selling or offering for sale a printed or engraved substance containing defamatory matter, while knowing it contains that matter, is an offence punishable by up to 2 years' imprisonment, a fine, or both."
 source = "Singapore Penal Code 1871, Section 502"
 
 [verification]

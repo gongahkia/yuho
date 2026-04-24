@@ -2,16 +2,17 @@
 section_number = "477A"
 title = "Falsification of accounts"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Whoever, being a clerk, officer or servant, or employed or acting in the capacity of a clerk, officer or servant, intentionally and with intent to defraud destroys, alters, conceals, mutilates or falsifies any book, electronic record, paper, writing, valuable security or account or a set thereof which belongs to or is in the possession of his employer, or has been received by him for or on behalf of his employer, or intentionally and with inte..."
+summary = "Section 477A criminalises fraudulent falsification, false entries, and material omissions or alterations in employer-related accounts and records by clerks, officers, servants, or persons acting in those capacities."
 source = "Singapore Penal Code 1871, Section 477A"
 
 [verification]

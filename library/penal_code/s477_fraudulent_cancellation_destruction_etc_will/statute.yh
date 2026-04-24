@@ -1,36 +1,39 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr477-#pr477-
-// Singapore Penal Code Section 477 - Fraudulent cancellation, destruction, etc., of a will
-// Yuho v5 Syntax
-
-struct FraudulentCancellationWillCase {
-    string accused,
-    bool elementsSatisfied,
-}
-
-fn is_liable(bool elementsSatisfied) : bool {
-    match {
-        case TRUE if elementsSatisfied == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
 
 statute 477 "Fraudulent cancellation, destruction, etc., of a will" effective 1872-01-01 {
-    definitions {
-        will := "A testamentary document";
-        valuable_security := "As defined in section 30";
-    }
-
     elements {
+        /// Section 477 requires one culpable state of mind, one prohibited dealing with the document, and one qualifying document type.
         all_of {
-            actus_reus cancel_destroy_deface_or_secrete := "Cancels, destroys, defaces, secretes, or attempts such acts, or commits mischief in respect of a will or valuable security";
-            circumstance document_is_will_or_security := "The document is or purports to be a will, authority to adopt, or valuable security";
-            mens_rea fraudulent_dishonest_or_intent_damage := "Acts fraudulently or dishonestly, or with intent to cause damage or injury";
+            any_of {
+                mens_rea fraudulently := "Fraudulently";
+                mens_rea dishonestly := "Dishonestly";
+                mens_rea intent_to_cause_damage_or_injury := "With intent to cause damage or injury to the public or to any person";
+            }
+
+            any_of {
+                actus_reus cancels_document := "Cancels any document";
+                actus_reus destroys_document := "Destroys any document";
+                actus_reus defaces_document := "Defaces any document";
+                actus_reus attempts_to_cancel_document := "Attempts to cancel any document";
+                actus_reus attempts_to_destroy_document := "Attempts to destroy any document";
+                actus_reus attempts_to_deface_document := "Attempts to deface any document";
+                actus_reus secretes_document := "Secrets any document";
+                actus_reus attempts_to_secrete_document := "Attempts to secrete any document";
+                actus_reus commits_mischief_in_respect_of_document := "Commits mischief in respect to such document";
+            }
+
+            any_of {
+                circumstance document_is_or_purports_to_be_will := "The document is or purports to be a will";
+                circumstance document_is_or_purports_to_be_authority_to_adopt_child := "The document is or purports to be an authority to adopt a child";
+                circumstance document_is_or_purports_to_be_valuable_security := "The document is or purports to be a valuable security";
+            }
         }
     }
 
     penalty {
         imprisonment := 0 days .. 15 years;
+        fine := unlimited;
     }
 }

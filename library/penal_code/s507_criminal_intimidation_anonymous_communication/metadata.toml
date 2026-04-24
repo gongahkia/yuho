@@ -2,16 +2,17 @@
 section_number = "507"
 title = "Criminal intimidation by an anonymous communication"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Whoever commits the offence of criminal intimidation by an anonymous communication, or by having taken precautions to conceal the name or abode of the person from whom the threat comes, shall be punished with imprisonment for a term which may extend to 2 years, in addition to the punishment provided for the offence by section 506."
+summary = "Makes it an offence to commit criminal intimidation through an anonymous communication or by concealing the source of the threat, with up to 2 years’ additional imprisonment on top of section 506."
 source = "Singapore Penal Code 1871, Section 507"
 
 [verification]

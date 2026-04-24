@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-24T08:14:00+00:00",
+  "generated_at": "2026-04-24T15:15:28+00:00",
   "act": {
     "act_code": "PC1871",
     "title": "Penal Code 1871",
@@ -2023,7 +2023,7 @@
       "number": "142",
       "marginal_note": "Being a member of an unlawful assembly",
       "encoded_path": "library/penal_code/s142_being_member_unlawful_assembly/statute.yh",
-      "metadata_path": null,
+      "metadata_path": "library/penal_code/s142_being_member_unlawful_assembly/metadata.toml",
       "sso_url": "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr142-#pr142-",
       "L1": true,
       "L2": true,
@@ -3193,7 +3193,7 @@
       "number": "255",
       "marginal_note": "Counterfeiting a Government stamp",
       "encoded_path": "library/penal_code/s255_counterfeiting_government_stamp/statute.yh",
-      "metadata_path": null,
+      "metadata_path": "library/penal_code/s255_counterfeiting_government_stamp/metadata.toml",
       "sso_url": "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr255-#pr255-",
       "L1": true,
       "L2": true,

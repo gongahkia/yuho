@@ -2,33 +2,17 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr506-#pr506-
 /// @amendment [15/2019]
-// Singapore Penal Code Section 506 - Punishment for criminal intimidation
-/// punishment provision, cross-references section 503
 
-struct CriminalIntimidationPunishmentCase {
-    string accused,
-    bool offenceCommitted,
-}
-
-fn punishment_applies(bool offenceCommitted) : bool {
-    match {
-        case TRUE if offenceCommitted == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
-statute 506 "Punishment for criminal intimidation" effective 1872-01-01 {
-    definitions {
-        criminal_intimidation := "As defined under section 503";
-        aggravated_threat := "Threat of death, grievous hurt, fire, or offence punishable with death or imprisonment 7+ years";
+statute 506 "Punishment for criminal intimidation" effective 1872-01-01 effective 2020-01-01 {
+    /// Punishment for the offence of criminal intimidation under section 503.
+    penalty or_both when ordinary_criminal_intimidation {
+        imprisonment := 0 days .. 2 years;
+        fine := unlimited;
     }
 
-    elements {
-        /// triggering predicate -- the underlying offence must be established
-        circumstance offence_committed := "The underlying offence is established";
-    }
-
-    penalty {
+    /// Applies if the threat is to cause death or grievous hurt, or to cause the destruction of any property by fire, or to cause an offence punishable with death or with imprisonment for a term which may extend to 7 years or more. [15/2019]
+    penalty or_both when aggravated_threat {
         imprisonment := 0 days .. 10 years;
+        fine := unlimited;
     }
 }

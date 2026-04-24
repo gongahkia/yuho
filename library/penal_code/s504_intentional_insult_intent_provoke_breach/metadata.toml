@@ -2,16 +2,17 @@
 section_number = "504"
 title = "Intentional insult with intent to provoke a breach of the peace"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Whoever intentionally insults, and thereby gives provocation to any person, intending or knowing it to be likely that such provocation will cause him to break the public peace, or to commit any other offence, shall be punished with imprisonment for a term which may extend to 2 years, or with fine, or with both."
+summary = "This section criminalises intentionally insulting a person in a way that provokes that person, where the accused intends or knows the provocation is likely to cause a breach of the public peace or another offence."
 source = "Singapore Penal Code 1871, Section 504"
 
 [verification]

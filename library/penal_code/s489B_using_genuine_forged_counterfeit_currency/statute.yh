@@ -2,34 +2,17 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr489B-#pr489B-
 /// @amendment [15/2019]
-// Singapore Penal Code Section 489B - Using as genuine forged or counterfeit currency or bank notes
-// Yuho v5 Syntax
 
-struct UsingForgedCurrencyCase {
-    string accused,
-    bool elementsSatisfied,
-}
-
-fn is_liable(bool elementsSatisfied) : bool {
-    match {
-        case TRUE if elementsSatisfied == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
-statute 489B "Using as genuine forged or counterfeit currency or bank notes" effective 1946-01-01 {
-    definitions {
-        forged_currency := "Counterfeit currency or bank note";
-    }
-
+statute 489B "Using as genuine forged or counterfeit currency or bank notes" effective 1872-01-01 effective 2019-12-31 {
     elements {
         all_of {
-            actus_reus deliver_sell_import_or_use := "Delivers, sells, buys, receives, imports, exports, traffics in, or uses as genuine any forged or counterfeit currency or bank note";
-            mens_rea knows_or_believes_forged := "Knowing or having reason to believe the note to be forged or counterfeit";
+            actus_reus dealing_or_use := "Delivers or sells to, or buys or receives from, any other person, or otherwise imports, exports or traffics in or uses as genuine, any forged or counterfeit currency or bank note";
+            mens_rea knowledge_or_reason_to_believe := "Knowing or having reason to believe the same to be forged or counterfeit";
         }
     }
 
-    penalty {
+    penalty cumulative {
         imprisonment := 0 days .. 20 years;
+        fine := unlimited;
     }
 }

@@ -2,16 +2,17 @@
 section_number = "500"
 title = "Punishment for defamation"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Whoever defames another shall be punished with imprisonment for a term which may extend to 2 years, or with fine, or with both."
+summary = "Prescribes up to 2 years’ imprisonment, an uncapped fine, or both for a person who defames another."
 source = "Singapore Penal Code 1871, Section 500"
 
 [verification]
