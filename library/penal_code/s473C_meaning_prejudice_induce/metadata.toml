@@ -1,0 +1,19 @@
+[statute]
+section_number = "473C"
+title = "Meaning of “prejudice” and “induce”"
+jurisdiction = "Singapore"
+version = "2.0.0"
+
+[encoding]
+depth = "deep"
+revision = "phase-D"
+
+[contributor]
+name = "agent-reencoding-phase-D"
+
+[description]
+summary = "Defines when an induced act or omission is to a person's prejudice for section 473B, extends inducement to machine responses, and clarifies the meaning of loss."
+source = "Singapore Penal Code 1871, Section 473C"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr473C-#pr473C-"
