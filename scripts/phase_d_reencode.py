@@ -113,15 +113,34 @@ def dispatch_codex(prompt: str, num: str, timeout: int = 900) -> subprocess.Comp
         input=prompt, text=True, capture_output=True, timeout=timeout,
     )
 
+def verify_section(num: str) -> bool:
+    """Check that the encoding at library/penal_code/s<num>_*/ parses cleanly."""
+    d = find_dir(num)
+    if not d or not (d / "statute.yh").exists(): return False
+    r = subprocess.run(
+        [str(REPO / ".venv-scrape" / "bin" / "yuho"), "check", "--format", "json", str(d / "statute.yh")],
+        capture_output=True, text=True, timeout=60,
+    )
+    try: return json.loads(r.stdout).get("valid", False)
+    except Exception: return False
+
 def main() -> None:
     p = argparse.ArgumentParser(prog="phase_d_reencode", description=__doc__)
     p.add_argument("specs", nargs="*", help="section numbers, ranges (1-20), or comma lists")
     p.add_argument("--list", action="store_true",
                    help="print sections still needing re-encoding (non-L3, has encoding)")
+    p.add_argument("--all-remaining", action="store_true",
+                   help="target every section that is not currently L3")
     p.add_argument("--dispatch", action="store_true",
                    help="actually invoke `codex exec --full-auto` instead of just printing")
     p.add_argument("--parallel", type=int, default=1, metavar="K",
                    help="with --dispatch, run up to K codex instances in parallel")
+    p.add_argument("--progress", metavar="FILE", default=".phase_d_progress.jsonl",
+                   help="append-only JSONL file recording per-section outcomes")
+    p.add_argument("--resume", action="store_true",
+                   help="skip sections already marked done in the progress file")
+    p.add_argument("--retries", type=int, default=1,
+                   help="per-section retry count on dispatch or verify failure")
     p.add_argument("--to-files", metavar="DIR",
                    help="write one .md file per prompt to this directory (for Codex Cloud)")
     p.add_argument("--timeout", type=int, default=900,
@@ -136,9 +155,26 @@ def main() -> None:
             print(f"{n}\t{raw[n].get('marginal_note','')[:80]}")
         return
 
-    targets = expand_spec(args.specs, raw) if args.specs else []
-    if not targets: p.error("supply section numbers or --list")
+    if args.all_remaining:
+        targets = sorted(set(raw) - l3, key=_sortkey)
+    else:
+        targets = expand_spec(args.specs, raw) if args.specs else []
+    if not targets: p.error("supply section numbers, --all-remaining, or --list")
     targets = [n for n in targets if n in raw]
+
+    # resume: skip sections already marked done
+    done_from_progress: set[str] = set()
+    progress_path = REPO / args.progress
+    if args.resume and progress_path.is_file():
+        for line in progress_path.read_text().splitlines():
+            try:
+                r = json.loads(line)
+                if r.get("status") == "done": done_from_progress.add(r["section"])
+            except Exception:
+                continue
+        before = len(targets)
+        targets = [n for n in targets if n not in done_from_progress]
+        print(f"[resume] skipped {before - len(targets)} already-done sections; {len(targets)} remain", file=sys.stderr)
 
     body = load_template_body()
     prompts = {n: render(n, raw[n], act_code, body) for n in targets}
@@ -155,27 +191,45 @@ def main() -> None:
         sys.stdout.write(sep.join(prompts.values()) + "\n")
         return
 
-    # dispatch via codex
-    if args.parallel <= 1:
-        for n, prompt in prompts.items():
-            print(f"[dispatch] s{n} starting...", file=sys.stderr)
-            r = dispatch_codex(prompt, n, args.timeout)
-            status = "OK" if r.returncode == 0 else f"FAIL({r.returncode})"
-            print(f"[dispatch] s{n} {status}", file=sys.stderr)
-            if r.returncode != 0:
-                print(r.stderr[-500:], file=sys.stderr)
-    else:
-        from concurrent.futures import ThreadPoolExecutor, as_completed
-        with ThreadPoolExecutor(max_workers=args.parallel) as pool:
-            futs = {pool.submit(dispatch_codex, prompts[n], n, args.timeout): n for n in targets}
-            for f in as_completed(futs):
-                n = futs[f]
-                try:
-                    r = f.result()
-                    status = "OK" if r.returncode == 0 else f"FAIL({r.returncode})"
-                except Exception as e:
-                    status = f"ERR({e.__class__.__name__})"
-                print(f"[dispatch] s{n} {status}", file=sys.stderr)
+    # dispatch via codex, one attempt per section with optional retries
+    def _run_with_retries(n: str) -> dict:
+        prompt = prompts[n]
+        last_err = None
+        for attempt in range(1, args.retries + 2):
+            try:
+                r = dispatch_codex(prompt, n, args.timeout)
+                if r.returncode != 0:
+                    last_err = f"exit={r.returncode}"
+                    continue
+                if verify_section(n):
+                    return {"section": n, "status": "done", "attempts": attempt}
+                last_err = "yuho check fail"
+            except subprocess.TimeoutExpired:
+                last_err = "timeout"
+            except Exception as e:
+                last_err = f"{e.__class__.__name__}"
+        return {"section": n, "status": "failed", "attempts": args.retries + 1, "error": last_err}
+
+    progress_path = REPO / args.progress
+    progress_path.parent.mkdir(parents=True, exist_ok=True)
+    fh = open(progress_path, "a")
+
+    def _record(record: dict) -> None:
+        fh.write(json.dumps(record) + "\n"); fh.flush()
+        # stdout line = Monitor event; stderr = human-visible
+        print(f"[{record['status']}] s{record['section']} (attempt {record.get('attempts','?')})", flush=True)
+
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+    print(f"[start] {len(targets)} sections, parallel={args.parallel}, timeout={args.timeout}s", flush=True)
+    with ThreadPoolExecutor(max_workers=max(args.parallel, 1)) as pool:
+        futs = {pool.submit(_run_with_retries, n): n for n in targets}
+        for f in as_completed(futs):
+            n = futs[f]
+            try: _record(f.result())
+            except Exception as e:
+                _record({"section": n, "status": "failed", "error": f"{e.__class__.__name__}", "attempts": "?"})
+    fh.close()
+    print("[end] batch complete", flush=True)
 
 if __name__ == "__main__":
     main()
