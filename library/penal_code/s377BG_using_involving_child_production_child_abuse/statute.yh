@@ -33,6 +33,10 @@ statute 377BG "Using or involving child in production of child abuse material" e
             fine := unlimited;
             supplementary := "The offender shall also be liable to fine or to caning. [15/2019]";
         }
+
+        penalty alternative {
+            supplementary := "The offender shall also be liable to caning. [15/2019]";
+        }
     }
 
     subsection (3) {

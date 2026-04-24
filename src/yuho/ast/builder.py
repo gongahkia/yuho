@@ -1237,6 +1237,7 @@ class ASTBuilder:
         fine_min = fine_max = None
         fine_unlimited = False
         caning_min = caning_max = None
+        caning_unspecified = False
         death_penalty = None
         supplementary = None
         mandatory_min_imprisonment = None
@@ -1280,13 +1281,17 @@ class ASTBuilder:
                     elif money_nodes:
                         fine_max = self._build_money(money_nodes[0])
             elif child.type == "caning_clause":
-                int_nodes = self._children_by_type(child, "integer_literal")
-                if len(int_nodes) >= 2:
-                    caning_min = int(self._text(int_nodes[0]))
-                    caning_max = int(self._text(int_nodes[1]))
-                elif int_nodes:
-                    caning_min = int(self._text(int_nodes[0]))
-                    caning_max = caning_min
+                # G14: check for `caning := unspecified` keyword first
+                if any(self._text(c) == "unspecified" for c in child.children):
+                    caning_unspecified = True
+                else:
+                    int_nodes = self._children_by_type(child, "integer_literal")
+                    if len(int_nodes) >= 2:
+                        caning_min = int(self._text(int_nodes[0]))
+                        caning_max = int(self._text(int_nodes[1]))
+                    elif int_nodes:
+                        caning_min = int(self._text(int_nodes[0]))
+                        caning_max = caning_min
             elif child.type == "death_penalty_clause":
                 bool_node = self._child_by_type(child, "boolean_literal")
                 if bool_node:
@@ -1311,6 +1316,7 @@ class ASTBuilder:
             fine_unlimited=fine_unlimited,
             caning_min=caning_min,
             caning_max=caning_max,
+            caning_unspecified=caning_unspecified,
             death_penalty=death_penalty,
             supplementary=supplementary,
             sentencing=sentencing,

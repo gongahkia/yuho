@@ -1,5 +1,5 @@
 # s377BD — L3 flag
 
-- failed: 7
-- reason: Subsection (3) encodes only `fine := unlimited` for the “liable to fine or to caning” branch and omits any `caning :=` clause, so the penalty facts are incomplete.
-- suggested fix: Model subsection (3)’s alternative branch with both fine and caning liability instead of leaving caning only in supplementary text.
+- failed: 6, 8
+- reason: The canonical `act.json` entry for section 377BD is truncated at subsection (1)(b), but the Yuho file adds three specific limb-(b) conditions and an `all_of` structure that cannot be verified from the canonical review source.
+- suggested fix: Reconcile subsection (1)(b) against an authoritative source or a repaired canonical extract, then re-review the limb structure and connective mapping.

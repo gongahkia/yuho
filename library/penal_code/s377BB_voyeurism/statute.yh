@@ -68,6 +68,7 @@ statute 377BB "Voyeurism" effective 1872-01-01 effective 2019-12-31 effective 20
         penalty or_both {
             imprisonment := 0 years .. 2 years;
             fine := unlimited;
+            caning := unspecified;
             supplementary := "Subject to subsection (8), a person who is guilty of an offence under this section shall on conviction be punished with imprisonment for a term which may extend to 2 years, or with fine, or with caning, or with any combination of such punishments. [15/2019]";
         }
     }
@@ -80,6 +81,7 @@ statute 377BB "Voyeurism" effective 1872-01-01 effective 2019-12-31 effective 20
 
         penalty alternative {
             fine := unlimited;
+            caning := unspecified;
             supplementary := "A person who commits an offence under this section against a person who is below 14 years of age shall on conviction be punished with imprisonment for a term which may extend to 2 years and shall also be liable to fine or to caning. [15/2019]";
         }
     }

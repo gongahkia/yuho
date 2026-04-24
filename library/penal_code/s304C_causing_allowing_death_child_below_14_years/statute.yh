@@ -47,6 +47,7 @@ statute 304C "Causing or allowing death of child below 14 years of age, domestic
 
         penalty alternative {
             fine := unlimited;
+            caning := unspecified;
             supplementary := "The offender shall also be liable to fine or to caning.";
         }
     }

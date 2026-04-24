@@ -33,6 +33,7 @@ primitives that your draft must use.
 | multiple numbered subsections (1), (2), (3) with distinct content | `subsection (1) { ... } subsection (2) { ... }` nested in the statute block |
 | statute added by amendment (e.g. [15/2019] introduces s377BO) | two `effective` clauses: `effective 1872-01-01 effective 2019-12-31` |
 | statute says "with fine" with no dollar cap | `fine := unlimited` — NEVER invent a cap |
+| statute says "liable to caning" with no stroke count | `caning := unspecified` — NEVER invent a stroke range, NEVER write `0 .. 0 strokes` |
 | statute says "X years, or fine, or both" (typical PC pattern) | `penalty or_both { imprisonment := ...; fine := unlimited; }` |
 | statute gives conditional punishment ("if rash, 5yr; if negligent, 2yr") | two sibling penalty blocks with `when`: `penalty when rash_act { ... } penalty when negligent_act { ... }` |
 | doc-comment rationale on a group (`all_of` / `any_of`) | `/// rationale\nall_of { ... }` — now valid, don't omit |

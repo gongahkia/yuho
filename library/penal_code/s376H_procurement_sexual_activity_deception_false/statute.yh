@@ -31,6 +31,17 @@ statute 376H "Procurement of sexual activity by deception or false representatio
     }
 
     subsection (2) {
+        elements {
+            all_of {
+                circumstance offence_under_subsection_1 := "A person who is guilty of an offence under subsection (1)";
+                circumstance case_under_subsection_2_a := "In the case where the sexual touching mentioned in that subsection involved —";
+                any_of {
+                    circumstance penetration_of_vagina_or_anus := "penetration of the vagina or anus (as the case may be) with a part of the body or anything else";
+                    circumstance penetration_of_mouth_with_penis := "penetration of the mouth with the penis";
+                }
+            }
+        }
+
         penalty or_both when other_case {
             imprisonment := 0 years .. 2 years;
             fine := unlimited;

@@ -509,7 +509,7 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
         {
           "type": "integer_literal",
@@ -4431,6 +4431,10 @@
   },
   {
     "type": "unlimited",
+    "named": false
+  },
+  {
+    "type": "unspecified",
     "named": false
   },
   {

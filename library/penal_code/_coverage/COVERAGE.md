@@ -1,6 +1,6 @@
 # Coverage — Penal Code 1871 (PC1871)
 
-_Generated: 2026-04-24T16:20:07+00:00_  
+_Generated: 2026-04-24T16:39:45+00:00_  
 _Scraped: 2026-04-24T15:50:03Z_  
 _Valid date: n/a_
 
@@ -12,7 +12,7 @@ _Valid date: n/a_
 | encoded (.yh present) | 524 | 100.0% |
 | **L1** — parses | **524** | **100.0%** |
 | **L2** — typechecks | **524** | **100.0%** |
-| **L3** — verified | **113** | **21.6%** |
+| **L3** — verified | **118** | **22.5%** |
 
 ## Encoded sections
 
@@ -36,7 +36,7 @@ _Valid date: n/a_
 | s17 | “Government” | ✓ | ✓ | ✓ | 2026-04-24 Opus 4.7 (automated reviewer) | `library/penal_code/s17_government/statute.yh` |
 | s19 | “Judge” | ✓ | ✓ | ✓ | 2026-04-24 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s19_judge/statute.yh` |
 | s20 | “Court of justice” | ✓ | ✓ | ✓ | 2026-04-24 Opus 4.7 (automated reviewer) | `library/penal_code/s20_court_justice/statute.yh` |
-| s21 | “Public servant” | ✓ | ✓ | · | — | `library/penal_code/s21_public_servant/statute.yh` |
+| s21 | “Public servant” | ✓ | ✓ | ✓ | 2026-04-25 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s21_public_servant/statute.yh` |
 | s22 | “Property” | ✓ | ✓ | ✓ | 2026-04-24 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s22_property/statute.yh` |
 | s22A | “Fault element” and “physical element” | ✓ | ✓ | ✓ | 2026-04-24 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s22A_fault_element_physical_element/statute.yh` |
 | s23 | “Wrongful gain” and “wrongful loss” | ✓ | ✓ | ✓ | 2026-04-24 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s23_wrongful_gain_wrongful_loss/statute.yh` |
@@ -82,7 +82,7 @@ _Valid date: n/a_
 | s53 | Punishments | ✓ | ✓ | · | — | `library/penal_code/s53_punishments/statute.yh` |
 | s54 | Imprisonment for life | ✓ | ✓ | · | — | `library/penal_code/s54_imprisonment_life/statute.yh` |
 | s72 | Punishment of a person found guilty of one of several offenc | ✓ | ✓ | · | — | `library/penal_code/s72_punishment_person_found_guilty_one_several/statute.yh` |
-| s73 | Enhanced penalties for offences against domestic workers | ✓ | ✓ | · | — | `library/penal_code/s73_enhanced_penalties_offences_against_domestic/statute.yh` |
+| s73 | Enhanced penalties for offences against domestic workers | ✓ | ✓ | ✓ | 2026-04-25 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s73_enhanced_penalties_offences_against_domestic/statute.yh` |
 | s74 | Enhanced penalties for racially or religiously aggravated of | ✓ | ✓ | ✓ | 2026-04-24 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s74_enhanced_penalties_racially_religiously/statute.yh` |
 | s74A | Enhanced penalties for offences against vulnerable persons | ✓ | ✓ | ✓ | 2026-04-24 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s74A_enhanced_penalties_offences_against/statute.yh` |
 | s74B | Enhanced penalties for offences against person below 14 year | ✓ | ✓ | ✓ | 2026-04-24 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s74B_enhanced_penalties_offences_against_person/statute.yh` |
@@ -406,15 +406,15 @@ _Valid date: n/a_
 | s376F | Procurement of sexual activity with person with mental disab | ✓ | ✓ | ✓ | 2026-04-25 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s376F_procurement_sexual_activity_person_mental/statute.yh` |
 | s376G | Incest | ✓ | ✓ | ✓ | 2026-04-25 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s376G_incest/statute.yh` |
 | s376H | Procurement of sexual activity by deception or false represe | ✓ | ✓ | · | — | `library/penal_code/s376H_procurement_sexual_activity_deception_false/statute.yh` |
-| s377 | Sexual penetration, etc., of a corpse | ✓ | ✓ | · | — | `library/penal_code/s377_sexual_penetration_etc_corpse/statute.yh` |
+| s377 | Sexual penetration, etc., of a corpse | ✓ | ✓ | ✓ | 2026-04-25 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s377_sexual_penetration_etc_corpse/statute.yh` |
 | s377B | Sexual penetration with living animal | ✓ | ✓ | · | — | `library/penal_code/s377B_sexual_penetration_living_animal/statute.yh` |
 | s377BA | Word or gesture intended to insult modesty of any person | ✓ | ✓ | · | — | `library/penal_code/s377BA_word_gesture_intended_insult_modesty_person/statute.yh` |
-| s377BB | Voyeurism | ✓ | ✓ | · | — | `library/penal_code/s377BB_voyeurism/statute.yh` |
+| s377BB | Voyeurism | ✓ | ✓ | ✓ | 2026-04-25 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s377BB_voyeurism/statute.yh` |
 | s377BC | Distribution of voyeuristic image or recording | ✓ | ✓ | · | — | `library/penal_code/s377BC_distribution_voyeuristic_image_recording/statute.yh` |
 | s377BD | Possession of or gaining access to voyeuristic or intimate i | ✓ | ✓ | · | — | `library/penal_code/s377BD_possession_gaining_access_voyeuristic/statute.yh` |
 | s377BE | Distributing or threatening to distribute intimate image or  | ✓ | ✓ | ✓ | 2026-04-24 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s377BE_distributing_threatening_distribute_intimate/statute.yh` |
 | s377BF | Sexual exposure | ✓ | ✓ | · | — | `library/penal_code/s377BF_sexual_exposure/statute.yh` |
-| s377BG | Using or involving child in production of child abuse materi | ✓ | ✓ | · | — | `library/penal_code/s377BG_using_involving_child_production_child_abuse/statute.yh` |
+| s377BG | Using or involving child in production of child abuse materi | ✓ | ✓ | ✓ | 2026-04-25 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s377BG_using_involving_child_production_child_abuse/statute.yh` |
 | s377BH | Producing child abuse material | ✓ | ✓ | · | — | `library/penal_code/s377BH_producing_child_abuse_material/statute.yh` |
 | s377BI | Distributing or selling child abuse material | ✓ | ✓ | · | — | `library/penal_code/s377BI_distributing_selling_child_abuse_material/statute.yh` |
 | s377BJ | Advertising or seeking child abuse material | ✓ | ✓ | · | — | `library/penal_code/s377BJ_advertising_seeking_child_abuse_material/statute.yh` |

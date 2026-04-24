@@ -547,10 +547,10 @@ module.exports = grammar({
       'caning',
       ':=',
       choice(
-        $.integer_literal,
-        seq($.integer_literal, '..', $.integer_literal),
+        seq($.integer_literal, 'strokes'),
+        seq($.integer_literal, '..', $.integer_literal, 'strokes'),
+        'unspecified',                                    // G14: "liable to caning" without a numeric range
       ),
-      'strokes',
       optional(';'),
     ),
 

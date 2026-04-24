@@ -1,5 +1,5 @@
 # s376H — L3 flag
 
 - failed: 7
-- reason: The encoding omits the canonical subsection `(2)(a)` penalty branch and therefore does not faithfully capture all conditional penalties in section 376H.
-- suggested fix: Re-encode subsection `(2)` with both statutory penalty branches from the authoritative text, then rerun `yuho check`.
+- reason: The canonical subsection (2) is conditional, but the encoding preserves only the subsection (2)(b) 2-year/fine/or-both branch and omits the separate subsection (2)(a) punishment branch.
+- suggested fix: Encode the missing subsection (2)(a) penalty branch verbatim and preserve the full conditional penalty structure from the canonical entry.

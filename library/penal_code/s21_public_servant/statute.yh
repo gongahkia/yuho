@@ -7,7 +7,7 @@
 /// @amendment [19/2016; 15/2019]
 /// @amendment [19/2016]
 
-statute 21 "“Public servant”" effective 1872-01-01 effective 2022-01-14 effective 2022-04-01 effective 2024-01-31 {
+statute 21 "“Public servant”" effective 1872-01-01 effective 2017-10-01 effective 2019-12-31 effective 2022-01-14 effective 2022-04-01 effective 2024-01-31 {
     subsection (1) {
         definitions {
             public_servant := "—(1) The words “public servant” denote a person falling under any of the following descriptions:";

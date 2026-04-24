@@ -1,5 +1,5 @@
 # s304C — L3 flag
 
-- failed: 7
-- reason: Subsection (4) is not faithfully encoded because the statute makes imprisonment mandatory with additional liability to fine or to caning, but the `.yh` models only the fine branch machine-readably and leaves caning only in supplementary text.
-- suggested fix: Encode both alternative supplementary punishments in subsection (4) without inventing a caning quantum that the statute does not state.
+- failed: 9
+- reason: The encoding includes a generic `effective 1872-01-01` clause even though canonical section 304C was introduced by amendment `[15/2019]`, so the effective-date metadata is not sane.
+- suggested fix: Remove the generic 1872 effective date and retain the amendment-era effective date that corresponds to the section's introduction.

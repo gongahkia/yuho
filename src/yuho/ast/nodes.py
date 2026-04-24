@@ -815,6 +815,7 @@ class PenaltyNode(ASTNode):
     fine_unlimited: bool = False  # G8: `fine := unlimited` — statute-level uncapped fine
     caning_min: Optional[int] = None
     caning_max: Optional[int] = None
+    caning_unspecified: bool = False  # G14: `caning := unspecified` — statute-level "liable to caning" without a stroke count
     death_penalty: Optional[bool] = None
     supplementary: Optional[StringLit] = None
     sentencing: Optional[str] = None  # phase 14: "concurrent" or "consecutive"

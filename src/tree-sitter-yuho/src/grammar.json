@@ -2518,8 +2518,17 @@
           "type": "CHOICE",
           "members": [
             {
-              "type": "SYMBOL",
-              "name": "integer_literal"
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "integer_literal"
+                },
+                {
+                  "type": "STRING",
+                  "value": "strokes"
+                }
+              ]
             },
             {
               "type": "SEQ",
@@ -2535,14 +2544,18 @@
                 {
                   "type": "SYMBOL",
                   "name": "integer_literal"
+                },
+                {
+                  "type": "STRING",
+                  "value": "strokes"
                 }
               ]
+            },
+            {
+              "type": "STRING",
+              "value": "unspecified"
             }
           ]
-        },
-        {
-          "type": "STRING",
-          "value": "strokes"
         },
         {
           "type": "CHOICE",
