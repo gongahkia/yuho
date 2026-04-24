@@ -11,10 +11,6 @@ statute 82 "Act of a child below 10 years of age" effective 1872-01-01 effective
         child_below_10 := "A child below 10 years of age.";
     }
 
-    elements {
-        circumstance child_below_10 := "The act is done by a child below 10 years of age.";
-    }
-
     exception child_below_10 {
         "Nothing is an offence which is done by a child below 10 years of age. [15/2019]"
     }

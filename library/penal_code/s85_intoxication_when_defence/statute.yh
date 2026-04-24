@@ -1,0 +1,50 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr85-#pr85-
+/// @amendment [Act 23 of 2021 wef 01/03/2022]
+/// @amendment [15/2019]
+
+statute 85 "Intoxication when a defence" effective 1872-01-01 effective 2022-03-01 {
+    subsection (1) {
+        definitions {
+            general_rule := "Except as provided in this section and in section 86, intoxication shall not constitute a defence to any criminal charge.";
+        }
+    }
+
+    subsection (2) {
+        elements {
+            /// s85(2) requires intoxication-caused incapacity, one of two knowledge states, and intoxication without knowledge or against will.
+            all_of {
+                circumstance criminal_charge := "Intoxication is a defence to any criminal charge";
+                circumstance by_reason_of_intoxication := "By reason of the intoxication the person charged, at the time of the act or omission complained of";
+                any_of {
+                    circumstance did_not_know_doing := "Did not know what he was doing";
+                    circumstance did_not_know_wrong := "Did not know that such act or omission was wrong";
+                }
+                circumstance without_knowledge_or_against_will := "The state of intoxication was caused without the knowledge or against the will of the person charged with the offence.";
+            }
+        }
+    }
+
+    subsection (2A) {
+        elements {
+            /// subsection (2)(b) only applies where both wrongfulness thresholds are unknown to the person charged.
+            all_of {
+                circumstance applies_to_subsection_2_b := "Subsection (2)(b) only applies";
+                circumstance at_time_of_act_or_omission := "The person charged, at the time of the act or omission complained of, did not know that the act or omission";
+                circumstance ordinary_standards_wrong := "Was wrong by the ordinary standards of reasonable and honest persons";
+                circumstance contrary_to_law_wrong := "Was wrong as contrary to law.";
+            }
+        }
+    }
+
+    subsection (3) {
+        elements {
+            all_of {
+                circumstance criminal_charge := "Intoxication is a defence to any criminal charge";
+                circumstance by_reason_of_intoxication := "By reason of the intoxication the person charged was of unsound mind";
+                circumstance section_84_determination := "Determined in accordance with section 84.";
+            }
+        }
+    }
+}
