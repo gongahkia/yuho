@@ -2,16 +2,17 @@
 section_number = "407"
 title = "Criminal breach of trust of property entrusted for purposes of transportation or storage"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Criminal breach of trust in respect of property entrusted for transportation for hire or storage for rent or charge is punishable with up to 15 years imprisonment and fine."
+summary = "Section 407 criminalises committing criminal breach of trust in respect of property entrusted for transportation for hire or storage for rent or charge, with up to 15 years' imprisonment and uncapped fine liability."
 source = "Singapore Penal Code 1871, Section 407"
 
 [verification]
