@@ -106,11 +106,15 @@ def render(num: str, sec: dict, act_code: str, body: str) -> str:
     )
     return header + body.replace("{N}", num)
 
-def dispatch_codex(prompt: str, num: str, timeout: int = 900) -> subprocess.CompletedProcess:
+def dispatch_codex(prompt: str, num: str, timeout: int = 900,
+                   model: str | None = None, reasoning: str | None = None) -> subprocess.CompletedProcess:
     """Run `codex exec --full-auto` with the rendered prompt. Returns CompletedProcess."""
+    cmd = ["codex", "exec", "--full-auto", "--skip-git-repo-check", "-C", str(REPO)]
+    if model: cmd += ["-m", model]
+    if reasoning: cmd += ["-c", f"model_reasoning_effort={reasoning}"]
+    cmd.append("-")
     return subprocess.run(
-        ["codex", "exec", "--full-auto", "--skip-git-repo-check", "-C", str(REPO), "-"],
-        input=prompt, text=True, capture_output=True, timeout=timeout,
+        cmd, input=prompt, text=True, capture_output=True, timeout=timeout,
     )
 
 def verify_section(num: str) -> bool:
@@ -145,6 +149,10 @@ def main() -> None:
                    help="write one .md file per prompt to this directory (for Codex Cloud)")
     p.add_argument("--timeout", type=int, default=900,
                    help="per-section timeout for --dispatch in seconds (default 900)")
+    p.add_argument("--model", metavar="NAME",
+                   help="override codex model (e.g. gpt-5.5, gpt-5-fast). Defaults to codex config.")
+    p.add_argument("--reasoning", metavar="LEVEL",
+                   help="override reasoning effort (low|medium|high|xhigh). Default keeps config.")
     args = p.parse_args()
 
     raw, act_code = load_raw()
@@ -197,7 +205,7 @@ def main() -> None:
         last_err = None
         for attempt in range(1, args.retries + 2):
             try:
-                r = dispatch_codex(prompt, n, args.timeout)
+                r = dispatch_codex(prompt, n, args.timeout, args.model, args.reasoning)
                 if r.returncode != 0:
                     last_err = f"exit={r.returncode}"
                     continue
