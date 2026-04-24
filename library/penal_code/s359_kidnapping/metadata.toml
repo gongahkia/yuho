@@ -2,16 +2,17 @@
 section_number = "359"
 title = "Kidnapping"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Kidnapping is of two kinds -- kidnapping from Singapore and kidnapping from lawful guardianship."
+summary = "Section 359 classifies kidnapping into kidnapping from Singapore and kidnapping from lawful guardianship."
 source = "Singapore Penal Code 1871, Section 359"
 
 [verification]

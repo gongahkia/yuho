@@ -1,41 +1,28 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr353-#pr353-
-// Singapore Penal Code Section 353 -- Using criminal force to deter a public servant from discharge of his duty
-// Yuho v5 Syntax
-
-struct S353Case {
-    string accused,
-    string victim,
-    bool offenceCommitted,
-}
-
-fn s353_applies(bool offenceCommitted) : bool {
-    match {
-        case TRUE if offenceCommitted == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
 
 statute 353 "Using criminal force to deter a public servant from discharge of his duty" effective 1872-01-01 {
-    definitions {
-        offence_summary := "Assault or criminal force against a public servant in execution of duty.";
-    }
-
     elements {
-        /// the predicate offence must be established
-        circumstance offence_committed := "The statutory conduct is proved";
-        /// sentence applies on conviction
-        actus_reus conviction := "Conviction under this section";
+        all_of {
+            actus_reus assault_or_criminal_force := "Assaults or uses criminal force to any person";
+            circumstance victim_is_public_servant := "That person is a public servant";
+
+            /// liability is established by any one of the three statutory limbs
+            any_of {
+                circumstance during_execution_of_duty := "That public servant is in the execution of his duty as such public servant";
+
+                all_of {
+                    mens_rea intent_to_prevent_or_deter := "Intent to prevent or deter that person from discharging his duty as such public servant";
+                }
+
+                circumstance consequence_of_lawful_discharge := "The assault or criminal force is in consequence of anything done or attempted to be done by such person in the lawful discharge of his duty as such public servant";
+            }
+        }
     }
 
-    penalty {
+    penalty or_both {
         imprisonment := 0 years .. 4 years;
-        fine := $0.00 .. $50,000.00;
-    }
-
-    illustration example1 {
-        "A is convicted under section 353. A shall be punished as prescribed by section 353."
+        fine := unlimited;
     }
 }

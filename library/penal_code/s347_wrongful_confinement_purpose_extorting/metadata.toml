@@ -2,16 +2,17 @@
 section_number = "347"
 title = "Wrongful confinement for the purpose of extorting property or constraining to an illegal act"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Wrongful confinement to extort property or constrain to an illegal act."
+summary = "Punishes wrongful confinement used to extort property or valuable security, or to coerce an illegal act or offence-facilitating information."
 source = "Singapore Penal Code 1871, Section 347"
 
 [verification]

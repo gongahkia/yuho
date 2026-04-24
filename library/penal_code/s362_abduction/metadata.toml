@@ -2,16 +2,17 @@
 section_number = "362"
 title = "Abduction"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Abduction by forceful compulsion or deceitful inducement to go from any place."
+summary = "Defines abduction as compelling by force or inducing by deceit any person to go from any place."
 source = "Singapore Penal Code 1871, Section 362"
 
 [verification]

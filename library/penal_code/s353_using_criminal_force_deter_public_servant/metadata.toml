@@ -2,16 +2,17 @@
 section_number = "353"
 title = "Using criminal force to deter a public servant from discharge of his duty"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Assault or criminal force against a public servant in execution of duty."
+summary = "Makes it an offence to assault or use criminal force against a public servant in the execution of duty, to deter that duty, or in retaliation for lawful discharge of that duty."
 source = "Singapore Penal Code 1871, Section 353"
 
 [verification]

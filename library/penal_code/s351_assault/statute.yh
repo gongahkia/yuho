@@ -1,37 +1,36 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr351-#pr351-
-// Singapore Penal Code Section 351 -- Assault
-// Yuho v5 Syntax
-
-struct S351Case {
-    string actor,
-    bool criteriaMet,
-}
-
-fn s351_matches(bool criteriaMet) : bool {
-    match {
-        case TRUE if criteriaMet == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
 
 statute 351 "Assault" effective 1872-01-01 {
     definitions {
-        term_summary := "Definition of assault.";
+        assault := "Whoever makes any gesture or any preparation, intending or knowing it to be likely that such gesture or preparation will cause any person present to apprehend that he who makes that gesture or preparation is about to use criminal force to that person, is said to commit an assault.";
+        explanation_mere_words := "Explanation. — Mere words do not amount to an assault. But the words which a person uses may give to his gestures or preparations such a meaning as may make those gestures or preparations amount to an assault.";
     }
 
     elements {
-        /// statutory criteria for the defined term
-        circumstance criteria := "Statutory criteria for the defined term are satisfied";
+        /// Section 351 requires the gesture or preparation, the required intention or knowledge, and the victim's apprehension of imminent criminal force.
+        all_of {
+            actus_reus gesture_or_preparation := "Whoever makes any gesture or any preparation";
+            any_of {
+                mens_rea intention := "intending that such gesture or preparation will cause any person present to apprehend that he who makes that gesture or preparation is about to use criminal force to that person";
+                mens_rea knowledge := "knowing it to be likely that such gesture or preparation will cause any person present to apprehend that he who makes that gesture or preparation is about to use criminal force to that person";
+            }
+            circumstance apprehension_of_imminent_criminal_force := "such gesture or preparation will cause any person present to apprehend that he who makes that gesture or preparation is about to use criminal force to that person";
+        }
     }
 
-    penalty {
-        fine := $0.00 .. $1,000.00;
+    /// Punishment for assault is provided separately by section 352.
+
+    illustration illustration_a {
+        "( a ) A shakes his fist at Z , intending or knowing it to be likely that he may thereby cause Z to believe that A is about to strike Z . A has committed an assault."
     }
 
-    illustration example1 {
-        "The conduct of A matches the statutory criteria defined under section 351."
+    illustration illustration_b {
+        "( b ) A begins to unloose the muzzle of a ferocious dog, intending or knowing it to be likely that he may thereby cause Z to believe that he is about to cause the dog to attack Z. A has committed an assault upon Z ."
+    }
+
+    illustration illustration_c {
+        "( c ) A takes up a stick, saying to Z , “I will give you a beating”. Here, though the words used by A could in no case amount to an assault, and though the mere gesture, unaccompanied by any other circumstances might not amount to an assault, the gesture explained by the words may amount to an assault."
     }
 }

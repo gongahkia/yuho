@@ -1,11 +1,11 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr359-#pr359-
-// Singapore Penal Code Section 359
 
 statute 359 "Kidnapping" effective 1872-01-01 {
     definitions {
-        kidnapping := "Two forms -- kidnapping from Singapore, and kidnapping from lawful guardianship";
+        kidnapping := "Kidnapping is of 2 kinds: kidnapping from Singapore, and kidnapping from lawful guardianship.";
+        kidnapping_from_singapore := "kidnapping from Singapore";
+        kidnapping_from_lawful_guardianship := "kidnapping from lawful guardianship";
     }
-
 }

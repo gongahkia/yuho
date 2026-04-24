@@ -1,12 +1,27 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr361-#pr361-
-// Singapore Penal Code Section 361
+/// @amendment [15/2019]
 
-statute 361 "Kidnapping from lawful guardianship" effective 1872-01-01 {
+statute 361 "Kidnapping from lawful guardianship" effective 1872-01-01 effective 2019-12-31 {
     definitions {
-        lawful_guardian := "Any person lawfully entrusted with the care or custody of a minor or person of unsound mind";
-        enticement := "Taking or enticing a minor or person of unsound mind out of the keeping of the lawful guardian";
+        lawful_guardian := "The words “lawful guardian” in this section include any person lawfully entrusted with the care or custody of such minor or other person.";
     }
 
+    elements {
+        all_of {
+            actus_reus taking_or_enticing := "Whoever takes or entices any minor below 16 years of age, or any person of unsound mind, out of the keeping of the lawful guardian of such minor or person of unsound mind.";
+            any_of {
+                circumstance minor_below_16 := "The person taken or enticed is a minor below 16 years of age.";
+                circumstance person_of_unsound_mind := "The person taken or enticed is a person of unsound mind.";
+            }
+            circumstance out_of_guardian_keeping := "The person is taken or enticed out of the keeping of the lawful guardian of such minor or person of unsound mind.";
+            circumstance without_guardian_consent := "The taking or enticing is without the consent of such guardian.";
+        }
+    }
+
+    exception good_faith_claim_to_illegitimate_child_custody {
+        "This section does not extend to the act of any person who in good faith believes himself to be the father of an illegitimate child or who in good faith believes himself to be entitled to the lawful custody of such child, unless such act is committed for an immoral or unlawful purpose."
+        "This section does not extend to that act."
+    }
 }

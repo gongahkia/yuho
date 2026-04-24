@@ -2,16 +2,17 @@
 section_number = "348"
 title = "Wrongful confinement for the purpose of extorting confession or of compelling restoration of property"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Wrongful confinement to extort confession or compel restoration of property."
+summary = "This section criminalises wrongfully confining a person in order to extract a confession or information, or to compel restoration of property or satisfaction of a claim."
 source = "Singapore Penal Code 1871, Section 348"
 
 [verification]

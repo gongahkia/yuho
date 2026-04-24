@@ -2,16 +2,17 @@
 section_number = "360"
 title = "Kidnapping from Singapore"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "A person who conveys another beyond Singapore without consent is said to kidnap from Singapore."
+summary = "Section 360 defines kidnapping from Singapore as conveying a person beyond Singapore without the required consent."
 source = "Singapore Penal Code 1871, Section 360"
 
 [verification]

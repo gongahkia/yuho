@@ -2,16 +2,17 @@
 section_number = "354A"
 title = "Outraging modesty in certain circumstances"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Whoever, to commit or facilitate a s354 offence, voluntarily causes death, hurt, wrongful restraint or fear thereof, is liable to imprisonment and caning."
+summary = "This section criminalises using or attempting specified violence, restraint, or threats in order to commit or facilitate an offence under section 354, with enhanced punishment if done in a lift or against a person below 14 years of age."
 source = "Singapore Penal Code 1871, Section 354A"
 
 [verification]

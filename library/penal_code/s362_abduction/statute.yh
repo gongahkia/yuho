@@ -1,11 +1,8 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr362-#pr362-
-// Singapore Penal Code Section 362
-
 statute 362 "Abduction" effective 1872-01-01 {
     definitions {
-        abduction := "Forcing or deceitfully inducing a person to go from any place";
+        abduct := "Whoever by force compels, or by any deceitful means induces any person to go from any place, is said to abduct that person.";
     }
-
 }

@@ -1,16 +1,14 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr363A-#pr363A-
-// Singapore Penal Code Section 363A
+
+referencing penal_code/s362_abduction
 
 statute 363A "Punishment for abduction" effective 1872-01-01 {
-    definitions {
-        abduction_reference := "Abduction as defined under section 362";
-    }
-
-    penalty {
+    /// Punishment for the offence of abduction under section 362.
+    penalty or_both {
         imprisonment := 0 years .. 7 years;
-        fine := $0.00 .. $10,000.00;
+        fine := unlimited;
+        supplementary := "Whoever abducts any person shall be punished with imprisonment for a term which may extend to 7 years, or with fine, or with caning, or with any combination of such punishments.";
     }
-
 }

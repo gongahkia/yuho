@@ -2,16 +2,17 @@
 section_number = "358"
 title = "Assaulting or using criminal force on grave and sudden provocation"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Assault or criminal force on grave and sudden provocation -- reduced punishment version of ss352-355."
+summary = "This section punishes assault or use of criminal force against a person when that person gave grave and sudden provocation."
 source = "Singapore Penal Code 1871, Section 358"
 
 [verification]

@@ -2,16 +2,17 @@
 section_number = "361"
 title = "Kidnapping from lawful guardianship"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Taking or enticing a minor or person of unsound mind out of the keeping of their lawful guardian."
+summary = "Section 361 defines kidnapping from lawful guardianship where a minor below 16 or a person of unsound mind is taken or enticed out of a lawful guardian’s keeping without that guardian’s consent."
 source = "Singapore Penal Code 1871, Section 361"
 
 [verification]

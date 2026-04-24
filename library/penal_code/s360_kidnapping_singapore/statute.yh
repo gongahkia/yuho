@@ -1,11 +1,11 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr360-#pr360-
-// Singapore Penal Code Section 360
 
 statute 360 "Kidnapping from Singapore" effective 1872-01-01 {
     definitions {
-        kidnapping_from_singapore := "Conveying a person beyond the limits of Singapore without their consent or the consent of a person lawfully authorised to consent on their behalf";
+        conveys_beyond_limits_of_singapore := "Conveys any person beyond the limits of Singapore";
+        without_consent := "Without the consent of that person, or of some person legally authorised to consent on behalf of that person";
+        kidnapping_from_singapore := "Whoever conveys any person beyond the limits of Singapore without the consent of that person, or of some person legally authorised to consent on behalf of that person, is said to kidnap that person from Singapore.";
     }
-
 }

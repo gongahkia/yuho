@@ -1,25 +1,36 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr354A-#pr354A-
-// Singapore Penal Code Section 354A
+/// @amendment [23/84]
+statute 354A "Outraging modesty in certain circumstances" effective 1872-01-01 effective 1984-08-31 {
+    subsection (1) {
+        elements {
+            all_of {
+                actus_reus section_354_context := "In order to commit or to facilitate the commission of an offence against any person under section 354";
+                actus_reus voluntary_causation_or_attempt := "Voluntarily causes or attempts to cause to that person death, or hurt, or wrongful restraint, or fear of instant death, instant hurt or instant wrongful restraint";
+            }
+        }
 
-statute 354A "Outraging modesty in certain circumstances" effective 1872-01-01 {
-    definitions {
-        voluntary_harm := "Voluntarily causing death, hurt, wrongful restraint, or fear thereof to facilitate a section 354 offence";
+        penalty cumulative {
+            imprisonment := 2 years .. 10 years;
+            supplementary := "The offender shall also be punished with caning.";
+        }
     }
 
-    elements {
-        /// in order to commit or facilitate an offence under s354
-        circumstance predicate_offence := "In order to commit or facilitate a section 354 offence";
-        /// voluntary causation of death, hurt, wrongful restraint or fear thereof
-        actus_reus causes_harm := "Voluntarily causes or attempts to cause death, hurt, wrongful restraint, or fear of instant death, hurt or restraint";
-        /// the harm must be caused voluntarily
-        mens_rea voluntary := "Acts voluntarily";
-    }
+    subsection (2) {
+        elements {
+            all_of {
+                actus_reus subsection_1_offence := "Commits an offence under subsection (1)";
+                any_of {
+                    circumstance lift_in_building := "In a lift in any building";
+                    circumstance victim_below_14 := "Against any person below 14 years of age";
+                }
+            }
+        }
 
-    penalty {
-        imprisonment := 2 years .. 10 years;
-        caning := 0 .. 24 strokes;
+        penalty cumulative {
+            imprisonment := 3 years .. 10 years;
+            supplementary := "The offender shall also be punished with caning.";
+        }
     }
-
 }

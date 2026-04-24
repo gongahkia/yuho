@@ -1,44 +1,21 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr348-#pr348-
-// Singapore Penal Code Section 348 -- Wrongful confinement for the purpose of extorting confession or of compelling restoration of property
-// Yuho v5 Syntax
-
-struct S348Case {
-    string accused,
-    string victim,
-    bool actusReus,
-    bool mensRea,
-}
-
-fn s348_applies(bool actusReus, bool mensRea) : bool {
-    match {
-        case TRUE if actusReus == TRUE && mensRea == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
 
 statute 348 "Wrongful confinement for the purpose of extorting confession or of compelling restoration of property" effective 1872-01-01 {
-    definitions {
-        offence_summary := "Wrongful confinement to extort confession or compel restoration of property.";
-    }
-
     elements {
-        /// mental element required for the offence
-        mens_rea intent := "Intent or knowledge as required by the section";
-        /// physical act constituting the offence
-        actus_reus act := "The prohibited act defined by the section";
-        /// contextual requirement -- victim, circumstances, or result
-        circumstance context := "Statutory circumstances are satisfied";
+        /// The offence requires wrongful confinement and either prohibited purpose.
+        all_of {
+            actus_reus wrongful_confinement := "Whoever wrongfully confines any person";
+            any_of {
+                mens_rea purpose_of_extorting_confession_or_detection_information := "For the purpose of extorting from the person confined, or from any person interested in the person confined, any confession or any information which may lead to the detection of an offence or misconduct";
+                mens_rea purpose_of_compelling_restoration_or_satisfaction := "For the purpose of constraining the person confined, or any person interested in the person confined, to restore, or to cause the restoration of any property or valuable security, or to satisfy any claim or demand, or to give information which may lead to the restoration of any property or valuable security";
+            }
+        }
     }
 
-    penalty {
-        imprisonment := 0 years .. 3 years;
-        fine := $0.00 .. $50,000.00;
-    }
-
-    illustration example1 {
-        "A commits the conduct described in section 348 against B. A is guilty of the offence under section 348."
+    penalty cumulative {
+        imprisonment := 0 days .. 3 years;
+        fine := unlimited;
     }
 }

@@ -1,25 +1,27 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr355-#pr355-
-// Singapore Penal Code Section 355
+/// @amendment [Act 23 of 2021 wef 01/03/2022]
 
-statute 355 "Assault or criminal force with intent to dishonour otherwise than on grave and sudden provocation" effective 1872-01-01 {
+statute 355 "Assault or criminal force with intent to dishonour otherwise than on grave and sudden provocation" effective 1872-01-01 effective 2022-03-01 {
     definitions {
-        dishonour := "Causing disgrace or loss of honour to a person";
+        explanation_same_as_section_352 := "Explanation. — This section is subject to the same explanation as section 352.";
     }
 
     elements {
-        /// assault or criminal force to a person
-        actus_reus assault_or_force := "Assaults or uses criminal force to any person";
-        /// intent to dishonour that person
-        mens_rea intent_dishonour := "Intending to dishonour that person";
-        /// not on grave and sudden provocation from that person
-        circumstance not_provoked := "Otherwise than on grave and sudden provocation given by that person";
+        /// Section 355 is conjunctive: the accused must assault or use criminal force, must do so with intent to dishonour, and the act must be otherwise than on grave and sudden provocation given by that person.
+        all_of {
+            any_of {
+                actus_reus assault := "Whoever assaults any person";
+                actus_reus use_of_criminal_force := "Whoever uses criminal force to any person";
+            }
+            mens_rea intent_to_dishonour := "Intending thereby to dishonour that person";
+            circumstance absence_of_grave_and_sudden_provocation := "Otherwise than on grave and sudden provocation given by that person";
+        }
     }
 
-    penalty {
-        imprisonment := 0 years .. 2 years;
-        fine := $0.00 .. $5,000.00;
+    penalty or_both {
+        imprisonment := 0 days .. 2 years;
+        fine := unlimited;
     }
-
 }
