@@ -2,18 +2,18 @@
 section_number = "223"
 title = "Escape from confinement negligently suffered by a public servant"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Public servant legally bound to keep in confinement negligently suffers a person charged with, convicted of, or lawfully committed for an offence to escape."
+summary = "A public servant commits an offence by negligently allowing a person whom the servant is legally bound to keep in confinement to escape."
 source = "Singapore Penal Code 1871, Section 223"
 
 [verification]
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr223-#pr223-"
-disclaimer = "Educational purposes only. Cross-reference with official SSO text."

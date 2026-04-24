@@ -1,45 +1,19 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr223-#pr223-
-// Singapore Penal Code Section 223 - Escape from confinement negligently suffered by a public servant
-// Yuho v5 Syntax
 
-struct S223Case {
-    string accused,
-    bool isPublicServant,
-    bool legallyBound,
-    bool negligentlySuffersEscape,
-}
-fn s223_applies(bool isPublicServant, bool legallyBound, bool negligentlySuffersEscape) : bool {
-    match {
-        case TRUE if isPublicServant == FALSE := consequence FALSE;
-        case TRUE if legallyBound == FALSE := consequence FALSE;
-        case TRUE if negligentlySuffersEscape == FALSE := consequence FALSE;
-        case _ := consequence TRUE;
-    }
-}
 statute 223 "Escape from confinement negligently suffered by a public servant" effective 1872-01-01 {
-    definitions {
-        public_servant := "Person defined as a public servant under section 21";
-        negligent := "Failure to exercise reasonable care such that a person escapes";
-    }
-
     elements {
         all_of {
-            circumstance public_servant_status := "Accused is a public servant";
-            circumstance duty := "Legally bound as such public servant to keep in confinement any person charged with or convicted of any offence, or lawfully committed to custody";
-            actus_reus suffers_escape := "Suffers such person to escape from confinement";
+            circumstance public_servant_status := "Whoever, being a public servant";
+            circumstance legal_duty_of_confinement := "Legally bound as such public servant to keep in confinement any person charged with or convicted of any offence, or lawfully committed to custody";
+            actus_reus suffering_escape := "Suffers such person to escape from confinement";
             mens_rea negligence := "Negligently";
         }
     }
 
-    penalty {
-        imprisonment := 0 years .. 2 years;
-        fine := $0.00 .. $20,000.00;
+    penalty or_both {
+        imprisonment := 0 days .. 2 years;
+        fine := unlimited;
     }
-
-    illustration example1 {
-        "A, a prison warder, carelessly leaves a cell door unlocked permitting B to escape. A commits an offence under s223."
-    }
-
 }

@@ -1,49 +1,33 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr213-#pr213-
-// Singapore Penal Code Section 213 - Taking gifts, etc., to screen an offender from punishment
-// Yuho v5 Syntax
-
-struct S213Case {
-    string accused,
-    bool acceptsOrAgreesOrAttemptsGratification,
-    bool considerationForScreening,
-    string underlyingOffencePunishment,
-}
-
-fn evaluate_s213(bool acceptsOrAgreesOrAttemptsGratification, bool considerationForScreening, string underlyingOffencePunishment) : string {
-    match {
-        case TRUE if acceptsOrAgreesOrAttemptsGratification == FALSE := consequence "Not liable - no gratification";
-        case TRUE if considerationForScreening == FALSE := consequence "Not liable - not for screening";
-        case TRUE if underlyingOffencePunishment == "death" := consequence "Liable s213(a) - up to 10 years + fine";
-        case TRUE if underlyingOffencePunishment == "life_or_up_to_20" := consequence "Liable s213(b) - up to 7 years + fine";
-        case _ := consequence "Liable s213(c) - up to 1/4 of longest term";
-    }
-}
 
 statute 213 "Taking gifts, etc., to screen an offender from punishment" effective 1872-01-01 {
-    definitions {
-        gratification := "Any pecuniary or non-pecuniary benefit or inducement";
-        restitution := "Restoration of property";
-        screening := "Preventing the offender from legal punishment";
-    }
-
     elements {
+        /// Section 213 requires the prohibited gratification or restitution conduct, the screening consideration, and a qualifying predicate offence punishment tier.
         all_of {
-            /// actus reus: accepting, agreeing, or attempting to obtain gratification or restitution
-            actus_reus accept := "Accepts, or agrees to accept, or attempts to obtain any gratification for himself or another, or any restitution of property to himself or another";
-            /// mens rea: consideration for screening or forbearance
-            mens_rea consideration := "In consideration of concealing an offence, screening any person from legal punishment, or not proceeding against any person for the purpose of bringing him to legal punishment";
+            actus_reus gratification_or_restitution := "Accepts, or agrees to accept, or attempts to obtain any gratification for himself or any other person, or any restitution of property to himself or any other person";
+            circumstance screening_consideration := "In consideration of his concealing an offence, or of his screening any person from legal punishment for any offence, or of his not proceeding against any person for the purpose of bringing him to legal punishment";
+            any_of {
+                circumstance death_punishable_offence := "The offence is punishable with death";
+                circumstance life_or_20_year_offence := "The offence is punishable with imprisonment for life, or with imprisonment which may extend to 20 years";
+                circumstance below_20_year_offence := "The offence is punishable with imprisonment not extending to 20 years";
+            }
         }
     }
 
-    penalty {
+    penalty when death_punishable_offence {
         imprisonment := 0 years .. 10 years;
-        fine := $0.00 .. $50,000.00;
+        fine := unlimited;
     }
 
-    // tiered penalty mirrors s212:
-    // (a) death-punishable: up to 10 years + fine
-    // (b) life or up to 20 years: up to 7 years + fine
-    // (c) up to 20 years: up to 1/4 of longest term, fine, or both
+    penalty when life_or_20_year_offence {
+        imprisonment := 0 years .. 7 years;
+        fine := unlimited;
+    }
+
+    penalty or_both when below_20_year_offence {
+        fine := unlimited;
+        supplementary := "Shall be punished with imprisonment for a term which may extend to one‑fourth part of the longest term of imprisonment provided for that offence, or with fine, or with both.";
+    }
 }

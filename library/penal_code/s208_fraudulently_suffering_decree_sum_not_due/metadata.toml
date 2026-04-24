@@ -2,18 +2,18 @@
 section_number = "208"
 title = "Fraudulently suffering a decree for a sum not due"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Fraudulently causing or suffering a decree or order to be passed against oneself for a sum not due, a larger sum than due, or for property not entitled; or suffering a satisfied decree to be executed again."
+summary = "Section 208 criminalises fraudulently causing or suffering a decree or order to pass or be enforced for money, property, or claims that are not lawfully due."
 source = "Singapore Penal Code 1871, Section 208"
 
 [verification]
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr208-#pr208-"
-disclaimer = "Educational purposes only. Cross-reference with official SSO text."

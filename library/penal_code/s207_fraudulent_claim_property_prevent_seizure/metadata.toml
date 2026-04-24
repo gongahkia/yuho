@@ -2,18 +2,18 @@
 section_number = "207"
 title = "Fraudulent claim to property to prevent its seizure as a forfeiture, in execution of a decree or under or pursuant to an enforcement order"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Fraudulently accepting, claiming, or practising deception about property one has no right to, intending to prevent its seizure as forfeiture, fine satisfaction, or decree execution."
+summary = "Makes it an offence fraudulently to accept, receive, claim, or deceptively assert rights to property with intent to stop its lawful seizure or enforcement."
 source = "Singapore Penal Code 1871, Section 207"
 
 [verification]
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr207-#pr207-"
-disclaimer = "Educational purposes only. Cross-reference with official SSO text."

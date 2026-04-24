@@ -2,18 +2,18 @@
 section_number = "216B"
 title = "“Harbour”"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Defines 'harbour' for ss212, 216 and 216A as supplying shelter, food, drink, money, clothes, arms, ammunition, means of conveyance, or assisting evasion of apprehension."
+summary = "This section defines “harbour” for sections 212, 216 and 216A to include supplying shelter, sustenance, resources, conveyance, or assistance to evade apprehension."
 source = "Singapore Penal Code 1871, Section 216B"
 
 [verification]
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr216B-#pr216B-"
-disclaimer = "Educational purposes only. Cross-reference with official SSO text."

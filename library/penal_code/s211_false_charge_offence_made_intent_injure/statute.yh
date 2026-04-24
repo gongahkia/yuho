@@ -1,49 +1,31 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr211-#pr211-
-// Singapore Penal Code Section 211 - False charge of offence made with intent to injure
-// Yuho v5 Syntax
-
-struct S211Case {
-    string accused,
-    bool institutesProceedingOrFalselyCharges,
-    bool intentToCauseInjury,
-    bool knowsNoJustOrLawfulGround,
-    bool chargeIsCapitalOr7YearsPlus,
-}
-
-fn evaluate_s211(bool institutesProceedingOrFalselyCharges, bool intentToCauseInjury, bool knowsNoJustOrLawfulGround, bool chargeIsCapitalOr7YearsPlus) : string {
-    match {
-        case TRUE if institutesProceedingOrFalselyCharges == FALSE := consequence "Not liable - no false charge or proceeding";
-        case TRUE if intentToCauseInjury == FALSE := consequence "Not liable - no intent to injure";
-        case TRUE if knowsNoJustOrLawfulGround == FALSE := consequence "Not liable - believed just ground exists";
-        case TRUE if chargeIsCapitalOr7YearsPlus == TRUE := consequence "Liable under s211 - aggravated (up to 7 years)";
-        case _ := consequence "Liable under s211 - simple (up to 2 years)";
-    }
-}
 
 statute 211 "False charge of offence made with intent to injure" effective 1872-01-01 {
-    definitions {
-        injury := "As defined in section 44";
-        criminal_proceeding := "Any proceeding by which a person is accused of an offence";
-    }
-
     elements {
+        /// Section 211 requires the injury intent, one of the two charging acts, knowledge that no just or lawful ground exists, and one of the two mutually exclusive punishment-triggering charge categories.
         all_of {
-            /// actus reus: instituting proceeding or falsely charging
-            actus_reus action := "Institutes or causes to be instituted any criminal proceeding against that person, or falsely charges any person with having committed an offence";
-            /// mens rea: intent to cause injury
-            mens_rea intent := "With intent to cause injury to any person";
-            /// mens rea: knowledge of no just ground
-            mens_rea knowledge := "Knowing that there is no just or lawful ground for such proceeding or charge";
+            mens_rea intent_to_cause_injury := "With intent to cause injury to any person";
+            any_of {
+                actus_reus institutes_criminal_proceeding := "Institutes or causes to be instituted any criminal proceeding against that person";
+                actus_reus falsely_charges_offence := "Falsely charges any person with having committed an offence";
+            }
+            mens_rea knowledge_no_just_or_lawful_ground := "Knowing that there is no just or lawful ground for such proceeding or charge against that person";
+            any_of {
+                circumstance ordinary_false_charge := "Such criminal proceeding is not instituted on a false charge of an offence punishable with death, or imprisonment for 7 years or upwards";
+                circumstance aggravated_false_charge := "Such criminal proceeding is instituted on a false charge of an offence punishable with death, or imprisonment for 7 years or upwards";
+            }
         }
     }
 
-    penalty {
-        imprisonment := 0 years .. 7 years;
-        fine := $0.00 .. $50,000.00;
+    penalty or_both when ordinary_false_charge {
+        imprisonment := 0 days .. 2 years;
+        fine := unlimited;
     }
 
-    // base: up to 2 years imprisonment, fine, or both
-    // aggravated (charge of death-punishable or 7-year-plus offence): up to 7 years + fine
+    penalty when aggravated_false_charge {
+        imprisonment := 0 days .. 7 years;
+        fine := unlimited;
+    }
 }

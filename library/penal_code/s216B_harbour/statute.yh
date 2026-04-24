@@ -1,12 +1,10 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr216B-#pr216B-
-// Singapore Penal Code Section 216B - “Harbour”
-// Yuho v5 Syntax
 
 statute 216B "“Harbour”" effective 1872-01-01 {
     definitions {
-        harbour := "Supplying a person with shelter, food, drink, money, clothes, arms, ammunition, or means of conveyance, or assisting a person in any way to evade apprehension";
-        applies_to := "Sections 212, 216 and 216A";
+        applies_in_sections := "In sections 212, 216 and 216A.";
+        harbour := "“harbour” includes the supplying a person with shelter, food, drink, money, clothes, arms, ammunition, or means of conveyance, or the assisting a person in any way to evade apprehension.";
     }
 }

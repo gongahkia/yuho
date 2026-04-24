@@ -1,54 +1,25 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr218-#pr218-
-// Singapore Penal Code Section 218 - Public servant framing an incorrect record or writing with intent to save person from punishment, or property from forfeiture
-// Yuho v5 Syntax
 
-struct S218Case {
-    string accused,
-    bool isPublicServant,
-    bool chargedWithPreparation,
-    bool framesIncorrectly,
-    bool knowledgeIncorrect,
-    bool intentToSaveOrHarm,
-}
-fn s218_applies(bool isPublicServant, bool chargedWithPreparation, bool framesIncorrectly, bool knowledgeIncorrect, bool intentToSaveOrHarm) : bool {
-    match {
-        case TRUE if isPublicServant == FALSE := consequence FALSE;
-        case TRUE if chargedWithPreparation == FALSE := consequence FALSE;
-        case TRUE if framesIncorrectly == FALSE := consequence FALSE;
-        case TRUE if knowledgeIncorrect == FALSE := consequence FALSE;
-        case TRUE if intentToSaveOrHarm == FALSE := consequence FALSE;
-        case _ := consequence TRUE;
-    }
-}
 statute 218 "Public servant framing an incorrect record or writing with intent to save person from punishment, or property from forfeiture" effective 1872-01-01 {
-    definitions {
-        public_servant := "Person defined as a public servant under section 21";
-        record := "Any record or other writing the public servant is charged with preparing";
-    }
-
     elements {
+        /// The offence requires public-servant status, charge over the preparation, incorrect framing, knowledge of that incorrectness, and one prohibited intended or foreseen outcome.
         all_of {
-            circumstance public_servant_status := "Accused is a public servant";
-            circumstance duty_to_prepare := "Charged with preparation of any record or other writing";
-            actus_reus frames_incorrect := "Frames that record or writing in a manner known to be incorrect";
-            mens_rea knowledge := "Knows the framing to be incorrect";
+            circumstance public_servant_status := "Whoever, being a public servant";
+            circumstance charged_with_preparation := "Being, as such public servant, charged with the preparation of any record or other writing";
+            actus_reus incorrect_framing := "Frames that record or writing in a manner which he knows to be incorrect";
+            mens_rea knowledge_incorrect := "Knows that record or writing to be incorrect";
             any_of {
-                mens_rea intent_loss := "Intent to cause, or knowledge that it is likely to cause, loss or injury to the public or any person";
-                mens_rea intent_save_punishment := "Intent to save, or knowledge of likelihood to save, any person from legal punishment";
-                mens_rea intent_save_property := "Intent to save, or knowledge of likelihood to save, any property from forfeiture or charge";
+                mens_rea loss_or_injury_outcome := "With intent to cause, or knowing it to be likely that he will thereby cause, loss or injury to the public or to any person";
+                mens_rea save_person_from_punishment := "With intent thereby to save, or knowing it to be likely that he will thereby save, any person from legal punishment";
+                mens_rea save_property_from_forfeiture := "With intent to save, or knowing that he is likely thereby to save, any property from forfeiture or other charge to which it is liable by law";
             }
         }
     }
 
-    penalty {
-        imprisonment := 0 years .. 3 years;
-        fine := $0.00 .. $20,000.00;
+    penalty or_both {
+        imprisonment := 0 days .. 3 years;
+        fine := unlimited;
     }
-
-    illustration example1 {
-        "A, a registrar, knowingly enters a false record of a conviction to save B from punishment. A commits an offence under s218."
-    }
-
 }

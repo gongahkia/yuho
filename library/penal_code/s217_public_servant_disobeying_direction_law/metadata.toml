@@ -2,18 +2,18 @@
 section_number = "217"
 title = "Public servant disobeying a direction of law with intent to save person from punishment or property from forfeiture"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Public servant knowingly disobeying a direction of law with intent to save a person from punishment or property from forfeiture."
+summary = "This section criminalises a public servant knowingly disobeying the law governing his conduct in order to save a person from punishment or property from forfeiture or charge."
 source = "Singapore Penal Code 1871, Section 217"
 
 [verification]
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr217-#pr217-"
-disclaimer = "Educational purposes only. Cross-reference with official SSO text."

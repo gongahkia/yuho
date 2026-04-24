@@ -1,51 +1,38 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr221-#pr221-
-// Singapore Penal Code Section 221 - Intentional omission to apprehend on the part of a public servant bound by law to apprehend
-// Yuho v5 Syntax
 
-struct S221Case {
-    string accused,
-    bool isPublicServant,
-    bool legallyBound,
-    bool intentionalOmissionOrAid,
-    string underlyingOffenceSeverity,
-}
-fn s221_applies(bool isPublicServant, bool legallyBound, bool intentionalOmissionOrAid) : bool {
-    match {
-        case TRUE if isPublicServant == FALSE := consequence FALSE;
-        case TRUE if legallyBound == FALSE := consequence FALSE;
-        case TRUE if intentionalOmissionOrAid == FALSE := consequence FALSE;
-        case _ := consequence TRUE;
-    }
-}
 statute 221 "Intentional omission to apprehend on the part of a public servant bound by law to apprehend" effective 1872-01-01 {
-    definitions {
-        public_servant := "Person defined as a public servant under section 21";
-        legally_bound := "Bound as such public servant to apprehend or keep in confinement";
-    }
-
     elements {
+        /// Section 221 requires public-servant status, the legal duty to apprehend or confine, one intentional escape-related act, and one punishment-tier circumstance for the underlying offence.
         all_of {
-            circumstance public_servant_status := "Accused is a public servant";
-            circumstance duty := "Legally bound as such public servant to apprehend or keep in confinement any person charged with or liable to be apprehended for an offence";
+            circumstance public_servant_status := "Whoever, being a public servant";
+            circumstance legal_duty := "Legally bound as such public servant to apprehend or to keep in confinement any person charged with or liable to be apprehended for an offence";
             any_of {
-                actus_reus omit_apprehend := "Intentionally omits to apprehend such person";
-                actus_reus suffer_escape := "Intentionally suffers such person to escape";
-                actus_reus aid_escape := "Intentionally aids such person in escaping or attempting to escape";
+                actus_reus omission_to_apprehend := "Intentionally omits to apprehend such person";
+                actus_reus suffering_escape := "Intentionally suffers such person to escape";
+                actus_reus aiding_escape := "Intentionally aids such person in escaping or attempting to escape from such confinement";
             }
-            mens_rea intent := "Intentionally";
+            any_of {
+                circumstance offence_punishable_with_death := "The person in confinement, or who ought to have been apprehended, was charged with or liable to be apprehended for an offence punishable with death";
+                circumstance offence_punishable_with_life_or_20_years := "The person in confinement, or who ought to have been apprehended, was charged with or liable to be apprehended for an offence punishable with imprisonment for life, or imprisonment for a term which may extend to 20 years";
+                circumstance offence_punishable_below_20_years := "The person in confinement, or who ought to have been apprehended, was charged with or liable to be apprehended for an offence punishable with imprisonment for a term less than 20 years";
+            }
         }
     }
 
-    penalty {
+    penalty when offence_punishable_with_death {
         imprisonment := 0 years .. 10 years;
-        fine := $0.00 .. $50,000.00;
+        fine := unlimited;
     }
 
-    illustration example1 {
-        "A, a police officer legally bound to apprehend B who is liable for a murder charge, intentionally allows B to escape. A is punishable under s221(a) with imprisonment up to 10 years and fine."
+    penalty when offence_punishable_with_life_or_20_years {
+        imprisonment := 0 years .. 7 years;
+        fine := unlimited;
     }
 
-    // penalty tiered: (a) death offence: up to 10 years + fine; (b) life/20yr offence: up to 7 years + fine; (c) <20yr offence: up to 5 years or fine or both
+    penalty or_both when offence_punishable_below_20_years {
+        imprisonment := 0 years .. 5 years;
+        fine := unlimited;
+    }
 }

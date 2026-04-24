@@ -2,18 +2,18 @@
 section_number = "213"
 title = "Taking gifts, etc., to screen an offender from punishment"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Accepting, agreeing to accept, or attempting to obtain gratification or restitution of property, in consideration of concealing an offence or screening an offender from legal punishment."
+summary = "Section 213 criminalises accepting, agreeing to accept, or attempting to obtain gratification or restitution in return for concealing an offence or screening an offender from punishment."
 source = "Singapore Penal Code 1871, Section 213"
 
 [verification]
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr213-#pr213-"
-disclaimer = "Educational purposes only. Cross-reference with official SSO text."

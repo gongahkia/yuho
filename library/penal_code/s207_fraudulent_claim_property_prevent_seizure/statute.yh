@@ -1,45 +1,26 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr207-#pr207-
-// Singapore Penal Code Section 207 - Fraudulent claim to property to prevent its seizure as a forfeiture, in execution of a decree or under or pursuant to an enforcement order
-// Yuho v5 Syntax
+/// @amendment [Act 25 of 2021 wef 01/04/2022]
 
-struct S207Case {
-    string accused,
-    bool fraudulentAcceptanceOrClaim,
-    bool knowsNoRightToProperty,
-    bool intentToPreventSeizure,
-}
-
-fn evaluate_s207(bool fraudulentAcceptanceOrClaim, bool knowsNoRightToProperty, bool intentToPreventSeizure) : string {
-    match {
-        case TRUE if fraudulentAcceptanceOrClaim == FALSE := consequence "Not liable - no fraudulent claim";
-        case TRUE if knowsNoRightToProperty == FALSE := consequence "Not liable - genuine claim to property";
-        case TRUE if intentToPreventSeizure == FALSE := consequence "Not liable - no intent to prevent seizure";
-        case _ := consequence "Liable under s207";
-    }
-}
-
-statute 207 "Fraudulent claim to property to prevent its seizure as a forfeiture, in execution of a decree or under or pursuant to an enforcement order" effective 1872-01-01 {
-    definitions {
-        fraudulently := "As defined in section 25";
-        forfeiture := "Taking of property as a penalty or satisfaction of fine under a sentence";
-        deception := "Any false statement or practice concerning rights to property";
-    }
-
+statute 207 "Fraudulent claim to property to prevent its seizure as a forfeiture, in execution of a decree or under or pursuant to an enforcement order" effective 1872-01-01 effective 2022-04-01 {
     elements {
+        /// The offence requires a fraudulent claim-or-deception act, lack of right, and a seizure-prevention purpose.
         all_of {
-            /// actus reus: fraudulent claim or deception
-            actus_reus claim := "Fraudulently accepts, receives or claims any property or interest therein, or practises any deception touching any right to property";
-            /// mens rea: knowledge of no right
-            mens_rea knowledge := "Knowing that he has no right or rightful claim to such property or interest";
-            /// mens rea: intent to prevent seizure
-            mens_rea intent := "Intending thereby to prevent that property or interest from being taken as a forfeiture or in satisfaction of a fine, or in execution of a decree, or under or pursuant to an enforcement order";
+            any_of {
+                actus_reus fraudulent_acceptance := "Fraudulently accepts any property or any interest therein";
+                actus_reus fraudulent_receipt := "Fraudulently receives any property or any interest therein";
+                actus_reus fraudulent_claim := "Fraudulently claims any property or any interest therein";
+                actus_reus deceptive_practice := "Practises any deception touching any right to any property or any interest therein";
+            }
+            mens_rea no_right_or_rightful_claim := "Knowing that he has no right or rightful claim to such property or interest";
+            circumstance seizure_target := "That property or interest therein is liable to be taken as a forfeiture or in satisfaction of a fine under a sentence which has been pronounced, or which he knows to be likely to be pronounced by a court of justice or other competent authority, or from being taken in execution of a decree or an order, or under or pursuant to an enforcement order, which has been made or which he knows to be likely to be made by a court of justice in a civil suit";
+            mens_rea intent_to_prevent_taking := "Intending thereby to prevent that property or interest therein from being so taken";
         }
     }
 
-    penalty {
-        imprisonment := 0 years .. 2 years;
-        fine := $0.00 .. $5,000.00;
+    penalty or_both {
+        imprisonment := 0 days .. 2 years;
+        fine := unlimited;
     }
 }

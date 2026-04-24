@@ -2,18 +2,18 @@
 section_number = "215"
 title = "Taking gift to help to recover stolen property, etc."
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Taking or agreeing to take gratification under pretence of helping a person recover movable property deprived by an offence, unless the taker uses all means in his power to cause the offender's apprehension and conviction."
+summary = "Section 215 criminalises taking gratification for purportedly helping to recover movable property taken by an offence, unless all means are used to secure the offender's apprehension and conviction."
 source = "Singapore Penal Code 1871, Section 215"
 
 [verification]
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr215-#pr215-"
-disclaimer = "Educational purposes only. Cross-reference with official SSO text."

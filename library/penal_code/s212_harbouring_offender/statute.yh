@@ -2,69 +2,56 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr212-#pr212-
 /// @amendment [15/2019]
-// Singapore Penal Code Section 212 - Harbouring an offender
-// Yuho v5 Syntax
 
-struct S212Case {
-    string accused,
-    bool offenceCommitted,
-    bool harboursOrConceals,
-    bool knowsOrReasonToBelieveOffender,
-    bool intentionToScreenOffender,
-    string underlyingOffencePunishment,
-}
+statute 212 "Harbouring an offender" effective 1872-01-01 effective 2019-12-31 {
+    subsection (1) {
+        elements {
+            /// Liability under subsection (1) requires a completed offence, harbouring or concealment, knowledge or reason to believe, screening intent, and one punishment tier for the predicate offence.
+            all_of {
+                circumstance offence_committed := "Whenever an offence has been committed";
+                actus_reus harbours_or_conceals := "Harbours or conceals a person";
+                mens_rea knowledge_of_offender := "Knows or has reason to believe to be the offender";
+                mens_rea intention_to_screen := "With the intention of screening him from legal punishment";
+                any_of {
+                    circumstance death_punishable_offence := "The offence is punishable with death";
+                    circumstance life_or_20_year_offence := "The offence is punishable with imprisonment for life, or with imprisonment which may extend to 20 years";
+                    circumstance one_year_and_not_20_year_offence := "The offence is punishable with imprisonment which may extend to one year and not to 20 years";
+                }
+            }
+        }
 
-fn evaluate_s212(bool offenceCommitted, bool harboursOrConceals, bool knowsOrReasonToBelieveOffender, bool intentionToScreenOffender, string underlyingOffencePunishment) : string {
-    match {
-        case TRUE if offenceCommitted == FALSE := consequence "Not liable - no predicate offence";
-        case TRUE if harboursOrConceals == FALSE := consequence "Not liable - no harbouring";
-        case TRUE if knowsOrReasonToBelieveOffender == FALSE := consequence "Not liable - no knowledge offender";
-        case TRUE if intentionToScreenOffender == FALSE := consequence "Not liable - no screening intent";
-        case TRUE if underlyingOffencePunishment == "death" := consequence "Liable s212(1)(a) - up to 10 years + fine";
-        case TRUE if underlyingOffencePunishment == "life_or_up_to_20" := consequence "Liable s212(1)(b) - up to 7 years + fine";
-        case _ := consequence "Liable s212(1)(c) - up to 1/4 of longest term";
-    }
-}
+        penalty when death_punishable_offence {
+            imprisonment := 0 years .. 10 years;
+            fine := unlimited;
+        }
 
-statute 212 "Harbouring an offender" effective 1872-01-01 {
-    definitions {
-        harbour := "To shelter, conceal, or provide refuge";
-        offender := "A person who has committed an offence";
-        screening := "Preventing the offender from being apprehended or punished";
-    }
+        penalty when life_or_20_year_offence {
+            imprisonment := 0 years .. 7 years;
+            fine := unlimited;
+        }
 
-    elements {
-        all_of {
-            /// circumstance: underlying offence has been committed
-            circumstance predicate := "An offence has been committed";
-            /// actus reus: harbouring or concealing the offender
-            actus_reus harbour := "Harbours or conceals a person";
-            /// mens rea: knowledge or reason to believe the person is the offender
-            mens_rea knowledge := "Knows or has reason to believe the person to be the offender";
-            /// mens rea: intention to screen from legal punishment
-            mens_rea screenIntent := "With the intention of screening him from legal punishment";
+        penalty or_both when one_year_and_not_20_year_offence {
+            fine := unlimited;
+            supplementary := "Shall be punished with imprisonment for a term which may extend to one‑fourth part of the longest term of imprisonment provided for that offence, or with fine, or with both.";
+        }
+
+        illustration illustration_a {
+            "( a ) A , knowing that B has committed gang‑robbery, knowingly conceals B in order to screen him from legal punishment. Here, as B is liable to imprisonment for a term of not less than 5 years and not more than 20 years, A is liable to imprisonment for a term not exceeding 7 years, and is also liable to fine."
+        }
+
+        illustration illustration_b {
+            "( b ) A and B are married to each other, and live in their matrimonial home. A knows that B has committed house‑breaking. A provides food and shelter to B , with no intention to screen B from legal punishment. A is not guilty of the offence of harbouring."
+        }
+
+        illustration illustration_c {
+            "( c ) A and B are married to each other, and live in their matrimonial home. A knows that B has committed gang‑robbery and is preparing to leave Singapore to evade arrest. A provides food and shelter to B for the purposes of helping B evade detection by the police before he leaves Singapore. A is guilty of the offence of harbouring."
         }
     }
 
-    penalty {
-        imprisonment := 0 years .. 10 years;
-        fine := $0.00 .. $50,000.00;
+    subsection (2) {
+        definitions {
+            offence := "Includes any act committed at any place out of Singapore which if committed in Singapore would be punishable under any of the following sections, namely, 302, 304, 382, 392, 393, 394, 395, 396, 397, 399, 402, 435, 436, 449, 450, 459 and 460";
+            deemed_punishable := "Every such act shall for the purposes of this section be deemed to be punishable as if the accused person had been guilty of it in Singapore. [15/2019]";
+        }
     }
-
-    illustration exampleA {
-        "A, knowing that B has committed gang-robbery, knowingly conceals B in order to screen him from legal punishment. Here, as B is liable to imprisonment for a term of not less than 5 years, A is liable under paragraph (c) to imprisonment for up to one-fourth part of the longest term provided for gang-robbery."
-    }
-
-    illustration exampleB {
-        "A and B are married to each other, and live in their matrimonial home. A knows that B has committed house-breaking. A provides food and shelter to B, with no intention to screen B from legal punishment. A has not committed an offence under this section."
-    }
-
-    illustration exampleC {
-        "A and B are married to each other, and live in their matrimonial home. A knows that B has committed gang-robbery and is preparing to leave Singapore to evade arrest. A provides food and shelter to B, intending thereby to screen B from legal punishment. A has committed an offence under this section."
-    }
-
-    // s212(1)(a) death-punishable: up to 10 years + fine
-    // s212(1)(b) life or up to 20 years: up to 7 years + fine
-    // s212(1)(c) up to 1 year and not to 20: up to 1/4 of longest term + fine + both
-    // s212(2) extends "offence" to extraterritorial equivalents for ss 302, 304, 382, 392-397, 399, 402, 435, 436, 449, 450, 459, 460
 }

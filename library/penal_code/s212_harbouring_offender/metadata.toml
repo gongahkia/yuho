@@ -2,18 +2,18 @@
 section_number = "212"
 title = "Harbouring an offender"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Harbouring or concealing a person known to be an offender, with intent to screen them from legal punishment; punishment is tiered to the seriousness of the underlying offence."
+summary = "Harbouring or concealing an offender with knowledge and screening intent is punished according to the seriousness of the predicate offence, with an extended definition of \"offence\" for specified extraterritorial acts."
 source = "Singapore Penal Code 1871, Section 212"
 
 [verification]
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr212-#pr212-"
-disclaimer = "Educational purposes only. Cross-reference with official SSO text."

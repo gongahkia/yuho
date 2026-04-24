@@ -1,50 +1,33 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr217-#pr217-
-// Singapore Penal Code Section 217 - Public servant disobeying a direction of law with intent to save person from punishment or property from forfeiture
-// Yuho v5 Syntax
 
-struct S217Case {
-    string accused,
-    bool isPublicServant,
-    bool knowinglyDisobeysLaw,
-    bool intentToSavePunishmentOrForfeiture,
-}
-fn s217_applies(bool isPublicServant, bool knowinglyDisobeysLaw, bool intentToSavePunishmentOrForfeiture) : bool {
-    match {
-        case TRUE if isPublicServant == FALSE := consequence FALSE;
-        case TRUE if knowinglyDisobeysLaw == FALSE := consequence FALSE;
-        case TRUE if intentToSavePunishmentOrForfeiture == FALSE := consequence FALSE;
-        case _ := consequence TRUE;
-    }
-}
 statute 217 "Public servant disobeying a direction of law with intent to save person from punishment or property from forfeiture" effective 1872-01-01 {
-    definitions {
-        public_servant := "Person defined as a public servant under section 21";
-        direction_of_law := "Any legal direction as to how the public servant is to conduct himself";
-        forfeiture := "Loss of property to the state by operation of law";
-    }
-
     elements {
+        /// The offence is conjunctive as to public-servant status, knowing disobedience, and one prohibited saving outcome.
         all_of {
-            circumstance public_servant_status := "Accused is a public servant";
-            mens_rea knowledge := "Knowingly disobeys any direction of the law as to his conduct as such public servant";
-            actus_reus disobey := "Disobeys the direction of law";
+            circumstance public_servant_status := "Whoever, being a public servant";
+            actus_reus disobedience := "Knowingly disobeys any direction of the law as to the way in which he is to conduct himself as such public servant";
             any_of {
-                mens_rea intent_save_punishment := "Intent to save any person from legal punishment or subject him to a lesser punishment";
-                mens_rea intent_save_property := "Intent to save any property from forfeiture or charge";
-                mens_rea knowledge_likely := "Knowing it likely that the disobedience will have that effect";
+                all_of {
+                    any_of {
+                        mens_rea intent_save_person := "Intending thereby to save any person from legal punishment";
+                        mens_rea knowledge_likely_save_person := "Knowing it to be likely that he will thereby save any person from legal punishment";
+                    }
+                    actus_reus lesser_punishment_or_escape := "Save any person from legal punishment, or subject him to a lesser punishment than that to which he is liable";
+                }
+                all_of {
+                    any_of {
+                        mens_rea intent_save_property := "With intent to save any property from forfeiture or any charge to which it is liable by law";
+                        mens_rea knowledge_likely_save_property := "Knowing that he is likely thereby to save any property from forfeiture or any charge to which it is liable by law";
+                    }
+                }
             }
         }
     }
 
-    penalty {
-        imprisonment := 0 years .. 2 years;
-        fine := $0.00 .. $20,000.00;
+    penalty or_both {
+        imprisonment := 0 days .. 2 years;
+        fine := unlimited;
     }
-
-    illustration example1 {
-        "A, a police officer, knowingly disobeys a lawful direction requiring him to report an offender, intending to save that offender from punishment. A commits an offence under s217."
-    }
-
 }

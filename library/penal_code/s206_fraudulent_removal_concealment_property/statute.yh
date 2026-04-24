@@ -1,45 +1,23 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr206-#pr206-
-// Singapore Penal Code Section 206 - Fraudulent removal or concealment of property to prevent its seizure as a forfeiture, in execution of a decree or under or pursuant to an enforcement order
-// Yuho v5 Syntax
+/// @amendment [Act 25 of 2021 wef 01/04/2022]
 
-struct S206Case {
-    string accused,
-    bool fraudulentlyRemovesConceals,
-    bool intentToPreventSeizure,
-    bool propertySubjectToForfeitureOrExecution,
-}
-
-fn evaluate_s206(bool fraudulentlyRemovesConceals, bool intentToPreventSeizure, bool propertySubjectToForfeitureOrExecution) : string {
-    match {
-        case TRUE if fraudulentlyRemovesConceals == FALSE := consequence "Not liable - no fraudulent removal or concealment";
-        case TRUE if intentToPreventSeizure == FALSE := consequence "Not liable - no intent to prevent seizure";
-        case TRUE if propertySubjectToForfeitureOrExecution == FALSE := consequence "Not liable - property not subject to forfeiture or execution";
-        case _ := consequence "Liable under s206";
-    }
-}
-
-statute 206 "Fraudulent removal or concealment of property to prevent its seizure as a forfeiture, in execution of a decree or under or pursuant to an enforcement order" effective 1872-01-01 {
-    definitions {
-        fraudulently := "As defined in section 25";
-        forfeiture := "Taking of property as a penalty or satisfaction of fine under a sentence";
-        enforcement_order := "An order made by a court of justice in a civil suit or otherwise for execution";
-    }
-
+statute 206 "Fraudulent removal or concealment of property to prevent its seizure as a forfeiture, in execution of a decree or under or pursuant to an enforcement order" effective 1872-01-01 effective 2022-04-01 {
     elements {
+        /// The offence requires the fraudulent dealing with property, the purpose of preventing seizure, and one of the listed legal seizure contexts.
         all_of {
-            /// actus reus: fraudulent removal, concealment, transfer or delivery
-            actus_reus act := "Fraudulently removes, conceals, transfers or delivers to any person any property or interest therein";
-            /// mens rea: intent to prevent seizure
-            mens_rea intent := "Intending thereby to prevent that property or interest from being taken as a forfeiture, in satisfaction of a fine, or in execution of a decree or order, or under or pursuant to an enforcement order";
-            /// circumstance: relevant sentence/decree pronounced or likely
-            circumstance decree := "Sentence, decree, or enforcement order has been pronounced or is known to be likely to be pronounced";
+            actus_reus dealing_with_property := "Whoever fraudulently removes, conceals, transfers, or delivers to any person any property or any interest therein";
+            mens_rea intention_to_prevent_seizure := "Intending thereby to prevent that property or interest therein from being taken";
+            any_of {
+                circumstance forfeiture_or_fine_under_sentence := "As a forfeiture or in satisfaction of a fine, under a sentence which has been pronounced, or which he knows to be likely to be pronounced by a court of justice or other competent authority";
+                circumstance execution_or_enforcement := "In execution of a decree or an order, or under or pursuant to an enforcement order, which has been made, or which he knows to be likely to be made by a court of justice in a civil suit";
+            }
         }
     }
 
-    penalty {
-        imprisonment := 0 years .. 2 years;
-        fine := $0.00 .. $5,000.00;
+    penalty or_both {
+        imprisonment := 0 days .. 2 years;
+        fine := unlimited;
     }
 }

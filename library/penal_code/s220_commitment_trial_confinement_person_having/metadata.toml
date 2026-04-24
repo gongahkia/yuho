@@ -2,18 +2,18 @@
 section_number = "220"
 title = "Commitment for trial or confinement by person having authority who knows he is acting contrary to law"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Person with legal authority to commit others for trial or confinement corruptly or intending injury commits them while knowing the act is contrary to law."
+summary = "This section criminalises a person with legal authority over trial committal or confinement who corruptly or with intent to cause injury uses that authority while knowing the act is contrary to law."
 source = "Singapore Penal Code 1871, Section 220"
 
 [verification]
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr220-#pr220-"
-disclaimer = "Educational purposes only. Cross-reference with official SSO text."

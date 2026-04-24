@@ -1,55 +1,39 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr214-#pr214-
-// Singapore Penal Code Section 214 - Offering gift or restoration of property in consideration of screening offender
-// Yuho v5 Syntax
-
-struct S214Case {
-    string accused,
-    bool givesOrOffersGratification,
-    bool considerationForScreening,
-    bool offenceLawfullyCompoundable,
-    string underlyingOffencePunishment,
-}
-
-fn evaluate_s214(bool givesOrOffersGratification, bool considerationForScreening, bool offenceLawfullyCompoundable, string underlyingOffencePunishment) : string {
-    match {
-        case TRUE if givesOrOffersGratification == FALSE := consequence "Not liable - no gift or offer";
-        case TRUE if considerationForScreening == FALSE := consequence "Not liable - not for screening";
-        case TRUE if offenceLawfullyCompoundable == TRUE := consequence "Not liable - offence lawfully compoundable (exception)";
-        case TRUE if underlyingOffencePunishment == "death" := consequence "Liable s214(a) - up to 10 years + fine";
-        case TRUE if underlyingOffencePunishment == "life_or_up_to_20" := consequence "Liable s214(b) - up to 7 years + fine";
-        case _ := consequence "Liable s214(c) - up to 1/4 of longest term";
-    }
-}
 
 statute 214 "Offering gift or restoration of property in consideration of screening offender" effective 1872-01-01 {
-    definitions {
-        gratification := "Any pecuniary or non-pecuniary benefit or inducement";
-        restoration := "Return or handing over of property";
-        screening := "Preventing the offender from legal punishment";
-        compoundable := "An offence which may lawfully be settled between parties";
-    }
-
     elements {
+        /// Section 214 requires the proscribed giving or offering conduct, the screening consideration, and one of the punishment-category circumstances for the underlying offence.
         all_of {
-            /// actus reus: giving or offering gratification or restoration
-            actus_reus give := "Gives or causes, or offers or agrees to give or cause, any gratification to any person, or restores or causes restoration of any property to any person";
-            /// mens rea: consideration for screening or forbearance
-            mens_rea consideration := "In consideration of concealing an offence, screening any person from legal punishment, or not proceeding against any person to bring him to legal punishment";
+            actus_reus giving_or_offering := "Whoever gives or causes, or offers or agrees to give or cause, any gratification to any person, or to restore or cause the restoration of any property to any person";
+            mens_rea screening_consideration := "In consideration of that person’s concealing an offence, or of his screening any person from legal punishment for any offence, or of his not proceeding against any person for the purpose of bringing him to legal punishment";
+            any_of {
+                circumstance offence_punishable_with_death := "The offence is punishable with death";
+                circumstance offence_punishable_with_life_or_20_years := "The offence is punishable with imprisonment for life, or with imprisonment which may extend to 20 years";
+                circumstance offence_punishable_below_20_years := "The offence is punishable with imprisonment not extending to 20 years";
+            }
         }
     }
 
-    exception compoundable {
-        "Sections 213 and 214 do not extend to any case in which the offence may lawfully be compounded"
-        "Not liable under s214"
-        when facts.offenceLawfullyCompoundable == TRUE
+    exception compoundable_offence {
+        "Exceptions.— Sections 213 and 214 do not extend to any case in which the offence may lawfully be compounded."
+        "Sections 213 and 214 do not extend to any case in which the offence may lawfully be compounded."
+        when facts.offence_may_lawfully_be_compounded == TRUE
     }
 
-    penalty {
+    penalty when offence_punishable_with_death {
         imprisonment := 0 years .. 10 years;
-        fine := $0.00 .. $50,000.00;
+        fine := unlimited;
     }
 
-    // tiered penalty mirrors s213
+    penalty when offence_punishable_with_life_or_20_years {
+        imprisonment := 0 years .. 7 years;
+        fine := unlimited;
+    }
+
+    penalty or_both when offence_punishable_below_20_years {
+        fine := unlimited;
+        supplementary := "Shall be punished with imprisonment for a term which may extend to one-fourth part of the longest term of imprisonment provided for that offence, or with fine, or with both.";
+    }
 }

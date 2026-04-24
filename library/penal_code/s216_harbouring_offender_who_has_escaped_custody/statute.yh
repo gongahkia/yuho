@@ -1,53 +1,56 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr216-#pr216-
-// Singapore Penal Code Section 216 - Harbouring an offender who has escaped from custody, or whose apprehension has been ordered
-// Yuho v5 Syntax
-
-struct HarbouringCase {
-    string accused,
-    bool knowsOfEscapeOrOrder,
-    bool harboursOrConceals,
-    bool intentToPreventApprehension,
-    string underlyingOffenceSeverity,
-}
-fn s216_applies(bool knowsOfEscapeOrOrder, bool harboursOrConceals, bool intentToPreventApprehension) : bool {
-    match {
-        case TRUE if knowsOfEscapeOrOrder == FALSE := consequence FALSE;
-        case TRUE if harboursOrConceals == FALSE := consequence FALSE;
-        case TRUE if intentToPreventApprehension == FALSE := consequence FALSE;
-        case _ := consequence TRUE;
-    }
-}
 /// @amendment [15/2019]
-statute 216 "Harbouring an offender who has escaped from custody, or whose apprehension has been ordered" effective 1872-01-01 {
-    definitions {
-        harbour := "Supplying shelter, food, drink, money, clothes, arms, ammunition, or means of conveyance, or assisting in any way to evade apprehension (s216B)";
-        lawful_custody := "Custody pursuant to a charge, conviction, or lawful order";
-        apprehension_order := "Order by a public servant in lawful exercise of powers to apprehend a person for an offence";
-    }
+statute 216 "Harbouring an offender who has escaped from custody, or whose apprehension has been ordered" effective 1872-01-01 effective 2019-12-31 {
+    subsection (1) {
+        elements {
+            /// Subsection (1) requires either an escape from lawful custody or an order for apprehension, knowledge of that trigger, harbouring or concealment, and intent to prevent apprehension.
+            all_of {
+                any_of {
+                    all_of {
+                        circumstance convicted_or_charged := "Any person convicted of, or charged with an offence";
+                        circumstance lawful_custody := "The person is in lawful custody for that offence";
+                        actus_reus escape_from_custody := "The person escapes from such custody";
+                    }
+                    all_of {
+                        circumstance public_servant_lawful_powers := "A public servant, in the exercise of the lawful powers of such public servant, orders a certain person to be apprehended for an offence";
+                    }
+                }
+                mens_rea knowledge := "Knowing of such escape or order for apprehension";
+                any_of {
+                    actus_reus harbour := "Harbours that person";
+                    actus_reus conceal := "Conceals that person";
+                }
+                mens_rea intention_to_prevent_apprehension := "With the intention of preventing him from being apprehended";
+                any_of {
+                    circumstance death_punishable_offence := "The offence for which the person was in custody, or is ordered to be apprehended, is punishable with death";
+                    circumstance life_or_20_year_offence := "The offence is punishable with imprisonment for life, or imprisonment which may extend to 20 years";
+                    circumstance one_to_twenty_year_offence := "The offence is punishable with imprisonment which may extend to one year and not to 20 years";
+                }
+            }
+        }
 
-    elements {
-        all_of {
-            /// the underlying custodial person escapes or is ordered to be apprehended
-            circumstance trigger := "Person in lawful custody escapes, or a public servant orders apprehension";
-            /// accused knows of the escape or order
-            mens_rea knowledge := "Knowing of such escape or order for apprehension";
-            /// the actus reus is harbouring or concealing
-            actus_reus harbour := "Harbours or conceals that person";
-            /// specific intent to prevent apprehension
-            mens_rea intent := "Intention of preventing the person from being apprehended";
+        penalty when death_punishable_offence {
+            imprisonment := 0 years .. 10 years;
+            fine := unlimited;
+        }
+
+        penalty when life_or_20_year_offence {
+            imprisonment := 0 years .. 7 years;
+            fine := unlimited;
+        }
+
+        penalty or_both when one_to_twenty_year_offence {
+            fine := unlimited;
+            supplementary := "Shall be punished with imprisonment for a term which may extend to one‑fourth part of the longest term of the imprisonment provided for the offence, or with fine, or with both.";
         }
     }
 
-    penalty {
-        imprisonment := 0 years .. 10 years;
-        fine := $0.00 .. $50,000.00;
+    subsection (2) {
+        definitions {
+            offence := "In this section, “offence” includes also any act or omission of which a person is alleged to have been guilty out of Singapore which if he had been guilty of it in Singapore would have been punishable as an offence and for which he is under any law relating to extradition, or otherwise, liable to be apprehended or detained in custody in Singapore.";
+            deemed_punishable := "Every such act or omission shall for the purpose of this section be deemed to be punishable as if the accused person had been guilty of it in Singapore.";
+        }
     }
-
-    illustration example1 {
-        "A, knowing that B has escaped from lawful custody on a murder charge, hides B with intent to prevent apprehension. A is punishable under s216 with up to 10 years' imprisonment and fine."
-    }
-
-    // sub-(2): extraterritorial acts/omissions apprehensible under Singapore extradition are deemed offences for this section
 }
