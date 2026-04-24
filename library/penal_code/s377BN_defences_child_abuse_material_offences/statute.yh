@@ -1,10 +1,9 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BN-#pr377BN-
-/// @section 377BN
 // Singapore Penal Code Section 377BN
 
-statute 377.15 "Defences to child abuse material offences" effective 1872-01-01 {
+statute 377BN "Defences to child abuse material offences" effective 1872-01-01 {
     definitions {
         law_enforcement_defence := "A defence for law enforcement, court order, bona fide research or similar";
         classification_defence := "Defence for material classified by a regulator or similar authority";

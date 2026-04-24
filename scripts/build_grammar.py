@@ -114,18 +114,25 @@ def build_grammar(grammar_dir: Path, output_dir: Path = None):
 
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    # Find and copy the library
+    # Find and copy the library.
+    # Tree-sitter CLI 0.22+ emits yuho.dylib; older emitted libtree-sitter-yuho.dylib.
+    # Copy whichever exists under both names so the Python binding finds it.
+    # Destinations: the in-tree binding dir AND the installed package dir
+    # (both are needed for different import paths).
     lib_extensions = [".dylib", ".so"]
     copied = False
 
+    installed_pkg_dir = grammar_dir.parent / "tree_sitter_yuho"
     for ext in lib_extensions:
-        lib_name = f"libtree-sitter-yuho{ext}"
-        lib_path = grammar_dir / lib_name
-        if lib_path.exists():
-            dest = output_dir / lib_name
-            shutil.copy2(lib_path, dest)
-            print(f"Copied {lib_name} to {output_dir}")
-            copied = True
+        for src_name in (f"yuho{ext}", f"libtree-sitter-yuho{ext}"):
+            lib_path = grammar_dir / src_name
+            if lib_path.exists():
+                for dest_name in (f"yuho{ext}", f"libtree-sitter-yuho{ext}"):
+                    shutil.copy2(lib_path, output_dir / dest_name)
+                    if installed_pkg_dir.exists():
+                        shutil.copy2(lib_path, installed_pkg_dir / dest_name)
+                print(f"Copied {src_name} → {output_dir} and {installed_pkg_dir}")
+                copied = True
 
     if not copied:
         # Check build directory

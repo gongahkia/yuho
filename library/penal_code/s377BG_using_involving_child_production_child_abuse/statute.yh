@@ -1,10 +1,9 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BG-#pr377BG-
-/// @section 377BG
 // Singapore Penal Code Section 377BG
 
-statute 377.8 "Using or involving child in production of child abuse material" effective 1872-01-01 {
+statute 377BG "Using or involving child in production of child abuse material" effective 1872-01-01 {
     definitions {
         child_abuse_material := "Material depicting a child engaged in sexual conduct or other abuse";
     }

@@ -1,10 +1,9 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BB-#pr377BB-
-/// @section 377BB
 // Singapore Penal Code Section 377BB
 
-statute 377.3 "Voyeurism" effective 1872-01-01 {
+statute 377BB "Voyeurism" effective 1872-01-01 {
     definitions {
         voyeurism := "Observing or recording a private act without consent for sexual or distressing purpose";
         private_act := "Act done in circumstances that would reasonably be expected to provide privacy";

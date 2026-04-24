@@ -1,10 +1,9 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BH-#pr377BH-
-/// @section 377BH
 // Singapore Penal Code Section 377BH
 
-statute 377.9 "Producing child abuse material" effective 1872-01-01 {
+statute 377BH "Producing child abuse material" effective 1872-01-01 {
     definitions {
         produce := "To create, make, or generate child abuse material by any means";
     }

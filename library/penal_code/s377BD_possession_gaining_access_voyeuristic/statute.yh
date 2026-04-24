@@ -1,10 +1,9 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BD-#pr377BD-
-/// @section 377BD
 // Singapore Penal Code Section 377BD
 
-statute 377.5 "Possession of or gaining access to voyeuristic or intimate image or recording" effective 1872-01-01 {
+statute 377BD "Possession of or gaining access to voyeuristic or intimate image or recording" effective 1872-01-01 {
     definitions {
         intimate_image := "An image depicting a person in a private act or exposing private parts";
     }

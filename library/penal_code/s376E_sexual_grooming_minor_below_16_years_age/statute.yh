@@ -1,10 +1,9 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr376E-#pr376E-
-/// @section 376E
 // Singapore Penal Code Section 376E
 
-statute 376.6 "Sexual grooming of minor below 16 years of age" effective 1872-01-01 {
+statute 376E "Sexual grooming of minor below 16 years of age" effective 1872-01-01 {
     definitions {
         sexual_grooming := "Prior communication followed by intentional meeting or travel to meet a minor";
     }

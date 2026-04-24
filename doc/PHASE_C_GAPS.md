@@ -6,35 +6,34 @@ concrete input to Phase D (AST/grammar refactor).
 
 ## Already identified during encoding
 
-### G1 — element_group rejects preceding doc comments
+### G1 — element_group rejects preceding doc comments ✅ FIXED
 
 `all_of { ... }` and `any_of { ... }` blocks cannot be preceded by a
-`///` doc comment. Agents had to omit group-level rationale.
+`///` doc comment.
 
-**Workaround:** attach doc comments only to `element_entry` siblings.
+**Fix landed:** `element_group` rule now accepts `repeat(doc_comment)`
+before the combinator keyword. Verified by smoke test + regression pass
+against all 524 encodings.
 
-**Fix:** extend the grammar to allow `doc_comment*` before `element_group`.
+### G2 — colons break /// doc comments ✅ NOT A GAP
 
-### G2 — colons break /// doc comments
+Agent report from wave 1d could not be reproduced on post-fix grammar.
+A `:` inside `///` doc-comments parses cleanly. Likely the original
+wave-1d errors were misdiagnosed — an unrelated parse failure that
+happened to be on a line containing a colon.
 
-A `:` anywhere inside a `///` doc comment causes a parse error.
+**No fix required.** Closing.
 
-**Workaround:** use `--` (em-dash) or commas instead.
+### G3 — section_number token only accepts single trailing letter ✅ FIXED
 
-**Fix:** lex `///` as opaque-until-EOL, or escape `:` inside doc comments
-explicitly.
-
-### G3 — section_number token only accepts single trailing letter
-
-Grammar rule `section_number = \d+[A-Z]?` rejects multi-letter suffixes
-like `376AA`, `377BA..377BO`, `377CA`, `377CB`. Affected ~25 real PC
+Grammar rule `section_number = \d+[A-Z]?` rejected multi-letter suffixes
+like `376AA`, `377BA..377BO`, `377CA`, `377CB`. Affected ~37 real PC
 sections.
 
-**Workaround:** encode as `statute <num>.<n> "<title>"` with
-`/// @section <original>` doc comment for traceability.
-
-**Fix:** change token to `\d+[A-Z]*`. Also audit downstream consumers
-(LSP, transpilers, CLI) that may assume single-letter suffix.
+**Fix landed:** token now matches `\d+[A-Z]*`. All 37 affected
+encodings migrated from the `statute <num>.<n>` decimal workaround to
+the correct suffix (e.g. `statute 377BO "..."`). The temporary
+`/// @section <original>` doc comments have been removed.
 
 ## Identified during L3 review
 
@@ -71,7 +70,7 @@ s464.
 blocks. Subsections should be able to contain their own definitions,
 elements, penalty, and illustrations independently.
 
-### G6 — `effective` date cannot reflect amendment-introduced sections
+### G6 — `effective` date cannot reflect amendment-introduced sections ✅ PARTIALLY FIXED
 
 All 524 sections carry `effective 1872-01-01` in their encodings because
 that is the act's commencement. But s377BO, s4B, s22A, s26A-H, s74A-E,
@@ -82,9 +81,19 @@ legal effective date is the amendment date, not 1872.
 wrong results. Temporal queries ("was s377BO in force in 2015?") will
 say yes when they should say no.
 
-**Fix direction:** either (a) allow multiple `effective` clauses with
-amendment markers, or (b) extract effective dates from `@amendment`
-doc comments automatically. Probably both.
+**Fix landed (grammar side):** `statute_block` now allows multiple
+`effective <date>` clauses. Encodings can now write
+
+    statute 377BO "..."
+        effective 1872-01-01
+        effective 2019-12-31
+    { ... }
+
+expressing original-act-commencement + amendment-introduction.
+
+**Still pending (data side):** re-encoding the ~50+ amendment-introduced
+sections to actually include the correct second `effective` clause.
+This is part of the re-encoding wave, not the grammar fix.
 
 ### G7 — no decomposition for long interpretation sections with nested terms
 
@@ -104,7 +113,7 @@ alternatives, or a reference. Optionally add a separate
 `interpretation_block` node for interpretation sections with different
 semantics (Penal Code has ~40 pure-interpretation sections).
 
-### G8 — no explicit model for alternative punishments
+### G8 — no explicit model for alternative punishments ✅ PARTIALLY FIXED
 
 The Penal Code's standard penalty pattern is "imprisonment up to N
 years, or fine, or both," sometimes with caning. Yuho's `penalty { }`
@@ -119,10 +128,23 @@ sections include s153, s166, s269, s325, s420, s501, s504, s505, and
 likely most offence sections. (b) Caning is often omitted entirely (s325,
 s420, s325). (c) "or both" semantics are lost.
 
-**Fix direction:** replace the current slot-based penalty with an
-alternative/cumulative lattice. Add `fine := <amount or unlimited>`.
-Add `caning := <strokes or unspecified>`. Clearly distinguish "or" vs
-"and" in the AST.
+**Fix landed (grammar side):**
+
+1. `fine := unlimited` is now a valid fine-clause form. AST carries
+   `fine_unlimited: bool`.
+2. `penalty` now accepts an optional combinator keyword:
+   `penalty cumulative { ... }` (all clauses required together — default),
+   `penalty alternative { ... }` (exactly one applies),
+   `penalty or_both { ... }` (any one, or any combination — the dominant
+   PC idiom). AST carries `combinator: Optional[str]`.
+
+Wire-up verified: grammar parses, AST builder reads the fields,
+`yuho check` / ast / semantic all pass.
+
+**Still pending (data side):** re-encoding the ~150+ offence sections
+that currently have fabricated fine caps and cumulative-defaulted
+penalty blocks. These need to use `fine := unlimited` and
+`penalty or_both { ... }` where appropriate.
 
 ### G9 — no support for conditional / branch-dependent penalties
 

@@ -1398,29 +1398,24 @@
           ]
         },
         {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "SEQ",
-              "members": [
-                {
-                  "type": "STRING",
-                  "value": "effective"
-                },
-                {
-                  "type": "FIELD",
-                  "name": "effective_date",
-                  "content": {
-                    "type": "SYMBOL",
-                    "name": "date_literal"
-                  }
+          "type": "REPEAT",
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "effective"
+              },
+              {
+                "type": "FIELD",
+                "name": "effective_date",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "date_literal"
                 }
-              ]
-            },
-            {
-              "type": "BLANK"
-            }
-          ]
+              }
+            ]
+          }
         },
         {
           "type": "CHOICE",
@@ -1561,7 +1556,7 @@
             "members": [
               {
                 "type": "PATTERN",
-                "value": "[A-Za-z]"
+                "value": "[A-Za-z]+"
               },
               {
                 "type": "BLANK"
@@ -2065,6 +2060,17 @@
       "type": "SEQ",
       "members": [
         {
+          "type": "REPEAT",
+          "content": {
+            "type": "FIELD",
+            "name": "doc_comment",
+            "content": {
+              "type": "SYMBOL",
+              "name": "doc_comment"
+            }
+          }
+        },
+        {
           "type": "FIELD",
           "name": "combinator",
           "content": {
@@ -2130,6 +2136,35 @@
                   {
                     "type": "STRING",
                     "value": "consecutive"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "combinator",
+              "content": {
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "STRING",
+                    "value": "cumulative"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "alternative"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "or_both"
                   }
                 ]
               }
@@ -2340,6 +2375,10 @@
             {
               "type": "SYMBOL",
               "name": "money_range"
+            },
+            {
+              "type": "STRING",
+              "value": "unlimited"
             }
           ]
         },

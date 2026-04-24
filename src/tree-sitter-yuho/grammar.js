@@ -366,7 +366,7 @@ module.exports = grammar({
       'statute',
       field('section_number', $.section_number),
       optional(field('title', $.string_literal)),
-      optional(seq('effective', field('effective_date', $.date_literal))),
+      repeat(seq('effective', field('effective_date', $.date_literal))),  // G6: allow multiple effective dates for amendments
       optional(seq('repealed', field('repealed_date', $.date_literal))),
       optional(seq('subsumes', field('subsumes', $.section_number))),
       optional(seq('amends', field('amends', $.section_number))),
@@ -379,7 +379,7 @@ module.exports = grammar({
       optional('S'),
       /[0-9]+/,
       optional(seq('.', /[0-9]+/)),
-      optional(/[A-Za-z]/),
+      optional(/[A-Za-z]+/),                              // G3: allow multi-letter suffix (376AA, 377BA, etc.)
     )),
 
     _statute_member: $ => choice(
@@ -462,6 +462,7 @@ module.exports = grammar({
     ),
 
     element_group: $ => seq(
+      repeat(field('doc_comment', $.doc_comment)),  // G1: allow doc comments before a group
       field('combinator', choice('all_of', 'any_of')),
       '{',
       repeat(choice($.element_entry, $.element_group)),
@@ -471,6 +472,11 @@ module.exports = grammar({
     penalty_block: $ => seq(
       'penalty',
       optional(field('sentencing', choice('concurrent', 'consecutive'))),
+      // G8: combinator expressing the legal relationship between listed clauses.
+      //   cumulative  -- all listed penalties apply together (default, back-compat)
+      //   alternative -- exactly one of the listed penalties applies
+      //   or_both     -- any one or any combination applies ("X, or fine, or both" PC idiom)
+      optional(field('combinator', choice('cumulative', 'alternative', 'or_both'))),
       '{',
       optional($.imprisonment_clause),
       optional($.fine_clause),
@@ -506,6 +512,7 @@ module.exports = grammar({
       choice(
         $.money_literal,
         $.money_range,
+        'unlimited',                                      // G8: uncapped fine — statute says "with fine" without a numeric ceiling
       ),
       optional(';'),
     ),

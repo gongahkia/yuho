@@ -1,10 +1,9 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BJ-#pr377BJ-
-/// @section 377BJ
 // Singapore Penal Code Section 377BJ
 
-statute 377.11 "Advertising or seeking child abuse material" effective 1872-01-01 {
+statute 377BJ "Advertising or seeking child abuse material" effective 1872-01-01 {
     definitions {
         advertise_seek := "Publishing, communicating, or requesting child abuse material";
     }

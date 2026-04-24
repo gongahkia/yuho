@@ -1,10 +1,9 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BO-#pr377BO-
-/// @section 377BO
 // Singapore Penal Code Section 377BO
 
-statute 377.16 "Child abuse material offences outside or partially outside Singapore" effective 1872-01-01 {
+statute 377BO "Child abuse material offences outside or partially outside Singapore" effective 1872-01-01 {
     definitions {
         extraterritorial_jurisdiction := "Jurisdiction over acts committed outside Singapore by citizens or PRs";
         partial_extraterritorial := "Acts in Singapore involving victims outside Singapore, treated as if done in Singapore";

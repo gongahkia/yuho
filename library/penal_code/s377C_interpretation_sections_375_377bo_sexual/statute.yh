@@ -1,10 +1,9 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377C-#pr377C-
-/// @section 377C
 // Singapore Penal Code Section 377C
 
-statute 377.17 "Interpretation of sections 375 to 377BO (sexual offences)" effective 1872-01-01 {
+statute 377C "Interpretation of sections 375 to 377BO (sexual offences)" effective 1872-01-01 {
     definitions {
         interpretation_scope := "Definitions applicable to sections 375 to 377BO";
         buttocks := "In relation to a person, includes the anal region of the person";

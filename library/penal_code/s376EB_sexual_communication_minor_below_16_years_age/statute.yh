@@ -1,10 +1,9 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr376EB-#pr376EB-
-/// @section 376EB
 // Singapore Penal Code Section 376EB
 
-statute 376.8 "Sexual communication with minor below 16 years of age" effective 1872-01-01 {
+statute 376EB "Sexual communication with minor below 16 years of age" effective 1872-01-01 {
     definitions {
         sexual_communication := "Any written, oral, visual or electronic communication of a sexual nature";
     }

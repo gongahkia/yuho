@@ -1,10 +1,9 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr376A-#pr376A-
-/// @section 376A
 // Singapore Penal Code Section 376A
 
-statute 376.1 "Sexual penetration of minor below 16 years of age" effective 1872-01-01 {
+statute 376A "Sexual penetration of minor below 16 years of age" effective 1872-01-01 {
     definitions {
         minor_below_16 := "A person below 16 years of age";
     }

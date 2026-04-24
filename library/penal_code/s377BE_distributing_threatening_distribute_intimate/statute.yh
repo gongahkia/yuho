@@ -1,10 +1,9 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BE-#pr377BE-
-/// @section 377BE
 // Singapore Penal Code Section 377BE
 
-statute 377.6 "Distributing or threatening to distribute intimate image or recording" effective 1872-01-01 {
+statute 377BE "Distributing or threatening to distribute intimate image or recording" effective 1872-01-01 {
     definitions {
         threat_distribute := "A threat to distribute an intimate image or recording";
     }

@@ -1,10 +1,9 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BA-#pr377BA-
-/// @section 377BA
 // Singapore Penal Code Section 377BA
 
-statute 377.2 "Word or gesture intended to insult modesty of any person" effective 1872-01-01 {
+statute 377BA "Word or gesture intended to insult modesty of any person" effective 1872-01-01 {
     definitions {
         insult_modesty := "Uttering, making, gesturing or exhibiting anything to insult modesty";
     }

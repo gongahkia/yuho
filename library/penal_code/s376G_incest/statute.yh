@@ -1,10 +1,9 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr376G-#pr376G-
-/// @section 376G
 // Singapore Penal Code Section 376G
 
-statute 376.13 "Incest" effective 1872-01-01 {
+statute 376G "Incest" effective 1872-01-01 {
     definitions {
         close_relative := "Grandparent, parent, sibling, child or grandchild, whether of whole or half blood, or by adoption";
     }

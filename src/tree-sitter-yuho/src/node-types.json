@@ -901,6 +901,16 @@
             "named": false
           }
         ]
+      },
+      "doc_comment": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "doc_comment",
+            "named": true
+          }
+        ]
       }
     },
     "children": {
@@ -1528,7 +1538,7 @@
     "fields": {},
     "children": {
       "multiple": false,
-      "required": true,
+      "required": false,
       "types": [
         {
           "type": "money_literal",
@@ -2699,6 +2709,24 @@
     "type": "penalty_block",
     "named": true,
     "fields": {
+      "combinator": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "alternative",
+            "named": false
+          },
+          {
+            "type": "cumulative",
+            "named": false
+          },
+          {
+            "type": "or_both",
+            "named": false
+          }
+        ]
+      },
       "sentencing": {
         "multiple": false,
         "required": false,
@@ -3130,7 +3158,7 @@
         ]
       },
       "effective_date": {
-        "multiple": false,
+        "multiple": true,
         "required": false,
         "types": [
           {
@@ -3928,6 +3956,10 @@
     "named": false
   },
   {
+    "type": "alternative",
+    "named": false
+  },
+  {
     "type": "amended",
     "named": false
   },
@@ -4002,6 +4034,10 @@
   },
   {
     "type": "consequence",
+    "named": false
+  },
+  {
+    "type": "cumulative",
     "named": false
   },
   {
@@ -4186,6 +4222,10 @@
     "named": false
   },
   {
+    "type": "or_both",
+    "named": false
+  },
+  {
     "type": "parties",
     "named": false
   },
@@ -4311,6 +4351,10 @@
   },
   {
     "type": "unless",
+    "named": false
+  },
+  {
+    "type": "unlimited",
     "named": false
   },
   {

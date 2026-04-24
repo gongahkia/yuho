@@ -1174,6 +1174,7 @@ class ASTBuilder:
         """Build PenaltyNode from penalty_block node."""
         imprisonment_min = imprisonment_max = None
         fine_min = fine_max = None
+        fine_unlimited = False
         caning_min = caning_max = None
         death_penalty = None
         supplementary = None
@@ -1183,6 +1184,10 @@ class ASTBuilder:
         # phase 14: sentencing mode
         sentencing_node = self._child_by_field(node, "sentencing")
         sentencing = self._text(sentencing_node) if sentencing_node else None
+
+        # G8: combinator describing the legal relationship between penalty clauses
+        combinator_node = self._child_by_field(node, "combinator")
+        combinator = self._text(combinator_node) if combinator_node else None
 
         for child in node.children:
             if child.type == "imprisonment_clause":
@@ -1196,15 +1201,19 @@ class ASTBuilder:
                 elif duration_nodes:
                     imprisonment_max = self._build_duration(duration_nodes[0])
             elif child.type == "fine_clause":
-                money_nodes = self._children_by_type(child, "money_literal")
-                range_node = self._child_by_type(child, "money_range")
-                if range_node:
-                    moneys = self._children_by_type(range_node, "money_literal")
-                    if len(moneys) >= 2:
-                        fine_min = self._build_money(moneys[0])
-                        fine_max = self._build_money(moneys[1])
-                elif money_nodes:
-                    fine_max = self._build_money(money_nodes[0])
+                # G8: check for `fine := unlimited` keyword first
+                if any(self._text(c) == "unlimited" for c in child.children):
+                    fine_unlimited = True
+                else:
+                    money_nodes = self._children_by_type(child, "money_literal")
+                    range_node = self._child_by_type(child, "money_range")
+                    if range_node:
+                        moneys = self._children_by_type(range_node, "money_literal")
+                        if len(moneys) >= 2:
+                            fine_min = self._build_money(moneys[0])
+                            fine_max = self._build_money(moneys[1])
+                    elif money_nodes:
+                        fine_max = self._build_money(money_nodes[0])
             elif child.type == "caning_clause":
                 int_nodes = self._children_by_type(child, "integer_literal")
                 if len(int_nodes) >= 2:
@@ -1234,11 +1243,13 @@ class ASTBuilder:
             imprisonment_max=imprisonment_max,
             fine_min=fine_min,
             fine_max=fine_max,
+            fine_unlimited=fine_unlimited,
             caning_min=caning_min,
             caning_max=caning_max,
             death_penalty=death_penalty,
             supplementary=supplementary,
             sentencing=sentencing,
+            combinator=combinator,
             mandatory_min_imprisonment=mandatory_min_imprisonment,
             mandatory_min_fine=mandatory_min_fine,
             source_location=self._loc(node),

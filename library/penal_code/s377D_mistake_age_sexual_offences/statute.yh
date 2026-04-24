@@ -1,10 +1,9 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377D-#pr377D-
-/// @section 377D
 // Singapore Penal Code Section 377D
 
-statute 377.20 "Mistake as to age in sexual offences" effective 1872-01-01 {
+statute 377D "Mistake as to age in sexual offences" effective 1872-01-01 {
     definitions {
         mistake_age_rule := "Reasonable mistake as to age is generally not a defence to sexual offences";
         mistake_age_exception := "Limited defence available where minor is 16-18 and accused reasonably believed they were 18 or above";
