@@ -1,17 +1,18 @@
 [statute]
 section_number = "8"
-title = "Gender"
+title = "“Gender”"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "The pronoun 'he' and its derivatives apply to any person, male or female."
+summary = "Defines the pronoun “he” and its derivatives as applying to any person, whether male or female."
 source = "Singapore Penal Code 1871, Section 8"
 
 [verification]

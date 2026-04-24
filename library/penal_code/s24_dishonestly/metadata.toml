@@ -2,16 +2,17 @@
 section_number = "24"
 title = "“Dishonestly”"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Defines 'dishonestly' as an act done with intention to cause wrongful gain or wrongful loss."
+summary = "Defines when a person is said to do an act dishonestly under the Penal Code."
 source = "Singapore Penal Code 1871, Section 24"
 
 [verification]

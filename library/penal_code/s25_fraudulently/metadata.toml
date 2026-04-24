@@ -2,16 +2,17 @@
 section_number = "25"
 title = "“Fraudulently”"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Defines 'fraudulently' as an act done with intent to deceive so an advantage accrues or a detriment is suffered."
+summary = "Defines when a person is said to do an act fraudulently, including the slight-advantage exception and pleading rule."
 source = "Singapore Penal Code 1871, Section 25"
 
 [verification]

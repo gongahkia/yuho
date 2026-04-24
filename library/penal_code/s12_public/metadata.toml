@@ -1,17 +1,18 @@
 [statute]
 section_number = "12"
-title = "Public"
+title = "“Public”"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "The word 'public' includes any class of the public or any community."
+summary = "Defines “public” to include any class of the public or any community."
 source = "Singapore Penal Code 1871, Section 12"
 
 [verification]

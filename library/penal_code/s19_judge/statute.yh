@@ -1,28 +1,26 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr19-#pr19-
-// Singapore Penal Code Section 19 - "Judge"
-// Shape: interpretation / definition
 
-statute 19 "Judge" effective 1872-01-01 {
+statute 19 "“Judge”" effective 1872-01-01 {
     definitions {
-        judge := "Every person who is officially designated as a judge, and every person who is empowered by law to give, in any legal proceeding, civil or criminal, a definitive judgment, or a judgment which if not appealed against would be definitive, or a judgment which if confirmed by some other authority would be definitive, or who is one of a body of persons which body is empowered by law to give such a judgment";
-        officially_designated := "A person officially designated as a judge";
-        empowered_definitive := "A person empowered by law to give a definitive judgment in any legal proceeding, civil or criminal";
-        empowered_if_unappealed := "A person empowered by law to give a judgment that would be definitive if not appealed against";
-        empowered_if_confirmed := "A person empowered by law to give a judgment that would be definitive if confirmed by some other authority";
-        body_member := "A member of a body of persons empowered by law to give such a judgment";
+        judge := "The word “judge” denotes the persons in the categories defined in this section.";
+        officially_designated_judge := "every person who is officially designated as a judge";
+        empowered_definitive_judgment := "every person who is empowered by law to give, in any legal proceeding, civil or criminal, a definitive judgment";
+        empowered_unappealed_definitive_judgment := "every person who is empowered by law to give, in any legal proceeding, civil or criminal, a judgment which, if not appealed against, would be definitive";
+        empowered_confirmed_definitive_judgment := "every person who is empowered by law to give, in any legal proceeding, civil or criminal, a judgment which, if confirmed by some other authority, would be definitive";
+        member_of_empowered_body := "every person who is one of a body of persons, which body of persons is empowered by law to give such a judgment";
     }
 
-    illustration illustrationA {
-        "A Magistrate exercising jurisdiction in respect of a charge on which he has power to sentence to fine or imprisonment, with or without appeal, is a judge."
+    illustration illustration_a {
+        "( a ) A Magistrate exercising jurisdiction in respect of a charge on which he has power to sentence to fine or imprisonment, with or without appeal, is a judge."
     }
 
-    illustration illustrationB {
-        "Officers holding an inquiry as to the loss of a ship under the Merchant Shipping Act 1995 are judges."
+    illustration illustration_b {
+        "( b ) Officers holding an inquiry as to the loss of a ship under the Merchant Shipping Act 1995 are judges."
     }
 
-    illustration illustrationC {
-        "A Magistrate exercising jurisdiction in respect of a charge on which he has power only to commit for trial to another court, is not a judge."
+    illustration illustration_c {
+        "( c ) A Magistrate exercising jurisdiction in respect of a charge on which he has power only to commit for trial to another court, is not a judge."
     }
 }

@@ -1,13 +1,17 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr22-#pr22-
-// Singapore Penal Code Section 22
-// Yuho v5 Syntax
-
 /// @amendment [15/2019]
 
-statute 22 "“Property”" effective 1872-01-01 {
+statute 22 "“Property”" effective 1872-01-01 effective 2020-01-01 {
     definitions {
-        property := "In this Code — “immovable property” means land, benefits to arise out of land and things attached to the earth or permanently fastened to anything attached to the earth; “movable property” includes property of every description, except immovable property; “property” means money and all other property, movable or immovable, including things in action, other intangible or incorporeal property and virtual currency; “virtual currency” means a digital representation of value in money or money’s worth that can be digitally traded and functions as a medium of exchange, a unit of account or store of value, regardless of whether it is legal tender in any country or territory including Singapore. [15/2019] Illustration Writings, relating to real or personal property or rights, are movable property.";
+        immovable_property := "Means land, benefits to arise out of land and things attached to the earth or permanently fastened to anything attached to the earth";
+        movable_property := "Includes property of every description, except immovable property";
+        property := "Means money and all other property, movable or immovable, including things in action, other intangible or incorporeal property and virtual currency";
+        virtual_currency := "Means a digital representation of value in money or money’s worth that can be digitally traded and functions as a medium of exchange, a unit of account or store of value, regardless of whether it is legal tender in any country or territory including Singapore";
+    }
+
+    illustration illustration {
+        "Writings, relating to real or personal property or rights, are movable property."
     }
 }

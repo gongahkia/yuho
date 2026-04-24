@@ -1,12 +1,9 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr10-#pr10-
-// Singapore Penal Code Section 10 - "Man" and "woman"
-// Shape: interpretation / definition
-
-statute 10 "Man and woman" effective 1872-01-01 {
+statute 10 "“Man” and “woman”" effective 1872-01-01 {
     definitions {
-        man := "A male human being of any age";
-        woman := "A female human being of any age";
+        man := "The word “man” denotes a male human being of any age";
+        woman := "“woman” denotes a female human being of any age";
     }
 }

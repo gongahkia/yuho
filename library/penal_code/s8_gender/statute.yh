@@ -1,11 +1,9 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr8-#pr8-
-// Singapore Penal Code Section 8 - "Gender"
-// Shape: interpretation / definition
 
-statute 8 "Gender" effective 1872-01-01 {
+statute 8 "“Gender”" effective 1872-01-01 {
     definitions {
-        he_pronoun_rule := "The pronoun he and its derivatives are used of any person, whether male or female";
+        pronoun_he_and_derivatives := "The pronoun “he” and its derivatives are used of any person, whether male or female.";
     }
 }

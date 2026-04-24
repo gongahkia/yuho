@@ -1,8 +1,6 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr26-#pr26-
-// Singapore Penal Code Section 26
-// Yuho v5 Syntax
 
 statute 26 "“Reason to believe”" effective 1872-01-01 {
     definitions {

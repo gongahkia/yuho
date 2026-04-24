@@ -1,17 +1,18 @@
 [statute]
 section_number = "10"
-title = "Man and woman"
+title = "“Man” and “woman”"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Defines 'man' as a male human being of any age and 'woman' as a female human being of any age."
+summary = "Defines “man” as a male human being of any age and “woman” as a female human being of any age."
 source = "Singapore Penal Code 1871, Section 10"
 
 [verification]

@@ -2,16 +2,17 @@
 section_number = "22"
 title = "“Property”"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Defines 'property' including both immovable (land) and movable (non-land) property, including money."
+summary = "Defines immovable property, movable property, property, and virtual currency for the Penal Code."
 source = "Singapore Penal Code 1871, Section 22"
 
 [verification]
