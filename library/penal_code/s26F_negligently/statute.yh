@@ -1,13 +1,18 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr26F-#pr26F-
-// Singapore Penal Code Section 26F
-// Yuho v5 Syntax
-
 /// @amendment [15/2019]
 
-statute 26F "“Negligently”" effective 1872-01-01 {
-    definitions {
-        negligently := "—(1) Whoever omits to do an act which a reasonable person would do, or does any act which a reasonable person would not do, is said to do so negligently. [15/2019] (2) Where doing an act negligently is a fault element of an offence, that fault element is also established where that act is done intentionally, knowingly or rashly. [15/2019]";
+statute 26F "“Negligently”" effective 1872-01-01 effective 2019-12-31 {
+    subsection (1) {
+        definitions {
+            negligently := "Whoever omits to do an act which a reasonable person would do, or does any act which a reasonable person would not do, is said to do so negligently. [15/2019]";
+        }
+    }
+
+    subsection (2) {
+        definitions {
+            negligent_fault_element_established_by_higher_fault := "Where doing an act negligently is a fault element of an offence, that fault element is also established where that act is done intentionally, knowingly or rashly. [15/2019]";
+        }
     }
 }
