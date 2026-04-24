@@ -396,8 +396,9 @@ module.exports = grammar({
     // G5: subsection nesting — numbered subsections can contain their own
     // definitions / elements / penalty / illustrations, matching the real
     // structure of sections like s377BO (7 subsections) and s511 (3).
+    // No leading doc_comment field — doc comments are `extras` and should
+    // float freely without being captured by this rule's prefix.
     subsection_block: $ => seq(
-      repeat(field('doc_comment', $.doc_comment)),
       'subsection',
       field('number', $.subsection_number),
       '{',
@@ -498,6 +499,10 @@ module.exports = grammar({
       //   alternative -- exactly one of the listed penalties applies
       //   or_both     -- any one or any combination applies ("X, or fine, or both" PC idiom)
       optional(field('combinator', choice('cumulative', 'alternative', 'or_both'))),
+      // G9: optional `when <label>` binds this penalty to a named branch. Lets
+      // sections like s304A encode `penalty when rash_act { ... }` and
+      // `penalty when negligent_act { ... }` as distinct sibling penalty blocks.
+      optional(seq('when', field('condition', $.identifier))),
       '{',
       optional($.imprisonment_clause),
       optional($.fine_clause),

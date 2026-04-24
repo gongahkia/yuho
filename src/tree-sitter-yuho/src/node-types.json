@@ -2727,6 +2727,16 @@
           }
         ]
       },
+      "condition": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
       "sentencing": {
         "multiple": false,
         "required": false,
@@ -3362,16 +3372,6 @@
     "type": "subsection_block",
     "named": true,
     "fields": {
-      "doc_comment": {
-        "multiple": true,
-        "required": false,
-        "types": [
-          {
-            "type": "doc_comment",
-            "named": true
-          }
-        ]
-      },
       "number": {
         "multiple": false,
         "required": true,

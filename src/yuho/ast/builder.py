@@ -1250,6 +1250,10 @@ class ASTBuilder:
         combinator_node = self._child_by_field(node, "combinator")
         combinator = self._text(combinator_node) if combinator_node else None
 
+        # G9: optional branch label — `penalty when <ident> { ... }`
+        condition_node = self._child_by_field(node, "condition")
+        condition = self._text(condition_node) if condition_node else None
+
         for child in node.children:
             if child.type == "imprisonment_clause":
                 duration_nodes = self._children_by_type(child, "duration_literal")
@@ -1311,6 +1315,7 @@ class ASTBuilder:
             supplementary=supplementary,
             sentencing=sentencing,
             combinator=combinator,
+            condition=condition,
             mandatory_min_imprisonment=mandatory_min_imprisonment,
             mandatory_min_fine=mandatory_min_fine,
             source_location=self._loc(node),

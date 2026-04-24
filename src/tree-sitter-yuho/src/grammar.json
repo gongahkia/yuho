@@ -1607,17 +1607,6 @@
       "type": "SEQ",
       "members": [
         {
-          "type": "REPEAT",
-          "content": {
-            "type": "FIELD",
-            "name": "doc_comment",
-            "content": {
-              "type": "SYMBOL",
-              "name": "doc_comment"
-            }
-          }
-        },
-        {
           "type": "STRING",
           "value": "subsection"
         },
@@ -2261,6 +2250,31 @@
                   }
                 ]
               }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": "when"
+                },
+                {
+                  "type": "FIELD",
+                  "name": "condition",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "identifier"
+                  }
+                }
+              ]
             },
             {
               "type": "BLANK"

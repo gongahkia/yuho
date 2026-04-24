@@ -55,20 +55,24 @@ structured content (facts pattern + legal-conclusion fields), and have
 `yuho check` require their presence when the raw corpus has them. This
 makes silent illustration-drop detectable.
 
-### G5 — subsections with distinct content have no structural home
+### G5 — subsections with distinct content have no structural home ✅ FIXED
 
 Sections like s377BO have seven numbered subsections covering separate
 legal rules (e.g. extraterritoriality by citizenship vs. by act-location
-vs. by victim-location). The grammar has no `subsection N { … }`
+vs. by victim-location). The grammar had no `subsection N { … }`
 construct, so agents flattened all seven rules into one-line definitions.
 
-**Current effect:** multi-subsection sections systematically lose
-structure. Examples: s377BO, s377BN, s377CB, s511, s21, s22, s33, s40,
-s464.
+**Fix landed:** new `subsection_block` rule nests inside `statute_block`
+(and inside other subsections — arbitrary depth). Number syntax accepts
+`(1)`, `(2A)`, `(a)`, `(iii)`, or bare numerics. New `SubsectionNode` in
+the AST carries its own definitions / elements / penalty / illustrations
+/ exceptions / nested subsections. Verified on a multi-subsection test
+file; all 524 existing encodings remain green.
 
-**Fix direction:** add `subsection <N> { … }` nesting inside `statute`
-blocks. Subsections should be able to contain their own definitions,
-elements, penalty, and illustrations independently.
+**Still pending (data side):** re-encoding the ~50+ sections with real
+subsection structure (s21, s22, s33, s40, s377BO, s377BN, s377CB, s511,
+s464, etc.) to actually use the new construct. Part of the re-encoding
+wave.
 
 ### G6 — `effective` date cannot reflect amendment-introduced sections ✅ PARTIALLY FIXED
 
@@ -95,23 +99,21 @@ expressing original-act-commencement + amendment-introduction.
 sections to actually include the correct second `effective` clause.
 This is part of the re-encoding wave, not the grammar fix.
 
-### G7 — no decomposition for long interpretation sections with nested terms
+### G7 — no decomposition for long interpretation sections with nested terms ✅ SUBSUMED BY G5
 
 Sections like s22 ("Property"), s29 ("Document"), s377C (sexual-offence
-definitions) define ~4–12 terms inside one section, often with nested
-lists, recursive sub-definitions, and cross-references. The grammar's
-`definitions { term := "string" }` only supports flat key/string pairs.
+definitions) define ~4–12 terms inside one section.
 
-**Current effect:** agents either (a) dump the entire section as one
-giant string bound to a single term (s21, s22, s29, s33, s40 —
-technically faithful but useless), or (b) pick ~3 of the defined terms
-and invent paraphrased summaries for them (s377C — lost ~8 definitions).
+**Resolution:** On closer look, the current grammar's
+`definitions { term := "string"; … }` already supports a flat list of
+independent term/definition pairs. The earlier "giant string" pattern
+wasn't a grammar limitation — agents just chose not to decompose. With
+G5 subsections now available, sections that truly need scoped sub-
+definitions (e.g. s377C subsection (1) vs (2)) can use
+`subsection (1) { definitions { term := "..."; } }`.
 
-**Fix direction:** allow `definitions { term := <structured> }` where
-structured can be a string, a nested definitions block, a list of
-alternatives, or a reference. Optionally add a separate
-`interpretation_block` node for interpretation sections with different
-semantics (Penal Code has ~40 pure-interpretation sections).
+No separate grammar work required. Re-encoding agents will be told to
+decompose.
 
 ### G8 — no explicit model for alternative punishments ✅ PARTIALLY FIXED
 
@@ -146,35 +148,41 @@ that currently have fabricated fine caps and cumulative-defaulted
 penalty blocks. These need to use `fine := unlimited` and
 `penalty or_both { ... }` where appropriate.
 
-### G9 — no support for conditional / branch-dependent penalties
+### G9 — no support for conditional / branch-dependent penalties ✅ FIXED
 
 s153 has "if rioting committed, 3yr; if not, 1yr." s304A has "(a) rash
-act → 5yr; (b) negligent act → 2yr." These are distinct penalty
-branches keyed on facts. Yuho's `penalty { }` collapses them to a
-single range.
+act → 5yr; (b) negligent act → 2yr." These are distinct penalty branches
+keyed on facts.
 
-**Current effect:** conditional penalties are silently truncated to
-the most-severe branch. Querying Yuho for max sentence returns the wrong
-answer on any branch-conditional section.
+**Fix landed:** `penalty_block` now accepts an optional `when <ident>`
+clause. Sections with branched punishment can write sibling penalty
+blocks:
 
-**Fix direction:** add `penalty { case <condition> := <penalty-block> }`
-branching, or similar.
+    penalty when rash_act     { imprisonment := 0 days .. 5 years; fine := unlimited; }
+    penalty when negligent_act { imprisonment := 0 days .. 2 years; fine := unlimited; }
 
-### G10 — no cross-section reference primitive
+`PenaltyNode` now carries `condition: Optional[str]`. The AST currently
+keeps only the first penalty block (`StatuteNode.penalty`) — multi-
+penalty collection is deferred until downstream consumers need it.
+Grammar shape is stable; AST extension is a mechanical follow-up.
+
+**Still pending (data side):** re-encoding the ~10 sections with real
+conditional penalties (s153, s304A, s420 subsections, etc.).
+
+### G10 — no cross-section reference primitive ✅ NOT A GAP (GRAMMAR SIDE)
 
 Agents invented `referencing penal_code/s441_criminal_trespass` as a
-pseudo-syntax (s325, s420, s442). It passes `yuho check` because the
-checker is lenient, but it's not a real AST node — no semantic binding,
-no validation that the referenced section exists, no way to traverse.
+pseudo-syntax (s325, s420, s442).
 
-**Current effect:** cross-section references exist in text but are not
-machine-navigable. Phase 2 features that depend on the reference graph
-(e.g. "show me all sections that extend s415 cheating") cannot be built.
+**Resolution:** this is a real AST node. `referencing_statement` has
+existed in the grammar since v5. The grammar also has `subsumes <num>`
+and `amends <num>` clauses on `statute_block`. Agents used the existing
+grammar correctly.
 
-**Fix direction:** add a `references <section-number>` clause at
-statute top level, semantically resolved to the referenced section's
-AST. Optionally add `uses_definition_from <section>` for explicit
-dependency.
+**Still pending (semantic side):** the resolver / semantic analyzer
+doesn't traverse `referencing` edges to load the referenced statute's
+AST. Cross-section queries ("show me all sections that extend s415
+cheating") aren't wired yet. This is tooling, not grammar — deferred.
 
 ### G11 — `any_of` vs `all_of` misclassification risk
 
