@@ -20,13 +20,15 @@ statute 377BI "Distributing or selling child abuse material" effective 1872-01-0
 
     subsection (2) {
         penalty cumulative {
+
             imprisonment := 0 years .. 7 years;
             supplementary := "A person who is guilty of an offence under subsection (1) shall on conviction be punished with imprisonment for a term which may extend to 7 years. [15/2019]";
-        }
 
-        penalty alternative {
-            fine := unlimited;
-            supplementary := "The offender shall also be liable to fine or to caning. [15/2019]";
+            alternative {
+                fine := unlimited;
+                supplementary := "The offender shall also be liable to fine or to caning. [15/2019]";
+        
+            }
         }
     }
 }

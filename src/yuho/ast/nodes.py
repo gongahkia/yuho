@@ -821,6 +821,7 @@ class PenaltyNode(ASTNode):
     sentencing: Optional[str] = None  # phase 14: "concurrent" or "consecutive"
     combinator: Optional[str] = None  # G8: "cumulative" | "alternative" | "or_both"; None = cumulative (back-compat)
     condition: Optional[str] = None  # G9: identifier from `penalty when <ident> { ... }` — names a conditional branch
+    nested: Optional["PenaltyNode"] = None  # G12: nested sub-combinator (e.g. `penalty cumulative { imprisonment; or_both { fine; caning } }`)
     mandatory_min_imprisonment: Optional[DurationNode] = None  # phase 14
     mandatory_min_fine: Optional[MoneyNode] = None  # phase 14
 

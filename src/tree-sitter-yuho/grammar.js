@@ -510,6 +510,24 @@ module.exports = grammar({
       optional($.death_penalty_clause),
       optional($.supplementary_clause),
       optional($.mandatory_minimum_clause),
+      // G12: nested combinator sub-block for "imprisonment AND ALSO fine or
+      // caning or both" patterns. Single level of nesting — covers every
+      // SG PC case; deeper nesting is YAGNI.
+      optional($.penalty_sub_block),
+      '}'
+    ),
+
+    // G12: a nested sub-combinator inside a penalty_block. Carries its own
+    // combinator keyword + its own clauses. No `when`, no `sentencing`, no
+    // `minimum` — those only make sense at the top level.
+    penalty_sub_block: $ => seq(
+      field('combinator', choice('cumulative', 'alternative', 'or_both')),
+      '{',
+      optional($.imprisonment_clause),
+      optional($.fine_clause),
+      optional($.caning_clause),
+      optional($.death_penalty_clause),
+      optional($.supplementary_clause),
       '}'
     ),
 

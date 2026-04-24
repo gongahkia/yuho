@@ -19,12 +19,14 @@ statute 373 "Buying minor for purposes of prostitution, etc." effective 1872-01-
     }
 
     penalty cumulative {
+
         imprisonment := 0 years .. 10 years;
         supplementary := "Whoever buys, hires or otherwise obtains possession of any person below 21 years of age with intent that such person shall at any age be employed or used for the purpose of prostitution or illicit intercourse with any person or for any unlawful and immoral purpose, or knowing it to be likely that such person will at any age be employed or used for any such purpose, shall be punished with imprisonment for a term which may extend to 10 years.";
-    }
 
-    penalty alternative {
-        fine := unlimited;
-        supplementary := "The offender shall also be liable to fine.";
+        alternative {
+            fine := unlimited;
+            supplementary := "The offender shall also be liable to fine.";
+    
+        }
     }
 }

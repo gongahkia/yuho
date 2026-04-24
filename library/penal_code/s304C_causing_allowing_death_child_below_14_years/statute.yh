@@ -42,13 +42,15 @@ statute 304C "Causing or allowing death of child below 14 years of age, domestic
 
     subsection (4) {
         penalty cumulative {
-            imprisonment := 0 years .. 20 years;
-        }
 
-        penalty alternative {
-            fine := unlimited;
-            caning := unspecified;
-            supplementary := "The offender shall also be liable to fine or to caning.";
+            imprisonment := 0 years .. 20 years;
+
+            alternative {
+                fine := unlimited;
+                caning := unspecified;
+                supplementary := "The offender shall also be liable to fine or to caning.";
+        
+            }
         }
     }
 

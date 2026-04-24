@@ -2777,6 +2777,60 @@
           "named": true
         },
         {
+          "type": "penalty_sub_block",
+          "named": true
+        },
+        {
+          "type": "supplementary_clause",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "penalty_sub_block",
+    "named": true,
+    "fields": {
+      "combinator": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "alternative",
+            "named": false
+          },
+          {
+            "type": "cumulative",
+            "named": false
+          },
+          {
+            "type": "or_both",
+            "named": false
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "caning_clause",
+          "named": true
+        },
+        {
+          "type": "death_penalty_clause",
+          "named": true
+        },
+        {
+          "type": "fine_clause",
+          "named": true
+        },
+        {
+          "type": "imprisonment_clause",
+          "named": true
+        },
+        {
           "type": "supplementary_clause",
           "named": true
         }

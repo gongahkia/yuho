@@ -1238,6 +1238,7 @@ class ASTBuilder:
         fine_unlimited = False
         caning_min = caning_max = None
         caning_unspecified = False
+        nested = None
         death_penalty = None
         supplementary = None
         mandatory_min_imprisonment = None
@@ -1307,6 +1308,10 @@ class ASTBuilder:
                     mandatory_min_imprisonment = self._build_duration(dur_node)
                 if money_node:
                     mandatory_min_fine = self._build_money(money_node)
+            elif child.type == "penalty_sub_block":                # G12: nested combinator
+                nested = self._build_penalty_sub_block(child)      # forward declared below
+            else:
+                pass
 
         return nodes.PenaltyNode(
             imprisonment_min=imprisonment_min,
@@ -1322,8 +1327,82 @@ class ASTBuilder:
             sentencing=sentencing,
             combinator=combinator,
             condition=condition,
+            nested=nested,
             mandatory_min_imprisonment=mandatory_min_imprisonment,
             mandatory_min_fine=mandatory_min_fine,
+            source_location=self._loc(node),
+        )
+
+    def _build_penalty_sub_block(self, node) -> nodes.PenaltyNode:
+        """G12: build a nested PenaltyNode from a penalty_sub_block.
+        Similar shape to the top-level block but no sentencing/when/minimum."""
+        imprisonment_min = imprisonment_max = None
+        fine_min = fine_max = None
+        fine_unlimited = False
+        caning_min = caning_max = None
+        caning_unspecified = False
+        death_penalty = None
+        supplementary = None
+
+        combinator_node = self._child_by_field(node, "combinator")
+        combinator = self._text(combinator_node) if combinator_node else None
+
+        for child in node.children:
+            if child.type == "imprisonment_clause":
+                range_node = self._child_by_type(child, "duration_range")
+                dur_nodes = self._children_by_type(child, "duration_literal")
+                if range_node:
+                    durs = self._children_by_type(range_node, "duration_literal")
+                    if len(durs) >= 2:
+                        imprisonment_min = self._build_duration(durs[0])
+                        imprisonment_max = self._build_duration(durs[1])
+                elif dur_nodes:
+                    imprisonment_max = self._build_duration(dur_nodes[0])
+            elif child.type == "fine_clause":
+                if any(self._text(c) == "unlimited" for c in child.children):
+                    fine_unlimited = True
+                else:
+                    money_nodes = self._children_by_type(child, "money_literal")
+                    range_node = self._child_by_type(child, "money_range")
+                    if range_node:
+                        moneys = self._children_by_type(range_node, "money_literal")
+                        if len(moneys) >= 2:
+                            fine_min = self._build_money(moneys[0])
+                            fine_max = self._build_money(moneys[1])
+                    elif money_nodes:
+                        fine_max = self._build_money(money_nodes[0])
+            elif child.type == "caning_clause":
+                if any(self._text(c) == "unspecified" for c in child.children):
+                    caning_unspecified = True
+                else:
+                    int_nodes = self._children_by_type(child, "integer_literal")
+                    if len(int_nodes) >= 2:
+                        caning_min = int(self._text(int_nodes[0]))
+                        caning_max = int(self._text(int_nodes[1]))
+                    elif int_nodes:
+                        caning_min = int(self._text(int_nodes[0]))
+                        caning_max = caning_min
+            elif child.type == "death_penalty_clause":
+                bool_node = self._child_by_type(child, "boolean_literal")
+                if bool_node:
+                    death_penalty = self._text(bool_node) == "TRUE"
+            elif child.type == "supplementary_clause":
+                string_node = self._child_by_type(child, "string_literal")
+                if string_node:
+                    supplementary = self._build_string_lit(string_node)
+
+        return nodes.PenaltyNode(
+            imprisonment_min=imprisonment_min,
+            imprisonment_max=imprisonment_max,
+            fine_min=fine_min,
+            fine_max=fine_max,
+            fine_unlimited=fine_unlimited,
+            caning_min=caning_min,
+            caning_max=caning_max,
+            caning_unspecified=caning_unspecified,
+            death_penalty=death_penalty,
+            supplementary=supplementary,
+            combinator=combinator,
             source_location=self._loc(node),
         )
 

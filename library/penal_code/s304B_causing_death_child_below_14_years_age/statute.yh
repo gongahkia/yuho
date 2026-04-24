@@ -15,13 +15,15 @@ statute 304B "Causing death of child below 14 years of age, domestic worker or v
         }
 
         penalty cumulative {
+
             imprisonment := 0 years .. 20 years;
             supplementary := "A relevant person who causes the death of any child, domestic worker or vulnerable person by sustained abuse shall be punished with imprisonment for a term which may extend to 20 years. [15/2019]"
-        }
 
-        penalty alternative {
-            fine := unlimited;
-            supplementary := "The offender shall also be liable to fine or to caning. [15/2019]"
+            alternative {
+                fine := unlimited;
+                supplementary := "The offender shall also be liable to fine or to caning. [15/2019]"
+        
+            }
         }
     }
 

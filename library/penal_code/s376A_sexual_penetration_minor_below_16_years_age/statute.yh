@@ -63,14 +63,16 @@ statute 376A "Sexual penetration of minor below 16 years of age" effective 1872-
         }
 
         penalty cumulative {
+
             imprisonment := 0 years .. 20 years;
             supplementary := "Whoever commits an offence under this section against a person (B) who is below 14 years of age shall be punished with imprisonment for a term which may extend to 20 years.";
-        }
 
-        penalty alternative {
-            fine := unlimited;
-            caning := 0 .. 24 strokes;
-            supplementary := "The offender shall also be liable to fine or to caning.";
+            alternative {
+                fine := unlimited;
+                caning := 0 .. 24 strokes;
+                supplementary := "The offender shall also be liable to fine or to caning.";
+        
+            }
         }
     }
 

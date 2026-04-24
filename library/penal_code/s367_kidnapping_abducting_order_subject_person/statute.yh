@@ -20,13 +20,15 @@ statute 367 "Kidnapping or abducting in order to subject a person to grievous hu
     }
 
     penalty cumulative {
+
         imprisonment := 0 years .. 10 years;
         supplementary := "Whoever kidnaps or abducts any person in order that such person may be subjected, or may be so disposed of as to be put in danger of being subjected to grievous hurt or slavery, or to non-consensual penile penetration of the anus or mouth, or knowing it to be likely that such person will be so subjected or disposed of, shall be punished with imprisonment for a term which may extend to 10 years. [15/2019]";
-    }
 
-    penalty alternative {
-        fine := unlimited;
-        caning := 0 .. 24 strokes;
-        supplementary := "The offender shall also be liable to fine or to caning. [15/2019]";
+        alternative {
+            fine := unlimited;
+            caning := 0 .. 24 strokes;
+            supplementary := "The offender shall also be liable to fine or to caning. [15/2019]";
+    
+        }
     }
 }

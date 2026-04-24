@@ -16,11 +16,13 @@ statute 389 "Putting person in fear of accusation of offence, in order to commit
     }
 
     penalty cumulative {
-        imprisonment := 0 years .. 10 years;
-    }
 
-    penalty alternative {
-        fine := unlimited;
-        supplementary := "The offender shall also be liable to fine or to caning.";
+        imprisonment := 0 years .. 10 years;
+
+        alternative {
+            fine := unlimited;
+            supplementary := "The offender shall also be liable to fine or to caning.";
+    
+        }
     }
 }

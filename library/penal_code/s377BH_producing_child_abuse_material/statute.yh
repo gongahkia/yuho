@@ -17,13 +17,15 @@ statute 377BH "Producing child abuse material" effective 1872-01-01 effective 20
 
     subsection (2) {
         penalty cumulative {
+
             imprisonment := 0 years .. 10 years;
             supplementary := "A person who is guilty of an offence under subsection (1) shall on conviction be punished with imprisonment for a term which may extend to 10 years, and shall also be liable to fine or to caning. [15/2019]";
-        }
 
-        penalty alternative {
-            fine := unlimited;
-            supplementary := "The offender shall also be liable to fine or to caning. [15/2019]";
+            alternative {
+                fine := unlimited;
+                supplementary := "The offender shall also be liable to fine or to caning. [15/2019]";
+        
+            }
         }
     }
 
