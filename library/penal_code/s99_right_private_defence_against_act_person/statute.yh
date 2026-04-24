@@ -1,20 +1,18 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr99-#pr99-
-// Singapore Penal Code Section 99
-
 /// @amendment [15/2019]
 
-statute 99 "Right of private defence against act of person of unsound mind, etc." effective 1872-01-01 {
+statute 99 "Right of private defence against act of person of unsound mind, etc." effective 1872-01-01 effective 2019-12-31 {
     definitions {
-        rule := "When an act, which would otherwise be a certain offence, is not that offence by reason of the youth, want of maturity of understanding, unsoundness of mind, or intoxication of the person doing that act, or by reason of any misconception on the part of that person, every person has the same right of private defence against that act as if the act were that offence.";
+        private_defence_against_act_not_offence_due_to_actor_status := "When an act, which would otherwise be a certain offence, is not that offence, by reason of the youth, the want of maturity of understanding, the unsoundness of mind, or the intoxication of the person doing that act, or by reason of any misconception on the part of that person, every person has the same right of private defence against that act which he would have if the act were that offence. [15/2019]";
     }
 
-    illustration example_a {
+    illustration illustration_a {
         "( a ) Z , under the influence of madness, attempts to kill A . Z is guilty of no offence. But A has the same right of private defence which he would have if Z were sane."
     }
 
-    illustration example_b {
+    illustration illustration_b {
         "( b ) A enters, by night, a house which he is legally entitled to enter. Z , in good faith, taking A for a housebreaker, attacks A . Here Z , by attacking A under this misconception, commits no offence. But A has the same right of private defence against Z , which he would have if Z were not acting under that misconception."
     }
 }

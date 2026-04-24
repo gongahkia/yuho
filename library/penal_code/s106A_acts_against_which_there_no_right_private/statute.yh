@@ -2,47 +2,50 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr106A-#pr106A-
 /// @amendment [15/2019]
-// Singapore Penal Code Section 106A - Acts against which there is no right of private defence
-// Yuho v5 Syntax
 
-struct NoPrivateDefenceCase {
-    string defender,
-    string actor,
-    bool actorIsPublicServant,
-    bool actorInGoodFaith,
-    bool defenderBelievesDeathOrGrievousHurt,
-    bool defenderKnowsActorIsPublicServant,
-}
+statute 106A "Acts against which there is no right of private defence" effective 1872-01-01 effective 2019-12-31 {
+    subsection (1) {
+        definitions {
+            no_right_against_public_servant_act := "There is no right of private defence against an act which does not cause the defender to reasonably believe that death or grievous hurt would result, if done, or attempted to be done, by a public servant acting in good faith under the actual or apparent authority of his office, though that act may not be strictly justifiable by law. [15/2019]";
+            explanation_1 := "Explanation 1.—A person is not deprived of the right of private defence against an act done, or attempted to be done, by a public servant, as such, unless he knows, or has reason to believe, that the person doing the act is such public servant.";
+        }
 
-fn no_right_of_defence(bool actorIsPublicServant, bool actorInGoodFaith, bool defenderBelievesDeathOrGrievousHurt, bool defenderKnowsActorIsPublicServant) : bool {
-    match {
-        case TRUE if actorIsPublicServant == FALSE := consequence FALSE;
-        case TRUE if actorInGoodFaith == FALSE := consequence FALSE;
-        case TRUE if defenderKnowsActorIsPublicServant == FALSE := consequence FALSE;
-        case TRUE if defenderBelievesDeathOrGrievousHurt == TRUE := consequence FALSE;
-        case _ := consequence TRUE;
-    }
-}
-
-statute 106A "Acts against which there is no right of private defence" effective 2020-01-01 {
-    definitions {
-        public_servant := "As defined in section 21";
-        good_faith := "As defined in section 52";
-        actual_authority := "Authority conferred by law on a public servant";
-        apparent_authority := "Authority a public servant appears to exercise by virtue of office";
-        grievous_hurt := "As defined in section 320";
-    }
-
-    elements {
-        // Explanation 1: defender not deprived of right unless defender knows or has reason to believe the actor is a public servant
-        all_of {
-            any_of {
-                actus_reus public_servant_act := "Act done or attempted by a public servant under actual or apparent authority of office";
-                actus_reus direction_of_public_servant := "Act done or attempted under the direction of a public servant acting in good faith";
+        elements {
+            /// Subsection (1) is conjunctive: the right is excluded only when the act, belief threshold, and public-servant authority conditions are all present.
+            all_of {
+                actus_reus act_done_or_attempted := "An act is done, or attempted to be done";
+                circumstance no_reasonable_belief_of_death_or_grievous_hurt := "The act does not cause the defender to reasonably believe that death or grievous hurt would result";
+                circumstance public_servant_status := "The act is done, or attempted to be done, by a public servant";
+                mens_rea good_faith := "The public servant is acting in good faith";
+                circumstance actual_or_apparent_authority := "The public servant is acting under the actual or apparent authority of his office";
+                circumstance knowledge_of_public_servant_status := "The person deprived of the right of private defence knows, or has reason to believe, that the person doing the act is such public servant";
             }
-            circumstance good_faith_actor := "Public servant acts in good faith under authority of office";
-            circumstance no_reasonable_belief := "Defender does not reasonably believe death or grievous hurt would result";
-            mens_rea defender_knowledge := "Defender knows or has reason to believe the actor is a public servant";
+        }
+    }
+
+    subsection (2) {
+        definitions {
+            no_right_against_act_under_public_servant_direction := "There is no right of private defence against an act which does not cause the defender to reasonably believe that death or grievous hurt would result, if done, or attempted to be done, by the direction of a public servant acting in good faith under the actual or apparent authority of the public servant’s office, though that direction may not be strictly justifiable by law. [15/2019]";
+            explanation_2 := "Explanation 2.—A person ( A ) is not deprived of the right of private defence against an act done, or attempted to be done, by the direction of a public servant, unless A knows, or has reason to believe, that the person doing the act ( B ) is acting by such direction; or unless B states the authority under which B acts, or, if B has authority in writing, unless B produces such authority, if demanded.";
+        }
+
+        elements {
+            /// Subsection (2) is conjunctive, subject to the Explanation 2 alternatives on notice of the public servant's direction.
+            all_of {
+                actus_reus act_done_or_attempted := "An act is done, or attempted to be done";
+                circumstance no_reasonable_belief_of_death_or_grievous_hurt := "The act does not cause the defender to reasonably believe that death or grievous hurt would result";
+                actus_reus acted_by_direction := "The act is done, or attempted to be done, by the direction of a public servant";
+                mens_rea good_faith := "The public servant is acting in good faith";
+                circumstance actual_or_apparent_authority := "The public servant is acting under the actual or apparent authority of the public servant’s office";
+                any_of {
+                    circumstance knowledge_of_direction := "A knows, or has reason to believe, that B is acting by such direction";
+                    actus_reus authority_stated := "B states the authority under which B acts";
+                    all_of {
+                        circumstance written_authority := "B has authority in writing";
+                        actus_reus written_authority_produced_if_demanded := "B produces such authority, if demanded";
+                    }
+                }
+            }
         }
     }
 }

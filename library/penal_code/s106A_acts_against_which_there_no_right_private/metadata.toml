@@ -2,16 +2,17 @@
 section_number = "106A"
 title = "Acts against which there is no right of private defence"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "No right of private defence against acts by public servants acting in good faith under actual or apparent authority, or done under their direction, where defender does not reasonably believe death or grievous hurt would result; applies only where defender knows or has reason to believe actor is acting as public servant."
+summary = "Section 106A removes the right of private defence against certain acts by public servants or acts done under their direction when the defender lacks a reasonable belief of death or grievous hurt."
 source = "Singapore Penal Code 1871, Section 106A"
 
 [verification]

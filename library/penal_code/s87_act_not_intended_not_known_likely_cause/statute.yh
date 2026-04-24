@@ -1,14 +1,32 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr87-#pr87-
-// Singapore Penal Code Section 87
-
 statute 87 "Act not intended and not known to be likely to cause death or grievous hurt, done by consent" effective 1872-01-01 {
     definitions {
-        rule := "Nothing, which is not intended to cause death or grievous hurt, and which is not known by the doer to be likely to cause death or grievous hurt, is an offence by reason of any harm which it may cause, or be intended to cause, to any person above 18 years of age who has consented to suffer that harm or take the risk of that harm.";
+        no_offence_consent_rule := "Nothing, which is not intended to cause death or grievous hurt, and which is not known by the doer to be likely to cause death or grievous hurt, is an offence by reason of any harm which it may cause, or be intended by the doer to cause, to any person above 18 years of age, who has given consent, whether express or implied, to suffer that harm; or by reason of any harm which it may be known by the doer to be likely to cause to any such person who has consented to take the risk of that harm.";
     }
 
-    illustration example1 {
+    elements {
+        /// The exception is conjunctive overall, with two alternative consent pathways for harm suffered or risk accepted.
+        all_of {
+            actus_reus act_causing_harm := "Act causing harm, intended harm, or known-likely harm to a consenting person";
+            mens_rea no_intention_death_or_grievous_hurt := "Act is not intended to cause death or grievous hurt";
+            mens_rea no_knowledge_likely_death_or_grievous_hurt := "Act is not known by the doer to be likely to cause death or grievous hurt";
+            circumstance person_above_18 := "Person harmed or exposed to risk is above 18 years of age";
+            /// Section 87 distinguishes consent to suffer harm from consent to take the risk of known-likely harm.
+            any_of {
+                circumstance consent_to_suffer_harm := "The person has given consent, whether express or implied, to suffer harm which the act may cause or which the doer intends to cause";
+                circumstance consent_to_take_risk := "The person has consented to take the risk of harm which the doer may know to be likely to cause";
+            }
+        }
+    }
+
+    exception adult_consent_to_non_fatal_non_grievous_harm {
+        "Nothing, which is not intended to cause death or grievous hurt, and which is not known by the doer to be likely to cause death or grievous hurt, is an offence by reason of any harm which it may cause, or be intended by the doer to cause, to any person above 18 years of age, who has given consent, whether express or implied, to suffer that harm; or by reason of any harm which it may be known by the doer to be likely to cause to any such person who has consented to take the risk of that harm."
+        "Not an offence by reason of that harm"
+    }
+
+    illustration illustration {
         "A and Z agree to fence with each other for amusement. This agreement implies the consent of each to suffer any harm which, in the course of such fencing, may be caused without foul play; and if A , while playing fairly, hurts Z , A commits no offence."
     }
 }

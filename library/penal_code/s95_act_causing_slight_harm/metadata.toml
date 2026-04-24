@@ -2,16 +2,17 @@
 section_number = "95"
 title = "Act causing slight harm"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Nothing is an offence by reason of harm so slight that no person of ordinary sense and temper would complain of it."
+summary = "Provides a general exception where the harm caused, intended, or known to be likely is so slight that no person of ordinary sense and temper would complain."
 source = "Singapore Penal Code 1871, Section 95"
 
 [verification]

@@ -2,16 +2,17 @@
 section_number = "104"
 title = "Commencement and continuance of right of private defence of property"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Describes when the right of private defence of property commences and how long it continues against theft, robbery, mischief, criminal trespass, and house-breaking."
+summary = "States when the right of private defence of property begins and when it continues against theft, robbery, criminal trespass, mischief, and house-breaking."
 source = "Singapore Penal Code 1871, Section 104"
 
 [verification]

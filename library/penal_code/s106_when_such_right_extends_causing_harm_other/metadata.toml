@@ -2,16 +2,17 @@
 section_number = "106"
 title = "When such right extends to causing any harm other than death"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Where triggering offence is theft, mischief or criminal trespass not of a section 105 description, the right of private defence of property does not extend to causing death but does extend, subject to sections 98 and 106A, to causing any harm other than death."
+summary = "Section 106 limits the right of private defence of property in certain theft, mischief, and criminal trespass cases to harm other than death, subject to sections 98 and 106A."
 source = "Singapore Penal Code 1871, Section 106"
 
 [verification]

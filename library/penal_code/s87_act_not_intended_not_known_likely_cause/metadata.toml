@@ -2,16 +2,17 @@
 section_number = "87"
 title = "Act not intended and not known to be likely to cause death or grievous hurt, done by consent"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Consent of a person above 18 excuses harm that is not intended and not known likely to cause death or grievous hurt."
+summary = "Provides a consent-based exception for harm to a person above 18 where death or grievous hurt is neither intended nor known likely."
 source = "Singapore Penal Code 1871, Section 87"
 
 [verification]

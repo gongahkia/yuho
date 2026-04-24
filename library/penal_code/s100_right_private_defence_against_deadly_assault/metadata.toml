@@ -2,16 +2,17 @@
 section_number = "100"
 title = "Right of private defence against deadly assault when there is risk of harm to innocent person"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Where defending against a deadly assault, the right of private defence extends to running the risk of harming innocent persons if that risk cannot be effectually avoided."
+summary = "This section extends the right of private defence to the unavoidable risk of harming an innocent person during a deadly assault."
 source = "Singapore Penal Code 1871, Section 100"
 
 [verification]

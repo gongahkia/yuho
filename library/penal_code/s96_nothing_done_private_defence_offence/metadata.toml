@@ -2,16 +2,17 @@
 section_number = "96"
 title = "Nothing done in private defence is an offence"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Nothing done in the exercise of the right of private defence is an offence."
+summary = "This section states that an act done in the exercise of the right of private defence is not an offence."
 source = "Singapore Penal Code 1871, Section 96"
 
 [verification]

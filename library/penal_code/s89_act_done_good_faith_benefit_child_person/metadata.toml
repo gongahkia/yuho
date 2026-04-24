@@ -2,16 +2,17 @@
 section_number = "89"
 title = "Act done in good faith for the benefit of a child or person of unsound mind, by or by consent of guardian"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "An act done in good faith for the benefit of a child under 12 or a person of unsound mind, by or with the consent of a guardian, is excused as to harm caused."
+summary = "Section 89 provides a no-offence exception for harm caused, intended, or known likely to be caused by acts done in good faith for the benefit of a child below 12 or a person of unsound mind by or with qualifying guardian consent."
 source = "Singapore Penal Code 1871, Section 89"
 
 [verification]

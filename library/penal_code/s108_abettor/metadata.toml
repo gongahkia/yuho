@@ -2,16 +2,17 @@
 section_number = "108"
 title = "Abettor"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "A person abets an offence by abetting either the commission of an offence, or the commission of an act which would be an offence if committed by a person capable by law of committing an offence with the same intention or knowledge as the abettor."
+summary = "Defines who is an abettor and clarifies the scope of abetment through explanations and illustrations."
 source = "Singapore Penal Code 1871, Section 108"
 
 [verification]

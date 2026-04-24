@@ -1,31 +1,18 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr114-#pr114-
-// Singapore Penal Code Section 114 - Abettor present when offence committed
-// Yuho v5 Syntax
-
-struct S114Case {
-    string abettor,
-    bool wouldBePunishableIfAbsent,
-    bool presentWhenCommitted,
-}
-
-fn s114_deemed_committed(bool wouldBePunishableIfAbsent, bool presentWhenCommitted) : bool {
-    match {
-        case TRUE if wouldBePunishableIfAbsent == TRUE && presentWhenCommitted == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
 
 statute 114 "Abettor present when offence committed" effective 1872-01-01 {
     definitions {
-        deemed_committed := "Abettor shall be deemed to have committed the act or offence";
+        abettor_if_absent := "Any person who, if absent, would be liable to be punished as an abettor";
+        deemed_commission := "He shall be deemed to have committed such act or offence";
     }
 
     elements {
         all_of {
-            circumstance would_be_punishable := "If absent, the person would be liable to be punished as an abettor";
-            circumstance presence := "Person is present when the act or offence for which he would be punishable in consequence of the abetment is committed";
+            circumstance abettor_liability_if_absent := "Any person who, if absent, would be liable to be punished as an abettor";
+            circumstance presence_at_commission := "Is present when the act or offence for which he would be punishable in consequence of the abetment is committed";
+            circumstance deemed_principal_liability := "He shall be deemed to have committed such act or offence";
         }
     }
 }

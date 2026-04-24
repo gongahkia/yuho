@@ -2,16 +2,17 @@
 section_number = "101"
 title = "Start and continuance of right of private defence of body"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Defines when the right of private defence of the body begins (upon reasonable belief of danger) and how long it continues (while the belief persists)."
+summary = "States when the right of private defence of the body begins and how long it continues."
 source = "Singapore Penal Code 1871, Section 101"
 
 [verification]

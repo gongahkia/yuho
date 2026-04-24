@@ -1,14 +1,13 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr91-#pr91-
-// Singapore Penal Code Section 91
-
 statute 91 "Acts which are offences independently of harm caused to the person consenting, are not within the exceptions in sections 87, 88 and 89" effective 1872-01-01 {
     definitions {
-        rule := "The exceptions in sections 87, 88 and 89 do not extend to acts which are offences independently of any harm which they may cause, or be intended to cause, or be known to be likely to cause, to the person giving the consent, or on whose behalf the consent is given.";
+        consent_exception_limitation := "The exceptions in sections 87, 88 and 89 do not extend to acts which are offences independently of any harm which they may cause, or be intended to cause, or be known to be likely to cause, to the person giving the consent, or on whose behalf the consent is given.";
     }
 
-    illustration example1 {
+    /// Illustration
+    illustration illustration {
         "Causing miscarriage, unless it is authorised under the Termination of Pregnancy Act 1974 is an offence independently of any harm which it may cause or be intended to cause to the woman. Therefore it is not an offence “by reason of such harm”; and the consent of the woman, or of her guardian, to the causing of such miscarriage does not justify the act."
     }
 }

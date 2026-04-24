@@ -1,14 +1,39 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr88-#pr88-
-// Singapore Penal Code Section 88
 
 statute 88 "Act not intended to cause death done by consent in good faith for the benefit of a person" effective 1872-01-01 {
     definitions {
-        rule := "Nothing, which is not intended to cause death, is an offence by reason of any harm which it may cause, or be intended or known likely to cause, to any person for whose benefit it is done in good faith and who has consented to suffer that harm or take the risk of that harm.";
+        no_offence_rule := "Nothing, which is not intended to cause death, is an offence by reason of any harm which it may cause, or be intended by the doer to cause, or be known by the doer to be likely to cause, to any person for whose benefit it is done in good faith, and who has given a consent, whether express or implied, to suffer that harm, or to take the risk of that harm.";
+        express_consent := "Consent given expressly to suffer the harm, or to take the risk of that harm.";
+        implied_consent := "Consent impliedly given to suffer the harm, or to take the risk of that harm.";
     }
 
-    illustration example1 {
+    elements {
+        /// The section is conjunctive: the act is excused only where the act is not intended to cause death, is done for the person's benefit in good faith, and that person has consented to the harm or risk.
+        all_of {
+            actus_reus qualifying_act := "Thing done by the doer.";
+            mens_rea no_intention_to_cause_death := "Act is not intended to cause death.";
+            any_of {
+                circumstance harm_caused := "Harm which the act may cause.";
+                mens_rea harm_intended := "Harm intended by the doer to be caused.";
+                mens_rea harm_known_likely := "Harm known by the doer to be likely to be caused.";
+            }
+            circumstance benefit := "Act is done to a person for whose benefit it is done.";
+            mens_rea good_faith := "Act is done in good faith.";
+            any_of {
+                circumstance express_consent_given := "Person has given express consent to suffer that harm, or to take the risk of that harm.";
+                circumstance implied_consent_given := "Person has given implied consent to suffer that harm, or to take the risk of that harm.";
+            }
+        }
+    }
+
+    exception consent_good_faith_benefit {
+        "Nothing, which is not intended to cause death, is an offence by reason of any harm which it may cause, or be intended by the doer to cause, or be known by the doer to be likely to cause, to any person for whose benefit it is done in good faith, and who has given a consent, whether express or implied, to suffer that harm, or to take the risk of that harm."
+        "No offence by reason of that harm."
+    }
+
+    illustration illustration_1 {
         "A , a surgeon, knowing that a particular operation is likely to cause the death of Z , who suffers under a painful complaint, but not intending to cause Z ’s death, and intending, in good faith, Z ’s benefit, performs that operation on Z , with Z ’s consent. A has committed no offence."
     }
 }

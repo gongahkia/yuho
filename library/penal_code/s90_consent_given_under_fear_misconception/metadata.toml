@@ -2,16 +2,17 @@
 section_number = "90"
 title = "Consent given under fear or misconception, by person of unsound mind, etc., and by child"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "A consent is invalid if given under fear or misconception, by a person of unsound mind or intoxicated person unable to understand, or (unless context requires otherwise) by a child under 12."
+summary = "States when consent is not treated as consent intended by the Penal Code because of the giver's condition or age."
 source = "Singapore Penal Code 1871, Section 90"
 
 [verification]

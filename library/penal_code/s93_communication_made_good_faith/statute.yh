@@ -1,14 +1,14 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr93-#pr93-
-// Singapore Penal Code Section 93
 
 statute 93 "Communication made in good faith" effective 1872-01-01 {
-    definitions {
-        rule := "No communication made in good faith is an offence by reason of any harm to the person to whom it is made, if it is made for the benefit of that person.";
+    exception communication_made_in_good_faith {
+        "No communication made in good faith is an offence by reason of any harm to the person to whom it is made, if it is made for the benefit of that person."
+        "Not an offence by reason of that harm."
     }
 
-    illustration example1 {
+    illustration illustration_a {
         "A , a surgeon, in good faith, communicates to a patient his opinion that he cannot live. The patient dies in consequence of the shock. A has committed no offence, though he knew it to be likely that the communication might cause the patient’s death."
     }
 }

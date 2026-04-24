@@ -1,44 +1,51 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr108-#pr108-
-// Singapore Penal Code Section 108 - Abettor
-// Yuho v5 Syntax
-
-struct AbettorCase {
-    string abettor,
-    string principal,
-    bool offenceOrActWhichWouldBeOffence,
-    bool abettorHasSameIntentionOrKnowledge,
-}
-
-fn is_abettor(bool offenceOrActWhichWouldBeOffence, bool abettorHasSameIntentionOrKnowledge) : bool {
-    match {
-        case TRUE if offenceOrActWhichWouldBeOffence == TRUE && abettorHasSameIntentionOrKnowledge == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
 
 statute 108 "Abettor" effective 1872-01-01 {
     definitions {
-        offence := "An act declared punishable by this Code or any other written law";
-        act_which_would_be_offence := "An act that would be an offence if committed by a person capable by law of committing an offence with the same intention or knowledge as the abettor";
-        explanation_1 := "Abetment of illegal omission of an act may amount to an offence, although the abettor may not himself be bound to do that act";
-        explanation_2 := "To constitute the offence of abetment, it is not necessary that the act abetted should be committed, or that the effect requisite to constitute the offence should be caused";
-        explanation_3 := "It is not necessary that the person abetted should be capable by law of committing an offence, or that he should have the same guilty intention or knowledge as that of the abettor, or any guilty intention or knowledge";
+        abettor := "A person abets an offence who abets either the commission of an offence, or the commission of an act which would be an offence, if committed by a person capable by law of committing an offence with the same intention or knowledge as that of the abettor.";
+        act_which_would_be_offence := "An act which would be an offence, if committed by a person capable by law of committing an offence with the same intention or knowledge as that of the abettor.";
+        explanation_1 := "Explanation 1.—The abetment of the illegal omission of an act may amount to an offence, although the abettor may not himself be bound to do that act.";
+        explanation_2 := "Explanation 2.—To constitute the offence of abetment, it is not necessary that the act abetted should be committed, or that the effect requisite to constitute the offence should be caused.";
+        explanation_3 := "Explanation 3.—It is not necessary that the person abetted should be capable by law of committing an offence, or that he should have the same guilty intention or knowledge as that of the abettor, or any guilty intention or knowledge.";
+        explanation_4 := "Explanation 4.—The abetment of an offence being an offence, the abetment of such an abetment is also an offence.";
+        explanation_5 := "Explanation 5.—It is not necessary to the commission of the offence of abetment by conspiracy that the abettor should concert the offence with the person who commits it. It is sufficient if he engages in the conspiracy in pursuance of which the offence is committed.";
     }
 
-    elements {
-        any_of {
-            actus_reus abets_offence := "Abets the commission of an offence";
-            actus_reus abets_qualifying_act := "Abets the commission of an act which would be an offence if committed by a person capable by law, with the same intention or knowledge as the abettor";
-        }
+    /// Illustrations
+    illustration illustration_a {
+        "( a ) A instigates B to murder C . B refuses to do so. A is guilty of abetting B to commit murder."
     }
 
-    illustration example_a {
-        "A instigates B to murder C. B refuses to do so. A is guilty of abetting B to commit murder."
+    illustration illustration_b {
+        "( b ) A instigates B to murder D . B , in pursuance of the instigation, stabs D . D recovers from the wound. A is guilty of instigating B to commit murder."
     }
 
-    illustration example_b {
-        "A instigates B to murder D. B, in pursuance of the instigation, stabs D. D recovers from the wound. A is guilty of instigating B to commit murder."
+    /// Illustrations
+    illustration illustration_c {
+        "( a ) A , with a guilty intention, abets a child or a person of unsound mind to commit an act which would be an offence if committed by a person capable by law of committing an offence, and having the same intention as A . Here A , whether the act is committed or not, is guilty of abetting an offence."
+    }
+
+    illustration illustration_d {
+        "( b ) A , with the intention of murdering Z , instigates B , a child below 7 years of age, to do an act which causes Z ’s death. B , in consequence of the abetment, does the act, and thereby causes Z ’s death. Here, though B was not capable by law of committing an offence, A is liable to be punished in the same manner as if B had been capable by law of committing an offence and had committed murder, and he is therefore subject to the punishment of death."
+    }
+
+    illustration illustration_e {
+        "( c ) A instigates B to set fire to a dwelling house. B , in consequence of the unsoundness of his mind, being incapable of knowing the nature of the act, or that he is doing what is wrong or contrary to law, sets fire to the house in consequence of A ’s instigation. B has committed no offence, but A is guilty of abetting the offence of setting fire to a dwelling house, and is liable to the punishment provided for that offence."
+    }
+
+    illustration illustration_f {
+        "( d ) A , intending to cause a theft to be committed, instigates B to take property belonging to Z out of Z ’s possession. A induces B to believe that the property belongs to A . B takes the property out of Z ’s possession, in good faith believing it to be A ’s property. B , acting under this misconception, does not take dishonestly, and therefore does not commit theft. But A is guilty of abetting theft, and is liable to the same punishment as if B had committed theft."
+    }
+
+    /// Illustration
+    illustration illustration_g {
+        "A instigates B to instigate C to murder Z . B accordingly instigates C to murder Z , and C commits that offence in consequence of B ’s instigation. B is liable to be punished for his offence with the punishment for murder; and as A instigated B to commit the offence A is also liable to the same punishment."
+    }
+
+    /// Illustration
+    illustration illustration_h {
+        "A concerts with B a plan for poisoning Z . It is agreed that A shall administer the poison. B then explains the plan to C , mentioning that a third person is to administer the poison, but without mentioning A ’s name. C agrees to procure the poison, and procures and delivers it to B for the purpose of its being used in the manner explained. A administers the poison; Z dies in consequence. Here, though A and C have not conspired together, yet C has been engaged in the conspiracy in pursuance of which Z has been murdered. C has therefore committed the offence defined in this section, and is liable to the punishment for murder."
     }
 }

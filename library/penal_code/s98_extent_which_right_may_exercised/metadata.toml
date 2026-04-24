@@ -2,16 +2,17 @@
 section_number = "98"
 title = "Extent to which right may be exercised"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "The right of private defence does not extend to more harm than is reasonably necessary, and does not arise where there is reasonable opportunity to seek protection of a public authority."
+summary = "Section 98 limits private defence to reasonably necessary harm and excludes it where public authority protection can reasonably be sought."
 source = "Singapore Penal Code 1871, Section 98"
 
 [verification]

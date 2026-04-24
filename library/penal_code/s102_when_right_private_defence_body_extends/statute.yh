@@ -1,37 +1,27 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr102-#pr102-
-// Singapore Penal Code Section 102 - When right of private defence of body extends to causing death
 /// @amendment [Act 23 of 2021 wef 01/03/2022]
 /// @amendment [15/2019]
 
-statute 102 "When right of private defence of body extends to causing death" effective 2020-01-01 {
+statute 102 "When right of private defence of body extends to causing death" effective 1872-01-01 effective 2019-12-31 effective 2022-03-01 {
     definitions {
-        extension := "Right of private defence of body extends to voluntary causing of death";
-        restrictions := "Subject to restrictions in sections 98 and 106A";
-        rape := "As described in section 375";
-        penile_penetration := "Penile penetration of vagina, anus or mouth as described in section 376(2)";
+        operative_rule := "The right of private defence of the body extends, under the restrictions mentioned in sections 98 and 106A, to the voluntary causing of death to the assailant, if the offence which gives rise to the exercise of the right is of any of the following descriptions:";
     }
 
     elements {
         all_of {
-            /// the defender must be exercising a valid right of private defence of body
-            circumstance exerciseOfRight := "Exercise of right of private defence of body under section 97";
-            /// restrictions in ss 98 and 106A must not bar the right
-            circumstance restrictions := "Restrictions in sections 98 and 106A do not apply";
+            actus_reus causing_death_to_assailant := "The voluntary causing of death to the assailant";
+            circumstance right_of_private_defence_of_body := "The right of private defence of the body is being exercised";
+            circumstance restrictions_in_sections_98_and_106A := "The exercise of the right is under the restrictions mentioned in sections 98 and 106A";
+            /// the triggering offence may be any one of the six statutory descriptions
             any_of {
-                /// (a) assault giving reasonable belief of death
-                circumstance limb_a := "Assault where defender reasonably believes death will otherwise be the consequence";
-                /// (b) assault giving reasonable belief of grievous hurt
-                circumstance limb_b := "Assault where defender reasonably believes grievous hurt will otherwise be the consequence";
-                /// (c) assault with intention to commit rape (s375)
-                circumstance limb_c := "Assault done with the intention of committing rape under section 375";
-                /// (d) assault with intention to cause penile penetration (s376(2))
-                circumstance limb_d := "Assault done with the intention of causing penile penetration under section 376(2)";
-                /// (e) assault with intention of kidnapping or abducting
-                circumstance limb_e := "Assault done with the intention of kidnapping or abducting";
-                /// (f) assault with intention of wrongful confinement preventing recourse to public authority
-                circumstance limb_f := "Assault done with the intention of wrongfully confining under circumstances preventing recourse to a public authority";
+                circumstance assault_with_apprehended_death := "An assault where the defender reasonably believes that death will otherwise be the consequence of such assault";
+                circumstance assault_with_apprehended_grievous_hurt := "An assault where the defender reasonably believes that grievous hurt will otherwise be the consequence of such assault";
+                circumstance assault_with_intention_of_committing_rape := "An assault that the defender reasonably believes to be done with the intention of committing rape as described in section 375 or causing such rape to be committed";
+                circumstance assault_with_intention_of_penile_penetration := "An assault that the defender reasonably believes to be done with the intention of causing penile penetration of the vagina, anus or mouth as described in section 376(2)";
+                circumstance assault_with_intention_of_kidnapping_or_abducting := "An assault that the defender reasonably believes to be done with the intention of kidnapping or abducting";
+                circumstance assault_with_intention_of_wrongful_confinement := "An assault that the defender reasonably believes to be done with the intention of wrongfully confining a person, under circumstances which may reasonably cause him to believe that he will be unable to have opportunity for recourse to a public authority for his release";
             }
         }
     }

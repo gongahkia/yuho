@@ -2,16 +2,17 @@
 section_number = "99"
 title = "Right of private defence against act of person of unsound mind, etc."
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "The right of private defence applies against acts that would otherwise be offences but are not due to the actor's youth, unsoundness of mind, intoxication, or misconception."
+summary = "This section preserves the same right of private defence against an act that would otherwise be an offence even when the actor is excused by youth, immaturity, unsoundness of mind, intoxication, or misconception."
 source = "Singapore Penal Code 1871, Section 99"
 
 [verification]

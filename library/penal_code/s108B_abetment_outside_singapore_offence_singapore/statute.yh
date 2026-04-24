@@ -1,31 +1,12 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr108B-#pr108B-
-// Singapore Penal Code Section 108B - Abetment outside Singapore of an offence in Singapore
-// Yuho v5 Syntax
-
-struct AbetmentInboundCase {
-    string abettor,
-    bool offenceInSingapore,
-    bool abetmentActsOutsideSingapore,
-}
-
-fn is_inbound_abetment(bool offenceInSingapore, bool abetmentActsOutsideSingapore) : bool {
-    match {
-        case TRUE if offenceInSingapore == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
 
 statute 108B "Abetment outside Singapore of an offence in Singapore" effective 1872-01-01 {
-    definitions {
-        within_meaning_of_code := "Treated as an offence under this Code even though the abetment occurs outside Singapore";
-    }
-
     elements {
         all_of {
-            actus_reus abets_offence := "Abets an offence committed in Singapore";
-            circumstance acts_outside := "Any or all acts constituting the abetment were done outside Singapore";
+            actus_reus abets_offence_in_singapore := "Abets an offence committed in Singapore";
+            circumstance abetment_acts_done_outside_singapore := "Any or all of the acts constituting the abetment were done outside Singapore";
         }
     }
 }

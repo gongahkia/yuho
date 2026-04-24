@@ -1,10 +1,15 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr96-#pr96-
-// Singapore Penal Code Section 96
-
 statute 96 "Nothing done in private defence is an offence" effective 1872-01-01 {
     definitions {
-        rule := "Nothing is an offence which is done in the exercise of the right of private defence.";
+        no_offence_private_defence := "Nothing is an offence which is done in the exercise of the right of private defence.";
+        right_of_private_defence := "The right of private defence.";
+    }
+
+    exception private_defence {
+        "Nothing is an offence which is done in the exercise of the right of private defence."
+        "Nothing is an offence."
+        when facts.right_of_private_defence == TRUE
     }
 }

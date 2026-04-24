@@ -2,16 +2,17 @@
 section_number = "114"
 title = "Abettor present when offence committed"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Whenever any person who, if absent, would be liable as an abettor, is present when the act or offence is committed, that person is deemed to have committed the act or offence."
+summary = "Section 114 deems an abettor who is present when the abetted act or offence is committed to have committed that act or offence."
 source = "Singapore Penal Code 1871, Section 114"
 
 [verification]

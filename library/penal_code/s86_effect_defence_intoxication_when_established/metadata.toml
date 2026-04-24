@@ -2,16 +2,17 @@
 section_number = "86"
 title = "Effect of defence of intoxication when established"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Where section 85 defence is established the accused must be acquitted; intoxication is also considered when determining whether a required intent, knowledge or belief was formed."
+summary = "Section 86 states the effect of an established intoxication defence, how intoxication affects required fault states, and what intoxication includes."
 source = "Singapore Penal Code 1871, Section 86"
 
 [verification]

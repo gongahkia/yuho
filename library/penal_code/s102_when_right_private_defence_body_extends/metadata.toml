@@ -2,16 +2,17 @@
 section_number = "102"
 title = "When right of private defence of body extends to causing death"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "The right of private defence of the body extends to voluntary causing of death under six enumerated descriptions of assault (ss98 and 106A restrictions apply)."
+summary = "This section specifies the six descriptions of assault for which the right of private defence of the body extends, subject to sections 98 and 106A, to voluntarily causing death to the assailant."
 source = "Singapore Penal Code 1871, Section 102"
 
 [verification]

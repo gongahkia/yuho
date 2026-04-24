@@ -2,54 +2,28 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr105-#pr105-
 /// @amendment [15/2019]
-// Singapore Penal Code Section 105 - When right of private defence of property extends to causing death
-// Yuho v5 Syntax
 
-struct PrivateDefencePropertyCase {
-    string defender,
-    string wrongdoer,
-    string offenceType,
-    bool reasonableBeliefDanger,
-    bool withinRestrictions,
-}
-
-fn extends_to_death(string offenceType, bool reasonableBeliefDanger, bool withinRestrictions) : bool {
-    match {
-        case TRUE if withinRestrictions == FALSE := consequence FALSE;
-        case TRUE if reasonableBeliefDanger == FALSE := consequence FALSE;
-        case TRUE if offenceType == "robbery" := consequence TRUE;
-        case TRUE if offenceType == "house_breaking_night" := consequence TRUE;
-        case TRUE if offenceType == "mischief_by_fire_dwelling" := consequence TRUE;
-        case TRUE if offenceType == "theft_with_apprehended_harm" := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
-statute 105 "When right of private defence of property extends to causing death" effective 2020-01-01 {
-    definitions {
-        private_defence := "Right under sections 96 to 106A to defend property";
-        robbery := "As defined in section 390";
-        house_breaking := "House-breaking committed after 7pm and before 7am";
-        mischief_by_fire := "Mischief by fire on a building, tent, container or vessel used as dwelling or store";
-        restrictions := "Restrictions in sections 98 and 106A on exercise of the right";
-    }
-
-    elements {
-        all_of {
-            /// defender must reasonably believe danger to property exists
-            circumstance reasonable_belief := "Defender reasonably believes danger to property arises";
-            any_of {
-                actus_reus robbery_descr := "Robbery against property";
-                actus_reus housebreak_descr := "House-breaking committed after 7pm and before 7am";
-                actus_reus fire_descr := "Mischief by fire on dwelling, tent, container or vessel";
-                actus_reus theft_descr := "Theft, mischief or house-trespass with apprehension of death or grievous hurt";
+statute 105 "When right of private defence of property extends to causing death" effective 1872-01-01 effective 2019-12-31 {
+    subsection (1) {
+        elements {
+            /// subsection (1) extends the right only where the baseline right, restrictions, belief, and one listed danger-description all coexist.
+            all_of {
+                permission right_extends := "The right of private defence of property extends, under the restrictions mentioned in sections 98 and 106A, to the voluntary causing of death to the wrongdoer";
+                circumstance reasonable_belief_of_danger := "The defender reasonably believes that there was a danger to property (either his own or that of any other person)";
+                circumstance listed_description := "The danger to property arose from any of the following descriptions";
+                any_of {
+                    circumstance robbery := "robbery";
+                    circumstance house_breaking_night := "house-breaking committed after 7 p.m. and before 7 a.m. and if the wrongdoer —";
+                    circumstance mischief_by_fire := "mischief by fire committed on any building, tent, container or vessel, which building, tent, container or vessel is used as a human dwelling, or as a place for the custody of property";
+                    circumstance theft_mischief_or_house_breaking_with_further_risk := "theft, mischief or house-breaking, under such circumstances where the defender reasonably believes that death or grievous hurt will be the consequence, if such right of private defence is not exercised";
+                }
             }
-            /// right is subject to restrictions in s98 and s106A
-            circumstance within_restrictions := "Restrictions in sections 98 and 106A are satisfied";
         }
     }
 
-    illustration example1 {
-        "A attempts robbery against B. B, reasonably believing danger to property, causes A death within restrictions of sections 98 and 106A. B is within the right of private defence of property."
+    subsection (2) {
+        definitions {
+            six_ways_of_entry_or_leaving := "For the purposes of subsection (1)( b ), the 6 ways of entry or leaving by a wrongdoer are as follows:";
+        }
     }
 }

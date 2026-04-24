@@ -2,16 +2,17 @@
 section_number = "110"
 title = "Punishment of abetment if the person abetted does the act with a different intention from that of the abettor"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Where the person abetted commits the act with a different intention or knowledge from the abettor, the abettor is punished with the punishment provided for the offence that would have been committed with the abettors intention or knowledge and no other."
+summary = "An abettor is punished according to the offence that would have been committed if the act had been done with the abettor's intention or knowledge alone."
 source = "Singapore Penal Code 1871, Section 110"
 
 [verification]

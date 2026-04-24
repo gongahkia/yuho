@@ -1,15 +1,39 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr89-#pr89-
-// Singapore Penal Code Section 89
 
 statute 89 "Act done in good faith for the benefit of a child or person of unsound mind, by or by consent of guardian" effective 1872-01-01 {
     definitions {
-        rule := "Nothing done in good faith for the benefit of a person below 12 years of age, or of unsound mind, by or with the consent of the guardian or person having lawful charge, is an offence by reason of harm caused, intended or known likely to be caused, to that person.";
-        provisos := "This exception is subject to the provisos concerning intention to cause death, knowledge of likelihood of death, grievous hurt, and abetment of offences.";
+        no_offence_rule := "Nothing, which is done in good faith for the benefit of a person below 12 years of age, or of unsound mind, by or by consent, either express or implied, of the guardian or other person having lawful charge of that person, is an offence by reason of any harm which it may cause, or be intended by the doer to cause, or be known by the doer to be likely to cause, to that person:";
+        express_consent := "Consent given expressly by the guardian or other person having lawful charge of the person.";
+        implied_consent := "Consent impliedly given by the guardian or other person having lawful charge of the person.";
     }
 
-    illustration example1 {
+    elements {
+        /// The exception is conjunctive: the act must be done in good faith, for the protected person's benefit, and by or with qualifying guardian consent; the harm limb is disjunctive.
+        all_of {
+            actus_reus qualifying_act := "Thing done.";
+            mens_rea good_faith := "Thing is done in good faith.";
+            circumstance benefit := "Thing is done for the benefit of a person below 12 years of age, or of unsound mind.";
+            any_of {
+                actus_reus by_guardian_or_lawful_charge := "Thing is done by the guardian or other person having lawful charge of that person.";
+                circumstance express_guardian_consent := "Thing is done by express consent of the guardian or other person having lawful charge of that person.";
+                circumstance implied_guardian_consent := "Thing is done by implied consent of the guardian or other person having lawful charge of that person.";
+            }
+            any_of {
+                circumstance harm_caused := "Harm which the thing may cause to that person.";
+                mens_rea harm_intended := "Harm intended by the doer to be caused to that person.";
+                mens_rea harm_known_likely := "Harm known by the doer to be likely to be caused to that person.";
+            }
+        }
+    }
+
+    exception guardian_good_faith_benefit {
+        "Nothing, which is done in good faith for the benefit of a person below 12 years of age, or of unsound mind, by or by consent, either express or implied, of the guardian or other person having lawful charge of that person, is an offence by reason of any harm which it may cause, or be intended by the doer to cause, or be known by the doer to be likely to cause, to that person:"
+        "No offence by reason of that harm."
+    }
+
+    illustration illustration_1 {
         "A , in good faith, for the benefit of his child, being below 12 years of age, without his child’s consent, has his child cut for the stone by a surgeon, knowing it to be likely that the operation will cause the child’s death, but not intending to cause the child’s death. A is within the exception, inasmuch as his object was the cure of the child."
     }
 }

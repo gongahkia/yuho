@@ -1,14 +1,51 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr86-#pr86-
-// Singapore Penal Code Section 86
-
 /// @amendment [15/2019]
 
-statute 86 "Effect of defence of intoxication when established" effective 1872-01-01 {
-    definitions {
-        acquittal_rule := "Where the defence under section 85 is established, the accused must be acquitted, except that if the person was of unsound mind by reason of intoxication, section 84 and sections 251 and 252 of the Criminal Procedure Code 2010 apply.";
-        specific_intent := "Intoxication shall be taken into account for determining whether the person charged had formed any intention or had any knowledge or belief, specific or otherwise, in the absence of which he would not be guilty of the offence.";
-        drugs_included := "For the purposes of sections 85 and 86, intoxication includes a state produced by narcotics or drugs.";
+statute 86 "Effect of defence of intoxication when established" effective 1872-01-01 effective 2020-01-01 {
+    subsection (1) {
+        definitions {
+            acquittal_rule := "Where the defence under section 85 is established, then the accused person must be acquitted, except that if the person was of unsound mind by reason of intoxication, section 84 of this Code and sections 251 and 252 of the Criminal Procedure Code 2010 will apply. [15/2019]";
+        }
+
+        elements {
+            /// Subsection (1) states the consequence when the section 85 defence is established, subject to the unsound-mind-by-intoxication exception.
+            all_of {
+                circumstance section_85_defence_established := "The defence under section 85 is established";
+                circumstance accused_must_be_acquitted := "The accused person must be acquitted";
+            }
+        }
+
+        exception unsound_mind_by_intoxication {
+            "The person was of unsound mind by reason of intoxication"
+            "Section 84 of this Code and sections 251 and 252 of the Criminal Procedure Code 2010 will apply."
+        }
+    }
+
+    subsection (2) {
+        definitions {
+            intoxication_taken_into_account := "Intoxication shall be taken into account for the purpose of determining whether the person charged had formed any intention or had any knowledge or belief, specific or otherwise, in the absence of which he would not be guilty of the offence. [15/2019]";
+        }
+
+        elements {
+            /// Subsection (2) applies to each listed fault state because absence of any required state may mean the person is not guilty.
+            all_of {
+                circumstance intoxication_considered := "Intoxication shall be taken into account";
+                circumstance purpose := "For the purpose of determining whether the person charged had formed a required fault state";
+                any_of {
+                    mens_rea intention := "Any intention, specific or otherwise";
+                    mens_rea knowledge := "Any knowledge, specific or otherwise";
+                    mens_rea belief := "Any belief, specific or otherwise";
+                }
+                circumstance guilt_dependency := "In the absence of which he would not be guilty of the offence";
+            }
+        }
+    }
+
+    subsection (3) {
+        definitions {
+            intoxication := "For the purposes of this section and section 85 “intoxication” shall be deemed to include a state produced by narcotics or drugs. [15/2019]";
+        }
     }
 }

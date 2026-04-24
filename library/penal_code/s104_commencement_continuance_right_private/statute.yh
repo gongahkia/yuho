@@ -1,16 +1,54 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr104-#pr104-
-// Singapore Penal Code Section 104
-
 /// @amendment [15/2019]
 
-statute 104 "Commencement and continuance of right of private defence of property" effective 1872-01-01 {
-    definitions {
-        commencement := "The right of private defence of property starts when the defender reasonably believes that there was a danger to property arising from any act which is an offence falling under theft, robbery, mischief or criminal trespass, or which is an attempt to commit such an offence.";
-        against_theft := "The right continues against theft till the offender has effected his retreat with the property, or either the assistance of the public authorities is obtained, or the property has been recovered.";
-        against_robbery := "The right continues against robbery as long as the offender causes or attempts to cause to any person death or hurt or wrongful restraint, or as long as the fear of instant death, instant hurt, or instant personal restraint continues.";
-        against_trespass_mischief := "The right continues against criminal trespass or mischief as long as the offender continues in the commission of criminal trespass or mischief.";
-        against_housebreaking := "The right continues against house-breaking as long as such house-breaking continues.";
+statute 104 "Commencement and continuance of right of private defence of property" effective 1872-01-01 effective 2019-12-31 {
+    subsection (1) {
+        definitions {
+            commencement_of_right := "The right of private defence of property starts when the defender reasonably believes that there was a danger to property (either his own or that of any other person) arising from any act which is an offence falling under the definition of theft, robbery, mischief or criminal trespass, or which is an attempt to commit such an offence. [15/2019]";
+        }
+    }
+
+    subsection (2) {
+        definitions {
+            continuance_against_theft := "The right of private defence of property against theft continues till — [15/2019]";
+        }
+
+        subsection (a) {
+            definitions {
+                theft_continuance_until_retreat := "the offender has effected his retreat with the property;";
+            }
+        }
+
+        subsection (b) {
+            definitions {
+                theft_continuance_until_public_authority_assistance := "the assistance of a public authority is obtained; or";
+            }
+        }
+
+        subsection (c) {
+            definitions {
+                theft_continuance_until_recovery := "the property has been recovered.";
+            }
+        }
+    }
+
+    subsection (3) {
+        definitions {
+            continuance_against_robbery := "The right of private defence of property against robbery continues as long as the offender causes or attempts to cause to any person death or hurt or wrongful restraint, or as long as the fear of instant death or of instant hurt or of instant personal restraint continues. [15/2019]";
+        }
+    }
+
+    subsection (4) {
+        definitions {
+            continuance_against_criminal_trespass_or_mischief := "The right of private defence of property against criminal trespass or mischief continues as long as the offender continues in the commission of criminal trespass or mischief. [15/2019]";
+        }
+    }
+
+    subsection (5) {
+        definitions {
+            continuance_against_house_breaking := "The right of private defence of property against house-breaking continues as long as such house-breaking continues. [15/2019]";
+        }
     }
 }

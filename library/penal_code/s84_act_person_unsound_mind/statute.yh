@@ -7,13 +7,12 @@
 statute 84 "Act of person of unsound mind" effective 1872-01-01 effective 2019-12-31 effective 2022-03-01 {
     subsection (1) {
         definitions {
-            no_offence_rule := "Nothing is an offence which is done by a person who, at the time of doing it, by reason of unsoundness of mind, satisfies one of the incapacity conditions in subsection (1)(a), (b), or (c).";
+            no_offence_rule := "Nothing is an offence which is done by a person who, at the time of doing it, by reason of unsoundness of mind, is incapable of knowing the nature of the act, incapable of knowing that what he is doing is wrong, or completely deprived of any power to control his actions.";
         }
 
         elements {
             all_of {
                 actus_reus act_done := "An act is done by a person";
-                temporal unsoundness during act_done;
                 circumstance unsoundness := "At the time of doing the act, the person acts by reason of unsoundness of mind";
                 /// subsection (1) uses disjunctive limbs (a), (b), and (c), with limb (c) added by Act 23 of 2021.
                 any_of {

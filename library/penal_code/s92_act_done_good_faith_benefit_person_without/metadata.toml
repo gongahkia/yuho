@@ -2,16 +2,17 @@
 section_number = "92"
 title = "Act done in good faith for the benefit of a person without consent"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "An act done in good faith for the benefit of a person without their consent is excused where consent is impossible to obtain in time for the act to be of benefit."
+summary = "Section 92 excuses harm done in good faith for a person's benefit without consent when consent cannot be obtained in time."
 source = "Singapore Penal Code 1871, Section 92"
 
 [verification]

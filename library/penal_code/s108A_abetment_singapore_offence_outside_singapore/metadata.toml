@@ -2,16 +2,17 @@
 section_number = "108A"
 title = "Abetment in Singapore of an offence outside Singapore"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "A person abets an offence within the meaning of this Code who, in Singapore, abets the commission of any act outside Singapore which would constitute an offence if committed in Singapore."
+summary = "Defines abetment within the Penal Code where the abetting occurs in Singapore but the abetted act is committed outside Singapore and would be an offence if committed in Singapore."
 source = "Singapore Penal Code 1871, Section 108A"
 
 [verification]

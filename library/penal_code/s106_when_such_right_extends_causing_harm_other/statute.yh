@@ -2,46 +2,9 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr106-#pr106-
 /// @amendment [15/2019]
-// Singapore Penal Code Section 106 - When such right extends to causing any harm other than death
-// Yuho v5 Syntax
 
-struct NonFatalDefenceCase {
-    string defender,
-    string offenceType,
-    bool withinRestrictions,
-}
-
-fn extends_to_non_fatal_harm(string offenceType, bool withinRestrictions) : bool {
-    match {
-        case TRUE if withinRestrictions == FALSE := consequence FALSE;
-        case TRUE if offenceType == "theft" := consequence TRUE;
-        case TRUE if offenceType == "mischief" := consequence TRUE;
-        case TRUE if offenceType == "criminal_trespass" := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
-statute 106 "When such right extends to causing any harm other than death" effective 2020-01-01 {
+statute 106 "When such right extends to causing any harm other than death" effective 1872-01-01 effective 2019-12-31 {
     definitions {
-        theft := "As defined in section 378";
-        mischief := "As defined in section 425";
-        criminal_trespass := "As defined in section 441";
-        non_fatal_harm := "Voluntary causing of harm other than death";
-        restrictions := "Restrictions in sections 98 and 106A";
-    }
-
-    elements {
-        // triggering offence must be theft, mischief, or criminal trespass not within s105
-        all_of {
-            any_of {
-                actus_reus theft_not_s105 := "Theft not of a description in section 105";
-                actus_reus mischief_not_s105 := "Mischief not of a description in section 105";
-                actus_reus trespass_not_s105 := "Criminal trespass not of a description in section 105";
-            }
-            /// defender exercises right subject to restrictions in s98 and s106A
-            circumstance within_restrictions := "Restrictions in sections 98 and 106A are satisfied";
-            /// harm caused must be non-fatal
-            circumstance non_fatal := "Harm caused is other than death";
-        }
+        scope_of_nonfatal_private_defence_of_property := "If the offence, the committing or the attempt to commit of which occasions the exercise of the right of private defence, is theft, mischief, or criminal trespass, not of any of the descriptions mentioned in section 105, that right does not extend to the voluntary causing of death, but does extend, subject to the restrictions mentioned in sections 98 and 106A, to the voluntary causing to the wrongdoer of any harm other than death. [15/2019]";
     }
 }

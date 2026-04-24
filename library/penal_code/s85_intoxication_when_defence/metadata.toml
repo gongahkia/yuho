@@ -1,0 +1,19 @@
+[statute]
+section_number = "85"
+title = "Intoxication when a defence"
+jurisdiction = "Singapore"
+version = "2.0.0"
+
+[encoding]
+depth = "deep"
+revision = "phase-D"
+
+[contributor]
+name = "agent-reencoding-phase-D"
+
+[description]
+summary = "Intoxication is generally not a defence, except where the statutory intoxication defence or unsoundness of mind route applies."
+source = "Singapore Penal Code 1871, Section 85"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr85-#pr85-"
