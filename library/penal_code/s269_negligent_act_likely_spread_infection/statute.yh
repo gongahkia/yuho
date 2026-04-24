@@ -1,57 +1,23 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr269-#pr269-
-// Singapore Penal Code Section 269 - Negligent act likely to spread infection of any disease dangerous to life
-// Yuho v5 Syntax
-
-struct NegligentInfectionCase {
-    string accused,
-    bool actDone,
-    bool unlawfulOrNegligent,
-    bool knowledgeOrReasonToBelieve,
-    bool likelyToSpreadInfection,
-    bool diseaseDangerousToLife,
-}
-
-fn is_offence(bool actDone, bool unlawfulOrNegligent, bool knowledge, bool likelySpread, bool diseaseDangerous) : bool {
-    match {
-        case TRUE if actDone == FALSE := consequence FALSE;
-        case TRUE if unlawfulOrNegligent == FALSE := consequence FALSE;
-        case TRUE if knowledge == FALSE := consequence FALSE;
-        case TRUE if likelySpread == FALSE := consequence FALSE;
-        case TRUE if diseaseDangerous == FALSE := consequence FALSE;
-        case _ := consequence TRUE;
-    }
-}
-
 statute 269 "Negligent act likely to spread infection of any disease dangerous to life" effective 1872-01-01 {
-    definitions {
-        unlawfully := "In a manner contrary to law";
-        negligently := "Without reasonable care";
-        dangerous_disease := "A disease that is dangerous to life";
-    }
-
     elements {
+        /// Section 269 requires the act, an unlawful or negligent mode, likelihood of spreading a life-dangerous disease, and knowledge or reason to believe that likelihood.
         all_of {
-            /// any positive act satisfies this limb
-            actus_reus act_done := "Doing any act";
+            actus_reus doing_act := "Doing any act";
+            /// The conduct mode is disjunctive: the act may be unlawful, negligent, or both.
             any_of {
-                /// alternative fault element -- unlawfulness
-                mens_rea unlawful := "Acting unlawfully";
-                /// alternative fault element -- negligence
-                mens_rea negligent := "Acting negligently";
+                circumstance unlawful_act := "The act is done unlawfully";
+                mens_rea negligent_act := "The act is done negligently";
             }
-            /// accused knew or had reason to believe the act was likely to spread infection
-            mens_rea knowledge := "Knowledge or reason to believe the act is likely to spread infection";
-            /// the act must be of a kind likely to spread infection
-            circumstance likely_spread := "Act is likely to spread infection of a disease";
-            /// the disease must be dangerous to life
-            circumstance dangerous_disease_present := "The disease is dangerous to life";
+            circumstance likely_to_spread_infection := "The act is likely to spread the infection of any disease dangerous to life";
+            mens_rea knowledge_or_reason_to_believe := "The person knows or has reason to believe the act to be likely to spread the infection of any disease dangerous to life";
         }
     }
 
-    penalty {
+    penalty or_both {
         imprisonment := 0 days .. 1 year;
-        fine := $0.00 .. $5,000.00;
+        fine := unlimited;
     }
 }

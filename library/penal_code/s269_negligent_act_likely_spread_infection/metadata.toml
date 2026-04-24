@@ -2,16 +2,17 @@
 section_number = "269"
 title = "Negligent act likely to spread infection of any disease dangerous to life"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Criminalises unlawful or negligent acts done with knowledge or reason to believe them likely to spread infection of any disease dangerous to life."
+summary = "Criminalises unlawful or negligent acts done with knowledge or reason to believe they are likely to spread infection of a disease dangerous to life."
 source = "Singapore Penal Code 1871, Section 269"
 
 [verification]
