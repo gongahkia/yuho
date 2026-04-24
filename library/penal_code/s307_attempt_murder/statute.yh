@@ -2,55 +2,62 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr307-#pr307-
 /// @amendment [15/2019]
-// Singapore Penal Code Section 307 - Attempt to murder
-// Yuho v5 Syntax
+statute 307 "Attempt to murder" effective 1872-01-01 effective 2019-12-31 {
+    subsection (1) {
+        elements {
+            /// Subsection (1) is conjunctive: the act, the intention to cause death, and the murder-quality circumstances must all be present.
+            all_of {
+                actus_reus does_any_act := "Does any act";
+                mens_rea intention_of_causing_death := "With the intention of causing death";
+                circumstance would_be_guilty_of_murder := "Under such circumstances that if he by that act caused death he would be guilty of murder";
+            }
+        }
 
-struct S307Case {
-    bool actDone,
-    bool intentionCausingDeath,
-    bool wouldBeMurderIfDeathCaused,
-}
+        penalty cumulative when no_hurt_caused {
+            imprisonment := 0 years .. 15 years;
+            fine := unlimited;
+            supplementary := "Whoever does any act with the intention of causing death and under such circumstances that if he by that act caused death he would be guilty of murder, shall be punished with imprisonment for a term which may extend to 15 years, and shall also be liable to fine.";
+        }
 
-fn applies_s307(bool actDone, bool intentionCausingDeath, bool wouldBeMurderIfDeathCaused) : bool {
-    match {
-        case TRUE if actDone && intentionCausingDeath && wouldBeMurderIfDeathCaused := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
+        penalty alternative when hurt_caused_life_sentence {
+            supplementary := "If hurt is caused to any person by such act, the offender shall be punished with imprisonment for life and shall also be liable to caning. [15/2019]";
+        }
 
-statute 307 "Attempt to murder" effective 1872-01-01 {
-    definitions {
-        provision_text := "—(1) Whoever does any act with the intention of causing death and under such circumstances that if he by that act caused death he would be guilty of murder, shall be punished with imprisonment for a term which may extend to 15 years, and shall also be liable to fine; and if hurt is caused to any person by such act, the offender shall be punished with — ( a ) imprisonment for life and shall also be liable to caning; or ( b ) imprisonment for a term which may extend to 20 years, and shall also be liable to fine, or to caning or to both. [15/2019] Other offences by convicts (2) When any person offending under this section is under sentence of imprisonment for life, he may, if hurt is caused, be punished with death.";
-        attempt_murder := "An act done with intention of causing death and under circumstances where causing death would be murder.";
-    }
-
-    elements {
-        all_of {
-            actus_reus actDone := "The accused does an act.";
-            mens_rea intentionCausingDeath := "The accused acts with intention of causing death.";
-            circumstance wouldBeMurderIfDeathCaused := "The circumstances are such that causing death by that act would be murder.";
+        penalty or_both when hurt_caused_term_sentence {
+            imprisonment := 0 years .. 20 years;
+            fine := unlimited;
+            supplementary := "If hurt is caused to any person by such act, the offender shall be punished with imprisonment for a term which may extend to 20 years, and shall also be liable to fine, or to caning or to both. [15/2019]";
         }
     }
 
-    penalty {
-        imprisonment := 0 years .. 99 years;
-        death := TRUE;
-        supplementary := "Basic imprisonment may extend to 15 years; if hurt is caused, life imprisonment or imprisonment up to 20 years and fine or caning may apply; if an offender under life imprisonment causes hurt, death may apply.";
+    subsection (2) {
+        elements {
+            all_of {
+                circumstance offending_under_this_section := "Any person offending under this section";
+                circumstance under_sentence_of_imprisonment_for_life := "Is under sentence of imprisonment for life";
+                circumstance hurt_is_caused := "Hurt is caused";
+            }
+        }
+
+        penalty when hurt_caused_by_life_prisoner {
+            death := TRUE;
+            supplementary := "When any person offending under this section is under sentence of imprisonment for life, he may, if hurt is caused, be punished with death.";
+        }
     }
 
-    illustration a {
+    illustration illustration_a {
         "( a ) A shoots at Z with intention to kill him, under such circumstances that, if death ensued, A would be guilty of murder. A is liable to punishment under this section."
     }
 
-    illustration b {
+    illustration illustration_b {
         "( b ) A , with intention of causing the death of a child of tender years, throws the child into a river. A has committed the offence defined by this section, although the death of the child does not ensue."
     }
 
-    illustration c {
+    illustration illustration_c {
         "( c ) A , intending to murder Z , buys a gun and loads it. A has not yet committed the offence. A fires the gun at Z . He has committed the offence defined in this section; and if by such firing he wounds Z , he is liable to the punishment provided by the latter part of this section."
     }
 
-    illustration d {
+    illustration illustration_d {
         "( d ) A , intending to murder Z by poison, purchases poison and mixes the same with food which remains in A ’s keeping; A has not yet committed the offence defined in this section. A places the food on Z ’s table or delivers it to Z ’s servants to place it on Z ’s table. A has committed the offence defined in this section."
     }
 }

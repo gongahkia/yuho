@@ -2,16 +2,17 @@
 section_number = "306"
 title = "Abetment of suicide or attempted suicide"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Encodes Singapore Penal Code section 306, Abetment of suicide or attempted suicide, as a offence provision."
+summary = "Makes it an offence to abet the commission of another person's suicide or attempted suicide."
 source = "Singapore Penal Code 1871, Section 306"
 
 [verification]

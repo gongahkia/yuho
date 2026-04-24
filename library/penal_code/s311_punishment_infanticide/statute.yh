@@ -3,34 +3,16 @@
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr311-#pr311-
 /// @amendment [15/2019]
 /// @amendment [Act 23 of 2021 wef 01/03/2022]
-// Singapore Penal Code Section 311 - Punishment for infanticide
-// Yuho v5 Syntax
-
-struct S311Case {
-    bool infanticideCommitted,
-}
-
-fn applies_s311(bool infanticideCommitted) : bool {
-    match {
-        case TRUE if infanticideCommitted := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
 
 statute 311 "Punishment for infanticide" effective 1872-01-01 {
-    definitions {
-        provision_text := "Whoever commits the offence of infanticide shall be punished at the discretion of the court with imprisonment for life, or with imprisonment for a term which may extend to 10 years, and shall, if she is not sentenced to imprisonment for life, also be liable to fine. [15/2019] [Act 23 of 2021 wef 01/03/2022]";
-        infanticide := "The offence of infanticide under section 310.";
+    /// Punishment for the offence of infanticide under section 310.
+    penalty alternative {
+        imprisonment := 0 years .. 10 years;
+        supplementary := "Whoever commits the offence of infanticide shall be punished at the discretion of the court with imprisonment for life, or with imprisonment for a term which may extend to 10 years. [15/2019] [Act 23 of 2021 wef 01/03/2022]";
     }
 
-    elements {
-        all_of {
-            actus_reus infanticideCommitted := "The offence of infanticide is committed.";
-        }
-    }
-
-    penalty {
-        imprisonment := 0 years .. 99 years;
-        supplementary := "The court may impose imprisonment for life or imprisonment up to 10 years; if not sentenced to imprisonment for life, the offender is also liable to fine.";
+    penalty when non_life_sentence {
+        fine := unlimited;
+        supplementary := "The offender shall, if she is not sentenced to imprisonment for life, also be liable to fine. [15/2019] [Act 23 of 2021 wef 01/03/2022]";
     }
 }

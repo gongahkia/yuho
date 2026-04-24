@@ -2,17 +2,19 @@
 section_number = "308"
 title = "Attempt to commit culpable homicide"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Encodes Singapore Penal Code section 308, Attempt to commit culpable homicide, as a offence provision."
+summary = "Creates the offence of doing an act intended to cause death in circumstances that would amount to culpable homicide not amounting to murder if death resulted, with higher punishment if hurt is caused."
 source = "Singapore Penal Code 1871, Section 308"
 
 [verification]
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr308-#pr308-"
+

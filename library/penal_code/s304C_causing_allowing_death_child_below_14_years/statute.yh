@@ -2,40 +2,64 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr304C-#pr304C-
 /// @amendment [15/2019]
-// Singapore Penal Code Section 304C - Causing or allowing death of child below 14 years of age, domestic worker or vulnerable person in same household
-// Yuho v5 Syntax
 
-struct S304CCase {
-    bool sameHouseholdFrequentContact,
-    bool deathFromUnlawfulAct,
-    bool significantRiskGrievousHurt,
-    bool causedDeathOrFailedSteps,
-}
-
-fn applies_s304c(bool sameHouseholdFrequentContact, bool deathFromUnlawfulAct, bool significantRiskGrievousHurt, bool causedDeathOrFailedSteps) : bool {
-    match {
-        case TRUE if sameHouseholdFrequentContact && deathFromUnlawfulAct && significantRiskGrievousHurt && causedDeathOrFailedSteps := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
-statute 304C "Causing or allowing death of child below 14 years of age, domestic worker or vulnerable person in same household" effective 1872-01-01 {
-    definitions {
-        provision_text := "—(1) A person ( A ) shall be guilty of an offence if — ( a ) a person below 14 years of age, a domestic worker or a vulnerable person ( B ) dies as a result of the unlawful act of a person who — ( b ) A was a member of the same household as B , and had frequent contact with B at the time of that act; ( c ) at that time there was a significant risk of grievous hurt being caused to B by the unlawful act of such a person; and ( d ) either A was the person whose act caused B ’s death or — (2) The prosecution does not have to prove whether it is the first alternative element in subsection (1)( d ) or the second alternative element (sub‑paragraphs (i), (ii) and (iii) of subsection (1)( d )) that applies. [15/2019] (3) A is not guilty of an offence under this section if A could not have been expected in A ’s circumstances to take any such step as is mentioned in subsection (1)( d )(ii). [15/2019] (4) Any person who is guilty of an offence under this section shall be punished with imprisonment for a term which may extend to 20 years, and shall also be liable to fine or to caning. [15/2019] (5) For the purposes of this section —";
-        same_household := "A was a member of the same household as B and had frequent contact with B at the time of the unlawful act.";
-    }
-
-    elements {
-        all_of {
-            circumstance sameHouseholdFrequentContact := "A was in the same household as B and had frequent contact with B at the time of the act.";
-            actus_reus deathFromUnlawfulAct := "B dies as a result of the unlawful act of a qualifying person.";
-            circumstance significantRiskGrievousHurt := "At that time there was a significant risk of grievous hurt to B by such unlawful act.";
-            actus_reus causedDeathOrFailedSteps := "A either caused B’s death or met the statutory alternative involving awareness, failure to take steps, and causation allowance.";
+statute 304C "Causing or allowing death of child below 14 years of age, domestic worker or vulnerable person in same household" effective 1872-01-01 effective 2019-12-31 {
+    subsection (1) {
+        elements {
+            /// Subsection (1) requires the protected person's death, household proximity, significant risk, and one of the paragraph (d) alternatives.
+            all_of {
+                actus_reus death_of_b := "A person below 14 years of age, a domestic worker or a vulnerable person (B) dies as a result of the unlawful act of a person";
+                circumstance unlawful_actor_same_household := "The person whose unlawful act caused B's death was a member of the same household as B" caused_by death_of_b;
+                circumstance unlawful_actor_frequent_contact := "The person whose unlawful act caused B's death had frequent contact with B" caused_by death_of_b;
+                circumstance a_same_household_and_contact := "A was a member of the same household as B, and had frequent contact with B at the time of that act.";
+                circumstance significant_risk_of_grievous_hurt := "At that time there was a significant risk of grievous hurt being caused to B by the unlawful act of such a person.";
+                /// Paragraph (d) is disjunctive: either A directly caused B's death, or all three sub-paragraphs (i) to (iii) apply.
+                any_of {
+                    actus_reus a_caused_b_death := "A was the person whose act caused B's death.";
+                    /// The second alternative element in subsection (1)(d) requires all three limbs together.
+                    all_of {
+                        mens_rea awareness_of_significant_risk := "A was, or ought to have been, aware of the significant risk mentioned in paragraph (c).";
+                        actus_reus failure_to_take_protective_steps := "A failed to take such steps as A could reasonably have been expected to take to protect B from the significant risk.";
+                        circumstance foreseen_kind_of_circumstances := "The unlawful act occurred in circumstances of the kind that A foresaw or ought to have foreseen.";
+                    }
+                }
+            }
         }
     }
 
-    penalty {
-        imprisonment := 0 years .. 20 years;
-        supplementary := "The offender is also liable to fine or to caning. Subsection (3) excludes guilt where A could not have been expected in A’s circumstances to take the relevant step.";
+    subsection (2) {
+        definitions {
+            prosecution_proof_rule := "The prosecution does not have to prove whether it is the first alternative element in subsection (1)(d) or the second alternative element (sub-paragraphs (i), (ii) and (iii) of subsection (1)(d)) that applies.";
+        }
+    }
+
+    subsection (3) {
+        exception inability_to_take_step {
+            "A could not have been expected in A's circumstances to take any such step as is mentioned in subsection (1)(d)(ii)."
+            "A is not guilty of an offence under this section."
+        }
+    }
+
+    subsection (4) {
+        penalty cumulative {
+            imprisonment := 0 years .. 20 years;
+        }
+
+        penalty alternative {
+            fine := unlimited;
+            caning := 0 .. 24 strokes;
+            supplementary := "The offender shall also be liable to fine or to caning.";
+        }
+    }
+
+    subsection (5) {
+        definitions {
+            member_of_particular_household := "A person is to be regarded as a \"member\" of a particular household, even if that person does not live in that household, if that person visits it so often and for such periods of time that it is reasonable to regard him as a member of the particular household.";
+            same_household_as_b := "Where B lived in different households at different times, \"the same household as B\" refers to the household in which B was living at the time of the act that caused B's death.";
+            unlawful_act_other_than_act_by_a := "An \"unlawful\" act, other than an act by A, is one that constitutes an offence or would constitute an offence but for being the act of a person below the age specified in section 82, a person of the age specified in section 83 who had not attained sufficient maturity of understanding to judge of the nature and consequence of the act, a person entitled to rely on a defence of unsoundness of mind, a person entitled to rely on a defence of intoxication, or a person entitled to rely on a defence of mistake of fact.";
+            domestic_worker := "\"Domestic worker\" has the meaning given by section 73(4).";
+            vulnerable_person := "\"Vulnerable person\" has the meaning given by section 74A(5).";
+            circumstances_in_subsection_3 := "The circumstances mentioned in subsection (3) include but are not limited to A's past or present experiences of suffering neglect, hurt, grievous hurt, sexual abuse or any injury to A's mental health as a result of an unlawful act by any member of the same household as A.";
+        }
     }
 }

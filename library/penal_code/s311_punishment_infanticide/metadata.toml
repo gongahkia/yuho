@@ -2,16 +2,17 @@
 section_number = "311"
 title = "Punishment for infanticide"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Encodes Singapore Penal Code section 311, Punishment for infanticide, as a punishment provision."
+summary = "Sets the punishment for committing the offence of infanticide under section 310."
 source = "Singapore Penal Code 1871, Section 311"
 
 [verification]

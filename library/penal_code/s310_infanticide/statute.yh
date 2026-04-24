@@ -2,36 +2,26 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr310-#pr310-
 /// @amendment [15/2019]
-// Singapore Penal Code Section 310 - Infanticide
-// Yuho v5 Syntax
 
-struct S310Case {
-    bool womanCausesChildDeath,
-    bool childBelowTwelveMonths,
-    bool intentionalActOrOmission,
-    bool disturbedBalanceOfMind,
-}
-
-fn applies_s310(bool womanCausesChildDeath, bool childBelowTwelveMonths, bool intentionalActOrOmission, bool disturbedBalanceOfMind) : bool {
-    match {
-        case TRUE if womanCausesChildDeath && childBelowTwelveMonths && intentionalActOrOmission && disturbedBalanceOfMind := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
-statute 310 "Infanticide" effective 1872-01-01 {
+statute 310 "Infanticide" effective 1872-01-01 effective 2019-12-31 {
     definitions {
-        provision_text := "When any woman by any intentional act or omission causes the death of her child being a child below 12 months of age, but at the time of the act or omission the balance of her mind was disturbed by reason of her not having fully recovered from the effect of giving birth to the child or by reason of the effect of lactation consequent upon the birth of the child, she shall, notwithstanding that the circumstances were such that but for this section the offence would have amounted to murder, be guilty of the offence of infanticide. [15/2019]";
-        infanticide := "The offence committed where the stated mental disturbance condition reduces what would otherwise amount to murder to infanticide.";
+        infanticide := "When any woman by any intentional act or omission causes the death of her child being a child below 12 months of age, but at the time of the act or omission the balance of her mind was disturbed by reason of her not having fully recovered from the effect of giving birth to the child or by reason of the effect of lactation consequent upon the birth of the child, she shall, notwithstanding that the circumstances were such that but for this section the offence would have amounted to murder, be guilty of the offence of infanticide. [15/2019]";
     }
 
     elements {
+        /// Section 310 is conjunctive: death of the child, age below 12 months, intentional act or omission, disturbed balance of mind, and the but-for-murder condition must all be present.
         all_of {
-            circumstance womanCausesChildDeath := "A woman causes the death of her child.";
-            circumstance childBelowTwelveMonths := "The child is below 12 months of age.";
-            mens_rea intentionalActOrOmission := "The death is caused by intentional act or omission.";
-            actus_reus disturbedBalanceOfMind := "At the time, the balance of her mind was disturbed for the statutory childbirth or lactation reason.";
+            circumstance offender_is_woman := "Any woman";
+            any_of {
+                actus_reus intentional_act := "By any act causes the death of her child being a child below 12 months of age";
+                actus_reus intentional_omission := "By any omission causes the death of her child being a child below 12 months of age";
+            }
+            mens_rea intentional := "The act or omission is intentional";
+            circumstance child_below_12_months := "Her child is a child below 12 months of age";
+            circumstance disturbed_balance_of_mind := "At the time of the act or omission the balance of her mind was disturbed by reason of her not having fully recovered from the effect of giving birth to the child or by reason of the effect of lactation consequent upon the birth of the child";
+            circumstance but_for_this_section_murder := "The circumstances were such that but for this section the offence would have amounted to murder";
         }
     }
 
+    /// Punishment is provided separately in section 311.
 }

@@ -2,16 +2,17 @@
 section_number = "308A"
 title = "Causing death in furtherance of group’s object"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Encodes Singapore Penal Code section 308A, Causing death in furtherance of group’s object, as a offence provision."
+summary = "Creates the offence of causing a person's death in furtherance of a group's common object and sets its punishment."
 source = "Singapore Penal Code 1871, Section 308A"
 
 [verification]

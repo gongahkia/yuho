@@ -2,42 +2,30 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr308-#pr308-
 /// @amendment [15/2019]
-// Singapore Penal Code Section 308 - Attempt to commit culpable homicide
-// Yuho v5 Syntax
 
-struct S308Case {
-    bool actDone,
-    bool intentionCausingDeath,
-    bool wouldBeCulpableHomicideNotMurder,
-}
-
-fn applies_s308(bool actDone, bool intentionCausingDeath, bool wouldBeCulpableHomicideNotMurder) : bool {
-    match {
-        case TRUE if actDone && intentionCausingDeath && wouldBeCulpableHomicideNotMurder := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
-statute 308 "Attempt to commit culpable homicide" effective 1872-01-01 {
-    definitions {
-        provision_text := "Whoever does any act with the intention to cause death and under such circumstances that if he by that act caused death he would be guilty of culpable homicide not amounting to murder, shall be punished with imprisonment for a term which may extend to 7 years, or with fine, or with both; and if hurt is caused to any person by such act, the offender shall be punished with imprisonment for a term which may extend to 15 years, or with fine, or with caning, or with any combination of such punishments. [15/2019]";
-        attempt_culpable_homicide := "An act done with intention to cause death and under circumstances where causing death would be culpable homicide not amounting to murder.";
-    }
-
+statute 308 "Attempt to commit culpable homicide" effective 1872-01-01 effective 2019-12-31 {
     elements {
+        /// Section 308 requires the doing of an act, the intention to cause death, and circumstances making the completed killing culpable homicide not amounting to murder.
         all_of {
-            actus_reus actDone := "The accused does an act.";
-            mens_rea intentionCausingDeath := "The accused acts with intention of causing death.";
-            circumstance wouldBeCulpableHomicideNotMurder := "The circumstances are such that causing death by that act would be culpable homicide not amounting to murder.";
+            actus_reus doing_act := "Whoever does any act";
+            mens_rea intention_to_cause_death := "The act is done with the intention to cause death";
+            circumstance culpable_homicide_not_murder_if_death_caused := "Under such circumstances that if he by that act caused death he would be guilty of culpable homicide not amounting to murder";
         }
     }
 
-    penalty {
-        imprisonment := 0 years .. 15 years;
-        supplementary := "Basic imprisonment may extend to 7 years; if hurt is caused, imprisonment may extend to 15 years, or fine, caning, or any combination may apply.";
+    penalty or_both {
+        imprisonment := 0 years .. 7 years;
+        fine := unlimited;
+        supplementary := "Whoever does any act with the intention to cause death and under such circumstances that if he by that act caused death he would be guilty of culpable homicide not amounting to murder, shall be punished with imprisonment for a term which may extend to 7 years, or with fine, or with both.";
     }
 
-    illustration example {
+    penalty or_both when hurt_caused {
+        imprisonment := 0 years .. 15 years;
+        fine := unlimited;
+        supplementary := "If hurt is caused to any person by such act, the offender shall be punished with imprisonment for a term which may extend to 15 years, or with fine, or with caning, or with any combination of such punishments. [15/2019]";
+    }
+
+    illustration illustration_a {
         "A , on grave and sudden provocation, fires a pistol at Z intending to kill Z , under such circumstances that if he thereby caused death he would be guilty of culpable homicide not amounting to murder. A has committed the offence defined in this section."
     }
 }

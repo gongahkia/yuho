@@ -1,44 +1,33 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr312-#pr312-
-// Singapore Penal Code Section 312 -- Causing miscarriage
-// Yuho v5 Syntax
-
-struct S312Case {
-    string accused,
-    string victim,
-    bool actusReus,
-    bool mensRea,
-}
-
-fn s312_applies(bool actusReus, bool mensRea) : bool {
-    match {
-        case TRUE if actusReus == TRUE && mensRea == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
 /// @amendment [15/2019]
-statute 312 "Causing miscarriage" effective 1872-01-01 {
+
+statute 312 "Causing miscarriage" effective 1872-01-01 effective 2019-12-31 {
     definitions {
-        offence_summary := "Voluntarily causing a woman with child to miscarry, subject to the Termination of Pregnancy Act 1974.";
+        explanation_self_caused_miscarriage := "A woman who causes herself to miscarry is within the meaning of this section.";
     }
 
     elements {
-        /// mental element required for the offence
-        mens_rea intent := "Intent or knowledge as required by the section";
-        /// physical act constituting the offence
-        actus_reus act := "The prohibited act defined by the section";
-        /// contextual requirement -- victim, circumstances, or result
-        circumstance context := "Statutory circumstances are satisfied";
+        /// Section 312 criminalises voluntarily causing miscarriage, subject to the Termination of Pregnancy Act 1974, with punishment split by pregnancy duration.
+        all_of {
+            circumstance subject_to_termination_of_pregnancy_act := "Subject to the provisions of the Termination of Pregnancy Act 1974";
+            actus_reus causing_miscarriage := "Causing a woman with child to miscarry";
+            mens_rea voluntary_causation := "Voluntarily";
+            any_of {
+                circumstance pregnancy_not_more_than_16_weeks := "The woman’s pregnancy is not of more than 16 weeks’ duration as calculated in accordance with section 4 of the Termination of Pregnancy Act 1974";
+                circumstance pregnancy_more_than_16_weeks := "The woman’s pregnancy is of more than 16 weeks’ duration as calculated in accordance with section 4 of the Termination of Pregnancy Act 1974";
+            }
+        }
     }
 
-    penalty {
+    penalty or_both when pregnancy_not_more_than_16_weeks {
         imprisonment := 0 years .. 3 years;
-        fine := $0.00 .. $50,000.00;
+        fine := unlimited;
     }
 
-    illustration example1 {
-        "A commits the conduct described in section 312 against B. A is guilty of the offence under section 312."
+    penalty when pregnancy_more_than_16_weeks {
+        imprisonment := 0 years .. 7 years;
+        fine := unlimited;
     }
 }

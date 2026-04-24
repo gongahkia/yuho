@@ -2,16 +2,17 @@
 section_number = "307"
 title = "Attempt to murder"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Encodes Singapore Penal Code section 307, Attempt to murder, as a offence provision."
+summary = "Creates the offence of attempting to commit murder and prescribes enhanced punishment where hurt is caused, including death for certain life prisoners."
 source = "Singapore Penal Code 1871, Section 307"
 
 [verification]

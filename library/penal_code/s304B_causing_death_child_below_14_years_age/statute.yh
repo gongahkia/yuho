@@ -2,38 +2,29 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr304B-#pr304B-
 /// @amendment [15/2019]
-// Singapore Penal Code Section 304B - Causing death of child below 14 years of age, domestic worker or vulnerable person by sustained abuse
-// Yuho v5 Syntax
+statute 304B "Causing death of child below 14 years of age, domestic worker or vulnerable person by sustained abuse" effective 1872-01-01 effective 2019-12-31 {
+    subsection (1) {
+        elements {
+            /// Subsection (1) requires the offender to be a relevant person, the deceased to fall within the protected classes, and the death to be caused by sustained abuse.
+            all_of {
+                circumstance relevant_person := "The offender is a relevant person";
+                actus_reus causes_death := "Causes the death";
+                circumstance protected_person := "The person whose death is caused is a child, domestic worker or vulnerable person" caused_by causes_death;
+                circumstance sustained_abuse := "The death is caused by sustained abuse" caused_by causes_death;
+            }
+        }
 
-struct S304BCase {
-    bool relevantPerson,
-    bool protectedVictim,
-    bool deathBySustainedAbuse,
-}
+        penalty cumulative {
+            imprisonment := 0 years .. 20 years;
+            supplementary := "A relevant person who causes the death of any child, domestic worker or vulnerable person by sustained abuse shall be punished with imprisonment for a term which may extend to 20 years. [15/2019]"
+        }
 
-fn applies_s304b(bool relevantPerson, bool protectedVictim, bool deathBySustainedAbuse) : bool {
-    match {
-        case TRUE if relevantPerson && protectedVictim && deathBySustainedAbuse := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
-statute 304B "Causing death of child below 14 years of age, domestic worker or vulnerable person by sustained abuse" effective 1872-01-01 {
-    definitions {
-        provision_text := "—(1) A relevant person who causes the death of any child, domestic worker or vulnerable person by sustained abuse shall be punished with imprisonment for a term which may extend to 20 years, and shall also be liable to fine or to caning. [15/2019] (2) In this section —";
-        protected_victim := "Any child, domestic worker or vulnerable person.";
-    }
-
-    elements {
-        all_of {
-            actus_reus relevantPerson := "The offender is a relevant person.";
-            circumstance protectedVictim := "The deceased is a child, domestic worker or vulnerable person.";
-            actus_reus deathBySustainedAbuse := "The death is caused by sustained abuse.";
+        penalty alternative {
+            fine := unlimited;
+            supplementary := "The offender shall also be liable to fine or to caning. [15/2019]"
         }
     }
 
-    penalty {
-        imprisonment := 0 years .. 20 years;
-        supplementary := "The offender is also liable to fine or to caning.";
+    subsection (2) {
     }
 }

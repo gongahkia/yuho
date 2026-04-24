@@ -2,36 +2,17 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr306-#pr306-
 /// @amendment [15/2019]
-// Singapore Penal Code Section 306 - Abetment of suicide or attempted suicide
-// Yuho v5 Syntax
 
-struct S306Case {
-    bool suicideOrAttempt,
-    bool abetment,
-}
-
-fn applies_s306(bool suicideOrAttempt, bool abetment) : bool {
-    match {
-        case TRUE if suicideOrAttempt && abetment := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
-statute 306 "Abetment of suicide or attempted suicide" effective 1872-01-01 {
-    definitions {
-        provision_text := "If any person attempts or commits suicide, whoever abets the commission of such attempted suicide or suicide shall be punished with imprisonment for a term which may extend to 10 years, and shall also be liable to fine. [15/2019]";
-        abetment := "Abetting the commission of attempted suicide or suicide.";
-    }
-
+statute 306 "Abetment of suicide or attempted suicide" effective 1872-01-01 effective 2020-01-01 {
     elements {
         all_of {
-            actus_reus suicideOrAttempt := "The person commits suicide or attempts suicide.";
-            actus_reus abetment := "The accused abets the commission of the suicide or attempted suicide.";
+            circumstance suicide_or_attempted_suicide := "Any person attempts or commits suicide";
+            actus_reus abetment := "Whoever abets the commission of such attempted suicide or suicide";
         }
     }
 
     penalty {
         imprisonment := 0 years .. 10 years;
-        supplementary := "Fine is also mandatory as a liability.";
+        fine := unlimited;
     }
 }

@@ -2,16 +2,17 @@
 section_number = "312"
 title = "Causing miscarriage"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Voluntarily causing a woman with child to miscarry, subject to the Termination of Pregnancy Act 1974."
+summary = "Section 312 criminalises voluntarily causing a woman with child to miscarry, with a higher maximum punishment when the pregnancy is of more than 16 weeks’ duration."
 source = "Singapore Penal Code 1871, Section 312"
 
 [verification]

@@ -2,16 +2,17 @@
 section_number = "304B"
 title = "Causing death of child below 14 years of age, domestic worker or vulnerable person by sustained abuse"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Encodes Singapore Penal Code section 304B, Causing death of child below 14 years of age, domestic worker or vulnerable person by sustained abuse, as a offence provision."
+summary = "Makes it an offence for a relevant person to cause the death of a child, domestic worker, or vulnerable person by sustained abuse, punishable by imprisonment and additional liability to fine or caning."
 source = "Singapore Penal Code 1871, Section 304B"
 
 [verification]

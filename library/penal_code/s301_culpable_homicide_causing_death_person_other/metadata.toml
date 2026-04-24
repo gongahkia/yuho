@@ -2,16 +2,17 @@
 section_number = "301"
 title = "Culpable homicide by causing the death of a person other than the person whose death was intended"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Encodes Singapore Penal Code section 301, Culpable homicide by causing the death of a person other than the person whose death was intended, as a other provision."
+summary = "This section treats culpable homicide caused by killing an unintended person as the same description of culpable homicide that would have applied had the intended person died, and preserves the same defences and exceptions."
 source = "Singapore Penal Code 1871, Section 301"
 
 [verification]

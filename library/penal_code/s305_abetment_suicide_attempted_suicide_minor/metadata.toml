@@ -2,16 +2,17 @@
 section_number = "305"
 title = "Abetment of suicide or attempted suicide of minor or person who lacks mental capacity"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Encodes Singapore Penal Code section 305, Abetment of suicide or attempted suicide of minor or person who lacks mental capacity, as a offence provision."
+summary = "Section 305 criminalises abetting the suicide or attempted suicide of a minor or a person who lacks capacity, with aggravated punishment where hurt is caused in the course of the attempt."
 source = "Singapore Penal Code 1871, Section 305"
 
 [verification]

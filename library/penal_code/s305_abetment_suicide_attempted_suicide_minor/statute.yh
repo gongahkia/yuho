@@ -2,41 +2,68 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr305-#pr305-
 /// @amendment [15/2019]
-// Singapore Penal Code Section 305 - Abetment of suicide or attempted suicide of minor or person who lacks mental capacity
-// Yuho v5 Syntax
 
-struct S305Case {
-    bool minorOrLacksCapacity,
-    bool suicideOrAttempt,
-    bool abetment,
-    bool knowledgeOrReasonableKnowledge,
-}
+statute 305 "Abetment of suicide or attempted suicide of minor or person who lacks mental capacity" effective 1872-01-01 effective 2020-01-01 {
+    subsection (1) {
+        subsection (a) {
+            elements {
+                all_of {
+                    actus_reus victim_commits_suicide := "Any minor or other person who lacks capacity commits suicide";
+                    actus_reus abets_commission_of_suicide := "Whoever abets the commission of the suicide";
+                    mens_rea knows_or_ought_reasonably_to_have_known_status := "The abettor knew or ought reasonably to have known that the person who committed suicide was a minor or a person who lacks capacity";
+                }
+            }
 
-fn applies_s305(bool minorOrLacksCapacity, bool suicideOrAttempt, bool abetment, bool knowledgeOrReasonableKnowledge) : bool {
-    match {
-        case TRUE if minorOrLacksCapacity && suicideOrAttempt && abetment && knowledgeOrReasonableKnowledge := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
+            penalty alternative {
+                death := TRUE;
+                supplementary := "The offender shall be punished with death or imprisonment for life, or with imprisonment for a term which may extend to 20 years, and shall, if he is not sentenced to death or imprisonment for life, also be liable to fine. [15/2019]"
+            }
 
-statute 305 "Abetment of suicide or attempted suicide of minor or person who lacks mental capacity" effective 1872-01-01 {
-    definitions {
-        provision_text := "—(1) If any minor or other person who lacks capacity — ( a ) commits suicide, whoever abets the commission of the suicide and who knew or ought reasonably to have known that the person who committed suicide was a minor or a person who lacks capacity, shall be punished with death or imprisonment for life, or with imprisonment for a term which may extend to 20 years, and shall, if he is not sentenced to death or imprisonment for life, also be liable to fine; ( b ) attempts suicide, whoever abets the attempted suicide and who knew or ought reasonably to have known that the person who attempted suicide was a minor or a person who lacks capacity, shall be punished with imprisonment for a term which may extend to 15 years, and shall also be liable to fine; or ( c ) attempts suicide and hurt is caused to any person in the course of the attempted suicide, whoever abets the attempted suicide and who knew or ought reasonably to have known that the person who attempted suicide was a minor or a person who lacks capacity, shall be punished with imprisonment for life or with imprisonment for a term which may extend to 20 years, and shall, if he is not sentenced to imprisonment for life, also be liable to fine. [15/2019] (2) In subsection (1) —";
-        lacks_capacity := "A person who lacks capacity as referenced in subsection (1).";
-    }
+            penalty cumulative {
+                imprisonment := 0 years .. 20 years;
+                fine := unlimited;
+                supplementary := "The structured clauses in this block capture the fixed-term imprisonment and uncapped fine limbs only; the life-imprisonment alternative and the condition that fine applies only if the offender is not sentenced to death or imprisonment for life remain in the statutory text quoted in the other penalty block."
+            }
+        }
 
-    elements {
-        all_of {
-            actus_reus minorOrLacksCapacity := "The person who commits or attempts suicide is a minor or lacks capacity.";
-            actus_reus suicideOrAttempt := "The person commits suicide or attempts suicide.";
-            actus_reus abetment := "The accused abets the commission of the suicide or attempted suicide.";
-            mens_rea knowledgeOrReasonableKnowledge := "The accused knew or ought reasonably to have known the person was a minor or lacked capacity.";
+        subsection (b) {
+            elements {
+                all_of {
+                    actus_reus victim_attempts_suicide := "Any minor or other person who lacks capacity attempts suicide";
+                    actus_reus abets_attempted_suicide := "Whoever abets the attempted suicide";
+                    mens_rea knows_or_ought_reasonably_to_have_known_status := "The abettor knew or ought reasonably to have known that the person who attempted suicide was a minor or a person who lacks capacity";
+                }
+            }
+
+            penalty cumulative {
+                imprisonment := 0 years .. 15 years;
+                fine := unlimited;
+                supplementary := "The offender shall be punished with imprisonment for a term which may extend to 15 years, and shall also be liable to fine. [15/2019]"
+            }
+        }
+
+        subsection (c) {
+            elements {
+                all_of {
+                    actus_reus victim_attempts_suicide := "Any minor or other person who lacks capacity attempts suicide";
+                    circumstance hurt_caused_in_course := "Hurt is caused to any person in the course of the attempted suicide";
+                    actus_reus abets_attempted_suicide := "Whoever abets the attempted suicide";
+                    mens_rea knows_or_ought_reasonably_to_have_known_status := "The abettor knew or ought reasonably to have known that the person who attempted suicide was a minor or a person who lacks capacity";
+                }
+            }
+
+            penalty cumulative {
+                imprisonment := 0 years .. 20 years;
+                fine := unlimited;
+                supplementary := "The offender shall be punished with imprisonment for life or with imprisonment for a term which may extend to 20 years, and shall, if he is not sentenced to imprisonment for life, also be liable to fine. [15/2019]"
+            }
         }
     }
 
-    penalty {
-        imprisonment := 0 years .. 99 years;
-        death := TRUE;
-        supplementary := "Punishment depends on whether suicide, attempted suicide, or attempted suicide with hurt occurred; death, life imprisonment, imprisonment up to 20 years, imprisonment up to 15 years, and fine exposure are specified.";
+    subsection (2) {
+        definitions {
+            minor := "a person below 18 years of age";
+            person_who_lacks_capacity := "a person who lacks capacity to understand the consequences of attempting or committing suicide, as the case may be, from unsoundness of mind, mental incapacity, intoxication, or the influence of any drug or other substance.";
+        }
     }
 }

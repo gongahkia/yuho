@@ -2,16 +2,17 @@
 section_number = "310"
 title = "Infanticide"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Encodes Singapore Penal Code section 310, Infanticide, as a offence provision."
+summary = "Defines the offence of infanticide where a woman intentionally causes the death of her child below 12 months old while her balance of mind is disturbed by childbirth or lactation-related effects."
 source = "Singapore Penal Code 1871, Section 310"
 
 [verification]

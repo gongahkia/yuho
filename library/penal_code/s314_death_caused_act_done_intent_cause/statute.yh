@@ -1,44 +1,30 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr314-#pr314-
-// Singapore Penal Code Section 314 -- Death caused by act done with intent to cause miscarriage
-// Yuho v5 Syntax
-
-struct S314Case {
-    string accused,
-    string victim,
-    bool actusReus,
-    bool mensRea,
-}
-
-fn s314_applies(bool actusReus, bool mensRea) : bool {
-    match {
-        case TRUE if actusReus == TRUE && mensRea == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
 
 statute 314 "Death caused by act done with intent to cause miscarriage" effective 1872-01-01 {
     definitions {
-        offence_summary := "Act intending miscarriage that causes death of the woman.";
+        explanation_likelihood_of_death := "Explanation. — It is not essential to this offence that the offender should know that the act is likely to cause death.";
     }
 
     elements {
-        /// mental element required for the offence
-        mens_rea intent := "Intent or knowledge as required by the section";
-        /// physical act constituting the offence
-        actus_reus act := "The prohibited act defined by the section";
-        /// contextual requirement -- victim, circumstances, or result
-        circumstance context := "Statutory circumstances are satisfied";
+        /// Section 314 requires an act done with intent to cause miscarriage, causing the death of the woman, subject to the Termination of Pregnancy Act 1974.
+        all_of {
+            actus_reus doing_act := "Doing any act";
+            mens_rea intent_to_cause_miscarriage := "With intent to cause the miscarriage of a woman with child";
+            circumstance subject_to_termination_of_pregnancy_act := "Subject to the provisions of the Termination of Pregnancy Act 1974";
+            circumstance woman_with_child := "The woman is a woman with child";
+            actus_reus causes_death := "Causing the death of such woman" caused_by doing_act;
+        }
     }
 
-    penalty {
-        imprisonment := 0 years .. 99 years;
-        fine := $0.00 .. $50,000.00;
+    penalty when woman_consented {
+        imprisonment := 0 years .. 10 years;
+        fine := unlimited;
     }
 
-    illustration example1 {
-        "A commits the conduct described in section 314 against B. A is guilty of the offence under section 314."
+    penalty alternative when woman_without_consent {
+        imprisonment := life;
+        supplementary := "Or with the punishment above-mentioned.";
     }
 }
