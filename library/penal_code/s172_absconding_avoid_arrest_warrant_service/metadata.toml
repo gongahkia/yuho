@@ -2,16 +2,17 @@
 section_number = "172"
 title = "Absconding to avoid arrest on warrant or service of summons, etc., proceeding from a public servant"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Absconding to avoid arrest on a warrant, or service of a summons, notice, or order issued by a competent public servant; heavier penalty if court process."
+summary = "This section makes it an offence to abscond in order to avoid arrest on a warrant or service of process issued by a legally competent public servant, with a higher penalty for specified court process."
 source = "Singapore Penal Code 1871, Section 172"
 
 [verification]

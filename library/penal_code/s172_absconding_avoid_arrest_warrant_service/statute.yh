@@ -1,28 +1,29 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr172-#pr172-
-// Singapore Penal Code Section 172
-
 /// @amendment [15/2019]
-statute 172 "Absconding to avoid arrest on warrant or service of summons, etc., proceeding from a public servant" effective 1872-01-01 {
-    definitions {
-        process := "A warrant, summons, notice, or order proceeding from a public servant legally competent to issue such process";
-        court_process := "A summons, notice or order requiring attendance in person or by agent, or production of a document or electronic record, before a court of justice";
-    }
-
+statute 172 "Absconding to avoid arrest on warrant or service of summons, etc., proceeding from a public servant" effective 1872-01-01 effective 2020-01-01 {
     elements {
+        /// Section 172 requires absconding to avoid arrest on a warrant or service of process issued by a legally competent public servant.
         all_of {
-            /// physical act of absconding
-            actus_reus absconding := "Absconding in order to avoid being arrested on a warrant, or being served with a summons, notice, or order";
-            /// issuing authority competence
-            circumstance competent_issuer := "The warrant, summons, notice or order proceeds from a public servant legally competent to issue it";
+            actus_reus absconding := "Absconds";
+            mens_rea avoidance_purpose := "In order to avoid being arrested on a warrant, or to avoid being served with a summons, a notice, or an order";
+            circumstance competent_public_servant := "The warrant, summons, notice or order proceeds from a public servant, legally competent, as such public servant, to issue such warrant, summons, notice or order";
+            /// The enhanced branch applies only if the summons, notice or order is court process requiring attendance or production.
+            any_of {
+                circumstance ordinary_process := "The summons, notice or order is not to attend in person or by agent, or to produce a document or an electronic record before a court of justice";
+                circumstance court_process := "The summons, notice or order is to attend in person or by agent, or to produce a document or an electronic record before a court of justice";
+            }
         }
     }
 
-    penalty {
-        imprisonment := 0 months .. 1 months;
+    penalty or_both when ordinary_process {
+        imprisonment := 0 days .. 1 month;
         fine := $0.00 .. $1,500.00;
     }
 
-    /// Where the summons, notice or order is court process to attend in person or by agent, or to produce a document or electronic record, punishment may extend to 6 months imprisonment, or fine up to $5,000, or both.
+    penalty or_both when court_process {
+        imprisonment := 0 days .. 6 months;
+        fine := $0.00 .. $5,000.00;
+    }
 }
