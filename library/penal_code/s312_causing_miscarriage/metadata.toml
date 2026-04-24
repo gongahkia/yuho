@@ -1,0 +1,18 @@
+[statute]
+section_number = "312"
+title = "Causing miscarriage"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Voluntarily causing a woman with child to miscarry, subject to the Termination of Pregnancy Act 1974."
+source = "Singapore Penal Code 1871, Section 312"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr312-#pr312-"

@@ -1,0 +1,29 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr449-#pr449-
+// Singapore Penal Code Section 449 - House-breaking in order to commit an offence punishable with death
+
+/// @amendment [15/2019]
+
+referencing penal_code/s442_house_breaking
+
+statute 449 "House-breaking in order to commit an offence punishable with death" effective 1872-01-01 {
+    definitions {
+        house_breaking := "As defined in section 442";
+        capital_offence := "An offence punishable with death";
+    }
+
+    elements {
+        all_of {
+            /// base offence -- house-breaking under s442
+            actus_reus base_house_breaking := "Commits house-breaking under section 442";
+            /// aggravating purpose -- in order to commit a capital offence
+            mens_rea purpose_capital := "Commits house-breaking in order to commit an offence punishable with death";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 99 years;
+        fine := $0.00 .. $100,000.00;
+    }
+}

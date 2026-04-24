@@ -1,0 +1,23 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr357-#pr357-
+// Singapore Penal Code Section 357
+
+statute 357 "Assault or criminal force in attempting wrongfully to confine a person" effective 1872-01-01 {
+    definitions {
+        wrongful_confinement := "Wrongful confinement as defined in section 340";
+    }
+
+    elements {
+        /// assault or criminal force to a person
+        actus_reus assault_or_force := "Assaults or uses criminal force to any person";
+        /// attempting wrongfully to confine that person
+        mens_rea intent_confine := "In attempting wrongfully to confine that person";
+    }
+
+    penalty {
+        imprisonment := 0 years .. 1 years;
+        fine := $0.00 .. $3,000.00;
+    }
+
+}

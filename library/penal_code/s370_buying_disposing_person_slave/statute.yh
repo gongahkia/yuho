@@ -1,0 +1,21 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr370-#pr370-
+// Singapore Penal Code Section 370
+
+statute 370 "Buying or disposing of any person as a slave" effective 1872-01-01 {
+    definitions {
+        slave := "A person held or treated as the property of another";
+    }
+
+    elements {
+        /// import, export, buy, sell or dispose of a person as slave
+        actus_reus trade_person := "Imports, exports, removes, buys, sells or disposes of any person as a slave, or accepts, receives or detains against their will any person as a slave";
+    }
+
+    penalty {
+        imprisonment := 0 years .. 10 years;
+        fine := $0.00 .. $10,000.00;
+    }
+
+}

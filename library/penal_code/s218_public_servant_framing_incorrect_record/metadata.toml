@@ -1,0 +1,19 @@
+[statute]
+section_number = "218"
+title = "Public servant framing an incorrect record or writing with intent to save person from punishment, or property from forfeiture"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Public servant framing an incorrect record or writing with intent to cause loss or save a person from punishment or property from forfeiture."
+source = "Singapore Penal Code 1871, Section 218"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr218-#pr218-"
+disclaimer = "Educational purposes only. Cross-reference with official SSO text."

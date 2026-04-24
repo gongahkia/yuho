@@ -1,0 +1,24 @@
+// Test file for s121D
+// Yuho v5 Syntax
+
+referencing penal_code/s121D_intentional_omission_give_information
+
+struct S121DTest {
+    bool knowingOrReasonToBelieveOffenceCommitted,
+    bool intentionallyOmittedInformation,
+    bool legallyBoundToGive,
+}
+
+S121DTest qualifying := S121DTest {
+    knowingOrReasonToBelieveOffenceCommitted := TRUE,
+    intentionallyOmittedInformation := TRUE,
+    legallyBoundToGive := TRUE,
+}
+assert s121D_applies(qualifying.knowingOrReasonToBelieveOffenceCommitted, qualifying.intentionallyOmittedInformation, qualifying.legallyBoundToGive) == TRUE
+
+S121DTest notBound := S121DTest {
+    knowingOrReasonToBelieveOffenceCommitted := TRUE,
+    intentionallyOmittedInformation := TRUE,
+    legallyBoundToGive := FALSE,
+}
+assert s121D_applies(notBound.knowingOrReasonToBelieveOffenceCommitted, notBound.intentionallyOmittedInformation, notBound.legallyBoundToGive) == FALSE

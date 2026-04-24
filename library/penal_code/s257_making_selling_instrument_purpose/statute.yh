@@ -1,0 +1,54 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr257-#pr257-
+// Singapore Penal Code Section 257 - Making or selling an instrument for the purpose of counterfeiting a Government stamp
+// Yuho v5 Syntax
+
+struct S257Case {
+    string accused,
+    bool makesOrSellsInstrument,
+    bool forPurposeCounterfeiting,
+    bool knowsOrBelievesIntendedUse,
+    bool governmentRevenueStamp,
+}
+fn s257_applies(bool makesOrSellsInstrument, bool forPurposeCounterfeiting, bool knowsOrBelievesIntendedUse, bool governmentRevenueStamp) : bool {
+    match {
+        case TRUE if makesOrSellsInstrument == FALSE := consequence FALSE;
+        case TRUE if governmentRevenueStamp == FALSE := consequence FALSE;
+        case TRUE if forPurposeCounterfeiting == FALSE := consequence FALSE;
+        case TRUE if knowsOrBelievesIntendedUse == FALSE := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
+statute 257 "Making or selling an instrument for the purpose of counterfeiting a Government stamp" effective 1872-01-01 {
+    definitions {
+        government_stamp := "Stamp issued by the Government for the purpose of revenue";
+        counterfeit := "Causing one thing to resemble another with intent to deceive (s28)";
+    }
+
+    elements {
+        all_of {
+            any_of {
+                actus_reus makes := "Makes an instrument for counterfeiting a Government stamp";
+                actus_reus part_of_process := "Performs any part of the process of making such instrument";
+                actus_reus buys := "Buys such instrument";
+                actus_reus sells := "Sells or disposes of such instrument";
+            }
+            circumstance target := "The instrument is for the purpose of counterfeiting a Government stamp for revenue";
+            any_of {
+                mens_rea own_purpose := "For the purpose of being used";
+                mens_rea knowledge := "Knowing or having reason to believe that it is intended to be used";
+            }
+        }
+    }
+
+    penalty {
+        imprisonment := 0 years .. 7 years;
+        fine := $0.00 .. $50,000.00;
+    }
+
+    illustration example1 {
+        "A manufactures dies that can produce counterfeit revenue stamps and sells them to B. A commits an offence under s257."
+    }
+
+}

@@ -1,0 +1,45 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr207-#pr207-
+// Singapore Penal Code Section 207 - Fraudulent claim to property to prevent its seizure as a forfeiture, in execution of a decree or under or pursuant to an enforcement order
+// Yuho v5 Syntax
+
+struct S207Case {
+    string accused,
+    bool fraudulentAcceptanceOrClaim,
+    bool knowsNoRightToProperty,
+    bool intentToPreventSeizure,
+}
+
+fn evaluate_s207(bool fraudulentAcceptanceOrClaim, bool knowsNoRightToProperty, bool intentToPreventSeizure) : string {
+    match {
+        case TRUE if fraudulentAcceptanceOrClaim == FALSE := consequence "Not liable - no fraudulent claim";
+        case TRUE if knowsNoRightToProperty == FALSE := consequence "Not liable - genuine claim to property";
+        case TRUE if intentToPreventSeizure == FALSE := consequence "Not liable - no intent to prevent seizure";
+        case _ := consequence "Liable under s207";
+    }
+}
+
+statute 207 "Fraudulent claim to property to prevent its seizure as a forfeiture, in execution of a decree or under or pursuant to an enforcement order" effective 1872-01-01 {
+    definitions {
+        fraudulently := "As defined in section 25";
+        forfeiture := "Taking of property as a penalty or satisfaction of fine under a sentence";
+        deception := "Any false statement or practice concerning rights to property";
+    }
+
+    elements {
+        all_of {
+            /// actus reus: fraudulent claim or deception
+            actus_reus claim := "Fraudulently accepts, receives or claims any property or interest therein, or practises any deception touching any right to property";
+            /// mens rea: knowledge of no right
+            mens_rea knowledge := "Knowing that he has no right or rightful claim to such property or interest";
+            /// mens rea: intent to prevent seizure
+            mens_rea intent := "Intending thereby to prevent that property or interest from being taken as a forfeiture or in satisfaction of a fine, or in execution of a decree, or under or pursuant to an enforcement order";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 years .. 2 years;
+        fine := $0.00 .. $5,000.00;
+    }
+}

@@ -1,0 +1,18 @@
+[statute]
+section_number = "149"
+title = "Every member of an unlawful assembly to be deemed guilty of any offence committed in prosecution of common object"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Extends constructive liability so that every member of an unlawful assembly is guilty of any offence committed in prosecution of, or known likely in pursuit of, the common object."
+source = "Singapore Penal Code 1871, Section 149"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr149-#pr149-"

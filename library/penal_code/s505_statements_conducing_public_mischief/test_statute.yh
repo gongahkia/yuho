@@ -1,0 +1,22 @@
+// Test file for s505_statements_conducing_public_mischief
+// Yuho v5 Syntax
+
+referencing penal_code/s505_statements_conducing_public_mischief
+
+struct PublicMischiefStatementCaseTest {
+    bool elementsSatisfied,
+}
+
+PublicMischiefStatementCaseTest positive := PublicMischiefStatementCaseTest {
+    elementsSatisfied := TRUE,
+}
+
+assert positive.elementsSatisfied == TRUE
+assert is_liable(positive.elementsSatisfied) == TRUE
+
+PublicMischiefStatementCaseTest negative := PublicMischiefStatementCaseTest {
+    elementsSatisfied := FALSE,
+}
+
+assert negative.elementsSatisfied == FALSE
+assert is_liable(negative.elementsSatisfied) == FALSE

@@ -1,0 +1,22 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BI-#pr377BI-
+/// @section 377BI
+// Singapore Penal Code Section 377BI
+
+statute 377.10 "Distributing or selling child abuse material" effective 1872-01-01 {
+    definitions {
+        distribute_cam := "To share, sell, offer for sale, or make available child abuse material";
+    }
+
+    elements {
+        /// distribute, sell or offer for sale child abuse material
+        actus_reus distribute_cam := "Distributes, sells, offers to sell, or advertises for sale child abuse material";
+    }
+
+    penalty {
+        imprisonment := 0 years .. 7 years;
+        caning := 0 .. 6 strokes;
+    }
+
+}

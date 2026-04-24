@@ -1,0 +1,18 @@
+[statute]
+section_number = "26G"
+title = "“Transferred fault”"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Defines 'transferred fault' — transferring intent or knowledge between offences."
+source = "Singapore Penal Code 1871, Section 26G"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr26G-#pr26G-"

@@ -1,0 +1,18 @@
+[statute]
+section_number = "364"
+title = "Kidnapping or abducting in order to murder"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Kidnapping or abducting with intent to have victim murdered or placed in danger of being murdered."
+source = "Singapore Penal Code 1871, Section 364"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr364-#pr364-"

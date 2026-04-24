@@ -1,0 +1,27 @@
+// Test file for s117
+// Yuho v5 Syntax
+
+referencing penal_code/s117_abetting_commission_offence_public_more_than
+
+struct S117Test {
+    bool abetmentToPublicGenerally,
+    int classOrNumberOfPersons,
+}
+
+S117Test publicAbetment := S117Test {
+    abetmentToPublicGenerally := TRUE,
+    classOrNumberOfPersons := 0,
+}
+assert s117_applies(publicAbetment.abetmentToPublicGenerally, publicAbetment.classOrNumberOfPersons) == TRUE
+
+S117Test largeGroup := S117Test {
+    abetmentToPublicGenerally := FALSE,
+    classOrNumberOfPersons := 20,
+}
+assert s117_applies(largeGroup.abetmentToPublicGenerally, largeGroup.classOrNumberOfPersons) == TRUE
+
+S117Test smallGroup := S117Test {
+    abetmentToPublicGenerally := FALSE,
+    classOrNumberOfPersons := 5,
+}
+assert s117_applies(smallGroup.abetmentToPublicGenerally, smallGroup.classOrNumberOfPersons) == FALSE

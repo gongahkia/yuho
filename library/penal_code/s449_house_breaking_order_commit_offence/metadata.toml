@@ -1,0 +1,18 @@
+[statute]
+section_number = "449"
+title = "House-breaking in order to commit an offence punishable with death"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "House-breaking committed in order to commit an offence punishable with death."
+source = "Singapore Penal Code 1871, Section 449"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr449-#pr449-"

@@ -1,0 +1,13 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr140A-#pr140A-
+// Singapore Penal Code Section 140A - "Harbour"
+// Shape: interpretation (defines "harbour" for Chapter VII; text mirrors s130A)
+
+statute 140A "Harbour" effective 1872-01-01 {
+    definitions {
+        harbour := "Supplying a person with shelter, food, drink, money, clothes, arms, ammunition, or means of conveyance, or assisting a person in any way to evade apprehension";
+        shelter := "Physical refuge or lodging";
+        means_of_conveyance := "Any vehicle, vessel, or transportation facilitating evasion";
+    }
+}

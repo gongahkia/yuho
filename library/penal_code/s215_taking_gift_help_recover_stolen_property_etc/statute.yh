@@ -1,0 +1,47 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr215-#pr215-
+// Singapore Penal Code Section 215 - Taking gift to help to recover stolen property, etc.
+// Yuho v5 Syntax
+
+struct S215Case {
+    string accused,
+    bool takesOrAgreesGratification,
+    bool underPretenceOfHelpingRecover,
+    bool propertyDeprivedByOffence,
+    bool usesAllMeansToCauseApprehension,
+}
+
+fn evaluate_s215(bool takesOrAgreesGratification, bool underPretenceOfHelpingRecover, bool propertyDeprivedByOffence, bool usesAllMeansToCauseApprehension) : string {
+    match {
+        case TRUE if takesOrAgreesGratification == FALSE := consequence "Not liable - no gratification";
+        case TRUE if underPretenceOfHelpingRecover == FALSE := consequence "Not liable - not on account of recovery";
+        case TRUE if propertyDeprivedByOffence == FALSE := consequence "Not liable - property not deprived by offence";
+        case TRUE if usesAllMeansToCauseApprehension == TRUE := consequence "Not liable - used all means to apprehend offender";
+        case _ := consequence "Liable under s215";
+    }
+}
+
+statute 215 "Taking gift to help to recover stolen property, etc." effective 1872-01-01 {
+    definitions {
+        gratification := "Any pecuniary or non-pecuniary benefit or inducement";
+        movable_property := "Any property deprived by an offence punishable under the Penal Code";
+        all_means := "All means in one's power to cause the offender to be apprehended and convicted";
+    }
+
+    elements {
+        all_of {
+            /// actus reus: taking or agreeing to take gratification
+            actus_reus accept := "Takes, or agrees or consents to take, any gratification for himself or another";
+            /// circumstance: under pretence of helping recovery of movable property deprived by offence
+            circumstance pretence := "Under pretence or on account of helping any person to recover any movable property of which he has been deprived by any offence punishable under this Code";
+            /// circumstance: accused fails to use all means to apprehend offender
+            circumstance failsApprehension := "Unless he uses all means in his power to cause the offender to be apprehended and convicted";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 years .. 2 years;
+        fine := $0.00 .. $5,000.00;
+    }
+}

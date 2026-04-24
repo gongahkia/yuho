@@ -1,0 +1,36 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr512-#pr512-
+/// @amendment [15/2019]
+// Singapore Penal Code Section 512 - Punishment for attempting to commit offences
+/// punishment provision, cross-references section 511
+
+struct AttemptPunishmentCase {
+    string accused,
+    bool offenceCommitted,
+}
+
+fn punishment_applies(bool offenceCommitted) : bool {
+    match {
+        case TRUE if offenceCommitted == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 512 "Punishment for attempting to commit offences" effective 1872-01-01 {
+    definitions {
+        attempt := "As defined under section 511";
+        capital_attempt_cap := "Attempt of an offence punishable by death or life imprisonment punishable up to 20 years";
+        ordinary_attempt_punishment := "Attempts of other offences punishable as prescribed for that offence";
+        mandatory_minimum_exception := "Where punishment is a mandatory minimum, court is not bound to impose it for an attempt";
+    }
+
+    elements {
+        /// triggering predicate -- the underlying offence must be established
+        circumstance offence_committed := "The underlying offence is established";
+    }
+
+    penalty {
+        imprisonment := 0 days .. 20 years;
+    }
+}

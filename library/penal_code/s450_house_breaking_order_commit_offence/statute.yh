@@ -1,0 +1,29 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr450-#pr450-
+// Singapore Penal Code Section 450 - House-breaking in order to commit an offence punishable with imprisonment for life
+
+/// @amendment [15/2019]
+
+referencing penal_code/s442_house_breaking
+
+statute 450 "House-breaking in order to commit an offence punishable with imprisonment for life" effective 1872-01-01 {
+    definitions {
+        house_breaking := "As defined in section 442";
+        life_offence := "An offence punishable with imprisonment for life";
+    }
+
+    elements {
+        all_of {
+            /// base offence -- house-breaking under s442
+            actus_reus base_house_breaking := "Commits house-breaking under section 442";
+            /// aggravating purpose -- to commit an offence punishable with life imprisonment
+            mens_rea purpose_life := "Commits house-breaking in order to commit an offence punishable with imprisonment for life";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 15 years;
+        fine := $0.00 .. $50,000.00;
+    }
+}

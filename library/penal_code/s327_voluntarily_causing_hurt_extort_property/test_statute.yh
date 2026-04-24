@@ -1,0 +1,23 @@
+// Test file for s327
+// Yuho v5 Syntax
+
+referencing penal_code/s327_voluntarily_causing_hurt_extort_property
+
+struct S327CaseTest {
+    bool actusReus,
+    bool mensRea,
+}
+
+S327CaseTest satisfied := S327CaseTest {
+    actusReus := TRUE,
+    mensRea := TRUE,
+}
+
+assert s327_applies(satisfied.actusReus, satisfied.mensRea) == TRUE
+
+S327CaseTest missingMens := S327CaseTest {
+    actusReus := TRUE,
+    mensRea := FALSE,
+}
+
+assert s327_applies(missingMens.actusReus, missingMens.mensRea) == FALSE

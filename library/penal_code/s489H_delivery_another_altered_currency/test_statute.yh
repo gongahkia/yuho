@@ -1,0 +1,22 @@
+// Test file for s489H_delivery_another_altered_currency
+// Yuho v5 Syntax
+
+referencing penal_code/s489H_delivery_another_altered_currency
+
+struct DeliveryAlteredCurrencyCaseTest {
+    bool elementsSatisfied,
+}
+
+DeliveryAlteredCurrencyCaseTest positive := DeliveryAlteredCurrencyCaseTest {
+    elementsSatisfied := TRUE,
+}
+
+assert positive.elementsSatisfied == TRUE
+assert is_liable(positive.elementsSatisfied) == TRUE
+
+DeliveryAlteredCurrencyCaseTest negative := DeliveryAlteredCurrencyCaseTest {
+    elementsSatisfied := FALSE,
+}
+
+assert negative.elementsSatisfied == FALSE
+assert is_liable(negative.elementsSatisfied) == FALSE

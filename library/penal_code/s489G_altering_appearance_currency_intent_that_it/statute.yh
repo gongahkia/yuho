@@ -1,0 +1,35 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr489G-#pr489G-
+/// @amendment [15/2019]
+// Singapore Penal Code Section 489G - Altering appearance of currency with intent that it shall pass as currency of different description
+// Yuho v5 Syntax
+
+struct AlteringAppearanceCurrencyCase {
+    string accused,
+    bool elementsSatisfied,
+}
+
+fn is_liable(bool elementsSatisfied) : bool {
+    match {
+        case TRUE if elementsSatisfied == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 489G "Altering appearance of currency with intent that it shall pass as currency of different description" effective 2008-02-01 {
+    definitions {
+        currency := "Coin or paper money issued by any government";
+    }
+
+    elements {
+        all_of {
+            actus_reus alter_appearance := "Performs any operation on currency which alters its appearance";
+            mens_rea intent_pass_as_different := "Intending that the currency will pass as currency of a different description";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 7 years;
+    }
+}

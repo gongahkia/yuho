@@ -1,0 +1,21 @@
+// Test file for s108B_abetment_outside_singapore_offence_singapore
+// Yuho v5 Syntax
+
+referencing penal_code/s108B_abetment_outside_singapore_offence_singapore
+
+struct InboundAbetmentTest {
+    bool offenceInSingapore,
+    bool abetmentActsOutsideSingapore,
+}
+
+InboundAbetmentTest qualifying := InboundAbetmentTest {
+    offenceInSingapore := TRUE,
+    abetmentActsOutsideSingapore := TRUE,
+}
+assert is_inbound_abetment(qualifying.offenceInSingapore, qualifying.abetmentActsOutsideSingapore) == TRUE
+
+InboundAbetmentTest offenceNotInSG := InboundAbetmentTest {
+    offenceInSingapore := FALSE,
+    abetmentActsOutsideSingapore := TRUE,
+}
+assert is_inbound_abetment(offenceNotInSG.offenceInSingapore, offenceNotInSG.abetmentActsOutsideSingapore) == FALSE

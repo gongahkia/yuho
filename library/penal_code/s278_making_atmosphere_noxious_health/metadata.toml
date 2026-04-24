@@ -1,0 +1,18 @@
+[statute]
+section_number = "278"
+title = "Making atmosphere noxious to health"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Criminalises voluntarily vitiating the atmosphere in any place so as to make it noxious to the health of persons in general dwelling, working or passing nearby."
+source = "Singapore Penal Code 1871, Section 278"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr278-#pr278-"

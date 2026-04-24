@@ -1,0 +1,16 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr53-#pr53-
+// Singapore Penal Code Section 53 - Punishments
+// Scope provision enumerating the punishments offenders are liable to under the Code
+/// Explanation. Caning shall be with a rattan.
+
+statute 53 "Punishments" effective 1872-01-01 {
+    definitions {
+        punishment_death := "Death";
+        punishment_imprisonment := "Imprisonment";
+        punishment_forfeiture := "Forfeiture of property";
+        punishment_fine := "Fine";
+        punishment_caning := "Caning with a rattan";
+    }
+}

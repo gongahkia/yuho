@@ -1,0 +1,38 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr424A-#pr424A-
+// Singapore Penal Code Section 424A - Fraud by false representation, non-disclosure or abuse of position not connected with contracts for goods or services
+
+/// @amendment [15/2019]
+
+statute 424A "Fraud by false representation, non-disclosure or abuse of position not connected with contracts for goods or services" effective 2020-01-01 {
+    definitions {
+        false_representation := "A representation which is untrue or misleading made dishonestly or fraudulently";
+        legal_duty_to_disclose := "A duty to disclose arising under law or contract";
+        abuse_of_position := "Acting in breach of a position expected to safeguard anothers financial interests";
+    }
+
+    elements {
+        all_of {
+            any_of {
+                /// false representation
+                actus_reus false_rep := "Makes a false representation";
+                /// failure to disclose
+                actus_reus nondisclosure := "Fails to disclose information which he is under a legal duty to disclose";
+                /// abuse of position
+                actus_reus abuse_position := "Abuses by act or omission a position expected to safeguard anothers financial interests";
+            }
+            any_of {
+                /// dishonest state of mind
+                mens_rea dishonest := "Acts dishonestly";
+                /// fraudulent state of mind
+                mens_rea fraudulent := "Acts fraudulently";
+            }
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 20 years;
+        fine := $0.00 .. $100,000.00;
+    }
+}

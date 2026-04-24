@@ -1,0 +1,11 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr46-#pr46-
+// Singapore Penal Code Section 46 - "Death"
+// Interpretation provision defining "death"
+
+statute 46 "Death" effective 1872-01-01 {
+    definitions {
+        death := "The death of a human being, unless the contrary appears from the context";
+    }
+}

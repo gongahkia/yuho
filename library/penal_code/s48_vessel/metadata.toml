@@ -1,0 +1,18 @@
+[statute]
+section_number = "48"
+title = "Vessel"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Defines 'vessel' as anything made for the conveyance by water of human beings or property."
+source = "Singapore Penal Code 1871, Section 48"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr48-#pr48-"

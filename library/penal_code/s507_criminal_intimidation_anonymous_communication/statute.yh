@@ -1,0 +1,35 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr507-#pr507-
+// Singapore Penal Code Section 507 - Criminal intimidation by an anonymous communication
+// Yuho v5 Syntax
+
+struct AnonymousIntimidationCase {
+    string accused,
+    bool elementsSatisfied,
+}
+
+fn is_liable(bool elementsSatisfied) : bool {
+    match {
+        case TRUE if elementsSatisfied == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 507 "Criminal intimidation by an anonymous communication" effective 1872-01-01 {
+    definitions {
+        criminal_intimidation := "As defined under section 503";
+        anonymous_communication := "A communication whose source is concealed";
+    }
+
+    elements {
+        all_of {
+            circumstance is_criminal_intimidation := "Commits criminal intimidation as defined in section 503";
+            actus_reus anonymous_or_concealed := "By anonymous communication or taking precautions to conceal identity";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 2 years;
+    }
+}

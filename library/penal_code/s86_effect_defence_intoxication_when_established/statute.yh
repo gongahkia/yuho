@@ -1,0 +1,14 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr86-#pr86-
+// Singapore Penal Code Section 86
+
+/// @amendment [15/2019]
+
+statute 86 "Effect of defence of intoxication when established" effective 1872-01-01 {
+    definitions {
+        acquittal_rule := "Where the defence under section 85 is established, the accused must be acquitted, except that if the person was of unsound mind by reason of intoxication, section 84 and sections 251 and 252 of the Criminal Procedure Code 2010 apply.";
+        specific_intent := "Intoxication shall be taken into account for determining whether the person charged had formed any intention or had any knowledge or belief, specific or otherwise, in the absence of which he would not be guilty of the offence.";
+        drugs_included := "For the purposes of sections 85 and 86, intoxication includes a state produced by narcotics or drugs.";
+    }
+}

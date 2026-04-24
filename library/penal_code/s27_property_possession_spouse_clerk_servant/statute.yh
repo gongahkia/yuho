@@ -1,0 +1,11 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr27-#pr27-
+// Singapore Penal Code Section 27
+// Yuho v5 Syntax
+
+statute 27 "Property in possession of spouse, clerk or servant" effective 1872-01-01 {
+    definitions {
+        property_in_possession_of_spouse_clerk_servant := "When property is in the possession of a person’s spouse, clerk or servant, on account of that person, it is in that person’s possession within the meaning of this Code. Explanation.— A person employed temporarily or on a particular occasion in the capacity of a clerk or servant is a clerk or servant within the meaning of this section.";
+    }
+}

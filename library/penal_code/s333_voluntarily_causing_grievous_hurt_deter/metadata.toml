@@ -1,0 +1,18 @@
+[statute]
+section_number = "333"
+title = "Voluntarily causing grievous hurt to deter public servant from his duty"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Voluntarily causing grievous hurt to a public servant in discharge of duty."
+source = "Singapore Penal Code 1871, Section 333"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr333-#pr333-"

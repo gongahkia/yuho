@@ -1,0 +1,18 @@
+[statute]
+section_number = "36"
+title = "Effect caused partly by act and partly by omission"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Where causing an effect is an offence, causing it partly by act and partly by omission is the same offence."
+source = "Singapore Penal Code 1871, Section 36"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr36-#pr36-"

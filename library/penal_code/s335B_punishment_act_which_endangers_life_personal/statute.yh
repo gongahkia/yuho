@@ -1,0 +1,41 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr335B-#pr335B-
+// Singapore Penal Code Section 335B -- Punishment for act which endangers life or personal safety of others with knowledge or belief that it is likely to cause death
+// Yuho v5 Syntax
+
+struct S335bCase {
+    string accused,
+    string victim,
+    bool offenceCommitted,
+}
+
+fn s335b_applies(bool offenceCommitted) : bool {
+    match {
+        case TRUE if offenceCommitted == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+/// @amendment [15/2019]
+statute 335B "Punishment for act which endangers life or personal safety of others with knowledge or belief that it is likely to cause death" effective 1872-01-01 {
+    definitions {
+        offence_summary := "Endangering life or personal safety with knowledge or belief it is likely to cause death.";
+    }
+
+    elements {
+        /// the predicate offence must be established
+        circumstance offence_committed := "The statutory conduct is proved";
+        /// sentence applies on conviction
+        actus_reus conviction := "Conviction under this section";
+    }
+
+    penalty {
+        imprisonment := 0 years .. 7 years;
+        fine := $0.00 .. $50,000.00;
+    }
+
+    illustration example1 {
+        "A is convicted under section 335B. A shall be punished as prescribed by section 335B."
+    }
+}

@@ -1,0 +1,45 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr333-#pr333-
+// Singapore Penal Code Section 333 -- Voluntarily causing grievous hurt to deter public servant from his duty
+// Yuho v5 Syntax
+
+struct S333Case {
+    string accused,
+    string victim,
+    bool actusReus,
+    bool mensRea,
+}
+
+fn s333_applies(bool actusReus, bool mensRea) : bool {
+    match {
+        case TRUE if actusReus == TRUE && mensRea == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+
+statute 333 "Voluntarily causing grievous hurt to deter public servant from his duty" effective 1872-01-01 {
+    definitions {
+        offence_summary := "Voluntarily causing grievous hurt to a public servant in discharge of duty.";
+    }
+
+    elements {
+        /// mental element required for the offence
+        mens_rea intent := "Intent or knowledge as required by the section";
+        /// physical act constituting the offence
+        actus_reus act := "The prohibited act defined by the section";
+        /// contextual requirement -- victim, circumstances, or result
+        circumstance context := "Statutory circumstances are satisfied";
+    }
+
+    penalty {
+        imprisonment := 0 years .. 15 years;
+        fine := $0.00 .. $50,000.00;
+        caning := 0 .. 24 strokes;
+    }
+
+    illustration example1 {
+        "A commits the conduct described in section 333 against B. A is guilty of the offence under section 333."
+    }
+}

@@ -1,0 +1,49 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr256-#pr256-
+// Singapore Penal Code Section 256 - Having possession of an instrument or material for the purpose of counterfeiting a Government stamp
+// Yuho v5 Syntax
+
+struct S256Case {
+    string accused,
+    bool possessesInstrumentOrMaterial,
+    bool forPurposeCounterfeiting,
+    bool knowsOrBelievesIntendedUse,
+    bool governmentRevenueStamp,
+}
+fn s256_applies(bool possessesInstrumentOrMaterial, bool forPurposeCounterfeiting, bool knowsOrBelievesIntendedUse, bool governmentRevenueStamp) : bool {
+    match {
+        case TRUE if possessesInstrumentOrMaterial == FALSE := consequence FALSE;
+        case TRUE if governmentRevenueStamp == FALSE := consequence FALSE;
+        case TRUE if forPurposeCounterfeiting == FALSE := consequence FALSE;
+        case TRUE if knowsOrBelievesIntendedUse == FALSE := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
+statute 256 "Having possession of an instrument or material for the purpose of counterfeiting a Government stamp" effective 1872-01-01 {
+    definitions {
+        government_stamp := "Stamp issued by the Government for the purpose of revenue, including stamp certificates under the Stamp Duties Act 1929";
+        counterfeit := "Causing one thing to resemble another with intent to deceive (s28)";
+    }
+
+    elements {
+        all_of {
+            actus_reus possession := "Has possession of any instrument or material";
+            circumstance target := "For the purpose of counterfeiting a Government stamp issued for revenue";
+            any_of {
+                mens_rea own_purpose := "For the purpose of being used";
+                mens_rea knowledge := "Knowing or having reason to believe that it is intended to be used";
+            }
+        }
+    }
+
+    penalty {
+        imprisonment := 0 years .. 7 years;
+        fine := $0.00 .. $50,000.00;
+    }
+
+    illustration example1 {
+        "A is found with dies designed to counterfeit revenue stamps. A commits an offence under s256."
+    }
+
+}

@@ -1,0 +1,19 @@
+[statute]
+section_number = "228"
+title = "Intentional insult or interruption to a public servant sitting in any stage of a judicial proceeding or mediation or other alternative dispute resolution process"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Intentionally offering insult or causing interruption to a public servant sitting in a judicial proceeding or conducting a mediation or alternative dispute resolution process."
+source = "Singapore Penal Code 1871, Section 228"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr228-#pr228-"
+disclaimer = "Educational purposes only. Cross-reference with official SSO text."

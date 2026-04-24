@@ -1,0 +1,18 @@
+[statute]
+section_number = "119"
+title = "A public servant concealing a design to commit an offence which it is his duty to prevent"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "A public servant who, intending or knowing concealment will likely facilitate, conceals or makes false representations respecting a design to commit an offence it is his duty to prevent, is punishable with up to one-half (or one-fourth if not committed) of the longest term of imprisonment or fine provided for the offence."
+source = "Singapore Penal Code 1871, Section 119"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr119-#pr119-"

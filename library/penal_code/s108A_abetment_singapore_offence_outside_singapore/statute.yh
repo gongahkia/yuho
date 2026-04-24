@@ -1,0 +1,37 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr108A-#pr108A-
+// Singapore Penal Code Section 108A - Abetment in Singapore of an offence outside Singapore
+// Yuho v5 Syntax
+
+struct AbetmentAcrossBorderCase {
+    string abettor,
+    bool abettorInSingapore,
+    bool actOutsideSingapore,
+    bool wouldBeOffenceIfInSingapore,
+}
+
+fn is_extraterritorial_abetment(bool abettorInSingapore, bool actOutsideSingapore, bool wouldBeOffenceIfInSingapore) : bool {
+    match {
+        case TRUE if abettorInSingapore == TRUE && actOutsideSingapore == TRUE && wouldBeOffenceIfInSingapore == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 108A "Abetment in Singapore of an offence outside Singapore" effective 1872-01-01 {
+    definitions {
+        within_meaning_of_code := "Treated as an offence under this Code notwithstanding act is committed outside Singapore";
+        commission_outside := "Any act done outside Singapore that would be an offence if committed in Singapore";
+    }
+
+    elements {
+        all_of {
+            actus_reus abets_in_singapore := "Abets, in Singapore, the commission of an act beyond Singapore";
+            circumstance qualifying_act := "Act would constitute an offence if committed in Singapore";
+        }
+    }
+
+    illustration example1 {
+        "A, in Singapore, instigates B, a foreigner in Java, to commit murder in Java. A is guilty of abetting murder."
+    }
+}

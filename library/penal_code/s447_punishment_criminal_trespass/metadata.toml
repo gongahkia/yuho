@@ -1,0 +1,18 @@
+[statute]
+section_number = "447"
+title = "Punishment for criminal trespass"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Punishment for the offence of criminal trespass under section 441."
+source = "Singapore Penal Code 1871, Section 447"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr447-#pr447-"

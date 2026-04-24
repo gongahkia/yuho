@@ -1,0 +1,18 @@
+[statute]
+section_number = "419"
+title = "Punishment for cheating by personation"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Punishment for the offence of cheating by personation under section 416."
+source = "Singapore Penal Code 1871, Section 419"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr419-#pr419-"

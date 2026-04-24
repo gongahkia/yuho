@@ -1,0 +1,16 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr74-#pr74-
+// Singapore Penal Code Section 74
+
+/// @amendment [Act 31 of 2019 wef 01/11/2022]
+/// @amendment [15/2019]
+/// @amendment [Act 23 of 2021 wef 01/11/2022]
+/// @amendment [†Updated to be consistent with the 2020 Revised Edition]
+
+statute 74 "Enhanced penalties for racially or religiously aggravated offences" effective 1872-01-01 {
+    definitions {
+        rule := "Where a person is convicted of a specified offence that is racially or religiously aggravated, the court may sentence up to 2 times the maximum punishment otherwise imposable.";
+        aggravation_test := "An offence is racially or religiously aggravated as defined in subsection (4).";
+    }
+}

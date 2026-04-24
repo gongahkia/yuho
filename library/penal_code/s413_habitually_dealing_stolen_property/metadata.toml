@@ -1,0 +1,18 @@
+[statute]
+section_number = "413"
+title = "Habitually dealing in stolen property"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Habitually receiving or dealing in stolen property or property obtained through offences involving fraud or dishonesty."
+source = "Singapore Penal Code 1871, Section 413"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr413-#pr413-"

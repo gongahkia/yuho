@@ -1,0 +1,45 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr387-#pr387-
+// Singapore Penal Code Section 387 - Putting person in fear of death or of grievous hurt in order to commit extortion
+// Yuho v5 Syntax
+
+referencing penal_code/s383_extortion
+
+struct S387Case {
+    string accused,
+    string victim,
+    bool extortionIntent,
+    bool fearOfDeathOrGrievousHurt,
+}
+
+fn s387_applies(bool extortionIntent, bool gravFear) : bool {
+    match {
+        case TRUE if extortionIntent == FALSE := consequence FALSE;
+        case TRUE if gravFear == FALSE := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
+
+statute 387 "Putting person in fear of death or of grievous hurt in order to commit extortion" effective 1872-01-01 {
+    definitions {
+        extortion := "As defined under section 383";
+        grievous_hurt := "Hurt of the kinds specified under section 320";
+    }
+
+    elements {
+        /// purpose is to commit extortion
+        mens_rea extortion_purpose := "Acting in order to commit extortion" burden prosecution beyond_reasonable_doubt;
+        /// puts or attempts to put a person in fear of death or grievous hurt
+        actus_reus aggravated_threat := "Puts or attempts to put any person in fear of death or grievous hurt to that person or another";
+    }
+
+    penalty {
+        imprisonment := 2 years .. 7 years;
+        caning := 1 .. 24 strokes;
+    }
+
+    illustration example1 {
+        "A threatens to shoot B unless B agrees to hand over his watch. Whether or not B complies, A has committed the offence under s387."
+    }
+}

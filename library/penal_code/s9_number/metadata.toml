@@ -1,0 +1,18 @@
+[statute]
+section_number = "9"
+title = "Number"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Singular words include the plural and vice versa unless the context indicates otherwise."
+source = "Singapore Penal Code 1871, Section 9"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr9-#pr9-"

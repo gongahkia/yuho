@@ -1,0 +1,20 @@
+// Test file for s340
+// Yuho v5 Syntax
+
+referencing penal_code/s340_wrongful_confinement
+
+struct S340CaseTest {
+    bool criteriaMet,
+}
+
+S340CaseTest matches := S340CaseTest {
+    criteriaMet := TRUE,
+}
+
+assert s340_matches(matches.criteriaMet) == TRUE
+
+S340CaseTest nomatch := S340CaseTest {
+    criteriaMet := FALSE,
+}
+
+assert s340_matches(nomatch.criteriaMet) == FALSE

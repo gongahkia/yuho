@@ -1,0 +1,46 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr224-#pr224-
+// Singapore Penal Code Section 224 - Resistance or obstruction by a person to his lawful apprehension
+// Yuho v5 Syntax
+
+struct S224Case {
+    string accused,
+    bool intentionallyResistsOrEscapes,
+    bool lawfulApprehensionOrCustody,
+}
+fn s224_applies(bool intentionallyResistsOrEscapes, bool lawfulApprehensionOrCustody) : bool {
+    match {
+        case TRUE if intentionallyResistsOrEscapes == FALSE := consequence FALSE;
+        case TRUE if lawfulApprehensionOrCustody == FALSE := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
+statute 224 "Resistance or obstruction by a person to his lawful apprehension" effective 1872-01-01 {
+    definitions {
+        lawful_apprehension := "Apprehension pursuant to a valid charge or conviction";
+        illegal_obstruction := "Any obstruction not authorised by law";
+    }
+
+    elements {
+        all_of {
+            circumstance lawful_basis := "Accused is being lawfully apprehended or lawfully detained for an offence charged or of which convicted";
+            any_of {
+                actus_reus resist := "Offers resistance or illegal obstruction to lawful apprehension";
+                actus_reus escape := "Escapes or attempts to escape from lawful custody";
+            }
+            mens_rea intent := "Intentionally";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 years .. 2 years;
+        fine := $0.00 .. $20,000.00;
+    }
+
+    illustration example1 {
+        "A, lawfully charged with theft, intentionally fights off a police officer attempting arrest. A commits an offence under s224."
+    }
+
+    /// Explanation: punishment under this section is in addition to any punishment for the underlying charged or convicted offence.
+}

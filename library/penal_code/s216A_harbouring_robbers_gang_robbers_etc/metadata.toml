@@ -1,0 +1,19 @@
+[statute]
+section_number = "216A"
+title = "Harbouring robbers or gang-robbers, etc."
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Harbouring robbers or gang-robbers with intent to facilitate the offence or screen the offenders; robbery may be committed within or outside Singapore."
+source = "Singapore Penal Code 1871, Section 216A"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr216A-#pr216A-"
+disclaimer = "Educational purposes only. Cross-reference with official SSO text."

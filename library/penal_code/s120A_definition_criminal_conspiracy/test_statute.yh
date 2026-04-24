@@ -1,0 +1,21 @@
+// Test file for s120A
+// Yuho v5 Syntax
+
+referencing penal_code/s120A_definition_criminal_conspiracy
+
+struct S120ATest {
+    bool agreementExists,
+    bool agreementToCommitOrCauseOffence,
+}
+
+S120ATest conspiracy := S120ATest {
+    agreementExists := TRUE,
+    agreementToCommitOrCauseOffence := TRUE,
+}
+assert is_criminal_conspiracy(conspiracy.agreementExists, conspiracy.agreementToCommitOrCauseOffence) == TRUE
+
+S120ATest lawfulAgreement := S120ATest {
+    agreementExists := TRUE,
+    agreementToCommitOrCauseOffence := FALSE,
+}
+assert is_criminal_conspiracy(lawfulAgreement.agreementExists, lawfulAgreement.agreementToCommitOrCauseOffence) == FALSE

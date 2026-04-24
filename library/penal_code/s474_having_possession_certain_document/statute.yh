@@ -1,0 +1,36 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr474-#pr474-
+// Singapore Penal Code Section 474 - Having possession of certain document or electronic record known to be forged, with intent to use it as genuine
+// Yuho v5 Syntax
+
+struct PossessionForgedDocumentCase {
+    string accused,
+    bool elementsSatisfied,
+}
+
+fn is_liable(bool elementsSatisfied) : bool {
+    match {
+        case TRUE if elementsSatisfied == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 474 "Having possession of certain document or electronic record known to be forged, with intent to use it as genuine" effective 1872-01-01 {
+    definitions {
+        forged_document := "As defined in section 470";
+    }
+
+    elements {
+        all_of {
+            actus_reus possesses_forged := "Has in possession any document or electronic record";
+            mens_rea knows_forged := "Knowing the document or electronic record to be forged";
+            mens_rea intent_use_as_genuine := "Intending that it shall fraudulently or dishonestly be used as genuine";
+            circumstance described_in_s466_or_s467 := "Document is of a kind described in section 466 or 467";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 15 years;
+    }
+}

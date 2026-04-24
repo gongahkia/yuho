@@ -1,0 +1,27 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr92-#pr92-
+// Singapore Penal Code Section 92
+
+/// @amendment [ Deleted by Act 51 of 2007 ]
+
+statute 92 "Act done in good faith for the benefit of a person without consent" effective 1872-01-01 {
+    definitions {
+        rule := "Nothing is an offence by reason of any harm which it may cause to a person for whose benefit it is done in good faith, even without that person's consent, if the circumstances are such that it is impossible for that person to signify consent, or if that person is incapable of giving consent and has no guardian or other person in lawful charge from whom it is possible to obtain consent in time for the thing to be done with benefit.";
+        provisos := "Subject to provisos that the exception does not extend to intentional causing of death, acts known likely to cause death other than to prevent death or grievous hurt, voluntary causing of hurt unless intended to prevent death or hurt, or abetment of offences.";
+    }
+
+    /// Explanation .—Mere pecuniary benefit is not benefit within the meaning of sections 88, 89 and 92.
+
+    illustration example_a {
+        "( a ) Z is thrown from his horse, and is insensible. A , a surgeon, finds that Z requires to be trepanned. A , not intending Z ’s death, but in good faith, for Z ’s benefit, performs the trepan before Z recovers his power of judging for himself. A has committed no offence."
+    }
+
+    illustration example_c {
+        "( c ) A , a surgeon, sees a child suffer an accident which is likely to prove fatal unless an operation is immediately performed. There is no time to apply to the child’s guardian. A performs the operation in spite of the entreaties of the child, intending, in good faith, the child’s benefit. A has committed no offence."
+    }
+
+    illustration example_d {
+        "( d ) A is in a house which is on fire, with Z , a child. People below hold out a blanket. A drops the child from the house‑top, knowing it to be likely that the fall may kill the child, but not intending to kill the child, and intending in good faith, the child’s benefit. Here, even if the child is killed by the fall, A has committed no offence."
+    }
+}

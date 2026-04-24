@@ -1,0 +1,18 @@
+[statute]
+section_number = "329"
+title = "Voluntarily causing grievous hurt to extort property, or to constrain to an illegal act"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Voluntarily causing grievous hurt to extort property or constrain an illegal act."
+source = "Singapore Penal Code 1871, Section 329"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr329-#pr329-"

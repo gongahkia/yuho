@@ -1,0 +1,38 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr102-#pr102-
+// Singapore Penal Code Section 102 - When right of private defence of body extends to causing death
+/// @amendment [Act 23 of 2021 wef 01/03/2022]
+/// @amendment [15/2019]
+
+statute 102 "When right of private defence of body extends to causing death" effective 2020-01-01 {
+    definitions {
+        extension := "Right of private defence of body extends to voluntary causing of death";
+        restrictions := "Subject to restrictions in sections 98 and 106A";
+        rape := "As described in section 375";
+        penile_penetration := "Penile penetration of vagina, anus or mouth as described in section 376(2)";
+    }
+
+    elements {
+        all_of {
+            /// the defender must be exercising a valid right of private defence of body
+            circumstance exerciseOfRight := "Exercise of right of private defence of body under section 97";
+            /// restrictions in ss 98 and 106A must not bar the right
+            circumstance restrictions := "Restrictions in sections 98 and 106A do not apply";
+            any_of {
+                /// (a) assault giving reasonable belief of death
+                circumstance limb_a := "Assault where defender reasonably believes death will otherwise be the consequence";
+                /// (b) assault giving reasonable belief of grievous hurt
+                circumstance limb_b := "Assault where defender reasonably believes grievous hurt will otherwise be the consequence";
+                /// (c) assault with intention to commit rape (s375)
+                circumstance limb_c := "Assault done with the intention of committing rape under section 375";
+                /// (d) assault with intention to cause penile penetration (s376(2))
+                circumstance limb_d := "Assault done with the intention of causing penile penetration under section 376(2)";
+                /// (e) assault with intention of kidnapping or abducting
+                circumstance limb_e := "Assault done with the intention of kidnapping or abducting";
+                /// (f) assault with intention of wrongful confinement preventing recourse to public authority
+                circumstance limb_f := "Assault done with the intention of wrongfully confining under circumstances preventing recourse to a public authority";
+            }
+        }
+    }
+}

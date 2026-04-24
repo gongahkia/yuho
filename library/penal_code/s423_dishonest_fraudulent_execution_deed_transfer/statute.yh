@@ -1,0 +1,44 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr423-#pr423-
+// Singapore Penal Code Section 423 - Dishonest or fraudulent execution of deed of transfer containing a false statement of consideration
+
+statute 423 "Dishonest or fraudulent execution of deed of transfer containing a false statement of consideration" effective 1872-01-01 {
+    definitions {
+        deed := "A deed or instrument purporting to transfer or subject to charge any property";
+        dishonestly := "As defined in section 24";
+        fraudulently := "As defined in section 25";
+    }
+
+    elements {
+        all_of {
+            any_of {
+                /// signing
+                actus_reus sign := "Signs the deed or instrument";
+                /// executing
+                actus_reus execute := "Executes the deed or instrument";
+                /// becoming a party
+                actus_reus become_party := "Becomes a party to the deed or instrument";
+            }
+            /// deed concerns transfer or charge over property
+            circumstance deed_on_property := "Deed purports to transfer property or subject property to a charge";
+            any_of {
+                /// false statement of consideration
+                circumstance false_consideration := "Deed contains a false statement relating to the consideration";
+                /// false statement of beneficiary
+                circumstance false_beneficiary := "Deed contains a false statement relating to the person for whose benefit the deed is really intended";
+            }
+            any_of {
+                /// dishonest state of mind
+                mens_rea dishonest := "Acts dishonestly";
+                /// fraudulent state of mind
+                mens_rea fraudulent := "Acts fraudulently";
+            }
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 3 years;
+        fine := $0.00 .. $10,000.00;
+    }
+}

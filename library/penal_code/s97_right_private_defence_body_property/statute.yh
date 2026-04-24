@@ -1,0 +1,13 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr97-#pr97-
+// Singapore Penal Code Section 97
+
+/// @amendment [15/2019]
+
+statute 97 "Right of private defence of the body and of property" effective 1872-01-01 {
+    definitions {
+        body_defence := "Every person has a right, subject to the restrictions in sections 98 and 106A, to defend his own body, and the body of any other person, against any offence affecting the human body.";
+        property_defence := "Every person has a right, subject to the restrictions in sections 98 and 106A, to defend the property, movable or immovable, of himself or of any other person, against any act which is an offence falling under theft, robbery, mischief or criminal trespass, or which is an attempt to commit such an offence.";
+    }
+}

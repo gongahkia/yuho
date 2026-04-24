@@ -1,0 +1,23 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr366-#pr366-
+// Singapore Penal Code Section 366
+
+statute 366 "Kidnapping or abducting a woman to compel her marriage, etc." effective 1872-01-01 {
+    definitions {
+        compel_marriage := "Compelling a woman to marry against her will, or forcing or seducing to illicit intercourse";
+    }
+
+    elements {
+        /// kidnaps or abducts a woman
+        actus_reus kidnap_or_abduct_woman := "Kidnaps or abducts any woman";
+        /// intent to compel marriage, illicit intercourse, or to force or seduce to illicit intercourse
+        mens_rea intent_compel_marriage := "With intent to compel marriage against will, or to force or seduce to illicit intercourse, or knowing it likely she will be so compelled, forced or seduced";
+    }
+
+    penalty {
+        imprisonment := 0 years .. 10 years;
+        fine := $0.00 .. $10,000.00;
+    }
+
+}

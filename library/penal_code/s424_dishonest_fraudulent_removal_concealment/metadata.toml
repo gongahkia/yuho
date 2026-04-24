@@ -1,0 +1,18 @@
+[statute]
+section_number = "424"
+title = "Dishonest or fraudulent removal or concealment of property or release of claim"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Dishonest or fraudulent concealment or removal of property or release of a claim."
+source = "Singapore Penal Code 1871, Section 424"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr424-#pr424-"

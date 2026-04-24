@@ -1,0 +1,18 @@
+[statute]
+section_number = "389"
+title = "Putting person in fear of accusation of offence, in order to commit extortion"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Putting or attempting to put a person in fear of accusation of a serious offence in order to commit extortion is punishable with up to 10 years imprisonment, and also liable to fine or caning."
+source = "Singapore Penal Code 1871, Section 389"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr389-#pr389-"

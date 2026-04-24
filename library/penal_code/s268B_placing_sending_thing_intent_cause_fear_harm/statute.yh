@@ -1,0 +1,49 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr268B-#pr268B-
+// Singapore Penal Code Section 268B - Placing or sending thing with intent to cause fear of harm
+// Yuho v5 Syntax
+
+struct S268BCase {
+    string accused,
+    bool placesOrSendsThing,
+    bool withoutReasonableExcuse,
+    bool intentToInduceBelief,
+}
+fn s268B_applies(bool placesOrSendsThing, bool withoutReasonableExcuse, bool intentToInduceBelief) : bool {
+    match {
+        case TRUE if placesOrSendsThing == FALSE := consequence FALSE;
+        case TRUE if withoutReasonableExcuse == FALSE := consequence FALSE;
+        case TRUE if intentToInduceBelief == FALSE := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
+/// @amendment [15/2019]
+statute 268B "Placing or sending thing with intent to cause fear of harm" effective 1872-01-01 {
+    definitions {
+        harmful_belief := "Belief that the thing placed or sent is likely to cause hurt or damage to property";
+        reasonable_excuse := "A lawful justification for placing or sending the thing";
+    }
+
+    elements {
+        all_of {
+            any_of {
+                actus_reus places := "Places any thing in any place, location, conveyance or means of transportation";
+                actus_reus sends := "Sends any thing from one place to another by post, courier or any other means";
+            }
+            circumstance no_excuse := "Without reasonable excuse";
+            mens_rea intent := "Intending to induce in one or more other persons a belief that the thing is likely to cause hurt or damage to property";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 years .. 7 years;
+        fine := $0.00 .. $50,000.00;
+    }
+
+    illustration example1 {
+        "A leaves a suspicious package at a train station intending commuters to believe it is a bomb. A commits an offence under s268B even if no one specific is targeted."
+    }
+
+    // sub-(2): it is not necessary for A to have any particular person in mind as being induced to have the belief
+}

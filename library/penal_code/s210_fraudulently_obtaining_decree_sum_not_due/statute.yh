@@ -1,0 +1,43 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr210-#pr210-
+/// @amendment [Act 25 of 2021 wef 01/04/2022]
+// Singapore Penal Code Section 210 - Fraudulently obtaining a decree for a sum not due
+// Yuho v5 Syntax
+
+struct S210Case {
+    string accused,
+    bool fraudulentlyObtains,
+    bool decreeAgainstAnother,
+    bool sumNotDueOrSatisfied,
+}
+
+fn evaluate_s210(bool fraudulentlyObtains, bool decreeAgainstAnother, bool sumNotDueOrSatisfied) : string {
+    match {
+        case TRUE if fraudulentlyObtains == FALSE := consequence "Not liable - not fraudulent";
+        case TRUE if decreeAgainstAnother == FALSE := consequence "Not liable - no decree obtained";
+        case TRUE if sumNotDueOrSatisfied == FALSE := consequence "Not liable - sum genuinely due";
+        case _ := consequence "Liable under s210";
+    }
+}
+
+statute 210 "Fraudulently obtaining a decree for a sum not due" effective 1872-01-01 {
+    definitions {
+        decree := "A judgment or order of a court of justice";
+        fraudulently := "As defined in section 25";
+    }
+
+    elements {
+        all_of {
+            /// actus reus: fraudulently obtaining a decree
+            actus_reus obtain := "Fraudulently obtains a decree or order against any person for a sum not due, for a larger sum than is due, or for any property or interest not entitled, or fraudulently causes a decree to be executed or enforced after satisfaction, or fraudulently suffers or permits any such act to be done in his name";
+            /// mens rea: fraud
+            mens_rea fraud := "With fraudulent intent";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 years .. 2 years;
+        fine := $0.00 .. $5,000.00;
+    }
+}

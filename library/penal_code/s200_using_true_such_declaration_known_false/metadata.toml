@@ -1,0 +1,19 @@
+[statute]
+section_number = "200"
+title = "Using as true any such declaration known to be false"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Corruptly using as true a s199 declaration known to be false in a material point; punished as if giving false evidence."
+source = "Singapore Penal Code 1871, Section 200"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr200-#pr200-"
+disclaimer = "Educational purposes only. Cross-reference with official SSO text."

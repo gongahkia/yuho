@@ -1,0 +1,24 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr147-#pr147-
+// Singapore Penal Code Section 147 - Punishment for rioting
+
+referencing penal_code/s146_force_used_one_member_prosecution_common
+
+statute 147 "Punishment for rioting" effective 1872-01-01 {
+    definitions {
+        rioting := "As defined under section 146";
+    }
+
+    elements {
+        all_of {
+            /// circumstance - guilty of rioting under s146
+            circumstance guilty_of_rioting := "Being guilty of rioting within the meaning of section 146";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 years .. 7 years;
+        caning := 0 .. 24 strokes;
+    }
+}

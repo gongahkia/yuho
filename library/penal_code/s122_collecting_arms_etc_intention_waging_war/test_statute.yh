@@ -1,0 +1,24 @@
+// Test file for s122
+// Yuho v5 Syntax
+
+referencing penal_code/s122_collecting_arms_etc_intention_waging_war
+
+struct S122Test {
+    bool collectsMenArmsOrAmmunition,
+    bool otherwisePreparesToWageWar,
+    bool intendsToWageOrBePreparedToWageWar,
+}
+
+S122Test qualifying := S122Test {
+    collectsMenArmsOrAmmunition := TRUE,
+    otherwisePreparesToWageWar := FALSE,
+    intendsToWageOrBePreparedToWageWar := TRUE,
+}
+assert s122_applies(qualifying.collectsMenArmsOrAmmunition, qualifying.otherwisePreparesToWageWar, qualifying.intendsToWageOrBePreparedToWageWar) == TRUE
+
+S122Test noIntent := S122Test {
+    collectsMenArmsOrAmmunition := TRUE,
+    otherwisePreparesToWageWar := FALSE,
+    intendsToWageOrBePreparedToWageWar := FALSE,
+}
+assert s122_applies(noIntent.collectsMenArmsOrAmmunition, noIntent.otherwisePreparesToWageWar, noIntent.intendsToWageOrBePreparedToWageWar) == FALSE

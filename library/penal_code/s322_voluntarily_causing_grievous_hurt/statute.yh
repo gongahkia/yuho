@@ -1,0 +1,37 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr322-#pr322-
+// Singapore Penal Code Section 322 -- Voluntarily causing grievous hurt
+// Yuho v5 Syntax
+
+struct S322Case {
+    string actor,
+    bool criteriaMet,
+}
+
+fn s322_matches(bool criteriaMet) : bool {
+    match {
+        case TRUE if criteriaMet == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+
+statute 322 "Voluntarily causing grievous hurt" effective 1872-01-01 {
+    definitions {
+        term_summary := "Definition of voluntarily causing grievous hurt.";
+    }
+
+    elements {
+        /// statutory criteria for the defined term
+        circumstance criteria := "Statutory criteria for the defined term are satisfied";
+    }
+
+    penalty {
+        fine := $0.00 .. $1,000.00;
+    }
+
+    illustration example1 {
+        "The conduct of A matches the statutory criteria defined under section 322."
+    }
+}

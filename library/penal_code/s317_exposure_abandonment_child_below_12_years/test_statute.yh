@@ -1,0 +1,23 @@
+// Test file for s317
+// Yuho v5 Syntax
+
+referencing penal_code/s317_exposure_abandonment_child_below_12_years
+
+struct S317CaseTest {
+    bool actusReus,
+    bool mensRea,
+}
+
+S317CaseTest satisfied := S317CaseTest {
+    actusReus := TRUE,
+    mensRea := TRUE,
+}
+
+assert s317_applies(satisfied.actusReus, satisfied.mensRea) == TRUE
+
+S317CaseTest missingMens := S317CaseTest {
+    actusReus := TRUE,
+    mensRea := FALSE,
+}
+
+assert s317_applies(missingMens.actusReus, missingMens.mensRea) == FALSE

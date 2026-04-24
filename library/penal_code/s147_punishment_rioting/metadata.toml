@@ -1,0 +1,18 @@
+[statute]
+section_number = "147"
+title = "Punishment for rioting"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Prescribes punishment for rioting under section 146: imprisonment up to 7 years and liability to caning."
+source = "Singapore Penal Code 1871, Section 147"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr147-#pr147-"

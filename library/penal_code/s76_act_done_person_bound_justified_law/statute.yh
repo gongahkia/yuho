@@ -1,0 +1,45 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr76-#pr76-
+// Singapore Penal Code Section 76 - Act done by person bound, or justified by law
+// Yuho v5 Syntax
+
+struct BoundJustifiedCase {
+    string accused,
+    string action,
+    bool boundByLaw,
+    bool justifiedByLaw,
+}
+
+fn is_defence_available(bool boundByLaw, bool justifiedByLaw) : bool {
+    match {
+        case TRUE if boundByLaw == TRUE := consequence TRUE;
+        case TRUE if justifiedByLaw == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+/// @amendment [15/2019]
+statute 76 "Act done by person bound, or justified by law" effective 1872-01-01 {
+    definitions {
+        bound_by_law := "Required by law to perform the act";
+        justified_by_law := "Authorised by law to perform the act";
+    }
+
+    elements {
+        any_of {
+            /// defence applies when the actor is legally bound
+            circumstance bound := "Person is bound by law to do the act";
+            /// or when the actor is legally justified
+            circumstance justified := "Person is justified by law in doing the act";
+        }
+    }
+
+    illustration example_a {
+        "A, a soldier, fires on a mob by the order of his superior officer, in conformity with the commands of the law. A has committed no offence."
+    }
+
+    illustration example_b {
+        "A sees Z repeatedly stabbing Y with a knife on a public road. Y dies. A, in the exercise of the power which the law gives to all persons apprehending murderers in the act, forcefully seizes Z and brings Z to the nearest police station. A has committed no offence though it may turn out that Z was acting in self-defence."
+    }
+}

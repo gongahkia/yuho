@@ -1,0 +1,18 @@
+[statute]
+section_number = "427"
+title = "Punishment for committing mischief causing disruption to key service, etc."
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Punishment for mischief causing disruption to key services or to government functions."
+source = "Singapore Penal Code 1871, Section 427"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr427-#pr427-"

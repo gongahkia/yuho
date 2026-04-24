@@ -1,0 +1,41 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr283-#pr283-
+// Singapore Penal Code Section 283 - Danger or obstruction in a public way or navigation
+// Yuho v5 Syntax
+
+struct DangerObstructionCase { string accused, bool actOrOmission, bool causedDangerObstructionInjury, bool publicWayOrNavigation, }
+
+fn is_offence(bool act, bool caused, bool public_way) : bool {
+    match {
+        case TRUE if act == FALSE := consequence FALSE;
+        case TRUE if caused == FALSE := consequence FALSE;
+        case TRUE if public_way == FALSE := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
+
+statute 283 "Danger or obstruction in a public way or navigation" effective 1872-01-01 {
+    definitions {
+        public_way := "A public thoroughfare or line of navigation";
+    }
+
+    elements {
+        all_of {
+            any_of {
+                /// positive act
+                actus_reus do_act := "Doing any act";
+                /// omission regarding property
+                actus_reus omit := "Omitting to take order with property in possession or under charge";
+            }
+            /// result -- causing danger, obstruction or injury
+            circumstance caused := "Causing danger, obstruction or injury to any person";
+            /// circumstance -- location
+            circumstance location := "The danger, obstruction or injury is in a public way or public line of navigation";
+        }
+    }
+
+    penalty {
+        fine := $0.00 .. $1,000.00;
+    }
+}

@@ -1,0 +1,15 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr85-#pr85-
+// Singapore Penal Code Section 85
+
+/// @amendment [Act 23 of 2021 wef 01/03/2022]
+/// @amendment [15/2019]
+
+statute 85 "Intoxication when a defence" effective 1872-01-01 {
+    definitions {
+        rule := "Except as provided in this section and in section 86, intoxication shall not constitute a defence to any criminal charge.";
+        involuntary_or_unaware := "Intoxication is a defence if by reason of the intoxication the person charged, at the time of the act or omission, was in a state specified in subsection (2) and (where applicable) did not know the nature of the act or that it was wrong.";
+        unsoundness_of_mind := "Intoxication is a defence if by reason of the intoxication the person charged was of unsound mind as determined in accordance with section 84.";
+    }
+}

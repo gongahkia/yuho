@@ -1,0 +1,24 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BA-#pr377BA-
+/// @section 377BA
+// Singapore Penal Code Section 377BA
+
+statute 377.2 "Word or gesture intended to insult modesty of any person" effective 1872-01-01 {
+    definitions {
+        insult_modesty := "Uttering, making, gesturing or exhibiting anything to insult modesty";
+    }
+
+    elements {
+        /// word, sound, gesture or object intended to insult modesty
+        actus_reus insult_modesty := "Utters a word, makes a sound or gesture, or exhibits an object, intending to insult the modesty of any person";
+        /// intent that word, sound or gesture be heard or seen
+        mens_rea intent_insult_modesty := "Intending that such word, sound or gesture be heard or seen by that person, or that such object be seen";
+    }
+
+    penalty {
+        imprisonment := 0 years .. 1 years;
+        fine := $0.00 .. $5,000.00;
+    }
+
+}

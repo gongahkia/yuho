@@ -1,0 +1,40 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr421-#pr421-
+// Singapore Penal Code Section 421 - Dishonest or fraudulent removal or concealment of property to prevent distribution among creditors
+
+statute 421 "Dishonest or fraudulent removal or concealment of property to prevent distribution among creditors" effective 1872-01-01 {
+    definitions {
+        dishonestly := "As defined in section 24";
+        fraudulently := "As defined in section 25";
+        adequate_consideration := "Consideration reasonably equivalent to the value of the property";
+    }
+
+    elements {
+        all_of {
+            any_of {
+                /// removal
+                actus_reus remove := "Dishonestly or fraudulently removes property";
+                /// concealment
+                actus_reus conceal := "Dishonestly or fraudulently conceals property";
+                /// delivery to another
+                actus_reus deliver := "Dishonestly or fraudulently delivers property to another";
+                /// transfer to another
+                actus_reus transfer := "Dishonestly or fraudulently transfers or causes property to be transferred to another";
+            }
+            /// without adequate consideration
+            circumstance no_consideration := "The transaction occurs without adequate consideration";
+            any_of {
+                /// intent to prevent creditor distribution
+                mens_rea intend_prevent := "Intending to prevent the distribution of the property according to law among creditors";
+                /// or knowledge that prevention is likely
+                mens_rea know_likely := "Knowing it to be likely that the act will prevent such distribution";
+            }
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 3 years;
+        fine := $0.00 .. $10,000.00;
+    }
+}

@@ -1,0 +1,25 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr376F-#pr376F-
+/// @section 376F
+// Singapore Penal Code Section 376F
+
+statute 376.12 "Procurement of sexual activity with person with mental disability" effective 1872-01-01 {
+    definitions {
+        mental_disability := "A mental impairment as defined in section 377C";
+    }
+
+    elements {
+        /// procure sexual activity with a person with mental disability
+        actus_reus procure_sexual_activity := "Procures a person with mental disability to engage in sexual activity";
+        /// the other person has a mental disability
+        circumstance mental_disability := "The other person is a person with mental disability";
+        /// procurement is via inducement, threat or deception
+        mens_rea exploitation := "The procurement is obtained through inducement, threat or deception";
+    }
+
+    penalty {
+        imprisonment := 0 years .. 10 years;
+    }
+
+}

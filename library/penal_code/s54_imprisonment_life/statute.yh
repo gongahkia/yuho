@@ -1,0 +1,11 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr54-#pr54-
+// Singapore Penal Code Section 54 - Imprisonment for life
+// Interpretation provision defining "imprisonment for life"
+
+statute 54 "Imprisonment for life" effective 1872-01-01 {
+    definitions {
+        imprisonment_for_life := "In relation to any prescribed punishment under this Code or any other written law, means imprisonment for the duration of a person's natural life";
+    }
+}

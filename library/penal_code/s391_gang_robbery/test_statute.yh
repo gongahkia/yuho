@@ -1,0 +1,26 @@
+// Test file for s391_gang_robbery
+// Yuho v5 Syntax
+
+referencing penal_code/s391_gang_robbery
+
+struct S391TestCase {
+    int totalPersons,
+    bool robberyOrAttempt,
+    bool conjointConduct,
+}
+
+S391TestCase fiveConjoint := S391TestCase {
+    totalPersons := 5,
+    robberyOrAttempt := TRUE,
+    conjointConduct := TRUE,
+}
+
+assert is_gang_robbery(fiveConjoint.totalPersons, fiveConjoint.robberyOrAttempt, fiveConjoint.conjointConduct) == TRUE
+
+S391TestCase fourOnly := S391TestCase {
+    totalPersons := 4,
+    robberyOrAttempt := TRUE,
+    conjointConduct := TRUE,
+}
+
+assert is_gang_robbery(fourOnly.totalPersons, fourOnly.robberyOrAttempt, fourOnly.conjointConduct) == FALSE

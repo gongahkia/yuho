@@ -1,0 +1,43 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr107-#pr107-
+/// @amendment [15/2019]
+// Singapore Penal Code Section 107 - Abetment of the doing of a thing
+// Yuho v5 Syntax
+
+struct AbetmentCase {
+    string abettor,
+    string principal,
+    string mode,
+    bool actOrOmissionInPursuance,
+}
+
+fn is_abetment(string mode, bool actOrOmissionInPursuance) : bool {
+    match {
+        case TRUE if mode == "instigation" := consequence TRUE;
+        case TRUE if mode == "conspiracy" && actOrOmissionInPursuance == TRUE := consequence TRUE;
+        case TRUE if mode == "intentional_aid" := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 107 "Abetment of the doing of a thing" effective 2020-01-01 {
+    definitions {
+        instigation := "Per Explanation 1: intentional misrepresentation or concealment of a material fact bound to be disclosed that voluntarily causes or procures a thing to be done";
+        conspiracy_in_abetment := "Engaging with one or more persons in a conspiracy for doing a thing where an act or illegal omission follows in pursuance";
+        intentional_aid := "Per Explanation 2: doing anything prior to or at the time of commission to facilitate an act, and thereby facilitating the commission";
+        impossibility_immaterial := "Per subsection (2): abetment may occur despite unknown facts that make doing of the thing impossible";
+    }
+
+    elements {
+        any_of {
+            actus_reus instigates := "Instigating any person to do that thing";
+            actus_reus conspires := "Engaging in conspiracy for doing that thing where act or illegal omission follows in pursuance";
+            actus_reus aids := "Intentionally aiding, by any act or illegal omission, the doing of that thing";
+        }
+    }
+
+    illustration example1 {
+        "A, a public officer, is authorised by a warrant to apprehend Z. B, knowing that fact and also that C is not Z, intentionally represents to A that C is Z, and thereby intentionally causes A to apprehend C. Here B abets by instigation the apprehension of C."
+    }
+}

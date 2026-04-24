@@ -1,0 +1,23 @@
+// Test file for s316
+// Yuho v5 Syntax
+
+referencing penal_code/s316_causing_death_quick_unborn_child_act
+
+struct S316CaseTest {
+    bool actusReus,
+    bool mensRea,
+}
+
+S316CaseTest satisfied := S316CaseTest {
+    actusReus := TRUE,
+    mensRea := TRUE,
+}
+
+assert s316_applies(satisfied.actusReus, satisfied.mensRea) == TRUE
+
+S316CaseTest missingMens := S316CaseTest {
+    actusReus := TRUE,
+    mensRea := FALSE,
+}
+
+assert s316_applies(missingMens.actusReus, missingMens.mensRea) == FALSE

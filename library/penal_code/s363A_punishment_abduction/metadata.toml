@@ -1,0 +1,18 @@
+[statute]
+section_number = "363A"
+title = "Punishment for abduction"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Punishment for abduction -- imprisonment and fine for any abduction offence."
+source = "Singapore Penal Code 1871, Section 363A"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr363A-#pr363A-"

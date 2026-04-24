@@ -1,0 +1,23 @@
+// Test file for s200_using_true_such_declaration_known_false
+// Yuho v5 Syntax
+
+referencing penal_code/s200_using_true_such_declaration_known_false
+
+struct S200TestCase {
+    bool corruptlyUsesDeclarationAsTrue,
+    bool knowsDeclarationFalseInMaterialPoint,
+}
+
+S200TestCase usingFalseDecl := S200TestCase {
+    corruptlyUsesDeclarationAsTrue := TRUE,
+    knowsDeclarationFalseInMaterialPoint := TRUE,
+}
+
+assert evaluate_s200(usingFalseDecl.corruptlyUsesDeclarationAsTrue, usingFalseDecl.knowsDeclarationFalseInMaterialPoint) == "Liable under s200"
+
+S200TestCase honestUse := S200TestCase {
+    corruptlyUsesDeclarationAsTrue := TRUE,
+    knowsDeclarationFalseInMaterialPoint := FALSE,
+}
+
+assert evaluate_s200(honestUse.corruptlyUsesDeclarationAsTrue, honestUse.knowsDeclarationFalseInMaterialPoint) == "Not liable - no knowledge of material falsity"

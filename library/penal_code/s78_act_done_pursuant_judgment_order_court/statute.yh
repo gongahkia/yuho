@@ -1,0 +1,40 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr78-#pr78-
+// Singapore Penal Code Section 78 - Act done pursuant to the judgment or order of a court of justice
+// Yuho v5 Syntax
+
+struct CourtOrderCase {
+    string accused,
+    bool pursuantToJudgment,
+    bool judgmentInForce,
+    bool goodFaithBelievedJurisdiction,
+}
+
+fn court_order_defence(bool pursuantToJudgment, bool judgmentInForce, bool goodFaithBelievedJurisdiction) : bool {
+    match {
+        case TRUE if pursuantToJudgment == FALSE := consequence FALSE;
+        case TRUE if judgmentInForce == FALSE := consequence FALSE;
+        case TRUE if goodFaithBelievedJurisdiction == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 78 "Act done pursuant to the judgment or order of a court of justice" effective 1872-01-01 {
+    definitions {
+        court_of_justice := "As defined under section 20";
+        judgment_in_force := "Judgment or order has not been set aside or reversed";
+        good_faith := "As defined under section 52";
+    }
+
+    elements {
+        all_of {
+            /// act must be done pursuant to or warranted by the judgment/order
+            actus_reus pursuant_act := "Act is done in pursuance of or warranted by the judgment or order of a court of justice";
+            /// judgment must still be in force
+            circumstance in_force := "Judgment or order remains in force at the time of the act";
+            /// jurisdictional defect is irrelevant if good faith belief exists
+            mens_rea good_faith_jurisdiction := "Person in good faith believes the court had jurisdiction to pass the judgment or order";
+        }
+    }
+}

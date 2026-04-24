@@ -1,0 +1,18 @@
+[statute]
+section_number = "438"
+title = "Punishment for the mischief described in section 437 when committed by fire or any explosive substance"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Punishment for section 437 mischief when committed by fire or any explosive substance."
+source = "Singapore Penal Code 1871, Section 438"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr438-#pr438-"

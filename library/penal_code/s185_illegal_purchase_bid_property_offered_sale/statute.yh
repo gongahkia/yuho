@@ -1,0 +1,32 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr185-#pr185-
+// Singapore Penal Code Section 185
+
+/// @amendment [15/2019]
+statute 185 "Illegal purchase or bid for property offered for sale by authority of public servant" effective 1872-01-01 {
+    definitions {
+        authorised_sale := "A sale of property held by the lawful authority of a public servant as such";
+        legal_incapacity := "A known legal incapacity of the person on whose account the bid or purchase is made, to purchase the property at that sale";
+    }
+
+    elements {
+        all_of {
+            /// sale held by lawful authority of public servant
+            circumstance authorised_sale := "Sale of property is held by the lawful authority of a public servant as such";
+            /// purchase or bid by accused
+            actus_reus purchase_or_bid := "Purchasing or bidding for property on account of himself or another at such sale";
+            any_of {
+                mens_rea knew_incapacity := "Knowing the person on whose account the bid or purchase is made is under a legal incapacity to purchase the property at that sale";
+                mens_rea no_intent_to_perform := "Bidding for the property not intending to perform the obligations under which he lays himself by such bidding";
+            }
+        }
+    }
+
+    penalty {
+        imprisonment := 0 months .. 1 months;
+        fine := $0.00 .. $10,000.00;
+    }
+
+    /// For individuals -- imprisonment up to 1 month, or fine up to $1,500, or both. For any other case -- fine up to $10,000.
+}

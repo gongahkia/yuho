@@ -1,0 +1,23 @@
+// Test file for s385_putting_person_fear_harm_order_commit
+// Yuho v5 Syntax
+
+referencing penal_code/s385_putting_person_fear_harm_order_commit
+
+struct S385TestCase {
+    bool extortionIntent,
+    bool putInFearOfHarm,
+}
+
+S385TestCase threat := S385TestCase {
+    extortionIntent := TRUE,
+    putInFearOfHarm := TRUE,
+}
+
+assert s385_applies(threat.extortionIntent, threat.putInFearOfHarm) == TRUE
+
+S385TestCase mereInsult := S385TestCase {
+    extortionIntent := FALSE,
+    putInFearOfHarm := TRUE,
+}
+
+assert s385_applies(mereInsult.extortionIntent, mereInsult.putInFearOfHarm) == FALSE

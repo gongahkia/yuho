@@ -1,0 +1,24 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr376H-#pr376H-
+/// @section 376H
+// Singapore Penal Code Section 376H
+
+statute 376.14 "Procurement of sexual activity by deception or false representation" effective 1872-01-01 {
+    definitions {
+        deception_false_representation := "Any false statement or conduct that induces consent or participation";
+    }
+
+    elements {
+        /// procure sexual activity by deception
+        actus_reus procure_by_deception := "Procures another person to engage in sexual activity";
+        /// by deception or false representation
+        mens_rea deception_or_false := "By deception or false representation made by or on behalf of that person";
+    }
+
+    penalty {
+        imprisonment := 0 years .. 10 years;
+        fine := $0.00 .. $10,000.00;
+    }
+
+}

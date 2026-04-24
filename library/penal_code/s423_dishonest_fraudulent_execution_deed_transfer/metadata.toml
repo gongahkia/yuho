@@ -1,0 +1,18 @@
+[statute]
+section_number = "423"
+title = "Dishonest or fraudulent execution of deed of transfer containing a false statement of consideration"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Dishonestly or fraudulently executing a deed of transfer containing a false statement of consideration or beneficiary."
+source = "Singapore Penal Code 1871, Section 423"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr423-#pr423-"

@@ -1,0 +1,26 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr146-#pr146-
+// Singapore Penal Code Section 146 - Force used by one member in prosecution of common object (defines "rioting")
+// Shape: interpretation/definition (punishment follows at s147)
+
+statute 146 "Force used by one member in prosecution of common object" effective 1872-01-01 {
+    definitions {
+        rioting := "The offence committed when force or violence is used by an unlawful assembly or by any member thereof, in prosecution of the common object of such assembly";
+        common_object := "The shared object of an unlawful assembly under section 141";
+        unlawful_assembly := "As defined under section 141";
+    }
+
+    elements {
+        all_of {
+            /// actus reus - force or violence used by the assembly or any member
+            actus_reus use_force := "Force or violence is used by an unlawful assembly or by any member thereof";
+            /// circumstance - linkage to the common object
+            circumstance in_prosecution := "The force or violence is used in prosecution of the common object of such assembly";
+            /// constructive imputation - every member is guilty of rioting
+            circumstance constructive_liability := "Every member of the assembly is guilty of the offence of rioting";
+        }
+    }
+
+    // punishment for rioting is prescribed by section 147
+}

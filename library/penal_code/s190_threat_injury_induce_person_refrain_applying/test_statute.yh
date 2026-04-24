@@ -1,0 +1,34 @@
+// Test file for s190_threat_injury_induce_person_refrain_applying
+// Yuho v5 Syntax
+
+referencing penal_code/s190_threat_injury_induce_person_refrain_applying
+
+struct S190TestCase {
+    bool holdsOutThreat,
+    bool purposeInduceRefrainApplication,
+    bool applicationIsForProtection,
+}
+
+S190TestCase intimidateVictim := S190TestCase {
+    holdsOutThreat := TRUE,
+    purposeInduceRefrainApplication := TRUE,
+    applicationIsForProtection := TRUE,
+}
+
+assert evaluate_s190(intimidateVictim.holdsOutThreat, intimidateVictim.purposeInduceRefrainApplication, intimidateVictim.applicationIsForProtection) == "Liable under s190"
+
+S190TestCase noThreat := S190TestCase {
+    holdsOutThreat := FALSE,
+    purposeInduceRefrainApplication := TRUE,
+    applicationIsForProtection := TRUE,
+}
+
+assert evaluate_s190(noThreat.holdsOutThreat, noThreat.purposeInduceRefrainApplication, noThreat.applicationIsForProtection) == "Not liable - no threat"
+
+S190TestCase wrongPurpose := S190TestCase {
+    holdsOutThreat := TRUE,
+    purposeInduceRefrainApplication := FALSE,
+    applicationIsForProtection := TRUE,
+}
+
+assert evaluate_s190(wrongPurpose.holdsOutThreat, wrongPurpose.purposeInduceRefrainApplication, wrongPurpose.applicationIsForProtection) == "Not liable - no intent to deter application"

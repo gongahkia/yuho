@@ -1,0 +1,13 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr5-#pr5-
+// Singapore Penal Code Section 5 - Certain laws not to be affected by this Code
+// Shape: scope / saving provision
+
+statute 5 "Certain laws not to be affected by this Code" effective 1872-01-01 {
+    definitions {
+        saving_rule := "Nothing in this Code is intended to repeal, vary, suspend, or affect any of the provisions of any Act for punishing mutiny and desertion of officers or servicemen in the Singapore Armed Forces, or of any other law for the time being in force";
+        preserved_military_law := "Acts for punishing mutiny and desertion of officers or servicemen in the Singapore Armed Forces";
+        preserved_other_law := "Any other law for the time being in force";
+    }
+}

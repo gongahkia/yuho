@@ -1,0 +1,18 @@
+[statute]
+section_number = "88"
+title = "Act not intended to cause death done by consent in good faith for the benefit of a person"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "An act not intended to cause death, done in good faith for the benefit of a consenting person, is excused even if it causes or is likely to cause harm."
+source = "Singapore Penal Code 1871, Section 88"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr88-#pr88-"

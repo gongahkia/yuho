@@ -1,0 +1,47 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr229-#pr229-
+// Singapore Penal Code Section 229 - Personation of an assessor
+// Yuho v5 Syntax
+
+struct S229Case {
+    string accused,
+    bool causedToBeReturnedOrSworn,
+    bool notEntitledByLaw,
+    bool knowinglyOrVoluntarily,
+}
+fn s229_applies(bool causedToBeReturnedOrSworn, bool notEntitledByLaw, bool knowinglyOrVoluntarily) : bool {
+    match {
+        case TRUE if causedToBeReturnedOrSworn == FALSE := consequence FALSE;
+        case TRUE if notEntitledByLaw == FALSE := consequence FALSE;
+        case TRUE if knowinglyOrVoluntarily == FALSE := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
+statute 229 "Personation of an assessor" effective 1872-01-01 {
+    definitions {
+        assessor := "Person empanelled to assist a court as an assessor";
+        personation := "Falsely assuming the identity of another";
+    }
+
+    elements {
+        all_of {
+            any_of {
+                actus_reus caused_to_be_returned := "By personation or otherwise, causes or suffers himself to be returned, empanelled, or sworn as an assessor";
+                actus_reus voluntary_service := "Voluntarily serves as an assessor knowing himself to have been returned, empanelled, or sworn contrary to law";
+            }
+            circumstance not_entitled := "Not entitled by law to be so returned, empanelled, or sworn";
+            mens_rea knowledge := "Knows he is not entitled, or knows the return was contrary to law";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 years .. 2 years;
+        fine := $0.00 .. $20,000.00;
+    }
+
+    illustration example1 {
+        "A impersonates B in order to sit as an assessor in a trial, knowing he is not entitled. A commits an offence under s229."
+    }
+
+}

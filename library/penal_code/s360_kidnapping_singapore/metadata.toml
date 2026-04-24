@@ -1,0 +1,18 @@
+[statute]
+section_number = "360"
+title = "Kidnapping from Singapore"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "A person who conveys another beyond Singapore without consent is said to kidnap from Singapore."
+source = "Singapore Penal Code 1871, Section 360"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr360-#pr360-"

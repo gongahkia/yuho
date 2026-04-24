@@ -1,0 +1,26 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr354A-#pr354A-
+/// @section 354A
+// Singapore Penal Code Section 354A
+
+statute 354.1 "Outraging modesty in certain circumstances" effective 1872-01-01 {
+    definitions {
+        voluntary_harm := "Voluntarily causing death, hurt, wrongful restraint, or fear thereof to facilitate a section 354 offence";
+    }
+
+    elements {
+        /// in order to commit or facilitate an offence under s354
+        circumstance predicate_offence := "In order to commit or facilitate a section 354 offence";
+        /// voluntary causation of death, hurt, wrongful restraint or fear thereof
+        actus_reus causes_harm := "Voluntarily causes or attempts to cause death, hurt, wrongful restraint, or fear of instant death, hurt or restraint";
+        /// the harm must be caused voluntarily
+        mens_rea voluntary := "Acts voluntarily";
+    }
+
+    penalty {
+        imprisonment := 2 years .. 10 years;
+        caning := 0 .. 24 strokes;
+    }
+
+}

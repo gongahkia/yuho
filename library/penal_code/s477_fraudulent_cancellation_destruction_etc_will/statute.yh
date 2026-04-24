@@ -1,0 +1,36 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr477-#pr477-
+// Singapore Penal Code Section 477 - Fraudulent cancellation, destruction, etc., of a will
+// Yuho v5 Syntax
+
+struct FraudulentCancellationWillCase {
+    string accused,
+    bool elementsSatisfied,
+}
+
+fn is_liable(bool elementsSatisfied) : bool {
+    match {
+        case TRUE if elementsSatisfied == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 477 "Fraudulent cancellation, destruction, etc., of a will" effective 1872-01-01 {
+    definitions {
+        will := "A testamentary document";
+        valuable_security := "As defined in section 30";
+    }
+
+    elements {
+        all_of {
+            actus_reus cancel_destroy_deface_or_secrete := "Cancels, destroys, defaces, secretes, or attempts such acts, or commits mischief in respect of a will or valuable security";
+            circumstance document_is_will_or_security := "The document is or purports to be a will, authority to adopt, or valuable security";
+            mens_rea fraudulent_dishonest_or_intent_damage := "Acts fraudulently or dishonestly, or with intent to cause damage or injury";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 15 years;
+    }
+}

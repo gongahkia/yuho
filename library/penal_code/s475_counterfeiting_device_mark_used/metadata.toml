@@ -1,0 +1,18 @@
+[statute]
+section_number = "475"
+title = "Counterfeiting a device or mark used for authenticating documents described in section 467, or possessing counterfeit marked material"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Whoever counterfeits upon or in the substance of any material any device or mark used for the purpose of authenticating any document described in section 467, intending that such device or mark shall be used for the purpose of giving the appearance of authenticity to any document then forged or thereafter to be forged on such material, or who with such intent has in his possession any material upon or in the substance of which any such device ..."
+source = "Singapore Penal Code 1871, Section 475"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr475-#pr475-"

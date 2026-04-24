@@ -1,0 +1,18 @@
+[statute]
+section_number = "317"
+title = "Exposure and abandonment of a child below 12 years of age by parent or person having care of it"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Exposing or leaving a child below 12 with intent to wholly abandon."
+source = "Singapore Penal Code 1871, Section 317"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr317-#pr317-"

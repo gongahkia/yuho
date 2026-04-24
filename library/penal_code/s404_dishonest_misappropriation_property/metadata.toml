@@ -1,0 +1,18 @@
+[statute]
+section_number = "404"
+title = "Dishonest misappropriation of property possessed by a deceased person at the time of his death"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Dishonestly misappropriating property known to have been in a deceased person's possession at time of death, before any legally entitled person took possession, is punishable with up to 3 years imprisonment and fine (up to 7 years if offender was the deceased's clerk or servant)."
+source = "Singapore Penal Code 1871, Section 404"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr404-#pr404-"

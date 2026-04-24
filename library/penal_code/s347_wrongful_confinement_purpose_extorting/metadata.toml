@@ -1,0 +1,18 @@
+[statute]
+section_number = "347"
+title = "Wrongful confinement for the purpose of extorting property or constraining to an illegal act"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Wrongful confinement to extort property or constrain to an illegal act."
+source = "Singapore Penal Code 1871, Section 347"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr347-#pr347-"

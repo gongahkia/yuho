@@ -1,0 +1,39 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr174-#pr174-
+// Singapore Penal Code Section 174
+
+/// @amendment [15/2019]
+/// @amendment [15/2019; 40/2019]
+/// @amendment [Act 25 of 2021 wef 01/04/2022]
+statute 174 "Failure to attend in obedience to order from public servant" effective 1872-01-01 {
+    definitions {
+        process := "A summons, notice, order or proclamation proceeding from a public servant legally competent to issue the same";
+    }
+
+    elements {
+        all_of {
+            /// accused is legally bound to attend
+            circumstance bound_to_attend := "Legally bound to attend in person or by an agent at a certain place and time in obedience to the process";
+            any_of {
+                actus_reus omission := "Intentionally omitting to attend at the place or time required";
+                actus_reus premature_departure := "Departing from the place where bound to attend before the time at which it is lawful to depart";
+            }
+        }
+    }
+
+    penalty {
+        imprisonment := 0 months .. 1 months;
+        fine := $0.00 .. $10,000.00;
+    }
+
+    illustration example_a {
+        "A, being legally bound to appear before the General Division of the High Court, in obedience to an order to attend court issuing from the General Division of the High Court, intentionally omits to appear. A has committed the offence defined in this section."
+    }
+
+    illustration example_b {
+        "A, being legally bound to appear before a Magistrate as a witness, in obedience to a summons issued by that Magistrate, intentionally omits to appear. A has committed the offence defined in this section."
+    }
+
+    /// For individuals -- imprisonment up to 1 month, or fine up to $1,500, or both. For any other case -- fine up to $10,000. Enhanced penalties apply where process is to attend court.
+}

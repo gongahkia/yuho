@@ -1,0 +1,24 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr426-#pr426-
+// Singapore Penal Code Section 426 - Punishment for committing mischief
+
+/// @amendment [15/2019]
+
+referencing penal_code/s425_mischief
+
+statute 426 "Punishment for committing mischief" effective 1872-01-01 {
+    definitions {
+        mischief := "As defined in section 425";
+    }
+
+    elements {
+        /// conviction for mischief under s425 is required
+        circumstance mischief_committed := "Mischief under section 425 is committed";
+    }
+
+    penalty {
+        imprisonment := 0 days .. 2 years;
+        fine := $0.00 .. $5,000.00;
+    }
+}

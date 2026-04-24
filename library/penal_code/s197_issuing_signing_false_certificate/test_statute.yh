@@ -1,0 +1,26 @@
+// Test file for s197_issuing_signing_false_certificate
+// Yuho v5 Syntax
+
+referencing penal_code/s197_issuing_signing_false_certificate
+
+struct S197TestCase {
+    bool issuesOrSignsCertificate,
+    bool certificateRequiredOrAdmissibleByLaw,
+    bool knowsOrBelievesFalseInMaterialPoint,
+}
+
+S197TestCase forgedDoctorsCert := S197TestCase {
+    issuesOrSignsCertificate := TRUE,
+    certificateRequiredOrAdmissibleByLaw := TRUE,
+    knowsOrBelievesFalseInMaterialPoint := TRUE,
+}
+
+assert evaluate_s197(forgedDoctorsCert.issuesOrSignsCertificate, forgedDoctorsCert.certificateRequiredOrAdmissibleByLaw, forgedDoctorsCert.knowsOrBelievesFalseInMaterialPoint) == "Liable under s197"
+
+S197TestCase honestlyIssued := S197TestCase {
+    issuesOrSignsCertificate := TRUE,
+    certificateRequiredOrAdmissibleByLaw := TRUE,
+    knowsOrBelievesFalseInMaterialPoint := FALSE,
+}
+
+assert evaluate_s197(honestlyIssued.issuesOrSignsCertificate, honestlyIssued.certificateRequiredOrAdmissibleByLaw, honestlyIssued.knowsOrBelievesFalseInMaterialPoint) == "Not liable - no knowledge of material falsity"

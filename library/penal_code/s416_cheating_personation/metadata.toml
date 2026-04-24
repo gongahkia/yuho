@@ -1,0 +1,18 @@
+[statute]
+section_number = "416"
+title = "Cheating by personation"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Cheating by pretending to be another person or substituting one person for another."
+source = "Singapore Penal Code 1871, Section 416"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr416-#pr416-"

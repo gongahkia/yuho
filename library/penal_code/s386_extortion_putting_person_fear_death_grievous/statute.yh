@@ -1,0 +1,46 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr386-#pr386-
+// Singapore Penal Code Section 386 - Extortion by putting a person in fear of death or grievous hurt
+// Yuho v5 Syntax
+
+referencing penal_code/s383_extortion
+
+struct S386Case {
+    string accused,
+    string victim,
+    bool extortionCommitted,
+    bool fearOfDeathOrGrievousHurt,
+}
+
+fn s386_applies(bool extortion, bool gravFear) : bool {
+    match {
+        case TRUE if extortion == FALSE := consequence FALSE;
+        case TRUE if gravFear == FALSE := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
+
+statute 386 "Extortion by putting a person in fear of death or grievous hurt" effective 1872-01-01 {
+    definitions {
+        extortion := "As defined under section 383";
+        grievous_hurt := "Hurt of the kinds specified under section 320";
+        fear_of_death := "Apprehension of loss of life";
+    }
+
+    elements {
+        /// extortion under s383 must be committed
+        circumstance extortion_committed := "Extortion under section 383 is established" burden prosecution beyond_reasonable_doubt;
+        /// fear induced must be of death or grievous hurt
+        actus_reus aggravated_fear := "Putting any person in fear of death or grievous hurt to that person or another";
+    }
+
+    penalty {
+        imprisonment := 2 years .. 10 years;
+        caning := 1 .. 24 strokes;
+    }
+
+    illustration example1 {
+        "A threatens B with death unless B hands over property. B complies. A has committed extortion by putting B in fear of death."
+    }
+}

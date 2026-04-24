@@ -1,0 +1,18 @@
+[statute]
+section_number = "155"
+title = "Liability of person for whose benefit a riot is committed"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Fine liability for a person (or via agent/manager) for whose benefit a riot is committed and who failed to use lawful means to prevent or suppress it."
+source = "Singapore Penal Code 1871, Section 155"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr155-#pr155-"

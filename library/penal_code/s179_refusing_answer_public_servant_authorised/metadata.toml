@@ -1,0 +1,18 @@
+[statute]
+section_number = "179"
+title = "Refusing to answer public servant authorised to question"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Refusing to answer a question on a subject one is legally bound to state the truth on, demanded by a public servant in exercise of legal powers."
+source = "Singapore Penal Code 1871, Section 179"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr179-#pr179-"

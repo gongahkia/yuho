@@ -1,0 +1,41 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr352-#pr352-
+// Singapore Penal Code Section 352 -- Punishment for using criminal force otherwise than on grave and sudden provocation
+// Yuho v5 Syntax
+
+struct S352Case {
+    string accused,
+    string victim,
+    bool offenceCommitted,
+}
+
+fn s352_applies(bool offenceCommitted) : bool {
+    match {
+        case TRUE if offenceCommitted == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+/// @amendment [Act 23 of 2021 wef 01/03/2022]
+statute 352 "Punishment for using criminal force otherwise than on grave and sudden provocation" effective 1872-01-01 {
+    definitions {
+        offence_summary := "Punishment for assault or using criminal force other than on grave and sudden provocation.";
+    }
+
+    elements {
+        /// the predicate offence must be established
+        circumstance offence_committed := "The statutory conduct is proved";
+        /// sentence applies on conviction
+        actus_reus conviction := "Conviction under this section";
+    }
+
+    penalty {
+        imprisonment := 0 months .. 3 months;
+        fine := $0.00 .. $1,500.00;
+    }
+
+    illustration example1 {
+        "A is convicted under section 352. A shall be punished as prescribed by section 352."
+    }
+}

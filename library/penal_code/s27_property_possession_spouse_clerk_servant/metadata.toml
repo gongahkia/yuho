@@ -1,0 +1,18 @@
+[statute]
+section_number = "27"
+title = "Property in possession of spouse, clerk or servant"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Property in possession of a person's spouse, clerk or servant on the person's account is in that person's possession."
+source = "Singapore Penal Code 1871, Section 27"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr27-#pr27-"

@@ -1,0 +1,18 @@
+[statute]
+section_number = "320"
+title = "Grievous hurt"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Definition of the kinds of hurt designated as grievous."
+source = "Singapore Penal Code 1871, Section 320"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr320-#pr320-"

@@ -1,0 +1,18 @@
+[statute]
+section_number = "33"
+title = "“Act” and “omission”"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Defines 'act' and 'omission' as including both a single act/omission and a series thereof."
+source = "Singapore Penal Code 1871, Section 33"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr33-#pr33-"

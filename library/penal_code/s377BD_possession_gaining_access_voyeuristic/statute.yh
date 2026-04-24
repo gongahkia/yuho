@@ -1,0 +1,24 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BD-#pr377BD-
+/// @section 377BD
+// Singapore Penal Code Section 377BD
+
+statute 377.5 "Possession of or gaining access to voyeuristic or intimate image or recording" effective 1872-01-01 {
+    definitions {
+        intimate_image := "An image depicting a person in a private act or exposing private parts";
+    }
+
+    elements {
+        /// possess or gain access to a voyeuristic or intimate image
+        actus_reus possess_or_access := "Possesses or gains access to a voyeuristic or intimate image or recording";
+        /// without consent of the depicted person
+        circumstance no_consent := "Without the consent of the person depicted";
+    }
+
+    penalty {
+        imprisonment := 0 years .. 2 years;
+        fine := $0.00 .. $10,000.00;
+    }
+
+}

@@ -1,0 +1,19 @@
+[statute]
+section_number = "198"
+title = "Using as a true certificate one known to be false in a material point"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Corruptly using a certificate as true, knowing it to be false in a material point; punished as if giving false evidence."
+source = "Singapore Penal Code 1871, Section 198"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr198-#pr198-"
+disclaimer = "Educational purposes only. Cross-reference with official SSO text."

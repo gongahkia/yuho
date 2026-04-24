@@ -1,0 +1,36 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr120A-#pr120A-
+/// @amendment [15/2019]
+// Singapore Penal Code Section 120A - Definition of criminal conspiracy
+// Yuho v5 Syntax
+
+struct CriminalConspiracyCase {
+    string partyA,
+    string partyB,
+    bool agreementExists,
+    bool agreementToCommitOrCauseOffence,
+}
+
+fn is_criminal_conspiracy(bool agreementExists, bool agreementToCommitOrCauseOffence) : bool {
+    match {
+        case TRUE if agreementExists == TRUE && agreementToCommitOrCauseOffence == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 120A "Definition of criminal conspiracy" effective 2020-01-01 {
+    definitions {
+        criminal_conspiracy := "An agreement between two or more persons to commit an offence or cause an offence to be committed";
+        impossibility_immaterial := "A person may be party to a conspiracy despite unknown facts that make commission impossible";
+        mere_agreement_sufficient := "A person may be party even though other parties do not intend to carry out the agreement";
+        immaterial_ultimate_object := "Per Explanation: immaterial whether the offence is the ultimate object of the agreement or merely incidental";
+    }
+
+    elements {
+        all_of {
+            actus_reus agreement := "Agreement between two or more persons";
+            mens_rea objective := "Agreement is to commit an offence or cause an offence to be committed";
+        }
+    }
+}

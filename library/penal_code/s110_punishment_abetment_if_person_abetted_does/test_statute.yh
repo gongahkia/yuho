@@ -1,0 +1,21 @@
+// Test file for s110
+// Yuho v5 Syntax
+
+referencing penal_code/s110_punishment_abetment_if_person_abetted_does
+
+struct S110Test {
+    bool abetsCommission,
+    bool principalDifferentIntentionOrKnowledge,
+}
+
+S110Test diverging := S110Test {
+    abetsCommission := TRUE,
+    principalDifferentIntentionOrKnowledge := TRUE,
+}
+assert s110_applies(diverging.abetsCommission, diverging.principalDifferentIntentionOrKnowledge) == TRUE
+
+S110Test aligned := S110Test {
+    abetsCommission := TRUE,
+    principalDifferentIntentionOrKnowledge := FALSE,
+}
+assert s110_applies(aligned.abetsCommission, aligned.principalDifferentIntentionOrKnowledge) == FALSE

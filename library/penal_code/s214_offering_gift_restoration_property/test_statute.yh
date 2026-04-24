@@ -1,0 +1,29 @@
+// Test file for s214_offering_gift_restoration_property
+// Yuho v5 Syntax
+
+referencing penal_code/s214_offering_gift_restoration_property
+
+struct S214TestCase {
+    bool givesOrOffersGratification,
+    bool considerationForScreening,
+    bool offenceLawfullyCompoundable,
+    string underlyingOffencePunishment,
+}
+
+S214TestCase offerBribeForCover := S214TestCase {
+    givesOrOffersGratification := TRUE,
+    considerationForScreening := TRUE,
+    offenceLawfullyCompoundable := FALSE,
+    underlyingOffencePunishment := "death",
+}
+
+assert evaluate_s214(offerBribeForCover.givesOrOffersGratification, offerBribeForCover.considerationForScreening, offerBribeForCover.offenceLawfullyCompoundable, offerBribeForCover.underlyingOffencePunishment) == "Liable s214(a) - up to 10 years + fine"
+
+S214TestCase compoundable := S214TestCase {
+    givesOrOffersGratification := TRUE,
+    considerationForScreening := TRUE,
+    offenceLawfullyCompoundable := TRUE,
+    underlyingOffencePunishment := "short_term",
+}
+
+assert evaluate_s214(compoundable.givesOrOffersGratification, compoundable.considerationForScreening, compoundable.offenceLawfullyCompoundable, compoundable.underlyingOffencePunishment) == "Not liable - offence lawfully compoundable (exception)"

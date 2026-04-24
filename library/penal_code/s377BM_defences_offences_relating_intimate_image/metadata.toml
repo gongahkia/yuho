@@ -1,0 +1,18 @@
+[statute]
+section_number = "377BM"
+title = "Defences to offences relating to intimate image or recording and voyeurism"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Defences available to offences relating to intimate image or recording and voyeurism."
+source = "Singapore Penal Code 1871, Section 377BM"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BM-#pr377BM-"

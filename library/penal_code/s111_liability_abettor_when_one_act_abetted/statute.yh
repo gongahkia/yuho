@@ -1,0 +1,45 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr111-#pr111-
+// Singapore Penal Code Section 111 - Liability of abettor when one act is abetted and a different act is done
+// Yuho v5 Syntax
+
+struct S111Case {
+    string abettor,
+    bool oneActAbetted,
+    bool differentActDone,
+    bool differentActProbableConsequence,
+}
+
+fn s111_liable(bool oneActAbetted, bool differentActDone, bool differentActProbableConsequence) : bool {
+    match {
+        case TRUE if oneActAbetted == TRUE && differentActDone == TRUE && differentActProbableConsequence == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 111 "Liability of abettor when one act is abetted and a different act is done" effective 1872-01-01 {
+    definitions {
+        probable_consequence := "The different act done is a probable consequence of the abetment and committed under the influence of the instigation, in pursuance of the conspiracy, or with the aid that constituted the abetment";
+    }
+
+    elements {
+        all_of {
+            actus_reus one_act_abetted := "An act is abetted";
+            circumstance different_act_done := "A different act is done by the principal";
+            circumstance probable_consequence := "Different act is a probable consequence of the abetment";
+        }
+    }
+
+    illustration example_a {
+        "A instigates a child to put poison into the food of Z and gives him poison for that purpose. The child, in consequence of the instigation, by mistake puts the poison into the food of Y, which is by the side of that of Z. Here A is liable in the same manner as if he had instigated the child to put the poison into Ys food."
+    }
+
+    illustration example_b {
+        "A instigates B to burn Zs house. B sets fire to the house, and at the same time commits theft of property there. A, though guilty of abetting the burning of the house, is not guilty of abetting the theft; for the theft was a distinct act, and not a probable consequence of the burning."
+    }
+
+    illustration example_c {
+        "A instigates B and C to break into an inhabited house at midnight for the purpose of robbery and provides them with arms for that purpose. B and C break into the house, and being resisted by Z, one of the inmates, murder Z. Here, if that murder was the probable consequence of the abetment, A is liable to the punishment provided for murder."
+    }
+}

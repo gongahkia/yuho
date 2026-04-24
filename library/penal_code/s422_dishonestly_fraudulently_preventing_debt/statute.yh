@@ -1,0 +1,30 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr422-#pr422-
+// Singapore Penal Code Section 422 - Dishonestly or fraudulently preventing a debt or demand due to the offender from being made available for his creditors
+
+statute 422 "Dishonestly or fraudulently preventing a debt or demand due to the offender from being made available for his creditors" effective 1872-01-01 {
+    definitions {
+        dishonestly := "As defined in section 24";
+        fraudulently := "As defined in section 25";
+        debt_or_demand := "A debt or demand due to the offender or another";
+    }
+
+    elements {
+        all_of {
+            /// actus reus -- prevention of the debt being made available
+            actus_reus prevent := "Prevents a debt or demand due to himself or another from being made available according to law for payment of debts";
+            any_of {
+                /// dishonest state of mind
+                mens_rea dishonest := "Acts dishonestly";
+                /// fraudulent state of mind
+                mens_rea fraudulent := "Acts fraudulently";
+            }
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 3 years;
+        fine := $0.00 .. $10,000.00;
+    }
+}

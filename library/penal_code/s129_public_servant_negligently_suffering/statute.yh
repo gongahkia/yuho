@@ -1,0 +1,28 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr129-#pr129-
+// Singapore Penal Code Section 129 - Public servant negligently suffering prisoner of State or war in his custody to escape
+
+statute 129 "Public servant negligently suffering prisoner of State or war in his custody to escape" effective 1872-01-01 {
+    definitions {
+        public_servant := "A public servant as defined in section 21";
+        negligently := "Negligently, per section 26F";
+        prisoner := "A prisoner of State or prisoner of war held under lawful custody";
+    }
+
+    elements {
+        all_of {
+            /// circumstance - offender must be a public servant with custody
+            circumstance custodian := "Being a public servant having the custody of any prisoner of State or prisoner of war";
+            /// actus reus - the escape resulting from the public servant's conduct
+            actus_reus suffer_escape := "Suffering such prisoner to escape from any place of confinement in which such prisoner is confined";
+            /// mens rea - negligence
+            mens_rea negligence := "Negligently suffering such prisoner to escape";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 years .. 7 years;
+        fine := $0.00 .. $50,000.00;
+    }
+}

@@ -1,0 +1,58 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr191-#pr191-
+// Singapore Penal Code Section 191 - Giving false evidence
+// Yuho v5 Syntax
+
+struct S191Case {
+    string accused,
+    bool legallyBound,
+    bool statementMade,
+    bool statementFalse,
+    bool knowsOrBelievesFalse,
+}
+
+fn evaluate_s191(bool legallyBound, bool statementMade, bool statementFalse, bool knowsOrBelievesFalse) : string {
+    match {
+        case TRUE if legallyBound == FALSE := consequence "Not false evidence - not legally bound";
+        case TRUE if statementMade == FALSE := consequence "Not false evidence - no statement made";
+        case TRUE if statementFalse == FALSE := consequence "Not false evidence - statement not false";
+        case TRUE if knowsOrBelievesFalse == FALSE := consequence "Not false evidence - no knowledge of falsity";
+        case _ := consequence "Said to give false evidence";
+    }
+}
+
+statute 191 "Giving false evidence" effective 1872-01-01 {
+    definitions {
+        false_evidence := "A statement made under a legal obligation to state the truth, which is false and known or believed by the maker to be false or not believed to be true";
+        legally_bound := "Bound by an oath, by any express provision of law to state the truth, or by law to make a declaration upon any subject";
+    }
+
+    elements {
+        all_of {
+            /// circumstance: legal obligation to tell truth
+            circumstance obligation := "Being legally bound by an oath, or by any express provision of law to state the truth, or being bound by law to make a declaration upon any subject";
+            /// actus reus: making a false statement
+            actus_reus statement := "Makes any statement which is false";
+            /// mens rea: knowledge or belief of falsity or disbelief of truth
+            mens_rea knowledge := "Either knows or believes the statement to be false, or does not believe it to be true";
+        }
+    }
+
+    /// Explanation 1: A statement is within the meaning of this section whether it is made verbally or otherwise.
+    /// Explanation 2: A false statement as to the belief of the person attesting is within the meaning of this section; a person may be guilty by stating that he believes a thing which he does not believe, as well as by stating that he knows a thing which he does not know.
+
+    illustration exampleA {
+        "A, in support of a just claim which B has against Z for $1,000, falsely swears on a trial that he heard Z admit the justice of B's claim. A has given false evidence."
+    }
+
+    illustration exampleB {
+        "A, being bound by an oath to state the truth, states that he believes a certain signature to be the handwriting of Z, when he does not believe it to be the handwriting of Z. Here A states that which he knows to be false, and therefore gives false evidence."
+    }
+
+    illustration exampleC {
+        "A, knowing the general character of Z's handwriting, states that he believes a certain signature to be the handwriting of Z; A in good faith believing it to be so. Here A's statement is merely as to his belief, and is true as to his belief, and therefore, although the signature may not be the handwriting of Z, A has not given false evidence."
+    }
+
+    // punishment under s193; this section is a definitional offence
+}

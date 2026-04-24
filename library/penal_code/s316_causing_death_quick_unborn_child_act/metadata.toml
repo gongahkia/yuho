@@ -1,0 +1,18 @@
+[statute]
+section_number = "316"
+title = "Causing death of a quick unborn child by an act amounting to culpable homicide"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Act that would be culpable homicide if it caused death, causing death of a quick unborn child."
+source = "Singapore Penal Code 1871, Section 316"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr316-#pr316-"

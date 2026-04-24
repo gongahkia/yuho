@@ -1,0 +1,37 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr462-#pr462-
+// Singapore Penal Code Section 462 - Punishment for same offence when committed by person entrusted with custody
+// Yuho v5 Syntax
+
+struct EntrustedReceptacleCase {
+    string accused,
+    bool elementsSatisfied,
+}
+
+fn is_liable(bool elementsSatisfied) : bool {
+    match {
+        case TRUE if elementsSatisfied == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 462 "Punishment for same offence when committed by person entrusted with custody" effective 1872-01-01 {
+    definitions {
+        entrustment := "Legal entrustment for safekeeping";
+        authority := "Lawful permission to open the receptacle";
+    }
+
+    elements {
+        all_of {
+            circumstance entrusted := "Being entrusted with a closed receptacle containing property";
+            circumstance without_authority := "Without authority to open the receptacle";
+            actus_reus breaks_open := "Breaks open or unfastens the receptacle";
+            mens_rea dishonestly_or_mischief := "Dishonestly or with intent to commit mischief";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 3 years;
+    }
+}

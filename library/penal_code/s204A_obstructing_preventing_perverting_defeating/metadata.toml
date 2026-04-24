@@ -1,0 +1,19 @@
+[statute]
+section_number = "204A"
+title = "Obstructing, preventing, perverting or defeating course of justice"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Doing an act with a tendency to obstruct, prevent, pervert or defeat the course of justice, either knowing it is likely to do so or intending that it do so."
+source = "Singapore Penal Code 1871, Section 204A"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr204A-#pr204A-"
+disclaimer = "Educational purposes only. Cross-reference with official SSO text."

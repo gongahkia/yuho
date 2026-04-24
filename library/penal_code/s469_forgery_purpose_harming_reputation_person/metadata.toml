@@ -1,0 +1,18 @@
+[statute]
+section_number = "469"
+title = "Forgery for the purpose of harming the reputation of any person"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Whoever commits forgery, intending that the document or electronic record forged shall harm the reputation of any person, or knowing that it is likely to be used for that purpose, shall be punished with imprisonment for a term which may extend to 5 years, and shall also be liable to fine."
+source = "Singapore Penal Code 1871, Section 469"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr469-#pr469-"

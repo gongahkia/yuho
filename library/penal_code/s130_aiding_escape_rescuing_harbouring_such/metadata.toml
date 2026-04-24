@@ -1,0 +1,18 @@
+[statute]
+section_number = "130"
+title = "Aiding escape of, rescuing, or harbouring such prisoner"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Criminalises knowingly aiding, rescuing, harbouring, or resisting recapture of a prisoner of State or war who has escaped or is escaping lawful custody."
+source = "Singapore Penal Code 1871, Section 130"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr130-#pr130-"

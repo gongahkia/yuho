@@ -1,0 +1,42 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr161-#pr161-
+// Singapore Penal Code Section 161
+
+statute 161 "Public servant taking a gratification, other than legal remuneration, in respect of an official act" effective 1872-01-01 {
+    definitions {
+        gratification := "Any gratification whatever, not restricted to pecuniary gratifications or those estimable in money";
+        legal_remuneration := "All remuneration which a public servant is permitted by law to accept";
+        official_act := "Any official act, or exercise of official functions to show favour or disfavour or to render service or disservice, connected with the Government, Members of Parliament, the Cabinet, or any public servant";
+    }
+
+    elements {
+        all_of {
+            /// accused is or expects to be a public servant
+            circumstance status := "Accused is or expects to be a public servant";
+            /// acceptance or attempt to obtain gratification
+            actus_reus taking := "Accepting, obtaining, agreeing to accept, or attempting to obtain any gratification other than legal remuneration, for himself or another";
+            /// motive or reward link to official conduct
+            mens_rea motive := "As a motive or reward for doing or forbearing to do an official act, showing favour or disfavour, or rendering service or disservice, with the Government, Parliament, Cabinet, or any public servant";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 months .. 3 years;
+        fine := $0.00 .. $100,000.00;
+    }
+
+    illustration example_a {
+        "A, a judge, obtains from Z, a banker, a situation in Z's bank for A's brother, as a reward to A for deciding a cause in favour of Z. A has committed the offence defined in this section."
+    }
+
+    illustration example_b {
+        "A, a public servant, induces Z erroneously to believe that A's influence with another public servant has obtained for Z a contract to do work, and thus induces Z to give A money. A has committed the offence defined in this section."
+    }
+
+    illustration example_c {
+        "A, a public servant, induces Z erroneously to believe that A's influence with the Government has obtained a grant of land for Z, and thus induces Z to give A money, as a reward for his service. A has committed the offence defined in this section."
+    }
+
+    /// Explanation. A person not expecting to be in office who obtains a gratification by deceiving others into belief that he will be in office may be guilty of cheating but not of this offence. Gratification is not restricted to pecuniary forms. Legal remuneration includes all that a public servant is permitted by law to accept. A reward for not doing what he does not intend to do, or for what he has not done, is within the section.
+}

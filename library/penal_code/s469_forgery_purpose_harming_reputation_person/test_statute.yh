@@ -1,0 +1,22 @@
+// Test file for s469_forgery_purpose_harming_reputation_person
+// Yuho v5 Syntax
+
+referencing penal_code/s469_forgery_purpose_harming_reputation_person
+
+struct ForgeryHarmReputationCaseTest {
+    bool elementsSatisfied,
+}
+
+ForgeryHarmReputationCaseTest positive := ForgeryHarmReputationCaseTest {
+    elementsSatisfied := TRUE,
+}
+
+assert positive.elementsSatisfied == TRUE
+assert is_liable(positive.elementsSatisfied) == TRUE
+
+ForgeryHarmReputationCaseTest negative := ForgeryHarmReputationCaseTest {
+    elementsSatisfied := FALSE,
+}
+
+assert negative.elementsSatisfied == FALSE
+assert is_liable(negative.elementsSatisfied) == FALSE

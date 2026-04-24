@@ -1,0 +1,18 @@
+[statute]
+section_number = "169"
+title = "Public servant unlawfully buying or bidding for property"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Public servant legally bound not to purchase or bid for certain property who purchases or bids for it, directly or through another; property confiscated."
+source = "Singapore Penal Code 1871, Section 169"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr169-#pr169-"

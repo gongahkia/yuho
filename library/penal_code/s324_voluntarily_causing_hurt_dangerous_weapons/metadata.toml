@@ -1,0 +1,18 @@
+[statute]
+section_number = "324"
+title = "Voluntarily causing hurt by dangerous weapons or means"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Voluntarily causing hurt by dangerous weapons, fire, poison, corrosive, explosive, harmful substance or animal."
+source = "Singapore Penal Code 1871, Section 324"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr324-#pr324-"

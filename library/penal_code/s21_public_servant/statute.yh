@@ -1,0 +1,17 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr21-#pr21-
+// Singapore Penal Code Section 21
+// Yuho v5 Syntax
+
+/// @amendment [Act 18 of 2023 wef 31/01/2024]
+/// @amendment [Act 25 of 2021 wef 01/04/2022]
+/// @amendment [Act 33 of 2021 wef 14/01/2022]
+/// @amendment [19/2016; 15/2019]
+/// @amendment [19/2016]
+
+statute 21 "“Public servant”" effective 1872-01-01 {
+    definitions {
+        public_servant := "—(1) The words “public servant” denote a person falling under any of the following descriptions: ( a ) every officer in the Singapore Armed Forces; ( b ) every judge; ( c ) every officer of a court of justice whose duty it is, as such officer, to investigate or report on any matter of law or fact, or to make, authenticate, or keep any document, or to take charge or dispose of any property, or to execute any judicial process, or to administer any oath, or to interpret, or to preserve order in the court, or to conduct mediation or other alternative dispute resolution process under any written law, and every person specially authorised by a court of justice to perform any of such duties; [Act 18 of 2023 wef 31/01/2024] ( d ) every assessor assisting a court of justice or public servant; ( e ) every arbitrator or other person to whom any cause or matter has been referred for decision or report by any court of justice, or by any other competent public authority; ( f ) every person who holds any office by virtue of which he is empowered to place or keep any person in confinement; ( g ) every officer of the Government and every officer or employee of a body corporate established by a public Act for the purposes of a public function whose duty, as such officer or employee, is any of the following: ( h ) every officer whose duty it is, as such officer, to take, receive, keep or expend any property, on behalf of Government, or to make any survey, assessment, or contract on behalf of Government, or to execute any revenue process, or to investigate, or to report on any matter affecting the pecuniary interests of Government, or to make, authenticate or keep any document relating to the pecuniary interests of Government, or to prevent the infraction of any law for the protection of the pecuniary interests of Government, and every officer in the service or pay of Government, or remunerated by fees or commission for the performance of any public duty; ( i ) a member of the Public Service Commission, the Judicial Service Commission or the Legal Service Commission; [Act 33 of 2021 wef 14/01/2022] ( j ) every person (other than a person mentioned in paragraph ( g )) who is employed to carry out any of the duties, mentioned in paragraph ( g )(i) to (vii), on behalf of the Government or a body corporate established by a public Act for the purposes of a public function, when that person is performing such duties. [19/2016; 15/2019] (2) Despite subsection (1), the words “public servant” in sections 175, 178, 179, 180 and 228 does not include a judge as defined in the Administration of Justice (Protection) Act 2016. [19/2016] Explanation 1.—Persons falling under any of the above descriptions are public servants, whether appointed by the Government or not. Explanation 2.—Wherever the words “public servant” occur, they shall be understood of every person who is in actual possession of the situation of a public servant, whatever legal defect there may be in his right to hold that situation.";
+    }
+}

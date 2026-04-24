@@ -1,0 +1,18 @@
+[statute]
+section_number = "35"
+title = "When such an act is criminal by reason of its being done with a criminal knowledge or intention"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Where an act is criminal only by reason of criminal knowledge/intention, each joiner with such knowledge/intention is liable as if done alone."
+source = "Singapore Penal Code 1871, Section 35"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr35-#pr35-"

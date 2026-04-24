@@ -1,0 +1,23 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr376-#pr376-
+// Singapore Penal Code Section 376
+
+statute 376 "Sexual assault involving penetration" effective 1872-01-01 {
+    definitions {
+        sexual_penetration := "Sexual penetration with a part of the body other than the penis, or any object";
+    }
+
+    elements {
+        /// sexual penetration with body part or object
+        actus_reus nonpenile_penetration := "Sexually penetrates with a part of the body other than the penis, or anything else, the vagina or anus of another person";
+        /// without consent, or where victim is below 14
+        circumstance no_consent_or_minor := "Without the consent of that person, or with or without consent where that person is below 14 years of age";
+    }
+
+    penalty {
+        imprisonment := 3 years .. 20 years;
+        caning := 0 .. 12 strokes;
+    }
+
+}

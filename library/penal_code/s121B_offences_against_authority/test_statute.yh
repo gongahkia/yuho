@@ -1,0 +1,21 @@
+// Test file for s121B
+// Yuho v5 Syntax
+
+referencing penal_code/s121B_offences_against_authority
+
+struct S121BTest {
+    bool plansUnlawfulDepositionOfPresident,
+    bool plansOverawingGovernmentByCriminalForce,
+}
+
+S121BTest deposition := S121BTest {
+    plansUnlawfulDepositionOfPresident := TRUE,
+    plansOverawingGovernmentByCriminalForce := FALSE,
+}
+assert s121B_applies(deposition.plansUnlawfulDepositionOfPresident, deposition.plansOverawingGovernmentByCriminalForce) == TRUE
+
+S121BTest neither := S121BTest {
+    plansUnlawfulDepositionOfPresident := FALSE,
+    plansOverawingGovernmentByCriminalForce := FALSE,
+}
+assert s121B_applies(neither.plansUnlawfulDepositionOfPresident, neither.plansOverawingGovernmentByCriminalForce) == FALSE

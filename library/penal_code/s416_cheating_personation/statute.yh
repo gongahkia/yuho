@@ -1,0 +1,38 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr416-#pr416-
+// Singapore Penal Code Section 416 - Cheating by personation
+
+referencing penal_code/s415_cheating
+
+statute 416 "Cheating by personation" effective 1872-01-01 {
+    definitions {
+        personation := "Pretending to be another person, substituting one person for another, or falsely representing a persons identity";
+        cheating := "As defined in section 415";
+    }
+
+    elements {
+        all_of {
+            /// the base offence of cheating under s415
+            actus_reus base_cheating := "Cheats within the meaning of section 415";
+            any_of {
+                /// first form -- pretending to be another
+                actus_reus pretending := "Pretending to be some other person";
+                /// second form -- substituting one person for another
+                actus_reus substitution := "Knowingly substituting one person for another";
+                /// third form -- false representation of identity
+                actus_reus misrepresentation := "Representing that he or another is a person other than he really is";
+            }
+        }
+    }
+
+    illustration example1 {
+        "A cheats by pretending to be a certain rich banker of the same name. A cheats by personation."
+    }
+
+    illustration example2 {
+        "A cheats by pretending to be B, a person who is deceased. A cheats by personation."
+    }
+
+    // Explanation: offence committed whether the individual personated is real or imaginary
+}

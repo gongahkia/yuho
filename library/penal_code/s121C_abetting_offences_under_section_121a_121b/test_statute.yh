@@ -1,0 +1,14 @@
+// Test file for s121C
+// Yuho v5 Syntax
+
+referencing penal_code/s121C_abetting_offences_under_section_121a_121b
+
+struct S121CTest {
+    bool abetsOffenceUnder121AOr121B,
+}
+
+S121CTest qualifying := S121CTest { abetsOffenceUnder121AOr121B := TRUE, }
+assert s121C_applies(qualifying.abetsOffenceUnder121AOr121B) == TRUE
+
+S121CTest notAbetting := S121CTest { abetsOffenceUnder121AOr121B := FALSE, }
+assert s121C_applies(notAbetting.abetsOffenceUnder121AOr121B) == FALSE

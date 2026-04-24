@@ -1,0 +1,31 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr128-#pr128-
+// Singapore Penal Code Section 128 - Public servant voluntarily allowing prisoner of State or war in his custody to escape
+
+/// @amendment [15/2019]
+statute 128 "Public servant voluntarily allowing prisoner of State or war in his custody to escape" effective 1872-01-01 {
+    definitions {
+        public_servant := "A public servant as defined in section 21";
+        prisoner_of_state := "A prisoner of State held under lawful custody";
+        prisoner_of_war := "A prisoner of war held under lawful custody";
+        voluntarily := "Intentionally, per section 26A";
+    }
+
+    elements {
+        all_of {
+            /// circumstance - offender must be a public servant with custody
+            circumstance custodian := "Being a public servant having the custody of any prisoner of State or prisoner of war";
+            /// actus reus - the escape
+            actus_reus allow_escape := "Allowing such prisoner to escape from any place in which such prisoner is confined";
+            /// mens rea - voluntariness
+            mens_rea voluntary := "Voluntarily allowing such prisoner to escape";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 years .. 99 years;
+        fine := $0.00 .. $50,000.00;
+        supplementary := "Imprisonment for life, or imprisonment for a term which may extend to 15 years; if not sentenced to imprisonment for life, also liable to fine";
+    }
+}

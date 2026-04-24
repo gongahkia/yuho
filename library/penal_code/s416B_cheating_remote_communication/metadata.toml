@@ -1,0 +1,18 @@
+[statute]
+section_number = "416B"
+title = "Cheating by remote communication"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Cheating another person by deception conducted mainly by remote communication."
+source = "Singapore Penal Code 1871, Section 416B"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr416B-#pr416B-"

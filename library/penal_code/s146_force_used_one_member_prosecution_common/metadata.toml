@@ -1,0 +1,18 @@
+[statute]
+section_number = "146"
+title = "Force used by one member in prosecution of common object"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Defines rioting: when force or violence is used by an unlawful assembly or any member in prosecution of its common object, every member is guilty of rioting."
+source = "Singapore Penal Code 1871, Section 146"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr146-#pr146-"

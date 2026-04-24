@@ -1,0 +1,24 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr364-#pr364-
+// Singapore Penal Code Section 364
+
+statute 364 "Kidnapping or abducting in order to murder" effective 1872-01-01 {
+    definitions {
+        kidnapping_or_abduction := "Kidnapping under sections 359 to 361 or abduction under section 362";
+    }
+
+    elements {
+        /// kidnaps or abducts a person
+        actus_reus kidnap_or_abduct := "Kidnaps or abducts any person";
+        /// in order that such person may be murdered or put in danger
+        mens_rea intent_murder := "In order that such person may be murdered or put in danger of being murdered";
+    }
+
+    penalty {
+        imprisonment := 20 years .. 99 years;
+        caning := 0 .. 24 strokes;
+        death := TRUE;
+    }
+
+}

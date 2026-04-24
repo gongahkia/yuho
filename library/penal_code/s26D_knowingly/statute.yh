@@ -1,0 +1,14 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr26D-#pr26D-
+// Singapore Penal Code Section 26D
+// Yuho v5 Syntax
+
+/// @amendment [15/2019]
+/// @amendment [15/2019; 2/2020]
+
+statute 26D "“Knowingly”" effective 1872-01-01 {
+    definitions {
+        knowingly := "—(1) Whoever does an act with awareness that a circumstance exists, will exist, or is virtually certain (barring an unforeseen intervention) to exist, is said to do that act knowingly in respect of that circumstance. [15/2019] (2) Whoever does an act with awareness that an effect will be caused, or is virtually certain (barring an unforeseen intervention) to be caused, is said to do that act knowingly in respect of that effect. [15/2019] (3) Where doing an act knowingly is a fault element of an offence, that fault element is also established where that act is done intentionally or with wilful blindness. [15/2019; 2/2020]";
+    }
+}

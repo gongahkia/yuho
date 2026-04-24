@@ -1,0 +1,18 @@
+[statute]
+section_number = "512"
+title = "Punishment for attempting to commit offences"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "A person who attempts to commit an offence punishable by this Code or by any other written law with death or imprisonment for life, shall, where no express provision is made by this Code or by such other written law for the punishment of such attempt, be punished with imprisonment for a term which may extend to 20 years, and shall also be liable to fine or to caning."
+source = "Singapore Penal Code 1871, Section 512"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr512-#pr512-"

@@ -1,0 +1,18 @@
+[statute]
+section_number = "501"
+title = "Printing or engraving matter known to be defamatory"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Whoever prints or engraves any matter, knowing or having good reason to believe that such matter is defamatory of any person, shall be punished with imprisonment for a term which may extend to 2 years, or with fine, or with both."
+source = "Singapore Penal Code 1871, Section 501"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr501-#pr501-"

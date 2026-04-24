@@ -1,0 +1,18 @@
+[statute]
+section_number = "374"
+title = "Unlawful compulsory labour"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Unlawfully compelling a person to labour against that person's will."
+source = "Singapore Penal Code 1871, Section 374"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr374-#pr374-"

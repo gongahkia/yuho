@@ -1,0 +1,37 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr83-#pr83-
+/// @amendment [15/2019]
+// Singapore Penal Code Section 83 - Act of child 10-12 without sufficient maturity
+// general exception (defence): doli incapax, rebuttable
+
+struct ChildMaturityCase {
+    string accused,
+    int age,
+    bool hasSufficientMaturity,
+}
+
+fn child_10_to_12_defence(int age, bool hasSufficientMaturity) : bool {
+    match {
+        case TRUE if age < 10 := consequence FALSE;
+        case TRUE if age >= 12 := consequence FALSE;
+        case TRUE if hasSufficientMaturity == TRUE := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
+
+statute 83 "Act of a child of or above 10 and below 12 years of age, who has not sufficient maturity of understanding" effective 2020-01-01 {
+    definitions {
+        child := "A person of or above 10 years and below 12 years of age";
+        maturity := "Sufficient maturity of understanding to judge the nature and consequence of conduct on the occasion";
+    }
+
+    elements {
+        all_of {
+            /// age between 10 (inclusive) and 12 (exclusive) at time of act
+            circumstance ageRange := "Accused was of or above 10 years and below 12 years of age";
+            /// lacked sufficient maturity on that occasion -- fact-specific
+            circumstance lackMaturity := "Accused had not attained sufficient maturity of understanding to judge nature and consequence of conduct on that occasion";
+        }
+    }
+}

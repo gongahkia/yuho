@@ -1,0 +1,18 @@
+[statute]
+section_number = "377BD"
+title = "Possession of or gaining access to voyeuristic or intimate image or recording"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Possession of or gaining access to a voyeuristic or intimate image or recording."
+source = "Singapore Penal Code 1871, Section 377BD"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BD-#pr377BD-"

@@ -1,0 +1,32 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr130B-#pr130B-
+// Singapore Penal Code Section 130B - Piracy by law of nations
+
+statute 130B "Piracy by law of nations. Cf. 12 and 13 Victoria c. 96 (Admiralty Offences (Colonial) Act 1849)" effective 1872-01-01 {
+    definitions {
+        piracy := "Any act that, by the law of nations, is piracy";
+        law_of_nations := "Customary international law governing piracy";
+        aggravated_piracy := "Piracy involving murder, attempted murder, or acts likely to endanger life";
+    }
+
+    elements {
+        all_of {
+            /// actus reus - performing an act of piracy under international law
+            actus_reus piratical_act := "Doing any act that, by the law of nations, is piracy";
+            any_of {
+                /// subsection (2) ordinary piracy
+                circumstance ordinary_piracy := "Committing piracy without murder, attempted murder, or acts likely to endanger life";
+                /// subsection (2) aggravated piracy attracting the death penalty
+                circumstance aggravated := "While committing or attempting piracy, murdering or attempting to murder another person, or doing any act likely to endanger the life of another person";
+            }
+        }
+    }
+
+    penalty {
+        imprisonment := 20 years .. 99 years;
+        caning := 12 .. 24 strokes;
+        death := TRUE;
+        supplementary := "Imprisonment for life and caning with not less than 12 strokes; but if while committing or attempting piracy the offender murders or attempts to murder or endangers life, punishment is death";
+    }
+}

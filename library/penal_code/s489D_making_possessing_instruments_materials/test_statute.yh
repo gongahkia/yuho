@@ -1,0 +1,22 @@
+// Test file for s489D_making_possessing_instruments_materials
+// Yuho v5 Syntax
+
+referencing penal_code/s489D_making_possessing_instruments_materials
+
+struct InstrumentsForCounterfeitingCaseTest {
+    bool elementsSatisfied,
+}
+
+InstrumentsForCounterfeitingCaseTest positive := InstrumentsForCounterfeitingCaseTest {
+    elementsSatisfied := TRUE,
+}
+
+assert positive.elementsSatisfied == TRUE
+assert is_liable(positive.elementsSatisfied) == TRUE
+
+InstrumentsForCounterfeitingCaseTest negative := InstrumentsForCounterfeitingCaseTest {
+    elementsSatisfied := FALSE,
+}
+
+assert negative.elementsSatisfied == FALSE
+assert is_liable(negative.elementsSatisfied) == FALSE

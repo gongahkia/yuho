@@ -1,0 +1,22 @@
+// Test file for s489I_possession_altered_currency
+// Yuho v5 Syntax
+
+referencing penal_code/s489I_possession_altered_currency
+
+struct PossessionAlteredCurrencyCaseTest {
+    bool elementsSatisfied,
+}
+
+PossessionAlteredCurrencyCaseTest positive := PossessionAlteredCurrencyCaseTest {
+    elementsSatisfied := TRUE,
+}
+
+assert positive.elementsSatisfied == TRUE
+assert is_liable(positive.elementsSatisfied) == TRUE
+
+PossessionAlteredCurrencyCaseTest negative := PossessionAlteredCurrencyCaseTest {
+    elementsSatisfied := FALSE,
+}
+
+assert negative.elementsSatisfied == FALSE
+assert is_liable(negative.elementsSatisfied) == FALSE

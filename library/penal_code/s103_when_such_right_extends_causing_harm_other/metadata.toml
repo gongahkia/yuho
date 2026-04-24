@@ -1,0 +1,18 @@
+[statute]
+section_number = "103"
+title = "When such right extends to causing any harm other than death"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Where the offence being defended against is not of a description in section 102, the right of private defence of the body extends to causing any harm other than death to the assailant."
+source = "Singapore Penal Code 1871, Section 103"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr103-#pr103-"

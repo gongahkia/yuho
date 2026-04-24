@@ -1,0 +1,18 @@
+[statute]
+section_number = "121D"
+title = "Intentional omission to give information of offences against section 121, 121A, 121B or 121C by a person bound to inform"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Whoever, knowing or having reason to believe an offence under section 121, 121A, 121B or 121C has been committed, intentionally omits to give any information respecting that offence he is legally bound to give, is punishable with up to 10 years imprisonment, or fine, or both."
+source = "Singapore Penal Code 1871, Section 121D"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr121D-#pr121D-"

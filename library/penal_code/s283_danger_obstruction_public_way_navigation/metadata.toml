@@ -1,0 +1,18 @@
+[statute]
+section_number = "283"
+title = "Danger or obstruction in a public way or navigation"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Criminalises causing danger, obstruction or injury to any person in any public way or public line of navigation, by act or omission with property in one's charge."
+source = "Singapore Penal Code 1871, Section 283"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr283-#pr283-"

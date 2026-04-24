@@ -1,0 +1,29 @@
+// Test file for s215_taking_gift_help_recover_stolen_property_etc
+// Yuho v5 Syntax
+
+referencing penal_code/s215_taking_gift_help_recover_stolen_property_etc
+
+struct S215TestCase {
+    bool takesOrAgreesGratification,
+    bool underPretenceOfHelpingRecover,
+    bool propertyDeprivedByOffence,
+    bool usesAllMeansToCauseApprehension,
+}
+
+S215TestCase shadyRecoveryAgent := S215TestCase {
+    takesOrAgreesGratification := TRUE,
+    underPretenceOfHelpingRecover := TRUE,
+    propertyDeprivedByOffence := TRUE,
+    usesAllMeansToCauseApprehension := FALSE,
+}
+
+assert evaluate_s215(shadyRecoveryAgent.takesOrAgreesGratification, shadyRecoveryAgent.underPretenceOfHelpingRecover, shadyRecoveryAgent.propertyDeprivedByOffence, shadyRecoveryAgent.usesAllMeansToCauseApprehension) == "Liable under s215"
+
+S215TestCase legitimateRecovery := S215TestCase {
+    takesOrAgreesGratification := TRUE,
+    underPretenceOfHelpingRecover := TRUE,
+    propertyDeprivedByOffence := TRUE,
+    usesAllMeansToCauseApprehension := TRUE,
+}
+
+assert evaluate_s215(legitimateRecovery.takesOrAgreesGratification, legitimateRecovery.underPretenceOfHelpingRecover, legitimateRecovery.propertyDeprivedByOffence, legitimateRecovery.usesAllMeansToCauseApprehension) == "Not liable - used all means to apprehend offender"

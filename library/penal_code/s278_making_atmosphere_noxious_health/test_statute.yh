@@ -1,0 +1,10 @@
+// Test file for s278
+// Yuho v5 Syntax
+
+referencing penal_code/s278_making_atmosphere_noxious_health
+
+struct AtmosphereTestCase { bool voluntary, bool noxious, }
+AtmosphereTestCase good := AtmosphereTestCase { voluntary := TRUE, noxious := TRUE, }
+assert is_offence(good.voluntary, good.noxious) == TRUE
+AtmosphereTestCase harmless := AtmosphereTestCase { voluntary := TRUE, noxious := FALSE, }
+assert is_offence(harmless.voluntary, harmless.noxious) == FALSE

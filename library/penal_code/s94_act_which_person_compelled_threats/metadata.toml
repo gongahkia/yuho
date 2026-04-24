@@ -1,0 +1,18 @@
+[statute]
+section_number = "94"
+title = "Act to which a person is compelled by threats"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Excuses acts (other than murder and offences against the State punishable with death) done under threats that reasonably cause apprehension of instant death."
+source = "Singapore Penal Code 1871, Section 94"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr94-#pr94-"

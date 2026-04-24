@@ -1,0 +1,44 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr273-#pr273-
+// Singapore Penal Code Section 273 - Sale of noxious food or drink
+// Yuho v5 Syntax
+
+struct NoxiousFoodCase {
+    string accused,
+    bool soldOrExposed,
+    bool articleNoxious,
+    bool knowledgeOrReasonToBelieve,
+}
+
+fn is_offence(bool sold, bool noxious, bool knowledge) : bool {
+    match {
+        case TRUE if sold == FALSE := consequence FALSE;
+        case TRUE if noxious == FALSE := consequence FALSE;
+        case TRUE if knowledge == FALSE := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
+
+/// @amendment [15/2019]
+statute 273 "Sale of noxious food or drink" effective 1872-01-01 {
+    definitions {
+        noxious := "Rendered harmful or in a state unfit for food or drink";
+    }
+
+    elements {
+        all_of {
+            /// selling or exposing for sale
+            actus_reus sell := "Selling, offering or exposing for sale as food or drink";
+            /// the article has become noxious or unfit
+            circumstance noxious := "Article has become noxious or is in a state unfit for food or drink";
+            /// fault element -- knowledge or reason to believe
+            mens_rea knowledge := "Knowing or having reason to believe the article is noxious";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 3 years;
+        fine := $0.00 .. $10,000.00;
+    }
+}

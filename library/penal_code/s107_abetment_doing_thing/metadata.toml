@@ -1,0 +1,18 @@
+[statute]
+section_number = "107"
+title = "Abetment of the doing of a thing"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "A person abets the doing of a thing by instigating, conspiring (followed by act or illegal omission in pursuance), or intentionally aiding by any act or illegal omission; abetment may occur despite facts unknown to abettor that make the doing impossible."
+source = "Singapore Penal Code 1871, Section 107"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr107-#pr107-"

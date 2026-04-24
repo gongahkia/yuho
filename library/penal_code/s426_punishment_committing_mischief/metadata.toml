@@ -1,0 +1,18 @@
+[statute]
+section_number = "426"
+title = "Punishment for committing mischief"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Punishment for the offence of mischief under section 425."
+source = "Singapore Penal Code 1871, Section 426"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr426-#pr426-"

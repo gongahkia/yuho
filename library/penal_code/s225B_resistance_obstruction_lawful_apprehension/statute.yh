@@ -1,0 +1,45 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr225B-#pr225B-
+// Singapore Penal Code Section 225B - Resistance or obstruction to lawful apprehension, or escape, or rescue, in cases not otherwise provided for
+// Yuho v5 Syntax
+
+struct S225BCase {
+    string accused,
+    bool intentionallyResistsEscapesOrRescues,
+    bool notOtherwiseProvided,
+}
+fn s225B_applies(bool intentionallyResistsEscapesOrRescues, bool notOtherwiseProvided) : bool {
+    match {
+        case TRUE if intentionallyResistsEscapesOrRescues == FALSE := consequence FALSE;
+        case TRUE if notOtherwiseProvided == FALSE := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
+statute 225B "Resistance or obstruction to lawful apprehension, or escape, or rescue, in cases not otherwise provided for" effective 1872-01-01 {
+    definitions {
+        not_otherwise_provided := "Case not covered by s224, s225 or other law";
+    }
+
+    elements {
+        all_of {
+            circumstance catchall := "Case not provided for in s224, s225 or any other law";
+            any_of {
+                actus_reus resist := "Offers resistance or illegal obstruction to lawful apprehension of self or another";
+                actus_reus escape := "Escapes or attempts to escape from lawful custody";
+                actus_reus rescue := "Rescues or attempts to rescue another from lawful custody";
+            }
+            mens_rea intent := "Intentionally";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 years .. 1 year;
+        fine := $0.00 .. $5,000.00;
+    }
+
+    illustration example1 {
+        "A intentionally obstructs a minor civil apprehension not covered by s224 or s225. A is punishable under s225B with imprisonment up to 1 year or fine or both."
+    }
+
+}

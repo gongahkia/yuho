@@ -1,0 +1,18 @@
+[statute]
+section_number = "376ED"
+title = "Sexual activity or image in presence of minor below 16 years of age"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Engaging in sexual activity or causing sexual image to be seen in presence of a minor below 16."
+source = "Singapore Penal Code 1871, Section 376ED"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr376ED-#pr376ED-"

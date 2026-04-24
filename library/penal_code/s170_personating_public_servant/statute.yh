@@ -1,0 +1,29 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr170-#pr170-
+// Singapore Penal Code Section 170
+
+statute 170 "Personating a public servant" effective 1872-01-01 {
+    definitions {
+        personation := "Pretending to hold a particular office as a public servant, or falsely personating another who holds such office";
+        colour_of_office := "Any act done or attempted under colour of the assumed office";
+    }
+
+    elements {
+        all_of {
+            any_of {
+                actus_reus pretending := "Pretending to hold a particular office as a public servant";
+                actus_reus personating := "Falsely personating any other person holding such office";
+            }
+            /// knowledge that he does not hold such office
+            mens_rea knowledge := "Knowing that he does not hold such office, or that he is falsely personating another";
+            /// act done under colour of the office
+            actus_reus colour_act := "In the assumed character, doing or attempting any act under colour of such office";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 months .. 2 years;
+        fine := $0.00 .. $20,000.00;
+    }
+}

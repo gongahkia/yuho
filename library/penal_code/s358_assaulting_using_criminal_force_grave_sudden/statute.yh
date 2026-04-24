@@ -1,0 +1,23 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr358-#pr358-
+// Singapore Penal Code Section 358
+
+statute 358 "Assaulting or using criminal force on grave and sudden provocation" effective 1872-01-01 {
+    definitions {
+        grave_sudden_provocation := "Provocation that is both grave and sudden, depriving the accused of self-control";
+    }
+
+    elements {
+        /// assault or criminal force to a person
+        actus_reus assault_or_force := "Assaults or uses criminal force to any person";
+        /// on grave and sudden provocation from that person
+        circumstance on_provocation := "On grave and sudden provocation given by that person";
+    }
+
+    penalty {
+        imprisonment := 0 years .. 1 years;
+        fine := $0.00 .. $1,000.00;
+    }
+
+}

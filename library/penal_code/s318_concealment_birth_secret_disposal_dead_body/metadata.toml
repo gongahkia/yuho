@@ -1,0 +1,18 @@
+[statute]
+section_number = "318"
+title = "Concealment of birth by secret disposal of dead body"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Concealing the birth of a child by secret disposal of its dead body."
+source = "Singapore Penal Code 1871, Section 318"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr318-#pr318-"

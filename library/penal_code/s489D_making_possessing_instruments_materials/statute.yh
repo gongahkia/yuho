@@ -1,0 +1,35 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr489D-#pr489D-
+/// @amendment [15/2019]
+// Singapore Penal Code Section 489D - Making or possessing instruments or materials for forging or counterfeiting currency or bank notes
+// Yuho v5 Syntax
+
+struct InstrumentsForCounterfeitingCase {
+    string accused,
+    bool elementsSatisfied,
+}
+
+fn is_liable(bool elementsSatisfied) : bool {
+    match {
+        case TRUE if elementsSatisfied == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 489D "Making or possessing instruments or materials for forging or counterfeiting currency or bank notes" effective 1946-01-01 {
+    definitions {
+        die := "A device for stamping impressions";
+    }
+
+    elements {
+        all_of {
+            actus_reus makes_or_possesses_instrument := "Makes, mends, buys, sells, disposes of, or possesses any die, machinery, instrument or material";
+            mens_rea purpose_counterfeiting := "For the purpose of being used, or knowing or believing it intended to be used, for forging or counterfeiting currency or bank notes";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 20 years;
+    }
+}

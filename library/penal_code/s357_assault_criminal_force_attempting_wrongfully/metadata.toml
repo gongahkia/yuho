@@ -1,0 +1,18 @@
+[statute]
+section_number = "357"
+title = "Assault or criminal force in attempting wrongfully to confine a person"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Assault or criminal force used in attempting wrongfully to confine a person."
+source = "Singapore Penal Code 1871, Section 357"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr357-#pr357-"

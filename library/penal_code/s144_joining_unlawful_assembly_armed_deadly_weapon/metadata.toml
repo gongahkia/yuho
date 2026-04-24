@@ -1,0 +1,18 @@
+[statute]
+section_number = "144"
+title = "Joining an unlawful assembly armed with any deadly weapon"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Enhanced punishment for being a member of an unlawful assembly while armed with a deadly weapon or an article likely to cause death if used as a weapon."
+source = "Singapore Penal Code 1871, Section 144"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr144-#pr144-"

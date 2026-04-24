@@ -1,0 +1,35 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr121C-#pr121C-
+// Singapore Penal Code Section 121C - Abetting offences under section 121A or 121B
+// Yuho v5 Syntax
+
+referencing penal_code/s121A_offences_against_president_s_person
+referencing penal_code/s121B_offences_against_authority
+
+struct S121CCase {
+    string abettor,
+    bool abetsOffenceUnder121AOr121B,
+}
+
+fn s121C_applies(bool abetsOffenceUnder121AOr121B) : bool {
+    match {
+        case TRUE if abetsOffenceUnder121AOr121B == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 121C "Abetting offences under section 121A or 121B" effective 1872-01-01 {
+    definitions {
+        qualifying_offence := "Any offence punishable under section 121A or section 121B";
+    }
+
+    elements {
+        actus_reus abets_offence := "Abets the commission of any offence punishable under section 121A or 121B";
+    }
+
+    penalty {
+        imprisonment := 0 days .. 99 years;
+        fine := $0.00 .. $1,000,000.00;
+    }
+}

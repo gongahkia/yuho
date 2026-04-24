@@ -1,0 +1,14 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr511-#pr511-
+/// @amendment [15/2019]
+// Singapore Penal Code Section 511 - Attempt to commit offence
+/// interpretation section, defines terms used in related offences
+
+statute 511 "Attempt to commit offence" effective 1872-01-01 {
+    definitions {
+        attempt := "A person attempts to commit an offence when, with intention of committing it, takes a substantial step towards commission";
+        substantial_step := "An act strongly corroborative of an intention to commit the offence";
+        factual_impossibility_irrelevant := "A person may attempt despite existence of facts unknown to them which make the thing impossible";
+    }
+}

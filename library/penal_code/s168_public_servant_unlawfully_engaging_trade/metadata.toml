@@ -1,0 +1,18 @@
+[statute]
+section_number = "168"
+title = "Public servant unlawfully engaging in trade"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Public servant who, being legally bound as such not to engage in trade, engages in trade."
+source = "Singapore Penal Code 1871, Section 168"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr168-#pr168-"

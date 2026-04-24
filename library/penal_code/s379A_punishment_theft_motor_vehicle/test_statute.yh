@@ -1,0 +1,23 @@
+// Test file for s379A_punishment_theft_motor_vehicle
+// Yuho v5 Syntax
+
+referencing penal_code/s379A_punishment_theft_motor_vehicle
+
+struct S379ATestCase {
+    bool theftCommitted,
+    bool motorVehicleOrPart,
+}
+
+S379ATestCase motorTheft := S379ATestCase {
+    theftCommitted := TRUE,
+    motorVehicleOrPart := TRUE,
+}
+
+assert s379A_applies(motorTheft.theftCommitted, motorTheft.motorVehicleOrPart) == TRUE
+
+S379ATestCase notMotor := S379ATestCase {
+    theftCommitted := TRUE,
+    motorVehicleOrPart := FALSE,
+}
+
+assert s379A_applies(notMotor.theftCommitted, notMotor.motorVehicleOrPart) == FALSE

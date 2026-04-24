@@ -1,0 +1,18 @@
+[statute]
+section_number = "506"
+title = "Punishment for criminal intimidation"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Whoever commits the offence of criminal intimidation shall be punished with imprisonment for a term which may extend to 2 years, or with fine, or with both; and if the threat is to cause death or grievous hurt, or to cause the destruction of any property by fire, or to cause an offence punishable with death or with imprisonment for a term which may extend to 7 years or more, shall be punished with imprisonment for a term which may extend to 10..."
+source = "Singapore Penal Code 1871, Section 506"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr506-#pr506-"

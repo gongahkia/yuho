@@ -1,0 +1,39 @@
+// Test file for s201_causing_disappearance_evidence_offence
+// Yuho v5 Syntax
+
+referencing penal_code/s201_causing_disappearance_evidence_offence
+
+struct S201TestCase {
+    bool knowsOffenceCommitted,
+    bool causesEvidenceToDisappear,
+    bool givesFalseInformation,
+    bool intentionToScreen,
+}
+
+S201TestCase hidingMurderBody := S201TestCase {
+    knowsOffenceCommitted := TRUE,
+    causesEvidenceToDisappear := TRUE,
+    givesFalseInformation := FALSE,
+    intentionToScreen := TRUE,
+}
+
+assert hidingMurderBody.knowsOffenceCommitted == TRUE
+assert evaluate_s201(hidingMurderBody.knowsOffenceCommitted, hidingMurderBody.causesEvidenceToDisappear, hidingMurderBody.givesFalseInformation, hidingMurderBody.intentionToScreen) == "Liable under s201"
+
+S201TestCase noKnowledge := S201TestCase {
+    knowsOffenceCommitted := FALSE,
+    causesEvidenceToDisappear := TRUE,
+    givesFalseInformation := FALSE,
+    intentionToScreen := TRUE,
+}
+
+assert evaluate_s201(noKnowledge.knowsOffenceCommitted, noKnowledge.causesEvidenceToDisappear, noKnowledge.givesFalseInformation, noKnowledge.intentionToScreen) == "Not liable - no knowledge of offence"
+
+S201TestCase noIntent := S201TestCase {
+    knowsOffenceCommitted := TRUE,
+    causesEvidenceToDisappear := TRUE,
+    givesFalseInformation := FALSE,
+    intentionToScreen := FALSE,
+}
+
+assert evaluate_s201(noIntent.knowsOffenceCommitted, noIntent.causesEvidenceToDisappear, noIntent.givesFalseInformation, noIntent.intentionToScreen) == "Not liable - no screening intent"

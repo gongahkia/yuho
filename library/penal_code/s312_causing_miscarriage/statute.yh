@@ -1,0 +1,44 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr312-#pr312-
+// Singapore Penal Code Section 312 -- Causing miscarriage
+// Yuho v5 Syntax
+
+struct S312Case {
+    string accused,
+    string victim,
+    bool actusReus,
+    bool mensRea,
+}
+
+fn s312_applies(bool actusReus, bool mensRea) : bool {
+    match {
+        case TRUE if actusReus == TRUE && mensRea == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+/// @amendment [15/2019]
+statute 312 "Causing miscarriage" effective 1872-01-01 {
+    definitions {
+        offence_summary := "Voluntarily causing a woman with child to miscarry, subject to the Termination of Pregnancy Act 1974.";
+    }
+
+    elements {
+        /// mental element required for the offence
+        mens_rea intent := "Intent or knowledge as required by the section";
+        /// physical act constituting the offence
+        actus_reus act := "The prohibited act defined by the section";
+        /// contextual requirement -- victim, circumstances, or result
+        circumstance context := "Statutory circumstances are satisfied";
+    }
+
+    penalty {
+        imprisonment := 0 years .. 3 years;
+        fine := $0.00 .. $50,000.00;
+    }
+
+    illustration example1 {
+        "A commits the conduct described in section 312 against B. A is guilty of the offence under section 312."
+    }
+}

@@ -1,0 +1,18 @@
+[statute]
+section_number = "116"
+title = "Abetment of offence punishable with imprisonment"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Whoever abets an offence punishable with imprisonment is punished in the same manner as if the abettor had committed the offence, where the offence is not committed in consequence and no express provision is made. Where the offence's punishment is fixed or a mandatory minimum, the court may impose a lower sentence on the abettor."
+source = "Singapore Penal Code 1871, Section 116"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr116-#pr116-"

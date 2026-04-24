@@ -1,0 +1,32 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr500-#pr500-
+// Singapore Penal Code Section 500 - Punishment for defamation
+/// punishment provision, cross-references section 499
+
+struct DefamationPunishmentCase {
+    string accused,
+    bool offenceCommitted,
+}
+
+fn punishment_applies(bool offenceCommitted) : bool {
+    match {
+        case TRUE if offenceCommitted == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 500 "Punishment for defamation" effective 1872-01-01 {
+    definitions {
+        defamation := "As defined under section 499";
+    }
+
+    elements {
+        /// triggering predicate -- the underlying offence must be established
+        circumstance offence_committed := "The underlying offence is established";
+    }
+
+    penalty {
+        imprisonment := 0 days .. 2 years;
+    }
+}

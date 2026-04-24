@@ -1,0 +1,28 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr451-#pr451-
+// Singapore Penal Code Section 451 - House-breaking in order to commit an offence punishable with imprisonment
+
+/// @amendment [15/2019]
+
+referencing penal_code/s442_house_breaking
+
+statute 451 "House-breaking in order to commit an offence punishable with imprisonment" effective 1872-01-01 {
+    definitions {
+        house_breaking := "As defined in section 442";
+    }
+
+    elements {
+        all_of {
+            /// base offence -- house-breaking under s442
+            actus_reus base_house_breaking := "Commits house-breaking under section 442";
+            /// aggravating purpose -- to commit any offence punishable with imprisonment
+            mens_rea purpose_imprisonment := "Commits house-breaking in order to commit an offence punishable with imprisonment";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 10 years;
+        fine := $0.00 .. $30,000.00;
+    }
+}

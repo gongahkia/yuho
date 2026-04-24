@@ -1,0 +1,18 @@
+[statute]
+section_number = "472"
+title = "Making or possessing a counterfeit seal, plate, etc., with intent to commit a forgery punishable under section 467"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Whoever makes or counterfeits any seal, plate or other instrument for making an impression, intending that the same shall be used for the purpose of committing any forgery which would be punishable under section 467, or with such intent has in his possession any such seal, plate or other instrument, knowing the same to be counterfeit, shall be punished with imprisonment for a term which may extend to 15 years, and shall also be liable to fine."
+source = "Singapore Penal Code 1871, Section 472"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr472-#pr472-"

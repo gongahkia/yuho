@@ -1,0 +1,45 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr275-#pr275-
+// Singapore Penal Code Section 275 - Sale of adulterated drugs
+// Yuho v5 Syntax
+
+struct SaleAdulteratedDrugCase { string accused, bool knewAdulterated, bool soldOrIssued, }
+
+fn is_offence(bool knew, bool sold) : bool {
+    match {
+        case TRUE if knew == FALSE := consequence FALSE;
+        case TRUE if sold == FALSE := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
+
+/// @amendment [15/2019]
+statute 275 "Sale of adulterated drugs" effective 1872-01-01 {
+    definitions {
+        dispensary := "A place at which medicines are dispensed";
+        adulterated_drug := "A drug or medical preparation altered to lessen efficacy, change operation, or render it noxious";
+    }
+
+    elements {
+        all_of {
+            /// fault -- knowledge of adulteration
+            mens_rea knowledge := "Knowing the drug has been adulterated";
+            any_of {
+                /// alternative conduct -- sale
+                actus_reus sell := "Selling the adulterated drug";
+                /// alternative conduct -- offering for sale
+                actus_reus offer := "Offering or exposing the drug for sale";
+                /// alternative conduct -- issuing from dispensary
+                actus_reus issue := "Issuing the drug from a dispensary for medicinal purposes as unadulterated";
+                /// alternative conduct -- causing use by another
+                actus_reus cause_use := "Causing the drug to be used for medicinal purposes by any person not knowing of the adulteration";
+            }
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 3 years;
+        fine := $0.00 .. $10,000.00;
+    }
+}

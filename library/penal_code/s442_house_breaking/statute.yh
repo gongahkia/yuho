@@ -1,0 +1,38 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr442-#pr442-
+// Singapore Penal Code Section 442 - House-breaking
+
+/// @amendment [15/2019]
+
+referencing penal_code/s441_criminal_trespass
+
+statute 442 "House-breaking" effective 1872-01-01 {
+    definitions {
+        house_breaking := "Criminal trespass into a building used as a dwelling or as a place of worship or custody of property";
+        criminal_trespass := "As defined in section 441";
+    }
+
+    elements {
+        all_of {
+            /// base offence -- criminal trespass under s441
+            actus_reus base_trespass := "Commits criminal trespass under section 441";
+            any_of {
+                /// by entering
+                actus_reus enter := "Enters into a qualifying building, tent, container, or vessel";
+                /// or by remaining
+                actus_reus remain := "Remains in a qualifying building, tent, container, or vessel";
+            }
+            any_of {
+                /// target -- human dwelling
+                circumstance dwelling := "Target is a building, tent, container, or vessel used as a human dwelling";
+                /// target -- place of worship
+                circumstance worship := "Target is a building used as a place for worship";
+                /// target -- custody of property
+                circumstance custody := "Target is a building used as a place for the custody of property";
+            }
+        }
+    }
+
+    // Explanation: introduction of any part of the trespassers body suffices as entering
+}

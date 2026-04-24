@@ -1,0 +1,43 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr225C-#pr225C-
+// Singapore Penal Code Section 225C - Offences against laws of Singapore where no special punishment is provided
+// Yuho v5 Syntax
+
+struct S225CCase {
+    string accused,
+    bool prohibitedActOrEnjoinedOmission,
+    bool noSpecialPunishmentProvided,
+}
+fn s225C_applies(bool prohibitedActOrEnjoinedOmission, bool noSpecialPunishmentProvided) : bool {
+    match {
+        case TRUE if prohibitedActOrEnjoinedOmission == FALSE := consequence FALSE;
+        case TRUE if noSpecialPunishmentProvided == FALSE := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
+statute 225C "Offences against laws of Singapore where no special punishment is provided" effective 1872-01-01 {
+    definitions {
+        prohibited := "An act the person is prohibited by law from doing";
+        enjoined := "An omission of an act the person is enjoined by law to do";
+    }
+
+    elements {
+        all_of {
+            any_of {
+                actus_reus prohibited_act := "Does anything which by any law in force in Singapore he is prohibited from doing";
+                actus_reus enjoined_omission := "Omits to do anything which he is so enjoined to do";
+            }
+            circumstance no_special_punishment := "No special punishment is provided by the law for the commission or omission";
+        }
+    }
+
+    penalty {
+        fine := $0.00 .. $2,000.00;
+    }
+
+    illustration example1 {
+        "A breaches a statutory requirement for which no penalty is specified. A is liable to a fine not exceeding $2,000 under s225C."
+    }
+
+}

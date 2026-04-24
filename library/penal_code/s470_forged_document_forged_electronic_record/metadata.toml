@@ -1,0 +1,18 @@
+[statute]
+section_number = "470"
+title = "“A forged document” or “a forged electronic record”"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "A false document or false electronic record, made wholly or in part by forgery, is designated “a forged document” or “a forged electronic record”, respectively."
+source = "Singapore Penal Code 1871, Section 470"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr470-#pr470-"

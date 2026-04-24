@@ -1,0 +1,37 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr351-#pr351-
+// Singapore Penal Code Section 351 -- Assault
+// Yuho v5 Syntax
+
+struct S351Case {
+    string actor,
+    bool criteriaMet,
+}
+
+fn s351_matches(bool criteriaMet) : bool {
+    match {
+        case TRUE if criteriaMet == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+
+statute 351 "Assault" effective 1872-01-01 {
+    definitions {
+        term_summary := "Definition of assault.";
+    }
+
+    elements {
+        /// statutory criteria for the defined term
+        circumstance criteria := "Statutory criteria for the defined term are satisfied";
+    }
+
+    penalty {
+        fine := $0.00 .. $1,000.00;
+    }
+
+    illustration example1 {
+        "The conduct of A matches the statutory criteria defined under section 351."
+    }
+}

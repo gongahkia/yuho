@@ -1,0 +1,51 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr220-#pr220-
+// Singapore Penal Code Section 220 - Commitment for trial or confinement by person having authority who knows he is acting contrary to law
+// Yuho v5 Syntax
+
+struct S220Case {
+    string accused,
+    bool hasLegalAuthority,
+    bool commitsPersonForTrialOrConfinement,
+    bool knowsContraryToLaw,
+    bool corruptlyOrIntendingInjury,
+}
+fn s220_applies(bool hasLegalAuthority, bool commitsPersonForTrialOrConfinement, bool knowsContraryToLaw, bool corruptlyOrIntendingInjury) : bool {
+    match {
+        case TRUE if hasLegalAuthority == FALSE := consequence FALSE;
+        case TRUE if commitsPersonForTrialOrConfinement == FALSE := consequence FALSE;
+        case TRUE if knowsContraryToLaw == FALSE := consequence FALSE;
+        case TRUE if corruptlyOrIntendingInjury == FALSE := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
+/// @amendment [Act 23 of 2021 wef 01/03/2022]
+statute 220 "Commitment for trial or confinement by person having authority who knows he is acting contrary to law" effective 1872-01-01 {
+    definitions {
+        legal_authority := "Office giving authority to commit persons for trial or to confinement, or to keep persons in confinement";
+        contrary_to_law := "Acting without lawful basis for the committal or confinement";
+    }
+
+    elements {
+        all_of {
+            circumstance authority := "Accused holds an office giving legal authority to commit persons for trial or confinement or to keep them in confinement";
+            actus_reus commits_or_keeps := "Commits or keeps the person in confinement in exercise of that authority";
+            any_of {
+                mens_rea corruptly := "Acts corruptly";
+                mens_rea intent_injury := "Intent to cause injury to any person";
+            }
+            mens_rea knowledge := "Knowing that in doing so he is acting contrary to law";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 years .. 7 years;
+        fine := $0.00 .. $50,000.00;
+    }
+
+    illustration example1 {
+        "A, a magistrate with authority to commit persons to confinement, corruptly commits B to prison knowing no legal basis exists. A commits an offence under s220."
+    }
+
+}

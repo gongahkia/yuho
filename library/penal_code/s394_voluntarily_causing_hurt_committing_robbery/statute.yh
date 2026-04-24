@@ -1,0 +1,48 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr394-#pr394-
+// Singapore Penal Code Section 394 - Voluntarily causing hurt in committing robbery
+// Yuho v5 Syntax
+
+referencing penal_code/s390_robbery
+
+struct S394Case {
+    string accused,
+    bool robberyOrAttempt,
+    bool hurtVoluntarilyCaused,
+    bool jointlyConcerned,
+}
+
+fn s394_applies(bool robbery, bool hurt) : bool {
+    match {
+        case TRUE if robbery == FALSE := consequence FALSE;
+        case TRUE if hurt == FALSE := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
+
+statute 394 "Voluntarily causing hurt in committing robbery" effective 1872-01-01 {
+    definitions {
+        voluntarily := "As defined under section 39";
+        hurt := "Causing bodily pain, disease, or infirmity";
+        jointly_concerned := "Other persons acting together with the offender in committing or attempting the robbery";
+    }
+
+    elements {
+        /// robbery or attempted robbery must be the predicate
+        actus_reus predicate_robbery := "Committing or attempting to commit robbery" burden prosecution beyond_reasonable_doubt;
+        /// hurt must be voluntarily caused by a person so committing or attempting
+        actus_reus hurt_caused := "Voluntarily causing hurt in the course of robbery or attempted robbery";
+        /// liability extends to all persons jointly concerned
+        circumstance joint_liability := "All persons jointly concerned in committing or attempting the robbery share liability";
+    }
+
+    penalty {
+        imprisonment := 5 years .. 20 years;
+        caning := 12 .. 24 strokes;
+    }
+
+    illustration example1 {
+        "A and B rob C, and in the course of the robbery A strikes C, breaking C's arm. Both A and B are punishable under s394."
+    }
+}

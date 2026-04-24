@@ -1,0 +1,26 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr356-#pr356-
+// Singapore Penal Code Section 356
+
+statute 356 "Assault or criminal force in committing or attempting to commit theft of property carried by a person" effective 1872-01-01 {
+    definitions {
+        theft_offence := "An offence of theft as defined in section 378";
+    }
+
+    elements {
+        /// assault or criminal force to a person
+        actus_reus assault_or_force := "Assaults or uses criminal force to any person";
+        /// in committing or attempting to commit theft
+        circumstance in_commission_theft := "In committing or attempting to commit theft";
+        /// property carried by or about that person
+        circumstance property_on_person := "Of any property which the person then had on or about their person";
+    }
+
+    penalty {
+        imprisonment := 0 years .. 10 years;
+        fine := $0.00 .. $10,000.00;
+        caning := 0 .. 3 strokes;
+    }
+
+}

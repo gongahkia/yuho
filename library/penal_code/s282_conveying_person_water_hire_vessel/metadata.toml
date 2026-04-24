@@ -1,0 +1,18 @@
+[statute]
+section_number = "282"
+title = "Conveying person by water for hire in a vessel overloaded or unsafe"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Criminalises knowingly or negligently conveying a person by water for hire in a vessel that is in such a state or so loaded as to endanger life."
+source = "Singapore Penal Code 1871, Section 282"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr282-#pr282-"

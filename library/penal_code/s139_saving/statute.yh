@@ -1,0 +1,13 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr139-#pr139-
+// Singapore Penal Code Section 139 - Saving
+// Shape: scope/saving provision limiting double punishment for service offences
+
+statute 139 "Saving" effective 1872-01-01 {
+    definitions {
+        saving_rule := "Where provision is made in any law relating to the discipline of the Singapore Armed Forces for the punishment of an offence corresponding to an offence defined in Chapter VII, no person who is subject to such provision shall be subject to punishment under this Code for the offence defined in this Chapter";
+        corresponding_offence := "A service-discipline offence that corresponds to an offence defined in Chapter VII";
+        subject_person := "A person subject to a law relating to the discipline of the Singapore Armed Forces";
+    }
+}

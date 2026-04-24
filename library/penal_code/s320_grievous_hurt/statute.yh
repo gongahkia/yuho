@@ -1,0 +1,37 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr320-#pr320-
+// Singapore Penal Code Section 320 -- Grievous hurt
+// Yuho v5 Syntax
+
+struct S320Case {
+    string actor,
+    bool criteriaMet,
+}
+
+fn s320_matches(bool criteriaMet) : bool {
+    match {
+        case TRUE if criteriaMet == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+
+statute 320 "Grievous hurt" effective 1872-01-01 {
+    definitions {
+        term_summary := "Definition of the kinds of hurt designated as grievous.";
+    }
+
+    elements {
+        /// statutory criteria for the defined term
+        circumstance criteria := "Statutory criteria for the defined term are satisfied";
+    }
+
+    penalty {
+        fine := $0.00 .. $1,000.00;
+    }
+
+    illustration example1 {
+        "The conduct of A matches the statutory criteria defined under section 320."
+    }
+}

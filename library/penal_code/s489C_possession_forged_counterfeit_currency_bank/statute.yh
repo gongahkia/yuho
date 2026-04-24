@@ -1,0 +1,36 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr489C-#pr489C-
+/// @amendment [15/2019]
+// Singapore Penal Code Section 489C - Possession of forged or counterfeit currency or bank notes
+// Yuho v5 Syntax
+
+struct PossessionForgedCurrencyCase {
+    string accused,
+    bool elementsSatisfied,
+}
+
+fn is_liable(bool elementsSatisfied) : bool {
+    match {
+        case TRUE if elementsSatisfied == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 489C "Possession of forged or counterfeit currency or bank notes" effective 1946-01-01 {
+    definitions {
+        forged_currency := "Counterfeit currency or bank note";
+    }
+
+    elements {
+        all_of {
+            actus_reus possesses_forged_currency := "Has in possession any forged or counterfeit currency or bank note";
+            mens_rea knows_or_believes_forged := "Knowing or having reason to believe the note to be forged or counterfeit";
+            mens_rea intent_use_as_genuine := "Intending to use the same as genuine or that it may be used as genuine";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 15 years;
+    }
+}

@@ -1,0 +1,18 @@
+[statute]
+section_number = "334"
+title = "Voluntarily causing hurt on provocation"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Voluntarily causing hurt on grave and sudden provocation."
+source = "Singapore Penal Code 1871, Section 334"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr334-#pr334-"

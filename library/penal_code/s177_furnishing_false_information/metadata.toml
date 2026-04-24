@@ -1,0 +1,18 @@
+[statute]
+section_number = "177"
+title = "Furnishing false information"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Furnishing, as true, information one is legally bound to give to a public servant, knowing or having reason to believe it false."
+source = "Singapore Penal Code 1871, Section 177"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr177-#pr177-"

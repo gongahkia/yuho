@@ -1,0 +1,23 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr372-#pr372-
+// Singapore Penal Code Section 372
+
+statute 372 "Selling minor for purposes of prostitution, etc." effective 1872-01-01 {
+    definitions {
+        disposition_of_minor := "Selling, letting to hire, or otherwise disposing of a person below 18";
+    }
+
+    elements {
+        /// sell, let to hire, or otherwise dispose of a minor
+        actus_reus sell_let_minor := "Sells, lets to hire, or otherwise disposes of any person below 18 years of age";
+        /// for purposes of prostitution or unlawful or immoral purpose
+        mens_rea purpose_prostitution := "With intent or knowledge that the person will be employed or used for prostitution, illicit intercourse, or any unlawful and immoral purpose";
+    }
+
+    penalty {
+        imprisonment := 0 years .. 10 years;
+        fine := $0.00 .. $10,000.00;
+    }
+
+}

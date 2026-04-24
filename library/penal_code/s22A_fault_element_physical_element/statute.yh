@@ -1,0 +1,13 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr22A-#pr22A-
+// Singapore Penal Code Section 22A
+// Yuho v5 Syntax
+
+/// @amendment [15/2019]
+
+statute 22A "“Fault element” and “physical element”" effective 1872-01-01 {
+    definitions {
+        fault_element_physical_element := "—(1) A fault element of an offence refers to any state of mind, proof of which is needed to establish liability under that offence, including but not limited to intention, wilfulness, knowledge, rashness and negligence. [15/2019] (2) A physical element of an offence refers to any fact, proof of which is needed to establish liability under that offence, and that is not a fault element of that offence. [15/2019]";
+    }
+}

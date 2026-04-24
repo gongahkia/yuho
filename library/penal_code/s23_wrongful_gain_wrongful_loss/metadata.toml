@@ -1,0 +1,18 @@
+[statute]
+section_number = "23"
+title = "“Wrongful gain” and “wrongful loss”"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Defines 'wrongful gain' and 'wrongful loss' in terms of unlawful means and legal entitlement."
+source = "Singapore Penal Code 1871, Section 23"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr23-#pr23-"

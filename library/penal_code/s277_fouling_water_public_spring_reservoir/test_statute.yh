@@ -1,0 +1,10 @@
+// Test file for s277
+// Yuho v5 Syntax
+
+referencing penal_code/s277_fouling_water_public_spring_reservoir
+
+struct FoulingWaterTestCase { bool voluntary, bool publicWater, bool lessFit, }
+FoulingWaterTestCase good := FoulingWaterTestCase { voluntary := TRUE, publicWater := TRUE, lessFit := TRUE, }
+assert is_offence(good.voluntary, good.publicWater, good.lessFit) == TRUE
+FoulingWaterTestCase privateWater := FoulingWaterTestCase { voluntary := TRUE, publicWater := FALSE, lessFit := TRUE, }
+assert is_offence(privateWater.voluntary, privateWater.publicWater, privateWater.lessFit) == FALSE

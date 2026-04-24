@@ -1,0 +1,49 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr385-#pr385-
+// Singapore Penal Code Section 385 - Putting person in fear of harm in order to commit extortion
+// Yuho v5 Syntax
+
+referencing penal_code/s383_extortion
+
+struct S385Case {
+    string accused,
+    string victim,
+    bool extortionIntent,
+    bool putInFearOfHarm,
+    string harmType,
+}
+
+fn s385_applies(bool extortionIntent, bool fearOfHarm) : bool {
+    match {
+        case TRUE if extortionIntent == FALSE := consequence FALSE;
+        case TRUE if fearOfHarm == FALSE := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
+
+statute 385 "Putting person in fear of harm in order to commit extortion" effective 1872-01-01 {
+    definitions {
+        harm := "Harm to body, mind, reputation, or property, whether caused legally or illegally";
+        fear := "Apprehension of harm induced in another person";
+        extortion := "As defined under section 383";
+    }
+
+    elements {
+        /// purpose must be to commit extortion
+        mens_rea extortion_purpose := "Acting in order to commit extortion" burden prosecution beyond_reasonable_doubt;
+        /// puts or attempts to put another in fear of harm
+        actus_reus putting_in_fear := "Puts or attempts to put any person in fear of harm";
+        /// harm may be to any person -- whether caused legally or illegally
+        circumstance harm_scope := "Harm to that person or another in body, mind, reputation, or property";
+    }
+
+    penalty {
+        imprisonment := 2 years .. 5 years;
+        caning := 1 .. 24 strokes;
+    }
+
+    illustration example1 {
+        "A threatens to expose B's secret unless B pays money. A has put B in fear of harm to reputation in order to commit extortion."
+    }
+}

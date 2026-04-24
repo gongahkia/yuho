@@ -1,0 +1,19 @@
+[statute]
+section_number = "258"
+title = "Sale of counterfeit Government stamp"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Selling or offering for sale any stamp known or believed to be a counterfeit of a Government revenue stamp."
+source = "Singapore Penal Code 1871, Section 258"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr258-#pr258-"
+disclaimer = "Educational purposes only. Cross-reference with official SSO text."

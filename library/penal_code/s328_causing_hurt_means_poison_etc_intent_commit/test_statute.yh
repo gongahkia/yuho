@@ -1,0 +1,23 @@
+// Test file for s328
+// Yuho v5 Syntax
+
+referencing penal_code/s328_causing_hurt_means_poison_etc_intent_commit
+
+struct S328CaseTest {
+    bool actusReus,
+    bool mensRea,
+}
+
+S328CaseTest satisfied := S328CaseTest {
+    actusReus := TRUE,
+    mensRea := TRUE,
+}
+
+assert s328_applies(satisfied.actusReus, satisfied.mensRea) == TRUE
+
+S328CaseTest missingMens := S328CaseTest {
+    actusReus := TRUE,
+    mensRea := FALSE,
+}
+
+assert s328_applies(missingMens.actusReus, missingMens.mensRea) == FALSE

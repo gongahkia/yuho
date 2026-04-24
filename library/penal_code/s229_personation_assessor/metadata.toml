@@ -1,0 +1,19 @@
+[statute]
+section_number = "229"
+title = "Personation of an assessor"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Personating or voluntarily serving as an assessor when not entitled by law to be returned, empanelled or sworn."
+source = "Singapore Penal Code 1871, Section 229"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr229-#pr229-"
+disclaimer = "Educational purposes only. Cross-reference with official SSO text."

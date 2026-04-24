@@ -1,0 +1,35 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr467-#pr467-
+// Singapore Penal Code Section 467 - Forgery of a valuable security or will
+// Yuho v5 Syntax
+
+struct ForgeryValuableSecurityCase {
+    string accused,
+    bool elementsSatisfied,
+}
+
+fn is_liable(bool elementsSatisfied) : bool {
+    match {
+        case TRUE if elementsSatisfied == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 467 "Forgery of a valuable security or will" effective 1872-01-01 {
+    definitions {
+        valuable_security := "As defined in section 30";
+        will := "A testamentary document";
+    }
+
+    elements {
+        all_of {
+            actus_reus forges_document := "Forges a document purporting to be a valuable security, will, or authority";
+            circumstance valuable_nature := "Document purports to be a valuable security, will, authority to adopt, or receipt for money/property";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 15 years;
+    }
+}

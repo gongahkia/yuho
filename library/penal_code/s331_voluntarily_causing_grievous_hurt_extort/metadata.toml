@@ -1,0 +1,18 @@
+[statute]
+section_number = "331"
+title = "Voluntarily causing grievous hurt to extort confession or to compel restoration of property"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Voluntarily causing grievous hurt to extort confession or compel restoration of property."
+source = "Singapore Penal Code 1871, Section 331"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr331-#pr331-"

@@ -1,0 +1,14 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr73-#pr73-
+// Singapore Penal Code Section 73
+
+/// @amendment [15/2019]
+/// @amendment [Act 23 of 2021 wef 01/03/2022]
+
+statute 73 "Enhanced penalties for offences against domestic workers" effective 1872-01-01 {
+    definitions {
+        rule := "Where an employer of a domestic worker, a member of the employer's household or an employment agent of a domestic worker is convicted of an offence under this Code (other than an excluded offence) committed against that domestic worker, the court may sentence twice the maximum punishment otherwise imposable.";
+        rebuttal := "Section does not apply where offender proves the relationship did not adversely affect the worker's ability to protect herself from the harm caused.";
+    }
+}

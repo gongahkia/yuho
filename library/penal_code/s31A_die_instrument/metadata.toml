@@ -1,0 +1,18 @@
+[statute]
+section_number = "31A"
+title = "“Die” and “instrument”"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Defines 'die' and 'instrument' for Chapters 12 and 18 concerning counterfeiting of stamps etc."
+source = "Singapore Penal Code 1871, Section 31A"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr31A-#pr31A-"

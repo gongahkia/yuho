@@ -1,0 +1,18 @@
+[statute]
+section_number = "30"
+title = "“Valuable security”"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Defines 'valuable security' as documents/electronic records creating or evidencing legal rights."
+source = "Singapore Penal Code 1871, Section 30"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr30-#pr30-"

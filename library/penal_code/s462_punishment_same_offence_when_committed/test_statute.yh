@@ -1,0 +1,22 @@
+// Test file for s462_punishment_same_offence_when_committed
+// Yuho v5 Syntax
+
+referencing penal_code/s462_punishment_same_offence_when_committed
+
+struct EntrustedReceptacleCaseTest {
+    bool elementsSatisfied,
+}
+
+EntrustedReceptacleCaseTest positive := EntrustedReceptacleCaseTest {
+    elementsSatisfied := TRUE,
+}
+
+assert positive.elementsSatisfied == TRUE
+assert is_liable(positive.elementsSatisfied) == TRUE
+
+EntrustedReceptacleCaseTest negative := EntrustedReceptacleCaseTest {
+    elementsSatisfied := FALSE,
+}
+
+assert negative.elementsSatisfied == FALSE
+assert is_liable(negative.elementsSatisfied) == FALSE

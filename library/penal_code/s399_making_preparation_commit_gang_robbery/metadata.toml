@@ -1,0 +1,18 @@
+[statute]
+section_number = "399"
+title = "Making preparation to commit gang-robbery"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Making any preparation for committing gang-robbery is punishable with 3 to 10 years imprisonment and caning with not less than 12 strokes."
+source = "Singapore Penal Code 1871, Section 399"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr399-#pr399-"

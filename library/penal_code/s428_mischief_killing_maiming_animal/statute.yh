@@ -1,0 +1,35 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr428-#pr428-
+// Singapore Penal Code Section 428 - Mischief by killing or maiming any animal
+
+referencing penal_code/s425_mischief
+
+statute 428 "Mischief by killing or maiming any animal" effective 1872-01-01 {
+    definitions {
+        animal := "Any living creature other than a human being";
+        mischief := "As defined in section 425";
+    }
+
+    elements {
+        all_of {
+            /// base offence -- mischief under s425
+            actus_reus base_mischief := "Commits mischief under section 425";
+            any_of {
+                /// killing
+                actus_reus kill := "Kills any animal";
+                /// poisoning
+                actus_reus poison := "Poisons any animal";
+                /// maiming
+                actus_reus maim := "Maims any animal";
+                /// rendering useless
+                actus_reus render_useless := "Renders any animal useless";
+            }
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 5 years;
+        fine := $0.00 .. $20,000.00;
+    }
+}

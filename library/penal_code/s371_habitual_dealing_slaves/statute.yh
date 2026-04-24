@@ -1,0 +1,21 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr371-#pr371-
+// Singapore Penal Code Section 371
+
+statute 371 "Habitual dealing in slaves" effective 1872-01-01 {
+    definitions {
+        habitual_dealer := "A person who habitually imports, exports, traffics or deals in slaves";
+    }
+
+    elements {
+        /// habitually dealing in slaves
+        actus_reus habitual_dealing := "Habitually imports, exports, removes, buys, sells, traffics or deals in slaves";
+    }
+
+    penalty {
+        imprisonment := 0 years .. 10 years;
+        fine := $0.00 .. $10,000.00;
+    }
+
+}

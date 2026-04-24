@@ -1,0 +1,41 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr336-#pr336-
+// Singapore Penal Code Section 336 -- Punishment for act which endangers life or the personal safety of others
+// Yuho v5 Syntax
+
+struct S336Case {
+    string accused,
+    string victim,
+    bool offenceCommitted,
+}
+
+fn s336_applies(bool offenceCommitted) : bool {
+    match {
+        case TRUE if offenceCommitted == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+
+statute 336 "Punishment for act which endangers life or the personal safety of others" effective 1872-01-01 {
+    definitions {
+        offence_summary := "Rash or negligent act endangering life or personal safety of others.";
+    }
+
+    elements {
+        /// the predicate offence must be established
+        circumstance offence_committed := "The statutory conduct is proved";
+        /// sentence applies on conviction
+        actus_reus conviction := "Conviction under this section";
+    }
+
+    penalty {
+        imprisonment := 0 months .. 6 months;
+        fine := $0.00 .. $2,500.00;
+    }
+
+    illustration example1 {
+        "A is convicted under section 336. A shall be punished as prescribed by section 336."
+    }
+}

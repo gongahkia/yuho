@@ -1,0 +1,39 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr121B-#pr121B-
+/// @amendment [15/2019]
+// Singapore Penal Code Section 121B - Offences against authority
+// Yuho v5 Syntax
+
+struct S121BCase {
+    string accused,
+    bool plansUnlawfulDepositionOfPresident,
+    bool plansOverawingGovernmentByCriminalForce,
+}
+
+fn s121B_applies(bool plansUnlawfulDepositionOfPresident, bool plansOverawingGovernmentByCriminalForce) : bool {
+    match {
+        case TRUE if plansUnlawfulDepositionOfPresident == TRUE := consequence TRUE;
+        case TRUE if plansOverawingGovernmentByCriminalForce == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 121B "Offences against authority" effective 2020-01-01 {
+    definitions {
+        unlawful_deposition := "Unlawful deprivation or deposition of the President from the sovereignty of Singapore";
+        overawing_government := "Overawing the Government by criminal force";
+    }
+
+    elements {
+        any_of {
+            actus_reus plans_deposition := "Plans the unlawful deprivation or deposition of the President from sovereignty of Singapore";
+            actus_reus plans_overawing := "Plans the overawing by criminal force of the Government";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 99 years;
+        fine := $0.00 .. $1,000,000.00;
+    }
+}

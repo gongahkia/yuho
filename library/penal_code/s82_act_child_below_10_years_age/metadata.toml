@@ -1,0 +1,18 @@
+[statute]
+section_number = "82"
+title = "Act of a child below 10 years of age"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Irrebuttable defence: nothing done by a child below 10 is an offence (doli incapax)."
+source = "Singapore Penal Code 1871, Section 82"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr82-#pr82-"

@@ -1,0 +1,18 @@
+[statute]
+section_number = "108B"
+title = "Abetment outside Singapore of an offence in Singapore"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "A person abets an offence within the meaning of this Code who abets an offence committed in Singapore notwithstanding that any or all of the acts constituting the abetment were done outside Singapore."
+source = "Singapore Penal Code 1871, Section 108B"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr108B-#pr108B-"

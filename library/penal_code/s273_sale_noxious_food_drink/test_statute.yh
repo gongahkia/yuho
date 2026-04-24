@@ -1,0 +1,10 @@
+// Test file for s273
+// Yuho v5 Syntax
+
+referencing penal_code/s273_sale_noxious_food_drink
+
+struct NoxiousFoodTestCase { bool sold, bool noxious, bool knowledge, }
+NoxiousFoodTestCase good := NoxiousFoodTestCase { sold := TRUE, noxious := TRUE, knowledge := TRUE, }
+assert is_offence(good.sold, good.noxious, good.knowledge) == TRUE
+NoxiousFoodTestCase ignorant := NoxiousFoodTestCase { sold := TRUE, noxious := TRUE, knowledge := FALSE, }
+assert is_offence(ignorant.sold, ignorant.noxious, ignorant.knowledge) == FALSE

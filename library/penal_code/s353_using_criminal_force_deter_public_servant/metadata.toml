@@ -1,0 +1,18 @@
+[statute]
+section_number = "353"
+title = "Using criminal force to deter a public servant from discharge of his duty"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Assault or criminal force against a public servant in execution of duty."
+source = "Singapore Penal Code 1871, Section 353"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr353-#pr353-"

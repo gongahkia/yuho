@@ -1,0 +1,18 @@
+[statute]
+section_number = "351"
+title = "Assault"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Definition of assault."
+source = "Singapore Penal Code 1871, Section 351"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr351-#pr351-"

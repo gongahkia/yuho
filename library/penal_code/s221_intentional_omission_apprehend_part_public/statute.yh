@@ -1,0 +1,51 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr221-#pr221-
+// Singapore Penal Code Section 221 - Intentional omission to apprehend on the part of a public servant bound by law to apprehend
+// Yuho v5 Syntax
+
+struct S221Case {
+    string accused,
+    bool isPublicServant,
+    bool legallyBound,
+    bool intentionalOmissionOrAid,
+    string underlyingOffenceSeverity,
+}
+fn s221_applies(bool isPublicServant, bool legallyBound, bool intentionalOmissionOrAid) : bool {
+    match {
+        case TRUE if isPublicServant == FALSE := consequence FALSE;
+        case TRUE if legallyBound == FALSE := consequence FALSE;
+        case TRUE if intentionalOmissionOrAid == FALSE := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
+statute 221 "Intentional omission to apprehend on the part of a public servant bound by law to apprehend" effective 1872-01-01 {
+    definitions {
+        public_servant := "Person defined as a public servant under section 21";
+        legally_bound := "Bound as such public servant to apprehend or keep in confinement";
+    }
+
+    elements {
+        all_of {
+            circumstance public_servant_status := "Accused is a public servant";
+            circumstance duty := "Legally bound as such public servant to apprehend or keep in confinement any person charged with or liable to be apprehended for an offence";
+            any_of {
+                actus_reus omit_apprehend := "Intentionally omits to apprehend such person";
+                actus_reus suffer_escape := "Intentionally suffers such person to escape";
+                actus_reus aid_escape := "Intentionally aids such person in escaping or attempting to escape";
+            }
+            mens_rea intent := "Intentionally";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 years .. 10 years;
+        fine := $0.00 .. $50,000.00;
+    }
+
+    illustration example1 {
+        "A, a police officer legally bound to apprehend B who is liable for a murder charge, intentionally allows B to escape. A is punishable under s221(a) with imprisonment up to 10 years and fine."
+    }
+
+    // penalty tiered: (a) death offence: up to 10 years + fine; (b) life/20yr offence: up to 7 years + fine; (c) <20yr offence: up to 5 years or fine or both
+}

@@ -1,0 +1,18 @@
+[statute]
+section_number = "400"
+title = "Punishment for belonging to gang-robbers"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Belonging to a gang of persons associated for the purpose of habitually committing gang-robbery is punishable with life imprisonment or up to 10 years imprisonment, and caning with not less than 6 strokes."
+source = "Singapore Penal Code 1871, Section 400"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr400-#pr400-"

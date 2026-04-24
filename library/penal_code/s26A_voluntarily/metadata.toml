@@ -1,0 +1,18 @@
+[statute]
+section_number = "26A"
+title = "“Voluntarily”"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Defines 'voluntarily' as causing an effect by intended or foreseen means."
+source = "Singapore Penal Code 1871, Section 26A"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr26A-#pr26A-"

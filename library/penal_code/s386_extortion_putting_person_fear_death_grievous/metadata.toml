@@ -1,0 +1,18 @@
+[statute]
+section_number = "386"
+title = "Extortion by putting a person in fear of death or grievous hurt"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Extortion committed by putting any person in fear of death or grievous hurt is punishable with 2 to 10 years imprisonment and caning."
+source = "Singapore Penal Code 1871, Section 386"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr386-#pr386-"

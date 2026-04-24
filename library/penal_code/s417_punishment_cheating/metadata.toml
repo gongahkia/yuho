@@ -1,0 +1,18 @@
+[statute]
+section_number = "417"
+title = "Punishment for cheating"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Punishment for the offence of cheating under section 415."
+source = "Singapore Penal Code 1871, Section 417"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr417-#pr417-"

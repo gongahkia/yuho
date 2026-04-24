@@ -1,0 +1,35 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr466-#pr466-
+// Singapore Penal Code Section 466 - Forgery of a record of a court of justice, or a public register of births, etc.
+// Yuho v5 Syntax
+
+struct ForgeryCourtRecordCase {
+    string accused,
+    bool elementsSatisfied,
+}
+
+fn is_liable(bool elementsSatisfied) : bool {
+    match {
+        case TRUE if elementsSatisfied == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 466 "Forgery of a record of a court of justice, or a public register of births, etc." effective 1872-01-01 {
+    definitions {
+        forgery := "As defined in section 463";
+        public_servant := "As defined in section 21";
+    }
+
+    elements {
+        all_of {
+            actus_reus forges_document := "Forges a document or electronic record";
+            circumstance purports_official := "Purports to be a court record, register of birth/marriage/burial, or official document of a public servant";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 10 years;
+    }
+}

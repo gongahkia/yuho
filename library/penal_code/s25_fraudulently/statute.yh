@@ -1,0 +1,13 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr25-#pr25-
+// Singapore Penal Code Section 25
+// Yuho v5 Syntax
+
+/// @amendment [15/2019]
+
+statute 25 "“Fraudulently”" effective 1872-01-01 {
+    definitions {
+        fraudulently := "A person ( A ) is said to do an act fraudulently if A does that act with intent to deceive another person ( B ) and by means of such deception, that an advantage should accrue to A or another person or detriment should befall B or another person (other than A ), regardless of whether such advantage or detriment is temporary or permanent. [15/2019] Explanation 1.—Where the advantage or the detriment A intended by means of the act done is so slight that no reasonable person of ordinary sense or temper would complain of it, the act is not done fraudulently. Explanation 2.—It is sufficient in any charge for an offence under this Code involving doing an act fraudulently to allege a general intent to act fraudulently without naming any particular person intended to be deceived.";
+    }
+}

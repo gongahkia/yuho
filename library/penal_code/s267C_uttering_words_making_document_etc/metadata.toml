@@ -1,0 +1,19 @@
+[statute]
+section_number = "267C"
+title = "Uttering words, making document, etc., containing incitement to violence, etc."
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Uttering, making, distributing or communicating words, documents or electronic records containing incitement to violence, counselling disobedience to law, or likely to cause a breach of the peace."
+source = "Singapore Penal Code 1871, Section 267C"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr267C-#pr267C-"
+disclaimer = "Educational purposes only. Cross-reference with official SSO text."

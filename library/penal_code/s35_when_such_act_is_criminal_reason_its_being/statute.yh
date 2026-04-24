@@ -1,0 +1,11 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr35-#pr35-
+// Singapore Penal Code Section 35
+// Yuho v5 Syntax
+
+statute 35 "When such an act is criminal by reason of its being done with a criminal knowledge or intention" effective 1872-01-01 {
+    definitions {
+        criminal_knowledge_intention := "Whenever an act, which is criminal only by reason of its being done with a criminal knowledge or intention, is done by several persons, each of such persons who joins in the act with such knowledge or intention, is liable for the act in the same manner as if the act were done by him alone with that knowledge or intention.";
+    }
+}

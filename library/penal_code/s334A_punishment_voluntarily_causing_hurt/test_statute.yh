@@ -1,0 +1,23 @@
+// Test file for s334A
+// Yuho v5 Syntax
+
+referencing penal_code/s334A_punishment_voluntarily_causing_hurt
+
+struct S334aCaseTest {
+    bool actusReus,
+    bool mensRea,
+}
+
+S334aCaseTest satisfied := S334aCaseTest {
+    actusReus := TRUE,
+    mensRea := TRUE,
+}
+
+assert s334a_applies(satisfied.actusReus, satisfied.mensRea) == TRUE
+
+S334aCaseTest missingMens := S334aCaseTest {
+    actusReus := TRUE,
+    mensRea := FALSE,
+}
+
+assert s334a_applies(missingMens.actusReus, missingMens.mensRea) == FALSE

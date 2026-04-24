@@ -1,0 +1,28 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr169-#pr169-
+// Singapore Penal Code Section 169
+
+statute 169 "Public servant unlawfully buying or bidding for property" effective 1872-01-01 {
+    definitions {
+        purchase_bar := "Legal obligation on a public servant, as such, not to purchase or bid for certain property";
+    }
+
+    elements {
+        all_of {
+            /// accused is a public servant
+            circumstance status := "Accused is a public servant";
+            /// subject to a duty not to purchase or bid for certain property
+            circumstance legal_duty := "Legally bound as such public servant not to purchase or bid for the property";
+            /// purchases or bids in own name, or another's, or jointly or in shares
+            actus_reus purchasing_or_bidding := "Purchasing or bidding for the property, either in his own name or another's, or jointly or in shares with others";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 months .. 2 years;
+        fine := $0.00 .. $30,000.00;
+    }
+
+    /// The property, if purchased, shall be confiscated.
+}

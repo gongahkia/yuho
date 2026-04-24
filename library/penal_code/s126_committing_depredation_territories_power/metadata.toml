@@ -1,0 +1,18 @@
+[statute]
+section_number = "126"
+title = "Committing depredation on the territories of any power in alliance or at peace with Singapore"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Criminalises committing or preparing depredation on the territories of a power in alliance or at peace with Singapore, with forfeiture of related property."
+source = "Singapore Penal Code 1871, Section 126"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr126-#pr126-"

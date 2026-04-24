@@ -1,0 +1,18 @@
+[statute]
+section_number = "123"
+title = "Concealing with intent to facilitate a design to wage war"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Whoever by any act or illegal omission conceals the existence of a design to wage war against the Government, intending or knowing such concealment will likely facilitate the waging of such war, is punishable with up to 15 years imprisonment and liable to fine."
+source = "Singapore Penal Code 1871, Section 123"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr123-#pr123-"

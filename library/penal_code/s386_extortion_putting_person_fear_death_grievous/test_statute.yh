@@ -1,0 +1,23 @@
+// Test file for s386_extortion_putting_person_fear_death_grievous
+// Yuho v5 Syntax
+
+referencing penal_code/s386_extortion_putting_person_fear_death_grievous
+
+struct S386TestCase {
+    bool extortionCommitted,
+    bool fearOfDeathOrGrievousHurt,
+}
+
+S386TestCase armed := S386TestCase {
+    extortionCommitted := TRUE,
+    fearOfDeathOrGrievousHurt := TRUE,
+}
+
+assert s386_applies(armed.extortionCommitted, armed.fearOfDeathOrGrievousHurt) == TRUE
+
+S386TestCase mild := S386TestCase {
+    extortionCommitted := TRUE,
+    fearOfDeathOrGrievousHurt := FALSE,
+}
+
+assert s386_applies(mild.extortionCommitted, mild.fearOfDeathOrGrievousHurt) == FALSE

@@ -1,0 +1,18 @@
+[statute]
+section_number = "377BH"
+title = "Producing child abuse material"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Producing child abuse material."
+source = "Singapore Penal Code 1871, Section 377BH"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BH-#pr377BH-"

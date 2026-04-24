@@ -1,0 +1,38 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr477A-#pr477A-
+/// @amendment [15/2019]
+/// @amendment [Act 23 of 2021 wef 01/03/2022]
+// Singapore Penal Code Section 477A - Falsification of accounts
+// Yuho v5 Syntax
+
+struct FalsificationAccountsCase {
+    string accused,
+    bool elementsSatisfied,
+}
+
+fn is_liable(bool elementsSatisfied) : bool {
+    match {
+        case TRUE if elementsSatisfied == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 477A "Falsification of accounts" effective 1910-01-01 {
+    definitions {
+        clerk := "An employed recordkeeper";
+        employer := "The person on whose behalf records are kept";
+    }
+
+    elements {
+        all_of {
+            circumstance clerk_officer_servant := "Being a clerk, officer or servant, or employed as such";
+            actus_reus falsify_records := "Destroys, alters, conceals, mutilates or falsifies any book, electronic record, paper, writing, valuable security or account belonging to the employer";
+            mens_rea intent_defraud := "Acts intentionally and with intent to defraud";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 10 years;
+    }
+}

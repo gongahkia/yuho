@@ -1,0 +1,18 @@
+[statute]
+section_number = "32"
+title = "Words referring to acts include illegal omissions"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Words referring to acts in the Code extend also to illegal omissions, unless contrary intention appears."
+source = "Singapore Penal Code 1871, Section 32"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr32-#pr32-"

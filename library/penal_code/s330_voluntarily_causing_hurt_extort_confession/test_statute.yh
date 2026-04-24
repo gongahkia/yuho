@@ -1,0 +1,23 @@
+// Test file for s330
+// Yuho v5 Syntax
+
+referencing penal_code/s330_voluntarily_causing_hurt_extort_confession
+
+struct S330CaseTest {
+    bool actusReus,
+    bool mensRea,
+}
+
+S330CaseTest satisfied := S330CaseTest {
+    actusReus := TRUE,
+    mensRea := TRUE,
+}
+
+assert s330_applies(satisfied.actusReus, satisfied.mensRea) == TRUE
+
+S330CaseTest missingMens := S330CaseTest {
+    actusReus := TRUE,
+    mensRea := FALSE,
+}
+
+assert s330_applies(missingMens.actusReus, missingMens.mensRea) == FALSE

@@ -1,0 +1,37 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr438-#pr438-
+// Singapore Penal Code Section 438 - Punishment for the mischief described in section 437 when committed by fire or any explosive substance
+
+/// @amendment [15/2019]
+
+referencing penal_code/s437_mischief_intent_destroy_make_unsafe_decked
+
+statute 438 "Punishment for the mischief described in section 437 when committed by fire or any explosive substance" effective 1872-01-01 {
+    definitions {
+        section_437_mischief := "Mischief described in section 437";
+        explosive_substance := "Any substance capable of producing a practical effect by explosion";
+    }
+
+    elements {
+        all_of {
+            any_of {
+                /// commission
+                actus_reus commits := "Commits mischief described in section 437";
+                /// attempt
+                actus_reus attempts := "Attempts to commit mischief described in section 437";
+            }
+            any_of {
+                /// by fire
+                circumstance by_fire := "Committed or attempted by fire";
+                /// by explosive
+                circumstance by_explosive := "Committed or attempted by explosive substance";
+            }
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 99 years;
+        fine := $0.00 .. $50,000.00;
+    }
+}

@@ -1,0 +1,18 @@
+[statute]
+section_number = "451"
+title = "House-breaking in order to commit an offence punishable with imprisonment"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "House-breaking committed in order to commit any offence punishable with imprisonment."
+source = "Singapore Penal Code 1871, Section 451"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr451-#pr451-"

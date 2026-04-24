@@ -1,0 +1,43 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr259-#pr259-
+// Singapore Penal Code Section 259 - Having possession of a counterfeit Government stamp
+// Yuho v5 Syntax
+
+struct S259Case {
+    string accused,
+    bool possessesCounterfeitStamp,
+    bool knowsCounterfeit,
+    bool intentToUseOrDisposeAsGenuine,
+}
+fn s259_applies(bool possessesCounterfeitStamp, bool knowsCounterfeit, bool intentToUseOrDisposeAsGenuine) : bool {
+    match {
+        case TRUE if possessesCounterfeitStamp == FALSE := consequence FALSE;
+        case TRUE if knowsCounterfeit == FALSE := consequence FALSE;
+        case TRUE if intentToUseOrDisposeAsGenuine == FALSE := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
+statute 259 "Having possession of a counterfeit Government stamp" effective 1872-01-01 {
+    definitions {
+        counterfeit_stamp := "A stamp counterfeiting a Government revenue stamp";
+    }
+
+    elements {
+        all_of {
+            actus_reus possession := "Has in his possession any counterfeit of a Government stamp issued for revenue";
+            mens_rea knowledge := "Knows the stamp to be a counterfeit";
+            mens_rea intent := "Intending to use or dispose of it as a genuine stamp, or so that it may be used as a genuine stamp";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 years .. 7 years;
+        fine := $0.00 .. $50,000.00;
+    }
+
+    illustration example1 {
+        "A keeps a quantity of counterfeit revenue stamps intending to use them as genuine. A commits an offence under s259."
+    }
+
+}

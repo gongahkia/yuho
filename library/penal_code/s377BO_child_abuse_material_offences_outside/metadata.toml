@@ -1,0 +1,18 @@
+[statute]
+section_number = "377BO"
+title = "Child abuse material offences outside or partially outside Singapore"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Child abuse material offences committed outside or partially outside Singapore by citizens or PRs."
+source = "Singapore Penal Code 1871, Section 377BO"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BO-#pr377BO-"

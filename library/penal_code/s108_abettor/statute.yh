@@ -1,0 +1,44 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr108-#pr108-
+// Singapore Penal Code Section 108 - Abettor
+// Yuho v5 Syntax
+
+struct AbettorCase {
+    string abettor,
+    string principal,
+    bool offenceOrActWhichWouldBeOffence,
+    bool abettorHasSameIntentionOrKnowledge,
+}
+
+fn is_abettor(bool offenceOrActWhichWouldBeOffence, bool abettorHasSameIntentionOrKnowledge) : bool {
+    match {
+        case TRUE if offenceOrActWhichWouldBeOffence == TRUE && abettorHasSameIntentionOrKnowledge == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 108 "Abettor" effective 1872-01-01 {
+    definitions {
+        offence := "An act declared punishable by this Code or any other written law";
+        act_which_would_be_offence := "An act that would be an offence if committed by a person capable by law of committing an offence with the same intention or knowledge as the abettor";
+        explanation_1 := "Abetment of illegal omission of an act may amount to an offence, although the abettor may not himself be bound to do that act";
+        explanation_2 := "To constitute the offence of abetment, it is not necessary that the act abetted should be committed, or that the effect requisite to constitute the offence should be caused";
+        explanation_3 := "It is not necessary that the person abetted should be capable by law of committing an offence, or that he should have the same guilty intention or knowledge as that of the abettor, or any guilty intention or knowledge";
+    }
+
+    elements {
+        any_of {
+            actus_reus abets_offence := "Abets the commission of an offence";
+            actus_reus abets_qualifying_act := "Abets the commission of an act which would be an offence if committed by a person capable by law, with the same intention or knowledge as the abettor";
+        }
+    }
+
+    illustration example_a {
+        "A instigates B to murder C. B refuses to do so. A is guilty of abetting B to commit murder."
+    }
+
+    illustration example_b {
+        "A instigates B to murder D. B, in pursuance of the instigation, stabs D. D recovers from the wound. A is guilty of instigating B to commit murder."
+    }
+}

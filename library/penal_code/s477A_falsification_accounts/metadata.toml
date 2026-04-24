@@ -1,0 +1,18 @@
+[statute]
+section_number = "477A"
+title = "Falsification of accounts"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Whoever, being a clerk, officer or servant, or employed or acting in the capacity of a clerk, officer or servant, intentionally and with intent to defraud destroys, alters, conceals, mutilates or falsifies any book, electronic record, paper, writing, valuable security or account or a set thereof which belongs to or is in the possession of his employer, or has been received by him for or on behalf of his employer, or intentionally and with inte..."
+source = "Singapore Penal Code 1871, Section 477A"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr477A-#pr477A-"

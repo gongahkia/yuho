@@ -1,0 +1,23 @@
+// Test file for s333
+// Yuho v5 Syntax
+
+referencing penal_code/s333_voluntarily_causing_grievous_hurt_deter
+
+struct S333CaseTest {
+    bool actusReus,
+    bool mensRea,
+}
+
+S333CaseTest satisfied := S333CaseTest {
+    actusReus := TRUE,
+    mensRea := TRUE,
+}
+
+assert s333_applies(satisfied.actusReus, satisfied.mensRea) == TRUE
+
+S333CaseTest missingMens := S333CaseTest {
+    actusReus := TRUE,
+    mensRea := FALSE,
+}
+
+assert s333_applies(missingMens.actusReus, missingMens.mensRea) == FALSE

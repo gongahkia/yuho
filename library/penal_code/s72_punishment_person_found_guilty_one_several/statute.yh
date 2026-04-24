@@ -1,0 +1,10 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr72-#pr72-
+// Singapore Penal Code Section 72
+
+statute 72 "Punishment of a person found guilty of one of several offences, the judgment stating that it is doubtful of which" effective 1872-01-01 {
+    definitions {
+        rule := "In all cases in which judgment is given that a person is guilty of one of several offences specified in the judgment, but that it is doubtful of which of these offences he is guilty, the offender shall be punished for the offence for which the lowest punishment is provided, if the same punishment is not provided for all.";
+    }
+}

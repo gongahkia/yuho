@@ -1,0 +1,18 @@
+[statute]
+section_number = "135"
+title = "Abetment of the desertion of an officer or a serviceman"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Criminalises abetting the desertion of an officer or serviceman of the Singapore Armed Forces or visiting forces."
+source = "Singapore Penal Code 1871, Section 135"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr135-#pr135-"

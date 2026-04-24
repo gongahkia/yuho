@@ -1,0 +1,18 @@
+[statute]
+section_number = "437"
+title = "Mischief with intent to destroy or make unsafe a decked vessel or a vessel of 20 tons burden"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Mischief with intent to destroy or render unsafe a decked vessel or a vessel of 20 tons burden."
+source = "Singapore Penal Code 1871, Section 437"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr437-#pr437-"

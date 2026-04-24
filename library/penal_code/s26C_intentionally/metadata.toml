@@ -1,0 +1,18 @@
+[statute]
+section_number = "26C"
+title = "“Intentionally”"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Defines 'intentionally' as doing an act deliberately."
+source = "Singapore Penal Code 1871, Section 26C"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr26C-#pr26C-"

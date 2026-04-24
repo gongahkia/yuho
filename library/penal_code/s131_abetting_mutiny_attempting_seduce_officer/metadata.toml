@@ -1,0 +1,18 @@
+[statute]
+section_number = "131"
+title = "Abetting mutiny, or attempting to seduce an officer or a serviceman from his duty"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Criminalises abetting mutiny or attempting to seduce an officer or serviceman of the Singapore Armed Forces or visiting forces from his allegiance or duty."
+source = "Singapore Penal Code 1871, Section 131"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr131-#pr131-"

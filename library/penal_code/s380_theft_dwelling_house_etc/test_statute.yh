@@ -1,0 +1,23 @@
+// Test file for s380_theft_dwelling_house_etc
+// Yuho v5 Syntax
+
+referencing penal_code/s380_theft_dwelling_house_etc
+
+struct S380TestCase {
+    bool theftCommitted,
+    bool usedAsDwellingOrCustody,
+}
+
+S380TestCase dwellingTheft := S380TestCase {
+    theftCommitted := TRUE,
+    usedAsDwellingOrCustody := TRUE,
+}
+
+assert s380_applies(dwellingTheft.theftCommitted, dwellingTheft.usedAsDwellingOrCustody) == TRUE
+
+S380TestCase openField := S380TestCase {
+    theftCommitted := TRUE,
+    usedAsDwellingOrCustody := FALSE,
+}
+
+assert s380_applies(openField.theftCommitted, openField.usedAsDwellingOrCustody) == FALSE

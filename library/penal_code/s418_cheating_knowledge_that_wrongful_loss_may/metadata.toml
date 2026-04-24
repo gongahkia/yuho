@@ -1,0 +1,18 @@
+[statute]
+section_number = "418"
+title = "Cheating with knowledge that wrongful loss may be thereby caused to a person whose interest the offender is bound to protect"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Cheating with knowledge that wrongful loss is likely to be caused to a person whose interest the offender was bound by law or contract to protect."
+source = "Singapore Penal Code 1871, Section 418"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr418-#pr418-"

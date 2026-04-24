@@ -1,0 +1,33 @@
+// Test file for s107_abetment_doing_thing
+// Yuho v5 Syntax
+
+referencing penal_code/s107_abetment_doing_thing
+
+struct AbetmentTestCase {
+    string mode,
+    bool actOrOmissionInPursuance,
+}
+
+AbetmentTestCase instigationCase := AbetmentTestCase {
+    mode := "instigation",
+    actOrOmissionInPursuance := FALSE,
+}
+assert is_abetment(instigationCase.mode, instigationCase.actOrOmissionInPursuance) == TRUE
+
+AbetmentTestCase conspiracyWithAct := AbetmentTestCase {
+    mode := "conspiracy",
+    actOrOmissionInPursuance := TRUE,
+}
+assert is_abetment(conspiracyWithAct.mode, conspiracyWithAct.actOrOmissionInPursuance) == TRUE
+
+AbetmentTestCase conspiracyNoAct := AbetmentTestCase {
+    mode := "conspiracy",
+    actOrOmissionInPursuance := FALSE,
+}
+assert is_abetment(conspiracyNoAct.mode, conspiracyNoAct.actOrOmissionInPursuance) == FALSE
+
+AbetmentTestCase aidCase := AbetmentTestCase {
+    mode := "intentional_aid",
+    actOrOmissionInPursuance := FALSE,
+}
+assert is_abetment(aidCase.mode, aidCase.actOrOmissionInPursuance) == TRUE

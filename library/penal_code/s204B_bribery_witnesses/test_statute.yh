@@ -1,0 +1,29 @@
+// Test file for s204B_bribery_witnesses
+// Yuho v5 Syntax
+
+referencing penal_code/s204B_bribery_witnesses
+
+struct S204BTestCase {
+    bool givesGratificationToSuppressReporting,
+    bool givesGratificationForFalseTestimony,
+    bool attemptsToInduceFalseTestimony,
+    bool receivesGratificationForFalseTestimony,
+}
+
+S204BTestCase bribeWitness := S204BTestCase {
+    givesGratificationToSuppressReporting := FALSE,
+    givesGratificationForFalseTestimony := TRUE,
+    attemptsToInduceFalseTestimony := FALSE,
+    receivesGratificationForFalseTestimony := FALSE,
+}
+
+assert evaluate_s204B(bribeWitness.givesGratificationToSuppressReporting, bribeWitness.givesGratificationForFalseTestimony, bribeWitness.attemptsToInduceFalseTestimony, bribeWitness.receivesGratificationForFalseTestimony) == "Liable under s204B(1)(b)"
+
+S204BTestCase noBribery := S204BTestCase {
+    givesGratificationToSuppressReporting := FALSE,
+    givesGratificationForFalseTestimony := FALSE,
+    attemptsToInduceFalseTestimony := FALSE,
+    receivesGratificationForFalseTestimony := FALSE,
+}
+
+assert evaluate_s204B(noBribery.givesGratificationToSuppressReporting, noBribery.givesGratificationForFalseTestimony, noBribery.attemptsToInduceFalseTestimony, noBribery.receivesGratificationForFalseTestimony) == "Not liable - no bribery of witnesses"

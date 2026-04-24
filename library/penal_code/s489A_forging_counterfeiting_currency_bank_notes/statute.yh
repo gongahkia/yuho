@@ -1,0 +1,36 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr489A-#pr489A-
+/// @amendment [15/2019]
+// Singapore Penal Code Section 489A - Forging or counterfeiting currency or bank notes
+// Yuho v5 Syntax
+
+struct ForgingCurrencyCase {
+    string accused,
+    bool elementsSatisfied,
+}
+
+fn is_liable(bool elementsSatisfied) : bool {
+    match {
+        case TRUE if elementsSatisfied == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 489A "Forging or counterfeiting currency or bank notes" effective 1946-01-01 {
+    definitions {
+        currency := "Coin or paper money issued by any government";
+        bank_note := "A note issued by a bank payable on demand";
+    }
+
+    elements {
+        all_of {
+            actus_reus forges_or_counterfeits := "Forges or counterfeits, or knowingly performs any part of forging or counterfeiting";
+            circumstance currency_or_bank_note := "The subject is any currency or bank note";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 20 years;
+    }
+}

@@ -1,0 +1,13 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr74D-#pr74D-
+// Singapore Penal Code Section 74D
+
+/// @amendment [15/2019]
+
+statute 74D "Enhanced penalties for offences against victims in close relationships" effective 1872-01-01 {
+    definitions {
+        rule := "Where A is convicted of a Chapter 16 offence (except one punishable with death or life imprisonment) against B who was or is in a close relationship with A, the court may sentence up to twice the maximum punishment if at the time A knew or ought reasonably to have known of that relationship.";
+        rebuttal := "Does not apply where A proves the relationship did not adversely affect B's ability to protect B from A.";
+    }
+}

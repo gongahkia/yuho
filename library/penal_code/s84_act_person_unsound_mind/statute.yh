@@ -1,0 +1,18 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr84-#pr84-
+// Singapore Penal Code Section 84
+
+/// @amendment [Act 23 of 2021 wef 01/03/2022]
+/// @amendment [15/2019]
+
+statute 84 "Act of person of unsound mind" effective 1872-01-01 {
+    definitions {
+        rule := "Nothing is an offence which is done by a person who, at the time of doing it, by reason of unsoundness of mind, is incapable of knowing the nature of the act, or incapable of knowing that what he is doing is wrong, or completely deprived of any power to control his actions.";
+        wrongness_scope := "Subsection (1)(b) applies only if the person is incapable of knowing that the act is wrong by reference to the standards specified in that provision.";
+    }
+
+    illustration example1 {
+        "A , while labouring under a delusion, believes that he has received divine instructions to kill Z and that it is morally right for him to do so. A however knows that it is contrary to law to kill Z . A kills Z . Here, the defence of unsoundness of mind is not available to A as he is capable of knowing that it is contrary to law to kill Z ."
+    }
+}

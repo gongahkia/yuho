@@ -1,0 +1,18 @@
+[statute]
+section_number = "176"
+title = "Omission to give notice or information to public servant by person legally bound to give such notice or information"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Intentional omission by a person legally bound to give notice or furnish information to a public servant, in the manner and time required by law."
+source = "Singapore Penal Code 1871, Section 176"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr176-#pr176-"

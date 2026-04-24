@@ -1,0 +1,29 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr179-#pr179-
+// Singapore Penal Code Section 179
+
+/// @amendment [15/2019]
+statute 179 "Refusing to answer public servant authorised to question" effective 1872-01-01 {
+    definitions {
+        authorised_question := "A question touching a subject which the accused is legally bound to answer truthfully, demanded by a public servant exercising legal powers";
+    }
+
+    elements {
+        all_of {
+            /// legal duty to state the truth on the subject
+            circumstance legal_duty := "Legally bound to state the truth on the subject to the public servant";
+            /// public servant demands a question in exercise of legal powers
+            circumstance authorised_demand := "Public servant demands a question touching that subject in the exercise of his legal powers";
+            /// refusal to answer
+            actus_reus refusal := "Refusing to answer the question demanded";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 months .. 6 months;
+        fine := $0.00 .. $10,000.00;
+    }
+
+    /// For individuals -- imprisonment up to 6 months, or fine up to $5,000, or both. For any other case -- fine up to $10,000.
+}

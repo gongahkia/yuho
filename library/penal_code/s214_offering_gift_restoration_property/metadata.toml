@@ -1,0 +1,19 @@
+[statute]
+section_number = "214"
+title = "Offering gift or restoration of property in consideration of screening offender"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Giving, offering, or agreeing to give gratification or restore property to any person in consideration of that person's concealing an offence or screening an offender; exception where the offence may lawfully be compounded."
+source = "Singapore Penal Code 1871, Section 214"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr214-#pr214-"
+disclaimer = "Educational purposes only. Cross-reference with official SSO text."

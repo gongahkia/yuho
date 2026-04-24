@@ -1,0 +1,47 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr124-#pr124-
+/// @amendment [15/2019]
+// Singapore Penal Code Section 124 - Assaulting President, etc., with intent to compel or restrain the exercise of any lawful power
+// Yuho v5 Syntax
+
+struct S124Case {
+    string accused,
+    string targetRole,
+    bool intendsToInduceOrCompel,
+    bool assaultsOrWrongfullyRestrainsOrOverawes,
+}
+
+fn s124_applies(string targetRole, bool intendsToInduceOrCompel, bool assaultsOrWrongfullyRestrainsOrOverawes) : bool {
+    match {
+        case TRUE if targetRole == "president" && intendsToInduceOrCompel == TRUE && assaultsOrWrongfullyRestrainsOrOverawes == TRUE := consequence TRUE;
+        case TRUE if targetRole == "mp" && intendsToInduceOrCompel == TRUE && assaultsOrWrongfullyRestrainsOrOverawes == TRUE := consequence TRUE;
+        case TRUE if targetRole == "cabinet_member" && intendsToInduceOrCompel == TRUE && assaultsOrWrongfullyRestrainsOrOverawes == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 124 "Assaulting President, etc., with intent to compel or restrain the exercise of any lawful power" effective 2020-01-01 {
+    definitions {
+        covered_person := "The President, a Member of Parliament, or a member of the Cabinet";
+        induce_or_compel := "Intention of inducing or compelling the covered person to exercise or refrain from exercising in any manner any of their lawful powers";
+        criminal_force := "Criminal force as defined in the Code";
+    }
+
+    elements {
+        all_of {
+            circumstance covered_person := "Target is the President, a Member of Parliament, or a member of the Cabinet";
+            mens_rea compel_intent := "Intention of inducing or compelling the target to exercise or refrain from exercising any lawful power";
+            any_of {
+                actus_reus assault := "Assaults the target";
+                actus_reus wrongful_restraint := "Wrongfully restrains or attempts wrongfully to restrain the target";
+                actus_reus overawes := "Overawes, or attempts to overawe, the target by criminal force or the show of criminal force";
+            }
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 99 years;
+        fine := $0.00 .. $1,000,000.00;
+    }
+}

@@ -1,0 +1,18 @@
+[statute]
+section_number = "381"
+title = "Theft by clerk or servant of property in possession of master"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Theft by a clerk or servant of property in the possession of their master or employer is punishable with up to 7 years imprisonment and fine."
+source = "Singapore Penal Code 1871, Section 381"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr381-#pr381-"

@@ -1,0 +1,29 @@
+// Test file for s204_destruction_document_electronic_record
+// Yuho v5 Syntax
+
+referencing penal_code/s204_destruction_document_electronic_record
+
+struct S204TestCase {
+    bool secretesOrDestroysOrObliterates,
+    bool documentLawfullyCompellableAsEvidence,
+    bool intentionToPreventProduction,
+    bool afterLawfulSummons,
+}
+
+S204TestCase shreddingDocs := S204TestCase {
+    secretesOrDestroysOrObliterates := TRUE,
+    documentLawfullyCompellableAsEvidence := TRUE,
+    intentionToPreventProduction := TRUE,
+    afterLawfulSummons := FALSE,
+}
+
+assert evaluate_s204(shreddingDocs.secretesOrDestroysOrObliterates, shreddingDocs.documentLawfullyCompellableAsEvidence, shreddingDocs.intentionToPreventProduction, shreddingDocs.afterLawfulSummons) == "Liable under s204"
+
+S204TestCase routineShred := S204TestCase {
+    secretesOrDestroysOrObliterates := TRUE,
+    documentLawfullyCompellableAsEvidence := FALSE,
+    intentionToPreventProduction := FALSE,
+    afterLawfulSummons := FALSE,
+}
+
+assert evaluate_s204(routineShred.secretesOrDestroysOrObliterates, routineShred.documentLawfullyCompellableAsEvidence, routineShred.intentionToPreventProduction, routineShred.afterLawfulSummons) == "Not liable - document not evidentiary"

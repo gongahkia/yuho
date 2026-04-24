@@ -1,0 +1,18 @@
+[statute]
+section_number = "73"
+title = "Enhanced penalties for offences against domestic workers"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Allows up to double the maximum punishment where an employer, household member, or employment agent of a domestic worker commits an offence against that worker."
+source = "Singapore Penal Code 1871, Section 73"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr73-#pr73-"

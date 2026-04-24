@@ -1,0 +1,18 @@
+[statute]
+section_number = "377BG"
+title = "Using or involving child in production of child abuse material"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Using or involving a child below 16 in the production of child abuse material."
+source = "Singapore Penal Code 1871, Section 377BG"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BG-#pr377BG-"

@@ -1,0 +1,18 @@
+[statute]
+section_number = "109"
+title = "Punishment of abetment if the act abetted is committed in consequence, and where no express provision is made for its punishment"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Where the act abetted is committed in consequence of the abetment and no express provision for punishment of such abetment is made by the Code, the abettor is punished with the punishment provided for the offence."
+source = "Singapore Penal Code 1871, Section 109"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr109-#pr109-"

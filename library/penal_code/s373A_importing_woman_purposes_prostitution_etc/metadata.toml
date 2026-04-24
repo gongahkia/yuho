@@ -1,0 +1,18 @@
+[statute]
+section_number = "373A"
+title = "Importing woman for purposes of prostitution, etc."
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Importing a woman into Singapore with intent or knowledge she will be forced or seduced to illicit intercourse."
+source = "Singapore Penal Code 1871, Section 373A"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr373A-#pr373A-"

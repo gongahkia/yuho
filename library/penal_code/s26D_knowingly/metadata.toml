@@ -1,0 +1,18 @@
+[statute]
+section_number = "26D"
+title = "“Knowingly”"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Defines 'knowingly' as acting with awareness of a circumstance existing or virtually certain to exist."
+source = "Singapore Penal Code 1871, Section 26D"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr26D-#pr26D-"

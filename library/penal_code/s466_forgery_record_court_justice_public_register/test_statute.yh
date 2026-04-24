@@ -1,0 +1,22 @@
+// Test file for s466_forgery_record_court_justice_public_register
+// Yuho v5 Syntax
+
+referencing penal_code/s466_forgery_record_court_justice_public_register
+
+struct ForgeryCourtRecordCaseTest {
+    bool elementsSatisfied,
+}
+
+ForgeryCourtRecordCaseTest positive := ForgeryCourtRecordCaseTest {
+    elementsSatisfied := TRUE,
+}
+
+assert positive.elementsSatisfied == TRUE
+assert is_liable(positive.elementsSatisfied) == TRUE
+
+ForgeryCourtRecordCaseTest negative := ForgeryCourtRecordCaseTest {
+    elementsSatisfied := FALSE,
+}
+
+assert negative.elementsSatisfied == FALSE
+assert is_liable(negative.elementsSatisfied) == FALSE

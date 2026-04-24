@@ -1,0 +1,39 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr125-#pr125-
+/// @amendment [15/2019]
+// Singapore Penal Code Section 125 - Waging war against any power in alliance or at peace with Singapore
+// Yuho v5 Syntax
+
+struct S125Case {
+    string accused,
+    string mode,
+}
+
+fn s125_applies(string mode) : bool {
+    match {
+        case TRUE if mode == "wages_war" := consequence TRUE;
+        case TRUE if mode == "attempts_to_wage_war" := consequence TRUE;
+        case TRUE if mode == "abets_waging_of_war" := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 125 "Waging war against any power in alliance or at peace with Singapore" effective 2020-01-01 {
+    definitions {
+        friendly_power := "The government of any power in alliance or at peace with the Government of Singapore";
+    }
+
+    elements {
+        any_of {
+            actus_reus wages := "Wages war against the government of any power in alliance or at peace with the Government";
+            actus_reus attempts := "Attempts to wage such war";
+            actus_reus abets := "Abets the waging of such war";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 99 years;
+        fine := $0.00 .. $1,000,000.00;
+    }
+}

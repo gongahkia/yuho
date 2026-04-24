@@ -1,0 +1,24 @@
+// Test file for s113
+// Yuho v5 Syntax
+
+referencing penal_code/s113_liability_abettor_offence_caused_act_abetted
+
+struct S113Test {
+    bool abetmentIntendedParticularEffect,
+    bool differentEffectCaused,
+    bool abettorKnewActLikelyToCauseDifferentEffect,
+}
+
+S113Test liable := S113Test {
+    abetmentIntendedParticularEffect := TRUE,
+    differentEffectCaused := TRUE,
+    abettorKnewActLikelyToCauseDifferentEffect := TRUE,
+}
+assert s113_liable(liable.abetmentIntendedParticularEffect, liable.differentEffectCaused, liable.abettorKnewActLikelyToCauseDifferentEffect) == TRUE
+
+S113Test notKnown := S113Test {
+    abetmentIntendedParticularEffect := TRUE,
+    differentEffectCaused := TRUE,
+    abettorKnewActLikelyToCauseDifferentEffect := FALSE,
+}
+assert s113_liable(notKnown.abetmentIntendedParticularEffect, notKnown.differentEffectCaused, notKnown.abettorKnewActLikelyToCauseDifferentEffect) == FALSE

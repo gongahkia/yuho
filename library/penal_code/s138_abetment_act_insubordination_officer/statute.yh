@@ -1,0 +1,28 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr138-#pr138-
+// Singapore Penal Code Section 138 - Abetment of act of insubordination by an officer or a serviceman
+
+statute 138 "Abetment of act of insubordination by an officer or a serviceman" effective 1872-01-01 {
+    definitions {
+        officer := "An officer in the Singapore Armed Forces or any visiting forces lawfully present in Singapore";
+        serviceman := "Any serviceman in the Singapore Armed Forces or any visiting forces lawfully present in Singapore";
+        insubordination := "Failure or refusal to submit to lawful military authority";
+    }
+
+    elements {
+        all_of {
+            /// mens rea - knowledge that the act is insubordination
+            mens_rea knowledge := "Knowing the act to be an act of insubordination";
+            /// actus reus - abetment
+            actus_reus abet_insubordination := "Abetting an act of insubordination by an officer or any serviceman in the Singapore Armed Forces or any visiting forces lawfully present in Singapore";
+            /// consequential condition - insubordination must be committed
+            circumstance insubordination_committed := "The act of insubordination is committed in consequence of that abetment";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 months .. 6 months;
+        fine := $0.00 .. $50,000.00;
+    }
+}

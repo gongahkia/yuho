@@ -1,0 +1,18 @@
+[statute]
+section_number = "393"
+title = "Attempt to commit robbery"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Attempting to commit robbery is punishable with 2 to 7 years imprisonment and caning with not less than 6 strokes."
+source = "Singapore Penal Code 1871, Section 393"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr393-#pr393-"

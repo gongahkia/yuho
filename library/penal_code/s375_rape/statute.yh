@@ -1,0 +1,24 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr375-#pr375-
+// Singapore Penal Code Section 375
+
+statute 375 "Rape" effective 1872-01-01 {
+    definitions {
+        penile_penetration := "Penile penetration of the vagina, anus or mouth of another person";
+        consent := "Free, voluntary and informed agreement to the sexual act";
+    }
+
+    elements {
+        /// penile penetration of vagina, anus or mouth
+        actus_reus penile_penetration := "Penetrates with his penis the vagina, anus or mouth of another person";
+        /// without consent, or where victim is below 14
+        circumstance no_consent_or_minor := "Without consent of the other person, or with or without consent where the other person is below 14 years of age";
+    }
+
+    penalty {
+        imprisonment := 8 years .. 20 years;
+        caning := 0 .. 12 strokes;
+    }
+
+}

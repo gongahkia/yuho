@@ -1,0 +1,37 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr460-#pr460-
+/// @amendment [15/2019]
+// Singapore Penal Code Section 460 - House-breaking when death or grievous hurt caused
+// Yuho v5 Syntax
+
+struct HouseBreakingDeathCase {
+    string accused,
+    bool elementsSatisfied,
+}
+
+fn is_liable(bool elementsSatisfied) : bool {
+    match {
+        case TRUE if elementsSatisfied == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 460 "House-breaking when death or grievous hurt caused" effective 1872-01-01 {
+    definitions {
+        house_breaking := "House-breaking as defined in section 442";
+        grievous_hurt := "Grievous hurt as defined in section 320";
+    }
+
+    elements {
+        all_of {
+            circumstance house_breaking := "At the time of committing house-breaking";
+            actus_reus voluntary_death_or_grievous_hurt := "Voluntarily causes or attempts to cause death or grievous hurt";
+            circumstance jointly_concerned := "Every person jointly concerned in the house-breaking is liable";
+        }
+    }
+
+    penalty {
+        imprisonment := 3 years .. 20 years;
+    }
+}

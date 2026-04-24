@@ -1,0 +1,11 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr34-#pr34-
+// Singapore Penal Code Section 34
+// Yuho v5 Syntax
+
+statute 34 "Each of several persons liable for an act done by all, in like manner as if done by him alone" effective 1872-01-01 {
+    definitions {
+        common_intention := "When a criminal act is done by several persons, in furtherance of the common intention of all, each of such persons is liable for that act in the same manner as if the act were done by him alone.";
+    }
+}

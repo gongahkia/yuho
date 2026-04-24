@@ -1,0 +1,18 @@
+[statute]
+section_number = "367"
+title = "Kidnapping or abducting in order to subject a person to grievous hurt, slavery, etc."
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Kidnapping or abducting with intent to subject to grievous hurt, slavery, or unnatural lust."
+source = "Singapore Penal Code 1871, Section 367"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr367-#pr367-"

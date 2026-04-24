@@ -1,0 +1,58 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr270-#pr270-
+// Singapore Penal Code Section 270 - Intentional or rash act likely to spread infection of any disease dangerous to life
+// Yuho v5 Syntax
+
+struct IntentionalInfectionCase {
+    string accused,
+    bool actDone,
+    bool intentionalOrRash,
+    bool knowledgeOrReasonToBelieve,
+    bool likelyToSpreadInfection,
+    bool diseaseDangerousToLife,
+}
+
+fn is_offence(bool actDone, bool intentionalOrRash, bool knowledge, bool likelySpread, bool diseaseDangerous) : bool {
+    match {
+        case TRUE if actDone == FALSE := consequence FALSE;
+        case TRUE if intentionalOrRash == FALSE := consequence FALSE;
+        case TRUE if knowledge == FALSE := consequence FALSE;
+        case TRUE if likelySpread == FALSE := consequence FALSE;
+        case TRUE if diseaseDangerous == FALSE := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
+
+/// @amendment [Act 23 of 2021 wef 01/03/2022]
+statute 270 "Intentional or rash act likely to spread infection of any disease dangerous to life" effective 1872-01-01 {
+    definitions {
+        intentionally := "With the specific intention of bringing about the act";
+        rashly := "With knowledge of risk but without care to prevent it";
+        dangerous_disease := "A disease that is dangerous to life";
+    }
+
+    elements {
+        all_of {
+            /// any positive act satisfies this limb
+            actus_reus act_done := "Doing any act";
+            any_of {
+                /// alternative fault element -- intentional
+                mens_rea intentional := "Acting intentionally";
+                /// alternative fault element -- rashness
+                mens_rea rash := "Acting rashly";
+            }
+            /// accused knew or had reason to believe the act was likely to spread infection
+            mens_rea knowledge := "Knowledge or reason to believe the act is likely to spread infection";
+            /// the act must be likely to spread infection
+            circumstance likely_spread := "Act is likely to spread infection of a disease";
+            /// the disease must be dangerous to life
+            circumstance dangerous_disease_present := "The disease is dangerous to life";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 4 years;
+        fine := $0.00 .. $10,000.00;
+    }
+}

@@ -1,0 +1,22 @@
+// Test file for s460_house_breaking_when_death_grievous_hurt
+// Yuho v5 Syntax
+
+referencing penal_code/s460_house_breaking_when_death_grievous_hurt
+
+struct HouseBreakingDeathCaseTest {
+    bool elementsSatisfied,
+}
+
+HouseBreakingDeathCaseTest positive := HouseBreakingDeathCaseTest {
+    elementsSatisfied := TRUE,
+}
+
+assert positive.elementsSatisfied == TRUE
+assert is_liable(positive.elementsSatisfied) == TRUE
+
+HouseBreakingDeathCaseTest negative := HouseBreakingDeathCaseTest {
+    elementsSatisfied := FALSE,
+}
+
+assert negative.elementsSatisfied == FALSE
+assert is_liable(negative.elementsSatisfied) == FALSE

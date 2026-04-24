@@ -1,0 +1,18 @@
+[statute]
+section_number = "327"
+title = "Voluntarily causing hurt to extort property or to constrain to an illegal act"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Voluntarily causing hurt to extort property or constrain an illegal act."
+source = "Singapore Penal Code 1871, Section 327"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr327-#pr327-"

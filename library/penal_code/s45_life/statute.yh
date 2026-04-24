@@ -1,0 +1,11 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr45-#pr45-
+// Singapore Penal Code Section 45 - "Life"
+// Interpretation provision defining "life"
+
+statute 45 "Life" effective 1872-01-01 {
+    definitions {
+        life := "The life of a human being, unless the contrary appears from the context";
+    }
+}

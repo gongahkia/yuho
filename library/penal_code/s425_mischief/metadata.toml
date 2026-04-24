@@ -1,0 +1,18 @@
+[statute]
+section_number = "425"
+title = "Mischief"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Defines the offence of mischief as intentional destruction of or injurious change to property."
+source = "Singapore Penal Code 1871, Section 425"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr425-#pr425-"

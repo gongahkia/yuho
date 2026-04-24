@@ -1,0 +1,14 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr79A-#pr79A-
+// Singapore Penal Code Section 79A
+
+/// @amendment [15/2019]
+/// @amendment [Act 23 of 2021 wef 01/03/2022]
+
+statute 79A "Mistake of law or ignorance of law not defence" effective 1872-01-01 {
+    definitions {
+        rule := "A person's mistake of law or ignorance of the law is not a defence to a charge for an offence unless it is otherwise provided by written law.";
+        prosecution_burden := "Where a person alleges a mistake of law or ignorance of the law that may negate the fault element, the prosecution must prove the fault element in order to establish liability.";
+    }
+}

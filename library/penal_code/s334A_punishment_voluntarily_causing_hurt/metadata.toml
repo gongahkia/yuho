@@ -1,0 +1,18 @@
+[statute]
+section_number = "334A"
+title = "Punishment for voluntarily causing hurt on provocation which causes grievous hurt"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Hurt on provocation where actual hurt is grievous though not intended grievous."
+source = "Singapore Penal Code 1871, Section 334A"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr334A-#pr334A-"

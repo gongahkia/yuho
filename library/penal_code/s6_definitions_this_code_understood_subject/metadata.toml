@@ -1,0 +1,18 @@
+[statute]
+section_number = "6"
+title = "Definitions in this Code to be understood subject to exceptions"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "All offence definitions and penal provisions are read subject to the General Exceptions and Right of Private Defence chapters."
+source = "Singapore Penal Code 1871, Section 6"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr6-#pr6-"

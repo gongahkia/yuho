@@ -1,0 +1,50 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr404-#pr404-
+// Singapore Penal Code Section 404 - Dishonest misappropriation of property possessed by a deceased person at the time of his death
+// Yuho v5 Syntax
+
+struct S404Case {
+    string accused,
+    bool dishonestMisappropriation,
+    bool knewPropertyInDeceasedPossessionAtDeath,
+    bool notSincePossessedByEntitled,
+    bool accusedWasClerkOrServantOfDeceased,
+}
+
+fn s404_applies(bool dishonest, bool knewPossession, bool notSinceEntitled) : bool {
+    match {
+        case TRUE if dishonest == FALSE := consequence FALSE;
+        case TRUE if knewPossession == FALSE := consequence FALSE;
+        case TRUE if notSinceEntitled == FALSE := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
+
+statute 404 "Dishonest misappropriation of property possessed by a deceased person at the time of his death" effective 1872-01-01 {
+    definitions {
+        dishonestly := "With intention of causing wrongful gain or wrongful loss";
+        misappropriation := "Dishonestly misappropriating or converting to one's own use";
+        deceased_possession := "Property that was in the possession of a deceased person at the time of death";
+        legal_entitlement := "Possession by a person legally entitled to such possession";
+    }
+
+    elements {
+        /// dishonest mens rea
+        mens_rea dishonesty := "Dishonestly misappropriating or converting property to one's own use" burden prosecution beyond_reasonable_doubt;
+        /// knowledge that property was in the deceased's possession at time of death
+        mens_rea knowledge := "Knowing that property was in the possession of a deceased person at the time of decease";
+        /// property has not since been in possession of any person legally entitled
+        circumstance gap_in_custody := "Property has not since been in the possession of any person legally entitled";
+    }
+
+    penalty {
+        imprisonment := 0 days .. 3 years;
+        fine := $0.00 .. $10,000.00;
+        supplementary := "Imprisonment may extend to 7 years if the offender was at the time of the decease employed by the deceased as a clerk or servant";
+    }
+
+    illustration example1 {
+        "Z dies in possession of furniture and money. His servant A, before the money comes into the possession of any person entitled to such possession, dishonestly misappropriates it. A has committed the offence defined in this section."
+    }
+}

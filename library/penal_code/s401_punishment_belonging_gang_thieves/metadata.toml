@@ -1,0 +1,18 @@
+[statute]
+section_number = "401"
+title = "Punishment for belonging to gang of thieves"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Belonging to a gang of persons associated for habitually committing theft or robbery (not being gang-robbers) is punishable with up to 7 years imprisonment and caning with not less than 4 strokes."
+source = "Singapore Penal Code 1871, Section 401"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr401-#pr401-"

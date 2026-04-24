@@ -1,0 +1,20 @@
+// Test file for s349
+// Yuho v5 Syntax
+
+referencing penal_code/s349_force
+
+struct S349CaseTest {
+    bool criteriaMet,
+}
+
+S349CaseTest matches := S349CaseTest {
+    criteriaMet := TRUE,
+}
+
+assert s349_matches(matches.criteriaMet) == TRUE
+
+S349CaseTest nomatch := S349CaseTest {
+    criteriaMet := FALSE,
+}
+
+assert s349_matches(nomatch.criteriaMet) == FALSE

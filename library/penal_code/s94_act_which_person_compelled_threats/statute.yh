@@ -1,0 +1,15 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr94-#pr94-
+// Singapore Penal Code Section 94
+
+statute 94 "Act to which a person is compelled by threats" effective 1872-01-01 {
+    definitions {
+        rule := "Except murder and offences against the State punishable with death, nothing is an offence which is done by a person who is compelled to do it by threats which, at the time of doing it, reasonably cause the apprehension that instant death to that person or any other person will otherwise be the consequence.";
+        provisos := "Provided the person doing the act did not of their own accord, or from a reasonable apprehension of harm to themselves short of instant death, place themselves in the situation by which they became subject to such constraint.";
+    }
+
+    /// Explanation 1.—A person who, of his own accord, or by reason of a threat of being beaten, joins gang-robbers knowing their character, is not entitled to the benefit of this exception on the ground of his having been compelled by his associates to do anything that is an offence by law.
+
+    /// Explanation 2.—A person seized by gang-robbers, and forced by threat of instant death to do a thing which is an offence by law — for example, a smith compelled to take his tools and to force the door of a house for the gang‑robbers to enter and plunder it — is entitled to the benefit of this exception.
+}

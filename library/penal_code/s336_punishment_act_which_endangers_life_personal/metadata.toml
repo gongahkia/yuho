@@ -1,0 +1,18 @@
+[statute]
+section_number = "336"
+title = "Punishment for act which endangers life or the personal safety of others"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Rash or negligent act endangering life or personal safety of others."
+source = "Singapore Penal Code 1871, Section 336"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr336-#pr336-"

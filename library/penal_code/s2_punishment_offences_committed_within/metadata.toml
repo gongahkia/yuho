@@ -1,0 +1,18 @@
+[statute]
+section_number = "2"
+title = "Punishment of offences committed within Singapore"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Every person is liable under this Code for acts or omissions committed within Singapore."
+source = "Singapore Penal Code 1871, Section 2"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr2-#pr2-"

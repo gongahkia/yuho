@@ -1,0 +1,26 @@
+// Test file for s208_fraudulently_suffering_decree_sum_not_due
+// Yuho v5 Syntax
+
+referencing penal_code/s208_fraudulently_suffering_decree_sum_not_due
+
+struct S208TestCase {
+    bool fraudulentlySuffers,
+    bool decreeOrOrderPassed,
+    bool sumNotDueOrSatisfied,
+}
+
+S208TestCase shamJudgment := S208TestCase {
+    fraudulentlySuffers := TRUE,
+    decreeOrOrderPassed := TRUE,
+    sumNotDueOrSatisfied := TRUE,
+}
+
+assert evaluate_s208(shamJudgment.fraudulentlySuffers, shamJudgment.decreeOrOrderPassed, shamJudgment.sumNotDueOrSatisfied) == "Liable under s208"
+
+S208TestCase validJudgment := S208TestCase {
+    fraudulentlySuffers := FALSE,
+    decreeOrOrderPassed := TRUE,
+    sumNotDueOrSatisfied := FALSE,
+}
+
+assert evaluate_s208(validJudgment.fraudulentlySuffers, validJudgment.decreeOrOrderPassed, validJudgment.sumNotDueOrSatisfied) == "Not liable - not fraudulent"

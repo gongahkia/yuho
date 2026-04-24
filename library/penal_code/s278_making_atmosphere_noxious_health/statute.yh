@@ -1,0 +1,38 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr278-#pr278-
+// Singapore Penal Code Section 278 - Making atmosphere noxious to health
+// Yuho v5 Syntax
+
+struct AtmosphereCase { string accused, bool voluntarilyVitiated, bool noxiousToHealth, }
+
+fn is_offence(bool voluntary, bool noxious) : bool {
+    match {
+        case TRUE if voluntary == FALSE := consequence FALSE;
+        case TRUE if noxious == FALSE := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
+
+/// @amendment [15/2019]
+statute 278 "Making atmosphere noxious to health" effective 1872-01-01 {
+    definitions {
+        vitiate := "To spoil or make impure";
+    }
+
+    elements {
+        all_of {
+            /// act of vitiating the atmosphere
+            actus_reus vitiate := "Vitiating the atmosphere in any place";
+            /// result -- noxious to health of persons in neighbourhood or public way
+            circumstance noxious := "Atmosphere made noxious to the health of persons in general dwelling, carrying on business, or passing along a public way";
+            /// fault element -- voluntariness
+            mens_rea voluntary := "Acting voluntarily";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 3 years;
+        fine := $0.00 .. $10,000.00;
+    }
+}

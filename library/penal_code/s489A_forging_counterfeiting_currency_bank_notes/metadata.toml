@@ -1,0 +1,18 @@
+[statute]
+section_number = "489A"
+title = "Forging or counterfeiting currency or bank notes"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Whoever forges or counterfeits, or knowingly performs any part of the process of forging or counterfeiting, any currency or bank note shall be guilty of an offence and shall on conviction be punished with imprisonment for a term which may extend to 20 years, and shall also be liable to fine. [15/2019] (2) In this section and sections 489B to 489I —"
+source = "Singapore Penal Code 1871, Section 489A"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr489A-#pr489A-"

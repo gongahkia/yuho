@@ -1,0 +1,42 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr277-#pr277-
+// Singapore Penal Code Section 277 - Fouling the water of a public spring or reservoir
+// Yuho v5 Syntax
+
+struct FoulingWaterCase { string accused, bool voluntarilyCorrupted, bool publicSpringOrReservoir, bool lessFitForUse, }
+
+fn is_offence(bool voluntary, bool public_water, bool lessFit) : bool {
+    match {
+        case TRUE if voluntary == FALSE := consequence FALSE;
+        case TRUE if public_water == FALSE := consequence FALSE;
+        case TRUE if lessFit == FALSE := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
+
+/// @amendment [15/2019]
+statute 277 "Fouling the water of a public spring or reservoir" effective 1872-01-01 {
+    definitions {
+        voluntarily := "Acting of one's own free will, intentionally or by reason of known likely consequences";
+        public_water := "A public spring or reservoir";
+    }
+
+    elements {
+        all_of {
+            /// physical act
+            actus_reus fouling := "Corrupting or fouling water";
+            /// circumstance -- public spring or reservoir
+            circumstance public_spring := "Water is that of a public spring or reservoir";
+            /// result -- fitness reduced
+            circumstance less_fit := "Water rendered less fit for the purpose for which it is ordinarily used";
+            /// fault element
+            mens_rea voluntary := "Acting voluntarily";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 3 years;
+        fine := $0.00 .. $10,000.00;
+    }
+}

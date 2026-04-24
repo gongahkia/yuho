@@ -1,0 +1,24 @@
+// Test file for s116
+// Yuho v5 Syntax
+
+referencing penal_code/s116_abetment_offence_punishable_imprisonment
+
+struct S116Test {
+    bool offencePunishableByImprisonment,
+    bool offenceNotCommittedInConsequence,
+    bool noExpressProvision,
+}
+
+S116Test qualifying := S116Test {
+    offencePunishableByImprisonment := TRUE,
+    offenceNotCommittedInConsequence := TRUE,
+    noExpressProvision := TRUE,
+}
+assert s116_applies(qualifying.offencePunishableByImprisonment, qualifying.offenceNotCommittedInConsequence, qualifying.noExpressProvision) == TRUE
+
+S116Test committed := S116Test {
+    offencePunishableByImprisonment := TRUE,
+    offenceNotCommittedInConsequence := FALSE,
+    noExpressProvision := TRUE,
+}
+assert s116_applies(committed.offencePunishableByImprisonment, committed.offenceNotCommittedInConsequence, committed.noExpressProvision) == FALSE

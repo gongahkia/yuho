@@ -1,0 +1,18 @@
+[statute]
+section_number = "382"
+title = "Theft after preparation made for causing death or hurt in order to commit theft"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Theft preceded by preparation to cause death, hurt, or restraint to commit theft, escape, or retain stolen property is punishable with up to 10 years imprisonment and caning with not less than 3 strokes."
+source = "Singapore Penal Code 1871, Section 382"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr382-#pr382-"

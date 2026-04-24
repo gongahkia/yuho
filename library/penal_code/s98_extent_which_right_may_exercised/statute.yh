@@ -1,0 +1,21 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr98-#pr98-
+// Singapore Penal Code Section 98
+
+/// @amendment [15/2019]
+
+statute 98 "Extent to which right may be exercised" effective 1872-01-01 {
+    definitions {
+        proportionality := "The right of private defence does not extend to the inflicting of more harm than it is reasonably necessary in the circumstances.";
+        public_authority := "There is no right of private defence in cases in which there is reasonable opportunity to have recourse to the protection of a public authority in the circumstances.";
+    }
+
+    illustration example_a {
+        "( a ) Z ambushes A in a secluded area and attempts to kill A . A kills Z while fending off Z ’s attack. A is guilty of no offence because, in the circumstances, A had no reasonable opportunity to have recourse to the protection of a public authority."
+    }
+
+    illustration example_b {
+        "( b ) Z ambushes A in a secluded area and attempts to kill A . A ’s right of private defence arises because, at that point of time, A had no reasonable opportunity to have recourse to the protection of a public authority. In the midst of the struggle between A and Z , a police patrol car arrives on the scene. A ’s right of private defence ceases the moment A had reasonable opportunity to have recourse to the protection of the police."
+    }
+}

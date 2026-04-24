@@ -1,0 +1,44 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr119-#pr119-
+// Singapore Penal Code Section 119 - A public servant concealing a design to commit an offence which it is his duty to prevent
+// Yuho v5 Syntax
+
+struct S119Case {
+    string concealer,
+    bool isPublicServant,
+    bool intendsOrKnowsLikelyToFacilitate,
+    bool dutyToPreventOffence,
+    bool concealsOrMakesFalseRepresentation,
+}
+
+fn s119_applies(bool isPublicServant, bool intendsOrKnowsLikelyToFacilitate, bool dutyToPreventOffence, bool concealsOrMakesFalseRepresentation) : bool {
+    match {
+        case TRUE if isPublicServant == TRUE && intendsOrKnowsLikelyToFacilitate == TRUE && dutyToPreventOffence == TRUE && concealsOrMakesFalseRepresentation == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 119 "A public servant concealing a design to commit an offence which it is his duty to prevent" effective 1872-01-01 {
+    definitions {
+        public_servant := "As defined in section 21";
+        duty_to_prevent := "Commission of the offence is one which it is the public servant's duty as such to prevent";
+        intent_to_facilitate := "Intending to facilitate, or knowing concealment likely will facilitate, commission of the offence";
+    }
+
+    elements {
+        all_of {
+            circumstance public_servant := "Person is a public servant";
+            mens_rea intent_or_knowledge := "Intending to facilitate, or knowing it likely to facilitate, commission of the offence";
+            circumstance duty_to_prevent := "Commission of the offence is one which it is the public servant's duty to prevent";
+            any_of {
+                actus_reus conceals_design := "Voluntarily conceals, by any act or illegal omission, existence of a design to commit the offence";
+                actus_reus makes_false_rep := "Makes any representation known to be false respecting such design";
+            }
+        }
+    }
+
+    illustration example1 {
+        "A, an officer of police, being legally bound to give information of all designs to commit robbery which may come to his knowledge, and knowing that B designs to commit robbery, omits to give such information, with intent to facilitate the commission of that offence. A has committed the offence defined in this section."
+    }
+}

@@ -1,0 +1,23 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr367-#pr367-
+// Singapore Penal Code Section 367
+
+statute 367 "Kidnapping or abducting in order to subject a person to grievous hurt, slavery, etc." effective 1872-01-01 {
+    definitions {
+        unnatural_lust := "Unnatural lust as understood under the Penal Code";
+    }
+
+    elements {
+        /// kidnaps or abducts a person
+        actus_reus kidnap_or_abduct := "Kidnaps or abducts any person";
+        /// intent to subject to grievous hurt, slavery, or unnatural lust
+        mens_rea intent_grievous_hurt_slavery := "In order that such person may be subjected to grievous hurt, slavery, or unnatural lust, or knowing it likely that such person will be so subjected";
+    }
+
+    penalty {
+        imprisonment := 0 years .. 10 years;
+        fine := $0.00 .. $10,000.00;
+    }
+
+}

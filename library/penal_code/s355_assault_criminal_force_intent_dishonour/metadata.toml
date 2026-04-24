@@ -1,0 +1,18 @@
+[statute]
+section_number = "355"
+title = "Assault or criminal force with intent to dishonour otherwise than on grave and sudden provocation"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Assaults or criminal force with intent to dishonour, otherwise than on grave and sudden provocation, punishable by imprisonment and fine."
+source = "Singapore Penal Code 1871, Section 355"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr355-#pr355-"

@@ -1,0 +1,33 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr459-#pr459-
+// Singapore Penal Code Section 459 - Grievous hurt caused while committing house-breaking
+
+/// @amendment [15/2019]
+
+referencing penal_code/s442_house_breaking
+
+statute 459 "Grievous hurt caused while committing house-breaking" effective 2020-01-01 {
+    definitions {
+        grievous_hurt := "As defined in section 320";
+        house_breaking := "As defined in section 442";
+    }
+
+    elements {
+        all_of {
+            /// base offence -- in the course of house-breaking
+            actus_reus during_house_breaking := "Commits the relevant act while committing house-breaking";
+            any_of {
+                /// causing grievous hurt
+                actus_reus cause_gh := "Causes grievous hurt to any person";
+                /// attempting death or grievous hurt
+                actus_reus attempt_gh := "Attempts to cause death or grievous hurt to any person";
+            }
+        }
+    }
+
+    penalty {
+        imprisonment := 3 years .. 20 years;
+        caning := 1 .. 24 strokes;
+    }
+}

@@ -1,0 +1,18 @@
+[statute]
+section_number = "118"
+title = "Concealing a design to commit an offence punishable with death or imprisonment for life"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Whoever, with intent or knowledge of likely facilitation, conceals the existence of a design to commit an offence punishable with death or imprisonment for life, or makes a known false representation about it, is punishable with up to 7 years imprisonment (3 years if offence not committed) and liable to fine."
+source = "Singapore Penal Code 1871, Section 118"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr118-#pr118-"

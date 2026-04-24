@@ -1,0 +1,19 @@
+[statute]
+section_number = "216"
+title = "Harbouring an offender who has escaped from custody, or whose apprehension has been ordered"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Harbouring a person who has escaped from lawful custody or whose apprehension has been ordered, with intent to prevent apprehension; punishment tiered by underlying offence."
+source = "Singapore Penal Code 1871, Section 216"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr216-#pr216-"
+disclaimer = "Educational purposes only. Cross-reference with official SSO text."

@@ -1,0 +1,27 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr127-#pr127-
+// Singapore Penal Code Section 127 - Receiving property taken by war or depredation mentioned in sections 125 and 126
+
+statute 127 "Receiving property taken by war or depredation mentioned in sections 125 and 126" effective 1872-01-01 {
+    definitions {
+        receiving := "Taking possession of property with knowledge of its criminal origin";
+        predicate_offence := "An offence mentioned in sections 125 or 126";
+        forfeiture := "The property so received shall be forfeited";
+    }
+
+    elements {
+        all_of {
+            /// physical act of receiving property
+            actus_reus receive_property := "Receiving any property taken in the commission of an offence under sections 125 or 126";
+            /// mens rea - knowledge of predicate offence
+            mens_rea knowledge := "Knowing the property to have been taken in the commission of any of the offences mentioned in sections 125 and 126";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 years .. 7 years;
+        fine := $0.00 .. $50,000.00;
+        supplementary := "The property so received shall be forfeited";
+    }
+}

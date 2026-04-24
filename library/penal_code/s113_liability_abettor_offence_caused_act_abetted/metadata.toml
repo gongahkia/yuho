@@ -1,0 +1,18 @@
+[statute]
+section_number = "113"
+title = "Liability of abettor for an offence caused by the act abetted different from that intended by the abettor"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Where the act abetted causes a different effect from that intended by the abettor, the abettor is liable for the effect caused as if he had abetted the act with intention of causing that effect, provided he knew the act was likely to cause that effect."
+source = "Singapore Penal Code 1871, Section 113"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr113-#pr113-"

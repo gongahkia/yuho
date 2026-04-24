@@ -1,0 +1,23 @@
+// Test file for s312
+// Yuho v5 Syntax
+
+referencing penal_code/s312_causing_miscarriage
+
+struct S312CaseTest {
+    bool actusReus,
+    bool mensRea,
+}
+
+S312CaseTest satisfied := S312CaseTest {
+    actusReus := TRUE,
+    mensRea := TRUE,
+}
+
+assert s312_applies(satisfied.actusReus, satisfied.mensRea) == TRUE
+
+S312CaseTest missingMens := S312CaseTest {
+    actusReus := TRUE,
+    mensRea := FALSE,
+}
+
+assert s312_applies(missingMens.actusReus, missingMens.mensRea) == FALSE

@@ -1,0 +1,25 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr178-#pr178-
+// Singapore Penal Code Section 178
+
+/// @amendment [15/2019]
+statute 178 "Refusing oath when duly required to take oath by a public servant" effective 1872-01-01 {
+    definitions {
+        oath := "An oath to bind oneself to state the truth, required by a public servant legally competent to require such oath";
+    }
+
+    elements {
+        all_of {
+            /// competent public servant requires the oath
+            circumstance competent_requirement := "A public servant legally competent to require it demands that the accused bind himself by an oath to state the truth";
+            /// accused refuses
+            actus_reus refusal := "Refusing to bind himself by such oath";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 months .. 6 months;
+        fine := $0.00 .. $5,000.00;
+    }
+}

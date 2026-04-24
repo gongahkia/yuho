@@ -1,0 +1,11 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr29A-#pr29A-
+// Singapore Penal Code Section 29A
+// Yuho v5 Syntax
+
+statute 29A "“Writing”" effective 1872-01-01 {
+    definitions {
+        writing := "The word “writing” includes any mode of representing or reproducing words, figures, drawings or symbols in a visible form.";
+    }
+}

@@ -1,0 +1,18 @@
+[statute]
+section_number = "121C"
+title = "Abetting offences under section 121A or 121B"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Whoever abets the commission of any offence punishable under section 121A or 121B is punishable with the punishment provided for those offences."
+source = "Singapore Penal Code 1871, Section 121C"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr121C-#pr121C-"

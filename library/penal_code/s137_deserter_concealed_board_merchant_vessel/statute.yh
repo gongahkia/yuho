@@ -1,0 +1,27 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr137-#pr137-
+// Singapore Penal Code Section 137 - Deserter concealed on board merchant vessel through negligence of master
+
+/// @amendment [15/2019]
+statute 137 "Deserter concealed on board merchant vessel through negligence of master" effective 1872-01-01 {
+    definitions {
+        master := "The master or person in charge of a merchant vessel";
+        merchant_vessel := "A ship engaged in the commercial transport of passengers or cargo";
+        deserter := "A deserter from the Singapore Armed Forces or any visiting forces lawfully present in Singapore";
+        constructive_knowledge := "The master might have known of the concealment but for neglect of duty or want of discipline";
+    }
+
+    elements {
+        all_of {
+            /// circumstance - concealment aboard vessel under the master's charge
+            circumstance concealment := "A deserter from the Singapore Armed Forces or any visiting forces lawfully present in Singapore is concealed on board a merchant vessel";
+            /// actus reus by omission - the master's failure
+            actus_reus negligent_master := "The master or person in charge, though ignorant of the concealment, might have known of it but for some neglect of his duty or want of discipline on board";
+        }
+    }
+
+    penalty {
+        fine := $0.00 .. $1,500.00;
+    }
+}

@@ -131,3 +131,7 @@ library/penal_code/**/test_statute.json
 
 # Generated project scaffolds
 my_statute/
+
+AGENTS.md
+CLAUDE.md
+.claude/

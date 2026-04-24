@@ -1,0 +1,35 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr502-#pr502-
+// Singapore Penal Code Section 502 - Sale of printed or engraved substance containing defamatory matter
+// Yuho v5 Syntax
+
+struct SaleDefamatoryCase {
+    string accused,
+    bool elementsSatisfied,
+}
+
+fn is_liable(bool elementsSatisfied) : bool {
+    match {
+        case TRUE if elementsSatisfied == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 502 "Sale of printed or engraved substance containing defamatory matter" effective 1872-01-01 {
+    definitions {
+        defamation := "As defined under section 499";
+    }
+
+    elements {
+        all_of {
+            actus_reus sells_or_offers := "Sells or offers for sale any printed or engraved substance";
+            circumstance contains_defamatory_matter := "The substance contains defamatory matter";
+            mens_rea knows_contents := "Knows that it contains such matter";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 2 years;
+    }
+}

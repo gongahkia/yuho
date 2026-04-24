@@ -1,0 +1,18 @@
+[statute]
+section_number = "377BI"
+title = "Distributing or selling child abuse material"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Distributing or selling child abuse material."
+source = "Singapore Penal Code 1871, Section 377BI"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BI-#pr377BI-"

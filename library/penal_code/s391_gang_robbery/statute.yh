@@ -1,0 +1,49 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr391-#pr391-
+// Singapore Penal Code Section 391 - Gang-robbery
+// Yuho v5 Syntax
+
+referencing penal_code/s390_robbery
+
+struct S391Case {
+    string accused,
+    int totalPersons,
+    bool robberyOrAttempt,
+    bool conjointConduct,
+}
+
+fn is_gang_robbery(int totalPersons, bool robberyOrAttempt, bool conjointConduct) : bool {
+    match {
+        case TRUE if totalPersons < 5 := consequence FALSE;
+        case TRUE if robberyOrAttempt == FALSE := consequence FALSE;
+        case TRUE if conjointConduct == FALSE := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
+
+statute 391 "Gang-robbery" effective 1872-01-01 {
+    definitions {
+        gang_robbery := "Robbery conjointly committed or attempted by 5 or more persons, or where total of committers and aiders present amounts to 5 or more";
+        conjointly := "Acting together in concert";
+        aiding_present := "Persons present and aiding such commission or attempt";
+        robbery := "As defined under section 390";
+    }
+
+    elements {
+        /// robbery or attempted robbery is the predicate conduct
+        actus_reus predicate_robbery := "Commission or attempted commission of robbery" burden prosecution beyond_reasonable_doubt;
+        /// conjoint participation by 5 or more persons is required
+        circumstance conjoint_group := "5 or more persons acting conjointly, or total of committers plus present aiders reaches 5 or more";
+        /// every committer, attempter, or aider is a gang-robber
+        circumstance participant_status := "Person is committing, attempting, or aiding in the robbery";
+    }
+
+    illustration example1 {
+        "A, B, C, D, and E together break into Z's house and rob Z. Each of A to E has committed gang-robbery."
+    }
+
+    illustration example2 {
+        "A, B, and C attempt to rob Z while D and E stand nearby aiding them. The total of committers and aiders is 5. Each of A to E has committed gang-robbery."
+    }
+}

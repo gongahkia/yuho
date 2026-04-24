@@ -1,0 +1,19 @@
+[statute]
+section_number = "263"
+title = "Erasure of mark denoting that stamp has been used"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Fraudulently or with intent to cause loss to Government erasing marks of use on a Government revenue stamp, or possessing or selling such defaced or used stamps."
+source = "Singapore Penal Code 1871, Section 263"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr263-#pr263-"
+disclaimer = "Educational purposes only. Cross-reference with official SSO text."

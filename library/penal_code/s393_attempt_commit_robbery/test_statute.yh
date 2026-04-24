@@ -1,0 +1,20 @@
+// Test file for s393_attempt_commit_robbery
+// Yuho v5 Syntax
+
+referencing penal_code/s393_attempt_commit_robbery
+
+struct S393TestCase {
+    bool robberyAttempted,
+}
+
+S393TestCase attempt := S393TestCase {
+    robberyAttempted := TRUE,
+}
+
+assert s393_applies(attempt.robberyAttempted) == TRUE
+
+S393TestCase none := S393TestCase {
+    robberyAttempted := FALSE,
+}
+
+assert s393_applies(none.robberyAttempted) == FALSE

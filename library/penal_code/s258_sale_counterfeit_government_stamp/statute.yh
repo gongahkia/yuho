@@ -1,0 +1,47 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr258-#pr258-
+// Singapore Penal Code Section 258 - Sale of counterfeit Government stamp
+// Yuho v5 Syntax
+
+struct S258Case {
+    string accused,
+    bool sellsOrOffersStamp,
+    bool knowsOrBelievesCounterfeit,
+    bool governmentRevenueStamp,
+}
+fn s258_applies(bool sellsOrOffersStamp, bool knowsOrBelievesCounterfeit, bool governmentRevenueStamp) : bool {
+    match {
+        case TRUE if sellsOrOffersStamp == FALSE := consequence FALSE;
+        case TRUE if governmentRevenueStamp == FALSE := consequence FALSE;
+        case TRUE if knowsOrBelievesCounterfeit == FALSE := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
+statute 258 "Sale of counterfeit Government stamp" effective 1872-01-01 {
+    definitions {
+        government_stamp := "Stamp issued by the Government for the purpose of revenue";
+        counterfeit_stamp := "A stamp counterfeiting a Government revenue stamp";
+    }
+
+    elements {
+        all_of {
+            any_of {
+                actus_reus sells := "Sells any stamp";
+                actus_reus offers_for_sale := "Offers for sale any stamp";
+            }
+            circumstance stamp_counterfeit := "The stamp is a counterfeit of one issued by the Government for revenue";
+            mens_rea knowledge := "Knows or has reason to believe the stamp to be a counterfeit";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 years .. 7 years;
+        fine := $0.00 .. $50,000.00;
+    }
+
+    illustration example1 {
+        "A offers counterfeit revenue stamps for sale knowing they are fakes. A commits an offence under s258."
+    }
+
+}

@@ -1,0 +1,18 @@
+[statute]
+section_number = "25"
+title = "“Fraudulently”"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Defines 'fraudulently' as an act done with intent to deceive so an advantage accrues or a detriment is suffered."
+source = "Singapore Penal Code 1871, Section 25"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr25-#pr25-"

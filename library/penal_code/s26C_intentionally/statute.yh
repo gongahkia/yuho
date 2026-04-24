@@ -1,0 +1,13 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr26C-#pr26C-
+// Singapore Penal Code Section 26C
+// Yuho v5 Syntax
+
+/// @amendment [15/2019]
+
+statute 26C "“Intentionally”" effective 1872-01-01 {
+    definitions {
+        intentionally := "—(1) A person is said to do an act intentionally where that person does an act deliberately. [15/2019] (2) A person is said to cause an effect intentionally where that person does anything that causes an effect — (3) To avoid doubt, a person does not intend or foresee a result of his acts by reason only of it being a natural and probable consequence of those acts. [15/2019] (4) To avoid doubt, nothing in this section prevents a court from relying on a person’s foresight that a certain effect was a probable consequence of his act as a basis to draw an inference that the person caused that effect intentionally. [15/2019] Explanation .—Intention is distinct from motive or desire, and a person may do an act or cause an effect intentionally even if doing so was not his motive or he had no desire to do so.";
+    }
+}

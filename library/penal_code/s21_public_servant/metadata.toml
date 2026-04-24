@@ -1,0 +1,18 @@
+[statute]
+section_number = "21"
+title = "“Public servant”"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Defines 'public servant' enumerating officers, judges, court staff, jurors, arbitrators and various government officials."
+source = "Singapore Penal Code 1871, Section 21"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr21-#pr21-"

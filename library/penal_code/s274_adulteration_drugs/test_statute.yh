@@ -1,0 +1,10 @@
+// Test file for s274
+// Yuho v5 Syntax
+
+referencing penal_code/s274_adulteration_drugs
+
+struct DrugAdulterationTestCase { bool adulterated, bool effect, bool intentKnowledge, }
+DrugAdulterationTestCase good := DrugAdulterationTestCase { adulterated := TRUE, effect := TRUE, intentKnowledge := TRUE, }
+assert is_offence(good.adulterated, good.effect, good.intentKnowledge) == TRUE
+DrugAdulterationTestCase noEffect := DrugAdulterationTestCase { adulterated := TRUE, effect := FALSE, intentKnowledge := TRUE, }
+assert is_offence(noEffect.adulterated, noEffect.effect, noEffect.intentKnowledge) == FALSE

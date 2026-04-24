@@ -1,0 +1,40 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr436-#pr436-
+// Singapore Penal Code Section 436 - Mischief by fire or explosive substance with intent to destroy a house, etc.
+
+referencing penal_code/s425_mischief
+
+statute 436 "Mischief by fire or explosive substance with intent to destroy a house, etc." effective 1872-01-01 {
+    definitions {
+        mischief := "As defined in section 425";
+        explosive_substance := "Any substance capable of producing a practical effect by explosion";
+        protected_building := "A building used for worship, administration of justice, public affairs, education, art, public use or ornament, human dwelling, or custody of property";
+    }
+
+    elements {
+        all_of {
+            /// base offence -- mischief under s425
+            actus_reus base_mischief := "Commits mischief under section 425";
+            any_of {
+                /// mode -- by fire
+                circumstance by_fire := "Mischief committed by fire";
+                /// mode -- by explosive
+                circumstance by_explosive := "Mischief committed by an explosive substance";
+            }
+            /// target is a protected building
+            circumstance target_building := "Target is a building used for worship, justice, public affairs, education, art, public use, ornament, human dwelling, or custody of property";
+            any_of {
+                /// intent to destroy that building
+                mens_rea intent_destroy := "Intends to cause destruction of the building";
+                /// knowledge destruction is likely
+                mens_rea know_destroy := "Knows it to be likely that the destruction will be caused";
+            }
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 99 years;
+        fine := $0.00 .. $100,000.00;
+    }
+}

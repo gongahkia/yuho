@@ -1,0 +1,13 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr20-#pr20-
+// Singapore Penal Code Section 20 - "Court of justice"
+// Shape: interpretation / definition
+
+statute 20 "Court of justice" effective 1872-01-01 {
+    definitions {
+        court_of_justice := "A judge who is empowered by law to act judicially alone, or a body of judges which is empowered by law to act judicially as a body, when such judge or body of judges is acting judicially";
+        single_judge_court := "A judge empowered by law to act judicially alone, when acting judicially";
+        collegiate_court := "A body of judges empowered by law to act judicially as a body, when acting judicially";
+    }
+}

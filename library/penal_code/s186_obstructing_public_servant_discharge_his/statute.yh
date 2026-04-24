@@ -1,0 +1,56 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr186-#pr186-
+/// @amendment [Act 23 of 2021 wef 01/03/2022]
+/// @amendment [15/2019]
+// Singapore Penal Code Section 186 - Obstructing public servant in discharge of his public functions
+// Yuho v5 Syntax
+
+struct ObstructingCase {
+    string accused,
+    bool voluntary,
+    bool obstructsPublicServant,
+    bool inDischargeOfPublicFunctions,
+    bool isIndividual,
+}
+
+fn evaluate_s186(bool voluntary, bool obstructsPublicServant, bool inDischargeOfPublicFunctions) : string {
+    match {
+        case TRUE if voluntary == FALSE := consequence "Not liable - not voluntary";
+        case TRUE if obstructsPublicServant == FALSE := consequence "Not liable - no obstruction";
+        case TRUE if inDischargeOfPublicFunctions == FALSE := consequence "Not liable - not in discharge of public function";
+        case _ := consequence "Liable under s186";
+    }
+}
+
+statute 186 "Obstructing public servant in discharge of his public functions" effective 1872-01-01 {
+    definitions {
+        public_servant := "As defined in section 21";
+        obstruction := "Any hindrance, including non-physical means or threatening language, to a public servant's public function";
+        voluntary := "As defined in section 39";
+    }
+
+    elements {
+        all_of {
+            /// mens rea: act must be voluntary
+            mens_rea voluntary_act := "Voluntarily";
+            /// actus reus: obstruct a public servant
+            actus_reus obstruct := "Obstructs any public servant";
+            /// circumstance: obstruction must be during discharge of public functions
+            circumstance public_function := "In the discharge of the public servant's public functions";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 years .. 6 months;
+        fine := $0.00 .. $10,000.00;
+    }
+
+    illustration example1 {
+        "A group of paramedics from the Singapore Civil Defence Force intends to take the lift to the 30th storey of a block of flats to reach a person suffering from a heart attack. A decides to play a prank on the paramedics by telling them that the lift has broken down, knowing this to be false. The paramedics took the stairs because of what A told them and reached the person 15 minutes later than if they had taken the lift. A has voluntarily obstructed the paramedics in the discharge of their public function."
+    }
+
+    // sub-para (a) individual: up to 6 months imprisonment, up to $2,500 fine, or both
+    // sub-para (b) other case: fine up to $10,000
+    // s186(2) clarifies obstruction need not be physical or by threatening language
+}

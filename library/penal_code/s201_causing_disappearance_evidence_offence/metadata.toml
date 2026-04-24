@@ -1,0 +1,19 @@
+[statute]
+section_number = "201"
+title = "Causing disappearance of evidence of an offence committed, or giving false information touching it, to screen the offender"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Causing evidence of an offence to disappear, or giving false information about it, with intent to screen the offender from legal punishment."
+source = "Singapore Penal Code 1871, Section 201"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr201-#pr201-"
+disclaimer = "Educational purposes only. Cross-reference with official SSO text."

@@ -1,0 +1,18 @@
+[statute]
+section_number = "412"
+title = "Receiving property stolen in the commission of a gang-robbery"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Receiving or retaining property known or believed to have been stolen in a gang-robbery."
+source = "Singapore Penal Code 1871, Section 412"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr412-#pr412-"

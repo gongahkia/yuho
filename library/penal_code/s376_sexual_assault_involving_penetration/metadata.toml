@@ -1,0 +1,18 @@
+[statute]
+section_number = "376"
+title = "Sexual assault involving penetration"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Sexual assault involving non-penile penetration of the vagina or anus without consent, or where victim is below 14."
+source = "Singapore Penal Code 1871, Section 376"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr376-#pr376-"

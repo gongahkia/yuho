@@ -1,0 +1,13 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr74E-#pr74E-
+// Singapore Penal Code Section 74E
+
+/// @amendment [15/2019]
+
+statute 74E "Application of enhanced penalties" effective 1872-01-01 {
+    definitions {
+        single_enhancement := "Where 2 or more of sections 73 to 74D are applicable, the punishment for the same offence shall not be enhanced by the application of more than one of those sections.";
+        court_discretion := "The court may determine which section should apply to enhance the punishment.";
+    }
+}

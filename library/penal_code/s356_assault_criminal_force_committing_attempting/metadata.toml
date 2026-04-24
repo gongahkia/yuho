@@ -1,0 +1,18 @@
+[statute]
+section_number = "356"
+title = "Assault or criminal force in committing or attempting to commit theft of property carried by a person"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Assault or criminal force committed in committing or attempting to commit theft of property carried by a person."
+source = "Singapore Penal Code 1871, Section 356"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr356-#pr356-"

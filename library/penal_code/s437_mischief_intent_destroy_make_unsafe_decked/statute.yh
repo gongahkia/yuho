@@ -1,0 +1,33 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr437-#pr437-
+// Singapore Penal Code Section 437 - Mischief with intent to destroy or make unsafe a decked vessel or a vessel of 20 tons burden
+
+referencing penal_code/s425_mischief
+
+statute 437 "Mischief with intent to destroy or make unsafe a decked vessel or a vessel of 20 tons burden" effective 1872-01-01 {
+    definitions {
+        mischief := "As defined in section 425";
+        qualifying_vessel := "A decked vessel or any vessel of 20 tons burden or more";
+    }
+
+    elements {
+        all_of {
+            /// base offence -- mischief under s425
+            actus_reus base_mischief := "Commits mischief to a qualifying vessel";
+            /// target is a decked vessel or >=20 tons
+            circumstance qualifying_target := "Target is a decked vessel or a vessel of 20 tons burden or more";
+            any_of {
+                /// intent to destroy or render unsafe
+                mens_rea intent := "Intends to destroy or render the vessel unsafe";
+                /// knowledge such consequence is likely
+                mens_rea knowledge := "Knows it to be likely that the vessel will be destroyed or rendered unsafe";
+            }
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 10 years;
+        fine := $0.00 .. $30,000.00;
+    }
+}

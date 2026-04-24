@@ -1,0 +1,43 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr189-#pr189-
+// Singapore Penal Code Section 189 - Threat of injury to a public servant
+// Yuho v5 Syntax
+
+struct S189Case {
+    string accused,
+    bool holdsOutThreat,
+    bool targetIsPublicServantOrInterested,
+    bool purposeToInducePublicFunction,
+}
+
+fn evaluate_s189(bool holdsOutThreat, bool targetIsPublicServantOrInterested, bool purposeToInducePublicFunction) : string {
+    match {
+        case TRUE if holdsOutThreat == FALSE := consequence "Not liable - no threat";
+        case TRUE if targetIsPublicServantOrInterested == FALSE := consequence "Not liable - target not public servant or associate";
+        case TRUE if purposeToInducePublicFunction == FALSE := consequence "Not liable - wrong purpose";
+        case _ := consequence "Liable under s189";
+    }
+}
+
+statute 189 "Threat of injury to a public servant" effective 1872-01-01 {
+    definitions {
+        injury := "As defined in section 44";
+        public_servant := "As defined in section 21";
+        public_function := "An act connected with the exercise of the public functions of a public servant";
+    }
+
+    elements {
+        all_of {
+            /// actus reus: holding out threat of injury
+            actus_reus threat := "Holds out any threat of injury to any public servant, or to any person in whom he believes that public servant to be interested";
+            /// mens rea: purpose to induce action or forbearance in public function
+            mens_rea purpose := "For the purpose of inducing that public servant to do any act, or to forbear or delay any act, connected with the exercise of public functions";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 years .. 2 years;
+        fine := $0.00 .. $5,000.00;
+    }
+}

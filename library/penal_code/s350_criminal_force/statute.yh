@@ -1,0 +1,37 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr350-#pr350-
+// Singapore Penal Code Section 350 -- Criminal force
+// Yuho v5 Syntax
+
+struct S350Case {
+    string actor,
+    bool criteriaMet,
+}
+
+fn s350_matches(bool criteriaMet) : bool {
+    match {
+        case TRUE if criteriaMet == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+
+statute 350 "Criminal force" effective 1872-01-01 {
+    definitions {
+        term_summary := "Definition of criminal force.";
+    }
+
+    elements {
+        /// statutory criteria for the defined term
+        circumstance criteria := "Statutory criteria for the defined term are satisfied";
+    }
+
+    penalty {
+        fine := $0.00 .. $1,000.00;
+    }
+
+    illustration example1 {
+        "The conduct of A matches the statutory criteria defined under section 350."
+    }
+}

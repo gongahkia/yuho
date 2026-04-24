@@ -1,0 +1,18 @@
+[statute]
+section_number = "22A"
+title = "“Fault element” and “physical element”"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Defines 'fault element' (mens rea component) and 'physical element' (actus reus component) of an offence."
+source = "Singapore Penal Code 1871, Section 22A"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr22A-#pr22A-"

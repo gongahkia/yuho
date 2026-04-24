@@ -1,0 +1,26 @@
+// Test file for s205_false_personation_purpose_act_proceeding_suit
+// Yuho v5 Syntax
+
+referencing penal_code/s205_false_personation_purpose_act_proceeding_suit
+
+struct S205TestCase {
+    bool falselyPersonatesAnother,
+    bool performsActInAssumedCharacter,
+    bool inSuitOrCriminalProsecution,
+}
+
+S205TestCase impersonatorInCourt := S205TestCase {
+    falselyPersonatesAnother := TRUE,
+    performsActInAssumedCharacter := TRUE,
+    inSuitOrCriminalProsecution := TRUE,
+}
+
+assert evaluate_s205(impersonatorInCourt.falselyPersonatesAnother, impersonatorInCourt.performsActInAssumedCharacter, impersonatorInCourt.inSuitOrCriminalProsecution) == "Liable under s205"
+
+S205TestCase noCourtContext := S205TestCase {
+    falselyPersonatesAnother := TRUE,
+    performsActInAssumedCharacter := TRUE,
+    inSuitOrCriminalProsecution := FALSE,
+}
+
+assert evaluate_s205(noCourtContext.falselyPersonatesAnother, noCourtContext.performsActInAssumedCharacter, noCourtContext.inSuitOrCriminalProsecution) == "Not liable - not in suit or criminal prosecution"

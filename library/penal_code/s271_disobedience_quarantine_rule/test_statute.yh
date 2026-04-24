@@ -1,0 +1,11 @@
+// Test file for s271
+// Yuho v5 Syntax
+
+referencing penal_code/s271_disobedience_quarantine_rule
+
+struct QuarantineTestCase { bool ruleLawful, bool disobeyed, bool knowingly, }
+QuarantineTestCase good := QuarantineTestCase { ruleLawful := TRUE, disobeyed := TRUE, knowingly := TRUE, }
+assert is_offence(good.ruleLawful, good.disobeyed, good.knowingly) == TRUE
+
+QuarantineTestCase unknowing := QuarantineTestCase { ruleLawful := TRUE, disobeyed := TRUE, knowingly := FALSE, }
+assert is_offence(unknowing.ruleLawful, unknowing.disobeyed, unknowing.knowingly) == FALSE

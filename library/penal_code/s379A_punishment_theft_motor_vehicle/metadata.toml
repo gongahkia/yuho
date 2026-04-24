@@ -1,0 +1,18 @@
+[statute]
+section_number = "379A"
+title = "Punishment for theft of a motor vehicle"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Theft of a motor vehicle or component part is punishable with imprisonment up to 7 years, a fine, and driving-licence disqualification."
+source = "Singapore Penal Code 1871, Section 379A"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr379A-#pr379A-"

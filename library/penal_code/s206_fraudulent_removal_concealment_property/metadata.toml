@@ -1,0 +1,19 @@
+[statute]
+section_number = "206"
+title = "Fraudulent removal or concealment of property to prevent its seizure as a forfeiture, in execution of a decree or under or pursuant to an enforcement order"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Fraudulently removing, concealing, transferring, or delivering property with intent to prevent its seizure as forfeiture, satisfaction of fine, or execution of a decree or enforcement order."
+source = "Singapore Penal Code 1871, Section 206"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr206-#pr206-"
+disclaimer = "Educational purposes only. Cross-reference with official SSO text."

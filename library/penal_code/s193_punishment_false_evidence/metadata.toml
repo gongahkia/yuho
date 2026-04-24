@@ -1,0 +1,19 @@
+[statute]
+section_number = "193"
+title = "Punishment for false evidence"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Intentionally giving false evidence (s191) or fabricating false evidence (s192) in a judicial proceeding attracts up to 7 years; in any other case, up to 3 years. Fine also leviable."
+source = "Singapore Penal Code 1871, Section 193"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr193-#pr193-"
+disclaimer = "Educational purposes only. Cross-reference with official SSO text."

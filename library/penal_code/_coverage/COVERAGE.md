@@ -1,6 +1,6 @@
 # Coverage — Penal Code 1871 (PC1871)
 
-_Generated: 2026-04-24T03:53:29+00:00_  
+_Generated: 2026-04-24T04:53:48+00:00_  
 _Scraped: 2026-04-24T03:48:44Z_  
 _Valid date: n/a_
 
@@ -9,15 +9,276 @@ _Valid date: n/a_
 | Metric | Count | % of raw |
 |---|---|---|
 | raw sections (canonical) | 524 | — |
-| encoded (.yh present) | 25 | 4.8% |
-| **L1** — parses | **25** | **4.8%** |
-| **L2** — typechecks | **25** | **4.8%** |
+| encoded (.yh present) | 286 | 54.6% |
+| **L1** — parses | **286** | **54.6%** |
+| **L2** — typechecks | **286** | **54.6%** |
 | **L3** — verified | **25** | **4.8%** |
 
 ## Encoded sections
 
 | § | Marginal note | L1 | L2 | L3 | Verified | Path |
 |---|---|:-:|:-:|:-:|---|---|
+| s1 | Short title | ✓ | ✓ | · | — | `library/penal_code/s1_short_title/statute.yh` |
+| s2 | Punishment of offences committed within Singapore | ✓ | ✓ | · | — | `library/penal_code/s2_punishment_offences_committed_within/statute.yh` |
+| s3 | Punishment of offences committed beyond, but which by law ma | ✓ | ✓ | · | — | `library/penal_code/s3_punishment_offences_committed_beyond_but/statute.yh` |
+| s4 | Jurisdiction over public servants for offences committed out | ✓ | ✓ | · | — | `library/penal_code/s4_jurisdiction_over_public_servants_offences/statute.yh` |
+| s4A | Offences against State and genocide committed outside Singap | ✓ | ✓ | · | — | `library/penal_code/s4A_offences_against_state_genocide_committed/statute.yh` |
+| s4B | Punishment of specified offences with elements occurring in  | ✓ | ✓ | · | — | `library/penal_code/s4B_punishment_specified_offences_elements/statute.yh` |
+| s5 | Certain laws not to be affected by this Code | ✓ | ✓ | · | — | `library/penal_code/s5_certain_laws_not_affected_this_code/statute.yh` |
+| s6 | Definitions in this Code to be understood subject to excepti | ✓ | ✓ | · | — | `library/penal_code/s6_definitions_this_code_understood_subject/statute.yh` |
+| s6A | Definitions to apply to this Code and other written law | ✓ | ✓ | · | — | `library/penal_code/s6A_definitions_apply_this_code_other_written_law/statute.yh` |
+| s7 | Expression once explained is used in the same sense througho | ✓ | ✓ | · | — | `library/penal_code/s7_expression_once_explained_used_same_sense/statute.yh` |
+| s8 | “Gender” | ✓ | ✓ | · | — | `library/penal_code/s8_gender/statute.yh` |
+| s9 | “Number” | ✓ | ✓ | · | — | `library/penal_code/s9_number/statute.yh` |
+| s10 | “Man” and “woman” | ✓ | ✓ | · | — | `library/penal_code/s10_man_woman/statute.yh` |
+| s11 | “Person” | ✓ | ✓ | · | — | `library/penal_code/s11_person/statute.yh` |
+| s12 | “Public” | ✓ | ✓ | · | — | `library/penal_code/s12_public/statute.yh` |
+| s17 | “Government” | ✓ | ✓ | · | — | `library/penal_code/s17_government/statute.yh` |
+| s19 | “Judge” | ✓ | ✓ | · | — | `library/penal_code/s19_judge/statute.yh` |
+| s20 | “Court of justice” | ✓ | ✓ | · | — | `library/penal_code/s20_court_justice/statute.yh` |
+| s21 | “Public servant” | ✓ | ✓ | · | — | `library/penal_code/s21_public_servant/statute.yh` |
+| s22 | “Property” | ✓ | ✓ | · | — | `library/penal_code/s22_property/statute.yh` |
+| s22A | “Fault element” and “physical element” | ✓ | ✓ | · | — | `library/penal_code/s22A_fault_element_physical_element/statute.yh` |
+| s23 | “Wrongful gain” and “wrongful loss” | ✓ | ✓ | · | — | `library/penal_code/s23_wrongful_gain_wrongful_loss/statute.yh` |
+| s24 | “Dishonestly” | ✓ | ✓ | · | — | `library/penal_code/s24_dishonestly/statute.yh` |
+| s25 | “Fraudulently” | ✓ | ✓ | · | — | `library/penal_code/s25_fraudulently/statute.yh` |
+| s26 | “Reason to believe” | ✓ | ✓ | · | — | `library/penal_code/s26_reason_believe/statute.yh` |
+| s26A | “Voluntarily” | ✓ | ✓ | · | — | `library/penal_code/s26A_voluntarily/statute.yh` |
+| s26B | “Good faith” | ✓ | ✓ | · | — | `library/penal_code/s26B_good_faith/statute.yh` |
+| s26C | “Intentionally” | ✓ | ✓ | · | — | `library/penal_code/s26C_intentionally/statute.yh` |
+| s26D | “Knowingly” | ✓ | ✓ | · | — | `library/penal_code/s26D_knowingly/statute.yh` |
+| s26E | “Rashly” | ✓ | ✓ | · | — | `library/penal_code/s26E_rashly/statute.yh` |
+| s26F | “Negligently” | ✓ | ✓ | · | — | `library/penal_code/s26F_negligently/statute.yh` |
+| s26G | “Transferred fault” | ✓ | ✓ | · | — | `library/penal_code/s26G_transferred_fault/statute.yh` |
+| s26H | “Strict liability” | ✓ | ✓ | · | — | `library/penal_code/s26H_strict_liability/statute.yh` |
+| s27 | Property in possession of spouse, clerk or servant | ✓ | ✓ | · | — | `library/penal_code/s27_property_possession_spouse_clerk_servant/statute.yh` |
+| s28 | “Counterfeit” | ✓ | ✓ | · | — | `library/penal_code/s28_counterfeit/statute.yh` |
+| s29 | “Document” | ✓ | ✓ | · | — | `library/penal_code/s29_document/statute.yh` |
+| s29A | “Writing” | ✓ | ✓ | · | — | `library/penal_code/s29A_writing/statute.yh` |
+| s29B | “Electronic record” | ✓ | ✓ | · | — | `library/penal_code/s29B_electronic_record/statute.yh` |
+| s30 | “Valuable security” | ✓ | ✓ | · | — | `library/penal_code/s30_valuable_security/statute.yh` |
+| s31 | “A will” | ✓ | ✓ | · | — | `library/penal_code/s31_will/statute.yh` |
+| s31A | “Die” and “instrument” | ✓ | ✓ | · | — | `library/penal_code/s31A_die_instrument/statute.yh` |
+| s32 | Words referring to acts include illegal omissions | ✓ | ✓ | · | — | `library/penal_code/s32_words_referring_acts_include_illegal_omissions/statute.yh` |
+| s33 | “Act” and “omission” | ✓ | ✓ | · | — | `library/penal_code/s33_act_omission/statute.yh` |
+| s34 | Each of several persons liable for an act done by all, in li | ✓ | ✓ | · | — | `library/penal_code/s34_each_several_persons_liable_act_done_all_like/statute.yh` |
+| s35 | When such an act is criminal by reason of its being done wit | ✓ | ✓ | · | — | `library/penal_code/s35_when_such_act_is_criminal_reason_its_being/statute.yh` |
+| s36 | Effect caused partly by act and partly by omission | ✓ | ✓ | · | — | `library/penal_code/s36_effect_caused_partly_act_partly_omission/statute.yh` |
+| s37 | Cooperation by doing one of several acts constituting an off | ✓ | ✓ | · | — | `library/penal_code/s37_cooperation_doing_one_several_acts/statute.yh` |
+| s38 | Several persons engaged in the commission of a criminal act  | ✓ | ✓ | · | — | `library/penal_code/s38_several_persons_engaged_commission_criminal/statute.yh` |
+| s40 | “Offence” | ✓ | ✓ | · | — | `library/penal_code/s40_offence/statute.yh` |
+| s41 | Offence with specified term of imprisonment | ✓ | ✓ | · | — | `library/penal_code/s41_offence_specified_term_imprisonment/statute.yh` |
+| s42 | “Obscene” | ✓ | ✓ | · | — | `library/penal_code/s42_obscene/statute.yh` |
+| s43 | “Illegal”, “unlawful” and “legally bound to do” | ✓ | ✓ | · | — | `library/penal_code/s43_illegal_unlawful_legally_bound_do/statute.yh` |
+| s44 | “Injury” | ✓ | ✓ | · | — | `library/penal_code/s44_injury/statute.yh` |
+| s44A | “Bodily injury” | ✓ | ✓ | · | — | `library/penal_code/s44A_bodily_injury/statute.yh` |
+| s45 | “Life” | ✓ | ✓ | · | — | `library/penal_code/s45_life/statute.yh` |
+| s46 | “Death” | ✓ | ✓ | · | — | `library/penal_code/s46_death/statute.yh` |
+| s47 | “Animal” | ✓ | ✓ | · | — | `library/penal_code/s47_animal/statute.yh` |
+| s48 | “Vessel” | ✓ | ✓ | · | — | `library/penal_code/s48_vessel/statute.yh` |
+| s49 | “Year” and “month” | ✓ | ✓ | · | — | `library/penal_code/s49_year_month/statute.yh` |
+| s50 | “Section” | ✓ | ✓ | · | — | `library/penal_code/s50_section/statute.yh` |
+| s51 | “Oath” | ✓ | ✓ | · | — | `library/penal_code/s51_oath/statute.yh` |
+| s53 | Punishments | ✓ | ✓ | · | — | `library/penal_code/s53_punishments/statute.yh` |
+| s54 | Imprisonment for life | ✓ | ✓ | · | — | `library/penal_code/s54_imprisonment_life/statute.yh` |
+| s72 | Punishment of a person found guilty of one of several offenc | ✓ | ✓ | · | — | `library/penal_code/s72_punishment_person_found_guilty_one_several/statute.yh` |
+| s73 | Enhanced penalties for offences against domestic workers | ✓ | ✓ | · | — | `library/penal_code/s73_enhanced_penalties_offences_against_domestic/statute.yh` |
+| s74 | Enhanced penalties for racially or religiously aggravated of | ✓ | ✓ | · | — | `library/penal_code/s74_enhanced_penalties_racially_religiously/statute.yh` |
+| s74A | Enhanced penalties for offences against vulnerable persons | ✓ | ✓ | · | — | `library/penal_code/s74A_enhanced_penalties_offences_against/statute.yh` |
+| s74B | Enhanced penalties for offences against person below 14 year | ✓ | ✓ | · | — | `library/penal_code/s74B_enhanced_penalties_offences_against_person/statute.yh` |
+| s74C | Enhanced penalties for offences against victims in intimate  | ✓ | ✓ | · | — | `library/penal_code/s74C_enhanced_penalties_offences_against_victims/statute.yh` |
+| s74D | Enhanced penalties for offences against victims in close rel | ✓ | ✓ | · | — | `library/penal_code/s74D_enhanced_penalties_offences_against_victims/statute.yh` |
+| s74E | Application of enhanced penalties | ✓ | ✓ | · | — | `library/penal_code/s74E_application_enhanced_penalties/statute.yh` |
+| s76 | Act done by person bound, or justified by law | ✓ | ✓ | · | — | `library/penal_code/s76_act_done_person_bound_justified_law/statute.yh` |
+| s77 | Act of judge when acting judicially | ✓ | ✓ | · | — | `library/penal_code/s77_act_judge_when_acting_judicially/statute.yh` |
+| s78 | Act done pursuant to the judgment or order of a court of jus | ✓ | ✓ | · | — | `library/penal_code/s78_act_done_pursuant_judgment_order_court/statute.yh` |
+| s79 | Act done by person by mistake of fact believing himself boun | ✓ | ✓ | · | — | `library/penal_code/s79_act_done_person_mistake_fact_believing/statute.yh` |
+| s79A | Mistake of law or ignorance of law not defence | ✓ | ✓ | · | — | `library/penal_code/s79A_mistake_law_ignorance_law_not_defence/statute.yh` |
+| s80 | Accident in the doing of a lawful act | ✓ | ✓ | · | — | `library/penal_code/s80_accident_doing_lawful_act/statute.yh` |
+| s81 | Act likely to cause harm but done to prevent other harm | ✓ | ✓ | · | — | `library/penal_code/s81_act_likely_cause_harm_but_done_prevent_other/statute.yh` |
+| s82 | Act of a child below 10 years of age | ✓ | ✓ | · | — | `library/penal_code/s82_act_child_below_10_years_age/statute.yh` |
+| s83 | Act of a child of or above 10 and below 12 years of age, who | ✓ | ✓ | · | — | `library/penal_code/s83_act_child_above_10_below_12_years_age_who/statute.yh` |
+| s84 | Act of person of unsound mind | ✓ | ✓ | · | — | `library/penal_code/s84_act_person_unsound_mind/statute.yh` |
+| s85 | Intoxication when a defence | ✓ | ✓ | · | — | `library/penal_code/s85_intoxication_when_defence/statute.yh` |
+| s86 | Effect of defence of intoxication when established | ✓ | ✓ | · | — | `library/penal_code/s86_effect_defence_intoxication_when_established/statute.yh` |
+| s87 | Act not intended and not known to be likely to cause death o | ✓ | ✓ | · | — | `library/penal_code/s87_act_not_intended_not_known_likely_cause/statute.yh` |
+| s88 | Act not intended to cause death done by consent in good fait | ✓ | ✓ | · | — | `library/penal_code/s88_act_not_intended_cause_death_done_consent/statute.yh` |
+| s89 | Act done in good faith for the benefit of a child or person  | ✓ | ✓ | · | — | `library/penal_code/s89_act_done_good_faith_benefit_child_person/statute.yh` |
+| s90 | Consent given under fear or misconception, by person of unso | ✓ | ✓ | · | — | `library/penal_code/s90_consent_given_under_fear_misconception/statute.yh` |
+| s91 | Acts which are offences independently of harm caused to the  | ✓ | ✓ | · | — | `library/penal_code/s91_acts_which_are_offences_independently_harm/statute.yh` |
+| s92 | Act done in good faith for the benefit of a person without c | ✓ | ✓ | · | — | `library/penal_code/s92_act_done_good_faith_benefit_person_without/statute.yh` |
+| s93 | Communication made in good faith | ✓ | ✓ | · | — | `library/penal_code/s93_communication_made_good_faith/statute.yh` |
+| s94 | Act to which a person is compelled by threats | ✓ | ✓ | · | — | `library/penal_code/s94_act_which_person_compelled_threats/statute.yh` |
+| s95 | Act causing slight harm | ✓ | ✓ | · | — | `library/penal_code/s95_act_causing_slight_harm/statute.yh` |
+| s96 | Nothing done in private defence is an offence | ✓ | ✓ | · | — | `library/penal_code/s96_nothing_done_private_defence_offence/statute.yh` |
+| s97 | Right of private defence of the body and of property | ✓ | ✓ | · | — | `library/penal_code/s97_right_private_defence_body_property/statute.yh` |
+| s98 | Extent to which right may be exercised | ✓ | ✓ | · | — | `library/penal_code/s98_extent_which_right_may_exercised/statute.yh` |
+| s99 | Right of private defence against act of person of unsound mi | ✓ | ✓ | · | — | `library/penal_code/s99_right_private_defence_against_act_person/statute.yh` |
+| s100 | Right of private defence against deadly assault when there i | ✓ | ✓ | · | — | `library/penal_code/s100_right_private_defence_against_deadly_assault/statute.yh` |
+| s101 | Start and continuance of right of private defence of body | ✓ | ✓ | · | — | `library/penal_code/s101_start_continuance_right_private_defence_body/statute.yh` |
+| s102 | When right of private defence of body extends to causing dea | ✓ | ✓ | · | — | `library/penal_code/s102_when_right_private_defence_body_extends/statute.yh` |
+| s103 | When such right extends to causing any harm other than death | ✓ | ✓ | · | — | `library/penal_code/s103_when_such_right_extends_causing_harm_other/statute.yh` |
+| s104 | Commencement and continuance of right of private defence of  | ✓ | ✓ | · | — | `library/penal_code/s104_commencement_continuance_right_private/statute.yh` |
+| s105 | When right of private defence of property extends to causing | ✓ | ✓ | · | — | `library/penal_code/s105_when_right_private_defence_property_extends/statute.yh` |
+| s106 | When such right extends to causing any harm other than death | ✓ | ✓ | · | — | `library/penal_code/s106_when_such_right_extends_causing_harm_other/statute.yh` |
+| s106A | Acts against which there is no right of private defence | ✓ | ✓ | · | — | `library/penal_code/s106A_acts_against_which_there_no_right_private/statute.yh` |
+| s107 | Abetment of the doing of a thing | ✓ | ✓ | · | — | `library/penal_code/s107_abetment_doing_thing/statute.yh` |
+| s108 | Abettor | ✓ | ✓ | · | — | `library/penal_code/s108_abettor/statute.yh` |
+| s108A | Abetment in Singapore of an offence outside Singapore | ✓ | ✓ | · | — | `library/penal_code/s108A_abetment_singapore_offence_outside_singapore/statute.yh` |
+| s108B | Abetment outside Singapore of an offence in Singapore | ✓ | ✓ | · | — | `library/penal_code/s108B_abetment_outside_singapore_offence_singapore/statute.yh` |
+| s109 | Punishment of abetment if the act abetted is committed in co | ✓ | ✓ | · | — | `library/penal_code/s109_punishment_abetment_if_act_abetted_committed/statute.yh` |
+| s110 | Punishment of abetment if the person abetted does the act wi | ✓ | ✓ | · | — | `library/penal_code/s110_punishment_abetment_if_person_abetted_does/statute.yh` |
+| s111 | Liability of abettor when one act is abetted and a different | ✓ | ✓ | · | — | `library/penal_code/s111_liability_abettor_when_one_act_abetted/statute.yh` |
+| s112 | Abettor, when liable to cumulative punishment for act abette | ✓ | ✓ | · | — | `library/penal_code/s112_abettor_when_liable_cumulative_punishment/statute.yh` |
+| s113 | Liability of abettor for an offence caused by the act abette | ✓ | ✓ | · | — | `library/penal_code/s113_liability_abettor_offence_caused_act_abetted/statute.yh` |
+| s114 | Abettor present when offence committed | ✓ | ✓ | · | — | `library/penal_code/s114_abettor_present_when_offence_committed/statute.yh` |
+| s115 | Abetment of offence punishable with death or imprisonment fo | ✓ | ✓ | · | — | `library/penal_code/s115_abetment_offence_punishable_death/statute.yh` |
+| s116 | Abetment of offence punishable with imprisonment | ✓ | ✓ | · | — | `library/penal_code/s116_abetment_offence_punishable_imprisonment/statute.yh` |
+| s117 | Abetting the commission of an offence by the public or by mo | ✓ | ✓ | · | — | `library/penal_code/s117_abetting_commission_offence_public_more_than/statute.yh` |
+| s118 | Concealing a design to commit an offence punishable with dea | ✓ | ✓ | · | — | `library/penal_code/s118_concealing_design_commit_offence_punishable/statute.yh` |
+| s119 | A public servant concealing a design to commit an offence wh | ✓ | ✓ | · | — | `library/penal_code/s119_public_servant_concealing_design_commit/statute.yh` |
+| s120 | Concealing a design to commit an offence punishable with imp | ✓ | ✓ | · | — | `library/penal_code/s120_concealing_design_commit_offence_punishable/statute.yh` |
+| s120A | Definition of criminal conspiracy | ✓ | ✓ | · | — | `library/penal_code/s120A_definition_criminal_conspiracy/statute.yh` |
+| s120B | Punishment of criminal conspiracy | ✓ | ✓ | · | — | `library/penal_code/s120B_punishment_criminal_conspiracy/statute.yh` |
+| s121 | Waging or attempting to wage war or abetting the waging of w | ✓ | ✓ | · | — | `library/penal_code/s121_waging_attempting_wage_war_abetting_waging/statute.yh` |
+| s121A | Offences against the President’s person | ✓ | ✓ | · | — | `library/penal_code/s121A_offences_against_president_s_person/statute.yh` |
+| s121B | Offences against authority | ✓ | ✓ | · | — | `library/penal_code/s121B_offences_against_authority/statute.yh` |
+| s121C | Abetting offences under section 121A or 121B | ✓ | ✓ | · | — | `library/penal_code/s121C_abetting_offences_under_section_121a_121b/statute.yh` |
+| s121D | Intentional omission to give information of offences against | ✓ | ✓ | · | — | `library/penal_code/s121D_intentional_omission_give_information/statute.yh` |
+| s122 | Collecting arms, etc., with the intention of waging war agai | ✓ | ✓ | · | — | `library/penal_code/s122_collecting_arms_etc_intention_waging_war/statute.yh` |
+| s123 | Concealing with intent to facilitate a design to wage war | ✓ | ✓ | · | — | `library/penal_code/s123_concealing_intent_facilitate_design_wage_war/statute.yh` |
+| s124 | Assaulting President, etc., with intent to compel or restrai | ✓ | ✓ | · | — | `library/penal_code/s124_assaulting_president_etc_intent_compel/statute.yh` |
+| s125 | Waging war against any power in alliance or at peace with Si | ✓ | ✓ | · | — | `library/penal_code/s125_waging_war_against_power_alliance_peace/statute.yh` |
+| s126 | Committing depredation on the territories of any power in al | ✓ | ✓ | · | — | `library/penal_code/s126_committing_depredation_territories_power/statute.yh` |
+| s127 | Receiving property taken by war or depredation mentioned in  | ✓ | ✓ | · | — | `library/penal_code/s127_receiving_property_taken_war_depredation/statute.yh` |
+| s128 | Public servant voluntarily allowing prisoner of State or war | ✓ | ✓ | · | — | `library/penal_code/s128_public_servant_voluntarily_allowing_prisoner/statute.yh` |
+| s129 | Public servant negligently suffering prisoner of State or wa | ✓ | ✓ | · | — | `library/penal_code/s129_public_servant_negligently_suffering/statute.yh` |
+| s130 | Aiding escape of, rescuing, or harbouring such prisoner | ✓ | ✓ | · | — | `library/penal_code/s130_aiding_escape_rescuing_harbouring_such/statute.yh` |
+| s130A | “Harbour” | ✓ | ✓ | · | — | `library/penal_code/s130A_harbour/statute.yh` |
+| s130B | Piracy by law of nations. Cf. 12 and 13 Victoria c. 96 (Admi | ✓ | ✓ | · | — | `library/penal_code/s130B_piracy_law_nations_cf_12_13_victoria_c_96/statute.yh` |
+| s130C | Piratical acts | ✓ | ✓ | · | — | `library/penal_code/s130C_piratical_acts/statute.yh` |
+| s130D | Genocide | ✓ | ✓ | · | — | `library/penal_code/s130D_genocide/statute.yh` |
+| s130E | Punishment for genocide | ✓ | ✓ | · | — | `library/penal_code/s130E_punishment_genocide/statute.yh` |
+| s131 | Abetting mutiny, or attempting to seduce an officer or a ser | ✓ | ✓ | · | — | `library/penal_code/s131_abetting_mutiny_attempting_seduce_officer/statute.yh` |
+| s132 | Abetment of mutiny, if mutiny is committed in consequence th | ✓ | ✓ | · | — | `library/penal_code/s132_abetment_mutiny_if_mutiny_committed/statute.yh` |
+| s133 | Abetment of an assault by an officer or a serviceman on his  | ✓ | ✓ | · | — | `library/penal_code/s133_abetment_assault_officer_serviceman_his/statute.yh` |
+| s134 | Abetment of such assault, if the assault is committed | ✓ | ✓ | · | — | `library/penal_code/s134_abetment_such_assault_if_assault_committed/statute.yh` |
+| s135 | Abetment of the desertion of an officer or a serviceman | ✓ | ✓ | · | — | `library/penal_code/s135_abetment_desertion_officer_serviceman/statute.yh` |
+| s136 | Harbouring a deserter | ✓ | ✓ | · | — | `library/penal_code/s136_harbouring_deserter/statute.yh` |
+| s137 | Deserter concealed on board merchant vessel through negligen | ✓ | ✓ | · | — | `library/penal_code/s137_deserter_concealed_board_merchant_vessel/statute.yh` |
+| s138 | Abetment of act of insubordination by an officer or a servic | ✓ | ✓ | · | — | `library/penal_code/s138_abetment_act_insubordination_officer/statute.yh` |
+| s139 | Saving | ✓ | ✓ | · | — | `library/penal_code/s139_saving/statute.yh` |
+| s140 | Wearing the dress of a serviceman | ✓ | ✓ | · | — | `library/penal_code/s140_wearing_dress_serviceman/statute.yh` |
+| s140A | “Harbour” | ✓ | ✓ | · | — | `library/penal_code/s140A_harbour/statute.yh` |
+| s140B | Application of Chapter 7 to Singapore Police Force | ✓ | ✓ | · | — | `library/penal_code/s140B_application_chapter_7_singapore_police_force/statute.yh` |
+| s141 | Unlawful assembly | ✓ | ✓ | · | — | `library/penal_code/s141_unlawful_assembly/statute.yh` |
+| s142 | Being a member of an unlawful assembly | ✓ | ✓ | · | — | `library/penal_code/s142_being_member_unlawful_assembly/statute.yh` |
+| s143 | Punishment | ✓ | ✓ | · | — | `library/penal_code/s143_punishment/statute.yh` |
+| s144 | Joining an unlawful assembly armed with any deadly weapon | ✓ | ✓ | · | — | `library/penal_code/s144_joining_unlawful_assembly_armed_deadly_weapon/statute.yh` |
+| s145 | Joining or continuing in an unlawful assembly, knowing that  | ✓ | ✓ | · | — | `library/penal_code/s145_joining_continuing_unlawful_assembly_knowing/statute.yh` |
+| s146 | Force used by one member in prosecution of common object | ✓ | ✓ | · | — | `library/penal_code/s146_force_used_one_member_prosecution_common/statute.yh` |
+| s147 | Punishment for rioting | ✓ | ✓ | · | — | `library/penal_code/s147_punishment_rioting/statute.yh` |
+| s148 | Rioting, armed with a deadly weapon | ✓ | ✓ | · | — | `library/penal_code/s148_rioting_armed_deadly_weapon/statute.yh` |
+| s149 | Every member of an unlawful assembly to be deemed guilty of  | ✓ | ✓ | · | — | `library/penal_code/s149_every_member_unlawful_assembly_deemed_guilty/statute.yh` |
+| s150 | Hiring, or conniving at hiring, of persons to join an unlawf | ✓ | ✓ | · | — | `library/penal_code/s150_hiring_conniving_hiring_persons_join/statute.yh` |
+| s151 | Knowingly joining or continuing in any assembly of 5 or more | ✓ | ✓ | · | — | `library/penal_code/s151_knowingly_joining_continuing_assembly_5_more/statute.yh` |
+| s152 | Assaulting or obstructing public servant when suppressing ri | ✓ | ✓ | · | — | `library/penal_code/s152_assaulting_obstructing_public_servant_when/statute.yh` |
+| s153 | Intentionally or rashly giving provocation, with intent to c | ✓ | ✓ | · | — | `library/penal_code/s153_intentionally_rashly_giving_provocation/statute.yh` |
+| s154 | Owner or occupier of land on which an unlawful assembly is h | ✓ | ✓ | · | — | `library/penal_code/s154_owner_occupier_land_which_unlawful_assembly/statute.yh` |
+| s155 | Liability of person for whose benefit a riot is committed | ✓ | ✓ | · | — | `library/penal_code/s155_liability_person_whose_benefit_riot_committed/statute.yh` |
+| s156 | Liability of agent of owner or occupier for whose benefit a  | ✓ | ✓ | · | — | `library/penal_code/s156_liability_agent_owner_occupier_whose_benefit/statute.yh` |
+| s157 | Harbouring persons hired for an unlawful assembly | ✓ | ✓ | · | — | `library/penal_code/s157_harbouring_persons_hired_unlawful_assembly/statute.yh` |
+| s158 | Being hired to take part in an unlawful assembly or riot | ✓ | ✓ | · | — | `library/penal_code/s158_being_hired_take_part_unlawful_assembly_riot/statute.yh` |
+| s161 | Public servant taking a gratification, other than legal remu | ✓ | ✓ | · | — | `library/penal_code/s161_public_servant_taking_gratification_other/statute.yh` |
+| s162 | Taking a gratification in order, by corrupt or illegal means | ✓ | ✓ | · | — | `library/penal_code/s162_taking_gratification_order_corrupt_illegal/statute.yh` |
+| s163 | Taking a gratification, for the exercise of personal influen | ✓ | ✓ | · | — | `library/penal_code/s163_taking_gratification_exercise_personal/statute.yh` |
+| s164 | Punishment for abetment by public servant of the offences ab | ✓ | ✓ | · | — | `library/penal_code/s164_punishment_abetment_public_servant_offences/statute.yh` |
+| s165 | Public servant obtaining any valuable thing, without conside | ✓ | ✓ | · | — | `library/penal_code/s165_public_servant_obtaining_valuable_thing/statute.yh` |
+| s166 | Public servant disobeying a direction of the law, with inten | ✓ | ✓ | · | — | `library/penal_code/s166_public_servant_disobeying_direction_law/statute.yh` |
+| s167 | Public servant framing an incorrect document or electronic r | ✓ | ✓ | · | — | `library/penal_code/s167_public_servant_framing_incorrect_document/statute.yh` |
+| s168 | Public servant unlawfully engaging in trade | ✓ | ✓ | · | — | `library/penal_code/s168_public_servant_unlawfully_engaging_trade/statute.yh` |
+| s169 | Public servant unlawfully buying or bidding for property | ✓ | ✓ | · | — | `library/penal_code/s169_public_servant_unlawfully_buying_bidding/statute.yh` |
+| s170 | Personating a public servant | ✓ | ✓ | · | — | `library/penal_code/s170_personating_public_servant/statute.yh` |
+| s171 | Wearing garb or carrying token used by public servant, with  | ✓ | ✓ | · | — | `library/penal_code/s171_wearing_garb_carrying_token_used_public/statute.yh` |
+| s172 | Absconding to avoid arrest on warrant or service of summons, | ✓ | ✓ | · | — | `library/penal_code/s172_absconding_avoid_arrest_warrant_service/statute.yh` |
+| s173 | Preventing service of summons, etc., or preventing publicati | ✓ | ✓ | · | — | `library/penal_code/s173_preventing_service_summons_etc_preventing/statute.yh` |
+| s174 | Failure to attend in obedience to order from public servant | ✓ | ✓ | · | — | `library/penal_code/s174_failure_attend_obedience_order_public_servant/statute.yh` |
+| s175 | Omission to produce document or electronic record to public  | ✓ | ✓ | · | — | `library/penal_code/s175_omission_produce_document_electronic_record/statute.yh` |
+| s176 | Omission to give notice or information to public servant by  | ✓ | ✓ | · | — | `library/penal_code/s176_omission_give_notice_information_public/statute.yh` |
+| s177 | Furnishing false information | ✓ | ✓ | · | — | `library/penal_code/s177_furnishing_false_information/statute.yh` |
+| s178 | Refusing oath when duly required to take oath by a public se | ✓ | ✓ | · | — | `library/penal_code/s178_refusing_oath_when_duly_required_take_oath/statute.yh` |
+| s179 | Refusing to answer public servant authorised to question | ✓ | ✓ | · | — | `library/penal_code/s179_refusing_answer_public_servant_authorised/statute.yh` |
+| s180 | Refusing to sign statement | ✓ | ✓ | · | — | `library/penal_code/s180_refusing_sign_statement/statute.yh` |
+| s181 | False statement on oath to public servant or person authoris | ✓ | ✓ | · | — | `library/penal_code/s181_false_statement_oath_public_servant_person/statute.yh` |
+| s182 | False information, with intent to cause a public servant to  | ✓ | ✓ | · | — | `library/penal_code/s182_false_information_intent_cause_public/statute.yh` |
+| s183 | Resistance to taking of property by lawful authority of publ | ✓ | ✓ | · | — | `library/penal_code/s183_resistance_taking_property_lawful_authority/statute.yh` |
+| s184 | Obstructing sale of property offered for sale by authority o | ✓ | ✓ | · | — | `library/penal_code/s184_obstructing_sale_property_offered_sale/statute.yh` |
+| s185 | Illegal purchase or bid for property offered for sale by aut | ✓ | ✓ | · | — | `library/penal_code/s185_illegal_purchase_bid_property_offered_sale/statute.yh` |
+| s186 | Obstructing public servant in discharge of his public functi | ✓ | ✓ | · | — | `library/penal_code/s186_obstructing_public_servant_discharge_his/statute.yh` |
+| s187 | Omission to assist public servant when bound by law to give  | ✓ | ✓ | · | — | `library/penal_code/s187_omission_assist_public_servant_when_bound/statute.yh` |
+| s188 | Disobedience to order duly promulgated by public servant | ✓ | ✓ | · | — | `library/penal_code/s188_disobedience_order_duly_promulgated_public/statute.yh` |
+| s189 | Threat of injury to a public servant | ✓ | ✓ | · | — | `library/penal_code/s189_threat_injury_public_servant/statute.yh` |
+| s190 | Threat of injury to induce any person to refrain from applyi | ✓ | ✓ | · | — | `library/penal_code/s190_threat_injury_induce_person_refrain_applying/statute.yh` |
+| s191 | Giving false evidence | ✓ | ✓ | · | — | `library/penal_code/s191_giving_false_evidence/statute.yh` |
+| s192 | Fabricating false evidence | ✓ | ✓ | · | — | `library/penal_code/s192_fabricating_false_evidence/statute.yh` |
+| s193 | Punishment for false evidence | ✓ | ✓ | · | — | `library/penal_code/s193_punishment_false_evidence/statute.yh` |
+| s194 | Giving or fabricating false evidence with intent to procure  | ✓ | ✓ | · | — | `library/penal_code/s194_giving_fabricating_false_evidence_intent/statute.yh` |
+| s195 | Giving or fabricating false evidence with intent to procure  | ✓ | ✓ | · | — | `library/penal_code/s195_giving_fabricating_false_evidence_intent/statute.yh` |
+| s196 | Using evidence known to be false | ✓ | ✓ | · | — | `library/penal_code/s196_using_evidence_known_false/statute.yh` |
+| s197 | Issuing or signing a false certificate | ✓ | ✓ | · | — | `library/penal_code/s197_issuing_signing_false_certificate/statute.yh` |
+| s198 | Using as a true certificate one known to be false in a mater | ✓ | ✓ | · | — | `library/penal_code/s198_using_true_certificate_one_known_false/statute.yh` |
+| s199 | False statement made in any declaration which is by law rece | ✓ | ✓ | · | — | `library/penal_code/s199_false_statement_made_declaration_which_law/statute.yh` |
+| s200 | Using as true any such declaration known to be false | ✓ | ✓ | · | — | `library/penal_code/s200_using_true_such_declaration_known_false/statute.yh` |
+| s201 | Causing disappearance of evidence of an offence committed, o | ✓ | ✓ | · | — | `library/penal_code/s201_causing_disappearance_evidence_offence/statute.yh` |
+| s202 | Intentional omission to give information of an offence, by p | ✓ | ✓ | · | — | `library/penal_code/s202_intentional_omission_give_information/statute.yh` |
+| s203 | Giving false information respecting an offence committed | ✓ | ✓ | · | — | `library/penal_code/s203_giving_false_information_respecting_offence/statute.yh` |
+| s204 | Destruction of document or electronic record to prevent its  | ✓ | ✓ | · | — | `library/penal_code/s204_destruction_document_electronic_record/statute.yh` |
+| s204A | Obstructing, preventing, perverting or defeating course of j | ✓ | ✓ | · | — | `library/penal_code/s204A_obstructing_preventing_perverting_defeating/statute.yh` |
+| s204B | Bribery of witnesses | ✓ | ✓ | · | — | `library/penal_code/s204B_bribery_witnesses/statute.yh` |
+| s205 | False personation for the purpose of any act or proceeding i | ✓ | ✓ | · | — | `library/penal_code/s205_false_personation_purpose_act_proceeding_suit/statute.yh` |
+| s206 | Fraudulent removal or concealment of property to prevent its | ✓ | ✓ | · | — | `library/penal_code/s206_fraudulent_removal_concealment_property/statute.yh` |
+| s207 | Fraudulent claim to property to prevent its seizure as a for | ✓ | ✓ | · | — | `library/penal_code/s207_fraudulent_claim_property_prevent_seizure/statute.yh` |
+| s208 | Fraudulently suffering a decree for a sum not due | ✓ | ✓ | · | — | `library/penal_code/s208_fraudulently_suffering_decree_sum_not_due/statute.yh` |
+| s210 | Fraudulently obtaining a decree for a sum not due | ✓ | ✓ | · | — | `library/penal_code/s210_fraudulently_obtaining_decree_sum_not_due/statute.yh` |
+| s211 | False charge of offence made with intent to injure | ✓ | ✓ | · | — | `library/penal_code/s211_false_charge_offence_made_intent_injure/statute.yh` |
+| s212 | Harbouring an offender | ✓ | ✓ | · | — | `library/penal_code/s212_harbouring_offender/statute.yh` |
+| s213 | Taking gifts, etc., to screen an offender from punishment | ✓ | ✓ | · | — | `library/penal_code/s213_taking_gifts_etc_screen_offender_punishment/statute.yh` |
+| s214 | Offering gift or restoration of property in consideration of | ✓ | ✓ | · | — | `library/penal_code/s214_offering_gift_restoration_property/statute.yh` |
+| s215 | Taking gift to help to recover stolen property, etc. | ✓ | ✓ | · | — | `library/penal_code/s215_taking_gift_help_recover_stolen_property_etc/statute.yh` |
+| s216 | Harbouring an offender who has escaped from custody, or whos | ✓ | ✓ | · | — | `library/penal_code/s216_harbouring_offender_who_has_escaped_custody/statute.yh` |
+| s216A | Harbouring robbers or gang-robbers, etc. | ✓ | ✓ | · | — | `library/penal_code/s216A_harbouring_robbers_gang_robbers_etc/statute.yh` |
+| s216B | “Harbour” | ✓ | ✓ | · | — | `library/penal_code/s216B_harbour/statute.yh` |
+| s217 | Public servant disobeying a direction of law with intent to  | ✓ | ✓ | · | — | `library/penal_code/s217_public_servant_disobeying_direction_law/statute.yh` |
+| s218 | Public servant framing an incorrect record or writing with i | ✓ | ✓ | · | — | `library/penal_code/s218_public_servant_framing_incorrect_record/statute.yh` |
+| s219 | Public servant in a judicial proceeding making an order, etc | ✓ | ✓ | · | — | `library/penal_code/s219_public_servant_judicial_proceeding_making/statute.yh` |
+| s220 | Commitment for trial or confinement by person having authori | ✓ | ✓ | · | — | `library/penal_code/s220_commitment_trial_confinement_person_having/statute.yh` |
+| s221 | Intentional omission to apprehend on the part of a public se | ✓ | ✓ | · | — | `library/penal_code/s221_intentional_omission_apprehend_part_public/statute.yh` |
+| s222 | Intentional omission to apprehend on the part of a public se | ✓ | ✓ | · | — | `library/penal_code/s222_intentional_omission_apprehend_part_public/statute.yh` |
+| s223 | Escape from confinement negligently suffered by a public ser | ✓ | ✓ | · | — | `library/penal_code/s223_escape_confinement_negligently_suffered/statute.yh` |
+| s224 | Resistance or obstruction by a person to his lawful apprehen | ✓ | ✓ | · | — | `library/penal_code/s224_resistance_obstruction_person_his_lawful/statute.yh` |
+| s225 | Resistance or obstruction to the lawful apprehension of anot | ✓ | ✓ | · | — | `library/penal_code/s225_resistance_obstruction_lawful_apprehension/statute.yh` |
+| s225A | Public servant omitting to apprehend or suffering other pers | ✓ | ✓ | · | — | `library/penal_code/s225A_public_servant_omitting_apprehend_suffering/statute.yh` |
+| s225B | Resistance or obstruction to lawful apprehension, or escape, | ✓ | ✓ | · | — | `library/penal_code/s225B_resistance_obstruction_lawful_apprehension/statute.yh` |
+| s225C | Offences against laws of Singapore where no special punishme | ✓ | ✓ | · | — | `library/penal_code/s225C_offences_against_laws_singapore_where_no/statute.yh` |
+| s228 | Intentional insult or interruption to a public servant sitti | ✓ | ✓ | · | — | `library/penal_code/s228_intentional_insult_interruption_public/statute.yh` |
+| s229 | Personation of an assessor | ✓ | ✓ | · | — | `library/penal_code/s229_personation_assessor/statute.yh` |
+| s255 | Counterfeiting a Government stamp | ✓ | ✓ | · | — | `library/penal_code/s255_counterfeiting_government_stamp/statute.yh` |
+| s256 | Having possession of an instrument or material for the purpo | ✓ | ✓ | · | — | `library/penal_code/s256_having_possession_instrument_material/statute.yh` |
+| s257 | Making or selling an instrument for the purpose of counterfe | ✓ | ✓ | · | — | `library/penal_code/s257_making_selling_instrument_purpose/statute.yh` |
+| s258 | Sale of counterfeit Government stamp | ✓ | ✓ | · | — | `library/penal_code/s258_sale_counterfeit_government_stamp/statute.yh` |
+| s259 | Having possession of a counterfeit Government stamp | ✓ | ✓ | · | — | `library/penal_code/s259_having_possession_counterfeit_government/statute.yh` |
+| s260 | Using as genuine a Government stamp known to be counterfeit | ✓ | ✓ | · | — | `library/penal_code/s260_using_genuine_government_stamp_known/statute.yh` |
+| s261 | Effacing any writing from a substance bearing a Government s | ✓ | ✓ | · | — | `library/penal_code/s261_effacing_writing_substance_bearing/statute.yh` |
+| s262 | Using a Government stamp known to have been before used | ✓ | ✓ | · | — | `library/penal_code/s262_using_government_stamp_known_have_been/statute.yh` |
+| s263 | Erasure of mark denoting that stamp has been used | ✓ | ✓ | · | — | `library/penal_code/s263_erasure_mark_denoting_that_stamp_has_been/statute.yh` |
+| s267A | Affray | ✓ | ✓ | · | — | `library/penal_code/s267A_affray/statute.yh` |
+| s267B | Punishment for committing affray | ✓ | ✓ | · | — | `library/penal_code/s267B_punishment_committing_affray/statute.yh` |
+| s267C | Uttering words, making document, etc., containing incitement | ✓ | ✓ | · | — | `library/penal_code/s267C_uttering_words_making_document_etc/statute.yh` |
+| s268 | Public nuisance | ✓ | ✓ | · | — | `library/penal_code/s268_public_nuisance/statute.yh` |
+| s268A | Communicating false information of harmful thing | ✓ | ✓ | · | — | `library/penal_code/s268A_communicating_false_information_harmful_thing/statute.yh` |
+| s268B | Placing or sending thing with intent to cause fear of harm | ✓ | ✓ | · | — | `library/penal_code/s268B_placing_sending_thing_intent_cause_fear_harm/statute.yh` |
+| s268C | Placing or sending thing causing fear of harm | ✓ | ✓ | · | — | `library/penal_code/s268C_placing_sending_thing_causing_fear_harm/statute.yh` |
+| s281 | Exhibition of a false light, mark or buoy | ✓ | ✓ | · | — | `library/penal_code/s281_exhibition_false_light_mark_buoy/statute.yh` |
 | s299 | Culpable homicide | ✓ | ✓ | ✓ | 2026-03-08 Yuho Team | `library/penal_code/s299_culpable_homicide/statute.yh` |
 | s300 | Murder | ✓ | ✓ | ✓ | 2026-03-08 Yuho Team | `library/penal_code/s300_murder/statute.yh` |
 | s302 | Punishment for murder | ✓ | ✓ | ✓ | 2026-03-10 Yuho Team | `library/penal_code/s302_punishment_for_murder/statute.yh` |
@@ -44,270 +305,10 @@ _Valid date: n/a_
 | s499 | Defamation | ✓ | ✓ | ✓ | 2026-03-08 Yuho Team | `library/penal_code/s499_defamation/statute.yh` |
 | s503 | Criminal intimidation | ✓ | ✓ | ✓ | 2026-03-08 Yuho Team | `library/penal_code/s503_criminal_breach_of_trust/statute.yh` |
 
-## Unencoded sections (499)
+## Unencoded sections (238)
 
 | § | Marginal note | SSO |
 |---|---|---|
-| s1 | Short title | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr1-#pr1-) |
-| s2 | Punishment of offences committed within Singapore | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr2-#pr2-) |
-| s3 | Punishment of offences committed beyond, but which by law may be tried within Si | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr3-#pr3-) |
-| s4 | Jurisdiction over public servants for offences committed outside Singapore | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr4-#pr4-) |
-| s4A | Offences against State and genocide committed outside Singapore by citizen or pe | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr4A-#pr4A-) |
-| s4B | Punishment of specified offences with elements occurring in Singapore but others | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr4B-#pr4B-) |
-| s5 | Certain laws not to be affected by this Code | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr5-#pr5-) |
-| s6 | Definitions in this Code to be understood subject to exceptions | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr6-#pr6-) |
-| s6A | Definitions to apply to this Code and other written law | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr6A-#pr6A-) |
-| s7 | Expression once explained is used in the same sense throughout this Code | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr7-#pr7-) |
-| s8 | “Gender” | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr8-#pr8-) |
-| s9 | “Number” | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr9-#pr9-) |
-| s10 | “Man” and “woman” | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr10-#pr10-) |
-| s11 | “Person” | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr11-#pr11-) |
-| s12 | “Public” | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr12-#pr12-) |
-| s17 | “Government” | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr17-#pr17-) |
-| s19 | “Judge” | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr19-#pr19-) |
-| s20 | “Court of justice” | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr20-#pr20-) |
-| s21 | “Public servant” | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr21-#pr21-) |
-| s22 | “Property” | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr22-#pr22-) |
-| s22A | “Fault element” and “physical element” | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr22A-#pr22A-) |
-| s23 | “Wrongful gain” and “wrongful loss” | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr23-#pr23-) |
-| s24 | “Dishonestly” | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr24-#pr24-) |
-| s25 | “Fraudulently” | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr25-#pr25-) |
-| s26 | “Reason to believe” | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr26-#pr26-) |
-| s26A | “Voluntarily” | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr26A-#pr26A-) |
-| s26B | “Good faith” | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr26B-#pr26B-) |
-| s26C | “Intentionally” | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr26C-#pr26C-) |
-| s26D | “Knowingly” | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr26D-#pr26D-) |
-| s26E | “Rashly” | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr26E-#pr26E-) |
-| s26F | “Negligently” | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr26F-#pr26F-) |
-| s26G | “Transferred fault” | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr26G-#pr26G-) |
-| s26H | “Strict liability” | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr26H-#pr26H-) |
-| s27 | Property in possession of spouse, clerk or servant | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr27-#pr27-) |
-| s28 | “Counterfeit” | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr28-#pr28-) |
-| s29 | “Document” | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr29-#pr29-) |
-| s29A | “Writing” | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr29A-#pr29A-) |
-| s29B | “Electronic record” | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr29B-#pr29B-) |
-| s30 | “Valuable security” | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr30-#pr30-) |
-| s31 | “A will” | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr31-#pr31-) |
-| s31A | “Die” and “instrument” | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr31A-#pr31A-) |
-| s32 | Words referring to acts include illegal omissions | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr32-#pr32-) |
-| s33 | “Act” and “omission” | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr33-#pr33-) |
-| s34 | Each of several persons liable for an act done by all, in like manner as if done | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr34-#pr34-) |
-| s35 | When such an act is criminal by reason of its being done with a criminal knowled | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr35-#pr35-) |
-| s36 | Effect caused partly by act and partly by omission | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr36-#pr36-) |
-| s37 | Cooperation by doing one of several acts constituting an offence | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr37-#pr37-) |
-| s38 | Several persons engaged in the commission of a criminal act may be guilty of dif | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr38-#pr38-) |
-| s40 | “Offence” | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr40-#pr40-) |
-| s41 | Offence with specified term of imprisonment | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr41-#pr41-) |
-| s42 | “Obscene” | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr42-#pr42-) |
-| s43 | “Illegal”, “unlawful” and “legally bound to do” | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr43-#pr43-) |
-| s44 | “Injury” | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr44-#pr44-) |
-| s44A | “Bodily injury” | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr44A-#pr44A-) |
-| s45 | “Life” | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr45-#pr45-) |
-| s46 | “Death” | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr46-#pr46-) |
-| s47 | “Animal” | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr47-#pr47-) |
-| s48 | “Vessel” | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr48-#pr48-) |
-| s49 | “Year” and “month” | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr49-#pr49-) |
-| s50 | “Section” | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr50-#pr50-) |
-| s51 | “Oath” | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr51-#pr51-) |
-| s53 | Punishments | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr53-#pr53-) |
-| s54 | Imprisonment for life | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr54-#pr54-) |
-| s72 | Punishment of a person found guilty of one of several offences, the judgment sta | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr72-#pr72-) |
-| s73 | Enhanced penalties for offences against domestic workers | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr73-#pr73-) |
-| s74 | Enhanced penalties for racially or religiously aggravated offences | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr74-#pr74-) |
-| s74A | Enhanced penalties for offences against vulnerable persons | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr74A-#pr74A-) |
-| s74B | Enhanced penalties for offences against person below 14 years of age | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr74B-#pr74B-) |
-| s74C | Enhanced penalties for offences against victims in intimate relationships | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr74C-#pr74C-) |
-| s74D | Enhanced penalties for offences against victims in close relationships | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr74D-#pr74D-) |
-| s74E | Application of enhanced penalties | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr74E-#pr74E-) |
-| s76 | Act done by person bound, or justified by law | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr76-#pr76-) |
-| s77 | Act of judge when acting judicially | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr77-#pr77-) |
-| s78 | Act done pursuant to the judgment or order of a court of justice | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr78-#pr78-) |
-| s79 | Act done by person by mistake of fact believing himself bound or justified by la | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr79-#pr79-) |
-| s79A | Mistake of law or ignorance of law not defence | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr79A-#pr79A-) |
-| s80 | Accident in the doing of a lawful act | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr80-#pr80-) |
-| s81 | Act likely to cause harm but done to prevent other harm | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr81-#pr81-) |
-| s82 | Act of a child below 10 years of age | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr82-#pr82-) |
-| s83 | Act of a child of or above 10 and below 12 years of age, who has not sufficient  | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr83-#pr83-) |
-| s84 | Act of person of unsound mind | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr84-#pr84-) |
-| s85 | Intoxication when a defence | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr85-#pr85-) |
-| s86 | Effect of defence of intoxication when established | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr86-#pr86-) |
-| s87 | Act not intended and not known to be likely to cause death or grievous hurt, don | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr87-#pr87-) |
-| s88 | Act not intended to cause death done by consent in good faith for the benefit of | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr88-#pr88-) |
-| s89 | Act done in good faith for the benefit of a child or person of unsound mind, by  | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr89-#pr89-) |
-| s90 | Consent given under fear or misconception, by person of unsound mind, etc., and  | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr90-#pr90-) |
-| s91 | Acts which are offences independently of harm caused to the person consenting, a | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr91-#pr91-) |
-| s92 | Act done in good faith for the benefit of a person without consent | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr92-#pr92-) |
-| s93 | Communication made in good faith | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr93-#pr93-) |
-| s94 | Act to which a person is compelled by threats | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr94-#pr94-) |
-| s95 | Act causing slight harm | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr95-#pr95-) |
-| s96 | Nothing done in private defence is an offence | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr96-#pr96-) |
-| s97 | Right of private defence of the body and of property | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr97-#pr97-) |
-| s98 | Extent to which right may be exercised | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr98-#pr98-) |
-| s99 | Right of private defence against act of person of unsound mind, etc. | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr99-#pr99-) |
-| s100 | Right of private defence against deadly assault when there is risk of harm to in | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr100-#pr100-) |
-| s101 | Start and continuance of right of private defence of body | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr101-#pr101-) |
-| s102 | When right of private defence of body extends to causing death | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr102-#pr102-) |
-| s103 | When such right extends to causing any harm other than death | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr103-#pr103-) |
-| s104 | Commencement and continuance of right of private defence of property | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr104-#pr104-) |
-| s105 | When right of private defence of property extends to causing death | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr105-#pr105-) |
-| s106 | When such right extends to causing any harm other than death | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr106-#pr106-) |
-| s106A | Acts against which there is no right of private defence | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr106A-#pr106A-) |
-| s107 | Abetment of the doing of a thing | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr107-#pr107-) |
-| s108 | Abettor | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr108-#pr108-) |
-| s108A | Abetment in Singapore of an offence outside Singapore | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr108A-#pr108A-) |
-| s108B | Abetment outside Singapore of an offence in Singapore | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr108B-#pr108B-) |
-| s109 | Punishment of abetment if the act abetted is committed in consequence, and where | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr109-#pr109-) |
-| s110 | Punishment of abetment if the person abetted does the act with a different inten | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr110-#pr110-) |
-| s111 | Liability of abettor when one act is abetted and a different act is done | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr111-#pr111-) |
-| s112 | Abettor, when liable to cumulative punishment for act abetted and for act done | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr112-#pr112-) |
-| s113 | Liability of abettor for an offence caused by the act abetted different from tha | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr113-#pr113-) |
-| s114 | Abettor present when offence committed | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr114-#pr114-) |
-| s115 | Abetment of offence punishable with death or imprisonment for life | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr115-#pr115-) |
-| s116 | Abetment of offence punishable with imprisonment | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr116-#pr116-) |
-| s117 | Abetting the commission of an offence by the public or by more than 10 persons | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr117-#pr117-) |
-| s118 | Concealing a design to commit an offence punishable with death or imprisonment f | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr118-#pr118-) |
-| s119 | A public servant concealing a design to commit an offence which it is his duty t | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr119-#pr119-) |
-| s120 | Concealing a design to commit an offence punishable with imprisonment | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr120-#pr120-) |
-| s120A | Definition of criminal conspiracy | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr120A-#pr120A-) |
-| s120B | Punishment of criminal conspiracy | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr120B-#pr120B-) |
-| s121 | Waging or attempting to wage war or abetting the waging of war against the Gover | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr121-#pr121-) |
-| s121A | Offences against the President’s person | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr121A-#pr121A-) |
-| s121B | Offences against authority | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr121B-#pr121B-) |
-| s121C | Abetting offences under section 121A or 121B | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr121C-#pr121C-) |
-| s121D | Intentional omission to give information of offences against section 121, 121A,  | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr121D-#pr121D-) |
-| s122 | Collecting arms, etc., with the intention of waging war against the Government | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr122-#pr122-) |
-| s123 | Concealing with intent to facilitate a design to wage war | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr123-#pr123-) |
-| s124 | Assaulting President, etc., with intent to compel or restrain the exercise of an | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr124-#pr124-) |
-| s125 | Waging war against any power in alliance or at peace with Singapore | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr125-#pr125-) |
-| s126 | Committing depredation on the territories of any power in alliance or at peace w | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr126-#pr126-) |
-| s127 | Receiving property taken by war or depredation mentioned in sections 125 and 126 | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr127-#pr127-) |
-| s128 | Public servant voluntarily allowing prisoner of State or war in his custody to e | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr128-#pr128-) |
-| s129 | Public servant negligently suffering prisoner of State or war in his custody to  | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr129-#pr129-) |
-| s130 | Aiding escape of, rescuing, or harbouring such prisoner | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr130-#pr130-) |
-| s130A | “Harbour” | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr130A-#pr130A-) |
-| s130B | Piracy by law of nations. Cf. 12 and 13 Victoria c. 96 (Admiralty Offences (Colo | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr130B-#pr130B-) |
-| s130C | Piratical acts | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr130C-#pr130C-) |
-| s130D | Genocide | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr130D-#pr130D-) |
-| s130E | Punishment for genocide | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr130E-#pr130E-) |
-| s131 | Abetting mutiny, or attempting to seduce an officer or a serviceman from his dut | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr131-#pr131-) |
-| s132 | Abetment of mutiny, if mutiny is committed in consequence thereof | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr132-#pr132-) |
-| s133 | Abetment of an assault by an officer or a serviceman on his superior officer, wh | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr133-#pr133-) |
-| s134 | Abetment of such assault, if the assault is committed | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr134-#pr134-) |
-| s135 | Abetment of the desertion of an officer or a serviceman | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr135-#pr135-) |
-| s136 | Harbouring a deserter | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr136-#pr136-) |
-| s137 | Deserter concealed on board merchant vessel through negligence of master | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr137-#pr137-) |
-| s138 | Abetment of act of insubordination by an officer or a serviceman | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr138-#pr138-) |
-| s139 | Saving | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr139-#pr139-) |
-| s140 | Wearing the dress of a serviceman | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr140-#pr140-) |
-| s140A | “Harbour” | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr140A-#pr140A-) |
-| s140B | Application of Chapter 7 to Singapore Police Force | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr140B-#pr140B-) |
-| s141 | Unlawful assembly | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr141-#pr141-) |
-| s142 | Being a member of an unlawful assembly | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr142-#pr142-) |
-| s143 | Punishment | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr143-#pr143-) |
-| s144 | Joining an unlawful assembly armed with any deadly weapon | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr144-#pr144-) |
-| s145 | Joining or continuing in an unlawful assembly, knowing that it has been commande | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr145-#pr145-) |
-| s146 | Force used by one member in prosecution of common object | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr146-#pr146-) |
-| s147 | Punishment for rioting | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr147-#pr147-) |
-| s148 | Rioting, armed with a deadly weapon | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr148-#pr148-) |
-| s149 | Every member of an unlawful assembly to be deemed guilty of any offence committe | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr149-#pr149-) |
-| s150 | Hiring, or conniving at hiring, of persons to join an unlawful assembly | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr150-#pr150-) |
-| s151 | Knowingly joining or continuing in any assembly of 5 or more persons after it ha | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr151-#pr151-) |
-| s152 | Assaulting or obstructing public servant when suppressing riot, etc. | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr152-#pr152-) |
-| s153 | Intentionally or rashly giving provocation, with intent to cause riot | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr153-#pr153-) |
-| s154 | Owner or occupier of land on which an unlawful assembly is held | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr154-#pr154-) |
-| s155 | Liability of person for whose benefit a riot is committed | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr155-#pr155-) |
-| s156 | Liability of agent of owner or occupier for whose benefit a riot is committed | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr156-#pr156-) |
-| s157 | Harbouring persons hired for an unlawful assembly | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr157-#pr157-) |
-| s158 | Being hired to take part in an unlawful assembly or riot | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr158-#pr158-) |
-| s161 | Public servant taking a gratification, other than legal remuneration, in respect | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr161-#pr161-) |
-| s162 | Taking a gratification in order, by corrupt or illegal means, to influence a pub | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr162-#pr162-) |
-| s163 | Taking a gratification, for the exercise of personal influence with a public ser | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr163-#pr163-) |
-| s164 | Punishment for abetment by public servant of the offences above defined | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr164-#pr164-) |
-| s165 | Public servant obtaining any valuable thing, without consideration, from person  | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr165-#pr165-) |
-| s166 | Public servant disobeying a direction of the law, with intent to cause injury to | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr166-#pr166-) |
-| s167 | Public servant framing an incorrect document or electronic record with intent to | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr167-#pr167-) |
-| s168 | Public servant unlawfully engaging in trade | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr168-#pr168-) |
-| s169 | Public servant unlawfully buying or bidding for property | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr169-#pr169-) |
-| s170 | Personating a public servant | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr170-#pr170-) |
-| s171 | Wearing garb or carrying token used by public servant, with fraudulent intent | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr171-#pr171-) |
-| s172 | Absconding to avoid arrest on warrant or service of summons, etc., proceeding fr | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr172-#pr172-) |
-| s173 | Preventing service of summons, etc., or preventing publication thereof | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr173-#pr173-) |
-| s174 | Failure to attend in obedience to order from public servant | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr174-#pr174-) |
-| s175 | Omission to produce document or electronic record to public servant by person le | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr175-#pr175-) |
-| s176 | Omission to give notice or information to public servant by person legally bound | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr176-#pr176-) |
-| s177 | Furnishing false information | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr177-#pr177-) |
-| s178 | Refusing oath when duly required to take oath by a public servant | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr178-#pr178-) |
-| s179 | Refusing to answer public servant authorised to question | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr179-#pr179-) |
-| s180 | Refusing to sign statement | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr180-#pr180-) |
-| s181 | False statement on oath to public servant or person authorised to administer an  | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr181-#pr181-) |
-| s182 | False information, with intent to cause a public servant to use his lawful power | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr182-#pr182-) |
-| s183 | Resistance to taking of property by lawful authority of public servant | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr183-#pr183-) |
-| s184 | Obstructing sale of property offered for sale by authority of public servant | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr184-#pr184-) |
-| s185 | Illegal purchase or bid for property offered for sale by authority of public ser | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr185-#pr185-) |
-| s186 | Obstructing public servant in discharge of his public functions | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr186-#pr186-) |
-| s187 | Omission to assist public servant when bound by law to give assistance | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr187-#pr187-) |
-| s188 | Disobedience to order duly promulgated by public servant | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr188-#pr188-) |
-| s189 | Threat of injury to a public servant | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr189-#pr189-) |
-| s190 | Threat of injury to induce any person to refrain from applying for protection to | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr190-#pr190-) |
-| s191 | Giving false evidence | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr191-#pr191-) |
-| s192 | Fabricating false evidence | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr192-#pr192-) |
-| s193 | Punishment for false evidence | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr193-#pr193-) |
-| s194 | Giving or fabricating false evidence with intent to procure conviction of a capi | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr194-#pr194-) |
-| s195 | Giving or fabricating false evidence with intent to procure conviction of an off | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr195-#pr195-) |
-| s196 | Using evidence known to be false | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr196-#pr196-) |
-| s197 | Issuing or signing a false certificate | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr197-#pr197-) |
-| s198 | Using as a true certificate one known to be false in a material point | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr198-#pr198-) |
-| s199 | False statement made in any declaration which is by law receivable as evidence | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr199-#pr199-) |
-| s200 | Using as true any such declaration known to be false | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr200-#pr200-) |
-| s201 | Causing disappearance of evidence of an offence committed, or giving false infor | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr201-#pr201-) |
-| s202 | Intentional omission to give information of an offence, by person bound to infor | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr202-#pr202-) |
-| s203 | Giving false information respecting an offence committed | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr203-#pr203-) |
-| s204 | Destruction of document or electronic record to prevent its production as eviden | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr204-#pr204-) |
-| s204A | Obstructing, preventing, perverting or defeating course of justice | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr204A-#pr204A-) |
-| s204B | Bribery of witnesses | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr204B-#pr204B-) |
-| s205 | False personation for the purpose of any act or proceeding in a suit | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr205-#pr205-) |
-| s206 | Fraudulent removal or concealment of property to prevent its seizure as a forfei | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr206-#pr206-) |
-| s207 | Fraudulent claim to property to prevent its seizure as a forfeiture, in executio | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr207-#pr207-) |
-| s208 | Fraudulently suffering a decree for a sum not due | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr208-#pr208-) |
-| s210 | Fraudulently obtaining a decree for a sum not due | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr210-#pr210-) |
-| s211 | False charge of offence made with intent to injure | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr211-#pr211-) |
-| s212 | Harbouring an offender | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr212-#pr212-) |
-| s213 | Taking gifts, etc., to screen an offender from punishment | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr213-#pr213-) |
-| s214 | Offering gift or restoration of property in consideration of screening offender | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr214-#pr214-) |
-| s215 | Taking gift to help to recover stolen property, etc. | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr215-#pr215-) |
-| s216 | Harbouring an offender who has escaped from custody, or whose apprehension has b | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr216-#pr216-) |
-| s216A | Harbouring robbers or gang-robbers, etc. | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr216A-#pr216A-) |
-| s216B | “Harbour” | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr216B-#pr216B-) |
-| s217 | Public servant disobeying a direction of law with intent to save person from pun | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr217-#pr217-) |
-| s218 | Public servant framing an incorrect record or writing with intent to save person | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr218-#pr218-) |
-| s219 | Public servant in a judicial proceeding making an order, etc., which he knows to | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr219-#pr219-) |
-| s220 | Commitment for trial or confinement by person having authority who knows he is a | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr220-#pr220-) |
-| s221 | Intentional omission to apprehend on the part of a public servant bound by law t | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr221-#pr221-) |
-| s222 | Intentional omission to apprehend on the part of a public servant bound by law t | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr222-#pr222-) |
-| s223 | Escape from confinement negligently suffered by a public servant | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr223-#pr223-) |
-| s224 | Resistance or obstruction by a person to his lawful apprehension | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr224-#pr224-) |
-| s225 | Resistance or obstruction to the lawful apprehension of another person | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr225-#pr225-) |
-| s225A | Public servant omitting to apprehend or suffering other persons to escape in cas | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr225A-#pr225A-) |
-| s225B | Resistance or obstruction to lawful apprehension, or escape, or rescue, in cases | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr225B-#pr225B-) |
-| s225C | Offences against laws of Singapore where no special punishment is provided | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr225C-#pr225C-) |
-| s228 | Intentional insult or interruption to a public servant sitting in any stage of a | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr228-#pr228-) |
-| s229 | Personation of an assessor | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr229-#pr229-) |
-| s255 | Counterfeiting a Government stamp | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr255-#pr255-) |
-| s256 | Having possession of an instrument or material for the purpose of counterfeiting | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr256-#pr256-) |
-| s257 | Making or selling an instrument for the purpose of counterfeiting a Government s | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr257-#pr257-) |
-| s258 | Sale of counterfeit Government stamp | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr258-#pr258-) |
-| s259 | Having possession of a counterfeit Government stamp | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr259-#pr259-) |
-| s260 | Using as genuine a Government stamp known to be counterfeit | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr260-#pr260-) |
-| s261 | Effacing any writing from a substance bearing a Government stamp, or removing fr | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr261-#pr261-) |
-| s262 | Using a Government stamp known to have been before used | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr262-#pr262-) |
-| s263 | Erasure of mark denoting that stamp has been used | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr263-#pr263-) |
-| s267A | Affray | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr267A-#pr267A-) |
-| s267B | Punishment for committing affray | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr267B-#pr267B-) |
-| s267C | Uttering words, making document, etc., containing incitement to violence, etc. | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr267C-#pr267C-) |
-| s268 | Public nuisance | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr268-#pr268-) |
-| s268A | Communicating false information of harmful thing | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr268A-#pr268A-) |
-| s268B | Placing or sending thing with intent to cause fear of harm | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr268B-#pr268B-) |
-| s268C | Placing or sending thing causing fear of harm | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr268C-#pr268C-) |
 | s269 | Negligent act likely to spread infection of any disease dangerous to life | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr269-#pr269-) |
 | s270 | Intentional or rash act likely to spread infection of any disease dangerous to l | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr270-#pr270-) |
 | s271 | Disobedience to a quarantine rule | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr271-#pr271-) |
@@ -320,7 +321,6 @@ _Valid date: n/a_
 | s278 | Making atmosphere noxious to health | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr278-#pr278-) |
 | s279 | Rash driving or riding on a public way | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr279-#pr279-) |
 | s280 | Rash navigation of a vessel | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr280-#pr280-) |
-| s281 | Exhibition of a false light, mark or buoy | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr281-#pr281-) |
 | s282 | Conveying person by water for hire in a vessel overloaded or unsafe | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr282-#pr282-) |
 | s283 | Danger or obstruction in a public way or navigation | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr283-#pr283-) |
 | s284 | Rash or negligent conduct with respect to dangerous or harmful substance | [↗](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr284-#pr284-) |

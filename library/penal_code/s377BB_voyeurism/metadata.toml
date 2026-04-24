@@ -1,0 +1,18 @@
+[statute]
+section_number = "377BB"
+title = "Voyeurism"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Voyeurism -- observing or recording a private act without consent for a sexual purpose."
+source = "Singapore Penal Code 1871, Section 377BB"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BB-#pr377BB-"

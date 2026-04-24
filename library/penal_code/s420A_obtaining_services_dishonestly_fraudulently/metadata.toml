@@ -1,0 +1,18 @@
+[statute]
+section_number = "420A"
+title = "Obtaining services dishonestly or fraudulently"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Dishonestly or fraudulently obtaining services for oneself or another without full payment."
+source = "Singapore Penal Code 1871, Section 420A"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr420A-#pr420A-"

@@ -1,0 +1,27 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr156-#pr156-
+// Singapore Penal Code Section 156
+
+statute 156 "Liability of agent of owner or occupier for whose benefit a riot is committed" effective 1872-01-01 {
+    definitions {
+        agent_or_manager := "Agent or manager of a person who is owner, occupier, claimant of interest, party to dispute, or recipient of benefit from the riot";
+    }
+
+    elements {
+        all_of {
+            /// riot committed for benefit of principal with qualifying interest
+            circumstance principal_benefit := "A riot is committed for the benefit or on behalf of a person who is owner, occupier, claimant of interest, party to the dispute, or recipient of benefit";
+            /// accused is the agent or manager of that person
+            circumstance accused_is_agent := "Accused is the agent or manager of that person";
+            /// reason to believe the riot or assembly was likely
+            mens_rea reason_to_believe := "Agent or manager had reason to believe the riot was likely to be committed or the assembly was likely to be held";
+            /// failure to use lawful means personally
+            actus_reus failure_to_prevent := "Agent or manager failed to use all lawful means in his power to prevent the riot or assembly and to suppress or disperse the same";
+        }
+    }
+
+    penalty {
+        fine := $0.00 .. $5,000.00;
+    }
+}

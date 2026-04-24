@@ -1,0 +1,18 @@
+[statute]
+section_number = "409"
+title = "Criminal breach of trust by public servant, or by banker, merchant, agent, director, officer, partner, key executive or fiduciary"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Criminal breach of trust by public servant, banker, agent, director, officer, partner, key executive or fiduciary."
+source = "Singapore Penal Code 1871, Section 409"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr409-#pr409-"

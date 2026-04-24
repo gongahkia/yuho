@@ -1,0 +1,31 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr173-#pr173-
+// Singapore Penal Code Section 173
+
+/// @amendment [15/2019]
+statute 173 "Preventing service of summons, etc., or preventing publication thereof" effective 1872-01-01 {
+    definitions {
+        process := "Any summons, notice, or order proceeding from a public servant legally competent to issue it";
+        proclamation := "A proclamation made under the authority of a public servant legally competent to direct it";
+    }
+
+    elements {
+        all_of {
+            any_of {
+                actus_reus prevent_service := "Intentionally preventing the serving of any summons, notice or order on oneself or another";
+                actus_reus prevent_affixing := "Intentionally preventing the lawful affixing of any such summons, notice or order, or removing it from a place where it was lawfully affixed";
+                actus_reus prevent_proclamation := "Intentionally preventing the lawful making of a proclamation under the authority of a competent public servant";
+            }
+            /// issuing authority competence
+            circumstance competent_issuer := "The summons, notice, order or proclamation proceeds from a public servant legally competent to issue or direct it";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 months .. 1 months;
+        fine := $0.00 .. $10,000.00;
+    }
+
+    /// For individuals -- imprisonment up to 1 month, or fine up to $1,500, or both. For any other case -- fine up to $10,000. Enhanced penalty where process is court process to attend or produce document.
+}

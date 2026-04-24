@@ -1,0 +1,18 @@
+[statute]
+section_number = "24"
+title = "“Dishonestly”"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Defines 'dishonestly' as an act done with intention to cause wrongful gain or wrongful loss."
+source = "Singapore Penal Code 1871, Section 24"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr24-#pr24-"

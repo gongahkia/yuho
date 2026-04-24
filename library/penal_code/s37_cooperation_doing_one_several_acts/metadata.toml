@@ -1,0 +1,18 @@
+[statute]
+section_number = "37"
+title = "Cooperation by doing one of several acts constituting an offence"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Intentional cooperation in one of several acts making up an offence renders the cooperator liable for the offence."
+source = "Singapore Penal Code 1871, Section 37"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr37-#pr37-"

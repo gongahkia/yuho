@@ -1,0 +1,21 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr374-#pr374-
+// Singapore Penal Code Section 374
+
+statute 374 "Unlawful compulsory labour" effective 1872-01-01 {
+    definitions {
+        unlawful_compulsory_labour := "Compelling a person to labour against their will without lawful justification";
+    }
+
+    elements {
+        /// unlawfully compel a person to labour against their will
+        actus_reus compel_labour := "Unlawfully compels any person to labour against the will of that person";
+    }
+
+    penalty {
+        imprisonment := 0 years .. 1 years;
+        fine := $0.00 .. $3,000.00;
+    }
+
+}

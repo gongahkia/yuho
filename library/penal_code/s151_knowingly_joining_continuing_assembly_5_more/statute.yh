@@ -1,0 +1,31 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr151-#pr151-
+// Singapore Penal Code Section 151
+
+statute 151 "Knowingly joining or continuing in any assembly of 5 or more persons after it has been commanded to disperse" effective 1872-01-01 {
+    definitions {
+        assembly := "Gathering of 5 or more persons likely to cause a disturbance of the public peace";
+        lawful_dispersal_order := "A lawful command to disperse issued to such assembly";
+    }
+
+    elements {
+        all_of {
+            /// accused joins or continues in the assembly
+            actus_reus joining := "Joining or continuing in any assembly of 5 or more persons";
+            /// knowledge requirement
+            mens_rea knowingly := "Knowing of the assembly and its nature";
+            /// the assembly is likely to disturb public peace
+            circumstance likely_disturbance := "Assembly likely to cause a disturbance of the public peace";
+            /// dispersal already commanded
+            circumstance dispersal_commanded := "Assembly has been lawfully commanded to disperse";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 months .. 2 years;
+        fine := $0.00 .. $10,000.00;
+    }
+
+    /// Explanation. If the assembly is an unlawful assembly within the meaning of section 141, the offender will be punishable under section 145.
+}

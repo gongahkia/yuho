@@ -1,0 +1,58 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr193-#pr193-
+// Singapore Penal Code Section 193 - Punishment for false evidence
+// Yuho v5 Syntax
+
+referencing penal_code/s191_giving_false_evidence
+referencing penal_code/s192_fabricating_false_evidence
+
+struct S193Case {
+    string accused,
+    bool intentionallyGivesFalseEvidence,
+    bool fabricatesForJudicial,
+    bool inJudicialProceeding,
+}
+
+fn evaluate_s193(bool intentionallyGivesFalseEvidence, bool fabricatesForJudicial, bool inJudicialProceeding) : string {
+    match {
+        case TRUE if intentionallyGivesFalseEvidence == FALSE && fabricatesForJudicial == FALSE := consequence "Not liable - neither giving nor fabricating";
+        case TRUE if inJudicialProceeding == TRUE := consequence "Liable - up to 7 years (judicial)";
+        case _ := consequence "Liable - up to 3 years (non-judicial)";
+    }
+}
+
+statute 193 "Punishment for false evidence" effective 1872-01-01 {
+    definitions {
+        judicial_proceeding := "A proceeding in the course of which evidence is or may be legally taken on oath";
+        false_evidence := "As defined in section 191";
+        fabricated_evidence := "As defined in section 192";
+    }
+
+    elements {
+        any_of {
+            /// limb 1: giving false evidence in judicial proceeding
+            actus_reus giveFalse := "Intentionally gives false evidence in any stage of a judicial proceeding";
+            /// limb 2: fabricating false evidence for judicial proceeding
+            actus_reus fabricateJudicial := "Fabricates false evidence for the purpose of being used in any stage of a judicial proceeding";
+            /// limb 3: giving or fabricating false evidence in any other case
+            actus_reus giveOrFabricateOther := "Intentionally gives or fabricates false evidence in any other case";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 years .. 7 years;
+        fine := $0.00 .. $50,000.00;
+    }
+
+    /// Explanation 1: A trial before a court martial is a judicial proceeding.
+    /// Explanation 2: An investigation directed by law preliminary to a proceeding before a court of justice is a stage of a judicial proceeding, though that investigation may not itself take place before a court of justice.
+    /// Explanation 3: An investigation directed by a court of justice according to law, and conducted under the authority of such court, is a stage of a judicial proceeding, though that investigation may not take place before a court of justice.
+
+    illustration example1 {
+        "A, in an inquiry before a Magistrate for the purpose of ascertaining whether Z ought to be committed for trial, makes on oath a statement which he knows to be false. As this inquiry is a stage of a judicial proceeding, A has given false evidence."
+    }
+
+    // first limb: judicial proceeding - up to 7 years imprisonment plus fine
+    // second limb: any other case - up to 3 years imprisonment plus fine
+}

@@ -1,0 +1,36 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr471-#pr471-
+// Singapore Penal Code Section 471 - Using as genuine a forged document or forged electronic record
+// Yuho v5 Syntax
+
+struct UsingForgedDocumentCase {
+    string accused,
+    bool elementsSatisfied,
+}
+
+fn is_liable(bool elementsSatisfied) : bool {
+    match {
+        case TRUE if elementsSatisfied == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 471 "Using as genuine a forged document or forged electronic record" effective 1872-01-01 {
+    definitions {
+        forged_document := "As defined in section 470";
+    }
+
+    elements {
+        all_of {
+            actus_reus uses_as_genuine := "Uses as genuine any document or electronic record";
+            circumstance is_forged := "The document or electronic record is a forged document or forged electronic record";
+            mens_rea knows_or_believes_forged := "Knows or has reason to believe the document to be forged";
+            mens_rea fraudulently_or_dishonestly := "Acts fraudulently or dishonestly";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 15 years;
+    }
+}

@@ -1,0 +1,39 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr453-#pr453-
+// Singapore Penal Code Section 453 - Possession of house-breaking implements or offensive weapons
+
+/// @amendment [15/2019]
+/// @amendment [Act 43 of 2024 wef 24/03/2025]
+
+statute 453 "Possession of house-breaking implements or offensive weapons" effective 2020-01-01 {
+    definitions {
+        offensive_weapon := "An instrument for shooting, stabbing or cutting, or any instrument which used as a weapon of offence is likely to cause death";
+        disguise := "Having ones face covered or otherwise being disguised";
+        house_breaking_implement := "Any article or instrument for use in the course of or in connection with house-breaking";
+    }
+
+    elements {
+        any_of {
+            all_of {
+                /// form (a) -- armed with offensive weapon
+                actus_reus armed := "Is found armed with an offensive weapon";
+                /// without lawful authority or purpose
+                circumstance no_lawful_authority := "Without lawful authority or lawful purpose";
+            }
+            all_of {
+                /// form (b) -- disguised
+                actus_reus disguised := "Is found disguised or with face covered";
+                /// with intent to commit an offence
+                mens_rea intent_offence := "Intent to commit an offence";
+            }
+            /// form (c) -- equipped with house-breaking implement
+            actus_reus equipped := "Is found equipped with a house-breaking implement";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 3 years;
+        fine := $0.00 .. $10,000.00;
+    }
+}

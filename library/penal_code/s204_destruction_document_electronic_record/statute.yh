@@ -1,0 +1,46 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr204-#pr204-
+// Singapore Penal Code Section 204 - Destruction of document or electronic record to prevent its production as evidence
+// Yuho v5 Syntax
+
+struct S204Case {
+    string accused,
+    bool secretesOrDestroysOrObliterates,
+    bool documentLawfullyCompellableAsEvidence,
+    bool intentionToPreventProduction,
+    bool afterLawfulSummons,
+}
+
+fn evaluate_s204(bool secretesOrDestroysOrObliterates, bool documentLawfullyCompellableAsEvidence, bool intentionToPreventProduction, bool afterLawfulSummons) : string {
+    match {
+        case TRUE if secretesOrDestroysOrObliterates == FALSE := consequence "Not liable - no destruction or secretion";
+        case TRUE if documentLawfullyCompellableAsEvidence == FALSE && afterLawfulSummons == FALSE := consequence "Not liable - document not evidentiary";
+        case TRUE if intentionToPreventProduction == FALSE && afterLawfulSummons == FALSE := consequence "Not liable - no intent to prevent production";
+        case _ := consequence "Liable under s204";
+    }
+}
+
+statute 204 "Destruction of document or electronic record to prevent its production as evidence" effective 1872-01-01 {
+    definitions {
+        document := "Any document or electronic record";
+        secrete := "To hide or conceal";
+        obliterate := "To erase or render illegible";
+    }
+
+    elements {
+        all_of {
+            /// actus reus: secreting, destroying, or obliterating the document
+            actus_reus destroy := "Secretes, destroys, obliterates, or renders illegible any document or electronic record";
+            /// circumstance: document could lawfully be compelled as evidence
+            circumstance evidentiary := "Document or record may be lawfully compelled to be produced as evidence before a court or public servant, or accused has been lawfully summoned to produce it";
+            /// mens rea: intent to prevent production as evidence
+            mens_rea intent := "With the intention of preventing the same from being produced or used as evidence";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 years .. 2 years;
+        fine := $0.00 .. $5,000.00;
+    }
+}

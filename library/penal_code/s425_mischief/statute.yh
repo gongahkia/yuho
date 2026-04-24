@@ -1,0 +1,42 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr425-#pr425-
+// Singapore Penal Code Section 425 - Mischief
+
+/// @amendment [Act 25 of 2021 wef 01/04/2022]
+/// @amendment [ Deleted by Act 51 of 2007 ]
+
+statute 425 "Mischief" effective 1872-01-01 {
+    definitions {
+        mischief := "Causing destruction of property or injurious change to property with intent or knowledge of likely wrongful loss or damage";
+        wrongful_loss := "As defined in section 23";
+    }
+
+    elements {
+        all_of {
+            any_of {
+                /// intent to cause wrongful loss or damage
+                mens_rea intent := "Intent to cause wrongful loss or damage to the public or any person";
+                /// knowledge it is likely to cause such loss or damage
+                mens_rea knowledge := "Knowledge that wrongful loss or damage is likely to be caused";
+            }
+            any_of {
+                /// destruction
+                actus_reus destroy := "Causes the destruction of any property";
+                /// injurious change
+                actus_reus alter := "Causes any change in property or its situation that destroys or diminishes value, utility, or affects it injuriously";
+            }
+        }
+    }
+
+    illustration example1 {
+        "A voluntarily burns a valuable security belonging to Z, intending to cause wrongful loss to Z. A has committed mischief."
+    }
+
+    illustration example2 {
+        "A introduces water into an ice-house belonging to Z, and thus causes the ice to melt, intending wrongful loss to Z. A has committed mischief."
+    }
+
+    // Explanation 1: not essential that offender intends loss to owner -- sufficient if he intends wrongful loss or damage to any person
+    // Explanation 2: mischief may be committed by an act affecting property belonging jointly or wholly to the offender
+}

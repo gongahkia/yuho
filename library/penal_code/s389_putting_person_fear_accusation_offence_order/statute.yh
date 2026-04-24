@@ -1,0 +1,47 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr389-#pr389-
+// Singapore Penal Code Section 389 - Putting person in fear of accusation of offence, in order to commit extortion
+// Yuho v5 Syntax
+
+referencing penal_code/s383_extortion
+
+struct S389Case {
+    string accused,
+    string victim,
+    bool extortionIntent,
+    bool fearOfSeriousAccusation,
+}
+
+fn s389_applies(bool extortionIntent, bool fearAcc) : bool {
+    match {
+        case TRUE if extortionIntent == FALSE := consequence FALSE;
+        case TRUE if fearAcc == FALSE := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
+
+statute 389 "Putting person in fear of accusation of offence, in order to commit extortion" effective 1872-01-01 {
+    definitions {
+        extortion := "As defined under section 383";
+        qualifying_accusation := "Accusation of having committed or attempted to commit an offence punishable with death, life imprisonment, or imprisonment extending to 10 years";
+    }
+
+    elements {
+        /// purpose must be to commit extortion
+        mens_rea extortion_purpose := "Acting in order to commit extortion" burden prosecution beyond_reasonable_doubt;
+        /// puts or attempts to put person in fear of qualifying accusation
+        actus_reus threat_of_accusation := "Puts or attempts to put any person in fear of accusation of a serious offence against that person or another";
+    }
+
+    penalty {
+        imprisonment := 0 days .. 10 years;
+        fine := $0.00 .. $10,000.00;
+        caning := 0 .. 24 strokes;
+        supplementary := "Offender also liable to fine or to caning";
+    }
+
+    illustration example1 {
+        "A threatens to accuse B of a capital offence unless B agrees to pay. Whether or not B pays, A has committed the offence under s389."
+    }
+}

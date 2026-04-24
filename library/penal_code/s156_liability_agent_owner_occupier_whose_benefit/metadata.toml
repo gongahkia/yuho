@@ -1,0 +1,18 @@
+[statute]
+section_number = "156"
+title = "Liability of agent of owner or occupier for whose benefit a riot is committed"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Fine liability for an agent or manager who, having reason to believe a riot or unlawful assembly was likely, fails to use all lawful means to prevent or suppress it."
+source = "Singapore Penal Code 1871, Section 156"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr156-#pr156-"

@@ -1,0 +1,11 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr42-#pr42-
+// Singapore Penal Code Section 42 - "Obscene"
+// Interpretation provision defining "obscene"
+
+statute 42 "Obscene" effective 1872-01-01 {
+    definitions {
+        obscene := "Any thing or matter the effect of which is, if taken as a whole, such as to tend to deprave and corrupt persons who are likely, having regard to all relevant circumstances, to read, see or hear the matter contained or embodied in it";
+    }
+}

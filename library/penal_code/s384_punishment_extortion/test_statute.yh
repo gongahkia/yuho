@@ -1,0 +1,20 @@
+// Test file for s384_punishment_extortion
+// Yuho v5 Syntax
+
+referencing penal_code/s384_punishment_extortion
+
+struct S384TestCase {
+    bool extortionCommitted,
+}
+
+S384TestCase convicted := S384TestCase {
+    extortionCommitted := TRUE,
+}
+
+assert s384_applies(convicted.extortionCommitted) == TRUE
+
+S384TestCase notCommitted := S384TestCase {
+    extortionCommitted := FALSE,
+}
+
+assert s384_applies(notCommitted.extortionCommitted) == FALSE

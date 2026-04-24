@@ -1,0 +1,14 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr74B-#pr74B-
+// Singapore Penal Code Section 74B
+
+/// @amendment [15/2019]
+
+statute 74B "Enhanced penalties for offences against person below 14 years of age" effective 1872-01-01 {
+    definitions {
+        rule := "Where a person commits an offence under this Code against a person below 14 years of age, the court may sentence up to twice the maximum punishment if at the time the offender knew or ought reasonably to have known of the age.";
+        exclusions := "Does not apply where enhanced or mandatory minimum sentence already provided, for sections 304B, 304C, 377BG, 377BH, 377BI, 377BJ or 377BK, or where the offence is punishable with death or life imprisonment.";
+        rebuttal := "Does not apply where offender proves the victim was capable of protecting themselves in the same manner as a person of or above 14 years of age.";
+    }
+}

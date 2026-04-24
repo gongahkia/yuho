@@ -1,0 +1,22 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr376D-#pr376D-
+/// @section 376D
+// Singapore Penal Code Section 376D
+
+statute 376.5 "Tour outside Singapore for commercial sex with minor below 18 years of age" effective 1872-01-01 {
+    definitions {
+        travel_promotion := "Making, printing, publishing, distributing or organising travel arrangements for commercial sex with minors abroad";
+    }
+
+    elements {
+        /// make, organise, transport or promote travel for commercial sex with minor abroad
+        actus_reus tour_arrangement := "Makes, prints, publishes, distributes, transports any document, or organises or assists in arranging travel, for facilitating commercial sex with a person below 18 years of age outside Singapore";
+    }
+
+    penalty {
+        imprisonment := 0 years .. 10 years;
+        fine := $0.00 .. $10,000.00;
+    }
+
+}

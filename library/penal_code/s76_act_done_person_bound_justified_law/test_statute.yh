@@ -1,0 +1,33 @@
+// Test file for s76_act_done_person_bound_justified_law
+// Yuho v5 Syntax
+
+referencing penal_code/s76_act_done_person_bound_justified_law
+
+struct BoundJustifiedTestCase {
+    bool boundByLaw,
+    bool justifiedByLaw,
+}
+
+// soldier bound by law: defence applies
+BoundJustifiedTestCase soldierOrder := BoundJustifiedTestCase {
+    boundByLaw := TRUE,
+    justifiedByLaw := FALSE,
+}
+
+assert is_defence_available(soldierOrder.boundByLaw, soldierOrder.justifiedByLaw) == TRUE
+
+// civilian apprehending murderer: justified by law
+BoundJustifiedTestCase apprehender := BoundJustifiedTestCase {
+    boundByLaw := FALSE,
+    justifiedByLaw := TRUE,
+}
+
+assert is_defence_available(apprehender.boundByLaw, apprehender.justifiedByLaw) == TRUE
+
+// neither: defence not available
+BoundJustifiedTestCase neither := BoundJustifiedTestCase {
+    boundByLaw := FALSE,
+    justifiedByLaw := FALSE,
+}
+
+assert is_defence_available(neither.boundByLaw, neither.justifiedByLaw) == FALSE

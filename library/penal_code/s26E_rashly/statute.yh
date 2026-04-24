@@ -1,0 +1,13 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr26E-#pr26E-
+// Singapore Penal Code Section 26E
+// Yuho v5 Syntax
+
+/// @amendment [15/2019]
+
+statute 26E "“Rashly”" effective 1872-01-01 {
+    definitions {
+        rashly := "—(1) Whoever does any act knowing that there is a real risk that a particular circumstance exists or will exist is said to do that act rashly in respect of that particular circumstance, if it would have been unreasonable to have taken that risk. [15/2019] (2) Whoever does any act knowing that there is a real risk that an effect will be caused is said to do that act rashly in respect of that effect, if it would have been unreasonable to have taken that risk. [15/2019] (3) Where doing an act rashly is a fault element of an offence, that fault element is also established where that act is done intentionally or knowingly. [15/2019]";
+    }
+}

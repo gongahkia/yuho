@@ -1,0 +1,20 @@
+// Test file for s339
+// Yuho v5 Syntax
+
+referencing penal_code/s339_wrongful_restraint
+
+struct S339CaseTest {
+    bool criteriaMet,
+}
+
+S339CaseTest matches := S339CaseTest {
+    criteriaMet := TRUE,
+}
+
+assert s339_matches(matches.criteriaMet) == TRUE
+
+S339CaseTest nomatch := S339CaseTest {
+    criteriaMet := FALSE,
+}
+
+assert s339_matches(nomatch.criteriaMet) == FALSE

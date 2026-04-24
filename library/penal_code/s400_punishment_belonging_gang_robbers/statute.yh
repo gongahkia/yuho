@@ -1,0 +1,46 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr400-#pr400-
+// Singapore Penal Code Section 400 - Punishment for belonging to gang-robbers
+// Yuho v5 Syntax
+
+referencing penal_code/s391_gang_robbery
+
+struct S400Case {
+    string accused,
+    bool belongsToGang,
+    bool gangHabituallyCommitsGangRobbery,
+}
+
+fn s400_applies(bool belongs, bool habitual) : bool {
+    match {
+        case TRUE if belongs == FALSE := consequence FALSE;
+        case TRUE if habitual == FALSE := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
+
+statute 400 "Punishment for belonging to gang-robbers" effective 1872-01-01 {
+    definitions {
+        gang := "A group of persons associated for a common unlawful purpose";
+        habitually := "Engaging in the conduct as a matter of ongoing practice";
+        gang_robbery := "As defined under section 391";
+    }
+
+    elements {
+        /// accused must belong to the gang
+        circumstance membership := "Accused belongs to a gang of persons" burden prosecution beyond_reasonable_doubt;
+        /// gang's purpose must be habitual commission of gang-robbery
+        circumstance habitual_purpose := "Gang is associated for the purpose of habitually committing gang-robbery";
+    }
+
+    penalty {
+        imprisonment := 0 days .. 99 years;
+        caning := 6 .. 24 strokes;
+        supplementary := "Imprisonment for life, or imprisonment for a term which may extend to 10 years, and caning with not less than 6 strokes";
+    }
+
+    illustration example1 {
+        "A is an ongoing member of a group that habitually robs travellers in armed parties of five or more. A is punishable under s400."
+    }
+}

@@ -1,0 +1,14 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr87-#pr87-
+// Singapore Penal Code Section 87
+
+statute 87 "Act not intended and not known to be likely to cause death or grievous hurt, done by consent" effective 1872-01-01 {
+    definitions {
+        rule := "Nothing, which is not intended to cause death or grievous hurt, and which is not known by the doer to be likely to cause death or grievous hurt, is an offence by reason of any harm which it may cause, or be intended to cause, to any person above 18 years of age who has consented to suffer that harm or take the risk of that harm.";
+    }
+
+    illustration example1 {
+        "A and Z agree to fence with each other for amusement. This agreement implies the consent of each to suffer any harm which, in the course of such fencing, may be caused without foul play; and if A , while playing fairly, hurts Z , A commits no offence."
+    }
+}

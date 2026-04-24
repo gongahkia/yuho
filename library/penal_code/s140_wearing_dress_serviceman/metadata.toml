@@ -1,0 +1,18 @@
+[statute]
+section_number = "140"
+title = "Wearing the dress of a serviceman"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Criminalises a non-serviceman wearing or carrying garb or tokens resembling a serviceman's, with intent to be believed a serviceman."
+source = "Singapore Penal Code 1871, Section 140"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr140-#pr140-"

@@ -1,0 +1,18 @@
+[statute]
+section_number = "162"
+title = "Taking a gratification in order, by corrupt or illegal means, to influence a public servant"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Taking any gratification as motive or reward for inducing, by corrupt or illegal means, a public servant to do or forbear an official act or related conduct."
+source = "Singapore Penal Code 1871, Section 162"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr162-#pr162-"

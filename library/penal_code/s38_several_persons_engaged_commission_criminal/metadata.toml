@@ -1,0 +1,18 @@
+[statute]
+section_number = "38"
+title = "Several persons engaged in the commission of a criminal act may be guilty of different offences"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Several persons engaged in a criminal act may be guilty of different offences by means of that act."
+source = "Singapore Penal Code 1871, Section 38"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr38-#pr38-"

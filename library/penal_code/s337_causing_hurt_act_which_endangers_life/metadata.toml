@@ -1,0 +1,18 @@
+[statute]
+section_number = "337"
+title = "Causing hurt by an act which endangers life or the personal safety of others"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Causing hurt by rash or negligent act endangering life or personal safety."
+source = "Singapore Penal Code 1871, Section 337"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr337-#pr337-"

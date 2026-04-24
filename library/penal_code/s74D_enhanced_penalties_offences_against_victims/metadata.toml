@@ -1,0 +1,18 @@
+[statute]
+section_number = "74D"
+title = "Enhanced penalties for offences against victims in close relationships"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Allows up to double the maximum punishment for certain Chapter 16 offences against victims in close relationships (same household) with the offender."
+source = "Singapore Penal Code 1871, Section 74D"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr74D-#pr74D-"

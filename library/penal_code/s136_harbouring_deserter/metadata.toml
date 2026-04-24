@@ -1,0 +1,18 @@
+[statute]
+section_number = "136"
+title = "Harbouring a deserter"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Criminalises harbouring a known deserter of the Singapore Armed Forces or visiting forces with intent to prevent apprehension."
+source = "Singapore Penal Code 1871, Section 136"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr136-#pr136-"

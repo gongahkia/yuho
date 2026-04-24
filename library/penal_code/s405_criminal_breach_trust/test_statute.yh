@@ -1,0 +1,34 @@
+// Test file for s405_criminal_breach_trust
+// Yuho v5 Syntax
+
+referencing penal_code/s405_criminal_breach_trust
+
+struct S405TestCase {
+    bool entrustedWithPropertyOrDominion,
+    string breachMode,
+    bool dishonestState,
+}
+
+S405TestCase warehouseSale := S405TestCase {
+    entrustedWithPropertyOrDominion := TRUE,
+    breachMode := "misappropriation",
+    dishonestState := TRUE,
+}
+
+assert is_criminal_breach_of_trust(warehouseSale.entrustedWithPropertyOrDominion, warehouseSale.breachMode, warehouseSale.dishonestState) == TRUE
+
+S405TestCase goodFaith := S405TestCase {
+    entrustedWithPropertyOrDominion := TRUE,
+    breachMode := "unlawful_use",
+    dishonestState := FALSE,
+}
+
+assert is_criminal_breach_of_trust(goodFaith.entrustedWithPropertyOrDominion, goodFaith.breachMode, goodFaith.dishonestState) == FALSE
+
+S405TestCase notEntrusted := S405TestCase {
+    entrustedWithPropertyOrDominion := FALSE,
+    breachMode := "misappropriation",
+    dishonestState := TRUE,
+}
+
+assert is_criminal_breach_of_trust(notEntrusted.entrustedWithPropertyOrDominion, notEntrusted.breachMode, notEntrusted.dishonestState) == FALSE

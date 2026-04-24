@@ -1,0 +1,23 @@
+// Test file for s329
+// Yuho v5 Syntax
+
+referencing penal_code/s329_voluntarily_causing_grievous_hurt_extort
+
+struct S329CaseTest {
+    bool actusReus,
+    bool mensRea,
+}
+
+S329CaseTest satisfied := S329CaseTest {
+    actusReus := TRUE,
+    mensRea := TRUE,
+}
+
+assert s329_applies(satisfied.actusReus, satisfied.mensRea) == TRUE
+
+S329CaseTest missingMens := S329CaseTest {
+    actusReus := TRUE,
+    mensRea := FALSE,
+}
+
+assert s329_applies(missingMens.actusReus, missingMens.mensRea) == FALSE

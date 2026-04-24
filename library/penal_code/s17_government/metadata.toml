@@ -1,0 +1,18 @@
+[statute]
+section_number = "17"
+title = "Government"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "'Government' includes any person lawfully performing executive functions of the Government under any law."
+source = "Singapore Penal Code 1871, Section 17"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr17-#pr17-"

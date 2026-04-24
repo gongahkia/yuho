@@ -1,0 +1,55 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr216A-#pr216A-
+// Singapore Penal Code Section 216A - Harbouring robbers or gang-robbers, etc.
+// Yuho v5 Syntax
+
+struct HarbourRobbersCase {
+    string accused,
+    bool knowsOrBelievesRobbery,
+    bool harboursRobbers,
+    bool intentToFacilitateOrScreen,
+}
+fn s216A_applies(bool knowsOrBelievesRobbery, bool harboursRobbers, bool intentToFacilitateOrScreen) : bool {
+    match {
+        case TRUE if knowsOrBelievesRobbery == FALSE := consequence FALSE;
+        case TRUE if harboursRobbers == FALSE := consequence FALSE;
+        case TRUE if intentToFacilitateOrScreen == FALSE := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
+// @amendment [15/2019]
+statute 216A "Harbouring robbers or gang-robbers, etc." effective 1872-01-01 {
+    definitions {
+        robbery := "Robbery as defined under s390";
+        gang_robbery := "Gang-robbery as defined under s391";
+        harbour := "As defined under s216B";
+    }
+
+    elements {
+        all_of {
+            /// triggering circumstance: persons about to commit or having recently committed robbery or gang-robbery
+            circumstance robbery_predicate := "Persons are about to commit or have recently committed robbery or gang-robbery";
+            /// knowledge or reason to believe of that circumstance
+            mens_rea knowledge := "Knowing or having reason to believe the robbery predicate";
+            /// actus reus is harbouring
+            actus_reus harbours_them := "Harbours them or any of them";
+            // specific intent: facilitate the offence or screen from punishment
+            any_of {
+                mens_rea facilitate := "Intention of facilitating the commission of such robbery or gang-robbery";
+                mens_rea screen := "Intention of screening them from punishment";
+            }
+        }
+    }
+
+    penalty {
+        imprisonment := 0 years .. 7 years;
+        fine := $0.00 .. $50,000.00;
+    }
+
+    illustration example1 {
+        "A, knowing that B and C are about to commit gang-robbery, shelters them in order to facilitate the robbery. A is liable under s216A to imprisonment up to 7 years and fine."
+    }
+
+    /// Explanation: it is immaterial whether the robbery or gang-robbery is intended or committed within or without Singapore.
+}

@@ -1,0 +1,54 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr192-#pr192-
+// Singapore Penal Code Section 192 - Fabricating false evidence
+// Yuho v5 Syntax
+
+struct S192Case {
+    string accused,
+    bool causesCircumstanceOrFalseEntry,
+    bool intendsToAppearInEvidence,
+    bool intendsErroneousOpinion,
+    bool isJudicialProceeding,
+}
+
+fn evaluate_s192(bool causesCircumstanceOrFalseEntry, bool intendsToAppearInEvidence, bool intendsErroneousOpinion) : string {
+    match {
+        case TRUE if causesCircumstanceOrFalseEntry == FALSE := consequence "Not fabricating - no false circumstance or entry";
+        case TRUE if intendsToAppearInEvidence == FALSE := consequence "Not fabricating - no intent for evidence use";
+        case TRUE if intendsErroneousOpinion == FALSE := consequence "Not fabricating - no intent to mislead fact-finder";
+        case _ := consequence "Said to fabricate false evidence";
+    }
+}
+
+statute 192 "Fabricating false evidence" effective 1872-01-01 {
+    definitions {
+        fabricated_evidence := "A false circumstance, false entry, or false statement in a document or record intended to appear in evidence and cause an erroneous opinion";
+        judicial_proceeding := "A proceeding in which evidence is or may be legally taken";
+    }
+
+    elements {
+        all_of {
+            /// actus reus: creating a false circumstance, entry, or document
+            actus_reus create := "Causes any circumstance to exist, or makes any false entry in any book, record, or electronic record, or makes any document or electronic record containing a false statement";
+            /// mens rea: intent that false item appear in evidence
+            mens_rea appearance := "Intending that such circumstance, false entry, or false statement may appear in evidence in a judicial proceeding, or before a public servant as such, or before an arbitrator";
+            /// mens rea: intent to cause erroneous opinion on a material point
+            mens_rea misleading := "Intending that such evidence cause the person forming an opinion to entertain an erroneous opinion touching any point material to the result of the proceeding";
+        }
+    }
+
+    illustration exampleA {
+        "A puts jewels into a box belonging to Z with the intention that they may be found in that box and that this circumstance may cause Z to be convicted of theft. A has fabricated false evidence."
+    }
+
+    illustration exampleB {
+        "A makes a false entry in his shop-book for the purpose of using it as corroborative evidence in a court of justice. A has fabricated false evidence."
+    }
+
+    illustration exampleC {
+        "A, with the intention of causing Z to be convicted of a criminal conspiracy, writes a letter in imitation of Z's handwriting, purporting to be addressed to an accomplice in such criminal conspiracy, and puts the letter in a place which he knows that the officers of the Police are likely to search. A has fabricated false evidence."
+    }
+
+    // punishment under s193; this section is definitional
+}

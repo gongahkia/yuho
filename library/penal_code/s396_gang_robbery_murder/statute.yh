@@ -1,0 +1,48 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr396-#pr396-
+// Singapore Penal Code Section 396 - Gang-robbery with murder
+// Yuho v5 Syntax
+
+referencing penal_code/s391_gang_robbery
+referencing penal_code/s300_murder
+
+struct S396Case {
+    string accused,
+    bool gangRobberyInProgress,
+    bool murderCommittedByMember,
+}
+
+fn s396_applies(bool gangRobbery, bool murderByMember) : bool {
+    match {
+        case TRUE if gangRobbery == FALSE := consequence FALSE;
+        case TRUE if murderByMember == FALSE := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
+
+statute 396 "Gang-robbery with murder" effective 1872-01-01 {
+    definitions {
+        gang_robbery := "As defined under section 391";
+        murder := "As defined under section 300";
+    }
+
+    elements {
+        /// gang-robbery under s391 must be in progress
+        actus_reus predicate_gang_robbery := "5 or more persons conjointly committing gang-robbery" burden prosecution beyond_reasonable_doubt;
+        /// any one member must commit murder in the course of gang-robbery
+        actus_reus murder_in_course := "Any one of the 5 or more persons commits murder in so committing gang-robbery";
+        /// collective liability attaches to every member
+        circumstance collective_liability := "Every one of those persons is punished with death or imprisonment for life";
+    }
+
+    penalty {
+        imprisonment := 20 years .. 99 years;
+        caning := 12 .. 24 strokes;
+        supplementary := "Death or imprisonment for life; caning with not less than 12 strokes if not sentenced to death";
+    }
+
+    illustration example1 {
+        "Five persons conjointly rob Z and one of them fatally stabs Z. Each of the five is punishable with death or life imprisonment under s396."
+    }
+}

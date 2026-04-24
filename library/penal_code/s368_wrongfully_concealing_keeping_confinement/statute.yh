@@ -1,0 +1,23 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr368-#pr368-
+// Singapore Penal Code Section 368
+
+statute 368 "Wrongfully concealing or keeping in confinement a kidnapped person" effective 1872-01-01 {
+    definitions {
+        knowledge_requirement := "Knowledge that the person was kidnapped or abducted";
+    }
+
+    elements {
+        /// wrongfully conceal or keep in confinement
+        actus_reus conceal_or_confine := "Wrongfully conceals or keeps in confinement such kidnapped or abducted person";
+        /// knowledge that person was kidnapped or abducted
+        mens_rea knowledge_kidnapping := "Knowing that such person has been kidnapped or abducted";
+    }
+
+    penalty {
+        imprisonment := 0 years .. 7 years;
+        fine := $0.00 .. $10,000.00;
+    }
+
+}

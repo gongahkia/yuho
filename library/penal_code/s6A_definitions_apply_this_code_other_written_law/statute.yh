@@ -1,0 +1,16 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr6A-#pr6A-
+/// @amendment [15/2019]
+// Singapore Penal Code Section 6A - Definitions to apply to this Code and other written law
+// Shape: interpretation / construction rule
+
+statute 6A "Definitions to apply to this Code and other written law" effective 2019-11-01 {
+    definitions {
+        construction_rule := "Every definition of a word or expression which is explained in sections 22A to 26H (except the definitions of dishonestly and fraudulently in sections 24 and 25, respectively) applies to any offence in this Code or in any other written law unless that written law expressly provides for a definition or explanation of that same word or expression";
+        scope_sections := "Sections 22A to 26H of this Code";
+        excluded_dishonestly := "Section 24 definition of dishonestly is excluded from the cross-application rule";
+        excluded_fraudulently := "Section 25 definition of fraudulently is excluded from the cross-application rule";
+        default_rule := "Definition applies unless the other written law expressly defines the same word or expression";
+    }
+}

@@ -1,0 +1,18 @@
+[statute]
+section_number = "271"
+title = "Disobedience to a quarantine rule"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Criminalises knowingly disobeying any rule lawfully made for quarantine of vessels or regulating intercourse between infected places."
+source = "Singapore Penal Code 1871, Section 271"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr271-#pr271-"

@@ -1,0 +1,18 @@
+[statute]
+section_number = "74E"
+title = "Application of enhanced penalties"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Limits enhanced-penalty stacking: where multiple of sections 73 to 74D apply, only one enhancement may be imposed."
+source = "Singapore Penal Code 1871, Section 74E"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr74E-#pr74E-"

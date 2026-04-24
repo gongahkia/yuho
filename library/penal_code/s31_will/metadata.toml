@@ -1,0 +1,18 @@
+[statute]
+section_number = "31"
+title = "“A will”"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Defines 'a will' as any testamentary document."
+source = "Singapore Penal Code 1871, Section 31"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr31-#pr31-"

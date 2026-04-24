@@ -1,0 +1,18 @@
+[statute]
+section_number = "366"
+title = "Kidnapping or abducting a woman to compel her marriage, etc."
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Kidnapping or abducting a woman to compel marriage, or to force or seduce to illicit intercourse."
+source = "Singapore Penal Code 1871, Section 366"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr366-#pr366-"

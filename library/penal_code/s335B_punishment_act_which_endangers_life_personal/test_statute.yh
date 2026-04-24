@@ -1,0 +1,20 @@
+// Test file for s335B
+// Yuho v5 Syntax
+
+referencing penal_code/s335B_punishment_act_which_endangers_life_personal
+
+struct S335bCaseTest {
+    bool offenceCommitted,
+}
+
+S335bCaseTest convicted := S335bCaseTest {
+    offenceCommitted := TRUE,
+}
+
+assert s335b_applies(convicted.offenceCommitted) == TRUE
+
+S335bCaseTest acquitted := S335bCaseTest {
+    offenceCommitted := FALSE,
+}
+
+assert s335b_applies(acquitted.offenceCommitted) == FALSE

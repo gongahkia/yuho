@@ -1,0 +1,30 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr82-#pr82-
+/// @amendment [15/2019]
+// Singapore Penal Code Section 82 - Act of a child below 10 years of age
+// general exception (defence): doli incapax, irrebuttable
+
+struct ChildUnder10Case {
+    string accused,
+    int age,
+}
+
+fn child_under_10_defence(int age) : bool {
+    match {
+        case TRUE if age < 10 := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 82 "Act of a child below 10 years of age" effective 2020-01-01 {
+    definitions {
+        child := "A person below 10 years of age";
+        doli_incapax := "Irrebuttable presumption that a child below 10 is incapable of crime";
+    }
+
+    elements {
+        /// sole element: age below 10 at time of act
+        circumstance ageUnder10 := "Accused was below 10 years of age at time of act";
+    }
+}

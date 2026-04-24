@@ -1,0 +1,23 @@
+// Test file for s394_voluntarily_causing_hurt_committing_robbery
+// Yuho v5 Syntax
+
+referencing penal_code/s394_voluntarily_causing_hurt_committing_robbery
+
+struct S394TestCase {
+    bool robberyOrAttempt,
+    bool hurtVoluntarilyCaused,
+}
+
+S394TestCase violentRobbery := S394TestCase {
+    robberyOrAttempt := TRUE,
+    hurtVoluntarilyCaused := TRUE,
+}
+
+assert s394_applies(violentRobbery.robberyOrAttempt, violentRobbery.hurtVoluntarilyCaused) == TRUE
+
+S394TestCase noHurt := S394TestCase {
+    robberyOrAttempt := TRUE,
+    hurtVoluntarilyCaused := FALSE,
+}
+
+assert s394_applies(noHurt.robberyOrAttempt, noHurt.hurtVoluntarilyCaused) == FALSE

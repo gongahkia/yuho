@@ -1,0 +1,40 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr399-#pr399-
+// Singapore Penal Code Section 399 - Making preparation to commit gang-robbery
+// Yuho v5 Syntax
+
+referencing penal_code/s391_gang_robbery
+
+struct S399Case {
+    string accused,
+    bool preparationForGangRobbery,
+}
+
+fn s399_applies(bool preparation) : bool {
+    match {
+        case TRUE if preparation == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 399 "Making preparation to commit gang-robbery" effective 1872-01-01 {
+    definitions {
+        preparation := "Any preparatory act done for the purpose of committing gang-robbery";
+        gang_robbery := "As defined under section 391";
+    }
+
+    elements {
+        /// preparation for gang-robbery under s391 is sufficient
+        actus_reus preparation := "Making any preparation for committing gang-robbery" burden prosecution beyond_reasonable_doubt;
+    }
+
+    penalty {
+        imprisonment := 3 years .. 10 years;
+        caning := 12 .. 24 strokes;
+    }
+
+    illustration example1 {
+        "A, B, C, D, and E assemble weapons and maps intending to rob Z. Before they set out, they are caught. Each has committed the offence under s399."
+    }
+}

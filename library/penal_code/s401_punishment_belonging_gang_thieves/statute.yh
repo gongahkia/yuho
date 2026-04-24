@@ -1,0 +1,51 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr401-#pr401-
+// Singapore Penal Code Section 401 - Punishment for belonging to gang of thieves
+// Yuho v5 Syntax
+
+/// @amendment [15/2019]
+referencing penal_code/s378_theft
+referencing penal_code/s390_robbery
+
+struct S401Case {
+    string accused,
+    bool belongsToGang,
+    bool gangHabituallyCommitsTheftOrRobbery,
+    bool notGangRobbers,
+}
+
+fn s401_applies(bool belongs, bool habitual, bool notGangRobbers) : bool {
+    match {
+        case TRUE if belongs == FALSE := consequence FALSE;
+        case TRUE if habitual == FALSE := consequence FALSE;
+        case TRUE if notGangRobbers == FALSE := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
+
+statute 401 "Punishment for belonging to gang of thieves" effective 1872-01-01 {
+    definitions {
+        gang := "A group of persons associated for a common unlawful purpose";
+        theft := "As defined under section 378";
+        robbery := "As defined under section 390";
+    }
+
+    elements {
+        /// accused must belong to a gang
+        circumstance membership := "Accused belongs to a gang of persons" burden prosecution beyond_reasonable_doubt;
+        /// gang's purpose must be habitual theft or robbery
+        circumstance habitual_theft_or_robbery := "Gang is associated for the purpose of habitually committing theft or robbery";
+        /// gang must not be gang-robbers (those fall under s400)
+        circumstance not_gang_robbers := "Gang is not gang-robbers under section 400";
+    }
+
+    penalty {
+        imprisonment := 0 days .. 7 years;
+        caning := 4 .. 24 strokes;
+    }
+
+    illustration example1 {
+        "A belongs to a group of persons who habitually commit petty theft together but do not number five or more. A is punishable under s401."
+    }
+}

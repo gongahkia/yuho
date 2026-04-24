@@ -1,0 +1,18 @@
+[statute]
+section_number = "134"
+title = "Abetment of such assault, if the assault is committed"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Enhanced punishment for abetment of an assault by a serviceman on a superior officer where the assault is committed in consequence of the abetment."
+source = "Singapore Penal Code 1871, Section 134"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr134-#pr134-"

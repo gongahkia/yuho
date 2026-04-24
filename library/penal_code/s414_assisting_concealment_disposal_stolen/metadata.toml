@@ -1,0 +1,18 @@
+[statute]
+section_number = "414"
+title = "Assisting in concealment or disposal of stolen property"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Voluntarily assisting in concealing, disposing of, or making away with stolen property."
+source = "Singapore Penal Code 1871, Section 414"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr414-#pr414-"

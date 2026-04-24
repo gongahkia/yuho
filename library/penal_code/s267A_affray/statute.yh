@@ -1,0 +1,13 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr267A-#pr267A-
+// Singapore Penal Code Section 267A - Affray
+// Yuho v5 Syntax
+
+statute 267A "Affray" effective 1872-01-01 {
+    definitions {
+        affray := "Two or more persons disturbing the public peace by fighting in a public place";
+        public_place := "A place to which the public has access";
+        disturb_public_peace := "Causing disruption or tumult affecting public order";
+    }
+}

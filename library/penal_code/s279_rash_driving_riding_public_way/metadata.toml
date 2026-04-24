@@ -1,0 +1,18 @@
+[statute]
+section_number = "279"
+title = "Rash driving or riding on a public way"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Criminalises driving or riding on a public way in a rash or negligent manner so as to endanger human life or likely to cause hurt or injury."
+source = "Singapore Penal Code 1871, Section 279"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr279-#pr279-"

@@ -1,0 +1,18 @@
+[statute]
+section_number = "405"
+title = "Criminal breach of trust"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "A person entrusted with property or dominion over property commits criminal breach of trust by dishonestly misappropriating, using, or disposing of it in violation of law or contract governing the trust, or by intentionally suffering another to do so."
+source = "Singapore Penal Code 1871, Section 405"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr405-#pr405-"

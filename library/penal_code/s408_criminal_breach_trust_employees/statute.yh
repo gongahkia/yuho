@@ -1,0 +1,36 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr408-#pr408-
+// Singapore Penal Code Section 408 - Criminal breach of trust by employees
+
+/// @amendment [15/2019]
+
+referencing penal_code/s406_punishment_for_criminal_breach_of_trust
+
+statute 408 "Criminal breach of trust by employees" effective 1872-01-01 {
+    definitions {
+        employee := "A person employed under a contract of service (see subsection 2)";
+        entrusted := "Placed under a persons dominion by virtue of trust";
+        criminal_breach_of_trust := "Dishonest misappropriation or conversion of entrusted property (see section 405)";
+    }
+
+    elements {
+        all_of {
+            /// accused must be an employee at the material time
+            circumstance employee_status := "Accused is an employee of another person";
+            /// property entrusted in that employee capacity
+            circumstance entrusted_in_capacity := "Entrusted with property or dominion over property in employee capacity";
+            /// the actus reus -- criminal breach of trust of that property
+            actus_reus breach_of_trust := "Commits criminal breach of trust in respect of that property";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 15 years;
+        fine := $0.00 .. $100,000.00;
+    }
+
+    illustration example1 {
+        "A, an employee of B, is entrusted with cash to deposit at the bank. A dishonestly uses the cash for personal gambling. A commits criminal breach of trust as an employee."
+    }
+}

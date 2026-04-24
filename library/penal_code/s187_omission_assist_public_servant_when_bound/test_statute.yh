@@ -1,0 +1,34 @@
+// Test file for s187_omission_assist_public_servant_when_bound
+// Yuho v5 Syntax
+
+referencing penal_code/s187_omission_assist_public_servant_when_bound
+
+struct S187TestCase {
+    bool boundByLaw,
+    bool intentionalOmission,
+    bool assistanceDemanded,
+}
+
+S187TestCase refusedOnDemand := S187TestCase {
+    boundByLaw := TRUE,
+    intentionalOmission := TRUE,
+    assistanceDemanded := TRUE,
+}
+
+assert evaluate_s187(refusedOnDemand.boundByLaw, refusedOnDemand.intentionalOmission, refusedOnDemand.assistanceDemanded) == "Liable under s187(2) - aggravated"
+
+S187TestCase simpleOmission := S187TestCase {
+    boundByLaw := TRUE,
+    intentionalOmission := TRUE,
+    assistanceDemanded := FALSE,
+}
+
+assert evaluate_s187(simpleOmission.boundByLaw, simpleOmission.intentionalOmission, simpleOmission.assistanceDemanded) == "Liable under s187(1)"
+
+S187TestCase notBound := S187TestCase {
+    boundByLaw := FALSE,
+    intentionalOmission := TRUE,
+    assistanceDemanded := TRUE,
+}
+
+assert evaluate_s187(notBound.boundByLaw, notBound.intentionalOmission, notBound.assistanceDemanded) == "Not liable - not bound by law"

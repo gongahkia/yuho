@@ -1,0 +1,47 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr200-#pr200-
+// Singapore Penal Code Section 200 - Using as true any such declaration known to be false
+// Yuho v5 Syntax
+
+referencing penal_code/s199_false_statement_made_declaration_which_law
+referencing penal_code/s193_punishment_false_evidence
+
+struct S200Case {
+    string accused,
+    bool corruptlyUsesDeclarationAsTrue,
+    bool knowsDeclarationFalseInMaterialPoint,
+}
+
+fn evaluate_s200(bool corruptlyUsesDeclarationAsTrue, bool knowsDeclarationFalseInMaterialPoint) : string {
+    match {
+        case TRUE if corruptlyUsesDeclarationAsTrue == FALSE := consequence "Not liable - no corrupt use";
+        case TRUE if knowsDeclarationFalseInMaterialPoint == FALSE := consequence "Not liable - no knowledge of material falsity";
+        case _ := consequence "Liable under s200";
+    }
+}
+
+statute 200 "Using as true any such declaration known to be false" effective 1872-01-01 {
+    definitions {
+        declaration := "A declaration within the meaning of section 199";
+        corruptly := "With dishonest or fraudulent purpose";
+    }
+
+    elements {
+        all_of {
+            /// actus reus: corrupt use or attempt
+            actus_reus useDeclaration := "Corruptly uses or attempts to use as true any such declaration";
+            /// mens rea: knowledge of material falsity
+            mens_rea knowledge := "Knowing the same to be false in any material point";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 years .. 7 years;
+        fine := $0.00 .. $50,000.00;
+    }
+
+    /// Explanation: A declaration which is inadmissible merely upon the ground of some informality is a declaration within the meaning of sections 199 and 200.
+
+    // punished in the same manner as if he gave false evidence (s193)
+}

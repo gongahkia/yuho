@@ -1,0 +1,18 @@
+[statute]
+section_number = "91"
+title = "Acts which are offences independently of harm caused to the person consenting, are not within the exceptions in sections 87, 88 and 89"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "The exceptions in sections 87, 88 and 89 do not extend to acts that are independently offences regardless of harm to the consenting person."
+source = "Singapore Penal Code 1871, Section 91"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr91-#pr91-"

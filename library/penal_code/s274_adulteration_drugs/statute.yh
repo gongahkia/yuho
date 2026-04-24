@@ -1,0 +1,50 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr274-#pr274-
+// Singapore Penal Code Section 274 - Adulteration of drugs
+// Yuho v5 Syntax
+
+struct DrugAdulterationCase { string accused, bool adulterated, bool efficacyLessenedOrNoxious, bool intentOrKnowledgeMedicinalSale, }
+
+fn is_offence(bool adulterated, bool effect, bool intentKnowledge) : bool {
+    match {
+        case TRUE if adulterated == FALSE := consequence FALSE;
+        case TRUE if effect == FALSE := consequence FALSE;
+        case TRUE if intentKnowledge == FALSE := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
+
+/// @amendment [15/2019]
+statute 274 "Adulteration of drugs" effective 1872-01-01 {
+    definitions {
+        adulterate := "To alter a drug or medical preparation so as to change its efficacy, operation or make it noxious";
+        medicinal_purpose := "Use for medical treatment or therapy";
+    }
+
+    elements {
+        all_of {
+            /// physical act of adulteration
+            actus_reus adulterate_act := "Adulterating a drug or medical preparation";
+            any_of {
+                /// alternative effect -- lessening efficacy
+                circumstance lessen_efficacy := "Adulteration lessens the efficacy of the drug";
+                /// alternative effect -- change in operation
+                circumstance change_operation := "Adulteration changes the operation of the drug";
+                /// alternative effect -- rendered noxious
+                circumstance noxious := "Adulteration renders the drug noxious";
+            }
+            any_of {
+                /// intent to sell as unadulterated
+                mens_rea intent_sell := "Intending the drug shall be sold or used for medicinal purpose as if unadulterated";
+                /// knowledge of likely sale
+                mens_rea knowledge_sell := "Knowing it to be likely that the drug will be sold or used for medicinal purpose as if unadulterated";
+            }
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 3 years;
+        fine := $0.00 .. $10,000.00;
+    }
+}

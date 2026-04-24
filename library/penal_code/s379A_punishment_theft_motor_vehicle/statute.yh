@@ -1,0 +1,46 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr379A-#pr379A-
+// Singapore Penal Code Section 379A - Punishment for theft of a motor vehicle
+// Yuho v5 Syntax
+
+referencing penal_code/s378_theft
+
+struct S379ACase {
+    string accused,
+    bool theftCommitted,
+    bool motorVehicleOrPart,
+}
+
+fn s379A_applies(bool theftCommitted, bool motorVehicleOrPart) : bool {
+    match {
+        case TRUE if theftCommitted == FALSE := consequence FALSE;
+        case TRUE if motorVehicleOrPart == FALSE := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
+
+statute 379A "Punishment for theft of a motor vehicle" effective 1872-01-01 {
+    definitions {
+        motor_vehicle := "A mechanically propelled vehicle of any description";
+        component_part := "Any component part of a motor vehicle";
+        driving_licence := "Driving licence under the Road Traffic Act 1961";
+    }
+
+    elements {
+        /// theft under s378 must be established against a motor vehicle or part
+        circumstance theft_committed := "Theft under section 378 is established" burden prosecution beyond_reasonable_doubt;
+        /// subject of theft must be a motor vehicle or its component part
+        circumstance motor_vehicle_target := "Subject of theft is a motor vehicle or component part";
+    }
+
+    penalty {
+        imprisonment := 0 days .. 7 years;
+        fine := $0.00 .. $10,000.00;
+        supplementary := "Disqualification from holding or obtaining a driving licence under the Road Traffic Act 1961 unless the court for special reasons thinks fit to order otherwise";
+    }
+
+    illustration example1 {
+        "A dishonestly takes B's motorcycle without consent. A is liable to imprisonment up to 7 years, a fine, and disqualification from holding a driving licence."
+    }
+}

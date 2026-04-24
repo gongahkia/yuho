@@ -1,0 +1,19 @@
+[statute]
+section_number = "256"
+title = "Having possession of an instrument or material for the purpose of counterfeiting a Government stamp"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Possessing an instrument or material for the purpose of counterfeiting a Government stamp issued for revenue."
+source = "Singapore Penal Code 1871, Section 256"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr256-#pr256-"
+disclaimer = "Educational purposes only. Cross-reference with official SSO text."

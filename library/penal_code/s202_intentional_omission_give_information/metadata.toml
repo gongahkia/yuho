@@ -1,0 +1,19 @@
+[statute]
+section_number = "202"
+title = "Intentional omission to give information of an offence, by person bound to inform"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Knowing or having reason to believe an offence has been committed, intentionally omitting to give information that one is legally bound to give."
+source = "Singapore Penal Code 1871, Section 202"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr202-#pr202-"
+disclaimer = "Educational purposes only. Cross-reference with official SSO text."

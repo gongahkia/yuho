@@ -1,0 +1,18 @@
+[statute]
+section_number = "150"
+title = "Hiring, or conniving at hiring, of persons to join an unlawful assembly"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Imposes liability on those who hire, engage, employ, promote, or connive at the hiring of persons to join an unlawful assembly, as if they were members and for any offences committed by the hired persons in pursuance."
+source = "Singapore Penal Code 1871, Section 150"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr150-#pr150-"

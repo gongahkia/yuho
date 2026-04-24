@@ -1,0 +1,23 @@
+// Test file for s335
+// Yuho v5 Syntax
+
+referencing penal_code/s335_causing_grievous_hurt_provocation
+
+struct S335CaseTest {
+    bool actusReus,
+    bool mensRea,
+}
+
+S335CaseTest satisfied := S335CaseTest {
+    actusReus := TRUE,
+    mensRea := TRUE,
+}
+
+assert s335_applies(satisfied.actusReus, satisfied.mensRea) == TRUE
+
+S335CaseTest missingMens := S335CaseTest {
+    actusReus := TRUE,
+    mensRea := FALSE,
+}
+
+assert s335_applies(missingMens.actusReus, missingMens.mensRea) == FALSE

@@ -1,0 +1,29 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr131-#pr131-
+// Singapore Penal Code Section 131 - Abetting mutiny, or attempting to seduce an officer or a serviceman from his duty
+
+/// @amendment [15/2019]
+statute 131 "Abetting mutiny, or attempting to seduce an officer or a serviceman from his duty" effective 1872-01-01 {
+    definitions {
+        officer := "An officer in the Singapore Armed Forces or any visiting forces lawfully present in Singapore";
+        serviceman := "Any serviceman in the Singapore Armed Forces or any visiting forces lawfully present in Singapore";
+        mutiny := "A collective refusal of obedience by members of the armed forces";
+        seduce := "To induce an officer or serviceman to abandon his allegiance or duty";
+    }
+
+    elements {
+        any_of {
+            /// limb 1 - abetment of mutiny (without consummation; see s132 for consummated mutiny)
+            actus_reus abet_mutiny := "Abetting the committing of mutiny by an officer or any serviceman in the Singapore Armed Forces or any visiting forces lawfully present in Singapore";
+            /// limb 2 - attempted seduction from allegiance or duty
+            actus_reus attempt_seduce := "Attempting to seduce any such officer or serviceman from his allegiance or his duty";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 years .. 99 years;
+        fine := $0.00 .. $50,000.00;
+        supplementary := "Imprisonment for life, or imprisonment for a term which may extend to 10 years; if not sentenced to imprisonment for life, also liable to fine";
+    }
+}

@@ -1,0 +1,26 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr376ED-#pr376ED-
+/// @section 376ED
+// Singapore Penal Code Section 376ED
+
+statute 376.10 "Sexual activity or image in presence of minor below 16 years of age" effective 1872-01-01 {
+    definitions {
+        sexual_activity_presence := "Engaging in sexual activity or causing sexual image to be seen in the presence of a minor";
+    }
+
+    elements {
+        /// engage in sexual activity or show sexual image in presence of minor
+        actus_reus sexual_activity_presence := "Intentionally engages in a sexual activity, or causes a sexual image to be seen, in the presence of another person";
+        /// the other person is below 16 years of age
+        circumstance minor_below_16 := "The other person is below 16 years of age";
+        /// for purpose of sexual gratification
+        mens_rea purpose_gratification := "For the purpose of obtaining sexual gratification";
+    }
+
+    penalty {
+        imprisonment := 0 years .. 2 years;
+        fine := $0.00 .. $10,000.00;
+    }
+
+}

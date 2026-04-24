@@ -1,0 +1,52 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr187-#pr187-
+/// @amendment [15/2019]
+// Singapore Penal Code Section 187 - Omission to assist public servant when bound by law to give assistance
+// Yuho v5 Syntax
+
+struct S187Case {
+    string accused,
+    bool boundByLaw,
+    bool intentionalOmission,
+    bool assistanceDemanded,
+}
+
+fn evaluate_s187(bool boundByLaw, bool intentionalOmission, bool assistanceDemanded) : string {
+    match {
+        case TRUE if boundByLaw == FALSE := consequence "Not liable - not bound by law";
+        case TRUE if intentionalOmission == FALSE := consequence "Not liable - not intentional";
+        case TRUE if assistanceDemanded == TRUE := consequence "Liable under s187(2) - aggravated";
+        case _ := consequence "Liable under s187(1)";
+    }
+}
+
+statute 187 "Omission to assist public servant when bound by law to give assistance" effective 1872-01-01 {
+    definitions {
+        public_servant := "As defined in section 21";
+        assistance := "Aid in the execution of a public servant's public duty";
+        bound_by_law := "Under a legal obligation to render assistance";
+    }
+
+    elements {
+        all_of {
+            /// circumstance: legal duty to assist
+            circumstance legal_duty := "Being bound by law to render or furnish assistance to any public servant";
+            /// actus reus: omission
+            actus_reus omit := "Omits to give such assistance";
+            /// mens rea: intentional omission
+            mens_rea intentional := "Intentionally omits to give such assistance";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 years .. 6 months;
+        fine := $0.00 .. $10,000.00;
+    }
+
+    // s187(1)(a) individual: up to 1 month imprisonment, fine up to $1,500, or both
+    // s187(1)(b) other case: fine up to $10,000
+    // s187(2) aggravated where demanded by a legally competent public servant:
+    //   (a) individual: up to 6 months imprisonment, fine up to $2,500, or both
+    //   (b) other case: fine up to $5,000
+}

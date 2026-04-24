@@ -1,0 +1,19 @@
+[statute]
+section_number = "192"
+title = "Fabricating false evidence"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Defines 'fabricating false evidence': causing a false circumstance, entry, or document to exist with intent that it appear in evidence and cause a fact-finder to form an erroneous opinion on a material point."
+source = "Singapore Penal Code 1871, Section 192"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr192-#pr192-"
+disclaimer = "Educational purposes only. Cross-reference with official SSO text."

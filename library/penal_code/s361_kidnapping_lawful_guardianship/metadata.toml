@@ -1,0 +1,18 @@
+[statute]
+section_number = "361"
+title = "Kidnapping from lawful guardianship"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Taking or enticing a minor or person of unsound mind out of the keeping of their lawful guardian."
+source = "Singapore Penal Code 1871, Section 361"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr361-#pr361-"

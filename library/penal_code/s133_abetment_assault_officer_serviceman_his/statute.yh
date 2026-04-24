@@ -1,0 +1,27 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr133-#pr133-
+// Singapore Penal Code Section 133 - Abetment of an assault by an officer or a serviceman on his superior officer, when in the execution of his office
+
+statute 133 "Abetment of an assault by an officer or a serviceman on his superior officer, when in the execution of his office" effective 1872-01-01 {
+    definitions {
+        officer := "An officer in the Singapore Armed Forces or any visiting forces lawfully present in Singapore";
+        serviceman := "Any serviceman in the Singapore Armed Forces or any visiting forces lawfully present in Singapore";
+        superior_officer := "An officer senior in rank to the principal offender";
+        execution_of_office := "Acting in the discharge of official duties";
+    }
+
+    elements {
+        all_of {
+            /// actus reus - abetment of assault
+            actus_reus abet_assault := "Abetting an assault by an officer or any serviceman in the Singapore Armed Forces or any visiting forces lawfully present in Singapore on any superior officer";
+            /// circumstance - victim superior must be in execution of his office
+            circumstance in_execution := "The superior officer is in the execution of his office at the time of the abetted assault";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 years .. 3 years;
+        fine := $0.00 .. $50,000.00;
+    }
+}

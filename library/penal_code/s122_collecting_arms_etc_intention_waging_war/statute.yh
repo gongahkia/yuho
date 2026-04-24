@@ -1,0 +1,43 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr122-#pr122-
+/// @amendment [15/2019]
+// Singapore Penal Code Section 122 - Collecting arms, etc., with the intention of waging war against the Government
+// Yuho v5 Syntax
+
+struct S122Case {
+    string accused,
+    bool collectsMenArmsOrAmmunition,
+    bool otherwisePreparesToWageWar,
+    bool intendsToWageOrBePreparedToWageWar,
+}
+
+fn s122_applies(bool collectsMenArmsOrAmmunition, bool otherwisePreparesToWageWar, bool intendsToWageOrBePreparedToWageWar) : bool {
+    match {
+        case TRUE if collectsMenArmsOrAmmunition == TRUE && intendsToWageOrBePreparedToWageWar == TRUE := consequence TRUE;
+        case TRUE if otherwisePreparesToWageWar == TRUE && intendsToWageOrBePreparedToWageWar == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 122 "Collecting arms, etc., with the intention of waging war against the Government" effective 2020-01-01 {
+    definitions {
+        preparation := "Preparation to wage war or to be prepared to wage war against the Government";
+        targets := "Men, arms, or ammunition, or otherwise preparations";
+    }
+
+    elements {
+        all_of {
+            any_of {
+                actus_reus collects := "Collects men, arms or ammunition";
+                actus_reus prepares := "Otherwise prepares to wage war";
+            }
+            mens_rea intention := "Intending either to wage war or to be prepared to wage war against the Government";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 99 years;
+        fine := $0.00 .. $1,000,000.00;
+    }
+}

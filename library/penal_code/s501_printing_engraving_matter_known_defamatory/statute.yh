@@ -1,0 +1,35 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr501-#pr501-
+// Singapore Penal Code Section 501 - Printing or engraving matter known to be defamatory
+// Yuho v5 Syntax
+
+struct PrintingDefamatoryCase {
+    string accused,
+    bool elementsSatisfied,
+}
+
+fn is_liable(bool elementsSatisfied) : bool {
+    match {
+        case TRUE if elementsSatisfied == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 501 "Printing or engraving matter known to be defamatory" effective 1872-01-01 {
+    definitions {
+        defamation := "As defined under section 499";
+    }
+
+    elements {
+        all_of {
+            actus_reus prints_or_engraves := "Prints or engraves any matter";
+            circumstance matter_is_defamatory := "The matter is defamatory of any person";
+            mens_rea knows_or_reason_to_believe := "Knows or has good reason to believe the matter to be defamatory";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 2 years;
+    }
+}

@@ -1,0 +1,18 @@
+[statute]
+section_number = "20"
+title = "Court of justice"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "'Court of justice' denotes a judge (or body of judges) empowered to act judicially when acting in that capacity."
+source = "Singapore Penal Code 1871, Section 20"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr20-#pr20-"

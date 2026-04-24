@@ -1,0 +1,15 @@
+// Illustrations for Penal Code section 165
+
+referencing penal_code/s165_public_servant_obtaining_valuable_thing
+
+illustration example_a {
+    "A, a judge, hires a house of Z, who has a case pending before him. It is agreed that A shall pay $50 a month, the house being such that, if the bargain were made in good faith, A would be required to pay $200 a month. A has obtained a valuable thing from Z without adequate consideration."
+}
+
+illustration example_b {
+    "A, a judge, buys of Z, who has a cause pending in A's court, Government promissory notes at a discount, when they are selling in the market at a premium. A has obtained a valuable thing from Z without adequate consideration."
+}
+
+illustration example_c {
+    "Z's brother is apprehended and taken before A, a Magistrate, on a charge of perjury. A sells to Z shares in a bank at a premium, when they are selling in the market at a discount. Z pays A for the shares accordingly. The money so obtained by A is a valuable thing obtained by him without adequate consideration."
+}

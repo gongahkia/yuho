@@ -1,0 +1,18 @@
+[statute]
+section_number = "7"
+title = "Expression once explained is used in the same sense throughout this Code"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Expressions explained anywhere in the Code carry that explanation throughout the Code."
+source = "Singapore Penal Code 1871, Section 7"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr7-#pr7-"

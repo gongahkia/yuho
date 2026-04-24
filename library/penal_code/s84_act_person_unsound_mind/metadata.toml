@@ -1,0 +1,18 @@
+[statute]
+section_number = "84"
+title = "Act of person of unsound mind"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Excuses acts of a person who, by reason of unsoundness of mind, is incapable of knowing the nature of the act, that it is wrong, or of controlling their actions."
+source = "Singapore Penal Code 1871, Section 84"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr84-#pr84-"

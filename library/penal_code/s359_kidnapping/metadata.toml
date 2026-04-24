@@ -1,0 +1,18 @@
+[statute]
+section_number = "359"
+title = "Kidnapping"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Kidnapping is of two kinds -- kidnapping from Singapore and kidnapping from lawful guardianship."
+source = "Singapore Penal Code 1871, Section 359"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr359-#pr359-"

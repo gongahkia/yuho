@@ -1,0 +1,48 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr106A-#pr106A-
+/// @amendment [15/2019]
+// Singapore Penal Code Section 106A - Acts against which there is no right of private defence
+// Yuho v5 Syntax
+
+struct NoPrivateDefenceCase {
+    string defender,
+    string actor,
+    bool actorIsPublicServant,
+    bool actorInGoodFaith,
+    bool defenderBelievesDeathOrGrievousHurt,
+    bool defenderKnowsActorIsPublicServant,
+}
+
+fn no_right_of_defence(bool actorIsPublicServant, bool actorInGoodFaith, bool defenderBelievesDeathOrGrievousHurt, bool defenderKnowsActorIsPublicServant) : bool {
+    match {
+        case TRUE if actorIsPublicServant == FALSE := consequence FALSE;
+        case TRUE if actorInGoodFaith == FALSE := consequence FALSE;
+        case TRUE if defenderKnowsActorIsPublicServant == FALSE := consequence FALSE;
+        case TRUE if defenderBelievesDeathOrGrievousHurt == TRUE := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
+
+statute 106A "Acts against which there is no right of private defence" effective 2020-01-01 {
+    definitions {
+        public_servant := "As defined in section 21";
+        good_faith := "As defined in section 52";
+        actual_authority := "Authority conferred by law on a public servant";
+        apparent_authority := "Authority a public servant appears to exercise by virtue of office";
+        grievous_hurt := "As defined in section 320";
+    }
+
+    elements {
+        // Explanation 1: defender not deprived of right unless defender knows or has reason to believe the actor is a public servant
+        all_of {
+            any_of {
+                actus_reus public_servant_act := "Act done or attempted by a public servant under actual or apparent authority of office";
+                actus_reus direction_of_public_servant := "Act done or attempted under the direction of a public servant acting in good faith";
+            }
+            circumstance good_faith_actor := "Public servant acts in good faith under authority of office";
+            circumstance no_reasonable_belief := "Defender does not reasonably believe death or grievous hurt would result";
+            mens_rea defender_knowledge := "Defender knows or has reason to believe the actor is a public servant";
+        }
+    }
+}

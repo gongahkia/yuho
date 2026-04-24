@@ -1,0 +1,44 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr346-#pr346-
+// Singapore Penal Code Section 346 -- Wrongful confinement in secret
+// Yuho v5 Syntax
+
+struct S346Case {
+    string accused,
+    string victim,
+    bool actusReus,
+    bool mensRea,
+}
+
+fn s346_applies(bool actusReus, bool mensRea) : bool {
+    match {
+        case TRUE if actusReus == TRUE && mensRea == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+
+statute 346 "Wrongful confinement in secret" effective 1872-01-01 {
+    definitions {
+        offence_summary := "Wrongful confinement with intent that confinement or place may not be known.";
+    }
+
+    elements {
+        /// mental element required for the offence
+        mens_rea intent := "Intent or knowledge as required by the section";
+        /// physical act constituting the offence
+        actus_reus act := "The prohibited act defined by the section";
+        /// contextual requirement -- victim, circumstances, or result
+        circumstance context := "Statutory circumstances are satisfied";
+    }
+
+    penalty {
+        imprisonment := 0 years .. 2 years;
+        fine := $0.00 .. $50,000.00;
+    }
+
+    illustration example1 {
+        "A commits the conduct described in section 346 against B. A is guilty of the offence under section 346."
+    }
+}

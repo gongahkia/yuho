@@ -1,0 +1,31 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr413-#pr413-
+// Singapore Penal Code Section 413 - Habitually dealing in stolen property
+
+/// @amendment [15/2019]
+
+referencing penal_code/s410_stolen_property
+
+statute 413 "Habitually dealing in stolen property" effective 1872-01-01 {
+    definitions {
+        habitually := "On repeated occasions demonstrating a settled practice";
+        stolen_property := "As defined in section 410";
+    }
+
+    elements {
+        all_of {
+            /// repeated course of conduct is the core actus reus
+            actus_reus habitual_dealing := "Habitually receives or deals in the property";
+            /// property is stolen or proceeds of fraud/dishonesty
+            circumstance tainted_property := "Property is stolen or obtained through a criminal offence involving fraud or dishonesty";
+            /// knowledge or reason to believe about the taint
+            mens_rea knowledge := "Knows or has reason to believe the taint";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 20 years;
+        fine := $0.00 .. $100,000.00;
+    }
+}

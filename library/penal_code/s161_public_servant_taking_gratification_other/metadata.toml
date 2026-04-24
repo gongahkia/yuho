@@ -1,0 +1,18 @@
+[statute]
+section_number = "161"
+title = "Public servant taking a gratification, other than legal remuneration, in respect of an official act"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Public servant (or one expecting to be) taking any gratification other than legal remuneration as a motive or reward for an official act or exercise of functions."
+source = "Singapore Penal Code 1871, Section 161"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr161-#pr161-"

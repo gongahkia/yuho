@@ -1,0 +1,47 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr208-#pr208-
+/// @amendment [Act 25 of 2021 wef 01/04/2022]
+// Singapore Penal Code Section 208 - Fraudulently suffering a decree for a sum not due
+// Yuho v5 Syntax
+
+struct S208Case {
+    string accused,
+    bool fraudulentlySuffers,
+    bool decreeOrOrderPassed,
+    bool sumNotDueOrSatisfied,
+}
+
+fn evaluate_s208(bool fraudulentlySuffers, bool decreeOrOrderPassed, bool sumNotDueOrSatisfied) : string {
+    match {
+        case TRUE if fraudulentlySuffers == FALSE := consequence "Not liable - not fraudulent";
+        case TRUE if decreeOrOrderPassed == FALSE := consequence "Not liable - no decree or order";
+        case TRUE if sumNotDueOrSatisfied == FALSE := consequence "Not liable - sum genuinely due";
+        case _ := consequence "Liable under s208";
+    }
+}
+
+statute 208 "Fraudulently suffering a decree for a sum not due" effective 1872-01-01 {
+    definitions {
+        decree := "A judgment or order of a court of justice";
+        fraudulently := "As defined in section 25";
+    }
+
+    elements {
+        all_of {
+            /// actus reus: fraudulently causing or suffering a decree
+            actus_reus suffer := "Fraudulently causes or suffers a decree or order to be passed against him at the suit of any person for a sum not due, or for a larger sum than is due, or for any property not entitled, or fraudulently causes or suffers a decree to be executed or enforced after satisfaction";
+            /// mens rea: fraud
+            mens_rea fraud := "With fraudulent intent";
+        }
+    }
+
+    illustration example1 {
+        "A institutes a suit against Z. Z, knowing that A is likely to obtain a decree against him, fraudulently suffers a judgment to pass against him for a larger amount at the suit of B, who has no just claim against him, in order that B, either on his own account or for the benefit of Z, may share in the proceeds of any sale of Z's property which may be made under A's decree. Z has committed an offence under this section."
+    }
+
+    penalty {
+        imprisonment := 0 years .. 2 years;
+        fine := $0.00 .. $5,000.00;
+    }
+}

@@ -1,0 +1,30 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr452-#pr452-
+// Singapore Penal Code Section 452 - House-breaking after preparation made for causing hurt, etc.
+
+/// @amendment [15/2019]
+
+referencing penal_code/s442_house_breaking
+
+statute 452 "House-breaking after preparation made for causing hurt, etc." effective 1872-01-01 {
+    definitions {
+        house_breaking := "As defined in section 442";
+        preparation := "Prior steps taken in advance to cause hurt, assault, wrongful restraint, or fear of any of these";
+    }
+
+    elements {
+        all_of {
+            /// base offence -- house-breaking under s442
+            actus_reus base_house_breaking := "Commits house-breaking under section 442";
+            /// aggravating preparation
+            circumstance prepared := "Has made preparation for causing hurt, assault, wrongful restraint, or fear of any of these";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 10 years;
+        fine := $0.00 .. $30,000.00;
+        caning := 0 .. 12 strokes;
+    }
+}

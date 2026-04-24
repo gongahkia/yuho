@@ -1,0 +1,12 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr470-#pr470-
+// Singapore Penal Code Section 470 - “A forged document” or “a forged electronic record”
+/// interpretation section, defines terms used in related offences
+
+statute 470 "“A forged document” or “a forged electronic record”" effective 1872-01-01 {
+    definitions {
+        forged_document := "A false document, made wholly or in part by forgery";
+        forged_electronic_record := "A false electronic record, made wholly or in part by forgery";
+    }
+}

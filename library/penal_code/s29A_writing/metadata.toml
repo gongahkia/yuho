@@ -1,0 +1,18 @@
+[statute]
+section_number = "29A"
+title = "“Writing”"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Defines 'writing' to include any mode of representing words/figures/drawings/symbols in visible form."
+source = "Singapore Penal Code 1871, Section 29A"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr29A-#pr29A-"

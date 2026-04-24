@@ -1,0 +1,12 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr2-#pr2-
+// Singapore Penal Code Section 2 - Punishment of offences committed within Singapore
+// Shape: scope / jurisdiction
+
+statute 2 "Punishment of offences committed within Singapore" effective 1872-01-01 {
+    definitions {
+        liability_rule := "Every person shall be liable to punishment under this Code and not otherwise for every act or omission contrary to the provisions thereof, of which he is guilty within Singapore";
+        territorial_scope := "Offences committed within Singapore";
+    }
+}

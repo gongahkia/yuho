@@ -1,0 +1,18 @@
+[statute]
+section_number = "428"
+title = "Mischief by killing or maiming any animal"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Mischief by killing, poisoning, maiming or rendering useless any animal."
+source = "Singapore Penal Code 1871, Section 428"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr428-#pr428-"

@@ -1,0 +1,55 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr195-#pr195-
+/// @amendment [15/2019]
+// Singapore Penal Code Section 195 - Giving or fabricating false evidence with intent to procure conviction of an offence punishable with imprisonment
+// Yuho v5 Syntax
+
+referencing penal_code/s191_giving_false_evidence
+referencing penal_code/s192_fabricating_false_evidence
+
+struct S195Case {
+    string accused,
+    bool givesOrFabricatesFalseEvidence,
+    bool intendsSevenYearPlusConviction,
+    bool intendsLifeImprisonmentConviction,
+}
+
+fn evaluate_s195(bool givesOrFabricatesFalseEvidence, bool intendsSevenYearPlusConviction, bool intendsLifeImprisonmentConviction) : string {
+    match {
+        case TRUE if givesOrFabricatesFalseEvidence == FALSE := consequence "Not liable - no false evidence";
+        case TRUE if intendsLifeImprisonmentConviction == TRUE := consequence "Liable under s195(2) - up to 20 years";
+        case TRUE if intendsSevenYearPlusConviction == TRUE := consequence "Liable under s195(1) - as convicted would be punished";
+        case _ := consequence "Not liable under s195";
+    }
+}
+
+statute 195 "Giving or fabricating false evidence with intent to procure conviction of an offence punishable with imprisonment" effective 1872-01-01 {
+    definitions {
+        non_capital_offence := "An offence not capital but punishable with imprisonment for 7 years or more";
+        life_offence := "An offence punishable with imprisonment for life, but not capital";
+        false_evidence := "As defined in section 191";
+        fabricated_evidence := "As defined in section 192";
+    }
+
+    elements {
+        all_of {
+            /// actus reus: giving or fabricating false evidence
+            actus_reus giveOrFabricate := "Gives or fabricates false evidence";
+            /// mens rea: intent or knowledge of likely conviction for 7yr+/life offence
+            mens_rea convictionIntent := "Intending thereby to cause, or knowing it to be likely that he will thereby cause, any person to be convicted of an offence which is not capital but punishable with imprisonment for 7 years or more, or for life";
+        }
+    }
+
+    illustration example1 {
+        "A gives false evidence before a court of justice, intending thereby to cause Z to be convicted of a gang-robbery. The punishment of gang-robbery is imprisonment for a term of not less than 5 years and up to 20 years. A is liable under this section."
+    }
+
+    penalty {
+        imprisonment := 0 years .. 20 years;
+        fine := $0.00 .. $50,000.00;
+    }
+
+    // s195(1) offence punishable with imprisonment 7 years or upwards: punished as a person convicted of that offence would be liable
+    // s195(2) offence punishable with life imprisonment: up to 20 years
+}

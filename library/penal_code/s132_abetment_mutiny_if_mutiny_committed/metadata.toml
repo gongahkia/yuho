@@ -1,0 +1,18 @@
+[statute]
+section_number = "132"
+title = "Abetment of mutiny, if mutiny is committed in consequence thereof"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Enhanced punishment for abetment of mutiny where mutiny is in fact committed in consequence of the abetment, including the possibility of death."
+source = "Singapore Penal Code 1871, Section 132"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr132-#pr132-"

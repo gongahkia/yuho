@@ -1,0 +1,19 @@
+[statute]
+section_number = "219"
+title = "Public servant in a judicial proceeding making an order, etc., which he knows to be contrary to law"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Public servant in any stage of a judicial proceeding corruptly or maliciously making a report, order, verdict or decision known to be contrary to law."
+source = "Singapore Penal Code 1871, Section 219"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr219-#pr219-"
+disclaimer = "Educational purposes only. Cross-reference with official SSO text."

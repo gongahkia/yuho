@@ -1,0 +1,18 @@
+[statute]
+section_number = "440"
+title = "Mischief committed after preparation made for causing death or hurt"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Mischief committed after preparation made for causing death, hurt, or wrongful restraint, or fear thereof."
+source = "Singapore Penal Code 1871, Section 440"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr440-#pr440-"

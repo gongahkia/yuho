@@ -1,0 +1,44 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr271-#pr271-
+// Singapore Penal Code Section 271 - Disobedience to a quarantine rule
+// Yuho v5 Syntax
+
+struct QuarantineCase {
+    string accused,
+    bool ruleLawfullyMade,
+    bool disobeyed,
+    bool knowingly,
+}
+
+fn is_offence(bool ruleLawful, bool disobeyed, bool knowingly) : bool {
+    match {
+        case TRUE if ruleLawful == FALSE := consequence FALSE;
+        case TRUE if disobeyed == FALSE := consequence FALSE;
+        case TRUE if knowingly == FALSE := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
+
+statute 271 "Disobedience to a quarantine rule" effective 1872-01-01 {
+    definitions {
+        quarantine_rule := "A rule lawfully made and promulgated for putting any vessel into a state of quarantine, or regulating intercourse between infected and other places";
+        knowingly := "With actual knowledge of the rule and of the disobedience";
+    }
+
+    elements {
+        all_of {
+            /// the rule must be lawfully made and promulgated
+            circumstance rule_lawful := "Rule lawfully made and promulgated";
+            /// physical act of disobedience
+            actus_reus disobey := "Disobeying the quarantine rule";
+            /// accused must know of the rule
+            mens_rea knowledge := "Knowing of the rule and its requirements";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 2 years;
+        fine := $0.00 .. $5,000.00;
+    }
+}

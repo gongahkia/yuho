@@ -1,0 +1,48 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr109-#pr109-
+// Singapore Penal Code Section 109 - Punishment of abetment if the act abetted is committed in consequence, and where no express provision is made for its punishment
+// Yuho v5 Syntax
+
+referencing penal_code/s107_abetment_doing_thing
+
+struct AbetmentS109Case {
+    string abettor,
+    bool actAbettedCommittedInConsequence,
+    bool expressProvisionExists,
+}
+
+fn s109_applies(bool actAbettedCommittedInConsequence, bool expressProvisionExists) : bool {
+    match {
+        case TRUE if actAbettedCommittedInConsequence == TRUE && expressProvisionExists == FALSE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 109 "Punishment of abetment if the act abetted is committed in consequence, and where no express provision is made for its punishment" effective 1872-01-01 {
+    definitions {
+        in_consequence := "Per Explanation: committed in consequence of the instigation, in pursuance of the conspiracy, or with the aid which constitutes the abetment";
+        express_provision := "Any specific punishment provision in this Code for the abetment";
+    }
+
+    elements {
+        all_of {
+            actus_reus abets_offence := "Abets any offence under section 107";
+            circumstance in_consequence := "Act abetted is committed in consequence of the abetment";
+            circumstance no_express_provision := "No express provision is made by this Code for the punishment of such abetment";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 99 years;
+        fine := $0.00 .. $1,000,000.00;
+    }
+
+    illustration example_a {
+        "A offers a bribe to B, a public servant, as a reward for showing A some favour in the exercise of Bs official functions. B accepts the bribe. A has abetted the offence defined in section 161."
+    }
+
+    illustration example_b {
+        "A instigates B to give false evidence. B, in consequence of the instigation, commits that offence. A is guilty of abetting that offence, and is liable to the same punishment as B."
+    }
+}

@@ -1,0 +1,37 @@
+// Test file for s105_when_right_private_defence_property_extends
+// Yuho v5 Syntax
+
+referencing penal_code/s105_when_right_private_defence_property_extends
+
+struct PrivateDefenceTestCase {
+    string offenceType,
+    bool reasonableBeliefDanger,
+    bool withinRestrictions,
+}
+
+// robbery, reasonable belief, within restrictions -> extends
+PrivateDefenceTestCase robberyCase := PrivateDefenceTestCase {
+    offenceType := "robbery",
+    reasonableBeliefDanger := TRUE,
+    withinRestrictions := TRUE,
+}
+
+assert extends_to_death(robberyCase.offenceType, robberyCase.reasonableBeliefDanger, robberyCase.withinRestrictions) == TRUE
+
+// theft outside s105 enumerations -> does not extend
+PrivateDefenceTestCase trivialCase := PrivateDefenceTestCase {
+    offenceType := "petty_theft",
+    reasonableBeliefDanger := TRUE,
+    withinRestrictions := TRUE,
+}
+
+assert extends_to_death(trivialCase.offenceType, trivialCase.reasonableBeliefDanger, trivialCase.withinRestrictions) == FALSE
+
+// no reasonable belief -> does not extend
+PrivateDefenceTestCase noBeliefCase := PrivateDefenceTestCase {
+    offenceType := "robbery",
+    reasonableBeliefDanger := FALSE,
+    withinRestrictions := TRUE,
+}
+
+assert extends_to_death(noBeliefCase.offenceType, noBeliefCase.reasonableBeliefDanger, noBeliefCase.withinRestrictions) == FALSE

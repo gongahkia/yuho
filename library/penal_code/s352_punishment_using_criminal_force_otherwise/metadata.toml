@@ -1,0 +1,18 @@
+[statute]
+section_number = "352"
+title = "Punishment for using criminal force otherwise than on grave and sudden provocation"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Punishment for assault or using criminal force other than on grave and sudden provocation."
+source = "Singapore Penal Code 1871, Section 352"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr352-#pr352-"

@@ -1,0 +1,18 @@
+[statute]
+section_number = "154"
+title = "Owner or occupier of land on which an unlawful assembly is held"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Owner, occupier, or interested person in land liable to fine for failing to report and prevent unlawful assemblies or riots on it."
+source = "Singapore Penal Code 1871, Section 154"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr154-#pr154-"

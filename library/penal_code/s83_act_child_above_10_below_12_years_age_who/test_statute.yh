@@ -1,0 +1,19 @@
+// test file for s83 - rebuttable doli incapax
+referencing penal_code/s83_act_child_above_10_below_12_years_age_who
+
+struct ChildMatTest {
+    int age,
+    bool hasSufficientMaturity,
+}
+
+// 11yo without maturity -- defence applies
+ChildMatTest immature11 := ChildMatTest { age := 11, hasSufficientMaturity := FALSE }
+assert child_10_to_12_defence(immature11.age, immature11.hasSufficientMaturity) == TRUE
+
+// 11yo with maturity -- no defence
+ChildMatTest mature11 := ChildMatTest { age := 11, hasSufficientMaturity := TRUE }
+assert child_10_to_12_defence(mature11.age, mature11.hasSufficientMaturity) == FALSE
+
+// 12yo -- out of range
+ChildMatTest age12 := ChildMatTest { age := 12, hasSufficientMaturity := FALSE }
+assert child_10_to_12_defence(age12.age, age12.hasSufficientMaturity) == FALSE

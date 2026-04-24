@@ -1,0 +1,42 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr280-#pr280-
+// Singapore Penal Code Section 280 - Rash navigation of a vessel
+// Yuho v5 Syntax
+
+struct RashNavigationCase { string accused, bool navigated, bool rashOrNegligent, bool endangersLifeOrLikelyHurt, }
+
+fn is_offence(bool navigated, bool rash, bool endanger) : bool {
+    match {
+        case TRUE if navigated == FALSE := consequence FALSE;
+        case TRUE if rash == FALSE := consequence FALSE;
+        case TRUE if endanger == FALSE := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
+
+statute 280 "Rash navigation of a vessel" effective 1872-01-01 {
+    definitions {
+        vessel := "Any ship, boat, or other watercraft";
+    }
+
+    elements {
+        all_of {
+            /// physical act
+            actus_reus navigate := "Navigating a vessel";
+            any_of {
+                /// rashness
+                mens_rea rash := "Acting rashly";
+                /// negligence
+                mens_rea negligent := "Acting negligently";
+            }
+            /// result element
+            circumstance endanger := "Manner endangers human life or is likely to cause hurt or injury to any other person";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 1 year;
+        fine := $0.00 .. $5,000.00;
+    }
+}

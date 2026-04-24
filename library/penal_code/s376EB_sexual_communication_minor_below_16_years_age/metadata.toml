@@ -1,0 +1,18 @@
+[statute]
+section_number = "376EB"
+title = "Sexual communication with minor below 16 years of age"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Sexual communication with a minor below 16 for the purpose of sexual gratification."
+source = "Singapore Penal Code 1871, Section 376EB"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr376EB-#pr376EB-"

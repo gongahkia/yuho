@@ -1,0 +1,18 @@
+[statute]
+section_number = "269"
+title = "Negligent act likely to spread infection of any disease dangerous to life"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Criminalises unlawful or negligent acts done with knowledge or reason to believe them likely to spread infection of any disease dangerous to life."
+source = "Singapore Penal Code 1871, Section 269"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr269-#pr269-"

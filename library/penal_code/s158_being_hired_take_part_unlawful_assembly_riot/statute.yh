@@ -1,0 +1,30 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr158-#pr158-
+// Singapore Penal Code Section 158
+
+statute 158 "Being hired to take part in an unlawful assembly or riot" effective 1872-01-01 {
+    definitions {
+        hiring := "Being engaged or hired, or offering or attempting to be hired or engaged";
+        specified_acts := "The acts specified in section 141 constituting an unlawful assembly";
+        deadly_weapon := "Any deadly weapon or anything which used as a weapon of offence is likely to cause death";
+    }
+
+    elements {
+        all_of {
+            /// basic offence -- hiring to take part
+            actus_reus hired := "Being engaged or hired, or offering or attempting to be hired or engaged, to do or assist in doing any of the acts specified in section 141";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 months .. 2 years;
+        fine := $0.00 .. $10,000.00;
+    }
+
+    illustration example1 {
+        "The last section is subject to the same illustration as section 144."
+    }
+
+    /// If the accused goes armed or offers to go armed with a deadly weapon, imprisonment may extend to 5 years, with fine, or with both.
+}

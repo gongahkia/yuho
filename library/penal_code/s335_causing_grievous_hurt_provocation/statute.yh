@@ -1,0 +1,44 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr335-#pr335-
+// Singapore Penal Code Section 335 -- Causing grievous hurt on provocation
+// Yuho v5 Syntax
+
+struct S335Case {
+    string accused,
+    string victim,
+    bool actusReus,
+    bool mensRea,
+}
+
+fn s335_applies(bool actusReus, bool mensRea) : bool {
+    match {
+        case TRUE if actusReus == TRUE && mensRea == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+/// @amendment [Act 23 of 2021 wef 01/03/2022]
+statute 335 "Causing grievous hurt on provocation" effective 1872-01-01 {
+    definitions {
+        offence_summary := "Voluntarily causing grievous hurt on grave and sudden provocation.";
+    }
+
+    elements {
+        /// mental element required for the offence
+        mens_rea intent := "Intent or knowledge as required by the section";
+        /// physical act constituting the offence
+        actus_reus act := "The prohibited act defined by the section";
+        /// contextual requirement -- victim, circumstances, or result
+        circumstance context := "Statutory circumstances are satisfied";
+    }
+
+    penalty {
+        imprisonment := 0 years .. 6 years;
+        fine := $0.00 .. $10,000.00;
+    }
+
+    illustration example1 {
+        "A commits the conduct described in section 335 against B. A is guilty of the offence under section 335."
+    }
+}

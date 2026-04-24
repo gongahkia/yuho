@@ -1,0 +1,18 @@
+[statute]
+section_number = "111"
+title = "Liability of abettor when one act is abetted and a different act is done"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "When an act is abetted and a different act is done, the abettor is liable for the act done as if he had directly abetted it, provided the different act was a probable consequence of the abetment."
+source = "Singapore Penal Code 1871, Section 111"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr111-#pr111-"

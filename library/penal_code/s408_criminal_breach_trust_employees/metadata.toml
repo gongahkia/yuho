@@ -1,0 +1,18 @@
+[statute]
+section_number = "408"
+title = "Criminal breach of trust by employees"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Criminal breach of trust committed by an employee entrusted with property."
+source = "Singapore Penal Code 1871, Section 408"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr408-#pr408-"

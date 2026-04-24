@@ -1,0 +1,18 @@
+[statute]
+section_number = "174"
+title = "Failure to attend in obedience to order from public servant"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Intentional omission to attend or premature departure by a person legally bound to attend before a competent public servant in obedience to process."
+source = "Singapore Penal Code 1871, Section 174"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr174-#pr174-"

@@ -1,0 +1,22 @@
+// Test file for s474_having_possession_certain_document
+// Yuho v5 Syntax
+
+referencing penal_code/s474_having_possession_certain_document
+
+struct PossessionForgedDocumentCaseTest {
+    bool elementsSatisfied,
+}
+
+PossessionForgedDocumentCaseTest positive := PossessionForgedDocumentCaseTest {
+    elementsSatisfied := TRUE,
+}
+
+assert positive.elementsSatisfied == TRUE
+assert is_liable(positive.elementsSatisfied) == TRUE
+
+PossessionForgedDocumentCaseTest negative := PossessionForgedDocumentCaseTest {
+    elementsSatisfied := FALSE,
+}
+
+assert negative.elementsSatisfied == FALSE
+assert is_liable(negative.elementsSatisfied) == FALSE

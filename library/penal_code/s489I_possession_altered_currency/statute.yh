@@ -1,0 +1,35 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr489I-#pr489I-
+/// @amendment [15/2019]
+// Singapore Penal Code Section 489I - Possession of altered currency
+// Yuho v5 Syntax
+
+struct PossessionAlteredCurrencyCase {
+    string accused,
+    bool elementsSatisfied,
+}
+
+fn is_liable(bool elementsSatisfied) : bool {
+    match {
+        case TRUE if elementsSatisfied == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 489I "Possession of altered currency" effective 2008-02-01 {
+    definitions {
+        altered_currency := "Currency affected by operations under sections 489F or 489G";
+    }
+
+    elements {
+        all_of {
+            actus_reus possesses_altered_currency := "Has in possession any currency known or believed to have been altered under section 489F or 489G";
+            mens_rea intent_use_as_genuine := "Intending to use the currency as genuine or that it may be used as genuine";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 5 years;
+    }
+}

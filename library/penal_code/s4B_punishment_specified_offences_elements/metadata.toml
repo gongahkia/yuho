@@ -1,0 +1,18 @@
+[statute]
+section_number = "4B"
+title = "Punishment of specified offences with elements occurring in Singapore but others occurring outside Singapore"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Deems specified offences to have been committed in Singapore when relevant acts or harm straddle the border."
+source = "Singapore Penal Code 1871, Section 4B"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr4B-#pr4B-"

@@ -1,0 +1,18 @@
+[statute]
+section_number = "11"
+title = "Person"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "The word 'person' includes any company, association, or body of persons, incorporated or not."
+source = "Singapore Penal Code 1871, Section 11"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr11-#pr11-"

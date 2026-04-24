@@ -1,0 +1,18 @@
+[statute]
+section_number = "139"
+title = "Saving"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Saving provision preventing double punishment where a service-discipline law covers an offence corresponding to one in Chapter VII."
+source = "Singapore Penal Code 1871, Section 139"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr139-#pr139-"

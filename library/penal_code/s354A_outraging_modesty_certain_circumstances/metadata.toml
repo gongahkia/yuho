@@ -1,0 +1,18 @@
+[statute]
+section_number = "354A"
+title = "Outraging modesty in certain circumstances"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Whoever, to commit or facilitate a s354 offence, voluntarily causes death, hurt, wrongful restraint or fear thereof, is liable to imprisonment and caning."
+source = "Singapore Penal Code 1871, Section 354A"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr354A-#pr354A-"

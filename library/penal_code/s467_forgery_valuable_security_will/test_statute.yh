@@ -1,0 +1,22 @@
+// Test file for s467_forgery_valuable_security_will
+// Yuho v5 Syntax
+
+referencing penal_code/s467_forgery_valuable_security_will
+
+struct ForgeryValuableSecurityCaseTest {
+    bool elementsSatisfied,
+}
+
+ForgeryValuableSecurityCaseTest positive := ForgeryValuableSecurityCaseTest {
+    elementsSatisfied := TRUE,
+}
+
+assert positive.elementsSatisfied == TRUE
+assert is_liable(positive.elementsSatisfied) == TRUE
+
+ForgeryValuableSecurityCaseTest negative := ForgeryValuableSecurityCaseTest {
+    elementsSatisfied := FALSE,
+}
+
+assert negative.elementsSatisfied == FALSE
+assert is_liable(negative.elementsSatisfied) == FALSE

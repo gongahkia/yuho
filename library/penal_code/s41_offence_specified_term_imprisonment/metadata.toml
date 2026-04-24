@@ -1,0 +1,18 @@
+[statute]
+section_number = "41"
+title = "Offence with specified term of imprisonment"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "An offence punishable with imprisonment for a specified term or upwards includes one where that specified term is the maximum term."
+source = "Singapore Penal Code 1871, Section 41"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr41-#pr41-"

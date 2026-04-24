@@ -1,0 +1,18 @@
+[statute]
+section_number = "19"
+title = "Judge"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "'Judge' covers officially designated judges and persons empowered by law to give definitive judgments in any legal proceeding."
+source = "Singapore Penal Code 1871, Section 19"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr19-#pr19-"

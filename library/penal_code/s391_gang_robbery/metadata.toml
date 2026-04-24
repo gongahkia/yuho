@@ -1,0 +1,18 @@
+[statute]
+section_number = "391"
+title = "Gang-robbery"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "When 5 or more persons conjointly commit or attempt robbery, or the total of such committers and present aiders reaches 5 or more, each is said to commit gang-robbery."
+source = "Singapore Penal Code 1871, Section 391"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr391-#pr391-"

@@ -1,0 +1,54 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr225A-#pr225A-
+// Singapore Penal Code Section 225A - Public servant omitting to apprehend or suffering other persons to escape in cases not already provided for
+// Yuho v5 Syntax
+
+struct S225ACase {
+    string accused,
+    bool isPublicServant,
+    bool legallyBound,
+    bool omitsApprehendOrSuffersEscape,
+    bool intentionally,
+    bool negligently,
+}
+fn s225A_applies(bool isPublicServant, bool legallyBound, bool omitsApprehendOrSuffersEscape) : bool {
+    match {
+        case TRUE if isPublicServant == FALSE := consequence FALSE;
+        case TRUE if legallyBound == FALSE := consequence FALSE;
+        case TRUE if omitsApprehendOrSuffersEscape == FALSE := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
+statute 225A "Public servant omitting to apprehend or suffering other persons to escape in cases not already provided for" effective 1872-01-01 {
+    definitions {
+        public_servant := "Person defined as a public servant under section 21";
+        not_otherwise_provided := "Cases not covered by section 221, 222 or 223 or other law";
+    }
+
+    elements {
+        all_of {
+            circumstance public_servant_status := "Accused is a public servant";
+            circumstance duty := "Legally bound to apprehend or keep in confinement any person in a case not provided for in s221, s222 or s223";
+            any_of {
+                actus_reus omit_apprehend := "Omits to apprehend the person";
+                actus_reus suffer_escape := "Suffers the person to escape from confinement";
+            }
+            any_of {
+                mens_rea intentional := "Acts intentionally";
+                mens_rea negligent := "Acts negligently";
+            }
+        }
+    }
+
+    penalty {
+        imprisonment := 0 years .. 3 years;
+        fine := $0.00 .. $20,000.00;
+    }
+
+    illustration example1 {
+        "A, a public servant bound to apprehend B for a minor offence not covered by s221, intentionally omits to do so. A is punishable under s225A(a) with imprisonment up to 3 years or fine or both."
+    }
+
+    // penalty tiered: (a) intentional: up to 3 years or fine or both; (b) negligent: up to 2 years or fine or both
+}

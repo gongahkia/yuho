@@ -1,0 +1,18 @@
+[statute]
+section_number = "281"
+title = "Exhibition of a false light, mark or buoy"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Criminalises exhibiting a false light, mark or buoy with intent or knowledge that it is likely to mislead any navigator."
+source = "Singapore Penal Code 1871, Section 281"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr281-#pr281-"

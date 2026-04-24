@@ -1,0 +1,18 @@
+[statute]
+section_number = "49"
+title = "Year and month"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "'Year' and 'month' are reckoned according to the Gregorian calendar."
+source = "Singapore Penal Code 1871, Section 49"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr49-#pr49-"

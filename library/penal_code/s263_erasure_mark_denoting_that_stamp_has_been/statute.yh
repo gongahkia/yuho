@@ -1,0 +1,51 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr263-#pr263-
+// Singapore Penal Code Section 263 - Erasure of mark denoting that stamp has been used
+// Yuho v5 Syntax
+
+struct S263Case {
+    string accused,
+    bool erasesMarkOrPossessesOrSells,
+    bool knowsMarkErasedOrStampUsed,
+    bool fraudulentlyOrIntentToCauseLoss,
+}
+fn s263_applies(bool erasesMarkOrPossessesOrSells, bool knowsMarkErasedOrStampUsed, bool fraudulentlyOrIntentToCauseLoss) : bool {
+    match {
+        case TRUE if erasesMarkOrPossessesOrSells == FALSE := consequence FALSE;
+        case TRUE if knowsMarkErasedOrStampUsed == FALSE := consequence FALSE;
+        case TRUE if fraudulentlyOrIntentToCauseLoss == FALSE := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
+statute 263 "Erasure of mark denoting that stamp has been used" effective 1872-01-01 {
+    definitions {
+        government_stamp := "Stamp issued by the Government for the purpose of revenue";
+        mark_of_use := "Any mark put or impressed upon a stamp to denote that it has been used";
+    }
+
+    elements {
+        all_of {
+            any_of {
+                actus_reus erase := "Erases or removes from a Government revenue stamp any mark denoting that it has been used";
+                actus_reus possesses_defaced := "Knowingly has in possession any such stamp from which the mark has been erased or removed";
+                actus_reus sell_used := "Sells or disposes of any such stamp which he knows to have been used";
+            }
+            mens_rea knowledge := "Knows the mark has been erased or the stamp has been used";
+            any_of {
+                mens_rea fraudulent := "Fraudulently";
+                mens_rea intent_loss := "Intent to cause loss to the Government";
+            }
+        }
+    }
+
+    penalty {
+        imprisonment := 0 years .. 3 years;
+        fine := $0.00 .. $30,000.00;
+    }
+
+    illustration example1 {
+        "A removes the cancellation mark from a used revenue stamp intending to defraud the Government. A commits an offence under s263."
+    }
+
+}

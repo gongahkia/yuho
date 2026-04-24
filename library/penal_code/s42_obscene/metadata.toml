@@ -1,0 +1,18 @@
+[statute]
+section_number = "42"
+title = "Obscene"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Defines 'obscene' as matter that, taken as a whole, tends to deprave and corrupt its likely audience."
+source = "Singapore Penal Code 1871, Section 42"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr42-#pr42-"

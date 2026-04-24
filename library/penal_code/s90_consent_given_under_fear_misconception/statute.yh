@@ -1,0 +1,12 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr90-#pr90-
+// Singapore Penal Code Section 90
+
+statute 90 "Consent given under fear or misconception, by person of unsound mind, etc., and by child" effective 1872-01-01 {
+    definitions {
+        fear_or_misconception := "A consent given under fear of injury or under a misconception of fact, where the person doing the act knew or had reason to believe of the fear or misconception, is not valid consent.";
+        incapacity := "A consent given by a person who, from unsoundness of mind, mental incapacity, intoxication, or the influence of any drug or other substance, is unable to understand the nature and consequence of that to which he gives his consent, is not valid consent.";
+        minority := "Unless the contrary appears from the context, a consent given by a person below 12 years of age is not valid consent.";
+    }
+}

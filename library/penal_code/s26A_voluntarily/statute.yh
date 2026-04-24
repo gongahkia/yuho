@@ -1,0 +1,13 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr26A-#pr26A-
+// Singapore Penal Code Section 26A
+// Yuho v5 Syntax
+
+/// @amendment [15/2019]
+
+statute 26A "“Voluntarily”" effective 1872-01-01 {
+    definitions {
+        voluntarily := "A person is said to cause an effect “voluntarily” when he causes it by means whereby he intended to cause it, or by means which, at the time of employing those means, he knew or had reason to believe to be likely to cause it. [15/2019] Illustration A sets fire, by night, to an inhabited house in a large town, for the purpose of facilitating a robbery, and thus causes the death of a person. Here A may not have intended to cause death, and may even be sorry that death has been caused by this act; yet, if he knew that he was likely to cause death, he has caused death voluntarily.";
+    }
+}

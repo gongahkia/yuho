@@ -1,0 +1,44 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr347-#pr347-
+// Singapore Penal Code Section 347 -- Wrongful confinement for the purpose of extorting property or constraining to an illegal act
+// Yuho v5 Syntax
+
+struct S347Case {
+    string accused,
+    string victim,
+    bool actusReus,
+    bool mensRea,
+}
+
+fn s347_applies(bool actusReus, bool mensRea) : bool {
+    match {
+        case TRUE if actusReus == TRUE && mensRea == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+
+statute 347 "Wrongful confinement for the purpose of extorting property or constraining to an illegal act" effective 1872-01-01 {
+    definitions {
+        offence_summary := "Wrongful confinement to extort property or constrain to an illegal act.";
+    }
+
+    elements {
+        /// mental element required for the offence
+        mens_rea intent := "Intent or knowledge as required by the section";
+        /// physical act constituting the offence
+        actus_reus act := "The prohibited act defined by the section";
+        /// contextual requirement -- victim, circumstances, or result
+        circumstance context := "Statutory circumstances are satisfied";
+    }
+
+    penalty {
+        imprisonment := 0 years .. 3 years;
+        fine := $0.00 .. $50,000.00;
+    }
+
+    illustration example1 {
+        "A commits the conduct described in section 347 against B. A is guilty of the offence under section 347."
+    }
+}

@@ -1,0 +1,18 @@
+[statute]
+section_number = "489H"
+title = "Delivery to another of altered currency"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Whoever delivers to any other person as genuine, or as currency of a different description from what it is, or attempts to induce any person to receive as genuine or as a currency of a different description from what it is, any currency in respect of which he knows or has reason to believe that any operation mentioned in section 489F or 489G has been performed, shall be guilty of an offence and shall on conviction be punished with imprisonment..."
+source = "Singapore Penal Code 1871, Section 489H"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr489H-#pr489H-"

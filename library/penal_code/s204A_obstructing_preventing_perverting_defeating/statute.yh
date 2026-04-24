@@ -1,0 +1,45 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr204A-#pr204A-
+// Singapore Penal Code Section 204A - Obstructing, preventing, perverting or defeating course of justice
+// Yuho v5 Syntax
+
+struct S204ACase {
+    string accused,
+    bool tendsToObstructPreventPervertDefeat,
+    bool knowsLikelyToObstruct,
+    bool intendsToObstruct,
+}
+
+fn evaluate_s204A(bool tendsToObstructPreventPervertDefeat, bool knowsLikelyToObstruct, bool intendsToObstruct) : string {
+    match {
+        case TRUE if tendsToObstructPreventPervertDefeat == FALSE := consequence "Not liable - act does not tend to obstruct course of justice";
+        case TRUE if knowsLikelyToObstruct == FALSE && intendsToObstruct == FALSE := consequence "Not liable - no mens rea";
+        case _ := consequence "Liable under s204A";
+    }
+}
+
+statute 204A "Obstructing, preventing, perverting or defeating course of justice" effective 2012-01-01 {
+    definitions {
+        course_of_justice := "The orderly administration of justice, including investigations and judicial proceedings";
+        tendency := "A natural or probable effect";
+    }
+
+    elements {
+        all_of {
+            /// actus reus: act tending to obstruct/prevent/pervert/defeat
+            actus_reus obstructAct := "Does an act that has a tendency to obstruct, prevent, pervert or defeat the course of justice";
+            any_of {
+                /// limb (a): knowledge of likelihood
+                mens_rea knowledge := "Knowing that the act is likely to obstruct, prevent, pervert or defeat the course of justice";
+                /// limb (b): intention
+                mens_rea intention := "Intending to obstruct, prevent, pervert or defeat the course of justice";
+            }
+        }
+    }
+
+    penalty {
+        imprisonment := 0 years .. 7 years;
+        fine := $0.00 .. $50,000.00;
+    }
+}

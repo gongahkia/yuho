@@ -1,0 +1,18 @@
+[statute]
+section_number = "489E"
+title = "Abetting in Singapore counterfeiting of currency out of Singapore"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Whoever, being within Singapore, abets the counterfeiting of any currency out of Singapore, shall be punished in the same manner as if he abetted the counterfeiting of such currency within Singapore. [15/2019]"
+source = "Singapore Penal Code 1871, Section 489E"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr489E-#pr489E-"

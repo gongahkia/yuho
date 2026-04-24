@@ -1,0 +1,18 @@
+[statute]
+section_number = "435"
+title = "Mischief by fire or explosive substance with intent to cause damage"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Mischief by fire or explosive substance with intent to cause damage to property."
+source = "Singapore Penal Code 1871, Section 435"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr435-#pr435-"

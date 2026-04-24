@@ -1,0 +1,12 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377CB-#pr377CB-
+/// @section 377CB
+// Singapore Penal Code Section 377CB
+
+statute 377.19 "Consent given under misconception in sexual offences" effective 1872-01-01 {
+    definitions {
+        misconception_consent := "Consent is vitiated if given under a misconception about the nature or purpose of the act, or identity of the actor";
+    }
+
+}

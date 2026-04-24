@@ -1,0 +1,26 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr376C-#pr376C-
+/// @section 376C
+// Singapore Penal Code Section 376C
+
+statute 376.4 "Commercial sex with minor below 18 years of age outside Singapore" effective 1872-01-01 {
+    definitions {
+        extraterritorial_application := "Offence committed outside Singapore by a citizen or permanent resident";
+    }
+
+    elements {
+        /// commercial sex with a minor outside Singapore
+        actus_reus commercial_sex_abroad := "Being a citizen or permanent resident, outside Singapore obtains for consideration the sexual services of a person below 18 years of age, or communicates for that purpose";
+        /// the other person is below 18 years of age
+        circumstance minor_below_18 := "The other person is below 18 years of age";
+        /// act occurs outside Singapore
+        circumstance outside_singapore := "The act occurs outside Singapore";
+    }
+
+    penalty {
+        imprisonment := 0 years .. 7 years;
+        fine := $0.00 .. $10,000.00;
+    }
+
+}

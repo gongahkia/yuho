@@ -1,0 +1,23 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377-#pr377-
+// Singapore Penal Code Section 377
+
+statute 377 "Sexual penetration, etc., of a corpse" effective 1872-01-01 {
+    definitions {
+        corpse := "The dead body of a human being";
+    }
+
+    elements {
+        /// sexual penetration of a corpse
+        actus_reus sexual_corpse := "Penetrates the vagina, anus or mouth of a dead person, or sexually penetrates with an object";
+        /// the body is that of a dead person
+        circumstance victim_is_corpse := "The person penetrated is dead";
+    }
+
+    penalty {
+        imprisonment := 0 years .. 5 years;
+        fine := $0.00 .. $10,000.00;
+    }
+
+}

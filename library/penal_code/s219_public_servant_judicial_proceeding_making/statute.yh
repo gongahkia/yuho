@@ -1,0 +1,55 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr219-#pr219-
+// Singapore Penal Code Section 219 - Public servant in a judicial proceeding making an order, etc., which he knows to be contrary to law
+// Yuho v5 Syntax
+
+struct S219Case {
+    string accused,
+    bool isPublicServant,
+    bool inJudicialProceeding,
+    bool makesOrder,
+    bool knowsContraryToLaw,
+    bool corruptlyOrIntendingInjury,
+}
+fn s219_applies(bool isPublicServant, bool inJudicialProceeding, bool makesOrder, bool knowsContraryToLaw, bool corruptlyOrIntendingInjury) : bool {
+    match {
+        case TRUE if isPublicServant == FALSE := consequence FALSE;
+        case TRUE if inJudicialProceeding == FALSE := consequence FALSE;
+        case TRUE if makesOrder == FALSE := consequence FALSE;
+        case TRUE if knowsContraryToLaw == FALSE := consequence FALSE;
+        case TRUE if corruptlyOrIntendingInjury == FALSE := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
+/// @amendment [Act 23 of 2021 wef 01/03/2022]
+statute 219 "Public servant in a judicial proceeding making an order, etc., which he knows to be contrary to law" effective 1872-01-01 {
+    definitions {
+        public_servant := "Person defined as a public servant under section 21";
+        judicial_proceeding := "Any stage of a proceeding before a court of justice";
+        contrary_to_law := "An order, report, verdict or decision inconsistent with applicable law";
+    }
+
+    elements {
+        all_of {
+            circumstance public_servant_status := "Accused is a public servant";
+            circumstance proceeding := "Acting in any stage of a judicial proceeding";
+            actus_reus issues_order := "Makes or pronounces any report, order, verdict or decision";
+            mens_rea knowledge := "Knows the report, order, verdict or decision to be contrary to law";
+            any_of {
+                mens_rea corruptly := "Acts corruptly";
+                mens_rea intent_injury := "Intent to cause injury to any person";
+            }
+        }
+    }
+
+    penalty {
+        imprisonment := 0 years .. 7 years;
+        fine := $0.00 .. $50,000.00;
+    }
+
+    illustration example1 {
+        "A, a judicial officer, knowingly and corruptly issues a verdict that has no basis in law against B. A commits an offence under s219."
+    }
+
+}

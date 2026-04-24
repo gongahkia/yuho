@@ -1,0 +1,24 @@
+// Test file for s115
+// Yuho v5 Syntax
+
+referencing penal_code/s115_abetment_offence_punishable_death
+
+struct S115Test {
+    bool offenceCarriesDeathOrLife,
+    bool offenceNotCommittedInConsequence,
+    bool noExpressProvision,
+}
+
+S115Test qualifying := S115Test {
+    offenceCarriesDeathOrLife := TRUE,
+    offenceNotCommittedInConsequence := TRUE,
+    noExpressProvision := TRUE,
+}
+assert s115_applies(qualifying.offenceCarriesDeathOrLife, qualifying.offenceNotCommittedInConsequence, qualifying.noExpressProvision) == TRUE
+
+S115Test lesserOffence := S115Test {
+    offenceCarriesDeathOrLife := FALSE,
+    offenceNotCommittedInConsequence := TRUE,
+    noExpressProvision := TRUE,
+}
+assert s115_applies(lesserOffence.offenceCarriesDeathOrLife, lesserOffence.offenceNotCommittedInConsequence, lesserOffence.noExpressProvision) == FALSE

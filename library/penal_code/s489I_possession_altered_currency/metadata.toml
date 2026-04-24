@@ -1,0 +1,18 @@
+[statute]
+section_number = "489I"
+title = "Possession of altered currency"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Whoever has in his possession any currency with respect to which he knows or has reason to believe that any offence defined in section 489F or 489G has been committed and intending to use such currency as genuine or that it may be used as genuine shall on conviction be punished with imprisonment for a term which may extend to 5 years, and shall also be liable to fine. [15/2019]"
+source = "Singapore Penal Code 1871, Section 489I"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr489I-#pr489I-"

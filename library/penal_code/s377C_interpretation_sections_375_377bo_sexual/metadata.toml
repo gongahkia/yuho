@@ -1,0 +1,18 @@
+[statute]
+section_number = "377C"
+title = "Interpretation of sections 375 to 377BO (sexual offences)"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Interpretation of terms used in sections 375 to 377BO (sexual offences)."
+source = "Singapore Penal Code 1871, Section 377C"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377C-#pr377C-"

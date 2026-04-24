@@ -1,0 +1,32 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr110-#pr110-
+// Singapore Penal Code Section 110 - Punishment of abetment if the person abetted does the act with a different intention from that of the abettor
+// Yuho v5 Syntax
+
+struct S110Case {
+    string abettor,
+    string principal,
+    bool abetsCommission,
+    bool principalDifferentIntentionOrKnowledge,
+}
+
+fn s110_applies(bool abetsCommission, bool principalDifferentIntentionOrKnowledge) : bool {
+    match {
+        case TRUE if abetsCommission == TRUE && principalDifferentIntentionOrKnowledge == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 110 "Punishment of abetment if the person abetted does the act with a different intention from that of the abettor" effective 1872-01-01 {
+    definitions {
+        hypothetical_offence := "The offence which would have been committed if the act had been done with the intention or knowledge of the abettor and with no other";
+    }
+
+    elements {
+        all_of {
+            actus_reus abets_commission := "Abets the commission of an offence";
+            circumstance divergent_mens_rea := "Person abetted does the act with a different intention or knowledge from that of the abettor";
+        }
+    }
+}

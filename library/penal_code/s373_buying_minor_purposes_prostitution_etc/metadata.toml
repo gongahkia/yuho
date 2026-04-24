@@ -1,0 +1,18 @@
+[statute]
+section_number = "373"
+title = "Buying minor for purposes of prostitution, etc."
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Buying, hiring, or otherwise obtaining possession of a minor for prostitution or unlawful purposes."
+source = "Singapore Penal Code 1871, Section 373"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr373-#pr373-"

@@ -1,0 +1,19 @@
+[statute]
+section_number = "196"
+title = "Using evidence known to be false"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Corruptly using, or attempting to use, evidence known to be false or fabricated; punished in the same manner as giving or fabricating false evidence."
+source = "Singapore Penal Code 1871, Section 196"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr196-#pr196-"
+disclaimer = "Educational purposes only. Cross-reference with official SSO text."

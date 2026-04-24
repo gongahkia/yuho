@@ -1,0 +1,37 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr123-#pr123-
+// Singapore Penal Code Section 123 - Concealing with intent to facilitate a design to wage war
+// Yuho v5 Syntax
+
+struct S123Case {
+    string accused,
+    bool concealsDesignToWageWar,
+    bool intendsToFacilitateOrKnowsConcealmentWillFacilitate,
+}
+
+fn s123_applies(bool concealsDesignToWageWar, bool intendsToFacilitateOrKnowsConcealmentWillFacilitate) : bool {
+    match {
+        case TRUE if concealsDesignToWageWar == TRUE && intendsToFacilitateOrKnowsConcealmentWillFacilitate == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 123 "Concealing with intent to facilitate a design to wage war" effective 1872-01-01 {
+    definitions {
+        design_to_wage_war := "A design to wage war against the Government";
+        concealment := "Concealing the existence of the design by any act or illegal omission";
+    }
+
+    elements {
+        all_of {
+            actus_reus conceals_design := "Conceals, by any act or illegal omission, the existence of a design to wage war against the Government";
+            mens_rea intent_or_knowledge := "Intending to facilitate, or knowing concealment will likely facilitate, the waging of such war";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 15 years;
+        fine := $0.00 .. $1,000,000.00;
+    }
+}

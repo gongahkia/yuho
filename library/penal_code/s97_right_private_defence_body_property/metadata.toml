@@ -1,0 +1,18 @@
+[statute]
+section_number = "97"
+title = "Right of private defence of the body and of property"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Every person has a right, subject to sections 98 and 106A, to defend their own or another's body against offences affecting the body and property against theft, robbery, mischief or criminal trespass."
+source = "Singapore Penal Code 1871, Section 97"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr97-#pr97-"

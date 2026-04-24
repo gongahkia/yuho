@@ -1,0 +1,18 @@
+[statute]
+section_number = "184"
+title = "Obstructing sale of property offered for sale by authority of public servant"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Intentionally obstructing a sale of property offered for sale by the lawful authority of a public servant."
+source = "Singapore Penal Code 1871, Section 184"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr184-#pr184-"

@@ -1,0 +1,29 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr149-#pr149-
+// Singapore Penal Code Section 149 - Every member of an unlawful assembly to be deemed guilty of any offence committed in prosecution of common object
+// Shape: constructive liability rule (extends liability of members for offences in prosecution of common object)
+
+statute 149 "Every member of an unlawful assembly to be deemed guilty of any offence committed in prosecution of common object" effective 1872-01-01 {
+    definitions {
+        unlawful_assembly := "As defined under section 141";
+        common_object := "The shared object of the unlawful assembly";
+        constructive_liability := "Imputation of guilt to every member at the time of the offence";
+    }
+
+    elements {
+        all_of {
+            /// circumstance - an offence is committed by a member
+            circumstance offence_by_member := "An offence is committed by any member of an unlawful assembly";
+            // linkage to the common object OR knowledge of likelihood
+            any_of {
+                circumstance in_prosecution := "The offence is committed in prosecution of the common object of that assembly";
+                circumstance known_likely := "The offence is such as the members of that assembly knew to be likely to be committed in prosecution of that object";
+            }
+            /// circumstance - offender was a member at the time of the offence
+            circumstance contemporaneous_member := "The person was a member of the same assembly at the time of the committing of that offence";
+        }
+    }
+
+    // punishment is whatever applies to the offence deemed to have been committed
+}

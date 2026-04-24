@@ -1,0 +1,19 @@
+[statute]
+section_number = "211"
+title = "False charge of offence made with intent to injure"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Instituting a criminal proceeding or falsely charging another with an offence, with intent to cause injury and knowing there is no just or lawful ground; aggravated where the charged offence is death-punishable or carries 7+ years."
+source = "Singapore Penal Code 1871, Section 211"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr211-#pr211-"
+disclaimer = "Educational purposes only. Cross-reference with official SSO text."

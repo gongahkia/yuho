@@ -1,0 +1,18 @@
+[statute]
+section_number = "377BF"
+title = "Sexual exposure"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Sexual exposure -- intentionally exposing genitals to cause humiliation, alarm or distress."
+source = "Singapore Penal Code 1871, Section 377BF"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BF-#pr377BF-"

@@ -1,0 +1,40 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr420A-#pr420A-
+// Singapore Penal Code Section 420A - Obtaining services dishonestly or fraudulently
+
+/// @amendment [15/2019]
+
+statute 420A "Obtaining services dishonestly or fraudulently" effective 2020-01-01 {
+    definitions {
+        services := "Services made available on the basis that payment is or will be made";
+        dishonestly := "As defined in section 24";
+        fraudulently := "As defined in section 25";
+    }
+
+    elements {
+        all_of {
+            /// the actus reus -- obtaining services
+            actus_reus obtain_services := "Obtains services for himself or another person";
+            /// services are paid-for services
+            circumstance paid_services := "Services are made available on the basis that payment has been, is being or will be made";
+            /// payment is not made in full (or at all)
+            circumstance no_full_payment := "Services obtained without any or full payment";
+            any_of {
+                /// dishonest state of mind
+                mens_rea dishonest := "Obtains services dishonestly";
+                /// fraudulent state of mind
+                mens_rea fraudulent := "Obtains services fraudulently";
+            }
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 10 years;
+        fine := $0.00 .. $50,000.00;
+    }
+
+    illustration example1 {
+        "A obtains services in the form of air transportation on an airline from Singapore to an overseas destination. A has obtained services within the meaning of this section even though the services also involve food and beverages."
+    }
+}

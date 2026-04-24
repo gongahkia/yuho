@@ -1,0 +1,16 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr464-#pr464-
+/// @amendment [15/2019]
+// Singapore Penal Code Section 464 - Making a false document or false electronic record
+/// interpretation section, defines terms used in related offences
+
+statute 464 "Making a false document or false electronic record" effective 1872-01-01 {
+    definitions {
+        false_document := "A document made dishonestly or fraudulently by affixing, altering or causing signature";
+        electronic_signature := "As defined in the Electronic Transactions Act 2010";
+        making_false_document_a := "Dishonestly or fraudulently makes, signs, seals, executes or affixes electronic signature to a document";
+        making_false_document_b := "Without lawful authority alters a document or electronic record in any material part after execution";
+        making_false_document_c := "Dishonestly or fraudulently causes another to sign knowing the person cannot know the contents";
+    }
+}

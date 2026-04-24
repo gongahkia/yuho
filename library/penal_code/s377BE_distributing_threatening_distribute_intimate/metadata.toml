@@ -1,0 +1,18 @@
+[statute]
+section_number = "377BE"
+title = "Distributing or threatening to distribute intimate image or recording"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Distributing or threatening to distribute an intimate image or recording without consent."
+source = "Singapore Penal Code 1871, Section 377BE"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BE-#pr377BE-"

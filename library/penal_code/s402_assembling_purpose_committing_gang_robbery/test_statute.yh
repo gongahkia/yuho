@@ -1,0 +1,23 @@
+// Test file for s402_assembling_purpose_committing_gang_robbery
+// Yuho v5 Syntax
+
+referencing penal_code/s402_assembling_purpose_committing_gang_robbery
+
+struct S402TestCase {
+    int totalAssembled,
+    bool purposeGangRobbery,
+}
+
+S402TestCase fiveArmed := S402TestCase {
+    totalAssembled := 5,
+    purposeGangRobbery := TRUE,
+}
+
+assert s402_applies(fiveArmed.totalAssembled, fiveArmed.purposeGangRobbery) == TRUE
+
+S402TestCase threeOnly := S402TestCase {
+    totalAssembled := 3,
+    purposeGangRobbery := TRUE,
+}
+
+assert s402_applies(threeOnly.totalAssembled, threeOnly.purposeGangRobbery) == FALSE

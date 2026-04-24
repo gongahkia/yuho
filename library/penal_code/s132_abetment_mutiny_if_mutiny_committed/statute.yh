@@ -1,0 +1,30 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr132-#pr132-
+// Singapore Penal Code Section 132 - Abetment of mutiny, if mutiny is committed in consequence thereof
+
+/// @amendment [15/2019]
+statute 132 "Abetment of mutiny, if mutiny is committed in consequence thereof" effective 1872-01-01 {
+    definitions {
+        officer := "An officer in the Singapore Armed Forces or any visiting forces lawfully present in Singapore";
+        serviceman := "Any serviceman in the Singapore Armed Forces or any visiting forces lawfully present in Singapore";
+        mutiny := "A collective refusal of obedience by members of the armed forces";
+        consequence := "Mutiny committed in consequence of the abetment";
+    }
+
+    elements {
+        all_of {
+            /// abetment of mutiny
+            actus_reus abet_mutiny := "Abetting the committing of mutiny by an officer or any serviceman in the Singapore Armed Forces or any visiting forces lawfully present in Singapore";
+            /// consequential condition - mutiny was in fact committed
+            circumstance mutiny_committed := "Mutiny is committed in consequence of that abetment";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 years .. 99 years;
+        fine := $0.00 .. $50,000.00;
+        death := TRUE;
+        supplementary := "Death or imprisonment for life, or imprisonment for a term which may extend to 10 years; if not sentenced to death or imprisonment for life, also liable to fine";
+    }
+}

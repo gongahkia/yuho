@@ -1,0 +1,38 @@
+// Test file for s188_disobedience_order_duly_promulgated_public
+// Yuho v5 Syntax
+
+referencing penal_code/s188_disobedience_order_duly_promulgated_public
+
+struct S188TestCase {
+    bool knowledgeOfOrder,
+    bool disobeys,
+    bool causesObstructionAnnoyanceInjury,
+    bool endangersHumanLife,
+}
+
+S188TestCase riotRisk := S188TestCase {
+    knowledgeOfOrder := TRUE,
+    disobeys := TRUE,
+    causesObstructionAnnoyanceInjury := TRUE,
+    endangersHumanLife := TRUE,
+}
+
+assert evaluate_s188(riotRisk.knowledgeOfOrder, riotRisk.disobeys, riotRisk.causesObstructionAnnoyanceInjury, riotRisk.endangersHumanLife) == "Liable under s188 - aggravated (danger to life)"
+
+S188TestCase simpleDisobedience := S188TestCase {
+    knowledgeOfOrder := TRUE,
+    disobeys := TRUE,
+    causesObstructionAnnoyanceInjury := TRUE,
+    endangersHumanLife := FALSE,
+}
+
+assert evaluate_s188(simpleDisobedience.knowledgeOfOrder, simpleDisobedience.disobeys, simpleDisobedience.causesObstructionAnnoyanceInjury, simpleDisobedience.endangersHumanLife) == "Liable under s188 - simple disobedience"
+
+S188TestCase noKnowledge := S188TestCase {
+    knowledgeOfOrder := FALSE,
+    disobeys := TRUE,
+    causesObstructionAnnoyanceInjury := TRUE,
+    endangersHumanLife := FALSE,
+}
+
+assert evaluate_s188(noKnowledge.knowledgeOfOrder, noKnowledge.disobeys, noKnowledge.causesObstructionAnnoyanceInjury, noKnowledge.endangersHumanLife) == "Not liable - no knowledge of order"

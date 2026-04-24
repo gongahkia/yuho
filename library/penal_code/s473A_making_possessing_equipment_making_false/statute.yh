@@ -1,0 +1,35 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr473A-#pr473A-
+// Singapore Penal Code Section 473A - Making or possessing equipment for making a false instrument
+// Yuho v5 Syntax
+
+struct EquipmentFalseInstrumentCase {
+    string accused,
+    bool elementsSatisfied,
+}
+
+fn is_liable(bool elementsSatisfied) : bool {
+    match {
+        case TRUE if elementsSatisfied == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 473A "Making or possessing equipment for making a false instrument" effective 2008-02-01 {
+    definitions {
+        false_instrument := "An instrument made for fraudulent use";
+    }
+
+    elements {
+        all_of {
+            actus_reus makes_or_possesses_equipment := "Makes or has in custody or control a machine, implement, paper or material";
+            circumstance designed_for_false_instrument := "The item is specifically designed or adapted for making any false instrument";
+            mens_rea knowledge := "To the person's knowledge";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 5 years;
+    }
+}

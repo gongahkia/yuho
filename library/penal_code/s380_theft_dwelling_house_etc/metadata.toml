@@ -1,0 +1,18 @@
+[statute]
+section_number = "380"
+title = "Theft in dwelling house, etc."
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Theft committed in a building, tent or vessel used as a human dwelling or for custody of property is punishable with up to 7 years imprisonment and fine."
+source = "Singapore Penal Code 1871, Section 380"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr380-#pr380-"

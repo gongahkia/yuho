@@ -1,0 +1,18 @@
+[statute]
+section_number = "171"
+title = "Wearing garb or carrying token used by public servant, with fraudulent intent"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Wearing a garb or carrying a token resembling that of a class of public servants with intent or knowledge of likely belief that the wearer belongs to that class."
+source = "Singapore Penal Code 1871, Section 171"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr171-#pr171-"

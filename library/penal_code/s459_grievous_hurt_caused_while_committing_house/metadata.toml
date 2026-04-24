@@ -1,0 +1,18 @@
+[statute]
+section_number = "459"
+title = "Grievous hurt caused while committing house-breaking"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Causing grievous hurt or attempting to cause death or grievous hurt while committing house-breaking."
+source = "Singapore Penal Code 1871, Section 459"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr459-#pr459-"

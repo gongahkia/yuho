@@ -1,0 +1,18 @@
+[statute]
+section_number = "3"
+title = "Punishment of offences committed beyond, but which by law may be tried within Singapore"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Persons triable in Singapore for acts outside its limits are dealt with under this Code as if the act were committed within Singapore."
+source = "Singapore Penal Code 1871, Section 3"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr3-#pr3-"

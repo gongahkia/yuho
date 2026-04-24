@@ -1,0 +1,21 @@
+// Test file for s121A
+// Yuho v5 Syntax
+
+referencing penal_code/s121A_offences_against_president_s_person
+
+struct S121ATest {
+    bool plansDeathOrHurt,
+    bool plansUnlawfulImprisonmentOrRestraint,
+}
+
+S121ATest plansHurt := S121ATest {
+    plansDeathOrHurt := TRUE,
+    plansUnlawfulImprisonmentOrRestraint := FALSE,
+}
+assert s121A_applies(plansHurt.plansDeathOrHurt, plansHurt.plansUnlawfulImprisonmentOrRestraint) == TRUE
+
+S121ATest noPlan := S121ATest {
+    plansDeathOrHurt := FALSE,
+    plansUnlawfulImprisonmentOrRestraint := FALSE,
+}
+assert s121A_applies(noPlan.plansDeathOrHurt, noPlan.plansUnlawfulImprisonmentOrRestraint) == FALSE

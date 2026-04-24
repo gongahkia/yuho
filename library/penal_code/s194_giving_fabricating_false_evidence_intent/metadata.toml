@@ -1,0 +1,19 @@
+[statute]
+section_number = "194"
+title = "Giving or fabricating false evidence with intent to procure conviction of a capital offence"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Aggravated false-evidence offence where the accused intends or knows it likely that the false evidence will cause another to be convicted of a capital offence; death penalty available if an innocent person is convicted and executed."
+source = "Singapore Penal Code 1871, Section 194"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr194-#pr194-"
+disclaimer = "Educational purposes only. Cross-reference with official SSO text."

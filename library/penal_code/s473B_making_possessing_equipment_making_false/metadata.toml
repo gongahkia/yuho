@@ -1,0 +1,18 @@
+[statute]
+section_number = "473B"
+title = "Making or possessing equipment for making a false instrument with intent to induce prejudice"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Any person ( A ) who — ( a ) makes or has in his custody or under his control a machine or implement, or paper or other material, which is or has been specifically designed or adapted for the making of any instrument; and ( b ) intends that — shall be punished with imprisonment for a term which may extend to 10 years, or with fine, or with both."
+source = "Singapore Penal Code 1871, Section 473B"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr473B-#pr473B-"

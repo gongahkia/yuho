@@ -1,0 +1,40 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr260-#pr260-
+// Singapore Penal Code Section 260 - Using as genuine a Government stamp known to be counterfeit
+// Yuho v5 Syntax
+
+struct S260Case {
+    string accused,
+    bool usesStampAsGenuine,
+    bool knowsCounterfeit,
+}
+fn s260_applies(bool usesStampAsGenuine, bool knowsCounterfeit) : bool {
+    match {
+        case TRUE if usesStampAsGenuine == FALSE := consequence FALSE;
+        case TRUE if knowsCounterfeit == FALSE := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
+statute 260 "Using as genuine a Government stamp known to be counterfeit" effective 1872-01-01 {
+    definitions {
+        counterfeit_stamp := "A stamp counterfeiting a Government revenue stamp";
+    }
+
+    elements {
+        all_of {
+            actus_reus uses := "Uses as genuine any stamp which is a counterfeit of a Government stamp issued for revenue";
+            mens_rea knowledge := "Knowing it to be a counterfeit";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 years .. 7 years;
+        fine := $0.00 .. $50,000.00;
+    }
+
+    illustration example1 {
+        "A affixes a stamp he knows to be a counterfeit to a document as though it were genuine. A commits an offence under s260."
+    }
+
+}

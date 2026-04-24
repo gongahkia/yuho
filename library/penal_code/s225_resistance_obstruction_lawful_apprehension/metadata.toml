@@ -1,0 +1,19 @@
+[statute]
+section_number = "225"
+title = "Resistance or obstruction to the lawful apprehension of another person"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Intentionally offering resistance or illegal obstruction to the lawful apprehension of another person, or rescuing or attempting to rescue another from lawful custody; penalty tiered by underlying offence."
+source = "Singapore Penal Code 1871, Section 225"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr225-#pr225-"
+disclaimer = "Educational purposes only. Cross-reference with official SSO text."

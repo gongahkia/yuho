@@ -1,0 +1,11 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr11-#pr11-
+// Singapore Penal Code Section 11 - "Person"
+// Shape: interpretation / definition
+
+statute 11 "Person" effective 1872-01-01 {
+    definitions {
+        person := "Any company or association or body of persons, whether incorporated or not";
+    }
+}

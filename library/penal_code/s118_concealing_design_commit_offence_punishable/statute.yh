@@ -1,0 +1,48 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr118-#pr118-
+// Singapore Penal Code Section 118 - Concealing a design to commit an offence punishable with death or imprisonment for life
+// Yuho v5 Syntax
+
+struct S118Case {
+    string concealer,
+    bool intendsOrKnowsLikelyToFacilitate,
+    bool offencePunishableByDeathOrLife,
+    bool concealsOrMakesFalseRepresentation,
+    bool offenceIsCommitted,
+}
+
+fn s118_applies(bool intendsOrKnowsLikelyToFacilitate, bool offencePunishableByDeathOrLife, bool concealsOrMakesFalseRepresentation) : bool {
+    match {
+        case TRUE if intendsOrKnowsLikelyToFacilitate == TRUE && offencePunishableByDeathOrLife == TRUE && concealsOrMakesFalseRepresentation == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 118 "Concealing a design to commit an offence punishable with death or imprisonment for life" effective 1872-01-01 {
+    definitions {
+        intent_to_facilitate := "Intending to facilitate, or knowing that concealment will likely facilitate, commission of the offence";
+        voluntary_concealment := "Voluntarily concealing by any act or illegal omission the existence of a design to commit the offence";
+        false_representation := "Making any representation known to be false respecting the design to commit the offence";
+    }
+
+    elements {
+        all_of {
+            mens_rea intent_or_knowledge := "Intending to facilitate, or knowing it likely to facilitate, commission of the offence";
+            circumstance qualifying_offence := "Offence concealed is punishable with death or imprisonment for life";
+            any_of {
+                actus_reus conceals_design := "Voluntarily conceals, by any act or illegal omission, existence of a design to commit the offence";
+                actus_reus makes_false_rep := "Makes any representation known to be false respecting such design";
+            }
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 7 years;
+        fine := $0.00 .. $1,000,000.00;
+    }
+
+    illustration example1 {
+        "A, knowing that a gang-robbery is about to be committed at B, falsely informs the police that a gang-robbery is about to be committed at C, a place in an opposite direction, and thereby misleads the police with intent to facilitate the commission of the offence. A is guilty under this section."
+    }
+}

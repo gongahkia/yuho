@@ -1,0 +1,18 @@
+[statute]
+section_number = "29B"
+title = "“Electronic record”"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Defines 'electronic record' by reference to the Electronic Transactions Act 2010."
+source = "Singapore Penal Code 1871, Section 29B"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr29B-#pr29B-"

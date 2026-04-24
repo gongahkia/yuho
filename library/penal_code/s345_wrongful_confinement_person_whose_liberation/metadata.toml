@@ -1,0 +1,18 @@
+[statute]
+section_number = "345"
+title = "Wrongful confinement of person for whose liberation a writ has been issued"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Keeping a person in wrongful confinement knowing a writ for liberation has been issued."
+source = "Singapore Penal Code 1871, Section 345"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr345-#pr345-"

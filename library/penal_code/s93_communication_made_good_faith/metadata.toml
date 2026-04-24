@@ -1,0 +1,18 @@
+[statute]
+section_number = "93"
+title = "Communication made in good faith"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "No communication made in good faith is an offence by reason of harm to the recipient if it is made for the recipient's benefit."
+source = "Singapore Penal Code 1871, Section 93"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr93-#pr93-"

@@ -1,0 +1,23 @@
+// Test file for s318
+// Yuho v5 Syntax
+
+referencing penal_code/s318_concealment_birth_secret_disposal_dead_body
+
+struct S318CaseTest {
+    bool actusReus,
+    bool mensRea,
+}
+
+S318CaseTest satisfied := S318CaseTest {
+    actusReus := TRUE,
+    mensRea := TRUE,
+}
+
+assert s318_applies(satisfied.actusReus, satisfied.mensRea) == TRUE
+
+S318CaseTest missingMens := S318CaseTest {
+    actusReus := TRUE,
+    mensRea := FALSE,
+}
+
+assert s318_applies(missingMens.actusReus, missingMens.mensRea) == FALSE

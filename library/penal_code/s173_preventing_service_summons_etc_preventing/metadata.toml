@@ -1,0 +1,18 @@
+[statute]
+section_number = "173"
+title = "Preventing service of summons, etc., or preventing publication thereof"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Intentionally preventing service, lawful affixing, or lawful publication of a summons, notice, order, or proclamation from a competent public servant."
+source = "Singapore Penal Code 1871, Section 173"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr173-#pr173-"

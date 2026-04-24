@@ -1,0 +1,18 @@
+[statute]
+section_number = "83"
+title = "Act of a child of or above 10 and below 12 years of age, who has not sufficient maturity of understanding"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Rebuttable defence: a child aged 10 or above but below 12 is not guilty if lacking sufficient maturity of understanding to judge the nature and consequence of the conduct on that occasion."
+source = "Singapore Penal Code 1871, Section 83"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr83-#pr83-"

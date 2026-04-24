@@ -1,0 +1,12 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr49-#pr49-
+// Singapore Penal Code Section 49 - "Year" and "month"
+// Interpretation provision fixing the calendar used
+
+statute 49 "Year and month" effective 1872-01-01 {
+    definitions {
+        year := "Reckoned according to the Gregorian calendar";
+        month := "Reckoned according to the Gregorian calendar";
+    }
+}

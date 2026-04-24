@@ -1,0 +1,18 @@
+[statute]
+section_number = "362"
+title = "Abduction"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Abduction by forceful compulsion or deceitful inducement to go from any place."
+source = "Singapore Penal Code 1871, Section 362"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr362-#pr362-"

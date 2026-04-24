@@ -1,0 +1,18 @@
+[statute]
+section_number = "141"
+title = "Unlawful assembly"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Defines an unlawful assembly as 5 or more persons whose common object falls within five prohibited categories."
+source = "Singapore Penal Code 1871, Section 141"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr141-#pr141-"

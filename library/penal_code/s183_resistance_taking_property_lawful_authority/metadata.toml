@@ -1,0 +1,18 @@
+[statute]
+section_number = "183"
+title = "Resistance to taking of property by lawful authority of public servant"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Offering resistance to the taking of property under the lawful authority of a public servant, knowing or having reason to believe his status."
+source = "Singapore Penal Code 1871, Section 183"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr183-#pr183-"

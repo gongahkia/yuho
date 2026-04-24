@@ -1,0 +1,20 @@
+// Test file for s350
+// Yuho v5 Syntax
+
+referencing penal_code/s350_criminal_force
+
+struct S350CaseTest {
+    bool criteriaMet,
+}
+
+S350CaseTest matches := S350CaseTest {
+    criteriaMet := TRUE,
+}
+
+assert s350_matches(matches.criteriaMet) == TRUE
+
+S350CaseTest nomatch := S350CaseTest {
+    criteriaMet := FALSE,
+}
+
+assert s350_matches(nomatch.criteriaMet) == FALSE

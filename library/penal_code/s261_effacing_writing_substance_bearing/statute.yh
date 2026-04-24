@@ -1,0 +1,49 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr261-#pr261-
+// Singapore Penal Code Section 261 - Effacing any writing from a substance bearing a Government stamp, or removing from a document a stamp used for it, with intent to cause loss to Government
+// Yuho v5 Syntax
+
+struct S261Case {
+    string accused,
+    bool effacesOrRemoves,
+    bool fraudulentlyOrIntentToCauseLoss,
+    bool governmentRevenueStamp,
+}
+fn s261_applies(bool effacesOrRemoves, bool fraudulentlyOrIntentToCauseLoss, bool governmentRevenueStamp) : bool {
+    match {
+        case TRUE if effacesOrRemoves == FALSE := consequence FALSE;
+        case TRUE if governmentRevenueStamp == FALSE := consequence FALSE;
+        case TRUE if fraudulentlyOrIntentToCauseLoss == FALSE := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
+statute 261 "Effacing any writing from a substance bearing a Government stamp, or removing from a document a stamp used for it, with intent to cause loss to Government" effective 1872-01-01 {
+    definitions {
+        government_stamp := "Stamp issued by the Government for the purpose of revenue";
+        reuse := "Using the stamp for a different writing or document";
+    }
+
+    elements {
+        all_of {
+            any_of {
+                actus_reus remove_or_efface := "Removes or effaces from any substance bearing a Government revenue stamp any writing or document for which the stamp has been used";
+                actus_reus remove_stamp := "Removes from any writing or document a stamp which has been used for that writing or document, in order that the stamp may be used for a different writing or document";
+            }
+            any_of {
+                mens_rea fraudulent := "Fraudulently";
+                mens_rea intent_loss := "Intent to cause loss to the Government";
+            }
+        }
+    }
+
+    penalty {
+        imprisonment := 0 years .. 3 years;
+        fine := $0.00 .. $30,000.00;
+    }
+
+    illustration example1 {
+        "A peels a used revenue stamp off a document intending to reuse it, to defraud the Government. A commits an offence under s261."
+    }
+
+}

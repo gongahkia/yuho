@@ -1,0 +1,27 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr176-#pr176-
+// Singapore Penal Code Section 176
+
+/// @amendment [15/2019]
+statute 176 "Omission to give notice or information to public servant by person legally bound to give such notice or information" effective 1872-01-01 {
+    definitions {
+        notice_or_information := "Any notice or information on a subject which the accused is legally bound to give or furnish to a public servant as such";
+    }
+
+    elements {
+        all_of {
+            /// legal obligation to give notice or information
+            circumstance legal_duty := "Legally bound to give a notice or furnish information on a subject to a public servant as such";
+            /// intentional omission in required manner or time
+            actus_reus omission := "Intentionally omitting to give such notice or furnish such information in the manner and at the time required by law";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 months .. 1 months;
+        fine := $0.00 .. $10,000.00;
+    }
+
+    /// For individuals -- imprisonment up to 1 month, or fine up to $1,500, or both. For any other case -- fine up to $10,000. Enhanced penalty where information concerns commission of an offence, its prevention, or apprehension of an offender.
+}

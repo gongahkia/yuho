@@ -1,0 +1,18 @@
+[statute]
+section_number = "313"
+title = "Causing miscarriage without woman's consent"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Committing miscarriage as in s312 without the woman's consent."
+source = "Singapore Penal Code 1871, Section 313"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr313-#pr313-"

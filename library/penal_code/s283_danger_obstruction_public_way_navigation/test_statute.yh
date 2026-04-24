@@ -1,0 +1,10 @@
+// Test file for s283
+// Yuho v5 Syntax
+
+referencing penal_code/s283_danger_obstruction_public_way_navigation
+
+struct DangerObstructionTestCase { bool act, bool caused, bool publicWay, }
+DangerObstructionTestCase good := DangerObstructionTestCase { act := TRUE, caused := TRUE, publicWay := TRUE, }
+assert is_offence(good.act, good.caused, good.publicWay) == TRUE
+DangerObstructionTestCase privateLand := DangerObstructionTestCase { act := TRUE, caused := TRUE, publicWay := FALSE, }
+assert is_offence(privateLand.act, privateLand.caused, privateLand.publicWay) == FALSE

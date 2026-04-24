@@ -1,0 +1,18 @@
+[statute]
+section_number = "376F"
+title = "Procurement of sexual activity with person with mental disability"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Procuring sexual activity with a person with mental disability by inducement, threat or deception."
+source = "Singapore Penal Code 1871, Section 376F"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr376F-#pr376F-"

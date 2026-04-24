@@ -1,0 +1,23 @@
+// Test file for s326
+// Yuho v5 Syntax
+
+referencing penal_code/s326_voluntarily_causing_grievous_hurt_dangerous
+
+struct S326CaseTest {
+    bool actusReus,
+    bool mensRea,
+}
+
+S326CaseTest satisfied := S326CaseTest {
+    actusReus := TRUE,
+    mensRea := TRUE,
+}
+
+assert s326_applies(satisfied.actusReus, satisfied.mensRea) == TRUE
+
+S326CaseTest missingMens := S326CaseTest {
+    actusReus := TRUE,
+    mensRea := FALSE,
+}
+
+assert s326_applies(missingMens.actusReus, missingMens.mensRea) == FALSE

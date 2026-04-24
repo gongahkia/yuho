@@ -1,0 +1,18 @@
+[statute]
+section_number = "346"
+title = "Wrongful confinement in secret"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Wrongful confinement with intent that confinement or place may not be known."
+source = "Singapore Penal Code 1871, Section 346"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr346-#pr346-"

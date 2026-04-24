@@ -1,0 +1,23 @@
+// Test file for s345
+// Yuho v5 Syntax
+
+referencing penal_code/s345_wrongful_confinement_person_whose_liberation
+
+struct S345CaseTest {
+    bool actusReus,
+    bool mensRea,
+}
+
+S345CaseTest satisfied := S345CaseTest {
+    actusReus := TRUE,
+    mensRea := TRUE,
+}
+
+assert s345_applies(satisfied.actusReus, satisfied.mensRea) == TRUE
+
+S345CaseTest missingMens := S345CaseTest {
+    actusReus := TRUE,
+    mensRea := FALSE,
+}
+
+assert s345_applies(missingMens.actusReus, missingMens.mensRea) == FALSE

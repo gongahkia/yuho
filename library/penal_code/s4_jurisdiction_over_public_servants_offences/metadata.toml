@@ -1,0 +1,18 @@
+[statute]
+section_number = "4"
+title = "Jurisdiction over public servants for offences committed outside Singapore"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Singaporean citizen or PR public servants are deemed to commit acts in Singapore when acting in the course of employment abroad."
+source = "Singapore Penal Code 1871, Section 4"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr4-#pr4-"

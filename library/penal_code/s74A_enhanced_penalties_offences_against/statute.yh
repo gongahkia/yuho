@@ -1,0 +1,16 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr74A-#pr74A-
+// Singapore Penal Code Section 74A
+
+/// @amendment [27/2018; 15/2019]
+/// @amendment [Act 23 of 2021 wef 01/03/2022]
+/// @amendment [S 759/2022]
+/// @amendment [15/2019]
+
+statute 74A "Enhanced penalties for offences against vulnerable persons" effective 1872-01-01 {
+    definitions {
+        rule := "Where a person is convicted of a specified offence against a vulnerable person, the court may sentence up to twice the maximum punishment otherwise imposable if the offender knew or ought reasonably to have known of the vulnerability.";
+        rebuttal := "Does not apply where offender proves the victim was capable of protecting themselves in the same manner as an ordinary person.";
+    }
+}

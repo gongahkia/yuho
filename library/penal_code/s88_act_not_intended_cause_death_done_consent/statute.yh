@@ -1,0 +1,14 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr88-#pr88-
+// Singapore Penal Code Section 88
+
+statute 88 "Act not intended to cause death done by consent in good faith for the benefit of a person" effective 1872-01-01 {
+    definitions {
+        rule := "Nothing, which is not intended to cause death, is an offence by reason of any harm which it may cause, or be intended or known likely to cause, to any person for whose benefit it is done in good faith and who has consented to suffer that harm or take the risk of that harm.";
+    }
+
+    illustration example1 {
+        "A , a surgeon, knowing that a particular operation is likely to cause the death of Z , who suffers under a painful complaint, but not intending to cause Z ’s death, and intending, in good faith, Z ’s benefit, performs that operation on Z , with Z ’s consent. A has committed no offence."
+    }
+}

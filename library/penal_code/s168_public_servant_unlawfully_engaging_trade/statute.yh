@@ -1,0 +1,26 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr168-#pr168-
+// Singapore Penal Code Section 168
+
+statute 168 "Public servant unlawfully engaging in trade" effective 1872-01-01 {
+    definitions {
+        trade_bar := "Legal obligation on a public servant, as such, not to engage in trade";
+    }
+
+    elements {
+        all_of {
+            /// accused is a public servant
+            circumstance status := "Accused is a public servant";
+            /// subject to a legal duty not to engage in trade
+            circumstance legal_duty := "Legally bound as such public servant not to engage in trade";
+            /// physical act of engaging in trade
+            actus_reus engaging := "Engaging in trade in breach of that duty";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 months .. 1 years;
+        fine := $0.00 .. $20,000.00;
+    }
+}

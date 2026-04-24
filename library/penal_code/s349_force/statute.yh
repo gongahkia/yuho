@@ -1,0 +1,37 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr349-#pr349-
+// Singapore Penal Code Section 349 -- Force
+// Yuho v5 Syntax
+
+struct S349Case {
+    string actor,
+    bool criteriaMet,
+}
+
+fn s349_matches(bool criteriaMet) : bool {
+    match {
+        case TRUE if criteriaMet == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+
+statute 349 "Force" effective 1872-01-01 {
+    definitions {
+        term_summary := "Definition of force.";
+    }
+
+    elements {
+        /// statutory criteria for the defined term
+        circumstance criteria := "Statutory criteria for the defined term are satisfied";
+    }
+
+    penalty {
+        fine := $0.00 .. $1,000.00;
+    }
+
+    illustration example1 {
+        "The conduct of A matches the statutory criteria defined under section 349."
+    }
+}

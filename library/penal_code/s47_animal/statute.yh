@@ -1,0 +1,11 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr47-#pr47-
+// Singapore Penal Code Section 47 - "Animal"
+// Interpretation provision defining "animal"
+
+statute 47 "Animal" effective 1872-01-01 {
+    definitions {
+        animal := "Any living creature, other than a human being";
+    }
+}

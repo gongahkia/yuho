@@ -1,0 +1,18 @@
+[statute]
+section_number = "424A"
+title = "Fraud by false representation, non-disclosure or abuse of position not connected with contracts for goods or services"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Fraud by false representation, non-disclosure, or abuse of position not connected with contracts for goods or services."
+source = "Singapore Penal Code 1871, Section 424A"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr424A-#pr424A-"

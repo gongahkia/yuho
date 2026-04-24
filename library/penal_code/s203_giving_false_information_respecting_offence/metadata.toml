@@ -1,0 +1,19 @@
+[statute]
+section_number = "203"
+title = "Giving false information respecting an offence committed"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Knowing or having reason to believe an offence was committed, giving information respecting it which one knows or believes to be false."
+source = "Singapore Penal Code 1871, Section 203"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr203-#pr203-"
+disclaimer = "Educational purposes only. Cross-reference with official SSO text."

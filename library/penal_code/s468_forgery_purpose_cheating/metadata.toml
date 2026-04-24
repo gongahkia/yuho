@@ -1,0 +1,18 @@
+[statute]
+section_number = "468"
+title = "Forgery for the purpose of cheating"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Whoever commits forgery, intending that the document or electronic record forged shall be used for the purpose of cheating, shall be punished with imprisonment for a term which may extend to 10 years, and shall also be liable to fine."
+source = "Singapore Penal Code 1871, Section 468"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr468-#pr468-"

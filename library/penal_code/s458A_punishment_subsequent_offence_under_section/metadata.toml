@@ -1,0 +1,18 @@
+[statute]
+section_number = "458A"
+title = "Punishment for subsequent offence under section 449, 450, 451 or 452"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Enhanced punishment (caning) for subsequent offences under sections 449, 450, 451 or 452."
+source = "Singapore Penal Code 1871, Section 458A"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr458A-#pr458A-"

@@ -1,0 +1,19 @@
+[statute]
+section_number = "259"
+title = "Having possession of a counterfeit Government stamp"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Possessing a counterfeit of a Government revenue stamp with intent to use or dispose of it as genuine."
+source = "Singapore Penal Code 1871, Section 259"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr259-#pr259-"
+disclaimer = "Educational purposes only. Cross-reference with official SSO text."

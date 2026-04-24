@@ -1,0 +1,18 @@
+[statute]
+section_number = "402"
+title = "Assembling for purpose of committing gang-robbery"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Being one of 5 or more persons assembled for the purpose of committing gang-robbery is punishable with up to 7 years imprisonment and caning with not less than 4 strokes."
+source = "Singapore Penal Code 1871, Section 402"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr402-#pr402-"

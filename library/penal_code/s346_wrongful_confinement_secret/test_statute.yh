@@ -1,0 +1,23 @@
+// Test file for s346
+// Yuho v5 Syntax
+
+referencing penal_code/s346_wrongful_confinement_secret
+
+struct S346CaseTest {
+    bool actusReus,
+    bool mensRea,
+}
+
+S346CaseTest satisfied := S346CaseTest {
+    actusReus := TRUE,
+    mensRea := TRUE,
+}
+
+assert s346_applies(satisfied.actusReus, satisfied.mensRea) == TRUE
+
+S346CaseTest missingMens := S346CaseTest {
+    actusReus := TRUE,
+    mensRea := FALSE,
+}
+
+assert s346_applies(missingMens.actusReus, missingMens.mensRea) == FALSE

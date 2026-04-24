@@ -1,0 +1,53 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr222-#pr222-
+// Singapore Penal Code Section 222 - Intentional omission to apprehend on the part of a public servant bound by law to apprehend person under sentence of a court of justice
+// Yuho v5 Syntax
+
+struct S222Case {
+    string accused,
+    bool isPublicServant,
+    bool legallyBound,
+    bool personUnderSentence,
+    bool intentionalOmissionOrAid,
+    string sentenceSeverity,
+}
+fn s222_applies(bool isPublicServant, bool legallyBound, bool personUnderSentence, bool intentionalOmissionOrAid) : bool {
+    match {
+        case TRUE if isPublicServant == FALSE := consequence FALSE;
+        case TRUE if legallyBound == FALSE := consequence FALSE;
+        case TRUE if personUnderSentence == FALSE := consequence FALSE;
+        case TRUE if intentionalOmissionOrAid == FALSE := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
+statute 222 "Intentional omission to apprehend on the part of a public servant bound by law to apprehend person under sentence of a court of justice" effective 1872-01-01 {
+    definitions {
+        public_servant := "Person defined as a public servant under section 21";
+        under_sentence := "A person under sentence of a court of justice for any offence, or lawfully committed to custody";
+    }
+
+    elements {
+        all_of {
+            circumstance public_servant_status := "Accused is a public servant";
+            circumstance duty := "Legally bound as such public servant to apprehend or keep in confinement any person under sentence of a court of justice or lawfully committed to custody";
+            any_of {
+                actus_reus omit_apprehend := "Intentionally omits to apprehend such person";
+                actus_reus suffer_escape := "Intentionally suffers such person to escape";
+                actus_reus aid_escape := "Intentionally aids such person in escaping or attempting to escape";
+            }
+            mens_rea intent := "Intentionally";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 years .. 20 years;
+        fine := $0.00 .. $100,000.00;
+    }
+
+    illustration example1 {
+        "A, a prison officer legally bound to keep B under sentence of death, intentionally allows B to escape. A is punishable under s222(a) with imprisonment for life or up to 20 years and fine."
+    }
+
+    // penalty tiered: (a) death sentence: life or up to 20 years + fine; (b) 20yr+ sentence: up to 10 years + fine; (c) <20yr sentence: up to 7 years or fine or both
+}

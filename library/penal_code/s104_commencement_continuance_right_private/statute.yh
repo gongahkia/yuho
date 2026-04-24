@@ -1,0 +1,16 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr104-#pr104-
+// Singapore Penal Code Section 104
+
+/// @amendment [15/2019]
+
+statute 104 "Commencement and continuance of right of private defence of property" effective 1872-01-01 {
+    definitions {
+        commencement := "The right of private defence of property starts when the defender reasonably believes that there was a danger to property arising from any act which is an offence falling under theft, robbery, mischief or criminal trespass, or which is an attempt to commit such an offence.";
+        against_theft := "The right continues against theft till the offender has effected his retreat with the property, or either the assistance of the public authorities is obtained, or the property has been recovered.";
+        against_robbery := "The right continues against robbery as long as the offender causes or attempts to cause to any person death or hurt or wrongful restraint, or as long as the fear of instant death, instant hurt, or instant personal restraint continues.";
+        against_trespass_mischief := "The right continues against criminal trespass or mischief as long as the offender continues in the commission of criminal trespass or mischief.";
+        against_housebreaking := "The right continues against house-breaking as long as such house-breaking continues.";
+    }
+}

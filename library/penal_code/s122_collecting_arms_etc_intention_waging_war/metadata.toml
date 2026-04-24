@@ -1,0 +1,18 @@
+[statute]
+section_number = "122"
+title = "Collecting arms, etc., with the intention of waging war against the Government"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Whoever collects men, arms or ammunition or otherwise prepares to wage war, with intent to wage or be prepared to wage war against the Government, is punishable with life imprisonment or up to 20 years and, if not sentenced to life, is also liable to fine."
+source = "Singapore Penal Code 1871, Section 122"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr122-#pr122-"

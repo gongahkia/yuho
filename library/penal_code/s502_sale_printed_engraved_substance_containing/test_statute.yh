@@ -1,0 +1,22 @@
+// Test file for s502_sale_printed_engraved_substance_containing
+// Yuho v5 Syntax
+
+referencing penal_code/s502_sale_printed_engraved_substance_containing
+
+struct SaleDefamatoryCaseTest {
+    bool elementsSatisfied,
+}
+
+SaleDefamatoryCaseTest positive := SaleDefamatoryCaseTest {
+    elementsSatisfied := TRUE,
+}
+
+assert positive.elementsSatisfied == TRUE
+assert is_liable(positive.elementsSatisfied) == TRUE
+
+SaleDefamatoryCaseTest negative := SaleDefamatoryCaseTest {
+    elementsSatisfied := FALSE,
+}
+
+assert negative.elementsSatisfied == FALSE
+assert is_liable(negative.elementsSatisfied) == FALSE

@@ -1,0 +1,26 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BC-#pr377BC-
+/// @section 377BC
+// Singapore Penal Code Section 377BC
+
+statute 377.4 "Distribution of voyeuristic image or recording" effective 1872-01-01 {
+    definitions {
+        voyeuristic_image := "An image obtained in circumstances constituting voyeurism under s377BB";
+    }
+
+    elements {
+        /// distribute a voyeuristic image or recording
+        actus_reus distribute_voyeuristic := "Intentionally distributes an image or recording of another person";
+        /// the image or recording is a voyeuristic one
+        circumstance voyeuristic_image := "The image or recording is a voyeuristic image or recording";
+        /// without consent of the depicted person
+        circumstance no_consent := "Without the consent of the other person depicted";
+    }
+
+    penalty {
+        imprisonment := 0 years .. 5 years;
+        caning := 0 .. 6 strokes;
+    }
+
+}

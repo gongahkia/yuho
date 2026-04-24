@@ -1,0 +1,17 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr473C-#pr473C-
+// Singapore Penal Code Section 473C - Meaning of “prejudice” and “induce”
+/// interpretation section, defines terms used in related offences
+
+statute 473C "Meaning of “prejudice” and “induce”" effective 2008-02-01 {
+    definitions {
+        prejudice := "An act or omission is to a person's prejudice only if it causes loss of property, deprivation of opportunity to earn, or acceptance of a false instrument as genuine";
+        prejudice_loss_property := "Results in permanent or temporary loss of property";
+        prejudice_deprived_remuneration := "Results in deprivation of opportunity to earn remuneration or greater remuneration";
+        prejudice_deprived_advantage := "Results in deprivation of opportunity to gain financial advantage otherwise than by remuneration";
+        prejudice_acceptance_false_instrument := "Result of having accepted a false instrument as genuine in connection with performance of any duty";
+        induce_machine_included := "Inducing a machine to respond to an instrument as if it were genuine counts as inducing a person";
+        loss_includes_not_getting := "Loss includes loss by not getting what one might get";
+    }
+}

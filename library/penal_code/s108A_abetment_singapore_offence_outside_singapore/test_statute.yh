@@ -1,0 +1,24 @@
+// Test file for s108A_abetment_singapore_offence_outside_singapore
+// Yuho v5 Syntax
+
+referencing penal_code/s108A_abetment_singapore_offence_outside_singapore
+
+struct AbetmentAcrossBorderTest {
+    bool abettorInSingapore,
+    bool actOutsideSingapore,
+    bool wouldBeOffenceIfInSingapore,
+}
+
+AbetmentAcrossBorderTest qualifying := AbetmentAcrossBorderTest {
+    abettorInSingapore := TRUE,
+    actOutsideSingapore := TRUE,
+    wouldBeOffenceIfInSingapore := TRUE,
+}
+assert is_extraterritorial_abetment(qualifying.abettorInSingapore, qualifying.actOutsideSingapore, qualifying.wouldBeOffenceIfInSingapore) == TRUE
+
+AbetmentAcrossBorderTest abettorOutside := AbetmentAcrossBorderTest {
+    abettorInSingapore := FALSE,
+    actOutsideSingapore := TRUE,
+    wouldBeOffenceIfInSingapore := TRUE,
+}
+assert is_extraterritorial_abetment(abettorOutside.abettorInSingapore, abettorOutside.actOutsideSingapore, abettorOutside.wouldBeOffenceIfInSingapore) == FALSE

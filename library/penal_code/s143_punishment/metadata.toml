@@ -1,0 +1,18 @@
+[statute]
+section_number = "143"
+title = "Punishment"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Prescribes punishment for being a member of an unlawful assembly: imprisonment up to 2 years, fine, or both."
+source = "Singapore Penal Code 1871, Section 143"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr143-#pr143-"

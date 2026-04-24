@@ -1,0 +1,18 @@
+[statute]
+section_number = "370"
+title = "Buying or disposing of any person as a slave"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Importing, exporting, buying, selling or disposing of a person as a slave."
+source = "Singapore Penal Code 1871, Section 370"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr370-#pr370-"

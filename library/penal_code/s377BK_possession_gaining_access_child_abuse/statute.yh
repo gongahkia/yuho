@@ -1,0 +1,21 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BK-#pr377BK-
+/// @section 377BK
+// Singapore Penal Code Section 377BK
+
+statute 377.12 "Possession of or gaining access to child abuse material" effective 1872-01-01 {
+    definitions {
+        possess_cam := "Having child abuse material in one possession or gaining access to it";
+    }
+
+    elements {
+        /// possess or gain access to child abuse material
+        actus_reus possess_or_access_cam := "Possesses or gains access to child abuse material";
+    }
+
+    penalty {
+        imprisonment := 0 years .. 5 years;
+    }
+
+}

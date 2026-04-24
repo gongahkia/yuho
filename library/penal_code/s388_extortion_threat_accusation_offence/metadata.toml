@@ -1,0 +1,18 @@
+[statute]
+section_number = "388"
+title = "Extortion by threat of accusation of an offence punishable with death, or imprisonment, etc."
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Extortion by putting a person in fear of accusation of a serious offence punishable with death, life imprisonment, or 10 years imprisonment is punishable with up to 10 years imprisonment, and also liable to fine or caning."
+source = "Singapore Penal Code 1871, Section 388"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr388-#pr388-"

@@ -1,0 +1,18 @@
+[statute]
+section_number = "439"
+title = "Punishment for intentionally running vessel aground or ashore with intent to commit theft, etc."
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Intentionally running a vessel aground or ashore with intent to commit theft or dishonest misappropriation."
+source = "Singapore Penal Code 1871, Section 439"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr439-#pr439-"

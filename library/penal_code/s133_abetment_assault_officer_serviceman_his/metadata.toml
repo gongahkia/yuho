@@ -1,0 +1,18 @@
+[statute]
+section_number = "133"
+title = "Abetment of an assault by an officer or a serviceman on his superior officer, when in the execution of his office"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Criminalises abetting an assault by a serviceman on a superior officer who is in the execution of his office."
+source = "Singapore Penal Code 1871, Section 133"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr133-#pr133-"

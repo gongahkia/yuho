@@ -1,0 +1,45 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr331-#pr331-
+// Singapore Penal Code Section 331 -- Voluntarily causing grievous hurt to extort confession or to compel restoration of property
+// Yuho v5 Syntax
+
+struct S331Case {
+    string accused,
+    string victim,
+    bool actusReus,
+    bool mensRea,
+}
+
+fn s331_applies(bool actusReus, bool mensRea) : bool {
+    match {
+        case TRUE if actusReus == TRUE && mensRea == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+
+statute 331 "Voluntarily causing grievous hurt to extort confession or to compel restoration of property" effective 1872-01-01 {
+    definitions {
+        offence_summary := "Voluntarily causing grievous hurt to extort confession or compel restoration of property.";
+    }
+
+    elements {
+        /// mental element required for the offence
+        mens_rea intent := "Intent or knowledge as required by the section";
+        /// physical act constituting the offence
+        actus_reus act := "The prohibited act defined by the section";
+        /// contextual requirement -- victim, circumstances, or result
+        circumstance context := "Statutory circumstances are satisfied";
+    }
+
+    penalty {
+        imprisonment := 0 years .. 10 years;
+        fine := $0.00 .. $50,000.00;
+        caning := 0 .. 24 strokes;
+    }
+
+    illustration example1 {
+        "A commits the conduct described in section 331 against B. A is guilty of the offence under section 331."
+    }
+}

@@ -1,0 +1,18 @@
+[statute]
+section_number = "323A"
+title = "Punishment for voluntarily causing hurt which causes grievous hurt"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Punishment where intended hurt is not grievous but actual hurt is grievous."
+source = "Singapore Penal Code 1871, Section 323A"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr323A-#pr323A-"

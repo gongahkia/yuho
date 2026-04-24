@@ -1,0 +1,18 @@
+[statute]
+section_number = "376H"
+title = "Procurement of sexual activity by deception or false representation"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Procuring sexual activity by deception or false representation."
+source = "Singapore Penal Code 1871, Section 376H"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr376H-#pr376H-"

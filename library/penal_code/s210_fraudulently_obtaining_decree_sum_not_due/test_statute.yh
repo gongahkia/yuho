@@ -1,0 +1,26 @@
+// Test file for s210_fraudulently_obtaining_decree_sum_not_due
+// Yuho v5 Syntax
+
+referencing penal_code/s210_fraudulently_obtaining_decree_sum_not_due
+
+struct S210TestCase {
+    bool fraudulentlyObtains,
+    bool decreeAgainstAnother,
+    bool sumNotDueOrSatisfied,
+}
+
+S210TestCase shamDecree := S210TestCase {
+    fraudulentlyObtains := TRUE,
+    decreeAgainstAnother := TRUE,
+    sumNotDueOrSatisfied := TRUE,
+}
+
+assert evaluate_s210(shamDecree.fraudulentlyObtains, shamDecree.decreeAgainstAnother, shamDecree.sumNotDueOrSatisfied) == "Liable under s210"
+
+S210TestCase honestDecree := S210TestCase {
+    fraudulentlyObtains := FALSE,
+    decreeAgainstAnother := TRUE,
+    sumNotDueOrSatisfied := FALSE,
+}
+
+assert evaluate_s210(honestDecree.fraudulentlyObtains, honestDecree.decreeAgainstAnother, honestDecree.sumNotDueOrSatisfied) == "Not liable - not fraudulent"

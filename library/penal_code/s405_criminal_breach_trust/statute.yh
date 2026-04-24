@@ -1,0 +1,75 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr405-#pr405-
+// Singapore Penal Code Section 405 - Criminal breach of trust
+// Yuho v5 Syntax
+
+/// @amendment [15/2019]
+/// @amendment [Act 23 of 2021 wef 01/03/2022]
+
+struct S405Case {
+    string accused,
+    bool entrustedWithPropertyOrDominion,
+    string breachMode,
+    bool dishonestState,
+}
+
+fn is_criminal_breach_of_trust(bool entrusted, string mode, bool dishonestOrIntentional) : bool {
+    match {
+        case TRUE if entrusted == FALSE := consequence FALSE;
+        case TRUE if mode == "none" := consequence FALSE;
+        case TRUE if dishonestOrIntentional == FALSE := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
+
+statute 405 "Criminal breach of trust" effective 1872-01-01 {
+    definitions {
+        entrustment := "Being in any manner entrusted with property, or with any dominion over property";
+        dishonestly := "With intention of causing wrongful gain or wrongful loss (s24)";
+        misappropriation := "Dishonestly misappropriating or converting to one's own use";
+        unlawful_use := "Dishonestly using or disposing of property in violation of a legal direction or contract governing the trust";
+        suffering_breach := "Intentionally suffering any other person to misappropriate, convert, use, or dispose of the entrusted property";
+    }
+
+    elements {
+        all_of {
+            /// accused must be entrusted with property or with dominion over property
+            circumstance entrustment := "Accused is entrusted with property or with dominion over property" burden prosecution beyond_reasonable_doubt;
+            any_of {
+                /// dishonest misappropriation or conversion to own use
+                actus_reus misappropriation := "Dishonestly misappropriates or converts to own use the entrusted property";
+                /// dishonest use or disposal in violation of law or contract
+                actus_reus unlawful_use := "Dishonestly uses or disposes of property in violation of any direction of law or of any legal contract touching the discharge of the trust";
+                /// intentionally suffers another to do any of the above
+                actus_reus suffering_breach := "Intentionally suffers any other person to do so";
+            }
+            /// dishonesty or intention is the operative fault element
+            mens_rea fault := "Dishonest or intentional state of mind at the time of the act";
+        }
+    }
+
+    illustration example1 {
+        "A, being executor to the will of a deceased person, dishonestly disobeys the law which directs him to divide the effects according to the will, and appropriates them to his own use. A has committed criminal breach of trust."
+    }
+
+    illustration example2 {
+        "A is a warehouse owner or warehouse operator. Z, going on a journey, entrusts his furniture to A, under a contract that it shall be returned on payment of a stipulated sum for warehouse room. A dishonestly sells the goods. A has committed breach of trust."
+    }
+
+    illustration example3 {
+        "A, residing in Singapore, is agent for Z, residing in Penang. There is an express or implied contract between A and Z that all sums remitted by Z to A shall be invested by A according to Z's direction. Z remits $5,000 to A, with directions to A to invest the same in Government securities. A dishonestly disobeys the direction, and employs the money in his own business. A has committed criminal breach of trust."
+    }
+
+    illustration example4 {
+        "But if A, in the last illustration, not dishonestly, but in good faith, believing that it will be more for Z's advantage to hold shares in the Bank X, disobeys Z's directions, and buys shares in the Bank X for Z, instead of buying Government securities, here, though Z should suffer loss and should be entitled to bring a civil action against A on account of that loss, yet A, not having acted dishonestly, has not committed criminal breach of trust."
+    }
+
+    illustration example5 {
+        "A, a collector of Government money, or a clerk in a Government office, is entrusted with public money, and is either directed by law, or bound by a contract, express or implied, with the Government, to pay into a certain treasury all the public money which he holds. A dishonestly appropriates the money. A has committed criminal breach of trust."
+    }
+
+    illustration example6 {
+        "A, a carrier, is entrusted by Z with property to be carried by land or by water. A dishonestly misappropriates the property. A has committed criminal breach of trust."
+    }
+}

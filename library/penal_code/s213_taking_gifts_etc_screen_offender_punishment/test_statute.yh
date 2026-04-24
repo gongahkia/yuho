@@ -1,0 +1,26 @@
+// Test file for s213_taking_gifts_etc_screen_offender_punishment
+// Yuho v5 Syntax
+
+referencing penal_code/s213_taking_gifts_etc_screen_offender_punishment
+
+struct S213TestCase {
+    bool acceptsOrAgreesOrAttemptsGratification,
+    bool considerationForScreening,
+    string underlyingOffencePunishment,
+}
+
+S213TestCase bribeForMurderCover := S213TestCase {
+    acceptsOrAgreesOrAttemptsGratification := TRUE,
+    considerationForScreening := TRUE,
+    underlyingOffencePunishment := "death",
+}
+
+assert evaluate_s213(bribeForMurderCover.acceptsOrAgreesOrAttemptsGratification, bribeForMurderCover.considerationForScreening, bribeForMurderCover.underlyingOffencePunishment) == "Liable s213(a) - up to 10 years + fine"
+
+S213TestCase noConsideration := S213TestCase {
+    acceptsOrAgreesOrAttemptsGratification := TRUE,
+    considerationForScreening := FALSE,
+    underlyingOffencePunishment := "death",
+}
+
+assert evaluate_s213(noConsideration.acceptsOrAgreesOrAttemptsGratification, noConsideration.considerationForScreening, noConsideration.underlyingOffencePunishment) == "Not liable - not for screening"

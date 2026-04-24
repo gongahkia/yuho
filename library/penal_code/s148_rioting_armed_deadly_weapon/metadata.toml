@@ -1,0 +1,18 @@
+[statute]
+section_number = "148"
+title = "Rioting, armed with a deadly weapon"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Enhanced punishment for rioting while armed with a deadly weapon or an article likely to cause death if used as a weapon."
+source = "Singapore Penal Code 1871, Section 148"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr148-#pr148-"

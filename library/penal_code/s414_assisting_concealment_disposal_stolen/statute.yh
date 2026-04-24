@@ -1,0 +1,31 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr414-#pr414-
+// Singapore Penal Code Section 414 - Assisting in concealment or disposal of stolen property
+
+/// @amendment [15/2019]
+
+referencing penal_code/s410_stolen_property
+
+statute 414 "Assisting in concealment or disposal of stolen property" effective 1872-01-01 {
+    definitions {
+        stolen_property := "As defined in section 410";
+        assistance := "Voluntary help in concealing, disposing of, or making away with property";
+    }
+
+    elements {
+        all_of {
+            /// voluntary assistance is the actus reus
+            actus_reus voluntary_assistance := "Voluntarily assists in concealing or disposing of or making away with the property";
+            /// the property must be stolen or fraud proceeds
+            circumstance tainted_property := "Property is stolen or obtained through a criminal offence involving fraud or dishonesty";
+            /// knowledge or reason to believe about the taint
+            mens_rea knowledge := "Knows or has reason to believe the taint";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 5 years;
+        fine := $0.00 .. $20,000.00;
+    }
+}

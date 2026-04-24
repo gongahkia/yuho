@@ -1,0 +1,23 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr373-#pr373-
+// Singapore Penal Code Section 373
+
+statute 373 "Buying minor for purposes of prostitution, etc." effective 1872-01-01 {
+    definitions {
+        acquisition_of_minor := "Buying, hiring, or obtaining possession of a person below 18";
+    }
+
+    elements {
+        /// buy, hire, or otherwise obtain possession of a minor
+        actus_reus buy_hire_minor := "Buys, hires or otherwise obtains possession of any person below 18 years of age";
+        /// for purposes of prostitution or unlawful or immoral purpose
+        mens_rea purpose_prostitution := "With intent or knowledge that the person will be employed or used for prostitution, illicit intercourse, or any unlawful and immoral purpose";
+    }
+
+    penalty {
+        imprisonment := 0 years .. 10 years;
+        fine := $0.00 .. $10,000.00;
+    }
+
+}

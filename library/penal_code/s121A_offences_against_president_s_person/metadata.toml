@@ -1,0 +1,18 @@
+[statute]
+section_number = "121A"
+title = "Offences against the President's person"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Whoever plans the death, hurt, unlawful imprisonment or restraint of the President is punishable with imprisonment for life or up to 20 years and, if not sentenced to life imprisonment, is also liable to fine."
+source = "Singapore Penal Code 1871, Section 121A"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr121A-#pr121A-"

@@ -1,0 +1,49 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr204B-#pr204B-
+// Singapore Penal Code Section 204B - Bribery of witnesses
+// Yuho v5 Syntax
+
+struct S204BCase {
+    string accused,
+    bool givesGratificationToSuppressReporting,
+    bool givesGratificationForFalseTestimony,
+    bool attemptsToInduceFalseTestimony,
+    bool receivesGratificationForFalseTestimony,
+}
+
+fn evaluate_s204B(bool givesGratificationToSuppressReporting, bool givesGratificationForFalseTestimony, bool attemptsToInduceFalseTestimony, bool receivesGratificationForFalseTestimony) : string {
+    match {
+        case TRUE if givesGratificationToSuppressReporting == TRUE := consequence "Liable under s204B(1)(a)";
+        case TRUE if givesGratificationForFalseTestimony == TRUE := consequence "Liable under s204B(1)(b)";
+        case TRUE if attemptsToInduceFalseTestimony == TRUE := consequence "Liable under s204B(1)(c)";
+        case TRUE if receivesGratificationForFalseTestimony == TRUE := consequence "Liable under s204B(1)(d)";
+        case _ := consequence "Not liable - no bribery of witnesses";
+    }
+}
+
+statute 204B "Bribery of witnesses" effective 2012-01-01 {
+    definitions {
+        gratification := "Any money, favour, reward, or thing of value";
+        judicial_proceeding := "Any proceeding in the course of which evidence is or may be legally taken";
+        witness := "A person called or to be called as a witness in any judicial proceeding";
+    }
+
+    elements {
+        any_of {
+            /// limb (a): bribery to suppress reporting of an offence
+            actus_reus suppressReport := "Gives, confers, or procures, or promises or offers to do so, any gratification to any person upon an agreement that any person aware of an offence (which must be reported) will abstain from reporting it to the police or an investigating agency";
+            /// limb (b): bribery for false/withheld testimony
+            actus_reus bribeFalseTestimony := "Gives or offers any gratification to any person upon an agreement that any person called as a witness will give false testimony or withhold true testimony or abstain from giving evidence";
+            /// limb (c): inducing witness to give false testimony
+            actus_reus induceFalseTestimony := "Attempts by any means to induce a person called or to be called as a witness to give false testimony or withhold true testimony or abstain from giving evidence";
+            /// limb (d): receiving gratification for false testimony
+            actus_reus receiveBribe := "Asks, receives, or obtains, or agrees or attempts to receive or obtain, any property or benefit for himself or any other person upon an agreement that any person will as a witness give false testimony or withhold true testimony or abstain from giving evidence";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 years .. 7 years;
+        fine := $0.00 .. $50,000.00;
+    }
+}

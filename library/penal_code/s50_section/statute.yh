@@ -1,0 +1,11 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr50-#pr50-
+// Singapore Penal Code Section 50 - "Section"
+// Interpretation provision defining "section"
+
+statute 50 "Section" effective 1872-01-01 {
+    definitions {
+        section := "One of those portions of a Chapter of this Code which are distinguished by prefixed numeral figures";
+    }
+}

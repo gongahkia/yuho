@@ -1,0 +1,26 @@
+// Test file for s207_fraudulent_claim_property_prevent_seizure
+// Yuho v5 Syntax
+
+referencing penal_code/s207_fraudulent_claim_property_prevent_seizure
+
+struct S207TestCase {
+    bool fraudulentAcceptanceOrClaim,
+    bool knowsNoRightToProperty,
+    bool intentToPreventSeizure,
+}
+
+S207TestCase shamClaim := S207TestCase {
+    fraudulentAcceptanceOrClaim := TRUE,
+    knowsNoRightToProperty := TRUE,
+    intentToPreventSeizure := TRUE,
+}
+
+assert evaluate_s207(shamClaim.fraudulentAcceptanceOrClaim, shamClaim.knowsNoRightToProperty, shamClaim.intentToPreventSeizure) == "Liable under s207"
+
+S207TestCase genuineClaim := S207TestCase {
+    fraudulentAcceptanceOrClaim := TRUE,
+    knowsNoRightToProperty := FALSE,
+    intentToPreventSeizure := TRUE,
+}
+
+assert evaluate_s207(genuineClaim.fraudulentAcceptanceOrClaim, genuineClaim.knowsNoRightToProperty, genuineClaim.intentToPreventSeizure) == "Not liable - genuine claim to property"

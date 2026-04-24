@@ -1,0 +1,18 @@
+[statute]
+section_number = "53"
+title = "Punishments"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Enumerates the punishments to which offenders are liable: death, imprisonment, forfeiture of property, fine, and caning (with a rattan)."
+source = "Singapore Penal Code 1871, Section 53"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr53-#pr53-"

@@ -1,0 +1,46 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr262-#pr262-
+// Singapore Penal Code Section 262 - Using a Government stamp known to have been before used
+// Yuho v5 Syntax
+
+struct S262Case {
+    string accused,
+    bool usesStamp,
+    bool knowsPreviouslyUsed,
+    bool fraudulentlyOrIntentToCauseLoss,
+}
+fn s262_applies(bool usesStamp, bool knowsPreviouslyUsed, bool fraudulentlyOrIntentToCauseLoss) : bool {
+    match {
+        case TRUE if usesStamp == FALSE := consequence FALSE;
+        case TRUE if knowsPreviouslyUsed == FALSE := consequence FALSE;
+        case TRUE if fraudulentlyOrIntentToCauseLoss == FALSE := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
+statute 262 "Using a Government stamp known to have been before used" effective 1872-01-01 {
+    definitions {
+        government_stamp := "Stamp issued by the Government for the purpose of revenue";
+    }
+
+    elements {
+        all_of {
+            actus_reus uses := "Uses for any purpose a Government revenue stamp";
+            mens_rea knowledge := "Knowing the stamp to have been used before";
+            any_of {
+                mens_rea fraudulent := "Fraudulently";
+                mens_rea intent_loss := "Intent to cause loss to the Government";
+            }
+        }
+    }
+
+    penalty {
+        imprisonment := 0 years .. 2 years;
+        fine := $0.00 .. $20,000.00;
+    }
+
+    illustration example1 {
+        "A reuses a revenue stamp he knows has been used before, intending to defraud the Government. A commits an offence under s262."
+    }
+
+}

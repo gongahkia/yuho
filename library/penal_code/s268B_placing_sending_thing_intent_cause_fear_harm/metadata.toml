@@ -1,0 +1,19 @@
+[statute]
+section_number = "268B"
+title = "Placing or sending thing with intent to cause fear of harm"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Placing or sending a thing with the intention of inducing others to believe it is likely to cause hurt or damage to property; no particular victim need be in mind."
+source = "Singapore Penal Code 1871, Section 268B"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr268B-#pr268B-"
+disclaimer = "Educational purposes only. Cross-reference with official SSO text."

@@ -1,0 +1,18 @@
+[statute]
+section_number = "163"
+title = "Taking a gratification, for the exercise of personal influence with a public servant"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Taking a gratification as motive or reward for inducing a public servant by the exercise of personal influence, distinct from professional advocacy."
+source = "Singapore Penal Code 1871, Section 163"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr163-#pr163-"

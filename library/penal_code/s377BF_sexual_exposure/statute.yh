@@ -1,0 +1,24 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BF-#pr377BF-
+/// @section 377BF
+// Singapore Penal Code Section 377BF
+
+statute 377.7 "Sexual exposure" effective 1872-01-01 {
+    definitions {
+        sexual_exposure := "Intentional exposure of genitals to another person";
+    }
+
+    elements {
+        /// intentional exposure of genitals
+        actus_reus expose_genitals := "Intentionally exposes his or her genitals";
+        /// intending another person to see them
+        mens_rea intent_another_see := "Intending that another person see them and be caused humiliation, alarm or distress";
+    }
+
+    penalty {
+        imprisonment := 0 years .. 1 years;
+        fine := $0.00 .. $5,000.00;
+    }
+
+}

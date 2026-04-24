@@ -1,0 +1,18 @@
+[statute]
+section_number = "128"
+title = "Public servant voluntarily allowing prisoner of State or war in his custody to escape"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Criminalises a public servant voluntarily allowing a prisoner of State or war in his custody to escape."
+source = "Singapore Penal Code 1871, Section 128"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr128-#pr128-"

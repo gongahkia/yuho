@@ -1,0 +1,11 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr9-#pr9-
+// Singapore Penal Code Section 9 - "Number"
+// Shape: interpretation / definition
+
+statute 9 "Number" effective 1872-01-01 {
+    definitions {
+        number_rule := "Unless the contrary appears from the context, words importing the singular number include the plural number, and words importing the plural number include the singular number";
+    }
+}

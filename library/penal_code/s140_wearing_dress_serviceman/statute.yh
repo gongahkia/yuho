@@ -1,0 +1,28 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr140-#pr140-
+// Singapore Penal Code Section 140 - Wearing the dress of a serviceman
+
+statute 140 "Wearing the dress of a serviceman" effective 1872-01-01 {
+    definitions {
+        serviceman := "A serviceman in the Singapore Armed Forces or any visiting forces lawfully present in Singapore";
+        garb_or_token := "Any garb or token resembling any garb or token used by such a serviceman";
+        civilian := "A person who is not a serviceman";
+    }
+
+    elements {
+        all_of {
+            /// circumstance - offender is not a serviceman
+            circumstance not_serviceman := "The offender is not a serviceman in the Singapore Armed Forces or any visiting forces lawfully present in Singapore";
+            /// actus reus - wearing garb or carrying token
+            actus_reus wear_garb := "Wearing any garb or carrying any token resembling any garb or token used by such a serviceman";
+            /// mens rea - specific intent of being believed a serviceman
+            mens_rea intent := "Intention that it may be believed that he is such a serviceman";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 months .. 6 months;
+        fine := $0.00 .. $2,500.00;
+    }
+}

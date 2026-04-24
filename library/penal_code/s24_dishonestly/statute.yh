@@ -1,0 +1,13 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr24-#pr24-
+// Singapore Penal Code Section 24
+// Yuho v5 Syntax
+
+/// @amendment [15/2019]
+
+statute 24 "“Dishonestly”" effective 1872-01-01 {
+    definitions {
+        dishonestly := "A person ( A ) is said to do an act dishonestly if — ( a ) A does that act with the intention of causing wrongful gain to A or another person, or wrongful loss to another person, regardless of whether such gain or loss is temporary or permanent; or ( b ) that act done by A is dishonest by the ordinary standards of reasonable and honest persons and A knows that that act is dishonest by such standards. [15/2019]";
+    }
+}

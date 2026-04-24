@@ -1,0 +1,18 @@
+[statute]
+section_number = "448"
+title = "Punishment for house-breaking"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Punishment for the offence of house-breaking under section 442."
+source = "Singapore Penal Code 1871, Section 448"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr448-#pr448-"

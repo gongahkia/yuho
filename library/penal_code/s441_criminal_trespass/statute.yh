@@ -1,0 +1,32 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr441-#pr441-
+// Singapore Penal Code Section 441 - Criminal trespass
+
+statute 441 "Criminal trespass" effective 1872-01-01 {
+    definitions {
+        criminal_trespass := "Entering or unlawfully remaining on property in anothers possession with intent to commit an offence or to intimidate, insult or annoy";
+        possession := "Actual or constructive possession of property";
+    }
+
+    elements {
+        all_of {
+            any_of {
+                /// entering into or upon property
+                actus_reus enter := "Enters into or upon property in the possession of another";
+                /// having lawfully entered, unlawfully remains
+                actus_reus unlawfully_remain := "Having lawfully entered, unlawfully remains on such property";
+            }
+            any_of {
+                /// intent to commit an offence
+                mens_rea intent_offence := "Intent to commit an offence";
+                /// intent to intimidate
+                mens_rea intent_intimidate := "Intent to intimidate any person in possession";
+                /// intent to insult
+                mens_rea intent_insult := "Intent to insult any person in possession";
+                /// intent to annoy
+                mens_rea intent_annoy := "Intent to annoy any person in possession";
+            }
+        }
+    }
+}

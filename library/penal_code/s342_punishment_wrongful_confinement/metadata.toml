@@ -1,0 +1,18 @@
+[statute]
+section_number = "342"
+title = "Punishment for wrongful confinement"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Punishment for wrongful confinement."
+source = "Singapore Penal Code 1871, Section 342"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr342-#pr342-"

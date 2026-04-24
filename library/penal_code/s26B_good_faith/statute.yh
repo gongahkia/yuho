@@ -1,0 +1,13 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr26B-#pr26B-
+// Singapore Penal Code Section 26B
+// Yuho v5 Syntax
+
+/// @amendment [15/2019]
+
+statute 26B "“Good faith”" effective 1872-01-01 {
+    definitions {
+        good_faith := "Nothing is said to be done or believed in good faith which is done or believed without due care and attention. [15/2019]";
+    }
+}

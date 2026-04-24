@@ -1,0 +1,11 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr48-#pr48-
+// Singapore Penal Code Section 48 - "Vessel"
+// Interpretation provision defining "vessel"
+
+statute 48 "Vessel" effective 1872-01-01 {
+    definitions {
+        vessel := "Anything made for the conveyance by water of human beings, or of property";
+    }
+}

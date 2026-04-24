@@ -1,0 +1,37 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr340-#pr340-
+// Singapore Penal Code Section 340 -- Wrongful confinement
+// Yuho v5 Syntax
+
+struct S340Case {
+    string actor,
+    bool criteriaMet,
+}
+
+fn s340_matches(bool criteriaMet) : bool {
+    match {
+        case TRUE if criteriaMet == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+
+statute 340 "Wrongful confinement" effective 1872-01-01 {
+    definitions {
+        term_summary := "Definition of wrongful confinement.";
+    }
+
+    elements {
+        /// statutory criteria for the defined term
+        circumstance criteria := "Statutory criteria for the defined term are satisfied";
+    }
+
+    penalty {
+        fine := $0.00 .. $1,000.00;
+    }
+
+    illustration example1 {
+        "The conduct of A matches the statutory criteria defined under section 340."
+    }
+}

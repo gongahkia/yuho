@@ -1,0 +1,27 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr184-#pr184-
+// Singapore Penal Code Section 184
+
+/// @amendment [15/2019]
+statute 184 "Obstructing sale of property offered for sale by authority of public servant" effective 1872-01-01 {
+    definitions {
+        authorised_sale := "A sale of property offered for sale by the lawful authority of a public servant as such";
+    }
+
+    elements {
+        all_of {
+            /// sale is authorised by a public servant
+            circumstance authorised_sale := "A sale of property is offered for sale by the lawful authority of a public servant as such";
+            /// intentional obstruction
+            actus_reus obstruction := "Intentionally obstructing the sale";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 months .. 1 months;
+        fine := $0.00 .. $10,000.00;
+    }
+
+    /// For individuals -- imprisonment up to 1 month, or fine up to $1,500, or both. For any other case -- fine up to $10,000.
+}

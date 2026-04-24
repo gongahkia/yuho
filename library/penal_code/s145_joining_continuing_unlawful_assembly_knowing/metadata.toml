@@ -1,0 +1,18 @@
+[statute]
+section_number = "145"
+title = "Joining or continuing in an unlawful assembly, knowing that it has been commanded to disperse"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Criminalises joining or continuing in an unlawful assembly with knowledge that it has been lawfully commanded to disperse."
+source = "Singapore Penal Code 1871, Section 145"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr145-#pr145-"

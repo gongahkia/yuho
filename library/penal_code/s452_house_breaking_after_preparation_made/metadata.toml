@@ -1,0 +1,18 @@
+[statute]
+section_number = "452"
+title = "House-breaking after preparation made for causing hurt, etc."
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "House-breaking after preparation made for causing hurt, assault or wrongful restraint."
+source = "Singapore Penal Code 1871, Section 452"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr452-#pr452-"

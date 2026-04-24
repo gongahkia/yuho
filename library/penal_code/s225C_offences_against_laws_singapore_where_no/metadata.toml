@@ -1,0 +1,19 @@
+[statute]
+section_number = "225C"
+title = "Offences against laws of Singapore where no special punishment is provided"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Residual offence: doing a prohibited act or omitting an enjoined act under Singapore law where no special punishment is provided; punishable by fine up to $2,000."
+source = "Singapore Penal Code 1871, Section 225C"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr225C-#pr225C-"
+disclaimer = "Educational purposes only. Cross-reference with official SSO text."

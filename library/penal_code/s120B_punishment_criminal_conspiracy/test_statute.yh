@@ -1,0 +1,21 @@
+// Test file for s120B
+// Yuho v5 Syntax
+
+referencing penal_code/s120B_punishment_criminal_conspiracy
+
+struct S120BTest {
+    bool partyToCriminalConspiracy,
+    bool noExpressProvision,
+}
+
+S120BTest qualifying := S120BTest {
+    partyToCriminalConspiracy := TRUE,
+    noExpressProvision := TRUE,
+}
+assert s120B_applies(qualifying.partyToCriminalConspiracy, qualifying.noExpressProvision) == TRUE
+
+S120BTest notParty := S120BTest {
+    partyToCriminalConspiracy := FALSE,
+    noExpressProvision := TRUE,
+}
+assert s120B_applies(notParty.partyToCriminalConspiracy, notParty.noExpressProvision) == FALSE

@@ -1,0 +1,18 @@
+[statute]
+section_number = "105"
+title = "When right of private defence of property extends to causing death"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "The right of private defence of property extends to voluntarily causing death where defender reasonably believes danger arises from robbery, house-breaking at night, arson of dwelling, or theft/mischief/trespass with apprehension of death or grievous hurt."
+source = "Singapore Penal Code 1871, Section 105"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr105-#pr105-"

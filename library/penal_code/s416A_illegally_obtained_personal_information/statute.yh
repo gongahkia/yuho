@@ -1,0 +1,33 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr416A-#pr416A-
+// Singapore Penal Code Section 416A - Illegally obtained personal information
+
+/// @amendment [15/2019]
+
+statute 416A "Illegally obtained personal information" effective 2020-01-01 {
+    definitions {
+        personal_information := "Information about an identified or identifiable individual";
+        without_consent := "Obtained without the consent of the individual to whom the information relates";
+    }
+
+    elements {
+        all_of {
+            any_of {
+                /// form (a) -- obtaining or retaining the information
+                actus_reus obtain_or_retain := "Obtains or retains the personal information";
+                /// form (b) -- supplying, offering, transmitting or making available
+                actus_reus supply_or_transmit := "Supplies, offers to supply, transmits or makes available the personal information";
+            }
+            /// the information was obtained without consent
+            circumstance tainted := "The personal information was obtained without the individuals consent";
+            /// knowledge or reason to believe about that taint
+            mens_rea knowledge := "Knows or has reason to believe the personal information was obtained without consent";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 3 years;
+        fine := $0.00 .. $10,000.00;
+    }
+}

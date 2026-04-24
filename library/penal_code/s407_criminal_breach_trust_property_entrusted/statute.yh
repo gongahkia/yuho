@@ -1,0 +1,46 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr407-#pr407-
+// Singapore Penal Code Section 407 - Criminal breach of trust of property entrusted for purposes of transportation or storage
+// Yuho v5 Syntax
+
+/// @amendment [15/2019]
+referencing penal_code/s405_criminal_breach_trust
+
+struct S407Case {
+    string accused,
+    bool entrustedForTransportOrStorage,
+    bool criminalBreachOfTrustCommitted,
+}
+
+fn s407_applies(bool entrusted, bool cbt) : bool {
+    match {
+        case TRUE if entrusted == FALSE := consequence FALSE;
+        case TRUE if cbt == FALSE := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
+
+statute 407 "Criminal breach of trust of property entrusted for purposes of transportation or storage" effective 1872-01-01 {
+    definitions {
+        transportation_for_hire := "Entrustment of property for carriage in exchange for payment";
+        storage_for_rent := "Entrustment of property for storage in exchange for rent or charge";
+        criminal_breach_of_trust := "As defined under section 405";
+    }
+
+    elements {
+        /// entrustment must be for transportation for hire or storage for rent or charge
+        circumstance qualifying_entrustment := "Accused is entrusted with property for the purpose of transportation for hire or storage for rent or charge" burden prosecution beyond_reasonable_doubt;
+        /// criminal breach of trust under s405 must be committed in respect of that property
+        actus_reus cbt_committed := "Commits criminal breach of trust in respect of such property";
+    }
+
+    penalty {
+        imprisonment := 0 days .. 15 years;
+        fine := $0.00 .. $10,000.00;
+    }
+
+    illustration example1 {
+        "A carrier is an example of a person who is entrusted with property for the purpose of transportation for hire and a warehouse owner or warehouse operator is an example of a person who is entrusted with property for the purpose of storage for rent or charge."
+    }
+}

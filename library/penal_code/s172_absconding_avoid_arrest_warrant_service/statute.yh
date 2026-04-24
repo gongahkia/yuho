@@ -1,0 +1,28 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr172-#pr172-
+// Singapore Penal Code Section 172
+
+/// @amendment [15/2019]
+statute 172 "Absconding to avoid arrest on warrant or service of summons, etc., proceeding from a public servant" effective 1872-01-01 {
+    definitions {
+        process := "A warrant, summons, notice, or order proceeding from a public servant legally competent to issue such process";
+        court_process := "A summons, notice or order requiring attendance in person or by agent, or production of a document or electronic record, before a court of justice";
+    }
+
+    elements {
+        all_of {
+            /// physical act of absconding
+            actus_reus absconding := "Absconding in order to avoid being arrested on a warrant, or being served with a summons, notice, or order";
+            /// issuing authority competence
+            circumstance competent_issuer := "The warrant, summons, notice or order proceeds from a public servant legally competent to issue it";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 months .. 1 months;
+        fine := $0.00 .. $1,500.00;
+    }
+
+    /// Where the summons, notice or order is court process to attend in person or by agent, or to produce a document or electronic record, punishment may extend to 6 months imprisonment, or fine up to $5,000, or both.
+}

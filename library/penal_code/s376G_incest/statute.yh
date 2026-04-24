@@ -1,0 +1,25 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr376G-#pr376G-
+/// @section 376G
+// Singapore Penal Code Section 376G
+
+statute 376.13 "Incest" effective 1872-01-01 {
+    definitions {
+        close_relative := "Grandparent, parent, sibling, child or grandchild, whether of whole or half blood, or by adoption";
+    }
+
+    elements {
+        /// sexual penetration with close relative
+        actus_reus incest_sexual_act := "Sexually penetrates or permits sexual penetration by a close relative";
+        /// the other person is a close relative by blood or adoption
+        circumstance close_relative := "The other person is a grandparent, parent, sibling, child or grandchild by blood or adoption";
+        /// knowledge of the relationship
+        mens_rea knowledge_relation := "Knowing the other person is such a relation";
+    }
+
+    penalty {
+        imprisonment := 0 years .. 14 years;
+    }
+
+}

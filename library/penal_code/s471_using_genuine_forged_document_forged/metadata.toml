@@ -1,0 +1,18 @@
+[statute]
+section_number = "471"
+title = "Using as genuine a forged document or forged electronic record"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Whoever fraudulently or dishonestly uses as genuine any document or electronic record which he knows or has reason to believe to be a forged document or forged electronic record, shall be punished in the same manner as if he had forged such document or electronic record."
+source = "Singapore Penal Code 1871, Section 471"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr471-#pr471-"

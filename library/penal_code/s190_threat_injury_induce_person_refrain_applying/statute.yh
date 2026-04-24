@@ -1,0 +1,46 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr190-#pr190-
+// Singapore Penal Code Section 190 - Threat of injury to induce any person to refrain from applying for protection to a public servant
+// Yuho v5 Syntax
+
+struct S190Case {
+    string accused,
+    string victim,
+    bool holdsOutThreat,
+    bool purposeInduceRefrainApplication,
+    bool applicationIsForProtection,
+}
+
+fn evaluate_s190(bool holdsOutThreat, bool purposeInduceRefrainApplication, bool applicationIsForProtection) : string {
+    match {
+        case TRUE if holdsOutThreat == FALSE := consequence "Not liable - no threat";
+        case TRUE if purposeInduceRefrainApplication == FALSE := consequence "Not liable - no intent to deter application";
+        case TRUE if applicationIsForProtection == FALSE := consequence "Not liable - not a protection application";
+        case _ := consequence "Liable under s190";
+    }
+}
+
+statute 190 "Threat of injury to induce any person to refrain from applying for protection to a public servant" effective 1872-01-01 {
+    definitions {
+        injury := "As defined in section 44";
+        protection := "Any protection against injury to which a person is legally entitled";
+        public_servant := "A public servant legally empowered to give such protection or cause it to be given";
+    }
+
+    elements {
+        all_of {
+            /// actus reus: threat of injury
+            actus_reus threat := "Holds out any threat of injury to any person";
+            /// mens rea: purpose to induce victim to refrain from applying for protection
+            mens_rea purpose := "For the purpose of inducing that person to refrain or desist from making a legal application for protection";
+            /// circumstance: protection sought from competent public servant
+            circumstance public_servant_target := "Against any injury, to any public servant legally empowered to give such protection or cause it to be given";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 years .. 1 year;
+        fine := $0.00 .. $5,000.00;
+    }
+}

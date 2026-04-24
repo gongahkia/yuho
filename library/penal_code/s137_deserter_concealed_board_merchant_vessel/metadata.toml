@@ -1,0 +1,18 @@
+[statute]
+section_number = "137"
+title = "Deserter concealed on board merchant vessel through negligence of master"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Imposes a fine on a merchant vessel master on whose ship a deserter is concealed where the master, though ignorant, could have known but for neglect of duty or want of discipline."
+source = "Singapore Penal Code 1871, Section 137"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr137-#pr137-"

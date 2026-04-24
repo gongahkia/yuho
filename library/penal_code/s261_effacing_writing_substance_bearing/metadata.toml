@@ -1,0 +1,19 @@
+[statute]
+section_number = "261"
+title = "Effacing any writing from a substance bearing a Government stamp, or removing from a document a stamp used for it, with intent to cause loss to Government"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Fraudulently or with intent to cause loss to Government effacing writing or removing a used Government revenue stamp so that it may be reused."
+source = "Singapore Penal Code 1871, Section 261"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr261-#pr261-"
+disclaimer = "Educational purposes only. Cross-reference with official SSO text."

@@ -1,0 +1,18 @@
+[statute]
+section_number = "153"
+title = "Intentionally or rashly giving provocation, with intent to cause riot"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Intentionally or rashly giving provocation by an illegal act, intending or knowing it likely to cause the offence of rioting."
+source = "Singapore Penal Code 1871, Section 153"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr153-#pr153-"

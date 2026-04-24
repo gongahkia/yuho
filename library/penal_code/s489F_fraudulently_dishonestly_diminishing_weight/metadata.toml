@@ -1,0 +1,18 @@
+[statute]
+section_number = "489F"
+title = "Fraudulently or dishonestly diminishing weight or altering composition of any coin"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Whoever fraudulently or dishonestly performs on any coin any operation which diminishes the weight or alters the composition of that coin shall be guilty of an offence and shall on conviction be punished with imprisonment for a term which may extend to 7 years, and shall also be liable to fine. [15/2019]"
+source = "Singapore Penal Code 1871, Section 489F"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr489F-#pr489F-"

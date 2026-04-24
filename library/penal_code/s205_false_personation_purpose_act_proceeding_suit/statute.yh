@@ -1,0 +1,44 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr205-#pr205-
+// Singapore Penal Code Section 205 - False personation for the purpose of any act or proceeding in a suit
+// Yuho v5 Syntax
+
+struct S205Case {
+    string accused,
+    bool falselyPersonatesAnother,
+    bool performsActInAssumedCharacter,
+    bool inSuitOrCriminalProsecution,
+}
+
+fn evaluate_s205(bool falselyPersonatesAnother, bool performsActInAssumedCharacter, bool inSuitOrCriminalProsecution) : string {
+    match {
+        case TRUE if falselyPersonatesAnother == FALSE := consequence "Not liable - no false personation";
+        case TRUE if performsActInAssumedCharacter == FALSE := consequence "Not liable - no act in assumed character";
+        case TRUE if inSuitOrCriminalProsecution == FALSE := consequence "Not liable - not in suit or criminal prosecution";
+        case _ := consequence "Liable under s205";
+    }
+}
+
+statute 205 "False personation for the purpose of any act or proceeding in a suit" effective 1872-01-01 {
+    definitions {
+        false_personation := "Falsely assuming another person's identity or character";
+        suit := "A civil suit or criminal prosecution";
+    }
+
+    elements {
+        all_of {
+            /// actus reus: false personation
+            actus_reus personate := "Falsely personates another";
+            /// actus reus: performing act in assumed character
+            actus_reus actInCharacter := "In such assumed character makes any admission or statement, confesses judgment, causes any process to be issued, becomes bail or security, or does any other act";
+            /// circumstance: in a suit or prosecution
+            circumstance context := "In any suit or criminal prosecution";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 years .. 3 years;
+        fine := $0.00 .. $10,000.00;
+    }
+}

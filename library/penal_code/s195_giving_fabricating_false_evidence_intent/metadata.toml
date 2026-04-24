@@ -1,0 +1,19 @@
+[statute]
+section_number = "195"
+title = "Giving or fabricating false evidence with intent to procure conviction of an offence punishable with imprisonment"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "False evidence intended to cause a non-capital conviction punishable by 7+ years or life; punished as if convicted of the target offence (7y+) or up to 20 years (life)."
+source = "Singapore Penal Code 1871, Section 195"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr195-#pr195-"
+disclaimer = "Educational purposes only. Cross-reference with official SSO text."

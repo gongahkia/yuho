@@ -1,0 +1,18 @@
+[statute]
+section_number = "424B"
+title = "Fraud by false representation, non-disclosure or abuse of position"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Fraud by false representation, non-disclosure, or abuse of position."
+source = "Singapore Penal Code 1871, Section 424B"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr424B-#pr424B-"

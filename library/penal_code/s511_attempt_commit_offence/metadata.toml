@@ -1,0 +1,18 @@
+[statute]
+section_number = "511"
+title = "Attempt to commit offence"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "A person attempts to commit an offence punishable by this Code or by any other written law who, with the intention of committing that offence takes a substantial step towards the commission of that offence."
+source = "Singapore Penal Code 1871, Section 511"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr511-#pr511-"

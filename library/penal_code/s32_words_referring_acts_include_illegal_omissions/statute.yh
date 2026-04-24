@@ -1,0 +1,11 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr32-#pr32-
+// Singapore Penal Code Section 32
+// Yuho v5 Syntax
+
+statute 32 "Words referring to acts include illegal omissions" effective 1872-01-01 {
+    definitions {
+        words_referring_to_acts_include_illegal_omissions := "In every part of this Code, except where a contrary intention appears from the context, words which refer to acts done extend also to illegal omissions.";
+    }
+}

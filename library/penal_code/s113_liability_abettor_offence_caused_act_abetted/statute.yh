@@ -1,0 +1,38 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr113-#pr113-
+// Singapore Penal Code Section 113 - Liability of abettor for an offence caused by the act abetted different from that intended by the abettor
+// Yuho v5 Syntax
+
+struct S113Case {
+    string abettor,
+    bool abetmentIntendedParticularEffect,
+    bool differentEffectCaused,
+    bool abettorKnewActLikelyToCauseDifferentEffect,
+}
+
+fn s113_liable(bool abetmentIntendedParticularEffect, bool differentEffectCaused, bool abettorKnewActLikelyToCauseDifferentEffect) : bool {
+    match {
+        case TRUE if abetmentIntendedParticularEffect == TRUE && differentEffectCaused == TRUE && abettorKnewActLikelyToCauseDifferentEffect == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 113 "Liability of abettor for an offence caused by the act abetted different from that intended by the abettor" effective 1872-01-01 {
+    definitions {
+        different_effect := "An effect different from that intended by the abettor, caused by an act for which abettor is liable in consequence of the abetment";
+        abettor_knowledge := "Abettor knew the act abetted was likely to cause that different effect";
+    }
+
+    elements {
+        all_of {
+            mens_rea particular_effect_intention := "Abettor intended a particular effect when the act was abetted";
+            circumstance different_effect_caused := "Act for which abettor is liable causes a different effect from that intended";
+            mens_rea likelihood_knowledge := "Abettor knew the act abetted was likely to cause that different effect";
+        }
+    }
+
+    illustration example1 {
+        "A instigates B to cause grievous hurt to Z. B, in consequence of the instigation, causes grievous hurt to Z. Z dies in consequence. Here, if A knew that the grievous hurt abetted was likely to cause death, A is liable to be punished with the punishment provided for murder."
+    }
+}

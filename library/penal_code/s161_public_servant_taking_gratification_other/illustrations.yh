@@ -1,0 +1,15 @@
+// Illustrations for Penal Code section 161
+
+referencing penal_code/s161_public_servant_taking_gratification_other
+
+illustration example_a {
+    "A, a judge, obtains from Z, a banker, a situation in Z's bank for A's brother, as a reward to A for deciding a cause in favour of Z. A has committed the offence defined in this section."
+}
+
+illustration example_b {
+    "A, a public servant, induces Z erroneously to believe that A's influence with another public servant has obtained for Z a contract to do work, and thus induces Z to give A money. A has committed the offence defined in this section."
+}
+
+illustration example_c {
+    "A, a public servant, induces Z erroneously to believe that A's influence with the Government has obtained a grant of land for Z, and thus induces Z to give A money, as a reward for his service. A has committed the offence defined in this section."
+}

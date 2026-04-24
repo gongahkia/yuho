@@ -1,0 +1,29 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr163-#pr163-
+// Singapore Penal Code Section 163
+
+statute 163 "Taking a gratification, for the exercise of personal influence with a public servant" effective 1872-01-01 {
+    definitions {
+        gratification := "Any gratification whatever";
+        personal_influence := "The exercise of personal influence, as distinguished from advocacy or professional representation";
+    }
+
+    elements {
+        all_of {
+            /// acceptance of gratification
+            actus_reus taking := "Accepting, obtaining, agreeing to accept, or attempting to obtain any gratification for himself or another";
+            /// motive or reward linked to exercising personal influence
+            mens_rea motive := "As a motive or reward for inducing, by the exercise of personal influence, any public servant to do or forbear an official act, to show favour or disfavour, or to render service or disservice, with the Government, Parliament, Cabinet, or any public servant";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 months .. 1 years;
+        fine := $0.00 .. $50,000.00;
+    }
+
+    illustration example1 {
+        "An advocate who receives a fee for arguing a case before a judge; a person who receives pay for arranging and correcting a memorial addressed to Government, setting forth the services and claims of the memorialist; a paid agent for a condemned criminal, who lays before the Government statements tending to show that the condemnation was unjust -- are not within this section, inasmuch as they do not exercise or profess to exercise personal influence."
+    }
+}

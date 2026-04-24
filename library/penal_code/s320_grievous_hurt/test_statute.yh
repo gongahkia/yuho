@@ -1,0 +1,20 @@
+// Test file for s320
+// Yuho v5 Syntax
+
+referencing penal_code/s320_grievous_hurt
+
+struct S320CaseTest {
+    bool criteriaMet,
+}
+
+S320CaseTest matches := S320CaseTest {
+    criteriaMet := TRUE,
+}
+
+assert s320_matches(matches.criteriaMet) == TRUE
+
+S320CaseTest nomatch := S320CaseTest {
+    criteriaMet := FALSE,
+}
+
+assert s320_matches(nomatch.criteriaMet) == FALSE

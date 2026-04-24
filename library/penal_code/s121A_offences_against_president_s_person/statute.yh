@@ -1,0 +1,40 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr121A-#pr121A-
+/// @amendment [15/2019]
+// Singapore Penal Code Section 121A - Offences against the President's person
+// Yuho v5 Syntax
+
+struct S121ACase {
+    string accused,
+    bool plansDeathOrHurt,
+    bool plansUnlawfulImprisonmentOrRestraint,
+}
+
+fn s121A_applies(bool plansDeathOrHurt, bool plansUnlawfulImprisonmentOrRestraint) : bool {
+    match {
+        case TRUE if plansDeathOrHurt == TRUE := consequence TRUE;
+        case TRUE if plansUnlawfulImprisonmentOrRestraint == TRUE := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 121A "Offences against the President's person" effective 2020-01-01 {
+    definitions {
+        president := "The President of Singapore";
+        plan := "Forming a plan to carry out the act, whether or not executed";
+    }
+
+    elements {
+        any_of {
+            actus_reus plans_death := "Plans the death of the President";
+            actus_reus plans_hurt := "Plans hurt to the President";
+            actus_reus plans_unlawful_imprisonment := "Plans unlawful imprisonment or restraint of the President";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 days .. 99 years;
+        fine := $0.00 .. $1,000,000.00;
+    }
+}

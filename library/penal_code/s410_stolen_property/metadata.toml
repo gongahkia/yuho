@@ -1,0 +1,18 @@
+[statute]
+section_number = "410"
+title = "Stolen property"
+jurisdiction = "Singapore"
+version = "1.0.0"
+
+[encoding]
+depth = "deep"
+
+[contributor]
+name = "agent-draft"
+
+[description]
+summary = "Defines property transferred by theft, extortion, robbery, criminal misappropriation, criminal breach of trust or cheating as stolen property."
+source = "Singapore Penal Code 1871, Section 410"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr410-#pr410-"

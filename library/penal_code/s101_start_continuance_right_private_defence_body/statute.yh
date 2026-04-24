@@ -1,0 +1,24 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr101-#pr101-
+// Singapore Penal Code Section 101 - Start and continuance of right of private defence of body
+/// @amendment [15/2019]
+
+statute 101 "Start and continuance of right of private defence of body" effective 2020-01-01 {
+    definitions {
+        right_starts := "The right of private defence of the body starts as soon as the defender reasonably believes that there is danger to the body";
+        danger := "Danger arising from any act which is an offence against the human body or an attempt or a threat to commit the offence";
+        right_continues := "The right continues as long as the belief of danger continues";
+    }
+
+    elements {
+        all_of {
+            /// (1) trigger: reasonable belief of danger to body
+            circumstance reasonableBelief := "Defender reasonably believes there is danger to body (own or another's)";
+            /// (1) the danger must arise from an offence, attempt or threat against the human body
+            circumstance dangerSource := "Danger arises from offence, attempt or threat against the human body";
+            /// (2) continuance: right persists while belief persists
+            circumstance continuance := "Belief of danger continues";
+        }
+    }
+}

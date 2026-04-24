@@ -1,0 +1,47 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr228-#pr228-
+// Singapore Penal Code Section 228 - Intentional insult or interruption to a public servant sitting in any stage of a judicial proceeding or mediation or other alternative dispute resolution process
+// Yuho v5 Syntax
+
+struct S228Case {
+    string accused,
+    bool publicServantSittingJudicialOrADR,
+    bool intentionallyInsultsOrInterrupts,
+}
+fn s228_applies(bool publicServantSittingJudicialOrADR, bool intentionallyInsultsOrInterrupts) : bool {
+    match {
+        case TRUE if publicServantSittingJudicialOrADR == FALSE := consequence FALSE;
+        case TRUE if intentionallyInsultsOrInterrupts == FALSE := consequence FALSE;
+        case _ := consequence TRUE;
+    }
+}
+/// @amendment [Act 18 of 2023 wef 31/01/2024]
+statute 228 "Intentional insult or interruption to a public servant sitting in any stage of a judicial proceeding or mediation or other alternative dispute resolution process" effective 1872-01-01 {
+    definitions {
+        public_servant := "Person defined as a public servant under section 21";
+        judicial_proceeding := "Any stage of a proceeding before a court of justice";
+        adr := "Mediation or other alternative dispute resolution process under any written law";
+    }
+
+    elements {
+        all_of {
+            circumstance sitting := "Public servant sitting in any stage of a judicial proceeding or conducting mediation or ADR";
+            any_of {
+                actus_reus insult := "Offers any insult to the public servant";
+                actus_reus interrupt := "Causes any interruption to the public servant";
+            }
+            mens_rea intent := "Intentionally";
+        }
+    }
+
+    penalty {
+        imprisonment := 0 years .. 1 year;
+        fine := $0.00 .. $5,000.00;
+    }
+
+    illustration example1 {
+        "A shouts abuse at a magistrate during a hearing, intending to disrupt proceedings. A commits an offence under s228."
+    }
+
+}
