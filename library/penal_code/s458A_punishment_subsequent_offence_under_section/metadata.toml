@@ -2,16 +2,17 @@
 section_number = "458A"
 title = "Punishment for subsequent offence under section 449, 450, 451 or 452"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Enhanced punishment (caning) for subsequent offences under sections 449, 450, 451 or 452."
+summary = "Adds liability to caning for a person who, after a prior conviction under section 449, 450, 451 or 452, commits another offence under any of those sections."
 source = "Singapore Penal Code 1871, Section 458A"
 
 [verification]

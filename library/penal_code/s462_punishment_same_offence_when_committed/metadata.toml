@@ -2,16 +2,17 @@
 section_number = "462"
 title = "Punishment for same offence when committed by person entrusted with custody"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Whoever, being entrusted with any closed receptacle which contains or which he believes to contain property, without having authority to open the same, dishonestly, or with intent to commit mischief, breaks open or unfastens that receptacle, shall be punished with imprisonment for a term which may extend to 3 years, or with fine, or with both."
+summary = "Section 462 criminalises breaking open or unfastening an entrusted closed receptacle without authority, dishonestly or with intent to commit mischief."
 source = "Singapore Penal Code 1871, Section 462"
 
 [verification]

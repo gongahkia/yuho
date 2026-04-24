@@ -1,17 +1,41 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr473C-#pr473C-
-// Singapore Penal Code Section 473C - Meaning of “prejudice” and “induce”
-/// interpretation section, defines terms used in related offences
 
-statute 473C "Meaning of “prejudice” and “induce”" effective 2008-02-01 {
-    definitions {
-        prejudice := "An act or omission is to a person's prejudice only if it causes loss of property, deprivation of opportunity to earn, or acceptance of a false instrument as genuine";
-        prejudice_loss_property := "Results in permanent or temporary loss of property";
-        prejudice_deprived_remuneration := "Results in deprivation of opportunity to earn remuneration or greater remuneration";
-        prejudice_deprived_advantage := "Results in deprivation of opportunity to gain financial advantage otherwise than by remuneration";
-        prejudice_acceptance_false_instrument := "Result of having accepted a false instrument as genuine in connection with performance of any duty";
-        induce_machine_included := "Inducing a machine to respond to an instrument as if it were genuine counts as inducing a person";
-        loss_includes_not_getting := "Loss includes loss by not getting what one might get";
+statute 473C "Meaning of “prejudice” and “induce”" effective 1872-01-01 effective 2008-02-01 {
+    subsection (1) {
+        definitions {
+            application_to_section_473B := "For the purposes of section 473B and subject to subsections (2) and (4), an act or omission intended to be induced is to a person’s prejudice if, and only if, it is one which, if it occurs, will —";
+            prejudice_loss_of_property := "( a ) result in his permanent or temporary loss of property;";
+            prejudice_loss_of_remuneration_opportunity := "( b ) result in his being deprived of an opportunity to earn remuneration or greater remuneration;";
+            prejudice_loss_of_financial_advantage_opportunity := "( c ) result in his being deprived of an opportunity to gain a financial advantage otherwise than by way of remuneration;";
+            prejudice_gain_of_remuneration_opportunity_from_him := "( d ) result in somebody being given an opportunity to earn remuneration or greater remuneration from him;";
+            prejudice_gain_of_financial_advantage_from_him := "( e ) result in somebody being given an opportunity to gain a financial advantage from him otherwise than by way of remuneration; or";
+            prejudice_acceptance_of_false_instrument := "( f ) be the result of his having accepted a false instrument as genuine in connection with his performance of any duty.";
+        }
+    }
+
+    subsection (2) {
+        definitions {
+            disregarded_act_or_omission := "For the purpose of this section, an act which a person has an enforceable duty to do and an omission to do an act which a person is not entitled to do shall be disregarded.";
+        }
+    }
+
+    subsection (3) {
+        definitions {
+            inducing_a_person_includes_machine_response := "The reference in section 473B to inducing a person ( B ) to accept a false instrument as genuine includes a reference to inducing a machine to respond to an instrument as if it were a genuine instrument.";
+        }
+    }
+
+    subsection (4) {
+        definitions {
+            machine_response_treated_as_prejudice := "Where subsection (3) applies, the act or omission intended to be induced by the machine responding to the instrument shall be treated as an act or omission to a person’s prejudice.";
+        }
+    }
+
+    subsection (5) {
+        definitions {
+            loss := "In subsection (1)( a ), “loss” includes a loss by not getting what one might get, as well as a loss by parting with what one has.";
+        }
     }
 }

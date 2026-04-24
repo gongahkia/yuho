@@ -1,39 +1,45 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr453-#pr453-
-// Singapore Penal Code Section 453 - Possession of house-breaking implements or offensive weapons
-
 /// @amendment [15/2019]
 /// @amendment [Act 43 of 2024 wef 24/03/2025]
 
-statute 453 "Possession of house-breaking implements or offensive weapons" effective 2020-01-01 {
-    definitions {
-        offensive_weapon := "An instrument for shooting, stabbing or cutting, or any instrument which used as a weapon of offence is likely to cause death";
-        disguise := "Having ones face covered or otherwise being disguised";
-        house_breaking_implement := "Any article or instrument for use in the course of or in connection with house-breaking";
-    }
+statute 453 "Possession of house-breaking implements or offensive weapons" effective 1872-01-01 effective 2019-12-31 effective 2025-03-24 {
+    subsection (1) {
+        elements {
+            any_of {
+                all_of {
+                    actus_reus armed_with_weapon := "Any person who is found armed with any instrument for shooting, stabbing or cutting, or any instrument which, used as a weapon of offence, is likely to cause death";
+                    circumstance without_lawful_authority_or_purpose := "Without lawful authority or a lawful purpose";
+                }
+                all_of {
+                    actus_reus face_covered_or_disguised := "Any person who is found having his face covered or otherwise found disguised";
+                    mens_rea intent_to_commit_offence := "With intent to commit any offence";
+                }
+                actus_reus equipped_for_house_breaking := "Any person who is found equipped with any article or instrument for use in the course of or in connection with any house‑breaking";
+            }
+        }
 
-    elements {
-        any_of {
-            all_of {
-                /// form (a) -- armed with offensive weapon
-                actus_reus armed := "Is found armed with an offensive weapon";
-                /// without lawful authority or purpose
-                circumstance no_lawful_authority := "Without lawful authority or lawful purpose";
-            }
-            all_of {
-                /// form (b) -- disguised
-                actus_reus disguised := "Is found disguised or with face covered";
-                /// with intent to commit an offence
-                mens_rea intent_offence := "Intent to commit an offence";
-            }
-            /// form (c) -- equipped with house-breaking implement
-            actus_reus equipped := "Is found equipped with a house-breaking implement";
+        penalty or_both {
+            imprisonment := 0 days .. 2 years;
+            fine := unlimited;
+            supplementary := "Any person who is guilty of an offence under subsection (1) shall on conviction be punished with imprisonment for a term which may extend to 2 years, or with fine, or with both; and any instrument or article, mentioned in paragraph ( a ) or ( c ), found in the possession of that person shall be forfeited. [15/2019]";
         }
     }
 
-    penalty {
-        imprisonment := 0 days .. 3 years;
-        fine := $0.00 .. $10,000.00;
+    subsection (2) {
+        elements {
+            all_of {
+                circumstance prosecution_for_subsection_1_a := "In any prosecution for an offence under subsection (1)( a )";
+                actus_reus prosecution_allege_and_prove_armed := "It is sufficient for the prosecution to allege and prove that the accused was found to be armed with any instrument mentioned in paragraph ( a )" burden prosecution beyond_reasonable_doubt;
+                circumstance accused_must_show_lawful_authority_or_purpose := "The burden is then on the accused to show that he had lawful authority or a lawful purpose to be so armed" burden defence balance_of_probabilities;
+            }
+        }
+    }
+
+    subsection (3) {
+        definitions {
+            presumed_lawful_authority_lead_in := "An article or instrument is presumed to be carried with lawful authority if it is carried by —";
+        }
     }
 }

@@ -2,16 +2,17 @@
 section_number = "467"
 title = "Forgery of a valuable security or will"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Whoever forges a document which purports to be a valuable security or a will, or an authority to adopt a child, or which purports to give authority to any person to make or transfer any valuable security, or to receive the principal, interest, or dividends thereon, or to receive or deliver any money, movable property, or valuable security, or any document purporting to be an acquittance or a receipt, acknowledging the payment of money, or an a..."
+summary = "Section 467 makes it an offence to forge a document purporting to be certain high-value legal or financial instruments, including a valuable security or will."
 source = "Singapore Penal Code 1871, Section 467"
 
 [verification]

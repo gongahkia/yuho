@@ -2,16 +2,17 @@
 section_number = "473A"
 title = "Making or possessing equipment for making a false instrument"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Whoever makes or has in his custody or under his control a machine or implement, or paper or other material, which to his knowledge is or has been specifically designed or adapted for the making of any false instrument shall be punished with imprisonment for a term which may extend to 5 years, or with fine, or with both."
+summary = "Makes it an offence to make or possess equipment or materials known to be specifically designed or adapted for making a false instrument."
 source = "Singapore Penal Code 1871, Section 473A"
 
 [verification]

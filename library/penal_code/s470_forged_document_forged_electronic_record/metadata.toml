@@ -2,16 +2,17 @@
 section_number = "470"
 title = "“A forged document” or “a forged electronic record”"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "A false document or false electronic record, made wholly or in part by forgery, is designated “a forged document” or “a forged electronic record”, respectively."
+summary = "Section 470 defines the terms “forged document” and “forged electronic record” for the Penal Code."
 source = "Singapore Penal Code 1871, Section 470"
 
 [verification]

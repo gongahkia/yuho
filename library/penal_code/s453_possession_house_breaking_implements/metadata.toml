@@ -2,16 +2,17 @@
 section_number = "453"
 title = "Possession of house-breaking implements or offensive weapons"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Possession of house-breaking implements, disguise, or offensive weapons without lawful authority."
+summary = "Creates an offence for being armed, disguised, or equipped for house-breaking, and states an evidential rule and a presumption about lawful authority."
 source = "Singapore Penal Code 1871, Section 453"
 
 [verification]

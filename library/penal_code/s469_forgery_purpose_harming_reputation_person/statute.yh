@@ -1,34 +1,20 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr469-#pr469-
-// Singapore Penal Code Section 469 - Forgery for the purpose of harming the reputation of any person
-// Yuho v5 Syntax
-
-struct ForgeryHarmReputationCase {
-    string accused,
-    bool elementsSatisfied,
-}
-
-fn is_liable(bool elementsSatisfied) : bool {
-    match {
-        case TRUE if elementsSatisfied == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
 
 statute 469 "Forgery for the purpose of harming the reputation of any person" effective 1872-01-01 {
-    definitions {
-        reputation := "The estimation in which a person is held by others";
-    }
-
     elements {
         all_of {
-            actus_reus commits_forgery := "Commits forgery as defined in section 463";
-            mens_rea intent_harm_reputation := "Intending the forged document to harm reputation, or knowing it is likely to be so used";
+            actus_reus commits_forgery := "Whoever commits forgery";
+            any_of {
+                mens_rea intent_to_harm_reputation := "Intending that the document or electronic record forged shall harm the reputation of any person";
+                mens_rea knowledge_of_likely_use := "Knowing that it is likely to be used for that purpose";
+            }
         }
     }
 
-    penalty {
+    penalty cumulative {
         imprisonment := 0 days .. 5 years;
+        fine := unlimited;
     }
 }

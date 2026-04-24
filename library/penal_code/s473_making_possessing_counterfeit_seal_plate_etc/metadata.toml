@@ -2,16 +2,17 @@
 section_number = "473"
 title = "Making or possessing a counterfeit seal, plate, etc., with intent to commit a forgery punishable otherwise"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Whoever makes or counterfeits any seal, plate or other instrument for making an impression, intending that the same shall be used for the purpose of committing any forgery which would be punishable under any section of this Chapter other than section 467, or with such intent has in his possession any such seal, plate or other instrument, knowing the same to be counterfeit, shall be punished with imprisonment for a term which may extend to 10 y..."
+summary = "Section 473 criminalises making, counterfeiting, or possessing a counterfeit seal, plate, or similar impression-making instrument with intent to use it for forgery punishable under this Chapter other than section 467."
 source = "Singapore Penal Code 1871, Section 473"
 
 [verification]

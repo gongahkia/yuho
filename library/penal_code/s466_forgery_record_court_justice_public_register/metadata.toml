@@ -2,16 +2,17 @@
 section_number = "466"
 title = "Forgery of a record of a court of justice, or a public register of births, etc."
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Whoever forges a document or an electronic record, purporting to be a record or proceeding of or before a court of justice, or a register of birth, baptism, marriage or burial, or a register kept by a public servant as such, or a certificate or document or an electronic record, purporting to be made by a public servant in his official capacity, or an authority to institute or defend a suit, or to take any proceedings therein, or to confess jud..."
+summary = "Section 466 criminalises forging a document or electronic record that purports to be a court record, specified public register, official public servant document, litigation authority, confession authority, or power of attorney, punishable with up to 10 years' imprisonment and an unlimited fine."
 source = "Singapore Penal Code 1871, Section 466"
 
 [verification]

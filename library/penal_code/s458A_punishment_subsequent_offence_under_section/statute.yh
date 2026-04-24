@@ -1,27 +1,11 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr458A-#pr458A-
-// Singapore Penal Code Section 458A - Punishment for subsequent offence under section 449, 450, 451 or 452
-
 /// @amendment [15/2019]
 
-referencing penal_code/s449_house_breaking_order_commit_offence
-
-statute 458A "Punishment for subsequent offence under section 449, 450, 451 or 452" effective 2020-01-01 {
-    definitions {
-        subsequent_offence := "A further offence under section 449, 450, 451 or 452 after a prior conviction under any of those sections";
-    }
-
-    elements {
-        all_of {
-            /// must have a prior conviction under 449/450/451/452
-            circumstance prior_conviction := "Previously convicted of an offence under section 449, 450, 451 or 452";
-            /// and commits a further offence under those sections
-            actus_reus subsequent_offence := "Commits an offence under section 449, 450, 451 or 452";
-        }
-    }
-
+statute 458A "Punishment for subsequent offence under section 449, 450, 451 or 452" effective 1872-01-01 effective 2019-12-31 {
+    /// Additional punishment for a subsequent offence under section 449, 450, 451 or 452.
     penalty {
-        caning := 0 .. 24 strokes;
+        supplementary := "Whoever, having been convicted of an offence under section 449, 450, 451 or 452, commits an offence under section 449, 450, 451 or 452 shall be liable to caning in addition to the punishment prescribed for that offence. [15/2019]";
     }
 }

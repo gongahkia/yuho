@@ -1,35 +1,28 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr466-#pr466-
-// Singapore Penal Code Section 466 - Forgery of a record of a court of justice, or a public register of births, etc.
-// Yuho v5 Syntax
-
-struct ForgeryCourtRecordCase {
-    string accused,
-    bool elementsSatisfied,
-}
-
-fn is_liable(bool elementsSatisfied) : bool {
-    match {
-        case TRUE if elementsSatisfied == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
 
 statute 466 "Forgery of a record of a court of justice, or a public register of births, etc." effective 1872-01-01 {
-    definitions {
-        forgery := "As defined in section 463";
-        public_servant := "As defined in section 21";
-    }
-
     elements {
         all_of {
-            actus_reus forges_document := "Forges a document or electronic record";
-            circumstance purports_official := "Purports to be a court record, register of birth/marriage/burial, or official document of a public servant";
+            actus_reus commits_forgery := "Forges a document or an electronic record";
+            mens_rea forgery_intent := "Acts with the intent that makes the making amount to forgery under section 463";
+
+            any_of {
+                circumstance court_record := "The document or electronic record purports to be a record or proceeding of or before a court of justice";
+                circumstance birth_register := "The document or electronic record purports to be a register of birth, baptism, marriage or burial";
+                circumstance public_servant_register := "The document or electronic record purports to be a register kept by a public servant as such";
+                circumstance official_certificate := "The document or electronic record purports to be a certificate or document or an electronic record, purporting to be made by a public servant in his official capacity";
+                circumstance suit_authority := "The document or electronic record purports to be an authority to institute or defend a suit";
+                circumstance proceedings_authority := "The document or electronic record purports to be an authority to take any proceedings therein";
+                circumstance confession_authority := "The document or electronic record purports to be an authority to confess judgment";
+                circumstance power_of_attorney := "The document or electronic record purports to be a power of attorney";
+            }
         }
     }
 
     penalty {
         imprisonment := 0 days .. 10 years;
+        fine := unlimited;
     }
 }

@@ -1,35 +1,23 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr473-#pr473-
-// Singapore Penal Code Section 473 - Making or possessing a counterfeit seal, plate, etc., with intent to commit a forgery punishable otherwise
-// Yuho v5 Syntax
-
-struct CounterfeitSealOtherCase {
-    string accused,
-    bool elementsSatisfied,
-}
-
-fn is_liable(bool elementsSatisfied) : bool {
-    match {
-        case TRUE if elementsSatisfied == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
 
 statute 473 "Making or possessing a counterfeit seal, plate, etc., with intent to commit a forgery punishable otherwise" effective 1872-01-01 {
-    definitions {
-        seal := "A device used to make an authenticating impression on documents";
-    }
-
     elements {
         all_of {
-            actus_reus makes_or_possesses_seal := "Makes or counterfeits, or possesses, any seal, plate or instrument for making an impression";
-            mens_rea intent_forgery_other := "Intending it be used to commit forgery punishable under this Chapter other than section 467";
-            mens_rea knows_counterfeit := "Knowing the seal or instrument to be counterfeit when in possession";
+            any_of {
+                actus_reus making_or_counterfeiting := "Makes or counterfeits any seal, plate or other instrument for making an impression";
+                all_of {
+                    actus_reus possession := "Has in his possession any such seal, plate or other instrument";
+                    mens_rea knowledge_of_counterfeit := "Knowing the same to be counterfeit";
+                }
+            }
+            mens_rea intent_to_commit_other_forgery := "Intending that the same shall be used for the purpose of committing any forgery which would be punishable under any section of this Chapter other than section 467";
         }
     }
 
     penalty {
         imprisonment := 0 days .. 10 years;
+        fine := unlimited;
     }
 }

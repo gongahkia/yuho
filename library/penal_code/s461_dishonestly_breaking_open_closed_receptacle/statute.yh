@@ -1,36 +1,31 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr461-#pr461-
-// Singapore Penal Code Section 461 - Dishonestly breaking open any closed receptacle containing or supposed to contain property
-// Yuho v5 Syntax
-
-struct BreakingReceptacleCase {
-    string accused,
-    bool elementsSatisfied,
-}
-
-fn is_liable(bool elementsSatisfied) : bool {
-    match {
-        case TRUE if elementsSatisfied == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
 
 statute 461 "Dishonestly breaking open any closed receptacle containing or supposed to contain property" effective 1872-01-01 {
-    definitions {
-        closed_receptacle := "Any closed container or compartment";
-        mischief := "As defined under section 425";
-    }
-
     elements {
         all_of {
-            actus_reus breaks_open := "Breaks open or unfastens any closed receptacle";
-            circumstance contains_property := "Receptacle contains or is believed to contain property";
-            mens_rea dishonestly_or_mischief := "Dishonestly or with intent to commit mischief";
+            any_of {
+                mens_rea dishonestly := "Dishonestly";
+                mens_rea intent_to_commit_mischief := "With intent to commit mischief";
+            }
+
+            any_of {
+                actus_reus breaks_open := "Breaks open";
+                actus_reus unfastens := "Unfastens";
+            }
+
+            circumstance closed_receptacle := "Any closed receptacle";
+
+            any_of {
+                circumstance contains_property := "The closed receptacle contains property";
+                circumstance believes_contains_property := "The offender believes the closed receptacle to contain property";
+            }
         }
     }
 
-    penalty {
+    penalty or_both {
         imprisonment := 0 days .. 2 years;
+        fine := unlimited;
     }
 }

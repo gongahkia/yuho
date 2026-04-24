@@ -1,35 +1,28 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr467-#pr467-
-// Singapore Penal Code Section 467 - Forgery of a valuable security or will
-// Yuho v5 Syntax
-
-struct ForgeryValuableSecurityCase {
-    string accused,
-    bool elementsSatisfied,
-}
-
-fn is_liable(bool elementsSatisfied) : bool {
-    match {
-        case TRUE if elementsSatisfied == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
 
 statute 467 "Forgery of a valuable security or will" effective 1872-01-01 {
-    definitions {
-        valuable_security := "As defined in section 30";
-        will := "A testamentary document";
-    }
-
     elements {
         all_of {
-            actus_reus forges_document := "Forges a document purporting to be a valuable security, will, or authority";
-            circumstance valuable_nature := "Document purports to be a valuable security, will, authority to adopt, or receipt for money/property";
+            actus_reus commits_forgery := "Forges a document";
+            mens_rea forgery_intent := "Acts with the intent that makes the making amount to forgery under section 463";
+
+            any_of {
+                circumstance valuable_security := "The document purports to be a valuable security";
+                circumstance will := "The document purports to be a will";
+                circumstance authority_to_adopt := "The document purports to be an authority to adopt a child";
+                circumstance authority_to_make_or_transfer_security := "The document purports to give authority to any person to make or transfer any valuable security";
+                circumstance authority_to_receive_returns := "The document purports to give authority to any person to receive the principal, interest, or dividends thereon";
+                circumstance authority_to_receive_or_deliver_property := "The document purports to give authority to any person to receive or deliver any money, movable property, or valuable security";
+                circumstance acquittance_or_receipt_for_money := "The document purports to be an acquittance or a receipt, acknowledging the payment of money";
+                circumstance acquittance_or_receipt_for_property := "The document purports to be an acquittance or a receipt for the delivery of any movable property or valuable security";
+            }
         }
     }
 
     penalty {
         imprisonment := 0 days .. 15 years;
+        fine := unlimited;
     }
 }

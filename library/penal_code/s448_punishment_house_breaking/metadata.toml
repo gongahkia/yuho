@@ -2,16 +2,17 @@
 section_number = "448"
 title = "Punishment for house-breaking"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Punishment for the offence of house-breaking under section 442."
+summary = "Provides the punishment for committing house-breaking under section 442."
 source = "Singapore Penal Code 1871, Section 448"
 
 [verification]

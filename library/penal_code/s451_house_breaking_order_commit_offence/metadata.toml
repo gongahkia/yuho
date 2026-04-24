@@ -2,16 +2,17 @@
 section_number = "451"
 title = "House-breaking in order to commit an offence punishable with imprisonment"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "House-breaking committed in order to commit any offence punishable with imprisonment."
+summary = "This section criminalises house-breaking done in order to commit any offence punishable with imprisonment and prescribes imprisonment and liability to an unlimited fine."
 source = "Singapore Penal Code 1871, Section 451"
 
 [verification]

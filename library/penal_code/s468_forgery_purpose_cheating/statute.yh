@@ -1,34 +1,18 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr468-#pr468-
-// Singapore Penal Code Section 468 - Forgery for the purpose of cheating
-// Yuho v5 Syntax
-
-struct ForgeryForCheatingCase {
-    string accused,
-    bool elementsSatisfied,
-}
-
-fn is_liable(bool elementsSatisfied) : bool {
-    match {
-        case TRUE if elementsSatisfied == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
 
 statute 468 "Forgery for the purpose of cheating" effective 1872-01-01 {
-    definitions {
-        cheating := "As defined in section 415";
-    }
-
     elements {
         all_of {
-            actus_reus commits_forgery := "Commits forgery as defined in section 463";
-            mens_rea intent_cheating := "Intending the forged document or electronic record to be used for cheating";
+            actus_reus commits_forgery := "Commits forgery";
+            circumstance forged_object := "The document or electronic record is forged";
+            mens_rea intention_for_cheating := "Intending that the document or electronic record forged shall be used for the purpose of cheating";
         }
     }
 
-    penalty {
+    penalty or_both {
         imprisonment := 0 days .. 10 years;
+        fine := unlimited;
     }
 }

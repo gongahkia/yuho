@@ -1,34 +1,21 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr476-#pr476-
-// Singapore Penal Code Section 476 - Counterfeiting a device or mark used for authenticating documents or electronic records other than those described in section 467, or possessing counterfeit marked material
-// Yuho v5 Syntax
-
-struct CounterfeitMarkOtherCase {
-    string accused,
-    bool elementsSatisfied,
-}
-
-fn is_liable(bool elementsSatisfied) : bool {
-    match {
-        case TRUE if elementsSatisfied == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
 
 statute 476 "Counterfeiting a device or mark used for authenticating documents or electronic records other than those described in section 467, or possessing counterfeit marked material" effective 1872-01-01 {
-    definitions {
-        authenticating_device := "A mark or device used to authenticate a document or electronic record";
-    }
-
     elements {
+        /// The section criminalises either counterfeiting the authenticating device or possessing material bearing the counterfeit, provided the same intent is present.
         all_of {
-            actus_reus counterfeits_or_possesses_mark := "Counterfeits upon material any device or mark used to authenticate a document or electronic record other than those described in section 467, or possesses such material";
-            mens_rea intent_give_appearance_authenticity := "Intending the mark be used to give appearance of authenticity to a forged document on such material";
+            any_of {
+                actus_reus counterfeits_device_or_mark := "Counterfeits upon or in the substance of any material any device or mark used for the purpose of authenticating any document or electronic record other than the documents described in section 467";
+                actus_reus possesses_counterfeit_marked_material := "Has in his possession any material upon or in the substance of which any such device or mark has been counterfeited";
+            }
+            mens_rea intent_to_give_appearance_of_authenticity := "Intending that such device or mark shall be used for the purpose of giving the appearance of authenticity to any document or electronic record then forged or thereafter to be forged on such material";
         }
     }
 
-    penalty {
+    penalty or_both {
         imprisonment := 0 days .. 10 years;
+        fine := unlimited;
     }
 }

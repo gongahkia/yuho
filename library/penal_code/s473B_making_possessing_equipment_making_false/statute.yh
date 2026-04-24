@@ -1,36 +1,21 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr473B-#pr473B-
-// Singapore Penal Code Section 473B - Making or possessing equipment for making a false instrument with intent to induce prejudice
-// Yuho v5 Syntax
 
-struct EquipmentFalseInstrumentPrejudiceCase {
-    string accused,
-    bool elementsSatisfied,
-}
-
-fn is_liable(bool elementsSatisfied) : bool {
-    match {
-        case TRUE if elementsSatisfied == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
-statute 473B "Making or possessing equipment for making a false instrument with intent to induce prejudice" effective 2008-02-01 {
-    definitions {
-        prejudice := "As defined in section 473C";
-        induce := "As defined in section 473C";
-    }
-
+statute 473B "Making or possessing equipment for making a false instrument with intent to induce prejudice" effective 1872-01-01 {
     elements {
         all_of {
-            actus_reus makes_or_possesses_equipment := "Makes or has in custody or control a machine, implement, paper or material";
-            circumstance designed_for_instrument := "The item is specifically designed or adapted for making any instrument";
-            mens_rea intent_induce_prejudice := "Intends that it be used to induce another to accept a false instrument as genuine to that person's prejudice";
+            /// paragraph (a) is disjunctive: making the equipment or having it in custody/control suffices
+            any_of {
+                actus_reus makes_equipment := "Makes a machine or implement, or paper or other material, which is or has been specifically designed or adapted for the making of any instrument";
+                actus_reus possesses_equipment := "Has in his custody or under his control a machine or implement, or paper or other material, which is or has been specifically designed or adapted for the making of any instrument";
+            }
+            mens_rea intent_clause := "Intends that —";
         }
     }
 
-    penalty {
+    penalty or_both {
         imprisonment := 0 days .. 10 years;
+        fine := unlimited;
     }
 }

@@ -1,36 +1,29 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr471-#pr471-
-// Singapore Penal Code Section 471 - Using as genuine a forged document or forged electronic record
-// Yuho v5 Syntax
 
-struct UsingForgedDocumentCase {
-    string accused,
-    bool elementsSatisfied,
-}
-
-fn is_liable(bool elementsSatisfied) : bool {
-    match {
-        case TRUE if elementsSatisfied == TRUE := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
+referencing penal_code/s470_forged_document_forged_electronic_record
 
 statute 471 "Using as genuine a forged document or forged electronic record" effective 1872-01-01 {
     definitions {
-        forged_document := "As defined in section 470";
+        forged_document := "A forged document has the meaning given in section 470.";
+        forged_electronic_record := "A forged electronic record has the meaning given in section 470.";
     }
 
     elements {
         all_of {
+            any_of {
+                mens_rea fraudulently := "Whoever fraudulently";
+                mens_rea dishonestly := "Whoever dishonestly";
+            }
             actus_reus uses_as_genuine := "Uses as genuine any document or electronic record";
-            circumstance is_forged := "The document or electronic record is a forged document or forged electronic record";
-            mens_rea knows_or_believes_forged := "Knows or has reason to believe the document to be forged";
-            mens_rea fraudulently_or_dishonestly := "Acts fraudulently or dishonestly";
+            circumstance forged_status := "The document or electronic record is a forged document or forged electronic record";
+            mens_rea knows_or_has_reason_to_believe := "He knows or has reason to believe the document or electronic record to be a forged document or forged electronic record";
         }
     }
 
+    /// Punishment is derivative: section 471 directs the court to impose the same punishment as for forging the document or electronic record used as genuine.
     penalty {
-        imprisonment := 0 days .. 15 years;
+        supplementary := "Whoever fraudulently or dishonestly uses as genuine any document or electronic record which he knows or has reason to believe to be a forged document or forged electronic record, shall be punished in the same manner as if he had forged such document or electronic record."
     }
 }

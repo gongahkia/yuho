@@ -2,16 +2,17 @@
 section_number = "460"
 title = "House-breaking when death or grievous hurt caused"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "If, at the time of the committing of house‑breaking, any person guilty of such offence voluntarily causes or attempts to cause death or grievous hurt to any person, every person jointly concerned in committing such house‑breaking, shall be punished with imprisonment for a term of not less than 3 years and not more than 20 years. [15/2019]"
+summary = "Joint participants in a house-breaking are punishable if, during the house-breaking, any guilty participant voluntarily causes or attempts to cause death or grievous hurt to any person."
 source = "Singapore Penal Code 1871, Section 460"
 
 [verification]

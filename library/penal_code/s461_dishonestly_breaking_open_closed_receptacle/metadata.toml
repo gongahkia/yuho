@@ -2,16 +2,17 @@
 section_number = "461"
 title = "Dishonestly breaking open any closed receptacle containing or supposed to contain property"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Whoever dishonestly, or with intent to commit mischief, breaks open or unfastens any closed receptacle which contains or which he believes to contain property, shall be punished with imprisonment for a term which may extend to 2 years, or with fine, or with both."
+summary = "This section makes it an offence to dishonestly, or with intent to commit mischief, break open or unfasten a closed receptacle that contains property or is believed to contain property."
 source = "Singapore Penal Code 1871, Section 461"
 
 [verification]
