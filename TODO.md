@@ -70,17 +70,42 @@ Re-run (or resume) command:
       `all_of` vs `any_of`).
 - [ ] Single bulk commit for the sweep (`phase D wave 2 — bulk re-encoding`).
 
-### L3 review — auto-stamp via heuristics + agents `[ ]`
+### L3 review — status + what remains `[~]`
 
-Goal: lift L3 from 40 to 400+. Use high-reasoning agents (Opus / GPT-5.5 xhigh)
-to read each encoded section against `_raw/act.json` and stamp when safe.
+L3 review dispatcher + strict prompt landed:
+- `scripts/phase_d_l3_review.py` — Codex-backed auditor, gpt-5.4 high by
+  default, 11-point checklist (illustration count, no fabricated penalty,
+  `all_of`/`any_of` matches English, effective dates sane, etc.). Writes
+  stamps into `metadata.toml`, flags to `library/penal_code/_L3_flags.md`.
+- `doc/PHASE_D_L3_REVIEW_PROMPT.md` — the checklist prompt.
 
-- [ ] Write a per-section reviewer prompt that outputs either
-      `stamp` (faithful) or `flag` (ambiguous) with reasons.
-- [ ] Dispatch in parallel. Progress-tracked the same way as the encoding sweep.
-- [ ] Heuristic auto-stamp (simple definitions, ≤3 canonical illustrations,
-      single-sentence statute text).
-- [ ] Manual / human review for everything flagged.
+First pass strategy: prioritise the **complex sections** (longer
+`statute.yh` = more structural risk). Skipping the long tail of trivial
+single-sentence definitions for now — they are low-risk and don't move
+the needle for practitioner trust.
+
+Current dispatch:
+- [~] Sweep the top ~60 longest-unreviewed sections at `--reasoning high`
+      to reach ~100 total L3-stamped sections (buffering for the observed
+      ~29% flag rate).
+
+### L3 review — deprioritised long tail `(def)`
+
+~400 shorter / simpler sections deferred. Most are single-sentence
+interpretation sections (s31 "A will", s44 "Injury", s45 "Life", s267B
+"Punishment for affray", etc.) where the encoding is a faithful mirror
+and the bug surface is trivially small. Cheap to review later if needed.
+
+Full list of deferred sections lives in the backlog as a one-off file;
+regenerate by running `python scripts/phase_d_l3_review.py --list`
+after the current priority sweep completes — anything not in
+`.phase_d_l3_progress.jsonl` is part of the deferred tail.
+
+- [ ] (def) Revisit when L3 matters for a concrete deliverable (paper,
+      demo, production product). At that point: run
+      `phase_d_l3_review.py --all-unstamped --dispatch --reasoning medium`
+      (medium is fine for these; trivial) with parallel 8. Expected wall
+      time ≤ 2 hours.
 
 ### G13 grammar fix — default-logic exception priority `[ ]`
 
