@@ -1,30 +1,24 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr132-#pr132-
-// Singapore Penal Code Section 132 - Abetment of mutiny, if mutiny is committed in consequence thereof
-
 /// @amendment [15/2019]
-statute 132 "Abetment of mutiny, if mutiny is committed in consequence thereof" effective 1872-01-01 {
-    definitions {
-        officer := "An officer in the Singapore Armed Forces or any visiting forces lawfully present in Singapore";
-        serviceman := "Any serviceman in the Singapore Armed Forces or any visiting forces lawfully present in Singapore";
-        mutiny := "A collective refusal of obedience by members of the armed forces";
-        consequence := "Mutiny committed in consequence of the abetment";
-    }
-
+statute 132 "Abetment of mutiny, if mutiny is committed in consequence thereof" effective 1872-01-01 effective 2019-12-31 {
     elements {
+        /// The offence requires abetment of mutiny and the consequential commission of mutiny.
         all_of {
-            /// abetment of mutiny
-            actus_reus abet_mutiny := "Abetting the committing of mutiny by an officer or any serviceman in the Singapore Armed Forces or any visiting forces lawfully present in Singapore";
-            /// consequential condition - mutiny was in fact committed
-            circumstance mutiny_committed := "Mutiny is committed in consequence of that abetment";
+            actus_reus abetment := "Whoever abets the committing of mutiny by an officer or any serviceman in the Singapore Armed Forces or any visiting forces lawfully present in Singapore";
+            circumstance mutiny_committed := "Mutiny be committed in consequence of that abetment";
         }
     }
 
-    penalty {
-        imprisonment := 0 years .. 99 years;
-        fine := $0.00 .. $50,000.00;
+    penalty alternative {
+        imprisonment := 0 years .. 10 years;
         death := TRUE;
-        supplementary := "Death or imprisonment for life, or imprisonment for a term which may extend to 10 years; if not sentenced to death or imprisonment for life, also liable to fine";
+        supplementary := "Whoever abets the committing of mutiny by an officer or any serviceman in the Singapore Armed Forces or any visiting forces lawfully present in Singapore shall, if mutiny be committed in consequence of that abetment, be punished with death or with imprisonment for life, or with imprisonment for a term which may extend to 10 years. [15/2019]";
+    }
+
+    penalty when non_death_or_life_sentence {
+        fine := unlimited;
+        supplementary := "The offender shall, if he is not sentenced to death or imprisonment for life, also be liable to fine. [15/2019]";
     }
 }

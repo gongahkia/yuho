@@ -1,27 +1,18 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr134-#pr134-
-// Singapore Penal Code Section 134 - Abetment of such assault, if the assault is committed
 
 statute 134 "Abetment of such assault, if the assault is committed" effective 1872-01-01 {
-    definitions {
-        officer := "An officer in the Singapore Armed Forces or any visiting forces lawfully present in Singapore";
-        serviceman := "Any serviceman in the Singapore Armed Forces or any visiting forces lawfully present in Singapore";
-        superior_officer := "An officer senior in rank to the principal offender";
-        consequence := "The assault is committed in consequence of the abetment";
-    }
-
     elements {
+        /// Section 134 applies only where the abetment concerns the section 133 assault and that assault is in fact committed in consequence of the abetment.
         all_of {
-            /// abetment of assault on superior
-            actus_reus abet_assault := "Abetting an assault by an officer or any serviceman in the Singapore Armed Forces or any visiting forces lawfully present in Singapore on any superior officer being in the execution of his office";
-            /// consequential condition - assault was committed
-            circumstance assault_committed := "The assault is committed in consequence of that abetment";
+            actus_reus abets_assault := "Whoever abets an assault by an officer or any serviceman in the Singapore Armed Forces or any visiting forces lawfully present in Singapore, on any superior officer being in the execution of his office";
+            circumstance assault_committed_in_consequence := "Such assault be committed in consequence of that abetment";
         }
     }
 
-    penalty {
+    penalty cumulative {
         imprisonment := 0 years .. 7 years;
-        fine := $0.00 .. $50,000.00;
+        fine := unlimited;
     }
 }

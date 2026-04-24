@@ -2,16 +2,17 @@
 section_number = "134"
 title = "Abetment of such assault, if the assault is committed"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Enhanced punishment for abetment of an assault by a serviceman on a superior officer where the assault is committed in consequence of the abetment."
+summary = "This section criminalises abetting the section 133 assault when that assault is actually committed in consequence of the abetment."
 source = "Singapore Penal Code 1871, Section 134"
 
 [verification]

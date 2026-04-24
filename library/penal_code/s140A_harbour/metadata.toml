@@ -1,17 +1,18 @@
 [statute]
 section_number = "140A"
-title = "Harbour"
+title = "“Harbour”"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Interpretation section defining 'harbour' for Chapter VII, mirroring section 130A."
+summary = "Defines “harbour” for Chapter 7 to include supplying aid or helping a person evade apprehension."
 source = "Singapore Penal Code 1871, Section 140A"
 
 [verification]

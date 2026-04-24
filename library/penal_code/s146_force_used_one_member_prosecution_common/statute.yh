@@ -1,26 +1,25 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr146-#pr146-
-// Singapore Penal Code Section 146 - Force used by one member in prosecution of common object (defines "rioting")
-// Shape: interpretation/definition (punishment follows at s147)
+
+referencing penal_code/s141_unlawful_assembly
 
 statute 146 "Force used by one member in prosecution of common object" effective 1872-01-01 {
     definitions {
-        rioting := "The offence committed when force or violence is used by an unlawful assembly or by any member thereof, in prosecution of the common object of such assembly";
-        common_object := "The shared object of an unlawful assembly under section 141";
+        rioting := "Whenever force or violence is used by an unlawful assembly or by any member thereof, in prosecution of the common object of such assembly, every member of such assembly is guilty of the offence of rioting.";
         unlawful_assembly := "As defined under section 141";
+        common_object := "The common object of such assembly";
     }
 
     elements {
+        /// Section 146 deems every member guilty once force or violence is used in prosecution of the assembly's common object.
         all_of {
-            /// actus reus - force or violence used by the assembly or any member
-            actus_reus use_force := "Force or violence is used by an unlawful assembly or by any member thereof";
-            /// circumstance - linkage to the common object
-            circumstance in_prosecution := "The force or violence is used in prosecution of the common object of such assembly";
-            /// constructive imputation - every member is guilty of rioting
-            circumstance constructive_liability := "Every member of the assembly is guilty of the offence of rioting";
+            any_of {
+                actus_reus force_or_violence_by_assembly := "Force or violence is used by an unlawful assembly";
+                actus_reus force_or_violence_by_member := "Force or violence is used by any member thereof";
+            }
+            circumstance prosecution_of_common_object := "The force or violence is used in prosecution of the common object of such assembly";
+            circumstance every_member_guilty := "Every member of such assembly is guilty of the offence of rioting";
         }
     }
-
-    // punishment for rioting is prescribed by section 147
 }

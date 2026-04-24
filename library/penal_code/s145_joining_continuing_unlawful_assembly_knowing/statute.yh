@@ -1,25 +1,17 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr145-#pr145-
-// Singapore Penal Code Section 145 - Joining or continuing in an unlawful assembly, knowing that it has been commanded to disperse
 
 statute 145 "Joining or continuing in an unlawful assembly, knowing that it has been commanded to disperse" effective 1872-01-01 {
-    definitions {
-        unlawful_assembly := "As defined under section 141";
-        dispersal_command := "A command to disperse issued in the manner prescribed by law";
-    }
-
     elements {
         all_of {
-            /// actus reus - joining or continuing
-            actus_reus join_or_continue := "Joining or continuing in an unlawful assembly";
-            /// mens rea - knowledge of the dispersal command
+            actus_reus joining_or_continuing := "Joins or continues in an unlawful assembly";
             mens_rea knowledge := "Knowing that such unlawful assembly has been commanded in the manner prescribed by law to disperse";
         }
     }
 
-    penalty {
+    penalty or_both {
         imprisonment := 0 years .. 5 years;
-        fine := $0.00 .. $50,000.00;
+        fine := unlimited;
     }
 }

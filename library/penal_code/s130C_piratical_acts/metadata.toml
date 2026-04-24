@@ -2,16 +2,17 @@
 section_number = "130C"
 title = "Piratical acts"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Criminalises piratical acts against Singapore ships, including theft, damage, mutiny, and counselling or procuring such acts, whether in or out of Singapore."
+summary = "Creates an offence for stealing or damaging Singapore ships or their contents, committing mutinous acts on them, or counselling or procuring those acts, whether in or out of Singapore."
 source = "Singapore Penal Code 1871, Section 130C"
 
 [verification]

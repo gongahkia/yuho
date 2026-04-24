@@ -2,16 +2,17 @@
 section_number = "140B"
 title = "Application of Chapter 7 to Singapore Police Force"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Extends the application of Chapter VII to acts committed in relation to the Singapore Police Force and its auxiliary, volunteer, or special forces, with necessary modifications."
+summary = "Applies Chapter 7 provisions concerning offences against armed forces personnel, with necessary modifications, to corresponding acts involving the Singapore Police Force and attached volunteer, auxiliary, or special forces."
 source = "Singapore Penal Code 1871, Section 140B"
 
 [verification]

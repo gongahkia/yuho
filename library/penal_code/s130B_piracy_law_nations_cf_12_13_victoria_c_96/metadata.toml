@@ -2,16 +2,17 @@
 section_number = "130B"
 title = "Piracy by law of nations. Cf. 12 and 13 Victoria c. 96 (Admiralty Offences (Colonial) Act 1849)"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Criminalises piracy as defined by the law of nations; aggravated piracy involving murder or life-endangering acts attracts the death penalty."
+summary = "Defines piracy by reference to the law of nations and prescribes life imprisonment with minimum caning, escalating to death for specified life-endangering conduct during piracy."
 source = "Singapore Penal Code 1871, Section 130B"
 
 [verification]

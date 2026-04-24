@@ -1,27 +1,11 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr143-#pr143-
-// Singapore Penal Code Section 143 - Punishment
-// Shape: punishment section for membership in an unlawful assembly (cross-refs s141 / s142)
-
-referencing penal_code/s141_unlawful_assembly
-referencing penal_code/s142_being_member_unlawful_assembly
 
 statute 143 "Punishment" effective 1872-01-01 {
-    definitions {
-        unlawful_assembly := "As defined under section 141";
-        member := "As defined under section 142";
-    }
-
-    elements {
-        all_of {
-            /// circumstance - conviction for membership of an unlawful assembly
-            circumstance membership := "Being a member of an unlawful assembly within the meaning of sections 141 and 142";
-        }
-    }
-
-    penalty {
-        imprisonment := 0 years .. 2 years;
-        fine := $0.00 .. $50,000.00;
+    /// Punishment for being a member of an unlawful assembly; see sections 141 and 142 for the underlying offence context.
+    penalty or_both {
+        imprisonment := 0 days .. 2 years;
+        fine := unlimited;
     }
 }

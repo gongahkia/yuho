@@ -2,16 +2,17 @@
 section_number = "132"
 title = "Abetment of mutiny, if mutiny is committed in consequence thereof"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Enhanced punishment for abetment of mutiny where mutiny is in fact committed in consequence of the abetment, including the possibility of death."
+summary = "This section criminalises abetting mutiny where mutiny is in fact committed in consequence of that abetment."
 source = "Singapore Penal Code 1871, Section 132"
 
 [verification]

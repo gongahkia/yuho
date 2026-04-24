@@ -2,16 +2,17 @@
 section_number = "130E"
 title = "Punishment for genocide"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Prescribes punishment for genocide under section 130D: death where the offence consists of killing, else imprisonment for life or up to 20 years."
+summary = "Prescribes death where genocide consists of the killing of any person, and otherwise imprisonment for life or up to 20 years."
 source = "Singapore Penal Code 1871, Section 130E"
 
 [verification]

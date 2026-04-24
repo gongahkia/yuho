@@ -1,32 +1,28 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr144-#pr144-
-// Singapore Penal Code Section 144 - Joining an unlawful assembly armed with any deadly weapon
 
-/// Illustration - A wooden pole sharpened at the end is a thing which, used as a weapon of offence, is likely to cause death. This illustration is applicable to sections 148 and 158.
 statute 144 "Joining an unlawful assembly armed with any deadly weapon" effective 1872-01-01 {
-    definitions {
-        deadly_weapon := "Any weapon inherently capable of causing death";
-        weapon_of_offence := "Anything which, used as a weapon of offence, is likely to cause death";
-        unlawful_assembly := "As defined under section 141";
-    }
-
     elements {
+        /// The offence is conjunctive: membership in an unlawful assembly and the armed condition must both be present.
         all_of {
-            /// circumstance - armed with a deadly or offence-likely weapon
+            actus_reus membership := "Is a member of an unlawful assembly";
             circumstance armed := "Being armed with any deadly weapon, or with anything which, used as a weapon of offence, is likely to cause death";
-            /// circumstance - member of an unlawful assembly
-            circumstance member := "Being a member of an unlawful assembly within the meaning of section 141";
         }
     }
 
-    penalty {
+    penalty or_both {
         imprisonment := 0 years .. 5 years;
-        fine := $0.00 .. $50,000.00;
-        caning := 0 .. 24 strokes;
+        fine := unlimited;
+        supplementary := "Whoever, being armed with any deadly weapon, or with anything which, used as a weapon of offence, is likely to cause death, is a member of an unlawful assembly shall be punished with imprisonment for a term which may extend to 5 years, or with fine, or with caning, or with any combination of such punishments."
     }
 
-    illustration example1 {
+    /// Illustration
+    illustration illustration_1 {
         "A wooden pole sharpened at the end is a thing which, used as a weapon of offence, is likely to cause death."
+    }
+
+    illustration illustration_2 {
+        "This illustration is applicable to sections 148 and 158."
     }
 }

@@ -2,13 +2,14 @@
 section_number = "136"
 title = "Harbouring a deserter"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
 summary = "Criminalises harbouring a known deserter of the Singapore Armed Forces or visiting forces with intent to prevent apprehension."

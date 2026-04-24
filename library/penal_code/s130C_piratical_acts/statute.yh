@@ -1,30 +1,22 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr130C-#pr130C-
-// Singapore Penal Code Section 130C - Piratical acts
 
 statute 130C "Piratical acts" effective 1872-01-01 {
-    definitions {
-        singapore_ship := "A ship registered in, or under the jurisdiction of, Singapore";
-        mutinous_act := "An act of mutiny on a Singapore ship";
-        extra_territorial := "Whether in or out of Singapore";
-    }
-
     elements {
-        any_of {
-            /// paragraph (a) - stealing a Singapore ship
-            actus_reus steal_ship := "Stealing a Singapore ship, whether in or out of Singapore";
-            /// paragraph (b) - stealing, throwing overboard, damaging, or destroying cargo/supplies/fittings
-            actus_reus steal_cargo := "Stealing or without lawful authority throwing overboard, damaging, or destroying anything that is part of the cargo, supplies or fittings in a Singapore ship";
-            /// paragraph (c) - mutinous acts on a Singapore ship
-            actus_reus mutinous := "Doing or attempting to do a mutinous act on a Singapore ship";
-            /// paragraph (d) - counselling or procuring any of the above
-            actus_reus counsel_procure := "Counselling or procuring a person to do anything mentioned in paragraph (a), (b) or (c)";
+        all_of {
+            circumstance location := "While in or out of Singapore";
+            any_of {
+                actus_reus paragraph_a := "Steals a Singapore ship";
+                actus_reus paragraph_b := "Steals or without lawful authority throws overboard, damages or destroys anything that is part of the cargo, supplies or fittings in a Singapore ship";
+                actus_reus paragraph_c := "Does or attempts to do a mutinous act on a Singapore ship";
+                actus_reus paragraph_d := "Counsels or procures a person to do anything mentioned in paragraph (a), (b) or (c)";
+            }
         }
     }
 
-    penalty {
+    penalty cumulative {
         imprisonment := 0 years .. 15 years;
-        caning := 0 .. 24 strokes;
+        supplementary := "Shall be liable to caning.";
     }
 }

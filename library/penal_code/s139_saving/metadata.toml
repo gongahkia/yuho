@@ -2,16 +2,17 @@
 section_number = "139"
 title = "Saving"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Saving provision preventing double punishment where a service-discipline law covers an offence corresponding to one in Chapter VII."
+summary = "This saving provision prevents punishment under the Penal Code where a corresponding Chapter VII offence is punishable under Singapore Armed Forces discipline law."
 source = "Singapore Penal Code 1871, Section 139"
 
 [verification]

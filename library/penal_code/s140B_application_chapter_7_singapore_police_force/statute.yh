@@ -1,13 +1,9 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr140B-#pr140B-
-// Singapore Penal Code Section 140B - Application of Chapter 7 to Singapore Police Force
-// Shape: scope/application (extends Chapter VII mutatis mutandis to police force acts)
 
 statute 140B "Application of Chapter 7 to Singapore Police Force" effective 1872-01-01 {
     definitions {
-        scope := "The provisions of Chapter VII relating to offences committed in relation to members of the Singapore Armed Forces or any visiting forces lawfully present in Singapore shall apply, with the necessary modifications, to similar acts committed in relation to members of the Singapore Police Force or any volunteer, auxiliary or special force attached to, or coming under the jurisdiction of, that Force";
-        singapore_police_force := "The Singapore Police Force including any volunteer, auxiliary or special force attached to or under its jurisdiction";
-        necessary_modifications := "Mutatis mutandis application of the Chapter VII provisions";
+        application_rule := "The provisions of this Chapter relating to offences committed in relation to members of the Singapore Armed Forces or any visiting forces lawfully present in Singapore shall apply, with the necessary modifications, to similar acts committed in relation to members of the Singapore Police Force or any volunteer, auxiliary or special force attached to, or coming under the jurisdiction of, that Force.";
     }
 }

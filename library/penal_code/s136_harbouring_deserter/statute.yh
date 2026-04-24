@@ -1,30 +1,20 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr136-#pr136-
-// Singapore Penal Code Section 136 - Harbouring a deserter
-
 /// @amendment [15/2019]
-statute 136 "Harbouring a deserter" effective 1872-01-01 {
-    definitions {
-        officer := "An officer in the Singapore Armed Forces or any visiting forces lawfully present in Singapore";
-        serviceman := "Any serviceman in the Singapore Armed Forces or any visiting forces lawfully present in Singapore";
-        deserter := "An officer or serviceman who has deserted";
-        harbour := "As defined in section 130A";
-    }
 
+statute 136 "Harbouring a deserter" effective 1872-01-01 effective 2020-01-01 {
     elements {
+        /// Section 136 requires knowledge or reason to believe of desertion, harbouring, and intent to prevent apprehension.
         all_of {
-            /// mens rea - knowledge or reason to believe of desertion
-            mens_rea knowledge := "Knowing or having reason to believe that an officer or a serviceman has deserted";
-            /// actus reus - harbouring the deserter
-            actus_reus harbouring := "Harbouring such officer or serviceman";
-            /// mens rea - specific intent to prevent apprehension
-            mens_rea intent_prevent := "Intention of preventing the officer or serviceman from being apprehended";
+            mens_rea knowledge_or_reason_to_believe := "Knowing or having reason to believe that an officer or a serviceman in the Singapore Armed Forces or any visiting forces lawfully present in Singapore has deserted";
+            actus_reus harbouring := "Harbours such officer or serviceman" caused_by knowledge_or_reason_to_believe;
+            mens_rea intention_to_prevent_apprehension := "With the intention of preventing the officer or serviceman from being apprehended" caused_by harbouring;
         }
     }
 
-    penalty {
-        imprisonment := 0 years .. 2 years;
-        fine := $0.00 .. $50,000.00;
+    penalty or_both {
+        imprisonment := 0 days .. 2 years;
+        fine := unlimited;
     }
 }

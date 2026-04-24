@@ -1,0 +1,19 @@
+[statute]
+section_number = "142"
+title = "Being a member of an unlawful assembly"
+jurisdiction = "Singapore"
+version = "2.0.0"
+
+[encoding]
+depth = "deep"
+revision = "phase-D"
+
+[contributor]
+name = "agent-reencoding-phase-D"
+
+[description]
+summary = "Defines when a person is said to be a member of an unlawful assembly."
+source = "Singapore Penal Code 1871, Section 142"
+
+[verification]
+sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr142-#pr142-"

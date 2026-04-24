@@ -1,24 +1,17 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr135-#pr135-
-// Singapore Penal Code Section 135 - Abetment of the desertion of an officer or a serviceman
 
 statute 135 "Abetment of the desertion of an officer or a serviceman" effective 1872-01-01 {
-    definitions {
-        officer := "An officer in the Singapore Armed Forces or any visiting forces lawfully present in Singapore";
-        serviceman := "Any serviceman in the Singapore Armed Forces or any visiting forces lawfully present in Singapore";
-        desertion := "Abandonment of duty or post by an officer or serviceman without authority";
-    }
-
     elements {
         all_of {
-            /// actus reus - abetment of desertion
-            actus_reus abet_desertion := "Abetting the desertion of any officer or any serviceman in the Singapore Armed Forces or any visiting forces lawfully present in Singapore";
+            actus_reus abets_desertion := "Abets the desertion";
+            circumstance protected_person := "The desertion is of any officer or any serviceman in the Singapore Armed Forces or any visiting forces lawfully present in Singapore" caused_by abets_desertion;
         }
     }
 
-    penalty {
+    penalty or_both {
         imprisonment := 0 years .. 2 years;
-        fine := $0.00 .. $50,000.00;
+        fine := unlimited;
     }
 }

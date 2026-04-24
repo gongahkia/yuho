@@ -1,25 +1,9 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr142-#pr142-
-// Singapore Penal Code Section 142 - Being a member of an unlawful assembly
-// Shape: interpretation (defines "member of an unlawful assembly"); punishment is under s143
 
 statute 142 "Being a member of an unlawful assembly" effective 1872-01-01 {
     definitions {
-        member_of_unlawful_assembly := "Whoever, being aware of facts which render any assembly an unlawful assembly, intentionally joins that assembly, or continues in it";
-        unlawful_assembly := "As defined under section 141";
+        member_of_an_unlawful_assembly := "Whoever, being aware of facts which render any assembly an unlawful assembly, intentionally joins that assembly, or continues in it";
     }
-
-    elements {
-        all_of {
-            /// mens rea - awareness of the facts rendering the assembly unlawful
-            mens_rea awareness := "Being aware of facts which render any assembly an unlawful assembly";
-            /// actus reus - joining or continuing in the assembly
-            actus_reus join_or_continue := "Intentionally joining that assembly or continuing in it";
-            /// circumstance - the assembly must be unlawful under s141
-            circumstance assembly_is_unlawful := "The assembly is an unlawful assembly within the meaning of section 141";
-        }
-    }
-
-    // punishment for membership is prescribed by section 143
 }

@@ -1,29 +1,19 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr130E-#pr130E-
-// Singapore Penal Code Section 130E - Punishment for genocide
+/// @amendment [15/2019]
 
 referencing penal_code/s130D_genocide
 
-statute 130E "Punishment for genocide" effective 1872-01-01 {
-    definitions {
-        genocide := "As defined in section 130D";
-        killing_limb := "Paragraph (a) genocide - killing members of the group";
-        other_limb := "Any other act of genocide not consisting of killing";
-    }
-
-    elements {
-        any_of {
-            /// paragraph (a) conviction where offence consists of killing
-            circumstance killing_genocide := "Conviction for genocide consisting of the killing of any person";
-            /// paragraph (b) conviction for any other form of genocide
-            circumstance other_genocide := "Conviction for genocide in any other case";
-        }
-    }
-
-    penalty {
-        imprisonment := 0 years .. 99 years;
+statute 130E "Punishment for genocide" effective 1872-01-01 effective 2020-01-01 {
+    /// Punishment for the offence of genocide under section 130D.
+    penalty alternative when offence_consists_of_killing_any_person {
         death := TRUE;
-        supplementary := "If the offence consists of the killing of any person, punished with death; otherwise imprisonment for life or imprisonment for a term which may extend to 20 years";
+        supplementary := "If the offence consists of the killing of any person, the offender shall be punished with death. [15/2019]";
+    }
+
+    penalty alternative when any_other_case {
+        imprisonment := 0 years .. 20 years;
+        supplementary := "In any other case, the offender shall be punished with imprisonment for life or with imprisonment for a term which may extend to 20 years. [15/2019]";
     }
 }

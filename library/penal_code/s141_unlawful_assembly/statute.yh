@@ -1,32 +1,26 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr141-#pr141-
-// Singapore Penal Code Section 141 - Unlawful assembly
-// Interpretation/definition of "unlawful assembly"
 
-/// Explanation - An assembly which was not unlawful when it assembled may subsequently become an unlawful assembly.
 statute 141 "Unlawful assembly" effective 1872-01-01 {
     definitions {
-        unlawful_assembly := "An assembly of 5 or more persons whose common object is one of the prohibited objects listed in paragraphs (a) to (e)";
-        common_object_overawe := "To overawe by criminal force or show of criminal force the Legislative or Executive Government or any public servant in the exercise of lawful power";
-        common_object_resist_law := "To resist the execution of any law or of any legal process";
-        common_object_commit_offence := "To commit any offence";
-        common_object_take_property := "By means of criminal force or show of criminal force to any person, to take or obtain possession of any property, or to deprive any person of the enjoyment of a right of way, or of the use of water or other incorporeal right of which he is in possession or enjoyment, or to enforce any right or supposed right";
-        common_object_compel := "By means of criminal force or show of criminal force to compel any person to do what he is not legally bound to do, or to omit to do what he is legally entitled to do";
+        unlawful_assembly := "An assembly of 5 or more persons is designated an “unlawful assembly”, if the common object of the persons composing that assembly is one of the objects in paragraphs (a) to (e).";
+        explanation_subsequent_unlawful_assembly := "Explanation. — An assembly which was not unlawful when it assembled may subsequently become an unlawful assembly.";
     }
 
     elements {
-        any_of {
-            /// paragraph (a) - overawing government or public servant
-            circumstance object_a_overawe := "Assembly of 5 or more with common object to overawe by criminal force the Legislative or Executive Government or any public servant";
-            /// paragraph (b) - resisting law or legal process
-            circumstance object_b_resist_law := "Assembly of 5 or more with common object to resist the execution of any law or legal process";
-            /// paragraph (c) - committing any offence
-            circumstance object_c_commit_offence := "Assembly of 5 or more with common object to commit any offence";
-            /// paragraph (d) - taking property or enforcing supposed rights by criminal force
-            circumstance object_d_take_property := "Assembly of 5 or more with common object by criminal force to take property, deprive a right of way or incorporeal right, or enforce any right or supposed right";
-            /// paragraph (e) - compelling acts or omissions by criminal force
-            circumstance object_e_compel := "Assembly of 5 or more with common object by criminal force to compel any person to act or omit contrary to legal right";
+        /// Section 141 requires both the minimum assembly size and one disjunctive common object.
+        all_of {
+            circumstance assembly_of_five_or_more := "An assembly of 5 or more persons";
+
+            /// Paragraphs (a) to (e) are alternative common objects separated by “or”.
+            any_of {
+                actus_reus common_object_overawe := "The common object of the persons composing that assembly is to overawe by criminal force, or show of criminal force, the Legislative or Executive Government, or any public servant in the exercise of the lawful power of such public servant";
+                actus_reus common_object_resist_execution := "The common object of the persons composing that assembly is to resist the execution of any law, or of any legal process";
+                actus_reus common_object_commit_offence := "The common object of the persons composing that assembly is to commit any offence";
+                actus_reus common_object_take_property_or_enforce_right := "The common object of the persons composing that assembly is by means of criminal force, or show of criminal force, to any person, to take or obtain possession of any property, or to deprive any person of the enjoyment of a right of way, or of the use of water or other incorporeal right of which he is in possession or enjoyment, or to enforce any right or supposed right";
+                actus_reus common_object_compel := "The common object of the persons composing that assembly is by means of criminal force, or show of criminal force, to compel any person to do what he is not legally bound to do, or to omit to do what he is legally entitled to do";
+            }
         }
     }
 }

@@ -2,16 +2,17 @@
 section_number = "143"
 title = "Punishment"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Prescribes punishment for being a member of an unlawful assembly: imprisonment up to 2 years, fine, or both."
+summary = "Prescribes imprisonment up to 2 years, a fine, or both for being a member of an unlawful assembly."
 source = "Singapore Penal Code 1871, Section 143"
 
 [verification]

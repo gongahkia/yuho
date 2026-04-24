@@ -2,16 +2,17 @@
 section_number = "130D"
 title = "Genocide"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Defines genocide as acts including killing, serious harm, destructive conditions, birth prevention, or forcible transfer of children, done with intent to destroy a national, ethnic, racial, or religious group."
+summary = "Defines genocide as committing any listed genocidal act with intent to destroy, in whole or in part, a national, ethnical, racial, or religious group."
 source = "Singapore Penal Code 1871, Section 130D"
 
 [verification]

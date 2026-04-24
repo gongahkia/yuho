@@ -2,16 +2,17 @@
 section_number = "138"
 title = "Abetment of act of insubordination by an officer or a serviceman"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Criminalises knowingly abetting an act of insubordination by a serviceman where the act of insubordination is committed in consequence of the abetment."
+summary = "Makes it an offence to knowingly abet an act of insubordination by an officer or serviceman where that act is committed in consequence of the abetment."
 source = "Singapore Penal Code 1871, Section 138"
 
 [verification]

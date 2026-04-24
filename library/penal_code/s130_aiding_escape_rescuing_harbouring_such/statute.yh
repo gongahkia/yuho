@@ -1,37 +1,29 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr130-#pr130-
-// Singapore Penal Code Section 130 - Aiding escape of, rescuing, or harbouring such prisoner
-
-/// Explanation - A prisoner of State or prisoner of war who is permitted to be at large on his parole within certain limits in Singapore, is said to escape from lawful custody if he goes beyond the limits within which he is allowed to be at large.
 /// @amendment [15/2019]
-statute 130 "Aiding escape of, rescuing, or harbouring such prisoner" effective 1872-01-01 {
+
+statute 130 "Aiding escape of, rescuing, or harbouring such prisoner" effective 1872-01-01 effective 2020-01-01 {
     definitions {
-        prisoner := "A prisoner of State or prisoner of war";
-        lawful_custody := "Custody authorised by law, including parole within prescribed limits";
-        harbour := "As defined in section 130A";
+        explanation_escape_from_lawful_custody := "Explanation .—A prisoner of State or prisoner of war who is permitted to be at large on his parole within certain limits in Singapore, is said to escape from lawful custody if he goes beyond the limits within which he is allowed to be at large.";
     }
 
     elements {
+        /// Section 130 is conjunctive overall, with four disjunctive actus reus limbs tied to a knowing mental element.
         all_of {
-            /// mens rea - knowledge is required for all limbs
-            mens_rea knowledge := "Knowingly aiding, assisting, rescuing, attempting to rescue, harbouring, concealing, or resisting recapture";
+            mens_rea knowledge := "Whoever knowingly";
             any_of {
-                /// limb 1 - aiding or assisting escape
-                actus_reus aid_escape := "Aiding or assisting any prisoner of State or prisoner of war in escaping from lawful custody";
-                /// limb 2 - rescuing or attempting to rescue
-                actus_reus rescue := "Rescuing or attempting to rescue any such prisoner";
-                /// limb 3 - harbouring or concealing an escapee
-                actus_reus harbour_conceal := "Harbouring or concealing any such prisoner who has escaped from lawful custody";
-                /// limb 4 - resisting recapture
-                actus_reus resist_recapture := "Offering or attempting to offer any resistance to the recapture of such prisoner";
+                actus_reus aiding_or_assisting_escape := "Aids or assists any prisoner of State or prisoner of war in escaping from lawful custody" caused_by knowledge;
+                actus_reus rescuing_or_attempting_rescue := "Rescues or attempts to rescue any such prisoner" caused_by knowledge;
+                actus_reus harbouring_or_concealing_escapee := "Harbours or conceals any such prisoner who has escaped from lawful custody" caused_by knowledge;
+                actus_reus resisting_recapture := "Offers or attempts to offer any resistance to the recapture of such prisoner" caused_by knowledge;
             }
         }
     }
 
     penalty {
-        imprisonment := 0 years .. 99 years;
-        fine := $0.00 .. $50,000.00;
-        supplementary := "Imprisonment for life, or imprisonment for a term which may extend to 15 years; if not sentenced to imprisonment for life, also liable to fine";
+        imprisonment := 0 days .. 15 years;
+        fine := unlimited;
+        supplementary := "The offender shall be punished with imprisonment for life, or with imprisonment for a term which may extend to 15 years, and shall, if he is not sentenced to imprisonment for life, also be liable to fine. [15/2019]";
     }
 }

@@ -1,34 +1,19 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr130D-#pr130D-
-// Singapore Penal Code Section 130D - Genocide
+/// @amendment [15/2019]
 
-statute 130D "Genocide" effective 1872-01-01 {
-    definitions {
-        protected_group := "A national, an ethnical, a racial or a religious group";
-        genocidal_intent := "Intent to destroy, in whole or in part, a national, an ethnical, a racial or a religious group";
-        serious_bodily_harm := "Serious bodily or mental harm to members of the group";
-        conditions_of_life := "Conditions of life calculated to bring about the physical destruction of the group in whole or in part";
-    }
-
+statute 130D "Genocide" effective 1872-01-01 effective 2020-01-01 {
     elements {
         all_of {
-            /// mens rea - genocidal intent
-            mens_rea intent_to_destroy := "Intent to destroy, in whole or in part, a national, an ethnical, a racial or a religious group";
+            mens_rea intent_to_destroy := "With intent to destroy, in whole or in part, a national, an ethnical, a racial or a religious group";
             any_of {
-                /// paragraph (a) - killing members of the group
-                actus_reus killing := "Killing members of the group";
-                /// paragraph (b) - causing serious harm
+                actus_reus killing_members := "Killing members of the group";
                 actus_reus serious_harm := "Causing serious bodily or mental harm to members of the group";
-                /// paragraph (c) - inflicting destructive conditions of life
                 actus_reus destructive_conditions := "Deliberately inflicting on the group conditions of life calculated to bring about its physical destruction in whole or in part";
-                /// paragraph (d) - preventing births
                 actus_reus prevent_births := "Imposing measures intended to prevent births within the group";
-                /// paragraph (e) - forcible transfer of children
                 actus_reus transfer_children := "Forcibly transferring children of the group to another group";
             }
         }
     }
-
-    // punishment for genocide is prescribed by section 130E
 }
