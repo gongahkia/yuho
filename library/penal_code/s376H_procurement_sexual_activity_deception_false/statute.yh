@@ -31,12 +31,6 @@ statute 376H "Procurement of sexual activity by deception or false representatio
     }
 
     subsection (2) {
-        penalty or_both when penetrative_touching_case {
-            imprisonment := 0 years .. 10 years;
-            fine := unlimited;
-            supplementary := "Applies in the case where the sexual touching mentioned in subsection (1) involved penetration of the vagina or anus (as the case may be) with a part of the body or anything else, or penetration of the mouth with the penis; the exact statutory caning limb is preserved in GAPS.md because the grammar cannot encode uncapped caning without inventing a stroke count.";
-        }
-
         penalty or_both when other_case {
             imprisonment := 0 years .. 2 years;
             fine := unlimited;

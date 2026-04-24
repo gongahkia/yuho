@@ -36,7 +36,6 @@ statute 377 "Sexual penetration, etc., of a corpse" effective 1872-01-01 effecti
 
         penalty alternative {
             fine := unlimited;
-            caning := 0 .. 24 strokes;
             supplementary := "The offender shall also be liable to fine or to caning. [Act 23 of 2021 wef 01/03/2022]";
         }
     }

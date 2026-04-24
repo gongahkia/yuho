@@ -6,11 +6,15 @@
 // Shape: scope / jurisdictional deeming rule
 
 statute 4A "Offences against State and genocide committed outside Singapore by citizen or permanent resident" effective 1872-01-01 effective 2019-11-01 {
-    definitions {
-        subject_person := "Every person who is a citizen or permanent resident of Singapore";
-        relevant_conduct := "An act or omission committed outside Singapore";
-        qualifying_offence := "Conduct that if committed in Singapore would constitute an offence under Chapter 6 (Offences against the State) or 6B (Genocide)";
-        deemed_place := "The person is deemed to have committed that act or omission in Singapore";
+    elements {
+        all_of {
+            circumstance citizen_or_permanent_resident := "Every person who, being a citizen or permanent resident of Singapore";
+            actus_reus outside_singapore_conduct := "Commits an act or omission outside Singapore";
+            any_of {
+                circumstance chapter_6_offence := "That if committed in Singapore would constitute an offence under Chapter 6 (Offences against the State)";
+                circumstance chapter_6B_offence := "That if committed in Singapore would constitute an offence under 6B (Genocide)";
+            }
+            circumstance deemed_in_singapore := "Is deemed to have committed that act or omission in Singapore";
+        }
     }
-
 }

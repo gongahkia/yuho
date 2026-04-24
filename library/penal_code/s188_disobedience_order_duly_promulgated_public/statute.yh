@@ -48,11 +48,11 @@ statute 188 "Disobedience to order duly promulgated by public servant" effective
 
         penalty or_both when individual_case {
             imprisonment := 0 days .. 6 months;
-            fine := $0.00 .. $2,500.00;
+            fine := $0.00 .. $5,000.00;
         }
 
         penalty when other_case {
-            fine := $0.00 .. $20,000.00;
+            fine := $0.00 .. $10,000.00;
         }
     }
 

@@ -1,5 +1,5 @@
 # s377BD — L3 flag
 
 - failed: 7
-- reason: Subsection (3) states the offender is also liable to fine or to caning, but the encoding only models imprisonment and leaves fine/caning as unstructured supplementary text.
-- suggested fix: Encode subsection (3) with an explicit cumulative imprisonment block plus a separate fine/caning liability block, following the pattern used in nearby section 377BB(8).
+- reason: Subsection (3) encodes only `fine := unlimited` for the “liable to fine or to caning” branch and omits any `caning :=` clause, so the penalty facts are incomplete.
+- suggested fix: Model subsection (3)’s alternative branch with both fine and caning liability instead of leaving caning only in supplementary text.

@@ -14,15 +14,23 @@ statute 305 "Abetment of suicide or attempted suicide of minor or person who lac
                 }
             }
 
-            penalty alternative {
+            penalty alternative when death_sentence {
                 death := TRUE;
-                supplementary := "The offender shall be punished with death or imprisonment for life, or with imprisonment for a term which may extend to 20 years, and shall, if he is not sentenced to death or imprisonment for life, also be liable to fine. [15/2019]"
+                supplementary := "The offender shall be punished with death. [15/2019]"
             }
 
-            penalty cumulative {
+            penalty alternative when life_imprisonment_sentence {
+                supplementary := "The offender shall be punished with imprisonment for life. [15/2019]"
+            }
+
+            penalty cumulative when term_imprisonment_sentence {
                 imprisonment := 0 years .. 20 years;
+                supplementary := "The offender shall be punished with imprisonment for a term which may extend to 20 years. [15/2019]"
+            }
+
+            penalty when fine_if_not_death_or_life_sentence {
                 fine := unlimited;
-                supplementary := "The structured clauses in this block capture the fixed-term imprisonment and uncapped fine limbs only; the life-imprisonment alternative and the condition that fine applies only if the offender is not sentenced to death or imprisonment for life remain in the statutory text quoted in the other penalty block."
+                supplementary := "The offender shall, if he is not sentenced to death or imprisonment for life, also be liable to fine. [15/2019]"
             }
         }
 
@@ -52,10 +60,18 @@ statute 305 "Abetment of suicide or attempted suicide of minor or person who lac
                 }
             }
 
-            penalty cumulative {
+            penalty alternative when life_imprisonment_sentence {
+                supplementary := "The offender shall be punished with imprisonment for life. [15/2019]"
+            }
+
+            penalty cumulative when term_imprisonment_sentence {
                 imprisonment := 0 years .. 20 years;
+                supplementary := "The offender shall be punished with imprisonment for a term which may extend to 20 years. [15/2019]"
+            }
+
+            penalty when fine_if_not_life_sentence {
                 fine := unlimited;
-                supplementary := "The offender shall be punished with imprisonment for life or with imprisonment for a term which may extend to 20 years, and shall, if he is not sentenced to imprisonment for life, also be liable to fine. [15/2019]"
+                supplementary := "The offender shall, if he is not sentenced to imprisonment for life, also be liable to fine. [15/2019]"
             }
         }
     }

@@ -1,5 +1,5 @@
 # s304C — L3 flag
 
 - failed: 7
-- reason: The canonical text makes the offender liable to fine or to caning without stating any caning quantum, but the encoding adds `caning := 0 .. 24 strokes`.
-- suggested fix: Remove the invented caning range and encode only the punishment facts expressly stated in the statute.
+- reason: Subsection (4) is not faithfully encoded because the statute makes imprisonment mandatory with additional liability to fine or to caning, but the `.yh` models only the fine branch machine-readably and leaves caning only in supplementary text.
+- suggested fix: Encode both alternative supplementary punishments in subsection (4) without inventing a caning quantum that the statute does not state.

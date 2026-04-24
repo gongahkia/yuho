@@ -44,6 +44,8 @@ statute 376G "Incest" effective 1872-01-01 effective 2019-12-31 effective 2022-0
     subsection (5) {
         definitions {
             avoidance_of_doubt_opening := "To avoid doubt —";
+            prosecution_need_not_prove_consent := "it is not necessary for the prosecution to prove that B did consent to the act of penetration mentioned in subsection (1); and";
+            consent_not_a_defence := "it is not a defence that B did consent to that act.";
         }
     }
 

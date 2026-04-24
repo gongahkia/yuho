@@ -1,5 +1,5 @@
 # s73 — L3 flag
 
 - failed: 9
-- reason: The encoding includes an unsupported `excluded_offence` definition in subsection (4) and an inferred `2020-01-01` effective date that cannot be verified from the canonical `act.json` entry alone.
-- suggested fix: Reconcile subsection (4) and the effective dates against the authoritative source text/commencement record, then restamp only if the extra content is proven.
+- reason: The encoding omits the 2019 commencement date even though the canonical entry carries a `[15/2019]` amendment marker, so `effective 1872-01-01` and `effective 2022-03-01` alone are not sane.
+- suggested fix: Verify and add the section’s 2019 effective date, then retain the existing 2022 amendment date.

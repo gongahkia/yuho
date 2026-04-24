@@ -4,7 +4,7 @@
 /// @amendment [15/2019]
 /// @amendment [Act 23 of 2021 wef 01/03/2022]
 
-statute 377D "Mistake as to age in sexual offences" effective 1872-01-01 effective 2019-12-31 effective 2022-03-01 {
+statute 377D "Mistake as to age in sexual offences" effective 2019-12-31 effective 2022-03-01 {
     subsection (1) {
         definitions {
             reasonable_mistake_as_to_age_not_defence := "Subject to subsections (2) and (3) and despite section 79, a reasonable mistake as to the age of a person cannot be a defence to any charge for a sexual offence. [15/2019]";
@@ -32,12 +32,9 @@ statute 377D "Mistake as to age in sexual offences" effective 1872-01-01 effecti
         }
 
         elements {
-            all_of {
-                circumstance defence_under_subsection_2_invoked := "The defence under subsection (2) is invoked";
-                any_of {
-                    circumstance previously_charged_for_listed_offence := "At the time of the offence, the person charged with that offence has previously been charged in court for an offence under section 375(1)(b), 375(1A)(b), 376(1) (if the victim B is below 14 years of age), 376(2) (if the victim B is below 14 years of age), 376A, 376AA, 376B, 376C, 376E, 376EA, 376EB, 376EC, 376ED, 376EE, 377BG, 377BH, 377BI, 377BJ, 377BK or 377BL or section 7 of the Children and Young Persons Act or section 140(1)(i) or 145(1) of the Women’s Charter" burden prosecution beyond_reasonable_doubt;
-                    circumstance failed_to_take_all_reasonable_steps := "At the time of the offence, the person charged with that offence failed to take all reasonable steps to verify that the minor was of or above 18 years of age" burden prosecution beyond_reasonable_doubt;
-                }
+            any_of {
+                circumstance previously_charged_for_listed_offence := "has previously been charged in court for an offence under section 375(1)( b ), 375(1A)( b ), 376(1) as in force before its deletion by section 23( a ) of the Criminal Law (Miscellaneous Amendments) Act 2021 (if the victim B is below 14 years of age), 376(2) (if the victim B is below 14 years of age), 376A, 376AA, 376B, 376C, 376E, 376EA, 376EB, 376EC, 376ED, 376EE, 377BG, 377BH, 377BI, 377BJ, 377BK or 377BL or section 8 of the Children and Young Persons Act 1993 or section 140(1)( i ) or 145(1) of the Women’s Charter 1961; or" burden prosecution beyond_reasonable_doubt;
+                circumstance failed_to_take_all_reasonable_steps := "failed to take all reasonable steps to verify that the minor was of or above 18 years of age." burden prosecution beyond_reasonable_doubt;
             }
         }
     }

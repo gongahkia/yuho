@@ -29,13 +29,9 @@ statute 377BG "Using or involving child in production of child abuse material" e
             supplementary := "A person who is guilty of an offence under subsection (1) shall on conviction be punished with imprisonment for a term which may extend to 10 years, and shall also be liable to fine or to caning. [15/2019]";
         }
 
-        penalty when fine_liability {
+        penalty alternative {
             fine := unlimited;
-            supplementary := "The offender shall also be liable to fine. [15/2019]";
-        }
-
-        penalty when caning_liability {
-            supplementary := "The offender shall also be liable to caning. [15/2019]";
+            supplementary := "The offender shall also be liable to fine or to caning. [15/2019]";
         }
     }
 

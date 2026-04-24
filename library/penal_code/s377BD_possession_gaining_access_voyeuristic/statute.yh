@@ -36,9 +36,14 @@ statute 377BD "Possession of or gaining access to voyeuristic or intimate image 
             }
         }
 
-        penalty {
+        penalty cumulative {
             imprisonment := 0 years .. 2 years;
-            supplementary := "A person who is guilty of an offence under this section shall on conviction be punished with imprisonment for a term which may extend to 2 years, and shall also be liable to fine or to caning. [15/2019]";
+            supplementary := "A person who is guilty of an offence under this section shall on conviction be punished with imprisonment for a term which may extend to 2 years. [15/2019]";
+        }
+
+        penalty alternative {
+            fine := unlimited;
+            supplementary := "The offender shall also be liable to fine or to caning. [15/2019]";
         }
     }
 

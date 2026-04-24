@@ -38,6 +38,7 @@ statute 376 "Sexual assault involving penetration" effective 1872-01-01 effectiv
 
         penalty alternative {
             fine := unlimited;
+            caning := 0 .. 24 strokes;
             supplementary := "The offender shall also be liable to fine or to caning.";
         }
     }
@@ -49,6 +50,7 @@ statute 376 "Sexual assault involving penetration" effective 1872-01-01 effectiv
 
         penalty cumulative {
             imprisonment := 8 years .. 20 years;
+            caning := 12 .. 24 strokes;
             supplementary := "Whoever satisfies subsection (4) shall be punished with imprisonment for a term of not less than 8 years and not more than 20 years and shall also be punished with caning with not less than 12 strokes.";
             minimum imprisonment := 8 years;
         }

@@ -1,5 +1,5 @@
 # s377BB — L3 flag
 
-- failed: 6, 7
-- reason: Canonical subsections (2) to (5) contain substantive offence text but are empty in `statute.yh`, and subsections (7) and (8) fabricate `caning := 0 .. 24 strokes` even though the statute states only liability to caning with no numeric quantum.
-- suggested fix: Populate subsections (2) to (5) from the canonical text and preserve the caning limbs verbatim in supplementary text instead of inventing a stroke range.
+- failed: 7
+- reason: The encoding drops the statute's express caning punishment in subsections (7) and (8) as structured penalty facts and leaves it only in supplementary text.
+- suggested fix: Add explicit `caning :=` penalty clauses for subsections (7) and (8) so the punishment branches fully match the canonical text.

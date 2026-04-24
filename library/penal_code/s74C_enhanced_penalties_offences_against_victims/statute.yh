@@ -56,16 +56,14 @@ statute 74C "Enhanced penalties for offences against victims in intimate relatio
     }
 
     subsection (5) {
-        elements {
-            /// the court may consider all circumstances of the case, including any of these non-exhaustive relationship factors
-            any_of {
-                circumstance same_household := "Whether A and B are living in the same household, although it is not necessary that they live in the same household";
-                circumstance shared_daily_tasks := "Whether A and B share the tasks and duties of their daily lives";
-                circumstance financial_arrangements := "Whether A and B have made arrangements to share expenses or financial support and the degree of financial dependence or interdependence between A and B";
-                circumstance sexual_relationship := "Whether there is a sexual relationship between A and B, although it is not necessary that there be a sexual relationship between them";
-                circumstance shared_care_support := "Whether A and B share the care and support of a specific person below 21 years of age";
-                circumstance held_out_as_intimate := "Whether A and B conduct themselves toward their friends, relatives or other persons as parties to an intimate relationship, and whether A and B are so treated by their friends, relatives or other persons";
-            }
+        definitions {
+            intimate_relationship_determination := "For the purpose of this section, the court may determine whether the offender ( A ) was or is in an intimate relationship with the victim ( B ) having regard to all the circumstances of the case, including the following:";
+            same_household := "whether A and B are living in the same household, although it is not necessary that they live in the same household;";
+            shared_daily_tasks := "whether A and B share the tasks and duties of their daily lives;";
+            financial_arrangements := "whether A and B have made arrangements to share expenses or financial support and the degree of financial dependence or interdependence between A and B ;";
+            sexual_relationship := "whether there is a sexual relationship between A and B , although it is not necessary that there be a sexual relationship between them;";
+            shared_care_support := "whether A and B share the care and support of a specific person below 21 years of age;";
+            held_out_as_intimate := "whether A and B conduct themselves toward their friends, relatives or other persons as parties to an intimate relationship, and whether A and B are so treated by their friends, relatives or other persons.";
         }
     }
 }

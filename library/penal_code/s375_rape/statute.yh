@@ -36,10 +36,14 @@ statute 375 "Rape" effective 1872-01-01 effective 2020-01-01 {
     }
 
     subsection (2) {
-        penalty or_both {
+        penalty cumulative {
             imprisonment := 0 days .. 20 years;
+            supplementary := "Subject to subsection (3), a man who is guilty of an offence under this section shall be punished with imprisonment for a term which may extend to 20 years.";
+        }
+
+        penalty alternative {
             fine := unlimited;
-            supplementary := "Subject to subsection (3), a man who is guilty of an offence under this section shall also be liable to caning.";
+            supplementary := "The offender shall also be liable to fine or to caning.";
         }
     }
 

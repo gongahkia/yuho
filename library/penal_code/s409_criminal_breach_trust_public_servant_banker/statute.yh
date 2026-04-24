@@ -34,12 +34,12 @@ statute 409 "Criminal breach of trust by public servant, or by banker, merchant,
 
     subsection (2) {
         definitions {
-            director := "“director” includes — ( a ) any person occupying the position of director of a corporation by whatever name called, and includes a person in accordance with whose directions or instructions the directors or the majority of the directors of a corporation are accustomed to act, and an alternate or substitute director; or ( b ) a member of a corporation in the case where the affairs of the corporation are managed by its members, and includes a person in accordance with whose directions or instructions the members or the majority of the members of such corporation are accustomed to act, and an alternate or substitute member;";
+            director := "“director” includes —";
             fiduciary := "“fiduciary” means a person who has undertaken to act for or on behalf of another person in a matter in circumstances which give rise to a relationship of trust, confidence and loyalty, and includes but is not limited to an executor, an administrator, a liquidator, a receiver and a trustee (other than the trustee of an implied, a constructive or a resulting trust);";
             key_executive := "“key executive” means a person who, whether or not an employee of the corporation, unincorporated association or partnership, and whether acting alone or together with any other person, has general control and management of the administration of that corporation, unincorporated association or partnership;";
-            officer := "“officer”, in relation to an unincorporated association (other than a partnership), means the president, the secretary or any member of the committee of the unincorporated association, and includes — ( a ) any person holding a position analogous to that of president, secretary or member of a committee of the unincorporated association; ( b ) a person in accordance with whose directions or instructions the president, secretary or member of a committee of the unincorporated association or a majority of such persons are accustomed to act; and ( c ) any person purporting to act in any such capacity;";
+            officer := "“officer”, in relation to an unincorporated association (other than a partnership), means the president, the secretary or any member of the committee of the unincorporated association, and includes —";
             partner := "“partner” includes a person purporting to act as a partner;";
-            partnership := "“partnership” includes a limited partnership and a limited liability partnership within the meaning of section 2(1) of the Limited Liability Partnerships Act (Cap. 163A).";
+            partnership := "“partnership” includes a limited partnership and a limited liability partnership within the meaning of section 2(1) of the Limited Liability Partnerships Act 2005.";
         }
     }
 

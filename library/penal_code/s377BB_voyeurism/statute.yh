@@ -16,15 +16,43 @@ statute 377BB "Voyeurism" effective 1872-01-01 effective 2019-12-31 effective 20
     }
 
     subsection (2) {
+        elements {
+            /// Subsection (2) is conjunctive: the operation of equipment for the prohibited observation and A's knowledge or reason to believe of B's non-consent must both be present.
+            all_of {
+                actus_reus operation_for_observation := "Operates equipment with the intention of enabling A or another person to observe a third person ( B ) doing a private act without B ’s consent";
+                mens_rea knowledge_or_reason_to_believe_non_consent := "Knows or has reason to believe that B (whether B ’s private act was recorded or not) does not consent to A operating equipment with that intention.";
+            }
+        }
     }
 
     subsection (3) {
+        elements {
+            /// Subsection (3) is conjunctive: the intentional or knowing recording and A's knowledge or reason to believe of B's non-consent must both be present.
+            all_of {
+                actus_reus recording_private_act := "Intentionally or knowingly records another person ( B ) doing a private act without B ’s consent";
+                mens_rea knowledge_or_reason_to_believe_non_consent := "Knows or has reason to believe that B does not consent to A recording the act.";
+            }
+        }
     }
 
     subsection (4) {
+        elements {
+            /// Subsection (4) is conjunctive: the operation of equipment for the prohibited observation and A's knowledge or reason to believe of B's non-consent must both be present.
+            all_of {
+                actus_reus operation_for_image_observation := "Operates equipment without another person’s ( B ) consent with the intention of enabling A or another person ( C ) to observe B ’s genital region, breasts if B is female, or buttocks (whether exposed or covered) in circumstances where the genital region, breasts, buttocks or underwear would not otherwise be visible";
+                mens_rea knowledge_or_reason_to_believe_non_consent := "Knows or has reason to believe that B (whether B ’s image was recorded or not) does not consent to A operating the equipment with that intention.";
+            }
+        }
     }
 
     subsection (5) {
+        elements {
+            /// Subsection (5) is conjunctive: the intentional or knowing recording and A's knowledge or reason to believe of B's non-consent must both be present.
+            all_of {
+                actus_reus recording_image := "Intentionally or knowingly records without another person’s ( B ) consent an image of B ’s genital region, breasts if B is female, or buttocks (whether exposed or covered), in circumstances where the genital region, breasts, buttocks or underwear would not otherwise be visible";
+                mens_rea knowledge_or_reason_to_believe_non_consent := "Knows or has reason to believe that B does not consent to A recording the image.";
+            }
+        }
     }
 
     subsection (6) {
@@ -40,7 +68,6 @@ statute 377BB "Voyeurism" effective 1872-01-01 effective 2019-12-31 effective 20
         penalty or_both {
             imprisonment := 0 years .. 2 years;
             fine := unlimited;
-            caning := 0 .. 24 strokes;
             supplementary := "Subject to subsection (8), a person who is guilty of an offence under this section shall on conviction be punished with imprisonment for a term which may extend to 2 years, or with fine, or with caning, or with any combination of such punishments. [15/2019]";
         }
     }
@@ -53,8 +80,7 @@ statute 377BB "Voyeurism" effective 1872-01-01 effective 2019-12-31 effective 20
 
         penalty alternative {
             fine := unlimited;
-            caning := 0 .. 24 strokes;
-            supplementary := "The offender shall also be liable to fine or to caning. [15/2019]";
+            supplementary := "A person who commits an offence under this section against a person who is below 14 years of age shall on conviction be punished with imprisonment for a term which may extend to 2 years and shall also be liable to fine or to caning. [15/2019]";
         }
     }
 

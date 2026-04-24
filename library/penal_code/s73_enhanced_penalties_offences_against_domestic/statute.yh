@@ -3,7 +3,7 @@
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr73-#pr73-
 /// @amendment [15/2019]
 /// @amendment [Act 23 of 2021 wef 01/03/2022]
-statute 73 "Enhanced penalties for offences against domestic workers" effective 1872-01-01 effective 2020-01-01 effective 2022-03-01 {
+statute 73 "Enhanced penalties for offences against domestic workers" effective 1872-01-01 effective 2022-03-01 {
     subsection (1) {
         elements {
             /// Section 73(1) applies only when the offender's domestic-worker relationship, the Penal Code offence, and the victim nexus are all present.
@@ -47,7 +47,6 @@ statute 73 "Enhanced penalties for offences against domestic workers" effective 
             employer := "In relation to a domestic worker, includes a person who has the same fundamental qualities as an employer of the domestic worker and whose orders the domestic worker has reasonable grounds for believing she is expected to obey.";
             employment_agency_personnel := "Has the meaning given by section 2 of the Employment Agencies Act 1958.";
             employment_agent := "In relation to a domestic worker, means an employment agency personnel or a person who performs work similar to an employment agency personnel, and whose orders the domestic worker has reasonable grounds for believing she is expected to obey.";
-            excluded_offence := "An offence under section 304B, 304C or 335A, or an offence under this Code which is punishable with death or imprisonment for life.";
             member_of_employers_household := "In relation to a domestic worker, means a person residing in the private dwelling house of the domestic worker’s employer at the time the offence was committed, and whose orders the domestic worker has reasonable grounds for believing she is expected to obey.";
         }
     }

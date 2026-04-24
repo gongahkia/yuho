@@ -18,17 +18,7 @@ statute 376F "Procurement of sexual activity with person with mental disability"
                 circumstance touching_is_sexual := "The touching is sexual";
                 circumstance b_consents_to_touching := "B consents to the touching";
 
-                /// Paragraph (c) differs depending on whether B is A's spouse.
-                any_of {
-                    all_of {
-                        circumstance b_not_a_spouse := "B is not A’s spouse";
-                        actus_reus consent_obtained_by_inducement_threat_or_deception := "A obtains B’s consent by means of an inducement offered or given, a threat made or a deception practised by A for that purpose";
-                    }
-                    all_of {
-                        circumstance b_is_a_spouse := "B is A’s spouse";
-                        actus_reus consent_obtained_by_threat_or_deception := "A obtains B’s consent by means of a threat made or a deception practised by A for that purpose";
-                    }
-                }
+                actus_reus obtains_b_consent := "A obtains B’s consent";
 
                 circumstance mental_disability := "B has a mental disability";
                 mens_rea knowledge_of_mental_disability := "A knows or could reasonably be expected to know that B has a mental disability";

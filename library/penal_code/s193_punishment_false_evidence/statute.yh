@@ -24,12 +24,10 @@ statute 193 "Punishment for false evidence" effective 1872-01-01 {
             }
             all_of {
                 any_of {
-                    all_of {
-                        actus_reus gives_false_evidence_other_case := "Whoever gives false evidence in any other case";
-                        mens_rea intentionally_gives_other_case := "The person intentionally gives that false evidence.";
-                    }
+                    actus_reus gives_false_evidence_other_case := "Whoever gives false evidence in any other case";
                     actus_reus fabricates_false_evidence_other_case := "Whoever fabricates false evidence in any other case";
                 }
+                mens_rea intentionally_gives_or_fabricates_other_case := "Whoever intentionally gives or fabricates false evidence in any other case";
                 circumstance other_case := "The false evidence is in any other case.";
             }
         }

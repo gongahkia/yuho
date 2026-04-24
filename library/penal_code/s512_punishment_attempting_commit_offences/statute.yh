@@ -14,8 +14,12 @@ statute 512 "Punishment for attempting to commit offences" effective 1872-01-01 
 
         penalty cumulative {
             imprisonment := 0 years .. 20 years;
+            supplementary := "The offender shall be punished with imprisonment for a term which may extend to 20 years. [15/2019]";
+        }
+
+        penalty alternative {
             fine := unlimited;
-            supplementary := "The offender shall be punished with imprisonment for a term which may extend to 20 years, and shall also be liable to fine or to caning. [15/2019]";
+            supplementary := "The offender shall also be liable to fine or to caning. [15/2019]";
         }
     }
 
