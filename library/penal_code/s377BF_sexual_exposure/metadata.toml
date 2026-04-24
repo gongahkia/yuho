@@ -2,16 +2,17 @@
 section_number = "377BF"
 title = "Sexual exposure"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Sexual exposure -- intentionally exposing genitals to cause humiliation, alarm or distress."
+summary = "This section criminalises exposing genitals or distributing a genital image for sexual gratification or to cause humiliation, alarm or distress, without the other person's consent."
 source = "Singapore Penal Code 1871, Section 377BF"
 
 [verification]

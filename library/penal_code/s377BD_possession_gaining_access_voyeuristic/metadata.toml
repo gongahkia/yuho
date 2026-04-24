@@ -2,16 +2,17 @@
 section_number = "377BD"
 title = "Possession of or gaining access to voyeuristic or intimate image or recording"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Possession of or gaining access to a voyeuristic or intimate image or recording."
+summary = "Makes it an offence to possess or gain access to certain voyeuristic or intimate images or recordings, with aggravated punishment where subsection (1)(a) concerns a person below 14."
 source = "Singapore Penal Code 1871, Section 377BD"
 
 [verification]

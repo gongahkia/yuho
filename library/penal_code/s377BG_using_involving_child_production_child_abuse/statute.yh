@@ -1,23 +1,49 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BG-#pr377BG-
-// Singapore Penal Code Section 377BG
-
-statute 377BG "Using or involving child in production of child abuse material" effective 1872-01-01 {
-    definitions {
-        child_abuse_material := "Material depicting a child engaged in sexual conduct or other abuse";
+/// @amendment [15/2019]
+statute 377BG "Using or involving child in production of child abuse material" effective 1872-01-01 effective 2019-12-31 {
+    subsection (1) {
+        elements {
+            /// Subsection (1) requires that the person involved is below 16 years of age and that one of the three statutory modes of use or involvement is proved.
+            all_of {
+                circumstance person_below_16_years_of_age := "A person who is below 16 years of age is involved";
+                any_of {
+                    actus_reus uses_child_for_production := "Any person uses a person who is below 16 years of age for the production of material which he knows or has reason to believe is child abuse material";
+                    actus_reus causes_or_procures_child_to_be_used := "Any person causes or procures a person of that age to be so used";
+                    all_of {
+                        circumstance care_or_custody_of_child := "Any person has the care or custody of a person of that age";
+                        any_of {
+                            actus_reus consents_to_child_being_used := "The person consents to the person being so used";
+                            actus_reus allows_child_to_be_used := "The person allows the person to be so used";
+                        }
+                    }
+                }
+            }
+        }
     }
 
-    elements {
-        /// use or involve a child in production of child abuse material
-        actus_reus use_child := "Uses, causes or procures a child to be involved in production of child abuse material";
-        /// the person involved is below 16 years of age
-        circumstance child_under_16 := "The person involved is a child below 16 years of age";
+    subsection (2) {
+        penalty cumulative {
+            imprisonment := 0 years .. 10 years;
+            supplementary := "A person who is guilty of an offence under subsection (1) shall on conviction be punished with imprisonment for a term which may extend to 10 years, and shall also be liable to fine or to caning. [15/2019]";
+        }
+
+        penalty when fine_liability {
+            fine := unlimited;
+            supplementary := "The offender shall also be liable to fine. [15/2019]";
+        }
+
+        penalty when caning_liability {
+            supplementary := "The offender shall also be liable to caning. [15/2019]";
+        }
     }
 
-    penalty {
-        imprisonment := 0 years .. 10 years;
-        caning := 0 .. 6 strokes;
+    subsection (3) {
+        definitions {
+            care_of_person_below_16_years_of_age := "A person may have the care of a person below 16 years of age without necessarily being entitled by law to have the custody of the child. [15/2019]"
+            material_produced := "The ways in which material is produced may include filming, printing, photographing, recording, drawing or otherwise generating material; altering or manipulating material; or reproducing or copying material. [15/2019]"
+            person_used_in_production_of_material := "The ways in which a person may be used in the production of material include inviting or encouraging the person to be involved, or offering the person to be involved, in the production of the material. [15/2019]"
+        }
     }
-
 }

@@ -1,20 +1,47 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BJ-#pr377BJ-
-// Singapore Penal Code Section 377BJ
+/// @amendment [15/2019]
 
-statute 377BJ "Advertising or seeking child abuse material" effective 1872-01-01 {
-    definitions {
-        advertise_seek := "Publishing, communicating, or requesting child abuse material";
+statute 377BJ "Advertising or seeking child abuse material" effective 1872-01-01 effective 2019-12-31 {
+    subsection (1) {
+        elements {
+            /// Subsection (1) is conjunctive: the advertising limb and the knowledge limb must both be proved.
+            all_of {
+                actus_reus advertising_child_abuse_material := "For the purposes of distributing or selling or offering for sale any child abuse material advertises the material";
+                mens_rea knowledge_of_child_abuse_material := "Knows or has reason to believe that the material is child abuse material";
+            }
+        }
     }
 
-    elements {
-        /// advertise or seek child abuse material
-        actus_reus advertise_or_seek := "Advertises, or seeks to obtain, child abuse material";
+    subsection (2) {
+        elements {
+            /// Subsection (2) is conjunctive: the announced offer limb and the knowledge limb must both be proved.
+            all_of {
+                actus_reus announcing_offer_to_acquire_buy_or_gain_access := "Announces or otherwise makes known by any means any offer or purported offer to acquire, buy or gain access to any child abuse material";
+                mens_rea knowledge_of_child_abuse_material := "Knows or has reason to believe that the material is child abuse material";
+            }
+        }
     }
 
-    penalty {
-        imprisonment := 0 years .. 7 years;
+    subsection (3) {
+        penalty cumulative {
+            imprisonment := 0 years .. 5 years;
+            supplementary := "A person who is guilty of an offence under subsection (1) or (2) shall on conviction be punished with imprisonment for a term which may extend to 5 years.";
+        }
+
+        penalty alternative {
+            fine := unlimited;
+            supplementary := "The person shall also be liable to fine or to caning. [15/2019]";
+        }
     }
 
+    subsection (4) {
+        definitions {
+            advertise := "In subsection (1), “advertise”, in relation to child abuse material, includes —";
+            advertise_by_exhibiting_displaying_or_supplying := "Exhibiting, displaying or supplying any advertising material relating to the material";
+            advertise_by_announcing_offer := "Announcing by any means any offer to sell or distribute the material";
+            advertise_by_distributing_or_circulating_advertisement := "Distributing or circulating any advertisement relating to the material";
+        }
+    }
 }

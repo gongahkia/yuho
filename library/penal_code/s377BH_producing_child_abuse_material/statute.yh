@@ -1,23 +1,35 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BH-#pr377BH-
-// Singapore Penal Code Section 377BH
+/// @amendment [15/2019]
 
-statute 377BH "Producing child abuse material" effective 1872-01-01 {
-    definitions {
-        produce := "To create, make, or generate child abuse material by any means";
+statute 377BH "Producing child abuse material" effective 1872-01-01 effective 2019-12-31 {
+    subsection (1) {
+        elements {
+            /// Subsection (1) requires intentional production plus knowledge or reason to believe that the material is child abuse material.
+            all_of {
+                actus_reus production := "Any person produces child abuse material";
+                mens_rea intention := "Intentionally";
+                mens_rea knowledge_or_reason_to_believe := "Knowing or having reason to believe that the material is child abuse material. [15/2019]";
+            }
+        }
     }
 
-    elements {
-        /// produce child abuse material
-        actus_reus produce_cam := "Produces child abuse material";
-        /// acts intentionally
-        mens_rea intentional := "Acts intentionally";
+    subsection (2) {
+        penalty cumulative {
+            imprisonment := 0 years .. 10 years;
+            supplementary := "A person who is guilty of an offence under subsection (1) shall on conviction be punished with imprisonment for a term which may extend to 10 years, and shall also be liable to fine or to caning. [15/2019]";
+        }
+
+        penalty alternative {
+            fine := unlimited;
+            supplementary := "The offender shall also be liable to fine or to caning. [15/2019]";
+        }
     }
 
-    penalty {
-        imprisonment := 0 years .. 10 years;
-        caning := 0 .. 6 strokes;
+    subsection (3) {
+        definitions {
+            produced_methods_opening := "For the purposes of subsection (1), the ways in which material is produced may include —";
+        }
     }
-
 }

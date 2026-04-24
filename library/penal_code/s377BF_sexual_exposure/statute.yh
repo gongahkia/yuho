@@ -1,23 +1,50 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BF-#pr377BF-
-// Singapore Penal Code Section 377BF
+/// @amendment [15/2019]
 
-statute 377BF "Sexual exposure" effective 1872-01-01 {
-    definitions {
-        sexual_exposure := "Intentional exposure of genitals to another person";
+statute 377BF "Sexual exposure" effective 1872-01-01 effective 2019-12-31 {
+    subsection (1) {
+        elements {
+            /// Subsection (1) is conjunctive: purpose, exposure, intended viewing, and lack of consent must all be proved.
+            all_of {
+                actus_reus exposure := "For the purpose of obtaining sexual gratification or of causing another person ( B ) humiliation, alarm or distress, A intentionally exposes A’s genitals.";
+                mens_rea intended_viewing := "A intends that B will see A’s genitals.";
+                circumstance absence_of_consent := "A does so without B’s consent. [15/2019]";
+            }
+        }
     }
 
-    elements {
-        /// intentional exposure of genitals
-        actus_reus expose_genitals := "Intentionally exposes his or her genitals";
-        /// intending another person to see them
-        mens_rea intent_another_see := "Intending that another person see them and be caused humiliation, alarm or distress";
+    subsection (2) {
+        elements {
+            /// Subsection (2) is conjunctive: purpose, intentional distribution of the genital image, intended viewing, and lack of consent must all be proved.
+            all_of {
+                actus_reus distribution := "For the purpose of obtaining sexual gratification or of causing another person ( B ) humiliation, alarm or distress, A intentionally distributes to B an image of A’s or any other person’s genitals.";
+                mens_rea intended_viewing := "A intends that B will see A’s or the other person’s genitals.";
+                circumstance absence_of_consent := "A does so without B’s consent. [15/2019]";
+            }
+        }
     }
 
-    penalty {
-        imprisonment := 0 years .. 1 years;
-        fine := $0.00 .. $5,000.00;
+    subsection (3) {
+        penalty or_both {
+            imprisonment := 0 years .. 1 years;
+            fine := unlimited;
+        }
     }
 
+    subsection (4) {
+        elements {
+            circumstance victim_below_14 := "A person commits an offence under subsection (1) or (2) against a person ( B ) who is below 14 years of age. [15/2019]";
+        }
+
+        penalty cumulative {
+            imprisonment := 0 years .. 2 years;
+        }
+
+        penalty alternative {
+            fine := unlimited;
+            supplementary := "The offender shall also be liable to caning. [15/2019]";
+        }
+    }
 }

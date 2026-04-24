@@ -1,20 +1,45 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377BK-#pr377BK-
-// Singapore Penal Code Section 377BK
+/// @amendment [15/2019]
 
-statute 377BK "Possession of or gaining access to child abuse material" effective 1872-01-01 {
-    definitions {
-        possess_cam := "Having child abuse material in one possession or gaining access to it";
+statute 377BK "Possession of or gaining access to child abuse material" effective 1872-01-01 effective 2019-12-31 {
+    subsection (1) {
+        elements {
+            /// Subsection (1) is conjunctive overall: possession or access to the material, and knowledge or reason to believe of its child-abuse nature.
+            all_of {
+                any_of {
+                    actus_reus possession := "Any person has in the person’s possession child abuse material";
+                    actus_reus gained_access := "Any person has gained access to child abuse material";
+                }
+                any_of {
+                    mens_rea knows_material_is_child_abuse_material := "Knows that the material is child abuse material";
+                    mens_rea has_reason_to_believe_material_is_child_abuse_material := "Has reason to believe that the material is child abuse material. [15/2019]";
+                }
+            }
+        }
     }
 
-    elements {
-        /// possess or gain access to child abuse material
-        actus_reus possess_or_access_cam := "Possesses or gains access to child abuse material";
+    subsection (2) {
+        penalty cumulative {
+            imprisonment := 0 years .. 5 years;
+            supplementary := "A person who is guilty of an offence under subsection (1) shall on conviction be punished with imprisonment for a term which may extend to 5 years. [15/2019]";
+        }
+
+        penalty when fine_liability {
+            fine := unlimited;
+            supplementary := "The offender shall also be liable to fine. [15/2019]";
+        }
+
+        penalty when caning_liability {
+            supplementary := "The offender shall also be liable to caning. [15/2019]";
+        }
     }
 
-    penalty {
-        imprisonment := 0 years .. 5 years;
+    subsection (3) {
+        /// The canonical source in library/penal_code/_raw/act.json preserves only the opening words of subsection (3) plus one illustration.
+        illustration illustration_a {
+            "Y has an online storage account for electronic material accessible with a username and password. Y has control of what is stored in the account and can upload to, copy from or delete material from the account. Y has an electronic folder in the account to which Y uploads and stores electronic child abuse material. Y has in his possession child abuse material."
+        }
     }
-
 }

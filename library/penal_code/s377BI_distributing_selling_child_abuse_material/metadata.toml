@@ -2,16 +2,17 @@
 section_number = "377BI"
 title = "Distributing or selling child abuse material"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Distributing or selling child abuse material."
+summary = "Creates an offence for distributing, selling, offering for sale, or possessing for distribution child abuse material with knowledge or reason to believe its nature, and prescribes imprisonment plus liability to fine or caning."
 source = "Singapore Penal Code 1871, Section 377BI"
 
 [verification]

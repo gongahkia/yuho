@@ -2,16 +2,17 @@
 section_number = "377BG"
 title = "Using or involving child in production of child abuse material"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Using or involving a child below 16 in the production of child abuse material."
+summary = "Using or involving a person below 16 years of age in the production of material known or believed to be child abuse material is an offence punishable by up to 10 years' imprisonment and liability to fine or caning."
 source = "Singapore Penal Code 1871, Section 377BG"
 
 [verification]

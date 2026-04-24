@@ -2,16 +2,17 @@
 section_number = "377BH"
 title = "Producing child abuse material"
 jurisdiction = "Singapore"
-version = "1.0.0"
+version = "2.0.0"
 
 [encoding]
 depth = "deep"
+revision = "phase-D"
 
 [contributor]
-name = "agent-draft"
+name = "agent-reencoding-phase-D"
 
 [description]
-summary = "Producing child abuse material."
+summary = "Intentionally producing child abuse material while knowing or having reason to believe that it is child abuse material is an offence punishable by up to 10 years' imprisonment and liability to fine or caning."
 source = "Singapore Penal Code 1871, Section 377BH"
 
 [verification]
