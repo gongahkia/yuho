@@ -240,6 +240,58 @@ section.section-page h1 { margin: 0; font-size: 1.5rem; }
 section.section-page h1 .num { color: var(--c-muted); font-weight: 500; margin-right: 0.5em; font-family: ui-monospace, monospace; }
 section.section-page .meta { color: var(--c-muted); font-size: 0.92em; display: flex; gap: 0.9rem; flex-wrap: wrap; margin-top: 0.5rem; }
 
+.breadcrumb {
+  font-size: 0.85em;
+  color: var(--c-muted);
+  margin-bottom: 0.6rem;
+}
+.breadcrumb a { color: var(--c-muted); }
+.breadcrumb a:hover { color: var(--c-accent); }
+.breadcrumb [aria-current] { color: var(--c-fg); font-weight: 600; }
+
+.toc {
+  background: var(--c-card);
+  border: 1px solid var(--c-border);
+  border-radius: 6px;
+  padding: 0.6rem 0.9rem;
+  margin: 1rem 0 1.4rem;
+  font-size: 0.88em;
+}
+.toc ul { margin: 0; padding-left: 1.1rem; columns: 2; column-gap: 1.2rem; }
+.toc li { margin: 0.15em 0; }
+
+.prevnext {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+  margin: 1.6rem 0 0.6rem;
+}
+.navchip {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15em;
+  padding: 0.55rem 0.7rem;
+  background: var(--c-card);
+  border: 1px solid var(--c-border);
+  border-radius: 6px;
+  color: var(--c-fg);
+  text-decoration: none;
+}
+.navchip:hover { border-color: var(--c-accent); text-decoration: none; }
+.navchip .dir { font-size: 0.75em; color: var(--c-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+.navchip:nth-child(2) { text-align: right; }
+.navchip .num { font: 600 0.95em ui-monospace, monospace; color: var(--c-accent); }
+.navchip .ttl { font-size: 0.92em; line-height: 1.3; }
+.navchip.empty {
+  background: transparent;
+  border-style: dashed;
+  color: var(--c-muted);
+  font-size: 0.85em;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+
 .diagram {
   width: 100%;
   overflow: auto;
@@ -576,7 +628,10 @@ decision that matters.</p>
     return _page("Yuho — About", body, active_nav="about")
 
 
-def render_section(rec: Dict[str, Any]) -> str:
+def render_section(rec: Dict[str, Any],
+                   *,
+                   prev_rec: Optional[Dict[str, Any]] = None,
+                   next_rec: Optional[Dict[str, Any]] = None) -> str:
     cov = rec.get("coverage", {})
     ast = rec.get("encoded", {}).get("ast_summary", {}) or {}
     flag = cov.get("L3_flag")
@@ -634,8 +689,49 @@ def render_section(rec: Dict[str, Any]) -> str:
 
     summary = rec.get("metadata", {}).get("summary") or rec.get("raw", {}).get("marginal_note") or ""
 
+    # Section anchors are stable IDs we can link to and that the in-page TOC
+    # references. Each <h2> gets one of these.
+    sections_present = [("summary", "Summary", bool(summary)),
+                        ("canonical", "Canonical SSO text", True),
+                        ("english", "Controlled English", bool(en)),
+                        ("structural", "Structural counts", True),
+                        ("refs-out", "Outgoing references", True),
+                        ("refs-in", "Incoming references", True),
+                        ("diagram", "Diagram", bool(mermaid_svg)),
+                        ("source", "Encoded .yh source", True)]
+    toc_items = "".join(
+        f'<li><a href="#{aid}">{_esc(label)}</a></li>'
+        for aid, label, present in sections_present if present
+    )
+    toc_html = f'<nav class="toc" aria-label="On this page"><ul>{toc_items}</ul></nav>'
+
+    breadcrumb = (
+        '<nav class="breadcrumb" aria-label="Breadcrumb">'
+        '<a href="/index.html">Index</a> ›'
+        f' <span aria-current="page">s{_esc(rec["section_number"])}</span>'
+        '</nav>'
+    )
+
+    def _navchip(side, r):
+        if not r:
+            return f'<span class="navchip empty">{_esc(side)}</span>'
+        return (
+            f'<a class="navchip" href="/s/{_esc(r["number"])}.html">'
+            f'<span class="dir">{_esc(side)}</span>'
+            f'<span class="num">s{_esc(r["number"])}</span>'
+            f'<span class="ttl">{_esc(r.get("title","") or "")}</span>'
+            f'</a>'
+        )
+    nav_html = (
+        '<nav class="prevnext" aria-label="Section navigation">'
+        f'{_navchip("← prev", prev_rec)}'
+        f'{_navchip("next →", next_rec)}'
+        '</nav>'
+    )
+
     body = f"""
 <section class="section-page">
+  {breadcrumb}
   <header>
     <h1><span class="num">s{_esc(rec['section_number'])}</span>{_esc(title)}</h1>
     <div class="meta">
@@ -647,34 +743,38 @@ def render_section(rec: Dict[str, Any]) -> str:
 
   {flag_html}
 
-  {f'<h2>Summary</h2><p>{_esc(summary)}</p>' if summary else ""}
+  {toc_html}
 
-  <h2>Canonical SSO text</h2>
+  {f'<h2 id="summary">Summary</h2><p>{_esc(summary)}</p>' if summary else ""}
+
+  <h2 id="canonical">Canonical SSO text</h2>
   <pre class="lite">{_esc(raw_text) or "(no raw text)"}</pre>
 
-  {f'<h2>Controlled English</h2><pre class="lite">{_esc(en)}</pre>' if en else ""}
+  {f'<h2 id="english">Controlled English</h2><pre class="lite">{_esc(en)}</pre>' if en else ""}
 
-  <h2>Structural counts</h2>
+  <h2 id="structural">Structural counts</h2>
   <table class="refs">
     <tbody>{''.join(structural_rows)}</tbody>
   </table>
 
-  <h2>Outgoing references</h2>
+  <h2 id="refs-out">Outgoing references</h2>
   <table class="refs">
     <thead><tr><th>To</th><th>Kind</th><th>Context</th></tr></thead>
     <tbody>{render_edge_rows(refs.get("outgoing", []), "outgoing")}</tbody>
   </table>
 
-  <h2>Incoming references</h2>
+  <h2 id="refs-in">Incoming references</h2>
   <table class="refs">
     <thead><tr><th>From</th><th>Kind</th><th>Context</th></tr></thead>
     <tbody>{render_edge_rows(refs.get("incoming", []), "incoming")}</tbody>
   </table>
 
-  {f'<h2>Diagram</h2><div class="diagram">{mermaid_svg}</div>' if mermaid_svg else ""}
+  {f'<h2 id="diagram">Diagram</h2><div class="diagram">{mermaid_svg}</div>' if mermaid_svg else ""}
 
-  <h2>Encoded <code>.yh</code> source</h2>
+  <h2 id="source">Encoded <code>.yh</code> source</h2>
   <pre class="src">{_esc(yh) or "(no encoded source)"}</pre>
+
+  {nav_html}
 
   <p class="muted" style="font-size:0.85em;margin-top:1.5rem;color:var(--c-muted)">
     raw SHA-256: <code>{_esc(rec.get('raw',{}).get('hash_sha256',''))[:16]}…</code>
@@ -725,15 +825,24 @@ def main() -> int:
     (BUILD / "sitemap.xml").write_text(render_sitemap(index, args.base_url))
     (BUILD / "robots.txt").write_text(render_robots(args.base_url))
 
-    # Per-section pages + full-text search index (G2).
+    # Per-section pages + full-text search index (G2). Adjacency uses the
+    # ordering already in index.json (G4 prev/next).
     sect_dir = CORPUS / "sections"
     n_pages = 0
     search_index: Dict[str, str] = {}
-    for path in sorted(sect_dir.glob("s*.json")):
+    ordered_nums = [r["number"] for r in index["sections"]]
+    by_num = {r["number"]: r for r in index["sections"]}
+    paths_by_num = {p.stem[1:]: p for p in sect_dir.glob("s*.json")}
+    for i, num in enumerate(ordered_nums):
+        path = paths_by_num.get(num)
+        if path is None:
+            continue
         with path.open("r", encoding="utf-8") as f:
             rec = json.load(f)
+        prev_rec = by_num.get(ordered_nums[i - 1]) if i > 0 else None
+        next_rec = by_num.get(ordered_nums[i + 1]) if i < len(ordered_nums) - 1 else None
         out = BUILD / "s" / f"{rec['section_number']}.html"
-        out.write_text(render_section(rec))
+        out.write_text(render_section(rec, prev_rec=prev_rec, next_rec=next_rec))
         n_pages += 1
         # Concatenate searchable bodies. Stored lowercased + length-capped
         # so the bundle stays under a few hundred KB.
