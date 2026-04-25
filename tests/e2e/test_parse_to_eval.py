@@ -24,13 +24,47 @@ class TestParseToEval:
         assert len(ast.statutes) > 0
 
     def test_statute_has_elements(self, statute_dir, parse_file):
-        """Every statute should have at least one element."""
+        """Every statute should have at least one element somewhere — top
+        level or in a subsection. Sections that are interpretive,
+        right-conferring, or punishment-only legitimately have none and
+        are skipped (see tests/test_library_statutes.py for the same
+        classification rules)."""
         statute_path = statute_dir / "statute.yh"
         if not statute_path.exists():
             pytest.skip()
         ast = parse_file(statute_path)
         for statute in ast.statutes:
-            assert len(statute.elements) > 0, f"Section {statute.section_number} has no elements"
+            # Subsection-aware count.
+            n = len(statute.elements) + sum(
+                len(getattr(sub, "elements", ()) or ())
+                for sub in getattr(statute, "subsections", ()) or ()
+            )
+            if n > 0:
+                continue
+            # No elements anywhere — only acceptable for non-offence shapes.
+            has_defs = bool(getattr(statute, "definitions", ())) or any(
+                getattr(sub, "definitions", ())
+                for sub in getattr(statute, "subsections", ()) or ()
+            )
+            has_penalty = statute.penalty is not None or any(
+                getattr(sub, "penalty", None) is not None
+                for sub in getattr(statute, "subsections", ()) or ()
+            )
+            has_exceptions = bool(getattr(statute, "exceptions", ())) or any(
+                getattr(sub, "exceptions", ())
+                for sub in getattr(statute, "subsections", ()) or ()
+            )
+            if has_defs and not has_penalty:
+                pytest.skip(f"s{statute.section_number}: interpretive section "
+                            f"(definitions, no offence shape)")
+            if has_exceptions and not has_penalty:
+                pytest.skip(f"s{statute.section_number}: pure-exception section "
+                            f"(general defence, no offence shape)")
+            if has_penalty:
+                pytest.skip(f"s{statute.section_number}: punishment-only "
+                            f"(elements live in parent section)")
+            # Truly elementless and not classified — let it fail.
+            assert n > 0, f"Section {statute.section_number} has no elements"
 
     def test_interpreter_loads_statute(self, statute_dir, parse_file):
         """Interpreter should load statute definitions."""
