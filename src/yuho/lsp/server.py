@@ -350,6 +350,22 @@ class YuhoLanguageServer(LanguageServer):
                     self._cancel_parse_timer(uri)
                     self._documents[uri].update(params.text, self._documents[uri].version + 1)
                     self._publish_diagnostics(uri, self._documents[uri])
+            # G10 graph may have changed if the file edited subsumes/amends
+            # clauses or implicit cross-section references.
+            self._invalidate_reference_graph()
+            # Ask the client to refresh inlay hints (a saved file may have
+            # gained / lost statutes, changing per-statute summary tags).
+            try:
+                self.lsp.send_request(lsp.WORKSPACE_INLAY_HINT_REFRESH, None)
+            except Exception:
+                # The client may not support the refresh request; ignore.
+                pass
+            # Also refresh semantic tokens so the visual highlighting
+            # reflects keyword additions/removals on this save.
+            try:
+                self.lsp.send_request(lsp.WORKSPACE_SEMANTIC_TOKENS_REFRESH, None)
+            except Exception:
+                pass
 
         @self.feature(lsp.TEXT_DOCUMENT_COMPLETION)
         def completion(params: lsp.CompletionParams) -> lsp.CompletionList:

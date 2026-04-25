@@ -715,6 +715,9 @@ Usage: yuho lsp [OPTIONS]
 
 Options:
   --tcp INTEGER  Start LSP server on TCP port
+  --workspace    On startup, walk every .yh file in each workspace folder and publish
+                 diagnostics. Editor's 'problems' panel will show issues from the entire
+                 library, not just open documents.
   --help         Show this message and exit.
 ```
 
