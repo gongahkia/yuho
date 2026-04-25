@@ -41,6 +41,24 @@ SITE_ROOT = Path(__file__).resolve().parent
 BUILD = SITE_ROOT / "build"
 STATIC = BUILD / "static"
 
+# Set by main() from --base-path; "" means served from /, "/yuho" means
+# every absolute href is prefixed accordingly.
+_BASE_PATH: str = ""
+
+
+def _rewrite_absolute_paths(html_text: str) -> str:
+    """Prefix every internal absolute href/src with BASE_PATH.
+
+    Matches ``href="/..."`` and ``src="/..."`` but skips ``//`` (protocol-
+    relative) and ``/static/.../external.com`` is not a concern because we
+    only ever emit our own paths.
+    """
+    if not _BASE_PATH:
+        return html_text
+    import re as _re
+    pat = _re.compile(r'(href|src)="(/(?!/)[^"]*)"')
+    return pat.sub(lambda m: f'{m.group(1)}="{_BASE_PATH}{m.group(2)}"', html_text)
+
 
 # ---------------------------------------------------------------------------
 # Style + scripts
@@ -518,7 +536,7 @@ def _page(title: str, body: str, *, active_nav: str = "") -> str:
     nav_link = lambda key, label, href: (
         f'<a href="{href}"' + (' aria-current="page"' if active_nav == key else "") + f">{label}</a>"
     )
-    return f"""<!DOCTYPE html>
+    html_text = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -551,6 +569,7 @@ def _page(title: str, body: str, *, active_nav: str = "") -> str:
 </body>
 </html>
 """
+    return _rewrite_absolute_paths(html_text)
 
 
 # ---------------------------------------------------------------------------
@@ -886,7 +905,17 @@ def main() -> int:
                     help="absolute base URL used in sitemap.xml + robots.txt (default: https://yuho.dev)")
     ap.add_argument("--no-cache", action="store_true",
                     help="ignore .cache.json and rebuild every page")
+    ap.add_argument("--base-path", default="",
+                    help="URL prefix when deploying under a subpath (e.g. '/yuho'). "
+                         "Default empty = served at site root.")
     args = ap.parse_args()
+    # Normalize base path: strip trailing slash, ensure leading slash if non-empty.
+    BASE = args.base_path.rstrip("/")
+    if BASE and not BASE.startswith("/"):
+        BASE = "/" + BASE
+    # Make BASE visible to the page renderers via module-level rebind.
+    global _BASE_PATH
+    _BASE_PATH = BASE
 
     if not (CORPUS / "index.json").exists():
         print("error: corpus not built; run scripts/build_corpus.py first.")
