@@ -16,4 +16,6 @@ summary = "A child aged 10 or above but below 12 does not commit an offence if t
 source = "Singapore Penal Code 1871, Section 83"
 
 [verification]
+last_verified = "2026-04-25"
+verified_by = "gpt-5.4 high (automated L3 reviewer)"
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr83-#pr83-"
