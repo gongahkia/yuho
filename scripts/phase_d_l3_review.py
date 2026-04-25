@@ -13,7 +13,7 @@ usage:
     python scripts/phase_d_l3_review.py 400-500
     python scripts/phase_d_l3_review.py --all-unstamped --dispatch --parallel 8
     python scripts/phase_d_l3_review.py --all-unstamped --dispatch --parallel 8 \\
-        --progress .phase_d_l3_progress.jsonl --resume
+        --progress library/penal_code/_coverage/phase_d_l3_progress.jsonl --resume
 
 defaults for dispatch:
     --model gpt-5.4
@@ -24,7 +24,7 @@ import argparse, json, re, subprocess, sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
-TEMPLATE_PATH = REPO / "docs" / "PHASE_D_L3_REVIEW_PROMPT.md"
+TEMPLATE_PATH = REPO / "docs" / "researcher" / "phase-d-l3-review-prompt.md"
 RAW_PATH = REPO / "library" / "penal_code" / "_raw" / "act.json"
 COVERAGE_PATH = REPO / "library" / "penal_code" / "_coverage" / "coverage.json"
 SEPARATOR = "\n\n<<<---NEXT_SECTION--->>>\n\n"
@@ -137,7 +137,7 @@ def main() -> None:
                    help="actually invoke `codex exec` instead of just printing")
     p.add_argument("--parallel", type=int, default=1, metavar="K",
                    help="with --dispatch, run up to K codex instances in parallel")
-    p.add_argument("--progress", metavar="FILE", default=".phase_d_l3_progress.jsonl",
+    p.add_argument("--progress", metavar="FILE", default="library/penal_code/_coverage/phase_d_l3_progress.jsonl",
                    help="append-only JSONL file recording per-section decisions")
     p.add_argument("--resume", action="store_true",
                    help="skip sections already recorded in the progress file")

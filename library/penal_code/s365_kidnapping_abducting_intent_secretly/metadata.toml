@@ -16,4 +16,6 @@ summary = "Makes it an offence to kidnap or abduct a person with intent to keep 
 source = "Singapore Penal Code 1871, Section 365"
 
 [verification]
+last_verified = "2026-04-25"
+verified_by = "manual L3 review (human-verified)"
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr365-#pr365-"

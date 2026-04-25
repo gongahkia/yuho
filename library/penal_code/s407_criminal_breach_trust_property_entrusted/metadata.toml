@@ -16,4 +16,6 @@ summary = "Section 407 criminalises committing criminal breach of trust in respe
 source = "Singapore Penal Code 1871, Section 407"
 
 [verification]
+last_verified = "2026-04-25"
+verified_by = "manual L3 review (human-verified)"
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr407-#pr407-"

@@ -16,4 +16,6 @@ summary = "This section criminalises putting or attempting to put a person in fe
 source = "Singapore Penal Code 1871, Section 385"
 
 [verification]
+last_verified = "2026-04-25"
+verified_by = "manual L3 review (human-verified)"
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr385-#pr385-"

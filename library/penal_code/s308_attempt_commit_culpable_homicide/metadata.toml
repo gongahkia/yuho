@@ -16,5 +16,7 @@ summary = "Creates the offence of doing an act intended to cause death in circum
 source = "Singapore Penal Code 1871, Section 308"
 
 [verification]
+last_verified = "2026-04-25"
+verified_by = "manual L3 review (human-verified)"
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr308-#pr308-"
 

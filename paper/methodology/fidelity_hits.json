@@ -1,0 +1,163 @@
+{
+  "n_sections_scanned": 524,
+  "g4_illustration_count": {
+    "count": 98,
+    "rate": 0.187,
+    "sample": [
+      {
+        "section": "102",
+        "canonical_illustrations": 6,
+        "encoded_illustrations": 0
+      },
+      {
+        "section": "105",
+        "canonical_illustrations": 4,
+        "encoded_illustrations": 0
+      },
+      {
+        "section": "107",
+        "canonical_illustrations": 3,
+        "encoded_illustrations": 1
+      },
+      {
+        "section": "130C",
+        "canonical_illustrations": 4,
+        "encoded_illustrations": 0
+      },
+      {
+        "section": "130D",
+        "canonical_illustrations": 5,
+        "encoded_illustrations": 0
+      },
+      {
+        "section": "130E",
+        "canonical_illustrations": 2,
+        "encoded_illustrations": 0
+      },
+      {
+        "section": "141",
+        "canonical_illustrations": 5,
+        "encoded_illustrations": 0
+      },
+      {
+        "section": "173",
+        "canonical_illustrations": 5,
+        "encoded_illustrations": 0
+      },
+      {
+        "section": "175",
+        "canonical_illustrations": 2,
+        "encoded_illustrations": 0
+      },
+      {
+        "section": "176",
+        "canonical_illustrations": 2,
+        "encoded_illustrations": 0
+      }
+    ]
+  },
+  "fabricated_fine_cap": {
+    "count": 48,
+    "rate": 0.0916,
+    "sample": [
+      {
+        "section": "140"
+      },
+      {
+        "section": "171"
+      },
+      {
+        "section": "172"
+      },
+      {
+        "section": "173"
+      },
+      {
+        "section": "174"
+      },
+      {
+        "section": "175"
+      },
+      {
+        "section": "176"
+      },
+      {
+        "section": "177"
+      },
+      {
+        "section": "178"
+      },
+      {
+        "section": "179"
+      }
+    ]
+  },
+  "fabricated_caning_range": {
+    "count": 2,
+    "rate": 0.0038,
+    "sample": [
+      {
+        "section": "147"
+      },
+      {
+        "section": "302"
+      }
+    ]
+  },
+  "g11_disjunctive_mismatch": {
+    "count": 208,
+    "rate": 0.3969,
+    "sample": [
+      {
+        "section": "106A",
+        "or_count": 2,
+        "and_count": 0
+      },
+      {
+        "section": "117",
+        "or_count": 3,
+        "and_count": 0
+      },
+      {
+        "section": "118",
+        "or_count": 3,
+        "and_count": 0
+      },
+      {
+        "section": "119",
+        "or_count": 6,
+        "and_count": 2
+      },
+      {
+        "section": "120",
+        "or_count": 3,
+        "and_count": 1
+      },
+      {
+        "section": "121D",
+        "or_count": 2,
+        "and_count": 0
+      },
+      {
+        "section": "123",
+        "or_count": 2,
+        "and_count": 1
+      },
+      {
+        "section": "124",
+        "or_count": 5,
+        "and_count": 1
+      },
+      {
+        "section": "126",
+        "or_count": 3,
+        "and_count": 2
+      },
+      {
+        "section": "130",
+        "or_count": 3,
+        "and_count": 1
+      }
+    ]
+  }
+}

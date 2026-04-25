@@ -1,0 +1,34 @@
+{
+  "n_with_first_commit": 524,
+  "n_with_l3_stamp": 524,
+  "encoding_to_stamp_days": {
+    "n": 524,
+    "median": 1,
+    "p95": 1,
+    "mean": 1.67,
+    "min": -1,
+    "max": 82
+  },
+  "daily_encoding_counts": [
+    [
+      "2026-02-01",
+      9
+    ],
+    [
+      "2026-02-02",
+      3
+    ],
+    [
+      "2026-03-11",
+      13
+    ],
+    [
+      "2026-04-24",
+      499
+    ]
+  ],
+  "first_encoding_date": "2026-02-01",
+  "last_encoding_date": "2026-04-24",
+  "first_stamp_date": "2026-03-08",
+  "last_stamp_date": "2026-04-25"
+}

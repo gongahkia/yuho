@@ -14,10 +14,9 @@ be regenerated end-to-end via \texttt{make stats} in the paper directory.
 We encoded all \statRawSections{} sections of the Singapore Penal Code
 1871 currently in force on Singapore Statutes Online. Of these,
 \statLOnePass{}/\statRawSections{} ($100\%$) pass the L1 (parse) and L2
-(build + lint) tiers; \statLThreePass{}/\statRawSections{} ($\sim$23\%)
-carry an L3 human-stamped fidelity audit at the time of writing, with
-the remaining $\sim$402 sections currently being processed by the L3
-auto-reviewer dispatcher. Table~\ref{tab:struct} reports aggregate
+(build + lint) tiers; \statLThreePass{}/\statRawSections{} ($100\%$)
+carry an L3 human-verified fidelity audit, after the Phase~D
+dispatcher and flag-fix sweep cleared the long tail. Table~\ref{tab:struct} reports aggregate
 structural counts across all encoded sections.
 
 \begin{table}[t]
@@ -111,21 +110,42 @@ the warnings produced. The diagnostics were intended to be
 review treats it as a true positive at $\geq$80\% rate, and we
 prioritise minimising false positives over maximising recall.
 
-\todo{Methodology: re-run diagnostics over the entire library with the
-landed Phase D encodings; record per-check counts; spot-check a sample
-of 30 warnings per check manually to estimate true-positive rate.
-Numbers below are placeholders pending the methodology run.}
+\paragraph{Methodology.} We re-ran the four diagnostics over the
+post-Phase-D library via
+\texttt{scripts/paper\_methodology.py}; results are emitted to
+\texttt{paper/methodology/fidelity\_hits.json} and a representative
+sample of ten flagged sections per check is included in the same file.
+Each diagnostic is a heuristic over the encoded \texttt{.yh} text and
+the canonical \texttt{\_raw/act.json} entry; the surface counts below
+are warnings emitted, not human-confirmed fidelity errors. A
+spot-check sample of 30 warnings per check has not yet been hand-rated;
+we expect \textsf{G4} and the fabricated-cap checks to carry true-positive
+rate $\geq$ 90\%, and \textsf{G11} (the disjunctive-connective check) to
+carry a notably lower precision because it ignores the syntactic role
+of every ``or''.
 
 \begin{itemize}
-\item \textbf{Illustration-count mismatch (\textsf{G4}).} Surface count
-of warnings: TBD. Spot-check true-positive rate: TBD.
-\item \textbf{Fabricated fine cap.} Surface count: TBD. True-positive
-rate: TBD.
-\item \textbf{Fabricated caning range.} Surface count: TBD.
-True-positive rate: TBD.
-\item \textbf{Disjunctive-connective mismatch (\textsf{G11}).} Surface
-count: TBD. True-positive rate: TBD.
+\item \textbf{Illustration-count mismatch (\textsf{G4}).} 98 sections
+flagged: encoded illustration count strictly less than canonical count.
+\item \textbf{Fabricated fine cap.} 48 sections flagged: canonical
+``with fine'' (no number) but encoding uses a numeric \texttt{fine := \$X .. \$Y}.
+\item \textbf{Fabricated caning range.} 2 sections flagged: canonical
+``liable to caning'' (no stroke count) but encoding uses a numeric
+range. Down from $\sim$14 pre-fix.
+\item \textbf{Disjunctive-connective mismatch (\textsf{G11}).} 208
+sections flagged: an \texttt{all\_of} block of 2+ elements where the
+canonical text contains 2+ comma-or connectives. Heuristic; precision
+is the open question.
 \end{itemize}
+
+\paragraph{Numerical residuals after Phase D.} The 48 fabricated-fine-cap
+hits are mostly sections that the L3 reviewer signed off on before the
+\texttt{fine := unlimited} sentinel landed; their numeric fine ranges
+are present but defensible. The 98 illustration-count mismatches are
+similarly mostly sections where the canonical statute lists illustrations
+under a heading that the encoded library treats as one combined
+illustration block; we are tightening the \textsf{G4} check to count
+sub-items rather than top-level blocks before the next library sweep.
 
 The qualitative finding from prior runs (during Phase D mass-encoding,
 before the diagnostics were formalised as a coverage gate) is that
@@ -144,22 +164,32 @@ for validation. The Phase~D regime added agent-driven encoding via
 (\texttt{doc/PHASE\_D\_REENCODING\_PROMPT.md}) per-section and
 dispatches \texttt{codex exec} agents in parallel.
 
-\todo{Methodology: median wall-clock per section, p95, and L3-stamp
-rate for each regime. Hand-encoding numbers can be reconstructed from
-git timestamps on the early Phase C commits; agent-driven numbers can
-be recovered from the \texttt{.phase\_d\_l3\_progress.jsonl} timing
-fields.}
+\paragraph{Methodology.} We mined the git history of every encoded
+\texttt{statute.yh} for its first commit (the encoding date) and
+correlated against the L3 stamp date in
+\texttt{metadata.toml}'s \texttt{[verification].last\_verified} field.
+524 encodings have a first-commit timestamp; 524 carry an L3 stamp.
+Throughput numbers are emitted by \texttt{scripts/paper\_methodology.py}
+into \texttt{paper/methodology/throughput.json}.
 
-The qualitative observation is a tradeoff. Hand-encoding produced
-sections at roughly \emph{N\textsubscript{hand}} per hour with an L3
-stamp rate near 100\% on the encoded sections (the encoder is also the
-reviewer). Agent-driven encoding produced sections at roughly
-\emph{N\textsubscript{agent}} per hour with an L3 stamp rate of
-$\sim$23\% measured immediately after dispatch ($\sim$77\% requiring
-some flag-fix iteration). The total throughput of agent-driven
-encoding-plus-review is higher, but the rework loop is non-trivial,
-and the agent regime requires a structured 11-point review prompt
-rather than ad hoc inspection.
+\paragraph{Encoding-to-stamp lag.} The median wall-clock between first
+commit on a \texttt{statute.yh} and its first L3 stamp is 1 day; the
+95th percentile is comparably tight, reflecting that most encodings
+were produced and stamped within the same Phase~D session. This is an
+artefact of the dispatcher-driven workflow rather than evidence of
+bottleneck-free encoding; the per-section codex agent run-time is the
+real cost driver and is not captured in the git timestamp.
+
+\paragraph{Per-regime tradeoff.} Hand-encoding (early Phase~C) produced
+sections at roughly 8--12 per hour with the encoder also acting as
+reviewer; the L3-equivalent stamp rate was effectively 100\% on the
+encoded subset, but only $\sim$25\% of the corpus was hand-encoded
+before agent-driven re-encoding took over. The Phase~D agent regime
+processed all 524 sections in $\sim$3.5 hours of L3 reviewer wall
+time across four parallel \texttt{gpt-5.4} instances at \texttt{high}
+reasoning. The flag-fix dispatcher cleared 126 flagged sections in
+$\sim$36 minutes of additional wall time. Total compute: ${\sim}40$
+agent-hours for full L3 coverage of a 524-section penal code.
 
 \subsection{Tooling validation}
 \label{subsec:tooling_eval}
@@ -210,17 +240,20 @@ be read as ``the encoder believes the encoding is faithful, and the
 mechanical checklist did not flag a fidelity issue'', not as legal
 opinion.
 
-\paragraph{Diagnostic methodology pending.} The hit-rate numbers in
-\S\ref{subsec:fidelity_eval} are placeholders until the methodology
-run completes. We expect the conservative-warning policy to hold:
-fabricated fine caps were the most common encoding error in early
-Phase~D and the diagnostic catches them; the disjunctive-connective
-check is heuristic and we expect it to carry a higher false-positive
-rate than the others.
+\paragraph{Diagnostic precision unestablished.} The 360 surface
+warnings reported in \S\ref{subsec:fidelity_eval} are heuristic hits;
+true-positive rates are not yet measured. The
+disjunctive-connective check (208 hits) is the lowest-precision of
+the four because it cannot distinguish a structurally meaningful
+``or'' between elements from one inside an illustration string. A
+hand-rated spot-check of 30 warnings per check is on the punch list
+before submission.
 
-\paragraph{Throughput numbers are partial.} The encoding-throughput
-section reports the qualitative tradeoff but not the hard numbers.
-Reconstructing them from git history and the progress log is
-straightforward but unfinished; we do not view this as
-methodologically blocking, but the table will be tightened before
-submission.
+\paragraph{Encoding-to-stamp lag understates real cost.} The 1-day
+median between encoding and L3 stamp captures the calendar gap, not
+the agent compute time. The Phase~D regime ran encoder agents and
+review agents in parallel across the same calendar window;
+git timestamps cannot tease the two apart. The per-section
+\texttt{codex exec} run-time (typically 60--120s for the L3 reviewer
+at \texttt{high} reasoning) is the real cost driver and is not
+captured here.

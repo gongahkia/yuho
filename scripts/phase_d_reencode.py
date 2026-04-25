@@ -28,7 +28,7 @@ import argparse, json, re, subprocess, sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
-TEMPLATE_PATH = REPO / "docs" / "PHASE_D_REENCODING_PROMPT.md"
+TEMPLATE_PATH = REPO / "docs" / "researcher" / "phase-d-reencoding-prompt.md"
 RAW_PATH = REPO / "library" / "penal_code" / "_raw" / "act.json"
 COVERAGE_PATH = REPO / "library" / "penal_code" / "_coverage" / "coverage.json"
 SEPARATOR = "\n\n<<<---NEXT_SECTION--->>>\n\n"
@@ -139,7 +139,7 @@ def main() -> None:
                    help="actually invoke `codex exec --full-auto` instead of just printing")
     p.add_argument("--parallel", type=int, default=1, metavar="K",
                    help="with --dispatch, run up to K codex instances in parallel")
-    p.add_argument("--progress", metavar="FILE", default=".phase_d_progress.jsonl",
+    p.add_argument("--progress", metavar="FILE", default="library/penal_code/_coverage/phase_d_reencode_progress.jsonl",
                    help="append-only JSONL file recording per-section outcomes")
     p.add_argument("--resume", action="store_true",
                    help="skip sections already marked done in the progress file")

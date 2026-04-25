@@ -1,0 +1,112 @@
+{
+  "n_sections_scanned": 524,
+  "patterns": [
+    {
+      "gap": "G1_doc_before_element_group",
+      "count": 280,
+      "examples": [
+        "109",
+        "221",
+        "364",
+        "155",
+        "404"
+      ]
+    },
+    {
+      "gap": "G3_multi_letter_section",
+      "count": 23,
+      "examples": [
+        "376EA",
+        "377BD",
+        "376ED",
+        "377BA",
+        "377BC"
+      ]
+    },
+    {
+      "gap": "G5_subsection_blocks",
+      "count": 123,
+      "examples": [
+        "104",
+        "26E",
+        "473C",
+        "377C",
+        "376E"
+      ]
+    },
+    {
+      "gap": "G6_multiple_effective",
+      "count": 243,
+      "examples": [
+        "104",
+        "26E",
+        "473C",
+        "352",
+        "377C"
+      ]
+    },
+    {
+      "gap": "G8_fine_unlimited",
+      "count": 249,
+      "examples": [
+        "221",
+        "155",
+        "404",
+        "367",
+        "121A"
+      ]
+    },
+    {
+      "gap": "G8_penalty_or_both",
+      "count": 190,
+      "examples": [
+        "341",
+        "221",
+        "352",
+        "376E",
+        "143"
+      ]
+    },
+    {
+      "gap": "G9_penalty_when",
+      "count": 49,
+      "examples": [
+        "221",
+        "364",
+        "404",
+        "121A",
+        "130B"
+      ]
+    },
+    {
+      "gap": "G12_nested_penalty",
+      "count": 11,
+      "examples": [
+        "367",
+        "365",
+        "388",
+        "327",
+        "373"
+      ]
+    },
+    {
+      "gap": "G13_exception_priority",
+      "count": 1,
+      "examples": [
+        "94"
+      ]
+    },
+    {
+      "gap": "G14_caning_unspecified",
+      "count": 31,
+      "examples": [
+        "367",
+        "377",
+        "376",
+        "377BD",
+        "385"
+      ]
+    }
+  ],
+  "note": "Counts are post-fix (after Phase D). Gaps with low counts here may have had high pre-fix incidence; cf. docs/researcher/phase-c-gaps.md for the historical narrative of which sections originally triggered each."
+}

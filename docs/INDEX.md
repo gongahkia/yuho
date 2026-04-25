@@ -54,13 +54,13 @@ Audience: paper readers, reviewers, anyone tracing the design rationale.
 
 - [Cookbook](cookbook/) — recipe-style how-tos that don't fit one audience.
 - [Assets](assets/) — diagrams, screenshots, comic / meme variants.
+- [Architecture diagram (SVG)](architecture.svg) — rendered from `paper/figures/architecture.mmd`.
+- [Retrospective](retrospective.md) — Phase A–D lessons learned + numbers.
 
-The Phase D agent prompts (`PHASE_D_FLAG_FIX_PROMPT.md`,
-`PHASE_D_L3_REVIEW_PROMPT.md`, `PHASE_D_REENCODING_PROMPT.md`) live at the
-`docs/` root rather than under `researcher/` because the dispatcher
-scripts in `scripts/phase_d_*.py` reference them by absolute path. They
-will move to `researcher/phase-d-*.md` once the long-running L3 dispatcher
-session completes.
+The Phase D agent prompts now live under `researcher/`:
+- [phase-d-l3-review-prompt.md](researcher/phase-d-l3-review-prompt.md)
+- [phase-d-reencoding-prompt.md](researcher/phase-d-reencoding-prompt.md)
+- [phase-d-flag-fix-prompt.md](researcher/phase-d-flag-fix-prompt.md)
 
 ---
 

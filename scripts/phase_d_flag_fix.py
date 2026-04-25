@@ -5,7 +5,7 @@ renders doc/PHASE_D_FLAG_FIX_PROMPT.md per section and invokes
 `codex exec --full-auto -m gpt-5.4 -c model_reasoning_effort=high`.
 Each agent reads the section's existing _L3_FLAG.md + canonical text,
 patches statute.yh to address the specific flag, and deletes the flag
-file on success. Progress tracked in .phase_d_flag_fix_progress.jsonl.
+file on success. Progress tracked in library/penal_code/_coverage/phase_d_flag_fix_progress.jsonl.
 
 usage:
     python scripts/phase_d_flag_fix.py --list
@@ -17,7 +17,7 @@ import argparse, json, re, subprocess, sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
-TEMPLATE_PATH = REPO / "docs" / "PHASE_D_FLAG_FIX_PROMPT.md"
+TEMPLATE_PATH = REPO / "docs" / "researcher" / "phase-d-flag-fix-prompt.md"
 RAW_PATH = REPO / "library" / "penal_code" / "_raw" / "act.json"
 
 STOPWORDS = {"of","and","the","in","for","to","with","by","on","or",
@@ -130,7 +130,7 @@ def main() -> None:
                    help="actually invoke `codex exec`")
     p.add_argument("--parallel", type=int, default=1, metavar="K",
                    help="with --dispatch, run up to K codex instances in parallel")
-    p.add_argument("--progress", metavar="FILE", default=".phase_d_flag_fix_progress.jsonl",
+    p.add_argument("--progress", metavar="FILE", default="library/penal_code/_coverage/phase_d_flag_fix_progress.jsonl",
                    help="append-only JSONL file recording per-section outcomes")
     p.add_argument("--timeout", type=int, default=900,
                    help="per-section timeout in seconds")
