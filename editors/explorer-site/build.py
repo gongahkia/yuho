@@ -356,6 +356,24 @@ section.section-page .downloads a { color: var(--c-accent); margin: 0 0.05em; }
   display: flex;
 }
 
+/* Counter-example explorer pages (Tier 3 #8) */
+.explore-list { margin: 0.4em 0 1em 1.2em; padding: 0; }
+.explore-list li { margin: 0.2em 0; line-height: 1.4; }
+.elem-t {
+  display: inline-block; padding: 0 0.4em; margin: 0 0.18em 0.18em 0;
+  background: #e8f5e9; color: #1f6f2c; border-radius: 3px;
+  font: 600 0.78em ui-monospace, monospace;
+}
+.elem-f {
+  display: inline-block; padding: 0 0.4em; margin: 0 0.18em 0.18em 0;
+  background: #ffeaea; color: #a8302a; border-radius: 3px;
+  font: 600 0.78em ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  .elem-t { background: #1f3622; color: #6fdb88; }
+  .elem-f { background: #401818; color: #ff8888; }
+}
+
 .diagram {
   width: 100%;
   overflow: auto;
@@ -772,6 +790,7 @@ def render_sitemap(index: Dict[str, Any], base_url: str) -> str:
     urls = [f"{base}/index.html", f"{base}/coverage.html",
             f"{base}/flags.html", f"{base}/about.html"]
     urls.extend(f"{base}/s/{r['number']}.html" for r in index["sections"])
+    urls.extend(f"{base}/explore/{r['number']}.html" for r in index["sections"])
     entries = "".join(
         f"  <url><loc>{_esc(u)}</loc><lastmod>{today}</lastmod></url>\n"
         for u in urls
@@ -780,6 +799,100 @@ def render_sitemap(index: Dict[str, Any], base_url: str) -> str:
             '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
             f'{entries}'
             '</urlset>\n')
+
+
+def render_explore_page(rec: Dict[str, Any], explore_payload: Dict[str, Any]) -> str:
+    """Render a static counter-example explorer page for one section.
+
+    Layered on top of the same _page() chrome as the section pages.
+    Reads the pre-rendered explorer report (from build_explore.py),
+    falls back to a "not yet rendered" placeholder when absent.
+    """
+    n = rec["section_number"]
+    title = rec.get("section_title", "")
+    if not explore_payload or not explore_payload.get("available"):
+        body = f"""
+<section class="section-page">
+  <nav class="breadcrumb"><a href="/index.html">Index</a> ›
+    <a href="/s/{_esc(n)}.html">s{_esc(n)}</a> ›
+    <span aria-current="page">explore</span></nav>
+  <header><h1><span class="num">s{_esc(n)}</span>{_esc(title)} — counter-examples</h1></header>
+  <p class="muted">No pre-rendered explorer report available for this section.
+  Run <code>python3 editors/browser-yuho/build_explore.py --section {_esc(n)}</code>
+  to generate one. Reasons typically include: Z3 not installed, the section's
+  encoding has no top-level elements, or the parser failed.</p>
+</section>
+"""
+        return _page(f"Yuho — s{n} counter-examples", body)
+
+    s = explore_payload.get("summary") or {}
+    sat_html = ""
+    if explore_payload.get("satisfying"):
+        items = []
+        for i, scen in enumerate(explore_payload["satisfying"], 1):
+            tags = "".join(
+                f'<span class="elem-{("t" if v else "f")}">{_esc(k)}</span>'
+                for k, v in (scen.get("elements") or {}).items()
+            )
+            items.append(f'<li><strong>#{i}</strong> {tags}</li>')
+        sat_html = f"<h2>Satisfying scenarios</h2><ul class='explore-list'>{''.join(items)}</ul>"
+    else:
+        sat_html = "<h2>Satisfying scenarios</h2><p class='muted'>None found — conviction may be unreachable.</p>"
+
+    bord_html = ""
+    if explore_payload.get("borderline"):
+        items = []
+        for scen in explore_payload["borderline"]:
+            f_keys = [k for k, v in (scen.get("elements") or {}).items() if not v]
+            if f_keys:
+                items.append(f'<li>fails when missing: {_esc(", ".join(f_keys))}</li>')
+        if items:
+            bord_html = f"<h2>Load-bearing elements</h2><ul class='explore-list'>{''.join(items)}</ul>"
+
+    exc_html = ""
+    if explore_payload.get("exception_coverage"):
+        items = []
+        for e in explore_payload["exception_coverage"]:
+            label = "REACHABLE" if e.get("reachable") is True else (
+                "DEAD" if e.get("reachable") is False else "UNKNOWN"
+            )
+            items.append(f"<li>{_esc(e['exception'])} — {label}</li>")
+        exc_html = f"<h2>Exception coverage</h2><ul class='explore-list'>{''.join(items)}</ul>"
+
+    body = f"""
+<section class="section-page">
+  <nav class="breadcrumb">
+    <a href="/index.html">Index</a> ›
+    <a href="/s/{_esc(n)}.html">s{_esc(n)}</a> ›
+    <span aria-current="page">explore</span>
+  </nav>
+  <header>
+    <h1><span class="num">s{_esc(n)}</span>{_esc(title)} — counter-examples</h1>
+    <div class="meta">
+      <span>Pre-rendered structural witnesses from the Z3 verifier.</span>
+      <span>·</span>
+      <a href="/s/{_esc(n)}.html">back to section page</a>
+    </div>
+  </header>
+  <h2>Summary</h2>
+  <table class="refs">
+    <tr><th>Elements</th><td>{s.get('n_leaf_elements', 0)}</td></tr>
+    <tr><th>Exceptions</th><td>{s.get('n_exceptions', 0)}</td></tr>
+    <tr><th>Conviction reachable</th><td>{'yes' if s.get('conviction_reachable') else 'no'}</td></tr>
+    <tr><th>Load-bearing elements</th><td>{s.get('n_load_bearing', 0)}</td></tr>
+    <tr><th>Dead exceptions</th><td>{s.get('n_dead_exceptions', 0)}</td></tr>
+  </table>
+  {sat_html}
+  {bord_html}
+  {exc_html}
+  <p class="muted" style="font-size:0.85em;margin-top:1.5rem">
+    Counter-example exploration is structural only — it surfaces fact-pattern
+    witnesses over the encoded grammar, not legal conclusions. Cross-reference
+    the <a href="https://sso.agc.gov.sg/Act/PC1871">canonical SSO text</a>.
+  </p>
+</section>
+"""
+    return _page(f"Yuho — s{n} counter-examples", body)
 
 
 def render_robots(base_url: str) -> str:
@@ -940,6 +1053,8 @@ def render_section(rec: Dict[str, Any],
         f' · <a href="/s/{_esc(n)}.yh">.yh</a>'
         f'{f"" if not en else f" · <a href=\"/s/{_esc(n)}.en.txt\">English</a>"}'
         f'</span>'
+        f'<span>·</span>'
+        f'<a href="/explore/{_esc(n)}.html">explore counter-examples</a>'
     )
 
     body = f"""
@@ -1118,6 +1233,28 @@ def main() -> int:
             (BUILD / "s" / f"{n}.en.txt").write_text(en_src)
 
     cache_path.write_text(json.dumps(cache_out, separators=(",", ":")))
+
+    # Tier 3 #8: per-section explorer pages, shipped under /explore/<n>.html.
+    explore_src = REPO / "editors" / "browser-yuho" / "data" / "explore"
+    explore_out_dir = BUILD / "explore"
+    explore_out_dir.mkdir(parents=True, exist_ok=True)
+    n_explore_pages = 0
+    for num in ordered_nums:
+        path = paths_by_num.get(num)
+        if path is None:
+            continue
+        with path.open("r", encoding="utf-8") as f:
+            rec = json.load(f)
+        explore_payload = None
+        explore_json = explore_src / f"s{num}.json"
+        if explore_json.exists():
+            try:
+                explore_payload = json.loads(explore_json.read_text(encoding="utf-8"))
+            except Exception:
+                explore_payload = None
+        out = explore_out_dir / f"{num}.html"
+        out.write_text(render_explore_page(rec, explore_payload or {}))
+        n_explore_pages += 1
 
     (STATIC / "search-index.json").write_text(
         json.dumps(search_index, ensure_ascii=False, separators=(",", ":"))

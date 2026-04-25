@@ -198,3 +198,20 @@ class TestBuiltSite:
         text = (built_site / "s" / "415.html").read_text(encoding="utf-8")
         assert "raw SHA-256" in text
         assert "yuho " in text  # version stamp
+
+    def test_explore_pages_emitted(self, built_site):
+        # Tier 3 #8: per-section /explore/<n>.html pages.
+        explore_dir = built_site / "explore"
+        if not explore_dir.exists():
+            pytest.skip("explore dir not built")
+        # At least one page must exist (s415 if explorer data was generated;
+        # otherwise the placeholder still emits).
+        assert any(explore_dir.glob("*.html")), \
+            "no /explore/*.html pages emitted"
+        # The section page must link to its explore page.
+        s415 = (built_site / "s" / "415.html").read_text(encoding="utf-8")
+        assert "/explore/415.html" in s415
+
+    def test_sitemap_includes_explore_pages(self, built_site):
+        sm = (built_site / "sitemap.xml").read_text(encoding="utf-8")
+        assert "/explore/415.html" in sm
