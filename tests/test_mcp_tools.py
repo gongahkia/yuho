@@ -198,6 +198,78 @@ class TestBenchmark:
 # ---------------------------------------------------------------------------
 
 
+class TestExplorerAndRecommender:
+    """End-to-end MCP wiring tests for the two analytical surfaces.
+
+    These exercise the full FastMCP path (rate-limit lookup, dispatch,
+    return-value envelope) — not just the underlying core function — so
+    a regression in the tool decorator stack would show up here.
+    """
+
+    def test_explore_counterexamples_present_and_callable(self, server):
+        tools = _run(server.server.list_tools())
+        names = {t.name for t in tools}
+        assert "yuho_explore_counterexamples" in names
+
+    def test_explore_counterexamples_round_trip(self, server):
+        src = Path("library/penal_code/s415_cheating/statute.yh").read_text()
+        try:
+            import z3  # noqa: F401
+        except Exception:
+            pytest.skip("z3 not installed; explorer requires it")
+        result = _call(server, "yuho_explore_counterexamples",
+                       {"file_content": src, "section": "415",
+                        "max_satisfying": 2})
+        assert result.get("ok") is True, result
+        rep = result["report"]
+        assert rep["section"] == "415"
+        assert rep["available"] is True
+        assert rep["summary"]["conviction_reachable"] is True
+
+    def test_explore_counterexamples_unknown_section_envelope(self, server):
+        # Wiring regression check: a parsed module that lacks the requested
+        # section should round-trip as ok=True / report.available=False.
+        # If the input doesn't even parse, ok=False with mcp_error envelope.
+        src = Path("library/penal_code/s415_cheating/statute.yh").read_text()
+        result = _call(server, "yuho_explore_counterexamples",
+                       {"file_content": src, "section": "9999"})
+        assert result.get("ok") is True
+        assert result["report"]["available"] is False
+        assert "not found" in (result["report"]["reason"] or "").lower()
+
+    def test_recommend_charges_present_and_callable(self, server):
+        tools = _run(server.server.list_tools())
+        names = {t.name for t in tools}
+        assert "yuho_recommend_charges" in names
+
+    def test_recommend_charges_returns_disclaimer(self, server):
+        if not Path("library/penal_code/_corpus/sections").exists():
+            pytest.skip("corpus not built")
+        facts = {
+            "name": "A intentionally deceives B",
+            "acts": [
+                {"actor": "A", "description": "deceives B about a worthless article"},
+                {"actor": "A", "description": "induces B to deliver property"},
+            ],
+            "mental_states": {"A": {"intent": "to defraud"}},
+        }
+        result = _call(server, "yuho_recommend_charges",
+                       {"facts": facts, "top_k": 3})
+        assert result.get("ok") is True, result
+        rec = result["recommendation"]
+        # Disclaimer fields are load-bearing — clients rely on them.
+        assert rec["not_legal_advice"] is True
+        assert "disclaimer" in rec and rec["disclaimer"]
+        assert isinstance(rec["candidates"], list)
+
+    def test_recommend_charges_rate_limit_override_registered(self, server):
+        # The two new tools should be in the per-tool override map,
+        # otherwise they fall back to the global limit and may be too aggressive.
+        overrides = server.rate_limiter.config.per_tool_overrides
+        assert "yuho_explore_counterexamples" in overrides
+        assert "yuho_recommend_charges" in overrides
+
+
 class TestResources:
     def test_resources_listed(self, server):
         resources = _run(server.server.list_resources())
