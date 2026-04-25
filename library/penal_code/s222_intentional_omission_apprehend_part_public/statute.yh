@@ -22,10 +22,14 @@ statute 222 "Intentional omission to apprehend on the part of a public servant b
         }
     }
 
-    penalty when death_sentence {
+    penalty alternative when death_sentence {
         imprisonment := 0 years .. 20 years;
+        supplementary := "Shall be punished with imprisonment for life or with imprisonment for a term which may extend to 20 years.";
+    }
+
+    penalty when death_sentence {
         fine := unlimited;
-        supplementary := "Shall be punished with imprisonment for life or with imprisonment for a term which may extend to 20 years, and shall also be liable to fine.";
+        supplementary := "And shall also be liable to fine.";
     }
 
     penalty when sentence_of_20_years_or_upwards {

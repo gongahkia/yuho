@@ -22,7 +22,6 @@ statute 327 "Voluntarily causing hurt to extort property or to constrain to an i
 
         alternative {
             fine := unlimited;
-            caning := unspecified;
             supplementary := "The offender shall also be liable to fine or to caning.";
     
         }

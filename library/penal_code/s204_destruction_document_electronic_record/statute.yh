@@ -4,20 +4,7 @@
 
 statute 204 "Destruction of document or electronic record to prevent its production as evidence" effective 1872-01-01 {
     elements {
-        /// Section 204 is satisfied only if the prohibited handling of the document or electronic record and the prevention purpose coexist.
-        all_of {
-            /// The actus reus is disjunctive: concealment or destruction of the whole, or obliteration/rendering illegible of the whole or any part.
-            any_of {
-                actus_reus secretes_or_destroys := "Whoever secretes or destroys any document or electronic record";
-                actus_reus obliterates_or_renders_illegible := "Obliterates or renders illegible the whole or any part of such document or electronic record";
-            }
-            /// The evidential setting is also disjunctive: the document may be lawfully compelled for evidence, or the person has already been lawfully summoned or required to produce it for that purpose.
-            any_of {
-                circumstance lawfully_compellable_evidence := "Which he may be lawfully compelled to produce as evidence before a court of justice, or in any proceeding lawfully held before a public servant as such";
-                circumstance lawfully_summoned_or_required := "After he has been lawfully summoned or required to produce the same for that purpose";
-            }
-            mens_rea prevention_purpose := "With the intention of preventing the same from being produced or used as evidence before such court or public servant as aforesaid";
-        }
+        actus_reus prohibited_handling := "Whoever secretes or destroys any document or electronic record which he may be lawfully compelled to produce as evidence before a court of justice, or in any proceeding lawfully held before a public servant as such, or obliterates or renders illegible the whole or any part of such document or electronic record with the intention of preventing the same from being produced or used as evidence before such court or public servant as aforesaid, or after he has been lawfully summoned or required to produce the same for that purpose";
     }
 
     penalty or_both {

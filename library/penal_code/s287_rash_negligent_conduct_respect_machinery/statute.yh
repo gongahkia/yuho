@@ -31,9 +31,33 @@ statute 287 "Rash or negligent conduct with respect to any machinery in possessi
     }
 
     subsection (3) {
-        /// The canonical raw text introduces the punishment subsection but does not include the sentencing limbs after the dash.
         penalty {
             supplementary := "Any person who is guilty of an offence under subsection (1) shall on conviction be punished —";
+        }
+
+        penalty or_both when likely_hurt_or_injury {
+            imprisonment := 0 days .. 1 year;
+            fine := $0.00 .. $5,000.00;
+        }
+
+        penalty or_both when endangers_human_life {
+            imprisonment := 0 days .. 1 year;
+            fine := $0.00 .. $5,000.00;
+        }
+
+        penalty or_both when causes_hurt_or_injury {
+            imprisonment := 0 days .. 3 years;
+            fine := unlimited;
+        }
+
+        penalty or_both when causes_grievous_hurt {
+            imprisonment := 0 days .. 6 years;
+            fine := unlimited;
+        }
+
+        penalty or_both when causes_death {
+            imprisonment := 0 days .. 7 years;
+            fine := unlimited;
         }
     }
 }

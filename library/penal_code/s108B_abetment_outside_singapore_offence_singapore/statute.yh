@@ -2,7 +2,7 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr108B-#pr108B-
 
-statute 108B "Abetment outside Singapore of an offence in Singapore" effective 1872-01-01 {
+statute 108B "Abetment outside Singapore of an offence in Singapore" effective 1872-01-01 effective 2008-02-01 {
     elements {
         all_of {
             actus_reus abets_offence_in_singapore := "Abets an offence committed in Singapore";

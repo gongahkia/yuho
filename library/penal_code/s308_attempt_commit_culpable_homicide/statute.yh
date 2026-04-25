@@ -22,6 +22,7 @@ statute 308 "Attempt to commit culpable homicide" effective 1872-01-01 effective
     penalty or_both when hurt_caused {
         imprisonment := 0 years .. 15 years;
         fine := unlimited;
+        caning := unspecified;
         supplementary := "If hurt is caused to any person by such act, the offender shall be punished with imprisonment for a term which may extend to 15 years, or with fine, or with caning, or with any combination of such punishments. [15/2019]";
     }
 

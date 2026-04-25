@@ -5,13 +5,18 @@
 
 statute 185 "Illegal purchase or bid for property offered for sale by authority of public servant" effective 1872-01-01 effective 2020-01-01 {
     elements {
-        /// Section 185 requires a sale held by lawful authority of a public servant, a purchase or bid on account of self or another, and one of the two prohibited mental states.
+        /// Section 185 requires a sale held by lawful authority of a public servant, one of the two statutory act-and-fault branches, and the applicable case category.
         all_of {
             circumstance lawful_authority_sale := "At any sale of property held by the lawful authority of a public servant as such";
-            actus_reus purchase_or_bid := "Purchases or bids for any property on account of the person or another person";
             any_of {
-                mens_rea knowledge_of_legal_incapacity := "The person knows that the person on whose account the purchase or bid is made is under a legal incapacity to purchase that property at that sale";
-                mens_rea no_intention_to_perform := "Bids for such property not intending to perform the obligations under which the person lays himself by such bidding";
+                all_of {
+                    actus_reus purchase_or_bid := "Purchases or bids for any property on account of the person or another person";
+                    mens_rea knowledge_of_legal_incapacity := "The person knows that the person on whose account the purchase or bid is made is under a legal incapacity to purchase that property at that sale";
+                }
+                all_of {
+                    actus_reus bid_for_property := "Bids for such property";
+                    mens_rea no_intention_to_perform := "Not intending to perform the obligations under which the person lays himself by such bidding";
+                }
             }
             /// The amended text separates punishment between the case of an individual and any other case.
             any_of {

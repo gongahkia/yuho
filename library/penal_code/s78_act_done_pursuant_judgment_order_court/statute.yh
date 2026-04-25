@@ -17,7 +17,6 @@ statute 78 "Act done pursuant to the judgment or order of a court of justice" ef
                 actus_reus warranted := "Act is warranted by the judgment or order of a court of justice.";
             }
             circumstance in_force := "Act is done while the judgment or order remains in force.";
-            circumstance no_jurisdiction_notwithstanding := "The court may have had no jurisdiction to pass the judgment or order.";
             mens_rea good_faith_jurisdiction_belief := "Person doing the act in good faith believes that the court had such jurisdiction.";
         }
     }

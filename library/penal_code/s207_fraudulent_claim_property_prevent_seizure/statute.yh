@@ -8,12 +8,16 @@ statute 207 "Fraudulent claim to property to prevent its seizure as a forfeiture
         /// The offence requires a fraudulent claim-or-deception act, lack of right, and a seizure-prevention purpose.
         all_of {
             any_of {
-                actus_reus fraudulent_acceptance := "Fraudulently accepts any property or any interest therein";
-                actus_reus fraudulent_receipt := "Fraudulently receives any property or any interest therein";
-                actus_reus fraudulent_claim := "Fraudulently claims any property or any interest therein";
+                all_of {
+                    any_of {
+                        actus_reus fraudulent_acceptance := "Fraudulently accepts any property or any interest therein";
+                        actus_reus fraudulent_receipt := "Fraudulently receives any property or any interest therein";
+                        actus_reus fraudulent_claim := "Fraudulently claims any property or any interest therein";
+                    }
+                    mens_rea no_right_or_rightful_claim := "Knowing that he has no right or rightful claim to such property or interest";
+                }
                 actus_reus deceptive_practice := "Practises any deception touching any right to any property or any interest therein";
             }
-            mens_rea no_right_or_rightful_claim := "Knowing that he has no right or rightful claim to such property or interest";
             circumstance seizure_target := "That property or interest therein is liable to be taken as a forfeiture or in satisfaction of a fine under a sentence which has been pronounced, or which he knows to be likely to be pronounced by a court of justice or other competent authority, or from being taken in execution of a decree or an order, or under or pursuant to an enforcement order, which has been made or which he knows to be likely to be made by a court of justice in a civil suit";
             mens_rea intent_to_prevent_taking := "Intending thereby to prevent that property or interest therein from being so taken";
         }

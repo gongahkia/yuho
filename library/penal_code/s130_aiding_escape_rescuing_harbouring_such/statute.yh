@@ -21,9 +21,13 @@ statute 130 "Aiding escape of, rescuing, or harbouring such prisoner" effective 
         }
     }
 
-    penalty {
+    penalty alternative when life_imprisonment_sentence {
+        supplementary := "shall be punished with imprisonment for life,"
+    }
+
+    penalty cumulative when non_life_sentence {
         imprisonment := 0 days .. 15 years;
         fine := unlimited;
-        supplementary := "The offender shall be punished with imprisonment for life, or with imprisonment for a term which may extend to 15 years, and shall, if he is not sentenced to imprisonment for life, also be liable to fine. [15/2019]";
+        supplementary := "or with imprisonment for a term which may extend to 15 years, and shall, if he is not sentenced to imprisonment for life, also be liable to fine."
     }
 }

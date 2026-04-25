@@ -4,27 +4,19 @@
 
 statute 158 "Being hired to take part in an unlawful assembly or riot" effective 1872-01-01 {
     elements {
-        /// Section 158 criminalises being hired or offering to be hired to do or assist in doing acts specified in section 141, with a higher punishment where the person goes armed.
-        all_of {
-            actus_reus hired_or_engaged := "Is engaged or hired, or offers or attempts to be hired or engaged";
-            actus_reus unlawful_assembly_acts := "To do or assist in doing any of the acts specified in section 141";
-            any_of {
-                circumstance base_offence := "The person is engaged or hired, or offers or attempts to be hired or engaged to do or assist in doing any of the acts specified in section 141";
-                /// The aggravated limb applies where the person, being so engaged or hired as aforesaid, goes armed or engages or offers to go armed.
-                all_of {
-                    circumstance engaged_or_hired_as_aforesaid := "Being so engaged or hired as aforesaid";
-                    actus_reus goes_armed := "Goes armed, or engages or offers to go armed, with any deadly weapon, or with anything which used as a weapon of offence is likely to cause death";
-                }
-            }
+        /// Section 158 states separate ordinary and armed limbs, each with its own punishment branch.
+        any_of {
+            circumstance ordinary_limb := "Whoever is engaged or hired, or offers or attempts to be hired or engaged, to do or assist in doing any of the acts specified in section 141";
+            circumstance armed_limb := "Whoever, being so engaged or hired as aforesaid, goes armed, or engages or offers to go armed, with any deadly weapon, or with anything which used as a weapon of offence is likely to cause death";
         }
     }
 
-    penalty or_both when base_offence {
+    penalty or_both when ordinary_limb {
         imprisonment := 0 days .. 2 years;
         fine := unlimited;
     }
 
-    penalty or_both when goes_armed {
+    penalty or_both when armed_limb {
         imprisonment := 0 days .. 5 years;
         fine := unlimited;
     }

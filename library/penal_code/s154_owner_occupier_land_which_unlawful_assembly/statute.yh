@@ -10,7 +10,8 @@ statute 154 "Owner or occupier of land on which an unlawful assembly is held" ef
             circumstance event := "An unlawful assembly takes place on that land or a riot is committed on that land";
             mens_rea knowledge_threshold := "He or his agent or manager knows that such offence is being or has been committed, or has reason to believe it is likely to be committed";
             actus_reus no_earliest_notice := "He or his agent or manager does not give the earliest notice thereof in his or their power to the principal officer at the nearest police station";
-            actus_reus no_lawful_means := "He or his agent or manager does not, in the case of his or their having reason to believe that it is about to be committed, use all lawful means in his or their power to prevent it, and in the event of its taking place, use all lawful means in his or their power to disperse or suppress the riot or unlawful assembly";
+            actus_reus no_prevention := "He or his agent or manager does not, in the case of his or their having reason to believe that it is about to be committed, use all lawful means in his or their power to prevent it";
+            actus_reus no_dispersal_or_suppression := "He or his agent or manager does not, in the event of its taking place, use all lawful means in his or their power to disperse or suppress the riot or unlawful assembly";
         }
     }
 

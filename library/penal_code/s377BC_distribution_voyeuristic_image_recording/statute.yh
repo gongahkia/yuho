@@ -16,15 +16,25 @@ statute 377BC "Distribution of voyeuristic image or recording" effective 1872-01
     }
 
     subsection (2) {
-        /// Canonical source text in library/penal_code/_raw/act.json is truncated at:
-        /// "Any person ( A ) shall be guilty of an offence who —"
+        elements {
+            all_of {
+                actus_reus possession_for_distribution := "intentionally or knowingly has in his possession an image or recording of another person ( B ) for the purpose of distribution without B ’s consent to the distribution; [15/2019]";
+                circumstance obtained_through_377BB := "knowing or having reason to believe that the image or recording was obtained through the commission of an offence under section 377BB; and [15/2019]";
+                mens_rea knows_no_consent := "knows or has reason to believe that B does not consent to the distribution. [15/2019]";
+            }
+        }
     }
 
     subsection (3) {
-        penalty or_both {
+        penalty cumulative {
             imprisonment := 0 years .. 5 years;
+            supplementary := "Subject to subsection (4), a person who is guilty of an offence under subsection (1) or (2) shall on conviction be punished with imprisonment for a term which may extend to 5 years. [15/2019]";
+        }
+
+        penalty or_both {
             fine := unlimited;
-            supplementary := "Subject to subsection (4), a person who is guilty of an offence under subsection (1) or (2) shall on conviction be punished with imprisonment for a term which may extend to 5 years, or with fine, or with caning, or any combination of such punishments. [15/2019]";
+            caning := unspecified;
+            supplementary := "or with fine, or with caning, or any combination of such punishments. [15/2019]";
         }
     }
 
@@ -33,10 +43,15 @@ statute 377BC "Distribution of voyeuristic image or recording" effective 1872-01
             circumstance victim_below_14 := "Where the image or recording in subsection (1) or (2) is of a person below 14 years of age. [15/2019]";
         }
 
-        penalty {
+        penalty cumulative {
             imprisonment := 0 years .. 5 years;
+            supplementary := "Where the image or recording in subsection (1) or (2) is of a person below 14 years of age, a person who is guilty of an offence under subsection (1) or (2) shall on conviction be punished with imprisonment for a term which may extend to 5 years. [15/2019]";
+        }
+
+        penalty alternative {
             fine := unlimited;
-            supplementary := "A person who is guilty of an offence under subsection (1) or (2) shall on conviction be punished with imprisonment for a term which may extend to 5 years, and shall also be liable to fine or to caning. [15/2019]";
+            caning := unspecified;
+            supplementary := "and shall also be liable to fine or to caning. [15/2019]";
         }
     }
 }

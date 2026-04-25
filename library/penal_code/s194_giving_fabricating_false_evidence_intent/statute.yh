@@ -6,7 +6,7 @@
 statute 194 "Giving or fabricating false evidence with intent to procure conviction of a capital offence" effective 1872-01-01 effective 2020-01-01 {
     definitions {
         capital_offence := "An offence which is capital by this Code, or under any other law for the time being in force";
-        aggravated_consequence := "An innocent person is convicted and executed in consequence of such false evidence";
+        aggravated_giving_false_evidence := "An innocent person is convicted and executed in consequence of such false evidence, the person who gives such false evidence shall be punished either with death or the punishment hereinbefore described.";
     }
 
     elements {
@@ -23,9 +23,13 @@ statute 194 "Giving or fabricating false evidence with intent to procure convict
         }
     }
 
-    penalty alternative {
+    penalty alternative when life_imprisonment {
+        supplementary := "Whoever gives or fabricates false evidence, intending thereby to cause, or knowing it to be likely that he will thereby cause, any person to be convicted of an offence which is capital by this Code, or under any other law for the time being in force, shall be punished with imprisonment for life. [15/2019]";
+    }
+
+    penalty cumulative when non_life_sentence {
         imprisonment := 0 years .. 20 years;
-        supplementary := "The offender shall be punished with imprisonment for life, or with imprisonment for a term which may extend to 20 years. [15/2019]";
+        supplementary := "Whoever gives or fabricates false evidence, intending thereby to cause, or knowing it to be likely that he will thereby cause, any person to be convicted of an offence which is capital by this Code, or under any other law for the time being in force, shall be punished with imprisonment for a term which may extend to 20 years. [15/2019]";
     }
 
     penalty when non_life_sentence {
@@ -33,7 +37,7 @@ statute 194 "Giving or fabricating false evidence with intent to procure convict
         supplementary := "If the offender is not sentenced to imprisonment for life, the offender is also liable to fine. [15/2019]";
     }
 
-    penalty alternative when aggravated_consequence {
+    penalty alternative when aggravated_giving_false_evidence {
         imprisonment := 0 years .. 20 years;
         death := TRUE;
         supplementary := "If an innocent person is convicted and executed in consequence of such false evidence, the person who gives such false evidence shall be punished either with death or the punishment hereinbefore described. [15/2019]";

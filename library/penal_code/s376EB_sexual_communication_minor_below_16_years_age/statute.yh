@@ -19,12 +19,22 @@ statute 376EB "Sexual communication with minor below 16 years of age" effective 
     subsection (2) {
         definitions {
             immaterial_opening := "For the purposes of this section, it is immaterial —";
+            whether_b_replied_or_responded := "whether B replied or responded to A ’s communication mentioned in subsection (1); and";
+            whether_communication_originated_in_singapore := "whether such communication originated in Singapore provided that either A or B was in Singapore at the time of such communication.";
         }
     }
 
     subsection (3) {
-        definitions {
-            punishment_opening := "A person who is guilty of an offence under this section shall —";
+        penalty or_both when victim_below_14_case {
+            imprisonment := 0 years .. 3 years;
+            fine := unlimited;
+            supplementary := "In the case where the offence is committed against a victim who is below 14 years of age and A does not reasonably believe that B is of or above that age.";
+        }
+
+        penalty or_both when other_case {
+            imprisonment := 0 years .. 2 years;
+            fine := unlimited;
+            supplementary := "In any other case.";
         }
     }
 

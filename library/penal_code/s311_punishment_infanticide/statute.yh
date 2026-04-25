@@ -4,7 +4,7 @@
 /// @amendment [15/2019]
 /// @amendment [Act 23 of 2021 wef 01/03/2022]
 
-statute 311 "Punishment for infanticide" effective 1872-01-01 {
+statute 311 "Punishment for infanticide" effective 1872-01-01 effective 2019-12-31 effective 2022-03-01 {
     /// Punishment for the offence of infanticide under section 310.
     penalty alternative {
         imprisonment := 0 years .. 10 years;

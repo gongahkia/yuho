@@ -3,6 +3,6 @@
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr96-#pr96-
 statute 96 "Nothing done in private defence is an offence" effective 1872-01-01 {
     definitions {
-        no_offence_private_defence := "Nothing is an offence which is done in the exercise of the right of private defence.";
+        operative_rule := "Nothing is an offence which is done in the exercise of the right of private defence.";
     }
 }

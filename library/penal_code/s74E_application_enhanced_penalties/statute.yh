@@ -18,5 +18,13 @@ statute 74E "Application of enhanced penalties" effective 1872-01-01 effective 2
         definitions {
             prescribed_punishment_rule_intro := "Where any punishment prescribed for an offence is —";
         }
+
+        elements {
+            /// Subsection (2) preserves the two canonical punishment categories for which sections 73 to 74D do not enhance punishment.
+            any_of {
+                prohibition specified_or_mandatory_minimum_sentence_not_enhanced := "a specified minimum sentence or a mandatory minimum sentence of imprisonment or caning, section 73, 74, 74A, 74B, 74C or 74D does not apply to enhance such punishment; and";
+                prohibition sentence_of_caning_maximum_strokes_not_enhanced := "a sentence of caning, section 73, 74, 74A, 74B, 74C or 74D does not apply to enhance the maximum number of strokes of the cane that may be imposed.";
+            }
+        }
     }
 }

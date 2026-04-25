@@ -18,9 +18,13 @@ statute 124 "Assaulting President, etc., with intent to compel or restrain the e
         }
     }
 
-    penalty alternative {
+    penalty alternative when life_imprisonment {
+        supplementary := "The offender shall be punished with imprisonment for life. [15/2019]";
+    }
+
+    penalty cumulative when non_life_sentence {
         imprisonment := 0 years .. 20 years;
-        supplementary := "The offender shall be punished with imprisonment for life or for a term which may extend to 20 years. [15/2019]";
+        supplementary := "If the offender is not sentenced to imprisonment for life, the offender shall be punished with imprisonment for a term which may extend to 20 years. [15/2019]";
     }
 
     penalty when non_life_sentence {

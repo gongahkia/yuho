@@ -6,9 +6,14 @@ referencing penal_code/s362_abduction
 
 statute 363A "Punishment for abduction" effective 1872-01-01 {
     /// Punishment for the offence of abduction under section 362.
-    penalty or_both {
+    penalty cumulative {
         imprisonment := 0 years .. 7 years;
+        supplementary := "Whoever abducts any person shall be punished with imprisonment for a term which may extend to 7 years";
+    }
+
+    penalty or_both {
         fine := unlimited;
-        supplementary := "Whoever abducts any person shall be punished with imprisonment for a term which may extend to 7 years, or with fine, or with caning, or with any combination of such punishments.";
+        caning := unspecified;
+        supplementary := "or with fine, or with caning, or with any combination of such punishments.";
     }
 }

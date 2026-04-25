@@ -3,7 +3,7 @@
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr97-#pr97-
 /// @amendment [15/2019]
 
-statute 97 "Right of private defence of the body and of property" effective 1872-01-01 {
+statute 97 "Right of private defence of the body and of property" effective 1872-01-01 effective 2020-01-01 {
     definitions {
         private_defence_body := "Every person has a right, subject to the restrictions contained in sections 98 and 106A, to defend his own body, and the body of any other person, against any offence affecting the human body.";
         private_defence_property := "Every person has a right, subject to the restrictions contained in sections 98 and 106A, to defend the property, whether movable or immovable, of himself or of any other person, against any act which is an offence falling under the definition of theft, robbery, mischief or criminal trespass, or which is an attempt to commit theft, robbery, mischief or criminal trespass.";

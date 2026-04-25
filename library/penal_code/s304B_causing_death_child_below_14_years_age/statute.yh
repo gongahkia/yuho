@@ -21,6 +21,7 @@ statute 304B "Causing death of child below 14 years of age, domestic worker or v
 
             alternative {
                 fine := unlimited;
+                caning := unspecified;
                 supplementary := "The offender shall also be liable to fine or to caning. [15/2019]"
         
             }
@@ -28,5 +29,14 @@ statute 304B "Causing death of child below 14 years of age, domestic worker or v
     }
 
     subsection (2) {
+        definitions {
+            child := "\"Child\" means a person below 14 years of age.";
+            domestic_worker := "\"Domestic worker\" has the meaning given by section 73(4).";
+            employer := "\"Employer\" has the meaning given by section 73(4).";
+            employment_agent := "\"Employment agent\" has the meaning given by section 73(4).";
+            member_of_employers_household := "\"Member of the employer's household\" has the meaning given by section 73(4).";
+            neglect := "\"Neglect\" means the failure by a relevant person to provide any or adequate essential care (such as but not limited to food, clothing, medical aid, lodging and other necessities of life) to the extent of causing personal injury or physical pain to, or injury to the physical health of any child, domestic worker or vulnerable person.";
+            vulnerable_person := "\"Vulnerable person\" has the meaning given by section 74A(5).";
+        }
     }
 }

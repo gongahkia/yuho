@@ -1,9 +1,10 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr40-#pr40-
+/// @amendment [15/2019]
 /// @amendment [15/2019; 2/2020]
 
-statute 40 "“Offence”" effective 1872-01-01 effective 2020-02-10 {
+statute 40 "“Offence”" effective 1872-01-01 effective 2020-01-01 effective 2020-02-10 {
     subsection (1) {
         definitions {
             offence_default := "Except in the Chapters and sections mentioned in subsections (2) and (3), “offence” denotes a thing made punishable by this Code.";
@@ -12,7 +13,7 @@ statute 40 "“Offence”" effective 1872-01-01 effective 2020-02-10 {
 
     subsection (2) {
         definitions {
-            offence_chapters_4_4A_5_5A_and_listed_sections := "In Chapters 4, 4A, 5 and 5A, and in sections 4, 187, 194, 195, 203, 204B, 211, 213, 214, 221, 222, 223, 224, 225, 327, 328, 329, 330, 331, 347, 348, 388 and 389, “offence” denotes a thing punishable under this Code or under any other written law for the time being in force. [15/2019; 2/2020]";
+            offence_chapters_4_4A_5_5A_and_listed_sections := "In Chapters 4, 4A, 5 and 5A, and in sections 4, 187, 194, 195, 203, 204B, 211, 213, 214, 221, 222, 223, 224, 225, 327, 328, 329, 330, 331, 347, 348, 388 and 389, “offence” denotes a thing punishable under this Code or under any other written law for the time being in force.";
         }
     }
 

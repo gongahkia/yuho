@@ -3,9 +3,16 @@
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr139-#pr139-
 
 statute 139 "Saving" effective 1872-01-01 {
-    definitions {
-        service_discipline_provision := "Provision is made in any law relating to the discipline of the Singapore Armed Forces for the punishment of an offence corresponding to an offence defined in this Chapter";
-        person_subject_to_service_discipline_law := "A person is subject to such provision";
-        saving_rule := "No person who is subject to such provision shall be subject to punishment under this Code for the offence defined in this Chapter";
+    elements {
+        /// The saving applies only where a service-discipline law provides punishment for a corresponding Chapter offence and the person is subject to that provision.
+        all_of {
+            circumstance corresponding_service_discipline_provision := "Provision is made in any law relating to the discipline of the Singapore Armed Forces for the punishment of an offence corresponding to an offence defined in this Chapter";
+            circumstance person_subject_to_provision := "The person is subject to such provision";
+        }
+    }
+
+    exception saving_for_service_discipline {
+        "Where provision is made in any law relating to the discipline of the Singapore Armed Forces for the punishment of an offence corresponding to an offence defined in this Chapter, no person who is subject to such provision shall be subject to punishment under this Code for the offence defined in this Chapter."
+        "No person who is subject to such provision shall be subject to punishment under this Code for the offence defined in this Chapter."
     }
 }

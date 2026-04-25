@@ -5,8 +5,14 @@
 statute 368 "Wrongfully concealing or keeping in confinement a kidnapped person" effective 1872-01-01 {
     elements {
         all_of {
-            mens_rea knowledge_of_kidnapping_or_abduction := "Knowing that any person has been kidnapped or has been abducted";
-            actus_reus wrongful_concealment_or_confinement := "Wrongfully conceals or keeps such person in confinement";
+            any_of {
+                mens_rea knowledge_of_kidnapping := "Knowing that any person has been kidnapped";
+                mens_rea knowledge_of_abduction := "Knowing that any person has been abducted";
+            }
+            any_of {
+                actus_reus wrongful_concealment := "Wrongfully conceals such person";
+                actus_reus wrongful_confinement := "Wrongfully keeps such person in confinement";
+            }
         }
     }
 

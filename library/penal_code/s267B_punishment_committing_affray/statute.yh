@@ -2,7 +2,7 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr267B-#pr267B-
 
-statute 267B "Punishment for committing affray" effective 1872-01-01 {
+statute 267B "Punishment for committing affray" effective 1872-01-01 effective 2008-02-01 {
     /// Punishment for committing an affray; see section 267A for the underlying offence.
     penalty or_both {
         imprisonment := 0 days .. 1 year;

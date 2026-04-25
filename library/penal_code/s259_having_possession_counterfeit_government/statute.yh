@@ -15,7 +15,7 @@ statute 259 "Having possession of a counterfeit Government stamp" effective 1872
         }
     }
 
-    penalty {
+    penalty cumulative {
         imprisonment := 0 days .. 7 years;
         fine := unlimited;
     }

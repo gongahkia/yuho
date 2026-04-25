@@ -2,7 +2,7 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr130B-#pr130B-
 
-statute 130B "Piracy by law of nations. Cf. 12 and 13 Victoria c. 96 (Admiralty Offences (Colonial) Act 1849)" effective 1872-01-01 {
+statute 130B "Piracy by law of nations. Cf. 12 and 13 Victoria c. 96 (Admiralty Offences (Colonial) Act 1849)" effective 1872-01-01 effective 1993-11-12 {
     subsection (1) {
         elements {
             /// The offence is defined by the law of nations test in subsection (1).

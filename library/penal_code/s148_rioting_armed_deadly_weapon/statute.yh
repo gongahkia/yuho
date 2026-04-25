@@ -16,7 +16,8 @@ statute 148 "Rioting, armed with a deadly weapon" effective 1872-01-01 {
         supplementary := "The offender shall also be liable to caning.";
     }
 
-    illustration cross_reference {
+    /// Illustration
+    illustration same_as_section_144 {
         "The last section is subject to the same illustration as section 144."
     }
 }

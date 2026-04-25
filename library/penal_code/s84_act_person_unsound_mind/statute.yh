@@ -28,6 +28,13 @@ statute 84 "Act of person of unsound mind" effective 1872-01-01 effective 2020-0
         definitions {
             subsection_1_b_limitation := "Subsection (1)( b ) applies only if the person is incapable of knowing that his act —";
         }
+
+        elements {
+            all_of {
+                circumstance ordinary_standards := "is wrong by the ordinary standards of reasonable and honest persons";
+                circumstance contrary_to_law := "is wrong as contrary to law.";
+            }
+        }
     }
 
     illustration illustration_a {

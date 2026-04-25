@@ -12,8 +12,12 @@ statute 130E "Punishment for genocide" effective 1872-01-01 effective 2020-01-01
         supplementary := "If the offence consists of the killing of any person, the offender shall be punished with death. [15/2019]";
     }
 
-    penalty alternative when any_other_case {
+    penalty alternative when life_imprisonment_in_any_other_case {
+        supplementary := "In any other case, the offender shall be punished with imprisonment for life. [15/2019]";
+    }
+
+    penalty alternative when term_imprisonment_in_any_other_case {
         imprisonment := 0 years .. 20 years;
-        supplementary := "In any other case, the offender shall be punished with imprisonment for life or with imprisonment for a term which may extend to 20 years. [15/2019]";
+        supplementary := "In any other case, the offender shall be punished with imprisonment for a term which may extend to 20 years. [15/2019]";
     }
 }

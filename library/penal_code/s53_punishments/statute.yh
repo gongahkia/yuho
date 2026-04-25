@@ -12,5 +12,6 @@ statute 53 "Punishments" effective 1872-01-01 {
         punishment_caning := "caning";
     }
 
-    /// Explanation. —Caning shall be with a rattan.
+    /// Explanation
+    /// Caning shall be with a rattan.
 }

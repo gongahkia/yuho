@@ -8,12 +8,15 @@
 statute 376E "Sexual grooming of minor below 16 years of age" effective 1872-01-01 effective 2020-01-01 effective 2022-03-01 effective 2023-01-03 {
     subsection (1) {
         elements {
-            /// The canonical source preserves subsection (1) as an offence with conjunctive limbs, but truncates paragraph (b) after its opening words.
+            /// Subsection (1) is conjunctive: the previous contact limb, the meeting or travel limb, and all three paragraph (b) conditions must be present.
             all_of {
                 circumstance accused_age := "Any person of or above 18 years of age ( A )";
                 actus_reus prior_contact := "Having met or communicated with another person ( B ) on at least one previous occasion";
                 actus_reus meeting_or_travel := "A intentionally meets B or travels with the intention of meeting B or B travels to attend a meeting with A which A has either initiated or agreed to whether expressly or by implication";
                 circumstance paragraph_b_opening := "At the time of the acts referred to in paragraph ( a ) —";
+                mens_rea intent_to_commit_relevant_offence := "A intends to do anything to or in respect of B , during or after the meeting, which if done will involve the commission by A of a relevant offence";
+                circumstance b_below_16_years_of_age := "B is below 16 years of age";
+                circumstance no_reasonable_belief_b_16_or_above := "A does not reasonably believe that B is of or above 16 years of age.";
             }
         }
     }
@@ -21,6 +24,9 @@ statute 376E "Sexual grooming of minor below 16 years of age" effective 1872-01-
     subsection (2) {
         definitions {
             relevant_offence := "In subsection (1), “relevant offence” means an offence under —";
+            relevant_offence_under_penal_code_and_related_sections := "section 354, 354A, 355, 372, 373, 373A, 375, 376, 376A, 376B, 376C, 376EB, 376ED, 376F, 376H, 377(1)( e ), ( f ), ( g ) or ( h ), 377B(3), 377BA, 377BB, 377BF, 377BG or 377BH;";
+            relevant_offence_under_cypa := "section 8 of the Children and Young Persons Act 1993; or";
+            relevant_offence_under_womens_charter := "section 140(1) of the Women’s Charter 1961.";
         }
     }
 
@@ -31,8 +37,23 @@ statute 376E "Sexual grooming of minor below 16 years of age" effective 1872-01-
     }
 
     subsection (4) {
-        definitions {
-            punishment_opening := "A person who is guilty of an offence under this section shall on conviction —";
+        elements {
+            any_of {
+                circumstance victim_below_14_and_no_reasonable_belief := "The offence is committed against a victim who is below 14 years of age and A does not reasonably believe that B is of or above that age";
+                circumstance any_other_case := "In any other case";
+            }
+        }
+
+        penalty or_both when victim_below_14_and_no_reasonable_belief {
+            imprisonment := 0 years .. 4 years;
+            fine := unlimited;
+            supplementary := "In the case where the offence is committed against a victim who is below 14 years of age and A does not reasonably believe that B is of or above that age, be punished with imprisonment for a term which may extend to 4 years, or with fine, or with both; or";
+        }
+
+        penalty or_both when any_other_case {
+            imprisonment := 0 years .. 3 years;
+            fine := unlimited;
+            supplementary := "In any other case, be punished with imprisonment for a term which may extend to 3 years, or with fine, or with both.";
         }
     }
 }

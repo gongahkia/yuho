@@ -9,12 +9,9 @@ statute 113 "Liability of abettor for an offence caused by the act abetted diffe
             actus_reus act_abetted := "An act is abetted";
             mens_rea intention_to_cause_particular_effect := "The abetment is with the intention on the part of the abettor of causing a particular effect";
             circumstance liable_act_causes_different_effect := "An act for which the abettor is liable in consequence of the abetment causes a different effect from that intended by the abettor";
+            circumstance liable_for_effect_caused := "The abettor is liable for the effect caused, in the same manner, and to the same extent, as if he had abetted the act with the intention of causing that effect";
             mens_rea knowledge_of_likely_effect := "The abettor knew that the act abetted was likely to cause that effect";
         }
-    }
-
-    penalty {
-        supplementary := "The abettor is liable for the effect caused, in the same manner, and to the same extent, as if he had abetted the act with the intention of causing that effect.";
     }
 
     illustration illustration {

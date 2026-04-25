@@ -7,14 +7,27 @@ statute 172 "Absconding to avoid arrest on warrant or service of summons, etc., 
         /// Section 172 requires absconding to avoid arrest on a warrant or service of process issued by a legally competent public servant.
         all_of {
             actus_reus absconding := "Absconds";
-            mens_rea avoidance_purpose := "In order to avoid being arrested on a warrant, or to avoid being served with a summons, a notice, or an order";
-            circumstance competent_public_servant := "The warrant, summons, notice or order proceeds from a public servant, legally competent, as such public servant, to issue such warrant, summons, notice or order";
-            /// The enhanced branch applies only if the summons, notice or order is court process requiring attendance or production.
             any_of {
-                circumstance ordinary_process := "The summons, notice or order is not to attend in person or by agent, or to produce a document or an electronic record before a court of justice";
-                circumstance court_process := "The summons, notice or order is to attend in person or by agent, or to produce a document or an electronic record before a court of justice";
+                all_of {
+                    mens_rea warrant_avoidance := "In order to avoid being arrested on a warrant";
+                    circumstance competent_warrant_public_servant := "The warrant proceeds from a public servant, legally competent, as such public servant, to issue such warrant";
+                }
+                all_of {
+                    mens_rea service_avoidance := "In order to avoid being served with a summons, a notice, or an order";
+                    circumstance competent_process_public_servant := "The summons, notice or order proceeds from a public servant, legally competent, as such public servant, to issue such summons, notice or order";
+                    /// The enhanced branch applies only if the summons, notice or order is court process requiring attendance or production.
+                    any_of {
+                        circumstance ordinary_process := "The summons, notice or order is not to attend in person or by agent, or to produce a document or an electronic record before a court of justice";
+                        circumstance court_process := "The summons, notice or order is to attend in person or by agent, or to produce a document or an electronic record before a court of justice";
+                    }
+                }
             }
         }
+    }
+
+    penalty or_both when warrant_avoidance {
+        imprisonment := 0 days .. 1 month;
+        fine := $0.00 .. $1,500.00;
     }
 
     penalty or_both when ordinary_process {

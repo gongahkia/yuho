@@ -10,7 +10,10 @@ statute 308A "Causing death in furtherance of group’s object" effective 1872-0
             all_of {
                 circumstance member_of_group := "Any person is or acts as a member of a group";
                 mens_rea knows_common_object_is_offence := "Knowing that the common object of the members of the group is to commit an offence under this Code or any written law";
-                mens_rea paragraph_b_truncated := "Knowing that —";
+                any_of {
+                    mens_rea knows_death_or_grievous_hurt_likely := "Death or grievous hurt is likely to be caused in furtherance of the group’s common object";
+                    mens_rea knows_deadly_weapon_to_be_used := "A deadly weapon, or anything which, used as a weapon of offence, is likely to cause death, is to be used in any manner against another person in the furtherance of that common object";
+                }
                 actus_reus death_caused_in_furtherance := "The death of a person was caused in furtherance of the group’s common object";
             }
         }

@@ -16,13 +16,26 @@ statute 155 "Liability of person for whose benefit a riot is committed" effectiv
                 circumstance accepted_or_derived_benefit := "The person has accepted or derived a benefit from the riot";
             }
 
-            /// Liability attaches if the person, or the person's agent or manager, had reason to foresee the riot or the unlawful assembly.
+            /// Liability attaches only where the same subject had reason to believe and failed to use lawful means.
             any_of {
-                mens_rea reason_to_believe_riot_likely := "The person or the person's agent or manager had reason to believe that the riot was likely to be committed";
-                mens_rea reason_to_believe_unlawful_assembly_likely := "The person or the person's agent or manager had reason to believe that the unlawful assembly by which the riot was committed was likely to be held";
-            }
+                all_of {
+                    any_of {
+                        mens_rea person_reason_to_believe_riot_likely := "The person had reason to believe that such riot was likely to be committed";
+                        mens_rea person_reason_to_believe_unlawful_assembly_likely := "The person had reason to believe that the unlawful assembly by which such riot was committed was likely to be held";
+                    }
 
-            actus_reus failure_to_use_lawful_means := "The person or the person's agent or manager did not use all lawful means in his or their power to prevent the riot or assembly from taking place, and for suppressing and dispersing the same";
+                    actus_reus person_failure_to_use_lawful_means := "The person did not use all lawful means in his power to prevent such riot or assembly from taking place, and for suppressing and dispersing the same";
+                }
+
+                all_of {
+                    any_of {
+                        mens_rea agent_or_manager_reason_to_believe_riot_likely := "The person's agent or manager had reason to believe that such riot was likely to be committed";
+                        mens_rea agent_or_manager_reason_to_believe_unlawful_assembly_likely := "The person's agent or manager had reason to believe that the unlawful assembly by which such riot was committed was likely to be held";
+                    }
+
+                    actus_reus agent_or_manager_failure_to_use_lawful_means := "The person's agent or manager did not use all lawful means in his or their power to prevent such riot or assembly from taking place, and for suppressing and dispersing the same";
+                }
+            }
         }
     }
 

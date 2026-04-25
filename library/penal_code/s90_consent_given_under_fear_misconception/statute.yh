@@ -5,8 +5,19 @@
 statute 90 "Consent given under fear or misconception, by person of unsound mind, etc., and by child" effective 1872-01-01 {
     definitions {
         consent_rule := "A consent is not such a consent as is intended by any section of this Code —";
-        condition_a := "( a ) if the consent is given by a person —";
-        condition_b := "( b ) if the consent is given by a person who, from unsoundness of mind, mental incapacity, intoxication, or the influence of any drug or other substance, is unable to understand the nature and consequence of that to which he gives his consent; or";
-        condition_c := "( c ) unless the contrary appears from the context, if the consent is given by a person who is below 12 years of age.";
+    }
+
+    elements {
+        any_of {
+            all_of {
+                circumstance consent_given_by_person := "if the consent is given by a person —";
+                any_of {
+                    circumstance under_fear := "under fear of injury or wrongful restraint to the person or to some other person; or";
+                    circumstance under_misconception := "under a misconception of fact,";
+                }
+            }
+            circumstance unable_to_understand := "if the consent is given by a person who, from unsoundness of mind, mental incapacity, intoxication, or the influence of any drug or other substance, is unable to understand the nature and consequence of that to which he gives his consent; or";
+            circumstance below_twelve := "unless the contrary appears from the context, if the consent is given by a person who is below 12 years of age.";
+        }
     }
 }

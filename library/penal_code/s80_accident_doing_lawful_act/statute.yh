@@ -19,6 +19,14 @@ statute 80 "Accident in the doing of a lawful act" effective 1872-01-01 effectiv
         definitions {
             avoid_doubt_intro := "To avoid doubt, where — [15/2019] [Act 23 of 2021 wef 01/03/2022]";
         }
+
+        elements {
+            all_of {
+                circumstance alleged_act_done_by_accident_or_misfortune := "a person alleges any act is done by accident or misfortune in the doing of a lawful act in a lawful manner, by lawful means, and with proper care and caution; and";
+                circumstance alleged_act_may_negate_fault_element := "the doing of the act allegedly by accident or misfortune may negate the fault element of the offence that the person is charged with,";
+                obligation prosecution_proves_fault := "the prosecution must prove the fault element in order to establish liability under the offence." burden prosecution beyond_reasonable_doubt;
+            }
+        }
     }
 
     definitions {

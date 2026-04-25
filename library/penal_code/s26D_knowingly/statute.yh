@@ -4,7 +4,7 @@
 /// @amendment [15/2019]
 /// @amendment [15/2019; 2/2020]
 
-statute 26D "“Knowingly”" effective 1872-01-01 effective 2020-02-10 {
+statute 26D "“Knowingly”" effective 1872-01-01 effective 2019-12-31 effective 2020-02-10 {
     subsection (1) {
         definitions {
             knowingly_circumstance := "Whoever does an act with awareness that a circumstance exists, will exist, or is virtually certain (barring an unforeseen intervention) to exist, is said to do that act knowingly in respect of that circumstance. [15/2019]";

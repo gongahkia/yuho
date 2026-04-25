@@ -2,7 +2,7 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr377B-#pr377B-
 
-statute 377B "Sexual penetration with living animal" effective 1872-01-01 {
+statute 377B "Sexual penetration with living animal" effective 1872-01-01 effective 2008-02-01 {
     subsection (1) {
         elements {
             /// Subsection (1) is conjunctive overall: the actor must be a person A and must commit one of the two penetration alternatives.
@@ -24,6 +24,17 @@ statute 377B "Sexual penetration with living animal" effective 1872-01-01 {
     }
 
     subsection (3) {
+        elements {
+            /// Subsection (3) is conjunctive overall: A must commit one of the two causation alternatives and B must not have consented to the penetration.
+            all_of {
+                any_of {
+                    actus_reus causes_man_to_penetrate_animal := "Causes any man ( B ) to penetrate, with B ’s penis, the vagina, anus or any orifice of an animal";
+                    actus_reus causes_person_penetrated_by_animal := "Causes the vagina, anus or mouth, as the case may be, of another person ( B ) to be penetrated with the penis of an animal";
+                }
+
+                circumstance b_did_not_consent := "B did not consent to the penetration";
+            }
+        }
     }
 
     subsection (4) {

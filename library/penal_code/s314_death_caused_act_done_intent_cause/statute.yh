@@ -28,12 +28,12 @@ statute 314 "Death caused by act done with intent to cause miscarriage" effectiv
     }
 
     penalty alternative when woman_without_consent {
-        imprisonment := 0 years .. 10 years;
-        supplementary := "If the act is done without the consent of the woman, the offender shall be punished either with imprisonment for life, or with the punishment above-mentioned.";
+        supplementary := "If the act is done without the consent of the woman, the offender shall be punished either with imprisonment for life,"
     }
 
-    penalty when woman_without_consent_non_life_sentence {
+    penalty cumulative when woman_without_consent {
+        imprisonment := 0 years .. 10 years;
         fine := unlimited;
-        supplementary := "Where the act is done without the consent of the woman and the offender is not sentenced to imprisonment for life, the punishment above-mentioned includes liability to fine.";
+        supplementary := "or with the punishment above-mentioned.";
     }
 }

@@ -13,16 +13,14 @@ statute 115 "Abetment of offence punishable with death or imprisonment for life"
     }
 
     penalty cumulative {
-
         imprisonment := 0 years .. 20 years;
         supplementary := "The offender shall be punished with imprisonment for a term that may extend to 20 years.";
+    }
 
-        alternative {
-            fine := unlimited;
+    penalty alternative {
+        fine := unlimited;
         caning := unspecified;
-            supplementary := "The offender shall also be liable to fine or to caning.";
-    
-        }
+        supplementary := "The offender shall also be liable to fine or to caning.";
     }
 
     /// Illustration

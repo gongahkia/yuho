@@ -16,9 +16,13 @@ statute 330 "Voluntarily causing hurt to extort confession or to compel restorat
 
     penalty cumulative {
         imprisonment := 0 years .. 7 years;
+        supplementary := "Whoever voluntarily causes hurt for the purpose of extorting from the sufferer, or from any person interested in the sufferer, any confession or any information which may lead to the detection of an offence or misconduct, or for the purpose of constraining the sufferer, or any person interested in the sufferer, to restore or to cause the restoration of any property or valuable security, or to satisfy any claim or demand, or to give information which may lead to the restoration of any property or valuable security, shall be punished with imprisonment for a term which may extend to 7 years";
+    }
+
+    penalty or_both {
         fine := unlimited;
         caning := unspecified;
-        supplementary := "Whoever voluntarily causes hurt for the purpose of extorting from the sufferer, or from any person interested in the sufferer, any confession or any information which may lead to the detection of an offence or misconduct, or for the purpose of constraining the sufferer, or any person interested in the sufferer, to restore or to cause the restoration of any property or valuable security, or to satisfy any claim or demand, or to give information which may lead to the restoration of any property or valuable security, shall be punished with imprisonment for a term which may extend to 7 years, and shall also be liable to fine or to caning.";
+        supplementary := "and shall also be liable to fine or to caning.";
     }
 
     illustration illustration_a {

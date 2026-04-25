@@ -3,9 +3,11 @@
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr38-#pr38-
 
 statute 38 "Several persons engaged in the commission of a criminal act may be guilty of different offences" effective 1872-01-01 {
-    definitions {
-        engaged_or_concerned_persons := "Several persons are engaged or concerned in the commission of a criminal act";
-        different_offences_by_same_act := "Those persons may be guilty of different offences by means of that act";
+    elements {
+        all_of {
+            circumstance engaged_or_concerned_persons := "Several persons are engaged or concerned in the commission of a criminal act";
+            circumstance different_offences_by_same_act := "They may be guilty of different offences by means of that act";
+        }
     }
 
     illustration illustration {

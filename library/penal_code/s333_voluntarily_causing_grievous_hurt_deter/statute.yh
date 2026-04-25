@@ -19,15 +19,13 @@ statute 333 "Voluntarily causing grievous hurt to deter public servant from his 
     }
 
     penalty cumulative {
-
         imprisonment := 0 years .. 15 years;
         supplementary := "Whoever voluntarily causes grievous hurt to any person being a public servant in the discharge of his duty as such public servant, or with intent to prevent or deter that person or any other public servant from discharging his duty as such public servant, or in consequence of anything done or attempted to be done by that person in the lawful discharge of his duty as such public servant, shall be punished with imprisonment for a term which may extend to 15 years.";
+    }
 
-        alternative {
-            fine := unlimited;
+    penalty alternative {
+        fine := unlimited;
         caning := unspecified;
-            supplementary := "The offender shall also be liable to fine or to caning.";
-    
-        }
+        supplementary := "The offender shall also be liable to fine or to caning.";
     }
 }

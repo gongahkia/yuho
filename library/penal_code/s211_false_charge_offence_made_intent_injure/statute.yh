@@ -12,19 +12,15 @@ statute 211 "False charge of offence made with intent to injure" effective 1872-
                 actus_reus falsely_charges_offence := "Falsely charges any person with having committed an offence";
             }
             mens_rea knowledge_no_just_or_lawful_ground := "Knowing that there is no just or lawful ground for such proceeding or charge against that person";
-            any_of {
-                circumstance ordinary_false_charge := "Such criminal proceeding is not instituted on a false charge of an offence punishable with death, or imprisonment for 7 years or upwards";
-                circumstance aggravated_false_charge := "Such criminal proceeding is instituted on a false charge of an offence punishable with death, or imprisonment for 7 years or upwards";
-            }
         }
     }
 
-    penalty or_both when ordinary_false_charge {
+    penalty or_both {
         imprisonment := 0 days .. 2 years;
         fine := unlimited;
     }
 
-    penalty when aggravated_false_charge {
+    penalty cumulative when aggravated_false_charge {
         imprisonment := 0 days .. 7 years;
         fine := unlimited;
     }

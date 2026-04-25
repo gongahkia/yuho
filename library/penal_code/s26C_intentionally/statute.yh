@@ -12,6 +12,8 @@ statute 26C "“Intentionally”" effective 1872-01-01 effective 2020-01-01 {
     subsection (2) {
         definitions {
             intentionally_cause_effect := "A person is said to cause an effect intentionally where that person does anything that causes an effect —";
+            paragraph_a := "( a ) with the purpose of causing that effect; or";
+            paragraph_b := "( b ) knowing that that effect would be virtually certain (barring an unforeseen intervention) to result.";
         }
     }
 

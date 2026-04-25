@@ -2,7 +2,7 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr76-#pr76-
 /// @amendment [15/2019]
-statute 76 "Act done by person bound, or justified by law" effective 1872-01-01 {
+statute 76 "Act done by person bound, or justified by law" effective 1872-01-01 effective 2020-01-01 {
     definitions {
         no_offence_rule := "Nothing is an offence which is done by a person who is bound by law to do it or justified by law in doing it.";
         bound_by_law := "done by a person who is bound by law to do it";

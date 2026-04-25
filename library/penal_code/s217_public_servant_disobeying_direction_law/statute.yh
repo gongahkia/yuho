@@ -9,13 +9,7 @@ statute 217 "Public servant disobeying a direction of law with intent to save pe
             circumstance public_servant_status := "Whoever, being a public servant";
             actus_reus disobedience := "Knowingly disobeys any direction of the law as to the way in which he is to conduct himself as such public servant";
             any_of {
-                all_of {
-                    any_of {
-                        mens_rea intent_save_person := "Intending thereby to save any person from legal punishment";
-                        mens_rea knowledge_likely_save_person := "Knowing it to be likely that he will thereby save any person from legal punishment";
-                    }
-                    actus_reus lesser_punishment_or_escape := "Save any person from legal punishment, or subject him to a lesser punishment than that to which he is liable";
-                }
+                mens_rea save_person_or_lesser_punishment := "Intending thereby to save, or knowing it to be likely that he will thereby save, any person from legal punishment, or subject him to a lesser punishment than that to which he is liable";
                 all_of {
                     any_of {
                         mens_rea intent_save_property := "With intent to save any property from forfeiture or any charge to which it is liable by law";
