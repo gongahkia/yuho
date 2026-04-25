@@ -25,12 +25,20 @@ LATEXMK_FLAGS = -lualatex -interaction=nonstopmode -halt-on-error \
 FIGURES_MMD := $(wildcard figures/*.mmd)
 FIGURES_PDF := $(FIGURES_MMD:.mmd=.pdf)
 
-.PHONY: paper stats figures arxiv clean distclean watch
+.PHONY: paper smoke stats figures arxiv clean distclean watch
 
 paper: stats $(FIGURES_PDF) | $(BUILD_DIR)
 	$(LATEXMK) $(LATEXMK_FLAGS) $(PAPER).tex
 	@cp $(BUILD_DIR)/$(PAPER).pdf ./$(PAPER).pdf
 	@echo "Built $(PAPER).pdf"
+
+# Smoke build using article class instead of acmart. No latexmk, no figures
+# required, no acmart deps. Useful when basic TeX Live is the only install.
+smoke: stats | $(BUILD_DIR)
+	lualatex -interaction=nonstopmode -output-directory=$(BUILD_DIR) main_smoke.tex
+	lualatex -interaction=nonstopmode -output-directory=$(BUILD_DIR) main_smoke.tex
+	@cp $(BUILD_DIR)/main_smoke.pdf ./main_smoke.pdf
+	@echo "Built main_smoke.pdf"
 
 # Regenerate stats.tex from coverage.json. Safe to call repeatedly.
 stats: $(STATS_TEX)
