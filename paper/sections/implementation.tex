@@ -274,11 +274,19 @@ not access the network. Every result envelope carries an
 \texttt{not\_legal\_advice: true} flag and a fixed disclaimer string
 (\texttt{LEGAL\_DISCLAIMER}) that callers --- the CLI, the MCP tool,
 or any downstream consumer --- are required to surface verbatim.
-Validated against the seven simulator fixtures, the recommender
-ranks the canonical section first or in the top three for every
-fixture (e.g.\ s415 with the classic-cheating fact pattern returns
-s415 at 80\% coverage, with subsequent candidates --- s383 extortion,
-s499 defamation --- below 25\%, providing a clear fit signal).
+Validated against the simulator fixtures (encoded as a
+regression-tested benchmark in
+\texttt{tests/test\_recommender\_benchmark.py}), the recommender
+ranks the canonical section first for the two positive single-section
+fixtures (s415 classic-cheating, s378 theft); for a deliberate
+negative fixture (s415 with-consent, where the supplied facts
+contradict the deception element) the recommender correctly does
+\emph{not} surface s415 as the top candidate; for a multi-offence-
+family fixture (s319 hurt) the recommender places one of the bodily-
+harm offences in the top three. A known gap is multi-section
+abetment patterns (s107 / s109 / s120A) where pure keyword-overlap
+fails to walk the reference graph; closing this gap via a G10-graph
+prefilter is on the punch list.
 
 The recommender's coverage metric is structural by construction: it
 measures element-overlap between facts and encoded grammar, not the

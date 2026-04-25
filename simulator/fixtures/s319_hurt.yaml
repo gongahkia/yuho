@@ -1,0 +1,32 @@
+name: "A intentionally strikes B causing bodily pain"
+section: "319"
+description: |
+  A standard hurt fact pattern: A voluntarily causes B bodily pain by
+  striking B. Drawn from the typical fact frame the encoded s319
+  illustrations contemplate.
+
+parties:
+  A:
+    role: accused
+  B:
+    role: victim
+
+acts:
+  - actor: A
+    description: "A intentionally strikes B with a fist"
+  - actor: A
+    description: "A causes B bodily pain"
+
+mental_states:
+  A:
+    intent: "to cause B bodily pain"
+    knowledge: "the strike will cause pain"
+
+circumstances:
+  - "A and B are not engaged in lawful private defence"
+
+outcomes:
+  - actor: B
+    description: "B suffers a bruise and pain"
+
+asserted_exceptions: []

@@ -1,0 +1,37 @@
+name: "A instigates B to commit theft"
+section: "107"
+description: |
+  A standard abetment-by-instigation pattern: A induces B to take
+  property out of C's possession without C's consent. Tests whether
+  the recommender surfaces s107 (abetment) and the underlying
+  property offence.
+
+parties:
+  A:
+    role: abetter
+  B:
+    role: principal
+  C:
+    role: victim
+
+acts:
+  - actor: A
+    description: "A instigates B to take C's wallet"
+  - actor: B
+    description: "B takes C's wallet without consent"
+
+mental_states:
+  A:
+    intent: "to procure B's commission of theft"
+    knowledge: "B will take C's property dishonestly"
+  B:
+    intent: "to dishonestly take C's property"
+
+circumstances:
+  - "C does not consent"
+
+outcomes:
+  - actor: C
+    description: "C is deprived of his wallet"
+
+asserted_exceptions: []
