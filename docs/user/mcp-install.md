@@ -78,7 +78,7 @@ clients send `Authorization: Bearer <token>` on every request.
 
 ## What the server exposes
 
-### Tools (22)
+### Tools (26)
 
 Core language ops: `yuho_check`, `yuho_transpile`, `yuho_parse`,
 `yuho_format`. LSP-like: `yuho_complete`, `yuho_hover`, `yuho_definition`,
@@ -90,7 +90,15 @@ Core language ops: `yuho_check`, `yuho_transpile`, `yuho_parse`,
 `yuho_coverage_status`, `yuho_propose_encoding_skeleton`,
 `yuho_grammar_example`, `yuho_run_l3_review` (mechanical checklist
 audit, structured result), `yuho_apply_flag_fix` (trigger a
-minimum-edit flag-fix via Codex). Admin: `yuho_rate_limit_stats`.
+minimum-edit flag-fix via Codex).
+
+**Research / G10 / corpus tools** (added in v5.1):
+- `yuho_section_references(section, direction='both', kind=None, transitive=False)` — walk the cross-section reference graph (subsumes / amends / implicit edges).
+- `yuho_simulate_fact_pattern(facts)` — run the fact-pattern simulator on a structured fact dict; returns satisfied / contradicted / unresolved element trace.
+- `yuho_verify_grounded(answer)` — check that every claim in a model answer cites a real span in the encoded corpus; reports orphan claims and spurious citations.
+- `yuho_benchmark_task(task_type, n=1, offset=0)` — fetch tasks from the Yuho benchmark pack (`citation_grounding`, `penalty_extraction`, `element_classification`, `cross_reference`, `illustration_recognition`).
+
+Admin: `yuho_rate_limit_stats`.
 
 ### Resources
 

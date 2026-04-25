@@ -1961,6 +1961,195 @@ statute {section} "{marginal}" effective 1872-01-01 {{
             """
             return self.rate_limiter.get_stats()
 
+        # ----------------------------------------------------------------
+        # G10 — cross-section reference graph
+        # ----------------------------------------------------------------
+
+        @tool_with_structured_logging()
+        async def yuho_section_references(
+            section: str,
+            direction: str = "both",
+            kind: Optional[str] = None,
+            transitive: bool = False,
+        ) -> Dict[str, Any]:
+            """
+            Walk the cross-section reference graph for a Penal Code section (G10).
+
+            Returns the typed edges leaving and/or entering the section. Edge
+            kinds are 'subsumes', 'amends', 'implicit'. Implicit edges are
+            mentions like 's415' or 'Section 415' inside element descriptions,
+            doc comments, or case-law holdings.
+
+            Args:
+                section: section number (e.g. '415', '376AA').
+                direction: 'out', 'in', or 'both' (default).
+                kind: optional filter ('subsumes' | 'amends' | 'implicit').
+                transitive: follow edges transitively (BFS closure).
+
+            Returns:
+                {section, direction, outgoing?, incoming?} — outgoing/incoming
+                are lists of edges or section numbers depending on `transitive`.
+            """
+            try:
+                from yuho.library.reference_graph import build_reference_graph
+                from pathlib import Path
+            except ImportError as e:
+                return {"error": f"reference graph module unavailable: {e}"}
+
+            section = section.lstrip("sS").strip()
+            kinds = [kind] if kind else None
+            graph = build_reference_graph(Path("library/penal_code"))
+
+            result: Dict[str, Any] = {"section": section, "direction": direction}
+            if direction in ("out", "both"):
+                if transitive:
+                    result["outgoing"] = sorted(graph.reachable_from(section, kinds))
+                else:
+                    result["outgoing"] = [
+                        {"dst": e.dst, "kind": e.kind, "snippet": e.snippet}
+                        for e in graph.outgoing(section, kinds)
+                    ]
+            if direction in ("in", "both"):
+                if transitive:
+                    result["incoming"] = sorted(graph.reachable_to(section, kinds))
+                else:
+                    result["incoming"] = [
+                        {"src": e.src, "kind": e.kind, "snippet": e.snippet}
+                        for e in graph.incoming(section, kinds)
+                    ]
+            return result
+
+        # ----------------------------------------------------------------
+        # Simulator — fact-pattern → element-trace
+        # ----------------------------------------------------------------
+
+        @tool_with_structured_logging()
+        async def yuho_simulate_fact_pattern(facts: Dict[str, Any]) -> Dict[str, Any]:
+            """
+            Run the Yuho fact-pattern simulator.
+
+            Takes a structured fact pattern (see `simulator/schema.md`) and
+            returns a per-element trace: which elements the facts satisfy,
+            contradict, or leave unresolved. Does NOT predict case outcomes
+            or provide legal advice; it is a structural trace over the
+            encoded section's elements and exceptions.
+
+            Args:
+                facts: a dict matching the fact-pattern schema. Required keys:
+                    `section` (the encoded section number),
+                    optional: `name`, `acts`, `mental_states`, `circumstances`,
+                    `outcomes`, `asserted_exceptions`, `fact_facts`.
+
+            Returns:
+                The simulator's structural trace with verdict, satisfied /
+                contradicted / suggested / unresolved element lists, and
+                exception-match info.
+            """
+            try:
+                import sys
+                from pathlib import Path
+                sim_path = Path(__file__).resolve().parent.parent.parent.parent / "simulator"
+                if str(sim_path) not in sys.path:
+                    sys.path.insert(0, str(sim_path))
+                import simulator as sim_mod  # type: ignore
+                return sim_mod.evaluate(facts)
+            except Exception as e:
+                return {"error": f"simulator unavailable: {e}"}
+
+        # ----------------------------------------------------------------
+        # Grounded answer verifier
+        # ----------------------------------------------------------------
+
+        @tool_with_structured_logging()
+        async def yuho_verify_grounded(answer: Dict[str, Any]) -> Dict[str, Any]:
+            """
+            Verify that every claim in a model answer is grounded in the
+            encoded corpus.
+
+            Takes a JSON answer document with explicit citations and checks
+            each citation's span against the named artefact (`raw`, `yh`,
+            or `english`). Reports orphan claims and spurious citations.
+
+            See `scripts/verify_grounded.py` for the input schema.
+
+            Args:
+                answer: dict with optional `question`, `answer`, and a list
+                    of `claims`, where each claim has `text` and `citations`.
+
+            Returns:
+                Verification report: per-claim results, spurious citation list,
+                grounded fraction, verdict.
+            """
+            try:
+                import sys
+                from pathlib import Path
+                root = Path(__file__).resolve().parent.parent.parent.parent
+                scripts_path = root / "scripts"
+                if str(scripts_path) not in sys.path:
+                    sys.path.insert(0, str(scripts_path))
+                import verify_grounded as vg  # type: ignore
+                return vg.verify_answer(answer)
+            except Exception as e:
+                return {"error": f"verifier unavailable: {e}"}
+
+        # ----------------------------------------------------------------
+        # Benchmark task fetcher
+        # ----------------------------------------------------------------
+
+        @tool_with_structured_logging()
+        async def yuho_benchmark_task(
+            task_type: str,
+            n: int = 1,
+            offset: int = 0,
+        ) -> Dict[str, Any]:
+            """
+            Fetch tasks from the Yuho benchmark pack.
+
+            Task types: 'citation_grounding', 'penalty_extraction',
+            'element_classification', 'cross_reference', 'illustration_recognition'.
+
+            Args:
+                task_type: one of the five task types.
+                n: number of tasks to return (default 1).
+                offset: skip this many tasks before returning n.
+
+            Returns:
+                {task_type, n_total, n_returned, tasks: [...]}.
+            """
+            from pathlib import Path
+            import json as _json
+
+            valid_types = {
+                "citation_grounding", "penalty_extraction", "element_classification",
+                "cross_reference", "illustration_recognition",
+            }
+            if task_type not in valid_types:
+                return {"error": f"unknown task_type {task_type!r}",
+                        "valid_types": sorted(valid_types)}
+
+            path = Path("benchmarks/tasks") / f"{task_type}.jsonl"
+            if not path.exists():
+                return {"error": f"benchmark not built; run python3 benchmarks/build_benchmarks.py"}
+
+            tasks = []
+            n_total = 0
+            with path.open("r", encoding="utf-8") as f:
+                for i, line in enumerate(f):
+                    line = line.strip()
+                    if not line:
+                        continue
+                    n_total += 1
+                    if i < offset:
+                        continue
+                    if len(tasks) < n:
+                        tasks.append(_json.loads(line))
+            return {
+                "task_type": task_type,
+                "n_total": n_total,
+                "n_returned": len(tasks),
+                "tasks": tasks,
+            }
+
     def _register_resources(self):
         """Register MCP resources."""
 

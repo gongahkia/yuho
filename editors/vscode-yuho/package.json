@@ -2,7 +2,7 @@
   "name": "yuho",
   "displayName": "Yuho",
   "description": "Language server, syntax highlighting, snippets, and commands for the Yuho legal DSL (Singapore Penal Code).",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "publisher": "yuho",
   "engines": { "vscode": "^1.75.0" },
   "categories": ["Programming Languages", "Linters", "Snippets"],
@@ -47,9 +47,44 @@
       {
         "command": "yuho.showCoverage",
         "title": "Yuho: Show coverage dashboard"
+      },
+      {
+        "command": "yuho.openLibrarySection",
+        "title": "Yuho: Open library section"
+      },
+      {
+        "command": "yuho.refreshTreeView",
+        "title": "Yuho: Refresh library tree",
+        "icon": "$(refresh)"
       }
     ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "yuho-library",
+          "title": "Yuho Library",
+          "icon": "$(book)"
+        }
+      ]
+    },
+    "views": {
+      "yuho-library": [
+        {
+          "id": "yuho.libraryTree",
+          "name": "Penal Code 1871",
+          "icon": "$(book)",
+          "contextualTitle": "Yuho — Penal Code 1871"
+        }
+      ]
+    },
     "menus": {
+      "view/title": [
+        {
+          "command": "yuho.refreshTreeView",
+          "when": "view == yuho.libraryTree",
+          "group": "navigation"
+        }
+      ],
       "editor/context": [
         {
           "when": "editorLangId == yuho",

@@ -2,9 +2,16 @@
 // surfaces L1/L2/L3 coverage in the status bar.
 
 import {
+  Event,
+  EventEmitter,
   ExtensionContext,
   StatusBarAlignment,
   StatusBarItem,
+  ThemeColor,
+  ThemeIcon,
+  TreeDataProvider,
+  TreeItem,
+  TreeItemCollapsibleState,
   Uri,
   commands,
   env,
@@ -37,12 +44,16 @@ export async function activate(context: ExtensionContext): Promise<void> {
   }
 
   // 2. Register commands.
+  const treeProvider = new YuhoLibraryTreeProvider();
   context.subscriptions.push(
     commands.registerTextEditorCommand("yuho.openSSO", openSSO),
     commands.registerCommand("yuho.check", runCheck),
     commands.registerCommand("yuho.transpileMermaid", () => runTranspile("mermaid")),
     commands.registerCommand("yuho.transpileEnglish", () => runTranspile("english")),
     commands.registerCommand("yuho.showCoverage", showCoverage),
+    commands.registerCommand("yuho.openLibrarySection", openLibrarySection),
+    commands.registerCommand("yuho.refreshTreeView", () => treeProvider.refresh()),
+    window.registerTreeDataProvider("yuho.libraryTree", treeProvider),
   );
 
   // 3. Status bar: L3 coverage summary.
@@ -245,4 +256,85 @@ function refreshStatusBar(): void {
   statusBar.text = `$(book) Yuho L1 ${L1_pass}/${raw_sections} · L2 ${L2_pass}/${raw_sections} · L3 ${L3_pass}/${raw_sections}`;
   statusBar.tooltip = "Click to open the coverage dashboard";
   statusBar.show();
+}
+
+// -------------------------------------------------------------------------
+// Tree view: library browser
+// -------------------------------------------------------------------------
+
+type SectionRow = {
+  number: string;
+  title: string;
+  L1: boolean;
+  L2: boolean;
+  L3: string; // "stamped" | "flagged" | "unstamped"
+  yhPath: string;
+};
+
+class YuhoLibraryTreeProvider implements TreeDataProvider<SectionRow> {
+  private _onDidChangeTreeData: EventEmitter<SectionRow | undefined | void> =
+    new EventEmitter<SectionRow | undefined | void>();
+  readonly onDidChangeTreeData: Event<SectionRow | undefined | void> =
+    this._onDidChangeTreeData.event;
+
+  refresh(): void {
+    this._onDidChangeTreeData.fire();
+  }
+
+  getTreeItem(row: SectionRow): TreeItem {
+    const item = new TreeItem(`s${row.number}`, TreeItemCollapsibleState.None);
+    item.description = row.title;
+    item.tooltip = `s${row.number} — ${row.title}\nL1=${row.L1 ? "✓" : "✗"} L2=${row.L2 ? "✓" : "✗"} L3=${row.L3}`;
+    item.command = {
+      title: "Open",
+      command: "yuho.openLibrarySection",
+      arguments: [row.yhPath],
+    };
+    if (row.L3 === "stamped") item.iconPath = new ThemeIcon("pass", new ThemeColor("testing.iconPassed"));
+    else if (row.L3 === "flagged") item.iconPath = new ThemeIcon("warning", new ThemeColor("testing.iconFailed"));
+    else item.iconPath = new ThemeIcon("circle-outline");
+    return item;
+  }
+
+  getChildren(): SectionRow[] {
+    return loadIndexRows();
+  }
+}
+
+function loadIndexRows(): SectionRow[] {
+  const folder = (workspace.workspaceFolders ?? [])[0];
+  if (!folder) return [];
+  const root = folder.uri.fsPath;
+  const indexPath = path.join(root, "library", "penal_code", "_corpus", "index.json");
+  if (!fs.existsSync(indexPath)) return [];
+  try {
+    const j = JSON.parse(fs.readFileSync(indexPath, "utf-8"));
+    return (j.sections || []).map((r: any): SectionRow => {
+      // Resolve yh path by guessing the section dir naming convention.
+      const dirs = fs.readdirSync(path.join(root, "library", "penal_code"))
+        .filter((n) => n.startsWith(`s${r.number}_`) || n === `s${r.number}`);
+      const yhPath = dirs.length
+        ? path.join(root, "library", "penal_code", dirs[0], "statute.yh")
+        : "";
+      return {
+        number: String(r.number),
+        title: r.title || "",
+        L1: !!r.L1,
+        L2: !!r.L2,
+        L3: r.L3 || "unstamped",
+        yhPath,
+      };
+    });
+  } catch {
+    return [];
+  }
+}
+
+async function openLibrarySection(yhPath: string): Promise<void> {
+  if (!yhPath || !fs.existsSync(yhPath)) {
+    window.showWarningMessage(`Yuho: section file not found.`);
+    return;
+  }
+  const doc = await workspace.openTextDocument(yhPath);
+  await window.showTextDocument(doc, { preview: false });
 }
