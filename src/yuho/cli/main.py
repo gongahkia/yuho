@@ -169,6 +169,50 @@ def verify(
 
 
 # =============================================================================
+# Explore command (counter-example explorer)
+# =============================================================================
+
+
+@cli.command()
+@click.argument("file", type=click.Path(exists=True))
+@click.argument("section", type=str)
+@click.option("--max-satisfying", type=int, default=5, show_default=True,
+              help="Cap on satisfying scenarios returned")
+@click.option("--no-borderline", is_flag=True,
+              help="Skip the per-element load-bearing analysis")
+@click.option("--no-exceptions", is_flag=True,
+              help="Skip the exception coverage / dead-exception scan")
+@click.option("--json", "json_output", is_flag=True, help="Output as JSON")
+def explore(
+    file: str,
+    section: str,
+    max_satisfying: int,
+    no_borderline: bool,
+    no_exceptions: bool,
+    json_output: bool,
+):
+    """Counter-example explorer: surface fact patterns over a section.
+
+    Reuses the Z3 verifier to enumerate (a) satisfying scenarios where the
+    section's elements are all met, (b) borderline scenarios showing which
+    elements are load-bearing, and (c) which exceptions are reachable.
+
+    Example:
+        yuho explore library/penal_code/s415_cheating/statute.yh 415
+    """
+    from yuho.cli.commands.explore import run_explore
+
+    run_explore(
+        file,
+        section,
+        max_satisfying=max_satisfying,
+        no_borderline=no_borderline,
+        no_exceptions=no_exceptions,
+        json_output=json_output,
+    )
+
+
+# =============================================================================
 # Check command
 # =============================================================================
 

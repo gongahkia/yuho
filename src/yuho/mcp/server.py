@@ -109,6 +109,7 @@ class RateLimitConfig:
         "yuho_apply_flag_fix":        (0.1,  2),
         "yuho_propose_encoding_skeleton": (0.5, 3),
         "yuho_simulate_fact_pattern": (1.0,  4),
+        "yuho_explore_counterexamples": (0.5, 3),
         "yuho_verify_grounded":       (1.0,  4),
         "yuho_section_references":    (2.0,  5),   # corpus walk + graph build
         "yuho_validate_contribution": (1.0,  3),
@@ -2322,6 +2323,62 @@ statute {section} "{marginal}" effective 1872-01-01 {{
         # ----------------------------------------------------------------
         # Simulator — fact-pattern → element-trace
         # ----------------------------------------------------------------
+
+        @tool_with_structured_logging()
+        async def yuho_explore_counterexamples(
+            file_content: str,
+            section: str,
+            max_satisfying: int = 5,
+            include_borderline: bool = True,
+            include_exception_coverage: bool = True,
+        ) -> Dict[str, Any]:
+            """
+            Counter-example explorer over an encoded section.
+
+            Reuses the Z3 verifier to surface structural fact patterns that
+            satisfy the section's elements, expose load-bearing elements,
+            and check which exceptions are reachable. Companion to
+            ``yuho_simulate_fact_pattern`` (which goes user-facts -> trace);
+            this tool goes section -> enumerated witness scenarios.
+
+            Args:
+                file_content: the .yh source for the section's module
+                section: the section number (e.g. "415")
+                max_satisfying: cap on satisfying scenarios returned (default 5)
+                include_borderline: also enumerate per-element load-bearing
+                    scenarios (default True)
+                include_exception_coverage: also check each exception's
+                    reachability under element-satisfying assignments
+                    (default True)
+
+            Returns:
+                {"ok": bool, "report": ExplorerReport.to_dict()} or an
+                {"ok": False, "error": ...} envelope.
+            """
+            try:
+                from yuho.services.analysis import analyze_source
+                from yuho.explore.counterexamples import CounterexampleExplorer
+            except Exception as exc:
+                return mcp_error("unavailable",
+                                 f"counter-example explorer could not be loaded: {exc}")
+            try:
+                analysis = analyze_source(file_content, file="<mcp>", run_semantic=False)
+            except Exception as exc:
+                return mcp_error("parse_error",
+                                 f"failed to parse input: {exc}")
+            if analysis.parse_errors or analysis.ast is None:
+                return mcp_error(
+                    "parse_error", "input did not parse",
+                    details=[str(e) for e in (analysis.parse_errors or [])][:5],
+                )
+            explorer = CounterexampleExplorer(analysis.ast)
+            report = explorer.explore_section(
+                section,
+                max_satisfying=max_satisfying,
+                include_borderline=include_borderline,
+                include_exception_coverage=include_exception_coverage,
+            )
+            return {"ok": True, "report": report.to_dict()}
 
         @tool_with_structured_logging()
         async def yuho_simulate_fact_pattern(facts: Dict[str, Any]) -> Dict[str, Any]:
