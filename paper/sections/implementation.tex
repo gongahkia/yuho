@@ -4,10 +4,19 @@
 This section walks the implementation top-to-bottom, from the tree-sitter
 grammar through the AST, the analyser stack, the six transpilers, the
 verification hookup, the three-tier coverage harness, the editor surfaces,
-and the fidelity-diagnostic pass. Engineering counts per layer appear in
-Table~\ref{tab:sloc}; the architecture diagram is rendered to
-\texttt{figures/architecture.pdf} from a Mermaid source under
-\texttt{paper/figures/architecture.mmd}.
+and the fidelity-diagnostic pass. Figure~\ref{fig:architecture} sketches
+the data flow; engineering counts per layer appear in
+Table~\ref{tab:sloc}.
+
+\begin{figure*}[!htbp]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/architecture.pdf}
+\caption{Yuho architecture: \texttt{.yh} source flows through tree-sitter
+to a Python AST that fans out into transpilers, verification, and editor
+surfaces. The canonical SSO scrape feeds the fidelity-diagnostic pass at
+the lint layer. Rendered from \texttt{paper/figures/architecture.mmd}.}
+\label{fig:architecture}
+\end{figure*}
 
 \subsection{Parser and AST}
 \label{subsec:parser}
@@ -212,7 +221,7 @@ Table~\ref{tab:sloc} summarises the implementation effort. The numbers
 are wc-line counts as of the paper's writing, computed from the
 public source tree.
 
-\begin{table}[t]
+\begin{table*}[t]
 \caption{Implementation size by layer (approximate SLOC).}
 \label{tab:sloc}
 \begin{small}
@@ -234,7 +243,7 @@ Encoded library (524 \texttt{.yh} files)            & 16\,400 \\
 \bottomrule
 \end{tabular}
 \end{small}
-\end{table}
+\end{table*}
 
 The breakdown is informative on two axes. First, the surface area is
 unevenly distributed: the CLI and the AST together account for nearly

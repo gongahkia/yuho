@@ -23,30 +23,30 @@ contains a helper \texttt{struct} and \texttt{match} expression for
 client-side reasoning, omitted here for brevity).
 
 \begin{figure*}[!htbp]
-\begin{small}
+{\fontsize{7}{8}\selectfont
 \begin{verbatim}
 statute 415 "Cheating" effective 1872-01-01 {
   definitions {
-    deceive       := "To cause a person to believe something that is false";
-    fraudulently  := "With intent to defraud another person";
-    dishonestly   := "With intention of causing wrongful gain or wrongful loss";
-    property      := "Any movable or immovable property";
-    inducement    := "Causing a person to act based on deception";
+    deceive      := "To cause a person to believe ...";
+    fraudulently := "With intent to defraud another person";
+    dishonestly  := "With intention of causing wrongful gain/loss";
+    property     := "Any movable or immovable property";
+    inducement   := "Causing a person to act based on deception";
   }
 
   elements {
     all_of {
       /// deception is the foundational act
-      actus_reus  deception   := "Deceiving any person";
+      actus_reus  deception  := "Deceiving any person";
       any_of {
         /// per s25: intent to defraud
-        mens_rea  fraudulent  := "Fraudulently inducing the person";
+        mens_rea  fraudulent := "Fraudulently inducing the person";
         /// per s24: intent to cause wrongful gain/loss
-        mens_rea  dishonest   := "Dishonestly inducing the person";
+        mens_rea  dishonest  := "Dishonestly inducing the person";
       }
-      /// three forms: deliver property, consent to retain, or do/omit an act
-      actus_reus  inducement  := "Inducing delivery of property, ...";
-      circumstance harm       := "Causing or likely to cause damage ...";
+      /// deliver property / consent to retain / do/omit an act
+      actus_reus  inducement := "Inducing delivery of property, ...";
+      circumstance harm      := "Causing or likely to cause damage ...";
     }
   }
 
@@ -56,13 +56,14 @@ statute 415 "Cheating" effective 1872-01-01 {
   }
 
   illustration example1 {
-    "A intentionally deceives B into believing that a worthless article
-     is valuable, and thus induces B to buy it. A cheats."
+    "A intentionally deceives B into believing that
+     a worthless article is valuable, and thus induces
+     B to buy it. A cheats."
   }
   /* example2, example3 omitted for space */
 }
 \end{verbatim}
-\end{small}
+\end{scriptsize}
 \caption{Yuho encoding of \emph{Penal Code s.\,415 (Cheating)}. The
 \texttt{statute} block is the top-level construct; it has named field
 positions for definitions, elements, penalty, and illustrations, plus
@@ -179,6 +180,18 @@ which lets a single \texttt{penalty} block express the full algebra.
 Before \textsf{G12} this was a frequent encoder workaround: nineteen
 sections in the Penal Code used a two-sibling-block hack that we
 collapsed into nested form via a one-shot migration script.
+Figure~\ref{fig:penalty} shows the resulting combinator tree for s302.
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=0.85\columnwidth]{figures/penalty-tree.pdf}
+\caption{Nested penalty combinator for s302: a top-level
+\texttt{cumulative} block wrapping an \texttt{alternative} branch
+(death or imprisonment-for-life) plus an unconditional
+\texttt{fine := unlimited}. Rendered from
+\texttt{paper/figures/penalty-tree.mmd}.}
+\label{fig:penalty}
+\end{figure}
 
 \subsection{Exceptions as Catala-style defaults}
 \label{subsec:exceptions}
@@ -197,7 +210,7 @@ and a \texttt{priority N} integer (the rank in the DAG; lower numbers
 fire first). An optional \texttt{defeats <element\_name>} edge ties the
 exception to the specific element it overrides.
 
-\begin{small}
+\begin{footnotesize}
 \begin{verbatim}
 exception "consent" priority 1
   guard "victim consents and exception 87 applies";
@@ -205,13 +218,25 @@ exception "self_defence" priority 2
   guard "private defence under sections 96-106"
   defeats inducement;
 \end{verbatim}
-\end{small}
+\end{footnotesize}
 
 The compilation target is Z3 prioritised rewriting in the style of
 Catala~\cite{catala2021}: the base rule fires; lower-priority exceptions
 fire only when no higher-priority exception matches. This semantics is
 the right shape for general exceptions, which behave precisely as
 prioritised defaults rather than as flat negations.
+Figure~\ref{fig:exception-priority} shows the priority DAG over a
+typical Chapter IV exception cluster.
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=0.85\columnwidth]{figures/exception-priority.pdf}
+\caption{Catala-style prioritised exception DAG: each exception
+\texttt{defeats} the base rule when its guard fires, and the priority
+edges encode the order in which simultaneously-applicable exceptions
+resolve. Rendered from \texttt{paper/figures/exception-priority.mmd}.}
+\label{fig:exception-priority}
+\end{figure}
 
 \subsection{Subsections and amendment lineage}
 \label{subsec:subsections}
@@ -256,7 +281,7 @@ all (\textsf{G2}, \textsf{G7}); one (\textsf{G10}) is a not-a-gap on
 the grammar side but does require a separate semantic-resolver pass
 that remains future work.
 
-\begin{table}[t]
+\begin{table*}[t]
 \caption{The fourteen grammar gaps, with resolution.}
 \label{tab:gaps}
 \begin{small}
@@ -280,7 +305,7 @@ that remains future work.
 \bottomrule
 \end{tabular}
 \end{small}
-\end{table}
+\end{table*}
 
 The empirical takeaway from the gap catalogue is that the gap classification
 itself matters. A gap that surfaces as ``the parser rejects this encoding''
