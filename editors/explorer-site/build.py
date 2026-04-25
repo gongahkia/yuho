@@ -28,6 +28,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as _dt
+import hashlib
 import html as _html
 import json
 import shutil
@@ -883,6 +884,8 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawTextHelpFormatter)
     ap.add_argument("--base-url", default="https://yuho.dev",
                     help="absolute base URL used in sitemap.xml + robots.txt (default: https://yuho.dev)")
+    ap.add_argument("--no-cache", action="store_true",
+                    help="ignore .cache.json and rebuild every page")
     args = ap.parse_args()
 
     if not (CORPUS / "index.json").exists():
@@ -914,38 +917,43 @@ def main() -> int:
     (BUILD / "robots.txt").write_text(render_robots(args.base_url))
 
     # Per-section pages + full-text search index (G2). Adjacency uses the
-    # ordering already in index.json (G4 prev/next).
+    # ordering already in index.json (G4 prev/next). G9: hash-based cache
+    # keyed on (section JSON, neighbour ids, build.py source) skips
+    # rebuilding sections whose inputs haven't changed.
     sect_dir = CORPUS / "sections"
     n_pages = 0
+    n_skipped = 0
     search_index: Dict[str, str] = {}
     ordered_nums = [r["number"] for r in index["sections"]]
     by_num = {r["number"]: r for r in index["sections"]}
     paths_by_num = {p.stem[1:]: p for p in sect_dir.glob("s*.json")}
+
+    builder_hash = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()[:16]
+    cache_path = BUILD / ".cache.json"
+    cache_in: Dict[str, str] = {}
+    if cache_path.exists() and not args.no_cache:
+        try:
+            cache_in = json.loads(cache_path.read_text())
+            if cache_in.get("_builder") != builder_hash:
+                cache_in = {}  # generator changed; rebuild everything.
+        except Exception:
+            cache_in = {}
+    cache_out: Dict[str, str] = {"_builder": builder_hash}
+
     for i, num in enumerate(ordered_nums):
         path = paths_by_num.get(num)
         if path is None:
             continue
+        raw = path.read_bytes()
         with path.open("r", encoding="utf-8") as f:
             rec = json.load(f)
         prev_rec = by_num.get(ordered_nums[i - 1]) if i > 0 else None
         next_rec = by_num.get(ordered_nums[i + 1]) if i < len(ordered_nums) - 1 else None
+        prev_id = prev_rec["number"] if prev_rec else ""
+        next_id = next_rec["number"] if next_rec else ""
+        key = hashlib.sha256(raw + f"|{prev_id}|{next_id}".encode()).hexdigest()
         n = rec["section_number"]
-        out = BUILD / "s" / f"{n}.html"
-        out.write_text(render_section(rec, prev_rec=prev_rec, next_rec=next_rec))
-        n_pages += 1
-        # G6: per-section raw artefacts. JSON is canonical record, .yh is
-        # the encoded source verbatim, .en.txt is controlled English.
-        (BUILD / "s" / f"{n}.json").write_text(
-            json.dumps(rec, ensure_ascii=False, indent=2)
-        )
-        yh_src = rec.get("encoded", {}).get("yh_source") or ""
-        if yh_src:
-            (BUILD / "s" / f"{n}.yh").write_text(yh_src)
-        en_src = rec.get("transpiled", {}).get("english") or ""
-        if en_src:
-            (BUILD / "s" / f"{n}.en.txt").write_text(en_src)
-        # Concatenate searchable bodies. Stored lowercased + length-capped
-        # so the bundle stays under a few hundred KB.
+        # search_index always recomputed (cheap, derived from rec)
         parts = [
             rec.get("section_title", ""),
             rec.get("metadata", {}).get("summary") or "",
@@ -955,14 +963,33 @@ def main() -> int:
         joined = "\n".join(p for p in parts if p)
         if len(joined) > 4000:
             joined = joined[:4000]
-        search_index[rec["section_number"]] = joined
+        search_index[n] = joined
+        cache_out[n] = key
+        out_html = BUILD / "s" / f"{n}.html"
+        if cache_in.get(n) == key and out_html.exists():
+            n_skipped += 1
+            continue
+        out_html.write_text(render_section(rec, prev_rec=prev_rec, next_rec=next_rec))
+        n_pages += 1
+        # G6: per-section raw artefacts.
+        (BUILD / "s" / f"{n}.json").write_text(
+            json.dumps(rec, ensure_ascii=False, indent=2)
+        )
+        yh_src = rec.get("encoded", {}).get("yh_source") or ""
+        if yh_src:
+            (BUILD / "s" / f"{n}.yh").write_text(yh_src)
+        en_src = rec.get("transpiled", {}).get("english") or ""
+        if en_src:
+            (BUILD / "s" / f"{n}.en.txt").write_text(en_src)
+
+    cache_path.write_text(json.dumps(cache_out, separators=(",", ":")))
 
     (STATIC / "search-index.json").write_text(
         json.dumps(search_index, ensure_ascii=False, separators=(",", ":"))
     )
 
     print(f"site built: {BUILD}")
-    print(f"  {n_pages} per-section pages")
+    print(f"  {n_pages} per-section pages rebuilt, {n_skipped} skipped (cache hit)")
     print(f"  index.html, coverage.html, flags.html, about.html")
     print(f"  static/{{style.css, search.js, index.json}}")
     print(f"\npreview: python3 -m http.server -d {BUILD.relative_to(REPO)} 8000")
