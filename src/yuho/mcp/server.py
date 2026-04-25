@@ -1265,7 +1265,7 @@ class YuhoMCPServer:
             result = parser.parse(file_content)
 
             if result.errors:
-                return {"symbols": [], "error": result.errors[0].message}
+                return mcp_error("parse_error", result.errors[0].message, symbols=[])
 
             try:
                 builder = ASTBuilder(file_content)
@@ -1312,7 +1312,7 @@ class YuhoMCPServer:
 
                 return {"symbols": symbols}
             except Exception as e:
-                return {"symbols": [], "error": str(e)}
+                return mcp_error("internal_error", str(e), symbols=[])
 
         @tool_with_structured_logging()
         async def yuho_diagnostics(file_content: str) -> Dict[str, Any]:
@@ -2236,8 +2236,8 @@ statute {section} "{marginal}" effective 1872-01-01 {{
             }
             known = sorted(examples)
             if primitive not in examples:
-                return {"primitive": primitive, "error": "unknown primitive",
-                        "known_primitives": known}
+                return mcp_error("invalid_argument", "unknown primitive",
+                                 primitive=primitive, known_primitives=known)
             # resolve the actual body by calling the resource getter (we have
             # it in this scope under _register_resources; to keep things
             # decoupled we re-read the map from the examples resource body).
