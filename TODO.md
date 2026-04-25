@@ -54,7 +54,7 @@ Remaining prose work:
 - [x] **Introduction** — full prose (~120 lines, 4 contribution para, jurisdictional rationale, roadmap).
 - [x] **Background** — full prose (~160 lines, three traditions: logic-prog, markup, modern DSLs; Catala/lam4/LexScript/LDOC subsections).
 - [x] **Design** — full prose (~294 lines, s415 worked example as Figure 1, statute-block + element + penalty (G8/G9/G12/G14) + exception (G13) + subsection (G5/G6) sections, full G1–G14 table).
-- [ ] **Implementation** — fill SLOC table (auto via `scripts/repo_stats.py`), expand verification subsection.
+- [x] **Implementation** — full prose (~249 lines, parser/AST + 6 transpilers + Z3/Alloy verify + 3-tier coverage + LSP/MCP/VSCode + 4 fidelity diagnostics; SLOC table inline with real wc-line counts).
 - [ ] **Evaluation** — bar chart of gap-trigger frequencies, diagnostic hit-rate methodology + numbers, encoding throughput.
 - [ ] **Related work** — comparison matrix (Yuho × Catala × lam4 × LexScript × AKN × LegalRuleML × LDOC) as a real Table.
 - [ ] **Limitations** — already substantive; tighten + cross-link future-work in conclusion.
