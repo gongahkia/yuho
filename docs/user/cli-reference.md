@@ -20,6 +20,7 @@ This document mirrors the output of `yuho <subcommand> --help` for every impleme
 | `yuho deps` | Show statute dependencies for a Yuho file. |
 | `yuho diff` | Compare two Yuho files and show semantic differences. |
 | `yuho eval` | Evaluate a Yuho file through the interpreter. |
+| `yuho explore` | Counter-example explorer: surface fact patterns over a section. |
 | `yuho fmt` | Format a Yuho source file. |
 | `yuho generate` | Generate statute scaffold with proper structure. |
 | `yuho generate-tests` | Generate test cases using Z3 constraint solving. |
@@ -28,6 +29,7 @@ This document mirrors the output of `yuho <subcommand> --help` for every impleme
 | `yuho library` | Manage Yuho statute packages. |
 | `yuho lint` | Check Yuho files for style and best practice issues. |
 | `yuho lsp` | Start the Language Server Protocol server. |
+| `yuho recommend` | Charge-recommender: rank Penal Code sections that structurally fit a fact pattern. |
 | `yuho refs` | Query the cross-section reference graph (G10). |
 | `yuho repl` | Start interactive REPL for statute experimentation. |
 | `yuho schema` | Print JSON Schema for Yuho JSON transpiler output. |
@@ -357,6 +359,29 @@ Usage: yuho eval [OPTIONS] FILE
 Options:
   --json  Output as JSON
   --help  Show this message and exit.
+```
+
+## `yuho explore`
+
+Counter-example explorer: surface fact patterns over a section.
+
+```
+Usage: yuho explore [OPTIONS] FILE SECTION
+
+  Counter-example explorer: surface fact patterns over a section.
+
+  Reuses the Z3 verifier to enumerate (a) satisfying scenarios where the section's
+  elements are all met, (b) borderline scenarios showing which elements are load-
+  bearing, and (c) which exceptions are reachable.
+
+  Example:     yuho explore library/penal_code/s415_cheating/statute.yh 415
+
+Options:
+  --max-satisfying INTEGER  Cap on satisfying scenarios returned  [default: 5]
+  --no-borderline           Skip the per-element load-bearing analysis
+  --no-exceptions           Skip the exception coverage / dead-exception scan
+  --json                    Output as JSON
+  --help                    Show this message and exit.
 ```
 
 ## `yuho fmt`
@@ -721,6 +746,31 @@ Options:
   --help         Show this message and exit.
 ```
 
+## `yuho recommend`
+
+Charge-recommender: rank Penal Code sections that structurally fit a fact pattern.
+
+```
+Usage: yuho recommend [OPTIONS] FACTS_PATH
+
+  Charge-recommender: rank Penal Code sections that structurally fit a fact pattern.
+
+  NOT LEGAL ADVICE — every output carries an explicit disclaimer. The recommender re-
+  uses the existing fact-pattern simulator for per-element traces, then sorts by
+  coverage. No external LLM, no scraping.
+
+  Example:     yuho recommend simulator/fixtures/s415_classic.yaml
+
+Options:
+  --top-k INTEGER           How many ranked candidates to return  [default: 5]
+  --max-candidates INTEGER  Cap on sections whose simulator trace gets run  [default:
+                            60]
+  --min-coverage FLOAT      Drop candidates below this coverage fraction (0.0 .. 1.0)
+                            [default: 0.0]
+  --json                    Output as JSON
+  --help                    Show this message and exit.
+```
+
 ## `yuho refs`
 
 Query the cross-section reference graph (G10).
@@ -947,6 +997,7 @@ Commands:
   deps               Show statute dependencies for a Yuho file.
   diff               Compare two Yuho files and show semantic differences.
   eval               Evaluate a Yuho file through the interpreter.
+  explore            Counter-example explorer: surface fact patterns over a section.
   fmt                Format a Yuho source file.
   generate           Generate statute scaffold with proper structure.
   generate-tests     Generate test cases using Z3 constraint solving.
@@ -955,6 +1006,7 @@ Commands:
   library            Manage Yuho statute packages.
   lint               Check Yuho files for style and best practice issues.
   lsp                Start the Language Server Protocol server.
+  recommend          Charge-recommender: rank Penal Code sections that structurally...
   refs               Query the cross-section reference graph (G10).
   repl               Start interactive REPL for statute experimentation.
   schema             Print JSON Schema for Yuho JSON transpiler output.
