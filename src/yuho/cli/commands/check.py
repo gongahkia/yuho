@@ -9,7 +9,7 @@ from typing import Any, Optional
 
 import click
 
-from yuho.cli.error_formatter import format_errors, format_suggestion, Colors, colorize
+from yuho.cli.error_formatter import format_error, format_errors, format_suggestion, format_suggestions, Colors, colorize
 from yuho.services.analysis import analyze_file, analyze_source
 from yuho.output.sarif import make_sarif_result, to_sarif
 
@@ -190,22 +190,29 @@ def run_check(
     click.echo(f"  phases: {', '.join(phase_labels)}")
 
     if analysis.parse_errors:
-        error_output = format_errors(analysis.parse_errors, analysis.source, file_label)
-        click.echo(error_output, err=True)
+        # Render each error with its hints inline so users see the fix
+        # next to the offending source line, not at the end of a wall
+        # of errors.
+        click.echo(
+            colorize(f"Found {len(analysis.parse_errors)} error(s) in {file_label}:",
+                     Colors.BOLD),
+            err=True,
+        )
+        click.echo("", err=True)
         for err in analysis.parse_errors:
-            suggestion = format_suggestion(err, analysis.source)
-            if suggestion:
-                click.echo(colorize(f"  hint: {suggestion}", Colors.YELLOW), err=True)
+            click.echo(format_error(err, analysis.source), err=True)
+            for hint in format_suggestions(err, analysis.source):
+                click.echo(colorize(f"  hint: {hint}", Colors.YELLOW), err=True)
             if explain_errors:
                 explanation = get_error_explanation(err.message, err.node_type)
                 if explanation:
                     click.echo(
-                        colorize("\n  Explanation:", Colors.CYAN + Colors.BOLD),
+                        colorize("  Explanation:", Colors.CYAN + Colors.BOLD),
                         err=True,
                     )
                     for line in explanation.strip().split("\n"):
                         click.echo(colorize(f"    {line}", Colors.DIM), err=True)
-                    click.echo("", err=True)
+            click.echo("", err=True)
 
     for item in payload["errors"]:
         if item["stage"] == "parse":

@@ -156,64 +156,177 @@ def find_similar(word: str, candidates: List[str], max_distance: int = 2) -> Lis
     return [s[1] for s in similar]
 
 
-# Known keywords and types for suggestions
+# Known keywords and types for suggestions.
+# Kept exhaustive so a typo on any first-class primitive resolves to a hint.
 YUHO_KEYWORDS = [
-    "struct",
-    "fn",
-    "match",
-    "case",
-    "consequence",
-    "pass",
-    "return",
-    "statute",
-    "definitions",
-    "elements",
-    "penalty",
-    "illustration",
-    "import",
-    "from",
-    "actus_reus",
-    "mens_rea",
-    "circumstance",
-    "imprisonment",
-    "fine",
-    "supplementary",
-    "TRUE",
-    "FALSE",
+    # top-level constructs
+    "struct", "fn", "enum", "match", "case", "consequence", "pass", "return",
+    "import", "from", "if", "else", "while", "for",
+    # statute shape
+    "statute", "subsection", "definitions", "elements", "penalty",
+    "illustration", "exception", "caselaw", "parties", "metadata",
+    # element kinds (G1, G11)
+    "actus_reus", "mens_rea", "circumstance",
+    "obligation", "prohibition", "permission",
+    "all_of", "any_of",
+    # element qualifiers (Phase 12)
+    "burden", "prosecution", "defence",
+    "beyond_reasonable_doubt", "balance_of_probabilities", "prima_facie",
+    "causedBy", "actor", "patient", "precedes", "during", "after",
+    # penalty primitives + combinators (G8, G9, G12, G14)
+    "imprisonment", "fine", "caning", "death_penalty", "supplementary",
+    "cumulative", "alternative", "or_both", "when",
+    "unlimited", "unspecified", "life", "mandatory_min",
+    "concurrent", "consecutive",
+    # statute-level lifecycle (G3, G6, G10)
+    "effective", "repealed", "subsumes", "amends", "referencing",
+    "priority", "defeats", "guard", "presumed", "unless",
+    # literals
+    "TRUE", "FALSE", "true", "false",
 ]
 
 YUHO_TYPES = [
-    "int",
-    "float",
-    "bool",
-    "string",
-    "money",
-    "percent",
-    "date",
-    "duration",
-    "void",
+    "int", "float", "bool", "string",
+    "money", "percent", "date", "duration", "void",
+    "list", "set", "map", "option",
 ]
 
 
-def suggest_keyword(typo: str) -> Optional[str]:
-    """Suggest a correct keyword for a typo."""
+def suggest_keyword(typo: str, k: int = 3, max_distance: int = 2) -> List[str]:
+    """Return up to ``k`` closest keyword/type candidates for a typo.
+
+    Empty list if nothing within ``max_distance`` is found.
+    """
     candidates = YUHO_KEYWORDS + YUHO_TYPES
-    similar = find_similar(typo, candidates, max_distance=2)
-    return similar[0] if similar else None
+    return find_similar(typo, candidates, max_distance=max_distance)[:k]
+
+
+# =============================================================================
+# Structured fix-it patterns
+# =============================================================================
+#
+# Each fix-it is a check (regex on the error context) plus a hint string.
+# Order matters: the first match wins, so most-specific patterns first.
+
+import re as _re
+
+
+def _extract_first_identifier(text: str) -> Optional[str]:
+    """Pull the first bareword identifier out of an error blob."""
+    if not text:
+        return None
+    m = _re.match(r"\s*([A-Za-z_][A-Za-z0-9_]*)", text)
+    return m.group(1) if m else None
+
+
+def _line_at(source: str, line_no: int) -> str:
+    lines = source.splitlines()
+    if 1 <= line_no <= len(lines):
+        return lines[line_no - 1]
+    return ""
+
+
+_FIXITS = [
+    # ---- assignment operator ---------------------------------------------
+    (
+        lambda err, src: (
+            "Unexpected" in err.message
+            and _re.search(r"=(?!=|>)\s", _line_at(src, err.location.line) or "")
+            and ":=" not in (_line_at(src, err.location.line) or "")
+        ),
+        "Yuho uses `:=` for assignment, not `=`. Replace `=` with `:=`.",
+    ),
+    # ---- missing semicolon -----------------------------------------------
+    (
+        lambda err, src: err.message.startswith("Missing semicolon"),
+        "Add a `;` at the end of the previous statement. Yuho terminates each "
+        "field declaration (e.g. `fine := unlimited;`) with a semicolon.",
+    ),
+    # ---- missing close brace ---------------------------------------------
+    (
+        lambda err, src: "closing brace" in err.message.lower(),
+        "An open `{` was never closed. Check that every `statute`, `elements`, "
+        "`penalty`, or `subsection` block has a matching `}`.",
+    ),
+    # ---- fabricated penalty cap ------------------------------------------
+    (
+        lambda err, src: _re.search(r"fine\s*:=\s*\$0", _line_at(src, err.location.line) or "")
+                       and "with fine" not in src.lower(),
+        "If the canonical statute says `with fine` without a number, use "
+        "`fine := unlimited;` (G8 sentinel). Numeric ranges should match a "
+        "stated maximum in the source text.",
+    ),
+    # ---- caning fabrication ----------------------------------------------
+    (
+        lambda err, src: _re.search(r"caning\s*:=\s*\d+\s*\.\.\s*\d+", _line_at(src, err.location.line) or ""),
+        "If the canonical statute says `liable to caning` without a stroke "
+        "count, use `caning := unspecified;` (G14 sentinel). Avoid invented "
+        "stroke ranges.",
+    ),
+    # ---- `or_both` outside `penalty or_both` block ----------------------
+    (
+        lambda err, src: "or_both" in err.message and "penalty or_both" not in src,
+        "Use `penalty or_both { ... }` as the block header. The bare keyword "
+        "`or_both;` is not valid; it must follow `penalty`.",
+    ),
+]
+
+
+def _structural_hint(error: ParseError, source: str) -> Optional[str]:
+    """Run the fix-it patterns and return the first hit, if any."""
+    for predicate, hint in _FIXITS:
+        try:
+            if predicate(error, source):
+                return hint
+        except Exception:
+            continue
+    return None
+
+
+def format_suggestions(error: ParseError, source: str) -> List[str]:
+    """Generate every applicable fix-it hint for a parse error.
+
+    Returns hints in priority order:
+    1. Structured pattern matches (operator typos, sentinel use, missing braces).
+    2. Levenshtein "did you mean" against the full keyword/type set, where
+       the unexpected token's first identifier is short enough to be a typo.
+
+    May return an empty list if nothing applies.
+    """
+    out: List[str] = []
+
+    # 1. Structural pattern matches (may produce 0..N hints).
+    structural = _structural_hint(error, source)
+    if structural:
+        out.append(structural)
+
+    # 2. Levenshtein fallback for unexpected-token errors.
+    if "Unexpected" in error.message:
+        match = _re.search(r"Unexpected syntax: ['\"]?(.+?)['\"]?(?:$|\.\.\.)", error.message)
+        if match:
+            raw = match.group(1).strip()
+            candidate = _extract_first_identifier(raw)
+            if candidate and len(candidate) >= 3:
+                suggestions = suggest_keyword(candidate, k=3)
+                if suggestions:
+                    if len(suggestions) == 1:
+                        out.append(f"Did you mean `{suggestions[0]}`?")
+                    else:
+                        head = suggestions[0]
+                        rest = ", ".join(f"`{s}`" for s in suggestions[1:])
+                        out.append(f"Did you mean `{head}`? (also: {rest})")
+
+    # Dedupe while preserving order.
+    seen = set()
+    deduped: List[str] = []
+    for h in out:
+        if h not in seen:
+            seen.add(h)
+            deduped.append(h)
+    return deduped
 
 
 def format_suggestion(error: ParseError, source: str) -> Optional[str]:
-    """Generate a suggestion for fixing an error."""
-    # Try to extract the problematic token from the error
-    if "Unexpected" in error.message:
-        # Extract the token text
-        import re
-
-        match = re.search(r"Unexpected syntax: ['\"]?([^'\"]+)['\"]?", error.message)
-        if match:
-            token = match.group(1).strip()
-            suggestion = suggest_keyword(token)
-            if suggestion:
-                return f"Did you mean '{suggestion}'?"
-
-    return None
+    """Backward-compatible single-hint API. Returns the first applicable hint."""
+    hints = format_suggestions(error, source)
+    return hints[0] if hints else None

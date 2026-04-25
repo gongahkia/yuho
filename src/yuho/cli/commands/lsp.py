@@ -10,13 +10,21 @@ import click
 from yuho.cli.error_formatter import Colors, colorize
 
 
-def run_lsp(tcp: Optional[int] = None, verbose: bool = False) -> None:
+def run_lsp(
+    tcp: Optional[int] = None,
+    verbose: bool = False,
+    workspace: bool = False,
+) -> None:
     """
     Start the Language Server Protocol server.
 
     Args:
         tcp: TCP port to listen on (default: stdio)
         verbose: Enable verbose output
+        workspace: After initialize, walk every .yh file under each
+            workspace folder and publish diagnostics. Editor's "problems"
+            panel will show issues from the entire library, not just open
+            documents.
     """
     try:
         from yuho.lsp import YuhoLanguageServer
@@ -29,7 +37,7 @@ def run_lsp(tcp: Optional[int] = None, verbose: bool = False) -> None:
         )
         sys.exit(1)
 
-    server = YuhoLanguageServer()
+    server = YuhoLanguageServer(workspace_mode=workspace)
 
     if tcp:
         if verbose:

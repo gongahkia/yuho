@@ -749,8 +749,15 @@ def test(
 
 @cli.command()
 @click.option("--tcp", type=int, help="Start LSP server on TCP port")
+@click.option(
+    "--workspace",
+    is_flag=True,
+    help="On startup, walk every .yh file in each workspace folder and "
+    "publish diagnostics. Editor's 'problems' panel will show issues "
+    "from the entire library, not just open documents.",
+)
 @click.pass_context
-def lsp(ctx: click.Context, tcp: Optional[int]) -> None:
+def lsp(ctx: click.Context, tcp: Optional[int], workspace: bool) -> None:
     """
     Start the Language Server Protocol server.
 
@@ -758,7 +765,7 @@ def lsp(ctx: click.Context, tcp: Optional[int]) -> None:
     """
     from yuho.cli.commands.lsp import run_lsp
 
-    run_lsp(tcp=tcp, verbose=ctx.obj["verbose"])
+    run_lsp(tcp=tcp, verbose=ctx.obj["verbose"], workspace=workspace)
 
 
 # =============================================================================

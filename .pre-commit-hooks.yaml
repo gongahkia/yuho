@@ -21,3 +21,11 @@
   types: [file]
   files: '\.yh$'
   additional_dependencies: ['yuho']
+
+- id: yuho-cli-reference-current
+  name: Yuho CLI reference up to date
+  entry: python3 scripts/gen_cli_reference.py --check
+  language: python
+  pass_filenames: false
+  always_run: true
+  additional_dependencies: ['yuho']

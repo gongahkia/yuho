@@ -132,7 +132,7 @@ class YuhoLanguageServer(LanguageServer):
     - Find references
     """
 
-    def __init__(self):
+    def __init__(self, workspace_mode: bool = False):
         super().__init__(name="yuho-lsp", version=__version__)
 
         # Document cache
@@ -151,8 +151,84 @@ class YuhoLanguageServer(LanguageServer):
         self._parse_timers: Dict[str, threading.Timer] = {}
         self._parse_timers_lock = threading.Lock()
 
+        # G10 cross-section reference graph (lazy, cached per workspace folder).
+        self._reference_graphs: Dict[str, Any] = {}
+        self._reference_graphs_lock = threading.Lock()
+
+        # When true, on initialize/did_change_workspace_folders we also walk
+        # every .yh file under each workspace folder and publish diagnostics.
+        self._workspace_mode = workspace_mode
+
         # Register handlers
         self._register_handlers()
+
+    # --------------------------------------------------------------
+    # G10 cross-section reference graph (lazy cache)
+    # --------------------------------------------------------------
+
+    def _get_reference_graph(self, folder_path: "Path"):
+        """Return a cached ReferenceGraph rooted at folder_path/library/penal_code.
+
+        Re-builds on demand (cheap: ~150ms over the 524-section library) and
+        caches per folder. Caller is responsible for invalidating after edits
+        if absolute freshness is required.
+        """
+        from yuho.library.reference_graph import build_reference_graph
+
+        key = str(folder_path)
+        with self._reference_graphs_lock:
+            if key in self._reference_graphs:
+                return self._reference_graphs[key]
+            penal = folder_path / "library" / "penal_code"
+            if not penal.exists():
+                self._reference_graphs[key] = None
+                return None
+            try:
+                graph = build_reference_graph(penal)
+            except Exception:
+                graph = None
+            self._reference_graphs[key] = graph
+            return graph
+
+    def _invalidate_reference_graph(self) -> None:
+        with self._reference_graphs_lock:
+            self._reference_graphs.clear()
+
+    def _workspace_root_for_uri(self, uri: str) -> Optional["Path"]:
+        """Best-effort: find the workspace folder containing this URI."""
+        from pathlib import Path
+        from urllib.parse import urlparse, unquote
+
+        for folder_uri in self._workspace_folders:
+            parsed = urlparse(folder_uri)
+            folder = Path(unquote(parsed.path))
+            doc_parsed = urlparse(uri)
+            doc_path = Path(unquote(doc_parsed.path))
+            try:
+                doc_path.relative_to(folder)
+                return folder
+            except ValueError:
+                continue
+        # Fallback: walk up the doc path looking for library/penal_code/
+        from pathlib import Path
+        from urllib.parse import urlparse, unquote
+        parsed = urlparse(uri)
+        p = Path(unquote(parsed.path)).resolve()
+        for ancestor in [p] + list(p.parents):
+            if (ancestor / "library" / "penal_code").exists():
+                return ancestor
+        return None
+
+    @staticmethod
+    def _section_dir_for(library_dir: "Path", section: str) -> Optional["Path"]:
+        """Find the per-section directory matching `s{section}_<slug>/`."""
+        candidates = list(library_dir.glob(f"s{section}_*"))
+        if candidates:
+            return candidates[0]
+        single = library_dir / f"s{section}"
+        if single.is_dir():
+            return single
+        return None
 
     def _index_workspace_symbols(self, folder_uri: str) -> None:
         """Index workspace symbols in a background worker."""
@@ -510,6 +586,63 @@ class YuhoLanguageServer(LanguageServer):
         if folder_uri not in self._workspace_folders:
             self._workspace_folders.append(folder_uri)
         self._index_workspace_symbols(folder_uri)
+        if self._workspace_mode:
+            self._schedule_workspace_diagnostic_walk(folder_uri)
+
+    def _schedule_workspace_diagnostic_walk(self, folder_uri: str) -> None:
+        """In workspace mode, parse + diagnose every .yh file under folder.
+
+        Runs on a background thread; results stream into the editor's
+        problems panel via ``self.publish_diagnostics`` calls.
+        """
+        from pathlib import Path
+        from urllib.parse import urlparse, unquote
+
+        parsed = urlparse(folder_uri)
+        folder = Path(unquote(parsed.path))
+        if not folder.exists():
+            return
+
+        worker = threading.Thread(
+            target=self._workspace_diagnostic_worker,
+            args=(folder,),
+            daemon=True,
+        )
+        worker.start()
+
+    def _workspace_diagnostic_worker(self, folder: "Path") -> None:
+        """Walk every .yh file under folder; parse + publish diagnostics."""
+        from yuho.parser import get_parser
+        from yuho.ast import ASTBuilder
+
+        try:
+            parser = get_parser()
+        except Exception:
+            return
+
+        for yh in folder.rglob("*.yh"):
+            uri = f"file://{yh}"
+            # Don't re-do open documents — they already have live diagnostics.
+            if uri in self._documents:
+                continue
+            try:
+                source = yh.read_text(encoding="utf-8")
+                parse_result = parser.parse(source, file=str(yh))
+                ast = None
+                if parse_result.is_valid:
+                    try:
+                        ast = ASTBuilder().build(parse_result.tree, source)
+                    except Exception:
+                        ast = None
+                doc_state = DocumentState(uri=uri, source=source)
+                doc_state.parse_result = parse_result
+                doc_state.ast = ast
+                diagnostics = collect_diagnostics(doc_state)
+                if diagnostics:
+                    self.publish_diagnostics(uri, diagnostics)
+            except Exception:
+                # One bad file shouldn't kill the whole walk.
+                continue
 
     def _publish_diagnostics(self, uri: str, doc_state: DocumentState):
         """Publish diagnostics for a document."""
@@ -531,7 +664,16 @@ class YuhoLanguageServer(LanguageServer):
         return get_hover(doc_state, word, self._type_to_str)
 
     def _get_definition(self, uri: str, position: lsp.Position) -> Optional[lsp.Location]:
-        """Get definition location for identifier at position."""
+        """Get definition location for identifier at position.
+
+        Resolution order:
+        1. Local AST: structs, functions, statutes, imports.
+        2. Cross-section (G10): if the cursor is on `s415` / `415` /
+           `Section 415` and the workspace contains
+           ``library/penal_code/s415_<slug>/statute.yh``, jump there. Also
+           triggered when on the value of `subsumes` / `amends` /
+           `referencing` clauses.
+        """
         doc_state = self._documents.get(uri)
         if not doc_state:
             return None
@@ -539,6 +681,29 @@ class YuhoLanguageServer(LanguageServer):
         word = self._get_word_at_position(doc_state.source, position)
         if not word:
             return None
+
+        # ------------------------------------------------------------
+        # G10: cross-section goto-definition.
+        # If `word` looks like a section number (digits + optional alpha
+        # suffix, with optional "s" prefix), resolve via reference graph.
+        # ------------------------------------------------------------
+        import re as _re
+        section_match = _re.match(r"(?:[sS])?(\d+[A-Z]{0,3})$", word)
+        if section_match:
+            section = section_match.group(1)
+            folder = self._workspace_root_for_uri(uri)
+            if folder is not None:
+                target_dir = self._section_dir_for(folder / "library" / "penal_code", section)
+                if target_dir is not None:
+                    target = target_dir / "statute.yh"
+                    if target.exists():
+                        return lsp.Location(
+                            uri=f"file://{target}",
+                            range=lsp.Range(
+                                start=lsp.Position(line=0, character=0),
+                                end=lsp.Position(line=0, character=0),
+                            ),
+                        )
 
         # Check AST for definitions
         if doc_state.ast:
@@ -1145,7 +1310,17 @@ class YuhoLanguageServer(LanguageServer):
     def _rename_symbol(
         self, uri: str, position: lsp.Position, new_name: str
     ) -> Optional[lsp.WorkspaceEdit]:
-        """Rename symbol at position across all documents."""
+        """Rename symbol at position across all documents.
+
+        Two paths:
+        - **Section-number rename (G10)**: if cursor is on `s415` (or
+          variants), walk the G10 reference graph to find every section
+          that references s415 — both ``subsumes``/``amends`` clauses and
+          implicit ``s415`` mentions in element descriptions / doc
+          comments — and propose a renamed edit for every site.
+        - **Identifier rename**: structs / functions / variables — same as
+          before, with a workspace-wide text scan.
+        """
         doc_state = self._documents.get(uri)
         if not doc_state:
             return None
@@ -1153,6 +1328,35 @@ class YuhoLanguageServer(LanguageServer):
         word = self._get_word_at_position(doc_state.source, position)
         if not word:
             return None
+
+        # ------------------------------------------------------------
+        # G10 cross-section rename.
+        # ------------------------------------------------------------
+        import re as _re
+        section_match = _re.match(r"(?:[sS])?(\d+[A-Z]{0,3})$", word)
+        if section_match:
+            section = section_match.group(1)
+            new_section_match = _re.match(r"(?:[sS])?(\d+[A-Z]{0,3})$", new_name)
+            if not new_section_match:
+                return None  # rename target isn't a valid section number
+            new_section = new_section_match.group(1)
+            folder = self._workspace_root_for_uri(uri)
+            if folder is None:
+                return None
+            graph = self._get_reference_graph(folder)
+            if graph is None or section not in graph.nodes:
+                # Fall through to identifier rename.
+                pass
+            else:
+                changes = self._build_section_rename_edits(
+                    folder=folder,
+                    graph=graph,
+                    old_section=section,
+                    new_section=new_section,
+                )
+                if changes:
+                    return lsp.WorkspaceEdit(changes=changes)
+                # No edits — fall through.
 
         # Validate new name is a valid identifier
         if not new_name or not new_name[0].isalpha() and new_name[0] != "_":
@@ -1191,6 +1395,93 @@ class YuhoLanguageServer(LanguageServer):
             return None
 
         return lsp.WorkspaceEdit(changes=changes)
+
+    def _build_section_rename_edits(
+        self,
+        folder: "Path",
+        graph,
+        old_section: str,
+        new_section: str,
+    ) -> Dict[str, List[lsp.TextEdit]]:
+        """Construct WorkspaceEdit changes for a section-number rename.
+
+        For the renamed section's own statute.yh, rewrite the
+        ``statute N "..."`` header. For every section that has an
+        outgoing edge into ``old_section`` (per the G10 graph), do a
+        text-substitution over the matching ``s<N>`` / ``Section N``
+        patterns in that file.
+        """
+        from pathlib import Path
+        import re as _re
+
+        library = folder / "library" / "penal_code"
+        changes: Dict[str, List[lsp.TextEdit]] = {}
+
+        # Targets: the renamed section + every section that references it.
+        target_sections = {old_section}
+        for edge in graph.incoming(old_section):
+            target_sections.add(edge.src)
+        # Plus the renamed section itself owns its `statute N "..."` header.
+
+        # Build a regex that catches `s415`, `s.415`, `Section 415` style
+        # references — but not part of a longer identifier like `s4152`.
+        old_re = _re.compile(
+            rf"\b(?:[sS]\.?\s*|[sS]ection\s+)?{_re.escape(old_section)}\b"
+        )
+
+        for sec in target_sections:
+            section_dir = self._section_dir_for(library, sec)
+            if section_dir is None:
+                continue
+            yh = section_dir / "statute.yh"
+            if not yh.exists():
+                continue
+            try:
+                source = yh.read_text(encoding="utf-8")
+            except Exception:
+                continue
+
+            edits: List[lsp.TextEdit] = []
+            lines = source.splitlines()
+            for line_idx, line in enumerate(lines):
+                # The `statute N "..."` header on the renamed section's own
+                # file: rewrite the bare number too.
+                if sec == old_section:
+                    m_header = _re.match(rf"^\s*statute\s+({_re.escape(old_section)})\b", line)
+                    if m_header:
+                        col_start = m_header.start(1)
+                        col_end = m_header.end(1)
+                        edits.append(lsp.TextEdit(
+                            range=lsp.Range(
+                                start=lsp.Position(line=line_idx, character=col_start),
+                                end=lsp.Position(line=line_idx, character=col_end),
+                            ),
+                            new_text=new_section,
+                        ))
+                        continue
+
+                # Implicit references inside other sections.
+                for m in old_re.finditer(line):
+                    matched = m.group(0)
+                    # Replace the trailing digits of the matched span only;
+                    # keep any `s` / `s.` / `section ` prefix intact.
+                    suffix_match = _re.search(rf"{_re.escape(old_section)}$", matched)
+                    if not suffix_match:
+                        continue
+                    abs_start = m.start() + suffix_match.start()
+                    abs_end = m.start() + suffix_match.end()
+                    edits.append(lsp.TextEdit(
+                        range=lsp.Range(
+                            start=lsp.Position(line=line_idx, character=abs_start),
+                            end=lsp.Position(line=line_idx, character=abs_end),
+                        ),
+                        new_text=new_section,
+                    ))
+
+            if edits:
+                changes[f"file://{yh}"] = edits
+
+        return changes
 
     def _search_workspace_for_symbol(
         self,
