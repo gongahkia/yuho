@@ -16,4 +16,6 @@ summary = "Section 317 criminalises a parent or person caring for a child below 
 source = "Singapore Penal Code 1871, Section 317"
 
 [verification]
+last_verified = "2026-04-25"
+verified_by = "gpt-5.4 high (automated L3 reviewer)"
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr317-#pr317-"
