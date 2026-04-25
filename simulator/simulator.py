@@ -237,6 +237,37 @@ def _stem(word: str) -> str:
     return word
 
 
+# Doctrinal synonym clusters: each row is a set of stemmed roots that
+# Yuho's element descriptions and natural-language fact patterns use
+# interchangeably. Token overlap is computed on the *expanded* set so
+# `procure` matches `intentional aid`, `abet` matches `instigate`, etc.
+#
+# Kept deliberately small: only verbs that the Penal Code's elements
+# actually use as element-description vocabulary. Adding broader semantic
+# clusters would inflate the false-positive rate on the recommender.
+_SYNONYM_CLUSTERS = (
+    frozenset({"abet", "abett", "instigat", "induc", "procur", "encourag", "incit"}),
+    frozenset({"conspir", "agreement", "plot"}),
+    frozenset({"aid", "assist", "help", "facilitat"}),
+    frozenset({"take", "steal", "deprivat", "deprive", "carri"}),
+    frozenset({"deceiv", "mislead", "defraud", "decept"}),
+    frozenset({"dishonest", "fraudulent", "deceit"}),
+    frozenset({"hurt", "injur", "harm", "wound"}),
+    frozenset({"threat", "intimidat", "menac"}),
+)
+
+
+def _expand_with_synonyms(tokens: set) -> set:
+    """For every token in `tokens`, fold in every cluster member that
+    contains the token. The result preserves the original tokens plus any
+    cluster expansions."""
+    out = set(tokens)
+    for cluster in _SYNONYM_CLUSTERS:
+        if tokens & cluster:
+            out |= cluster
+    return out
+
+
 # Stop words that pass the 4+ char length filter but don't carry meaning;
 # excluded from both the desc-token count and the overlap set so they
 # don't inflate the threshold or produce spurious matches.
@@ -261,15 +292,19 @@ def _suggests(elem_desc: str, fact_strings: List[str]) -> Optional[str]:
     """
     raw_desc = {w.lower() for w in re.findall(r"[A-Za-z]{4,}", elem_desc)
                 if w.lower() not in _STOPWORDS}
-    desc_words = {_stem(w) for w in raw_desc}
-    if not desc_words:
+    desc_stems = {_stem(w) for w in raw_desc}
+    if not desc_stems:
         return None
-    threshold = 1 if len(desc_words) <= 3 else 2
+    desc_expanded = _expand_with_synonyms(desc_stems)
+    # Threshold counts the *original* (non-expanded) desc tokens so a
+    # one-content-word element still gets the relaxed-1 threshold.
+    threshold = 1 if len(desc_stems) <= 3 else 2
     for fact in fact_strings:
         raw_fact = {w.lower() for w in re.findall(r"[A-Za-z]{4,}", fact)
                     if w.lower() not in _STOPWORDS}
-        fact_words = {_stem(w) for w in raw_fact}
-        if len(desc_words & fact_words) >= threshold:
+        fact_stems = {_stem(w) for w in raw_fact}
+        fact_expanded = _expand_with_synonyms(fact_stems)
+        if len(desc_expanded & fact_expanded) >= threshold:
             return fact
     return None
 
