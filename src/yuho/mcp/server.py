@@ -96,6 +96,39 @@ class RateLimitConfig:
     # Exempt tool names (no rate limiting)
     exempt_tools: List[str] = field(default_factory=lambda: ["yuho_grammar", "yuho_types"])
 
+    # Per-tool rate-limit overrides. Tools not in this map fall back to the
+    # global limit. Long-running tools (subprocess dispatchers, full-corpus
+    # walks) get a much lower rate so they can't accidentally swamp the
+    # process. Fast tools (parse, format, hover) get a higher rate so an
+    # IDE / AI client polling them doesn't get throttled.
+    #
+    # Each value is a (rps, burst) tuple.
+    per_tool_overrides: Dict[str, tuple] = field(default_factory=lambda: {
+        # Long-running: subprocess dispatchers / full-library scans.
+        "yuho_run_l3_review":         (0.1,  2),   # ~6 calls per minute
+        "yuho_apply_flag_fix":        (0.1,  2),
+        "yuho_propose_encoding_skeleton": (0.5, 3),
+        "yuho_simulate_fact_pattern": (1.0,  4),
+        "yuho_verify_grounded":       (1.0,  4),
+        "yuho_section_references":    (2.0,  5),   # corpus walk + graph build
+        "yuho_validate_contribution": (1.0,  3),
+        # Mid-cost.
+        "yuho_section_pair":          (5.0, 10),
+        "yuho_library_list":          (5.0, 10),
+        "yuho_library_search":        (5.0, 10),
+        "yuho_transpile":             (5.0, 10),
+        # Cheap, latency-sensitive: bumped above the global default.
+        "yuho_check":                 (30.0, 60),
+        "yuho_parse":                 (30.0, 60),
+        "yuho_hover":                 (30.0, 60),
+        "yuho_complete":              (30.0, 60),
+        "yuho_diagnostics":           (30.0, 60),
+        "yuho_format":                (30.0, 60),
+        "yuho_definition":            (30.0, 60),
+        "yuho_references":            (30.0, 60),
+        "yuho_symbols":               (30.0, 60),
+    })
+
 
 class TokenBucket:
     """Token bucket rate limiter implementation."""
@@ -164,6 +197,9 @@ class RateLimiter:
         self._global_bucket = TokenBucket(config.requests_per_second, config.burst_size)
         self._client_buckets: Dict[str, TokenBucket] = {}
         self._client_buckets_lock = threading.Lock()
+        # Per-tool buckets: built lazily on first call.
+        self._tool_buckets: Dict[str, TokenBucket] = {}
+        self._tool_buckets_lock = threading.Lock()
         self._stats_lock = threading.Lock()
         self._stats: RateLimitStats = {
             "total_requests": 0,
@@ -181,6 +217,20 @@ class RateLimiter:
                     self.config.per_client_rps, self.config.per_client_burst
                 )
             return self._client_buckets[client_id]
+
+    def _get_tool_bucket(self, tool_name: str) -> Optional[TokenBucket]:
+        """Get or create a per-tool token bucket if the tool has an override.
+
+        Returns None if no override applies (fall back to the global bucket).
+        """
+        override = self.config.per_tool_overrides.get(tool_name)
+        if override is None:
+            return None
+        rps, burst = override
+        with self._tool_buckets_lock:
+            if tool_name not in self._tool_buckets:
+                self._tool_buckets[tool_name] = TokenBucket(rps, burst)
+            return self._tool_buckets[tool_name]
 
     def check_rate_limit(
         self,
@@ -209,13 +259,27 @@ class RateLimiter:
         if tool_name in self.config.exempt_tools:
             return
 
-        # Check global rate limit
-        if not self._global_bucket.acquire():
-            with self._stats_lock:
-                self._stats["rate_limited"] += 1
-            retry_after = self._global_bucket.time_until_available()
-            logger.warning(f"Global rate limit exceeded for {tool_name}")
-            raise RateLimitExceeded(retry_after)
+        # Per-tool override: if this tool has a custom rate, the per-tool
+        # bucket is the binding constraint, not the global bucket. Falling
+        # back to the global bucket only when no override is set keeps
+        # high-frequency tools (yuho_check) from being throttled by the
+        # default global rate.
+        tool_bucket = self._get_tool_bucket(tool_name)
+        if tool_bucket is not None:
+            if not tool_bucket.acquire():
+                with self._stats_lock:
+                    self._stats["rate_limited"] += 1
+                retry_after = tool_bucket.time_until_available()
+                logger.warning(f"Per-tool rate limit exceeded for {tool_name}")
+                raise RateLimitExceeded(retry_after)
+        else:
+            # Check global rate limit
+            if not self._global_bucket.acquire():
+                with self._stats_lock:
+                    self._stats["rate_limited"] += 1
+                retry_after = self._global_bucket.time_until_available()
+                logger.warning(f"Global rate limit exceeded for {tool_name}")
+                raise RateLimitExceeded(retry_after)
 
         # Check per-client rate limit if client_id provided
         if client_id:
