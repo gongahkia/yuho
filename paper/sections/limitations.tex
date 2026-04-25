@@ -1,0 +1,36 @@
+\section{Limitations}
+\label{sec:limitations}
+
+\paragraph{Common-law doctrines are not modelled.} Yuho captures the
+statute as drafted; it does not model judicial gloss. Doctrines like the
+\emph{thin skull} rule or \emph{novus actus interveniens} live in case
+law and shape how elements (especially causation) apply. Our \texttt{caselaw}
+block records the existence of judicial interpretation but does not lift
+the doctrine into the type system.
+
+\paragraph{Single jurisdiction.} The encoding is Singapore-only. The
+Anglo-Indian heritage of the Singapore Penal Code makes the grammar
+plausibly portable to India, Pakistan, Brunei, and (with adjustments)
+Malaysia, but we have not verified this empirically.
+
+\paragraph{Shallow precedent integration.} Case law is referenced by name
++ citation + holding string; the holding is not parsed into structured
+elements. A holding like ``mens rea may be inferred from the actus reus
+when the act is inherently dangerous'' would, in a richer system, modify
+the burden qualifier of a mens-rea element. Yuho does not yet do this.
+
+\paragraph{No live SSO diffing.} The canonical scrape lives in
+\texttt{library/penal\_code/\_raw/act.json} as a snapshot. Amendments
+published by AGC are not picked up automatically. A scheduled re-scrape
++ diff pass is on the roadmap.
+
+\paragraph{L3 reviewer is the encoder.} The 11-point checklist is
+mechanical, but the same author wrote the encodings and stamped them.
+External review by a Singapore-qualified lawyer is the natural next step
+for any encoding intended for use beyond proof of concept.
+
+\paragraph{Verification scope.} Z3 and Alloy hookups currently target
+exception-priority well-formedness and bounded element-combination
+enumeration. Properties that require quantification over an unbounded
+number of historical events (e.g.\ ``no defendant has ever been convicted
+under both s299 and s300 for the same act'') are out of scope.

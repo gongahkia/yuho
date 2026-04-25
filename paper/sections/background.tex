@@ -1,0 +1,62 @@
+\section{Background and Motivation}
+\label{sec:background}
+
+\subsection{Statute encoding in the wild}
+\todo{Three threads to cover, each in 1--2 paragraphs.}
+
+\paragraph{Logic-programming origins.} Sergot et al.~\cite{sergot1986british}
+encoded the British Nationality Act as a Prolog program in 1986. The
+encoding was complete enough to run case-style queries but exposed the
+gap between informal drafting and Horn-clause semantics. Subsequent work
+(Hammond, Bench-Capon) extended the approach without changing its shape.
+
+\paragraph{Markup-driven codification.} \emph{Akoma Ntoso}~\cite{akomantoso}
+and \emph{LegalRuleML}~\cite{legalruleml} took the orthogonal route of
+heavyweight XML schemas designed for archival and inter-government exchange.
+They encode \emph{structure} (who promulgated, when amended, which paragraph)
+faithfully but have no native way to express element decomposition or
+penalty arithmetic.
+
+\paragraph{Modern DSLs.}
+\begin{itemize}
+\item \textbf{Catala}~\cite{catala2021}, designed by Merigoux et al. for
+the French tax code, introduces \emph{prioritised default rules} as a
+first-class construct, which we borrow for statutory exceptions
+(\S\ref{subsec:exceptions}).
+\item \textbf{lam4}~\cite{lam4} models contracts and regulations with a
+deontic logic core and a notion of named-norm references / \texttt{IS\_INFRINGED}
+predicate that we plan to adopt for inter-section reasoning.
+\item \textbf{LexScript}~\cite{lexscript} (MIT) compiles statutes via a
+tree-sitter parser and offers Tarjan-SCC analysis over reference graphs ---
+a technique we adopt directly for cross-section reachability checks.
+\item \textbf{LDOC}~\cite{ldoc} prioritises a Word-and-PDF authoring loop
+and is the inspiration for our DOCX transpile target.
+\end{itemize}
+
+\subsection{Why a new DSL?}
+\todo{Position Yuho in the design space. Summary table appears in
+\S\ref{sec:related}; here, give the prose argument.}
+
+Existing DSLs each cover a partial slice of what statute-encoding requires.
+Catala has world-class default-rule semantics but no native penalty
+combinators or illustration blocks. lam4 has a strong deontic core but
+expects regulations, not penal sections. Akoma Ntoso has structure without
+semantics. LexScript has clean tooling but a thin grammar. None target a
+common-law penal code at full coverage.
+
+Yuho takes the position that a \emph{statute-shaped} DSL --- where the
+top-level construct is \texttt{statute N \{ definitions, elements,
+penalty, illustrations, exceptions \}} --- is more honest than retrofitting
+a contract or regulation DSL. A penal section has its own grammar; the
+encoding should match it.
+
+\subsection{Singapore Penal Code 1871: a tractable testbed}
+\label{subsec:pc1871}
+\todo{One paragraph: 524 sections, English-language drafting, public via
+SSO, modest cross-reference density, illustration blocks ubiquitous,
+Anglo-Indian heritage shared with India, Pakistan, Malaysia, Brunei.}
+The Singapore Penal Code descends from Macaulay's 1860 Indian Penal Code
+draft and retains its idiom: short numbered sections, inline illustrations,
+penalty clauses with named combinators (``or both''), and Chapter IV
+\emph{General Exceptions} that operate as cross-cutting defences. This
+shape is what Yuho's grammar tracks.

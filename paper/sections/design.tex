@@ -1,0 +1,77 @@
+\section{Design}
+\label{sec:design}
+
+\subsection{Core grammar}
+\label{subsec:grammar}
+\todo{Lead with a single concrete example (s415, cheating) shown in full
+Yuho syntax, then unpack each block.}
+
+\begin{quote}
+\begin{small}
+\texttt{statute 415 "Cheating" \{ \\
+~~jurisdiction := SG; \\
+~~effective 1872-01-01; \\
+~~elements \{ \\
+~~~~deception : actus\_reus := "by deceiving any person"; \\
+~~~~induction  : actus\_reus := "fraudulently induces" causedBy deception; \\
+~~~~mens       : mens\_rea  := "intent to defraud"; \\
+~~\} \\
+~~penalty alternative \{ \\
+~~~~imprisonment := up\_to 3 years; \\
+~~~~fine := unlimited; \\
+~~~~or\_both; \\
+~~\} \\
+~~illustration "(a) ..."; \\
+~~exception "consent" guard "victim consents" priority 1; \\
+\}}
+\end{small}
+\end{quote}
+
+\subsection{Element decomposition}
+\label{subsec:elements}
+Every offence is a conjunction (or carefully-named disjunction) of typed
+elements. The element kinds --- \texttt{actus\_reus}, \texttt{mens\_rea},
+\texttt{circumstance}, \texttt{obligation}, \texttt{prohibition},
+\texttt{permission} --- are the type system. Burden qualifiers
+(\texttt{burden prosecution}, \texttt{burden defence}) and proof standards
+attach per-element. Causal links (\texttt{causedBy other\_element}) and
+temporal relations (\texttt{precedes}, \texttt{during}, \texttt{after})
+make element graphs traversable.
+
+\subsection{Penalty combinators}
+\label{subsec:penalty}
+\todo{Diagram: penalty AST tree for s302 (``death or imprisonment for life,
+and shall also be liable to fine'') showing nested combinator from G12.}
+Three top-level combinators (\texttt{cumulative}, \texttt{alternative},
+\texttt{or\_both}); a conditional branch combinator (\texttt{when <ident>});
+and a nested-combinator escape hatch added in gap \textsf{G12} for
+penalties of the form ``A and (B or C)''. Sentinels \texttt{fine := unlimited}
+(\textsf{G8}) and \texttt{caning := unspecified} (\textsf{G14}) cover
+statute-text-says-no-cap cases without forcing fabricated numeric ranges.
+
+\subsection{Exceptions as Catala-style defaults}
+\label{subsec:exceptions}
+\todo{Show the priority DAG; mention how it compiles to Z3 prioritised
+rewriting.}
+General exceptions (Chapter IV) and section-local provisos are encoded
+as priority-ordered \texttt{exception} blocks with an optional
+\texttt{defeats} edge to the elements they override. Compilation to Z3
+follows Catala's prioritised-rewriting semantics: lower-priority rules
+fire only when no higher-priority rule applies.
+
+\subsection{Subsections and amendment lineage}
+A statute can carry nested \texttt{subsection (N) \{ ... \}} blocks
+(gap \textsf{G5}) with their own elements, penalties, and exceptions.
+Multiple \texttt{effective <date>} clauses (gap \textsf{G6}) record the
+amendment history; a \texttt{repealed <date>} clause closes the section.
+
+\subsection{The fourteen grammar gaps}
+\label{subsec:gaps}
+\todo{Compact table summarising G1--G14, status (fixed / deferred / not-a-gap),
+and the artefact that resolved each. Source: \texttt{todo.md} Phase D table.}
+
+Mass-encoding the Penal Code surfaced fourteen distinct grammar shortcomings.
+We classify each as a real grammar limitation (10 items) or a not-a-gap
+that the diagnostic layer should catch (4 items). All ten real gaps
+were resolved in the grammar; the four diagnostic-layer items became
+fidelity linters (\S\ref{subsec:fidelity}).

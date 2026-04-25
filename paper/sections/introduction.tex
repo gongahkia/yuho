@@ -1,0 +1,58 @@
+\section{Introduction}
+\label{sec:intro}
+
+% Hook: legal text is already structured, but not executable.
+% Anchor in the Singapore Penal Code as a tractable, public, well-bounded artefact.
+\todo{Hook paragraph: statute as code-adjacent object. Cite Lessig 1999; Sergot
+1986 (\emph{The British Nationality Act as a Logic Program}); Hammond 1983.}
+
+\paragraph{Thesis.} Statutes are not free-form prose. They have a regular
+grammar imposed by drafting convention --- numbered sections, enumerated
+elements, illustration blocks, exceptions, and penalty clauses --- and that
+grammar is amenable to direct encoding. We argue that a sufficiently expressive
+domain-specific language can capture the entire structural surface of a modern
+penal code without falling back on free-text escape hatches, and that the
+resulting encodings carry their own verification and tooling for free.
+
+\paragraph{Contributions.}
+\begin{enumerate}
+\item \textbf{The Yuho grammar.} A statute-shaped syntax with first-class
+elements, penalty combinators (cumulative / alternative / or-both / conditional
+/ nested), prioritised exceptions in the style of Catala defaults, deontic
+element types (obligation / prohibition / permission), burden qualifiers
+(prosecution / defence with named proof standards), temporal and causal
+constraints between elements, illustration blocks, case-law anchors, and
+amendment lineage.
+\item \textbf{A complete, public encoding.} All \statRawSections{} sections of
+the Singapore Penal Code 1871 encoded; \statLOnePass{}/\statRawSections{} pass
+parse-and-build (L1+L2); \statLThreePass{} have been human-stamped at the
+strictest fidelity tier (L3) using a structured \mbox{11-point} review.
+\item \textbf{Tooling.} Six transpilers (JSON, controlled English, \LaTeX{},
+Mermaid, Alloy, DOCX), a tree-sitter parser, a pluggable Python AST, a
+Language Server with hover / inlay-hint / fidelity-diagnostic support, a
+Model Context Protocol server exposing the workflow as machine-callable tools,
+and an editor extension for VS Code.
+\item \textbf{Empirical findings.} A catalogue of fourteen grammar gaps
+(\textsf{G1}--\textsf{G14}) that mass-encoding surfaced. We document which were
+real grammar limitations versus encoding mistakes that diagnostics could catch,
+and which we resolved by extending the grammar versus by adding linters.
+\end{enumerate}
+
+\paragraph{Why criminal law and why Singapore?} The Singapore Penal Code 1871
+is a public, single-jurisdiction, modestly-sized ($\sim$524 sections) statute
+covering a self-contained problem domain. It uses Anglo-Indian drafting
+conventions (numbered sections, in-line illustrations, explanatory subsections)
+that map cleanly onto programming-language constructs. Unlike a regulatory
+corpus, it has limited cross-statute reference, which lets us focus on
+intra-statute primitives before tackling graph-level concerns.
+
+\paragraph{Roadmap.} \S\ref{sec:background} surveys prior legal-DSL work.
+\S\ref{sec:design} presents the Yuho grammar and its core primitives.
+\S\ref{sec:implementation} describes the toolchain end-to-end.
+\S\ref{sec:evaluation} reports empirical results from encoding all
+\statRawSections{} sections. \S\ref{sec:related} compares against Catala,
+lam4, LexScript, Akoma Ntoso, and LDOC. \S\ref{sec:limitations} discusses
+limits. \S\ref{sec:conclusion} concludes.
+
+\todo{If we end up writing this for ICAIL/JURIX, fold in a one-sentence
+positioning relative to LegalRuleML / Akoma Ntoso markup standards.}

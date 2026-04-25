@@ -1,0 +1,43 @@
+\section{Related Work}
+\label{sec:related}
+
+\todo{Comparison matrix as Table~\ref{tab:related}: rows = Yuho, Catala,
+lam4, LexScript, Akoma Ntoso, LDOC, LegalRuleML; columns = expressivity
+(deontic types, prioritised defaults, penalty combinators, illustration blocks),
+tooling (parser, LSP, MCP, transpilers), verification hookup (Z3, Alloy,
+none), and target coverage (single-statute / corpus / synthetic).}
+
+\subsection{Catala}
+Catala~\cite{catala2021} pioneered prioritised default rules for legal
+encoding. We adopt the priority semantics directly for our exception
+DAG (\S\ref{subsec:exceptions}) but disagree on top-level shape: Catala's
+top-level construct is a \emph{scope} (a callable function), whereas
+Yuho's top-level construct is a \emph{statute} block, which mirrors the
+drafting unit and carries fields (definitions, illustrations, case law)
+that a function-call shape does not naturally accommodate. Scope composition
+is on our roadmap but as an additional layer, not a replacement for the
+statute block.
+
+\subsection{lam4}
+lam4~\cite{lam4} centres on deontic logic and named-norm references. The
+\texttt{IS\_INFRINGED} predicate is the obvious target for our planned
+G10 inter-section semantic hookup. lam4 targets contracts and regulations;
+Yuho targets penal code. The two grammars are non-overlapping but
+philosophically aligned.
+
+\subsection{LexScript}
+LexScript~\cite{lexscript} is the closest tooling-shaped peer: tree-sitter
+grammar, statute-shaped top-level. We borrow its Tarjan-SCC reference-graph
+analysis (planned, blocked on G10). LexScript has a thinner element model
+(no burden / no causal links / no Catala-style exception priority).
+
+\subsection{Akoma Ntoso and LegalRuleML}
+\todo{Position as orthogonal: markup standards for archival exchange,
+not executable encodings. We can emit Akoma Ntoso XML as a future
+transpile target without competing with it.}
+
+\subsection{LDOC}
+LDOC's authoring-loop emphasis (Word + PDF) is the inspiration for our
+DOCX transpile target. Yuho diverges by not making Word the source of
+truth: the canonical encoding is the \texttt{.yh} file in version control;
+DOCX is one of six output formats.

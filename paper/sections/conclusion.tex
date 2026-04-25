@@ -1,0 +1,31 @@
+\section{Conclusion}
+\label{sec:conclusion}
+
+\todo{Tight three-paragraph close.}
+
+We presented Yuho, a statute-shaped DSL, and used it to encode the
+entire Singapore Penal Code 1871 ($\statRawSections{}$ sections,
+$\statLOnePass{}$ passing parse-and-build, $\statLThreePass{}$ stamped
+at the strictest fidelity tier). The exercise surfaced fourteen
+grammar gaps, all either resolved in the grammar or rerouted to the
+diagnostic layer, and produced a complete, queryable, machine-checkable
+encoding of a working penal code.
+
+The longer-term thesis is that statute-as-source-of-truth is a viable
+posture for legal infrastructure: the encoded artefact is what a
+lawyer, a tool, and a verifier all read; downstream rendering (English,
+\LaTeX{}, DOCX) is generated, not authored. We do not claim the
+\statRawSections{} encoded sections are publication-ready legal advice.
+We do claim that the gap between drafted statute and executable artefact
+is smaller than commonly assumed --- and that closing it is mostly an
+engineering exercise once the grammar is right.
+
+Future work has three concrete strands: (1) the G10 inter-section
+semantic hookup, which unlocks reference-graph reachability and named-norm
+references; (2) cross-jurisdiction generalisation, starting with the
+Indian Penal Code; and (3) deeper precedent integration, lifting
+holding strings into structured constraints over the element graph.
+
+\paragraph{Artefact availability.}
+The Yuho compiler, library, and tooling are available at
+\url{https://github.com/gongahkia/yuho}.

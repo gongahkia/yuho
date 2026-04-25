@@ -1,0 +1,46 @@
+\section{Evaluation}
+\label{sec:evaluation}
+
+\subsection{Coverage}
+\label{subsec:coverage_eval}
+We encoded all \statRawSections{} sections of the Singapore Penal Code 1871.
+\statLOnePass{}/\statRawSections{} ($100\%$) parse and build (L1+L2);
+\statLThreePass{}/\statRawSections{} ($\sim$23\%) carry an L3 human stamp.
+The unstamped long tail is dominated by short interpretation sections where
+the encoding is a faithful mirror and the bug surface is small;
+\S\ref{sec:limitations} discusses the cost-benefit of pushing L3 higher.
+
+\todo{Table: counts per chapter; mean/median sections per chapter; mean
+elements / illustrations / exceptions per encoded section.}
+
+\subsection{Grammar gaps in practice}
+\todo{Bar chart: number of sections that triggered each of \textsf{G1}--\textsf{G14}
+during mass-encoding. Source data: \texttt{doc/PHASE\_C\_GAPS.md}.}
+Of the fourteen gaps, three (\textsf{G6} multiple effective dates, \textsf{G8}
+\texttt{or\_both}, \textsf{G12} nested combinators) accounted for the
+majority of encoder retries. Two (\textsf{G2} colons in doc-comments,
+\textsf{G7} flat definitions) turned out not to be gaps after closer reading
+of the parser.
+
+\subsection{Fidelity diagnostic hit rate}
+\todo{Methodology: re-run diagnostics over the entire library. Report
+true-positive rate per check (G4 illustration count, fabricated fine cap,
+fabricated caning range, G11 disjunctive-connective). Spot-check a sample
+manually to estimate false-positive rate.}
+
+\subsection{Encoding throughput}
+\todo{Wall-clock per section (median, p95). Compare hand-encoding (early
+Phase C) against agent-driven re-encoding (Phase D, Codex CLI). Tradeoffs:
+agent throughput vs human stamp rate.}
+
+\subsection{Editor / tooling validation}
+\todo{Qualitative section. LSP hover correctness, inlay-hint usefulness,
+DOCX rendering screenshot in Word for Mac. MCP-driven encoding loop:
+demo of a fresh section encoded end-to-end via Claude Desktop calling
+the MCP server.}
+
+\subsection{Threats to validity}
+Single jurisdiction; single statute family (penal code); the L3 reviewer
+is the same author as the encoder, so signoff is partly self-marking.
+Cross-jurisdiction generalisation (e.g. the Indian Penal Code, which shares
+the same drafting heritage) is left to future work.

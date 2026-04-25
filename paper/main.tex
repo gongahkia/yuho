@@ -1,0 +1,73 @@
+% !TEX program = lualatex
+% Yuho — research paper. arXiv preprint, attributed.
+% Build with: make paper
+
+\documentclass[manuscript,nonacm,review=false,screen]{acmart}
+
+% --------------------------------------------------------------------
+% Metadata
+% --------------------------------------------------------------------
+\title{Yuho: A Domain-Specific Language for Encoding the Singapore Penal Code as Executable Statute}
+\subtitle{Grammar, Tooling, and a 524-Section Proof of Concept}
+
+\author{gongahkia}
+\affiliation{%
+  \institution{Independent}
+  \country{Singapore}
+}
+\email{angryapplegravy@gmail.com}
+
+% Auto-generated from coverage.json by `make stats` (see Makefile).
+% Hand-edit only if Makefile is unavailable; otherwise rerun `make stats`.
+\IfFileExists{stats.tex}{\input{stats}}{%
+  \newcommand{\statRawSections}{524}%
+  \newcommand{\statEncoded}{524}%
+  \newcommand{\statLOnePass}{524}%
+  \newcommand{\statLTwoPass}{524}%
+  \newcommand{\statLThreePass}{122}%
+}
+
+\begin{abstract}
+We present \emph{Yuho}, a domain-specific language for encoding statutes as
+executable, machine-checkable artefacts, and a corresponding proof-of-concept
+encoding of the Singapore Penal Code 1871 (\statRawSections{} sections,
+\statEncoded{} encoded, \statLOnePass{} passing parse-and-build, \statLThreePass{}
+human-stamped at the highest fidelity tier). The Yuho grammar models the
+structural primitives of criminal law: section headers and amendment lineage;
+elements partitioned into \emph{actus reus}, \emph{mens rea}, and circumstance
+with optional burden qualifiers; penalty combinators capturing cumulative,
+alternative, conditional, and nested punishment regimes; verbatim
+illustrations; Catala-style prioritised exceptions; and case-law anchors. A
+tree-sitter parser, a Python AST, six transpilers (JSON, controlled English,
+\LaTeX{}, Mermaid, Alloy, DOCX), a Language Server, a Model Context Protocol
+server, and a Z3/Alloy verification hookup turn an encoded statute into a
+queryable, diffable, formally-checkable object. We discuss fourteen grammar
+gaps surfaced by mass-encoding the Penal Code, the linting and fidelity-checking
+infrastructure built to keep encodings honest, and the engineering tradeoffs
+involved in modelling a single common-law jurisdiction in production-strength
+detail rather than a synthetic toy.
+\end{abstract}
+
+% Optional CCS / keywords block (kept minimal; expand on submission).
+\keywords{legal DSL, statute encoding, Singapore Penal Code, tree-sitter,
+language server, formal verification, Catala, Alloy, Z3}
+
+% --------------------------------------------------------------------
+% Document
+% --------------------------------------------------------------------
+\begin{document}
+\maketitle
+
+\input{sections/introduction}
+\input{sections/background}
+\input{sections/design}
+\input{sections/implementation}
+\input{sections/evaluation}
+\input{sections/related}
+\input{sections/limitations}
+\input{sections/conclusion}
+
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{references}
+
+\end{document}
