@@ -1,0 +1,43 @@
+{
+  "manifest_version": 3,
+  "name": "Yuho — Singapore Penal Code companion",
+  "short_name": "Yuho",
+  "version": "0.1.0",
+  "description": "Side-by-side Yuho enrichment for Singapore Statutes Online (sso.agc.gov.sg) Penal Code pages: per-section English transpilation, element / penalty breakdown, illustrations, exceptions, references, and SSO citations grounded in version-controlled .yh source.",
+  "author": "Gabriel Ong Zhe Mian",
+  "homepage_url": "https://github.com/gongahkia/yuho",
+  "icons": {
+    "16": "src/assets/icon-16.png",
+    "32": "src/assets/icon-32.png",
+    "48": "src/assets/icon-48.png",
+    "128": "src/assets/icon-128.png"
+  },
+  "action": {
+    "default_title": "Yuho",
+    "default_icon": {
+      "16": "src/assets/icon-16.png",
+      "32": "src/assets/icon-32.png",
+      "48": "src/assets/icon-48.png"
+    }
+  },
+  "permissions": ["storage"],
+  "host_permissions": ["https://sso.agc.gov.sg/*"],
+  "content_scripts": [
+    {
+      "matches": ["https://sso.agc.gov.sg/Act/PC1871*"],
+      "js": ["src/content/content.js"],
+      "css": ["src/content/panel.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "background": {
+    "service_worker": "src/background/service_worker.js",
+    "type": "module"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["data/*.json"],
+      "matches": ["https://sso.agc.gov.sg/*"]
+    }
+  ]
+}

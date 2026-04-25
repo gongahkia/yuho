@@ -1,0 +1,37 @@
+{
+  "name": "Yuho benchmark pack",
+  "version": "0.1.0",
+  "act_code": "PC1871",
+  "act": "Penal Code 1871",
+  "jurisdiction": "SG",
+  "generated_at": "2026-04-25T04:47:18Z",
+  "seed": 20260425,
+  "tasks": [
+    {
+      "name": "citation_grounding",
+      "file": "tasks/citation_grounding.jsonl",
+      "n_rows": 519
+    },
+    {
+      "name": "penalty_extraction",
+      "file": "tasks/penalty_extraction.jsonl",
+      "n_rows": 290
+    },
+    {
+      "name": "element_classification",
+      "file": "tasks/element_classification.jsonl",
+      "n_rows": 2165
+    },
+    {
+      "name": "cross_reference",
+      "file": "tasks/cross_reference.jsonl",
+      "n_rows": 91
+    },
+    {
+      "name": "illustration_recognition",
+      "file": "tasks/illustration_recognition.jsonl",
+      "n_rows": 254
+    }
+  ],
+  "disclaimer": "Research / educational artefact. Not legal advice. The benchmark draws from the publicly-available Singapore Penal Code 1871 as encoded in the Yuho library; cross-reference with the canonical SSO source for any decision that matters."
+}

@@ -83,6 +83,7 @@ Available commands inside the REPL:
 | `yuho export-training` | Export training-ready statute data |
 | `yuho generate-tests <file>` | Generate test cases from statute constraints |
 | `yuho playground` | Start the local playground server |
+| `yuho refs [section]` | Query the cross-section reference graph (G10): subsumes / amends / implicit edges |
 | `yuho schema` | Print the config or data schema |
 | `yuho static-site` | Build a static study site from Yuho sources |
 | `yuho verify-report` | Generate verification-focused reports |

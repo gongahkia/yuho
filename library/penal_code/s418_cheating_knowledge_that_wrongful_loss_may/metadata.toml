@@ -16,4 +16,6 @@ summary = "This section punishes cheating done with knowledge that it is likely 
 source = "Singapore Penal Code 1871, Section 418"
 
 [verification]
+last_verified = "2026-04-25"
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr418-#pr418-"
+verified_by = "gpt-5.4 high (automated L3 reviewer)"

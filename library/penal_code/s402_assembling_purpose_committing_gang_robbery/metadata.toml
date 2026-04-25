@@ -17,3 +17,5 @@ source = "Singapore Penal Code 1871, Section 402"
 
 [verification]
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr402-#pr402-"
+last_verified = "2026-04-25"
+verified_by = "gpt-5.4 high (automated L3 reviewer)"

@@ -1039,6 +1039,71 @@ def eval(ctx: click.Context, file: str, json_output: bool) -> None:
             click.echo(f"  Bindings: {len(env.bindings)}")
 
 
+@cli.command()
+@click.argument("section", required=False)
+@click.option("--library", "library_dir", type=click.Path(), default=None,
+              help="Library root (default: library/penal_code)")
+@click.option("--in", "in_only", is_flag=True, help="Only show edges entering the section")
+@click.option("--out", "out_only", is_flag=True, help="Only show edges leaving the section")
+@click.option("--kind", "kinds", multiple=True,
+              type=click.Choice(["subsumes", "amends", "implicit"]),
+              help="Filter to specific edge kinds (repeatable)")
+@click.option("--transitive", is_flag=True, help="Follow edges transitively (BFS closure)")
+@click.option("--graph", "show_graph", is_flag=True,
+              help="Print the full graph summary when no section is given")
+@click.option("--json", "json_output", is_flag=True, help="Emit JSON instead of human text")
+@click.pass_context
+def refs(
+    ctx: click.Context,
+    section: Optional[str],
+    library_dir: Optional[str],
+    in_only: bool,
+    out_only: bool,
+    kinds: tuple,
+    transitive: bool,
+    show_graph: bool,
+    json_output: bool,
+) -> None:
+    """Query the cross-section reference graph (G10).
+
+    With a section number, prints the edges entering and/or leaving that
+    section. Without a section, prints aggregate stats; pass --graph to dump
+    the full graph.
+
+    Examples:
+        yuho refs s415               # in + out for s415
+        yuho refs s415 --out --transitive
+        yuho refs s415 --kind subsumes
+        yuho refs                    # full-graph stats
+        yuho refs --graph            # full graph summary
+        yuho refs s415 --json
+    """
+    from yuho.cli.commands.refs import run_refs
+
+    if in_only and out_only:
+        direction = "both"
+    elif in_only:
+        direction = "in"
+    elif out_only:
+        direction = "out"
+    else:
+        direction = "both"
+
+    norm = section
+    if norm and norm.lower().startswith("s") and len(norm) > 1 and norm[1].isdigit():
+        norm = norm[1:]
+
+    run_refs(
+        section=norm,
+        library_dir=library_dir,
+        direction=direction,
+        kinds=kinds,
+        transitive=transitive,
+        json_output=json_output,
+        show_graph=show_graph,
+    )
+
+
 def main() -> None:
     """Main entry point with global error handling."""
     try:

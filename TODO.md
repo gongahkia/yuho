@@ -36,10 +36,10 @@ later practitioner-facing surface rather than the next keystone task.
 - [ ] **G10 cross-section resolver.** Keystone. Unblocks LSP goto-definition,
       Tarjan SCC, `IS_INFRINGED`, cross-reference explorer pages, and stronger
       paper claims about multi-section reasoning.
-- [ ] **Public Penal Code explorer v0.** Static product demo for researchers,
-      law students, and legal engineers: index of 524 sections, per-section
-      raw text, `.yh`, English transpilation, Mermaid diagram, L1/L2/L3 badge,
-      flags, and SSO deep-link. Cross-reference graph waits for G10.
+- [ ] **Penal Code explorer — split into three artefacts sharing one corpus.**
+    - [ ] **2a. Enriched JSON corpus.** Per-section: raw SSO text, `.yh`, controlled English, Mermaid SVG, metadata, badges, flags, SSO anchor. Single source of truth; both UIs read from this.
+    - [ ] **2b. Browser extension v0.** Headline product demo. Content script on `sso.agc.gov.sg/Act/PC1871*` that overlays a side-by-side Yuho panel and pop-up explanations on hover. Highest demo leverage.
+    - [ ] **2c. Static explorer site.** Citable URLs, downloadable bundles, search-indexable. Reuses the same JSON corpus. Lower priority — extension covers the headline demo; site is the research artefact tail.
 - [ ] **Yuho benchmark pack.** Generate reusable tasks from the encoded corpus:
       citation grounding, penalty extraction, offence-element classification,
       exception application, cross-reference lookup, and temporal-validity
@@ -214,9 +214,13 @@ can call `yuho transpile -t docx` directly.
 - [ ] Tree view panel: library browser sorted by section number with L1/L2/L3 badges.
 - [ ] Marketplace publish (stretch).
 
-## Remaining tooling gaps `[ ]`
+## Remaining tooling gaps `[~]`
 
-- [ ] **G10** semantic hookup for cross-section references. Resolver walks `referencing` / `subsumes` / `amends` edges so queries like "all sections that extend s415" become answerable. Unlocks LSP goto-def, Tarjan SCC, and named-norm references.
+- [x] **G10** semantic hookup for cross-section references. Done.
+    - `src/yuho/library/reference_graph.py` — `ReferenceGraph` data structure, `ReferenceEdge` typed edges (subsumes / amends / implicit), `build_reference_graph()` walks library and emits edges from explicit `subsumes`/`amends` clauses + implicit regex matches over element descriptions / doc comments / case-law holdings.
+    - `yuho refs` CLI — query subcommand with `--in` / `--out` / `--kind` / `--transitive` / `--graph` / `--json` flags.
+    - 19 tests in `tests/test_reference_graph.py`, all passing.
+    - Live graph over the SG Penal Code: 152 nodes, 130 edges (5 subsumes + 125 implicit). Top-referenced: s467, s2, s375, s378, s377BB.
 - [ ] Aggregate-all-errors compilation (LexScript pattern) — don't short-circuit on first parse error.
 
 ## Ideas borrowed from other legal DSLs `[ ]`
