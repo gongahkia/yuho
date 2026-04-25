@@ -462,9 +462,95 @@ class YuhoMCPServer:
         self.server = _FastMCPImpl("yuho-mcp")
         self.request_logger = MCPRequestLogger(verbosity)
         self.rate_limiter = RateLimiter(rate_limit_config or RateLimitConfig())
+
+        # ----------------------------------------------------------------
+        # In-process caches.
+        # ----------------------------------------------------------------
+        # 1. Reference graph (G10): expensive to build (~150ms for the
+        #    SG Penal Code), invariant across many tool calls. Cache the
+        #    built graph once per process lifetime.
+        self._reference_graph_cache = None
+        self._reference_graph_lock = threading.Lock()
+
+        # 2. Per-section corpus records: read once, hand out the same
+        #    dict to every consumer. Keyed by section number.
+        self._corpus_section_cache: Dict[str, Any] = {}
+        self._corpus_section_cache_lock = threading.Lock()
+
+        # 3. Generic TTL cache for tool results. Keyed by
+        #    (tool_name, frozen_args). Bounded by entry count.
+        self._tool_result_cache: Dict[tuple, tuple] = {}  # value: (expires_at, result)
+        self._tool_result_cache_lock = threading.Lock()
+        self._tool_result_cache_max = 256
+        self._tool_result_cache_ttl = 30.0  # seconds
+
         self._register_tools()
         self._register_resources()
         self._register_prompts()
+
+    def get_reference_graph(self):
+        """Return the cached G10 reference graph, building it on first call."""
+        from yuho.library.reference_graph import build_reference_graph
+        from pathlib import Path
+        with self._reference_graph_lock:
+            if self._reference_graph_cache is None:
+                penal = Path("library/penal_code")
+                if not penal.exists():
+                    return None
+                try:
+                    self._reference_graph_cache = build_reference_graph(penal)
+                except Exception:
+                    self._reference_graph_cache = None
+            return self._reference_graph_cache
+
+    def invalidate_reference_graph(self) -> None:
+        """Drop the cached reference graph (call after edits to library/)."""
+        with self._reference_graph_lock:
+            self._reference_graph_cache = None
+
+    def get_corpus_section(self, section: str) -> Optional[dict]:
+        """Return the cached `_corpus/sections/s{N}.json` record for a section."""
+        from pathlib import Path
+        with self._corpus_section_cache_lock:
+            if section in self._corpus_section_cache:
+                return self._corpus_section_cache[section]
+            path = Path("library/penal_code/_corpus/sections") / f"s{section}.json"
+            if not path.exists():
+                self._corpus_section_cache[section] = None
+                return None
+            try:
+                with path.open("r", encoding="utf-8") as f:
+                    record = json.load(f)
+                self._corpus_section_cache[section] = record
+                return record
+            except Exception:
+                self._corpus_section_cache[section] = None
+                return None
+
+    def cache_get(self, key: tuple) -> Optional[Any]:
+        """Look up a cached tool result. Returns None on miss or expired."""
+        with self._tool_result_cache_lock:
+            entry = self._tool_result_cache.get(key)
+            if entry is None:
+                return None
+            expires_at, value = entry
+            if time.monotonic() >= expires_at:
+                self._tool_result_cache.pop(key, None)
+                return None
+            return value
+
+    def cache_put(self, key: tuple, value: Any, ttl: Optional[float] = None) -> None:
+        """Store a tool result with TTL. Evicts oldest entries when full."""
+        ttl = ttl if ttl is not None else self._tool_result_cache_ttl
+        expires_at = time.monotonic() + ttl
+        with self._tool_result_cache_lock:
+            self._tool_result_cache[key] = (expires_at, value)
+            # Bounded eviction: drop the oldest entry if over capacity.
+            if len(self._tool_result_cache) > self._tool_result_cache_max:
+                # Pop the entry with the smallest expires_at (closest to expiry).
+                oldest_key = min(self._tool_result_cache,
+                                 key=lambda k: self._tool_result_cache[k][0])
+                self._tool_result_cache.pop(oldest_key, None)
 
     def set_verbosity(self, verbosity: LogVerbosity) -> None:
         """Set the logging verbosity level."""
@@ -2054,15 +2140,15 @@ statute {section} "{marginal}" effective 1872-01-01 {{
                 {section, direction, outgoing?, incoming?} — outgoing/incoming
                 are lists of edges or section numbers depending on `transitive`.
             """
-            try:
-                from yuho.library.reference_graph import build_reference_graph
-                from pathlib import Path
-            except ImportError as e:
-                return {"error": f"reference graph module unavailable: {e}"}
-
             section = section.lstrip("sS").strip()
             kinds = [kind] if kind else None
-            graph = build_reference_graph(Path("library/penal_code"))
+            cache_key = ("yuho_section_references", section, direction, kind, transitive)
+            cached = self.cache_get(cache_key)
+            if cached is not None:
+                return cached
+            graph = self.get_reference_graph()
+            if graph is None:
+                return {"error": "reference graph unavailable (library/penal_code missing?)"}
 
             result: Dict[str, Any] = {"section": section, "direction": direction}
             if direction in ("out", "both"):
@@ -2081,6 +2167,7 @@ statute {section} "{marginal}" effective 1872-01-01 {{
                         {"src": e.src, "kind": e.kind, "snippet": e.snippet}
                         for e in graph.incoming(section, kinds)
                     ]
+            self.cache_put(cache_key, result, ttl=120.0)
             return result
 
         # ----------------------------------------------------------------
@@ -2152,6 +2239,24 @@ statute {section} "{marginal}" effective 1872-01-01 {{
                 if str(scripts_path) not in sys.path:
                     sys.path.insert(0, str(scripts_path))
                 import verify_grounded as vg  # type: ignore
+
+                # Re-route the verifier's per-section loader through the
+                # server's cache so multiple claims citing the same section
+                # don't each re-read the section JSON from disk.
+                if hasattr(vg, "_load_section"):
+                    server_self = self
+                    original_load = vg._load_section
+
+                    def cached_load(section: str):
+                        rec = server_self.get_corpus_section(section)
+                        if rec is not None:
+                            return rec
+                        return original_load(section)
+                    vg._load_section = cached_load
+                    try:
+                        return vg.verify_answer(answer)
+                    finally:
+                        vg._load_section = original_load
                 return vg.verify_answer(answer)
             except Exception as e:
                 return {"error": f"verifier unavailable: {e}"}
