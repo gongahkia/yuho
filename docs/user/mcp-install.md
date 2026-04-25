@@ -126,6 +126,34 @@ Admin: `yuho_rate_limit_stats`.
 - `recommend_l3(section)` — quick STAMP/FLAG decision.
 - `encode_new_section(section)` — end-to-end encoding guide for an unencoded section.
 
+## Error envelope (v5.1+)
+
+Tools that fail return a structured envelope rather than ad-hoc dict
+shapes. Standard fields:
+
+```json
+{
+  "ok": false,
+  "error_code": "invalid_argument" | "not_found" | "rate_limited" |
+                "timeout" | "subprocess_failed" | "unavailable" |
+                "parse_error" | "internal_error",
+  "message": "<human-readable explanation>",
+  "retry": true | false,
+  "retry_after_seconds": <number or null>
+}
+```
+
+Tools may add extra fields beyond these for per-call context (e.g.
+`valid_types`, `expected_path`). Successful results are NOT wrapped —
+they retain whatever shape the tool documents. Clients should branch
+on the `ok` field: presence of `ok: false` indicates the envelope.
+
+The new research tools (`yuho_section_references`,
+`yuho_simulate_fact_pattern`, `yuho_verify_grounded`,
+`yuho_benchmark_task`) all use this shape. Older tools are migrating;
+expect legacy `{"error": "..."}` shapes from a few until they're
+swept.
+
 ## Typical client workflows
 
 ### Browse the library

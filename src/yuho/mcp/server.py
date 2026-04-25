@@ -434,6 +434,44 @@ except ImportError:
     _FastMCPImpl = _FallbackFastMCP
 
 
+def mcp_error(
+    code: str,
+    message: str,
+    *,
+    retry: bool = False,
+    retry_after_seconds: Optional[float] = None,
+    **extra: Any,
+) -> Dict[str, Any]:
+    """Construct the canonical error envelope for MCP tool returns.
+
+    Standard shape:
+
+        {
+          "ok": false,
+          "error_code": "<machine-readable identifier>",
+          "message": "<human-readable explanation>",
+          "retry": true | false,
+          "retry_after_seconds": <number or null>,
+          ...extra fields a specific tool wants to surface...
+        }
+
+    Use error_code values that map onto a small fixed vocabulary:
+    'parse_error', 'not_found', 'invalid_argument', 'rate_limited',
+    'timeout', 'subprocess_failed', 'unavailable', 'internal_error'.
+    Tools may extend the vocabulary but should keep codes stable across
+    versions for client error-handling.
+    """
+    payload: Dict[str, Any] = {
+        "ok": False,
+        "error_code": code,
+        "message": message,
+        "retry": retry,
+        "retry_after_seconds": retry_after_seconds,
+    }
+    payload.update(extra)
+    return payload
+
+
 class YuhoMCPServer:
     """
     MCP Server exposing Yuho functionality.
@@ -2199,7 +2237,11 @@ statute {section} "{marginal}" effective 1872-01-01 {{
                 return cached
             graph = self.get_reference_graph()
             if graph is None:
-                return {"error": "reference graph unavailable (library/penal_code missing?)"}
+                return mcp_error(
+                    "unavailable",
+                    "Reference graph could not be built (is library/penal_code present?)",
+                    section=section,
+                )
 
             result: Dict[str, Any] = {"section": section, "direction": direction}
             if direction in ("out", "both"):
@@ -2256,7 +2298,7 @@ statute {section} "{marginal}" effective 1872-01-01 {{
                 import simulator as sim_mod  # type: ignore
                 return sim_mod.evaluate(facts)
             except Exception as e:
-                return {"error": f"simulator unavailable: {e}"}
+                return mcp_error("unavailable", f"simulator could not be loaded: {e}")
 
         # ----------------------------------------------------------------
         # Grounded answer verifier
@@ -2310,7 +2352,7 @@ statute {section} "{marginal}" effective 1872-01-01 {{
                         vg._load_section = original_load
                 return vg.verify_answer(answer)
             except Exception as e:
-                return {"error": f"verifier unavailable: {e}"}
+                return mcp_error("unavailable", f"verifier could not be loaded: {e}")
 
         # ----------------------------------------------------------------
         # Benchmark task fetcher
@@ -2344,12 +2386,20 @@ statute {section} "{marginal}" effective 1872-01-01 {{
                 "cross_reference", "illustration_recognition",
             }
             if task_type not in valid_types:
-                return {"error": f"unknown task_type {task_type!r}",
-                        "valid_types": sorted(valid_types)}
+                return mcp_error(
+                    "invalid_argument",
+                    f"unknown task_type {task_type!r}",
+                    valid_types=sorted(valid_types),
+                )
 
             path = Path("benchmarks/tasks") / f"{task_type}.jsonl"
             if not path.exists():
-                return {"error": f"benchmark not built; run python3 benchmarks/build_benchmarks.py"}
+                return mcp_error(
+                    "not_found",
+                    "benchmark task file does not exist; run `python3 benchmarks/build_benchmarks.py`",
+                    task_type=task_type,
+                    expected_path=str(path),
+                )
 
             tasks = []
             n_total = 0

@@ -180,7 +180,10 @@ class TestVerifyGrounded:
 class TestBenchmark:
     def test_unknown_task_type(self, server):
         result = _call(server, "yuho_benchmark_task", {"task_type": "bogus", "n": 1})
-        assert "error" in result
+        # Standard error envelope: {ok: false, error_code: "invalid_argument", ...}
+        assert result.get("ok") is False
+        assert result.get("error_code") == "invalid_argument"
+        assert "valid_types" in result
 
     def test_known_task_type(self, server):
         # Skip if benchmarks aren't built.
