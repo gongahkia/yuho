@@ -14,6 +14,6 @@ statute 385 "Putting person in fear of harm in order to commit extortion" effect
 
     penalty cumulative {
         imprisonment := 2 years .. 5 years;
-        supplementary := "The offender shall be punished with caning.";
+        caning := unspecified;
     }
 }

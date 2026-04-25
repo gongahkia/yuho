@@ -12,7 +12,12 @@ statute 460 "House-breaking when death or grievous hurt caused" effective 1872-0
         all_of {
             actus_reus house_breaking := "Committing house-breaking";
             circumstance timing := "At the time of the committing of house-breaking";
-            actus_reus aggravated_violence := "Any person guilty of such offence voluntarily causes or attempts to cause death or grievous hurt to any person";
+            any_of {
+                actus_reus voluntarily_causes_death := "Any person guilty of such offence voluntarily causes death to any person";
+                actus_reus voluntarily_causes_grievous_hurt := "Any person guilty of such offence voluntarily causes grievous hurt to any person";
+                actus_reus voluntarily_attempts_to_cause_death := "Any person guilty of such offence voluntarily attempts to cause death to any person";
+                actus_reus voluntarily_attempts_to_cause_grievous_hurt := "Any person guilty of such offence voluntarily attempts to cause grievous hurt to any person";
+            }
             circumstance joint_participation := "The offender is every person jointly concerned in committing such house-breaking";
         }
     }

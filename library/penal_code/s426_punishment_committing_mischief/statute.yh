@@ -5,7 +5,7 @@
 
 referencing penal_code/s425_mischief
 
-statute 426 "Punishment for committing mischief" effective 1872-01-01 {
+statute 426 "Punishment for committing mischief" effective 1872-01-01 effective 2020-01-01 {
     /// Punishment for the offence of mischief under section 425.
     penalty or_both {
         imprisonment := 0 days .. 2 years;

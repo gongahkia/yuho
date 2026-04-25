@@ -20,6 +20,7 @@ statute 393 "Attempt to commit robbery" effective 1872-01-01 {
 
     penalty cumulative {
         imprisonment := 2 years .. 7 years;
+        caning := unspecified;
         supplementary := "The offender shall also be punished with caning with not less than 6 strokes.";
     }
 }

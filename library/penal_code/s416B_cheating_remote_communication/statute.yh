@@ -13,6 +13,11 @@ statute 416B "Cheating by remote communication" effective 1872-01-01 effective 2
     subsection (2) {
         definitions {
             remote_communication := "In this section, “remote communication” means communication through — [Act 21 of 2025 wef 30/12/2025]";
+            remote_communication_internet := "( a ) the Internet;";
+            remote_communication_telephone_or_other_device := "( b ) telephone or any other communication device;";
+            remote_communication_television_or_radio := "( c ) television or radio; or";
+            remote_communication_other_technology := "( d ) any other kind of electronic or other technology for facilitating communication,";
+            remote_communication_exclusion := "but excludes any specific system or method of communication that the Minister, by order in the Gazette , declares is not remote communication for the purposes of this section.";
         }
     }
 }

@@ -8,6 +8,6 @@ statute 447 "Punishment for criminal trespass" effective 1872-01-01 {
     /// Punishment for the offence of criminal trespass under section 441.
     penalty or_both {
         imprisonment := 0 days .. 3 months;
-        fine := $1,500.00;
+        fine := $0.00 .. $1,500.00;
     }
 }

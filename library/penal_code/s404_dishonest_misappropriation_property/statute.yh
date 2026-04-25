@@ -10,14 +10,10 @@ statute 404 "Dishonest misappropriation of property possessed by a deceased pers
             actus_reus misappropriation_or_conversion := "Misappropriates or converts to his own use property";
             mens_rea knowledge_of_deceased_possession := "Knowing that such property was in the possession of a deceased person at the time of that person’s decease";
             circumstance no_intervening_legal_possession := "The property has not since been in the possession of any person legally entitled to such possession";
-            any_of {
-                circumstance ordinary_case := "The offender is not shown to have been employed by the deceased as a clerk or servant at the time of that person’s decease";
-                circumstance clerk_or_servant_case := "The offender at the time of such person’s decease was employed by him as a clerk or servant";
-            }
         }
     }
 
-    penalty when ordinary_case {
+    penalty {
         imprisonment := 0 days .. 3 years;
         fine := unlimited;
     }

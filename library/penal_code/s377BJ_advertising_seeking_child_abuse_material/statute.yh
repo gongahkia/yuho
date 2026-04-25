@@ -26,16 +26,18 @@ statute 377BJ "Advertising or seeking child abuse material" effective 1872-01-01
 
     subsection (3) {
         penalty cumulative {
-
             imprisonment := 0 years .. 5 years;
-            supplementary := "A person who is guilty of an offence under subsection (1) or (2) shall on conviction be punished with imprisonment for a term which may extend to 5 years.";
+            supplementary := "A person who is guilty of an offence under subsection (1) or (2) shall on conviction be punished with imprisonment for a term which may extend to 5 years, and shall also be liable to fine or to caning.";
+        }
 
-            alternative {
-                fine := unlimited;
-        caning := unspecified;
-                supplementary := "The person shall also be liable to fine or to caning. [15/2019]";
-        
-            }
+        penalty when fine_liability {
+            fine := unlimited;
+            supplementary := "The offender shall also be liable to fine. [15/2019]";
+        }
+
+        penalty when caning_liability {
+            caning := unspecified;
+            supplementary := "The offender shall also be liable to caning. [15/2019]";
         }
     }
 

@@ -5,7 +5,6 @@
 statute 420A "Obtaining services dishonestly or fraudulently" effective 1872-01-01 effective 2020-01-01 {
     subsection (1) {
         elements {
-            /// The canonical source preserves subsection (1) as obtaining services plus the statutory payment conditions in paragraphs (a) and (b), but truncates paragraph (c) after its lead-in.
             all_of {
                 actus_reus obtaining_services := "A person obtains services for himself or another person";
 
@@ -16,6 +15,30 @@ statute 420A "Obtaining services dishonestly or fraudulently" effective 1872-01-
 
                 circumstance payment_basis := "The services are made available on the basis that payment has been, is being or will be made for or in respect of them";
                 circumstance unpaid_or_not_paid_in_full := "The person obtains the services without any payment having been made for or in respect of them or without payment having been made in full";
+            }
+        }
+
+        subsection (c) {
+            elements {
+                all_of {
+                    circumstance when_person_obtains_services := "when the person obtains the services —";
+                }
+            }
+
+            subsection (i) {
+                elements {
+                    all_of {
+                        circumstance knows_payment_basis_or_might_be := "the person knows that they are being made available on the basis mentioned in paragraph ( a ) or that they might be; and";
+                    }
+                }
+            }
+
+            subsection (ii) {
+                elements {
+                    all_of {
+                        mens_rea intends_non_payment_or_not_in_full := "the person intends that payment will not be made or will not be made in full.";
+                    }
+                }
             }
         }
     }

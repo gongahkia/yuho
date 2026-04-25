@@ -17,13 +17,17 @@ statute 400 "Punishment for belonging to gang-robbers" effective 1872-01-01 {
         }
     }
 
-    penalty alternative {
-        imprisonment := 0 days .. 10 years;
-        supplementary := "Whoever shall belong to a gang of persons associated for the purpose of habitually committing gang‑robbery, shall be punished with imprisonment for life, or with imprisonment for a term which may extend to 10 years.";
+    penalty alternative when life_imprisonment_sentence {
+        supplementary := "Whoever shall belong to a gang of persons associated for the purpose of habitually committing gang‑robbery, shall be punished with imprisonment for life,";
     }
 
-    penalty cumulative {
-        caning := 6 .. 24 strokes;
+    penalty cumulative when term_sentence {
+        imprisonment := 0 days .. 10 years;
+        supplementary := "or with imprisonment for a term which may extend to 10 years,";
+    }
+
+    penalty {
+        caning := unspecified;
         supplementary := "The offender shall also be punished with caning with not less than 6 strokes.";
     }
 }

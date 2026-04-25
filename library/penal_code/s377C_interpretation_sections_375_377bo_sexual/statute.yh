@@ -10,12 +10,28 @@ statute 377C "Interpretation of sections 375 to 377BO (sexual offences)" effecti
             application_subsection_1 := "In this section and in sections 375 to 377BO —";
             buttocks := "“buttocks”, in relation to a person, includes the anal region of the person; [Act 23 of 2021 wef 01/03/2022]";
             child_abuse_material := "“child abuse material” means material that depicts an image of any of the following:";
+            child_abuse_material_person_below_16 := "(a) a person who is, or who appears to a reasonable observer to be, or who is implied to be, below 16 years of age —";
+            child_abuse_material_person_below_16_torture_cruelty_or_physical_abuse := "(i) as a victim of torture, cruelty or physical abuse (whether or not the torture, cruelty or abuse is sexual);";
+            child_abuse_material_person_below_16_sexual_abuse := "(ii) as a victim of sexual abuse;";
+            child_abuse_material_person_below_16_sexual_pose_or_activity := "(iii) engaged in, or apparently engaging in, a sexual pose or sexual activity (whether or not in the presence of another person); or";
+            child_abuse_material_person_below_16_presence_with_other_person := "(iv) in the presence of another person who is engaged in, or apparently engaged in a sexual pose or sexual activity;";
+            child_abuse_material_genital_region_or_buttocks := "(b) the genital region or buttocks (whether exposed or covered) of a person who is, or who appears to a reasonable observer to be, or who is implied to be, a person below 16 years of age, where the depiction is sexual and in circumstances (whether or not apparent from the depiction) which reasonable persons would regard as being offensive;";
+            child_abuse_material_breasts_of_female_below_16 := "(c) the breasts (whether exposed or covered) of a person who is, or who appears to a reasonable observer to be, or who is implied to be, a female below 16 years of age, where the depiction is sexual and in circumstances (whether or not apparent from the depiction) which reasonable persons would regard as being offensive;";
             distribute := "“distribute” includes any of the following conduct, whether done in person, electronically, digitally or in any other way:";
+            distribute_send_publish_supply_show_exhibit_transmit_or_communicate := "(a) send, publish, supply, show, exhibit, transmit or communicate to another person;";
+            distribute_make_available_for_viewing_or_access := "(b) make available for viewing or access by another person;";
             image_general := "“image” means a still, moving, recorded or unrecorded image and includes an image produced by any means and, where the context requires, a three-dimensional image;";
             image_in_relation_to_person := "“image”, in relation to a person, means an image of a human being that is not fictional or imaginary but includes an image that so closely resembles that of a human being as to make it difficult for an ordinary person to distinguish it from an image of a human being that is not fictional or imaginary;";
             material := "“material” means —";
+            material_film_photograph_printed_matter_or_computer_game := "(a) any film, photograph, printed matter or computer game depicting an image;";
+            material_electronic_record := "(b) any electronic record depicting an image; or";
+            material_other_thing_depicting_image := "(c) any other thing of any kind depicting an image;";
             structure := "“structure” includes a tent, vehicle or vessel or other temporary or movable structure;";
             touching := "“touching” includes touching —";
+            touching_with_any_part_of_body := "(a) with any part of the body;";
+            touching_with_anything_else := "(b) with anything else; or";
+            touching_through_anything := "(c) through anything,";
+            touching_includes_penetration := "and includes penetration of the vagina or anus, as the case may be, with a part of the body or anything else and penetration of the mouth with the penis;";
             vagina := "“vagina” includes vulva. [15/2019] [Act 23 of 2021 wef 01/03/2022]";
         }
     }
@@ -29,6 +45,19 @@ statute 377C "Interpretation of sections 375 to 377BO (sexual offences)" effecti
     subsection (3) {
         definitions {
             application_subsection_3 := "In sections 375 to 377BO —";
+            penetration_continuing_act := "(a) penetration is a continuing act from entry to withdrawal;";
+            reference_to_part_of_body_includes_surgically_constructed_part := "(b) a reference to a part of the body includes a reference to a part which is surgically constructed (in particular, through a sex reassignment procedure);";
+            identifying_sex_of_person := "(c) for the purposes of identifying the sex of a person —";
+            identifying_sex_identity_card := "(i) the sex of a person as stated in that person’s identity card issued under the National Registration Act 1965 at the time the sexual activity took place is prima facie evidence of the sex of that person; and";
+            identifying_sex_reassignment := "(ii) a person who has undergone a sex reassignment procedure is identified as being of the sex to which that person has been reassigned;";
+            meaning_of_sexual := "(d) penetration, touching, communication or other activity is “sexual” if —";
+            sexual_because_of_nature := "(i) because of its nature it is sexual, whatever its circumstances or any person’s purpose in relation to it may be; or";
+            sexual_because_of_nature_and_circumstances_or_purpose := "(ii) because of its nature it may be sexual and because of its circumstances or the purpose of any person in relation to it (or both) it is sexual;";
+            references_to_observation := "(e) references to observation (however expressed) are to observation whether direct or by looking at an image;";
+            private_act_definition := "(f) a person is doing a private act if under circumstances in which the person has a reasonable expectation of privacy, the person —";
+            private_act_exposed_genital_region_buttocks_or_breasts := "(i) is in a state where the person’s genital region, buttocks or breasts (if the person is a female) are exposed or covered only in underwear;";
+            private_act_using_toilet_showering_or_bathing := "(ii) is using a toilet, showering or bathing; or";
+            private_act_sexual_act_not_ordinarily_done_in_public := "(iii) is doing a sexual act that is not of a kind ordinarily done in public.";
         }
 
         illustration illustration {

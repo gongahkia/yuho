@@ -19,12 +19,21 @@ statute 416A "Illegally obtained personal information" effective 1872-01-01 effe
     subsection (2) {
         definitions {
             carve_out_for_subsection_1a_lead_in := "It is not an offence under subsection (1)( a ) if the person obtained or retained the personal information for a purpose other than —";
+            paragraph_a := "( a ) for use in committing, or in facilitating the commission of, any offence under this Code or any other written law; or";
+            paragraph_b := "( b ) for supply, transmission or making available by any means for the personal information to be used in committing, or in facilitating the commission of, any offence under this Code or any other written law.";
         }
     }
 
     subsection (3) {
         definitions {
             carve_out_for_subsection_1b_lead_in := "It is not an offence under subsection (1)( b ) if —";
+        }
+
+        elements {
+            all_of {
+                circumstance paragraph_a := "The person did the act for a purpose other than for the personal information to be used in committing, or in facilitating the commission of, any offence under this Code or any other written law";
+                circumstance paragraph_b := "The person did not know or have reason to believe that the personal information will be or is likely to be used to commit, or facilitate the commission of, any offence under this Code or any other written law.";
+            }
         }
     }
 
@@ -51,6 +60,8 @@ statute 416A "Illegally obtained personal information" effective 1872-01-01 effe
     subsection (7) {
         definitions {
             definitions_lead_in := "In this section —";
+            paragraph_a := "( a ) personal information is any information, whether true or not, about an individual of a type that is commonly used alone or in combination with other information to identify or purport to identify an individual, including (but not limited to) biometric data, name, address, date of birth, national registration identity card number, passport number, a written, electronic or digital signature, user authentication code, credit card or debit card number, and password; and";
+            paragraph_b := "( b ) a reference to an offence under this Code includes an offence under subsection (1).";
         }
     }
 }

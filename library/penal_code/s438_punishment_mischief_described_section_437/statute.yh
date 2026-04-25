@@ -7,9 +7,13 @@ referencing penal_code/s437_mischief_intent_destroy_make_unsafe_decked
 
 statute 438 "Punishment for the mischief described in section 437 when committed by fire or any explosive substance" effective 1872-01-01 effective 2020-01-01 {
     /// Punishment for the predicate offence in section 437 where the offender commits or attempts to commit that mischief by fire or any explosive substance.
-    penalty alternative {
+    penalty alternative when life_imprisonment_sentence {
+        supplementary := "Whoever commits or attempts to commit by fire or any explosive substance, such mischief as is described in section 437, shall be punished with imprisonment for life. [15/2019]";
+    }
+
+    penalty cumulative when non_life_sentence {
         imprisonment := 0 days .. 10 years;
-        supplementary := "Whoever commits or attempts to commit by fire or any explosive substance, such mischief as is described in section 437, shall be punished with imprisonment for life, or with imprisonment for a term which may extend to 10 years. [15/2019]";
+        supplementary := "Whoever commits or attempts to commit by fire or any explosive substance, such mischief as is described in section 437, shall be punished with imprisonment for a term which may extend to 10 years. [15/2019]";
     }
 
     penalty when non_life_sentence {

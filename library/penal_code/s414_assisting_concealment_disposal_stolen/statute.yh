@@ -38,7 +38,7 @@ statute 414 "Assisting in concealment or disposal of stolen property" effective 
         }
 
         penalty cumulative {
-            supplementary := "A person convicted of an offence under this section may be disqualified for such period as the court may order from the date of his release from imprisonment from holding or obtaining a driving licence under the Road Traffic Act (Cap. 276).";
+            supplementary := "A person convicted of an offence under this section may be disqualified for such period as the court may order from the date of his release from imprisonment from holding or obtaining a driving licence under the Road Traffic Act 1961.";
         }
     }
 }

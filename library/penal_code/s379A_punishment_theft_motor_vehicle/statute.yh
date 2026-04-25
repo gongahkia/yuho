@@ -2,7 +2,7 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr379A-#pr379A-
 
-statute 379A "Punishment for theft of a motor vehicle" effective 1872-01-01 {
+statute 379A "Punishment for theft of a motor vehicle" effective 1872-01-01 effective 1984-08-31 effective 2008-02-01 {
     subsection (1) {
         /// This subsection punishes theft under section 378 where the property is a motor vehicle or a component part of a motor vehicle.
         penalty cumulative {
@@ -20,6 +20,10 @@ statute 379A "Punishment for theft of a motor vehicle" effective 1872-01-01 {
     }
 
     subsection (3) {
-        /// Canonical text in `_raw/act.json`: "In this section —"
+        definitions {
+            definitions_lead_in := "In this section —";
+            component_part := "“component part”, in relation to a motor vehicle, means any component part attached to the motor vehicle, and includes any tyre, accessory or equipment attached to the motor vehicle;";
+            motor_vehicle := "“motor vehicle” means a mechanically propelled vehicle intended or adapted for use on roads, and includes a trailer drawn by a motor vehicle.";
+        }
     }
 }

@@ -14,9 +14,13 @@ statute 449 "House-breaking in order to commit an offence punishable with death"
         }
     }
 
-    penalty alternative {
+    penalty alternative when life_imprisonment_sentence {
+        supplementary := "Whoever commits house-breaking in order to commit any offence punishable with death, shall be punished with imprisonment for life. [15/2019]";
+    }
+
+    penalty cumulative when non_life_sentence {
         imprisonment := 0 days .. 15 years;
-        supplementary := "Whoever commits house-breaking in order to commit any offence punishable with death, shall be punished with imprisonment for life, or with imprisonment for a term not exceeding 15 years. [15/2019]";
+        supplementary := "Whoever commits house-breaking in order to commit any offence punishable with death, shall be punished with imprisonment for a term not exceeding 15 years. [15/2019]";
     }
 
     penalty when non_life_sentence {

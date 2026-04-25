@@ -37,7 +37,22 @@ statute 377BK "Possession of or gaining access to child abuse material" effectiv
     }
 
     subsection (3) {
-        /// The canonical source in library/penal_code/_raw/act.json preserves only the opening words of subsection (3) plus one illustration.
+        definitions {
+            for_purposes_of_subsection_1 := "For the purposes of subsection (1) —";
+        }
+
+        subsection (a) {
+            definitions {
+                possession_of_electronic_child_abuse_material := "a person has in the person’s possession child abuse material that is electronic material if the person controls access to the material whether or not the person has physical possession of the electronic material; and";
+            }
+        }
+
+        subsection (b) {
+            definitions {
+                ways_of_gaining_access_to_material := "the ways in which a person gains access to material may include viewing material or displaying material by an electronic medium or any other output of the material by an electronic medium.";
+            }
+        }
+
         illustration illustration_a {
             "Y has an online storage account for electronic material accessible with a username and password. Y has control of what is stored in the account and can upload to, copy from or delete material from the account. Y has an electronic folder in the account to which Y uploads and stores electronic child abuse material. Y has in his possession child abuse material."
         }

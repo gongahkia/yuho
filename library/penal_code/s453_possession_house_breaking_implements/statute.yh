@@ -40,6 +40,10 @@ statute 453 "Possession of house-breaking implements or offensive weapons" effec
     subsection (3) {
         definitions {
             presumed_lawful_authority_lead_in := "An article or instrument is presumed to be carried with lawful authority if it is carried by —";
+            paragraph_a := "( a ) any member of the Singapore Armed Forces, the Singapore Police Force, the Singapore Civil Defence Force or any auxiliary police force created under any written law;";
+            paragraph_b := "( b ) a forensic specialist or law enforcement officer acting in the course of his duty as such in accordance with the Police Force Act 2004;";
+            paragraph_c := "( c ) any visiting force lawfully present in Singapore under the provisions of any law relating to visiting forces; or";
+            paragraph_d := "( d ) any person as part of his official or ceremonial dress on any official or ceremonial occasion.";
         }
     }
 }

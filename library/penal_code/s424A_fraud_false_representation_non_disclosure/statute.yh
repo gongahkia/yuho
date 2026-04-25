@@ -44,6 +44,7 @@ statute 424A "Fraud by false representation, non-disclosure or abuse of position
 
     subsection (5) {
         definitions {
+            scope_of_definitions := "For the purposes of this section and section 424B —";
             representation := "Representation means any representation as to fact or law, including a representation as to the state of mind of the person making the representation, or any other person. [15/2019]";
             false_representation := "A person makes a false representation if it is untrue or misleading, and that person knows that it is, or might be, untrue or misleading. [15/2019]";
             representation_may_be_express_or_implied := "A representation may be express or implied. [15/2019]";
