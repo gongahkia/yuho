@@ -1,6 +1,6 @@
 # Yuho — Singapore Penal Code provenance & fidelity ledger
 
-_Generated 2026-04-25T04:52:23Z._
+_Generated 2026-04-25T05:04:47Z._
 
 Per-section audit trail. For every encoded section the ledger records
 the canonical SSO anchor, a SHA-256 hash of the scraped text, the
@@ -9,7 +9,7 @@ coverage state, and any review flags. Use this file to cite a specific
 version of the encoded library; cross-reference with the canonical
 SSO source for any decision that matters.
 
-**Coverage**: 524 sections · L3 stamped: 351 · L3 flagged: 102 · unstamped: 71.
+**Coverage**: 524 sections · L3 stamped: 398 · L3 flagged: 126 · unstamped: 0.
 
 ---
 
@@ -398,104 +398,104 @@ SSO source for any decision that matters.
 | [s404](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr404-#pr404-) | Dishonest misappropriation of property possessed by a deceased person at the tim | ✓ | ✓ | flagged |  | `fbd7518762628eb0` |
 | [s405](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr405-#pr405-) | Criminal breach of trust | ✓ | ✓ | stamped | 2026-04-24 | `89aed9efe09a5db4` |
 | [s406](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr406-#pr406-) | Punishment for Criminal Breach of Trust | ✓ | ✓ | stamped | 2026-03-10 | `fb12e91afb7a7dbb` |
-| [s407](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr407-#pr407-) | Criminal breach of trust of property entrusted for purposes of transportation or | ✓ | ✓ | unstamped |  | `025b89b8da4ee3d3` |
-| [s408](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr408-#pr408-) | Criminal breach of trust by employees | ✓ | ✓ | unstamped |  | `30eb1ea272162194` |
+| [s407](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr407-#pr407-) | Criminal breach of trust of property entrusted for purposes of transportation or | ✓ | ✓ | flagged |  | `025b89b8da4ee3d3` |
+| [s408](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr408-#pr408-) | Criminal breach of trust by employees | ✓ | ✓ | stamped | 2026-04-25 | `30eb1ea272162194` |
 | [s409](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr409-#pr409-) | Criminal breach of trust by public servant, or by banker, merchant, agent, direc | ✓ | ✓ | stamped | 2026-04-25 | `0e309998c4b710cd` |
 | [s41](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr41-#pr41-) | Offence with specified term of imprisonment | ✓ | ✓ | stamped | 2026-04-25 | `d0722df19e0766b2` |
-| [s410](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr410-#pr410-) | Stolen property | ✓ | ✓ | unstamped |  | `a388c211fe627a29` |
+| [s410](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr410-#pr410-) | Stolen property | ✓ | ✓ | flagged |  | `a388c211fe627a29` |
 | [s411](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr411-#pr411-) | Dishonestly Receiving Stolen Property | ✓ | ✓ | stamped | 2026-03-10 | `426fcae0ba216258` |
 | [s412](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr412-#pr412-) | Receiving property stolen in the commission of a gang-robbery | ✓ | ✓ | stamped | 2026-04-24 | `12c82b7df5679250` |
-| [s413](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr413-#pr413-) | Habitually dealing in stolen property | ✓ | ✓ | unstamped |  | `a44264a5234f9d89` |
-| [s414](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr414-#pr414-) | Assisting in concealment or disposal of stolen property | ✓ | ✓ | unstamped |  | `2f11a98722574201` |
+| [s413](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr413-#pr413-) | Habitually dealing in stolen property | ✓ | ✓ | stamped | 2026-04-25 | `a44264a5234f9d89` |
+| [s414](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr414-#pr414-) | Assisting in concealment or disposal of stolen property | ✓ | ✓ | flagged |  | `2f11a98722574201` |
 | [s415](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr415-#pr415-) | Cheating | ✓ | ✓ | stamped | 2026-03-08 | `9f963c2996487714` |
-| [s416](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr416-#pr416-) | Cheating by personation | ✓ | ✓ | unstamped |  | `ea4158543657e36f` |
-| [s416A](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr416A-#pr416A-) | Illegally obtained personal information | ✓ | ✓ | unstamped |  | `f50402bd23130277` |
-| [s416B](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr416B-#pr416B-) | Cheating by remote communication | ✓ | ✓ | unstamped |  | `c5d094bd4be0ca73` |
-| [s417](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr417-#pr417-) | Punishment for cheating | ✓ | ✓ | unstamped |  | `4163ae7b71b7f087` |
-| [s418](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr418-#pr418-) | Cheating with knowledge that wrongful loss may be thereby caused to a person who | ✓ | ✓ | unstamped |  | `ddd083fd9cace338` |
-| [s419](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr419-#pr419-) | Punishment for cheating by personation | ✓ | ✓ | unstamped |  | `2f9b2d0e3e909ca3` |
+| [s416](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr416-#pr416-) | Cheating by personation | ✓ | ✓ | stamped | 2026-04-25 | `ea4158543657e36f` |
+| [s416A](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr416A-#pr416A-) | Illegally obtained personal information | ✓ | ✓ | flagged |  | `f50402bd23130277` |
+| [s416B](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr416B-#pr416B-) | Cheating by remote communication | ✓ | ✓ | flagged |  | `c5d094bd4be0ca73` |
+| [s417](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr417-#pr417-) | Punishment for cheating | ✓ | ✓ | stamped | 2026-04-25 | `4163ae7b71b7f087` |
+| [s418](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr418-#pr418-) | Cheating with knowledge that wrongful loss may be thereby caused to a person who | ✓ | ✓ | stamped | 2026-04-25 | `ddd083fd9cace338` |
+| [s419](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr419-#pr419-) | Punishment for cheating by personation | ✓ | ✓ | stamped | 2026-04-25 | `2f9b2d0e3e909ca3` |
 | [s42](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr42-#pr42-) | “Obscene” | ✓ | ✓ | stamped | 2026-04-25 | `5b3001370ec1f353` |
 | [s420](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr420-#pr420-) | Cheating and dishonestly inducing a delivery of property | ✓ | ✓ | stamped | 2026-04-24 | `042b6c706012058a` |
-| [s420A](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr420A-#pr420A-) | Obtaining services dishonestly or fraudulently | ✓ | ✓ | unstamped |  | `0d560bceaef5bfb1` |
-| [s421](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr421-#pr421-) | Dishonest or fraudulent removal or concealment of property to prevent distributi | ✓ | ✓ | unstamped |  | `f057c6452e487230` |
-| [s422](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr422-#pr422-) | Dishonestly or fraudulently preventing a debt or demand due to the offender from | ✓ | ✓ | unstamped |  | `627dfd9b22ecde58` |
-| [s423](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr423-#pr423-) | Dishonest or fraudulent execution of deed of transfer containing a false stateme | ✓ | ✓ | unstamped |  | `19cec6f9c979001d` |
-| [s424](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr424-#pr424-) | Dishonest or fraudulent removal or concealment of property or release of claim | ✓ | ✓ | unstamped |  | `89b77487809345c2` |
-| [s424A](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr424A-#pr424A-) | Fraud by false representation, non-disclosure or abuse of position not connected | ✓ | ✓ | unstamped |  | `7ab4f1f7ae25fe10` |
-| [s424B](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr424B-#pr424B-) | Fraud by false representation, non-disclosure or abuse of position | ✓ | ✓ | unstamped |  | `eaebb49b82cd5291` |
+| [s420A](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr420A-#pr420A-) | Obtaining services dishonestly or fraudulently | ✓ | ✓ | flagged |  | `0d560bceaef5bfb1` |
+| [s421](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr421-#pr421-) | Dishonest or fraudulent removal or concealment of property to prevent distributi | ✓ | ✓ | stamped | 2026-04-25 | `f057c6452e487230` |
+| [s422](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr422-#pr422-) | Dishonestly or fraudulently preventing a debt or demand due to the offender from | ✓ | ✓ | stamped | 2026-04-25 | `627dfd9b22ecde58` |
+| [s423](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr423-#pr423-) | Dishonest or fraudulent execution of deed of transfer containing a false stateme | ✓ | ✓ | stamped | 2026-04-25 | `19cec6f9c979001d` |
+| [s424](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr424-#pr424-) | Dishonest or fraudulent removal or concealment of property or release of claim | ✓ | ✓ | stamped | 2026-04-25 | `89b77487809345c2` |
+| [s424A](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr424A-#pr424A-) | Fraud by false representation, non-disclosure or abuse of position not connected | ✓ | ✓ | flagged |  | `7ab4f1f7ae25fe10` |
+| [s424B](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr424B-#pr424B-) | Fraud by false representation, non-disclosure or abuse of position | ✓ | ✓ | stamped | 2026-04-25 | `eaebb49b82cd5291` |
 | [s425](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr425-#pr425-) | Mischief | ✓ | ✓ | stamped | 2026-04-24 | `bbf25e49162ff1e6` |
-| [s426](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr426-#pr426-) | Punishment for committing mischief | ✓ | ✓ | unstamped |  | `c5f3cf820021c6b2` |
+| [s426](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr426-#pr426-) | Punishment for committing mischief | ✓ | ✓ | flagged |  | `c5f3cf820021c6b2` |
 | [s427](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr427-#pr427-) | Punishment for committing mischief causing disruption to key service, etc. | ✓ | ✓ | stamped | 2026-04-24 | `d99772e1906fa7ad` |
-| [s428](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr428-#pr428-) | Mischief by killing or maiming any animal | ✓ | ✓ | unstamped |  | `09661524db42b541` |
+| [s428](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr428-#pr428-) | Mischief by killing or maiming any animal | ✓ | ✓ | stamped | 2026-04-25 | `09661524db42b541` |
 | [s43](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr43-#pr43-) | “Illegal”, “unlawful” and “legally bound to do” | ✓ | ✓ | stamped | 2026-04-25 | `fa3fd6081e15c5ba` |
-| [s435](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr435-#pr435-) | Mischief by fire or explosive substance with intent to cause damage | ✓ | ✓ | unstamped |  | `2613ff1fcb679c27` |
-| [s436](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr436-#pr436-) | Mischief by fire or explosive substance with intent to destroy a house, etc. | ✓ | ✓ | unstamped |  | `495cc1baa2480bf5` |
-| [s437](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr437-#pr437-) | Mischief with intent to destroy or make unsafe a decked vessel or a vessel of 20 | ✓ | ✓ | unstamped |  | `1cbce01efed264b3` |
-| [s438](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr438-#pr438-) | Punishment for the mischief described in section 437 when committed by fire or a | ✓ | ✓ | unstamped |  | `9df34200c7d7d719` |
-| [s439](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr439-#pr439-) | Punishment for intentionally running vessel aground or ashore with intent to com | ✓ | ✓ | unstamped |  | `347954f56dce00d2` |
+| [s435](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr435-#pr435-) | Mischief by fire or explosive substance with intent to cause damage | ✓ | ✓ | stamped | 2026-04-25 | `2613ff1fcb679c27` |
+| [s436](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr436-#pr436-) | Mischief by fire or explosive substance with intent to destroy a house, etc. | ✓ | ✓ | stamped | 2026-04-25 | `495cc1baa2480bf5` |
+| [s437](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr437-#pr437-) | Mischief with intent to destroy or make unsafe a decked vessel or a vessel of 20 | ✓ | ✓ | stamped | 2026-04-25 | `1cbce01efed264b3` |
+| [s438](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr438-#pr438-) | Punishment for the mischief described in section 437 when committed by fire or a | ✓ | ✓ | flagged |  | `9df34200c7d7d719` |
+| [s439](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr439-#pr439-) | Punishment for intentionally running vessel aground or ashore with intent to com | ✓ | ✓ | stamped | 2026-04-25 | `347954f56dce00d2` |
 | [s44](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr44-#pr44-) | “Injury” | ✓ | ✓ | stamped | 2026-04-25 | `209e2c795e209a09` |
-| [s440](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr440-#pr440-) | Mischief committed after preparation made for causing death or hurt | ✓ | ✓ | unstamped |  | `877eb1e192d118fb` |
-| [s441](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr441-#pr441-) | Criminal trespass | ✓ | ✓ | unstamped |  | `aee5050c0257a583` |
-| [s442](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr442-#pr442-) | House-breaking | ✓ | ✓ | unstamped |  | `320458ebdd8d490a` |
-| [s447](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr447-#pr447-) | Punishment for criminal trespass | ✓ | ✓ | unstamped |  | `6debc8c7f257b930` |
-| [s448](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr448-#pr448-) | Punishment for house-breaking | ✓ | ✓ | unstamped |  | `8f45dc952beff5c8` |
-| [s449](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr449-#pr449-) | House-breaking in order to commit an offence punishable with death | ✓ | ✓ | unstamped |  | `433b753fb909bee6` |
+| [s440](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr440-#pr440-) | Mischief committed after preparation made for causing death or hurt | ✓ | ✓ | stamped | 2026-04-25 | `877eb1e192d118fb` |
+| [s441](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr441-#pr441-) | Criminal trespass | ✓ | ✓ | stamped | 2026-04-25 | `aee5050c0257a583` |
+| [s442](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr442-#pr442-) | House-breaking | ✓ | ✓ | flagged |  | `320458ebdd8d490a` |
+| [s447](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr447-#pr447-) | Punishment for criminal trespass | ✓ | ✓ | flagged |  | `6debc8c7f257b930` |
+| [s448](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr448-#pr448-) | Punishment for house-breaking | ✓ | ✓ | flagged |  | `8f45dc952beff5c8` |
+| [s449](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr449-#pr449-) | House-breaking in order to commit an offence punishable with death | ✓ | ✓ | flagged |  | `433b753fb909bee6` |
 | [s44A](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr44A-#pr44A-) | “Bodily injury” | ✓ | ✓ | stamped | 2026-04-25 | `06e45814ae300cfe` |
 | [s45](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr45-#pr45-) | Life | ✓ | ✓ | stamped | 2026-04-24 | `e7c9bafc16b1b04b` |
-| [s450](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr450-#pr450-) | House-breaking in order to commit an offence punishable with imprisonment for li | ✓ | ✓ | unstamped |  | `ab6fe54ec58e7331` |
-| [s451](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr451-#pr451-) | House-breaking in order to commit an offence punishable with imprisonment | ✓ | ✓ | unstamped |  | `a2cbd6478c9d6ee2` |
-| [s452](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr452-#pr452-) | House-breaking after preparation made for causing hurt, etc. | ✓ | ✓ | unstamped |  | `f866c7daa30c7f89` |
-| [s453](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr453-#pr453-) | Possession of house-breaking implements or offensive weapons | ✓ | ✓ | unstamped |  | `ce15f79d82c9a84d` |
-| [s458A](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr458A-#pr458A-) | Punishment for subsequent offence under section 449, 450, 451 or 452 | ✓ | ✓ | unstamped |  | `eda30bc914c0d6bc` |
-| [s459](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr459-#pr459-) | Grievous hurt caused while committing house-breaking | ✓ | ✓ | unstamped |  | `e98cfff5490b9243` |
+| [s450](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr450-#pr450-) | House-breaking in order to commit an offence punishable with imprisonment for li | ✓ | ✓ | flagged |  | `ab6fe54ec58e7331` |
+| [s451](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr451-#pr451-) | House-breaking in order to commit an offence punishable with imprisonment | ✓ | ✓ | stamped | 2026-04-25 | `a2cbd6478c9d6ee2` |
+| [s452](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr452-#pr452-) | House-breaking after preparation made for causing hurt, etc. | ✓ | ✓ | stamped | 2026-04-25 | `f866c7daa30c7f89` |
+| [s453](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr453-#pr453-) | Possession of house-breaking implements or offensive weapons | ✓ | ✓ | flagged |  | `ce15f79d82c9a84d` |
+| [s458A](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr458A-#pr458A-) | Punishment for subsequent offence under section 449, 450, 451 or 452 | ✓ | ✓ | stamped | 2026-04-25 | `eda30bc914c0d6bc` |
+| [s459](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr459-#pr459-) | Grievous hurt caused while committing house-breaking | ✓ | ✓ | stamped | 2026-04-25 | `e98cfff5490b9243` |
 | [s46](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr46-#pr46-) | Death | ✓ | ✓ | stamped | 2026-04-24 | `0dd0be480cfa2af2` |
-| [s460](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr460-#pr460-) | House-breaking when death or grievous hurt caused | ✓ | ✓ | unstamped |  | `3fe9d11e2e19f960` |
-| [s461](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr461-#pr461-) | Dishonestly breaking open any closed receptacle containing or supposed to contai | ✓ | ✓ | unstamped |  | `9645abf160ab5241` |
-| [s462](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr462-#pr462-) | Punishment for same offence when committed by person entrusted with custody | ✓ | ✓ | unstamped |  | `ea2fb06899577e97` |
+| [s460](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr460-#pr460-) | House-breaking when death or grievous hurt caused | ✓ | ✓ | flagged |  | `3fe9d11e2e19f960` |
+| [s461](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr461-#pr461-) | Dishonestly breaking open any closed receptacle containing or supposed to contai | ✓ | ✓ | stamped | 2026-04-25 | `9645abf160ab5241` |
+| [s462](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr462-#pr462-) | Punishment for same offence when committed by person entrusted with custody | ✓ | ✓ | stamped | 2026-04-25 | `ea2fb06899577e97` |
 | [s463](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr463-#pr463-) | Forgery | ✓ | ✓ | stamped | 2026-03-08 | `e4b6353d98f5816f` |
 | [s464](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr464-#pr464-) | Making a false document or false electronic record | ✓ | ✓ | stamped | 2026-04-24 | `fc0c1892bf037c51` |
 | [s465](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr465-#pr465-) | Punishment for Forgery | ✓ | ✓ | stamped | 2026-03-10 | `d5da4b8dc78a28dd` |
-| [s466](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr466-#pr466-) | Forgery of a record of a court of justice, or a public register of births, etc. | ✓ | ✓ | unstamped |  | `790abfbcb44cd523` |
-| [s467](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr467-#pr467-) | Forgery of a valuable security or will | ✓ | ✓ | unstamped |  | `f096d618799c3d97` |
-| [s468](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr468-#pr468-) | Forgery for the purpose of cheating | ✓ | ✓ | unstamped |  | `a9f2206f7b3003ec` |
-| [s469](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr469-#pr469-) | Forgery for the purpose of harming the reputation of any person | ✓ | ✓ | unstamped |  | `473bd84bc886f686` |
+| [s466](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr466-#pr466-) | Forgery of a record of a court of justice, or a public register of births, etc. | ✓ | ✓ | stamped | 2026-04-25 | `790abfbcb44cd523` |
+| [s467](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr467-#pr467-) | Forgery of a valuable security or will | ✓ | ✓ | stamped | 2026-04-25 | `f096d618799c3d97` |
+| [s468](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr468-#pr468-) | Forgery for the purpose of cheating | ✓ | ✓ | flagged |  | `a9f2206f7b3003ec` |
+| [s469](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr469-#pr469-) | Forgery for the purpose of harming the reputation of any person | ✓ | ✓ | stamped | 2026-04-25 | `473bd84bc886f686` |
 | [s47](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr47-#pr47-) | Animal | ✓ | ✓ | stamped | 2026-04-24 | `0e38e1dfe4e11fda` |
-| [s470](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr470-#pr470-) | “A forged document” or “a forged electronic record” | ✓ | ✓ | unstamped |  | `4e6b056fab2818e7` |
-| [s471](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr471-#pr471-) | Using as genuine a forged document or forged electronic record | ✓ | ✓ | unstamped |  | `001d360bbaa9f8e6` |
-| [s472](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr472-#pr472-) | Making or possessing a counterfeit seal, plate, etc., with intent to commit a fo | ✓ | ✓ | unstamped |  | `bbe96af58ba0bca0` |
-| [s473](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr473-#pr473-) | Making or possessing a counterfeit seal, plate, etc., with intent to commit a fo | ✓ | ✓ | unstamped |  | `081814e170c4093c` |
-| [s473A](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr473A-#pr473A-) | Making or possessing equipment for making a false instrument | ✓ | ✓ | unstamped |  | `8c3325ea1f2d4636` |
-| [s473B](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr473B-#pr473B-) | Making or possessing equipment for making a false instrument with intent to indu | ✓ | ✓ | unstamped |  | `f5acb880380075ae` |
-| [s473C](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr473C-#pr473C-) | Meaning of “prejudice” and “induce” | ✓ | ✓ | unstamped |  | `2fd7a20086952f50` |
-| [s474](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr474-#pr474-) | Having possession of certain document or electronic record known to be forged, w | ✓ | ✓ | unstamped |  | `78a3a245fd25125c` |
-| [s475](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr475-#pr475-) | Counterfeiting a device or mark used for authenticating documents described in s | ✓ | ✓ | unstamped |  | `d37abd035b9c731b` |
-| [s476](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr476-#pr476-) | Counterfeiting a device or mark used for authenticating documents or electronic  | ✓ | ✓ | unstamped |  | `9507752201026626` |
-| [s477](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr477-#pr477-) | Fraudulent cancellation, destruction, etc., of a will | ✓ | ✓ | unstamped |  | `c762252882c2fa42` |
-| [s477A](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr477A-#pr477A-) | Falsification of accounts | ✓ | ✓ | unstamped |  | `9a121c6243b051c5` |
+| [s470](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr470-#pr470-) | “A forged document” or “a forged electronic record” | ✓ | ✓ | stamped | 2026-04-25 | `4e6b056fab2818e7` |
+| [s471](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr471-#pr471-) | Using as genuine a forged document or forged electronic record | ✓ | ✓ | stamped | 2026-04-25 | `001d360bbaa9f8e6` |
+| [s472](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr472-#pr472-) | Making or possessing a counterfeit seal, plate, etc., with intent to commit a fo | ✓ | ✓ | stamped | 2026-04-25 | `bbe96af58ba0bca0` |
+| [s473](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr473-#pr473-) | Making or possessing a counterfeit seal, plate, etc., with intent to commit a fo | ✓ | ✓ | stamped | 2026-04-25 | `081814e170c4093c` |
+| [s473A](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr473A-#pr473A-) | Making or possessing equipment for making a false instrument | ✓ | ✓ | flagged |  | `8c3325ea1f2d4636` |
+| [s473B](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr473B-#pr473B-) | Making or possessing equipment for making a false instrument with intent to indu | ✓ | ✓ | flagged |  | `f5acb880380075ae` |
+| [s473C](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr473C-#pr473C-) | Meaning of “prejudice” and “induce” | ✓ | ✓ | flagged |  | `2fd7a20086952f50` |
+| [s474](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr474-#pr474-) | Having possession of certain document or electronic record known to be forged, w | ✓ | ✓ | stamped | 2026-04-25 | `78a3a245fd25125c` |
+| [s475](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr475-#pr475-) | Counterfeiting a device or mark used for authenticating documents described in s | ✓ | ✓ | stamped | 2026-04-25 | `d37abd035b9c731b` |
+| [s476](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr476-#pr476-) | Counterfeiting a device or mark used for authenticating documents or electronic  | ✓ | ✓ | flagged |  | `9507752201026626` |
+| [s477](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr477-#pr477-) | Fraudulent cancellation, destruction, etc., of a will | ✓ | ✓ | stamped | 2026-04-25 | `c762252882c2fa42` |
+| [s477A](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr477A-#pr477A-) | Falsification of accounts | ✓ | ✓ | flagged |  | `9a121c6243b051c5` |
 | [s48](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr48-#pr48-) | Vessel | ✓ | ✓ | stamped | 2026-04-24 | `c71c04e8c1fd6fea` |
-| [s489A](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr489A-#pr489A-) | Forging or counterfeiting currency or bank notes | ✓ | ✓ | unstamped |  | `2c468c9bb0e1c8e9` |
-| [s489B](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr489B-#pr489B-) | Using as genuine forged or counterfeit currency or bank notes | ✓ | ✓ | unstamped |  | `ef608679b4f79aa9` |
-| [s489C](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr489C-#pr489C-) | Possession of forged or counterfeit currency or bank notes | ✓ | ✓ | unstamped |  | `42a214a69307ea18` |
-| [s489D](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr489D-#pr489D-) | Making or possessing instruments or materials for forging or counterfeiting curr | ✓ | ✓ | unstamped |  | `4718fa8520fad424` |
-| [s489E](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr489E-#pr489E-) | Abetting in Singapore counterfeiting of currency out of Singapore | ✓ | ✓ | unstamped |  | `1a1651a8456f62be` |
-| [s489F](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr489F-#pr489F-) | Fraudulently or dishonestly diminishing weight or altering composition of any co | ✓ | ✓ | unstamped |  | `27e7742fa39596b5` |
-| [s489G](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr489G-#pr489G-) | Altering appearance of currency with intent that it shall pass as currency of di | ✓ | ✓ | unstamped |  | `3436cf40af1ed837` |
-| [s489H](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr489H-#pr489H-) | Delivery to another of altered currency | ✓ | ✓ | unstamped |  | `d8030ac4e70d07b0` |
-| [s489I](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr489I-#pr489I-) | Possession of altered currency | ✓ | ✓ | unstamped |  | `d37c49d0773b97b1` |
+| [s489A](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr489A-#pr489A-) | Forging or counterfeiting currency or bank notes | ✓ | ✓ | flagged |  | `2c468c9bb0e1c8e9` |
+| [s489B](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr489B-#pr489B-) | Using as genuine forged or counterfeit currency or bank notes | ✓ | ✓ | flagged |  | `ef608679b4f79aa9` |
+| [s489C](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr489C-#pr489C-) | Possession of forged or counterfeit currency or bank notes | ✓ | ✓ | stamped | 2026-04-25 | `42a214a69307ea18` |
+| [s489D](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr489D-#pr489D-) | Making or possessing instruments or materials for forging or counterfeiting curr | ✓ | ✓ | stamped | 2026-04-25 | `4718fa8520fad424` |
+| [s489E](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr489E-#pr489E-) | Abetting in Singapore counterfeiting of currency out of Singapore | ✓ | ✓ | stamped | 2026-04-25 | `1a1651a8456f62be` |
+| [s489F](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr489F-#pr489F-) | Fraudulently or dishonestly diminishing weight or altering composition of any co | ✓ | ✓ | stamped | 2026-04-25 | `27e7742fa39596b5` |
+| [s489G](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr489G-#pr489G-) | Altering appearance of currency with intent that it shall pass as currency of di | ✓ | ✓ | stamped | 2026-04-25 | `3436cf40af1ed837` |
+| [s489H](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr489H-#pr489H-) | Delivery to another of altered currency | ✓ | ✓ | stamped | 2026-04-25 | `d8030ac4e70d07b0` |
+| [s489I](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr489I-#pr489I-) | Possession of altered currency | ✓ | ✓ | stamped | 2026-04-25 | `d37c49d0773b97b1` |
 | [s49](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr49-#pr49-) | “Year” and “month” | ✓ | ✓ | stamped | 2026-04-25 | `3f0295bab9c359c0` |
 | [s499](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr499-#pr499-) | Defamation | ✓ | ✓ | stamped | 2026-03-08 | `0bc3b9ea138ee2d6` |
 | [s4A](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr4A-#pr4A-) | Offences against State and genocide committed outside Singapore by citizen or pe | ✓ | ✓ | stamped | 2026-04-25 | `986cff9260095368` |
 | [s4B](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr4B-#pr4B-) | Punishment of specified offences with elements occurring in Singapore but others | ✓ | ✓ | stamped | 2026-04-24 | `361366f0b01bc34e` |
 | [s5](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr5-#pr5-) | Certain laws not to be affected by this Code | ✓ | ✓ | stamped | 2026-04-24 | `cfca8a038092cd14` |
 | [s50](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr50-#pr50-) | Section | ✓ | ✓ | stamped | 2026-04-24 | `dc6c5f782069a545` |
-| [s500](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr500-#pr500-) | Punishment for defamation | ✓ | ✓ | unstamped |  | `9de8d96e92095abd` |
-| [s501](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr501-#pr501-) | Printing or engraving matter known to be defamatory | ✓ | ✓ | unstamped |  | `5d2f8d90b3608ddf` |
-| [s502](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr502-#pr502-) | Sale of printed or engraved substance containing defamatory matter | ✓ | ✓ | unstamped |  | `b903dd6208095171` |
+| [s500](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr500-#pr500-) | Punishment for defamation | ✓ | ✓ | stamped | 2026-04-25 | `9de8d96e92095abd` |
+| [s501](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr501-#pr501-) | Printing or engraving matter known to be defamatory | ✓ | ✓ | stamped | 2026-04-25 | `5d2f8d90b3608ddf` |
+| [s502](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr502-#pr502-) | Sale of printed or engraved substance containing defamatory matter | ✓ | ✓ | stamped | 2026-04-25 | `b903dd6208095171` |
 | [s503](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr503-#pr503-) | Criminal Breach of Trust | ✓ | ✓ | stamped | 2026-03-08 | `a3b6187acc71594d` |
-| [s504](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr504-#pr504-) | Intentional insult with intent to provoke a breach of the peace | ✓ | ✓ | unstamped |  | `aa456fd1c8ebe505` |
+| [s504](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr504-#pr504-) | Intentional insult with intent to provoke a breach of the peace | ✓ | ✓ | stamped | 2026-04-25 | `aa456fd1c8ebe505` |
 | [s505](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr505-#pr505-) | Statements conducing to public mischief | ✓ | ✓ | stamped | 2026-04-24 | `7b7020239086b964` |
-| [s506](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr506-#pr506-) | Punishment for criminal intimidation | ✓ | ✓ | unstamped |  | `aac7d26fad18f135` |
-| [s507](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr507-#pr507-) | Criminal intimidation by an anonymous communication | ✓ | ✓ | unstamped |  | `b7705bbdd6c272e0` |
+| [s506](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr506-#pr506-) | Punishment for criminal intimidation | ✓ | ✓ | stamped | 2026-04-25 | `aac7d26fad18f135` |
+| [s507](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr507-#pr507-) | Criminal intimidation by an anonymous communication | ✓ | ✓ | stamped | 2026-04-25 | `b7705bbdd6c272e0` |
 | [s51](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr51-#pr51-) | “Oath” | ✓ | ✓ | stamped | 2026-04-25 | `45180c243bf4d21f` |
 | [s511](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr511-#pr511-) | Attempt to commit offence | ✓ | ✓ | stamped | 2026-04-24 | `ec9ef47f34e5fee6` |
 | [s512](https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr512-#pr512-) | Punishment for attempting to commit offences | ✓ | ✓ | stamped | 2026-04-25 | `b4af7d8d4791de4e` |
@@ -542,7 +542,7 @@ SSO source for any decision that matters.
 
 ---
 
-## L3 flags (102)
+## L3 flags (126)
 
 ### s105 — When right of private defence of property extends to causing death
 - reason: The encoding drops canonical limbs `(b)(i)`, `(b)(ii)`, and `(2)(a)` to `(2)(f)`, collapsing subsection `(2)` into a definition string and failing to preserve the statute's disjunctive structure.
@@ -980,6 +980,122 @@ SSO source for any decision that matters.
 - failed check: 8
 - reason: The encoding introduces an `any_of` split between an invented `ordinary_case` and `clerk_or_servant_case`, but the canonical text states one offence with a higher imprisonment ceiling if the offender was the deceased's clerk or servant.
 - suggested fix: Remove the fabricated offence-level disjunction and model the clerk-or-servant status only as the predicate for the enhanced penalty branch.
+
+### s407 — Criminal breach of trust of property entrusted for purposes of transportation or storage
+- failed check: 7
+- reason: The penalty block makes the fine optional by nesting it under `alternative {}` even though the canonical text requires imprisonment and fine cumulatively ("and shall also be liable to fine").
+- suggested fix: Encode the fine as a direct cumulative penalty alongside the imprisonment term, without an `alternative {}` wrapper.
+
+### s410 — Stolen property
+- failed check: 9
+- reason: The section is tagged `[15/2019]` but the encoding uses `effective 2019-12-31`, while repo-local L3 precedent for Act 15 of 2019 commencement is `2020-01-01`, so the effective-date encoding is not sane enough to stamp.
+- suggested fix: Replace the later effective date with `2020-01-01` if that is the intended commencement date for this provision.
+
+### s414 — Assisting in concealment or disposal of stolen property
+- reason: The encoding uses an unsound `[15/2019]` effective date (`2019-12-31` instead of repo-local `2020-01-01`) and alters subsection (2)(b) by substituting `Road Traffic Act (Cap. 276)` for the canonical `Road Traffic Act 1961`.
+- suggested fix: Update the amendment effective date to the verified commencement date and restore subsection (2)(b) to the canonical Road Traffic Act wording before rerunning L3 review.
+
+### s416A — Illegally obtained personal information
+- reason: Subsections (2), (3), and (7) drop the canonical paragraph content and subsection (3)'s conjunctive structure, and the section uses `effective 2019-12-31` for `[15/2019]` despite repo-local L3 precedent treating Act 15 of 2019 commencement as `2020-01-01`.
+- suggested fix: Restore the missing `(2)(a)` to `(2)(b)`, `(3)(a)` to `(3)(b)`, and `(7)(a)` to `(7)(b)` content with the correct logical structure, then correct the amendment effective date.
+
+### s416B — Cheating by remote communication
+- failed check: 6
+- reason: The encoding does not faithfully preserve subsection (2), omitting paragraphs (a) to (d) and the exclusion clause after "means communication through —".
+- suggested fix: Re-encode subsection (2) with all paragraph items and the full exclusion text from the canonical statute.
+
+### s420A — Obtaining services dishonestly or fraudulently
+- failed check: 6
+- reason: The canonical entry includes subsection (1)(c) plus sub-items (c)(i) and (c)(ii), but the encoding omits them and therefore does not fully preserve subsection structure/content.
+- suggested fix: Re-encode paragraph (c) and its two sub-items as part of subsection (1) without changing the canonical wording.
+
+### s424A — Fraud by false representation, non-disclosure or abuse of position not connected with contracts for goods or services
+- failed check: 6
+- reason: Subsection (5) is not fully preserved because the encoding omits the chapeau that its definitions apply "for the purposes of this section and section 424B", which drops a substantive cross-section scope statement.
+- suggested fix: Preserve subsection (5)'s introductory scope text explicitly in the encoding so the definitions are not represented as applying only within section 424A.
+
+### s426 — Punishment for committing mischief
+- failed check: 9
+- reason: The section is marked `[15/2019]` but the encoding uses only `effective 1872-01-01`, so the effective-date encoding is not sane enough to stamp.
+- suggested fix: Add the verified post-2019 commencement date for the Act 15 of 2019 amendment as an additional `effective` clause, then rerun L3 review.
+
+### s438 — Punishment for the mischief described in section 437 when committed by fire or any explosive substance
+- failed check: 7
+- reason: The encoding leaves the statute’s imprisonment-for-life alternative only in supplementary prose instead of preserving it as a structured penalty branch, so the punishment is not faithfully captured.
+- suggested fix: Encode imprisonment for life as an explicit structured alternative alongside the up-to-10-years branch, while retaining the conditional unlimited fine for non-life sentences.
+
+### s442 — House-breaking
+- failed check: 9
+- reason: The section is marked `[15/2019]` but the encoding only has `effective 1872-01-01`, so the later amendment effective date is missing and the effective-date encoding is not sane enough to stamp.
+- suggested fix: Add the applicable later effective date for the 2019 amendment to the statute header, consistent with the canonical amendment history and nearby amended sections.
+
+### s447 — Punishment for criminal trespass
+- failed check: 7
+- reason: The canonical text makes the fine discretionary up to $1,500, but the encoding fixes it at exactly `$1,500.00`, which fabricates the penalty ceiling into a mandatory amount.
+- suggested fix: Change the fine encoding to a capped range that preserves "may extend to $1,500" rather than a fixed sum.
+
+### s448 — Punishment for house-breaking
+- failed check: 9
+- reason: The section is tagged `[15/2019]` but the encoding uses `effective 2019-12-31`, which repo-local L3 precedent already treats as an unsound commencement date for Act 15 of 2019.
+- suggested fix: Replace the amendment effective date with the correct Act 15 of 2019 commencement date before resubmitting for L3 review.
+
+### s449 — House-breaking in order to commit an offence punishable with death
+- reason: The encoding does not preserve the imprisonment-for-life alternative as a structured penalty branch, and it uses `effective 2019-12-31` for a section tagged `[15/2019]`, which is not a reliable commencement date for that amendment.
+- suggested fix: Encode imprisonment for life as an explicit alternative penalty branch and replace the amendment effective date with the correct commencement date for Act 15 of 2019 before resubmitting for L3 review.
+
+### s450 — House-breaking in order to commit an offence punishable with imprisonment for life
+- failed check: 9
+- reason: The section is tagged `[15/2019]` but the encoding uses `effective 2019-12-31`, while repo-local L3 precedent treats Act 15 of 2019 commencement as `2020-01-01`, so the effective-date encoding is not sane enough to stamp.
+- suggested fix: Replace the unsound 2019 amendment effective date with the correct commencement date used consistently for Act 15 of 2019 in this repo, then re-run L3 review.
+
+### s453 — Possession of house-breaking implements or offensive weapons
+- failed check: 6
+- reason: Subsection (3) in the canonical text includes operative paragraphs (a) to (d), but the encoding preserves only the lead-in presumption sentence and drops all four categories.
+- suggested fix: Encode subsection (3)(a) to (d) explicitly instead of reducing subsection (3) to a single definition line.
+
+### s460 — House-breaking when death or grievous hurt caused
+- failed check: 8
+- reason: The encoding flattens the statute's disjunctive aggravated-act phrase ("causes or attempts to cause death or grievous hurt") into a single element instead of modeling the alternatives with `any_of`.
+- suggested fix: Refine the aggravated-act limb into explicit disjunctive branches so the connective structure matches the English text.
+
+### s468 — Forgery for the purpose of cheating
+- failed check: 8
+- reason: The encoding uses `penalty or_both`, but the canonical text makes imprisonment and liability to fine conjunctive, not disjunctive.
+- suggested fix: Replace the disjunctive penalty form with the standard conjunctive penalty encoding used for sections that say the offender "shall also be liable to fine".
+
+### s473A — Making or possessing equipment for making a false instrument
+- failed check: 9
+- reason: The encoding uses only `effective 1872-01-01`, but section 473A is a later inserted provision and should include its later commencement date instead of only the original 1872 date.
+- suggested fix: Confirm the insertion commencement from the Penal Code legislative history and add that date as an `effective` clause for section 473A.
+
+### s473B — Making or possessing equipment for making a false instrument with intent to induce prejudice
+- failed check: 8
+- reason: The English in paragraph (b) requires conjunctive intent content in both `(b)(i)` and `(b)(ii)`, but the encoding stops at `mens_rea intent_clause := "Intends that —";` and omits those operative limbs entirely.
+- suggested fix: Encode paragraph `(b)` so the intent element explicitly captures both `(b)(i)` and `(b)(ii)` as conjunctive requirements instead of a placeholder clause.
+
+### s473C — Meaning of “prejudice” and “induce”
+- failed check: 8
+- reason: Subsection (1) encodes the `(a)` to `(f)` alternatives as opaque definition strings instead of preserving their disjunctive structure, so the English "or" logic is not represented faithfully.
+- suggested fix: Refine subsection `(1)` into structured alternatives that preserve the `(a)` to `(f)` list and its disjunctive connective.
+
+### s476 — Counterfeiting a device or mark used for authenticating documents or electronic records other than those described in section 467, or possessing counterfeit marked material
+- reason: The canonical penalty is imprisonment up to 10 years and liability to fine, but the encoding uses `penalty or_both`, which introduces an alternative fine-only branch not stated in the statute.
+- suggested fix: Replace the penalty form with a cumulative or otherwise explicitly mandatory imprisonment-plus-fine encoding that matches the canonical text.
+
+### s477A — Falsification of accounts
+- failed check: 9
+- reason: The encoding omits the amendment commencement date `2022-03-01` from `[Act 23 of 2021 wef 01/03/2022]`, so the effective clauses are incomplete.
+- suggested fix: Add `effective 2022-03-01` to the statute header, preserving any already-valid commencement dates.
+
+### s489A — Forging or counterfeiting currency or bank notes
+- failed check: 6
+- reason: Subsection (2) is not faithfully preserved because the encoding drops the statutory definitions of "bank note", "coin", and "currency" and keeps only the lead-in.
+- suggested fix: Encode subsection (2) with all three canonical definitions from `_raw/act.json` instead of the placeholder lead-in-only definition.
+
+### s489B — Using as genuine forged or counterfeit currency or bank notes
+- failed check: 9
+- reason: The section is tagged `[15/2019]`, but the encoding uses `effective 2019-12-31` and the repo contains conflicting guidance on whether Act 15 of 2019 commenced on `2019-12-31` or `2020-01-01`, so the effective-date encoding is not safe to stamp.
+- suggested fix: Confirm the commencement date for Act 15 of 2019 from an authoritative source, then update the second `effective` clause and re-run L3 review.
 
 ### s53 — Punishments
 - failed check: 4
