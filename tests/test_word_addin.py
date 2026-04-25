@@ -114,6 +114,16 @@ class TestJSSyntax:
         )
         assert result.returncode == 0, f"node -c failed for {rel}: {result.stderr}"
 
+    def test_dev_server_parses(self):
+        # G8: dev_server.js must parse so `npm start` doesn't blow up.
+        path = EXT / "dev_server.js"
+        assert path.exists()
+        result = subprocess.run(
+            ["node", "-c", str(path)],
+            capture_output=True, text=True,
+        )
+        assert result.returncode == 0, f"node -c failed: {result.stderr}"
+
 
 # ---------------------------------------------------------------------------
 # Data bundle
