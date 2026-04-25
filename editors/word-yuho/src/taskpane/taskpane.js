@@ -41,12 +41,34 @@ function writeSetting(key, value) {
   }
 }
 
-Office.onReady(() => {
+// True only when running inside Word. The taskpane.html is occasionally
+// loaded outside Office (e.g. opened directly during dev, or sideloaded
+// into the wrong host) — gate every Word.run on this so the panel still
+// works for browse-only inspection.
+let IN_WORD = false;
+
+Office.onReady((info) => {
+  IN_WORD = !!(info && info.host === Office.HostType.Word);
   document.getElementById("search").addEventListener("input", onSearch);
   document.getElementById("action-insert-en").addEventListener("click", () => insert("english"));
   document.getElementById("action-insert-cite").addEventListener("click", () => insert("citation"));
   document.getElementById("action-insert-elements").addEventListener("click", () => insert("elements"));
   document.getElementById("action-insert-diagram").addEventListener("click", () => insert("diagram"));
+  if (!IN_WORD) {
+    // Disable insert buttons + show a banner when the host isn't Word.
+    for (const id of ["action-insert-en", "action-insert-cite",
+                       "action-insert-elements", "action-insert-diagram"]) {
+      const btn = document.getElementById(id);
+      if (btn) {
+        btn.disabled = true;
+        btn.title = "Insert is only available when running inside Word.";
+      }
+    }
+    const banner = document.createElement("p");
+    banner.className = "host-banner";
+    banner.textContent = "Read-only mode: open inside Word to insert content.";
+    document.querySelector("main")?.prepend(banner);
+  }
   loadCorpus();
 });
 
@@ -232,6 +254,10 @@ async function svgToPngBase64(svg, scale = 2) {
 
 async function insert(kind) {
   if (!SELECTED) return;
+  if (!IN_WORD) {
+    console.warn("[Yuho] insert ignored — host is not Word");
+    return;
+  }
   writeSetting(SETTINGS_KEYS.DEFAULT_INSERT, kind);
   const rec = SELECTED;
 
