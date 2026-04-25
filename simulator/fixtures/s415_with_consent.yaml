@@ -1,0 +1,36 @@
+name: "B knew the article was worthless but bought it anyway"
+section: "415"
+description: |
+  Variant on the s415 fact pattern: B was not deceived. The intended
+  illustration of how a fact pattern can fail the deception element.
+
+parties:
+  A:
+    role: accused
+  B:
+    role: victim
+
+acts:
+  - actor: A
+    description: "offers B a worthless article and openly tells B it is decorative only"
+
+mental_states:
+  A:
+    intent: "to sell the article at a premium"
+  B:
+    knowledge: "the article is decorative and not valuable"
+
+circumstances:
+  - "B is fully informed before the transaction"
+
+outcomes:
+  - actor: B
+    description: "B buys the article willingly knowing it is worthless"
+
+asserted_exceptions: []
+
+fact_facts:
+  deception: false
+  fraudulent: false
+  inducement: false
+  harm: false

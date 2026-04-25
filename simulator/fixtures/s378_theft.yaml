@@ -1,0 +1,42 @@
+name: "A takes B's umbrella from a public stand intending to keep it"
+section: "378"
+description: |
+  Classic theft fact pattern: A takes movable property out of B's possession
+  with dishonest intention and without B's consent. Used as a teaching
+  example of s378's element decomposition.
+
+parties:
+  A:
+    role: accused
+  B:
+    role: victim
+
+acts:
+  - actor: A
+    description: "removes B's umbrella from the public umbrella stand"
+  - actor: A
+    description: "carries the umbrella away from the stand"
+
+mental_states:
+  A:
+    intent: "to keep the umbrella permanently"
+    knowledge: "the umbrella belongs to B"
+    dishonesty: "wrongful gain through retention"
+
+circumstances:
+  - "the umbrella is movable property"
+  - "B has not consented to A's taking"
+  - "the act occurs in a public space"
+
+outcomes:
+  - actor: A
+    description: "A leaves with B's umbrella"
+
+asserted_exceptions: []
+
+fact_facts:
+  intention: true
+  taking: true
+  possession: true
+  consent: true
+  movement: true

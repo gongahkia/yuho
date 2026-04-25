@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Office Add-in manifest for the Yuho Word add-in. This is a content +
+  taskpane add-in: it adds a "Yuho" group to the Insert ribbon with two
+  buttons (open the side panel; insert an encoded statute), and registers
+  a side taskpane that surfaces section search and Yuho enrichment.
+
+  Sideload during development by hosting this manifest and the dist/
+  bundle on a localhost server (npm run start) or by uploading via
+  https://aka.ms/olksideload.
+-->
+<OfficeApp
+  xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0"
+  xmlns:ov="http://schemas.microsoft.com/office/taskpaneappversionoverrides"
+  xsi:type="TaskPaneApp">
+
+  <Id>9c17bf7a-1d24-4e9f-99c8-yuho00000001</Id>
+  <Version>0.1.0.0</Version>
+  <ProviderName>Gabriel Ong Zhe Mian</ProviderName>
+  <DefaultLocale>en-SG</DefaultLocale>
+  <DisplayName DefaultValue="Yuho — Singapore Penal Code companion"/>
+  <Description DefaultValue="Insert structured Singapore Penal Code references, enrichment, and English transpilations from the Yuho encoded library."/>
+  <IconUrl DefaultValue="https://localhost:3000/assets/icon-32.png"/>
+  <HighResolutionIconUrl DefaultValue="https://localhost:3000/assets/icon-128.png"/>
+  <SupportUrl DefaultValue="https://github.com/gongahkia/yuho"/>
+
+  <Hosts>
+    <Host Name="Document"/>
+  </Hosts>
+
+  <DefaultSettings>
+    <SourceLocation DefaultValue="https://localhost:3000/taskpane/taskpane.html"/>
+  </DefaultSettings>
+
+  <Permissions>ReadWriteDocument</Permissions>
+
+  <VersionOverrides xmlns="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="VersionOverridesV1_0">
+    <Hosts>
+      <Host xsi:type="Document">
+        <DesktopFormFactor>
+          <GetStarted>
+            <Title resid="GetStarted.Title"/>
+            <Description resid="GetStarted.Description"/>
+            <LearnMoreUrl resid="GetStarted.LearnMoreUrl"/>
+          </GetStarted>
+          <ExtensionPoint xsi:type="PrimaryCommandSurface">
+            <OfficeTab id="TabHome">
+              <Group id="YuhoGroup">
+                <Label resid="YuhoGroup.Label"/>
+                <Icon>
+                  <bt:Image size="16" resid="Icon.16x16"/>
+                  <bt:Image size="32" resid="Icon.32x32"/>
+                  <bt:Image size="80" resid="Icon.80x80"/>
+                </Icon>
+
+                <Control xsi:type="Button" id="ShowTaskpaneButton">
+                  <Label resid="ShowTaskpaneButton.Label"/>
+                  <Supertip>
+                    <Title resid="ShowTaskpaneButton.Label"/>
+                    <Description resid="ShowTaskpaneButton.Tooltip"/>
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="Icon.16x16"/>
+                    <bt:Image size="32" resid="Icon.32x32"/>
+                    <bt:Image size="80" resid="Icon.80x80"/>
+                  </Icon>
+                  <Action xsi:type="ShowTaskpane">
+                    <TaskpaneId>YuhoTaskpane</TaskpaneId>
+                    <SourceLocation resid="Taskpane.Url"/>
+                  </Action>
+                </Control>
+
+                <Control xsi:type="Button" id="InsertStatuteButton">
+                  <Label resid="InsertStatuteButton.Label"/>
+                  <Supertip>
+                    <Title resid="InsertStatuteButton.Label"/>
+                    <Description resid="InsertStatuteButton.Tooltip"/>
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="Icon.16x16"/>
+                    <bt:Image size="32" resid="Icon.32x32"/>
+                    <bt:Image size="80" resid="Icon.80x80"/>
+                  </Icon>
+                  <Action xsi:type="ExecuteFunction">
+                    <FunctionName>insertStatute</FunctionName>
+                  </Action>
+                </Control>
+              </Group>
+            </OfficeTab>
+          </ExtensionPoint>
+        </DesktopFormFactor>
+      </Host>
+    </Hosts>
+
+    <Resources>
+      <bt:Images>
+        <bt:Image id="Icon.16x16" DefaultValue="https://localhost:3000/assets/icon-16.png"/>
+        <bt:Image id="Icon.32x32" DefaultValue="https://localhost:3000/assets/icon-32.png"/>
+        <bt:Image id="Icon.80x80" DefaultValue="https://localhost:3000/assets/icon-128.png"/>
+      </bt:Images>
+      <bt:Urls>
+        <bt:Url id="GetStarted.LearnMoreUrl" DefaultValue="https://github.com/gongahkia/yuho/tree/main/editors/word-yuho"/>
+        <bt:Url id="Taskpane.Url" DefaultValue="https://localhost:3000/taskpane/taskpane.html"/>
+      </bt:Urls>
+      <bt:ShortStrings>
+        <bt:String id="GetStarted.Title" DefaultValue="Yuho — Singapore Penal Code companion"/>
+        <bt:String id="YuhoGroup.Label" DefaultValue="Yuho"/>
+        <bt:String id="ShowTaskpaneButton.Label" DefaultValue="Yuho panel"/>
+        <bt:String id="InsertStatuteButton.Label" DefaultValue="Insert statute"/>
+      </bt:ShortStrings>
+      <bt:LongStrings>
+        <bt:String id="GetStarted.Description" DefaultValue="Side panel + ribbon command for searching and inserting structured Singapore Penal Code references."/>
+        <bt:String id="ShowTaskpaneButton.Tooltip" DefaultValue="Open the Yuho side panel."/>
+        <bt:String id="InsertStatuteButton.Tooltip" DefaultValue="Insert a statute reference into the document."/>
+      </bt:LongStrings>
+    </Resources>
+  </VersionOverrides>
+</OfficeApp>

@@ -1,0 +1,18 @@
+{
+  "name": "yuho-word",
+  "version": "0.1.0",
+  "description": "Yuho Word add-in: insert structured Singapore Penal Code references and English transpilations into Word.",
+  "author": "Gabriel Ong Zhe Mian <gabrielzmong@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build:data": "python3 ../browser-yuho/build_data.py && cp -r ../browser-yuho/data ./",
+    "start": "office-addin-debugging start manifest.xml",
+    "stop": "office-addin-debugging stop manifest.xml",
+    "validate": "office-addin-manifest validate manifest.xml"
+  },
+  "devDependencies": {
+    "office-addin-debugging": "^5.0.0",
+    "office-addin-manifest": "^1.13.0"
+  }
+}

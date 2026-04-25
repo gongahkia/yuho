@@ -1,0 +1,39 @@
+name: "A intentionally deceives B about a worthless article"
+section: "415"
+description: |
+  Drawn directly from illustration (a) of s415: A intentionally deceives B
+  into believing that a worthless article is valuable, and thus induces B
+  to buy it.
+
+parties:
+  A:
+    role: accused
+  B:
+    role: victim
+
+acts:
+  - actor: A
+    description: "deceives B into believing a worthless article is valuable"
+  - actor: A
+    description: "induces B to buy the worthless article"
+
+mental_states:
+  A:
+    intent: "to defraud B"
+    knowledge: "the article has no real value"
+
+circumstances:
+  - "B has no prior experience with the article"
+  - "A trades on B's trust"
+
+outcomes:
+  - actor: B
+    description: "B parts with money for a worthless article"
+
+asserted_exceptions: []
+
+fact_facts:
+  deception: true
+  fraudulent: true
+  inducement: true
+  harm: true
