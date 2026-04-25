@@ -2,7 +2,7 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr473A-#pr473A-
 
-statute 473A "Making or possessing equipment for making a false instrument" effective 1872-01-01 {
+statute 473A "Making or possessing equipment for making a false instrument" effective 1872-01-01 effective 2008-02-01 {
     elements {
         all_of {
             any_of {

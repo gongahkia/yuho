@@ -6,12 +6,17 @@ statute 473C "Meaning of “prejudice” and “induce”" effective 1872-01-01 
     subsection (1) {
         definitions {
             application_to_section_473B := "For the purposes of section 473B and subject to subsections (2) and (4), an act or omission intended to be induced is to a person’s prejudice if, and only if, it is one which, if it occurs, will —";
-            prejudice_loss_of_property := "( a ) result in his permanent or temporary loss of property;";
-            prejudice_loss_of_remuneration_opportunity := "( b ) result in his being deprived of an opportunity to earn remuneration or greater remuneration;";
-            prejudice_loss_of_financial_advantage_opportunity := "( c ) result in his being deprived of an opportunity to gain a financial advantage otherwise than by way of remuneration;";
-            prejudice_gain_of_remuneration_opportunity_from_him := "( d ) result in somebody being given an opportunity to earn remuneration or greater remuneration from him;";
-            prejudice_gain_of_financial_advantage_from_him := "( e ) result in somebody being given an opportunity to gain a financial advantage from him otherwise than by way of remuneration; or";
-            prejudice_acceptance_of_false_instrument := "( f ) be the result of his having accepted a false instrument as genuine in connection with his performance of any duty.";
+        }
+
+        elements {
+            any_of {
+                circumstance prejudice_loss_of_property := "result in his permanent or temporary loss of property;";
+                circumstance prejudice_loss_of_remuneration_opportunity := "result in his being deprived of an opportunity to earn remuneration or greater remuneration;";
+                circumstance prejudice_loss_of_financial_advantage_opportunity := "result in his being deprived of an opportunity to gain a financial advantage otherwise than by way of remuneration;";
+                circumstance prejudice_gain_of_remuneration_opportunity_from_him := "result in somebody being given an opportunity to earn remuneration or greater remuneration from him;";
+                circumstance prejudice_gain_of_financial_advantage_from_him := "result in somebody being given an opportunity to gain a financial advantage from him otherwise than by way of remuneration; or";
+                circumstance prejudice_acceptance_of_false_instrument := "be the result of his having accepted a false instrument as genuine in connection with his performance of any duty.";
+            }
         }
     }
 

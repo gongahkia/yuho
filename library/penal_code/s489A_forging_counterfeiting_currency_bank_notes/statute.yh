@@ -29,9 +29,10 @@ statute 489A "Forging or counterfeiting currency or bank notes" effective 1872-0
     }
 
     subsection (2) {
-        /// Canonical `_raw/act.json` preserves only the subsection lead-in and no following definitions.
         definitions {
-            subsection_2_lead_in := "In this section and sections 489B to 489I —";
+            bank_note := "“bank note” means a promissory note or engagement for the payment of money to bearer on demand issued by any person carrying on the business of banking in any part of the world, or issued by or under the authority of the government of any country or territory and intended to be used as equivalent to, or as a substitute for, money;";
+            coin := "“coin” is metal used as money stamped and issued by or under the authority of the government of any country or territory in order to be so used;";
+            currency := "“currency” includes any currency note or coin (by whatever name called) which is legal tender in the country or territory in which it is issued.";
         }
     }
 }

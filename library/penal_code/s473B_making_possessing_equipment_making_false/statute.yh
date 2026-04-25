@@ -10,7 +10,11 @@ statute 473B "Making or possessing equipment for making a false instrument with 
                 actus_reus makes_equipment := "Makes a machine or implement, or paper or other material, which is or has been specifically designed or adapted for the making of any instrument";
                 actus_reus possesses_equipment := "Has in his custody or under his control a machine or implement, or paper or other material, which is or has been specifically designed or adapted for the making of any instrument";
             }
-            mens_rea intent_clause := "Intends that —";
+            /// paragraph (b) requires both sub-paragraphs (i) and (ii)
+            all_of {
+                mens_rea intent_false_instrument_using_equipment := "he or another person makes a false instrument using the machine or implement, or paper or other material in order to induce another person ( B ) to accept it as genuine; and";
+                mens_rea intent_prejudice_by_acceptance := "by reason of so accepting it, B does or does not do some act to B ’s or any other person’s prejudice,";
+            }
         }
     }
 

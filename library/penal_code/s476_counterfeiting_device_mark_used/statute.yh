@@ -14,7 +14,7 @@ statute 476 "Counterfeiting a device or mark used for authenticating documents o
         }
     }
 
-    penalty {
+    penalty cumulative {
         imprisonment := 0 days .. 10 years;
         fine := unlimited;
     }
