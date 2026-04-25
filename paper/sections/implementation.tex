@@ -312,10 +312,22 @@ negative fixture (s415 with-consent, where the supplied facts
 contradict the deception element) the recommender correctly does
 \emph{not} surface s415 as the top candidate; for a multi-offence-
 family fixture (s319 hurt) the recommender places one of the bodily-
-harm offences in the top three. A known gap is multi-section
-abetment patterns (s107 / s109 / s120A) where pure keyword-overlap
-fails to walk the reference graph; closing this gap via a G10-graph
-prefilter is on the punch list.
+harm offences in the top three. A multi-section abetment fixture
+(s107 / s109 / s120A) initially failed because element descriptions
+in s107 use \texttt{instigation} / \texttt{intentional aid} where
+fact patterns naturally write ``A abets B'' or ``A procures B'';
+three improvements compose to close that gap: (a)~a one-hop walk of
+the G10 reference graph, used to expand keyword-overlap candidates
+with their incoming and outgoing references; (b)~a rule-based
+stemmer that collapses tense and derivation differences
+(\texttt{deceives}~/~\texttt{deception}~/~\texttt{deceit} all reduce
+to a common root); and (c)~a small doctrinal synonym table covering
+the abetment / aid / theft / deception clusters that the encoded
+elements draw from. With all three the recommender surfaces the
+abetment family in the top five for that fixture --- not s107
+itself, which is purely definitional, but the actionable abetment
+sections (s108 / s108A / s108B / s115 / s120A / s306) that the user
+of a charge recommender would want to inspect first.
 
 The recommender's coverage metric is structural by construction: it
 measures element-overlap between facts and encoded grammar, not the
