@@ -26,7 +26,8 @@ documentation does not pin it down, we mark $\sim$ rather than
 support, $\sim$ = partial / via workaround, --- = absent, n/a = not in
 scope.}
 \label{tab:expressivity}
-\begin{small}
+\begin{footnotesize}
+\setlength{\tabcolsep}{4pt}
 \begin{tabular}{@{}lcccccccc@{}}
 \toprule
 \textbf{System}
@@ -48,14 +49,15 @@ Akoma Ntoso      & \checkmark & ---        & ---        & ---        & ---      
 LegalRuleML      & n/a        & \checkmark & ---        & ---        & $\sim$     & ---        & ---        & ---        \\
 \bottomrule
 \end{tabular}
-\end{small}
+\end{footnotesize}
 \end{table*}
 
 \begin{table*}[t]
 \caption{Tooling and demonstrated coverage. ``Corpus scale'' is the
 largest publicly-encoded corpus we are aware of for each system.}
 \label{tab:tooling}
-\begin{small}
+\begin{scriptsize}
+\setlength{\tabcolsep}{3pt}
 \begin{tabular}{@{}lllllll@{}}
 \toprule
 \textbf{System}
@@ -67,8 +69,8 @@ largest publicly-encoded corpus we are aware of for each system.}
   & \textbf{Corpus scale} \\
 \midrule
 \textbf{Yuho} & tree-sitter & \checkmark & \checkmark & Z3 + Alloy
-                & 6 (JSON, English, \LaTeX, Mermaid, Alloy, DOCX)
-                & SG Penal Code, 524 sections \\
+                & 6 (JSON, EN, \TeX, MMD, Alloy, DOCX)
+                & SG Penal Code (524) \\
 Catala        & menhir / OCaml & ---         & ---        & native rewriting
                 & OCaml, Python
                 & Fragments of FR tax code \\
@@ -77,19 +79,19 @@ lam4          & ANTLR        & $\sim$       & ---        & ---
                 & Synthetic contracts \\
 LexScript     & tree-sitter  & $\sim$       & ---        & ---
                 & multi
-                & Various, not pinned to one statute family \\
+                & Various \\
 LDOC          & Word + macros & ---         & ---        & ---
                 & PDF, DOCX
                 & Authored documents (varies) \\
 Akoma Ntoso   & XML          & via XSD      & ---        & ---
-                & many (XML tools)
-                & Multi-jurisdiction parliamentary docs \\
+                & XML tools
+                & Multi-jurisdiction docs \\
 LegalRuleML   & XML          & via XSD      & ---        & via mappings
                 & Several rule-language exports
                 & Norm-set fragments \\
 \bottomrule
 \end{tabular}
-\end{small}
+\end{scriptsize}
 \end{table*}
 
 The honest reading of the matrix is that no two systems target the
