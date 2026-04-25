@@ -200,13 +200,6 @@ class TestStatuteElements:
                             f"(possibly mens-rea-only / status offence)")
             assert len(ar) > 0, f"{name} s{s.section_number}: no actus_reus"
 
-    # Sections with known intra-scope duplicate element names — real
-    # encoding bugs in the library, queued for repair. Listed here so
-    # the suite stays green while the gap is visible in the xfail count.
-    _KNOWN_DUPLICATE_NAME_BUGS = {
-        "375", "376", "376D", "427",
-    }
-
     def test_element_names_unique(self, name, path):
         result = analyze_file(str(path))
         for s in result.ast.statutes:
@@ -221,17 +214,10 @@ class TestStatuteElements:
                 scopes.append(self._flat_elements(sub.elements))
             for scope_flat in scopes:
                 names = [e.name for e in scope_flat]
-                if len(names) != len(set(names)):
-                    if s.section_number in self._KNOWN_DUPLICATE_NAME_BUGS:
-                        pytest.xfail(
-                            f"{name} s{s.section_number}: known intra-scope "
-                            f"duplicate element names {names}; encoding fix "
-                            f"queued"
-                        )
-                    pytest.fail(
-                        f"{name} s{s.section_number}: duplicate element "
-                        f"names in scope: {names}"
-                    )
+                assert len(names) == len(set(names)), (
+                    f"{name} s{s.section_number}: duplicate element names "
+                    f"in scope: {names}"
+                )
 
 
 @pytest.mark.parametrize("name,path", STATUTE_DIRS, ids=[s[0] for s in STATUTE_DIRS])

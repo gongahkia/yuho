@@ -9,13 +9,13 @@ statute 376D "Tour outside Singapore for commercial sex with minor below 18 year
             any_of {
                 all_of {
                     actus_reus make_or_organise_travel_arrangements := "Makes or organises any travel arrangements for or on behalf of any other person";
-                    mens_rea facilitate_section_376C_offence := "With the intention of facilitating the commission by that other person of an offence under section 376C";
-                    circumstance actual_section_376C_offence_not_required := "Whether or not such an offence is actually committed by that other person";
+                    mens_rea facilitate_section_376C_via_arrangements := "With the intention of facilitating the commission by that other person of an offence under section 376C";
+                    circumstance actual_offence_not_required_arrangements := "Whether or not such an offence is actually committed by that other person";
                 }
                 all_of {
                     actus_reus transport_other_person_outside_singapore := "Transports any other person to a place outside Singapore";
-                    mens_rea facilitate_section_376C_offence := "With the intention of facilitating the commission by that other person of an offence under section 376C";
-                    circumstance actual_section_376C_offence_not_required := "Whether or not such an offence is actually committed by that other person";
+                    mens_rea facilitate_section_376C_via_transport := "With the intention of facilitating the commission by that other person of an offence under section 376C";
+                    circumstance actual_offence_not_required_transport := "Whether or not such an offence is actually committed by that other person";
                 }
                 all_of {
                     actus_reus print_publish_or_distribute_information := "Prints, publishes or distributes any information";

@@ -14,12 +14,12 @@ statute 427 "Punishment for committing mischief causing disruption to key servic
                 any_of {
                     circumstance causes_disruption_to_key_service := "The act causes a disruption to the provision of any key service";
                     all_of {
-                        mens_rea knowledge_of_likely_disruption := "The person knows the act is likely to cause a disruption";
+                        mens_rea knowledge_of_likely_disruption_to_key_service := "The person knows the act is likely to cause a disruption";
                         circumstance likely_disruption_to_key_service := "The likely disruption is to the provision of any key service";
                     }
                     circumstance causes_disruption_to_government_or_public_agency := "The act causes a disruption to the performance of any duty or function of, or the exercise of any power by the Government or a public agency";
                     all_of {
-                        mens_rea knowledge_of_likely_disruption := "The person knows the act is likely to cause a disruption";
+                        mens_rea knowledge_of_likely_disruption_to_government := "The person knows the act is likely to cause a disruption";
                         circumstance likely_disruption_to_government_or_public_agency := "The likely disruption is to the performance of any duty or function of, or the exercise of any power by the Government or a public agency";
                     }
                 }

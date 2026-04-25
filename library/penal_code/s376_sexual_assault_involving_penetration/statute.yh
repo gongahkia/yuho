@@ -62,12 +62,12 @@ statute 376 "Sexual assault involving penetration" effective 1872-01-01 effectiv
                 }
 
                 all_of {
-                    actus_reus commits_subsection_2_offence := "Commits an offence under subsection (2)";
+                    actus_reus commits_subsection_2_offence_b := "Commits an offence under subsection (2)";
                     circumstance against_person_below_14_without_consent := "Against a person below 14 years of age without that person's consent";
                 }
 
                 all_of {
-                    actus_reus commits_subsection_2_offence := "Commits an offence under subsection (2)";
+                    actus_reus commits_subsection_2_offence_c := "Commits an offence under subsection (2)";
                     circumstance against_person_below_14_in_exploitative_relationship := "Against a person below 14 years of age with whom the offender is in a relationship that is exploitative of that person";
                 }
             }
