@@ -56,7 +56,7 @@ Remaining prose work:
 - [x] **Design** — full prose (~294 lines, s415 worked example as Figure 1, statute-block + element + penalty (G8/G9/G12/G14) + exception (G13) + subsection (G5/G6) sections, full G1–G14 table).
 - [x] **Implementation** — full prose (~249 lines, parser/AST + 6 transpilers + Z3/Alloy verify + 3-tier coverage + LSP/MCP/VSCode + 4 fidelity diagnostics; SLOC table inline with real wc-line counts).
 - [x] **Evaluation** — full prose (~226 lines, coverage + structural-counts table + per-gap qualitative analysis + threats-to-validity). Three subsections (fidelity hit rate, throughput numbers, partial bar chart) carry `\todo{}` markers for the methodology runs that need to land before submission.
-- [ ] **Related work** — comparison matrix (Yuho × Catala × lam4 × LexScript × AKN × LegalRuleML × LDOC) as a real Table.
+- [x] **Related work** — full prose (~254 lines, two comparison matrices: 8-axis expressivity table + 6-column tooling/coverage table; per-system positioning subsections for Catala/lam4/LexScript/AKN+LegalRuleML/LDOC; explicit borrowings called out).
 - [ ] **Limitations** — already substantive; tighten + cross-link future-work in conclusion.
 - [ ] **Conclusion** — already drafted; revisit after evaluation numbers settle.
 - [ ] Render Mermaid figures to PDF (requires `mmdc`), inspect, and tune layouts.
