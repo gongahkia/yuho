@@ -1972,8 +1972,100 @@ class YuhoLanguageServer(LanguageServer):
                     )
                 )
 
+        # ----------------------------------------------------------------
+        # Source-level pattern tokens for visual scanability.
+        #
+        # Element kinds, penalty combinators, sentinels, and lifecycle
+        # keywords each get a distinct semantic-token mapping so a colour
+        # theme can show them differently. We do this with regex over the
+        # raw source rather than a full AST walk because the AST may not
+        # carry token-level location info for every keyword occurrence.
+        # ----------------------------------------------------------------
+        import re as _re
+
+        # Map literal keywords to (token type, modifier bits).
+        SOURCE_PATTERNS = [
+            # Element kinds (deontic taxonomy) — typeParameter to colour distinct from struct/type
+            (r"\bactus_reus\b",       TOKEN_TYPES["typeParameter"], 1 << MODIFIERS["definition"]),
+            (r"\bmens_rea\b",         TOKEN_TYPES["typeParameter"], 1 << MODIFIERS["definition"]),
+            (r"\bcircumstance\b",     TOKEN_TYPES["typeParameter"], 1 << MODIFIERS["definition"]),
+            (r"\bobligation\b",       TOKEN_TYPES["typeParameter"], 1 << MODIFIERS["definition"]),
+            (r"\bprohibition\b",      TOKEN_TYPES["typeParameter"], 1 << MODIFIERS["definition"]),
+            (r"\bpermission\b",       TOKEN_TYPES["typeParameter"], 1 << MODIFIERS["definition"]),
+            # Element-group combinators
+            (r"\ball_of\b",           TOKEN_TYPES["macro"],         0),
+            (r"\bany_of\b",           TOKEN_TYPES["macro"],         0),
+            # Penalty combinators
+            (r"\bcumulative\b",       TOKEN_TYPES["modifier"],      0),
+            (r"\balternative\b",      TOKEN_TYPES["modifier"],      0),
+            (r"\bor_both\b",          TOKEN_TYPES["modifier"],      0),
+            # Sentinels (G8 / G14)
+            (r"\bunlimited\b",        TOKEN_TYPES["enumMember"],    1 << MODIFIERS["readonly"]),
+            (r"\bunspecified\b",      TOKEN_TYPES["enumMember"],    1 << MODIFIERS["readonly"]),
+            (r"\blife\b",             TOKEN_TYPES["enumMember"],    1 << MODIFIERS["readonly"]),
+            # Lifecycle keywords
+            (r"\beffective\b",        TOKEN_TYPES["modifier"],      1 << MODIFIERS["modification"]),
+            (r"\brepealed\b",         TOKEN_TYPES["modifier"],      1 << MODIFIERS["deprecated"]),
+            (r"\bsubsumes\b",         TOKEN_TYPES["modifier"],      0),
+            (r"\bamends\b",           TOKEN_TYPES["modifier"],      0),
+            (r"\breferencing\b",      TOKEN_TYPES["modifier"],      0),
+            # Burden qualifiers
+            (r"\bburden\b",           TOKEN_TYPES["macro"],         0),
+            (r"\bprosecution\b",      TOKEN_TYPES["macro"],         0),
+            (r"\bdefence\b",          TOKEN_TYPES["macro"],         0),
+            # Penalty primitives
+            (r"\bimprisonment\b",     TOKEN_TYPES["property"],      0),
+            (r"\bfine\b",             TOKEN_TYPES["property"],      0),
+            (r"\bcaning\b",           TOKEN_TYPES["property"],      0),
+            (r"\bdeath_penalty\b",    TOKEN_TYPES["property"],      0),
+            (r"\bsupplementary\b",    TOKEN_TYPES["property"],      0),
+            # Top-level shape keywords (already covered by AST for `statute`,
+            # but `subsection` / `definitions` / `elements` / `penalty` /
+            # `illustration` / `exception` / `caselaw` / `parties` aren't.)
+            (r"\bsubsection\b",       TOKEN_TYPES["keyword"],       0),
+            (r"\bdefinitions\b",      TOKEN_TYPES["keyword"],       0),
+            (r"\belements\b",         TOKEN_TYPES["keyword"],       0),
+            (r"\bpenalty\b",          TOKEN_TYPES["keyword"],       0),
+            (r"\billustration\b",     TOKEN_TYPES["keyword"],       0),
+            (r"\bexception\b",        TOKEN_TYPES["keyword"],       0),
+            (r"\bcaselaw\b",          TOKEN_TYPES["keyword"],       0),
+            (r"\bparties\b",          TOKEN_TYPES["keyword"],       0),
+            # Deontic / temporal / causal edges
+            (r"\bcausedBy\b",         TOKEN_TYPES["macro"],         0),
+            (r"\bprecedes\b",         TOKEN_TYPES["macro"],         0),
+            (r"\bduring\b",           TOKEN_TYPES["macro"],         0),
+            (r"\bafter\b",            TOKEN_TYPES["macro"],         0),
+            # Doc-comments (line-prefix `///`)
+            (r"^\s*///[^\n]*",        TOKEN_TYPES["comment"],       1 << MODIFIERS["documentation"]),
+        ]
+
+        for pattern, ttype, tmod in SOURCE_PATTERNS:
+            for m in _re.finditer(pattern, doc_state.source, flags=_re.MULTILINE):
+                # Convert byte offset -> (line, col).
+                start = m.start()
+                # Compute line and col by counting newlines up to start.
+                preceding = doc_state.source[:start]
+                line_no = preceding.count("\n")
+                last_newline = preceding.rfind("\n")
+                col = start - (last_newline + 1) if last_newline >= 0 else start
+                length = m.end() - m.start()
+                tokens.append((line_no, col, length, ttype, tmod))
+
         # Sort tokens by position
         tokens.sort(key=lambda t: (t[0], t[1]))
+
+        # Drop overlapping tokens (LSP spec: tokens must not overlap).
+        # Keep the first by sort order; skip any subsequent token whose
+        # start is before the previous token's end.
+        deduped: List[tuple] = []
+        last_end = (-1, -1)  # (line, col) tuple, exclusive
+        for tok in tokens:
+            line, col, length, _, _ = tok
+            if (line, col) < last_end:
+                continue  # overlap with prior token; skip
+            deduped.append(tok)
+            last_end = (line, col + length)
+        tokens = deduped
 
         # Encode as relative positions (LSP semantic tokens format)
         data: List[int] = []
