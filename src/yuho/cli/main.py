@@ -182,6 +182,9 @@ def verify(
               help="Skip the per-element load-bearing analysis")
 @click.option("--no-exceptions", is_flag=True,
               help="Skip the exception coverage / dead-exception scan")
+@click.option("--subsume", "subsume_target", default=None,
+              help="Compare with another section: report disjoint / overlap / "
+                   "subsumes / equal relation. Pass the other section number.")
 @click.option("--json", "json_output", is_flag=True, help="Output as JSON")
 def explore(
     file: str,
@@ -189,6 +192,7 @@ def explore(
     max_satisfying: int,
     no_borderline: bool,
     no_exceptions: bool,
+    subsume_target: Optional[str],
     json_output: bool,
 ):
     """Counter-example explorer: surface fact patterns over a section.
@@ -197,8 +201,13 @@ def explore(
     section's elements are all met, (b) borderline scenarios showing which
     elements are load-bearing, and (c) which exceptions are reachable.
 
-    Example:
+    With --subsume <n>, compares the two sections and reports their
+    relation (disjoint / overlap / one subsumes the other / equal),
+    along with witness fact-bindings for each direction.
+
+    Examples:
         yuho explore library/penal_code/s415_cheating/statute.yh 415
+        yuho explore module.yh 415 --subsume 420 --json
     """
     from yuho.cli.commands.explore import run_explore
 
@@ -208,6 +217,7 @@ def explore(
         max_satisfying=max_satisfying,
         no_borderline=no_borderline,
         no_exceptions=no_exceptions,
+        subsume_target=subsume_target,
         json_output=json_output,
     )
 

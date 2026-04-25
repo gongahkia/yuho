@@ -56,6 +56,22 @@ class Scenario:
 
 
 @dataclass
+class SubsumptionReport:
+    """Result of asking whether two sections can convict on the same facts."""
+    section_a: str
+    section_b: str
+    available: bool
+    reason: Optional[str] = None
+    overlap_witness: Optional[Dict[str, Any]] = None  # element-bindings, if SAT
+    a_only_witness: Optional[Dict[str, Any]] = None    # convicts A but not B
+    b_only_witness: Optional[Dict[str, Any]] = None    # convicts B but not A
+    relation: str = ""  # "disjoint" | "overlap" | "a_subsumes_b" | "b_subsumes_a" | "equal"
+
+    def to_dict(self) -> Dict[str, Any]:
+        return asdict(self)
+
+
+@dataclass
 class ExplorerReport:
     section: str
     title: str
@@ -158,6 +174,118 @@ class CounterexampleExplorer:
             "n_dead_exceptions":     len(report.dead_exceptions),
         }
         return report
+
+    def explore_subsumption(self, section_a: str, section_b: str) -> SubsumptionReport:
+        """Check whether two sections can convict on the same fact configuration.
+
+        Asks the verifier three questions:
+
+        1. ``conviction_a AND conviction_b`` --- is there an element-binding
+           that satisfies *both* sections simultaneously? If SAT, we report
+           the overlap witness; if UNSAT, the offences are structurally
+           disjoint over the shared element vocabulary (e.g. one excludes
+           the other via a contradicting element guard).
+        2. ``conviction_a AND NOT conviction_b`` --- is there a binding
+           where A convicts but B does not? UNSAT means every A-binding is
+           also a B-binding (B subsumes A).
+        3. ``conviction_b AND NOT conviction_a`` --- the symmetric check.
+
+        From the three answers we tag the relation:
+
+        * ``equal``           --- (1) SAT, (2) UNSAT, (3) UNSAT
+        * ``a_subsumes_b``    --- (1) SAT, (2) SAT,   (3) UNSAT
+        * ``b_subsumes_a``    --- (1) SAT, (2) UNSAT, (3) SAT
+        * ``overlap``         --- (1) SAT, (2) SAT,   (3) SAT
+        * ``disjoint``        --- (1) UNSAT (regardless of 2/3)
+
+        Note: the same element variable name in both sections (e.g. both
+        statutes have a ``deception`` element) is shared in the Z3 model
+        because ``Z3Generator`` keys element Bools on
+        ``{statute_id}_{name}_satisfied`` --- so different statutes
+        contribute independent variables. The "shared element vocabulary"
+        therefore only kicks in for elements with literally the same
+        Yuho name *and* matching match-expression guards. For sections
+        without match-expressions (most of the corpus), the question
+        collapses to whether both convictions can be true at all, which
+        is interesting only to the extent that exceptions or temporal
+        constraints force one to be false.
+        """
+        statute_a = self._find_statute(section_a)
+        statute_b = self._find_statute(section_b)
+        if statute_a is None or statute_b is None:
+            missing = [s for s, st in
+                       ((section_a, statute_a), (section_b, statute_b))
+                       if st is None]
+            return SubsumptionReport(
+                section_a=section_a, section_b=section_b, available=False,
+                reason=f"section(s) not found in module: {', '.join(missing)}",
+            )
+        if not _Z3_AVAILABLE:
+            return SubsumptionReport(
+                section_a=section_a, section_b=section_b, available=False,
+                reason="z3 is not installed; subsumption query unavailable",
+            )
+
+        from yuho.verify.z3_solver import Z3Generator
+        gen = Z3Generator()
+        _solver, base_assertions = gen.generate(self._module)
+
+        id_a = section_a.replace(".", "_")
+        id_b = section_b.replace(".", "_")
+        conv_a = gen._consts.get(f"{id_a}_conviction")
+        conv_b = gen._consts.get(f"{id_b}_conviction")
+        if conv_a is None or conv_b is None:
+            return SubsumptionReport(
+                section_a=section_a, section_b=section_b, available=False,
+                reason="conviction var missing for one or both sections "
+                       "(no top-level elements?)",
+            )
+
+        elem_vars_a = self._element_vars(gen, id_a)
+        elem_vars_b = self._element_vars(gen, id_b)
+        all_elem = elem_vars_a + elem_vars_b
+
+        def _check(*extra) -> Optional[Dict[str, Any]]:
+            solver = z3.Solver()
+            solver.set("timeout", self._timeout_ms)
+            for a in base_assertions:
+                solver.add(a)
+            for a in extra:
+                solver.add(a)
+            if solver.check() != z3.sat:
+                return None
+            model = solver.model()
+            return {
+                "elements": {
+                    name: bool(model[v]) for name, v in all_elem
+                    if model[v] is not None
+                },
+                "conviction_a": bool(model[conv_a]) if model[conv_a] is not None else None,
+                "conviction_b": bool(model[conv_b]) if model[conv_b] is not None else None,
+            }
+
+        overlap = _check(conv_a == True, conv_b == True)
+        a_only  = _check(conv_a == True, conv_b == False)
+        b_only  = _check(conv_a == False, conv_b == True)
+
+        if overlap is None:
+            relation = "disjoint"
+        elif a_only is None and b_only is None:
+            relation = "equal"
+        elif a_only is None:
+            relation = "b_subsumes_a"
+        elif b_only is None:
+            relation = "a_subsumes_b"
+        else:
+            relation = "overlap"
+
+        return SubsumptionReport(
+            section_a=section_a, section_b=section_b, available=True,
+            relation=relation,
+            overlap_witness=overlap,
+            a_only_witness=a_only,
+            b_only_witness=b_only,
+        )
 
     # -- scenario builders --------------------------------------------------
 

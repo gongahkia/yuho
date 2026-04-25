@@ -130,3 +130,63 @@ class TestRendering:
         text = render_report_text(report)
         assert "elements:" in text
         assert "Satisfying scenarios" in text
+
+
+class TestSubsumption:
+    """Tier 2 #4: subsumption query — does section A convict on the same
+    facts as section B?"""
+
+    def test_self_subsumption_is_equal(self, s415_module):
+        from yuho.explore.counterexamples import CounterexampleExplorer
+        explorer = CounterexampleExplorer(s415_module)
+        report = explorer.explore_subsumption("415", "415")
+        assert report.available is True
+        assert report.relation == "equal"
+        # By definition, when comparing a section to itself, no a-only or
+        # b-only witness should exist (modulo the renamed variables).
+        assert report.a_only_witness is None
+        assert report.b_only_witness is None
+
+    def test_unknown_section_yields_unavailable(self, s415_module):
+        from yuho.explore.counterexamples import CounterexampleExplorer
+        explorer = CounterexampleExplorer(s415_module)
+        report = explorer.explore_subsumption("415", "9999")
+        assert report.available is False
+        assert "not found" in (report.reason or "").lower()
+
+    def test_synthetic_two_section_overlap(self, tmp_path):
+        """Synthesise a tiny two-statute module to exercise the cross-section
+        path. s100 has elements (a, b); s101 has elements (a, c). They share
+        ``a`` symbolically but the Z3 generator names per-statute, so any
+        binding satisfying both convictions is the overlap case."""
+        src = (
+            'statute 100 "alpha" effective 1872-01-01 {\n'
+            '  elements {\n'
+            '    actus_reus a := "act a";\n'
+            '    mens_rea  b := "mens b";\n'
+            '  }\n'
+            '  penalty cumulative { fine := unlimited; }\n'
+            '}\n'
+            'statute 101 "beta" effective 1872-01-01 {\n'
+            '  elements {\n'
+            '    actus_reus a := "act a";\n'
+            '    mens_rea  c := "mens c";\n'
+            '  }\n'
+            '  penalty cumulative { fine := unlimited; }\n'
+            '}\n'
+        )
+        from yuho.services.analysis import analyze_source
+        analysis = analyze_source(src, file="<synth>", run_semantic=False)
+        if analysis.parse_errors or analysis.ast is None:
+            pytest.skip(f"synthetic source did not parse: {analysis.parse_errors!r}")
+        from yuho.explore.counterexamples import CounterexampleExplorer
+        explorer = CounterexampleExplorer(analysis.ast)
+        report = explorer.explore_subsumption("100", "101")
+        assert report.available is True
+        # Independent statutes with no defeats / temporal links should
+        # admit overlap (both convict simultaneously) and a/b-only witnesses.
+        assert report.relation == "overlap", \
+            f"expected overlap for independent sections, got {report.relation}"
+        assert report.overlap_witness is not None
+        assert report.a_only_witness is not None
+        assert report.b_only_witness is not None
