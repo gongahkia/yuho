@@ -155,6 +155,25 @@ class TestDataBundle:
 # ---------------------------------------------------------------------------
 
 
+class TestProdManifestBuilder:
+    """G7: build_manifest.py rewrites localhost URLs for production."""
+
+    def test_builder_emits_swapped_manifest(self, tmp_path):
+        out = tmp_path / "manifest.prod.xml"
+        result = subprocess.run(
+            ["python3", str(EXT / "build_manifest.py"),
+             "--host", "https://yuho.dev/word",
+             "--version", "9.9.9.9",
+             "--output", str(out)],
+            capture_output=True, text=True, cwd=EXT,
+        )
+        assert result.returncode == 0, f"build_manifest.py failed: {result.stderr}"
+        text = out.read_text(encoding="utf-8")
+        assert "https://localhost:3000" not in text
+        assert "https://yuho.dev/word" in text
+        assert "<Version>9.9.9.9</Version>" in text
+
+
 class TestTaskpaneHtml:
     @pytest.fixture(scope="class")
     def html(self):

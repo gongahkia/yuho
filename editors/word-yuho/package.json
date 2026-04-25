@@ -6,7 +6,8 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "build:data": "python3 ../../scripts/build_corpus.py && python3 ../browser-yuho/build_data.py && cp -r ../browser-yuho/data ./",
+    "build:data": "python3 ../../scripts/build_corpus.py && python3 ../browser-yuho/build_data.py && rm -rf ./data && cp -r ../browser-yuho/data ./",
+    "build:manifest:prod": "python3 build_manifest.py --host https://yuho.dev/word",
     "rebuild": "npm run build:data",
     "start": "office-addin-debugging start manifest.xml",
     "stop": "office-addin-debugging stop manifest.xml",
