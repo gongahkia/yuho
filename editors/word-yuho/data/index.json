@@ -1,8 +1,8 @@
 {
   "act": "Penal Code 1871",
   "act_code": "PC1871",
-  "encoding_commit": "dcf83c77656dcdb11980d9423dc296c17e91f608",
-  "generated_at": "2026-04-25T06:02:03Z",
+  "encoding_commit": "c5245c440d8ae48c1fe57d104c9bf92a0ff03bfb",
+  "generated_at": "2026-04-25T08:30:31Z",
   "jurisdiction": "SG",
   "n_sections": 524,
   "scrape_date": "2026-04-24T17:04:28Z",

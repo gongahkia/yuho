@@ -115,3 +115,14 @@ pre {
 }
 
 .empty { color: #999; padding: 0.5rem 0.3rem; font-style: italic; }
+
+.diagram {
+  width: 100%;
+  overflow: auto;
+  text-align: center;
+  padding: 0.4rem 0;
+}
+.diagram svg {
+  max-width: 100%;
+  height: auto;
+}

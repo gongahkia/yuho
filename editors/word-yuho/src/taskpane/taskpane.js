@@ -16,6 +16,7 @@ Office.onReady(() => {
   document.getElementById("action-insert-en").addEventListener("click", () => insert("english"));
   document.getElementById("action-insert-cite").addEventListener("click", () => insert("citation"));
   document.getElementById("action-insert-elements").addEventListener("click", () => insert("elements"));
+  document.getElementById("action-insert-diagram").addEventListener("click", () => insert("diagram"));
   loadCorpus();
 });
 
@@ -83,11 +84,102 @@ function selectSection(rec) {
   document.getElementById("detail-summary").textContent =
     rec.metadata?.summary || rec.raw?.text || "(no summary)";
   document.getElementById("detail-yh").textContent = rec.encoded?.yh_source || "";
+  loadDiagram(rec).catch(() => { /* non-fatal */ });
+}
+
+// Lazy-fetch + cache SVGs by section number. The diagram tab populates
+// asynchronously so the panel doesn't block on file IO when scrolling
+// search results.
+const SVG_CACHE = new Map();
+
+async function loadDiagram(rec) {
+  const host = document.getElementById("detail-diagram");
+  if (!host) return;
+  const url = rec.transpiled?.mermaid_svg_url;
+  if (!url) {
+    host.innerHTML = `<p class="empty">No diagram for s${escape(rec.section_number)}.</p>`;
+    return;
+  }
+  let svg = SVG_CACHE.get(rec.section_number);
+  if (!svg) {
+    host.innerHTML = `<p class="empty">Loading…</p>`;
+    try {
+      const res = await fetch(`../${url}`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      svg = await res.text();
+      SVG_CACHE.set(rec.section_number, svg);
+    } catch (err) {
+      host.innerHTML = `<p class="empty">Could not load diagram (${escape(String(err))}).</p>`;
+      return;
+    }
+  }
+  if (SELECTED && SELECTED.section_number === rec.section_number) {
+    host.innerHTML = svg;
+  }
+}
+
+// Convert an inline SVG string to a PNG dataURL by drawing it to a
+// canvas. Returns the base64 PNG (without the "data:" prefix) suitable
+// for Word's insertInlinePictureFromBase64.
+async function svgToPngBase64(svg, scale = 2) {
+  const blob = new Blob([svg], { type: "image/svg+xml;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  try {
+    const img = new Image();
+    await new Promise((resolve, reject) => {
+      img.onload = resolve;
+      img.onerror = reject;
+      img.src = url;
+    });
+    const w = (img.naturalWidth || img.width || 800) * scale;
+    const h = (img.naturalHeight || img.height || 600) * scale;
+    const canvas = document.createElement("canvas");
+    canvas.width = w;
+    canvas.height = h;
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, w, h);
+    ctx.drawImage(img, 0, 0, w, h);
+    return canvas.toDataURL("image/png").split(",", 2)[1];
+  } finally {
+    URL.revokeObjectURL(url);
+  }
 }
 
 async function insert(kind) {
   if (!SELECTED) return;
   const rec = SELECTED;
+
+  // Diagram is a binary insert (PNG), not text — handle it separately.
+  if (kind === "diagram") {
+    const url = rec.transpiled?.mermaid_svg_url;
+    if (!url) return;
+    let svg = SVG_CACHE.get(rec.section_number);
+    if (!svg) {
+      try {
+        const res = await fetch(`../${url}`);
+        svg = await res.text();
+        SVG_CACHE.set(rec.section_number, svg);
+      } catch (err) {
+        console.error("[Yuho] diagram fetch failed", err);
+        return;
+      }
+    }
+    let pngB64;
+    try {
+      pngB64 = await svgToPngBase64(svg);
+    } catch (err) {
+      console.error("[Yuho] svg → png conversion failed", err);
+      return;
+    }
+    await Word.run(async (context) => {
+      const range = context.document.getSelection();
+      range.insertInlinePictureFromBase64(pngB64, Word.InsertLocation.replace);
+      await context.sync();
+    });
+    return;
+  }
+
   let text = "";
   switch (kind) {
     case "english":
