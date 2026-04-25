@@ -363,10 +363,19 @@ async function insert(kind) {
   });
 }
 
-// Pulls structured elements out of the encoded `.yh` source. Parses the
-// `elements { ... }` block and matches typed element declarations of the
-// shape `<kind> <label> := "<text>"`. Returns an array of {kind,label,text}.
+// Returns an array of {kind, label, text} typed elements for the section.
+// Prefers `encoded.ast_summary.elements_detail` (a structured AST walk
+// produced at corpus-build time); falls back to a regex over the raw
+// `.yh` source for older corpora.
 function parseElements(rec) {
+  const detail = rec.encoded?.ast_summary?.elements_detail;
+  if (Array.isArray(detail) && detail.length) {
+    return detail.map(e => ({
+      kind: e.kind || "",
+      label: e.label || "",
+      text: e.text || "",
+    }));
+  }
   const yh = rec.encoded?.yh_source || "";
   const lines = yh.split("\n");
   const out = [];

@@ -66,6 +66,7 @@ def _ast_summary(module) -> Dict[str, Any]:
     return {
         "statutes": len(module.statutes),
         "elements": n_elements,
+        "elements_detail": _elements_detail(s),
         "illustrations": len(s.illustrations) + sum(len(sub.illustrations) for sub in s.subsections),
         "subsections": len(s.subsections),
         "exceptions": len(s.exceptions),
@@ -80,6 +81,42 @@ def _ast_summary(module) -> Dict[str, Any]:
         "has_penalty": s.penalty is not None,
         "jurisdiction": s.jurisdiction,
     }
+
+
+def _elements_detail(statute) -> List[Dict[str, Any]]:
+    """Flatten typed elements into a JSON-friendly list of {kind,label,text}.
+
+    Walks the statute body + subsections, descending through ElementGroupNodes
+    so disjunctive / conjunctive groups still surface their leaf members.
+    """
+    from yuho.ast import nodes as ast_nodes
+
+    out: List[Dict[str, Any]] = []
+
+    def _description_text(desc) -> str:
+        if isinstance(desc, ast_nodes.StringLit):
+            return desc.value
+        # Fallback: any other expression type — stringify minimally.
+        return str(getattr(desc, "value", "") or "")
+
+    def _walk(node, group: Optional[str] = None):
+        if isinstance(node, ast_nodes.ElementNode):
+            out.append({
+                "kind": node.element_type,
+                "label": node.name,
+                "text": _description_text(node.description),
+                "group": group,
+            })
+        elif isinstance(node, ast_nodes.ElementGroupNode):
+            for m in node.members:
+                _walk(m, group=node.combinator)
+
+    for e in statute.elements:
+        _walk(e)
+    for sub in statute.subsections:
+        for e in sub.elements:
+            _walk(e)
+    return out
 
 
 def _count_elements(node) -> int:

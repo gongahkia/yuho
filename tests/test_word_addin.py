@@ -151,6 +151,32 @@ class TestDataBundle:
                     "transpiled", "coverage"):
             assert key in rec, f"section record missing {key}"
 
+    def test_sections_carry_structured_elements(self):
+        """G12: slim corpus must carry ast_summary.elements_detail so the
+        taskpane doesn't have to regex over .yh source."""
+        path = EXT / "data" / "sections.json"
+        if not path.exists():
+            pytest.skip("data/sections.json not built")
+        with path.open("r", encoding="utf-8") as f:
+            data = json.load(f)
+        # At least one section in the corpus should expose elements_detail
+        # as a list of dicts. Older corpora (pre-G12) won't, so we only
+        # require it on at least one record.
+        found = False
+        for rec in data.values():
+            ed = rec.get("encoded", {}).get("ast_summary", {}).get("elements_detail")
+            if isinstance(ed, list) and ed:
+                # Spot-check shape on first non-empty entry.
+                first = ed[0]
+                assert isinstance(first, dict)
+                for k in ("kind", "label", "text"):
+                    assert k in first, f"elements_detail entry missing {k}"
+                found = True
+                break
+        if not found:
+            pytest.skip("no section yet exposes elements_detail; "
+                        "rebuild the corpus with the G12-aware build_corpus.py")
+
     def test_index_json_present(self):
         path = EXT / "data" / "index.json"
         if not path.exists():

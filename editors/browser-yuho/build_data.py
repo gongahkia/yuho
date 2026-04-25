@@ -26,7 +26,7 @@ DEST = Path(__file__).resolve().parent / "data"
 # Fields kept per section in the slim format.
 KEEP_RAW = ("marginal_note", "text", "sub_items", "amendments", "hash_sha256")
 KEEP_ENCODED_AST = (
-    "elements", "illustrations", "subsections", "exceptions",
+    "elements", "elements_detail", "illustrations", "subsections", "exceptions",
     "case_law", "definitions", "effective_dates", "repealed_date",
     "subsumes", "amends", "has_penalty",
 )
