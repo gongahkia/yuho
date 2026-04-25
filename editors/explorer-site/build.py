@@ -333,6 +333,51 @@ footer.site {
   font-size: 0.88em;
   text-align: center;
 }
+
+@media print {
+  /* G7: print-friendly. Force light theme, drop the gradient header,
+     ink-saving pres, hide non-essential UI. */
+  :root {
+    --c-bg: #ffffff;
+    --c-fg: #000000;
+    --c-muted: #555555;
+    --c-card: #ffffff;
+    --c-border: #cccccc;
+  }
+  html, body { background: #fff; color: #000; }
+  header.site {
+    background: #fff !important;
+    color: #000 !important;
+    border-bottom: 1px solid #999;
+    padding: 0.6rem 0;
+  }
+  header.site h1 a { color: #000 !important; }
+  header.site nav,
+  header.site nav a,
+  .searchbar,
+  #section-grid,
+  .prevnext,
+  .toc,
+  footer.site { display: none !important; }
+  pre.src {
+    background: #fff !important;
+    color: #000 !important;
+    border: 1px solid #999;
+    page-break-inside: avoid;
+  }
+  pre.lite { border: 1px solid #999; page-break-inside: avoid; }
+  .diagram { border: 1px solid #999; page-break-inside: avoid; }
+  .badge { border: 1px solid #999; background: #fff !important; color: #000 !important; }
+  a { color: #000; text-decoration: underline; }
+  /* Expose link targets in print */
+  section.section-page a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.85em;
+    color: #555;
+    word-break: break-all;
+  }
+  h2 { page-break-after: avoid; }
+}
 """
 
 
