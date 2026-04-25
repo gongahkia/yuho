@@ -126,3 +126,18 @@ pre {
   max-width: 100%;
   height: auto;
 }
+
+.snippet {
+  display: block;
+  margin-top: 0.25em;
+  font-size: 0.85em;
+  color: #666;
+  line-height: 1.35;
+  font-style: normal;
+}
+.snippet mark {
+  background: #ffe066;
+  color: inherit;
+  padding: 0 1px;
+  border-radius: 2px;
+}

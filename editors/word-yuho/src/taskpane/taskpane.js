@@ -39,14 +39,56 @@ function renderTopHits() {
   renderResults(sample);
 }
 
+function bodyForRecord(rec) {
+  // Concatenate the searchable fields. Title is included so a token-AND
+  // query like "induces delivery" hits s415 even when the word "delivery"
+  // is in the body but the title is just "Cheating".
+  const parts = [
+    rec.section_title || "",
+    rec.metadata?.summary || "",
+    rec.raw?.text || "",
+    rec.transpiled?.english || "",
+  ];
+  return parts.filter(Boolean).join("\n").toLowerCase();
+}
+
+function snippet(body, q) {
+  const i = body.toLowerCase().indexOf(q.toLowerCase());
+  if (i < 0) return "";
+  const start = Math.max(0, i - 30);
+  const end = Math.min(body.length, i + q.length + 60);
+  let s = (start > 0 ? "…" : "") + body.slice(start, end) + (end < body.length ? "…" : "");
+  s = escape(s);
+  const reEsc = q.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
+  return s.replace(new RegExp(reEsc, "gi"), m => `<mark>${m}</mark>`);
+}
+
 function onSearch(ev) {
-  const q = ev.target.value.trim().toLowerCase();
+  const q = ev.target.value.trim();
   if (!CORPUS) return;
   if (!q) { renderTopHits(); return; }
-  const hits = Object.values(CORPUS).filter(rec => {
-    return rec.section_number.toLowerCase().includes(q)
-        || (rec.section_title || "").toLowerCase().includes(q);
-  }).slice(0, 100);
+  const ql = q.toLowerCase();
+  const tokens = ql.split(/\s+/).filter(Boolean);
+  const hits = [];
+  for (const rec of Object.values(CORPUS)) {
+    const num = rec.section_number.toLowerCase();
+    const title = (rec.section_title || "").toLowerCase();
+    const body = bodyForRecord(rec);
+    const hay = `${num}\n${title}\n${body}`;
+    if (!tokens.every(t => hay.includes(t))) continue;
+    const annotated = Object.assign({}, rec);
+    if (!num.includes(ql) && !title.includes(ql)) {
+      // Pull a snippet from the original (non-lowercased) body for display.
+      const origBody = [
+        rec.metadata?.summary || "",
+        rec.raw?.text || "",
+        rec.transpiled?.english || "",
+      ].filter(Boolean).join("\n");
+      annotated._snippet = snippet(origBody, q);
+    }
+    hits.push(annotated);
+    if (hits.length >= 100) break;
+  }
   renderResults(hits);
 }
 
@@ -68,6 +110,7 @@ function renderResults(records) {
         <span class="num">s${escape(rec.section_number)}</span>
         <span class="title">${escape(rec.section_title || "(untitled)")}</span>
         <span class="tier tier-${tier.toLowerCase()}">${tier}</span>
+        ${rec._snippet ? `<span class="snippet">${rec._snippet}</span>` : ""}
       </button>
     `;
     li.querySelector("button").addEventListener("click", () => selectSection(rec));
