@@ -677,7 +677,7 @@ class YuhoMCPServer:
             try:
                 self._check_rate_limit("yuho_check", client_id)
             except RateLimitExceeded as e:
-                return {"error": str(e), "retry_after": e.retry_after}
+                return mcp_error("rate_limited", str(e), retry=True, retry_after_seconds=e.retry_after)
 
             analysis = analyze_source(file_content, file="<mcp>", run_semantic=True)
             payload = analysis.validation_payload(include_metrics=include_metrics)
@@ -709,7 +709,7 @@ class YuhoMCPServer:
             try:
                 self._check_rate_limit("yuho_transpile", client_id)
             except RateLimitExceeded as e:
-                return {"error": str(e), "retry_after": e.retry_after}
+                return mcp_error("rate_limited", str(e), retry=True, retry_after_seconds=e.retry_after)
 
             from yuho.parser import get_parser
             from yuho.ast import ASTBuilder
@@ -723,10 +723,10 @@ class YuhoMCPServer:
                     message="Failed to parse source",
                 )
             except ParserBoundaryError as e:
-                return {"error": str(e)}
+                return mcp_error("internal_error", str(e))
 
             if result.errors:
-                return {"error": f"Parse error: {result.errors[0].message}"}
+                return mcp_error("parse_error", result.errors[0].message)
 
             try:
                 builder = ASTBuilder(file_content)
@@ -736,7 +736,7 @@ class YuhoMCPServer:
                     message="Failed to build AST",
                 )
             except ASTBoundaryError as e:
-                return {"error": str(e)}
+                return mcp_error("internal_error", str(e))
 
             try:
                 transpile_target = TranspileTarget.from_string(target)
@@ -749,9 +749,9 @@ class YuhoMCPServer:
 
                 return {"output": output}
             except ValueError as e:
-                return {"error": f"Invalid target: {e}"}
+                return mcp_error("invalid_argument", f"Invalid target: {e}")
             except TranspileBoundaryError as e:
-                return {"error": str(e)}
+                return mcp_error("internal_error", str(e))
 
         @tool_with_structured_logging()
         async def yuho_explain(
@@ -771,7 +771,7 @@ class YuhoMCPServer:
             try:
                 self._check_rate_limit("yuho_explain", client_id)
             except RateLimitExceeded as e:
-                return {"error": str(e), "retry_after": e.retry_after}
+                return mcp_error("rate_limited", str(e), retry=True, retry_after_seconds=e.retry_after)
 
             from yuho.parser import get_parser
             from yuho.ast import ASTBuilder
@@ -785,10 +785,10 @@ class YuhoMCPServer:
                     message="Failed to parse source",
                 )
             except ParserBoundaryError as e:
-                return {"error": str(e)}
+                return mcp_error("internal_error", str(e))
 
             if result.errors:
-                return {"error": f"Parse error: {result.errors[0].message}"}
+                return mcp_error("parse_error", result.errors[0].message)
 
             try:
                 builder = ASTBuilder(file_content)
@@ -798,7 +798,7 @@ class YuhoMCPServer:
                     message="Failed to build AST",
                 )
             except ASTBoundaryError as e:
-                return {"error": str(e)}
+                return mcp_error("internal_error", str(e))
 
             # Filter to specific section if requested
             if section:
@@ -806,7 +806,7 @@ class YuhoMCPServer:
 
                 matching = [s for s in ast.statutes if section in s.section_number]
                 if not matching:
-                    return {"error": f"Section {section} not found"}
+                    return mcp_error("not_found", f"Section {section} not found", section=section)
                 ast = ModuleNode(
                     imports=ast.imports,
                     type_defs=ast.type_defs,
@@ -824,7 +824,7 @@ class YuhoMCPServer:
                 )
                 return {"explanation": explanation}
             except TranspileBoundaryError as e:
-                return {"error": str(e)}
+                return mcp_error("internal_error", str(e))
 
         @tool_with_structured_logging()
         async def yuho_parse(file_content: str) -> Dict[str, Any]:
@@ -849,7 +849,7 @@ class YuhoMCPServer:
                         "message": "Failed to build AST",
                     }
                 )
-                return {"error": first_error["message"], "validation": payload}
+                return mcp_error("invalid_argument", first_error["message"], validation=payload)
 
             # Use JSON transpiler to serialize AST
             json_transpiler = JSONTranspiler(include_locations=False)
@@ -880,10 +880,10 @@ class YuhoMCPServer:
                     message="Failed to parse source",
                 )
             except ParserBoundaryError as e:
-                return {"error": str(e)}
+                return mcp_error("internal_error", str(e))
 
             if result.errors:
-                return {"error": f"Parse error: {result.errors[0].message}"}
+                return mcp_error("parse_error", result.errors[0].message)
 
             try:
                 builder = ASTBuilder(file_content)
@@ -893,13 +893,13 @@ class YuhoMCPServer:
                     message="Failed to build AST",
                 )
             except ASTBoundaryError as e:
-                return {"error": str(e)}
+                return mcp_error("internal_error", str(e))
 
             try:
                 formatted = _format_module(ast)
                 return {"formatted": formatted}
             except (TypeError, ValueError, AttributeError, RuntimeError) as e:
-                return {"error": str(e)}
+                return mcp_error("internal_error", str(e))
 
         @tool_with_structured_logging()
         async def yuho_complete(file_content: str, line: int, col: int) -> Dict[str, Any]:
@@ -1561,9 +1561,9 @@ class YuhoMCPServer:
                                 }
                             }
                         except Exception as e:
-                            return {"error": str(e)}
+                            return mcp_error("internal_error", str(e))
 
-            return {"error": f"Section {section} not found in library"}
+            return mcp_error("not_found", f"Section {section} not found", section=section)
 
         # (yuho_statute_to_yuho was cut in the Phase D endpoint trim.
         # MCP clients own the LLM; they can construct Yuho code themselves
@@ -1589,7 +1589,7 @@ class YuhoMCPServer:
             # normalise to bare section number
             a = anchor.strip()
             m = re.match(r"^(?:pr)?(\d+[A-Za-z]*)-?$", a)
-            if not m: return {"error": f"anchor not recognised: {anchor!r}"}
+            if not m: return mcp_error("invalid_argument", f"anchor not recognised: {anchor!r}", anchor=anchor)
             section = m.group(1)
             library_path = Path(__file__).parent.parent.parent.parent / "library"
             for meta_file in library_path.glob("**/metadata.toml"):
@@ -1604,7 +1604,7 @@ class YuhoMCPServer:
                             "sso_url": meta.get("verification", {}).get("sso_url", ""),
                         }
                 except Exception: continue
-            return {"error": f"section {section} not found"}
+            return mcp_error("not_found", f"section {section} not found", section=section)
 
         @tool_with_structured_logging()
         async def yuho_find_citations_to(section: str) -> Dict[str, Any]:
@@ -1671,11 +1671,11 @@ class YuhoMCPServer:
             repo = Path(__file__).parent.parent.parent.parent
             raw_path = repo / "library" / "penal_code" / "_raw" / "act.json"
             if not raw_path.is_file():
-                return {"error": "_raw/act.json not found"}
+                return mcp_error("not_found", "_raw/act.json missing — run scripts/scrape_sso.py")
             raw = _j.loads(raw_path.read_text())
             by_num = {s["number"]: s for s in raw.get("sections", []) if s.get("number")}
             sec = by_num.get(section)
-            if not sec: return {"error": f"section {section} not in canonical corpus"}
+            if not sec: return mcp_error("not_found", f"section {section} not in canonical corpus", section=section)
             # find encoded dir
             encoded = {"path": None, "source": None, "metadata_toml": None}
             for p in (repo / "library" / "penal_code").iterdir():
@@ -1738,7 +1738,7 @@ class YuhoMCPServer:
             repo = Path(__file__).parent.parent.parent.parent
             cov_path = repo / "library" / "penal_code" / "_coverage" / "coverage.json"
             if not cov_path.is_file():
-                return {"error": "coverage.json missing — run scripts/coverage_report.py"}
+                return mcp_error("not_found", "coverage.json missing — run scripts/coverage_report.py")
             cov = _j.loads(cov_path.read_text())
             totals = cov.get("totals", {})
             unencoded = [
@@ -1779,11 +1779,11 @@ class YuhoMCPServer:
             import json as _j, re
             repo = Path(__file__).parent.parent.parent.parent
             raw_path = repo / "library" / "penal_code" / "_raw" / "act.json"
-            if not raw_path.is_file(): return {"error": "_raw/act.json not found"}
+            if not raw_path.is_file(): return mcp_error("not_found", "_raw/act.json missing — run scripts/scrape_sso.py")
             raw = _j.loads(raw_path.read_text())
             by_num = {s["number"]: s for s in raw.get("sections", []) if s.get("number")}
             sec = by_num.get(section)
-            if not sec: return {"error": f"section {section} not in canonical corpus"}
+            if not sec: return mcp_error("not_found", f"section {section} not in canonical corpus", section=section)
             marginal = sec.get("marginal_note", f"Section {section}")
             anchor = sec.get("anchor_id", f"pr{section}-")
             # slug: snake-case from marginal, dropping stopwords
@@ -1848,19 +1848,19 @@ statute {section} "{marginal}" effective 1872-01-01 {{
             repo = Path(__file__).parent.parent.parent.parent
             raw_path = repo / "library" / "penal_code" / "_raw" / "act.json"
             if not raw_path.is_file():
-                return {"error": "_raw/act.json not found"}
+                return mcp_error("not_found", "_raw/act.json missing — run scripts/scrape_sso.py")
             raw = _j.loads(raw_path.read_text())
             by_num = {s["number"]: s for s in raw.get("sections", []) if s.get("number")}
             sec = by_num.get(section)
             if not sec:
-                return {"error": f"section {section} not in canonical corpus"}
+                return mcp_error("not_found", f"section {section} not in canonical corpus", section=section)
 
             d = None
             for p in (repo / "library" / "penal_code").iterdir():
                 if p.is_dir() and _re.match(rf"s{section}_", p.name):
                     d = p; break
             if not d or not (d / "statute.yh").exists():
-                return {"error": f"no encoded statute.yh for s{section}"}
+                return mcp_error("not_found", f"no encoded statute.yh for s{section}", section=section)
             source = (d / "statute.yh").read_text()
 
             checklist: list[Dict[str, Any]] = []
@@ -2178,7 +2178,7 @@ statute {section} "{marginal}" effective 1872-01-01 {{
             repo = Path(__file__).parent.parent.parent.parent
             cov_path = repo / "library" / "penal_code" / "_coverage" / "coverage.json"
             if not cov_path.is_file():
-                return {"error": "coverage.json missing — run scripts/coverage_report.py"}
+                return mcp_error("not_found", "coverage.json missing — run scripts/coverage_report.py")
             cov = _j.loads(cov_path.read_text())
             rows = cov.get("sections", [])
             total = len(rows)
