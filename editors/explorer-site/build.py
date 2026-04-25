@@ -222,6 +222,24 @@ section.section-page h1 { margin: 0; font-size: 1.5rem; }
 section.section-page h1 .num { color: var(--c-muted); font-weight: 500; margin-right: 0.5em; font-family: ui-monospace, monospace; }
 section.section-page .meta { color: var(--c-muted); font-size: 0.92em; display: flex; gap: 0.9rem; flex-wrap: wrap; margin-top: 0.5rem; }
 
+.diagram {
+  width: 100%;
+  overflow: auto;
+  background: var(--c-card);
+  border: 1px solid var(--c-border);
+  border-radius: 6px;
+  padding: 0.8rem;
+  text-align: center;
+  margin: 0.6rem 0;
+}
+.diagram svg.yuho-mermaid-svg, .diagram svg {
+  max-width: 100%;
+  height: auto;
+}
+@media (prefers-color-scheme: dark) {
+  .diagram svg text { fill: #d6d6e0; }
+}
+
 .flag-callout {
   background: #fff8e6;
   border: 1px solid #ffd166;
@@ -483,6 +501,7 @@ def render_section(rec: Dict[str, Any]) -> str:
     raw_text = rec.get("raw", {}).get("text", "")
     en = rec.get("transpiled", {}).get("english", "")
     yh = rec.get("encoded", {}).get("yh_source", "")
+    mermaid_svg = rec.get("transpiled", {}).get("mermaid_svg") or ""
 
     refs = rec.get("references", {})
 
@@ -553,6 +572,8 @@ def render_section(rec: Dict[str, Any]) -> str:
     <thead><tr><th>From</th><th>Kind</th><th>Context</th></tr></thead>
     <tbody>{render_edge_rows(refs.get("incoming", []), "incoming")}</tbody>
   </table>
+
+  {f'<h2>Diagram</h2><div class="diagram">{mermaid_svg}</div>' if mermaid_svg else ""}
 
   <h2>Encoded <code>.yh</code> source</h2>
   <pre class="src">{_esc(yh) or "(no encoded source)"}</pre>
