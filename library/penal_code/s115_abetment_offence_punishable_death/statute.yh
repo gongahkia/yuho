@@ -19,6 +19,7 @@ statute 115 "Abetment of offence punishable with death or imprisonment for life"
 
         alternative {
             fine := unlimited;
+        caning := unspecified;
             supplementary := "The offender shall also be liable to fine or to caning.";
     
         }

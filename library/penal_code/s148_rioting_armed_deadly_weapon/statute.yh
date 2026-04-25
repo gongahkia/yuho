@@ -12,11 +12,11 @@ statute 148 "Rioting, armed with a deadly weapon" effective 1872-01-01 {
 
     penalty {
         imprisonment := 0 years .. 10 years;
+        caning := unspecified;
         supplementary := "The offender shall also be liable to caning.";
     }
 
-    // Heading
-    // Illustration
-    // Raw sub-item preserved verbatim from the canonical text.
-    // The last section is subject to the same illustration as section 144.
+    illustration cross_reference {
+        "The last section is subject to the same illustration as section 144."
+    }
 }

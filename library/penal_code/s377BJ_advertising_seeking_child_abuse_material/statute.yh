@@ -32,6 +32,7 @@ statute 377BJ "Advertising or seeking child abuse material" effective 1872-01-01
 
             alternative {
                 fine := unlimited;
+        caning := unspecified;
                 supplementary := "The person shall also be liable to fine or to caning. [15/2019]";
         
             }

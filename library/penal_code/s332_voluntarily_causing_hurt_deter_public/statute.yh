@@ -29,6 +29,7 @@ statute 332 "Voluntarily causing hurt to deter public servant from his duty" eff
 
     penalty alternative when additional_non_imprisonment_liability {
         fine := unlimited;
+        caning := unspecified;
         supplementary := "The offender shall also be liable to fine or to caning, provided that in exceptional circumstances imprisonment need not be imposed. [15/2019]";
     }
 }

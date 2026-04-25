@@ -1,6 +1,6 @@
 # Yuho — Singapore Penal Code provenance & fidelity ledger
 
-_Generated 2026-04-25T05:04:47Z._
+_Generated 2026-04-25T05:16:26Z._
 
 Per-section audit trail. For every encoded section the ledger records
 the canonical SSO anchor, a SHA-256 hash of the scraped text, the

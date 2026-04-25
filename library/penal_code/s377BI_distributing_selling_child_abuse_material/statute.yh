@@ -26,6 +26,7 @@ statute 377BI "Distributing or selling child abuse material" effective 1872-01-0
 
             alternative {
                 fine := unlimited;
+        caning := unspecified;
                 supplementary := "The offender shall also be liable to fine or to caning. [15/2019]";
         
             }

@@ -30,6 +30,7 @@ statute 377BF "Sexual exposure" effective 1872-01-01 effective 2020-01-01 {
         penalty or_both {
             imprisonment := 0 years .. 1 years;
             fine := unlimited;
+        caning := unspecified;
         }
     }
 

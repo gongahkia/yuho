@@ -25,6 +25,7 @@ statute 333 "Voluntarily causing grievous hurt to deter public servant from his 
 
         alternative {
             fine := unlimited;
+        caning := unspecified;
             supplementary := "The offender shall also be liable to fine or to caning.";
     
         }

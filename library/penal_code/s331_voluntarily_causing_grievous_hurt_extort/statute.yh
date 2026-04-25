@@ -19,6 +19,7 @@ statute 331 "Voluntarily causing grievous hurt to extort confession or to compel
 
         alternative {
             fine := unlimited;
+        caning := unspecified;
             supplementary := "The offender shall also be liable to fine or to caning.";
     
         }

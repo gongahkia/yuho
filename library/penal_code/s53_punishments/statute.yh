@@ -10,6 +10,7 @@ statute 53 "Punishments" effective 1872-01-01 {
         punishment_forfeiture_of_property := "forfeiture of property";
         punishment_fine := "fine";
         punishment_caning := "caning";
-        explanation_caning_with_rattan := "Explanation. —Caning shall be with a rattan.";
     }
+
+    /// Explanation. —Caning shall be with a rattan.
 }
