@@ -223,170 +223,6 @@ statute 300 "NoArgs" {
 
 
 # =========================================================================
-# Catala transpiler
-# =========================================================================
-
-
-@pytest.mark.skipif(
-    not hasattr(TranspileTarget, "CATALA"),
-    reason="Catala transpiler not yet shipped (planned target).",
-)
-class TestCatalaTranspiler:
-    def _transpile(self, source: str) -> str:
-        mod = parse(source)
-        registry = TranspilerRegistry.instance()
-        transpiler = registry.get(TranspileTarget.CATALA)
-        return transpiler.transpile(mod)
-
-    def test_catala_statute(self):
-        src = """
-statute 378 "Theft" effective 1872-01-01 {
-    definitions {
-        theft := "dishonest taking of property"
-    }
-    elements {
-        actus_reus taking := "moves property out of possession"
-        mens_rea dishonesty := "intention to dishonestly take"
-    }
-    penalty {
-        imprisonment := 3 years
-        fine := $10,000
-    }
-}
-"""
-        output = self._transpile(src)
-        assert "Section 378" in output
-        assert "declaration scope" in output
-        assert "taking" in output
-        assert "dishonesty" in output
-        assert "guilty" in output
-
-    def test_catala_legal_test(self):
-        src = """
-legal_test ValidOffer {
-    bool definite,
-    bool communicated,
-    requires definite && communicated
-}
-"""
-        output = self._transpile(src)
-        assert "LegalTest" in output
-        assert "test_satisfied" in output
-
-    def test_catala_conflict_check(self):
-        src = """
-conflict_check TestConflict {
-    source := "file_a"
-    target := "file_b"
-}
-"""
-        output = self._transpile(src)
-        assert "Conflict check" in output
-        assert "file_a" in output
-
-    def test_catala_with_exception(self):
-        src = """
-statute 100 "Test" {
-    elements {
-        actus_reus act := "some act"
-    }
-    exception self_defence {
-        "acted in self-defence"
-    }
-}
-"""
-        output = self._transpile(src)
-        assert "exception" in output
-
-
-# =========================================================================
-# F* transpiler
-# =========================================================================
-
-
-@pytest.mark.skipif(
-    not hasattr(TranspileTarget, "FSTAR"),
-    reason="F* transpiler not yet shipped (planned target).",
-)
-class TestFStarTranspiler:
-    def _transpile(self, source: str) -> str:
-        mod = parse(source)
-        registry = TranspilerRegistry.instance()
-        transpiler = registry.get(TranspileTarget.FSTAR)
-        return transpiler.transpile(mod)
-
-    def test_fstar_statute(self):
-        src = """
-statute 378 "Theft" effective 1872-01-01 {
-    definitions {
-        theft := "dishonest taking of property"
-    }
-    elements {
-        actus_reus taking := "moves property out of possession"
-        mens_rea dishonesty := "intention to dishonestly take"
-    }
-    penalty {
-        imprisonment := 3 years
-    }
-}
-"""
-        output = self._transpile(src)
-        assert "module YuhoStatutes" in output
-        assert "section_" in output
-        assert "taking" in output
-        assert "dishonesty" in output
-        assert "is_guilty" in output
-
-    def test_fstar_struct(self):
-        src = """
-struct Party {
-    string name,
-    int age,
-}
-"""
-        output = self._transpile(src)
-        assert "type" in output
-        assert "name" in output
-        assert "string" in output
-
-    def test_fstar_legal_test(self):
-        src = """
-legal_test ValidContract {
-    bool offer,
-    bool acceptance,
-    requires offer && acceptance
-}
-"""
-        output = self._transpile(src)
-        assert "Legal test" in output
-        assert "test_" in output
-
-    def test_fstar_enum(self):
-        src = """
-enum Verdict {
-    Guilty,
-    NotGuilty,
-    Acquitted,
-}
-"""
-        output = self._transpile(src)
-        assert "Guilty" in output
-        assert "NotGuilty" in output
-
-    def test_fstar_with_annotations(self):
-        src = """
-@amended("2020-01-01", "Reform Act")
-statute 100 "Annotated" {
-    elements {
-        actus_reus act := "test"
-    }
-}
-"""
-        output = self._transpile(src)
-        assert "@amended" in output
-
-
-# =========================================================================
 # Logic engine
 # =========================================================================
 
@@ -555,31 +391,6 @@ statute 100 "Test" {
 
 
 # =========================================================================
-# Transpiler target enum
-# =========================================================================
-
-
-@pytest.mark.skipif(
-    not hasattr(TranspileTarget, "CATALA") or not hasattr(TranspileTarget, "FSTAR"),
-    reason="Catala / F* transpiler targets not yet shipped.",
-)
-class TestTranspileTargets:
-    def test_catala_from_string(self):
-        assert TranspileTarget.from_string("catala") == TranspileTarget.CATALA
-
-    def test_fstar_from_string(self):
-        assert TranspileTarget.from_string("fstar") == TranspileTarget.FSTAR
-        assert TranspileTarget.from_string("f*") == TranspileTarget.FSTAR
-        assert TranspileTarget.from_string("fst") == TranspileTarget.FSTAR
-
-    def test_catala_extension(self):
-        assert TranspileTarget.CATALA.file_extension == ".catala_en"
-
-    def test_fstar_extension(self):
-        assert TranspileTarget.FSTAR.file_extension == ".fst"
-
-
-# =========================================================================
 # Integration: parse + transpile roundtrip
 # =========================================================================
 
@@ -627,12 +438,8 @@ conflict_check S100_vs_S200 {
         assert len(mod.legal_tests) == 1
         assert len(mod.conflict_checks) == 1
         assert len(mod.statutes[0].annotations) == 2
-        # Transpile to all available targets. Some referenced targets
-        # (CATALA, FSTAR, PROLOG) are planned but not yet shipped — the
-        # enum may not declare them. Skip those rather than fail.
-        wanted = ["CATALA", "FSTAR", "JSON", "ENGLISH", "PROLOG"]
-        targets = [getattr(TranspileTarget, n) for n in wanted
-                   if hasattr(TranspileTarget, n)]
+        # Transpile to every shipped target the enum declares.
+        targets = list(TranspileTarget)
         registry = TranspilerRegistry.instance()
         for target in targets:
             transpiler = registry.get(target)

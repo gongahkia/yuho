@@ -400,38 +400,6 @@ class TestCrossTranspilerConsistency:
     Invariant: JSON AST parsed back should match original structural properties.
     """
 
-    @given(yuho_statute_block())
-    @SLOW_SETTINGS
-    def test_json_and_jsonld_structural_consistency(self, statute):
-        """JSON and JSON-LD transpilers should produce structurally consistent output."""
-        import json
-        from yuho.parser import Parser
-        from yuho.ast import ASTBuilder
-        try:
-            from yuho.transpile import JSONTranspiler, JSONLDTranspiler
-        except ImportError:
-            pytest.skip("JSONLDTranspiler not currently exported "
-                        "(planned target, not yet shipped)")
-
-        parser = Parser()
-        result = parser.parse(statute)
-        assume(result.is_valid)
-
-        builder = ASTBuilder(statute)
-        ast = builder.build(result.root_node)
-
-        # Both transpilers
-        json_transpiler = JSONTranspiler(include_locations=False)
-        jsonld_transpiler = JSONLDTranspiler()
-
-        json_output = json.loads(json_transpiler.transpile(ast))
-        jsonld_output = json.loads(jsonld_transpiler.transpile(ast))
-
-        # Both should have statutes
-        assert "statutes" in json_output
-        # JSON-LD wraps differently, check @graph or root structure
-        assert "@context" in jsonld_output or "statutes" in jsonld_output
-
     @given(yuho_module())
     @SLOW_SETTINGS
     def test_transpiler_produces_valid_output(self, module):

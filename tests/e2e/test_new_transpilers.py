@@ -66,41 +66,6 @@ def two_statute_ast():
     return result.ast
 
 
-@pytest.mark.skipif(
-    not hasattr(TranspileTarget, "BIBTEX"),
-    reason="BibTeX transpiler not yet shipped (planned target).",
-)
-class TestBibTeXTranspiler:
-    def test_produces_output(self, single_ast):
-        t = get_transpiler(TranspileTarget.BIBTEX)
-        output = t.transpile(single_ast)
-        assert isinstance(output, str)
-
-    def test_empty_for_no_caselaw(self, single_ast):
-        t = get_transpiler(TranspileTarget.BIBTEX)
-        output = t.transpile(single_ast)
-        # no case_law in sample, should produce minimal/empty output
-        assert isinstance(output, str)
-
-
-@pytest.mark.skipif(
-    not hasattr(TranspileTarget, "COMPARATIVE"),
-    reason="Comparative transpiler not yet shipped (planned target).",
-)
-class TestComparativeTranspiler:
-    def test_needs_two_statutes(self, single_ast):
-        t = get_transpiler(TranspileTarget.COMPARATIVE)
-        output = t.transpile(single_ast)
-        assert "Need at least 2 statutes" in output or "need" in output.lower()
-
-    def test_produces_table_for_two(self, two_statute_ast):
-        t = get_transpiler(TranspileTarget.COMPARATIVE)
-        output = t.transpile(two_statute_ast)
-        assert "First Offence" in output
-        assert "Second Offence" in output
-        assert "|" in output  # markdown table
-
-
 class TestVerificationReport:
     def test_produces_latex(self, single_ast):
         from yuho.transpile.verification_report import generate_verification_report
@@ -126,35 +91,14 @@ class TestVerificationReport:
 
 
 class TestAllTargetsRoundtrip:
-    """Ensure all transpile targets produce non-empty output. Targets that
-    have an alias listed but aren't currently shipped (graphql / blocks /
-    bibtex / comparative / akomantoso / prolog) skip cleanly so the suite
-    stays green while the planned-target gap is visible."""
+    """Every shipped transpile target produces non-empty output."""
 
-    TARGETS = [
-        "json",
-        "english",
-        "mermaid",
-        "latex",
-        "alloy",
-        "graphql",
-        "blocks",
-        "bibtex",
-        "comparative",
-        "akomantoso",
-        "prolog",
-    ]
+    TARGETS = ["json", "english", "mermaid", "latex", "alloy", "docx"]
 
     @pytest.mark.parametrize("target_name", TARGETS)
     def test_target_produces_output(self, single_ast, target_name):
-        try:
-            target = TranspileTarget.from_string(target_name)
-        except ValueError:
-            pytest.skip(f"transpile target {target_name!r} not yet shipped")
-        try:
-            t = get_transpiler(target)
-        except (KeyError, ValueError):
-            pytest.skip(f"transpile target {target_name!r} not registered")
+        target = TranspileTarget.from_string(target_name)
+        t = get_transpiler(target)
         output = t.transpile(single_ast)
         assert isinstance(output, str)
         assert len(output) > 0, f"{target_name} produced empty output"

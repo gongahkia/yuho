@@ -923,18 +923,10 @@ class TestTranspileTarget:
     def test_from_string_aliases(self):
         from yuho.transpile.base import TranspileTarget
 
-        # Always-shipped targets.
         assert TranspileTarget.from_string("json") == TranspileTarget.JSON
         assert TranspileTarget.from_string("en") == TranspileTarget.ENGLISH
         assert TranspileTarget.from_string("tex") == TranspileTarget.LATEX
         assert TranspileTarget.from_string("mmd") == TranspileTarget.MERMAID
-        # Targets that may not be exported in the current shipped set
-        # (json-ld / graphql / bibtex / comparative are planned).
-        for alias, name in [("jsonld", "JSON_LD"), ("json-ld", "JSON_LD"),
-                            ("gql", "GRAPHQL"), ("bib", "BIBTEX"),
-                            ("compare", "COMPARATIVE")]:
-            if hasattr(TranspileTarget, name):
-                assert TranspileTarget.from_string(alias) == getattr(TranspileTarget, name)
 
     def test_from_string_case_insensitive(self):
         from yuho.transpile.base import TranspileTarget
@@ -951,14 +943,10 @@ class TestTranspileTarget:
     def test_file_extensions(self):
         from yuho.transpile.base import TranspileTarget
 
-        # Always-shipped targets.
         assert TranspileTarget.JSON.file_extension == ".json"
         assert TranspileTarget.LATEX.file_extension == ".tex"
         assert TranspileTarget.MERMAID.file_extension == ".mmd"
         assert TranspileTarget.ALLOY.file_extension == ".als"
-        # Optional target — only assert if it's present in the enum.
-        if hasattr(TranspileTarget, "COMPARATIVE"):
-            assert TranspileTarget.COMPARATIVE.file_extension == ".md"
 
 
 # =========================================================================
