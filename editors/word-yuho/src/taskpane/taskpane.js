@@ -223,37 +223,47 @@ async function insert(kind) {
     return;
   }
 
+  // Citation: insert as a real hyperlink, not a string with a tail URL.
+  if (kind === "citation") {
+    const url = rec.sso_url
+      || `https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr${rec.section_number}-#pr${rec.section_number}-`;
+    const anchorText = `Penal Code 1871, s.${rec.section_number} (${rec.section_title})`;
+    const html = `<a href="${escape(url)}">${escape(anchorText)}</a>`;
+    await Word.run(async (context) => {
+      const range = context.document.getSelection();
+      range.insertHtml(html, Word.InsertLocation.replace);
+      await context.sync();
+    });
+    return;
+  }
+
+  // Elements: insert as a native Word table with one row per typed element,
+  // not a stringified bullet list.
+  if (kind === "elements") {
+    const elements = parseElements(rec);
+    await Word.run(async (context) => {
+      const range = context.document.getSelection();
+      const heading = `Elements of s${rec.section_number} (${rec.section_title})`;
+      range.insertText(heading + "\n", Word.InsertLocation.replace);
+      const after = range.getRange("End");
+      if (!elements.length) {
+        after.insertText("(no typed elements found)", Word.InsertLocation.after);
+      } else {
+        const values = [["Kind", "Label", "Statement"]];
+        for (const e of elements) values.push([e.kind, e.label, e.text]);
+        after.insertTable(values.length, 3, Word.InsertLocation.after, values);
+      }
+      await context.sync();
+    });
+    return;
+  }
+
+  // Plain-text inserts: English transpilation.
   let text = "";
   switch (kind) {
     case "english":
       text = rec.transpiled?.english || "(no English transpilation available)";
       break;
-    case "citation":
-      text = `Penal Code 1871, s.${rec.section_number} (${rec.section_title}), `
-           + `available at ${rec.sso_url}`;
-      break;
-    case "elements": {
-      const yh = rec.encoded?.yh_source || "";
-      const lines = yh.split("\n");
-      const elements = [];
-      let inElems = false, depth = 0;
-      for (const line of lines) {
-        if (!inElems && /^\s*elements\s*\{/.test(line)) {
-          inElems = true; depth = (line.match(/\{/g) || []).length - (line.match(/\}/g) || []).length;
-          continue;
-        }
-        if (inElems) {
-          depth += (line.match(/\{/g) || []).length;
-          depth -= (line.match(/\}/g) || []).length;
-          if (depth <= 0) break;
-          const m = line.match(/\b(actus_reus|mens_rea|circumstance|obligation|prohibition|permission)\s+\w+\s*:=\s*"([^"]+)"/);
-          if (m) elements.push(`• [${m[1]}] ${m[2]}`);
-        }
-      }
-      text = `Elements of s${rec.section_number} (${rec.section_title}):\n` +
-             (elements.length ? elements.join("\n") : "(no typed elements found)");
-      break;
-    }
   }
 
   await Word.run(async (context) => {
@@ -261,6 +271,31 @@ async function insert(kind) {
     range.insertText(text, Word.InsertLocation.replace);
     await context.sync();
   });
+}
+
+// Pulls structured elements out of the encoded `.yh` source. Parses the
+// `elements { ... }` block and matches typed element declarations of the
+// shape `<kind> <label> := "<text>"`. Returns an array of {kind,label,text}.
+function parseElements(rec) {
+  const yh = rec.encoded?.yh_source || "";
+  const lines = yh.split("\n");
+  const out = [];
+  let inElems = false, depth = 0;
+  for (const line of lines) {
+    if (!inElems && /^\s*elements\s*\{/.test(line)) {
+      inElems = true;
+      depth = (line.match(/\{/g) || []).length - (line.match(/\}/g) || []).length;
+      continue;
+    }
+    if (inElems) {
+      depth += (line.match(/\{/g) || []).length;
+      depth -= (line.match(/\}/g) || []).length;
+      if (depth <= 0) break;
+      const m = line.match(/\b(actus_reus|mens_rea|circumstance|obligation|prohibition|permission)\s+(\w+)\s*:=\s*"([^"]+)"/);
+      if (m) out.push({ kind: m[1], label: m[2], text: m[3] });
+    }
+  }
+  return out;
 }
 
 function escape(s) {
