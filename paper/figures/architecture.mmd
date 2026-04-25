@@ -1,0 +1,35 @@
+%% Yuho architecture overview.
+%% Render: cd paper && make figures   (produces figures/architecture.pdf)
+flowchart LR
+  subgraph Ingest
+    SSO[SSO scrape] --> RAW[(library/penal_code/_raw/act.json)]
+  end
+
+  subgraph Frontend
+    YH[".yh source"] --> TS[tree-sitter grammar]
+    TS --> AST[Python AST]
+  end
+
+  subgraph Analysis
+    AST --> SEM[semantic checks]
+    AST --> LINT[fidelity diagnostics]
+    AST --> Z3[Z3 solver]
+    AST --> ALLOY[Alloy model]
+  end
+
+  subgraph Transpilers
+    AST --> JSON[JSON]
+    AST --> EN[English]
+    AST --> TEX[LaTeX]
+    AST --> MMD[Mermaid]
+    AST --> ALS[Alloy ALS]
+    AST --> DOCX[DOCX]
+  end
+
+  subgraph Surfaces
+    AST --> CLI[yuho CLI]
+    AST --> LSP[Language Server]
+    AST --> MCP[MCP server]
+  end
+
+  RAW -.fidelity check.-> LINT

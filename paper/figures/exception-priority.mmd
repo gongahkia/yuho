@@ -1,0 +1,11 @@
+%% G13 — Catala-style prioritised exception DAG.
+flowchart TD
+  RULE["base rule: liable"]
+  E1["exception 1: consent (priority 1)"]
+  E2["exception 2: self-defence (priority 2)"]
+  E3["exception 3: insanity (priority 3)"]
+  E1 -->|defeats| RULE
+  E2 -->|defeats| RULE
+  E3 -->|defeats| RULE
+  E2 -.priority order.-> E1
+  E3 -.priority order.-> E2

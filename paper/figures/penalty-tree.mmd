@@ -1,0 +1,8 @@
+%% G12 nested penalty combinator example.
+%% Statute: s302 — "death or imprisonment for life, and shall also be liable to fine".
+flowchart TD
+  ROOT["penalty cumulative"]
+  ROOT --> A["alternative"]
+  A --> DEATH["death"]
+  A --> LIFE["imprisonment: life"]
+  ROOT --> FINE["fine: unlimited"]
