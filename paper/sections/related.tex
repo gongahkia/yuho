@@ -1,43 +1,254 @@
 \section{Related Work}
 \label{sec:related}
 
-\todo{Comparison matrix as Table~\ref{tab:related}: rows = Yuho, Catala,
-lam4, LexScript, Akoma Ntoso, LDOC, LegalRuleML; columns = expressivity
-(deontic types, prioritised defaults, penalty combinators, illustration blocks),
-tooling (parser, LSP, MCP, transpilers), verification hookup (Z3, Alloy,
-none), and target coverage (single-statute / corpus / synthetic).}
+Section~\ref{sec:background} surveyed the prior art in narrative form;
+this section consolidates the comparison into structured form
+(Tables~\ref{tab:expressivity} and~\ref{tab:tooling}), then discusses
+the closest peers and articulates how Yuho positions against each.
+
+\subsection{Comparison matrix}
+\label{subsec:matrix}
+
+Tables~\ref{tab:expressivity} and~\ref{tab:tooling} compare Yuho against
+six points of reference: Catala~\cite{catala2021},
+lam4~\cite{lam4}, LexScript~\cite{lexscript},
+LDOC~\cite{ldoc}, Akoma Ntoso~\cite{akomantoso}, and
+LegalRuleML~\cite{legalruleml}. The first table tabulates expressivity
+along eight axes; the second tabulates tooling and demonstrated
+coverage. We mark a feature as present (\checkmark), partial
+($\sim$), absent (---), or non-applicable to the system's stated
+scope (n/a). Where a feature is present in principle but the system's
+documentation does not pin it down, we mark $\sim$ rather than
+\checkmark.
+
+\begin{table*}[t]
+\caption{Expressivity comparison along eight axes. \checkmark{} = first-class
+support, $\sim$ = partial / via workaround, --- = absent, n/a = not in
+scope.}
+\label{tab:expressivity}
+\begin{small}
+\begin{tabular}{@{}lcccccccc@{}}
+\toprule
+\textbf{System}
+  & \shortstack{Statute-\\shaped\\top-level}
+  & \shortstack{Deontic\\element\\types}
+  & \shortstack{Burden\\qualifiers}
+  & \shortstack{Penalty\\algebra}
+  & \shortstack{Catala-\\style\\priority}
+  & \shortstack{Causal /\\temporal\\edges}
+  & \shortstack{Verbatim\\illustration\\blocks}
+  & \shortstack{Amendment\\lineage} \\
+\midrule
+\textbf{Yuho}    & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
+Catala           & ---        & ---        & ---        & ---        & \checkmark & ---        & ---        & ---        \\
+lam4             & ---        & \checkmark & ---        & ---        & ---        & ---        & ---        & ---        \\
+LexScript        & \checkmark & $\sim$     & ---        & ---        & ---        & ---        & ---        & ---        \\
+LDOC             & \checkmark & ---        & ---        & ---        & ---        & ---        & \checkmark & ---        \\
+Akoma Ntoso      & \checkmark & ---        & ---        & ---        & ---        & ---        & \checkmark & \checkmark \\
+LegalRuleML      & n/a        & \checkmark & ---        & ---        & $\sim$     & ---        & ---        & ---        \\
+\bottomrule
+\end{tabular}
+\end{small}
+\end{table*}
+
+\begin{table*}[t]
+\caption{Tooling and demonstrated coverage. ``Corpus scale'' is the
+largest publicly-encoded corpus we are aware of for each system.}
+\label{tab:tooling}
+\begin{small}
+\begin{tabular}{@{}lllllll@{}}
+\toprule
+\textbf{System}
+  & \textbf{Parser}
+  & \textbf{LSP}
+  & \textbf{MCP}
+  & \textbf{Verification}
+  & \textbf{Transpile targets}
+  & \textbf{Corpus scale} \\
+\midrule
+\textbf{Yuho} & tree-sitter & \checkmark & \checkmark & Z3 + Alloy
+                & 6 (JSON, English, \LaTeX, Mermaid, Alloy, DOCX)
+                & SG Penal Code, 524 sections \\
+Catala        & menhir / OCaml & ---         & ---        & native rewriting
+                & OCaml, Python
+                & Fragments of FR tax code \\
+lam4          & ANTLR        & $\sim$       & ---        & ---
+                & ---
+                & Synthetic contracts \\
+LexScript     & tree-sitter  & $\sim$       & ---        & ---
+                & multi
+                & Various, not pinned to one statute family \\
+LDOC          & Word + macros & ---         & ---        & ---
+                & PDF, DOCX
+                & Authored documents (varies) \\
+Akoma Ntoso   & XML          & via XSD      & ---        & ---
+                & many (XML tools)
+                & Multi-jurisdiction parliamentary docs \\
+LegalRuleML   & XML          & via XSD      & ---        & via mappings
+                & Several rule-language exports
+                & Norm-set fragments \\
+\bottomrule
+\end{tabular}
+\end{small}
+\end{table*}
+
+The honest reading of the matrix is that no two systems target the
+same point in the design space. Catala has the right defaults but
+no penalty algebra. lam4 has the right deontic core but no
+statute-level structural primitives. LexScript shares Yuho's
+tree-sitter-driven shape but has a thinner element model. LDOC has
+illustrations because Word renders them naturally, but it is a Word
+authoring tool first and a DSL second. Akoma Ntoso preserves
+structure faithfully and is the only competitor with real
+amendment-lineage support, but stops where semantics begins.
+LegalRuleML adds a deontic layer above the Akoma Ntoso markup, but
+does not commit to a fixed structural shape for an offence.
+
+The columns where Yuho is alone in claiming first-class support ---
+penalty algebra, burden qualifiers, causal/temporal edges, and the
+combination of all of the above on a statute-shaped top level --- are
+exactly the columns that fall out of taking the Penal Code's drafting
+conventions seriously. Where Yuho overlaps with a peer, the design
+borrows directly: Catala for the priority semantics, lam4 for the
+named-norm references planned under \textsf{G10}, LexScript for the
+tree-sitter pipeline shape and the Tarjan-SCC analysis, LDOC for the
+DOCX authoring loop. The borrowings are explicit; we do not claim
+novelty on the borrowed pieces.
 
 \subsection{Catala}
-Catala~\cite{catala2021} pioneered prioritised default rules for legal
-encoding. We adopt the priority semantics directly for our exception
-DAG (\S\ref{subsec:exceptions}) but disagree on top-level shape: Catala's
-top-level construct is a \emph{scope} (a callable function), whereas
-Yuho's top-level construct is a \emph{statute} block, which mirrors the
-drafting unit and carries fields (definitions, illustrations, case law)
-that a function-call shape does not naturally accommodate. Scope composition
-is on our roadmap but as an additional layer, not a replacement for the
-statute block.
+\label{subsec:rel_catala}
+
+Catala~\cite{catala2021} is the most influential reference for this
+work. The two systems disagree on top-level shape (scope vs statute)
+but agree that the right semantics for legal exceptions is prioritised
+default rules. We adopt the priority semantics directly: each Yuho
+\texttt{exception} block carries an integer \texttt{priority} field,
+and compilation to Z3 follows Catala's prioritised-rewriting algorithm
+in shape if not in proof. Catala also formalises a soundness theorem
+for its rewriting system; we do not, but we treat Catala's theorem
+as the warrant that the priority semantics is well-defined and behaves
+the way drafted statutes are read.
+
+The disagreement on top-level shape matters in practice. Catala's
+scope is a callable function: it takes inputs (facts about the case),
+returns outputs (the legal conclusion), and composes via scope-call
+sites. This is the right shape for tax code, where a tax-credit
+calculation is a function from taxpayer-facts to tax-owed. It is the
+wrong shape for a Penal Code section, where the section bundles
+definitions, elements, illustrations, and case law that are not
+function arguments. We discuss scope composition as a future-work
+layer (\S\ref{sec:limitations}) that adds Catala-style scope-call
+semantics on top of Yuho's statute blocks rather than replacing them.
 
 \subsection{lam4}
-lam4~\cite{lam4} centres on deontic logic and named-norm references. The
-\texttt{IS\_INFRINGED} predicate is the obvious target for our planned
-G10 inter-section semantic hookup. lam4 targets contracts and regulations;
-Yuho targets penal code. The two grammars are non-overlapping but
-philosophically aligned.
+\label{subsec:rel_lam4}
+
+lam4~\cite{lam4} originates from the SMU Centre for Computational
+Law and is, like Yuho, a Singapore-context legal DSL. It is the
+closest jurisdictional peer; the systems target different statute
+families (lam4: contracts and regulations; Yuho: penal code) but
+share an institutional context that makes comparison easy.
+
+lam4's distinctive primitive is the named-norm reference and the
+\texttt{IS\_INFRINGED} predicate: a contract clause can predicate
+on whether another named norm has been infringed, which composes
+cleanly into multi-clause reasoning. This composes directly into
+our planned \textsf{G10} cross-section semantic resolver: a Yuho
+section like \texttt{statute 107 abetment} should be able to
+predicate on whether a different section's offence elements are
+satisfied, and the lam4 \texttt{IS\_INFRINGED} shape is the right
+syntactic surface. We expect to import the predicate name and
+semantics, with credit, when \textsf{G10} lands.
 
 \subsection{LexScript}
-LexScript~\cite{lexscript} is the closest tooling-shaped peer: tree-sitter
-grammar, statute-shaped top-level. We borrow its Tarjan-SCC reference-graph
-analysis (planned, blocked on G10). LexScript has a thinner element model
-(no burden / no causal links / no Catala-style exception priority).
+\label{subsec:rel_lexscript}
+
+LexScript~\cite{lexscript} is the closest tooling-shaped peer. It
+shares Yuho's tree-sitter pipeline, multi-target transpile shape,
+and statute-shaped top-level grammar. The differences are in depth,
+not in approach: LexScript has a thinner element model (no burden
+qualifier, no causal-link edges, no Catala-style exception priority)
+and a broader cross-corpus posture (multiple statute families at
+shallow coverage rather than one at full coverage).
+
+The most directly portable LexScript idea is the Tarjan-SCC analysis
+over the statute reference graph. We borrow it under \textsf{G10}:
+once the cross-section resolver lands, an SCC pass will catch
+unreachable exception branches and cyclic cross-references that the
+plain parser cannot detect. The classification of LexScript as a
+``thinner-grammar / broader-coverage'' alternative to Yuho's
+``richer-grammar / single-family-coverage'' is meant descriptively;
+the two systems make different bets on the right place to be on the
+expressivity-coverage tradeoff.
 
 \subsection{Akoma Ntoso and LegalRuleML}
-\todo{Position as orthogonal: markup standards for archival exchange,
-not executable encodings. We can emit Akoma Ntoso XML as a future
-transpile target without competing with it.}
+\label{subsec:rel_akn}
+
+Akoma Ntoso~\cite{akomantoso} and LegalRuleML~\cite{legalruleml}
+are the OASIS-standardised XML schemas for, respectively, legislative
+structural markup and legal rule representation. They are not direct
+competitors to Yuho: their job is archival exchange and inter-system
+interoperability, not executable encoding.
+
+The constructive constraint that these standards impose on Yuho is
+that we should be at least as faithful on the structural axis. Akoma
+Ntoso is the only competitor with first-class amendment-lineage
+support (its \texttt{<modifies>} element family captures every
+gazetted amendment with its own metadata), and we treat that as the
+benchmark our \texttt{effective}/\texttt{repealed}/\texttt{subsumes}/
+\texttt{amends} clauses are obliged to match. We expect to ship a
+Yuho-to-Akoma-Ntoso transpile target as future work; the converse
+direction is harder because Akoma Ntoso does not commit to a fixed
+shape for an offence definition, so an Akoma-Ntoso-to-Yuho lifting
+would have to reconstruct missing semantics from the markup.
+
+LegalRuleML is more semantic than Akoma Ntoso: it has deontic
+operators (obligation, prohibition, permission) and isomorphic
+mappings to several rule languages. It does not commit to a
+prioritised-default semantics in the Catala sense, and it does not
+have a notion of penalty algebra or illustration blocks. Where
+Yuho's deontic operators (\texttt{obligation} / \texttt{prohibition}
+/ \texttt{permission} elements) overlap with LegalRuleML's, the
+mapping is straightforward; the rest of Yuho's structural surface
+falls outside LegalRuleML's scope.
 
 \subsection{LDOC}
-LDOC's authoring-loop emphasis (Word + PDF) is the inspiration for our
-DOCX transpile target. Yuho diverges by not making Word the source of
-truth: the canonical encoding is the \texttt{.yh} file in version control;
-DOCX is one of six output formats.
+\label{subsec:rel_ldoc}
+
+LDOC~\cite{ldoc} prioritises the authoring loop: lawyers draft in
+Word and the system extracts structured semantics. This is the
+opposite of Yuho's source-of-truth posture: Yuho treats the
+\texttt{.yh} file in version control as canonical and DOCX as one
+of six generated outputs, while LDOC treats the Word document as
+canonical and downstream renderings as derived. The two postures
+target different audiences --- LDOC for practitioners who already
+work in Word, Yuho for systems-and-DSL-friendly contributors --- and
+both are coherent.
+
+The constructive borrowing from LDOC is the DOCX transpile target.
+A Yuho-encoded section that renders cleanly to a Word document is
+a useful artefact for the practitioner audience, and the in-progress
+Microsoft Word add-in (\S\ref{subsec:editors}) is meant to bridge
+the two postures: a lawyer can browse Yuho-encoded sections from
+inside Word, insert formatted statute text via the add-in, and read
+the canonical Yuho file as needed without leaving the document.
+
+\subsection{Wider context}
+\label{subsec:rel_wider}
+
+Several lines of work outside the legal-DSL bracket inform Yuho's
+design without being direct comparators. Tree-sitter~\cite{treesitter}
+provides the incremental parsing infrastructure shared with
+LexScript and a growing number of other DSLs. The Language Server
+Protocol matured into the de-facto integration point between
+editors and language tooling, used by every modern legal DSL we
+surveyed. The Model Context Protocol~\cite{mcp2024}, introduced in
+2024, provides a parallel surface for AI clients; we are aware of
+no other legal DSL that ships an MCP server, though we expect
+several will in the next year.
+
+The verification stack borrows from the broader formal-methods
+literature. Z3~\cite{demoura2008z3} and Alloy~\cite{jackson2002alloy}
+are well-established tools whose application to legal reasoning has
+been demonstrated since the 2000s; our use of them is engineering
+rather than research, and we make no claims of solver-side novelty.
