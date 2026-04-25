@@ -104,6 +104,35 @@ templates that encode the most common queries (consistency,
 exception-priority well-formedness, mutual-exclusion of penalty
 branches, and inter-section overlap).
 
+\paragraph{Encoding the exception semantics correctly.} An early
+implementation of the Z3 generator asserted, per encoded section,
+the pair
+$\mathit{conviction} \Leftrightarrow \mathit{all\_elements}$ and
+$\mathit{exception\_fires} \Rightarrow \neg\mathit{conviction}$.
+The pair is consistent in isolation but jointly entails
+$\mathit{exception\_fires} \Rightarrow \neg\mathit{all\_elements}$,
+which is doctrinally the wrong reading: the whole purpose of an
+exception is to suppress conviction \emph{despite} the elements
+being satisfied (a defendant raising a Chapter IV general defence
+is not denying the elements; she is asking the court to excuse the
+conduct). Under the original encoding, the satisfiability query
+``does there exist a fact pattern in which the elements are
+satisfied and this exception fires?'' returned UNSAT for
+\statRawSections{}-equivalent sections that have any encoded
+exception, making the counter-example explorer's reachability
+diagnostic uniformly negative. The corrected encoding splits the
+biconditional via a synthetic
+$\mathit{elements\_satisfied}$ aggregate and asserts
+$\mathit{conviction} \Leftrightarrow \mathit{elements\_satisfied}
+\wedge \neg(\bigvee_i \mathit{fires}_i)$,
+which preserves the original semantics when no exception fires and
+admits the satisfied-but-excused case otherwise. The change moved
+exception reachability across the corpus from $4/21$ sections with
+at least one reachable exception to $21/21$ --- a confirmation that
+the correction matches the doctrine and a reminder that the design
+of structural verifications, even on small grammars, can sit
+arbitrarily close to a logical inversion of the intended reading.
+
 \subsection{Three-tier coverage harness}
 \label{subsec:coverage}
 Coverage is graded on a three-tier scale:
