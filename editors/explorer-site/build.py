@@ -89,6 +89,32 @@ header.site {
   flex-wrap: wrap;
 }
 header.site h1 { margin: 0; font-size: 1.4rem; font-weight: 700; letter-spacing: 0.02em; }
+header.site h1 a.brand { color: inherit; text-decoration: none; }
+header.site h1 a.brand:hover { text-decoration: underline; }
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  padding: 0.5rem 0.9rem;
+  background: var(--c-fg);
+  color: var(--c-bg);
+  z-index: 100;
+  border-radius: 0 0 6px 0;
+}
+.skip-link:focus { left: 0; top: 0; outline: 2px solid var(--c-accent); }
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
 header.site nav { margin-left: auto; display: flex; gap: 1.2rem; font-size: 0.95em; }
 header.site nav a { color: #fff; opacity: 0.92; }
 header.site nav a:hover { opacity: 1; text-decoration: underline; }
@@ -500,10 +526,11 @@ def _page(title: str, body: str, *, active_nav: str = "") -> str:
 <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
+<a class="skip-link" href="#main-content">Skip to content</a>
 <header class="site">
-  <h1><a href="/" style="color:inherit">Yuho</a></h1>
+  <h1><a href="/" class="brand">Yuho</a></h1>
   <span class="tagline">Singapore Penal Code 1871 — explorer</span>
-  <nav>
+  <nav aria-label="Primary">
     {nav_link("index", "Index", "/index.html")}
     {nav_link("coverage", "Coverage", "/coverage.html")}
     {nav_link("flags", "Flags", "/flags.html")}
@@ -511,7 +538,7 @@ def _page(title: str, body: str, *, active_nav: str = "") -> str:
     <a href="https://github.com/gongahkia/yuho">GitHub ↗</a>
   </nav>
 </header>
-<main>
+<main id="main-content">
 {body}
 </main>
 <footer class="site">
@@ -539,9 +566,12 @@ def render_index(index: Dict[str, Any]) -> str:
    <strong>{_esc(index['totals']['L3_stamped'])}</strong> human-stamped at the strictest tier.
    <strong style="color:var(--c-l3-flagged)">{_esc(index['totals']['L3_flagged'])}</strong> currently flagged for review.</p>
 <div class="searchbar">
-  <input id="search-input" type="search" placeholder="Search by section number or title (e.g. 415, cheating, theft)">
+  <label for="search-input" class="visually-hidden">Search sections</label>
+  <input id="search-input" type="search" autocomplete="off"
+         aria-controls="section-grid"
+         placeholder="Search by section number, title, element wording (e.g. 415, cheating, induces delivery)">
 </div>
-<div id="section-grid" class="grid"><p>Loading…</p></div>
+<div id="section-grid" class="grid" role="region" aria-label="Section results" aria-live="polite"><p>Loading…</p></div>
 """
     return _page("Yuho — Singapore Penal Code explorer", body, active_nav="index")
 
