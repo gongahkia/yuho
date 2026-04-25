@@ -275,8 +275,25 @@ class ChargeRecommender:
         return [s for s in out if s]
 
     @staticmethod
-    def _tokenise(s: str) -> List[str]:
-        return [w for w in re.split(r"[^a-zA-Z0-9]+", s.lower()) if len(w) > 2]
+    def _stem(word: str) -> str:
+        # Same rule-based stemmer as simulator._stem (Tier 2 #6). Kept
+        # in-module to avoid importing simulator at module-load time
+        # (the simulator path is only reachable via lazy sys.path mutation).
+        if len(word) <= 4:
+            return word
+        for suffix in ("ational", "ization", "ations", "ousness", "ively",
+                       "ation", "tion", "sion", "ously", "ingly", "ment",
+                       "ness", "able", "ible", "ing", "ies", "ied", "ed",
+                       "es", "ly", "er", "or", "s"):
+            if word.endswith(suffix) and len(word) - len(suffix) >= 3:
+                return word[: -len(suffix)]
+        return word
+
+    @classmethod
+    def _tokenise(cls, s: str) -> List[str]:
+        return [cls._stem(w)
+                for w in re.split(r"[^a-zA-Z0-9]+", s.lower())
+                if len(w) > 2]
 
     def _prefilter(
         self,

@@ -215,12 +215,61 @@ def _all_fact_strings(facts: Dict[str, Any]) -> List[str]:
     return out
 
 
+def _stem(word: str) -> str:
+    """Tiny rule-based stemmer (Porter-ish, deps-free).
+
+    Applies a few common suffix strips so `deceives` and `deception`
+    collapse to the same root, `instigates` and `instigation` likewise,
+    and `inducing` / `induced` / `induces` all reduce to `induc`. Run
+    on already-lowercased inputs.
+
+    Order matters: longest suffix first, otherwise `s` would consume
+    the trailing s of `tions`/`ions` before the longer rule fires.
+    """
+    if len(word) <= 4:
+        return word
+    for suffix in ("ational", "ization", "ization", "ations", "ization",
+                   "ization", "ousness", "ively", "ation", "tion", "sion",
+                   "ously", "ingly", "ment", "ness", "able", "ible",
+                   "ing", "ies", "ied", "ed", "es", "ly", "er", "or", "s"):
+        if word.endswith(suffix) and len(word) - len(suffix) >= 3:
+            return word[: -len(suffix)]
+    return word
+
+
+# Stop words that pass the 4+ char length filter but don't carry meaning;
+# excluded from both the desc-token count and the overlap set so they
+# don't inflate the threshold or produce spurious matches.
+_STOPWORDS = frozenset({
+    "that", "this", "with", "without", "from", "into", "onto", "upon",
+    "such", "than", "they", "them", "their", "theirs", "would", "could",
+    "shall", "should", "have", "having", "been", "were", "your", "yours",
+    "what", "when", "where", "which", "while", "person", "thing", "other",
+    "another", "anyone", "someone", "everyone", "actor", "victim",
+})
+
+
 def _suggests(elem_desc: str, fact_strings: List[str]) -> Optional[str]:
-    """Return a fact string that overlaps with the element description, if any."""
-    desc_words = {w.lower() for w in re.findall(r"[A-Za-z]{4,}", elem_desc)}
+    """Return a fact string that overlaps with the element description, if any.
+
+    Tier 2 #6: tokens are stemmed before comparison, so `deceives` in a
+    fact pattern matches the `deception` element description and
+    `instigates` matches `instigation`. The 2-token overlap threshold is
+    relaxed to 1 token when the (stop-word-filtered) element description
+    is short (<=3 tokens), which mirrors the case where a single salient
+    verb carries the entire element.
+    """
+    raw_desc = {w.lower() for w in re.findall(r"[A-Za-z]{4,}", elem_desc)
+                if w.lower() not in _STOPWORDS}
+    desc_words = {_stem(w) for w in raw_desc}
+    if not desc_words:
+        return None
+    threshold = 1 if len(desc_words) <= 3 else 2
     for fact in fact_strings:
-        fact_words = {w.lower() for w in re.findall(r"[A-Za-z]{4,}", fact)}
-        if len(desc_words & fact_words) >= 2:
+        raw_fact = {w.lower() for w in re.findall(r"[A-Za-z]{4,}", fact)
+                    if w.lower() not in _STOPWORDS}
+        fact_words = {_stem(w) for w in raw_fact}
+        if len(desc_words & fact_words) >= threshold:
             return fact
     return None
 
