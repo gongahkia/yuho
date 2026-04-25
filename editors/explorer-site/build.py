@@ -239,6 +239,8 @@ section.section-page header {
 section.section-page h1 { margin: 0; font-size: 1.5rem; }
 section.section-page h1 .num { color: var(--c-muted); font-weight: 500; margin-right: 0.5em; font-family: ui-monospace, monospace; }
 section.section-page .meta { color: var(--c-muted); font-size: 0.92em; display: flex; gap: 0.9rem; flex-wrap: wrap; margin-top: 0.5rem; }
+section.section-page .downloads { font-family: ui-monospace, monospace; font-size: 0.88em; }
+section.section-page .downloads a { color: var(--c-accent); margin: 0 0.05em; }
 
 .breadcrumb {
   font-size: 0.85em;
@@ -729,6 +731,16 @@ def render_section(rec: Dict[str, Any],
         '</nav>'
     )
 
+    n = rec["section_number"]
+    download_html = (
+        f'<span>·</span>'
+        f'<span class="downloads">downloads: '
+        f'<a href="/s/{_esc(n)}.json">JSON</a>'
+        f' · <a href="/s/{_esc(n)}.yh">.yh</a>'
+        f'{f"" if not en else f" · <a href=\"/s/{_esc(n)}.en.txt\">English</a>"}'
+        f'</span>'
+    )
+
     body = f"""
 <section class="section-page">
   {breadcrumb}
@@ -738,6 +750,7 @@ def render_section(rec: Dict[str, Any],
       <span>{' '.join(badges)}</span>
       <span>·</span>
       <a href="{_esc(rec.get('sso_url',''))}" target="_blank" rel="noopener">canonical text on SSO ↗</a>
+      {download_html}
     </div>
   </header>
 
@@ -841,9 +854,21 @@ def main() -> int:
             rec = json.load(f)
         prev_rec = by_num.get(ordered_nums[i - 1]) if i > 0 else None
         next_rec = by_num.get(ordered_nums[i + 1]) if i < len(ordered_nums) - 1 else None
-        out = BUILD / "s" / f"{rec['section_number']}.html"
+        n = rec["section_number"]
+        out = BUILD / "s" / f"{n}.html"
         out.write_text(render_section(rec, prev_rec=prev_rec, next_rec=next_rec))
         n_pages += 1
+        # G6: per-section raw artefacts. JSON is canonical record, .yh is
+        # the encoded source verbatim, .en.txt is controlled English.
+        (BUILD / "s" / f"{n}.json").write_text(
+            json.dumps(rec, ensure_ascii=False, indent=2)
+        )
+        yh_src = rec.get("encoded", {}).get("yh_source") or ""
+        if yh_src:
+            (BUILD / "s" / f"{n}.yh").write_text(yh_src)
+        en_src = rec.get("transpiled", {}).get("english") or ""
+        if en_src:
+            (BUILD / "s" / f"{n}.en.txt").write_text(en_src)
         # Concatenate searchable bodies. Stored lowercased + length-capped
         # so the bundle stays under a few hundred KB.
         parts = [
