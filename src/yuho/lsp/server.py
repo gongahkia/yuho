@@ -1794,6 +1794,19 @@ class YuhoLanguageServer(LanguageServer):
                     ),
                 )
             )
+            # Counter-example explorer (Tier 1 #3): one-click discovery of the
+            # offence's structural witnesses. Routed through the VS Code
+            # extension which spawns the `yuho explore` CLI.
+            lenses.append(
+                lsp.CodeLens(
+                    range=line_range,
+                    command=lsp.Command(
+                        title="🔍 Explore counter-examples",
+                        command="yuho.exploreCounterexamples",
+                        arguments=[uri, statute.section_number],
+                    ),
+                )
+            )
 
         return lenses
 

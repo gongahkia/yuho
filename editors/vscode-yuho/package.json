@@ -56,6 +56,14 @@
         "command": "yuho.refreshTreeView",
         "title": "Yuho: Refresh library tree",
         "icon": "$(refresh)"
+      },
+      {
+        "command": "yuho.exploreCounterexamples",
+        "title": "Yuho: Explore counter-examples for a section"
+      },
+      {
+        "command": "yuho.recommendCharges",
+        "title": "Yuho: Recommend charges from a fact pattern (NOT legal advice)"
       }
     ],
     "viewsContainers": {

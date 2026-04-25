@@ -53,6 +53,11 @@ export async function activate(context: ExtensionContext): Promise<void> {
     commands.registerCommand("yuho.showCoverage", showCoverage),
     commands.registerCommand("yuho.openLibrarySection", openLibrarySection),
     commands.registerCommand("yuho.refreshTreeView", () => treeProvider.refresh()),
+    commands.registerCommand(
+      "yuho.exploreCounterexamples",
+      (uriArg?: string, sectionArg?: string) => exploreCounterexamples(uriArg, sectionArg),
+    ),
+    commands.registerCommand("yuho.recommendCharges", recommendCharges),
     window.registerTreeDataProvider("yuho.libraryTree", treeProvider),
   );
 
@@ -188,6 +193,87 @@ async function runCheck(): Promise<void> {
 // -------------------------------------------------------------------------
 // Command: transpile + preview (mermaid/english)
 // -------------------------------------------------------------------------
+
+// Counter-example explorer (Tier 1 #3): wraps `yuho explore <file> <section>`.
+// Triggered from a code lens (which passes `uri` + `section`) or from the
+// command palette (which prompts for both).
+async function exploreCounterexamples(
+  uriArg?: string,
+  sectionArg?: string,
+): Promise<void> {
+  let file = uriArg;
+  let section = sectionArg;
+  if (!file) {
+    const editor = window.activeTextEditor;
+    if (!editor || !editor.document.fileName.endsWith(".yh")) {
+      window.showWarningMessage("Yuho: open a .yh file first.");
+      return;
+    }
+    file = editor.document.uri.toString();
+  }
+  if (file.startsWith("file://")) file = Uri.parse(file).fsPath;
+  if (!section) {
+    section = await window.showInputBox({
+      prompt: "Section number to explore (e.g. 415)",
+      placeHolder: "415",
+    });
+    if (!section) return;
+  }
+  const cmd = resolveYuhoBin();
+  const out = window.createOutputChannel("Yuho explore");
+  out.show(true);
+  out.appendLine(`$ ${cmd} explore ${file} ${section}`);
+  cp.exec(
+    `"${cmd}" explore "${file}" "${section}"`,
+    { maxBuffer: 1024 * 1024 * 4 },
+    (err, stdout, stderr) => {
+      if (stdout) out.append(stdout);
+      if (stderr) out.append(stderr);
+      if (err) out.appendLine(`(exited with ${err.code})`);
+    },
+  );
+}
+
+// Charge recommender (Tier 1 #3): prompts for a fact-pattern file then runs
+// `yuho recommend <facts>`. Always pipes to an output channel so the
+// disclaimer banner is visible — never silently swallowed.
+async function recommendCharges(): Promise<void> {
+  const picked = await window.showOpenDialog({
+    canSelectMany: false,
+    openLabel: "Pick fact pattern (YAML or JSON)",
+    filters: { "Fact pattern": ["yaml", "yml", "json"] },
+  });
+  if (!picked || picked.length === 0) return;
+  const factsPath = picked[0].fsPath;
+  const cmd = resolveYuhoBin();
+  const out = window.createOutputChannel("Yuho recommend");
+  out.show(true);
+  out.appendLine(`$ ${cmd} recommend ${factsPath}`);
+  cp.exec(
+    `"${cmd}" recommend "${factsPath}"`,
+    { maxBuffer: 1024 * 1024 * 4 },
+    (err, stdout, stderr) => {
+      if (stdout) out.append(stdout);
+      if (stderr) out.append(stderr);
+      if (err) out.appendLine(`(exited with ${err.code})`);
+    },
+  );
+}
+
+// Resolve the same `yuho` binary that startLsp resolved, so the explore /
+// recommend commands run against the project's bundled venv if available.
+function resolveYuhoBin(): string {
+  const explicit = workspace.getConfiguration("yuho").get<string>("lsp.command", "");
+  if (explicit) return explicit;
+  const folder = (workspace.workspaceFolders ?? [])[0];
+  if (folder) {
+    const venv = path.join(folder.uri.fsPath, ".venv-lsp", "bin", "yuho");
+    if (fs.existsSync(venv)) return venv;
+    const test = path.join(folder.uri.fsPath, ".venv-test", "bin", "yuho");
+    if (fs.existsSync(test)) return test;
+  }
+  return "yuho";
+}
 
 async function runTranspile(target: string): Promise<void> {
   const editor = window.activeTextEditor;
