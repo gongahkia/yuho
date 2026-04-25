@@ -1929,7 +1929,8 @@ statute {section} "{marginal}" effective 1872-01-01 {{
 
         @tool_with_structured_logging()
         async def yuho_apply_flag_fix(
-            section: str, failed: str, reason: str, suggested_fix: str = ""
+            section: str, failed: str, reason: str, suggested_fix: str = "",
+            ctx: Optional[Any] = None,
         ) -> Dict[str, Any]:
             """
             Trigger the minimum-edit flag-fix workflow on a section. Writes
@@ -1937,6 +1938,11 @@ statute {section} "{marginal}" effective 1872-01-01 {{
             same script (`scripts/phase_d_flag_fix.py`) used in Phase D
             to patch the encoding, runs `yuho check`, and returns the
             outcome.
+
+            Streams progress via `ctx.report_progress(...)` while the
+            dispatcher runs so the AI client can show "still working"
+            instead of appearing hung. The `ctx` parameter is injected
+            by FastMCP when called from a session that supports it.
 
             NOTE: this tool requires `codex` to be on PATH (uses Codex
             for the actual edit). Returns an ERROR outcome if codex is
@@ -1952,7 +1958,7 @@ statute {section} "{marginal}" effective 1872-01-01 {{
                 {section, outcome: "FIXED" | "PARTIAL" | "UNCHANGED" | "BROKEN" | "ERROR",
                  error?, yuho_check?, flag_deleted?}
             """
-            import subprocess as _sp, re as _re, json as _j
+            import subprocess as _sp, re as _re, json as _j, time as _time
             repo = Path(__file__).parent.parent.parent.parent
             d = None
             for p in (repo / "library" / "penal_code").iterdir():
@@ -1970,21 +1976,66 @@ statute {section} "{marginal}" effective 1872-01-01 {{
                 flag_body += f"- suggested fix: {suggested_fix}\n"
             (d / "_L3_FLAG.md").write_text(flag_body)
 
-            # run the dispatcher on this one section
+            async def _report(progress: float, message: str) -> None:
+                """Best-effort progress notification to the client."""
+                if ctx is None:
+                    return
+                try:
+                    await ctx.report_progress(progress=progress, total=1.0, message=message)
+                except Exception:
+                    # Older clients / clients without progress support.
+                    pass
+
+            await _report(0.05, "writing _L3_FLAG.md and dispatching codex agent")
+
+            # Run the dispatcher with Popen so we can stream progress lines.
             try:
-                r = _sp.run(
+                proc = _sp.Popen(
                     [str(repo / ".venv-scrape" / "bin" / "python"),
                      str(repo / "scripts" / "phase_d_flag_fix.py"),
                      section, "--dispatch", "--parallel", "1",
                      "--timeout", "600", "--model", "gpt-5.4",
                      "--reasoning", "high"],
-                    capture_output=True, text=True, timeout=900,
+                    stdout=_sp.PIPE,
+                    stderr=_sp.STDOUT,
+                    text=True,
                 )
-            except _sp.TimeoutExpired:
-                return {"section": section, "outcome": "ERROR", "error": "timeout"}
             except FileNotFoundError:
                 return {"section": section, "outcome": "ERROR",
-                        "error": "codex not available on PATH"}
+                        "error": "codex / python venv not available"}
+
+            stdout_lines: List[str] = []
+            start = _time.time()
+            timeout_s = 900
+            # Pump stdout: report each non-blank line as a progress message.
+            # We don't have a known total, so we ramp progress from 0.05 → 0.9
+            # as the dispatcher runs, leaving the last 10% for the post-run
+            # yuho-check.
+            try:
+                while True:
+                    if _time.time() - start > timeout_s:
+                        proc.terminate()
+                        return {"section": section, "outcome": "ERROR", "error": "timeout"}
+                    line = proc.stdout.readline() if proc.stdout else ""
+                    if not line:
+                        if proc.poll() is not None:
+                            break
+                        continue
+                    stdout_lines.append(line)
+                    # Heuristic progress: ramp toward 0.9 with each line.
+                    elapsed = _time.time() - start
+                    progress = min(0.9, 0.1 + (elapsed / timeout_s) * 0.8)
+                    msg = line.strip()[:120]
+                    if msg:
+                        await _report(progress, msg)
+                proc.wait()
+            except Exception as e:
+                return {"section": section, "outcome": "ERROR", "error": str(e)}
+
+            class _Result:
+                stdout = "".join(stdout_lines)
+            r = _Result()
+            await _report(0.95, "running yuho check on patched encoding")
             # determine outcome
             flag_still_there = (d / "_L3_FLAG.md").exists()
             check_ok = False
