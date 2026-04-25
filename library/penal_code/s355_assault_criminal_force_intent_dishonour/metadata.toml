@@ -16,4 +16,6 @@ summary = "This section criminalises assault or use of criminal force intended t
 source = "Singapore Penal Code 1871, Section 355"
 
 [verification]
+last_verified = "2026-04-25"
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr355-#pr355-"
+verified_by = "gpt-5.4 high (automated L3 reviewer)"
