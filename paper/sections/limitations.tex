@@ -98,6 +98,24 @@ The unevenness reflects implementation order rather than design
 intent --- every surface should reach feature parity, and the
 remaining work is engineering rather than research.
 
+\paragraph{Charge-recommender is structural, not adjudicative.} The
+charge recommender (\S\ref{subsec:analytical_tools}) ranks Penal Code
+sections by element-overlap between a supplied fact pattern and the
+encoded grammar; it does not, and cannot, decide whether an offence
+is made out. The substring matching the simulator uses is permissive
+by design --- a fact mentioning ``deception'' will hit any section
+whose encoded element description contains that word --- which is the
+right behaviour for a candidate-surface tool but the wrong behaviour
+for a legal-conclusion tool. The recommender's output envelope
+carries an \texttt{not\_legal\_advice} flag and a fixed
+\texttt{LEGAL\_DISCLAIMER} string, and the CLI prints the disclaimer
+twice (once before results, once after) precisely so a hurried
+reader cannot ingest the ranking without ingesting the caveat.
+External counsel review is the appropriate route for any actual
+charge decision; the recommender is a teaching / research artefact
+over the encoded grammar, in the same posture as the
+counter-example explorer.
+
 \paragraph{No formal grammar-completeness theorem.} We claim that
 Yuho can express every Penal Code section at L1+L2 fidelity,
 backed by the 524/524 coverage figure (\S\ref{subsec:coverage_eval}).

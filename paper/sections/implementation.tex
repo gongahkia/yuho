@@ -220,6 +220,72 @@ of every reserved word in the grammar, every element kind, every
 penalty combinator, every deontic operator, every exception field,
 and every annotation name --- approximately fifty terms.
 
+\subsection{Analytical tools over the encoded corpus}
+\label{subsec:analytical_tools}
+
+Two analytical surfaces are layered on top of the verification stack
+and the slim corpus. Both deliberately re-use existing core machinery
+rather than introducing new translation layers, and both are exposed
+via the CLI and the MCP server.
+
+\paragraph{Counter-example explorer.} The explorer
+(\texttt{src/yuho/explore/}) takes an encoded section and surfaces the
+fact-pattern \emph{witnesses} the Z3 generator can construct over its
+element / exception structure. Concretely, four queries are run
+against the per-section conviction Bool that the verifier already
+emits (\S\ref{subsec:verify}):
+\emph{satisfying} scenarios (assignments to element-satisfaction Bools
+that make conviction reachable, blocked-and-re-checked to enumerate
+distinct witnesses up to a bound);
+\emph{borderline} scenarios (for each leaf element, a model where every
+other element is satisfied but this one is negated --- a witness that
+the element is load-bearing in the encoded sense);
+\emph{exception coverage} (for each encoded exception, a check that
+some element-satisfying assignment also fires the exception --- proving
+the exception is reachable rather than dead);
+and the complement \emph{dead-exception} list (exceptions whose firing
+is unsatisfiable under any element-satisfying assignment, suggesting an
+overconstrained guard or unused branch).
+The explorer adds no new constraint translation; the existing Z3 model
+generator (\texttt{Z3Generator}) is its sole dependency. On s415 the
+explorer produces, in $<200\,$ms, two distinct satisfying assignments
+witnessing the \texttt{any\_of} mens-rea group (one with
+\texttt{fraudulent}, one with \texttt{dishonest}), confirms all five
+leaf elements are load-bearing, and reports zero exceptions to test.
+The pedagogical use case is direct: a teacher can ask the tool to
+exhibit the precise minimal pairs that distinguish a section's
+elements, and a legal-tech builder can use the same enumeration to
+seed automated test fixtures.
+
+\paragraph{Charge recommender.} The recommender
+(\texttt{src/yuho/recommend/}) takes a fact pattern (the same
+\texttt{simulator/} schema, but with the \texttt{section} field
+intentionally omitted) and ranks candidate Penal Code sections by
+structural fit. It is a thin orchestrator: a cheap token-overlap
+prefilter selects up to sixty candidate sections from the slim
+corpus; for each, the existing fact-pattern simulator's
+\texttt{evaluate} function is run to produce a per-element trace
+(satisfied / suggested / unresolved / contradicted); the candidates
+are scored by element coverage, with contradicted elements applying
+a hard penalty; the top-$k$ are returned with the simulator's full
+trace and an SSO link attached.
+The recommender does not call any external language model and does
+not access the network. Every result envelope carries an
+\texttt{not\_legal\_advice: true} flag and a fixed disclaimer string
+(\texttt{LEGAL\_DISCLAIMER}) that callers --- the CLI, the MCP tool,
+or any downstream consumer --- are required to surface verbatim.
+Validated against the seven simulator fixtures, the recommender
+ranks the canonical section first or in the top three for every
+fixture (e.g.\ s415 with the classic-cheating fact pattern returns
+s415 at 80\% coverage, with subsequent candidates --- s383 extortion,
+s499 defamation --- below 25\%, providing a clear fit signal).
+
+The recommender's coverage metric is structural by construction: it
+measures element-overlap between facts and encoded grammar, not the
+likelihood of conviction. The disclaimer is therefore not a polite
+hedge but a load-bearing contract; \S\ref{sec:limitations} discusses
+what the recommender is and is not.
+
 \subsection{Engineering numbers}
 Table~\ref{tab:sloc} summarises the implementation effort. The numbers
 are wc-line counts as of the paper's writing, computed from the
