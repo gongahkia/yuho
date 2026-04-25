@@ -37,24 +37,32 @@ comparable to top-tier OSS/knowledge projects.
 - [ ] Add per-phase "lessons learned" appendix in `doc/RETROSPECTIVE.md` (pulling from `PHASE_C_REVIEW.md`, `PHASE_D_*`, etc.).
 - [ ] Normalize heading styles, badge order, and code-block language tags across all `.md` files.
 
-### Research paper (LaTeX) `[ ]`
+### Research paper (LaTeX) `[~]`
 
-Draft a full academic paper about Yuho from scratch, suitable for submission
-to a legal-tech or PL venue (ICAIL, JURIX, CoNLL demo track, SPLASH OOPSLA
-Onward!, PLDI SRC).
+arXiv preprint, attributed, acmart `manuscript` mode. Skeleton landed under
+`paper/`; prose remains.
 
-- [ ] Scaffold `paper/` with `main.tex`, `references.bib`, `paper/sections/` (intro, background, design, implementation, evaluation, related-work, limitations, conclusion), `paper/figures/`, `paper/Makefile`.
-- [ ] Pick template: ACM primary-article or LNCS. Default to ACM `acmart` + `\documentclass[sigconf,review,anonymous]{acmart}`.
-- [ ] **Introduction**: thesis — legal statutes are executable-adjacent artefacts, and SG Penal Code is a tractable testbed.
-- [ ] **Background**: brief survey of legal DSLs (Catala, lam4, LexScript, LDOC, Akoma Ntoso) + formal methods (Z3, Alloy) usage in law.
-- [ ] **Design**: Yuho grammar (14 grammar gaps G1–G14), element/penalty/exception model, deontic types, burden qualifiers, Catala-style defaults, temporal/causal constraints.
-- [ ] **Implementation**: tree-sitter parser, Python AST, 6 transpilers (JSON/English/LaTeX/Mermaid/Alloy/DOCX), LSP + MCP surfaces, fidelity diagnostics, Z3/Alloy verification hookup, scraper + 3-tier coverage (L1/L2/L3).
-- [ ] **Evaluation**: 524/524 L1+L2, 122 L3 signoff; fidelity-diagnostic hit rate; encoding time per section; qualitative analysis of grammar gaps uncovered.
-- [ ] **Related work** matrix comparing Yuho vs Catala/lam4/LexScript/LDOC across: expressivity (deontic, defaults, temporal), tooling (LSP/MCP), target coverage, formal-verification hookup.
-- [ ] **Limitations** — common-law doctrines not yet modelled, precedent integration shallow, no live SSO diffing, single-jurisdiction.
-- [ ] Figures: AST diagram, penalty-combinator tree (G12), Catala-style default chain (G13), coverage Sankey.
-- [ ] Auto-include repo stats from `coverage.json` via Makefile preprocessing.
-- [ ] `paper/Makefile` with `make paper` (latexmk), `make figures`, `make arxiv` (tar the sources).
+Done (this session):
+- [x] Scaffold `paper/` (`main.tex`, `references.bib`, `Makefile`, `.gitignore`, `README.md`, `scripts/gen_stats.py`).
+- [x] Eight section skeletons under `paper/sections/` with structured `\todo{}` markers.
+- [x] Three Mermaid figure sources under `paper/figures/` (architecture, penalty-tree, exception-priority).
+- [x] Stats auto-injection from `coverage.json` via `make stats` → `stats.tex`.
+- [x] `Makefile` targets: `paper / stats / figures / arxiv / watch / clean / distclean`.
+- [x] References seeded (Catala, lam4, LexScript, Akoma Ntoso, LegalRuleML, Z3, Alloy, tree-sitter, MCP).
+
+Remaining prose work:
+- [ ] **Introduction** — expand hook + contributions paragraphs; cite Sergot 1986 / Lessig 1999.
+- [ ] **Background** — three threads (logic-prog origins, markup standards, modern DSLs) into prose.
+- [ ] **Design** — concrete s415 walkthrough, gap table G1–G14, exception priority DAG diagram.
+- [ ] **Implementation** — fill SLOC table (auto via `scripts/repo_stats.py`), expand verification subsection.
+- [ ] **Evaluation** — bar chart of gap-trigger frequencies, diagnostic hit-rate methodology + numbers, encoding throughput.
+- [ ] **Related work** — comparison matrix (Yuho × Catala × lam4 × LexScript × AKN × LegalRuleML × LDOC) as a real Table.
+- [ ] **Limitations** — already substantive; tighten + cross-link future-work in conclusion.
+- [ ] **Conclusion** — already drafted; revisit after evaluation numbers settle.
+- [ ] Render Mermaid figures to PDF (requires `mmdc`), inspect, and tune layouts.
+- [ ] Verify all `\cite{}` keys resolve cleanly (some bib entries currently carry TODO notes — confirm canonical citations for `lam4`, `lexscript`, `ldoc`, `hammond1983rights`).
+- [ ] `scripts/repo_stats.py` — emit SLOC-per-layer for the implementation table.
+- [ ] (Optional) Add `make smoke` target with `article`-class fallback so build verifies on basic TeX Live without `acmart`.
 
 ---
 

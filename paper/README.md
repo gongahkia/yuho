@@ -45,10 +45,30 @@ make clean     # remove build artefacts
 
 ## Requirements
 
-- `latexmk`, `lualatex`, `acmart.cls` (full TeX Live, or
-  `brew install --cask mactex`)
+- `latexmk`, `lualatex`, `acmart.cls`
 - `mmdc` for figures (`npm install -g @mermaid-js/mermaid-cli`)
 - `python3` for `make stats` and `make arxiv`
+
+### Installing on a basic TeX Live
+
+If you have TeX Live basic (e.g. `mactex-no-gui` / `basictex`), install the
+missing pieces:
+
+```sh
+sudo tlmgr update --self
+sudo tlmgr install acmart latexmk collection-fontsrecommended
+
+# then verify
+kpsewhich acmart.cls   # should resolve to a real path
+which latexmk
+```
+
+For a one-shot full install instead:
+
+```sh
+brew install --cask mactex                # mac
+sudo apt-get install texlive-full         # debian/ubuntu
+```
 
 ## Stats injection
 
