@@ -16,4 +16,6 @@ summary = "Defines when an act is done rashly in respect of a circumstance or ef
 source = "Singapore Penal Code 1871, Section 26E"
 
 [verification]
+last_verified = "2026-04-25"
+verified_by = "gpt-5.4 high (automated L3 reviewer)"
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr26E-#pr26E-"

@@ -1,58 +1,118 @@
 \section{Introduction}
 \label{sec:intro}
 
-% Hook: legal text is already structured, but not executable.
-% Anchor in the Singapore Penal Code as a tractable, public, well-bounded artefact.
-\todo{Hook paragraph: statute as code-adjacent object. Cite Lessig 1999; Sergot
-1986 (\emph{The British Nationality Act as a Logic Program}); Hammond 1983.}
+Statutes are not free-form prose. A modern penal code is drafted to a tight
+internal grammar: numbered sections; enumerated elements; in-line illustration
+blocks; cross-cutting general exceptions; penalty clauses with named
+combinators (``or both''). Lawyers learn to read this structure as if it were
+a typed program, and computer scientists have, since at least Sergot et al.'s
+1986 encoding of the British Nationality Act~\cite{sergot1986british}, observed
+that the structure is amenable to direct symbolic representation. The persistent
+gap is not the recognition that statute looks like code --- it is the practical
+absence of a representation expressive enough to encode an entire production
+statute without immediately falling back on free-text strings.
 
-\paragraph{Thesis.} Statutes are not free-form prose. They have a regular
-grammar imposed by drafting convention --- numbered sections, enumerated
-elements, illustration blocks, exceptions, and penalty clauses --- and that
-grammar is amenable to direct encoding. We argue that a sufficiently expressive
-domain-specific language can capture the entire structural surface of a modern
-penal code without falling back on free-text escape hatches, and that the
-resulting encodings carry their own verification and tooling for free.
+This paper argues that the gap is mostly a grammar gap, and presents
+\emph{Yuho}, a domain-specific language designed by mass-encoding the entire
+Singapore Penal Code 1871. The headline number is engineering rather than
+methodological: \statRawSections{} sections, \statEncoded{} encoded,
+\statLOnePass{}/\statRawSections{} passing parse-and-build (the L1+L2 tiers of
+our coverage harness), and \statLThreePass{} carrying a structured
+human-fidelity stamp (L3) at the time of writing. The interesting numbers
+sit underneath: every section that the grammar could not natively express
+is documented as a numbered \emph{grammar gap} (\textsf{G1}--\textsf{G14}),
+and we report which were genuine grammar limitations, which were diagnostic
+issues misread as grammar issues, and which we resolved versus deferred.
 
-\paragraph{Contributions.}
+\paragraph{Why a fresh DSL?} Existing legal-encoding work clusters into three
+camps. The logic-programming tradition treats statute as Horn clauses
+\cite{sergot1986british,benchcapon2003legal}; the markup tradition treats
+statute as structured XML for archival and exchange (Akoma Ntoso
+\cite{akomantoso}, LegalRuleML \cite{legalruleml}); and the modern DSL
+tradition picks a sub-domain --- French tax code (Catala~\cite{catala2021}),
+contracts and regulations (lam4~\cite{lam4}), generic statute compilation
+(LexScript~\cite{lexscript}), Word-driven authoring (LDOC~\cite{ldoc}) ---
+and builds a focused syntax for it. None of these target a common-law
+\emph{penal} code at full coverage, and none expose primitives that match
+how penal sections are actually drafted: an offence is a typed conjunction
+of elements; a penalty is a small algebra over imprisonment / fine / caning /
+death; an exception is a prioritised override; an illustration is a
+verbatim worked example tied to the parent section; an amendment is a
+new \texttt{effective <date>} clause that does not erase the prior text.
+
+\paragraph{Contributions.} We make four contributions.
+
 \begin{enumerate}
-\item \textbf{The Yuho grammar.} A statute-shaped syntax with first-class
-elements, penalty combinators (cumulative / alternative / or-both / conditional
-/ nested), prioritised exceptions in the style of Catala defaults, deontic
-element types (obligation / prohibition / permission), burden qualifiers
-(prosecution / defence with named proof standards), temporal and causal
-constraints between elements, illustration blocks, case-law anchors, and
-amendment lineage.
-\item \textbf{A complete, public encoding.} All \statRawSections{} sections of
-the Singapore Penal Code 1871 encoded; \statLOnePass{}/\statRawSections{} pass
-parse-and-build (L1+L2); \statLThreePass{} have been human-stamped at the
-strictest fidelity tier (L3) using a structured \mbox{11-point} review.
-\item \textbf{Tooling.} Six transpilers (JSON, controlled English, \LaTeX{},
-Mermaid, Alloy, DOCX), a tree-sitter parser, a pluggable Python AST, a
-Language Server with hover / inlay-hint / fidelity-diagnostic support, a
-Model Context Protocol server exposing the workflow as machine-callable tools,
-and an editor extension for VS Code.
-\item \textbf{Empirical findings.} A catalogue of fourteen grammar gaps
-(\textsf{G1}--\textsf{G14}) that mass-encoding surfaced. We document which were
-real grammar limitations versus encoding mistakes that diagnostics could catch,
-and which we resolved by extending the grammar versus by adding linters.
+\item \textbf{The Yuho grammar.} A statute-shaped syntax in which the
+top-level construct is a \texttt{statute N \{ \dots \}} block with first-class
+fields for definitions, elements, penalty, illustrations, exceptions, case
+law, parties, and amendment lineage. Elements carry a deontic type
+(\texttt{actus\_reus} / \texttt{mens\_rea} / \texttt{circumstance} /
+\texttt{obligation} / \texttt{prohibition} / \texttt{permission}), an optional
+burden qualifier (\texttt{burden prosecution} / \texttt{burden defence})
+with a named proof standard, and optional causal (\texttt{causedBy}) and
+temporal (\texttt{precedes} / \texttt{during} / \texttt{after}) edges to
+other elements. Penalty clauses compose three top-level combinators
+(\texttt{cumulative} / \texttt{alternative} / \texttt{or\_both}) plus a
+\texttt{when <ident>} conditional and a nested-combinator escape hatch.
+Exceptions form a Catala-style priority DAG with optional \texttt{defeats}
+edges to the elements they override.
+
+\item \textbf{A complete public encoding.} All \statRawSections{} sections
+of the Singapore Penal Code 1871, version-controlled under
+\texttt{library/penal\_code/}, with a per-section directory layout
+(\texttt{statute.yh}, \texttt{metadata.toml}, \texttt{test\_statute.yh}).
+The encoding is canonical: the \texttt{.yh} file is the source of truth;
+all rendered formats are generated.
+
+\item \textbf{Tooling.} A tree-sitter parser, an immutable Python AST,
+six transpilers (JSON, controlled English, \LaTeX{}, Mermaid, Alloy,
+DOCX), a Z3-and-Alloy verification hookup, a fidelity-diagnostic pass
+that cross-checks encodings against the canonical scrape, a Language Server
+exposing hover / inlay-hint / completion / code-lens / diagnostics, a
+Model Context Protocol server for AI-driven encoding workflows, and a
+VS Code extension wrapping the Language Server.
+
+\item \textbf{Empirical findings.} A catalogue of fourteen distinct grammar
+gaps surfaced during mass-encoding, classified into ten genuine grammar
+limitations (all resolved by extending the parser) and four diagnostic-layer
+issues (all resolved by adding fidelity linters). We argue this distinction
+matters: a gap that looks like a grammar problem may, on inspection, be a
+linting problem in disguise --- and conflating the two leads to grammar
+bloat with no corresponding gain in fidelity.
 \end{enumerate}
 
 \paragraph{Why criminal law and why Singapore?} The Singapore Penal Code 1871
-is a public, single-jurisdiction, modestly-sized ($\sim$524 sections) statute
-covering a self-contained problem domain. It uses Anglo-Indian drafting
-conventions (numbered sections, in-line illustrations, explanatory subsections)
-that map cleanly onto programming-language constructs. Unlike a regulatory
-corpus, it has limited cross-statute reference, which lets us focus on
-intra-statute primitives before tackling graph-level concerns.
+was selected for three pragmatic reasons. First, it is public: the canonical
+text is hosted on Singapore Statutes Online (SSO)~\cite{singaporepenalcode}
+under permissive terms that allow programmatic ingestion. Second, it is
+modestly sized: \statRawSections{} sections is small enough to mass-encode
+with manageable effort, and large enough to surface structural patterns that
+hand-picked toy examples would miss. Third, it inherits the Anglo-Indian
+drafting tradition --- short numbered sections, in-line illustrations,
+``or both'' penalty clauses, Chapter IV general exceptions --- which is
+shared with the Indian, Pakistani, Bruneian, and (with adjustments)
+Malaysian penal codes. A grammar that fits the Singapore statute is
+plausibly portable across the wider Penal Code family, though we have not
+yet empirically verified that.
 
-\paragraph{Roadmap.} \S\ref{sec:background} surveys prior legal-DSL work.
-\S\ref{sec:design} presents the Yuho grammar and its core primitives.
+\paragraph{What this paper is not.} It is not a claim that the encoded
+sections constitute legal advice, that the L3 fidelity stamp replaces
+external counsel review, or that Yuho is the right tool for every
+legal-encoding problem (regulatory corpora, contract drafting, treaty
+interpretation, and judgment summarisation each have grammars that Yuho
+does not natively model). It is a claim that the gap between a drafted
+penal section and an executable artefact is smaller than the existing
+literature suggests --- and that closing that gap, for one statute family
+at full coverage, is mostly an engineering exercise once the grammar is
+right.
+
+\paragraph{Roadmap.} \S\ref{sec:background} surveys the prior art in
+statute encoding and positions Yuho against the three traditions.
+\S\ref{sec:design} presents the grammar through worked examples.
 \S\ref{sec:implementation} describes the toolchain end-to-end.
-\S\ref{sec:evaluation} reports empirical results from encoding all
-\statRawSections{} sections. \S\ref{sec:related} compares against Catala,
-lam4, LexScript, Akoma Ntoso, and LDOC. \S\ref{sec:limitations} discusses
-limits. \S\ref{sec:conclusion} concludes.
-
-\todo{If we end up writing this for ICAIL/JURIX, fold in a one-sentence
-positioning relative to LegalRuleML / Akoma Ntoso markup standards.}
+\S\ref{sec:evaluation} reports empirical results from mass-encoding the
+Penal Code, including the gap-trigger frequency analysis and the fidelity
+diagnostic hit rate. \S\ref{sec:related} compares Yuho against Catala,
+lam4, LexScript, Akoma Ntoso, LegalRuleML, and LDOC. \S\ref{sec:limitations}
+discusses what we cannot do, and \S\ref{sec:conclusion} concludes.

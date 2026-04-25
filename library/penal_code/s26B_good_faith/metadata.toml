@@ -16,4 +16,6 @@ summary = "Defines good faith by excluding acts or beliefs done without due care
 source = "Singapore Penal Code 1871, Section 26B"
 
 [verification]
+last_verified = "2026-04-25"
+verified_by = "gpt-5.4 high (automated L3 reviewer)"
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr26B-#pr26B-"
