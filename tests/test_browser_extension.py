@@ -54,6 +54,14 @@ class TestManifests:
         assert "data/svg/*.svg" in flat, \
             "SVGs must be web-accessible for content-script fetch()"
 
+    def test_chrome_manifest_exposes_explore_dir(self):
+        # Tier 3 #7: pre-rendered explorer reports must be fetchable.
+        with (EXT / "manifest.json").open("r", encoding="utf-8") as f:
+            data = json.load(f)
+        flat = [r for entry in data["web_accessible_resources"]
+                for r in entry.get("resources", [])]
+        assert "data/explore/*.json" in flat
+
     def test_chrome_manifest_uses_service_worker(self):
         with (EXT / "manifest.json").open("r", encoding="utf-8") as f:
             data = json.load(f)
@@ -133,6 +141,15 @@ class TestContentScriptFeatures:
         assert "mermaid_svg_url" in content
         assert "function loadDiagram" in content
         assert "SVG_CACHE" in content
+
+    def test_has_explore_tab(self, content):
+        # Tier 3 #7: counter-example explorer button on the panel.
+        assert 'data-tab="explore"' in content
+        assert "function renderExplore" in content
+        assert "function loadExplore" in content
+        assert "EXPLORE_CACHE" in content
+        # Pre-rendered SVGs and explorer reports both ship under data/.
+        assert "data/explore/s" in content
 
 
 class TestServiceWorkerFeatures:

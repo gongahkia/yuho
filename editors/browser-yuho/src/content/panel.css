@@ -584,3 +584,21 @@
   }
   .yuho-diagram svg text { fill: #d6d6e0; }
 }
+
+/* Counter-example explorer panel (Tier 3 #7) */
+.yuho-explore-list { margin: 0.3em 0 0.8em 1.1em; padding: 0; }
+.yuho-explore-list li { margin: 0.2em 0; line-height: 1.4; }
+.yuho-elem-t {
+  display: inline-block; padding: 0 0.35em; margin: 0 0.15em 0.15em 0;
+  background: #e8f5e9; color: #1f6f2c; border-radius: 3px;
+  font: 600 0.78em ui-monospace, monospace;
+}
+.yuho-elem-f {
+  display: inline-block; padding: 0 0.35em; margin: 0 0.15em 0.15em 0;
+  background: #ffeaea; color: #a8302a; border-radius: 3px;
+  font: 600 0.78em ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  .yuho-elem-t { background: #1f3622; color: #6fdb88; }
+  .yuho-elem-f { background: #401818; color: #ff8888; }
+}

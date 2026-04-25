@@ -415,6 +415,7 @@
         <button class="yuho-tab" data-tab="elements" role="tab">Elements</button>
         <button class="yuho-tab" data-tab="refs" role="tab">References</button>
         <button class="yuho-tab" data-tab="diagram" role="tab">Diagram</button>
+        <button class="yuho-tab" data-tab="explore" role="tab">Explore</button>
         <button class="yuho-tab" data-tab="source" role="tab">.yh source</button>
       </nav>
       <main class="yuho-panel-body" tabindex="0"></main>
@@ -626,6 +627,7 @@
       case "elements":  return renderElements(record);
       case "refs":      return renderRefs(record);
       case "diagram":   return renderDiagram(record);
+      case "explore":   return renderExplore(record);
       case "source":    return renderSource(record);
       default:          return `<p>unknown tab: ${escapeHtml(name)}</p>`;
     }
@@ -767,6 +769,75 @@
     // Re-fetch host in case the user already switched away.
     const stillHost = document.getElementById(SVG_HOST_ID);
     if (stillHost) stillHost.innerHTML = svg;
+  }
+
+  // Counter-example explorer (Tier 3 #7): lazy-fetches the pre-rendered
+  // explorer report for the current section. Pre-rendering happens at
+  // corpus-build time via build_explore.py — the browser ext does not
+  // run Z3 itself.
+  const EXPLORE_CACHE = new Map();
+  const EXPLORE_HOST_ID = "yuho-explore-host";
+
+  function renderExplore(rec) {
+    queueMicrotask(() => loadExplore(rec.section_number));
+    return `<div id="${EXPLORE_HOST_ID}">
+              <p class="yuho-empty">Loading counter-examples…</p>
+            </div>`;
+  }
+
+  async function loadExplore(section) {
+    const host = document.getElementById(EXPLORE_HOST_ID);
+    if (!host) return;
+    let payload = EXPLORE_CACHE.get(section);
+    if (!payload) {
+      try {
+        const url = chrome.runtime.getURL(`data/explore/s${section}.json`);
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        payload = await res.json();
+        EXPLORE_CACHE.set(section, payload);
+      } catch (err) {
+        host.innerHTML = `<p class="yuho-empty">No pre-rendered explorer report for s${escapeHtml(section)}.<br>` +
+          `Run <code>editors/browser-yuho/build_explore.py</code> after the corpus build.</p>`;
+        return;
+      }
+    }
+    host.innerHTML = renderExploreReport(payload);
+  }
+
+  function renderExploreReport(p) {
+    if (!p.available) {
+      return `<p class="yuho-empty">${escapeHtml(p.reason || "Explorer unavailable for this section.")}</p>`;
+    }
+    const s = p.summary || {};
+    const head = `
+      <table class="yuho-stats">
+        <tr><th>Elements</th><td>${s.n_leaf_elements ?? 0}</td></tr>
+        <tr><th>Exceptions</th><td>${s.n_exceptions ?? 0}</td></tr>
+        <tr><th>Conviction reachable</th><td>${s.conviction_reachable ? "yes" : "no"}</td></tr>
+        <tr><th>Load-bearing elements</th><td>${s.n_load_bearing ?? 0}</td></tr>
+        <tr><th>Dead exceptions</th><td>${s.n_dead_exceptions ?? 0}</td></tr>
+      </table>
+    `;
+    const sat = (p.satisfying || []).map((sc, i) => {
+      const tags = Object.entries(sc.elements || {})
+        .map(([k, v]) => `<span class="yuho-elem-${v ? "t" : "f"}">${escapeHtml(k)}</span>`)
+        .join(" ");
+      return `<li><strong>#${i + 1}</strong> ${tags}</li>`;
+    }).join("") || `<li class="yuho-empty">No satisfying scenarios found (conviction may be unreachable).</li>`;
+    const dead = (p.dead_exceptions || []).map(d => `<li>${escapeHtml(d)}</li>`).join("");
+    const exc = (p.exception_coverage || []).map(e => {
+      const mark = e.reachable === true ? "REACHABLE" : (e.reachable === false ? "DEAD" : "UNKNOWN");
+      return `<li>${escapeHtml(e.exception)} — ${mark}</li>`;
+    }).join("");
+    return `
+      <h3>Summary</h3>
+      ${head}
+      <h3>Satisfying scenarios</h3>
+      <ul class="yuho-explore-list">${sat}</ul>
+      ${exc ? `<h3>Exception coverage</h3><ul class="yuho-explore-list">${exc}</ul>` : ""}
+      ${dead ? `<h3>Dead exceptions</h3><ul class="yuho-explore-list">${dead}</ul>` : ""}
+    `;
   }
 
   function renderSource(rec) {

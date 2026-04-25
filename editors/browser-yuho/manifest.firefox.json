@@ -50,7 +50,8 @@
     {
       "resources": [
         "data/*.json",
-        "data/svg/*.svg"
+        "data/svg/*.svg",
+        "data/explore/*.json"
       ],
       "matches": [
         "https://sso.agc.gov.sg/*"

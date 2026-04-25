@@ -36,7 +36,7 @@
   },
   "web_accessible_resources": [
     {
-      "resources": ["data/*.json", "data/svg/*.svg"],
+      "resources": ["data/*.json", "data/svg/*.svg", "data/explore/*.json"],
       "matches": ["https://sso.agc.gov.sg/*"]
     }
   ]
