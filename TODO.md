@@ -48,16 +48,18 @@ intro 118, background 160, design 294, implementation 249, evaluation 226,
 related 254, limitations 108, conclusion 55.
 
 Outstanding before submission:
+- [ ] **Manual read-through pass.** Read the rendered PDF cover-to-cover, mark places where prose drifts, claims need a citation, or a paragraph buries the lede. Add detail where missing (especially in evaluation §5 and limitations §7) but stay tight — no padding. Aim: every paragraph earns its place.
+- [ ] **Switch to two-column layout.** Current build is single-column smoke (`article`) plus single-column acmart `manuscript`. For density and venue-readiness, swap `main.tex` documentclass to `\documentclass[sigconf]{acmart}` (two-column ACM conf style). This gets `table*` to span both columns, tightens line lengths, and roughly halves page count. Re-check Figure 1 fit at narrower column width; may need `\begin{figure*}` for the s415 listing.
+- [ ] **Blog-post transpilation.** Hand the rendered paper to Claude with the prompt: *"Transpile this paper into a markdown blog post for gabrielongzm.com. Target ~1500 words. Keep the thesis (statute-as-source-of-truth + the 14-grammar-gaps argument), drop the implementation SLOC tables, drop the methodology threats-to-validity, keep one worked example (s415), keep the Catala/lam4/LexScript comparison as prose not table. Conversational tone, link to the GitHub repo, embed coverage stats inline."* Output to `paper/blog/yuho.md`.
 - [ ] **Evaluation methodology runs** — fill the `\todo{}` placeholders in `evaluation.tex`:
     - Fidelity diagnostic hit-rate methodology (re-run 4 diagnostics over all 524 sections, spot-check 30 warnings per check)
     - Encoding throughput numbers (median + p95 wall-clock; reconstructable from git timestamps + `.phase_d_l3_progress.jsonl`)
     - Gap-trigger frequency bar chart (source data in `doc/PHASE_C_GAPS.md`)
 - [ ] Render Mermaid figures to PDF (requires `mmdc`), inspect, and tune layouts.
-- [ ] Verify all `\cite{}` keys resolve cleanly. Some bib entries carry TODO notes — confirm canonical citations for `lam4`, `lexscript`, `ldoc`, `hammond1983rights`.
+- [ ] Verify all `\cite{}` keys resolve cleanly. Some bib entries carry TODO notes — confirm canonical citations for `lam4`, `lexscript`, `ldoc`, `hammond1983rights`. Fix the two bibtex warnings (`ldoc` missing author/key for sort; `jackson2002alloy` has redundant volume+number).
 - [ ] `scripts/repo_stats.py` — emit SLOC-per-layer JSON so the implementation Table 1 can be auto-regenerated rather than hand-typed.
 - [ ] External-reader pass on the full PDF; tighten phrasing and integrate cross-references where the prose has drift between sections.
 - [ ] Decide final venue (currently arXiv-attributed, `manuscript,nonacm` mode). For ICAIL/JURIX retargeting, swap documentclass per `paper/README.md`.
-- [ ] (Optional) `make smoke` target with `article`-class fallback so build verifies on basic TeX Live without `acmart` installed.
 
 ---
 

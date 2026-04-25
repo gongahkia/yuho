@@ -16,4 +16,6 @@ summary = "Using or attempting to use as true a certificate known to be false in
 source = "Singapore Penal Code 1871, Section 198"
 
 [verification]
+last_verified = "2026-04-25"
+verified_by = "gpt-5.4 high (automated L3 reviewer)"
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr198-#pr198-"

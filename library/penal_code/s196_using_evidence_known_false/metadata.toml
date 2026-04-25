@@ -16,4 +16,6 @@ summary = "This section criminalises corruptly using or attempting to use eviden
 source = "Singapore Penal Code 1871, Section 196"
 
 [verification]
+last_verified = "2026-04-25"
+verified_by = "gpt-5.4 high (automated L3 reviewer)"
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr196-#pr196-"
