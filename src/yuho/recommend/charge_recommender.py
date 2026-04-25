@@ -117,6 +117,7 @@ class ChargeRecommender:
         top_k: int = 5,
         max_candidates: int = 60,
         min_coverage: float = 0.0,
+        graph_expand: bool = True,
     ) -> Recommendation:
         """Rank Penal Code sections by structural fit to the supplied facts.
 
@@ -143,7 +144,34 @@ class ChargeRecommender:
 
         # Stage 1: cheap keyword-overlap scoring to pick candidates.
         scored = self._prefilter(sections, fact_strings)
-        candidates_to_simulate = [n for n, _ in scored[:max_candidates]]
+        keyword_candidates = [n for n, _ in scored[:max_candidates]]
+
+        # Stage 1b (Tier 2 #5): walk the G10 reference graph one hop from
+        # each top-N keyword hit to surface neighbouring sections that the
+        # raw fact text doesn't mention by name (abetment chains, aggravators,
+        # general-exception companions). Pure keyword overlap can't find
+        # s107 (abetment) from facts about a theft because "abet" rarely
+        # appears in fact text; the graph closes that hop.
+        candidates_to_simulate = list(keyword_candidates)
+        if graph_expand and keyword_candidates:
+            seen = set(candidates_to_simulate)
+            # Pull from references already cached on per-section corpus records.
+            for src in keyword_candidates[: min(15, len(keyword_candidates))]:
+                rec = sections.get(src) or {}
+                refs = rec.get("references") or {}
+                for edge in (refs.get("outgoing") or []):
+                    dst = edge.get("dst")
+                    if dst and dst not in seen and dst in sections:
+                        candidates_to_simulate.append(dst)
+                        seen.add(dst)
+                for edge in (refs.get("incoming") or []):
+                    src_sec = edge.get("src")
+                    if src_sec and src_sec not in seen and src_sec in sections:
+                        candidates_to_simulate.append(src_sec)
+                        seen.add(src_sec)
+                if len(candidates_to_simulate) >= max_candidates:
+                    break
+            candidates_to_simulate = candidates_to_simulate[:max_candidates]
 
         # Stage 2: run the simulator against each candidate.
         out: List[Candidate] = []
