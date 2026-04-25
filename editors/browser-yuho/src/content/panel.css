@@ -333,3 +333,232 @@
   .yuho-empty { color: #777; }
   .yuho-flag { background: #2a2418; border-color: #6a4a00; color: #ffe0a0; }
 }
+
+/* --- Inline citation tooltip ---------------------------------------- */
+
+.yuho-citation {
+  cursor: help;
+  border-bottom: 1px dotted rgba(58, 134, 255, 0.5);
+  transition: border-color 0.06s ease-out, background 0.06s ease-out;
+}
+.yuho-citation:hover {
+  border-bottom-color: var(--c-accent, #3a86ff);
+  background: rgba(58, 134, 255, 0.08);
+}
+
+#yuho-tooltip {
+  position: absolute;
+  z-index: 1000000;
+  max-width: 22rem;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(-2px);
+  transition: opacity 0.12s ease-out, transform 0.12s ease-out;
+}
+#yuho-tooltip.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.yuho-tooltip-card {
+  background: #ffffff;
+  color: #1a1a22;
+  border: 1px solid #e2e2e8;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  padding: 0.6rem 0.75rem 0.55rem;
+  font: 13px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  .yuho-tooltip-card {
+    background: #1a1a22;
+    color: #e2e2e8;
+    border-color: #2a2a35;
+  }
+}
+
+.yuho-tooltip-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  margin-bottom: 0.3rem;
+}
+.yuho-tooltip-section {
+  font: 700 0.92em/1.2 ui-monospace, monospace;
+  color: #3a86ff;
+}
+.yuho-tooltip-title {
+  flex: 1;
+  font-size: 0.9em;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.yuho-tooltip-tier {
+  font: 600 0.7em/1.2 ui-monospace, monospace;
+  padding: 0.05em 0.45em;
+  border-radius: 3px;
+  letter-spacing: 0.04em;
+}
+.yuho-tooltip-tier-l3 { background: #e8f5e9; color: #1a8b3a; }
+.yuho-tooltip-tier-flag { background: #ffeaea; color: #c43d3d; }
+.yuho-tooltip-tier-l2 { background: #e3f2fd; color: #1976d2; }
+.yuho-tooltip-tier-l1 { background: #fff5e0; color: #b07020; }
+.yuho-tooltip-tier-none { background: #eef0f3; color: #6a6a75; }
+@media (prefers-color-scheme: dark) {
+  .yuho-tooltip-tier-l3 { background: #1f3622; }
+  .yuho-tooltip-tier-flag { background: #401818; }
+  .yuho-tooltip-tier-l2 { background: #1a3252; }
+  .yuho-tooltip-tier-l1 { background: #3a2810; }
+  .yuho-tooltip-tier-none { background: #2a2a35; color: #b0b0bc; }
+}
+
+.yuho-tooltip-summary {
+  margin: 0 0 0.4rem;
+  color: #2a2a35;
+  font-size: 0.9em;
+  line-height: 1.4;
+}
+@media (prefers-color-scheme: dark) {
+  .yuho-tooltip-summary { color: #d6d6e0; }
+}
+
+.yuho-tooltip-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-size: 0.78em;
+  color: #6a6a75;
+  margin-bottom: 0.4rem;
+}
+.yuho-tooltip-stats span {
+  background: #f4f4f8;
+  padding: 0.05em 0.45em;
+  border-radius: 3px;
+}
+.yuho-tooltip-penalty {
+  flex-basis: 100%;
+  font-weight: 500;
+}
+@media (prefers-color-scheme: dark) {
+  .yuho-tooltip-stats span { background: #2a2a35; color: #b0b0bc; }
+}
+
+.yuho-tooltip-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-top: 0.3rem;
+}
+.yuho-tooltip-open {
+  background: #3a86ff;
+  color: #fff;
+  border: none;
+  padding: 0.32em 0.72em;
+  border-radius: 4px;
+  font: 500 0.82em/1.2 inherit;
+  cursor: pointer;
+}
+.yuho-tooltip-open:hover { background: #2c6ddc; }
+.yuho-tooltip-actions a {
+  color: #3a86ff;
+  font-size: 0.82em;
+  text-decoration: none;
+}
+.yuho-tooltip-actions a:hover { text-decoration: underline; }
+
+/* --- Panel search box ------------------------------------------------- */
+
+.yuho-panel-search {
+  position: relative;
+  padding: 0.5rem 0.9rem 0.4rem;
+  border-bottom: 1px solid #e8e8ee;
+  background: #fafafc;
+}
+@media (prefers-color-scheme: dark) {
+  .yuho-panel-search {
+    background: #15151c;
+    border-bottom-color: #2a2a35;
+  }
+}
+.yuho-search-input {
+  width: 100%;
+  padding: 0.42rem 0.65rem;
+  border: 1px solid #d0d0d8;
+  border-radius: 5px;
+  font: 13px/1.4 inherit;
+  background: #fff;
+  color: #1a1a22;
+}
+.yuho-search-input:focus {
+  outline: 2px solid #3a86ff;
+  outline-offset: -1px;
+}
+@media (prefers-color-scheme: dark) {
+  .yuho-search-input {
+    background: #1a1a22;
+    color: #e2e2e8;
+    border-color: #2a2a35;
+  }
+}
+
+.yuho-search-results {
+  list-style: none;
+  margin: 0.3rem 0 0;
+  padding: 0;
+  max-height: 16rem;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid #e2e2e8;
+  border-radius: 5px;
+}
+@media (prefers-color-scheme: dark) {
+  .yuho-search-results {
+    background: #1a1a22;
+    border-color: #2a2a35;
+  }
+}
+.yuho-search-results li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.55rem;
+  border-bottom: 1px solid #f0f0f4;
+  font-size: 0.88em;
+  cursor: pointer;
+}
+.yuho-search-results li:hover {
+  background: rgba(58, 134, 255, 0.08);
+}
+.yuho-search-results li:last-child { border-bottom: none; }
+.yuho-search-num {
+  font-family: ui-monospace, monospace;
+  color: #6a6a75;
+  font-size: 0.85em;
+  min-width: 3.5em;
+}
+.yuho-search-title { flex: 1; }
+.yuho-search-tier {
+  font: 600 0.7em/1.2 ui-monospace, monospace;
+  padding: 0.05em 0.4em;
+  border-radius: 3px;
+  letter-spacing: 0.04em;
+}
+.yuho-search-tier-l3 { background: #e8f5e9; color: #1a8b3a; }
+.yuho-search-tier-flag { background: #ffeaea; color: #c43d3d; }
+.yuho-search-tier-l2 { background: #e3f2fd; color: #1976d2; }
+.yuho-search-tier-l1 { background: #fff5e0; color: #b07020; }
+@media (prefers-color-scheme: dark) {
+  .yuho-search-results li { border-bottom-color: #2a2a35; }
+  .yuho-search-tier-l3 { background: #1f3622; }
+  .yuho-search-tier-flag { background: #401818; }
+  .yuho-search-tier-l2 { background: #1a3252; }
+  .yuho-search-tier-l1 { background: #3a2810; }
+}
+.yuho-search-empty {
+  color: #888;
+  font-style: italic;
+  cursor: default;
+}
