@@ -10,6 +10,8 @@ side panel with:
 - **English** — controlled-English transpilation of the encoded `.yh`.
 - **Elements** — extracted `elements`, `penalty`, and `exceptions` blocks.
 - **References** — outgoing and incoming cross-section edges (G10).
+- **Diagram** — Mermaid diagram of the section's element / penalty structure,
+  pre-rendered to SVG at corpus-build time and lazy-fetched per section.
 - **.yh source** — the raw Yuho encoding for the section.
 
 The extension reads from a bundled JSON corpus generated from the
@@ -25,7 +27,8 @@ editors/browser-yuho/
 ├── build_data.py                   # Slim corpus → data/sections.json
 ├── data/                           # generated, do not edit by hand
 │   ├── index.json
-│   └── sections.json
+│   ├── sections.json
+│   └── svg/s{N}.svg                # pre-rendered Mermaid diagrams
 └── src/
     ├── content/
     │   ├── content.js              # SSO DOM walker + panel UI
@@ -39,14 +42,18 @@ editors/browser-yuho/
 ## Build
 
 ```sh
-# 1. Make sure the canonical corpus exists
+# 1. Make sure the canonical corpus exists. To pre-render Mermaid -> SVG
+#    for the Diagram tab, install mmdc (npm install -g @mermaid-js/mermaid-cli)
+#    and ensure it's on PATH. Without mmdc, the Diagram tab will be empty;
+#    everything else still works.
 python3 scripts/build_corpus.py
+# (or skip SVG: `python3 scripts/build_corpus.py --no-mermaid-svg`)
 
 # 2. Generate the slim bundle the extension ships with
 python3 editors/browser-yuho/build_data.py
 ```
 
-That populates `editors/browser-yuho/data/{index.json,sections.json}`.
+That populates `editors/browser-yuho/data/{index.json,sections.json,svg/}`.
 
 ## Install (developer mode)
 
@@ -105,9 +112,6 @@ This is the v0 implementation. Outstanding before publication:
       override.
 - [ ] Per-tab badges: section number in the toolbar action shows the
       currently focused section's coverage tier.
-- [ ] Re-render Mermaid diagrams in the panel (today the panel skips the
-      Mermaid block to keep the bundle small; would need to ship a
-      Mermaid renderer or pre-render the SVG into the corpus).
 - [ ] Marketplace publish: Chrome Web Store, Firefox AMO, Edge Add-ons,
       Safari Extensions Gallery (each is a separate review pipeline).
 

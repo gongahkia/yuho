@@ -562,3 +562,25 @@
   font-style: italic;
   cursor: default;
 }
+
+/* Diagram tab */
+.yuho-diagram {
+  width: 100%;
+  overflow: auto;
+  padding: 8px 0;
+  text-align: center;
+}
+.yuho-diagram svg.yuho-mermaid-svg,
+.yuho-diagram svg {
+  max-width: 100%;
+  height: auto;
+  display: inline-block;
+}
+@media (prefers-color-scheme: dark) {
+  .yuho-diagram svg.yuho-mermaid-svg,
+  .yuho-diagram svg {
+    background: #1a1a22;
+    border-radius: 4px;
+  }
+  .yuho-diagram svg text { fill: #d6d6e0; }
+}

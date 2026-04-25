@@ -31,12 +31,15 @@ import argparse
 import datetime as _dt
 import hashlib
 import json
+import os
+import shutil as _shutil
 import subprocess
 import sys
+import tempfile
 import tomllib
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional, List
 
 
 REPO = Path(__file__).resolve().parent.parent
@@ -225,6 +228,62 @@ def _transpile(yh_path: Path, target: str) -> Optional[str]:
 
 
 # ---------------------------------------------------------------------------
+# Mermaid pre-rendering
+# ---------------------------------------------------------------------------
+
+
+_MMDC_BIN: Optional[str] = None  # resolved once
+_MMDC_PROBED = False
+
+
+def _resolve_mmdc() -> Optional[str]:
+    """Locate the Mermaid CLI binary. Cache the result across calls."""
+    global _MMDC_BIN, _MMDC_PROBED
+    if _MMDC_PROBED:
+        return _MMDC_BIN
+    _MMDC_PROBED = True
+    bin_path = _shutil.which("mmdc")
+    if bin_path:
+        _MMDC_BIN = bin_path
+    return _MMDC_BIN
+
+
+def _render_mermaid_svg(mermaid_src: Optional[str]) -> Optional[str]:
+    """Render Mermaid source to inline SVG via mmdc. Returns None on failure.
+
+    The SVG is post-processed: the outer ``<?xml ...?>`` declaration is
+    stripped (panel embeds it via innerHTML, where XML declarations are
+    invalid) and the root ``<svg>`` element gets a ``yuho-mermaid-svg``
+    class for styling.
+    """
+    if not mermaid_src or not mermaid_src.strip():
+        return None
+    mmdc = _resolve_mmdc()
+    if not mmdc:
+        return None
+    with tempfile.TemporaryDirectory(prefix="yuho-mmdc-") as tdir:
+        in_path = Path(tdir) / "in.mmd"
+        out_path = Path(tdir) / "out.svg"
+        in_path.write_text(mermaid_src, encoding="utf-8")
+        try:
+            result = subprocess.run(
+                [mmdc, "-i", str(in_path), "-o", str(out_path), "-b", "transparent"],
+                capture_output=True, text=True, timeout=60,
+            )
+        except Exception:
+            return None
+        if result.returncode != 0 or not out_path.exists():
+            return None
+        svg = out_path.read_text(encoding="utf-8")
+    if svg.startswith("<?xml"):
+        end = svg.find("?>")
+        if end >= 0:
+            svg = svg[end + 2:].lstrip()
+    svg = svg.replace("<svg ", '<svg class="yuho-mermaid-svg" ', 1)
+    return svg
+
+
+# ---------------------------------------------------------------------------
 # Reference-graph integration
 # ---------------------------------------------------------------------------
 
@@ -329,6 +388,7 @@ def build_section_record(section_dir: Path, ctx: CorpusBuildContext) -> Dict[str
     # --- Transpilations ---
     english = _transpile(yh_path, "english") if yh_path.exists() else None
     mermaid = _transpile(yh_path, "mermaid") if yh_path.exists() else None
+    mermaid_svg = _render_mermaid_svg(mermaid) if not os.environ.get("YUHO_SKIP_MERMAID_SVG") else None
 
     # --- References (G10) ---
     refs = _refs_for_section(ctx.reference_graph, section_num)
@@ -371,6 +431,7 @@ def build_section_record(section_dir: Path, ctx: CorpusBuildContext) -> Dict[str
         "transpiled": {
             "english": english,
             "mermaid": mermaid,
+            "mermaid_svg": mermaid_svg,
         },
         "coverage": {
             "L1": cov.get("L1_pass", parse_ok),
@@ -463,7 +524,11 @@ def main() -> int:
                         help="Build records in memory, don't write to disk")
     parser.add_argument("--no-transpile", action="store_true",
                         help="Skip controlled-English + Mermaid transpilations (fast mode)")
+    parser.add_argument("--no-mermaid-svg", action="store_true",
+                        help="Skip Mermaid -> SVG pre-render via mmdc (faster, smaller corpus)")
     args = parser.parse_args()
+    if args.no_mermaid_svg:
+        os.environ["YUHO_SKIP_MERMAID_SVG"] = "1"
 
     if not LIBRARY_DIR.exists():
         print(f"error: library dir not found: {LIBRARY_DIR}", file=sys.stderr)

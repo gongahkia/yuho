@@ -50,7 +50,12 @@ def slim_record(rec: Dict[str, Any]) -> Dict[str, Any]:
         },
         "transpiled": {
             "english": rec.get("transpiled", {}).get("english"),
-            # mermaid omitted from slim -- panel renders its own diagrams
+            "mermaid_svg_url": (
+                f"data/svg/s{rec['section_number']}.svg"
+                if rec.get("transpiled", {}).get("mermaid_svg") else None
+            ),
+            # raw mermaid source + inline SVG omitted -- panel lazy-loads
+            # the per-section SVG file from data/svg/ on tab open.
         },
         "coverage": rec.get("coverage", {}),
         "references": rec.get("references", {}),
@@ -67,6 +72,11 @@ def main() -> int:
         return 1
 
     DEST.mkdir(parents=True, exist_ok=True)
+    svg_dir = DEST / "svg"
+    svg_dir.mkdir(parents=True, exist_ok=True)
+    # Wipe stale SVGs so deletions in the canonical corpus propagate.
+    for old in svg_dir.glob("s*.svg"):
+        old.unlink()
 
     # Copy the index verbatim — it's already small and panel-friendly.
     shutil.copy2(SOURCE / "index.json", DEST / "index.json")
@@ -75,10 +85,16 @@ def main() -> int:
     # Build the combined slim sections file.
     sections: Dict[str, Dict[str, Any]] = {}
     files = sorted((SOURCE / "sections").glob("s*.json"))
+    n_svgs = 0
     for path in files:
         with path.open("r", encoding="utf-8") as f:
             rec = json.load(f)
         sections[rec["section_number"]] = slim_record(rec)
+        svg = rec.get("transpiled", {}).get("mermaid_svg")
+        if svg:
+            (svg_dir / f"s{rec['section_number']}.svg").write_text(svg, encoding="utf-8")
+            n_svgs += 1
+    print(f"wrote {n_svgs} SVGs to {svg_dir}")
 
     out_path = DEST / "sections.json"
     out_path.write_text(json.dumps(sections, ensure_ascii=False), encoding="utf-8")

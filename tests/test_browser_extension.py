@@ -46,6 +46,14 @@ class TestManifests:
                     "background", "web_accessible_resources"):
             assert key in data, f"missing key in manifest.json: {key}"
 
+    def test_chrome_manifest_exposes_svg_dir(self):
+        with (EXT / "manifest.json").open("r", encoding="utf-8") as f:
+            data = json.load(f)
+        war = data["web_accessible_resources"]
+        flat = [r for entry in war for r in entry.get("resources", [])]
+        assert "data/svg/*.svg" in flat, \
+            "SVGs must be web-accessible for content-script fetch()"
+
     def test_chrome_manifest_uses_service_worker(self):
         with (EXT / "manifest.json").open("r", encoding="utf-8") as f:
             data = json.load(f)
@@ -119,6 +127,13 @@ class TestContentScriptFeatures:
     def test_has_service_worker_message(self, content):
         assert "yuho_section_active" in content
 
+    def test_has_diagram_tab(self, content):
+        assert 'data-tab="diagram"' in content
+        assert "function renderDiagram" in content
+        assert "mermaid_svg_url" in content
+        assert "function loadDiagram" in content
+        assert "SVG_CACHE" in content
+
 
 class TestServiceWorkerFeatures:
     @pytest.fixture(scope="class")
@@ -153,6 +168,9 @@ class TestCSSRegions:
         # Dark mode media query should appear at least once.
         assert "@media (prefers-color-scheme: dark)" in css
 
+    def test_has_diagram_styles(self, css):
+        assert ".yuho-diagram" in css
+
 
 class TestDataBundle:
     def test_data_bundle_exists(self):
@@ -163,6 +181,29 @@ class TestDataBundle:
             sections = json.load(f)
         assert isinstance(sections, dict)
         assert "415" in sections, "expected s415 in slim corpus"
+
+    def test_slim_emits_svg_files_and_url(self):
+        """Canonical SVG must surface as a per-section file + slim URL pointer."""
+        canonical = REPO / "library" / "penal_code" / "_corpus" / "sections"
+        slim = EXT / "data" / "sections.json"
+        if not canonical.exists() or not slim.exists():
+            pytest.skip("corpus or slim bundle not built")
+        with slim.open("r", encoding="utf-8") as f:
+            sections = json.load(f)
+        for path in sorted(canonical.glob("s*.json")):
+            with path.open("r", encoding="utf-8") as f:
+                rec = json.load(f)
+            if not rec.get("transpiled", {}).get("mermaid_svg"):
+                continue
+            num = rec["section_number"]
+            url = sections[num]["transpiled"]["mermaid_svg_url"]
+            assert url == f"data/svg/s{num}.svg", f"unexpected url: {url}"
+            svg_path = EXT / url
+            assert svg_path.exists(), f"slim references {url} but file missing"
+            assert svg_path.read_text(encoding="utf-8").lstrip().startswith("<svg")
+            return
+        pytest.skip("no section in canonical corpus has mermaid_svg "
+                    "(install mmdc and rebuild with build_corpus.py)")
 
     def test_index_bundle_exists(self):
         idx = EXT / "data" / "index.json"

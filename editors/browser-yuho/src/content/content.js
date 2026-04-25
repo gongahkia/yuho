@@ -8,7 +8,7 @@
 //
 // Features (v0.3):
 // - Section-heading badges with L1/L2/L3/FLAG status
-// - Side panel with 5 tabs (Overview / English / Elements / References / .yh)
+// - Side panel with 6 tabs (Overview / English / Elements / References / Diagram / .yh)
 // - **Inline citation tooltips** on `s415` mentions in body text
 // - **Panel search box** filtering all 524 sections by number or title
 // - **User-prefs persistence** (chrome.storage.sync): pin state, default tab
@@ -414,6 +414,7 @@
         <button class="yuho-tab" data-tab="english" role="tab">English</button>
         <button class="yuho-tab" data-tab="elements" role="tab">Elements</button>
         <button class="yuho-tab" data-tab="refs" role="tab">References</button>
+        <button class="yuho-tab" data-tab="diagram" role="tab">Diagram</button>
         <button class="yuho-tab" data-tab="source" role="tab">.yh source</button>
       </nav>
       <main class="yuho-panel-body" tabindex="0"></main>
@@ -624,6 +625,7 @@
       case "english":   return renderEnglish(record);
       case "elements":  return renderElements(record);
       case "refs":      return renderRefs(record);
+      case "diagram":   return renderDiagram(record);
       case "source":    return renderSource(record);
       default:          return `<p>unknown tab: ${escapeHtml(name)}</p>`;
     }
@@ -726,6 +728,45 @@
       <h3>Incoming (${inc.length})</h3>
       ${inc.length ? `<ul class="yuho-edges">${inc.map(e => renderEdge(e, "in")).join("")}</ul>` : `<p class="yuho-empty">No incoming references.</p>`}
     `;
+  }
+
+  // SVGs are lazy-loaded from data/svg/s{num}.svg on tab open and cached
+  // in-memory thereafter so re-opening the same section is instant.
+  const SVG_CACHE = new Map();
+  const SVG_HOST_ID = "yuho-diagram-host";
+
+  function renderDiagram(rec) {
+    const url = rec.transpiled?.mermaid_svg_url;
+    if (!url) {
+      return `<p class="yuho-empty">No diagram available for this section. ` +
+             `Re-run <code>scripts/build_corpus.py</code> with mmdc on PATH, ` +
+             `then <code>build_data.py</code>, to populate <code>data/svg/</code>.</p>`;
+    }
+    // Render a host element synchronously, then populate it asynchronously.
+    queueMicrotask(() => loadDiagram(rec.section_number, url));
+    return `<div class="yuho-diagram" id="${SVG_HOST_ID}">
+              <p class="yuho-empty">Loading diagram…</p>
+            </div>`;
+  }
+
+  async function loadDiagram(section, url) {
+    const host = document.getElementById(SVG_HOST_ID);
+    if (!host) return;
+    let svg = SVG_CACHE.get(section);
+    if (!svg) {
+      try {
+        const res = await fetch(chrome.runtime.getURL(url));
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        svg = await res.text();
+        SVG_CACHE.set(section, svg);
+      } catch (err) {
+        host.innerHTML = `<p class="yuho-empty">Failed to load diagram: ${escapeHtml(String(err))}</p>`;
+        return;
+      }
+    }
+    // Re-fetch host in case the user already switched away.
+    const stillHost = document.getElementById(SVG_HOST_ID);
+    if (stillHost) stillHost.innerHTML = svg;
   }
 
   function renderSource(rec) {
