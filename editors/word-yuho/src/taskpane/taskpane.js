@@ -11,6 +11,36 @@
 let CORPUS = null;
 let SELECTED = null;
 
+// Office.context.document.settings is a per-document blob persisted into
+// the Word file itself, so prefs travel with the document. Keys used:
+//   yuho.lastSelected   -- JSON of the most recent selection (consumed
+//                          by the ribbon's insertStatute command)
+//   yuho.defaultInsert  -- "english" | "citation" | "elements" | "diagram"
+const SETTINGS_KEYS = {
+  LAST_SELECTED:  "yuho.lastSelected",
+  DEFAULT_INSERT: "yuho.defaultInsert",
+};
+
+function readSetting(key, fallback = null) {
+  try {
+    const v = Office.context.document.settings.get(key);
+    if (v == null) return fallback;
+    return typeof v === "string" ? JSON.parse(v) : v;
+  } catch (err) {
+    return fallback;
+  }
+}
+
+function writeSetting(key, value) {
+  try {
+    const settings = Office.context.document.settings;
+    settings.set(key, typeof value === "string" ? value : JSON.stringify(value));
+    settings.saveAsync();
+  } catch (err) {
+    /* ignore */
+  }
+}
+
 Office.onReady(() => {
   document.getElementById("search").addEventListener("input", onSearch);
   document.getElementById("action-insert-en").addEventListener("click", () => insert("english"));
@@ -27,6 +57,11 @@ async function loadCorpus() {
     const resp = await fetch("../data/sections.json");
     CORPUS = await resp.json();
     renderTopHits();
+    // Restore the last selection from this document's settings, if any.
+    const last = readSetting(SETTINGS_KEYS.LAST_SELECTED);
+    if (last && last.section_number && CORPUS[last.section_number]) {
+      selectSection(CORPUS[last.section_number]);
+    }
   } catch (err) {
     console.error("[Yuho] failed to load corpus", err);
     document.getElementById("results").innerHTML =
@@ -120,6 +155,12 @@ function renderResults(records) {
 
 function selectSection(rec) {
   SELECTED = rec;
+  // Persist a slim copy: full record can be megabytes (yh + svg + raw).
+  writeSetting(SETTINGS_KEYS.LAST_SELECTED, {
+    section_number: rec.section_number,
+    section_title:  rec.section_title,
+    sso_url:        rec.sso_url,
+  });
   const detail = document.getElementById("detail");
   detail.hidden = false;
   document.getElementById("detail-title").textContent = `s${rec.section_number} — ${rec.section_title}`;
@@ -191,6 +232,7 @@ async function svgToPngBase64(svg, scale = 2) {
 
 async function insert(kind) {
   if (!SELECTED) return;
+  writeSetting(SETTINGS_KEYS.DEFAULT_INSERT, kind);
   const rec = SELECTED;
 
   // Diagram is a binary insert (PNG), not text — handle it separately.
