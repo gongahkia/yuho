@@ -16,4 +16,6 @@ summary = "Defines “die” and “instrument” for the purposes of Chapters 1
 source = "Singapore Penal Code 1871, Section 31A"
 
 [verification]
+last_verified = "2026-04-25"
+verified_by = "gpt-5.4 high (automated L3 reviewer)"
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr31A-#pr31A-"

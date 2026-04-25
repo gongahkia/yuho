@@ -1,77 +1,294 @@
 \section{Design}
 \label{sec:design}
 
-\subsection{Core grammar}
-\label{subsec:grammar}
-\todo{Lead with a single concrete example (s415, cheating) shown in full
-Yuho syntax, then unpack each block.}
+This section presents the Yuho grammar through a worked example, then
+unpacks each structural primitive in turn. We close with a catalogue of
+the fourteen grammar gaps that mass-encoding the Singapore Penal Code
+surfaced, classified into ten genuine grammar limitations (all resolved
+by extending the parser) and four diagnostic-layer issues (resolved by
+adding fidelity linters; see \S\ref{subsec:fidelity}).
 
-\begin{quote}
+\subsection{A worked example: section 415}
+\label{subsec:s415}
+Section 415 of the Penal Code defines the offence of cheating. The
+canonical drafting establishes deception as the foundational act, requires
+either fraudulent or dishonest mens rea, requires that the deception
+induces one of three specific consequences (delivery of property, consent
+to retain property, or doing/omitting an act the victim would not
+otherwise have done), and requires that the inducement cause or be likely
+to cause damage to body, mind, reputation, or property. Three illustrations
+follow. Figure~\ref{fig:s415} shows the full Yuho encoding of the statute
+block (the file under \texttt{library/penal\_code/s415\_cheating/} also
+contains a helper \texttt{struct} and \texttt{match} expression for
+client-side reasoning, omitted here for brevity).
+
+\begin{figure}[t]
 \begin{small}
-\texttt{statute 415 "Cheating" \{ \\
-~~jurisdiction := SG; \\
-~~effective 1872-01-01; \\
-~~elements \{ \\
-~~~~deception : actus\_reus := "by deceiving any person"; \\
-~~~~induction  : actus\_reus := "fraudulently induces" causedBy deception; \\
-~~~~mens       : mens\_rea  := "intent to defraud"; \\
-~~\} \\
-~~penalty alternative \{ \\
-~~~~imprisonment := up\_to 3 years; \\
-~~~~fine := unlimited; \\
-~~~~or\_both; \\
-~~\} \\
-~~illustration "(a) ..."; \\
-~~exception "consent" guard "victim consents" priority 1; \\
-\}}
+\begin{verbatim}
+statute 415 "Cheating" effective 1872-01-01 {
+  definitions {
+    deceive       := "To cause a person to believe something that is false";
+    fraudulently  := "With intent to defraud another person";
+    dishonestly   := "With intention of causing wrongful gain or wrongful loss";
+    property      := "Any movable or immovable property";
+    inducement    := "Causing a person to act based on deception";
+  }
+
+  elements {
+    all_of {
+      /// deception is the foundational act
+      actus_reus  deception   := "Deceiving any person";
+      any_of {
+        /// per s25: intent to defraud
+        mens_rea  fraudulent  := "Fraudulently inducing the person";
+        /// per s24: intent to cause wrongful gain/loss
+        mens_rea  dishonest   := "Dishonestly inducing the person";
+      }
+      /// three forms: deliver property, consent to retain, or do/omit an act
+      actus_reus  inducement  := "Inducing delivery of property, ...";
+      circumstance harm       := "Causing or likely to cause damage ...";
+    }
+  }
+
+  penalty {
+    imprisonment := 1 year .. 7 years;
+    fine         := $0.00 .. $50,000.00;
+  }
+
+  illustration example1 {
+    "A intentionally deceives B into believing that a worthless article
+     is valuable, and thus induces B to buy it. A cheats."
+  }
+  /* example2, example3 omitted for space */
+}
+\end{verbatim}
 \end{small}
-\end{quote}
+\caption{Yuho encoding of \emph{Penal Code s.\,415 (Cheating)}. The
+\texttt{statute} block is the top-level construct; it has named field
+positions for definitions, elements, penalty, and illustrations, plus
+optional positions (not shown here) for exceptions, case law, parties,
+and subsections. The element block uses an \texttt{all\_of} combinator
+with a nested \texttt{any\_of} for the disjunctive mens-rea requirement.
+Doc comments (\texttt{///}) attach as \texttt{doc\_comment} fields on
+the AST node they precede.}
+\label{fig:s415}
+\end{figure}
+
+The encoding tracks the drafted statute one-for-one. Definitions reproduce
+the in-statute glossary. The element block is a typed conjunction with
+one disjunctive sub-group for the alternative mens rea. The penalty is a
+flat range over imprisonment and fine. Each illustration is a verbatim
+worked example with a stable label.
+
+\subsection{The \texttt{statute} block}
+\label{subsec:statute}
+The top-level construct of every Yuho file is one or more \texttt{statute}
+blocks. Each block carries a section number (with optional alphabetic
+suffix --- e.g.\ s376AA --- supported after gap \textsf{G3}), an optional
+title string, and one or more \texttt{effective <date>} clauses
+(\textsf{G6}). The body is a sequence of named-field positions:
+\texttt{definitions}, \texttt{elements}, \texttt{penalty}, \texttt{illustration}
+(repeatable), \texttt{exception} (repeatable), \texttt{caselaw} (repeatable),
+\texttt{parties}, and \texttt{subsection (N)} (repeatable, with
+nesting). All field positions are optional except that a section without
+any elements or subsections carries no semantic content and is rejected.
+
+The choice to make \texttt{statute} the top-level construct, rather than
+a more abstract notion like Catala's \emph{scope}, is deliberate. Penal
+sections come bundled with fields that a function-call shape does not
+naturally accommodate: illustrations are not function arguments, and
+case-law anchors are not return values. Treating the section as a struct
+with named fields matches the way the statute is drafted and the way a
+lawyer reads it.
 
 \subsection{Element decomposition}
 \label{subsec:elements}
-Every offence is a conjunction (or carefully-named disjunction) of typed
-elements. The element kinds --- \texttt{actus\_reus}, \texttt{mens\_rea},
-\texttt{circumstance}, \texttt{obligation}, \texttt{prohibition},
-\texttt{permission} --- are the type system. Burden qualifiers
-(\texttt{burden prosecution}, \texttt{burden defence}) and proof standards
-attach per-element. Causal links (\texttt{causedBy other\_element}) and
-temporal relations (\texttt{precedes}, \texttt{during}, \texttt{after})
-make element graphs traversable.
+Every offence is encoded as a typed conjunction (or, for genuinely
+disjunctive offences, a typed disjunction) of \emph{elements}. The element
+type system is the kind taxonomy:
+
+\begin{itemize}
+\item \texttt{actus\_reus} --- the prohibited act.
+\item \texttt{mens\_rea} --- the required mental state.
+\item \texttt{circumstance} --- contextual conditions that must hold
+(time, place, status of victim, etc.).
+\item \texttt{obligation} / \texttt{prohibition} / \texttt{permission}
+--- deontic operators for sections drafted as duties or
+prohibitions rather than offences proper.
+\end{itemize}
+
+Elements are grouped by combinator. The \texttt{all\_of} combinator
+denotes conjunction (every member must hold); the \texttt{any\_of}
+combinator denotes disjunction (at least one member must hold). Groups
+nest: the s415 example uses \texttt{all\_of} at the top with a nested
+\texttt{any\_of} for the alternative mens rea. Beyond the combinator,
+each element carries an optional \emph{burden qualifier} ---
+\texttt{burden prosecution} or \texttt{burden defence}, optionally with
+a named \emph{proof standard} (\texttt{beyond\_reasonable\_doubt},
+\texttt{balance\_of\_probabilities}, \texttt{prima\_facie}) --- and
+optional causal (\texttt{causedBy <other\_element>}) and temporal
+(\texttt{<element> precedes <element>}, \texttt{during}, \texttt{after})
+edges to other elements in the same statute. The causal edges proved
+necessary while encoding sections like s299 (culpable homicide), where
+the act and the death are distinct elements connected by a causal
+requirement that is itself a frequent litigation point.
 
 \subsection{Penalty combinators}
 \label{subsec:penalty}
-\todo{Diagram: penalty AST tree for s302 (``death or imprisonment for life,
-and shall also be liable to fine'') showing nested combinator from G12.}
-Three top-level combinators (\texttt{cumulative}, \texttt{alternative},
-\texttt{or\_both}); a conditional branch combinator (\texttt{when <ident>});
-and a nested-combinator escape hatch added in gap \textsf{G12} for
-penalties of the form ``A and (B or C)''. Sentinels \texttt{fine := unlimited}
-(\textsf{G8}) and \texttt{caning := unspecified} (\textsf{G14}) cover
-statute-text-says-no-cap cases without forcing fabricated numeric ranges.
+Penal sections specify punishment as a small algebra over four primitives
+(imprisonment, fine, caning, death) plus three top-level combinators
+(\texttt{cumulative}, \texttt{alternative}, \texttt{or\_both}), one
+conditional combinator (\texttt{when <ident>}), and a nested-combinator
+escape hatch.
+
+\paragraph{Combinators.} The default combinator is \texttt{cumulative}:
+all listed punishments apply. The \texttt{alternative} combinator
+selects one branch at sentencing. The \texttt{or\_both} combinator,
+which the Penal Code uses pervasively (``shall be punished with
+imprisonment of either description for a term which may extend to N
+years, or with fine, or with both''), is a binary case where the
+sentencer may impose either or both. We treat \texttt{or\_both} as a
+first-class primitive rather than a sugar over \texttt{alternative},
+because the canonical drafting names it explicitly and the verification
+semantics differ.
+
+\paragraph{Sentinels.} Two sentinels avoid the temptation to fabricate
+numeric ranges where the statute is silent. The \texttt{fine := unlimited}
+sentinel (\textsf{G8}) encodes ``with fine'' clauses that name no upper
+bound; the \texttt{caning := unspecified} sentinel (\textsf{G14})
+encodes ``shall be liable to caning'' clauses that name no stroke count.
+Without these sentinels, encoders are tempted to write fictitious caps
+(``\$100,000'' or ``24 strokes'') that the statute does not authorise ---
+which a fidelity linter then catches as fabrication
+(\S\ref{subsec:fidelity}).
+
+\paragraph{Conditional branches.} The \texttt{penalty when <ident>}
+construct (\textsf{G9}) names a conditional penalty branch. Sections
+where the punishment depends on a named factual condition --- for
+example, s302 where the death penalty applies only when the offence
+falls within the limited residual category preserved by the 2012
+amendments --- become readable as a small case analysis rather than as
+embedded prose.
+
+\paragraph{Nested combinators.} A penalty of the form ``A and (B or C)''
+--- ``death or imprisonment for life, and shall also be liable to fine''
+in s302, for example --- requires composing combinators rather than
+flattening them. Gap \textsf{G12} added a \texttt{nested} field on
+\texttt{PenaltyNode} that carries a sub-penalty with its own combinator,
+which lets a single \texttt{penalty} block express the full algebra.
+Before \textsf{G12} this was a frequent encoder workaround: nineteen
+sections in the Penal Code used a two-sibling-block hack that we
+collapsed into nested form via a one-shot migration script.
 
 \subsection{Exceptions as Catala-style defaults}
 \label{subsec:exceptions}
-\todo{Show the priority DAG; mention how it compiles to Z3 prioritised
-rewriting.}
-General exceptions (Chapter IV) and section-local provisos are encoded
-as priority-ordered \texttt{exception} blocks with an optional
-\texttt{defeats} edge to the elements they override. Compilation to Z3
-follows Catala's prioritised-rewriting semantics: lower-priority rules
-fire only when no higher-priority rule applies.
+Chapter IV of the Penal Code (sections 76 through 106) sets out the
+\emph{General Exceptions} --- mistake of fact, accident, judicial act,
+infancy, insanity, intoxication, consent, communication made in good
+faith, private defence, and others. These exceptions are cross-cutting:
+each one applies, in principle, to every offence in the Code, and they
+have a partial priority order (intoxication is narrower than insanity;
+private defence is narrower than mistake; and so on).
+
+We encode each exception as a Yuho \texttt{exception} block with three
+fields: a \texttt{condition} string (the natural-language scope), an
+optional \texttt{effect} string (what changes when the exception applies),
+and a \texttt{priority N} integer (the rank in the DAG; lower numbers
+fire first). An optional \texttt{defeats <element\_name>} edge ties the
+exception to the specific element it overrides.
+
+\begin{small}
+\begin{verbatim}
+exception "consent" priority 1
+  guard "victim consents and exception 87 applies";
+exception "self_defence" priority 2
+  guard "private defence under sections 96-106"
+  defeats inducement;
+\end{verbatim}
+\end{small}
+
+The compilation target is Z3 prioritised rewriting in the style of
+Catala~\cite{catala2021}: the base rule fires; lower-priority exceptions
+fire only when no higher-priority exception matches. This semantics is
+the right shape for general exceptions, which behave precisely as
+prioritised defaults rather than as flat negations.
 
 \subsection{Subsections and amendment lineage}
-A statute can carry nested \texttt{subsection (N) \{ ... \}} blocks
-(gap \textsf{G5}) with their own elements, penalties, and exceptions.
-Multiple \texttt{effective <date>} clauses (gap \textsf{G6}) record the
-amendment history; a \texttt{repealed <date>} clause closes the section.
+\label{subsec:subsections}
+A statute may carry nested \texttt{subsection (N) \{ \dots \}} blocks
+(gap \textsf{G5}). Each subsection has its own definitions, elements,
+penalty, illustrations, and exceptions, and may itself contain further
+nested subsections. This matches the drafting reality of sections like
+s377BO (seven subsections) and s511 (three): the subsections are
+semantically distinct and frequently carry their own penalty regimes.
+
+Amendment lineage is encoded by repeated \texttt{effective <date>}
+clauses on the \texttt{statute} header (gap \textsf{G6}). The Singapore
+Penal Code has been amended substantively at least four times since 1872
+(notably 1985, 2007, 2012, and 2019); for sections introduced or
+materially rewritten by an amendment, the encoding carries both the
+original \texttt{effective 1872-01-01} clause and the amendment
+\texttt{effective <date>} clauses. The optional \texttt{repealed <date>}
+clause closes a section. Two further metadata clauses --- \texttt{subsumes}
+and \texttt{amends} --- record cross-section relationships at the header
+level, surfacing for reference-graph analysis (\S\ref{sec:related}).
+
+\subsection{Annotations and metadata}
+The grammar reserves three lightweight annotation positions: \texttt{///}
+doc comments on most node positions (lifted into the AST as
+\texttt{doc\_comment} fields, gap \textsf{G1} fixed), file-level
+\texttt{/// @meta key=value} pairs (used for the canonical SSO source
+URL, the controlling Act number, and the amendment number), and a
+\texttt{/// @amendment [N/YYYY]} marker that ties an encoding to a
+specific gazette amendment. These annotations are recoverable from the
+AST without polluting the core grammar; they are read by the LSP hover
+handler, the MCP server, and the documentation transpilers.
 
 \subsection{The fourteen grammar gaps}
 \label{subsec:gaps}
-\todo{Compact table summarising G1--G14, status (fixed / deferred / not-a-gap),
-and the artefact that resolved each. Source: \texttt{todo.md} Phase D table.}
+Mass-encoding the Penal Code surfaced fourteen distinct grammar
+shortcomings, summarised in Table~\ref{tab:gaps}. We classify each as
+a real grammar limitation (ten items, all resolved by extending the
+parser) or a not-a-gap that the diagnostic layer catches (four items,
+resolved by adding fidelity linters). Two gaps initially classified as
+grammar limitations turned out, on closer inspection, not to be gaps at
+all (\textsf{G2}, \textsf{G7}); one (\textsf{G10}) is a not-a-gap on
+the grammar side but does require a separate semantic-resolver pass
+that remains future work.
 
-Mass-encoding the Penal Code surfaced fourteen distinct grammar shortcomings.
-We classify each as a real grammar limitation (10 items) or a not-a-gap
-that the diagnostic layer should catch (4 items). All ten real gaps
-were resolved in the grammar; the four diagnostic-layer items became
-fidelity linters (\S\ref{subsec:fidelity}).
+\begin{table}[t]
+\caption{The fourteen grammar gaps, with resolution.}
+\label{tab:gaps}
+\begin{small}
+\begin{tabular}{@{}llp{4.4cm}@{}}
+\toprule
+\textbf{Gap} & \textbf{Resolution} & \textbf{Artefact} \\ \midrule
+\textsf{G1}  & fixed       & doc comments before \texttt{element\_group} \\
+\textsf{G2}  & not-a-gap   & colons in \texttt{///} parse fine after re-test \\
+\textsf{G3}  & fixed       & multi-letter section suffix (s376AA, s377BO) \\
+\textsf{G4}  & lint        & illustration-count vs canonical \\
+\textsf{G5}  & fixed       & \texttt{subsection (N) \{ \dots \}} nesting \\
+\textsf{G6}  & fixed       & multiple \texttt{effective <date>} clauses \\
+\textsf{G7}  & not-a-gap   & flat \texttt{definitions} suffices; G5 covers nesting \\
+\textsf{G8}  & fixed       & \texttt{or\_both} / \texttt{alternative} / \texttt{cumulative}; \texttt{fine := unlimited} \\
+\textsf{G9}  & fixed       & \texttt{penalty when <ident>} conditional branches \\
+\textsf{G10} & deferred    & cross-section semantic resolver --- grammar already parses \texttt{referencing} / \texttt{subsumes} / \texttt{amends} \\
+\textsf{G11} & lint        & \texttt{all\_of} vs ``or'' connective check \\
+\textsf{G12} & fixed       & nested penalty combinators \\
+\textsf{G13} & fixed       & exception-priority DAG with Z3 prioritised rewriting \\
+\textsf{G14} & fixed       & \texttt{caning := unspecified} sentinel \\
+\bottomrule
+\end{tabular}
+\end{small}
+\end{table}
+
+The empirical takeaway from the gap catalogue is that the gap classification
+itself matters. A gap that surfaces as ``the parser rejects this encoding''
+might be a parser bug (\textsf{G1}, \textsf{G3}, \textsf{G5}), a missing
+combinator (\textsf{G8}, \textsf{G12}), a missing sentinel (\textsf{G14}),
+or a fidelity issue masquerading as a grammar issue (\textsf{G4},
+\textsf{G11}). Distinguishing these matters because the resolution cost
+differs by an order of magnitude --- a new parser rule is a few lines
+in \texttt{grammar.js}, while a fidelity linter requires walking the AST
+against the canonical scrape --- and conflating them leads to grammar
+bloat with no corresponding fidelity gain.
