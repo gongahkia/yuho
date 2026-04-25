@@ -131,6 +131,23 @@ h2:first-child { margin-top: 0; }
 .card .num { color: var(--c-muted); font-family: ui-monospace, monospace; font-size: 0.85em; }
 .card .title { font-size: 0.92em; line-height: 1.3; min-height: 2.4em; }
 .card .badges { display: flex; gap: 0.3rem; flex-wrap: wrap; margin-top: 0.18rem; }
+.card .snippet {
+  margin-top: 0.3em;
+  font-size: 0.83em;
+  color: var(--c-muted);
+  line-height: 1.35;
+  border-top: 1px dashed var(--c-border);
+  padding-top: 0.3em;
+}
+.card .snippet mark {
+  background: #ffe066;
+  color: inherit;
+  padding: 0 1px;
+  border-radius: 2px;
+}
+@media (prefers-color-scheme: dark) {
+  .card .snippet mark { background: #5a4a10; color: #ffe9a0; }
+}
 
 .badge {
   display: inline-block;
@@ -265,16 +282,29 @@ footer.site {
 
 
 _SEARCH_JS = r"""
-// Client-side search over the index. Loads index.json once, filters as you type.
+// Client-side search over title + body. Loads search-index.json (one big
+// blob with title/summary/english/raw concatenated per section) and does
+// case-insensitive substring + token-AND matching.
 (function () {
   const input = document.getElementById('search-input');
   const grid = document.getElementById('section-grid');
   if (!input || !grid) return;
 
   let DATA = null;
-  fetch('static/index.json').then(r => r.json()).then(j => {
-    DATA = j;
-    render(j.sections);
+  let SEARCH = null;
+  Promise.all([
+    fetch('static/index.json').then(r => r.json()),
+    fetch('static/search-index.json').then(r => r.json()),
+  ]).then(([idx, sidx]) => {
+    DATA = idx;
+    SEARCH = sidx;
+    render(idx.sections);
+  }).catch(() => {
+    // search-index missing? fall back to title/number only.
+    fetch('static/index.json').then(r => r.json()).then(idx => {
+      DATA = idx;
+      render(idx.sections);
+    });
   });
 
   function render(rows) {
@@ -295,6 +325,7 @@ _SEARCH_JS = r"""
           ${row.L2 ? '<span class="badge l2">L2</span>' : ''}
           ${badgeForL3(row.L3)}
         </div>
+        ${row._snippet ? `<div class="snippet">${row._snippet}</div>` : ''}
       `;
       frag.appendChild(card);
     }
@@ -308,14 +339,39 @@ _SEARCH_JS = r"""
     return (s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   }
 
+  function snippet(body, q) {
+    const i = body.toLowerCase().indexOf(q.toLowerCase());
+    if (i < 0) return '';
+    const start = Math.max(0, i - 30);
+    const end = Math.min(body.length, i + q.length + 60);
+    let s = (start > 0 ? '…' : '') + body.slice(start, end) + (end < body.length ? '…' : '');
+    s = escape(s);
+    const reEsc = q.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
+    return s.replace(new RegExp(reEsc, 'gi'), m => `<mark>${m}</mark>`);
+  }
+
   input.addEventListener('input', () => {
     if (!DATA) return;
-    const q = input.value.trim().toLowerCase();
+    const q = input.value.trim();
     if (!q) { render(DATA.sections); return; }
-    const filtered = DATA.sections.filter(r => {
-      return r.number.toLowerCase().includes(q)
-          || (r.title || '').toLowerCase().includes(q);
-    });
+    const ql = q.toLowerCase();
+    const tokens = ql.split(/\s+/).filter(Boolean);
+    const filtered = [];
+    for (const row of DATA.sections) {
+      const num = row.number.toLowerCase();
+      const title = (row.title || '').toLowerCase();
+      const body = SEARCH ? (SEARCH[row.number] || '') : '';
+      // token-AND across title|number|body
+      const hay = `${num}\n${title}\n${body.toLowerCase()}`;
+      const allHit = tokens.every(t => hay.includes(t));
+      if (!allHit) continue;
+      const annotated = Object.assign({}, row);
+      // Only show snippet for body matches, not pure title/number hits.
+      if (body && !title.includes(ql) && !num.includes(ql)) {
+        annotated._snippet = snippet(body, q);
+      }
+      filtered.push(annotated);
+    }
     render(filtered);
   });
 })();
@@ -619,15 +675,32 @@ def main() -> int:
     (BUILD / "flags.html").write_text(render_flags(index))
     (BUILD / "about.html").write_text(render_about())
 
-    # Per-section pages
+    # Per-section pages + full-text search index (G2).
     sect_dir = CORPUS / "sections"
     n_pages = 0
+    search_index: Dict[str, str] = {}
     for path in sorted(sect_dir.glob("s*.json")):
         with path.open("r", encoding="utf-8") as f:
             rec = json.load(f)
         out = BUILD / "s" / f"{rec['section_number']}.html"
         out.write_text(render_section(rec))
         n_pages += 1
+        # Concatenate searchable bodies. Stored lowercased + length-capped
+        # so the bundle stays under a few hundred KB.
+        parts = [
+            rec.get("section_title", ""),
+            rec.get("metadata", {}).get("summary") or "",
+            rec.get("raw", {}).get("text", "") or "",
+            rec.get("transpiled", {}).get("english", "") or "",
+        ]
+        joined = "\n".join(p for p in parts if p)
+        if len(joined) > 4000:
+            joined = joined[:4000]
+        search_index[rec["section_number"]] = joined
+
+    (STATIC / "search-index.json").write_text(
+        json.dumps(search_index, ensure_ascii=False, separators=(",", ":"))
+    )
 
     print(f"site built: {BUILD}")
     print(f"  {n_pages} per-section pages")
