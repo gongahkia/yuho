@@ -110,6 +110,7 @@ class RateLimitConfig:
         "yuho_propose_encoding_skeleton": (0.5, 3),
         "yuho_simulate_fact_pattern": (1.0,  4),
         "yuho_explore_counterexamples": (0.5, 3),
+        "yuho_recommend_charges":     (0.5, 3),
         "yuho_verify_grounded":       (1.0,  4),
         "yuho_section_references":    (2.0,  5),   # corpus walk + graph build
         "yuho_validate_contribution": (1.0,  3),
@@ -2379,6 +2380,53 @@ statute {section} "{marginal}" effective 1872-01-01 {{
                 include_exception_coverage=include_exception_coverage,
             )
             return {"ok": True, "report": report.to_dict()}
+
+        @tool_with_structured_logging()
+        async def yuho_recommend_charges(
+            facts: Dict[str, Any],
+            top_k: int = 5,
+            max_candidates: int = 60,
+            min_coverage: float = 0.0,
+        ) -> Dict[str, Any]:
+            """
+            Rank Penal Code sections that structurally fit a fact pattern.
+
+            NOT LEGAL ADVICE. Returns a ranked list of candidate sections
+            with the simulator's per-element trace attached. Re-uses the
+            existing fact-pattern simulator (no external LLM, no web
+            access, no scraping). Every result envelope carries the
+            ``not_legal_advice: true`` flag and the standard disclaimer
+            string; clients MUST surface the disclaimer verbatim.
+
+            Args:
+                facts: a fact-pattern dict (same shape as the simulator's
+                    input but the ``section`` field is optional / ignored —
+                    the recommender is what fills in candidate sections).
+                top_k: how many ranked candidates to return (default 5).
+                max_candidates: cap on sections whose simulator trace gets
+                    run during the second-stage simulation (default 60).
+                min_coverage: drop candidates below this coverage fraction
+                    (default 0.0 keeps everything that simulated).
+
+            Returns:
+                {"ok": true, "recommendation": Recommendation.to_dict()} or
+                an {"ok": false, ...} envelope on error.
+            """
+            try:
+                from yuho.recommend.charge_recommender import ChargeRecommender
+            except Exception as exc:
+                return mcp_error("unavailable",
+                                 f"charge recommender could not be loaded: {exc}")
+            try:
+                rec = ChargeRecommender().recommend(
+                    facts,
+                    top_k=top_k,
+                    max_candidates=max_candidates,
+                    min_coverage=min_coverage,
+                )
+            except Exception as exc:
+                return mcp_error("internal", f"recommendation failed: {exc}")
+            return {"ok": True, "recommendation": rec.to_dict()}
 
         @tool_with_structured_logging()
         async def yuho_simulate_fact_pattern(facts: Dict[str, Any]) -> Dict[str, Any]:

@@ -213,6 +213,47 @@ def explore(
 
 
 # =============================================================================
+# Recommend command (charge recommender)
+# =============================================================================
+
+
+@cli.command()
+@click.argument("facts_path", type=click.Path(exists=True))
+@click.option("--top-k", type=int, default=5, show_default=True,
+              help="How many ranked candidates to return")
+@click.option("--max-candidates", type=int, default=60, show_default=True,
+              help="Cap on sections whose simulator trace gets run")
+@click.option("--min-coverage", type=float, default=0.0, show_default=True,
+              help="Drop candidates below this coverage fraction (0.0 .. 1.0)")
+@click.option("--json", "json_output", is_flag=True, help="Output as JSON")
+def recommend(
+    facts_path: str,
+    top_k: int,
+    max_candidates: int,
+    min_coverage: float,
+    json_output: bool,
+):
+    """Charge-recommender: rank Penal Code sections that structurally fit a fact pattern.
+
+    NOT LEGAL ADVICE — every output carries an explicit disclaimer. The
+    recommender re-uses the existing fact-pattern simulator for per-element
+    traces, then sorts by coverage. No external LLM, no scraping.
+
+    Example:
+        yuho recommend simulator/fixtures/s415_classic.yaml
+    """
+    from yuho.cli.commands.recommend import run_recommend
+
+    run_recommend(
+        facts_path,
+        top_k=top_k,
+        max_candidates=max_candidates,
+        min_coverage=min_coverage,
+        json_output=json_output,
+    )
+
+
+# =============================================================================
 # Check command
 # =============================================================================
 
