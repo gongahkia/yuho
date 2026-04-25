@@ -87,9 +87,10 @@ covers the same ground in less depth.
 |---|---|
 | **Grammar** | Tree-sitter, 14 grammar gaps closed, deontic types, Catala-style exception priority, nested penalty combinators |
 | **Transpilers** | JSON · controlled English · LaTeX · Mermaid · Alloy · DOCX |
-| **Editors** | LSP (hover, inlay hints, completion, code lens, fidelity diagnostics) · VS Code extension · Microsoft Word add-in (planned) |
+| **Editors** | LSP (hover, inlay hints, completion, code lens, fidelity diagnostics) · VS Code · Word add-in · browser extension · static explorer site |
 | **AI integration** | MCP server (tools, resources, prompts) usable from Claude Desktop / Claude Code / Codex CLI / Cursor |
 | **Verification** | Z3 (exception-priority + cross-section conflict) · Alloy (bounded element-combination enumeration) |
+| **Analytical tools** | Counter-example explorer (`yuho explore`) · charge recommender (`yuho recommend`, structural ranking, not legal advice) · fact-pattern simulator |
 | **Coverage harness** | L1 (parse) · L2 (build + lint + fidelity) · L3 (11-point human audit) |
 | **Library** | 524 / 524 sections of the SG Penal Code 1871 encoded, stamped, and indexed |
 
