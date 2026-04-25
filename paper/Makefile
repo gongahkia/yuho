@@ -34,7 +34,12 @@ paper: stats $(FIGURES_PDF) | $(BUILD_DIR)
 
 # Smoke build using article class instead of acmart. No latexmk, no figures
 # required, no acmart deps. Useful when basic TeX Live is the only install.
+# Runs the full latex -> bibtex -> latex -> latex sequence so citations
+# resolve to numbered references against references.bib.
 smoke: stats | $(BUILD_DIR)
+	lualatex -interaction=nonstopmode -output-directory=$(BUILD_DIR) main_smoke.tex
+	@cp references.bib $(BUILD_DIR)/
+	cd $(BUILD_DIR) && bibtex main_smoke
 	lualatex -interaction=nonstopmode -output-directory=$(BUILD_DIR) main_smoke.tex
 	lualatex -interaction=nonstopmode -output-directory=$(BUILD_DIR) main_smoke.tex
 	@cp $(BUILD_DIR)/main_smoke.pdf ./main_smoke.pdf

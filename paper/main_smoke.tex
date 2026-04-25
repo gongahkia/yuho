@@ -61,12 +61,6 @@ common-law jurisdiction in production-strength detail rather than a
 synthetic toy.
 \end{abstract}
 
-% Citation stub --- the bibliography below is mostly placeholders for
-% the smoke build. Final acmart build uses ACM-Reference-Format.bst.
-\providecommand{\citebracket}[1]{[\textbf{?}]}
-\let\oldcite\cite
-\renewcommand{\cite}[1]{\citebracket{#1}}
-
 \input{sections/introduction}
 \input{sections/background}
 \input{sections/design}
@@ -75,5 +69,8 @@ synthetic toy.
 \input{sections/related}
 \input{sections/limitations}
 \input{sections/conclusion}
+
+\bibliographystyle{plain}
+\bibliography{references}
 
 \end{document}

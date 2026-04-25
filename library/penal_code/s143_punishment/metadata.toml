@@ -16,4 +16,6 @@ summary = "Prescribes imprisonment up to 2 years, a fine, or both for being a me
 source = "Singapore Penal Code 1871, Section 143"
 
 [verification]
+last_verified = "2026-04-25"
+verified_by = "gpt-5.4 high (automated L3 reviewer)"
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr143-#pr143-"
