@@ -1,0 +1,14 @@
+yuho-validate:
+  image: python:3.12-slim
+  stage: test
+  before_script:
+    - pip install yuho
+  script:
+    - yuho ci-report . --format json -o report.json
+  artifacts:
+    reports:
+      junit: report.json
+    when: always
+  rules:
+    - changes:
+        - "**/*.yh"

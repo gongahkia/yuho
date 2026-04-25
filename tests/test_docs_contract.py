@@ -10,7 +10,7 @@ from yuho.cli.main import cli
 
 DOC_ROOTS = [
     Path(".github"),
-    Path("doc"),
+    Path("docs"),
     Path("library"),
 ]
 
@@ -30,7 +30,7 @@ def _local_markdown_links(markdown_text: str) -> list[str]:
 def test_documented_cli_commands_exist() -> None:
     """Every CLI command documented in the reference should be implemented."""
     actual = set(cli.commands.keys())
-    reference = Path("doc/CLI_REFERENCE.md").read_text(encoding="utf-8")
+    reference = Path("docs/user/cli-reference.md").read_text(encoding="utf-8")
     documented = set(re.findall(r"`yuho\s+([a-zA-Z0-9_-]+)", reference))
 
     assert documented
@@ -39,8 +39,8 @@ def test_documented_cli_commands_exist() -> None:
 
 def test_dsl_docs_cover_new_constructs() -> None:
     """Syntax and semantics docs should mention the shipped advanced constructs."""
-    syntax = Path("doc/SYNTAX.md").read_text(encoding="utf-8")
-    semantics = Path("doc/FORMAL_SEMANTICS.md").read_text(encoding="utf-8")
+    syntax = Path("docs/researcher/syntax.md").read_text(encoding="utf-8")
+    semantics = Path("docs/researcher/formal-semantics.md").read_text(encoding="utf-8")
 
     for term in CONSTRUCT_TERMS:
         assert term in syntax

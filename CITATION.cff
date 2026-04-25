@@ -1,0 +1,30 @@
+cff-version: 1.2.0
+title: "Yuho: A Domain-Specific Language for Encoding the Singapore Penal Code as Executable Statute"
+message: "If you use Yuho or its encoded library in academic work, please cite this artefact."
+type: software
+authors:
+  - given-names: Gabriel
+    family-names: Ong Zhe Mian
+    email: gabrielzmong@gmail.com
+    website: "https://gabrielongzm.com"
+repository-code: "https://github.com/gongahkia/yuho"
+url: "https://github.com/gongahkia/yuho"
+license: MIT
+version: "5.1.0"
+date-released: "2026-04-25"
+keywords:
+  - legal-dsl
+  - statute-encoding
+  - singapore-penal-code
+  - tree-sitter
+  - language-server
+  - formal-verification
+preferred-citation:
+  type: software
+  title: "Yuho: A Domain-Specific Language for Encoding the Singapore Penal Code as Executable Statute"
+  authors:
+    - given-names: Gabriel
+      family-names: Ong Zhe Mian
+      email: gabrielzmong@gmail.com
+  year: 2026
+  url: "https://github.com/gongahkia/yuho"

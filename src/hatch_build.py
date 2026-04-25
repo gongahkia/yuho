@@ -19,8 +19,8 @@ class CustomBuildHook(BuildHookInterface):
             return
 
         root = Path(self.root)
-        grammar_dir = root / "tree-sitter-yuho"
-        package_dir = root / "tree_sitter_yuho"
+        grammar_dir = root / "src" / "tree-sitter-yuho"
+        package_dir = root / "src" / "tree_sitter_yuho"
         parser_c = grammar_dir / "src" / "parser.c"
         scanner_c = grammar_dir / "src" / "scanner.c"
         include_dir = grammar_dir / "src"

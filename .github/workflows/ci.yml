@@ -43,10 +43,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install black mypy
           pip install -e ./src/tree-sitter-yuho/bindings/python 2>&1 | tee logs/install-tree-sitter-yuho.log
-          pip install -e ./src[dev] 2>&1 | tee logs/install-yuho.log
+          pip install -e .[dev] 2>&1 | tee logs/install-yuho.log
 
       - name: Check formatting with Black
-        run: black --check --diff --config src/pyproject.toml src/yuho tests 2>&1 | tee logs/black.log
+        run: black --check --diff --config pyproject.toml src/yuho tests 2>&1 | tee logs/black.log
 
       - name: Type check with mypy
         run: mypy src/yuho --ignore-missing-imports 2>&1 | tee logs/mypy.log
@@ -91,7 +91,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -e ./src/tree-sitter-yuho/bindings/python 2>&1 | tee logs/install-tree-sitter-yuho.log
-          pip install -e ./src[dev] 2>&1 | tee logs/install-yuho.log
+          pip install -e .[dev] 2>&1 | tee logs/install-yuho.log
           pip list 2>&1 | tee logs/pip-list.log
 
       - name: Smoke test parser CLI
@@ -126,10 +126,10 @@ jobs:
         run: python -m pip install --upgrade pip build
 
       - name: Build package
-        run: python -m build ./src
+        run: python -m build .
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: dist
-          path: src/dist/
+          path: dist/

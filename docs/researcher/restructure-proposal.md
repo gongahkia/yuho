@@ -210,7 +210,7 @@ References for visual reference:
 
 Every `.md` should be reachable from `docs/INDEX.md` via at most two clicks.
 Within a file, references to other docs should be relative-path links —
-Obsidian-style wikilinks would be cleaner but markdown's `[text](path)`
+Obsidian-style wikilinks would be cleaner but standard markdown link syntax
 is universal and works in Github's renderer.
 
 A weekly link-checker script (`scripts/check_links.py`) will:

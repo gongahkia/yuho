@@ -6,10 +6,10 @@ build-backend = "hatchling.build"
 name = "yuho"
 version = "5.1.0"
 description = "A domain-specific language for encoding legal statutes"
-readme = "../README.md"
+readme = "README.md"
 license = "MIT"
 authors = [
-    { name = "gongahkia", email = "gongahkia@example.com" }
+    { name = "Gabriel Ong Zhe Mian", email = "gabrielzmong@gmail.com" }
 ]
 keywords = ["legal", "dsl", "statute", "law", "parser", "transpiler"]
 classifiers = [
@@ -64,21 +64,21 @@ yuho = "yuho.cli:cli"
 
 [project.urls]
 Homepage = "https://github.com/gongahkia/yuho"
-Documentation = "https://github.com/gongahkia/yuho/tree/main/doc"
+Documentation = "https://github.com/gongahkia/yuho/tree/main/docs"
 Repository = "https://github.com/gongahkia/yuho"
 
 [tool.hatch.build.targets.wheel]
-packages = ["yuho", "tree_sitter_yuho"]
+packages = ["src/yuho", "src/tree_sitter_yuho"]
 
 [tool.hatch.build.hooks.custom]
-path = "hatch_build.py"
+path = "src/hatch_build.py"
 
 [tool.hatch.build.targets.sdist]
 include = [
-    "yuho/**",
-    "tree-sitter-yuho/grammar.js",
-    "tree-sitter-yuho/src/**",
-    "tree-sitter-yuho/bindings/python/**",
+    "src/yuho/**",
+    "src/tree-sitter-yuho/grammar.js",
+    "src/tree-sitter-yuho/src/**",
+    "src/tree-sitter-yuho/bindings/python/**",
 ]
 
 [tool.black]

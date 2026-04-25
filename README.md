@@ -6,7 +6,7 @@
 # `Yuho`  
 
 <p align="center">
-    <img src="./asset/logo/yuho_mascot.png" width=40% height=40%>
+    <img src="./assets/logo/yuho_mascot.png" width=40% height=40%>
 </p>
 
 Yuho is a [domain-specific language](https://en.wikipedia.org/wiki/Domain-specific_language) that simplifies [legalese](https://www.merriam-webster.com/dictionary/legalese) by providing a programmatic representation of Singapore Law.  
@@ -64,7 +64,7 @@ Want to find out more? See Yuho's [documentation](#documentation).
 
 ### Documentation
 
-* [Language specification](./doc/SYNTAX.md)
+* [Language specification](docs/researcher/syntax.md)
 * [Grammar specification](./src/tree-sitter-yuho/grammar.js)
 * [Formal verification](./tests)
 * [Library statutes](./library/penal_code)
@@ -82,7 +82,7 @@ $ yuho transpile my_statute.yh -t mermaid
 
 ## If you have 5 minutes...
 
-Understand the basics of `Yuho` at [`5_MINUTES.md`](./doc/5_MINUTES.md).
+Understand the basics of `Yuho` at [`5_MINUTES.md`](docs/user/5-minutes.md).
 
 ## Contribute
 

@@ -34,6 +34,13 @@ def test_transpile_all_generates_every_target_output(tmp_path: Path, monkeypatch
 
     monkeypatch.setattr("yuho.transpile.pdf_pipeline.generate_pdf", fake_generate_pdf)
 
+    # DOCX is a binary special-case (like PDF). Mock the writer so it doesn't
+    # need a real AST to produce output.
+    class DummyDocx:
+        def write_docx(self, _ast, path):
+            Path(path).write_text("generated:docx", encoding="utf-8")
+    monkeypatch.setattr("yuho.transpile.docx_transpiler.DOCXTranspiler", lambda: DummyDocx())
+
     source_path = tmp_path / "sample.yh"
     source_path.write_text('statute 1 "Dummy" { elements { } }', encoding="utf-8")
     output_dir = tmp_path / "all-targets"

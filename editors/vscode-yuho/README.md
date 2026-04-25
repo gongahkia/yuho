@@ -94,4 +94,4 @@ open. Click to open the dashboard.
 ## Requirements
 
 - VS Code 1.75 or later
-- Yuho installed and on `PATH` (`pip install -e ./src && pip install -e 'src[lsp]'`) — verify with `yuho --version`
+- Yuho installed and on `PATH` (`pip install -e . && pip install -e '.[lsp]'`) — verify with `yuho --version`

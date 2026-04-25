@@ -17,7 +17,7 @@ import argparse, json, re, subprocess, sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
-TEMPLATE_PATH = REPO / "doc" / "PHASE_D_FLAG_FIX_PROMPT.md"
+TEMPLATE_PATH = REPO / "docs" / "PHASE_D_FLAG_FIX_PROMPT.md"
 RAW_PATH = REPO / "library" / "penal_code" / "_raw" / "act.json"
 
 STOPWORDS = {"of","and","the","in","for","to","with","by","on","or",

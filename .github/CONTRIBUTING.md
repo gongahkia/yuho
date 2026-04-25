@@ -153,4 +153,4 @@ We follow [these guidelines](https://gist.github.com/robertpainsi/b632364184e709
 
 Our documentation is written in [Markdown](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax), and we follow the [Github Markdown Styleguide](https://github.com/google/styleguide/blob/gh-pages/docguide/style.md).
 
-## [FAQ](../doc/FAQ.md)
+## [FAQ](../docs/user/faq.md)
