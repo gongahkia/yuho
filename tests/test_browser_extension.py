@@ -257,12 +257,7 @@ def _has_chromium() -> bool:
         return False
 
 
-@pytest.fixture(scope="module")
-def fixture_html(tmp_path_factory):
-    """A synthetic SSO-shaped page hosting two section anchors."""
-    p = tmp_path_factory.mktemp("yuho_fixture") / "fixture.html"
-    p.write_text(
-        """<!DOCTYPE html>
+_FIXTURE_HTML = """<!DOCTYPE html>
 <html>
 <head><title>Yuho fixture</title></head>
 <body>
@@ -273,35 +268,158 @@ def fixture_html(tmp_path_factory):
   <p>Whoever cheats and thereby dishonestly induces delivery of property ...</p>
 </body>
 </html>
-""",
-        encoding="utf-8",
+"""
+
+
+@pytest.fixture(scope="module")
+def fixture_server(tmp_path_factory):
+    """Serve the fixture via a local HTTP server.
+
+    MV3 content scripts don't run on file:// URLs (Chrome blocks them
+    unless the per-extension "allow file URLs" toggle is on), so a real
+    integration test needs an HTTP origin.
+    """
+    import http.server
+    import socketserver
+    import threading
+    import os
+
+    site_dir = tmp_path_factory.mktemp("yuho_site")
+    (site_dir / "index.html").write_text(_FIXTURE_HTML, encoding="utf-8")
+
+    cwd = os.getcwd()
+    os.chdir(site_dir)
+    httpd = socketserver.TCPServer(("127.0.0.1", 0), http.server.SimpleHTTPRequestHandler)
+    port = httpd.server_address[1]
+    t = threading.Thread(target=httpd.serve_forever, daemon=True)
+    t.start()
+
+    yield f"http://127.0.0.1:{port}/"
+
+    httpd.shutdown()
+    os.chdir(cwd)
+
+
+# Build a tmp copy of the extension with relaxed matchers so the content
+# script injects on the test fixture page. The original manifest scopes
+# to sso.agc.gov.sg/Act/PC1871*, which the local fixture URL would never
+# match.
+def _build_test_extension(dst: Path, ext_src: Path) -> None:
+    import shutil
+    if dst.exists():
+        shutil.rmtree(dst)
+    shutil.copytree(ext_src, dst, dirs_exist_ok=True,
+                    ignore=shutil.ignore_patterns("__pycache__", "*.pyc"))
+    manifest = dst / "manifest.json"
+    data = json.loads(manifest.read_text(encoding="utf-8"))
+    # Match every URL so the content script attaches to the fixture file.
+    for cs in data.get("content_scripts", []):
+        cs["matches"] = ["<all_urls>"]
+    data["host_permissions"] = ["<all_urls>"]
+    for entry in data.get("web_accessible_resources", []):
+        entry["matches"] = ["<all_urls>"]
+    manifest.write_text(json.dumps(data, indent=2), encoding="utf-8")
+
+
+@pytest.fixture(scope="module")
+def chromium_with_ext(tmp_path_factory):
+    if not _has_chromium():
+        pytest.skip("Chromium not installed for Playwright")
+    from playwright.sync_api import sync_playwright
+
+    work_root = tmp_path_factory.mktemp("yuho_pw")
+    test_ext = work_root / "ext"
+    _build_test_extension(test_ext, EXT)
+    user_data = work_root / "user_data"
+
+    pw = sync_playwright().start()
+    # Note: extensions only load under the *new* headless mode. The legacy
+    # "old headless" silently drops content_scripts.
+    ctx = pw.chromium.launch_persistent_context(
+        user_data_dir=str(user_data),
+        headless=False,
+        args=[
+            f"--disable-extensions-except={test_ext}",
+            f"--load-extension={test_ext}",
+            "--no-sandbox",
+            "--headless=new",
+        ],
     )
-    return p
+    yield ctx
+    try:
+        ctx.close()
+    finally:
+        pw.stop()
 
 
 @pytest.mark.skipif(not _has_chromium(), reason="Chromium not installed for Playwright")
 class TestPlaywrightIntegration:
-    def test_extension_injects_badges(self, fixture_html):
-        from playwright.sync_api import sync_playwright
+    def test_fixture_page_loads(self, fixture_server, chromium_with_ext):
+        page = chromium_with_ext.new_page()
+        try:
+            page.goto(fixture_server)
+            assert "Yuho fixture" in page.title()
+        finally:
+            page.close()
 
-        ext_path = str(EXT)
-        with sync_playwright() as pw:
-            ctx = pw.chromium.launch_persistent_context(
-                user_data_dir=str(fixture_html.parent / "user_data"),
-                headless=True,
-                args=[
-                    f"--disable-extensions-except={ext_path}",
-                    f"--load-extension={ext_path}",
-                ],
+    def test_content_script_injects_section_badges(self, fixture_server, chromium_with_ext):
+        """Open the fixture in headless Chromium with the extension
+        loaded, wait for the content script's document_idle init, and
+        assert the L1/L2/L3 badges appear next to the section h2s."""
+        page = chromium_with_ext.new_page()
+        try:
+            page.goto(fixture_server)
+            badge = page.wait_for_selector(".yuho-badge", timeout=15_000)
+            assert badge is not None
+            count = page.evaluate("() => document.querySelectorAll('.yuho-badge').length")
+            assert count >= 2, f"expected ≥2 badges (s415 + s420), got {count}"
+        finally:
+            page.close()
+
+    def test_clicking_badge_opens_panel_with_explore_tab(
+        self, fixture_server, chromium_with_ext,
+    ):
+        page = chromium_with_ext.new_page()
+        try:
+            page.goto(fixture_server)
+            page.wait_for_selector(".yuho-badge", timeout=15_000)
+            page.evaluate(
+                "() => document.querySelector('.yuho-badge[data-section=\"415\"]')?.click()"
             )
-            try:
-                page = ctx.new_page()
-                # The extension is scoped to sso.agc.gov.sg/Act/PC1871* so a
-                # local fixture won't activate it. We confirm the manifest
-                # loads cleanly by checking the extension's background page
-                # does not error. (Full E2E against real SSO requires
-                # network access and is out of scope for unit tests.)
-                page.goto(fixture_html.as_uri())
-                assert "Yuho fixture" in page.title()
-            finally:
-                ctx.close()
+            page.wait_for_selector("#yuho-panel", timeout=10_000)
+            # Tab bar must include the Explore tab (Tier 3 #7).
+            tabs = page.evaluate(
+                "() => Array.from(document.querySelectorAll('#yuho-panel .yuho-tab'))"
+                ".map(b => b.dataset.tab)"
+            )
+            assert "explore" in tabs, f"explore tab missing from {tabs}"
+            page.evaluate(
+                "() => document.querySelector('#yuho-panel .yuho-tab[data-tab=\"explore\"]')?.click()"
+            )
+            # Either a real report renders or the placeholder fires when
+            # the slim explore JSON isn't bundled. Both prove loadExplore ran.
+            page.wait_for_selector(
+                "#yuho-explore-host h3, #yuho-explore-host .yuho-empty",
+                timeout=15_000,
+            )
+        finally:
+            page.close()
+
+    def test_inline_citations_get_wrapped(self, fixture_server, chromium_with_ext):
+        """The content script walks the body and wraps `s420` / `section 24`
+        in `<span class="yuho-citation">`. Verify at least one is wrapped
+        in the fixture prose."""
+        page = chromium_with_ext.new_page()
+        try:
+            page.goto(fixture_server)
+            page.wait_for_selector(".yuho-badge", timeout=15_000)
+            page.wait_for_function(
+                "() => document.querySelectorAll('.yuho-citation').length > 0",
+                timeout=10_000,
+            )
+            count = page.evaluate(
+                "() => document.querySelectorAll('.yuho-citation').length"
+            )
+            assert count >= 1, f"expected ≥1 wrapped citation, got {count}"
+        finally:
+            page.close()
