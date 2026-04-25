@@ -153,3 +153,11 @@ pre {
   margin: 0.4rem 0 0.7rem;
 }
 button[disabled] { opacity: 0.55; cursor: not-allowed; }
+
+.corpus-version {
+  margin-top: 0.4rem;
+  color: #888;
+  font-size: 0.75em;
+  font-family: ui-monospace, monospace;
+  text-align: center;
+}

@@ -76,8 +76,15 @@ async function loadCorpus() {
   // The data bundle is hosted alongside the taskpane assets; same shape
   // as the browser extension's data/sections.json.
   try {
-    const resp = await fetch("../data/sections.json");
-    CORPUS = await resp.json();
+    const [secResp, idxResp] = await Promise.all([
+      fetch("../data/sections.json"),
+      fetch("../data/index.json"),
+    ]);
+    CORPUS = await secResp.json();
+    try {
+      const idx = await idxResp.json();
+      renderCorpusVersion(idx);
+    } catch (err) { /* index optional */ }
     renderTopHits();
     // Restore the last selection from this document's settings, if any.
     const last = readSetting(SETTINGS_KEYS.LAST_SELECTED);
@@ -89,6 +96,21 @@ async function loadCorpus() {
     document.getElementById("results").innerHTML =
       `<li class="empty">Could not load Yuho corpus. The extension expects <code>data/sections.json</code> next to the taskpane bundle.</li>`;
   }
+}
+
+function renderCorpusVersion(idx) {
+  const el = document.getElementById("corpus-version");
+  if (!el || !idx) return;
+  const parts = [];
+  parts.push(`${idx.n_sections ?? "?"} sections`);
+  if (idx.yuho_version) parts.push(`yuho ${idx.yuho_version}`);
+  if (idx.encoding_commit) parts.push(`commit ${String(idx.encoding_commit).slice(0, 7)}`);
+  if (idx.generated_at) {
+    // Trim to YYYY-MM-DD for compactness.
+    parts.push(`built ${String(idx.generated_at).slice(0, 10)}`);
+  }
+  el.textContent = parts.join(" · ");
+  el.hidden = false;
 }
 
 function renderTopHits() {
