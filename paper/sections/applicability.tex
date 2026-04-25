@@ -1,0 +1,175 @@
+\section{Applicability beyond Singapore}
+\label{sec:applicability}
+
+The encoding presented in \S\ref{sec:evaluation} is Singapore-only,
+and the paper is careful in \S\ref{sec:limitations} not to overstate
+portability without empirical evidence. This section makes the
+\emph{positive} case: where the grammar plausibly transfers, what
+adaptation each candidate jurisdiction would require, and what
+empirical work would falsify the claim. We separate this from the
+limitations discussion deliberately. Disclaiming a thing and arguing
+for its plausibility are different rhetorical moves, and
+proof-of-concept readers reasonably want both.
+
+\subsection{The Anglo-Indian penal code family}
+\label{subsec:anglo_indian_family}
+
+The Singapore Penal Code 1871 is not a Singapore invention. It is the
+Straits Settlements adoption of the 1860 Indian Penal Code drafted by
+Macaulay's First Law Commission, lightly localised and subsequently
+amended. The same parent text underpins the criminal codes of India
+(IPC~1860, since 2023 reframed as the Bharatiya Nyaya Sanhita),
+Pakistan (PPC~1860), Bangladesh (PC~1860), Brunei (PC, Cap.~22),
+Malaysia (PC, Act~574), Sri Lanka (PC No.~2 of 1883), Myanmar
+(PC~1861), and historically several East African codes. The shared
+ancestry is not merely thematic. Section numbering, marginal-note
+conventions, illustration formatting, exception clauses, and the
+characteristic actus-reus / mens-rea / circumstance partitioning are
+recognisably the same drafting style across the family. A reader who
+has read Singapore's s415 will find the corresponding Indian and
+Malaysian s415 cosmetically familiar, often differing only in
+penalty quanta and amendment lineage.
+
+This is what makes the family the natural test bed for grammar
+portability. Yuho's primitives were chosen to fit the drafting shape
+of penal statute --- not the cultural specifics of one jurisdiction.
+The element partitioning is doctrinal, not local; the exception block
+is a Catala-style prioritised override pattern that maps directly
+onto the codified ``provided that'' clauses common to every member of
+the family; the penalty combinators capture the cumulative-or-
+alternative-or-conditional structure that the entire family inherits
+from Macaulay's draft. To the extent the grammar fits Singapore
+because the grammar fits Macaulay, the grammar should fit the others
+for the same reason.
+
+\subsection{What transfers, what adapts}
+\label{subsec:portability_mechanism}
+
+We separate the grammar substrate (which we expect to transfer
+unchanged) from the per-jurisdiction configuration (which would need
+swapping).
+
+\paragraph{Transfers as-is.} The tree-sitter grammar, the AST, the
+five-block statute structure (\texttt{elements}, \texttt{penalty},
+\texttt{exceptions}, \texttt{illustrations}, \texttt{caselaw}), the
+G10 reference resolver, the Z3 / Alloy verification scaffolding, the
+six transpilers, and the entire editor surface (LSP, MCP, browser
+extension, explorer site, Word add-in) are jurisdiction-neutral. They
+operate on the AST, not on Singapore-specific tokens. Adopting a new
+jurisdiction would not require parser changes for these subsystems.
+
+\paragraph{Adapts via configuration.} A small number of surface
+features are configurable per jurisdiction:
+
+\begin{itemize}
+\item \emph{Penalty vocabulary.} The set of admissible punishments
+varies: caning is in the Singapore, Malaysian, and Bruneian codes
+but not the Indian one; Pakistan retains \emph{tazir} categories
+absent from Singapore; the Bangladeshi 2020 amendments enumerate
+specific aggravators absent elsewhere. Yuho's punishment kinds are
+a closed enum in the grammar; the per-jurisdiction adoption needs
+the enum extended (or restricted) and the controlled-English
+transpiler taught the new vocabulary.
+\item \emph{Currency tokens.} Fines are encoded as a numeric quantum
+plus a currency tag (\texttt{SGD} for Singapore). Indian, Pakistani,
+and Bruneian codes use different currencies; the type system already
+admits the parameter, but the L2 fidelity linter expects the
+jurisdiction's reporting currency on initial scrape.
+\item \emph{Statutory amendment lineage.} The \texttt{amends} clause
+points at an act number (e.g.\ ``Act 32 of 2019''); each
+jurisdiction has its own amendment-act numbering scheme. The grammar
+accepts arbitrary strings here; only the L3 fidelity check that
+reconciles \texttt{amends} against the canonical scrape needs a
+jurisdiction-specific source.
+\item \emph{Marginal-note style.} Older codes (1860--1900) place the
+marginal note above the section; newer ones (post-1990) inline it.
+The Phase~A scraper's heuristic for extracting marginal notes is
+jurisdiction-specific; the AST and downstream tooling are not.
+\end{itemize}
+
+\paragraph{Requires substantive work.} Two surfaces are not yet
+configuration-clean:
+
+\begin{itemize}
+\item \emph{Mens-rea taxonomy.} Singapore distinguishes intention,
+knowledge, rashness, and negligence as distinct mental states; the
+1860 IPC is identical, but the BNS~2023 (the recent Indian
+recodification) introduces collapsed categories that do not map
+one-to-one. A jurisdiction that uses a different taxonomy needs
+either a grammar extension or a vocabulary remapping pass.
+\item \emph{The L3 reviewer's checklist.} The 11-point fidelity
+checklist (\S\ref{subsec:coverage}) bakes in conventions specific to
+the Singapore SSO format (anchor IDs, marginal-note syntax,
+amendment notation). A jurisdiction with a different official
+publication format would need its own checklist; the
+parameterisation surface exists but has not been exercised.
+\end{itemize}
+
+\subsection{Beyond the Penal Code family}
+\label{subsec:non_penal}
+
+The grammar is statute-shaped rather than penal-statute-shaped at the
+top level: a module contains statutes, a statute contains elements
+and penalties and exceptions, and the AST does not require the
+penalties block to be present. The question of whether Yuho fits
+non-penal statutes (tax, employment, intellectual property,
+competition law) reduces to whether those statutes share the
+\emph{element + exception + illustration} shape. The Singapore
+Income Tax Act and the Employment Act both exhibit this shape on
+inspection of a sample of sections; the Companies Act does too,
+though with a heavier reliance on definitions blocks that Yuho
+already supports. A more rigorous claim awaits empirical encoding.
+
+The shift to civil-law jurisdictions is more speculative. The French
+\emph{Code p\'enal} and the German \emph{Strafgesetzbuch} are
+similarly element-structured, but their definitional density and
+their reliance on cross-references to the civil-law general parts
+mean an encoding would lean heavily on Yuho's reference graph and
+less on its element partitioning. We do not claim the grammar fits
+civil-law codes; we claim the AST is the right level at which to
+test the question. Catala~\cite{catala2021}, focused on French tax
+law, is the closer analogue here, and a Yuho-Catala interop layer
+(scope composition over Yuho statute blocks) is the most natural
+extension if the civil-law direction is pursued.
+
+\subsection{An empirical path to validation}
+\label{subsec:portability_path}
+
+We commit to a concrete and falsifiable test of the portability
+claim. Encoding a 50-section sample of the Indian Penal Code is the
+minimum viable exercise: 50 sections is enough to surface grammar
+gaps that the Singapore exercise did not, and small enough to
+complete in a single encoder-quarter. The sampling strategy mirrors
+the Singapore encoding order: start with structurally simple
+property offences (theft, cheating, criminal misappropriation),
+move through bodily-harm hierarchies (hurt, grievous hurt, culpable
+homicide), and end with the procedural and abetment apparatus.
+Concretely, the test passes if (a)~the grammar absorbs the 50-section
+sample at L1 with zero new gaps catalogued, (b)~the L2 fidelity
+linters produce diagnostic densities within an order of magnitude of
+the Singapore baseline, and (c)~the existing G1--G14 gap catalogue
+covers any drafting patterns the IPC sample exhibits but Singapore's
+PC does not. Failure on (a) implies a fifteenth gap and a grammar
+extension; failure on (b) implies the linters are over-fitted to
+Singapore conventions; failure on (c) implies the gap catalogue is
+not a stable artefact and would need a replication study before any
+portability claim is publishable.
+
+The corpus directory layout is already jurisdiction-aware: the slim
+corpus, the canonical per-section JSON, and the reference graph are
+keyed on a \texttt{jurisdiction} field that defaults to Singapore but
+admits any string. Switching corpus base from Singapore to India
+requires no code change to the editor surfaces, only a parallel
+\texttt{library/penal\_code\_in/} directory and a per-jurisdiction
+\texttt{config.toml} for the per-jurisdiction parameters above. The
+build pipeline already supports running the corpus build over an
+arbitrary library root, so a multi-jurisdiction artefact is an
+engineering exercise on top of the empirical encoding work.
+
+We frame this as future work in \S\ref{sec:conclusion} rather than as
+a present-tense claim. What this section adds beyond
+\S\ref{sec:limitations} is a positive structural argument: the
+grammar substrate is jurisdiction-neutral, the configuration surface
+is small, and the empirical test is bounded. Portability has not been
+demonstrated, but the cost of demonstrating it is well-understood and
+the path to falsification is clear.
