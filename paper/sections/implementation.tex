@@ -58,9 +58,10 @@ straight to PDF via \texttt{pdflatex}.
 \item[Mermaid.] Decision-tree flowcharts for elements and exceptions ---
 useful for teaching and for the documentation site.
 \item[Alloy.] A relational model suitable for bounded model-checking.
-The Alloy transpiler is the largest of the six ($\sim$26k SLOC) because
-it carries the type-mapping logic from Yuho elements to Alloy signatures
-and facts.
+The Alloy transpiler is the largest of the six because it carries the
+type-mapping logic from Yuho elements to Alloy signatures and facts;
+its share of the 4{,}200-SLOC transpiler aggregate in
+Table~\ref{tab:sloc} is roughly 60\%.
 \item[DOCX.] Office Open XML output, written as a stdlib-only minimal
 WordprocessingML package (\texttt{zipfile} + a fixed set of XML parts;
 no \texttt{python-docx} dependency). The DOCX transpiler is the
@@ -74,7 +75,10 @@ land in the same process.
 
 \subsection{Verification: Z3 and Alloy}
 \label{subsec:verify}
-Two solvers, two purposes. Z3~\cite{demoura2008z3} powers the
+The verification stack checks well-formedness of the \emph{encoding}, not
+legal correctness; properties about ``the law'' are out of scope and are
+discussed in \S\ref{sec:limitations}. Two solvers, two purposes.
+Z3~\cite{demoura2008z3} powers the
 exception-priority validator: given an encoded section with a list of
 prioritised exceptions, the solver checks that the priority ordering is
 well-formed (no cycles, no priority-inversion under composition with
@@ -245,14 +249,13 @@ Encoded library (524 \texttt{.yh} files)            & 16\,400 \\
 \end{small}
 \end{table*}
 
-The breakdown is informative on two axes. First, the surface area is
-unevenly distributed: the CLI and the AST together account for nearly
-half the implementation, reflecting the fact that the system has a
-large number of subcommands and that the AST must absorb the grammar's
-expressivity. Second, the encoded library is roughly 40\% the size of
-the implementation. This ratio is a fair quick check on the DSL's
-density: an encoding-to-tooling ratio below 1:1 would indicate that the
-DSL was over-engineered relative to its corpus, while a ratio above
-2:1 would indicate that the encodings were carrying weight that the
-language could absorb. Yuho currently sits roughly at the productive
-end of this range.
+The breakdown is informative on one axis: the surface area is
+unevenly distributed, with the CLI and the AST together accounting
+for nearly half the implementation, reflecting the fact that the
+system has a large number of subcommands and that the AST must absorb
+the grammar's expressivity. We do not draw conclusions from the
+encoding-to-tooling SLOC ratio: \texttt{wc -l} conflates blank lines,
+comments, and code, and there is no source we are aware of that
+calibrates a ``productive'' DSL-to-corpus ratio. The numbers are
+included for transparency about effort and surface area, not as a
+density argument.

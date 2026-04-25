@@ -12,13 +12,18 @@ gap is not the recognition that statute looks like code --- it is the practical
 absence of a representation expressive enough to encode an entire production
 statute without immediately falling back on free-text strings.
 
-This paper argues that the gap is mostly a grammar gap, and presents
-\emph{Yuho}, a domain-specific language designed by mass-encoding the entire
-Singapore Penal Code 1871. The headline number is engineering rather than
-methodological: \statRawSections{} sections, \statEncoded{} encoded,
-\statLOnePass{}/\statRawSections{} passing parse-and-build (the L1+L2 tiers of
-our coverage harness), and \statLThreePass{} carrying a structured
-human-fidelity stamp (L3) at the time of writing. The interesting numbers
+This paper investigates whether the persistent statute-encoding gap reduces,
+in practice, to a grammar gap, and presents \emph{Yuho}, a domain-specific
+language designed by mass-encoding the entire Singapore Penal Code 1871. The
+headline number is engineering rather than methodological: \statRawSections{}
+sections, \statEncoded{} encoded, \statLOnePass{}/\statRawSections{} passing
+parse-and-build (the L1+L2 tiers of our coverage harness), and \statLThreePass{}
+carrying an \emph{author-administered} fidelity stamp at the L3 tier
+(\S\ref{subsec:coverage_eval}; external-reviewer validation is future work,
+\S\ref{sec:limitations}). Throughout, ``machine-checkable'' refers to the
+\emph{encoding}: the verification stack checks structural and inter-section
+consistency of the encoded artefact, not the legal correctness of the statute
+itself. The interesting numbers
 sit underneath: every section that the grammar could not natively express
 is documented as a numbered \emph{grammar gap} (\textsf{G1}--\textsf{G14}),
 and we report which were genuine grammar limitations, which were diagnostic
@@ -40,9 +45,26 @@ death; an exception is a prioritised override; an illustration is a
 verbatim worked example tied to the parent section; an amendment is a
 new \texttt{effective <date>} clause that does not erase the prior text.
 
-\paragraph{Contributions.} We make four contributions.
+\paragraph{Contributions.} We make four contributions, the first of
+which is the methodological one we believe will travel beyond Yuho.
 
 \begin{enumerate}
+\item \textbf{A gap-classification methodology.} A discipline for
+distinguishing genuine grammar limitations from fidelity issues
+masquerading as grammar issues, by classifying each encoding
+shortcoming according to the layer at which it is resolved (parser,
+linter, semantic resolver, or not-a-gap-on-re-test). We apply it to
+fourteen gaps surfaced during mass-encoding (\textsf{G1}--\textsf{G14}),
+preserving initial and final classifications honestly so readers can
+audit the three reclassifications (\textsf{G2} and \textsf{G7}
+reclassified to not-a-gap; \textsf{G10} marked deferred because its
+remaining work is a semantic-resolver pass rather than a parser
+extension). The claim we advance is that conflating grammar gaps with
+linter gaps leads to grammar bloat with no corresponding gain in
+fidelity --- and that the classification surfaces grammar-design
+feedback (e.g.\ a low-precision lint may indicate the grammar should
+disambiguate at the source) that a flat gap list does not.
+
 \item \textbf{The Yuho grammar.} A statute-shaped syntax in which the
 top-level construct is a \texttt{statute N \{ \dots \}} block with first-class
 fields for definitions, elements, penalty, illustrations, exceptions, case
@@ -73,13 +95,17 @@ exposing hover / inlay-hint / completion / code-lens / diagnostics, a
 Model Context Protocol server for AI-driven encoding workflows, and a
 VS Code extension wrapping the Language Server.
 
-\item \textbf{Empirical findings.} A catalogue of fourteen distinct grammar
-gaps surfaced during mass-encoding, classified into ten genuine grammar
-limitations (all resolved by extending the parser) and four diagnostic-layer
-issues (all resolved by adding fidelity linters). We argue this distinction
-matters: a gap that looks like a grammar problem may, on inspection, be a
-linting problem in disguise --- and conflating the two leads to grammar
-bloat with no corresponding gain in fidelity.
+\item \textbf{Empirical findings on the 524-section sweep.} Per-gap
+incidence in the encoded corpus from
+\texttt{paper/methodology/gap\_frequency.json}
+(\textsf{G6}/\textsf{G8}/\textsf{G1} dominate, \textsf{G13}/\textsf{G12}
+are rare); fidelity-diagnostic warning counts after Phase~D
+(\textsf{G4}=98, fab-fine=48, fab-caning=2, \textsf{G11}=208); and a
+side-observation that the largest fidelity bucket (\textsf{G11}) is
+itself a low-precision heuristic whose 39.7\% flag rate is a signal
+that a grammar-layer fix is the right long-term response. Diagnostic
+precision has not yet been hand-rated and we report this as a known
+gap (\S\ref{subsec:fidelity_eval}, \S\ref{subsec:threats}).
 \end{enumerate}
 
 \paragraph{Why criminal law and why Singapore?} The Singapore Penal Code 1871
@@ -92,9 +118,10 @@ hand-picked toy examples would miss. Third, it inherits the Anglo-Indian
 drafting tradition --- short numbered sections, in-line illustrations,
 ``or both'' penalty clauses, Chapter IV general exceptions --- which is
 shared with the Indian, Pakistani, Bruneian, and (with adjustments)
-Malaysian penal codes. A grammar that fits the Singapore statute is
-plausibly portable across the wider Penal Code family, though we have not
-yet empirically verified that.
+Malaysian penal codes. Whether a grammar that fits the Singapore statute is
+portable across the wider Penal Code family is an empirical question
+we have not yet tested; the structural overlap makes the question
+worth asking, not the answer.
 
 \paragraph{What this paper is not.} It is not a claim that the encoded
 sections constitute legal advice, that the L3 fidelity stamp replaces
@@ -103,9 +130,9 @@ legal-encoding problem (regulatory corpora, contract drafting, treaty
 interpretation, and judgment summarisation each have grammars that Yuho
 does not natively model). It is a claim that the gap between a drafted
 penal section and an executable artefact is smaller than the existing
-literature suggests --- and that closing that gap, for one statute family
-at full coverage, is mostly an engineering exercise once the grammar is
-right.
+literature suggests --- and that an appropriately-shaped grammar
+dissolves a class of previously-reported encoding obstacles, leaving a
+residue that is tractable at full coverage for one statute family.
 
 \paragraph{Roadmap.} \S\ref{sec:background} surveys the prior art in
 statute encoding and positions Yuho against the three traditions.

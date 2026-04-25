@@ -44,10 +44,13 @@
 
 \begin{abstract}
 We present \emph{Yuho}, a domain-specific language for encoding statutes as
-executable, machine-checkable artefacts, and a corresponding proof-of-concept
-encoding of the Singapore Penal Code 1871 (\statRawSections{} sections,
-\statEncoded{} encoded, \statLOnePass{} passing parse-and-build, \statLThreePass{}
-human-stamped at the highest fidelity tier). The Yuho grammar models the
+executable artefacts whose \emph{encoding} is machine-checkable for structural
+and inter-section consistency (the verification stack does not adjudicate
+legal correctness; see \S\ref{sec:limitations}), and a corresponding
+proof-of-concept encoding of the Singapore Penal Code 1871 (\statRawSections{}
+sections, \statEncoded{} encoded, \statLOnePass{} passing parse-and-build,
+\statLThreePass{} carrying an author-administered fidelity stamp at the L3
+tier --- external-reviewer validation remains future work). The Yuho grammar models the
 structural primitives of criminal law: section headers and amendment lineage;
 elements partitioned into \emph{actus reus}, \emph{mens rea}, and circumstance
 with optional burden qualifiers; penalty combinators capturing cumulative,

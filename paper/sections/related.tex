@@ -41,12 +41,12 @@ scope.}
   & \shortstack{Amendment\\lineage} \\
 \midrule
 \textbf{Yuho}    & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
-Catala           & ---        & ---        & ---        & ---        & \checkmark & ---        & ---        & ---        \\
-lam4             & ---        & \checkmark & ---        & ---        & ---        & ---        & ---        & ---        \\
+Catala           & ---        & ---        & ---        & n/a        & \checkmark & ---        & $\sim$     & ---        \\
+lam4             & ---        & \checkmark & ---        & n/a        & ---        & ---        & ---        & ---        \\
 LexScript        & \checkmark & $\sim$     & ---        & ---        & ---        & ---        & ---        & ---        \\
 LDOC             & \checkmark & ---        & ---        & ---        & ---        & ---        & \checkmark & ---        \\
 Akoma Ntoso      & \checkmark & ---        & ---        & ---        & ---        & ---        & \checkmark & \checkmark \\
-LegalRuleML      & n/a        & \checkmark & ---        & ---        & $\sim$     & ---        & ---        & ---        \\
+LegalRuleML      & n/a        & \checkmark & \checkmark & ---        & $\sim$     & $\sim$     & ---        & ---        \\
 \bottomrule
 \end{tabular}
 \end{footnotesize}
@@ -95,16 +95,35 @@ LegalRuleML   & XML          & via XSD      & ---        & via mappings
 \end{table*}
 
 The honest reading of the matrix is that no two systems target the
-same point in the design space. Catala has the right defaults but
-no penalty algebra. lam4 has the right deontic core but no
-statute-level structural primitives. LexScript shares Yuho's
-tree-sitter-driven shape but has a thinner element model. LDOC has
-illustrations because Word renders them naturally, but it is a Word
-authoring tool first and a DSL second. Akoma Ntoso preserves
-structure faithfully and is the only competitor with real
-amendment-lineage support, but stops where semantics begins.
-LegalRuleML adds a deontic layer above the Akoma Ntoso markup, but
-does not commit to a fixed structural shape for an offence.
+same point in the design space. Catala does not need penalty algebra
+for its declared domain (tax) --- the n/a marker reflects scope, not
+absence; we adopt Catala's prioritised-default \emph{semantics} and
+re-implement it as a Z3 encoding (Catala itself compiles to OCaml and
+Python --- the Z3 hookup is our own and we do not inherit Catala's
+soundness proof). lam4 has the right deontic core but no
+statute-level structural primitives, and like Catala does not need
+penalty algebra (n/a) for its contracts-and-regulations target.
+LexScript shares Yuho's tree-sitter-driven shape but has a thinner
+element model. LDOC has illustrations because Word renders them
+naturally, but it is a Word authoring tool first and a DSL second.
+Akoma Ntoso preserves structure faithfully and is the only competitor
+with real amendment-lineage support, but stops where semantics begins.
+LegalRuleML adds a deontic layer above the Akoma Ntoso markup --- and
+in fact carries first-class burden-of-proof markup
+(\texttt{<lrml:hasReversedBurdenOfProof>}) and temporal characteristics
+(\texttt{<lrml:hasTemporalCharacteristics>}); we mark the latter as
+$\sim$ because the temporal layer is partial and the causal axis is
+not addressed --- but does not commit to a fixed structural shape for
+an offence.
+
+We deliberately omit columns that other systems would lead on ---
+formal soundness theorems (Catala), peer-reviewed publication and
+deployed production users in a tax administration (Catala),
+multilingual and multi-jurisdiction archival (Akoma Ntoso), OASIS
+standardisation (Akoma Ntoso, LegalRuleML). Yuho holds none of these.
+The expressivity matrix is therefore the column set Yuho was designed
+to support; readers should weight it against the column set their own
+priorities select.
 
 The columns where Yuho is alone in claiming first-class support ---
 penalty algebra, burden qualifiers, causal/temporal edges, and the
@@ -123,13 +142,16 @@ novelty on the borrowed pieces.
 Catala~\cite{catala2021} is the most influential reference for this
 work. The two systems disagree on top-level shape (scope vs statute)
 but agree that the right semantics for legal exceptions is prioritised
-default rules. We adopt the priority semantics directly: each Yuho
-\texttt{exception} block carries an integer \texttt{priority} field,
-and compilation to Z3 follows Catala's prioritised-rewriting algorithm
-in shape if not in proof. Catala also formalises a soundness theorem
-for its rewriting system; we do not, but we treat Catala's theorem
-as the warrant that the priority semantics is well-defined and behaves
-the way drafted statutes are read.
+default rules. We adopt Catala's prioritised-default \emph{semantics}
+and re-implement it as a Z3 encoding: each Yuho \texttt{exception}
+block carries an integer \texttt{priority} field, and our Z3 hookup
+follows the shape of Catala's prioritised-rewriting algorithm without
+inheriting Catala's actual compiler (Catala itself compiles to OCaml
+and Python). Catala also formalises a soundness theorem for its
+rewriting system; we do not, and our re-implementation does not
+inherit it. We treat Catala's theorem as the warrant that the
+priority semantics is well-defined and behaves the way drafted
+statutes are read; we make no formal claim about our Z3 encoding.
 
 The disagreement on top-level shape matters in practice. Catala's
 scope is a callable function: it takes inputs (facts about the case),
@@ -195,24 +217,40 @@ interoperability, not executable encoding.
 The constructive constraint that these standards impose on Yuho is
 that we should be at least as faithful on the structural axis. Akoma
 Ntoso is the only competitor with first-class amendment-lineage
-support (its \texttt{<modifies>} element family captures every
-gazetted amendment with its own metadata), and we treat that as the
-benchmark our \texttt{effective}/\texttt{repealed}/\texttt{subsumes}/
-\texttt{amends} clauses are obliged to match. We expect to ship a
+support: its lifecycle model carries \texttt{<activeModifications>}
+and \texttt{<passiveModifications>} containers populated with
+\texttt{<textualMod>}, \texttt{<meaningMod>}, and \texttt{<scopeMod>}
+elements that capture every gazetted amendment with its own metadata.
+We treat that as the benchmark our
+\texttt{effective}/\texttt{repealed}/\texttt{subsumes}/\texttt{amends}
+clauses are obliged to match. Yuho's current model captures
+first-order temporal versioning (date-stamped clauses on the statute
+header) but not full textual-modification tracking in the
+\texttt{<textualMod>} sense; the \texttt{subsumes}/\texttt{amends}
+clauses approximate the latter at the section-level granularity that
+suffices for the Penal Code's amendment cadence. We expect to ship a
 Yuho-to-Akoma-Ntoso transpile target as future work; the converse
 direction is harder because Akoma Ntoso does not commit to a fixed
 shape for an offence definition, so an Akoma-Ntoso-to-Yuho lifting
 would have to reconstruct missing semantics from the markup.
 
-LegalRuleML is more semantic than Akoma Ntoso: it has deontic
-operators (obligation, prohibition, permission) and isomorphic
-mappings to several rule languages. It does not commit to a
-prioritised-default semantics in the Catala sense, and it does not
-have a notion of penalty algebra or illustration blocks. Where
-Yuho's deontic operators (\texttt{obligation} / \texttt{prohibition}
-/ \texttt{permission} elements) overlap with LegalRuleML's, the
-mapping is straightforward; the rest of Yuho's structural surface
-falls outside LegalRuleML's scope.
+LegalRuleML is more semantic than Akoma Ntoso: it has explicit
+deontic operators (\texttt{<lrml:Obligation>},
+\texttt{<lrml:Prohibition>}, \texttt{<lrml:Permission>}), defeasibility
+markers (\texttt{<lrml:Override>}, \texttt{<lrml:Strength>}) that sit
+in the prioritised-default neighbourhood without being Catala-style
+prioritised rewriting, first-class burden-of-proof markup
+(\texttt{<lrml:hasReversedBurdenOfProof>} and related), partial
+temporal characteristics, and isomorphic mappings to several rule
+languages (Drools, Defeasible Logic via SPINdle in
+Governatori~\cite{governatori2005ruleml}). It does not have a notion
+of penalty algebra or illustration blocks. Where Yuho's deontic
+operators (\texttt{obligation} / \texttt{prohibition} /
+\texttt{permission} elements) overlap with LegalRuleML's, the
+syntactic mapping is straightforward; the underlying defeasibility
+machinery in Governatori et al.\ is richer than Yuho's static type-tag
+treatment, and a serious LegalRuleML-Yuho bridge would need to
+reconcile the two.
 
 \subsection{LDOC}
 \label{subsec:rel_ldoc}
@@ -234,6 +272,45 @@ Microsoft Word add-in (\S\ref{subsec:editors}) is meant to bridge
 the two postures: a lawyer can browse Yuho-encoded sections from
 inside Word, insert formatted statute text via the add-in, and read
 the canonical Yuho file as needed without leaving the document.
+
+\subsection{Programming-languages context: language workbenches and the
+DSL economy}
+\label{subsec:rel_pl}
+
+Yuho's architectural shape --- a tree-sitter grammar feeding an
+immutable AST that several visitor-shaped consumers (transpilers,
+verifiers, linters, LSP, MCP) walk in parallel --- is the shape of a
+\emph{language workbench} in the sense of Erdweg et
+al.~\cite{erdweg2015workbenches}, who survey the state of the art
+across MPS, Spoofax, Rascal, Xtext, and others. The named-field
+grammar shape, the doc-comment-as-AST-attribute lift, and the
+multi-target transpilation pattern are all classic workbench moves.
+For a domain whose user is a lawyer, projectional editing
+(V\"olter~\cite{voelter2014mps}) is arguably a better surface than a
+text-based external DSL: a structured form on top of the same AST
+would give the verification benefits without the syntax-learning cost.
+We chose an external DSL because the encoder is the author and
+text-with-LSP suffices; an MPS-style projectional editor on the same
+AST is a credible alternative architecture and we do not claim ours
+is the only sensible one.
+
+The decision to ship a one-way pipeline from \texttt{.yh} to
+DOCX/EN/JSON, rather than a bidirectional Word-to-yh editing loop,
+also has a literature: Foster et al.'s lens
+framework~\cite{foster2007combinators} formalises asymmetric vs.\
+symmetric transformations and would let LDOC's authoring posture and
+Yuho's verification posture coexist via a Word$\leftrightarrow$Yuho
+lens. We do not implement this; we note it as a credible alternative
+direction and a question we have not engaged.
+
+The DSL-economy literature (Mernik, Heering \&
+Sloane~\cite{mernik2005dsl}) lays out the standard
+when-to-build-a-DSL criteria. Yuho clears the standard bars
+(productivity-per-section above the alternative, clear
+domain-specific surface, an audience that can read the syntax) for
+the encoder, but the audience claim has not been tested with external
+users, and the DSL-economy literature would press on this point. We
+defer the validation to future work.
 
 \subsection{Wider context}
 \label{subsec:rel_wider}

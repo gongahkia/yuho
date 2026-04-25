@@ -124,19 +124,46 @@ rate $\geq$ 90\%, and \textsf{G11} (the disjunctive-connective check) to
 carry a notably lower precision because it ignores the syntactic role
 of every ``or''.
 
+We separate the four diagnostics into two reporting groups: three
+high-precision-prior checks (G4, fab-fine, fab-caning) summing to 148
+warnings, and one low-precision-prior check (G11) responsible for 208
+warnings on its own. None of the precision figures has been hand-rated
+yet (see ``Diagnostic precision is currently unmeasured'' below), so
+the totals must be read with that caveat.
+
 \begin{itemize}
 \item \textbf{Illustration-count mismatch (\textsf{G4}).} 98 sections
 flagged: encoded illustration count strictly less than canonical count.
+Author's prior: precision $\geq$0.9.
 \item \textbf{Fabricated fine cap.} 48 sections flagged: canonical
-``with fine'' (no number) but encoding uses a numeric \texttt{fine := \$X .. \$Y}.
+``with fine'' (no number) but encoding uses a numeric
+\texttt{fine := \$X .. \$Y}. Author's prior: precision $\geq$0.9.
 \item \textbf{Fabricated caning range.} 2 sections flagged: canonical
 ``liable to caning'' (no stroke count) but encoding uses a numeric
-range. Down from $\sim$14 pre-fix.
+range. Down from $\sim$14 pre-fix. Author's prior: precision $\geq$0.9.
 \item \textbf{Disjunctive-connective mismatch (\textsf{G11}).} 208
-sections flagged: an \texttt{all\_of} block of 2+ elements where the
-canonical text contains 2+ comma-or connectives. Heuristic; precision
-is the open question.
+sections flagged (39.7\% of the corpus): an \texttt{all\_of} block of
+2+ elements where the canonical text contains 2+ comma-or connectives.
+Heuristic; the check pattern-matches connectives in the canonical
+prose without distinguishing structurally meaningful ``or''s from
+ones inside illustration strings. Author's prior: precision well
+below 0.9, possibly closer to 0.5 --- removing G11 would collapse the
+headline 360-warning total to 148, and an honest reader of the present
+draft should weight G11 separately.
 \end{itemize}
+
+\paragraph{Grammar-design implication of the G11 hit rate.} A 39.7\%
+flag rate on a low-precision heuristic is operationally close to
+``warn on every section''. The cleaner long-term response is at the
+grammar layer rather than the lint layer: if the structural ambiguity
+between \texttt{all\_of} with comma-separated elements and
+\texttt{any\_of} with or-connected elements cannot be resolved by
+heuristic, the grammar should require encoders to write the
+connective explicitly per element pair, eliminating the lint at the
+source. This would be a grammar-design response to a lint-layer
+signal --- exactly the gap-vs-lint feedback loop articulated in
+\S\ref{subsec:gaps} --- and is on the roadmap for a future grammar
+revision.
 
 \paragraph{Numerical residuals after Phase D.} The 48 fabricated-fine-cap
 hits are mostly sections that the L3 reviewer signed off on before the
@@ -172,24 +199,39 @@ correlated against the L3 stamp date in
 Throughput numbers are emitted by \texttt{scripts/paper\_methodology.py}
 into \texttt{paper/methodology/throughput.json}.
 
-\paragraph{Encoding-to-stamp lag.} The median wall-clock between first
-commit on a \texttt{statute.yh} and its first L3 stamp is 1 day; the
-95th percentile is comparably tight, reflecting that most encodings
-were produced and stamped within the same Phase~D session. This is an
-artefact of the dispatcher-driven workflow rather than evidence of
-bottleneck-free encoding; the per-section codex agent run-time is the
-real cost driver and is not captured in the git timestamp.
+\paragraph{Encoding-to-stamp lag (calendar; reported as artefact, not as
+effort).} The median wall-clock between first commit on a
+\texttt{statute.yh} and its first L3 stamp is 1 day; the 95th
+percentile is also 1 day. We report this number only to surface the
+artefact: 499 of 524 first-commits are concentrated on a single
+calendar day (2026-04-24) per
+\texttt{paper/methodology/throughput.json}, so the 1-day median is a
+property of the parallel dispatcher run, not of the DSL's encoding
+ergonomics. The \texttt{throughput.json} file also records a
+\texttt{min} of $-1$ days for one section, which indicates a
+\texttt{last\_verified} stamp written before the matching first commit
+in git history; we have not yet root-caused this and flag it as an
+open measurement-pipeline bug. The defensible cost number is the
+\emph{per-section agent compute time}, not the calendar lag, and we
+report it next.
+
+\paragraph{Per-section agent compute (the real cost driver).} The
+Phase~D agent regime processed all 524 sections in $\sim$3.5 hours of
+L3 reviewer wall time across four parallel \texttt{gpt-5.4} instances
+at \texttt{high} reasoning, plus $\sim$36 minutes of additional
+flag-fix sweep over 126 flagged sections. The implied per-section
+agent compute is $\sim$4.6 minutes/section averaged
+(${\sim}40$ agent-hours total / 524 sections), with the per-section
+\texttt{codex exec} run-time typically in the 60--120s range
+observed during dispatcher runs.
 
 \paragraph{Per-regime tradeoff.} Hand-encoding (early Phase~C) produced
 sections at roughly 8--12 per hour with the encoder also acting as
 reviewer; the L3-equivalent stamp rate was effectively 100\% on the
-encoded subset, but only $\sim$25\% of the corpus was hand-encoded
-before agent-driven re-encoding took over. The Phase~D agent regime
-processed all 524 sections in $\sim$3.5 hours of L3 reviewer wall
-time across four parallel \texttt{gpt-5.4} instances at \texttt{high}
-reasoning. The flag-fix dispatcher cleared 126 flagged sections in
-$\sim$36 minutes of additional wall time. Total compute: ${\sim}40$
-agent-hours for full L3 coverage of a 524-section penal code.
+encoded subset, but the stamps were author-administered (the same
+circularity discussed in \S\ref{sec:limitations}) and only
+$\sim$25\% of the corpus was hand-encoded before agent-driven
+re-encoding took over.
 
 \subsection{Tooling validation}
 \label{subsec:tooling_eval}

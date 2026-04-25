@@ -71,19 +71,24 @@
   howpublished = {\url{https://sso.agc.gov.sg/Act/PC1871}}
 }
 
-@book{lessig1999code,
-  title     = {Code and Other Laws of Cyberspace},
-  author    = {Lessig, Lawrence},
-  publisher = {Basic Books},
-  year      = {1999}
-}
+% lessig1999code dropped: previously included in the bibliography but
+% never cited in any section file; Lessig's "code is law" thesis is
+% the inverse of the "law as code" framing this paper develops, and
+% engaging it would require a deeper digression than the scope allows.
 
-@techreport{hammond1983rights,
-  title       = {{APES}: a user-friendly advice-giving system},
-  author      = {Hammond, Peter},
-  institution = {Imperial College of Science, Technology and Medicine, Department of Computing},
-  year        = {1983},
-  note        = {Technical report; cited via secondary literature on logic-based legal expert systems of the 1980s.}
+% hammond1983rights replaced: previous entry cited via secondary
+% literature only, with no verifiable primary source. Replaced with
+% Sergot's own follow-up survey, which is the canonical citation for
+% the BNA-and-after logic-programming-of-law tradition this paper
+% references.
+@incollection{sergot1991representation,
+  title     = {The Representation of Law in Computer Programs},
+  author    = {Sergot, Marek},
+  booktitle = {Knowledge Based Systems and Legal Applications},
+  editor    = {Bench-Capon, T. J. M.},
+  publisher = {Academic Press},
+  year      = {1991},
+  pages     = {3--67}
 }
 
 @article{benchcapon2003legal,
@@ -127,4 +132,119 @@
   author = {{Anthropic}},
   year   = {2024},
   howpublished = {\url{https://modelcontextprotocol.io/}}
+}
+
+@inproceedings{eflint2020,
+  title     = {{eFLINT}: a domain-specific language for executable norm specifications},
+  author    = {van Binsbergen, L. Thomas and Liu, Lu-Chi and van Doesburg, Robert and van Engers, Tom},
+  booktitle = {Proceedings of the 19th ACM SIGPLAN International Conference on Generative Programming: Concepts and Experiences (GPCE)},
+  year      = {2020},
+  pages     = {124--136},
+  doi       = {10.1145/3425898.3426958}
+}
+
+@article{benchcapon1992isomorphism,
+  title   = {Isomorphism and legal knowledge based systems},
+  author  = {Bench-Capon, T. J. M. and Coenen, F. P.},
+  journal = {Artificial Intelligence and Law},
+  volume  = {1},
+  number  = {1},
+  pages   = {65--86},
+  year    = {1992},
+  doi     = {10.1007/BF00118480}
+}
+
+@misc{dmn2022,
+  title  = {{Decision Model and Notation (DMN)}, Version 1.4},
+  author = {{Object Management Group}},
+  year   = {2022},
+  howpublished = {OMG Document Number: formal/2022-10-02, \url{https://www.omg.org/spec/DMN/1.4/}}
+}
+
+@inproceedings{symboleo2020,
+  title     = {Symboleo: Towards a Specification Language for Legal Contracts},
+  author    = {Sharifi, Sepehr and Parvizimosaed, Alireza and Amyot, Daniel and Logrippo, Luigi and Mylopoulos, John},
+  booktitle = {Proceedings of the IEEE 28th International Requirements Engineering Conference (RE)},
+  year      = {2020},
+  pages     = {364--369},
+  doi       = {10.1109/RE48521.2020.00049}
+}
+
+@article{governatori2005ruleml,
+  title   = {Representing Business Contracts in {RuleML}},
+  author  = {Governatori, Guido},
+  journal = {International Journal of Cooperative Information Systems},
+  volume  = {14},
+  number  = {2--3},
+  pages   = {181--216},
+  year    = {2005},
+  doi     = {10.1142/S0218843005001134}
+}
+
+@incollection{prakken2009burdens,
+  title     = {A logical analysis of burdens of proof},
+  author    = {Prakken, Henry and Sartor, Giovanni},
+  booktitle = {Legal Evidence and Proof: Statistics, Stories, Logic},
+  editor    = {Kaptein, Hendrik and Prakken, Henry and Verheij, Bart},
+  publisher = {Ashgate},
+  year      = {2009},
+  pages     = {223--253}
+}
+
+@article{vonwright1951deontic,
+  title   = {Deontic Logic},
+  author  = {von Wright, Georg Henrik},
+  journal = {Mind},
+  volume  = {60},
+  number  = {237},
+  pages   = {1--15},
+  year    = {1951},
+  doi     = {10.1093/mind/LX.237.1}
+}
+
+@book{deonticlogic2013handbook,
+  title     = {Handbook of Deontic Logic and Normative Systems},
+  editor    = {Gabbay, Dov and Horty, John and Parent, Xavier and van der Meyden, Ron and van der Torre, Leendert},
+  publisher = {College Publications},
+  year      = {2013}
+}
+
+@article{erdweg2015workbenches,
+  title   = {Evaluating and comparing language workbenches: Existing results and benchmarks for the future},
+  author  = {Erdweg, Sebastian and van der Storm, Tijs and V{\"o}lter, Markus and Tratt, Laurence and Bosman, Remi and Cook, William R. and Gerritsen, Albert and Hulshout, Angelo and Kelly, Steven and Loh, Alex and Konat, Gabri{\"e}l and Molina, Pedro J. and Palatnik, Martin and Pohjonen, Risto and Schindler, Eugen and Schindler, Klemens and Solmi, Riccardo and Vergu, Vlad and Visser, Eelco and van der Vlist, Kevin and Wachsmuth, Guido and van der Woning, Jimi},
+  journal = {Computer Languages, Systems \& Structures},
+  volume  = {44},
+  pages   = {24--47},
+  year    = {2015},
+  doi     = {10.1016/j.cl.2015.08.007}
+}
+
+@inproceedings{voelter2014mps,
+  title     = {Towards user friendly transformation languages},
+  author    = {V{\"o}lter, Markus},
+  booktitle = {Proceedings of the 3rd Workshop on the Globalization of Modeling Languages},
+  year      = {2014},
+  note      = {Background reference for projectional editing in MPS.}
+}
+
+@article{mernik2005dsl,
+  title   = {When and how to develop domain-specific languages},
+  author  = {Mernik, Marjan and Heering, Jan and Sloane, Anthony M.},
+  journal = {ACM Computing Surveys},
+  volume  = {37},
+  number  = {4},
+  pages   = {316--344},
+  year    = {2005},
+  doi     = {10.1145/1118890.1118892}
+}
+
+@article{foster2007combinators,
+  title   = {Combinators for bidirectional tree transformations: A linguistic approach to the view-update problem},
+  author  = {Foster, J. Nathan and Greenwald, Michael B. and Moore, Jonathan T. and Pierce, Benjamin C. and Schmitt, Alan},
+  journal = {ACM Transactions on Programming Languages and Systems},
+  volume  = {29},
+  number  = {3},
+  pages   = {17:1--17:65},
+  year    = {2007},
+  doi     = {10.1145/1232420.1232424}
 }

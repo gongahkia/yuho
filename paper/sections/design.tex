@@ -81,6 +81,71 @@ one disjunctive sub-group for the alternative mens rea. The penalty is a
 flat range over imprisonment and fine. Each illustration is a verbatim
 worked example with a stable label.
 
+\subsubsection*{A harder worked example: section 302 (murder)}
+\label{subsubsec:s302}
+
+Section 415 is a deliberately simple introductory example: it has typed
+elements, a flat penalty, three illustrations, and no encoded
+exceptions. Several of the primitives we claim as distinctive --- nested
+penalty combinators (\textsf{G12}), the \texttt{when} conditional
+(\textsf{G9}), the \texttt{caning := unspecified} sentinel
+(\textsf{G14}), and exception priority (\textsf{G13}) --- do not fire on
+s415. Section 302 (murder) exercises three of them at once: its
+post-2012 penalty has the form ``death \emph{or} imprisonment for life,
+\emph{and} shall also be liable to fine'' --- a nested combinator
+(\texttt{cumulative} wrapping an \texttt{alternative} branch) with a
+named \texttt{when} guard distinguishing the residual category in which
+the death penalty is available from the default life-imprisonment case.
+
+\begin{footnotesize}
+\begin{verbatim}
+statute 302 "Murder" effective 1872-01-01
+                     effective 2012-12-31 {
+  elements { all_of {
+    actus_reus  killing  := "Causing the death of a person";
+    mens_rea    intent   := "Intent to kill or knowledge of likelihood";
+    /// per s300 limbs
+    circumstance s300_limb := "Falls within s300 (a)-(d)";
+  } }
+
+  penalty {
+    cumulative {
+      alternative when residual_category {
+        death;
+        imprisonment := life;
+      }
+      fine := unlimited;
+    }
+  }
+
+  exception "private_defence" priority 1
+    guard "private defence under sections 96-106"
+    defeats killing;
+}
+\end{verbatim}
+\end{footnotesize}
+
+The combinator tree (already in Figure~\ref{fig:penalty}) is what
+\textsf{G12} purchased: before \textsf{G12} landed, the same content
+required two sibling \texttt{penalty} blocks plus a free-text comment
+disambiguating the relationship between them. The \texttt{when
+residual\_category} clause (\textsf{G9}) names the post-2012 condition
+under which death is reachable, separating it from the default
+life-imprisonment penalty without requiring conditional logic in the
+encoder's prose. The \texttt{fine := unlimited} sentinel (\textsf{G8})
+encodes ``and shall also be liable to fine'' without inviting the
+encoder to fabricate a numeric cap (\S\ref{subsec:fidelity}). Finally,
+the \texttt{exception} block with \texttt{defeats killing} ties a
+Chapter~IV general exception to the specific element it overrides ---
+the priority field places it in the DAG (\textsf{G13}) so that the
+compilation to Z3 prioritised rewriting (\S\ref{subsec:exceptions})
+fires this defeater before lower-priority exceptions. Cross-section
+references (e.g.\ \texttt{s300\_limb} pointing into the s300 element
+graph) remain a free-text circumstance label in this example because
+the cross-section semantic resolver (\textsf{G10}) is deferred future
+work; the encoded \texttt{referencing} clauses parse but the resolver
+to walk them does not yet exist.
+
 \subsection{The \texttt{statute} block}
 \label{subsec:statute}
 The top-level construct of every Yuho file is one or more \texttt{statute}
@@ -282,26 +347,40 @@ the grammar side but does require a separate semantic-resolver pass
 that remains future work.
 
 \begin{table*}[t]
-\caption{The fourteen grammar gaps, with resolution.}
+\caption{The fourteen grammar gaps. ``Initial class.'' is what the
+gap was called when first surfaced during mass-encoding; ``Final
+class.'' is the resolution after closer inspection. Three gaps shifted
+class post-hoc: \textsf{G2} and \textsf{G7} were reclassified as
+not-a-gap once the underlying issues were re-tested or subsumed by
+\textsf{G5}; \textsf{G10} stays a grammar concern in name but its
+remaining work is a semantic-resolver pass and we mark it deferred
+rather than fixed. ``Freq.'' is the post-fix incidence in the encoded
+corpus from \texttt{paper/methodology/gap\_frequency.json}; entries
+marked ``---'' have no post-fix incidence (G2 and G7 because they were
+not gaps; G10 because the semantic resolver is unimplemented).
+\textsf{G8} is reported as two related counts:
+\texttt{fine := unlimited} sentinel uses (249) and \texttt{or\_both}
+combinator uses (190). Discovery-order narrative is in
+\texttt{docs/researcher/phase-c-gaps.md}.}
 \label{tab:gaps}
 \begin{small}
-\begin{tabular}{@{}llp{4.4cm}@{}}
+\begin{tabular}{@{}lllrp{3.6cm}@{}}
 \toprule
-\textbf{Gap} & \textbf{Resolution} & \textbf{Artefact} \\ \midrule
-\textsf{G1}  & fixed       & doc comments before \texttt{element\_group} \\
-\textsf{G2}  & not-a-gap   & colons in \texttt{///} parse fine after re-test \\
-\textsf{G3}  & fixed       & multi-letter section suffix (s376AA, s377BO) \\
-\textsf{G4}  & lint        & illustration-count vs canonical \\
-\textsf{G5}  & fixed       & \texttt{subsection (N) \{ \dots \}} nesting \\
-\textsf{G6}  & fixed       & multiple \texttt{effective <date>} clauses \\
-\textsf{G7}  & not-a-gap   & flat \texttt{definitions} suffices; G5 covers nesting \\
-\textsf{G8}  & fixed       & \texttt{or\_both} / \texttt{alternative} / \texttt{cumulative}; \texttt{fine := unlimited} \\
-\textsf{G9}  & fixed       & \texttt{penalty when <ident>} conditional branches \\
-\textsf{G10} & deferred    & cross-section semantic resolver --- grammar already parses \texttt{referencing} / \texttt{subsumes} / \texttt{amends} \\
-\textsf{G11} & lint        & \texttt{all\_of} vs ``or'' connective check \\
-\textsf{G12} & fixed       & nested penalty combinators \\
-\textsf{G13} & fixed       & exception-priority DAG with Z3 prioritised rewriting \\
-\textsf{G14} & fixed       & \texttt{caning := unspecified} sentinel \\
+\textbf{Gap} & \textbf{Initial class.} & \textbf{Final class.} & \textbf{Freq.} & \textbf{Artefact} \\ \midrule
+\textsf{G1}  & grammar       & fixed     & 280 & doc comments before \texttt{element\_group} \\
+\textsf{G2}  & grammar       & not-a-gap & ---  & colons in \texttt{///} parse fine after re-test \\
+\textsf{G3}  & grammar       & fixed     &  23 & multi-letter section suffix (s376AA, s377BO) \\
+\textsf{G4}  & grammar       & lint      &  98 & illustration-count vs canonical \\
+\textsf{G5}  & grammar       & fixed     & 123 & \texttt{subsection (N) \{ \dots \}} nesting \\
+\textsf{G6}  & grammar       & fixed     & 243 & multiple \texttt{effective <date>} clauses \\
+\textsf{G7}  & grammar       & not-a-gap & ---  & flat \texttt{definitions} suffices; G5 covers nesting \\
+\textsf{G8}  & grammar       & fixed     & 249/190 & \texttt{or\_both} / \texttt{alternative} / \texttt{cumulative}; \texttt{fine := unlimited} \\
+\textsf{G9}  & grammar       & fixed     &  49 & \texttt{penalty when <ident>} conditional branches \\
+\textsf{G10} & grammar       & deferred  & ---  & cross-section semantic resolver --- grammar already parses \texttt{referencing} / \texttt{subsumes} / \texttt{amends} \\
+\textsf{G11} & grammar       & lint      & 208 & \texttt{all\_of} vs ``or'' connective check \\
+\textsf{G12} & grammar       & fixed     &  11 & nested penalty combinators \\
+\textsf{G13} & grammar       & fixed     &   1 & exception-priority DAG with Z3 prioritised rewriting \\
+\textsf{G14} & grammar       & fixed     &  31 & \texttt{caning := unspecified} sentinel \\
 \bottomrule
 \end{tabular}
 \end{small}

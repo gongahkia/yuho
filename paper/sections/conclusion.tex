@@ -18,7 +18,14 @@ that turns the encoding into an executable artefact rather than a
 paper exercise.
 
 The longer-term thesis is that \emph{statute-as-source-of-truth} is a
-viable posture for legal infrastructure. The encoded artefact is what
+viable posture for legal infrastructure. This is the
+isomorphism~\cite{benchcapon1992isomorphism} position with all the
+standard objections that come with it: clause-for-clause mirroring
+preserves traceability and makes amendments propagate cleanly, but
+it forecloses some logic-friendly normalisations and inherits the
+open-textured-terms problem. We claim the isomorphism trade is the
+right one for penal code; we do not claim the standard objections
+have been dissolved. The encoded artefact is what
 the lawyer, the tooling, and the verification stack all read;
 downstream renderings (controlled English, \LaTeX{}, Mermaid, DOCX)
 are generated, not authored. We do not claim that the \statRawSections{}
@@ -27,9 +34,10 @@ limitations on common-law-doctrine modelling, precedent integration,
 and external counsel review (\S\ref{sec:limitations}) are explicit
 about what the artefact is and is not. We do claim that the gap
 between a drafted penal section and an executable encoding is
-narrower than the existing literature suggests, and that closing it
-for one statute family at full coverage is mostly an engineering
-exercise once the grammar is right.
+narrower than the existing literature suggests, and that an
+appropriately-shaped grammar dissolves a class of previously-reported
+encoding obstacles, leaving a residue that is tractable at full
+coverage for one statute family.
 
 \paragraph{Future work.} Three concrete strands. First, the
 \textsf{G10} cross-section semantic resolver, which lifts the

@@ -25,10 +25,11 @@ documentation hint in the LSP hover output.
 \paragraph{Single jurisdiction.} The encoding is Singapore-only. The
 Anglo-Indian drafting heritage of the Singapore Penal Code (descended
 from Macaulay's 1860 Indian Penal Code draft via the 1872 SS Penal
-Code) makes the grammar plausibly portable across the wider Penal
-Code family --- the Indian, Pakistani, Bangladeshi, Bruneian, and
+Code) means the Indian, Pakistani, Bangladeshi, Bruneian, and
 Malaysian codes share substantial structural overlap with Singapore's
---- but we have not verified portability empirically. A planned
+--- but whether Yuho's grammar fits any of them is an empirical
+question we have not tested; we have no evidence of portability and
+should not be read as claiming any. A planned
 exercise (\S\ref{subsec:threats}) is encoding a 50-section sample
 of the Indian Penal Code to test grammar fit and tooling reuse;
 substantive grammar bloat from that exercise would falsify the
@@ -66,10 +67,13 @@ not flag a fidelity issue'', not as a legal opinion. External review
 by a Singapore-qualified lawyer is the natural next step for any
 encoding intended for use beyond proof of concept; we have not done
 it, and we acknowledge that a substantive sample of the L3-stamped
-encodings would benefit from independent inspection. The 23\% L3
-coverage figure is honest in this respect: it reflects what the
-existing reviewer chain has stamped, and we make no claim about what
-fraction of those would survive external counsel review unchanged.
+encodings would benefit from independent inspection. The
+\statLThreePass{}/\statRawSections{} L3 figure reported in
+\S\ref{subsec:coverage_eval} is therefore an \emph{author-stamped}
+coverage statistic, not an externally-validated one: it reflects what
+the existing author-and-agent reviewer chain has stamped, and we make
+no claim about what fraction of those would survive external counsel
+review unchanged.
 
 \paragraph{Verification scope.} The Z3 and Alloy hookups
 (\S\ref{subsec:verify}) target a deliberately narrow set of properties:
