@@ -16,4 +16,6 @@ summary = "A judge acting judicially is not committing an offence when exercisin
 source = "Singapore Penal Code 1871, Section 77"
 
 [verification]
+last_verified = "2026-04-25"
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr77-#pr77-"
+verified_by = "gpt-5.4 high (automated L3 reviewer)"
