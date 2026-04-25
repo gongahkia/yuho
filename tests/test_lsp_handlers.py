@@ -180,13 +180,14 @@ class TestSemanticTokens:
         s._documents[doc.uri] = doc
         tokens = s._get_semantic_tokens(doc.uri)
         assert tokens is not None
-        # Cumulative position must be monotonic (delta_line >= 0; if delta_line == 0, delta_col > 0).
+        # Position monotonicity: delta_line >= 0; if delta_line == 0 and
+        # this is not the first token, delta_col must be > 0 (no overlap).
         line = 0
         col = 0
-        for i in range(0, len(tokens.data), 5):
+        for idx, i in enumerate(range(0, len(tokens.data), 5)):
             d_line, d_col, *_ = tokens.data[i:i + 5]
+            assert d_line >= 0
+            if idx > 0 and d_line == 0:
+                assert d_col > 0, "overlapping or duplicate tokens in semantic stream"
             line += d_line
             col = d_col if d_line > 0 else col + d_col
-            assert d_line >= 0
-            if d_line == 0:
-                assert d_col > 0, "overlapping or duplicate tokens in semantic stream"
