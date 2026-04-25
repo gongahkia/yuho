@@ -26,6 +26,7 @@ Run:
 
 from __future__ import annotations
 
+import argparse
 import datetime as _dt
 import html as _html
 import json
@@ -492,6 +493,47 @@ text.</p>
     return _page("Yuho — Flags", body, active_nav="flags")
 
 
+def render_404() -> str:
+    body = """
+<h2>404 — section not found</h2>
+<p>The page you asked for doesn't exist on this site.</p>
+<ul>
+  <li><a href="/index.html">Index of all 524 sections</a></li>
+  <li><a href="/coverage.html">Coverage dashboard</a></li>
+  <li><a href="/flags.html">Flagged sections</a></li>
+  <li><a href="/about.html">About</a></li>
+</ul>
+<p>If you arrived from a citation that mentions a specific section number,
+try <code>/s/&lt;number&gt;.html</code> directly — e.g.
+<a href="/s/415.html">/s/415.html</a> for cheating.</p>
+"""
+    return _page("Yuho — 404", body)
+
+
+def render_sitemap(index: Dict[str, Any], base_url: str) -> str:
+    """XML sitemap. base_url should not end with a slash."""
+    base = base_url.rstrip("/")
+    today = _dt.date.today().isoformat()
+    urls = [f"{base}/index.html", f"{base}/coverage.html",
+            f"{base}/flags.html", f"{base}/about.html"]
+    urls.extend(f"{base}/s/{r['number']}.html" for r in index["sections"])
+    entries = "".join(
+        f"  <url><loc>{_esc(u)}</loc><lastmod>{today}</lastmod></url>\n"
+        for u in urls
+    )
+    return ('<?xml version="1.0" encoding="UTF-8"?>\n'
+            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+            f'{entries}'
+            '</urlset>\n')
+
+
+def render_robots(base_url: str) -> str:
+    base = base_url.rstrip("/")
+    return ("User-agent: *\n"
+            "Allow: /\n"
+            f"Sitemap: {base}/sitemap.xml\n")
+
+
 def render_about() -> str:
     body = """
 <h2>About this site</h2>
@@ -650,6 +692,11 @@ def render_section(rec: Dict[str, Any]) -> str:
 
 
 def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawTextHelpFormatter)
+    ap.add_argument("--base-url", default="https://yuho.dev",
+                    help="absolute base URL used in sitemap.xml + robots.txt (default: https://yuho.dev)")
+    args = ap.parse_args()
+
     if not (CORPUS / "index.json").exists():
         print("error: corpus not built; run scripts/build_corpus.py first.")
         return 1
@@ -674,6 +721,9 @@ def main() -> int:
     (BUILD / "coverage.html").write_text(render_coverage(index))
     (BUILD / "flags.html").write_text(render_flags(index))
     (BUILD / "about.html").write_text(render_about())
+    (BUILD / "404.html").write_text(render_404())
+    (BUILD / "sitemap.xml").write_text(render_sitemap(index, args.base_url))
+    (BUILD / "robots.txt").write_text(render_robots(args.base_url))
 
     # Per-section pages + full-text search index (G2).
     sect_dir = CORPUS / "sections"
