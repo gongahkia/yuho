@@ -2002,8 +2002,12 @@ statute {section} "{marginal}" effective 1872-01-01 {{
             for p in (repo / "library" / "penal_code").iterdir():
                 if p.is_dir() and _re.match(rf"s{section}_", p.name): d = p; break
             if not d:
-                return {"section": section, "outcome": "ERROR",
-                        "error": f"no directory for s{section}"}
+                return mcp_error(
+                    "not_found",
+                    f"no directory found for section s{section}",
+                    section=section,
+                    outcome="ERROR",
+                )
             # seed the flag file
             flag_body = (
                 f"# s{section} — L3 flag\n\n"
@@ -2039,8 +2043,12 @@ statute {section} "{marginal}" effective 1872-01-01 {{
                     text=True,
                 )
             except FileNotFoundError:
-                return {"section": section, "outcome": "ERROR",
-                        "error": "codex / python venv not available"}
+                return mcp_error(
+                    "unavailable",
+                    "codex CLI or python venv not available; install codex and create .venv-scrape",
+                    section=section,
+                    outcome="ERROR",
+                )
 
             stdout_lines: List[str] = []
             start = _time.time()
@@ -2048,16 +2056,32 @@ statute {section} "{marginal}" effective 1872-01-01 {{
             # Pump stdout: report each non-blank line as a progress message.
             # We don't have a known total, so we ramp progress from 0.05 → 0.9
             # as the dispatcher runs, leaving the last 10% for the post-run
-            # yuho-check.
+            # yuho-check. Yields to the asyncio loop on every iteration so
+            # MCP cancellation (CancelledError) lands here promptly; on
+            # cancellation we terminate the subprocess and return a
+            # structured cancelled-outcome envelope.
+            import asyncio as _asyncio
             try:
                 while True:
+                    # Cooperative cancellation point.
+                    await _asyncio.sleep(0)
+
                     if _time.time() - start > timeout_s:
                         proc.terminate()
-                        return {"section": section, "outcome": "ERROR", "error": "timeout"}
+                        return mcp_error(
+                            "timeout",
+                            f"flag-fix dispatcher exceeded {timeout_s}s timeout",
+                            section=section,
+                            outcome="ERROR",
+                            partial_stdout="".join(stdout_lines)[-400:],
+                        )
                     line = proc.stdout.readline() if proc.stdout else ""
                     if not line:
                         if proc.poll() is not None:
                             break
+                        # Brief sleep so the loop doesn't busy-spin and so
+                        # cancellation latency stays bounded (10ms here).
+                        await _asyncio.sleep(0.01)
                         continue
                     stdout_lines.append(line)
                     # Heuristic progress: ramp toward 0.9 with each line.
@@ -2067,8 +2091,40 @@ statute {section} "{marginal}" effective 1872-01-01 {{
                     if msg:
                         await _report(progress, msg)
                 proc.wait()
+            except _asyncio.CancelledError:
+                # Client requested cancellation. Tear down the dispatcher
+                # cleanly and surface a structured "cancelled" envelope so
+                # callers can distinguish from genuine errors.
+                try:
+                    proc.terminate()
+                    proc.wait(timeout=5)
+                except Exception:
+                    try:
+                        proc.kill()
+                    except Exception:
+                        pass
+                # Drop the half-written flag file; the user's previous
+                # state is preserved on the .yh file (we never edited it).
+                try:
+                    (d / "_L3_FLAG.md").unlink(missing_ok=True)
+                except Exception:
+                    pass
+                return mcp_error(
+                    "cancelled",
+                    "flag-fix cancelled by client request",
+                    section=section,
+                    outcome="CANCELLED",
+                    partial_stdout="".join(stdout_lines)[-400:],
+                    retry=True,
+                )
             except Exception as e:
-                return {"section": section, "outcome": "ERROR", "error": str(e)}
+                return mcp_error(
+                    "subprocess_failed",
+                    f"flag-fix dispatcher raised {type(e).__name__}: {e}",
+                    section=section,
+                    outcome="ERROR",
+                    partial_stdout="".join(stdout_lines)[-400:],
+                )
 
             class _Result:
                 stdout = "".join(stdout_lines)
