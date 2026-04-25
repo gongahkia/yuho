@@ -360,7 +360,14 @@ class CounterexampleExplorer:
             safe = exc_label.replace(" ", "_").replace("-", "_")
             fires_key = f"{statute_id}_exc_{safe}_fires"
             sat_key = f"{statute_id}_exc_{safe}"
-            fires_var = gen._consts.get(fires_key) or gen._consts.get(sat_key)
+            # Don't use `or`: Z3 BoolRefs raise from __bool__ (symbolic
+            # expressions can't be cast to concrete bools), so the truth-
+            # test would explode whenever fires_key is registered. This
+            # bug only surfaces on sections with exception priority +
+            # defeats (s94 is the only one in the corpus today).
+            fires_var = gen._consts.get(fires_key)
+            if fires_var is None:
+                fires_var = gen._consts.get(sat_key)
             if fires_var is None:
                 # No constraint generated; nothing to check.
                 continue
@@ -399,11 +406,19 @@ class CounterexampleExplorer:
         """Return [(human_name, z3_bool)] for every leaf element in the statute."""
         prefix = f"{statute_id}_"
         suffix = "_satisfied"
+        # Exclude the synthetic `elements_satisfied` aggregate that the Z3
+        # generator introduces alongside the per-element bools — it shares
+        # the prefix+suffix pattern but isn't a leaf element. Without this
+        # filter, borderline queries try to negate the aggregate while
+        # keeping leaves true, which is structurally inconsistent.
         out: List[Tuple[str, Any]] = []
         for key, var in gen._consts.items():
-            if key.startswith(prefix) and key.endswith(suffix):
-                stem = key[len(prefix):-len(suffix)]
-                out.append((stem, var))
+            if not (key.startswith(prefix) and key.endswith(suffix)):
+                continue
+            stem = key[len(prefix):-len(suffix)]
+            if stem == "elements":
+                continue
+            out.append((stem, var))
         return out
 
     def _count_leaf_elements(self, statute) -> int:

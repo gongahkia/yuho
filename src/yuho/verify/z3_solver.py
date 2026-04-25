@@ -1134,23 +1134,38 @@ class Z3Generator:
             if expr is not None:
                 element_exprs.append(expr)
 
-        # Top-level elements are implicitly conjunctive (all must hold)
+        # Top-level elements are implicitly conjunctive (all must hold).
+        # We split the original biconditional `conviction == all_elements`
+        # into two named vars so a satisfied-but-excused fact pattern
+        # (elements all true *and* an exception fires) is representable:
+        #     elements_satisfied <=> all top-level elements hold
+        #     conviction         <=> elements_satisfied AND NOT any_exc_fires
+        # Without the split, an exception firing would force one of the
+        # elements to be false (since exc_fires => NOT conviction was
+        # asserted alongside the original biconditional), which forbids
+        # the doctrinal reading "elements met but offence excused".
         if element_exprs:
             if len(element_exprs) == 1:
                 all_elements = element_exprs[0]
             else:
                 all_elements = z3.And(*element_exprs)
 
+            elements_satisfied = z3.Bool(f"{statute_id}_elements_satisfied")
+            self._consts[f"{statute_id}_elements_satisfied"] = elements_satisfied
+            self._assertions.append(elements_satisfied == all_elements)
+
             conviction_var = z3.Bool(f"{statute_id}_conviction")
             self._consts[f"{statute_id}_conviction"] = conviction_var
-
-            # conviction <=> all top-level elements satisfied
-            self._assertions.append(conviction_var == all_elements)
+            # The conviction biconditional is closed in
+            # _generate_exception_constraints once the exc_fires set is
+            # known — it sets `conviction <=> elements_satisfied AND NOT any_fires`.
+            # If a statute has no exceptions, the bicond degenerates to
+            # `conviction <=> elements_satisfied`.
 
         # Temporal ordering constraints
         self._generate_temporal_constraints(statute_id, statute)
 
-        # Exception constraints
+        # Exception constraints (also closes the conviction biconditional).
         self._generate_exception_constraints(statute_id, statute)
 
         # Penalty constraints
@@ -1449,8 +1464,24 @@ class Z3Generator:
                 # no defeaters — fires == satisfied
                 exc_fires[exc_label] = exc_var
 
-            # Core encoding: effective firing => NOT conviction
-            self._assertions.append(z3.Implies(exc_fires[exc_label], z3.Not(conviction_var)))
+        # Close the conviction biconditional now that the per-exception
+        # `_fires` vars are settled. With elements_satisfied (asserted in
+        # the caller) and the gathered fires list:
+        #     conviction <=> elements_satisfied AND NOT (any fires)
+        # If the statute has no exceptions, the second conjunct collapses
+        # to True and we recover the original `conviction <=> elements`.
+        elements_key = f"{statute_id}_elements_satisfied"
+        elements_satisfied = self._consts.get(elements_key)
+        if elements_satisfied is not None:
+            if exc_fires:
+                any_fires = (z3.Or(*exc_fires.values())
+                             if len(exc_fires) > 1
+                             else next(iter(exc_fires.values())))
+                self._assertions.append(
+                    conviction_var == z3.And(elements_satisfied, z3.Not(any_fires))
+                )
+            else:
+                self._assertions.append(conviction_var == elements_satisfied)
 
     def _generate_penalty_constraints(self, statute_id: str, penalty: "PenaltyNode") -> None:
         """Generate Z3 constraints for penalty specification."""
