@@ -5,7 +5,7 @@
 
 referencing penal_code/s340_wrongful_confinement
 
-statute 342 "Punishment for wrongful confinement" effective 1872-01-01 effective 2019-12-31 {
+statute 342 "Punishment for wrongful confinement" effective 1872-01-01 effective 2020-01-01 {
     /// Punishment for wrongful confinement; see section 340 for the underlying offence.
     penalty or_both {
         imprisonment := 0 days .. 3 years;

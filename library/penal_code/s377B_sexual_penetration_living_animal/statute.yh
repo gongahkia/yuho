@@ -34,7 +34,7 @@ statute 377B "Sexual penetration with living animal" effective 1872-01-01 {
 
         penalty alternative {
             fine := unlimited;
-            caning := 0 .. 24 strokes;
+            caning := unspecified;
             supplementary := "The offender shall also be liable to fine or to caning.";
         }
     }

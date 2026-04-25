@@ -3,7 +3,7 @@
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr308-#pr308-
 /// @amendment [15/2019]
 
-statute 308 "Attempt to commit culpable homicide" effective 1872-01-01 effective 2019-12-31 {
+statute 308 "Attempt to commit culpable homicide" effective 1872-01-01 effective 2020-01-01 {
     elements {
         /// Section 308 requires the doing of an act, the intention to cause death, and circumstances making the completed killing culpable homicide not amounting to murder.
         all_of {

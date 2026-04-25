@@ -6,7 +6,7 @@
 referencing penal_code/s379A_punishment_theft_motor_vehicle
 referencing penal_code/s410_stolen_property
 
-statute 414 "Assisting in concealment or disposal of stolen property" effective 1872-01-01 effective 2019-12-31 {
+statute 414 "Assisting in concealment or disposal of stolen property" effective 1872-01-01 effective 2020-01-01 {
     subsection (1) {
         elements {
             /// The offence requires voluntary assistance, tainted property, and knowledge or reason to believe of that taint.

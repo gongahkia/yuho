@@ -3,7 +3,7 @@
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr407-#pr407-
 /// @amendment [15/2019]
 
-statute 407 "Criminal breach of trust of property entrusted for purposes of transportation or storage" effective 1872-01-01 effective 2019-12-31 {
+statute 407 "Criminal breach of trust of property entrusted for purposes of transportation or storage" effective 1872-01-01 effective 2020-01-01 {
     elements {
         /// Section 407 is conjunctive: qualifying entrustment plus criminal breach of trust of that property.
         all_of {
@@ -21,11 +21,8 @@ statute 407 "Criminal breach of trust of property entrusted for purposes of tran
         imprisonment := 0 years .. 15 years;
         supplementary := "Whoever, being entrusted with property for the purpose of transportation for hire or storage for rent or charge, commits criminal breach of trust in respect of such property, shall be punished with imprisonment for a term which may extend to 15 years. [15/2019]"
 
-        alternative {
-            fine := unlimited;
-            supplementary := "The offender shall also be liable to fine. [15/2019]"
-    
-        }
+        fine := unlimited;
+        supplementary := "The offender shall also be liable to fine. [15/2019]";
     }
 
     /// Illustration

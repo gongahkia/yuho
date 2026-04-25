@@ -11,7 +11,7 @@ statute 468 "Forgery for the purpose of cheating" effective 1872-01-01 {
         }
     }
 
-    penalty or_both {
+    penalty {
         imprisonment := 0 days .. 10 years;
         fine := unlimited;
     }

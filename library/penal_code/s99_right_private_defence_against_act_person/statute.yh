@@ -3,7 +3,7 @@
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr99-#pr99-
 /// @amendment [15/2019]
 
-statute 99 "Right of private defence against act of person of unsound mind, etc." effective 1872-01-01 effective 2019-12-31 {
+statute 99 "Right of private defence against act of person of unsound mind, etc." effective 1872-01-01 effective 2020-01-01 {
     definitions {
         private_defence_against_act_not_offence_due_to_actor_status := "When an act, which would otherwise be a certain offence, is not that offence, by reason of the youth, the want of maturity of understanding, the unsoundness of mind, or the intoxication of the person doing that act, or by reason of any misconception on the part of that person, every person has the same right of private defence against that act which he would have if the act were that offence. [15/2019]";
     }

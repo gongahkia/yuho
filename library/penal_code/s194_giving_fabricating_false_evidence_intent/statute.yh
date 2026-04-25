@@ -3,7 +3,7 @@
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr194-#pr194-
 /// @amendment [15/2019]
 
-statute 194 "Giving or fabricating false evidence with intent to procure conviction of a capital offence" effective 1872-01-01 effective 2019-12-31 {
+statute 194 "Giving or fabricating false evidence with intent to procure conviction of a capital offence" effective 1872-01-01 effective 2020-01-01 {
     definitions {
         capital_offence := "An offence which is capital by this Code, or under any other law for the time being in force";
         aggravated_consequence := "An innocent person is convicted and executed in consequence of such false evidence";

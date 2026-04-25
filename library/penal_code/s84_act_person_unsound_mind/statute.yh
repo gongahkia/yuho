@@ -4,7 +4,7 @@
 /// @amendment [Act 23 of 2021 wef 01/03/2022]
 /// @amendment [15/2019]
 
-statute 84 "Act of person of unsound mind" effective 1872-01-01 effective 2019-12-31 effective 2022-03-01 {
+statute 84 "Act of person of unsound mind" effective 1872-01-01 effective 2020-01-01 effective 2022-03-01 {
     subsection (1) {
         definitions {
             no_offence_rule := "Nothing is an offence which is done by a person who, at the time of doing it, by reason of unsoundness of mind, is incapable of knowing the nature of the act, incapable of knowing that what he is doing is wrong, or completely deprived of any power to control his actions.";

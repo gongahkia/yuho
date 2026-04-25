@@ -5,7 +5,7 @@
 
 referencing penal_code/s442_house_breaking
 
-statute 450 "House-breaking in order to commit an offence punishable with imprisonment for life" effective 1872-01-01 effective 2019-12-31 {
+statute 450 "House-breaking in order to commit an offence punishable with imprisonment for life" effective 1872-01-01 effective 2020-01-01 {
     definitions {
         house_breaking := "House-breaking as defined in section 442.";
         offence_punishable_with_imprisonment_for_life := "An offence punishable with imprisonment for life.";

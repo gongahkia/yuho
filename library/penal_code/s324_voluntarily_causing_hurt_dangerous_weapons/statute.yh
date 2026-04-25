@@ -3,7 +3,7 @@
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr324-#pr324-
 /// @amendment [15/2019]
 
-statute 324 "Voluntarily causing hurt by dangerous weapons or means" effective 1872-01-01 effective 2019-12-31 {
+statute 324 "Voluntarily causing hurt by dangerous weapons or means" effective 1872-01-01 effective 2020-01-01 {
     elements {
         all_of {
             circumstance not_section_334_case := "Except in the case provided for by section 334";
@@ -25,6 +25,6 @@ statute 324 "Voluntarily causing hurt by dangerous weapons or means" effective 1
     penalty or_both {
         imprisonment := 0 days .. 7 years;
         fine := unlimited;
-        caning := 0 .. 24 strokes;
+        caning := unspecified;
     }
 }

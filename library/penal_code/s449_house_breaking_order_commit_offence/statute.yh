@@ -5,7 +5,7 @@
 
 referencing penal_code/s442_house_breaking
 
-statute 449 "House-breaking in order to commit an offence punishable with death" effective 1872-01-01 effective 2019-12-31 {
+statute 449 "House-breaking in order to commit an offence punishable with death" effective 1872-01-01 effective 2020-01-01 {
     elements {
         /// Section 449 is conjunctive: the accused must commit house-breaking and do so in order to commit a death-punishable offence.
         all_of {

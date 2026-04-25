@@ -3,7 +3,7 @@
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr323A-#pr323A-
 /// @amendment [15/2019]
 
-statute 323A "Punishment for voluntarily causing hurt which causes grievous hurt" effective 1872-01-01 effective 2019-12-31 {
+statute 323A "Punishment for voluntarily causing hurt which causes grievous hurt" effective 1872-01-01 effective 2020-01-01 {
     elements {
         all_of {
             actus_reus voluntarily_causes_hurt := "Whoever voluntarily causes hurt";

@@ -3,7 +3,7 @@
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr328-#pr328-
 /// @amendment [15/2019]
 
-statute 328 "Causing hurt by means of poison, etc., with intent to commit an offence" effective 1872-01-01 effective 2019-12-31 {
+statute 328 "Causing hurt by means of poison, etc., with intent to commit an offence" effective 1872-01-01 effective 2020-01-01 {
     elements {
         /// Section 328 requires the prohibited administration or caused ingestion, one listed harmful substance category, and one listed fault element.
         all_of {
@@ -32,7 +32,7 @@ statute 328 "Causing hurt by means of poison, etc., with intent to commit an off
 
         alternative {
             fine := unlimited;
-            caning := 0 .. 24 strokes;
+            caning := unspecified;
             supplementary := "The offender shall also be liable to fine or to caning. [15/2019]";
     
         }

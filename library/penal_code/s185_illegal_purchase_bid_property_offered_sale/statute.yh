@@ -3,7 +3,7 @@
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr185-#pr185-
 /// @amendment [15/2019]
 
-statute 185 "Illegal purchase or bid for property offered for sale by authority of public servant" effective 1872-01-01 effective 2019-12-31 {
+statute 185 "Illegal purchase or bid for property offered for sale by authority of public servant" effective 1872-01-01 effective 2020-01-01 {
     elements {
         /// Section 185 requires a sale held by lawful authority of a public servant, a purchase or bid on account of self or another, and one of the two prohibited mental states.
         all_of {

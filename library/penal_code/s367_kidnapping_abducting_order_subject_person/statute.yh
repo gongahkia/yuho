@@ -3,7 +3,7 @@
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr367-#pr367-
 /// @amendment [15/2019]
 
-statute 367 "Kidnapping or abducting in order to subject a person to grievous hurt, slavery, etc." effective 1872-01-01 effective 2019-12-31 {
+statute 367 "Kidnapping or abducting in order to subject a person to grievous hurt, slavery, etc." effective 1872-01-01 effective 2020-01-01 {
     elements {
         /// Section 367 is conjunctive: the accused must kidnap or abduct, and must do so with the stated purpose or knowledge concerning the listed forms of harm.
         all_of {
@@ -26,7 +26,7 @@ statute 367 "Kidnapping or abducting in order to subject a person to grievous hu
 
         alternative {
             fine := unlimited;
-            caning := 0 .. 24 strokes;
+            caning := unspecified;
             supplementary := "The offender shall also be liable to fine or to caning. [15/2019]";
     
         }

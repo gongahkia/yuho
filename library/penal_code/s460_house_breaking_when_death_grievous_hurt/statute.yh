@@ -6,7 +6,7 @@
 referencing penal_code/s442_house_breaking
 referencing penal_code/s320_grievous_hurt
 
-statute 460 "House-breaking when death or grievous hurt caused" effective 1872-01-01 effective 2019-12-31 {
+statute 460 "House-breaking when death or grievous hurt caused" effective 1872-01-01 effective 2020-01-01 {
     elements {
         /// Section 460 is conjunctive: the offender must be jointly concerned in the house-breaking, and during that house-breaking a guilty participant voluntarily causes or attempts to cause death or grievous hurt.
         all_of {

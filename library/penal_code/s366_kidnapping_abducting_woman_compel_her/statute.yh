@@ -25,7 +25,7 @@ statute 366 "Kidnapping or abducting a woman to compel her marriage, etc." effec
 
         alternative {
             fine := unlimited;
-            caning := 0 .. 24 strokes;
+            caning := unspecified;
             supplementary := "The offender shall also be liable to fine or to caning.";
     
         }

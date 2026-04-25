@@ -2,7 +2,7 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr332-#pr332-
 /// @amendment [15/2019]
-statute 332 "Voluntarily causing hurt to deter public servant from his duty" effective 1872-01-01 effective 2019-12-31 {
+statute 332 "Voluntarily causing hurt to deter public servant from his duty" effective 1872-01-01 effective 2020-01-01 {
     elements {
         /// Section 332 requires the voluntary causing of hurt to a public servant, plus one of the three statutory duty-related nexuses.
         all_of {

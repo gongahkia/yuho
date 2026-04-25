@@ -3,7 +3,7 @@
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr410-#pr410-
 /// @amendment [15/2019]
 
-statute 410 "Stolen property" effective 1872-01-01 effective 2019-12-31 {
+statute 410 "Stolen property" effective 1872-01-01 effective 2020-01-01 {
     subsection (1) {
         definitions {
             stolen_property := "Property the possession whereof has been transferred by theft, or by extortion, or by robbery, and property which has been criminally misappropriated, or in respect of which criminal breach of trust or cheating has been committed, is designated as “stolen property”, whether the transfer has been made or the misappropriation or breach of trust or cheating has been committed within or without Singapore.";

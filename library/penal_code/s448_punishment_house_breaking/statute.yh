@@ -5,7 +5,7 @@
 
 referencing penal_code/s442_house_breaking
 
-statute 448 "Punishment for house-breaking" effective 1872-01-01 effective 2019-12-31 {
+statute 448 "Punishment for house-breaking" effective 1872-01-01 effective 2020-01-01 {
     /// Section 448 prescribes the punishment for the offence of house-breaking under section 442.
     penalty or_both {
         imprisonment := 0 days .. 3 years;

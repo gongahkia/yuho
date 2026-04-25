@@ -2,7 +2,7 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr74E-#pr74E-
 /// @amendment [15/2019]
-statute 74E "Application of enhanced penalties" effective 1872-01-01 effective 2019-12-31 {
+statute 74E "Application of enhanced penalties" effective 1872-01-01 effective 2020-01-01 {
     subsection (1) {
         elements {
             /// Subsection (1) governs overlap where two or more enhanced-penalty sections from sections 73 to 74D would otherwise apply to the same offence.

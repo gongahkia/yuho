@@ -3,7 +3,7 @@
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr489B-#pr489B-
 /// @amendment [15/2019]
 
-statute 489B "Using as genuine forged or counterfeit currency or bank notes" effective 1872-01-01 effective 2019-12-31 {
+statute 489B "Using as genuine forged or counterfeit currency or bank notes" effective 1872-01-01 effective 2020-01-01 {
     elements {
         all_of {
             actus_reus dealing_or_use := "Delivers or sells to, or buys or receives from, any other person, or otherwise imports, exports or traffics in or uses as genuine, any forged or counterfeit currency or bank note";
