@@ -1,36 +1,108 @@
 \section{Limitations}
 \label{sec:limitations}
 
+This section makes the limitations explicit. We expect each to map onto
+a future-work line; some have concrete plans, others are deliberately
+out of scope. The threats to validity in \S\ref{subsec:threats} are
+methodological and concern the evaluation; the limitations here are
+structural and concern what Yuho can and cannot represent in principle.
+
 \paragraph{Common-law doctrines are not modelled.} Yuho captures the
-statute as drafted; it does not model judicial gloss. Doctrines like the
-\emph{thin skull} rule or \emph{novus actus interveniens} live in case
-law and shape how elements (especially causation) apply. Our \texttt{caselaw}
-block records the existence of judicial interpretation but does not lift
-the doctrine into the type system.
+statute as drafted; it does not model judicial gloss. Doctrines like
+the \emph{thin skull} rule, \emph{novus actus interveniens}, or the
+mens-rea-inferred-from-act presumption live in case law and shape
+how the encoded elements apply in practice. Our \texttt{caselaw}
+block records the existence and citation of a relevant judicial
+interpretation, but does not lift the doctrine into the type system
+or the verification semantics. A holding that ``mens rea may be
+inferred from the actus reus when the act is inherently dangerous''
+would, in a richer system, attach as a derived constraint that
+modifies the burden qualifier on the mens-rea element when the
+matching predicate fires. Yuho does not yet support this kind of
+case-law-to-type-system lifting; the closest current analogue is a
+documentation hint in the LSP hover output.
 
 \paragraph{Single jurisdiction.} The encoding is Singapore-only. The
-Anglo-Indian heritage of the Singapore Penal Code makes the grammar
-plausibly portable to India, Pakistan, Brunei, and (with adjustments)
-Malaysia, but we have not verified this empirically.
+Anglo-Indian drafting heritage of the Singapore Penal Code (descended
+from Macaulay's 1860 Indian Penal Code draft via the 1872 SS Penal
+Code) makes the grammar plausibly portable across the wider Penal
+Code family --- the Indian, Pakistani, Bangladeshi, Bruneian, and
+Malaysian codes share substantial structural overlap with Singapore's
+--- but we have not verified portability empirically. A planned
+exercise (\S\ref{subsec:threats}) is encoding a 50-section sample
+of the Indian Penal Code to test grammar fit and tooling reuse;
+substantive grammar bloat from that exercise would falsify the
+``one statute family'' positioning we adopt in \S\ref{sec:intro}.
 
-\paragraph{Shallow precedent integration.} Case law is referenced by name
-+ citation + holding string; the holding is not parsed into structured
-elements. A holding like ``mens rea may be inferred from the actus reus
-when the act is inherently dangerous'' would, in a richer system, modify
-the burden qualifier of a mens-rea element. Yuho does not yet do this.
+\paragraph{Shallow precedent integration.} Case law is referenced
+by name, citation, and holding string. The holding is treated as
+opaque text, not parsed into structured elements. This is a
+deliberate choice for the proof-of-concept: lifting holdings into
+structured constraints would require either a separate case-law
+DSL or a substantial NLP pipeline, and either route risks fabricating
+structure that the holding text does not actually support. The cost
+of the choice is that queries like ``which sections has a holding
+narrowed in the last decade?'' cannot be answered from Yuho alone;
+the user must read the holding strings.
 
-\paragraph{No live SSO diffing.} The canonical scrape lives in
-\texttt{library/penal\_code/\_raw/act.json} as a snapshot. Amendments
-published by AGC are not picked up automatically. A scheduled re-scrape
-+ diff pass is on the roadmap.
+\paragraph{No live amendment ingestion.} The canonical scrape lives
+in \texttt{library/penal\_code/\_raw/act.json} as a snapshot taken
+at scrape-time (the version embedded with the artefact reflects the
+state on the dated commit in the project's git history). Amendments
+published subsequently by the Attorney-General's Chambers are not
+ingested automatically. A scheduled re-scrape with diff-against-prior
+detection is on the roadmap and is mostly an engineering exercise
+(the Phase~A scraper already supports running over a fresh URL); we
+have not invested the time because the Penal Code's amendment cadence
+is annual at most and the cost of a manual re-scrape is small.
 
-\paragraph{L3 reviewer is the encoder.} The 11-point checklist is
-mechanical, but the same author wrote the encodings and stamped them.
-External review by a Singapore-qualified lawyer is the natural next step
-for any encoding intended for use beyond proof of concept.
+\paragraph{L3 reviewer is the encoder.} The 11-point fidelity checklist
+the L3 reviewer applies (\S\ref{subsec:coverage}) is mechanical, but
+the same author wrote both the encodings and the dispatcher, and runs
+the checklist via agent sessions trained on encoding conventions the
+author defined. The L3 stamp should be read as ``the encoder
+believes the encoding is faithful, and the mechanical checklist did
+not flag a fidelity issue'', not as a legal opinion. External review
+by a Singapore-qualified lawyer is the natural next step for any
+encoding intended for use beyond proof of concept; we have not done
+it, and we acknowledge that a substantive sample of the L3-stamped
+encodings would benefit from independent inspection. The 23\% L3
+coverage figure is honest in this respect: it reflects what the
+existing reviewer chain has stamped, and we make no claim about what
+fraction of those would survive external counsel review unchanged.
 
-\paragraph{Verification scope.} Z3 and Alloy hookups currently target
-exception-priority well-formedness and bounded element-combination
-enumeration. Properties that require quantification over an unbounded
-number of historical events (e.g.\ ``no defendant has ever been convicted
-under both s299 and s300 for the same act'') are out of scope.
+\paragraph{Verification scope.} The Z3 and Alloy hookups
+(\S\ref{subsec:verify}) target a deliberately narrow set of properties:
+exception-priority well-formedness, bounded element-combination
+enumeration, and pairwise inter-section conflict detection. Properties
+that require quantification over an unbounded number of historical
+events (``no defendant has ever been convicted under both s299 and
+s300 for the same act'') are out of scope. Properties that require
+quantification over the universe of fact-patterns (``every act of
+deception that satisfies s415 also satisfies s420 if it induces
+property delivery'') are reachable in principle but require a
+case-fact ontology that Yuho does not currently provide. We note this
+not as a flaw but as a calibration: the verification stack is for
+checking that the \emph{encoding} is well-formed, not for adjudicating
+the \emph{law}.
+
+\paragraph{Editor surfaces are uneven.} The Language Server is the
+most complete surface; the MCP server has full tool/resource/prompt
+coverage; the VS Code extension is at v0.2 with snippets, status-bar
+indicator, and command palette but without a full library tree-view
+panel; the Microsoft Word add-in is in flight but not yet shipped.
+The unevenness reflects implementation order rather than design
+intent --- every surface should reach feature parity, and the
+remaining work is engineering rather than research.
+
+\paragraph{No formal grammar-completeness theorem.} We claim that
+Yuho can express every Penal Code section at L1+L2 fidelity,
+backed by the 524/524 coverage figure (\S\ref{subsec:coverage_eval}).
+This is empirical evidence rather than a proof: a future Penal Code
+amendment could in principle introduce a drafting pattern Yuho does
+not handle, in which case we would need to extend the grammar (the
+G1--G14 catalogue is what such extensions look like in practice).
+The notion of ``grammar completeness for a statute family'' is not
+something we know how to formalise in a way that survives drafting
+innovations; we report 524/524 as a coverage statistic rather than
+a soundness theorem.

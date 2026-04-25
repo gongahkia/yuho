@@ -39,30 +39,25 @@ comparable to top-tier OSS/knowledge projects.
 
 ### Research paper (LaTeX) `[~]`
 
-arXiv preprint, attributed, acmart `manuscript` mode. Skeleton landed under
-`paper/`; prose remains.
+arXiv preprint, attributed, acmart `manuscript` mode. Full first draft
+landed; outstanding work is empirical methodology runs and submission
+hardening.
 
-Done (this session):
-- [x] Scaffold `paper/` (`main.tex`, `references.bib`, `Makefile`, `.gitignore`, `README.md`, `scripts/gen_stats.py`).
-- [x] Eight section skeletons under `paper/sections/` with structured `\todo{}` markers.
-- [x] Three Mermaid figure sources under `paper/figures/` (architecture, penalty-tree, exception-priority).
-- [x] Stats auto-injection from `coverage.json` via `make stats` → `stats.tex`.
-- [x] `Makefile` targets: `paper / stats / figures / arxiv / watch / clean / distclean`.
-- [x] References seeded (Catala, lam4, LexScript, Akoma Ntoso, LegalRuleML, Z3, Alloy, tree-sitter, MCP).
+All 8 sections drafted (1,464 prose lines total under `paper/sections/`):
+intro 118, background 160, design 294, implementation 249, evaluation 226,
+related 254, limitations 108, conclusion 55.
 
-Remaining prose work:
-- [x] **Introduction** — full prose (~120 lines, 4 contribution para, jurisdictional rationale, roadmap).
-- [x] **Background** — full prose (~160 lines, three traditions: logic-prog, markup, modern DSLs; Catala/lam4/LexScript/LDOC subsections).
-- [x] **Design** — full prose (~294 lines, s415 worked example as Figure 1, statute-block + element + penalty (G8/G9/G12/G14) + exception (G13) + subsection (G5/G6) sections, full G1–G14 table).
-- [x] **Implementation** — full prose (~249 lines, parser/AST + 6 transpilers + Z3/Alloy verify + 3-tier coverage + LSP/MCP/VSCode + 4 fidelity diagnostics; SLOC table inline with real wc-line counts).
-- [x] **Evaluation** — full prose (~226 lines, coverage + structural-counts table + per-gap qualitative analysis + threats-to-validity). Three subsections (fidelity hit rate, throughput numbers, partial bar chart) carry `\todo{}` markers for the methodology runs that need to land before submission.
-- [x] **Related work** — full prose (~254 lines, two comparison matrices: 8-axis expressivity table + 6-column tooling/coverage table; per-system positioning subsections for Catala/lam4/LexScript/AKN+LegalRuleML/LDOC; explicit borrowings called out).
-- [ ] **Limitations** — already substantive; tighten + cross-link future-work in conclusion.
-- [ ] **Conclusion** — already drafted; revisit after evaluation numbers settle.
+Outstanding before submission:
+- [ ] **Evaluation methodology runs** — fill the `\todo{}` placeholders in `evaluation.tex`:
+    - Fidelity diagnostic hit-rate methodology (re-run 4 diagnostics over all 524 sections, spot-check 30 warnings per check)
+    - Encoding throughput numbers (median + p95 wall-clock; reconstructable from git timestamps + `.phase_d_l3_progress.jsonl`)
+    - Gap-trigger frequency bar chart (source data in `doc/PHASE_C_GAPS.md`)
 - [ ] Render Mermaid figures to PDF (requires `mmdc`), inspect, and tune layouts.
-- [ ] Verify all `\cite{}` keys resolve cleanly (some bib entries currently carry TODO notes — confirm canonical citations for `lam4`, `lexscript`, `ldoc`, `hammond1983rights`).
-- [ ] `scripts/repo_stats.py` — emit SLOC-per-layer for the implementation table.
-- [ ] (Optional) Add `make smoke` target with `article`-class fallback so build verifies on basic TeX Live without `acmart`.
+- [ ] Verify all `\cite{}` keys resolve cleanly. Some bib entries carry TODO notes — confirm canonical citations for `lam4`, `lexscript`, `ldoc`, `hammond1983rights`.
+- [ ] `scripts/repo_stats.py` — emit SLOC-per-layer JSON so the implementation Table 1 can be auto-regenerated rather than hand-typed.
+- [ ] External-reader pass on the full PDF; tighten phrasing and integrate cross-references where the prose has drift between sections.
+- [ ] Decide final venue (currently arXiv-attributed, `manuscript,nonacm` mode). For ICAIL/JURIX retargeting, swap documentclass per `paper/README.md`.
+- [ ] (Optional) `make smoke` target with `article`-class fallback so build verifies on basic TeX Live without `acmart` installed.
 
 ---
 

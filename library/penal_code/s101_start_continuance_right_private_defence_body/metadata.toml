@@ -16,4 +16,6 @@ summary = "States when the right of private defence of the body begins and how l
 source = "Singapore Penal Code 1871, Section 101"
 
 [verification]
+last_verified = "2026-04-25"
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr101-#pr101-"
+verified_by = "gpt-5.4 high (automated L3 reviewer)"

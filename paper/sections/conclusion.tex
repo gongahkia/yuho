@@ -1,31 +1,55 @@
 \section{Conclusion}
 \label{sec:conclusion}
 
-\todo{Tight three-paragraph close.}
+We presented Yuho, a statute-shaped domain-specific language, and used
+it to encode the entire Singapore Penal Code 1871: \statRawSections{}
+sections, \statLOnePass{}/\statRawSections{} passing parse-and-build at
+the L1+L2 coverage tiers, and \statLThreePass{} carrying a structured
+human-fidelity stamp at the strictest L3 tier (\S\ref{subsec:coverage_eval}).
+The exercise surfaced a catalogue of fourteen grammar gaps
+(\S\ref{subsec:gaps}), distributed across ten genuine grammar
+limitations that we resolved in the parser and four diagnostic-layer
+issues that we resolved by adding fidelity linters. The result is a
+complete, queryable, machine-checkable encoding of a production penal
+code, plus the tooling --- a tree-sitter parser, an immutable Python
+AST, six transpilers, a Z3-and-Alloy verification hookup, a Language
+Server, a Model Context Protocol server, and a VS Code extension ---
+that turns the encoding into an executable artefact rather than a
+paper exercise.
 
-We presented Yuho, a statute-shaped DSL, and used it to encode the
-entire Singapore Penal Code 1871 ($\statRawSections{}$ sections,
-$\statLOnePass{}$ passing parse-and-build, $\statLThreePass{}$ stamped
-at the strictest fidelity tier). The exercise surfaced fourteen
-grammar gaps, all either resolved in the grammar or rerouted to the
-diagnostic layer, and produced a complete, queryable, machine-checkable
-encoding of a working penal code.
+The longer-term thesis is that \emph{statute-as-source-of-truth} is a
+viable posture for legal infrastructure. The encoded artefact is what
+the lawyer, the tooling, and the verification stack all read;
+downstream renderings (controlled English, \LaTeX{}, Mermaid, DOCX)
+are generated, not authored. We do not claim that the \statRawSections{}
+encoded sections constitute publication-ready legal advice; the
+limitations on common-law-doctrine modelling, precedent integration,
+and external counsel review (\S\ref{sec:limitations}) are explicit
+about what the artefact is and is not. We do claim that the gap
+between a drafted penal section and an executable encoding is
+narrower than the existing literature suggests, and that closing it
+for one statute family at full coverage is mostly an engineering
+exercise once the grammar is right.
 
-The longer-term thesis is that statute-as-source-of-truth is a viable
-posture for legal infrastructure: the encoded artefact is what a
-lawyer, a tool, and a verifier all read; downstream rendering (English,
-\LaTeX{}, DOCX) is generated, not authored. We do not claim the
-\statRawSections{} encoded sections are publication-ready legal advice.
-We do claim that the gap between drafted statute and executable artefact
-is smaller than commonly assumed --- and that closing it is mostly an
-engineering exercise once the grammar is right.
+\paragraph{Future work.} Three concrete strands. First, the
+\textsf{G10} cross-section semantic resolver, which lifts the
+already-parsed \texttt{referencing} / \texttt{subsumes} / \texttt{amends}
+clauses into a real reference graph and unlocks LSP goto-definition,
+the LexScript-borrowed Tarjan-SCC analysis, and the lam4-borrowed
+\texttt{IS\_INFRINGED} predicate. Second, cross-jurisdiction
+generalisation: encoding a 50-section sample of the Indian Penal Code
+to test grammar fit and tooling reuse across the wider Anglo-Indian
+penal-code family. Third, deeper precedent integration: lifting
+case-law holding strings into structured constraints that modify
+element burden qualifiers when the matching predicate fires.
+A fourth, more speculative strand is scope composition in the
+Catala~\cite{catala2021} sense, layered on top of Yuho's statute
+blocks rather than replacing them, which would let abetment-style
+sections (s107--s120) wrap arbitrary base offences as functions.
 
-Future work has three concrete strands: (1) the G10 inter-section
-semantic hookup, which unlocks reference-graph reachability and named-norm
-references; (2) cross-jurisdiction generalisation, starting with the
-Indian Penal Code; and (3) deeper precedent integration, lifting
-holding strings into structured constraints over the element graph.
-
-\paragraph{Artefact availability.}
-The Yuho compiler, library, and tooling are available at
-\url{https://github.com/gongahkia/yuho}.
+\paragraph{Artefact availability.} The Yuho compiler, encoded library,
+and tooling are available under an open-source licence at
+\url{https://github.com/gongahkia/yuho}. The paper itself, including
+the build pipeline that injects coverage statistics into this very
+manuscript at compile time, is in the same repository under
+\texttt{paper/}.
