@@ -16,4 +16,6 @@ summary = "Section 114 deems an abettor who is present when the abetted act or o
 source = "Singapore Penal Code 1871, Section 114"
 
 [verification]
+last_verified = "2026-04-25"
+verified_by = "gpt-5.4 high (automated L3 reviewer)"
 sso_url = "https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr114-#pr114-"
