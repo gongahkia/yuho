@@ -88,8 +88,8 @@ open. Click to open the dashboard.
 | Setting | Default | Description |
 |---|---|---|
 | `yuho.lsp.enabled` | `true` | Launch `yuho lsp` on activation |
-| `yuho.lsp.command` | `yuho` | Path to the Yuho executable |
-| `yuho.lsp.args` | `["lsp"]` | Arguments to start the LSP |
+| `yuho.lsp.command` | `""` (auto) | Path to the Yuho executable. Empty = auto-resolve: prefers `<workspace>/.venv-lsp/bin/yuho`, falls back to `yuho` on PATH. |
+| `yuho.lsp.args` | `["lsp", "--workspace"]` | Arguments to start the LSP. The `--workspace` flag triggers whole-library diagnostic walks on startup. |
 
 ## Requirements
 

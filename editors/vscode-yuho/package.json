@@ -2,7 +2,7 @@
   "name": "yuho",
   "displayName": "Yuho",
   "description": "Language server, syntax highlighting, snippets, and commands for the Yuho legal DSL (Singapore Penal Code).",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "publisher": "yuho",
   "engines": { "vscode": "^1.75.0" },
   "categories": ["Programming Languages", "Linters", "Snippets"],
@@ -109,14 +109,14 @@
         },
         "yuho.lsp.command": {
           "type": "string",
-          "default": "yuho",
-          "description": "Path to the `yuho` executable."
+          "default": "",
+          "description": "Path to the `yuho` executable. Leave empty to auto-resolve: prefers `<workspace>/.venv-lsp/bin/yuho` (the project's pygls venv), falls back to `yuho` on PATH."
         },
         "yuho.lsp.args": {
           "type": "array",
-          "default": ["lsp"],
+          "default": ["lsp", "--workspace"],
           "items": { "type": "string" },
-          "description": "Arguments passed to the `yuho` binary to start the LSP server."
+          "description": "Arguments passed to the `yuho` binary to start the LSP server. The default `--workspace` flag enables whole-library diagnostic walks on startup."
         }
       }
     }

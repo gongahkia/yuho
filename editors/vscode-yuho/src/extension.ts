@@ -86,7 +86,25 @@ async function startLsp(
   context: ExtensionContext,
   config: ReturnType<typeof workspace.getConfiguration>,
 ): Promise<void> {
-  const command = config.get<string>("lsp.command", "yuho");
+  // Resolution order for the `yuho` binary:
+  //   1. Explicit user override via `yuho.lsp.command` setting.
+  //   2. `<workspaceFolder>/.venv-lsp/bin/yuho` (the project's bundled
+  //      Python-3.12 venv that has pygls installed).
+  //   3. `yuho` on PATH.
+  const explicit = config.get<string>("lsp.command", "");
+  let command = explicit;
+  if (!command) {
+    const folder = (workspace.workspaceFolders ?? [])[0];
+    if (folder) {
+      const venv = path.join(folder.uri.fsPath, ".venv-lsp", "bin", "yuho");
+      if (fs.existsSync(venv)) {
+        command = venv;
+      }
+    }
+    if (!command) {
+      command = "yuho";
+    }
+  }
   const args = config.get<string[]>("lsp.args", ["lsp"]);
 
   const serverOptions: ServerOptions = {
