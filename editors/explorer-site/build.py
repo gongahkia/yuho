@@ -255,6 +255,23 @@ table.refs { border-collapse: collapse; width: 100%; margin: 0.6em 0; }
 table.refs th, table.refs td { padding: 0.35em 0.55em; border-bottom: 1px solid var(--c-border); text-align: left; font-size: 0.92em; }
 table.refs th { color: var(--c-muted); font-weight: 500; font-size: 0.82em; text-transform: uppercase; letter-spacing: 0.04em; }
 
+table.cov-table th[data-sort] { cursor: pointer; user-select: none; }
+table.cov-table th[data-sort]:hover { color: var(--c-accent); }
+table.cov-table th[data-sort].asc::after  { content: " ▲"; font-size: 0.7em; color: var(--c-accent); }
+table.cov-table th[data-sort].desc::after { content: " ▼"; font-size: 0.7em; color: var(--c-accent); }
+table.cov-table td.cov-cell { text-align: center; font-family: ui-monospace, monospace; }
+table.cov-table td.cov-num,
+table.cov-table th.cov-num  { text-align: right; font-variant-numeric: tabular-nums; }
+input.cov-filter {
+  width: 100%;
+  margin: 0.4em 0 0.6em;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid var(--c-border);
+  border-radius: 6px;
+  background: var(--c-card);
+  color: var(--c-fg);
+}
+
 pre.src {
   background: #15151c;
   color: #d6d6e0;
@@ -520,6 +537,56 @@ _SEARCH_JS = r"""
     render(filtered);
   });
 })();
+
+// Coverage table filter + sort. No-op when the table isn't present.
+(function () {
+  const table = document.getElementById('coverage-table');
+  const filter = document.getElementById('coverage-filter');
+  if (!table) return;
+  const tbody = table.tBodies[0];
+  const rows = Array.from(tbody.rows);
+
+  if (filter) {
+    filter.addEventListener('input', () => {
+      const q = filter.value.trim().toLowerCase();
+      for (const tr of rows) {
+        tr.style.display = !q || tr.textContent.toLowerCase().includes(q) ? '' : 'none';
+      }
+    });
+  }
+
+  let sortState = { col: -1, dir: 1 };
+  const heads = table.tHead.rows[0].cells;
+  for (let i = 0; i < heads.length; i++) {
+    const th = heads[i];
+    if (!th.dataset.sort) continue;
+    th.addEventListener('click', () => {
+      const dir = (sortState.col === i) ? -sortState.dir : 1;
+      sortState = { col: i, dir };
+      for (const h of heads) h.classList.remove('asc', 'desc');
+      th.classList.add(dir > 0 ? 'asc' : 'desc');
+      const kind = th.dataset.sort;
+      const visibleRows = rows.slice();
+      visibleRows.sort((a, b) => {
+        const av = a.cells[i].textContent.trim();
+        const bv = b.cells[i].textContent.trim();
+        let cmp;
+        if (kind === 'num') {
+          // Pull leading integer; non-numeric sorts as -1.
+          const an = parseFloat(av) || 0;
+          const bn = parseFloat(bv) || 0;
+          cmp = an - bn;
+        } else if (kind === 'bool') {
+          cmp = (av === '✓' ? 1 : 0) - (bv === '✓' ? 1 : 0);
+        } else {
+          cmp = av.localeCompare(bv);
+        }
+        return cmp * dir;
+      });
+      tbody.replaceChildren(...visibleRows);
+    });
+  }
+})();
 """
 
 
@@ -598,6 +665,27 @@ def render_index(index: Dict[str, Any]) -> str:
 
 def render_coverage(index: Dict[str, Any]) -> str:
     t = index["totals"]
+
+    def _badge_for_l3(s: str) -> str:
+        return f'<span class="badge l3-{_esc(s)}">{_esc(s)}</span>'
+
+    rows = []
+    for r in index["sections"]:
+        cell_l1 = "✓" if r.get("L1") else "—"
+        cell_l2 = "✓" if r.get("L2") else "—"
+        l3 = r.get("L3", "")
+        rows.append(
+            f'<tr>'
+            f'<td><a href="/s/{_esc(r["number"])}.html">s{_esc(r["number"])}</a></td>'
+            f'<td>{_esc(r.get("title",""))}</td>'
+            f'<td class="cov-cell">{cell_l1}</td>'
+            f'<td class="cov-cell">{cell_l2}</td>'
+            f'<td>{_badge_for_l3(l3) if l3 else "—"}</td>'
+            f'<td class="cov-num">{_esc(r.get("elements",0))}</td>'
+            f'<td class="cov-num">{_esc(r.get("outgoing_refs",0))}/{_esc(r.get("incoming_refs",0))}</td>'
+            f'</tr>'
+        )
+
     body = f"""
 <h2>Coverage dashboard</h2>
 <p>Latest snapshot regenerated from <code>library/penal_code/_coverage/coverage.json</code> at corpus build time.</p>
@@ -616,6 +704,24 @@ def render_coverage(index: Dict[str, Any]) -> str:
   <li><strong>L2 (lint)</strong> — the AST builds, semantic checks pass, and the four fidelity diagnostics emit no warnings.</li>
   <li><strong>L3 (human stamp)</strong> — an 11-point checklist over the encoded <code>.yh</code> against the canonical SSO text. Stamping happens via <code>scripts/phase_d_l3_review.py</code>; flags surface here and in <a href="/flags.html">Flags</a>.</li>
 </ul>
+
+<h2 id="per-section">Per-section coverage</h2>
+<p class="muted" style="font-size:0.9em">Type below to filter; columns are sortable by clicking the header.</p>
+<input id="coverage-filter" type="search" autocomplete="off"
+       placeholder="Filter by section number, title, or L3 status…"
+       aria-controls="coverage-table" class="cov-filter">
+<table id="coverage-table" class="refs cov-table">
+  <thead><tr>
+    <th data-sort="num">#</th>
+    <th data-sort="text">Title</th>
+    <th data-sort="bool">L1</th>
+    <th data-sort="bool">L2</th>
+    <th data-sort="text">L3</th>
+    <th data-sort="num" class="cov-num">Elements</th>
+    <th data-sort="text" class="cov-num">Refs out/in</th>
+  </tr></thead>
+  <tbody>{''.join(rows)}</tbody>
+</table>
 """
     return _page("Yuho — Coverage dashboard", body, active_nav="coverage")
 
