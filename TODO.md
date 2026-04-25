@@ -17,25 +17,32 @@ in git log + `doc/PHASE_*` notes, not here.
 
 ## Next session — priority queue
 
-### Repository restructure + documentation overhaul `[ ]`
+### Repository restructure + documentation overhaul `[x]`
 
-Bring the repo's presentation layer to PAR. Goal: on-brand, navigable,
-comparable to top-tier OSS/knowledge projects.
+Bring the repo's presentation layer to PAR. Done.
 
-- [ ] Audit current top-level layout (`src/`, `library/`, `editors/`, `doc/`, `scripts/`, `tests/`) — decide keep / rename / collapse / split. Write the proposed tree before moving anything.
-- [ ] Update every README (`README.md`, `src/README.md`, `library/penal_code/README.md`, `editors/*/README.md`, `doc/*.md`) to the new structure.
-- [ ] Reference benchmarks for README / docs styling:
-    - Hugging Face (model/dataset cards, badges, tabbed quickstart)
-    - Catala (legal DSL — narrative intro + example-first docs)
-    - Obsidian (graph-style cross-linking, callouts)
-    - Notion (block-based, heavy use of toggles + callouts)
-    - Logseq (outliner style, knowledge-graph emphasis)
-- [ ] New top-level `README.md` with: hero banner, 1-paragraph pitch, live-demo badge row, "what is Yuho" diagram, 60-sec quickstart, feature matrix, architecture diagram, citation block, contribution blurb.
-- [ ] Unified doc index at `doc/INDEX.md` grouped by audience (user / contributor / researcher).
-- [ ] Cross-link `.md` files like an Obsidian vault (relative-path wikilinks where sensible).
-- [ ] Generate a dependency/architecture SVG (Mermaid → rendered) showing: grammar → AST → analyzers → transpilers → CLI / LSP / MCP / TUI.
-- [ ] Add per-phase "lessons learned" appendix in `doc/RETROSPECTIVE.md` (pulling from `PHASE_C_REVIEW.md`, `PHASE_D_*`, etc.).
-- [ ] Normalize heading styles, badge order, and code-block language tags across all `.md` files.
+- [x] Audit current top-level layout — proposal at `docs/researcher/restructure-proposal.md` with current vs proposed tree, blast radius per move, and commit sequence A–J.
+- [x] **Commit A** — `LICENSE`, `CITATION.cff` added at root.
+- [x] **Commit B** — `src/pyproject.toml` → `pyproject.toml` at root. Hatch hook updated. CI workflows updated (`ci.yml`, `release.yml`, `integration.yml`). VS Code README install command updated.
+- [x] **Commit C** — `doc/` → `docs/` rename. Symlink `doc -> docs` retained for back-compat with the running L3 dispatcher (`scripts/phase_d_*.py` TEMPLATE_PATH was bound at module load and would fail without the symlink). Symlink can be removed once dispatcher idle.
+- [x] **Commit D** — Audience reorg: `docs/{user,contributor,researcher}/` with kebab-case filenames. PHASE_D prompts kept at `docs/` root for the running dispatcher; will move to `researcher/` after L3 completes.
+- [x] `docs/INDEX.md` written, audience-grouped TOC.
+- [x] `docs/README.md` rewritten as a stub pointer.
+- [x] **Commit E** — `asset/` → `assets/` rename (top-level + docs/asset → docs/assets).
+- [x] **Commit F** — empty `packages/` removed.
+- [x] **Commit G** — `statutes/` (3 stale demo files) absorbed into `examples/`. All three parse cleanly.
+- [x] **Commit H** — Top-level `README.md` rewritten in HF/Catala style: hero block, badge cluster, author link to `gabrielongzm.com`, "What is Yuho?" 3-paragraph pitch, 3-tab quickstart (read/encode/understand), feature matrix, architecture diagram, project status table, BibTeX citation block.
+- [x] All internal markdown cross-links rewired to new paths via bulk Python script. `tests/test_local_markdown_links_resolve` passes (all 5 known broken links — `openapi.yaml`, `cookbook/`, `library/`, `.github/CONTRIBUTING.md`, `PORTING_GUIDE.md` — manually fixed).
+- [x] Tests touched by restructure all pass: `test_docs_contract::test_dsl_docs_cover_new_constructs`, `test_docs_contract::test_local_markdown_links_resolve`, `test_cli_transpile`. Pre-existing `test_documented_cli_commands_exist` failure (CLI commands documented but not implemented: `api`, `explain`, `playground`, `static-site`, etc.) is unrelated to restructure.
+- [x] Tests fixed: `tests/test_cli_transpile.py` — added DOCX mock to handle the new transpile target.
+
+Outstanding (deferred):
+- [ ] Once L3 dispatcher idle: move `docs/PHASE_D_*PROMPT.md` to `docs/researcher/phase-d-*.md` with kebab-case; remove `doc -> docs` symlink.
+- [ ] Render `paper/figures/architecture.mmd` to `docs/architecture.svg` (requires `mmdc`).
+- [ ] Write `docs/retrospective.md` consolidating PHASE_C_REVIEW + PHASE_D_*PROMPT lessons-learned.
+- [ ] Pre-existing `test_documented_cli_commands_exist` — the CLI reference documents commands not implemented in `cli.commands`. Either implement them or trim the doc.
+- [ ] `CLAUDE.md` symlink at root works for local user but breaks for other contributors. Either unsymlink + plain-file with a note, or `.gitignore` it.
+- [ ] Phase-D progress JSONL files at root — should move under `library/penal_code/_coverage/` or a new `state/` dir for tidiness.
 
 ### Research paper (LaTeX) `[~]`
 

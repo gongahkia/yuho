@@ -1,132 +1,160 @@
-[![](https://img.shields.io/badge/yuho_5.0-passing-%2398FB98)](https://github.com/gongahkia/yuho/releases/tag/5.0) 
-![](https://github.com/gongahkia/yuho/actions/workflows/ci.yml/badge.svg)
-![](https://github.com/gongahkia/yuho/actions/workflows/release.yml/badge.svg)
-[![PyPI](https://img.shields.io/pypi/v/yuho)](https://pypi.org/project/yuho/)
-
-# `Yuho`  
-
 <p align="center">
-    <img src="./assets/logo/yuho_mascot.png" width=40% height=40%>
+  <img src="./assets/logo/yuho_mascot.png" width="200" alt="Yuho mascot"/>
 </p>
 
-Yuho is a [domain-specific language](https://en.wikipedia.org/wiki/Domain-specific_language) that simplifies [legalese](https://www.merriam-webster.com/dictionary/legalese) by providing a programmatic representation of Singapore Law.  
+<h1 align="center">Yuho</h1>
 
-Current applications are focused on [Singapore Criminal Law](https://sso.agc.gov.sg/act/pc1871) but really can be applied to any [jurisdiction](https://en.wikipedia.org/wiki/Jurisdiction) that is [statute](https://www.merriam-webster.com/dictionary/statute)-reliant.
+<p align="center">
+  <em>A domain-specific language for encoding statutes as executable, machine-checkable artefacts.</em>
+</p>
 
-## Rationale
+<p align="center">
+  <a href="https://github.com/gongahkia/yuho/actions/workflows/ci.yml"><img src="https://github.com/gongahkia/yuho/actions/workflows/ci.yml/badge.svg" alt="CI"/></a>
+  <a href="https://github.com/gongahkia/yuho/actions/workflows/release.yml"><img src="https://github.com/gongahkia/yuho/actions/workflows/release.yml/badge.svg" alt="Release"/></a>
+  <a href="https://pypi.org/project/yuho/"><img src="https://img.shields.io/pypi/v/yuho" alt="PyPI"/></a>
+  <a href="./LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"/></a>
+  <img src="https://img.shields.io/badge/python-3.10%2B-blue.svg" alt="Python 3.10+"/>
+  <img src="https://img.shields.io/badge/L1%2BL2-524%2F524-brightgreen.svg" alt="L1+L2 coverage"/>
+  <img src="https://img.shields.io/badge/L3-122%2F524-orange.svg" alt="L3 coverage"/>
+</p>
 
-The law is innately complex.  
+<p align="center">
+  <a href="https://gabrielongzm.com">Gabriel Ong Zhe Mian</a>
+  &nbsp;·&nbsp;
+  <a href="./paper/">Paper</a>
+  &nbsp;·&nbsp;
+  <a href="./docs/INDEX.md">Docs</a>
+  &nbsp;·&nbsp;
+  <a href="./library/penal_code/">Encoded library</a>
+</p>
 
-[Statutes](https://sso.agc.gov.sg/) are not always easy to understand, especially for incoming law students new to [legalese](https://www.merriam-webster.com/dictionary/legalese) and its [logical structure](https://law.stanford.edu/wp-content/uploads/2018/04/ILEI-Forms-of-Legal-Reasoning-2014.pdf).  
+---
 
-Criminal Law is often a [foundational module](https://law.smu.edu.sg/programmes/core-courses-description) most students take in their first year of law school. In particular, Singapore Criminal Law is nearly entirely statute-based, largely focusing on [Singapore's 1871 Penal Code](https://sso.agc.gov.sg/Act/PC1871).
+## What is Yuho?
 
-Yuho is a DSL that seeks to *help law students* better understand statutes by providing a flexible syntax which affords a [rules-as-code](https://www.beinformed.com/what-is-rules-as-code/) representation of Singapore Criminal Law. 
+Yuho is a statute-shaped DSL: the top-level construct is a `statute N { … }`
+block with first-class fields for elements, penalties, illustrations,
+exceptions, and amendment lineage. The grammar tracks how penal code is
+actually drafted, so encoding a section is line-for-line with reading it.
 
-By allowing users to decide how to represent statutory provisions in `.yh` code, the hope is that the statute's key elements *(and their underlying conditional relationships)* surface themselves. These representations can be coarse or granular, entirely scoped by each person's use-case.
+The proof of concept is a complete encoding of the **Singapore Penal Code
+1871** — all 524 sections, 524 passing parse-and-build (L1+L2), 122
+human-stamped at the strictest fidelity tier (L3). Mass-encoding the full
+code surfaced fourteen distinct grammar gaps (G1–G14), all either resolved
+in the parser or rerouted to a fidelity-diagnostic linter; the catalogue
+is documented in [`docs/researcher/phase-c-gaps.md`](./docs/researcher/phase-c-gaps.md).
 
-### For law students
+Around the language sits a complete toolchain — six transpilers, an LSP, an
+MCP server, a VS Code extension, and Z3 / Alloy verification hookups —
+described below.
 
-`Yuho` breaks down statutes into their constituent elements and visualises the logical relationships between them.
+---
 
-* **Statute modelling**: Represent any statute's definitions, elements (actus reus, mens rea, circumstance), penalties, and illustrations in structured `.yh` files
-* **Plain English output**: Ttranspile your model back to a structured English explanation to verify your understanding
-* **Fact pattern testing**: Model hypothetical scenarios and evaluate them against statute definitions
-* **Diagrams**: Generate Mermaid mindmaps and flowcharts showing how a statute's elements relate
-* **Interactive wizard**: `yuho wizard` guides you through creating a statute model step-by-step, no code required
-* **REPL**: `yuho repl` lets you experiment with statute models interactively
+## Quickstart
 
-### For developers
+### I want to *read* an encoded statute
 
-`Yuho` provides the infrastructure to extend your existing legal tech tooling.
-
-| Target | Usage |
-| :--- | :--- |
-| JSON | Machine-readable structured representation for tooling integration |
-| English | Human-readable plain English explanation of statutory logic |
-| LaTeX | PDF generation of formatted statute documents |
-| Alloy | Formal verification with Alloy Analyzer |
-| Mermaid | Diagrammatic representations of statutory logic *(mindmap, flowchart)* |
-
-## Nerd stuff
-
-For those interested, `Yuho` provides the following.
-
-* **Tree-sitter based parser** for robust, incremental parsing with excellent error recovery
-* **Full LSP implementation** with diagnostics, completion, hover, go-to-definition, and references
-* **Property-based testing** with [Hypothesis](https://hypothesis.readthedocs.io/) for thorough validation
-* **Formal verification** integration with [Alloy](https://alloytools.org/) and [Z3](https://github.com/Z3Prover/z3)
-* **MCP server** exposing statute data, the strict encoding prompt, grammar reference, and validation tools to AI clients via the Model Context Protocol
-
-Yuho is [grammatically-validated](https://www.usna.edu/Users/cs/wcbrown/courses/F19SI413/lec/l07/lec.html), [exception-validated](https://www.reddit.com/r/learnjavascript/comments/y6663u/difference_between_input_validation_and_exception/), and [language-agnostic](https://softwareengineering.stackexchange.com/questions/28484/what-is-language-agnosticism-and-why-is-it-called-that), transpiling from one formally-specified source of truth to multiple target outputs.
-
-Want to find out more? See Yuho's [documentation](#documentation).
-
-### Documentation
-
-* [Language specification](docs/researcher/syntax.md)
-* [Grammar specification](./src/tree-sitter-yuho/grammar.js)
-* [Formal verification](./tests)
-* [Library statutes](./library/penal_code)
-* [Examples](./examples)
-
-## Quickstart (your first 60 seconds with `Yuho`)
-
-```console
-$ pip install yuho
-$ yuho wizard
-$ yuho check my_statute.yh
-$ yuho transpile my_statute.yh -t english
-$ yuho transpile my_statute.yh -t mermaid
+```sh
+git clone https://github.com/gongahkia/yuho && cd yuho
+cat library/penal_code/s415_cheating/statute.yh           # the source
+yuho transpile -t english library/penal_code/s415_cheating/statute.yh
 ```
 
-## If you have 5 minutes...
+### I want to *encode* a new statute
 
-Understand the basics of `Yuho` at [`5_MINUTES.md`](docs/user/5-minutes.md).
+```sh
+pip install -e . && pip install -e '.[lsp,mcp]'
+yuho --version                                            # 5.1.0
+yuho check examples/simple_statute.yh                     # validate
+```
 
-## Contribute
+VS Code: install the extension under `editors/vscode-yuho/`, open a `.yh`
+file, hover over a `statute N` header to see its canonical SSO link and
+coverage badges. See [`editors/vscode-yuho/README.md`](./editors/vscode-yuho/README.md).
 
-Yuho is open-source. Contribution guidelines are found at [`CONTRIBUTING.md`](./.github/CONTRIBUTING.md).
+### I want to *understand* the design
 
-## References
+Read the paper draft in [`paper/`](./paper/) — full prose treatment of
+the grammar, the toolchain, and the empirical findings from mass-encoding.
+The 5-minute tour at [`docs/user/5-minutes.md`](./docs/user/5-minutes.md)
+covers the same ground in less depth.
 
-### Analogues
+---
 
-Yuho takes much inspiration from the following projects.  
+## Feature matrix
 
-* [Natural L4](https://github.com/smucclaw/dsl): Language with an English-like syntax that transpiles to multiple targets, focused on codification of Singapore law at large and Contract Law in specific.
-* [lam4](https://github.com/smucclaw/lam4): Functional DSL for law from SMU CCLAW (Natural L4 successor), with Haskell backend, Grisette/Z3 solver-aided verification, and modular reparation clauses built on an `IS_INFRINGED` predicate.
-* [Catala](https://github.com/CatalaLang): Language syntax that explicitly mimicks logical structure of the Law, focused on general Socio-fiscal legislature in most jurisidictions.
-* [Blawx](https://github.com/Lexpedite/blawx): User-friendly web-based tool for Rules as Code, a declarative logic knowledge representation tool for encoding, testing and using rules.
-* [Morphir](https://github.com/finos/morphir): Technology agnostic toolkit for digitisation of business models and their underlying decision logic, enabling automation in fintech.
-* [OpenFisca](https://github.com/openfisca/openfisca-core): Open-source platform for modelling social policies through tax and benefits systems across jurisdictions.
-* [Docassemble](https://docassemble.org/): Document automation system for generating guided interview documents through a question-and-answer interface.
-* [Akoma Ntoso](https://github.com/oasis-open/legaldocml-akomantoso): Standardised XML schema for representing parliamentary, legislative and judiciary documents across jurisdictions.
-* [LexScript](https://github.com/codeNinja62/LexScript): Go DSL that compiles state-machine contract definitions to legally-formatted Markdown and PDF, enforcing contract completeness and deadlock-freedom via Tarjan SCC + BFS reachability analysis over the state graph.
-* [LDOC](https://github.com/arismoko/LDOC): Plain-text DSL for authoring legal documents that compiles to real DOCX/OOXML, using directive syntax with JSON5 arguments, recovery-oriented diagnostics, and an LSP for in-editor drafting.
+| Surface | Capability |
+|---|---|
+| **Grammar** | Tree-sitter, 14 grammar gaps closed, deontic types, Catala-style exception priority, nested penalty combinators |
+| **Transpilers** | JSON · controlled English · LaTeX · Mermaid · Alloy · DOCX |
+| **Editors** | LSP (hover, inlay hints, completion, code lens, fidelity diagnostics) · VS Code extension · Microsoft Word add-in (planned) |
+| **AI integration** | MCP server (tools, resources, prompts) usable from Claude Desktop / Claude Code / Codex CLI / Cursor |
+| **Verification** | Z3 (exception-priority + cross-section conflict) · Alloy (bounded element-combination enumeration) |
+| **Coverage harness** | L1 (parse) · L2 (build + lint + fidelity) · L3 (11-point human audit) |
+| **Library** | 524 / 524 sections of the SG Penal Code 1871 encoded, stamped, and indexed |
 
-### Research
+---
 
-Yuho stands on the shoulders of past research and academia.  
+## Architecture
 
-* [A Logic for Statutes](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3088206) by Sarah B Lawsky
-* [An End-to-End Pipeline from Law Text to Logical Formulas](https://ebooks.iospress.nl/volumearticle/62060) by Aarne Ranta, Inari Listenmaa, Jerrold Soh and Meng Weng Wong
-* [Symbolic and automatic differentiation of languages](https://dl.acm.org/doi/10.1145/3473583) by Conal Elliott
-* [Legal Rules, Legal Reasoning, and Nonmonotonic Logic](https://philpapers.org/rec/RIGLRL-2) by Adam W Rigoni
-* [Law and logic: A review from an argumentation perspective](https://www.sciencedirect.com/science/article/pii/S0004370215000910) by Henry Prakken and Giovanni Sartor
-* [Rules as code: Seven levels of digitisation](https://ink.library.smu.edu.sg/cgi/viewcontent.cgi?article=5051&context=sol_research) by Meng Weng Wong
-* [Defeasible semantics for L4](https://ink.library.smu.edu.sg/cclaw/5/) by Guido Governatori and Meng Weng Wong
-* [CLAWs and Effect](https://www.lawsociety.org.sg/publication/claws-and-effect/) by Alexis N Chun
-* [The LKIF Core Ontology of Basic Legal Concepts](https://ceur-ws.org/Vol-321/paper3.pdf) by Rinke Hoekstra, Joost Breuker, Marcello Di Bello and Alexander Boer
-* [ChatGPT, Large Language Models, and Law](https://fordhamlawreview.org/issues/chatgpt-large-language-models-and-law/) by Harry Surden
-* [Scaling Laws for Neural Language Models](https://arxiv.org/abs/2001.08361) by Jared Kaplan, Sam McCandlish, Tom Henighan, Tom B Brown, Benjamin Chess, Rewon Child, Scott Gray, Alec Radford, Jeffrey Wu and Dario Amodei
-* [Large Language Models in Law: A Survey](https://arxiv.org/pdf/2312.03718) by Jinqi Lai, Wensheng Gan, Jiayang Wu, Zhenlian Qi and Philip S Yu
-* [Automating Defeasible Reasoning in Law with Answer Set Programming](http://platon.etsii.urjc.es/~jarias/GDE-2022/GDE-07.pdf) by Lim How Khang, Avishkar Mahajan, Martin Strecker and Meng Weng Wong
-* [User Guided Abductive Proof Generation for Answer Set Programming Queries](https://dl.acm.org/doi/10.1145/3551357.3551383) by Avishkar Mahajan, Martin Strecker and Meng Weng Wong
-* [Computer-Readable Legislation Project: What might an IDE-like drafting tool look like?](https://osf.io/uk2vy/) by Matthew Waddington, Laurence Diver and Tin San Leon Qiu
-* [Normalized Legal Drafting and the Query Method](https://repository.law.umich.edu/articles/29/) by Layman E Allen and C Rudy Engholm
-* [An IDE-like tool for legislative drafting](https://crlp-jerseyldo.github.io/work/an-ide-for-legislation) by crlp-jerseyldo.github.io
-* [The Grammar And Structure Of Legal Texts](https://academic.oup.com/edited-volume/34877/chapter-abstract/298341735?redirectedFrom=fulltext) by Risto Hiltunen
-* [Does Justice Have a Syntax?](https://www.jstor.org/stable/27073484) by Steven L Winter
-* [The syntax of legal exceptions: how the absence of proof is a proof of absence thereof](https://www.tandfonline.com/doi/abs/10.1080/20414005.2017.1283567) by Kyriakos N Kotsoglou
-* [The British Nationality Act as a logic program](https://www.semanticscholar.org/paper/The-British-Nationality-Act-as-a-logic-program-Sergot-Sadri/16d480717a1d233ae94b09e3b983d8cc96437644) by M Sergot, F Sadri, R Kowalski, F Kriwaczek, P Hammond and H T Cory
+```
+.yh source ──▶ tree-sitter parser ──▶ Python AST ──▶ analyser stack
+                                                        │
+                                       ┌────────────────┼────────────────┐
+                                       ▼                ▼                ▼
+                                   Transpilers      Verification      Editor surfaces
+                              (JSON/EN/TeX/MMD/         (Z3, Alloy)       (LSP, MCP, VSCode)
+                               Alloy/DOCX)
+```
+
+A rendered SVG version lives at `paper/figures/architecture.mmd` and
+will land at `docs/architecture.svg` once the Mermaid CLI build runs.
+
+---
+
+## Project status
+
+| Metric | Value |
+|---|---|
+| Sections encoded | 524 / 524 |
+| L1 (parse) | 524 / 524 |
+| L2 (build + lint) | 524 / 524 |
+| L3 (human-stamped) | 122 / 524 (long tail in progress) |
+| Grammar gaps (G1–G14) | 10 fixed · 2 not-a-gap · 1 lint · 1 deferred |
+| Implementation SLOC | ~38.7k Python + 900 grammar.js |
+| Library SLOC | ~16.4k `.yh` |
+
+Numbers regenerate from `library/penal_code/_coverage/coverage.json` via
+`scripts/coverage_report.py`.
+
+---
+
+## Citation
+
+If you use Yuho or its encoded library in academic work, please cite:
+
+```bibtex
+@software{yuho_2026,
+  author  = {Gabriel Ong Zhe Mian},
+  title   = {Yuho: A Domain-Specific Language for Encoding the Singapore
+             Penal Code as Executable Statute},
+  year    = {2026},
+  url     = {https://github.com/gongahkia/yuho},
+  version = {5.1.0}
+}
+```
+
+A `CITATION.cff` is provided at the repo root for tools that consume that
+format.
+
+---
+
+## Contributing
+
+See [`.github/CONTRIBUTING.md`](./.github/CONTRIBUTING.md). Issues and pull
+requests welcome; the [`todo.md`](./todo.md) file tracks current
+priorities and `[x]`-marks completed work.
+
+## License
+
+[MIT](./LICENSE).
