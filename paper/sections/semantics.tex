@@ -1,0 +1,331 @@
+\section{Formal semantics}
+\label{sec:semantics}
+
+\S\ref{sec:design} presents Yuho informally; this section pins the
+operational semantics for the fragment of the language the
+empirical claims rely on. We give small-step rules for element
+evaluation, prioritised-exception precedence in the
+Catala~\cite{catala2021} default-logic style, the cross-section
+composition predicates \texttt{apply\_scope} and
+\texttt{is\_infringed}, and the penalty algebra. The body of this
+section is the two-page summary reviewers can follow without
+flipping to the appendix; the complete inference rules
+(including the elided cases for ``mens rea'' typed-intent
+variants, temporal-ordering constraints, and the burden-of-proof
+qualifier) appear in Appendix~\ref{app:semantics-full}. We
+deliberately omit any mechanisation here --- the soundness
+theorem of \S\ref{sec:soundness} rests on the pen-and-paper rules
+below; a Coq mechanisation is left as future work and noted in
+\S\ref{sec:limitations}.
+
+\subsection{Preliminaries}
+\label{subsec:semantics-prelim}
+
+\paragraph{Syntactic domains.} A Yuho \emph{module} $M$ is a
+multiset of \emph{statutes}; a statute $S = \langle n, D,
+\mathit{Es}, P, \mathit{Xs}, \mathit{Subs} \rangle$ where $n$ is
+its section number (a string like \texttt{300} or
+\texttt{376AA}), $D$ is a set of named definitions, $\mathit{Es}$
+is a tree of element nodes and groups, $P$ is an optional penalty
+algebra term, $\mathit{Xs}$ is a list of exception nodes carrying
+priority and \texttt{defeats} edges, and $\mathit{Subs}$ is a
+sequence of subsection sub-statutes.
+
+An \emph{element} $e$ is a triple $\langle \kappa, x, \rho
+\rangle$ where $\kappa \in \{\textsf{actus\_reus},
+\textsf{mens\_rea}, \textsf{circumstance}\}$ tags the doctrinal
+kind, $x$ is the element's identifier, and $\rho$ is its
+free-text description (semantically opaque to the rules below).
+An \emph{element group} $g = \langle c, \vec{m} \rangle$ has a
+combinator $c \in \{\textsf{all\_of}, \textsf{any\_of}\}$ and an
+ordered sequence of member nodes (each a leaf $e$ or a nested
+group). \emph{Exception} $\xi = \langle \ell, \gamma, \delta,
+\pi \rangle$ has a label $\ell$, a guard expression $\gamma$
+(a boolean predicate over facts), an optional set $\delta$ of
+sibling-exception labels it defeats, and an optional priority
+$\pi \in \mathbb{N}$ (lower is higher-priority).
+
+\paragraph{Semantic domains.} A \emph{fact pattern} $F$ is a
+finite map from element identifiers to truth values, augmented
+with the typed constants the encoded library uses
+(\textsf{Intent} enums, money quantities, durations). The
+\emph{statute environment} $\Sigma$ is a finite map from section
+numbers to statute terms; given $M$, $\Sigma_M = \{\, n \mapsto S
+\mid S \in M, S = \langle n, \ldots \rangle \,\}$. Evaluation
+takes place under a context $\Gamma = \langle F, \Sigma \rangle$.
+
+\paragraph{Judgements.} We define five judgements, in increasing
+order of compositional depth:
+
+\begin{itemize}
+  \item $\Gamma \vdash e \Downarrow b$ — element $e$ evaluates to
+    boolean $b$ under context $\Gamma$.
+  \item $\Gamma \vdash g \Downarrow b$ — element group $g$
+    evaluates to $b$.
+  \item $\Gamma \vdash \xi \Downarrow_{\!\textsc{f}} b$ —
+    exception $\xi$ \emph{fires} as $b$.
+  \item $\Gamma \vdash S \Downarrow_{\!\textsc{c}} b$ — section
+    $S$ produces a conviction outcome $b$.
+  \item $\Gamma \vdash p \Downarrow_{\!\textsc{p}} \mathcal{R}$ —
+    penalty term $p$ reduces to a sentence range $\mathcal{R}$.
+\end{itemize}
+
+We elide explicit threading of $\Gamma$ when it does not change
+across rule premises. All judgements are \emph{total}: the rules
+below cover every well-formed input, and the encoded library's
+type-checker (\S\ref{sec:design}) rejects any module that would
+land outside this coverage.
+
+\subsection{Element evaluation}
+\label{subsec:semantics-elements}
+
+The element-kind tag $\kappa$ is doctrinally meaningful but
+semantically inert at the structural layer: under
+\textsc{Eval-Elem} below, all three kinds reduce by the same fact
+lookup. The downstream verifier
+(\S\ref{sec:implementation} Z3 backend) refines this with intent
+typing for $\textsf{mens\_rea}$ elements; that refinement is
+captured in Appendix~\ref{app:semantics-full}.
+
+\begin{equation*}
+\inferrule[Eval-Elem]
+  {F(x) = b}
+  {\langle F, \Sigma \rangle \vdash \langle \kappa, x, \rho
+   \rangle \Downarrow b}
+\qquad
+\inferrule[Eval-Elem-Missing]
+  {x \notin \mathrm{dom}(F)}
+  {\langle F, \Sigma \rangle \vdash \langle \kappa, x, \rho
+   \rangle \Downarrow \bot}
+\end{equation*}
+
+\textsc{Eval-Elem-Missing} is the key rule a reviewer should
+notice: if a fact pattern omits an element identifier the section
+asks about, the element evaluates to $\bot$. This is the
+fail-closed reading the encoder relies on: the prosecution must
+supply each element, not the encoder.
+
+Element groups distribute over their member judgements:
+
+\begin{equation*}
+\inferrule[Eval-AllOf]
+  {\Gamma \vdash m_1 \Downarrow b_1 \quad \cdots \quad
+   \Gamma \vdash m_k \Downarrow b_k}
+  {\Gamma \vdash \langle \textsf{all\_of}, \vec{m} \rangle
+   \Downarrow b_1 \wedge \cdots \wedge b_k}
+\end{equation*}
+
+\begin{equation*}
+\inferrule[Eval-AnyOf]
+  {\Gamma \vdash m_1 \Downarrow b_1 \quad \cdots \quad
+   \Gamma \vdash m_k \Downarrow b_k}
+  {\Gamma \vdash \langle \textsf{any\_of}, \vec{m} \rangle
+   \Downarrow b_1 \vee \cdots \vee b_k}
+\end{equation*}
+
+The top-level element tree of a statute is implicitly
+$\textsf{all\_of}$. We write $\Gamma \vdash \mathit{Es}
+\Downarrow_{\!\textsc{el}} b$ for the resulting truth value of
+the section's element conjunction.
+
+\subsection{Exception precedence}
+\label{subsec:semantics-exceptions}
+
+The Catala~\cite{catala2021} default-logic pattern: each
+exception carries an explicit guard and is ordered by an explicit
+priority DAG. Yuho extends this slightly: in addition to a
+numeric \texttt{priority}, an exception may declare
+\texttt{defeats $\ell'$} naming a sibling it overrides directly
+(\S\ref{subsec:exceptions}). Both forms collapse into a single
+``$\xi'$ defeats $\xi$'' relation, and we require its transitive
+closure to be acyclic --- the linter
+(\S\ref{sec:implementation}) enforces this and rejects modules
+that would otherwise be ambiguous.
+
+An exception's guard $\gamma$ is itself a boolean expression
+over facts; its truth value $\Gamma \vdash \gamma \Downarrow b$
+is given by standard expression evaluation
+(Appendix~\ref{app:semantics-full}). The exception ``fires'' iff
+its guard is true \emph{and} no defeating sibling also fires:
+
+\begin{equation*}
+\inferrule[Fires]
+  {\Gamma \vdash \gamma \Downarrow \top \\\\
+   \forall \xi' \in \mathrm{defeats}^{-1}(\xi) :
+   \Gamma \vdash \xi' \Downarrow_{\!\textsc{f}} \bot}
+  {\Gamma \vdash \xi \Downarrow_{\!\textsc{f}} \top}
+\end{equation*}
+
+\begin{equation*}
+\inferrule[NotFires-Guard]
+  {\Gamma \vdash \gamma \Downarrow \bot}
+  {\Gamma \vdash \xi \Downarrow_{\!\textsc{f}} \bot}
+\qquad
+\inferrule[NotFires-Defeated]
+  {\Gamma \vdash \gamma \Downarrow \top \\
+   \exists \xi' \in \mathrm{defeats}^{-1}(\xi) :
+   \Gamma \vdash \xi' \Downarrow_{\!\textsc{f}} \top}
+  {\Gamma \vdash \xi \Downarrow_{\!\textsc{f}} \bot}
+\end{equation*}
+
+The mutually-recursive shape of \textsc{Fires} on the priority
+DAG is well-founded by construction (the linter rejects cycles).
+A section's \emph{conviction} judgement closes the loop: elements
+all hold \emph{and} no exception fires.
+
+\begin{equation*}
+\inferrule[Conviction]
+  {\Gamma \vdash \mathit{Es} \Downarrow_{\!\textsc{el}} \top \\\\
+   \forall \xi \in \mathit{Xs} :
+   \Gamma \vdash \xi \Downarrow_{\!\textsc{f}} \bot}
+  {\Gamma \vdash S \Downarrow_{\!\textsc{c}} \top}
+\end{equation*}
+
+\begin{equation*}
+\inferrule[NoConviction-Elements]
+  {\Gamma \vdash \mathit{Es} \Downarrow_{\!\textsc{el}} \bot}
+  {\Gamma \vdash S \Downarrow_{\!\textsc{c}} \bot}
+\quad
+\inferrule[NoConviction-Excused]
+  {\Gamma \vdash \mathit{Es} \Downarrow_{\!\textsc{el}} \top \\
+   \exists \xi \in \mathit{Xs} :
+   \Gamma \vdash \xi \Downarrow_{\!\textsc{f}} \top}
+  {\Gamma \vdash S \Downarrow_{\!\textsc{c}} \bot}
+\end{equation*}
+
+The split between \textsc{NoConviction-Elements} and
+\textsc{NoConviction-Excused} is the doctrinal hinge: it
+distinguishes ``elements not made out'' from ``elements met but
+defendant excused''. The Z3 backend exploits this distinction by
+introducing two named booleans, \texttt{<sX>\_elements\_satisfied}
+and \texttt{<sX>\_conviction}, whose biconditional
+\texttt{conviction $\Leftrightarrow$ elements\_satisfied $\land\,
+\lnot$ any\_fires} is the formal correspondent of these three
+rules taken together.
+
+\subsection{Cross-section composition}
+\label{subsec:semantics-cross-section}
+
+Two predicates lift the conviction judgement to expression
+position so that a parent statute can refer to a base offence
+without restating its elements. The lam4-flavoured
+\texttt{is\_infringed(sX)} answers ``does $sX$ convict under the
+ambient facts'', and the Catala-flavoured
+\texttt{apply\_scope(sX, F')} answers the same question against
+an explicit (possibly different) fact pattern $F'$.
+
+\begin{equation*}
+\inferrule[IsInfringed]
+  {\Sigma(n) = S \\
+   \langle F, \Sigma \rangle \vdash S \Downarrow_{\!\textsc{c}}
+   b}
+  {\langle F, \Sigma \rangle \vdash \texttt{is\_infringed}(n)
+   \Downarrow b}
+\end{equation*}
+
+\begin{equation*}
+\inferrule[ApplyScope]
+  {\Sigma(n) = S \\
+   \langle F', \Sigma \rangle \vdash S \Downarrow_{\!\textsc{c}}
+   b}
+  {\langle F, \Sigma \rangle \vdash
+   \texttt{apply\_scope}(n, F') \Downarrow b}
+\end{equation*}
+
+The two predicates differ only in the fact pattern they thread:
+\textsc{IsInfringed} re-uses the ambient $F$ (lam4-style ``the
+facts the parent caller already has''), \textsc{ApplyScope}
+substitutes a parent-supplied $F'$ (Catala-style scope
+composition with explicit input). The implementation
+(\S\ref{sec:implementation} Z3 backend) realises both as the
+same lazily-declared boolean atom
+\texttt{<sX>\_conviction}, deduplicated by name --- so a
+satisfying assignment of the parent's constraints carries the
+inner section's conviction-truth as a first-class proposition.
+
+\subsection{Penalty algebra}
+\label{subsec:semantics-penalty}
+
+Penalty terms reduce to a \emph{sentence range} $\mathcal{R}$, an
+abstract value carrying optional imprisonment, fine, caning, and
+death components, each as a pair $\langle \mathit{lo},
+\mathit{hi} \rangle$ over the appropriate measurement domain
+(days, dollars, strokes, or the discrete unit
+$\{\textsf{death}\}$). The leaf rules wrap structural penalty
+literals; the combinator rules compose them.
+
+\begin{equation*}
+\inferrule[Pen-Imprisonment]
+  { }
+  {\Gamma \vdash \texttt{imprisonment}\,\mathit{lo}\,\texttt{..}\,
+   \mathit{hi} \Downarrow_{\!\textsc{p}}
+   \langle \mathit{lo}, \mathit{hi} \rangle_{\!\mathrm{imp}}}
+\end{equation*}
+
+The fine, caning, and death-penalty leaves are analogous and
+omitted here. The two non-trivial combinators are
+\texttt{cumulative} (every component of every child applies) and
+\texttt{or\_both} (the sentencer picks one or both children); we
+write $\sqcup$ and $\sqcap$ respectively for the corresponding
+range operations:
+
+\begin{equation*}
+\inferrule[Pen-Cumulative]
+  {\Gamma \vdash p_1 \Downarrow_{\!\textsc{p}} \mathcal{R}_1
+   \quad \cdots \quad
+   \Gamma \vdash p_k \Downarrow_{\!\textsc{p}} \mathcal{R}_k}
+  {\Gamma \vdash \texttt{cumulative}\{p_1, \ldots, p_k\}
+   \Downarrow_{\!\textsc{p}}
+   \mathcal{R}_1 \sqcup \cdots \sqcup \mathcal{R}_k}
+\end{equation*}
+
+\begin{equation*}
+\inferrule[Pen-OrBoth]
+  {\Gamma \vdash p_1 \Downarrow_{\!\textsc{p}} \mathcal{R}_1
+   \quad \cdots \quad
+   \Gamma \vdash p_k \Downarrow_{\!\textsc{p}} \mathcal{R}_k}
+  {\Gamma \vdash \texttt{or\_both}\{p_1, \ldots, p_k\}
+   \Downarrow_{\!\textsc{p}}
+   \mathcal{R}_1 \sqcap \cdots \sqcap \mathcal{R}_k}
+\end{equation*}
+
+The G8 (\texttt{fine := unlimited}) and G14
+(\texttt{caning := unspecified}) refinements
+(\S\ref{subsec:gaps}) appear in the leaves as the special
+range-pair values $\langle 0, +\infty \rangle$ and
+$\langle 0, ? \rangle$ respectively; the linter ensures these
+sentinels do not propagate beyond the leaf via the combinators.
+
+\subsection{What the rules do not cover}
+\label{subsec:semantics-scope}
+
+Three deliberate elisions, named here so the soundness theorem of
+\S\ref{sec:soundness} can refer to them:
+
+\textit{Subsection composition.} Subsections $\mathit{Subs}$ are
+self-similar to the parent statute (each is a sub-statute with
+its own elements / penalty / exceptions). The Z3 backend
+(\S\ref{sec:implementation}) hoists subsection elements to the
+top level when the parent has none, which is the encoding
+choice the rules above implicitly assume; a fully compositional
+treatment lives in Appendix~\ref{app:semantics-full}.
+
+\textit{Definitional substitution.} The \texttt{definitions}
+block introduces named string aliases that the
+controlled-English transpiler expands. They are semantically
+opaque at the conviction layer --- a definition does not
+contribute to element evaluation --- and we treat them as
+metadata.
+
+\textit{Refinement-typed quantities.} Fines, durations, and
+counts can carry refinement bounds (G8, G14). The rules above
+treat the underlying numeric range; refinement-bound enforcement
+is a type-check pass orthogonal to the small-step semantics, and
+discharged before the rules above fire.
+
+These elisions are honest about the gap between the rules in
+this section and the encoded library's full surface. The
+soundness claim that follows applies to the fragment defined
+above; the fragment is precisely what the empirical claims of
+\S\ref{sec:evaluation} (the Z3-driven scenario synthesis, the
+case-law differential testing) exercise.

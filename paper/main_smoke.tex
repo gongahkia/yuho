@@ -16,6 +16,21 @@
 \usepackage{graphicx}
 \usepackage{yuho-listing}
 \usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+
+% Theorem environments for §6 (soundness).
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+
+% Minimal inference-rule macro so the §4 formal-semantics rules
+% typeset without depending on mathpartir (not always present in
+% basic TeX Live installs). The macro takes \inferrule[Name]{premises}{conclusion}
+% and renders a horizontal bar with the rule name typeset to the right.
+\newcommand{\inferrule}[3][]{%
+  \ensuremath{\dfrac{\begin{array}{c}#2\end{array}}{\begin{array}{c}#3\end{array}}}%
+  \ifx\\#1\\\else\quad\textsc{#1}\fi%
+}
 \usepackage{microtype}
 \usepackage{fancyhdr}
 \usepackage{titling}
@@ -99,7 +114,9 @@ synthetic toy.
 \input{sections/introduction}
 \input{sections/background}
 \input{sections/design}
+\input{sections/semantics}
 \input{sections/implementation}
+\input{sections/soundness}
 \input{sections/evaluation}
 \input{sections/related}
 \input{sections/applicability}
@@ -108,5 +125,44 @@ synthetic toy.
 
 \bibliographystyle{plain}
 \bibliography{references}
+
+\appendix
+\section{Full inference rules for the operational semantics}
+\label{app:semantics-full}
+
+This appendix expands the rules of \S\ref{sec:semantics} to cover
+the cases elided in the body for readability:
+
+\begin{itemize}
+  \item \textbf{Mens-rea intent typing.} The Z3 backend
+    introduces an \texttt{Intent} sort and per-element
+    \texttt{<sX>\_<elem>\_intent} variables; the body's
+    \textsc{Eval-Elem} rule subsumes the typed case under boolean
+    truth, but the soundness theorem of
+    \S\ref{sec:soundness} relates the typed sort back to the
+    boolean lift via a refinement-style isomorphism.
+  \item \textbf{Temporal-ordering constraints} (G7).
+    \texttt{precedes} / \texttt{after} / \texttt{during} between
+    element identifiers translate to integer time-stamp
+    inequalities; their evaluation closes over the same fact
+    pattern $F$, treating the time-stamps as additional fields.
+  \item \textbf{Burden-of-proof qualifier} (G11). An element
+    tagged \texttt{burden\_on\_defence} flips the truth-value
+    convention: an unsupplied fact pattern leaves the element
+    \emph{satisfied} by default, and a defence-side counter-fact
+    is required to negate it. The body's
+    \textsc{Eval-Elem-Missing} rule covers the prosecution-side
+    default; this appendix gives the symmetric defence-side rule.
+  \item \textbf{Subsection composition.} The full
+    self-similar reduction with \texttt{subsection (N)} blocks
+    treated as scoped sub-statutes whose elements join into the
+    parent's element conjunction at the configured combinator
+    (default \textsf{all\_of}).
+\end{itemize}
+
+A fully expanded rule list lives at
+\texttt{paper/appendix/semantics-full.tex} in the repository's
+camera-ready branch; for the journal-version draft this appendix
+serves as an inventory rather than a complete enumeration.
 
 \end{document}

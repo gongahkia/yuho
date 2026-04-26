@@ -13,6 +13,17 @@
 % Yuho syntax highlighting for code listings.
 \usepackage{yuho-listing}
 
+% Theorem environments for §6 (soundness).
+\usepackage{amsthm}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+
+% Minimal inference-rule macro for §4 — avoids the mathpartir dep.
+\newcommand{\inferrule}[3][]{%
+  \ensuremath{\dfrac{\begin{array}{c}#2\end{array}}{\begin{array}{c}#3\end{array}}}%
+  \ifx\\#1\\\else\quad\textsc{#1}\fi%
+}
+
 % --------------------------------------------------------------------
 % Metadata
 % --------------------------------------------------------------------
@@ -97,7 +108,9 @@ language server, formal verification, Catala, Alloy, Z3}
 \input{sections/introduction}
 \input{sections/background}
 \input{sections/design}
+\input{sections/semantics}
 \input{sections/implementation}
+\input{sections/soundness}
 \input{sections/evaluation}
 \input{sections/related}
 \input{sections/applicability}
@@ -106,5 +119,16 @@ language server, formal verification, Catala, Alloy, Z3}
 
 \bibliographystyle{ACM-Reference-Format}
 \bibliography{references}
+
+\appendix
+\section{Full inference rules for the operational semantics}
+\label{app:semantics-full}
+
+This appendix expands the rules of \S\ref{sec:semantics} to cover
+mens-rea intent typing, temporal-ordering constraints (G7),
+burden-of-proof qualifiers (G11), and full subsection
+composition. See \texttt{paper/appendix/semantics-full.tex} in
+the camera-ready branch; this appendix serves as an inventory
+in the working draft.
 
 \end{document}

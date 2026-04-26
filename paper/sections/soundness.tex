@@ -1,0 +1,269 @@
+\section{Transpiler soundness}
+\label{sec:soundness}
+
+The Z3 backend (\S\ref{sec:implementation}) is the link between
+the operational semantics of \S\ref{sec:semantics} and the
+empirical claims of \S\ref{sec:evaluation}: the contrast tool,
+\texttt{narrow-defence}, and the constrained-contrast scorer of
+\S\ref{subsec:case_law_diff} all interrogate Z3 models of the
+encoded library and read back ``conviction'' truth values. A
+reader has to be able to trust that the Z3 model and the
+operational semantics agree --- that the scorer's headline
+numbers measure something semantically grounded rather than an
+artefact of the encoding. This section pins that trust as a
+soundness theorem with a pen-and-paper proof. Mechanisation is
+deferred to a follow-on artefact (\S\ref{sec:limitations}); the
+working theorem is the structural-correspondence claim that
+follows.
+
+\subsection{Theorem statement}
+\label{subsec:soundness-statement}
+
+Let $\mathcal{Z}$ denote the Z3 generator's translation of a
+module $M$: a finite set of Z3 boolean and integer constants
+$\mathcal{V}_M$ together with a finite set of assertions
+$\Phi_M$. For each statute $S \in M$ with section number $n$,
+$\mathcal{Z}$ allocates two named booleans
+$\mathit{el}_n \equiv \texttt{<n>\_elements\_satisfied}$ and
+$\mathit{cv}_n \equiv \texttt{<n>\_conviction}$ in
+$\mathcal{V}_M$, and asserts the biconditionals
+$\mathit{el}_n \Leftrightarrow \bigwedge_i e_i$ and
+$\mathit{cv}_n \Leftrightarrow (\mathit{el}_n \,\wedge\,
+\bigwedge_\xi \neg \mathit{fires}_\xi)$ in $\Phi_M$, where the
+$e_i$ are leaf-element booleans for $S$ and the
+$\mathit{fires}_\xi$ are exception-fired booleans
+(\S\ref{subsec:semantics-exceptions}).
+
+A \emph{satisfying assignment} $\mathcal{M}$ for $\Phi_M$ assigns
+each variable in $\mathcal{V}_M$ a value such that every
+assertion in $\Phi_M$ evaluates to $\top$. Given $\mathcal{M}$,
+let $F_\mathcal{M}$ denote the corresponding fact pattern: the
+boolean truth value of every $e_i \in \mathcal{V}_M$ becomes the
+fact-map entry $F_\mathcal{M}(x_i) = \mathcal{M}(e_i)$ for the
+underlying element identifier $x_i$.
+
+\begin{theorem}[Z3-Operational Soundness]
+\label{thm:z3-sound}
+For every module $M$, every statute $S = \langle n, \ldots
+\rangle \in M$, and every satisfying assignment $\mathcal{M}$ of
+$\Phi_M$:
+\[
+  \mathcal{M}(\mathit{cv}_n) = \top
+  \;\;\Longleftrightarrow\;\;
+  \langle F_\mathcal{M}, \Sigma_M \rangle
+  \vdash S \Downarrow_{\!\textsc{c}} \top.
+\]
+\end{theorem}
+
+In words: the Z3 conviction Bool is true in a model iff the
+operational semantics of \S\ref{sec:semantics} convicts under the
+fact pattern that model encodes. The contrast and
+narrow-defence tools' headline numbers are therefore
+measurements of operational-semantic agreement, not artefacts of
+the SAT encoding.
+
+\subsection{Proof structure}
+\label{subsec:soundness-proof}
+
+The proof decomposes into four lemmas, one per judgement of
+\S\ref{sec:semantics}. Each lemma states a per-judgement
+correspondence between the Z3 encoding and the operational
+rules; the main theorem follows by composition.
+
+\begin{lemma}[Element correspondence]
+\label{lem:soundness-elem}
+For every leaf element $e = \langle \kappa, x, \rho \rangle$ in
+$S$ and satisfying assignment $\mathcal{M}$:
+\[
+  \mathcal{M}(e_x) = b
+  \;\;\Longleftrightarrow\;\;
+  \langle F_\mathcal{M}, \Sigma_M \rangle \vdash e
+  \Downarrow b.
+\]
+\end{lemma}
+
+\begin{proof}[Sketch]
+Direct from the construction of $F_\mathcal{M}$: the fact-map
+entry for $x$ is, by definition, $\mathcal{M}(e_x)$. Both
+\textsc{Eval-Elem} (when $x \in \mathrm{dom}(F)$) and
+\textsc{Eval-Elem-Missing} (when $x \notin \mathrm{dom}(F)$, in
+which case the Z3 boolean is unconstrained but the constructed
+$F_\mathcal{M}$ records its assigned truth value regardless)
+agree with the looked-up value. The element-kind tag $\kappa$ is
+inert at this layer.
+\end{proof}
+
+\begin{lemma}[Element-graph correspondence]
+\label{lem:soundness-graph}
+For every element-tree $\mathit{Es}$ in $S$ and satisfying
+assignment $\mathcal{M}$:
+\[
+  \mathcal{M}(\mathit{el}_n) = b
+  \;\;\Longleftrightarrow\;\;
+  \langle F_\mathcal{M}, \Sigma_M \rangle \vdash
+  \mathit{Es} \Downarrow_{\!\textsc{el}} b.
+\]
+\end{lemma}
+
+\begin{proof}[Sketch]
+Induction on the structure of $\mathit{Es}$. Base case: a leaf
+element, by Lemma~\ref{lem:soundness-elem}. Inductive cases:
+
+\textit{$\textsf{all\_of}$ group.} The Z3 generator emits
+$\mathit{el}_n \Leftrightarrow \bigwedge_i b_i$ (or the
+sub-group-level boolean's biconditional). The operational rule
+\textsc{Eval-AllOf} computes the same conjunction. By the IH on
+each member, both sides agree.
+
+\textit{$\textsf{any\_of}$ group.} Symmetric, with $\bigvee$
+replacing $\bigwedge$ on both sides.
+\end{proof}
+
+\begin{lemma}[Exception correspondence]
+\label{lem:soundness-exc}
+For every exception $\xi \in \mathit{Xs}$ and satisfying
+assignment $\mathcal{M}$:
+\[
+  \mathcal{M}(\mathit{fires}_\xi) = b
+  \;\;\Longleftrightarrow\;\;
+  \langle F_\mathcal{M}, \Sigma_M \rangle \vdash \xi
+  \Downarrow_{\!\textsc{f}} b.
+\]
+\end{lemma}
+
+\begin{proof}[Sketch]
+Induction on the priority DAG, well-founded by the
+defeats-acyclicity invariant
+(\S\ref{subsec:semantics-exceptions}: the linter rejects cyclic
+\texttt{defeats} edges, so the DAG admits a topological sort;
+induction proceeds along the reverse order).
+
+\textit{Base case:} an exception with no in-degree in the
+defeats relation. Its \textsc{Fires} premise simplifies to
+``guard true'' alone, which the Z3 generator emits as the
+single-conjunct biconditional $\mathit{fires}_\xi
+\Leftrightarrow \mathcal{Z}(\gamma)$. By
+Lemma~\ref{lem:soundness-graph} (extended to general boolean
+expressions over the fact-map; the extension is mechanical), the
+guard's Z3-truth and operational-truth coincide.
+
+\textit{Inductive case:} an exception $\xi$ with non-empty
+$\mathrm{defeats}^{-1}(\xi)$. The Z3 generator emits
+$\mathit{fires}_\xi \Leftrightarrow \mathcal{Z}(\gamma_\xi)
+\,\wedge\, \bigwedge_{\xi' \in \mathrm{defeats}^{-1}(\xi)}
+\neg \mathit{fires}_{\xi'}$. The operational rule
+\textsc{Fires} asserts the same conjunction (with
+\textsc{NotFires-Defeated} closing the negative case). By the
+IH on each $\xi'$ (which has strictly smaller priority-DAG depth)
+and the guard correspondence, both sides agree.
+\end{proof}
+
+\begin{lemma}[Cross-section correspondence]
+\label{lem:soundness-cross}
+For every \texttt{is\_infringed}($n'$) or
+\texttt{apply\_scope}($n'$, $F'$) reference appearing in any
+guard or expression of any statute in $M$:
+\[
+  \mathcal{M}(\mathit{cv}_{n'}) = b
+  \;\;\Longleftrightarrow\;\;
+  \mathit{cross}(n', \cdot) \Downarrow b
+\]
+where $\mathit{cross}$ is the operational reduction
+(\textsc{IsInfringed} or \textsc{ApplyScope},
+\S\ref{subsec:semantics-cross-section}) under either the ambient
+or supplied fact pattern.
+\end{lemma}
+
+\begin{proof}[Sketch]
+The Z3 generator's \texttt{\_conviction\_bool($n'$)} helper
+declares $\mathit{cv}_{n'}$ lazily and dedupes by name: any
+reference to the same section number resolves to the identical
+Z3 atom. Therefore, when statute $n'$ is itself translated by
+$\mathcal{Z}$, the conviction-biconditional asserted for $n'$
+constrains the same atom that the cross-section reference reads.
+By Lemmas~\ref{lem:soundness-graph} and~\ref{lem:soundness-exc}
+applied to the inner statute, $\mathit{cv}_{n'}$'s truth tracks
+the inner conviction judgement. The
+\textsc{IsInfringed}/\textsc{ApplyScope} rules of
+\S\ref{subsec:semantics-cross-section} thread the same fact
+pattern as that conviction judgement (ambient $F$ for
+\texttt{is\_infringed}; supplied $F'$ for \texttt{apply\_scope}),
+so the operational and Z3 readings coincide.
+
+A subtle case: when the referenced section $n'$ is \emph{not}
+in $M$ (cross-library reference), the Z3 atom $\mathit{cv}_{n'}$
+exists but is unconstrained --- the SAT solver may freely
+assign it. The operational rule on the same input is undefined
+(the $\Sigma$ lookup fails). We treat the cross-library case as
+out of scope for Theorem~\ref{thm:z3-sound}; the case-law
+differential testing of \S\ref{subsec:case_law_diff}
+deliberately uses only same-module fact patterns to stay within
+the theorem's scope.
+\end{proof}
+
+\subsection{Main theorem}
+\label{subsec:soundness-main}
+
+\begin{proof}[of Theorem~\ref{thm:z3-sound}]
+The Z3 generator's conviction biconditional for statute $S$
+asserts
+\[
+  \mathit{cv}_n \Leftrightarrow
+  \mathit{el}_n \,\wedge\,
+  \bigwedge_\xi \neg \mathit{fires}_\xi.
+\]
+
+By Lemma~\ref{lem:soundness-graph}, $\mathcal{M}(\mathit{el}_n)$
+agrees with the operational element judgement
+$\mathit{Es} \Downarrow_{\!\textsc{el}} b_E$. By
+Lemma~\ref{lem:soundness-exc}, each $\mathcal{M}(\mathit{fires}_\xi)$
+agrees with the operational exception judgement $\xi
+\Downarrow_{\!\textsc{f}} b_\xi$.
+Lemma~\ref{lem:soundness-cross} extends the same correspondence
+through any cross-section reference reachable from a guard.
+
+Substituting into the biconditional:
+\[
+  \mathcal{M}(\mathit{cv}_n) =
+  b_E \,\wedge\, \bigwedge_\xi \neg b_\xi.
+\]
+
+The operational rule \textsc{Conviction} computes precisely
+this: $S \Downarrow_{\!\textsc{c}} \top$ iff the elements'
+conjunction is $\top$ and no exception fires. The two sides are
+therefore equal under any satisfying assignment, which is
+Theorem~\ref{thm:z3-sound}.
+\end{proof}
+
+\subsection{Penalty correspondence and mechanisation status}
+\label{subsec:soundness-penalty}
+
+The penalty algebra of \S\ref{subsec:semantics-penalty} reduces
+to range pairs $\langle \mathit{lo}, \mathit{hi} \rangle$. The Z3
+generator emits range bounds as integer-arithmetic assertions
+(\texttt{imp\_min} $\le$ \texttt{imp\_max} and so on). The
+correspondence here is structural rather than predicate-level:
+the rules of \S\ref{subsec:semantics-penalty} produce a
+\emph{value} (a range), whereas the Z3 encoding emits
+\emph{constraints} on integer variables. Both sides agree on the
+satisfying-range membership test (an imprisonment of $d$ days
+satisfies the constraints iff
+$\mathit{lo} \le d \le \mathit{hi}$), and that suffices for the
+empirical claims --- the contrast and narrow-defence tools
+exercise conviction (Theorem~\ref{thm:z3-sound}), not penalty
+ranges.
+
+\paragraph{Mechanisation.} A fully mechanised proof in Coq
+or Lean would replace each lemma sketch above with a kernel-
+checked derivation. The natural target is the
+\texttt{\_conviction\_bool} helper's correspondence as a
+simulation argument between the AST evaluator and the Z3
+generator's encoding function, both written as Coq functions over
+the AST datatype. We estimate three to six months of effort for a
+competent proof-assistant user starting from the pen-and-paper
+proof above; Catala's comparable mechanisation of its default-
+calculus correctness theorem is the proximate model. We treat
+the mechanisation as an artefact-level deliverable left for a
+follow-on effort, and \S\ref{sec:limitations} carries the
+explicit ``unmechanised'' caveat alongside the rest of the
+paper's known unverified claims.

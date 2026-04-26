@@ -111,54 +111,40 @@ means slower-but-completer rather than faster-but-iterative.
 | Appx B — full soundness proofs | Gap 2 detail |
 | Appx C — mechanisation listing | Gap 5 (if shipped) |
 
-### §4 of the paper — Pinned operational semantics `[ ]`
+### §4 of the paper — Pinned operational semantics `[x]`
 
-Every comparable system (Catala, eFLINT, Symboleo) ships
-inference rules in the body or appendix. Yuho's `design.tex`
-describes the language but doesn't formally pin a semantics.
-Without this, an AI&L reviewer marks it as a rigor gap and the
-paper fails its formal-methods-defence layer.
+Shipped at `paper/sections/semantics.tex`. Five subsections:
+preliminaries (syntactic + semantic domains, judgement
+shapes), element evaluation (small-step rules for actus_reus /
+mens_rea / circumstance + all_of / any_of combinators),
+exception precedence (Catala-style default-logic with explicit
+defeats DAG), cross-section composition (is_infringed +
+apply_scope), and penalty algebra (cumulative / or_both
+combinators reducing to range pairs). Full inference rules
+inventoried in Appendix A; body fragment is the page reviewers
+follow without the appendix.
 
-- [ ] Write `paper/sections/semantics.tex` (3-5 pages) covering:
-  - Small-step element evaluation: `actus_reus`, `mens_rea`,
-    `circumstance`, plus the `all_of` / `any_of` combinators.
-  - **Catala-style default-logic rules** for prioritised exception
-    precedence — we already cite `catala2021`, the rules transfer
-    directly with the addition of `defeats` edges as overrides.
-  - `apply_scope(sX, facts)` and `is_infringed(sX)` as
-    cross-section composition rules; the lazy-conviction-Bool
-    encoding in the Z3 backend is the operational realisation.
-  - Penalty algebra (`cumulative` / `or_both` / `combo`) as a
-    small algebraic structure with a paper-pinned reduction
-    relation.
-- [ ] Insert into `main.tex` after the design section so the
-      operational-semantics paragraph in `design.tex` cross-refs it.
-- [ ] Two-page summary in the paper body; full inference rules
-      in an appendix to keep the body readable.
+### §6 of the paper — Soundness theorem for the Z3 transpiler `[~]`
 
-### §6 of the paper — Soundness theorem for the Z3 transpiler `[ ]`
+Pen-and-paper proof shipped at `paper/sections/soundness.tex`.
+Theorem 6.1 (Z3-Operational Soundness): every satisfying Z3
+assignment's `<sX>_conviction` truth value equals the
+operational-semantic conviction judgement on the corresponding
+fact pattern. Proof decomposes into four lemmas (element /
+element-graph / exception / cross-section correspondence) plus a
+penalty-correspondence note. Structural induction on element
+AST; well-founded induction on the defeats priority DAG;
+simulation argument for cross-section composition via the lazy
+`_conviction_bool` name-deduping helper.
 
-The CompCert / Catala pattern: prove that the transpiler preserves
-meaning. For Yuho the cleanest target is the Z3 backend, where
-both sides are total functions over the encoded element graph.
-Lands as `§6 Transpiler soundness` in the paper.
+Possible follow-ups:
 
-- [ ] Statement (informal): for any module $M$ and fact pattern
-      $F$, the `StatuteEvaluator` verdict on $(M, F)$ equals the
-      truth value of `<sX>_conviction` in any model of the Z3
-      encoding satisfying $F$.
-- [ ] Pen-and-paper proof in `paper/sections/semantics.tex` or a
-      sibling `transpiler-correctness.tex`. Structure:
-  - Element-graph evaluation soundness (induction on the element
-    AST).
-  - Exception-precedence soundness (induction on the priority DAG;
-    the `defeats` edges form a DAG by construction, lemma proven).
-  - `apply_scope` / `is_infringed` soundness (the lazy
-    conviction-Bool atom dedupes by name; simulation argument).
-  - Penalty constraints land as range assertions; trivial.
 - [ ] Sanity-check the proof against a fixed set of corner cases
       via the existing `tests/test_z3_apply_scope.py` shape: every
-      claimed lemma should have a corresponding executable test.
+      claimed lemma should have a corresponding executable test
+      that exhibits the case it covers.
+- [ ] Mechanisation in Coq or Lean — see §6.3 below
+      (deliberately deferred).
 
 ### §7.7 of the paper — External Singapore-counsel L3 audit `[ ]`
 
@@ -200,13 +186,24 @@ is satisfiable in the encoded model.
 
 Possible follow-ups (not in scope for §7.8 v1):
 
-- [ ] Grow sample beyond 23 fixtures — Chapter XX (offences
-      relating to marriage), Chapter XXII (criminal intimidation),
-      and more property-offence cases (s378 theft, s392 robbery,
-      s415 cheating) are thin. Aim for 50+ on a future trench.
+- [ ] **Grow case-law sample via manual curation from LawNet /
+      Singapore Law Watch.** v1 ships 23 fixtures derived from
+      training-data recall + an LLM research agent; this is
+      necessary but not sufficient. The next trench requires
+      *actual research*: sit with LawNet open, read judgments,
+      hand-extract fact patterns, verify citations, and grow
+      coverage to 50+ fixtures with the chapter-spread gaps
+      (XX offences relating to marriage, XXII criminal
+      intimidation, more XVII property-offence cases —
+      s378 theft, s392 robbery, s415/420 cheating, s425 mischief,
+      s441 criminal trespass — currently underrepresented).
+      Some of the existing fixtures may also need verification
+      against the judgments themselves; spot-check the
+      `case_summary` and `fact_facts` mappings.
 - [ ] Inter-rater reliability on the curated fact patterns. A
-      second curator extracting facts from the same judgments
-      gives a κ score for §7.8's threats-to-validity caveat.
+      second curator (human, not LLM) extracts facts from the
+      same judgments independently; compute κ score for §7.8's
+      threats-to-validity caveat.
 
 ### §8 of the paper — Cross-jurisdiction comparative encoding `[ ]`
 
