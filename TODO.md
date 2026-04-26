@@ -87,9 +87,6 @@ delegate to `StatuteEvaluator` and return a boolean Value tracking
 the inner scope's `overall_satisfied`. The remaining work is the
 deeper static + symbolic layer.
 
-- [ ] Type-check pass: when `apply_scope` is composed inside a parent
-      statute, verify the parent's element shape is compatible with the
-      base section's required inputs.
 - [ ] Z3 backend hookup: model `apply_scope` as an inlined sub-formula
       so prioritised-rewriting at the parent retains the base's exception
       hierarchy.

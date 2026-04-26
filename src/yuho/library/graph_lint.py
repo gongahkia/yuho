@@ -23,7 +23,7 @@ Run via ``yuho refs --scc`` or programmatically::
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Iterable, List, Optional
+from typing import Iterable, List, Mapping, Optional
 
 from yuho.ast import nodes
 from yuho.library.reference_graph import ReferenceGraph
@@ -123,6 +123,94 @@ def check_apply_scope_resolution(
     return warnings
 
 
+def _flatten_element_names(elements) -> List[str]:
+    """Walk an element tree (ElementNode + ElementGroupNode), returning the
+    flat list of leaf element names in declaration order."""
+    out: List[str] = []
+    stack = list(elements)
+    while stack:
+        item = stack.pop(0)
+        if isinstance(item, nodes.ElementNode):
+            out.append(item.name)
+        elif isinstance(item, nodes.ElementGroupNode):
+            stack[:0] = list(item.members)
+    return out
+
+
+def check_apply_scope_arg_shape(
+    module: nodes.ModuleNode,
+    registry: Optional[Mapping[str, nodes.StatuteNode]] = None,
+) -> List[GraphLintWarning]:
+    """Static type-check for ``apply_scope(<section>, ...)``.
+
+    ``registry`` is the section-number → StatuteNode lookup. When omitted,
+    statutes from the same module are used (sufficient for self-referential
+    composition; library-wide coverage requires the caller to pass a
+    populated registry built from the encoded library).
+
+    Two diagnostics:
+
+    * ``apply_scope_target_empty`` — calling apply_scope on a section that
+      has no elements is structurally meaningless: nothing for the inner
+      scope to evaluate. Often a typo on the section ref.
+    * ``apply_scope_arg_missing_fields`` — when the first arg is a struct
+      literal, every leaf element name on the target must be a field on
+      the struct; missing fields would resolve to None at evaluation
+      time and silently fail the inner predicate.
+
+    Identifier args (the common case — ``apply_scope(s299, facts)``) are
+    not statically checkable here; they're left to the runtime.
+    """
+    if registry is None:
+        registry = {st.section_number: st for st in module.statutes}
+
+    warnings: List[GraphLintWarning] = []
+    for node in _walk_apply_scope(module):
+        target = registry.get(node.section_ref)
+        if target is None:
+            # Resolution is the other check's responsibility; skip.
+            continue
+        element_names = _flatten_element_names(target.elements or ())
+        if not element_names:
+            warnings.append(
+                GraphLintWarning(
+                    code="apply_scope_target_empty",
+                    sections=(node.section_ref,),
+                    message=(
+                        f"apply_scope(s{node.section_ref}, ...) targets a "
+                        f"section with no top-level elements; the inner "
+                        f"scope has nothing to evaluate"
+                    ),
+                    severity="warning",
+                )
+            )
+            continue
+        # Static struct-literal check: only fires when the first arg is a
+        # struct literal (rare in practice, but the strongest signal we
+        # can give without runtime info).
+        if not node.args:
+            continue
+        first = node.args[0]
+        if not isinstance(first, nodes.StructLiteralNode):
+            continue
+        struct_fields = {fa.name for fa in first.field_values}
+        missing = [n for n in element_names if n not in struct_fields]
+        if missing:
+            warnings.append(
+                GraphLintWarning(
+                    code="apply_scope_arg_missing_fields",
+                    sections=(node.section_ref,),
+                    message=(
+                        f"apply_scope(s{node.section_ref}, ...) struct arg "
+                        f"is missing fields the target's elements read: "
+                        f"{', '.join(missing)}"
+                    ),
+                    severity="warning",
+                )
+            )
+    return warnings
+
+
 def check_is_infringed_resolution(
     module: nodes.ModuleNode,
     known_sections: Iterable[str],
@@ -173,4 +261,5 @@ def lint_reference_graph(
     if module is not None:
         warnings.extend(check_is_infringed_resolution(module, graph.nodes))
         warnings.extend(check_apply_scope_resolution(module, graph.nodes))
+        warnings.extend(check_apply_scope_arg_shape(module))
     return warnings
