@@ -20,8 +20,7 @@ under Yuho.
 | D — Grammar refactor + L3 sweep | Close grammar gaps; agent-driven re-encoding; L3 review dispatcher. | 524/524 L3-stamped at human-verified tier. |
 
 For per-section provenance see [`/library/penal_code/_ledger/LEDGER.md`](../library/penal_code/_ledger/LEDGER.md).
-For per-gap detail see [`researcher/phase-c-gaps.md`](researcher/phase-c-gaps.md)
-and [`researcher/phase-c-review.md`](researcher/phase-c-review.md).
+For per-gap detail see [`researcher/phase-c-gaps.md`](researcher/phase-c-gaps.md).
 
 ---
 
@@ -241,11 +240,10 @@ If you're encoding a statute family other than the SG Penal Code,
 read this in order:
 
 1. [`researcher/phase-c-gaps.md`](researcher/phase-c-gaps.md) — every grammar gap, with the offending shape and the fix.
-2. [`researcher/phase-c-review.md`](researcher/phase-c-review.md) — Phase C qualitative findings.
-3. [`researcher/phase-d-l3-review-prompt.md`](researcher/phase-d-l3-review-prompt.md) — the 11-point checklist.
-4. [`researcher/phase-d-reencoding-prompt.md`](researcher/phase-d-reencoding-prompt.md) — the structured re-encoding prompt.
-5. [`researcher/phase-d-flag-fix-prompt.md`](researcher/phase-d-flag-fix-prompt.md) — the minimum-edit flag-fix prompt.
-6. [`contributor/porting-guide.md`](contributor/porting-guide.md) — file-level porting steps.
+2. [`researcher/phase-d-l3-review-prompt.md`](researcher/phase-d-l3-review-prompt.md) — the 11-point checklist.
+3. [`researcher/phase-d-reencoding-prompt.md`](researcher/phase-d-reencoding-prompt.md) — the structured re-encoding prompt.
+4. [`researcher/phase-d-flag-fix-prompt.md`](researcher/phase-d-flag-fix-prompt.md) — the minimum-edit flag-fix prompt.
+5. [`contributor/porting-guide.md`](contributor/porting-guide.md) — file-level porting steps.
 
 The non-negotiable conventions, distilled:
 
