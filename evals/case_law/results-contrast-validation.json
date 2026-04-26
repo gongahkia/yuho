@@ -1,6 +1,6 @@
 {
   "n_contrast_pairs": 115,
-  "n_case_law_pairs": 22,
+  "n_case_law_pairs": 23,
   "n_matched_ordered": 2,
   "n_matched_unordered": 1,
   "n_unmatched": 112,
@@ -190,8 +190,8 @@
   "case_law_pair_summary": [
     {
       "pair": [
-        "300",
-        "304"
+        "304",
+        "300"
       ],
       "fixtures": [
         "case-azlin-bte-arujunah",
@@ -234,8 +234,17 @@
     },
     {
       "pair": [
-        "300",
-        "299"
+        "304",
+        "325"
+      ],
+      "fixtures": [
+        "case-pp-v-bdb"
+      ]
+    },
+    {
+      "pair": [
+        "299",
+        "300"
       ],
       "fixtures": [
         "case-pp-v-kho-jabing"

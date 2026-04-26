@@ -1,0 +1,35 @@
+id: case-adf-v-pp
+case_citation: "ADF v PP [2010] 1 SLR 874"
+actual_charge: "324"
+outcome: "Conviction for voluntarily causing hurt by dangerous weapons / means under s324 affirmed by the Court of Appeal."
+case_summary: |
+  The appellant used a dangerous instrument to inflict hurt on the
+  victim. The Court of Appeal affirmed the s324 conviction (voluntarily
+  causing hurt by dangerous weapons or means), holding that the means
+  used were within the s324 category and that the mens rea of voluntary
+  causing of hurt was made out. Regularly cited for the scope of the
+  s324 instrument categories.
+section: "324"
+description: |
+  A used a dangerous instrument to strike B, causing B hurt. A intended
+  to cause hurt to B. The instrument was within the s324 category of
+  dangerous weapons or means.
+parties:
+  A: { role: accused }
+  B: { role: victim }
+acts:
+  - { actor: A, description: "strikes B with a dangerous instrument, causing hurt" }
+mental_states:
+  A:
+    intent: "to cause hurt to B"
+    knowledge: "the instrument was capable of causing hurt"
+circumstances:
+  - "instrument falls within the s324 dangerous-weapons-or-means category"
+outcomes:
+  - { actor: B, description: "B suffers hurt inflicted by a dangerous weapon" }
+fact_facts:
+  not_section_334_case: true
+  voluntary: true
+  causes_hurt: true
+  weapon_likely_to_cause_death: true
+tags: [source:case-law, chapter:xvi, category:hurt, doctrine:s324-dangerous-weapon]

@@ -1,0 +1,40 @@
+id: case-idya-nurhazlyn
+case_citation: "Idya Nurhazlyn bte Ahmad Khir v PP [2014] 1 SLR 756"
+outcome: "Convictions for cheating under s420 affirmed; the appellant ran an online sales scam, taking payment for goods she never intended to deliver."
+actual_charge: "420"
+case_summary: |
+  The appellant advertised goods (concert tickets and electronics)
+  online and induced multiple buyers to transfer payment, but had no
+  intention of delivering the goods and did not deliver them. The
+  s420 cheating convictions were affirmed: deception was the
+  misrepresentation of intent to deliver, the inducement was the
+  payment, and the wrongful loss/gain was the transferred money.
+section: "420"
+description: |
+  A advertised goods online and represented to B that A would deliver
+  the goods on payment. A never intended to deliver. B, induced by the
+  representation, transferred money to A. A did not deliver and kept
+  the money. A's deception caused B wrongful loss and A wrongful gain.
+parties:
+  A: { role: accused, attribute: online_seller }
+  B: { role: victim, attribute: online_buyer }
+acts:
+  - { actor: A, description: "represents to B that goods will be delivered on payment" }
+  - { actor: B, description: "transfers payment to A in reliance on the representation" }
+  - { actor: A, description: "fails to deliver and retains the money" }
+mental_states:
+  A:
+    intent: "to dishonestly induce delivery of money without delivering goods"
+    knowledge: "no intention to deliver at the time of the representation"
+circumstances:
+  - "deception as to a present intention (intent-not-to-perform)"
+  - "delivery of property (money) induced by the deception"
+outcomes:
+  - { actor: B, description: "B suffers wrongful loss of the payment" }
+fact_facts:
+  cheating: true
+  inducement: true
+  dishonesty: true
+  deliver_property: true
+  cause_delivery_property: true
+tags: [source:case-law, chapter:xvii, category:property, doctrine:s420-intent-not-to-perform]

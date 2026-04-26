@@ -1,0 +1,36 @@
+id: case-terence-ng
+case_citation: "Ng Kean Meng Terence v PP [2017] 2 SLR 449"
+actual_charge: "375"
+outcome: "Conviction for rape under s375 affirmed; the Court of Appeal restated the sentencing framework for s375 rape (the 'Terence Ng' framework)."
+case_summary: |
+  The accused had non-consensual penile-vaginal intercourse with the
+  complainant. The Court of Appeal affirmed the s375 conviction and
+  used the appeal to restate the sentencing framework for s375 rape,
+  identifying offence-specific aggravating factors (vulnerability of
+  victim, abuse of position, premeditation) and offender-specific
+  factors. Leading SG sentencing authority for rape post-2017.
+section: "375"
+description: |
+  A penile-vaginally penetrated B without B's consent. A knew B was
+  not consenting. The conduct fell squarely under s375(1)(a). No
+  s376-distinguishing facts arose — penetration was penile and of the
+  vagina.
+parties:
+  A: { role: accused }
+  B: { role: victim }
+acts:
+  - { actor: A, description: "penile-vaginally penetrates B without B's consent" }
+mental_states:
+  A:
+    intent: "to penetrate B"
+    knowledge: "B was not consenting"
+circumstances:
+  - "non-consensual penile-vaginal penetration"
+  - "no marital-exemption or other s375 exclusion engaged"
+outcomes:
+  - { actor: B, description: "B is raped" }
+fact_facts:
+  penetrate_vagina: true
+  without_her_consent: true
+  below_14_with_or_without_consent: false
+tags: [source:case-law, chapter:xvi, category:sexual_offence, doctrine:s375-sentencing-framework]

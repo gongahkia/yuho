@@ -1,0 +1,38 @@
+id: case-wong-seng-kwan
+case_citation: "Wong Seng Kwan v PP [2012] 3 SLR 12"
+actual_charge: "378"
+outcome: "Conviction for theft under s378 affirmed by the High Court; appellant kept a wallet found on a hotel lobby sofa instead of handing it in."
+case_summary: |
+  The appellant found a wallet containing cash and cards on a sofa in a
+  hotel lobby and pocketed it without making any attempt to locate the
+  owner or hand it to hotel staff. The High Court held that property
+  temporarily mislaid in a public/quasi-public place remains in the
+  constructive possession of the owner (or the occupier of the
+  premises), so taking it with dishonest intention satisfies s378.
+section: "378"
+description: |
+  A took a wallet B had left on a sofa in a hotel lobby. A intended to
+  appropriate the wallet for himself rather than return it. The wallet
+  remained in the constructive possession of B (or the hotel occupier).
+  A moved the wallet without B's consent.
+parties:
+  A: { role: accused }
+  B: { role: victim, attribute: wallet_owner }
+acts:
+  - { actor: A, description: "picks up B's wallet from a hotel lobby sofa and keeps it" }
+mental_states:
+  A:
+    intent: "to dishonestly appropriate the wallet"
+    knowledge: "the wallet belonged to someone else and had been mislaid, not abandoned"
+circumstances:
+  - "wallet temporarily mislaid in a quasi-public place — constructive possession retained"
+  - "no attempt to locate owner or hand wallet to staff"
+outcomes:
+  - { actor: B, description: "B is dishonestly deprived of the wallet" }
+fact_facts:
+  intention: true
+  taking: true
+  possession: true
+  consent: false
+  movement: true
+tags: [source:case-law, chapter:xvii, category:property, doctrine:s378-constructive-possession]

@@ -1,0 +1,40 @@
+id: case-pp-v-bdb
+case_citation: "PP v BDB [2018] 1 SLR 127"
+actual_charge: "325"
+alternative_charge: "304"
+court_distinguished_on: [intention]
+outcome: "CA affirmed s325 voluntarily-causing-grievous-hurt conviction; rejected the prosecution's bid to elevate to s304 on the mens rea."
+case_summary: |
+  The accused mother subjected her young son to sustained physical
+  abuse over an extended period; the child eventually died from the
+  cumulative injuries. The Court of Appeal upheld the s325 conviction
+  — the mens rea required for s304 culpable homicide (intention or
+  knowledge of likelihood of death) was not made out beyond reasonable
+  doubt — and used the appeal to set out the sentencing framework for
+  s325, including hurt resulting in death.
+section: "325"
+description: |
+  A subjected B (A's young child) to sustained physical violence over
+  an extended period. A intended to cause hurt and the cumulative
+  injuries amounted to grievous hurt under s320. B eventually died
+  from those injuries, but A's mental state did not extend to the
+  intention or knowledge of likelihood of death required for s304.
+parties:
+  A: { role: accused, attribute: mother }
+  B: { role: victim, attribute: young_child }
+acts:
+  - { actor: A, description: "inflicts sustained physical violence on B over time" }
+mental_states:
+  A:
+    intent: "to cause hurt to B"
+    knowledge: "the cumulative injuries amounted to grievous hurt"
+circumstances:
+  - "cumulative injuries — hurt aggregated to grievous hurt under s320"
+  - "death resulted but mens rea for s304 not established"
+outcomes:
+  - { actor: B, description: "B suffers grievous hurt and ultimately dies from the cumulative injuries" }
+fact_facts:
+  intention: true
+  causing: true
+  grievous_result: true
+tags: [source:case-law, chapter:xvi, category:hurt, doctrine:s325-sentencing-framework]

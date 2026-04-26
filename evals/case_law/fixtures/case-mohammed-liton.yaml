@@ -1,0 +1,32 @@
+id: case-mohammed-liton
+case_citation: "Mohammed Liton Mohammed Syeed Mallik v PP [2008] 1 SLR(R) 601"
+actual_charge: "375"
+outcome: "Conviction for rape under s375 affirmed; the Court of Appeal laid down the pre-Terence-Ng sentencing benchmarks for s375 rape, with the 'group-1/2/3/4' categorisation."
+case_summary: |
+  The accused raped the complainant. The Court of Appeal affirmed the
+  s375 conviction and used the appeal to set out a structured
+  sentencing framework for rape — categorising rape cases into groups
+  by reference to aggravating features. This framework governed s375
+  sentencing until it was restated in Terence Ng (2017).
+section: "375"
+description: |
+  A penile-vaginally penetrated B without B's consent. A knew B was
+  not consenting. The conduct fell under s375.
+parties:
+  A: { role: accused }
+  B: { role: victim }
+acts:
+  - { actor: A, description: "penile-vaginally penetrates B without B's consent" }
+mental_states:
+  A:
+    intent: "to penetrate B"
+    knowledge: "B was not consenting"
+circumstances:
+  - "non-consensual penile-vaginal penetration"
+outcomes:
+  - { actor: B, description: "B is raped" }
+fact_facts:
+  penetrate_vagina: true
+  without_her_consent: true
+  below_14_with_or_without_consent: false
+tags: [source:case-law, chapter:xvi, category:sexual_offence, doctrine:s375-pre-terence-ng-framework]

@@ -1,6 +1,6 @@
 {
-  "n": 22,
-  "n_consistent": 22,
+  "n": 23,
+  "n_consistent": 23,
   "n_unsat": 0,
   "n_no_encoding": 0,
   "n_error": 0,
@@ -127,6 +127,16 @@
       "court_distinguishing": [
         "intent1",
         "intent3"
+      ],
+      "status": "consistent",
+      "missing_in_encoding": []
+    },
+    {
+      "fixture_id": "case-pp-v-bdb",
+      "actual_charge": "325",
+      "alternative_charge": "304",
+      "court_distinguishing": [
+        "intention"
       ],
       "status": "consistent",
       "missing_in_encoding": []

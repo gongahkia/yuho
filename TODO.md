@@ -162,20 +162,23 @@ is satisfiable in the encoded model.
 
 Possible follow-ups (not in scope for §7.8 v1):
 
-- [ ] **Grow case-law sample via manual curation from LawNet /
-      Singapore Law Watch.** v1 ships 23 fixtures derived from
-      training-data recall + an LLM research agent; this is
-      necessary but not sufficient. The next trench requires
-      *actual research*: sit with LawNet open, read judgments,
-      hand-extract fact patterns, verify citations, and grow
-      coverage to 50+ fixtures with the chapter-spread gaps
-      (XX offences relating to marriage, XXII criminal
-      intimidation, more XVII property-offence cases —
-      s378 theft, s392 robbery, s415/420 cheating, s425 mischief,
-      s441 criminal trespass — currently underrepresented).
-      Some of the existing fixtures may also need verification
-      against the judgments themselves; spot-check the
-      `case_summary` and `fact_facts` mappings.
+- [~] **Case-law sample grown 23 → 30 fixtures.** Added 7
+      high-confidence cases via a focused training-data research
+      pass (Wong Seng Kwan s378 theft / Idya Nurhazlyn s420
+      cheating / PP v BDB s325 hurt / Terence Ng + Mohammed Liton
+      s375 sentencing frameworks / Low Song Chye s323 / ADF v PP
+      s324). Recommend top-1 lifted 30.4% → 43.3%, T3 34.8% →
+      46.7%, MRR 0.326 → 0.450 — the new fixtures use sections
+      with cleaner element vocabulary than the homicide-heavy
+      original sample. **Still requires** manual research from
+      LawNet / SLW for: chapter II (state offences), chapter XX
+      (marriage), chapter XXII (intimidation — s506 / s509),
+      s392 / s394 robbery, s425 mischief, s441 criminal trespass,
+      s363 / s363A kidnapping. The agent flagged these chapters
+      as ones where reported SG case-law is genuinely thin or
+      where citation accuracy needs LawNet verification.
+      Citation pinpoint for Low Song Chye [2019] 5 SLR 526 is
+      [Inference] from training-data — verify before relying.
 - [ ] Inter-rater reliability on the curated fact patterns. A
       second curator (human, not LLM) extracts facts from the
       same judgments independently; compute κ score for §7.8's

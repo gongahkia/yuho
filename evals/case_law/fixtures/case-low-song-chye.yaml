@@ -1,0 +1,33 @@
+id: case-low-song-chye
+case_citation: "Low Song Chye v PP [2019] 5 SLR 526"
+actual_charge: "323"
+outcome: "Conviction for voluntarily causing hurt under s323 affirmed by the High Court; 3-judge coram restated the sentencing framework for s323 simple-hurt cases."
+case_summary: |
+  The appellant punched the victim, causing hurt. The High Court
+  (sitting as a 3-judge coram) affirmed the s323 conviction and used
+  the appeal to set out the sentencing framework for s323 voluntarily
+  causing hurt — the band-based approach by reference to the degree of
+  injury and culpability. Leading SG sentencing authority for s323.
+  Citation pinpoint flagged as [Inference] by the agent that
+  surfaced this case; verify against LawNet before relying on it.
+section: "323"
+description: |
+  A struck B, causing B bodily pain and injury (hurt under s319). A
+  intended to cause hurt to B. The injuries did not rise to grievous
+  hurt under s320, so the offence fell under s323 (not s325).
+parties:
+  A: { role: accused }
+  B: { role: victim }
+acts:
+  - { actor: A, description: "punches B, causing bodily injury" }
+mental_states:
+  A:
+    intent: "to cause hurt to B"
+circumstances:
+  - "injuries amount to hurt under s319 but not grievous hurt under s320"
+outcomes:
+  - { actor: B, description: "B suffers hurt" }
+fact_facts:
+  offence_committed: true
+  conviction: true
+tags: [source:case-law, chapter:xvi, category:hurt, doctrine:s323-sentencing-framework]
