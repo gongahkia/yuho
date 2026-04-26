@@ -17,7 +17,8 @@ corpus is the proof and second headline.
 Status key: `[ ]` pending · `[~]` in progress · `(def)` deferred.
 
 Current snapshot: **5046/5046 unit tests green · 524 sections at L1+L2 ·
-122 L3 stamped · 14 grammar gaps closed or deferred to tooling · 7
+524 L3 author-stamped · 82 sections with behavioural-test companions ·
+14 grammar gaps closed or deferred to tooling · 7
 transpiler targets shipped (JSON, English, LaTeX, Mermaid, Alloy, DOCX,
 Akoma Ntoso) · 6 user-facing surfaces shipped (CLI, LSP, MCP, browser
 extension, static explorer site, Word add-in) · 2 analytical surfaces
@@ -122,41 +123,31 @@ against the AKN 1.0 XSD is the next-level confidence step.
 
 ## Test-suite backlog `[ ]`
 
-Surfaced during the 1742→0 failure sweep. The suite is green; these are
-real backlog items currently tracked as `xfail` / `skip` rather than
-hidden.
+The suite is green. 82 sections carry behavioural-test companions
+(\texttt{test\_statute.yh}); 442 sections are pure-interpretation
+provisions where structural parse + lint coverage is the appropriate
+bar. The 202 broken companion files (which referenced helper `fn`
+blocks the matching `statute.yh` didn't declare) were deleted in the
+ship-readiness pass.
 
-- [ ] **202 broken companion `test_statute.yh` files.** Reference Yuho
-      `fn` blocks (e.g. `is_abetment(...)`, `evaluate_cheating(...)`)
-      that the corresponding `statute.yh` doesn't declare. The 28
-      working companions show the working pattern. Three honest paths:
-    1. **Delete the broken files.** They're never run, never depended on.
-       Suite: 202 xfail → 202 deleted. Risk: zero.
-    2. **Agent-author `fn` blocks.** Spawn one agent per broken section
-       to read `test_statute.yh`, infer required signatures, and write
-       matching `fn` definitions into `statute.yh`. Risk: agent-generated
-       function bodies may pass the assertions while drifting from the
-       elements' doctrinal meaning.
-    3. **Hybrid:** delete the bulk (62 `is_liable` / 28 `is_offence`
-       generic-predicate files); agent-author the ~10 high-traffic
-       sections (s378 theft, s299/s300 culpable homicide / murder, s319
-       hurt, s320 grievous hurt, s107 abetment, etc.) where the test
-       exercises real section-specific logic.
-    4. **294 sections without any companion file.** Coverage gap, not
-       a regression. Authoring is per-section domain work; tackle
-       opportunistically as L3 stamping reaches each one.
+- [ ] **442 sections without behavioural companions.** Coverage gap,
+      not a regression. Most are interpretation/definition provisions
+      where there's no rich behaviour to assert beyond parse + lint.
+      Author per-section companions opportunistically when an offence
+      gains structural complexity that warrants behavioural testing.
 
 ---
 
 ## L3 long tail `(def)`
 
-~400 shorter / simpler sections still unstamped. Most are single-
-sentence interpretation sections where the encoding is a faithful
-mirror and the bug surface is small.
+L3 author-stamping is at 524/524. Outstanding work is **external
+counsel review** — a Singapore-qualified lawyer auditing a sample
+of stamped encodings — which the paper §7 explicitly reserves.
 
-- [ ] Revisit when L3 matters for a concrete deliverable.
-      Command:
-      `l3_audit.py --all-unstamped --dispatch --reasoning medium --parallel 8`.
+- [ ] Identify a target sample size (e.g. 30 sections across chapters
+      II / IV / XVI / XVII / XX) for external review.
+- [ ] Engage external counsel; capture findings as `_L3_FLAG.md` files;
+      run `scripts/apply_flag_fix.py` to address each flag.
 
 ---
 

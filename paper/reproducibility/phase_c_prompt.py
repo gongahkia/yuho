@@ -6,15 +6,15 @@ number, and prefixes each prompt with a pre-filled "Section context" block
 to look those up.
 
 usage:
-    python scripts/phase_c_prompt.py 34                 # one section
-    python scripts/phase_c_prompt.py 1-20               # range (20 prompts, sentinel-separated)
-    python scripts/phase_c_prompt.py 34,35,304A         # comma list
-    python scripts/phase_c_prompt.py 1-10,34,304A       # range + list mix
-    python scripts/phase_c_prompt.py 34 300 304A        # space-separated positional args
-    python scripts/phase_c_prompt.py --next 10          # next K unencoded in section order
-    python scripts/phase_c_prompt.py --list             # tab-separated: number<TAB>marginal_note
-    python scripts/phase_c_prompt.py 415 | pbcopy       # copy one prompt to clipboard (macOS)
-    python scripts/phase_c_prompt.py 1-20 --batch       # ONE prompt telling a single long-running
+    python paper/reproducibility/phase_c_prompt.py 34                 # one section
+    python paper/reproducibility/phase_c_prompt.py 1-20               # range (20 prompts, sentinel-separated)
+    python paper/reproducibility/phase_c_prompt.py 34,35,304A         # comma list
+    python paper/reproducibility/phase_c_prompt.py 1-10,34,304A       # range + list mix
+    python paper/reproducibility/phase_c_prompt.py 34 300 304A        # space-separated positional args
+    python paper/reproducibility/phase_c_prompt.py --next 10          # next K unencoded in section order
+    python paper/reproducibility/phase_c_prompt.py --list             # tab-separated: number<TAB>marginal_note
+    python paper/reproducibility/phase_c_prompt.py 415 | pbcopy       # copy one prompt to clipboard (macOS)
+    python paper/reproducibility/phase_c_prompt.py 1-20 --batch       # ONE prompt telling a single long-running
                                                         # agent to do all 20 sequentially
 
 modes:

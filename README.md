@@ -15,7 +15,7 @@
   <a href="./LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"/></a>
   <img src="https://img.shields.io/badge/python-3.10%2B-blue.svg" alt="Python 3.10+"/>
   <img src="https://img.shields.io/badge/L1%2BL2-524%2F524-brightgreen.svg" alt="L1+L2 coverage"/>
-  <img src="https://img.shields.io/badge/L3-122%2F524-orange.svg" alt="L3 coverage"/>
+  <img src="https://img.shields.io/badge/L3-524%2F524-brightgreen.svg" alt="L3 coverage"/>
 </p>
 
 <p align="center">
@@ -38,13 +38,16 @@ exceptions, and amendment lineage. The grammar tracks how penal code is
 actually drafted, so encoding a section is line-for-line with reading it.
 
 The proof of concept is a complete encoding of the **Singapore Penal Code
-1871** — all 524 sections, 524 passing parse-and-build (L1+L2), 122
-human-stamped at the strictest fidelity tier (L3). Mass-encoding the full
+1871** — all 524 sections, 524 passing parse-and-build (L1+L2), 524
+author-stamped at the strictest fidelity tier (L3, 11-point checklist;
+external counsel review remains future work — see paper §7).
+Mass-encoding the full
 code surfaced fourteen distinct grammar gaps (G1–G14), all either resolved
 in the parser or rerouted to a fidelity-diagnostic linter; the catalogue
 is documented in [`docs/researcher/phase-c-gaps.md`](./docs/researcher/phase-c-gaps.md).
 
-Around the language sits a complete toolchain — six transpilers, an LSP, an
+Around the language sits a complete toolchain — seven transpilers
+(including Akoma Ntoso for cross-jurisdictional interop), an LSP, an
 MCP server, a VS Code extension, and Z3 / Alloy verification hookups —
 described below.
 
@@ -120,7 +123,7 @@ will land at `docs/architecture.svg` once the Mermaid CLI build runs.
 | Sections encoded | 524 / 524 |
 | L1 (parse) | 524 / 524 |
 | L2 (build + lint) | 524 / 524 |
-| L3 (human-stamped) | 122 / 524 (long tail in progress) |
+| L3 (author-stamped) | 524 / 524 (external counsel review pending) |
 | Grammar gaps (G1–G14) | 10 fixed · 2 not-a-gap · 1 lint · 1 deferred |
 | Implementation SLOC | ~38.7k Python + 900 grammar.js |
 | Library SLOC | ~16.4k `.yh` |

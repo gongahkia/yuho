@@ -6,22 +6,22 @@ context prefilled (marginal note, SSO anchor, existing dir path).
 
 usage:
     # print one prompt to stdout
-    python scripts/phase_d_reencode.py 415
+    python paper/reproducibility/phase_d_reencode.py 415
 
     # print prompts for a range as sentinel-separated stream
-    python scripts/phase_d_reencode.py 1-20
+    python paper/reproducibility/phase_d_reencode.py 1-20
 
     # list the sections that still need re-encoding (non-L3, non-clean-simple)
-    python scripts/phase_d_reencode.py --list
+    python paper/reproducibility/phase_d_reencode.py --list
 
     # dispatch ONE section to `codex exec --full-auto` in the foreground
-    python scripts/phase_d_reencode.py 415 --dispatch
+    python paper/reproducibility/phase_d_reencode.py 415 --dispatch
 
     # dispatch a batch to codex in parallel (background processes)
-    python scripts/phase_d_reencode.py 1-10 --dispatch --parallel 5
+    python paper/reproducibility/phase_d_reencode.py 1-10 --dispatch --parallel 5
 
     # write prompts to files in /tmp/phase_d/ for manual paste-to-Codex-Cloud
-    python scripts/phase_d_reencode.py 1-50 --to-files /tmp/phase_d/
+    python paper/reproducibility/phase_d_reencode.py 1-50 --to-files /tmp/phase_d/
 """
 from __future__ import annotations
 import argparse, json, re, subprocess, sys
