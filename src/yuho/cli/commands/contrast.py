@@ -118,8 +118,17 @@ def run_contrast(
     *,
     library: Optional[str] = None,
     json_output: bool = False,
+    minimal: bool = False,
+    timeout_ms: int = 30000,
 ) -> None:
-    """Shell entrypoint for ``yuho contrast``."""
+    """Shell entrypoint for ``yuho contrast``.
+
+    When ``minimal`` is True, uses Z3's ``Optimize`` interface to find
+    a satisfying assignment that minimises the count of leaf-element
+    ``*_satisfied`` Bools that are True — i.e. the smallest fact-set
+    (by hamming weight) that distinguishes A from B. Slower than the
+    default any-model search; honour the timeout knob accordingly.
+    """
     try:
         import z3  # noqa: F401
     except ImportError:
@@ -151,18 +160,47 @@ def run_contrast(
     b_id = section_b.lstrip("sS").replace(".", "_")
     a_conviction = gen._consts.get(f"{a_id}_conviction")
     b_conviction = gen._consts.get(f"{b_id}_conviction")
-    if a_conviction is None or b_conviction is None:
+    missing = []
+    if a_conviction is None:
+        missing.append(section_a)
+    if b_conviction is None:
+        missing.append(section_b)
+    if missing:
         raise click.ClickException(
-            f"conviction Bool missing for {section_a} / {section_b} — "
-            f"sections may have no elements"
+            "no elements declared for: " + ", ".join(missing)
+            + ". The section is likely interpretation-only "
+              "(definitions / penalty / illustrations only) and has "
+              "no conviction predicate to contrast against."
         )
 
     import z3
-    solver = z3.Solver()
-    for assertion in gen._assertions:
-        solver.add(assertion)
-    solver.add(a_conviction)
-    solver.add(z3.Not(b_conviction))
+    if minimal:
+        solver = z3.Optimize()
+        solver.set("timeout", timeout_ms)
+        for assertion in gen._assertions:
+            solver.add(assertion)
+        solver.add(a_conviction)
+        solver.add(z3.Not(b_conviction))
+        # Minimise the number of `*_satisfied` Bools that are True across
+        # both statutes — the smallest fact-set (by count) that still
+        # distinguishes A from B. `If(b, 1, 0)` lifts each Bool to an Int
+        # so `Sum` is well-typed.
+        weight_terms = [
+            z3.If(var, 1, 0)
+            for name, var in gen._consts.items()
+            if name.endswith("_satisfied")
+            and name not in (f"{a_id}_elements_satisfied",
+                             f"{b_id}_elements_satisfied")
+        ]
+        if weight_terms:
+            solver.minimize(z3.Sum(*weight_terms))
+    else:
+        solver = z3.Solver()
+        solver.set("timeout", timeout_ms)
+        for assertion in gen._assertions:
+            solver.add(assertion)
+        solver.add(a_conviction)
+        solver.add(z3.Not(b_conviction))
 
     result = solver.check()
     if result != z3.sat:

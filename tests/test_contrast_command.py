@@ -90,3 +90,27 @@ def test_contrast_unresolved_section_errors_cleanly():
     assert result.exit_code != 0
     assert "could not locate encoded section" in (result.output or "") or \
            "could not locate encoded section" in str(result.exception)
+
+
+@pytest.mark.skipif(
+    not (LIBRARY / "s299_culpable_homicide" / "statute.yh").exists()
+    or not (LIBRARY / "s300_murder" / "statute.yh").exists(),
+    reason="Penal Code library not present",
+)
+def test_contrast_minimal_does_not_increase_true_count():
+    """--minimal must yield at-most-as-many True Bools as the any-model run."""
+    runner = CliRunner()
+    plain = runner.invoke(cli, ["contrast", "s299", "s300", "--json"])
+    minimal = runner.invoke(cli, ["contrast", "s299", "s300", "--minimal", "--json"])
+    assert plain.exit_code == 0, plain.output
+    assert minimal.exit_code == 0, minimal.output
+    p = json.loads(plain.output)
+    m = json.loads(minimal.output)
+
+    def _count_true(payload):
+        n = 0
+        for fp in payload["fact_pattern"].values():
+            n += sum(1 for v in fp.values() if v)
+        return n
+
+    assert _count_true(m) <= _count_true(p), (m, p)

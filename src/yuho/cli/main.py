@@ -273,11 +273,20 @@ def recommend(
 @click.argument("section_b", type=str)
 @click.option("--library", type=click.Path(exists=True, file_okay=False),
               help="Override the default library/penal_code path")
+@click.option("--minimal", is_flag=True,
+              help="Use z3.Optimize to return the smallest fact-set "
+                   "(by hamming weight) that distinguishes A from B; "
+                   "slower than the default any-model search.")
+@click.option("--timeout", "timeout_ms", type=int, default=30000,
+              show_default=True,
+              help="Z3 solver timeout in milliseconds")
 @click.option("--json", "json_output", is_flag=True, help="Output as JSON")
 def contrast(
     section_a: str,
     section_b: str,
     library: Optional[str],
+    minimal: bool,
+    timeout_ms: int,
     json_output: bool,
 ):
     """Z3-derived structural boundary between two sections.
@@ -291,8 +300,9 @@ def contrast(
     cases turn on evidence and judicial interpretation.
 
     Example:
-        yuho contrast s299 s300         # culpable homicide vs murder
-        yuho contrast s302 s79          # murder vs private-defence
+        yuho contrast s299 s300                 # any model
+        yuho contrast s299 s300 --minimal       # smallest fact-set
+        yuho contrast s299 s300 --json          # machine-readable
     """
     from yuho.cli.commands.contrast import run_contrast
 
@@ -300,6 +310,55 @@ def contrast(
         section_a, section_b,
         library=library,
         json_output=json_output,
+        minimal=minimal,
+        timeout_ms=timeout_ms,
+    )
+
+
+# =============================================================================
+# Narrow-defence command — structural-availability floor for defences
+# =============================================================================
+
+
+@cli.command("narrow-defence")
+@click.argument("offence_section", type=str)
+@click.argument("defence_section", type=str)
+@click.option("--library", type=click.Path(exists=True, file_okay=False),
+              help="Override the default library/penal_code path")
+@click.option("--minimal", is_flag=True,
+              help="Use z3.Optimize to return the smallest fact-set "
+                   "(by hamming weight) where both sections' elements fire.")
+@click.option("--timeout", "timeout_ms", type=int, default=30000,
+              show_default=True, help="Z3 solver timeout in milliseconds")
+@click.option("--json", "json_output", is_flag=True, help="Output as JSON")
+def narrow_defence(
+    offence_section: str,
+    defence_section: str,
+    library: Optional[str],
+    minimal: bool,
+    timeout_ms: int,
+    json_output: bool,
+):
+    """Smallest fact pattern where a defence section's elements fire
+    alongside an offence section's. Useful for spotting the
+    structural-availability floor of a general defence against a
+    specific offence.
+
+    NOT LEGAL ADVICE — structural-availability floor only. Whether
+    the defence will succeed evidentially is a doctrinal call.
+
+    Example:
+        yuho narrow-defence s302 s79             # murder vs private-defence
+        yuho narrow-defence s302 s84 --minimal   # vs unsoundness of mind
+    """
+    from yuho.cli.commands.narrow_defence import run_narrow_defence
+
+    run_narrow_defence(
+        offence_section, defence_section,
+        library=library,
+        json_output=json_output,
+        minimal=minimal,
+        timeout_ms=timeout_ms,
     )
 
 

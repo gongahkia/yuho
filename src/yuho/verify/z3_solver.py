@@ -1127,12 +1127,28 @@ class Z3Generator:
         statute_const = z3.Const(f"statute_{statute_id}", self._sorts["Statute"])
         self._consts[f"statute_{statute_id}"] = statute_const
 
-        # Recursively translate element tree into a Z3 boolean expression
+        # Recursively translate element tree into a Z3 boolean expression.
+        # When a section declares its elements only inside subsections
+        # (the typical shape for general-defence statutes — s76–s106
+        # under Chapter IV — and for any provision whose drafting splits
+        # by subsection), we hoist every subsection's elements to the
+        # top level. The Z3 model treats the top-level conjunction as
+        # the section's predicate; the subsection split is structurally
+        # irrelevant once elements are flattened. Without this hoist,
+        # `<sX>_elements_satisfied` would not exist for any defence
+        # statute, breaking `yuho narrow-defence` and any cross-section
+        # query that names them.
         element_exprs = []
         for elem in statute.elements:
             expr = self._translate_element(statute_id, elem)
             if expr is not None:
                 element_exprs.append(expr)
+        if not element_exprs:
+            for sub in getattr(statute, "subsections", ()) or ():
+                for elem in getattr(sub, "elements", ()) or ():
+                    expr = self._translate_element(statute_id, elem)
+                    if expr is not None:
+                        element_exprs.append(expr)
 
         # Top-level elements are implicitly conjunctive (all must hold).
         # We split the original biconditional `conviction == all_elements`
