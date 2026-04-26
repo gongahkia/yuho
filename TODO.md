@@ -380,24 +380,33 @@ Possible follow-ups (not in scope here):
       can switch from the "both elements fire" model to the
       stronger "elements fire AND defence prevents conviction" one.
 
-#### Direction C — LLM legal-reasoning benchmark
+#### Direction C — LLM legal-reasoning benchmark `[~]`
 
 Package the encoded library as a graded benchmark for LLMs. Each
 fixture is a fact-pattern + ground-truth answer (which section
 applies, which elements are met, which exception fires). Yuho's
 evaluator already computes the ground truth.
 
-- [ ] Define benchmark schema (`benchmark/schema.json`) and a runner
-      (`benchmark/run.py`) that takes an LLM client + fixtures and
-      produces a per-task accuracy table.
-- [ ] Seed with ~200 fixtures derived from existing
-      `simulator/fixtures/` + `library/penal_code/*/test_statute.yh`
-      companions, filtered by L3 stamp.
-- [ ] Run baseline against Claude / GPT-4-class / open-weights
-      models. Report per-section + per-element-type accuracy.
+- [x] **v0 shipped:** `benchmark/schema.json` defines the fixture
+      shape; `benchmark/run.py` is a single-file runner with two
+      `BenchmarkClient` impls (Anthropic SDK + `FakeClient` for
+      offline / CI) and three tasks per fixture (section
+      identification, element-set F1, exception citation).
+      `benchmark/fixtures/` ships with 22 seed fixtures spanning
+      9 chapters and 4 categories. End-to-end: `python benchmark/
+      run.py --fake` lands cleanly at 100/100/100% headline.
+- [ ] **Grow to ~200 fixtures.** The 22 seed fixtures cover the
+      common offences but skip half the Penal Code's chapters.
+      Add fixtures opportunistically; every encoded section with
+      a `test_statute.yh` companion is a candidate seed.
+- [ ] **Run baseline against Claude / GPT-4-class / open-weights**
+      and report per-section + per-element-type accuracy. The
+      runner already emits the per-fixture JSON; add a stratified
+      report (per chapter / per difficulty / per category).
 - [ ] **Paper claim:** "A statute-grounded benchmark for LLM legal
       reasoning". Position alongside LegalBench / LawBench but with
-      Yuho's structural ground truth as the differentiator.
+      Yuho's structural ground truth as the differentiator. Adds
+      an evaluation subsection with the headline numbers.
 
 #### Direction D — Interactive learn-by-doing legal-ed
 

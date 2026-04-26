@@ -1,0 +1,16 @@
+id: s375-rape
+section: "375"
+scenario: |
+  A and B are at A's flat. B says "no" repeatedly and tries to push
+  A away. A nonetheless penetrates B without B's consent. B did
+  not consent at any point and was physically resisting A's actions.
+  A was aware of B's lack of consent.
+ground_truth:
+  section: "375"
+  satisfied_elements: [penetration, without_consent, knowledge_of_lack_of_consent]
+  fired_exception: null
+fact_facts:
+  penetration: true
+  without_consent: true
+  knowledge_of_lack_of_consent: true
+tags: [chapter:xvi, category:sexual_offence, difficulty:basic]
