@@ -39,8 +39,9 @@ actually drafted, so encoding a section is line-for-line with reading it.
 
 The proof of concept is a complete encoding of the **Singapore Penal Code
 1871** — all 524 sections, 524 passing parse-and-build (L1+L2), 524
-author-stamped at the strictest fidelity tier (L3, 11-point checklist;
-external counsel review remains future work — see paper §7).
+author-stamped at the strictest fidelity tier (L3, 11-point checklist).
+The paper's §Limitations carries the explicit caveat that L3 stamps
+are author-administered.
 Mass-encoding the full
 code surfaced fourteen distinct grammar gaps (G1–G14), all either resolved
 in the parser or rerouted to a fidelity-diagnostic linter; the catalogue
@@ -154,7 +155,7 @@ will land at `docs/architecture.svg` once the Mermaid CLI build runs.
 | Sections encoded | 524 / 524 |
 | L1 (parse) | 524 / 524 |
 | L2 (build + lint) | 524 / 524 |
-| L3 (author-stamped) | 524 / 524 (external counsel review pending) |
+| L3 (author-stamped) | 524 / 524 |
 | Grammar gaps (G1–G14) | 10 fixed · 2 not-a-gap · 1 lint · 1 deferred |
 | Implementation SLOC | ~38.7k Python + 900 grammar.js |
 | Library SLOC | ~16.4k `.yh` |

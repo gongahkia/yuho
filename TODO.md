@@ -65,13 +65,11 @@ manuscript. Slower wall-clock (9-15 months) but the submission is
 a finished artefact and avoids the risk of a "come back when §8
 is done" rejection.
 
-1. **Months 1-3** — Gaps 1, 2, 3, 4 in parallel where possible:
+1. **Months 1-3** — Gaps 1, 2, 4 in parallel where possible:
    - Gap 1 (operational semantics): independent paper-writing
      work, can ship while corpus encoding runs.
    - Gap 2 (pen-and-paper soundness): depends on Gap 1; landed
      immediately after.
-   - Gap 3 (external counsel audit): book the lawyer in month 1;
-     audit runs over months 1-3 in the background.
    - Gap 4 (case-law differential testing): curate cases in
      month 2-3; encode + score in month 3.
 2. **Months 2-9** — Opportunity A (IPC or MPC encoding):
@@ -104,7 +102,7 @@ means slower-but-completer rather than faster-but-iterative.
 | §4 Formal semantics | **Gap 1** |
 | §5 Implementation | Existing |
 | §6 Transpiler soundness | **Gap 2** (+ Gap 5 mechanisation subsection if it lands) |
-| §7 Evaluation | Existing + **Gap 3** (§7.7) + **Gap 4** (§7.8) |
+| §7 Evaluation | Existing + **Gap 4** (§7.8) |
 | §8 Comparative encoding | **Opportunity A** |
 | §9-12 Related / Applicability / Limitations / Conclusion | Existing |
 | Appx A — full inference rules | Gap 1 detail |
@@ -149,32 +147,6 @@ Remaining work:
 
 - [ ] Mechanisation in Coq or Lean — see §6.3 below
       (deliberately deferred).
-
-### §7.7 of the paper — External Singapore-counsel L3 audit `[ ]`
-
-L3 is at 524/524 author-stamped; the paper §7 explicitly reserves
-external counsel review. Engaging one Singapore-qualified lawyer
-for a 30-section sample turns the L3 claim from "author-stamped"
-to "audited", which is the rigor analogue of Catala's DGFiP
-collaboration and DAPRECO's external legal-scholar review.
-
-- [ ] Sampling plan: 30 sections drawn across chapters II
-      (offences against state), IV (general exceptions), XVI
-      (offences against the body), XVII (offences against
-      property), XX (offences relating to marriage). 6 per
-      chapter, stratified by complexity (count of `exception`
-      blocks + count of subsections).
-- [ ] Brief the lawyer with: encoded `.yh` source + the
-      controlled-English transpile + the canonical SSO text +
-      Yuho's existing 11-point checklist. Half-day per section is
-      a reasonable budget.
-- [ ] Findings persist as per-section `_L3_FLAG.md` files;
-      `scripts/apply_flag_fix.py` (already shipped) dispatches the
-      fix for each. Re-stamp at `L3_external` so the metadata
-      surface distinguishes from author-stamped.
-- [ ] Paper §7 update: replace "external counsel review pending"
-      with the audit findings (n surveyed / n flagged / n
-      addressed) + a per-chapter breakdown.
 
 ### §7.8 of the paper — Differential testing against published case law `[x]`
 
@@ -293,8 +265,7 @@ Two of three deliverables shipped — only the Zenodo DOI remains
 - [x] **`paper/REPRODUCE.md`** documents every paper claim with
       a per-claim verification command, expected output, expected
       wall-clock time, and what's deliberately *not* covered by
-      `paper-reproduce` (real-LLM benchmark, full IPC scrape,
-      external counsel audit).
+      `paper-reproduce` (real-LLM benchmark, full IPC scrape).
 - [ ] **Zenodo deposit** of the v1.0 corpus + benchmark fixtures
       + AKN XSD with a citable DOI. Triggered on paper
       submission; nothing to do until then.
@@ -304,7 +275,7 @@ Two of three deliverables shipped — only the Zenodo DOI remains
 | Risk | Mitigation |
 |---|---|
 | Gap 5 mechanisation overruns | §6.3 demotes to future-work pointer; §6.2 pen-and-paper carries the soundness claim alone |
-| External counsel availability slips Gap 3 | Reduce sample from 30 → 20 sections; cite limitation in §7.7 |
+| External counsel access not available | L3 stays author-stamped; §11 Limitations carries the explicit caveat that external review is not part of this paper's claim |
 | IPC/MPC text access blocked (paywall, robots.txt change) | Switch to the Bangladeshi PC 1860 (also Anglo-Indian lineage, public-domain text) |
 | AI&L editorial rejection | Re-target *Formal Aspects of Computing* (legal-tech amenable) or ICAIL (page budget tighter but acceptable) |
 | Case-law sample for §7.8 has too few clean single-charge cases | Widen to multi-charge cases; score per-charge top-k accuracy; drop the "single charge" cleanliness constraint |
@@ -312,8 +283,8 @@ Two of three deliverables shipped — only the Zenodo DOI remains
 ### Cross-cutting notes
 
 The §4 + §6 (formal semantics + soundness) layer is the **rigor
-defence** against formal-methods-trained reviewers; §7.7 + §7.8
-(audit + differential testing) are the **empirical case**;
+defence** against formal-methods-trained reviewers; §7.8
+(case-law differential testing) is the **empirical case**;
 §8 (cross-jurisdiction) is the **uniqueness claim**. All three
 are needed for an AI&L journal submission of this scope; missing
 any one weakens the paper to "interesting tooling" rather than
@@ -328,9 +299,7 @@ future-work pointer.
 
 **Overlap with deferred sections:** §8 supersedes Phase 2c
 Direction A (Cross-jurisdiction PC port) — the Direction-A
-bullets below are absorbed into §8. §7.7 supersedes the L3
-long-tail external-counsel-review bullets — the external review
-is now a paper section, not a deferred item.
+bullets below are absorbed into §8.
 
 ---
 
@@ -458,13 +427,12 @@ ship-readiness pass.
 
 ---
 
-## L3 long tail `(superseded by §7.7)`
+## L3 long tail `(closed)`
 
-L3 author-stamping is at 524/524. The external-counsel-review
-work has been promoted into the paper as `§7.7 of the paper —
-External Singapore-counsel L3 audit` (under PhD-rigor hardening).
-This section retained as a back-link only; do not track work
-here.
+L3 author-stamping is at 524/524. External counsel review is out
+of scope for this paper; the paper's `§Limitations` carries the
+explicit caveat that L3 stamps are author-administered. No work
+to track here.
 
 ---
 

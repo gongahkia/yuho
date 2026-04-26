@@ -60,7 +60,6 @@ These steps are heavy enough to live separately:
 - **Full corpus build with rendered SVGs** — `python scripts/build_corpus.py` followed by `python scripts/render_svg_cache.py --workers 8`. Takes ~10 minutes with mmdc + Chrome installed (see `editors/explorer-site/build/`). Required only if you want to rebuild the explorer site.
 - **Full LLM benchmark against a real model** — needs `OPENAI_API_KEY` or `ANTHROPIC_API_KEY`. The FakeClient end-to-end above confirms the *runner* works; real-LLM scores require credentials and are reported separately at `evals/results-<model>.json`.
 - **Full IPC / MPC scrape (§8)** — `python scripts/scrape_indiacode.py act --out library/indian_penal_code/_raw/act.json`. Takes ~1 hour at the 6 s/request crawl-delay convention. Independent of paper-reproduce since the encoded library doesn't yet ship the IPC data.
-- **External-counsel L3 audit (§7.7)** — non-code; carried out by a Singapore-qualified lawyer against the 30-section sample described in `paper/sections/evaluation.tex` §7.7.
 
 ## Reproducing the paper PDF
 

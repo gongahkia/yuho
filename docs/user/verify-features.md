@@ -360,8 +360,9 @@ structural parse + lint coverage is the appropriate bar).
 |---|---|---|
 | **L1** | The `.yh` parses without syntax errors. | Yes — `yuho check`. |
 | **L2** | AST builds, lint passes, fidelity diagnostics quiet. | Yes — `yuho check` + `yuho lint`. |
-| **L3** | An 11-point human-checklist audit passed. | Author-administered; external counsel review pending. |
+| **L3** | An 11-point human-checklist audit passed. | Author-administered. |
 
-The paper's §7 is explicit that L3 stamps are author-administered, not
-externally validated. That is the load-bearing caveat to read the
-"524/524 L3-stamped" claim alongside.
+The paper's §Limitations is explicit that L3 stamps are
+author-administered, not externally validated. That is the
+load-bearing caveat to read the "524/524 L3-stamped" claim
+alongside.
