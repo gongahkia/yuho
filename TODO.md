@@ -641,10 +641,19 @@ Possible follow-ups (not in scope here):
       the Z3-synthesised corpus covers SCC/subsumes pairs
       across the wider library. Results JSON at
       `evals/case_law/results-contrast-validation.json`.
-- [ ] Encode general defences with explicit `defeats` edges into
-      the offences they apply against, so `yuho narrow-defence`
-      can switch from the "both elements fire" model to the
-      stronger "elements fire AND defence prevents conviction" one.
+- [~] **General-defence `defeats` edges, v0 sample shipped.**
+      s302 (murder) carries an `exception general_defence_s84`
+      block whose guard is `when is_infringed(s84)` — when s84's
+      elements all fire, the exception fires, and `s302_conviction`
+      goes false. The pattern is repeatable for every Chapter IV
+      defence (s76-s106) against every relevant offence; we ship
+      the s302+s84 edge as the proof of concept (mirrors the
+      Took Leng How precedent we curated). Full coverage is a
+      follow-up trench: ~30 defences × dozens of applicable
+      offences = several hundred edges. Suggest doing the
+      most-doctrinally-applicable subset first (private defence
+      ss96-106 onto harm offences; s79 mistake-of-fact onto
+      mens-rea offences).
 
 #### Direction C — LLM legal-reasoning benchmark `[~]`
 
