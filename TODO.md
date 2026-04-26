@@ -60,10 +60,6 @@ work is submission hardening.
       `paper/blog/yuho.md`.
 - [ ] Render Mermaid figures to PDF (requires `mmdc`), inspect, and tune
       layouts.
-- [x] **Cite-key audit (done):** every `\cite{}` resolves; all 26 bib
-      entries are referenced at least once. Smoke build now lands clean
-      (24 pages, 0 LaTeX errors, 0 unresolved refs) after the
-      digit-in-command-name fix to `methodology.tex`.
 - [ ] Confirm canonical citations for `lam4`, `lexscript`, `ldoc`,
       `hammond1983rights` (TODO notes still in `references.bib`).
 - [ ] External-reader pass on the full PDF; tighten phrasing and integrate
@@ -95,10 +91,6 @@ delegate to `StatuteEvaluator` and return a boolean Value tracking
 the inner scope's `overall_satisfied`. The remaining work is the
 deeper static + symbolic layer.
 
-- [x] Element-graph executor for `ApplyScopeNode` — wired into
-      `Interpreter.visit_apply_scope`; first struct-typed arg is the
-      facts, falling back to the env-derived facts when no struct arg
-      is supplied. `IsInfringedNode` follows the same path.
 - [ ] Type-check pass: when `apply_scope` is composed inside a parent
       statute, verify the parent's element shape is compatible with the
       base section's required inputs.
@@ -108,22 +100,11 @@ deeper static + symbolic layer.
 
 ---
 
-## Akoma Ntoso transpiler — schema validation `[x]`
+## Akoma Ntoso transpiler `[ ]`
 
-Done. The OASIS LegalDocML 1.0 XSD is vendored at
-`paper/reproducibility/akn-schema/`; `python scripts/akn_roundtrip.py
---xsd` validates all 524 sections against the schema. Three real
-fidelity bugs surfaced and were fixed:
-
-- `<identification>` now carries all three FRBR siblings (Work,
-  Expression, Manifestation), not just Work.
-- `<term>` requires a `refersTo` ontology reference; replaced with
-  `<def refersTo="#term_…">` for definitions and bold inline text
-  for elements.
-- AKN has no first-class `<exception>` element; emit as
-  `<hcontainer name="exception">`. Sections with subsections or
-  exceptions take the `intro + hierElements` branch of the
-  hierarchy content model instead of `<content>`.
+Structural transpiler ships and validates 524/524 against the
+vendored OASIS XSD via `python scripts/akn_roundtrip.py --xsd`.
+Remaining work is hardening:
 
 - [ ] **Stretch:** add a CI job that runs `xmllint --schema` against
       every emitted document on every push (currently the round-trip
@@ -212,15 +193,11 @@ first-class queries.
 
 #### Scrape + ingest
 
-- [x] **v0 scrape (shipped):** `scripts/scrape_sso.py historical-list`
-      enumerates every ValidDate SSO advertises for an Act;
-      `historical` fetches a single snapshot via
-      `?ValidDate=YYYYMMDD&WholeDoc=1`; `historical-bulk` walks every
-      advertised date with the existing 6 s crawl-delay and writes one
-      `_raw/historical/<act>/<YYYYMMDD>.json` per snapshot plus a
-      `historical_index.json` mapping date → relative path. Per-Act
-      coverage is whatever the SSO dropdown lists (typically 40–60
-      snapshots across the 150-year span).
+The v0 scrape ships (`scripts/scrape_sso.py historical-list /
+historical / historical-bulk`); per-Act snapshots land under
+`_raw/historical/<act>/<YYYYMMDD>.json` with a sibling
+`historical_index.json`. Remaining work:
+
 - [ ] Build a `historical_index.json` mapping `(section, valid-date)
       -> raw_path` so re-encoding can iterate snapshots in chronological
       order.
