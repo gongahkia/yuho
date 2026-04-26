@@ -15,6 +15,12 @@
 
 % Theorem environments for §6 (soundness).
 \usepackage{amsthm}
+
+% TikZ for the §3 + §5 figures (replaces the prior Mermaid-rendered PDFs
+% which had weak typographic control under acmart). Native LaTeX
+% rendering picks up the body font + spacing.
+\usepackage{tikz}
+\usetikzlibrary{positioning, shapes.geometric, arrows.meta, fit, calc, backgrounds}
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{lemma}[theorem]{Lemma}
 

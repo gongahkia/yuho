@@ -67,7 +67,7 @@ def SMTModel.elementsTruth (m : SMTModel) (s : Statute) : Bool :=
 function is monotone — once a label enters the accumulator, it
 stays in. We need this for the inductive step of the main lemma. -/
 private theorem firedSet_prefix_subset
-    (xs : List Exception) (F : Facts) (acc : List String) :
+    (_xs : List Exception) (_F : Facts) (_acc : List String) :
     -- every label in `acc` remains in the result of folding `xs`
     -- over `acc`. Stated as a helper for the well-foundedness of
     -- the defeats-DAG argument.

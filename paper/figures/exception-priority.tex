@@ -1,0 +1,39 @@
+% TikZ rendering of the G13 Catala-style prioritised exception DAG.
+% Replaces the Mermaid render at exception-priority.mmd.
+\begin{tikzpicture}[
+    node distance = 8mm and 12mm,
+    every node/.style = {
+      font = \footnotesize,
+      align = center,
+    },
+    rule/.style = {
+      draw, rounded corners = 2pt,
+      minimum height = 16pt, minimum width = 28mm,
+      inner sep = 4pt, fill = black!4,
+    },
+    exc/.style = {
+      draw, rounded corners = 2pt,
+      minimum height = 16pt, minimum width = 36mm,
+      inner sep = 4pt, fill = white,
+    },
+    every path/.style = {-{Stealth[length=4pt]}, draw, thin},
+    priority/.style = {-{Stealth[length=4pt]}, draw, thin, dashed,
+                       gray, font = \scriptsize\itshape},
+  ]
+  \node[rule]                          (rule) {base rule:\, liable};
+  \node[exc, below = 14mm of rule]     (e1)   {exception 1: consent
+                                                 \\ (priority 1)};
+  \node[exc, below = of e1]            (e2)   {exception 2: self-defence
+                                                 \\ (priority 2)};
+  \node[exc, below = of e2]            (e3)   {exception 3: insanity
+                                                 \\ (priority 3)};
+
+  % `defeats` edges from each exception up to the base rule.
+  \draw (e1) -- node[right = 1pt, font = \tiny] {defeats} (rule);
+  \draw[bend right=10] (e2) to (rule);
+  \draw[bend right=20] (e3) to (rule);
+
+  % Priority-ordering between exceptions (lower number wins).
+  \draw[priority, bend right=30] (e2) to node[left] {priority} (e1);
+  \draw[priority, bend right=30] (e3) to (e2);
+\end{tikzpicture}

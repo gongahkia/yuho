@@ -142,3 +142,12 @@ library/penal_code/_coverage/phase_d_*_progress.jsonl
 editors/browser-yuho/data/
 editors/word-yuho/data/
 editors/explorer-site/build/
+
+# Lean / Lake build artefacts
+mechanisation/.lake/
+mechanisation/lake-packages/
+mechanisation/lake-manifest.json
+mechanisation/build/
+
+# Reproducibility-target log directory (emitted by `make paper-reproduce`)
+logs/

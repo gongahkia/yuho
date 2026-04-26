@@ -1,0 +1,78 @@
+% TikZ rendering of the Yuho architecture overview.
+% Replaces the Mermaid render at architecture.mmd; the AST is the
+% central pipeline node, with three concentric clusters around it
+% (Frontend → Analysis + Transpilers + Surfaces) plus an Ingest
+% cluster feeding the lint layer.
+\begin{tikzpicture}[
+    node distance = 5mm and 8mm,
+    every node/.style = {
+      font = \scriptsize,
+      align = center,
+    },
+    box/.style = {
+      draw, rounded corners = 2pt,
+      minimum height = 14pt, minimum width = 16mm,
+      inner sep = 3pt, fill = white,
+    },
+    hub/.style = {
+      draw, rounded corners = 2pt,
+      minimum height = 18pt, minimum width = 18mm,
+      inner sep = 4pt, fill = black!8, font = \footnotesize,
+    },
+    src/.style = {
+      draw, rounded corners = 2pt,
+      minimum height = 14pt, minimum width = 16mm,
+      inner sep = 3pt, fill = black!4,
+    },
+    every path/.style = {-{Stealth[length=4pt]}, draw, thin},
+    fidelity/.style = {-{Stealth[length=4pt]}, draw, thin, dashed, gray},
+    cluster/.style = {
+      draw, rounded corners = 4pt, dashed, thick = 0.4pt,
+      inner sep = 6pt, gray!50,
+    },
+  ]
+
+  % Central pipeline: source → parser → AST.
+  \node[src]                                 (yh)   {.yh source};
+  \node[box, right = of yh]                  (ts)   {tree-sitter\\grammar};
+  \node[hub, right = of ts]                  (ast)  {Python AST};
+
+  % Ingest cluster (top, feeds fidelity check).
+  \node[box, above = 9mm of yh]              (sso)   {SSO scrape};
+  \node[box, right = of sso]                 (raw)   {\_raw/act.json};
+  \draw (sso) -- (raw);
+
+  % Analysis cluster (top-right).
+  \node[box, above right = 6mm and 5mm of ast] (lint) {fidelity\\diagnostics};
+  \node[box, right = 3mm of lint]              (sem)  {semantic\\checks};
+  \node[box, right = 3mm of sem]               (z3)   {Z3 solver};
+  \node[box, right = 3mm of z3]                (alloy) {Alloy};
+
+  % Transpilers cluster (right of AST).
+  \node[box, right = 14mm of ast, yshift = -2mm]
+                                               (json) {JSON};
+  \node[box, right = 3mm of json]              (en)   {English};
+  \node[box, right = 3mm of en]                (tex)  {\LaTeX};
+  \node[box, right = 3mm of tex]               (mmd)  {Mermaid};
+  \node[box, below = 1mm of json]              (als)  {Alloy ALS};
+  \node[box, right = 3mm of als]               (akn)  {AKN};
+  \node[box, right = 3mm of akn]               (docx) {DOCX};
+
+  % Surfaces cluster (bottom-right).
+  \node[box, below right = 6mm and 5mm of ast] (cli) {CLI};
+  \node[box, right = 3mm of cli]               (lsp) {LSP};
+  \node[box, right = 3mm of lsp]               (mcp) {MCP};
+
+  % Edges from the AST hub.
+  \draw (yh) -- (ts);
+  \draw (ts) -- (ast);
+  \draw (ast.east) -- ([xshift=-2pt]lint.west);
+  \draw (ast.east) -- ([xshift=-2pt]json.west);
+  \draw (ast.east) -- ([xshift=-2pt]cli.west);
+
+  % Fidelity check: raw scrape feeds the lint layer.
+  \draw[fidelity] (raw.east) to[bend left=20]
+                  node[above, font=\tiny\itshape] {fidelity check}
+                  (lint.north);
+
+\end{tikzpicture}

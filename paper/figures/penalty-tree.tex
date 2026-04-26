@@ -1,0 +1,33 @@
+% TikZ rendering of the G12 nested-penalty combinator example for s302
+% ("death or imprisonment for life, and shall also be liable to fine").
+% Replaces the Mermaid render at penalty-tree.mmd; native LaTeX
+% typography integrates with the paper body font.
+\begin{tikzpicture}[
+    node distance = 5mm and 12mm,
+    every node/.style = {
+      font = \footnotesize,
+      align = center,
+    },
+    box/.style = {
+      draw, rounded corners = 2pt,
+      minimum height = 16pt, minimum width = 22mm,
+      inner sep = 4pt, fill = white,
+    },
+    leaf/.style = {
+      draw, rounded corners = 2pt,
+      minimum height = 14pt, minimum width = 14mm,
+      inner sep = 4pt, fill = black!4,
+    },
+    every path/.style = {-{Stealth[length=4pt]}, draw, thin},
+  ]
+  \node[box]                                  (root)  {penalty\\\texttt{cumulative}};
+  \node[box, below left  = of root]           (alt)   {\texttt{or\_both}};
+  \node[leaf, below right = of root]          (fine)  {fine\\(unlimited)};
+  \node[leaf, below left  = of alt]           (death) {death};
+  \node[leaf, below right = of alt]           (life)  {imprisonment\\(life)};
+
+  \draw (root) -- (alt);
+  \draw (root) -- (fine);
+  \draw (alt)  -- (death);
+  \draw (alt)  -- (life);
+\end{tikzpicture}

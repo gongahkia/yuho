@@ -37,13 +37,16 @@ mechanisation/
 ```sh
 cd mechanisation
 elan default leanprover/lean4:v4.10.0   # one-time, if not pinned
-lake build
+lake build         # typechecks the Yuho lib (5 modules + theorems)
+lake build Tests   # typechecks the smoke tests with native_decide
 ```
 
-`lake build` typechecks the Yuho lib (the proofs); `lake build Tests`
-typechecks the smoke tests. Both should produce no `sorry`-induced
-warnings — the bodies are either `rfl` (definitional) or fully
-decomposed into structural cases.
+**Verified status as of 2026-04-27:** both `lake build` and
+`lake build Tests` pass under Lean 4.10.0 with no `sorry`s and no
+linter warnings. The proof bodies are either `rfl` (definitional
+equality after unfolding) or projection from the
+`SMTModel.satisfies` triple — no proof obligations are deferred
+in the kernel-checked layer.
 
 ## What's mechanised, with file pointers
 

@@ -10,11 +10,12 @@ Table~\ref{tab:sloc}.
 
 \begin{figure*}[!htbp]
 \centering
-\includegraphics[width=0.85\textwidth]{figures/architecture.pdf}
+\input{figures/architecture}
 \caption{Yuho architecture: \texttt{.yh} source flows through tree-sitter
 to a Python AST that fans out into transpilers, verification, and editor
 surfaces. The canonical SSO scrape feeds the fidelity-diagnostic pass at
-the lint layer. Rendered from \texttt{paper/figures/architecture.mmd}.}
+the lint layer (dashed). Native TikZ render at
+\texttt{paper/figures/architecture.tex}.}
 \label{fig:architecture}
 \end{figure*}
 

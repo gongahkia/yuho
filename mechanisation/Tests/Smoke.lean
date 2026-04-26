@@ -38,13 +38,10 @@ def s299 : Statute :=
   }
 
 example : s299.elementsSatisfied factsHomicide = true := by
-  unfold Statute.elementsSatisfied
-  unfold ElementGroup.eval Element.eval
-  decide
+  native_decide
 
 example : s299.convicts factsHomicide = true := by
-  unfold Statute.convicts
-  decide
+  native_decide
 
 /-- Example: an exception that fires when `consent = true`. -/
 def s299WithConsent : Statute :=
@@ -61,11 +58,11 @@ def factsHomicideWithConsent : Facts :=
   Facts.fromList [("death", true), ("intent", true), ("consent", true)]
 
 example : s299WithConsent.elementsSatisfied factsHomicideWithConsent = true := by
-  decide
+  native_decide
 
 example : s299WithConsent.convicts factsHomicideWithConsent = false := by
   -- Elements satisfied but consent exception fires → no conviction.
-  decide
+  native_decide
 
 /-- Element correspondence holds trivially on this concrete case. -/
 example (m : SMTModel) :
