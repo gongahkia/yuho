@@ -272,29 +272,31 @@ correctness theorem** (§6) means:
       pen-and-paper §6.2 carries the soundness claim alone. The
       paper still ships.
 
-### Reproducibility artefact (AEC-grade) `[ ]`
+### Reproducibility artefact (AEC-grade) `[~]`
 
-The audit flagged this as **essential since ~2015** at top-tier
-venues (POPL / PLDI / OOPSLA / CAV ship "Available + Functional +
-Reusable" badges; AI&L journal submissions are increasingly
-expected to include the same). Yuho currently has
-`paper/reproducibility/` with stats scripts, but no
-containerisation or Zenodo DOI.
+Two of three deliverables shipped — only the Zenodo DOI remains
+(non-code, lands on submission day).
 
-- [ ] **Dockerfile** that boots a clean image with the full
-      toolchain (Python + tree-sitter + Z3 + xmllint) and a
-      one-command driver (`make paper-reproduce`) that
-      regenerates every figure, table, and stratified breakdown
-      in the paper.
-- [ ] **Zenodo deposit** of the v1.0 corpus (encoded `.yh`
-      files + `_corpus/` SVG cache + benchmark fixtures + AKN
-      XSD) with a citable DOI.
-- [ ] Reproducibility README (one-screen) at `paper/REPRODUCE.md`
-      pointing at the Dockerfile, the Zenodo DOI, and the four
-      headline-claim verification commands (corpus build, AKN
-      round-trip, evals fake-run, contrast bulk run).
-- [ ] Lightweight: this is plumbing work, not research. Two days
-      total once the manuscript is drafted.
+- [x] **Dockerfile** at repo root + `.dockerignore` boots a clean
+      Python 3.12 image with the full toolchain (Python deps via
+      `pip install -e .[dev]`, Node + tree-sitter-cli, xmllint
+      for the AKN round-trip).
+- [x] **Top-level Makefile** with `make paper-reproduce` that
+      runs every empirical claim end-to-end (verify-coverage /
+      verify-akn-xsd / verify-evals / verify-case-law) in ~3
+      minutes and emits a one-page summary at
+      `logs/paper-reproduce-summary.txt`. Each verify-* target
+      is independently runnable; `PYTHON` and `YUHO` make
+      variables let users override interpreter / CLI for hosts
+      with broken default Pythons.
+- [x] **`paper/REPRODUCE.md`** documents every paper claim with
+      a per-claim verification command, expected output, expected
+      wall-clock time, and what's deliberately *not* covered by
+      `paper-reproduce` (real-LLM benchmark, full IPC scrape,
+      external counsel audit).
+- [ ] **Zenodo deposit** of the v1.0 corpus + benchmark fixtures
+      + AKN XSD with a citable DOI. Triggered on paper
+      submission; nothing to do until then.
 
 ### Risk register
 

@@ -1,0 +1,55 @@
+# Reproducibility image build context — exclude state that would
+# either bloat the image or invalidate cache layers unnecessarily.
+
+# Python / venv state
+.venv*
+venv/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+*.egg-info/
+.mypy_cache/
+
+# Local credentials (anything starting with .env)
+.env
+.env.*
+
+# Build outputs that get regenerated
+paper/build/
+paper/main.pdf
+paper/main_smoke.pdf
+paper/main_smoke.log
+paper/methodology/methodology.tex
+paper/stats.tex
+paper/stats-extra.tex
+editors/explorer-site/build/
+library/penal_code/_corpus/
+
+# Phase-D agent dispatch logs (jsonl)
+library/penal_code/_coverage/phase_d_*_progress.jsonl
+
+# Browser/word add-in build caches
+editors/browser-yuho/data/
+editors/word-yuho/data/
+
+# Git internals
+.git/
+.gitignore
+
+# Editor / IDE state
+.idea/
+.vscode/
+.DS_Store
+
+# Node modules (we install tree-sitter CLI globally)
+node_modules/
+
+# Existing benchmark results / corpus dumps
+evals/results-*.json
+evals/case_law/results-*.json
+library/penal_code/_corpus/
+
+# OS / temp
+*~
+*.swp
