@@ -1,0 +1,15 @@
+id: s377CB-illustration-c
+section: "377CB"
+scenario: |
+  ( c ) A deceives B into believing that A is her husband. A is an imposter. B consents to sexual intercourse with A because she believes A is her husband. B ’s consent is given under a misconception of the identity of A and is therefore not a valid consent.
+ground_truth:
+  section: "377CB"
+  satisfied_elements: [consent_for_physical_element_of_sexual_offence, misconception_as_to_nature, misconception_as_to_purpose, misconception_as_to_identity, knowledge_or_reason_to_believe_consent_consequence]
+  fired_exception: null
+fact_facts:
+  consent_for_physical_element_of_sexual_offence: true
+  misconception_as_to_nature: true
+  misconception_as_to_purpose: true
+  misconception_as_to_identity: true
+  knowledge_or_reason_to_believe_consent_consequence: true
+tags: [synth:true]

@@ -1,0 +1,13 @@
+id: s166-illustration
+section: "166"
+scenario: |
+  A , being an officer directed by law to take property under or pursuant to an enforcement order, or in execution in order to satisfy a decree, pronounced in Z ’s favour by a court of justice, knowingly disobeys that direction of law, with the knowledge that he is likely thereby to cause injury to Z . A has committed the offence defined in this section.
+ground_truth:
+  section: "166"
+  satisfied_elements: [public_servant_status, disobedience_of_direction, injury_intent_or_knowledge]
+  fired_exception: null
+fact_facts:
+  public_servant_status: true
+  disobedience_of_direction: true
+  injury_intent_or_knowledge: true
+tags: [synth:true]

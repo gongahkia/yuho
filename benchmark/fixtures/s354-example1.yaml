@@ -1,0 +1,13 @@
+id: s354-example1
+section: "354"
+scenario: |
+  A grabs B's arm and touches B inappropriately without consent. A intends to outrage B's modesty. A is guilty under section 354.
+ground_truth:
+  section: "354"
+  satisfied_elements: [intention, force_or_assault, modesty_outraged]
+  fired_exception: null
+fact_facts:
+  intention: true
+  force_or_assault: true
+  modesty_outraged: true
+tags: [synth:true]

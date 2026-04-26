@@ -1,0 +1,15 @@
+id: s420A-illustration-a
+section: "420A"
+scenario: |
+  A obtains services in the form of air transportation on an airline from Singapore to an overseas destination. A is also served food and beverages on the airline. A has obtained services even though A has also been provided with food and beverages.
+ground_truth:
+  section: "420A"
+  satisfied_elements: [obtaining_services, dishonestly, fraudulently, payment_basis, unpaid_or_not_paid_in_full]
+  fired_exception: null
+fact_facts:
+  obtaining_services: true
+  dishonestly: true
+  fraudulently: true
+  payment_basis: true
+  unpaid_or_not_paid_in_full: true
+tags: [synth:true]

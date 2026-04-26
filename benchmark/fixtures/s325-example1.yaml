@@ -1,0 +1,13 @@
+id: s325-example1
+section: "325"
+scenario: |
+  A strikes B on the eye with an iron rod, permanently destroying B's sight in that eye. A has voluntarily caused grievous hurt.
+ground_truth:
+  section: "325"
+  satisfied_elements: [intention, causing, grievous_result]
+  fired_exception: null
+fact_facts:
+  intention: true
+  causing: true
+  grievous_result: true
+tags: [synth:true]

@@ -1,0 +1,12 @@
+id: s76-illustration-a
+section: "76"
+scenario: |
+  ( a ) A , a soldier, fires on a mob by the order of his superior officer, in conformity with the commands of the law. A has committed no offence.
+ground_truth:
+  section: "76"
+  satisfied_elements: []
+  fired_exception: null
+fact_facts:
+  bound_by_law: false
+  justified_by_law: false
+tags: [synth:true, polarity:negative]

@@ -1,0 +1,15 @@
+id: s350-illustration-a
+section: "350"
+scenario: |
+  ( a ) Z is sitting in a moored boat on a river. A unfastens the moorings, and thus intentionally causes the boat to drift down the stream. Here A intentionally causes motion to Z , and he does this by disposing substances in such a manner that the motion is produced without any other act on any person’s part. A has therefore intentionally used force to Z ; and if he has done so without Z ’s consent, in order to cause the committing of any offence, or intending or knowing it to be likely that this use of force will cause injury, fear or annoyance to Z , A has used criminal force to Z .
+ground_truth:
+  section: "350"
+  satisfied_elements: [intentional_use_of_force, absence_of_consent, purpose_to_cause_offence, intent_to_cause_illegally, knowledge_likely_to_cause_illegally]
+  fired_exception: null
+fact_facts:
+  intentional_use_of_force: true
+  absence_of_consent: true
+  purpose_to_cause_offence: true
+  intent_to_cause_illegally: true
+  knowledge_likely_to_cause_illegally: true
+tags: [synth:true]

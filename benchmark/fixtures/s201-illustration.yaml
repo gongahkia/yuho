@@ -1,0 +1,17 @@
+id: s201-illustration
+section: "201"
+scenario: |
+  A , knowing that B has murdered Z , assists B to hide the body with the intention of screening B from punishment. A is liable to imprisonment for 10 years, and also to fine.
+ground_truth:
+  section: "201"
+  satisfied_elements: [knowledge_of_offence, intention_to_screen, disappearance_of_evidence, false_information, death_punishable_offence, life_or_20_year_offence, below_20_year_offence]
+  fired_exception: null
+fact_facts:
+  knowledge_of_offence: true
+  intention_to_screen: true
+  disappearance_of_evidence: true
+  false_information: true
+  death_punishable_offence: true
+  life_or_20_year_offence: true
+  below_20_year_offence: true
+tags: [synth:true]

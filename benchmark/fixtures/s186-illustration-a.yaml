@@ -1,0 +1,15 @@
+id: s186-illustration-a
+section: "186"
+scenario: |
+  A group of paramedics from the Singapore Civil Defence Force intends to take the lift to the 30th storey of a block of flats to reach a person suffering from a heart attack. A decides to play a prank on the paramedics by telling them that the lift has broken down, knowing this to be false. The paramedics took the stairs because of what A told them and reached the person 15 minutes later than if they had taken the lift. A has voluntarily obstructed the paramedics in the discharge of their public function.
+ground_truth:
+  section: "186"
+  satisfied_elements: [voluntary, obstructs_public_servant, discharge_of_public_functions, individual_case, other_case]
+  fired_exception: null
+fact_facts:
+  voluntary: true
+  obstructs_public_servant: true
+  discharge_of_public_functions: true
+  individual_case: true
+  other_case: true
+tags: [synth:true]

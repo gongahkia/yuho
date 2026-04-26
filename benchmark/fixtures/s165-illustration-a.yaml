@@ -1,0 +1,21 @@
+id: s165-illustration-a
+section: "165"
+scenario: |
+  ( a ) A , a judge, hires a house of Z , who has a case pending before him. It is agreed that A shall pay $50 a month, the house being such that, if the bargain were made in good faith, A would be required to pay $200 a month. A has obtained a valuable thing from Z without adequate consideration.
+ground_truth:
+  section: "165"
+  satisfied_elements: [public_servant, accepts_or_obtains, agrees_to_accept, attempts_to_obtain, no_consideration, consideration_given, knows_inadequate, knows_person_connection, person_concerned, official_connection, interested_or_related_person]
+  fired_exception: null
+fact_facts:
+  public_servant: true
+  accepts_or_obtains: true
+  agrees_to_accept: true
+  attempts_to_obtain: true
+  no_consideration: true
+  consideration_given: true
+  knows_inadequate: true
+  knows_person_connection: true
+  person_concerned: true
+  official_connection: true
+  interested_or_related_person: true
+tags: [synth:true]

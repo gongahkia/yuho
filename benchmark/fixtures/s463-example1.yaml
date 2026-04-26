@@ -1,0 +1,16 @@
+id: s463-example1
+section: "463"
+scenario: |
+  A creates a false certificate purporting to be from a university. A has committed forgery.
+ground_truth:
+  section: "463"
+  satisfied_elements: [making, intent_damage, intent_support, intent_property, intent_contract, intent_fraud]
+  fired_exception: null
+fact_facts:
+  making: true
+  intent_damage: true
+  intent_support: true
+  intent_property: true
+  intent_contract: true
+  intent_fraud: true
+tags: [synth:true]

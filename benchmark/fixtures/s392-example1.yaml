@@ -1,0 +1,13 @@
+id: s392-example1
+section: "392"
+scenario: |
+  A robs B at 10pm. A shall be punished with imprisonment of not less than 3 years and not more than 14 years and with caning of not less than 12 strokes.
+ground_truth:
+  section: "392"
+  satisfied_elements: [robbery_committed, time_of_offence, conviction]
+  fired_exception: null
+fact_facts:
+  robbery_committed: true
+  time_of_offence: true
+  conviction: true
+tags: [synth:true]

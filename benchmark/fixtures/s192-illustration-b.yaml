@@ -1,0 +1,13 @@
+id: s192-illustration-b
+section: "192"
+scenario: |
+  ( b ) A makes a false entry in his shop‑book for the purpose of using it as corroborative evidence in a court of justice. A has fabricated false evidence.
+ground_truth:
+  section: "192"
+  satisfied_elements: [fabrication, intended_evidential_appearance, intended_erroneous_opinion]
+  fired_exception: null
+fact_facts:
+  fabrication: true
+  intended_evidential_appearance: true
+  intended_erroneous_opinion: true
+tags: [synth:true]

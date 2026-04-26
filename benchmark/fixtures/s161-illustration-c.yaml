@@ -1,0 +1,13 @@
+id: s161-illustration-c
+section: "161"
+scenario: |
+  ( c ) A , a public servant, induces Z erroneously to believe that A ’s influence with the Government has obtained a grant of land for Z , and thus induces Z to give A money, as a reward for his service. A has committed the offence defined in this section.
+ground_truth:
+  section: "161"
+  satisfied_elements: [public_servant_status, gratification_transaction, corrupt_motive_or_reward]
+  fired_exception: null
+fact_facts:
+  public_servant_status: true
+  gratification_transaction: true
+  corrupt_motive_or_reward: true
+tags: [synth:true]

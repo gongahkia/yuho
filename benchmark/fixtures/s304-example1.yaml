@@ -1,0 +1,13 @@
+id: s304-example1
+section: "304"
+scenario: |
+  A, in a sudden fight without premeditation, strikes B with a heavy object. B dies. A has committed culpable homicide not amounting to murder.
+ground_truth:
+  section: "304"
+  satisfied_elements: [intention, causation, not_murder]
+  fired_exception: null
+fact_facts:
+  intention: true
+  causation: true
+  not_murder: true
+tags: [synth:true]

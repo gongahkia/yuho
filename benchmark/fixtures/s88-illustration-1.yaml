@@ -1,0 +1,19 @@
+id: s88-illustration-1
+section: "88"
+scenario: |
+  A , a surgeon, knowing that a particular operation is likely to cause the death of Z , who suffers under a painful complaint, but not intending to cause Z ’s death, and intending, in good faith, Z ’s benefit, performs that operation on Z , with Z ’s consent. A has committed no offence.
+ground_truth:
+  section: "88"
+  satisfied_elements: []
+  fired_exception: null
+fact_facts:
+  qualifying_act: false
+  no_intention_to_cause_death: false
+  harm_caused: false
+  harm_intended: false
+  harm_known_likely: false
+  benefit: false
+  good_faith: false
+  express_consent_given: false
+  implied_consent_given: false
+tags: [synth:true, polarity:negative]

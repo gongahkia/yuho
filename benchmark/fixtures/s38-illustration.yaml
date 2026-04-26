@@ -1,0 +1,12 @@
+id: s38-illustration
+section: "38"
+scenario: |
+  A attacks Z under such circumstances of grave provocation that his killing of Z would be only culpable homicide not amounting to murder. B , having ill will towards Z , and intending to kill him, and not having been subject to the provocation, assists A in killing Z . Here, though A and B are both engaged in causing Z ’s death, B is guilty of murder, and A is guilty only of culpable homicide.
+ground_truth:
+  section: "38"
+  satisfied_elements: [engaged_or_concerned_persons, different_offences_by_same_act]
+  fired_exception: null
+fact_facts:
+  engaged_or_concerned_persons: true
+  different_offences_by_same_act: true
+tags: [synth:true]

@@ -1,0 +1,29 @@
+id: s377BO-illustration-b
+section: "377BO"
+scenario: |
+  ( b ) A , who is in Singapore, uses remote video facilities to film a video recording of child abuse material involving a person below 16 years of age ( B ). B is in a foreign country during the filming. A is guilty of an offence under section 377BG or 377BH read with section 377BO(2).
+ground_truth:
+  section: "377BO"
+  satisfied_elements: [citizen_or_permanent_resident_of_singapore, act_done_outside_singapore, hypothetical_offence_if_done_in_singapore, act_done_in_singapore, person_b_outside_singapore, hypothetical_offence_if_b_were_in_singapore, act_done_outside_singapore_involving_person_below_16, person_b_in_singapore, hypothetical_offence_if_done_in_singapore_under_377BG_or_377BH, act_done_in_singapore_involving_person_16_to_18, person_b_outside_singapore_and_exploitative_relationship_gate, hypothetical_offence_if_b_were_in_singapore_under_377BL, act_done_outside_singapore_involving_person_16_to_18, person_b_in_singapore_and_exploitative_relationship_gate, hypothetical_offence_if_done_in_singapore_under_377BL, physical_element_done_in_singapore, all_fault_elements_proven, all_physical_elements_proven, other_physical_elements_occurred_outside_singapore]
+  fired_exception: null
+fact_facts:
+  citizen_or_permanent_resident_of_singapore: true
+  act_done_outside_singapore: true
+  hypothetical_offence_if_done_in_singapore: true
+  act_done_in_singapore: true
+  person_b_outside_singapore: true
+  hypothetical_offence_if_b_were_in_singapore: true
+  act_done_outside_singapore_involving_person_below_16: true
+  person_b_in_singapore: true
+  hypothetical_offence_if_done_in_singapore_under_377BG_or_377BH: true
+  act_done_in_singapore_involving_person_16_to_18: true
+  person_b_outside_singapore_and_exploitative_relationship_gate: true
+  hypothetical_offence_if_b_were_in_singapore_under_377BL: true
+  act_done_outside_singapore_involving_person_16_to_18: true
+  person_b_in_singapore_and_exploitative_relationship_gate: true
+  hypothetical_offence_if_done_in_singapore_under_377BL: true
+  physical_element_done_in_singapore: true
+  all_fault_elements_proven: true
+  all_physical_elements_proven: true
+  other_physical_elements_occurred_outside_singapore: true
+tags: [synth:true]

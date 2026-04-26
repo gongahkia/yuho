@@ -1,0 +1,15 @@
+id: s416-illustration-a
+section: "416"
+scenario: |
+  ( a ) A cheats by pretending to be a certain rich banker of the same name. A cheats by personation.
+ground_truth:
+  section: "416"
+  satisfied_elements: [cheating, pretending_other_person, knowledge, substitution, false_representation_of_identity]
+  fired_exception: null
+fact_facts:
+  cheating: true
+  pretending_other_person: true
+  knowledge: true
+  substitution: true
+  false_representation_of_identity: true
+tags: [synth:true]

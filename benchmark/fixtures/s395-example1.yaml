@@ -1,0 +1,13 @@
+id: s395-example1
+section: "395"
+scenario: |
+  A, B, C, D and E jointly rob a bank. As 5 persons conjointly committed robbery, every one of them is guilty of dacoity.
+ground_truth:
+  section: "395"
+  satisfied_elements: [five_or_more, robbery, common_intention]
+  fired_exception: null
+fact_facts:
+  five_or_more: true
+  robbery: true
+  common_intention: true
+tags: [synth:true]

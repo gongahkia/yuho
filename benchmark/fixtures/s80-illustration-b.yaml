@@ -1,0 +1,13 @@
+id: s80-illustration-b
+section: "80"
+scenario: |
+  ( b ) A operates a construction crane and activates a control that causes a heavy load to fall onto B , killing B . A did not act negligently, but his activation of the control caused this result because the construction crane was malfunctioning. A has not committed an offence of causing death by doing a negligent act under section 304A as he did not possess the requisite fault element of negligence.
+ground_truth:
+  section: "80"
+  satisfied_elements: [alleged_act_done_by_accident_or_misfortune, alleged_act_may_negate_fault_element, prosecution_proves_fault]
+  fired_exception: null
+fact_facts:
+  alleged_act_done_by_accident_or_misfortune: true
+  alleged_act_may_negate_fault_element: true
+  prosecution_proves_fault: true
+tags: [synth:true]

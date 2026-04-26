@@ -1,0 +1,15 @@
+id: s319-example1
+section: "319"
+scenario: |
+  A strikes B with a stick. B feels pain. A has caused hurt to B.
+ground_truth:
+  section: "319"
+  satisfied_elements: [cause, bodily_pain, disease, infirmity, unconsciousness]
+  fired_exception: null
+fact_facts:
+  cause: true
+  bodily_pain: true
+  disease: true
+  infirmity: true
+  unconsciousness: true
+tags: [synth:true]

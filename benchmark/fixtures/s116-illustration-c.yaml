@@ -1,0 +1,19 @@
+id: s116-illustration-c
+section: "116"
+scenario: |
+  ( c ) A , a police officer, whose duty it is to prevent robbery, abets the commission of robbery. Here, though the robbery is not committed, A is liable to the maximum term of imprisonment provided for that offence.
+ground_truth:
+  section: "116"
+  satisfied_elements: []
+  fired_exception: null
+fact_facts:
+  abets_offence: false
+  offence_not_committed: false
+  no_express_provision: false
+  subsection_1_offence: false
+  punishment_fixed_by_law: false
+  specified_minimum_sentence: false
+  mandatory_minimum_imprisonment: false
+  mandatory_minimum_fine: false
+  mandatory_minimum_caning: false
+tags: [synth:true, polarity:negative]

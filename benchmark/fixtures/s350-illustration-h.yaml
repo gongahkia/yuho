@@ -1,0 +1,15 @@
+id: s350-illustration-h
+section: "350"
+scenario: |
+  ( h ) A incites a dog to spring upon Z , without Z ’s consent. Here, if A intends to cause injury, fear or annoyance to Z , he uses criminal force to Z .
+ground_truth:
+  section: "350"
+  satisfied_elements: [intentional_use_of_force, absence_of_consent, purpose_to_cause_offence, intent_to_cause_illegally, knowledge_likely_to_cause_illegally]
+  fired_exception: null
+fact_facts:
+  intentional_use_of_force: true
+  absence_of_consent: true
+  purpose_to_cause_offence: true
+  intent_to_cause_illegally: true
+  knowledge_likely_to_cause_illegally: true
+tags: [synth:true]

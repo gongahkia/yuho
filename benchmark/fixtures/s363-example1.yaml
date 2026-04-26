@@ -1,0 +1,13 @@
+id: s363-example1
+section: "363"
+scenario: |
+  A forcibly takes B, a child of 10, from B's parents and transports B to Malaysia. A has committed kidnapping.
+ground_truth:
+  section: "363"
+  satisfied_elements: [intention, taking, without_consent]
+  fired_exception: null
+fact_facts:
+  intention: true
+  taking: true
+  without_consent: true
+tags: [synth:true]

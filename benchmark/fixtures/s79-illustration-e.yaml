@@ -1,0 +1,18 @@
+id: s79-illustration-e
+section: "79"
+scenario: |
+  ( e ) A , an officer of a court, being ordered by that court to arrest Y , and, after due enquiry, believing Z to be Y , arrests Z . A has committed no offence.
+ground_truth:
+  section: "79"
+  satisfied_elements: []
+  fired_exception: null
+fact_facts:
+  no_written_law_override: false
+  act_done: false
+  mistake_of_fact: false
+  ignorance_of_fact: false
+  good_faith_belief: false
+  alleged_mistake_of_fact: false
+  alleged_ignorance_of_fact: false
+  prosecution_proves_fault: false
+tags: [synth:true, polarity:negative]

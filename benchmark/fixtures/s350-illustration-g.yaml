@@ -1,0 +1,15 @@
+id: s350-illustration-g
+section: "350"
+scenario: |
+  ( g ) Z is bathing. A pours into the bath water which he knows to be boiling. Here A intentionally by his own bodily power causes such motion in the boiling water as brings that water into contact with Z , or with other water so situated that such contact must affect Z ’s sense of feeling; A has therefore intentionally used force to Z ; and if he has done this without Z ’s consent, intending or knowing it to be likely that he may thereby cause injury, fear or annoyance to Z , A has used criminal force to Z .
+ground_truth:
+  section: "350"
+  satisfied_elements: [intentional_use_of_force, absence_of_consent, purpose_to_cause_offence, intent_to_cause_illegally, knowledge_likely_to_cause_illegally]
+  fired_exception: null
+fact_facts:
+  intentional_use_of_force: true
+  absence_of_consent: true
+  purpose_to_cause_offence: true
+  intent_to_cause_illegally: true
+  knowledge_likely_to_cause_illegally: true
+tags: [synth:true]

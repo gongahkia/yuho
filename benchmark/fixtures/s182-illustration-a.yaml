@@ -1,0 +1,16 @@
+id: s182-illustration-a
+section: "182"
+scenario: |
+  ( a ) A informs a superintendent of police that Z , a police officer subordinate to such superintendent, has been guilty of neglect of duty or misconduct, knowing such information to be false, and knowing it to be likely that the information will cause the superintendent to dismiss Z . A has committed the offence defined in this section.
+ground_truth:
+  section: "182"
+  satisfied_elements: [giving_information, falsity, intends_consequence, knows_likely_consequence, injury_or_annoyance, improper_action_or_omission]
+  fired_exception: null
+fact_facts:
+  giving_information: true
+  falsity: true
+  intends_consequence: true
+  knows_likely_consequence: true
+  injury_or_annoyance: true
+  improper_action_or_omission: true
+tags: [synth:true]

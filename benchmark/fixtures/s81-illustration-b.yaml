@@ -1,0 +1,15 @@
+id: s81-illustration-b
+section: "81"
+scenario: |
+  ( b ) A in a great fire pulls down houses in order to prevent the conflagration from spreading. He does this with the intention, in good faith, of saving human life or property. Here, if it be found that the harm to be prevented was of such a nature and so imminent as to excuse A ’s act, A is not guilty of the offence.
+ground_truth:
+  section: "81"
+  satisfied_elements: []
+  fired_exception: null
+fact_facts:
+  act_likely_to_cause_harm: false
+  knowledge_likely_harm: false
+  good_faith: false
+  preventive_purpose: false
+  justified_risk: false
+tags: [synth:true, polarity:negative]

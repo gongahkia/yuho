@@ -1,0 +1,18 @@
+id: s79-illustration-d
+section: "79"
+scenario: |
+  ( d ) X , the commander of a naval vessel, is patrolling Singapore territorial waters. X receives information that someone may hijack a vessel in order to commit a terrorist act. X spots vessel A which is proceeding at high speed towards a cruise liner. X orders vessel A to stop her manoeuvre immediately and fires a warning signal. Vessel A instead starts accelerating towards the cruise liner. X , after assessing the circumstances of the case, and to the best of his judgment exerted in good faith, believes that vessel A is going to ram into the cruise liner. X gives an order to fire at vessel A . The persons on board vessel A die as a result. X has committed no offence, even though it may turn out that vessel A was not hijacked nor were there any terrorist on board.
+ground_truth:
+  section: "79"
+  satisfied_elements: []
+  fired_exception: null
+fact_facts:
+  no_written_law_override: false
+  act_done: false
+  mistake_of_fact: false
+  ignorance_of_fact: false
+  good_faith_belief: false
+  alleged_mistake_of_fact: false
+  alleged_ignorance_of_fact: false
+  prosecution_proves_fault: false
+tags: [synth:true, polarity:negative]

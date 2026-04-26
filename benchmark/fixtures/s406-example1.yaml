@@ -1,0 +1,13 @@
+id: s406-example1
+section: "406"
+scenario: |
+  A, a warehouse keeper, is entrusted with goods by B for safekeeping. A sells the goods and keeps the proceeds. A has committed criminal breach of trust.
+ground_truth:
+  section: "406"
+  satisfied_elements: [property_entrusted, misappropriation, dishonesty]
+  fired_exception: null
+fact_facts:
+  property_entrusted: true
+  misappropriation: true
+  dishonesty: true
+tags: [synth:true]

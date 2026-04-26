@@ -1,0 +1,15 @@
+id: s191-illustration-e
+section: "191"
+scenario: |
+  ( e ) A , an interpreter or a translator, gives or certifies as a true interpretation or translation of a statement or document which he is bound by oath to interpret or translate truly, that which is not and which he does not believe to be a true interpretation or translation. A has given false evidence.
+ground_truth:
+  section: "191"
+  satisfied_elements: []
+  fired_exception: null
+fact_facts:
+  legal_obligation: false
+  false_statement: false
+  knows_false: false
+  believes_false: false
+  does_not_believe_true: false
+tags: [synth:true, polarity:negative]

@@ -1,0 +1,13 @@
+id: s323A-illustration
+section: "323A"
+scenario: |
+  At a club, A notices one of A ’s friends fighting with Z . A runs towards Z and punches Z in the face intending or knowing himself to be likely to cause minor injuries to Z ’s face. Z loses his balance, falls and hits his head against a ledge. Z suffers from severe brain injuries and is permanently paralysed. A did not intend to cause grievous hurt but A ’s action has actually caused grievous hurt to Z .
+ground_truth:
+  section: "323A"
+  satisfied_elements: [voluntarily_causes_hurt, intends_or_knows_non_grievous_hurt, actual_hurt_grievous]
+  fired_exception: null
+fact_facts:
+  voluntarily_causes_hurt: true
+  intends_or_knows_non_grievous_hurt: true
+  actual_hurt_grievous: true
+tags: [synth:true]

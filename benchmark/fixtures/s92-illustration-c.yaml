@@ -1,0 +1,17 @@
+id: s92-illustration-c
+section: "92"
+scenario: |
+  ( c ) A , a surgeon, sees a child suffer an accident which is likely to prove fatal unless an operation is immediately performed. There is no time to apply to the child’s guardian. A performs the operation in spite of the entreaties of the child, intending, in good faith, the child’s benefit. A has committed no offence.
+ground_truth:
+  section: "92"
+  satisfied_elements: []
+  fired_exception: null
+fact_facts:
+  qualifying_act: false
+  beneficiary: false
+  good_faith: false
+  without_consent: false
+  impossible_to_signify_consent: false
+  incapable_of_giving_consent: false
+  no_guardian_or_lawful_charge_available: false
+tags: [synth:true, polarity:negative]

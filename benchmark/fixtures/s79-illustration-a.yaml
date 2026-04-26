@@ -1,0 +1,18 @@
+id: s79-illustration-a
+section: "79"
+scenario: |
+  ( a ) A sees Z commit what appears to A to be a murder. A , in the exercise, to the best of his judgment exerted in good faith, of the power which the law gives to all persons of apprehending murderers in the act, seizes Z , in order to bring Z before the proper authorities. A has committed no offence, though it may turn out that Z was acting in self-defence.
+ground_truth:
+  section: "79"
+  satisfied_elements: []
+  fired_exception: null
+fact_facts:
+  no_written_law_override: false
+  act_done: false
+  mistake_of_fact: false
+  ignorance_of_fact: false
+  good_faith_belief: false
+  alleged_mistake_of_fact: false
+  alleged_ignorance_of_fact: false
+  prosecution_proves_fault: false
+tags: [synth:true, polarity:negative]

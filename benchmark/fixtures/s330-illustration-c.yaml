@@ -1,0 +1,13 @@
+id: s330-illustration-c
+section: "330"
+scenario: |
+  ( c ) A , a customs officer, tortures Z in order to compel him to confess to a pretended offence against the customs laws. A is guilty of an offence under this section.
+ground_truth:
+  section: "330"
+  satisfied_elements: [voluntarily_causes_hurt, purpose_of_extorting_confession_or_detection_information, purpose_of_constraining_restoration_or_satisfaction]
+  fired_exception: null
+fact_facts:
+  voluntarily_causes_hurt: true
+  purpose_of_extorting_confession_or_detection_information: true
+  purpose_of_constraining_restoration_or_satisfaction: true
+tags: [synth:true]

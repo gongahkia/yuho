@@ -387,26 +387,28 @@ fixture is a fact-pattern + ground-truth answer (which section
 applies, which elements are met, which exception fires). Yuho's
 evaluator already computes the ground truth.
 
-- [x] **v0 shipped:** `benchmark/schema.json` defines the fixture
-      shape; `benchmark/run.py` is a single-file runner with two
-      `BenchmarkClient` impls (Anthropic SDK + `FakeClient` for
-      offline / CI) and three tasks per fixture (section
-      identification, element-set F1, exception citation).
-      `benchmark/fixtures/` ships with 22 seed fixtures spanning
-      9 chapters and 4 categories. End-to-end: `python benchmark/
-      run.py --fake` lands cleanly at 100/100/100% headline.
-- [ ] **Grow to ~200 fixtures.** The 22 seed fixtures cover the
-      common offences but skip half the Penal Code's chapters.
-      Add fixtures opportunistically; every encoded section with
-      a `test_statute.yh` companion is a candidate seed.
-- [ ] **Run baseline against Claude / GPT-4-class / open-weights**
-      and report per-section + per-element-type accuracy. The
-      runner already emits the per-fixture JSON; add a stratified
-      report (per chapter / per difficulty / per category).
-- [ ] **Paper claim:** "A statute-grounded benchmark for LLM legal
-      reasoning". Position alongside LegalBench / LawBench but with
-      Yuho's structural ground truth as the differentiator. Adds
-      an evaluation subsection with the headline numbers.
+- [x] **v0 shipped:** `benchmark/schema.json` + `benchmark/run.py`
+      single-file runner with two `BenchmarkClient` impls
+      (Anthropic SDK + `FakeClient` for offline / CI). Three tasks:
+      section identification, element-set F1, exception citation.
+- [x] **Grown to 205 fixtures** (22 hand-authored + 183 synthesised
+      from the encoded library's canonical illustrations). Driver:
+      `scripts/synthesise_benchmark_fixtures.py`. Auto-detects
+      polarity-negative illustrations and tags them as such.
+- [x] **Stratified accuracy report** — per chapter / category /
+      difficulty / synth-vs-hand / polarity. Triggered by
+      `--no-per-fixture` for the headline view; full per-fixture
+      table is the default.
+- [x] **Paper subsection** "LLM legal-reasoning benchmark" added
+      under \S\ref{subsec:llm_benchmark} with positioning vs
+      LegalBench / LawBench, fixture-corpus stats, structural-not-
+      doctrinal caveat, and explicit acknowledgment that the
+      real-LLM run is queued.
+- [ ] **Run real baselines** against Claude Sonnet 4.6 / Opus 4.7
+      / one open-weights reference; emit
+      `benchmark/results-<model>.json` and update the paper
+      subsection's "Headline numbers" paragraph with the actual
+      stratified accuracies. Requires `ANTHROPIC_API_KEY`.
 
 #### Direction D — Interactive learn-by-doing legal-ed
 

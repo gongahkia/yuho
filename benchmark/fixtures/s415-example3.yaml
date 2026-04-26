@@ -1,0 +1,15 @@
+id: s415-example3
+section: "415"
+scenario: |
+  A deceives B into believing that A means to repay a loan, inducing B to lend money which A does not intend to repay. A cheats.
+ground_truth:
+  section: "415"
+  satisfied_elements: [deception, fraudulent, dishonest, inducement, harm]
+  fired_exception: null
+fact_facts:
+  deception: true
+  fraudulent: true
+  dishonest: true
+  inducement: true
+  harm: true
+tags: [synth:true]

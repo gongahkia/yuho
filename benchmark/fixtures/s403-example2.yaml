@@ -1,0 +1,14 @@
+id: s403-example2
+section: "403"
+scenario: |
+  A finds a ring on the highway near B's house. A knows the ring likely belongs to B. A sells the ring without attempting to find the owner. A is guilty of misappropriation.
+ground_truth:
+  section: "403"
+  satisfied_elements: [possession, dishonesty, conversion, disposal]
+  fired_exception: null
+fact_facts:
+  possession: true
+  dishonesty: true
+  conversion: true
+  disposal: true
+tags: [synth:true]

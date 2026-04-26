@@ -1,0 +1,19 @@
+id: s512-illustration-b
+section: "512"
+scenario: |
+  A attempts to commit robbery but did not succeed. If A had committed robbery, he would have been subject to a mandatory minimum term of imprisonment of not less than 2 years and mandatory caning of a minimum of 6 strokes. As the court is not bound to impose the minimum mandatory punishment prescribed for robbery, A may be sentenced to 6 months imprisonment with no caning for attempted robbery. However, the court may not sentence A to a fine, as this is not a prescribed punishment for robbery but the court may sentence A to probation if he is a young offender.
+ground_truth:
+  section: "512"
+  satisfied_elements: []
+  fired_exception: null
+fact_facts:
+  attempts_offence: false
+  no_express_provision: false
+  attempts_other_offence: false
+  offence_in_subsection_2: false
+  punishment_fixed_by_law: false
+  specified_minimum_sentence: false
+  mandatory_minimum_imprisonment: false
+  mandatory_minimum_fine: false
+  mandatory_minimum_caning: false
+tags: [synth:true, polarity:negative]

@@ -1,0 +1,20 @@
+id: s119-illustration-1
+section: "119"
+scenario: |
+  A , an officer of police, being legally bound to give information of all designs to commit robbery which may come to his knowledge, and knowing that B designs to commit robbery, omits to give such information, with intent to facilitate the commission of that offence. Here A has by an illegal omission concealed the existence of B ’s design, and is liable to punishment according to this section.
+ground_truth:
+  section: "119"
+  satisfied_elements: [public_servant_status, intent_to_facilitate, knowledge_likely_facilitate, duty_to_prevent_target_offence, conceal_design, false_representation, offence_committed_noncapital, offence_committed_capital_or_life, offence_not_committed_noncapital, offence_not_committed_capital_or_life]
+  fired_exception: null
+fact_facts:
+  public_servant_status: true
+  intent_to_facilitate: true
+  knowledge_likely_facilitate: true
+  duty_to_prevent_target_offence: true
+  conceal_design: true
+  false_representation: true
+  offence_committed_noncapital: true
+  offence_committed_capital_or_life: true
+  offence_not_committed_noncapital: true
+  offence_not_committed_capital_or_life: true
+tags: [synth:true]

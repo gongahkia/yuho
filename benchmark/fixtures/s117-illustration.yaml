@@ -1,0 +1,13 @@
+id: s117-illustration
+section: "117"
+scenario: |
+  A , an employee at a worksite, affixes a placard at the worksite where more than 10 persons are employed. A instigates the workers to damage property at the worksite if their demand for a pay rise is not met. A has committed an offence under this section.
+ground_truth:
+  section: "117"
+  satisfied_elements: []
+  fired_exception: null
+fact_facts:
+  abetment: false
+  public_generally: false
+  number_or_class_exceeding_10: false
+tags: [synth:true, polarity:negative]

@@ -1,0 +1,13 @@
+id: s192-illustration-a
+section: "192"
+scenario: |
+  ( a ) A puts jewels into a box belonging to Z with the intention that they may be found in that box and that this circumstance may cause Z to be convicted of theft. A has fabricated false evidence.
+ground_truth:
+  section: "192"
+  satisfied_elements: [fabrication, intended_evidential_appearance, intended_erroneous_opinion]
+  fired_exception: null
+fact_facts:
+  fabrication: true
+  intended_evidential_appearance: true
+  intended_erroneous_opinion: true
+tags: [synth:true]

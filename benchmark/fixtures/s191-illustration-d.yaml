@@ -1,0 +1,15 @@
+id: s191-illustration-d
+section: "191"
+scenario: |
+  ( d ) A , being bound by an oath to state the truth, states that he knows that Z was at a particular place on a particular day, not knowing anything upon the subject. A gives false evidence as to whether Z was at that place on the day named, or not.
+ground_truth:
+  section: "191"
+  satisfied_elements: [legal_obligation, false_statement, knows_false, believes_false, does_not_believe_true]
+  fired_exception: null
+fact_facts:
+  legal_obligation: true
+  false_statement: true
+  knows_false: true
+  believes_false: true
+  does_not_believe_true: true
+tags: [synth:true]

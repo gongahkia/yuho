@@ -1,0 +1,13 @@
+id: s304-example2
+section: "304"
+scenario: |
+  A knows that B has a weak heart. A intentionally frightens B, causing B to have a heart attack and die. A is guilty of culpable homicide.
+ground_truth:
+  section: "304"
+  satisfied_elements: [intention, causation, not_murder]
+  fired_exception: null
+fact_facts:
+  intention: true
+  causation: true
+  not_murder: true
+tags: [synth:true]

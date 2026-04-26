@@ -1,0 +1,14 @@
+id: s383-example1
+section: "383"
+scenario: |
+  A threatens to publish a defamatory statement about B unless B gives A money. A commits extortion.
+ground_truth:
+  section: "383"
+  satisfied_elements: [intention, threat, fear, inducement]
+  fired_exception: null
+fact_facts:
+  intention: true
+  threat: true
+  fear: true
+  inducement: true
+tags: [synth:true]

@@ -1,0 +1,19 @@
+id: s116-illustration-d
+section: "116"
+scenario: |
+  ( d ) B abets the commission of a robbery by A , a police officer, whose duty it is to prevent that offence. Here, though the robbery is not committed, B is liable to the same punishment as if he had committed the offence of robbery.
+ground_truth:
+  section: "116"
+  satisfied_elements: []
+  fired_exception: null
+fact_facts:
+  abets_offence: false
+  offence_not_committed: false
+  no_express_provision: false
+  subsection_1_offence: false
+  punishment_fixed_by_law: false
+  specified_minimum_sentence: false
+  mandatory_minimum_imprisonment: false
+  mandatory_minimum_fine: false
+  mandatory_minimum_caning: false
+tags: [synth:true, polarity:negative]

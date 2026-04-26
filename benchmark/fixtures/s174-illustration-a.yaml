@@ -1,0 +1,18 @@
+id: s174-illustration-a
+section: "174"
+scenario: |
+  A , being legally bound to appear before the General Division of the High Court, in obedience to an order to attend court issuing from the General Division of the High Court, intentionally omits to appear. A has committed the offence defined in this section.
+ground_truth:
+  section: "174"
+  satisfied_elements: [legal_attendance_duty, competent_process, omits_to_attend, premature_departure, individual_case, other_case, subsection_1_offence, court_attendance_process]
+  fired_exception: null
+fact_facts:
+  legal_attendance_duty: true
+  competent_process: true
+  omits_to_attend: true
+  premature_departure: true
+  individual_case: true
+  other_case: true
+  subsection_1_offence: true
+  court_attendance_process: true
+tags: [synth:true]

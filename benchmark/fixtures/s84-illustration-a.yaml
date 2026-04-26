@@ -1,0 +1,17 @@
+id: s84-illustration-a
+section: "84"
+scenario: |
+  A , while labouring under a delusion, believes that he has received divine instructions to kill Z and that it is morally right for him to do so. A however knows that it is contrary to law to kill Z . A kills Z . Here, the defence of unsoundness of mind is not available to A as he is capable of knowing that it is contrary to law to kill Z .
+ground_truth:
+  section: "84"
+  satisfied_elements: []
+  fired_exception: null
+fact_facts:
+  act_done: false
+  unsoundness: false
+  incapable_nature: false
+  incapable_wrong: false
+  deprived_control: false
+  ordinary_standards: false
+  contrary_to_law: false
+tags: [synth:true, polarity:negative]

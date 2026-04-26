@@ -1,0 +1,13 @@
+id: s192-illustration-c
+section: "192"
+scenario: |
+  ( c ) A , with the intention of causing Z to be convicted of a criminal conspiracy, writes a letter in imitation of Z ’s handwriting, purporting to be addressed to an accomplice in such criminal conspiracy, and puts the letter in a place which he knows that the officers of the police are likely to search. A has fabricated false evidence.
+ground_truth:
+  section: "192"
+  satisfied_elements: [fabrication, intended_evidential_appearance, intended_erroneous_opinion]
+  fired_exception: null
+fact_facts:
+  fabrication: true
+  intended_evidential_appearance: true
+  intended_erroneous_opinion: true
+tags: [synth:true]

@@ -1,0 +1,17 @@
+id: s92-illustration-d
+section: "92"
+scenario: |
+  ( d ) A is in a house which is on fire, with Z , a child. People below hold out a blanket. A drops the child from the house‑top, knowing it to be likely that the fall may kill the child, but not intending to kill the child, and intending in good faith, the child’s benefit. Here, even if the child is killed by the fall, A has committed no offence.
+ground_truth:
+  section: "92"
+  satisfied_elements: []
+  fired_exception: null
+fact_facts:
+  qualifying_act: false
+  beneficiary: false
+  good_faith: false
+  without_consent: false
+  impossible_to_signify_consent: false
+  incapable_of_giving_consent: false
+  no_guardian_or_lawful_charge_available: false
+tags: [synth:true, polarity:negative]

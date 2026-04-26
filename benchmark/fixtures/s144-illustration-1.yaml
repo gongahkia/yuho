@@ -1,0 +1,12 @@
+id: s144-illustration-1
+section: "144"
+scenario: |
+  A wooden pole sharpened at the end is a thing which, used as a weapon of offence, is likely to cause death.
+ground_truth:
+  section: "144"
+  satisfied_elements: [membership, armed]
+  fired_exception: null
+fact_facts:
+  membership: true
+  armed: true
+tags: [synth:true]

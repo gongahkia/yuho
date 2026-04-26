@@ -134,3 +134,41 @@ def test_render_report_includes_disclaimer():
     assert "Yuho LLM legal-reasoning benchmark" in text
     assert "Not legal advice" in text
     assert "T1 (section identification)" in text
+
+
+def test_stratified_report_groups_by_tag_prefix():
+    """The stratified accuracy slice keys on the `key:value` tag form."""
+    fixtures = _all_fixtures()
+    client = bench.FakeClient(fixtures=fixtures)
+    result = bench.run_benchmark(fixtures, client)
+    strat = result.stratified()
+    # Bundled fixtures use chapter / category / difficulty / synth / polarity tags.
+    assert "chapter" in strat
+    assert "difficulty" in strat
+    # Every slice value carries n + per-task accuracy.
+    for prefix, by_value in strat.items():
+        for value, row in by_value.items():
+            assert row["n"] >= 1
+            assert 0.0 <= row["t1_accuracy"] <= 1.0
+            assert 0.0 <= row["t2_mean_f1"] <= 1.0
+            assert 0.0 <= row["t3_accuracy"] <= 1.0
+
+
+def test_render_report_includes_stratified_section():
+    fixtures = _all_fixtures()
+    client = bench.FakeClient(fixtures=fixtures)
+    result = bench.run_benchmark(fixtures, client)
+    text = bench.render_report(result, show_per_fixture=False)
+    assert "Stratified by `chapter`" in text
+    assert "Stratified by `difficulty`" in text
+    # `--no-per-fixture` mode shouldn't render the per-row table heading.
+    assert "Per-fixture:" not in text
+
+
+def test_to_dict_includes_stratified_in_json():
+    fixtures = _all_fixtures()[:5]
+    client = bench.FakeClient(fixtures=fixtures)
+    result = bench.run_benchmark(fixtures, client)
+    payload = result.to_dict()
+    assert "stratified" in payload
+    assert isinstance(payload["stratified"], dict)

@@ -1,0 +1,16 @@
+id: s307-illustration-c
+section: "307"
+scenario: |
+  ( c ) A , intending to murder Z , buys a gun and loads it. A has not yet committed the offence. A fires the gun at Z . He has committed the offence defined in this section; and if by such firing he wounds Z , he is liable to the punishment provided by the latter part of this section.
+ground_truth:
+  section: "307"
+  satisfied_elements: [does_any_act, intention_of_causing_death, would_be_guilty_of_murder, offending_under_this_section, under_sentence_of_imprisonment_for_life, hurt_is_caused]
+  fired_exception: null
+fact_facts:
+  does_any_act: true
+  intention_of_causing_death: true
+  would_be_guilty_of_murder: true
+  offending_under_this_section: true
+  under_sentence_of_imprisonment_for_life: true
+  hurt_is_caused: true
+tags: [synth:true]

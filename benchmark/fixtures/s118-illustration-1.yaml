@@ -1,0 +1,15 @@
+id: s118-illustration-1
+section: "118"
+scenario: |
+  A , knowing that a gang-robbery is about to be committed at B , falsely informs the police that a gang‑robbery is about to be committed at C , a place in an opposite direction, and thereby misleads the police with intent to facilitate the commission of the offence. The gang‑robbery is committed at B in pursuance of the design. A is punishable under this section.
+ground_truth:
+  section: "118"
+  satisfied_elements: [facilitation_intent_or_knowledge, concealment, false_representation, offence_committed, offence_not_committed]
+  fired_exception: null
+fact_facts:
+  facilitation_intent_or_knowledge: true
+  concealment: true
+  false_representation: true
+  offence_committed: true
+  offence_not_committed: true
+tags: [synth:true]

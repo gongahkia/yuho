@@ -1,0 +1,15 @@
+id: s37-illustration-c
+section: "37"
+scenario: |
+  ( c ) A , a jailor, has the charge of Z , a prisoner. A , intending to cause Z ’s death, illegally omits to supply Z with food; in consequence of which Z is much reduced in strength, but the starvation is not sufficient to cause his death. A is dismissed from his office, and B succeeds him. B , without collusion or cooperation with A , illegally omits to supply Z with food, knowing that he is likely thereby to cause Z ’s death. Z dies of hunger. B is guilty of murder; but as A did not cooperate with B , A is guilty only of an attempt to commit murder.
+ground_truth:
+  section: "37"
+  satisfied_elements: []
+  fired_exception: null
+fact_facts:
+  offence_committed_by_several_acts: false
+  intentional_cooperation: false
+  doing_one_act: false
+  singly_or_jointly: false
+  commits_that_offence: false
+tags: [synth:true, polarity:negative]

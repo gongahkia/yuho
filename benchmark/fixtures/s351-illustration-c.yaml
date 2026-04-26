@@ -1,0 +1,14 @@
+id: s351-illustration-c
+section: "351"
+scenario: |
+  ( c ) A takes up a stick, saying to Z , “I will give you a beating”. Here, though the words used by A could in no case amount to an assault, and though the mere gesture, unaccompanied by any other circumstances might not amount to an assault, the gesture explained by the words may amount to an assault.
+ground_truth:
+  section: "351"
+  satisfied_elements: [gesture_or_preparation, intention, knowledge, apprehension_of_imminent_criminal_force]
+  fired_exception: null
+fact_facts:
+  gesture_or_preparation: true
+  intention: true
+  knowledge: true
+  apprehension_of_imminent_criminal_force: true
+tags: [synth:true]

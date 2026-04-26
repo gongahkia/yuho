@@ -1,0 +1,17 @@
+id: s405-illustration-c
+section: "405"
+scenario: |
+  ( c ) A , residing in Singapore, is agent for Z , residing in Penang. There is an express or implied contract between A and Z that all sums remitted by Z to A shall be invested by A according to Z ’s direction. Z remits $5,000 to A , with directions to A to invest the same in Government securities. A dishonestly disobeys the direction, and employs the money in his own business. A has committed criminal breach of trust.
+ground_truth:
+  section: "405"
+  satisfied_elements: [entrustment_or_dominion, dishonestly_misappropriates_or_converts, misappropriates_or_converts_to_own_use, dishonestly_uses_or_disposes, uses_or_disposes_in_breach, intentionally_suffers, suffers_any_other_person_to_do_so]
+  fired_exception: null
+fact_facts:
+  entrustment_or_dominion: true
+  dishonestly_misappropriates_or_converts: true
+  misappropriates_or_converts_to_own_use: true
+  dishonestly_uses_or_disposes: true
+  uses_or_disposes_in_breach: true
+  intentionally_suffers: true
+  suffers_any_other_person_to_do_so: true
+tags: [synth:true]

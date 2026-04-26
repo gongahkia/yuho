@@ -1,0 +1,12 @@
+id: s465-example1
+section: "465"
+scenario: |
+  A forges a document purporting to be a receipt from B for goods never delivered. A is convicted of forgery and may be imprisoned up to 4 years and fined.
+ground_truth:
+  section: "465"
+  satisfied_elements: [forgery_committed, conviction]
+  fired_exception: null
+fact_facts:
+  forgery_committed: true
+  conviction: true
+tags: [synth:true]

@@ -1,0 +1,14 @@
+id: s351-illustration-a
+section: "351"
+scenario: |
+  ( a ) A shakes his fist at Z , intending or knowing it to be likely that he may thereby cause Z to believe that A is about to strike Z . A has committed an assault.
+ground_truth:
+  section: "351"
+  satisfied_elements: [gesture_or_preparation, intention, knowledge, apprehension_of_imminent_criminal_force]
+  fired_exception: null
+fact_facts:
+  gesture_or_preparation: true
+  intention: true
+  knowledge: true
+  apprehension_of_imminent_criminal_force: true
+tags: [synth:true]

@@ -1,0 +1,16 @@
+id: s503-example2
+section: "503"
+scenario: |
+  A, a warehouse keeper, is entrusted with goods. A dishonestly pledges the goods for a personal loan. A commits criminal breach of trust.
+ground_truth:
+  section: "503"
+  satisfied_elements: [trust, dishonesty, misappropriate, convert, violate_law, violate_contract]
+  fired_exception: null
+fact_facts:
+  trust: true
+  dishonesty: true
+  misappropriate: true
+  convert: true
+  violate_law: true
+  violate_contract: true
+tags: [synth:true]

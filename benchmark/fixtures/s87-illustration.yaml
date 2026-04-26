@@ -1,0 +1,16 @@
+id: s87-illustration
+section: "87"
+scenario: |
+  A and Z agree to fence with each other for amusement. This agreement implies the consent of each to suffer any harm which, in the course of such fencing, may be caused without foul play; and if A , while playing fairly, hurts Z , A commits no offence.
+ground_truth:
+  section: "87"
+  satisfied_elements: []
+  fired_exception: null
+fact_facts:
+  act_causing_harm: false
+  no_intention_death_or_grievous_hurt: false
+  no_knowledge_likely_death_or_grievous_hurt: false
+  person_above_18: false
+  consent_to_suffer_harm: false
+  consent_to_take_risk: false
+tags: [synth:true, polarity:negative]

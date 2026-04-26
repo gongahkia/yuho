@@ -1,0 +1,12 @@
+id: s323-example1
+section: "323"
+scenario: |
+  A punches B in the face causing a bruise. A is convicted of voluntarily causing hurt and may be imprisoned up to 3 years or fined up to $5,000 or both.
+ground_truth:
+  section: "323"
+  satisfied_elements: [offence_committed, conviction]
+  fired_exception: null
+fact_facts:
+  offence_committed: true
+  conviction: true
+tags: [synth:true]

@@ -1,0 +1,12 @@
+id: s111-illustration-b
+section: "111"
+scenario: |
+  ( b ) A instigates B to burn Z ’s house. B sets fire to the house, and at the same time commits theft of property there. A , though guilty of abetting the burning of the house, is not guilty of abetting the theft; for the theft was a distinct act, and not a probable consequence of the burning.
+ground_truth:
+  section: "111"
+  satisfied_elements: []
+  fired_exception: null
+fact_facts:
+  act_abetted: false
+  different_act_done: false
+tags: [synth:true, polarity:negative]

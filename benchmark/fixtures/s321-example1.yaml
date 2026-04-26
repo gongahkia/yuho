@@ -1,0 +1,13 @@
+id: s321-example1
+section: "321"
+scenario: |
+  A intentionally pushes B, causing B to fall and sustain injuries. A has voluntarily caused hurt to B.
+ground_truth:
+  section: "321"
+  satisfied_elements: [intention, causing_hurt, hurt_caused]
+  fired_exception: null
+fact_facts:
+  intention: true
+  causing_hurt: true
+  hurt_caused: true
+tags: [synth:true]

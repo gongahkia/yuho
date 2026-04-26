@@ -1,0 +1,17 @@
+id: s427-illustration-c
+section: "427"
+scenario: |
+  ( c ) An act of mischief which damages an electricity licensee’s power generation facility that is used to supply electricity to a public housing estate, is an act which is likely to cause disruption to a key service even though there is no actual disruption to that power supply.
+ground_truth:
+  section: "427"
+  satisfied_elements: [commits_mischief, causes_disruption_to_key_service, knowledge_of_likely_disruption_to_key_service, likely_disruption_to_key_service, causes_disruption_to_government_or_public_agency, knowledge_of_likely_disruption_to_government, likely_disruption_to_government_or_public_agency]
+  fired_exception: null
+fact_facts:
+  commits_mischief: true
+  causes_disruption_to_key_service: true
+  knowledge_of_likely_disruption_to_key_service: true
+  likely_disruption_to_key_service: true
+  causes_disruption_to_government_or_public_agency: true
+  knowledge_of_likely_disruption_to_government: true
+  likely_disruption_to_government_or_public_agency: true
+tags: [synth:true]

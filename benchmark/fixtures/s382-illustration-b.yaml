@@ -1,0 +1,15 @@
+id: s382-illustration-b
+section: "382"
+scenario: |
+  ( b ) A picks Z ’s pocket, having posted several of his companions near him, in order that they may restrain Z , if Z should perceive what is passing and should resist, or should attempt to apprehend A . A has committed the offence defined in this section.
+ground_truth:
+  section: "382"
+  satisfied_elements: [commits_theft, made_preparation, purpose_commit_theft, purpose_escape, purpose_retain_property]
+  fired_exception: null
+fact_facts:
+  commits_theft: true
+  made_preparation: true
+  purpose_commit_theft: true
+  purpose_escape: true
+  purpose_retain_property: true
+tags: [synth:true]

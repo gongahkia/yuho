@@ -1,0 +1,18 @@
+id: s412-illustration
+section: "412"
+scenario: |
+  A box of valuable jewels is delivered by courier to A ’s office. A later discovers the jewels and learns from the news reports that there was a gang robbery of jewels in the vicinity. A has reason to believe that the jewels were stolen in the gang robbery. As soon as practicable after this discovery, A keeps the jewels in the safe and travels to the police station to make a report of the jewels and express his belief that the jewels were stolen by gang‑robbers. A has a reasonable excuse for receiving and retaining the jewels pending their retrieval by the police and has exercised reasonable care.
+ground_truth:
+  section: "412"
+  satisfied_elements: [receives_or_retains_stolen_property, knowledge_possession_transferred_by_gang_robbery, receives_property_from_person, knowledge_person_belongs_or_belonged_to_gang_robbers, knowledge_property_stolen, charge_under_subsection_1, reasonable_excuse_to_receive_or_retain, exercised_reasonable_care_as_soon_as_practicable]
+  fired_exception: null
+fact_facts:
+  receives_or_retains_stolen_property: true
+  knowledge_possession_transferred_by_gang_robbery: true
+  receives_property_from_person: true
+  knowledge_person_belongs_or_belonged_to_gang_robbers: true
+  knowledge_property_stolen: true
+  charge_under_subsection_1: true
+  reasonable_excuse_to_receive_or_retain: true
+  exercised_reasonable_care_as_soon_as_practicable: true
+tags: [synth:true]

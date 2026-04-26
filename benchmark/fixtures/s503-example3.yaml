@@ -1,0 +1,16 @@
+id: s503-example3
+section: "503"
+scenario: |
+  A, an employee, is given money to purchase supplies. A spends the money on personal expenses. A commits criminal breach of trust.
+ground_truth:
+  section: "503"
+  satisfied_elements: [trust, dishonesty, misappropriate, convert, violate_law, violate_contract]
+  fired_exception: null
+fact_facts:
+  trust: true
+  dishonesty: true
+  misappropriate: true
+  convert: true
+  violate_law: true
+  violate_contract: true
+tags: [synth:true]

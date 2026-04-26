@@ -1,0 +1,13 @@
+id: s121-illustration
+section: "121"
+scenario: |
+  A joins an insurrection against the Government. A has committed the offence defined in this section.
+ground_truth:
+  section: "121"
+  satisfied_elements: [wages_war, attempts_wage_war, abets_waging_war]
+  fired_exception: null
+fact_facts:
+  wages_war: true
+  attempts_wage_war: true
+  abets_waging_war: true
+tags: [synth:true]

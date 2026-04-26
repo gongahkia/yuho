@@ -1,0 +1,14 @@
+id: s100-illustration
+section: "100"
+scenario: |
+  A is attacked by a mob who attempt to murder him. A cannot effectually exercise his right of private defence without firing on the mob, and he cannot fire without risk of harming young children who are mingled with the mob. A commits no offence if by so firing he harms any of the children.
+ground_truth:
+  section: "100"
+  satisfied_elements: []
+  fired_exception: null
+fact_facts:
+  exercise_of_right: false
+  assault_causing_reasonable_belief_of_death: false
+  cannot_effectually_exercise_without_risk: false
+  extension_to_running_risk: false
+tags: [synth:true, polarity:negative]

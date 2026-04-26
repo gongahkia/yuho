@@ -1,0 +1,12 @@
+id: s108A-example1
+section: "108A"
+scenario: |
+  A , in Singapore, instigates B , a foreigner in Java, to commit murder in Java. A is guilty of abetting murder.
+ground_truth:
+  section: "108A"
+  satisfied_elements: [abetment_in_singapore, singapore_offence_equivalence]
+  fired_exception: null
+fact_facts:
+  abetment_in_singapore: true
+  singapore_offence_equivalence: true
+tags: [synth:true]

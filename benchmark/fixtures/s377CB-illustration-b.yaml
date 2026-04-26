@@ -1,0 +1,15 @@
+id: s377CB-illustration-b
+section: "377CB"
+scenario: |
+  ( b ) A deceives B into believing that he can heal B ’s chronic disease by treatment involving sexual penetration. B gives her consent under the misconception that the act is treatment for a health purpose and not for a sexual purpose. B ’s apparent consent is therefore not a valid consent.
+ground_truth:
+  section: "377CB"
+  satisfied_elements: [consent_for_physical_element_of_sexual_offence, misconception_as_to_nature, misconception_as_to_purpose, misconception_as_to_identity, knowledge_or_reason_to_believe_consent_consequence]
+  fired_exception: null
+fact_facts:
+  consent_for_physical_element_of_sexual_offence: true
+  misconception_as_to_nature: true
+  misconception_as_to_purpose: true
+  misconception_as_to_identity: true
+  knowledge_or_reason_to_believe_consent_consequence: true
+tags: [synth:true]

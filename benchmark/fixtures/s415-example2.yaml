@@ -1,0 +1,15 @@
+id: s415-example2
+section: "415"
+scenario: |
+  A falsely pretends to be in government service and induces B to let him have goods on credit. A cheats.
+ground_truth:
+  section: "415"
+  satisfied_elements: [deception, fraudulent, dishonest, inducement, harm]
+  fired_exception: null
+fact_facts:
+  deception: true
+  fraudulent: true
+  dishonest: true
+  inducement: true
+  harm: true
+tags: [synth:true]

@@ -330,6 +330,79 @@ toolchain (\S\ref{subsec:tooling_eval}); the contract here is
 ``minimal element configuration that distinguishes A from B in
 the encoded model'', not legal advice.
 
+\subsection{LLM legal-reasoning benchmark}
+\label{subsec:llm_benchmark}
+
+The encoded library admits a second use orthogonal to verification:
+as the \emph{ground truth} for a machine-checkable LLM benchmark.
+For each fixture we present a natural-language scenario; the model
+is asked, in three separately-scored tasks, to (T1) identify the
+applicable Penal Code section, (T2) name the leaf elements
+satisfied by the scenario, and (T3) cite any defeating exception.
+Every answer is graded against the structural shape Yuho's
+evaluator computes from the same encoded \texttt{.yh} the rest of
+this paper relies on --- the comparison surface is exact match on
+T1 and T3, F1 over the predicted vs encoded element-name set on T2.
+
+\paragraph{Position relative to LegalBench / LawBench.} The
+existing benchmarks
+\cite{guha2024legalbench,fei2023lawbench} score legal-task
+performance against authored answer keys: their ground truth is a
+human's prose response, and disagreement at the level of
+``equivalent legal effect, different phrasing'' is irreducible.
+Yuho's ground truth is the structural evaluator's verdict over the
+encoded source, which removes that ambiguity at the cost of being
+a structural benchmark, not a legal-prose one. The two surfaces
+are complementary: LegalBench / LawBench probe legal reasoning as
+practitioners read and write it; the Yuho benchmark probes whether
+an LLM can recover the structural shape that an explicit encoding
+already commits to.
+
+\paragraph{Fixture corpus.} The seed corpus ships at $n =$
+\statBenchmarkFixtures{} fixtures spanning $\statBenchmarkChapters$
+Penal Code chapters and $\statBenchmarkCategories$ structural
+categories (deception, harm, property, homicide, abetment,
+intimidation, reputation, sexual offence, document, liberty).
+\statBenchmarkSynth{} are programmatically synthesised from
+canonical illustrations in the encoded library
+(\texttt{scripts/synthesise\_benchmark\_fixtures.py}) --- the
+illustrations are designed by the legislative drafters as positive
+examples that satisfy the section's elements by construction, so
+the structural ground truth is recoverable without per-fixture
+authoring. The remaining $\statBenchmarkHand$ fixtures are
+hand-authored, carrying polarity-negative variants
+(\texttt{s415-no-deception}, \texttt{s378-with-consent}) and
+edge cases the canonical illustrations skip.
+
+\paragraph{Headline numbers.} The runner is single-file and ships
+two \texttt{BenchmarkClient} implementations (Anthropic SDK and a
+deterministic \texttt{FakeClient} for CI). End-to-end with the
+\texttt{FakeClient}, every fixture scores 100\% on every task ---
+confirming the loader / scorer / report pipeline. Real-LLM
+baselines against \emph{Claude Sonnet 4.6}, \emph{Claude Opus
+4.7}, and an open-weights reference are deferred from this
+trench's scope; the runner emits the full per-fixture JSON plus
+stratified accuracy slices (per chapter, per category, per
+difficulty), so once the API key lands, the headline numbers
+reduce to one command. We list the stratification axes here as a
+contract for the deferred run rather than a measurement, in the
+spirit of the rest of \S\ref{sec:evaluation}: the paper is the
+record of what the toolchain measures, even when the measurement
+itself is queued.
+
+\paragraph{Caveats.} Three. First, the benchmark probes
+\emph{structural} agreement with the encoded statute, not legal
+correctness in the sense a practitioner would test --- the
+encoded statute itself may diverge from what a court would
+ultimately hold. Second, the synthesised fixtures inherit the
+illustrations' authorial bias toward positive examples; the
+hand-authored slice mitigates but does not eliminate this. Third,
+T1 forces a single-section answer where real cases routinely
+support concurrent charges; we adopt the convention that the
+scenario's \emph{most directly applicable} section is the
+ground-truth answer, with concurrent-charge fixtures left as
+future work.
+
 \subsection{Tooling validation}
 \label{subsec:tooling_eval}
 

@@ -1,0 +1,18 @@
+id: s193-illustration-2
+section: "193"
+scenario: |
+  A , in an inquiry before an officer deputed by a court of justice to ascertain on the spot the boundaries of land, makes on oath a statement which he knows to be false. As this inquiry is a stage of a judicial proceeding, A has given false evidence.
+ground_truth:
+  section: "193"
+  satisfied_elements: [gives_false_evidence_in_judicial_stage, intentionally_gives_in_judicial_stage, fabricates_false_evidence_for_judicial_stage, judicial_proceeding_case, gives_false_evidence_other_case, fabricates_false_evidence_other_case, intentionally_gives_or_fabricates_other_case, other_case]
+  fired_exception: null
+fact_facts:
+  gives_false_evidence_in_judicial_stage: true
+  intentionally_gives_in_judicial_stage: true
+  fabricates_false_evidence_for_judicial_stage: true
+  judicial_proceeding_case: true
+  gives_false_evidence_other_case: true
+  fabricates_false_evidence_other_case: true
+  intentionally_gives_or_fabricates_other_case: true
+  other_case: true
+tags: [synth:true]

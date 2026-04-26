@@ -1,0 +1,17 @@
+id: s427-illustration-b
+section: "427"
+scenario: |
+  ( b ) Unauthorised destruction of the records and files of a department of the Government which role is to promote Singapore as a sound and reputable financial centre is an act which causes disruption to the performance of the function of that department.
+ground_truth:
+  section: "427"
+  satisfied_elements: [commits_mischief, causes_disruption_to_key_service, knowledge_of_likely_disruption_to_key_service, likely_disruption_to_key_service, causes_disruption_to_government_or_public_agency, knowledge_of_likely_disruption_to_government, likely_disruption_to_government_or_public_agency]
+  fired_exception: null
+fact_facts:
+  commits_mischief: true
+  causes_disruption_to_key_service: true
+  knowledge_of_likely_disruption_to_key_service: true
+  likely_disruption_to_key_service: true
+  causes_disruption_to_government_or_public_agency: true
+  knowledge_of_likely_disruption_to_government: true
+  likely_disruption_to_government_or_public_agency: true
+tags: [synth:true]

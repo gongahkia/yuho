@@ -1,0 +1,16 @@
+id: s307-illustration-d
+section: "307"
+scenario: |
+  ( d ) A , intending to murder Z by poison, purchases poison and mixes the same with food which remains in A ’s keeping; A has not yet committed the offence defined in this section. A places the food on Z ’s table or delivers it to Z ’s servants to place it on Z ’s table. A has committed the offence defined in this section.
+ground_truth:
+  section: "307"
+  satisfied_elements: [does_any_act, intention_of_causing_death, would_be_guilty_of_murder, offending_under_this_section, under_sentence_of_imprisonment_for_life, hurt_is_caused]
+  fired_exception: null
+fact_facts:
+  does_any_act: true
+  intention_of_causing_death: true
+  would_be_guilty_of_murder: true
+  offending_under_this_section: true
+  under_sentence_of_imprisonment_for_life: true
+  hurt_is_caused: true
+tags: [synth:true]

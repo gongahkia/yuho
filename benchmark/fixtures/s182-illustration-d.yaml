@@ -1,0 +1,16 @@
+id: s182-illustration-d
+section: "182"
+scenario: |
+  ( d ) A informs a policeman that A does not know the identity of the suspect of a criminal offence, knowing such information to be false, and knowing it to be likely that in consequence of this information, the policeman will expend additional time and resources to identify the suspect which will not be so expended if A had informed the policeman that A knew the identity of the suspect. A has committed an offence under this section.
+ground_truth:
+  section: "182"
+  satisfied_elements: [giving_information, falsity, intends_consequence, knows_likely_consequence, injury_or_annoyance, improper_action_or_omission]
+  fired_exception: null
+fact_facts:
+  giving_information: true
+  falsity: true
+  intends_consequence: true
+  knows_likely_consequence: true
+  injury_or_annoyance: true
+  improper_action_or_omission: true
+tags: [synth:true]

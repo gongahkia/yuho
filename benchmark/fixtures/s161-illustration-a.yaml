@@ -1,0 +1,13 @@
+id: s161-illustration-a
+section: "161"
+scenario: |
+  ( a ) A , a judge, obtains from Z , a banker, a situation in Z ’s bank for A ’s brother, as a reward to A for deciding a cause in favour of Z . A has committed the offence defined in this section.
+ground_truth:
+  section: "161"
+  satisfied_elements: [public_servant_status, gratification_transaction, corrupt_motive_or_reward]
+  fired_exception: null
+fact_facts:
+  public_servant_status: true
+  gratification_transaction: true
+  corrupt_motive_or_reward: true
+tags: [synth:true]

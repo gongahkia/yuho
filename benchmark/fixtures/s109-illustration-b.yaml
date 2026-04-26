@@ -1,0 +1,13 @@
+id: s109-illustration-b
+section: "109"
+scenario: |
+  ( b ) A instigates B to give false evidence. B , in consequence of the instigation, commits that offence. A is guilty of abetting that offence, and is liable to the same punishment as B .
+ground_truth:
+  section: "109"
+  satisfied_elements: [abets_offence, act_abetted_committed_in_consequence, no_express_provision_for_punishment]
+  fired_exception: null
+fact_facts:
+  abets_offence: true
+  act_abetted_committed_in_consequence: true
+  no_express_provision_for_punishment: true
+tags: [synth:true]

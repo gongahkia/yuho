@@ -1,0 +1,16 @@
+id: s195-illustration-a
+section: "195"
+scenario: |
+  A gives false evidence before a court of justice, intending thereby to cause Z to be convicted of a gang‑robbery. The punishment of gang-robbery is imprisonment for a term of not less than 5 years and not more than 20 years and also caning with not less than 12 strokes. A , therefore, is liable to such imprisonment, with caning.
+ground_truth:
+  section: "195"
+  satisfied_elements: [gives_false_evidence, fabricates_false_evidence, intending_to_cause_conviction, knowing_likely_to_cause_conviction, qualifying_noncapital_offence, qualifying_life_imprisonment_offence]
+  fired_exception: null
+fact_facts:
+  gives_false_evidence: true
+  fabricates_false_evidence: true
+  intending_to_cause_conviction: true
+  knowing_likely_to_cause_conviction: true
+  qualifying_noncapital_offence: true
+  qualifying_life_imprisonment_offence: true
+tags: [synth:true]

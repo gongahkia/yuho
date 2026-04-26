@@ -1,0 +1,15 @@
+id: s499-example2
+section: "499"
+scenario: |
+  A publishes true facts about B's public conduct as a public servant for public good. A does not defame B.
+ground_truth:
+  section: "499"
+  satisfied_elements: [imputation, method, intent, knowledge, harm]
+  fired_exception: null
+fact_facts:
+  imputation: true
+  method: true
+  intent: true
+  knowledge: true
+  harm: true
+tags: [synth:true]

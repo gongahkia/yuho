@@ -1,0 +1,13 @@
+id: s411-example2
+section: "411"
+scenario: |
+  A finds goods left at her doorstep. A has no reason to believe they are stolen and keeps them. A has not committed the offence.
+ground_truth:
+  section: "411"
+  satisfied_elements: [stolen, knowledge, receiving]
+  fired_exception: null
+fact_facts:
+  stolen: true
+  knowledge: true
+  receiving: true
+tags: [synth:true]

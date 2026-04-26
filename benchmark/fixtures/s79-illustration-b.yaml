@@ -1,0 +1,18 @@
+id: s79-illustration-b
+section: "79"
+scenario: |
+  ( b ) A , a police officer, is deployed to perform the duty of screening passengers boarding a flight at the airport. A sees Z , a passenger queuing up to be screened, acting suspiciously. As A approaches Z , Z suddenly shouts aloud that he is carrying a bomb and warns A not to approach further. As A draws his revolver, Z suddenly starts to run away. A , after assessing the circumstances of the case, and to the best of his judgment exerted in good faith, believes that Z has a bomb and will set it off. A shoots Z and Z dies as a result. A has committed no offence, even though it may turn out that Z was not carrying a bomb.
+ground_truth:
+  section: "79"
+  satisfied_elements: []
+  fired_exception: null
+fact_facts:
+  no_written_law_override: false
+  act_done: false
+  mistake_of_fact: false
+  ignorance_of_fact: false
+  good_faith_belief: false
+  alleged_mistake_of_fact: false
+  alleged_ignorance_of_fact: false
+  prosecution_proves_fault: false
+tags: [synth:true, polarity:negative]

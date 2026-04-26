@@ -1,0 +1,16 @@
+id: s182-illustration-c
+section: "182"
+scenario: |
+  ( c ) A falsely informs a policeman that he has been assaulted and robbed by a person whose identity he does not know. A also mentions that he often sees that person going in and out of a block of flats, knowing it to be likely that in consequence of this information, the police will make inquiries and institute searches in the block of flats to the annoyance of the flat dwellers or some of them. A has committed an offence under this section.
+ground_truth:
+  section: "182"
+  satisfied_elements: [giving_information, falsity, intends_consequence, knows_likely_consequence, injury_or_annoyance, improper_action_or_omission]
+  fired_exception: null
+fact_facts:
+  giving_information: true
+  falsity: true
+  intends_consequence: true
+  knows_likely_consequence: true
+  injury_or_annoyance: true
+  improper_action_or_omission: true
+tags: [synth:true]

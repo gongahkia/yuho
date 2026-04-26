@@ -158,16 +158,22 @@ class FakeClient:
         self._by_scenario = {fx.scenario: fx for fx in self.fixtures}
 
     def query(self, prompt: str, *, system: str = "", task_kind: str = "") -> str:
-        # Find the fixture by matching the embedded scenario substring.
+        # Match by full scenario text — short prefixes collide
+        # across illustrations that share opening clauses (the
+        # canonical Penal Code drafting style).
+        match: Optional[Fixture] = None
         for scenario, fx in self._by_scenario.items():
-            if scenario.split("\n")[0][:60] in prompt:
-                if task_kind == "section":
-                    return fx.truth_section
-                if task_kind == "elements":
-                    return json.dumps(list(fx.truth_elements))
-                if task_kind == "exception":
-                    return fx.truth_exception or "none"
-                break
+            if scenario in prompt:
+                if match is None or len(scenario) > len(match.scenario):
+                    match = fx
+        if match is None:
+            return ""
+        if task_kind == "section":
+            return match.truth_section
+        if task_kind == "elements":
+            return json.dumps(list(match.truth_elements))
+        if task_kind == "exception":
+            return match.truth_exception or "none"
         return ""
 
 
@@ -300,6 +306,43 @@ class BenchmarkResult:
                   if fr.t2_elements.f1 is not None]
         return sum(scores) / len(scores) if scores else 0.0
 
+    def stratified(self) -> Dict[str, Dict[str, Any]]:
+        """Per-tag-prefix accuracy slices.
+
+        Walks every fixture's ``tags`` field looking for ``key:value``
+        pairs (e.g. ``chapter:xvi``, ``difficulty:basic``,
+        ``category:property``). Returns a nested dict keyed by tag
+        prefix → tag value → {n, t1, t2, t2_f1, t3}.
+        """
+        # Map each FixtureResult back to its source fixture for tag access.
+        # We need fixture tags; recover them from the runtime store the
+        # caller passes via `_attach_tags_to(result, fixtures)`.
+        tags_by_id: Dict[str, Tuple[str, ...]] = getattr(self, "_tags_by_id", {})
+        if not tags_by_id:
+            return {}
+        slices: Dict[str, Dict[str, List[FixtureResult]]] = {}
+        for fr in self.fixtures:
+            for tag in tags_by_id.get(fr.fixture_id, ()):
+                if ":" not in tag:
+                    continue
+                prefix, _, value = tag.partition(":")
+                slices.setdefault(prefix, {}).setdefault(value, []).append(fr)
+        out: Dict[str, Dict[str, Any]] = {}
+        for prefix, by_value in slices.items():
+            out[prefix] = {}
+            for value, frs in by_value.items():
+                if not frs:
+                    continue
+                f1s = [fr.t2_elements.f1 for fr in frs if fr.t2_elements.f1 is not None]
+                out[prefix][value] = {
+                    "n": len(frs),
+                    "t1_accuracy": sum(1 for fr in frs if fr.t1_section.correct) / len(frs),
+                    "t2_accuracy": sum(1 for fr in frs if fr.t2_elements.correct) / len(frs),
+                    "t2_mean_f1": (sum(f1s) / len(f1s)) if f1s else 0.0,
+                    "t3_accuracy": sum(1 for fr in frs if fr.t3_exception.correct) / len(frs),
+                }
+        return out
+
     def to_dict(self) -> Dict[str, Any]:
         return {
             "n": self.n,
@@ -307,6 +350,7 @@ class BenchmarkResult:
             "t2_accuracy": self.task_accuracy("t2_elements"),
             "t2_mean_f1": self.mean_f1(),
             "t3_accuracy": self.task_accuracy("t3_exception"),
+            "stratified": self.stratified(),
             "fixtures": [
                 {
                     "id": fr.fixture_id,
@@ -432,6 +476,9 @@ def run_benchmark(
 ) -> BenchmarkResult:
     """Score every fixture against the supplied client."""
     result = BenchmarkResult()
+    # Attach a `fixture_id -> tags` map so `stratified()` can recover
+    # per-tag slices without forcing the caller to manage that bookkeeping.
+    result._tags_by_id = {fx.id: fx.tags for fx in fixtures}  # type: ignore[attr-defined]
     for i, fx in enumerate(fixtures, 1):
         try:
             fr = score_fixture(fx, client)
@@ -450,7 +497,7 @@ def run_benchmark(
     return result
 
 
-def render_report(result: BenchmarkResult) -> str:
+def render_report(result: BenchmarkResult, *, show_per_fixture: bool = True) -> str:
     """Human-readable text report."""
     lines = [
         f"Yuho LLM legal-reasoning benchmark — n={result.n}",
@@ -458,16 +505,33 @@ def render_report(result: BenchmarkResult) -> str:
         f"  T1 (section identification):  {result.task_accuracy('t1_section'):.1%}",
         f"  T2 (element-set recall):      {result.task_accuracy('t2_elements'):.1%}  (mean F1: {result.mean_f1():.3f})",
         f"  T3 (exception citation):      {result.task_accuracy('t3_exception'):.1%}",
-        "",
-        "Per-fixture:",
     ]
-    for fr in result.fixtures:
-        lines.append(
-            f"  [{fr.fixture_id:32s}] T1={'✓' if fr.t1_section.correct else '✗'}  "
-            f"T2_F1={fr.t2_elements.f1 or 0:.2f}  "
-            f"T3={'✓' if fr.t3_exception.correct else '✗'}  "
-            f"({fr.elapsed_seconds:.2f}s)"
-        )
+
+    strat = result.stratified()
+    if strat:
+        for prefix in sorted(strat):
+            lines.append("")
+            lines.append(f"Stratified by `{prefix}`:")
+            lines.append(f"  {'value':22s}  {'n':>4s}  {'T1':>6s}  {'T2-F1':>6s}  {'T3':>6s}")
+            for value in sorted(strat[prefix]):
+                row = strat[prefix][value]
+                lines.append(
+                    f"  {value:22s}  {row['n']:>4d}  "
+                    f"{row['t1_accuracy']:>6.1%}  "
+                    f"{row['t2_mean_f1']:>6.3f}  "
+                    f"{row['t3_accuracy']:>6.1%}"
+                )
+
+    if show_per_fixture:
+        lines.append("")
+        lines.append("Per-fixture:")
+        for fr in result.fixtures:
+            lines.append(
+                f"  [{fr.fixture_id:32s}] T1={'✓' if fr.t1_section.correct else '✗'}  "
+                f"T2_F1={fr.t2_elements.f1 or 0:.2f}  "
+                f"T3={'✓' if fr.t3_exception.correct else '✗'}  "
+                f"({fr.elapsed_seconds:.2f}s)"
+            )
     lines.append("")
     lines.append("Not legal advice — structural benchmark, not legal reasoning.")
     return "\n".join(lines)
@@ -493,6 +557,8 @@ def main() -> int:
                    help="Emit JSON instead of human-readable text")
     p.add_argument("--out", type=Path, default=None,
                    help="Write report to this path (default: stdout)")
+    p.add_argument("--no-per-fixture", action="store_true",
+                   help="Hide the per-fixture table in the human report")
     args = p.parse_args()
 
     fixtures = load_fixtures(args.fixtures)
@@ -531,7 +597,9 @@ def main() -> int:
 
     output = (
         json.dumps(result.to_dict(), indent=2, ensure_ascii=False)
-        if args.json_out else render_report(result)
+        if args.json_out else render_report(
+            result, show_per_fixture=not args.no_per_fixture,
+        )
     )
     if args.out:
         args.out.parent.mkdir(parents=True, exist_ok=True)

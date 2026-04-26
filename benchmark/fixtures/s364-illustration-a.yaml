@@ -1,0 +1,14 @@
+id: s364-illustration-a
+section: "364"
+scenario: |
+  ( a ) A kidnaps Z from Singapore, intending or knowing it to be likely that Z may be sacrificed to an idol. A has committed the offence defined in this section.
+ground_truth:
+  section: "364"
+  satisfied_elements: [kidnaps_person, abducts_person, purpose_murder, purpose_danger_of_murder]
+  fired_exception: null
+fact_facts:
+  kidnaps_person: true
+  abducts_person: true
+  purpose_murder: true
+  purpose_danger_of_murder: true
+tags: [synth:true]

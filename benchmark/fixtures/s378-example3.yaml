@@ -1,0 +1,15 @@
+id: s378-example3
+section: "378"
+scenario: |
+  A sees a watch belonging to B lying on a table. A, not intending to take the watch, moves it to see what is under it. A has not committed theft.
+ground_truth:
+  section: "378"
+  satisfied_elements: [intention, taking, possession, consent, movement]
+  fired_exception: null
+fact_facts:
+  intention: true
+  taking: true
+  possession: true
+  consent: true
+  movement: true
+tags: [synth:true]

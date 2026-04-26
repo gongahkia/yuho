@@ -1,0 +1,21 @@
+id: s163-illustration-1
+section: "163"
+scenario: |
+  An advocate who receives a fee for arguing a case before a judge; a person who receives pay for arranging and correcting a memorial addressed to Government, setting forth the services and claims of the memorialist; a paid agent for a condemned criminal, who lays before the Government statements tending to show that the condemnation was unjust — are not within this section, inasmuch as they do not exercise or profess to exercise personal influence.
+ground_truth:
+  section: "163"
+  satisfied_elements: [accepts, obtains, agrees_to_accept, attempts_to_obtain, source_person, for_self_or_other, motive_or_reward, inducing_by_personal_influence, do_or_forbear_official_act, show_favour_or_disfavour, render_or_attempt_service_or_disservice]
+  fired_exception: null
+fact_facts:
+  accepts: true
+  obtains: true
+  agrees_to_accept: true
+  attempts_to_obtain: true
+  source_person: true
+  for_self_or_other: true
+  motive_or_reward: true
+  inducing_by_personal_influence: true
+  do_or_forbear_official_act: true
+  show_favour_or_disfavour: true
+  render_or_attempt_service_or_disservice: true
+tags: [synth:true]

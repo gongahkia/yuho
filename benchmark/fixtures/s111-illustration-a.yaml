@@ -1,0 +1,12 @@
+id: s111-illustration-a
+section: "111"
+scenario: |
+  ( a ) A instigates a child to put poison into the food of Z , and gives him poison for that purpose. The child, in consequence of the instigation, by mistake puts the poison into the food of Y , which is by the side of that of Z . Here, if the child was acting under the influence of A ’s instigation, and the act done was under the circumstances a probable consequence of the abetment, A is liable in the same manner, and to the same extent, as if he had instigated the child to put the poison into the food of Y .
+ground_truth:
+  section: "111"
+  satisfied_elements: [act_abetted, different_act_done]
+  fired_exception: null
+fact_facts:
+  act_abetted: true
+  different_act_done: true
+tags: [synth:true]

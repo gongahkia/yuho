@@ -1,0 +1,12 @@
+id: s302-example1
+section: "302"
+scenario: |
+  A is convicted of murdering B by stabbing with intent to kill. A shall be punished with death or imprisonment for life.
+ground_truth:
+  section: "302"
+  satisfied_elements: [murder_committed, conviction]
+  fired_exception: null
+fact_facts:
+  murder_committed: true
+  conviction: true
+tags: [synth:true]

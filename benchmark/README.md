@@ -28,7 +28,7 @@ benchmark/
 ├── README.md            (this file)
 ├── schema.json          (JSON-schema for fixture files)
 ├── run.py               (runner — fixture loader + LLM client + scorer)
-└── fixtures/            (22 seed fixtures across 9 chapters)
+└── fixtures/            (205 fixtures: 22 hand-authored + 183 synthesised)
     ├── s415-classic.yaml
     ├── s415-no-deception.yaml
     ├── s378-classic.yaml
@@ -36,6 +36,13 @@ benchmark/
     ├── s319-classic.yaml
     ├── …
 ```
+
+The 183 synthesised fixtures are generated from the canonical
+illustrations in the encoded library by
+`scripts/synthesise_benchmark_fixtures.py`. They're tagged
+`synth:true`; pass `--no-per-fixture` and inspect the stratified
+report's `synth` axis to compare hand-authored vs synthesised
+performance.
 
 ## Running
 
@@ -58,7 +65,24 @@ python benchmark/run.py --max-fixtures 5
 
 # Machine-readable output to a file.
 python benchmark/run.py --json --out benchmark/results.json
+
+# Stratified accuracy slices (per chapter / category / difficulty / synth):
+python benchmark/run.py --fake --no-per-fixture
 ```
+
+### Bulk-generating fixtures from the encoded library
+
+```sh
+python scripts/synthesise_benchmark_fixtures.py
+```
+
+For every encoded section that has both leaf elements AND
+illustrations, this writes one fixture per illustration into
+`benchmark/fixtures/`. Existing fixture files are not overwritten.
+Polarity-negative illustrations (text containing "is not", "no
+offence", etc.) are auto-tagged `polarity:negative` and emit an
+empty `satisfied_elements` set so the LLM is graded on identifying
+the negative case.
 
 ### Plugging in a different model
 

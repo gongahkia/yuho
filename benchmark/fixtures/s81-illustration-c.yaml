@@ -1,0 +1,15 @@
+id: s81-illustration-c
+section: "81"
+scenario: |
+  ( c ) X , the commander of a naval vessel, is deployed in response to a threat of a terrorist attack against a ferry terminal in Singapore. X receives information that vessel A , with a crew of 6, has been hijacked by terrorists and is approaching the ferry terminal at great speed and is likely to collide into the terminal. There is insufficient time to evacuate the persons at the terminal, which is estimated to be about 100. X orders vessel A to stop her manoeuvre immediately and fires a warning signal. However, vessel A continues her advance towards the terminal. Here, if X gives an order to fire at vessel A to disable it, without any intention to cause harm to the crew members of vessel A , and in good faith for the purpose of avoiding the danger to the persons at the terminal, he is not guilty of an offence. This is so even though he knows that he is likely to cause harm to the crew members of vessel A , if it be found as a matter of fact that the danger which X intends to avoid is such as to excuse him in incurring the risk of firing at vessel A .
+ground_truth:
+  section: "81"
+  satisfied_elements: []
+  fired_exception: null
+fact_facts:
+  act_likely_to_cause_harm: false
+  knowledge_likely_harm: false
+  good_faith: false
+  preventive_purpose: false
+  justified_risk: false
+tags: [synth:true, polarity:negative]

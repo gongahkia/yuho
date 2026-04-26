@@ -1,0 +1,12 @@
+id: s144-illustration-2
+section: "144"
+scenario: |
+  This illustration is applicable to sections 148 and 158.
+ground_truth:
+  section: "144"
+  satisfied_elements: [membership, armed]
+  fired_exception: null
+fact_facts:
+  membership: true
+  armed: true
+tags: [synth:true]

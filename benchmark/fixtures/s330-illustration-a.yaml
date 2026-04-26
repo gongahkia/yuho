@@ -1,0 +1,13 @@
+id: s330-illustration-a
+section: "330"
+scenario: |
+  ( a ) A , a police officer, tortures Z in order to induce Z to confess that he committed a crime. A is guilty of an offence under this section.
+ground_truth:
+  section: "330"
+  satisfied_elements: [voluntarily_causes_hurt, purpose_of_extorting_confession_or_detection_information, purpose_of_constraining_restoration_or_satisfaction]
+  fired_exception: null
+fact_facts:
+  voluntarily_causes_hurt: true
+  purpose_of_extorting_confession_or_detection_information: true
+  purpose_of_constraining_restoration_or_satisfaction: true
+tags: [synth:true]

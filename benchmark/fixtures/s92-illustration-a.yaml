@@ -1,0 +1,17 @@
+id: s92-illustration-a
+section: "92"
+scenario: |
+  ( a ) Z is thrown from his horse, and is insensible. A , a surgeon, finds that Z requires to be trepanned. A , not intending Z ’s death, but in good faith, for Z ’s benefit, performs the trepan before Z recovers his power of judging for himself. A has committed no offence.
+ground_truth:
+  section: "92"
+  satisfied_elements: []
+  fired_exception: null
+fact_facts:
+  qualifying_act: false
+  beneficiary: false
+  good_faith: false
+  without_consent: false
+  impossible_to_signify_consent: false
+  incapable_of_giving_consent: false
+  no_guardian_or_lawful_charge_available: false
+tags: [synth:true, polarity:negative]

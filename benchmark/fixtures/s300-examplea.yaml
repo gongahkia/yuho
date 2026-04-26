@@ -1,0 +1,15 @@
+id: s300-examplea
+section: "300"
+scenario: |
+  A shoots Z with the intention of killing him. Z dies in consequence. A commits murder.
+ground_truth:
+  section: "300"
+  satisfied_elements: [causeDeath, intent1, intent2, intent3, intent4]
+  fired_exception: null
+fact_facts:
+  causeDeath: true
+  intent1: true
+  intent2: true
+  intent3: true
+  intent4: true
+tags: [synth:true]

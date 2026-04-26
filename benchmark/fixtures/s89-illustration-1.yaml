@@ -1,0 +1,19 @@
+id: s89-illustration-1
+section: "89"
+scenario: |
+  A , in good faith, for the benefit of his child, being below 12 years of age, without his child’s consent, has his child cut for the stone by a surgeon, knowing it to be likely that the operation will cause the child’s death, but not intending to cause the child’s death. A is within the exception, inasmuch as his object was the cure of the child.
+ground_truth:
+  section: "89"
+  satisfied_elements: [qualifying_act, good_faith, benefit, by_guardian_or_lawful_charge, express_guardian_consent, implied_guardian_consent, harm_caused, harm_intended, harm_known_likely]
+  fired_exception: null
+fact_facts:
+  qualifying_act: true
+  good_faith: true
+  benefit: true
+  by_guardian_or_lawful_charge: true
+  express_guardian_consent: true
+  implied_guardian_consent: true
+  harm_caused: true
+  harm_intended: true
+  harm_known_likely: true
+tags: [synth:true]

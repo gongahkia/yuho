@@ -1,0 +1,16 @@
+id: s182-illustration-b
+section: "182"
+scenario: |
+  ( b ) A falsely informs a public servant that Z has contraband opium in a secret place, knowing such information to be false, and knowing that it is likely that the consequence of the information will be a search of Z ’s premises, attended with annoyance to Z. A has committed the offence defined in this section.
+ground_truth:
+  section: "182"
+  satisfied_elements: [giving_information, falsity, intends_consequence, knows_likely_consequence, injury_or_annoyance, improper_action_or_omission]
+  fired_exception: null
+fact_facts:
+  giving_information: true
+  falsity: true
+  intends_consequence: true
+  knows_likely_consequence: true
+  injury_or_annoyance: true
+  improper_action_or_omission: true
+tags: [synth:true]

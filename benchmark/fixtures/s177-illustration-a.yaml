@@ -1,0 +1,17 @@
+id: s177-illustration-a
+section: "177"
+scenario: |
+  A , a landholder, knowing of the commission of a murder, within the limits of his commercial property, intentionally misinforms the police that the death has occurred by accident in consequence of the bite of a snake. A is guilty of the offence defined in this section.
+ground_truth:
+  section: "177"
+  satisfied_elements: [legal_duty, furnishing_as_true, knowledge_of_falsity, subsection_1_offence, respects_commission_of_offence, preventing_commission_of_offence, apprehension_of_offender]
+  fired_exception: null
+fact_facts:
+  legal_duty: true
+  furnishing_as_true: true
+  knowledge_of_falsity: true
+  subsection_1_offence: true
+  respects_commission_of_offence: true
+  preventing_commission_of_offence: true
+  apprehension_of_offender: true
+tags: [synth:true]

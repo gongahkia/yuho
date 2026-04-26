@@ -1,0 +1,13 @@
+id: s321-example2
+section: "321"
+scenario: |
+  A throws a stone knowing it is likely to hit B. The stone hits B causing pain. A has voluntarily caused hurt.
+ground_truth:
+  section: "321"
+  satisfied_elements: [intention, causing_hurt, hurt_caused]
+  fired_exception: null
+fact_facts:
+  intention: true
+  causing_hurt: true
+  hurt_caused: true
+tags: [synth:true]

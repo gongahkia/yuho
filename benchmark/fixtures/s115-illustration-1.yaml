@@ -1,0 +1,13 @@
+id: s115-illustration-1
+section: "115"
+scenario: |
+  A instigates B to murder Z . The offence is not committed. If B had murdered Z , B would have been subject to the punishment of death. Therefore, A shall be punished with imprisonment for a term that may extend to 20 years, and shall also be liable to fine or to caning.
+ground_truth:
+  section: "115"
+  satisfied_elements: []
+  fired_exception: null
+fact_facts:
+  abetment: false
+  offence_not_committed: false
+  no_express_provision: false
+tags: [synth:true, polarity:negative]

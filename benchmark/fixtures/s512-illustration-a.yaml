@@ -1,0 +1,19 @@
+id: s512-illustration-a
+section: "512"
+scenario: |
+  A attempts to commit kidnapping of B in order that B may be murdered but did not succeed. If A had committed kidnapping in order to murder, he would have been punished with death or imprisonment for life (and would, if not sentenced to death, also be liable to caning). A shall be punished with imprisonment for a term which may extend to 20 years, and shall also be liable to fine or to caning.
+ground_truth:
+  section: "512"
+  satisfied_elements: [attempts_offence, no_express_provision, attempts_other_offence, offence_in_subsection_2, punishment_fixed_by_law, specified_minimum_sentence, mandatory_minimum_imprisonment, mandatory_minimum_fine, mandatory_minimum_caning]
+  fired_exception: null
+fact_facts:
+  attempts_offence: true
+  no_express_provision: true
+  attempts_other_offence: true
+  offence_in_subsection_2: true
+  punishment_fixed_by_law: true
+  specified_minimum_sentence: true
+  mandatory_minimum_imprisonment: true
+  mandatory_minimum_fine: true
+  mandatory_minimum_caning: true
+tags: [synth:true]

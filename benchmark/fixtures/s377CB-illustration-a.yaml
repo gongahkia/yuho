@@ -1,0 +1,15 @@
+id: s377CB-illustration-a
+section: "377CB"
+scenario: |
+  ( a ) A deceives B into allowing him to penetrate her vagina by inducing the misconception that he is extracting an evil spirit from B ’s body. B believes A and thinks that what she has consented to is a procedure to extract an evil spirit, not sexual intercourse. B has given her consent under a misconception as to the sexual nature of the act. B ’s apparent consent is therefore not a valid consent.
+ground_truth:
+  section: "377CB"
+  satisfied_elements: [consent_for_physical_element_of_sexual_offence, misconception_as_to_nature, misconception_as_to_purpose, misconception_as_to_identity, knowledge_or_reason_to_believe_consent_consequence]
+  fired_exception: null
+fact_facts:
+  consent_for_physical_element_of_sexual_offence: true
+  misconception_as_to_nature: true
+  misconception_as_to_purpose: true
+  misconception_as_to_identity: true
+  knowledge_or_reason_to_believe_consent_consequence: true
+tags: [synth:true]

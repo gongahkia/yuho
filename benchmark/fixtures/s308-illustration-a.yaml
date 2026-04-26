@@ -1,0 +1,13 @@
+id: s308-illustration-a
+section: "308"
+scenario: |
+  A , on grave and sudden provocation, fires a pistol at Z intending to kill Z , under such circumstances that if he thereby caused death he would be guilty of culpable homicide not amounting to murder. A has committed the offence defined in this section.
+ground_truth:
+  section: "308"
+  satisfied_elements: [doing_act, intention_to_cause_death, culpable_homicide_not_murder_if_death_caused]
+  fired_exception: null
+fact_facts:
+  doing_act: true
+  intention_to_cause_death: true
+  culpable_homicide_not_murder_if_death_caused: true
+tags: [synth:true]

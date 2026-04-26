@@ -1,0 +1,14 @@
+id: s425-illustration-a
+section: "425"
+scenario: |
+  ( a ) A voluntarily burns a valuable security belonging to Z , intending to cause wrongful loss to Z . A has committed mischief.
+ground_truth:
+  section: "425"
+  satisfied_elements: [intent_to_cause_wrongful_loss_or_damage, knowledge_of_likely_wrongful_loss_or_damage, destruction_of_property, change_in_property]
+  fired_exception: null
+fact_facts:
+  intent_to_cause_wrongful_loss_or_damage: true
+  knowledge_of_likely_wrongful_loss_or_damage: true
+  destruction_of_property: true
+  change_in_property: true
+tags: [synth:true]

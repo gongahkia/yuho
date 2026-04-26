@@ -1,0 +1,13 @@
+id: s411-example1
+section: "411"
+scenario: |
+  A buys a laptop from B at a suspiciously low price, knowing that B likely stole it. A has dishonestly received stolen property.
+ground_truth:
+  section: "411"
+  satisfied_elements: [stolen, knowledge, receiving]
+  fired_exception: null
+fact_facts:
+  stolen: true
+  knowledge: true
+  receiving: true
+tags: [synth:true]

@@ -1,0 +1,13 @@
+id: s109-illustration-c
+section: "109"
+scenario: |
+  ( c ) A and B conspire to poison Z . A , in pursuance of the conspiracy, procures the poison and delivers it to B , in order that he may administer it to Z . B , in pursuance of the conspiracy, administers the poison to Z , in A ’s absence and thereby causes Z ’s death. Here B is guilty of murder. A is guilty of abetting that offence by conspiracy, and is liable to the punishment for murder.
+ground_truth:
+  section: "109"
+  satisfied_elements: [abets_offence, act_abetted_committed_in_consequence, no_express_provision_for_punishment]
+  fired_exception: null
+fact_facts:
+  abets_offence: true
+  act_abetted_committed_in_consequence: true
+  no_express_provision_for_punishment: true
+tags: [synth:true]

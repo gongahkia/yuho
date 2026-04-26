@@ -1,0 +1,14 @@
+id: s404-illustration-a
+section: "404"
+scenario: |
+  Z dies in possession of furniture and money. His servant A , before the money comes into the possession of any person entitled to such possession, dishonestly misappropriates it. A has committed the offence defined in this section.
+ground_truth:
+  section: "404"
+  satisfied_elements: [dishonesty, misappropriation_or_conversion, knowledge_of_deceased_possession, no_intervening_legal_possession]
+  fired_exception: null
+fact_facts:
+  dishonesty: true
+  misappropriation_or_conversion: true
+  knowledge_of_deceased_possession: true
+  no_intervening_legal_possession: true
+tags: [synth:true]

@@ -1,0 +1,13 @@
+id: s80-illustration-a
+section: "80"
+scenario: |
+  ( a ) A is at work with a hatchet; the head flies off and kills a man who is standing by. Here, if there was no want of proper caution on the part of A , his act is excusable and not an offence.
+ground_truth:
+  section: "80"
+  satisfied_elements: [alleged_act_done_by_accident_or_misfortune, alleged_act_may_negate_fault_element, prosecution_proves_fault]
+  fired_exception: null
+fact_facts:
+  alleged_act_done_by_accident_or_misfortune: true
+  alleged_act_may_negate_fault_element: true
+  prosecution_proves_fault: true
+tags: [synth:true]

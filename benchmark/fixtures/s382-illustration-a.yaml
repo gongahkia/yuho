@@ -1,0 +1,15 @@
+id: s382-illustration-a
+section: "382"
+scenario: |
+  ( a ) A commits theft of property in Z ’s possession; and, while committing this theft, he has a loaded pistol under his garment, having provided this pistol for the purpose of hurting Z in case Z should resist. A has committed the offence defined in this section.
+ground_truth:
+  section: "382"
+  satisfied_elements: [commits_theft, made_preparation, purpose_commit_theft, purpose_escape, purpose_retain_property]
+  fired_exception: null
+fact_facts:
+  commits_theft: true
+  made_preparation: true
+  purpose_commit_theft: true
+  purpose_escape: true
+  purpose_retain_property: true
+tags: [synth:true]

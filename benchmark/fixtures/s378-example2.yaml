@@ -1,0 +1,15 @@
+id: s378-example2
+section: "378"
+scenario: |
+  A finds a watch belonging to B. A picks it up intending to keep it. A has committed theft.
+ground_truth:
+  section: "378"
+  satisfied_elements: [intention, taking, possession, consent, movement]
+  fired_exception: null
+fact_facts:
+  intention: true
+  taking: true
+  possession: true
+  consent: true
+  movement: true
+tags: [synth:true]

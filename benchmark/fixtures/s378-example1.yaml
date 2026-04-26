@@ -1,0 +1,15 @@
+id: s378-example1
+section: "378"
+scenario: |
+  A finds a watch on the road, not knowing to whom it belongs. A picks it up with intent to find the owner. A has not committed theft.
+ground_truth:
+  section: "378"
+  satisfied_elements: [intention, taking, possession, consent, movement]
+  fired_exception: null
+fact_facts:
+  intention: true
+  taking: true
+  possession: true
+  consent: true
+  movement: true
+tags: [synth:true]

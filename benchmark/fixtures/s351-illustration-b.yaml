@@ -1,0 +1,14 @@
+id: s351-illustration-b
+section: "351"
+scenario: |
+  ( b ) A begins to unloose the muzzle of a ferocious dog, intending or knowing it to be likely that he may thereby cause Z to believe that he is about to cause the dog to attack Z. A has committed an assault upon Z .
+ground_truth:
+  section: "351"
+  satisfied_elements: [gesture_or_preparation, intention, knowledge, apprehension_of_imminent_criminal_force]
+  fired_exception: null
+fact_facts:
+  gesture_or_preparation: true
+  intention: true
+  knowledge: true
+  apprehension_of_imminent_criminal_force: true
+tags: [synth:true]

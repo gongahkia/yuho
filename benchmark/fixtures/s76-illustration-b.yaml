@@ -1,0 +1,12 @@
+id: s76-illustration-b
+section: "76"
+scenario: |
+  ( b ) A sees Z repeatedly stabbing Y with a knife on a public road. Y dies. A , in the exercise of the power which the law gives to all persons apprehending murderers in the act, forcefully seizes Z , in order to detain Z so that Z can be arrested by the police officers when they arrive. A has committed no offence.
+ground_truth:
+  section: "76"
+  satisfied_elements: []
+  fired_exception: null
+fact_facts:
+  bound_by_law: false
+  justified_by_law: false
+tags: [synth:true, polarity:negative]

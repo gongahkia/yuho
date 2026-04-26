@@ -1,0 +1,13 @@
+id: s109-illustration-a
+section: "109"
+scenario: |
+  ( a ) A offers a bribe to B , a public servant, as a reward for showing A some favour in the exercise of B ’s official functions. B accepts the bribe. A has abetted the offence defined in section 161.
+ground_truth:
+  section: "109"
+  satisfied_elements: [abets_offence, act_abetted_committed_in_consequence, no_express_provision_for_punishment]
+  fired_exception: null
+fact_facts:
+  abets_offence: true
+  act_abetted_committed_in_consequence: true
+  no_express_provision_for_punishment: true
+tags: [synth:true]

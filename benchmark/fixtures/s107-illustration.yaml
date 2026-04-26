@@ -1,0 +1,15 @@
+id: s107-illustration
+section: "107"
+scenario: |
+  A , a public officer, is authorised by a warrant from a court of justice to apprehend Z . B , knowing that fact and also that C is not Z , intentionally represents to A that C is Z , and thereby intentionally causes A to apprehend C . Here B abets by instigation the apprehension of C .
+ground_truth:
+  section: "107"
+  satisfied_elements: []
+  fired_exception: null
+fact_facts:
+  instigation: false
+  conspiracy: false
+  act_or_illegal_omission_in_pursuance: false
+  in_order_to_do_thing: false
+  intentional_aid: false
+tags: [synth:true, polarity:negative]

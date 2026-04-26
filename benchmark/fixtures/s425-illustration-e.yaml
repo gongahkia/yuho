@@ -1,0 +1,14 @@
+id: s425-illustration-e
+section: "425"
+scenario: |
+  ( e ) A , having insured a ship, voluntarily causes the same to be cast away, with the intention of causing damage to the underwriters. A has committed mischief.
+ground_truth:
+  section: "425"
+  satisfied_elements: [intent_to_cause_wrongful_loss_or_damage, knowledge_of_likely_wrongful_loss_or_damage, destruction_of_property, change_in_property]
+  fired_exception: null
+fact_facts:
+  intent_to_cause_wrongful_loss_or_damage: true
+  knowledge_of_likely_wrongful_loss_or_damage: true
+  destruction_of_property: true
+  change_in_property: true
+tags: [synth:true]

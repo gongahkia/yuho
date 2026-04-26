@@ -1,0 +1,15 @@
+id: s113-illustration
+section: "113"
+scenario: |
+  A instigates B to cause grievous hurt to Z . B , in consequence of the instigation, causes grievous hurt to Z . Z dies in consequence. Here, if A knew that the grievous hurt abetted was likely to cause death, A is liable to be punished with the punishment provided for murder.
+ground_truth:
+  section: "113"
+  satisfied_elements: [act_abetted, intention_to_cause_particular_effect, liable_act_causes_different_effect, liable_for_effect_caused, knowledge_of_likely_effect]
+  fired_exception: null
+fact_facts:
+  act_abetted: true
+  intention_to_cause_particular_effect: true
+  liable_act_causes_different_effect: true
+  liable_for_effect_caused: true
+  knowledge_of_likely_effect: true
+tags: [synth:true]

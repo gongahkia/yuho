@@ -1,0 +1,16 @@
+id: s307-illustration-b
+section: "307"
+scenario: |
+  ( b ) A , with intention of causing the death of a child of tender years, throws the child into a river. A has committed the offence defined by this section, although the death of the child does not ensue.
+ground_truth:
+  section: "307"
+  satisfied_elements: [does_any_act, intention_of_causing_death, would_be_guilty_of_murder, offending_under_this_section, under_sentence_of_imprisonment_for_life, hurt_is_caused]
+  fired_exception: null
+fact_facts:
+  does_any_act: true
+  intention_of_causing_death: true
+  would_be_guilty_of_murder: true
+  offending_under_this_section: true
+  under_sentence_of_imprisonment_for_life: true
+  hurt_is_caused: true
+tags: [synth:true]

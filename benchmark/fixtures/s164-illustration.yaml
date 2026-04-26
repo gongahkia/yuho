@@ -1,0 +1,13 @@
+id: s164-illustration
+section: "164"
+scenario: |
+  A is a public servant. B , A ’s wife, receives a present as a motive for soliciting A to give an office to a particular person. A abets her doing so. B is punishable with imprisonment for a term not exceeding one year, or with fine, or with both. A is punishable with imprisonment for a term which may extend to 3 years, or with fine, or with both.
+ground_truth:
+  section: "164"
+  satisfied_elements: [public_servant, offence_in_respect_of_public_servant, abetment]
+  fired_exception: null
+fact_facts:
+  public_servant: true
+  offence_in_respect_of_public_servant: true
+  abetment: true
+tags: [synth:true]

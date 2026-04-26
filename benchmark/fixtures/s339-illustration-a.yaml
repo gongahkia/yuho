@@ -1,0 +1,13 @@
+id: s339-illustration-a
+section: "339"
+scenario: |
+  A obstructs a path along which Z has a right to pass, A not believing in good faith that he has a right to stop the path. Z is thereby prevented from passing. A wrongfully restrains Z .
+ground_truth:
+  section: "339"
+  satisfied_elements: [obstruction, prevention, right_to_proceed]
+  fired_exception: null
+fact_facts:
+  obstruction: true
+  prevention: true
+  right_to_proceed: true
+tags: [synth:true]

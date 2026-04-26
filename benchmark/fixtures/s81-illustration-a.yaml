@@ -1,0 +1,15 @@
+id: s81-illustration-a
+section: "81"
+scenario: |
+  ( a ) A , the captain of a steam vessel, suddenly and without any fault or negligence on his part, finds himself in such a position that, before he can stop his vessel, he must inevitably run down a boat B , with 20 or 30 passengers on board, unless he changes the course of his vessel, and that, by changing his course he must incur risk of running down a boat C , with only 2 passengers on board, which he may possibly clear. Here, if A alters his course without any intention to run down the boat C , and in good faith for the purposes of avoiding the danger to the passengers in the boat B , he is not guilty of an offence, though he may run down the boat C , by doing an act which he knew was likely to cause that effect, if it be found as a matter of fact that the danger which he intended to avoid was such as to excuse him in incurring the risk of running down the boat C .
+ground_truth:
+  section: "81"
+  satisfied_elements: []
+  fired_exception: null
+fact_facts:
+  act_likely_to_cause_harm: false
+  knowledge_likely_harm: false
+  good_faith: false
+  preventive_purpose: false
+  justified_risk: false
+tags: [synth:true, polarity:negative]

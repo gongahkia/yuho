@@ -1,0 +1,13 @@
+id: s407-illustration-1
+section: "407"
+scenario: |
+  A carrier is an example of a person who is entrusted with property for the purpose of transportation for hire and a warehouse owner or warehouse operator is an example of a person who is entrusted with property for the purpose of storage for rent or charge.
+ground_truth:
+  section: "407"
+  satisfied_elements: [entrusted_for_transportation_for_hire, entrusted_for_storage_for_rent_or_charge, criminal_breach_of_trust]
+  fired_exception: null
+fact_facts:
+  entrusted_for_transportation_for_hire: true
+  entrusted_for_storage_for_rent_or_charge: true
+  criminal_breach_of_trust: true
+tags: [synth:true]

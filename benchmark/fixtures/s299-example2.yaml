@@ -1,0 +1,16 @@
+id: s299-example2
+section: "299"
+scenario: |
+  A knows that B is behind a bush. C does not know it. A induces C to fire at the bush. C fires and kills B. A has committed culpable homicide.
+ground_truth:
+  section: "299"
+  satisfied_elements: [act, omission, death, intent1, intent2, knowledge]
+  fired_exception: null
+fact_facts:
+  act: true
+  omission: true
+  death: true
+  intent1: true
+  intent2: true
+  knowledge: true
+tags: [synth:true]

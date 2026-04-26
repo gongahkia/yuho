@@ -1,0 +1,14 @@
+id: s425-illustration-d
+section: "425"
+scenario: |
+  ( d ) A , knowing that his effects are about to be taken in execution, or under or pursuant to an enforcement order, in order to satisfy a debt due from him to Z , destroys those effects, with the intention of thereby preventing Z from obtaining satisfaction of the debt, and of thus causing damage to Z . A has committed mischief.
+ground_truth:
+  section: "425"
+  satisfied_elements: [intent_to_cause_wrongful_loss_or_damage, knowledge_of_likely_wrongful_loss_or_damage, destruction_of_property, change_in_property]
+  fired_exception: null
+fact_facts:
+  intent_to_cause_wrongful_loss_or_damage: true
+  knowledge_of_likely_wrongful_loss_or_damage: true
+  destruction_of_property: true
+  change_in_property: true
+tags: [synth:true]

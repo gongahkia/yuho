@@ -1,0 +1,18 @@
+id: s79-illustration-f
+section: "79"
+scenario: |
+  ( f ) A sees a watch on Z ’s desk, which is identical to one that A owns, and mistakenly believes the watch is actually his. A intentionally takes the watch out of Z ’s possession without Z ’s consent while labouring under such mistaken belief. A has not committed an offence of theft as A did not possess the requisite fault element of dishonesty when A took the watch out of Z ’s possession. There is no need for A to rely on a defence under this section.
+ground_truth:
+  section: "79"
+  satisfied_elements: [no_written_law_override, act_done, mistake_of_fact, ignorance_of_fact, good_faith_belief, alleged_mistake_of_fact, alleged_ignorance_of_fact, prosecution_proves_fault]
+  fired_exception: null
+fact_facts:
+  no_written_law_override: true
+  act_done: true
+  mistake_of_fact: true
+  ignorance_of_fact: true
+  good_faith_belief: true
+  alleged_mistake_of_fact: true
+  alleged_ignorance_of_fact: true
+  prosecution_proves_fault: true
+tags: [synth:true]

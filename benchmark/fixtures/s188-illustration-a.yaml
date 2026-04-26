@@ -1,0 +1,18 @@
+id: s188-illustration-a
+section: "188"
+scenario: |
+  An order is promulgated by a public servant lawfully empowered to promulgate such order, directing that a religious procession must not pass down a certain street. A knowingly disobeys the order, and thereby causes danger of riot. A has committed the offence defined in this section.
+ground_truth:
+  section: "188"
+  satisfied_elements: [knowledge_of_order, disobeys_direction, lower_tier_harm_or_risk, individual_case, other_case, offence_under_subsection_1, danger_to_human_life_health_or_safety, riot_or_affray]
+  fired_exception: null
+fact_facts:
+  knowledge_of_order: true
+  disobeys_direction: true
+  lower_tier_harm_or_risk: true
+  individual_case: true
+  other_case: true
+  offence_under_subsection_1: true
+  danger_to_human_life_health_or_safety: true
+  riot_or_affray: true
+tags: [synth:true]

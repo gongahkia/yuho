@@ -1,0 +1,15 @@
+id: s37-illustration-b
+section: "37"
+scenario: |
+  ( b ) A and B are joint jailors, and as such have the charge of Z , a prisoner, alternately for 6 hours at a time. A and B , intending to cause Z ’s death, knowingly cooperate in causing that effect by illegally omitting, each during the time of his attendance, to furnish Z with food supplied to them for that purpose. Z dies of hunger. Both A and B are guilty of the murder of Z .
+ground_truth:
+  section: "37"
+  satisfied_elements: [offence_committed_by_several_acts, intentional_cooperation, doing_one_act, singly_or_jointly, commits_that_offence]
+  fired_exception: null
+fact_facts:
+  offence_committed_by_several_acts: true
+  intentional_cooperation: true
+  doing_one_act: true
+  singly_or_jointly: true
+  commits_that_offence: true
+tags: [synth:true]

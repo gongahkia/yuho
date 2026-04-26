@@ -1,0 +1,19 @@
+id: s116-illustration-b
+section: "116"
+scenario: |
+  ( b ) A instigates B to give false evidence. Here, if B does not give false evidence, A has nevertheless committed the offence defined in this section, and is punishable accordingly.
+ground_truth:
+  section: "116"
+  satisfied_elements: [abets_offence, offence_not_committed, no_express_provision, subsection_1_offence, punishment_fixed_by_law, specified_minimum_sentence, mandatory_minimum_imprisonment, mandatory_minimum_fine, mandatory_minimum_caning]
+  fired_exception: null
+fact_facts:
+  abets_offence: true
+  offence_not_committed: true
+  no_express_provision: true
+  subsection_1_offence: true
+  punishment_fixed_by_law: true
+  specified_minimum_sentence: true
+  mandatory_minimum_imprisonment: true
+  mandatory_minimum_fine: true
+  mandatory_minimum_caning: true
+tags: [synth:true]

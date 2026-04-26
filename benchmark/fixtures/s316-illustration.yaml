@@ -1,0 +1,13 @@
+id: s316-illustration
+section: "316"
+scenario: |
+  A , knowing that he is likely to cause the death of a pregnant woman, does an act which, if it caused the death of the woman, would amount to culpable homicide. The woman is injured, but does not die; but the death of an unborn quick child with which she is pregnant is thereby caused. A is guilty of the offence defined in this section.
+ground_truth:
+  section: "316"
+  satisfied_elements: [act, culpable_homicide_circumstances, death_of_quick_unborn_child]
+  fired_exception: null
+fact_facts:
+  act: true
+  culpable_homicide_circumstances: true
+  death_of_quick_unborn_child: true
+tags: [synth:true]

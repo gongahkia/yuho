@@ -1,0 +1,16 @@
+id: s299-example1
+section: "299"
+scenario: |
+  A lays sticks and turf over a pit, with the intention of causing death. B walks over and falls in and is killed. A has committed culpable homicide.
+ground_truth:
+  section: "299"
+  satisfied_elements: [act, omission, death, intent1, intent2, knowledge]
+  fired_exception: null
+fact_facts:
+  act: true
+  omission: true
+  death: true
+  intent1: true
+  intent2: true
+  knowledge: true
+tags: [synth:true]

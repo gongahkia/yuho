@@ -1,0 +1,16 @@
+id: s503-example1
+section: "503"
+scenario: |
+  A is entrusted with B's property. A dishonestly sells the property and keeps the money. A commits criminal breach of trust.
+ground_truth:
+  section: "503"
+  satisfied_elements: [trust, dishonesty, misappropriate, convert, violate_law, violate_contract]
+  fired_exception: null
+fact_facts:
+  trust: true
+  dishonesty: true
+  misappropriate: true
+  convert: true
+  violate_law: true
+  violate_contract: true
+tags: [synth:true]

@@ -1,0 +1,14 @@
+id: s390-example1
+section: "390"
+scenario: |
+  A holds B and takes B's wallet while B is unable to resist. A commits robbery.
+ground_truth:
+  section: "390"
+  satisfied_elements: [theft, extortion, violence, fear]
+  fired_exception: null
+fact_facts:
+  theft: true
+  extortion: true
+  violence: true
+  fear: true
+tags: [synth:true]

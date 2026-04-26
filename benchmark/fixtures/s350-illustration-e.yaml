@@ -1,0 +1,15 @@
+id: s350-illustration-e
+section: "350"
+scenario: |
+  ( e ) A throws a stone, intending or knowing it to be likely that the stone will be thus brought into contact with Z , or with Z ’s clothes, or with something carried by Z , or that it will strike water and dash up the water against Z ’s clothes, or something carried by Z . Here if the throwing of the stone produces the effect of causing any substance to come into contact with Z , or Z ’s clothes, A has used force to Z ; and if he has done so without Z ’s consent, intending thereby to injure, frighten or annoy Z , he has used criminal force to Z .
+ground_truth:
+  section: "350"
+  satisfied_elements: [intentional_use_of_force, absence_of_consent, purpose_to_cause_offence, intent_to_cause_illegally, knowledge_likely_to_cause_illegally]
+  fired_exception: null
+fact_facts:
+  intentional_use_of_force: true
+  absence_of_consent: true
+  purpose_to_cause_offence: true
+  intent_to_cause_illegally: true
+  knowledge_likely_to_cause_illegally: true
+tags: [synth:true]

@@ -1,0 +1,15 @@
+id: s191-illustration-b
+section: "191"
+scenario: |
+  ( b ) A , being bound by an oath to state the truth, states that he believes a certain signature to be the handwriting of Z , when he does not believe it to be the handwriting of Z . Here A states that which he knows to be false, and therefore gives false evidence.
+ground_truth:
+  section: "191"
+  satisfied_elements: [legal_obligation, false_statement, knows_false, believes_false, does_not_believe_true]
+  fired_exception: null
+fact_facts:
+  legal_obligation: true
+  false_statement: true
+  knows_false: true
+  believes_false: true
+  does_not_believe_true: true
+tags: [synth:true]

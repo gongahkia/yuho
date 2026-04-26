@@ -1,0 +1,15 @@
+id: s37-illustration-a
+section: "37"
+scenario: |
+  ( a ) A and B agree to murder Z , by severally, and at different times, giving him small doses of poison. A and B administer the poison, according to the agreement, with intent to murder Z . Z dies from the effects of the several doses of poison so administered to him. Here A and B intentionally cooperate in the commission of murder, and as each of them does an act by which the death is caused, they are both guilty of the offence, though their acts are separate.
+ground_truth:
+  section: "37"
+  satisfied_elements: [offence_committed_by_several_acts, intentional_cooperation, doing_one_act, singly_or_jointly, commits_that_offence]
+  fired_exception: null
+fact_facts:
+  offence_committed_by_several_acts: true
+  intentional_cooperation: true
+  doing_one_act: true
+  singly_or_jointly: true
+  commits_that_offence: true
+tags: [synth:true]

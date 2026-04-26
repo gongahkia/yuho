@@ -1,0 +1,12 @@
+id: s111-illustration-c
+section: "111"
+scenario: |
+  ( c ) A instigates B and C to break into an inhabited house at midnight for the purpose of robbery, and provides them with arms for that purpose. B and C break into the house, and being resisted by Z , one of the inmates, murder Z. Here, if that murder was the probable consequence of the abetment, A is liable to the punishment provided for murder.
+ground_truth:
+  section: "111"
+  satisfied_elements: [act_abetted, different_act_done]
+  fired_exception: null
+fact_facts:
+  act_abetted: true
+  different_act_done: true
+tags: [synth:true]

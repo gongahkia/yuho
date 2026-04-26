@@ -1,0 +1,14 @@
+id: s403-example1
+section: "403"
+scenario: |
+  A finds a government promissory note. Not knowing who lost it and believing it can be kept, A appropriates it. A may not be guilty as there was no dishonest intent.
+ground_truth:
+  section: "403"
+  satisfied_elements: [possession, dishonesty, conversion, disposal]
+  fired_exception: null
+fact_facts:
+  possession: true
+  dishonesty: true
+  conversion: true
+  disposal: true
+tags: [synth:true]

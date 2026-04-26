@@ -1,0 +1,12 @@
+id: s379-example1
+section: "379"
+scenario: |
+  A picks B's pocket and steals B's wallet. A is convicted of theft and may be imprisoned up to 7 years and fined.
+ground_truth:
+  section: "379"
+  satisfied_elements: [theft_committed, conviction]
+  fired_exception: null
+fact_facts:
+  theft_committed: true
+  conviction: true
+tags: [synth:true]

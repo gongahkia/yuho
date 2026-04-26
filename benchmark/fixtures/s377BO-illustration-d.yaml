@@ -1,0 +1,29 @@
+id: s377BO-illustration-d
+section: "377BO"
+scenario: |
+  ( d ) A , who is in Singapore, uses computer software to alter and reproduce child abuse material which was not filmed in Singapore. The child abuse material is not stored in Singapore but in a computer server in a foreign country which A accesses through A ’s computer in Singapore. A is guilty of an offence under section 377BH read with section 377BO(7).
+ground_truth:
+  section: "377BO"
+  satisfied_elements: []
+  fired_exception: null
+fact_facts:
+  citizen_or_permanent_resident_of_singapore: false
+  act_done_outside_singapore: false
+  hypothetical_offence_if_done_in_singapore: false
+  act_done_in_singapore: false
+  person_b_outside_singapore: false
+  hypothetical_offence_if_b_were_in_singapore: false
+  act_done_outside_singapore_involving_person_below_16: false
+  person_b_in_singapore: false
+  hypothetical_offence_if_done_in_singapore_under_377BG_or_377BH: false
+  act_done_in_singapore_involving_person_16_to_18: false
+  person_b_outside_singapore_and_exploitative_relationship_gate: false
+  hypothetical_offence_if_b_were_in_singapore_under_377BL: false
+  act_done_outside_singapore_involving_person_16_to_18: false
+  person_b_in_singapore_and_exploitative_relationship_gate: false
+  hypothetical_offence_if_done_in_singapore_under_377BL: false
+  physical_element_done_in_singapore: false
+  all_fault_elements_proven: false
+  all_physical_elements_proven: false
+  other_physical_elements_occurred_outside_singapore: false
+tags: [synth:true, polarity:negative]

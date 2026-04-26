@@ -1,0 +1,16 @@
+id: s208-illustration
+section: "208"
+scenario: |
+  A institutes a suit against Z . Z , knowing that A is likely to obtain a decree against him, fraudulently suffers a judgment to pass against him for a larger amount at the suit of B , who has no just claim against him, in order that B , either on his own account or for the benefit of Z , may share in the proceeds of any sale of Z ’s property which may be made under A ’s decree. Z has committed an offence under this section.
+ground_truth:
+  section: "208"
+  satisfied_elements: [fraudulently, sum_not_due, larger_sum_than_due, property_not_entitled, executed_after_satisfied, executed_for_satisfied_matter]
+  fired_exception: null
+fact_facts:
+  fraudulently: true
+  sum_not_due: true
+  larger_sum_than_due: true
+  property_not_entitled: true
+  executed_after_satisfied: true
+  executed_for_satisfied_matter: true
+tags: [synth:true]
