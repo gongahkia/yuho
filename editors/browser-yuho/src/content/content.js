@@ -415,6 +415,8 @@
         <button class="yuho-tab" data-tab="elements" role="tab">Elements</button>
         <button class="yuho-tab" data-tab="refs" role="tab">References</button>
         <button class="yuho-tab" data-tab="diagram" role="tab">Diagram</button>
+        <button class="yuho-tab" data-tab="mindmap" role="tab">Mindmap</button>
+        <button class="yuho-tab" data-tab="explain" role="tab">Explain</button>
         <button class="yuho-tab" data-tab="explore" role="tab">Explore</button>
         <button class="yuho-tab" data-tab="source" role="tab">.yh source</button>
       </nav>
@@ -627,6 +629,8 @@
       case "elements":  return renderElements(record);
       case "refs":      return renderRefs(record);
       case "diagram":   return renderDiagram(record);
+      case "mindmap":   return renderMindmap(record);
+      case "explain":   return renderExplain(record);
       case "explore":   return renderExplore(record);
       case "source":    return renderSource(record);
       default:          return `<p>unknown tab: ${escapeHtml(name)}</p>`;
@@ -733,9 +737,12 @@
   }
 
   // SVGs are lazy-loaded from data/svg/s{num}.svg on tab open and cached
-  // in-memory thereafter so re-opening the same section is instant.
+  // in-memory thereafter so re-opening the same section is instant. Two
+  // caches: one for the flowchart (Diagram tab), one for the mindmap.
   const SVG_CACHE = new Map();
+  const MINDMAP_SVG_CACHE = new Map();
   const SVG_HOST_ID = "yuho-diagram-host";
+  const MINDMAP_HOST_ID = "yuho-mindmap-host";
 
   function renderDiagram(rec) {
     const url = rec.transpiled?.mermaid_svg_url;
@@ -749,6 +756,68 @@
     return `<div class="yuho-diagram" id="${SVG_HOST_ID}">
               <p class="yuho-empty">Loading diagram…</p>
             </div>`;
+  }
+
+  function renderMindmap(rec) {
+    const url = rec.transpiled?.mindmap_svg_url;
+    if (!url) {
+      return `<p class="yuho-empty">No mindmap available for this section. ` +
+             `Re-run <code>build_data.py</code> after a corpus rebuild that ` +
+             `includes <code>transpiled.mindmap_svg</code>.</p>`;
+    }
+    queueMicrotask(() => loadMindmap(rec.section_number, url));
+    return `<div class="yuho-diagram" id="${MINDMAP_HOST_ID}">
+              <p class="yuho-empty">Loading mindmap…</p>
+            </div>`;
+  }
+
+  async function loadMindmap(section, url) {
+    const host = document.getElementById(MINDMAP_HOST_ID);
+    if (!host) return;
+    let svg = MINDMAP_SVG_CACHE.get(section);
+    if (!svg) {
+      try {
+        const res = await fetch(chrome.runtime.getURL(url));
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        svg = await res.text();
+        MINDMAP_SVG_CACHE.set(section, svg);
+      } catch (err) {
+        host.innerHTML = `<p class="yuho-empty">Failed to load mindmap: ${escapeHtml(String(err))}</p>`;
+        return;
+      }
+    }
+    host.innerHTML = svg;
+  }
+
+  // The Explain tab surfaces the same prose-first per-section summary
+  // produced by `yuho explain` on the CLI. Source: rec.metadata.summary
+  // (from metadata.toml) plus structural fields from the AST summary.
+  function renderExplain(rec) {
+    const ast = rec.encoded?.ast_summary || {};
+    const summary = rec.metadata?.summary
+                  || rec.raw?.text
+                  || "(no summary recorded for this section)";
+    const elements = rec.elements || [];
+    const elementsBlock = elements.length
+      ? `<ul>${elements.map(e =>
+          `<li><strong>${escapeHtml(e.element_type)}</strong> ${escapeHtml(e.name)}: ${escapeHtml(e.description || "")}</li>`,
+        ).join("")}</ul>`
+      : `<p class="yuho-empty">(This section defines a term or carves out an
+         exception rather than declaring an offence.)</p>`;
+    const firstIll = (rec.illustrations || [])[0];
+    const illBlock = firstIll
+      ? `<h3>Worked example</h3><blockquote>${escapeHtml(firstIll.description || "")}</blockquote>`
+      : "";
+    return `
+      <h3>What it covers</h3>
+      <p class="yuho-summary">${escapeHtml(summary)}</p>
+      <h3>Elements</h3>
+      ${elementsBlock}
+      ${illBlock}
+      <p class="yuho-empty"><em>NOT LEGAL ADVICE — this is a structural
+      summary of the encoded statute. Cross-reference Singapore Statutes
+      Online for any decision that matters.</em></p>
+    `;
   }
 
   async function loadDiagram(section, url) {
