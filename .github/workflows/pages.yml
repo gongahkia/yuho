@@ -1,0 +1,105 @@
+name: Deploy explorer site to GitHub Pages
+
+# Builds the static Penal Code explorer (524 sections × 2 diagrams =
+# 1048 Mermaid SVGs) and publishes editors/explorer-site/build/ via
+# GitHub Pages. Triggered on push to main, on a manual dispatch, and
+# nightly so the deployed site doesn't drift from the encoded library.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "library/penal_code/**/*.yh"
+      - "src/yuho/transpile/**"
+      - "src/yuho/library/**"
+      - "scripts/build_corpus.py"
+      - "scripts/render_svg_cache.py"
+      - "editors/explorer-site/**"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+  schedule:
+    - cron: "0 6 * * *"  # 06:00 UTC daily
+
+concurrency:
+  group: pages-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build-and-deploy:
+    name: Build corpus, render SVGs, deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install Python deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ./src/tree-sitter-yuho/bindings/python
+          pip install -e .[dev]
+
+      - name: Install Mermaid CLI
+        run: npm install -g @mermaid-js/mermaid-cli@11
+
+      # Puppeteer's Chrome download is keyed on the runner OS + the
+      # mermaid-cli major version, so a stable cache key avoids the
+      # ~80 MB download on every build.
+      - name: Cache puppeteer Chrome
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/puppeteer
+          key: puppeteer-${{ runner.os }}-mmdc11-v1
+
+      - name: Install Chrome for puppeteer (cache miss only)
+        run: |
+          if [ ! -d "$HOME/.cache/puppeteer/chrome" ]; then
+            npx --yes puppeteer browsers install chrome
+          fi
+
+      # The SVG cache is keyed by the encoded library + transpiler
+      # source. When neither changes, the previous render output is
+      # restored verbatim and `render_svg_cache.py` becomes a no-op.
+      - name: Cache rendered SVG corpus
+        id: svg-cache
+        uses: actions/cache@v4
+        with:
+          path: library/penal_code/_corpus
+          key: svg-corpus-${{ runner.os }}-${{ hashFiles('library/penal_code/**/statute.yh', 'src/yuho/transpile/**', 'scripts/build_corpus.py', 'scripts/render_svg_cache.py') }}
+          restore-keys: |
+            svg-corpus-${{ runner.os }}-
+
+      - name: Build structural corpus (no SVG)
+        run: python scripts/build_corpus.py --no-mermaid-svg
+
+      - name: Render Mermaid SVGs in parallel
+        run: python scripts/render_svg_cache.py --workers 4
+
+      - name: Build static site
+        run: python editors/explorer-site/build.py
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: editors/explorer-site/build
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
