@@ -337,28 +337,30 @@ what the recommender is and is not.
 
 \subsection{Engineering numbers}
 Table~\ref{tab:sloc} summarises the implementation effort. The numbers
-are wc-line counts as of the paper's writing, computed from the
-public source tree.
+are wc-line counts auto-generated from the public source tree by
+\texttt{scripts/repo\_stats.py}; rerun \texttt{make stats-extra} to
+refresh the table at the current HEAD.
 
 \begin{table*}[t]
-\caption{Implementation size by layer (approximate SLOC).}
+\caption{Implementation size by layer (auto-generated SLOC).}
 \label{tab:sloc}
 \begin{small}
 \begin{tabular}{@{}lr@{}}
 \toprule
 \textbf{Layer} & \textbf{SLOC} \\ \midrule
-Tree-sitter grammar (\texttt{grammar.js})           & \,\,\,\,900 \\
-AST (nodes, builder, visitors, validators)          & 7\,400 \\
-Parser wrapper (\texttt{src/yuho/parser/})          & \,\,\,\,540 \\
-Transpilers (six targets)                           & 4\,200 \\
-Verification (Z3 + Alloy)                           & 3\,300 \\
-CLI (25+ subcommands)                               & 10\,600 \\
-Language Server                                      & 3\,200 \\
-MCP server                                           & 2\,700 \\
-Library helpers / coverage / scrapers               & 4\,000 \\
-Phase-D scripts (re-encode, L3 review, flag-fix)    & 1\,900 \\ \midrule
-\textbf{Implementation total}                        & \textbf{38\,700} \\ \midrule
-Encoded library (524 \texttt{.yh} files)            & 16\,400 \\
+Tree-sitter grammar (\texttt{grammar.js})           & \statTREESITTERGRAMMAR{} \\
+AST (nodes, builder, visitors, validators)          & \statAST{} \\
+Parser wrapper (\texttt{src/yuho/parser/})          & \statPARSERWRAPPER{} \\
+Transpilers                                          & \statTRANSPILERS{} \\
+Verification (Z3 + Alloy)                           & \statVERIFICATION{} \\
+CLI                                                  & \statCLI{} \\
+Language Server                                      & \statLANGUAGESERVER{} \\
+MCP server                                           & \statMCPSERVER{} \\
+Library helpers / coverage / scrapers               & \statLIBRARYHELPERS{} \\
+Phase-D scripts (re-encode, L3 review, flag-fix)    & \statPHASEDSCRIPTS{} \\
+Tests                                                & \statTESTS{} \\ \midrule
+\textbf{Implementation total}                        & \textbf{\statTotalImplementation{}} \\ \midrule
+Encoded library (524 \texttt{.yh} files)            & \statENCODEDLIBRARYYH{} \\
 \bottomrule
 \end{tabular}
 \end{small}

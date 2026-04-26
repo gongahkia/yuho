@@ -18,6 +18,7 @@ PAPER       ?= main
 BUILD_DIR   ?= build
 COVERAGE     = ../library/penal_code/_coverage/coverage.json
 STATS_TEX    = stats.tex
+STATS_EXTRA  = stats-extra.tex
 LATEXMK     ?= latexmk
 LATEXMK_FLAGS = -lualatex -interaction=nonstopmode -halt-on-error \
                 -output-directory=$(BUILD_DIR) -shell-escape
@@ -25,9 +26,9 @@ LATEXMK_FLAGS = -lualatex -interaction=nonstopmode -halt-on-error \
 FIGURES_MMD := $(wildcard figures/*.mmd)
 FIGURES_PDF := $(FIGURES_MMD:.mmd=.pdf)
 
-.PHONY: paper smoke stats figures arxiv clean distclean watch
+.PHONY: paper smoke stats stats-extra figures arxiv clean distclean watch
 
-paper: stats $(FIGURES_PDF) | $(BUILD_DIR)
+paper: stats stats-extra $(FIGURES_PDF) | $(BUILD_DIR)
 	$(LATEXMK) $(LATEXMK_FLAGS) $(PAPER).tex
 	@cp $(BUILD_DIR)/$(PAPER).pdf ./$(PAPER).pdf
 	@echo "Built $(PAPER).pdf"
@@ -36,7 +37,7 @@ paper: stats $(FIGURES_PDF) | $(BUILD_DIR)
 # required, no acmart deps. Useful when basic TeX Live is the only install.
 # Runs the full latex -> bibtex -> latex -> latex sequence so citations
 # resolve to numbered references against references.bib.
-smoke: stats | $(BUILD_DIR)
+smoke: stats stats-extra | $(BUILD_DIR)
 	lualatex -interaction=nonstopmode -output-directory=$(BUILD_DIR) main_smoke.tex
 	@cp references.bib $(BUILD_DIR)/
 	cd $(BUILD_DIR) && bibtex main_smoke
@@ -50,6 +51,12 @@ stats: $(STATS_TEX)
 
 $(STATS_TEX): $(COVERAGE) scripts/gen_stats.py
 	python3 scripts/gen_stats.py $(COVERAGE) > $(STATS_TEX)
+
+# Regenerate stats-extra.tex (Table 1 SLOC) from the source tree.
+stats-extra: $(STATS_EXTRA)
+
+$(STATS_EXTRA): ../scripts/repo_stats.py
+	python3 ../scripts/repo_stats.py > /dev/null
 
 # Render every figures/*.mmd into figures/*.pdf via mmdc.
 figures: $(FIGURES_PDF)
