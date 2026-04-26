@@ -58,4 +58,27 @@ statute 325 "Voluntarily Causing Grievous Hurt" effective 1872-01-01 subsumes 32
     illustration example2 {
         "A throws acid at B, permanently disfiguring B's face. A has voluntarily caused grievous hurt."
     }
+
+    /// Phase 2c Direction B follow-up: general-defence cross-section
+    /// `defeats` edges (Chapter IV onto offence).
+    exception general_defence_s79 {
+        "act done by reason of mistake of fact"
+        "no s325 conviction per s79 general exception"
+        when is_infringed(s79)
+    }
+    exception general_defence_s80 {
+        "accident in the doing of a lawful act"
+        "no s325 conviction per s80 general exception"
+        when is_infringed(s80)
+    }
+    exception general_defence_s96 {
+        "act done in private defence"
+        "no s325 conviction per s96 right of private defence"
+        when is_infringed(s96)
+    }
+    exception general_defence_s100 {
+        "right of private defence against deadly assault"
+        "no s325 conviction per s100 deadly-assault private defence"
+        when is_infringed(s100)
+    }
 }

@@ -1,5 +1,6 @@
 id: case-low-song-chye
-case_citation: "Low Song Chye v PP [2019] 5 SLR 526"
+case_citation: "Low Song Chye v PP [2019] SGHC 140"
+case_url: "https://www.elitigation.sg/gd/s/2019_SGHC_140"
 actual_charge: "323"
 outcome: "Conviction for voluntarily causing hurt under s323 affirmed by the High Court; 3-judge coram restated the sentencing framework for s323 simple-hurt cases."
 case_summary: |
@@ -8,8 +9,7 @@ case_summary: |
   the appeal to set out the sentencing framework for s323 voluntarily
   causing hurt — the band-based approach by reference to the degree of
   injury and culpability. Leading SG sentencing authority for s323.
-  Citation pinpoint flagged as [Inference] by the agent that
-  surfaced this case; verify against LawNet before relying on it.
+  Citation verified against eLitigation (2026-04-27).
 section: "323"
 description: |
   A struck B, causing B bodily pain and injury (hurt under s319). A

@@ -40,4 +40,29 @@ statute 323 "Punishment for Voluntarily Causing Hurt" effective 1872-01-01 {
     illustration example1 {
         "A punches B in the face causing a bruise. A is convicted of voluntarily causing hurt and may be imprisoned up to 3 years or fined up to $5,000 or both."
     }
+
+    /// Phase 2c Direction B follow-up: general-defence cross-section
+    /// `defeats` edges. When a Chapter IV defence's elements are
+    /// independently established, that statute's conviction predicate
+    /// fires as an exception against s323.
+    exception general_defence_s79 {
+        "act done by reason of mistake of fact"
+        "no s323 conviction per s79 general exception"
+        when is_infringed(s79)
+    }
+    exception general_defence_s80 {
+        "accident in the doing of a lawful act"
+        "no s323 conviction per s80 general exception"
+        when is_infringed(s80)
+    }
+    exception general_defence_s81 {
+        "act likely to cause harm but done to prevent other harm"
+        "no s323 conviction per s81 general exception"
+        when is_infringed(s81)
+    }
+    exception general_defence_s96 {
+        "act done in private defence"
+        "no s323 conviction per s96 right of private defence"
+        when is_infringed(s96)
+    }
 }
