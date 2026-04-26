@@ -62,7 +62,7 @@ prompt per section and invokes an agentic coder
 (`gpt-5.4` `high`) on each. Three flavours:
 
 - **Re-encoder** (`scripts/phase_d_reencode.py`) — given a section, produce a clean encoding from the canonical text + the gap-aware grammar.
-- **L3 reviewer** (`scripts/phase_d_l3_review.py`) — given a section's encoding, run the 11-point checklist and STAMP or FLAG.
+- **L3 reviewer** (`scripts/l3_audit.py`) — given a section's encoding, run the 11-point checklist and STAMP or FLAG.
 - **Flag-fixer** (`scripts/apply_flag_fix.py`) — given a `_L3_FLAG.md`, apply the minimum edit that addresses the flag.
 
 This let the project move from 122 L3-stamped sections at the start of

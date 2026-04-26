@@ -1,4 +1,4 @@
-"""phase_d_l3_review.py — dispatch L3 reviewer agents to audit encoded
+"""l3_audit.py — dispatch L3 reviewer agents to audit encoded
 sections and stamp metadata.toml when faithful.
 
 renders doc/PHASE_D_L3_REVIEW_PROMPT.md with per-section context and
@@ -8,11 +8,11 @@ passing section, or appends a flag to library/penal_code/_L3_flags.md
 for human review.
 
 usage:
-    python scripts/phase_d_l3_review.py --list
-    python scripts/phase_d_l3_review.py 415
-    python scripts/phase_d_l3_review.py 400-500
-    python scripts/phase_d_l3_review.py --all-unstamped --dispatch --parallel 8
-    python scripts/phase_d_l3_review.py --all-unstamped --dispatch --parallel 8 \\
+    python scripts/l3_audit.py --list
+    python scripts/l3_audit.py 415
+    python scripts/l3_audit.py 400-500
+    python scripts/l3_audit.py --all-unstamped --dispatch --parallel 8
+    python scripts/l3_audit.py --all-unstamped --dispatch --parallel 8 \\
         --progress library/penal_code/_coverage/phase_d_l3_progress.jsonl --resume
 
 defaults for dispatch:
@@ -126,7 +126,7 @@ def is_stamped_on_disk(n: str) -> bool:
         return False
 
 def main() -> None:
-    p = argparse.ArgumentParser(prog="phase_d_l3_review", description=__doc__)
+    p = argparse.ArgumentParser(prog="l3_audit", description=__doc__)
     p.add_argument("specs", nargs="*",
                    help="section numbers, ranges (1-20), or comma lists")
     p.add_argument("--list", action="store_true",
@@ -240,7 +240,7 @@ def main() -> None:
     with open(out_path, "w") as f:
         f.write("# Phase D L3 — flagged sections for human review\n\n")
         f.write("_Aggregated from per-section `_L3_FLAG.md` files. "
-                "Regenerate by re-running `phase_d_l3_review.py`._\n\n")
+                "Regenerate by re-running `l3_audit.py`._\n\n")
         for _section, content in entries:
             # per-section files start with a `# sN — L3 flag` header; demote to `##` for the combined doc
             demoted = re.sub(r"^#\s+", "## ", content, count=1, flags=re.MULTILINE)

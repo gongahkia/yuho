@@ -720,7 +720,7 @@ def render_coverage(index: Dict[str, Any]) -> str:
 <ul>
   <li><strong>L1 (parse)</strong> — the encoded <code>.yh</code> file passes the tree-sitter grammar.</li>
   <li><strong>L2 (lint)</strong> — the AST builds, semantic checks pass, and the four fidelity diagnostics emit no warnings.</li>
-  <li><strong>L3 (human stamp)</strong> — an 11-point checklist over the encoded <code>.yh</code> against the canonical SSO text. Stamping happens via <code>scripts/phase_d_l3_review.py</code>; flags surface here and in <a href="/flags.html">Flags</a>.</li>
+  <li><strong>L3 (human stamp)</strong> — an 11-point checklist over the encoded <code>.yh</code> against the canonical SSO text. Stamping happens via <code>scripts/l3_audit.py</code>; flags surface here and in <a href="/flags.html">Flags</a>.</li>
 </ul>
 
 <h2 id="per-section">Per-section coverage</h2>
@@ -754,7 +754,7 @@ def render_flags(index: Dict[str, Any]) -> str:
     )
     body = f"""
 <h2>L3 flags ({len(flagged)})</h2>
-<p>Sections whose encoding the L3 reviewer (<code>scripts/phase_d_l3_review.py</code>)
+<p>Sections whose encoding the L3 reviewer (<code>scripts/l3_audit.py</code>)
 flagged for human attention. Each flag includes a numeric checklist failure
 code, a reason, and a suggested fix; per-section pages render the full flag
 text.</p>

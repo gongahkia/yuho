@@ -156,7 +156,7 @@ mirror and the bug surface is small.
 
 - [ ] Revisit when L3 matters for a concrete deliverable.
       Command:
-      `phase_d_l3_review.py --all-unstamped --dispatch --reasoning medium --parallel 8`.
+      `l3_audit.py --all-unstamped --dispatch --reasoning medium --parallel 8`.
 
 ---
 

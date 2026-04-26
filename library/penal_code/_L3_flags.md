@@ -1,6 +1,6 @@
 # Phase D L3 — flagged sections for human review
 
-_Aggregated from per-section `_L3_FLAG.md` files. Regenerate by re-running `phase_d_l3_review.py`._
+_Aggregated from per-section `_L3_FLAG.md` files. Regenerate by re-running `l3_audit.py`._
 
 ## s26C — L3 flag
 
