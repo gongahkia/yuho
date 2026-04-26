@@ -660,11 +660,17 @@ evaluator already computes the ground truth.
       LegalBench / LawBench, fixture-corpus stats, structural-not-
       doctrinal caveat, and explicit acknowledgment that the
       real-LLM run is queued.
-- [ ] **Run real baselines** against Claude Sonnet 4.6 / Opus 4.7
-      / one open-weights reference; emit
-      `evals/results-<model>.json` and update the paper
-      subsection's "Headline numbers" paragraph with the actual
-      stratified accuracies. Requires `ANTHROPIC_API_KEY`.
+- [x] **GPT-4o-mini baseline shipped** — full 205-fixture run
+      lands at `evals/results-gpt-4o-mini-full.json` (T1=43.9%,
+      T2=32.7% exact / F1=0.676, T3=94.1%). Paper §7.6
+      "Headline numbers" paragraph rewritten with the real
+      numbers + three observations (T3-as-negative-calibration,
+      T2-closed-vocab nuance, polarity-negative collapse).
+- [ ] **Additional models** (Claude Sonnet 4.6 / Opus 4.7 /
+      one open-weights reference). Optional — gpt-4o-mini already
+      establishes the structural-reasoning baseline; additional
+      models would test cross-model generalisation but aren't
+      load-bearing for the paper.
 
 #### Direction D — Interactive learn-by-doing legal-ed
 

@@ -1,0 +1,6334 @@
+{
+  "n": 205,
+  "t1_accuracy": 0.43902439024390244,
+  "t2_accuracy": 0.32682926829268294,
+  "t2_mean_f1": 0.6757188422511858,
+  "t3_accuracy": 0.9414634146341463,
+  "stratified": {
+    "synth": {
+      "true": {
+        "n": 183,
+        "t1_accuracy": 0.43169398907103823,
+        "t2_accuracy": 0.2786885245901639,
+        "t2_mean_f1": 0.6433219574702113,
+        "t3_accuracy": 0.9344262295081968
+      }
+    },
+    "polarity": {
+      "negative": {
+        "n": 30,
+        "t1_accuracy": 0.3333333333333333,
+        "t2_accuracy": 0.03333333333333333,
+        "t2_mean_f1": 0.05555555555555555,
+        "t3_accuracy": 0.7
+      }
+    },
+    "chapter": {
+      "v": {
+        "n": 1,
+        "t1_accuracy": 0.0,
+        "t2_accuracy": 1.0,
+        "t2_mean_f1": 1.0,
+        "t3_accuracy": 1.0
+      },
+      "xvi": {
+        "n": 9,
+        "t1_accuracy": 0.4444444444444444,
+        "t2_accuracy": 0.7777777777777778,
+        "t2_mean_f1": 0.9500000000000001,
+        "t3_accuracy": 1.0
+      },
+      "xvii": {
+        "n": 9,
+        "t1_accuracy": 0.4444444444444444,
+        "t2_accuracy": 0.5555555555555556,
+        "t2_mean_f1": 0.9160493827160495,
+        "t3_accuracy": 1.0
+      },
+      "xviii": {
+        "n": 1,
+        "t1_accuracy": 1.0,
+        "t2_accuracy": 1.0,
+        "t2_mean_f1": 1.0,
+        "t3_accuracy": 1.0
+      },
+      "xxi": {
+        "n": 1,
+        "t1_accuracy": 1.0,
+        "t2_accuracy": 1.0,
+        "t2_mean_f1": 1.0,
+        "t3_accuracy": 1.0
+      },
+      "xxii": {
+        "n": 1,
+        "t1_accuracy": 1.0,
+        "t2_accuracy": 1.0,
+        "t2_mean_f1": 1.0,
+        "t3_accuracy": 1.0
+      }
+    },
+    "category": {
+      "abetment": {
+        "n": 1,
+        "t1_accuracy": 0.0,
+        "t2_accuracy": 1.0,
+        "t2_mean_f1": 1.0,
+        "t3_accuracy": 1.0
+      },
+      "homicide": {
+        "n": 3,
+        "t1_accuracy": 0.3333333333333333,
+        "t2_accuracy": 0.3333333333333333,
+        "t2_mean_f1": 0.85,
+        "t3_accuracy": 1.0
+      },
+      "harm": {
+        "n": 4,
+        "t1_accuracy": 0.25,
+        "t2_accuracy": 1.0,
+        "t2_mean_f1": 1.0,
+        "t3_accuracy": 1.0
+      },
+      "liberty": {
+        "n": 1,
+        "t1_accuracy": 1.0,
+        "t2_accuracy": 1.0,
+        "t2_mean_f1": 1.0,
+        "t3_accuracy": 1.0
+      },
+      "sexual_offence": {
+        "n": 1,
+        "t1_accuracy": 1.0,
+        "t2_accuracy": 1.0,
+        "t2_mean_f1": 1.0,
+        "t3_accuracy": 1.0
+      },
+      "property": {
+        "n": 6,
+        "t1_accuracy": 0.3333333333333333,
+        "t2_accuracy": 0.5,
+        "t2_mean_f1": 0.8925925925925927,
+        "t3_accuracy": 1.0
+      },
+      "deception": {
+        "n": 3,
+        "t1_accuracy": 0.6666666666666666,
+        "t2_accuracy": 0.6666666666666666,
+        "t2_mean_f1": 0.9629629629629629,
+        "t3_accuracy": 1.0
+      },
+      "document": {
+        "n": 1,
+        "t1_accuracy": 1.0,
+        "t2_accuracy": 1.0,
+        "t2_mean_f1": 1.0,
+        "t3_accuracy": 1.0
+      },
+      "reputation": {
+        "n": 1,
+        "t1_accuracy": 1.0,
+        "t2_accuracy": 1.0,
+        "t2_mean_f1": 1.0,
+        "t3_accuracy": 1.0
+      },
+      "intimidation": {
+        "n": 1,
+        "t1_accuracy": 1.0,
+        "t2_accuracy": 1.0,
+        "t2_mean_f1": 1.0,
+        "t3_accuracy": 1.0
+      }
+    },
+    "difficulty": {
+      "intermediate": {
+        "n": 10,
+        "t1_accuracy": 0.5,
+        "t2_accuracy": 0.9,
+        "t2_mean_f1": 0.9666666666666666,
+        "t3_accuracy": 1.0
+      },
+      "advanced": {
+        "n": 1,
+        "t1_accuracy": 0.0,
+        "t2_accuracy": 0.0,
+        "t2_mean_f1": 0.75,
+        "t3_accuracy": 1.0
+      },
+      "basic": {
+        "n": 11,
+        "t1_accuracy": 0.5454545454545454,
+        "t2_accuracy": 0.6363636363636364,
+        "t2_mean_f1": 0.9434343434343435,
+        "t3_accuracy": 1.0
+      }
+    }
+  },
+  "fixtures": [
+    {
+      "id": "s100-illustration",
+      "section": "100",
+      "t1": {
+        "correct": true,
+        "predicted": "100",
+        "expected": "100"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.0,
+        "predicted": [
+          "assault_causing_reasonable_belief_of_death",
+          "cannot_effectually_exercise_without_risk",
+          "exercise_of_right",
+          "extension_to_running_risk"
+        ],
+        "expected": []
+      },
+      "t3": {
+        "correct": false,
+        "predicted": "self_defence",
+        "expected": "none"
+      },
+      "elapsed_seconds": 4.205
+    },
+    {
+      "id": "s107-abetment",
+      "section": "107",
+      "t1": {
+        "correct": false,
+        "predicted": "405",
+        "expected": "107"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "abet_intent",
+          "instigation",
+          "knowledge"
+        ],
+        "expected": [
+          "instigation",
+          "knowledge",
+          "abet_intent"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.35
+    },
+    {
+      "id": "s107-illustration",
+      "section": "107",
+      "t1": {
+        "correct": false,
+        "predicted": "108",
+        "expected": "107"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.0,
+        "predicted": [
+          "instigation"
+        ],
+        "expected": []
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 4.114
+    },
+    {
+      "id": "s108A-example1",
+      "section": "108A",
+      "t1": {
+        "correct": false,
+        "predicted": "109",
+        "expected": "108A"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.6666666666666666,
+        "predicted": [
+          "abetment_in_singapore"
+        ],
+        "expected": [
+          "abetment_in_singapore",
+          "singapore_offence_equivalence"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 3.571
+    },
+    {
+      "id": "s109-illustration-a",
+      "section": "109",
+      "t1": {
+        "correct": false,
+        "predicted": "161",
+        "expected": "109"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.8,
+        "predicted": [
+          "abets_offence",
+          "act_abetted_committed_in_consequence"
+        ],
+        "expected": [
+          "abets_offence",
+          "act_abetted_committed_in_consequence",
+          "no_express_provision_for_punishment"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.971
+    },
+    {
+      "id": "s109-illustration-b",
+      "section": "109",
+      "t1": {
+        "correct": false,
+        "predicted": "108",
+        "expected": "109"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "abets_offence",
+          "act_abetted_committed_in_consequence",
+          "no_express_provision_for_punishment"
+        ],
+        "expected": [
+          "abets_offence",
+          "act_abetted_committed_in_consequence",
+          "no_express_provision_for_punishment"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.155
+    },
+    {
+      "id": "s109-illustration-c",
+      "section": "109",
+      "t1": {
+        "correct": false,
+        "predicted": "302",
+        "expected": "109"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.8,
+        "predicted": [
+          "abets_offence",
+          "act_abetted_committed_in_consequence"
+        ],
+        "expected": [
+          "abets_offence",
+          "act_abetted_committed_in_consequence",
+          "no_express_provision_for_punishment"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 3.069
+    },
+    {
+      "id": "s111-illustration-a",
+      "section": "111",
+      "t1": {
+        "correct": false,
+        "predicted": "108",
+        "expected": "111"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "act_abetted",
+          "different_act_done"
+        ],
+        "expected": [
+          "act_abetted",
+          "different_act_done"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.052
+    },
+    {
+      "id": "s111-illustration-b",
+      "section": "111",
+      "t1": {
+        "correct": false,
+        "predicted": "109",
+        "expected": "111"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.0,
+        "predicted": [
+          "act_abetted",
+          "different_act_done"
+        ],
+        "expected": []
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.228
+    },
+    {
+      "id": "s111-illustration-c",
+      "section": "111",
+      "t1": {
+        "correct": false,
+        "predicted": "302",
+        "expected": "111"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "act_abetted",
+          "different_act_done"
+        ],
+        "expected": [
+          "act_abetted",
+          "different_act_done"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.098
+    },
+    {
+      "id": "s112-illustration",
+      "section": "112",
+      "t1": {
+        "correct": false,
+        "predicted": "332",
+        "expected": "112"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "additional_act_committed",
+          "cumulative_liability",
+          "distinct_offence",
+          "section_111_liability"
+        ],
+        "expected": [
+          "section_111_liability",
+          "additional_act_committed",
+          "distinct_offence",
+          "cumulative_liability"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 4.066
+    },
+    {
+      "id": "s113-illustration",
+      "section": "113",
+      "t1": {
+        "correct": false,
+        "predicted": "302",
+        "expected": "113"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "act_abetted",
+          "intention_to_cause_particular_effect",
+          "knowledge_of_likely_effect",
+          "liable_act_causes_different_effect",
+          "liable_for_effect_caused"
+        ],
+        "expected": [
+          "act_abetted",
+          "intention_to_cause_particular_effect",
+          "liable_act_causes_different_effect",
+          "liable_for_effect_caused",
+          "knowledge_of_likely_effect"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 3.48
+    },
+    {
+      "id": "s115-illustration-1",
+      "section": "115",
+      "t1": {
+        "correct": false,
+        "predicted": "306",
+        "expected": "115"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.0,
+        "predicted": [
+          "abetment",
+          "no_express_provision",
+          "offence_not_committed"
+        ],
+        "expected": []
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 3.174
+    },
+    {
+      "id": "s116-illustration-a",
+      "section": "116",
+      "t1": {
+        "correct": false,
+        "predicted": "161",
+        "expected": "116"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.3636363636363636,
+        "predicted": [
+          "abets_offence",
+          "punishment_fixed_by_law"
+        ],
+        "expected": [
+          "abets_offence",
+          "offence_not_committed",
+          "no_express_provision",
+          "subsection_1_offence",
+          "punishment_fixed_by_law",
+          "specified_minimum_sentence",
+          "mandatory_minimum_imprisonment",
+          "mandatory_minimum_fine",
+          "mandatory_minimum_caning"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.151
+    },
+    {
+      "id": "s116-illustration-b",
+      "section": "116",
+      "t1": {
+        "correct": false,
+        "predicted": "195",
+        "expected": "116"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.5,
+        "predicted": [
+          "abets_offence",
+          "offence_not_committed",
+          "punishment_fixed_by_law"
+        ],
+        "expected": [
+          "abets_offence",
+          "offence_not_committed",
+          "no_express_provision",
+          "subsection_1_offence",
+          "punishment_fixed_by_law",
+          "specified_minimum_sentence",
+          "mandatory_minimum_imprisonment",
+          "mandatory_minimum_fine",
+          "mandatory_minimum_caning"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.56
+    },
+    {
+      "id": "s116-illustration-c",
+      "section": "116",
+      "t1": {
+        "correct": false,
+        "predicted": "109",
+        "expected": "116"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.0,
+        "predicted": [
+          "abets_offence",
+          "offence_not_committed",
+          "punishment_fixed_by_law"
+        ],
+        "expected": []
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.15
+    },
+    {
+      "id": "s116-illustration-d",
+      "section": "116",
+      "t1": {
+        "correct": false,
+        "predicted": "109",
+        "expected": "116"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.0,
+        "predicted": [
+          "abets_offence",
+          "punishment_fixed_by_law",
+          "subsection_1_offence"
+        ],
+        "expected": []
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.56
+    },
+    {
+      "id": "s117-illustration",
+      "section": "117",
+      "t1": {
+        "correct": false,
+        "predicted": "141",
+        "expected": "117"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.0,
+        "predicted": [
+          "abetment",
+          "number_or_class_exceeding_10"
+        ],
+        "expected": []
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.56
+    },
+    {
+      "id": "s118-illustration-1",
+      "section": "118",
+      "t1": {
+        "correct": false,
+        "predicted": "120B",
+        "expected": "118"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.7499999999999999,
+        "predicted": [
+          "facilitation_intent_or_knowledge",
+          "false_representation",
+          "offence_committed"
+        ],
+        "expected": [
+          "facilitation_intent_or_knowledge",
+          "concealment",
+          "false_representation",
+          "offence_committed",
+          "offence_not_committed"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 1.946
+    },
+    {
+      "id": "s119-illustration-1",
+      "section": "119",
+      "t1": {
+        "correct": false,
+        "predicted": "202",
+        "expected": "119"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.6666666666666666,
+        "predicted": [
+          "conceal_design",
+          "duty_to_prevent_target_offence",
+          "intent_to_facilitate",
+          "knowledge_likely_facilitate",
+          "public_servant_status"
+        ],
+        "expected": [
+          "public_servant_status",
+          "intent_to_facilitate",
+          "knowledge_likely_facilitate",
+          "duty_to_prevent_target_offence",
+          "conceal_design",
+          "false_representation",
+          "offence_committed_noncapital",
+          "offence_committed_capital_or_life",
+          "offence_not_committed_noncapital",
+          "offence_not_committed_capital_or_life"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.769
+    },
+    {
+      "id": "s121-illustration",
+      "section": "121",
+      "t1": {
+        "correct": true,
+        "predicted": "121",
+        "expected": "121"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.5,
+        "predicted": [
+          "wages_war"
+        ],
+        "expected": [
+          "wages_war",
+          "attempts_wage_war",
+          "abets_waging_war"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.147
+    },
+    {
+      "id": "s144-illustration-1",
+      "section": "144",
+      "t1": {
+        "correct": false,
+        "predicted": "300",
+        "expected": "144"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.6666666666666666,
+        "predicted": [
+          "armed"
+        ],
+        "expected": [
+          "membership",
+          "armed"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.253
+    },
+    {
+      "id": "s144-illustration-2",
+      "section": "144",
+      "t1": {
+        "correct": false,
+        "predicted": "148",
+        "expected": "144"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.0,
+        "predicted": [],
+        "expected": [
+          "membership",
+          "armed"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 1.947
+    },
+    {
+      "id": "s161-illustration-a",
+      "section": "161",
+      "t1": {
+        "correct": true,
+        "predicted": "161",
+        "expected": "161"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "corrupt_motive_or_reward",
+          "gratification_transaction",
+          "public_servant_status"
+        ],
+        "expected": [
+          "public_servant_status",
+          "gratification_transaction",
+          "corrupt_motive_or_reward"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.869
+    },
+    {
+      "id": "s161-illustration-b",
+      "section": "161",
+      "t1": {
+        "correct": false,
+        "predicted": "415",
+        "expected": "161"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "corrupt_motive_or_reward",
+          "gratification_transaction",
+          "public_servant_status"
+        ],
+        "expected": [
+          "public_servant_status",
+          "gratification_transaction",
+          "corrupt_motive_or_reward"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.352
+    },
+    {
+      "id": "s161-illustration-c",
+      "section": "161",
+      "t1": {
+        "correct": false,
+        "predicted": "415",
+        "expected": "161"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "corrupt_motive_or_reward",
+          "gratification_transaction",
+          "public_servant_status"
+        ],
+        "expected": [
+          "public_servant_status",
+          "gratification_transaction",
+          "corrupt_motive_or_reward"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.765
+    },
+    {
+      "id": "s163-illustration-1",
+      "section": "163",
+      "t1": {
+        "correct": false,
+        "predicted": "499",
+        "expected": "163"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.0,
+        "predicted": [],
+        "expected": [
+          "accepts",
+          "obtains",
+          "agrees_to_accept",
+          "attempts_to_obtain",
+          "source_person",
+          "for_self_or_other",
+          "motive_or_reward",
+          "inducing_by_personal_influence",
+          "do_or_forbear_official_act",
+          "show_favour_or_disfavour",
+          "render_or_attempt_service_or_disservice"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 7.197
+    },
+    {
+      "id": "s164-illustration",
+      "section": "164",
+      "t1": {
+        "correct": false,
+        "predicted": "161",
+        "expected": "164"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "abetment",
+          "offence_in_respect_of_public_servant",
+          "public_servant"
+        ],
+        "expected": [
+          "public_servant",
+          "offence_in_respect_of_public_servant",
+          "abetment"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.435
+    },
+    {
+      "id": "s165-illustration-a",
+      "section": "165",
+      "t1": {
+        "correct": false,
+        "predicted": "409",
+        "expected": "165"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.625,
+        "predicted": [
+          "accepts_or_obtains",
+          "agrees_to_accept",
+          "no_consideration",
+          "official_connection",
+          "person_concerned"
+        ],
+        "expected": [
+          "public_servant",
+          "accepts_or_obtains",
+          "agrees_to_accept",
+          "attempts_to_obtain",
+          "no_consideration",
+          "consideration_given",
+          "knows_inadequate",
+          "knows_person_connection",
+          "person_concerned",
+          "official_connection",
+          "interested_or_related_person"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.514
+    },
+    {
+      "id": "s165-illustration-b",
+      "section": "165",
+      "t1": {
+        "correct": false,
+        "predicted": "409",
+        "expected": "165"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.5333333333333333,
+        "predicted": [
+          "accepts_or_obtains",
+          "no_consideration",
+          "official_connection",
+          "person_concerned"
+        ],
+        "expected": [
+          "public_servant",
+          "accepts_or_obtains",
+          "agrees_to_accept",
+          "attempts_to_obtain",
+          "no_consideration",
+          "consideration_given",
+          "knows_inadequate",
+          "knows_person_connection",
+          "person_concerned",
+          "official_connection",
+          "interested_or_related_person"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 3.725
+    },
+    {
+      "id": "s165-illustration-c",
+      "section": "165",
+      "t1": {
+        "correct": false,
+        "predicted": "405",
+        "expected": "165"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.625,
+        "predicted": [
+          "accepts_or_obtains",
+          "consideration_given",
+          "knows_inadequate",
+          "official_connection",
+          "person_concerned"
+        ],
+        "expected": [
+          "public_servant",
+          "accepts_or_obtains",
+          "agrees_to_accept",
+          "attempts_to_obtain",
+          "no_consideration",
+          "consideration_given",
+          "knows_inadequate",
+          "knows_person_connection",
+          "person_concerned",
+          "official_connection",
+          "interested_or_related_person"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.15
+    },
+    {
+      "id": "s166-illustration",
+      "section": "166",
+      "t1": {
+        "correct": false,
+        "predicted": "217",
+        "expected": "166"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "disobedience_of_direction",
+          "injury_intent_or_knowledge",
+          "public_servant_status"
+        ],
+        "expected": [
+          "public_servant_status",
+          "disobedience_of_direction",
+          "injury_intent_or_knowledge"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.458
+    },
+    {
+      "id": "s174-illustration-a",
+      "section": "174",
+      "t1": {
+        "correct": true,
+        "predicted": "174",
+        "expected": "174"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.7692307692307693,
+        "predicted": [
+          "competent_process",
+          "court_attendance_process",
+          "individual_case",
+          "legal_attendance_duty",
+          "omits_to_attend"
+        ],
+        "expected": [
+          "legal_attendance_duty",
+          "competent_process",
+          "omits_to_attend",
+          "premature_departure",
+          "individual_case",
+          "other_case",
+          "subsection_1_offence",
+          "court_attendance_process"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.36
+    },
+    {
+      "id": "s174-illustration-b",
+      "section": "174",
+      "t1": {
+        "correct": true,
+        "predicted": "174",
+        "expected": "174"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.8571428571428571,
+        "predicted": [
+          "competent_process",
+          "court_attendance_process",
+          "individual_case",
+          "legal_attendance_duty",
+          "omits_to_attend",
+          "subsection_1_offence"
+        ],
+        "expected": [
+          "legal_attendance_duty",
+          "competent_process",
+          "omits_to_attend",
+          "premature_departure",
+          "individual_case",
+          "other_case",
+          "subsection_1_offence",
+          "court_attendance_process"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 3.068
+    },
+    {
+      "id": "s177-illustration-a",
+      "section": "177",
+      "t1": {
+        "correct": false,
+        "predicted": "201",
+        "expected": "177"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.6,
+        "predicted": [
+          "furnishing_as_true",
+          "knowledge_of_falsity",
+          "respects_commission_of_offence"
+        ],
+        "expected": [
+          "legal_duty",
+          "furnishing_as_true",
+          "knowledge_of_falsity",
+          "subsection_1_offence",
+          "respects_commission_of_offence",
+          "preventing_commission_of_offence",
+          "apprehension_of_offender"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 3.177
+    },
+    {
+      "id": "s182-illustration-a",
+      "section": "182",
+      "t1": {
+        "correct": false,
+        "predicted": "211",
+        "expected": "182"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.9090909090909091,
+        "predicted": [
+          "falsity",
+          "giving_information",
+          "improper_action_or_omission",
+          "intends_consequence",
+          "knows_likely_consequence"
+        ],
+        "expected": [
+          "giving_information",
+          "falsity",
+          "intends_consequence",
+          "knows_likely_consequence",
+          "injury_or_annoyance",
+          "improper_action_or_omission"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.713
+    },
+    {
+      "id": "s182-illustration-b",
+      "section": "182",
+      "t1": {
+        "correct": true,
+        "predicted": "182",
+        "expected": "182"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "falsity",
+          "giving_information",
+          "improper_action_or_omission",
+          "injury_or_annoyance",
+          "intends_consequence",
+          "knows_likely_consequence"
+        ],
+        "expected": [
+          "giving_information",
+          "falsity",
+          "intends_consequence",
+          "knows_likely_consequence",
+          "injury_or_annoyance",
+          "improper_action_or_omission"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.815
+    },
+    {
+      "id": "s182-illustration-c",
+      "section": "182",
+      "t1": {
+        "correct": true,
+        "predicted": "182",
+        "expected": "182"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "falsity",
+          "giving_information",
+          "improper_action_or_omission",
+          "injury_or_annoyance",
+          "intends_consequence",
+          "knows_likely_consequence"
+        ],
+        "expected": [
+          "giving_information",
+          "falsity",
+          "intends_consequence",
+          "knows_likely_consequence",
+          "injury_or_annoyance",
+          "improper_action_or_omission"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.57
+    },
+    {
+      "id": "s182-illustration-d",
+      "section": "182",
+      "t1": {
+        "correct": true,
+        "predicted": "182",
+        "expected": "182"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.9090909090909091,
+        "predicted": [
+          "falsity",
+          "giving_information",
+          "improper_action_or_omission",
+          "intends_consequence",
+          "knows_likely_consequence"
+        ],
+        "expected": [
+          "giving_information",
+          "falsity",
+          "intends_consequence",
+          "knows_likely_consequence",
+          "injury_or_annoyance",
+          "improper_action_or_omission"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.857
+    },
+    {
+      "id": "s186-illustration-a",
+      "section": "186",
+      "t1": {
+        "correct": true,
+        "predicted": "186",
+        "expected": "186"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.7499999999999999,
+        "predicted": [
+          "discharge_of_public_functions",
+          "obstructs_public_servant",
+          "voluntary"
+        ],
+        "expected": [
+          "voluntary",
+          "obstructs_public_servant",
+          "discharge_of_public_functions",
+          "individual_case",
+          "other_case"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.666
+    },
+    {
+      "id": "s188-illustration-a",
+      "section": "188",
+      "t1": {
+        "correct": false,
+        "predicted": "141",
+        "expected": "188"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.8571428571428571,
+        "predicted": [
+          "danger_to_human_life_health_or_safety",
+          "disobeys_direction",
+          "knowledge_of_order",
+          "lower_tier_harm_or_risk",
+          "offence_under_subsection_1",
+          "riot_or_affray"
+        ],
+        "expected": [
+          "knowledge_of_order",
+          "disobeys_direction",
+          "lower_tier_harm_or_risk",
+          "individual_case",
+          "other_case",
+          "offence_under_subsection_1",
+          "danger_to_human_life_health_or_safety",
+          "riot_or_affray"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 3.478
+    },
+    {
+      "id": "s191-illustration-a",
+      "section": "191",
+      "t1": {
+        "correct": false,
+        "predicted": "193",
+        "expected": "191"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.7499999999999999,
+        "predicted": [
+          "false_statement",
+          "knows_false",
+          "legal_obligation"
+        ],
+        "expected": [
+          "legal_obligation",
+          "false_statement",
+          "knows_false",
+          "believes_false",
+          "does_not_believe_true"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.114
+    },
+    {
+      "id": "s191-illustration-b",
+      "section": "191",
+      "t1": {
+        "correct": false,
+        "predicted": "193",
+        "expected": "191"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "believes_false",
+          "does_not_believe_true",
+          "false_statement",
+          "knows_false",
+          "legal_obligation"
+        ],
+        "expected": [
+          "legal_obligation",
+          "false_statement",
+          "knows_false",
+          "believes_false",
+          "does_not_believe_true"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.398
+    },
+    {
+      "id": "s191-illustration-c",
+      "section": "191",
+      "t1": {
+        "correct": true,
+        "predicted": "191",
+        "expected": "191"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.0,
+        "predicted": [],
+        "expected": [
+          "legal_obligation",
+          "false_statement",
+          "knows_false",
+          "believes_false",
+          "does_not_believe_true"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.864
+    },
+    {
+      "id": "s191-illustration-d",
+      "section": "191",
+      "t1": {
+        "correct": false,
+        "predicted": "193",
+        "expected": "191"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.888888888888889,
+        "predicted": [
+          "believes_false",
+          "false_statement",
+          "knows_false",
+          "legal_obligation"
+        ],
+        "expected": [
+          "legal_obligation",
+          "false_statement",
+          "knows_false",
+          "believes_false",
+          "does_not_believe_true"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.356
+    },
+    {
+      "id": "s191-illustration-e",
+      "section": "191",
+      "t1": {
+        "correct": true,
+        "predicted": "191",
+        "expected": "191"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.0,
+        "predicted": [
+          "believes_false",
+          "does_not_believe_true",
+          "false_statement",
+          "knows_false",
+          "legal_obligation"
+        ],
+        "expected": []
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.286
+    },
+    {
+      "id": "s192-illustration-a",
+      "section": "192",
+      "t1": {
+        "correct": false,
+        "predicted": "191",
+        "expected": "192"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "fabrication",
+          "intended_erroneous_opinion",
+          "intended_evidential_appearance"
+        ],
+        "expected": [
+          "fabrication",
+          "intended_evidential_appearance",
+          "intended_erroneous_opinion"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.324
+    },
+    {
+      "id": "s192-illustration-b",
+      "section": "192",
+      "t1": {
+        "correct": false,
+        "predicted": "193",
+        "expected": "192"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.8,
+        "predicted": [
+          "fabrication",
+          "intended_evidential_appearance"
+        ],
+        "expected": [
+          "fabrication",
+          "intended_evidential_appearance",
+          "intended_erroneous_opinion"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.251
+    },
+    {
+      "id": "s192-illustration-c",
+      "section": "192",
+      "t1": {
+        "correct": true,
+        "predicted": "192",
+        "expected": "192"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.8,
+        "predicted": [
+          "fabrication",
+          "intended_evidential_appearance"
+        ],
+        "expected": [
+          "fabrication",
+          "intended_evidential_appearance",
+          "intended_erroneous_opinion"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.453
+    },
+    {
+      "id": "s193-illustration-1",
+      "section": "193",
+      "t1": {
+        "correct": true,
+        "predicted": "193",
+        "expected": "193"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.5454545454545454,
+        "predicted": [
+          "gives_false_evidence_in_judicial_stage",
+          "intentionally_gives_in_judicial_stage",
+          "judicial_proceeding_case"
+        ],
+        "expected": [
+          "gives_false_evidence_in_judicial_stage",
+          "intentionally_gives_in_judicial_stage",
+          "fabricates_false_evidence_for_judicial_stage",
+          "judicial_proceeding_case",
+          "gives_false_evidence_other_case",
+          "fabricates_false_evidence_other_case",
+          "intentionally_gives_or_fabricates_other_case",
+          "other_case"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.768
+    },
+    {
+      "id": "s193-illustration-2",
+      "section": "193",
+      "t1": {
+        "correct": false,
+        "predicted": "191",
+        "expected": "193"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.5454545454545454,
+        "predicted": [
+          "gives_false_evidence_in_judicial_stage",
+          "intentionally_gives_in_judicial_stage",
+          "judicial_proceeding_case"
+        ],
+        "expected": [
+          "gives_false_evidence_in_judicial_stage",
+          "intentionally_gives_in_judicial_stage",
+          "fabricates_false_evidence_for_judicial_stage",
+          "judicial_proceeding_case",
+          "gives_false_evidence_other_case",
+          "fabricates_false_evidence_other_case",
+          "intentionally_gives_or_fabricates_other_case",
+          "other_case"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 4.094
+    },
+    {
+      "id": "s195-illustration-a",
+      "section": "195",
+      "t1": {
+        "correct": false,
+        "predicted": "193",
+        "expected": "195"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.8,
+        "predicted": [
+          "gives_false_evidence",
+          "intending_to_cause_conviction",
+          "knowing_likely_to_cause_conviction",
+          "qualifying_noncapital_offence"
+        ],
+        "expected": [
+          "gives_false_evidence",
+          "fabricates_false_evidence",
+          "intending_to_cause_conviction",
+          "knowing_likely_to_cause_conviction",
+          "qualifying_noncapital_offence",
+          "qualifying_life_imprisonment_offence"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.567
+    },
+    {
+      "id": "s201-illustration",
+      "section": "201",
+      "t1": {
+        "correct": true,
+        "predicted": "201",
+        "expected": "201"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.8333333333333333,
+        "predicted": [
+          "below_20_year_offence",
+          "death_punishable_offence",
+          "disappearance_of_evidence",
+          "intention_to_screen",
+          "knowledge_of_offence"
+        ],
+        "expected": [
+          "knowledge_of_offence",
+          "intention_to_screen",
+          "disappearance_of_evidence",
+          "false_information",
+          "death_punishable_offence",
+          "life_or_20_year_offence",
+          "below_20_year_offence"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.45
+    },
+    {
+      "id": "s208-illustration",
+      "section": "208",
+      "t1": {
+        "correct": false,
+        "predicted": "421",
+        "expected": "208"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "executed_after_satisfied",
+          "executed_for_satisfied_matter",
+          "fraudulently",
+          "larger_sum_than_due",
+          "property_not_entitled",
+          "sum_not_due"
+        ],
+        "expected": [
+          "fraudulently",
+          "sum_not_due",
+          "larger_sum_than_due",
+          "property_not_entitled",
+          "executed_after_satisfied",
+          "executed_for_satisfied_matter"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.764
+    },
+    {
+      "id": "s299-culpable-homicide",
+      "section": "299",
+      "t1": {
+        "correct": false,
+        "predicted": "300",
+        "expected": "299"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.75,
+        "predicted": [
+          "act",
+          "death",
+          "intent1",
+          "knowledge"
+        ],
+        "expected": [
+          "act",
+          "death",
+          "intent2",
+          "knowledge"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 3.589
+    },
+    {
+      "id": "s299-example1",
+      "section": "299",
+      "t1": {
+        "correct": true,
+        "predicted": "299",
+        "expected": "299"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.9090909090909091,
+        "predicted": [
+          "act",
+          "death",
+          "intent1",
+          "intent2",
+          "knowledge"
+        ],
+        "expected": [
+          "act",
+          "omission",
+          "death",
+          "intent1",
+          "intent2",
+          "knowledge"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.249
+    },
+    {
+      "id": "s299-example2",
+      "section": "299",
+      "t1": {
+        "correct": false,
+        "predicted": "300",
+        "expected": "299"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.8,
+        "predicted": [
+          "act",
+          "death",
+          "intent1",
+          "knowledge"
+        ],
+        "expected": [
+          "act",
+          "omission",
+          "death",
+          "intent1",
+          "intent2",
+          "knowledge"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.768
+    },
+    {
+      "id": "s299-example3",
+      "section": "299",
+      "t1": {
+        "correct": true,
+        "predicted": "299",
+        "expected": "299"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.8,
+        "predicted": [
+          "act",
+          "death",
+          "intent1",
+          "knowledge"
+        ],
+        "expected": [
+          "act",
+          "omission",
+          "death",
+          "intent1",
+          "intent2",
+          "knowledge"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.24
+    },
+    {
+      "id": "s300-examplea",
+      "section": "300",
+      "t1": {
+        "correct": true,
+        "predicted": "300",
+        "expected": "300"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.5714285714285715,
+        "predicted": [
+          "causeDeath",
+          "intent1"
+        ],
+        "expected": [
+          "causeDeath",
+          "intent1",
+          "intent2",
+          "intent3",
+          "intent4"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.578
+    },
+    {
+      "id": "s300-murder",
+      "section": "300",
+      "t1": {
+        "correct": true,
+        "predicted": "300",
+        "expected": "300"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.8,
+        "predicted": [
+          "causeDeath",
+          "intent1"
+        ],
+        "expected": [
+          "causeDeath",
+          "intent1",
+          "intent2"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.463
+    },
+    {
+      "id": "s302-example1",
+      "section": "302",
+      "t1": {
+        "correct": false,
+        "predicted": "300",
+        "expected": "302"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "conviction",
+          "murder_committed"
+        ],
+        "expected": [
+          "murder_committed",
+          "conviction"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.163
+    },
+    {
+      "id": "s302-murder-spectrum",
+      "section": "302",
+      "t1": {
+        "correct": false,
+        "predicted": "300",
+        "expected": "302"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "conviction",
+          "murder_committed"
+        ],
+        "expected": [
+          "murder_committed",
+          "conviction"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.257
+    },
+    {
+      "id": "s304-example1",
+      "section": "304",
+      "t1": {
+        "correct": true,
+        "predicted": "304",
+        "expected": "304"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.8,
+        "predicted": [
+          "causation",
+          "not_murder"
+        ],
+        "expected": [
+          "intention",
+          "causation",
+          "not_murder"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.327
+    },
+    {
+      "id": "s304-example2",
+      "section": "304",
+      "t1": {
+        "correct": false,
+        "predicted": "299",
+        "expected": "304"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "causation",
+          "intention",
+          "not_murder"
+        ],
+        "expected": [
+          "intention",
+          "causation",
+          "not_murder"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.364
+    },
+    {
+      "id": "s307-illustration-a",
+      "section": "307",
+      "t1": {
+        "correct": false,
+        "predicted": "300",
+        "expected": "307"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.8,
+        "predicted": [
+          "does_any_act",
+          "intention_of_causing_death",
+          "offending_under_this_section",
+          "would_be_guilty_of_murder"
+        ],
+        "expected": [
+          "does_any_act",
+          "intention_of_causing_death",
+          "would_be_guilty_of_murder",
+          "offending_under_this_section",
+          "under_sentence_of_imprisonment_for_life",
+          "hurt_is_caused"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 3.063
+    },
+    {
+      "id": "s307-illustration-b",
+      "section": "307",
+      "t1": {
+        "correct": false,
+        "predicted": "299",
+        "expected": "307"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.6666666666666666,
+        "predicted": [
+          "does_any_act",
+          "intention_of_causing_death",
+          "offending_under_this_section"
+        ],
+        "expected": [
+          "does_any_act",
+          "intention_of_causing_death",
+          "would_be_guilty_of_murder",
+          "offending_under_this_section",
+          "under_sentence_of_imprisonment_for_life",
+          "hurt_is_caused"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.252
+    },
+    {
+      "id": "s307-illustration-c",
+      "section": "307",
+      "t1": {
+        "correct": false,
+        "predicted": "300",
+        "expected": "307"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.8,
+        "predicted": [
+          "does_any_act",
+          "hurt_is_caused",
+          "intention_of_causing_death",
+          "offending_under_this_section"
+        ],
+        "expected": [
+          "does_any_act",
+          "intention_of_causing_death",
+          "would_be_guilty_of_murder",
+          "offending_under_this_section",
+          "under_sentence_of_imprisonment_for_life",
+          "hurt_is_caused"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.762
+    },
+    {
+      "id": "s307-illustration-d",
+      "section": "307",
+      "t1": {
+        "correct": false,
+        "predicted": "300",
+        "expected": "307"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.6666666666666666,
+        "predicted": [
+          "does_any_act",
+          "intention_of_causing_death",
+          "offending_under_this_section"
+        ],
+        "expected": [
+          "does_any_act",
+          "intention_of_causing_death",
+          "would_be_guilty_of_murder",
+          "offending_under_this_section",
+          "under_sentence_of_imprisonment_for_life",
+          "hurt_is_caused"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 3.031
+    },
+    {
+      "id": "s308-illustration-a",
+      "section": "308",
+      "t1": {
+        "correct": false,
+        "predicted": "304",
+        "expected": "308"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "culpable_homicide_not_murder_if_death_caused",
+          "doing_act",
+          "intention_to_cause_death"
+        ],
+        "expected": [
+          "doing_act",
+          "intention_to_cause_death",
+          "culpable_homicide_not_murder_if_death_caused"
+        ]
+      },
+      "t3": {
+        "correct": false,
+        "predicted": "grave_and_sudden_provocation",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.499
+    },
+    {
+      "id": "s316-illustration",
+      "section": "316",
+      "t1": {
+        "correct": true,
+        "predicted": "316",
+        "expected": "316"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "act",
+          "culpable_homicide_circumstances",
+          "death_of_quick_unborn_child"
+        ],
+        "expected": [
+          "act",
+          "culpable_homicide_circumstances",
+          "death_of_quick_unborn_child"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.459
+    },
+    {
+      "id": "s319-classic",
+      "section": "319",
+      "t1": {
+        "correct": false,
+        "predicted": "351",
+        "expected": "319"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "act",
+          "harm",
+          "voluntariness"
+        ],
+        "expected": [
+          "act",
+          "harm",
+          "voluntariness"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.458
+    },
+    {
+      "id": "s319-example1",
+      "section": "319",
+      "t1": {
+        "correct": true,
+        "predicted": "319",
+        "expected": "319"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.5714285714285715,
+        "predicted": [
+          "bodily_pain",
+          "cause"
+        ],
+        "expected": [
+          "cause",
+          "bodily_pain",
+          "disease",
+          "infirmity",
+          "unconsciousness"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.261
+    },
+    {
+      "id": "s319-example2",
+      "section": "319",
+      "t1": {
+        "correct": false,
+        "predicted": "328",
+        "expected": "319"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.33333333333333337,
+        "predicted": [
+          "unconsciousness"
+        ],
+        "expected": [
+          "cause",
+          "bodily_pain",
+          "disease",
+          "infirmity",
+          "unconsciousness"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 1.938
+    },
+    {
+      "id": "s320-grievous-hurt",
+      "section": "320",
+      "t1": {
+        "correct": false,
+        "predicted": "325",
+        "expected": "320"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "grievous_qualifier",
+          "hurt_act",
+          "voluntariness"
+        ],
+        "expected": [
+          "hurt_act",
+          "grievous_qualifier",
+          "voluntariness"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.046
+    },
+    {
+      "id": "s321-example1",
+      "section": "321",
+      "t1": {
+        "correct": false,
+        "predicted": "323",
+        "expected": "321"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "causing_hurt",
+          "hurt_caused",
+          "intention"
+        ],
+        "expected": [
+          "intention",
+          "causing_hurt",
+          "hurt_caused"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.867
+    },
+    {
+      "id": "s321-example2",
+      "section": "321",
+      "t1": {
+        "correct": false,
+        "predicted": "319",
+        "expected": "321"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "causing_hurt",
+          "hurt_caused",
+          "intention"
+        ],
+        "expected": [
+          "intention",
+          "causing_hurt",
+          "hurt_caused"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.048
+    },
+    {
+      "id": "s322-illustration-a",
+      "section": "322",
+      "t1": {
+        "correct": true,
+        "predicted": "322",
+        "expected": "322"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.8571428571428571,
+        "predicted": [
+          "hurt_caused_is_grievous_hurt",
+          "intends_grievous_hurt",
+          "voluntarily_causes_hurt"
+        ],
+        "expected": [
+          "voluntarily_causes_hurt",
+          "intends_grievous_hurt",
+          "knows_likely_grievous_hurt",
+          "hurt_caused_is_grievous_hurt"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.124
+    },
+    {
+      "id": "s323-causing-hurt",
+      "section": "323",
+      "t1": {
+        "correct": false,
+        "predicted": "352",
+        "expected": "323"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "hurt",
+          "voluntariness"
+        ],
+        "expected": [
+          "hurt",
+          "voluntariness"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.076
+    },
+    {
+      "id": "s323-example1",
+      "section": "323",
+      "t1": {
+        "correct": false,
+        "predicted": "319",
+        "expected": "323"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "conviction",
+          "offence_committed"
+        ],
+        "expected": [
+          "offence_committed",
+          "conviction"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.15
+    },
+    {
+      "id": "s323A-illustration",
+      "section": "323A",
+      "t1": {
+        "correct": false,
+        "predicted": "338",
+        "expected": "323A"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "actual_hurt_grievous",
+          "intends_or_knows_non_grievous_hurt",
+          "voluntarily_causes_hurt"
+        ],
+        "expected": [
+          "voluntarily_causes_hurt",
+          "intends_or_knows_non_grievous_hurt",
+          "actual_hurt_grievous"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 3.994
+    },
+    {
+      "id": "s325-example1",
+      "section": "325",
+      "t1": {
+        "correct": false,
+        "predicted": "322",
+        "expected": "325"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "causing",
+          "grievous_result",
+          "intention"
+        ],
+        "expected": [
+          "intention",
+          "causing",
+          "grievous_result"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.591
+    },
+    {
+      "id": "s325-example2",
+      "section": "325",
+      "t1": {
+        "correct": false,
+        "predicted": "322",
+        "expected": "325"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "causing",
+          "grievous_result",
+          "intention"
+        ],
+        "expected": [
+          "intention",
+          "causing",
+          "grievous_result"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.324
+    },
+    {
+      "id": "s330-illustration-a",
+      "section": "330",
+      "t1": {
+        "correct": true,
+        "predicted": "330",
+        "expected": "330"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.8,
+        "predicted": [
+          "purpose_of_extorting_confession_or_detection_information",
+          "voluntarily_causes_hurt"
+        ],
+        "expected": [
+          "voluntarily_causes_hurt",
+          "purpose_of_extorting_confession_or_detection_information",
+          "purpose_of_constraining_restoration_or_satisfaction"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.359
+    },
+    {
+      "id": "s330-illustration-b",
+      "section": "330",
+      "t1": {
+        "correct": true,
+        "predicted": "330",
+        "expected": "330"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.8,
+        "predicted": [
+          "purpose_of_extorting_confession_or_detection_information",
+          "voluntarily_causes_hurt"
+        ],
+        "expected": [
+          "voluntarily_causes_hurt",
+          "purpose_of_extorting_confession_or_detection_information",
+          "purpose_of_constraining_restoration_or_satisfaction"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 3.479
+    },
+    {
+      "id": "s330-illustration-c",
+      "section": "330",
+      "t1": {
+        "correct": true,
+        "predicted": "330",
+        "expected": "330"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.8,
+        "predicted": [
+          "purpose_of_extorting_confession_or_detection_information",
+          "voluntarily_causes_hurt"
+        ],
+        "expected": [
+          "voluntarily_causes_hurt",
+          "purpose_of_extorting_confession_or_detection_information",
+          "purpose_of_constraining_restoration_or_satisfaction"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.3
+    },
+    {
+      "id": "s339-illustration-a",
+      "section": "339",
+      "t1": {
+        "correct": false,
+        "predicted": "341",
+        "expected": "339"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "obstruction",
+          "prevention",
+          "right_to_proceed"
+        ],
+        "expected": [
+          "obstruction",
+          "prevention",
+          "right_to_proceed"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.276
+    },
+    {
+      "id": "s350-illustration-a",
+      "section": "350",
+      "t1": {
+        "correct": true,
+        "predicted": "350",
+        "expected": "350"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "absence_of_consent",
+          "intent_to_cause_illegally",
+          "intentional_use_of_force",
+          "knowledge_likely_to_cause_illegally",
+          "purpose_to_cause_offence"
+        ],
+        "expected": [
+          "intentional_use_of_force",
+          "absence_of_consent",
+          "purpose_to_cause_offence",
+          "intent_to_cause_illegally",
+          "knowledge_likely_to_cause_illegally"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.63
+    },
+    {
+      "id": "s350-illustration-b",
+      "section": "350",
+      "t1": {
+        "correct": true,
+        "predicted": "350",
+        "expected": "350"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.888888888888889,
+        "predicted": [
+          "absence_of_consent",
+          "intent_to_cause_illegally",
+          "intentional_use_of_force",
+          "knowledge_likely_to_cause_illegally"
+        ],
+        "expected": [
+          "intentional_use_of_force",
+          "absence_of_consent",
+          "purpose_to_cause_offence",
+          "intent_to_cause_illegally",
+          "knowledge_likely_to_cause_illegally"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.861
+    },
+    {
+      "id": "s350-illustration-c",
+      "section": "350",
+      "t1": {
+        "correct": true,
+        "predicted": "350",
+        "expected": "350"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.888888888888889,
+        "predicted": [
+          "absence_of_consent",
+          "intent_to_cause_illegally",
+          "intentional_use_of_force",
+          "purpose_to_cause_offence"
+        ],
+        "expected": [
+          "intentional_use_of_force",
+          "absence_of_consent",
+          "purpose_to_cause_offence",
+          "intent_to_cause_illegally",
+          "knowledge_likely_to_cause_illegally"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 3.15
+    },
+    {
+      "id": "s350-illustration-d",
+      "section": "350",
+      "t1": {
+        "correct": true,
+        "predicted": "350",
+        "expected": "350"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.888888888888889,
+        "predicted": [
+          "absence_of_consent",
+          "intent_to_cause_illegally",
+          "intentional_use_of_force",
+          "knowledge_likely_to_cause_illegally"
+        ],
+        "expected": [
+          "intentional_use_of_force",
+          "absence_of_consent",
+          "purpose_to_cause_offence",
+          "intent_to_cause_illegally",
+          "knowledge_likely_to_cause_illegally"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 3.27
+    },
+    {
+      "id": "s350-illustration-e",
+      "section": "350",
+      "t1": {
+        "correct": true,
+        "predicted": "350",
+        "expected": "350"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "absence_of_consent",
+          "intent_to_cause_illegally",
+          "intentional_use_of_force",
+          "knowledge_likely_to_cause_illegally",
+          "purpose_to_cause_offence"
+        ],
+        "expected": [
+          "intentional_use_of_force",
+          "absence_of_consent",
+          "purpose_to_cause_offence",
+          "intent_to_cause_illegally",
+          "knowledge_likely_to_cause_illegally"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 3.686
+    },
+    {
+      "id": "s350-illustration-f",
+      "section": "350",
+      "t1": {
+        "correct": true,
+        "predicted": "350",
+        "expected": "350"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "absence_of_consent",
+          "intent_to_cause_illegally",
+          "intentional_use_of_force",
+          "knowledge_likely_to_cause_illegally",
+          "purpose_to_cause_offence"
+        ],
+        "expected": [
+          "intentional_use_of_force",
+          "absence_of_consent",
+          "purpose_to_cause_offence",
+          "intent_to_cause_illegally",
+          "knowledge_likely_to_cause_illegally"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.66
+    },
+    {
+      "id": "s350-illustration-g",
+      "section": "350",
+      "t1": {
+        "correct": true,
+        "predicted": "350",
+        "expected": "350"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.888888888888889,
+        "predicted": [
+          "absence_of_consent",
+          "intent_to_cause_illegally",
+          "intentional_use_of_force",
+          "knowledge_likely_to_cause_illegally"
+        ],
+        "expected": [
+          "intentional_use_of_force",
+          "absence_of_consent",
+          "purpose_to_cause_offence",
+          "intent_to_cause_illegally",
+          "knowledge_likely_to_cause_illegally"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.463
+    },
+    {
+      "id": "s350-illustration-h",
+      "section": "350",
+      "t1": {
+        "correct": false,
+        "predicted": "352",
+        "expected": "350"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.7499999999999999,
+        "predicted": [
+          "absence_of_consent",
+          "intent_to_cause_illegally",
+          "intentional_use_of_force"
+        ],
+        "expected": [
+          "intentional_use_of_force",
+          "absence_of_consent",
+          "purpose_to_cause_offence",
+          "intent_to_cause_illegally",
+          "knowledge_likely_to_cause_illegally"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.147
+    },
+    {
+      "id": "s351-illustration-a",
+      "section": "351",
+      "t1": {
+        "correct": true,
+        "predicted": "351",
+        "expected": "351"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "apprehension_of_imminent_criminal_force",
+          "gesture_or_preparation",
+          "intention",
+          "knowledge"
+        ],
+        "expected": [
+          "gesture_or_preparation",
+          "intention",
+          "knowledge",
+          "apprehension_of_imminent_criminal_force"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.564
+    },
+    {
+      "id": "s351-illustration-b",
+      "section": "351",
+      "t1": {
+        "correct": true,
+        "predicted": "351",
+        "expected": "351"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "apprehension_of_imminent_criminal_force",
+          "gesture_or_preparation",
+          "intention",
+          "knowledge"
+        ],
+        "expected": [
+          "gesture_or_preparation",
+          "intention",
+          "knowledge",
+          "apprehension_of_imminent_criminal_force"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.454
+    },
+    {
+      "id": "s351-illustration-c",
+      "section": "351",
+      "t1": {
+        "correct": true,
+        "predicted": "351",
+        "expected": "351"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.8571428571428571,
+        "predicted": [
+          "apprehension_of_imminent_criminal_force",
+          "gesture_or_preparation",
+          "intention"
+        ],
+        "expected": [
+          "gesture_or_preparation",
+          "intention",
+          "knowledge",
+          "apprehension_of_imminent_criminal_force"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.56
+    },
+    {
+      "id": "s354-example1",
+      "section": "354",
+      "t1": {
+        "correct": true,
+        "predicted": "354",
+        "expected": "354"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "force_or_assault",
+          "intention",
+          "modesty_outraged"
+        ],
+        "expected": [
+          "intention",
+          "force_or_assault",
+          "modesty_outraged"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.361
+    },
+    {
+      "id": "s354-example2",
+      "section": "354",
+      "t1": {
+        "correct": true,
+        "predicted": "354",
+        "expected": "354"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "force_or_assault",
+          "intention",
+          "modesty_outraged"
+        ],
+        "expected": [
+          "intention",
+          "force_or_assault",
+          "modesty_outraged"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.663
+    },
+    {
+      "id": "s354-outraging-modesty",
+      "section": "354",
+      "t1": {
+        "correct": true,
+        "predicted": "354",
+        "expected": "354"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "assault_or_force",
+          "intent_outrage",
+          "modesty_outraged"
+        ],
+        "expected": [
+          "assault_or_force",
+          "intent_outrage",
+          "modesty_outraged"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 3.067
+    },
+    {
+      "id": "s363-example1",
+      "section": "363",
+      "t1": {
+        "correct": true,
+        "predicted": "363",
+        "expected": "363"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "intention",
+          "taking",
+          "without_consent"
+        ],
+        "expected": [
+          "intention",
+          "taking",
+          "without_consent"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.484
+    },
+    {
+      "id": "s363-kidnapping",
+      "section": "363",
+      "t1": {
+        "correct": true,
+        "predicted": "363",
+        "expected": "363"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "lawful_guardian_consent_absent",
+          "minor_age",
+          "taking_or_enticing"
+        ],
+        "expected": [
+          "taking_or_enticing",
+          "minor_age",
+          "lawful_guardian_consent_absent"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.367
+    },
+    {
+      "id": "s364-illustration-a",
+      "section": "364",
+      "t1": {
+        "correct": false,
+        "predicted": "294",
+        "expected": "364"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.6666666666666666,
+        "predicted": [
+          "kidnaps_person",
+          "purpose_danger_of_murder"
+        ],
+        "expected": [
+          "kidnaps_person",
+          "abducts_person",
+          "purpose_murder",
+          "purpose_danger_of_murder"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.113
+    },
+    {
+      "id": "s364-illustration-b",
+      "section": "364",
+      "t1": {
+        "correct": false,
+        "predicted": "kidnapping",
+        "expected": "364"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.6666666666666666,
+        "predicted": [
+          "abducts_person",
+          "purpose_murder"
+        ],
+        "expected": [
+          "kidnaps_person",
+          "abducts_person",
+          "purpose_murder",
+          "purpose_danger_of_murder"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.265
+    },
+    {
+      "id": "s37-illustration-a",
+      "section": "37",
+      "t1": {
+        "correct": false,
+        "predicted": "300",
+        "expected": "37"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "commits_that_offence",
+          "doing_one_act",
+          "intentional_cooperation",
+          "offence_committed_by_several_acts",
+          "singly_or_jointly"
+        ],
+        "expected": [
+          "offence_committed_by_several_acts",
+          "intentional_cooperation",
+          "doing_one_act",
+          "singly_or_jointly",
+          "commits_that_offence"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.695
+    },
+    {
+      "id": "s37-illustration-b",
+      "section": "37",
+      "t1": {
+        "correct": false,
+        "predicted": "300",
+        "expected": "37"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "commits_that_offence",
+          "doing_one_act",
+          "intentional_cooperation",
+          "offence_committed_by_several_acts",
+          "singly_or_jointly"
+        ],
+        "expected": [
+          "offence_committed_by_several_acts",
+          "intentional_cooperation",
+          "doing_one_act",
+          "singly_or_jointly",
+          "commits_that_offence"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.517
+    },
+    {
+      "id": "s37-illustration-c",
+      "section": "37",
+      "t1": {
+        "correct": false,
+        "predicted": "300",
+        "expected": "37"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.0,
+        "predicted": [
+          "commits_that_offence",
+          "doing_one_act",
+          "offence_committed_by_several_acts"
+        ],
+        "expected": []
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.872
+    },
+    {
+      "id": "s375-rape",
+      "section": "375",
+      "t1": {
+        "correct": true,
+        "predicted": "375",
+        "expected": "375"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "knowledge_of_lack_of_consent",
+          "penetration",
+          "without_consent"
+        ],
+        "expected": [
+          "penetration",
+          "without_consent",
+          "knowledge_of_lack_of_consent"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.27
+    },
+    {
+      "id": "s377BO-illustration-a",
+      "section": "377BO",
+      "t1": {
+        "correct": false,
+        "predicted": "377BG",
+        "expected": "377BO"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.34782608695652173,
+        "predicted": [
+          "act_done_outside_singapore_involving_person_below_16",
+          "all_fault_elements_proven",
+          "all_physical_elements_proven",
+          "citizen_or_permanent_resident_of_singapore"
+        ],
+        "expected": [
+          "citizen_or_permanent_resident_of_singapore",
+          "act_done_outside_singapore",
+          "hypothetical_offence_if_done_in_singapore",
+          "act_done_in_singapore",
+          "person_b_outside_singapore",
+          "hypothetical_offence_if_b_were_in_singapore",
+          "act_done_outside_singapore_involving_person_below_16",
+          "person_b_in_singapore",
+          "hypothetical_offence_if_done_in_singapore_under_377BG_or_377BH",
+          "act_done_in_singapore_involving_person_16_to_18",
+          "person_b_outside_singapore_and_exploitative_relationship_gate",
+          "hypothetical_offence_if_b_were_in_singapore_under_377BL",
+          "act_done_outside_singapore_involving_person_16_to_18",
+          "person_b_in_singapore_and_exploitative_relationship_gate",
+          "hypothetical_offence_if_done_in_singapore_under_377BL",
+          "physical_element_done_in_singapore",
+          "all_fault_elements_proven",
+          "all_physical_elements_proven",
+          "other_physical_elements_occurred_outside_singapore"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.973
+    },
+    {
+      "id": "s377BO-illustration-b",
+      "section": "377BO",
+      "t1": {
+        "correct": false,
+        "predicted": "377BG",
+        "expected": "377BO"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.4166666666666667,
+        "predicted": [
+          "act_done_in_singapore",
+          "act_done_outside_singapore_involving_person_below_16",
+          "all_fault_elements_proven",
+          "all_physical_elements_proven",
+          "person_b_outside_singapore"
+        ],
+        "expected": [
+          "citizen_or_permanent_resident_of_singapore",
+          "act_done_outside_singapore",
+          "hypothetical_offence_if_done_in_singapore",
+          "act_done_in_singapore",
+          "person_b_outside_singapore",
+          "hypothetical_offence_if_b_were_in_singapore",
+          "act_done_outside_singapore_involving_person_below_16",
+          "person_b_in_singapore",
+          "hypothetical_offence_if_done_in_singapore_under_377BG_or_377BH",
+          "act_done_in_singapore_involving_person_16_to_18",
+          "person_b_outside_singapore_and_exploitative_relationship_gate",
+          "hypothetical_offence_if_b_were_in_singapore_under_377BL",
+          "act_done_outside_singapore_involving_person_16_to_18",
+          "person_b_in_singapore_and_exploitative_relationship_gate",
+          "hypothetical_offence_if_done_in_singapore_under_377BL",
+          "physical_element_done_in_singapore",
+          "all_fault_elements_proven",
+          "all_physical_elements_proven",
+          "other_physical_elements_occurred_outside_singapore"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 3.156
+    },
+    {
+      "id": "s377BO-illustration-c",
+      "section": "377BO",
+      "t1": {
+        "correct": false,
+        "predicted": "377BG",
+        "expected": "377BO"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.0,
+        "predicted": [
+          "act_done_outside_singapore_involving_person_below_16",
+          "person_b_in_singapore",
+          "hypothetical_offence_if_done_in_singapore_under_377BG_or_377BH"
+        ],
+        "expected": []
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 4.396
+    },
+    {
+      "id": "s377BO-illustration-d",
+      "section": "377BO",
+      "t1": {
+        "correct": false,
+        "predicted": "377BH",
+        "expected": "377BO"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.0,
+        "predicted": [
+          "act_done_in_singapore",
+          "all_fault_elements_proven",
+          "all_physical_elements_proven",
+          "person_b_in_singapore"
+        ],
+        "expected": []
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.582
+    },
+    {
+      "id": "s377CB-illustration-a",
+      "section": "377CB",
+      "t1": {
+        "correct": false,
+        "predicted": "375",
+        "expected": "377CB"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.5714285714285715,
+        "predicted": [
+          "consent_for_physical_element_of_sexual_offence",
+          "misconception_as_to_nature"
+        ],
+        "expected": [
+          "consent_for_physical_element_of_sexual_offence",
+          "misconception_as_to_nature",
+          "misconception_as_to_purpose",
+          "misconception_as_to_identity",
+          "knowledge_or_reason_to_believe_consent_consequence"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.332
+    },
+    {
+      "id": "s377CB-illustration-b",
+      "section": "377CB",
+      "t1": {
+        "correct": false,
+        "predicted": "375",
+        "expected": "377CB"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.5714285714285715,
+        "predicted": [
+          "consent_for_physical_element_of_sexual_offence",
+          "misconception_as_to_purpose"
+        ],
+        "expected": [
+          "consent_for_physical_element_of_sexual_offence",
+          "misconception_as_to_nature",
+          "misconception_as_to_purpose",
+          "misconception_as_to_identity",
+          "knowledge_or_reason_to_believe_consent_consequence"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.505
+    },
+    {
+      "id": "s377CB-illustration-c",
+      "section": "377CB",
+      "t1": {
+        "correct": false,
+        "predicted": "375",
+        "expected": "377CB"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.5714285714285715,
+        "predicted": [
+          "consent_for_physical_element_of_sexual_offence",
+          "misconception_as_to_identity"
+        ],
+        "expected": [
+          "consent_for_physical_element_of_sexual_offence",
+          "misconception_as_to_nature",
+          "misconception_as_to_purpose",
+          "misconception_as_to_identity",
+          "knowledge_or_reason_to_believe_consent_consequence"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.512
+    },
+    {
+      "id": "s377CB-illustration-d",
+      "section": "377CB",
+      "t1": {
+        "correct": false,
+        "predicted": "375",
+        "expected": "377CB"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.5714285714285715,
+        "predicted": [
+          "consent_for_physical_element_of_sexual_offence",
+          "misconception_as_to_nature"
+        ],
+        "expected": [
+          "consent_for_physical_element_of_sexual_offence",
+          "misconception_as_to_nature",
+          "misconception_as_to_purpose",
+          "misconception_as_to_identity",
+          "knowledge_or_reason_to_believe_consent_consequence"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.558
+    },
+    {
+      "id": "s378-classic",
+      "section": "378",
+      "t1": {
+        "correct": true,
+        "predicted": "378",
+        "expected": "378"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.888888888888889,
+        "predicted": [
+          "consent",
+          "intention",
+          "movement",
+          "possession",
+          "taking"
+        ],
+        "expected": [
+          "intention",
+          "taking",
+          "possession",
+          "movement"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.663
+    },
+    {
+      "id": "s378-example1",
+      "section": "378",
+      "t1": {
+        "correct": false,
+        "predicted": "403",
+        "expected": "378"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.0,
+        "predicted": [],
+        "expected": [
+          "intention",
+          "taking",
+          "possession",
+          "consent",
+          "movement"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.081
+    },
+    {
+      "id": "s378-example2",
+      "section": "378",
+      "t1": {
+        "correct": true,
+        "predicted": "378",
+        "expected": "378"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.888888888888889,
+        "predicted": [
+          "intention",
+          "movement",
+          "possession",
+          "taking"
+        ],
+        "expected": [
+          "intention",
+          "taking",
+          "possession",
+          "consent",
+          "movement"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.656
+    },
+    {
+      "id": "s378-example3",
+      "section": "378",
+      "t1": {
+        "correct": true,
+        "predicted": "378",
+        "expected": "378"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.0,
+        "predicted": [],
+        "expected": [
+          "intention",
+          "taking",
+          "possession",
+          "consent",
+          "movement"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.431
+    },
+    {
+      "id": "s378-example4",
+      "section": "378",
+      "t1": {
+        "correct": true,
+        "predicted": "378",
+        "expected": "378"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.5714285714285715,
+        "predicted": [
+          "intention",
+          "taking"
+        ],
+        "expected": [
+          "intention",
+          "taking",
+          "possession",
+          "consent",
+          "movement"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.663
+    },
+    {
+      "id": "s378-with-consent",
+      "section": "378",
+      "t1": {
+        "correct": false,
+        "predicted": "405",
+        "expected": "378"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.6666666666666666,
+        "predicted": [
+          "consent",
+          "possession",
+          "taking"
+        ],
+        "expected": [
+          "taking",
+          "possession",
+          "movement"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.97
+    },
+    {
+      "id": "s379-example1",
+      "section": "379",
+      "t1": {
+        "correct": false,
+        "predicted": "378",
+        "expected": "379"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "conviction",
+          "theft_committed"
+        ],
+        "expected": [
+          "theft_committed",
+          "conviction"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.441
+    },
+    {
+      "id": "s38-illustration",
+      "section": "38",
+      "t1": {
+        "correct": false,
+        "predicted": "300",
+        "expected": "38"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "different_offences_by_same_act",
+          "engaged_or_concerned_persons"
+        ],
+        "expected": [
+          "engaged_or_concerned_persons",
+          "different_offences_by_same_act"
+        ]
+      },
+      "t3": {
+        "correct": false,
+        "predicted": "grave_provocation",
+        "expected": "none"
+      },
+      "elapsed_seconds": 3.094
+    },
+    {
+      "id": "s382-illustration-a",
+      "section": "382",
+      "t1": {
+        "correct": false,
+        "predicted": "397",
+        "expected": "382"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.7499999999999999,
+        "predicted": [
+          "commits_theft",
+          "made_preparation",
+          "purpose_commit_theft"
+        ],
+        "expected": [
+          "commits_theft",
+          "made_preparation",
+          "purpose_commit_theft",
+          "purpose_escape",
+          "purpose_retain_property"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.083
+    },
+    {
+      "id": "s382-illustration-b",
+      "section": "382",
+      "t1": {
+        "correct": false,
+        "predicted": "378",
+        "expected": "382"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.7499999999999999,
+        "predicted": [
+          "commits_theft",
+          "made_preparation",
+          "purpose_commit_theft"
+        ],
+        "expected": [
+          "commits_theft",
+          "made_preparation",
+          "purpose_commit_theft",
+          "purpose_escape",
+          "purpose_retain_property"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.419
+    },
+    {
+      "id": "s383-example1",
+      "section": "383",
+      "t1": {
+        "correct": true,
+        "predicted": "383",
+        "expected": "383"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "fear",
+          "inducement",
+          "intention",
+          "threat"
+        ],
+        "expected": [
+          "intention",
+          "threat",
+          "fear",
+          "inducement"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.563
+    },
+    {
+      "id": "s383-example2",
+      "section": "383",
+      "t1": {
+        "correct": true,
+        "predicted": "383",
+        "expected": "383"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "fear",
+          "inducement",
+          "intention",
+          "threat"
+        ],
+        "expected": [
+          "intention",
+          "threat",
+          "fear",
+          "inducement"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.457
+    },
+    {
+      "id": "s383-extortion",
+      "section": "383",
+      "t1": {
+        "correct": false,
+        "predicted": "384",
+        "expected": "383"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "delivery",
+          "dishonest_inducement",
+          "putting_in_fear"
+        ],
+        "expected": [
+          "putting_in_fear",
+          "dishonest_inducement",
+          "delivery"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.628
+    },
+    {
+      "id": "s390-example1",
+      "section": "390",
+      "t1": {
+        "correct": true,
+        "predicted": "390",
+        "expected": "390"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.6666666666666666,
+        "predicted": [
+          "theft",
+          "violence"
+        ],
+        "expected": [
+          "theft",
+          "extortion",
+          "violence",
+          "fear"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.797
+    },
+    {
+      "id": "s390-example2",
+      "section": "390",
+      "t1": {
+        "correct": true,
+        "predicted": "390",
+        "expected": "390"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "extortion",
+          "fear",
+          "theft",
+          "violence"
+        ],
+        "expected": [
+          "theft",
+          "extortion",
+          "violence",
+          "fear"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.563
+    },
+    {
+      "id": "s392-example1",
+      "section": "392",
+      "t1": {
+        "correct": true,
+        "predicted": "392",
+        "expected": "392"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "conviction",
+          "robbery_committed",
+          "time_of_offence"
+        ],
+        "expected": [
+          "robbery_committed",
+          "time_of_offence",
+          "conviction"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.478
+    },
+    {
+      "id": "s392-example2",
+      "section": "392",
+      "t1": {
+        "correct": true,
+        "predicted": "392",
+        "expected": "392"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "conviction",
+          "robbery_committed",
+          "time_of_offence"
+        ],
+        "expected": [
+          "robbery_committed",
+          "time_of_offence",
+          "conviction"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.101
+    },
+    {
+      "id": "s392-robbery",
+      "section": "392",
+      "t1": {
+        "correct": false,
+        "predicted": "390",
+        "expected": "392"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "force_or_fear",
+          "immediate_taking",
+          "theft_act"
+        ],
+        "expected": [
+          "theft_act",
+          "force_or_fear",
+          "immediate_taking"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.329
+    },
+    {
+      "id": "s395-example1",
+      "section": "395",
+      "t1": {
+        "correct": true,
+        "predicted": "395",
+        "expected": "395"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "common_intention",
+          "five_or_more",
+          "robbery"
+        ],
+        "expected": [
+          "five_or_more",
+          "robbery",
+          "common_intention"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.615
+    },
+    {
+      "id": "s403-example1",
+      "section": "403",
+      "t1": {
+        "correct": true,
+        "predicted": "403",
+        "expected": "403"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.0,
+        "predicted": [],
+        "expected": [
+          "possession",
+          "dishonesty",
+          "conversion",
+          "disposal"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.047
+    },
+    {
+      "id": "s403-example2",
+      "section": "403",
+      "t1": {
+        "correct": true,
+        "predicted": "403",
+        "expected": "403"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.8571428571428571,
+        "predicted": [
+          "conversion",
+          "dishonesty",
+          "disposal"
+        ],
+        "expected": [
+          "possession",
+          "dishonesty",
+          "conversion",
+          "disposal"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 5.753
+    },
+    {
+      "id": "s404-illustration-a",
+      "section": "404",
+      "t1": {
+        "correct": false,
+        "predicted": "403",
+        "expected": "404"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "dishonesty",
+          "knowledge_of_deceased_possession",
+          "misappropriation_or_conversion",
+          "no_intervening_legal_possession"
+        ],
+        "expected": [
+          "dishonesty",
+          "misappropriation_or_conversion",
+          "knowledge_of_deceased_possession",
+          "no_intervening_legal_possession"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.757
+    },
+    {
+      "id": "s405-illustration-a",
+      "section": "405",
+      "t1": {
+        "correct": true,
+        "predicted": "405",
+        "expected": "405"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.7272727272727273,
+        "predicted": [
+          "dishonestly_misappropriates_or_converts",
+          "entrustment_or_dominion",
+          "misappropriates_or_converts_to_own_use",
+          "uses_or_disposes_in_breach"
+        ],
+        "expected": [
+          "entrustment_or_dominion",
+          "dishonestly_misappropriates_or_converts",
+          "misappropriates_or_converts_to_own_use",
+          "dishonestly_uses_or_disposes",
+          "uses_or_disposes_in_breach",
+          "intentionally_suffers",
+          "suffers_any_other_person_to_do_so"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.652
+    },
+    {
+      "id": "s405-illustration-b",
+      "section": "405",
+      "t1": {
+        "correct": true,
+        "predicted": "405",
+        "expected": "405"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.6,
+        "predicted": [
+          "dishonestly_misappropriates_or_converts",
+          "entrustment_or_dominion",
+          "uses_or_disposes_in_breach"
+        ],
+        "expected": [
+          "entrustment_or_dominion",
+          "dishonestly_misappropriates_or_converts",
+          "misappropriates_or_converts_to_own_use",
+          "dishonestly_uses_or_disposes",
+          "uses_or_disposes_in_breach",
+          "intentionally_suffers",
+          "suffers_any_other_person_to_do_so"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.871
+    },
+    {
+      "id": "s405-illustration-c",
+      "section": "405",
+      "t1": {
+        "correct": true,
+        "predicted": "405",
+        "expected": "405"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.6,
+        "predicted": [
+          "dishonestly_misappropriates_or_converts",
+          "entrustment_or_dominion",
+          "uses_or_disposes_in_breach"
+        ],
+        "expected": [
+          "entrustment_or_dominion",
+          "dishonestly_misappropriates_or_converts",
+          "misappropriates_or_converts_to_own_use",
+          "dishonestly_uses_or_disposes",
+          "uses_or_disposes_in_breach",
+          "intentionally_suffers",
+          "suffers_any_other_person_to_do_so"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.657
+    },
+    {
+      "id": "s405-illustration-d",
+      "section": "405",
+      "t1": {
+        "correct": true,
+        "predicted": "405",
+        "expected": "405"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.0,
+        "predicted": [],
+        "expected": [
+          "entrustment_or_dominion",
+          "dishonestly_misappropriates_or_converts",
+          "misappropriates_or_converts_to_own_use",
+          "dishonestly_uses_or_disposes",
+          "uses_or_disposes_in_breach",
+          "intentionally_suffers",
+          "suffers_any_other_person_to_do_so"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.456
+    },
+    {
+      "id": "s405-illustration-e",
+      "section": "405",
+      "t1": {
+        "correct": true,
+        "predicted": "405",
+        "expected": "405"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.6,
+        "predicted": [
+          "dishonestly_misappropriates_or_converts",
+          "entrustment_or_dominion",
+          "uses_or_disposes_in_breach"
+        ],
+        "expected": [
+          "entrustment_or_dominion",
+          "dishonestly_misappropriates_or_converts",
+          "misappropriates_or_converts_to_own_use",
+          "dishonestly_uses_or_disposes",
+          "uses_or_disposes_in_breach",
+          "intentionally_suffers",
+          "suffers_any_other_person_to_do_so"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.867
+    },
+    {
+      "id": "s405-illustration-f",
+      "section": "405",
+      "t1": {
+        "correct": true,
+        "predicted": "405",
+        "expected": "405"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.4444444444444445,
+        "predicted": [
+          "dishonestly_misappropriates_or_converts",
+          "entrustment_or_dominion"
+        ],
+        "expected": [
+          "entrustment_or_dominion",
+          "dishonestly_misappropriates_or_converts",
+          "misappropriates_or_converts_to_own_use",
+          "dishonestly_uses_or_disposes",
+          "uses_or_disposes_in_breach",
+          "intentionally_suffers",
+          "suffers_any_other_person_to_do_so"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.77
+    },
+    {
+      "id": "s406-example1",
+      "section": "406",
+      "t1": {
+        "correct": false,
+        "predicted": "405",
+        "expected": "406"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "dishonesty",
+          "misappropriation",
+          "property_entrusted"
+        ],
+        "expected": [
+          "property_entrusted",
+          "misappropriation",
+          "dishonesty"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.566
+    },
+    {
+      "id": "s406-example2",
+      "section": "406",
+      "t1": {
+        "correct": false,
+        "predicted": "405",
+        "expected": "406"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "dishonesty",
+          "misappropriation",
+          "property_entrusted"
+        ],
+        "expected": [
+          "property_entrusted",
+          "misappropriation",
+          "dishonesty"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.348
+    },
+    {
+      "id": "s407-illustration-1",
+      "section": "407",
+      "t1": {
+        "correct": false,
+        "predicted": "409",
+        "expected": "407"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.8,
+        "predicted": [
+          "entrusted_for_transportation_for_hire",
+          "entrusted_for_storage_for_rent_or_charge"
+        ],
+        "expected": [
+          "entrusted_for_transportation_for_hire",
+          "entrusted_for_storage_for_rent_or_charge",
+          "criminal_breach_of_trust"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.663
+    },
+    {
+      "id": "s411-example1",
+      "section": "411",
+      "t1": {
+        "correct": true,
+        "predicted": "411",
+        "expected": "411"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "knowledge",
+          "receiving",
+          "stolen"
+        ],
+        "expected": [
+          "stolen",
+          "knowledge",
+          "receiving"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.724
+    },
+    {
+      "id": "s411-example2",
+      "section": "411",
+      "t1": {
+        "correct": false,
+        "predicted": "404",
+        "expected": "411"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.0,
+        "predicted": [],
+        "expected": [
+          "stolen",
+          "knowledge",
+          "receiving"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.702
+    },
+    {
+      "id": "s412-illustration",
+      "section": "412",
+      "t1": {
+        "correct": false,
+        "predicted": "403",
+        "expected": "412"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.5454545454545454,
+        "predicted": [
+          "exercised_reasonable_care_as_soon_as_practicable",
+          "reasonable_excuse_to_receive_or_retain",
+          "receives_or_retains_stolen_property"
+        ],
+        "expected": [
+          "receives_or_retains_stolen_property",
+          "knowledge_possession_transferred_by_gang_robbery",
+          "receives_property_from_person",
+          "knowledge_person_belongs_or_belonged_to_gang_robbers",
+          "knowledge_property_stolen",
+          "charge_under_subsection_1",
+          "reasonable_excuse_to_receive_or_retain",
+          "exercised_reasonable_care_as_soon_as_practicable"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.566
+    },
+    {
+      "id": "s415-classic",
+      "section": "415",
+      "t1": {
+        "correct": true,
+        "predicted": "415",
+        "expected": "415"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "deception",
+          "fraudulent",
+          "harm",
+          "inducement"
+        ],
+        "expected": [
+          "deception",
+          "fraudulent",
+          "inducement",
+          "harm"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.555
+    },
+    {
+      "id": "s415-example1",
+      "section": "415",
+      "t1": {
+        "correct": true,
+        "predicted": "415",
+        "expected": "415"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.888888888888889,
+        "predicted": [
+          "deception",
+          "dishonest",
+          "fraudulent",
+          "inducement"
+        ],
+        "expected": [
+          "deception",
+          "fraudulent",
+          "dishonest",
+          "inducement",
+          "harm"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.568
+    },
+    {
+      "id": "s415-example2",
+      "section": "415",
+      "t1": {
+        "correct": true,
+        "predicted": "415",
+        "expected": "415"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.888888888888889,
+        "predicted": [
+          "deception",
+          "dishonest",
+          "fraudulent",
+          "inducement"
+        ],
+        "expected": [
+          "deception",
+          "fraudulent",
+          "dishonest",
+          "inducement",
+          "harm"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.44
+    },
+    {
+      "id": "s415-example3",
+      "section": "415",
+      "t1": {
+        "correct": true,
+        "predicted": "415",
+        "expected": "415"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.888888888888889,
+        "predicted": [
+          "deception",
+          "dishonest",
+          "fraudulent",
+          "inducement"
+        ],
+        "expected": [
+          "deception",
+          "fraudulent",
+          "dishonest",
+          "inducement",
+          "harm"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.364
+    },
+    {
+      "id": "s415-no-deception",
+      "section": "415",
+      "t1": {
+        "correct": true,
+        "predicted": "415",
+        "expected": "415"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [],
+        "expected": []
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.154
+    },
+    {
+      "id": "s416-illustration-a",
+      "section": "416",
+      "t1": {
+        "correct": false,
+        "predicted": "415",
+        "expected": "416"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.7499999999999999,
+        "predicted": [
+          "cheating",
+          "false_representation_of_identity",
+          "pretending_other_person"
+        ],
+        "expected": [
+          "cheating",
+          "pretending_other_person",
+          "knowledge",
+          "substitution",
+          "false_representation_of_identity"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.249
+    },
+    {
+      "id": "s416-illustration-b",
+      "section": "416",
+      "t1": {
+        "correct": false,
+        "predicted": "419",
+        "expected": "416"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.7499999999999999,
+        "predicted": [
+          "cheating",
+          "false_representation_of_identity",
+          "pretending_other_person"
+        ],
+        "expected": [
+          "cheating",
+          "pretending_other_person",
+          "knowledge",
+          "substitution",
+          "false_representation_of_identity"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.457
+    },
+    {
+      "id": "s420-cheating-property",
+      "section": "420",
+      "t1": {
+        "correct": false,
+        "predicted": "415",
+        "expected": "420"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.888888888888889,
+        "predicted": [
+          "deception",
+          "fraudulent",
+          "harm",
+          "inducement"
+        ],
+        "expected": [
+          "deception",
+          "fraudulent",
+          "inducement",
+          "delivery",
+          "harm"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.156
+    },
+    {
+      "id": "s420A-illustration-a",
+      "section": "420A",
+      "t1": {
+        "correct": false,
+        "predicted": "415",
+        "expected": "420A"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.33333333333333337,
+        "predicted": [
+          "obtaining_services"
+        ],
+        "expected": [
+          "obtaining_services",
+          "dishonestly",
+          "fraudulently",
+          "payment_basis",
+          "unpaid_or_not_paid_in_full"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.871
+    },
+    {
+      "id": "s425-illustration-a",
+      "section": "425",
+      "t1": {
+        "correct": true,
+        "predicted": "425",
+        "expected": "425"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "change_in_property",
+          "destruction_of_property",
+          "intent_to_cause_wrongful_loss_or_damage",
+          "knowledge_of_likely_wrongful_loss_or_damage"
+        ],
+        "expected": [
+          "intent_to_cause_wrongful_loss_or_damage",
+          "knowledge_of_likely_wrongful_loss_or_damage",
+          "destruction_of_property",
+          "change_in_property"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 3.072
+    },
+    {
+      "id": "s425-illustration-c",
+      "section": "425",
+      "t1": {
+        "correct": true,
+        "predicted": "425",
+        "expected": "425"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.8571428571428571,
+        "predicted": [
+          "change_in_property",
+          "intent_to_cause_wrongful_loss_or_damage",
+          "knowledge_of_likely_wrongful_loss_or_damage"
+        ],
+        "expected": [
+          "intent_to_cause_wrongful_loss_or_damage",
+          "knowledge_of_likely_wrongful_loss_or_damage",
+          "destruction_of_property",
+          "change_in_property"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 4.557
+    },
+    {
+      "id": "s425-illustration-d",
+      "section": "425",
+      "t1": {
+        "correct": false,
+        "predicted": "426",
+        "expected": "425"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.8571428571428571,
+        "predicted": [
+          "destruction_of_property",
+          "intent_to_cause_wrongful_loss_or_damage",
+          "knowledge_of_likely_wrongful_loss_or_damage"
+        ],
+        "expected": [
+          "intent_to_cause_wrongful_loss_or_damage",
+          "knowledge_of_likely_wrongful_loss_or_damage",
+          "destruction_of_property",
+          "change_in_property"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.601
+    },
+    {
+      "id": "s425-illustration-e",
+      "section": "425",
+      "t1": {
+        "correct": true,
+        "predicted": "425",
+        "expected": "425"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.8571428571428571,
+        "predicted": [
+          "change_in_property",
+          "intent_to_cause_wrongful_loss_or_damage",
+          "knowledge_of_likely_wrongful_loss_or_damage"
+        ],
+        "expected": [
+          "intent_to_cause_wrongful_loss_or_damage",
+          "knowledge_of_likely_wrongful_loss_or_damage",
+          "destruction_of_property",
+          "change_in_property"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.664
+    },
+    {
+      "id": "s425-illustration-f",
+      "section": "425",
+      "t1": {
+        "correct": true,
+        "predicted": "425",
+        "expected": "425"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.8571428571428571,
+        "predicted": [
+          "change_in_property",
+          "intent_to_cause_wrongful_loss_or_damage",
+          "knowledge_of_likely_wrongful_loss_or_damage"
+        ],
+        "expected": [
+          "intent_to_cause_wrongful_loss_or_damage",
+          "knowledge_of_likely_wrongful_loss_or_damage",
+          "destruction_of_property",
+          "change_in_property"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.586
+    },
+    {
+      "id": "s425-illustration-g",
+      "section": "425",
+      "t1": {
+        "correct": true,
+        "predicted": "425",
+        "expected": "425"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.8571428571428571,
+        "predicted": [
+          "destruction_of_property",
+          "intent_to_cause_wrongful_loss_or_damage",
+          "knowledge_of_likely_wrongful_loss_or_damage"
+        ],
+        "expected": [
+          "intent_to_cause_wrongful_loss_or_damage",
+          "knowledge_of_likely_wrongful_loss_or_damage",
+          "destruction_of_property",
+          "change_in_property"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.737
+    },
+    {
+      "id": "s425-mischief",
+      "section": "425",
+      "t1": {
+        "correct": false,
+        "predicted": "426",
+        "expected": "425"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.8,
+        "predicted": [
+          "destruction",
+          "intent_damage"
+        ],
+        "expected": [
+          "destruction",
+          "intent_damage",
+          "harm"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.458
+    },
+    {
+      "id": "s427-illustration-a",
+      "section": "427",
+      "t1": {
+        "correct": true,
+        "predicted": "427",
+        "expected": "427"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "causes_disruption_to_government_or_public_agency",
+          "causes_disruption_to_key_service",
+          "commits_mischief",
+          "knowledge_of_likely_disruption_to_government",
+          "knowledge_of_likely_disruption_to_key_service",
+          "likely_disruption_to_government_or_public_agency",
+          "likely_disruption_to_key_service"
+        ],
+        "expected": [
+          "commits_mischief",
+          "causes_disruption_to_key_service",
+          "knowledge_of_likely_disruption_to_key_service",
+          "likely_disruption_to_key_service",
+          "causes_disruption_to_government_or_public_agency",
+          "knowledge_of_likely_disruption_to_government",
+          "likely_disruption_to_government_or_public_agency"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 3.072
+    },
+    {
+      "id": "s427-illustration-b",
+      "section": "427",
+      "t1": {
+        "correct": false,
+        "predicted": "425",
+        "expected": "427"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.7272727272727273,
+        "predicted": [
+          "causes_disruption_to_government_or_public_agency",
+          "commits_mischief",
+          "knowledge_of_likely_disruption_to_government",
+          "likely_disruption_to_government_or_public_agency"
+        ],
+        "expected": [
+          "commits_mischief",
+          "causes_disruption_to_key_service",
+          "knowledge_of_likely_disruption_to_key_service",
+          "likely_disruption_to_key_service",
+          "causes_disruption_to_government_or_public_agency",
+          "knowledge_of_likely_disruption_to_government",
+          "likely_disruption_to_government_or_public_agency"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 3.688
+    },
+    {
+      "id": "s427-illustration-c",
+      "section": "427",
+      "t1": {
+        "correct": false,
+        "predicted": "425",
+        "expected": "427"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.7272727272727273,
+        "predicted": [
+          "causes_disruption_to_key_service",
+          "commits_mischief",
+          "knowledge_of_likely_disruption_to_key_service",
+          "likely_disruption_to_key_service"
+        ],
+        "expected": [
+          "commits_mischief",
+          "causes_disruption_to_key_service",
+          "knowledge_of_likely_disruption_to_key_service",
+          "likely_disruption_to_key_service",
+          "causes_disruption_to_government_or_public_agency",
+          "knowledge_of_likely_disruption_to_government",
+          "likely_disruption_to_government_or_public_agency"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.972
+    },
+    {
+      "id": "s441-criminal-trespass",
+      "section": "441",
+      "t1": {
+        "correct": true,
+        "predicted": "441",
+        "expected": "441"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "entry",
+          "intent_intimidate",
+          "without_consent"
+        ],
+        "expected": [
+          "entry",
+          "intent_intimidate",
+          "without_consent"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.658
+    },
+    {
+      "id": "s463-example1",
+      "section": "463",
+      "t1": {
+        "correct": true,
+        "predicted": "463",
+        "expected": "463"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.5,
+        "predicted": [
+          "intent_fraud",
+          "making"
+        ],
+        "expected": [
+          "making",
+          "intent_damage",
+          "intent_support",
+          "intent_property",
+          "intent_contract",
+          "intent_fraud"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 3.285
+    },
+    {
+      "id": "s463-example2",
+      "section": "463",
+      "t1": {
+        "correct": true,
+        "predicted": "463",
+        "expected": "463"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.5,
+        "predicted": [
+          "intent_fraud",
+          "making"
+        ],
+        "expected": [
+          "making",
+          "intent_damage",
+          "intent_support",
+          "intent_property",
+          "intent_contract",
+          "intent_fraud"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.143
+    },
+    {
+      "id": "s463-example3",
+      "section": "463",
+      "t1": {
+        "correct": true,
+        "predicted": "463",
+        "expected": "463"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.5,
+        "predicted": [
+          "intent_fraud",
+          "making"
+        ],
+        "expected": [
+          "making",
+          "intent_damage",
+          "intent_support",
+          "intent_property",
+          "intent_contract",
+          "intent_fraud"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.359
+    },
+    {
+      "id": "s463-forgery",
+      "section": "463",
+      "t1": {
+        "correct": true,
+        "predicted": "463",
+        "expected": "463"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "false_document",
+          "intent_to_deceive",
+          "making"
+        ],
+        "expected": [
+          "making",
+          "false_document",
+          "intent_to_deceive"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.25
+    },
+    {
+      "id": "s465-example1",
+      "section": "465",
+      "t1": {
+        "correct": false,
+        "predicted": "463",
+        "expected": "465"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "conviction",
+          "forgery_committed"
+        ],
+        "expected": [
+          "forgery_committed",
+          "conviction"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.154
+    },
+    {
+      "id": "s499-defamation",
+      "section": "499",
+      "t1": {
+        "correct": true,
+        "predicted": "499",
+        "expected": "499"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "harm_reputation",
+          "imputation",
+          "publication"
+        ],
+        "expected": [
+          "imputation",
+          "publication",
+          "harm_reputation"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.15
+    },
+    {
+      "id": "s499-example1",
+      "section": "499",
+      "t1": {
+        "correct": true,
+        "predicted": "499",
+        "expected": "499"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.7499999999999999,
+        "predicted": [
+          "harm",
+          "imputation",
+          "intent"
+        ],
+        "expected": [
+          "imputation",
+          "method",
+          "intent",
+          "knowledge",
+          "harm"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.366
+    },
+    {
+      "id": "s499-example2",
+      "section": "499",
+      "t1": {
+        "correct": true,
+        "predicted": "499",
+        "expected": "499"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.0,
+        "predicted": [],
+        "expected": [
+          "imputation",
+          "method",
+          "intent",
+          "knowledge",
+          "harm"
+        ]
+      },
+      "t3": {
+        "correct": false,
+        "predicted": "public_conduct_exception",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.141
+    },
+    {
+      "id": "s499-example3",
+      "section": "499",
+      "t1": {
+        "correct": true,
+        "predicted": "499",
+        "expected": "499"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.0,
+        "predicted": [],
+        "expected": [
+          "imputation",
+          "method",
+          "intent",
+          "knowledge",
+          "harm"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 1.838
+    },
+    {
+      "id": "s503-example1",
+      "section": "503",
+      "t1": {
+        "correct": false,
+        "predicted": "405",
+        "expected": "503"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.6666666666666666,
+        "predicted": [
+          "dishonesty",
+          "misappropriate",
+          "trust"
+        ],
+        "expected": [
+          "trust",
+          "dishonesty",
+          "misappropriate",
+          "convert",
+          "violate_law",
+          "violate_contract"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.151
+    },
+    {
+      "id": "s503-example2",
+      "section": "503",
+      "t1": {
+        "correct": false,
+        "predicted": "405",
+        "expected": "503"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.6666666666666666,
+        "predicted": [
+          "dishonesty",
+          "misappropriate",
+          "trust"
+        ],
+        "expected": [
+          "trust",
+          "dishonesty",
+          "misappropriate",
+          "convert",
+          "violate_law",
+          "violate_contract"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 3.694
+    },
+    {
+      "id": "s503-example3",
+      "section": "503",
+      "t1": {
+        "correct": false,
+        "predicted": "405",
+        "expected": "503"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.8,
+        "predicted": [
+          "convert",
+          "dishonesty",
+          "misappropriate",
+          "trust"
+        ],
+        "expected": [
+          "trust",
+          "dishonesty",
+          "misappropriate",
+          "convert",
+          "violate_law",
+          "violate_contract"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.553
+    },
+    {
+      "id": "s506-criminal-intimidation",
+      "section": "506",
+      "t1": {
+        "correct": true,
+        "predicted": "506",
+        "expected": "506"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "alarm_effect",
+          "intent_alarm",
+          "threat"
+        ],
+        "expected": [
+          "threat",
+          "intent_alarm",
+          "alarm_effect"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.295
+    },
+    {
+      "id": "s512-illustration-a",
+      "section": "512",
+      "t1": {
+        "correct": false,
+        "predicted": "365",
+        "expected": "512"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.5,
+        "predicted": [
+          "attempts_offence",
+          "punishment_fixed_by_law",
+          "specified_minimum_sentence"
+        ],
+        "expected": [
+          "attempts_offence",
+          "no_express_provision",
+          "attempts_other_offence",
+          "offence_in_subsection_2",
+          "punishment_fixed_by_law",
+          "specified_minimum_sentence",
+          "mandatory_minimum_imprisonment",
+          "mandatory_minimum_fine",
+          "mandatory_minimum_caning"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.416
+    },
+    {
+      "id": "s512-illustration-b",
+      "section": "512",
+      "t1": {
+        "correct": false,
+        "predicted": "393",
+        "expected": "512"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.0,
+        "predicted": [
+          "attempts_offence",
+          "mandatory_minimum_imprisonment",
+          "no_express_provision"
+        ],
+        "expected": []
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.047
+    },
+    {
+      "id": "s76-illustration-a",
+      "section": "76",
+      "t1": {
+        "correct": true,
+        "predicted": "76",
+        "expected": "76"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.0,
+        "predicted": [
+          "bound_by_law",
+          "justified_by_law"
+        ],
+        "expected": []
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.253
+    },
+    {
+      "id": "s76-illustration-b",
+      "section": "76",
+      "t1": {
+        "correct": false,
+        "predicted": "97",
+        "expected": "76"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.0,
+        "predicted": [
+          "bound_by_law",
+          "justified_by_law"
+        ],
+        "expected": []
+      },
+      "t3": {
+        "correct": false,
+        "predicted": "self_defense",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.564
+    },
+    {
+      "id": "s79-illustration-a",
+      "section": "79",
+      "t1": {
+        "correct": false,
+        "predicted": "97",
+        "expected": "79"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.0,
+        "predicted": [
+          "act_done",
+          "good_faith_belief"
+        ],
+        "expected": []
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.044
+    },
+    {
+      "id": "s79-illustration-b",
+      "section": "79",
+      "t1": {
+        "correct": false,
+        "predicted": "76",
+        "expected": "79"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.0,
+        "predicted": [
+          "act_done",
+          "good_faith_belief",
+          "no_written_law_override"
+        ],
+        "expected": []
+      },
+      "t3": {
+        "correct": false,
+        "predicted": "self_defence",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.604
+    },
+    {
+      "id": "s79-illustration-c",
+      "section": "79",
+      "t1": {
+        "correct": false,
+        "predicted": "76",
+        "expected": "79"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.0,
+        "predicted": [
+          "act_done",
+          "good_faith_belief",
+          "no_written_law_override"
+        ],
+        "expected": []
+      },
+      "t3": {
+        "correct": false,
+        "predicted": "self_defence",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.925
+    },
+    {
+      "id": "s79-illustration-d",
+      "section": "79",
+      "t1": {
+        "correct": true,
+        "predicted": "79",
+        "expected": "79"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.0,
+        "predicted": [
+          "act_done",
+          "good_faith_belief"
+        ],
+        "expected": []
+      },
+      "t3": {
+        "correct": false,
+        "predicted": "self_defence",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.462
+    },
+    {
+      "id": "s79-illustration-e",
+      "section": "79",
+      "t1": {
+        "correct": false,
+        "predicted": "76",
+        "expected": "79"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.0,
+        "predicted": [
+          "act_done",
+          "alleged_mistake_of_fact",
+          "good_faith_belief"
+        ],
+        "expected": []
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.313
+    },
+    {
+      "id": "s79-illustration-f",
+      "section": "79",
+      "t1": {
+        "correct": false,
+        "predicted": "378",
+        "expected": "79"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.7692307692307693,
+        "predicted": [
+          "alleged_ignorance_of_fact",
+          "alleged_mistake_of_fact",
+          "good_faith_belief",
+          "ignorance_of_fact",
+          "mistake_of_fact"
+        ],
+        "expected": [
+          "no_written_law_override",
+          "act_done",
+          "mistake_of_fact",
+          "ignorance_of_fact",
+          "good_faith_belief",
+          "alleged_mistake_of_fact",
+          "alleged_ignorance_of_fact",
+          "prosecution_proves_fault"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 3.419
+    },
+    {
+      "id": "s80-illustration-a",
+      "section": "80",
+      "t1": {
+        "correct": true,
+        "predicted": "80",
+        "expected": "80"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.8,
+        "predicted": [
+          "alleged_act_done_by_accident_or_misfortune",
+          "alleged_act_may_negate_fault_element"
+        ],
+        "expected": [
+          "alleged_act_done_by_accident_or_misfortune",
+          "alleged_act_may_negate_fault_element",
+          "prosecution_proves_fault"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.765
+    },
+    {
+      "id": "s80-illustration-b",
+      "section": "80",
+      "t1": {
+        "correct": false,
+        "predicted": "304A",
+        "expected": "80"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.8,
+        "predicted": [
+          "alleged_act_done_by_accident_or_misfortune",
+          "alleged_act_may_negate_fault_element"
+        ],
+        "expected": [
+          "alleged_act_done_by_accident_or_misfortune",
+          "alleged_act_may_negate_fault_element",
+          "prosecution_proves_fault"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.459
+    },
+    {
+      "id": "s81-illustration-a",
+      "section": "81",
+      "t1": {
+        "correct": true,
+        "predicted": "81",
+        "expected": "81"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.0,
+        "predicted": [
+          "act_likely_to_cause_harm",
+          "good_faith",
+          "justified_risk",
+          "knowledge_likely_harm",
+          "preventive_purpose"
+        ],
+        "expected": []
+      },
+      "t3": {
+        "correct": false,
+        "predicted": "self_defense",
+        "expected": "none"
+      },
+      "elapsed_seconds": 3.58
+    },
+    {
+      "id": "s81-illustration-b",
+      "section": "81",
+      "t1": {
+        "correct": true,
+        "predicted": "81",
+        "expected": "81"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.0,
+        "predicted": [
+          "act_likely_to_cause_harm",
+          "good_faith",
+          "justified_risk",
+          "preventive_purpose"
+        ],
+        "expected": []
+      },
+      "t3": {
+        "correct": false,
+        "predicted": "self_defense",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.56
+    },
+    {
+      "id": "s81-illustration-c",
+      "section": "81",
+      "t1": {
+        "correct": true,
+        "predicted": "81",
+        "expected": "81"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.0,
+        "predicted": [
+          "act_likely_to_cause_harm",
+          "good_faith",
+          "justified_risk",
+          "knowledge_likely_harm",
+          "preventive_purpose"
+        ],
+        "expected": []
+      },
+      "t3": {
+        "correct": false,
+        "predicted": "self_defence",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.882
+    },
+    {
+      "id": "s84-illustration-a",
+      "section": "84",
+      "t1": {
+        "correct": false,
+        "predicted": "300",
+        "expected": "84"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.0,
+        "predicted": [
+          "act_done",
+          "contrary_to_law",
+          "deprived_control",
+          "incapable_nature",
+          "incapable_wrong"
+        ],
+        "expected": []
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.648
+    },
+    {
+      "id": "s87-illustration",
+      "section": "87",
+      "t1": {
+        "correct": true,
+        "predicted": "87",
+        "expected": "87"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.0,
+        "predicted": [
+          "act_causing_harm",
+          "consent_to_suffer_harm",
+          "consent_to_take_risk",
+          "no_intention_death_or_grievous_hurt",
+          "no_knowledge_likely_death_or_grievous_hurt",
+          "person_above_18"
+        ],
+        "expected": []
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 3.279
+    },
+    {
+      "id": "s88-illustration-1",
+      "section": "88",
+      "t1": {
+        "correct": true,
+        "predicted": "88",
+        "expected": "88"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.0,
+        "predicted": [
+          "benefit",
+          "express_consent_given",
+          "good_faith",
+          "harm_known_likely",
+          "no_intention_to_cause_death",
+          "qualifying_act"
+        ],
+        "expected": []
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.455
+    },
+    {
+      "id": "s89-illustration-1",
+      "section": "89",
+      "t1": {
+        "correct": false,
+        "predicted": "299",
+        "expected": "89"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.8,
+        "predicted": [
+          "benefit",
+          "by_guardian_or_lawful_charge",
+          "good_faith",
+          "harm_caused",
+          "harm_known_likely",
+          "qualifying_act"
+        ],
+        "expected": [
+          "qualifying_act",
+          "good_faith",
+          "benefit",
+          "by_guardian_or_lawful_charge",
+          "express_guardian_consent",
+          "implied_guardian_consent",
+          "harm_caused",
+          "harm_intended",
+          "harm_known_likely"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.253
+    },
+    {
+      "id": "s92-illustration-a",
+      "section": "92",
+      "t1": {
+        "correct": false,
+        "predicted": "88",
+        "expected": "92"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.0,
+        "predicted": [
+          "beneficiary",
+          "good_faith",
+          "impossible_to_signify_consent",
+          "incapable_of_giving_consent",
+          "qualifying_act",
+          "without_consent"
+        ],
+        "expected": []
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.868
+    },
+    {
+      "id": "s92-illustration-c",
+      "section": "92",
+      "t1": {
+        "correct": false,
+        "predicted": "88",
+        "expected": "92"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.0,
+        "predicted": [
+          "beneficiary",
+          "good_faith",
+          "impossible_to_signify_consent",
+          "no_guardian_or_lawful_charge_available",
+          "qualifying_act",
+          "without_consent"
+        ],
+        "expected": []
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.564
+    },
+    {
+      "id": "s92-illustration-d",
+      "section": "92",
+      "t1": {
+        "correct": false,
+        "predicted": "76",
+        "expected": "92"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.0,
+        "predicted": [
+          "beneficiary",
+          "good_faith",
+          "impossible_to_signify_consent",
+          "incapable_of_giving_consent"
+        ],
+        "expected": []
+      },
+      "t3": {
+        "correct": false,
+        "predicted": "exception_for_good_faith_benefit",
+        "expected": "none"
+      },
+      "elapsed_seconds": 3.273
+    }
+  ],
+  "not_legal_advice": true
+}

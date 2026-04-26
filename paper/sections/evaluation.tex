@@ -514,24 +514,51 @@ hand-authored, carrying polarity-negative variants
 (\texttt{s415-no-deception}, \texttt{s378-with-consent}) and
 edge cases the canonical illustrations skip.
 
-\paragraph{Headline numbers.} The runner is single-file and ships
+\paragraph{Runner.} The runner is single-file and ships
 three \texttt{BenchmarkClient} implementations: the Anthropic SDK,
 the OpenAI SDK (compatible out of the box with org-scoped keys
 and OpenAI-wire-compatible proxies via
 \texttt{OPENAI\_BASE\_URL}), and a deterministic
 \texttt{FakeClient} for CI. End-to-end with the
 \texttt{FakeClient}, every fixture scores 100\% on every task
---- confirming the loader / scorer / report pipeline. Real-LLM
-baselines against \emph{Claude Sonnet 4.6}, \emph{Claude Opus
-4.7}, \emph{GPT-4o}, and an open-weights reference are deferred
-from this trench's scope; the runner emits the full per-fixture
-JSON plus stratified accuracy slices (per chapter, per category,
-per difficulty, per polarity), so once the API keys land, the
-headline numbers reduce to one command. We list the stratification axes here as a
-contract for the deferred run rather than a measurement, in the
-spirit of the rest of \S\ref{sec:evaluation}: the paper is the
-record of what the toolchain measures, even when the measurement
-itself is queued.
+--- confirming the loader / scorer / report pipeline.
+
+\paragraph{Headline numbers.}
+A baseline run against \statBenchmarkLlmModel{} on the full
+$n = \statBenchmarkFixtures{}$ fixtures gives the following
+headline accuracies:
+\textbf{T1 (section identification): \statBenchmarkLlmTone{}\%},
+\textbf{T2 (element-set, closed vocabulary): \statBenchmarkLlmTtwo{}\% exact}
+with mean F1 \statBenchmarkLlmTtwoFOne{},
+\textbf{T3 (exception citation): \statBenchmarkLlmTthree{}\%}.
+Three observations:
+
+(i) T3 is genuinely strong --- the model reliably identifies
+when no exception fires (the modal answer in the corpus). The
+\statBenchmarkLlmTthree{}\% figure should be read against the
+fact that ``\texttt{none}'' is the correct T3 answer for
+$\sim$95\% of fixtures, so this measures negative-case
+calibration more than affirmative-exception recall.
+
+(ii) T2's F1 of \statBenchmarkLlmTtwoFOne{} is the closed-vocab
+result: the prompt presents the section's encoded element names
+as a fixed list and the model picks a subset. Exact-set match
+(\statBenchmarkLlmTtwo{}\%) is harder than F1 because partial
+overlap is common --- the model often correctly identifies most
+elements but adds or drops one.
+
+(iii) Polarity-negative fixtures
+(scenarios where ground truth is the empty element set) collapse
+T1 to \statBenchmarkLlmNegPolarTone{}\% and T2's F1 to
+\statBenchmarkLlmNegPolarFOne{} --- the model is systematically
+biased toward producing \emph{some} satisfied elements rather
+than identifying that none fire. This is itself an informative
+finding for downstream legal-AI work: structural-reasoning
+prompts on negative cases need polarity priming or chain-of-
+thought scaffolding to recover. The runner emits the full
+per-fixture JSON plus stratified accuracy slices (per chapter,
+per category, per difficulty, per polarity), so reproducing the
+result against a different model is one command.
 
 \paragraph{Caveats.} Three. First, the benchmark probes
 \emph{structural} agreement with the encoded statute, not legal
