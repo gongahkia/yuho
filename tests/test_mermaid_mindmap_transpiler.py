@@ -165,6 +165,23 @@ def test_indentation_two_spaces():
     assert elements_line.startswith("    ")
 
 
+def test_subsection_numbers_emit_single_brackets():
+    """Regression: SubsectionNode.number already carries parens; the
+    transpiler must not double-wrap them or the sanitiser produces the
+    `[[1]]` doubled-decorator that the Mermaid mindmap parser rejects."""
+    out = _emit('''
+        statute 101 "Demo" {
+          subsection (1) { elements { actus_reus a := "x"; } }
+          subsection (2) { elements { actus_reus a := "y"; } }
+        }
+    ''')
+    assert "[[1]]" not in out  # the bug we're guarding against
+    assert "[[2]]" not in out
+    # Single-bracket form is what Mermaid mindmap accepts.
+    assert "[1]" in out
+    assert "[2]" in out
+
+
 def test_no_unescaped_parentheses_break_parser():
     """Free-form description text with parens shouldn't crash the parser."""
     out = _emit('''
