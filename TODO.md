@@ -270,6 +270,40 @@ correctness theorem** (§6) means:
       pen-and-paper §6.2 carries the soundness claim alone. The
       paper still ships.
 
+### Reproducibility artefact (AEC-grade) `[ ]`
+
+The audit flagged this as **essential since ~2015** at top-tier
+venues (POPL / PLDI / OOPSLA / CAV ship "Available + Functional +
+Reusable" badges; AI&L journal submissions are increasingly
+expected to include the same). Yuho currently has
+`paper/reproducibility/` with stats scripts, but no
+containerisation or Zenodo DOI.
+
+- [ ] **Dockerfile** that boots a clean image with the full
+      toolchain (Python + tree-sitter + Z3 + xmllint) and a
+      one-command driver (`make paper-reproduce`) that
+      regenerates every figure, table, and stratified breakdown
+      in the paper.
+- [ ] **Zenodo deposit** of the v1.0 corpus (encoded `.yh`
+      files + `_corpus/` SVG cache + benchmark fixtures + AKN
+      XSD) with a citable DOI.
+- [ ] Reproducibility README (one-screen) at `paper/REPRODUCE.md`
+      pointing at the Dockerfile, the Zenodo DOI, and the four
+      headline-claim verification commands (corpus build, AKN
+      round-trip, evals fake-run, contrast bulk run).
+- [ ] Lightweight: this is plumbing work, not research. Two days
+      total once the manuscript is drafted.
+
+### Risk register
+
+| Risk | Mitigation |
+|---|---|
+| Gap 5 mechanisation overruns | §6.3 demotes to future-work pointer; §6.2 pen-and-paper carries the soundness claim alone |
+| External counsel availability slips Gap 3 | Reduce sample from 30 → 20 sections; cite limitation in §7.7 |
+| IPC/MPC text access blocked (paywall, robots.txt change) | Switch to the Bangladeshi PC 1860 (also Anglo-Indian lineage, public-domain text) |
+| AI&L editorial rejection | Re-target *Formal Aspects of Computing* (legal-tech amenable) or ICAIL (page budget tighter but acceptable) |
+| Case-law sample for §7.8 has too few clean single-charge cases | Widen to multi-charge cases; score per-charge top-k accuracy; drop the "single charge" cleanliness constraint |
+
 ### Cross-cutting notes
 
 The §4 + §6 (formal semantics + soundness) layer is the **rigor
@@ -286,6 +320,12 @@ The biggest single risk is Gap 5 (mechanisation) — it's the only
 item that has no incremental fallback if it overruns; if the
 mechanisation goes sideways the paper still ships with §6.3 as a
 future-work pointer.
+
+**Overlap with deferred sections:** §8 supersedes Phase 2c
+Direction A (Cross-jurisdiction PC port) — the Direction-A
+bullets below are absorbed into §8. §7.7 supersedes the L3
+long-tail external-counsel-review bullets — the external review
+is now a paper section, not a deferred item.
 
 ---
 
@@ -413,16 +453,13 @@ ship-readiness pass.
 
 ---
 
-## L3 long tail `(def)`
+## L3 long tail `(superseded by §7.7)`
 
-L3 author-stamping is at 524/524. Outstanding work is **external
-counsel review** — a Singapore-qualified lawyer auditing a sample
-of stamped encodings — which the paper §7 explicitly reserves.
-
-- [ ] Identify a target sample size (e.g. 30 sections across chapters
-      II / IV / XVI / XVII / XX) for external review.
-- [ ] Engage external counsel; capture findings as `_L3_FLAG.md` files;
-      run `scripts/apply_flag_fix.py` to address each flag.
+L3 author-stamping is at 524/524. The external-counsel-review
+work has been promoted into the paper as `§7.7 of the paper —
+External Singapore-counsel L3 audit` (under PhD-rigor hardening).
+This section retained as a back-link only; do not track work
+here.
 
 ---
 
@@ -573,27 +610,12 @@ hold throughout: each must hinge on the encoded library + the DSL
 + the existing Z3/Alloy/MCP surface, and target researchers, law
 students, or legal engineers.
 
-#### Direction A — Cross-jurisdiction PC port
+#### Direction A — Cross-jurisdiction PC port `(superseded by §8)`
 
-The Indian Penal Code 1860 and the Malaysian Penal Code (Act 574)
-share the 1860/1871 Anglo-Indian lineage with Singapore's PC. Encode
-the IPC (or MPC — pick the one with cleaner online text) at full
-524+-section L1+L2 coverage; keep Yuho's grammar fixed.
-
-- [ ] Run the SSO scrape harness against the equivalent IPC source
-      (India Code or AdvocateKhoj). Land a per-section JSON corpus
-      mirroring `library/penal_code/_raw/`.
-- [ ] Encode every IPC section as `library/indian_penal_code/sNNN/
-      statute.yh`, dispatching agents the same way `apply_flag_fix.py`
-      does for the SG PC.
-- [ ] Comparative graph build: a single tool that constructs SCC +
-      semantic-graph reports across both libraries, surfacing
-      structural divergences (which sections were renumbered, which
-      gained/lost subsumes edges, which exception priorities flipped).
-- [ ] **Paper claim:** "Comparative encoded penal codes: shared
-      structure, divergent amendment trajectories." Headline figure:
-      side-by-side SCC overlap diagram, plus a divergence-over-time
-      chart if Phase 2a is also live.
+This work has been promoted into the paper as `§8 of the paper —
+Cross-jurisdiction comparative encoding` (under PhD-rigor
+hardening). This section retained as a back-link only; do not
+track work here.
 
 #### Direction B — Counter-factual edge-case explorer `[x]`
 
