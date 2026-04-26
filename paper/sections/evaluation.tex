@@ -243,13 +243,15 @@ artefact: 499 of 524 first-commits are concentrated on a single
 calendar day (2026-04-24) per
 \texttt{paper/methodology/throughput.json}, so the 1-day median is a
 property of the parallel dispatcher run, not of the DSL's encoding
-ergonomics. The \texttt{throughput.json} file also records a
-\texttt{min} of $-1$ days for one section, which indicates a
-\texttt{last\_verified} stamp written before the matching first commit
-in git history; we have not yet root-caused this and flag it as an
-open measurement-pipeline bug. The defensible cost number is the
-\emph{per-section agent compute time}, not the calendar lag, and we
-report it next.
+ergonomics. The \texttt{throughput.json} file also records 13 sections
+with a \texttt{last\_verified} stamp dated one day \emph{before} the
+matching first commit in git history --- the encoder stamped during
+the session and committed the next calendar day. We surface those as
+a separate \texttt{pre\_commit\_stamps} count and clamp the per-section
+delta to a floor of zero in the throughput statistic, so the stat
+measures unstamped-work lag rather than signed-time arithmetic.
+The defensible cost number is the \emph{per-section agent compute
+time}, not the calendar lag, and we report it next.
 
 \paragraph{Per-section agent compute (the real cost driver).} The
 Phase~D agent regime processed all 524 sections in $\sim$3.5 hours of

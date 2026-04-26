@@ -180,6 +180,7 @@ def encoding_throughput() -> Dict[str, Any]:
     encoding_dates: List[_dt.datetime] = []
     stamp_dates: List[_dt.date] = []
     encoding_to_stamp_days: List[float] = []
+    pre_commit_stamps: List[Dict[str, Any]] = []
 
     for d in sect_dirs:
         yh = d / "statute.yh"
@@ -206,8 +207,21 @@ def encoding_throughput() -> Dict[str, Any]:
                     except ValueError:
                         continue
                     stamp_dates.append(stamp_dt)
-                    delta = (stamp_dt - enc_dt.date()).days
-                    encoding_to_stamp_days.append(delta)
+                    raw_delta = (stamp_dt - enc_dt.date()).days
+                    # Clamp negative deltas to 0: a stamp dated one day
+                    # before the first commit is the encoder having
+                    # stamped during the session and committed the next
+                    # calendar day. The stat is a wall-clock proxy, not
+                    # a temporal-ordering claim. We surface the count of
+                    # such cases separately so the artefact stays honest.
+                    if raw_delta < 0:
+                        pre_commit_stamps.append({
+                            "section": d.name,
+                            "first_commit": first_iso,
+                            "stamp": stamp_str,
+                            "raw_delta_days": raw_delta,
+                        })
+                    encoding_to_stamp_days.append(max(raw_delta, 0))
             except Exception:
                 continue
 
@@ -241,6 +255,17 @@ def encoding_throughput() -> Dict[str, Any]:
         "last_encoding_date": max(encoding_dates).date().isoformat() if encoding_dates else None,
         "first_stamp_date": min(stamp_dates).isoformat() if stamp_dates else None,
         "last_stamp_date": max(stamp_dates).isoformat() if stamp_dates else None,
+        "pre_commit_stamps": {
+            "count": len(pre_commit_stamps),
+            "note": (
+                "Sections whose `last_verified` stamp predates the first git "
+                "commit on `statute.yh`. Cause: encoder stamped during the "
+                "session, committed the next calendar day. Clamped to 0 in "
+                "encoding_to_stamp_days so the stat reflects work-not-yet-"
+                "stamped lag, not signed-time arithmetic."
+            ),
+            "sample": pre_commit_stamps[:5],
+        },
     }
 
 

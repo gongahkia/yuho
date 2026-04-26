@@ -5,8 +5,8 @@
     "n": 524,
     "median": 1,
     "p95": 1,
-    "mean": 1.67,
-    "min": -1,
+    "mean": 1.7,
+    "min": 0,
     "max": 82
   },
   "daily_encoding_counts": [
@@ -30,5 +30,41 @@
   "first_encoding_date": "2026-02-01",
   "last_encoding_date": "2026-04-24",
   "first_stamp_date": "2026-03-08",
-  "last_stamp_date": "2026-04-25"
+  "last_stamp_date": "2026-04-25",
+  "pre_commit_stamps": {
+    "count": 13,
+    "note": "Sections whose `last_verified` stamp predates the first git commit on `statute.yh`. Cause: encoder stamped during the session, committed the next calendar day. Clamped to 0 in encoding_to_stamp_days so the stat reflects work-not-yet-stamped lag, not signed-time arithmetic.",
+    "sample": [
+      {
+        "section": "s302_punishment_for_murder",
+        "first_commit": "2026-03-11T00:18:28+08:00",
+        "stamp": "2026-03-10",
+        "raw_delta_days": -1
+      },
+      {
+        "section": "s304_culpable_homicide_not_amounting_to_murder",
+        "first_commit": "2026-03-11T00:18:28+08:00",
+        "stamp": "2026-03-10",
+        "raw_delta_days": -1
+      },
+      {
+        "section": "s321_voluntarily_causing_hurt",
+        "first_commit": "2026-03-11T00:18:28+08:00",
+        "stamp": "2026-03-10",
+        "raw_delta_days": -1
+      },
+      {
+        "section": "s323_punishment_for_voluntarily_causing_hurt",
+        "first_commit": "2026-03-11T00:18:28+08:00",
+        "stamp": "2026-03-10",
+        "raw_delta_days": -1
+      },
+      {
+        "section": "s325_voluntarily_causing_grievous_hurt",
+        "first_commit": "2026-03-11T00:18:28+08:00",
+        "stamp": "2026-03-10",
+        "raw_delta_days": -1
+      }
+    ]
+  }
 }
