@@ -1,0 +1,17 @@
+id: s499-defamation
+section: "499"
+scenario: |
+  A posts on a public Facebook group that B, a local restaurateur,
+  routinely re-uses old food and lies about ingredients. A has no
+  basis for the claim; A made it up because B had refused to refund
+  a meal. The post is read by hundreds of locals; some stop patronising
+  B's restaurant. The statement is false.
+ground_truth:
+  section: "499"
+  satisfied_elements: [imputation, publication, harm_reputation]
+  fired_exception: null
+fact_facts:
+  imputation: true
+  publication: true
+  harm_reputation: true
+tags: [chapter:xxi, category:reputation, difficulty:intermediate]

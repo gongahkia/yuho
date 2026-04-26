@@ -1,0 +1,18 @@
+id: s415-no-deception
+section: "415"
+scenario: |
+  B asks A whether a particular antique trinket is valuable. A
+  truthfully tells B that the trinket is worth roughly $20 and shows
+  B the appraisal certificate. B chooses to buy it anyway for $20.
+  B later regrets the purchase but the price was accurate and A did
+  not misrepresent anything.
+ground_truth:
+  section: "415"
+  satisfied_elements: []
+  fired_exception: null
+fact_facts:
+  deception: false
+  fraudulent: false
+  inducement: false
+  harm: false
+tags: [chapter:xvii, category:deception, difficulty:basic, polarity:negative]

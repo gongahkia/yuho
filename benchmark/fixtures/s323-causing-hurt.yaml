@@ -1,0 +1,16 @@
+id: s323-causing-hurt
+section: "323"
+scenario: |
+  In a hawker centre dispute over queue jumping, A slaps B across
+  the face. The slap is open-handed but firm enough that B's lip
+  swells and a small cut opens on B's gum. B feels physical pain
+  for several minutes. A acted intentionally and was not provoked
+  beyond the queue-related shoving.
+ground_truth:
+  section: "323"
+  satisfied_elements: [hurt, voluntariness]
+  fired_exception: null
+fact_facts:
+  hurt: true
+  voluntariness: true
+tags: [chapter:xvi, category:harm, difficulty:basic]

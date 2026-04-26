@@ -1,0 +1,18 @@
+id: s320-grievous-hurt
+section: "320"
+scenario: |
+  A swings a metal pipe at B's leg during a street fight. The blow
+  fractures B's femur. B is hospitalised for 18 days and requires
+  surgery to insert a metal rod. The fracture significantly impairs
+  B's mobility for the next six months. A intended to cause B
+  serious injury and the leg fracture is precisely the kind of
+  long-term injury contemplated.
+ground_truth:
+  section: "320"
+  satisfied_elements: [hurt_act, grievous_qualifier, voluntariness]
+  fired_exception: null
+fact_facts:
+  hurt_act: true
+  grievous_qualifier: true
+  voluntariness: true
+tags: [chapter:xvi, category:harm, difficulty:intermediate]

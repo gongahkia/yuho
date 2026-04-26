@@ -1,0 +1,18 @@
+id: s378-classic
+section: "378"
+scenario: |
+  A walks past a public umbrella stand outside a coffee shop. Without
+  asking anyone, A picks up B's distinctive blue umbrella from the
+  stand and carries it away, intending to keep it for personal use.
+  B did not consent to A taking the umbrella.
+ground_truth:
+  section: "378"
+  satisfied_elements: [intention, taking, possession, movement]
+  fired_exception: null
+fact_facts:
+  intention: true
+  taking: true
+  possession: true
+  consent: false
+  movement: true
+tags: [chapter:xvii, category:property, difficulty:basic]

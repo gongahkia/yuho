@@ -1,0 +1,18 @@
+id: s415-classic
+section: "415"
+scenario: |
+  A intentionally tells B that a particular antique trinket is a rare
+  piece worth several thousand dollars, when in fact A knows the
+  trinket is worthless mass-produced costume jewellery. Trusting A's
+  representation, B pays A $5,000 and takes the trinket home. B does
+  not learn the trinket is worthless until weeks later.
+ground_truth:
+  section: "415"
+  satisfied_elements: [deception, fraudulent, inducement, harm]
+  fired_exception: null
+fact_facts:
+  deception: true
+  fraudulent: true
+  inducement: true
+  harm: true
+tags: [chapter:xvii, category:deception, difficulty:basic]

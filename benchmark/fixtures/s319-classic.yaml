@@ -1,0 +1,18 @@
+id: s319-classic
+section: "319"
+scenario: |
+  Following a heated argument outside a bar, A swings a closed fist
+  and strikes B on the cheek. B immediately experiences sharp pain
+  and a bruise forms over the next few minutes. A intended the strike
+  to cause B pain. The two men are not engaged in any kind of mutual
+  combat or sport, and neither has provoked the other to lawful
+  defence.
+ground_truth:
+  section: "319"
+  satisfied_elements: [act, harm, voluntariness]
+  fired_exception: null
+fact_facts:
+  act: true
+  harm: true
+  voluntariness: true
+tags: [chapter:xvi, category:harm, difficulty:basic]

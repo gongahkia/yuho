@@ -1,0 +1,16 @@
+id: s354-outraging-modesty
+section: "354"
+scenario: |
+  In a crowded MRT carriage, A deliberately presses against B and
+  gropes B's body in a sexually suggestive manner over several stops.
+  B is plainly distressed but cannot move away due to the crowd.
+  A intended the contact and intended for B to feel violated.
+ground_truth:
+  section: "354"
+  satisfied_elements: [assault_or_force, intent_outrage, modesty_outraged]
+  fired_exception: null
+fact_facts:
+  assault_or_force: true
+  intent_outrage: true
+  modesty_outraged: true
+tags: [chapter:xvi, category:harm, difficulty:intermediate]

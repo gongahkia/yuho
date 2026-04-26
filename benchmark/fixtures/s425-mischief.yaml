@@ -1,0 +1,16 @@
+id: s425-mischief
+section: "425"
+scenario: |
+  A, angry about a noise complaint, walks up to B's parked car
+  carrying a brick and deliberately smashes the windshield. The
+  windshield is destroyed and the car is rendered un-driveable
+  until repaired. A intended the damage; B did not consent.
+ground_truth:
+  section: "425"
+  satisfied_elements: [destruction, intent_damage, harm]
+  fired_exception: null
+fact_facts:
+  destruction: true
+  intent_damage: true
+  harm: true
+tags: [chapter:xvii, category:property, difficulty:basic]

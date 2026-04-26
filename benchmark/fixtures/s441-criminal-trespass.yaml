@@ -1,0 +1,17 @@
+id: s441-criminal-trespass
+section: "441"
+scenario: |
+  A climbs over the fence into B's back garden at night without B's
+  permission, intending to scare B's family by smashing the windows
+  of the house. A is caught in the garden before reaching the house.
+  B never consented to A's entry and A's purpose was clearly to
+  intimidate.
+ground_truth:
+  section: "441"
+  satisfied_elements: [entry, intent_intimidate, without_consent]
+  fired_exception: null
+fact_facts:
+  entry: true
+  intent_intimidate: true
+  without_consent: true
+tags: [chapter:xvii, category:property, difficulty:intermediate]

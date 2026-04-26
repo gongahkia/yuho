@@ -1,0 +1,19 @@
+id: s420-cheating-property
+section: "420"
+scenario: |
+  A operates a fake online marketplace and lists luxury watches that
+  do not exist. B, browsing the site, transfers $8,000 to A's bank
+  account in exchange for a watch A will never deliver. A had no
+  intention of delivering anything; B was induced to part with money
+  on the strength of A's misrepresentations.
+ground_truth:
+  section: "420"
+  satisfied_elements: [deception, fraudulent, inducement, delivery, harm]
+  fired_exception: null
+fact_facts:
+  deception: true
+  fraudulent: true
+  inducement: true
+  delivery: true
+  harm: true
+tags: [chapter:xvii, category:deception, difficulty:basic]

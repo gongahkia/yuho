@@ -1,0 +1,18 @@
+id: s463-forgery
+section: "463"
+scenario: |
+  A creates a Word document mimicking the letterhead of B's company
+  and signs B's CFO's name at the bottom, then attaches it to an
+  email purporting to authorise a $50,000 wire transfer. A made the
+  document with the intention that the recipient bank would treat
+  it as genuine and act on it. B never authorised this and the
+  signature is fabricated.
+ground_truth:
+  section: "463"
+  satisfied_elements: [making, false_document, intent_to_deceive]
+  fired_exception: null
+fact_facts:
+  making: true
+  false_document: true
+  intent_to_deceive: true
+tags: [chapter:xviii, category:document, difficulty:intermediate]

@@ -1,0 +1,17 @@
+id: s506-criminal-intimidation
+section: "506"
+scenario: |
+  In a heated text exchange after a parking dispute, A messages B:
+  "If you ever block my driveway again I will burn your car." B,
+  fearing for the safety of his vehicle, parks elsewhere for the
+  next several days. A intended for B to feel threatened and to
+  alter B's behaviour because of the threat.
+ground_truth:
+  section: "506"
+  satisfied_elements: [threat, intent_alarm, alarm_effect]
+  fired_exception: null
+fact_facts:
+  threat: true
+  intent_alarm: true
+  alarm_effect: true
+tags: [chapter:xxii, category:intimidation, difficulty:basic]

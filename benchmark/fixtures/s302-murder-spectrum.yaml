@@ -1,0 +1,16 @@
+id: s302-murder-spectrum
+section: "302"
+scenario: |
+  After repeatedly threatening B, A waits outside B's home with a
+  knife. When B emerges, A stabs B fatally in a single deliberate
+  attack. A confesses to police, "I wanted him dead." B dies at
+  the scene from the stab wounds. There is no question of
+  provocation, self-defence, or any other excusing factor.
+ground_truth:
+  section: "302"
+  satisfied_elements: [murder_committed, conviction]
+  fired_exception: null
+fact_facts:
+  murder_committed: true
+  conviction: true
+tags: [chapter:xvi, category:homicide, difficulty:basic]

@@ -1,0 +1,18 @@
+id: s300-murder
+section: "300"
+scenario: |
+  A buys a knife in the morning, lies in wait outside B's office that
+  evening, and stabs B in the chest. A intends to kill B. B dies of
+  the stab wound at the scene. A confesses afterwards that B owed
+  him money and "deserved it".
+ground_truth:
+  section: "300"
+  satisfied_elements: [causeDeath, intent1, intent2]
+  fired_exception: null
+fact_facts:
+  causeDeath: true
+  intent1: true
+  intent2: true
+  intent3: false
+  intent4: false
+tags: [chapter:xvi, category:homicide, difficulty:basic]

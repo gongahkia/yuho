@@ -1,0 +1,18 @@
+id: s378-with-consent
+section: "378"
+scenario: |
+  A asks B if he can borrow B's umbrella for the afternoon. B agrees
+  and hands the umbrella to A. A walks away with the umbrella,
+  intending to return it that evening as agreed. B has clearly
+  consented to A's possession of the umbrella for the agreed period.
+ground_truth:
+  section: "378"
+  satisfied_elements: [taking, possession, movement]
+  fired_exception: null
+fact_facts:
+  intention: false
+  taking: true
+  possession: true
+  consent: true
+  movement: true
+tags: [chapter:xvii, category:property, difficulty:intermediate, polarity:negative]

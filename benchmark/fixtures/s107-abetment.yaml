@@ -1,0 +1,17 @@
+id: s107-abetment
+section: "107"
+scenario: |
+  A persuades B over coffee that B should sneak into C's apartment
+  the next afternoon and take C's laptop, which A claims C "won't
+  even notice is gone". A knows that taking C's laptop without
+  consent would be theft, and A's encouragement is the direct
+  reason B then enters C's apartment and removes the laptop.
+ground_truth:
+  section: "107"
+  satisfied_elements: [instigation, knowledge, abet_intent]
+  fired_exception: null
+fact_facts:
+  instigation: true
+  knowledge: true
+  abet_intent: true
+tags: [chapter:v, category:abetment, difficulty:intermediate]

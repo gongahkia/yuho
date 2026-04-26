@@ -1,0 +1,17 @@
+id: s392-robbery
+section: "392"
+scenario: |
+  At a deserted ATM at night, A approaches B from behind, presses
+  what feels like a knife to B's back, and demands B's wallet. B,
+  in fear of immediate harm, hands over the wallet. A then runs off.
+  B did not consent; B was directly threatened with bodily harm
+  if he resisted.
+ground_truth:
+  section: "392"
+  satisfied_elements: [theft_act, force_or_fear, immediate_taking]
+  fired_exception: null
+fact_facts:
+  theft_act: true
+  force_or_fear: true
+  immediate_taking: true
+tags: [chapter:xvii, category:property, difficulty:intermediate]

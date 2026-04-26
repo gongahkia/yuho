@@ -1,0 +1,17 @@
+id: s363-kidnapping
+section: "363"
+scenario: |
+  A approaches B's 12-year-old daughter outside her school, tells
+  her that "your father said I'd pick you up today", and drives her
+  away in his car. B never made any such arrangement and did not
+  consent. The child is taken several kilometres away before A is
+  intercepted.
+ground_truth:
+  section: "363"
+  satisfied_elements: [taking_or_enticing, minor_age, lawful_guardian_consent_absent]
+  fired_exception: null
+fact_facts:
+  taking_or_enticing: true
+  minor_age: true
+  lawful_guardian_consent_absent: true
+tags: [chapter:xvi, category:liberty, difficulty:intermediate]

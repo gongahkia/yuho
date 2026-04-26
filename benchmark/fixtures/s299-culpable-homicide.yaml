@@ -1,0 +1,21 @@
+id: s299-culpable-homicide
+section: "299"
+scenario: |
+  During an altercation in a parking lot, A pushes B with the intent
+  to seriously injure B. B falls backwards, strikes the back of his
+  head against a concrete kerb, and dies several hours later from
+  the head injury. A intended to cause bodily injury that A knew
+  was likely to result in death, but did not specifically intend B's
+  death.
+ground_truth:
+  section: "299"
+  satisfied_elements: [act, death, intent2, knowledge]
+  fired_exception: null
+fact_facts:
+  act: true
+  death: true
+  intent1: false
+  intent2: true
+  knowledge: true
+  omission: false
+tags: [chapter:xvi, category:homicide, difficulty:advanced]

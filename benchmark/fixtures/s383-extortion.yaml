@@ -1,0 +1,17 @@
+id: s383-extortion
+section: "383"
+scenario: |
+  A, holding compromising photographs of B, demands that B transfer
+  $20,000 to A's bank account or A "will share these with everyone
+  you know". B, in fear of public humiliation, transfers the money.
+  A had no lawful claim to the funds; the threat was the lever that
+  induced the transfer.
+ground_truth:
+  section: "383"
+  satisfied_elements: [putting_in_fear, dishonest_inducement, delivery]
+  fired_exception: null
+fact_facts:
+  putting_in_fear: true
+  dishonest_inducement: true
+  delivery: true
+tags: [chapter:xvii, category:property, difficulty:intermediate]

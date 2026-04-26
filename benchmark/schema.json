@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/gongahkia/yuho/benchmark/schema.json",
+  "title": "Yuho LLM Legal-Reasoning Benchmark Fixture",
+  "description": "Each fixture pairs a natural-language scenario with the structural ground truth Yuho's evaluator computes from the same facts. Three tasks per fixture: section identification, element-set recall, and exception citation.",
+  "type": "object",
+  "required": ["id", "scenario", "ground_truth"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique fixture identifier, kebab-case. Conventionally `<section>-<variant>` (e.g. `s415-classic`, `s415-with-consent`)."
+    },
+    "section": {
+      "type": "string",
+      "description": "Canonical Penal Code section number this fixture exercises (e.g. `415`, `300`, `376AA`). Used for indexing; the LLM is asked to *predict* this in task T1."
+    },
+    "scenario": {
+      "type": "string",
+      "description": "Natural-language fact pattern presented to the LLM. Free prose. Should be neutral on the legal question and not name the answer."
+    },
+    "ground_truth": {
+      "type": "object",
+      "required": ["section", "satisfied_elements"],
+      "additionalProperties": false,
+      "properties": {
+        "section": {
+          "type": "string",
+          "description": "Section number (or alphabet-suffixed variant) the scenario most directly fires. Computed by Yuho's evaluator + author confirmation."
+        },
+        "satisfied_elements": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Names of leaf elements satisfied by the scenario, derived from the encoded section's element graph."
+        },
+        "fired_exception": {
+          "type": ["string", "null"],
+          "description": "Name of the defeating exception that prevents conviction, or null when no exception fires."
+        }
+      }
+    },
+    "fact_facts": {
+      "type": "object",
+      "additionalProperties": {"type": "boolean"},
+      "description": "Boolean fact map fed to Yuho's StatuteEvaluator to compute the ground truth. Mirrors the `fact_facts` field in simulator/fixtures/."
+    },
+    "tags": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Optional tags: `chapter:xvi`, `difficulty:basic|intermediate|advanced`, `category:property|harm|deception|...`"
+    }
+  }
+}
