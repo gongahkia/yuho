@@ -153,7 +153,7 @@ format.
 ## Contributing
 
 See [`.github/CONTRIBUTING.md`](./.github/CONTRIBUTING.md). Issues and pull
-requests welcome; the [`todo.md`](./todo.md) file tracks current
+requests welcome; the [`TODO.md`](./TODO.md) file tracks current
 priorities and `[x]`-marks completed work.
 
 ## License

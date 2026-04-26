@@ -11,7 +11,7 @@ Office Add-in that lives in the **Insert** ribbon of Microsoft Word
 This is the **practitioner-facing surface** described in the project's
 delivery order — it sequences after the citable research artefacts
 (paper, JSON corpus, browser extension, static explorer site) per the
-plan in [`/todo.md`](../../todo.md).
+plan in [`/TODO.md`](../../TODO.md).
 
 ## Layout
 

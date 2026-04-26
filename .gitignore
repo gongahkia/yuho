@@ -138,5 +138,7 @@ CLAUDE.md
 
 # Yuho generated artefacts (reproducible from source)
 library/penal_code/_corpus/
+library/penal_code/_coverage/phase_d_*_progress.jsonl
 editors/browser-yuho/data/
+editors/word-yuho/data/
 editors/explorer-site/build/

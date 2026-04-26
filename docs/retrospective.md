@@ -162,7 +162,7 @@ The CLI reference in `docs/user/cli-reference.md` documents a number
 of commands (`api`, `explain`, `playground`, `static-site`,
 `webhook`, `workspace`) that were never implemented in
 `src/yuho/cli/main.py`. The doc-contract test catches this; the doc
-needs trimming. Recorded as outstanding in `todo.md`.
+needs trimming. Recorded as outstanding in `TODO.md`.
 
 Lesson: do CLI doc generation from the actual command tree if you
 can. Hand-written CLI docs drift.

@@ -7,7 +7,7 @@ encoded Yuho module: each statute becomes an ``<section>`` with nested
 ``<num>``, ``<heading>``, ``<content>`` containing definitions and
 elements, and ``<exception>`` blocks for prioritised exceptions.
 
-Scope (intentional, per ``todo.md`` Akoma Ntoso decision criterion):
+Scope (intentional, per ``TODO.md`` Akoma Ntoso decision criterion):
 this transpiler is the structural on-ramp described in the
 applicability section of the paper. It produces a syntactically valid
 AKN skeleton; full schema validation requires the OASIS XSD and is

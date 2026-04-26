@@ -67,4 +67,4 @@ The Phase D agent prompts now live under `researcher/`:
 - [Top-level README](../README.md) — project pitch + quickstart.
 - [Research paper draft](../paper/) — full prose treatment of the design.
 - [Encoded library](../library/penal_code/) — the artefact itself.
-- [todo.md](../todo.md) — outstanding work.
+- [TODO.md](../TODO.md) — outstanding work.
