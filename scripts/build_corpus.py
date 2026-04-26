@@ -285,6 +285,44 @@ def _resolve_mmdc() -> Optional[str]:
     return _MMDC_BIN
 
 
+_PUPPETEER_CFG_PROBED = False
+_PUPPETEER_CFG_PATH: Optional[str] = None
+
+
+def _autodetect_puppeteer_config() -> Optional[str]:
+    """Probe ~/.cache/puppeteer for an installed Chrome and synthesise a
+    puppeteer config JSON pointing at it.
+
+    mmdc pins to a specific Chrome version; users who installed a
+    different version (e.g. via ``npx puppeteer browsers install
+    chrome``) end up with a Chrome that mmdc can't find. We pick the
+    first installed Chrome whose path looks valid and write a one-shot
+    config file pointing at it. Cached across calls.
+    """
+    global _PUPPETEER_CFG_PROBED, _PUPPETEER_CFG_PATH
+    if _PUPPETEER_CFG_PROBED:
+        return _PUPPETEER_CFG_PATH
+    _PUPPETEER_CFG_PROBED = True
+    cache = Path.home() / ".cache" / "puppeteer" / "chrome"
+    if not cache.is_dir():
+        return None
+    # Prefer the version mmdc pins to (cosmetically), but fall back to
+    # any present version since override is name-agnostic.
+    candidates = sorted(cache.iterdir(), reverse=True)
+    for candidate in candidates:
+        # macOS-arm path; Linux paths look different but the same logic.
+        macos = candidate / "chrome-mac-arm64" / "Google Chrome for Testing.app" / \
+            "Contents" / "MacOS" / "Google Chrome for Testing"
+        linux = candidate / "chrome-linux64" / "chrome"
+        for candidate_bin in (macos, linux):
+            if candidate_bin.exists():
+                cfg_path = Path(tempfile.gettempdir()) / "yuho-puppeteer-config.json"
+                cfg_path.write_text(json.dumps({"executablePath": str(candidate_bin)}))
+                _PUPPETEER_CFG_PATH = str(cfg_path)
+                return _PUPPETEER_CFG_PATH
+    return None
+
+
 def _render_mermaid_svg(mermaid_src: Optional[str]) -> Optional[str]:
     """Render Mermaid source to inline SVG via mmdc. Returns None on failure.
 
@@ -302,10 +340,18 @@ def _render_mermaid_svg(mermaid_src: Optional[str]) -> Optional[str]:
         in_path = Path(tdir) / "in.mmd"
         out_path = Path(tdir) / "out.svg"
         in_path.write_text(mermaid_src, encoding="utf-8")
+        cmd = [mmdc, "-i", str(in_path), "-o", str(out_path), "-b", "transparent"]
+        # mmdc's bundled puppeteer pins to a specific Chrome build that
+        # users may not have. If a YUHO_PUPPETEER_CONFIG path or a
+        # YUHO_CHROME executable is exported, pass the puppeteer config
+        # through to mmdc so it picks up our resolved Chrome instead of
+        # failing the version check.
+        pup_cfg = os.environ.get("YUHO_PUPPETEER_CONFIG") or _autodetect_puppeteer_config()
+        if pup_cfg:
+            cmd.extend(["-p", pup_cfg])
         try:
             result = subprocess.run(
-                [mmdc, "-i", str(in_path), "-o", str(out_path), "-b", "transparent"],
-                capture_output=True, text=True, timeout=60,
+                cmd, capture_output=True, text=True, timeout=60,
             )
         except Exception:
             return None

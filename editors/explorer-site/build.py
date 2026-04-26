@@ -506,6 +506,137 @@ footer.site {
 """
 
 
+_SEMANTIC_GRAPH_JS = r"""
+// Semantic graph: typed nodes (section / definition / element /
+// exception) and typed edges (contains / mentions / defeats /
+// shares_term). Interaction: filter pins one section's neighbourhood,
+// toggles hide noisy edge kinds. Click a section node to navigate to
+// its per-section page; click any other node to focus its neighbours.
+(function () {
+  const canvas = document.getElementById('graph-canvas');
+  if (!canvas || typeof cytoscape !== 'function') return;
+
+  const filterInput = document.getElementById('semgraph-filter');
+  const hideMentions = document.getElementById('hide-mentions');
+  const hideShares = document.getElementById('hide-shares');
+
+  fetch('static/semantic-graph.json')
+    .then(r => r.json())
+    .then(boot)
+    .catch(err => {
+      canvas.innerHTML = '<p class="muted" style="padding:2rem">' +
+        'Failed to load semantic graph: ' + (err && err.message || err) + '</p>';
+    });
+
+  function boot(data) {
+    const elements = [];
+    for (const n of (data.nodes || [])) {
+      elements.push({
+        data: { id: n.id, label: n.label, kind: n.kind, section: n.section,
+                element_type: n.element_type || '' },
+      });
+    }
+    for (const e of (data.edges || [])) {
+      elements.push({
+        data: { id: `${e.kind}:${e.src}>${e.dst}`,
+                source: e.src, target: e.dst, kind: e.kind, snippet: e.snippet || '' },
+      });
+    }
+
+    const cy = cytoscape({
+      container: canvas,
+      elements: elements,
+      wheelSensitivity: 0.2,
+      style: [
+        { selector: 'node[kind = "section"]',
+          style: { 'background-color': '#8C1313', 'shape': 'round-rectangle',
+                   'label': 'data(label)', 'color': '#ffffff', 'font-size': '8px',
+                   'text-valign': 'center', 'text-halign': 'center',
+                   'width': 50, 'height': 18, 'overlay-padding': 4 } },
+        { selector: 'node[kind = "definition"]',
+          style: { 'background-color': '#1B5045', 'shape': 'diamond',
+                   'label': 'data(label)', 'font-size': '7px',
+                   'text-valign': 'center', 'text-halign': 'center',
+                   'color': '#ffffff', 'width': 14, 'height': 14 } },
+        { selector: 'node[kind = "element"]',
+          style: { 'background-color': '#0066CC', 'shape': 'ellipse',
+                   'label': 'data(label)', 'font-size': '7px',
+                   'text-valign': 'center', 'text-halign': 'center',
+                   'color': '#ffffff', 'width': 14, 'height': 14 } },
+        { selector: 'node[kind = "exception"]',
+          style: { 'background-color': '#b07020', 'shape': 'triangle',
+                   'label': 'data(label)', 'font-size': '7px',
+                   'text-valign': 'center', 'text-halign': 'center',
+                   'color': '#ffffff', 'width': 14, 'height': 14 } },
+        { selector: 'node:selected',
+          style: { 'border-width': 3, 'border-color': '#0066CC' } },
+        { selector: 'node.dim', style: { 'opacity': 0.1 } },
+        { selector: 'edge',
+          style: { 'curve-style': 'bezier', 'target-arrow-shape': 'triangle',
+                   'arrow-scale': 0.5, 'width': 1, 'opacity': 0.45 } },
+        { selector: 'edge[kind = "contains"]',
+          style: { 'line-color': '#cccccc', 'target-arrow-color': '#cccccc',
+                   'opacity': 0.4 } },
+        { selector: 'edge[kind = "mentions"]',
+          style: { 'line-color': '#0066CC', 'target-arrow-color': '#0066CC',
+                   'line-style': 'dashed' } },
+        { selector: 'edge[kind = "defeats"]',
+          style: { 'line-color': '#b07020', 'target-arrow-color': '#b07020',
+                   'width': 2 } },
+        { selector: 'edge[kind = "shares_term"]',
+          style: { 'line-color': '#1B5045', 'target-arrow-color': '#1B5045',
+                   'line-style': 'dotted', 'opacity': 0.7,
+                   'target-arrow-shape': 'none' } },
+        { selector: 'edge.hidden', style: { 'display': 'none' } },
+      ],
+      layout: {
+        name: 'cose', animate: false, nodeRepulsion: 3000,
+        idealEdgeLength: 50, edgeElasticity: 80,
+      },
+    });
+
+    cy.on('tap', 'node[kind = "section"]', evt => {
+      const section = evt.target.data('section');
+      if (section) window.location.href = 's/' + section + '.html';
+    });
+
+    cy.on('tap', 'node[kind != "section"]', evt => {
+      // Focus: dim everything except the tapped node + its 1-hop neighbours.
+      cy.nodes().addClass('dim');
+      const n = evt.target;
+      n.removeClass('dim');
+      n.neighborhood().removeClass('dim');
+    });
+
+    if (hideMentions) {
+      hideMentions.addEventListener('change', () => {
+        cy.edges('[kind = "mentions"]').toggleClass('hidden', hideMentions.checked);
+      });
+    }
+    if (hideShares) {
+      hideShares.addEventListener('change', () => {
+        cy.edges('[kind = "shares_term"]').toggleClass('hidden', hideShares.checked);
+      });
+    }
+
+    if (filterInput) {
+      filterInput.addEventListener('input', () => {
+        const q = filterInput.value.trim().toLowerCase();
+        if (!q) {
+          cy.nodes().removeClass('dim');
+          return;
+        }
+        cy.nodes().forEach(n => {
+          const matches = n.data('section').toLowerCase().includes(q);
+          n.toggleClass('dim', !matches);
+        });
+      });
+    }
+  }
+})();
+"""
+
+
 _GRAPH_JS = r"""
 // Reference-graph page: load static/graph.json and render via cytoscape.
 (function () {
@@ -815,6 +946,7 @@ def _page(title: str, body: str, *, active_nav: str = "") -> str:
     {nav_link("index", "Index", "/index.html")}
     {nav_link("coverage", "Coverage", "/coverage.html")}
     {nav_link("graph", "Graph", "/graph.html")}
+    {nav_link("semantic-graph", "Semantic", "/semantic-graph.html")}
     {nav_link("about", "About", "/about.html")}
     <a href="https://github.com/gongahkia/yuho">GitHub ↗</a>
   </nav>
@@ -920,6 +1052,48 @@ def render_coverage(index: Dict[str, Any]) -> str:
     return _page("Yuho — Coverage dashboard", body, active_nav="coverage")
 
 
+def render_semantic_graph(graph_data: Dict[str, Any]) -> str:
+    """Library-wide semantic graph (definitions / elements / exceptions
+    across all 524 sections). Different shape from the section-granular
+    /graph.html: nodes here are typed (section / definition / element /
+    exception), edges typed (contains / mentions / defeats / shares_term).
+
+    Reuses the same cytoscape.js layout the reference graph uses; the
+    JS in /static/semantic-graph.js styles by node + edge kind.
+    """
+    stats = graph_data.get("stats", {})
+    body = f"""
+<h2>Semantic graph</h2>
+<p class="muted">
+  {stats.get('n_section', 0)} sections ·
+  {stats.get('n_definition', 0)} definitions ·
+  {stats.get('n_element', 0)} elements ·
+  {stats.get('n_exception', 0)} exceptions ·
+  {stats.get('n_mentions', 0)} term-mention edges ·
+  {stats.get('n_defeats', 0)} defeats edges ·
+  {stats.get('n_shares_term', 0)} cross-section shared-term edges.
+  Drag to pan, scroll to zoom; the graph is large — pin a section by
+  number to focus its neighbourhood.
+</p>
+
+<div id="graph-controls" class="graph-controls">
+  <input type="search" id="semgraph-filter" placeholder="Pin a section by number (e.g. 415)..." aria-controls="graph-canvas">
+  <label class="muted">
+    <input type="checkbox" id="hide-mentions"> hide term-mention edges
+  </label>
+  <label class="muted">
+    <input type="checkbox" id="hide-shares"> hide shared-term edges
+  </label>
+  <a class="muted" href="/static/semantic-graph.json">semantic-graph.json</a>
+</div>
+<div id="graph-canvas" role="img" aria-label="Semantic graph"></div>
+
+<script src="https://unpkg.com/cytoscape@3.30.2/dist/cytoscape.min.js"></script>
+<script src="/static/semantic-graph.js" defer></script>
+"""
+    return _page("Yuho — Semantic graph", body, active_nav="semantic-graph")
+
+
 def render_graph(graph_data: Dict[str, Any]) -> str:
     """Static reference-graph page with cytoscape.js client-side render.
 
@@ -980,7 +1154,8 @@ def render_sitemap(index: Dict[str, Any], base_url: str) -> str:
     base = base_url.rstrip("/")
     today = _dt.date.today().isoformat()
     urls = [f"{base}/index.html", f"{base}/coverage.html",
-            f"{base}/graph.html", f"{base}/about.html"]
+            f"{base}/graph.html", f"{base}/semantic-graph.html",
+            f"{base}/about.html"]
     urls.extend(f"{base}/s/{r['number']}.html" for r in index["sections"])
     urls.extend(f"{base}/explore/{r['number']}.html" for r in index["sections"])
     entries = "".join(
@@ -1386,6 +1561,21 @@ def main() -> int:
     (STATIC / "graph.json").write_text(json.dumps(graph_dict, separators=(",", ":")))
     (STATIC / "graph.js").write_text(_GRAPH_JS)
     (BUILD / "graph.html").write_text(render_graph(graph_dict))
+
+    # Semantic graph: typed multi-kind graph at element / definition
+    # / exception granularity, distinct from the section-granular reference
+    # graph above. Heavy: ~10k nodes typically; rendered client-side.
+    try:
+        from yuho.library.semantic_graph import build_semantic_graph
+        semg = build_semantic_graph(REPO / "library" / "penal_code")
+        semg_dict = semg.to_dict()
+    except Exception as exc:
+        semg_dict = {"nodes": [], "edges": [], "stats": {}, "_error": str(exc)}
+    (STATIC / "semantic-graph.json").write_text(
+        json.dumps(semg_dict, separators=(",", ":"))
+    )
+    (STATIC / "semantic-graph.js").write_text(_SEMANTIC_GRAPH_JS)
+    (BUILD / "semantic-graph.html").write_text(render_semantic_graph(semg_dict))
 
     (BUILD / "about.html").write_text(render_about())
     (BUILD / "404.html").write_text(render_404())

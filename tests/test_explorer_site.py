@@ -146,6 +146,26 @@ class TestBuiltSite:
         assert "cytoscape" in html.lower()
         assert "graph-canvas" in html
 
+    def test_semantic_graph_page_present(self, built_site):
+        """Library-wide semantic graph (definitions / elements / exceptions)."""
+        assert (built_site / "semantic-graph.html").exists()
+        assert (built_site / "static" / "semantic-graph.json").exists()
+        assert (built_site / "static" / "semantic-graph.js").exists()
+
+    def test_semantic_graph_json_is_typed(self, built_site):
+        import json as _json
+        data = _json.loads(
+            (built_site / "static" / "semantic-graph.json").read_text()
+        )
+        if not data.get("nodes"):
+            return  # library not present in this checkout
+        kinds = {n.get("kind") for n in data["nodes"]}
+        assert kinds.issubset({"section", "definition", "element", "exception"})
+        edge_kinds = {e.get("kind") for e in data["edges"]}
+        assert edge_kinds.issubset(
+            {"contains", "mentions", "defeats", "shares_term"}
+        )
+
     def test_static_assets_present(self, built_site):
         for name in ("style.css", "search.js", "index.json", "search-index.json"):
             assert (built_site / "static" / name).exists(), f"missing static/{name}"
