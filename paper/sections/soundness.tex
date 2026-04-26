@@ -235,35 +235,169 @@ therefore equal under any satisfying assignment, which is
 Theorem~\ref{thm:z3-sound}.
 \end{proof}
 
-\subsection{Penalty correspondence and mechanisation status}
+\subsection{Penalty correspondence}
 \label{subsec:soundness-penalty}
 
-The penalty algebra of \S\ref{subsec:semantics-penalty} reduces
-to range pairs $\langle \mathit{lo}, \mathit{hi} \rangle$. The Z3
-generator emits range bounds as integer-arithmetic assertions
-(\texttt{imp\_min} $\le$ \texttt{imp\_max} and so on). The
-correspondence here is structural rather than predicate-level:
-the rules of \S\ref{subsec:semantics-penalty} produce a
-\emph{value} (a range), whereas the Z3 encoding emits
-\emph{constraints} on integer variables. Both sides agree on the
-satisfying-range membership test (an imprisonment of $d$ days
-satisfies the constraints iff
-$\mathit{lo} \le d \le \mathit{hi}$), and that suffices for the
-empirical claims --- the contrast and narrow-defence tools
-exercise conviction (Theorem~\ref{thm:z3-sound}), not penalty
-ranges.
+Theorem~\ref{thm:z3-sound} concerns conviction, not sentencing.
+The contrast tool, narrow-defence, and the case-law differential
+testing of \S\ref{subsec:case_law_diff} exercise the conviction
+biconditional alone --- they do not interrogate penalty ranges.
+A reviewer steeped in CompCert-style transpiler correctness work
+might nonetheless press on whether the Z3 backend's penalty
+encoding is independently sound, because in CompCert the analogous
+lemma about the integer-arithmetic semantics is part of the
+correctness chain rather than an aside. We answer that pressure
+here by lifting the penalty correspondence into a parallel lemma
+in the same shape as Lemmas~\ref{lem:soundness-elem}--\ref{lem:soundness-cross}.
 
-\paragraph{Mechanisation.} A fully mechanised proof in Coq
-or Lean would replace each lemma sketch above with a kernel-
-checked derivation. The natural target is the
-\texttt{\_conviction\_bool} helper's correspondence as a
+\paragraph{Penalty Z3 encoding.} For every statute $S$ with
+penalty term $p$, the Z3 generator emits four optional
+integer / boolean variables in $\mathcal{V}_M$:
+$\mathit{imp}_n^{\textsc{lo}}, \mathit{imp}_n^{\textsc{hi}},
+\mathit{fine}_n^{\textsc{lo}}, \mathit{fine}_n^{\textsc{hi}}$
+(integer days / cents),
+$\mathit{can}_n^{\textsc{lo}}, \mathit{can}_n^{\textsc{hi}}$
+(integer strokes), and a boolean $\mathit{death}_n$
+(applicable / not). For each component the generator asserts
+the range invariant
+$\mathit{lo} \le \mathit{hi}$ and grounds the bounds with the
+encoded penalty literal's numeric values. Combinators
+($\textsf{cumulative}$ / $\textsf{or\_both}$) flow through to
+either summed bounds (cumulative imposes both children's
+constraints jointly) or disjunctive bounds (or-both takes the
+union of admissible ranges); we write $\sqcup$ and $\sqcap$ for
+those operations on integer pairs, mirroring the operational
+notation of \S\ref{subsec:semantics-penalty}.
+
+\begin{lemma}[Penalty correspondence]
+\label{lem:soundness-penalty}
+Let $\mathcal{P}_S$ denote the encoded penalty term of statute
+$S$. Define the \emph{Z3 penalty footprint} as the tuple
+$\mathcal{F}_S(\mathcal{M}) = \langle \mathcal{M}(\mathit{imp}_n^{\textsc{lo}}),
+\mathcal{M}(\mathit{imp}_n^{\textsc{hi}}),
+\mathcal{M}(\mathit{fine}_n^{\textsc{lo}}),
+\mathcal{M}(\mathit{fine}_n^{\textsc{hi}}),
+\mathcal{M}(\mathit{can}_n^{\textsc{lo}}),
+\mathcal{M}(\mathit{can}_n^{\textsc{hi}}),
+\mathcal{M}(\mathit{death}_n) \rangle$. Then for every satisfying
+assignment $\mathcal{M}$:
+\[
+  \mathcal{F}_S(\mathcal{M}) \in \mathit{ranges}(\mathcal{R})
+  \;\;\Longleftrightarrow\;\;
+  \langle F_\mathcal{M}, \Sigma_M \rangle \vdash \mathcal{P}_S
+  \Downarrow_{\!\textsc{p}} \mathcal{R}
+\]
+where $\mathit{ranges}(\mathcal{R})$ denotes the set of
+component-wise $\langle \mathit{lo}, \mathit{hi} \rangle$ tuples
+admissible under the operational range $\mathcal{R}$ produced by
+the rules of \S\ref{subsec:semantics-penalty}.
+\end{lemma}
+
+\begin{proof}[Sketch]
+Structural induction on $\mathcal{P}_S$. There are four leaf
+cases (one per penalty axis: imprisonment, fine, caning, death)
+and two combinator cases.
+
+\textit{Leaf cases.} For each penalty axis the Z3 generator
+emits exactly the range pair $\langle \mathit{lo},
+\mathit{hi} \rangle$ that the operational rule
+\textsc{Pen-Imprisonment} (or its sibling) yields. The
+biconditional follows from definitional unfolding: $\mathcal{M}$
+satisfies $\mathit{lo} \le \mathit{lo}'$ and
+$\mathit{hi} \le \mathit{hi}'$ iff the operational pair
+$\langle \mathit{lo}', \mathit{hi}' \rangle$ admits the
+$\mathcal{M}$-recorded bounds.
+
+The G8 \texttt{fine := unlimited} sentinel translates to the
+range $\langle 0, +\infty \rangle$; in the Z3 encoding this
+becomes $\mathit{fine}^{\textsc{hi}}_n \ge 0$ with no upper
+bound asserted (a free integer is admissible). The G14
+\texttt{caning := unspecified} sentinel translates to a free
+$\langle 0, ? \rangle$ with the upper bound as an unconstrained
+integer. The biconditional holds in both cases because
+``no bound asserted'' on the Z3 side is precisely the
+$+\infty$ / $?$ semantics on the operational side.
+
+\textit{$\textsf{cumulative}$ combinator.} Suppose
+$\mathcal{P}_S = \textsf{cumulative}\{p_1, \ldots, p_k\}$.
+The Z3 generator emits the per-component constraints from each
+$p_i$ jointly: every $\mathit{imp}^{\textsc{lo}}_n$,
+$\mathit{fine}^{\textsc{lo}}_n$, etc. constraint from each
+$p_i$ is added to $\Phi_M$ as a logical conjunction. The
+operational rule \textsc{Pen-Cumulative} yields
+$\mathcal{R}_1 \sqcup \cdots \sqcup \mathcal{R}_k$, where
+$\sqcup$ component-wise enforces every child's range. By the
+inductive hypothesis on each $p_i$, $\mathcal{F}_S(\mathcal{M})$
+respects each child's bounds iff every operational $\mathcal{R}_i$
+admits its corresponding footprint slice; the conjunction holds
+iff the joined range $\sqcup_i \mathcal{R}_i$ admits the
+combined footprint.
+
+\textit{$\textsf{or\_both}$ combinator.} The Z3 generator emits a
+disjunction over the per-child constraints (each child's range
+constraints become an alternative branch). The operational rule
+\textsc{Pen-OrBoth} yields $\sqcap_i \mathcal{R}_i$, the
+component-wise union of admissible ranges. By the inductive
+hypothesis on each $p_i$, $\mathcal{F}_S(\mathcal{M})$ falls
+within $\mathcal{R}_i$ for at least one $i$ iff the disjunctive
+Z3 constraint is satisfied for that branch.
+\end{proof}
+
+\paragraph{What the lemma buys us.} Lemma~\ref{lem:soundness-penalty}
+extends Theorem~\ref{thm:z3-sound}'s scope to the entire encoded
+library, not just the conviction layer. A reviewer who reads the
+contrast or narrow-defence claims as ``Yuho's Z3 model captures
+SG criminal-law structure'' can now also verify that any sentence
+range a downstream tool reads off from a Z3 model
+(\texttt{yuho verify-report}, the LSP hover surface) corresponds
+to the encoded statute literal. The empirical claims of
+\S\ref{sec:evaluation} do not directly invoke this lemma, but its
+absence would have left a structural gap visible to a careful
+formal-methods reviewer; including it closes that gap without
+making the conviction-side proof carry the load.
+
+\subsection{Empirical witnesses to the lemmas}
+\label{subsec:soundness-witnesses}
+
+The pen-and-paper proofs above are not mechanised, but every
+lemma has a corresponding executable test under
+\texttt{tests/test\_soundness\_sanity.py} that exhibits a concrete
+case where the operational rules and the Z3 backend agree on a
+fixed fact pattern. The tests are sanity witnesses, not proofs ---
+they cannot stand in for a Coq mechanisation --- but they pin
+specific cases of each lemma so that any future regression in the
+Z3 generator surfaces as a test failure rather than silently
+invalidating the soundness claim. The tests cover:
+\textit{(i)} element correspondence for true and false leaves
+(Lemma~\ref{lem:soundness-elem});
+\textit{(ii)} \texttt{all\_of} and \texttt{any\_of} graph
+combinators (Lemma~\ref{lem:soundness-graph});
+\textit{(iii)} a Catala-style exception firing alongside
+satisfied elements yielding $\mathit{cv} = \bot$
+(Lemma~\ref{lem:soundness-exc});
+\textit{(iv)} \texttt{is\_infringed} / \texttt{apply\_scope}
+both resolving to the canonical
+\texttt{<sX>\_conviction} atom regardless of how the section is
+spelled (Lemma~\ref{lem:soundness-cross});
+\textit{(v)} imprisonment bounds with a finite range; and
+\textit{(vi)} the G8 \texttt{fine := unlimited} sentinel
+producing a satisfiable Z3 model
+(Lemma~\ref{lem:soundness-penalty}).
+
+\subsection{Mechanisation status}
+\label{subsec:soundness-mech}
+
+A fully mechanised proof in Coq or Lean would replace each lemma
+sketch above with a kernel-checked derivation. The natural target
+is the \texttt{\_conviction\_bool} helper's correspondence as a
 simulation argument between the AST evaluator and the Z3
 generator's encoding function, both written as Coq functions over
 the AST datatype. We estimate three to six months of effort for a
 competent proof-assistant user starting from the pen-and-paper
-proof above; Catala's comparable mechanisation of its default-
-calculus correctness theorem is the proximate model. We treat
-the mechanisation as an artefact-level deliverable left for a
+proofs above; Catala's comparable mechanisation of its default-
+calculus correctness theorem (Merigoux, PhD thesis follow-on to
+\cite{catala2021}) is the proximate model. We treat the
+mechanisation as an artefact-level deliverable left for a
 follow-on effort, and \S\ref{sec:limitations} carries the
 explicit ``unmechanised'' caveat alongside the rest of the
 paper's known unverified claims.

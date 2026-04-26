@@ -130,19 +130,23 @@ Pen-and-paper proof shipped at `paper/sections/soundness.tex`.
 Theorem 6.1 (Z3-Operational Soundness): every satisfying Z3
 assignment's `<sX>_conviction` truth value equals the
 operational-semantic conviction judgement on the corresponding
-fact pattern. Proof decomposes into four lemmas (element /
-element-graph / exception / cross-section correspondence) plus a
-penalty-correspondence note. Structural induction on element
-AST; well-founded induction on the defeats priority DAG;
-simulation argument for cross-section composition via the lazy
-`_conviction_bool` name-deduping helper.
+fact pattern. Proof decomposes into **five** lemmas — element /
+element-graph / exception / cross-section / **penalty**
+correspondence — plus the main theorem. Penalty correspondence
+(Lemma 6.5) lifted into a parallel correspondence lemma after
+review feedback so the soundness claim covers the full encoded
+library, not just the conviction layer.
 
-Possible follow-ups:
+Empirical witnesses shipped at `tests/test_soundness_sanity.py`
+(8 tests) — one concrete-case witness per lemma. The tests pin
+specific cases (true/false leaves, all_of/any_of combinators,
+exception firing alongside satisfied elements, conviction-Bool
+name dedupe across spellings, finite imprisonment range, G8
+unlimited-fine sentinel) so regressions surface here rather than
+silently invalidating the paper's soundness claim.
 
-- [ ] Sanity-check the proof against a fixed set of corner cases
-      via the existing `tests/test_z3_apply_scope.py` shape: every
-      claimed lemma should have a corresponding executable test
-      that exhibits the case it covers.
+Remaining work:
+
 - [ ] Mechanisation in Coq or Lean — see §6.3 below
       (deliberately deferred).
 
