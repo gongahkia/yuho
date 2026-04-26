@@ -183,13 +183,129 @@ of stamped encodings — which the paper §7 explicitly reserves.
 
 ### Phase 2a — Historical versions `(def)`
 
-- [ ] Extend `scrape_sso.py` with `--historical` flag. Enumerate
-      `/Act/<CODE>/Historical/<DATE>` snapshots.
-- [ ] Store each historical snapshot under
-      `library/<act>/_raw/historical/<date>.json`.
-- [ ] Extend AST's `effective_dates` semantics to thread version lineage.
-- [ ] Coverage harness extension — per `(section, valid-date)` rows.
-- [ ] Temporal query support: "what did s300 look like in 1995?"
+The Penal Code 1871 has accumulated 150+ years of amendments. Yuho
+currently encodes only the current version of each section; the
+amendment-lineage metadata (`effective`, `amends`, `subsumes`) is
+present but the historical clause text is not. This phase extends
+Yuho into a **diachronic** legal artefact: every section carries
+every historical version, and the toolchain answers "what did the
+law look like on date X?" temporally.
+
+**Scope (per design pick — full point-in-time replay):**
+
+Every encoded section gets every historical version since 1872.
+`yuho check --as-of 1995-06-15 my_facts.yh` and friends become
+first-class queries.
+
+#### Scrape + ingest
+
+- [ ] Extend `scripts/scrape_sso.py` with `--historical` flag.
+      Enumerate `/Act/<CODE>/Historical/<DATE>` snapshots from
+      Singapore Statutes Online and store each under
+      `library/penal_code/_raw/historical/<date>.json`. Estimate
+      40–60 historical-version snapshots per section across the
+      150-year span.
+- [ ] Build a `historical_index.json` mapping `(section, valid-date)
+      -> raw_path` so re-encoding can iterate snapshots in chronological
+      order.
+- [ ] Identify the canonical "current" snapshot date so the existing
+      `_raw/act.json` doesn't duplicate the latest historical entry.
+
+#### Grammar (per design pick — versioned blocks)
+
+- [ ] Add `version <date> { definitions / elements / penalty /
+      illustrations / exceptions }` block to `grammar.js`. Each
+      version is a complete snapshot; renderers diff client-side.
+- [ ] AST: extend `StatuteNode` with `versions: Tuple[VersionedBlock,
+      ...]` where each `VersionedBlock` carries an effective date plus
+      the same fields as the current `StatuteNode`. The current
+      single-version fields (`elements`, `penalty`, …) remain as
+      shorthand for a single-version statute.
+- [ ] Builder: when multiple `version` blocks are present, populate
+      `versions` and leave the top-level fields empty (or pointing at
+      the latest version). Lint check: every section either has zero
+      `version` blocks (current behaviour) or covers a contiguous
+      effective-date range (no gaps, no overlaps).
+- [ ] Update parser tests + a fresh `tests/test_versioned_blocks.py`
+      pinning shape, ordering, and lint behaviour.
+
+#### Re-encoding pipeline
+
+- [ ] Build `paper/reproducibility/historical_reencode.py`: given the
+      `historical_index.json`, dispatch agents to re-encode each
+      `(section, date)` snapshot as a `version` block, producing one
+      `versioned-statute.yh` per section. Reuse the agentic dispatcher
+      shape from `apply_flag_fix.py` / `l3_audit.py`.
+- [ ] L3-equivalent fidelity audit per version: extend the 11-point
+      checklist with an additional "preserves 1872-era spelling and
+      drafting style" check and any structural drift between
+      adjacent versions.
+- [ ] Coverage harness extension — `coverage.json` rows become
+      `(section, valid-date)` keyed.
+
+#### Temporal queries
+
+- [ ] `yuho check --as-of <date> <file>`: filter the AST to the
+      version effective on the given date before parse / lint /
+      semantic checks.
+- [ ] `yuho refs --as-of <date>`: reference graph at a historical
+      date.
+- [ ] `yuho recommend --as-of <date> <facts>`: charge recommender
+      against the law as it stood on the date of the alleged offence.
+- [ ] MCP: surface `--as-of` on the corresponding tools.
+
+#### Visualisations
+
+The first one ships with this phase; the others land separately.
+
+- [ ] **Per-section timeline** (v1 — ship first): vertical timeline
+      per section showing each version + diff highlights between
+      adjacent versions. Embedded on `/s/<N>.html` per-section pages
+      after the existing Diagram + Mindmap headings. Format:
+      `version 1872-01-01 → version 2008-02-01 → version 2012-12-31`,
+      each clickable to reveal the full version content. Diffs
+      rendered client-side.
+- [ ] **Penalty-inflation heatmap**: 524 sections × decade columns,
+      cell colour = imprisonment cap or fine cap. New top-level
+      `/penalty-inflation.html` page. Punchy paper figure.
+- [ ] **Library-wide amendment graph**: nodes = Acts, edges = "this
+      Act amended sections [a, b, c]". New `/amendment-graph.html`
+      page alongside `/graph.html` and `/semantic-graph.html`.
+- [ ] **Stable-kernel chart**: three-tier classification (verbatim
+      since 1872 / partially amended / completely rewritten) rendered
+      on `/coverage.html` as a chapter-by-chapter heatmap.
+
+#### Novel concepts (paper contributions)
+
+All four claimed; each gets its own subsection in the paper.
+
+- [ ] **Encoding lineage** — section in design.tex on
+      "statute-as-source-of-truth across time". Argues the encoding
+      composes over time without external archives.
+- [ ] **Amendment friction metric** — define a Levenshtein-style
+      distance over AST node trees between adjacent versions; report
+      the distribution across the 524-section corpus. New evaluation
+      subsection.
+- [ ] **Stable kernels** — empirical classification: which sections
+      are verbatim from 1872, which are partially amended, which are
+      completely rewritten? Report the percentages. New evaluation
+      subsection.
+- [ ] **Diachronic SCC analysis** — re-run Tarjan over the cross-
+      reference graph at every historical date; surface structural
+      changes invisible to clause-level diffs. Extends the existing
+      §5 SCC subsection.
+
+#### Acceptance criteria for closing Phase 2a
+
+- 524 sections × at-least-3 historical versions encoded (median should
+  be 4–5 versions; long tail handled by scrape coverage).
+- All temporal queries return correct results when checked against
+  hand-picked spot-checks (e.g. s300 in 2010 vs 2013 — known
+  death-penalty discretion change).
+- Per-section timeline renders for every section that has multiple
+  versions; sections with one version skip cleanly.
+- Paper has the four novel-concept subsections drafted and figure-
+  ready.
 
 ### Phase 2b — Vision pivot `(def)`
 
