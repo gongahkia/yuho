@@ -23,8 +23,7 @@ contains a helper \texttt{struct} and \texttt{match} expression for
 client-side reasoning, omitted here for brevity).
 
 \begin{figure*}[!htbp]
-{\fontsize{7}{8}\selectfont
-\begin{verbatim}
+\begin{lstlisting}[language=yuho,basicstyle=\ttfamily\scriptsize]
 statute 415 "Cheating" effective 1872-01-01 {
   definitions {
     deceive      := "To cause a person to believe ...";
@@ -62,8 +61,7 @@ statute 415 "Cheating" effective 1872-01-01 {
   }
   /* example2, example3 omitted for space */
 }
-\end{verbatim}
-}
+\end{lstlisting}
 \caption{Yuho encoding of \emph{Penal Code s.\,415 (Cheating)}. The
 \texttt{statute} block is the top-level construct; it has named field
 positions for definitions, elements, penalty, and illustrations, plus
@@ -97,8 +95,7 @@ post-2012 penalty has the form ``death \emph{or} imprisonment for life,
 named \texttt{when} guard distinguishing the residual category in which
 the death penalty is available from the default life-imprisonment case.
 
-\begin{footnotesize}
-\begin{verbatim}
+\begin{lstlisting}[language=yuho,basicstyle=\ttfamily\scriptsize]
 statute 302 "Murder" effective 1872-01-01
                      effective 2012-12-31 {
   elements { all_of {
@@ -122,8 +119,7 @@ statute 302 "Murder" effective 1872-01-01
     guard "private defence under sections 96-106"
     defeats killing;
 }
-\end{verbatim}
-\end{footnotesize}
+\end{lstlisting}
 
 The combinator tree (already in Figure~\ref{fig:penalty}) is what
 \textsf{G12} purchased: before \textsf{G12} landed, the same content
@@ -280,15 +276,13 @@ and a \texttt{priority N} integer (the rank in the DAG; lower numbers
 fire first). An optional \texttt{defeats <element\_name>} edge ties the
 exception to the specific element it overrides.
 
-\begin{footnotesize}
-\begin{verbatim}
+\begin{lstlisting}[language=yuho,basicstyle=\ttfamily\scriptsize]
 exception "consent" priority 1
   guard "victim consents and exception 87 applies";
 exception "self_defence" priority 2
   guard "private defence under sections 96-106"
   defeats inducement;
-\end{verbatim}
-\end{footnotesize}
+\end{lstlisting}
 
 The compilation target is Z3 prioritised rewriting in the style of
 Catala~\cite{catala2021}: the base rule fires; lower-priority exceptions

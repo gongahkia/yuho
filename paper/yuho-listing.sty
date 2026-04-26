@@ -1,0 +1,92 @@
+% yuho-listing.sty — Yuho syntax highlighting via the `listings` package.
+%
+% Provides a `yuho` listings language so paper-side code blocks can be
+% written as
+%
+%   \begin{lstlisting}[language=yuho]
+%   statute 415 "Cheating" { ... }
+%   \end{lstlisting}
+%
+% and render with keyword colouring, doc-comment ///-aware shading,
+% and string literal highlighting. Designed to compose with both the
+% `acmart` (paper build) and `article` (smoke build) document classes.
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{yuho-listing}[2026/04/26 v1.0 Yuho listings language]
+
+\RequirePackage{listings}
+\RequirePackage{xcolor}
+
+% --- Colour palette ---------------------------------------------------
+\definecolor{yuhoKeyword}{HTML}{0033B3}
+\definecolor{yuhoBlock}{HTML}{7A3E9D}
+\definecolor{yuhoElement}{HTML}{067D17}
+\definecolor{yuhoString}{HTML}{067D17}
+\definecolor{yuhoNumber}{HTML}{1750EB}
+\definecolor{yuhoComment}{HTML}{8C8C8C}
+\definecolor{yuhoDocComment}{HTML}{2A6FB0}
+\definecolor{yuhoBackground}{HTML}{FAFAFA}
+\definecolor{yuhoRule}{HTML}{D0D0D0}
+
+% --- Yuho language definition ----------------------------------------
+\lstdefinelanguage{yuho}{
+  alsoletter={\_},
+  morekeywords=[1]{
+    statute,struct,fn,enum,let,match,return,if,else,when,where,
+    import,from,as,type
+  },
+  morekeywords=[2]{
+    definitions,elements,penalty,illustration,exception,exceptions,
+    caselaw,parties,subsection,referencing,subsumes,amends,effective,
+    caused_by,defeats,priority,burden,prosecution,defence,balance_of_probabilities,
+    standard_proof,is_infringed
+  },
+  morekeywords=[3]{
+    actus_reus,mens_rea,circumstance,obligation,prohibition,permission,
+    strict_liability,all_of,any_of,one_of,none_of,
+    imprisonment,fine,caning,death,life,unlimited,unspecified,
+    cumulative,alternative,conditional
+  },
+  sensitive=true,
+  morecomment=[l][\color{yuhoDocComment}\itshape]{///},
+  morecomment=[l][\color{yuhoComment}]{//},
+  morecomment=[s][\color{yuhoComment}]{/*}{*/},
+  morestring=[b][\color{yuhoString}]{"},
+  alsodigit={.}
+}
+
+% --- Default style ----------------------------------------------------
+\lstdefinestyle{yuhoStyle}{
+  language=yuho,
+  basicstyle=\ttfamily\footnotesize,
+  keywordstyle=[1]\color{yuhoKeyword}\bfseries,
+  keywordstyle=[2]\color{yuhoBlock}\bfseries,
+  keywordstyle=[3]\color{yuhoElement},
+  stringstyle=\color{yuhoString},
+  commentstyle=\color{yuhoComment}\itshape,
+  numberstyle=\tiny\color{yuhoComment},
+  backgroundcolor=\color{yuhoBackground},
+  frame=single,
+  framerule=0.4pt,
+  rulecolor=\color{yuhoRule},
+  numbers=none,
+  breaklines=true,
+  breakatwhitespace=true,
+  showstringspaces=false,
+  columns=fullflexible,
+  keepspaces=true,
+  tabsize=2,
+  xleftmargin=4pt,
+  xrightmargin=4pt,
+  aboveskip=0.6em,
+  belowskip=0.6em,
+  literate=
+    {\$}{{\textcolor{yuhoNumber}{\$}}}1
+    {:=}{{\textcolor{yuhoKeyword}{:=}}}2
+    {->}{{\textcolor{yuhoKeyword}{->}}}2
+    {..}{{\textcolor{yuhoKeyword}{..}}}2
+}
+
+\lstset{style=yuhoStyle}
+
+\endinput
