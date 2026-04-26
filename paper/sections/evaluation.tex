@@ -19,6 +19,19 @@ carry an L3 human-verified fidelity audit, after the Phase~D
 dispatcher and flag-fix sweep cleared the long tail. Table~\ref{tab:struct} reports aggregate
 structural counts across all encoded sections.
 
+Beyond structural coverage, 82 sections carry behavioural-test
+companions (\texttt{test\_statute.yh}) that exercise the encoded
+predicates against fact patterns: 28 are richly hand-authored on the
+high-traffic offences (s299/s300 culpable homicide and murder, s378
+theft, s415 cheating, s463 forgery, etc.) with section-specific
+helper functions; the further 54 use a universal-shape predicate
+\texttt{fn is\_<offence>(elements\_satisfied, defence\_applies) :
+bool} that asserts the doctrinally-correct ``offence iff elements
+$\land$ $\neg$defence'' structure. The remaining 442 sections are
+mostly interpretation/definition provisions where the encoding is a
+faithful structural mirror and there is no rich behaviour to assert
+beyond parse + lint coverage.
+
 \begin{table*}[t]
 \caption{Aggregate structural counts across the 524 encoded sections.}
 \label{tab:struct}
