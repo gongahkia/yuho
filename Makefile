@@ -46,7 +46,7 @@ LOGS = logs
 
 .PHONY: paper-reproduce \
         verify-coverage verify-akn-xsd verify-evals \
-        verify-case-law verify-bulk-contrast \
+        verify-case-law verify-bulk-contrast verify-mechanisation \
         clean-reproduce
 
 paper-reproduce: $(LOGS)
@@ -56,6 +56,7 @@ paper-reproduce: $(LOGS)
 	$(MAKE) verify-akn-xsd
 	$(MAKE) verify-evals
 	$(MAKE) verify-case-law
+	$(MAKE) verify-mechanisation
 	@echo ""
 	@echo "=== summary ==="
 	@printf "Coverage         : %s\n" "$$(tail -n 1 $(LOGS)/coverage.log)" \
@@ -67,6 +68,8 @@ paper-reproduce: $(LOGS)
 	@printf "Case-law (recommend) : %s\n" "$$(grep -E 'Top-1 accuracy' $(LOGS)/case-law-recommend.log | tail -n 1)" \
 		| tee -a $(LOGS)/paper-reproduce-summary.txt
 	@printf "Case-law (constrained): %s\n" "$$(grep -E 'consistency-rate' $(LOGS)/case-law-constrained.log | tail -n 1)" \
+		| tee -a $(LOGS)/paper-reproduce-summary.txt
+	@printf "Mechanisation    : %s\n" "$$(tail -n 1 $(LOGS)/mechanisation.log)" \
 		| tee -a $(LOGS)/paper-reproduce-summary.txt
 	@echo ""
 	@echo "Wrote: $(LOGS)/paper-reproduce-summary.txt"
@@ -103,6 +106,21 @@ verify-case-law: $(LOGS)
 verify-bulk-contrast: $(LOGS)
 	@echo ">>> running §7.5 Z3 bulk-contrast across SG PC pairs…"
 	$(PYTHON) scripts/bulk_contrast.py 2>&1 | tee $(LOGS)/bulk-contrast.log
+
+verify-mechanisation: $(LOGS)
+	@echo ">>> verifying §6.6 Lean 4 mechanisation kernel-checks…"
+	@if command -v lake >/dev/null 2>&1; then \
+		(cd mechanisation && lake build 2>&1 && lake build Tests 2>&1) \
+			| tee $(LOGS)/mechanisation.log; \
+		grep -qE 'Build completed successfully|✔' $(LOGS)/mechanisation.log \
+			&& echo "Mechanisation: lake build OK (Lemmas 6.2 + 6.4 kernel-checked)" \
+			   | tee -a $(LOGS)/mechanisation.log \
+			|| (echo "Mechanisation: lake build FAILED — see $(LOGS)/mechanisation.log" \
+			    | tee -a $(LOGS)/mechanisation.log; exit 1); \
+	else \
+		echo "Mechanisation: SKIPPED (Lean toolchain not on PATH; install elan to verify)" \
+			| tee $(LOGS)/mechanisation.log; \
+	fi
 
 $(LOGS):
 	mkdir -p $(LOGS)
