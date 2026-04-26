@@ -560,6 +560,23 @@ per-fixture JSON plus stratified accuracy slices (per chapter,
 per category, per difficulty, per polarity), so reproducing the
 result against a different model is one command.
 
+\paragraph{Cross-model comparison.} A second baseline against
+\statBenchmarkLlmAltModel{} on the same $n =
+\statBenchmarkFixtures{}$ fixtures inverts the picture: T1 rises
+to \statBenchmarkLlmAltTone{}\% and T3 to
+\statBenchmarkLlmAltTthree{}\%, but T2 mean F1 drops to
+\statBenchmarkLlmAltTtwoFOne{} (vs.\ \statBenchmarkLlmTtwoFOne{}
+on \statBenchmarkLlmModel{}). The polarity-negative collapse,
+however, does \emph{not} reproduce: on
+\statBenchmarkLlmAltModel{} the negative-polarity slice scores
+T2 F1 \statBenchmarkLlmAltNegPolarFOne{} (slightly above the
+whole-corpus \statBenchmarkLlmAltTtwoFOne{}) and T1
+\statBenchmarkLlmAltNegPolarTone{}\%. So the
+\statBenchmarkLlmModel{} polarity collapse is a
+model-specific artefact, not a benchmark-wide structural
+property; the cross-model split itself becomes a useful
+discriminator that the benchmark surfaces.
+
 \paragraph{Caveats.} Three. First, the benchmark probes
 \emph{structural} agreement with the encoded statute, not legal
 correctness in the sense a practitioner would test --- the
