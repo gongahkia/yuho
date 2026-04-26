@@ -629,8 +629,15 @@ evaluation subsection (\S\ref{subsec:scenario_synthesis}).
 
 Possible follow-ups (not in scope here):
 
-- [ ] Cross-validate the synthesised scenarios against a published
-      case-law corpus; report match rate per chapter.
+- [x] **Cross-validation against case law shipped** —
+      `scripts/contrast_caselaw_validation.py` checks each of
+      the 115 synthesised contrast pairs against the 22
+      case-law-covered pairs. Match rate (any direction) =
+      2.6%. The two sources are complementary: case law
+      heavily clusters on s304↔s300 (17 of 22 fixtures);
+      the Z3-synthesised corpus covers SCC/subsumes pairs
+      across the wider library. Results JSON at
+      `evals/case_law/results-contrast-validation.json`.
 - [ ] Encode general defences with explicit `defeats` edges into
       the offences they apply against, so `yuho narrow-defence`
       can switch from the "both elements fire" model to the

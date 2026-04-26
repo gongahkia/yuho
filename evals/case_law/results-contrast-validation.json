@@ -1,0 +1,256 @@
+{
+  "n_contrast_pairs": 115,
+  "n_case_law_pairs": 22,
+  "n_matched_ordered": 2,
+  "n_matched_unordered": 1,
+  "n_unmatched": 112,
+  "match_rate_ordered": 0.017391304347826087,
+  "match_rate_any": 0.02608695652173913,
+  "matched_ordered": [
+    {
+      "contrast_pair": [
+        "300",
+        "299"
+      ],
+      "case_law_fixtures": [
+        "case-pp-v-kho-jabing"
+      ],
+      "source_file": "s300_vs_s299.json"
+    },
+    {
+      "contrast_pair": [
+        "304",
+        "300"
+      ],
+      "case_law_fixtures": [
+        "case-azlin-bte-arujunah",
+        "case-chee-cheong-hin-constance",
+        "case-lim-ghim-peow",
+        "case-ong-pang-siew",
+        "case-sundarti-supriyanto"
+      ],
+      "source_file": "s304_vs_s300.json"
+    }
+  ],
+  "matched_unordered": [
+    {
+      "contrast_pair": [
+        "299",
+        "300"
+      ],
+      "case_law_fixtures": [
+        "case-pp-v-kho-jabing"
+      ],
+      "source_file": "s299_vs_s300.json",
+      "note": "unordered match — case-law fixture has the inverse pair"
+    }
+  ],
+  "unmatched_sample": [
+    {
+      "contrast_pair": [
+        "102",
+        "375"
+      ],
+      "source_file": "s102_vs_s375.json"
+    },
+    {
+      "contrast_pair": [
+        "102",
+        "376"
+      ],
+      "source_file": "s102_vs_s376.json"
+    },
+    {
+      "contrast_pair": [
+        "109",
+        "161"
+      ],
+      "source_file": "s109_vs_s161.json"
+    },
+    {
+      "contrast_pair": [
+        "112",
+        "111"
+      ],
+      "source_file": "s112_vs_s111.json"
+    },
+    {
+      "contrast_pair": [
+        "116",
+        "161"
+      ],
+      "source_file": "s116_vs_s161.json"
+    },
+    {
+      "contrast_pair": [
+        "121C",
+        "121A"
+      ],
+      "source_file": "s121C_vs_s121A.json"
+    },
+    {
+      "contrast_pair": [
+        "121C",
+        "121B"
+      ],
+      "source_file": "s121C_vs_s121B.json"
+    },
+    {
+      "contrast_pair": [
+        "121D",
+        "121"
+      ],
+      "source_file": "s121D_vs_s121.json"
+    },
+    {
+      "contrast_pair": [
+        "146",
+        "141"
+      ],
+      "source_file": "s146_vs_s141.json"
+    },
+    {
+      "contrast_pair": [
+        "148",
+        "144"
+      ],
+      "source_file": "s148_vs_s144.json"
+    },
+    {
+      "contrast_pair": [
+        "151",
+        "141"
+      ],
+      "source_file": "s151_vs_s141.json"
+    },
+    {
+      "contrast_pair": [
+        "151",
+        "145"
+      ],
+      "source_file": "s151_vs_s145.json"
+    },
+    {
+      "contrast_pair": [
+        "158",
+        "141"
+      ],
+      "source_file": "s158_vs_s141.json"
+    },
+    {
+      "contrast_pair": [
+        "158",
+        "144"
+      ],
+      "source_file": "s158_vs_s144.json"
+    },
+    {
+      "contrast_pair": [
+        "195",
+        "191"
+      ],
+      "source_file": "s195_vs_s191.json"
+    },
+    {
+      "contrast_pair": [
+        "195",
+        "192"
+      ],
+      "source_file": "s195_vs_s192.json"
+    },
+    {
+      "contrast_pair": [
+        "198",
+        "197"
+      ],
+      "source_file": "s198_vs_s197.json"
+    },
+    {
+      "contrast_pair": [
+        "200",
+        "199"
+      ],
+      "source_file": "s200_vs_s199.json"
+    },
+    {
+      "contrast_pair": [
+        "225A",
+        "221"
+      ],
+      "source_file": "s225A_vs_s221.json"
+    },
+    {
+      "contrast_pair": [
+        "225B",
+        "224"
+      ],
+      "source_file": "s225B_vs_s224.json"
+    }
+  ],
+  "case_law_pair_summary": [
+    {
+      "pair": [
+        "300",
+        "304"
+      ],
+      "fixtures": [
+        "case-azlin-bte-arujunah",
+        "case-chee-cheong-hin-constance",
+        "case-chia-kee-chen",
+        "case-daniel-vijay-principal",
+        "case-iskandar-rahmat",
+        "case-lee-chez-kee",
+        "case-lim-ghim-peow",
+        "case-micheal-anak-garing",
+        "case-mohammed-ali-johari",
+        "case-ong-pang-siew",
+        "case-pp-v-lim-poh-lye",
+        "case-sundarti-supriyanto",
+        "case-tan-chee-wee",
+        "case-tan-joo-cheng",
+        "case-tan-kheng-ann-pulau-senang",
+        "case-took-leng-how",
+        "case-wang-zhijian"
+      ]
+    },
+    {
+      "pair": [
+        "406",
+        "409"
+      ],
+      "fixtures": [
+        "case-lam-leng-hung",
+        "case-tan-cheng-yew"
+      ]
+    },
+    {
+      "pair": [
+        "109",
+        "300"
+      ],
+      "fixtures": [
+        "case-aniza-bte-essa"
+      ]
+    },
+    {
+      "pair": [
+        "300",
+        "299"
+      ],
+      "fixtures": [
+        "case-pp-v-kho-jabing"
+      ]
+    },
+    {
+      "pair": [
+        "376",
+        "375"
+      ],
+      "fixtures": [
+        "case-pram-nair"
+      ]
+    }
+  ],
+  "not_legal_advice": true,
+  "disclaimer": "Match-rate measures structural overlap between the Z3-synthesised contrast pairs and the curated case-law corpus. A low rate means the synthesis exercises section boundaries the case-law sample does not yet cover (or vice versa), not that either is wrong."
+}
