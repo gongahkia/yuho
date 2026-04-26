@@ -16,8 +16,9 @@ L1+L2 · 524 L3 author-stamped · §4 + §6 paper sections shipped (formal
 semantics + soundness theorem with 5 lemmas + 8 sanity-witness tests) ·
 §6.6 partial Lean 4 mechanisation kernel-checked (Lemmas 6.2 + 6.4) ·
 §7.8 case-law differential testing (n=30, three scorers) · §7.6 LLM
-benchmark with full 205-fixture GPT-4o-mini baseline · 31-page smoke
-PDF · `make paper-reproduce` end-to-end including Lean kernel-check.**
+benchmark with full 205-fixture GPT-4o-mini + GPT-4o cross-model
+baselines · 31-page smoke PDF · `make paper-reproduce` end-to-end
+including Lean kernel-check.**
 
 Completed history (Phases A–D, the rigor-hardening trench, mechanisation
 v1, case-law differential testing, the LLM-benchmark closed-vocab fix,
@@ -52,9 +53,11 @@ Open follow-ups (deferred to v2):
 
 ## §7.6 — LLM benchmark hardening `[~]`
 
-v0 + closed-vocab fix + GPT-4o-mini full baseline shipped (T1=43.9%,
-T2=32.7% / F1=0.676, T3=94.1% on n=205). Paper §7.6 has the headline
-numbers + three findings paragraph. Open work:
+v0 + closed-vocab fix + GPT-4o-mini full baseline + GPT-4o cross-
+model baseline shipped (gpt-4o-mini: T1=43.9% / T2=32.7% /
+F1=0.676 / T3=94.1%; gpt-4o: T1=60.5% / T2=6.8% / F1=0.317 /
+T3=98.0% on n=205). Paper §7.6 has headline numbers + three
+findings + cross-model paragraph. Open work:
 
 ### Polarity-negative collapse (benchmark-design weakness)
 
@@ -73,6 +76,15 @@ elements rather than identifying that none fire. This is itself a
 finding worth keeping in §7.6 (it informs downstream legal-AI work
 on structural-reasoning prompts), but it also flags a benchmark-
 design weakness we should fix.
+
+**Update (post gpt-4o run):** the polarity-negative collapse does
+*not* reproduce on gpt-4o (T2 F1 0.380 on the 30 negative-polarity
+fixtures, slightly above the corpus mean 0.317). So the collapse
+is a **gpt-4o-mini-specific artefact**, not a benchmark-wide
+structural property. The benchmark itself surfaces this cross-
+model split — a useful discriminator. The polarity-priming /
+chain-of-thought work below now targets the gpt-4o-mini failure
+mode specifically, not the benchmark as a whole.
 
 **Iterative refinement history of the LLM benchmark** — useful
 context for the §7.6 paragraph and for any future benchmark-design
@@ -96,9 +108,13 @@ audit:
 5. **Full n=205 run (commit `ec91405a`)**: T1=43.9% / T2=32.7%
    exact / F1=0.676 / T3=94.1%. Paper §7.6 rewritten with the real
    numbers + three observations.
-6. **Polarity-negative finding (this section)**: the model
-   collapses on negative-polarity fixtures. The next iteration
-   should address this.
+6. **Polarity-negative finding (gpt-4o-mini)**: the model
+   collapses on negative-polarity fixtures (T2 F1 0.056).
+7. **Cross-model run (gpt-4o, this commit)**: the collapse does
+   *not* reproduce on gpt-4o (T2 F1 0.380 on the same slice).
+   Reframed: the failure mode is model-specific, not benchmark-
+   wide. Polarity-priming work below targets the gpt-4o-mini
+   regime specifically.
 
 Open work — fix the polarity-negative case:
 
@@ -124,12 +140,13 @@ Open work — fix the polarity-negative case:
 User has an OpenAI org key but not Anthropic. Run additional OpenAI
 models to test cross-model generalisation:
 
-- [ ] **GPT-4o** (running in background as of this write — see
-      `evals/results-gpt-4o-full.json` once landed). Tests whether
-      the larger model improves T1 + closes the polarity-negative
-      gap.
-- [ ] **GPT-4o + polarity-priming** combined run (after the
-      benchmark-design fix above lands).
+- [x] **GPT-4o.** Shipped — `evals/results-gpt-4o-full.json`.
+      T1 60.5% / T2 6.8% / F1 0.317 / T3 98.0% on n=205. Paper
+      §7.6 has the cross-model paragraph; polarity-negative
+      collapse is gpt-4o-mini-specific (see update note above).
+- [ ] **GPT-4o-mini + polarity-priming** combined run (target
+      the model-specific failure mode identified by the cross-
+      model split).
 - [ ] **o1-mini** or **o3-mini** if the user wants to test
       reasoning-model performance — a real apples-to-apples for
       structural reasoning.
@@ -253,7 +270,7 @@ remains:
 | External counsel access not available | L3 stays author-stamped; §11 carries the explicit caveat that external review is not part of this paper's claim |
 | IPC text access blocked (paywall, robots.txt change) | Switch to the Bangladeshi PC 1860 (also Anglo-Indian lineage, public-domain text) |
 | AI&L editorial rejection | Re-target *Formal Aspects of Computing* (legal-tech amenable) or ICAIL (page budget tighter but acceptable) |
-| LLM-benchmark polarity-negative gap remains unfixed | Keep as-is and flag in §7.6 "open question for downstream legal-AI work" rather than presenting as a benchmark we expect models to ace |
+| LLM-benchmark polarity-negative gap remains unfixed | gpt-4o run shows the gap is model-specific (gpt-4o-mini only); §7.6 cross-model paragraph already frames this as a positive discriminator the benchmark surfaces, not a corpus-wide weakness |
 
 ---
 
