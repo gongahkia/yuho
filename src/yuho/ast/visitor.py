@@ -114,6 +114,9 @@ class Visitor:
     def visit_function_call(self, node: nodes.FunctionCallNode) -> Any:
         return self.generic_visit(node)
 
+    def visit_is_infringed(self, node: nodes.IsInfringedNode) -> Any:
+        return self.generic_visit(node)
+
     def visit_binary_expr(self, node: nodes.BinaryExprNode) -> Any:
         return self.generic_visit(node)
 

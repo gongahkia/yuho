@@ -25,6 +25,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Iterable, List, Optional
 
+from yuho.ast import nodes
 from yuho.library.reference_graph import ReferenceGraph
 
 
@@ -69,17 +70,68 @@ def _check_cross_section_cycles(
     return out
 
 
+def _walk_is_infringed(root: nodes.ASTNode) -> List[nodes.IsInfringedNode]:
+    """Collect every IsInfringedNode reachable from ``root``."""
+    out: List[nodes.IsInfringedNode] = []
+    stack: List[nodes.ASTNode] = [root]
+    while stack:
+        n = stack.pop()
+        if isinstance(n, nodes.IsInfringedNode):
+            out.append(n)
+        children = n.children() if hasattr(n, "children") else []
+        for c in children:
+            if isinstance(c, nodes.ASTNode):
+                stack.append(c)
+    return out
+
+
+def check_is_infringed_resolution(
+    module: nodes.ModuleNode,
+    known_sections: Iterable[str],
+) -> List[GraphLintWarning]:
+    """Verify every ``is_infringed(<section>)`` references a known section.
+
+    ``known_sections`` is the set of section numbers present in the
+    library being lint-checked (typically ``graph.nodes`` from a
+    :class:`ReferenceGraph`). Unknown section references emit
+    ``is_infringed_unresolved`` warnings.
+    """
+    known = {str(s) for s in known_sections}
+    warnings: List[GraphLintWarning] = []
+    for node in _walk_is_infringed(module):
+        if node.section_ref not in known:
+            warnings.append(
+                GraphLintWarning(
+                    code="is_infringed_unresolved",
+                    sections=(node.section_ref,),
+                    message=(
+                        f"is_infringed(s{node.section_ref}) does not resolve "
+                        f"to any encoded section in the library"
+                    ),
+                    severity="warning",
+                )
+            )
+    return warnings
+
+
 def lint_reference_graph(
     graph: ReferenceGraph,
     *,
     kinds: Optional[Iterable[str]] = None,
+    module: Optional[nodes.ModuleNode] = None,
 ) -> List[GraphLintWarning]:
     """Run all library-level diagnostics on a built reference graph.
 
     ``kinds`` defaults to ``("implicit", "subsumes")``; pass an explicit
     iterable to include or exclude further edge kinds.
+
+    When ``module`` is supplied, also resolve ``is_infringed`` predicates
+    against the graph's node set and surface ``is_infringed_unresolved``
+    warnings for unknown section references.
     """
     edge_kinds = tuple(kinds) if kinds else _DEFAULT_KINDS
     warnings: List[GraphLintWarning] = []
     warnings.extend(_check_cross_section_cycles(graph, edge_kinds))
+    if module is not None:
+        warnings.extend(check_is_infringed_resolution(module, graph.nodes))
     return warnings

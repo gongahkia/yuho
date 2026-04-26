@@ -400,6 +400,19 @@ def add_edges_from_module(
     return added
 
 
+def is_infringed(graph: ReferenceGraph, section_ref: str) -> bool:
+    """lam4-style ``IS_INFRINGED`` predicate over the reference graph.
+
+    Returns ``True`` iff ``section_ref`` names a section present in the
+    library (i.e. is encoded and reachable as a graph node). The check
+    deliberately does not consult per-section satisfaction at the moment;
+    it answers ``does this section exist to be infringed?'' which is the
+    structural pre-condition for any downstream evaluator. A future
+    elaboration can layer on per-fact-pattern element satisfaction.
+    """
+    return _normalise_section(section_ref) in graph.nodes
+
+
 def build_reference_graph(library_dir: Path) -> ReferenceGraph:
     """Build a reference graph by parsing every ``statute.yh`` under ``library_dir``."""
     from yuho.services.analysis import analyze_file

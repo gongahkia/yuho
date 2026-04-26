@@ -359,6 +359,32 @@ class FunctionCallNode(ASTNode):
 
 
 @dataclass(frozen=True)
+class IsInfringedNode(ASTNode):
+    """lam4-style ``is_infringed(<section>)`` predicate.
+
+    Built when the AST builder sees a call to the reserved identifier
+    ``is_infringed`` with a single argument that names a section. The
+    argument is canonicalised to a section number string (e.g. ``"299"``,
+    ``"376AA"``).
+
+    Semantics: at evaluation time, ``IS_INFRINGED`` evaluates ``true``
+    iff the encoded fact pattern satisfies every required element of
+    the named section, after applying its prioritised exceptions. The
+    intent is to let composing sections (s107 abetment, s34 common
+    intention) compose with arbitrary base offences without re-stating
+    every element.
+    """
+
+    section_ref: str  # canonical section number, e.g. "299", "376AA"
+
+    def accept(self, visitor: "Visitor"):
+        return visitor.visit_is_infringed(self)
+
+    def children(self) -> List[ASTNode]:
+        return []
+
+
+@dataclass(frozen=True)
 class BinaryExprNode(ASTNode):
     """Binary expression: left op right."""
 

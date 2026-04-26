@@ -676,8 +676,12 @@ class ASTBuilder:
             source_location=self._loc(node),
         )
 
-    def _build_function_call(self, node) -> nodes.FunctionCallNode:
-        """Build FunctionCallNode from function_call node."""
+    def _build_function_call(self, node):
+        """Build FunctionCallNode from function_call node.
+
+        Special-case: ``is_infringed(<section_ref>)`` lifts to an
+        :class:`IsInfringedNode` (lam4-style cross-section predicate).
+        """
         callee_node = self._child_by_field(node, "callee")
         callee_expr = (
             self._build_expression(callee_node)
@@ -699,11 +703,48 @@ class ASTBuilder:
                 if child.type not in (",", "(", ")"):
                     args.append(self._build_expression(child))
 
+        # Lift is_infringed(<section_ref>) to IsInfringedNode.
+        if (
+            isinstance(callee, nodes.IdentifierNode)
+            and callee.name == "is_infringed"
+            and len(args) == 1
+        ):
+            section_ref = self._coerce_section_ref(args[0])
+            if section_ref is not None:
+                return nodes.IsInfringedNode(
+                    section_ref=section_ref,
+                    source_location=self._loc(node),
+                )
+
         return nodes.FunctionCallNode(
             callee=callee,
             args=tuple(args),
             source_location=self._loc(node),
         )
+
+    @staticmethod
+    def _coerce_section_ref(arg: nodes.ASTNode) -> Optional[str]:
+        """Canonicalise a function-call argument to a section number string.
+
+        Accepts identifiers like ``s299``, ``s.376AA``, integer literals like
+        ``299``, and string literals like ``"299"`` / ``"376AA"``. Returns
+        ``None`` when the argument is not a recognisable section reference.
+        """
+        import re
+
+        raw: Optional[str] = None
+        if isinstance(arg, nodes.IdentifierNode):
+            raw = arg.name
+        elif isinstance(arg, nodes.IntLit):
+            raw = str(arg.value)
+        elif isinstance(arg, nodes.StringLit):
+            raw = arg.value
+        if raw is None:
+            return None
+        m = re.match(r"^[Ss]?\.?\s*(\d+[A-Z]{0,3})$", raw.strip())
+        if not m:
+            return None
+        return m.group(1)
 
     def _build_binary_expr(self, node) -> nodes.BinaryExprNode:
         """Build BinaryExprNode from binary_expression node."""
