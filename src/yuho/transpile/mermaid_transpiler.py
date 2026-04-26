@@ -19,9 +19,28 @@ class MermaidTranspiler(TranspilerBase, Visitor):
     with diamonds for conditions and rectangles for outcomes.
     """
 
-    def __init__(self, direction: str = "TD", use_subgraphs: bool = True):
+    def __init__(
+        self,
+        direction: str = "TD",
+        use_subgraphs: bool = True,
+        shape: str = "statute",
+    ):
+        """
+        Args:
+            direction: Mermaid layout direction (TD/LR/RL/BT).
+            use_subgraphs: cluster nested match expressions into subgraphs.
+            shape: ``"statute"`` (default) emits the statute-structure
+                flowchart that has shipped since the project's earliest
+                transpiler. ``"schema"`` emits a fact-pattern decision
+                tree by walking a case-struct's enum-typed fields and
+                surfacing the consuming ``fn``'s consequence per leaf.
+                See ``_transpile_schema_module`` for the algorithm.
+        """
+        if shape not in ("statute", "schema"):
+            raise ValueError(f"unknown mermaid shape: {shape!r}")
         self.direction = direction
         self.use_subgraphs = use_subgraphs
+        self.shape = shape
         self._output: List[str] = []
         self._node_counter = 0
         self._subgraph_counter = 0
@@ -41,10 +60,13 @@ class MermaidTranspiler(TranspilerBase, Visitor):
         self._element_nodes = {}
         self._nesting_depth = 0
         self._emit(f"flowchart {self.direction}")
-        for statute in ast.statutes:
-            self._transpile_statute(statute)
-        for func in ast.function_defs:
-            self._transpile_function(func)
+        if self.shape == "schema":
+            self._transpile_schema_module(ast)
+        else:
+            for statute in ast.statutes:
+                self._transpile_statute(statute)
+            for func in ast.function_defs:
+                self._transpile_function(func)
         return "\n".join(self._output)
 
     def _emit(self, line: str) -> None:
@@ -165,6 +187,260 @@ class MermaidTranspiler(TranspilerBase, Visitor):
         for child in node.children():
             matches.extend(self._find_match_exprs(child))
         return matches
+
+    # =========================================================================
+    # Schema-shape rendering (--shape schema)
+    # =========================================================================
+
+    def _transpile_schema_module(self, ast: nodes.ModuleNode) -> None:
+        """Render a schema-shape decision tree from struct + fn pairs.
+
+        The 5-minutes.md illustration of a "Cheating" decision tree —
+        ``Cheating -> Accused -> Action -> Attribution -> Deception ->
+        Inducement -> CausesDamageHarm -> DamageHarmResult ->
+        ConsequenceDefinition`` — is the target shape. We reconstruct it
+        by:
+
+        1. Finding the *case struct* (a struct whose fields are all
+           plain types or string-named enums), e.g. ``CheatingCase``.
+        2. Finding the *enum-like structs* — structs whose fields all
+           have empty/no type annotation, e.g. ``DeceptionType``.
+        3. Linking case-struct fields to enum-likes by naming
+           convention: field ``deceptionType`` -> struct
+           ``DeceptionType`` (capitalise first + suffix preserved).
+        4. Finding the *consuming fn* — one whose params correspond
+           1:1 (by name+order) to the case-struct's fields.
+        5. Walking the case-struct fields in order, branching on each
+           enum's variants, and terminating in the consuming fn's
+           ``consequence`` outcomes (taken from its match arms).
+
+        When any of (1)-(4) cannot be located the renderer emits a
+        single ``no-schema-pair-found`` annotation and falls back to
+        the standard statute-shape rendering for any statutes that
+        happen to be present.
+        """
+        case_struct = self._find_case_struct(ast)
+        enum_map = self._find_enum_structs(ast)
+        consuming_fn = self._find_consuming_fn(ast, case_struct) if case_struct else None
+
+        if not case_struct or not consuming_fn:
+            self._emit("    %% schema-shape requires a struct + matching fn pair.")
+            self._emit('    NOSCHEMA["No schema pair found — falling back to statute shape."]')
+            for statute in ast.statutes:
+                self._transpile_statute(statute)
+            for func in ast.function_defs:
+                self._transpile_function(func)
+            return
+
+        self._emit(f"    %% Schema decision tree: {case_struct.name} -> {consuming_fn.name}")
+        # Root node: the case struct's display name (strip "Case" suffix
+        # for legibility, mirroring the 5-minutes.md depiction).
+        display = case_struct.name
+        if display.endswith("Case"):
+            display = display[:-4]
+        root_id = self._new_node_id("SCHEMA")
+        self._emit(f"    {root_id}([{self._q(display)}])")
+
+        # Pre-compute consequence labels per (field_name, value) by walking
+        # the consuming fn's match arms. The arms most commonly take the
+        # shape `case TRUE if <field> == "<value>" := consequence "<X>"`,
+        # but the value strings ("none", "fraudulently", …) typically use
+        # different casing than the corresponding enum variant names
+        # (Fraudulently, NA, …). We bucket case-insensitively and build a
+        # default-arm fallback for the wildcard `case _ := consequence …`.
+        consequence_terminals = self._consequences_by_field_value(consuming_fn)
+        default_consequence = consequence_terminals.get(("__default__", "__default__"))
+
+        # Variant-driven walk: each enum variant becomes a labelled edge
+        # from the current field's decision diamond. The edge terminates
+        # in either a consequence node (when a fn arm matches the variant
+        # name case-insensitively) or the next field's decision diamond
+        # via a "continue" anchor.
+        prev_decision = root_id
+        for i, field in enumerate(case_struct.fields):
+            decision_id = self._new_node_id("FIELD")
+            self._emit(f"    {decision_id}{{{{{self._q(field.name)}}}}}")
+            self._emit(f"    {prev_decision} --> {decision_id}")
+
+            enum_name = self._infer_enum_name(field.name)
+            enum_struct = enum_map.get(enum_name)
+            is_last_field = (i == len(case_struct.fields) - 1)
+
+            # Build the "continue to next field" anchor up-front so every
+            # variant edge that doesn't terminate in a consequence can
+            # point at the same node. For the last field we point at a
+            # default-consequence leaf instead.
+            if is_last_field:
+                if default_consequence:
+                    cont_id = self._new_node_id("CON")
+                    self._emit(f"    {cont_id}[{self._q(default_consequence)}]")
+                else:
+                    cont_id = self._new_node_id("END")
+                    self._emit(f'    {cont_id}["evaluation complete"]')
+            else:
+                cont_id = self._new_node_id("CONT")
+                self._emit(f'    {cont_id}["continue"]')
+
+            if enum_struct is None:
+                # Field has no matching enum; single "any value" edge.
+                self._emit(f"    {decision_id} --> {cont_id}")
+            else:
+                emitted_any = False
+                for variant in enum_struct.fields:
+                    branch_label = f"{enum_struct.name}.{variant.name}"
+                    term = consequence_terminals.get(
+                        (field.name, variant.name.lower())
+                    )
+                    if term is not None:
+                        leaf_id = self._new_node_id("CON")
+                        self._emit(f"    {leaf_id}[{self._q(term)}]")
+                        self._emit(
+                            f"    {decision_id} -->|{self._q(branch_label)}| {leaf_id}"
+                        )
+                    else:
+                        self._emit(
+                            f"    {decision_id} -->|{self._q(branch_label)}| {cont_id}"
+                        )
+                    emitted_any = True
+                if not emitted_any:
+                    self._emit(f"    {decision_id} --> {cont_id}")
+
+            prev_decision = cont_id if not is_last_field else cont_id
+
+    def _find_case_struct(self, ast: nodes.ModuleNode) -> Optional[nodes.StructDefNode]:
+        """Pick the most-likely 'fact pattern' struct in the module.
+
+        Heuristic: the struct whose name ends in ``Case`` is the
+        canonical pick. Otherwise, the struct with the most fields and
+        no nested-struct types is preferred.
+        """
+        if not getattr(ast, "type_defs", None):
+            return None
+        case_named = [s for s in ast.type_defs
+                      if isinstance(s, nodes.StructDefNode) and s.name.endswith("Case")]
+        if case_named:
+            return case_named[0]
+        # Fallback: largest non-enum struct.
+        candidates = [s for s in ast.type_defs
+                      if isinstance(s, nodes.StructDefNode) and s.fields
+                      and any(self._field_is_typed(f) for f in s.fields)]
+        return max(candidates, key=lambda s: len(s.fields), default=None)
+
+    def _find_enum_structs(self, ast: nodes.ModuleNode):
+        """Return a name -> EnumDefNode mapping for the module's enums.
+
+        Yuho exposes proper ``enum`` declarations (``enum DeceptionType
+        { Fraudulently, Dishonestly, NA }``); the schema-flowchart links
+        case-struct fields to these by capitalising the field name (the
+        documented naming convention). We expose enum variants under
+        the same ``.fields`` interface that ``StructDefNode`` uses so
+        the rendering loop stays uniform.
+        """
+        from types import SimpleNamespace
+        out: Dict[str, object] = {}
+        for e in getattr(ast, "enum_defs", ()) or ():
+            # Adapt EnumDefNode -> a struct-like object with .name + .fields.
+            adapted_fields = [SimpleNamespace(name=v.name) for v in e.variants]
+            out[e.name] = SimpleNamespace(name=e.name, fields=adapted_fields)
+        # Also include enum-shaped structs (rare; some legacy fixtures use
+        # the all-untyped-field convention from before `enum` landed).
+        for s in getattr(ast, "type_defs", ()) or ():
+            if not isinstance(s, nodes.StructDefNode) or not s.fields:
+                continue
+            if all(not self._field_is_typed(f) for f in s.fields):
+                out.setdefault(s.name, s)
+        return out
+
+    @staticmethod
+    def _field_is_typed(field: nodes.FieldDef) -> bool:
+        """Heuristic: a field is 'typed' if it has a real type annotation
+        beyond a bare name. Enum-like structs use field-as-variant where
+        the type annotation is essentially empty / synthesised."""
+        ta = getattr(field, "type_annotation", None)
+        if ta is None:
+            return False
+        # Variant-style fields parse with a TypeNode whose name == the
+        # field name. That's how we tell enum-likes apart.
+        name = getattr(ta, "name", None)
+        return bool(name) and name != field.name
+
+    @staticmethod
+    def _infer_enum_name(field_name: str) -> str:
+        """Naming-convention link: field ``deceptionType`` -> struct
+        ``DeceptionType``. Capitalises the first letter; preserves any
+        embedded camelCase."""
+        if not field_name:
+            return field_name
+        return field_name[0].upper() + field_name[1:]
+
+    def _find_consuming_fn(
+        self,
+        ast: nodes.ModuleNode,
+        case_struct: Optional[nodes.StructDefNode],
+    ) -> Optional[nodes.FunctionDefNode]:
+        """Return the fn whose parameters correspond to the case-struct's
+        fields. We require name+order alignment between fn params and
+        struct fields, since ``apply_scope``/``is_infringed`` would
+        otherwise pick up scope-composition fns that don't apply here.
+        """
+        if not case_struct:
+            return None
+        field_names = [f.name for f in case_struct.fields]
+        for fn in getattr(ast, "function_defs", ()) or ():
+            param_names = [p.name for p in fn.params]
+            # 1:1 alignment OR first-N alignment is acceptable.
+            if param_names and param_names[: len(field_names)] == field_names[: len(param_names)]:
+                return fn
+        return None
+
+    def _consequences_by_field_value(
+        self, fn: nodes.FunctionDefNode
+    ) -> Dict[tuple, str]:
+        """Walk a fn's match arms and bucket consequences by (field, value)."""
+        out: Dict[tuple, str] = {}
+        match_exprs = self._find_match_exprs(fn.body)
+        for m in match_exprs:
+            for arm in m.arms:
+                guard = getattr(arm, "guard", None)
+                body = getattr(arm, "body", None)
+                if not guard or not body:
+                    continue
+                # Patterns like `<param> == "<value>"`.
+                fld, val = self._parse_field_eq_string(guard)
+                if fld is not None and val is not None:
+                    consequence_text = self._consequence_label(body)
+                    if consequence_text:
+                        out[(fld, val.lower())] = consequence_text
+                else:
+                    consequence_text = self._consequence_label(body)
+                    if consequence_text:
+                        out.setdefault(("__default__", "__default__"), consequence_text)
+        return out
+
+    @staticmethod
+    def _parse_field_eq_string(expr) -> tuple:
+        """Detect `<ident> == "<string>"`-shaped guards."""
+        if isinstance(expr, nodes.BinaryExprNode) and expr.operator == "==":
+            left, right = expr.left, expr.right
+            if isinstance(left, nodes.IdentifierNode) and isinstance(right, nodes.StringLit):
+                return left.name, right.value
+            if isinstance(right, nodes.IdentifierNode) and isinstance(left, nodes.StringLit):
+                return right.name, left.value
+        return (None, None)
+
+    @staticmethod
+    def _consequence_label(body) -> Optional[str]:
+        """Pull a string label out of a match-arm body when the body is
+        a ``consequence "<text>"`` expression. Anything else surfaces as
+        the plain expression text via ``repr`` so the diagram still emits."""
+        # ConsequenceExpr nodes wrap an expression; walk the tree.
+        if isinstance(body, nodes.StringLit):
+            return body.value
+        for child in body.children() if hasattr(body, "children") else []:
+            r = MermaidTranspiler._consequence_label(child)
+            if r is not None:
+                return r
+        return None
 
     # =========================================================================
     # Match expression to flowchart (no merge nodes)

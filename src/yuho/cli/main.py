@@ -401,6 +401,13 @@ def ast(
 @click.option("-o", "--output", type=click.Path(), help="Output file path")
 @click.option("--dir", "output_dir", type=click.Path(), help="Output directory for multiple files")
 @click.option("--all", "all_targets", is_flag=True, help="Generate all targets")
+@click.option(
+    "--shape",
+    type=click.Choice(["statute", "schema"], case_sensitive=False),
+    default="statute",
+    help="Mermaid flowchart shape: 'statute' (structural, default) or 'schema' "
+         "(decision tree from a case-struct + matching fn).",
+)
 @click.option("--json", "json_output", is_flag=True, help="Output metadata as JSON")
 @click.pass_context
 def transpile(
@@ -410,18 +417,22 @@ def transpile(
     output: Optional[str],
     output_dir: Optional[str],
     all_targets: bool,
+    shape: str,
     json_output: bool,
 ) -> None:
     """
     Transpile a Yuho source file to another format.
 
-    Supported targets: json, english, latex, pdf, mermaid, alloy
+    Supported targets: json, english, latex, pdf, mermaid, mindmap,
+    alloy, docx, akomantoso. Use ``--shape schema`` with mermaid for the
+    case-struct decision-tree rendering described in the 5-minutes guide.
     """
     from yuho.cli.commands.transpile import run_transpile
 
     run_transpile(
         file,
         target=target,
+        shape=shape,
         output=output,
         output_dir=output_dir,
         all_targets=all_targets,

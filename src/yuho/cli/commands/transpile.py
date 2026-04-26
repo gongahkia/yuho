@@ -35,6 +35,7 @@ def run_transpile(
     all_targets: bool = False,
     json_output: bool = False,
     verbose: bool = False,
+    shape: str = "statute",
 ) -> None:
     """
     Transpile a Yuho file to another format.
@@ -168,7 +169,14 @@ def run_transpile(
 
         try:
             transpile_target = TranspileTarget.from_string(tgt)
-            transpiler = get_transpiler(transpile_target)
+            # Mermaid + schema-shape: use a fresh transpiler with the requested
+            # shape rather than the cached statute-shape singleton from the
+            # registry. The schema path is opt-in and rarely the right default.
+            if transpile_target is TranspileTarget.MERMAID and shape == "schema":
+                from yuho.transpile.mermaid_transpiler import MermaidTranspiler
+                transpiler = MermaidTranspiler(shape="schema")
+            else:
+                transpiler = get_transpiler(transpile_target)
             output_text = transpiler.transpile(ast)
         except ValueError as e:
             click.echo(colorize(f"error: {e}", Colors.RED), err=True)
