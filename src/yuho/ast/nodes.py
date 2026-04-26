@@ -359,6 +359,33 @@ class FunctionCallNode(ASTNode):
 
 
 @dataclass(frozen=True)
+class ApplyScopeNode(ASTNode):
+    """Catala-style scope composition: ``apply_scope(<section>, ...args)``.
+
+    Evaluates the named section's element graph as a callable scope,
+    returning whatever a downstream evaluator computes for that scope.
+    Lets composing sections (s34 common intention, s107 abetment, s120A
+    criminal conspiracy) wrap an arbitrary base offence by referring to
+    its elements without restating them.
+
+    Built when the AST builder sees a call to the reserved identifier
+    ``apply_scope`` whose first argument is a section reference. Trailing
+    arguments are passed through as additional scope inputs (typically
+    the fact pattern or shared bindings); the builder canonicalises only
+    the section reference.
+    """
+
+    section_ref: str
+    args: Tuple[ASTNode, ...] = ()
+
+    def accept(self, visitor: "Visitor"):
+        return visitor.visit_apply_scope(self)
+
+    def children(self) -> List[ASTNode]:
+        return list(self.args)
+
+
+@dataclass(frozen=True)
 class IsInfringedNode(ASTNode):
     """lam4-style ``is_infringed(<section>)`` predicate.
 

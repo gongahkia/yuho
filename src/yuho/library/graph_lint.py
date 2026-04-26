@@ -85,6 +85,44 @@ def _walk_is_infringed(root: nodes.ASTNode) -> List[nodes.IsInfringedNode]:
     return out
 
 
+def _walk_apply_scope(root: nodes.ASTNode) -> List[nodes.ApplyScopeNode]:
+    """Collect every ApplyScopeNode reachable from ``root``."""
+    out: List[nodes.ApplyScopeNode] = []
+    stack: List[nodes.ASTNode] = [root]
+    while stack:
+        n = stack.pop()
+        if isinstance(n, nodes.ApplyScopeNode):
+            out.append(n)
+        children = n.children() if hasattr(n, "children") else []
+        for c in children:
+            if isinstance(c, nodes.ASTNode):
+                stack.append(c)
+    return out
+
+
+def check_apply_scope_resolution(
+    module: nodes.ModuleNode,
+    known_sections: Iterable[str],
+) -> List[GraphLintWarning]:
+    """Verify every ``apply_scope(<section>, ...)`` references a known section."""
+    known = {str(s) for s in known_sections}
+    warnings: List[GraphLintWarning] = []
+    for node in _walk_apply_scope(module):
+        if node.section_ref not in known:
+            warnings.append(
+                GraphLintWarning(
+                    code="apply_scope_unresolved",
+                    sections=(node.section_ref,),
+                    message=(
+                        f"apply_scope(s{node.section_ref}, ...) does not "
+                        f"resolve to any encoded section in the library"
+                    ),
+                    severity="warning",
+                )
+            )
+    return warnings
+
+
 def check_is_infringed_resolution(
     module: nodes.ModuleNode,
     known_sections: Iterable[str],
@@ -134,4 +172,5 @@ def lint_reference_graph(
     warnings.extend(_check_cross_section_cycles(graph, edge_kinds))
     if module is not None:
         warnings.extend(check_is_infringed_resolution(module, graph.nodes))
+        warnings.extend(check_apply_scope_resolution(module, graph.nodes))
     return warnings

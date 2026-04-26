@@ -413,6 +413,18 @@ def is_infringed(graph: ReferenceGraph, section_ref: str) -> bool:
     return _normalise_section(section_ref) in graph.nodes
 
 
+def can_apply_scope(graph: ReferenceGraph, section_ref: str) -> bool:
+    """Catala-style scope-composition pre-condition.
+
+    Returns ``True`` iff ``section_ref`` names a section that exists as a
+    callable scope in the library. Symmetric with :func:`is_infringed`
+    but is used by the AST/evaluator as the gate for ``apply_scope``;
+    semantic differences emerge at the evaluator (apply_scope returns
+    bindings, is_infringed returns a bool).
+    """
+    return _normalise_section(section_ref) in graph.nodes
+
+
 def build_reference_graph(library_dir: Path) -> ReferenceGraph:
     """Build a reference graph by parsing every ``statute.yh`` under ``library_dir``."""
     from yuho.services.analysis import analyze_file

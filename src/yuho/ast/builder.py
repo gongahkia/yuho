@@ -716,6 +716,20 @@ class ASTBuilder:
                     source_location=self._loc(node),
                 )
 
+        # Lift apply_scope(<section_ref>, ...args) to ApplyScopeNode.
+        if (
+            isinstance(callee, nodes.IdentifierNode)
+            and callee.name == "apply_scope"
+            and len(args) >= 1
+        ):
+            section_ref = self._coerce_section_ref(args[0])
+            if section_ref is not None:
+                return nodes.ApplyScopeNode(
+                    section_ref=section_ref,
+                    args=tuple(args[1:]),
+                    source_location=self._loc(node),
+                )
+
         return nodes.FunctionCallNode(
             callee=callee,
             args=tuple(args),

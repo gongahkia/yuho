@@ -117,6 +117,9 @@ class Visitor:
     def visit_is_infringed(self, node: nodes.IsInfringedNode) -> Any:
         return self.generic_visit(node)
 
+    def visit_apply_scope(self, node: nodes.ApplyScopeNode) -> Any:
+        return self.generic_visit(node)
+
     def visit_binary_expr(self, node: nodes.BinaryExprNode) -> Any:
         return self.generic_visit(node)
 
