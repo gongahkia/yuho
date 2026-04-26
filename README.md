@@ -55,10 +55,42 @@ described below.
 
 ## Quickstart
 
-### I want to *read* an encoded statute
+### Supported Python: 3.10 – 3.13
+
+CI tests 3.10, 3.11, 3.12, 3.13. **Avoid Python 3.14 on macOS Homebrew** —
+the current `python@3.14` formula has an Expat ABI mismatch
+(`Symbol not found: _XML_SetAllocTrackerActivationThreshold`) that
+breaks every Python project doing XML parsing, including Yuho's AKN
+transpiler. A future Homebrew rotation will fix it; until then use
+3.10–3.13.
+
+### Recommended: install via `uv`
+
+`uv` ships its own statically-linked Pythons and sidesteps Homebrew's
+`ensurepip` and `libexpat` glitches entirely.
+
+```sh
+brew install uv                 # one-time; or pipx install uv
+git clone https://github.com/gongahkia/yuho && cd yuho
+uv venv --python 3.13 .venv
+source .venv/bin/activate
+uv pip install -e '.[dev]'
+yuho --version                  # 5.1.0
+pytest tests/ --ignore=tests/e2e -q
+```
+
+### Fallback: plain `pip` (works if your Python install is healthy)
 
 ```sh
 git clone https://github.com/gongahkia/yuho && cd yuho
+python3.13 -m venv .venv
+source .venv/bin/activate
+pip install -e '.[dev]'
+```
+
+### I want to *read* an encoded statute
+
+```sh
 cat library/penal_code/s415_cheating/statute.yh           # the source
 yuho transpile -t english library/penal_code/s415_cheating/statute.yh
 ```
@@ -66,7 +98,6 @@ yuho transpile -t english library/penal_code/s415_cheating/statute.yh
 ### I want to *encode* a new statute
 
 ```sh
-pip install -e . && pip install -e '.[lsp,mcp]'
 yuho --version                                            # 5.1.0
 yuho check examples/simple_statute.yh                     # validate
 ```
