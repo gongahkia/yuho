@@ -1,0 +1,275 @@
+# Verifying Yuho's user-facing features
+
+A manual walkthrough of every shipped surface. Run top-to-bottom; each
+section is self-contained and you can stop after any one.
+
+Prerequisites: from the repo root,
+
+```sh
+pip install -e .[dev]
+```
+
+(or `pip install -e .[all]` for everything including the LSP/MCP/Word
+extras).
+
+---
+
+## 1. The CLI — `yuho` (~30 commands)
+
+### Basic file checks
+
+```sh
+yuho check library/penal_code/s415_cheating/statute.yh
+yuho lint  library/penal_code/s415_cheating/statute.yh
+yuho ast   library/penal_code/s415_cheating/statute.yh --stats
+yuho fmt   library/penal_code/s415_cheating/statute.yh --check
+```
+
+Expected: each prints structured output, exits 0.
+
+### Transpile to all seven targets
+
+```sh
+yuho transpile -t json       library/penal_code/s415_cheating/statute.yh
+yuho transpile -t english    library/penal_code/s415_cheating/statute.yh
+yuho transpile -t latex      library/penal_code/s415_cheating/statute.yh
+yuho transpile -t mermaid    library/penal_code/s415_cheating/statute.yh
+yuho transpile -t alloy      library/penal_code/s415_cheating/statute.yh
+yuho transpile -t akomantoso library/penal_code/s415_cheating/statute.yh
+yuho transpile --all         library/penal_code/s415_cheating/statute.yh -o /tmp/s415-all/
+```
+
+The DOCX target writes a binary; pass `-o out.docx`.
+
+### Reference graph + SCC analysis
+
+```sh
+yuho refs                              # whole-library stats
+yuho refs s415                         # in/out edges for s415
+yuho refs s415 --transitive --out      # transitive closure
+yuho refs --scc                        # find cross-section cycles
+yuho refs --scc --json                 # machine-readable
+```
+
+The `--scc` run should report **4 non-trivial cycles** in the encoded
+library (s292↔s293, s85↔s86, s424A↔s424B, s304B↔s74A).
+
+### Counter-example explorer + charge recommender
+
+```sh
+yuho explore     library/penal_code/s415_cheating/statute.yh
+yuho recommend "A intentionally deceived B into handing over a watch"
+```
+
+The recommender ranks Penal Code sections by structural fit. Output
+is decorated with the `LEGAL_DISCLAIMER` envelope and a
+`not_legal_advice` flag — that is not a hedge, it is the contract.
+
+### Verification (Z3 / Alloy)
+
+```sh
+yuho verify        library/penal_code/s415_cheating/statute.yh
+yuho verify-report library/penal_code/s415_cheating/statute.yh -o report.tex
+```
+
+Z3 is bundled with the `[verify]` extras. Alloy needs a separate
+install (see `docs/contributor/architecture.md` §verification).
+
+### Other handy commands
+
+```sh
+yuho repl                              # interactive REPL
+yuho graph -t mermaid library/penal_code/s415_cheating/statute.yh
+yuho diff  library/penal_code/s299_culpable_homicide/statute.yh \
+           library/penal_code/s300_murder/statute.yh
+yuho ci-report                         # repo-wide pass/fail summary
+yuho schema                            # JSON schema for transpile output
+yuho generate-tests library/penal_code/s415_cheating/statute.yh
+yuho compliance-matrix library/penal_code/s415_cheating/statute.yh
+yuho library list
+yuho library search theft
+yuho library tree
+```
+
+---
+
+## 2. The Language Server (LSP)
+
+```sh
+# Start the LSP over stdio (most editors expect this transport).
+yuho lsp
+```
+
+Then connect from any LSP client. For a quick CLI sanity check:
+
+```sh
+echo '{}' | yuho lsp --check  # spawn, log capabilities, exit
+```
+
+Smoke-tested via `tests/test_lsp_handlers.py`.
+
+---
+
+## 3. The MCP server (Model Context Protocol)
+
+```sh
+# Start the MCP server. Speaks JSON-RPC over stdio by default.
+yuho serve
+```
+
+Wire to Claude Desktop / Cursor / Codex CLI by adding to your
+client's MCP config (see `docs/user/mcp-install.md`). The server
+exposes ~40 tools (`yuho_check`, `yuho_transpile`, `yuho_apply_flag_fix`,
+…), ~20 resources (`yuho://library/<section>`, `yuho://prompts/...`),
+and a handful of structured prompts.
+
+Verify all tools register cleanly:
+
+```sh
+.venv-test/bin/python -m pytest tests/test_mcp_tools.py -q
+```
+
+---
+
+## 4. VS Code extension
+
+```sh
+cd editors/vscode-yuho
+npm install
+npm run package    # produces yuho-x.y.z.vsix
+code --install-extension yuho-*.vsix
+```
+
+Open any `.yh` file in VS Code and you should see syntax highlighting,
+hover popups, completion, code lens (Explore / Recommend), and a
+status-bar L3 coverage indicator.
+
+---
+
+## 5. Browser extension
+
+```sh
+cd editors/browser-yuho
+python build_data.py             # regenerate data/ from library/penal_code
+python build_explore.py
+# Load the unpacked extension from editors/browser-yuho/ in chrome://extensions/
+# (Firefox: about:debugging > "Load Temporary Add-on" > pick manifest.firefox.json)
+```
+
+The extension overlays Penal Code sections with their encoded form
+when you visit Singapore Statutes Online.
+
+---
+
+## 6. Static explorer site
+
+```sh
+cd editors/explorer-site
+python build.py                  # build static HTML into ./build
+python -m http.server --directory build 8000
+open http://localhost:8000
+```
+
+A browseable per-section index of the entire encoded Penal Code. No
+backend, just static HTML + JS.
+
+---
+
+## 7. Microsoft Word add-in
+
+```sh
+cd editors/word-yuho
+python build_data.py             # regenerate the per-section SVG/JSON cache
+python build_manifest.py         # writes manifest.xml
+# Side-load manifest.xml in Word (Insert → Add-ins → "Upload My Add-in")
+```
+
+Adds a Yuho ribbon to the **Insert** tab; insert encoded penal-code
+section quotes / element lists / Mermaid SVGs into a Word document.
+
+---
+
+## 8. Akoma Ntoso XML round-trip
+
+```sh
+yuho transpile -t akomantoso library/penal_code/s415_cheating/statute.yh > /tmp/s415.akn.xml
+xmllint --noout /tmp/s415.akn.xml          # well-formed?
+python scripts/akn_roundtrip.py            # validate ALL 524 sections
+```
+
+Should print `AKN round-trip: 524/524 validate clean`.
+
+---
+
+## 9. Run the full test suite
+
+```sh
+.venv-test/bin/python -m pytest tests/ --ignore=tests/e2e -q
+```
+
+Should report ~4800 passed, 0 failed. Add `tests/e2e/` for the
+end-to-end pack (slower).
+
+---
+
+## 10. Build the paper
+
+```sh
+cd paper
+make smoke              # article-class build (basic TeX Live)
+make paper              # full acmart build (needs latexmk + acmart)
+make stats stats-extra  # regenerate auto-injected metrics
+```
+
+Output is `paper/main.pdf` (or `paper/main_smoke.pdf`).
+
+---
+
+## 11. Reference-graph cycle dump (for the paper's §5)
+
+```sh
+yuho refs --scc --json | python -m json.tool
+```
+
+The four cycles printed are the empirical evidence cited in
+evaluation §5.X (Cross-reference graph structure).
+
+---
+
+## 12. Methodology numbers (for paper readers)
+
+```sh
+python scripts/paper_methodology.py
+cat paper/methodology/throughput.json | python -m json.tool
+cat paper/methodology/fidelity_hits.json | python -m json.tool
+cat paper/methodology/gap_frequency.json | python -m json.tool
+```
+
+Regenerates the throughput / fidelity / gap-frequency JSON that
+backs the empirical claims in evaluation §5.
+
+---
+
+## 13. Behavioural-test fixtures
+
+```sh
+.venv-test/bin/python -m pytest tests/test_library_statutes.py -k 'test_test_file_is_semantically_valid' -q
+```
+
+Should report 82 passed (the working companions) + ~442 skipped (the
+sections without companions, mostly interpretation provisions where
+structural parse + lint coverage is the appropriate bar).
+
+---
+
+## What "passing" means at each tier
+
+| Tier | What it asserts | Automated? |
+|---|---|---|
+| **L1** | The `.yh` parses without syntax errors. | Yes — `yuho check`. |
+| **L2** | AST builds, lint passes, fidelity diagnostics quiet. | Yes — `yuho check` + `yuho lint`. |
+| **L3** | An 11-point human-checklist audit passed. | Author-administered; external counsel review pending. |
+
+The paper's §7 is explicit that L3 stamps are author-administered, not
+externally validated. That is the load-bearing caveat to read the
+"524/524 L3-stamped" claim alongside.
