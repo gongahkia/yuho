@@ -102,14 +102,27 @@ class YuhoREPL:
         self._setup_readline()
 
     def _setup_readline(self) -> None:
+        """Wire up readline history; tolerate any read/write failure.
+
+        macOS sandboxing, immutable filesystems (e.g. Nix store), and
+        SELinux-restricted homedirs can all surface as PermissionError or
+        OSError on either the read or the write path. None of those are
+        fatal — the REPL just runs without persistent history.
+        """
         history_file = Path.home() / ".yuho_history"
         try:
             readline.read_history_file(history_file)
-        except FileNotFoundError:
+        except (FileNotFoundError, PermissionError, OSError):
             pass
         import atexit
 
-        atexit.register(lambda: readline.write_history_file(history_file))
+        def _write_history() -> None:
+            try:
+                readline.write_history_file(history_file)
+            except (PermissionError, OSError):
+                pass
+
+        atexit.register(_write_history)
         readline.set_history_length(1000)
 
     def _colorize(self, text: str, color: str) -> str:
