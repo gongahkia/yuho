@@ -20,6 +20,7 @@ This document mirrors the output of `yuho <subcommand> --help` for every impleme
 | `yuho deps` | Show statute dependencies for a Yuho file. |
 | `yuho diff` | Compare two Yuho files and show semantic differences. |
 | `yuho eval` | Evaluate a Yuho file through the interpreter. |
+| `yuho explain` | Plain-language summary of an encoded statute. |
 | `yuho explore` | Counter-example explorer: surface fact patterns over a section. |
 | `yuho fmt` | Format a Yuho source file. |
 | `yuho generate` | Generate statute scaffold with proper structure. |
@@ -358,6 +359,28 @@ Usage: yuho eval [OPTIONS] FILE
 
 Options:
   --json  Output as JSON
+  --help  Show this message and exit.
+```
+
+## `yuho explain`
+
+Plain-language summary of an encoded statute.
+
+```
+Usage: yuho explain [OPTIONS] FILE [SECTION]
+
+  Plain-language summary of an encoded statute.
+
+  Renders a 5-section prose block: title, what-it-covers (from metadata.toml summary),
+  elements, penalty, and a worked example (first illustration). With a section number it
+  filters to that section; without one, it explains every statute in the file.
+
+  Examples:
+
+      yuho explain library/penal_code/s415_cheating/statute.yh     yuho explain
+      library/penal_code/s415_cheating/statute.yh 415
+
+Options:
   --help  Show this message and exit.
 ```
 
@@ -897,14 +920,20 @@ Usage: yuho transpile [OPTIONS] FILE
 
   Transpile a Yuho source file to another format.
 
-  Supported targets: json, english, latex, pdf, mermaid, alloy
+  Supported targets: json, english, latex, pdf, mermaid, mindmap, alloy, docx,
+  akomantoso. Use ``--shape schema`` with mermaid for the case-struct decision-tree
+  rendering described in the 5-minutes guide.
 
 Options:
-  -t, --target [json|english|latex|pdf|mermaid|svg|png|alloy|docx]
+  -t, --target [json|english|latex|pdf|mermaid|mindmap|mermaid-mindmap|svg|png|alloy|docx|akomantoso|akn|legaldocml]
                                   Transpilation target format
   -o, --output PATH               Output file path
   --dir PATH                      Output directory for multiple files
   --all                           Generate all targets
+  --shape [statute|schema]        Mermaid flowchart shape: 'statute' (structural,
+                                  default) or 'schema' (decision tree from a case-struct
+                                  + matching fn). Only meaningful for the mermaid
+                                  target.
   --json                          Output metadata as JSON
   --help                          Show this message and exit.
 ```
@@ -1006,6 +1035,7 @@ Commands:
   deps               Show statute dependencies for a Yuho file.
   diff               Compare two Yuho files and show semantic differences.
   eval               Evaluate a Yuho file through the interpreter.
+  explain            Plain-language summary of an encoded statute.
   explore            Counter-example explorer: surface fact patterns over a section.
   fmt                Format a Yuho source file.
   generate           Generate statute scaffold with proper structure.
