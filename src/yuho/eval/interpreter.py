@@ -552,6 +552,83 @@ class Interpreter(Visitor):
     # Function call
     # ======================================================================
 
+    # ======================================================================
+    # Section-composition predicates (lam4 / Catala lineage)
+    # ======================================================================
+
+    def _section_lookup(self, section_ref: str, node: nodes.ASTNode) -> nodes.StatuteNode:
+        from yuho.eval.statute_evaluator import _canonical_section
+        canonical = _canonical_section(section_ref)
+        target = self.env.statutes.get(canonical)
+        if target is None:
+            raise InterpreterError(
+                f"unresolved section reference s{canonical}: not registered "
+                f"in this module's statute set",
+                node,
+            )
+        return target
+
+    def _facts_from_env(self) -> "StructInstance":
+        """Synthesise a `Facts` struct from current bindings.
+
+        Used by `is_infringed`, where the caller has not threaded an
+        explicit fact pattern through. Each visible binding becomes a
+        field on a synthetic struct so the StatuteEvaluator's facts
+        accessor lookups resolve.
+        """
+        fields: Dict[str, Value] = {}
+        env = self.env
+        # Walk the environment chain so child scopes shadow parents.
+        seen: Dict[str, Value] = {}
+        cur = env
+        while cur is not None:
+            for k, v in cur.bindings.items():
+                if k not in seen:
+                    seen[k] = v
+            cur = cur.parent
+        fields.update(seen)
+        return StructInstance(type_name="Facts", fields=fields)
+
+    def visit_is_infringed(self, node: nodes.IsInfringedNode) -> "Value":
+        """Evaluate `is_infringed(sX)` against the current environment.
+
+        Resolves to a boolean Value: true iff the named section's
+        elements are all satisfied (after exception precedence) under
+        the facts visible in the current scope.
+        """
+        from yuho.eval.statute_evaluator import StatuteEvaluator
+        target = self._section_lookup(node.section_ref, node)
+        facts = self._facts_from_env()
+        ev = StatuteEvaluator()
+        result = ev.evaluate(target, facts, self.env)
+        return Value(raw=bool(result.overall_satisfied), type_tag="bool")
+
+    def visit_apply_scope(self, node: nodes.ApplyScopeNode) -> "Value":
+        """Evaluate `apply_scope(sX, facts_arg, …)` and return the inner
+        scope's overall_satisfied as a boolean.
+
+        The first arg, by builder convention, is the section reference
+        and is already lifted into ``node.section_ref``. The remaining
+        args are evaluated; if at least one resolves to a struct
+        instance, that struct is taken as the fact pattern; otherwise
+        the current environment is used as in :meth:`visit_is_infringed`.
+        """
+        from yuho.eval.statute_evaluator import StatuteEvaluator
+        target = self._section_lookup(node.section_ref, node)
+        # Find the first struct-typed arg as the fact pattern; fall back
+        # to environment-derived facts otherwise.
+        facts: Optional[StructInstance] = None
+        for arg in node.args:
+            v = self.visit(arg)
+            if isinstance(v, Value) and isinstance(v.raw, StructInstance):
+                facts = v.raw
+                break
+        if facts is None:
+            facts = self._facts_from_env()
+        ev = StatuteEvaluator()
+        result = ev.apply_scope(node.section_ref, facts, self.env.statutes, env=self.env)
+        return Value(raw=bool(result.overall_satisfied), type_tag="bool")
+
     def visit_function_call(self, node: nodes.FunctionCallNode) -> Value:
         # resolve callee name
         if isinstance(node.callee, nodes.IdentifierNode):
