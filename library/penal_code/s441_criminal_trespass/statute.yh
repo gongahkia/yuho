@@ -2,6 +2,14 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr441-#pr441-
 
+fn is_criminal_trespass(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 441 "Criminal trespass" effective 1872-01-01 {
     definitions {
         criminal_trespass := "Whoever enters into or upon property in the possession of another with intent to commit an offence or to intimidate, insult or annoy any person in possession of such property, or having lawfully entered into or upon such property, unlawfully remains there with intent thereby to intimidate, insult or annoy any such person, or with intent to commit an offence, is said to commit “criminal trespass”.";

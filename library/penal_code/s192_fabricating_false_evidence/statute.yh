@@ -2,6 +2,14 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr192-#pr192-
 
+fn is_fabricating_false_evidence(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 192 "Fabricating false evidence" effective 1872-01-01 {
     definitions {
         fabricate_false_evidence := "A person is said to fabricate false evidence if the person satisfies the elements in this section.";

@@ -3,6 +3,14 @@
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr294-#pr294-
 /// @amendment [15/2019]
 
+fn is_obscene_acts(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 294 "Obscene acts" effective 1872-01-01 effective 2020-01-01 {
     elements {
         /// Section 294 requires annoyance of others and one of the two obscene public-place acts.

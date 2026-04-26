@@ -3,6 +3,14 @@
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr284-#pr284-
 /// @amendment [15/2019]
 
+fn is_rash_negligent_conduct_respect(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 284 "Rash or negligent conduct with respect to dangerous or harmful substance" effective 1872-01-01 effective 2020-01-01 {
     subsection (1) {
         elements {

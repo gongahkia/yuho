@@ -2,6 +2,14 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr191-#pr191-
 
+fn is_giving_false_evidence(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 191 "Giving false evidence" effective 1872-01-01 {
     definitions {
         giving_false_evidence := "Whoever, being legally bound by an oath, or by any express provision of law to state the truth, or being bound by law to make a declaration upon any subject, makes any statement which is false, and which he either knows or believes to be false, or does not believe to be true, is said to give false evidence.";

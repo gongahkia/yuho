@@ -1,0 +1,31 @@
+// Test file for s350_criminal_force
+// Yuho v5 Syntax — behavioural fixture.
+// Universal offence shape: made out iff elements ∧ ¬defence.
+
+referencing penal_code/s350_criminal_force
+
+struct CriminalForceTestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+// elements satisfied, no defence -> offence made out
+CriminalForceTestCase guilty := CriminalForceTestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_criminal_force(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+// elements satisfied, defence applies -> not made out
+CriminalForceTestCase defended := CriminalForceTestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_criminal_force(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+// no elements -> not made out
+CriminalForceTestCase notMadeOut := CriminalForceTestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_criminal_force(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE

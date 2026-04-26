@@ -4,6 +4,14 @@
 
 referencing penal_code/s470_forged_document_forged_electronic_record
 
+fn is_using_genuine_forged_document(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 471 "Using as genuine a forged document or forged electronic record" effective 1872-01-01 {
     definitions {
         forged_document := "A forged document has the meaning given in section 470.";

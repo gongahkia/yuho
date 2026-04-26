@@ -1,0 +1,31 @@
+// Test file for s121B_offences_against_authority
+// Yuho v5 Syntax — behavioural fixture.
+// Universal offence shape: made out iff elements ∧ ¬defence.
+
+referencing penal_code/s121B_offences_against_authority
+
+struct OffencesAgainstAuthorityTestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+// elements satisfied, no defence -> offence made out
+OffencesAgainstAuthorityTestCase guilty := OffencesAgainstAuthorityTestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_offences_against_authority(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+// elements satisfied, defence applies -> not made out
+OffencesAgainstAuthorityTestCase defended := OffencesAgainstAuthorityTestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_offences_against_authority(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+// no elements -> not made out
+OffencesAgainstAuthorityTestCase notMadeOut := OffencesAgainstAuthorityTestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_offences_against_authority(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE

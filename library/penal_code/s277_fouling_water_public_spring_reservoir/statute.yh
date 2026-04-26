@@ -3,6 +3,14 @@
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr277-#pr277-
 /// @amendment [15/2019]
 
+fn is_fouling_water_public_spring(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 277 "Fouling the water of a public spring or reservoir" effective 1872-01-01 effective 2019-12-31 {
     elements {
         all_of {

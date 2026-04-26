@@ -3,6 +3,14 @@
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr124-#pr124-
 /// @amendment [15/2019]
 
+fn is_assaulting_president_etc_intent(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 124 "Assaulting President, etc., with intent to compel or restrain the exercise of any lawful power" effective 1872-01-01 effective 2020-01-01 {
     elements {
         all_of {

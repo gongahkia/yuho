@@ -1,0 +1,31 @@
+// Test file for s327_voluntarily_causing_hurt_extort_property
+// Yuho v5 Syntax — behavioural fixture.
+// Universal offence shape: made out iff elements ∧ ¬defence.
+
+referencing penal_code/s327_voluntarily_causing_hurt_extort_property
+
+struct VoluntarilyCausingHurtExtortTestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+// elements satisfied, no defence -> offence made out
+VoluntarilyCausingHurtExtortTestCase guilty := VoluntarilyCausingHurtExtortTestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_voluntarily_causing_hurt_extort(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+// elements satisfied, defence applies -> not made out
+VoluntarilyCausingHurtExtortTestCase defended := VoluntarilyCausingHurtExtortTestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_voluntarily_causing_hurt_extort(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+// no elements -> not made out
+VoluntarilyCausingHurtExtortTestCase notMadeOut := VoluntarilyCausingHurtExtortTestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_voluntarily_causing_hurt_extort(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE

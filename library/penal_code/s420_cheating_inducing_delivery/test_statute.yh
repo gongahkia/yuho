@@ -1,0 +1,31 @@
+// Test file for s420_cheating_inducing_delivery
+// Yuho v5 Syntax — behavioural fixture.
+// Universal offence shape: made out iff elements ∧ ¬defence.
+
+referencing penal_code/s420_cheating_inducing_delivery
+
+struct CheatingInducingDeliveryTestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+// elements satisfied, no defence -> offence made out
+CheatingInducingDeliveryTestCase guilty := CheatingInducingDeliveryTestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_cheating_inducing_delivery(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+// elements satisfied, defence applies -> not made out
+CheatingInducingDeliveryTestCase defended := CheatingInducingDeliveryTestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_cheating_inducing_delivery(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+// no elements -> not made out
+CheatingInducingDeliveryTestCase notMadeOut := CheatingInducingDeliveryTestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_cheating_inducing_delivery(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE

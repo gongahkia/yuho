@@ -1,0 +1,31 @@
+// Test file for s121C_abetting_offences_under_section_121a_121b
+// Yuho v5 Syntax — behavioural fixture.
+// Universal offence shape: made out iff elements ∧ ¬defence.
+
+referencing penal_code/s121C_abetting_offences_under_section_121a_121b
+
+struct AbettingOffencesUnderSectionTestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+// elements satisfied, no defence -> offence made out
+AbettingOffencesUnderSectionTestCase guilty := AbettingOffencesUnderSectionTestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_abetting_offences_under_section(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+// elements satisfied, defence applies -> not made out
+AbettingOffencesUnderSectionTestCase defended := AbettingOffencesUnderSectionTestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_abetting_offences_under_section(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+// no elements -> not made out
+AbettingOffencesUnderSectionTestCase notMadeOut := AbettingOffencesUnderSectionTestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_abetting_offences_under_section(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE

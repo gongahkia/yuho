@@ -1,0 +1,31 @@
+// Test file for s130D_genocide
+// Yuho v5 Syntax — behavioural fixture.
+// Universal offence shape: made out iff elements ∧ ¬defence.
+
+referencing penal_code/s130D_genocide
+
+struct GenocideTestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+// elements satisfied, no defence -> offence made out
+GenocideTestCase guilty := GenocideTestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_genocide(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+// elements satisfied, defence applies -> not made out
+GenocideTestCase defended := GenocideTestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_genocide(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+// no elements -> not made out
+GenocideTestCase notMadeOut := GenocideTestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_genocide(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE

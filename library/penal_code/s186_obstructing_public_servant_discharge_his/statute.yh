@@ -4,6 +4,14 @@
 /// @amendment [Act 23 of 2021 wef 01/03/2022]
 /// @amendment [15/2019]
 
+fn is_obstructing_public_servant_discharge(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 186 "Obstructing public servant in discharge of his public functions" effective 1872-01-01 effective 2020-01-01 effective 2022-03-01 {
     subsection (1) {
         elements {

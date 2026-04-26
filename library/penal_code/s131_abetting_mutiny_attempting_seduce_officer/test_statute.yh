@@ -1,0 +1,31 @@
+// Test file for s131_abetting_mutiny_attempting_seduce_officer
+// Yuho v5 Syntax — behavioural fixture.
+// Universal offence shape: made out iff elements ∧ ¬defence.
+
+referencing penal_code/s131_abetting_mutiny_attempting_seduce_officer
+
+struct AbettingMutinyAttemptingSeduceTestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+// elements satisfied, no defence -> offence made out
+AbettingMutinyAttemptingSeduceTestCase guilty := AbettingMutinyAttemptingSeduceTestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_abetting_mutiny_attempting_seduce(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+// elements satisfied, defence applies -> not made out
+AbettingMutinyAttemptingSeduceTestCase defended := AbettingMutinyAttemptingSeduceTestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_abetting_mutiny_attempting_seduce(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+// no elements -> not made out
+AbettingMutinyAttemptingSeduceTestCase notMadeOut := AbettingMutinyAttemptingSeduceTestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_abetting_mutiny_attempting_seduce(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE

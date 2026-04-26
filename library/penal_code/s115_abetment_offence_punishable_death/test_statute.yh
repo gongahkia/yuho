@@ -1,0 +1,31 @@
+// Test file for s115_abetment_offence_punishable_death
+// Yuho v5 Syntax — behavioural fixture.
+// Universal offence shape: made out iff elements ∧ ¬defence.
+
+referencing penal_code/s115_abetment_offence_punishable_death
+
+struct AbetmentOffencePunishableDeathTestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+// elements satisfied, no defence -> offence made out
+AbetmentOffencePunishableDeathTestCase guilty := AbetmentOffencePunishableDeathTestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_abetment_offence_punishable_death(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+// elements satisfied, defence applies -> not made out
+AbetmentOffencePunishableDeathTestCase defended := AbetmentOffencePunishableDeathTestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_abetment_offence_punishable_death(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+// no elements -> not made out
+AbetmentOffencePunishableDeathTestCase notMadeOut := AbetmentOffencePunishableDeathTestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_abetment_offence_punishable_death(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE

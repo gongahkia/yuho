@@ -2,6 +2,14 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr171-#pr171-
 
+fn is_wearing_garb_carrying_token(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 171 "Wearing garb or carrying token used by public servant, with fraudulent intent" effective 1872-01-01 {
     elements {
         all_of {

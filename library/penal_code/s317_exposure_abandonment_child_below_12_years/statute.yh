@@ -2,6 +2,14 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr317-#pr317-
 
+fn is_exposure_abandonment_child_below(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 317 "Exposure and abandonment of a child below 12 years of age by parent or person having care of it" effective 1872-01-01 {
     definitions {
         explanation_child_dies_in_consequence := "Explanation. — This section is not intended to prevent the trial of the offender for murder or culpable homicide as the case may be, if the child dies in consequence of the exposure."

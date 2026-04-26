@@ -1,0 +1,31 @@
+// Test file for s201_causing_disappearance_evidence_offence
+// Yuho v5 Syntax — behavioural fixture.
+// Universal offence shape: made out iff elements ∧ ¬defence.
+
+referencing penal_code/s201_causing_disappearance_evidence_offence
+
+struct CausingDisappearanceEvidenceOffenceTestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+// elements satisfied, no defence -> offence made out
+CausingDisappearanceEvidenceOffenceTestCase guilty := CausingDisappearanceEvidenceOffenceTestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_causing_disappearance_evidence_offence(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+// elements satisfied, defence applies -> not made out
+CausingDisappearanceEvidenceOffenceTestCase defended := CausingDisappearanceEvidenceOffenceTestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_causing_disappearance_evidence_offence(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+// no elements -> not made out
+CausingDisappearanceEvidenceOffenceTestCase notMadeOut := CausingDisappearanceEvidenceOffenceTestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_causing_disappearance_evidence_offence(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE

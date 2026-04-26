@@ -3,6 +3,14 @@
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr122-#pr122-
 /// @amendment [15/2019]
 
+fn is_collecting_arms_etc_intention(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 122 "Collecting arms, etc., with the intention of waging war against the Government" effective 1872-01-01 effective 2019-12-31 {
     elements {
         all_of {

@@ -3,6 +3,14 @@
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr131-#pr131-
 /// @amendment [15/2019]
 
+fn is_abetting_mutiny_attempting_seduce(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 131 "Abetting mutiny, or attempting to seduce an officer or a serviceman from his duty" effective 1872-01-01 effective 2019-12-31 {
     elements {
         /// The offence is committed by either abetting mutiny or attempting to seduce the protected officer or serviceman from allegiance or duty.

@@ -1,0 +1,31 @@
+// Test file for s471_using_genuine_forged_document_forged
+// Yuho v5 Syntax — behavioural fixture.
+// Universal offence shape: made out iff elements ∧ ¬defence.
+
+referencing penal_code/s471_using_genuine_forged_document_forged
+
+struct UsingGenuineForgedDocumentTestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+// elements satisfied, no defence -> offence made out
+UsingGenuineForgedDocumentTestCase guilty := UsingGenuineForgedDocumentTestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_using_genuine_forged_document(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+// elements satisfied, defence applies -> not made out
+UsingGenuineForgedDocumentTestCase defended := UsingGenuineForgedDocumentTestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_using_genuine_forged_document(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+// no elements -> not made out
+UsingGenuineForgedDocumentTestCase notMadeOut := UsingGenuineForgedDocumentTestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_using_genuine_forged_document(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE

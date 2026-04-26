@@ -3,6 +3,14 @@
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr328-#pr328-
 /// @amendment [15/2019]
 
+fn is_causing_hurt_means_poison(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 328 "Causing hurt by means of poison, etc., with intent to commit an offence" effective 1872-01-01 effective 2020-01-01 {
     elements {
         /// Section 328 requires the prohibited administration or caused ingestion, one listed harmful substance category, and one listed fault element.

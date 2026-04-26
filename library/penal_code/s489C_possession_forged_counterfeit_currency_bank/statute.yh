@@ -3,6 +3,14 @@
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr489C-#pr489C-
 /// @amendment [15/2019]
 
+fn is_possession_forged_counterfeit_currency(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 489C "Possession of forged or counterfeit currency or bank notes" effective 1872-01-01 effective 2019-12-31 {
     elements {
         /// The offence requires possession of forged or counterfeit currency or a bank note, knowledge or reason to believe it is forged or counterfeit, and an intention that it be used as genuine.

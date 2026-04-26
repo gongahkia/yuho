@@ -1,0 +1,31 @@
+// Test file for s324_voluntarily_causing_hurt_dangerous_weapons
+// Yuho v5 Syntax — behavioural fixture.
+// Universal offence shape: made out iff elements ∧ ¬defence.
+
+referencing penal_code/s324_voluntarily_causing_hurt_dangerous_weapons
+
+struct VoluntarilyCausingHurtDangerousTestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+// elements satisfied, no defence -> offence made out
+VoluntarilyCausingHurtDangerousTestCase guilty := VoluntarilyCausingHurtDangerousTestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_voluntarily_causing_hurt_dangerous(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+// elements satisfied, defence applies -> not made out
+VoluntarilyCausingHurtDangerousTestCase defended := VoluntarilyCausingHurtDangerousTestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_voluntarily_causing_hurt_dangerous(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+// no elements -> not made out
+VoluntarilyCausingHurtDangerousTestCase notMadeOut := VoluntarilyCausingHurtDangerousTestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_voluntarily_causing_hurt_dangerous(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE

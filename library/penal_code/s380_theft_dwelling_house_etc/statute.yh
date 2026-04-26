@@ -4,6 +4,14 @@
 
 referencing penal_code/s378_theft
 
+fn is_theft_dwelling_house_etc(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 380 "Theft in dwelling house, etc." effective 1872-01-01 {
     elements {
         /// The section aggravates theft where the place is a building, tent or vessel used as a human dwelling or for the custody of property.

@@ -1,6 +1,14 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr339-#pr339-
+fn is_wrongful_restraint(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 339 "Wrongful restraint" effective 1872-01-01 {
     definitions {
         wrongful_restraint := "Whoever voluntarily obstructs any person, so as to prevent that person from proceeding in any direction in which that person has a right to proceed, is said wrongfully to restrain that person.";

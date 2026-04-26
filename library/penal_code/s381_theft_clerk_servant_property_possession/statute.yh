@@ -2,6 +2,14 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr381-#pr381-
 
+fn is_theft_clerk_servant_property(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 381 "Theft by clerk or servant of property in possession of master" effective 1872-01-01 {
     elements {
         /// Section 381 aggravates theft where the offender is in service to the person possessing the property.

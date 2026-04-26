@@ -3,6 +3,14 @@
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr188-#pr188-
 /// @amendment [15/2019]
 
+fn is_disobedience_order_duly_promulgated(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 188 "Disobedience to order duly promulgated by public servant" effective 1872-01-01 effective 2019-12-31 {
     /// Explanation .—It is not necessary that the offender should intend to produce harm, or contemplate his disobedience as likely to produce harm. It is sufficient that he knows of the order which he disobeys, and that his disobedience produces, or is likely to produce, harm.
 

@@ -1,0 +1,31 @@
+// Test file for s171_wearing_garb_carrying_token_used_public
+// Yuho v5 Syntax — behavioural fixture.
+// Universal offence shape: made out iff elements ∧ ¬defence.
+
+referencing penal_code/s171_wearing_garb_carrying_token_used_public
+
+struct WearingGarbCarryingTokenTestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+// elements satisfied, no defence -> offence made out
+WearingGarbCarryingTokenTestCase guilty := WearingGarbCarryingTokenTestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_wearing_garb_carrying_token(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+// elements satisfied, defence applies -> not made out
+WearingGarbCarryingTokenTestCase defended := WearingGarbCarryingTokenTestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_wearing_garb_carrying_token(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+// no elements -> not made out
+WearingGarbCarryingTokenTestCase notMadeOut := WearingGarbCarryingTokenTestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_wearing_garb_carrying_token(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE

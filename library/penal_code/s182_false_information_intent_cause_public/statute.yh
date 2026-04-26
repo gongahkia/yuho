@@ -4,6 +4,14 @@
 /// @amendment [15/2019]
 /// @amendment [Act 23 of 2021 wef 01/03/2022]
 
+fn is_false_information_intent_cause(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 182 "False information, with intent to cause a public servant to use his lawful power to the injury of another person" effective 1872-01-01 effective 2019-12-31 effective 2022-03-01 {
     elements {
         /// The section requires the false information to be given to a public servant.

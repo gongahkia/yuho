@@ -1,0 +1,31 @@
+// Test file for s192_fabricating_false_evidence
+// Yuho v5 Syntax — behavioural fixture.
+// Universal offence shape: made out iff elements ∧ ¬defence.
+
+referencing penal_code/s192_fabricating_false_evidence
+
+struct FabricatingFalseEvidenceTestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+// elements satisfied, no defence -> offence made out
+FabricatingFalseEvidenceTestCase guilty := FabricatingFalseEvidenceTestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_fabricating_false_evidence(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+// elements satisfied, defence applies -> not made out
+FabricatingFalseEvidenceTestCase defended := FabricatingFalseEvidenceTestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_fabricating_false_evidence(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+// no elements -> not made out
+FabricatingFalseEvidenceTestCase notMadeOut := FabricatingFalseEvidenceTestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_fabricating_false_evidence(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE

@@ -3,6 +3,14 @@
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr203-#pr203-
 /// @amendment [15/2019]
 
+fn is_giving_false_information_respecting(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 203 "Giving false information respecting an offence committed" effective 1872-01-01 effective 2019-12-31 {
     definitions {
         explanation_offence_includes_extraterritorial_listed_acts := "Explanations.-- In sections 201 and 202 and in this section “offence” includes any act committed at any place out of Singapore which if committed in Singapore would be punishable under any of the following sections, namely, 302, 304, 382, 392, 393, 394, 395, 396, 397, 399, 402, 435, 436, 449, 450, 459 and 460.";
