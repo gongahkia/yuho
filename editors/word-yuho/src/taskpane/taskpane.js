@@ -54,10 +54,12 @@ Office.onReady((info) => {
   document.getElementById("action-insert-cite").addEventListener("click", () => insert("citation"));
   document.getElementById("action-insert-elements").addEventListener("click", () => insert("elements"));
   document.getElementById("action-insert-diagram").addEventListener("click", () => insert("diagram"));
+  document.getElementById("action-insert-mindmap").addEventListener("click", () => insert("mindmap"));
   if (!IN_WORD) {
     // Disable insert buttons + show a banner when the host isn't Word.
     for (const id of ["action-insert-en", "action-insert-cite",
-                       "action-insert-elements", "action-insert-diagram"]) {
+                       "action-insert-elements", "action-insert-diagram",
+                       "action-insert-mindmap"]) {
       const btn = document.getElementById(id);
       if (btn) {
         btn.disabled = true;
@@ -213,31 +215,41 @@ function selectSection(rec) {
     rec.metadata?.summary || rec.raw?.text || "(no summary)";
   document.getElementById("detail-yh").textContent = rec.encoded?.yh_source || "";
   loadDiagram(rec).catch(() => { /* non-fatal */ });
+  loadMindmap(rec).catch(() => { /* non-fatal */ });
 }
 
-// Lazy-fetch + cache SVGs by section number. The diagram tab populates
+// Lazy-fetch + cache SVGs by section number. Two caches: one for the
+// flowchart (Diagram tab), one for the mindmap. Both populate
 // asynchronously so the panel doesn't block on file IO when scrolling
 // search results.
 const SVG_CACHE = new Map();
+const MINDMAP_CACHE = new Map();
 
 async function loadDiagram(rec) {
-  const host = document.getElementById("detail-diagram");
+  await _loadSvg(rec, "detail-diagram", rec.transpiled?.mermaid_svg_url, SVG_CACHE, "diagram");
+}
+
+async function loadMindmap(rec) {
+  await _loadSvg(rec, "detail-mindmap", rec.transpiled?.mindmap_svg_url, MINDMAP_CACHE, "mindmap");
+}
+
+async function _loadSvg(rec, hostId, url, cache, kindLabel) {
+  const host = document.getElementById(hostId);
   if (!host) return;
-  const url = rec.transpiled?.mermaid_svg_url;
   if (!url) {
-    host.innerHTML = `<p class="empty">No diagram for s${escape(rec.section_number)}.</p>`;
+    host.innerHTML = `<p class="empty">No ${kindLabel} for s${escape(rec.section_number)}.</p>`;
     return;
   }
-  let svg = SVG_CACHE.get(rec.section_number);
+  let svg = cache.get(rec.section_number);
   if (!svg) {
     host.innerHTML = `<p class="empty">Loading…</p>`;
     try {
       const res = await fetch(`../${url}`);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       svg = await res.text();
-      SVG_CACHE.set(rec.section_number, svg);
+      cache.set(rec.section_number, svg);
     } catch (err) {
-      host.innerHTML = `<p class="empty">Could not load diagram (${escape(String(err))}).</p>`;
+      host.innerHTML = `<p class="empty">Could not load ${kindLabel} (${escape(String(err))}).</p>`;
       return;
     }
   }
@@ -283,18 +295,22 @@ async function insert(kind) {
   writeSetting(SETTINGS_KEYS.DEFAULT_INSERT, kind);
   const rec = SELECTED;
 
-  // Diagram is a binary insert (PNG), not text — handle it separately.
-  if (kind === "diagram") {
-    const url = rec.transpiled?.mermaid_svg_url;
+  // Diagram + mindmap are binary inserts (PNG), not text — handle them
+  // through the same SVG-to-PNG path with a per-kind URL + cache.
+  if (kind === "diagram" || kind === "mindmap") {
+    const url = kind === "diagram"
+      ? rec.transpiled?.mermaid_svg_url
+      : rec.transpiled?.mindmap_svg_url;
+    const cache = kind === "diagram" ? SVG_CACHE : MINDMAP_CACHE;
     if (!url) return;
-    let svg = SVG_CACHE.get(rec.section_number);
+    let svg = cache.get(rec.section_number);
     if (!svg) {
       try {
         const res = await fetch(`../${url}`);
         svg = await res.text();
-        SVG_CACHE.set(rec.section_number, svg);
+        cache.set(rec.section_number, svg);
       } catch (err) {
-        console.error("[Yuho] diagram fetch failed", err);
+        console.error(`[Yuho] ${kind} fetch failed`, err);
         return;
       }
     }
