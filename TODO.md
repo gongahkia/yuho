@@ -37,31 +37,87 @@ Akoma Ntoso work) lives in git log + `docs/PHASE_*` notes, not here.
 
 ---
 
-## PhD-rigor hardening (next paper-shaped trench) `[ ]`
+## PhD-rigor hardening — single-paper expansion `[ ]`
 
-This trench is ranked by the rigor-mechanism rubric distilled from
-peer DSLs (Catala POPL'21, eFLINT PLAS'20, Symboleo RE'20, DAPRECO,
-the Defeasible Logic lineage; CompCert, sel4, K, F\* on the
-formal-methods side). The audit found Yuho clears the legal-tech
-bar comfortably (524 SG PC sections > Catala's tax fragment, peers
-DAPRECO's GDPR encoding) but is **two-paper-strong on empirical /
-one-paper-light on formal-semantics**.
+All five rigor additions below land in **the same paper**, not
+separate submissions. Each becomes a new section (Gaps 1, 2, Opp
+A) or extends an existing section (Gaps 3, 4 slot into
+`§Evaluation`). Mechanisation (Gap 5) becomes either a
+present-tense subsection (if it lands in time) or a "future work"
+pointer in `§Limitations` (if it doesn't). The paper grows from
+the current 25 pages to ~60-80 pages — a journal-grade artefact.
 
-**Venue plan:** target legal-tech first (ICAIL, JURIX, *Artificial
-Intelligence and Law*) where the existing empirical case wins, but
-land enough formal-semantics rigor that a formal-methods reviewer
-cannot reject on "no operational semantics pinned" / "no soundness
-claim". Concretely: ship Gap 1 + Gap 2 + Gap 3 as one paper trench;
-hold mechanisation (Gap 5 below) for a second-paper formal-methods
-submission.
+**Venue:** *Artificial Intelligence and Law* (Springer journal)
+— handles 60-80 page submissions naturally, audience is
+dual-trained (legal-tech + formal methods), and is the target
+venue Catala / DAPRECO / LegalRuleML follow-on work uses. AI&L's
+dual-trained reviewers also cleanly absorb the legal-tech-first
+empirical case + formal-methods-defence rigor stack we're
+building. ICAIL / JURIX would also accept the work but the page
+budget is tighter and the journal version reads as the canonical
+record anyway.
 
-### Gap 1 — Pinned operational semantics in the paper `[ ]`
+**Sequencing (Shape A — ship-once):**
 
-Every comparable system ships inference rules in the body or
-appendix. Yuho's `design.tex` describes the language but doesn't
-formally pin a semantics. Without this, a POPL/PLDI/OOPSLA
-reviewer rejects on the first pass; an ICAIL reviewer notes it as
-a weakness.
+The paper submits to AI&L only once **everything** is done — Gaps
+1-5 + Opportunity A all landed and present-tense in the
+manuscript. Slower wall-clock (9-15 months) but the submission is
+a finished artefact and avoids the risk of a "come back when §8
+is done" rejection.
+
+1. **Months 1-3** — Gaps 1, 2, 3, 4 in parallel where possible:
+   - Gap 1 (operational semantics): independent paper-writing
+     work, can ship while corpus encoding runs.
+   - Gap 2 (pen-and-paper soundness): depends on Gap 1; landed
+     immediately after.
+   - Gap 3 (external counsel audit): book the lawyer in month 1;
+     audit runs over months 1-3 in the background.
+   - Gap 4 (case-law differential testing): curate cases in
+     month 2-3; encode + score in month 3.
+2. **Months 2-9** — Opportunity A (IPC or MPC encoding):
+   - Scrape the foreign code in month 2-3 (in parallel with Gaps
+     3-4 above).
+   - Agent-dispatched encoding to L1+L2 over months 4-7 (mirrors
+     Phase D's SG PC pace).
+   - Cross-jurisdiction analysis + §8 prose in months 8-9.
+3. **Months 6-12** — Gap 5 mechanisation. Started in month 6
+   (after Gaps 1-2 land the pen-and-paper artefacts the
+   mechanisation reproduces) and runs to month 12. Catala's
+   comparable mechanisation (full default-calculus +
+   compilation correctness) was a multi-quarter PhD project; we
+   budget similarly.
+4. **Months 12-15** — Paper-writing trench: integrate every
+   shipped piece into the AI&L manuscript; final-pass
+   read-through (the existing TODO bullet); submit.
+
+This shape is the *Catala-as-it-would-have-been-written* pattern
+— if Catala had waited until the Coq mechanisation was done
+before submitting POPL'21, they would have shipped one paper
+instead of two. We're choosing that path deliberately, which
+means slower-but-completer rather than faster-but-iterative.
+
+**Target paper structure** (each gap maps to a section):
+
+| Section | Source |
+|---|---|
+| §1-3 (Intro / Background / Design) | Existing |
+| §4 Formal semantics | **Gap 1** |
+| §5 Implementation | Existing |
+| §6 Transpiler soundness | **Gap 2** (+ Gap 5 mechanisation subsection if it lands) |
+| §7 Evaluation | Existing + **Gap 3** (§7.7) + **Gap 4** (§7.8) |
+| §8 Comparative encoding | **Opportunity A** |
+| §9-12 Related / Applicability / Limitations / Conclusion | Existing |
+| Appx A — full inference rules | Gap 1 detail |
+| Appx B — full soundness proofs | Gap 2 detail |
+| Appx C — mechanisation listing | Gap 5 (if shipped) |
+
+### §4 of the paper — Pinned operational semantics `[ ]`
+
+Every comparable system (Catala, eFLINT, Symboleo) ships
+inference rules in the body or appendix. Yuho's `design.tex`
+describes the language but doesn't formally pin a semantics.
+Without this, an AI&L reviewer marks it as a rigor gap and the
+paper fails its formal-methods-defence layer.
 
 - [ ] Write `paper/sections/semantics.tex` (3-5 pages) covering:
   - Small-step element evaluation: `actus_reus`, `mens_rea`,
@@ -80,11 +136,12 @@ a weakness.
 - [ ] Two-page summary in the paper body; full inference rules
       in an appendix to keep the body readable.
 
-### Gap 2 — Soundness theorem for the Z3 transpiler `[ ]`
+### §6 of the paper — Soundness theorem for the Z3 transpiler `[ ]`
 
 The CompCert / Catala pattern: prove that the transpiler preserves
 meaning. For Yuho the cleanest target is the Z3 backend, where
 both sides are total functions over the encoded element graph.
+Lands as `§6 Transpiler soundness` in the paper.
 
 - [ ] Statement (informal): for any module $M$ and fact pattern
       $F$, the `StatuteEvaluator` verdict on $(M, F)$ equals the
@@ -103,7 +160,7 @@ both sides are total functions over the encoded element graph.
       via the existing `tests/test_z3_apply_scope.py` shape: every
       claimed lemma should have a corresponding executable test.
 
-### Gap 3 — External Singapore-counsel L3 audit `[ ]`
+### §7.7 of the paper — External Singapore-counsel L3 audit `[ ]`
 
 L3 is at 524/524 author-stamped; the paper §7 explicitly reserves
 external counsel review. Engaging one Singapore-qualified lawyer
@@ -129,7 +186,7 @@ collaboration and DAPRECO's external legal-scholar review.
       with the audit findings (n surveyed / n flagged / n
       addressed) + a per-chapter breakdown.
 
-### Gap 4 — Differential testing against published case law `[ ]`
+### §7.8 of the paper — Differential testing against published case law `[ ]`
 
 Catala's "matches the government tax calculator" is the canonical
 empirical-rigor template. Yuho's analogue is **agreement on a
@@ -152,14 +209,14 @@ highest-leverage empirical claim Yuho doesn't yet make.
       reporter / charge selection bias / encoded-statute drift
       from court reasoning).
 
-### Opportunity A — Cross-jurisdiction comparative DSL `[ ]`
+### §8 of the paper — Cross-jurisdiction comparative encoding `[ ]`
 
 The 1860/1871 Anglo-Indian PC family (Singapore, Malaysia, India,
 Pakistan, Brunei) shares structural shape with divergent amendment
 trajectories. No peer system can run this comparison — Catala is
 French tax only, lam4 is contract fragments, DAPRECO is GDPR only.
-Yuho is uniquely positioned. (Also tracked under Phase 2c
-Direction A; cross-link.)
+Yuho is uniquely positioned. The full encoding lands as `§8` of
+the paper. (Also tracked under Phase 2c Direction A; cross-link.)
 
 - [ ] Pick the Indian Penal Code 1860 OR Malaysian Penal Code
       (Act 574) — whichever has cleaner online text. Scrape via
@@ -177,7 +234,7 @@ Direction A; cross-link.)
       divergence chart. Reads as a *second paper* alongside the
       Yuho DSL paper, not a section.
 
-### Gap 5 — Mechanisation of the Z3-correctness theorem `[ ]` (deferred)
+### §6.3 of the paper — Mechanisation of the Z3-correctness theorem `[ ]`
 
 **What "mechanisation" means.** A *pen-and-paper proof* is a
 human-readable proof published in the paper; field reviewers can
@@ -191,7 +248,7 @@ gold-standard rigor signal at POPL / PLDI / CAV / FM and the
 DSL".
 
 For Yuho specifically, mechanising the **Z3 transpiler
-correctness theorem** (Gap 2) would mean:
+correctness theorem** (§6) means:
 
 - [ ] Encode Yuho's AST + element-graph evaluation in Coq (or
       Lean — Catala chose Coq, mathlib is in Lean; pick whichever
@@ -201,30 +258,34 @@ correctness theorem** (Gap 2) would mean:
 - [ ] Prove the soundness theorem: for any module + fact pattern,
       evaluator-verdict equals the Z3 conviction Bool's truth in
       every satisfying model.
+- [ ] Land as `§6.3 Mechanisation` in the paper, with the Coq /
+      Lean source listed under Appendix C and reproducibility
+      instructions in Appendix D.
 - [ ] **Realistic effort:** 3-6 months for a competent Coq user
-      starting from the pen-and-paper proof. Catala's mechanised
-      compilation correctness (a comparable task) was shipped as
-      part of Merigoux's PhD thesis follow-on, not in the POPL'21
-      paper itself.
-- [ ] **Deferred** because: (a) the legal-tech track Yuho targets
-      first doesn't require it; (b) it's a 3-6 month commitment;
-      (c) the pen-and-paper proof in Gap 2 covers the immediate
-      reviewer-defence need. Hold for a second-paper formal-
-      methods submission.
+      starting from the pen-and-paper proof in §6.2. Catala's
+      comparable mechanisation was a multi-quarter PhD project.
+- [ ] **Falls off the critical path if it overruns:** if the
+      mechanisation isn't done by the paper-writing month, §6.3
+      becomes a "future work" pointer in §11 instead, and the
+      pen-and-paper §6.2 carries the soundness claim alone. The
+      paper still ships.
 
-### Sequencing notes
+### Cross-cutting notes
 
-Gap 1 + Gap 2 + Gap 3 + Gap 4 = **one trench**, ~3 months of
-focused work, ships a paper-shaped artefact. Opportunity A is a
-**second-paper trench**, ~6-9 months (the IPC/MPC encoding is the
-long pole). Gap 5 (mechanisation) is the **third-paper / PhD-
-thesis trench**, holding for after the first two land.
+The §4 + §6 (formal semantics + soundness) layer is the **rigor
+defence** against formal-methods-trained reviewers; §7.7 + §7.8
+(audit + differential testing) are the **empirical case**;
+§8 (cross-jurisdiction) is the **uniqueness claim**. All three
+are needed for an AI&L journal submission of this scope; missing
+any one weakens the paper to "interesting tooling" rather than
+"PhD-thesis-grade contribution".
 
-The legal-tech-first venue plan means Gap 3 + Gap 4 are
-load-bearing — they're what an ICAIL reviewer counts as the
-empirical case. Gap 1 + Gap 2 are the formal-methods defence
-layer that prevents an ICAIL reviewer (often dual-trained) from
-rejecting on rigor grounds.
+The 12-month-budget is realistic given existing Phase D agent-
+dispatch tooling (re-used for Opportunity A's IPC/MPC encoding).
+The biggest single risk is Gap 5 (mechanisation) — it's the only
+item that has no incremental fallback if it overruns; if the
+mechanisation goes sideways the paper still ships with §6.3 as a
+future-work pointer.
 
 ---
 
