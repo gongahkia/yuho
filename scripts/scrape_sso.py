@@ -9,6 +9,14 @@ usage:
     python scripts/scrape_sso.py act --act-code PC1871 --title "Penal Code 1871" \\
         --out library/penal_code/_raw/act.json
 
+    # Phase 2a — diachronic snapshots:
+    python scripts/scrape_sso.py historical-list --act-code PC1871 \\
+        --out library/penal_code/_raw/historical_dates.json
+    python scripts/scrape_sso.py historical --act-code PC1871 --date 19980101 \\
+        --out library/penal_code/_raw/historical/19980101.json
+    python scripts/scrape_sso.py historical-bulk --act-code PC1871 \\
+        --out-dir library/penal_code/_raw/historical
+
 respects robots.txt: 6s crawl-delay, skips /search.
 """
 from __future__ import annotations
@@ -107,9 +115,22 @@ class SSOClient:
         finally:
             await page.close(); await ctx.close()
 
-    async def fetch_whole_doc(self, act_code: str, timeout_ms: int = 120000) -> str:
-        """fetch the WholeDoc view and drive lazy-load until all provisions render."""
-        url = f"{BASE}/Act/{act_code}?WholeDoc=1"
+    async def fetch_whole_doc(
+        self,
+        act_code: str,
+        timeout_ms: int = 120000,
+        valid_date: Optional[str] = None,
+    ) -> str:
+        """fetch the WholeDoc view and drive lazy-load until all provisions render.
+
+        ``valid_date`` (YYYYMMDD) selects a historical snapshot via the
+        SSO ``ValidDate`` query parameter; the parser extracts the
+        same field from og:url so the round-trip is consistent.
+        """
+        if valid_date:
+            url = f"{BASE}/Act/{act_code}?ValidDate={valid_date}&WholeDoc=1"
+        else:
+            url = f"{BASE}/Act/{act_code}?WholeDoc=1"
         await self._throttle()
         ctx, page = await self._new_page()
         try:
@@ -337,6 +358,31 @@ def _parse_section(prov: Tag) -> Section | None:
 
 # -- index scrape -------------------------------------------------------------
 
+async def fetch_historical_dates(client: SSOClient, act_code: str) -> list[str]:
+    """Enumerate historical snapshot dates SSO advertises for an Act.
+
+    SSO surfaces a "Versions" dropdown on the act-detail page; each option
+    carries a ValidDate=YYYYMMDD value. Returns dates as YYYYMMDD strings,
+    chronologically sorted.
+    """
+    url = f"{BASE}/Act/{act_code}"
+    html = await client.fetch(url, wait_selector="select, .versions, a[href*='ValidDate=']")
+    soup = BeautifulSoup(html, "lxml")
+    dates: set[str] = set()
+    # Pattern A: `<option value="…ValidDate=YYYYMMDD…">…</option>`.
+    for opt in soup.select("option"):
+        v = opt.get("value", "")
+        m = re.search(r"ValidDate=(\d{8})", v)
+        if m:
+            dates.add(m.group(1))
+    # Pattern B: anchors in a "Historical" or "Versions" panel.
+    for a in soup.select("a[href*='ValidDate=']"):
+        m = re.search(r"ValidDate=(\d{8})", a.get("href", ""))
+        if m:
+            dates.add(m.group(1))
+    return sorted(dates)
+
+
 async def fetch_index(client: SSOClient) -> list[dict]:
     url = f"{BASE}/Browse/Act/Current/All?PageSize=500&SortBy=Title&SortOrder=ASC"
     html = await client.fetch(url, wait_selector="a[href^='/Act/']")
@@ -376,6 +422,81 @@ async def _cmd_act(args) -> None:
         Path(args.dump_html).write_text(html)
     print(f"wrote {len(act.sections)} sections → {out}")
 
+
+async def _cmd_historical_list(args) -> None:
+    async with SSOClient(headless=not args.headed) as c:
+        dates = await fetch_historical_dates(c, args.act_code)
+    out = Path(args.out); out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps({"act_code": args.act_code, "dates": dates},
+                              indent=2, ensure_ascii=False))
+    print(f"found {len(dates)} historical dates for {args.act_code} → {out}")
+
+
+async def _cmd_historical(args) -> None:
+    """Phase 2a v0 — fetch one historical snapshot.
+
+    SSO addresses historical Act views via ``?ValidDate=YYYYMMDD&WholeDoc=1``.
+    Output mirrors `_cmd_act` but stamps the requested ValidDate so
+    downstream re-encoding sees a stable per-snapshot identifier.
+    """
+    async with SSOClient(headless=not args.headed) as c:
+        html = await c.fetch_whole_doc(args.act_code, valid_date=args.date)
+    url = f"{BASE}/Act/{args.act_code}?ValidDate={args.date}&WholeDoc=1"
+    act = parse_whole_doc(html, act_code=args.act_code,
+                          title=args.title or args.act_code,
+                          url=url, valid_date=args.date)
+    out = Path(args.out); out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(act.to_dict(), indent=2, ensure_ascii=False))
+    if args.dump_html:
+        Path(args.dump_html).write_text(html)
+    print(f"wrote {len(act.sections)} sections @ {args.date} → {out}")
+
+
+async def _cmd_historical_bulk(args) -> None:
+    """Walk every advertised historical date and persist a snapshot file.
+
+    Skips any date for which the output already exists unless
+    ``--force`` is set. Output layout::
+
+        <out_dir>/<act_code>/<YYYYMMDD>.json
+
+    plus a sibling ``<act_code>/historical_index.json`` mapping date
+    to relative path so downstream re-encoding can iterate in order.
+    """
+    out_dir = Path(args.out_dir) / args.act_code
+    out_dir.mkdir(parents=True, exist_ok=True)
+    async with SSOClient(headless=not args.headed) as c:
+        dates = await fetch_historical_dates(c, args.act_code)
+        if args.limit:
+            dates = dates[: args.limit]
+        index: dict[str, str] = {}
+        n_done = n_skip = n_fail = 0
+        for date in dates:
+            fp = out_dir / f"{date}.json"
+            if fp.exists() and not args.force:
+                n_skip += 1
+                index[date] = str(fp.relative_to(out_dir.parent))
+                continue
+            try:
+                html = await c.fetch_whole_doc(args.act_code, valid_date=date)
+                url = f"{BASE}/Act/{args.act_code}?ValidDate={date}&WholeDoc=1"
+                act = parse_whole_doc(html, act_code=args.act_code,
+                                      title=args.title or args.act_code,
+                                      url=url, valid_date=date)
+                fp.write_text(json.dumps(act.to_dict(), indent=2, ensure_ascii=False))
+                n_done += 1
+                index[date] = str(fp.relative_to(out_dir.parent))
+                print(f"  ✓ {date}: {len(act.sections)} sections")
+            except Exception as exc:  # noqa: BLE001 — keep going on per-date failure
+                n_fail += 1
+                print(f"  ! {date}: {exc}", file=sys.stderr)
+    (out_dir / "historical_index.json").write_text(
+        json.dumps({"act_code": args.act_code, "dates": index},
+                   indent=2, ensure_ascii=False)
+    )
+    print(f"done: {n_done} fetched, {n_skip} cached, {n_fail} failed "
+          f"→ {out_dir.relative_to(Path.cwd()) if out_dir.is_absolute() else out_dir}")
+
 def main() -> None:
     p = argparse.ArgumentParser(prog="scrape_sso", description=__doc__)
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -391,8 +512,41 @@ def main() -> None:
     pa.add_argument("--dump-html", help="optional: also save raw rendered HTML")
     pa.add_argument("--headed", action="store_true")
 
+    phl = sub.add_parser("historical-list",
+                         help="list every historical ValidDate SSO advertises for an Act")
+    phl.add_argument("--act-code", required=True)
+    phl.add_argument("--out", required=True, help="output JSON path")
+    phl.add_argument("--headed", action="store_true")
+
+    ph = sub.add_parser("historical",
+                        help="scrape one historical snapshot of an Act (--date YYYYMMDD)")
+    ph.add_argument("--act-code", required=True)
+    ph.add_argument("--date", required=True, help="YYYYMMDD ValidDate to fetch")
+    ph.add_argument("--title", help="display title (default: act_code)")
+    ph.add_argument("--out", required=True, help="output JSON path")
+    ph.add_argument("--dump-html")
+    ph.add_argument("--headed", action="store_true")
+
+    phb = sub.add_parser("historical-bulk",
+                         help="walk every advertised ValidDate and persist a snapshot per date")
+    phb.add_argument("--act-code", required=True)
+    phb.add_argument("--title", help="display title (default: act_code)")
+    phb.add_argument("--out-dir", required=True,
+                     help="output directory; per-act subdir is created automatically")
+    phb.add_argument("--limit", type=int, default=0,
+                     help="cap number of historical dates fetched (0 = no cap)")
+    phb.add_argument("--force", action="store_true",
+                     help="re-fetch even when cached output exists")
+    phb.add_argument("--headed", action="store_true")
+
     args = p.parse_args()
-    asyncio.run({"index": _cmd_index, "act": _cmd_act}[args.cmd](args))
+    asyncio.run({
+        "index": _cmd_index,
+        "act": _cmd_act,
+        "historical-list": _cmd_historical_list,
+        "historical": _cmd_historical,
+        "historical-bulk": _cmd_historical_bulk,
+    }[args.cmd](args))
 
 if __name__ == "__main__":
     main()

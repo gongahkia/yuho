@@ -199,12 +199,15 @@ first-class queries.
 
 #### Scrape + ingest
 
-- [ ] Extend `scripts/scrape_sso.py` with `--historical` flag.
-      Enumerate `/Act/<CODE>/Historical/<DATE>` snapshots from
-      Singapore Statutes Online and store each under
-      `library/penal_code/_raw/historical/<date>.json`. Estimate
-      40–60 historical-version snapshots per section across the
-      150-year span.
+- [x] **v0 scrape (shipped):** `scripts/scrape_sso.py historical-list`
+      enumerates every ValidDate SSO advertises for an Act;
+      `historical` fetches a single snapshot via
+      `?ValidDate=YYYYMMDD&WholeDoc=1`; `historical-bulk` walks every
+      advertised date with the existing 6 s crawl-delay and writes one
+      `_raw/historical/<act>/<YYYYMMDD>.json` per snapshot plus a
+      `historical_index.json` mapping date → relative path. Per-Act
+      coverage is whatever the SSO dropdown lists (typically 40–60
+      snapshots across the 150-year span).
 - [ ] Build a `historical_index.json` mapping `(section, valid-date)
       -> raw_path` so re-encoding can iterate snapshots in chronological
       order.
