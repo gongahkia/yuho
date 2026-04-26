@@ -1,0 +1,324 @@
+{
+  "n": 10,
+  "t1_accuracy": 0.1,
+  "t2_accuracy": 0.4,
+  "t2_mean_f1": 0.6266666666666667,
+  "t3_accuracy": 0.9,
+  "stratified": {
+    "synth": {
+      "true": {
+        "n": 9,
+        "t1_accuracy": 0.1111111111111111,
+        "t2_accuracy": 0.3333333333333333,
+        "t2_mean_f1": 0.5851851851851851,
+        "t3_accuracy": 0.8888888888888888
+      }
+    },
+    "polarity": {
+      "negative": {
+        "n": 3,
+        "t1_accuracy": 0.3333333333333333,
+        "t2_accuracy": 0.0,
+        "t2_mean_f1": 0.0,
+        "t3_accuracy": 0.6666666666666666
+      }
+    },
+    "chapter": {
+      "v": {
+        "n": 1,
+        "t1_accuracy": 0.0,
+        "t2_accuracy": 1.0,
+        "t2_mean_f1": 1.0,
+        "t3_accuracy": 1.0
+      }
+    },
+    "category": {
+      "abetment": {
+        "n": 1,
+        "t1_accuracy": 0.0,
+        "t2_accuracy": 1.0,
+        "t2_mean_f1": 1.0,
+        "t3_accuracy": 1.0
+      }
+    },
+    "difficulty": {
+      "intermediate": {
+        "n": 1,
+        "t1_accuracy": 0.0,
+        "t2_accuracy": 1.0,
+        "t2_mean_f1": 1.0,
+        "t3_accuracy": 1.0
+      }
+    }
+  },
+  "fixtures": [
+    {
+      "id": "s100-illustration",
+      "section": "100",
+      "t1": {
+        "correct": true,
+        "predicted": "100",
+        "expected": "100"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.0,
+        "predicted": [
+          "assault_causing_reasonable_belief_of_death",
+          "cannot_effectually_exercise_without_risk",
+          "exercise_of_right",
+          "extension_to_running_risk"
+        ],
+        "expected": []
+      },
+      "t3": {
+        "correct": false,
+        "predicted": "self_defence",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.753
+    },
+    {
+      "id": "s107-abetment",
+      "section": "107",
+      "t1": {
+        "correct": false,
+        "predicted": "405",
+        "expected": "107"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "abet_intent",
+          "instigation",
+          "knowledge"
+        ],
+        "expected": [
+          "instigation",
+          "knowledge",
+          "abet_intent"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.264
+    },
+    {
+      "id": "s107-illustration",
+      "section": "107",
+      "t1": {
+        "correct": false,
+        "predicted": "108",
+        "expected": "107"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.0,
+        "predicted": [
+          "instigation"
+        ],
+        "expected": []
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.872
+    },
+    {
+      "id": "s108A-example1",
+      "section": "108A",
+      "t1": {
+        "correct": false,
+        "predicted": "109",
+        "expected": "108A"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.6666666666666666,
+        "predicted": [
+          "abetment_in_singapore"
+        ],
+        "expected": [
+          "abetment_in_singapore",
+          "singapore_offence_equivalence"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.189
+    },
+    {
+      "id": "s109-illustration-a",
+      "section": "109",
+      "t1": {
+        "correct": false,
+        "predicted": "161",
+        "expected": "109"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.8,
+        "predicted": [
+          "abets_offence",
+          "act_abetted_committed_in_consequence"
+        ],
+        "expected": [
+          "abets_offence",
+          "act_abetted_committed_in_consequence",
+          "no_express_provision_for_punishment"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.067
+    },
+    {
+      "id": "s109-illustration-b",
+      "section": "109",
+      "t1": {
+        "correct": false,
+        "predicted": "108",
+        "expected": "109"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "abets_offence",
+          "act_abetted_committed_in_consequence",
+          "no_express_provision_for_punishment"
+        ],
+        "expected": [
+          "abets_offence",
+          "act_abetted_committed_in_consequence",
+          "no_express_provision_for_punishment"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.37
+    },
+    {
+      "id": "s109-illustration-c",
+      "section": "109",
+      "t1": {
+        "correct": false,
+        "predicted": "302",
+        "expected": "109"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.8,
+        "predicted": [
+          "abets_offence",
+          "act_abetted_committed_in_consequence"
+        ],
+        "expected": [
+          "abets_offence",
+          "act_abetted_committed_in_consequence",
+          "no_express_provision_for_punishment"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 3.275
+    },
+    {
+      "id": "s111-illustration-a",
+      "section": "111",
+      "t1": {
+        "correct": false,
+        "predicted": "108",
+        "expected": "111"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "act_abetted",
+          "different_act_done"
+        ],
+        "expected": [
+          "act_abetted",
+          "different_act_done"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.048
+    },
+    {
+      "id": "s111-illustration-b",
+      "section": "111",
+      "t1": {
+        "correct": false,
+        "predicted": "109",
+        "expected": "111"
+      },
+      "t2": {
+        "correct": false,
+        "f1": 0.0,
+        "predicted": [
+          "act_abetted",
+          "different_act_done"
+        ],
+        "expected": []
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 3.686
+    },
+    {
+      "id": "s111-illustration-c",
+      "section": "111",
+      "t1": {
+        "correct": false,
+        "predicted": "302",
+        "expected": "111"
+      },
+      "t2": {
+        "correct": true,
+        "f1": 1.0,
+        "predicted": [
+          "act_abetted",
+          "different_act_done"
+        ],
+        "expected": [
+          "act_abetted",
+          "different_act_done"
+        ]
+      },
+      "t3": {
+        "correct": true,
+        "predicted": "none",
+        "expected": "none"
+      },
+      "elapsed_seconds": 2.662
+    }
+  ],
+  "not_legal_advice": true
+}
