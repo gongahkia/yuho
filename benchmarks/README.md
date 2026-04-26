@@ -1,7 +1,17 @@
-# Yuho benchmark pack
+# Yuho benchmark pack (`benchmarks/`)
 
 Reusable evaluation tasks generated from the encoded Singapore Penal Code
 1871 corpus. Five task types as of v0.1.0; ~3,300 rows total.
+
+> **Sibling: `evals/`.** The repo also ships a separate `evals/`
+> directory containing a **scenario-fixture LLM evaluation
+> harness** — 205 natural-language fact patterns + a runner with
+> Anthropic / OpenAI / Fake clients + per-fixture and stratified
+> accuracy reports. That's a *runner deliverable* — point it at
+> a model and get accuracy numbers. This `benchmarks/` directory
+> is the *dataset deliverable* — five JSONL files you drop into
+> any evaluation harness of your choice. They evaluate
+> complementary surfaces; see `evals/README.md` for the runner.
 
 ## Why
 

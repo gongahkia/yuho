@@ -343,6 +343,14 @@ Every answer is graded against the structural shape Yuho's
 evaluator computes from the same encoded \texttt{.yh} the rest of
 this paper relies on --- the comparison surface is exact match on
 T1 and T3, F1 over the predicted vs encoded element-name set on T2.
+T2 is posed as \emph{closed-vocabulary multi-label classification}
+--- the prompt presents the section's encoded element names as a
+closed list and the model returns a subset --- so the metric
+isolates the structural-reasoning question (``does this scenario
+satisfy these elements?'') from the unrelated guess-our-naming-
+convention question (``can the model recover Yuho's private
+\texttt{snake\_case} identifiers?'') that an open-vocabulary T2
+inadvertently conflates.
 
 \paragraph{Position relative to LegalBench / LawBench.} The
 existing benchmarks
@@ -365,7 +373,7 @@ categories (deception, harm, property, homicide, abetment,
 intimidation, reputation, sexual offence, document, liberty).
 \statBenchmarkSynth{} are programmatically synthesised from
 canonical illustrations in the encoded library
-(\texttt{scripts/synthesise\_benchmark\_fixtures.py}) --- the
+(\texttt{scripts/synthesise\_eval\_fixtures.py}) --- the
 illustrations are designed by the legislative drafters as positive
 examples that satisfy the section's elements by construction, so
 the structural ground truth is recoverable without per-fixture

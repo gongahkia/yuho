@@ -1,4 +1,4 @@
-# Yuho LLM legal-reasoning benchmark
+# Yuho LLM-evaluation harness (`evals/`)
 
 A graded benchmark for LLM legal-reasoning over the Singapore Penal
 Code 1871, scored against the structural ground truth Yuho's
@@ -10,6 +10,16 @@ an LLM can recover the *structural shape* of the answer that the
 encoded statute already commits to. Position alongside LegalBench
 and LawBench: same evaluation surface, different ground-truth
 backing — Yuho's evaluator over the encoded `.yh` corpus.
+
+> **Sibling: `benchmarks/`.** The repo also ships a separate
+> `benchmarks/` directory containing five **JSONL task-row
+> datasets** (`citation_grounding`, `penalty_extraction`,
+> `element_classification`, `cross_reference`,
+> `illustration_recognition`; ~3,300 rows total). That's a
+> *dataset deliverable* — drop the JSONL into your harness of
+> choice. This `evals/` directory is the *scenario-fixture +
+> end-to-end runner* deliverable. They evaluate complementary
+> surfaces; see `benchmarks/README.md` for the dataset shape.
 
 ## Tasks
 
@@ -24,7 +34,7 @@ Each fixture exercises three tasks:
 ## Layout
 
 ```
-benchmark/
+evals/
 ├── README.md            (this file)
 ├── schema.json          (JSON-schema for fixture files)
 ├── run.py               (runner — fixture loader + LLM client + scorer)
@@ -39,7 +49,7 @@ benchmark/
 
 The 183 synthesised fixtures are generated from the canonical
 illustrations in the encoded library by
-`scripts/synthesise_benchmark_fixtures.py`. They're tagged
+`scripts/synthesise_eval_fixtures.py`. They're tagged
 `synth:true`; pass `--no-per-fixture` and inspect the stratified
 report's `synth` axis to compare hand-authored vs synthesised
 performance.
@@ -54,26 +64,26 @@ calls).
 ```sh
 # Smoke-test the full pipeline with no API calls — every fixture
 # scores 100% on every task.
-python benchmark/run.py --fake
+python evals/run.py --fake
 
 # Real run against Claude (requires ANTHROPIC_API_KEY).
-python benchmark/run.py --model claude-sonnet-4-6
-python benchmark/run.py --model claude-opus-4-7
+python evals/run.py --model claude-sonnet-4-6
+python evals/run.py --model claude-opus-4-7
 
 # Real run against OpenAI (requires OPENAI_API_KEY; org-scoped
 # keys also honour OPENAI_ORGANIZATION and OPENAI_BASE_URL).
-python benchmark/run.py --model gpt-4o
-python benchmark/run.py --model gpt-4o-mini --max-fixtures 30
-python benchmark/run.py --provider openai --model o3-mini
+python evals/run.py --model gpt-4o
+python evals/run.py --model gpt-4o-mini --max-fixtures 30
+python evals/run.py --provider openai --model o3-mini
 
 # Cap fixtures for a quick spot-check.
-python benchmark/run.py --max-fixtures 5
+python evals/run.py --max-fixtures 5
 
 # Machine-readable output to a file.
-python benchmark/run.py --json --out benchmark/results.json
+python evals/run.py --json --out evals/results.json
 
 # Stratified accuracy slices (per chapter / category / difficulty / synth):
-python benchmark/run.py --fake --no-per-fixture
+python evals/run.py --fake --no-per-fixture
 ```
 
 The provider is inferred from the model id: `claude-*` →
@@ -84,12 +94,12 @@ compatible proxies like Azure, vLLM, or Ollama).
 ### Bulk-generating fixtures from the encoded library
 
 ```sh
-python scripts/synthesise_benchmark_fixtures.py
+python scripts/synthesise_eval_fixtures.py
 ```
 
 For every encoded section that has both leaf elements AND
 illustrations, this writes one fixture per illustration into
-`benchmark/fixtures/`. Existing fixture files are not overwritten.
+`evals/fixtures/`. Existing fixture files are not overwritten.
 Polarity-negative illustrations (text containing "is not", "no
 offence", etc.) are auto-tagged `polarity:negative` and emit an
 empty `satisfied_elements` set so the LLM is graded on identifying
@@ -139,7 +149,7 @@ LLM is graded against.
 3. Run the scenario through Yuho's evaluator (or compute by
    inspection) to derive `satisfied_elements` and
    `fired_exception`.
-4. Drop the YAML in `benchmark/fixtures/`.
+4. Drop the YAML in `evals/fixtures/`.
 
 The runner's `FakeClient` end-to-end test confirms the fixture
 loads cleanly. Add a tag or two so the runner's per-tag breakdown

@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/gongahkia/yuho/benchmark/schema.json",
+  "$id": "https://github.com/gongahkia/yuho/evals/schema.json",
   "title": "Yuho LLM Legal-Reasoning Benchmark Fixture",
   "description": "Each fixture pairs a natural-language scenario with the structural ground truth Yuho's evaluator computes from the same facts. Three tasks per fixture: section identification, element-set recall, and exception citation.",
   "type": "object",

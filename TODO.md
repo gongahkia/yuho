@@ -387,13 +387,13 @@ fixture is a fact-pattern + ground-truth answer (which section
 applies, which elements are met, which exception fires). Yuho's
 evaluator already computes the ground truth.
 
-- [x] **v0 shipped:** `benchmark/schema.json` + `benchmark/run.py`
+- [x] **v0 shipped:** `evals/schema.json` + `evals/run.py`
       single-file runner with two `BenchmarkClient` impls
       (Anthropic SDK + `FakeClient` for offline / CI). Three tasks:
       section identification, element-set F1, exception citation.
 - [x] **Grown to 205 fixtures** (22 hand-authored + 183 synthesised
       from the encoded library's canonical illustrations). Driver:
-      `scripts/synthesise_benchmark_fixtures.py`. Auto-detects
+      `scripts/synthesise_eval_fixtures.py`. Auto-detects
       polarity-negative illustrations and tags them as such.
 - [x] **Stratified accuracy report** — per chapter / category /
       difficulty / synth-vs-hand / polarity. Triggered by
@@ -406,7 +406,7 @@ evaluator already computes the ground truth.
       real-LLM run is queued.
 - [ ] **Run real baselines** against Claude Sonnet 4.6 / Opus 4.7
       / one open-weights reference; emit
-      `benchmark/results-<model>.json` and update the paper
+      `evals/results-<model>.json` and update the paper
       subsection's "Headline numbers" paragraph with the actual
       stratified accuracies. Requires `ANTHROPIC_API_KEY`.
 

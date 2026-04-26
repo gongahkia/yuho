@@ -22,14 +22,14 @@ from pathlib import Path
 import pytest
 
 REPO = Path(__file__).resolve().parents[1]
-BENCHMARK = REPO / "benchmark"
+EVALS = REPO / "evals"
 
-sys.path.insert(0, str(BENCHMARK))
+sys.path.insert(0, str(EVALS))
 import run as bench  # type: ignore  # noqa: E402
 
 
 def _all_fixtures():
-    return bench.load_fixtures(BENCHMARK / "fixtures")
+    return bench.load_fixtures(EVALS / "fixtures")
 
 
 def test_fixture_loader_handles_inline_lists():
@@ -190,3 +190,46 @@ def test_anthropic_client_errors_cleanly_without_key(monkeypatch):
     monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
     with pytest.raises((ImportError, EnvironmentError)):
         bench.AnthropicClient()
+
+
+def test_t2_prompt_includes_closed_vocabulary_when_supplied():
+    """When a vocabulary is supplied, the T2 prompt embeds it as a
+    closed-set list and instructs the model to pick a subset rather
+    than generate names from scratch."""
+    prompt_open = bench._prompt_elements("X stole Y's umbrella.", "378")
+    prompt_closed = bench._prompt_elements(
+        "X stole Y's umbrella.", "378",
+        vocabulary=["taking", "consent", "intention"],
+    )
+    assert "snake_case" in prompt_open  # legacy open-vocab framing
+    assert "[taking, consent, intention]" in prompt_closed
+    assert "from the list above" in prompt_closed
+    # The closed prompt must explicitly forbid synonyms / additions.
+    assert "no synonyms" in prompt_closed.lower()
+
+
+def test_t2_hallucinated_predictions_are_filtered_under_closed_vocab():
+    """Predictions outside the supplied vocabulary are treated as 0,
+    not partial credit. This is the structural-honesty guarantee:
+    the scorer only sees in-vocab tokens."""
+    fixtures = _all_fixtures()
+    s378 = next(fx for fx in fixtures if fx.id == "s378-classic")
+
+    class _HallucinatingClient:
+        """Returns the right satisfied_elements PLUS a fabricated extra."""
+
+        def query(self, prompt: str, *, system: str = "", task_kind: str = ""):
+            if task_kind == "section":
+                return s378.truth_section
+            if task_kind == "elements":
+                return json.dumps(list(s378.truth_elements) + ["hallucinated_name"])
+            if task_kind == "exception":
+                return s378.truth_exception or "none"
+            return ""
+
+    result = bench.run_benchmark([s378], _HallucinatingClient())
+    fr = result.fixtures[0]
+    # The fabricated name is filtered out before scoring; F1 reflects
+    # the in-vocab match (which is perfect).
+    assert "hallucinated_name" not in [p.lower() for p in fr.t2_elements.predicted]
+    assert fr.t2_elements.f1 == 1.0

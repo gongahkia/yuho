@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Synthesise LLM-benchmark fixtures from the encoded library.
+"""Synthesise LLM-eval fixtures from the encoded library.
 
 For every encoded section with at least one illustration AND at least
 one leaf element, produce one fixture per illustration. The
@@ -7,11 +7,15 @@ illustration text is the scenario; the leaf element names are the
 ground-truth satisfied elements. Tagged ``synth:true`` so the
 generated fixtures are distinguishable from hand-authored ones.
 
+Output target: the ``evals/`` LLM-evaluation harness (scenario-shape
+fixtures + scoring runner). Distinct from the older ``benchmarks/``
+JSONL dataset pack — see each directory's README for the difference.
+
 Usage::
 
-    python scripts/synthesise_benchmark_fixtures.py
-    python scripts/synthesise_benchmark_fixtures.py --max-sections 30
-    python scripts/synthesise_benchmark_fixtures.py --out-dir benchmark/fixtures
+    python scripts/synthesise_eval_fixtures.py
+    python scripts/synthesise_eval_fixtures.py --max-sections 30
+    python scripts/synthesise_eval_fixtures.py --out-dir evals/fixtures
 
 Caveats
 -------
@@ -24,7 +28,7 @@ keyword scan tags those as ``polarity:negative`` so a downstream
 filter can skip them.
 
 Generated fixtures cover the structural baseline. Hand-authored
-fixtures (existing 22 in ``benchmark/fixtures/``) cover the
+fixtures (existing 22 in ``evals/fixtures/``) cover the
 edge-case + multi-section + exception-fires variants the
 illustrations don't naturally exercise.
 """
@@ -43,7 +47,7 @@ sys.path.insert(0, str(REPO / "src"))
 from yuho.ast import nodes  # noqa: E402
 from yuho.services.analysis import analyze_file  # noqa: E402
 
-OUT_DIR_DEFAULT = REPO / "benchmark" / "fixtures"
+OUT_DIR_DEFAULT = REPO / "evals" / "fixtures"
 
 _NEGATIVE_HINTS = (
     "is not", "would not", "no theft", "no offence", "is not guilty",

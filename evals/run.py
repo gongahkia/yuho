@@ -22,22 +22,22 @@ Scoring:
 Usage::
 
     # Anthropic — needs ANTHROPIC_API_KEY:
-    python benchmark/run.py --model claude-sonnet-4-6
-    python benchmark/run.py --model claude-opus-4-7
+    python evals/run.py --model claude-sonnet-4-6
+    python evals/run.py --model claude-opus-4-7
 
     # OpenAI — needs OPENAI_API_KEY (org-scoped keys also pick up
     # OPENAI_ORGANIZATION / OPENAI_BASE_URL automatically):
-    python benchmark/run.py --model gpt-4o
-    python benchmark/run.py --provider openai --model gpt-4o-mini
+    python evals/run.py --model gpt-4o
+    python evals/run.py --provider openai --model gpt-4o-mini
 
     # Pin a smaller fixture slice:
-    python benchmark/run.py --max-fixtures 5
+    python evals/run.py --max-fixtures 5
 
     # Dry-run with a fake client (no API calls; useful for CI):
-    python benchmark/run.py --fake
+    python evals/run.py --fake
 
     # Machine-readable output:
-    python benchmark/run.py --json --out benchmark/results.json
+    python evals/run.py --json --out evals/results.json
 
 The runner is small and dependency-light by design. The scoring
 logic, fixture loader, and report renderer are public so other
@@ -58,7 +58,7 @@ from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Protocol, Tuple
 
 REPO = Path(__file__).resolve().parent.parent
-FIXTURES_DIR = REPO / "benchmark" / "fixtures"
+FIXTURES_DIR = REPO / "evals" / "fixtures"
 
 
 # =============================================================================
@@ -81,7 +81,7 @@ class Fixture:
 
 
 def load_fixtures(directory: Optional[Path] = None) -> List[Fixture]:
-    """Load every YAML fixture under ``directory`` (default: benchmark/fixtures)."""
+    """Load every YAML fixture under ``directory`` (default: evals/fixtures)."""
     directory = directory or FIXTURES_DIR
     if not directory.exists():
         raise FileNotFoundError(f"fixtures directory not found: {directory}")
@@ -291,15 +291,47 @@ def _prompt_section(scenario: str) -> str:
     )
 
 
-def _prompt_elements(scenario: str, section: str) -> str:
-    return (
+def _prompt_elements(scenario: str, section: str,
+                     vocabulary: Optional[List[str]] = None) -> str:
+    """Build the T2 prompt.
+
+    When ``vocabulary`` is supplied, render T2 as a closed-set
+    multi-label classification (pick a subset of the named elements).
+    This is the structurally-honest framing: the LLM is being graded
+    on whether the scenario satisfies *these specific* encoded
+    elements, not on whether it can guess our private snake_case
+    naming convention from scratch — which is unrelated to legal
+    reasoning and explains the open-vocabulary T2 collapse on the
+    initial gpt-4o-mini spot-check.
+
+    The original open-vocabulary form is preserved as a fallback for
+    callers that deliberately want to test naming-convention recall.
+    """
+    base = (
         f"Scenario:\n{scenario}\n\n"
-        f"Assume Penal Code s{section} applies. Task: list the structural "
-        "elements of that section that are SATISFIED by the scenario as "
-        "stated. Reply with ONLY a JSON array of element name strings, "
-        'e.g. `[\"deception\", \"fraudulent\", \"inducement\"]`. '
-        "No prose. Element names are short snake_case identifiers as they "
-        "would appear in a structured statute encoding."
+        f"Assume Penal Code s{section} applies. "
+    )
+    if vocabulary:
+        vocab_inline = ", ".join(vocabulary)
+        return (
+            base
+            + "The encoded section's structural elements are:\n"
+            + f"  [{vocab_inline}]\n\n"
+            + "Task: from the list above, return the subset of element "
+              "names that are SATISFIED by the scenario as stated. Reply "
+              'with ONLY a JSON array of strings (e.g. `["a", "b"]`); '
+              "use `[]` if no element is satisfied. Names must come "
+              "from the supplied list verbatim — no synonyms, no "
+              "additions, no prose."
+        )
+    return (
+        base
+        + "Task: list the structural elements of that section that are "
+          "SATISFIED by the scenario as stated. Reply with ONLY a JSON "
+          'array of element name strings, e.g. `["deception", '
+          '"fraudulent", "inducement"]`. No prose. Element names are '
+          "short snake_case identifiers as they would appear in a "
+          "structured statute encoding."
     )
 
 
@@ -489,10 +521,22 @@ def score_fixture(
         expected=fixture.truth_section,
     )
 
-    # T2 — elements
-    raw_elements = client.query(_prompt_elements(fixture.scenario, fixture.truth_section),
-                                system=_SYSTEM_PROMPT, task_kind="elements")
+    # T2 — elements. The encoded section's full element set lives on
+    # `fact_facts`; passing it as the closed-set vocabulary turns T2
+    # into honest multi-label classification rather than open-vocab
+    # naming-convention recall (the latter conflates structural
+    # reasoning with guessing our private snake_case names).
+    vocabulary = sorted(fixture.fact_facts.keys()) if fixture.fact_facts else None
+    raw_elements = client.query(
+        _prompt_elements(fixture.scenario, fixture.truth_section, vocabulary),
+        system=_SYSTEM_PROMPT, task_kind="elements",
+    )
     pred_elements = _parse_elements(raw_elements)
+    # When a vocabulary is in play, restrict the predicted set to it
+    # — anything outside the vocab is hallucinated and grades as 0.
+    if vocabulary:
+        vocab_set = {v.lower() for v in vocabulary}
+        pred_elements = [p for p in pred_elements if p.lower() in vocab_set]
     f1, precision, recall = _f1(pred_elements, list(fixture.truth_elements))
     t2 = TaskScore(
         correct=set(x.lower() for x in pred_elements) == set(x.lower() for x in fixture.truth_elements),
