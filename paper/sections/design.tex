@@ -142,9 +142,14 @@ compilation to Z3 prioritised rewriting (\S\ref{subsec:exceptions})
 fires this defeater before lower-priority exceptions. Cross-section
 references (e.g.\ \texttt{s300\_limb} pointing into the s300 element
 graph) remain a free-text circumstance label in this example because
-the cross-section semantic resolver (\textsf{G10}) is deferred future
-work; the encoded \texttt{referencing} clauses parse but the resolver
-to walk them does not yet exist.
+the cross-section semantic resolver (\textsf{G10}) is partially landed:
+the resolver builds an adjacency-list reference graph over the encoded
+library and supports BFS reachability plus a Tarjan
+strongly-connected-components pass that surfaces structural cycles in
+the cross-reference graph (\S\ref{subsec:scc_eval}). The lam4-style
+\texttt{IS\_INFRINGED} predicate that would let \textsf{s107} abetment
+say ``if \textsf{s299} \texttt{IS\_INFRINGED}, then \dots'' is still
+future work.
 
 \subsection{The \texttt{statute} block}
 \label{subsec:statute}

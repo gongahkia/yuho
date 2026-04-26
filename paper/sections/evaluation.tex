@@ -95,10 +95,46 @@ is on the grammar side a not-a-gap: the parser already accepts
 on the statute header. The unfinished work is the \emph{semantic resolver}
 that walks the resulting reference graph to answer questions like
 ``which sections extend s415?''. We classify \textsf{G10} as deferred
-in the gap table for that reason; the remaining work is a Tarjan-SCC
-analysis pass over the reference graph (\S\ref{sec:related}) that
-unlocks LSP goto-definition and the lam4-style \texttt{IS\_INFRINGED}
-predicate.
+in the gap table for that reason; the resolver layer (LSP goto-definition,
+the lam4-style \texttt{IS\_INFRINGED} predicate, Tarjan-SCC structure
+analysis) is partially landed --- see \S\ref{subsec:scc_eval} for the
+SCC findings on the encoded library.
+
+\subsection{Cross-reference graph structure}
+\label{subsec:scc_eval}
+
+The reference graph (G10) carries both \emph{explicit} edges
+(\texttt{subsumes}, \texttt{amends} on the statute header) and
+\emph{implicit} edges (textual mentions like ``s415'' inside element
+descriptions, illustrations, and case-law holdings). After the resolver
+landed, we ran Tarjan's strongly-connected-components analysis over the
+implicit$\cup$subsumes subgraph (amendment chains were excluded as
+benign by construction).
+
+\paragraph{Findings.} Across the 524 encoded sections the analysis
+identifies four non-trivial cycles:
+\begin{itemize}
+\item \texttt{s292} $\leftrightarrow$ \texttt{s293} (sale of obscene
+      objects / sale to young persons --- mutually defining scopes).
+\item \texttt{s85} $\leftrightarrow$ \texttt{s86} (involuntary vs.\
+      voluntary intoxication --- s86 textually defers to s85's framing).
+\item \texttt{s424A} $\leftrightarrow$ \texttt{s424B} (cheating offences
+      that mutually carve out exception scope).
+\item \texttt{s304B} $\leftrightarrow$ \texttt{s74A} (an aggravation
+      pair where s74A modifies the s304B sentencing range).
+\end{itemize}
+None of these are \emph{bugs}: each is a faithful mirror of how the
+statute itself is drafted. They are, however, structural facts that
+would be invisible without the resolver. The diagnostic surfaces them as
+\texttt{cross\_section\_cycle} warnings; the author can then either
+acknowledge the cycle (the four pairs above) or refactor the encoding
+when the cycle reflects an authoring slip rather than the statute.
+
+\paragraph{Caveat.} A graph-theoretic cycle is not a \emph{legal}
+circularity: two sections can definitionally co-reference each other
+without making the law inconsistent. The diagnostic is a structural-
+inspection aid, not a soundness check; we discuss this further in
+\S\ref{sec:limitations}.
 
 \subsection{Fidelity diagnostic hit rate}
 \label{subsec:fidelity_eval}
