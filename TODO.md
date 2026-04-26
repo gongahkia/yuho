@@ -9,442 +9,295 @@ Secondary audience: practising lawyers and government law drafters.
 Third tranche: AI-tool builders who need grounded legal corpora and
 benchmarks.
 
-Delivery order: **paper + product demo first**, installable package second,
-practitioner workflow third. Yuho remains research / education oriented.
-The headline is the **DSL for statutes**; the machine-checkable Penal Code
-corpus is the proof and second headline.
-
 Status key: `[ ]` pending · `[~]` in progress · `(def)` deferred.
 
-Current snapshot: **5046/5046 unit tests green · 524 sections at L1+L2 ·
-524 L3 author-stamped · 82 sections with behavioural-test companions ·
-14 grammar gaps closed or deferred to tooling · 7
-transpiler targets shipped (JSON, English, LaTeX, Mermaid, Alloy, DOCX,
-Akoma Ntoso) · 6 user-facing surfaces shipped (CLI, LSP, MCP, browser
-extension, static explorer site, Word add-in) · 2 analytical surfaces
-(counter-example explorer, charge recommender) · reference-graph
-resolver shipped with Tarjan-SCC analysis, lam4-style `is_infringed`,
-and Catala-style `apply_scope` cross-section predicates · paper draft
-complete with applicability section + SCC empirical findings + Yuho
-syntax highlighting in `listings` + Table 1 auto-generated from
-`repo_stats.py`.**
+Current snapshot (2026-04-27): **4937 unit tests green · 524 sections at
+L1+L2 · 524 L3 author-stamped · §4 + §6 paper sections shipped (formal
+semantics + soundness theorem with 5 lemmas + 8 sanity-witness tests) ·
+§6.6 partial Lean 4 mechanisation kernel-checked (Lemmas 6.2 + 6.4) ·
+§7.8 case-law differential testing (n=30, three scorers) · §7.6 LLM
+benchmark with full 205-fixture GPT-4o-mini baseline · 31-page smoke
+PDF · `make paper-reproduce` end-to-end including Lean kernel-check.**
 
-Completed history (Phases A–D, L3 flag fixes, MCP expansion, LSP buff-up,
-VS Code extension, DOCX transpile target, fidelity diagnostics, repo
-restructure, the corpus-pivot product cycle, the analytical-surfaces
-cycle, the test-suite triage, the SCC + IS_INFRINGED + apply_scope +
-Akoma Ntoso work) lives in git log + `docs/PHASE_*` notes, not here.
+Completed history (Phases A–D, the rigor-hardening trench, mechanisation
+v1, case-law differential testing, the LLM-benchmark closed-vocab fix,
+TikZ figure rewrite, Z3 hookup, AKN OASIS XSD validation, and the rest)
+lives in git log + `docs/PHASE_*` notes, not here.
 
 ---
 
-## PhD-rigor hardening — single-paper expansion `[ ]`
+## §6.6 — Lean 4 mechanisation `[~]`
 
-All five rigor additions below land in **the same paper**, not
-separate submissions. Each becomes a new section (Gaps 1, 2, Opp
-A) or extends an existing section (Gaps 3, 4 slot into
-`§Evaluation`). Mechanisation (Gap 5) becomes either a
-present-tense subsection (if it lands in time) or a "future work"
-pointer in `§Limitations` (if it doesn't). The paper grows from
-the current 25 pages to ~60-80 pages — a journal-grade artefact.
+v1 shipped at `mechanisation/`: Lemma 6.2 (element correspondence) +
+Lemma 6.4 (exception correspondence) + composed corollary
+`partial_conviction_correspondence`, all kernel-checked under Lean
+4.10.0. Paper §6.6 documents the boundary; §11 Limitations carries
+the partial-mechanisation caveat.
 
-**Venue:** *Artificial Intelligence and Law* (Springer journal)
-— handles 60-80 page submissions naturally, audience is
-dual-trained (legal-tech + formal methods), and is the target
-venue Catala / DAPRECO / LegalRuleML follow-on work uses. AI&L's
-dual-trained reviewers also cleanly absorb the legal-tech-first
-empirical case + formal-methods-defence rigor stack we're
-building. ICAIL / JURIX would also accept the work but the page
-budget is tighter and the journal version reads as the canonical
-record anyway.
-
-**Sequencing (Shape A — ship-once):**
-
-The paper submits to AI&L only once **everything** is done — Gaps
-1-5 + Opportunity A all landed and present-tense in the
-manuscript. Slower wall-clock (9-15 months) but the submission is
-a finished artefact and avoids the risk of a "come back when §8
-is done" rejection.
-
-1. **Months 1-3** — Gaps 1, 2, 4 in parallel where possible:
-   - Gap 1 (operational semantics): independent paper-writing
-     work, can ship while corpus encoding runs.
-   - Gap 2 (pen-and-paper soundness): depends on Gap 1; landed
-     immediately after.
-   - Gap 4 (case-law differential testing): curate cases in
-     month 2-3; encode + score in month 3.
-2. **Months 2-9** — Opportunity A (IPC or MPC encoding):
-   - Scrape the foreign code in month 2-3 (in parallel with Gaps
-     3-4 above).
-   - Agent-dispatched encoding to L1+L2 over months 4-7 (mirrors
-     Phase D's SG PC pace).
-   - Cross-jurisdiction analysis + §8 prose in months 8-9.
-3. **Months 6-12** — Gap 5 mechanisation. Started in month 6
-   (after Gaps 1-2 land the pen-and-paper artefacts the
-   mechanisation reproduces) and runs to month 12. Catala's
-   comparable mechanisation (full default-calculus +
-   compilation correctness) was a multi-quarter PhD project; we
-   budget similarly.
-4. **Months 12-15** — Paper-writing trench: integrate every
-   shipped piece into the AI&L manuscript; final-pass
-   read-through (the existing TODO bullet); submit.
-
-This shape is the *Catala-as-it-would-have-been-written* pattern
-— if Catala had waited until the Coq mechanisation was done
-before submitting POPL'21, they would have shipped one paper
-instead of two. We're choosing that path deliberately, which
-means slower-but-completer rather than faster-but-iterative.
-
-**Target paper structure** (each gap maps to a section):
-
-| Section | Source |
-|---|---|
-| §1-3 (Intro / Background / Design) | Existing |
-| §4 Formal semantics | **Gap 1** |
-| §5 Implementation | Existing |
-| §6 Transpiler soundness | **Gap 2** (+ Gap 5 mechanisation subsection if it lands) |
-| §7 Evaluation | Existing + **Gap 4** (§7.8) |
-| §8 Comparative encoding | **Opportunity A** |
-| §9-12 Related / Applicability / Limitations / Conclusion | Existing |
-| Appx A — full inference rules | Gap 1 detail |
-| Appx B — full soundness proofs | Gap 2 detail |
-| Appx C — mechanisation listing | Gap 5 (if shipped) |
-
-### §4 of the paper — Pinned operational semantics `[x]`
-
-Shipped at `paper/sections/semantics.tex`. Five subsections:
-preliminaries (syntactic + semantic domains, judgement
-shapes), element evaluation (small-step rules for actus_reus /
-mens_rea / circumstance + all_of / any_of combinators),
-exception precedence (Catala-style default-logic with explicit
-defeats DAG), cross-section composition (is_infringed +
-apply_scope), and penalty algebra (cumulative / or_both
-combinators reducing to range pairs). Full inference rules
-inventoried in Appendix A; body fragment is the page reviewers
-follow without the appendix.
-
-### §6 of the paper — Soundness theorem for the Z3 transpiler `[~]`
-
-Pen-and-paper proof shipped at `paper/sections/soundness.tex`.
-Theorem 6.1 (Z3-Operational Soundness): every satisfying Z3
-assignment's `<sX>_conviction` truth value equals the
-operational-semantic conviction judgement on the corresponding
-fact pattern. Proof decomposes into **five** lemmas — element /
-element-graph / exception / cross-section / **penalty**
-correspondence — plus the main theorem. Penalty correspondence
-(Lemma 6.5) lifted into a parallel correspondence lemma after
-review feedback so the soundness claim covers the full encoded
-library, not just the conviction layer.
-
-Empirical witnesses shipped at `tests/test_soundness_sanity.py`
-(8 tests) — one concrete-case witness per lemma. The tests pin
-specific cases (true/false leaves, all_of/any_of combinators,
-exception firing alongside satisfied elements, conviction-Bool
-name dedupe across spellings, finite imprisonment range, G8
-unlimited-fine sentinel) so regressions surface here rather than
-silently invalidating the paper's soundness claim.
-
-Remaining work:
-
-- [ ] Mechanisation in Coq or Lean — see §6.3 below
-      (deliberately deferred).
-
-### §7.8 of the paper — Differential testing against published case law `[x]`
-
-Shipped. `evals/case_law/` carries 23 curated SG criminal-case
-fixtures + three orthogonal scorers (`score_recommend.py`,
-`score_contrast.py`, `score_contrast_constrained.py`) +
-README.md + tests. Headline numbers wired into the paper at
-\S\ref{subsec:case_law_diff}: top-1 30.4% / top-3 34.8% / MRR
-0.326 / unconstrained-contrast F1 0.188 / constrained-contrast
-consistency 100%. The 100% consistency-rate is the load-bearing
-positive finding: every court's stated element-level reasoning
-is satisfiable in the encoded model.
-
-Possible follow-ups (not in scope for §7.8 v1):
-
-- [~] **Case-law sample grown 23 → 30 fixtures.** Added 7
-      high-confidence cases via a focused training-data research
-      pass (Wong Seng Kwan s378 theft / Idya Nurhazlyn s420
-      cheating / PP v BDB s325 hurt / Terence Ng + Mohammed Liton
-      s375 sentencing frameworks / Low Song Chye s323 / ADF v PP
-      s324). Recommend top-1 lifted 30.4% → 43.3%, T3 34.8% →
-      46.7%, MRR 0.326 → 0.450 — the new fixtures use sections
-      with cleaner element vocabulary than the homicide-heavy
-      original sample. **Still requires** manual research from
-      LawNet / SLW for: chapter II (state offences), chapter XX
-      (marriage), chapter XXII (intimidation — s506 / s509),
-      s392 / s394 robbery, s425 mischief, s441 criminal trespass,
-      s363 / s363A kidnapping. The agent flagged these chapters
-      as ones where reported SG case-law is genuinely thin or
-      where citation accuracy needs LawNet verification.
-      Citation pinpoint for Low Song Chye [2019] 5 SLR 526 is
-      [Inference] from training-data — verify before relying.
-- [ ] Inter-rater reliability on the curated fact patterns. A
-      second curator (human, not LLM) extracts facts from the
-      same judgments independently; compute κ score for §7.8's
-      threats-to-validity caveat.
-
-### §8 of the paper — Cross-jurisdiction comparative encoding `[ ]`
-
-The 1860/1871 Anglo-Indian PC family (Singapore, Malaysia, India,
-Pakistan, Brunei) shares structural shape with divergent amendment
-trajectories. No peer system can run this comparison — Catala is
-French tax only, lam4 is contract fragments, DAPRECO is GDPR only.
-Yuho is uniquely positioned. The full encoding lands as `§8` of
-the paper. (Also tracked under Phase 2c Direction A; cross-link.)
-
-- [x] **IPC scraper shipped** — `scripts/scrape_indiacode.py` with
-      two HTML backends (AdvocateKhoj primary, India Code official
-      fallback), CLI subcommands `index` / `section` / `act`,
-      stdlib `urllib` (no Playwright needed since both sources are
-      server-rendered), 6 s crawl-delay, output JSON shape mirrors
-      `scrape_sso.py` so downstream encoders iterate the IPC the
-      same way they iterate the SG PC. 8 fixture-based tests pin
-      the parsers without network. **First real run is the
-      user's:** `python scripts/scrape_indiacode.py act --out
-      library/indian_penal_code/_raw/act.json` (~1 hour at
-      6 s/request × ~511 sections).
-- [ ] Encode at full coverage (511 IPC sections) using the same
-      agent-dispatch shape that Phase D used for the SG PC. The
-      long pole — months of agent runs.
-- [ ] Comparative analysis: SCC overlap, divergent amendment
-      paths, sections renumbered / added / repealed. Single tool
-      (`yuho refs --compare-libraries`) emits the diff report.
-- [ ] **Paper §8 prose** writing the comparative findings.
-
-### §6.6 of the paper — Lean 4 mechanisation `[~]`
-
-**v1 shipped** at `mechanisation/` (Lean 4.10.0, ~5 source
-files + smoke tests + README). Two paper-load-bearing lemmas
-kernel-checked:
-
-- [x] **Lemma 6.2 (element correspondence)** — theorem
-      `element_correspondence` in `Yuho/Soundness.lean`. Proof
-      is `rfl` after unfolding `Element.eval` and
-      `SMTModel.facts`.
-- [x] **Lemma 6.4 (exception correspondence)** — theorem
-      `exception_correspondence`. Catala-style priority
-      precedence realised by the operational definition of
-      `Exception.firedSet` walking the exception list in
-      topological order.
-- [x] **Composed corollary** `partial_conviction_correspondence`
-      pairing the two lemmas.
-- [x] **Paper §6.6 added** — `\subsection{Partial mechanisation
-      in Lean 4}` documenting what's mechanised, the boundary,
-      the trust base (Lean kernel + oracle assumption that the
-      Z3 generator faithfully emits the biconditionals), the
-      Coq-vs-Lean rationale.
-- [x] **Limitations §11 updated** to flag the partial nature
-      and size the remaining work (~6-9 person-months for
-      Lemmas 6.3 / 6.5 / 6.6; mirroring Catala's
-      `simulation_sred_to_cred.v` template).
-
-Possible follow-ups (deferred to v2):
+Open follow-ups (deferred to v2):
 
 - [ ] Mechanise Lemma 6.3 (element-graph correspondence) — the
-      structural twin of Catala's bisimulation lemma; ~2-3
+      structural twin of Catala's bisimulation lemma; ~2–3
       person-months.
 - [ ] Mechanise Lemma 6.5 (penalty correspondence) — Yuho-specific,
       requires lifting range-arithmetic into Lean; ~2 person-months.
 - [ ] Mechanise the cross-section composition step of Theorem 6.1
-      (apply\_scope / is\_infringed dedupe simulation) — ~2-3
+      (`apply_scope` / `is_infringed` dedupe simulation) — ~2–3
       person-months.
 - [ ] Discharge the oracle assumption by porting Yuho's Python
       `Z3Generator` to Lean and proving its functional equivalence
       to a verified specification.
 
-### Reproducibility artefact (AEC-grade) `[~]`
+---
 
-Two of three deliverables shipped — only the Zenodo DOI remains
-(non-code, lands on submission day).
+## §7.6 — LLM benchmark hardening `[~]`
 
-- [x] **Dockerfile** at repo root + `.dockerignore` boots a clean
-      Python 3.12 image with the full toolchain (Python deps via
-      `pip install -e .[dev]`, Node + tree-sitter-cli, xmllint
-      for the AKN round-trip).
-- [x] **Top-level Makefile** with `make paper-reproduce` that
-      runs every empirical claim end-to-end (verify-coverage /
-      verify-akn-xsd / verify-evals / verify-case-law) in ~3
-      minutes and emits a one-page summary at
-      `logs/paper-reproduce-summary.txt`. Each verify-* target
-      is independently runnable; `PYTHON` and `YUHO` make
-      variables let users override interpreter / CLI for hosts
-      with broken default Pythons.
-- [x] **`paper/REPRODUCE.md`** documents every paper claim with
-      a per-claim verification command, expected output, expected
-      wall-clock time, and what's deliberately *not* covered by
-      `paper-reproduce` (real-LLM benchmark, full IPC scrape).
-- [ ] **Zenodo deposit** of the v1.0 corpus + benchmark fixtures
-      + AKN XSD with a citable DOI. Triggered on paper
+v0 + closed-vocab fix + GPT-4o-mini full baseline shipped (T1=43.9%,
+T2=32.7% / F1=0.676, T3=94.1% on n=205). Paper §7.6 has the headline
+numbers + three findings paragraph. Open work:
+
+### Polarity-negative collapse (benchmark-design weakness)
+
+The full GPT-4o-mini run surfaced a real benchmark-design issue: on
+the 30 polarity-negative fixtures (scenarios where the ground-truth
+satisfied-elements set is empty), accuracy collapses:
+
+| Metric | Whole corpus (n=205) | Polarity-negative slice (n=30) |
+|---|---|---|
+| T1 (section identification) | 43.9% | 33.3% |
+| T2 (element-set F1) | 0.676 | 0.056 |
+| T3 (exception citation) | 94.1% | 70.0% |
+
+The model is systematically biased toward producing *some* satisfied
+elements rather than identifying that none fire. This is itself a
+finding worth keeping in §7.6 (it informs downstream legal-AI work
+on structural-reasoning prompts), but it also flags a benchmark-
+design weakness we should fix.
+
+**Iterative refinement history of the LLM benchmark** — useful
+context for the §7.6 paragraph and for any future benchmark-design
+audit:
+
+1. **v0 (commit `ac8570b0`)**: 22 hand-authored fixtures + open-
+   vocabulary T2 prompt asking the LLM to "list satisfied element
+   names as snake_case identifiers". Spot-check on n=5 (gpt-4o-
+   mini) yielded T2 F1 ≈ **0.07** — catastrophic.
+2. **Diagnosis**: open-vocabulary T2 was conflating two distinct
+   capacities — structural legal reasoning ("does this scenario
+   satisfy these elements?") with naming-convention recall ("can
+   you guess Yuho's private snake_case identifiers?"). The latter
+   is unrelated to legal capability and dragged down the metric.
+3. **Closed-vocabulary fix (commit `345909a0`)**: T2 prompt now
+   presents the section's encoded element names as a closed list
+   ("the encoded section's structural elements are: [a, b, c, …]")
+   and asks the model to return a subset. Predictions outside the
+   vocab are filtered.
+4. **Re-run on n=10**: T2 F1 lifted **0.07 → 0.627**.
+5. **Full n=205 run (commit `ec91405a`)**: T1=43.9% / T2=32.7%
+   exact / F1=0.676 / T3=94.1%. Paper §7.6 rewritten with the real
+   numbers + three observations.
+6. **Polarity-negative finding (this section)**: the model
+   collapses on negative-polarity fixtures. The next iteration
+   should address this.
+
+Open work — fix the polarity-negative case:
+
+- [ ] **Polarity-priming in the T2 prompt.** Add a sentence
+      acknowledging that the answer may be the empty set: "Reply
+      with `[]` if no element is satisfied — many scenarios are
+      structured so that no element fires." Test the lift on the
+      30 polarity-negative fixtures.
+- [ ] **Chain-of-thought scaffolding for negative cases.** Allow
+      the model to first identify which elements are *not*
+      satisfied before listing what *is*. Worth a side-by-side
+      comparison.
+- [ ] **Polarity-aware T1 prompting.** When the scenario is
+      polarity-negative, T1 still asks "what section best
+      applies?" — but the right answer may be "no section". Add a
+      "no-section-applies" option to the closed-vocab T1 list.
+- [ ] After each fix, re-run the benchmark and update §7.6's
+      "Headline numbers" paragraph + the polarity-negative slice
+      table.
+
+### Additional model baselines (OpenAI only)
+
+User has an OpenAI org key but not Anthropic. Run additional OpenAI
+models to test cross-model generalisation:
+
+- [ ] **GPT-4o** (running in background as of this write — see
+      `evals/results-gpt-4o-full.json` once landed). Tests whether
+      the larger model improves T1 + closes the polarity-negative
+      gap.
+- [ ] **GPT-4o + polarity-priming** combined run (after the
+      benchmark-design fix above lands).
+- [ ] **o1-mini** or **o3-mini** if the user wants to test
+      reasoning-model performance — a real apples-to-apples for
+      structural reasoning.
+
+---
+
+## §7.8 — Case-law differential testing `[~]`
+
+n=30 fixtures shipped with three scorers (recommend / contrast /
+constrained-contrast). Headline numbers wired into paper §7.8:
+top-1 43.3%, MRR 0.450, contrast F1 0.219, constrained-contrast
+consistency 100%. Open work:
+
+- [ ] **Grow case-law sample via manual LawNet / SLW research.**
+      Chapter II (state offences), chapter XX (marriage), chapter
+      XXII (intimidation — s506 / s509), s392 / s394 robbery,
+      s425 mischief, s441 criminal trespass, s363 / s363A
+      kidnapping are underrepresented or missing. The agent
+      flagged these as ones where reported SG case-law is
+      genuinely thin or where citation accuracy needs LawNet
+      verification by a human curator.
+- [ ] Inter-rater reliability on the curated fact patterns. A
+      second curator (human, not LLM) extracts facts from the
+      same judgments independently; compute κ score for §7.8's
+      threats-to-validity caveat.
+
+---
+
+## §8 — Cross-jurisdiction comparative encoding `[ ]`
+
+The IPC scraper (`scripts/scrape_indiacode.py`) is committed and
+fixture-tested. Open work:
+
+- [ ] **First IPC scrape run** (your action). One ~50-minute
+      command: `python scripts/scrape_indiacode.py act --out
+      library/indian_penal_code/_raw/act.json` against the
+      AdvocateKhoj backend. Spot-check the first few section
+      JSONs to confirm parser-shape assumptions hold against the
+      live HTML.
+- [ ] Encode at full coverage (511 IPC sections) using the
+      agent-dispatch shape from Phase D. The long pole — months
+      of agent runs.
+- [ ] Comparative analysis tool: `yuho refs --compare-libraries`
+      emitting SCC overlap, divergent amendment paths, sections
+      renumbered / added / repealed.
+- [ ] **Paper §8 prose** writing the comparative findings.
+
+---
+
+## Direction B — General-defence `defeats` edges (full coverage) `[~]`
+
+v1 ships edges across **4 offences and 11 distinct general defences**:
+
+- s302 (murder) ← s79, s80, s84, s96, s100
+- s323 (hurt) ← s79, s80, s81, s96
+- s325 (grievous hurt) ← s79, s80, s96, s100
+- s378 (theft) ← s79, s80, s81
+
+Full Chapter-IV coverage requires expanding to ~30 general defences
+× dozens of applicable offences (several hundred edges). Doctrinal
+priorities:
+
+- [ ] **Private defence (ss96-106) onto every harm offence.**
+      ~10 defences × ~15 hurt / homicide / sexual-offence sections.
+- [ ] **s79 mistake-of-fact onto every mens-rea-bearing offence.**
+      The most broadly applicable defence; expand to ~50 offences.
+- [ ] **s80 accident onto every actus-reus-bearing offence.**
+      Similarly broad; expand to ~50 offences.
+- [ ] **s84 unsoundness-of-mind onto every offence.** Universal
+      applicability; expand to all 524 - definition-only sections.
+- [ ] **s85, s86 intoxication onto every mens-rea offence.** Narrow
+      (specific-intent only) but well-established; ~30 offences.
+- [ ] **s95 trifling-harm onto hurt-family offences.** Narrow but
+      doctrinally clean; ~5 offences.
+
+After expansion, re-run `yuho narrow-defence` against the case-law
+fixtures and report uplift in matched-element F1 against the
+court's stated reasoning.
+
+---
+
+## Research paper polish `[~]`
+
+arXiv-attributed acmart `manuscript` mode for now; AI&L
+documentclass swap on submission day. Outstanding pre-submission
+hardening:
+
+- [ ] **Manual read-through pass.** Read the rendered PDF cover-
+      to-cover, mark places where prose drifts, claims need a
+      citation, or a paragraph buries the lede. Add detail where
+      missing (especially in evaluation §5 and limitations §11)
+      but stay tight — no padding. (User action.)
+- [ ] **Blog-post transpilation.** Hand the rendered paper to
+      Claude with a transpilation prompt; output to
+      `paper/blog/yuho.md`.
+- [ ] **External-reader pass on the full PDF.** Catches drift
+      both author and AI miss.
+- [ ] Confirm canonical citations for `lam4`, `lexscript`,
+      `ldoc`, `hammond1983rights` (TODO notes still in
+      `references.bib`).
+
+---
+
+## Reproducibility — Zenodo deposit `[ ]`
+
+Dockerfile + Makefile + REPRODUCE.md shipped. Only the Zenodo DOI
+remains:
+
+- [ ] Submission-day plumbing: zip the v1.0 corpus + benchmark
+      fixtures + AKN XSD + Lean mechanisation, upload to Zenodo,
+      cite the DOI in `paper/REPRODUCE.md`. Triggered on paper
       submission; nothing to do until then.
 
-### Risk register
+---
+
+## Risk register
 
 | Risk | Mitigation |
 |---|---|
-| Gap 5 mechanisation overruns | §6.3 demotes to future-work pointer; §6.2 pen-and-paper carries the soundness claim alone |
-| External counsel access not available | L3 stays author-stamped; §11 Limitations carries the explicit caveat that external review is not part of this paper's claim |
-| IPC/MPC text access blocked (paywall, robots.txt change) | Switch to the Bangladeshi PC 1860 (also Anglo-Indian lineage, public-domain text) |
+| §6.3 mechanisation overruns | §6.6 partial mechanisation already shipped; remaining lemmas demote to "future work" pointer in §11 if v2 doesn't land |
+| External counsel access not available | L3 stays author-stamped; §11 carries the explicit caveat that external review is not part of this paper's claim |
+| IPC text access blocked (paywall, robots.txt change) | Switch to the Bangladeshi PC 1860 (also Anglo-Indian lineage, public-domain text) |
 | AI&L editorial rejection | Re-target *Formal Aspects of Computing* (legal-tech amenable) or ICAIL (page budget tighter but acceptable) |
-| Case-law sample for §7.8 has too few clean single-charge cases | Widen to multi-charge cases; score per-charge top-k accuracy; drop the "single charge" cleanliness constraint |
-
-### Cross-cutting notes
-
-The §4 + §6 (formal semantics + soundness) layer is the **rigor
-defence** against formal-methods-trained reviewers; §7.8
-(case-law differential testing) is the **empirical case**;
-§8 (cross-jurisdiction) is the **uniqueness claim**. All three
-are needed for an AI&L journal submission of this scope; missing
-any one weakens the paper to "interesting tooling" rather than
-"PhD-thesis-grade contribution".
-
-The 12-month-budget is realistic given existing Phase D agent-
-dispatch tooling (re-used for Opportunity A's IPC/MPC encoding).
-The biggest single risk is Gap 5 (mechanisation) — it's the only
-item that has no incremental fallback if it overruns; if the
-mechanisation goes sideways the paper still ships with §6.3 as a
-future-work pointer.
-
-**Overlap with deferred sections:** §8 supersedes Phase 2c
-Direction A (Cross-jurisdiction PC port) — the Direction-A
-bullets below are absorbed into §8.
+| LLM-benchmark polarity-negative gap remains unfixed | Keep as-is and flag in §7.6 "open question for downstream legal-AI work" rather than presenting as a benchmark we expect models to ace |
 
 ---
 
-## Research paper (LaTeX) `[~]`
+## Long-tail / stretch
 
-arXiv preprint, attributed, acmart `manuscript` mode. Full first draft
-landed and has since been extended with applicability, the corrected
-exception-encoding semantics, SCC subsection, AKN transpiler mention,
-and Yuho syntax highlighting via the `listings` package. Outstanding
-work is submission hardening.
-
-- [ ] **Manual read-through pass.** Read the rendered PDF cover-to-cover,
-      mark places where prose drifts, claims need a citation, or a paragraph
-      buries the lede. Add detail where missing (especially in evaluation §5
-      and limitations §7) but stay tight — no padding.
-- [ ] **Blog-post transpilation.** Hand the rendered paper to Claude with
-      the prompt: *"Transpile this paper into a markdown blog post for
-      gabrielongzm.com. Target ~1500 words. Keep the thesis (statute-as-
-      source-of-truth + the 14-grammar-gaps argument), drop the
-      implementation SLOC tables, drop the methodology threats-to-validity,
-      keep one worked example (s415), keep the Catala/lam4/LexScript
-      comparison as prose not table. Conversational tone, link to the
-      GitHub repo, embed coverage stats inline."* Output to
-      `paper/blog/yuho.md`.
-- [ ] Inspect rendered Mermaid figures (`paper/figures/*.pdf` already
-      generated by `make figures`) and tune layouts where needed.
-- [ ] Confirm canonical citations for `lam4`, `lexscript`, `ldoc`,
-      `hammond1983rights` (TODO notes still in `references.bib`).
-- [ ] External-reader pass on the full PDF; tighten phrasing and integrate
-      cross-references where the prose has drift between sections.
-- [x] **Final venue: *Artificial Intelligence and Law*** (Springer
-      journal). Audience is dual-trained (legal-tech +
-      formal-methods), handles 60-80 page submissions naturally,
-      and is the canonical follow-on venue for Catala / DAPRECO /
-      LegalRuleML work. Documentclass swap to AI&L's template
-      lands at submission day; pen the manuscript against the
-      current arXiv-attributed acmart in the meantime.
-
----
-
-## VS Code extension — marketplace publish `[ ]`
+### VS Code extension marketplace publish `[ ]`
 
 The extension itself is feature-complete. Remaining work is publishing.
 
 - [ ] Marketplace publish (stretch).
 
----
-
-## Evaluator-side semantics of `apply_scope` `[x]`
-
-`apply_scope(<section_ref>, ...args)` and `is_infringed(<section>)`
-now evaluate end-to-end across all three layers:
-
-- **Tree-walking interpreter** evaluates either node to a boolean
-  Value backed by `StatuteEvaluator`.
-- **Static type-check pass** at the lint level surfaces empty-target
-  and missing-struct-field warnings.
-- **Z3 backend** translates either node to the target section's
-  `<sX>_conviction` Bool (elements satisfied AND no defeating
-  exception fires), declared lazily so cross-section references
-  inside guards resolve to the same atom regardless of statute
-  iteration order.
-
----
-
-## Akoma Ntoso transpiler `[ ]`
+### Akoma Ntoso transpiler hardening `[ ]`
 
 Structural transpiler ships and validates 524/524 against the
-vendored OASIS XSD via `python scripts/akn_roundtrip.py --xsd`.
-Remaining work is hardening:
+vendored OASIS XSD. Further extension is on-demand:
 
 - [ ] Decision criterion before further extension (richer FRBR
-      hierarchy, full `<componentRef>` graph): a named external user
-      asks for it.
+      hierarchy, full `<componentRef>` graph): a named external
+      user asks for it.
 
----
+### Mermaid flowchart richness `(def)`
 
-## Mermaid flowchart richness `(def)`
-
-The current per-section flowchart (`yuho transpile -t mermaid` default
-shape) renders structural shape: section node, element decomposition
-under combinators, exception priority DAG, penalty terminals. It does
-not yet *trace logic flow* — at a decision point ("did the actus_reus
-fire?", "did an exception apply?"), the diagram doesn't show the
-branch that leads to "offence made out" vs "no offence" vs "exception
-defeats charge". A reader has to mentally execute the encoding rather
-than read the diagram.
-
-Deprioritised — ship later. When it lands, the flowchart should:
+Per-section flowcharts render structural shape but don't trace
+*logic flow* (no decision diamonds, exception-precedence chain,
+penalty branches). Deprioritised — ship later.
 
 - [ ] Surface every binary decision point as a labelled diamond
-      (`{guard expression}`) with explicit `yes` / `no` edges so the
-      reader can trace any fact pattern through the diagram.
-- [ ] Render exception precedence as a chain of guards (rather than the
-      current flat priority list) so the reader sees *which* exception
-      fires and which alternatives it shadows.
-- [ ] Show penalty selection branches when multi-penalty (G12) is in
-      play — `cumulative` vs `or_both` siblings should diverge with
-      labelled edges, not collapse into a list.
-- [ ] Carry over the existing schema-shape flag (`--shape schema`)
-      style: typed terminals, collapsed enum dispatch, fn-call
-      consequence nodes — but apply it to the structural per-section
-      diagram by default.
-- [ ] Don't lose the current diagram's compactness: the new richness
-      should be opt-in via `--shape verbose` (or similar), not the
-      default, so the existing per-section explorer pages don't blow
-      up vertically.
+      with explicit `yes` / `no` edges.
+- [ ] Render exception precedence as a chain of guards.
+- [ ] Show penalty selection branches when multi-penalty (G12)
+      is in play.
+- [ ] Carry over the schema-shape style; opt-in via
+      `--shape verbose`.
 
-Acceptance criteria: a reader unfamiliar with Yuho can predict, from
-the flowchart alone, what the verdict will be for any concrete fact
-pattern — without consulting the source `.yh`.
+### Test-suite backlog `[ ]`
 
----
+The suite is green at 4937. 82 sections carry behavioural-test
+companions; 442 sections are pure-interpretation provisions where
+structural parse + lint coverage is the appropriate bar.
 
-## Test-suite backlog `[ ]`
-
-The suite is green. 82 sections carry behavioural-test companions
-(\texttt{test\_statute.yh}); 442 sections are pure-interpretation
-provisions where structural parse + lint coverage is the appropriate
-bar. The 202 broken companion files (which referenced helper `fn`
-blocks the matching `statute.yh` didn't declare) were deleted in the
-ship-readiness pass.
-
-- [ ] **442 sections without behavioural companions.** Coverage gap,
-      not a regression. Most are interpretation/definition provisions
-      where there's no rich behaviour to assert beyond parse + lint.
-      Author per-section companions opportunistically when an offence
-      gains structural complexity that warrants behavioural testing.
-
----
-
-## L3 long tail `(closed)`
-
-L3 author-stamping is at 524/524. External counsel review is out
-of scope for this paper; the paper's `§Limitations` carries the
-explicit caveat that L3 stamps are author-administered. No work
-to track here.
+- [ ] **442 sections without behavioural companions.** Author
+      per-section companions opportunistically when an offence
+      gains structural complexity that warrants behavioural
+      testing.
 
 ---
 
@@ -452,32 +305,29 @@ to track here.
 
 - **Hypothesis dep.** Already declared in `pyproject.toml` under the
   `[dev]` extras group. To run the property-based tests
-  (`tests/test_properties.py`, `tests/test_statutes.py`), install with:
-  `pip install -e .[dev]` (or `pip install -e .[all]` for everything).
-  CI configurations should pin to the `[dev]` extra so the property
-  suite participates in the test run.
+  (`tests/test_properties.py`, `tests/test_statutes.py`), install
+  with: `pip install -e .[dev]`. CI configurations should pin to the
+  `[dev]` extra so the property suite participates in the test run.
+
+- **Lean toolchain.** `mechanisation/` requires Lean 4.10.0+ via
+  `elan`. Install with `curl -sSf https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | bash`,
+  then `cd mechanisation && lake build`.
 
 ---
 
-## Deferred
-
-### Phase 2a — Historical versions `(def)`
+## Deferred — Phase 2a (Historical versions)
 
 The Penal Code 1871 has accumulated 150+ years of amendments. Yuho
-currently encodes only the current version of each section; the
-amendment-lineage metadata (`effective`, `amends`, `subsumes`) is
-present but the historical clause text is not. This phase extends
-Yuho into a **diachronic** legal artefact: every section carries
-every historical version, and the toolchain answers "what did the
-law look like on date X?" temporally.
+currently encodes only the current version of each section. Phase
+2a extends Yuho into a **diachronic** legal artefact: every section
+carries every historical version, and the toolchain answers "what
+did the law look like on date X?" temporally.
 
-**Scope (per design pick — full point-in-time replay):**
+**Scope:** every encoded section gets every historical version
+since 1872. `yuho check --as-of 1995-06-15 my_facts.yh` and friends
+become first-class queries.
 
-Every encoded section gets every historical version since 1872.
-`yuho check --as-of 1995-06-15 my_facts.yh` and friends become
-first-class queries.
-
-#### Scrape + ingest
+### Scrape + ingest
 
 The v0 scrape ships (`scripts/scrape_sso.py historical-list /
 historical / historical-bulk`); per-Act snapshots land under
@@ -485,218 +335,84 @@ historical / historical-bulk`); per-Act snapshots land under
 `historical_index.json`. Remaining work:
 
 - [ ] Build a `historical_index.json` mapping `(section, valid-date)
-      -> raw_path` so re-encoding can iterate snapshots in chronological
-      order.
-- [ ] Identify the canonical "current" snapshot date so the existing
-      `_raw/act.json` doesn't duplicate the latest historical entry.
+      → raw_path` so re-encoding can iterate snapshots in
+      chronological order.
+- [ ] Identify the canonical "current" snapshot date so the
+      existing `_raw/act.json` doesn't duplicate the latest
+      historical entry.
 
-#### Grammar (per design pick — versioned blocks)
+### Grammar (versioned blocks)
 
 - [ ] Add `version <date> { definitions / elements / penalty /
-      illustrations / exceptions }` block to `grammar.js`. Each
-      version is a complete snapshot; renderers diff client-side.
+      illustrations / exceptions }` block to `grammar.js`.
 - [ ] AST: extend `StatuteNode` with `versions: Tuple[VersionedBlock,
-      ...]` where each `VersionedBlock` carries an effective date plus
-      the same fields as the current `StatuteNode`. The current
-      single-version fields (`elements`, `penalty`, …) remain as
-      shorthand for a single-version statute.
+      ...]`.
 - [ ] Builder: when multiple `version` blocks are present, populate
-      `versions` and leave the top-level fields empty (or pointing at
-      the latest version). Lint check: every section either has zero
-      `version` blocks (current behaviour) or covers a contiguous
-      effective-date range (no gaps, no overlaps).
-- [ ] Update parser tests + a fresh `tests/test_versioned_blocks.py`
-      pinning shape, ordering, and lint behaviour.
+      `versions` and leave the top-level fields empty. Lint check
+      for contiguous effective-date ranges.
+- [ ] Update parser tests + `tests/test_versioned_blocks.py`.
 
-#### Re-encoding pipeline
+### Re-encoding pipeline
 
-- [ ] Build `paper/reproducibility/historical_reencode.py`: given the
-      `historical_index.json`, dispatch agents to re-encode each
-      `(section, date)` snapshot as a `version` block, producing one
-      `versioned-statute.yh` per section. Reuse the agentic dispatcher
-      shape from `apply_flag_fix.py` / `l3_audit.py`.
+- [ ] Build `paper/reproducibility/historical_reencode.py`: given
+      the `historical_index.json`, dispatch agents to re-encode
+      each `(section, date)` snapshot as a `version` block.
 - [ ] L3-equivalent fidelity audit per version: extend the 11-point
       checklist with an additional "preserves 1872-era spelling and
-      drafting style" check and any structural drift between
-      adjacent versions.
+      drafting style" check.
 - [ ] Coverage harness extension — `coverage.json` rows become
       `(section, valid-date)` keyed.
 
-#### Temporal queries
+### Temporal queries
 
-- [ ] `yuho check --as-of <date> <file>`: filter the AST to the
-      version effective on the given date before parse / lint /
-      semantic checks.
-- [ ] `yuho refs --as-of <date>`: reference graph at a historical
-      date.
-- [ ] `yuho recommend --as-of <date> <facts>`: charge recommender
-      against the law as it stood on the date of the alleged offence.
+- [ ] `yuho check --as-of <date> <file>`.
+- [ ] `yuho refs --as-of <date>`.
+- [ ] `yuho recommend --as-of <date> <facts>`.
 - [ ] MCP: surface `--as-of` on the corresponding tools.
 
-#### Visualisations
+### Visualisations
 
-The first one ships with this phase; the others land separately.
-
-- [ ] **Per-section timeline** (v1 — ship first): vertical timeline
-      per section showing each version + diff highlights between
-      adjacent versions. Embedded on `/s/<N>.html` per-section pages
-      after the existing Diagram + Mindmap headings. Format:
-      `version 1872-01-01 → version 2008-02-01 → version 2012-12-31`,
-      each clickable to reveal the full version content. Diffs
-      rendered client-side.
+- [ ] **Per-section timeline** (v1 — ship first). Vertical timeline
+      per section with diff highlights, embedded on `/s/<N>.html`.
 - [ ] **Penalty-inflation heatmap**: 524 sections × decade columns,
-      cell colour = imprisonment cap or fine cap. New top-level
-      `/penalty-inflation.html` page. Punchy paper figure.
+      cell colour = imprisonment / fine cap.
 - [ ] **Library-wide amendment graph**: nodes = Acts, edges = "this
-      Act amended sections [a, b, c]". New `/amendment-graph.html`
-      page alongside `/graph.html` and `/semantic-graph.html`.
+      Act amended sections [a, b, c]".
 - [ ] **Stable-kernel chart**: three-tier classification (verbatim
-      since 1872 / partially amended / completely rewritten) rendered
-      on `/coverage.html` as a chapter-by-chapter heatmap.
+      / partially amended / completely rewritten) on
+      `/coverage.html`.
 
-#### Novel concepts (paper contributions)
-
-All four claimed; each gets its own subsection in the paper.
+### Novel concepts (paper contributions)
 
 - [ ] **Encoding lineage** — section in design.tex on
-      "statute-as-source-of-truth across time". Argues the encoding
-      composes over time without external archives.
-- [ ] **Amendment friction metric** — define a Levenshtein-style
-      distance over AST node trees between adjacent versions; report
-      the distribution across the 524-section corpus. New evaluation
-      subsection.
-- [ ] **Stable kernels** — empirical classification: which sections
-      are verbatim from 1872, which are partially amended, which are
-      completely rewritten? Report the percentages. New evaluation
-      subsection.
-- [ ] **Diachronic SCC analysis** — re-run Tarjan over the cross-
-      reference graph at every historical date; surface structural
-      changes invisible to clause-level diffs. Extends the existing
-      §5 SCC subsection.
+      "statute-as-source-of-truth across time".
+- [ ] **Amendment friction metric** — Levenshtein-style distance
+      over AST node trees between adjacent versions; report the
+      distribution across the 524-section corpus.
+- [ ] **Stable kernels** — empirical classification of section
+      stability since 1872.
+- [ ] **Diachronic SCC analysis** — re-run Tarjan over the
+      cross-reference graph at every historical date; surface
+      structural changes invisible to clause-level diffs.
 
-#### Acceptance criteria for closing Phase 2a
+### Acceptance criteria
 
-- 524 sections × at-least-3 historical versions encoded (median should
-  be 4–5 versions; long tail handled by scrape coverage).
-- All temporal queries return correct results when checked against
-  hand-picked spot-checks (e.g. s300 in 2010 vs 2013 — known
-  death-penalty discretion change).
-- Per-section timeline renders for every section that has multiple
-  versions; sections with one version skip cleanly.
-- Paper has the four novel-concept subsections drafted and figure-
-  ready.
+- 524 sections × at-least-3 historical versions encoded.
+- All temporal queries return correct results on hand-picked
+  spot-checks (e.g. s300 in 2010 vs 2013 — known death-penalty
+  discretion change).
+- Per-section timeline renders for every section with multiple
+  versions.
+- Paper has the four novel-concept subsections drafted.
 
-### Phase 2c — Future directions (paper-shaped) `(def)`
+---
 
-Four directions all scoped as **full-corpus, paper-claim**. Sequence
-them — they share infrastructure and the diachronic Phase 2a is a
-prerequisite for one of them. Audience and core-asset constraints
-hold throughout: each must hinge on the encoded library + the DSL
-+ the existing Z3/Alloy/MCP surface, and target researchers, law
-students, or legal engineers.
+## Deferred — Phase 2c Direction D (Interactive learn-by-doing)
 
-#### Direction A — Cross-jurisdiction PC port `(superseded by §8)`
-
-This work has been promoted into the paper as `§8 of the paper —
-Cross-jurisdiction comparative encoding` (under PhD-rigor
-hardening). This section retained as a back-link only; do not
-track work here.
-
-#### Direction B — Counter-factual edge-case explorer `[x]`
-
-All five v0 deliverables shipped; the paper claim has its own
-evaluation subsection (\S\ref{subsec:scenario_synthesis}).
-
-- [x] **`yuho contrast s_A s_B`** — finds a satisfying assignment
-      where A's conviction holds and B's does not. Emits per-statute
-      element values + the distinguishing-elements summary. JSON
-      mode for downstream tooling. Honours the `not_legal_advice`
-      contract.
-- [x] **Minimum-distance via `--minimal`** — Z3's `Optimize`
-      interface with a hamming-weight objective; returns the
-      smallest fact-set that distinguishes A from B.
-- [x] **`yuho narrow-defence offence defence`** — smallest fact-set
-      where both sections' element conjunctions hold. Solves
-      "structural-availability floor" for a defence against an
-      offence. Same `--minimal` / `--timeout` / `--json` knobs.
-      Subsection-element hoist in `Z3Generator` makes general
-      defences (s76–s106, all subsection-scoped) queryable.
-- [x] **Bulk run** — `scripts/bulk_contrast.py`. First end-to-end:
-      143 doctrinally-related pairs, 115 landed (100% of subsumes,
-      79% of referenced); output at
-      `library/penal_code/_corpus/contrast/<a>_vs_<b>.json` plus
-      summary `index.json`. Per-pair failures logged not aborting.
-- [x] **Paper claim** — added evaluation subsection
-      "Z3-driven scenario synthesis" with bulk-run numbers and the
-      structural-not-doctrinal caveat.
-
-Possible follow-ups (not in scope here):
-
-- [x] **Cross-validation against case law shipped** —
-      `scripts/contrast_caselaw_validation.py` checks each of
-      the 115 synthesised contrast pairs against the 22
-      case-law-covered pairs. Match rate (any direction) =
-      2.6%. The two sources are complementary: case law
-      heavily clusters on s304↔s300 (17 of 22 fixtures);
-      the Z3-synthesised corpus covers SCC/subsumes pairs
-      across the wider library. Results JSON at
-      `evals/case_law/results-contrast-validation.json`.
-- [~] **General-defence `defeats` edges, v0 sample shipped.**
-      s302 (murder) carries an `exception general_defence_s84`
-      block whose guard is `when is_infringed(s84)` — when s84's
-      elements all fire, the exception fires, and `s302_conviction`
-      goes false. The pattern is repeatable for every Chapter IV
-      defence (s76-s106) against every relevant offence; we ship
-      the s302+s84 edge as the proof of concept (mirrors the
-      Took Leng How precedent we curated). Full coverage is a
-      follow-up trench: ~30 defences × dozens of applicable
-      offences = several hundred edges. Suggest doing the
-      most-doctrinally-applicable subset first (private defence
-      ss96-106 onto harm offences; s79 mistake-of-fact onto
-      mens-rea offences).
-
-#### Direction C — LLM legal-reasoning benchmark `[~]`
-
-Package the encoded library as a graded benchmark for LLMs. Each
-fixture is a fact-pattern + ground-truth answer (which section
-applies, which elements are met, which exception fires). Yuho's
-evaluator already computes the ground truth.
-
-- [x] **v0 shipped:** `evals/schema.json` + `evals/run.py`
-      single-file runner with two `BenchmarkClient` impls
-      (Anthropic SDK + `FakeClient` for offline / CI). Three tasks:
-      section identification, element-set F1, exception citation.
-- [x] **Grown to 205 fixtures** (22 hand-authored + 183 synthesised
-      from the encoded library's canonical illustrations). Driver:
-      `scripts/synthesise_eval_fixtures.py`. Auto-detects
-      polarity-negative illustrations and tags them as such.
-- [x] **Stratified accuracy report** — per chapter / category /
-      difficulty / synth-vs-hand / polarity. Triggered by
-      `--no-per-fixture` for the headline view; full per-fixture
-      table is the default.
-- [x] **Paper subsection** "LLM legal-reasoning benchmark" added
-      under \S\ref{subsec:llm_benchmark} with positioning vs
-      LegalBench / LawBench, fixture-corpus stats, structural-not-
-      doctrinal caveat, and explicit acknowledgment that the
-      real-LLM run is queued.
-- [x] **GPT-4o-mini baseline shipped** — full 205-fixture run
-      lands at `evals/results-gpt-4o-mini-full.json` (T1=43.9%,
-      T2=32.7% exact / F1=0.676, T3=94.1%). Paper §7.6
-      "Headline numbers" paragraph rewritten with the real
-      numbers + three observations (T3-as-negative-calibration,
-      T2-closed-vocab nuance, polarity-negative collapse).
-- [ ] **Additional models** (Claude Sonnet 4.6 / Opus 4.7 /
-      one open-weights reference). Optional — gpt-4o-mini already
-      establishes the structural-reasoning baseline; additional
-      models would test cross-model generalisation but aren't
-      load-bearing for the paper.
-
-#### Direction D — Interactive learn-by-doing legal-ed
-
-Extend the static explorer site (`editors/explorer-site/build/`)
-into a guided learning surface for law students. Each section page
-gains an interactive fact-builder; the elements light up as the
-student supplies fact values; the verdict updates live.
+Extend the static explorer site into a guided learning surface for
+law students. Each section page gains an interactive fact-builder;
+the elements light up as the student supplies fact values; the
+verdict updates live.
 
 - [ ] Per-section JS fact-builder component: parses the section's
       element list from the existing JSON corpus, renders boolean /
@@ -704,29 +420,20 @@ student supplies fact values; the verdict updates live.
       `StatuteEvaluator` to Pyodide or write a tiny TS port).
 - [ ] Worked-example walkthrough per section: takes the canonical
       illustrations from the `.yh` source, plays them through the
-      fact-builder one step at a time. Mode toggle: "show me how it
-      gets to the answer" vs "let me try myself first".
+      fact-builder one step at a time. Mode toggle: "show me how
+      it gets to the answer" vs "let me try myself first".
 - [ ] If Phase 2a lands first: integrate the per-section timeline
-      so a student can replay the same fact pattern against the law
-      as it stood in 1872, 1985, 2008, 2024 — directly visible
+      so a student can replay the same fact pattern against the
+      law as it stood in 1872, 1985, 2008, 2024 — directly visible
       doctrinal drift.
 - [ ] **Paper claim:** "Interactive structural pedagogy for
       common-law penal codes". Co-author with a law-school educator
       who can run a classroom trial; report measured learning
       outcomes vs textbook control.
 
-#### Sequencing notes
-
-- A and B are independent; either can ship first. C depends on a
-  stable benchmark schema (small) and the existing evaluator.
-- D is the most user-facing and the highest leverage with law
-  students; depends on a Pyodide port (modest) of `StatuteEvaluator`.
-- All four benefit from Phase 2a (diachronic encodings) but none
-  block on it.
-
 ---
 
-### Phase 2b — Vision pivot `(def)`
+## Deferred — Phase 2b (Vision pivot)
 
 Only after PC L3 coverage is high and tooling is battle-tested.
 
@@ -735,5 +442,5 @@ Only after PC L3 coverage is high and tooling is battle-tested.
 - [ ] Constitution (CONS1963)
 - [ ] Contract Law (common law + Misrepresentation Act, Contracts
       (Rights of Third Parties) Act, etc.)
-- [ ] Civil remedies and equitable doctrines — require AST shapes Yuho
-      doesn't have yet.
+- [ ] Civil remedies and equitable doctrines — require AST shapes
+      Yuho doesn't have yet.
