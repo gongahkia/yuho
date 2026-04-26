@@ -49,7 +49,13 @@ export async function activate(context: ExtensionContext): Promise<void> {
     commands.registerTextEditorCommand("yuho.openSSO", openSSO),
     commands.registerCommand("yuho.check", runCheck),
     commands.registerCommand("yuho.transpileMermaid", () => runTranspile("mermaid")),
+    commands.registerCommand("yuho.transpileMindmap", () => runTranspile("mindmap")),
+    commands.registerCommand(
+      "yuho.transpileMermaidSchema",
+      () => runTranspile("mermaid", { shape: "schema" }),
+    ),
     commands.registerCommand("yuho.transpileEnglish", () => runTranspile("english")),
+    commands.registerCommand("yuho.explain", runExplain),
     commands.registerCommand("yuho.showCoverage", showCoverage),
     commands.registerCommand("yuho.openLibrarySection", openLibrarySection),
     commands.registerCommand("yuho.refreshTreeView", () => treeProvider.refresh()),
@@ -275,21 +281,49 @@ function resolveYuhoBin(): string {
   return "yuho";
 }
 
-async function runTranspile(target: string): Promise<void> {
+interface TranspileOpts { shape?: string; }
+
+async function runTranspile(target: string, opts: TranspileOpts = {}): Promise<void> {
   const editor = window.activeTextEditor;
   if (!editor) return;
   const file = editor.document.fileName;
   if (!file.endsWith(".yh")) return;
   await editor.document.save();
   const cmd = workspace.getConfiguration("yuho").get<string>("lsp.command", "yuho");
-  cp.exec(`"${cmd}" transpile -t ${target} "${file}"`, async (err, stdout) => {
+  // mindmap and schema-shape Mermaid both render as Mermaid syntax in the
+  // preview pane; a plain `mermaid` highlighter handles all three.
+  const isMermaidish = target === "mermaid" || target === "mindmap";
+  const shapeFlag = opts.shape ? ` --shape ${opts.shape}` : "";
+  cp.exec(`"${cmd}" transpile -t ${target}${shapeFlag} "${file}"`, async (err, stdout) => {
     if (err) {
       window.showErrorMessage(`yuho transpile ${target} failed.`);
       return;
     }
     const doc = await workspace.openTextDocument({
       content: stdout,
-      language: target === "mermaid" ? "mermaid" : "plaintext",
+      language: isMermaidish ? "mermaid" : "plaintext",
+    });
+    await window.showTextDocument(doc, { preview: true, preserveFocus: false });
+  });
+}
+
+// Run `yuho explain` over the active file and open the prose summary
+// in a side panel.
+async function runExplain(): Promise<void> {
+  const editor = window.activeTextEditor;
+  if (!editor) return;
+  const file = editor.document.fileName;
+  if (!file.endsWith(".yh")) return;
+  await editor.document.save();
+  const cmd = workspace.getConfiguration("yuho").get<string>("lsp.command", "yuho");
+  cp.exec(`"${cmd}" explain "${file}"`, async (err, stdout) => {
+    if (err) {
+      window.showErrorMessage("yuho explain failed.");
+      return;
+    }
+    const doc = await workspace.openTextDocument({
+      content: stdout,
+      language: "markdown",
     });
     await window.showTextDocument(doc, { preview: true, preserveFocus: false });
   });
