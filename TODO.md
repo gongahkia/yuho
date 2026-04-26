@@ -60,9 +60,12 @@ work is submission hardening.
       `paper/blog/yuho.md`.
 - [ ] Render Mermaid figures to PDF (requires `mmdc`), inspect, and tune
       layouts.
-- [ ] Verify all `\cite{}` keys resolve cleanly. Some bib entries carry
-      TODO notes — confirm canonical citations for `lam4`, `lexscript`,
-      `ldoc`, `hammond1983rights`. Fix the two bibtex warnings.
+- [x] **Cite-key audit (done):** every `\cite{}` resolves; all 26 bib
+      entries are referenced at least once. Smoke build now lands clean
+      (24 pages, 0 LaTeX errors, 0 unresolved refs) after the
+      digit-in-command-name fix to `methodology.tex`.
+- [ ] Confirm canonical citations for `lam4`, `lexscript`, `ldoc`,
+      `hammond1983rights` (TODO notes still in `references.bib`).
 - [ ] External-reader pass on the full PDF; tighten phrasing and integrate
       cross-references where the prose has drift between sections.
 - [ ] Decide final venue (currently arXiv-attributed, `manuscript,nonacm`
@@ -83,18 +86,19 @@ The extension itself is feature-complete. Remaining work is publishing.
 
 ---
 
-## Evaluator-side semantics of `apply_scope` `[ ]`
+## Evaluator-side semantics of `apply_scope` `[~]`
 
-`apply_scope(<section_ref>, ...args)` is shipped at the AST + resolver
-layer (it lifts to `ApplyScopeNode`, the resolver gates with
-`can_apply_scope`, the lint flags unresolved references). The evaluator-
-side semantics is still a structural pre-condition rather than a real
-scope invocation that returns bindings.
+`apply_scope(<section_ref>, ...args)` and `is_infringed(<section>)`
+now evaluate inside the tree-walking interpreter (commit
+`feat(interp): wire apply_scope + is_infringed`): both AST nodes
+delegate to `StatuteEvaluator` and return a boolean Value tracking
+the inner scope's `overall_satisfied`. The remaining work is the
+deeper static + symbolic layer.
 
-- [ ] Element-graph executor that consumes a `ApplyScopeNode`, evaluates
-      the named section's element graph against a fact pattern, and
-      returns the set of bound element states (which the calling section
-      can then compose with its own elements).
+- [x] Element-graph executor for `ApplyScopeNode` — wired into
+      `Interpreter.visit_apply_scope`; first struct-typed arg is the
+      facts, falling back to the env-derived facts when no struct arg
+      is supplied. `IsInfringedNode` follows the same path.
 - [ ] Type-check pass: when `apply_scope` is composed inside a parent
       statute, verify the parent's element shape is compatible with the
       base section's required inputs.
@@ -104,17 +108,26 @@ scope invocation that returns bindings.
 
 ---
 
-## Akoma Ntoso transpiler — schema validation `[ ]`
+## Akoma Ntoso transpiler — schema validation `[x]`
 
-The structural transpiler is shipped (`yuho transpile -t akomantoso`)
-and its output passes `xmllint --noout`. Full OASIS schema validation
-against the AKN 1.0 XSD is the next-level confidence step.
+Done. The OASIS LegalDocML 1.0 XSD is vendored at
+`paper/reproducibility/akn-schema/`; `python scripts/akn_roundtrip.py
+--xsd` validates all 524 sections against the schema. Three real
+fidelity bugs surfaced and were fixed:
 
-- [ ] Validate output against the OASIS XSD schema (`xmllint --schema
-      akoma-ntoso-1.0.xsd ...`).
-- [ ] Add a CI job that round-trips the entire encoded library through
-      the AKN transpiler and asserts every emitted document is
-      schema-valid.
+- `<identification>` now carries all three FRBR siblings (Work,
+  Expression, Manifestation), not just Work.
+- `<term>` requires a `refersTo` ontology reference; replaced with
+  `<def refersTo="#term_…">` for definitions and bold inline text
+  for elements.
+- AKN has no first-class `<exception>` element; emit as
+  `<hcontainer name="exception">`. Sections with subsections or
+  exceptions take the `intro + hierElements` branch of the
+  hierarchy content model instead of `<content>`.
+
+- [ ] **Stretch:** add a CI job that runs `xmllint --schema` against
+      every emitted document on every push (currently the round-trip
+      is a one-shot script you opt into with `--xsd`).
 - [ ] Decision criterion before further extension (richer FRBR
       hierarchy, full `<componentRef>` graph): a named external user
       asks for it.
