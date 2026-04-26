@@ -429,6 +429,24 @@ Law students structure legal reasoning using IRAC (Issue, Rule, Application, Con
 
 Yuho does not replace IRAC. It sharpens the **R** by forcing you to explicitly identify every element and its classification (actus reus, mens rea, circumstance).
 
+## Cross-section graphs
+
+Two interactive graph surfaces in the static explorer site
+(`editors/explorer-site/build/`):
+
+- `/graph.html` — **reference graph** at section granularity: 524 nodes,
+  edges typed `subsumes` / `amends` / `implicit`. The same data the CLI's
+  `yuho refs --scc` consumes.
+- `/semantic-graph.html` — **typed semantic graph** at definition / element
+  / exception granularity. Node kinds: section / definition / element /
+  exception. Edge kinds: `contains` (structural), `mentions` (an element
+  description text references a defined term), `defeats` (G13 priority
+  DAG between exceptions in the same section), `shares_term` (cross-
+  section: every section that defines the same term name).
+
+Both pages are interactive (cytoscape.js): pan / zoom / click. Clicking
+a section node navigates to its `/s/<N>.html` page.
+
 ## Formal verification (advanced)
 
 Yuho can transpile to [Alloy](https://alloytools.org/) for formal consistency checking. This lets you verify properties like:

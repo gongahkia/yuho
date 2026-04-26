@@ -211,6 +211,10 @@ Pages shipped:
 - `/graph.html` – **interactive cross-reference graph** (cytoscape.js,
   524 nodes, click a node to open its section page, toggle implicit
   edges, live filter)
+- `/semantic-graph.html` – **typed semantic graph** at definition / element
+  / exception granularity (~2,300 nodes, ~2,000 edges across the full
+  library; section nodes click through, kind-coloured edges, toggles
+  to hide noisy mention/shared-term layers)
 - `/about.html` – mascot + methodology summary
 - `/s/<N>.html` – per-section pages with both **Diagram** (Mermaid
   flowchart) and **Mindmap** sections, plus controlled English,
