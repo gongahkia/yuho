@@ -105,6 +105,43 @@ Remaining work is hardening:
 
 ---
 
+## Mermaid flowchart richness `(def)`
+
+The current per-section flowchart (`yuho transpile -t mermaid` default
+shape) renders structural shape: section node, element decomposition
+under combinators, exception priority DAG, penalty terminals. It does
+not yet *trace logic flow* — at a decision point ("did the actus_reus
+fire?", "did an exception apply?"), the diagram doesn't show the
+branch that leads to "offence made out" vs "no offence" vs "exception
+defeats charge". A reader has to mentally execute the encoding rather
+than read the diagram.
+
+Deprioritised — ship later. When it lands, the flowchart should:
+
+- [ ] Surface every binary decision point as a labelled diamond
+      (`{guard expression}`) with explicit `yes` / `no` edges so the
+      reader can trace any fact pattern through the diagram.
+- [ ] Render exception precedence as a chain of guards (rather than the
+      current flat priority list) so the reader sees *which* exception
+      fires and which alternatives it shadows.
+- [ ] Show penalty selection branches when multi-penalty (G12) is in
+      play — `cumulative` vs `or_both` siblings should diverge with
+      labelled edges, not collapse into a list.
+- [ ] Carry over the existing schema-shape flag (`--shape schema`)
+      style: typed terminals, collapsed enum dispatch, fn-call
+      consequence nodes — but apply it to the structural per-section
+      diagram by default.
+- [ ] Don't lose the current diagram's compactness: the new richness
+      should be opt-in via `--shape verbose` (or similar), not the
+      default, so the existing per-section explorer pages don't blow
+      up vertically.
+
+Acceptance criteria: a reader unfamiliar with Yuho can predict, from
+the flowchart alone, what the verdict will be for any concrete fact
+pattern — without consulting the source `.yh`.
+
+---
+
 ## Test-suite backlog `[ ]`
 
 The suite is green. 82 sections carry behavioural-test companions
