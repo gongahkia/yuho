@@ -247,8 +247,11 @@ class AkomaNtosoTranspiler(TranspilerBase):
             lines.append(self._pad(f"<p>{escape(text)}</p>"))
         defeats = getattr(exc, "defeats", None)
         if defeats:
+            # `defeats` names another exception (by label) that this
+            # exception overrides at the priority-DAG layer; emit as
+            # an exception cross-reference, not an element reference.
             lines.append(self._pad(
-                f'<p class="defeats" refersTo="#elem_{escape(self._slug(defeats))}">'
+                f'<p class="defeats" refersTo="#exc_{escape(self._slug(defeats))}">'
                 f"defeats {escape(defeats)}</p>"
             ))
         self._depth -= 1
