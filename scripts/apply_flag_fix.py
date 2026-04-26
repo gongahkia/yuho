@@ -1,4 +1,4 @@
-"""phase_d_flag_fix.py — dispatch Codex agents to apply minimum-edit fixes
+"""apply_flag_fix.py — dispatch Codex agents to apply minimum-edit fixes
 to sections that carry an _L3_FLAG.md file.
 
 renders doc/PHASE_D_FLAG_FIX_PROMPT.md per section and invokes
@@ -8,9 +8,9 @@ patches statute.yh to address the specific flag, and deletes the flag
 file on success. Progress tracked in library/penal_code/_coverage/phase_d_flag_fix_progress.jsonl.
 
 usage:
-    python scripts/phase_d_flag_fix.py --list
-    python scripts/phase_d_flag_fix.py --all-flagged --dispatch --parallel 8
-    python scripts/phase_d_flag_fix.py 188 304C --dispatch
+    python scripts/apply_flag_fix.py --list
+    python scripts/apply_flag_fix.py --all-flagged --dispatch --parallel 8
+    python scripts/apply_flag_fix.py 188 304C --dispatch
 """
 from __future__ import annotations
 import argparse, json, re, subprocess, sys
@@ -120,7 +120,7 @@ def yuho_check_passes(n: str) -> bool:
     except Exception: return False
 
 def main() -> None:
-    p = argparse.ArgumentParser(prog="phase_d_flag_fix", description=__doc__)
+    p = argparse.ArgumentParser(prog="apply_flag_fix", description=__doc__)
     p.add_argument("specs", nargs="*", help="section numbers to fix")
     p.add_argument("--list", action="store_true",
                    help="list sections with an _L3_FLAG.md file")

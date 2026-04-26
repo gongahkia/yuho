@@ -299,7 +299,7 @@ These came back without a machine-readable failed-check code; the flag reasons c
 
 3. **Third pass — flag-fix dispatcher run (56 sections, ~30-90 min wall-clock)**:
    - Re-encoding-heavy work in groups C, D, and -1-with-RE-ENCODE.
-   - Use `scripts/phase_d_flag_fix.py` with a tightened prompt: *"Read `_L3_FLAG.md`'s reason. Read the canonical `_raw/act.json` entry's `text` and `sub_items`. Re-encode the empty/truncated subsection(s) verbatim. Preserve disjunctive English with `any_of` and conjunctive English with `all_of`. Don't fabricate any structure not in canonical text. Run `yuho check`. If green, stamp."*
+   - Use `scripts/apply_flag_fix.py` with a tightened prompt: *"Read `_L3_FLAG.md`'s reason. Read the canonical `_raw/act.json` entry's `text` and `sub_items`. Re-encode the empty/truncated subsection(s) verbatim. Preserve disjunctive English with `any_of` and conjunctive English with `all_of`. Don't fabricate any structure not in canonical text. Run `yuho check`. If green, stamp."*
    - Run with `--parallel 4`.
 
 4. **Fourth pass — re-run L3 review** scoped to the just-fixed sections.

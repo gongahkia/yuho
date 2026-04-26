@@ -1975,7 +1975,7 @@ statute {section} "{marginal}" effective 1872-01-01 {{
             """
             Trigger the minimum-edit flag-fix workflow on a section. Writes
             a transient `_L3_FLAG.md` in the section's dir, invokes the
-            same script (`scripts/phase_d_flag_fix.py`) used in Phase D
+            same script (`scripts/apply_flag_fix.py`) used in Phase D
             to patch the encoding, runs `yuho check`, and returns the
             outcome.
 
@@ -2036,7 +2036,7 @@ statute {section} "{marginal}" effective 1872-01-01 {{
             try:
                 proc = _sp.Popen(
                     [str(repo / ".venv-scrape" / "bin" / "python"),
-                     str(repo / "scripts" / "phase_d_flag_fix.py"),
+                     str(repo / "scripts" / "apply_flag_fix.py"),
                      section, "--dispatch", "--parallel", "1",
                      "--timeout", "600", "--model", "gpt-5.4",
                      "--reasoning", "high"],
