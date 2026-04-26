@@ -217,21 +217,24 @@ French tax only, lam4 is contract fragments, DAPRECO is GDPR only.
 Yuho is uniquely positioned. The full encoding lands as `§8` of
 the paper. (Also tracked under Phase 2c Direction A; cross-link.)
 
-- [ ] Pick the Indian Penal Code 1860 OR Malaysian Penal Code
-      (Act 574) — whichever has cleaner online text. Scrape via
-      `scripts/scrape_indiacode.py` (new), mirroring the SSO
-      pattern.
-- [ ] Encode at full coverage (511 IPC sections / 511 MPC
-      sections) using the same agent-dispatch shape that Phase D
-      used for the SG PC.
+- [x] **IPC scraper shipped** — `scripts/scrape_indiacode.py` with
+      two HTML backends (AdvocateKhoj primary, India Code official
+      fallback), CLI subcommands `index` / `section` / `act`,
+      stdlib `urllib` (no Playwright needed since both sources are
+      server-rendered), 6 s crawl-delay, output JSON shape mirrors
+      `scrape_sso.py` so downstream encoders iterate the IPC the
+      same way they iterate the SG PC. 8 fixture-based tests pin
+      the parsers without network. **First real run is the
+      user's:** `python scripts/scrape_indiacode.py act --out
+      library/indian_penal_code/_raw/act.json` (~1 hour at
+      6 s/request × ~511 sections).
+- [ ] Encode at full coverage (511 IPC sections) using the same
+      agent-dispatch shape that Phase D used for the SG PC. The
+      long pole — months of agent runs.
 - [ ] Comparative analysis: SCC overlap, divergent amendment
       paths, sections renumbered / added / repealed. Single tool
       (`yuho refs --compare-libraries`) emits the diff report.
-- [ ] **Paper claim:** "Comparative encoded penal codes: shared
-      structure, divergent amendment trajectories." Headline
-      figure: side-by-side SCC overlap diagram + per-chapter
-      divergence chart. Reads as a *second paper* alongside the
-      Yuho DSL paper, not a section.
+- [ ] **Paper §8 prose** writing the comparative findings.
 
 ### §6.3 of the paper — Mechanisation of the Z3-correctness theorem `[ ]`
 
