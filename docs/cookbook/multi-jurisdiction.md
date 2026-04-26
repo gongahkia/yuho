@@ -26,7 +26,15 @@ library/
 yuho diff singapore/s300.yh uk/murder.yh
 ```
 
-Use `yuho transpile -t comparative` to generate side-by-side markdown.
+For an interoperable interchange format, transpile each side to Akoma
+Ntoso and diff the XML — most legislative tooling consumes AKN
+natively:
+
+```bash
+yuho transpile -t akomantoso singapore/s300.yh > sg_s300.akn.xml
+yuho transpile -t akomantoso uk/murder.yh        > uk_murder.akn.xml
+diff sg_s300.akn.xml uk_murder.akn.xml
+```
 
 ## Registry Per Jurisdiction
 
