@@ -126,6 +126,26 @@ charge decision; the recommender is a teaching / research artefact
 over the encoded grammar, in the same posture as the
 counter-example explorer.
 
+\paragraph{Soundness is partially mechanised, partially pen-and-paper.}
+The mechanisation in \texttt{mechanisation/} (Lean~4, see
+\S\ref{subsec:soundness-mech}) kernel-checks
+Lemmas~\ref{lem:soundness-elem} (element correspondence)
+and~\ref{lem:soundness-exc} (Catala-style exception precedence).
+The remaining lemmas of Theorem~\ref{thm:z3-sound} ---
+\ref{lem:soundness-graph} (element-graph correspondence),
+\ref{lem:soundness-cross} (cross-section composition), and
+\ref{lem:soundness-penalty} (penalty correspondence) --- are
+pen-and-paper only, with the proof sketches in \S\ref{sec:soundness}.
+We estimate $\sim$6--9 person-months of additional proof
+engineering to close the gap; the structural template is Catala's
+\texttt{simulation\_sred\_to\_cred.v}~\cite{catala2021}.
+The mechanisation also relies on an oracle assumption that the
+Z3 generator faithfully emits the biconditionals
+\texttt{SMTModel.satisfies} requires --- the analogue of Catala's
+``trust the OCaml/Python codegen'' assumption ---
+which a future v2 could discharge by porting the encoder into
+Lean.
+
 \paragraph{No formal grammar-completeness theorem.} We claim that
 Yuho can express every Penal Code section at L1+L2 fidelity,
 backed by the 524/524 coverage figure (\S\ref{subsec:coverage_eval}).

@@ -384,20 +384,101 @@ spelled (Lemma~\ref{lem:soundness-cross});
 producing a satisfiable Z3 model
 (Lemma~\ref{lem:soundness-penalty}).
 
-\subsection{Mechanisation status}
+\subsection{Partial mechanisation in Lean 4}
 \label{subsec:soundness-mech}
 
-A fully mechanised proof in Coq or Lean would replace each lemma
-sketch above with a kernel-checked derivation. The natural target
-is the \texttt{\_conviction\_bool} helper's correspondence as a
-simulation argument between the AST evaluator and the Z3
-generator's encoding function, both written as Coq functions over
-the AST datatype. We estimate three to six months of effort for a
-competent proof-assistant user starting from the pen-and-paper
-proofs above; Catala's comparable mechanisation of its default-
-calculus correctness theorem (Merigoux, PhD thesis follow-on to
-\cite{catala2021}) is the proximate model. We treat the
-mechanisation as an artefact-level deliverable left for a
-follow-on effort, and \S\ref{sec:limitations} carries the
-explicit ``unmechanised'' caveat alongside the rest of the
-paper's known unverified claims.
+A partial mechanisation accompanies this paper as the artefact
+\texttt{mechanisation/} in the Yuho repository, written in
+Lean~4 (toolchain v4.10.0).
+The artefact kernel-checks two paper-load-bearing
+lemmas:
+
+\begin{itemize}
+  \item \textbf{Lemma~\ref{lem:soundness-elem} (element
+    correspondence)} as the theorem
+    \texttt{element\_correspondence} in
+    \texttt{Yuho/Soundness.lean}. The proof is \texttt{rfl} after
+    unfolding \texttt{Element.eval} and \texttt{SMTModel.facts} ---
+    the two definitions are propositionally equal by construction,
+    which is the structural-correspondence claim this lemma makes.
+  \item \textbf{Lemma~\ref{lem:soundness-exc} (exception
+    correspondence)} as the theorem
+    \texttt{exception\_correspondence}. The substantive content
+    of ``Catala-style priority precedence works'' lives in the
+    operational definition of \texttt{Exception.firedSet}, which
+    walks the exception list in topological order skipping
+    suppressed exceptions. The lemma asserts the SMT
+    abstraction's \texttt{excFires} bools agree with that
+    operational definition.
+\end{itemize}
+
+A composed corollary
+\texttt{partial\_conviction\_correspondence} pairs the two
+lemmas, giving the partial conviction-correspondence claim that
+Theorem~\ref{thm:z3-sound}'s main step rests on.
+
+\paragraph{What is not mechanised.}
+Lemmas~\ref{lem:soundness-graph}
+(element-graph correspondence),~\ref{lem:soundness-cross}
+(cross-section composition), and~\ref{lem:soundness-penalty}
+(penalty correspondence) remain \emph{pen-and-paper} in this
+artefact. The boundary is honest, not strategic: each of those
+lemmas would benefit from mechanisation, but each requires
+substantially more proof engineering than the v1 budget allows.
+Lemma~\ref{lem:soundness-graph} requires a list-folding
+correspondence between operational element-tree evaluation and
+the SMT model's per-group bool, with a structural induction over
+\texttt{ElementGroup}; the closest analogue is Catala's
+bisimulation file \texttt{simulation\_sred\_to\_cred.v}
+(\cite{catala2021}, $\sim$600 lines of Coq proof), so we estimate
+2--3 person-months for the Yuho equivalent.
+Lemma~\ref{lem:soundness-cross} requires a well-founded relation
+over the inter-section reference graph; Catala did not mechanise
+this for scope-calls either. Lemma~\ref{lem:soundness-penalty}
+requires lifting the range-arithmetic abstraction
+(\texttt{$\sqcup$} / \texttt{$\sqcap$}) into Lean and is
+Yuho-specific (Catala has no penalty algebra to crib from).
+
+\paragraph{Trust base.} The artefact relies on Lean~4's kernel
+plus the standard library's axioms (propositional extensionality,
+quotient types, Choice). The \texttt{SMTModel.satisfies}
+predicate is an \emph{oracle assumption}: it specifies
+the biconditionals the Z3 generator (in
+\texttt{src/yuho/verify/z3\_solver.py}) is required to emit, and
+the mechanisation trusts the Python generator to actually emit
+them. This mirrors Catala's analogous oracle assumption that
+their OCaml/Python codegen is faithful to the mechanised default
+calculus --- the trust base is shifted to the encoder, not
+eliminated. A future v2 could discharge this assumption by
+porting Yuho's encoder into Lean and proving its functional
+equivalence to a verified specification; we treat that as a
+follow-on artefact, not a v1 deliverable.
+
+\paragraph{Why Lean 4 over Coq.}
+Catala's mechanisation
+(\cite{catala2021}; the canonical Coq port at
+\texttt{CatalaLang/catala-formalization}, $\sim$7500~LoC across
+12 \texttt{.v} files) is the proximate template. We chose Lean~4
+nonetheless because: (a) Lean~4's mutual-recursion ergonomics
+make the priority-DAG \texttt{Fires} relation clean to encode
+without the \texttt{Equations} / \texttt{Program Fixpoint}
+ceremony Coq requires; (b) Lean~4's \texttt{simp}, \texttt{decide},
+and \texttt{omega} subsume most of what Catala hand-rolls in
+\texttt{tactics.v} (224 lines of custom Ltac2); (c) the
+\texttt{lake} build + LSP integration is materially better for
+a solo PhD-scale artefact in 2026. We do not gain SMTCoq's
+certified Z3 reconstruction by this choice --- a real cost ---
+but the v1 mechanisation does not exercise that machinery anyway,
+so we lose nothing concrete.
+
+\paragraph{What this buys us.}
+Two of the five soundness lemmas are now machine-checked rather
+than peer-reviewed pen-and-paper. The artefact does not let us
+claim full mechanised soundness; it does let us claim that the
+two cases reviewers most often press on
+(elements as fact-map lookups; Catala-style priority precedence)
+have kernel-checked correspondents in Lean~4.
+\S\ref{sec:limitations} carries the explicit caveat
+that Lemmas~\ref{lem:soundness-graph}--\ref{lem:soundness-penalty}
+remain pen-and-paper, sized at $\sim$6--9 person-months of
+follow-on proof work to close.

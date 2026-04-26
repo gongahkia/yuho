@@ -45,6 +45,11 @@ editors/word-yuho/data/
 # Node modules (we install tree-sitter CLI globally)
 node_modules/
 
+# Lean / Lake build outputs — keep the .lean source, drop the cache.
+mechanisation/.lake/
+mechanisation/lake-packages/
+mechanisation/build/
+
 # Existing benchmark results / corpus dumps
 evals/results-*.json
 evals/case_law/results-*.json

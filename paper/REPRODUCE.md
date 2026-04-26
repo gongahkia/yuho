@@ -38,7 +38,8 @@ The container's default entrypoint is `make paper-reproduce`.
 | §7.5 Z3-driven scenario synthesis | `make verify-bulk-contrast` | "143 candidate pairs, 115 landed (100% subsumes, 79% referenced)" |
 | §7.6 LLM benchmark | `make verify-evals` | FakeClient at 100% on all 205 fixtures |
 | §7.8 Case-law differential testing | `make verify-case-law` | top-1 30.4% / mean F1 0.188 / consistency 100% |
-| Paper smoke build | `make -C paper smoke` | 26-page PDF at `paper/main_smoke.pdf` |
+| Paper smoke build | `make -C paper smoke` | 32-page PDF at `paper/main_smoke.pdf` |
+| §6.6 Mechanisation | `cd mechanisation && lake build` | Lean 4 lib typechecks; Lemmas 6.2 + 6.4 kernel-checked. Requires `elan` (Lean toolchain manager). |
 
 ## Expected wall-clock times (clean container, 2025-vintage laptop)
 

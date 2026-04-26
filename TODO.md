@@ -209,41 +209,46 @@ the paper. (Also tracked under Phase 2c Direction A; cross-link.)
       (`yuho refs --compare-libraries`) emits the diff report.
 - [ ] **Paper §8 prose** writing the comparative findings.
 
-### §6.3 of the paper — Mechanisation of the Z3-correctness theorem `[ ]`
+### §6.6 of the paper — Lean 4 mechanisation `[~]`
 
-**What "mechanisation" means.** A *pen-and-paper proof* is a
-human-readable proof published in the paper; field reviewers can
-spot errors but the proof isn't machine-checked. A *mechanised
-proof* encodes every step inside a proof assistant (Coq, Lean,
-Isabelle/HOL). A small trusted kernel verifies each inference
-rule, so the trust base shrinks to "the kernel is correct + the
-theorem statement says what we mean". Mechanisation is the
-gold-standard rigor signal at POPL / PLDI / CAV / FM and the
-*differentiator* between "published DSL" and "PhD-thesis-grade
-DSL".
+**v1 shipped** at `mechanisation/` (Lean 4.10.0, ~5 source
+files + smoke tests + README). Two paper-load-bearing lemmas
+kernel-checked:
 
-For Yuho specifically, mechanising the **Z3 transpiler
-correctness theorem** (§6) means:
+- [x] **Lemma 6.2 (element correspondence)** — theorem
+      `element_correspondence` in `Yuho/Soundness.lean`. Proof
+      is `rfl` after unfolding `Element.eval` and
+      `SMTModel.facts`.
+- [x] **Lemma 6.4 (exception correspondence)** — theorem
+      `exception_correspondence`. Catala-style priority
+      precedence realised by the operational definition of
+      `Exception.firedSet` walking the exception list in
+      topological order.
+- [x] **Composed corollary** `partial_conviction_correspondence`
+      pairing the two lemmas.
+- [x] **Paper §6.6 added** — `\subsection{Partial mechanisation
+      in Lean 4}` documenting what's mechanised, the boundary,
+      the trust base (Lean kernel + oracle assumption that the
+      Z3 generator faithfully emits the biconditionals), the
+      Coq-vs-Lean rationale.
+- [x] **Limitations §11 updated** to flag the partial nature
+      and size the remaining work (~6-9 person-months for
+      Lemmas 6.3 / 6.5 / 6.6; mirroring Catala's
+      `simulation_sred_to_cred.v` template).
 
-- [ ] Encode Yuho's AST + element-graph evaluation in Coq (or
-      Lean — Catala chose Coq, mathlib is in Lean; pick whichever
-      the proof-assistant community around CCLAW prefers).
-- [ ] Define the Z3 encoding as a Coq function — the existing
-      Python `Z3Generator` is the spec.
-- [ ] Prove the soundness theorem: for any module + fact pattern,
-      evaluator-verdict equals the Z3 conviction Bool's truth in
-      every satisfying model.
-- [ ] Land as `§6.3 Mechanisation` in the paper, with the Coq /
-      Lean source listed under Appendix C and reproducibility
-      instructions in Appendix D.
-- [ ] **Realistic effort:** 3-6 months for a competent Coq user
-      starting from the pen-and-paper proof in §6.2. Catala's
-      comparable mechanisation was a multi-quarter PhD project.
-- [ ] **Falls off the critical path if it overruns:** if the
-      mechanisation isn't done by the paper-writing month, §6.3
-      becomes a "future work" pointer in §11 instead, and the
-      pen-and-paper §6.2 carries the soundness claim alone. The
-      paper still ships.
+Possible follow-ups (deferred to v2):
+
+- [ ] Mechanise Lemma 6.3 (element-graph correspondence) — the
+      structural twin of Catala's bisimulation lemma; ~2-3
+      person-months.
+- [ ] Mechanise Lemma 6.5 (penalty correspondence) — Yuho-specific,
+      requires lifting range-arithmetic into Lean; ~2 person-months.
+- [ ] Mechanise the cross-section composition step of Theorem 6.1
+      (apply\_scope / is\_infringed dedupe simulation) — ~2-3
+      person-months.
+- [ ] Discharge the oracle assumption by porting Yuho's Python
+      `Z3Generator` to Lean and proving its functional equivalence
+      to a verified specification.
 
 ### Reproducibility artefact (AEC-grade) `[~]`
 
@@ -330,9 +335,13 @@ work is submission hardening.
       `hammond1983rights` (TODO notes still in `references.bib`).
 - [ ] External-reader pass on the full PDF; tighten phrasing and integrate
       cross-references where the prose has drift between sections.
-- [ ] Decide final venue (currently arXiv-attributed, `manuscript,nonacm`
-      mode). For ICAIL/JURIX retargeting, swap documentclass per
-      `paper/README.md`.
+- [x] **Final venue: *Artificial Intelligence and Law*** (Springer
+      journal). Audience is dual-trained (legal-tech +
+      formal-methods), handles 60-80 page submissions naturally,
+      and is the canonical follow-on venue for Catala / DAPRECO /
+      LegalRuleML work. Documentclass swap to AI&L's template
+      lands at submission day; pen the manuscript against the
+      current arXiv-attributed acmart in the meantime.
 
 ---
 
