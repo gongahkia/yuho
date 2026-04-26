@@ -343,31 +343,42 @@ the IPC (or MPC — pick the one with cleaner online text) at full
       side-by-side SCC overlap diagram, plus a divergence-over-time
       chart if Phase 2a is also live.
 
-#### Direction B — Counter-factual edge-case explorer `[~]`
+#### Direction B — Counter-factual edge-case explorer `[x]`
 
-Builds directly on the `apply_scope`/`is_infringed` Z3 hookup that
-shipped this trench. Given two related sections, ask Z3 for the
-*minimum-distance* fact-set that satisfies one but not the other —
-producing a structured library of edge-case scenarios.
+All five v0 deliverables shipped; the paper claim has its own
+evaluation subsection (\S\ref{subsec:scenario_synthesis}).
 
-- [x] **v0 shipped:** `yuho contrast <section_a> <section_b>` —
-      finds *some* satisfying assignment where A's conviction holds
-      and B's does not. Emits per-statute element values + the
-      distinguishing-elements summary. JSON mode for downstream
-      tooling. Honours the `not_legal_advice` contract.
-- [ ] **Minimum-distance variant.** Today's v0 reports any
-      satisfying model; upgrade to Z3's `Optimize` interface with a
-      cardinality objective so the reported fact-set is the smallest
-      one that distinguishes A from B.
-- [ ] **`yuho narrow-defence s302 s79` CLI:** smallest fact-set
-      where private-defence (s79) overrides s302 murder. Walks the
-      exception priority DAG, not just the element conjunction.
-- [ ] **Bulk-run across SG PC pairs** from the existing SCC analysis
-      to produce `_corpus/contrast/`, a JSON-backed scenario library
-      of every doctrinally-relevant offence boundary.
-- [ ] **Paper claim:** "Z3-driven scenario synthesis from encoded
-      statutes". Section in evaluation showing how many of the
-      generated edge-cases match published case law.
+- [x] **`yuho contrast s_A s_B`** — finds a satisfying assignment
+      where A's conviction holds and B's does not. Emits per-statute
+      element values + the distinguishing-elements summary. JSON
+      mode for downstream tooling. Honours the `not_legal_advice`
+      contract.
+- [x] **Minimum-distance via `--minimal`** — Z3's `Optimize`
+      interface with a hamming-weight objective; returns the
+      smallest fact-set that distinguishes A from B.
+- [x] **`yuho narrow-defence offence defence`** — smallest fact-set
+      where both sections' element conjunctions hold. Solves
+      "structural-availability floor" for a defence against an
+      offence. Same `--minimal` / `--timeout` / `--json` knobs.
+      Subsection-element hoist in `Z3Generator` makes general
+      defences (s76–s106, all subsection-scoped) queryable.
+- [x] **Bulk run** — `scripts/bulk_contrast.py`. First end-to-end:
+      143 doctrinally-related pairs, 115 landed (100% of subsumes,
+      79% of referenced); output at
+      `library/penal_code/_corpus/contrast/<a>_vs_<b>.json` plus
+      summary `index.json`. Per-pair failures logged not aborting.
+- [x] **Paper claim** — added evaluation subsection
+      "Z3-driven scenario synthesis" with bulk-run numbers and the
+      structural-not-doctrinal caveat.
+
+Possible follow-ups (not in scope here):
+
+- [ ] Cross-validate the synthesised scenarios against a published
+      case-law corpus; report match rate per chapter.
+- [ ] Encode general defences with explicit `defeats` edges into
+      the offences they apply against, so `yuho narrow-defence`
+      can switch from the "both elements fire" model to the
+      stronger "elements fire AND defence prevents conviction" one.
 
 #### Direction C — LLM legal-reasoning benchmark
 

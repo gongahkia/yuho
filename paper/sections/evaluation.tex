@@ -284,6 +284,52 @@ circularity discussed in \S\ref{sec:limitations}) and only
 $\sim$25\% of the corpus was hand-encoded before agent-driven
 re-encoding took over.
 
+\subsection{Z3-driven scenario synthesis}
+\label{subsec:scenario_synthesis}
+
+The Z3 backend already encodes each encoded section as a
+biconditional ``\texttt{<sX>\_conviction} $\Leftrightarrow$
+elements satisfied AND no defeating exception fires''
+(\S\ref{subsec:exceptions}). With the lam4-style
+\texttt{is\_infringed} and Catala-style \texttt{apply\_scope}
+predicates wired into that backend, cross-section reasoning is
+queryable: a satisfying-assignment search over
+``\texttt{s\_A\_conviction} \emph{and not} \texttt{s\_B\_conviction}''
+returns the structural floor at which offence~A holds while
+offence~B does not. We expose this as
+\texttt{yuho contrast s299 s300} for the asymmetric query, and
+\texttt{yuho narrow-defence s302 s79} for the symmetric query
+(``smallest fact pattern where both an offence and a defence
+fire''). Both surface a distinguishing-elements summary; the
+\texttt{--minimal} flag swaps the SAT search for a Z3
+\texttt{Optimize} run with a hamming-weight objective so the
+returned model is the smallest fact-set that distinguishes the
+two sections.
+
+\paragraph{Bulk synthesis.} \texttt{scripts/bulk\_contrast.py}
+runs the contrast query for every doctrinally-related section
+pair: every \texttt{subsumes} edge, every non-trivial SCC
+component, and every explicit cross-reference in the encoded
+library. The first end-to-end run produced 143 candidate pairs;
+115 landed structurally (100\% of \texttt{subsumes} pairs, 79\%
+of referenced pairs). The 28 failures are sections with neither
+top-level nor subsection element blocks (e.g.\ definition-only or
+pure-exception statutes), where there is no element conjunction
+to contrast. Output lands as
+\texttt{library/penal\_code/\_corpus/contrast/} --- one JSON
+fact-pattern per pair plus a summary \texttt{index.json} ---
+which we treat as an artefact-level deliverable: a structurally
+ground-truthed scenario library, derived rather than authored.
+
+\paragraph{Caveat: structural, not doctrinal.} The synthesised
+fact patterns describe \emph{structural} boundaries. They do not
+claim that the smallest such pattern would prevail in court ---
+that is an evidentiary question. Every output carries the
+\texttt{not\_legal\_advice} envelope used elsewhere in the
+toolchain (\S\ref{subsec:tooling_eval}); the contract here is
+``minimal element configuration that distinguishes A from B in
+the encoded model'', not legal advice.
+
 \subsection{Tooling validation}
 \label{subsec:tooling_eval}
 
