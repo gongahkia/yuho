@@ -1321,6 +1321,28 @@ class Z3Generator:
 
         return constraint
 
+    def _conviction_bool(self, section_ref: str) -> Any:
+        """Return the Z3 Bool that represents `s<ref>_conviction`.
+
+        Used to encode lam4-style ``is_infringed(sX)`` and Catala-style
+        ``apply_scope(sX, ...)`` references. Declared lazily — when
+        ``_generate_statute_constraints`` later defines the same Bool,
+        both references point at the same Z3 atom (Z3 dedupes by name).
+
+        ``section_ref`` is the canonical section number string the AST
+        builder emits; we strip an optional leading ``s`` and replace
+        ``.`` with ``_`` to mirror ``_generate_statute_constraints``.
+        """
+        if not Z3_AVAILABLE:
+            return None
+        ref = section_ref.lstrip("sS").replace(".", "_")
+        name = f"{ref}_conviction"
+        if name in self._consts:
+            return self._consts[name]
+        b = z3.Bool(name)
+        self._consts[name] = b
+        return b
+
     def _translate_expr_to_z3(self, statute_id: str, expr: "ASTNode") -> Optional[Any]:
         """Translate an AST expression node to a Z3 formula."""
         if not Z3_AVAILABLE:
@@ -1334,6 +1356,8 @@ class Z3Generator:
             BoolLit,
             StringLit,
             FieldAccessNode,
+            IsInfringedNode,
+            ApplyScopeNode,
         )
 
         if isinstance(expr, BoolLit):
@@ -1344,6 +1368,20 @@ class Z3Generator:
 
         if isinstance(expr, StringLit):
             return z3.StringVal(expr.value)
+
+        # Section-composition predicates. Both `is_infringed(sX)` and
+        # `apply_scope(sX, …)` evaluate to the inner scope's
+        # `overall_satisfied` — which in the Z3 model is the
+        # `<sX>_conviction` Bool: elements all hold AND no defeating
+        # exception fires. The Bool is declared lazily so the order in
+        # which statutes get translated does not matter (z3.Bool dedupes
+        # by name; if `_generate_statute_constraints` later declares
+        # the same Bool, both references point at the same Z3 atom).
+        if isinstance(expr, IsInfringedNode):
+            return self._conviction_bool(expr.section_ref)
+
+        if isinstance(expr, ApplyScopeNode):
+            return self._conviction_bool(expr.section_ref)
 
         if isinstance(expr, IdentifierNode):
             name = f"{statute_id}_{expr.name}"

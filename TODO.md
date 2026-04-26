@@ -78,18 +78,20 @@ The extension itself is feature-complete. Remaining work is publishing.
 
 ---
 
-## Evaluator-side semantics of `apply_scope` `[~]`
+## Evaluator-side semantics of `apply_scope` `[x]`
 
 `apply_scope(<section_ref>, ...args)` and `is_infringed(<section>)`
-now evaluate inside the tree-walking interpreter (commit
-`feat(interp): wire apply_scope + is_infringed`): both AST nodes
-delegate to `StatuteEvaluator` and return a boolean Value tracking
-the inner scope's `overall_satisfied`. The remaining work is the
-deeper static + symbolic layer.
+now evaluate end-to-end across all three layers:
 
-- [ ] Z3 backend hookup: model `apply_scope` as an inlined sub-formula
-      so prioritised-rewriting at the parent retains the base's exception
-      hierarchy.
+- **Tree-walking interpreter** evaluates either node to a boolean
+  Value backed by `StatuteEvaluator`.
+- **Static type-check pass** at the lint level surfaces empty-target
+  and missing-struct-field warnings.
+- **Z3 backend** translates either node to the target section's
+  `<sX>_conviction` Bool (elements satisfied AND no defeating
+  exception fires), declared lazily so cross-section references
+  inside guards resolve to the same atom regardless of statute
+  iteration order.
 
 ---
 
