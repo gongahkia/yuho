@@ -218,15 +218,19 @@ class MermaidMindmapTranspiler(TranspilerBase):
     def _sanitise(self, text: str) -> str:
         """Mindmap labels do not tolerate raw parens / brackets / quotes well.
 
-        Strip the worst offenders, replace structural brackets with safer
-        Unicode markers, and truncate length so the rendered diagram does
-        not overflow the page.
+        Mermaid mindmap parses ``(label)`` and ``[label]`` as node-shape
+        decorators; mid-label brackets/parens trigger ``Expecting
+        'SPACELINE', 'NL', 'EOF', got 'NODE_ID'`` from the upstream
+        parser. We sidestep the whole class by replacing both forms
+        with text-safe French-quotation-mark glyphs (``«…»``) — they
+        carry the same visual hint that "this is a parenthetical" but
+        the parser treats them as plain word characters.
         """
         s = (text or "").replace("\n", " ").strip()
-        # Mindmap parser treats trailing parens like `name(args)` as a node
-        # decorator; rewriting `(x)` to `[x]` keeps the visual hint without
-        # confusing the parser.
-        s = s.replace("(", "[").replace(")", "]")
+        # Both ()  and []  break mindmap. French quotation marks are the
+        # closest visual analogue that the parser leaves alone.
+        s = s.replace("(", "«").replace(")", "»")
+        s = s.replace("[", "«").replace("]", "»")
         s = s.replace('"', "'")
         return self._truncate(s)
 

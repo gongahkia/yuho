@@ -76,8 +76,8 @@ def test_elements_cluster_with_combinator_tag():
           } }
         }
     ''')
-    assert "Elements [ALL OF]" in out
-    assert "[ANY OF]" in out
+    assert "Elements «ALL OF»" in out
+    assert "«ANY OF»" in out
     assert "actus_reus deception" in out
     assert "mens_rea fraudulent" in out
 
@@ -90,7 +90,7 @@ def test_penalty_with_unlimited_fine():
         }
     ''')
     assert "Penalty" in out
-    assert "Fine [unlimited]" in out  # parens get rewritten to brackets
+    assert "Fine «unlimited»" in out  # parens get rewritten to brackets
 
 
 def test_penalty_with_caning_unspecified():
@@ -100,7 +100,7 @@ def test_penalty_with_caning_unspecified():
           penalty { caning := unspecified; }
         }
     ''')
-    assert "Caning [unspecified]" in out
+    assert "Caning «unspecified»" in out
 
 
 def test_multi_penalty_g12_pattern_preserved():
@@ -119,11 +119,11 @@ def test_multi_penalty_g12_pattern_preserved():
     ''')
     # Sanitiser rewrites () to [] so the mindmap parser doesn't mistake
     # them for node decorators.
-    assert "Penalty [1]" in out
-    assert "Penalty [2] [or_both]" in out
+    assert "Penalty «1»" in out
+    assert "Penalty «2» «or_both»" in out
     assert "Imprisonment 0 days..7 years" in out
-    assert "Fine [unlimited]" in out
-    assert "Caning [unspecified]" in out
+    assert "Fine «unlimited»" in out
+    assert "Caning «unspecified»" in out
 
 
 def test_illustrations_listed():
@@ -161,7 +161,7 @@ def test_indentation_two_spaces():
     # Root sits at depth 1 (two spaces), elements cluster at depth 2 (four).
     root_line = next(l for l in lines if "((s1 Demo))" in l)
     assert root_line.startswith("  ((")
-    elements_line = next(l for l in lines if l.strip() == "Elements [ALL OF]")
+    elements_line = next(l for l in lines if "Elements" in l and "ALL OF" in l)
     assert elements_line.startswith("    ")
 
 
@@ -175,11 +175,12 @@ def test_subsection_numbers_emit_single_brackets():
           subsection (2) { elements { actus_reus a := "y"; } }
         }
     ''')
-    assert "[[1]]" not in out  # the bug we're guarding against
+    assert "[[1]]" not in out  # the original double-bracket bug
     assert "[[2]]" not in out
-    # Single-bracket form is what Mermaid mindmap accepts.
-    assert "[1]" in out
-    assert "[2]" in out
+    # Sanitiser also converts brackets to French quotes for safety,
+    # so subsection numbers surface as «1» / «2» in current output.
+    assert "«1»" in out
+    assert "«2»" in out
 
 
 def test_no_unescaped_parentheses_break_parser():
@@ -190,10 +191,24 @@ def test_no_unescaped_parentheses_break_parser():
           elements { actus_reus a := "Action (with parens)"; }
         }
     ''')
-    # Sanitised to brackets so mindmap doesn't treat them as decorators.
+    # Sanitised to French quotes so mindmap doesn't treat them as decorators.
     assert "(with parens)" not in out
     # Output should still build successfully.
     assert "term" in out
+
+
+def test_inline_brackets_in_user_content_sanitised():
+    """Regression: illustration labels like `[ a ]` in canonical Penal Code
+    text break Mermaid mindmap when emitted inline (not as standalone
+    decorator). Sanitiser must convert them to safe glyphs."""
+    out = _emit('''
+        statute 1 "Demo" {
+          elements { actus_reus a := "x"; }
+          illustration ill1 { "[ a ] A instigates B to do something" }
+        }
+    ''')
+    # Inline brackets in label text rewritten to French quotes.
+    assert "[ a ]" not in out
 
 
 # =============================================================================
