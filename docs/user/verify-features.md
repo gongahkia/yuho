@@ -57,8 +57,12 @@ library (s292↔s293, s85↔s86, s424A↔s424B, s304B↔s74A).
 ### Counter-example explorer + charge recommender
 
 ```sh
-yuho explore     library/penal_code/s415_cheating/statute.yh
-yuho recommend "A intentionally deceived B into handing over a watch"
+# Explorer: enumerates satisfying / borderline scenarios over a section.
+yuho explore library/penal_code/s415_cheating/statute.yh 415
+
+# Recommender: takes a fact-pattern YAML (see simulator/fixtures/ for
+# examples) and ranks sections by structural fit.
+yuho recommend simulator/fixtures/s415_classic.yaml
 ```
 
 The recommender ranks Penal Code sections by structural fit. Output
@@ -79,7 +83,7 @@ install (see `docs/contributor/architecture.md` §verification).
 
 ```sh
 yuho repl                              # interactive REPL
-yuho graph -t mermaid library/penal_code/s415_cheating/statute.yh
+yuho graph --format mermaid library/penal_code/s415_cheating/statute.yh
 yuho diff  library/penal_code/s299_culpable_homicide/statute.yh \
            library/penal_code/s300_murder/statute.yh
 yuho ci-report                         # repo-wide pass/fail summary
