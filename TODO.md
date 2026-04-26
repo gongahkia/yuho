@@ -135,23 +135,6 @@ of stamped encodings — which the paper §7 explicitly reserves.
 
 ---
 
-## Deferred from the repo restructure `(def)`
-
-- [ ] Once L3 dispatcher idle: move `docs/PHASE_D_*PROMPT.md` to
-      `docs/researcher/phase-d-*.md` with kebab-case; remove
-      `doc -> docs` symlink.
-- [ ] Render `paper/figures/architecture.mmd` to `docs/architecture.svg`
-      (requires `mmdc`).
-- [ ] Write `docs/retrospective.md` consolidating PHASE_C_REVIEW +
-      PHASE_D_*PROMPT lessons-learned.
-- [ ] `CLAUDE.md` symlink at root works for local user but breaks for
-      other contributors. Either unsymlink + plain-file with a note,
-      or `.gitignore` it.
-- [ ] Phase-D progress JSONL files at root — should move under
-      `library/penal_code/_coverage/` or a new `state/` dir for tidiness.
-
----
-
 ## Notes for fresh contributors
 
 - **Hypothesis dep.** Already declared in `pyproject.toml` under the
