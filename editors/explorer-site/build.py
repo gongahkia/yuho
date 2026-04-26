@@ -6,7 +6,6 @@ Output goes to ``editors/explorer-site/build/``. Layout:
     build/
     ├── index.html            -- searchable index of all 524 sections
     ├── coverage.html         -- L1 / L2 / L3 dashboard
-    ├── flags.html            -- list of L3-flagged sections needing review
     ├── about.html            -- methodology, citation, disclaimer
     ├── s/<N>.html            -- per-section page
     └── static/
@@ -66,29 +65,24 @@ def _rewrite_absolute_paths(html_text: str) -> str:
 
 
 _STYLE = r"""
+/* SSO-inspired palette: dark crimson header, white body, light grey
+   row separators, SSO blue links, dark teal section headings. */
 :root {
-  --c-bg: #fafafc;
+  --c-bg: #ffffff;
   --c-fg: #1a1a22;
   --c-muted: #6a6a75;
   --c-card: #ffffff;
-  --c-border: #e8e8ee;
-  --c-accent: #3a86ff;
-  --c-accent-2: #6f5cff;
+  --c-border: #d0d0d0;
+  --c-accent: #0066CC;            /* SSO link blue */
+  --c-header-bg: #8C1313;         /* SSO dark crimson */
+  --c-header-fg: #ffffff;
+  --c-heading: #1B5045;           /* SSO dark teal */
+  --c-row-alt: #fafafa;
+  --c-row-hover: #fff8f0;
+  --c-status: #8C1313;
   --c-l3-stamped: #1a8b3a;
   --c-l3-flagged: #c43d3d;
   --c-l3-unstamped: #b07020;
-}
-@media (prefers-color-scheme: dark) {
-  :root {
-    --c-bg: #15151c;
-    --c-fg: #e2e2e8;
-    --c-muted: #9090a0;
-    --c-card: #1a1a22;
-    --c-border: #2a2a35;
-    --c-l3-stamped: #4adb6a;
-    --c-l3-flagged: #ff6a6a;
-    --c-l3-unstamped: #e0a050;
-  }
 }
 
 * { box-sizing: border-box; }
@@ -99,13 +93,14 @@ a { color: var(--c-accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
 header.site {
-  background: linear-gradient(135deg, var(--c-accent) 0%, var(--c-accent-2) 100%);
-  color: #fff;
+  background: var(--c-header-bg);
+  color: var(--c-header-fg);
   padding: 1.4rem 1.4rem 1.6rem;
   display: flex;
   align-items: baseline;
   gap: 1.2rem;
   flex-wrap: wrap;
+  border-bottom: 3px solid #5C0A0A;
 }
 header.site h1 { margin: 0; font-size: 1.4rem; font-weight: 700; letter-spacing: 0.02em; }
 header.site h1 a.brand { color: inherit; text-decoration: none; }
@@ -145,54 +140,79 @@ main {
   padding: 1.6rem 1.4rem 4rem;
 }
 
-h2 { margin-top: 2.2em; font-size: 1.1rem; font-weight: 600; }
+h2 { margin-top: 2.2em; font-size: 1.1rem; font-weight: 600; color: var(--c-heading); }
 h2:first-child { margin-top: 0; }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
-  gap: 0.55rem;
+/* Row-based section listing (SSO-style table layout). */
+.section-list {
   margin: 1rem 0 2rem;
+  border-top: 1px solid var(--c-border);
 }
-
-.card {
+.section-row {
+  display: grid;
+  grid-template-columns: 5rem 1fr auto;
+  gap: 1rem;
+  align-items: center;
+  padding: 0.7rem 0.9rem;
+  border-bottom: 1px solid var(--c-border);
   background: var(--c-card);
-  border: 1px solid var(--c-border);
-  border-radius: 6px;
-  padding: 0.5rem 0.6rem;
+  transition: background-color 0.06s ease-out;
+}
+.section-row:nth-child(even) { background: var(--c-row-alt); }
+.section-row:hover { background: var(--c-row-hover); }
+.section-row .num {
+  color: var(--c-muted);
+  font-family: ui-monospace, monospace;
+  font-size: 0.95em;
+  font-weight: 600;
+}
+.section-row .title-cell {
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
-  transition: transform 0.06s ease-out, border-color 0.06s ease-out;
 }
-.card:hover {
-  border-color: var(--c-accent);
-  transform: translateY(-1px);
-}
-.card a {
+.section-row .title-cell a {
   color: var(--c-fg);
   font-weight: 600;
-  font-size: 0.95em;
+  font-size: 0.97em;
 }
-.card .num { color: var(--c-muted); font-family: ui-monospace, monospace; font-size: 0.85em; }
-.card .title { font-size: 0.92em; line-height: 1.3; min-height: 2.4em; }
-.card .badges { display: flex; gap: 0.3rem; flex-wrap: wrap; margin-top: 0.18rem; }
-.card .snippet {
-  margin-top: 0.3em;
+.section-row .title-cell a:hover { color: var(--c-accent); }
+.section-row .badges { display: flex; gap: 0.3rem; flex-wrap: wrap; align-items: center; }
+.section-row .snippet {
   font-size: 0.83em;
   color: var(--c-muted);
   line-height: 1.35;
-  border-top: 1px dashed var(--c-border);
-  padding-top: 0.3em;
+  margin-top: 0.15em;
 }
-.card .snippet mark {
+.section-row .snippet mark {
   background: #ffe066;
   color: inherit;
   padding: 0 1px;
   border-radius: 2px;
 }
-@media (prefers-color-scheme: dark) {
-  .card .snippet mark { background: #5a4a10; color: #ffe9a0; }
+@media (max-width: 50rem) {
+  .section-row { grid-template-columns: 4rem 1fr; }
+  .section-row .badges { grid-column: 1 / -1; padding-left: 4rem; }
+}
+
+.about-hero {
+  display: flex;
+  gap: 1.4rem;
+  align-items: center;
+  margin: 1rem 0 2rem;
+  padding: 1.2rem;
+  background: var(--c-row-alt);
+  border: 1px solid var(--c-border);
+  border-radius: 6px;
+}
+.about-hero .mascot {
+  width: 140px;
+  height: auto;
+  flex-shrink: 0;
+}
+.about-hero h2 { margin-top: 0; }
+@media (max-width: 38rem) {
+  .about-hero { flex-direction: column; text-align: center; }
 }
 
 .badge {
@@ -495,19 +515,21 @@ _SEARCH_JS = r"""
     }
     const frag = document.createDocumentFragment();
     for (const row of rows) {
-      const card = document.createElement('div');
-      card.className = 'card';
-      card.innerHTML = `
+      const r = document.createElement('div');
+      r.className = 'section-row';
+      r.innerHTML = `
         <span class="num">s${row.number}</span>
-        <a href="s/${row.number}.html">${escape(row.title || '(untitled)')}</a>
+        <div class="title-cell">
+          <a href="s/${row.number}.html">${escape(row.title || '(untitled)')}</a>
+          ${row._snippet ? `<div class="snippet">${row._snippet}</div>` : ''}
+        </div>
         <div class="badges">
           ${row.L1 ? '<span class="badge l1">L1</span>' : ''}
           ${row.L2 ? '<span class="badge l2">L2</span>' : ''}
           ${badgeForL3(row.L3)}
         </div>
-        ${row._snippet ? `<div class="snippet">${row._snippet}</div>` : ''}
       `;
-      frag.appendChild(card);
+      frag.appendChild(r);
     }
     grid.appendChild(frag);
   }
@@ -637,7 +659,6 @@ def _page(title: str, body: str, *, active_nav: str = "") -> str:
   <nav aria-label="Primary">
     {nav_link("index", "Index", "/index.html")}
     {nav_link("coverage", "Coverage", "/coverage.html")}
-    {nav_link("flags", "Flags", "/flags.html")}
     {nav_link("about", "About", "/about.html")}
     <a href="https://github.com/gongahkia/yuho">GitHub ↗</a>
   </nav>
@@ -646,9 +667,8 @@ def _page(title: str, body: str, *, active_nav: str = "") -> str:
 {body}
 </main>
 <footer class="site">
-  Yuho · proof-of-concept research artefact ·
-  <a href="https://gabrielongzm.com">Gabriel Ong Zhe Mian</a> ·
-  <a href="https://github.com/gongahkia/yuho">github.com/gongahkia/yuho</a>
+  <a href="https://github.com/gongahkia/yuho">Yuho</a> ·
+  <a href="https://gabrielongzm.com">Gabriel Ong Zhe Mian</a>
 </footer>
 <script src="/static/search.js" defer></script>
 </body>
@@ -676,7 +696,7 @@ def render_index(index: Dict[str, Any]) -> str:
          aria-controls="section-grid"
          placeholder="Search by section number, title, element wording (e.g. 415, cheating, induces delivery)">
 </div>
-<div id="section-grid" class="grid" role="region" aria-label="Section results" aria-live="polite"><p>Loading…</p></div>
+<div id="section-grid" class="section-list" role="region" aria-label="Section results" aria-live="polite"><p>Loading…</p></div>
 """
     return _page("Yuho — Singapore Penal Code explorer", body, active_nav="index")
 
@@ -720,7 +740,7 @@ def render_coverage(index: Dict[str, Any]) -> str:
 <ul>
   <li><strong>L1 (parse)</strong> — the encoded <code>.yh</code> file passes the tree-sitter grammar.</li>
   <li><strong>L2 (lint)</strong> — the AST builds, semantic checks pass, and the four fidelity diagnostics emit no warnings.</li>
-  <li><strong>L3 (human stamp)</strong> — an 11-point checklist over the encoded <code>.yh</code> against the canonical SSO text. Stamping happens via <code>scripts/l3_audit.py</code>; flags surface here and in <a href="/flags.html">Flags</a>.</li>
+  <li><strong>L3 (human stamp)</strong> — an 11-point checklist over the encoded <code>.yh</code> against the canonical SSO text. Stamping happens via <code>scripts/l3_audit.py</code>; any flagged sections are noted on the per-section page.</li>
 </ul>
 
 <h2 id="per-section">Per-section coverage</h2>
@@ -744,28 +764,6 @@ def render_coverage(index: Dict[str, Any]) -> str:
     return _page("Yuho — Coverage dashboard", body, active_nav="coverage")
 
 
-def render_flags(index: Dict[str, Any]) -> str:
-    flagged = [r for r in index["sections"] if r.get("L3") == "flagged"]
-    rows = "".join(
-        f'<tr><td><a href="/s/{_esc(r["number"])}.html">s{_esc(r["number"])}</a></td>'
-        f'<td>{_esc(r.get("title",""))}</td>'
-        f'<td><span class="badge l3-flagged">flagged</span></td></tr>'
-        for r in flagged
-    )
-    body = f"""
-<h2>L3 flags ({len(flagged)})</h2>
-<p>Sections whose encoding the L3 reviewer (<code>scripts/l3_audit.py</code>)
-flagged for human attention. Each flag includes a numeric checklist failure
-code, a reason, and a suggested fix; per-section pages render the full flag
-text.</p>
-<table class="refs">
-  <thead><tr><th>Section</th><th>Title</th><th>Status</th></tr></thead>
-  <tbody>{rows}</tbody>
-</table>
-"""
-    return _page("Yuho — Flags", body, active_nav="flags")
-
-
 def render_404() -> str:
     body = """
 <h2>404 — section not found</h2>
@@ -773,7 +771,6 @@ def render_404() -> str:
 <ul>
   <li><a href="/index.html">Index of all 524 sections</a></li>
   <li><a href="/coverage.html">Coverage dashboard</a></li>
-  <li><a href="/flags.html">Flagged sections</a></li>
   <li><a href="/about.html">About</a></li>
 </ul>
 <p>If you arrived from a citation that mentions a specific section number,
@@ -788,7 +785,7 @@ def render_sitemap(index: Dict[str, Any], base_url: str) -> str:
     base = base_url.rstrip("/")
     today = _dt.date.today().isoformat()
     urls = [f"{base}/index.html", f"{base}/coverage.html",
-            f"{base}/flags.html", f"{base}/about.html"]
+            f"{base}/about.html"]
     urls.extend(f"{base}/s/{r['number']}.html" for r in index["sections"])
     urls.extend(f"{base}/explore/{r['number']}.html" for r in index["sections"])
     entries = "".join(
@@ -904,17 +901,21 @@ def render_robots(base_url: str) -> str:
 
 def render_about() -> str:
     body = """
-<h2>About this site</h2>
-<p>Yuho is a domain-specific language for encoding statutes as executable,
-machine-checkable artefacts. The proof-of-concept corpus encodes the entire
-Singapore Penal Code 1871 (524 sections); this site is a public, citable
-explorer over that corpus.</p>
+<div class="about-hero">
+  <img src="/static/yuho_mascot.png" alt="Yuho mascot" class="mascot">
+  <div>
+    <h2>About this site</h2>
+    <p>Yuho is a domain-specific language for encoding statutes as
+    executable, machine-checkable artefacts. The corpus encodes the
+    entire Singapore Penal Code 1871 (524 sections); this site is a
+    public, citable explorer over that corpus.</p>
+  </div>
+</div>
 
 <h2>What is each page?</h2>
 <ul>
   <li><a href="/index.html">Index</a> — search and browse all 524 sections by number or title.</li>
   <li><a href="/coverage.html">Coverage</a> — three-tier (L1 / L2 / L3) coverage dashboard.</li>
-  <li><a href="/flags.html">Flags</a> — sections currently flagged by the L3 reviewer for human attention.</li>
   <li><a href="/s/415.html">Per-section pages</a> — raw SSO text, encoded <code>.yh</code>, controlled English, structural counts, references in/out, and SSO deep-link. Each page is a static citable URL.</li>
 </ul>
 
@@ -1154,13 +1155,17 @@ def main() -> int:
     (STATIC / "style.css").write_text(_STYLE)
     (STATIC / "search.js").write_text(_SEARCH_JS)
 
+    # Yuho mascot for the About page hero. Copied from assets/logo/.
+    mascot_src = REPO / "assets" / "logo" / "yuho_mascot.png"
+    if mascot_src.exists():
+        shutil.copy2(mascot_src, STATIC / "yuho_mascot.png")
+
     # Index.json copy for client-side search
     shutil.copy2(CORPUS / "index.json", STATIC / "index.json")
 
     # Top-level pages
     (BUILD / "index.html").write_text(render_index(index))
     (BUILD / "coverage.html").write_text(render_coverage(index))
-    (BUILD / "flags.html").write_text(render_flags(index))
     (BUILD / "about.html").write_text(render_about())
     (BUILD / "404.html").write_text(render_404())
     (BUILD / "sitemap.xml").write_text(render_sitemap(index, args.base_url))
@@ -1262,7 +1267,7 @@ def main() -> int:
 
     print(f"site built: {BUILD}")
     print(f"  {n_pages} per-section pages rebuilt, {n_skipped} skipped (cache hit)")
-    print(f"  index.html, coverage.html, flags.html, about.html")
+    print(f"  index.html, coverage.html, about.html")
     print(f"  static/{{style.css, search.js, index.json}}")
     print(f"\npreview: python3 -m http.server -d {BUILD.relative_to(REPO)} 8000")
     return 0

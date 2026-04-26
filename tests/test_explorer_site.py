@@ -114,10 +114,16 @@ def _all_built_pages(build_dir: Path):
 
 class TestBuiltSite:
     def test_top_level_pages_present(self, built_site):
-        for name in ("index.html", "coverage.html", "flags.html",
+        for name in ("index.html", "coverage.html",
                      "about.html", "404.html",
                      "sitemap.xml", "robots.txt"):
             assert (built_site / name).exists(), f"missing {name}"
+
+    def test_flags_page_intentionally_absent(self, built_site):
+        # The flags page was removed during ship-prep. Per-section pages
+        # still surface their own L3 flag callouts inline; an aggregate
+        # flags index is no longer rendered.
+        assert not (built_site / "flags.html").exists()
 
     def test_static_assets_present(self, built_site):
         for name in ("style.css", "search.js", "index.json", "search-index.json"):
