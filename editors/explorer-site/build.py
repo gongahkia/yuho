@@ -649,6 +649,9 @@ def _page(title: str, body: str, *, active_nav: str = "") -> str:
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{_esc(title)}</title>
+<link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32.png">
+<link rel="apple-touch-icon" href="/static/yuho_mascot.png">
 <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
@@ -1159,6 +1162,15 @@ def main() -> int:
     mascot_src = REPO / "assets" / "logo" / "yuho_mascot.png"
     if mascot_src.exists():
         shutil.copy2(mascot_src, STATIC / "yuho_mascot.png")
+
+    # Favicons. The .ico carries 16/32/48/64/128/256 sizes; the .png is a
+    # 32x32 single-resolution fallback for modern browsers.
+    ico_src = REPO / "assets" / "logo" / "yuho_mascot.ico"
+    if ico_src.exists():
+        shutil.copy2(ico_src, STATIC / "favicon.ico")
+    fav_png_src = REPO / "assets" / "logo" / "yuho_mascot_favicon.png"
+    if fav_png_src.exists():
+        shutil.copy2(fav_png_src, STATIC / "favicon-32.png")
 
     # Index.json copy for client-side search
     shutil.copy2(CORPUS / "index.json", STATIC / "index.json")
