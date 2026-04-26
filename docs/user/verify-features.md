@@ -27,19 +27,37 @@ yuho fmt   library/penal_code/s415_cheating/statute.yh --check
 
 Expected: each prints structured output, exits 0.
 
-### Transpile to all seven targets
+### Transpile to all eight targets
 
 ```sh
 yuho transpile -t json       library/penal_code/s415_cheating/statute.yh
 yuho transpile -t english    library/penal_code/s415_cheating/statute.yh
 yuho transpile -t latex      library/penal_code/s415_cheating/statute.yh
 yuho transpile -t mermaid    library/penal_code/s415_cheating/statute.yh
+yuho transpile -t mindmap    library/penal_code/s415_cheating/statute.yh
 yuho transpile -t alloy      library/penal_code/s415_cheating/statute.yh
 yuho transpile -t akomantoso library/penal_code/s415_cheating/statute.yh
-yuho transpile --all         library/penal_code/s415_cheating/statute.yh -o /tmp/s415-all/
+yuho transpile --all         library/penal_code/s415_cheating/statute.yh --dir /tmp/s415-all/
 ```
 
 The DOCX target writes a binary; pass `-o out.docx`.
+
+For Mermaid flowcharts there are two **shapes**:
+
+```sh
+# default — statute structure (combinator-aware decision tree per section)
+yuho transpile -t mermaid library/penal_code/s415_cheating/statute.yh
+
+# schema — case-struct walk + fn consequence terminals (5-min doc style)
+yuho transpile -t mermaid --shape schema my_section_with_struct_and_fn.yh
+```
+
+`-t mindmap` always emits the structural mindmap (`mindmap` Mermaid
+dialect). To validate the AKN round-trip across the whole library:
+
+```sh
+python scripts/akn_roundtrip.py        # 524/524 validate clean
+```
 
 ### Reference graph + SCC analysis
 
@@ -53,6 +71,15 @@ yuho refs --scc --json                 # machine-readable
 
 The `--scc` run should report **4 non-trivial cycles** in the encoded
 library (s292↔s293, s85↔s86, s424A↔s424B, s304B↔s74A).
+
+### Plain-language section summaries
+
+```sh
+# Five-section prose block (header + what-it-covers + elements + penalty +
+# worked example + disclaimer). Use when you want a reader-friendly summary.
+yuho explain library/penal_code/s415_cheating/statute.yh
+yuho explain library/penal_code/s415_cheating/statute.yh 415   # specific section
+```
 
 ### Counter-example explorer + charge recommender
 
@@ -168,14 +195,26 @@ when you visit Singapore Statutes Online.
 ## 6. Static explorer site
 
 ```sh
-cd editors/explorer-site
-python build.py                  # build static HTML into ./build
-python -m http.server --directory build 8000
+python scripts/build_corpus.py                    # corpus + Mermaid SVGs
+python editors/explorer-site/build.py             # static HTML to ./build
+python -m http.server -d editors/explorer-site/build 8000
 open http://localhost:8000
 ```
 
 A browseable per-section index of the entire encoded Penal Code. No
 backend, just static HTML + JS.
+
+Pages shipped:
+
+- `/` – index (search + row-by-row section listing)
+- `/coverage.html` – L1/L2/L3 dashboard
+- `/graph.html` – **interactive cross-reference graph** (cytoscape.js,
+  524 nodes, click a node to open its section page, toggle implicit
+  edges, live filter)
+- `/about.html` – mascot + methodology summary
+- `/s/<N>.html` – per-section pages with both **Diagram** (Mermaid
+  flowchart) and **Mindmap** sections, plus controlled English,
+  references in/out, encoded `.yh` source.
 
 ---
 
