@@ -258,10 +258,18 @@ section quotes / element lists / Mermaid SVGs into a Word document.
 ```sh
 yuho transpile -t akomantoso library/penal_code/s415_cheating/statute.yh > /tmp/s415.akn.xml
 xmllint --noout /tmp/s415.akn.xml          # well-formed?
-python scripts/akn_roundtrip.py            # validate ALL 524 sections
+
+# Structural round-trip (Yuho's hand-rolled AKN structural validator).
+python scripts/akn_roundtrip.py
+
+# Schema round-trip (vendored OASIS XSD via xmllint, all 524 sections).
+python scripts/akn_roundtrip.py --xsd
+xmllint --noout --schema paper/reproducibility/akn-schema/akomantoso30.xsd /tmp/s415.akn.xml
 ```
 
-Should print `AKN round-trip: 524/524 validate clean`.
+Should print `AKN round-trip: 524/524 validate clean` for both
+invocations. The vendored XSD bundle lives at
+`paper/reproducibility/akn-schema/` (OASIS LegalDocML 1.0).
 
 ---
 

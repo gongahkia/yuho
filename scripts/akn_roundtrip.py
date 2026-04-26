@@ -15,7 +15,10 @@ from __future__ import annotations
 
 import argparse
 import json
+import shutil
+import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
@@ -25,12 +28,36 @@ from yuho.services.analysis import analyze_file  # noqa: E402
 from yuho.transpile import TranspileTarget, get_transpiler  # noqa: E402
 from yuho.transpile.akn_validator import validate_akn  # noqa: E402
 
+XSD_PATH = REPO / "paper" / "reproducibility" / "akn-schema" / "akomantoso30.xsd"
+
+
+def _xsd_validate(xml: str, xsd: Path) -> tuple[bool, list[str]]:
+    """Validate `xml` against `xsd` using `xmllint`. Returns (ok, errors)."""
+    if not shutil.which("xmllint"):
+        return True, []  # xmllint not installed; skip XSD check transparently.
+    with tempfile.NamedTemporaryFile("w", suffix=".xml", delete=False) as fh:
+        fh.write(xml)
+        path = fh.name
+    try:
+        r = subprocess.run(
+            ["xmllint", "--noout", "--schema", str(xsd), path],
+            capture_output=True, text=True, timeout=30,
+        )
+    finally:
+        Path(path).unlink(missing_ok=True)
+    if r.returncode == 0:
+        return True, []
+    return False, [line for line in (r.stderr or "").splitlines() if line.strip()][:5]
+
 
 def main() -> int:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--library", default=str(REPO / "library" / "penal_code"))
     p.add_argument("--json", dest="json_out", action="store_true")
     p.add_argument("--max-errors", type=int, default=20)
+    p.add_argument("--xsd", action="store_true",
+                   help="Also validate every doc against the vendored OASIS XSD "
+                        "(requires xmllint).")
     args = p.parse_args()
 
     lib = Path(args.library)
@@ -63,14 +90,23 @@ def main() -> int:
             })
             continue
         v = validate_akn(xml)
-        if v.ok:
-            n_pass += 1
-        else:
+        if not v.ok:
             failures.append({
                 "section": yh.parent.name,
                 "stage": "validate",
                 "errors": list(v.errors)[: args.max_errors],
             })
+            continue
+        if args.xsd:
+            ok, errs = _xsd_validate(xml, XSD_PATH)
+            if not ok:
+                failures.append({
+                    "section": yh.parent.name,
+                    "stage": "xsd",
+                    "errors": errs,
+                })
+                continue
+        n_pass += 1
 
     summary = {
         "n_total": n_total,

@@ -100,6 +100,8 @@ def test_elements_emitted_with_class_attr():
 
 
 def test_exception_block_emitted():
+    """AKN has no first-class `<exception>`; emitted as `<hcontainer
+    name="exception">`, the schema-canonical extension point."""
     source = '''
     statute 1 "Demo" {
       elements { all_of { actus_reus a := "x"; } }
@@ -111,10 +113,24 @@ def test_exception_block_emitted():
     }
     '''
     root = ET.fromstring(_transpile(source))
-    excs = root.findall(f".//{_AKN_NS}exception")
+    excs = [
+        h for h in root.findall(f".//{_AKN_NS}hcontainer")
+        if h.attrib.get("name") == "exception"
+    ]
     assert len(excs) == 1
     num = excs[0].find(_AKN_NS + "num")
     assert num.text == "consent"
+
+
+def test_meta_frbr_expression_and_manifestation_present():
+    """OASIS XSD requires all three FRBR siblings inside `<identification>`."""
+    source = 'statute 1 "Demo" effective 2020-01-01 { elements { all_of { actus_reus a := "x"; } } }'
+    root = ET.fromstring(_transpile(source))
+    ident = root.find(f"{_AKN_NS}act/{_AKN_NS}meta/{_AKN_NS}identification")
+    assert ident is not None
+    assert ident.find(_AKN_NS + "FRBRWork") is not None
+    assert ident.find(_AKN_NS + "FRBRExpression") is not None
+    assert ident.find(_AKN_NS + "FRBRManifestation") is not None
 
 
 @pytest.mark.skipif(

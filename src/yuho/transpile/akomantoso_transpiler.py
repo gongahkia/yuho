@@ -119,6 +119,7 @@ class AkomaNtosoTranspiler(TranspilerBase):
         self._depth += 1
         lines.append(self._pad(f'<identification source="#{escape(self.author_id)}">'))
         self._depth += 1
+        # FRBRWork — abstract Work level (the Act itself).
         lines.append(self._pad("<FRBRWork>"))
         self._depth += 1
         lines.append(self._pad(
@@ -134,6 +135,38 @@ class AkomaNtosoTranspiler(TranspilerBase):
         lines.append(self._pad(f'<FRBRcountry value="{escape(self.country)}"/>'))
         self._depth -= 1
         lines.append(self._pad("</FRBRWork>"))
+        # FRBRExpression — required sibling per OASIS XSD; carries the
+        # language-level realisation of the Work.
+        lines.append(self._pad("<FRBRExpression>"))
+        self._depth += 1
+        lines.append(self._pad(
+            f'<FRBRthis value="/akn/{self.country}/act/{self.act_name}/eng@/main"/>'
+        ))
+        lines.append(self._pad(
+            f'<FRBRuri value="/akn/{self.country}/act/{self.act_name}/eng@"/>'
+        ))
+        lines.append(self._pad(
+            f'<FRBRdate date="{escape(date_attr)}" name="Generation"/>'
+        ))
+        lines.append(self._pad(f'<FRBRauthor href="#{escape(self.author_id)}"/>'))
+        lines.append(self._pad('<FRBRlanguage language="eng"/>'))
+        self._depth -= 1
+        lines.append(self._pad("</FRBRExpression>"))
+        # FRBRManifestation — required third FRBR sibling per XSD.
+        lines.append(self._pad("<FRBRManifestation>"))
+        self._depth += 1
+        lines.append(self._pad(
+            f'<FRBRthis value="/akn/{self.country}/act/{self.act_name}/eng@/main.xml"/>'
+        ))
+        lines.append(self._pad(
+            f'<FRBRuri value="/akn/{self.country}/act/{self.act_name}/eng@/main.xml"/>'
+        ))
+        lines.append(self._pad(
+            f'<FRBRdate date="{escape(date_attr)}" name="Generation"/>'
+        ))
+        lines.append(self._pad(f'<FRBRauthor href="#{escape(self.author_id)}"/>'))
+        self._depth -= 1
+        lines.append(self._pad("</FRBRManifestation>"))
         self._depth -= 1
         lines.append(self._pad("</identification>"))
         self._depth -= 1
@@ -162,21 +195,49 @@ class AkomaNtosoTranspiler(TranspilerBase):
         lines.append(self._pad(f"<num>{escape(stat.section_number)}</num>"))
         if stat.title is not None:
             lines.append(self._pad(f"<heading>{escape(stat.title.value)}</heading>"))
-        # Effective dates as AKN <FRBRdate> would normally live in <meta>
-        # for a per-section-versioned AKN; we surface them as <p> for now.
-        lines.extend(self._render_content(stat))
-        for exc in stat.exceptions:
-            lines.extend(self._render_exception(exc))
-        for sub in stat.subsections:
-            lines.extend(self._render_subsection(sub))
+        # AKN's `hierarchy` content model presents an exclusive choice:
+        # either a single `<content>` block, or a sequence of `<intro>` +
+        # hierarchy children. When the section carries exceptions or
+        # subsections, take the second branch.
+        has_subdivisions = bool(stat.exceptions or stat.subsections)
+        if has_subdivisions:
+            lines.extend(self._render_intro(stat))
+            for exc in stat.exceptions:
+                lines.extend(self._render_exception(exc))
+            for sub in stat.subsections:
+                lines.extend(self._render_subsection(sub))
+        else:
+            lines.extend(self._render_content(stat))
         self._depth -= 1
         lines.append(self._pad("</section>"))
+        return lines
+
+    def _render_intro(self, stat: nodes.StatuteNode) -> List[str]:
+        """Emit the section body as `<intro>` block elements.
+
+        `<intro>` is `blocksreq` per the XSD (block elements only, no
+        `<content>`), so we re-use the same body builders as
+        `_render_content` but wrap them in `<intro>` instead.
+        """
+        lines: List[str] = []
+        lines.append(self._pad("<intro>"))
+        self._depth += 1
+        lines.extend(self._render_content_body(stat))
+        self._depth -= 1
+        lines.append(self._pad("</intro>"))
         return lines
 
     def _render_content(self, stat: nodes.StatuteNode) -> List[str]:
         lines: List[str] = []
         lines.append(self._pad("<content>"))
         self._depth += 1
+        lines.extend(self._render_content_body(stat))
+        self._depth -= 1
+        lines.append(self._pad("</content>"))
+        return lines
+
+    def _render_content_body(self, stat: nodes.StatuteNode) -> List[str]:
+        lines: List[str] = []
         # Effective dates
         if stat.effective_dates:
             for d in stat.effective_dates:
@@ -191,8 +252,14 @@ class AkomaNtosoTranspiler(TranspilerBase):
                 term = getattr(defn, "term", None) or getattr(defn, "name", "")
                 value = getattr(defn, "definition", None)
                 value_str = value.value if hasattr(value, "value") else str(value or "")
+                # `itemType` (XSD) requires block-level children. `<term>`
+                # demands a `refersTo` attribute pointing into a TLCConcept
+                # ontology we don't carry; surface the term as plain text
+                # inside a `<def>`-tagged `<p>` so the document validates.
+                term_id = self._slug(str(term)) or "term"
                 lines.append(self._pad(
-                    f"<item><term>{escape(str(term))}</term><def>{escape(value_str)}</def></item>"
+                    f'<item><p><def refersTo="#term_{escape(term_id)}">'
+                    f"{escape(str(term))}</def>: {escape(value_str)}</p></item>"
                 ))
             self._depth -= 1
             lines.append(self._pad("</blockList>"))
@@ -205,9 +272,12 @@ class AkomaNtosoTranspiler(TranspilerBase):
                 attrs = f'class="{escape(el.element_type)}"'
                 desc_node = getattr(el, "description", None)
                 desc = desc_node.value if hasattr(desc_node, "value") else (desc_node or "")
+                # `<term>` requires a `refersTo` ontology reference per
+                # the XSD; render the element name as plain bold text
+                # inside `<p>` instead.
                 lines.append(self._pad(
-                    f"<item {attrs}><term>{escape(el.name)}</term>"
-                    f"<p>{escape(str(desc))}</p></item>"
+                    f"<item {attrs}><p><b>{escape(el.name)}</b>: "
+                    f"{escape(str(desc))}</p></item>"
                 ))
             self._depth -= 1
             lines.append(self._pad("</blockList>"))
@@ -225,37 +295,47 @@ class AkomaNtosoTranspiler(TranspilerBase):
                 f'<p class="illustration" eId="ill_{escape(self._slug(label))}">'
                 f"{escape(text)}</p>"
             ))
-        self._depth -= 1
-        lines.append(self._pad("</content>"))
         return lines
 
     def _render_exception(self, exc: nodes.ExceptionNode) -> List[str]:
+        # AKN has no first-class `<exception>` element; the canonical
+        # extension point for "named hierarchical block that isn't
+        # section/subsection" is `<hcontainer name="…">`. Required `eId`
+        # comes from `corereq`.
         lines: List[str] = []
-        attrs: List[str] = []
-        if getattr(exc, "label", None):
-            attrs.append(f'eId="exc_{escape(self._slug(exc.label))}"')
+        eid = f"exc_{self._slug(exc.label or 'unlabeled')}"
+        attrs = [f'eId="{escape(eid)}"', 'name="exception"']
         priority = getattr(exc, "priority", None)
         if priority is not None:
             attrs.append(f'refersTo="#priority-{escape(str(priority))}"')
-        attr_str = (" " + " ".join(attrs)) if attrs else ""
-        lines.append(self._pad(f"<exception{attr_str}>"))
+        lines.append(self._pad(f"<hcontainer {' '.join(attrs)}>"))
         self._depth += 1
         lines.append(self._pad(f"<num>{escape(exc.label or 'unlabeled')}</num>"))
+        # Wrap body in `<content>` (a hierarchy may contain at most one
+        # of intro+children OR content; we use the simpler content branch).
+        body_paragraphs: List[str] = []
         guard = getattr(exc, "guard", None)
         if guard is not None:
             text = guard.value if hasattr(guard, "value") else str(guard)
-            lines.append(self._pad(f"<p>{escape(text)}</p>"))
+            body_paragraphs.append(f"<p>{escape(text)}</p>")
         defeats = getattr(exc, "defeats", None)
         if defeats:
-            # `defeats` names another exception (by label) that this
-            # exception overrides at the priority-DAG layer; emit as
-            # an exception cross-reference, not an element reference.
-            lines.append(self._pad(
+            body_paragraphs.append(
                 f'<p class="defeats" refersTo="#exc_{escape(self._slug(defeats))}">'
                 f"defeats {escape(defeats)}</p>"
-            ))
+            )
+        # `<content>` is required to be non-empty; emit a placeholder if
+        # the source has no guard or defeats text.
+        if not body_paragraphs:
+            body_paragraphs.append("<p>(see source)</p>")
+        lines.append(self._pad("<content>"))
+        self._depth += 1
+        for p in body_paragraphs:
+            lines.append(self._pad(p))
         self._depth -= 1
-        lines.append(self._pad("</exception>"))
+        lines.append(self._pad("</content>"))
+        self._depth -= 1
+        lines.append(self._pad("</hcontainer>"))
         return lines
 
     def _render_subsection(self, sub: nodes.SubsectionNode) -> List[str]:
@@ -276,7 +356,8 @@ class AkomaNtosoTranspiler(TranspilerBase):
                 desc = desc_node.value if hasattr(desc_node, "value") else (desc_node or "")
                 lines.append(self._pad(
                     f'<item class="{escape(el.element_type)}">'
-                    f"<term>{escape(el.name)}</term><p>{escape(str(desc))}</p></item>"
+                    f"<p><b>{escape(el.name)}</b>: "
+                    f"{escape(str(desc))}</p></item>"
                 ))
             self._depth -= 1
             lines.append(self._pad("</blockList>"))

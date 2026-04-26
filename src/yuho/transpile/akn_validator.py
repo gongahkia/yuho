@@ -14,7 +14,8 @@ encode the AKN 1.0 invariants the Yuho transpiler depends on:
 * All ``eId`` attribute values follow the ``<prefix>_<slug>`` pattern
   used by the transpiler (``sec_``, ``sub_``, ``exc_``, ``ill_``).
 * ``<defeats>`` paragraphs that name a target via
-  ``refersTo="#elem_<slug>"`` resolve within the section scope.
+  ``refersTo="#exc_<slug>"`` resolve within the section scope to an
+  ``<hcontainer name="exception">`` with that ``eId``.
 
 This is intentionally a structural validator, not a schema validator.
 A future strengthening can layer XSD validation via ``lxml`` when the
@@ -124,10 +125,13 @@ def validate_akn(xml: str) -> AKNValidationResult:
             # Defeats refersTo must resolve within this section's
             # exception eIds (the priority DAG names other exceptions
             # by label, not elements).
+            # AKN has no first-class `<exception>`; the transpiler emits
+            # exceptions as `<hcontainer name="exception" eId="exc_…">`,
+            # so resolve the priority-DAG cross-refs against that shape.
             sec_exception_eids = {
-                e.attrib["eId"]
-                for e in sec.findall(_qual("exception"))
-                if "eId" in e.attrib
+                h.attrib["eId"]
+                for h in sec.findall(_qual("hcontainer"))
+                if h.attrib.get("name") == "exception" and "eId" in h.attrib
             }
             for p in sec.findall(f".//{_qual('p')}[@class='defeats']"):
                 refers = p.attrib.get("refersTo", "")
