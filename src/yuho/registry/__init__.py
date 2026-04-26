@@ -1,1 +1,0 @@
-"""Yuho package registry server."""
