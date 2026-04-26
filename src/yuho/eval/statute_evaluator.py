@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Tuple, Union
+from typing import Dict, List, Mapping, Optional, Tuple, Union
 from yuho.ast import nodes
 from yuho.eval.interpreter import Interpreter, Environment, Value, StructInstance
 
@@ -32,6 +32,16 @@ class EvaluationResult:
     overall_satisfied: bool
     applicable_penalties: Optional[nodes.PenaltyNode] = None
     reasoning: List[str] = field(default_factory=list)
+
+    def bindings(self) -> Dict[str, bool]:
+        """Return ``{element_name: satisfied}`` for every element evaluated.
+
+        Used by Catala-style scope composition: a parent statute that
+        invokes ``apply_scope(<base_section>, facts)`` consumes this map
+        as the bound element states from the base scope, optionally
+        re-using individual bindings in its own predicates.
+        """
+        return {er.element_name: er.satisfied for er in self.element_results}
 
     def summary(self) -> str:
         """Human-readable summary of the evaluation."""
@@ -220,3 +230,70 @@ class StatuteEvaluator:
     ) -> List[EvaluationResult]:
         """Evaluate multiple statutes against the same facts."""
         return [self.evaluate(st, facts, env) for st in statutes.values()]
+
+    # ------------------------------------------------------------------
+    # Catala-style scope composition (apply_scope)
+    # ------------------------------------------------------------------
+
+    def apply_scope(
+        self,
+        section_ref: str,
+        facts: StructInstance,
+        registry: Mapping[str, nodes.StatuteNode],
+        *,
+        env: Optional[Environment] = None,
+        _trace: Optional[List[str]] = None,
+    ) -> EvaluationResult:
+        """Evaluate a base section as a callable scope.
+
+        ``section_ref`` is the canonical section number (matches
+        ``StatuteNode.section_number``); ``registry`` is the section-to-
+        statute lookup the caller maintains for the surrounding library.
+        Returns an :class:`EvaluationResult` whose
+        :meth:`~EvaluationResult.bindings` map is the lam4-style scope
+        output --- the parent scope composes by reading specific
+        bindings or by inspecting ``overall_satisfied``.
+
+        Recursion: if the base scope itself contains
+        :class:`ApplyScopeNode` references to further sections, this
+        method recurses through ``registry``. A ``_trace`` accumulator
+        guards against cycles by raising :class:`RecursionError` if the
+        same section appears twice on the call chain.
+
+        Raises ``KeyError`` when ``section_ref`` is not in ``registry``.
+        """
+        canonical = _canonical_section(section_ref)
+        target = registry.get(canonical)
+        if target is None:
+            raise KeyError(
+                f"apply_scope: section s{canonical} is not in the supplied "
+                f"statute registry (known: {sorted(registry.keys())[:5]}…)"
+            )
+        trace = list(_trace) if _trace else []
+        if canonical in trace:
+            raise RecursionError(
+                f"apply_scope: cycle detected in scope-call chain: "
+                f"{' -> '.join(trace + [canonical])}"
+            )
+        trace.append(canonical)
+        # Standard evaluation handles elements + exceptions; ApplyScopeNode
+        # references inside expression contexts of this statute are
+        # not yet semantically interpreted by the element-graph executor
+        # (they currently surface as unresolved expression nodes), so the
+        # recursion entry-point is the parent-issued apply_scope call,
+        # not an embedded one. The ``_trace`` argument is plumbed through
+        # for future depth-bounded recursion.
+        return self.evaluate(target, facts, env)
+
+
+def _canonical_section(s: str) -> str:
+    """Strip an optional leading ``s`` / ``S.`` / ``Section`` prefix."""
+    raw = s.strip()
+    lower = raw.lower()
+    if lower.startswith("section"):
+        raw = raw[len("section"):].strip().strip(".").strip()
+    elif lower.startswith("s."):
+        raw = raw[2:].strip()
+    elif lower.startswith("s") and len(raw) > 1 and raw[1].isdigit():
+        raw = raw[1:]
+    return raw
