@@ -1153,6 +1153,8 @@ def eval(ctx: click.Context, file: str, json_output: bool) -> None:
 @click.option("--transitive", is_flag=True, help="Follow edges transitively (BFS closure)")
 @click.option("--graph", "show_graph", is_flag=True,
               help="Print the full graph summary when no section is given")
+@click.option("--scc", "scc", is_flag=True,
+              help="Run SCC analysis: list non-trivial cycles + lint warnings")
 @click.option("--json", "json_output", is_flag=True, help="Emit JSON instead of human text")
 @click.pass_context
 def refs(
@@ -1164,6 +1166,7 @@ def refs(
     kinds: tuple,
     transitive: bool,
     show_graph: bool,
+    scc: bool,
     json_output: bool,
 ) -> None:
     """Query the cross-section reference graph (G10).
@@ -1203,6 +1206,7 @@ def refs(
         transitive=transitive,
         json_output=json_output,
         show_graph=show_graph,
+        scc=scc,
     )
 
 

@@ -10,6 +10,7 @@ from typing import Optional
 import click
 
 from yuho.cli.error_formatter import Colors, colorize
+from yuho.library.graph_lint import lint_reference_graph
 from yuho.library.reference_graph import (
     ReferenceGraph,
     build_reference_graph,
@@ -27,6 +28,7 @@ def run_refs(
     transitive: bool,
     json_output: bool,
     show_graph: bool,
+    scc: bool = False,
 ) -> None:
     """Implementation of ``yuho refs``.
 
@@ -47,6 +49,10 @@ def run_refs(
 
     graph = build_reference_graph(root)
     edge_kinds = list(kinds) if kinds else None
+
+    if scc:
+        _emit_scc(graph, edge_kinds, json_output)
+        return
 
     if section is None:
         if show_graph and json_output:
@@ -158,6 +164,53 @@ def _print_graph_summary(graph: ReferenceGraph) -> None:
         if n == 0:
             break
         click.echo(f"  s{s:<6}  ← {n} incoming")
+
+
+def _emit_scc(graph: ReferenceGraph, kinds, json_output: bool) -> None:
+    """Print SCC analysis: condensation stats + non-trivial cycles + lint warnings."""
+    components = graph.find_sccs(kinds)
+    cycles = graph.cycles(kinds)
+    warnings = lint_reference_graph(
+        graph,
+        kinds=kinds if kinds else None,
+    )
+    if json_output:
+        payload = {
+            "kinds": kinds or ["implicit", "subsumes", "amends"],
+            "n_components": len(components),
+            "n_cycles": len(cycles),
+            "cycles": [sorted(c) for c in cycles],
+            "warnings": [
+                {
+                    "code": w.code,
+                    "sections": list(w.sections),
+                    "message": w.message,
+                    "severity": w.severity,
+                }
+                for w in warnings
+            ],
+        }
+        click.echo(json.dumps(payload, indent=2, sort_keys=True))
+        return
+
+    klabel = "/".join(kinds) if kinds else "implicit/subsumes (default)"
+    click.echo(colorize(f"=== reference-graph SCC analysis ({klabel}) ===", Colors.BOLD))
+    click.echo(f"{len(components)} strongly-connected components")
+    click.echo(f"{len(cycles)} non-trivial cycle(s)")
+    if not cycles:
+        click.echo(colorize("  (no cycles found)", Colors.GREEN))
+        return
+    click.echo("")
+    for i, comp in enumerate(cycles, 1):
+        members = ", ".join(f"s{s}" for s in sorted(comp))
+        click.echo(colorize(f"  cycle {i} ({len(comp)} sections):", Colors.YELLOW))
+        click.echo(f"    {members}")
+    if warnings:
+        click.echo("")
+        click.echo(colorize("lint warnings:", Colors.BOLD))
+        for w in warnings:
+            tag = colorize(f"[{w.severity}]", Colors.YELLOW if w.severity == "warning" else Colors.RESET)
+            click.echo(f"  {tag} {w.message}")
 
 
 def _kind_color(kind: str) -> str:
