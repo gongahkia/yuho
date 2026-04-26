@@ -22,6 +22,7 @@ ALL_TARGETS = [
     "mermaid",
     "alloy",
     "docx",
+    "akomantoso",
 ]
 
 

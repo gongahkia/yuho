@@ -17,6 +17,7 @@ class TranspileTarget(Enum):
     MERMAID = auto()
     ALLOY = auto()
     DOCX = auto()
+    AKOMANTOSO = auto()
 
     @classmethod
     def from_string(cls, name: str) -> "TranspileTarget":
@@ -32,6 +33,9 @@ class TranspileTarget(Enum):
             "alloy": cls.ALLOY,
             "docx": cls.DOCX,
             "word": cls.DOCX,
+            "akomantoso": cls.AKOMANTOSO,
+            "akn": cls.AKOMANTOSO,
+            "legaldocml": cls.AKOMANTOSO,
         }
         target = mapping.get(name.lower())
         if not target:
@@ -48,6 +52,7 @@ class TranspileTarget(Enum):
             TranspileTarget.MERMAID: ".mmd",
             TranspileTarget.ALLOY: ".als",
             TranspileTarget.DOCX: ".docx",
+            TranspileTarget.AKOMANTOSO: ".xml",
         }
         return extensions.get(self, ".txt")
 

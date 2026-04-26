@@ -16,6 +16,7 @@ from yuho.transpile.mermaid_transpiler import MermaidTranspiler
 from yuho.transpile.alloy_transpiler import AlloyTranspiler
 from yuho.transpile.latex_transpiler import LaTeXTranspiler, compile_to_pdf
 from yuho.transpile.docx_transpiler import DOCXTranspiler
+from yuho.transpile.akomantoso_transpiler import AkomaNtosoTranspiler
 from yuho.transpile.registry import TranspilerRegistry
 
 __all__ = [
@@ -29,6 +30,7 @@ __all__ = [
     "MermaidTranspiler",
     "AlloyTranspiler",
     "DOCXTranspiler",
+    "AkomaNtosoTranspiler",
     "get_transpiler",
 ]
 
