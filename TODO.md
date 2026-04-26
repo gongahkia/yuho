@@ -343,20 +343,26 @@ the IPC (or MPC — pick the one with cleaner online text) at full
       side-by-side SCC overlap diagram, plus a divergence-over-time
       chart if Phase 2a is also live.
 
-#### Direction B — Counter-factual edge-case explorer
+#### Direction B — Counter-factual edge-case explorer `[~]`
 
 Builds directly on the `apply_scope`/`is_infringed` Z3 hookup that
 shipped this trench. Given two related sections, ask Z3 for the
 *minimum-distance* fact-set that satisfies one but not the other —
 producing a structured library of edge-case scenarios.
 
-- [ ] `yuho contrast s299 s300` CLI: emits the smallest fact-set
-      satisfying s299 but failing s300 (and vice versa). Powered by
-      `Z3Generator` + the conviction-Bool model.
-- [ ] `yuho narrow-defence s302 s79` CLI: smallest fact-set where
-      private-defence (s79) overrides s302 murder. Walks the
-      exception priority DAG.
-- [ ] Bulk-run across the SG PC pairs from the existing SCC analysis
+- [x] **v0 shipped:** `yuho contrast <section_a> <section_b>` —
+      finds *some* satisfying assignment where A's conviction holds
+      and B's does not. Emits per-statute element values + the
+      distinguishing-elements summary. JSON mode for downstream
+      tooling. Honours the `not_legal_advice` contract.
+- [ ] **Minimum-distance variant.** Today's v0 reports any
+      satisfying model; upgrade to Z3's `Optimize` interface with a
+      cardinality objective so the reported fact-set is the smallest
+      one that distinguishes A from B.
+- [ ] **`yuho narrow-defence s302 s79` CLI:** smallest fact-set
+      where private-defence (s79) overrides s302 murder. Walks the
+      exception priority DAG, not just the element conjunction.
+- [ ] **Bulk-run across SG PC pairs** from the existing SCC analysis
       to produce `_corpus/contrast/`, a JSON-backed scenario library
       of every doctrinally-relevant offence boundary.
 - [ ] **Paper claim:** "Z3-driven scenario synthesis from encoded

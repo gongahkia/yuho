@@ -264,6 +264,46 @@ def recommend(
 
 
 # =============================================================================
+# Contrast command — Z3-driven counter-factual edge-case explorer
+# =============================================================================
+
+
+@cli.command()
+@click.argument("section_a", type=str)
+@click.argument("section_b", type=str)
+@click.option("--library", type=click.Path(exists=True, file_okay=False),
+              help="Override the default library/penal_code path")
+@click.option("--json", "json_output", is_flag=True, help="Output as JSON")
+def contrast(
+    section_a: str,
+    section_b: str,
+    library: Optional[str],
+    json_output: bool,
+):
+    """Z3-derived structural boundary between two sections.
+
+    Asks Z3 for a fact pattern that satisfies SECTION_A's conviction
+    predicate while failing SECTION_B's. Useful for spotting which
+    elements doctrinally distinguish two related offences.
+
+    NOT LEGAL ADVICE — every output carries the disclaimer. The fact
+    pattern is structural, derived from the encoded elements; real
+    cases turn on evidence and judicial interpretation.
+
+    Example:
+        yuho contrast s299 s300         # culpable homicide vs murder
+        yuho contrast s302 s79          # murder vs private-defence
+    """
+    from yuho.cli.commands.contrast import run_contrast
+
+    run_contrast(
+        section_a, section_b,
+        library=library,
+        json_output=json_output,
+    )
+
+
+# =============================================================================
 # Check command
 # =============================================================================
 

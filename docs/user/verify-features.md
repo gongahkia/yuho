@@ -96,6 +96,26 @@ The recommender ranks Penal Code sections by structural fit. Output
 is decorated with the `LEGAL_DISCLAIMER` envelope and a
 `not_legal_advice` flag — that is not a hedge, it is the contract.
 
+### Counter-factual edge-case explorer
+
+```sh
+# Smallest fact pattern that satisfies s299 but fails s300.
+yuho contrast s299 s300
+
+# Smallest fact pattern where private-defence (s79) overrides s302.
+yuho contrast s302 s79
+
+# Machine-readable form for downstream tooling.
+yuho contrast s299 s300 --json
+```
+
+`yuho contrast` solves `s_A_conviction AND NOT s_B_conviction` over
+the Z3 model the verifier already builds, then reads off the
+satisfying assignment of leaf-element `*_satisfied` Bools. Useful
+for spotting which elements doctrinally distinguish two related
+offences. Output carries the `not_legal_advice` flag — structural
+boundary, not legal advice.
+
 ### Verification (Z3 / Alloy)
 
 ```sh
