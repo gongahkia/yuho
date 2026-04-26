@@ -802,31 +802,25 @@ class YuhoMCPServer:
             except ASTBoundaryError as e:
                 return mcp_error("internal_error", str(e))
 
-            # Filter to specific section if requested
-            if section:
-                from yuho.ast.nodes import ModuleNode
-
-                matching = [s for s in ast.statutes if section in s.section_number]
-                if not matching:
-                    return mcp_error("not_found", f"Section {section} not found", section=section)
-                ast = ModuleNode(
-                    imports=ast.imports,
-                    type_defs=ast.type_defs,
-                    function_defs=ast.function_defs,
-                    statutes=tuple(matching),
-                    variables=ast.variables,
-                )
+            # Use the prose-first explainer that backs `yuho explain`.
+            # The CLI's run_explain reads metadata.toml summaries from disk;
+            # in the MCP path we don't have a stable file path so we pass
+            # summary=None and let the explainer fall back to doc_comment.
+            from yuho.cli.commands.explain import explain_module
 
             try:
-                transpiler = EnglishTranspiler()
-                explanation = run_transpile_boundary(
-                    transpiler.transpile,
-                    ast,
-                    message="Failed to generate explanation",
+                explanation = explain_module(
+                    ast, section=section, summary=None, color=False
                 )
+                if not explanation.strip():
+                    return mcp_error(
+                        "not_found",
+                        f"Section {section} not found" if section else "no statutes in source",
+                        section=section,
+                    )
                 return {"explanation": explanation}
-            except TranspileBoundaryError as e:
-                return mcp_error("internal_error", str(e))
+            except Exception as e:  # pragma: no cover — boundary catch
+                return mcp_error("internal_error", f"Failed to generate explanation: {e}")
 
         @tool_with_structured_logging()
         async def yuho_parse(file_content: str) -> Dict[str, Any]:

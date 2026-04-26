@@ -406,7 +406,8 @@ def ast(
     type=click.Choice(["statute", "schema"], case_sensitive=False),
     default="statute",
     help="Mermaid flowchart shape: 'statute' (structural, default) or 'schema' "
-         "(decision tree from a case-struct + matching fn).",
+         "(decision tree from a case-struct + matching fn). Only meaningful for "
+         "the mermaid target.",
 )
 @click.option("--json", "json_output", is_flag=True, help="Output metadata as JSON")
 @click.pass_context
@@ -1061,6 +1062,29 @@ def ci_report(ctx: click.Context, directory: str, output: Optional[str], fmt: st
     from yuho.cli.commands.ci_report import run_ci_report
 
     sys.exit(run_ci_report(directory=directory, output=output, format=fmt))
+
+
+@cli.command()
+@click.argument("file", type=click.Path(exists=True))
+@click.argument("section", required=False)
+@click.pass_context
+def explain(ctx: click.Context, file: str, section: Optional[str]) -> None:
+    """
+    Plain-language summary of an encoded statute.
+
+    Renders a 5-section prose block: title, what-it-covers (from
+    metadata.toml summary), elements, penalty, and a worked example
+    (first illustration). With a section number it filters to that
+    section; without one, it explains every statute in the file.
+
+    Examples:
+
+        yuho explain library/penal_code/s415_cheating/statute.yh
+        yuho explain library/penal_code/s415_cheating/statute.yh 415
+    """
+    from yuho.cli.commands.explain import run_explain
+
+    run_explain(file, section=section, color=ctx.obj.get("color", True))
 
 
 @cli.command()
