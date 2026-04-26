@@ -133,6 +133,138 @@ class ReferenceGraph:
         return seen
 
     # -----------------------------------------------------------------
+    # Strongly-connected components (Tarjan)
+    # -----------------------------------------------------------------
+
+    def find_sccs(
+        self, kinds: Optional[Iterable[str]] = None
+    ) -> List[List[str]]:
+        """Strongly-connected components via Tarjan, iterative.
+
+        Returns a list of components, each a list of section ids. Components
+        are emitted in reverse topological order of the condensation DAG, so
+        the output is also a topological sort over SCCs.
+
+        ``kinds`` filters which edge kinds count as adjacency (e.g. pass
+        ``["implicit", "subsumes"]`` to ignore amendment chains).
+        """
+        kset = set(kinds) if kinds else None
+
+        def successors(node: str) -> List[str]:
+            out: List[str] = []
+            for e in self.out_edges.get(node, []):
+                if kset is None or e.kind in kset:
+                    out.append(e.dst)
+            return out
+
+        index_counter = 0
+        stack: List[str] = []
+        on_stack: dict = {}
+        indices: dict = {}
+        lowlinks: dict = {}
+        result: List[List[str]] = []
+
+        for start in sorted(self.nodes):
+            if start in indices:
+                continue
+            indices[start] = index_counter
+            lowlinks[start] = index_counter
+            index_counter += 1
+            stack.append(start)
+            on_stack[start] = True
+            work: List[Tuple[str, List[str], int]] = [(start, successors(start), 0)]
+
+            while work:
+                node, succs, i = work[-1]
+                if i < len(succs):
+                    work[-1] = (node, succs, i + 1)
+                    w = succs[i]
+                    if w not in indices:
+                        indices[w] = index_counter
+                        lowlinks[w] = index_counter
+                        index_counter += 1
+                        stack.append(w)
+                        on_stack[w] = True
+                        work.append((w, successors(w), 0))
+                    elif on_stack.get(w, False):
+                        if indices[w] < lowlinks[node]:
+                            lowlinks[node] = indices[w]
+                    continue
+                # fully explored: pop, possibly emit component, propagate lowlink
+                work.pop()
+                if lowlinks[node] == indices[node]:
+                    component: List[str] = []
+                    while True:
+                        x = stack.pop()
+                        on_stack[x] = False
+                        component.append(x)
+                        if x == node:
+                            break
+                    result.append(component)
+                if work:
+                    parent = work[-1][0]
+                    if lowlinks[node] < lowlinks[parent]:
+                        lowlinks[parent] = lowlinks[node]
+
+        return result
+
+    def cycles(
+        self, kinds: Optional[Iterable[str]] = None
+    ) -> List[List[str]]:
+        """Non-trivial cycles (SCCs of size >1, plus singletons with a self-loop).
+
+        Returns the same shape as :meth:`find_sccs`, filtered to components
+        that genuinely contain a cycle. Singleton SCCs without a self-edge
+        are excluded.
+        """
+        kset = set(kinds) if kinds else None
+        out: List[List[str]] = []
+        for comp in self.find_sccs(kinds):
+            if len(comp) > 1:
+                out.append(comp)
+                continue
+            # singleton: include only if it has a self-loop in the filter
+            n = comp[0]
+            for e in self.out_edges.get(n, []):
+                if e.dst == n and (kset is None or e.kind in kset):
+                    out.append(comp)
+                    break
+        return out
+
+    def is_cyclic(self, kinds: Optional[Iterable[str]] = None) -> bool:
+        return bool(self.cycles(kinds))
+
+    def condensation_dag(
+        self, kinds: Optional[Iterable[str]] = None
+    ) -> Tuple[List[List[str]], dict]:
+        """Condensation of the graph: each SCC collapsed to a single node.
+
+        Returns ``(components, dag)`` where ``components`` is the list from
+        :meth:`find_sccs` and ``dag`` maps a component index ``i`` to the
+        set of component indices reachable in one step. The condensation
+        is acyclic by construction.
+        """
+        components = self.find_sccs(kinds)
+        node_to_comp: dict = {}
+        for i, comp in enumerate(components):
+            for n in comp:
+                node_to_comp[n] = i
+        kset = set(kinds) if kinds else None
+        dag: dict = {i: set() for i in range(len(components))}
+        for src, edges in self.out_edges.items():
+            ci = node_to_comp.get(src)
+            if ci is None:
+                continue
+            for e in edges:
+                if kset is not None and e.kind not in kset:
+                    continue
+                cj = node_to_comp.get(e.dst)
+                if cj is None or cj == ci:
+                    continue
+                dag[ci].add(cj)
+        return components, dag
+
+    # -----------------------------------------------------------------
     # Stats and serialisation
     # -----------------------------------------------------------------
 

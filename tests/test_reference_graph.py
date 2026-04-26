@@ -103,6 +103,100 @@ class TestReferenceGraph:
         assert d["stats"]["n_implicit"] == 1
 
 
+class TestSCC:
+    """Tarjan SCC + cycle detection over the reference graph."""
+
+    def setup_method(self):
+        self.g = ReferenceGraph()
+
+    def _add(self, src, dst, kind="implicit"):
+        self.g.add(ReferenceEdge(src=src, dst=dst, kind=kind, source_path="x"))
+
+    def test_empty_graph(self):
+        assert self.g.find_sccs() == []
+        assert self.g.cycles() == []
+        assert not self.g.is_cyclic()
+
+    def test_acyclic_chain(self):
+        self._add("A", "B")
+        self._add("B", "C")
+        sccs = self.g.find_sccs()
+        # three singletons, no cycles
+        assert sorted([sorted(c) for c in sccs]) == [["A"], ["B"], ["C"]]
+        assert self.g.cycles() == []
+        assert not self.g.is_cyclic()
+
+    def test_self_loop_is_cycle(self):
+        self._add("A", "A")
+        assert self.g.is_cyclic()
+        cyc = self.g.cycles()
+        assert cyc == [["A"]]
+
+    def test_two_cycle(self):
+        self._add("A", "B")
+        self._add("B", "A")
+        cyc = self.g.cycles()
+        assert len(cyc) == 1
+        assert sorted(cyc[0]) == ["A", "B"]
+        assert self.g.is_cyclic()
+
+    def test_three_cycle_with_tail(self):
+        # tail D -> A -> B -> C -> A
+        self._add("D", "A")
+        self._add("A", "B")
+        self._add("B", "C")
+        self._add("C", "A")
+        cyc = self.g.cycles()
+        assert len(cyc) == 1
+        assert sorted(cyc[0]) == ["A", "B", "C"]
+        # D remains a singleton outside the cycle
+        all_sccs = self.g.find_sccs()
+        singletons = [c for c in all_sccs if len(c) == 1]
+        assert ["D"] in singletons
+
+    def test_kind_filter(self):
+        # cycle exists in implicit edges only; subsumes is acyclic
+        self._add("A", "B", kind="implicit")
+        self._add("B", "A", kind="implicit")
+        self._add("X", "Y", kind="subsumes")
+        assert self.g.is_cyclic(kinds=["implicit"])
+        assert not self.g.is_cyclic(kinds=["subsumes"])
+
+    def test_disconnected_components(self):
+        # one cyclic, one acyclic
+        self._add("A", "B")
+        self._add("B", "A")
+        self._add("X", "Y")
+        cyc = self.g.cycles()
+        assert len(cyc) == 1
+        assert sorted(cyc[0]) == ["A", "B"]
+
+    def test_condensation_dag_is_acyclic(self):
+        # build: cycle {A,B} -> singleton C
+        self._add("A", "B")
+        self._add("B", "A")
+        self._add("A", "C")
+        comps, dag = self.g.condensation_dag()
+        # locate component indices
+        for i, c in enumerate(comps):
+            if "A" in c:
+                cycle_idx = i
+            if c == ["C"]:
+                c_idx = i
+        assert c_idx in dag[cycle_idx]
+        # no self-loops in condensation
+        for i, succs in dag.items():
+            assert i not in succs
+
+    def test_reverse_topological_order(self):
+        # A -> B -> C, expect C emitted before B before A
+        self._add("A", "B")
+        self._add("B", "C")
+        sccs = self.g.find_sccs()
+        order = [c[0] for c in sccs]
+        assert order.index("C") < order.index("B") < order.index("A")
+
+
 @pytest.mark.skipif(
     not Path("library/penal_code").exists(),
     reason="library/penal_code not present in this checkout",
