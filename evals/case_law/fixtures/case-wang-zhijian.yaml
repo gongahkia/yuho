@@ -1,0 +1,44 @@
+id: case-wang-zhijian
+case_citation: "PP v Wang Zhijian [2014] SGCA 58"
+actual_charge: "300"
+alternative_charge: "304"
+court_distinguished_on: [intent1]
+outcome: "Convicted of s302 murder; death sentence; diminished responsibility rejected."
+case_summary: |
+  The accused killed three women in two separate incidents at Yishun. He
+  was convicted of murder; defence of diminished responsibility was
+  rejected. Intent to cause death was inferred from repeated and targeted
+  attacks on multiple victims.
+section: "300"
+description: |
+  A killed three women B, C, D in two separate incidents. The attacks were
+  repeated and targeted on each victim. A intended to cause the deaths of
+  the victims. Diminished responsibility was raised but rejected on the
+  evidence.
+parties:
+  A: { role: accused }
+  B: { role: victim }
+  C: { role: victim }
+  D: { role: victim }
+acts:
+  - { actor: A, description: "kills B in a targeted attack" }
+  - { actor: A, description: "kills C and D in a separate targeted attack" }
+mental_states:
+  A:
+    intent: "to cause the deaths of the victims"
+    knowledge: "the attacks would cause death"
+circumstances:
+  - "two separate incidents"
+  - "diminished responsibility rejected"
+  - "no provocation"
+outcomes:
+  - { actor: B, description: "B dies" }
+  - { actor: C, description: "C dies" }
+  - { actor: D, description: "D dies" }
+fact_facts:
+  causeDeath: true
+  intent1: true
+  intent2: false
+  intent3: false
+  intent4: false
+tags: [source:case-law, chapter:xvi, category:homicide, doctrine:s300a, exception-7-rejected]

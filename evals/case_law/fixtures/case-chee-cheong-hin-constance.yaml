@@ -1,0 +1,36 @@
+id: case-chee-cheong-hin-constance
+case_citation: "Chee Cheong Hin Constance v PP [2006] 2 SLR(R) 707"
+actual_charge: "304"
+alternative_charge: "300"
+court_distinguished_on: [intent1, intent3]
+outcome: "Trial conviction of s300 reduced to s304(a) on appeal — Exception 7 (diminished responsibility) succeeded."
+case_summary: |
+  The accused abducted and killed an infant. On appeal, expert psychiatric
+  evidence of an adjustment disorder with depressive features substantially
+  impairing mental responsibility was accepted under Exception 7,
+  reducing the conviction to s304(a).
+section: "304"
+description: |
+  A abducted and killed B, an infant. A had been suffering from an
+  adjustment disorder with depressive features that substantially impaired
+  A's mental responsibility at the time of the act. Exception 7
+  (diminished responsibility) reduced the conviction from s300 to s304(a).
+parties:
+  A: { role: accused }
+  B: { role: victim, attribute: infant }
+acts:
+  - { actor: A, description: "abducts B" }
+  - { actor: A, description: "kills B" }
+mental_states:
+  A:
+    intent: "to cause B's death"
+    psychiatric: "adjustment disorder with depressive features substantially impairing mental responsibility"
+circumstances:
+  - "Exception 7 (diminished responsibility) succeeded"
+outcomes:
+  - { actor: B, description: "B dies" }
+fact_facts:
+  intention: true
+  causation: true
+  not_murder: true
+tags: [source:case-law, chapter:xvi, category:homicide, doctrine:exception-7, partial-defence:diminished-responsibility]

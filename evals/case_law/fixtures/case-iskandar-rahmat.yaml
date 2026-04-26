@@ -1,0 +1,46 @@
+id: case-iskandar-rahmat
+case_citation: "Iskandar bin Rahmat v PP [2017] 1 SLR 505"
+actual_charge: "300"
+alternative_charge: "304"
+court_distinguished_on: [intent1]
+outcome: "Convicted of two counts of s300(a) murder; death sentence affirmed; sudden-fight Exception 4 rejected."
+case_summary: |
+  A police officer in financial distress went to the Kovan home of a moneylender
+  to rob him, and killed both the moneylender and his son by repeated stabbing.
+  The bodies were dragged behind a car. Defence ran sudden fight (Exception 4)
+  and diminished responsibility (Exception 7); both rejected. The Court of
+  Appeal inferred intent to cause death (s300(a)) from the repeated and
+  targeted stabbing of vital areas in a sustained, one-sided assault.
+section: "300"
+description: |
+  A repeatedly stabbed B and B's son in vital areas (chest, throat) over a
+  sustained attack. Both victims died from the multiple stab wounds. A then
+  attempted to dispose of the bodies. A intended to cause the deaths of both
+  victims. The assault was one-sided and not provoked; no sudden fight; no
+  diminished responsibility.
+parties:
+  A: { role: accused }
+  B: { role: victim, attribute: moneylender }
+  C: { role: victim, attribute: son_of_moneylender }
+acts:
+  - { actor: A, description: "stabs B repeatedly in vital areas" }
+  - { actor: A, description: "stabs C repeatedly in vital areas" }
+  - { actor: A, description: "drags both bodies behind his car" }
+mental_states:
+  A:
+    intent: "to cause the death of both B and C"
+    knowledge: "the stabbings would cause death"
+circumstances:
+  - "no sudden fight (Exception 4 rejected)"
+  - "no diminished responsibility (Exception 7 rejected)"
+  - "assault was sustained and one-sided"
+outcomes:
+  - { actor: B, description: "B dies from multiple stab wounds" }
+  - { actor: C, description: "C dies from multiple stab wounds" }
+fact_facts:
+  causeDeath: true
+  intent1: true
+  intent2: false
+  intent3: false
+  intent4: false
+tags: [source:case-law, chapter:xvi, category:homicide, doctrine:s300a, exception:4-rejected]

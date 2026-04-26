@@ -1,0 +1,38 @@
+id: case-tan-kheng-ann-pulau-senang
+case_citation: "Tan Kheng Ann v PP [1965-1967] SLR(R) 52 (Pulau Senang)"
+actual_charge: "300"
+alternative_charge: "304"
+court_distinguished_on: [intent1]
+outcome: "Multiple accused convicted of murder under s302 read with s34 — group attack at Pulau Senang penal settlement."
+case_summary: |
+  Prison officers were killed when detainees rioted at the Pulau Senang
+  penal settlement. Multiple accused were convicted of murder under s302
+  read with s34 — common intention established by participation in a
+  coordinated group attack on the officers.
+section: "300"
+description: |
+  A and other accused participated in a coordinated group attack on prison
+  officer B during a riot. B died from the assault. A and the other
+  accused shared a common intention to cause B's death. The act was done
+  in furtherance of that common intention.
+parties:
+  A: { role: accused, attribute: detainee }
+  B: { role: victim, attribute: prison_officer }
+acts:
+  - { actor: A, description: "participates in coordinated group attack on B" }
+mental_states:
+  A:
+    intent: "to cause B's death (in common intention with co-accused)"
+    knowledge: "the group attack would cause death"
+circumstances:
+  - "coordinated group riot"
+  - "common intention under s34 established"
+outcomes:
+  - { actor: B, description: "B dies from the group attack" }
+fact_facts:
+  causeDeath: true
+  intent1: true
+  intent2: false
+  intent3: false
+  intent4: false
+tags: [source:case-law, chapter:xvi, category:homicide, doctrine:s300a, common-intention:s34, historical]

@@ -1,0 +1,41 @@
+id: case-tan-chee-wee
+case_citation: "Tan Chee Wee v PP [2004] 1 SLR(R) 479"
+actual_charge: "300"
+alternative_charge: "304"
+court_distinguished_on: [intent1]
+outcome: "Convicted of s302 murder; partial defences of grave-and-sudden provocation (Exception 1) and sudden fight (Exception 4) rejected."
+case_summary: |
+  The accused killed an elderly woman during a robbery in her flat. He
+  raised partial defences under Exception 1 (grave and sudden provocation)
+  and Exception 4 (sudden fight). Both rejected — the assault was
+  premeditated, no provocation, no sudden fight.
+section: "300"
+description: |
+  A entered the flat of B, an elderly woman, intending to rob her. A killed
+  B in the course of the robbery. A intended to cause B's death (or, in the
+  alternative, intended to inflict bodily injury sufficient in the ordinary
+  course to cause death). No grave-and-sudden provocation; no sudden fight;
+  attack was one-sided and premeditated.
+parties:
+  A: { role: accused }
+  B: { role: victim, attribute: elderly }
+acts:
+  - { actor: A, description: "enters B's flat to rob her" }
+  - { actor: A, description: "kills B in the course of the robbery" }
+mental_states:
+  A:
+    intent: "to cause B's death"
+    knowledge: "the assault would cause death"
+circumstances:
+  - "Exception 1 grave-and-sudden provocation rejected"
+  - "Exception 4 sudden-fight rejected"
+  - "premeditated assault"
+outcomes:
+  - { actor: B, description: "B dies from the assault" }
+fact_facts:
+  causeDeath: true
+  intent1: true
+  intent2: false
+  intent3: false
+  intent4: false
+tags: [source:case-law, chapter:xvi, category:homicide, doctrine:s300a, exceptions-1-and-4-rejected]

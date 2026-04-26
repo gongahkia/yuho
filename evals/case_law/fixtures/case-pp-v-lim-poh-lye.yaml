@@ -1,0 +1,41 @@
+id: case-pp-v-lim-poh-lye
+case_citation: "PP v Lim Poh Lye [2005] 4 SLR(R) 582"
+actual_charge: "300"
+alternative_charge: "304"
+court_distinguished_on: [intent3]
+outcome: "Convicted of s300(c) murder (Court of Appeal restored conviction)."
+case_summary: |
+  The victim was kidnapped, tied up, and stabbed in the thigh, severing the
+  femoral vein. He bled to death. The Court of Appeal held that s300(c) was
+  satisfied because the stab wound was intended and was objectively sufficient
+  in the ordinary course of nature to cause death — applying the Virsa Singh
+  framework. No need to prove intent to kill.
+section: "300"
+description: |
+  A kidnapped B, tied B up, and deliberately stabbed B in the thigh, severing
+  a major blood vessel. B bled to death. A intended to inflict the specific
+  stab wound actually inflicted; the wound was objectively sufficient in the
+  ordinary course of nature to cause death by exsanguination.
+parties:
+  A: { role: accused }
+  B: { role: victim }
+acts:
+  - { actor: A, description: "kidnaps and restrains B" }
+  - { actor: A, description: "stabs B in the thigh, severing the femoral vein" }
+mental_states:
+  A:
+    intent: "to inflict the stab wound actually inflicted"
+    knowledge: "the wound was sufficient in the ordinary course of nature to cause death"
+circumstances:
+  - "no consent"
+  - "no provocation"
+  - "no exception applies"
+outcomes:
+  - { actor: B, description: "B bleeds to death from the femoral wound" }
+fact_facts:
+  causeDeath: true
+  intent1: false
+  intent2: false
+  intent3: true
+  intent4: false
+tags: [source:case-law, chapter:xvi, category:homicide, doctrine:s300c-virsa-singh]

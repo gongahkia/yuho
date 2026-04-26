@@ -1,0 +1,39 @@
+id: case-daniel-vijay-principal
+case_citation: "Daniel Vijay s/o Katherasan v PP [2010] 4 SLR 1119 (principal offender)"
+actual_charge: "300"
+alternative_charge: "304"
+court_distinguished_on: [intent3]
+outcome: "Conviction restored as s304(a) on appeal for the accomplices; principal offender (the hockey-stick wielder) liable for s300(c) murder."
+case_summary: |
+  Three appellants attacked the deceased with a hockey stick during a robbery.
+  The trial court convicted all three of murder under s300(c) read with s34.
+  The Court of Appeal restored the higher subjective-knowledge threshold for
+  s34 collateral liability — the principal who actually wielded the hockey
+  stick remained liable for s300(c) murder; the accomplices were liable only
+  for s304(a).
+section: "300"
+description: |
+  A wielded a hockey stick and struck the deceased B repeatedly on the head
+  during a planned robbery. B died from severe head injuries. A intended to
+  inflict the bodily injuries actually inflicted, which were objectively
+  sufficient in the ordinary course of nature to cause death.
+parties:
+  A: { role: accused, attribute: principal_offender }
+  B: { role: victim }
+acts:
+  - { actor: A, description: "strikes B repeatedly on the head with a hockey stick" }
+mental_states:
+  A:
+    intent: "to inflict the head injuries actually inflicted"
+    knowledge: "the injuries were sufficient in the ordinary course of nature to cause death"
+circumstances:
+  - "joint robbery, but A is the principal offender who used the weapon"
+outcomes:
+  - { actor: B, description: "B dies from head injuries" }
+fact_facts:
+  causeDeath: true
+  intent1: false
+  intent2: false
+  intent3: true
+  intent4: false
+tags: [source:case-law, chapter:xvi, category:homicide, doctrine:s300c-virsa-singh, common-intention:s34]

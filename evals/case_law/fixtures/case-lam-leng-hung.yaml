@@ -1,0 +1,42 @@
+id: case-lam-leng-hung
+case_citation: "PP v Lam Leng Hung [2018] 1 SLR 659"
+actual_charge: "406"
+alternative_charge: "409"
+court_distinguished_on: [director_capacity, banker_merchant_factor_broker_attorney_agent_capacity]
+outcome: "CA narrowed the s409 'agent' category — convictions on appeal under s406 simple CBT, not s409 aggravated CBT by agent."
+case_summary: |
+  City Harvest Church leaders were charged with criminal breach of trust
+  over the use of church funds to finance the Crossover Project. The trial
+  court convicted under s409 (CBT by agent). The Court of Appeal held that
+  the prior s409 'agent' wording did not extend to directors / governing-
+  board members of a charity in their fiduciary capacity, narrowing the
+  convictions to s406 simple CBT. (The 2019 amendments later expanded
+  s409 to address this.)
+section: "406"
+description: |
+  A and others were governing-board members of a charity entrusted with
+  the charity's funds in their fiduciary capacity. They used the funds for
+  purposes outside their lawful authority. The trial court treated their
+  fiduciary capacity as that of a "banker, merchant, factor, broker,
+  attorney, or agent" under s409 (in the wording at the time); the Court
+  of Appeal held that interpretation was strained and the convictions
+  belonged under s406 simple CBT.
+parties:
+  A: { role: accused, attribute: charity_governing_board }
+  B: { role: victim, attribute: charity }
+acts:
+  - { actor: A, description: "directs use of charity funds for unauthorised purposes" }
+mental_states:
+  A:
+    intent: "to apply the funds to a use outside the entrustment"
+    knowledge: "the use was outside the lawful purpose"
+circumstances:
+  - "fiduciary capacity as governing-board members, not as a 'banker, merchant, factor, broker, attorney, or agent' under s409 wording at the time"
+  - "post-2019 amendments to s409 expanded the agent category"
+outcomes:
+  - { actor: B, description: "the charity's funds are diverted from authorised use" }
+fact_facts:
+  property_entrusted: true
+  misappropriation: true
+  dishonesty: true
+tags: [source:case-law, chapter:xvii, category:property, doctrine:s406-vs-s409, agent-capacity]

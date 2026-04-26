@@ -1,0 +1,39 @@
+id: case-lee-chez-kee
+case_citation: "Lee Chez Kee v PP [2008] 3 SLR(R) 447"
+actual_charge: "300"
+alternative_charge: "304"
+court_distinguished_on: [intent3]
+outcome: "Convicted of murder under s302 read with s34; CA reviewed the proper test for s34 collateral liability — laying foundation for Daniel Vijay clarification."
+case_summary: |
+  Three accused robbed and killed the deceased in his flat. The Court of
+  Appeal reviewed the proper test for s34 collateral liability —
+  subjective knowledge of likely consequences, foundational case for
+  the later Daniel Vijay clarification of the doctrine.
+section: "300"
+description: |
+  A and accomplices entered B's flat to rob him. B was killed in the
+  course of the robbery — A inflicted the fatal injuries. A intended to
+  inflict the bodily injuries actually inflicted; the injuries were
+  objectively sufficient in the ordinary course of nature to cause death.
+parties:
+  A: { role: accused, attribute: principal_offender }
+  B: { role: victim }
+acts:
+  - { actor: A, description: "enters B's flat to rob" }
+  - { actor: A, description: "inflicts fatal injuries on B" }
+mental_states:
+  A:
+    intent: "to inflict the bodily injuries actually inflicted"
+    knowledge: "the injuries were sufficient in the ordinary course of nature to cause death"
+circumstances:
+  - "joint robbery context"
+  - "A is the principal offender"
+outcomes:
+  - { actor: B, description: "B dies from the injuries" }
+fact_facts:
+  causeDeath: true
+  intent1: false
+  intent2: false
+  intent3: true
+  intent4: false
+tags: [source:case-law, chapter:xvi, category:homicide, doctrine:s300c-virsa-singh, common-intention:s34]

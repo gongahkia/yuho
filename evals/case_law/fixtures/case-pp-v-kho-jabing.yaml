@@ -1,0 +1,43 @@
+id: case-pp-v-kho-jabing
+case_citation: "PP v Kho Jabing [2015] SGCA 1"
+actual_charge: "300"
+alternative_charge: "299"
+court_distinguished_on: [intent3]
+outcome: "Convicted of s300(c) murder; death sentence affirmed."
+case_summary: |
+  Kho Jabing and an accomplice attacked Cao Ruyin during a robbery in Geylang,
+  striking him on the head with a tree branch. Cao died from severe head
+  injuries. The Court of Appeal held that Kho's repeated and forceful blows
+  to the head amounted to intent to inflict the specific bodily injury
+  actually inflicted, that injury being objectively sufficient in the
+  ordinary course of nature to cause death — squarely within s300(c).
+section: "300"
+description: |
+  During a planned robbery, A repeatedly struck B on the head with a tree
+  branch with sufficient force to fracture the skull. B died from the head
+  injuries shortly afterwards. A intended to inflict the specific bodily
+  injury actually inflicted on B; the injury was objectively sufficient in
+  the ordinary course of nature to cause death.
+parties:
+  A: { role: accused }
+  B: { role: victim }
+acts:
+  - { actor: A, description: "strikes B repeatedly on the head with a tree branch" }
+  - { actor: A, description: "inflicts a fatal skull-fracture injury" }
+mental_states:
+  A:
+    intent: "to inflict the specific bodily injury actually inflicted on B"
+    knowledge: "the injury was sufficient in the ordinary course of nature to cause death"
+circumstances:
+  - "the assault was unprovoked and one-sided"
+  - "no Exception 1 grave-and-sudden-provocation applies"
+  - "no Exception 4 sudden-fight applies"
+outcomes:
+  - { actor: B, description: "B dies from severe head injuries" }
+fact_facts:
+  causeDeath: true
+  intent1: false
+  intent2: false
+  intent3: true
+  intent4: false
+tags: [source:case-law, chapter:xvi, category:homicide, doctrine:s300c-virsa-singh]

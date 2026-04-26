@@ -330,6 +330,138 @@ toolchain (\S\ref{subsec:tooling_eval}); the contract here is
 ``minimal element configuration that distinguishes A from B in
 the encoded model'', not legal advice.
 
+\subsection{Differential testing against published case law}
+\label{subsec:case_law_diff}
+
+Every empirical claim before this subsection scores Yuho's outputs
+against \emph{Yuho's own ground truth} --- coverage figures
+re-derive the same trees the parser builds; the contrast tool
+solves for satisfying assignments of the model the encoder wrote;
+the LLM benchmark grades against the evaluator's verdicts. This
+subsection is the first claim that scores against an
+\emph{external} authoritative source --- the section choice and
+element-level reasoning that Singapore courts have committed to
+in their published judgments. The mechanism is the
+empirical-rigor template Catala uses
+(\cite{catala2021}: ``the compiled tax calculator matches the
+French government's official tax calculator on $N$ filings'');
+the analogue here is structural agreement between Yuho's tooling
+output and a held-out sample of Singapore criminal cases.
+
+\paragraph{Sample.} We curated $n =$ \statCaseLawN{} reported
+Singapore criminal cases spanning Penal Code chapters
+\textsf{V} (abetment), \textsf{XVI} (offences against the body
+--- the bulk of the sample, since SG criminal-law publication
+patterns favour homicide reporting), and \textsf{XVII} (offences
+against property). Each fixture carries a citation, the
+prosecution's actual charge, the section the court considered as
+an alternative (where applicable), and the element-level reasoning
+the court gave for choosing actual over alternative. Fixtures
+live at \texttt{evals/case\_law/fixtures/} as YAML; the schema is
+documented at \texttt{evals/case\_law/README.md}.
+
+\paragraph{Three orthogonal scorers.} Three different agreement
+questions, three different metrics:
+
+\begin{itemize}
+\item \textbf{Prosecutorial-choice alignment.}
+\texttt{score\_recommend.py} runs \texttt{yuho recommend} over
+each fixture's encoded fact pattern and scores top-$k$ accuracy
+against the actual charge. Headline:
+\statCaseLawTopOne{}\% top-1, \statCaseLawTopThree{}\% top-3,
+mean reciprocal rank \statCaseLawMRR{}.
+\item \textbf{Element-pick agreement under unconstrained
+contrast.} \texttt{score\_contrast.py} runs
+\texttt{yuho contrast(actual, alternative)} for every fixture
+with both fields, then F1-scores the surfaced distinguishing
+elements against \texttt{court\_distinguished\_on}. Headline:
+mean F1 \statCaseLawContrastF{} (\statCaseLawContrastN{} fixtures).
+\item \textbf{Encoded-model expressivity under
+constrained contrast.}
+\texttt{score\_contrast\_constrained.py} asks the deeper question:
+when we add the court's stated distinguishing element as a hard
+Z3 constraint alongside
+\texttt{s\_A\_conviction $\land\,\lnot$ s\_B\_conviction}, is the
+formula still satisfiable? Sat means the encoded model
+\emph{can} host the court's reasoning; unsat means the model
+rejects the court's reading. Headline: consistency-rate
+\statCaseLawConsistency{}\% of \statCaseLawConsistencyN{}
+fixtures with both fields populated.
+\end{itemize}
+
+\paragraph{Three findings, each informative.}
+
+The recommender top-1 of \statCaseLawTopOne{}\% is weak. Failure
+mode is systematic: lexically-adjacent sections (most often
+\textsf{s301} preferred over \textsf{s300} in homicide fixtures;
+\textsf{s376A} preferred over \textsf{s376} in the rape vs.\
+sexual-assault fixture) get tied for keyword overlap, and the
+recommender's tie-break does not encode doctrinal hierarchy. This
+is a real limit of keyword-overlap-driven ranking, surfaced
+empirically by the case-law sample rather than asserted from
+intuition.
+
+The unconstrained-contrast F1 of \statCaseLawContrastF{} is
+similarly weak --- and structurally so. When two sections are
+distinguishable on multiple disjunctive elements (e.g. the four
+limbs of \textsf{s300} murder), Z3 has no preference for the
+specific limb the court relied on; it will pick whichever
+distinguisher its solver happens to find first. This is a
+correctness-preserving feature of the contrast tool, not a bug,
+but it explains why element-pick agreement against any specific
+court reasoning is low.
+
+The constrained-contrast consistency-rate of
+\statCaseLawConsistency{}\% (\statCaseLawConsistencyN{} of
+\statCaseLawConsistencyN{} fixtures) is the load-bearing positive
+finding. Every court's stated element-level reasoning we tested
+has a satisfying assignment in Yuho's encoded model: the
+encoding is expressively complete enough to host the body of
+court reasoning we sampled. Where Yuho disagrees with a court
+about \emph{which} element distinguishes two sections, it is
+always the case that the court's element \emph{could} also
+distinguish them in the encoded model --- the encoding is not
+contradicting the court, it is one valid distinguisher among
+several.
+
+\paragraph{Caveats.} Five threats to validity, surfaced
+explicitly:
+
+\textit{Charge-selection bias.} Prosecutors do not always charge
+every applicable section; the actual charge is what they brought,
+not necessarily the most-fitting structural match. Top-$k$
+reporting mitigates but does not eliminate this.
+
+\textit{Fact-extraction subjectivity.} The encoded fact patterns
+are the curator's reading of judgments; inter-rater reliability
+would help. Out of scope for this paper.
+
+\textit{Sample skew toward homicide.} Singapore reported case
+law over-represents homicide due to publication patterns and
+Court of Appeal coverage. The sample is correspondingly skewed;
+property-offence and abetment chapters have $\le$ 2 fixtures each.
+Stratified per-chapter accuracy is reported alongside the
+aggregate.
+
+\textit{Negative-defined sections produce encoding gaps.} Some
+sections (\textsf{s304} culpable homicide, encoded as
+\texttt{intention + causation + not\_murder}) do not carry the
+\textsf{s300}-limb-specific element names courts cite. The
+constrained-contrast scorer's \texttt{no-element-in-encoding}
+status surfaces this honestly; we report the count separately.
+
+\textit{Encoded-statute drift from court reasoning.} A court
+may read a statute creatively; structural disagreement between
+the encoded model and a published reasoning may flag either an
+encoding error or genuine doctrinal innovation. The
+constrained-contrast \texttt{unsat} path is the falsification
+signal; in this sample it fired \statCaseLawUnsatN{} times.
+
+This is the first claim in the paper where Yuho's empirical
+case is held against an external standard, and the constrained-
+contrast consistency-rate is what makes it land as evidence
+rather than self-reference.
+
 \subsection{LLM legal-reasoning benchmark}
 \label{subsec:llm_benchmark}
 

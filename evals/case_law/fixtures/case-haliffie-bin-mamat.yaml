@@ -1,0 +1,33 @@
+id: case-haliffie-bin-mamat
+case_citation: "Haliffie bin Mamat v PP [2016] 5 SLR 636"
+actual_charge: "354"
+outcome: "Convicted of s354(1) outraging modesty; CA used the appeal to restate the sentencing framework for s354 offences."
+case_summary: |
+  The accused engaged in non-consensual sexual touching of the victim. The
+  Court of Appeal upheld the s354(1) outraging-modesty conviction and used
+  the case to restate the sentencing framework for s354 — covering
+  intentional touching that impinges on modesty in the objective sense.
+section: "354"
+description: |
+  A non-consensually touched B in a sexual manner. A intended to outrage
+  B's modesty (or knew the touching was likely to outrage modesty). The
+  touching objectively impinged on modesty.
+parties:
+  A: { role: accused }
+  B: { role: victim }
+acts:
+  - { actor: A, description: "non-consensually touches B in a sexual manner" }
+mental_states:
+  A:
+    intent: "to outrage B's modesty"
+    knowledge: "the touching would outrage B's modesty"
+circumstances:
+  - "no consent"
+  - "objective outrage of modesty"
+outcomes:
+  - { actor: B, description: "B's modesty is outraged" }
+fact_facts:
+  intention: true
+  force_or_assault: true
+  modesty_outraged: true
+tags: [source:case-law, chapter:xvi, category:sexual_offence, doctrine:s354-sentencing-framework]

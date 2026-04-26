@@ -1,0 +1,41 @@
+id: case-chia-kee-chen
+case_citation: "Chia Kee Chen v PP [2018] 2 SLR 249"
+actual_charge: "300"
+alternative_charge: "304"
+court_distinguished_on: [intent3]
+outcome: "Convicted of s300(c) murder; sentence enhanced to death on prosecution appeal."
+case_summary: |
+  The accused and accomplices abducted the victim, drove him around in a
+  van, and beat him to death over hours. The Court of Appeal enhanced
+  the sentence on prosecution appeal — sustained brutal beating with intent
+  to inflict the multiple injuries actually inflicted, those injuries
+  being sufficient in the ordinary course of nature to cause death.
+section: "300"
+description: |
+  A and accomplices abducted B and beat B sustainedly for several hours in a
+  van. B died from the cumulative injuries. A intended to inflict the
+  multiple injuries actually inflicted; those injuries were objectively
+  sufficient in the ordinary course of nature to cause death.
+parties:
+  A: { role: accused }
+  B: { role: victim }
+acts:
+  - { actor: A, description: "abducts B" }
+  - { actor: A, description: "beats B sustainedly for several hours" }
+mental_states:
+  A:
+    intent: "to inflict the multiple injuries actually inflicted"
+    knowledge: "the injuries were sufficient in the ordinary course of nature to cause death"
+circumstances:
+  - "sustained, prolonged beating"
+  - "no provocation"
+  - "no Exception applies"
+outcomes:
+  - { actor: B, description: "B dies from cumulative injuries" }
+fact_facts:
+  causeDeath: true
+  intent1: false
+  intent2: false
+  intent3: true
+  intent4: false
+tags: [source:case-law, chapter:xvi, category:homicide, doctrine:s300c-virsa-singh]

@@ -1,0 +1,36 @@
+id: case-tan-joo-cheng
+case_citation: "Tan Joo Cheng v PP [1992] 1 SLR(R) 219"
+actual_charge: "300"
+alternative_charge: "304"
+court_distinguished_on: [intent3]
+outcome: "Convicted of s300(c) murder applying the Virsa Singh-derived test."
+case_summary: |
+  Stabbing case applying the Virsa Singh-derived s300(c) test in the
+  Singapore context: the stab wound was intended, and the wound was
+  objectively sufficient in the ordinary course of nature to cause death.
+section: "300"
+description: |
+  A intentionally stabbed B. The stab wound was sufficient in the ordinary
+  course of nature to cause B's death. A intended to inflict the specific
+  injury that was inflicted. No partial defence.
+parties:
+  A: { role: accused }
+  B: { role: victim }
+acts:
+  - { actor: A, description: "stabs B with intent to inflict the specific wound" }
+mental_states:
+  A:
+    intent: "to inflict the stab wound actually inflicted"
+    knowledge: "the wound was sufficient in the ordinary course of nature to cause death"
+circumstances:
+  - "no partial defence"
+  - "applying Virsa Singh test"
+outcomes:
+  - { actor: B, description: "B dies from the stab wound" }
+fact_facts:
+  causeDeath: true
+  intent1: false
+  intent2: false
+  intent3: true
+  intent4: false
+tags: [source:case-law, chapter:xvi, category:homicide, doctrine:s300c-virsa-singh, historical]

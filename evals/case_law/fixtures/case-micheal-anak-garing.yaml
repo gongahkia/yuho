@@ -1,0 +1,40 @@
+id: case-micheal-anak-garing
+case_citation: "Micheal Anak Garing v PP [2017] 1 SLR 748"
+actual_charge: "300"
+alternative_charge: "304"
+court_distinguished_on: [intent3]
+outcome: "Principal (MAG) convicted of s300(c); co-accused convicted of s304(a) read with s34 on appeal."
+case_summary: |
+  Two East Malaysian accused went on a robbery spree at Kallang, slashing
+  victims with a parang; one victim died. Liability differed between the
+  parang-wielder (the principal) and the co-accused. Applying Daniel Vijay,
+  the co-accused did not subjectively know the principal would inflict
+  s300(c)-grade injury, so collateral murder under s34 was not made out
+  against him.
+section: "300"
+description: |
+  A is the principal offender who wielded a parang and slashed B during a
+  robbery. B died from the slash wounds. A intended to inflict the wounds
+  actually inflicted; the wounds were objectively sufficient in the ordinary
+  course of nature to cause death.
+parties:
+  A: { role: accused, attribute: principal_parang_wielder }
+  B: { role: victim }
+acts:
+  - { actor: A, description: "slashes B with a parang during a robbery" }
+mental_states:
+  A:
+    intent: "to inflict the slash wounds actually inflicted"
+    knowledge: "the wounds were sufficient in the ordinary course of nature to cause death"
+circumstances:
+  - "robbery context"
+  - "accomplice liability not at issue for A — A is the principal offender"
+outcomes:
+  - { actor: B, description: "B dies from slash wounds" }
+fact_facts:
+  causeDeath: true
+  intent1: false
+  intent2: false
+  intent3: true
+  intent4: false
+tags: [source:case-law, chapter:xvi, category:homicide, doctrine:s300c-virsa-singh, common-intention:s34]

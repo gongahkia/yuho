@@ -1,0 +1,40 @@
+id: case-mohammed-ali-johari
+case_citation: "Mohammed Ali bin Johari v PP [2008] 4 SLR(R) 1058"
+actual_charge: "300"
+alternative_charge: "304"
+court_distinguished_on: [intent3]
+outcome: "Convicted of s302 murder under s300(c)."
+case_summary: |
+  The accused inflicted fatal head injuries on his stepdaughter Nonoi by
+  shaking and striking her. The Court of Appeal held that the head injuries
+  were inflicted intentionally and were objectively sufficient in the
+  ordinary course of nature to cause death — squarely s300(c). Diminished
+  responsibility was rejected.
+section: "300"
+description: |
+  A inflicted severe head injuries on his stepdaughter B (a child) by
+  forceful shaking and striking. B died from the head injuries. A intended
+  to inflict the bodily injury actually inflicted; the injury was
+  objectively sufficient in the ordinary course of nature to cause death.
+parties:
+  A: { role: accused, attribute: stepfather }
+  B: { role: victim, attribute: child }
+acts:
+  - { actor: A, description: "violently shakes B" }
+  - { actor: A, description: "strikes B's head causing severe injury" }
+mental_states:
+  A:
+    intent: "to inflict the head injuries actually inflicted"
+    knowledge: "the injuries were sufficient in the ordinary course of nature to cause death"
+circumstances:
+  - "diminished responsibility (Exception 7) rejected"
+  - "no provocation"
+outcomes:
+  - { actor: B, description: "B dies from severe head injuries" }
+fact_facts:
+  causeDeath: true
+  intent1: false
+  intent2: false
+  intent3: true
+  intent4: false
+tags: [source:case-law, chapter:xvi, category:homicide, doctrine:s300c-virsa-singh, child-victim]

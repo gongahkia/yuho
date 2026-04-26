@@ -1,0 +1,41 @@
+id: case-took-leng-how
+case_citation: "Took Leng How v PP [2006] 2 SLR(R) 70"
+actual_charge: "300"
+alternative_charge: "304"
+court_distinguished_on: [intent1]
+outcome: "Convicted of s302 murder; defence of unsoundness of mind under s84 rejected; death sentence affirmed."
+case_summary: |
+  The accused, a vegetable packer, killed eight-year-old Huang Na and disposed
+  of her body in a box at Telok Blangah Hill Park. The principal defence at
+  trial was unsoundness of mind under s84 (obsessive-compulsive disorder). The
+  Court of Appeal held that OCD did not establish the cognitive incapacity
+  required by s84 — the accused knew the nature of his act and that it was
+  wrong. Murder under s300 was made out.
+section: "300"
+description: |
+  A killed B, an eight-year-old child, by suffocation. A then placed B's body
+  in a box and disposed of it at a park. A's psychiatric history included
+  obsessive-compulsive disorder, but A retained the cognitive capacity to know
+  the nature of the act and that it was wrong. A intended to cause B's death.
+parties:
+  A: { role: accused }
+  B: { role: victim, attribute: child }
+acts:
+  - { actor: A, description: "kills B, an eight-year-old, by suffocation" }
+  - { actor: A, description: "disposes of B's body in a box at a public park" }
+mental_states:
+  A:
+    intent: "to cause B's death"
+    knowledge: "the act was wrong"
+circumstances:
+  - "s84 unsoundness of mind defence rejected — no cognitive incapacity"
+  - "OCD diagnosis present but did not establish the s84 standard"
+outcomes:
+  - { actor: B, description: "B dies from asphyxiation" }
+fact_facts:
+  causeDeath: true
+  intent1: true
+  intent2: false
+  intent3: false
+  intent4: false
+tags: [source:case-law, chapter:xvi, category:homicide, doctrine:s300a, defence:s84-rejected]

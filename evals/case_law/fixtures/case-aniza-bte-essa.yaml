@@ -1,0 +1,41 @@
+id: case-aniza-bte-essa
+case_citation: "PP v Aniza bte Essa [2008] 3 SLR(R) 832"
+actual_charge: "109"
+alternative_charge: "300"
+court_distinguished_on: [abets_offence, act_abetted_committed_in_consequence]
+outcome: "Convicted of abetment of culpable homicide not amounting to murder under s304(a) read with s109 (after diminished-responsibility appeal)."
+case_summary: |
+  The accused conspired with her lover to kill her husband for insurance
+  proceeds; the husband was killed. She was charged as the abettor under
+  s109 read with s302. Diminished responsibility (Exception 7) was raised
+  on appeal; abetment liability under s109 tracks the principal offence as
+  modified by the abettor's mental state, so the conviction was reduced
+  to abetment of s304(a) under s109.
+section: "109"
+description: |
+  A conspired with B to kill A's husband C. B carried out the killing in
+  consequence of A's instigation and conspiracy. A is the abettor; B is
+  the principal offender. A is liable under s109 for abetting the offence
+  the principal committed, modified by A's own partial defence of
+  diminished responsibility (Exception 7), reducing to abetment of s304(a).
+parties:
+  A: { role: accused, attribute: abettor_spouse }
+  B: { role: principal_offender, attribute: lover }
+  C: { role: victim, attribute: husband }
+acts:
+  - { actor: A, description: "conspires with B to kill C" }
+  - { actor: B, description: "carries out the killing of C" }
+mental_states:
+  A:
+    intent: "to procure the death of C"
+    psychiatric: "diminished responsibility under Exception 7 accepted on appeal"
+circumstances:
+  - "abetment by conspiracy under s107 / s109"
+  - "Exception 7 (diminished responsibility) succeeded on appeal — reducing principal offence from s302 to s304(a)"
+outcomes:
+  - { actor: C, description: "C dies as a consequence of the conspiracy" }
+fact_facts:
+  abets_offence: true
+  act_abetted_committed_in_consequence: true
+  no_express_provision_for_punishment: true
+tags: [source:case-law, chapter:v, category:abetment, doctrine:s109-abetment, partial-defence:diminished-responsibility]

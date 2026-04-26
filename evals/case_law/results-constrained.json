@@ -1,0 +1,239 @@
+{
+  "n": 22,
+  "n_consistent": 22,
+  "n_unsat": 0,
+  "n_no_encoding": 0,
+  "n_error": 0,
+  "consistency_rate": 1.0,
+  "results": [
+    {
+      "fixture_id": "case-aniza-bte-essa",
+      "actual_charge": "109",
+      "alternative_charge": "300",
+      "court_distinguishing": [
+        "abets_offence",
+        "act_abetted_committed_in_consequence"
+      ],
+      "status": "consistent",
+      "missing_in_encoding": []
+    },
+    {
+      "fixture_id": "case-azlin-bte-arujunah",
+      "actual_charge": "304",
+      "alternative_charge": "300",
+      "court_distinguishing": [
+        "intent1"
+      ],
+      "status": "consistent",
+      "missing_in_encoding": []
+    },
+    {
+      "fixture_id": "case-chee-cheong-hin-constance",
+      "actual_charge": "304",
+      "alternative_charge": "300",
+      "court_distinguishing": [
+        "intent1",
+        "intent3"
+      ],
+      "status": "consistent",
+      "missing_in_encoding": []
+    },
+    {
+      "fixture_id": "case-chia-kee-chen",
+      "actual_charge": "300",
+      "alternative_charge": "304",
+      "court_distinguishing": [
+        "intent3"
+      ],
+      "status": "consistent",
+      "missing_in_encoding": []
+    },
+    {
+      "fixture_id": "case-daniel-vijay-principal",
+      "actual_charge": "300",
+      "alternative_charge": "304",
+      "court_distinguishing": [
+        "intent3"
+      ],
+      "status": "consistent",
+      "missing_in_encoding": []
+    },
+    {
+      "fixture_id": "case-iskandar-rahmat",
+      "actual_charge": "300",
+      "alternative_charge": "304",
+      "court_distinguishing": [
+        "intent1"
+      ],
+      "status": "consistent",
+      "missing_in_encoding": []
+    },
+    {
+      "fixture_id": "case-lam-leng-hung",
+      "actual_charge": "406",
+      "alternative_charge": "409",
+      "court_distinguishing": [
+        "director_capacity",
+        "banker_merchant_factor_broker_attorney_agent_capacity"
+      ],
+      "status": "consistent",
+      "missing_in_encoding": []
+    },
+    {
+      "fixture_id": "case-lee-chez-kee",
+      "actual_charge": "300",
+      "alternative_charge": "304",
+      "court_distinguishing": [
+        "intent3"
+      ],
+      "status": "consistent",
+      "missing_in_encoding": []
+    },
+    {
+      "fixture_id": "case-lim-ghim-peow",
+      "actual_charge": "304",
+      "alternative_charge": "300",
+      "court_distinguishing": [
+        "intent1",
+        "intent3"
+      ],
+      "status": "consistent",
+      "missing_in_encoding": []
+    },
+    {
+      "fixture_id": "case-micheal-anak-garing",
+      "actual_charge": "300",
+      "alternative_charge": "304",
+      "court_distinguishing": [
+        "intent3"
+      ],
+      "status": "consistent",
+      "missing_in_encoding": []
+    },
+    {
+      "fixture_id": "case-mohammed-ali-johari",
+      "actual_charge": "300",
+      "alternative_charge": "304",
+      "court_distinguishing": [
+        "intent3"
+      ],
+      "status": "consistent",
+      "missing_in_encoding": []
+    },
+    {
+      "fixture_id": "case-ong-pang-siew",
+      "actual_charge": "304",
+      "alternative_charge": "300",
+      "court_distinguishing": [
+        "intent1",
+        "intent3"
+      ],
+      "status": "consistent",
+      "missing_in_encoding": []
+    },
+    {
+      "fixture_id": "case-pp-v-kho-jabing",
+      "actual_charge": "300",
+      "alternative_charge": "299",
+      "court_distinguishing": [
+        "intent3"
+      ],
+      "status": "consistent",
+      "missing_in_encoding": []
+    },
+    {
+      "fixture_id": "case-pp-v-lim-poh-lye",
+      "actual_charge": "300",
+      "alternative_charge": "304",
+      "court_distinguishing": [
+        "intent3"
+      ],
+      "status": "consistent",
+      "missing_in_encoding": []
+    },
+    {
+      "fixture_id": "case-pram-nair",
+      "actual_charge": "376",
+      "alternative_charge": "375",
+      "court_distinguishing": [
+        "sexual_penetration_of_vagina_or_anus",
+        "penetrate_vagina"
+      ],
+      "status": "consistent",
+      "missing_in_encoding": []
+    },
+    {
+      "fixture_id": "case-sundarti-supriyanto",
+      "actual_charge": "304",
+      "alternative_charge": "300",
+      "court_distinguishing": [
+        "intent1"
+      ],
+      "status": "consistent",
+      "missing_in_encoding": []
+    },
+    {
+      "fixture_id": "case-tan-chee-wee",
+      "actual_charge": "300",
+      "alternative_charge": "304",
+      "court_distinguishing": [
+        "intent1"
+      ],
+      "status": "consistent",
+      "missing_in_encoding": []
+    },
+    {
+      "fixture_id": "case-tan-cheng-yew",
+      "actual_charge": "409",
+      "alternative_charge": "406",
+      "court_distinguishing": [
+        "banker_merchant_factor_broker_attorney_agent_capacity",
+        "director_capacity"
+      ],
+      "status": "consistent",
+      "missing_in_encoding": []
+    },
+    {
+      "fixture_id": "case-tan-joo-cheng",
+      "actual_charge": "300",
+      "alternative_charge": "304",
+      "court_distinguishing": [
+        "intent3"
+      ],
+      "status": "consistent",
+      "missing_in_encoding": []
+    },
+    {
+      "fixture_id": "case-tan-kheng-ann-pulau-senang",
+      "actual_charge": "300",
+      "alternative_charge": "304",
+      "court_distinguishing": [
+        "intent1"
+      ],
+      "status": "consistent",
+      "missing_in_encoding": []
+    },
+    {
+      "fixture_id": "case-took-leng-how",
+      "actual_charge": "300",
+      "alternative_charge": "304",
+      "court_distinguishing": [
+        "intent1"
+      ],
+      "status": "consistent",
+      "missing_in_encoding": []
+    },
+    {
+      "fixture_id": "case-wang-zhijian",
+      "actual_charge": "300",
+      "alternative_charge": "304",
+      "court_distinguishing": [
+        "intent1"
+      ],
+      "status": "consistent",
+      "missing_in_encoding": []
+    }
+  ],
+  "not_legal_advice": true,
+  "disclaimer": "Consistency-rate measures whether the court's stated element-level reasoning has a satisfying assignment in Yuho's encoded model. A low rate flags either an encoding gap (missing element) or genuine model-vs-court divergence; high rate is evidence the encoding is expressively complete enough to host the court's reasoning."
+}

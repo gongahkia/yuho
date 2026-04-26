@@ -1,0 +1,425 @@
+{
+  "n": 22,
+  "n_with_alternative": 22,
+  "n_contrast_sat": 22,
+  "mean_f1": 0.18787878787878787,
+  "mean_jaccard": 0.14393939393939392,
+  "fixtures": [
+    {
+      "fixture_id": "case-aniza-bte-essa",
+      "actual_charge": "109",
+      "alternative_charge": "300",
+      "yuho_distinguishing": [
+        "abets_offence",
+        "act_abetted_committed_in_consequence",
+        "no_express_provision_for_punishment"
+      ],
+      "court_distinguishing": [
+        "abets_offence",
+        "act_abetted_committed_in_consequence"
+      ],
+      "f1": 0.8,
+      "precision": 0.6666666666666666,
+      "recall": 1.0,
+      "jaccard": 0.6666666666666666,
+      "contrast_status": "ok",
+      "notes": ""
+    },
+    {
+      "fixture_id": "case-azlin-bte-arujunah",
+      "actual_charge": "304",
+      "alternative_charge": "300",
+      "yuho_distinguishing": [
+        "causation",
+        "intention",
+        "not_murder"
+      ],
+      "court_distinguishing": [
+        "intent1"
+      ],
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "jaccard": 0.0,
+      "contrast_status": "ok",
+      "notes": ""
+    },
+    {
+      "fixture_id": "case-chee-cheong-hin-constance",
+      "actual_charge": "304",
+      "alternative_charge": "300",
+      "yuho_distinguishing": [
+        "causation",
+        "intention",
+        "not_murder"
+      ],
+      "court_distinguishing": [
+        "intent1",
+        "intent3"
+      ],
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "jaccard": 0.0,
+      "contrast_status": "ok",
+      "notes": ""
+    },
+    {
+      "fixture_id": "case-chia-kee-chen",
+      "actual_charge": "300",
+      "alternative_charge": "304",
+      "yuho_distinguishing": [
+        "causeDeath",
+        "intent1"
+      ],
+      "court_distinguishing": [
+        "intent3"
+      ],
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "jaccard": 0.0,
+      "contrast_status": "ok",
+      "notes": ""
+    },
+    {
+      "fixture_id": "case-daniel-vijay-principal",
+      "actual_charge": "300",
+      "alternative_charge": "304",
+      "yuho_distinguishing": [
+        "causeDeath",
+        "intent1"
+      ],
+      "court_distinguishing": [
+        "intent3"
+      ],
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "jaccard": 0.0,
+      "contrast_status": "ok",
+      "notes": ""
+    },
+    {
+      "fixture_id": "case-iskandar-rahmat",
+      "actual_charge": "300",
+      "alternative_charge": "304",
+      "yuho_distinguishing": [
+        "causeDeath",
+        "intent1"
+      ],
+      "court_distinguishing": [
+        "intent1"
+      ],
+      "f1": 0.6666666666666666,
+      "precision": 0.5,
+      "recall": 1.0,
+      "jaccard": 0.5,
+      "contrast_status": "ok",
+      "notes": ""
+    },
+    {
+      "fixture_id": "case-lam-leng-hung",
+      "actual_charge": "406",
+      "alternative_charge": "409",
+      "yuho_distinguishing": [
+        "dishonesty",
+        "misappropriation",
+        "property_entrusted"
+      ],
+      "court_distinguishing": [
+        "banker_merchant_factor_broker_attorney_agent_capacity",
+        "director_capacity"
+      ],
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "jaccard": 0.0,
+      "contrast_status": "ok",
+      "notes": ""
+    },
+    {
+      "fixture_id": "case-lee-chez-kee",
+      "actual_charge": "300",
+      "alternative_charge": "304",
+      "yuho_distinguishing": [
+        "causeDeath",
+        "intent1"
+      ],
+      "court_distinguishing": [
+        "intent3"
+      ],
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "jaccard": 0.0,
+      "contrast_status": "ok",
+      "notes": ""
+    },
+    {
+      "fixture_id": "case-lim-ghim-peow",
+      "actual_charge": "304",
+      "alternative_charge": "300",
+      "yuho_distinguishing": [
+        "causation",
+        "intention",
+        "not_murder"
+      ],
+      "court_distinguishing": [
+        "intent1",
+        "intent3"
+      ],
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "jaccard": 0.0,
+      "contrast_status": "ok",
+      "notes": ""
+    },
+    {
+      "fixture_id": "case-micheal-anak-garing",
+      "actual_charge": "300",
+      "alternative_charge": "304",
+      "yuho_distinguishing": [
+        "causeDeath",
+        "intent1"
+      ],
+      "court_distinguishing": [
+        "intent3"
+      ],
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "jaccard": 0.0,
+      "contrast_status": "ok",
+      "notes": ""
+    },
+    {
+      "fixture_id": "case-mohammed-ali-johari",
+      "actual_charge": "300",
+      "alternative_charge": "304",
+      "yuho_distinguishing": [
+        "causeDeath",
+        "intent1"
+      ],
+      "court_distinguishing": [
+        "intent3"
+      ],
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "jaccard": 0.0,
+      "contrast_status": "ok",
+      "notes": ""
+    },
+    {
+      "fixture_id": "case-ong-pang-siew",
+      "actual_charge": "304",
+      "alternative_charge": "300",
+      "yuho_distinguishing": [
+        "causation",
+        "intention",
+        "not_murder"
+      ],
+      "court_distinguishing": [
+        "intent1",
+        "intent3"
+      ],
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "jaccard": 0.0,
+      "contrast_status": "ok",
+      "notes": ""
+    },
+    {
+      "fixture_id": "case-pp-v-kho-jabing",
+      "actual_charge": "300",
+      "alternative_charge": "299",
+      "yuho_distinguishing": [
+        "causeDeath"
+      ],
+      "court_distinguishing": [
+        "intent3"
+      ],
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "jaccard": 0.0,
+      "contrast_status": "ok",
+      "notes": ""
+    },
+    {
+      "fixture_id": "case-pp-v-lim-poh-lye",
+      "actual_charge": "300",
+      "alternative_charge": "304",
+      "yuho_distinguishing": [
+        "causeDeath",
+        "intent1"
+      ],
+      "court_distinguishing": [
+        "intent3"
+      ],
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "jaccard": 0.0,
+      "contrast_status": "ok",
+      "notes": ""
+    },
+    {
+      "fixture_id": "case-pram-nair",
+      "actual_charge": "376",
+      "alternative_charge": "375",
+      "yuho_distinguishing": [
+        "against_person_below_14_in_exploitative_relationship",
+        "against_person_below_14_without_consent",
+        "b_below_14",
+        "causes_man_to_penetrate",
+        "commission_or_facilitation_of_subsection_2",
+        "voluntarily_causes_hurt"
+      ],
+      "court_distinguishing": [
+        "penetrate_vagina",
+        "sexual_penetration_of_vagina_or_anus"
+      ],
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "jaccard": 0.0,
+      "contrast_status": "ok",
+      "notes": ""
+    },
+    {
+      "fixture_id": "case-sundarti-supriyanto",
+      "actual_charge": "304",
+      "alternative_charge": "300",
+      "yuho_distinguishing": [
+        "causation",
+        "intention",
+        "not_murder"
+      ],
+      "court_distinguishing": [
+        "intent1"
+      ],
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "jaccard": 0.0,
+      "contrast_status": "ok",
+      "notes": ""
+    },
+    {
+      "fixture_id": "case-tan-chee-wee",
+      "actual_charge": "300",
+      "alternative_charge": "304",
+      "yuho_distinguishing": [
+        "causeDeath",
+        "intent1"
+      ],
+      "court_distinguishing": [
+        "intent1"
+      ],
+      "f1": 0.6666666666666666,
+      "precision": 0.5,
+      "recall": 1.0,
+      "jaccard": 0.5,
+      "contrast_status": "ok",
+      "notes": ""
+    },
+    {
+      "fixture_id": "case-tan-cheng-yew",
+      "actual_charge": "409",
+      "alternative_charge": "406",
+      "yuho_distinguishing": [
+        "commits_criminal_breach_of_trust",
+        "entrusted_with_property_or_dominion",
+        "professional_capacity_other_than_paragraph_b"
+      ],
+      "court_distinguishing": [
+        "banker_merchant_factor_broker_attorney_agent_capacity",
+        "director_capacity"
+      ],
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "jaccard": 0.0,
+      "contrast_status": "ok",
+      "notes": ""
+    },
+    {
+      "fixture_id": "case-tan-joo-cheng",
+      "actual_charge": "300",
+      "alternative_charge": "304",
+      "yuho_distinguishing": [
+        "causeDeath",
+        "intent1"
+      ],
+      "court_distinguishing": [
+        "intent3"
+      ],
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "jaccard": 0.0,
+      "contrast_status": "ok",
+      "notes": ""
+    },
+    {
+      "fixture_id": "case-tan-kheng-ann-pulau-senang",
+      "actual_charge": "300",
+      "alternative_charge": "304",
+      "yuho_distinguishing": [
+        "causeDeath",
+        "intent1"
+      ],
+      "court_distinguishing": [
+        "intent1"
+      ],
+      "f1": 0.6666666666666666,
+      "precision": 0.5,
+      "recall": 1.0,
+      "jaccard": 0.5,
+      "contrast_status": "ok",
+      "notes": ""
+    },
+    {
+      "fixture_id": "case-took-leng-how",
+      "actual_charge": "300",
+      "alternative_charge": "304",
+      "yuho_distinguishing": [
+        "causeDeath",
+        "intent1"
+      ],
+      "court_distinguishing": [
+        "intent1"
+      ],
+      "f1": 0.6666666666666666,
+      "precision": 0.5,
+      "recall": 1.0,
+      "jaccard": 0.5,
+      "contrast_status": "ok",
+      "notes": ""
+    },
+    {
+      "fixture_id": "case-wang-zhijian",
+      "actual_charge": "300",
+      "alternative_charge": "304",
+      "yuho_distinguishing": [
+        "causeDeath",
+        "intent1"
+      ],
+      "court_distinguishing": [
+        "intent1"
+      ],
+      "f1": 0.6666666666666666,
+      "precision": 0.5,
+      "recall": 1.0,
+      "jaccard": 0.5,
+      "contrast_status": "ok",
+      "notes": ""
+    }
+  ],
+  "not_legal_advice": true,
+  "disclaimer": "F1 measures alignment between Yuho's Z3-derived structural contrast and the court's stated element-level reasoning. Disagreement is informative about the encoded model, not about the court's correctness."
+}

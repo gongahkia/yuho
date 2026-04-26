@@ -1,0 +1,37 @@
+id: case-sundarti-supriyanto
+case_citation: "PP v Sundarti Supriyanto [2004] SGHC 222"
+actual_charge: "304"
+alternative_charge: "300"
+court_distinguished_on: [intent1]
+outcome: "Convicted of s304(a) — Exception 1 (grave and sudden provocation) succeeded after sustained employer abuse."
+case_summary: |
+  A domestic worker killed her employer (and the employer's young child)
+  after sustained physical and psychological abuse. Exception 1 (grave and
+  sudden provocation) was accepted as a partial defence, reducing what
+  would have been s300 to s304(a).
+section: "304"
+description: |
+  A had been subjected to sustained physical and psychological abuse by her
+  employer B over an extended period. A killed B in a moment of loss of
+  self-control caused by the cumulative provocation. Exception 1 (grave
+  and sudden provocation) was accepted; the conviction was reduced from
+  s300 to s304(a).
+parties:
+  A: { role: accused, attribute: domestic_worker }
+  B: { role: victim, attribute: employer }
+acts:
+  - { actor: A, description: "kills B" }
+mental_states:
+  A:
+    intent: "to retaliate after sustained provocation"
+    state: "loss of self-control from cumulative grave and sudden provocation"
+circumstances:
+  - "Exception 1 (grave and sudden provocation) succeeded"
+  - "cumulative employer abuse over extended period"
+outcomes:
+  - { actor: B, description: "B dies from the assault" }
+fact_facts:
+  intention: true
+  causation: true
+  not_murder: true
+tags: [source:case-law, chapter:xvi, category:homicide, doctrine:exception-1, partial-defence:provocation]

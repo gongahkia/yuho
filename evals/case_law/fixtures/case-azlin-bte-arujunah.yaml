@@ -1,0 +1,41 @@
+id: case-azlin-bte-arujunah
+case_citation: "Azlin bte Arujunah v PP [2022] 2 SLR 825"
+actual_charge: "304"
+alternative_charge: "300"
+court_distinguished_on: [intent1]
+outcome: "CA reduced trial conviction from s300(a) to s304(a) — intent to cause death not proved beyond reasonable doubt."
+case_summary: |
+  Parents repeatedly scalded their five-year-old son with hot water; he died
+  from the burns. The Court of Appeal held that the prosecution had not
+  proved s300(a) intent to cause death beyond reasonable doubt — but had
+  proved s299/s304(a) knowledge that the acts were likely to cause death.
+section: "304"
+description: |
+  A and B (parents) repeatedly scalded their five-year-old son C with hot
+  water over a period of time. C died from the cumulative burn injuries.
+  A and B did not specifically intend to cause C's death, but knew that
+  the repeated scalding was likely to cause death.
+parties:
+  A: { role: accused, attribute: parent }
+  B: { role: accused, attribute: parent }
+  C: { role: victim, attribute: child }
+acts:
+  - { actor: A, description: "repeatedly scalds C with hot water" }
+  - { actor: B, description: "repeatedly scalds C with hot water" }
+mental_states:
+  A:
+    intent: "to inflict pain — not to cause death"
+    knowledge: "the repeated scalding was likely to cause death"
+  B:
+    intent: "to inflict pain — not to cause death"
+    knowledge: "the repeated scalding was likely to cause death"
+circumstances:
+  - "s300(a) intent to kill not proved beyond reasonable doubt"
+  - "s299 knowledge limb made out"
+outcomes:
+  - { actor: C, description: "C dies from accumulated burn injuries" }
+fact_facts:
+  intention: false
+  causation: true
+  not_murder: true
+tags: [source:case-law, chapter:xvi, category:homicide, doctrine:s299-knowledge-limb, child-victim]

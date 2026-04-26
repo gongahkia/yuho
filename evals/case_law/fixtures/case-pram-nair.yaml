@@ -1,0 +1,41 @@
+id: case-pram-nair
+case_citation: "PP v Pram Nair [2017] 2 SLR 1015"
+actual_charge: "376"
+alternative_charge: "375"
+court_distinguished_on: [sexual_penetration_of_vagina_or_anus, penetrate_vagina]
+outcome: "Convicted of s376(2) sexual assault by penetration (digital); acquitted of the s375 rape charge for the same incident."
+case_summary: |
+  The accused was charged with raping a heavily intoxicated woman. The
+  Court of Appeal held the rape charge under s375 (which requires penile
+  penetration of the vagina) was not made out beyond reasonable doubt, but
+  the s376 sexual assault by penetration charge (which covers digital
+  penetration) was. The case turned on the mode-of-penetration element
+  distinguishing s375 from s376.
+section: "376"
+description: |
+  A digitally penetrated B's vagina without B's consent. B was heavily
+  intoxicated and incapable of consenting. A knew that B was in no state
+  to consent. The penetration was by digit, not by penis — so the conduct
+  fell under s376 sexual assault by penetration rather than s375 rape.
+parties:
+  A: { role: accused }
+  B: { role: victim }
+acts:
+  - { actor: A, description: "digitally penetrates B's vagina" }
+mental_states:
+  A:
+    intent: "to penetrate B"
+    knowledge: "B was incapable of consent due to intoxication"
+circumstances:
+  - "B was heavily intoxicated"
+  - "no consent"
+  - "penetration was digital, not penile (distinguishing s375 from s376)"
+outcomes:
+  - { actor: B, description: "B is sexually assaulted by penetration" }
+fact_facts:
+  sexual_penetration_of_vagina_or_anus: true
+  causes_man_to_penetrate: false
+  causes_person_to_sexually_penetrate: false
+  without_b_consent: true
+  b_below_14: false
+tags: [source:case-law, chapter:xvi, category:sexual_offence, doctrine:s375-vs-s376-mode-of-penetration]

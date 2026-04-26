@@ -1,0 +1,391 @@
+{
+  "n": 23,
+  "top1_accuracy": 0.30434782608695654,
+  "top3_accuracy": 0.34782608695652173,
+  "top5_accuracy": 0.34782608695652173,
+  "mean_reciprocal_rank": 0.32608695652173914,
+  "per_chapter": {
+    "v": {
+      "n": 1,
+      "top1_accuracy": 1.0,
+      "top3_accuracy": 1.0,
+      "top5_accuracy": 1.0
+    },
+    "xvi": {
+      "n": 20,
+      "top1_accuracy": 0.3,
+      "top3_accuracy": 0.3,
+      "top5_accuracy": 0.3
+    },
+    "xvii": {
+      "n": 2,
+      "top1_accuracy": 0.0,
+      "top3_accuracy": 0.5,
+      "top5_accuracy": 0.5
+    }
+  },
+  "confusion": {
+    "300": {
+      "301": 12,
+      "148": 1
+    },
+    "406": {
+      "409": 1
+    },
+    "376": {
+      "376A": 1
+    },
+    "409": {
+      "408": 1
+    }
+  },
+  "fixtures": [
+    {
+      "fixture_id": "case-aniza-bte-essa",
+      "actual_charge": "109",
+      "predicted_top1": "109",
+      "predicted_top5": [
+        "109",
+        "108B",
+        "112",
+        "113",
+        "114"
+      ],
+      "rank_of_actual": 1,
+      "chapter": "v",
+      "notes": ""
+    },
+    {
+      "fixture_id": "case-azlin-bte-arujunah",
+      "actual_charge": "304",
+      "predicted_top1": "304",
+      "predicted_top5": [
+        "304",
+        "299",
+        "300",
+        "301",
+        "268B"
+      ],
+      "rank_of_actual": 1,
+      "chapter": "xvi",
+      "notes": ""
+    },
+    {
+      "fixture_id": "case-chee-cheong-hin-constance",
+      "actual_charge": "304",
+      "predicted_top1": "304",
+      "predicted_top5": [
+        "304",
+        "299",
+        "301",
+        "300",
+        "511"
+      ],
+      "rank_of_actual": 1,
+      "chapter": "xvi",
+      "notes": ""
+    },
+    {
+      "fixture_id": "case-chia-kee-chen",
+      "actual_charge": "300",
+      "predicted_top1": "301",
+      "predicted_top5": [
+        "301",
+        "321",
+        "322",
+        "323A",
+        "334"
+      ],
+      "rank_of_actual": null,
+      "chapter": "xvi",
+      "notes": ""
+    },
+    {
+      "fixture_id": "case-daniel-vijay-principal",
+      "actual_charge": "300",
+      "predicted_top1": "301",
+      "predicted_top5": [
+        "301",
+        "321",
+        "322",
+        "323A",
+        "325"
+      ],
+      "rank_of_actual": null,
+      "chapter": "xvi",
+      "notes": ""
+    },
+    {
+      "fixture_id": "case-haliffie-bin-mamat",
+      "actual_charge": "354",
+      "predicted_top1": "354",
+      "predicted_top5": [
+        "354",
+        "281",
+        "378",
+        "376F",
+        "376H"
+      ],
+      "rank_of_actual": 1,
+      "chapter": "xvi",
+      "notes": ""
+    },
+    {
+      "fixture_id": "case-iskandar-rahmat",
+      "actual_charge": "300",
+      "predicted_top1": "301",
+      "predicted_top5": [
+        "301",
+        "299",
+        "304",
+        "308",
+        "87"
+      ],
+      "rank_of_actual": null,
+      "chapter": "xvi",
+      "notes": ""
+    },
+    {
+      "fixture_id": "case-lam-leng-hung",
+      "actual_charge": "406",
+      "predicted_top1": "409",
+      "predicted_top5": [
+        "409",
+        "377CB",
+        "453",
+        "79",
+        "137"
+      ],
+      "rank_of_actual": null,
+      "chapter": "xvii",
+      "notes": ""
+    },
+    {
+      "fixture_id": "case-lee-chez-kee",
+      "actual_charge": "300",
+      "predicted_top1": "301",
+      "predicted_top5": [
+        "301",
+        "322",
+        "323A",
+        "325",
+        "87"
+      ],
+      "rank_of_actual": null,
+      "chapter": "xvi",
+      "notes": ""
+    },
+    {
+      "fixture_id": "case-lim-ghim-peow",
+      "actual_charge": "304",
+      "predicted_top1": "304",
+      "predicted_top5": [
+        "304",
+        "299",
+        "301",
+        "300",
+        "511"
+      ],
+      "rank_of_actual": 1,
+      "chapter": "xvi",
+      "notes": ""
+    },
+    {
+      "fixture_id": "case-micheal-anak-garing",
+      "actual_charge": "300",
+      "predicted_top1": "301",
+      "predicted_top5": [
+        "301",
+        "322",
+        "323A",
+        "334A",
+        "335"
+      ],
+      "rank_of_actual": null,
+      "chapter": "xvi",
+      "notes": ""
+    },
+    {
+      "fixture_id": "case-mohammed-ali-johari",
+      "actual_charge": "300",
+      "predicted_top1": "301",
+      "predicted_top5": [
+        "301",
+        "322",
+        "323A",
+        "325",
+        "334A"
+      ],
+      "rank_of_actual": null,
+      "chapter": "xvi",
+      "notes": ""
+    },
+    {
+      "fixture_id": "case-ong-pang-siew",
+      "actual_charge": "304",
+      "predicted_top1": "304",
+      "predicted_top5": [
+        "304",
+        "299",
+        "301",
+        "300",
+        "511"
+      ],
+      "rank_of_actual": 1,
+      "chapter": "xvi",
+      "notes": ""
+    },
+    {
+      "fixture_id": "case-pp-v-kho-jabing",
+      "actual_charge": "300",
+      "predicted_top1": "301",
+      "predicted_top5": [
+        "301",
+        "190",
+        "355",
+        "358",
+        "279"
+      ],
+      "rank_of_actual": null,
+      "chapter": "xvi",
+      "notes": ""
+    },
+    {
+      "fixture_id": "case-pp-v-lim-poh-lye",
+      "actual_charge": "300",
+      "predicted_top1": "301",
+      "predicted_top5": [
+        "301",
+        "322",
+        "323",
+        "323A",
+        "325"
+      ],
+      "rank_of_actual": null,
+      "chapter": "xvi",
+      "notes": ""
+    },
+    {
+      "fixture_id": "case-pram-nair",
+      "actual_charge": "376",
+      "predicted_top1": "376A",
+      "predicted_top5": [
+        "376A",
+        "90",
+        "375",
+        "313",
+        "377BE"
+      ],
+      "rank_of_actual": null,
+      "chapter": "xvi",
+      "notes": ""
+    },
+    {
+      "fixture_id": "case-sundarti-supriyanto",
+      "actual_charge": "304",
+      "predicted_top1": "304",
+      "predicted_top5": [
+        "304",
+        "358",
+        "378",
+        "334",
+        "335"
+      ],
+      "rank_of_actual": 1,
+      "chapter": "xvi",
+      "notes": ""
+    },
+    {
+      "fixture_id": "case-tan-chee-wee",
+      "actual_charge": "300",
+      "predicted_top1": "301",
+      "predicted_top5": [
+        "301",
+        "299",
+        "355",
+        "358",
+        "304"
+      ],
+      "rank_of_actual": null,
+      "chapter": "xvi",
+      "notes": ""
+    },
+    {
+      "fixture_id": "case-tan-cheng-yew",
+      "actual_charge": "409",
+      "predicted_top1": "408",
+      "predicted_top5": [
+        "408",
+        "409",
+        "477A",
+        "464",
+        "156"
+      ],
+      "rank_of_actual": 2,
+      "chapter": "xvii",
+      "notes": ""
+    },
+    {
+      "fixture_id": "case-tan-joo-cheng",
+      "actual_charge": "300",
+      "predicted_top1": "301",
+      "predicted_top5": [
+        "301",
+        "322",
+        "323A",
+        "87",
+        "81"
+      ],
+      "rank_of_actual": null,
+      "chapter": "xvi",
+      "notes": ""
+    },
+    {
+      "fixture_id": "case-tan-kheng-ann-pulau-senang",
+      "actual_charge": "300",
+      "predicted_top1": "148",
+      "predicted_top5": [
+        "148",
+        "301",
+        "308A",
+        "299",
+        "144"
+      ],
+      "rank_of_actual": null,
+      "chapter": "xvi",
+      "notes": ""
+    },
+    {
+      "fixture_id": "case-took-leng-how",
+      "actual_charge": "300",
+      "predicted_top1": "301",
+      "predicted_top5": [
+        "301",
+        "299",
+        "361",
+        "84",
+        "304B"
+      ],
+      "rank_of_actual": null,
+      "chapter": "xvi",
+      "notes": ""
+    },
+    {
+      "fixture_id": "case-wang-zhijian",
+      "actual_charge": "300",
+      "predicted_top1": "301",
+      "predicted_top5": [
+        "301",
+        "158",
+        "304",
+        "308",
+        "504"
+      ],
+      "rank_of_actual": null,
+      "chapter": "xvi",
+      "notes": ""
+    }
+  ],
+  "not_legal_advice": true,
+  "disclaimer": "Top-k agreement measures structural alignment between the encoded library and the section the Singapore prosecution actually brought. It is not a legal-correctness measure: prosecutors do not always charge every applicable section, and the encoded statute may diverge from a court's specific reading."
+}

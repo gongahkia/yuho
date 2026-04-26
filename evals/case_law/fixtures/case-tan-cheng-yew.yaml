@@ -1,0 +1,46 @@
+id: case-tan-cheng-yew
+case_citation: "Tan Cheng Yew v PP [2013] 1 SLR 1095"
+actual_charge: "409"
+alternative_charge: "406"
+court_distinguished_on: [banker_merchant_factor_broker_attorney_agent_capacity, director_capacity]
+outcome: "Convicted of s409 CBT by agent (solicitor capacity) and related s420 cheating."
+case_summary: |
+  A solicitor misappropriated client funds entrusted to him in his
+  professional capacity. The Court of Appeal held that s409 'agent'
+  clearly applied to a solicitor entrusted with client moneys —
+  contrasting later with the narrower City Harvest interpretation which
+  excluded charity-governing-board members under the pre-2019 s409
+  wording.
+section: "409"
+description: |
+  A is a practising solicitor. Clients entrusted A with funds in his
+  professional / agent capacity. A misappropriated those funds for his own
+  purposes. A's fiduciary capacity as a solicitor falls squarely within
+  the s409 'agent' category.
+parties:
+  A: { role: accused, attribute: solicitor }
+  B: { role: victim, attribute: client }
+acts:
+  - { actor: A, description: "receives client moneys in trust" }
+  - { actor: A, description: "uses the moneys for personal benefit outside the entrustment" }
+mental_states:
+  A:
+    intent: "to apply the moneys outside the lawful trust"
+    knowledge: "the moneys were entrusted in fiduciary capacity"
+circumstances:
+  - "professional / 'agent' capacity within s409"
+  - "moneys entrusted in fiduciary capacity"
+outcomes:
+  - { actor: B, description: "B's funds are misappropriated" }
+fact_facts:
+  entrusted_with_property_or_dominion: true
+  banker_merchant_factor_broker_attorney_agent_capacity: true
+  professional_capacity_other_than_paragraph_b: false
+  director_capacity: false
+  officer_capacity: false
+  partner_capacity: false
+  key_executive_capacity: false
+  fiduciary_capacity: true
+  commits_criminal_breach_of_trust: true
+  public_servant_capacity: false
+tags: [source:case-law, chapter:xvii, category:property, doctrine:s409-agent-solicitor]

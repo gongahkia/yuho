@@ -1,0 +1,38 @@
+id: case-lim-ghim-peow
+case_citation: "Lim Ghim Peow v PP [2014] 4 SLR 1287"
+actual_charge: "304"
+alternative_charge: "300"
+court_distinguished_on: [intent1, intent3]
+outcome: "Convicted of s304(a) — Exception 7 (diminished responsibility) succeeded on appeal."
+case_summary: |
+  The accused doused his former lover with petrol and set her on fire; she
+  died. The Court of Appeal accepted that he had been suffering from major
+  depressive disorder which substantially impaired his mental responsibility
+  for his acts, reducing what would otherwise have been a s300 conviction
+  to s304(a) under Exception 7.
+section: "304"
+description: |
+  A poured petrol on B and set B on fire. B died from severe burns. A had
+  been suffering from major depressive disorder which substantially impaired
+  A's mental responsibility at the time of the act. Exception 7 (diminished
+  responsibility) reduced the conviction from s300 to s304(a).
+parties:
+  A: { role: accused }
+  B: { role: victim, attribute: former_partner }
+acts:
+  - { actor: A, description: "douses B in petrol" }
+  - { actor: A, description: "sets B on fire" }
+mental_states:
+  A:
+    intent: "to cause B's death or fatal injury"
+    psychiatric: "major depressive disorder substantially impairing mental responsibility"
+circumstances:
+  - "Exception 7 (diminished responsibility) succeeded"
+  - "s300 limb (a) or (c) would otherwise have been made out"
+outcomes:
+  - { actor: B, description: "B dies from severe burns" }
+fact_facts:
+  intention: true
+  causation: true
+  not_murder: true
+tags: [source:case-law, chapter:xvi, category:homicide, doctrine:exception-7, partial-defence:diminished-responsibility]
