@@ -37,6 +37,197 @@ Akoma Ntoso work) lives in git log + `docs/PHASE_*` notes, not here.
 
 ---
 
+## PhD-rigor hardening (next paper-shaped trench) `[ ]`
+
+This trench is ranked by the rigor-mechanism rubric distilled from
+peer DSLs (Catala POPL'21, eFLINT PLAS'20, Symboleo RE'20, DAPRECO,
+the Defeasible Logic lineage; CompCert, sel4, K, F\* on the
+formal-methods side). The audit found Yuho clears the legal-tech
+bar comfortably (524 SG PC sections > Catala's tax fragment, peers
+DAPRECO's GDPR encoding) but is **two-paper-strong on empirical /
+one-paper-light on formal-semantics**.
+
+**Venue plan:** target legal-tech first (ICAIL, JURIX, *Artificial
+Intelligence and Law*) where the existing empirical case wins, but
+land enough formal-semantics rigor that a formal-methods reviewer
+cannot reject on "no operational semantics pinned" / "no soundness
+claim". Concretely: ship Gap 1 + Gap 2 + Gap 3 as one paper trench;
+hold mechanisation (Gap 5 below) for a second-paper formal-methods
+submission.
+
+### Gap 1 — Pinned operational semantics in the paper `[ ]`
+
+Every comparable system ships inference rules in the body or
+appendix. Yuho's `design.tex` describes the language but doesn't
+formally pin a semantics. Without this, a POPL/PLDI/OOPSLA
+reviewer rejects on the first pass; an ICAIL reviewer notes it as
+a weakness.
+
+- [ ] Write `paper/sections/semantics.tex` (3-5 pages) covering:
+  - Small-step element evaluation: `actus_reus`, `mens_rea`,
+    `circumstance`, plus the `all_of` / `any_of` combinators.
+  - **Catala-style default-logic rules** for prioritised exception
+    precedence — we already cite `catala2021`, the rules transfer
+    directly with the addition of `defeats` edges as overrides.
+  - `apply_scope(sX, facts)` and `is_infringed(sX)` as
+    cross-section composition rules; the lazy-conviction-Bool
+    encoding in the Z3 backend is the operational realisation.
+  - Penalty algebra (`cumulative` / `or_both` / `combo`) as a
+    small algebraic structure with a paper-pinned reduction
+    relation.
+- [ ] Insert into `main.tex` after the design section so the
+      operational-semantics paragraph in `design.tex` cross-refs it.
+- [ ] Two-page summary in the paper body; full inference rules
+      in an appendix to keep the body readable.
+
+### Gap 2 — Soundness theorem for the Z3 transpiler `[ ]`
+
+The CompCert / Catala pattern: prove that the transpiler preserves
+meaning. For Yuho the cleanest target is the Z3 backend, where
+both sides are total functions over the encoded element graph.
+
+- [ ] Statement (informal): for any module $M$ and fact pattern
+      $F$, the `StatuteEvaluator` verdict on $(M, F)$ equals the
+      truth value of `<sX>_conviction` in any model of the Z3
+      encoding satisfying $F$.
+- [ ] Pen-and-paper proof in `paper/sections/semantics.tex` or a
+      sibling `transpiler-correctness.tex`. Structure:
+  - Element-graph evaluation soundness (induction on the element
+    AST).
+  - Exception-precedence soundness (induction on the priority DAG;
+    the `defeats` edges form a DAG by construction, lemma proven).
+  - `apply_scope` / `is_infringed` soundness (the lazy
+    conviction-Bool atom dedupes by name; simulation argument).
+  - Penalty constraints land as range assertions; trivial.
+- [ ] Sanity-check the proof against a fixed set of corner cases
+      via the existing `tests/test_z3_apply_scope.py` shape: every
+      claimed lemma should have a corresponding executable test.
+
+### Gap 3 — External Singapore-counsel L3 audit `[ ]`
+
+L3 is at 524/524 author-stamped; the paper §7 explicitly reserves
+external counsel review. Engaging one Singapore-qualified lawyer
+for a 30-section sample turns the L3 claim from "author-stamped"
+to "audited", which is the rigor analogue of Catala's DGFiP
+collaboration and DAPRECO's external legal-scholar review.
+
+- [ ] Sampling plan: 30 sections drawn across chapters II
+      (offences against state), IV (general exceptions), XVI
+      (offences against the body), XVII (offences against
+      property), XX (offences relating to marriage). 6 per
+      chapter, stratified by complexity (count of `exception`
+      blocks + count of subsections).
+- [ ] Brief the lawyer with: encoded `.yh` source + the
+      controlled-English transpile + the canonical SSO text +
+      Yuho's existing 11-point checklist. Half-day per section is
+      a reasonable budget.
+- [ ] Findings persist as per-section `_L3_FLAG.md` files;
+      `scripts/apply_flag_fix.py` (already shipped) dispatches the
+      fix for each. Re-stamp at `L3_external` so the metadata
+      surface distinguishes from author-stamped.
+- [ ] Paper §7 update: replace "external counsel review pending"
+      with the audit findings (n surveyed / n flagged / n
+      addressed) + a per-chapter breakdown.
+
+### Gap 4 — Differential testing against published case law `[ ]`
+
+Catala's "matches the government tax calculator" is the canonical
+empirical-rigor template. Yuho's analogue is **agreement on a
+held-out case-law sample**: encoded fact pattern → `yuho recommend`
+ranking → did the recommender's top-1 match the section the
+defendant was actually charged with? This is the single
+highest-leverage empirical claim Yuho doesn't yet make.
+
+- [ ] Curate 30 reported Singapore criminal cases with clear
+      single-section charges (no concurrent counts in the sample),
+      across the same chapter spread as Gap 3. LawNet / SLW are
+      the natural sources.
+- [ ] Encode each case's facts as a fixture (reuse the `evals/`
+      fixture schema; new tag `source:case-law`).
+- [ ] Score: `yuho recommend` top-k accuracy against the actual
+      charge. Per-section confusion matrix; per-chapter agreement
+      rate. Report mean reciprocal rank for top-5.
+- [ ] Paper §5 subsection: "Differential testing against case
+      law", with the headline numbers + threats to validity (one
+      reporter / charge selection bias / encoded-statute drift
+      from court reasoning).
+
+### Opportunity A — Cross-jurisdiction comparative DSL `[ ]`
+
+The 1860/1871 Anglo-Indian PC family (Singapore, Malaysia, India,
+Pakistan, Brunei) shares structural shape with divergent amendment
+trajectories. No peer system can run this comparison — Catala is
+French tax only, lam4 is contract fragments, DAPRECO is GDPR only.
+Yuho is uniquely positioned. (Also tracked under Phase 2c
+Direction A; cross-link.)
+
+- [ ] Pick the Indian Penal Code 1860 OR Malaysian Penal Code
+      (Act 574) — whichever has cleaner online text. Scrape via
+      `scripts/scrape_indiacode.py` (new), mirroring the SSO
+      pattern.
+- [ ] Encode at full coverage (511 IPC sections / 511 MPC
+      sections) using the same agent-dispatch shape that Phase D
+      used for the SG PC.
+- [ ] Comparative analysis: SCC overlap, divergent amendment
+      paths, sections renumbered / added / repealed. Single tool
+      (`yuho refs --compare-libraries`) emits the diff report.
+- [ ] **Paper claim:** "Comparative encoded penal codes: shared
+      structure, divergent amendment trajectories." Headline
+      figure: side-by-side SCC overlap diagram + per-chapter
+      divergence chart. Reads as a *second paper* alongside the
+      Yuho DSL paper, not a section.
+
+### Gap 5 — Mechanisation of the Z3-correctness theorem `[ ]` (deferred)
+
+**What "mechanisation" means.** A *pen-and-paper proof* is a
+human-readable proof published in the paper; field reviewers can
+spot errors but the proof isn't machine-checked. A *mechanised
+proof* encodes every step inside a proof assistant (Coq, Lean,
+Isabelle/HOL). A small trusted kernel verifies each inference
+rule, so the trust base shrinks to "the kernel is correct + the
+theorem statement says what we mean". Mechanisation is the
+gold-standard rigor signal at POPL / PLDI / CAV / FM and the
+*differentiator* between "published DSL" and "PhD-thesis-grade
+DSL".
+
+For Yuho specifically, mechanising the **Z3 transpiler
+correctness theorem** (Gap 2) would mean:
+
+- [ ] Encode Yuho's AST + element-graph evaluation in Coq (or
+      Lean — Catala chose Coq, mathlib is in Lean; pick whichever
+      the proof-assistant community around CCLAW prefers).
+- [ ] Define the Z3 encoding as a Coq function — the existing
+      Python `Z3Generator` is the spec.
+- [ ] Prove the soundness theorem: for any module + fact pattern,
+      evaluator-verdict equals the Z3 conviction Bool's truth in
+      every satisfying model.
+- [ ] **Realistic effort:** 3-6 months for a competent Coq user
+      starting from the pen-and-paper proof. Catala's mechanised
+      compilation correctness (a comparable task) was shipped as
+      part of Merigoux's PhD thesis follow-on, not in the POPL'21
+      paper itself.
+- [ ] **Deferred** because: (a) the legal-tech track Yuho targets
+      first doesn't require it; (b) it's a 3-6 month commitment;
+      (c) the pen-and-paper proof in Gap 2 covers the immediate
+      reviewer-defence need. Hold for a second-paper formal-
+      methods submission.
+
+### Sequencing notes
+
+Gap 1 + Gap 2 + Gap 3 + Gap 4 = **one trench**, ~3 months of
+focused work, ships a paper-shaped artefact. Opportunity A is a
+**second-paper trench**, ~6-9 months (the IPC/MPC encoding is the
+long pole). Gap 5 (mechanisation) is the **third-paper / PhD-
+thesis trench**, holding for after the first two land.
+
+The legal-tech-first venue plan means Gap 3 + Gap 4 are
+load-bearing — they're what an ICAIL reviewer counts as the
+empirical case. Gap 1 + Gap 2 are the formal-methods defence
+layer that prevents an ICAIL reviewer (often dual-trained) from
+rejecting on rigor grounds.
+
+---
+
 ## Research paper (LaTeX) `[~]`
 
 arXiv preprint, attributed, acmart `manuscript` mode. Full first draft
