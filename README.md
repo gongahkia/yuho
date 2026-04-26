@@ -85,8 +85,8 @@ covers the same ground in less depth.
 
 | Surface | Capability |
 |---|---|
-| **Grammar** | Tree-sitter, 14 grammar gaps closed, deontic types, Catala-style exception priority, nested penalty combinators |
-| **Transpilers** | JSON · controlled English · LaTeX · Mermaid · Alloy · DOCX |
+| **Grammar** | Tree-sitter, 14 grammar gaps closed, deontic types, Catala-style exception priority, nested penalty combinators, lam4-style `is_infringed` + Catala-style `apply_scope` cross-section predicates |
+| **Transpilers** | JSON · controlled English · LaTeX · Mermaid · Alloy · DOCX · Akoma Ntoso |
 | **Editors** | LSP (hover, inlay hints, completion, code lens, fidelity diagnostics) · VS Code · Word add-in · browser extension · static explorer site |
 | **AI integration** | MCP server (tools, resources, prompts) usable from Claude Desktop / Claude Code / Codex CLI / Cursor |
 | **Verification** | Z3 (exception-priority + cross-section conflict) · Alloy (bounded element-combination enumeration) |

@@ -12,7 +12,10 @@ limitations that we resolved in the parser and four diagnostic-layer
 issues that we resolved by adding fidelity linters. The result is a
 complete, queryable, machine-checkable encoding of a production penal
 code, plus the tooling --- a tree-sitter parser, an immutable Python
-AST, six transpilers, a Z3-and-Alloy verification hookup, a Language
+AST, seven transpilers (including Akoma Ntoso for cross-jurisdictional
+interop), a reference-graph resolver with Tarjan-SCC analysis and the
+lam4-style \texttt{is\_infringed} / Catala-style \texttt{apply\_scope}
+cross-section predicates, a Z3-and-Alloy verification hookup, a Language
 Server, a Model Context Protocol server, and a VS Code extension ---
 that turns the encoding into an executable artefact rather than a
 paper exercise.
@@ -39,23 +42,25 @@ appropriately-shaped grammar dissolves a class of previously-reported
 encoding obstacles, leaving a residue that is tractable at full
 coverage for one statute family.
 
-\paragraph{Future work.} Three concrete strands. First, the
-\textsf{G10} cross-section semantic resolver, which lifts the
-already-parsed \texttt{referencing} / \texttt{subsumes} / \texttt{amends}
-clauses into a real reference graph and unlocks LSP goto-definition,
-the LexScript-borrowed Tarjan-SCC analysis, and the lam4-borrowed
-\texttt{IS\_INFRINGED} predicate. Second, cross-jurisdiction
-generalisation: encoding a 50-section sample of the Indian Penal Code
-to test grammar fit and tooling reuse across the wider Anglo-Indian
-penal-code family. The structural argument and the
-falsification criteria for this exercise are laid out in
-\S\ref{sec:applicability}. Third, deeper precedent integration: lifting
-case-law holding strings into structured constraints that modify
-element burden qualifiers when the matching predicate fires.
-A fourth, more speculative strand is scope composition in the
-Catala~\cite{catala2021} sense, layered on top of Yuho's statute
-blocks rather than replacing them, which would let abetment-style
-sections (s107--s120) wrap arbitrary base offences as functions.
+\paragraph{Future work.} Three concrete strands. The \textsf{G10}
+cross-section resolver landed during the most recent iteration --- the
+LexScript-borrowed Tarjan-SCC analysis (\S\ref{subsec:scc_eval}), the
+lam4-style \texttt{is\_infringed} predicate, and the Catala-style
+\texttt{apply\_scope} composition primitive are all shipped --- so the
+remaining work in this strand is the elaboration of the evaluator-side
+semantics of \texttt{apply\_scope} into a full element-graph executor
+that returns bindings, not just a structural ``does this scope exist''
+predicate. First (still open): cross-jurisdiction generalisation:
+encoding a 50-section sample of the Indian Penal Code to test grammar
+fit and tooling reuse across the wider Anglo-Indian penal-code family.
+The structural argument and the falsification criteria for this
+exercise are laid out in \S\ref{sec:applicability}; the Akoma Ntoso
+transpiler is the on-ramp for any cross-jurisdiction work that wants
+to interoperate with LegalDocML-consuming tooling. Second, deeper
+precedent integration: lifting case-law holding strings into structured
+constraints that modify element burden qualifiers when the matching
+predicate fires. Third, the evaluator-side semantics of
+\texttt{apply\_scope} mentioned above.
 
 \paragraph{Artefact availability.} The Yuho compiler, encoded library,
 and tooling are available under an open-source licence at
