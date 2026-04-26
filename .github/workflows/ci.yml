@@ -109,6 +109,51 @@ jobs:
           path: logs/
           retention-days: 7
 
+  akn-xsd:
+    name: Akoma Ntoso XSD round-trip
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node.js (for tree-sitter CLI)
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install tree-sitter CLI
+        run: npm install -g tree-sitter-cli
+
+      - name: Install xmllint
+        run: sudo apt-get update && sudo apt-get install -y libxml2-utils
+
+      - name: Install Yuho deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ./src/tree-sitter-yuho/bindings/python
+          pip install -e .[dev]
+
+      - name: Round-trip every section through AKN + xmllint --schema
+        run: |
+          python scripts/akn_roundtrip.py --xsd | tee akn-xsd.log
+          # Hard-fail when any section fails XSD validation; the script
+          # already exits non-zero, but pin it explicitly here so the
+          # CI job surfaces the failure even if `tee` masks the rc.
+          grep -q "524/524 validate clean" akn-xsd.log
+
+      - name: Upload AKN XSD log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: akn-xsd-log
+          path: akn-xsd.log
+          retention-days: 7
+
   build:
     name: Build Package
     runs-on: ubuntu-latest
