@@ -126,9 +126,13 @@ class MermaidTranspiler(TranspilerBase, Visitor):
                 self._emit(f"    {exc_out_id}[{self._q(effect)}]")
                 self._emit(f"    {exc_id} -->|{self._q(label)}| {exc_out_id}")
             prev_id = no_exc_id
-        if statute.penalty:
+        all_penalties = []
+        if statute.penalty is not None:
+            all_penalties.append(statute.penalty)
+        all_penalties.extend(getattr(statute, "additional_penalties", ()) or ())
+        for pen in all_penalties:
             penalty_id = self._new_node_id("PENALTY")
-            penalty_text = self._penalty_to_label(statute.penalty)
+            penalty_text = self._penalty_to_label(pen)
             self._emit(f"    {penalty_id}[[{self._q(penalty_text)}]]")
             self._emit(f"    {prev_id} --> {penalty_id}")
             prev_id = penalty_id
@@ -310,7 +314,12 @@ class MermaidTranspiler(TranspilerBase, Visitor):
             return "?"
 
     def _penalty_to_label(self, penalty: nodes.PenaltyNode) -> str:
-        """Convert penalty to label text."""
+        """Convert penalty to label text.
+
+        Honours the G8 / G14 sentinels (``fine := unlimited``,
+        ``caning := unspecified``) and prefixes the combinator name when
+        present so a viewer can tell ``cumulative`` from ``or_both``.
+        """
         parts: List[str] = []
         if penalty.death_penalty:
             parts.append("Death")
@@ -319,11 +328,15 @@ class MermaidTranspiler(TranspilerBase, Visitor):
             parts.append(f"Imprisonment up to {duration}")
         if penalty.fine_max:
             parts.append(f"Fine up to ${penalty.fine_max.amount}")
+        elif getattr(penalty, "fine_unlimited", False):
+            parts.append("Fine (unlimited)")
         if penalty.caning_max:
             if penalty.caning_min:
                 parts.append(f"Caning {penalty.caning_min}-{penalty.caning_max} strokes")
             else:
                 parts.append(f"Caning up to {penalty.caning_max} strokes")
+        elif getattr(penalty, "caning_unspecified", False):
+            parts.append("Caning (unspecified)")
         if penalty.supplementary:
             parts.append(penalty.supplementary.value)
         if getattr(penalty, "sentencing", None):
@@ -333,7 +346,12 @@ class MermaidTranspiler(TranspilerBase, Visitor):
         mandatory_min_fine = getattr(penalty, "mandatory_min_fine", None)
         if mandatory_min_fine is not None:
             parts.append(f"Min fine: ${mandatory_min_fine.amount}")
-        return "; ".join(parts) if parts else "Penalty TBD"
+        body = "; ".join(parts) if parts else "Penalty TBD"
+        combinator = getattr(penalty, "combinator", None)
+        if combinator and combinator != "cumulative":
+            # Default `cumulative` matches the no-combinator case; no need to label.
+            return f"[{combinator}] {body}"
+        return body
 
     def _deontic_prefix(self, element_type: str) -> str:
         """Return prefix for deontic element types."""

@@ -173,10 +173,18 @@ class EnglishTranspiler(TranspilerBase, Visitor):
             self._indent_level -= 1
             self._emit_blank()
 
-        # Penalty
-        if node.penalty:
-            self._visit_penalty(node.penalty)
+        # Penalty (G12 multi-penalty: emit primary + each additional with a numbered header)
+        all_penalties = []
+        if node.penalty is not None:
+            all_penalties.append(node.penalty)
+        all_penalties.extend(getattr(node, "additional_penalties", ()) or ())
+        if len(all_penalties) == 1:
+            self._visit_penalty(all_penalties[0])
             self._emit_blank()
+        elif len(all_penalties) > 1:
+            for i, pen in enumerate(all_penalties, 1):
+                self._visit_penalty(pen, header=f"Penalty ({i}):")
+                self._emit_blank()
 
         # Exceptions
         if node.exceptions:
@@ -250,7 +258,10 @@ class EnglishTranspiler(TranspilerBase, Visitor):
         if node.penalty:
             self._emit("If convicted:")
             self._indent_level += 1
-            self._visit_penalty(node.penalty)
+            all_penalties = [node.penalty] + list(getattr(node, "additional_penalties", ()) or ())
+            for i, pen in enumerate(all_penalties, 1):
+                hdr = "Penalty:" if len(all_penalties) == 1 else f"Penalty ({i}):"
+                self._visit_penalty(pen, header=hdr)
             self._indent_level -= 1
             self._emit_blank()
 
@@ -329,9 +340,14 @@ class EnglishTranspiler(TranspilerBase, Visitor):
                 self._visit_element(member)
         self._indent_level -= 1
 
-    def _visit_penalty(self, node: nodes.PenaltyNode) -> None:
-        """Generate English for penalty."""
-        self._emit("Penalty:")
+    def _visit_penalty(self, node: nodes.PenaltyNode, *, header: str = "Penalty:") -> None:
+        """Generate English for one penalty block.
+
+        ``header`` lets a caller iterate over multiple penalty blocks (the
+        G12 multi-penalty pattern: ``penalty cumulative {…} penalty or_both
+        {…}``) and number them, e.g. ``"Penalty (1):"``.
+        """
+        self._emit(header)
         self._indent_level += 1
 
         parts: List[str] = []
@@ -357,6 +373,9 @@ class EnglishTranspiler(TranspilerBase, Visitor):
             else:
                 max_str = self._money_to_english(node.fine_max)
                 parts.append(f"a fine which may extend to {max_str}")
+        elif getattr(node, "fine_unlimited", False):
+            # G8 sentinel: canonical statute says "with fine" and gives no cap.
+            parts.append("a fine (no statutory maximum specified)")
 
         # Caning
         if node.caning_min is not None:
@@ -366,15 +385,25 @@ class EnglishTranspiler(TranspilerBase, Visitor):
                 parts.append(
                     f"caning with not less than {node.caning_min} and not more than {node.caning_max} strokes"
                 )
+        elif getattr(node, "caning_unspecified", False):
+            # G14 sentinel: canonical statute says "liable to caning" without strokes.
+            parts.append("caning (no stroke count specified)")
 
         # Death penalty
         if node.death_penalty:
             parts.append("death")
 
         # Combine parts
+        combinator = getattr(node, "combinator", None) or "cumulative"
+        join_word = {
+            "alternative": "or with ",
+            "or_both": "or with ",
+            "cumulative": "and with ",
+        }.get(combinator, "or with ")
+        tail = " or with any combination thereof." if combinator == "or_both" else "."
         if len(parts) >= 2:
-            combined = ", or with ".join(parts)
-            self._emit(f"Shall be punished with {combined}, or with any combination thereof.")
+            combined = (", " + join_word).join(parts)
+            self._emit(f"Shall be punished with {combined}{tail}")
         elif len(parts) == 1:
             self._emit(f"Shall be punished with {parts[0]}.")
         else:

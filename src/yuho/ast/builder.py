@@ -1048,6 +1048,7 @@ class ASTBuilder:
         elements: list = []
         temporal_constraints: List[nodes.TemporalConstraintNode] = []
         penalty: Optional[nodes.PenaltyNode] = None
+        additional_penalties: List[nodes.PenaltyNode] = []
         illustrations: List[nodes.IllustrationNode] = []
         exceptions: List[nodes.ExceptionNode] = []
         case_law: List[nodes.CaseLawNode] = []
@@ -1062,7 +1063,13 @@ class ASTBuilder:
                 elements.extend(elems)
                 temporal_constraints.extend(temps)
             elif child.type == "penalty_block":
-                penalty = self._build_penalty_block(child)
+                # G12 multi-penalty pattern: keep the first as the canonical
+                # `penalty`, collect siblings into `additional_penalties`.
+                _p = self._build_penalty_block(child)
+                if penalty is None:
+                    penalty = _p
+                else:
+                    additional_penalties.append(_p)
             elif child.type == "illustration_block":
                 illustrations.append(self._build_illustration(child))
             elif child.type == "exception_block":
@@ -1093,6 +1100,7 @@ class ASTBuilder:
             definitions=tuple(definitions),
             elements=tuple(elements),
             penalty=penalty,
+            additional_penalties=tuple(additional_penalties),
             illustrations=tuple(illustrations),
             exceptions=tuple(exceptions),
             case_law=tuple(case_law),
@@ -1120,6 +1128,7 @@ class ASTBuilder:
         definitions: List[nodes.DefinitionEntry] = []
         elements: list = []
         penalty: Optional[nodes.PenaltyNode] = None
+        additional_penalties: List[nodes.PenaltyNode] = []
         illustrations: List[nodes.IllustrationNode] = []
         exceptions: List[nodes.ExceptionNode] = []
         subsections: List[nodes.SubsectionNode] = []
@@ -1131,7 +1140,11 @@ class ASTBuilder:
                 elems, _temps = self._build_elements_block(child)
                 elements.extend(elems)
             elif child.type == "penalty_block":
-                penalty = self._build_penalty_block(child)
+                _p = self._build_penalty_block(child)
+                if penalty is None:
+                    penalty = _p
+                else:
+                    additional_penalties.append(_p)
             elif child.type == "illustration_block":
                 illustrations.append(self._build_illustration(child))
             elif child.type == "exception_block":
@@ -1145,6 +1158,7 @@ class ASTBuilder:
             definitions=tuple(definitions),
             elements=tuple(elements),
             penalty=penalty,
+            additional_penalties=tuple(additional_penalties),
             illustrations=tuple(illustrations),
             exceptions=tuple(exceptions),
             subsections=tuple(subsections),

@@ -1047,6 +1047,7 @@ class SubsectionNode(ASTNode):
     penalty: Optional[PenaltyNode] = None
     illustrations: Tuple[IllustrationNode, ...] = ()
     exceptions: Tuple[ExceptionNode, ...] = ()
+    additional_penalties: Tuple[PenaltyNode, ...] = ()
     subsections: Tuple["SubsectionNode", ...] = ()           # nested subsections
     doc_comment: Optional[str] = None
 
@@ -1082,6 +1083,13 @@ class StatuteNode(ASTNode):
     exceptions: Tuple[ExceptionNode, ...] = ()
     case_law: Tuple[CaseLawNode, ...] = ()
     subsections: Tuple[SubsectionNode, ...] = ()             # G5
+    # Sibling penalty blocks beyond the first. The G12 multi-penalty pattern
+    # (`penalty cumulative {…} penalty or_both {…}`) is used by ~110 of 524
+    # encoded sections; before this field landed, every block after the first
+    # was silently dropped at AST-build time. ``penalty`` stays the canonical
+    # primary penalty for backwards compatibility; renderers that want the
+    # full picture iterate ``(penalty, *additional_penalties)``.
+    additional_penalties: Tuple[PenaltyNode, ...] = ()
     doc_comment: Optional[str] = None
     jurisdiction: Optional[str] = None
     jurisdiction_meta: Optional[Dict[str, str]] = None
