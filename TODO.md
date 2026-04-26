@@ -312,6 +312,111 @@ All four claimed; each gets its own subsection in the paper.
 - Paper has the four novel-concept subsections drafted and figure-
   ready.
 
+### Phase 2c — Future directions (paper-shaped) `(def)`
+
+Four directions all scoped as **full-corpus, paper-claim**. Sequence
+them — they share infrastructure and the diachronic Phase 2a is a
+prerequisite for one of them. Audience and core-asset constraints
+hold throughout: each must hinge on the encoded library + the DSL
++ the existing Z3/Alloy/MCP surface, and target researchers, law
+students, or legal engineers.
+
+#### Direction A — Cross-jurisdiction PC port
+
+The Indian Penal Code 1860 and the Malaysian Penal Code (Act 574)
+share the 1860/1871 Anglo-Indian lineage with Singapore's PC. Encode
+the IPC (or MPC — pick the one with cleaner online text) at full
+524+-section L1+L2 coverage; keep Yuho's grammar fixed.
+
+- [ ] Run the SSO scrape harness against the equivalent IPC source
+      (India Code or AdvocateKhoj). Land a per-section JSON corpus
+      mirroring `library/penal_code/_raw/`.
+- [ ] Encode every IPC section as `library/indian_penal_code/sNNN/
+      statute.yh`, dispatching agents the same way `apply_flag_fix.py`
+      does for the SG PC.
+- [ ] Comparative graph build: a single tool that constructs SCC +
+      semantic-graph reports across both libraries, surfacing
+      structural divergences (which sections were renumbered, which
+      gained/lost subsumes edges, which exception priorities flipped).
+- [ ] **Paper claim:** "Comparative encoded penal codes: shared
+      structure, divergent amendment trajectories." Headline figure:
+      side-by-side SCC overlap diagram, plus a divergence-over-time
+      chart if Phase 2a is also live.
+
+#### Direction B — Counter-factual edge-case explorer
+
+Builds directly on the `apply_scope`/`is_infringed` Z3 hookup that
+shipped this trench. Given two related sections, ask Z3 for the
+*minimum-distance* fact-set that satisfies one but not the other —
+producing a structured library of edge-case scenarios.
+
+- [ ] `yuho contrast s299 s300` CLI: emits the smallest fact-set
+      satisfying s299 but failing s300 (and vice versa). Powered by
+      `Z3Generator` + the conviction-Bool model.
+- [ ] `yuho narrow-defence s302 s79` CLI: smallest fact-set where
+      private-defence (s79) overrides s302 murder. Walks the
+      exception priority DAG.
+- [ ] Bulk-run across the SG PC pairs from the existing SCC analysis
+      to produce `_corpus/contrast/`, a JSON-backed scenario library
+      of every doctrinally-relevant offence boundary.
+- [ ] **Paper claim:** "Z3-driven scenario synthesis from encoded
+      statutes". Section in evaluation showing how many of the
+      generated edge-cases match published case law.
+
+#### Direction C — LLM legal-reasoning benchmark
+
+Package the encoded library as a graded benchmark for LLMs. Each
+fixture is a fact-pattern + ground-truth answer (which section
+applies, which elements are met, which exception fires). Yuho's
+evaluator already computes the ground truth.
+
+- [ ] Define benchmark schema (`benchmark/schema.json`) and a runner
+      (`benchmark/run.py`) that takes an LLM client + fixtures and
+      produces a per-task accuracy table.
+- [ ] Seed with ~200 fixtures derived from existing
+      `simulator/fixtures/` + `library/penal_code/*/test_statute.yh`
+      companions, filtered by L3 stamp.
+- [ ] Run baseline against Claude / GPT-4-class / open-weights
+      models. Report per-section + per-element-type accuracy.
+- [ ] **Paper claim:** "A statute-grounded benchmark for LLM legal
+      reasoning". Position alongside LegalBench / LawBench but with
+      Yuho's structural ground truth as the differentiator.
+
+#### Direction D — Interactive learn-by-doing legal-ed
+
+Extend the static explorer site (`editors/explorer-site/build/`)
+into a guided learning surface for law students. Each section page
+gains an interactive fact-builder; the elements light up as the
+student supplies fact values; the verdict updates live.
+
+- [ ] Per-section JS fact-builder component: parses the section's
+      element list from the existing JSON corpus, renders boolean /
+      enum / numeric inputs, calls the in-browser evaluator (compile
+      `StatuteEvaluator` to Pyodide or write a tiny TS port).
+- [ ] Worked-example walkthrough per section: takes the canonical
+      illustrations from the `.yh` source, plays them through the
+      fact-builder one step at a time. Mode toggle: "show me how it
+      gets to the answer" vs "let me try myself first".
+- [ ] If Phase 2a lands first: integrate the per-section timeline
+      so a student can replay the same fact pattern against the law
+      as it stood in 1872, 1985, 2008, 2024 — directly visible
+      doctrinal drift.
+- [ ] **Paper claim:** "Interactive structural pedagogy for
+      common-law penal codes". Co-author with a law-school educator
+      who can run a classroom trial; report measured learning
+      outcomes vs textbook control.
+
+#### Sequencing notes
+
+- A and B are independent; either can ship first. C depends on a
+  stable benchmark schema (small) and the existing evaluator.
+- D is the most user-facing and the highest leverage with law
+  students; depends on a Pyodide port (modest) of `StatuteEvaluator`.
+- All four benefit from Phase 2a (diachronic encodings) but none
+  block on it.
+
+---
+
 ### Phase 2b — Vision pivot `(def)`
 
 Only after PC L3 coverage is high and tooling is battle-tested.
