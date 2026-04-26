@@ -155,7 +155,12 @@ class MermaidMindmapTranspiler(TranspilerBase):
         if stat.subsections:
             self._emit(depth + 1, "Subsections")
             for sub in stat.subsections:
-                self._emit(depth + 2, f"({sub.number})")
+                # `sub.number` already contains the surrounding parens
+                # (e.g. "(1)", "(2A)"), so don't wrap again — the
+                # sanitiser would turn `((1))` into `[[1]]` which the
+                # Mermaid mindmap parser rejects as a doubled-bracket
+                # node decorator.
+                self._emit(depth + 2, str(sub.number))
 
     # ------------------------------------------------------------------
     # Element / penalty helpers
