@@ -11,6 +11,15 @@
 7. [Control Structures](#control-structures)
 8. [Functions](#functions)
 9. [Statute Blocks](#statute-blocks)
+   - [Element Groups](#element-groups-andor-relationships)
+   - [Exception Blocks](#exception-blocks)
+   - [Case Law Blocks](#case-law-blocks)
+   - [Extended Penalty](#extended-penalty)
+   - [Penalty combinators (`cumulative` / `alternative` / `or_both`)](#penalty-combinators-cumulative--alternative--or_both)
+   - [Exception priority + `defeats`](#exception-priority--defeats)
+   - [Effective dates, amends, subsumes](#effective-dates-amends-subsumes)
+   - [Subsections](#subsections)
+   - [Cross-section predicates: `is_infringed` and `apply_scope`](#cross-section-predicates-is_infringed-and-apply_scope)
 10. [Annotations](#annotations)
 11. [Legal Tests](#legal-tests)
 12. [Conflict Checks](#conflict-checks)
@@ -135,15 +144,11 @@ Person aPerson := Person {
 aPerson.name // evaluates to "Tan Ah Hock"
 aPerson.age  // evaluates to 20
 
-// --- ENUM-LIKE STRUCTS ---
-// structs without typed fields act as enums
-// variants are accessed via . dot syntax
+// --- ENUMS ---
+// enum is the dedicated keyword for variant-only types.
+// variants are accessed via . dot syntax.
 
-struct Fruit {
-    apple,
-    orange,
-    pear,
-}
+enum Fruit { apple, orange, pear }
 
 Fruit myFruit := Fruit.apple
 
@@ -376,6 +381,105 @@ penalty {
     supplementary := "Mandatory minimum of 6 strokes for repeat offenders";
 }
 ```
+
+### Penalty combinators (`cumulative` / `alternative` / `or_both`)
+
+Penal sections frequently say "imprisonment AND fine" or "imprisonment
+OR fine OR both". Yuho reflects that with named combinators on the
+`penalty` block:
+
+```yh
+penalty cumulative {
+    imprisonment := 0 years .. 7 years;
+    supplementary := "Whoever abducts any person shall be punished with imprisonment for a term which may extend to 7 years";
+}
+
+penalty or_both {
+    fine := unlimited;          // G8 sentinel — canonical text says "with fine" with no cap
+    caning := unspecified;      // G14 sentinel — "liable to caning" without stroke count
+    supplementary := "or with fine, or with caning, or with any combination of such punishments.";
+}
+```
+
+A statute can carry **multiple** `penalty` blocks (the G12 multi-penalty
+pattern); the AST preserves the primary block as `statute.penalty` and
+sibling blocks as `statute.additional_penalties`.
+
+### Exception priority + `defeats`
+
+Exceptions support a `priority` field and a `defeats` clause that names
+another exception this one overrides:
+
+```yh
+statute 94 "Compulsion by threats" {
+    elements { actus_reus act_done := "A person does the act."; }
+
+    exception compulsion_by_threats {
+        "Except for murder ..."
+        "Nothing is an offence."
+    }
+
+    exception explanation_1 {
+        "Explanation 1.—A person who, of his own accord, joins gang-robbers..."
+        priority 2
+        defeats compulsion_by_threats
+    }
+}
+```
+
+The priority DAG is checked at lint time (cycles emit a `G13` error)
+and consumed by the Z3 verifier for prioritised rewriting.
+
+### Effective dates, amends, subsumes
+
+```yh
+// G6: a statute can carry multiple `effective` clauses for the
+// original commencement and each subsequent amendment lineage step.
+statute 302 "Murder" effective 1872-01-01 effective 2012-12-31 subsumes 299 {
+    elements { /* ... */ }
+}
+```
+
+`amends <section>` records which earlier section this one amends;
+`subsumes <section>` records strict subsumption (the parent's elements
+must be a superset of the child's, enforced by the linter).
+
+### Subsections
+
+```yh
+// G5: a statute may carry nested subsection blocks. Each subsection
+// has its own definitions / elements / penalty / illustrations and
+// inherits effective dates from the parent unless overridden.
+statute 511 "Punishment for attempting to commit offences" {
+    subsection (1) {
+        elements { actus_reus attempt := "Attempts to commit any offence..."; }
+    }
+    subsection (2) {
+        elements { actus_reus attempt := "Attempts to cause an offence ..."; }
+    }
+}
+```
+
+### Cross-section predicates: `is_infringed` and `apply_scope`
+
+Two reserved fn-call names lift to dedicated AST nodes:
+
+```yh
+fn check_abetment(string facts) : bool {
+    // lam4-style: "is the named base offence made out?"
+    return is_infringed(s299);
+}
+
+fn evaluate_with_base(string facts) : bool {
+    // Catala-style scope composition: invoke a base offence's element
+    // graph and inspect its bindings.
+    return apply_scope(s299, facts);
+}
+```
+
+`is_infringed` is structural ("does this section exist + are its
+elements satisfied"); `apply_scope` returns the full evaluation
+result so a parent statute can compose with the bindings.
 
 ## Annotations
 
