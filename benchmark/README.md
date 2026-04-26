@@ -60,6 +60,12 @@ python benchmark/run.py --fake
 python benchmark/run.py --model claude-sonnet-4-6
 python benchmark/run.py --model claude-opus-4-7
 
+# Real run against OpenAI (requires OPENAI_API_KEY; org-scoped
+# keys also honour OPENAI_ORGANIZATION and OPENAI_BASE_URL).
+python benchmark/run.py --model gpt-4o
+python benchmark/run.py --model gpt-4o-mini --max-fixtures 30
+python benchmark/run.py --provider openai --model o3-mini
+
 # Cap fixtures for a quick spot-check.
 python benchmark/run.py --max-fixtures 5
 
@@ -69,6 +75,11 @@ python benchmark/run.py --json --out benchmark/results.json
 # Stratified accuracy slices (per chapter / category / difficulty / synth):
 python benchmark/run.py --fake --no-per-fixture
 ```
+
+The provider is inferred from the model id: `claude-*` →
+Anthropic, `gpt-*` / `o1-*` / `o3-*` / `o4-*` / `chatgpt-*` →
+OpenAI. Pass `--provider` to override (useful for OpenAI-wire-
+compatible proxies like Azure, vLLM, or Ollama).
 
 ### Bulk-generating fixtures from the encoded library
 

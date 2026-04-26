@@ -21,8 +21,14 @@ Scoring:
 
 Usage::
 
-    # With Anthropic SDK + ANTHROPIC_API_KEY in env:
+    # Anthropic — needs ANTHROPIC_API_KEY:
     python benchmark/run.py --model claude-sonnet-4-6
+    python benchmark/run.py --model claude-opus-4-7
+
+    # OpenAI — needs OPENAI_API_KEY (org-scoped keys also pick up
+    # OPENAI_ORGANIZATION / OPENAI_BASE_URL automatically):
+    python benchmark/run.py --model gpt-4o
+    python benchmark/run.py --provider openai --model gpt-4o-mini
 
     # Pin a smaller fixture slice:
     python benchmark/run.py --max-fixtures 5
@@ -214,6 +220,52 @@ class AnthropicClient:
         return "".join(
             getattr(block, "text", "") for block in response.content
         ).strip()
+
+
+@dataclass
+class OpenAIClient:
+    """OpenAI Chat Completions client. Requires ``OPENAI_API_KEY`` and
+    the ``openai`` SDK. Honours ``OPENAI_ORGANIZATION`` /
+    ``OPENAI_ORG_ID`` (org-scoped keys) and ``OPENAI_BASE_URL`` (for
+    Azure / proxy / open-weights endpoints that speak the OpenAI
+    wire format)."""
+
+    model: str = "gpt-4o"
+    max_tokens: int = 256
+    temperature: float = 0.0
+
+    def __post_init__(self) -> None:
+        try:
+            import openai  # type: ignore  # noqa: F401
+        except ImportError:
+            raise ImportError(
+                "openai SDK is required for OpenAIClient. "
+                "Install with: pip install openai"
+            )
+        if not os.environ.get("OPENAI_API_KEY"):
+            raise EnvironmentError(
+                "OPENAI_API_KEY is not set; cannot run real LLM scoring"
+            )
+
+    def query(self, prompt: str, *, system: str = "", task_kind: str = "") -> str:
+        import openai  # type: ignore
+        # The OpenAI SDK auto-picks up OPENAI_API_KEY,
+        # OPENAI_ORGANIZATION, and OPENAI_BASE_URL from the env.
+        client = openai.OpenAI()
+        response = client.chat.completions.create(
+            model=self.model,
+            max_tokens=self.max_tokens,
+            temperature=self.temperature,
+            messages=[
+                {"role": "system",
+                 "content": system or "You are a concise legal-reasoning assistant for the Singapore Penal Code 1871. Reply with exactly the requested format and nothing else."},
+                {"role": "user", "content": prompt},
+            ],
+        )
+        choice = response.choices[0] if response.choices else None
+        if choice is None or choice.message is None:
+            return ""
+        return (choice.message.content or "").strip()
 
 
 # =============================================================================
@@ -549,8 +601,14 @@ def main() -> int:
                    help="Override the fixtures directory")
     p.add_argument("--max-fixtures", type=int, default=0,
                    help="Cap number of fixtures (0 = no cap)")
+    p.add_argument("--provider", choices=["anthropic", "openai"],
+                   default=None,
+                   help="LLM provider (default: inferred from --model: "
+                        "claude-* → anthropic, gpt-* / o1-* / o3-* → openai)")
     p.add_argument("--model", default="claude-sonnet-4-6",
-                   help="Anthropic model id (default: claude-sonnet-4-6)")
+                   help="Model id. Anthropic: claude-sonnet-4-6, "
+                        "claude-opus-4-7. OpenAI: gpt-4o, gpt-4o-mini, "
+                        "o1, o3-mini, etc.")
     p.add_argument("--fake", action="store_true",
                    help="Use the deterministic fake client; no API calls")
     p.add_argument("--json", dest="json_out", action="store_true",
@@ -571,8 +629,23 @@ def main() -> int:
     if args.fake:
         client: BenchmarkClient = FakeClient(fixtures=fixtures)
     else:
+        # Provider inference: --provider wins; else look at the model
+        # prefix; else fall back to Anthropic for back-compat with the
+        # original CLI default.
+        provider = args.provider
+        if provider is None:
+            ml = args.model.lower()
+            if ml.startswith("claude"):
+                provider = "anthropic"
+            elif ml.startswith(("gpt", "o1", "o3", "o4", "chatgpt")):
+                provider = "openai"
+            else:
+                provider = "anthropic"
         try:
-            client = AnthropicClient(model=args.model)
+            if provider == "openai":
+                client = OpenAIClient(model=args.model)
+            else:
+                client = AnthropicClient(model=args.model)
         except (ImportError, EnvironmentError) as exc:
             print(f"error: {exc}", file=sys.stderr)
             print(
@@ -590,8 +663,11 @@ def main() -> int:
             file=sys.stderr,
         )
 
-    print(f"Running {len(fixtures)} fixtures through "
-          f"{'FakeClient' if args.fake else f'AnthropicClient({args.model})'}…",
+    if args.fake:
+        client_label = "FakeClient"
+    else:
+        client_label = f"{type(client).__name__}({args.model})"
+    print(f"Running {len(fixtures)} fixtures through {client_label}…",
           file=sys.stderr)
     result = run_benchmark(fixtures, client, progress=_on_progress)
 

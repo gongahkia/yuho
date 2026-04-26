@@ -375,16 +375,19 @@ hand-authored, carrying polarity-negative variants
 edge cases the canonical illustrations skip.
 
 \paragraph{Headline numbers.} The runner is single-file and ships
-two \texttt{BenchmarkClient} implementations (Anthropic SDK and a
-deterministic \texttt{FakeClient} for CI). End-to-end with the
-\texttt{FakeClient}, every fixture scores 100\% on every task ---
-confirming the loader / scorer / report pipeline. Real-LLM
+three \texttt{BenchmarkClient} implementations: the Anthropic SDK,
+the OpenAI SDK (compatible out of the box with org-scoped keys
+and OpenAI-wire-compatible proxies via
+\texttt{OPENAI\_BASE\_URL}), and a deterministic
+\texttt{FakeClient} for CI. End-to-end with the
+\texttt{FakeClient}, every fixture scores 100\% on every task
+--- confirming the loader / scorer / report pipeline. Real-LLM
 baselines against \emph{Claude Sonnet 4.6}, \emph{Claude Opus
-4.7}, and an open-weights reference are deferred from this
-trench's scope; the runner emits the full per-fixture JSON plus
-stratified accuracy slices (per chapter, per category, per
-difficulty), so once the API key lands, the headline numbers
-reduce to one command. We list the stratification axes here as a
+4.7}, \emph{GPT-4o}, and an open-weights reference are deferred
+from this trench's scope; the runner emits the full per-fixture
+JSON plus stratified accuracy slices (per chapter, per category,
+per difficulty, per polarity), so once the API keys land, the
+headline numbers reduce to one command. We list the stratification axes here as a
 contract for the deferred run rather than a measurement, in the
 spirit of the rest of \S\ref{sec:evaluation}: the paper is the
 record of what the toolchain measures, even when the measurement

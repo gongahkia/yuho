@@ -172,3 +172,21 @@ def test_to_dict_includes_stratified_in_json():
     payload = result.to_dict()
     assert "stratified" in payload
     assert isinstance(payload["stratified"], dict)
+
+
+def test_openai_client_errors_cleanly_without_key(monkeypatch):
+    """Without OPENAI_API_KEY (or with the SDK missing), the
+    OpenAIClient surfaces a structured error instead of silently
+    misbehaving."""
+    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+    # The SDK *may* be installed in this venv; either way, the
+    # constructor must raise — ImportError if absent, EnvironmentError
+    # if installed-but-keyless.
+    with pytest.raises((ImportError, EnvironmentError)):
+        bench.OpenAIClient()
+
+
+def test_anthropic_client_errors_cleanly_without_key(monkeypatch):
+    monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+    with pytest.raises((ImportError, EnvironmentError)):
+        bench.AnthropicClient()
