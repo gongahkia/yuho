@@ -102,15 +102,15 @@ subsumed by \textsf{G5} once subsection nesting landed --- the
 the definitions for a long section can be split across subsections
 that are already structurally distinct.
 
-\paragraph{One half-gap.} \textsf{G10} (cross-section reference primitive)
-is on the grammar side a not-a-gap: the parser already accepts
-\texttt{referencing}, \texttt{subsumes}, and \texttt{amends} clauses
-on the statute header. The unfinished work is the \emph{semantic resolver}
-that walks the resulting reference graph to answer questions like
-``which sections extend s415?''. We classify \textsf{G10} as deferred
-in the gap table for that reason; the resolver layer (LSP goto-definition,
-the lam4-style \texttt{IS\_INFRINGED} predicate, Tarjan-SCC structure
-analysis) is partially landed --- see \S\ref{subsec:scc_eval} for the
+\paragraph{From half-gap to fully landed.} \textsf{G10} (cross-section
+reference primitive) is on the grammar side a not-a-gap: the parser
+accepts \texttt{referencing}, \texttt{subsumes}, and \texttt{amends}
+clauses on the statute header. The semantic resolver layer that walks
+the resulting reference graph --- LSP goto-definition, the lam4-style
+\texttt{is\_infringed(sX)} predicate, the Catala-style
+\texttt{apply\_scope(sX, facts)} composition, and Tarjan-SCC structure
+analysis --- is now fully landed across all three execution layers
+(interpreter, lint, Z3 backend). \S\ref{subsec:scc_eval} reports the
 SCC findings on the encoded library.
 
 \subsection{Cross-reference graph structure}
