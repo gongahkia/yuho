@@ -975,6 +975,7 @@ def render_section(rec: Dict[str, Any],
     en = rec.get("transpiled", {}).get("english", "")
     yh = rec.get("encoded", {}).get("yh_source", "")
     mermaid_svg = rec.get("transpiled", {}).get("mermaid_svg") or ""
+    mindmap_svg = rec.get("transpiled", {}).get("mindmap_svg") or ""
 
     refs = rec.get("references", {})
 
@@ -1018,6 +1019,7 @@ def render_section(rec: Dict[str, Any],
                         ("refs-out", "Outgoing references", True),
                         ("refs-in", "Incoming references", True),
                         ("diagram", "Diagram", bool(mermaid_svg)),
+                        ("mindmap", "Mindmap", bool(mindmap_svg)),
                         ("source", "Encoded .yh source", True)]
     toc_items = "".join(
         f'<li><a href="#{aid}">{_esc(label)}</a></li>'
@@ -1103,6 +1105,7 @@ def render_section(rec: Dict[str, Any],
   </table>
 
   {f'<h2 id="diagram">Diagram</h2><div class="diagram">{mermaid_svg}</div>' if mermaid_svg else ""}
+  {f'<h2 id="mindmap">Mindmap</h2><div class="diagram">{mindmap_svg}</div>' if mindmap_svg else ""}
 
   <h2 id="source">Encoded <code>.yh</code> source</h2>
   <pre class="src">{_esc(yh) or "(no encoded source)"}</pre>

@@ -70,6 +70,7 @@ class TranspilerRegistry:
         from yuho.transpile.english_transpiler import EnglishTranspiler
         from yuho.transpile.latex_transpiler import LaTeXTranspiler
         from yuho.transpile.mermaid_transpiler import MermaidTranspiler
+        from yuho.transpile.mermaid_mindmap_transpiler import MermaidMindmapTranspiler
         from yuho.transpile.alloy_transpiler import AlloyTranspiler
         from yuho.transpile.docx_transpiler import DOCXTranspiler
         from yuho.transpile.akomantoso_transpiler import AkomaNtosoTranspiler
@@ -78,6 +79,7 @@ class TranspilerRegistry:
         self._registry[TranspileTarget.ENGLISH] = EnglishTranspiler
         self._registry[TranspileTarget.LATEX] = LaTeXTranspiler
         self._registry[TranspileTarget.MERMAID] = MermaidTranspiler
+        self._registry[TranspileTarget.MINDMAP] = MermaidMindmapTranspiler
         self._registry[TranspileTarget.ALLOY] = AlloyTranspiler
         self._registry[TranspileTarget.DOCX] = DOCXTranspiler
         self._registry[TranspileTarget.AKOMANTOSO] = AkomaNtosoTranspiler

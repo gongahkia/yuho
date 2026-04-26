@@ -13,6 +13,7 @@ from yuho.transpile.base import TranspileTarget, TranspilerBase
 from yuho.transpile.json_transpiler import JSONTranspiler
 from yuho.transpile.english_transpiler import EnglishTranspiler
 from yuho.transpile.mermaid_transpiler import MermaidTranspiler
+from yuho.transpile.mermaid_mindmap_transpiler import MermaidMindmapTranspiler
 from yuho.transpile.alloy_transpiler import AlloyTranspiler
 from yuho.transpile.latex_transpiler import LaTeXTranspiler, compile_to_pdf
 from yuho.transpile.docx_transpiler import DOCXTranspiler
@@ -28,6 +29,7 @@ __all__ = [
     "LaTeXTranspiler",
     "compile_to_pdf",
     "MermaidTranspiler",
+    "MermaidMindmapTranspiler",
     "AlloyTranspiler",
     "DOCXTranspiler",
     "AkomaNtosoTranspiler",

@@ -20,6 +20,7 @@ ALL_TARGETS = [
     "latex",
     "pdf",
     "mermaid",
+    "mindmap",
     "alloy",
     "docx",
     "akomantoso",

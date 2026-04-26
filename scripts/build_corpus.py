@@ -426,6 +426,10 @@ def build_section_record(section_dir: Path, ctx: CorpusBuildContext) -> Dict[str
     english = _transpile(yh_path, "english") if yh_path.exists() else None
     mermaid = _transpile(yh_path, "mermaid") if yh_path.exists() else None
     mermaid_svg = _render_mermaid_svg(mermaid) if not os.environ.get("YUHO_SKIP_MERMAID_SVG") else None
+    # Mindmap is the structural counterpart to the flowchart; both are
+    # routinely useful (flowchart for evaluation flow, mindmap for outline).
+    mindmap = _transpile(yh_path, "mindmap") if yh_path.exists() else None
+    mindmap_svg = _render_mermaid_svg(mindmap) if not os.environ.get("YUHO_SKIP_MERMAID_SVG") else None
 
     # --- References (G10) ---
     refs = _refs_for_section(ctx.reference_graph, section_num)
@@ -469,6 +473,8 @@ def build_section_record(section_dir: Path, ctx: CorpusBuildContext) -> Dict[str
             "english": english,
             "mermaid": mermaid,
             "mermaid_svg": mermaid_svg,
+            "mindmap": mindmap,
+            "mindmap_svg": mindmap_svg,
         },
         "coverage": {
             "L1": cov.get("L1_pass", parse_ok),

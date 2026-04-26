@@ -15,6 +15,7 @@ class TranspileTarget(Enum):
     ENGLISH = auto()
     LATEX = auto()
     MERMAID = auto()
+    MINDMAP = auto()
     ALLOY = auto()
     DOCX = auto()
     AKOMANTOSO = auto()
@@ -30,6 +31,8 @@ class TranspileTarget(Enum):
             "tex": cls.LATEX,
             "mermaid": cls.MERMAID,
             "mmd": cls.MERMAID,
+            "mindmap": cls.MINDMAP,
+            "mermaid-mindmap": cls.MINDMAP,
             "alloy": cls.ALLOY,
             "docx": cls.DOCX,
             "word": cls.DOCX,
@@ -50,6 +53,7 @@ class TranspileTarget(Enum):
             TranspileTarget.ENGLISH: ".txt",
             TranspileTarget.LATEX: ".tex",
             TranspileTarget.MERMAID: ".mmd",
+            TranspileTarget.MINDMAP: ".mmd",
             TranspileTarget.ALLOY: ".als",
             TranspileTarget.DOCX: ".docx",
             TranspileTarget.AKOMANTOSO: ".xml",

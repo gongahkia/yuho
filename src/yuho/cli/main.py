@@ -383,6 +383,8 @@ def ast(
             "latex",
             "pdf",
             "mermaid",
+            "mindmap",
+            "mermaid-mindmap",
             "svg",
             "png",
             "alloy",
