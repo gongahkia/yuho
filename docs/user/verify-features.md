@@ -194,11 +194,28 @@ when you visit Singapore Statutes Online.
 
 ## 6. Static explorer site
 
+Two-step build for the fast path:
+
 ```sh
-python scripts/build_corpus.py                    # corpus + Mermaid SVGs
-python editors/explorer-site/build.py             # static HTML to ./build
+# Step 1: structural corpus rebuild (no SVG rendering — fast, ~30 s).
+python scripts/build_corpus.py --no-mermaid-svg
+
+# Step 2: parallel SVG rendering (mmdc + Chrome via puppeteer).
+# 524 sections * 2 diagrams = 1048 renders, ~10 min at --workers 8.
+# Requires `npm i -g @mermaid-js/mermaid-cli` plus
+# `npx puppeteer browsers install chrome` once on first install.
+python scripts/render_svg_cache.py --workers 8
+
+# Step 3: build the static HTML.
+python editors/explorer-site/build.py
 python -m http.server -d editors/explorer-site/build 8000
 open http://localhost:8000
+```
+
+Single-step (slower) alternative for a one-off rebuild:
+
+```sh
+python scripts/build_corpus.py    # ~2 hours single-threaded
 ```
 
 A browseable per-section index of the entire encoded Penal Code. No
