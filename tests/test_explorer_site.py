@@ -125,6 +125,27 @@ class TestBuiltSite:
         # flags index is no longer rendered.
         assert not (built_site / "flags.html").exists()
 
+    def test_graph_page_present(self, built_site):
+        """The cross-reference graph page should ship by default."""
+        assert (built_site / "graph.html").exists()
+        assert (built_site / "static" / "graph.json").exists()
+        assert (built_site / "static" / "graph.js").exists()
+
+    def test_graph_json_has_node_and_edge_arrays(self, built_site):
+        import json as _json
+        data = _json.loads((built_site / "static" / "graph.json").read_text())
+        assert isinstance(data.get("nodes"), list)
+        assert isinstance(data.get("edges"), list)
+        # When the library is present we expect a non-trivial graph.
+        if data.get("nodes"):
+            assert len(data["nodes"]) > 1
+            assert all("kind" in e for e in data["edges"])
+
+    def test_graph_html_links_cytoscape(self, built_site):
+        html = (built_site / "graph.html").read_text()
+        assert "cytoscape" in html.lower()
+        assert "graph-canvas" in html
+
     def test_static_assets_present(self, built_site):
         for name in ("style.css", "search.js", "index.json", "search-index.json"):
             assert (built_site / "static" / name).exists(), f"missing static/{name}"

@@ -215,6 +215,31 @@ h2:first-child { margin-top: 0; }
   .about-hero { flex-direction: column; text-align: center; }
 }
 
+/* Cross-reference graph page. */
+.graph-controls {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin: 0.6rem 0;
+  flex-wrap: wrap;
+}
+.graph-controls input[type="search"] {
+  flex-grow: 1;
+  min-width: 14rem;
+  padding: 0.45rem 0.7rem;
+  border: 1px solid var(--c-border);
+  border-radius: 4px;
+  font: inherit;
+}
+#graph-canvas {
+  width: 100%;
+  height: 70vh;
+  min-height: 30rem;
+  border: 1px solid var(--c-border);
+  border-radius: 4px;
+  background: var(--c-row-alt);
+}
+
 .badge {
   display: inline-block;
   font: 600 0.7em/1.2 ui-monospace, monospace;
@@ -481,6 +506,133 @@ footer.site {
 """
 
 
+_GRAPH_JS = r"""
+// Reference-graph page: load static/graph.json and render via cytoscape.
+(function () {
+  const canvas = document.getElementById('graph-canvas');
+  if (!canvas || typeof cytoscape !== 'function') return;
+
+  const filterInput = document.getElementById('graph-filter');
+  const hideImplicit = document.getElementById('hide-implicit');
+
+  fetch('static/graph.json')
+    .then(r => r.json())
+    .then(data => boot(data))
+    .catch(err => {
+      canvas.innerHTML = '<p class="muted" style="padding:2rem">' +
+        'Failed to load graph data: ' + (err && err.message || err) + '</p>';
+    });
+
+  function boot(data) {
+    const elements = [];
+    for (const id of (data.nodes || [])) {
+      elements.push({
+        data: { id: 's' + id, label: 's' + id, sectionId: id },
+      });
+    }
+    for (const e of (data.edges || [])) {
+      elements.push({
+        data: {
+          id: 'e_' + e.src + '_' + e.dst + '_' + e.kind,
+          source: 's' + e.src,
+          target: 's' + e.dst,
+          kind: e.kind,
+        },
+      });
+    }
+    const cy = cytoscape({
+      container: canvas,
+      elements: elements,
+      wheelSensitivity: 0.2,
+      style: [
+        {
+          selector: 'node',
+          style: {
+            'background-color': '#8C1313',
+            'color': '#ffffff',
+            'label': 'data(label)',
+            'font-size': '8px',
+            'text-valign': 'center',
+            'text-halign': 'center',
+            'width': 18,
+            'height': 18,
+            'overlay-padding': 4,
+          },
+        },
+        {
+          selector: 'node:selected',
+          style: { 'background-color': '#0066CC', 'border-width': 2, 'border-color': '#003366' },
+        },
+        {
+          selector: 'node.dim',
+          style: { 'opacity': 0.15 },
+        },
+        {
+          selector: 'edge',
+          style: {
+            'curve-style': 'bezier',
+            'target-arrow-shape': 'triangle',
+            'arrow-scale': 0.6,
+            'width': 1,
+            'opacity': 0.55,
+          },
+        },
+        {
+          selector: 'edge[kind = "subsumes"]',
+          style: { 'line-color': '#0066CC', 'target-arrow-color': '#0066CC' },
+        },
+        {
+          selector: 'edge[kind = "amends"]',
+          style: { 'line-color': '#1B5045', 'target-arrow-color': '#1B5045' },
+        },
+        {
+          selector: 'edge[kind = "implicit"]',
+          style: { 'line-color': '#8C8C8C', 'target-arrow-color': '#8C8C8C', 'line-style': 'dashed' },
+        },
+        {
+          selector: 'edge.hidden',
+          style: { 'display': 'none' },
+        },
+      ],
+      layout: {
+        name: 'cose',
+        animate: false,
+        nodeRepulsion: 5000,
+        idealEdgeLength: 60,
+        edgeElasticity: 100,
+      },
+    });
+
+    cy.on('tap', 'node', evt => {
+      const id = evt.target.data('sectionId');
+      if (id) window.location.href = 's/' + id + '.html';
+    });
+
+    if (hideImplicit) {
+      hideImplicit.addEventListener('change', () => {
+        const on = hideImplicit.checked;
+        cy.edges('[kind = "implicit"]').toggleClass('hidden', on);
+      });
+    }
+
+    if (filterInput) {
+      filterInput.addEventListener('input', () => {
+        const q = filterInput.value.trim().toLowerCase();
+        if (!q) {
+          cy.nodes().removeClass('dim');
+          return;
+        }
+        cy.nodes().forEach(n => {
+          const matches = n.data('sectionId').toLowerCase().includes(q);
+          n.toggleClass('dim', !matches);
+        });
+      });
+    }
+  }
+})();
+"""
+
+
 _SEARCH_JS = r"""
 // Client-side search over title + body. Loads search-index.json (one big
 // blob with title/summary/english/raw concatenated per section) and does
@@ -662,6 +814,7 @@ def _page(title: str, body: str, *, active_nav: str = "") -> str:
   <nav aria-label="Primary">
     {nav_link("index", "Index", "/index.html")}
     {nav_link("coverage", "Coverage", "/coverage.html")}
+    {nav_link("graph", "Graph", "/graph.html")}
     {nav_link("about", "About", "/about.html")}
     <a href="https://github.com/gongahkia/yuho">GitHub ↗</a>
   </nav>
@@ -767,6 +920,45 @@ def render_coverage(index: Dict[str, Any]) -> str:
     return _page("Yuho — Coverage dashboard", body, active_nav="coverage")
 
 
+def render_graph(graph_data: Dict[str, Any]) -> str:
+    """Static reference-graph page with cytoscape.js client-side render.
+
+    Reads ``static/graph.json`` (emitted at build time from the same
+    :class:`yuho.library.reference_graph.ReferenceGraph` the CLI's
+    ``yuho refs --scc`` consumes) and lays out a directed graph of all
+    cross-section references. Nodes link back to per-section pages so
+    the page acts as a navigable knowledge-graph view.
+    """
+    n_nodes = len(graph_data.get("nodes", []))
+    n_edges = len(graph_data.get("edges", []))
+    body = f"""
+<h2>Cross-section reference graph</h2>
+<p class="muted">
+  {n_nodes} sections · {n_edges} edges
+  ({graph_data.get('stats', {}).get('n_subsumes', 0)} subsumes,
+   {graph_data.get('stats', {}).get('n_amends', 0)} amends,
+   {graph_data.get('stats', {}).get('n_implicit', 0)} implicit).
+  Drag to pan, scroll to zoom, click a section to open its page.
+  Coloured edges: <span style="color:#0066CC">blue=subsumes</span>,
+  <span style="color:#1B5045">teal=amends</span>,
+  <span style="color:#8C8C8C">grey=implicit</span>.
+</p>
+
+<div id="graph-controls" class="graph-controls">
+  <input type="search" id="graph-filter" placeholder="Highlight sections by number..." aria-controls="graph-canvas">
+  <label class="muted">
+    <input type="checkbox" id="hide-implicit"> hide implicit edges
+  </label>
+  <a class="muted" href="/static/graph.json">graph.json</a>
+</div>
+<div id="graph-canvas" role="img" aria-label="Cross-section reference graph"></div>
+
+<script src="https://unpkg.com/cytoscape@3.30.2/dist/cytoscape.min.js"></script>
+<script src="/static/graph.js" defer></script>
+"""
+    return _page("Yuho — Cross-reference graph", body, active_nav="graph")
+
+
 def render_404() -> str:
     body = """
 <h2>404 — section not found</h2>
@@ -788,7 +980,7 @@ def render_sitemap(index: Dict[str, Any], base_url: str) -> str:
     base = base_url.rstrip("/")
     today = _dt.date.today().isoformat()
     urls = [f"{base}/index.html", f"{base}/coverage.html",
-            f"{base}/about.html"]
+            f"{base}/graph.html", f"{base}/about.html"]
     urls.extend(f"{base}/s/{r['number']}.html" for r in index["sections"])
     urls.extend(f"{base}/explore/{r['number']}.html" for r in index["sections"])
     entries = "".join(
@@ -1181,6 +1373,20 @@ def main() -> int:
     # Top-level pages
     (BUILD / "index.html").write_text(render_index(index))
     (BUILD / "coverage.html").write_text(render_coverage(index))
+
+    # Reference graph: build once, render the page + ship a JSON dump.
+    try:
+        from yuho.library.reference_graph import build_reference_graph
+        graph = build_reference_graph(REPO / "library" / "penal_code")
+        graph_dict = graph.to_dict()
+    except Exception as exc:
+        # Don't fail the whole site build if the library isn't present;
+        # emit a stub graph and a placeholder page.
+        graph_dict = {"nodes": [], "edges": [], "stats": {}, "_error": str(exc)}
+    (STATIC / "graph.json").write_text(json.dumps(graph_dict, separators=(",", ":")))
+    (STATIC / "graph.js").write_text(_GRAPH_JS)
+    (BUILD / "graph.html").write_text(render_graph(graph_dict))
+
     (BUILD / "about.html").write_text(render_about())
     (BUILD / "404.html").write_text(render_404())
     (BUILD / "sitemap.xml").write_text(render_sitemap(index, args.base_url))
