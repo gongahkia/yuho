@@ -41,11 +41,16 @@ Lemma 6.4 (exception correspondence) + composed corollary
 4.10.0. Paper §6.6 documents the boundary; §11 Limitations carries
 the partial-mechanisation caveat.
 
-Open follow-ups (deferred to v2):
+v2 shipped (2026-04-27): Lemma 6.3 (element-graph correspondence)
+fully mechanised in `mechanisation/Yuho/Graph.lean` via
+well-founded recursion on `sizeOf` (not the predicted Catala-style
+list-folding bisimulation; closure took ~half a person-day, well
+under the ~2–3 person-month estimate). Composed corollary
+`full_conviction_correspondence` lives in `Graph.lean`. Smoke test
+on s299 in `Tests/Smoke.lean`.
 
-- [ ] Mechanise Lemma 6.3 (element-graph correspondence) — the
-      structural twin of Catala's bisimulation lemma; ~2–3
-      person-months.
+Open follow-ups (deferred to v3):
+
 - [ ] Mechanise Lemma 6.5 (penalty correspondence) — Yuho-specific,
       requires lifting range-arithmetic into Lean; ~2 person-months.
 - [ ] Mechanise the cross-section composition step of Theorem 6.1
