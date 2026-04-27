@@ -18,9 +18,12 @@ semantics + soundness theorem with 5 lemmas + 8 sanity-witness tests) ·
 (6.2 + 6.3 + 6.4 + 6.4' cross-section + 6.5 penalty) ·
 §7.8 case-law differential testing (n=38, three scorers; top-1 44.7%,
 MRR 0.461, contrast F1 0.239, constrained-contrast consistency 100%) ·
-§7.6 LLM benchmark with full 205-fixture GPT-4o-mini + GPT-4o cross-
-model baselines + 3-way prompt-variant comparison (baseline / polarity /
-polarity-soft; polarity-soft is near-Pareto on gpt-4o-mini) · Direction B
+§7.6 LLM benchmark with full 205-fixture GPT-4o-mini + GPT-4o + o3-mini
+cross-model baselines + 4-way prompt-variant comparison (baseline /
+polarity / polarity-soft / polarity-conditional; polarity-conditional
+is the only Pareto-improving variant on gpt-4o-mini, T1 48.8% / T2
+exact 37.1% / F1 0.699; o3-mini reproduces the polarity-negative
+collapse despite reasoning-token spend) · Direction B
 defeats-edge coverage at 1253 edges across 147 sections (28% of corpus,
 22 distinct standalone general defences spanning every Chapter IV
 affirmative defence the SG PC carries (only s79A and s90, which are
@@ -189,24 +192,24 @@ audit:
    path encouraging over-exclusion, not from the priming itself.
    §7.6 now a 3-way table.
 
-Open follow-ups (deferred):
-
-- [ ] **Conditional polarity prompting.** Route polarity-
-      negative scenarios through the v2 prompt and positive-case
-      scenarios through v1 — but this requires fixture knowledge
-      at inference time, which the model doesn't have. Could be
-      approximated with a cheap pre-classifier that decides
-      whether to invoke the priming prompt; experimental.
+v4 shipped: **conditional polarity prompting** as
+`--prompt-variant polarity-conditional`. A cheap regex pre-
+classifier on scenario null-cues routes each fixture between
+the baseline and polarity-soft prompts. Headline n=205 numbers
+on gpt-4o-mini: T1 48.8% / T2 exact 37.1% / F1 0.699 / T3 93.7%
+— the only **Pareto-improving variant** in the §7.6 paired-
+comparison table. Macros wired through `main.tex` /
+`main_smoke.tex` as `\statBenchmarkLlmCond*`.
 
 ### Additional model baselines (OpenAI only)
 
-User has an OpenAI org key but not Anthropic. GPT-4o-mini and
-GPT-4o full-corpus baselines are shipped (see iterative-history
-entries #5 and #7). Remaining:
-
-- [ ] **o1-mini** or **o3-mini** if the user wants to test
-      reasoning-model performance — a real apples-to-apples for
-      structural reasoning.
+GPT-4o-mini, GPT-4o, and o3-mini full-corpus baselines all
+shipped. o3-mini headline (commit `3e1e09a7`): T1 42.4% / T2
+exact 31.2% / F1 0.676 / T3 84.4%, polarity-negative T2 F1
+0.052. Headline finding: the polarity-negative collapse
+reproduces on o3-mini despite reasoning-token spend — the
+failure mode is not addressed by hidden CoT, only by the
+prompt-level conditional intervention above.
 
 ---
 
