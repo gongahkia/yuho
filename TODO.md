@@ -19,7 +19,8 @@ semantics + soundness theorem with 5 lemmas + 8 sanity-witness tests) ·
 benchmark with full 205-fixture GPT-4o-mini + GPT-4o cross-model
 baselines + 3-way prompt-variant comparison (baseline / polarity /
 polarity-soft; polarity-soft is near-Pareto on gpt-4o-mini) · Direction B
-defeats-edge coverage at 386 edges across 146 sections (28% of corpus,
+defeats-edge coverage at 459 edges across 147 sections (28% of corpus,
+9 distinct general defences: s79/s80/s81/s84/s85/s86/s95/s96/s100,
 spanning homicide, hurt, property, sexual offences, kidnapping,
 mischief, forgery, abetment, defamation, attempt) · 32-page smoke PDF ·
 `make paper-reproduce` end-to-end including Lean kernel-check.**
@@ -236,17 +237,21 @@ fixture-tested. Open work:
 
 ## Direction B — General-defence `defeats` edges (full coverage) `[~]`
 
-v2 ships **386 edges across 146 sections** (28% of the 524-section
-corpus). Per-defence breakdown:
+v2 ships **459 edges across 147 sections** (28% of the 524-section
+corpus) using **9 distinct Chapter IV general defences**. Per-defence
+breakdown:
 
 | Defence | Sections covered |
 |---|---|
 | s79 (mistake of fact) | 146 |
-| s80 (accident in lawful act) | 52 |
 | s84 (unsoundness of mind) | 143 |
+| s80 (accident in lawful act) | 52 |
 | s96 (private defence) | 31 |
+| s85 (intoxication when a defence) | 29 |
+| s86 (effect of intoxication when established) | 29 |
 | s100 (deadly-assault private defence) | 12 |
-| s81 (greater-harm avoidance, v0 only) | 2 |
+| s81 (greater-harm avoidance / necessity) | 11 |
+| s95 (act causing slight harm / de minimis) | 6 |
 
 Cluster-level coverage:
 
@@ -278,22 +283,28 @@ Edges deployed via the idempotent
 - [x] **s96 private defence onto homicide + hurt clusters.** 31
       sections (the doctrinally relevant range; s100 deadly-assault
       sub-edge present on the homicide cluster only).
+- [x] **s85, s86 intoxication onto specific-intent offences.**
+      29 sections covered (homicide-with-intent, theft, robbery,
+      CMA/CBT, cheating, forgery, abetment of specific-intent
+      offences). Strict-liability and recklessness-based offences
+      excluded by design.
+- [x] **s95 trifling-harm onto hurt-family offences.** 6 sections
+      covered (s319-s324). De minimis defence.
+- [x] **s81 (necessity / greater-harm avoidance)** onto property
+      + mischief clusters. 11 sections covered (theft, mischief
+      variants).
 
 Open follow-ups:
 
-- [ ] **s85, s86 intoxication onto specific-intent offences.**
-      Narrow but well-established; ~30 offences.
-- [ ] **s95 trifling-harm onto hurt-family offences.** Narrow but
-      doctrinally clean; ~5 offences.
-- [ ] **s81 (act likely to cause harm but done to prevent other
-      harm)** onto property + mischief clusters. The v0 sample
-      carries this on s323 / s378; consider expanding.
-- [ ] Coverage of ss97-106 (the rest of the private-defence
-      family — body, property, deadly-assault-against-property,
-      reasonable-fear, third-party, etc.).
-- [ ] Re-run `yuho narrow-defence` against the case-law fixtures
-      and report uplift in matched-element F1 against the court's
-      stated reasoning.
+- [ ] **ss97-s106 private-defence family.** The remaining sub-
+      sections of Chapter IV's private-defence regime (body,
+      property, deadly-assault-against-property, reasonable-
+      fear, third-party, etc.). Each has narrower doctrinal
+      reach than s96/s100 and warrants per-section review
+      before bulk-adding.
+- [ ] **Empirical uplift benchmark.** Re-run `yuho narrow-defence`
+      against the case-law fixtures and report uplift in matched-
+      element F1 against the court's stated reasoning.
 
 ---
 

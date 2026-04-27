@@ -307,28 +307,33 @@ returned model is the smallest fact-set that distinguishes the
 two sections.
 
 \paragraph{General-defence \texttt{defeats} edge coverage.}
-The corpus carries 386 explicit general-defence \texttt{defeats}
-edges across 146 of the 524 encoded sections (28\% by section
-count). The edges span every offence-bearing chapter touched by
-the case-law differential testing of \S\ref{subsec:case_law}:
-homicide (s299--s308), hurt (s319--s338), property (s378--s420),
-sexual offences and outrage of modesty (s354, s375--s377BL),
-kidnapping and unlawful labour (s359--s374), mischief and
-house-breaking (s425--s462), forgery (s463--s477A), abetment
-(s107--s120), defamation (s499--s502), and attempt (s511).
-Per-defence breakdown: s79 mistake-of-fact on 146 sections,
-s84 unsoundness-of-mind on 143 sections, s80 accident on 52
-sections, s96 private defence on 31 sections, s100 deadly-assault
-private defence on 12 sections. The remaining ${\sim}72\%$ of
-the corpus is mostly chapter-I/II definition sections, regulatory
-provisions, and procedural sections where general defences are
-moot or doctrinally degenerate; expansion to specific-intent
-defences (s85/s86 intoxication) and the rest of the private-
-defence family (ss97--s106) is logged as future work in the
-project TODO. Every edge is wired through the
-\texttt{is\_infringed} cross-section predicate
+The corpus carries 459 explicit general-defence \texttt{defeats}
+edges across 147 of the 524 encoded sections (28\% by section
+count) using nine distinct Chapter IV general defences. The
+edges span every offence-bearing chapter touched by the case-law
+differential testing of \S\ref{subsec:case_law}: homicide
+(s299--s308), hurt (s319--s338), property (s378--s420), sexual
+offences and outrage of modesty (s354, s375--s377BL), kidnapping
+and unlawful labour (s359--s374), mischief and house-breaking
+(s425--s462), forgery (s463--s477A), abetment (s107--s120),
+defamation (s499--s502), and attempt (s511). Per-defence
+breakdown: s79 mistake-of-fact on 146 sections, s84 unsoundness-
+of-mind on 143 sections, s80 accident on 52 sections, s96
+private defence on 31 sections, s85 / s86 intoxication on 29
+sections each (specific-intent slice), s100 deadly-assault
+private defence on 12 sections, s81 necessity on 11 sections,
+and s95 de minimis on 6 sections. The remaining ${\sim}72\%$
+of the corpus is mostly chapter-I/II definition sections,
+regulatory provisions, and procedural sections where general
+defences are moot or doctrinally degenerate; expansion to the
+rest of the private-defence family (ss97--s106) is logged as
+future work in the project TODO. Every edge is wired through
+the \texttt{is\_infringed} cross-section predicate
 (\S\ref{subsec:exceptions}), so the Z3 backend's coverage
-follows the library coverage automatically.
+follows the library coverage automatically. Edges are deployed
+via an idempotent helper script
+(\texttt{scripts/add\_general\_defence\_edges.py}) so the
+expansion is reproducible and auditable.
 
 \paragraph{Bulk synthesis.} \texttt{scripts/bulk\_contrast.py}
 runs the contrast query for every doctrinally-related section
