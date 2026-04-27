@@ -190,7 +190,7 @@ class AnthropicClient:
     repeated calls inside one fixture share a cache hit."""
 
     model: str = "claude-sonnet-4-6"
-    max_tokens: int = 256
+    max_tokens: int = 512
     temperature: float = 0.0
 
     def __post_init__(self) -> None:
@@ -231,7 +231,7 @@ class OpenAIClient:
     wire format)."""
 
     model: str = "gpt-4o"
-    max_tokens: int = 256
+    max_tokens: int = 512
     temperature: float = 0.0
 
     def __post_init__(self) -> None:
@@ -283,10 +283,18 @@ _SYSTEM_PROMPT = (
 
 
 def _prompt_section(scenario: str) -> str:
+    # polarity-aware T1: many scenarios are constructed so that no
+    # element of any section fires (the polarity-negative slice). For
+    # those, `none` is a legitimate answer; the scorer accepts both
+    # the canonical section and `none` when ground-truth elements are
+    # empty.
     return (
         f"Scenario:\n{scenario}\n\n"
         "Task: Identify the Penal Code section that most directly applies. "
-        "Reply with ONLY the section number (e.g. `415`, `300`, `376AA`). "
+        "Reply with ONLY the section number (e.g. `415`, `300`, `376AA`), "
+        "OR the literal word `none` if no Penal Code section applies "
+        "to the scenario as stated (many scenarios are constructed so "
+        "that no offence is made out). "
         "No prose, no `Section`, no period."
     )
 
@@ -313,16 +321,30 @@ def _prompt_elements(scenario: str, section: str,
     )
     if vocabulary:
         vocab_inline = ", ".join(vocabulary)
+        # polarity priming + light CoT scaffold: explicitly call out
+        # the empty-set case (the gpt-4o-mini polarity-negative
+        # collapse from §7.6 motivated this) and invite a one-line
+        # rule-out preamble before the final JSON array. Parser
+        # tolerates the preamble: it extracts the LAST JSON array.
         return (
             base
             + "The encoded section's structural elements are:\n"
             + f"  [{vocab_inline}]\n\n"
-            + "Task: from the list above, return the subset of element "
-              "names that are SATISFIED by the scenario as stated. Reply "
-              'with ONLY a JSON array of strings (e.g. `["a", "b"]`); '
+            + "IMPORTANT — many scenarios are constructed so that NO "
+              "element of this section is satisfied. The empty set `[]` "
+              "is a frequent and correct answer; do not feel obliged to "
+              "produce a non-empty subset.\n\n"
+              "First, mentally walk through each element above and "
+              "decide whether the scenario as stated establishes it. "
+              "You may optionally output ONE short line beginning with "
+              "`# ruled out:` listing element names you eliminated, "
+              "before your final answer.\n\n"
+              "Task: return the subset of element names from the list "
+              "above that are SATISFIED by the scenario as stated. "
+              'Final line must be ONLY a JSON array of strings (e.g. `["a", "b"]`); '
               "use `[]` if no element is satisfied. Names must come "
               "from the supplied list verbatim — no synonyms, no "
-              "additions, no prose."
+              "additions."
         )
     return (
         base
@@ -474,17 +496,35 @@ def _canonical_exception(s: Optional[str]) -> str:
 
 
 def _parse_elements(raw: str) -> List[str]:
-    """Best-effort parse of an element-list LLM response."""
+    """Best-effort parse of an element-list LLM response.
+
+    Tolerates a preceding ``# ruled out: …`` CoT preamble: extracts
+    the LAST balanced JSON array from the response and parses that.
+    """
     if not raw:
         return []
     raw = raw.strip()
-    # Fast path: JSON array.
-    if raw.startswith("["):
-        try:
-            arr = json.loads(raw)
-            return [str(x).strip() for x in arr if str(x).strip()]
-        except Exception:  # noqa: BLE001
-            pass
+    # Find the last balanced JSON array in the response.
+    last_close = raw.rfind("]")
+    if last_close >= 0:
+        depth = 0
+        last_open = -1
+        for i in range(last_close, -1, -1):
+            if raw[i] == "]":
+                depth += 1
+            elif raw[i] == "[":
+                depth -= 1
+                if depth == 0:
+                    last_open = i
+                    break
+        if last_open >= 0:
+            candidate = raw[last_open : last_close + 1]
+            try:
+                arr = json.loads(candidate)
+                if isinstance(arr, list):
+                    return [str(x).strip() for x in arr if str(x).strip()]
+            except Exception:  # noqa: BLE001
+                pass
     # Fall-back: split on commas / newlines, strip quotes / brackets.
     raw = raw.strip("[](){}")
     parts = re.split(r"[,\n]", raw)
@@ -511,12 +551,22 @@ def score_fixture(
     """Run all three tasks on a single fixture, return per-task scores."""
     t0 = time.monotonic()
 
-    # T1 — section
+    # T1 — section. polarity-negative fixtures (truth_elements empty)
+    # have an inherent ambiguity: the scenario is *about* a section
+    # (e.g. an s100 illustration where no element fires), but a strict
+    # reading is "no offence is made out, so no section applies". We
+    # accept either the canonical section or `none` in that case; for
+    # ordinary fixtures only the canonical section is correct.
     raw_section = client.query(_prompt_section(fixture.scenario),
                                system=_SYSTEM_PROMPT, task_kind="section")
     pred_section = _canonical_section(raw_section)
+    truth_canonical = _canonical_section(fixture.truth_section)
+    is_polarity_negative = len(fixture.truth_elements) == 0
+    t1_correct = pred_section == truth_canonical
+    if is_polarity_negative and pred_section.lower() == "none":
+        t1_correct = True
     t1 = TaskScore(
-        correct=pred_section == _canonical_section(fixture.truth_section),
+        correct=t1_correct,
         predicted=pred_section,
         expected=fixture.truth_section,
     )
