@@ -23,4 +23,25 @@ statute 335 "Causing grievous hurt on provocation" effective 1872-01-01 effectiv
         fine := $0.00 .. $10,000.00;
         supplementary := "Whoever voluntarily causes grievous hurt on grave and sudden provocation, if he neither intends nor knows himself to be likely to cause grievous hurt to any person other than the person who gave the provocation, shall be punished with imprisonment for a term which may extend to 6 years, or with fine which may extend to $10,000, or with both. [Act 23 of 2021 wef 01/03/2022]";
     }
+
+    exception general_defence_s79 {
+        "act done by reason of mistake of fact"
+        "no s335 conviction per s79 general exception"
+        when is_infringed(s79)
+    }
+    exception general_defence_s80 {
+        "accident in the doing of a lawful act"
+        "no s335 conviction per s80 general exception"
+        when is_infringed(s80)
+    }
+    exception general_defence_s84 {
+        "act done by a person of unsound mind"
+        "no s335 conviction per s84 general exception"
+        when is_infringed(s84)
+    }
+    exception general_defence_s96 {
+        "act done in private defence"
+        "no s335 conviction per s96 general exception"
+        when is_infringed(s96)
+    }
 }

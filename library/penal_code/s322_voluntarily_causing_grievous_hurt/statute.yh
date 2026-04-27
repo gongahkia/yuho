@@ -32,4 +32,25 @@ statute 322 "Voluntarily causing grievous hurt" effective 1872-01-01 {
     illustration illustration_a {
         "A , intending or knowing himself to be likely permanently to disfigure Z ’s face, gives Z a blow which does not permanently disfigure Z ’s face but which causes Z to suffer severe bodily pain for the space of 20 days. A has voluntarily caused grievous hurt."
     }
+
+    exception general_defence_s79 {
+        "act done by reason of mistake of fact"
+        "no s322 conviction per s79 general exception"
+        when is_infringed(s79)
+    }
+    exception general_defence_s80 {
+        "accident in the doing of a lawful act"
+        "no s322 conviction per s80 general exception"
+        when is_infringed(s80)
+    }
+    exception general_defence_s84 {
+        "act done by a person of unsound mind"
+        "no s322 conviction per s84 general exception"
+        when is_infringed(s84)
+    }
+    exception general_defence_s96 {
+        "act done in private defence"
+        "no s322 conviction per s96 general exception"
+        when is_infringed(s96)
+    }
 }

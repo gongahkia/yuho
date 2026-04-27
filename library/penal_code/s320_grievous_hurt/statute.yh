@@ -15,4 +15,25 @@ statute 320 "Grievous hurt" effective 1872-01-01 {
         hurt_endangering_life_or_causing_20_days_severe_bodily_pain_or_inability_to_follow_ordinary_pursuits := "any hurt which endangers life, or which causes the sufferer to be, during the space of 20 days, in severe bodily pain, or unable to follow his ordinary pursuits";
         penetration_of_vagina_or_anus_without_consent_causing_severe_bodily_pain := "penetration of the vagina or anus, as the case may be, of a person without that person’s consent, which causes severe bodily pain";
     }
+
+    exception general_defence_s79 {
+        "act done by reason of mistake of fact"
+        "no s320 conviction per s79 general exception"
+        when is_infringed(s79)
+    }
+    exception general_defence_s80 {
+        "accident in the doing of a lawful act"
+        "no s320 conviction per s80 general exception"
+        when is_infringed(s80)
+    }
+    exception general_defence_s84 {
+        "act done by a person of unsound mind"
+        "no s320 conviction per s84 general exception"
+        when is_infringed(s84)
+    }
+    exception general_defence_s96 {
+        "act done in private defence"
+        "no s320 conviction per s96 general exception"
+        when is_infringed(s96)
+    }
 }
