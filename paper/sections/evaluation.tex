@@ -350,27 +350,45 @@ A structural-coverage sweep
 carries and asks Z3 for the smallest fact-set where both
 sides' elements fire simultaneously. Headline: Z3 returns a
 satisfying assignment on \statDefeatsCoverageSat{} of the
-\statDefeatsCoverageN{} pairs (\statDefeatsCoverageRate{}\%).
-The remaining 36.6\% are not solver failures but an
-encoding-gap finding the sweep surfaces cleanly. Per-defence
-SAT rates split into two regimes: the element-bearing
-defences (s79, s80, s81, s84, s85, s86, s100) clear at
-90--100\%, while the broader private-defence family (s95,
-s96, s97, s98, s101, s103, s104, s106) all sit at 0\%
-because those sections were encoded during Phase~D mass-
-encoding as pure-definition sections with no
-\texttt{elements~\{\}} block to decompose. The Z3 backend
-correctly reports ``no elements declared'' and refuses to
-materialise a fact pattern; the \texttt{defeats} edges
-referencing those sections are doctrinally meaningful but
-Z3-unactionable until the sections themselves gain element
-structure. The finding bounds Yuho's claim: bulk-inserting
+\statDefeatsCoverageN{} pairs
+(\statDefeatsCoverageRate{}\%), with every encoded defence
+clearing at $\geq 83\%$ and most at $\geq 90\%$. The failure
+slice that remains is dominated by section-specific
+encoding-fidelity issues (a small number of offence sections
+declare elements only inside subsections that
+\texttt{narrow-defence} does not yet flatten) rather than
+doctrinal-shape mismatches between offences and defences.
+
+The path to this number is itself a finding worth recording.
+The sweep was first run after the bulk \texttt{defeats}-edge
+expansion of Direction~B but \emph{before} the
+ss95--s106 private-defence family had \texttt{elements~\{\}}
+blocks; the SAT rate at that stage was 387/610
+(63.4\%), and the per-defence breakdown split sharply into
+two regimes — the element-bearing defences (s79, s80, s81,
+s84, s85, s86, s100) clearing at 90--100\%, and the entire
+ss95--s106 private-defence family sitting at 0\% because
+those sections had been encoded during Phase~D as
+pure-definition sections (operative-rule prose only) with
+no element decomposition for the Z3 backend to materialise.
+The 0\% slice was a clean encoding-gap signal: bulk-inserting
 \texttt{defeats} edges is necessary but not sufficient for
 end-to-end Z3 reasoning over defences --- the encoded
-library has to host the defence's structural decomposition
-too. The natural next-phase work is to give s95--s106 their
-element structure, after which the 36.6\% UNSAT slice should
-collapse without further library or grammar changes.
+library has to host each defence's structural decomposition
+too. We then encoded \texttt{elements~\{\}} blocks for the
+eight affected sections (s95 de minimis; s96 operative
+gateway; s97 body-or-property right; s98 proportionality and
+public-authority limits; s101 body-defence timing; s103
+non-deadly body limb; s104 property-defence timing; s106
+non-deadly property limb), each faithful to the post-[15/2019]
+amendment text. Re-running the sweep against the same edge
+set then lifted the rate from 63.4\% to
+\statDefeatsCoverageRate{}\%, and every previously-0\% defence
+now clears at 83--100\%. The exercise is a clean illustration
+of how the differential-testing harness acts as a
+diagnostic: the sweep didn't just measure coverage — it
+\emph{found} the encoding gap and gave the resolution a
+concrete success metric.
 
 \paragraph{Bulk synthesis.} \texttt{scripts/bulk\_contrast.py}
 runs the contrast query for every doctrinally-related section

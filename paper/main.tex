@@ -121,10 +121,13 @@
   \providecommand{\statCaseLawConsistencyN}{25}%
   \providecommand{\statCaseLawConsistency}{100.0}%
   \providecommand{\statCaseLawUnsatN}{0}%
-  % Defeats-edge structural-coverage sweep (commit f1cb7cac).
+  % Defeats-edge structural-coverage sweep, post ss95-s106 elements{}
+  % encoding (commit 4ea3b97e). Numbers prior to that encoding (commit
+  % f1cb7cac) were 387/610 = 63.4%, with the entire ss95-s106 family
+  % at 0% SAT.
   \providecommand{\statDefeatsCoverageN}{610}%
-  \providecommand{\statDefeatsCoverageSat}{387}%
-  \providecommand{\statDefeatsCoverageRate}{63.4}%
+  \providecommand{\statDefeatsCoverageSat}{560}%
+  \providecommand{\statDefeatsCoverageRate}{91.8}%
   \providecommand{\statDefeatsCoverageSections}{147}%
   \providecommand{\statDefeatsCoverageDefences}{15}%
 }
