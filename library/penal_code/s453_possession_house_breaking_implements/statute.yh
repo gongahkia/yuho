@@ -62,4 +62,15 @@ statute 453 "Possession of house-breaking implements or offensive weapons" effec
         "no s453 conviction per s84 general exception"
         when is_infringed(s84)
     }
+
+    exception general_defence_s82 {
+        "act of a child under ten years of age"
+        "no s453 conviction per s82 general exception"
+        when is_infringed(s82)
+    }
+    exception general_defence_s83 {
+        "act of a child above ten and under twelve of immature understanding"
+        "no s453 conviction per s83 general exception"
+        when is_infringed(s83)
+    }
 }

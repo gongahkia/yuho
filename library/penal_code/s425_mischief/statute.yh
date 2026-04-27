@@ -80,4 +80,15 @@ statute 425 "Mischief" effective 1872-01-01 effective 2022-04-01 {
         "no s425 conviction per s97 general exception"
         when is_infringed(s97)
     }
+
+    exception general_defence_s82 {
+        "act of a child under ten years of age"
+        "no s425 conviction per s82 general exception"
+        when is_infringed(s82)
+    }
+    exception general_defence_s83 {
+        "act of a child above ten and under twelve of immature understanding"
+        "no s425 conviction per s83 general exception"
+        when is_infringed(s83)
+    }
 }

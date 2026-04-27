@@ -63,4 +63,15 @@ statute 304A "Causing death by rash or negligent act" effective 1872-01-01 {
         "no s304A conviction per s106 general exception"
         when is_infringed(s106)
     }
+
+    exception general_defence_s82 {
+        "act of a child under ten years of age"
+        "no s304A conviction per s82 general exception"
+        when is_infringed(s82)
+    }
+    exception general_defence_s83 {
+        "act of a child above ten and under twelve of immature understanding"
+        "no s304A conviction per s83 general exception"
+        when is_infringed(s83)
+    }
 }

@@ -33,4 +33,15 @@ statute 373A "Importing woman for purposes of prostitution, etc." effective 1872
         "no s373A conviction per s84 general exception"
         when is_infringed(s84)
     }
+
+    exception general_defence_s82 {
+        "act of a child under ten years of age"
+        "no s373A conviction per s82 general exception"
+        when is_infringed(s82)
+    }
+    exception general_defence_s83 {
+        "act of a child above ten and under twelve of immature understanding"
+        "no s373A conviction per s83 general exception"
+        when is_infringed(s83)
+    }
 }

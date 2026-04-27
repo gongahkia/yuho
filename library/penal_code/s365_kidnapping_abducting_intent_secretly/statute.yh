@@ -34,4 +34,15 @@ statute 365 "Kidnapping or abducting with intent secretly and wrongfully to conf
         "no s365 conviction per s84 general exception"
         when is_infringed(s84)
     }
+
+    exception general_defence_s82 {
+        "act of a child under ten years of age"
+        "no s365 conviction per s82 general exception"
+        when is_infringed(s82)
+    }
+    exception general_defence_s83 {
+        "act of a child above ten and under twelve of immature understanding"
+        "no s365 conviction per s83 general exception"
+        when is_infringed(s83)
+    }
 }

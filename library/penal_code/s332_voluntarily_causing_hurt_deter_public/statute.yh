@@ -59,4 +59,15 @@ statute 332 "Voluntarily causing hurt to deter public servant from his duty" eff
         "no s332 conviction per s97 general exception"
         when is_infringed(s97)
     }
+
+    exception general_defence_s82 {
+        "act of a child under ten years of age"
+        "no s332 conviction per s82 general exception"
+        when is_infringed(s82)
+    }
+    exception general_defence_s83 {
+        "act of a child above ten and under twelve of immature understanding"
+        "no s332 conviction per s83 general exception"
+        when is_infringed(s83)
+    }
 }

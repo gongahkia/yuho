@@ -117,4 +117,15 @@ statute 307 "Attempt to murder" effective 1872-01-01 effective 2019-12-31 {
         "no s307 conviction per s106 general exception"
         when is_infringed(s106)
     }
+
+    exception general_defence_s82 {
+        "act of a child under ten years of age"
+        "no s307 conviction per s82 general exception"
+        when is_infringed(s82)
+    }
+    exception general_defence_s83 {
+        "act of a child above ten and under twelve of immature understanding"
+        "no s307 conviction per s83 general exception"
+        when is_infringed(s83)
+    }
 }

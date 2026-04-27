@@ -56,4 +56,15 @@ statute 471 "Using as genuine a forged document or forged electronic record" eff
         "no s471 conviction per s86 general exception"
         when is_infringed(s86)
     }
+
+    exception general_defence_s82 {
+        "act of a child under ten years of age"
+        "no s471 conviction per s82 general exception"
+        when is_infringed(s82)
+    }
+    exception general_defence_s83 {
+        "act of a child above ten and under twelve of immature understanding"
+        "no s471 conviction per s83 general exception"
+        when is_infringed(s83)
+    }
 }
