@@ -21,19 +21,24 @@ MRR 0.461, contrast F1 0.239, constrained-contrast consistency 100%) ·
 §7.6 LLM benchmark with full 205-fixture GPT-4o-mini + GPT-4o cross-
 model baselines + 3-way prompt-variant comparison (baseline / polarity /
 polarity-soft; polarity-soft is near-Pareto on gpt-4o-mini) · Direction B
-defeats-edge coverage at 1038 edges across 147 sections (28% of corpus,
-19 distinct standalone general defences after (a) the doctrinal audit
-removed 75 misclassified s98 / s101 / s104 edges that were validity-
-condition or timing qualifiers rather than standalone defeating
-predicates, (b) s82 + s83 child-age defences were added across the
-universal-applicability footprint mirroring s84, and (c) s87 / s88 /
-s89 / s92 (consent + good faith family) were doctrinally targeted onto
-the hurt cluster + s88 onto s304/s304A medical-shaped homicide, plus
-s94 duress across 135 non-homicide offences; ss95-s106 private-defence
-family fully encoded with elements{}; defeats-edge structural-coverage
-sweep at 949/1038 = 91.4% SAT, every defence clearing 83-100%) ·
-32-page smoke PDF · `make paper-reproduce` end-to-end including Lean
-kernel-check.**
+defeats-edge coverage at 1253 edges across 147 sections (28% of corpus,
+22 distinct standalone general defences spanning every Chapter IV
+affirmative defence the SG PC carries (only s79A and s90, which are
+exclusionary and consent-validity-defining respectively, are excluded
+by design; ss98, s101, s104 are excluded after the doctrinal audit
+demoted them as validity-condition / timing qualifiers): the family
+covers s76 (bound or justified by law), s77 (judge acting judicially),
+s78 (act pursuant to court order), s79 (mistake of fact), s80
+(accident), s81 (necessity), s82 (child <10), s83 (child 10-12 without
+maturity), s84 (unsoundness), s85+s86 (intoxication), s87 (consent-
+bounded), s88 (consent for benefit), s89 (good faith for child/unsound),
+s92 (good faith without consent), s94 (duress), s95 (de minimis), s96
+(private-defence operative gateway), s97 (right of body or property
+defence), s100 (deadly body), s103 (non-deadly body), s106 (non-deadly
+property); ss95-s106 private-defence family fully encoded with
+elements{}; defeats-edge structural-coverage sweep at 1141/1253 = 91.1%
+SAT, every defence clearing 60-100%) · 32-page smoke PDF ·
+`make paper-reproduce` end-to-end including Lean kernel-check.**
 
 Completed history (Phases A–D, the rigor-hardening trench, mechanisation
 v1, case-law differential testing, the LLM-benchmark closed-vocab fix,
@@ -247,8 +252,15 @@ fixture-tested. Open work:
 
 ## Direction B — General-defence `defeats` edges (full coverage) `[~]`
 
-v3.3 ships **1038 edges across 147 sections** (28% of the 524-section
-corpus) using **19 distinct Chapter IV standalone general defences**.
+v3.4 ships **1253 edges across 147 sections** (28% of the 524-section
+corpus) using **22 distinct Chapter IV standalone general defences** —
+near-exhaustive on the Chapter IV affirmative-defence catalogue. The
+only Chapter IV sections deliberately excluded from the defeats-edge
+graph are: s79A (mistake-of-law-not-a-defence — exclusionary, not
+affirmative), s90 (consent-vitiation rule — defines when consent in
+s87/s88/s89 is invalid, not a standalone defence), and ss98/s101/s104
+(validity-condition / timing qualifiers — see audit commits
+`4f0ba0c9` / `f6042c99` / `f1155a9d`).
 The doctrinal-fidelity audit (commits `4f0ba0c9` / `f6042c99` /
 `f1155a9d`) removed 75 misclassified edges:
 
@@ -260,16 +272,17 @@ The doctrinal-fidelity audit (commits `4f0ba0c9` / `f6042c99` /
 - **s104** (23 edges) — temporal commencement + continuance qualifier
   on the property-defence right, not a standalone defence
 
-Per-defence breakdown after the audit + s82/s83 + s87/s88/s89/s92/s94
-expansion:
+Per-defence breakdown (22 distinct defences, ranked by section count):
 
 | Defence | Sections covered |
 |---|---|
 | s79 (mistake of fact) | 146 |
+| s76 (bound or justified by law) | 143 |
 | s82 (child below 10, doli incapax) | 143 |
 | s83 (child 10-12 without sufficient maturity) | 143 |
 | s84 (unsoundness of mind) | 143 |
 | s94 (duress / compulsion by threats) | 135 |
+| s78 (act pursuant to court order) | 67 |
 | s97 (private defence of body OR property) | 57 |
 | s80 (accident in lawful act) | 52 |
 | s96 (private defence — operative gateway) | 31 |
@@ -284,6 +297,7 @@ expansion:
 | s81 (greater-harm avoidance / necessity) | 11 |
 | s103 (deadly property defence) | 7 |
 | s95 (act causing slight harm / de minimis) | 6 |
+| s77 (judge acting judicially) | 5 |
 
 Cluster-level coverage:
 
