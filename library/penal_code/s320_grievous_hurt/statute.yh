@@ -95,4 +95,10 @@ statute 320 "Grievous hurt" effective 1872-01-01 {
         "no s320 conviction per s76 general exception"
         when is_infringed(s76)
     }
+
+    exception general_defence_s78 {
+        "general defence under s78"
+        "no s320 conviction per s78 general exception"
+        when is_infringed(s78)
+    }
 }

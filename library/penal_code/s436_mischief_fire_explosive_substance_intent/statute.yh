@@ -80,4 +80,10 @@ statute 436 "Mischief by fire or explosive substance with intent to destroy a ho
         "no s436 conviction per s76 general exception"
         when is_infringed(s76)
     }
+
+    exception general_defence_s78 {
+        "general defence under s78"
+        "no s436 conviction per s78 general exception"
+        when is_infringed(s78)
+    }
 }

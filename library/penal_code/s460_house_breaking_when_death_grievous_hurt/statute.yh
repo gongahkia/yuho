@@ -76,4 +76,10 @@ statute 460 "House-breaking when death or grievous hurt caused" effective 1872-0
         "no s460 conviction per s76 general exception"
         when is_infringed(s76)
     }
+
+    exception general_defence_s78 {
+        "general defence under s78"
+        "no s460 conviction per s78 general exception"
+        when is_infringed(s78)
+    }
 }

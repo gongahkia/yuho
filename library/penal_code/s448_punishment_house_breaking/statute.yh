@@ -56,4 +56,10 @@ statute 448 "Punishment for house-breaking" effective 1872-01-01 effective 2020-
         "no s448 conviction per s76 general exception"
         when is_infringed(s76)
     }
+
+    exception general_defence_s78 {
+        "general defence under s78"
+        "no s448 conviction per s78 general exception"
+        when is_infringed(s78)
+    }
 }
