@@ -1,0 +1,44 @@
+id: case-chen-weixiong-jerriek
+case_citation: "Chen Weixiong Jerriek v Public Prosecutor [2003] SGHC 103"
+actual_charge: "394"
+alternative_charge: "392"
+court_distinguished_on: [causes_hurt, voluntariness]
+outcome: "Convicted of robbery with hurt under s 394 of the Penal Code read with s 34. The deliberate punching and kicking of the victim during the robbery elevated the charge from simple robbery (s 392) to robbery-with-hurt (s 394)."
+case_summary: |
+  The accused, jointly with co-offenders, committed robbery of a handphone
+  while voluntarily causing hurt to the victim by punching and kicking. The
+  decisive doctrinal element was that the hurt was caused voluntarily and in
+  the course of the robbery — bringing the offence within s 394 rather than
+  s 392. The case illustrates the structural distinction between simple robbery
+  and robbery-with-hurt: causation of hurt by the robbery act, plus
+  voluntariness of the hurt-causing conduct.
+section: "394"
+description: |
+  A and co-offenders robbed C of a handphone. During the robbery, A punched
+  and kicked C, voluntarily causing hurt. The hurt was caused by A in the
+  course of committing the robbery. A was within the class of persons jointly
+  concerned in committing the robbery. A was charged under s 394 read with
+  s 34.
+parties:
+  A: { role: accused }
+  B: { role: co-offender }
+  C: { role: victim }
+acts:
+  - { actor: A, description: "jointly with B, robs C of a handphone" }
+  - { actor: A, description: "punches and kicks C during the robbery, causing hurt" }
+mental_states:
+  A:
+    intent: "to commit robbery"
+    knowledge: "the punching and kicking would cause hurt"
+circumstances:
+  - "robbery committed jointly with B (s 34 common intention)"
+  - "hurt caused voluntarily during the robbery"
+  - "A within the class jointly concerned in the robbery"
+outcomes:
+  - { actor: C, description: "C is robbed and suffers hurt from punches and kicks" }
+fact_facts:
+  committing_or_attempting_robbery: true
+  causes_hurt: true
+  voluntariness: true
+  accused_within_liable_class: true
+tags: [source:case-law, chapter:xvii, category:property, doctrine:s394-vs-s392-mode-of-hurt, common-intention:s34]

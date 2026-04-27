@@ -1,0 +1,55 @@
+id: case-daniel-vijay-accomplice
+case_citation: "Daniel Vijay s/o Katherasan v PP [2010] 4 SLR 1119 (accomplice)"
+actual_charge: "394"
+alternative_charge: "300"
+court_distinguished_on: [causes_hurt, voluntariness]
+outcome: "Court of Appeal set aside the murder conviction (s 300(c) read with s 34) for the two accomplices and substituted convictions under s 394 read with s 34 — robbery with hurt — on the ground that the higher subjective-knowledge threshold for s 300(c) common-intention liability was not made out."
+case_summary: |
+  Three appellants attacked the deceased with a hockey stick during a robbery.
+  The trial court convicted all three of murder under s 300(c) read with s 34.
+  The Court of Appeal restored the higher subjective-knowledge threshold for
+  common-intention murder liability and set aside the murder convictions for
+  the two accomplices, substituting convictions under s 394 read with s 34
+  (robbery with hurt). The case is canonical authority on the subjective-
+  knowledge floor for s 34 common-intention liability in homicide cases. This
+  fixture covers the s 394 angle for the accomplices; the principal-offender
+  s 300 angle is captured in case-daniel-vijay-principal.
+section: "394"
+description: |
+  A and B (accomplices) jointly with C (principal) attacked V during a
+  robbery. C struck V with a hockey stick, causing fatal injury. A and B did
+  not personally inflict the fatal blow but were jointly engaged in the
+  robbery. The Court of Appeal held that A and B did not have the subjective
+  knowledge required under s 300(c) read with s 34, and substituted convictions
+  for s 394 read with s 34 (robbery-with-hurt). Hurt was caused voluntarily
+  during the robbery by C (the joint act); A and B fell within the class
+  jointly concerned in the robbery.
+parties:
+  A: { role: accomplice }
+  B: { role: accomplice }
+  C: { role: principal-offender }
+  V: { role: victim }
+acts:
+  - { actor: C, description: "strikes V with a hockey stick during the robbery" }
+  - { actor: A, description: "jointly engaged in the robbery; does not strike V himself" }
+  - { actor: B, description: "jointly engaged in the robbery; does not strike V himself" }
+mental_states:
+  A:
+    intent: "to commit robbery"
+    knowledge: "did not have subjective knowledge that the hockey-stick strike would cause death (per s 300(c) common-intention floor)"
+  B:
+    intent: "to commit robbery"
+    knowledge: "did not have subjective knowledge that the hockey-stick strike would cause death"
+circumstances:
+  - "robbery committed jointly (s 34 common intention)"
+  - "hurt caused voluntarily during the robbery"
+  - "accomplices within the class jointly concerned in the robbery"
+  - "Court of Appeal substituted s 394 for s 300 — subjective-knowledge threshold for common-intention murder not met"
+outcomes:
+  - { actor: V, description: "V dies from the hockey-stick strike" }
+fact_facts:
+  committing_or_attempting_robbery: true
+  causes_hurt: true
+  voluntariness: true
+  accused_within_liable_class: true
+tags: [source:case-law, chapter:xvii, category:property, doctrine:s394-common-intention-floor, common-intention:s34]

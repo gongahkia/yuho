@@ -1,0 +1,44 @@
+id: case-see-li-quan-mendel
+case_citation: "See Li Quan Mendel v Public Prosecutor [2020]"
+actual_charge: "392"
+alternative_charge: null
+court_distinguished_on: [robbery_committed]
+outcome: "Court of Appeal upheld imprisonment (in contradistinction to reformative training); offender sentenced to the mandatory minimum of 3 years' imprisonment and 12 strokes of the cane under s 392 read with s 34 of the Penal Code."
+case_summary: |
+  The accused was convicted of robbery under s 392 of the Penal Code read with
+  s 34 (common intention). On appeal, Thean J's decision to impose imprisonment
+  rather than reformative training was upheld by the Court of Appeal, with the
+  accused receiving the mandatory-minimum 3-year imprisonment term and 12
+  strokes of the cane. The case is canonical authority on the appellate court's
+  reluctance to disturb a sentencing judge's choice between custodial sentence
+  and reformative training where the offence is gravely violent.
+section: "392"
+description: |
+  A jointly with B, in furtherance of common intention under s 34, committed
+  robbery against C. A and B were charged under s 392 read with s 34 of the
+  Penal Code. The trial judge imposed imprisonment in lieu of reformative
+  training. The Court of Appeal upheld the choice of sentence and applied the
+  mandatory-minimum 3-year imprisonment plus 12 strokes of the cane.
+parties:
+  A: { role: accused }
+  B: { role: co-accused }
+  C: { role: victim }
+acts:
+  - { actor: A, description: "jointly with B, robs C" }
+  - { actor: B, description: "jointly with A, robs C" }
+mental_states:
+  A:
+    intent: "to commit robbery in furtherance of common intention"
+  B:
+    intent: "to commit robbery in furtherance of common intention"
+circumstances:
+  - "common intention under s 34 between A and B"
+  - "robbery committed during daytime hours (s 392 first limb, mandatory minimum 2 years)"
+  - "Court of Appeal: reformative training declined; mandatory minimum imprisonment imposed"
+outcomes:
+  - { actor: C, description: "C is robbed" }
+fact_facts:
+  robbery_committed: true
+  time_of_offence: false
+  conviction: true
+tags: [source:case-law, chapter:xvii, category:property, doctrine:s392-sentencing, common-intention:s34]
