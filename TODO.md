@@ -21,7 +21,9 @@ baselines + 3-way prompt-variant comparison (baseline / polarity /
 polarity-soft; polarity-soft is near-Pareto on gpt-4o-mini) · Direction B
 defeats-edge coverage at 610 edges across 147 sections (28% of corpus,
 15 distinct general defences spanning the full Chapter IV regime
-including the entire ss97-s106 private-defence family) · 32-page smoke PDF ·
+including the entire ss97-s106 private-defence family; defeats-edge
+structural-coverage sweep (387/610 = 63.4% SAT, finding: ss95-s106
+need element decomposition to unblock the rest)) · 32-page smoke PDF ·
 `make paper-reproduce` end-to-end including Lean kernel-check.**
 
 Completed history (Phases A–D, the rigor-hardening trench, mechanisation
@@ -310,9 +312,27 @@ Edges deployed via the idempotent
 
 Open follow-ups:
 
-- [ ] **Empirical uplift benchmark.** Re-run `yuho narrow-defence`
-      against the case-law fixtures and report uplift in matched-
-      element F1 against the court's stated reasoning.
+- [x] **Defeats-edge structural-coverage benchmark** (commit
+      `f1cb7cac`). New scorer at
+      `evals/case_law/score_defeats_coverage.py` runs
+      `yuho narrow-defence` over every (offence, defence) edge
+      in the corpus. Headline: 387/610 = 63.4% SAT. Element-
+      bearing defences (s79/s80/s81/s84/s85/s86/s100) clear at
+      90–100%; the rest of the private-defence family
+      (s95/s96/s97/s98/s101/s103/s104/s106) sits at 0% because
+      those sections were encoded as pure-definition sections
+      during Phase D, with no `elements {}` block. Reported
+      honestly in §7.6.
+
+- [ ] **Encode structural elements for ss95-s106 private-defence
+      sections.** Currently encoded as pure-definition statutes
+      with operative-rule prose only. Adding an `elements {}`
+      block per section (e.g. for s96: `private_defence_in_play`
+      / `act_done_in_exercise_of_right`; for s97: body /
+      property choice flag + body-and-property predicates; etc.)
+      would unblock the 36.6% UNSAT slice in the defeats-coverage
+      sweep without further grammar or library changes. Doctrinal
+      decomposition needed; not a mechanical refactor.
 
 ---
 

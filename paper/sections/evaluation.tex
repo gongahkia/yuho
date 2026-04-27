@@ -342,6 +342,36 @@ via an idempotent helper script
 (\texttt{scripts/add\_general\_defence\_edges.py}) so the
 expansion is reproducible and auditable.
 
+\paragraph{Z3-actionable coverage.}
+A structural-coverage sweep
+(\texttt{evals/case\_law/score\_defeats\_coverage.py}) runs
+\texttt{yuho narrow-defence} over every
+\statDefeatsCoverageN{} (offence, defence) pair the corpus
+carries and asks Z3 for the smallest fact-set where both
+sides' elements fire simultaneously. Headline: Z3 returns a
+satisfying assignment on \statDefeatsCoverageSat{} of the
+\statDefeatsCoverageN{} pairs (\statDefeatsCoverageRate{}\%).
+The remaining 36.6\% are not solver failures but an
+encoding-gap finding the sweep surfaces cleanly. Per-defence
+SAT rates split into two regimes: the element-bearing
+defences (s79, s80, s81, s84, s85, s86, s100) clear at
+90--100\%, while the broader private-defence family (s95,
+s96, s97, s98, s101, s103, s104, s106) all sit at 0\%
+because those sections were encoded during Phase~D mass-
+encoding as pure-definition sections with no
+\texttt{elements~\{\}} block to decompose. The Z3 backend
+correctly reports ``no elements declared'' and refuses to
+materialise a fact pattern; the \texttt{defeats} edges
+referencing those sections are doctrinally meaningful but
+Z3-unactionable until the sections themselves gain element
+structure. The finding bounds Yuho's claim: bulk-inserting
+\texttt{defeats} edges is necessary but not sufficient for
+end-to-end Z3 reasoning over defences --- the encoded
+library has to host the defence's structural decomposition
+too. The natural next-phase work is to give s95--s106 their
+element structure, after which the 36.6\% UNSAT slice should
+collapse without further library or grammar changes.
+
 \paragraph{Bulk synthesis.} \texttt{scripts/bulk\_contrast.py}
 runs the contrast query for every doctrinally-related section
 pair: every \texttt{subsumes} edge, every non-trivial SCC
