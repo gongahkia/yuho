@@ -16,6 +16,7 @@ import Yuho.Facts
 import Yuho.Eval
 import Yuho.SMTAbs
 import Yuho.Soundness
+import Yuho.Graph
 
 namespace Yuho.Tests
 
@@ -68,5 +69,36 @@ example : s299WithConsent.convicts factsHomicideWithConsent = false := by
 example (m : SMTModel) :
     m.facts "death" = (Element.mk .actusReus "death" "").eval m.facts := by
   exact element_correspondence m { kind := .actusReus, name := "death", description := "" }
+
+/-! ## §6.3 v2 smoke tests — exercising `Graph.lean`. -/
+
+/-- A `GraphSMTModel` whose `groupTruth` is defined to *be* the
+operational `ElementGroup.eval m.facts`; this is the canonical
+saturating model and trivially satisfies the bicond bundle. -/
+def canonicalGraphModel (F : Facts) (s : Statute) : GraphSMTModel where
+  facts := F
+  groupTruth := fun g => g.eval F
+  excFires  := fun lbl => decide (lbl ∈ Exception.firedSet s.exceptions F)
+
+/-- The canonical model satisfies the bicond bundle for any statute. -/
+theorem canonicalGraphModel_satisfies (F : Facts) (s : Statute) :
+    (canonicalGraphModel F s).satisfies s where
+  leaf  e  := by
+    simp [canonicalGraphModel, ElementGroup.eval, Element.eval]
+  allOf gs := by
+    simp only [canonicalGraphModel, ElementGroup.eval]
+    exact (evalAll_corresp_param (canonicalGraphModel F s) gs (fun _ _ => rfl)).symm
+  anyOf gs := by
+    simp only [canonicalGraphModel, ElementGroup.eval]
+    exact (evalAny_corresp_param (canonicalGraphModel F s) gs (fun _ _ => rfl)).symm
+  exc   _  := rfl
+
+/-- Lemma 6.3 specialised to s299 / homicide facts kernel-checks. -/
+example :
+    (canonicalGraphModel factsHomicide s299).groupTruth s299.elements
+      = s299.elements.eval factsHomicide :=
+  element_graph_correspondence
+    (canonicalGraphModel factsHomicide s299) s299
+    (canonicalGraphModel_satisfies factsHomicide s299) s299.elements
 
 end Yuho.Tests
