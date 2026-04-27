@@ -56,12 +56,6 @@ statute 306 "Abetment of suicide or attempted suicide" effective 1872-01-01 effe
         when is_infringed(s97)
     }
 
-    exception general_defence_s98 {
-        "right of private defence against the act of a person of unsound mind"
-        "no s306 conviction per s98 general exception"
-        when is_infringed(s98)
-    }
-
     exception general_defence_s106 {
         "right of private defence against deadly assault when there is risk of harm to innocent person"
         "no s306 conviction per s106 general exception"

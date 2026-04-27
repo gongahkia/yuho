@@ -86,12 +86,6 @@ statute 304 "Culpable Homicide not amounting to Murder" effective 1872-01-01 {
         when is_infringed(s97)
     }
 
-    exception general_defence_s98 {
-        "right of private defence against the act of a person of unsound mind"
-        "no s304 conviction per s98 general exception"
-        when is_infringed(s98)
-    }
-
     exception general_defence_s106 {
         "right of private defence against deadly assault when there is risk of harm to innocent person"
         "no s304 conviction per s106 general exception"

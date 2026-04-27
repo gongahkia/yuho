@@ -56,12 +56,6 @@ statute 333 "Voluntarily causing grievous hurt to deter public servant from his 
         when is_infringed(s97)
     }
 
-    exception general_defence_s98 {
-        "right of private defence against the act of a person of unsound mind"
-        "no s333 conviction per s98 general exception"
-        when is_infringed(s98)
-    }
-
     exception general_defence_s101 {
         "right of private defence against assault not extending to causing death"
         "no s333 conviction per s101 general exception"

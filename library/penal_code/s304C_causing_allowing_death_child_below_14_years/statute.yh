@@ -98,12 +98,6 @@ statute 304C "Causing or allowing death of child below 14 years of age, domestic
         when is_infringed(s97)
     }
 
-    exception general_defence_s98 {
-        "right of private defence against the act of a person of unsound mind"
-        "no s304C conviction per s98 general exception"
-        when is_infringed(s98)
-    }
-
     exception general_defence_s106 {
         "right of private defence against deadly assault when there is risk of harm to innocent person"
         "no s304C conviction per s106 general exception"

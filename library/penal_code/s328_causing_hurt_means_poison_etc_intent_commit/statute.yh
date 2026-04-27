@@ -73,12 +73,6 @@ statute 328 "Causing hurt by means of poison, etc., with intent to commit an off
         when is_infringed(s97)
     }
 
-    exception general_defence_s98 {
-        "right of private defence against the act of a person of unsound mind"
-        "no s328 conviction per s98 general exception"
-        when is_infringed(s98)
-    }
-
     exception general_defence_s101 {
         "right of private defence against assault not extending to causing death"
         "no s328 conviction per s101 general exception"

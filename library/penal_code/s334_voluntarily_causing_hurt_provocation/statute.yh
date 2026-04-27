@@ -47,12 +47,6 @@ statute 334 "Voluntarily causing hurt on provocation" effective 1872-01-01 effec
         when is_infringed(s97)
     }
 
-    exception general_defence_s98 {
-        "right of private defence against the act of a person of unsound mind"
-        "no s334 conviction per s98 general exception"
-        when is_infringed(s98)
-    }
-
     exception general_defence_s101 {
         "right of private defence against assault not extending to causing death"
         "no s334 conviction per s101 general exception"
