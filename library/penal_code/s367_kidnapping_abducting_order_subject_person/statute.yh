@@ -59,4 +59,10 @@ statute 367 "Kidnapping or abducting in order to subject a person to grievous hu
         "no s367 conviction per s94 general exception"
         when is_infringed(s94)
     }
+
+    exception general_defence_s76 {
+        "general defence under s76"
+        "no s367 conviction per s76 general exception"
+        when is_infringed(s76)
+    }
 }

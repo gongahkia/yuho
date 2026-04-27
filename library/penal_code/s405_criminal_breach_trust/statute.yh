@@ -93,4 +93,10 @@ statute 405 "Criminal breach of trust" effective 1872-01-01 effective 2019-12-31
         "no s405 conviction per s94 general exception"
         when is_infringed(s94)
     }
+
+    exception general_defence_s76 {
+        "general defence under s76"
+        "no s405 conviction per s76 general exception"
+        when is_infringed(s76)
+    }
 }

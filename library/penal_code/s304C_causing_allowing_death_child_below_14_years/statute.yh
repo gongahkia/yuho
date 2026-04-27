@@ -114,4 +114,10 @@ statute 304C "Causing or allowing death of child below 14 years of age, domestic
         "no s304C conviction per s83 general exception"
         when is_infringed(s83)
     }
+
+    exception general_defence_s76 {
+        "general defence under s76"
+        "no s304C conviction per s76 general exception"
+        when is_infringed(s76)
+    }
 }

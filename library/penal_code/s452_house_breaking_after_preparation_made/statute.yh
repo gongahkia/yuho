@@ -67,4 +67,10 @@ statute 452 "House-breaking after preparation made for causing hurt, etc." effec
         "no s452 conviction per s94 general exception"
         when is_infringed(s94)
     }
+
+    exception general_defence_s76 {
+        "general defence under s76"
+        "no s452 conviction per s76 general exception"
+        when is_infringed(s76)
+    }
 }

@@ -97,4 +97,10 @@ statute 427 "Punishment for committing mischief causing disruption to key servic
         "no s427 conviction per s94 general exception"
         when is_infringed(s94)
     }
+
+    exception general_defence_s76 {
+        "general defence under s76"
+        "no s427 conviction per s76 general exception"
+        when is_infringed(s76)
+    }
 }

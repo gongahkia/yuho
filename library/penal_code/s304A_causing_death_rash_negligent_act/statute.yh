@@ -80,4 +80,10 @@ statute 304A "Causing death by rash or negligent act" effective 1872-01-01 {
         "no s304A conviction per s88 general exception"
         when is_infringed(s88)
     }
+
+    exception general_defence_s76 {
+        "general defence under s76"
+        "no s304A conviction per s76 general exception"
+        when is_infringed(s76)
+    }
 }

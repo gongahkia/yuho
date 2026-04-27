@@ -49,4 +49,10 @@ statute 372 "Selling minor for purposes of prostitution, etc." effective 1872-01
         "no s372 conviction per s94 general exception"
         when is_infringed(s94)
     }
+
+    exception general_defence_s76 {
+        "general defence under s76"
+        "no s372 conviction per s76 general exception"
+        when is_infringed(s76)
+    }
 }

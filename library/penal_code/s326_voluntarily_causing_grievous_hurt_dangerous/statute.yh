@@ -113,4 +113,10 @@ statute 326 "Voluntarily causing grievous hurt by dangerous weapons or means" ef
         "no s326 conviction per s94 general exception"
         when is_infringed(s94)
     }
+
+    exception general_defence_s76 {
+        "general defence under s76"
+        "no s326 conviction per s76 general exception"
+        when is_infringed(s76)
+    }
 }

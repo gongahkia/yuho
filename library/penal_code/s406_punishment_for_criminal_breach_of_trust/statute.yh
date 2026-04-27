@@ -84,4 +84,10 @@ statute 406 "Punishment for Criminal Breach of Trust" effective 1872-01-01 {
         "no s406 conviction per s94 general exception"
         when is_infringed(s94)
     }
+
+    exception general_defence_s76 {
+        "general defence under s76"
+        "no s406 conviction per s76 general exception"
+        when is_infringed(s76)
+    }
 }

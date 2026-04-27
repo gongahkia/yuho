@@ -79,4 +79,10 @@ statute 377BH "Producing child abuse material" effective 1872-01-01 effective 20
         "no s377BH conviction per s94 general exception"
         when is_infringed(s94)
     }
+
+    exception general_defence_s76 {
+        "general defence under s76"
+        "no s377BH conviction per s76 general exception"
+        when is_infringed(s76)
+    }
 }

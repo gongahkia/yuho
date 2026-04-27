@@ -74,4 +74,10 @@ statute 115 "Abetment of offence punishable with death or imprisonment for life"
         "no s115 conviction per s94 general exception"
         when is_infringed(s94)
     }
+
+    exception general_defence_s76 {
+        "general defence under s76"
+        "no s115 conviction per s76 general exception"
+        when is_infringed(s76)
+    }
 }

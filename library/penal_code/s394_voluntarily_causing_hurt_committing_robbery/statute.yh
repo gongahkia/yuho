@@ -68,4 +68,10 @@ statute 394 "Voluntarily causing hurt in committing robbery" effective 1872-01-0
         "no s394 conviction per s94 general exception"
         when is_infringed(s94)
     }
+
+    exception general_defence_s76 {
+        "general defence under s76"
+        "no s394 conviction per s76 general exception"
+        when is_infringed(s76)
+    }
 }

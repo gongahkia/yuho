@@ -59,4 +59,10 @@ statute 462 "Punishment for same offence when committed by person entrusted with
         "no s462 conviction per s94 general exception"
         when is_infringed(s94)
     }
+
+    exception general_defence_s76 {
+        "general defence under s76"
+        "no s462 conviction per s76 general exception"
+        when is_infringed(s76)
+    }
 }

@@ -45,4 +45,10 @@ statute 469 "Forgery for the purpose of harming the reputation of any person" ef
         "no s469 conviction per s94 general exception"
         when is_infringed(s94)
     }
+
+    exception general_defence_s76 {
+        "general defence under s76"
+        "no s469 conviction per s76 general exception"
+        when is_infringed(s76)
+    }
 }

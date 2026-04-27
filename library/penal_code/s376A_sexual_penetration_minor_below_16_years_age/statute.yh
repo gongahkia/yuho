@@ -110,4 +110,10 @@ statute 376A "Sexual penetration of minor below 16 years of age" effective 1872-
         "no s376A conviction per s94 general exception"
         when is_infringed(s94)
     }
+
+    exception general_defence_s76 {
+        "general defence under s76"
+        "no s376A conviction per s76 general exception"
+        when is_infringed(s76)
+    }
 }
