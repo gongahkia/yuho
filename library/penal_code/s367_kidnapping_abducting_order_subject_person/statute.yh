@@ -31,4 +31,15 @@ statute 367 "Kidnapping or abducting in order to subject a person to grievous hu
     
         }
     }
+
+    exception general_defence_s79 {
+        "act done by reason of mistake of fact"
+        "no s367 conviction per s79 general exception"
+        when is_infringed(s79)
+    }
+    exception general_defence_s84 {
+        "act done by a person of unsound mind"
+        "no s367 conviction per s84 general exception"
+        when is_infringed(s84)
+    }
 }

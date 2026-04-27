@@ -5,4 +5,15 @@ statute 362 "Abduction" effective 1872-01-01 {
     definitions {
         abduct := "Whoever by force compels, or by any deceitful means induces any person to go from any place, is said to abduct that person.";
     }
+
+    exception general_defence_s79 {
+        "act done by reason of mistake of fact"
+        "no s362 conviction per s79 general exception"
+        when is_infringed(s79)
+    }
+    exception general_defence_s84 {
+        "act done by a person of unsound mind"
+        "no s362 conviction per s84 general exception"
+        when is_infringed(s84)
+    }
 }

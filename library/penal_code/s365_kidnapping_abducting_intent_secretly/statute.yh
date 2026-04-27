@@ -23,4 +23,15 @@ statute 365 "Kidnapping or abducting with intent secretly and wrongfully to conf
     
         }
     }
+
+    exception general_defence_s79 {
+        "act done by reason of mistake of fact"
+        "no s365 conviction per s79 general exception"
+        when is_infringed(s79)
+    }
+    exception general_defence_s84 {
+        "act done by a person of unsound mind"
+        "no s365 conviction per s84 general exception"
+        when is_infringed(s84)
+    }
 }

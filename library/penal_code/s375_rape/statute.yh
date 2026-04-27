@@ -97,4 +97,15 @@ statute 375 "Rape" effective 1872-01-01 effective 2020-01-01 {
             "No man shall be punished under subsection (3)(b) in that case."
         }
     }
+
+    exception general_defence_s79 {
+        "act done by reason of mistake of fact"
+        "no s375 conviction per s79 general exception"
+        when is_infringed(s79)
+    }
+    exception general_defence_s84 {
+        "act done by a person of unsound mind"
+        "no s375 conviction per s84 general exception"
+        when is_infringed(s84)
+    }
 }

@@ -8,4 +8,15 @@ statute 360 "Kidnapping from Singapore" effective 1872-01-01 {
         without_consent := "Without the consent of that person, or of some person legally authorised to consent on behalf of that person";
         kidnapping_from_singapore := "Whoever conveys any person beyond the limits of Singapore without the consent of that person, or of some person legally authorised to consent on behalf of that person, is said to kidnap that person from Singapore.";
     }
+
+    exception general_defence_s79 {
+        "act done by reason of mistake of fact"
+        "no s360 conviction per s79 general exception"
+        when is_infringed(s79)
+    }
+    exception general_defence_s84 {
+        "act done by a person of unsound mind"
+        "no s360 conviction per s84 general exception"
+        when is_infringed(s84)
+    }
 }

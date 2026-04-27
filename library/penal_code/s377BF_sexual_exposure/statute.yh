@@ -48,4 +48,15 @@ statute 377BF "Sexual exposure" effective 1872-01-01 effective 2020-01-01 {
             caning := unspecified;
         }
     }
+
+    exception general_defence_s79 {
+        "act done by reason of mistake of fact"
+        "no s377BF conviction per s79 general exception"
+        when is_infringed(s79)
+    }
+    exception general_defence_s84 {
+        "act done by a person of unsound mind"
+        "no s377BF conviction per s84 general exception"
+        when is_infringed(s84)
+    }
 }

@@ -33,4 +33,15 @@ statute 364 "Kidnapping or abducting in order to murder" effective 1872-01-01 {
     illustration illustration_b {
         "( b ) A forcibly carries or entices B away from his home in order that B may be murdered. A has committed the offence defined in this section."
     }
+
+    exception general_defence_s79 {
+        "act done by reason of mistake of fact"
+        "no s364 conviction per s79 general exception"
+        when is_infringed(s79)
+    }
+    exception general_defence_s84 {
+        "act done by a person of unsound mind"
+        "no s364 conviction per s84 general exception"
+        when is_infringed(s84)
+    }
 }
