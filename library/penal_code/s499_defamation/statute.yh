@@ -120,4 +120,10 @@ statute 499 "Defamation" effective 1872-01-01 {
         "no s499 conviction per s76 general exception"
         when is_infringed(s76)
     }
+
+    exception general_defence_s77 {
+        "general defence under s77"
+        "no s499 conviction per s77 general exception"
+        when is_infringed(s77)
+    }
 }
