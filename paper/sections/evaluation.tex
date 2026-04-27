@@ -307,9 +307,13 @@ returned model is the smallest fact-set that distinguishes the
 two sections.
 
 \paragraph{General-defence \texttt{defeats} edge coverage.}
-The corpus carries 459 explicit general-defence \texttt{defeats}
+The corpus carries 610 explicit general-defence \texttt{defeats}
 edges across 147 of the 524 encoded sections (28\% by section
-count) using nine distinct Chapter IV general defences. The
+count) using fifteen distinct Chapter IV general defences,
+including the entire ss97--s106 private-defence family with
+per-defence doctrinal scoping (s99 omitted as a constraint
+rather than an affirmative defence; s102 and s105 omitted as
+timing qualifiers rather than standalone defences). The
 edges span every offence-bearing chapter touched by the case-law
 differential testing of \S\ref{subsec:case_law}: homicide
 (s299--s308), hurt (s319--s338), property (s378--s420), sexual
@@ -318,16 +322,19 @@ and unlawful labour (s359--s374), mischief and house-breaking
 (s425--s462), forgery (s463--s477A), abetment (s107--s120),
 defamation (s499--s502), and attempt (s511). Per-defence
 breakdown: s79 mistake-of-fact on 146 sections, s84 unsoundness-
-of-mind on 143 sections, s80 accident on 52 sections, s96
+of-mind on 143 sections, s97 body-or-property private defence on
+57 sections, s80 accident on 52 sections, s98 private defence
+against an unsound-minded aggressor on 32 sections, s96 general
 private defence on 31 sections, s85 / s86 intoxication on 29
-sections each (specific-intent slice), s100 deadly-assault
-private defence on 12 sections, s81 necessity on 11 sections,
-and s95 de minimis on 6 sections. The remaining ${\sim}72\%$
-of the corpus is mostly chapter-I/II definition sections,
-regulatory provisions, and procedural sections where general
-defences are moot or doctrinally degenerate; expansion to the
-rest of the private-defence family (ss97--s106) is logged as
-future work in the project TODO. Every edge is wired through
+sections each (specific-intent slice), s104 non-deadly property
+defence on 23 sections, s101 non-deadly body defence on 20
+sections, s100 deadly-assault body defence and s106 deadly
+defence with risk to innocent on 12 sections each, s81 necessity
+on 11 sections, s103 deadly property defence on 7 sections, and
+s95 de minimis on 6 sections. The remaining ${\sim}72\%$ of the
+corpus is mostly chapter-I/II definition sections, regulatory
+provisions, and procedural sections where general defences are
+moot or doctrinally degenerate. Every edge is wired through
 the \texttt{is\_infringed} cross-section predicate
 (\S\ref{subsec:exceptions}), so the Z3 backend's coverage
 follows the library coverage automatically. Edges are deployed

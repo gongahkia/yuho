@@ -19,10 +19,9 @@ semantics + soundness theorem with 5 lemmas + 8 sanity-witness tests) ·
 benchmark with full 205-fixture GPT-4o-mini + GPT-4o cross-model
 baselines + 3-way prompt-variant comparison (baseline / polarity /
 polarity-soft; polarity-soft is near-Pareto on gpt-4o-mini) · Direction B
-defeats-edge coverage at 459 edges across 147 sections (28% of corpus,
-9 distinct general defences: s79/s80/s81/s84/s85/s86/s95/s96/s100,
-spanning homicide, hurt, property, sexual offences, kidnapping,
-mischief, forgery, abetment, defamation, attempt) · 32-page smoke PDF ·
+defeats-edge coverage at 610 edges across 147 sections (28% of corpus,
+15 distinct general defences spanning the full Chapter IV regime
+including the entire ss97-s106 private-defence family) · 32-page smoke PDF ·
 `make paper-reproduce` end-to-end including Lean kernel-check.**
 
 Completed history (Phases A–D, the rigor-hardening trench, mechanisation
@@ -237,20 +236,26 @@ fixture-tested. Open work:
 
 ## Direction B — General-defence `defeats` edges (full coverage) `[~]`
 
-v2 ships **459 edges across 147 sections** (28% of the 524-section
-corpus) using **9 distinct Chapter IV general defences**. Per-defence
-breakdown:
+v3 ships **610 edges across 147 sections** (28% of the 524-section
+corpus) using **15 distinct Chapter IV general defences**. Per-
+defence breakdown:
 
 | Defence | Sections covered |
 |---|---|
 | s79 (mistake of fact) | 146 |
 | s84 (unsoundness of mind) | 143 |
+| s97 (private defence of body OR property) | 57 |
 | s80 (accident in lawful act) | 52 |
-| s96 (private defence) | 31 |
+| s98 (private defence against unsound-minded aggressor) | 32 |
+| s96 (private defence — general) | 31 |
 | s85 (intoxication when a defence) | 29 |
 | s86 (effect of intoxication when established) | 29 |
-| s100 (deadly-assault private defence) | 12 |
+| s104 (non-deadly property defence) | 23 |
+| s101 (non-deadly body defence) | 20 |
+| s100 (deadly-assault body defence) | 12 |
+| s106 (deadly defence with risk to innocent) | 12 |
 | s81 (greater-harm avoidance / necessity) | 11 |
+| s103 (deadly property defence) | 7 |
 | s95 (act causing slight harm / de minimis) | 6 |
 
 Cluster-level coverage:
@@ -293,15 +298,18 @@ Edges deployed via the idempotent
 - [x] **s81 (necessity / greater-harm avoidance)** onto property
       + mischief clusters. 11 sections covered (theft, mischief
       variants).
+- [x] **ss97-s106 private-defence family.** Per-defence
+      doctrinal mapping shipped. s97 (broadest, 57 sections),
+      s98 (against unsound aggressor, 32 sections), s101 (non-
+      deadly body, 20 sections), s103 (deadly property, 7
+      sections), s104 (non-deadly property, 23 sections), s106
+      (deadly with risk to innocent, 12 sections). s99
+      (constraint, not defence) and s102/s105 (timing
+      qualifiers, not standalone defences) deliberately omitted
+      per doctrine.
 
 Open follow-ups:
 
-- [ ] **ss97-s106 private-defence family.** The remaining sub-
-      sections of Chapter IV's private-defence regime (body,
-      property, deadly-assault-against-property, reasonable-
-      fear, third-party, etc.). Each has narrower doctrinal
-      reach than s96/s100 and warrants per-section review
-      before bulk-adding.
 - [ ] **Empirical uplift benchmark.** Re-run `yuho narrow-defence`
       against the case-law fixtures and report uplift in matched-
       element F1 against the court's stated reasoning.
