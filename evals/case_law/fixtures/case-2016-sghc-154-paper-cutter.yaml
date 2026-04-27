@@ -1,0 +1,36 @@
+id: case-2016-sghc-154-paper-cutter
+case_citation: "[2016] SGHC 154 (anonymised judgment)"
+actual_charge: "506"
+alternative_charge: null
+court_distinguished_on: []
+outcome: "Convicted of criminal intimidation under s 506 (first limb) of the Penal Code: by holding a paper-cutter and pointing it at the victim while threatening to cut her if she did not stop crying, with intent to cause alarm."
+case_summary: |
+  The accused held a paper-cutter and pointed it at the victim while
+  threatening to cut her if she did not stop crying. The threat was directed
+  at the victim's person (threat of injury) and was made with the requisite
+  intent to cause alarm. The case is illustrative of s 506 first-limb
+  prosecution where the threat is to cause injury (not death) and is
+  accompanied by an implement that turns the verbal threat into an immediate
+  prospect of harm.
+section: "506"
+description: |
+  A held a paper-cutter and pointed it at C while threatening to cut C if
+  C did not stop crying. The threat was made with intent to cause C alarm.
+  A was charged under s 506 (first limb) of the Penal Code.
+parties:
+  A: { role: accused }
+  C: { role: victim }
+acts:
+  - { actor: A, description: "holds a paper-cutter and points it at C" }
+  - { actor: A, description: "threatens to cut C if she does not stop crying" }
+mental_states:
+  A:
+    intent: "to cause alarm to C"
+circumstances:
+  - "threat to cause injury (not death) — engages s 506 first-limb penalty"
+  - "threat accompanied by display of an implement capable of causing the threatened injury"
+  - "judgment anonymised in the public report"
+outcomes:
+  - { actor: C, description: "C is alarmed by the threat and the paper-cutter display" }
+fact_facts: {}
+tags: [source:case-law, chapter:xxii, category:intimidation, doctrine:s506-first-limb, anonymised]

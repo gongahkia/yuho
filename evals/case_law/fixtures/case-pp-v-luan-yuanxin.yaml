@@ -1,0 +1,37 @@
+id: case-pp-v-luan-yuanxin
+case_citation: "Public Prosecutor v Luan Yuanxin [2002] SGHC 65"
+actual_charge: "506"
+alternative_charge: null
+court_distinguished_on: []
+outcome: "Convicted on a guilty plea of criminal intimidation under s 506 of the Penal Code (threat with a deadly weapon); sentenced to two months' imprisonment on the intimidation charge."
+case_summary: |
+  The respondent pointed a cleaver with a 20 cm blade at his wife and
+  threatened to kill her, with intent to cause alarm to her. He pleaded guilty
+  to all charges and was convicted and sentenced to two months' imprisonment
+  on the criminal intimidation charge under s 506 of the Penal Code. The
+  case illustrates a domestic-context s 506 prosecution where the threat was
+  accompanied by display of a deadly weapon (cleaver), engaging the
+  aggravated-threat penalty regime (threat to cause death).
+section: "506"
+description: |
+  A pointed a cleaver with a 20 cm blade at his wife C and threatened to kill
+  her, with intent to cause her alarm. A pleaded guilty and was sentenced
+  under s 506 of the Penal Code.
+parties:
+  A: { role: accused, attribute: spouse }
+  C: { role: victim, attribute: spouse }
+acts:
+  - { actor: A, description: "points a cleaver with a 20 cm blade at C" }
+  - { actor: A, description: "threatens to kill C" }
+mental_states:
+  A:
+    intent: "to cause alarm to C"
+circumstances:
+  - "threat made in domestic context (spouse-to-spouse)"
+  - "threat accompanied by display of a deadly weapon (cleaver, 20 cm blade)"
+  - "threat of death — aggravated-threat regime applies"
+  - "guilty plea"
+outcomes:
+  - { actor: C, description: "C is alarmed by the threat and the cleaver display" }
+fact_facts: {}
+tags: [source:case-law, chapter:xxii, category:intimidation, doctrine:s506-aggravated-threat, weapon:cleaver]

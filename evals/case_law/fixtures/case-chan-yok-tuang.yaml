@@ -1,0 +1,36 @@
+id: case-chan-yok-tuang
+case_citation: "Chan Yok Tuang v Public Prosecutor [2008] SGHC 137"
+actual_charge: "506"
+alternative_charge: null
+court_distinguished_on: []
+outcome: "Convicted on a guilty plea of criminal intimidation under s 506 of the Penal Code; sentenced to three months' imprisonment for threatening a police officer."
+case_summary: |
+  The appellant uttered the words "I will shoot her to death" in Hokkien at a
+  police officer, with intent to cause her alarm. The threat targeted the
+  officer's person (a threat to cause death) and was made with the requisite
+  intent to cause alarm. The appellant pleaded guilty to the charge under
+  s 506 of the Penal Code without qualification and was sentenced to three
+  months' imprisonment. The case is illustrative of the s 506 first-limb
+  punishment regime (intimidation simpliciter, prior to the [15/2019]
+  amendment that introduced the aggravated-threat second limb).
+section: "506"
+description: |
+  A uttered the words "I will shoot her to death" in Hokkien at C, a police
+  officer, with intent to cause C alarm. The threat was a threat of death.
+  A pleaded guilty and was sentenced under s 506 of the Penal Code.
+parties:
+  A: { role: accused }
+  C: { role: victim, attribute: police-officer }
+acts:
+  - { actor: A, description: "utters the threat 'I will shoot her to death' in Hokkien at C" }
+mental_states:
+  A:
+    intent: "to cause alarm to C"
+circumstances:
+  - "threat directed at a police officer"
+  - "threat of death — engages s 506 aggravated-threat penalty regime under post-[15/2019] amendment (case predates amendment, sentenced under prior framework)"
+  - "guilty plea; statement of facts admitted without qualification"
+outcomes:
+  - { actor: C, description: "C, the police officer, is alarmed by the threat" }
+fact_facts: {}
+tags: [source:case-law, chapter:xxii, category:intimidation, doctrine:s506-first-limb, sentencing-framework]
