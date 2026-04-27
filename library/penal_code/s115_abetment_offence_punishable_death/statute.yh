@@ -68,4 +68,10 @@ statute 115 "Abetment of offence punishable with death or imprisonment for life"
         "no s115 conviction per s83 general exception"
         when is_infringed(s83)
     }
+
+    exception general_defence_s94 {
+        "act to which a person is compelled by threats"
+        "no s115 conviction per s94 general exception"
+        when is_infringed(s94)
+    }
 }

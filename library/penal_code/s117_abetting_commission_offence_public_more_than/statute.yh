@@ -54,4 +54,10 @@ statute 117 "Abetting the commission of an offence by the public or by more than
         "no s117 conviction per s83 general exception"
         when is_infringed(s83)
     }
+
+    exception general_defence_s94 {
+        "act to which a person is compelled by threats"
+        "no s117 conviction per s94 general exception"
+        when is_infringed(s94)
+    }
 }

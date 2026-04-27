@@ -94,4 +94,10 @@ statute 332 "Voluntarily causing hurt to deter public servant from his duty" eff
         "no s332 conviction per s92 general exception"
         when is_infringed(s92)
     }
+
+    exception general_defence_s94 {
+        "act to which a person is compelled by threats"
+        "no s332 conviction per s94 general exception"
+        when is_infringed(s94)
+    }
 }

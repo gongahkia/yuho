@@ -27,4 +27,10 @@ statute 362 "Abduction" effective 1872-01-01 {
         "no s362 conviction per s83 general exception"
         when is_infringed(s83)
     }
+
+    exception general_defence_s94 {
+        "act to which a person is compelled by threats"
+        "no s362 conviction per s94 general exception"
+        when is_infringed(s94)
+    }
 }

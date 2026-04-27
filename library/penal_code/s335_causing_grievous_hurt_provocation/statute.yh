@@ -85,4 +85,10 @@ statute 335 "Causing grievous hurt on provocation" effective 1872-01-01 effectiv
         "no s335 conviction per s92 general exception"
         when is_infringed(s92)
     }
+
+    exception general_defence_s94 {
+        "act to which a person is compelled by threats"
+        "no s335 conviction per s94 general exception"
+        when is_infringed(s94)
+    }
 }

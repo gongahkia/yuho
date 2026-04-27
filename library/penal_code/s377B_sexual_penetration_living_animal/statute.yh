@@ -71,4 +71,10 @@ statute 377B "Sexual penetration with living animal" effective 1872-01-01 effect
         "no s377B conviction per s83 general exception"
         when is_infringed(s83)
     }
+
+    exception general_defence_s94 {
+        "act to which a person is compelled by threats"
+        "no s377B conviction per s94 general exception"
+        when is_infringed(s94)
+    }
 }

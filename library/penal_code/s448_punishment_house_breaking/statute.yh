@@ -44,4 +44,10 @@ statute 448 "Punishment for house-breaking" effective 1872-01-01 effective 2020-
         "no s448 conviction per s83 general exception"
         when is_infringed(s83)
     }
+
+    exception general_defence_s94 {
+        "act to which a person is compelled by threats"
+        "no s448 conviction per s94 general exception"
+        when is_infringed(s94)
+    }
 }

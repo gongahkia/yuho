@@ -85,4 +85,10 @@ statute 331 "Voluntarily causing grievous hurt to extort confession or to compel
         "no s331 conviction per s92 general exception"
         when is_infringed(s92)
     }
+
+    exception general_defence_s94 {
+        "act to which a person is compelled by threats"
+        "no s331 conviction per s94 general exception"
+        when is_infringed(s94)
+    }
 }

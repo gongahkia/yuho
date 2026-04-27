@@ -76,4 +76,10 @@ statute 377BC "Distribution of voyeuristic image or recording" effective 1872-01
         "no s377BC conviction per s83 general exception"
         when is_infringed(s83)
     }
+
+    exception general_defence_s94 {
+        "act to which a person is compelled by threats"
+        "no s377BC conviction per s94 general exception"
+        when is_infringed(s94)
+    }
 }

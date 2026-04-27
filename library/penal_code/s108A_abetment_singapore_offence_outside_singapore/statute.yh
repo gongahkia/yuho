@@ -35,4 +35,10 @@ statute 108A "Abetment in Singapore of an offence outside Singapore" effective 1
         "no s108A conviction per s83 general exception"
         when is_infringed(s83)
     }
+
+    exception general_defence_s94 {
+        "act to which a person is compelled by threats"
+        "no s108A conviction per s94 general exception"
+        when is_infringed(s94)
+    }
 }

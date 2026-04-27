@@ -104,4 +104,10 @@ statute 324 "Voluntarily causing hurt by dangerous weapons or means" effective 1
         "no s324 conviction per s92 general exception"
         when is_infringed(s92)
     }
+
+    exception general_defence_s94 {
+        "act to which a person is compelled by threats"
+        "no s324 conviction per s94 general exception"
+        when is_infringed(s94)
+    }
 }

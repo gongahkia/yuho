@@ -119,4 +119,10 @@ statute 375 "Rape" effective 1872-01-01 effective 2020-01-01 {
         "no s375 conviction per s83 general exception"
         when is_infringed(s83)
     }
+
+    exception general_defence_s94 {
+        "act to which a person is compelled by threats"
+        "no s375 conviction per s94 general exception"
+        when is_infringed(s94)
+    }
 }

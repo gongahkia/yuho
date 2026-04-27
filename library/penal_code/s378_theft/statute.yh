@@ -126,4 +126,10 @@ statute 378 "Theft" effective 1872-01-01 {
         "no s378 conviction per s97 general exception"
         when is_infringed(s97)
     }
+
+    exception general_defence_s94 {
+        "act to which a person is compelled by threats"
+        "no s378 conviction per s94 general exception"
+        when is_infringed(s94)
+    }
 }

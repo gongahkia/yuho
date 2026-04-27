@@ -60,4 +60,10 @@ statute 435 "Mischief by fire or explosive substance with intent to cause damage
         "no s435 conviction per s83 general exception"
         when is_infringed(s83)
     }
+
+    exception general_defence_s94 {
+        "act to which a person is compelled by threats"
+        "no s435 conviction per s94 general exception"
+        when is_infringed(s94)
+    }
 }
