@@ -557,74 +557,88 @@ per-fixture JSON plus stratified accuracy slices (per chapter,
 per category, per difficulty, per polarity), so reproducing the
 result against a different model is one command.
 
-\paragraph{Paired prompt-variant comparison.}
-We ran a second \statBenchmarkLlmModel{} pass at the same
-$n = \statBenchmarkFixtures{}$ fixtures under a polarity-aware
-prompt variant (\texttt{--prompt-variant polarity} in the
-runner): the T2 prompt foregrounds the empty-set case explicitly
-(``many scenarios are constructed so that NO element is
-satisfied'') and invites an optional one-line ``\texttt{\#
-ruled out:}'' chain-of-thought preamble before the JSON answer;
-T1 gains \texttt{none} as a permitted reply. The parser tolerates
-the CoT preamble by extracting the last balanced JSON array. The
-scoring code is identical across the two variants.
+\paragraph{Three-way prompt-variant comparison.}
+We ran two further \statBenchmarkLlmModel{} passes at the same
+$n = \statBenchmarkFixtures{}$ fixtures under structurally-paired
+prompt variants. The \emph{polarity} variant
+(\texttt{--prompt-variant polarity}) foregrounds the empty-set
+case explicitly (``many scenarios are constructed so that NO
+element is satisfied'') and invites an optional one-line
+``\texttt{\# ruled out:}'' chain-of-thought preamble before the
+JSON answer; T1 gains \texttt{none} as a permitted reply. The
+\emph{polarity-soft} variant (\texttt{--prompt-variant
+polarity-soft}) keeps the empty-set priming and the \texttt{none}
+T1 option but drops the CoT invitation. The parser tolerates a
+preceding CoT preamble by extracting the last balanced JSON array.
+Scoring code is identical across all three variants.
 
 \begin{center}
 \begin{tabular}{lrrr}
 \hline
-& \textbf{Baseline} & \textbf{Polarity} & $\Delta$ \\
+& \textbf{Baseline} & \textbf{Polarity} & \textbf{Polarity-soft} \\
 \hline
 T1 whole corpus      & \statBenchmarkLlmTone{}\%
                      & \statBenchmarkLlmPolTone{}\%
-                     & $-1.5$pp \\
+                     & \statBenchmarkLlmSoftTone{}\% \\
 T2 exact whole       & \statBenchmarkLlmTtwo{}\%
                      & \statBenchmarkLlmPolTtwo{}\%
-                     & $-15.1$pp \\
+                     & \statBenchmarkLlmSoftTtwo{}\% \\
 T2 mean F1 whole     & \statBenchmarkLlmTtwoFOne{}
                      & \statBenchmarkLlmPolTtwoFOne{}
-                     & $-0.258$ \\
+                     & \statBenchmarkLlmSoftTtwoFOne{} \\
 T3 whole corpus      & \statBenchmarkLlmTthree{}\%
                      & \statBenchmarkLlmPolTthree{}\%
-                     & $0.0$pp \\
+                     & \statBenchmarkLlmSoftTthree{}\% \\
 T1 polarity-neg      & \statBenchmarkLlmNegPolarTone{}\%
                      & \statBenchmarkLlmPolNegPolarTone{}\%
-                     & $\mathbf{+26.7}$\textbf{pp} \\
+                     & \statBenchmarkLlmSoftNegPolarTone{}\% \\
 T2 F1 polarity-neg   & \statBenchmarkLlmNegPolarFOne{}
                      & \statBenchmarkLlmPolNegPolarFOne{}
-                     & $\mathbf{+0.215}$ \\
+                     & \statBenchmarkLlmSoftNegPolarFOne{} \\
 \hline
 \end{tabular}
 \end{center}
 
-The intervention does what it was designed to do: T1 on the
-$n=30$ polarity-negative slice rises from
+The polarity variant does what it was designed to do on the
+$n=30$ negative slice (T1 rises from
 \statBenchmarkLlmNegPolarTone{}\% to
-\statBenchmarkLlmPolNegPolarTone{}\%, and T2 F1 on the same slice
-from \statBenchmarkLlmNegPolarFOne{} to
-\statBenchmarkLlmPolNegPolarFOne{} --- a substantial recovery on
-the failure mode the baseline run flagged. But the same priming
-that helps the negative slice over-corrects on the positive
-corpus: whole-corpus T2 F1 drops by 0.258 (from
+\statBenchmarkLlmPolNegPolarTone{}\%, T2 F1 from
+\statBenchmarkLlmNegPolarFOne{} to
+\statBenchmarkLlmPolNegPolarFOne{}), but it over-corrects on the
+positive corpus: whole-corpus T2 F1 drops by 0.258 (from
 \statBenchmarkLlmTtwoFOne{} to \statBenchmarkLlmPolTtwoFOne{}),
 because the model now rules out genuinely-satisfied elements too
-aggressively when invited to enumerate exclusions. T3 is flat
-across both variants, and T1 whole-corpus accuracy moves only
-$1.5$pp.
+aggressively when invited to enumerate exclusions. The polarity-
+soft variant disambiguates the cause. With the priming retained
+but the \texttt{\# ruled out:} CoT invitation removed, the
+negative-slice gain is preserved
+(T2 F1 \statBenchmarkLlmSoftNegPolarFOne{} matches polarity's
+\statBenchmarkLlmPolNegPolarFOne{}; T1
+\statBenchmarkLlmSoftNegPolarTone{}\% is within 4pp of polarity's
+\statBenchmarkLlmPolNegPolarTone{}\%) while the positive-corpus
+regression collapses (T2 F1 falls only from
+\statBenchmarkLlmTtwoFOne{} to \statBenchmarkLlmSoftTtwoFOne{},
+$-0.053$, vs.\ polarity's $-0.258$; T2 exact-set match
+\emph{improves} from \statBenchmarkLlmTtwo{}\% to
+\statBenchmarkLlmSoftTtwo{}\%; T3 lifts marginally from
+\statBenchmarkLlmTthree{}\% to \statBenchmarkLlmSoftTthree{}\%).
 
-The honest reading is that polarity priming is not a Pareto
-improvement on \statBenchmarkLlmModel{}: it trades positive-case
-recall for negative-case calibration, and in this trade the
-positive corpus loses more (in F1) than the negative slice gains
-(in F1). The result is informative for downstream legal-AI work
-in two distinct directions. First, prompt-level interventions
-that ``acknowledge the null answer'' are cheap and effective
-when the failure mode is over-firing, but they do not come for
-free on the rest of the distribution; conditional or
-fixture-aware prompting would be needed to capture both gains.
-Second, the failure mode itself is model-specific: the cross-
-model paragraph below shows that
-\statBenchmarkLlmAltModel{} does not exhibit the polarity-
-negative collapse, and so does not need the intervention.
+The reading is that the polarity-variant regression came from the
+CoT path encouraging over-exclusion, not from the empty-set
+priming itself. Polarity-soft is a near-Pareto improvement on
+this model: it captures essentially the full negative-slice gain
+($+0.215$ T2 F1, $+23.4$pp T1 over baseline) at a fraction of the
+positive-corpus cost ($-0.053$ T2 F1; T2 exact and T3 actually
+improve). The general finding for downstream legal-AI work is
+that prompt-level interventions in the
+``\emph{acknowledge the null answer}'' family are cheap and
+effective in the failure regime they target, but adding a
+generative CoT path on top of them risks corrupting the positive-
+case distribution; the priming alone is the load-bearing piece.
+The failure mode is also model-specific: the cross-model paragraph
+below shows that \statBenchmarkLlmAltModel{} does not exhibit
+the polarity-negative collapse, so the intervention is unnecessary
+on that model.
 
 \paragraph{Cross-model comparison.} A second baseline against
 \statBenchmarkLlmAltModel{} on the same $n =
