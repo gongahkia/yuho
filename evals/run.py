@@ -282,8 +282,51 @@ _SYSTEM_PROMPT = (
 )
 
 
+# Cheap regex/keyword classifier for null-answer cues. Used by the
+# `polarity-conditional` variant to route per-fixture: scenarios that
+# trip the classifier get the polarity-soft v2 prompts; those that do
+# not get the baseline v1 prompts. Goal: capture the negative-slice
+# gain of polarity-soft without paying its small positive-corpus cost.
+# Patterns are case-insensitive substring matches on the scenario.
+_NULL_CUE_PATTERNS = (
+    r"\bno element\b",
+    r"\bno offence\b",
+    r"\bno mens rea\b",
+    r"\bno intent\b",
+    r"\bwithout intent\b",
+    r"\bwithout knowledge\b",
+    r"\bwithout dishonest\b",
+    r"\bwithout fraudulent\b",
+    r"\bdid not\b",
+    r"\bdoes not\b",
+    r"\bdoesn't\b",
+    r"\bdidn't\b",
+    r"\bnever\b",
+    r"\bno deception\b",
+    r"\bno fraud\b",
+    r"\bnot guilty\b",
+    r"\bno harm\b",
+    r"\bno injury\b",
+    r"\bnone fires?\b",
+    r"\bno element fires\b",
+)
+_NULL_CUE_RE = re.compile("|".join(_NULL_CUE_PATTERNS), re.IGNORECASE)
+
+
+def _classify_null_cue(scenario: str) -> bool:
+    """Return True if scenario contains a null-answer keyword cue."""
+    return bool(_NULL_CUE_RE.search(scenario or ""))
+
+
+def _resolve_variant(variant: str, scenario: str) -> str:
+    """Resolve `polarity-conditional` per-fixture; otherwise pass-through."""
+    if variant == "polarity-conditional":
+        return "polarity-soft" if _classify_null_cue(scenario) else "baseline"
+    return variant
+
+
 def _prompt_section(scenario: str, variant: str = "polarity") -> str:
-    # Three prompt variants supported for §7.6 N-way comparison:
+    # Four prompt variants supported for §7.6 N-way comparison:
     #   - "baseline":     the original v1 closed-vocab prompt
     #   - "polarity":     adds `none` option + polarity priming +
     #                     `# ruled out:` CoT invitation on T2
@@ -291,6 +334,10 @@ def _prompt_section(scenario: str, variant: str = "polarity") -> str:
     #                     invitation (tests whether the regression
     #                     under "polarity" comes from the CoT path
     #                     or from the priming itself)
+    #   - "polarity-conditional": cheap regex classifier on scenario;
+    #                     routes to polarity-soft on null-cue hits,
+    #                     baseline otherwise (caller resolves via
+    #                     _resolve_variant before calling here)
     # T1 prompt is identical between "polarity" and "polarity-soft"
     # — the variants only diverge on T2.
     # Scorer accepts either truth_section or `none` when truth
@@ -602,13 +649,17 @@ def score_fixture(
     """Run all three tasks on a single fixture, return per-task scores."""
     t0 = time.monotonic()
 
+    # `polarity-conditional` resolves per-fixture into polarity-soft or
+    # baseline based on a cheap null-cue classifier on the scenario text.
+    effective_variant = _resolve_variant(variant, fixture.scenario)
+
     # T1 — section. polarity-negative fixtures (truth_elements empty)
     # have an inherent ambiguity: the scenario is *about* a section
     # (e.g. an s100 illustration where no element fires), but a strict
     # reading is "no offence is made out, so no section applies". We
     # accept either the canonical section or `none` in that case; for
     # ordinary fixtures only the canonical section is correct.
-    raw_section = client.query(_prompt_section(fixture.scenario, variant=variant),
+    raw_section = client.query(_prompt_section(fixture.scenario, variant=effective_variant),
                                system=_SYSTEM_PROMPT, task_kind="section")
     pred_section = _canonical_section(raw_section)
     truth_canonical = _canonical_section(fixture.truth_section)
@@ -630,7 +681,7 @@ def score_fixture(
     vocabulary = sorted(fixture.fact_facts.keys()) if fixture.fact_facts else None
     raw_elements = client.query(
         _prompt_elements(fixture.scenario, fixture.truth_section,
-                         vocabulary, variant=variant),
+                         vocabulary, variant=effective_variant),
         system=_SYSTEM_PROMPT, task_kind="elements",
     )
     pred_elements = _parse_elements(raw_elements)
@@ -765,13 +816,17 @@ def main() -> int:
     p.add_argument("--no-per-fixture", action="store_true",
                    help="Hide the per-fixture table in the human report")
     p.add_argument("--prompt-variant",
-                   choices=["baseline", "polarity", "polarity-soft"],
+                   choices=["baseline", "polarity", "polarity-soft",
+                            "polarity-conditional"],
                    default="polarity",
                    help="Prompt variant. `baseline` = original v1 prompts; "
                         "`polarity` = adds polarity priming + optional "
                         "`# ruled out:` CoT preamble + `none` T1 option; "
                         "`polarity-soft` = same as `polarity` minus the "
-                        "CoT invitation. Used for §7.6 N-way comparison.")
+                        "CoT invitation; `polarity-conditional` = cheap "
+                        "regex classifier on scenario routes to "
+                        "polarity-soft on null-cue hits, baseline "
+                        "otherwise. Used for §7.6 N-way comparison.")
     args = p.parse_args()
 
     fixtures = load_fixtures(args.fixtures)
