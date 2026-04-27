@@ -11,9 +11,22 @@ statute 96 "Nothing done in private defence is an offence" effective 1872-01-01 
         /// defence regime: an act is no offence if it is done in the exercise
         /// of the right of private defence. The right itself (body / property,
         /// extent, deadly limb, timing) is structured by ss97-s106A.
+        ///
+        /// Cross-section folding (audit follow-up to commits
+        /// `4f0ba0c9` / `f6042c99` / `f1155a9d`): the validity conditions
+        /// of s98 (proportionality + public-authority-recourse) and the
+        /// temporal envelopes of s101 (body) and s104 (property) are
+        /// modelled here as circumstance conjuncts that reference the
+        /// corresponding sections by name. Yuho's element grammar
+        /// currently treats these as opaque booleans — a future grammar
+        /// enhancement (a `requires(sN)` predicate at element-entry
+        /// scope) would let the Z3 backend wire them through to s98 /
+        /// s101 / s104's actual elements automatically.
         all_of {
             actus_reus act_done := "An act is done";
             circumstance exercise_of_right_of_private_defence := "The act is done in the exercise of the right of private defence (as constituted by ss97-s106A)";
+            circumstance s98_validity_conditions_satisfied := "The exercise satisfies the s98 validity conditions (proportionate to the circumstances AND no reasonable opportunity for public-authority recourse)";
+            circumstance s101_or_s104_temporal_envelope_active := "The exercise is within the temporal envelope of either s101 (body-defence right commencement + continuance) or s104 (property-defence right commencement + continuance, per offence-type)";
         }
     }
 }

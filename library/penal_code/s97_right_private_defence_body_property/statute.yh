@@ -15,12 +15,20 @@ statute 97 "Right of private defence of the body and of property" effective 1872
         /// against theft / robbery / mischief / criminal trespass (or attempts
         /// thereof). Either limb suffices to engage the right; both are
         /// subject to the proportionality and public-authority limits in
-        /// sections 98 and 106A.
+        /// sections 98 and 106A, AND to the temporal envelope of either
+        /// s101 (body) or s104 (property) per the limb engaged.
+        ///
+        /// Cross-section folding: the s98 validity conditions and the
+        /// matching limb's temporal envelope (s101 for body, s104 for
+        /// property) are modelled as circumstance conjuncts referencing
+        /// the corresponding sections by name. See s96 for the rationale
+        /// (grammar enhancement deferred).
         all_of {
             any_of {
                 all_of {
                     circumstance offence_affecting_human_body := "The triggering act is an offence affecting the human body";
                     actus_reus defends_body := "The defender acts to defend his own body or the body of another";
+                    circumstance s101_body_temporal_envelope_active := "The body-defence right is within s101's commencement-and-continuance envelope";
                 }
                 all_of {
                     any_of {
@@ -30,9 +38,11 @@ statute 97 "Right of private defence of the body and of property" effective 1872
                         circumstance criminal_trespass_or_attempt := "The triggering act is criminal trespass or an attempt to commit criminal trespass";
                     }
                     actus_reus defends_property := "The defender acts to defend property of himself or another";
+                    circumstance s104_property_temporal_envelope_active := "The property-defence right is within s104's commencement-and-continuance envelope (per the offence-type-specific limb of s104(2)-(5))";
                 }
             }
             circumstance subject_to_s98_and_s106A := "The exercise of the right is subject to the restrictions in ss98 and 106A";
+            circumstance s98_validity_conditions_satisfied := "The exercise satisfies the s98 validity conditions (proportionate to the circumstances AND no reasonable opportunity for public-authority recourse)";
         }
     }
 }

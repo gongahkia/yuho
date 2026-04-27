@@ -15,6 +15,12 @@ statute 106 "When such right extends to causing any harm other than death" effec
         /// causing of any harm short of death — subject to ss98 and 106A.
         /// Note that robbery and house-breaking (covered by s105's deadly
         /// limb) are deliberately excluded from s106's enumeration.
+        ///
+        /// Cross-section folding: as a property-defence reach section,
+        /// s106 inherits the s98 validity conditions and the s104
+        /// property-defence timing envelope (per the offence-type
+        /// continuance limb in s104(2) for theft, s104(4) for mischief
+        /// and criminal trespass).
         all_of {
             any_of {
                 circumstance offence_is_theft := "The triggering offence is theft (or attempt thereof)";
@@ -24,6 +30,8 @@ statute 106 "When such right extends to causing any harm other than death" effec
             circumstance offence_not_within_s105 := "The offence is not of any of the descriptions in section 105";
             actus_reus harm_other_than_death_caused := "The defender voluntarily causes harm other than death to the wrongdoer";
             circumstance subject_to_s98_and_s106A := "The exercise is subject to the restrictions in sections 98 and 106A";
+            circumstance s98_validity_conditions_satisfied := "The exercise satisfies the s98 validity conditions (proportionate to the circumstances AND no reasonable opportunity for public-authority recourse)";
+            circumstance s104_property_temporal_envelope_active := "The property-defence right is within s104's commencement-and-continuance envelope (per the offence-type-specific limb of s104(2)-(5))";
         }
     }
 }

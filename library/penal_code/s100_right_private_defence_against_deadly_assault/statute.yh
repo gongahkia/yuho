@@ -10,11 +10,18 @@ statute 100 "Right of private defence against deadly assault when there is risk 
 
     elements {
         /// Section 100 is conjunctive: the extension applies only when the defence is being exercised against a deadly assault and it cannot be effectually exercised without risking harm to an innocent person.
+        ///
+        /// Cross-section folding: as a body-defence reach section, s100
+        /// inherits the s98 validity conditions and the s101 body-defence
+        /// timing envelope. Modelled as circumstance conjuncts referencing
+        /// the corresponding sections; see s96 for the rationale.
         all_of {
             circumstance exercise_of_right := "In the exercise of the right of private defence";
             circumstance assault_causing_reasonable_belief_of_death := "Against an assault which causes the defender to reasonably believe that death would be caused to him or to any other person";
             circumstance cannot_effectually_exercise_without_risk := "The defender is so situated that he cannot effectually exercise that right without risk of harm to an innocent person";
             circumstance extension_to_running_risk := "His right of private defence extends to the running of that risk";
+            circumstance s98_validity_conditions_satisfied := "The exercise satisfies the s98 validity conditions (proportionate to the circumstances AND no reasonable opportunity for public-authority recourse)";
+            circumstance s101_body_temporal_envelope_active := "The body-defence right is within s101's commencement-and-continuance envelope";
         }
     }
 

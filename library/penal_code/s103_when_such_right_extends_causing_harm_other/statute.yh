@@ -13,11 +13,21 @@ statute 103 "When such right extends to causing any harm other than death" effec
         /// deadly extension), the right does not reach voluntary causing of
         /// death — but does reach voluntary causing of any other harm. The
         /// restrictions in ss98 and 106A still apply.
+        ///
+        /// Cross-section folding: as a body-defence reach section, s103
+        /// inherits the s98 validity conditions and the s101 body-defence
+        /// timing envelope. The `subject_to_s98_and_s106A` circumstance
+        /// is kept (it captures the statutory cross-reference at the prose
+        /// level) and the new `s98_validity_conditions_satisfied` and
+        /// `s101_body_temporal_envelope_active` conjuncts make the
+        /// dependency Z3-actionable.
         all_of {
             circumstance right_of_body_defence_engaged := "The right of private defence of the body is being exercised";
             circumstance offence_not_within_s102 := "The triggering offence is not of any of the descriptions in section 102";
             actus_reus harm_other_than_death_caused := "The defender voluntarily causes harm other than death to the assailant";
             circumstance subject_to_s98_and_s106A := "The exercise is subject to the restrictions in sections 98 and 106A";
+            circumstance s98_validity_conditions_satisfied := "The exercise satisfies the s98 validity conditions (proportionate to the circumstances AND no reasonable opportunity for public-authority recourse)";
+            circumstance s101_body_temporal_envelope_active := "The body-defence right is within s101's commencement-and-continuance envelope";
         }
     }
 }
