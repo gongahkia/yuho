@@ -68,4 +68,10 @@ statute 427 "Punishment for committing mischief causing disruption to key servic
         "no s427 conviction per s84 general exception"
         when is_infringed(s84)
     }
+
+    exception general_defence_s81 {
+        "act likely to cause harm but done to prevent other harm"
+        "no s427 conviction per s81 general exception"
+        when is_infringed(s81)
+    }
 }

@@ -72,4 +72,10 @@ statute 321 "Voluntarily Causing Hurt" effective 1872-01-01 subsumes 319 {
         "no s321 conviction per s96 general exception"
         when is_infringed(s96)
     }
+
+    exception general_defence_s95 {
+        "act causing slight harm"
+        "no s321 conviction per s95 general exception"
+        when is_infringed(s95)
+    }
 }

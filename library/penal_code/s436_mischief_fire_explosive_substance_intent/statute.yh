@@ -45,4 +45,10 @@ statute 436 "Mischief by fire or explosive substance with intent to destroy a ho
         "no s436 conviction per s84 general exception"
         when is_infringed(s84)
     }
+
+    exception general_defence_s81 {
+        "act likely to cause harm but done to prevent other harm"
+        "no s436 conviction per s81 general exception"
+        when is_infringed(s81)
+    }
 }

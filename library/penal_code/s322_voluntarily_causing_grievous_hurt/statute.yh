@@ -53,4 +53,10 @@ statute 322 "Voluntarily causing grievous hurt" effective 1872-01-01 {
         "no s322 conviction per s96 general exception"
         when is_infringed(s96)
     }
+
+    exception general_defence_s95 {
+        "act causing slight harm"
+        "no s322 conviction per s95 general exception"
+        when is_infringed(s95)
+    }
 }

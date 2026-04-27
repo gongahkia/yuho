@@ -68,4 +68,10 @@ statute 425 "Mischief" effective 1872-01-01 effective 2022-04-01 {
         "no s425 conviction per s84 general exception"
         when is_infringed(s84)
     }
+
+    exception general_defence_s81 {
+        "act likely to cause harm but done to prevent other harm"
+        "no s425 conviction per s81 general exception"
+        when is_infringed(s81)
+    }
 }
