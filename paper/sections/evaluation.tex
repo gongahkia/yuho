@@ -798,6 +798,32 @@ model-specific artefact, not a benchmark-wide structural
 property; the cross-model split itself becomes a useful
 discriminator that the benchmark surfaces.
 
+A third baseline against the reasoning model
+\statBenchmarkLlmReasonModel{} (same $n =
+\statBenchmarkFixtures{}$ fixtures, same baseline-variant
+prompts) sharpens the picture further. Whole-corpus numbers are
+broadly comparable to \statBenchmarkLlmModel{} on the structural
+tasks (T1 \statBenchmarkLlmReasonTone{}\%, T2 mean F1
+\statBenchmarkLlmReasonTtwoFOne{}, T2 exact
+\statBenchmarkLlmReasonTtwo{}\%) but T3 drops by
+\textasciitilde$8.8$pp to
+\statBenchmarkLlmReasonTthree{}\% --- the model loses ground on
+the most templated of the three tasks (single-token exception
+name) despite spending hundreds of hidden reasoning tokens per
+call. Crucially, the polarity-negative collapse \emph{does}
+reproduce: T2 F1 \statBenchmarkLlmReasonNegPolarFOne{} (matching
+\statBenchmarkLlmModel{}'s
+\statBenchmarkLlmNegPolarFOne{}), T1
+\statBenchmarkLlmReasonNegPolarTone{}\% (in fact $10$pp
+\emph{worse} than \statBenchmarkLlmModel{}'s
+\statBenchmarkLlmNegPolarTone{}\%). The takeaway is that hidden
+chain-of-thought reasoning is not the right tool for the
+empty-set failure mode: the model's bias toward enumerating
+satisfied elements is preserved, and possibly amplified, by
+giving it more thinking budget. The cheap-classifier
+intervention from the four-way table targets the failure mode
+directly, where reasoning-token spend does not.
+
 \paragraph{Caveats.} Three. First, the benchmark probes
 \emph{structural} agreement with the encoded statute, not legal
 correctness in the sense a practitioner would test --- the
