@@ -146,16 +146,18 @@ abetment provisions in Chapter V refer to whichever offence is being
 abetted). lam4 targets contracts; Yuho targets penal code; the two
 grammars do not overlap, but the named-norm idea ports directly.
 
-\paragraph{LexScript.} LexScript~\cite{lexscript} (MIT, MIT-licensed) is the
-closest tooling-shaped peer. It uses a tree-sitter grammar with a
-statute-shaped top level, compiles to multiple targets, and notably
+\paragraph{LexScript.} LexScript~\cite{lexscript} (MIT-licensed) is
+the closest tooling-shaped peer. It uses the \texttt{participle/v2}
+parser generator in Go (where Yuho uses tree-sitter) with a
+contract-shaped top level, compiles to multiple targets, and notably
 implements Tarjan strongly-connected-component analysis over the
-statute reference graph to detect cyclic cross-references and
-unreachable exception branches. We adopt the SCC analysis directly
-(planned, blocked on G10). LexScript's element model is thinner than
-ours: it has no burden qualifier, no causal-link edges between elements,
-and no Catala-style exception priority. Where Yuho aims for full coverage
-of one statute family, LexScript aims for a thinner grammar across many.
+contract reference graph to detect cyclic cross-references and
+unreachable termination paths. We adopt the SCC analysis directly
+(planned, blocked on G10). LexScript's element model is thinner
+than ours: it has no burden qualifier, no causal-link edges
+between elements, and no Catala-style exception priority. The two
+systems also target different statute families: LexScript targets
+contracts, Yuho targets the penal code.
 
 \paragraph{eFLINT.} eFLINT~\cite{eflint2020}, developed at the
 University of Amsterdam, is a norm-based DSL with explicit acts,
@@ -182,13 +184,16 @@ both are part of the legal-DSL landscape against which Yuho should be
 positioned, and both are deployed beyond their authoring teams in a
 way Yuho is not.
 
-\paragraph{LDOC.} LDOC~\cite{ldoc} centres the authoring loop on Word
-and PDF. The encoding is a structured Word document with semantic
-annotations; downstream tools render to other formats. This influences
-our DOCX transpile target, but the philosophical commitment is opposite:
-LDOC treats Word as the source of truth, while Yuho treats the
-\texttt{.yh} file in version control as canonical and DOCX as one of
-six generated outputs.
+\paragraph{LDOC.} LDOC~\cite{ldoc} is a plain-text DSL for authoring
+professional documents that compiles to DOCX (TypeScript
+implementation, with an LSP server for editor integration). The
+source-of-truth posture matches Yuho's: a plain-text \texttt{.ldoc}
+file is canonical, and the rendered DOCX is a downstream artefact.
+The systems differ on target audience and structural commitment ---
+LDOC is a general-purpose document-authoring DSL, where Yuho is
+statute-shaped --- but the convergent decision to treat the
+plain-text source as canonical and DOCX as one of several rendered
+outputs validates Yuho's DOCX transpile target.
 
 \subsection{Verification infrastructure}
 Beyond DSLs, several lines of work import formal-methods machinery into
@@ -219,8 +224,10 @@ well-fit to its declared domain --- but that no existing DSL targets a
 common-law penal code at full coverage. Catala has the right defaults
 but no penalty algebra and no illustrations. lam4 has the right deontic
 core but expects contracts, not penal sections. LexScript has the right
-shape but a thinner grammar. Akoma Ntoso has structure without semantics.
-LDOC inverts the source-of-truth relationship we want.
+parser-generator-driven shape but a thinner grammar and contracts as
+its target. Akoma Ntoso has structure without semantics. LDOC is
+plain-text-source-canonical like Yuho but is a general-purpose
+document-authoring DSL, not statute-shaped.
 
 The Singapore Penal Code 1871 was selected as the testbed for three
 reasons elaborated in \S\ref{sec:intro}: it is public, modestly sized,

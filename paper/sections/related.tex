@@ -77,9 +77,9 @@ Catala        & menhir / OCaml & ---         & ---        & native rewriting
 lam4          & ANTLR        & $\sim$       & ---        & ---
                 & ---
                 & Synthetic contracts \\
-LexScript     & tree-sitter  & $\sim$       & ---        & ---
+LexScript     & participle/Go & $\sim$      & ---        & ---
                 & multi
-                & Various \\
+                & Contracts \\
 LDOC          & Word + macros & ---         & ---        & ---
                 & PDF, DOCX
                 & Authored documents (varies) \\
@@ -103,9 +103,10 @@ Python --- the Z3 hookup is our own and we do not inherit Catala's
 soundness proof). lam4 has the right deontic core but no
 statute-level structural primitives, and like Catala does not need
 penalty algebra (n/a) for its contracts-and-regulations target.
-LexScript shares Yuho's tree-sitter-driven shape but has a thinner
-element model. LDOC has illustrations because Word renders them
-naturally, but it is a Word authoring tool first and a DSL second.
+LexScript shares Yuho's parser-generator-driven shape (participle in
+Go rather than tree-sitter) but has a thinner element model. LDOC
+has illustrations because DOCX renders them naturally, but it is a
+document-authoring tool first and a DSL second.
 Akoma Ntoso preserves structure faithfully and is the only competitor
 with real amendment-lineage support, but stops where semantics begins.
 LegalRuleML adds a deontic layer above the Akoma Ntoso markup --- and
@@ -132,7 +133,7 @@ exactly the columns that fall out of taking the Penal Code's drafting
 conventions seriously. Where Yuho overlaps with a peer, the design
 borrows directly: Catala for the priority semantics, lam4 for the
 named-norm references planned under \textsf{G10}, LexScript for the
-tree-sitter pipeline shape and the Tarjan-SCC analysis, LDOC for the
+Tarjan-SCC analysis over the cross-reference graph, LDOC for the
 DOCX authoring loop. The borrowings are explicit; we do not claim
 novelty on the borrowed pieces.
 
@@ -188,12 +189,14 @@ semantics, with credit, when \textsf{G10} lands.
 \label{subsec:rel_lexscript}
 
 LexScript~\cite{lexscript} is the closest tooling-shaped peer. It
-shares Yuho's tree-sitter pipeline, multi-target transpile shape,
-and statute-shaped top-level grammar. The differences are in depth,
-not in approach: LexScript has a thinner element model (no burden
-qualifier, no causal-link edges, no Catala-style exception priority)
-and a broader cross-corpus posture (multiple statute families at
-shallow coverage rather than one at full coverage).
+shares Yuho's compile-DSL-to-multiple-targets posture and structured
+top-level grammar (LexScript uses the \texttt{participle} parser
+generator in Go, where Yuho uses tree-sitter; the parser-generator
+shape is the same even though the host technologies differ). The
+substantive differences are in depth, not in approach: LexScript
+has a thinner element model (no burden qualifier, no causal-link
+edges, no Catala-style exception priority) and targets contracts
+rather than penal codes.
 
 The most directly portable LexScript idea is the Tarjan-SCC analysis
 over the statute reference graph. We borrow it under \textsf{G10}:
@@ -255,23 +258,26 @@ reconcile the two.
 \subsection{LDOC}
 \label{subsec:rel_ldoc}
 
-LDOC~\cite{ldoc} prioritises the authoring loop: lawyers draft in
-Word and the system extracts structured semantics. This is the
-opposite of Yuho's source-of-truth posture: Yuho treats the
-\texttt{.yh} file in version control as canonical and DOCX as one
-of six generated outputs, while LDOC treats the Word document as
-canonical and downstream renderings as derived. The two postures
-target different audiences --- LDOC for practitioners who already
-work in Word, Yuho for systems-and-DSL-friendly contributors --- and
-both are coherent.
+LDOC~\cite{ldoc} is a plain-text DSL for authoring professional
+documents that compiles to DOCX (TypeScript implementation; LSP
+server for editor integration). The source-of-truth posture
+matches Yuho's: a plain-text \texttt{.ldoc} file is canonical and
+the rendered DOCX is a downstream artefact. The systems differ on
+target audience and structural commitment --- LDOC is a general-
+purpose document-authoring DSL where Yuho is statute-shaped --- but
+the convergent decision to treat the plain-text source as canonical
+is direct evidence that the posture works in the legal-document
+neighbourhood.
 
-The constructive borrowing from LDOC is the DOCX transpile target.
-A Yuho-encoded section that renders cleanly to a Word document is
-a useful artefact for the practitioner audience, and the in-progress
-Microsoft Word add-in (\S\ref{subsec:editors}) is meant to bridge
-the two postures: a lawyer can browse Yuho-encoded sections from
-inside Word, insert formatted statute text via the add-in, and read
-the canonical Yuho file as needed without leaving the document.
+The constructive borrowing from LDOC is the DOCX transpile target
+itself: shipping a clean DOCX rendering of a Yuho-encoded section
+(rather than treating Word as alien) makes the encoded artefact
+usable for the practitioner audience without changing the canonical
+source. The in-progress Microsoft Word add-in
+(\S\ref{subsec:editors}) is meant to lift this further: a lawyer
+can browse Yuho-encoded sections from inside Word and insert
+formatted statute text via the add-in, while the \texttt{.yh} file
+in version control remains canonical.
 
 \subsection{Programming-languages context: language workbenches and the
 DSL economy}
@@ -298,8 +304,9 @@ The decision to ship a one-way pipeline from \texttt{.yh} to
 DOCX/EN/JSON, rather than a bidirectional Word-to-yh editing loop,
 also has a literature: Foster et al.'s lens
 framework~\cite{foster2007combinators} formalises asymmetric vs.\
-symmetric transformations and would let LDOC's authoring posture and
-Yuho's verification posture coexist via a Word$\leftrightarrow$Yuho
+symmetric transformations and would let an authoring posture
+(round-trip Word$\leftrightarrow$\texttt{.yh}) coexist with Yuho's
+verification posture via a Word$\leftrightarrow$Yuho
 lens. We do not implement this; we note it as a credible alternative
 direction and a question we have not engaged.
 
@@ -317,8 +324,10 @@ defer the validation to future work.
 
 Several lines of work outside the legal-DSL bracket inform Yuho's
 design without being direct comparators. Tree-sitter~\cite{treesitter}
-provides the incremental parsing infrastructure shared with
-LexScript and a growing number of other DSLs. The Language Server
+provides the incremental parsing infrastructure that Yuho uses
+directly; the parser-generator-driven posture is also shared with
+LexScript (which picks \texttt{participle} in Go for the same
+reasons) and a growing number of other DSLs. The Language Server
 Protocol matured into the de-facto integration point between
 editors and language tooling, used by every modern legal DSL we
 surveyed. The Model Context Protocol~\cite{mcp2024}, introduced in
