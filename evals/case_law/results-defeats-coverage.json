@@ -1,0 +1,4626 @@
+{
+  "n_pairs": 610,
+  "n_sat": 387,
+  "sat_rate": 0.6344262295081967,
+  "by_defence": {
+    "79": {
+      "n": 146,
+      "sat": 132
+    },
+    "80": {
+      "n": 52,
+      "sat": 47
+    },
+    "81": {
+      "n": 11,
+      "sat": 10
+    },
+    "84": {
+      "n": 143,
+      "sat": 129
+    },
+    "85": {
+      "n": 29,
+      "sat": 29
+    },
+    "86": {
+      "n": 29,
+      "sat": 29
+    },
+    "95": {
+      "n": 6,
+      "sat": 0
+    },
+    "96": {
+      "n": 31,
+      "sat": 0
+    },
+    "97": {
+      "n": 57,
+      "sat": 0
+    },
+    "98": {
+      "n": 32,
+      "sat": 0
+    },
+    "100": {
+      "n": 12,
+      "sat": 11
+    },
+    "101": {
+      "n": 20,
+      "sat": 0
+    },
+    "103": {
+      "n": 7,
+      "sat": 0
+    },
+    "104": {
+      "n": 23,
+      "sat": 0
+    },
+    "106": {
+      "n": 12,
+      "sat": 0
+    }
+  },
+  "by_cluster": {
+    "abetment": {
+      "n": 40,
+      "sat": 38
+    },
+    "attempt": {
+      "n": 2,
+      "sat": 2
+    },
+    "defamation": {
+      "n": 8,
+      "sat": 6
+    },
+    "forgery": {
+      "n": 28,
+      "sat": 28
+    },
+    "homicide": {
+      "n": 101,
+      "sat": 50
+    },
+    "hurt": {
+      "n": 146,
+      "sat": 57
+    },
+    "intimidation": {
+      "n": 8,
+      "sat": 6
+    },
+    "mischief": {
+      "n": 42,
+      "sat": 24
+    },
+    "property_breach_of_trust": {
+      "n": 14,
+      "sat": 14
+    },
+    "property_cheating": {
+      "n": 16,
+      "sat": 12
+    },
+    "property_misappropriation": {
+      "n": 6,
+      "sat": 6
+    },
+    "property_robbery": {
+      "n": 28,
+      "sat": 18
+    },
+    "property_theft": {
+      "n": 33,
+      "sat": 23
+    },
+    "sexual": {
+      "n": 78,
+      "sat": 70
+    },
+    "trespass": {
+      "n": 60,
+      "sat": 33
+    }
+  },
+  "pairs": [
+    {
+      "offence": "107",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "107",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 5
+    },
+    {
+      "offence": "107",
+      "defence": 85,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 9
+    },
+    {
+      "offence": "107",
+      "defence": 86,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "108A",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 6
+    },
+    {
+      "offence": "108A",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 5
+    },
+    {
+      "offence": "108B",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 6
+    },
+    {
+      "offence": "108B",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 5
+    },
+    {
+      "offence": "108",
+      "defence": 79,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s108. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "108",
+      "defence": 84,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s108. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "109",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "109",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 5
+    },
+    {
+      "offence": "109",
+      "defence": 85,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 9
+    },
+    {
+      "offence": "109",
+      "defence": 86,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "110",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "110",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 5
+    },
+    {
+      "offence": "111",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 6
+    },
+    {
+      "offence": "111",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 5
+    },
+    {
+      "offence": "112",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 6
+    },
+    {
+      "offence": "112",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 5
+    },
+    {
+      "offence": "113",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 5,
+      "defence_floor": 6
+    },
+    {
+      "offence": "113",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 5,
+      "defence_floor": 5
+    },
+    {
+      "offence": "114",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "114",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 5
+    },
+    {
+      "offence": "115",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "115",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 5
+    },
+    {
+      "offence": "115",
+      "defence": 85,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 9
+    },
+    {
+      "offence": "115",
+      "defence": 86,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "116",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 5,
+      "defence_floor": 6
+    },
+    {
+      "offence": "116",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 5,
+      "defence_floor": 5
+    },
+    {
+      "offence": "117",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 6
+    },
+    {
+      "offence": "117",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 5
+    },
+    {
+      "offence": "117",
+      "defence": 85,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 9
+    },
+    {
+      "offence": "117",
+      "defence": 86,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 6
+    },
+    {
+      "offence": "118",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "118",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 5
+    },
+    {
+      "offence": "119",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 5,
+      "defence_floor": 6
+    },
+    {
+      "offence": "119",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 5,
+      "defence_floor": 5
+    },
+    {
+      "offence": "120",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 6
+    },
+    {
+      "offence": "120",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 5
+    },
+    {
+      "offence": "299",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 6,
+      "defence_floor": 6
+    },
+    {
+      "offence": "299",
+      "defence": 80,
+      "sat": true,
+      "offence_floor": 6,
+      "defence_floor": 3
+    },
+    {
+      "offence": "299",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 6,
+      "defence_floor": 5
+    },
+    {
+      "offence": "299",
+      "defence": 96,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s96. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "299",
+      "defence": 100,
+      "sat": true,
+      "offence_floor": 6,
+      "defence_floor": 4
+    },
+    {
+      "offence": "299",
+      "defence": 85,
+      "sat": true,
+      "offence_floor": 6,
+      "defence_floor": 9
+    },
+    {
+      "offence": "299",
+      "defence": 86,
+      "sat": true,
+      "offence_floor": 6,
+      "defence_floor": 6
+    },
+    {
+      "offence": "299",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "299",
+      "defence": 98,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s98. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "299",
+      "defence": 106,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s106. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "300",
+      "defence": 85,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 9
+    },
+    {
+      "offence": "300",
+      "defence": 86,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 6
+    },
+    {
+      "offence": "300",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "300",
+      "defence": 98,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s98. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "300",
+      "defence": 106,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s106. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "301",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 6
+    },
+    {
+      "offence": "301",
+      "defence": 80,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 3
+    },
+    {
+      "offence": "301",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 5
+    },
+    {
+      "offence": "301",
+      "defence": 96,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s96. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "301",
+      "defence": 100,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 4
+    },
+    {
+      "offence": "301",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "301",
+      "defence": 98,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s98. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "301",
+      "defence": 106,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s106. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "302",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 6
+    },
+    {
+      "offence": "302",
+      "defence": 80,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 3
+    },
+    {
+      "offence": "302",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 5
+    },
+    {
+      "offence": "302",
+      "defence": 96,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s96. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "302",
+      "defence": 100,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 4
+    },
+    {
+      "offence": "302",
+      "defence": 85,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 9
+    },
+    {
+      "offence": "302",
+      "defence": 86,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 6
+    },
+    {
+      "offence": "302",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "302",
+      "defence": 98,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s98. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "302",
+      "defence": 106,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s106. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "304A",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 6
+    },
+    {
+      "offence": "304A",
+      "defence": 80,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 3
+    },
+    {
+      "offence": "304A",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 5
+    },
+    {
+      "offence": "304A",
+      "defence": 96,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s96. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "304A",
+      "defence": 100,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 4
+    },
+    {
+      "offence": "304A",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "304A",
+      "defence": 98,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s98. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "304A",
+      "defence": 106,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s106. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "304B",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 6
+    },
+    {
+      "offence": "304B",
+      "defence": 80,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 3
+    },
+    {
+      "offence": "304B",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 5
+    },
+    {
+      "offence": "304B",
+      "defence": 96,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s96. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "304B",
+      "defence": 100,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 4
+    },
+    {
+      "offence": "304B",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "304B",
+      "defence": 98,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s98. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "304B",
+      "defence": 106,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s106. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "304C",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 8,
+      "defence_floor": 6
+    },
+    {
+      "offence": "304C",
+      "defence": 80,
+      "sat": true,
+      "offence_floor": 8,
+      "defence_floor": 3
+    },
+    {
+      "offence": "304C",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 8,
+      "defence_floor": 5
+    },
+    {
+      "offence": "304C",
+      "defence": 96,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s96. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "304C",
+      "defence": 100,
+      "sat": true,
+      "offence_floor": 8,
+      "defence_floor": 4
+    },
+    {
+      "offence": "304C",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "304C",
+      "defence": 98,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s98. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "304C",
+      "defence": 106,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s106. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "304",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "304",
+      "defence": 80,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 3
+    },
+    {
+      "offence": "304",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 5
+    },
+    {
+      "offence": "304",
+      "defence": 96,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s96. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "304",
+      "defence": 100,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 4
+    },
+    {
+      "offence": "304",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "304",
+      "defence": 98,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s98. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "304",
+      "defence": 106,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s106. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "305",
+      "defence": 79,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s305. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "305",
+      "defence": 80,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s305. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "305",
+      "defence": 84,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s305. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "305",
+      "defence": 96,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s305, s96. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element s"
+    },
+    {
+      "offence": "305",
+      "defence": 100,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s305. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "305",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s305, s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element s"
+    },
+    {
+      "offence": "305",
+      "defence": 98,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s305, s98. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element s"
+    },
+    {
+      "offence": "305",
+      "defence": 106,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s305, s106. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element "
+    },
+    {
+      "offence": "306",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 6
+    },
+    {
+      "offence": "306",
+      "defence": 80,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 3
+    },
+    {
+      "offence": "306",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 5
+    },
+    {
+      "offence": "306",
+      "defence": 96,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s96. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "306",
+      "defence": 100,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 4
+    },
+    {
+      "offence": "306",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "306",
+      "defence": 98,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s98. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "306",
+      "defence": 106,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s106. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "307",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 6,
+      "defence_floor": 6
+    },
+    {
+      "offence": "307",
+      "defence": 80,
+      "sat": true,
+      "offence_floor": 6,
+      "defence_floor": 3
+    },
+    {
+      "offence": "307",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 6,
+      "defence_floor": 5
+    },
+    {
+      "offence": "307",
+      "defence": 96,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s96. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "307",
+      "defence": 100,
+      "sat": true,
+      "offence_floor": 6,
+      "defence_floor": 4
+    },
+    {
+      "offence": "307",
+      "defence": 85,
+      "sat": true,
+      "offence_floor": 6,
+      "defence_floor": 9
+    },
+    {
+      "offence": "307",
+      "defence": 86,
+      "sat": true,
+      "offence_floor": 6,
+      "defence_floor": 6
+    },
+    {
+      "offence": "307",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "307",
+      "defence": 98,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s98. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "307",
+      "defence": 106,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s106. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "308",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "308",
+      "defence": 80,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 3
+    },
+    {
+      "offence": "308",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 5
+    },
+    {
+      "offence": "308",
+      "defence": 96,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s96. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "308",
+      "defence": 100,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 4
+    },
+    {
+      "offence": "308",
+      "defence": 85,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 9
+    },
+    {
+      "offence": "308",
+      "defence": 86,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "308",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "308",
+      "defence": 98,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s98. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "308",
+      "defence": 106,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s106. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "319",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 5,
+      "defence_floor": 6
+    },
+    {
+      "offence": "319",
+      "defence": 80,
+      "sat": true,
+      "offence_floor": 5,
+      "defence_floor": 3
+    },
+    {
+      "offence": "319",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 5,
+      "defence_floor": 5
+    },
+    {
+      "offence": "319",
+      "defence": 96,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s96. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "319",
+      "defence": 95,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s95. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "319",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "319",
+      "defence": 98,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s98. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "319",
+      "defence": 101,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s101. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "320",
+      "defence": 79,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s320. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "320",
+      "defence": 80,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s320. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "320",
+      "defence": 84,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s320. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "320",
+      "defence": 96,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s320, s96. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element s"
+    },
+    {
+      "offence": "320",
+      "defence": 95,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s320, s95. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element s"
+    },
+    {
+      "offence": "320",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s320, s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element s"
+    },
+    {
+      "offence": "320",
+      "defence": 98,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s320, s98. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element s"
+    },
+    {
+      "offence": "320",
+      "defence": 101,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s320, s101. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element "
+    },
+    {
+      "offence": "321",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "321",
+      "defence": 80,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 3
+    },
+    {
+      "offence": "321",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 5
+    },
+    {
+      "offence": "321",
+      "defence": 96,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s96. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "321",
+      "defence": 95,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s95. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "321",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "321",
+      "defence": 98,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s98. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "321",
+      "defence": 101,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s101. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "322",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "322",
+      "defence": 80,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 3
+    },
+    {
+      "offence": "322",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 5
+    },
+    {
+      "offence": "322",
+      "defence": 96,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s96. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "322",
+      "defence": 95,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s95. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "322",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "322",
+      "defence": 98,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s98. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "322",
+      "defence": 101,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s101. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "323",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 6
+    },
+    {
+      "offence": "323",
+      "defence": 80,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 3
+    },
+    {
+      "offence": "323",
+      "defence": 81,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 5
+    },
+    {
+      "offence": "323",
+      "defence": 96,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s96. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "323",
+      "defence": 95,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s95. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "323",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "323",
+      "defence": 98,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s98. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "323",
+      "defence": 101,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s101. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "324",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 6
+    },
+    {
+      "offence": "324",
+      "defence": 80,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 3
+    },
+    {
+      "offence": "324",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 5
+    },
+    {
+      "offence": "324",
+      "defence": 96,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s96. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "324",
+      "defence": 95,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s95. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "324",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "324",
+      "defence": 98,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s98. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "324",
+      "defence": 101,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s101. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "325",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "325",
+      "defence": 80,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 3
+    },
+    {
+      "offence": "325",
+      "defence": 96,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s96. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "325",
+      "defence": 100,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 4
+    },
+    {
+      "offence": "325",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "325",
+      "defence": 98,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s98. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "325",
+      "defence": 101,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s101. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "326",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 6
+    },
+    {
+      "offence": "326",
+      "defence": 80,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 3
+    },
+    {
+      "offence": "326",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 5
+    },
+    {
+      "offence": "326",
+      "defence": 96,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s96. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "326",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "326",
+      "defence": 98,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s98. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "326",
+      "defence": 101,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s101. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "327",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "327",
+      "defence": 80,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 3
+    },
+    {
+      "offence": "327",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 5
+    },
+    {
+      "offence": "327",
+      "defence": 96,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s96. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "327",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "327",
+      "defence": 98,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s98. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "327",
+      "defence": 101,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s101. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "328",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "328",
+      "defence": 80,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 3
+    },
+    {
+      "offence": "328",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 5
+    },
+    {
+      "offence": "328",
+      "defence": 96,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s96. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "328",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "328",
+      "defence": 98,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s98. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "328",
+      "defence": 101,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s101. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "329",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 6
+    },
+    {
+      "offence": "329",
+      "defence": 80,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 3
+    },
+    {
+      "offence": "329",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 5
+    },
+    {
+      "offence": "329",
+      "defence": 96,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s96. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "329",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "329",
+      "defence": 98,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s98. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "329",
+      "defence": 101,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s101. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "330",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 6
+    },
+    {
+      "offence": "330",
+      "defence": 80,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 3
+    },
+    {
+      "offence": "330",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 5
+    },
+    {
+      "offence": "330",
+      "defence": 96,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s96. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "330",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "330",
+      "defence": 98,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s98. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "330",
+      "defence": 101,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s101. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "331",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 6
+    },
+    {
+      "offence": "331",
+      "defence": 80,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 3
+    },
+    {
+      "offence": "331",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 5
+    },
+    {
+      "offence": "331",
+      "defence": 96,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s96. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "331",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "331",
+      "defence": 98,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s98. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "331",
+      "defence": 101,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s101. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "332",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "332",
+      "defence": 80,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 3
+    },
+    {
+      "offence": "332",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 5
+    },
+    {
+      "offence": "332",
+      "defence": 96,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s96. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "332",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "332",
+      "defence": 98,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s98. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "332",
+      "defence": 101,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s101. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "333",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "333",
+      "defence": 80,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 3
+    },
+    {
+      "offence": "333",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 5
+    },
+    {
+      "offence": "333",
+      "defence": 96,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s96. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "333",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "333",
+      "defence": 98,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s98. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "333",
+      "defence": 101,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s101. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "334",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 6
+    },
+    {
+      "offence": "334",
+      "defence": 80,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 3
+    },
+    {
+      "offence": "334",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 5
+    },
+    {
+      "offence": "334",
+      "defence": 96,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s96. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "334",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "334",
+      "defence": 98,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s98. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "334",
+      "defence": 101,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s101. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "335",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 6
+    },
+    {
+      "offence": "335",
+      "defence": 80,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 3
+    },
+    {
+      "offence": "335",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 5
+    },
+    {
+      "offence": "335",
+      "defence": 96,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s96. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "335",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "335",
+      "defence": 98,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s98. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "335",
+      "defence": 101,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s101. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "336",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "336",
+      "defence": 80,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 3
+    },
+    {
+      "offence": "336",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 5
+    },
+    {
+      "offence": "336",
+      "defence": 96,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s96. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "336",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "336",
+      "defence": 98,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s98. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "336",
+      "defence": 101,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s101. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "337",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "337",
+      "defence": 80,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 3
+    },
+    {
+      "offence": "337",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 5
+    },
+    {
+      "offence": "337",
+      "defence": 96,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s96. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "337",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "337",
+      "defence": 98,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s98. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "337",
+      "defence": 101,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s101. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "338",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 6
+    },
+    {
+      "offence": "338",
+      "defence": 80,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 3
+    },
+    {
+      "offence": "338",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 5
+    },
+    {
+      "offence": "338",
+      "defence": 96,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s96. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "338",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "338",
+      "defence": 98,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s98. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "338",
+      "defence": 101,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s101. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "354A",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 6
+    },
+    {
+      "offence": "354A",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 5
+    },
+    {
+      "offence": "354",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "354",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 5
+    },
+    {
+      "offence": "359",
+      "defence": 79,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s359. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "359",
+      "defence": 84,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s359. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "360",
+      "defence": 79,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s360. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "360",
+      "defence": 84,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s360. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "361",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 6
+    },
+    {
+      "offence": "361",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 5
+    },
+    {
+      "offence": "362",
+      "defence": 79,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s362. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "362",
+      "defence": 84,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s362. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "363A",
+      "defence": 79,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s363A. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struc"
+    },
+    {
+      "offence": "363A",
+      "defence": 84,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s363A. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struc"
+    },
+    {
+      "offence": "363",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "363",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 5
+    },
+    {
+      "offence": "364",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 6
+    },
+    {
+      "offence": "364",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 5
+    },
+    {
+      "offence": "365",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 6
+    },
+    {
+      "offence": "365",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 5
+    },
+    {
+      "offence": "366",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 6
+    },
+    {
+      "offence": "366",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 5
+    },
+    {
+      "offence": "367",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 6
+    },
+    {
+      "offence": "367",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 5
+    },
+    {
+      "offence": "368",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 6
+    },
+    {
+      "offence": "368",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 5
+    },
+    {
+      "offence": "370",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 1,
+      "defence_floor": 6
+    },
+    {
+      "offence": "370",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 1,
+      "defence_floor": 5
+    },
+    {
+      "offence": "371",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 1,
+      "defence_floor": 6
+    },
+    {
+      "offence": "371",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 1,
+      "defence_floor": 5
+    },
+    {
+      "offence": "372",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 6
+    },
+    {
+      "offence": "372",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 5
+    },
+    {
+      "offence": "373A",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "373A",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 5
+    },
+    {
+      "offence": "373",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 6
+    },
+    {
+      "offence": "373",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 5
+    },
+    {
+      "offence": "374",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 6
+    },
+    {
+      "offence": "374",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 5
+    },
+    {
+      "offence": "375",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 8,
+      "defence_floor": 6
+    },
+    {
+      "offence": "375",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 8,
+      "defence_floor": 5
+    },
+    {
+      "offence": "376AA",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "376AA",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 5
+    },
+    {
+      "offence": "376A",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 6
+    },
+    {
+      "offence": "376A",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 5
+    },
+    {
+      "offence": "376B",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "376B",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 5
+    },
+    {
+      "offence": "376C",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 5,
+      "defence_floor": 6
+    },
+    {
+      "offence": "376C",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 5,
+      "defence_floor": 5
+    },
+    {
+      "offence": "376",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 6,
+      "defence_floor": 6
+    },
+    {
+      "offence": "376",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 6,
+      "defence_floor": 5
+    },
+    {
+      "offence": "377BA",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 6
+    },
+    {
+      "offence": "377BA",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 5
+    },
+    {
+      "offence": "377BB",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 8,
+      "defence_floor": 6
+    },
+    {
+      "offence": "377BB",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 8,
+      "defence_floor": 5
+    },
+    {
+      "offence": "377BC",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 5,
+      "defence_floor": 6
+    },
+    {
+      "offence": "377BC",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 5,
+      "defence_floor": 5
+    },
+    {
+      "offence": "377BD",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 7,
+      "defence_floor": 6
+    },
+    {
+      "offence": "377BD",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 7,
+      "defence_floor": 5
+    },
+    {
+      "offence": "377BE",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 5,
+      "defence_floor": 6
+    },
+    {
+      "offence": "377BE",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 5,
+      "defence_floor": 5
+    },
+    {
+      "offence": "377BF",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 5,
+      "defence_floor": 6
+    },
+    {
+      "offence": "377BF",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 5,
+      "defence_floor": 5
+    },
+    {
+      "offence": "377BG",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "377BG",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 5
+    },
+    {
+      "offence": "377BH",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "377BH",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 5
+    },
+    {
+      "offence": "377BI",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 6
+    },
+    {
+      "offence": "377BI",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 5
+    },
+    {
+      "offence": "377BJ",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "377BJ",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 5
+    },
+    {
+      "offence": "377BK",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 6
+    },
+    {
+      "offence": "377BK",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 5
+    },
+    {
+      "offence": "377BL",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 7,
+      "defence_floor": 6
+    },
+    {
+      "offence": "377BL",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 7,
+      "defence_floor": 5
+    },
+    {
+      "offence": "377B",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 6
+    },
+    {
+      "offence": "377B",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 5
+    },
+    {
+      "offence": "377",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 1,
+      "defence_floor": 6
+    },
+    {
+      "offence": "377",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 1,
+      "defence_floor": 5
+    },
+    {
+      "offence": "378",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 5,
+      "defence_floor": 6
+    },
+    {
+      "offence": "378",
+      "defence": 80,
+      "sat": true,
+      "offence_floor": 5,
+      "defence_floor": 3
+    },
+    {
+      "offence": "378",
+      "defence": 81,
+      "sat": true,
+      "offence_floor": 5,
+      "defence_floor": 5
+    },
+    {
+      "offence": "378",
+      "defence": 85,
+      "sat": true,
+      "offence_floor": 5,
+      "defence_floor": 9
+    },
+    {
+      "offence": "378",
+      "defence": 86,
+      "sat": true,
+      "offence_floor": 5,
+      "defence_floor": 6
+    },
+    {
+      "offence": "378",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "378",
+      "defence": 104,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s104. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "379",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 6
+    },
+    {
+      "offence": "379",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 5
+    },
+    {
+      "offence": "379",
+      "defence": 85,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 9
+    },
+    {
+      "offence": "379",
+      "defence": 86,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 6
+    },
+    {
+      "offence": "379",
+      "defence": 81,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 5
+    },
+    {
+      "offence": "379",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "379",
+      "defence": 104,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s104. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "380",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "380",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 5
+    },
+    {
+      "offence": "380",
+      "defence": 85,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 9
+    },
+    {
+      "offence": "380",
+      "defence": 86,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "380",
+      "defence": 81,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 5
+    },
+    {
+      "offence": "380",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "380",
+      "defence": 104,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s104. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "381",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "381",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 5
+    },
+    {
+      "offence": "381",
+      "defence": 85,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 9
+    },
+    {
+      "offence": "381",
+      "defence": 86,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "381",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "381",
+      "defence": 104,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s104. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "382",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "382",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 5
+    },
+    {
+      "offence": "382",
+      "defence": 85,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 9
+    },
+    {
+      "offence": "382",
+      "defence": 86,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "382",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "382",
+      "defence": 104,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s104. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "390",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 6
+    },
+    {
+      "offence": "390",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 5
+    },
+    {
+      "offence": "390",
+      "defence": 85,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 9
+    },
+    {
+      "offence": "390",
+      "defence": 86,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 6
+    },
+    {
+      "offence": "390",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "390",
+      "defence": 103,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s103. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "391",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 6
+    },
+    {
+      "offence": "391",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 5
+    },
+    {
+      "offence": "391",
+      "defence": 85,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 9
+    },
+    {
+      "offence": "391",
+      "defence": 86,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 6
+    },
+    {
+      "offence": "391",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "391",
+      "defence": 103,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s103. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "392",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "392",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 5
+    },
+    {
+      "offence": "392",
+      "defence": 85,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 9
+    },
+    {
+      "offence": "392",
+      "defence": 86,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "392",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "392",
+      "defence": 103,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s103. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "393",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 6
+    },
+    {
+      "offence": "393",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 5
+    },
+    {
+      "offence": "393",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "393",
+      "defence": 103,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s103. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "394",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 6
+    },
+    {
+      "offence": "394",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 5
+    },
+    {
+      "offence": "394",
+      "defence": 85,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 9
+    },
+    {
+      "offence": "394",
+      "defence": 86,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 6
+    },
+    {
+      "offence": "394",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "394",
+      "defence": 103,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s103. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "403",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 6
+    },
+    {
+      "offence": "403",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 5
+    },
+    {
+      "offence": "403",
+      "defence": 85,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 9
+    },
+    {
+      "offence": "403",
+      "defence": 86,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 6
+    },
+    {
+      "offence": "404",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 6
+    },
+    {
+      "offence": "404",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 5
+    },
+    {
+      "offence": "405",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 5,
+      "defence_floor": 6
+    },
+    {
+      "offence": "405",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 5,
+      "defence_floor": 5
+    },
+    {
+      "offence": "405",
+      "defence": 85,
+      "sat": true,
+      "offence_floor": 5,
+      "defence_floor": 9
+    },
+    {
+      "offence": "405",
+      "defence": 86,
+      "sat": true,
+      "offence_floor": 5,
+      "defence_floor": 6
+    },
+    {
+      "offence": "406",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "406",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 5
+    },
+    {
+      "offence": "406",
+      "defence": 85,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 9
+    },
+    {
+      "offence": "406",
+      "defence": 86,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "407",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 6
+    },
+    {
+      "offence": "407",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 5
+    },
+    {
+      "offence": "408",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "408",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 5
+    },
+    {
+      "offence": "409",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "409",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 5
+    },
+    {
+      "offence": "415",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 6
+    },
+    {
+      "offence": "415",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 5
+    },
+    {
+      "offence": "415",
+      "defence": 85,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 9
+    },
+    {
+      "offence": "415",
+      "defence": 86,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 6
+    },
+    {
+      "offence": "416",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "416",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 5
+    },
+    {
+      "offence": "417",
+      "defence": 79,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s417. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "417",
+      "defence": 84,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s417. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "418",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "418",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 5
+    },
+    {
+      "offence": "419",
+      "defence": 79,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s419. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "419",
+      "defence": 84,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s419. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "420",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 5,
+      "defence_floor": 6
+    },
+    {
+      "offence": "420",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 5,
+      "defence_floor": 5
+    },
+    {
+      "offence": "420",
+      "defence": 85,
+      "sat": true,
+      "offence_floor": 5,
+      "defence_floor": 9
+    },
+    {
+      "offence": "420",
+      "defence": 86,
+      "sat": true,
+      "offence_floor": 5,
+      "defence_floor": 6
+    },
+    {
+      "offence": "425",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 6
+    },
+    {
+      "offence": "425",
+      "defence": 80,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 3
+    },
+    {
+      "offence": "425",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 5
+    },
+    {
+      "offence": "425",
+      "defence": 81,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 5
+    },
+    {
+      "offence": "425",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "425",
+      "defence": 104,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s104. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "426",
+      "defence": 79,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s426. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "426",
+      "defence": 80,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s426. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "426",
+      "defence": 84,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s426. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "426",
+      "defence": 81,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s426. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "426",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s426, s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element s"
+    },
+    {
+      "offence": "426",
+      "defence": 104,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s426, s104. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element "
+    },
+    {
+      "offence": "427",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 6
+    },
+    {
+      "offence": "427",
+      "defence": 80,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 3
+    },
+    {
+      "offence": "427",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 5
+    },
+    {
+      "offence": "427",
+      "defence": 81,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 5
+    },
+    {
+      "offence": "427",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "427",
+      "defence": 104,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s104. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "428",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 6
+    },
+    {
+      "offence": "428",
+      "defence": 80,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 3
+    },
+    {
+      "offence": "428",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 5
+    },
+    {
+      "offence": "428",
+      "defence": 81,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 5
+    },
+    {
+      "offence": "428",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "428",
+      "defence": 104,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s104. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "435",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "435",
+      "defence": 80,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 3
+    },
+    {
+      "offence": "435",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 5
+    },
+    {
+      "offence": "435",
+      "defence": 81,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 5
+    },
+    {
+      "offence": "435",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "435",
+      "defence": 104,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s104. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "436",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 6
+    },
+    {
+      "offence": "436",
+      "defence": 80,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 3
+    },
+    {
+      "offence": "436",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 5
+    },
+    {
+      "offence": "436",
+      "defence": 81,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 5
+    },
+    {
+      "offence": "436",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "436",
+      "defence": 104,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s104. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "440",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 6
+    },
+    {
+      "offence": "440",
+      "defence": 80,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 3
+    },
+    {
+      "offence": "440",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 5
+    },
+    {
+      "offence": "440",
+      "defence": 81,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 5
+    },
+    {
+      "offence": "440",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "440",
+      "defence": 104,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s104. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "441",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 5,
+      "defence_floor": 6
+    },
+    {
+      "offence": "441",
+      "defence": 80,
+      "sat": true,
+      "offence_floor": 5,
+      "defence_floor": 3
+    },
+    {
+      "offence": "441",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 5,
+      "defence_floor": 5
+    },
+    {
+      "offence": "441",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "441",
+      "defence": 104,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s104. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "442",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "442",
+      "defence": 80,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 3
+    },
+    {
+      "offence": "442",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 5
+    },
+    {
+      "offence": "442",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "442",
+      "defence": 104,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s104. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "447",
+      "defence": 79,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s447. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "447",
+      "defence": 80,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s447. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "447",
+      "defence": 84,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s447. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "447",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s447, s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element s"
+    },
+    {
+      "offence": "447",
+      "defence": 104,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s447, s104. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element "
+    },
+    {
+      "offence": "448",
+      "defence": 79,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s448. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "448",
+      "defence": 80,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s448. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "448",
+      "defence": 84,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s448. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "448",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s448, s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element s"
+    },
+    {
+      "offence": "448",
+      "defence": 104,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s448, s104. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element "
+    },
+    {
+      "offence": "449",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 6
+    },
+    {
+      "offence": "449",
+      "defence": 80,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 3
+    },
+    {
+      "offence": "449",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 5
+    },
+    {
+      "offence": "449",
+      "defence": 104,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s104. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "450",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 6
+    },
+    {
+      "offence": "450",
+      "defence": 80,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 3
+    },
+    {
+      "offence": "450",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 5
+    },
+    {
+      "offence": "450",
+      "defence": 104,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s104. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "451",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 6
+    },
+    {
+      "offence": "451",
+      "defence": 80,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 3
+    },
+    {
+      "offence": "451",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 5
+    },
+    {
+      "offence": "451",
+      "defence": 104,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s104. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "452",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 6
+    },
+    {
+      "offence": "452",
+      "defence": 80,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 3
+    },
+    {
+      "offence": "452",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 5
+    },
+    {
+      "offence": "452",
+      "defence": 104,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s104. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "453",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 6,
+      "defence_floor": 6
+    },
+    {
+      "offence": "453",
+      "defence": 80,
+      "sat": true,
+      "offence_floor": 6,
+      "defence_floor": 3
+    },
+    {
+      "offence": "453",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 6,
+      "defence_floor": 5
+    },
+    {
+      "offence": "453",
+      "defence": 104,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s104. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "459",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 6
+    },
+    {
+      "offence": "459",
+      "defence": 80,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 3
+    },
+    {
+      "offence": "459",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 5
+    },
+    {
+      "offence": "459",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "459",
+      "defence": 103,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s103. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "460",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 6
+    },
+    {
+      "offence": "460",
+      "defence": 80,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 3
+    },
+    {
+      "offence": "460",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 5
+    },
+    {
+      "offence": "460",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "460",
+      "defence": 103,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s103. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "461",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 6
+    },
+    {
+      "offence": "461",
+      "defence": 80,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 3
+    },
+    {
+      "offence": "461",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 5
+    },
+    {
+      "offence": "461",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "461",
+      "defence": 104,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s104. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "462",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 5,
+      "defence_floor": 6
+    },
+    {
+      "offence": "462",
+      "defence": 80,
+      "sat": true,
+      "offence_floor": 5,
+      "defence_floor": 3
+    },
+    {
+      "offence": "462",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 5,
+      "defence_floor": 5
+    },
+    {
+      "offence": "462",
+      "defence": 97,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s97. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element structu"
+    },
+    {
+      "offence": "462",
+      "defence": 104,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s104. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "463",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 6,
+      "defence_floor": 6
+    },
+    {
+      "offence": "463",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 6,
+      "defence_floor": 5
+    },
+    {
+      "offence": "463",
+      "defence": 85,
+      "sat": true,
+      "offence_floor": 6,
+      "defence_floor": 9
+    },
+    {
+      "offence": "463",
+      "defence": 86,
+      "sat": true,
+      "offence_floor": 6,
+      "defence_floor": 6
+    },
+    {
+      "offence": "465",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 6
+    },
+    {
+      "offence": "465",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 5
+    },
+    {
+      "offence": "465",
+      "defence": 85,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 9
+    },
+    {
+      "offence": "465",
+      "defence": 86,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 6
+    },
+    {
+      "offence": "467",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "467",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 5
+    },
+    {
+      "offence": "467",
+      "defence": 85,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 9
+    },
+    {
+      "offence": "467",
+      "defence": 86,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "468",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "468",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 5
+    },
+    {
+      "offence": "468",
+      "defence": 85,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 9
+    },
+    {
+      "offence": "468",
+      "defence": 86,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "469",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 6
+    },
+    {
+      "offence": "469",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 5
+    },
+    {
+      "offence": "471",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 6
+    },
+    {
+      "offence": "471",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 5
+    },
+    {
+      "offence": "471",
+      "defence": 85,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 9
+    },
+    {
+      "offence": "471",
+      "defence": 86,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 6
+    },
+    {
+      "offence": "477A",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 6
+    },
+    {
+      "offence": "477A",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 5
+    },
+    {
+      "offence": "477A",
+      "defence": 85,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 9
+    },
+    {
+      "offence": "477A",
+      "defence": 86,
+      "sat": true,
+      "offence_floor": 4,
+      "defence_floor": 6
+    },
+    {
+      "offence": "477",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "477",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 5
+    },
+    {
+      "offence": "499",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 5,
+      "defence_floor": 6
+    },
+    {
+      "offence": "499",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 5,
+      "defence_floor": 5
+    },
+    {
+      "offence": "500",
+      "defence": 79,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s500. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "500",
+      "defence": 84,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s500. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "501",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "501",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 5
+    },
+    {
+      "offence": "502",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 6
+    },
+    {
+      "offence": "502",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 2,
+      "defence_floor": 5
+    },
+    {
+      "offence": "503",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 6,
+      "defence_floor": 6
+    },
+    {
+      "offence": "503",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 6,
+      "defence_floor": 5
+    },
+    {
+      "offence": "504",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "504",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 5
+    },
+    {
+      "offence": "505",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "505",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 5
+    },
+    {
+      "offence": "506",
+      "defence": 79,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s506. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "506",
+      "defence": 84,
+      "sat": false,
+      "offence_floor": 0,
+      "defence_floor": 0,
+      "error": "Error: no elements declared for: s506. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
+    },
+    {
+      "offence": "511",
+      "defence": 79,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 6
+    },
+    {
+      "offence": "511",
+      "defence": 84,
+      "sat": true,
+      "offence_floor": 3,
+      "defence_floor": 5
+    }
+  ],
+  "not_legal_advice": true,
+  "disclaimer": "Sat-rate measures structural availability of each (offence, defence) pair under Yuho's encoded model \u2014 whether Z3 returns a satisfying assignment for both sides' elements simultaneously. Does not measure whether any given defence will succeed evidentially on any given case."
+}
