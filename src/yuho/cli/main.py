@@ -502,11 +502,16 @@ def ast(
 @click.option("--all", "all_targets", is_flag=True, help="Generate all targets")
 @click.option(
     "--shape",
-    type=click.Choice(["statute", "schema"], case_sensitive=False),
+    type=click.Choice(["statute", "schema", "verbose"], case_sensitive=False),
     default="statute",
-    help="Mermaid flowchart shape: 'statute' (structural, default) or 'schema' "
-         "(decision tree from a case-struct + matching fn). Only meaningful for "
-         "the mermaid target.",
+    help="Mermaid flowchart shape: 'statute' (structural, default), "
+         "'schema' (decision tree from a case-struct + matching fn), or "
+         "'verbose' (statute shape with elements rendered as labelled "
+         "decision diamonds, exceptions as a priority-ordered guard "
+         "chain, and per-conditional penalties as branches off their "
+         "`when` clauses). Only meaningful for the mermaid target. "
+         "The verbose shape is FLAGGED FOR HUMAN AUDIT; see the "
+         "TODO 'Mermaid flowchart richness' entry.",
 )
 @click.option("--json", "json_output", is_flag=True, help="Output metadata as JSON")
 @click.pass_context

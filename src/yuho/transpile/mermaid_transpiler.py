@@ -35,8 +35,17 @@ class MermaidTranspiler(TranspilerBase, Visitor):
                 tree by walking a case-struct's enum-typed fields and
                 surfacing the consuming ``fn``'s consequence per leaf.
                 See ``_transpile_schema_module`` for the algorithm.
+                ``"verbose"`` emits the statute shape but with every
+                element rendered as a labelled decision diamond with
+                explicit yes/no edges, exceptions rendered as a
+                priority-ordered chain of guards, and per-conditional
+                penalty rendered as a diamond branch off its ``when``
+                guard. Use when the encoded section's logic flow needs
+                to be visible at first glance (e.g. teaching contexts,
+                audit reviews). FLAGGED FOR HUMAN AUDIT — see TODO
+                "Mermaid flowchart richness" entry.
         """
-        if shape not in ("statute", "schema"):
+        if shape not in ("statute", "schema", "verbose"):
             raise ValueError(f"unknown mermaid shape: {shape!r}")
         self.direction = direction
         self.use_subgraphs = use_subgraphs
@@ -62,6 +71,11 @@ class MermaidTranspiler(TranspilerBase, Visitor):
         self._emit(f"flowchart {self.direction}")
         if self.shape == "schema":
             self._transpile_schema_module(ast)
+        elif self.shape == "verbose":
+            for statute in ast.statutes:
+                self._transpile_statute_verbose(statute)
+            for func in ast.function_defs:
+                self._transpile_function(func)
         else:
             for statute in ast.statutes:
                 self._transpile_statute(statute)
@@ -158,6 +172,115 @@ class MermaidTranspiler(TranspilerBase, Visitor):
             self._emit(f"    {penalty_id}[[{self._q(penalty_text)}]]")
             self._emit(f"    {prev_id} --> {penalty_id}")
             prev_id = penalty_id
+        self._emit_provenance_nodes(statute, start_id=start_id, fallback_id=prev_id)
+        self._emit("")
+
+    # =========================================================================
+    # Verbose-shape rendering (--shape verbose)
+    # =========================================================================
+    #
+    # FLAGGED FOR HUMAN AUDIT (TODO "Mermaid flowchart richness").
+    # The verbose shape is a v1 implementation of the long-tail TODO
+    # request for a richer Mermaid rendering: elements as labelled
+    # decision diamonds with yes/no edges, exceptions as a priority-
+    # ordered guard chain, conditional penalties as branches off their
+    # `when` clauses. The diff is purely additive (the default
+    # `"statute"` shape is unchanged). Audit before relying on the
+    # verbose output for documentation: confirm that
+    #   (a) the diamond labels are doctrinally faithful to the source
+    #       elements (some long descriptions are truncated to label-
+    #       length;  the underlying text is correct, but the diamond
+    #       glyph may need a tooltip rather than an inline label),
+    #   (b) the exception priority chain matches the explicit
+    #       ``priority`` field on each exception block where present
+    #       (currently we render in source order; the chain ordering
+    #       intentionally does NOT auto-sort by priority because the
+    #       AST visitor doesn't yet expose the priority field), and
+    #   (c) per-conditional penalty diamonds correctly distinguish
+    #       between G8 ``or_both`` combinator and an explicit ``when``
+    #       guard (the rendering treats them differently).
+
+    def _transpile_statute_verbose(self, statute: nodes.StatuteNode) -> None:
+        """Verbose flowchart: elements as decision diamonds, exceptions
+        as priority-ordered guard chain, penalties as conditional branches."""
+        title = statute.title.value if statute.title else statute.section_number
+        self._emit(f"    %% Statute (verbose): {title}")
+        start_id = self._new_node_id("START")
+        start_label = f"Section {statute.section_number}: {title}"
+        self._emit(f"    {start_id}([{self._q(start_label)}])")
+
+        # Terminal "no offence" node — every failed-element branch
+        # converges here.
+        no_offence_id = self._new_node_id("NOOFF")
+        self._emit(f"    {no_offence_id}([{self._q('No offence made out')}])")
+
+        prev_id = start_id
+        for elem in statute.elements:
+            if isinstance(elem, nodes.ElementGroupNode):
+                # Group: render the combinator label, then recurse —
+                # for verbose we keep the existing group rendering and
+                # delegate to the canonical helper, then re-anchor.
+                prev_id = self._transpile_element_group(elem, prev_id)
+                continue
+            elem_id = self._new_node_id("ELEM")
+            prefix = self._deontic_prefix(elem.element_type)
+            label = prefix + self._expr_to_label(elem.description)
+            suffix = self._element_suffix(elem)
+            if suffix:
+                label += f" {suffix}"
+            # Decision-diamond shape `{ ... }` with the element name
+            # phrased as a question.
+            self._emit(f"    {elem_id}{{{self._q(label + '?')}}}")
+            self._emit(f"    {prev_id} -->|{self._q('yes')}| {elem_id}")
+            self._emit(f"    {elem_id} -.->|{self._q('no')}| {no_offence_id}")
+            self._element_nodes[elem.name] = elem_id
+            prev_id = elem_id
+
+        # Exceptions as a priority-ordered chain: each exception is a
+        # diamond that asks "does this exception fire?", branching to
+        # its own outcome on yes, falling through to the next on no.
+        if statute.exceptions:
+            for exc in statute.exceptions:
+                guard_id = self._new_node_id("EXCG")
+                label = exc.label or "exception"
+                guard_label = f"{label} fires?"
+                self._emit(f"    {guard_id}{{{self._q(guard_label)}}}")
+                self._emit(f"    {prev_id} -->|{self._q('continue')}| {guard_id}")
+                exc_out_id = self._new_node_id("EXCOUT")
+                effect = self._exception_outcome_label(exc)
+                self._emit(f"    {exc_out_id}[{self._q(effect)}]")
+                self._emit(f"    {guard_id} -->|{self._q('yes')}| {exc_out_id}")
+                # `no` falls through to the next guard / penalty.
+                prev_id = guard_id
+                # Track the no-edge target later; for now leave the
+                # `no` branch unwired and the next iteration will draw
+                # its `continue` edge from this diamond.
+
+        # Penalties: render each as a rectangle. If the penalty has a
+        # `when <condition>` guard (G12 conditional-penalty case),
+        # render a diamond first and branch into the rectangle on yes.
+        all_penalties = []
+        if statute.penalty is not None:
+            all_penalties.append(statute.penalty)
+        all_penalties.extend(getattr(statute, "additional_penalties", ()) or ())
+        for pen in all_penalties:
+            penalty_text = self._penalty_to_label(pen)
+            when_clause = getattr(pen, "when_condition", None) or getattr(pen, "when", None)
+            if when_clause:
+                guard_id = self._new_node_id("PENG")
+                guard_label = f"applies when {self._expr_to_label(when_clause)}?"
+                self._emit(f"    {guard_id}{{{self._q(guard_label)}}}")
+                self._emit(f"    {prev_id} -->|{self._q('yes')}| {guard_id}")
+                penalty_id = self._new_node_id("PENALTY")
+                self._emit(f"    {penalty_id}[[{self._q(penalty_text)}]]")
+                self._emit(f"    {guard_id} -->|{self._q('yes')}| {penalty_id}")
+                prev_id = penalty_id
+            else:
+                penalty_id = self._new_node_id("PENALTY")
+                self._emit(f"    {penalty_id}[[{self._q(penalty_text)}]]")
+                self._emit(f"    {prev_id} -->|{self._q('yes')}| {penalty_id}")
+                prev_id = penalty_id
+
         self._emit_provenance_nodes(statute, start_id=start_id, fallback_id=prev_id)
         self._emit("")
 

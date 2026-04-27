@@ -172,9 +172,9 @@ def run_transpile(
             # Mermaid + schema-shape: use a fresh transpiler with the requested
             # shape rather than the cached statute-shape singleton from the
             # registry. The schema path is opt-in and rarely the right default.
-            if transpile_target is TranspileTarget.MERMAID and shape == "schema":
+            if transpile_target is TranspileTarget.MERMAID and shape in ("schema", "verbose"):
                 from yuho.transpile.mermaid_transpiler import MermaidTranspiler
-                transpiler = MermaidTranspiler(shape="schema")
+                transpiler = MermaidTranspiler(shape=shape)
             else:
                 transpiler = get_transpiler(transpile_target)
             output_text = transpiler.transpile(ast)

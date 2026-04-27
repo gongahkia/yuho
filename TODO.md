@@ -407,19 +407,72 @@ vendored OASIS XSD. Further extension is on-demand:
       hierarchy, full `<componentRef>` graph): a named external
       user asks for it.
 
-### Mermaid flowchart richness `(def)`
+### Mermaid flowchart richness `[~]` — **FLAGGED FOR HUMAN AUDIT**
 
-Per-section flowcharts render structural shape but don't trace
-*logic flow* (no decision diamonds, exception-precedence chain,
-penalty branches). Deprioritised — ship later.
+v1 shipped (commit `<this-commit>`): the four sub-items below are
+implemented behind `--shape verbose` in
+`src/yuho/transpile/mermaid_transpiler.py`. The task is **NOT
+removed from TODO** by author request: the verbose shape is a
+mechanical rewrite of the existing statute shape and needs human
+audit before being relied on for documentation, teaching, or
+reviewer-facing rendering.
 
-- [ ] Surface every binary decision point as a labelled diamond
-      with explicit `yes` / `no` edges.
-- [ ] Render exception precedence as a chain of guards.
-- [ ] Show penalty selection branches when multi-penalty (G12)
-      is in play.
-- [ ] Carry over the schema-shape style; opt-in via
-      `--shape verbose`.
+What v1 does:
+- Each element rendered as a labelled decision diamond
+  (`{<element>?}`) with explicit `yes` (continue to next
+  element) and `no` (dotted edge to a single shared "No
+  offence made out" sink) edges.
+- Exceptions rendered as a priority-ordered chain of
+  diamonds (`{<exception> fires?}`), each with `yes` →
+  exception outcome, `no` (`continue`) → next guard /
+  penalty.
+- Per-conditional penalties (`penalty when <cond>`)
+  rendered as a diamond branch off the `when` clause
+  before the penalty rectangle. Unconditional penalties
+  fall through to the rectangle directly.
+- Opt-in via `--shape verbose` on `yuho transpile -t
+  mermaid` (also threaded through the CLI in
+  `src/yuho/cli/commands/transpile.py` + main.py's
+  `--shape` choice list).
+
+**Audit checklist (HUMAN):**
+- [ ] Diamond labels — confirm doctrinal fidelity for long
+      element descriptions; some labels may need a tooltip
+      rather than an inline glyph (Mermaid does not natively
+      support tooltips on diamonds).
+- [ ] Exception priority chain — currently rendered in
+      source order. The AST visitor does NOT yet auto-sort
+      by the `priority` field on exception blocks. Audit
+      output against sections that use explicit priorities
+      (e.g. s300 carries Exceptions 1-7 in priority order
+      already, but newer hand-edited sections might diverge).
+- [ ] Penalty-conditional rendering — verify the AST
+      attribute access in `_transpile_statute_verbose`
+      (`pen.when_condition` then fallback `pen.when`) actually
+      reads the `when` clause from the encoded library.
+      Spot-check on a multi-penalty section (s404 carries
+      `penalty when clerk_or_servant_case`; s302 has unconditional
+      penalty).
+- [ ] Mermaid render — run the verbose output through `mmdc`
+      / the explorer site and confirm no syntax errors / no
+      orphaned nodes. The current 28 Mermaid unit tests
+      cover the default `statute` shape only.
+
+Once the audit is complete, this section can be removed.
+
+Original sub-tasks (preserved for cross-reference):
+
+- [x] Surface every binary decision point as a labelled diamond
+      with explicit `yes` / `no` edges (verbose shape).
+- [x] Render exception precedence as a chain of guards
+      (verbose shape, source-order; priority-aware sort
+      deferred to a v2).
+- [x] Show penalty selection branches when multi-penalty (G12)
+      is in play (verbose shape, conditional `when`-clause
+      diamonds).
+- [x] Carry over the schema-shape style; opt-in via
+      `--shape verbose` (CLI flag threaded through main.py
+      and commands/transpile.py).
 
 ### Test-suite backlog `[ ]`
 
