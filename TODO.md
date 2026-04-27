@@ -11,20 +11,21 @@ benchmarks.
 
 Status key: `[ ]` pending · `[~]` in progress · `(def)` deferred.
 
-Current snapshot (2026-04-27): **4937 unit tests green · 524 sections at
+Current snapshot (2026-04-27): **4947 unit tests green · 524 sections at
 L1+L2 · 524 L3 author-stamped · §4 + §6 paper sections shipped (formal
 semantics + soundness theorem with 5 lemmas + 8 sanity-witness tests) ·
-§6.6 partial Lean 4 mechanisation kernel-checked (Lemmas 6.2 + 6.4) ·
-§7.8 case-law differential testing (n=38, three scorers; top-1 44.7%, MRR 0.461, contrast F1 0.239, constrained-contrast consistency 100%) · §7.6 LLM
-benchmark with full 205-fixture GPT-4o-mini + GPT-4o cross-model
-baselines + 3-way prompt-variant comparison (baseline / polarity /
+§6.6 Lean 4 mechanisation kernel-checks all 5 soundness lemmas
+(6.2 + 6.3 + 6.4 + 6.4' cross-section + 6.5 penalty) ·
+§7.8 case-law differential testing (n=38, three scorers; top-1 44.7%,
+MRR 0.461, contrast F1 0.239, constrained-contrast consistency 100%) ·
+§7.6 LLM benchmark with full 205-fixture GPT-4o-mini + GPT-4o cross-
+model baselines + 3-way prompt-variant comparison (baseline / polarity /
 polarity-soft; polarity-soft is near-Pareto on gpt-4o-mini) · Direction B
 defeats-edge coverage at 610 edges across 147 sections (28% of corpus,
-15 distinct general defences spanning the full Chapter IV regime
-including the entire ss97-s106 private-defence family; defeats-edge
-structural-coverage sweep (387/610 = 63.4% SAT, finding: ss95-s106
-need element decomposition to unblock the rest)) · 32-page smoke PDF ·
-`make paper-reproduce` end-to-end including Lean kernel-check.**
+15 distinct general defences; ss95-s106 private-defence family fully
+encoded with elements{}; defeats-edge structural-coverage sweep at
+560/610 = 91.8% SAT, every defence clearing 83-100%) · 32-page smoke
+PDF · `make paper-reproduce` end-to-end including Lean kernel-check.**
 
 Completed history (Phases A–D, the rigor-hardening trench, mechanisation
 v1, case-law differential testing, the LLM-benchmark closed-vocab fix,
@@ -43,22 +44,40 @@ the partial-mechanisation caveat.
 
 v2 shipped (2026-04-27): Lemma 6.3 (element-graph correspondence)
 fully mechanised in `mechanisation/Yuho/Graph.lean` via
-well-founded recursion on `sizeOf` (not the predicted Catala-style
-list-folding bisimulation; closure took ~half a person-day, well
-under the ~2–3 person-month estimate). Composed corollary
+well-founded recursion on `sizeOf`. Composed corollary
 `full_conviction_correspondence` lives in `Graph.lean`. Smoke test
 on s299 in `Tests/Smoke.lean`.
 
-Open follow-ups (deferred to v3):
+v3 shipped (2026-04-27): cross-section composition
+(Lemma 6.4', `mechanisation/Yuho/Cross.lean`) and penalty
+correspondence (Lemma 6.5, `mechanisation/Yuho/Penalty.lean`)
+fully mechanised. Cross.lean introduces `SectionRef` AST,
+`CrossSMTModel` extending `GraphSMTModel` with per-section
+conviction atoms, and proves `is_infringed_correspondence` /
+`apply_scope_correspondence` (the latter under the
+fact-coincidence hypothesis the linter discharges). Penalty.lean
+introduces a 6-constructor `Penalty` AST + `Footprint` record,
+the recursive `Penalty.admits` predicate (mutual block for the
+list combinators), and proves the four leaf-case + two
+combinator-case specialisations. Total v3 closure: ~half a
+person-day, well under the original 4–5 person-month estimate
+(the recursive-admissibility framing sidestepped the explicit
+range-arithmetic lift).
 
-- [ ] Mechanise Lemma 6.5 (penalty correspondence) — Yuho-specific,
-      requires lifting range-arithmetic into Lean; ~2 person-months.
-- [ ] Mechanise the cross-section composition step of Theorem 6.1
-      (`apply_scope` / `is_infringed` dedupe simulation) — ~2–3
-      person-months.
+Open follow-ups (deferred to v4):
+
 - [ ] Discharge the oracle assumption by porting Yuho's Python
       `Z3Generator` to Lean and proving its functional equivalence
       to a verified specification.
+- [ ] G8 / G14 unbounded-axis sentinels in `Penalty.lean`
+      (`fine := unlimited`, `caning := unspecified`) — ~half a
+      person-day plus a smoke test on s299/s300.
+- [ ] Mechanise the linter's no-sentinel-propagation invariant as
+      a `Penalty.wellFormed` predicate, tightening the satisfies
+      bundle to require it.
+- [ ] Cross-library `apply_scope` (the case-law differential
+      testing already restricts to in-module sections; this is a
+      v4-stretch item, not a release blocker).
 
 ---
 
@@ -261,22 +280,14 @@ Edges deployed via the idempotent
 `scripts/add_general_defence_edges.py` helper; commit history
 `90c3c8ef..d0a9c971` walks the cluster batches. Defeats-edge
 structural-coverage benchmark (`evals/case_law/score_defeats_coverage.py`,
-commit `f1cb7cac`) reports 387/610 (63.4%) SAT under
-`yuho narrow-defence`; element-bearing defences clear at 90–100%
-while ss95–s106 sit at 0% (encoding-gap finding, see open
-follow-up below).
-
-Open follow-ups:
-
-- [ ] **Encode structural elements for ss95-s106 private-defence
-      sections.** Currently encoded as pure-definition statutes
-      with operative-rule prose only. Adding an `elements {}`
-      block per section (e.g. for s96: `private_defence_in_play`
-      / `act_done_in_exercise_of_right`; for s97: body /
-      property choice flag + body-and-property predicates; etc.)
-      would unblock the 36.6% UNSAT slice in the defeats-coverage
-      sweep without further grammar or library changes. Doctrinal
-      decomposition needed; not a mechanical refactor.
+commit `f1cb7cac`) reported an initial 387/610 (63.4%) SAT under
+`yuho narrow-defence`. The 36.6% UNSAT slice was an encoding gap:
+ss95-s106 had been encoded during Phase D as pure-definition
+statutes with no `elements {}` block. Subsequent encoding (commit
+`4ea3b97e`) added structurally-faithful elements{} blocks for
+all eight sections (s95 / s96 / s97 / s98 / s101 / s103 / s104 /
+s106), lifting the sweep to 560/610 = 91.8% SAT with every
+defence clearing 83-100%.
 
 ---
 
