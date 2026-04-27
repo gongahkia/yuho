@@ -18,9 +18,11 @@ semantics + soundness theorem with 5 lemmas + 8 sanity-witness tests) ·
 §7.8 case-law differential testing (n=30, three scorers) · §7.6 LLM
 benchmark with full 205-fixture GPT-4o-mini + GPT-4o cross-model
 baselines + 3-way prompt-variant comparison (baseline / polarity /
-polarity-soft; polarity-soft is near-Pareto on gpt-4o-mini) · 32-page
-smoke PDF · `make paper-reproduce` end-to-end including Lean kernel-
-check.**
+polarity-soft; polarity-soft is near-Pareto on gpt-4o-mini) · Direction B
+defeats-edge coverage at 386 edges across 146 sections (28% of corpus,
+spanning homicide, hurt, property, sexual offences, kidnapping,
+mischief, forgery, abetment, defamation, attempt) · 32-page smoke PDF ·
+`make paper-reproduce` end-to-end including Lean kernel-check.**
 
 Completed history (Phases A–D, the rigor-hardening trench, mechanisation
 v1, case-law differential testing, the LLM-benchmark closed-vocab fix,
@@ -234,33 +236,64 @@ fixture-tested. Open work:
 
 ## Direction B — General-defence `defeats` edges (full coverage) `[~]`
 
-v1 ships edges across **4 offences and 11 distinct general defences**:
+v2 ships **386 edges across 146 sections** (28% of the 524-section
+corpus). Per-defence breakdown:
 
-- s302 (murder) ← s79, s80, s84, s96, s100
-- s323 (hurt) ← s79, s80, s81, s96
-- s325 (grievous hurt) ← s79, s80, s96, s100
-- s378 (theft) ← s79, s80, s81
+| Defence | Sections covered |
+|---|---|
+| s79 (mistake of fact) | 146 |
+| s80 (accident in lawful act) | 52 |
+| s84 (unsoundness of mind) | 143 |
+| s96 (private defence) | 31 |
+| s100 (deadly-assault private defence) | 12 |
+| s81 (greater-harm avoidance, v0 only) | 2 |
 
-Full Chapter-IV coverage requires expanding to ~30 general defences
-× dozens of applicable offences (several hundred edges). Doctrinal
-priorities:
+Cluster-level coverage:
 
-- [ ] **Private defence (ss96-106) onto every harm offence.**
-      ~10 defences × ~15 hurt / homicide / sexual-offence sections.
-- [ ] **s79 mistake-of-fact onto every mens-rea-bearing offence.**
-      The most broadly applicable defence; expand to ~50 offences.
-- [ ] **s80 accident onto every actus-reus-bearing offence.**
-      Similarly broad; expand to ~50 offences.
-- [ ] **s84 unsoundness-of-mind onto every offence.** Universal
-      applicability; expand to all 524 - definition-only sections.
-- [ ] **s85, s86 intoxication onto every mens-rea offence.** Narrow
-      (specific-intent only) but well-established; ~30 offences.
+- **Homicide** (10 sections, s299-s308): s79, s80, s84, s96, s100
+- **Hurt** (20 sections, s319-s338): s79, s80, s84, s96
+- **Property** (23 sections, s378-s420): s79, s80 (v0 only on s378), s84
+- **Sexual offences + outrage of modesty** (22 sections,
+  s354-s377BL): s79, s84
+- **Kidnapping / abduction / slavery** (17 sections, s359-s374): s79, s84
+- **Mischief + house-breaking + criminal trespass** (20 sections,
+  s425-s462): s79, s80, s84
+- **Forgery + intimidation / public-order** (12 sections, s463-s506):
+  s79, s84
+- **Abetment + defamation + attempt** (21 sections, s107-s120,
+  s499-s502, s511): s79, s84
+
+Edges deployed via the idempotent
+`scripts/add_general_defence_edges.py` helper; commit history
+`90c3c8ef..4f4110df` walks the cluster batches.
+
+- [x] **s84 unsoundness-of-mind onto every major offence cluster.**
+      143 sections covered (universal-applicability defence; missing
+      sections are pure definitions and regulatory provisions where
+      the defence is moot).
+- [x] **s79 mistake-of-fact onto every mens-rea-bearing offence
+      cluster.** 146 sections covered.
+- [x] **s80 accident onto major actus-reus-bearing clusters.**
+      52 sections (homicide, hurt, mischief, v0 sample).
+- [x] **s96 private defence onto homicide + hurt clusters.** 31
+      sections (the doctrinally relevant range; s100 deadly-assault
+      sub-edge present on the homicide cluster only).
+
+Open follow-ups:
+
+- [ ] **s85, s86 intoxication onto specific-intent offences.**
+      Narrow but well-established; ~30 offences.
 - [ ] **s95 trifling-harm onto hurt-family offences.** Narrow but
       doctrinally clean; ~5 offences.
-
-After expansion, re-run `yuho narrow-defence` against the case-law
-fixtures and report uplift in matched-element F1 against the
-court's stated reasoning.
+- [ ] **s81 (act likely to cause harm but done to prevent other
+      harm)** onto property + mischief clusters. The v0 sample
+      carries this on s323 / s378; consider expanding.
+- [ ] Coverage of ss97-106 (the rest of the private-defence
+      family — body, property, deadly-assault-against-property,
+      reasonable-fear, third-party, etc.).
+- [ ] Re-run `yuho narrow-defence` against the case-law fixtures
+      and report uplift in matched-element F1 against the court's
+      stated reasoning.
 
 ---
 
