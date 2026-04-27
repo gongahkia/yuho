@@ -21,11 +21,14 @@ MRR 0.461, contrast F1 0.239, constrained-contrast consistency 100%) ·
 §7.6 LLM benchmark with full 205-fixture GPT-4o-mini + GPT-4o cross-
 model baselines + 3-way prompt-variant comparison (baseline / polarity /
 polarity-soft; polarity-soft is near-Pareto on gpt-4o-mini) · Direction B
-defeats-edge coverage at 610 edges across 147 sections (28% of corpus,
-15 distinct general defences; ss95-s106 private-defence family fully
-encoded with elements{}; defeats-edge structural-coverage sweep at
-560/610 = 91.8% SAT, every defence clearing 83-100%) · 32-page smoke
-PDF · `make paper-reproduce` end-to-end including Lean kernel-check.**
+defeats-edge coverage at 535 edges across 147 sections (28% of corpus,
+12 distinct standalone general defences after the doctrinal audit
+removed 75 misclassified s98 / s101 / s104 edges that were validity-
+condition or timing qualifiers rather than standalone defeating
+predicates; ss95-s106 private-defence family fully encoded with
+elements{}; defeats-edge structural-coverage sweep at 491/535 = 91.8%
+SAT, every defence clearing 83-100%) · 32-page smoke PDF ·
+`make paper-reproduce` end-to-end including Lean kernel-check.**
 
 Completed history (Phases A–D, the rigor-hardening trench, mechanisation
 v1, case-law differential testing, the LLM-benchmark closed-vocab fix,
@@ -239,9 +242,20 @@ fixture-tested. Open work:
 
 ## Direction B — General-defence `defeats` edges (full coverage) `[~]`
 
-v3 ships **610 edges across 147 sections** (28% of the 524-section
-corpus) using **15 distinct Chapter IV general defences**. Per-
-defence breakdown:
+v3.1 ships **535 edges across 147 sections** (28% of the 524-section
+corpus) using **12 distinct Chapter IV standalone general defences**.
+The doctrinal-fidelity audit (commits `4f0ba0c9` / `f6042c99` /
+`f1155a9d`) removed 75 misclassified edges:
+
+- **s98** (32 edges) — proportionality + public-authority-recourse
+  validity conditions on the s96/s97/s100/s103/s106 family, not a
+  standalone defence
+- **s101** (20 edges) — temporal commencement + continuance qualifier
+  on the body-defence right, not a standalone defence
+- **s104** (23 edges) — temporal commencement + continuance qualifier
+  on the property-defence right, not a standalone defence
+
+Per-defence breakdown after the audit:
 
 | Defence | Sections covered |
 |---|---|
@@ -249,12 +263,9 @@ defence breakdown:
 | s84 (unsoundness of mind) | 143 |
 | s97 (private defence of body OR property) | 57 |
 | s80 (accident in lawful act) | 52 |
-| s98 (private defence against unsound-minded aggressor) | 32 |
-| s96 (private defence — general) | 31 |
+| s96 (private defence — operative gateway) | 31 |
 | s85 (intoxication when a defence) | 29 |
 | s86 (effect of intoxication when established) | 29 |
-| s104 (non-deadly property defence) | 23 |
-| s101 (non-deadly body defence) | 20 |
 | s100 (deadly-assault body defence) | 12 |
 | s106 (deadly defence with risk to innocent) | 12 |
 | s81 (greater-harm avoidance / necessity) | 11 |
@@ -277,17 +288,35 @@ Cluster-level coverage:
   s499-s502, s511): s79, s84
 
 Edges deployed via the idempotent
-`scripts/add_general_defence_edges.py` helper; commit history
-`90c3c8ef..d0a9c971` walks the cluster batches. Defeats-edge
-structural-coverage benchmark (`evals/case_law/score_defeats_coverage.py`,
-commit `f1cb7cac`) reported an initial 387/610 (63.4%) SAT under
+`scripts/add_general_defence_edges.py` helper; reverse remover
+at `scripts/remove_general_defence_edges.py`. Commit history
+`90c3c8ef..d0a9c971` walks the original cluster batches; commits
+`4f0ba0c9..f1155a9d` walk the doctrinal-fidelity audit.
+
+Defeats-edge structural-coverage benchmark
+(`evals/case_law/score_defeats_coverage.py`, commit `f1cb7cac`)
+reported an initial 387/610 (63.4%) SAT under
 `yuho narrow-defence`. The 36.6% UNSAT slice was an encoding gap:
 ss95-s106 had been encoded during Phase D as pure-definition
 statutes with no `elements {}` block. Subsequent encoding (commit
-`4ea3b97e`) added structurally-faithful elements{} blocks for
-all eight sections (s95 / s96 / s97 / s98 / s101 / s103 / s104 /
-s106), lifting the sweep to 560/610 = 91.8% SAT with every
-defence clearing 83-100%.
+`4ea3b97e`) added structurally-faithful elements{} blocks for all
+eight sections, lifting the sweep to 560/610 = 91.8% SAT.
+
+The doctrinal-fidelity audit then surfaced that s98 (validity
+conditions), s101 (body-defence timing), and s104 (property-
+defence timing) had been bulk-inserted as if standalone defences
+when they are in fact prerequisites that constrain the
+s96/s97/s100/s103/s106 family. Removing those 75 edges reframes
+the graph: the post-audit corpus carries 535 edges across the
+same 147 sections, and the SAT rate stays at 491/535 = 91.8%
+(unchanged in the aggregate, but every remaining edge is
+doctrinally a standalone defence).
+
+Future work: fold s98 / s101 / s104 conditions into the elements
+of s96 / s97 / s100 / s103 / s106 (or via cross-section
+predicates), so the validity-condition + timing constraints
+participate in `narrow-defence` queries through the
+private-defence sections rather than as freestanding edges.
 
 ---
 

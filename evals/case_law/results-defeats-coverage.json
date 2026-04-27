@@ -1,7 +1,7 @@
 {
-  "n_pairs": 610,
-  "n_sat": 560,
-  "sat_rate": 0.9180327868852459,
+  "n_pairs": 535,
+  "n_sat": 491,
+  "sat_rate": 0.9177570093457944,
   "by_defence": {
     "79": {
       "n": 146,
@@ -39,25 +39,13 @@
       "n": 57,
       "sat": 52
     },
-    "98": {
-      "n": 32,
-      "sat": 30
-    },
     "100": {
       "n": 12,
       "sat": 11
     },
-    "101": {
-      "n": 20,
-      "sat": 19
-    },
     "103": {
       "n": 7,
       "sat": 7
-    },
-    "104": {
-      "n": 23,
-      "sat": 20
     },
     "106": {
       "n": 12,
@@ -82,20 +70,20 @@
       "sat": 28
     },
     "homicide": {
-      "n": 101,
-      "sat": 93
+      "n": 89,
+      "sat": 82
     },
     "hurt": {
-      "n": 146,
-      "sat": 138
+      "n": 106,
+      "sat": 100
     },
     "intimidation": {
       "n": 8,
       "sat": 6
     },
     "mischief": {
-      "n": 42,
-      "sat": 36
+      "n": 35,
+      "sat": 30
     },
     "property_breach_of_trust": {
       "n": 14,
@@ -114,16 +102,16 @@
       "sat": 28
     },
     "property_theft": {
-      "n": 33,
-      "sat": 33
+      "n": 28,
+      "sat": 28
     },
     "sexual": {
       "n": 78,
       "sat": 70
     },
     "trespass": {
-      "n": 60,
-      "sat": 50
+      "n": 49,
+      "sat": 41
     }
   },
   "pairs": [
@@ -467,13 +455,6 @@
     },
     {
       "offence": "299",
-      "defence": 98,
-      "sat": true,
-      "offence_floor": 6,
-      "defence_floor": 2
-    },
-    {
-      "offence": "299",
       "defence": 106,
       "sat": true,
       "offence_floor": 6,
@@ -499,13 +480,6 @@
       "sat": true,
       "offence_floor": 2,
       "defence_floor": 4
-    },
-    {
-      "offence": "300",
-      "defence": 98,
-      "sat": true,
-      "offence_floor": 2,
-      "defence_floor": 2
     },
     {
       "offence": "300",
@@ -555,13 +529,6 @@
       "sat": true,
       "offence_floor": 2,
       "defence_floor": 4
-    },
-    {
-      "offence": "301",
-      "defence": 98,
-      "sat": true,
-      "offence_floor": 2,
-      "defence_floor": 2
     },
     {
       "offence": "301",
@@ -628,13 +595,6 @@
     },
     {
       "offence": "302",
-      "defence": 98,
-      "sat": true,
-      "offence_floor": 2,
-      "defence_floor": 2
-    },
-    {
-      "offence": "302",
       "defence": 106,
       "sat": true,
       "offence_floor": 2,
@@ -684,13 +644,6 @@
     },
     {
       "offence": "304A",
-      "defence": 98,
-      "sat": true,
-      "offence_floor": 4,
-      "defence_floor": 2
-    },
-    {
-      "offence": "304A",
       "defence": 106,
       "sat": true,
       "offence_floor": 4,
@@ -737,13 +690,6 @@
       "sat": true,
       "offence_floor": 4,
       "defence_floor": 4
-    },
-    {
-      "offence": "304B",
-      "defence": 98,
-      "sat": true,
-      "offence_floor": 4,
-      "defence_floor": 2
     },
     {
       "offence": "304B",
@@ -796,13 +742,6 @@
     },
     {
       "offence": "304C",
-      "defence": 98,
-      "sat": true,
-      "offence_floor": 8,
-      "defence_floor": 2
-    },
-    {
-      "offence": "304C",
       "defence": 106,
       "sat": true,
       "offence_floor": 8,
@@ -852,13 +791,6 @@
     },
     {
       "offence": "304",
-      "defence": 98,
-      "sat": true,
-      "offence_floor": 3,
-      "defence_floor": 2
-    },
-    {
-      "offence": "304",
       "defence": 106,
       "sat": true,
       "offence_floor": 3,
@@ -907,14 +839,6 @@
     {
       "offence": "305",
       "defence": 97,
-      "sat": false,
-      "offence_floor": 0,
-      "defence_floor": 0,
-      "error": "Error: no elements declared for: s305. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
-    },
-    {
-      "offence": "305",
-      "defence": 98,
       "sat": false,
       "offence_floor": 0,
       "defence_floor": 0,
@@ -969,13 +893,6 @@
       "sat": true,
       "offence_floor": 2,
       "defence_floor": 4
-    },
-    {
-      "offence": "306",
-      "defence": 98,
-      "sat": true,
-      "offence_floor": 2,
-      "defence_floor": 2
     },
     {
       "offence": "306",
@@ -1042,13 +959,6 @@
     },
     {
       "offence": "307",
-      "defence": 98,
-      "sat": true,
-      "offence_floor": 6,
-      "defence_floor": 2
-    },
-    {
-      "offence": "307",
       "defence": 106,
       "sat": true,
       "offence_floor": 6,
@@ -1112,13 +1022,6 @@
     },
     {
       "offence": "308",
-      "defence": 98,
-      "sat": true,
-      "offence_floor": 3,
-      "defence_floor": 2
-    },
-    {
-      "offence": "308",
       "defence": 106,
       "sat": true,
       "offence_floor": 3,
@@ -1167,20 +1070,6 @@
       "defence_floor": 4
     },
     {
-      "offence": "319",
-      "defence": 98,
-      "sat": true,
-      "offence_floor": 5,
-      "defence_floor": 2
-    },
-    {
-      "offence": "319",
-      "defence": 101,
-      "sat": true,
-      "offence_floor": 5,
-      "defence_floor": 3
-    },
-    {
       "offence": "320",
       "defence": 79,
       "sat": false,
@@ -1223,22 +1112,6 @@
     {
       "offence": "320",
       "defence": 97,
-      "sat": false,
-      "offence_floor": 0,
-      "defence_floor": 0,
-      "error": "Error: no elements declared for: s320. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
-    },
-    {
-      "offence": "320",
-      "defence": 98,
-      "sat": false,
-      "offence_floor": 0,
-      "defence_floor": 0,
-      "error": "Error: no elements declared for: s320. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
-    },
-    {
-      "offence": "320",
-      "defence": 101,
       "sat": false,
       "offence_floor": 0,
       "defence_floor": 0,
@@ -1287,20 +1160,6 @@
       "defence_floor": 4
     },
     {
-      "offence": "321",
-      "defence": 98,
-      "sat": true,
-      "offence_floor": 3,
-      "defence_floor": 2
-    },
-    {
-      "offence": "321",
-      "defence": 101,
-      "sat": true,
-      "offence_floor": 3,
-      "defence_floor": 3
-    },
-    {
       "offence": "322",
       "defence": 79,
       "sat": true,
@@ -1341,20 +1200,6 @@
       "sat": true,
       "offence_floor": 3,
       "defence_floor": 4
-    },
-    {
-      "offence": "322",
-      "defence": 98,
-      "sat": true,
-      "offence_floor": 3,
-      "defence_floor": 2
-    },
-    {
-      "offence": "322",
-      "defence": 101,
-      "sat": true,
-      "offence_floor": 3,
-      "defence_floor": 3
     },
     {
       "offence": "323",
@@ -1399,20 +1244,6 @@
       "defence_floor": 4
     },
     {
-      "offence": "323",
-      "defence": 98,
-      "sat": true,
-      "offence_floor": 2,
-      "defence_floor": 2
-    },
-    {
-      "offence": "323",
-      "defence": 101,
-      "sat": true,
-      "offence_floor": 2,
-      "defence_floor": 3
-    },
-    {
       "offence": "324",
       "defence": 79,
       "sat": true,
@@ -1455,20 +1286,6 @@
       "defence_floor": 4
     },
     {
-      "offence": "324",
-      "defence": 98,
-      "sat": true,
-      "offence_floor": 4,
-      "defence_floor": 2
-    },
-    {
-      "offence": "324",
-      "defence": 101,
-      "sat": true,
-      "offence_floor": 4,
-      "defence_floor": 3
-    },
-    {
       "offence": "325",
       "defence": 79,
       "sat": true,
@@ -1504,20 +1321,6 @@
       "defence_floor": 4
     },
     {
-      "offence": "325",
-      "defence": 98,
-      "sat": true,
-      "offence_floor": 3,
-      "defence_floor": 2
-    },
-    {
-      "offence": "325",
-      "defence": 101,
-      "sat": true,
-      "offence_floor": 3,
-      "defence_floor": 3
-    },
-    {
       "offence": "326",
       "defence": 79,
       "sat": true,
@@ -1551,20 +1354,6 @@
       "sat": true,
       "offence_floor": 4,
       "defence_floor": 4
-    },
-    {
-      "offence": "326",
-      "defence": 98,
-      "sat": true,
-      "offence_floor": 4,
-      "defence_floor": 2
-    },
-    {
-      "offence": "326",
-      "defence": 101,
-      "sat": true,
-      "offence_floor": 4,
-      "defence_floor": 3
     },
     {
       "offence": "327",
@@ -1602,20 +1391,6 @@
       "defence_floor": 4
     },
     {
-      "offence": "327",
-      "defence": 98,
-      "sat": true,
-      "offence_floor": 3,
-      "defence_floor": 2
-    },
-    {
-      "offence": "327",
-      "defence": 101,
-      "sat": true,
-      "offence_floor": 3,
-      "defence_floor": 3
-    },
-    {
       "offence": "328",
       "defence": 79,
       "sat": true,
@@ -1649,20 +1424,6 @@
       "sat": true,
       "offence_floor": 3,
       "defence_floor": 4
-    },
-    {
-      "offence": "328",
-      "defence": 98,
-      "sat": true,
-      "offence_floor": 3,
-      "defence_floor": 2
-    },
-    {
-      "offence": "328",
-      "defence": 101,
-      "sat": true,
-      "offence_floor": 3,
-      "defence_floor": 3
     },
     {
       "offence": "329",
@@ -1700,20 +1461,6 @@
       "defence_floor": 4
     },
     {
-      "offence": "329",
-      "defence": 98,
-      "sat": true,
-      "offence_floor": 4,
-      "defence_floor": 2
-    },
-    {
-      "offence": "329",
-      "defence": 101,
-      "sat": true,
-      "offence_floor": 4,
-      "defence_floor": 3
-    },
-    {
       "offence": "330",
       "defence": 79,
       "sat": true,
@@ -1747,20 +1494,6 @@
       "sat": true,
       "offence_floor": 2,
       "defence_floor": 4
-    },
-    {
-      "offence": "330",
-      "defence": 98,
-      "sat": true,
-      "offence_floor": 2,
-      "defence_floor": 2
-    },
-    {
-      "offence": "330",
-      "defence": 101,
-      "sat": true,
-      "offence_floor": 2,
-      "defence_floor": 3
     },
     {
       "offence": "331",
@@ -1798,20 +1531,6 @@
       "defence_floor": 4
     },
     {
-      "offence": "331",
-      "defence": 98,
-      "sat": true,
-      "offence_floor": 2,
-      "defence_floor": 2
-    },
-    {
-      "offence": "331",
-      "defence": 101,
-      "sat": true,
-      "offence_floor": 2,
-      "defence_floor": 3
-    },
-    {
       "offence": "332",
       "defence": 79,
       "sat": true,
@@ -1845,20 +1564,6 @@
       "sat": true,
       "offence_floor": 3,
       "defence_floor": 4
-    },
-    {
-      "offence": "332",
-      "defence": 98,
-      "sat": true,
-      "offence_floor": 3,
-      "defence_floor": 2
-    },
-    {
-      "offence": "332",
-      "defence": 101,
-      "sat": true,
-      "offence_floor": 3,
-      "defence_floor": 3
     },
     {
       "offence": "333",
@@ -1896,20 +1601,6 @@
       "defence_floor": 4
     },
     {
-      "offence": "333",
-      "defence": 98,
-      "sat": true,
-      "offence_floor": 3,
-      "defence_floor": 2
-    },
-    {
-      "offence": "333",
-      "defence": 101,
-      "sat": true,
-      "offence_floor": 3,
-      "defence_floor": 3
-    },
-    {
       "offence": "334",
       "defence": 79,
       "sat": true,
@@ -1943,20 +1634,6 @@
       "sat": true,
       "offence_floor": 4,
       "defence_floor": 4
-    },
-    {
-      "offence": "334",
-      "defence": 98,
-      "sat": true,
-      "offence_floor": 4,
-      "defence_floor": 2
-    },
-    {
-      "offence": "334",
-      "defence": 101,
-      "sat": true,
-      "offence_floor": 4,
-      "defence_floor": 3
     },
     {
       "offence": "335",
@@ -1994,20 +1671,6 @@
       "defence_floor": 4
     },
     {
-      "offence": "335",
-      "defence": 98,
-      "sat": true,
-      "offence_floor": 4,
-      "defence_floor": 2
-    },
-    {
-      "offence": "335",
-      "defence": 101,
-      "sat": true,
-      "offence_floor": 4,
-      "defence_floor": 3
-    },
-    {
       "offence": "336",
       "defence": 79,
       "sat": true,
@@ -2041,20 +1704,6 @@
       "sat": true,
       "offence_floor": 3,
       "defence_floor": 4
-    },
-    {
-      "offence": "336",
-      "defence": 98,
-      "sat": true,
-      "offence_floor": 3,
-      "defence_floor": 2
-    },
-    {
-      "offence": "336",
-      "defence": 101,
-      "sat": true,
-      "offence_floor": 3,
-      "defence_floor": 3
     },
     {
       "offence": "337",
@@ -2092,20 +1741,6 @@
       "defence_floor": 4
     },
     {
-      "offence": "337",
-      "defence": 98,
-      "sat": true,
-      "offence_floor": 3,
-      "defence_floor": 2
-    },
-    {
-      "offence": "337",
-      "defence": 101,
-      "sat": true,
-      "offence_floor": 3,
-      "defence_floor": 3
-    },
-    {
       "offence": "338",
       "defence": 79,
       "sat": true,
@@ -2139,20 +1774,6 @@
       "sat": true,
       "offence_floor": 4,
       "defence_floor": 4
-    },
-    {
-      "offence": "338",
-      "defence": 98,
-      "sat": true,
-      "offence_floor": 4,
-      "defence_floor": 2
-    },
-    {
-      "offence": "338",
-      "defence": 101,
-      "sat": true,
-      "offence_floor": 4,
-      "defence_floor": 3
     },
     {
       "offence": "354A",
@@ -2751,13 +2372,6 @@
       "defence_floor": 4
     },
     {
-      "offence": "378",
-      "defence": 104,
-      "sat": true,
-      "offence_floor": 5,
-      "defence_floor": 9
-    },
-    {
       "offence": "379",
       "defence": 79,
       "sat": true,
@@ -2798,13 +2412,6 @@
       "sat": true,
       "offence_floor": 2,
       "defence_floor": 4
-    },
-    {
-      "offence": "379",
-      "defence": 104,
-      "sat": true,
-      "offence_floor": 2,
-      "defence_floor": 9
     },
     {
       "offence": "380",
@@ -2849,13 +2456,6 @@
       "defence_floor": 4
     },
     {
-      "offence": "380",
-      "defence": 104,
-      "sat": true,
-      "offence_floor": 3,
-      "defence_floor": 9
-    },
-    {
       "offence": "381",
       "defence": 79,
       "sat": true,
@@ -2891,13 +2491,6 @@
       "defence_floor": 4
     },
     {
-      "offence": "381",
-      "defence": 104,
-      "sat": true,
-      "offence_floor": 3,
-      "defence_floor": 9
-    },
-    {
       "offence": "382",
       "defence": 79,
       "sat": true,
@@ -2931,13 +2524,6 @@
       "sat": true,
       "offence_floor": 3,
       "defence_floor": 4
-    },
-    {
-      "offence": "382",
-      "defence": 104,
-      "sat": true,
-      "offence_floor": 3,
-      "defence_floor": 9
     },
     {
       "offence": "390",
@@ -3427,13 +3013,6 @@
       "defence_floor": 4
     },
     {
-      "offence": "425",
-      "defence": 104,
-      "sat": true,
-      "offence_floor": 2,
-      "defence_floor": 9
-    },
-    {
       "offence": "426",
       "defence": 79,
       "sat": false,
@@ -3468,14 +3047,6 @@
     {
       "offence": "426",
       "defence": 97,
-      "sat": false,
-      "offence_floor": 0,
-      "defence_floor": 0,
-      "error": "Error: no elements declared for: s426. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
-    },
-    {
-      "offence": "426",
-      "defence": 104,
       "sat": false,
       "offence_floor": 0,
       "defence_floor": 0,
@@ -3517,13 +3088,6 @@
       "defence_floor": 4
     },
     {
-      "offence": "427",
-      "defence": 104,
-      "sat": true,
-      "offence_floor": 4,
-      "defence_floor": 9
-    },
-    {
       "offence": "428",
       "defence": 79,
       "sat": true,
@@ -3557,13 +3121,6 @@
       "sat": true,
       "offence_floor": 2,
       "defence_floor": 4
-    },
-    {
-      "offence": "428",
-      "defence": 104,
-      "sat": true,
-      "offence_floor": 2,
-      "defence_floor": 9
     },
     {
       "offence": "435",
@@ -3601,13 +3158,6 @@
       "defence_floor": 4
     },
     {
-      "offence": "435",
-      "defence": 104,
-      "sat": true,
-      "offence_floor": 3,
-      "defence_floor": 9
-    },
-    {
       "offence": "436",
       "defence": 79,
       "sat": true,
@@ -3643,13 +3193,6 @@
       "defence_floor": 4
     },
     {
-      "offence": "436",
-      "defence": 104,
-      "sat": true,
-      "offence_floor": 4,
-      "defence_floor": 9
-    },
-    {
       "offence": "440",
       "defence": 79,
       "sat": true,
@@ -3683,13 +3226,6 @@
       "sat": true,
       "offence_floor": 2,
       "defence_floor": 4
-    },
-    {
-      "offence": "440",
-      "defence": 104,
-      "sat": true,
-      "offence_floor": 2,
-      "defence_floor": 9
     },
     {
       "offence": "441",
@@ -3720,13 +3256,6 @@
       "defence_floor": 4
     },
     {
-      "offence": "441",
-      "defence": 104,
-      "sat": true,
-      "offence_floor": 5,
-      "defence_floor": 9
-    },
-    {
       "offence": "442",
       "defence": 79,
       "sat": true,
@@ -3753,13 +3282,6 @@
       "sat": true,
       "offence_floor": 3,
       "defence_floor": 4
-    },
-    {
-      "offence": "442",
-      "defence": 104,
-      "sat": true,
-      "offence_floor": 3,
-      "defence_floor": 9
     },
     {
       "offence": "447",
@@ -3788,14 +3310,6 @@
     {
       "offence": "447",
       "defence": 97,
-      "sat": false,
-      "offence_floor": 0,
-      "defence_floor": 0,
-      "error": "Error: no elements declared for: s447. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
-    },
-    {
-      "offence": "447",
-      "defence": 104,
       "sat": false,
       "offence_floor": 0,
       "defence_floor": 0,
@@ -3828,14 +3342,6 @@
     {
       "offence": "448",
       "defence": 97,
-      "sat": false,
-      "offence_floor": 0,
-      "defence_floor": 0,
-      "error": "Error: no elements declared for: s448. The section likely declares its elements inside a subsection that this command does not yet flatten, or the section is interpretation-only with no element struct"
-    },
-    {
-      "offence": "448",
-      "defence": 104,
       "sat": false,
       "offence_floor": 0,
       "defence_floor": 0,
@@ -3863,13 +3369,6 @@
       "defence_floor": 5
     },
     {
-      "offence": "449",
-      "defence": 104,
-      "sat": true,
-      "offence_floor": 2,
-      "defence_floor": 9
-    },
-    {
       "offence": "450",
       "defence": 79,
       "sat": true,
@@ -3889,13 +3388,6 @@
       "sat": true,
       "offence_floor": 2,
       "defence_floor": 5
-    },
-    {
-      "offence": "450",
-      "defence": 104,
-      "sat": true,
-      "offence_floor": 2,
-      "defence_floor": 9
     },
     {
       "offence": "451",
@@ -3919,13 +3411,6 @@
       "defence_floor": 5
     },
     {
-      "offence": "451",
-      "defence": 104,
-      "sat": true,
-      "offence_floor": 2,
-      "defence_floor": 9
-    },
-    {
       "offence": "452",
       "defence": 79,
       "sat": true,
@@ -3947,13 +3432,6 @@
       "defence_floor": 5
     },
     {
-      "offence": "452",
-      "defence": 104,
-      "sat": true,
-      "offence_floor": 2,
-      "defence_floor": 9
-    },
-    {
       "offence": "453",
       "defence": 79,
       "sat": true,
@@ -3973,13 +3451,6 @@
       "sat": true,
       "offence_floor": 6,
       "defence_floor": 5
-    },
-    {
-      "offence": "453",
-      "defence": 104,
-      "sat": true,
-      "offence_floor": 6,
-      "defence_floor": 9
     },
     {
       "offence": "459",
@@ -4080,13 +3551,6 @@
       "defence_floor": 4
     },
     {
-      "offence": "461",
-      "defence": 104,
-      "sat": true,
-      "offence_floor": 4,
-      "defence_floor": 9
-    },
-    {
       "offence": "462",
       "defence": 79,
       "sat": true,
@@ -4113,13 +3577,6 @@
       "sat": true,
       "offence_floor": 5,
       "defence_floor": 4
-    },
-    {
-      "offence": "462",
-      "defence": 104,
-      "sat": true,
-      "offence_floor": 5,
-      "defence_floor": 9
     },
     {
       "offence": "463",
