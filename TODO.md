@@ -139,20 +139,6 @@ audit:
    path encouraging over-exclusion, not from the priming itself.
    §7.6 now a 3-way table.
 
-Polarity-negative work shipped:
-
-- [x] **Polarity-priming in the T2 prompt.** Foregrounded the
-      empty-set case explicitly. Lifts negative-slice F1 from
-      0.052 → 0.267.
-- [x] **Chain-of-thought scaffolding for negative cases.**
-      Optional `# ruled out:` preamble; parser extracts the last
-      JSON array. Combined with the priming above.
-- [x] **Polarity-aware T1 prompting.** `none` is now a permitted
-      reply; scorer accepts it for polarity-negative fixtures.
-      Lifts negative-slice T1 from 33.3% → 60.0%.
-- [x] Re-ran benchmark; §7.6 now reports both variants side-by-
-      side with the calibration-tradeoff finding.
-
 Open follow-ups (deferred):
 
 - [ ] **Conditional polarity prompting.** Route polarity-
@@ -161,32 +147,13 @@ Open follow-ups (deferred):
       at inference time, which the model doesn't have. Could be
       approximated with a cheap pre-classifier that decides
       whether to invoke the priming prompt; experimental.
-- [x] **Soften the CoT invitation.** Shipped as
-      `--prompt-variant polarity-soft`: priming + `none` T1, no
-      CoT. Confirmed the hypothesis — the `# ruled out:` CoT path
-      caused the polarity-variant positive-corpus regression, not
-      the priming itself. Polarity-soft captures essentially the
-      full negative-slice gain (+0.215 T2 F1, +23.4pp T1 over
-      baseline) at a fraction of the positive-corpus cost
-      (T2 F1 -0.053; T2 exact +1.5pp; T3 +0.9pp). §7.6 promoted
-      to a 3-way table covering baseline / polarity / polarity-
-      soft.
 
 ### Additional model baselines (OpenAI only)
 
-User has an OpenAI org key but not Anthropic. Run additional OpenAI
-models to test cross-model generalisation:
+User has an OpenAI org key but not Anthropic. GPT-4o-mini and
+GPT-4o full-corpus baselines are shipped (see iterative-history
+entries #5 and #7). Remaining:
 
-- [x] **GPT-4o.** Shipped — `evals/results-gpt-4o-full.json`.
-      T1 60.5% / T2 6.8% / F1 0.317 / T3 98.0% on n=205. Paper
-      §7.6 has the cross-model paragraph; polarity-negative
-      collapse is gpt-4o-mini-specific (see update note above).
-- [x] **GPT-4o-mini + polarity-priming** combined run shipped
-      as the `--prompt-variant polarity` paired comparison
-      (results-gpt-4o-mini-polarity.json + §7.6 paired-variant
-      paragraph). Lifts the negative slice as targeted but
-      regresses positive-case F1 — see the iterative-history
-      entry #8 above.
 - [ ] **o1-mini** or **o3-mini** if the user wants to test
       reasoning-model performance — a real apples-to-apples for
       structural reasoning.
@@ -277,52 +244,14 @@ Cluster-level coverage:
 
 Edges deployed via the idempotent
 `scripts/add_general_defence_edges.py` helper; commit history
-`90c3c8ef..4f4110df` walks the cluster batches.
-
-- [x] **s84 unsoundness-of-mind onto every major offence cluster.**
-      143 sections covered (universal-applicability defence; missing
-      sections are pure definitions and regulatory provisions where
-      the defence is moot).
-- [x] **s79 mistake-of-fact onto every mens-rea-bearing offence
-      cluster.** 146 sections covered.
-- [x] **s80 accident onto major actus-reus-bearing clusters.**
-      52 sections (homicide, hurt, mischief, v0 sample).
-- [x] **s96 private defence onto homicide + hurt clusters.** 31
-      sections (the doctrinally relevant range; s100 deadly-assault
-      sub-edge present on the homicide cluster only).
-- [x] **s85, s86 intoxication onto specific-intent offences.**
-      29 sections covered (homicide-with-intent, theft, robbery,
-      CMA/CBT, cheating, forgery, abetment of specific-intent
-      offences). Strict-liability and recklessness-based offences
-      excluded by design.
-- [x] **s95 trifling-harm onto hurt-family offences.** 6 sections
-      covered (s319-s324). De minimis defence.
-- [x] **s81 (necessity / greater-harm avoidance)** onto property
-      + mischief clusters. 11 sections covered (theft, mischief
-      variants).
-- [x] **ss97-s106 private-defence family.** Per-defence
-      doctrinal mapping shipped. s97 (broadest, 57 sections),
-      s98 (against unsound aggressor, 32 sections), s101 (non-
-      deadly body, 20 sections), s103 (deadly property, 7
-      sections), s104 (non-deadly property, 23 sections), s106
-      (deadly with risk to innocent, 12 sections). s99
-      (constraint, not defence) and s102/s105 (timing
-      qualifiers, not standalone defences) deliberately omitted
-      per doctrine.
+`90c3c8ef..d0a9c971` walks the cluster batches. Defeats-edge
+structural-coverage benchmark (`evals/case_law/score_defeats_coverage.py`,
+commit `f1cb7cac`) reports 387/610 (63.4%) SAT under
+`yuho narrow-defence`; element-bearing defences clear at 90–100%
+while ss95–s106 sit at 0% (encoding-gap finding, see open
+follow-up below).
 
 Open follow-ups:
-
-- [x] **Defeats-edge structural-coverage benchmark** (commit
-      `f1cb7cac`). New scorer at
-      `evals/case_law/score_defeats_coverage.py` runs
-      `yuho narrow-defence` over every (offence, defence) edge
-      in the corpus. Headline: 387/610 = 63.4% SAT. Element-
-      bearing defences (s79/s80/s81/s84/s85/s86/s100) clear at
-      90–100%; the rest of the private-defence family
-      (s95/s96/s97/s98/s101/s103/s104/s106) sits at 0% because
-      those sections were encoded as pure-definition sections
-      during Phase D, with no `elements {}` block. Reported
-      honestly in §7.6.
 
 - [ ] **Encode structural elements for ss95-s106 private-defence
       sections.** Currently encoded as pure-definition statutes
@@ -352,15 +281,6 @@ hardening:
       `paper/blog/yuho.md`.
 - [ ] **External-reader pass on the full PDF.** Catches drift
       both author and AI miss.
-- [x] Confirmed canonical citations for `lam4` (JURIX 2023,
-      doi:10.3233/FAIA230954), `lexscript`
-      (github.com/codeNinja62/LexScript), `ldoc`
-      (github.com/arismoko/LDOC); `hammond1983rights` already
-      replaced with `sergot1991representation`. Surfaced two
-      factual corrections to LexScript (parser tech: participle/Go
-      not tree-sitter) and LDOC (source-of-truth posture matches
-      Yuho's, not opposed to it) — fixed across intro, background,
-      and related-work sections.
 
 ---
 
