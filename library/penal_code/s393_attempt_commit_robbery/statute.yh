@@ -4,6 +4,14 @@
 
 referencing penal_code/s390_robbery
 
+fn is_attempt_robbery(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 393 "Attempt to commit robbery" effective 1872-01-01 {
     definitions {
         robbery := "Robbery as defined in section 390.";

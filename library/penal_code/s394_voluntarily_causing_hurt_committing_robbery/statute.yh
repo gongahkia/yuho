@@ -2,6 +2,14 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr394-#pr394-
 
+fn is_robbery_with_hurt(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 394 "Voluntarily causing hurt in committing robbery" effective 1872-01-01 {
     elements {
         /// The section requires robbery or attempted robbery, voluntary hurt by one participant, and the accused to be either that participant or another jointly concerned participant.

@@ -3,6 +3,14 @@
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr506-#pr506-
 /// @amendment [15/2019]
 
+fn is_punishment_criminal_intimidation(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 506 "Punishment for criminal intimidation" effective 1872-01-01 effective 2020-01-01 {
     /// Punishment for the offence of criminal intimidation under section 503.
     penalty or_both when ordinary_criminal_intimidation {

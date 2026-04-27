@@ -4,6 +4,14 @@
 /// @amendment [15/2019]
 /// @amendment [Act 23 of 2021 wef 01/03/2022]
 
+fn is_falsification_of_accounts(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 477A "Falsification of accounts" effective 1872-01-01 effective 2020-01-01 effective 2022-03-01 {
     definitions {
         explanation_1 := "Explanation 1 . —It shall be sufficient in any charge under this section to allege a general intent to defraud without naming any particular person intended to be defrauded, or specifying any particular sum of money intended to be the subject of the fraud or any particular day on which the offence was committed.";

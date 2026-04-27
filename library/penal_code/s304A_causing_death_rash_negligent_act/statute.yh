@@ -1,6 +1,14 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr304A-#pr304A-
+fn is_causing_death_negligent(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 304A "Causing death by rash or negligent act" effective 1872-01-01 {
     elements {
         /// Section 304A requires death caused by doing an act, the act to be rash or negligent, and the act not to amount to culpable homicide.

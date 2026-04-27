@@ -1,0 +1,31 @@
+// Test file for s425_mischief
+// Yuho v5 Syntax — behavioural fixture.
+// Universal offence shape: made out iff elements ∧ ¬defence.
+
+referencing penal_code/s425_mischief
+
+struct MischiefTestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+// elements satisfied, no defence -> offence made out
+MischiefTestCase guilty := MischiefTestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_mischief(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+// elements satisfied, defence applies -> not made out
+MischiefTestCase defended := MischiefTestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_mischief(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+// no elements -> not made out
+MischiefTestCase notMadeOut := MischiefTestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_mischief(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE

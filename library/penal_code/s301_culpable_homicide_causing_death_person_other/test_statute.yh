@@ -1,0 +1,31 @@
+// Test file for s301_culpable_homicide_causing_death_person_other
+// Yuho v5 Syntax — behavioural fixture.
+// Universal offence shape: made out iff elements ∧ ¬defence.
+
+referencing penal_code/s301_culpable_homicide_causing_death_person_other
+
+struct CulpableHomicideOtherPersonTestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+// elements satisfied, no defence -> offence made out
+CulpableHomicideOtherPersonTestCase guilty := CulpableHomicideOtherPersonTestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_culpable_homicide_other_person(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+// elements satisfied, defence applies -> not made out
+CulpableHomicideOtherPersonTestCase defended := CulpableHomicideOtherPersonTestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_culpable_homicide_other_person(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+// no elements -> not made out
+CulpableHomicideOtherPersonTestCase notMadeOut := CulpableHomicideOtherPersonTestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_culpable_homicide_other_person(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE

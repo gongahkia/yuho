@@ -5,6 +5,14 @@
 
 referencing penal_code/s442_house_breaking
 
+fn is_grievous_hurt_during_house_breaking(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 459 "Grievous hurt caused while committing house-breaking" effective 1872-01-01 effective 2019-12-31 {
     definitions {
         house_breaking := "House-breaking as defined in section 442.";
