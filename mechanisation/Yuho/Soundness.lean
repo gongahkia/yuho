@@ -15,11 +15,15 @@ The two lemmas mechanised here:
   fact pattern. Catala-style default-logic priorities are
   realised by the topological-order walk of `Exception.firedSet`.
 
-The remaining lemmas of §6 (element-graph correspondence
-6.3, cross-section composition Theorem 6.1's main step,
-penalty correspondence 6.5) are pen-and-paper-only in this
-artefact and explicitly out of scope. See §6.6 of the paper for
-the rhetorical statement of the boundary.
+The remaining lemmas of §6 (cross-section composition
+Theorem 6.1's main step, penalty correspondence 6.5) are
+pen-and-paper-only in this artefact and explicitly out of scope.
+Lemma 6.3 (element-graph correspondence) was pen-and-paper-only
+in v1 and is now mechanised in `Yuho/Graph.lean`; the v1 partial
+result `partial_conviction_correspondence` below is preserved
+unchanged for backward compatibility, and the upgraded
+`full_conviction_correspondence` lives in `Graph.lean`. See §6.6
+of the paper for the rhetorical statement of the boundary.
 -/
 
 import Yuho.AST
@@ -49,10 +53,12 @@ theorem element_correspondence (m : SMTModel) (e : Element) :
 
 /-! ## Lemma 6.3-prep — Element-graph propagation
 
-We don't fully prove Lemma 6.3 here (it requires structural
-induction on `ElementGroup`, a list-folding correspondence
-that is more involved); we expose the per-group Bool value as a
-named definition so the §6.6 paper claim can refer to it cleanly.
+The full Lemma 6.3 lives in `Yuho/Graph.lean` (v2 mechanisation,
+as `element_graph_correspondence`). This section retains a
+helper `SMTModel.elementsTruth` definition because the v1
+`partial_conviction_correspondence` below cites it; new code
+should prefer the `GraphSMTModel`-based equivalents in
+`Yuho/Graph.lean`.
 -/
 
 /-- The element-tree's truth value under an SMT model. Used by
