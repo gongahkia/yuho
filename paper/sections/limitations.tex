@@ -129,14 +129,16 @@ counter-example explorer.
 \paragraph{Soundness is partially mechanised, partially pen-and-paper.}
 The mechanisation in \texttt{mechanisation/} (Lean~4, see
 \S\ref{subsec:soundness-mech}) kernel-checks
-Lemmas~\ref{lem:soundness-elem} (element correspondence)
-and~\ref{lem:soundness-exc} (Catala-style exception precedence).
-The remaining lemmas of Theorem~\ref{thm:z3-sound} ---
-\ref{lem:soundness-graph} (element-graph correspondence),
-\ref{lem:soundness-cross} (cross-section composition), and
+Lemmas~\ref{lem:soundness-elem} (element correspondence),
+\ref{lem:soundness-graph} (element-graph correspondence,
+\texttt{Yuho/Graph.lean}, v2 2026-04-27),
+and~\ref{lem:soundness-exc} (Catala-style exception precedence),
+plus the composed \texttt{full\_conviction\_correspondence}
+corollary. The remaining lemmas of Theorem~\ref{thm:z3-sound} ---
+\ref{lem:soundness-cross} (cross-section composition) and
 \ref{lem:soundness-penalty} (penalty correspondence) --- are
 pen-and-paper only, with the proof sketches in \S\ref{sec:soundness}.
-We estimate $\sim$6--9 person-months of additional proof
+We estimate $\sim$4--5 person-months of additional proof
 engineering to close the gap; the structural template is Catala's
 \texttt{simulation\_sred\_to\_cred.v}~\cite{catala2021}.
 The mechanisation also relies on an oracle assumption that the
