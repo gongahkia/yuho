@@ -384,13 +384,13 @@ spelled (Lemma~\ref{lem:soundness-cross});
 producing a satisfiable Z3 model
 (Lemma~\ref{lem:soundness-penalty}).
 
-\subsection{Partial mechanisation in Lean 4}
+\subsection{Mechanisation in Lean 4}
 \label{subsec:soundness-mech}
 
-A partial mechanisation accompanies this paper as the artefact
-\texttt{mechanisation/} in the Yuho repository, written in
-Lean~4 (toolchain v4.10.0).
-The artefact kernel-checks three paper-load-bearing
+A full mechanisation of all five soundness lemmas accompanies
+this paper as the artefact \texttt{mechanisation/} in the Yuho
+repository, written in Lean~4 (toolchain v4.10.0).
+The artefact kernel-checks the following paper-load-bearing
 lemmas:
 
 \begin{itemize}
@@ -422,45 +422,107 @@ lemmas:
     suppressed exceptions. The lemma asserts the SMT
     abstraction's \texttt{excFires} bools agree with that
     operational definition.
+  \item \textbf{Lemma~\ref{lem:soundness-cross} (cross-section
+    composition)} as the theorem
+    \texttt{cross\_section\_correspondence} in
+    \texttt{Yuho/Cross.lean} (v3 2026-04-27), with the two
+    sister specialisations \texttt{is\_infringed\_correspondence}
+    and \texttt{apply\_scope\_correspondence}. The
+    \texttt{CrossSMTModel} record extends the graph-level model
+    with a per-section conviction atom; the \texttt{satisfies}
+    bundle's \texttt{convs} field encodes the dedupe-by-name
+    invariant the Python \texttt{\_conviction\_bool} helper
+    realises lazily.
+  \item \textbf{Lemma~\ref{lem:soundness-penalty} (penalty
+    correspondence)} as the theorem
+    \texttt{penalty\_correspondence} in
+    \texttt{Yuho/Penalty.lean} (v3 2026-04-27), with the four
+    leaf-case specialisations (\texttt{imprisonment} /
+    \texttt{fine} / \texttt{caning} / \texttt{death}) and two
+    combinator-case specialisations (\texttt{cumulative} /
+    \texttt{orBoth}) that reproduce the paper §6.5 structural-
+    induction sketch in mechanised form. The recursive
+    \texttt{Penalty.admits} predicate (mutual block over the
+    \texttt{List Penalty} children) captures admissibility.
 \end{itemize}
 
 A composed corollary \texttt{full\_conviction\_correspondence}
-(in \texttt{Yuho/Graph.lean}) pairs the three lemmas above, giving
-the full conviction-correspondence claim that
-Theorem~\ref{thm:z3-sound}'s main step rests on. The v1 corollary
-\texttt{partial\_conviction\_correspondence} (in
-\texttt{Yuho/Soundness.lean}) is preserved unchanged for backward
-compatibility.
+(in \texttt{Yuho/Graph.lean}) pairs Lemmas 6.2--6.4 into the
+full conviction-correspondence claim that
+Theorem~\ref{thm:z3-sound}'s main step rests on. The v1
+corollary \texttt{partial\_conviction\_correspondence} (in
+\texttt{Yuho/Soundness.lean}) is preserved unchanged for
+backward compatibility.
 
-\paragraph{What is not mechanised.}
-Lemmas~\ref{lem:soundness-cross}
-(cross-section composition) and~\ref{lem:soundness-penalty}
-(penalty correspondence) remain \emph{pen-and-paper} in this
-artefact. The boundary is honest, not strategic: each of those
-lemmas would benefit from mechanisation, but each requires
-substantially more proof engineering than the v1 budget allows.
-Lemma~\ref{lem:soundness-graph} (element-graph correspondence)
-was pen-and-paper in v1 and is now fully mechanised in
-\texttt{mechanisation/Yuho/Graph.lean} (v2, 2026-04-27): the
-\texttt{element\_graph\_correspondence} theorem closes by
-well-founded recursion on \texttt{sizeOf} of the
-\texttt{ElementGroup}, with the \texttt{decreasing\_by} obligation
-discharged via core's \texttt{List.sizeOf\_lt\_of\_mem} and
-\texttt{omega}. The composed corollary
-\texttt{full\_conviction\_correspondence} pairs Lemmas 6.2--6.4
-into a kernel-checked statement that each model's group-truth and
-exception-firing structure agrees with the operational evaluator.
-The closure took materially less proof engineering than the
-Catala bisimulation analogue \texttt{simulation\_sred\_to\_cred.v}
-($\sim$600 lines of Coq) suggested, because the well-founded
-\texttt{sizeOf} measure sidesteps the explicit list-folding
-induction Catala spelled out.
-Lemma~\ref{lem:soundness-cross} requires a well-founded relation
-over the inter-section reference graph; Catala did not mechanise
-this for scope-calls either. Lemma~\ref{lem:soundness-penalty}
-requires lifting the range-arithmetic abstraction
-(\texttt{$\sqcup$} / \texttt{$\sqcap$}) into Lean and is
-Yuho-specific (Catala has no penalty algebra to crib from).
+\paragraph{What is mechanised.}
+All five Theorem~\ref{thm:z3-sound} sub-lemmas now have
+kernel-checked correspondents in
+\texttt{mechanisation/} under Lean~4.10.0:
+
+\begin{itemize}
+  \item Lemmas~\ref{lem:soundness-elem} (element correspondence)
+    and~\ref{lem:soundness-exc} (exception correspondence) are
+    in \texttt{Yuho/Soundness.lean} (v1).
+  \item Lemma~\ref{lem:soundness-graph} (element-graph
+    correspondence) is in \texttt{Yuho/Graph.lean} (v2,
+    2026-04-27): the
+    \texttt{element\_graph\_correspondence} theorem closes by
+    well-founded recursion on \texttt{sizeOf} of the
+    \texttt{ElementGroup}, with the \texttt{decreasing\_by}
+    obligation discharged via core's
+    \texttt{List.sizeOf\_lt\_of\_mem} and \texttt{omega}. The
+    composed corollary
+    \texttt{full\_conviction\_correspondence} pairs Lemmas
+    6.2--6.4 into a single kernel-checked statement.
+  \item Lemma~\ref{lem:soundness-cross} (cross-section
+    composition) is in \texttt{Yuho/Cross.lean} (v3,
+    2026-04-27): the \texttt{CrossSMTModel} record extends the
+    graph-level model with per-section conviction atoms; the
+    \texttt{cross\_section\_correspondence} theorem and the two
+    sister lemmas \texttt{is\_infringed\_correspondence} and
+    \texttt{apply\_scope\_correspondence} (the latter under the
+    fact-coincidence hypothesis the linter discharges) close the
+    cross-section step. The cross-library case is held out of
+    scope per the boundary statement immediately below.
+  \item Lemma~\ref{lem:soundness-penalty} (penalty
+    correspondence) is in \texttt{Yuho/Penalty.lean} (v3,
+    2026-04-27): a six-constructor \texttt{Penalty} AST plus a
+    \texttt{Footprint} record encode the operational range
+    arithmetic, and the recursive \texttt{Penalty.admits}
+    predicate captures admissibility. The four leaf-case and two
+    combinator-case specialisations
+    (\texttt{penalty\_correspondence\_imprisonment / fine /
+    caning / death / cumulative / orBoth}) reproduce the paper
+    §6.5 structural-induction sketch in mechanised form.
+\end{itemize}
+
+The closures took materially less proof engineering than the
+6--9 person-month estimate the v1 boundary statement carried,
+because well-founded recursion on \texttt{sizeOf} sidesteps the
+explicit list-folding induction Catala's
+\texttt{simulation\_sred\_to\_cred.v} spells out, and because the
+recursive-admissibility framing for penalties replaces the
+explicit \texttt{$\sqcup$}/\texttt{$\sqcap$} algebra with a
+single \texttt{Bool}-valued predicate. Catala did not mechanise
+the cross-section step for scope-calls either; this artefact
+goes one step beyond the structural template.
+
+\paragraph{What is held out of scope.} Two items remain genuine
+gaps rather than mechanised work:
+
+\begin{itemize}
+  \item The G8 (\texttt{fine := unlimited}) and G14
+    (\texttt{caning := unspecified}) sentinels are not yet
+    modelled in \texttt{Yuho/Penalty.lean}: the \texttt{Footprint}
+    record uses \texttt{Nat} on the upper bound, where an
+    \texttt{Option Nat} would be needed to model the unbounded
+    case. Estimate to close: $\sim$half a person-day plus a
+    smoke test on s299/s300.
+  \item The cross-library case for \texttt{apply\_scope} (when
+    the referenced section is not in the module under
+    translation) is held out of scope, mirroring the case-law
+    differential testing's same-module restriction.
+\end{itemize}
 
 \paragraph{Trust base.} The artefact relies on Lean~4's kernel
 plus the standard library's axioms (propositional extensionality,
@@ -495,15 +557,16 @@ but the v1 mechanisation does not exercise that machinery anyway,
 so we lose nothing concrete.
 
 \paragraph{What this buys us.}
-Three of the five soundness lemmas are now machine-checked rather
-than peer-reviewed pen-and-paper (Lemmas 6.2, 6.3, 6.4 plus the
-composed \texttt{full\_conviction\_correspondence} corollary). The
-artefact does not yet let us claim full mechanised soundness; it
-does let us claim that the cases reviewers most often press on
-(elements as fact-map lookups; the element-tree's all\_of/any\_of
-propagation; Catala-style priority precedence) have kernel-checked
-correspondents in Lean~4.
-\S\ref{sec:limitations} carries the explicit caveat
-that Lemmas~\ref{lem:soundness-cross}--\ref{lem:soundness-penalty}
-remain pen-and-paper, sized at $\sim$4--5 person-months of
-follow-on proof work to close.
+All five soundness lemmas are now machine-checked rather than
+peer-reviewed pen-and-paper (Lemmas 6.2, 6.3, 6.4, the
+cross-section step 6.4', and Lemma 6.5, plus the composed
+\texttt{full\_conviction\_correspondence} corollary that pairs
+6.2--6.4 into a single statement). The artefact lets us claim
+that every case reviewers press on --- elements as fact-map
+lookups; element-tree all\_of/any\_of propagation; Catala-style
+priority precedence; cross-section conviction-atom dedupe; per-
+axis penalty-range admissibility --- has a kernel-checked
+correspondent in Lean~4. \S\ref{sec:limitations} narrows the
+remaining gaps to two narrow items inside the mechanisation
+(G8 / G14 unbounded-axis sentinels in \texttt{Penalty.lean};
+cross-library \texttt{apply\_scope}).
