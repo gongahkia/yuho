@@ -268,9 +268,15 @@ hardening:
       `paper/blog/yuho.md`.
 - [ ] **External-reader pass on the full PDF.** Catches drift
       both author and AI miss.
-- [ ] Confirm canonical citations for `lam4`, `lexscript`,
-      `ldoc`, `hammond1983rights` (TODO notes still in
-      `references.bib`).
+- [x] Confirmed canonical citations for `lam4` (JURIX 2023,
+      doi:10.3233/FAIA230954), `lexscript`
+      (github.com/codeNinja62/LexScript), `ldoc`
+      (github.com/arismoko/LDOC); `hammond1983rights` already
+      replaced with `sergot1991representation`. Surfaced two
+      factual corrections to LexScript (parser tech: participle/Go
+      not tree-sitter) and LDOC (source-of-truth posture matches
+      Yuho's, not opposed to it) — fixed across intro, background,
+      and related-work sections.
 
 ---
 
