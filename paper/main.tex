@@ -67,12 +67,25 @@
   \providecommand{\statBenchmarkSynth}{183}%
   \providecommand{\statBenchmarkHand}{22}%
   \providecommand{\statBenchmarkLlmModel}{GPT-4o-mini}%
-  \providecommand{\statBenchmarkLlmTone}{43.9}%
-  \providecommand{\statBenchmarkLlmTtwo}{32.7}%
-  \providecommand{\statBenchmarkLlmTtwoFOne}{0.676}%
-  \providecommand{\statBenchmarkLlmTthree}{94.1}%
+  % Baseline variant (v1 prompts): used as the comparison column in
+  % the §7.6 paired comparison. These are the headline numbers we
+  % report for the model under standard closed-vocab prompting.
+  \providecommand{\statBenchmarkLlmTone}{44.9}%
+  \providecommand{\statBenchmarkLlmTtwo}{32.2}%
+  \providecommand{\statBenchmarkLlmTtwoFOne}{0.678}%
+  \providecommand{\statBenchmarkLlmTthree}{93.2}%
   \providecommand{\statBenchmarkLlmNegPolarTone}{33.3}%
-  \providecommand{\statBenchmarkLlmNegPolarFOne}{0.056}%
+  \providecommand{\statBenchmarkLlmNegPolarFOne}{0.052}%
+  % Polarity variant (v2 prompts): adds polarity priming + optional
+  % `# ruled out:` CoT preamble + `none` T1 option. Lifts the n=30
+  % polarity-negative slice substantially but regresses the positive-
+  % case corpus (calibration tradeoff documented in §7.6).
+  \providecommand{\statBenchmarkLlmPolTone}{43.4}%
+  \providecommand{\statBenchmarkLlmPolTtwo}{17.1}%
+  \providecommand{\statBenchmarkLlmPolTtwoFOne}{0.420}%
+  \providecommand{\statBenchmarkLlmPolTthree}{93.2}%
+  \providecommand{\statBenchmarkLlmPolNegPolarTone}{60.0}%
+  \providecommand{\statBenchmarkLlmPolNegPolarFOne}{0.267}%
   \providecommand{\statBenchmarkLlmAltModel}{GPT-4o}%
   \providecommand{\statBenchmarkLlmAltTone}{60.5}%
   \providecommand{\statBenchmarkLlmAltTtwo}{6.8}%

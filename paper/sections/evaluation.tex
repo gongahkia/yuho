@@ -552,13 +552,79 @@ elements but adds or drops one.
 T1 to \statBenchmarkLlmNegPolarTone{}\% and T2's F1 to
 \statBenchmarkLlmNegPolarFOne{} --- the model is systematically
 biased toward producing \emph{some} satisfied elements rather
-than identifying that none fire. This is itself an informative
-finding for downstream legal-AI work: structural-reasoning
-prompts on negative cases need polarity priming or chain-of-
-thought scaffolding to recover. The runner emits the full
+than identifying that none fire. The runner emits the full
 per-fixture JSON plus stratified accuracy slices (per chapter,
 per category, per difficulty, per polarity), so reproducing the
 result against a different model is one command.
+
+\paragraph{Paired prompt-variant comparison.}
+We ran a second \statBenchmarkLlmModel{} pass at the same
+$n = \statBenchmarkFixtures{}$ fixtures under a polarity-aware
+prompt variant (\texttt{--prompt-variant polarity} in the
+runner): the T2 prompt foregrounds the empty-set case explicitly
+(``many scenarios are constructed so that NO element is
+satisfied'') and invites an optional one-line ``\texttt{\#
+ruled out:}'' chain-of-thought preamble before the JSON answer;
+T1 gains \texttt{none} as a permitted reply. The parser tolerates
+the CoT preamble by extracting the last balanced JSON array. The
+scoring code is identical across the two variants.
+
+\begin{center}
+\begin{tabular}{lrrr}
+\hline
+& \textbf{Baseline} & \textbf{Polarity} & $\Delta$ \\
+\hline
+T1 whole corpus      & \statBenchmarkLlmTone{}\%
+                     & \statBenchmarkLlmPolTone{}\%
+                     & $-1.5$pp \\
+T2 exact whole       & \statBenchmarkLlmTtwo{}\%
+                     & \statBenchmarkLlmPolTtwo{}\%
+                     & $-15.1$pp \\
+T2 mean F1 whole     & \statBenchmarkLlmTtwoFOne{}
+                     & \statBenchmarkLlmPolTtwoFOne{}
+                     & $-0.258$ \\
+T3 whole corpus      & \statBenchmarkLlmTthree{}\%
+                     & \statBenchmarkLlmPolTthree{}\%
+                     & $0.0$pp \\
+T1 polarity-neg      & \statBenchmarkLlmNegPolarTone{}\%
+                     & \statBenchmarkLlmPolNegPolarTone{}\%
+                     & $\mathbf{+26.7}$\textbf{pp} \\
+T2 F1 polarity-neg   & \statBenchmarkLlmNegPolarFOne{}
+                     & \statBenchmarkLlmPolNegPolarFOne{}
+                     & $\mathbf{+0.215}$ \\
+\hline
+\end{tabular}
+\end{center}
+
+The intervention does what it was designed to do: T1 on the
+$n=30$ polarity-negative slice rises from
+\statBenchmarkLlmNegPolarTone{}\% to
+\statBenchmarkLlmPolNegPolarTone{}\%, and T2 F1 on the same slice
+from \statBenchmarkLlmNegPolarFOne{} to
+\statBenchmarkLlmPolNegPolarFOne{} --- a substantial recovery on
+the failure mode the baseline run flagged. But the same priming
+that helps the negative slice over-corrects on the positive
+corpus: whole-corpus T2 F1 drops by 0.258 (from
+\statBenchmarkLlmTtwoFOne{} to \statBenchmarkLlmPolTtwoFOne{}),
+because the model now rules out genuinely-satisfied elements too
+aggressively when invited to enumerate exclusions. T3 is flat
+across both variants, and T1 whole-corpus accuracy moves only
+$1.5$pp.
+
+The honest reading is that polarity priming is not a Pareto
+improvement on \statBenchmarkLlmModel{}: it trades positive-case
+recall for negative-case calibration, and in this trade the
+positive corpus loses more (in F1) than the negative slice gains
+(in F1). The result is informative for downstream legal-AI work
+in two distinct directions. First, prompt-level interventions
+that ``acknowledge the null answer'' are cheap and effective
+when the failure mode is over-firing, but they do not come for
+free on the rest of the distribution; conditional or
+fixture-aware prompting would be needed to capture both gains.
+Second, the failure mode itself is model-specific: the cross-
+model paragraph below shows that
+\statBenchmarkLlmAltModel{} does not exhibit the polarity-
+negative collapse, and so does not need the intervention.
 
 \paragraph{Cross-model comparison.} A second baseline against
 \statBenchmarkLlmAltModel{} on the same $n =
