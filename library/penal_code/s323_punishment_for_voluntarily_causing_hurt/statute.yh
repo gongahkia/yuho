@@ -77,4 +77,10 @@ statute 323 "Punishment for Voluntarily Causing Hurt" effective 1872-01-01 {
         "no s323 conviction per s97 general exception"
         when is_infringed(s97)
     }
+
+    exception general_defence_s87 {
+        "act not intended and not known to be likely to cause death or grievous hurt"
+        "no s323 conviction per s87 general exception"
+        when is_infringed(s87)
+    }
 }

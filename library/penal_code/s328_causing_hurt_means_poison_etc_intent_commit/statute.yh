@@ -83,4 +83,10 @@ statute 328 "Causing hurt by means of poison, etc., with intent to commit an off
         "no s328 conviction per s83 general exception"
         when is_infringed(s83)
     }
+
+    exception general_defence_s87 {
+        "act not intended and not known to be likely to cause death or grievous hurt"
+        "no s328 conviction per s87 general exception"
+        when is_infringed(s87)
+    }
 }
