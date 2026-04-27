@@ -92,4 +92,10 @@ statute 324 "Voluntarily causing hurt by dangerous weapons or means" effective 1
         "no s324 conviction per s88 general exception"
         when is_infringed(s88)
     }
+
+    exception general_defence_s89 {
+        "act done in good faith for the benefit of a child or person of unsound mind"
+        "no s324 conviction per s89 general exception"
+        when is_infringed(s89)
+    }
 }
