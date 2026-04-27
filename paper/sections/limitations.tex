@@ -126,21 +126,29 @@ charge decision; the recommender is a teaching / research artefact
 over the encoded grammar, in the same posture as the
 counter-example explorer.
 
-\paragraph{Soundness is partially mechanised, partially pen-and-paper.}
+\paragraph{Soundness is fully mechanised at the conviction +
+cross-section + penalty layers.}
 The mechanisation in \texttt{mechanisation/} (Lean~4, see
-\S\ref{subsec:soundness-mech}) kernel-checks
-Lemmas~\ref{lem:soundness-elem} (element correspondence),
-\ref{lem:soundness-graph} (element-graph correspondence,
-\texttt{Yuho/Graph.lean}, v2 2026-04-27),
-and~\ref{lem:soundness-exc} (Catala-style exception precedence),
+\S\ref{subsec:soundness-mech}) kernel-checks all five sub-lemmas
+of Theorem~\ref{thm:z3-sound}:
+\ref{lem:soundness-elem} (element correspondence) and
+\ref{lem:soundness-exc} (Catala-style exception precedence) in
+\texttt{Yuho/Soundness.lean} (v1);
+\ref{lem:soundness-graph} (element-graph correspondence) in
+\texttt{Yuho/Graph.lean} (v2, 2026-04-27);
+\ref{lem:soundness-cross} (cross-section composition) in
+\texttt{Yuho/Cross.lean} (v3, 2026-04-27);
+\ref{lem:soundness-penalty} (penalty correspondence) in
+\texttt{Yuho/Penalty.lean} (v3, 2026-04-27);
 plus the composed \texttt{full\_conviction\_correspondence}
-corollary. The remaining lemmas of Theorem~\ref{thm:z3-sound} ---
-\ref{lem:soundness-cross} (cross-section composition) and
-\ref{lem:soundness-penalty} (penalty correspondence) --- are
-pen-and-paper only, with the proof sketches in \S\ref{sec:soundness}.
-We estimate $\sim$4--5 person-months of additional proof
-engineering to close the gap; the structural template is Catala's
-\texttt{simulation\_sred\_to\_cred.v}~\cite{catala2021}.
+corollary in \texttt{Yuho/Graph.lean}. Two narrow gaps remain
+within the mechanisation itself: the G8 / G14 unbounded-axis
+sentinels in \texttt{Penalty.lean} (estimate: $\sim$half a
+person-day) and the cross-library case for
+\texttt{apply\_scope} in \texttt{Cross.lean} (held out of scope
+because the case-law differential testing of
+\S\ref{subsec:case_law_diff} stays within same-module fact
+patterns).
 The mechanisation also relies on an oracle assumption that the
 Z3 generator faithfully emits the biconditionals
 \texttt{SMTModel.satisfies} requires --- the analogue of Catala's
