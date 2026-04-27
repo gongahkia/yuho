@@ -46,4 +46,20 @@ statute 453 "Possession of house-breaking implements or offensive weapons" effec
             paragraph_d := "( d ) any person as part of his official or ceremonial dress on any official or ceremonial occasion.";
         }
     }
+
+    exception general_defence_s79 {
+        "act done by reason of mistake of fact"
+        "no s453 conviction per s79 general exception"
+        when is_infringed(s79)
+    }
+    exception general_defence_s80 {
+        "accident in the doing of a lawful act"
+        "no s453 conviction per s80 general exception"
+        when is_infringed(s80)
+    }
+    exception general_defence_s84 {
+        "act done by a person of unsound mind"
+        "no s453 conviction per s84 general exception"
+        when is_infringed(s84)
+    }
 }

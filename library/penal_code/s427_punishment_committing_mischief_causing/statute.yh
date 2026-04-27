@@ -52,4 +52,20 @@ statute 427 "Punishment for committing mischief causing disruption to key servic
     illustration illustration_c {
         "( c ) An act of mischief which damages an electricity licensee’s power generation facility that is used to supply electricity to a public housing estate, is an act which is likely to cause disruption to a key service even though there is no actual disruption to that power supply."
     }
+
+    exception general_defence_s79 {
+        "act done by reason of mistake of fact"
+        "no s427 conviction per s79 general exception"
+        when is_infringed(s79)
+    }
+    exception general_defence_s80 {
+        "accident in the doing of a lawful act"
+        "no s427 conviction per s80 general exception"
+        when is_infringed(s80)
+    }
+    exception general_defence_s84 {
+        "act done by a person of unsound mind"
+        "no s427 conviction per s84 general exception"
+        when is_infringed(s84)
+    }
 }

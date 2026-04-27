@@ -25,4 +25,20 @@ statute 460 "House-breaking when death or grievous hurt caused" effective 1872-0
     penalty {
         imprisonment := 3 years .. 20 years;
     }
+
+    exception general_defence_s79 {
+        "act done by reason of mistake of fact"
+        "no s460 conviction per s79 general exception"
+        when is_infringed(s79)
+    }
+    exception general_defence_s80 {
+        "accident in the doing of a lawful act"
+        "no s460 conviction per s80 general exception"
+        when is_infringed(s80)
+    }
+    exception general_defence_s84 {
+        "act done by a person of unsound mind"
+        "no s460 conviction per s84 general exception"
+        when is_infringed(s84)
+    }
 }

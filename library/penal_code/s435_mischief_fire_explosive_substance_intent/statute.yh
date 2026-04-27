@@ -21,4 +21,20 @@ statute 435 "Mischief by fire or explosive substance with intent to cause damage
         imprisonment := 0 days .. 7 years;
         fine := unlimited;
     }
+
+    exception general_defence_s79 {
+        "act done by reason of mistake of fact"
+        "no s435 conviction per s79 general exception"
+        when is_infringed(s79)
+    }
+    exception general_defence_s80 {
+        "accident in the doing of a lawful act"
+        "no s435 conviction per s80 general exception"
+        when is_infringed(s80)
+    }
+    exception general_defence_s84 {
+        "act done by a person of unsound mind"
+        "no s435 conviction per s84 general exception"
+        when is_infringed(s84)
+    }
 }

@@ -28,4 +28,20 @@ statute 442 "House-breaking" effective 1872-01-01 effective 2020-01-01 {
             }
         }
     }
+
+    exception general_defence_s79 {
+        "act done by reason of mistake of fact"
+        "no s442 conviction per s79 general exception"
+        when is_infringed(s79)
+    }
+    exception general_defence_s80 {
+        "accident in the doing of a lawful act"
+        "no s442 conviction per s80 general exception"
+        when is_infringed(s80)
+    }
+    exception general_defence_s84 {
+        "act done by a person of unsound mind"
+        "no s442 conviction per s84 general exception"
+        when is_infringed(s84)
+    }
 }
