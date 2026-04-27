@@ -1,0 +1,50 @@
+id: case-pp-v-ng-guan-hup
+case_citation: "Public Prosecutor v Ng Guan Hup [2009] SGHC 170"
+actual_charge: "425"
+alternative_charge: null
+court_distinguished_on: [intent_to_cause_wrongful_loss_or_damage, change_in_property]
+outcome: "Convicted on a guilty plea of mischief under s 425 of the Penal Code (three charges); pleaded guilty to administering a drug to three racehorses belonging to Charles Leck at the Singapore Turf Club in July 2007."
+case_summary: |
+  The respondent used a syringe to administer a drug to three racehorses
+  belonging to Charles Leck at the Singapore Turf Club sometime in July 2007.
+  On 8 April 2008, the respondent pleaded guilty to the charge and admitted
+  to the statement of facts without qualification, and was duly convicted of
+  mischief under s 425 of the Penal Code. The case illustrates s 425's
+  reach beyond classical destruction-of-property fact patterns: doping a
+  racehorse changes the property (the horse's competitive utility) in a way
+  that diminishes its value or utility, satisfying the
+  change-in-property limb of s 425 alongside the
+  wrongful-loss-or-damage mens rea.
+section: "425"
+description: |
+  A used a syringe to administer a drug to three racehorses owned by C at
+  the Singapore Turf Club. The drug administration affected the racehorses'
+  competitive utility — a change in property that diminished its value to C.
+  A acted with intent (or with knowledge of the likelihood) of causing
+  wrongful loss to C. A was charged under s 425 of the Penal Code (three
+  charges, one per horse).
+parties:
+  A: { role: accused }
+  C: { role: victim, attribute: racehorse-owner }
+  H1: { role: affected-property, attribute: racehorse }
+  H2: { role: affected-property, attribute: racehorse }
+  H3: { role: affected-property, attribute: racehorse }
+acts:
+  - { actor: A, description: "administers a drug to three racehorses owned by C using a syringe" }
+mental_states:
+  A:
+    intent: "to cause wrongful loss to C (or knowledge of likelihood thereof)"
+circumstances:
+  - "racehorses are property within s 425's reach"
+  - "drug administration is a 'change in property' diminishing utility, not classical destruction"
+  - "guilty plea on three counts (one per horse)"
+outcomes:
+  - { actor: H1, description: "racehorse's competitive utility is diminished" }
+  - { actor: H2, description: "racehorse's competitive utility is diminished" }
+  - { actor: H3, description: "racehorse's competitive utility is diminished" }
+fact_facts:
+  intent_to_cause_wrongful_loss_or_damage: true
+  knowledge_of_likely_wrongful_loss_or_damage: true
+  destruction_of_property: false
+  change_in_property: true
+tags: [source:case-law, chapter:xvii, category:property, doctrine:s425-change-in-property-limb, novel-property:racehorse]

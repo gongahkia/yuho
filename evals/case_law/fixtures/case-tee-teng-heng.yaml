@@ -1,0 +1,53 @@
+id: case-tee-teng-heng
+case_citation: "Tee Teng Heng v Public Prosecutor [2000] SGHC 230"
+actual_charge: "447"
+alternative_charge: null
+court_distinguished_on: [unlawfully_remains_there, intent_thereby_to_intimidate_insult_or_annoy]
+outcome: "Conviction under s 447 of the Penal Code (criminal trespass — punishment) affirmed on appeal; appellant sentenced to the maximum fine of S$500 (the pre-amendment cap)."
+case_summary: |
+  The appellant, a former HDB employee dismissed on 2 February 1996, made
+  several unauthorised entries into the HDB premises after his dismissal,
+  appealing his dismissal in person. The trial court convicted him under
+  s 447. The High Court on appeal affirmed the conviction, holding that
+  (a) the requisite intent to intimidate, insult or annoy need not be
+  proved by direct evidence — it can be inferred from the surrounding
+  circumstances; and (b) the maximum fine (S$500 at the time; subsequently
+  raised to S$1,500) was not manifestly excessive on the facts. The case
+  is canonical authority for the inferred-intent route to s 441 / s 447
+  liability, and for the structural distinction between initial-entry
+  and continued-presence limbs of s 441.
+section: "447"
+description: |
+  A, a former HDB employee, made several unauthorised entries into the HDB
+  premises after his dismissal. The premises were in the lawful possession
+  of HDB. A entered and/or remained on the premises with intent to intimidate,
+  insult or annoy HDB staff (inferred from the surrounding circumstances —
+  the dismissal grievance, repeated entries against express prohibition).
+  A was convicted under s 447 of the Penal Code (continued-presence limb of
+  s 441, with intent to annoy).
+parties:
+  A: { role: accused, attribute: former-employee }
+  HDB: { role: victim, attribute: property-possessor }
+acts:
+  - { actor: A, description: "makes unauthorised entries into HDB premises after his dismissal" }
+  - { actor: A, description: "remains on the premises after being asked to leave" }
+mental_states:
+  A:
+    intent: "(inferred) to intimidate, insult, or annoy HDB staff in connection with his dismissal grievance"
+circumstances:
+  - "premises in lawful possession of HDB"
+  - "A's prior employment terminated; entries made after dismissal"
+  - "intent inferred from surrounding circumstances — direct evidence not required"
+  - "maximum fine S$500 affirmed as not manifestly excessive (pre-amendment cap)"
+outcomes:
+  - { actor: HDB, description: "HDB staff annoyed by A's repeated unauthorised presence" }
+fact_facts:
+  enters_into_or_upon_property: true
+  property_in_possession_of_another: true
+  intent_to_commit_offence: false
+  intent_to_intimidate_insult_or_annoy_person_in_possession: true
+  lawful_entry: false
+  unlawfully_remains_there: true
+  intent_thereby_to_intimidate_insult_or_annoy: true
+  intent_to_commit_offence_after_entry: false
+tags: [source:case-law, chapter:xvii, category:property, doctrine:s441-inferred-intent, doctrine:s441-continued-presence-limb]
