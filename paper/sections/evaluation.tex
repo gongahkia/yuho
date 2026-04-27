@@ -417,14 +417,32 @@ output and a held-out sample of Singapore criminal cases.
 \paragraph{Sample.} We curated $n =$ \statCaseLawN{} reported
 Singapore criminal cases spanning Penal Code chapters
 \textsf{V} (abetment), \textsf{XVI} (offences against the body
---- the bulk of the sample, since SG criminal-law publication
-patterns favour homicide reporting), and \textsf{XVII} (offences
-against property). Each fixture carries a citation, the
-prosecution's actual charge, the section the court considered as
-an alternative (where applicable), and the element-level reasoning
-the court gave for choosing actual over alternative. Fixtures
-live at \texttt{evals/case\_law/fixtures/} as YAML; the schema is
-documented at \texttt{evals/case\_law/README.md}.
+--- still the bulk of the sample, since SG criminal-law
+publication patterns favour homicide reporting), \textsf{XVII}
+(offences against property, including new robbery, mischief and
+criminal-trespass coverage), and \textsf{XXII}
+(criminal intimidation, s506). The most recent expansion (commits
+\texttt{e8f37c3e..3e7f3dc6}) added eight publicly-citable fixtures
+covering \texttt{See Li Quan Mendel v PP [2020]} and
+\texttt{Chen Weixiong Jerriek v PP [2003] SGHC 103} (s392/s394
+robbery), the accomplice angle of
+\texttt{Daniel Vijay v PP [2010] 4 SLR 1119} (s394 read with s34),
+\texttt{Chan Yok Tuang v PP [2008] SGHC 137},
+\texttt{PP v Luan Yuanxin [2002] SGHC 65} and
+\texttt{[2016] SGHC 154} (s506 criminal intimidation),
+\texttt{PP v Ng Guan Hup [2009] SGHC 170} (s425 mischief by
+drug-administration to racehorses), and
+\texttt{Tee Teng Heng v PP [2000] SGHC 230} (s447 criminal
+trespass — inferred-intent doctrine). Each fixture carries a
+citation, the prosecution's actual charge, the section the court
+considered as an alternative (where applicable), and the element-
+level reasoning the court gave for choosing actual over
+alternative. Fixtures live at \texttt{evals/case\_law/fixtures/}
+as YAML; the schema is documented at
+\texttt{evals/case\_law/README.md}. Citations were verified
+against publicly indexed sources (eLitigation, Singapore Law Watch);
+LawNet was deliberately not used to keep the corpus reproducible
+without paywalled access.
 
 \paragraph{Three orthogonal scorers.} Three different agreement
 questions, three different metrics:

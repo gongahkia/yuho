@@ -1,10 +1,16 @@
 {
-  "n": 30,
-  "top1_accuracy": 0.43333333333333335,
-  "top3_accuracy": 0.4666666666666667,
-  "top5_accuracy": 0.4666666666666667,
-  "mean_reciprocal_rank": 0.45,
+  "n": 38,
+  "top1_accuracy": 0.4473684210526316,
+  "top3_accuracy": 0.47368421052631576,
+  "top5_accuracy": 0.47368421052631576,
+  "mean_reciprocal_rank": 0.4605263157894737,
   "per_chapter": {
+    "xxii": {
+      "n": 3,
+      "top1_accuracy": 0.0,
+      "top3_accuracy": 0.0,
+      "top5_accuracy": 0.0
+    },
     "xvi": {
       "n": 25,
       "top1_accuracy": 0.4,
@@ -18,13 +24,17 @@
       "top5_accuracy": 1.0
     },
     "xvii": {
-      "n": 4,
-      "top1_accuracy": 0.5,
-      "top3_accuracy": 0.75,
-      "top5_accuracy": 0.75
+      "n": 9,
+      "top1_accuracy": 0.6666666666666666,
+      "top3_accuracy": 0.7777777777777778,
+      "top5_accuracy": 0.7777777777777778
     }
   },
   "confusion": {
+    "506": {
+      "299": 2,
+      "148": 1
+    },
     "300": {
       "301": 12,
       "148": 1
@@ -40,9 +50,27 @@
     },
     "409": {
       "408": 1
+    },
+    "447": {
+      "204": 1
     }
   },
   "fixtures": [
+    {
+      "fixture_id": "case-2016-sghc-154-paper-cutter",
+      "actual_charge": "506",
+      "predicted_top1": "299",
+      "predicted_top5": [
+        "299",
+        "300",
+        "168",
+        "190",
+        "459"
+      ],
+      "rank_of_actual": null,
+      "chapter": "xxii",
+      "notes": ""
+    },
     {
       "fixture_id": "case-adf-v-pp",
       "actual_charge": "324",
@@ -89,6 +117,21 @@
       "notes": ""
     },
     {
+      "fixture_id": "case-chan-yok-tuang",
+      "actual_charge": "506",
+      "predicted_top1": "299",
+      "predicted_top5": [
+        "299",
+        "307",
+        "188",
+        "300",
+        "173"
+      ],
+      "rank_of_actual": null,
+      "chapter": "xxii",
+      "notes": ""
+    },
+    {
       "fixture_id": "case-chee-cheong-hin-constance",
       "actual_charge": "304",
       "predicted_top1": "304",
@@ -104,6 +147,21 @@
       "notes": ""
     },
     {
+      "fixture_id": "case-chen-weixiong-jerriek",
+      "actual_charge": "394",
+      "predicted_top1": "394",
+      "predicted_top5": [
+        "394",
+        "321",
+        "323",
+        "323A",
+        "390"
+      ],
+      "rank_of_actual": 1,
+      "chapter": "xvii",
+      "notes": ""
+    },
+    {
       "fixture_id": "case-chia-kee-chen",
       "actual_charge": "300",
       "predicted_top1": "301",
@@ -116,6 +174,21 @@
       ],
       "rank_of_actual": null,
       "chapter": "xvi",
+      "notes": ""
+    },
+    {
+      "fixture_id": "case-daniel-vijay-accomplice",
+      "actual_charge": "394",
+      "predicted_top1": "394",
+      "predicted_top5": [
+        "394",
+        "299",
+        "300",
+        "322",
+        "323A"
+      ],
+      "rank_of_actual": 1,
+      "chapter": "xvii",
       "notes": ""
     },
     {
@@ -344,6 +417,36 @@
       "notes": ""
     },
     {
+      "fixture_id": "case-pp-v-luan-yuanxin",
+      "actual_charge": "506",
+      "predicted_top1": "148",
+      "predicted_top5": [
+        "148",
+        "299",
+        "144",
+        "158",
+        "94"
+      ],
+      "rank_of_actual": null,
+      "chapter": "xxii",
+      "notes": ""
+    },
+    {
+      "fixture_id": "case-pp-v-ng-guan-hup",
+      "actual_charge": "425",
+      "predicted_top1": "425",
+      "predicted_top5": [
+        "425",
+        "463",
+        "378",
+        "321",
+        "354"
+      ],
+      "rank_of_actual": 1,
+      "chapter": "xvii",
+      "notes": ""
+    },
+    {
       "fixture_id": "case-pram-nair",
       "actual_charge": "376",
       "predicted_top1": "376A",
@@ -356,6 +459,21 @@
       ],
       "rank_of_actual": null,
       "chapter": "xvi",
+      "notes": ""
+    },
+    {
+      "fixture_id": "case-see-li-quan-mendel",
+      "actual_charge": "392",
+      "predicted_top1": "392",
+      "predicted_top5": [
+        "392",
+        "302",
+        "323",
+        "379",
+        "465"
+      ],
+      "rank_of_actual": 1,
+      "chapter": "xvii",
       "notes": ""
     },
     {
@@ -431,6 +549,21 @@
       ],
       "rank_of_actual": null,
       "chapter": "xvi",
+      "notes": ""
+    },
+    {
+      "fixture_id": "case-tee-teng-heng",
+      "actual_charge": "447",
+      "predicted_top1": "204",
+      "predicted_top5": [
+        "204",
+        "441",
+        "194",
+        "477A",
+        "464"
+      ],
+      "rank_of_actual": null,
+      "chapter": "xvii",
       "notes": ""
     },
     {

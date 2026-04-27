@@ -15,7 +15,7 @@ Current snapshot (2026-04-27): **4937 unit tests green · 524 sections at
 L1+L2 · 524 L3 author-stamped · §4 + §6 paper sections shipped (formal
 semantics + soundness theorem with 5 lemmas + 8 sanity-witness tests) ·
 §6.6 partial Lean 4 mechanisation kernel-checked (Lemmas 6.2 + 6.4) ·
-§7.8 case-law differential testing (n=30, three scorers) · §7.6 LLM
+§7.8 case-law differential testing (n=38, three scorers; top-1 44.7%, MRR 0.461, contrast F1 0.239, constrained-contrast consistency 100%) · §7.6 LLM
 benchmark with full 205-fixture GPT-4o-mini + GPT-4o cross-model
 baselines + 3-way prompt-variant comparison (baseline / polarity /
 polarity-soft; polarity-soft is near-Pareto on gpt-4o-mini) · Direction B
@@ -162,23 +162,33 @@ entries #5 and #7). Remaining:
 
 ## §7.8 — Case-law differential testing `[~]`
 
-n=30 fixtures shipped with three scorers (recommend / contrast /
+n=38 fixtures shipped with three scorers (recommend / contrast /
 constrained-contrast). Headline numbers wired into paper §7.8:
-top-1 43.3%, MRR 0.450, contrast F1 0.219, constrained-contrast
-consistency 100%. Open work:
+top-1 44.7%, top-3 47.4%, MRR 0.461, contrast F1 0.239,
+constrained-contrast consistency 100% (n=25). v2 expansion
+(commits `e8f37c3e..3e7f3dc6`) added 8 fixtures covering s392 /
+s394 robbery, s425 mischief, s447 criminal trespass, and s506
+criminal intimidation; chapter XXII intimidation now first-class
+in the corpus. Open work:
 
-- [ ] **Grow case-law sample via manual LawNet / SLW research.**
-      Chapter II (state offences), chapter XX (marriage), chapter
-      XXII (intimidation — s506 / s509), s392 / s394 robbery,
-      s425 mischief, s441 criminal trespass, s363 / s363A
-      kidnapping are underrepresented or missing. The agent
-      flagged these as ones where reported SG case-law is
-      genuinely thin or where citation accuracy needs LawNet
-      verification by a human curator.
+- [ ] **Further sample growth.** Chapter II (state offences) and
+      chapter XX (marriage offences) remain absent from the
+      corpus — neither has substantial publicly-reported SG
+      Penal Code case-law (chapter II offences are typically
+      prosecuted under the Internal Security Act / repealed
+      Sedition Act; chapter XX bigamy cases are typically
+      prosecuted via the Women's Charter rather than s494 PC).
+      Chapter XXIII s509 (insulting modesty) and s363 / s363A
+      kidnapping (most kidnapping cases use the Kidnapping Act
+      1961, not Penal Code ss363-367) similarly thin. Realistic
+      scope: target s363A kidnapping for ransom under PC, and
+      any s509 outrage-of-modesty cases reported on eLitigation.
 - [ ] Inter-rater reliability on the curated fact patterns. A
       second curator (human, not LLM) extracts facts from the
       same judgments independently; compute κ score for §7.8's
-      threats-to-validity caveat.
+      threats-to-validity caveat. Cannot be done by Claude as
+      the second curator (defeats the inter-rater claim);
+      requires user action.
 
 ---
 

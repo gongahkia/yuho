@@ -1,6 +1,6 @@
 {
-  "n": 23,
-  "n_consistent": 23,
+  "n": 25,
+  "n_consistent": 25,
   "n_unsat": 0,
   "n_no_encoding": 0,
   "n_error": 0,
@@ -39,11 +39,33 @@
       "missing_in_encoding": []
     },
     {
+      "fixture_id": "case-chen-weixiong-jerriek",
+      "actual_charge": "394",
+      "alternative_charge": "392",
+      "court_distinguishing": [
+        "causes_hurt",
+        "voluntariness"
+      ],
+      "status": "consistent",
+      "missing_in_encoding": []
+    },
+    {
       "fixture_id": "case-chia-kee-chen",
       "actual_charge": "300",
       "alternative_charge": "304",
       "court_distinguishing": [
         "intent3"
+      ],
+      "status": "consistent",
+      "missing_in_encoding": []
+    },
+    {
+      "fixture_id": "case-daniel-vijay-accomplice",
+      "actual_charge": "394",
+      "alternative_charge": "300",
+      "court_distinguishing": [
+        "causes_hurt",
+        "voluntariness"
       ],
       "status": "consistent",
       "missing_in_encoding": []
