@@ -72,4 +72,10 @@ statute 333 "Voluntarily causing grievous hurt to deter public servant from his 
         "no s333 conviction per s87 general exception"
         when is_infringed(s87)
     }
+
+    exception general_defence_s88 {
+        "act not intended to cause death done by consent"
+        "no s333 conviction per s88 general exception"
+        when is_infringed(s88)
+    }
 }

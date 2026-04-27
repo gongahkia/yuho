@@ -89,4 +89,10 @@ statute 328 "Causing hurt by means of poison, etc., with intent to commit an off
         "no s328 conviction per s87 general exception"
         when is_infringed(s87)
     }
+
+    exception general_defence_s88 {
+        "act not intended to cause death done by consent"
+        "no s328 conviction per s88 general exception"
+        when is_infringed(s88)
+    }
 }

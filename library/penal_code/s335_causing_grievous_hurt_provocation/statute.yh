@@ -67,4 +67,10 @@ statute 335 "Causing grievous hurt on provocation" effective 1872-01-01 effectiv
         "no s335 conviction per s87 general exception"
         when is_infringed(s87)
     }
+
+    exception general_defence_s88 {
+        "act not intended to cause death done by consent"
+        "no s335 conviction per s88 general exception"
+        when is_infringed(s88)
+    }
 }

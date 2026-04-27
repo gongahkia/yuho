@@ -63,4 +63,10 @@ statute 334 "Voluntarily causing hurt on provocation" effective 1872-01-01 effec
         "no s334 conviction per s87 general exception"
         when is_infringed(s87)
     }
+
+    exception general_defence_s88 {
+        "act not intended to cause death done by consent"
+        "no s334 conviction per s88 general exception"
+        when is_infringed(s88)
+    }
 }
