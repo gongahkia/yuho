@@ -62,10 +62,4 @@ statute 453 "Possession of house-breaking implements or offensive weapons" effec
         "no s453 conviction per s84 general exception"
         when is_infringed(s84)
     }
-
-    exception general_defence_s104 {
-        "right of private defence of property against attack not extending to causing death"
-        "no s453 conviction per s104 general exception"
-        when is_infringed(s104)
-    }
 }

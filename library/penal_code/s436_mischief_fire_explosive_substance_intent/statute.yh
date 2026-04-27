@@ -57,10 +57,4 @@ statute 436 "Mischief by fire or explosive substance with intent to destroy a ho
         "no s436 conviction per s97 general exception"
         when is_infringed(s97)
     }
-
-    exception general_defence_s104 {
-        "right of private defence of property against attack not extending to causing death"
-        "no s436 conviction per s104 general exception"
-        when is_infringed(s104)
-    }
 }

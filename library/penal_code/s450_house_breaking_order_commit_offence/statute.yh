@@ -38,10 +38,4 @@ statute 450 "House-breaking in order to commit an offence punishable with impris
         "no s450 conviction per s84 general exception"
         when is_infringed(s84)
     }
-
-    exception general_defence_s104 {
-        "right of private defence of property against attack not extending to causing death"
-        "no s450 conviction per s104 general exception"
-        when is_infringed(s104)
-    }
 }

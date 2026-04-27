@@ -80,10 +80,4 @@ statute 427 "Punishment for committing mischief causing disruption to key servic
         "no s427 conviction per s97 general exception"
         when is_infringed(s97)
     }
-
-    exception general_defence_s104 {
-        "right of private defence of property against attack not extending to causing death"
-        "no s427 conviction per s104 general exception"
-        when is_infringed(s104)
-    }
 }

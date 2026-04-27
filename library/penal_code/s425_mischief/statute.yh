@@ -80,10 +80,4 @@ statute 425 "Mischief" effective 1872-01-01 effective 2022-04-01 {
         "no s425 conviction per s97 general exception"
         when is_infringed(s97)
     }
-
-    exception general_defence_s104 {
-        "right of private defence of property against attack not extending to causing death"
-        "no s425 conviction per s104 general exception"
-        when is_infringed(s104)
-    }
 }

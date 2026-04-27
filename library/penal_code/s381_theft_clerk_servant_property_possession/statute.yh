@@ -53,10 +53,4 @@ statute 381 "Theft by clerk or servant of property in possession of master" effe
         "no s381 conviction per s97 general exception"
         when is_infringed(s97)
     }
-
-    exception general_defence_s104 {
-        "right of private defence of property against attack not extending to causing death"
-        "no s381 conviction per s104 general exception"
-        when is_infringed(s104)
-    }
 }
