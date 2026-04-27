@@ -17,4 +17,15 @@ statute 394 "Voluntarily causing hurt in committing robbery" effective 1872-01-0
         imprisonment := 5 years .. 20 years;
         supplementary := "Such person, and any other person, jointly concerned in committing or attempting to commit such robbery, shall also be punished with caning with not less than 12 strokes.";
     }
+
+    exception general_defence_s79 {
+        "act done by reason of mistake of fact"
+        "no s394 conviction per s79 general exception"
+        when is_infringed(s79)
+    }
+    exception general_defence_s84 {
+        "act done by a person of unsound mind"
+        "no s394 conviction per s84 general exception"
+        when is_infringed(s84)
+    }
 }

@@ -30,4 +30,15 @@ statute 382 "Theft after preparation made for causing death or hurt in order to 
     illustration illustration_b {
         "( b ) A picks Z ’s pocket, having posted several of his companions near him, in order that they may restrain Z , if Z should perceive what is passing and should resist, or should attempt to apprehend A . A has committed the offence defined in this section."
     }
+
+    exception general_defence_s79 {
+        "act done by reason of mistake of fact"
+        "no s382 conviction per s79 general exception"
+        when is_infringed(s79)
+    }
+    exception general_defence_s84 {
+        "act done by a person of unsound mind"
+        "no s382 conviction per s84 general exception"
+        when is_infringed(s84)
+    }
 }

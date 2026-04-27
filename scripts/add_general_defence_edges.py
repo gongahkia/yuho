@@ -105,12 +105,15 @@ def insert_edges(path: Path, section_num: str, defences: List[int]) -> Tuple[int
         raise ValueError(f"{path} has no top-level statute block")
 
     # Find the closing `}` of the top-level statute block. We do this by
-    # scanning brace depth from the start of the `statute` line.
+    # scanning brace depth from the start of the `statute` line. Yuho
+    # uses `"..."` for string literals (no `'...'`), so the brace tracker
+    # only treats `"` as a string delimiter — ASCII `'` shows up in
+    # English possessives inside `///` doc comments and would otherwise
+    # confuse the tracker. `///` and `//` line comments also skipped.
     start = statute_match.start()
     depth = 0
     end = -1
     in_string = False
-    string_char = ""
     i = start
     while i < len(src):
         c = src[i]
@@ -118,12 +121,18 @@ def insert_edges(path: Path, section_num: str, defences: List[int]) -> Tuple[int
             if c == "\\" and i + 1 < len(src):
                 i += 2
                 continue
-            if c == string_char:
+            if c == '"':
                 in_string = False
         else:
-            if c in ('"', "'"):
+            # Skip line comments outright.
+            if c == "/" and i + 1 < len(src) and src[i + 1] == "/":
+                nl = src.find("\n", i)
+                if nl < 0:
+                    break
+                i = nl + 1
+                continue
+            if c == '"':
                 in_string = True
-                string_char = c
             elif c == "{":
                 depth += 1
             elif c == "}":

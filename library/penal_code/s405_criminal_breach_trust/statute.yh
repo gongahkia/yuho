@@ -54,4 +54,15 @@ statute 405 "Criminal breach of trust" effective 1872-01-01 effective 2019-12-31
     illustration illustration_f {
         "( f ) A , a carrier, is entrusted by Z with property to be carried by land or by water. A dishonestly misappropriates the property. A has committed criminal breach of trust."
     }
+
+    exception general_defence_s79 {
+        "act done by reason of mistake of fact"
+        "no s405 conviction per s79 general exception"
+        when is_infringed(s79)
+    }
+    exception general_defence_s84 {
+        "act done by a person of unsound mind"
+        "no s405 conviction per s84 general exception"
+        when is_infringed(s84)
+    }
 }
