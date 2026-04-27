@@ -35,4 +35,15 @@ statute 115 "Abetment of offence punishable with death or imprisonment for life"
     illustration illustration_1 {
         "A instigates B to murder Z . The offence is not committed. If B had murdered Z , B would have been subject to the punishment of death. Therefore, A shall be punished with imprisonment for a term that may extend to 20 years, and shall also be liable to fine or to caning."
     }
+
+    exception general_defence_s79 {
+        "act done by reason of mistake of fact"
+        "no s115 conviction per s79 general exception"
+        when is_infringed(s79)
+    }
+    exception general_defence_s84 {
+        "act done by a person of unsound mind"
+        "no s115 conviction per s84 general exception"
+        when is_infringed(s84)
+    }
 }

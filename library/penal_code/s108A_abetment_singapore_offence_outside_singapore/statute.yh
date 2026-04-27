@@ -13,4 +13,15 @@ statute 108A "Abetment in Singapore of an offence outside Singapore" effective 1
     illustration example1 {
         "A , in Singapore, instigates B , a foreigner in Java, to commit murder in Java. A is guilty of abetting murder."
     }
+
+    exception general_defence_s79 {
+        "act done by reason of mistake of fact"
+        "no s108A conviction per s79 general exception"
+        when is_infringed(s79)
+    }
+    exception general_defence_s84 {
+        "act done by a person of unsound mind"
+        "no s108A conviction per s84 general exception"
+        when is_infringed(s84)
+    }
 }

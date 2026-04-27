@@ -48,4 +48,15 @@ statute 108 "Abettor" effective 1872-01-01 {
     illustration illustration_h {
         "A concerts with B a plan for poisoning Z . It is agreed that A shall administer the poison. B then explains the plan to C , mentioning that a third person is to administer the poison, but without mentioning A ’s name. C agrees to procure the poison, and procures and delivers it to B for the purpose of its being used in the manner explained. A administers the poison; Z dies in consequence. Here, though A and C have not conspired together, yet C has been engaged in the conspiracy in pursuance of which Z has been murdered. C has therefore committed the offence defined in this section, and is liable to the punishment for murder."
     }
+
+    exception general_defence_s79 {
+        "act done by reason of mistake of fact"
+        "no s108 conviction per s79 general exception"
+        when is_infringed(s79)
+    }
+    exception general_defence_s84 {
+        "act done by a person of unsound mind"
+        "no s108 conviction per s84 general exception"
+        when is_infringed(s84)
+    }
 }

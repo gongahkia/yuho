@@ -25,4 +25,15 @@ statute 111 "Liability of abettor when one act is abetted and a different act is
     illustration illustration_c {
         "( c ) A instigates B and C to break into an inhabited house at midnight for the purpose of robbery, and provides them with arms for that purpose. B and C break into the house, and being resisted by Z , one of the inmates, murder Z. Here, if that murder was the probable consequence of the abetment, A is liable to the punishment provided for murder."
     }
+
+    exception general_defence_s79 {
+        "act done by reason of mistake of fact"
+        "no s111 conviction per s79 general exception"
+        when is_infringed(s79)
+    }
+    exception general_defence_s84 {
+        "act done by a person of unsound mind"
+        "no s111 conviction per s84 general exception"
+        when is_infringed(s84)
+    }
 }

@@ -59,4 +59,15 @@ statute 116 "Abetment of offence punishable with imprisonment" effective 1872-01
     illustration illustration_d {
         "( d ) B abets the commission of a robbery by A , a police officer, whose duty it is to prevent that offence. Here, though the robbery is not committed, B is liable to the same punishment as if he had committed the offence of robbery."
     }
+
+    exception general_defence_s79 {
+        "act done by reason of mistake of fact"
+        "no s116 conviction per s79 general exception"
+        when is_infringed(s79)
+    }
+    exception general_defence_s84 {
+        "act done by a person of unsound mind"
+        "no s116 conviction per s84 general exception"
+        when is_infringed(s84)
+    }
 }

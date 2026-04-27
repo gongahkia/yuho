@@ -22,4 +22,15 @@ statute 112 "Abettor, when liable to cumulative punishment for act abetted and f
     illustration illustration {
         "A instigates B to resist by force a distress made by a public servant. B , in consequence, resists that distress. In offering the resistance, B voluntarily caused grievous hurt to the officer executing the distress. As B has committed both the offence of resisting the distress, and the offence of voluntarily causing grievous hurt, B is liable to punishment for both these offences; and if A knew that B was likely voluntarily to cause grievous hurt in resisting the distress, A will also be liable to punishment for each of the offences."
     }
+
+    exception general_defence_s79 {
+        "act done by reason of mistake of fact"
+        "no s112 conviction per s79 general exception"
+        when is_infringed(s79)
+    }
+    exception general_defence_s84 {
+        "act done by a person of unsound mind"
+        "no s112 conviction per s84 general exception"
+        when is_infringed(s84)
+    }
 }
