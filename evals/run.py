@@ -252,16 +252,39 @@ class OpenAIClient:
         # The OpenAI SDK auto-picks up OPENAI_API_KEY,
         # OPENAI_ORGANIZATION, and OPENAI_BASE_URL from the env.
         client = openai.OpenAI()
-        response = client.chat.completions.create(
-            model=self.model,
-            max_tokens=self.max_tokens,
-            temperature=self.temperature,
-            messages=[
-                {"role": "system",
-                 "content": system or "You are a concise legal-reasoning assistant for the Singapore Penal Code 1871. Reply with exactly the requested format and nothing else."},
+        # Reasoning models (o1, o3, o4 family) reject `max_tokens` and
+        # `temperature`; they require `max_completion_tokens` and run
+        # at a fixed temperature. They also burn a non-trivial number
+        # of completion tokens on hidden reasoning, so the visible
+        # budget needs to be much larger than the cap used for chat
+        # models — otherwise the visible answer is empty.
+        ml = self.model.lower()
+        is_reasoning = ml.startswith(("o1", "o3", "o4"))
+        sys_content = system or "You are a concise legal-reasoning assistant for the Singapore Penal Code 1871. Reply with exactly the requested format and nothing else."
+        if is_reasoning:
+            # Reasoning models do not accept `system` role on older
+            # snapshots; fold it into the user prompt for portability.
+            messages = [
+                {"role": "user",
+                 "content": f"{sys_content}\n\n{prompt}"},
+            ]
+            kwargs = dict(
+                model=self.model,
+                max_completion_tokens=max(self.max_tokens, 4096),
+                messages=messages,
+            )
+        else:
+            messages = [
+                {"role": "system", "content": sys_content},
                 {"role": "user", "content": prompt},
-            ],
-        )
+            ]
+            kwargs = dict(
+                model=self.model,
+                max_tokens=self.max_tokens,
+                temperature=self.temperature,
+                messages=messages,
+            )
+        response = client.chat.completions.create(**kwargs)
         choice = response.choices[0] if response.choices else None
         if choice is None or choice.message is None:
             return ""
