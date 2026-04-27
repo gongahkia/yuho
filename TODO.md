@@ -21,16 +21,19 @@ MRR 0.461, contrast F1 0.239, constrained-contrast consistency 100%) ·
 §7.6 LLM benchmark with full 205-fixture GPT-4o-mini + GPT-4o cross-
 model baselines + 3-way prompt-variant comparison (baseline / polarity /
 polarity-soft; polarity-soft is near-Pareto on gpt-4o-mini) · Direction B
-defeats-edge coverage at 821 edges across 147 sections (28% of corpus,
-14 distinct standalone general defences after (a) the doctrinal audit
+defeats-edge coverage at 1038 edges across 147 sections (28% of corpus,
+19 distinct standalone general defences after (a) the doctrinal audit
 removed 75 misclassified s98 / s101 / s104 edges that were validity-
 condition or timing qualifiers rather than standalone defeating
-predicates, and (b) s82 + s83 child-age defences were added across
-the universal-applicability footprint mirroring s84; ss95-s106
-private-defence family fully encoded with elements{}; defeats-edge
-structural-coverage sweep at 749/821 = 91.2% SAT, every defence
-clearing 83-100%) · 32-page smoke PDF · `make paper-reproduce`
-end-to-end including Lean kernel-check.**
+predicates, (b) s82 + s83 child-age defences were added across the
+universal-applicability footprint mirroring s84, and (c) s87 / s88 /
+s89 / s92 (consent + good faith family) were doctrinally targeted onto
+the hurt cluster + s88 onto s304/s304A medical-shaped homicide, plus
+s94 duress across 135 non-homicide offences; ss95-s106 private-defence
+family fully encoded with elements{}; defeats-edge structural-coverage
+sweep at 949/1038 = 91.4% SAT, every defence clearing 83-100%) ·
+32-page smoke PDF · `make paper-reproduce` end-to-end including Lean
+kernel-check.**
 
 Completed history (Phases A–D, the rigor-hardening trench, mechanisation
 v1, case-law differential testing, the LLM-benchmark closed-vocab fix,
@@ -244,8 +247,8 @@ fixture-tested. Open work:
 
 ## Direction B — General-defence `defeats` edges (full coverage) `[~]`
 
-v3.2 ships **821 edges across 147 sections** (28% of the 524-section
-corpus) using **14 distinct Chapter IV standalone general defences**.
+v3.3 ships **1038 edges across 147 sections** (28% of the 524-section
+corpus) using **19 distinct Chapter IV standalone general defences**.
 The doctrinal-fidelity audit (commits `4f0ba0c9` / `f6042c99` /
 `f1155a9d`) removed 75 misclassified edges:
 
@@ -257,7 +260,8 @@ The doctrinal-fidelity audit (commits `4f0ba0c9` / `f6042c99` /
 - **s104** (23 edges) — temporal commencement + continuance qualifier
   on the property-defence right, not a standalone defence
 
-Per-defence breakdown after the audit + s82/s83 expansion:
+Per-defence breakdown after the audit + s82/s83 + s87/s88/s89/s92/s94
+expansion:
 
 | Defence | Sections covered |
 |---|---|
@@ -265,11 +269,16 @@ Per-defence breakdown after the audit + s82/s83 expansion:
 | s82 (child below 10, doli incapax) | 143 |
 | s83 (child 10-12 without sufficient maturity) | 143 |
 | s84 (unsoundness of mind) | 143 |
+| s94 (duress / compulsion by threats) | 135 |
 | s97 (private defence of body OR property) | 57 |
 | s80 (accident in lawful act) | 52 |
 | s96 (private defence — operative gateway) | 31 |
 | s85 (intoxication when a defence) | 29 |
 | s86 (effect of intoxication when established) | 29 |
+| s88 (consent for benefit, medical-shaped) | 22 |
+| s87 (consent-bounded harm) | 20 |
+| s89 (good faith for child or unsound) | 20 |
+| s92 (good faith without consent, emergency) | 20 |
 | s100 (deadly-assault body defence) | 12 |
 | s106 (deadly defence with risk to innocent) | 12 |
 | s81 (greater-harm avoidance / necessity) | 11 |
