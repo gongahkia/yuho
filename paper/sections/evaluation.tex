@@ -641,8 +641,8 @@ per-fixture JSON plus stratified accuracy slices (per chapter,
 per category, per difficulty, per polarity), so reproducing the
 result against a different model is one command.
 
-\paragraph{Three-way prompt-variant comparison.}
-We ran two further \statBenchmarkLlmModel{} passes at the same
+\paragraph{Four-way prompt-variant comparison.}
+We ran three further \statBenchmarkLlmModel{} passes at the same
 $n = \statBenchmarkFixtures{}$ fixtures under structurally-paired
 prompt variants. The \emph{polarity} variant
 (\texttt{--prompt-variant polarity}) foregrounds the empty-set
@@ -652,33 +652,49 @@ element is satisfied'') and invites an optional one-line
 JSON answer; T1 gains \texttt{none} as a permitted reply. The
 \emph{polarity-soft} variant (\texttt{--prompt-variant
 polarity-soft}) keeps the empty-set priming and the \texttt{none}
-T1 option but drops the CoT invitation. The parser tolerates a
-preceding CoT preamble by extracting the last balanced JSON array.
-Scoring code is identical across all three variants.
+T1 option but drops the CoT invitation. The
+\emph{polarity-conditional} variant
+(\texttt{--prompt-variant polarity-conditional}) applies a cheap
+regex/keyword classifier (null-cue patterns such as ``no
+element'', ``without intent'', ``did not'', ``no mens rea'') to
+the scenario, then routes per-fixture: classifier-positive
+scenarios receive the polarity-soft prompts, classifier-negative
+scenarios receive the baseline prompts. On this corpus the
+classifier fires on 44 of 205 fixtures (precision 0.45, recall
+0.69 against the empty-truth-element gold set), so roughly one in
+five fixtures is upgraded. The parser tolerates a preceding CoT
+preamble by extracting the last balanced JSON array. Scoring
+code is identical across all four variants.
 
 \begin{center}
-\begin{tabular}{lrrr}
+\begin{tabular}{lrrrr}
 \hline
-& \textbf{Baseline} & \textbf{Polarity} & \textbf{Polarity-soft} \\
+& \textbf{Baseline} & \textbf{Polarity} & \textbf{Polarity-soft} & \textbf{Polarity-cond.} \\
 \hline
 T1 whole corpus      & \statBenchmarkLlmTone{}\%
                      & \statBenchmarkLlmPolTone{}\%
-                     & \statBenchmarkLlmSoftTone{}\% \\
+                     & \statBenchmarkLlmSoftTone{}\%
+                     & \statBenchmarkLlmCondTone{}\% \\
 T2 exact whole       & \statBenchmarkLlmTtwo{}\%
                      & \statBenchmarkLlmPolTtwo{}\%
-                     & \statBenchmarkLlmSoftTtwo{}\% \\
+                     & \statBenchmarkLlmSoftTtwo{}\%
+                     & \statBenchmarkLlmCondTtwo{}\% \\
 T2 mean F1 whole     & \statBenchmarkLlmTtwoFOne{}
                      & \statBenchmarkLlmPolTtwoFOne{}
-                     & \statBenchmarkLlmSoftTtwoFOne{} \\
+                     & \statBenchmarkLlmSoftTtwoFOne{}
+                     & \statBenchmarkLlmCondTtwoFOne{} \\
 T3 whole corpus      & \statBenchmarkLlmTthree{}\%
                      & \statBenchmarkLlmPolTthree{}\%
-                     & \statBenchmarkLlmSoftTthree{}\% \\
+                     & \statBenchmarkLlmSoftTthree{}\%
+                     & \statBenchmarkLlmCondTthree{}\% \\
 T1 polarity-neg      & \statBenchmarkLlmNegPolarTone{}\%
                      & \statBenchmarkLlmPolNegPolarTone{}\%
-                     & \statBenchmarkLlmSoftNegPolarTone{}\% \\
+                     & \statBenchmarkLlmSoftNegPolarTone{}\%
+                     & \statBenchmarkLlmCondNegPolarTone{}\% \\
 T2 F1 polarity-neg   & \statBenchmarkLlmNegPolarFOne{}
                      & \statBenchmarkLlmPolNegPolarFOne{}
-                     & \statBenchmarkLlmSoftNegPolarFOne{} \\
+                     & \statBenchmarkLlmSoftNegPolarFOne{}
+                     & \statBenchmarkLlmCondNegPolarFOne{} \\
 \hline
 \end{tabular}
 \end{center}
@@ -713,16 +729,39 @@ priming itself. Polarity-soft is a near-Pareto improvement on
 this model: it captures essentially the full negative-slice gain
 ($+0.215$ T2 F1, $+23.4$pp T1 over baseline) at a fraction of the
 positive-corpus cost ($-0.053$ T2 F1; T2 exact and T3 actually
-improve). The general finding for downstream legal-AI work is
-that prompt-level interventions in the
-``\emph{acknowledge the null answer}'' family are cheap and
-effective in the failure regime they target, but adding a
-generative CoT path on top of them risks corrupting the positive-
-case distribution; the priming alone is the load-bearing piece.
-The failure mode is also model-specific: the cross-model paragraph
-below shows that \statBenchmarkLlmAltModel{} does not exhibit
-the polarity-negative collapse, so the intervention is unnecessary
-on that model.
+improve).
+
+The polarity-conditional variant pushes this further by paying
+the priming cost only on fixtures where the surface text suggests
+it might be needed. It dominates every other variant on every
+whole-corpus metric --- T1 \statBenchmarkLlmCondTone{}\%
+($+3.9$pp over baseline, $+5.4$pp over polarity-soft), T2 exact
+\statBenchmarkLlmCondTtwo{}\% ($+4.9$pp over baseline,
+$+3.4$pp over polarity-soft), T2 mean F1
+\statBenchmarkLlmCondTtwoFOne{} ($+0.021$ over baseline,
+$+0.074$ over polarity-soft), T3 \statBenchmarkLlmCondTthree{}\%
+--- and on both polarity-negative metrics
+(T1 \statBenchmarkLlmCondNegPolarTone{}\%, the highest of any
+variant; T2 F1 \statBenchmarkLlmCondNegPolarFOne{}, $+0.052$
+over polarity-soft). The mechanism is straightforward: the
+classifier upgrades the high-value subset (fixtures the priming
+helps on) without subjecting the rest of the corpus to the
+priming's small but non-zero false-positive cost. That the
+imperfect classifier (precision 0.45) still produces a
+near-Pareto win suggests the prompt routing problem is forgiving:
+even moderately-targeted intervention beats blanket application.
+
+The general finding for downstream legal-AI work is that
+prompt-level interventions in the ``\emph{acknowledge the null
+answer}'' family are cheap and effective in the failure regime
+they target, but adding a generative CoT path on top of them
+risks corrupting the positive-case distribution; the priming
+alone is the load-bearing piece, and a cheap surface-level
+classifier is sufficient to confine it to the regime where it
+helps. The failure mode is also model-specific: the cross-model
+paragraph below shows that \statBenchmarkLlmAltModel{} does not
+exhibit the polarity-negative collapse, so the intervention is
+unnecessary on that model.
 
 \paragraph{Cross-model comparison.} A second baseline against
 \statBenchmarkLlmAltModel{} on the same $n =
