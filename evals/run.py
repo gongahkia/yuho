@@ -282,12 +282,20 @@ _SYSTEM_PROMPT = (
 )
 
 
-def _prompt_section(scenario: str) -> str:
-    # polarity-aware T1: many scenarios are constructed so that no
-    # element of any section fires (the polarity-negative slice). For
-    # those, `none` is a legitimate answer; the scorer accepts both
-    # the canonical section and `none` when ground-truth elements are
-    # empty.
+def _prompt_section(scenario: str, variant: str = "polarity") -> str:
+    # Two prompt variants supported for §7.6 paired comparison:
+    #   - "baseline": the original v1 closed-vocab prompt
+    #   - "polarity": adds the `none` option + polarity priming
+    # Scorer accepts either truth_section or `none` when truth
+    # elements are empty (both variants), so the variants differ
+    # only in what the model is *told* it can answer.
+    if variant == "baseline":
+        return (
+            f"Scenario:\n{scenario}\n\n"
+            "Task: Identify the Penal Code section that most directly applies. "
+            "Reply with ONLY the section number (e.g. `415`, `300`, `376AA`). "
+            "No prose, no `Section`, no period."
+        )
     return (
         f"Scenario:\n{scenario}\n\n"
         "Task: Identify the Penal Code section that most directly applies. "
@@ -300,7 +308,8 @@ def _prompt_section(scenario: str) -> str:
 
 
 def _prompt_elements(scenario: str, section: str,
-                     vocabulary: Optional[List[str]] = None) -> str:
+                     vocabulary: Optional[List[str]] = None,
+                     variant: str = "polarity") -> str:
     """Build the T2 prompt.
 
     When ``vocabulary`` is supplied, render T2 as a closed-set
@@ -321,6 +330,19 @@ def _prompt_elements(scenario: str, section: str,
     )
     if vocabulary:
         vocab_inline = ", ".join(vocabulary)
+        if variant == "baseline":
+            # Original v1 closed-vocab prompt.
+            return (
+                base
+                + "The encoded section's structural elements are:\n"
+                + f"  [{vocab_inline}]\n\n"
+                + "Task: from the list above, return the subset of element "
+                  "names that are SATISFIED by the scenario as stated. Reply "
+                  'with ONLY a JSON array of strings (e.g. `["a", "b"]`); '
+                  "use `[]` if no element is satisfied. Names must come "
+                  "from the supplied list verbatim — no synonyms, no "
+                  "additions, no prose."
+            )
         # polarity priming + light CoT scaffold: explicitly call out
         # the empty-set case (the gpt-4o-mini polarity-negative
         # collapse from §7.6 motivated this) and invite a one-line
@@ -547,6 +569,7 @@ def _f1(predicted: List[str], expected: List[str]) -> Tuple[float, float, float]
 
 def score_fixture(
     fixture: Fixture, client: BenchmarkClient,
+    *, variant: str = "polarity",
 ) -> FixtureResult:
     """Run all three tasks on a single fixture, return per-task scores."""
     t0 = time.monotonic()
@@ -557,7 +580,7 @@ def score_fixture(
     # reading is "no offence is made out, so no section applies". We
     # accept either the canonical section or `none` in that case; for
     # ordinary fixtures only the canonical section is correct.
-    raw_section = client.query(_prompt_section(fixture.scenario),
+    raw_section = client.query(_prompt_section(fixture.scenario, variant=variant),
                                system=_SYSTEM_PROMPT, task_kind="section")
     pred_section = _canonical_section(raw_section)
     truth_canonical = _canonical_section(fixture.truth_section)
@@ -578,7 +601,8 @@ def score_fixture(
     # reasoning with guessing our private snake_case names).
     vocabulary = sorted(fixture.fact_facts.keys()) if fixture.fact_facts else None
     raw_elements = client.query(
-        _prompt_elements(fixture.scenario, fixture.truth_section, vocabulary),
+        _prompt_elements(fixture.scenario, fixture.truth_section,
+                         vocabulary, variant=variant),
         system=_SYSTEM_PROMPT, task_kind="elements",
     )
     pred_elements = _parse_elements(raw_elements)
@@ -619,6 +643,7 @@ def score_fixture(
 def run_benchmark(
     fixtures: List[Fixture], client: BenchmarkClient,
     *, progress: Optional[Callable[[int, int, FixtureResult], None]] = None,
+    variant: str = "polarity",
 ) -> BenchmarkResult:
     """Score every fixture against the supplied client."""
     result = BenchmarkResult()
@@ -627,7 +652,7 @@ def run_benchmark(
     result._tags_by_id = {fx.id: fx.tags for fx in fixtures}  # type: ignore[attr-defined]
     for i, fx in enumerate(fixtures, 1):
         try:
-            fr = score_fixture(fx, client)
+            fr = score_fixture(fx, client, variant=variant)
         except Exception as exc:  # noqa: BLE001 — keep run resilient
             fr = FixtureResult(
                 fixture_id=fx.id, section=fx.section,
@@ -711,6 +736,12 @@ def main() -> int:
                    help="Write report to this path (default: stdout)")
     p.add_argument("--no-per-fixture", action="store_true",
                    help="Hide the per-fixture table in the human report")
+    p.add_argument("--prompt-variant", choices=["baseline", "polarity"],
+                   default="polarity",
+                   help="Prompt variant. `baseline` = original v1 prompts; "
+                        "`polarity` = adds polarity priming + optional "
+                        "`# ruled out:` CoT preamble + `none` T1 option. "
+                        "Used for §7.6 paired-variant comparison.")
     args = p.parse_args()
 
     fixtures = load_fixtures(args.fixtures)
@@ -761,9 +792,11 @@ def main() -> int:
         client_label = "FakeClient"
     else:
         client_label = f"{type(client).__name__}({args.model})"
-    print(f"Running {len(fixtures)} fixtures through {client_label}…",
+    print(f"Running {len(fixtures)} fixtures through {client_label} "
+          f"(prompt-variant={args.prompt_variant})…",
           file=sys.stderr)
-    result = run_benchmark(fixtures, client, progress=_on_progress)
+    result = run_benchmark(fixtures, client, progress=_on_progress,
+                           variant=args.prompt_variant)
 
     output = (
         json.dumps(result.to_dict(), indent=2, ensure_ascii=False)
