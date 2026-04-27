@@ -17,8 +17,9 @@ semantics + soundness theorem with 5 lemmas + 8 sanity-witness tests) ·
 §6.6 partial Lean 4 mechanisation kernel-checked (Lemmas 6.2 + 6.4) ·
 §7.8 case-law differential testing (n=30, three scorers) · §7.6 LLM
 benchmark with full 205-fixture GPT-4o-mini + GPT-4o cross-model
-baselines · 31-page smoke PDF · `make paper-reproduce` end-to-end
-including Lean kernel-check.**
+baselines + paired baseline-vs-polarity-variant prompt comparison
+(calibration-tradeoff finding) · 32-page smoke PDF · `make paper-reproduce`
+end-to-end including Lean kernel-check.**
 
 Completed history (Phases A–D, the rigor-hardening trench, mechanisation
 v1, case-law differential testing, the LLM-benchmark closed-vocab fix,
@@ -110,30 +111,50 @@ audit:
    numbers + three observations.
 6. **Polarity-negative finding (gpt-4o-mini)**: the model
    collapses on negative-polarity fixtures (T2 F1 0.056).
-7. **Cross-model run (gpt-4o, this commit)**: the collapse does
-   *not* reproduce on gpt-4o (T2 F1 0.380 on the same slice).
+7. **Cross-model run (gpt-4o, commit `2048c677`)**: the collapse
+   does *not* reproduce on gpt-4o (T2 F1 0.380 on the same slice).
    Reframed: the failure mode is model-specific, not benchmark-
-   wide. Polarity-priming work below targets the gpt-4o-mini
-   regime specifically.
+   wide. Polarity-priming work targets the gpt-4o-mini regime
+   specifically.
+8. **Polarity-variant prompts (this commit batch)**: shipped
+   polarity priming + optional `# ruled out:` CoT preamble +
+   `none` T1 option as `--prompt-variant polarity` in the runner.
+   Paired n=205 gpt-4o-mini run reported in §7.6 against the
+   baseline variant. Result: substantial lift on the n=30
+   polarity-negative slice (T1 33.3% → 60.0%, T2 F1 0.052 →
+   0.267) but a regression on the positive-case corpus (T2 F1
+   0.678 → 0.420). Not a Pareto improvement on gpt-4o-mini —
+   the intervention trades positive-case recall for negative-
+   case calibration. §7.6 reframed to report the tradeoff
+   honestly.
 
-Open work — fix the polarity-negative case:
+Polarity-negative work shipped:
 
-- [ ] **Polarity-priming in the T2 prompt.** Add a sentence
-      acknowledging that the answer may be the empty set: "Reply
-      with `[]` if no element is satisfied — many scenarios are
-      structured so that no element fires." Test the lift on the
-      30 polarity-negative fixtures.
-- [ ] **Chain-of-thought scaffolding for negative cases.** Allow
-      the model to first identify which elements are *not*
-      satisfied before listing what *is*. Worth a side-by-side
+- [x] **Polarity-priming in the T2 prompt.** Foregrounded the
+      empty-set case explicitly. Lifts negative-slice F1 from
+      0.052 → 0.267.
+- [x] **Chain-of-thought scaffolding for negative cases.**
+      Optional `# ruled out:` preamble; parser extracts the last
+      JSON array. Combined with the priming above.
+- [x] **Polarity-aware T1 prompting.** `none` is now a permitted
+      reply; scorer accepts it for polarity-negative fixtures.
+      Lifts negative-slice T1 from 33.3% → 60.0%.
+- [x] Re-ran benchmark; §7.6 now reports both variants side-by-
+      side with the calibration-tradeoff finding.
+
+Open follow-ups (deferred):
+
+- [ ] **Conditional polarity prompting.** Route polarity-
+      negative scenarios through the v2 prompt and positive-case
+      scenarios through v1 — but this requires fixture knowledge
+      at inference time, which the model doesn't have. Could be
+      approximated with a cheap pre-classifier that decides
+      whether to invoke the priming prompt; experimental.
+- [ ] **Soften the CoT invitation.** The current `# ruled out:`
+      pathway may be over-encouraging exclusion on positive
+      scenarios. Worth trying a lighter framing (polarity priming
+      alone, no CoT preamble) and re-running the paired
       comparison.
-- [ ] **Polarity-aware T1 prompting.** When the scenario is
-      polarity-negative, T1 still asks "what section best
-      applies?" — but the right answer may be "no section". Add a
-      "no-section-applies" option to the closed-vocab T1 list.
-- [ ] After each fix, re-run the benchmark and update §7.6's
-      "Headline numbers" paragraph + the polarity-negative slice
-      table.
 
 ### Additional model baselines (OpenAI only)
 
@@ -144,9 +165,12 @@ models to test cross-model generalisation:
       T1 60.5% / T2 6.8% / F1 0.317 / T3 98.0% on n=205. Paper
       §7.6 has the cross-model paragraph; polarity-negative
       collapse is gpt-4o-mini-specific (see update note above).
-- [ ] **GPT-4o-mini + polarity-priming** combined run (target
-      the model-specific failure mode identified by the cross-
-      model split).
+- [x] **GPT-4o-mini + polarity-priming** combined run shipped
+      as the `--prompt-variant polarity` paired comparison
+      (results-gpt-4o-mini-polarity.json + §7.6 paired-variant
+      paragraph). Lifts the negative slice as targeted but
+      regresses positive-case F1 — see the iterative-history
+      entry #8 above.
 - [ ] **o1-mini** or **o3-mini** if the user wants to test
       reasoning-model performance — a real apples-to-apples for
       structural reasoning.
