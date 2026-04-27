@@ -83,10 +83,4 @@ statute 319 "Hurt" effective 1872-01-01 {
         "no s319 conviction per s97 general exception"
         when is_infringed(s97)
     }
-
-    exception general_defence_s101 {
-        "right of private defence against assault not extending to causing death"
-        "no s319 conviction per s101 general exception"
-        when is_infringed(s101)
-    }
 }
