@@ -283,11 +283,18 @@ _SYSTEM_PROMPT = (
 
 
 def _prompt_section(scenario: str, variant: str = "polarity") -> str:
-    # Two prompt variants supported for §7.6 paired comparison:
-    #   - "baseline": the original v1 closed-vocab prompt
-    #   - "polarity": adds the `none` option + polarity priming
+    # Three prompt variants supported for §7.6 N-way comparison:
+    #   - "baseline":     the original v1 closed-vocab prompt
+    #   - "polarity":     adds `none` option + polarity priming +
+    #                     `# ruled out:` CoT invitation on T2
+    #   - "polarity-soft": polarity priming + `none` only, no CoT
+    #                     invitation (tests whether the regression
+    #                     under "polarity" comes from the CoT path
+    #                     or from the priming itself)
+    # T1 prompt is identical between "polarity" and "polarity-soft"
+    # — the variants only diverge on T2.
     # Scorer accepts either truth_section or `none` when truth
-    # elements are empty (both variants), so the variants differ
+    # elements are empty (all variants), so the variants differ
     # only in what the model is *told* it can answer.
     if variant == "baseline":
         return (
@@ -337,6 +344,27 @@ def _prompt_elements(scenario: str, section: str,
                 + "The encoded section's structural elements are:\n"
                 + f"  [{vocab_inline}]\n\n"
                 + "Task: from the list above, return the subset of element "
+                  "names that are SATISFIED by the scenario as stated. Reply "
+                  'with ONLY a JSON array of strings (e.g. `["a", "b"]`); '
+                  "use `[]` if no element is satisfied. Names must come "
+                  "from the supplied list verbatim — no synonyms, no "
+                  "additions, no prose."
+            )
+        if variant == "polarity-soft":
+            # Polarity priming alone, no CoT invitation. Tests the
+            # hypothesis that the "polarity"-variant regression on
+            # the positive corpus (§7.6) comes from the
+            # `# ruled out:` CoT path encouraging over-exclusion,
+            # not from the priming itself.
+            return (
+                base
+                + "The encoded section's structural elements are:\n"
+                + f"  [{vocab_inline}]\n\n"
+                + "IMPORTANT — many scenarios are constructed so that NO "
+                  "element of this section is satisfied. The empty set `[]` "
+                  "is a frequent and correct answer; do not feel obliged to "
+                  "produce a non-empty subset.\n\n"
+                  "Task: from the list above, return the subset of element "
                   "names that are SATISFIED by the scenario as stated. Reply "
                   'with ONLY a JSON array of strings (e.g. `["a", "b"]`); '
                   "use `[]` if no element is satisfied. Names must come "
@@ -736,12 +764,14 @@ def main() -> int:
                    help="Write report to this path (default: stdout)")
     p.add_argument("--no-per-fixture", action="store_true",
                    help="Hide the per-fixture table in the human report")
-    p.add_argument("--prompt-variant", choices=["baseline", "polarity"],
+    p.add_argument("--prompt-variant",
+                   choices=["baseline", "polarity", "polarity-soft"],
                    default="polarity",
                    help="Prompt variant. `baseline` = original v1 prompts; "
                         "`polarity` = adds polarity priming + optional "
-                        "`# ruled out:` CoT preamble + `none` T1 option. "
-                        "Used for §7.6 paired-variant comparison.")
+                        "`# ruled out:` CoT preamble + `none` T1 option; "
+                        "`polarity-soft` = same as `polarity` minus the "
+                        "CoT invitation. Used for §7.6 N-way comparison.")
     args = p.parse_args()
 
     fixtures = load_fixtures(args.fixtures)
