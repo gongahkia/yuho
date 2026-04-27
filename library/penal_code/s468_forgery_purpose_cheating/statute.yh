@@ -23,4 +23,15 @@ statute 468 "Forgery for the purpose of cheating" effective 1872-01-01 {
         imprisonment := 0 days .. 10 years;
         fine := unlimited;
     }
+
+    exception general_defence_s79 {
+        "act done by reason of mistake of fact"
+        "no s468 conviction per s79 general exception"
+        when is_infringed(s79)
+    }
+    exception general_defence_s84 {
+        "act done by a person of unsound mind"
+        "no s468 conviction per s84 general exception"
+        when is_infringed(s84)
+    }
 }

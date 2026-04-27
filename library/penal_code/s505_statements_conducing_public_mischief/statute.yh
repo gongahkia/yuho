@@ -30,4 +30,15 @@ statute 505 "Statements conducing to public mischief" effective 1872-01-01 {
         imprisonment := 0 days .. 3 years;
         fine := unlimited;
     }
+
+    exception general_defence_s79 {
+        "act done by reason of mistake of fact"
+        "no s505 conviction per s79 general exception"
+        when is_infringed(s79)
+    }
+    exception general_defence_s84 {
+        "act done by a person of unsound mind"
+        "no s505 conviction per s84 general exception"
+        when is_infringed(s84)
+    }
 }
