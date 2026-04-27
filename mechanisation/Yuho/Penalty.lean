@@ -70,15 +70,30 @@ namespace Yuho
 
 /-- A per-axis bound footprint, the abstract image of the per-axis
 Z3 atoms a satisfying model assigns. All bounds are `Nat`; the
-unbounded-upper-bound (G8 / G14) case is out of scope per the
-file-level boundary statement. -/
+unbounded-upper-bound (G8 / G14) case is supported via the
+`fine_unlimited` and `caning_unspecified` flags — when set true,
+the corresponding `*_hi` field is interpreted as `+∞` and the
+admissibility predicate ignores the numeric upper-bound check
+on that axis.
+
+Imprisonment intentionally does not carry a parallel sentinel:
+SG PC imprisonment ranges are always bounded (life imprisonment
+is encoded as a specific upper number, not a sentinel — see
+`s54` for the canonical "imprisonment for life" mapping). -/
 structure Footprint where
-  imp_lo    : Nat := 0
-  imp_hi    : Nat := 0
-  fine_lo   : Nat := 0
-  fine_hi   : Nat := 0
-  caning_lo : Nat := 0
-  caning_hi : Nat := 0
+  imp_lo    : Nat  := 0
+  imp_hi    : Nat  := 0
+  fine_lo   : Nat  := 0
+  fine_hi   : Nat  := 0
+  /-- (G8) The fine upper bound is unlimited (`fine := unlimited`).
+  When `true`, `fine_hi` is unconstrained from above. -/
+  fine_unlimited : Bool := false
+  caning_lo : Nat  := 0
+  caning_hi : Nat  := 0
+  /-- (G14) The caning upper bound is unspecified (`caning :=
+  unspecified`). When `true`, `caning_hi` is unconstrained from
+  above. -/
+  caning_unspecified : Bool := false
   death     : Bool := false
   deriving Repr
 
@@ -97,7 +112,14 @@ structure Footprint where
 inductive Penalty where
   | imprisonment : (lo hi : Nat) → Penalty
   | fine         : (lo hi : Nat) → Penalty
+  /-- (G8) `fine := unlimited`. The penalty's fine has lower bound
+  `lo` and an unbounded upper limit; the admissibility predicate
+  drops the numeric upper-bound check on the model's `fine_hi`. -/
+  | fineUnlimited : (lo : Nat) → Penalty
   | caning       : (lo hi : Nat) → Penalty
+  /-- (G14) `caning := unspecified`. Analogous to `fineUnlimited`
+  for the caning axis. -/
+  | caningUnspecified : (lo : Nat) → Penalty
   | death        : Penalty
   | cumulative   : List Penalty → Penalty
   | orBoth       : List Penalty → Penalty
@@ -123,9 +145,20 @@ def Penalty.admits : Penalty → Footprint → Bool
   | .fine lo hi, fp =>
       decide (lo ≤ fp.fine_lo) && decide (fp.fine_hi ≤ hi) &&
       decide (fp.fine_lo ≤ fp.fine_hi)
+  | .fineUnlimited lo, fp =>
+      -- G8: penalty range is [lo, +∞). The model must respect
+      -- `lo ≤ fp.fine_lo`, and either claim unlimited itself
+      -- (`fp.fine_unlimited = true`) or supply a coherent finite
+      -- range (`fp.fine_lo ≤ fp.fine_hi`).
+      decide (lo ≤ fp.fine_lo) &&
+      (fp.fine_unlimited || decide (fp.fine_lo ≤ fp.fine_hi))
   | .caning lo hi, fp =>
       decide (lo ≤ fp.caning_lo) && decide (fp.caning_hi ≤ hi) &&
       decide (fp.caning_lo ≤ fp.caning_hi)
+  | .caningUnspecified lo, fp =>
+      -- G14: same shape as G8 for the caning axis.
+      decide (lo ≤ fp.caning_lo) &&
+      (fp.caning_unspecified || decide (fp.caning_lo ≤ fp.caning_hi))
   | .death, fp => fp.death
   | .cumulative ps, fp => Penalty.admitsAll ps fp
   | .orBoth ps, fp => Penalty.admitsAny ps fp
@@ -225,6 +258,31 @@ theorem penalty_correspondence_death
     fp.death = true := by
   simpa [Penalty.admits] using h
 
+/-- **Leaf: fine — G8 unlimited variant.** From
+`(fineUnlimited lo).admits fp`, extract:
+  - `lo ≤ fp.fine_lo` (penalty lower bound respected), and
+  - either `fp.fine_unlimited = true` (model itself claims
+    unlimited) or `fp.fine_lo ≤ fp.fine_hi` (model supplies a
+    coherent finite range under the unbounded penalty cap). -/
+theorem penalty_correspondence_fine_unlimited
+    (lo : Nat) (fp : Footprint)
+    (h : (Penalty.fineUnlimited lo).admits fp = true) :
+    lo ≤ fp.fine_lo ∧ (fp.fine_unlimited = true ∨ fp.fine_lo ≤ fp.fine_hi) := by
+  simp [Penalty.admits, Bool.and_eq_true, decide_eq_true_iff,
+        Bool.or_eq_true] at h
+  exact ⟨h.1, h.2⟩
+
+/-- **Leaf: caning — G14 unspecified variant.** Mirror of
+`penalty_correspondence_fine_unlimited` for the caning axis. -/
+theorem penalty_correspondence_caning_unspecified
+    (lo : Nat) (fp : Footprint)
+    (h : (Penalty.caningUnspecified lo).admits fp = true) :
+    lo ≤ fp.caning_lo ∧
+      (fp.caning_unspecified = true ∨ fp.caning_lo ≤ fp.caning_hi) := by
+  simp [Penalty.admits, Bool.and_eq_true, decide_eq_true_iff,
+        Bool.or_eq_true] at h
+  exact ⟨h.1, h.2⟩
+
 /-! ### Combinator specialisations
 
 The two combinator-case lemmas are the paper §6.5 inductive-step
@@ -267,33 +325,41 @@ theorem penalty_correspondence_orBoth
       have ⟨p, hmem, hp⟩ := ih hrest
       exact ⟨p, List.mem_cons_of_mem _ hmem, hp⟩
 
-/-! ## §6.5-v3 follow-ups
+/-! ## §6.5-v4 follow-ups
 
-Closing the four leaf-case + two combinator specialisations
-above gives the *full* paper §6.5 structural-induction outline in
-mechanised form. What remains as a v4 extension:
+v4 (this commit) closed the G8 / G14 unbounded-axis sentinel
+gap that was the headline open item from v3. The
+`fineUnlimited` and `caningUnspecified` constructors plus the
+`Footprint.fine_unlimited` / `caning_unspecified` flags model
+the `fine := unlimited` and `caning := unspecified` cases
+faithfully, with per-leaf correspondence theorems
+(`penalty_correspondence_fine_unlimited` /
+`penalty_correspondence_caning_unspecified`) that kernel-check
+under the same template as the bounded leaves. Imprisonment
+intentionally retains a single `Nat`-bounded constructor:
+SG PC imprisonment ranges are always bounded (life imprisonment
+is encoded as a specific upper number; see `s54`), so no
+sentinel is needed.
 
-1. **G8 / G14 unbounded-axis sentinels.** The current `Footprint`
-   uses `Nat` for upper bounds; G8 (`fine := unlimited`) and G14
-   (`caning := unspecified`) require an `Option Nat` upper bound
-   with `none` interpreted as `+∞`. The leaf rules below would
-   then split into bounded / unbounded variants with the
-   biconditional adjusted accordingly. Estimate: ~half a
-   person-day plus a smoke test on the s299/s300 fixture.
+What remains as a v5 extension:
 
-2. **Linter integration.** The §3.4 sentinel-propagation
+1. **Linter integration.** The §3.4 sentinel-propagation
    invariant ("sentinels do not propagate beyond the leaf via
    the combinators") is not currently mechanised; it lives in
-   `src/yuho/ast/statute_lint.py`. A v4 extension would mechanise
+   `src/yuho/ast/statute_lint.py`. A v5 extension would mechanise
    the invariant as a Lean predicate `Penalty.wellFormed` and
    tighten `PenaltySMTModel.satisfies` to require it.
 
-3. **Range-arithmetic operators.** The paper writes
+2. **Range-arithmetic operators.** The paper writes
    `R₁ ⊔ ⋯ ⊔ Rₖ` for cumulative and `R₁ ⊓ ⋯ ⊓ Rₖ` for orBoth.
    The current admissibility-predicate framing sidesteps the
-   explicit operators; a v4 reformulation could expose them as
+   explicit operators; a v5 reformulation could expose them as
    `Range.cumulativeJoin` and `Range.orBothMeet` for users who
    prefer the algebraic style.
+
+3. **Z3 oracle assumption discharge.** Out of scope for the
+   penalty layer specifically; tracked as a v5 cross-cutting
+   item in the paper §6.6 boundary statement.
 -/
 
 end Yuho

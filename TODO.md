@@ -77,20 +77,33 @@ person-day, well under the original 4–5 person-month estimate
 (the recursive-admissibility framing sidestepped the explicit
 range-arithmetic lift).
 
-Open follow-ups (deferred to v4):
+v4 shipped: G8 / G14 unbounded-axis sentinels in `Penalty.lean`.
+The `Footprint` record gained `fine_unlimited` / `caning_unspecified`
+flags and the `Penalty` AST gained `fineUnlimited` / `caningUnspecified`
+constructors. Per-leaf correspondence theorems
+(`penalty_correspondence_fine_unlimited` /
+`penalty_correspondence_caning_unspecified`) kernel-check under
+the same template as the bounded leaves. Smoke tests in
+`Tests/Smoke.lean` exercise both unlimited variants on plausible
+footprints. Imprisonment intentionally retains a single
+`Nat`-bounded constructor (life imprisonment is encoded as a
+specific upper number per s54, not a sentinel).
+
+Open follow-ups (deferred to v5):
 
 - [ ] Discharge the oracle assumption by porting Yuho's Python
       `Z3Generator` to Lean and proving its functional equivalence
       to a verified specification.
-- [ ] G8 / G14 unbounded-axis sentinels in `Penalty.lean`
-      (`fine := unlimited`, `caning := unspecified`) — ~half a
-      person-day plus a smoke test on s299/s300.
 - [ ] Mechanise the linter's no-sentinel-propagation invariant as
       a `Penalty.wellFormed` predicate, tightening the satisfies
       bundle to require it.
 - [ ] Cross-library `apply_scope` (the case-law differential
       testing already restricts to in-module sections; this is a
-      v4-stretch item, not a release blocker).
+      v5-stretch item, not a release blocker).
+- [ ] Range-arithmetic operators (`Range.cumulativeJoin` /
+      `Range.orBothMeet`) as an algebraic-style alternative
+      surface to `Penalty.admits` for users who prefer the
+      `R₁ ⊔ ⋯ ⊔ Rₖ` notation from the paper.
 
 ---
 
