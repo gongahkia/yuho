@@ -84,4 +84,10 @@ statute 338 "Causing grievous hurt by an act which endangers life or the persona
         "no s338 conviction per s89 general exception"
         when is_infringed(s89)
     }
+
+    exception general_defence_s92 {
+        "act done in good faith for the benefit of a person without consent"
+        "no s338 conviction per s92 general exception"
+        when is_infringed(s92)
+    }
 }

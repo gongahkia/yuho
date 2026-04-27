@@ -101,4 +101,10 @@ statute 326 "Voluntarily causing grievous hurt by dangerous weapons or means" ef
         "no s326 conviction per s89 general exception"
         when is_infringed(s89)
     }
+
+    exception general_defence_s92 {
+        "act done in good faith for the benefit of a person without consent"
+        "no s326 conviction per s92 general exception"
+        when is_infringed(s92)
+    }
 }
