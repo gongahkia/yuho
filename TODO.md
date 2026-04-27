@@ -17,9 +17,10 @@ semantics + soundness theorem with 5 lemmas + 8 sanity-witness tests) ·
 §6.6 partial Lean 4 mechanisation kernel-checked (Lemmas 6.2 + 6.4) ·
 §7.8 case-law differential testing (n=30, three scorers) · §7.6 LLM
 benchmark with full 205-fixture GPT-4o-mini + GPT-4o cross-model
-baselines + paired baseline-vs-polarity-variant prompt comparison
-(calibration-tradeoff finding) · 32-page smoke PDF · `make paper-reproduce`
-end-to-end including Lean kernel-check.**
+baselines + 3-way prompt-variant comparison (baseline / polarity /
+polarity-soft; polarity-soft is near-Pareto on gpt-4o-mini) · 32-page
+smoke PDF · `make paper-reproduce` end-to-end including Lean kernel-
+check.**
 
 Completed history (Phases A–D, the rigor-hardening trench, mechanisation
 v1, case-law differential testing, the LLM-benchmark closed-vocab fix,
@@ -116,17 +117,23 @@ audit:
    Reframed: the failure mode is model-specific, not benchmark-
    wide. Polarity-priming work targets the gpt-4o-mini regime
    specifically.
-8. **Polarity-variant prompts (this commit batch)**: shipped
-   polarity priming + optional `# ruled out:` CoT preamble +
-   `none` T1 option as `--prompt-variant polarity` in the runner.
-   Paired n=205 gpt-4o-mini run reported in §7.6 against the
-   baseline variant. Result: substantial lift on the n=30
-   polarity-negative slice (T1 33.3% → 60.0%, T2 F1 0.052 →
-   0.267) but a regression on the positive-case corpus (T2 F1
-   0.678 → 0.420). Not a Pareto improvement on gpt-4o-mini —
-   the intervention trades positive-case recall for negative-
-   case calibration. §7.6 reframed to report the tradeoff
-   honestly.
+8. **Polarity-variant prompts (commits `6b4210bc` /
+   `f8712594` / `7f42a11d` / `1392b418`)**: shipped polarity
+   priming + optional `# ruled out:` CoT preamble + `none` T1
+   option as `--prompt-variant polarity`. Paired n=205 gpt-4o-
+   mini run vs baseline: substantial lift on the n=30 polarity-
+   negative slice (T1 33.3% → 60.0%, T2 F1 0.052 → 0.267) but a
+   regression on the positive-case corpus (T2 F1 0.678 → 0.420).
+   Not a Pareto improvement.
+9. **Polarity-soft variant (commits `fc0d90b7` / `1472d1cd`)**:
+   dropped the `# ruled out:` CoT invitation, kept priming +
+   `none`. Near-Pareto on gpt-4o-mini: captures essentially the
+   full negative-slice gain (T1 33.3% → 56.7%, T2 F1 0.052 →
+   0.267) at minimal positive-corpus cost (T2 F1 0.678 → 0.625,
+   $-0.053$; T2 exact 32.2% → 33.7%, $+1.5$pp; T3 93.2% → 94.1%,
+   $+0.9$pp). The polarity-variant regression came from the CoT
+   path encouraging over-exclusion, not from the priming itself.
+   §7.6 now a 3-way table.
 
 Polarity-negative work shipped:
 
@@ -150,11 +157,16 @@ Open follow-ups (deferred):
       at inference time, which the model doesn't have. Could be
       approximated with a cheap pre-classifier that decides
       whether to invoke the priming prompt; experimental.
-- [ ] **Soften the CoT invitation.** The current `# ruled out:`
-      pathway may be over-encouraging exclusion on positive
-      scenarios. Worth trying a lighter framing (polarity priming
-      alone, no CoT preamble) and re-running the paired
-      comparison.
+- [x] **Soften the CoT invitation.** Shipped as
+      `--prompt-variant polarity-soft`: priming + `none` T1, no
+      CoT. Confirmed the hypothesis — the `# ruled out:` CoT path
+      caused the polarity-variant positive-corpus regression, not
+      the priming itself. Polarity-soft captures essentially the
+      full negative-slice gain (+0.215 T2 F1, +23.4pp T1 over
+      baseline) at a fraction of the positive-corpus cost
+      (T2 F1 -0.053; T2 exact +1.5pp; T3 +0.9pp). §7.6 promoted
+      to a 3-way table covering baseline / polarity / polarity-
+      soft.
 
 ### Additional model baselines (OpenAI only)
 
