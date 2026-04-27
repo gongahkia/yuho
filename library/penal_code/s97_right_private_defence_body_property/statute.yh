@@ -8,4 +8,31 @@ statute 97 "Right of private defence of the body and of property" effective 1872
         private_defence_body := "Every person has a right, subject to the restrictions contained in sections 98 and 106A, to defend his own body, and the body of any other person, against any offence affecting the human body.";
         private_defence_property := "Every person has a right, subject to the restrictions contained in sections 98 and 106A, to defend the property, whether movable or immovable, of himself or of any other person, against any act which is an offence falling under the definition of theft, robbery, mischief or criminal trespass, or which is an attempt to commit theft, robbery, mischief or criminal trespass.";
     }
+
+    elements {
+        /// s97 grants two parallel rights: a body-defence right against any
+        /// offence affecting the human body, and a property-defence right
+        /// against theft / robbery / mischief / criminal trespass (or attempts
+        /// thereof). Either limb suffices to engage the right; both are
+        /// subject to the proportionality and public-authority limits in
+        /// sections 98 and 106A.
+        all_of {
+            any_of {
+                all_of {
+                    circumstance offence_affecting_human_body := "The triggering act is an offence affecting the human body";
+                    actus_reus defends_body := "The defender acts to defend his own body or the body of another";
+                }
+                all_of {
+                    any_of {
+                        circumstance theft_or_attempt := "The triggering act is theft or an attempt to commit theft";
+                        circumstance robbery_or_attempt := "The triggering act is robbery or an attempt to commit robbery";
+                        circumstance mischief_or_attempt := "The triggering act is mischief or an attempt to commit mischief";
+                        circumstance criminal_trespass_or_attempt := "The triggering act is criminal trespass or an attempt to commit criminal trespass";
+                    }
+                    actus_reus defends_property := "The defender acts to defend property of himself or another";
+                }
+            }
+            circumstance subject_to_s98_and_s106A := "The exercise of the right is subject to the restrictions in ss98 and 106A";
+        }
+    }
 }

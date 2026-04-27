@@ -51,4 +51,55 @@ statute 104 "Commencement and continuance of right of private defence of propert
             continuance_against_house_breaking := "The right of private defence of property against house-breaking continues as long as such house-breaking continues. [15/2019]";
         }
     }
+
+    elements {
+        /// s104 sets the temporal envelope of the property-defence right:
+        /// commencement on reasonable belief of danger from theft / robbery /
+        /// mischief / criminal trespass (or attempt thereof), and continuance
+        /// per offence-type as elaborated in subsections (2)-(5). For the
+        /// right to engage at the time of the defensive act, both the
+        /// commencement triggers and one of the continuance limbs must be
+        /// active. The continuance limb is offence-specific.
+        all_of {
+            circumstance reasonable_belief_of_danger_to_property := "The defender reasonably believes there is danger to property of himself or another";
+            any_of {
+                circumstance theft_or_attempt := "The triggering act is theft or an attempt to commit theft";
+                circumstance robbery_or_attempt := "The triggering act is robbery or an attempt to commit robbery";
+                circumstance mischief_or_attempt := "The triggering act is mischief or an attempt to commit mischief";
+                circumstance criminal_trespass_or_attempt := "The triggering act is criminal trespass or an attempt to commit criminal trespass";
+            }
+            any_of {
+                /// Theft continuance (subsection 2): right continues until
+                /// retreat-with-property, public-authority-assistance, or
+                /// property-recovery (any of which terminates the right).
+                all_of {
+                    circumstance against_theft := "The right is being exercised against theft";
+                    circumstance offender_not_yet_retreated_with_property := "The offender has not effected his retreat with the property";
+                    circumstance no_public_authority_assistance_obtained := "The assistance of a public authority has not yet been obtained";
+                    circumstance property_not_yet_recovered := "The property has not yet been recovered";
+                }
+                /// Robbery continuance (subsection 3).
+                all_of {
+                    circumstance against_robbery := "The right is being exercised against robbery";
+                    any_of {
+                        circumstance offender_continuing_to_cause_or_attempt_harm := "The offender causes or attempts to cause death, hurt, or wrongful restraint";
+                        circumstance fear_of_instant_harm_continues := "The fear of instant death, hurt, or personal restraint continues";
+                    }
+                }
+                /// Trespass / mischief continuance (subsection 4).
+                all_of {
+                    any_of {
+                        circumstance against_criminal_trespass := "The right is being exercised against criminal trespass";
+                        circumstance against_mischief := "The right is being exercised against mischief";
+                    }
+                    circumstance offender_continues_commission := "The offender continues in the commission of the criminal trespass or mischief";
+                }
+                /// House-breaking continuance (subsection 5).
+                all_of {
+                    circumstance against_house_breaking := "The right is being exercised against house-breaking";
+                    circumstance house_breaking_continues := "The house-breaking continues";
+                }
+            }
+        }
+    }
 }

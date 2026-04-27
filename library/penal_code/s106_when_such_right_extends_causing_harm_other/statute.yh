@@ -7,4 +7,23 @@ statute 106 "When such right extends to causing any harm other than death" effec
     definitions {
         scope_of_nonfatal_private_defence_of_property := "If the offence, the committing or the attempt to commit of which occasions the exercise of the right of private defence, is theft, mischief, or criminal trespass, not of any of the descriptions mentioned in section 105, that right does not extend to the voluntary causing of death, but does extend, subject to the restrictions mentioned in sections 98 and 106A, to the voluntary causing to the wrongdoer of any harm other than death. [15/2019]";
     }
+
+    elements {
+        /// s106 is the non-deadly limb of property-defence: when the
+        /// triggering offence is theft, mischief, or criminal trespass
+        /// NOT within the s105 deadly extension, the right reaches voluntary
+        /// causing of any harm short of death — subject to ss98 and 106A.
+        /// Note that robbery and house-breaking (covered by s105's deadly
+        /// limb) are deliberately excluded from s106's enumeration.
+        all_of {
+            any_of {
+                circumstance offence_is_theft := "The triggering offence is theft (or attempt thereof)";
+                circumstance offence_is_mischief := "The triggering offence is mischief (or attempt thereof)";
+                circumstance offence_is_criminal_trespass := "The triggering offence is criminal trespass (or attempt thereof)";
+            }
+            circumstance offence_not_within_s105 := "The offence is not of any of the descriptions in section 105";
+            actus_reus harm_other_than_death_caused := "The defender voluntarily causes harm other than death to the wrongdoer";
+            circumstance subject_to_s98_and_s106A := "The exercise is subject to the restrictions in sections 98 and 106A";
+        }
+    }
 }

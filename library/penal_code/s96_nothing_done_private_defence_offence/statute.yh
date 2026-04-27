@@ -5,4 +5,15 @@ statute 96 "Nothing done in private defence is an offence" effective 1872-01-01 
     definitions {
         operative_rule := "Nothing is an offence which is done in the exercise of the right of private defence.";
     }
+
+    elements {
+        /// s96 is the operative gateway for the entire ss97-s106A private-
+        /// defence regime: an act is no offence if it is done in the exercise
+        /// of the right of private defence. The right itself (body / property,
+        /// extent, deadly limb, timing) is structured by ss97-s106A.
+        all_of {
+            actus_reus act_done := "An act is done";
+            circumstance exercise_of_right_of_private_defence := "The act is done in the exercise of the right of private defence (as constituted by ss97-s106A)";
+        }
+    }
 }

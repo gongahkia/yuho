@@ -6,4 +6,18 @@ statute 103 "When such right extends to causing any harm other than death" effec
     definitions {
         scope_of_nonfatal_private_defence := "If the offence is not of any of the descriptions mentioned in section 102, the right of private defence of the body does not extend to the voluntary causing of death to the assailant, but does extend, under the restrictions mentioned in sections 98 and 106A, to the voluntary causing to the assailant of any harm other than death. [15/2019]";
     }
+
+    elements {
+        /// s103 is the non-deadly limb of body-defence: when the triggering
+        /// offence is NOT one of the descriptions in s102 (which carries the
+        /// deadly extension), the right does not reach voluntary causing of
+        /// death — but does reach voluntary causing of any other harm. The
+        /// restrictions in ss98 and 106A still apply.
+        all_of {
+            circumstance right_of_body_defence_engaged := "The right of private defence of the body is being exercised";
+            circumstance offence_not_within_s102 := "The triggering offence is not of any of the descriptions in section 102";
+            actus_reus harm_other_than_death_caused := "The defender voluntarily causes harm other than death to the assailant";
+            circumstance subject_to_s98_and_s106A := "The exercise is subject to the restrictions in sections 98 and 106A";
+        }
+    }
 }

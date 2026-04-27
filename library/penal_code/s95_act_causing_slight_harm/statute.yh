@@ -8,6 +8,20 @@ statute 95 "Act causing slight harm" effective 1872-01-01 {
         slight_harm := "Harm so slight that no person of ordinary sense and temper would complain of such harm.";
     }
 
+    elements {
+        /// s95 is conjunctive: the act must (a) cause / intend to cause / be known
+        /// likely to cause harm, AND (b) the harm must be so slight that no person
+        /// of ordinary sense and temper would complain.
+        all_of {
+            any_of {
+                actus_reus harm_caused := "The act causes harm";
+                mens_rea harm_intended := "The act is intended to cause harm";
+                mens_rea harm_known_likely := "The act is known to be likely to cause harm";
+            }
+            circumstance harm_is_slight := "The harm is so slight that no person of ordinary sense and temper would complain of such harm";
+        }
+    }
+
     exception slight_harm {
         "Nothing is an offence by reason that it causes, or that it is intended to cause, or that it is known to be likely to cause, any harm, if that harm is so slight that no person of ordinary sense and temper would complain of such harm."
         "Nothing is an offence."

@@ -15,6 +15,20 @@ statute 98 "Extent to which right may be exercised" effective 1872-01-01 effecti
         }
     }
 
+    elements {
+        /// s98 imposes two conjunctive validity-conditions on the right of
+        /// private defence: (1) proportionality — harm inflicted is no more
+        /// than reasonably necessary; (2) no reasonable opportunity to have
+        /// recourse to public authority. Both must hold for the right to be
+        /// validly exercised. The illustrations make the temporal-cessation
+        /// reading of (2) clear: the right ceases the moment public-authority
+        /// recourse becomes reasonably available (illustration b).
+        all_of {
+            circumstance proportionate_to_circumstances := "The harm inflicted is no more than reasonably necessary in the circumstances";
+            circumstance no_reasonable_recourse_to_public_authority := "No reasonable opportunity to have recourse to the protection of a public authority is available in the circumstances";
+        }
+    }
+
     illustration illustration_a {
         "( a ) Z ambushes A in a secluded area and attempts to kill A . A kills Z while fending off Z ’s attack. A is guilty of no offence because, in the circumstances, A had no reasonable opportunity to have recourse to the protection of a public authority."
     }

@@ -15,4 +15,22 @@ statute 101 "Start and continuance of right of private defence of body" effectiv
             continuance_rule := "The right of private defence continues as long as the belief of danger mentioned in subsection (1) continues. [15/2019]";
         }
     }
+
+    elements {
+        /// s101 sets the temporal envelope of the body-defence right:
+        /// commencement (subsection 1) on reasonable belief of danger
+        /// arising from a triggering offence/attempt/threat; continuance
+        /// (subsection 2) for as long as that belief subsists. All three
+        /// conditions (belief, triggering act, belief still continues at
+        /// the time the defensive act is done) must hold simultaneously.
+        all_of {
+            circumstance reasonable_belief_of_danger_to_body := "The defender reasonably believes that there is danger to the body (either his own or that of any other person)";
+            any_of {
+                circumstance offence_against_human_body := "The danger arises from an offence against the human body";
+                circumstance attempt_to_commit_offence := "The danger arises from an attempt to commit such an offence";
+                circumstance threat_to_commit_offence := "The danger arises from a threat to commit such an offence";
+            }
+            circumstance belief_continues_at_time_of_act := "The belief of danger still continues at the time of the defensive act";
+        }
+    }
 }
