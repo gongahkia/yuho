@@ -44,4 +44,15 @@ statute 467 "Forgery of a valuable security or will" effective 1872-01-01 {
         "no s467 conviction per s84 general exception"
         when is_infringed(s84)
     }
+
+    exception general_defence_s85 {
+        "intoxication when a defence"
+        "no s467 conviction per s85 general exception"
+        when is_infringed(s85)
+    }
+    exception general_defence_s86 {
+        "effect of defence of intoxication when established"
+        "no s467 conviction per s86 general exception"
+        when is_infringed(s86)
+    }
 }

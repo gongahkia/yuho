@@ -34,4 +34,15 @@ statute 468 "Forgery for the purpose of cheating" effective 1872-01-01 {
         "no s468 conviction per s84 general exception"
         when is_infringed(s84)
     }
+
+    exception general_defence_s85 {
+        "intoxication when a defence"
+        "no s468 conviction per s85 general exception"
+        when is_infringed(s85)
+    }
+    exception general_defence_s86 {
+        "effect of defence of intoxication when established"
+        "no s468 conviction per s86 general exception"
+        when is_infringed(s86)
+    }
 }
