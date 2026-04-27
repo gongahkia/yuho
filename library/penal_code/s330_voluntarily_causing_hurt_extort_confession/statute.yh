@@ -57,4 +57,22 @@ statute 330 "Voluntarily causing hurt to extort confession or to compel restorat
         "no s330 conviction per s96 general exception"
         when is_infringed(s96)
     }
+
+    exception general_defence_s97 {
+        "right of private defence of body and property"
+        "no s330 conviction per s97 general exception"
+        when is_infringed(s97)
+    }
+
+    exception general_defence_s98 {
+        "right of private defence against the act of a person of unsound mind"
+        "no s330 conviction per s98 general exception"
+        when is_infringed(s98)
+    }
+
+    exception general_defence_s101 {
+        "right of private defence against assault not extending to causing death"
+        "no s330 conviction per s101 general exception"
+        when is_infringed(s101)
+    }
 }

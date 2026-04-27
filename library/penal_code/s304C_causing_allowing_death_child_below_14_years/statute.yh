@@ -91,4 +91,22 @@ statute 304C "Causing or allowing death of child below 14 years of age, domestic
             circumstances_in_subsection_3 := "The circumstances mentioned in subsection (3) include but are not limited to A's past or present experiences of suffering neglect, hurt, grievous hurt, sexual abuse or any injury to A's mental health as a result of an unlawful act by any member of the same household as A.";
         }
     }
+
+    exception general_defence_s97 {
+        "right of private defence of body and property"
+        "no s304C conviction per s97 general exception"
+        when is_infringed(s97)
+    }
+
+    exception general_defence_s98 {
+        "right of private defence against the act of a person of unsound mind"
+        "no s304C conviction per s98 general exception"
+        when is_infringed(s98)
+    }
+
+    exception general_defence_s106 {
+        "right of private defence against deadly assault when there is risk of harm to innocent person"
+        "no s304C conviction per s106 general exception"
+        when is_infringed(s106)
+    }
 }

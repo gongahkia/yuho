@@ -50,4 +50,10 @@ statute 452 "House-breaking after preparation made for causing hurt, etc." effec
         "no s452 conviction per s84 general exception"
         when is_infringed(s84)
     }
+
+    exception general_defence_s104 {
+        "right of private defence of property against attack not extending to causing death"
+        "no s452 conviction per s104 general exception"
+        when is_infringed(s104)
+    }
 }

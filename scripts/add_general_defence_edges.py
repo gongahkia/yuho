@@ -54,8 +54,12 @@ DEFENCE_TITLES = {
     94: "act to which a person is compelled by threats",
     95: "act causing slight harm",
     96: "act done in private defence",
-    100: "right of private defence against deadly assault",
-    103: "right of private defence of property against deadly assault",
+    97: "right of private defence of body and property",
+    98: "right of private defence against the act of a person of unsound mind",
+    100: "right of private defence against deadly assault on body",
+    101: "right of private defence against assault not extending to causing death",
+    103: "right of private defence of property against deadly attack",
+    104: "right of private defence of property against attack not extending to causing death",
     106: "right of private defence against deadly assault when there is risk of harm to innocent person",
 }
 

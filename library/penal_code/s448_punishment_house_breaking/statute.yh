@@ -27,4 +27,16 @@ statute 448 "Punishment for house-breaking" effective 1872-01-01 effective 2020-
         "no s448 conviction per s84 general exception"
         when is_infringed(s84)
     }
+
+    exception general_defence_s97 {
+        "right of private defence of body and property"
+        "no s448 conviction per s97 general exception"
+        when is_infringed(s97)
+    }
+
+    exception general_defence_s104 {
+        "right of private defence of property against attack not extending to causing death"
+        "no s448 conviction per s104 general exception"
+        when is_infringed(s104)
+    }
 }

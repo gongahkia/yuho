@@ -105,4 +105,22 @@ statute 307 "Attempt to murder" effective 1872-01-01 effective 2019-12-31 {
         "no s307 conviction per s86 general exception"
         when is_infringed(s86)
     }
+
+    exception general_defence_s97 {
+        "right of private defence of body and property"
+        "no s307 conviction per s97 general exception"
+        when is_infringed(s97)
+    }
+
+    exception general_defence_s98 {
+        "right of private defence against the act of a person of unsound mind"
+        "no s307 conviction per s98 general exception"
+        when is_infringed(s98)
+    }
+
+    exception general_defence_s106 {
+        "right of private defence against deadly assault when there is risk of harm to innocent person"
+        "no s307 conviction per s106 general exception"
+        when is_infringed(s106)
+    }
 }

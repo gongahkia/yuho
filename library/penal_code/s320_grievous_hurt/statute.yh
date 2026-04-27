@@ -42,4 +42,22 @@ statute 320 "Grievous hurt" effective 1872-01-01 {
         "no s320 conviction per s95 general exception"
         when is_infringed(s95)
     }
+
+    exception general_defence_s97 {
+        "right of private defence of body and property"
+        "no s320 conviction per s97 general exception"
+        when is_infringed(s97)
+    }
+
+    exception general_defence_s98 {
+        "right of private defence against the act of a person of unsound mind"
+        "no s320 conviction per s98 general exception"
+        when is_infringed(s98)
+    }
+
+    exception general_defence_s101 {
+        "right of private defence against assault not extending to causing death"
+        "no s320 conviction per s101 general exception"
+        when is_infringed(s101)
+    }
 }

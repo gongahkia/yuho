@@ -52,4 +52,16 @@ statute 382 "Theft after preparation made for causing death or hurt in order to 
         "no s382 conviction per s86 general exception"
         when is_infringed(s86)
     }
+
+    exception general_defence_s97 {
+        "right of private defence of body and property"
+        "no s382 conviction per s97 general exception"
+        when is_infringed(s97)
+    }
+
+    exception general_defence_s104 {
+        "right of private defence of property against attack not extending to causing death"
+        "no s382 conviction per s104 general exception"
+        when is_infringed(s104)
+    }
 }
