@@ -39,4 +39,30 @@ statute 304B "Causing death of child below 14 years of age, domestic worker or v
             vulnerable_person := "\"Vulnerable person\" has the meaning given by section 74A(5).";
         }
     }
+
+    exception general_defence_s79 {
+        "act done by reason of mistake of fact"
+        "no s304B conviction per s79 general exception"
+        when is_infringed(s79)
+    }
+    exception general_defence_s80 {
+        "accident in the doing of a lawful act"
+        "no s304B conviction per s80 general exception"
+        when is_infringed(s80)
+    }
+    exception general_defence_s84 {
+        "act done by a person of unsound mind"
+        "no s304B conviction per s84 general exception"
+        when is_infringed(s84)
+    }
+    exception general_defence_s96 {
+        "act done in private defence"
+        "no s304B conviction per s96 general exception"
+        when is_infringed(s96)
+    }
+    exception general_defence_s100 {
+        "right of private defence against deadly assault"
+        "no s304B conviction per s100 general exception"
+        when is_infringed(s100)
+    }
 }

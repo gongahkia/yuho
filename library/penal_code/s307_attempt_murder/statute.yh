@@ -68,4 +68,30 @@ statute 307 "Attempt to murder" effective 1872-01-01 effective 2019-12-31 {
     illustration illustration_d {
         "( d ) A , intending to murder Z by poison, purchases poison and mixes the same with food which remains in A ’s keeping; A has not yet committed the offence defined in this section. A places the food on Z ’s table or delivers it to Z ’s servants to place it on Z ’s table. A has committed the offence defined in this section."
     }
+
+    exception general_defence_s79 {
+        "act done by reason of mistake of fact"
+        "no s307 conviction per s79 general exception"
+        when is_infringed(s79)
+    }
+    exception general_defence_s80 {
+        "accident in the doing of a lawful act"
+        "no s307 conviction per s80 general exception"
+        when is_infringed(s80)
+    }
+    exception general_defence_s84 {
+        "act done by a person of unsound mind"
+        "no s307 conviction per s84 general exception"
+        when is_infringed(s84)
+    }
+    exception general_defence_s96 {
+        "act done in private defence"
+        "no s307 conviction per s96 general exception"
+        when is_infringed(s96)
+    }
+    exception general_defence_s100 {
+        "right of private defence against deadly assault"
+        "no s307 conviction per s100 general exception"
+        when is_infringed(s100)
+    }
 }
