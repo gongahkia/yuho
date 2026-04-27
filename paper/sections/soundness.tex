@@ -390,7 +390,7 @@ producing a satisfiable Z3 model
 A partial mechanisation accompanies this paper as the artefact
 \texttt{mechanisation/} in the Yuho repository, written in
 Lean~4 (toolchain v4.10.0).
-The artefact kernel-checks two paper-load-bearing
+The artefact kernel-checks three paper-load-bearing
 lemmas:
 
 \begin{itemize}
@@ -401,6 +401,18 @@ lemmas:
     unfolding \texttt{Element.eval} and \texttt{SMTModel.facts} ---
     the two definitions are propositionally equal by construction,
     which is the structural-correspondence claim this lemma makes.
+  \item \textbf{Lemma~\ref{lem:soundness-graph} (element-graph
+    correspondence)} as the theorem
+    \texttt{element\_graph\_correspondence} in
+    \texttt{Yuho/Graph.lean} (v2 2026-04-27). The extended
+    \texttt{GraphSMTModel} carries a per-group truth atom; the
+    bicond bundle's \texttt{leaf}, \texttt{allOf}, and
+    \texttt{anyOf} fields realise the per-group biconditionals
+    the Z3 generator emits. The structural-induction step uses
+    well-founded recursion on \texttt{sizeOf g}, with the
+    \texttt{decreasing\_by} obligation discharged via
+    \texttt{List.sizeOf\_lt\_of\_mem} and \texttt{omega} from
+    Lean~4 core.
   \item \textbf{Lemma~\ref{lem:soundness-exc} (exception
     correspondence)} as the theorem
     \texttt{exception\_correspondence}. The substantive content
@@ -412,26 +424,37 @@ lemmas:
     operational definition.
 \end{itemize}
 
-A composed corollary
-\texttt{partial\_conviction\_correspondence} pairs the two
-lemmas, giving the partial conviction-correspondence claim that
-Theorem~\ref{thm:z3-sound}'s main step rests on.
+A composed corollary \texttt{full\_conviction\_correspondence}
+(in \texttt{Yuho/Graph.lean}) pairs the three lemmas above, giving
+the full conviction-correspondence claim that
+Theorem~\ref{thm:z3-sound}'s main step rests on. The v1 corollary
+\texttt{partial\_conviction\_correspondence} (in
+\texttt{Yuho/Soundness.lean}) is preserved unchanged for backward
+compatibility.
 
 \paragraph{What is not mechanised.}
-Lemmas~\ref{lem:soundness-graph}
-(element-graph correspondence),~\ref{lem:soundness-cross}
-(cross-section composition), and~\ref{lem:soundness-penalty}
+Lemmas~\ref{lem:soundness-cross}
+(cross-section composition) and~\ref{lem:soundness-penalty}
 (penalty correspondence) remain \emph{pen-and-paper} in this
 artefact. The boundary is honest, not strategic: each of those
 lemmas would benefit from mechanisation, but each requires
 substantially more proof engineering than the v1 budget allows.
-Lemma~\ref{lem:soundness-graph} requires a list-folding
-correspondence between operational element-tree evaluation and
-the SMT model's per-group bool, with a structural induction over
-\texttt{ElementGroup}; the closest analogue is Catala's
-bisimulation file \texttt{simulation\_sred\_to\_cred.v}
-(\cite{catala2021}, $\sim$600 lines of Coq proof), so we estimate
-2--3 person-months for the Yuho equivalent.
+Lemma~\ref{lem:soundness-graph} (element-graph correspondence)
+was pen-and-paper in v1 and is now fully mechanised in
+\texttt{mechanisation/Yuho/Graph.lean} (v2, 2026-04-27): the
+\texttt{element\_graph\_correspondence} theorem closes by
+well-founded recursion on \texttt{sizeOf} of the
+\texttt{ElementGroup}, with the \texttt{decreasing\_by} obligation
+discharged via core's \texttt{List.sizeOf\_lt\_of\_mem} and
+\texttt{omega}. The composed corollary
+\texttt{full\_conviction\_correspondence} pairs Lemmas 6.2--6.4
+into a kernel-checked statement that each model's group-truth and
+exception-firing structure agrees with the operational evaluator.
+The closure took materially less proof engineering than the
+Catala bisimulation analogue \texttt{simulation\_sred\_to\_cred.v}
+($\sim$600 lines of Coq) suggested, because the well-founded
+\texttt{sizeOf} measure sidesteps the explicit list-folding
+induction Catala spelled out.
 Lemma~\ref{lem:soundness-cross} requires a well-founded relation
 over the inter-section reference graph; Catala did not mechanise
 this for scope-calls either. Lemma~\ref{lem:soundness-penalty}
@@ -472,13 +495,15 @@ but the v1 mechanisation does not exercise that machinery anyway,
 so we lose nothing concrete.
 
 \paragraph{What this buys us.}
-Two of the five soundness lemmas are now machine-checked rather
-than peer-reviewed pen-and-paper. The artefact does not let us
-claim full mechanised soundness; it does let us claim that the
-two cases reviewers most often press on
-(elements as fact-map lookups; Catala-style priority precedence)
-have kernel-checked correspondents in Lean~4.
+Three of the five soundness lemmas are now machine-checked rather
+than peer-reviewed pen-and-paper (Lemmas 6.2, 6.3, 6.4 plus the
+composed \texttt{full\_conviction\_correspondence} corollary). The
+artefact does not yet let us claim full mechanised soundness; it
+does let us claim that the cases reviewers most often press on
+(elements as fact-map lookups; the element-tree's all\_of/any\_of
+propagation; Catala-style priority precedence) have kernel-checked
+correspondents in Lean~4.
 \S\ref{sec:limitations} carries the explicit caveat
-that Lemmas~\ref{lem:soundness-graph}--\ref{lem:soundness-penalty}
-remain pen-and-paper, sized at $\sim$6--9 person-months of
+that Lemmas~\ref{lem:soundness-cross}--\ref{lem:soundness-penalty}
+remain pen-and-paper, sized at $\sim$4--5 person-months of
 follow-on proof work to close.
