@@ -18,6 +18,7 @@ import Yuho.SMTAbs
 import Yuho.Soundness
 import Yuho.Graph
 import Yuho.Penalty
+import Yuho.Range
 import Yuho.Generator
 
 namespace Yuho.Tests
@@ -414,6 +415,45 @@ example :
 leaves. -/
 example :
     (Generator.encodeLeafBiconds s415 s415.elements).length = 5 := by
+  native_decide
+
+/-! ## §6.5-v5 smoke tests — `Range.cumulativeJoin` /
+`Range.orBothMeet` algebraic surface. -/
+
+/-- A two-component cumulative range (fine ≤ 1000 AND caning ≤ 12)
+admits a model that respects both axis caps. -/
+example :
+    (Range.cumulativeJoin [Penalty.fine 0 1000, Penalty.caning 0 12]).admits
+      { fine_lo := 0, fine_hi := 500, caning_lo := 0, caning_hi := 6
+        : Footprint }
+      = true := by
+  native_decide
+
+/-- The same cumulative rejects a model that breaches one axis. -/
+example :
+    (Range.cumulativeJoin [Penalty.fine 0 1000, Penalty.caning 0 12]).admits
+      { fine_lo := 0, fine_hi := 500, caning_lo := 0, caning_hi := 24
+        : Footprint }
+      = false := by
+  native_decide
+
+/-- An or-both range over (fine ≤ 1000) ⊔ (caning ≤ 12) admits any
+model that satisfies either axis. -/
+example :
+    (Range.orBothMeet [Penalty.fine 0 1000, Penalty.caning 0 12]).admits
+      { fine_lo := 0, fine_hi := 500, caning_lo := 0, caning_hi := 24
+        : Footprint }
+      = true := by
+  native_decide
+
+/-- Empty cumulative is vacuously admitted. -/
+example :
+    (Range.cumulativeJoin []).admits ({} : Footprint) = true := by
+  native_decide
+
+/-- Empty or-both admits nothing. -/
+example :
+    (Range.orBothMeet []).admits ({} : Footprint) = false := by
   native_decide
 
 end Yuho.Tests
