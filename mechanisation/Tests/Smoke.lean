@@ -204,4 +204,216 @@ example :
     (Generator.encodeLeafBiconds s299 s299.elements).length = 2 := by
   native_decide
 
+/-! ## §6.6-v5 smoke tests — canonical-model coverage across more
+element-tree + exception-list shapes (s300, s378, s415).
+
+s299 above exercises the simplest shape (allOf of two leaves, no
+exceptions / one exception). The fixtures below extend coverage to:
+
+  * **s300 — Murder.** allOf [actusReus, anyOf[mensRea×4]] + a
+    five-element exception list (the §300 Exceptions 1–5 priority
+    chain in the surface library).
+  * **s378 — Theft.** Flat allOf of five leaves spanning all three
+    kinds (mensRea, actusReus×2, circumstance×2) + one structural
+    exception (claim-of-right).
+  * **s415 — Cheating.** allOf with a nested anyOf
+    [actusReus, anyOf[mensRea×2], actusReus, circumstance] —
+    different nesting depth than s300.
+
+For each shape we check:
+  * `elementsSatisfied` and `convicts` on a witness fact pattern
+    (operational evaluator green on a real fixture);
+  * `canonicalSMTModel` / `canonicalGraphModel` satisfy the bicond
+    bundle (the v5 unconditional discharge holds across shapes);
+  * `encodeLeafBiconds` emits the expected number of leaves for
+    each shape (mirrors the Python generator's atom-emit count).
+-/
+
+/-! ### s300 — Murder. -/
+
+/-- s300: allOf [actusReus death, anyOf [intent1..intent4]]. -/
+def s300 : Statute :=
+  { section_number := "300"
+    title := "Murder"
+    elements :=
+      .allOf [
+        .leaf { kind := .actusReus, name := "death", description := "" },
+        .anyOf [
+          .leaf { kind := .mensRea, name := "intent_to_kill",       description := "" },
+          .leaf { kind := .mensRea, name := "intent_likely_fatal",  description := "" },
+          .leaf { kind := .mensRea, name := "intent_sufficient",    description := "" },
+          .leaf { kind := .mensRea, name := "knowledge_imminent",   description := "" }
+        ]
+      ]
+    exceptions := [
+      { label := "provocation",    guard := fun F => F "exc_provocation",    defeats := [] },
+      { label := "privateDefence", guard := fun F => F "exc_privateDefence", defeats := [] },
+      { label := "publicServant",  guard := fun F => F "exc_publicServant",  defeats := [] },
+      { label := "suddenFight",    guard := fun F => F "exc_suddenFight",    defeats := [] },
+      { label := "consent",        guard := fun F => F "exc_consent",        defeats := [] }
+    ]
+  }
+
+/-- Witness facts: limb (a) intent + actus death, no exception
+fires. -/
+def factsMurder : Facts :=
+  Facts.fromList [("death", true), ("intent_to_kill", true)]
+
+example : s300.elementsSatisfied factsMurder = true := by
+  native_decide
+
+example : s300.convicts factsMurder = true := by
+  native_decide
+
+/-- Same fact pattern with provocation exception → no conviction. -/
+def factsMurderWithProvocation : Facts :=
+  Facts.fromList
+    [("death", true), ("intent_to_kill", true), ("exc_provocation", true)]
+
+example : s300.convicts factsMurderWithProvocation = false := by
+  native_decide
+
+/-- Canonical SMTModel discharge on s300. -/
+example :
+    (Generator.canonicalSMTModel s300 factsMurder).satisfies s300 :=
+  canonical_smt_satisfies s300 factsMurder
+
+/-- Canonical GraphSMTModel discharge on s300. -/
+example :
+    (Generator.canonicalGraphModel s300 factsMurder).satisfies s300 :=
+  canonical_graph_satisfies s300 factsMurder
+
+/-- s300 carries one actus + four mens leaves under the nested
+shape; encoder emits five leaf biconditionals. -/
+example :
+    (Generator.encodeLeafBiconds s300 s300.elements).length = 5 := by
+  native_decide
+
+/-! ### s378 — Theft. Flat five-leaf allOf, mixed kinds. -/
+
+/-- s378: allOf [mensRea intention, actusReus taking,
+circumstance possession, circumstance consent, actusReus movement]. -/
+def s378 : Statute :=
+  { section_number := "378"
+    title := "Theft"
+    elements :=
+      .allOf [
+        .leaf { kind := .mensRea,      name := "intention",  description := "" },
+        .leaf { kind := .actusReus,    name := "taking",     description := "" },
+        .leaf { kind := .circumstance, name := "possession", description := "" },
+        .leaf { kind := .circumstance, name := "consent",    description := "" },
+        .leaf { kind := .actusReus,    name := "movement",   description := "" }
+      ]
+    exceptions := [
+      { label := "claimOfRight", guard := fun F => F "exc_claimOfRight", defeats := [] }
+    ]
+  }
+
+/-- Witness: all five fact keys true, no exception. -/
+def factsTheft : Facts :=
+  Facts.fromList
+    [("intention", true), ("taking", true), ("possession", true),
+     ("consent", true), ("movement", true)]
+
+example : s378.elementsSatisfied factsTheft = true := by
+  native_decide
+
+example : s378.convicts factsTheft = true := by
+  native_decide
+
+/-- Missing `movement` (the Explanation-3 movement element) →
+elements not satisfied. -/
+def factsTheftNoMovement : Facts :=
+  Facts.fromList
+    [("intention", true), ("taking", true), ("possession", true),
+     ("consent", true)]
+
+example : s378.elementsSatisfied factsTheftNoMovement = false := by
+  native_decide
+
+example : s378.convicts factsTheftNoMovement = false := by
+  native_decide
+
+/-- Claim-of-right exception fires on full elements → no
+conviction. -/
+def factsTheftClaimOfRight : Facts :=
+  Facts.fromList
+    [("intention", true), ("taking", true), ("possession", true),
+     ("consent", true), ("movement", true), ("exc_claimOfRight", true)]
+
+example : s378.convicts factsTheftClaimOfRight = false := by
+  native_decide
+
+/-- Canonical SMTModel discharge on s378. -/
+example :
+    (Generator.canonicalSMTModel s378 factsTheft).satisfies s378 :=
+  canonical_smt_satisfies s378 factsTheft
+
+/-- Canonical GraphSMTModel discharge on s378. -/
+example :
+    (Generator.canonicalGraphModel s378 factsTheft).satisfies s378 :=
+  canonical_graph_satisfies s378 factsTheft
+
+/-- Five flat leaves → five biconditionals. -/
+example :
+    (Generator.encodeLeafBiconds s378 s378.elements).length = 5 := by
+  native_decide
+
+/-! ### s415 — Cheating. allOf with a nested anyOf at non-final
+position (different shape than s300). -/
+
+/-- s415: allOf [actus deception, anyOf [mens fraud, mens dish],
+actus inducement, circ harm]. -/
+def s415 : Statute :=
+  { section_number := "415"
+    title := "Cheating"
+    elements :=
+      .allOf [
+        .leaf { kind := .actusReus, name := "deception", description := "" },
+        .anyOf [
+          .leaf { kind := .mensRea, name := "fraudulent", description := "" },
+          .leaf { kind := .mensRea, name := "dishonest",  description := "" }
+        ],
+        .leaf { kind := .actusReus,    name := "inducement", description := "" },
+        .leaf { kind := .circumstance, name := "harm",       description := "" }
+      ]
+    exceptions := []
+  }
+
+/-- Witness: dishonest-limb cheating. -/
+def factsCheating : Facts :=
+  Facts.fromList
+    [("deception", true), ("dishonest", true),
+     ("inducement", true), ("harm", true)]
+
+example : s415.elementsSatisfied factsCheating = true := by
+  native_decide
+
+example : s415.convicts factsCheating = true := by
+  native_decide
+
+/-- Neither limb of the anyOf satisfied → elements fail. -/
+def factsCheatingNeitherLimb : Facts :=
+  Facts.fromList
+    [("deception", true), ("inducement", true), ("harm", true)]
+
+example : s415.elementsSatisfied factsCheatingNeitherLimb = false := by
+  native_decide
+
+/-- Canonical SMTModel discharge on s415. -/
+example :
+    (Generator.canonicalSMTModel s415 factsCheating).satisfies s415 :=
+  canonical_smt_satisfies s415 factsCheating
+
+/-- Canonical GraphSMTModel discharge on s415. -/
+example :
+    (Generator.canonicalGraphModel s415 factsCheating).satisfies s415 :=
+  canonical_graph_satisfies s415 factsCheating
+
+/-- s415: 1 actus + 2 mens (in anyOf) + 1 actus + 1 circ = 5
+leaves. -/
+example :
+    (Generator.encodeLeafBiconds s415 s415.elements).length = 5 := by
+  native_decide
+
 end Yuho.Tests
