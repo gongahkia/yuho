@@ -18,7 +18,11 @@ semantics + soundness theorem with 5 lemmas + 8 sanity-witness tests) ·
 (6.2 + 6.3 + 6.4 + 6.4' cross-section + 6.5 penalty) PLUS conviction-
 layer oracle assumption discharged via `Generator.lean`'s constructive
 canonical models (`canonical_smt_satisfies` /
-`canonical_graph_satisfies` + unconditional forms of 6.2 / 6.3 / 6.4) ·
+`canonical_graph_satisfies` + unconditional forms of 6.2 / 6.3 / 6.4)
+PLUS `Range.cumulativeJoin` / `Range.orBothMeet` algebraic surface +
+canonical-model smoke coverage extended to s299 / s300 / s378 / s415 +
+`make verify-structural-diff` PoC harness comparing Lean spec ↔
+Python `Z3Generator` on those four fixtures ·
 §7.8 case-law differential testing (n=38, three scorers; top-1 44.7%,
 MRR 0.461, contrast F1 0.239, constrained-contrast consistency 100%) ·
 §7.6 LLM benchmark with full 205-fixture GPT-4o-mini + GPT-4o + o3-mini
@@ -82,26 +86,29 @@ Open follow-ups (deferred to v6):
 - [ ] Cross-library `apply_scope` (the case-law differential
       testing already restricts to in-module sections; this is a
       v6-stretch item, not a release blocker).
-- [ ] Range-arithmetic operators (`Range.cumulativeJoin` /
-      `Range.orBothMeet`) as an algebraic-style alternative
-      surface to `Penalty.admits` for users who prefer the
-      `R₁ ⊔ ⋯ ⊔ Rₖ` notation from the paper.
-- [ ] **Python-side faithfulness, structural diff.** Now that
-      `Generator.encodeStatute` exists in Lean, build a harness
-      that (a) serialises the Lean spec's biconditional list per
-      statute as JSON, (b) runs `Z3Generator._generate_statute_constraints`
-      on the same statute and emits its assertion list as JSON,
-      (c) asserts shape-match (atom names + connective tree). This
-      tightens `make verify-bulk-contrast` from a *behavioural*
-      check (Python generator agrees with operational evaluator on
-      every encoded statute) to a *structural* check (Python
-      generator emits exactly what the Lean spec says it should).
-- [ ] **Smoke-test coverage expansion.** `Tests/Smoke.lean`
-      currently exercises the v5 canonical model on s299 only.
-      Add s300 (Exceptions 1–7 priority chain), s378 (theft —
-      smaller structure), and s415 (cheating — conditional
-      penalty) to validate the canonical model across more
-      element-tree + exception-list shapes.
+- [ ] **Python-side faithfulness, structural diff — full corpus.**
+      PoC shipped on the four smoke fixtures via
+      `mechanisation/scripts/ExportSpec.lean` +
+      `scripts/verify_structural_diff.py` +
+      `make verify-structural-diff`; surfaces two documented
+      structural divergences between the Lean spec and the
+      Python `Z3Generator` (leaf-bicond omission; per-exception
+      `_fires` suffix only on defeat-bearing exceptions).
+      Remaining work: extend the harness from the four smoke
+      fixtures to the 524-statute corpus. Needs a Lean-side JSON
+      statute-loader (or a per-statute codegen that emits one
+      `.lean` file per encoded `statute.yh`) so Lean
+      `encodeStatute` can run on the whole corpus, not just
+      hard-coded fixtures.
+- [ ] **Generator-emit consolidation.** Reconcile the two
+      structural divergences the PoC harness surfaced — either
+      have the Python `Z3Generator` emit the leaf-bicond family
+      and a uniform `_fires` suffix, OR adjust the Lean
+      `Generator.encodeStatute` spec to drop the leaf bicond and
+      conditionalise the `_fires` suffix on defeat-bearing
+      exceptions. The former is cleaner for downstream Z3
+      tooling; the latter avoids touching the kernel-checked
+      spec. Decision pending.
 
 ---
 
@@ -210,15 +217,6 @@ hardening:
       every "remaining gap" / "future work" / "out of scope"
       sentence and confirm it's still accurate. (User action;
       the same sweep doubles as the manual read-through above.)
-- [ ] **§6.6 prose tightening.** The v5 "Trust base" paragraph
-      I shipped is long. Defense audit: read it cold and check
-      it leads with the discharge claim, not the historical
-      framing. Could tighten by 15–25%.
-- [ ] **Dangling-ref sweep.** One `subsec:case_law` typo (missing
-      `_diff` suffix) was caught and fixed in this session;
-      others may exist. Run
-      `grep -rn '\\\\ref{[^}]*}' paper/sections/` and confirm
-      every label resolves against `\label{…}` declarations.
 - [ ] **Blog-post transpilation.** Hand the rendered paper to
       Claude with a transpilation prompt; output to
       `paper/blog/yuho.md`.
@@ -227,26 +225,18 @@ hardening:
 
 ---
 
-## Defense-readiness `[~]`
+## Hardening `[~]`
 
-Items the panel will likely press on; consolidates user-action
-work surfaced during the §6.6 v5 sweep on 2026-04-28.
+Items worth keeping under attention even though there is no
+defense per se. Consolidates user-action work surfaced during
+the §6.6 v5 sweep on 2026-04-28 and the 2026-04-28 followup
+that closed smoke-test expansion + dangling-ref + §6.6 prose +
+Range ops + the structural-diff PoC.
 
-- [ ] **Defense FAQ / Q-and-A drill sheet.** Pull every caveat
-      in §11 + every TODO entry, write the sharpest panel
-      question against each, and a tight answer (referencing
-      file paths + theorem names). Concrete coverage: residual
-      oracle scope (CrossSMTModel + Python-side faithfulness),
-      L3 author-stamping, polarity-negative collapse, IPC scope
-      omission, inter-rater reliability gap, why Lean over Coq,
-      what `make verify-bulk-contrast` actually checks.
-- [ ] **Run `make paper-reproduce` end-to-end before defense.**
-      Confirms today's repo still reproduces every empirical
-      claim. Not done in this session; quick to re-run on
-      defense day.
+- [ ] **Run `make paper-reproduce` end-to-end periodically.**
+      Confirms the repo still reproduces every empirical claim.
 - [ ] **Inter-rater reliability for §7.8.** See §7.8 above —
-      tracked there, surfaced here as a panel-leverage item.
-      User action.
+      tracked there. User action.
 - [ ] **Mermaid `--shape verbose` audit.** See *Mermaid
       flowchart richness* below — flagged for HUMAN AUDIT, not
       removed from TODO. User action.
