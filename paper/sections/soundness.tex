@@ -525,52 +525,40 @@ gap rather than mechanised work:
     template as the bounded leaves.
 \end{itemize}
 
-\paragraph{Trust base (v5).} The artefact relies on Lean~4's
-kernel plus the standard library's axioms (propositional
-extensionality, quotient types, Choice). Earlier versions of this
-mechanisation (v1--v4) carried an \emph{oracle assumption} that
-the abstract \texttt{SMTModel.satisfies} bundle was satisfiable:
-the lemmas held \emph{for any} model meeting the bicond
-specification, and the existence of such a model was assumed.
-The v5 layer in \texttt{Yuho/Generator.lean} discharges this
-assumption for the conviction-layer lemmas
-(\ref{lem:soundness-elem} / \ref{lem:soundness-graph} /
-\ref{lem:soundness-exc}). It exhibits a constructive
-\texttt{canonicalSMTModel} and \texttt{canonicalGraphModel} ---
+\paragraph{Trust base (v5).} The conviction-layer oracle is
+discharged. \texttt{Yuho/Generator.lean} exhibits a constructive
+\texttt{canonicalSMTModel} / \texttt{canonicalGraphModel} ---
 defined directly from the operational evaluator's outputs --- and
 proves \texttt{canonical\_smt\_satisfies} and
-\texttt{canonical\_graph\_satisfies} unconditionally, both
-kernel-checked. The corresponding \emph{unconditional} forms of
-the soundness lemmas (\texttt{element\_correspondence\_uncon\-di\-tio\-nal},
-\texttt{element\_graph\_correspondence\_unconditional},
-\texttt{exception\_correspondence\_unconditional}) hold against
-the constructed model and are exported from
-\texttt{Yuho/Generator.lean} for downstream citation.
+\texttt{canonical\_graph\_satisfies} unconditionally; the
+unconditional forms of Lemmas~\ref{lem:soundness-elem} /
+\ref{lem:soundness-graph} / \ref{lem:soundness-exc} hold against
+this witness and are exported for downstream citation. The
+artefact's trust base is therefore Lean~4's kernel plus the
+standard library's axioms (propositional extensionality,
+quotient types, Choice).
 
-The same file additionally ships a verified specification of the
+The same file ships a verified specification of the
 generator's emit shape (\texttt{Generator.encodeStatute}, a list
 of symbolic biconditionals over an \texttt{SMTFormula} AST)
-mirroring \texttt{src/yuho/verify/z3\_solver.py} line-for-line on
-atom names (\texttt{<sX>\_<elem>\_satisfied} /
+mirroring \texttt{src/yuho/verify/z3\_solver.py} on atom names
+(\texttt{<sX>\_<elem>\_satisfied} /
 \texttt{<sX>\_elements\_satisfied} /
-\texttt{<sX>\_exc\_<label>\_fires} /
-\texttt{<sX>\_conviction}). What v5 \emph{does not} discharge:
-(i) the residual claim that the Python \texttt{Z3Generator}
-implementation matches this Lean specification --- now narrower
-and round-trip-testable rather than load-bearing on the soundness
-theorem, with the existing
-\texttt{make verify-bulk-contrast} sweep
-(\S\ref{subsec:scenario_synthesis})
-exercising the Python generator against the operational evaluator
-on every encoded statute as the differential check; and (ii) the
-module-level \texttt{CrossSMTModel.satisfies} bundle, whose
-single \texttt{excFires : String $\to$ Bool} indexed by raw
-exception labels is too coarse a witness target until the
-abstraction is refactored to qualified atom names (a v6 item
-adjacent to the cross-library \texttt{apply\_scope} extension).
-The trust base is therefore narrower than v4: the oracle
-assumption survives only at the cross-section bundle, not at the
-single-statute conviction layer.
+\texttt{<sX>\_exc\_<label>\_fires} / \texttt{<sX>\_conviction}).
+Two residuals survive, both narrower than the v4 oracle: (i) that
+the Python \texttt{Z3Generator} matches this Lean specification
+--- a round-trip-testable claim rather than a load-bearing
+assumption, with \texttt{make verify-bulk-contrast}
+(\S\ref{subsec:scenario_synthesis}) exercising the Python
+generator against the operational evaluator on every encoded
+statute as the differential check; and (ii) the module-level
+\texttt{CrossSMTModel.satisfies} bundle, whose single
+\texttt{excFires : String $\to$ Bool} indexed by raw exception
+labels needs a refactor to qualified atom names before a
+constructive witness fits (a v6 item, adjacent to the
+cross-library \texttt{apply\_scope} extension). The oracle
+assumption now survives only at the cross-section bundle, not at
+the single-statute conviction layer.
 
 \paragraph{Why Lean 4 over Coq.}
 Catala's mechanisation
