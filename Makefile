@@ -47,6 +47,7 @@ LOGS = logs
 .PHONY: paper-reproduce \
         verify-coverage verify-akn-xsd verify-evals \
         verify-case-law verify-bulk-contrast verify-mechanisation \
+        verify-structural-diff \
         clean-reproduce
 
 paper-reproduce: $(LOGS)
@@ -106,6 +107,16 @@ verify-case-law: $(LOGS)
 verify-bulk-contrast: $(LOGS)
 	@echo ">>> running §7.5 Z3 bulk-contrast across SG PC pairs…"
 	$(PYTHON) scripts/bulk_contrast.py 2>&1 | tee $(LOGS)/bulk-contrast.log
+
+verify-structural-diff: $(LOGS)
+	@echo ">>> running §6.6 Lean spec ↔ Python Z3Generator structural diff (smoke fixtures)…"
+	@if command -v lake >/dev/null 2>&1; then \
+		$(PYTHON) scripts/verify_structural_diff.py 2>&1 \
+			| tee $(LOGS)/structural-diff.log; \
+	else \
+		echo "Structural diff: SKIPPED (Lean toolchain not on PATH)" \
+			| tee $(LOGS)/structural-diff.log; \
+	fi
 
 verify-mechanisation: $(LOGS)
 	@echo ">>> verifying §6.6 Lean 4 mechanisation kernel-checks…"
