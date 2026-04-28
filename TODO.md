@@ -11,11 +11,14 @@ benchmarks.
 
 Status key: `[ ]` pending · `[~]` in progress · `(def)` deferred.
 
-Current snapshot (2026-04-27): **4947 unit tests green · 524 sections at
+Current snapshot (2026-04-28): **4947 unit tests green · 524 sections at
 L1+L2 · 524 L3 author-stamped · §4 + §6 paper sections shipped (formal
 semantics + soundness theorem with 5 lemmas + 8 sanity-witness tests) ·
-§6.6 Lean 4 mechanisation kernel-checks all 5 soundness lemmas
-(6.2 + 6.3 + 6.4 + 6.4' cross-section + 6.5 penalty) ·
+§6.6 Lean 4 mechanisation v5: all 5 soundness lemmas kernel-checked
+(6.2 + 6.3 + 6.4 + 6.4' cross-section + 6.5 penalty) PLUS conviction-
+layer oracle assumption discharged via `Generator.lean`'s constructive
+canonical models (`canonical_smt_satisfies` /
+`canonical_graph_satisfies` + unconditional forms of 6.2 / 6.3 / 6.4) ·
 §7.8 case-law differential testing (n=38, three scorers; top-1 44.7%,
 MRR 0.461, contrast F1 0.239, constrained-contrast consistency 100%) ·
 §7.6 LLM benchmark with full 205-fixture GPT-4o-mini + GPT-4o + o3-mini
@@ -52,164 +55,72 @@ lives in git log + `docs/PHASE_*` notes, not here.
 
 ## §6.6 — Lean 4 mechanisation `[~]`
 
-v1 shipped at `mechanisation/`: Lemma 6.2 (element correspondence) +
-Lemma 6.4 (exception correspondence) + composed corollary
-`partial_conviction_correspondence`, all kernel-checked under Lean
-4.10.0. Paper §6.6 documents the boundary; §11 Limitations carries
-the partial-mechanisation caveat.
+v1–v5 shipped; per-version layout, theorem inventory, and trust
+base live in [`mechanisation/README.md`](./mechanisation/README.md).
+Headline state: all 5 soundness lemmas (6.2, 6.3, 6.4, 6.4', 6.5)
++ the G8/G14 unbounded-axis sentinels + the conviction-layer
+oracle discharge (`Generator.lean`'s constructive
+`canonicalSMTModel` / `canonicalGraphModel` + unconditional forms
+of 6.2 / 6.3 / 6.4) all kernel-check under Lean 4.10.0 with no
+`sorry`s. `lake build` + `lake build Tests` both green.
 
-v2 shipped (2026-04-27): Lemma 6.3 (element-graph correspondence)
-fully mechanised in `mechanisation/Yuho/Graph.lean` via
-well-founded recursion on `sizeOf`. Composed corollary
-`full_conviction_correspondence` lives in `Graph.lean`. Smoke test
-on s299 in `Tests/Smoke.lean`.
+Open follow-ups (deferred to v6):
 
-v3 shipped (2026-04-27): cross-section composition
-(Lemma 6.4', `mechanisation/Yuho/Cross.lean`) and penalty
-correspondence (Lemma 6.5, `mechanisation/Yuho/Penalty.lean`)
-fully mechanised. Cross.lean introduces `SectionRef` AST,
-`CrossSMTModel` extending `GraphSMTModel` with per-section
-conviction atoms, and proves `is_infringed_correspondence` /
-`apply_scope_correspondence` (the latter under the
-fact-coincidence hypothesis the linter discharges). Penalty.lean
-introduces a 6-constructor `Penalty` AST + `Footprint` record,
-the recursive `Penalty.admits` predicate (mutual block for the
-list combinators), and proves the four leaf-case + two
-combinator-case specialisations. Total v3 closure: ~half a
-person-day, well under the original 4–5 person-month estimate
-(the recursive-admissibility framing sidestepped the explicit
-range-arithmetic lift).
-
-v4 shipped: G8 / G14 unbounded-axis sentinels in `Penalty.lean`.
-The `Footprint` record gained `fine_unlimited` / `caning_unspecified`
-flags and the `Penalty` AST gained `fineUnlimited` / `caningUnspecified`
-constructors. Per-leaf correspondence theorems
-(`penalty_correspondence_fine_unlimited` /
-`penalty_correspondence_caning_unspecified`) kernel-check under
-the same template as the bounded leaves. Smoke tests in
-`Tests/Smoke.lean` exercise both unlimited variants on plausible
-footprints. Imprisonment intentionally retains a single
-`Nat`-bounded constructor (life imprisonment is encoded as a
-specific upper number per s54, not a sentinel).
-
-Open follow-ups (deferred to v5):
-
-- [ ] Discharge the oracle assumption by porting Yuho's Python
-      `Z3Generator` to Lean and proving its functional equivalence
-      to a verified specification.
+- [ ] **CrossSMTModel discharge.** The single
+      `excFires : String → Bool` indexed by raw exception labels
+      needs a refactor to qualified atom names (`<sX>_exc_<label>`)
+      before a constructive module-wide witness fits. Adjacent to
+      the cross-library `apply_scope` extension.
+- [ ] **`Penalty.canonicalModel`.** Analogous to v5's discharge
+      for SMTModel / GraphSMTModel. The §6.5 `PenaltySMTModel`
+      bundle remains axiomatic; a constructive witness built from
+      `Penalty.admits` would close the §6.5 oracle the same way
+      v5 closed §6.2 / §6.3 / §6.4.
 - [ ] Mechanise the linter's no-sentinel-propagation invariant as
       a `Penalty.wellFormed` predicate, tightening the satisfies
       bundle to require it.
 - [ ] Cross-library `apply_scope` (the case-law differential
       testing already restricts to in-module sections; this is a
-      v5-stretch item, not a release blocker).
+      v6-stretch item, not a release blocker).
 - [ ] Range-arithmetic operators (`Range.cumulativeJoin` /
       `Range.orBothMeet`) as an algebraic-style alternative
       surface to `Penalty.admits` for users who prefer the
       `R₁ ⊔ ⋯ ⊔ Rₖ` notation from the paper.
+- [ ] **Python-side faithfulness, structural diff.** Now that
+      `Generator.encodeStatute` exists in Lean, build a harness
+      that (a) serialises the Lean spec's biconditional list per
+      statute as JSON, (b) runs `Z3Generator._generate_statute_constraints`
+      on the same statute and emits its assertion list as JSON,
+      (c) asserts shape-match (atom names + connective tree). This
+      tightens `make verify-bulk-contrast` from a *behavioural*
+      check (Python generator agrees with operational evaluator on
+      every encoded statute) to a *structural* check (Python
+      generator emits exactly what the Lean spec says it should).
+- [ ] **Smoke-test coverage expansion.** `Tests/Smoke.lean`
+      currently exercises the v5 canonical model on s299 only.
+      Add s300 (Exceptions 1–7 priority chain), s378 (theft —
+      smaller structure), and s415 (cheating — conditional
+      penalty) to validate the canonical model across more
+      element-tree + exception-list shapes.
 
 ---
 
-## §7.6 — LLM benchmark hardening `[~]`
+## §7.6 — LLM benchmark `[x]`
 
-v0 + closed-vocab fix + GPT-4o-mini full baseline + GPT-4o cross-
-model baseline shipped (gpt-4o-mini: T1=43.9% / T2=32.7% /
-F1=0.676 / T3=94.1%; gpt-4o: T1=60.5% / T2=6.8% / F1=0.317 /
-T3=98.0% on n=205). Paper §7.6 has headline numbers + three
-findings + cross-model paragraph. Open work:
+Closed. Headline state: full 205-fixture runs across three
+OpenAI models (gpt-4o-mini, gpt-4o, o3-mini) × four prompt
+variants (baseline / polarity / polarity-soft /
+polarity-conditional). `polarity-conditional` is the only
+Pareto-improving variant on gpt-4o-mini (T1 48.8% / T2 exact
+37.1% / F1 0.699 / T3 93.7%). The polarity-negative collapse on
+gpt-4o-mini reproduces on o3-mini (despite reasoning-token spend)
+but *not* on gpt-4o — the cross-model split is itself a
+benchmark finding, presented in §7.6's cross-model paragraph.
 
-### Polarity-negative collapse (benchmark-design weakness)
-
-The full GPT-4o-mini run surfaced a real benchmark-design issue: on
-the 30 polarity-negative fixtures (scenarios where the ground-truth
-satisfied-elements set is empty), accuracy collapses:
-
-| Metric | Whole corpus (n=205) | Polarity-negative slice (n=30) |
-|---|---|---|
-| T1 (section identification) | 43.9% | 33.3% |
-| T2 (element-set F1) | 0.676 | 0.056 |
-| T3 (exception citation) | 94.1% | 70.0% |
-
-The model is systematically biased toward producing *some* satisfied
-elements rather than identifying that none fire. This is itself a
-finding worth keeping in §7.6 (it informs downstream legal-AI work
-on structural-reasoning prompts), but it also flags a benchmark-
-design weakness we should fix.
-
-**Update (post gpt-4o run):** the polarity-negative collapse does
-*not* reproduce on gpt-4o (T2 F1 0.380 on the 30 negative-polarity
-fixtures, slightly above the corpus mean 0.317). So the collapse
-is a **gpt-4o-mini-specific artefact**, not a benchmark-wide
-structural property. The benchmark itself surfaces this cross-
-model split — a useful discriminator. The polarity-priming /
-chain-of-thought work below now targets the gpt-4o-mini failure
-mode specifically, not the benchmark as a whole.
-
-**Iterative refinement history of the LLM benchmark** — useful
-context for the §7.6 paragraph and for any future benchmark-design
-audit:
-
-1. **v0 (commit `ac8570b0`)**: 22 hand-authored fixtures + open-
-   vocabulary T2 prompt asking the LLM to "list satisfied element
-   names as snake_case identifiers". Spot-check on n=5 (gpt-4o-
-   mini) yielded T2 F1 ≈ **0.07** — catastrophic.
-2. **Diagnosis**: open-vocabulary T2 was conflating two distinct
-   capacities — structural legal reasoning ("does this scenario
-   satisfy these elements?") with naming-convention recall ("can
-   you guess Yuho's private snake_case identifiers?"). The latter
-   is unrelated to legal capability and dragged down the metric.
-3. **Closed-vocabulary fix (commit `345909a0`)**: T2 prompt now
-   presents the section's encoded element names as a closed list
-   ("the encoded section's structural elements are: [a, b, c, …]")
-   and asks the model to return a subset. Predictions outside the
-   vocab are filtered.
-4. **Re-run on n=10**: T2 F1 lifted **0.07 → 0.627**.
-5. **Full n=205 run (commit `ec91405a`)**: T1=43.9% / T2=32.7%
-   exact / F1=0.676 / T3=94.1%. Paper §7.6 rewritten with the real
-   numbers + three observations.
-6. **Polarity-negative finding (gpt-4o-mini)**: the model
-   collapses on negative-polarity fixtures (T2 F1 0.056).
-7. **Cross-model run (gpt-4o, commit `2048c677`)**: the collapse
-   does *not* reproduce on gpt-4o (T2 F1 0.380 on the same slice).
-   Reframed: the failure mode is model-specific, not benchmark-
-   wide. Polarity-priming work targets the gpt-4o-mini regime
-   specifically.
-8. **Polarity-variant prompts (commits `6b4210bc` /
-   `f8712594` / `7f42a11d` / `1392b418`)**: shipped polarity
-   priming + optional `# ruled out:` CoT preamble + `none` T1
-   option as `--prompt-variant polarity`. Paired n=205 gpt-4o-
-   mini run vs baseline: substantial lift on the n=30 polarity-
-   negative slice (T1 33.3% → 60.0%, T2 F1 0.052 → 0.267) but a
-   regression on the positive-case corpus (T2 F1 0.678 → 0.420).
-   Not a Pareto improvement.
-9. **Polarity-soft variant (commits `fc0d90b7` / `1472d1cd`)**:
-   dropped the `# ruled out:` CoT invitation, kept priming +
-   `none`. Near-Pareto on gpt-4o-mini: captures essentially the
-   full negative-slice gain (T1 33.3% → 56.7%, T2 F1 0.052 →
-   0.267) at minimal positive-corpus cost (T2 F1 0.678 → 0.625,
-   $-0.053$; T2 exact 32.2% → 33.7%, $+1.5$pp; T3 93.2% → 94.1%,
-   $+0.9$pp). The polarity-variant regression came from the CoT
-   path encouraging over-exclusion, not from the priming itself.
-   §7.6 now a 3-way table.
-
-v4 shipped: **conditional polarity prompting** as
-`--prompt-variant polarity-conditional`. A cheap regex pre-
-classifier on scenario null-cues routes each fixture between
-the baseline and polarity-soft prompts. Headline n=205 numbers
-on gpt-4o-mini: T1 48.8% / T2 exact 37.1% / F1 0.699 / T3 93.7%
-— the only **Pareto-improving variant** in the §7.6 paired-
-comparison table. Macros wired through `main.tex` /
-`main_smoke.tex` as `\statBenchmarkLlmCond*`.
-
-### Additional model baselines (OpenAI only)
-
-GPT-4o-mini, GPT-4o, and o3-mini full-corpus baselines all
-shipped. o3-mini headline (commit `3e1e09a7`): T1 42.4% / T2
-exact 31.2% / F1 0.676 / T3 84.4%, polarity-negative T2 F1
-0.052. Headline finding: the polarity-negative collapse
-reproduces on o3-mini despite reasoning-token spend — the
-failure mode is not addressed by hidden CoT, only by the
-prompt-level conditional intervention above.
+Iteration history (v0 closed-vocab fix → cross-model runs →
+polarity variants → conditional routing) lives in git log
+(commits `ac8570b0..bbdef134`); paper §7.6 carries the
+publishable summary. No open work.
 
 ---
 
@@ -266,100 +177,18 @@ fixture-tested. Open work:
 
 ---
 
-## Direction B — General-defence `defeats` edges (full coverage) `[~]`
+## Direction B — General-defence `defeats` edges `[x]`
 
-v3.4 ships **1253 edges across 147 sections** (28% of the 524-section
-corpus) using **22 distinct Chapter IV standalone general defences** —
-near-exhaustive on the Chapter IV affirmative-defence catalogue. The
-only Chapter IV sections deliberately excluded from the defeats-edge
-graph are: s79A (mistake-of-law-not-a-defence — exclusionary, not
-affirmative), s90 (consent-vitiation rule — defines when consent in
-s87/s88/s89 is invalid, not a standalone defence), and ss98/s101/s104
-(validity-condition / timing qualifiers — see audit commits
-`4f0ba0c9` / `f6042c99` / `f1155a9d`).
-The doctrinal-fidelity audit (commits `4f0ba0c9` / `f6042c99` /
-`f1155a9d`) removed 75 misclassified edges:
-
-- **s98** (32 edges) — proportionality + public-authority-recourse
-  validity conditions on the s96/s97/s100/s103/s106 family, not a
-  standalone defence
-- **s101** (20 edges) — temporal commencement + continuance qualifier
-  on the body-defence right, not a standalone defence
-- **s104** (23 edges) — temporal commencement + continuance qualifier
-  on the property-defence right, not a standalone defence
-
-Per-defence breakdown (22 distinct defences, ranked by section count):
-
-| Defence | Sections covered |
-|---|---|
-| s79 (mistake of fact) | 146 |
-| s76 (bound or justified by law) | 143 |
-| s82 (child below 10, doli incapax) | 143 |
-| s83 (child 10-12 without sufficient maturity) | 143 |
-| s84 (unsoundness of mind) | 143 |
-| s94 (duress / compulsion by threats) | 135 |
-| s78 (act pursuant to court order) | 67 |
-| s97 (private defence of body OR property) | 57 |
-| s80 (accident in lawful act) | 52 |
-| s96 (private defence — operative gateway) | 31 |
-| s85 (intoxication when a defence) | 29 |
-| s86 (effect of intoxication when established) | 29 |
-| s88 (consent for benefit, medical-shaped) | 22 |
-| s87 (consent-bounded harm) | 20 |
-| s89 (good faith for child or unsound) | 20 |
-| s92 (good faith without consent, emergency) | 20 |
-| s100 (deadly-assault body defence) | 12 |
-| s106 (deadly defence with risk to innocent) | 12 |
-| s81 (greater-harm avoidance / necessity) | 11 |
-| s103 (deadly property defence) | 7 |
-| s95 (act causing slight harm / de minimis) | 6 |
-| s77 (judge acting judicially) | 5 |
-
-Cluster-level coverage:
-
-- **Homicide** (10 sections, s299-s308): s79, s80, s84, s96, s100
-- **Hurt** (20 sections, s319-s338): s79, s80, s84, s96
-- **Property** (23 sections, s378-s420): s79, s80 (v0 only on s378), s84
-- **Sexual offences + outrage of modesty** (22 sections,
-  s354-s377BL): s79, s84
-- **Kidnapping / abduction / slavery** (17 sections, s359-s374): s79, s84
-- **Mischief + house-breaking + criminal trespass** (20 sections,
-  s425-s462): s79, s80, s84
-- **Forgery + intimidation / public-order** (12 sections, s463-s506):
-  s79, s84
-- **Abetment + defamation + attempt** (21 sections, s107-s120,
-  s499-s502, s511): s79, s84
-
-Edges deployed via the idempotent
-`scripts/add_general_defence_edges.py` helper; reverse remover
-at `scripts/remove_general_defence_edges.py`. Commit history
-`90c3c8ef..d0a9c971` walks the original cluster batches; commits
-`4f0ba0c9..f1155a9d` walk the doctrinal-fidelity audit.
-
-Defeats-edge structural-coverage benchmark
-(`evals/case_law/score_defeats_coverage.py`, commit `f1cb7cac`)
-reported an initial 387/610 (63.4%) SAT under
-`yuho narrow-defence`. The 36.6% UNSAT slice was an encoding gap:
-ss95-s106 had been encoded during Phase D as pure-definition
-statutes with no `elements {}` block. Subsequent encoding (commit
-`4ea3b97e`) added structurally-faithful elements{} blocks for all
-eight sections, lifting the sweep to 560/610 = 91.8% SAT.
-
-The doctrinal-fidelity audit then surfaced that s98 (validity
-conditions), s101 (body-defence timing), and s104 (property-
-defence timing) had been bulk-inserted as if standalone defences
-when they are in fact prerequisites that constrain the
-s96/s97/s100/s103/s106 family. Removing those 75 edges reframes
-the graph: the post-audit corpus carries 535 edges across the
-same 147 sections, and the SAT rate stays at 491/535 = 91.8%
-(unchanged in the aggregate, but every remaining edge is
-doctrinally a standalone defence).
-
-Future work: fold s98 / s101 / s104 conditions into the elements
-of s96 / s97 / s100 / s103 / s106 (or via cross-section
-predicates), so the validity-condition + timing constraints
-participate in `narrow-defence` queries through the
-private-defence sections rather than as freestanding edges.
+Closed. 1253 edges across 147 sections (28% of corpus) using 22
+distinct Chapter IV standalone general defences. Doctrinal-
+fidelity audit (commits `4f0ba0c9..f1155a9d`) removed 75
+misclassified edges; ss98/s101/s104 conditions subsequently
+folded into ss96/s97/s100/s103/s106 elements (commit `e982ccd7`).
+Defeats-edge structural-coverage sweep at 91.1% SAT under
+`yuho narrow-defence`. Per-defence breakdown + cluster coverage
+table preserved in paper §7.5 + git log (commits
+`90c3c8ef..d0a9c971` for cluster batches,
+`4f0ba0c9..f1155a9d` for the audit). No open work.
 
 ---
 
@@ -374,11 +203,53 @@ hardening:
       citation, or a paragraph buries the lede. Add detail where
       missing (especially in evaluation §5 and limitations §11)
       but stay tight — no padding. (User action.)
+- [ ] **§6.6 / §11 staleness audit.** A v4-shipped item (G8/G14
+      sentinels) was still listed as "out of scope" in §6.6 prose
+      until 2026-04-28; the v5 sweep caught it but did not
+      audit the rest of §6 / §11 / §7 for similar drift. Read
+      every "remaining gap" / "future work" / "out of scope"
+      sentence and confirm it's still accurate. (User action;
+      the same sweep doubles as the manual read-through above.)
+- [ ] **§6.6 prose tightening.** The v5 "Trust base" paragraph
+      I shipped is long. Defense audit: read it cold and check
+      it leads with the discharge claim, not the historical
+      framing. Could tighten by 15–25%.
+- [ ] **Dangling-ref sweep.** One `subsec:case_law` typo (missing
+      `_diff` suffix) was caught and fixed in this session;
+      others may exist. Run
+      `grep -rn '\\\\ref{[^}]*}' paper/sections/` and confirm
+      every label resolves against `\label{…}` declarations.
 - [ ] **Blog-post transpilation.** Hand the rendered paper to
       Claude with a transpilation prompt; output to
       `paper/blog/yuho.md`.
 - [ ] **External-reader pass on the full PDF.** Catches drift
       both author and AI miss.
+
+---
+
+## Defense-readiness `[~]`
+
+Items the panel will likely press on; consolidates user-action
+work surfaced during the §6.6 v5 sweep on 2026-04-28.
+
+- [ ] **Defense FAQ / Q-and-A drill sheet.** Pull every caveat
+      in §11 + every TODO entry, write the sharpest panel
+      question against each, and a tight answer (referencing
+      file paths + theorem names). Concrete coverage: residual
+      oracle scope (CrossSMTModel + Python-side faithfulness),
+      L3 author-stamping, polarity-negative collapse, IPC scope
+      omission, inter-rater reliability gap, why Lean over Coq,
+      what `make verify-bulk-contrast` actually checks.
+- [ ] **Run `make paper-reproduce` end-to-end before defense.**
+      Confirms today's repo still reproduces every empirical
+      claim. Not done in this session; quick to re-run on
+      defense day.
+- [ ] **Inter-rater reliability for §7.8.** See §7.8 above —
+      tracked there, surfaced here as a panel-leverage item.
+      User action.
+- [ ] **Mermaid `--shape verbose` audit.** See *Mermaid
+      flowchart richness* below — flagged for HUMAN AUDIT, not
+      removed from TODO. User action.
 
 ---
 
@@ -398,11 +269,10 @@ remains:
 
 | Risk | Mitigation |
 |---|---|
-| §6.3 mechanisation overruns | §6.6 partial mechanisation already shipped; remaining lemmas demote to "future work" pointer in §11 if v2 doesn't land |
 | External counsel access not available | L3 stays author-stamped; §11 carries the explicit caveat that external review is not part of this paper's claim |
 | IPC text access blocked (paywall, robots.txt change) | Switch to the Bangladeshi PC 1860 (also Anglo-Indian lineage, public-domain text) |
 | AI&L editorial rejection | Re-target *Formal Aspects of Computing* (legal-tech amenable) or ICAIL (page budget tighter but acceptable) |
-| LLM-benchmark polarity-negative gap remains unfixed | gpt-4o run shows the gap is model-specific (gpt-4o-mini only); §7.6 cross-model paragraph already frames this as a positive discriminator the benchmark surfaces, not a corpus-wide weakness |
+| Panellist presses on residual oracle scope | §6.6 + §11 v5 prose already frames the discharge: conviction-layer oracle gone, residual narrowed to (i) CrossSMTModel raw-label refactor (v6) and (ii) Python-side faithfulness, with `make verify-bulk-contrast` as the differential check today |
 
 ---
 
@@ -475,20 +345,6 @@ What v1 does:
       cover the default `statute` shape only.
 
 Once the audit is complete, this section can be removed.
-
-Original sub-tasks (preserved for cross-reference):
-
-- [x] Surface every binary decision point as a labelled diamond
-      with explicit `yes` / `no` edges (verbose shape).
-- [x] Render exception precedence as a chain of guards
-      (verbose shape, source-order; priority-aware sort
-      deferred to a v2).
-- [x] Show penalty selection branches when multi-penalty (G12)
-      is in play (verbose shape, conditional `when`-clause
-      diamonds).
-- [x] Carry over the schema-shape style; opt-in via
-      `--shape verbose` (CLI flag threaded through main.py
-      and commands/transpile.py).
 
 ### Test-suite backlog `[ ]`
 

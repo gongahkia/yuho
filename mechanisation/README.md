@@ -27,7 +27,13 @@ mechanisation/
 │   ├── Facts.lean       (fact-pattern abstraction)
 │   ├── Eval.lean        (operational evaluator: §4.2 + §4.3 rules)
 │   ├── SMTAbs.lean      (abstract SMT-model + biconditional spec)
-│   └── Soundness.lean   (Lemmas 6.2, 6.4 + partial 6.1 composition)
+│   ├── Soundness.lean   (Lemmas 6.2, 6.4 + partial 6.1 composition)
+│   ├── Graph.lean       (Lemma 6.3 element-graph correspondence, v2)
+│   ├── Cross.lean       (Lemma 6.4' cross-section composition, v3)
+│   ├── Penalty.lean     (Lemma 6.5 penalty correspondence + G8/G14, v4)
+│   └── Generator.lean   (verified Z3-generator spec + canonical
+│                         models — discharges the conviction-layer
+│                         oracle assumption, v5)
 └── Tests/
     └── Smoke.lean       (executable examples on s299-shaped fixtures)
 ```
@@ -37,57 +43,56 @@ mechanisation/
 ```sh
 cd mechanisation
 elan default leanprover/lean4:v4.10.0   # one-time, if not pinned
-lake build         # typechecks the Yuho lib (5 modules + theorems)
+lake build         # typechecks the Yuho lib (9 modules + theorems)
 lake build Tests   # typechecks the smoke tests with native_decide
 ```
 
-**Verified status as of 2026-04-27:** both `lake build` and
+**Verified status as of 2026-04-28:** both `lake build` and
 `lake build Tests` pass under Lean 4.10.0 with no `sorry`s and no
-linter warnings. The proof bodies are either `rfl` (definitional
-equality after unfolding) or projection from the
-`SMTModel.satisfies` triple — no proof obligations are deferred
-in the kernel-checked layer.
+linter warnings.
 
 ## What's mechanised, with file pointers
 
 | Paper claim | File | Theorem name | Proof technique |
 |---|---|---|---|
 | Lemma 6.2 element correspondence | `Yuho/Soundness.lean` | `element_correspondence` | `rfl` after unfolding `Element.eval` and `SMTModel.facts` |
+| Lemma 6.3 element-graph correspondence | `Yuho/Graph.lean` | `element_graph_correspondence` | Well-founded recursion on `sizeOf g` + list-folding sub-lemmas |
 | Lemma 6.4 exception correspondence | `Yuho/Soundness.lean` | `exception_correspondence` | Projection from the `SMTModel.satisfies` triple |
-| Partial 6.1 (composition of 6.2 + 6.4) | `Yuho/Soundness.lean` | `partial_conviction_correspondence` | Pair construction: rfl + Lemma 6.4 |
-
-## What's not mechanised (and why)
-
-* **Lemma 6.3 element-graph correspondence.** Requires structural
-  induction on `ElementGroup` with the AllOf/AnyOf list-folding
-  correspondence. The Catala bisimulation lemma at
-  `theories/catala/simulation_sred_to_cred.v` is the structural
-  template; ~600 lines of proof there. Out of scope for the v1
-  paper.
-* **Lemma 6.5 penalty correspondence.** Requires modelling the
-  range-arithmetic abstraction (`⊔` / `⊓` over interval pairs) in
-  Lean and showing the Z3 integer-bound encoding agrees on the
-  membership test. No Catala analogue. Out of scope for v1.
-* **Cross-section composition (Theorem 6.1's apply\_scope /
-  is\_infringed clause).** Requires a `WellFoundedRelation`
-  argument over the inter-section reference graph. Catala didn't
-  mechanise scope-calls either; out of scope for v1.
+| Lemma 6.4' cross-section composition | `Yuho/Cross.lean` | `cross_section_correspondence` + `is_infringed_correspondence` + `apply_scope_correspondence` | Field projection + `find?`-monotonicity |
+| Lemma 6.5 penalty correspondence (incl. G8/G14) | `Yuho/Penalty.lean` | `penalty_correspondence` | Structural induction on `Penalty` with leaf + combinator cases |
+| Conviction-layer oracle discharge (v5) | `Yuho/Generator.lean` | `canonical_smt_satisfies` + `canonical_graph_satisfies` | Direct construction; both `rfl`-style after unfold + finite induction on element-list |
+| Unconditional Lemma 6.2 / 6.3 / 6.4 (no oracle) | `Yuho/Generator.lean` | `element_correspondence_unconditional` etc. | Application of canonical-satisfies to the original lemmas |
 
 ## Trusted base
 
-Per Catala's `CLAIMS.md` template: this artefact is *not yet
-axiom-free*. The trusted base consists of:
+This artefact is **not** axiom-free. The trusted base consists of:
 
-1. **Lean 4.10's kernel** (the standard.toolchain pin).
+1. **Lean 4.10's kernel** (the `lean-toolchain` pin).
 2. **No additional axioms** beyond what Lean's stdlib uses
-   (Choice, propositional extensionality, etc.).
-3. **The `SMTModel.satisfies` predicate** is an axiomatic
-   specification of what the Z3 generator emits; we trust the
-   wider toolchain's `Z3Generator` (in
-   `src/yuho/verify/z3_solver.py`) to actually emit those
-   biconditionals. This is the analogue of Catala's "trust in
-   the OCaml/Python codegen" oracle assumption — see §6.6 of
-   the paper for the explicit framing.
+   (Choice, propositional extensionality, quotient types).
+3. **Residual oracle scope (post-v5):**
+   - The cross-section `CrossSMTModel.satisfies` bundle. Its
+     single `excFires : String → Bool` is indexed by raw exception
+     labels; a constructive module-wide witness needs a v6
+     refactor to qualified atom names (`<sX>_exc_<label>`)
+     mirroring what `Z3Generator` actually emits.
+   - The claim that the Python `Z3Generator`
+     (`src/yuho/verify/z3_solver.py`) emits exactly the
+     biconditional shape `Generator.encodeStatute` specifies.
+     This is now **narrower** than the prior oracle assumption:
+     the Lean spec is the verified target, and
+     `make verify-bulk-contrast` exercises the Python generator
+     against the operational evaluator on every encoded statute
+     as a differential check. Tightening this to a structural
+     diff against the Lean spec is the residual gap.
+
+What v5 changed: the prior trust assumption — "*some* SMTModel
+satisfies the bicond bundle" — has been **discharged** for the
+conviction layer. `Yuho/Generator.lean` exhibits constructive
+`canonicalSMTModel` and `canonicalGraphModel`, proves they
+satisfy the bundle on every fact pattern, and exports the
+unconditional forms of Lemmas 6.2 / 6.3 / 6.4 as application
+corollaries.
 
 There are **no `sorry`s** in `Yuho/`; the only `True`-bodied
 `firedSet_prefix_subset` lemma is named for `Soundness.lean`'s

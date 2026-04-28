@@ -507,37 +507,70 @@ single \texttt{Bool}-valued predicate. Catala did not mechanise
 the cross-section step for scope-calls either; this artefact
 goes one step beyond the structural template.
 
-\paragraph{What is held out of scope.} Two items remain genuine
-gaps rather than mechanised work:
+\paragraph{What is held out of scope.} One item remains a genuine
+gap rather than mechanised work:
 
 \begin{itemize}
-  \item The G8 (\texttt{fine := unlimited}) and G14
-    (\texttt{caning := unspecified}) sentinels are not yet
-    modelled in \texttt{Yuho/Penalty.lean}: the \texttt{Footprint}
-    record uses \texttt{Nat} on the upper bound, where an
-    \texttt{Option Nat} would be needed to model the unbounded
-    case. Estimate to close: $\sim$half a person-day plus a
-    smoke test on s299/s300.
   \item The cross-library case for \texttt{apply\_scope} (when
     the referenced section is not in the module under
     translation) is held out of scope, mirroring the case-law
-    differential testing's same-module restriction.
+    differential testing's same-module restriction. The G8
+    (\texttt{fine := unlimited}) and G14 (\texttt{caning :=
+    unspecified}) sentinels were closed in v4 (commit
+    \texttt{e7138d1e}): \texttt{Footprint} gained
+    \texttt{fine\_unlimited} / \texttt{caning\_unspecified} flags
+    and \texttt{Penalty} gained the matching \texttt{fineUnlimited}
+    / \texttt{caningUnspecified} constructors, with per-leaf
+    correspondence theorems kernel-checking under the same
+    template as the bounded leaves.
 \end{itemize}
 
-\paragraph{Trust base.} The artefact relies on Lean~4's kernel
-plus the standard library's axioms (propositional extensionality,
-quotient types, Choice). The \texttt{SMTModel.satisfies}
-predicate is an \emph{oracle assumption}: it specifies
-the biconditionals the Z3 generator (in
-\texttt{src/yuho/verify/z3\_solver.py}) is required to emit, and
-the mechanisation trusts the Python generator to actually emit
-them. This mirrors Catala's analogous oracle assumption that
-their OCaml/Python codegen is faithful to the mechanised default
-calculus --- the trust base is shifted to the encoder, not
-eliminated. A future v2 could discharge this assumption by
-porting Yuho's encoder into Lean and proving its functional
-equivalence to a verified specification; we treat that as a
-follow-on artefact, not a v1 deliverable.
+\paragraph{Trust base (v5).} The artefact relies on Lean~4's
+kernel plus the standard library's axioms (propositional
+extensionality, quotient types, Choice). Earlier versions of this
+mechanisation (v1--v4) carried an \emph{oracle assumption} that
+the abstract \texttt{SMTModel.satisfies} bundle was satisfiable:
+the lemmas held \emph{for any} model meeting the bicond
+specification, and the existence of such a model was assumed.
+The v5 layer in \texttt{Yuho/Generator.lean} discharges this
+assumption for the conviction-layer lemmas
+(\ref{lem:soundness-elem} / \ref{lem:soundness-graph} /
+\ref{lem:soundness-exc}). It exhibits a constructive
+\texttt{canonicalSMTModel} and \texttt{canonicalGraphModel} ---
+defined directly from the operational evaluator's outputs --- and
+proves \texttt{canonical\_smt\_satisfies} and
+\texttt{canonical\_graph\_satisfies} unconditionally, both
+kernel-checked. The corresponding \emph{unconditional} forms of
+the soundness lemmas (\texttt{element\_correspondence\_uncon\-di\-tio\-nal},
+\texttt{element\_graph\_correspondence\_unconditional},
+\texttt{exception\_correspondence\_unconditional}) hold against
+the constructed model and are exported from
+\texttt{Yuho/Generator.lean} for downstream citation.
+
+The same file additionally ships a verified specification of the
+generator's emit shape (\texttt{Generator.encodeStatute}, a list
+of symbolic biconditionals over an \texttt{SMTFormula} AST)
+mirroring \texttt{src/yuho/verify/z3\_solver.py} line-for-line on
+atom names (\texttt{<sX>\_<elem>\_satisfied} /
+\texttt{<sX>\_elements\_satisfied} /
+\texttt{<sX>\_exc\_<label>\_fires} /
+\texttt{<sX>\_conviction}). What v5 \emph{does not} discharge:
+(i) the residual claim that the Python \texttt{Z3Generator}
+implementation matches this Lean specification --- now narrower
+and round-trip-testable rather than load-bearing on the soundness
+theorem, with the existing
+\texttt{make verify-bulk-contrast} sweep
+(\S\ref{subsec:scenario_synthesis})
+exercising the Python generator against the operational evaluator
+on every encoded statute as the differential check; and (ii) the
+module-level \texttt{CrossSMTModel.satisfies} bundle, whose
+single \texttt{excFires : String $\to$ Bool} indexed by raw
+exception labels is too coarse a witness target until the
+abstraction is refactored to qualified atom names (a v6 item
+adjacent to the cross-library \texttt{apply\_scope} extension).
+The trust base is therefore narrower than v4: the oracle
+assumption survives only at the cross-section bundle, not at the
+single-statute conviction layer.
 
 \paragraph{Why Lean 4 over Coq.}
 Catala's mechanisation

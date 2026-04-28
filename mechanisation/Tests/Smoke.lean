@@ -18,6 +18,7 @@ import Yuho.SMTAbs
 import Yuho.Soundness
 import Yuho.Graph
 import Yuho.Penalty
+import Yuho.Generator
 
 namespace Yuho.Tests
 
@@ -154,6 +155,53 @@ example :
       { caning_lo := 6, caning_hi := 0,
         caning_unspecified := true : Footprint }
       = true := by
+  native_decide
+
+/-! ## §6.6-v5 smoke tests — exercising `Generator.lean`'s
+canonical-model discharge of the oracle assumption. -/
+
+/-- The verified generator's canonical SMTModel for s299 satisfies
+the bicond bundle on every fact pattern. The conditional Lemmas
+6.2 and 6.4 specialise to unconditional statements via this
+witness. -/
+example : (Generator.canonicalSMTModel s299 factsHomicide).satisfies s299 :=
+  canonical_smt_satisfies s299 factsHomicide
+
+/-- The verified generator's canonical GraphSMTModel for s299
+satisfies the bicond bundle on every fact pattern. Discharges
+Lemma 6.3's oracle premise on this fixture. -/
+example : (Generator.canonicalGraphModel s299 factsHomicide).satisfies s299 :=
+  canonical_graph_satisfies s299 factsHomicide
+
+/-- Unconditional Lemma 6.2 specialised to s299: no oracle. -/
+example :
+    (Generator.canonicalSMTModel s299 factsHomicide).facts "death"
+      = (Element.mk .actusReus "death" "").eval
+        (Generator.canonicalSMTModel s299 factsHomicide).facts :=
+  element_correspondence_unconditional s299
+    { kind := .actusReus, name := "death", description := "" }
+    factsHomicide
+
+/-- Unconditional Lemma 6.3 specialised to s299: no oracle. -/
+example :
+    (Generator.canonicalGraphModel s299 factsHomicide).groupTruth s299.elements
+      = s299.elements.eval (Generator.canonicalGraphModel s299 factsHomicide).facts :=
+  element_graph_correspondence_unconditional s299 s299.elements factsHomicide
+
+/-- Unconditional Lemma 6.4 specialised to the consent exception
+on s299WithConsent: no oracle. -/
+example :
+    (Generator.canonicalSMTModel s299WithConsent factsHomicideWithConsent).excFires "consent"
+      = decide ("consent" ∈ Exception.firedSet
+          s299WithConsent.exceptions
+          (Generator.canonicalSMTModel s299WithConsent factsHomicideWithConsent).facts) :=
+  exception_correspondence_unconditional
+    s299WithConsent "consent" factsHomicideWithConsent
+
+/-- The verified spec emits exactly two leaf biconditionals for
+s299's two-element conjunction (`death`, `intent`). -/
+example :
+    (Generator.encodeLeafBiconds s299 s299.elements).length = 2 := by
   native_decide
 
 end Yuho.Tests

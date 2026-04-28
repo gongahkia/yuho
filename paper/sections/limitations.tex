@@ -141,20 +141,33 @@ of Theorem~\ref{thm:z3-sound}:
 \ref{lem:soundness-penalty} (penalty correspondence) in
 \texttt{Yuho/Penalty.lean} (v3, 2026-04-27);
 plus the composed \texttt{full\_conviction\_correspondence}
-corollary in \texttt{Yuho/Graph.lean}. Two narrow gaps remain
-within the mechanisation itself: the G8 / G14 unbounded-axis
-sentinels in \texttt{Penalty.lean} (estimate: $\sim$half a
-person-day) and the cross-library case for
-\texttt{apply\_scope} in \texttt{Cross.lean} (held out of scope
-because the case-law differential testing of
-\S\ref{subsec:case_law_diff} stays within same-module fact
-patterns).
-The mechanisation also relies on an oracle assumption that the
-Z3 generator faithfully emits the biconditionals
-\texttt{SMTModel.satisfies} requires --- the analogue of Catala's
-``trust the OCaml/Python codegen'' assumption ---
-which a future v2 could discharge by porting the encoder into
-Lean.
+corollary in \texttt{Yuho/Graph.lean}. The G8 / G14 unbounded-axis
+sentinels in \texttt{Penalty.lean} were closed in v4
+(\texttt{fineUnlimited} / \texttt{caningUnspecified} constructors
+plus \texttt{Footprint} flag fields, kernel-checked); the
+cross-library case for \texttt{apply\_scope} in
+\texttt{Cross.lean} remains held out of scope because the
+case-law differential testing of \S\ref{subsec:case_law_diff}
+stays within same-module fact patterns.
+The v5 layer in \texttt{Yuho/Generator.lean} (2026-04-28)
+discharges the conviction-layer oracle assumption: the lemmas
+\ref{lem:soundness-elem} / \ref{lem:soundness-graph} /
+\ref{lem:soundness-exc} now hold against a constructive
+\texttt{canonicalSMTModel} / \texttt{canonicalGraphModel} (built
+directly from the operational evaluator's outputs) rather than
+an axiomatic existential. The unconditional forms
+(\texttt{element\_correspondence\_unconditional}, etc.) are
+exported from \texttt{Yuho/Generator.lean}. Residual oracle
+scope: (i) the cross-section
+\texttt{CrossSMTModel.satisfies} bundle (its single
+\texttt{excFires} indexed by raw labels needs a v6 refactor to
+qualified atom names before a constructive witness fits); and
+(ii) the claim that the Python \texttt{Z3Generator}
+implementation matches the Lean specification's emit shape ---
+narrower and round-trip-testable now that the spec exists, with
+\texttt{make verify-bulk-contrast} (\S\ref{subsec:scenario_synthesis})
+serving as the differential check against the operational
+evaluator on every encoded statute.
 
 \paragraph{No formal grammar-completeness theorem.} We claim that
 Yuho can express every Penal Code section at L1+L2 fidelity,
