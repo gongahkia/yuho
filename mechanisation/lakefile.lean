@@ -18,3 +18,9 @@ lean_lib «Yuho» where
 
 lean_lib «Tests» where
   globs := #[.submodules `Tests]
+
+-- §6.6 Python-side faithfulness — emits Generator.encodeStatute
+-- as JSON for the smoke fixtures. Driven by
+-- scripts/verify_structural_diff.py from the repo root.
+lean_exe «export_spec» where
+  root := `scripts.ExportSpec
