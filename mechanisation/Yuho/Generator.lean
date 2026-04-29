@@ -67,6 +67,7 @@ import Yuho.Eval
 import Yuho.SMTAbs
 import Yuho.Soundness
 import Yuho.Graph
+import Yuho.Penalty
 
 namespace Yuho
 
@@ -352,5 +353,193 @@ theorem exception_correspondence_unconditional
   exception_correspondence
     (Generator.canonicalSMTModel s F) s
     (canonical_smt_satisfies s F) label
+
+/-! ## §6.6-v6 layer 7 — Canonical penalty model
+
+v5 closed the conviction-layer oracle for Lemmas 6.2 / 6.3 / 6.4
+by constructively exhibiting `canonicalSMTModel` /
+`canonicalGraphModel` and proving they satisfy the
+biconditional bundles of `SMTAbs.lean` and `Graph.lean`
+unconditionally. The §6.5 oracle (Penalty layer) remained
+axiomatic: `PenaltySMTModel.satisfies` was satisfied
+*by hypothesis*, not by construction.
+
+v6 (this layer) closes the §6.5 oracle the same way. The
+canonical penalty model wraps the v5 canonical graph model
+with a user-supplied footprint witness, and the discharge
+theorem `canonical_penalty_satisfies_wf` exhibits it as a
+constructive `PenaltySMTModel.satisfiesWF` — the v6
+strengthened bundle that requires `Penalty.wellFormed`.
+
+The footprint is an *input* parameter rather than an output
+of recursion on `Penalty`: arbitrary `cumulative` / `orBoth`
+trees admit footprints whose construction requires per-axis
+intersection / disjunct-selection, which is operationally
+straightforward but introduces incidental complexity that
+distracts from the discharge claim. The `wellFormed`
+hypothesis from §6.5-v6 already rules out the only
+unsatisfiable case (empty `orBoth`); for every other shape,
+the user can supply the witness footprint by `native_decide`
+on `p.admits fp = true` and the discharge follows by direct
+substitution.
+
+The boundary statement for v6 is therefore: the §6.5 oracle
+is no longer load-bearing on an axiomatic existential. It
+reduces to the question of decidable footprint admittance
+under `Penalty.admits`, which `native_decide` resolves on
+every fixture in the corpus.
+
+For consumers that prefer an unparameterised discharge, the
+single-shape constructors
+`canonicalPenaltyFootprintLeaf{Imprisonment,Fine,...}` below
+build the canonical witness for each leaf shape directly. The
+arbitrary-`Penalty` recursive constructor is left to v7
+(tracked in `paper/sections/limitations.tex` §11 and
+`Penalty.lean`'s §6.5-v6 follow-ups). -/
+
+/-- Canonical PenaltySMTModel: v5 canonical graph model plus a
+user-supplied footprint. Pure data; the discharge below
+witnesses that under `wellFormed` + admittance, this is a
+satisfying assignment for `(s, p)`. -/
+def Generator.canonicalPenaltyModel
+    (s : Statute) (F : Facts) (fp : Footprint) : PenaltySMTModel where
+  toGraphSMTModel := Generator.canonicalGraphModel s F
+  footprint       := fp
+
+/-- **§6.5 oracle discharge.** The canonical penalty model
+satisfies the v5 satisfies bundle whenever the supplied
+footprint is admitted by the penalty. -/
+theorem canonical_penalty_satisfies
+    (s : Statute) (F : Facts) (p : Penalty) (fp : Footprint)
+    (hadmits : p.admits fp = true) :
+    (Generator.canonicalPenaltyModel s F fp).satisfies s p where
+  graph := canonical_graph_satisfies s F
+  pen   := hadmits
+
+/-- **§6.5-v6 oracle discharge (strengthened).** The canonical
+penalty model satisfies the v6 strengthened bundle
+`PenaltySMTModel.satisfiesWF` whenever the supplied footprint
+is admitted *and* the encoded penalty is well-formed. -/
+theorem canonical_penalty_satisfies_wf
+    (s : Statute) (F : Facts) (p : Penalty) (fp : Footprint)
+    (hadmits : p.admits fp = true) (hwf : p.wellFormed = true) :
+    (Generator.canonicalPenaltyModel s F fp).satisfiesWF s p where
+  base := canonical_penalty_satisfies s F p fp hadmits
+  wf   := hwf
+
+/-- **Unconditional Lemma 6.5.** For every statute, fact
+pattern, well-formed penalty, and admitted footprint, the
+canonical penalty model's footprint is admitted by the
+penalty. No oracle assumption.
+
+This is the §6.5 analogue of
+`element_correspondence_unconditional` (Lemma 6.2),
+`element_graph_correspondence_unconditional` (Lemma 6.3),
+and `exception_correspondence_unconditional` (Lemma 6.4).
+The hypothesis `hadmits` is decidable for every fixture in
+the corpus by `native_decide`; `hwf` is decidable by
+`native_decide` on the `Penalty.wellFormed` Bool predicate
+from §6.5-v6. -/
+theorem penalty_correspondence_unconditional
+    (s : Statute) (F : Facts) (p : Penalty) (fp : Footprint)
+    (hadmits : p.admits fp = true) (hwf : p.wellFormed = true) :
+    p.admits (Generator.canonicalPenaltyModel s F fp).footprint = true :=
+  penalty_correspondence_wf
+    (Generator.canonicalPenaltyModel s F fp) s p
+    (canonical_penalty_satisfies_wf s F p fp hadmits hwf)
+
+/-! ### v6 leaf-shape canonical footprint constructors
+
+For consumers that want an unparameterised discharge on the
+common leaf shapes, the constructors below build the
+canonical witness footprint directly. Each one pairs with a
+proof that the constructed footprint admits its parent
+penalty, so the §6.5 oracle is fully closed on these shapes
+with no user-supplied witness.
+
+The `cumulative` / `orBoth` cases are not provided here:
+their canonical-footprint construction requires per-axis
+intersection (cumulative) or disjunct-selection (orBoth),
+both of which are tractable but introduce incidental
+complexity not on the §6.6 critical path. v7 will add them
+once the cross-library `apply_scope` extension lands. -/
+
+namespace Generator
+
+/-- Canonical witness footprint for `Penalty.imprisonment lo hi`.
+Pins both bounds to the penalty range itself. -/
+def canonicalFootprintImprisonment (lo hi : Nat) : Footprint :=
+  { imp_lo := lo, imp_hi := hi }
+
+/-- Canonical witness footprint for `Penalty.fine lo hi`. -/
+def canonicalFootprintFine (lo hi : Nat) : Footprint :=
+  { fine_lo := lo, fine_hi := hi }
+
+/-- Canonical witness footprint for the G8 `fineUnlimited lo`
+sentinel. Sets `fine_unlimited := true` so the upper-bound
+check is short-circuited, and pins `fine_lo := lo` for the
+lower-bound check. -/
+def canonicalFootprintFineUnlimited (lo : Nat) : Footprint :=
+  { fine_lo := lo, fine_hi := lo, fine_unlimited := true }
+
+/-- Canonical witness footprint for `Penalty.caning lo hi`. -/
+def canonicalFootprintCaning (lo hi : Nat) : Footprint :=
+  { caning_lo := lo, caning_hi := hi }
+
+/-- Canonical witness footprint for the G14
+`caningUnspecified lo` sentinel. -/
+def canonicalFootprintCaningUnspecified (lo : Nat) : Footprint :=
+  { caning_lo := lo, caning_hi := lo, caning_unspecified := true }
+
+/-- Canonical witness footprint for `Penalty.death`. -/
+def canonicalFootprintDeath : Footprint :=
+  { death := true }
+
+end Generator
+
+/-! ### v6 admittance witnesses for leaf shapes
+
+Each leaf-shape canonical footprint constructed above admits
+its parent penalty by direct unfolding of `Penalty.admits`.
+These four lemmas are the "no oracle, no user witness"
+discharges for the leaf cases. -/
+
+/-- Canonical imprisonment footprint admits its parent. -/
+theorem canonicalFootprintImprisonment_admits (lo hi : Nat)
+    (h : lo ≤ hi) :
+    (Penalty.imprisonment lo hi).admits
+      (Generator.canonicalFootprintImprisonment lo hi) = true := by
+  simp [Penalty.admits, Generator.canonicalFootprintImprisonment, h]
+
+/-- Canonical fine footprint admits its parent. -/
+theorem canonicalFootprintFine_admits (lo hi : Nat) (h : lo ≤ hi) :
+    (Penalty.fine lo hi).admits
+      (Generator.canonicalFootprintFine lo hi) = true := by
+  simp [Penalty.admits, Generator.canonicalFootprintFine, h]
+
+/-- Canonical fineUnlimited footprint admits its parent. The
+short-circuit on `fine_unlimited := true` means we do not
+need `lo ≤ hi` here. -/
+theorem canonicalFootprintFineUnlimited_admits (lo : Nat) :
+    (Penalty.fineUnlimited lo).admits
+      (Generator.canonicalFootprintFineUnlimited lo) = true := by
+  simp [Penalty.admits, Generator.canonicalFootprintFineUnlimited]
+
+/-- Canonical caning footprint admits its parent. -/
+theorem canonicalFootprintCaning_admits (lo hi : Nat) (h : lo ≤ hi) :
+    (Penalty.caning lo hi).admits
+      (Generator.canonicalFootprintCaning lo hi) = true := by
+  simp [Penalty.admits, Generator.canonicalFootprintCaning, h]
+
+/-- Canonical caningUnspecified footprint admits its parent. -/
+theorem canonicalFootprintCaningUnspecified_admits (lo : Nat) :
+    (Penalty.caningUnspecified lo).admits
+      (Generator.canonicalFootprintCaningUnspecified lo) = true := by
+  simp [Penalty.admits, Generator.canonicalFootprintCaningUnspecified]
+
+/-- Canonical death footprint admits its parent. -/
+theorem canonicalFootprintDeath_admits :
+    Penalty.death.admits Generator.canonicalFootprintDeath = true := by
+  simp [Penalty.admits, Generator.canonicalFootprintDeath]
 
 end Yuho

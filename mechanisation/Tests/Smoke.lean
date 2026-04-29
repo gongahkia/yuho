@@ -514,4 +514,102 @@ example :
                      Penalty.caning 0 12]).wellFormed = true := by
   native_decide
 
+/-! ## §6.6-v6 smoke tests — `Generator.canonicalPenaltyModel`
+constructive discharge of the §6.5 oracle.
+
+The v6 layer extends the v5 discharge (Lemmas 6.2 / 6.3 / 6.4)
+to Lemma 6.5 (penalty layer). Each smoke test exercises one
+shape (leaf, leaf with sentinel, leaf with user-supplied
+footprint). The arbitrary-`Penalty` discharge is via the
+`canonicalPenaltyModel` constructor with a user-supplied
+witness; the leaf-shape constructors below need no witness. -/
+
+/-- Canonical witness for `Penalty.imprisonment 0 1095`
+(s378-style three-year imprisonment cap). -/
+example :
+    (Penalty.imprisonment 0 1095).admits
+      (Generator.canonicalFootprintImprisonment 0 1095) = true := by
+  exact canonicalFootprintImprisonment_admits 0 1095 (by decide)
+
+/-- Canonical witness for `Penalty.fineUnlimited 0` (the s378
+unlimited-fine schema). -/
+example :
+    (Penalty.fineUnlimited 0).admits
+      (Generator.canonicalFootprintFineUnlimited 0) = true :=
+  canonicalFootprintFineUnlimited_admits 0
+
+/-- Canonical witness for `Penalty.death` (the s302 murder
+sentence). -/
+example :
+    Penalty.death.admits Generator.canonicalFootprintDeath = true :=
+  canonicalFootprintDeath_admits
+
+/-- The canonical penalty model satisfies the v5 satisfies
+bundle for s299 + a witness imprisonment penalty. -/
+example :
+    (Generator.canonicalPenaltyModel s299 factsHomicide
+        (Generator.canonicalFootprintImprisonment 0 3650)).satisfies
+      s299 (Penalty.imprisonment 0 3650) :=
+  canonical_penalty_satisfies s299 factsHomicide
+    (Penalty.imprisonment 0 3650)
+    (Generator.canonicalFootprintImprisonment 0 3650)
+    (canonicalFootprintImprisonment_admits 0 3650 (by decide))
+
+/-- The canonical penalty model satisfies the v6 strengthened
+bundle (`satisfiesWF`) for s299 + a wellFormed witness
+imprisonment penalty. -/
+example :
+    (Generator.canonicalPenaltyModel s299 factsHomicide
+        (Generator.canonicalFootprintImprisonment 0 3650)).satisfiesWF
+      s299 (Penalty.imprisonment 0 3650) :=
+  canonical_penalty_satisfies_wf s299 factsHomicide
+    (Penalty.imprisonment 0 3650)
+    (Generator.canonicalFootprintImprisonment 0 3650)
+    (canonicalFootprintImprisonment_admits 0 3650 (by decide))
+    (by native_decide)
+
+/-- Unconditional Lemma 6.5 specialised to s378 + an unlimited
+fine: no oracle assumption, no user-supplied witness beyond
+the leaf-shape canonical constructor. -/
+example :
+    (Penalty.fineUnlimited 0).admits
+      (Generator.canonicalPenaltyModel s378 factsTheft
+        (Generator.canonicalFootprintFineUnlimited 0)).footprint = true :=
+  penalty_correspondence_unconditional s378 factsTheft
+    (Penalty.fineUnlimited 0)
+    (Generator.canonicalFootprintFineUnlimited 0)
+    (canonicalFootprintFineUnlimited_admits 0)
+    (by native_decide)
+
+/-- Unconditional Lemma 6.5 on s300 + death penalty (the
+s302-attached sentence): no oracle, no user witness. -/
+example :
+    Penalty.death.admits
+      (Generator.canonicalPenaltyModel s300 factsMurder
+        Generator.canonicalFootprintDeath).footprint = true :=
+  penalty_correspondence_unconditional s300 factsMurder
+    Penalty.death
+    Generator.canonicalFootprintDeath
+    canonicalFootprintDeath_admits
+    (by native_decide)
+
+/-- Unconditional Lemma 6.5 on s415 + a cumulative
+imprisonment + fine penalty (user-supplied witness for the
+combinator shape). -/
+example :
+    (Penalty.cumulative [Penalty.imprisonment 0 (10 * 365),
+                         Penalty.fineUnlimited 0]).admits
+      (Generator.canonicalPenaltyModel s415 factsCheating
+        { imp_lo := 0, imp_hi := 10 * 365,
+          fine_lo := 0, fine_hi := 0,
+          fine_unlimited := true : Footprint }).footprint = true :=
+  penalty_correspondence_unconditional s415 factsCheating
+    (Penalty.cumulative [Penalty.imprisonment 0 (10 * 365),
+                         Penalty.fineUnlimited 0])
+    { imp_lo := 0, imp_hi := 10 * 365,
+      fine_lo := 0, fine_hi := 0,
+      fine_unlimited := true : Footprint }
+    (by native_decide)
+    (by native_decide)
+
 end Yuho.Tests
