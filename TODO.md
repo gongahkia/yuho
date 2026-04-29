@@ -14,14 +14,17 @@ Status key: `[ ]` pending · `[~]` in progress · `(def)` deferred.
 Current snapshot (2026-04-29): **12251 unit tests green · 524
 sections at L1+L2 · 524 L3 author-stamped · §6.6 Lean 4 mechanisation
 v7 (all 5 soundness lemmas + canonical models kernel-checked,
-multi-statute `canonical_cross_satisfies` discharged) · structural
-diff harness 524/524 matched on full corpus
-(`make verify-structural-diff-full`) · §7.8 case-law differential
-testing n=40 · §7.6 LLM benchmark full 205 fixtures, 4-way prompt
-sweep · Direction B defeats-edge coverage 1253 edges across 147
-sections · 32-page smoke PDF · `make paper-reproduce` end-to-end
-including Lean kernel-check.** Completed history lives in git log +
-`docs/PHASE_*` notes.
+multi-statute `canonical_cross_satisfies` discharged, cross-library
+`apply_scope` companion theorems closed) · structural diff harness
+524/524 matched on full corpus (`make verify-structural-diff-full`)
+· runtime-eval sweep 90/90 rich tests passing
+(`make verify-runtime-tests`, wired into `make paper-reproduce`) ·
+§7.8 case-law differential testing n=40 · §7.6 LLM benchmark full
+205 fixtures, 4-way prompt sweep · Direction B defeats-edge
+coverage 1253 edges across 147 sections · 32-page smoke PDF ·
+`make paper-reproduce` end-to-end including Lean kernel-check +
+runtime sweep.** Completed history lives in git log + `docs/PHASE_*`
+notes.
 
 ---
 
@@ -46,11 +49,18 @@ constrained-contrast). Headline numbers in paper §7.8: top-1 47.5%,
 top-3 47.5%, MRR 0.480, contrast F1 0.239, constrained-contrast
 consistency 100% (n=25).
 
-- [ ] **Further sample growth.** Realistic next pass: target s509
-      outrage-of-modesty cases on eLitigation. Chapter II (state
-      offences) + chapter XX (marriage) absent because they're
-      typically prosecuted under other statutes; chapter XXIII
-      voyeurism partially covered via the v3 Nicholas Tan fixture.
+- [ ] **Further sample growth (user action — needs eLitigation /
+      LawNet access).** Chapter coverage gaps documented in
+      [`evals/case_law/README.md`](./evals/case_law/README.md)
+      under *Coverage gaps — sample growth roadmap* (chapter II
+      state offences, chapter XX marriage, chapter XXIII
+      modesty/voyeurism, ss363–367 kidnapping). Fixture template
+      ready at
+      `evals/case_law/fixtures/case-template-chapter-xxiii.yaml.template`;
+      author copies it, fills in a verified `case_url`, drops the
+      file in `fixtures/`, and re-runs the three scorers. Claude
+      blocked on this by the truth-verification rule (cannot
+      fabricate citations); user has the access.
 - [ ] **Inter-rater reliability** on the curated fact patterns.
       A second human curator extracts facts from the same judgments
       independently; compute κ score for §7.8's threats-to-validity
@@ -103,7 +113,8 @@ swap on submission day.
 ## Hardening `[~]`
 
 - [ ] **Run `make paper-reproduce` end-to-end periodically.** Confirms
-      every empirical claim still reproduces.
+      every empirical claim still reproduces; now includes the 90/90
+      runtime-eval sweep.
 - [ ] **Mermaid `--shape verbose` audit** — see *Mermaid flowchart
       richness* below. User action.
 - [ ] **Grammar restructure for comment-before-struct-instantiation
@@ -112,9 +123,11 @@ swap on submission day.
       in the file; `prec`/`prec.dynamic` workarounds insufficient.
       Real fix needs grammar restructure (variable_declaration
       terminator, or hoist type-name+`{` into a single token) or
-      tree-sitter parser upgrade. Workaround today: strip offending
-      comments before re-running runtime assertion eval on the 82
-      rich tests.
+      tree-sitter parser upgrade. Mitigated today via the
+      comment-strip pass (commit `ccca70dd`) + the runtime sweep
+      (`make verify-runtime-tests`) acting as a regression gate.
+      Authoring guidance lives in
+      [`docs/grammar-quirks.md`](./docs/grammar-quirks.md).
 
 ---
 
@@ -136,6 +149,38 @@ Dockerfile + Makefile + REPRODUCE.md shipped.
 | IPC text access blocked (paywall, robots.txt change) | Switch to Bangladeshi PC 1860 (Anglo-Indian lineage, public-domain text) |
 | AI&L editorial rejection | Re-target *Formal Aspects of Computing* or ICAIL |
 | Panellist presses on residual oracle scope | §6.6 + §11 v7 prose frames the discharge: conviction-layer oracle gone, full-corpus structural diff 524/524 matched |
+
+---
+
+## What to work on next (recommendation)
+
+Given the closures above, the highest-leverage tractable items
+remaining (Claude-driven, not user-action):
+
+1. **Test-suite backlog ramp** — author behavioural-test
+   companions for 5–10 high-traffic offences that don't yet have
+   them (s326 grievous hurt by dangerous weapon variants beyond
+   the v3 enrichment, s420 cheating-and-inducing-delivery,
+   s425 mischief sub-variants). Each adds an entry to the 90/90
+   runtime sweep and tightens regression coverage.
+2. **Hardening of structural-diff harness** — extend
+   `scripts/verify_structural_diff.py` with a `--strict` mode that
+   fails on any KNOWN_DIVERGENCE drift (i.e. catches if a future
+   Z3Generator change introduces a new naming convention beyond
+   the two documented ones).
+3. **§6.6 v8 (depth, optional)** — mechanise the linter's
+   acyclicity check on cross-section references in
+   `Yuho/Cross.lean`, removing the unspoken hypothesis the v7
+   cross-library closure inherits. Multi-session.
+
+User-blocked items (no Claude work possible until you act):
+
+* §7.8 sample growth — needs eLitigation access.
+* §7.8 inter-rater reliability — needs second human curator.
+* §8 IPC scrape — needs to run the ~50-min scrape command.
+* Paper read-through / external-reader pass / lualatex compile —
+  user actions per *Research paper polish*.
+* Mermaid `--shape verbose` audit — flagged for human.
 
 ---
 
@@ -194,18 +239,17 @@ is the appropriate bar.
       section companions opportunistically when an offence gains
       structural complexity that warrants behavioural testing.
 
-### Yuho interpreter assertion-eval `[ ]`
+### Yuho interpreter assertion-eval
 
-Diagnosis in `## Hardening` above (tree-sitter grammar bug).
-
-- [ ] **Decide test-runner contract.** With the diagnosis, `yuho
-      test`'s assertion-eval is provably correct on comment-free
-      fixtures. Recommendation: document the grammar limitation in
-      `doc/`, audit the 82 rich tests for the comment-before-
-      instantiation pattern, and either (a) strip the offending
-      comments (mechanical, unblocks runtime sweep today), or
-      (b) wait on the grammar restructure before claiming runtime-
-      eval coverage.
+Closed 2026-04-29 via option (a). Comment-strip pass applied to
+all 92 rich `test_statute.yh` files, runtime sweep harness
+(`scripts/verify_runtime_tests.py`) wired into
+`make verify-runtime-tests` and `make paper-reproduce`. Current
+result: **90/90 rich tests pass assertion eval**. Grammar
+limitation documented at
+[`docs/grammar-quirks.md`](./docs/grammar-quirks.md). Future
+regressions surface as CI failures rather than silent pass-then-
+fail-at-runtime.
 
 ---
 
