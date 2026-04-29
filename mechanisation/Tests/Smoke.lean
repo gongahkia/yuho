@@ -20,6 +20,7 @@ import Yuho.Graph
 import Yuho.Penalty
 import Yuho.Range
 import Yuho.Generator
+import Yuho.Cross
 
 namespace Yuho.Tests
 
@@ -611,5 +612,54 @@ example :
       fine_unlimited := true : Footprint }
     (by native_decide)
     (by native_decide)
+
+/-! ## §6-cross-v4 smoke tests — `Generator.canonicalCrossModel`
+constructive discharge of the cross-section bundle.
+
+The v4 refactor replaces v3's raw-label `excFires` bicond
+with a qualified-atom version
+(`<sX>_exc_<label>_fires`) and exhibits a constructive
+canonical model. The singleton-module discharge below
+exercises the bundle on the `s299WithConsent` fixture. -/
+
+/-- The canonical cross model for the singleton module
+`⟨[s299WithConsent]⟩` satisfies the v4 bundle. The fixture
+has exactly one exception (`consent`); the singleton
+discharge applies. -/
+example :
+    (Generator.canonicalCrossModel ⟨[s299WithConsent]⟩
+        factsHomicideWithConsent).satisfies ⟨[s299WithConsent]⟩ :=
+  canonical_cross_satisfies_singleton_singleton_exc
+    s299WithConsent
+    { label := "consent"
+      guard := fun F => F "consent"
+      defeats := [] }
+    factsHomicideWithConsent
+    rfl
+
+/-- The canonical cross model's `convicts` field returns the
+operational `Statute.convicts` for the in-module section. -/
+example :
+    (Generator.canonicalCrossModel ⟨[s299WithConsent]⟩
+        factsHomicideWithConsent).convicts "299"
+      = s299WithConsent.convicts factsHomicideWithConsent := by
+  native_decide
+
+/-- The qualified-atom `excFires` returns the operational
+`firedSet` membership for the in-module exception. The v4
+fix: this would have been raw label "consent" under v3,
+which collides with any other statute carrying a "consent"
+exception in the same module. -/
+example :
+    (Generator.canonicalCrossModel ⟨[s299WithConsent]⟩
+        factsHomicideWithConsent).excFires
+      (Generator.exceptionAtomName s299WithConsent
+        { label := "consent"
+          guard := fun F => F "consent"
+          defeats := [] : Exception })
+      = decide ("consent" ∈ Exception.firedSet
+          s299WithConsent.exceptions
+          factsHomicideWithConsent) := by
+  native_decide
 
 end Yuho.Tests

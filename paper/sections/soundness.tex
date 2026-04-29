@@ -551,14 +551,44 @@ the Python \texttt{Z3Generator} matches this Lean specification
 assumption, with \texttt{make verify-bulk-contrast}
 (\S\ref{subsec:scenario_synthesis}) exercising the Python
 generator against the operational evaluator on every encoded
-statute as the differential check; and (ii) the module-level
-\texttt{CrossSMTModel.satisfies} bundle, whose single
-\texttt{excFires : String $\to$ Bool} indexed by raw exception
-labels needs a refactor to qualified atom names before a
-constructive witness fits (a v6 item, adjacent to the
-cross-library \texttt{apply\_scope} extension). The oracle
-assumption now survives only at the cross-section bundle, not at
-the single-statute conviction layer.
+statute as the differential check; and (ii) the multi-statute
+extension of the v6 \texttt{CrossSMTModel.satisfies} bundle.
+v6 (this commit) refactored the bundle to index its
+\texttt{excFires : String $\to$ Bool} on \emph{qualified}
+atom names \texttt{<sX>\_exc\_<label>\_fires} matching the
+Python generator's atom-naming convention exactly, and
+exhibits a constructive
+\texttt{Generator.canonicalCrossModel} with the
+singleton-module discharge
+\texttt{canonical\_cross\_satisfies\_singleton\_singleton\_exc}
+kernel-checked. The multi-statute extension reduces to
+structural induction over \texttt{mod.statutes} under the
+linter-enforced section-number-uniqueness invariant; the
+per-arm helpers
+\texttt{crossExcFiresInExceptions\_head\_match} /
+\texttt{crossExcFiresInStatutes\_head\_match} ship as the
+induction's match-arm primitives. The oracle assumption now
+survives only at the multi-statute extension of the
+cross-section bundle, not at the single-statute conviction
+layer.
+
+v6 (this commit) also closes the §6.5 oracle: the
+\texttt{Penalty.canonicalModel} construction in
+\texttt{Generator.lean} exhibits a constructive
+\texttt{PenaltySMTModel} for any \texttt{(s, F, fp)} triple
+where \texttt{p.admits fp = true}, and the strengthened
+\texttt{PenaltySMTModel.satisfiesWF} bundle requires the
+\texttt{Penalty.wellFormed} predicate (the linter's
+sentinel-propagation + non-empty-orBoth invariant, now
+mechanised as a Bool-valued predicate in
+\texttt{Penalty.lean}). The leaf-shape canonical footprint
+constructors (\texttt{canonicalFootprintImprisonment},
+\texttt{canonicalFootprintFineUnlimited}, etc.) discharge
+the witness automatically for the leaf cases; the arbitrary
+\texttt{cumulative} / \texttt{orBoth} case takes a
+user-supplied footprint. Smoke tests in
+\texttt{Tests/Smoke.lean} exercise the s299 / s300 / s378 /
+s415 fixtures.
 
 \paragraph{Why Lean 4 over Coq.}
 Catala's mechanisation

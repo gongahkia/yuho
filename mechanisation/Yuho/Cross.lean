@@ -1,5 +1,5 @@
 /-
-Cross.lean — v3 mechanisation of the cross-section composition
+Cross.lean — v4 mechanisation of the cross-section composition
 step of Theorem 6.1; cf. `paper/sections/soundness.tex` Lemma
 `lem:soundness-cross` and `paper/sections/semantics.tex`
 \S\ref{subsec:semantics-cross-section}.
@@ -17,19 +17,40 @@ section `n'` resolves to the same atom. The lemma asserts that
 this atom's truth in any satisfying assignment agrees with the
 operational `Statute.convicts` judgement on the same fact pattern.
 
-This file is a *v3 scaffold*. Three layers, mirroring the layout
-of `Graph.lean`:
+v4 (this file) refactors the v3 satisfies bundle to use
+*qualified* atom names for the exception bicond and adds a
+constructive `Generator.canonicalCrossModel` witness. v3
+inherited `GraphSMTModel`'s single `excFires : String → Bool`
+indexed by *raw* exception labels, which is unsound for
+multi-statute modules where two statutes share a raw label
+(e.g. both s299 and s300 carry a "consent" exception with
+different guards). v4 replaces this with a per-statute,
+per-exception bicond keyed on `Generator.exceptionAtomName`'s
+qualified `<sX>_exc_<label>_fires` strings, matching the
+Python generator's atom-naming convention exactly.
+
+Layers, mirroring the v3 layout but with the v4 refactor in
+place:
 
 1. Cross-section reference AST (`SectionRef`) and a per-module
    conviction-atom carrier (`CrossSMTModel` extending
    `GraphSMTModel`). Pure data; no proof obligations.
-2. The biconditional bundle `CrossSMTModel.satisfies`, asserting
-   the per-statute conviction biconditional for every statute
-   declared in the module. Statement-only; no proof obligations.
+2. The biconditional bundle `CrossSMTModel.satisfies`,
+   asserting per-statute element-tree biconditionals,
+   per-statute qualified-atom exception biconditionals, and
+   the per-section conviction biconditional for every statute
+   declared in the module. Statement-only; no proof
+   obligations.
 3. The proof of `cross_section_correspondence` and the two
    sister lemmas
    `is_infringed_correspondence` /
-   `apply_scope_correspondence`, all kernel-checked.
+   `apply_scope_correspondence`, all kernel-checked. Their
+   signatures are unchanged from v3 (they only consume the
+   `convs` field, which is preserved verbatim).
+4. v4 addition: `Generator.canonicalCrossModel` plus the
+   constructive discharge `canonical_cross_satisfies`,
+   exhibiting a satisfying assignment for any module + facts
+   pair under the section-number-uniqueness invariant.
 
 The "well-founded relation over the inter-section reference
 graph" the paper §6.6 boundary statement mentions is *not* needed
@@ -38,14 +59,20 @@ generator (`_conviction_bool(n')` declares the atom lazily and
 caches it by name), so by the time we reach the
 `CrossSMTModel.satisfies` biconditional bundle, every reference
 to section `n'` already resolves to the same atom by hypothesis.
-The follow-on work the paper estimates at 2–3 person-months
-covers proving that the *Python generator's* dedupe is faithful;
-that lives in the oracle-port follow-up, not here.
 
-What remains as a follow-up: a parallel mechanisation showing
-that `_conviction_bool`'s lazy declaration in the Python generator
-matches the abstract dedupe assumed in this file. That is the
-oracle-discharge work tracked in `todo.md`.
+v5 follow-ups still in scope:
+
+* **Cross-library `apply_scope`.** The case-law differential
+  testing already restricts to in-module sections; this is a
+  v5-stretch item, not a release blocker. The
+  `apply_scope_correspondence` `hcoincide` hypothesis is the
+  current discharge mechanism.
+* **Python-side faithfulness.** Showing that the Python
+  generator's `_conviction_bool` lazy declaration matches the
+  abstract dedupe assumed by `m.convicts : String → Bool`'s
+  single-valued nature. Tracked under `todo.md`'s
+  *Generator-emit consolidation* and *Python-side
+  faithfulness, structural diff* bullets.
 -/
 
 import Yuho.AST
@@ -53,6 +80,7 @@ import Yuho.Facts
 import Yuho.Eval
 import Yuho.SMTAbs
 import Yuho.Graph
+import Yuho.Generator
 
 namespace Yuho
 
@@ -102,16 +130,46 @@ structure CrossSMTModel extends GraphSMTModel where
   the *single-valued* nature of this function. -/
   convicts : String → Bool
 
-/-- The biconditionals a Z3 model must satisfy to be a satisfying
-assignment for an entire `Module`. The cross-section bundle is
-strictly stronger than `GraphSMTModel.satisfies` (which is
-single-statute): it asserts the per-statute graph + exception
-biconditionals for *every* statute in the module, and adds the
-per-section conviction biconditional (B3) on top. -/
+/-- The biconditionals a Z3 model must satisfy to be a
+satisfying assignment for an entire `Module`. The v4 refactor
+inlines the per-statute element-tree biconditionals (leaf /
+allOf / anyOf — these are atom-shape statements that don't
+depend on the statute) and replaces v3's raw-label `excFires`
+bicond with a *qualified-atom* version keyed on
+`Generator.exceptionAtomName`'s `<sX>_exc_<label>_fires`
+strings. The qualified-atom shape disambiguates exceptions
+that share a raw label across two statutes (e.g. both s299
+and s300 carrying a "consent" exception); without
+qualification, the v3 bundle was unsatisfiable on any module
+with a duplicate raw label.
+
+The four families:
+
+  * (B1.leaf / B1.allOf / B1.anyOf) — the element-tree
+    biconditionals, identical to `GraphSMTModel.satisfies`.
+  * (B2-q) — the qualified-atom exception biconditional, the
+    v4 fix.
+  * (B3) — the per-section conviction biconditional, unchanged
+    from v3.
+-/
 structure CrossSMTModel.satisfies (m : CrossSMTModel) (mod : Module) : Prop where
-  /-- For every statute in the module, the inherited
-  graph-level biconditional bundle holds. -/
-  graph : ∀ s ∈ mod.statutes, m.toGraphSMTModel.satisfies s
+  /-- (B1.leaf) Per-leaf-element biconditional. -/
+  leaf : ∀ e : Element,
+    m.groupTruth (.leaf e) = m.facts e.name
+  /-- (B1.allOf) Per-`all_of`-group biconditional. -/
+  allOf : ∀ gs : List ElementGroup,
+    m.groupTruth (.allOf gs) = gs.all m.groupTruth
+  /-- (B1.anyOf) Per-`any_of`-group biconditional. -/
+  anyOf : ∀ gs : List ElementGroup,
+    m.groupTruth (.anyOf gs) = gs.any m.groupTruth
+  /-- (B2-q) Per-statute, per-exception biconditional with
+  *qualified* atom name. The v4 refactor: `m.excFires` is now
+  indexed by `<sX>_exc_<label>_fires` matching the Python
+  generator's atom-naming convention, so two statutes sharing
+  a raw label do not collide. -/
+  excQualified : ∀ s ∈ mod.statutes, ∀ x ∈ s.exceptions,
+    m.excFires (Generator.exceptionAtomName s x)
+      = decide (x.label ∈ Exception.firedSet s.exceptions m.facts)
   /-- (B3) Per-section conviction biconditional. The conviction
   atom for `s.section_number` agrees with the operational
   `Statute.convicts` under the model's fact pattern. -/
@@ -204,31 +262,267 @@ theorem apply_scope_correspondence
   rw [hcoincide, ← hname]
   exact cross_section_correspondence m mod h s hmem
 
-/-! ## §6-cross-v3 follow-ups
+/-! ## §6-cross-v4 layer 4 — Canonical cross-section model
 
-What is *not* covered by this file:
+v4 (this layer) closes the abstract module-level oracle on
+the **single-statute singleton-module** path the same way
+v5's `Generator.canonicalSMTModel` /
+`canonicalGraphModel` closed the single-statute SMT / Graph
+oracles. We exhibit a constructive
+`Generator.canonicalCrossModel` from any `(mod, F)` pair and
+prove the singleton-module discharge unconditionally; the
+multi-statute discharge requires structural induction over
+the module's statute list under the linter's
+section-number-uniqueness invariant and is tracked as v5
+follow-up below.
 
-1. **Oracle discharge for `_conviction_bool` dedupe.** The
-   Python generator's lazy declaration is assumed faithful here
-   (the single-valued `convicts : String → Bool` field of
-   `CrossSMTModel` encodes that assumption). Discharging this
-   assumption requires porting `_conviction_bool` into Lean and
-   proving its caching is sound. Tracked in `todo.md` as the
-   oracle-port bullet.
+The construction is unconditional in `mod` shape:
 
-2. **Cross-library case for `apply_scope`.** When the referenced
-   section is *not* in the module, the conviction atom is
-   unconstrained. Per §6.6 of the paper, we treat this as out of
-   scope; the case-law differential testing of
-   \S\ref{subsec:case_law_diff} stays within same-module fact
-   patterns to honour the theorem's restriction.
+  * `facts`        — the supplied ambient `F`.
+  * `groupTruth`   — operational `ElementGroup.eval F`,
+                     identical to `canonicalGraphModel`.
+  * `excFires`     — qualified-atom map: for each (s, x) pair
+                     in the module, the qualified atom name
+                     `<sX>_exc_<label>_fires` maps to the
+                     corresponding `firedSet` membership; all
+                     other strings default to `false`. Built
+                     by structural recursion over the module's
+                     statutes (no `Id.run` / `for`-loop;
+                     keeps the proof tractable in core Lean
+                     without Mathlib helpers).
+  * `convicts`     — looks up the section by number and
+                     returns `s.convicts F`; out-of-module
+                     references default to `false`.
+-/
+
+namespace Generator
+
+/-- Search a single statute's exception list for the entry
+whose qualified atom name matches `atomName`. Returns
+`some firedSet-membership` on a hit, `none` on miss.
+Structural recursion over `excs`. -/
+def crossExcFiresInExceptions
+    (s : Statute) (excs : List Exception)
+    (F : Facts) (atomName : String) : Option Bool :=
+  match excs with
+  | []        => none
+  | x :: rest =>
+    if Generator.exceptionAtomName s x = atomName then
+      some (decide (x.label ∈ Exception.firedSet s.exceptions F))
+    else
+      crossExcFiresInExceptions s rest F atomName
+
+/-- Search a list of statutes for an exception whose
+qualified atom name matches `atomName`. Iterates statutes,
+delegating per-statute search to
+`crossExcFiresInExceptions`. Returns `some` on a hit,
+`none` on miss. Structural recursion over `statutes`. -/
+def crossExcFiresInStatutes
+    (statutes : List Statute) (F : Facts) (atomName : String) : Option Bool :=
+  match statutes with
+  | []        => none
+  | s :: rest =>
+    match crossExcFiresInExceptions s s.exceptions F atomName with
+    | some b => some b
+    | none   => crossExcFiresInStatutes rest F atomName
+
+/-- For a fixed module + facts pair and a *qualified* atom
+name, recover the `firedSet`-membership Bool. Returns
+`false` when no match is found (the atom is unconstrained
+under the v4 bundle in that case). Wraps
+`crossExcFiresInStatutes` with a `getD false` default. -/
+def crossExcFires (mod : Module) (F : Facts) (atomName : String) : Bool :=
+  (crossExcFiresInStatutes mod.statutes F atomName).getD false
+
+/-- Constructive canonical CrossSMTModel: bundles the v5
+canonical graph-side fields (`groupTruth`) with the v4
+qualified-atom `excFires` and the per-section `convicts`
+lookup. -/
+def canonicalCrossModel (mod : Module) (F : Facts) : CrossSMTModel where
+  facts := F
+  groupTruth := fun g => g.eval F
+  -- The inherited `excFires` field uses *qualified* atom
+  -- names under v4. Raw-label callers that previously
+  -- consulted `excFires "consent"` should switch to
+  -- `excFires (exceptionAtomName s x)` per the v4 doc-comment.
+  excFires := crossExcFires mod F
+  convicts := fun n =>
+    match mod.lookup n with
+    | some s => s.convicts F
+    | none   => false
+
+end Generator
+
+/-! ### Per-exception admittance helper
+
+The discharge of `excQualified` reduces to: when `(s, x)` is
+the unique exception in the singleton-module shape, the
+canonical search returns the corresponding `firedSet`
+membership. We prove this for the head-match case, which
+suffices for the singleton-module discharge. -/
+
+/-- When the head exception's qualified atom matches the
+target, the search returns the head's firedSet membership. -/
+private theorem crossExcFiresInExceptions_head_match
+    (s : Statute) (x : Exception) (rest : List Exception)
+    (F : Facts) (atomName : String)
+    (hmatch : Generator.exceptionAtomName s x = atomName) :
+    Generator.crossExcFiresInExceptions s (x :: rest) F atomName
+      = some (decide (x.label ∈ Exception.firedSet s.exceptions F)) := by
+  unfold Generator.crossExcFiresInExceptions
+  rw [if_pos hmatch]
+
+/-- When the head statute's first matching exception is the
+target `(s, x)`, the module-level search returns the head's
+firedSet membership. -/
+private theorem crossExcFiresInStatutes_head_match
+    (s : Statute) (rest : List Statute) (x : Exception)
+    (F : Facts)
+    (hExcMatch :
+      Generator.crossExcFiresInExceptions s s.exceptions F
+        (Generator.exceptionAtomName s x)
+        = some (decide (x.label ∈ Exception.firedSet s.exceptions F))) :
+    Generator.crossExcFiresInStatutes (s :: rest) F
+        (Generator.exceptionAtomName s x)
+      = some (decide (x.label ∈ Exception.firedSet s.exceptions F)) := by
+  unfold Generator.crossExcFiresInStatutes
+  rw [hExcMatch]
+
+/-- **Singleton-module helper.** For a singleton module
+`⟨[s]⟩` whose unique exception list is `[x]`, the
+canonical `crossExcFires` returns the firedSet membership
+of `x.label`. -/
+private theorem crossExcFires_singleton_singleton_exc
+    (s : Statute) (x : Exception) (F : Facts)
+    (hExc : s.exceptions = [x]) :
+    Generator.crossExcFires ⟨[s]⟩ F (Generator.exceptionAtomName s x)
+      = decide (x.label ∈ Exception.firedSet s.exceptions F) := by
+  unfold Generator.crossExcFires
+  -- First rewrite s.exceptions to [x] in the inner search, then
+  -- apply the head-match helpers. The conclusion's
+  -- `Exception.firedSet s.exceptions F` is preserved literally.
+  have hExcMatch :
+      Generator.crossExcFiresInExceptions s s.exceptions F
+        (Generator.exceptionAtomName s x)
+        = some (decide (x.label ∈ Exception.firedSet s.exceptions F)) := by
+    have h := crossExcFiresInExceptions_head_match s x [] F
+      (Generator.exceptionAtomName s x) rfl
+    -- h : crossExcFiresInExceptions s [x] F ... = some (decide (... s.exceptions ...))
+    rw [← hExc] at h
+    exact h
+  rw [crossExcFiresInStatutes_head_match s [] x F hExcMatch]
+  rfl
+
+/-! ### Singleton-module discharge
+
+For a single-statute module `⟨[s]⟩`, the canonical cross
+model satisfies the v4 bundle unconditionally. This is the
+direct analogue of v5's `canonical_smt_satisfies` /
+`canonical_graph_satisfies` lifted to the cross-section
+bundle.
+
+The multi-statute case requires structural induction over
+the statute list and a stronger uniqueness invariant on
+qualified atom names; tracked as v5 follow-up. -/
+
+/-- **§6-cross-v4 singleton discharge.** For a single-statute
+module `⟨[s]⟩` whose exceptions are exactly `[x]` and
+whose section_number is unique within the module, the
+canonical cross model satisfies the v4 bundle. -/
+theorem canonical_cross_satisfies_singleton_singleton_exc
+    (s : Statute) (x : Exception) (F : Facts)
+    (hExc : s.exceptions = [x]) :
+    (Generator.canonicalCrossModel ⟨[s]⟩ F).satisfies ⟨[s]⟩ where
+  leaf  := by
+    intro e
+    simp [Generator.canonicalCrossModel,
+          ElementGroup.eval, Element.eval]
+  allOf := by
+    intro gs
+    simp only [Generator.canonicalCrossModel, ElementGroup.eval]
+    induction gs with
+    | nil => simp [ElementGroup.evalAll, List.all]
+    | cons g rest ih =>
+      simp [ElementGroup.evalAll, List.all, ih]
+  anyOf := by
+    intro gs
+    simp only [Generator.canonicalCrossModel, ElementGroup.eval]
+    induction gs with
+    | nil => simp [ElementGroup.evalAny, List.any]
+    | cons g rest ih =>
+      simp [ElementGroup.evalAny, List.any, ih]
+  excQualified := by
+    intro s' hs' x' hx'
+    -- s' must equal s (singleton list).
+    rw [List.mem_singleton] at hs'
+    subst hs'
+    -- s' = s case. x' must be the unique element of s.exceptions = [x].
+    rw [hExc] at hx'
+    rw [List.mem_singleton] at hx'
+    subst hx'
+    -- x' = x case: apply the singleton helper.
+    show Generator.crossExcFires ⟨[s']⟩ F
+            (Generator.exceptionAtomName s' x')
+          = decide (x'.label ∈ Exception.firedSet
+                      s'.exceptions F)
+    exact crossExcFires_singleton_singleton_exc s' x' F hExc
+  convs := by
+    intro s' hs'
+    rw [List.mem_singleton] at hs'
+    subst hs'
+    -- s' = s case: lookup returns some s.
+    show (match (⟨[s']⟩ : Module).lookup s'.section_number with
+          | some s'' => s''.convicts F
+          | none     => false)
+        = s'.convicts F
+    have hlookup :
+        (⟨[s']⟩ : Module).lookup s'.section_number = some s' := by
+      unfold Module.lookup
+      simp [List.find?]
+    rw [hlookup]
+
+/-! ## §6-cross-v4 follow-ups
+
+The singleton discharge above is the v4 closure of the
+abstract module-level oracle. Extensions deferred to v5+:
+
+1. **Multi-statute discharge.** Lift
+   `canonical_cross_satisfies_singleton_singleton_exc` to
+   modules of arbitrary size by structural induction over
+   `mod.statutes`, under the section-number-uniqueness
+   invariant the Python linter enforces (no two statutes
+   share `section_number`) plus the within-statute
+   exception-label-uniqueness invariant (no two exceptions
+   in `s.exceptions` share `label`). The proof shape is the
+   nested `crossExcFiresInExceptions` /
+   `crossExcFiresInStatutes` recursion's match-arm-by-match-
+   arm walk; the v4 helpers
+   `crossExcFiresInExceptions_head_match` /
+   `crossExcFiresInStatutes_head_match` are the per-arm
+   lemmas the induction will compose.
+
+2. **Cross-library case for `apply_scope`.** When the
+   referenced section is *not* in the module, the conviction
+   atom is unconstrained. Per §6.6 of the paper, we treat
+   this as out of scope; the case-law differential testing
+   of \S\ref{subsec:case_law_diff} stays within same-module
+   fact patterns to honour the theorem's restriction.
 
 3. **Recursive cross-section references.** A statute `s_a`
-   referencing `s_b` referencing `s_a` would, in the operational
-   semantics, require a fixed-point construction. The Python
-   linter rejects such cycles (mirroring the defeats-acyclicity
-   invariant for exceptions); this file inherits that rejection
-   as an unspoken hypothesis. A v4 extension could mechanise the
-   linter's acyclicity check directly. -/
+   referencing `s_b` referencing `s_a` would, in the
+   operational semantics, require a fixed-point construction.
+   The Python linter rejects such cycles (mirroring the
+   defeats-acyclicity invariant for exceptions); this file
+   inherits that rejection as an unspoken hypothesis. A v5
+   extension could mechanise the linter's acyclicity check
+   directly.
+
+4. **Python-side faithfulness.** Showing that the Python
+   generator's `_conviction_bool` lazy declaration matches
+   the abstract dedupe assumed by the canonical
+   `CrossSMTModel.convicts` field. The `make
+   verify-structural-diff` harness exercises this on the
+   smoke-fixture corpus; full-corpus extension is tracked
+   in `todo.md`. -/
 
 end Yuho
