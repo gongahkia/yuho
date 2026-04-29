@@ -163,30 +163,48 @@ Dockerfile + Makefile + REPRODUCE.md shipped.
 
 ## What to work on next (recommendation)
 
-Given the closures above, the highest-leverage tractable items
-remaining (Claude-driven, not user-action):
+Recently closed (2026-04-29 session): structural-diff `--strict`
+regression gate (commit `21472323`); behavioural-test ramp
++5 sections taking the runtime sweep to 95/95 (commit `067b6370`);
+§6.6 v8 cross-section-reference acyclicity invariant mechanised
+(commit `3b21401c`). The Claude-tractable shortlist below is the
+*next* batch of items, not the one just shipped.
 
-1. **Test-suite backlog ramp** — author behavioural-test
-   companions for 5–10 high-traffic offences that don't yet have
-   them (s326 grievous hurt by dangerous weapon variants beyond
-   the v3 enrichment, s420 cheating-and-inducing-delivery,
-   s425 mischief sub-variants). Each adds an entry to the 90/90
-   runtime sweep and tightens regression coverage.
-2. **Hardening of structural-diff harness** — extend
-   `scripts/verify_structural_diff.py` with a `--strict` mode that
-   fails on any KNOWN_DIVERGENCE drift (i.e. catches if a future
-   Z3Generator change introduces a new naming convention beyond
-   the two documented ones).
-3. **§6.6 v8 (depth, optional)** — mechanise the linter's
-   acyclicity check on cross-section references in
-   `Yuho/Cross.lean`, removing the unspoken hypothesis the v7
-   cross-library closure inherits. Multi-session.
+Claude-driven (no user action needed):
+
+1. **Test-suite backlog continuation (next 5–10 sections).**
+   The 95/95 runtime sweep currently covers 95 of the 524
+   sections. Next batch candidates:
+   `s127_receiving_property_taken_war_depredation`,
+   `s128_public_servant_voluntarily_allowing_prisoner`,
+   `s130D_genocide` (if not already covered),
+   `s171_wearing_garb_carrying_token_used_public`,
+   `s182_false_information_intent_cause_public`. Each adds a
+   fixture to `make verify-runtime-tests`. ~10–15 min per
+   section.
+
+2. **Defeats-edge structural-coverage extension.** Direction B
+   currently sits at 1141/1253 = 91.1% SAT. The remaining 112
+   defeats edges fail SAT under specific element-conjunction
+   shapes; a sweep of the failure set (logged in
+   `evals/case_law/results-defeats-coverage.json`) would
+   classify each as (a) fixture bug, (b) genuine doctrinal
+   exclusion, or (c) encoder gap. ~1–2 hr.
+
+3. **§6.6 v9 (depth, optional)** — lift cross-section refs
+   into `Element.eval` so the v8 acyclicity hypothesis becomes
+   load-bearing on well-founded recursion. Tracked under §6.6
+   above; multi-session and pays off only on external-review
+   pressure.
 
 User-blocked items (no Claude work possible until you act):
 
-* §7.8 sample growth — needs eLitigation access.
-* §7.8 inter-rater reliability — needs second human curator.
-* §8 IPC scrape — needs to run the ~50-min scrape command.
+* §7.8 sample growth — needs eLitigation access; chapter
+  XXIII fixture template ready at
+  `evals/case_law/fixtures/case-template-chapter-xxiii.yaml.template`.
+* §7.8 inter-rater reliability — needs a second human curator.
+* §8 IPC scrape — needs the ~50-min `scripts/scrape_indiacode.py
+  act` command run against AdvocateKhoj.
 * Paper read-through / external-reader pass / lualatex compile —
   user actions per *Research paper polish*.
 * Mermaid `--shape verbose` audit — flagged for human.
