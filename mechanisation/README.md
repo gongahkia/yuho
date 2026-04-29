@@ -64,7 +64,8 @@ linter warnings.
 | Unconditional Lemma 6.2 / 6.3 / 6.4 (no oracle) | `Yuho/Generator.lean` | `element_correspondence_unconditional` etc. | Application of canonical-satisfies to the original lemmas |
 | Penalty well-formedness (v6) | `Yuho/Penalty.lean` | `Penalty.wellFormed` + `PenaltySMTModel.satisfiesWF` | Bool-valued recursive predicate; mechanises the linter's sentinel-propagation + non-empty-`orBoth` invariant |
 | Penalty-layer oracle discharge (v6) | `Yuho/Generator.lean` | `canonical_penalty_satisfies` + `canonical_penalty_satisfies_wf` + `penalty_correspondence_unconditional` | Footprint as input parameter; leaf-shape canonical constructors auto-discharge witness |
-| Cross-section qualified-atom refactor (v6) | `Yuho/Cross.lean` | `CrossSMTModel.satisfies` (refactored) + `Generator.canonicalCrossModel` + `canonical_cross_satisfies_singleton_singleton_exc` | `excFires` re-keyed on `<sX>_exc_<label>_fires`; singleton-module discharge kernel-checked; multi-statute case reduces to structural induction |
+| Cross-section qualified-atom refactor (v6) | `Yuho/Cross.lean` | `CrossSMTModel.satisfies` (refactored) + `Generator.canonicalCrossModel` + `canonical_cross_satisfies_singleton_singleton_exc` | `excFires` re-keyed on `<sX>_exc_<label>_fires`; singleton-module discharge kernel-checked |
+| Cross-section multi-statute discharge (v7) | `Yuho/Cross.lean` | `canonical_cross_satisfies` | Structural induction over `mod.statutes` under qualified-atom-name + section-number uniqueness invariants (linter-enforced) |
 
 ## Trusted base
 
@@ -73,19 +74,7 @@ This artefact is **not** axiom-free. The trusted base consists of:
 1. **Lean 4.10's kernel** (the `lean-toolchain` pin).
 2. **No additional axioms** beyond what Lean's stdlib uses
    (Choice, propositional extensionality, quotient types).
-3. **Residual oracle scope (post-v6):**
-   - The multi-statute extension of the cross-section
-     `CrossSMTModel.satisfies` bundle. v6 refactored the bundle
-     to index `excFires : String → Bool` on *qualified* atom
-     names (`<sX>_exc_<label>_fires`) matching `Z3Generator`'s
-     atom-naming convention, and ships the singleton-module
-     discharge `canonical_cross_satisfies_singleton_singleton_exc`
-     kernel-checked. The multi-statute case reduces to
-     structural induction over `mod.statutes` under
-     section-number uniqueness; the per-arm helpers
-     `crossExcFiresInExceptions_head_match` /
-     `crossExcFiresInStatutes_head_match` are shipped as
-     induction primitives.
+3. **Residual oracle scope (post-v7):** A single item.
    - The claim that the Python `Z3Generator`
      (`src/yuho/verify/z3_solver.py`) emits exactly the
      biconditional shape `Generator.encodeStatute` specifies.
@@ -118,6 +107,18 @@ s300 carrying a `consent` exception) now route to distinct
 qualified atoms `299_exc_consent_fires` /
 `300_exc_consent_fires`, matching what `Z3Generator` already
 emits in `src/yuho/verify/z3_solver.py`.
+
+What v7 changed: lifted the cross-section discharge from the
+singleton-module case to arbitrary `mod.statutes` via
+structural induction. `canonical_cross_satisfies` takes the
+linter-enforced qualified-atom-name uniqueness invariant and
+section-number uniqueness invariant as explicit hypotheses,
+and discharges the bundle constructively. Smoke tests in
+`Tests/Smoke.lean` exhibit the discharge on a two-statute
+fixture (`s299WithConsent + s378NoExc`). With v7, the
+abstract module-level oracle is no longer a residual: every
+linter-clean module produces a satisfying assignment by
+construction.
 
 There are **no `sorry`s** in `Yuho/`; the only `True`-bodied
 `firedSet_prefix_subset` lemma is named for `Soundness.lean`'s

@@ -545,32 +545,36 @@ mirroring \texttt{src/yuho/verify/z3\_solver.py} on atom names
 (\texttt{<sX>\_<elem>\_satisfied} /
 \texttt{<sX>\_elements\_satisfied} /
 \texttt{<sX>\_exc\_<label>\_fires} / \texttt{<sX>\_conviction}).
-Two residuals survive, both narrower than the v4 oracle: (i) that
+A single residual survives, narrower than the v4 oracle: that
 the Python \texttt{Z3Generator} matches this Lean specification
 --- a round-trip-testable claim rather than a load-bearing
 assumption, with \texttt{make verify-bulk-contrast}
 (\S\ref{subsec:scenario_synthesis}) exercising the Python
 generator against the operational evaluator on every encoded
-statute as the differential check; and (ii) the multi-statute
-extension of the v6 \texttt{CrossSMTModel.satisfies} bundle.
-v6 (this commit) refactored the bundle to index its
+statute as the differential check.
+
+The cross-section bundle is fully discharged. v6 (2026-04-29)
+refactored \texttt{CrossSMTModel.satisfies} to index its
 \texttt{excFires : String $\to$ Bool} on \emph{qualified}
 atom names \texttt{<sX>\_exc\_<label>\_fires} matching the
-Python generator's atom-naming convention exactly, and
-exhibits a constructive
-\texttt{Generator.canonicalCrossModel} with the
-singleton-module discharge
-\texttt{canonical\_cross\_satisfies\_singleton\_singleton\_exc}
-kernel-checked. The multi-statute extension reduces to
-structural induction over \texttt{mod.statutes} under the
-linter-enforced section-number-uniqueness invariant; the
-per-arm helpers
-\texttt{crossExcFiresInExceptions\_head\_match} /
-\texttt{crossExcFiresInStatutes\_head\_match} ship as the
-induction's match-arm primitives. The oracle assumption now
-survives only at the multi-statute extension of the
-cross-section bundle, not at the single-statute conviction
-layer.
+Python generator's atom-naming convention exactly, exhibited
+a constructive \texttt{Generator.canonicalCrossModel}, and
+kernel-checked the singleton-module discharge
+\texttt{canonical\_cross\_satisfies\_singleton\_singleton\_exc}.
+v7 (this commit) lifted the discharge to arbitrary
+\texttt{mod.statutes} via structural induction, with
+\texttt{canonical\_cross\_satisfies} parameterised by the
+linter-enforced qualified-atom-name uniqueness invariant
+(\texttt{hAtomUniq}: equal qualified atom names imply equal
+\texttt{(statute, label)} pairs) and the section-number
+uniqueness invariant (\texttt{hSecUniq}). Both invariants are
+discharged by the Python linter on every module in the
+corpus; the smoke tests in \texttt{Tests/Smoke.lean} exhibit
+the discharge on a two-statute module fixture
+(\texttt{s299WithConsent + s378NoExc}). The conviction-layer
+oracle and the cross-section bundle are now both
+constructively closed; the only outstanding correspondence
+is between the Lean spec and the Python implementation.
 
 v6 (this commit) also closes the §6.5 oracle: the
 \texttt{Penalty.canonicalModel} construction in

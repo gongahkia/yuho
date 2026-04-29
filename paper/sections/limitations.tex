@@ -173,20 +173,18 @@ re-keys \texttt{excFires} on \emph{qualified} atom names
 (\texttt{<sX>\_exc\_<label>\_fires}) matching the Python
 generator's atom-naming convention, fixing the v3 raw-label
 collision when two statutes shared a label. Residual oracle
-scope after v6: (i) the multi-statute extension of the
-cross-section bundle (singleton case kernel-checked; the
-multi-statute case reduces to structural induction over
-\texttt{mod.statutes} under section-number uniqueness, with
-the per-arm helpers
-\texttt{crossExcFiresInExceptions\_head\_match} /
-\texttt{crossExcFiresInStatutes\_head\_match} shipped as
-induction primitives); and (ii) the claim that the Python
-\texttt{Z3Generator} implementation matches the Lean
-specification's emit shape --- narrower and round-trip-testable
-now that the spec exists, with \texttt{make verify-bulk-contrast}
+scope after v7 (2026-04-29): a single item survives — the
+claim that the Python \texttt{Z3Generator} implementation
+matches the Lean specification's emit shape, narrower and
+round-trip-testable now that the spec exists, with
+\texttt{make verify-bulk-contrast}
 (\S\ref{subsec:scenario_synthesis}) serving as the
-differential check against the operational evaluator on every
-encoded statute.
+differential check against the operational evaluator on
+every encoded statute. v7 closed the multi-statute extension
+of the cross-section bundle:
+\texttt{canonical\_cross\_satisfies} kernel-checks for any
+module under qualified-atom-name uniqueness +
+section-number uniqueness, both linter-enforced invariants.
 
 \paragraph{No formal grammar-completeness theorem.} We claim that
 Yuho can express every Penal Code section at L1+L2 fidelity,

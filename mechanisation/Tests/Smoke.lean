@@ -662,4 +662,109 @@ example :
           factsHomicideWithConsent) := by
   native_decide
 
+/-! ## §6-cross-v5 smoke tests — multi-statute discharge.
+
+The v5 layer lifts the singleton-module discharge to
+arbitrary `mod.statutes` under qualified-atom-name
+uniqueness + section-number uniqueness invariants. The
+smoke tests below exercise the multi-statute discharge on a
+two-statute module where exception labels are
+non-overlapping, so atom-name uniqueness holds by trivial
+case-split on the at-most-one `(s, x)` pair.
+
+A more demanding fixture (s300 + s299WithConsent, where both
+statutes carry a "consent" label and qualified-atom
+distinctness reduces to string-concat injectivity on
+`section_number`) is left to v6: it requires either a
+Mathlib-backed `String.append_injective` lemma or a manual
+length-bound argument that distracts from the discharge
+claim. The within-statute label-uniqueness path is
+exercised by the singleton fixture above. -/
+
+/-- A second statute alongside `s299WithConsent`: a stripped
+s378 with no exceptions. Together they form a two-statute
+module where only one statute has any exceptions, so
+qualified-atom-name uniqueness is trivial. -/
+def s378NoExc : Statute :=
+  { section_number := "378"
+    title := "Theft (no exceptions)"
+    elements :=
+      .leaf { kind := .actusReus, name := "taking", description := "" }
+    exceptions := []
+  }
+
+/-- Two-statute module: s299WithConsent (one `consent`
+exception) + s378NoExc (no exceptions). Distinct
+section_numbers; only s299WithConsent has any exception, so
+no two `(s, x)` pairs exist that could share a qualified
+atom name. -/
+def twoStatuteMod : Module := ⟨[s299WithConsent, s378NoExc]⟩
+
+/-- Section numbers `"299"` vs `"378"` are distinct;
+section-number uniqueness holds by case-split. -/
+private theorem twoStatuteMod_secUniq :
+    ∀ s₁ ∈ twoStatuteMod.statutes, ∀ s₂ ∈ twoStatuteMod.statutes,
+    s₁.section_number = s₂.section_number → s₁ = s₂ := by
+  intro s₁ hs₁ s₂ hs₂ heq
+  simp [twoStatuteMod] at hs₁ hs₂
+  rcases hs₁ with rfl | rfl <;> rcases hs₂ with rfl | rfl
+  · rfl
+  · simp [s299WithConsent, s299, s378NoExc] at heq
+  · simp [s299WithConsent, s299, s378NoExc] at heq
+  · rfl
+
+/-- Qualified-atom-name uniqueness: only s299WithConsent has
+exceptions, so the only `(s, x)` pair in the module is
+`(s299WithConsent, consent)`. Equal atom names imply both
+sides reference the same pair. -/
+private theorem twoStatuteMod_atomUniq :
+    ∀ s₁ ∈ twoStatuteMod.statutes, ∀ s₂ ∈ twoStatuteMod.statutes,
+    ∀ x₁ ∈ s₁.exceptions, ∀ x₂ ∈ s₂.exceptions,
+    Generator.exceptionAtomName s₁ x₁
+      = Generator.exceptionAtomName s₂ x₂ →
+    s₁ = s₂ ∧ x₁.label = x₂.label := by
+  intro s₁ hs₁ s₂ hs₂ x₁ hx₁ x₂ hx₂ _
+  simp [twoStatuteMod] at hs₁ hs₂
+  -- The s378NoExc cases give x₁ ∈ [] or x₂ ∈ [] (contradiction).
+  -- The (s299WithConsent, s299WithConsent) case has x₁ = x₂ = consent.
+  rcases hs₁ with rfl | rfl <;> rcases hs₂ with rfl | rfl
+  · -- Both s299WithConsent: x₁, x₂ both ∈ [consent], so equal.
+    simp [s299WithConsent, s299] at hx₁ hx₂
+    subst hx₁; subst hx₂
+    exact ⟨rfl, rfl⟩
+  · -- s₂ = s378NoExc: hx₂ ∈ [] contradiction.
+    simp [s378NoExc] at hx₂
+  · -- s₁ = s378NoExc: hx₁ ∈ [] contradiction.
+    simp [s378NoExc] at hx₁
+  · -- Both s378NoExc: hx₁ ∈ [] contradiction.
+    simp [s378NoExc] at hx₁
+
+/-- Multi-statute discharge on the two-statute module. -/
+example :
+    (Generator.canonicalCrossModel twoStatuteMod
+        factsHomicideWithConsent).satisfies twoStatuteMod :=
+  canonical_cross_satisfies twoStatuteMod
+    factsHomicideWithConsent
+    twoStatuteMod_atomUniq twoStatuteMod_secUniq
+
+/-- The per-section conviction atom for s299WithConsent in
+the multi-statute module returns its operational verdict
+under `factsHomicideWithConsent` (which fires the consent
+exception → no conviction). -/
+example :
+    (Generator.canonicalCrossModel twoStatuteMod
+        factsHomicideWithConsent).convicts "299"
+      = false := by
+  native_decide
+
+/-- The per-section conviction atom for s378NoExc returns
+`false` under `factsHomicideWithConsent` (the fact pattern
+has no `taking` element, so the s378NoExc structural
+elements are unsatisfied). -/
+example :
+    (Generator.canonicalCrossModel twoStatuteMod
+        factsHomicideWithConsent).convicts "378"
+      = false := by
+  native_decide
+
 end Yuho.Tests

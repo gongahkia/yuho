@@ -481,25 +481,268 @@ theorem canonical_cross_satisfies_singleton_singleton_exc
       simp [List.find?]
     rw [hlookup]
 
-/-! ## §6-cross-v4 follow-ups
+/-! ## §6-cross-v5 layer 5 — Multi-statute discharge
 
-The singleton discharge above is the v4 closure of the
-abstract module-level oracle. Extensions deferred to v5+:
+v4 closed the singleton-module case. v5 (this layer) lifts
+the discharge to arbitrary `mod.statutes` by structural
+induction over the list, under two linter-enforced
+invariants:
 
-1. **Multi-statute discharge.** Lift
-   `canonical_cross_satisfies_singleton_singleton_exc` to
-   modules of arbitrary size by structural induction over
-   `mod.statutes`, under the section-number-uniqueness
-   invariant the Python linter enforces (no two statutes
-   share `section_number`) plus the within-statute
-   exception-label-uniqueness invariant (no two exceptions
-   in `s.exceptions` share `label`). The proof shape is the
-   nested `crossExcFiresInExceptions` /
-   `crossExcFiresInStatutes` recursion's match-arm-by-match-
-   arm walk; the v4 helpers
-   `crossExcFiresInExceptions_head_match` /
-   `crossExcFiresInStatutes_head_match` are the per-arm
-   lemmas the induction will compose.
+  * `hAtomUniq` — qualified-atom-name uniqueness across the
+    module: equal atom names imply equal `(statute, label)`.
+    This is the conjunction of (a) section-number uniqueness
+    (no two statutes in the module share `section_number`)
+    and (b) within-statute label uniqueness (no two
+    exceptions in `s.exceptions` share `label`). The Python
+    linter rejects modules violating either invariant.
+  * `hSecUniq` — section-number-implies-statute identity.
+    Same root cause as (a) above, exposed as a separate
+    field for the `convs` proof's lookup-uniqueness step.
+
+Under both invariants, `canonical_cross_satisfies` exhibits
+the constructive discharge of the abstract module-level
+oracle for any `(mod, F)` pair. -/
+
+/-- When no exception in the list shares the target's
+qualified atom name, the inner search returns `none`. -/
+private theorem crossExcFiresInExceptions_no_match
+    (s : Statute) (excs : List Exception)
+    (F : Facts) (atomName : String)
+    (hNoMatch : ∀ y ∈ excs,
+                Generator.exceptionAtomName s y ≠ atomName) :
+    Generator.crossExcFiresInExceptions s excs F atomName = none := by
+  induction excs with
+  | nil => rfl
+  | cons y rest ih =>
+    unfold Generator.crossExcFiresInExceptions
+    have hy : Generator.exceptionAtomName s y ≠ atomName :=
+      hNoMatch y (List.mem_cons_self _ _)
+    rw [if_neg hy]
+    exact ih (fun y' hy' => hNoMatch y' (List.mem_cons_of_mem _ hy'))
+
+/-- Within a single statute's exception list, when `x ∈ excs`
+and the qualified atom names of distinct exceptions in
+`s.exceptions` are distinct (i.e. label uniqueness within
+`s.exceptions`), the inner search returns the firedSet
+membership for `x.label`. -/
+private theorem crossExcFiresInExceptions_eq_of_mem
+    (s : Statute) (excs : List Exception) (F : Facts)
+    (x : Exception) (hx : x ∈ excs)
+    (hLabelUniq : ∀ y ∈ excs,
+                  Generator.exceptionAtomName s y
+                    = Generator.exceptionAtomName s x →
+                  y.label = x.label) :
+    Generator.crossExcFiresInExceptions s excs F
+        (Generator.exceptionAtomName s x)
+      = some (decide (x.label ∈ Exception.firedSet s.exceptions F)) := by
+  induction excs with
+  | nil => cases hx
+  | cons y rest ih =>
+    unfold Generator.crossExcFiresInExceptions
+    by_cases hyEq : Generator.exceptionAtomName s y
+                      = Generator.exceptionAtomName s x
+    · -- Head matches the target atom name.
+      rw [if_pos hyEq]
+      have hyLabel : y.label = x.label :=
+        hLabelUniq y (List.mem_cons_self _ _) hyEq
+      rw [hyLabel]
+    · -- Head doesn't match; recurse on tail.
+      rw [if_neg hyEq]
+      cases hx with
+      | head =>
+        -- x is the head, but head doesn't match — contradiction.
+        exact absurd rfl hyEq
+      | tail _ hxRest =>
+        exact ih hxRest (fun y' hy' =>
+          hLabelUniq y' (List.mem_cons_of_mem _ hy'))
+
+/-- When the head statute's exception search returns `none`,
+the module-level search recurses to the tail. -/
+private theorem crossExcFiresInStatutes_skip_head
+    (s : Statute) (rest : List Statute)
+    (F : Facts) (atomName : String)
+    (hNoHead : Generator.crossExcFiresInExceptions s s.exceptions F atomName
+                 = none) :
+    Generator.crossExcFiresInStatutes (s :: rest) F atomName
+      = Generator.crossExcFiresInStatutes rest F atomName := by
+  show (match Generator.crossExcFiresInExceptions s s.exceptions F atomName with
+        | some b => some b
+        | none   => Generator.crossExcFiresInStatutes rest F atomName)
+      = Generator.crossExcFiresInStatutes rest F atomName
+  rw [hNoHead]
+
+/-- **§6-cross-v5 multi-statute helper.** When `s ∈ mod.statutes`,
+`x ∈ s.exceptions`, and the qualified-atom-name uniqueness
+invariant holds across the module, the canonical
+`crossExcFires` returns the firedSet membership for
+`x.label`. -/
+private theorem crossExcFires_eq_of_mem
+    (statutes : List Statute) (F : Facts)
+    (s : Statute) (x : Exception)
+    (hs : s ∈ statutes) (hx : x ∈ s.exceptions)
+    (hAtomUniq : ∀ s₁ ∈ statutes, ∀ s₂ ∈ statutes,
+                 ∀ x₁ ∈ s₁.exceptions, ∀ x₂ ∈ s₂.exceptions,
+                 Generator.exceptionAtomName s₁ x₁
+                   = Generator.exceptionAtomName s₂ x₂ →
+                 s₁ = s₂ ∧ x₁.label = x₂.label) :
+    Generator.crossExcFiresInStatutes statutes F
+        (Generator.exceptionAtomName s x)
+      = some (decide (x.label ∈ Exception.firedSet s.exceptions F)) := by
+  induction statutes with
+  | nil => cases hs
+  | cons s' rest ih =>
+    by_cases hsEq : s' = s
+    · -- Head equals target statute: inner search hits.
+      subst hsEq
+      have hLabel :
+          ∀ y ∈ s'.exceptions,
+            Generator.exceptionAtomName s' y
+              = Generator.exceptionAtomName s' x →
+            y.label = x.label := by
+        intro y hy heq
+        have := hAtomUniq s' (List.mem_cons_self _ _) s'
+                          (List.mem_cons_self _ _) y hy x hx heq
+        exact this.2
+      have hInner :
+          Generator.crossExcFiresInExceptions s' s'.exceptions F
+              (Generator.exceptionAtomName s' x)
+            = some (decide (x.label ∈ Exception.firedSet s'.exceptions F)) :=
+        crossExcFiresInExceptions_eq_of_mem s' s'.exceptions F x hx hLabel
+      unfold Generator.crossExcFiresInStatutes
+      rw [hInner]
+    · -- Head differs: inner search misses on head, recurse on tail.
+      have hsRest : s ∈ rest := by
+        cases hs with
+        | head => exact absurd rfl hsEq
+        | tail _ hsRest => exact hsRest
+      have hAtomUniqRest :
+          ∀ s₁ ∈ rest, ∀ s₂ ∈ rest,
+          ∀ x₁ ∈ s₁.exceptions, ∀ x₂ ∈ s₂.exceptions,
+          Generator.exceptionAtomName s₁ x₁
+            = Generator.exceptionAtomName s₂ x₂ →
+          s₁ = s₂ ∧ x₁.label = x₂.label := by
+        intro s₁ hs₁ s₂ hs₂ x₁ hx₁ x₂ hx₂ heq
+        exact hAtomUniq s₁ (List.mem_cons_of_mem _ hs₁) s₂
+                        (List.mem_cons_of_mem _ hs₂) x₁ hx₁ x₂ hx₂ heq
+      have hNoMatch :
+          ∀ y ∈ s'.exceptions,
+            Generator.exceptionAtomName s' y
+              ≠ Generator.exceptionAtomName s x := by
+        intro y hy heq
+        have hSameStatute :
+            s' = s ∧ y.label = x.label :=
+          hAtomUniq s' (List.mem_cons_self _ _) s
+                    (List.mem_cons_of_mem _ hsRest) y hy x hx heq
+        exact hsEq hSameStatute.1
+      have hHeadNone :
+          Generator.crossExcFiresInExceptions s' s'.exceptions F
+              (Generator.exceptionAtomName s x) = none :=
+        crossExcFiresInExceptions_no_match s' s'.exceptions F
+          (Generator.exceptionAtomName s x) hNoMatch
+      rw [crossExcFiresInStatutes_skip_head s' rest F
+            (Generator.exceptionAtomName s x) hHeadNone]
+      exact ih hsRest hAtomUniqRest
+
+/-- **§6-cross-v5 lookup helper.** Under section-number
+uniqueness, `Module.lookup` (a `List.find?` over the
+statutes list) returns `some s` for every `s ∈ statutes`. -/
+private theorem find?_section_number_of_mem
+    (statutes : List Statute) (s : Statute) (hs : s ∈ statutes)
+    (hSecUniq : ∀ s₁ ∈ statutes, ∀ s₂ ∈ statutes,
+                s₁.section_number = s₂.section_number → s₁ = s₂) :
+    Module.lookup ⟨statutes⟩ s.section_number = some s := by
+  show List.find? (fun s'' => decide (s''.section_number = s.section_number))
+          statutes = some s
+  induction statutes with
+  | nil => cases hs
+  | cons s' rest ih =>
+    by_cases hsEq : s' = s
+    · -- Head equals target: find? returns head.
+      subst hsEq
+      show List.find? (fun s'' => decide (s''.section_number = s'.section_number))
+              (s' :: rest) = some s'
+      simp [List.find?]
+    · -- Head differs: must skip head.
+      have hsRest : s ∈ rest := by
+        cases hs with
+        | head => exact absurd rfl hsEq
+        | tail _ hsRest => exact hsRest
+      have hSecEq_neg : s'.section_number ≠ s.section_number := by
+        intro heq
+        exact hsEq (hSecUniq s' (List.mem_cons_self _ _) s
+                              (List.mem_cons_of_mem _ hsRest) heq)
+      have hSecUniqRest :
+          ∀ s₁ ∈ rest, ∀ s₂ ∈ rest,
+          s₁.section_number = s₂.section_number → s₁ = s₂ := by
+        intro s₁ hs₁ s₂ hs₂ heq
+        exact hSecUniq s₁ (List.mem_cons_of_mem _ hs₁) s₂
+                      (List.mem_cons_of_mem _ hs₂) heq
+      show List.find? (fun s'' => decide (s''.section_number = s.section_number))
+              (s' :: rest) = some s
+      simp [List.find?, decide_eq_false hSecEq_neg]
+      exact ih hsRest hSecUniqRest
+
+/-- **§6-cross-v5 multi-statute discharge.** For any module +
+facts pair, the canonical cross model satisfies the v4
+bundle, under the linter-enforced qualified-atom-name
+uniqueness invariant (`hAtomUniq`) and the section-number
+uniqueness invariant (`hSecUniq`).
+
+Both hypotheses are decidable on concrete modules and hold
+by construction for every linter-clean module in the corpus.
+The Python linter rejects modules violating either; this
+theorem is unconditional once the linter has approved the
+module. -/
+theorem canonical_cross_satisfies
+    (mod : Module) (F : Facts)
+    (hAtomUniq : ∀ s₁ ∈ mod.statutes, ∀ s₂ ∈ mod.statutes,
+                 ∀ x₁ ∈ s₁.exceptions, ∀ x₂ ∈ s₂.exceptions,
+                 Generator.exceptionAtomName s₁ x₁
+                   = Generator.exceptionAtomName s₂ x₂ →
+                 s₁ = s₂ ∧ x₁.label = x₂.label)
+    (hSecUniq : ∀ s₁ ∈ mod.statutes, ∀ s₂ ∈ mod.statutes,
+                s₁.section_number = s₂.section_number → s₁ = s₂) :
+    (Generator.canonicalCrossModel mod F).satisfies mod where
+  leaf  := by
+    intro e
+    simp [Generator.canonicalCrossModel,
+          ElementGroup.eval, Element.eval]
+  allOf := by
+    intro gs
+    simp only [Generator.canonicalCrossModel, ElementGroup.eval]
+    induction gs with
+    | nil => simp [ElementGroup.evalAll, List.all]
+    | cons g rest ih =>
+      simp [ElementGroup.evalAll, List.all, ih]
+  anyOf := by
+    intro gs
+    simp only [Generator.canonicalCrossModel, ElementGroup.eval]
+    induction gs with
+    | nil => simp [ElementGroup.evalAny, List.any]
+    | cons g rest ih =>
+      simp [ElementGroup.evalAny, List.any, ih]
+  excQualified := by
+    intro s hs x hx
+    show Generator.crossExcFires mod F
+            (Generator.exceptionAtomName s x)
+          = decide (x.label ∈ Exception.firedSet s.exceptions F)
+    unfold Generator.crossExcFires
+    rw [crossExcFires_eq_of_mem mod.statutes F s x hs hx hAtomUniq]
+    rfl
+  convs := by
+    intro s hs
+    show (match mod.lookup s.section_number with
+          | some s' => s'.convicts F
+          | none    => false)
+        = s.convicts F
+    have hlookup : mod.lookup s.section_number = some s :=
+      find?_section_number_of_mem mod.statutes s hs hSecUniq
+    rw [hlookup]
+
+/-! ## §6-cross-v5 follow-ups
+
+The multi-statute discharge above is the v5 closure of the
+abstract module-level oracle. Extensions deferred to v6+:
 
 2. **Cross-library case for `apply_scope`.** When the
    referenced section is *not* in the module, the conviction
