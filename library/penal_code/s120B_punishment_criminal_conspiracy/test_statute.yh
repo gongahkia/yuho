@@ -1,0 +1,25 @@
+/// @meta source=test_statute_for_s120B
+referencing penal_code/s120B_punishment_criminal_conspiracy
+
+struct S120BTestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+S120BTestCase guilty := S120BTestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_s120B_punishment_criminal_conspiracy(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+S120BTestCase defended := S120BTestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_s120B_punishment_criminal_conspiracy(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+S120BTestCase notMadeOut := S120BTestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_s120B_punishment_criminal_conspiracy(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE

@@ -1,0 +1,25 @@
+/// @meta source=test_statute_for_s123
+referencing penal_code/s123_concealing_intent_facilitate_design_wage_war
+
+struct S123TestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+S123TestCase guilty := S123TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_s123_concealing_intent_wage_war(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+S123TestCase defended := S123TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_s123_concealing_intent_wage_war(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+S123TestCase notMadeOut := S123TestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_s123_concealing_intent_wage_war(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE

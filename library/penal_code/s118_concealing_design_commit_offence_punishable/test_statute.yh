@@ -1,0 +1,25 @@
+/// @meta source=test_statute_for_s118
+referencing penal_code/s118_concealing_design_commit_offence_punishable
+
+struct S118TestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+S118TestCase guilty := S118TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_s118_concealing_design_imprisonment(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+S118TestCase defended := S118TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_s118_concealing_design_imprisonment(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+S118TestCase notMadeOut := S118TestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_s118_concealing_design_imprisonment(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE

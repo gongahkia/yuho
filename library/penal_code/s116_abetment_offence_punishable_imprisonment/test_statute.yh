@@ -1,0 +1,25 @@
+/// @meta source=test_statute_for_s116
+referencing penal_code/s116_abetment_offence_punishable_imprisonment
+
+struct S116TestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+S116TestCase guilty := S116TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_s116_abetment_offence_imprisonment(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+S116TestCase defended := S116TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_s116_abetment_offence_imprisonment(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+S116TestCase notMadeOut := S116TestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_s116_abetment_offence_imprisonment(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE

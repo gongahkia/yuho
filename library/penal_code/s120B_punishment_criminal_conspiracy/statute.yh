@@ -2,6 +2,14 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr120B-#pr120B-
 /// @amendment [15/2019]
+fn is_s120B_punishment_criminal_conspiracy(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 120B "Punishment of criminal conspiracy" effective 1872-01-01 effective 2020-01-01 {
     /// Punishment section cross-referring to the offence definition in section 120A.
     penalty {
