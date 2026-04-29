@@ -147,6 +147,47 @@ construction — same file serves both surfaces.
 7. Drop the YAML in `fixtures/`. Run all three scorers; if any
    scorer raises, fix the fixture.
 
+## Coverage gaps — sample growth roadmap
+
+The 2026-04-29 corpus covers n=40 fixtures. Chapter coverage is
+uneven; the following pockets are explicit gaps to drive
+sample-growth runs against:
+
+* **Chapter II (offences against the State).** Absent. Modern
+  prosecutions go through the Internal Security Act / repealed
+  Sedition Act, so reported Penal Code-track judgments are rare.
+  Targeted citation candidates require a LawNet sweep on
+  `s121` / `s121A` / `s124A` / `s124B` charge tags; expect zero
+  hits in many years.
+* **Chapter XX (marriage offences).** Absent. Bigamy
+  prosecutions are typically routed through the Women's Charter
+  rather than s494 PC. Same constraint applies.
+* **Chapter XXIII (insulting modesty / voyeurism).** Single
+  fixture (`case-nicholas-tan-siew-chye.yaml`, s377BB(4),
+  [2023] SGHC 35). Pre-2020 s509 cases (the repealed
+  word/gesture-insulting-modesty provision) and post-2020
+  s377BA (word/gesture insulting modesty, the s509 successor)
+  cases are both absent. Most s377BA-tier fact patterns surface
+  at District Court level and don't generate reported judgments;
+  s509-era reported judgments exist on LawNet/eLitigation but
+  haven't been encoded yet. Targeted citation candidates require
+  an eLitigation search on the s509 / s377BA / s377BB charge
+  tags (user action — Claude lacks LawNet/eLitigation access).
+* **Kidnapping (ss363–367).** Absent. Most kidnapping
+  prosecutions use the Kidnapping Act 1961 rather than the Penal
+  Code; the 2026-04-29 eLitigation sweep located no reported
+  s363A PC cases.
+
+### Authoring a chapter-XXIII fixture (template)
+
+When LawNet/eLitigation access is available, copy and fill in
+the YAML skeleton at
+[`fixtures/case-template-chapter-xxiii.yaml.template`](./fixtures/case-template-chapter-xxiii.yaml.template).
+The template carries the s377BB / s377BA element-name
+conventions already, so the boolean `fact_facts` keys line up
+with the encoded library; only the citation, fact recital, and
+truth values need to be filled.
+
 ## Caveats / threats to validity
 
 The paper §7.8 enumerates these alongside the headline numbers:

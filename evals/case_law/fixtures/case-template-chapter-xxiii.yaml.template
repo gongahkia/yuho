@@ -1,0 +1,82 @@
+# Chapter XXIII fixture template — modesty-insult / voyeurism family.
+# Copy to `case-<short-id>.yaml` and fill in. The `.template`
+# extension stops the eval runner from picking this file up
+# directly. Element-name keys for `fact_facts` are sourced from
+# `library/penal_code/s377BB_*/statute.yh` (and s377BA / s509
+# variants); run
+#   yuho transpile -t json library/penal_code/s377BB_<…>/statute.yh
+# to confirm the latest names if the encoded library has drifted.
+#
+# Verification rule: `case_url` must point to a publicly resolvable
+# eLitigation / LawNet URL (the curator should have the judgment
+# open on their machine while filling this template). Without a
+# verifiable URL, do NOT add the fixture — fabricated citations
+# corrupt the §7.8 differential-testing claim.
+
+id: case-<short-id>            # kebab-case; matches filename
+case_citation: "<Party> v PP [<year>] <venue> <docket>"
+case_url: "<eLitigation or LawNet URL>"
+
+# The section the court convicted of (string, no leading "s").
+# Examples: "377BA", "377BB", "354", "509" (pre-2020 only).
+actual_charge: "377BB"
+
+# If the court considered/rejected an alternative section,
+# fill in here. Otherwise leave null.
+alternative_charge: null
+
+# Element names (as they appear in the encoded statute) that the
+# court itself relied on as the distinguisher. Run
+# `yuho transpile -t json library/penal_code/s377BB_<…>/statute.yh`
+# to surface the exact names.
+court_distinguished_on:
+  - operation_for_image_observation
+  - knowledge_or_reason_to_believe_non_consent
+
+outcome: |
+  <one-paragraph holding + sentence + any sentencing-framework
+  pronouncement that makes this a leading authority>
+
+case_summary: |
+  <natural-language summary for paper presentation; capture the
+  court's framing, the doctrinal hook, and the sentencing posture
+  so the §7.8 prose can quote it without needing to revisit the
+  judgment>
+
+# Below: simulator-shape fields used by ChargeRecommender.
+section: "377BB"
+description: |
+  <natural-language fact pattern fed to the recommender — the
+  court's recital with party-letter substitutions>
+
+parties:
+  A: { role: accused }
+  B: { role: victim }
+
+acts:
+  - { actor: A, description: "<verb-phrase from the judgment>" }
+
+mental_states:
+  A:
+    intent: "<intent the court attributed to the accused>"
+    knowledge: "<knowledge or reason-to-believe the court found>"
+
+circumstances:
+  - "<circumstance fact 1>"
+  - "<circumstance fact 2>"
+
+outcomes:
+  - { actor: B, description: "<observed outcome on the victim>" }
+
+# Boolean fact map. Every encoded element name on
+# `actual_charge` should appear with the corresponding truth
+# value. Run the section's structural transpile to confirm names.
+fact_facts:
+  operation_for_image_observation: true
+  knowledge_or_reason_to_believe_non_consent: true
+
+tags:
+  - source:case-law
+  - chapter:xxiii
+  - category:<voyeurism|modesty-insult>
+  - doctrine:<short-doctrine-tag>
