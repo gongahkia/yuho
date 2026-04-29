@@ -1160,23 +1160,30 @@ class Z3Generator:
         # elements to be false (since exc_fires => NOT conviction was
         # asserted alongside the original biconditional), which forbids
         # the doctrinal reading "elements met but offence excused".
-        if element_exprs:
-            if len(element_exprs) == 1:
-                all_elements = element_exprs[0]
-            else:
-                all_elements = z3.And(*element_exprs)
+        # Always emit `_elements_satisfied` and `_conviction` atoms,
+        # even for interpretation-only sections (empty `element_exprs`)
+        # — Lean's `Generator.encodeStatute` does the same
+        # (`encodeGroup` on `.allOf []` reduces to `.const true`),
+        # so the two emitters stay structurally aligned across the
+        # corpus.
+        if len(element_exprs) == 0:
+            all_elements = z3.BoolVal(True)
+        elif len(element_exprs) == 1:
+            all_elements = element_exprs[0]
+        else:
+            all_elements = z3.And(*element_exprs)
 
-            elements_satisfied = z3.Bool(f"{statute_id}_elements_satisfied")
-            self._consts[f"{statute_id}_elements_satisfied"] = elements_satisfied
-            self._assertions.append(elements_satisfied == all_elements)
+        elements_satisfied = z3.Bool(f"{statute_id}_elements_satisfied")
+        self._consts[f"{statute_id}_elements_satisfied"] = elements_satisfied
+        self._assertions.append(elements_satisfied == all_elements)
 
-            conviction_var = z3.Bool(f"{statute_id}_conviction")
-            self._consts[f"{statute_id}_conviction"] = conviction_var
-            # The conviction biconditional is closed in
-            # _generate_exception_constraints once the exc_fires set is
-            # known — it sets `conviction <=> elements_satisfied AND NOT any_fires`.
-            # If a statute has no exceptions, the bicond degenerates to
-            # `conviction <=> elements_satisfied`.
+        conviction_var = z3.Bool(f"{statute_id}_conviction")
+        self._consts[f"{statute_id}_conviction"] = conviction_var
+        # The conviction biconditional is closed in
+        # _generate_exception_constraints once the exc_fires set is
+        # known — it sets `conviction <=> elements_satisfied AND NOT any_fires`.
+        # If a statute has no exceptions, the bicond degenerates to
+        # `conviction <=> elements_satisfied AND NOT False`.
 
         # Temporal ordering constraints
         self._generate_temporal_constraints(statute_id, statute)
@@ -1229,6 +1236,22 @@ class Z3Generator:
             elem_var = z3.Bool(var_name)
             self._consts[var_name] = elem_var
 
+            # Leaf bicond, mirroring Lean's `encodeLeafBiconds`
+            # (mechanisation/Yuho/Generator.lean:170) — emit
+            # `<sX>_<elem>_satisfied <-> <sX>_leaf_<elem>`. The
+            # `_leaf_` infix avoids collisions with conviction-layer
+            # atom names when an element is named `conviction`,
+            # `elements_satisfied`, etc. (s302 has
+            # `actus_reus conviction`, which would otherwise clash
+            # with `<sX>_conviction`). The harness in
+            # `scripts/verify_structural_diff.py` canonicalises
+            # Lean's bare `<e.name>` to `<sX>_leaf_<e.name>` for
+            # comparison.
+            raw_name = f"{statute_id}_leaf_{safe_name}"
+            raw_var = z3.Bool(raw_name)
+            self._consts[raw_name] = raw_var
+            self._assertions.append(elem_var == raw_var)
+
             # Mens rea elements carry an intent variable
             if elem.element_type == "mens_rea":
                 intent_name = f"{statute_id}_{safe_name}_intent"
@@ -1238,7 +1261,11 @@ class Z3Generator:
             # Translate match-expression descriptions to constraints
             self._translate_element_description(statute_id, safe_name, elem)
 
-            return elem_var
+            # Return the raw atom for the elements_satisfied tree —
+            # this matches Lean's `encodeGroup` which references
+            # bare leaf names (`.var e.name`). The leaf bicond above
+            # ties the raw atom to `<sX>_<elem>_satisfied`.
+            return raw_var
 
         elif isinstance(elem, ElementGroupNode):
             child_exprs = []
@@ -1505,18 +1532,20 @@ class Z3Generator:
                     if other_pri < my_pri:  # other has higher precedence (lower number)
                         defeaters.append(exc_vars[other_label])
 
+            # Uniform `_fires` suffix per Lean Generator.exceptionAtomName
+            # (mechanisation/Yuho/Generator.lean:124). When defeaters are
+            # absent the bicond degenerates to `fires == exc_var`, which
+            # is structurally identical to the Lean spec.
+            safe_label = exc_label.replace(" ", "_").replace("-", "_")
+            fires_var = z3.Bool(f"{statute_id}_exc_{safe_label}_fires")
+            self._consts[f"{statute_id}_exc_{safe_label}_fires"] = fires_var
             if defeaters:
-                # fires = exc_var AND NOT any defeater
-                safe_label = exc_label.replace(" ", "_").replace("-", "_")
-                fires_var = z3.Bool(f"{statute_id}_exc_{safe_label}_fires")
-                self._consts[f"{statute_id}_exc_{safe_label}_fires"] = fires_var
                 self._assertions.append(
                     fires_var == z3.And(exc_var, z3.Not(z3.Or(*defeaters)))
                 )
-                exc_fires[exc_label] = fires_var
             else:
-                # no defeaters — fires == satisfied
-                exc_fires[exc_label] = exc_var
+                self._assertions.append(fires_var == exc_var)
+            exc_fires[exc_label] = fires_var
 
         # Close the conviction biconditional now that the per-exception
         # `_fires` vars are settled. With elements_satisfied (asserted in
@@ -1527,15 +1556,19 @@ class Z3Generator:
         elements_key = f"{statute_id}_elements_satisfied"
         elements_satisfied = self._consts.get(elements_key)
         if elements_satisfied is not None:
-            if exc_fires:
-                any_fires = (z3.Or(*exc_fires.values())
-                             if len(exc_fires) > 1
-                             else next(iter(exc_fires.values())))
-                self._assertions.append(
-                    conviction_var == z3.And(elements_satisfied, z3.Not(any_fires))
-                )
+            # Always emit the full `AND(elements_satisfied, NOT(any_fires))`
+            # shape Lean uses (mechanisation/Yuho/Generator.lean:204).
+            # When there are no exceptions, `any_fires` collapses to
+            # `False`; the bicond stays structurally identical.
+            if len(exc_fires) > 1:
+                any_fires = z3.Or(*exc_fires.values())
+            elif len(exc_fires) == 1:
+                any_fires = next(iter(exc_fires.values()))
             else:
-                self._assertions.append(conviction_var == elements_satisfied)
+                any_fires = z3.BoolVal(False)
+            self._assertions.append(
+                conviction_var == z3.And(elements_satisfied, z3.Not(any_fires))
+            )
 
     def _generate_penalty_constraints(self, statute_id: str, penalty: "PenaltyNode") -> None:
         """Generate Z3 constraints for penalty specification."""
