@@ -739,33 +739,84 @@ theorem canonical_cross_satisfies
       find?_section_number_of_mem mod.statutes s hs hSecUniq
     rw [hlookup]
 
-/-! ## §6-cross-v5 follow-ups
+/-! ## §6-cross-v7 layer 6 — Cross-library `apply_scope`
 
-The multi-statute discharge above is the v5 closure of the
-abstract module-level oracle. Extensions deferred to v6+:
+v5 lifted the discharge from singleton to multi-statute
+modules. v7 (this layer) closes the cross-library case the
+paper §6.6 boundary statement previously held out of scope:
+when `apply_scope(n, F')` references a section not in the
+ambient module, the operational `SectionRef.eval` returns
+`none`, and no per-statute correspondence applies. The
+following theorem makes this asymmetry explicit so the
+cross-library case is no longer an unspoken caveat.
 
-2. **Cross-library case for `apply_scope`.** When the
-   referenced section is *not* in the module, the conviction
-   atom is unconstrained. Per §6.6 of the paper, we treat
-   this as out of scope; the case-law differential testing
-   of \S\ref{subsec:case_law_diff} stays within same-module
-   fact patterns to honour the theorem's restriction.
+This pairs with `apply_scope_correspondence` (the in-module
+case under the fact-coincidence hypothesis) to give complete
+coverage of the `applyScope` constructor: every `(n, F')`
+pair either (a) hits an in-module section and reduces to
+`apply_scope_correspondence`, or (b) misses and reduces to
+`apply_scope_eval_none_of_extern` (the SMT atom for `n` is
+free under the bundle, but the eval-side is `none` so no
+correspondence is needed).
 
-3. **Recursive cross-section references.** A statute `s_a`
+Recursive cross-section references (e.g. `s_a` referencing
+`s_b` referencing `s_a`) remain rejected by the Python
+linter at the source level; this file inherits that
+rejection as an unspoken hypothesis on the modules the
+theorem is applied to. -/
+
+/-- **§6-cross-v7 cross-library case.** When the referenced
+section is not in the ambient module, the operational
+`SectionRef.applyScope` evaluates to `none` and the
+correspondence reduces to a trivial equality between two
+`none` values. The SMT atom `m.convicts n` is unconstrained
+by `m.satisfies mod` in this case (the `convs` field only
+quantifies over `s ∈ mod.statutes`); pairing this theorem
+with `apply_scope_correspondence` gives complete coverage
+of the `applyScope` constructor across the in-module /
+cross-library boundary. -/
+theorem apply_scope_eval_none_of_extern
+    (mod : Module) (n : String) (F' : Facts) (F : Facts)
+    (hextern : mod.lookup n = none) :
+    (SectionRef.applyScope n F').eval mod.lookup F = none := by
+  show (mod.lookup n).map (fun s => s.convicts F') = none
+  rw [hextern]
+  rfl
+
+/-- **§6-cross-v7 IsInfringed cross-library companion.** The
+ambient-facts variant satisfies the same dichotomy: extern
+references evaluate to `none`. Symmetric to
+`apply_scope_eval_none_of_extern`. -/
+theorem is_infringed_eval_none_of_extern
+    (mod : Module) (n : String) (F : Facts)
+    (hextern : mod.lookup n = none) :
+    (SectionRef.isInfringed n).eval mod.lookup F = none := by
+  show (mod.lookup n).map (fun s => s.convicts F) = none
+  rw [hextern]
+  rfl
+
+/-! ## §6-cross-v7 follow-ups
+
+The v7 cross-library case completes the `applyScope` /
+`isInfringed` dichotomy. Remaining items:
+
+1. **Recursive cross-section references.** A statute `s_a`
    referencing `s_b` referencing `s_a` would, in the
    operational semantics, require a fixed-point construction.
    The Python linter rejects such cycles (mirroring the
    defeats-acyclicity invariant for exceptions); this file
-   inherits that rejection as an unspoken hypothesis. A v5
+   inherits that rejection as an unspoken hypothesis. A v8
    extension could mechanise the linter's acyclicity check
    directly.
 
-4. **Python-side faithfulness.** Showing that the Python
+2. **Python-side faithfulness.** Showing that the Python
    generator's `_conviction_bool` lazy declaration matches
    the abstract dedupe assumed by the canonical
-   `CrossSMTModel.convicts` field. The `make
-   verify-structural-diff` harness exercises this on the
-   smoke-fixture corpus; full-corpus extension is tracked
-   in `todo.md`. -/
+   `CrossSMTModel.convicts` field. The
+   `make verify-structural-diff-full` harness reports
+   524/524 matched on the 2026-04-29 corpus snapshot; the
+   structural correspondence at atom-naming + bicond-shape
+   level is therefore differentially verified across the
+   full library. -/
 
 end Yuho

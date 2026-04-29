@@ -194,11 +194,18 @@ A subtle case: when the referenced section $n'$ is \emph{not}
 in $M$ (cross-library reference), the Z3 atom $\mathit{cv}_{n'}$
 exists but is unconstrained --- the SAT solver may freely
 assign it. The operational rule on the same input is undefined
-(the $\Sigma$ lookup fails). We treat the cross-library case as
-out of scope for Theorem~\ref{thm:z3-sound}; the case-law
-differential testing of \S\ref{subsec:case_law_diff}
-deliberately uses only same-module fact patterns to stay within
-the theorem's scope.
+(the $\Sigma$ lookup fails). The v7 cross-library closure
+(2026-04-29) makes this asymmetry explicit:
+\texttt{apply\_scope\_eval\_none\_of\_extern} and
+\texttt{is\_infringed\_eval\_none\_of\_extern} (kernel-checked
+in \texttt{Yuho/Cross.lean}) prove that the operational
+\texttt{SectionRef.eval} reduces to \texttt{none} for extern
+references, so the in-module case
+(\texttt{apply\_scope\_correspondence}) and the cross-library
+case partition the constructor cleanly. The case-law
+differential testing of \S\ref{subsec:case_law_diff} continues
+to use same-module fact patterns to keep the conviction-side
+correspondence non-trivial.
 \end{proof}
 
 \subsection{Main theorem}
@@ -476,14 +483,21 @@ kernel-checked correspondents in
     6.2--6.4 into a single kernel-checked statement.
   \item Lemma~\ref{lem:soundness-cross} (cross-section
     composition) is in \texttt{Yuho/Cross.lean} (v3,
-    2026-04-27): the \texttt{CrossSMTModel} record extends the
-    graph-level model with per-section conviction atoms; the
+    2026-04-27; v7 cross-library closure 2026-04-29): the
+    \texttt{CrossSMTModel} record extends the graph-level model
+    with per-section conviction atoms; the
     \texttt{cross\_section\_correspondence} theorem and the two
     sister lemmas \texttt{is\_infringed\_correspondence} and
     \texttt{apply\_scope\_correspondence} (the latter under the
     fact-coincidence hypothesis the linter discharges) close the
-    cross-section step. The cross-library case is held out of
-    scope per the boundary statement immediately below.
+    in-module cross-section step. The cross-library case is
+    handled by the v7 companion theorems
+    \texttt{apply\_scope\_eval\_none\_of\_extern} and
+    \texttt{is\_infringed\_eval\_none\_of\_extern}: when the
+    referenced section is not in the ambient module, the
+    operational \texttt{SectionRef.eval} reduces to
+    \texttt{none}, partitioning the constructor's coverage
+    across the in-module / cross-library boundary.
   \item Lemma~\ref{lem:soundness-penalty} (penalty
     correspondence) is in \texttt{Yuho/Penalty.lean} (v3,
     2026-04-27): a six-constructor \texttt{Penalty} AST plus a
@@ -507,23 +521,26 @@ single \texttt{Bool}-valued predicate. Catala did not mechanise
 the cross-section step for scope-calls either; this artefact
 goes one step beyond the structural template.
 
-\paragraph{What is held out of scope.} One item remains a genuine
-gap rather than mechanised work:
-
-\begin{itemize}
-  \item The cross-library case for \texttt{apply\_scope} (when
-    the referenced section is not in the module under
-    translation) is held out of scope, mirroring the case-law
-    differential testing's same-module restriction. The G8
-    (\texttt{fine := unlimited}) and G14 (\texttt{caning :=
-    unspecified}) sentinels were closed in v4 (commit
-    \texttt{e7138d1e}): \texttt{Footprint} gained
-    \texttt{fine\_unlimited} / \texttt{caning\_unspecified} flags
-    and \texttt{Penalty} gained the matching \texttt{fineUnlimited}
-    / \texttt{caningUnspecified} constructors, with per-leaf
-    correspondence theorems kernel-checking under the same
-    template as the bounded leaves.
-\end{itemize}
+\paragraph{What is held out of scope.} The v7 cross-library
+closure (2026-04-29) discharges the previously held-out case
+for \texttt{apply\_scope}: the companion theorems
+\texttt{apply\_scope\_eval\_none\_of\_extern} and
+\texttt{is\_infringed\_eval\_none\_of\_extern} in
+\texttt{Yuho/Cross.lean} make the cross-library asymmetry
+explicit (extern references reduce to \texttt{none} on the
+operational side; the SMT atom for the extern section number
+is unconstrained by \texttt{m.satisfies mod}). Pairing those
+companion theorems with \texttt{apply\_scope\_correspondence}
+gives complete coverage of the \texttt{applyScope} constructor
+across the in-module / cross-library boundary. The G8
+(\texttt{fine := unlimited}) and G14 (\texttt{caning :=
+unspecified}) sentinels were closed in v4 (commit
+\texttt{e7138d1e}): \texttt{Footprint} gained
+\texttt{fine\_unlimited} / \texttt{caning\_unspecified} flags
+and \texttt{Penalty} gained the matching \texttt{fineUnlimited}
+/ \texttt{caningUnspecified} constructors, with per-leaf
+correspondence theorems kernel-checking under the same template
+as the bounded leaves.
 
 \paragraph{Trust base (v5).} The conviction-layer oracle is
 discharged. \texttt{Yuho/Generator.lean} exhibits a constructive
@@ -644,7 +661,8 @@ that every case reviewers press on --- elements as fact-map
 lookups; element-tree all\_of/any\_of propagation; Catala-style
 priority precedence; cross-section conviction-atom dedupe; per-
 axis penalty-range admissibility --- has a kernel-checked
-correspondent in Lean~4. \S\ref{sec:limitations} narrows the
-remaining gaps to two narrow items inside the mechanisation
-(G8 / G14 unbounded-axis sentinels in \texttt{Penalty.lean};
-cross-library \texttt{apply\_scope}).
+correspondent in Lean~4. \S\ref{sec:limitations} reports the remaining gap: a single
+correspondence between the Lean specification's emit shape and
+the Python \texttt{Z3Generator}'s emission, now differentially
+verified at 524/524 by
+\texttt{make verify-structural-diff-full}.

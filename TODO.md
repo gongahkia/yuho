@@ -30,11 +30,12 @@ including Lean kernel-check.** Completed history lives in git log +
 v1–v7 shipped; per-version layout in
 [`mechanisation/README.md`](./mechanisation/README.md). Headline:
 all 5 soundness lemmas + G8/G14 sentinels + conviction-layer oracle
-discharge kernel-check under Lean 4.10.0 with no `sorry`s.
+discharge + cross-library `apply_scope` companion theorems
+kernel-check under Lean 4.10.0 with no `sorry`s.
 
-- [ ] Cross-library `apply_scope` (the case-law differential testing
-      already restricts to in-module sections; v7-stretch, not a
-      release blocker).
+No outstanding work; tracked here as `[~]` only because future depth
+items (recursive cross-section references, etc.) may surface during
+external review.
 
 ---
 

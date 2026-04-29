@@ -146,9 +146,17 @@ sentinels in \texttt{Penalty.lean} were closed in v4
 (\texttt{fineUnlimited} / \texttt{caningUnspecified} constructors
 plus \texttt{Footprint} flag fields, kernel-checked); the
 cross-library case for \texttt{apply\_scope} in
-\texttt{Cross.lean} remains held out of scope because the
-case-law differential testing of \S\ref{subsec:case_law_diff}
-stays within same-module fact patterns.
+\texttt{Cross.lean} was closed in v7 (2026-04-29) via the
+companion theorems
+\texttt{apply\_scope\_eval\_none\_of\_extern} and
+\texttt{is\_infringed\_eval\_none\_of\_extern}, which prove
+that extern references reduce to \texttt{none} on the
+operational side and therefore impose no SMT-side
+correspondence obligation; the case-law differential testing
+of \S\ref{subsec:case_law_diff} continues to use same-module
+fact patterns to keep the in-module correspondence
+non-trivial, but cross-library calls are no longer an
+unspoken caveat.
 The v5 layer in \texttt{Yuho/Generator.lean} (2026-04-28)
 discharges the conviction-layer oracle assumption: the lemmas
 \ref{lem:soundness-elem} / \ref{lem:soundness-graph} /
