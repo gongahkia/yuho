@@ -26,7 +26,7 @@ S322Scenario intentBlindingCauseBlinding := S322Scenario {
     grievousKindCaused := "permanent_privation_of_sight",
     defenceApplies := FALSE,
 }
-assert is_voluntarily_causing_grievous_hurt(
+assert is_s322_voluntarily_causing_grievous_hurt(
     intentBlindingCauseBlinding.voluntarilyCausesHurt && intentBlindingCauseBlinding.intendsOrKnowsGrievous && intentBlindingCauseBlinding.actuallyGrievous,
     intentBlindingCauseBlinding.defenceApplies
 ) == TRUE
@@ -41,7 +41,7 @@ S322Scenario knowsLikelyGrievousFracture := S322Scenario {
     grievousKindCaused := "fracture_or_dislocation_of_a_bone",
     defenceApplies := FALSE,
 }
-assert is_voluntarily_causing_grievous_hurt(
+assert is_s322_voluntarily_causing_grievous_hurt(
     knowsLikelyGrievousFracture.voluntarilyCausesHurt && knowsLikelyGrievousFracture.intendsOrKnowsGrievous && knowsLikelyGrievousFracture.actuallyGrievous,
     knowsLikelyGrievousFracture.defenceApplies
 ) == TRUE
@@ -56,7 +56,7 @@ S322Scenario kindShift := S322Scenario {
     grievousKindCaused := "permanent_privation_of_sight",
     defenceApplies := FALSE,
 }
-assert is_voluntarily_causing_grievous_hurt(
+assert is_s322_voluntarily_causing_grievous_hurt(
     kindShift.voluntarilyCausesHurt && kindShift.intendsOrKnowsGrievous && kindShift.actuallyGrievous,
     kindShift.defenceApplies
 ) == TRUE
@@ -71,7 +71,7 @@ S322Scenario nonGrievousIntent := S322Scenario {
     grievousKindCaused := "none",
     defenceApplies := FALSE,
 }
-assert is_voluntarily_causing_grievous_hurt(
+assert is_s322_voluntarily_causing_grievous_hurt(
     nonGrievousIntent.voluntarilyCausesHurt && nonGrievousIntent.intendsOrKnowsGrievous && nonGrievousIntent.actuallyGrievous,
     nonGrievousIntent.defenceApplies
 ) == FALSE
@@ -86,7 +86,7 @@ S322Scenario intentWithoutResult := S322Scenario {
     grievousKindCaused := "none",
     defenceApplies := FALSE,
 }
-assert is_voluntarily_causing_grievous_hurt(
+assert is_s322_voluntarily_causing_grievous_hurt(
     intentWithoutResult.voluntarilyCausesHurt && intentWithoutResult.intendsOrKnowsGrievous && intentWithoutResult.actuallyGrievous,
     intentWithoutResult.defenceApplies
 ) == FALSE
@@ -101,7 +101,7 @@ S322Scenario selfDefence := S322Scenario {
     grievousKindCaused := "fracture_or_dislocation_of_a_bone",
     defenceApplies := TRUE,
 }
-assert is_voluntarily_causing_grievous_hurt(
+assert is_s322_voluntarily_causing_grievous_hurt(
     selfDefence.voluntarilyCausesHurt && selfDefence.intendsOrKnowsGrievous && selfDefence.actuallyGrievous,
     selfDefence.defenceApplies
 ) == FALSE

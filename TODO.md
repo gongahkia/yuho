@@ -419,17 +419,17 @@ such statutes, the interpreter has no canonical way to
 disambiguate which `fn` body to bind, which is one candidate
 explanation for the assertion-eval bug above.
 
-- [ ] **Audit the corpus** for `fn` name collisions.
-      `grep "^fn " library/penal_code/*/statute.yh | sort -k2 |
-      awk -F: '{print $2}' | sort | uniq -d` should surface the
-      duplicates.
-- [ ] **Decide namespacing policy.** Either (a) prefix every
-      statute-local `fn` with the section number
-      (`is_s322_voluntarily_causing_grievous_hurt`), or (b)
-      enforce the linter check that within a `referencing`
-      transitive closure no two `fn`s share a name. Option (a)
-      is mechanical but verbose; option (b) requires the
-      linter pass plus a corpus-wide rename.
+Audit closed 2026-04-29: only one collision in the corpus —
+`is_voluntarily_causing_grievous_hurt` in s322 / s326 / s329.
+Resolved via option (a): renamed each to
+`is_s<sec>_voluntarily_causing_grievous_hurt` in both `statute.yh`
+and `test_statute.yh`. Per-section corpus JSON regenerated.
+4339-test parse suite stays green.
+
+- [ ] **Linter check (defensive).** Option (b) was deferred — add a
+      lint rule that flags any future `fn` collision within a
+      `referencing` transitive closure so the manual prefix policy
+      doesn't drift.
 
 ### AKN XSD validator broken under Python 3.14 `[ ]`
 

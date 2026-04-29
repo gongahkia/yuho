@@ -26,7 +26,7 @@ S326Scenario chopperFracture := S326Scenario {
     s335Excluded := TRUE,
     defenceApplies := FALSE,
 }
-assert is_voluntarily_causing_grievous_hurt(
+assert is_s326_voluntarily_causing_grievous_hurt(
     chopperFracture.voluntarily && chopperFracture.causesGrievousHurt && chopperFracture.dangerousMeansAny && chopperFracture.s335Excluded,
     chopperFracture.defenceApplies
 ) == TRUE
@@ -40,7 +40,7 @@ S326Scenario acidDisfiguration := S326Scenario {
     s335Excluded := TRUE,
     defenceApplies := FALSE,
 }
-assert is_voluntarily_causing_grievous_hurt(
+assert is_s326_voluntarily_causing_grievous_hurt(
     acidDisfiguration.voluntarily && acidDisfiguration.causesGrievousHurt && acidDisfiguration.dangerousMeansAny && acidDisfiguration.s335Excluded,
     acidDisfiguration.defenceApplies
 ) == TRUE
@@ -54,7 +54,7 @@ S326Scenario fireEndangerLife := S326Scenario {
     s335Excluded := TRUE,
     defenceApplies := FALSE,
 }
-assert is_voluntarily_causing_grievous_hurt(
+assert is_s326_voluntarily_causing_grievous_hurt(
     fireEndangerLife.voluntarily && fireEndangerLife.causesGrievousHurt && fireEndangerLife.dangerousMeansAny && fireEndangerLife.s335Excluded,
     fireEndangerLife.defenceApplies
 ) == TRUE
@@ -68,7 +68,7 @@ S326Scenario bareHandsGrievous := S326Scenario {
     s335Excluded := TRUE,
     defenceApplies := FALSE,
 }
-assert is_voluntarily_causing_grievous_hurt(
+assert is_s326_voluntarily_causing_grievous_hurt(
     bareHandsGrievous.voluntarily && bareHandsGrievous.causesGrievousHurt && bareHandsGrievous.dangerousMeansAny && bareHandsGrievous.s335Excluded,
     bareHandsGrievous.defenceApplies
 ) == FALSE
@@ -82,7 +82,7 @@ S326Scenario knifeNonGrievous := S326Scenario {
     s335Excluded := TRUE,
     defenceApplies := FALSE,
 }
-assert is_voluntarily_causing_grievous_hurt(
+assert is_s326_voluntarily_causing_grievous_hurt(
     knifeNonGrievous.voluntarily && knifeNonGrievous.causesGrievousHurt && knifeNonGrievous.dangerousMeansAny && knifeNonGrievous.s335Excluded,
     knifeNonGrievous.defenceApplies
 ) == FALSE
@@ -96,7 +96,7 @@ S326Scenario s335Provocation := S326Scenario {
     s335Excluded := FALSE,
     defenceApplies := FALSE,
 }
-assert is_voluntarily_causing_grievous_hurt(
+assert is_s326_voluntarily_causing_grievous_hurt(
     s335Provocation.voluntarily && s335Provocation.causesGrievousHurt && s335Provocation.dangerousMeansAny && s335Provocation.s335Excluded,
     s335Provocation.defenceApplies
 ) == FALSE
@@ -110,7 +110,7 @@ S326Scenario s100Defence := S326Scenario {
     s335Excluded := TRUE,
     defenceApplies := TRUE,
 }
-assert is_voluntarily_causing_grievous_hurt(
+assert is_s326_voluntarily_causing_grievous_hurt(
     s100Defence.voluntarily && s100Defence.causesGrievousHurt && s100Defence.dangerousMeansAny && s100Defence.s335Excluded,
     s100Defence.defenceApplies
 ) == FALSE
