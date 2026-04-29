@@ -1,0 +1,51 @@
+id: case-pp-v-bpk
+case_citation: "PP v BPK [2018] SGHC 135"
+case_url: "https://www.elitigation.sg/gd/s/2018_SGHC_135"
+actual_charge: "307"
+court_distinguished_on: [does_any_act, intention_of_causing_death, would_be_guilty_of_murder]
+outcome: "Conviction under s307(1) (attempt to murder, with hurt caused) sustained; 14 years' imprisonment + 6 strokes of the cane. The court found the accused possessed the highest culpability tier — intention to kill — at the time of the assault, satisfying the s307(1) mens rea element and the would-be-guilty-of-murder circumstance."
+case_summary: |
+  The accused confronted his former romantic interest at a residential
+  void deck on 20 December 2013, having pre-planned the encounter and
+  brought a 33cm knife concealed in his sock. He inflicted approximately
+  30+ stab and slash wounds across the victim's head, neck, chest,
+  abdomen, back, and arms, "repeatedly, relentlessly, and forcefully",
+  continuing while the victim was on the ground until the victim's
+  father intervened. The High Court found intention to kill (the highest
+  culpability tier under s307(1)) on the basis of the deadly weapon, the
+  pre-meditation, the targeting of vital organs, and the relentlessness
+  of the attack. The would-be-guilty-of-murder circumstance was made out
+  on the s300(c) limb (bodily injury sufficient in the ordinary course
+  of nature to cause death).
+  Citation verified against eLitigation (2026-04-29).
+section: "307"
+description: |
+  A confronted B at a residential void deck. A had brought a 33cm knife
+  concealed in his sock. A inflicted approximately 30 stab and slash
+  wounds on B's head, neck, chest, abdomen, back, and arms. B sustained
+  life-threatening injuries to major blood vessels. A intended to cause
+  B's death. The act, if it had caused death, would have rendered A
+  guilty of murder under s300(c).
+parties:
+  A: { role: accused }
+  B: { role: victim }
+acts:
+  - { actor: A, description: "concealed a 33cm knife in his sock" }
+  - { actor: A, description: "inflicted ~30 stab and slash wounds on B's vital regions" }
+mental_states:
+  A:
+    intent: "to cause B's death"
+    pre_meditation: "pre-planned the encounter"
+circumstances:
+  - "deadly weapon (33cm knife)"
+  - "targeting of vital organs (head, neck, chest, abdomen)"
+  - "relentless renewed attack while B was on the ground"
+  - "if death had resulted, A would have been guilty of murder under s300(c)"
+outcomes:
+  - { actor: B, description: "B sustained ~30 wounds including life-threatening injuries to major blood vessels; permanent scarring and nerve damage" }
+fact_facts:
+  does_any_act: true
+  intention_of_causing_death: true
+  would_be_guilty_of_murder: true
+  hurt_caused_term_sentence: true
+tags: [source:case-law, chapter:xvi, category:attempt-murder, doctrine:s307-intent-tier]

@@ -1,0 +1,43 @@
+id: case-nicholas-tan-siew-chye
+case_citation: "Nicholas Tan Siew Chye v PP [2023] SGHC 35"
+case_url: "https://www.elitigation.sg/gd/s/2023_SGHC_35"
+actual_charge: "377BB"
+court_distinguished_on: [operation_for_image_observation, knowledge_or_reason_to_believe_non_consent]
+outcome: "Conviction under s377BB(4) sustained; sentence reduced from 7 weeks' to 4 weeks' aggregate imprisonment on appeal. 3-judge coram established the Logachev two-stage five-step sentencing framework as the preferred framework for s377BB(4) offences. Leading SG sentencing authority for voyeurism offences; the s509 successor provision now governing the up-skirt-recording case family that was previously prosecuted under repealed s509."
+case_summary: |
+  The appellant, a 24-year-old NTU student, committed two upskirt-recording
+  offences under s377BB(4): one on a university lift, one on a residential
+  lift months later while on police bail. He squatted, placed his phone
+  camera under the victims' dresses, and recorded. The High Court (3-judge
+  coram) affirmed the s377BB(4) convictions and used the appeal to lay down
+  the Logachev two-stage five-step sentencing framework as the preferred
+  framework for s377BB(4) offences, holding that deterrence is generally the
+  dominant sentencing consideration for adult offenders without contributing
+  mental conditions. s377BB is the s509 successor provision (repealed
+  2020) — case-law growth in chapter XXIII tracks the new framework.
+  Citation verified against eLitigation (2026-04-29).
+section: "377BB"
+description: |
+  A operated his phone camera with the intention of enabling himself to
+  observe B's covered genital region in circumstances where it would not
+  otherwise be visible (under B's dress). A knew B did not consent. The
+  recording was made without B's knowledge.
+parties:
+  A: { role: accused }
+  B: { role: victim }
+acts:
+  - { actor: A, description: "squats and places phone camera under B's dress" }
+  - { actor: A, description: "operates the camera with intent to observe B's covered genital region" }
+mental_states:
+  A:
+    intent: "to observe B's covered genital region"
+    knowledge: "knew B did not consent to A operating the equipment"
+circumstances:
+  - "B's covered genital region would not otherwise be visible"
+  - "A operated equipment (mobile phone camera)"
+outcomes:
+  - { actor: B, description: "B's covered private region observed and recorded without consent" }
+fact_facts:
+  operation_for_image_observation: true
+  knowledge_or_reason_to_believe_non_consent: true
+tags: [source:case-law, chapter:xxiii, category:voyeurism, doctrine:s377BB-logachev-framework, s509-successor]
