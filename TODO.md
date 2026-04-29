@@ -392,18 +392,39 @@ checks) but their `assert` lines do not evaluate to TRUE under
 `yuho test <file>` invocation. The pytest suite stays green
 because it only enforces parse validity, not assertion truth.
 
-- [ ] **Diagnose root cause** in
-      `src/yuho/eval/interpreter.py` or upstream parser. The
-      symptom is consistent across files; the cause may be a
-      comment-position-dependent AST walker bug or a function-
-      name collision (multiple `is_voluntarily_causing_*` defs
-      across the corpus).
-- [ ] **Decide test-runner contract.** If `yuho test`'s
-      assertion-eval is meant to be load-bearing, fix the bug
-      and run the runtime sweep across all 82 rich tests. If
-      it's parse-only-by-policy, document the runtime semantics
-      explicitly and fold the assertion-eval into a separate
-      tool.
+Root cause located 2026-04-29: **tree-sitter grammar**, not
+interpreter. The parser truncates `Foo p := Foo { … }` at `Foo`
+when *any* `// …` or `/* … */` comment appears earlier in the
+file (between declarations). Without intervening comments, the
+LR parser correctly extends `variable_declaration`'s value to
+the trailing `struct_literal`. With comments, the variable
+declaration ends at the bare `Foo` identifier and the
+`{ a := …, b := … }` reduces to a separate anonymous-struct
+`expression_statement`. [Inference] Tree-sitter's LR state
+treats extras-bearing transitions differently from extras-free
+ones, breaking the conflict-resolution between
+`[$.struct_literal, $.variable_declaration]`.
+
+Workarounds tried and reverted (preserved 4339 tests green):
+`prec(2, …)` and `prec.dynamic(2, …)` on `struct_literal` — the
+parser still committed to the shorter parse. A real fix needs
+either grammar restructuring (e.g., making variable_declaration
+require a terminator before the next decl, or hoisting the
+type-name+`{` shape into a single token) or a tree-sitter parser
+upgrade.
+
+- [ ] **Grammar restructure.** Treat as a separate, scoped
+      grammar task; not a 30-minute fix. Out of scope for the
+      diagnose-root-cause bullet.
+- [ ] **Decide test-runner contract.** With the diagnosis above,
+      `yuho test`'s assertion-eval is provably correct on
+      comment-free fixtures. Recommendation: document the
+      grammar limitation in `doc/`, audit the 82 rich tests for
+      the comment-before-instantiation pattern, and either
+      (a) strip the offending comments (mechanical), or
+      (b) wait on the grammar restructure before claiming
+      runtime-eval coverage. Option (a) unblocks the runtime
+      sweep today without touching the parser.
 
 ### Function-name collisions in encoded statutes `[ ]`
 
