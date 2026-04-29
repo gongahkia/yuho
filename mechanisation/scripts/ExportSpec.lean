@@ -3,19 +3,24 @@ ExportSpec.lean — emit the verified `Generator.encodeStatute`
 biconditional list as JSON for each smoke fixture.
 
 Driven by `scripts/verify_structural_diff.py` (Python). The Python
-harness invokes `lake exe export_spec` from `mechanisation/`,
-captures stdout, parses the JSON object, and diffs the entries
-against what `src/yuho/verify/z3_solver.py::Z3Generator
+harness invokes `lake env lean --run scripts/ExportSpec.lean` from
+`mechanisation/`, captures stdout, parses the JSON object, and
+diffs the entries against what
+`src/yuho/verify/z3_solver.py::Z3Generator
 ._generate_statute_constraints` actually emits on parallel
 fixtures.
 
-This is the §6.6 `Python-side faithfulness, structural diff`
-follow-up from `TODO.md`. Scope: smoke fixtures only (s299, s300,
-s378, s415 — the same set covered by `Tests/Smoke.lean`'s v5
-canonical-model checks).
+The four hand-stitched fixtures (s299/s300/s378/s415) remain
+inlined for backwards compatibility with the original PoC harness.
+The full-corpus extension (524 sections) lives in
+`Fixtures.lean` (auto-generated via
+`mechanisation/scripts/generate_fixtures.py`); it is loaded only
+when `--full` is passed on the command line so the smoke harness
+stays fast.
 -/
 
 import Yuho
+import «scripts».Fixtures
 
 open Yuho
 
@@ -118,17 +123,21 @@ def s415 : Statute :=
     exceptions := []
   }
 
-def fixtures : List (String × Statute) :=
+def smokeFixtures : List (String × Statute) :=
   [("s299", s299), ("s300", s300), ("s378", s378), ("s415", s415)]
 
 def fixtureJSON (name : String) (s : Statute) : String :=
   "\"" ++ name ++ "\":" ++ listToJSON (Generator.encodeStatute s)
 
-def allJSON : String :=
+def allJSON (fixtures : List (String × Statute)) : String :=
   let entries := fixtures.map (fun (n, s) => fixtureJSON n s)
   "{" ++ String.intercalate "," entries ++ "}"
 
 end Yuho.ExportSpec
 
-def main : IO Unit :=
-  IO.println Yuho.ExportSpec.allJSON
+def main (args : List String) : IO Unit := do
+  let useFull := args.contains "--full"
+  let fixtures :=
+    if useFull then Yuho.Fixtures.fixtures
+    else Yuho.ExportSpec.smokeFixtures
+  IO.println (Yuho.ExportSpec.allJSON fixtures)

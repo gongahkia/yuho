@@ -51,50 +51,228 @@ from yuho.verify.z3_solver import Z3Generator  # noqa: E402
 import z3  # noqa: E402
 
 
-# Documented structural divergences between the Lean spec and the
-# Python emitter. These are real differences — not bugs in either
-# side — surfaced by the harness so they remain visible. See the
-# §6.6 `Trust base` paragraph in `paper/sections/soundness.tex`
-# for the boundary statement.
+# Documented atom-naming convention differences between the Lean spec
+# and the Python emitter. The leaf-bicond family and uniform `_fires`
+# suffix divergences were closed in the v7 generator-emit
+# consolidation pass (`src/yuho/verify/z3_solver.py` 2026-04-29);
+# Python now emits the same number and shape of biconds Lean does.
+# The remaining residue is purely an atom-naming convention: Lean
+# uses bare leaf names (`death`, `intent`) for the leaf-bicond RHS
+# and inside the elements bicond; Python uses statute-prefixed
+# `<sX>_<elem>` to preserve per-statute leaf independence under
+# multi-statute compilation. The harness canonicalises both
+# conventions before comparing bicond shape.
 KNOWN_DIVERGENCES = {
-    "leaf_biconds_omitted_in_python": (
-        "Lean spec emits `<sX>_<elem>_satisfied <-> <elem>` per leaf "
-        "element (the leaf bicond family). The Python `Z3Generator` "
-        "uses the per-element atom directly inside `<sX>_elements_satisfied` "
-        "and does not emit a separate leaf bicond. Both reach the same "
-        "satisfying assignments; the Python encoding is one bicond layer "
-        "shallower."
+    "leaf_atom_naming_convention": (
+        "Lean spec keys leaf atoms on bare `<e.name>` (shared across "
+        "statutes); Python keys them on `<sX>_<e.name>` (per-statute "
+        "independence). The harness normalises Lean atoms to the "
+        "Python convention before bicond comparison so the two "
+        "encodings register as canonically equivalent."
     ),
-    "elements_bicond_rhs_atom_naming": (
-        "Lean spec's `<sX>_elements_satisfied` bicond RHS uses raw "
-        "leaf names (e.g. `death`); Python uses the `<sX>_<elem>_satisfied` "
-        "atoms. Same shape, different atom names — a consequence of the "
-        "leaf-bicond omission above."
-    ),
-    "exception_fires_suffix_only_with_defeaters": (
-        "Lean spec uniformly names exception-firing atoms "
-        "`<sX>_exc_<label>_fires`. Python emits `<sX>_exc_<label>_fires` "
-        "ONLY when the exception has at least one defeater "
-        "(via priority or explicit `defeats` edges); for non-defeats "
-        "exceptions Python uses the bare `<sX>_exc_<label>` as the "
-        "fires variable. See `_generate_exception_constraints` lines "
-        "1494–1519. Tracked under the v6 CrossSMTModel refactor as "
-        "the consolidating naming pass."
+    "exception_fires_rhs_opaque_vs_priority": (
+        "Lean's `<sX>_exc_<label>_fires` bicond RHS is an opaque "
+        "`_firedSet` atom whose truth value the canonical model "
+        "resolves via `Exception.firedSet`. Python's RHS expands the "
+        "priority logic inline as `AND(exc_var, NOT(defeaters))`. "
+        "Both reach the same satisfying assignments; the harness "
+        "skips inner-shape comparison on `_fires` biconds."
     ),
 }
 
 
-def run_lean_exporter() -> dict[str, list[Any]]:
+def _canonicalise_lean_leaf_name(
+    name: str, statute_id: str, leaf_names: set[str]
+) -> str:
+    """Map a Lean atom name to Python's per-statute convention.
+
+    Lean leaf-bicond RHS and elements-bicond leaf references use bare
+    `<e.name>`; Python uses `<sX>_leaf_<e.name>`. When `name` is a
+    known leaf for `statute_id`, rewrite it to Python's collision-safe
+    naming so structural comparison succeeds.
+    """
+    if name in leaf_names:
+        return f"{statute_id}_leaf_{name}"
+    return name
+
+
+def _flatten_assoc(op: str, identity: bool, node: dict[str, Any]) -> dict[str, Any]:
+    """Normalise nested AND/OR + identity-element terminators to a flat
+    n-ary form. Lean emits list-folded AND/OR with `.const true/false`
+    terminators (`encodeGroupAll`/`Any`), inline binary AND/OR without
+    terminators (`encodeConvictionBicond`), and Python's z3 produces
+    n-ary flat AND/OR which `z3_to_json` rewraps as right-fold with
+    terminator. Canonical form is a sorted list of operand JSON
+    expressions; this function returns it as a left-leaning binary
+    tree without terminator so structural equality on the canonical
+    form succeeds across all three shapes.
+    """
+    children: list[dict[str, Any]] = []
+
+    def walk(n: dict[str, Any]) -> None:
+        if n.get("kind") == op:
+            walk(n["lhs"])
+            walk(n["rhs"])
+            return
+        if n.get("kind") == "const" and n.get("value") is identity:
+            return
+        # Canonicalise the child first; if the result is itself same-kind
+        # (e.g. an AND-with-True-terminator collapsed to its inner OR),
+        # walk into that result so the final tree is fully flat.
+        canon = _canonical_form(n)
+        if canon.get("kind") == op:
+            walk(canon)
+        else:
+            children.append(canon)
+
+    walk(node)
+    if not children:
+        return {"kind": "const", "value": identity}
+    if len(children) == 1:
+        return children[0]
+    acc = children[-1]
+    for c in reversed(children[:-1]):
+        acc = {"kind": op, "lhs": c, "rhs": acc}
+    return acc
+
+
+def _canonical_form(node: dict[str, Any]) -> dict[str, Any]:
+    """Recursively canonicalise a JSON formula for shape comparison."""
+    kind = node.get("kind")
+    if kind == "and":
+        return _flatten_assoc("and", True, node)
+    if kind == "or":
+        return _flatten_assoc("or", False, node)
+    if kind == "not":
+        return {"kind": "not", "arg": _canonical_form(node["arg"])}
+    if kind == "iff":
+        return {
+            "kind": "iff",
+            "lhs": _canonical_form(node["lhs"]),
+            "rhs": _canonical_form(node["rhs"]),
+        }
+    return dict(node)
+
+
+def _walk_atoms(node: dict[str, Any]):
+    """Yield every `var` leaf name reachable from a JSON formula."""
+    kind = node.get("kind")
+    if kind == "var":
+        yield node["name"]
+        return
+    if kind == "const":
+        return
+    if kind == "not":
+        yield from _walk_atoms(node["arg"])
+        return
+    if kind in ("and", "or", "iff"):
+        yield from _walk_atoms(node["lhs"])
+        yield from _walk_atoms(node["rhs"])
+
+
+def _canonicalise_lean_tree(
+    node: dict[str, Any], statute_id: str, leaf_names: set[str]
+) -> dict[str, Any]:
+    """Deep-copy `node` rewriting bare leaf names to `<sX>_<leaf>`."""
+    kind = node.get("kind")
+    if kind == "var":
+        return {"kind": "var", "name": _canonicalise_lean_leaf_name(
+            node["name"], statute_id, leaf_names
+        )}
+    if kind == "const":
+        return dict(node)
+    if kind == "not":
+        return {"kind": "not", "arg": _canonicalise_lean_tree(
+            node["arg"], statute_id, leaf_names
+        )}
+    if kind in ("and", "or", "iff"):
+        return {
+            "kind": kind,
+            "lhs": _canonicalise_lean_tree(node["lhs"], statute_id, leaf_names),
+            "rhs": _canonicalise_lean_tree(node["rhs"], statute_id, leaf_names),
+        }
+    return dict(node)
+
+
+def _leaf_names_from_lean(asserts: list[dict[str, Any]], statute_id: str) -> set[str]:
+    """Identify bare leaf atoms on the Lean side: any var that appears as
+    the RHS of a leaf bicond `iff(<sX>_<leaf>_satisfied, var)`."""
+    leaves: set[str] = set()
+    suffix = "_satisfied"
+    prefix = f"{statute_id}_"
+    for a in asserts:
+        if a.get("kind") != "iff":
+            continue
+        lhs = a.get("lhs", {})
+        rhs = a.get("rhs", {})
+        if (
+            lhs.get("kind") == "var"
+            and rhs.get("kind") == "var"
+            and lhs["name"].startswith(prefix)
+            and lhs["name"].endswith(suffix)
+        ):
+            leaves.add(rhs["name"])
+    return leaves
+
+
+def run_lean_exporter(full: bool = False) -> dict[str, list[Any]]:
     """Run `lake env lean --run scripts/ExportSpec.lean` from the
-    `mechanisation/` directory and parse stdout as JSON."""
+    `mechanisation/` directory and parse stdout as JSON.
+
+    When `full=True`, pass `--full` so the exporter emits the
+    524-section corpus from `scripts/Fixtures.lean`; otherwise the
+    four hand-stitched smoke fixtures are emitted.
+    """
+    cmd = ["lake", "env", "lean", "--run", "scripts/ExportSpec.lean"]
+    if full:
+        cmd += ["--", "--full"]
     proc = subprocess.run(
-        ["lake", "env", "lean", "--run", "scripts/ExportSpec.lean"],
+        cmd,
         cwd=REPO / "mechanisation",
         capture_output=True,
         text=True,
         check=True,
     )
-    return json.loads(proc.stdout)
+    # `lake env` may emit setup chatter on the first line; the JSON
+    # object is the last non-empty line.
+    out_lines = [l for l in proc.stdout.splitlines() if l.strip()]
+    if not out_lines:
+        raise RuntimeError("Lean exporter produced no output")
+    return json.loads(out_lines[-1])
+
+
+def fixtures_from_corpus() -> dict[str, StatuteNode]:
+    """Build Python fixtures from every `library/penal_code/*/statute.yh`.
+
+    Mirrors the codegen in `mechanisation/scripts/generate_fixtures.py`
+    so the structural diff has parallel sources on both sides.
+    """
+    from yuho.ast import ASTBuilder
+    from yuho.parser import get_parser
+
+    library = REPO / "library" / "penal_code"
+    parser = get_parser()
+    out: dict[str, StatuteNode] = {}
+    for stat_path in sorted(library.glob("*/statute.yh")):
+        try:
+            result = parser.parse_file(stat_path)
+        except Exception:
+            continue
+        if result.errors or result.root_node is None:
+            continue
+        try:
+            ast = ASTBuilder(result.source, str(stat_path)).build(
+                result.root_node
+            )
+        except Exception:
+            continue
+        if not ast.statutes:
+            continue
+        statute = ast.statutes[0]
+        ident = "s" + statute.section_number.replace(".", "_")
+        if ident not in out:
+            out[ident] = statute
+    return out
 
 
 def E(kind: str, name: str) -> ElementNode:
@@ -229,31 +407,43 @@ def lhs_atom(bicond: dict[str, Any]) -> str | None:
 
 def project_to_conviction_layer(asserts: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
     """Filter assertions to the conviction-layer atoms the Lean
-    spec covers, keyed by the LHS atom name."""
+    spec covers, keyed by the LHS atom name.
+
+    Python's `_generate_exception_constraints` introduces an
+    intermediate `<sX>_exc_<label>` guard alias that doesn't appear
+    in Lean's `encodeExceptionBiconds` (Lean folds the guard into the
+    canonical model's `excFires`). We exclude these guard aliases
+    so the comparison stays at Lean's bicond-shape granularity."""
     out: dict[str, dict[str, Any]] = {}
     for a in asserts:
         atom = lhs_atom(a)
         if atom is None:
             continue
-        if (atom.endswith("_satisfied") or
-            atom.endswith("_fires") or
-            atom.endswith("_conviction") or
-            "_exc_" in atom):
+        if atom.endswith("_satisfied") or atom.endswith("_fires") or atom.endswith("_conviction"):
             out[atom] = a
     return out
 
 
-def diff_one(name: str, lean: list[Any], python: list[Any]) -> tuple[bool, str]:
-    lean_by_atom = project_to_conviction_layer(lean)
+def diff_one(
+    name: str, statute_id: str, lean: list[Any], python: list[Any]
+) -> tuple[bool, str]:
+    leaf_names = _leaf_names_from_lean(lean, statute_id)
+    lean_canon = [_canonicalise_lean_tree(a, statute_id, leaf_names) for a in lean]
+    lean_by_atom = project_to_conviction_layer(lean_canon)
     py_by_atom = project_to_conviction_layer(python)
     only_lean = sorted(set(lean_by_atom) - set(py_by_atom))
     only_py = sorted(set(py_by_atom) - set(lean_by_atom))
     shared = sorted(set(lean_by_atom) & set(py_by_atom))
 
-    # Bicond-shape comparison on shared atoms.
+    # Bicond-shape comparison on shared atoms after canonicalisation
+    # (flatten AND/OR, drop identity-element terminators). `_fires`
+    # biconds are opaque (see KNOWN_DIVERGENCES['exception_fires_…']),
+    # so we compare existence + LHS atom but not RHS shape.
     shape_diffs: list[str] = []
     for atom in shared:
-        if lean_by_atom[atom] != py_by_atom[atom]:
+        if atom.endswith("_fires"):
+            continue
+        if _canonical_form(lean_by_atom[atom]) != _canonical_form(py_by_atom[atom]):
             shape_diffs.append(atom)
 
     lines = [f"=== {name} ==="]
@@ -267,32 +457,81 @@ def diff_one(name: str, lean: list[Any], python: list[Any]) -> tuple[bool, str]:
     if shape_diffs:
         lines.append(f"  shape differs on: {shape_diffs}")
 
-    # All findings on these fixtures fall under the documented
-    # known-divergences. We surface them but do NOT fail the harness.
-    return True, "\n".join(lines)
+    # Post-canonicalisation: any residue surfaces here. Empty residue
+    # means the two emitters agree on conviction-layer shape.
+    passed = not (only_lean or only_py or shape_diffs)
+    return passed, "\n".join(lines)
 
 
 def main() -> int:
-    print("→ running Lean exporter (lake env lean --run)…")
+    import argparse
+
+    ap = argparse.ArgumentParser()
+    ap.add_argument(
+        "--full",
+        action="store_true",
+        help="run against the full 524-section corpus instead of the four "
+             "hand-stitched smoke fixtures.",
+    )
+    ap.add_argument(
+        "--summary-only",
+        action="store_true",
+        help="suppress per-statute output; print only the aggregate result.",
+    )
+    args = ap.parse_args()
+
+    mode = "full corpus" if args.full else "smoke fixtures"
+    print(f"→ running Lean exporter ({mode}, lake env lean --run)…")
     try:
-        lean_export = run_lean_exporter()
+        lean_export = run_lean_exporter(full=args.full)
     except subprocess.CalledProcessError as e:
         print("Lean exporter failed:", e.stderr or e.stdout, file=sys.stderr)
         return 2
 
     print("→ running Python Z3Generator on parallel fixtures…\n")
-    py_fixtures = fixtures()
+    py_fixtures = fixtures_from_corpus() if args.full else fixtures()
     ok = True
+    counts = {"matched": 0, "diff": 0, "missing": 0}
+    diffs: list[str] = []
     for fname in py_fixtures:
         if fname not in lean_export:
-            print(f"!! Lean export missing fixture {fname}")
+            counts["missing"] += 1
+            if not args.summary_only:
+                print(f"!! Lean export missing fixture {fname}")
             ok = False
             continue
-        py_asserts = python_assertions_for(py_fixtures[fname])
+        try:
+            py_asserts = python_assertions_for(py_fixtures[fname])
+        except Exception as e:
+            counts["diff"] += 1
+            diffs.append(f"{fname}: python emit raised {type(e).__name__}: {e}")
+            ok = False
+            continue
         lean_asserts = lean_export[fname]
-        passed, summary = diff_one(fname, lean_asserts, py_asserts)
-        print(summary)
-        ok = ok and passed
+        statute_id = py_fixtures[fname].section_number.replace(".", "_")
+        passed, summary = diff_one(fname, statute_id, lean_asserts, py_asserts)
+        if passed:
+            counts["matched"] += 1
+        else:
+            counts["diff"] += 1
+            diffs.append(summary)
+            ok = False
+        if not args.summary_only:
+            print(summary)
+
+    if args.full:
+        print(
+            f"\nFull-corpus structural diff: "
+            f"{counts['matched']}/{len(py_fixtures)} matched, "
+            f"{counts['diff']} divergent, "
+            f"{counts['missing']} missing on Lean side."
+        )
+        if diffs and args.summary_only:
+            print("Divergences:")
+            for d in diffs[:20]:
+                print(d)
+            if len(diffs) > 20:
+                print(f"… +{len(diffs) - 20} more")
 
     print("\nKnown divergences (documented, not failed on):")
     for k, v in KNOWN_DIVERGENCES.items():

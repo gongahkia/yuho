@@ -118,6 +118,24 @@ verify-structural-diff: $(LOGS)
 			| tee $(LOGS)/structural-diff.log; \
 	fi
 
+# Full-corpus structural diff: regenerates the Lean fixture file
+# from the live `library/penal_code/*/statute.yh` corpus, then runs
+# the structural diff against all 524 sections. Slow (~30s including
+# fixture rebuild) — keep `verify-structural-diff` as the smoke gate
+# and run this on demand pre-arXiv.
+verify-structural-diff-full: $(LOGS)
+	@echo ">>> regenerating Lean corpus fixtures…"
+	@$(PYTHON) mechanisation/scripts/generate_fixtures.py 2>&1 \
+		| tee $(LOGS)/fixtures-gen.log
+	@echo ">>> running full-corpus Lean spec ↔ Python Z3Generator structural diff…"
+	@if command -v lake >/dev/null 2>&1; then \
+		$(PYTHON) scripts/verify_structural_diff.py --full --summary-only 2>&1 \
+			| tee $(LOGS)/structural-diff-full.log; \
+	else \
+		echo "Full structural diff: SKIPPED (Lean toolchain not on PATH)" \
+			| tee $(LOGS)/structural-diff-full.log; \
+	fi
+
 verify-mechanisation: $(LOGS)
 	@echo ">>> verifying §6.6 Lean 4 mechanisation kernel-checks…"
 	@if command -v lake >/dev/null 2>&1; then \
