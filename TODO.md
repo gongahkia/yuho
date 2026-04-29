@@ -11,10 +11,10 @@ benchmarks.
 
 Status key: `[ ]` pending · `[~]` in progress · `(def)` deferred.
 
-Current snapshot (2026-04-28): **4947 unit tests green · 524 sections at
+Current snapshot (2026-04-29): **4947 unit tests green · 524 sections at
 L1+L2 · 524 L3 author-stamped · §4 + §6 paper sections shipped (formal
 semantics + soundness theorem with 5 lemmas + 8 sanity-witness tests) ·
-§6.6 Lean 4 mechanisation v5: all 5 soundness lemmas kernel-checked
+§6.6 Lean 4 mechanisation v6: all 5 soundness lemmas kernel-checked
 (6.2 + 6.3 + 6.4 + 6.4' cross-section + 6.5 penalty) PLUS conviction-
 layer oracle assumption discharged via `Generator.lean`'s constructive
 canonical models (`canonical_smt_satisfies` /
@@ -22,7 +22,13 @@ canonical models (`canonical_smt_satisfies` /
 PLUS `Range.cumulativeJoin` / `Range.orBothMeet` algebraic surface +
 canonical-model smoke coverage extended to s299 / s300 / s378 / s415 +
 `make verify-structural-diff` PoC harness comparing Lean spec ↔
-Python `Z3Generator` on those four fixtures ·
+Python `Z3Generator` on those four fixtures PLUS v6 closures
+(`Penalty.wellFormed` predicate mechanises linter's
+sentinel-propagation invariant; `Generator.canonicalPenaltyModel`
+constructive §6.5 oracle discharge with leaf-shape canonical
+footprint constructors; `CrossSMTModel` qualified-atom refactor
++ `Generator.canonicalCrossModel` + singleton-module
+`canonical_cross_satisfies_singleton_singleton_exc` discharge) ·
 §7.8 case-law differential testing (n=38, three scorers; top-1 44.7%,
 MRR 0.461, contrast F1 0.239, constrained-contrast consistency 100%) ·
 §7.6 LLM benchmark with full 205-fixture GPT-4o-mini + GPT-4o + o3-mini
@@ -52,8 +58,10 @@ SAT, every defence clearing 60-100%) · 32-page smoke PDF ·
 
 Completed history (Phases A–D, the rigor-hardening trench, mechanisation
 v1, case-law differential testing, the LLM-benchmark closed-vocab fix,
-TikZ figure rewrite, Z3 hookup, AKN OASIS XSD validation, and the rest)
-lives in git log + `docs/PHASE_*` notes, not here.
+TikZ figure rewrite, Z3 hookup, AKN OASIS XSD validation, §7.6 LLM
+benchmark cross-model + prompt-variant sweep, Direction B
+defeats-edge encoding + audit, mechanisation v6 closures, and the
+rest) lives in git log + `docs/PHASE_*` notes, not here.
 
 ---
 
@@ -125,25 +133,6 @@ Open follow-ups (deferred to v7):
 
 ---
 
-## §7.6 — LLM benchmark `[x]`
-
-Closed. Headline state: full 205-fixture runs across three
-OpenAI models (gpt-4o-mini, gpt-4o, o3-mini) × four prompt
-variants (baseline / polarity / polarity-soft /
-polarity-conditional). `polarity-conditional` is the only
-Pareto-improving variant on gpt-4o-mini (T1 48.8% / T2 exact
-37.1% / F1 0.699 / T3 93.7%). The polarity-negative collapse on
-gpt-4o-mini reproduces on o3-mini (despite reasoning-token spend)
-but *not* on gpt-4o — the cross-model split is itself a
-benchmark finding, presented in §7.6's cross-model paragraph.
-
-Iteration history (v0 closed-vocab fix → cross-model runs →
-polarity variants → conditional routing) lives in git log
-(commits `ac8570b0..bbdef134`); paper §7.6 carries the
-publishable summary. No open work.
-
----
-
 ## §7.8 — Case-law differential testing `[~]`
 
 n=38 fixtures shipped with three scorers (recommend / contrast /
@@ -194,21 +183,6 @@ fixture-tested. Open work:
       emitting SCC overlap, divergent amendment paths, sections
       renumbered / added / repealed.
 - [ ] **Paper §8 prose** writing the comparative findings.
-
----
-
-## Direction B — General-defence `defeats` edges `[x]`
-
-Closed. 1253 edges across 147 sections (28% of corpus) using 22
-distinct Chapter IV standalone general defences. Doctrinal-
-fidelity audit (commits `4f0ba0c9..f1155a9d`) removed 75
-misclassified edges; ss98/s101/s104 conditions subsequently
-folded into ss96/s97/s100/s103/s106 elements (commit `e982ccd7`).
-Defeats-edge structural-coverage sweep at 91.1% SAT under
-`yuho narrow-defence`. Per-defence breakdown + cluster coverage
-table preserved in paper §7.5 + git log (commits
-`90c3c8ef..d0a9c971` for cluster batches,
-`4f0ba0c9..f1155a9d` for the audit). No open work.
 
 ---
 
