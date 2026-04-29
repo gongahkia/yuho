@@ -11,12 +11,13 @@ Checks for common issues in statute definitions:
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import List, Set, Tuple, Union
+from typing import List, Optional, Set, Tuple, Union
 
 from yuho.ast.nodes import (
     ElementGroupNode,
     ElementNode,
     ExceptionNode,
+    FunctionDefNode,
     IntLit,
     FloatLit,
     ModuleNode,
@@ -324,11 +325,61 @@ def _check_refinement_bounds(module: ModuleNode) -> List[LintWarning]:
     return warnings
 
 
-def lint_module(module: ModuleNode) -> List[LintWarning]:
-    """Run all lint checks across a module's statutes."""
+def _check_fn_name_collisions(modules: List[ModuleNode]) -> List[LintWarning]:
+    """Flag duplicate top-level `fn` names across a transitive `referencing`
+    closure. Each statute carries its own helper functions in a flat
+    namespace; if two referenced modules both define `fn foo` the
+    interpreter has no way to disambiguate. Mitigation policy is to
+    prefix each helper with its section number (option (a) in commit
+    `3d99308c`); this lint defends against drift.
+    """
+    warnings: List[LintWarning] = []
+    # (owner_section, module_id) so two modules with no statutes still
+    # disambiguate by identity.
+    seen: dict[str, tuple[str, int]] = {}
+    for module in modules:
+        owner = (
+            module.statutes[0].section_number
+            if module.statutes
+            else "<module>"
+        )
+        mod_id = id(module)
+        for fn in module.function_defs:
+            if not isinstance(fn, FunctionDefNode):
+                continue
+            prior = seen.get(fn.name)
+            if prior is not None and prior[1] != mod_id:
+                warnings.append(
+                    LintWarning(
+                        statute_section=owner,
+                        message=(
+                            f"fn '{fn.name}' collides with definition in "
+                            f"s{prior[0]}; prefix with section number "
+                            f"(e.g. is_s{owner}_{fn.name.removeprefix('is_')})"
+                        ),
+                        severity="warning",
+                    )
+                )
+            else:
+                seen[fn.name] = (owner, mod_id)
+    return warnings
+
+
+def lint_module(
+    module: ModuleNode,
+    referenced_modules: Optional[List[ModuleNode]] = None,
+) -> List[LintWarning]:
+    """Run all lint checks across a module's statutes.
+
+    When ``referenced_modules`` is supplied (e.g. by the resolver after
+    walking ``referencing`` directives), fn-name-collision checks span
+    the whole closure rather than just the local module.
+    """
     warnings: List[LintWarning] = []
     for statute in module.statutes:
         warnings.extend(lint_statute(statute))
     warnings.extend(_check_subsumption(module.statutes))
     warnings.extend(_check_refinement_bounds(module))
+    closure = [module] + list(referenced_modules or [])
+    warnings.extend(_check_fn_name_collisions(closure))
     return warnings
