@@ -1,6 +1,4 @@
 // Test file for s182_false_information_intent_cause_public
-// Yuho v5 Syntax — behavioural fixture.
-// Universal offence shape: made out iff elements ∧ ¬defence.
 
 referencing penal_code/s182_false_information_intent_cause_public
 
@@ -9,21 +7,18 @@ struct FalseInformationIntentCauseTestCase {
     bool defence_applies,
 }
 
-// elements satisfied, no defence -> offence made out
 FalseInformationIntentCauseTestCase guilty := FalseInformationIntentCauseTestCase {
     elements_satisfied := TRUE,
     defence_applies := FALSE,
 }
 assert is_false_information_intent_cause(guilty.elements_satisfied, guilty.defence_applies) == TRUE
 
-// elements satisfied, defence applies -> not made out
 FalseInformationIntentCauseTestCase defended := FalseInformationIntentCauseTestCase {
     elements_satisfied := TRUE,
     defence_applies := TRUE,
 }
 assert is_false_information_intent_cause(defended.elements_satisfied, defended.defence_applies) == FALSE
 
-// no elements -> not made out
 FalseInformationIntentCauseTestCase notMadeOut := FalseInformationIntentCauseTestCase {
     elements_satisfied := FALSE,
     defence_applies := FALSE,

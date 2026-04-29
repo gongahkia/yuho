@@ -1,9 +1,7 @@
 // Test file for s321_voluntarily_causing_hurt
-// Yuho v5 Syntax
 
 referencing penal_code/s321_voluntarily_causing_hurt
 
-// ----- test structs -----
 
 struct S321TestCase {
     bool intentToCauseHurt,
@@ -11,7 +9,6 @@ struct S321TestCase {
     bool hurtCaused,
 }
 
-// ----- intent and hurt caused: guilty -----
 
 S321TestCase intentHurt := S321TestCase {
     intentToCauseHurt := TRUE,
@@ -21,7 +18,6 @@ S321TestCase intentHurt := S321TestCase {
 
 assert is_voluntary_hurt(intentHurt.intentToCauseHurt, intentHurt.knowledgeLikelyToCauseHurt, intentHurt.hurtCaused) == TRUE
 
-// ----- knowledge and hurt caused: guilty -----
 
 S321TestCase knowledgeHurt := S321TestCase {
     intentToCauseHurt := FALSE,
@@ -31,7 +27,6 @@ S321TestCase knowledgeHurt := S321TestCase {
 
 assert is_voluntary_hurt(knowledgeHurt.intentToCauseHurt, knowledgeHurt.knowledgeLikelyToCauseHurt, knowledgeHurt.hurtCaused) == TRUE
 
-// ----- no hurt caused: not guilty -----
 
 S321TestCase noHurt := S321TestCase {
     intentToCauseHurt := TRUE,
@@ -41,7 +36,6 @@ S321TestCase noHurt := S321TestCase {
 
 assert is_voluntary_hurt(noHurt.intentToCauseHurt, noHurt.knowledgeLikelyToCauseHurt, noHurt.hurtCaused) == FALSE
 
-// ----- no intent or knowledge: not guilty -----
 
 S321TestCase noMensRea := S321TestCase {
     intentToCauseHurt := FALSE,

@@ -1,6 +1,4 @@
 // Test file for s203_giving_false_information_respecting_offence
-// Yuho v5 Syntax — behavioural fixture.
-// Universal offence shape: made out iff elements ∧ ¬defence.
 
 referencing penal_code/s203_giving_false_information_respecting_offence
 
@@ -9,21 +7,18 @@ struct GivingFalseInformationRespectingTestCase {
     bool defence_applies,
 }
 
-// elements satisfied, no defence -> offence made out
 GivingFalseInformationRespectingTestCase guilty := GivingFalseInformationRespectingTestCase {
     elements_satisfied := TRUE,
     defence_applies := FALSE,
 }
 assert is_giving_false_information_respecting(guilty.elements_satisfied, guilty.defence_applies) == TRUE
 
-// elements satisfied, defence applies -> not made out
 GivingFalseInformationRespectingTestCase defended := GivingFalseInformationRespectingTestCase {
     elements_satisfied := TRUE,
     defence_applies := TRUE,
 }
 assert is_giving_false_information_respecting(defended.elements_satisfied, defended.defence_applies) == FALSE
 
-// no elements -> not made out
 GivingFalseInformationRespectingTestCase notMadeOut := GivingFalseInformationRespectingTestCase {
     elements_satisfied := FALSE,
     defence_applies := FALSE,

@@ -1,16 +1,13 @@
 // Test file for s319_hurt
-// Yuho v5 Syntax
 
 referencing penal_code/s319_hurt
 
-// ----- test structs -----
 
 struct HurtTestCase {
     string physicalElement,
     bool causedToVictim,
 }
 
-// ----- bodily pain -----
 
 HurtTestCase bodilyPainCase := HurtTestCase {
     physicalElement := "bodily_pain",
@@ -21,7 +18,6 @@ assert bodilyPainCase.physicalElement == "bodily_pain"
 assert bodilyPainCase.causedToVictim == TRUE
 assert is_hurt(bodilyPainCase.physicalElement, bodilyPainCase.causedToVictim) == TRUE
 
-// ----- disease -----
 
 HurtTestCase diseaseCase := HurtTestCase {
     physicalElement := "disease",
@@ -31,7 +27,6 @@ HurtTestCase diseaseCase := HurtTestCase {
 assert diseaseCase.physicalElement == "disease"
 assert is_hurt(diseaseCase.physicalElement, diseaseCase.causedToVictim) == TRUE
 
-// ----- infirmity -----
 
 HurtTestCase infirmityCase := HurtTestCase {
     physicalElement := "infirmity",
@@ -41,7 +36,6 @@ HurtTestCase infirmityCase := HurtTestCase {
 assert infirmityCase.physicalElement == "infirmity"
 assert is_hurt(infirmityCase.physicalElement, infirmityCase.causedToVictim) == TRUE
 
-// ----- unconsciousness -----
 
 HurtTestCase unconsciousnessCase := HurtTestCase {
     physicalElement := "unconsciousness",
@@ -51,7 +45,6 @@ HurtTestCase unconsciousnessCase := HurtTestCase {
 assert unconsciousnessCase.physicalElement == "unconsciousness"
 assert is_hurt(unconsciousnessCase.physicalElement, unconsciousnessCase.causedToVictim) == TRUE
 
-// ----- no physical element: not hurt -----
 
 HurtTestCase noElement := HurtTestCase {
     physicalElement := "none",
@@ -61,7 +54,6 @@ HurtTestCase noElement := HurtTestCase {
 assert noElement.physicalElement == "none"
 assert is_hurt(noElement.physicalElement, noElement.causedToVictim) == FALSE
 
-// ----- not caused to victim: not hurt -----
 
 HurtTestCase notCaused := HurtTestCase {
     physicalElement := "bodily_pain",
@@ -71,7 +63,6 @@ HurtTestCase notCaused := HurtTestCase {
 assert notCaused.causedToVictim == FALSE
 assert is_hurt(notCaused.physicalElement, notCaused.causedToVictim) == FALSE
 
-// ----- unrecognized element: not hurt -----
 
 HurtTestCase unknownElement := HurtTestCase {
     physicalElement := "emotional_distress",

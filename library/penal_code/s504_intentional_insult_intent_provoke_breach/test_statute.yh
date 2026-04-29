@@ -1,6 +1,4 @@
 // Test file for s504_intentional_insult_intent_provoke_breach
-// Yuho v5 Syntax — behavioural fixture.
-// Universal offence shape: made out iff elements ∧ ¬defence.
 
 referencing penal_code/s504_intentional_insult_intent_provoke_breach
 
@@ -9,21 +7,18 @@ struct IntentionalInsultIntentProvokeTestCase {
     bool defence_applies,
 }
 
-// elements satisfied, no defence -> offence made out
 IntentionalInsultIntentProvokeTestCase guilty := IntentionalInsultIntentProvokeTestCase {
     elements_satisfied := TRUE,
     defence_applies := FALSE,
 }
 assert is_intentional_insult_intent_provoke(guilty.elements_satisfied, guilty.defence_applies) == TRUE
 
-// elements satisfied, defence applies -> not made out
 IntentionalInsultIntentProvokeTestCase defended := IntentionalInsultIntentProvokeTestCase {
     elements_satisfied := TRUE,
     defence_applies := TRUE,
 }
 assert is_intentional_insult_intent_provoke(defended.elements_satisfied, defended.defence_applies) == FALSE
 
-// no elements -> not made out
 IntentionalInsultIntentProvokeTestCase notMadeOut := IntentionalInsultIntentProvokeTestCase {
     elements_satisfied := FALSE,
     defence_applies := FALSE,

@@ -1,6 +1,4 @@
 // Test file for s122_collecting_arms_etc_intention_waging_war
-// Yuho v5 Syntax — behavioural fixture.
-// Universal offence shape: made out iff elements ∧ ¬defence.
 
 referencing penal_code/s122_collecting_arms_etc_intention_waging_war
 
@@ -9,21 +7,18 @@ struct CollectingArmsEtcIntentionTestCase {
     bool defence_applies,
 }
 
-// elements satisfied, no defence -> offence made out
 CollectingArmsEtcIntentionTestCase guilty := CollectingArmsEtcIntentionTestCase {
     elements_satisfied := TRUE,
     defence_applies := FALSE,
 }
 assert is_collecting_arms_etc_intention(guilty.elements_satisfied, guilty.defence_applies) == TRUE
 
-// elements satisfied, defence applies -> not made out
 CollectingArmsEtcIntentionTestCase defended := CollectingArmsEtcIntentionTestCase {
     elements_satisfied := TRUE,
     defence_applies := TRUE,
 }
 assert is_collecting_arms_etc_intention(defended.elements_satisfied, defended.defence_applies) == FALSE
 
-// no elements -> not made out
 CollectingArmsEtcIntentionTestCase notMadeOut := CollectingArmsEtcIntentionTestCase {
     elements_satisfied := FALSE,
     defence_applies := FALSE,

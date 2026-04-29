@@ -1,9 +1,7 @@
 // Test file for s300_murder
-// Yuho v5 Syntax
 
 referencing penal_code/s300_murder
 
-// ----- test structs -----
 
 struct MurderTestCase {
     bool causeDeath,
@@ -11,7 +9,6 @@ struct MurderTestCase {
     string exception,
 }
 
-// ----- normal murder (no exception) -----
 
 MurderTestCase normalMurder := MurderTestCase {
     causeDeath := TRUE,
@@ -25,7 +22,6 @@ assert normalMurder.exception == "none"
 assert has_murder_intent(normalMurder.mensRea) == TRUE
 assert exception_applies(normalMurder.exception) == FALSE
 
-// ----- mens rea limb 2: fatal injury -----
 
 MurderTestCase fatalInjuryMurder := MurderTestCase {
     causeDeath := TRUE,
@@ -37,7 +33,6 @@ assert fatalInjuryMurder.causeDeath == TRUE
 assert fatalInjuryMurder.mensRea == "intention_to_inflict_fatal_injury"
 assert has_murder_intent(fatalInjuryMurder.mensRea) == TRUE
 
-// ----- mens rea limb 3: sufficient injury -----
 
 MurderTestCase sufficientInjuryMurder := MurderTestCase {
     causeDeath := TRUE,
@@ -48,7 +43,6 @@ MurderTestCase sufficientInjuryMurder := MurderTestCase {
 assert sufficientInjuryMurder.mensRea == "intention_to_inflict_sufficient_injury"
 assert has_murder_intent(sufficientInjuryMurder.mensRea) == TRUE
 
-// ----- mens rea limb 4: knowledge of danger -----
 
 MurderTestCase dangerKnowledgeMurder := MurderTestCase {
     causeDeath := TRUE,
@@ -59,7 +53,6 @@ MurderTestCase dangerKnowledgeMurder := MurderTestCase {
 assert dangerKnowledgeMurder.mensRea == "knowledge_of_danger"
 assert has_murder_intent(dangerKnowledgeMurder.mensRea) == TRUE
 
-// ----- no mens rea: not murder -----
 
 MurderTestCase noMensRea := MurderTestCase {
     causeDeath := TRUE,
@@ -70,7 +63,6 @@ MurderTestCase noMensRea := MurderTestCase {
 assert noMensRea.mensRea == "negligence"
 assert has_murder_intent(noMensRea.mensRea) == FALSE
 
-// ----- exception 1: provocation -----
 
 MurderTestCase provocationCase := MurderTestCase {
     causeDeath := TRUE,
@@ -84,7 +76,6 @@ assert provocationCase.exception == "provocation"
 assert has_murder_intent(provocationCase.mensRea) == TRUE
 assert exception_applies(provocationCase.exception) == TRUE
 
-// ----- exception 2: private defence -----
 
 MurderTestCase privateDefenceCase := MurderTestCase {
     causeDeath := TRUE,
@@ -95,7 +86,6 @@ MurderTestCase privateDefenceCase := MurderTestCase {
 assert privateDefenceCase.exception == "privateDefence"
 assert exception_applies(privateDefenceCase.exception) == TRUE
 
-// ----- exception 3: public servant -----
 
 MurderTestCase publicServantCase := MurderTestCase {
     causeDeath := TRUE,
@@ -106,7 +96,6 @@ MurderTestCase publicServantCase := MurderTestCase {
 assert publicServantCase.exception == "publicServant"
 assert exception_applies(publicServantCase.exception) == TRUE
 
-// ----- exception 4: sudden fight -----
 
 MurderTestCase suddenFightCase := MurderTestCase {
     causeDeath := TRUE,
@@ -117,7 +106,6 @@ MurderTestCase suddenFightCase := MurderTestCase {
 assert suddenFightCase.exception == "suddenFight"
 assert exception_applies(suddenFightCase.exception) == TRUE
 
-// ----- exception 5: consent -----
 
 MurderTestCase consentCase := MurderTestCase {
     causeDeath := TRUE,
@@ -128,7 +116,6 @@ MurderTestCase consentCase := MurderTestCase {
 assert consentCase.exception == "consent"
 assert exception_applies(consentCase.exception) == TRUE
 
-// ----- no death caused: not murder -----
 
 MurderTestCase noDeathCase := MurderTestCase {
     causeDeath := FALSE,

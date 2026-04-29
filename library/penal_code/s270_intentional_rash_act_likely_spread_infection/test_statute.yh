@@ -1,6 +1,4 @@
 // Test file for s270_intentional_rash_act_likely_spread_infection
-// Yuho v5 Syntax — behavioural fixture.
-// Universal offence shape: made out iff elements ∧ ¬defence.
 
 referencing penal_code/s270_intentional_rash_act_likely_spread_infection
 
@@ -9,21 +7,18 @@ struct IntentionalRashActLikelyTestCase {
     bool defence_applies,
 }
 
-// elements satisfied, no defence -> offence made out
 IntentionalRashActLikelyTestCase guilty := IntentionalRashActLikelyTestCase {
     elements_satisfied := TRUE,
     defence_applies := FALSE,
 }
 assert is_intentional_rash_act_likely(guilty.elements_satisfied, guilty.defence_applies) == TRUE
 
-// elements satisfied, defence applies -> not made out
 IntentionalRashActLikelyTestCase defended := IntentionalRashActLikelyTestCase {
     elements_satisfied := TRUE,
     defence_applies := TRUE,
 }
 assert is_intentional_rash_act_likely(defended.elements_satisfied, defended.defence_applies) == FALSE
 
-// no elements -> not made out
 IntentionalRashActLikelyTestCase notMadeOut := IntentionalRashActLikelyTestCase {
     elements_satisfied := FALSE,
     defence_applies := FALSE,

@@ -1,6 +1,4 @@
 // Test file for s489B_using_genuine_forged_counterfeit_currency
-// Yuho v5 Syntax — behavioural fixture.
-// Universal offence shape: made out iff elements ∧ ¬defence.
 
 referencing penal_code/s489B_using_genuine_forged_counterfeit_currency
 
@@ -9,21 +7,18 @@ struct UsingGenuineForgedCounterfeitTestCase {
     bool defence_applies,
 }
 
-// elements satisfied, no defence -> offence made out
 UsingGenuineForgedCounterfeitTestCase guilty := UsingGenuineForgedCounterfeitTestCase {
     elements_satisfied := TRUE,
     defence_applies := FALSE,
 }
 assert is_using_genuine_forged_counterfeit(guilty.elements_satisfied, guilty.defence_applies) == TRUE
 
-// elements satisfied, defence applies -> not made out
 UsingGenuineForgedCounterfeitTestCase defended := UsingGenuineForgedCounterfeitTestCase {
     elements_satisfied := TRUE,
     defence_applies := TRUE,
 }
 assert is_using_genuine_forged_counterfeit(defended.elements_satisfied, defended.defence_applies) == FALSE
 
-// no elements -> not made out
 UsingGenuineForgedCounterfeitTestCase notMadeOut := UsingGenuineForgedCounterfeitTestCase {
     elements_satisfied := FALSE,
     defence_applies := FALSE,

@@ -1,6 +1,4 @@
 // Test file for s328_causing_hurt_means_poison_etc_intent_commit
-// Yuho v5 Syntax — behavioural fixture.
-// Universal offence shape: made out iff elements ∧ ¬defence.
 
 referencing penal_code/s328_causing_hurt_means_poison_etc_intent_commit
 
@@ -9,21 +7,18 @@ struct CausingHurtMeansPoisonTestCase {
     bool defence_applies,
 }
 
-// elements satisfied, no defence -> offence made out
 CausingHurtMeansPoisonTestCase guilty := CausingHurtMeansPoisonTestCase {
     elements_satisfied := TRUE,
     defence_applies := FALSE,
 }
 assert is_causing_hurt_means_poison(guilty.elements_satisfied, guilty.defence_applies) == TRUE
 
-// elements satisfied, defence applies -> not made out
 CausingHurtMeansPoisonTestCase defended := CausingHurtMeansPoisonTestCase {
     elements_satisfied := TRUE,
     defence_applies := TRUE,
 }
 assert is_causing_hurt_means_poison(defended.elements_satisfied, defended.defence_applies) == FALSE
 
-// no elements -> not made out
 CausingHurtMeansPoisonTestCase notMadeOut := CausingHurtMeansPoisonTestCase {
     elements_satisfied := FALSE,
     defence_applies := FALSE,

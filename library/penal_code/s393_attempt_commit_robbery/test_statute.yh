@@ -1,6 +1,4 @@
 // Test file for s393_attempt_commit_robbery
-// Yuho v5 Syntax — behavioural fixture.
-// Universal offence shape: made out iff elements ∧ ¬defence.
 
 referencing penal_code/s393_attempt_commit_robbery
 
@@ -9,21 +7,18 @@ struct AttemptRobberyTestCase {
     bool defence_applies,
 }
 
-// elements satisfied, no defence -> offence made out
 AttemptRobberyTestCase guilty := AttemptRobberyTestCase {
     elements_satisfied := TRUE,
     defence_applies := FALSE,
 }
 assert is_attempt_robbery(guilty.elements_satisfied, guilty.defence_applies) == TRUE
 
-// elements satisfied, defence applies -> not made out
 AttemptRobberyTestCase defended := AttemptRobberyTestCase {
     elements_satisfied := TRUE,
     defence_applies := TRUE,
 }
 assert is_attempt_robbery(defended.elements_satisfied, defended.defence_applies) == FALSE
 
-// no elements -> not made out
 AttemptRobberyTestCase notMadeOut := AttemptRobberyTestCase {
     elements_satisfied := FALSE,
     defence_applies := FALSE,

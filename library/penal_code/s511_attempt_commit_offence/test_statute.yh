@@ -1,9 +1,7 @@
 // Test file for s511_attempt_commit_offence
-// Yuho v5 Syntax
 
 referencing penal_code/s511_attempt_commit_offence
 
-// interpretation section -- no runtime behaviour to assert
 struct InterpretationTest {
     bool referenced,
 }

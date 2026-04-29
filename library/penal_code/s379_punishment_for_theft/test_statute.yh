@@ -1,15 +1,12 @@
 // Test file for s379_punishment_for_theft
-// Yuho v5 Syntax
 
 referencing penal_code/s379_punishment_for_theft
 
-// ----- test structs -----
 
 struct S379TestCase {
     bool theftCommitted,
 }
 
-// ----- theft committed: punishment applies -----
 
 S379TestCase guilty := S379TestCase {
     theftCommitted := TRUE,
@@ -18,7 +15,6 @@ S379TestCase guilty := S379TestCase {
 assert guilty.theftCommitted == TRUE
 assert s379_applies(guilty.theftCommitted) == TRUE
 
-// ----- no theft: no punishment -----
 
 S379TestCase notGuilty := S379TestCase {
     theftCommitted := FALSE,

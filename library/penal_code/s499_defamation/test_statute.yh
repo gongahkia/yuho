@@ -1,9 +1,7 @@
 // Test file for s499_defamation
-// Yuho v5 Syntax
 
 referencing penal_code/s499_defamation
 
-// ----- test structs -----
 
 struct DefamationTestCase {
     string method,
@@ -11,7 +9,6 @@ struct DefamationTestCase {
     string exception,
 }
 
-// ----- normal defamation: spoken words with intent -----
 
 DefamationTestCase normalDefamation := DefamationTestCase {
     method := "spoken_words",
@@ -24,7 +21,6 @@ assert normalDefamation.mensRea == "intent_to_harm_reputation"
 assert normalDefamation.exception == "none"
 assert is_defamation(normalDefamation.method, normalDefamation.mensRea, normalDefamation.exception) == TRUE
 
-// ----- written defamation -----
 
 DefamationTestCase writtenDefamation := DefamationTestCase {
     method := "written_words",
@@ -35,7 +31,6 @@ DefamationTestCase writtenDefamation := DefamationTestCase {
 assert writtenDefamation.method == "written_words"
 assert is_defamation(writtenDefamation.method, writtenDefamation.mensRea, writtenDefamation.exception) == TRUE
 
-// ----- defamation by signs -----
 
 DefamationTestCase signDefamation := DefamationTestCase {
     method := "visible_representation",
@@ -47,7 +42,6 @@ assert signDefamation.method == "visible_representation"
 assert signDefamation.mensRea == "knowledge_of_harm"
 assert is_defamation(signDefamation.method, signDefamation.mensRea, signDefamation.exception) == TRUE
 
-// ----- no method: not defamation -----
 
 DefamationTestCase noMethod := DefamationTestCase {
     method := "none",
@@ -58,7 +52,6 @@ DefamationTestCase noMethod := DefamationTestCase {
 assert noMethod.method == "none"
 assert is_defamation(noMethod.method, noMethod.mensRea, noMethod.exception) == FALSE
 
-// ----- no mens rea: not defamation -----
 
 DefamationTestCase noMensRea := DefamationTestCase {
     method := "spoken_words",
@@ -69,7 +62,6 @@ DefamationTestCase noMensRea := DefamationTestCase {
 assert noMensRea.mensRea == "none"
 assert is_defamation(noMensRea.method, noMensRea.mensRea, noMensRea.exception) == FALSE
 
-// ----- exception: truth for public good -----
 
 DefamationTestCase truthPublicGoodCase := DefamationTestCase {
     method := "written_words",
@@ -80,7 +72,6 @@ DefamationTestCase truthPublicGoodCase := DefamationTestCase {
 assert truthPublicGoodCase.exception == "truthPublicGood"
 assert is_defamation(truthPublicGoodCase.method, truthPublicGoodCase.mensRea, truthPublicGoodCase.exception) == FALSE
 
-// ----- exception: public conduct -----
 
 DefamationTestCase publicConductCase := DefamationTestCase {
     method := "spoken_words",
@@ -91,7 +82,6 @@ DefamationTestCase publicConductCase := DefamationTestCase {
 assert publicConductCase.exception == "publicConduct"
 assert is_defamation(publicConductCase.method, publicConductCase.mensRea, publicConductCase.exception) == FALSE
 
-// ----- exception: court proceedings -----
 
 DefamationTestCase courtProceedingsCase := DefamationTestCase {
     method := "written_words",
@@ -102,7 +92,6 @@ DefamationTestCase courtProceedingsCase := DefamationTestCase {
 assert courtProceedingsCase.exception == "courtProceedings"
 assert is_defamation(courtProceedingsCase.method, courtProceedingsCase.mensRea, courtProceedingsCase.exception) == FALSE
 
-// ----- exception: good faith opinion -----
 
 DefamationTestCase goodFaithOpinionCase := DefamationTestCase {
     method := "spoken_words",
@@ -113,7 +102,6 @@ DefamationTestCase goodFaithOpinionCase := DefamationTestCase {
 assert goodFaithOpinionCase.exception == "goodFaithOpinion"
 assert is_defamation(goodFaithOpinionCase.method, goodFaithOpinionCase.mensRea, goodFaithOpinionCase.exception) == FALSE
 
-// ----- exception: good faith accusation -----
 
 DefamationTestCase goodFaithAccusationCase := DefamationTestCase {
     method := "spoken_words",
@@ -124,7 +112,6 @@ DefamationTestCase goodFaithAccusationCase := DefamationTestCase {
 assert goodFaithAccusationCase.exception == "goodFaithAccusation"
 assert is_defamation(goodFaithAccusationCase.method, goodFaithAccusationCase.mensRea, goodFaithAccusationCase.exception) == FALSE
 
-// ----- exception: caution in good faith -----
 
 DefamationTestCase cautionCase := DefamationTestCase {
     method := "spoken_words",

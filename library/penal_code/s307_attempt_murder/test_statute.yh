@@ -1,6 +1,4 @@
 // Test file for s307_attempt_murder
-// Yuho v5 Syntax — behavioural fixture.
-// Universal offence shape: made out iff elements ∧ ¬defence.
 
 referencing penal_code/s307_attempt_murder
 
@@ -9,21 +7,18 @@ struct AttemptMurderTestCase {
     bool defence_applies,
 }
 
-// elements satisfied, no defence -> offence made out
 AttemptMurderTestCase guilty := AttemptMurderTestCase {
     elements_satisfied := TRUE,
     defence_applies := FALSE,
 }
 assert is_attempt_murder(guilty.elements_satisfied, guilty.defence_applies) == TRUE
 
-// elements satisfied, defence applies -> not made out
 AttemptMurderTestCase defended := AttemptMurderTestCase {
     elements_satisfied := TRUE,
     defence_applies := TRUE,
 }
 assert is_attempt_murder(defended.elements_satisfied, defended.defence_applies) == FALSE
 
-// no elements -> not made out
 AttemptMurderTestCase notMadeOut := AttemptMurderTestCase {
     elements_satisfied := FALSE,
     defence_applies := FALSE,

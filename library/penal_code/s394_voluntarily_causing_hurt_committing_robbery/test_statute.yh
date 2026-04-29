@@ -1,6 +1,4 @@
 // Test file for s394_voluntarily_causing_hurt_committing_robbery
-// Yuho v5 Syntax — behavioural fixture.
-// Universal offence shape: made out iff elements ∧ ¬defence.
 
 referencing penal_code/s394_voluntarily_causing_hurt_committing_robbery
 
@@ -9,21 +7,18 @@ struct RobberyWithHurtTestCase {
     bool defence_applies,
 }
 
-// elements satisfied, no defence -> offence made out
 RobberyWithHurtTestCase guilty := RobberyWithHurtTestCase {
     elements_satisfied := TRUE,
     defence_applies := FALSE,
 }
 assert is_robbery_with_hurt(guilty.elements_satisfied, guilty.defence_applies) == TRUE
 
-// elements satisfied, defence applies -> not made out
 RobberyWithHurtTestCase defended := RobberyWithHurtTestCase {
     elements_satisfied := TRUE,
     defence_applies := TRUE,
 }
 assert is_robbery_with_hurt(defended.elements_satisfied, defended.defence_applies) == FALSE
 
-// no elements -> not made out
 RobberyWithHurtTestCase notMadeOut := RobberyWithHurtTestCase {
     elements_satisfied := FALSE,
     defence_applies := FALSE,

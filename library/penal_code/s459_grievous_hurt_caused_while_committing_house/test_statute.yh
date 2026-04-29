@@ -1,6 +1,4 @@
 // Test file for s459_grievous_hurt_caused_while_committing_house
-// Yuho v5 Syntax — behavioural fixture.
-// Universal offence shape: made out iff elements ∧ ¬defence.
 
 referencing penal_code/s459_grievous_hurt_caused_while_committing_house
 
@@ -9,21 +7,18 @@ struct GrievousHurtDuringHouseBreakingTestCase {
     bool defence_applies,
 }
 
-// elements satisfied, no defence -> offence made out
 GrievousHurtDuringHouseBreakingTestCase guilty := GrievousHurtDuringHouseBreakingTestCase {
     elements_satisfied := TRUE,
     defence_applies := FALSE,
 }
 assert is_grievous_hurt_during_house_breaking(guilty.elements_satisfied, guilty.defence_applies) == TRUE
 
-// elements satisfied, defence applies -> not made out
 GrievousHurtDuringHouseBreakingTestCase defended := GrievousHurtDuringHouseBreakingTestCase {
     elements_satisfied := TRUE,
     defence_applies := TRUE,
 }
 assert is_grievous_hurt_during_house_breaking(defended.elements_satisfied, defended.defence_applies) == FALSE
 
-// no elements -> not made out
 GrievousHurtDuringHouseBreakingTestCase notMadeOut := GrievousHurtDuringHouseBreakingTestCase {
     elements_satisfied := FALSE,
     defence_applies := FALSE,

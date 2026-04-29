@@ -1,10 +1,4 @@
 // Test file for s324_voluntarily_causing_hurt_dangerous_weapons
-// Yuho v6 Syntax — enriched behavioural fixture (2026-04-29).
-// s324 is conjunctive: voluntary, hurt caused, AND at least one of the
-// disjunctive dangerous-weapon-or-means limbs (instrument for shooting/
-// stabbing/cutting; weapon likely to cause death; fire/heated substance;
-// poison/corrosive substance; explosive; specified noxious-substance
-// inhalation, etc.). Excludes the s334 case (hurt under provocation).
 
 referencing penal_code/s324_voluntarily_causing_hurt_dangerous_weapons
 

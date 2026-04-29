@@ -1,6 +1,4 @@
 // Test file for s125_waging_war_against_power_alliance_peace
-// Yuho v5 Syntax — behavioural fixture.
-// Universal offence shape: made out iff elements ∧ ¬defence.
 
 referencing penal_code/s125_waging_war_against_power_alliance_peace
 
@@ -9,21 +7,18 @@ struct WagingWarAgainstPowerTestCase {
     bool defence_applies,
 }
 
-// elements satisfied, no defence -> offence made out
 WagingWarAgainstPowerTestCase guilty := WagingWarAgainstPowerTestCase {
     elements_satisfied := TRUE,
     defence_applies := FALSE,
 }
 assert is_waging_war_against_power(guilty.elements_satisfied, guilty.defence_applies) == TRUE
 
-// elements satisfied, defence applies -> not made out
 WagingWarAgainstPowerTestCase defended := WagingWarAgainstPowerTestCase {
     elements_satisfied := TRUE,
     defence_applies := TRUE,
 }
 assert is_waging_war_against_power(defended.elements_satisfied, defended.defence_applies) == FALSE
 
-// no elements -> not made out
 WagingWarAgainstPowerTestCase notMadeOut := WagingWarAgainstPowerTestCase {
     elements_satisfied := FALSE,
     defence_applies := FALSE,

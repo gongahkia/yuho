@@ -1,9 +1,4 @@
 // Test file for s322_voluntarily_causing_grievous_hurt
-// Yuho v6 Syntax — enriched behavioural fixture (2026-04-29).
-// s322 is conjunctive: voluntary hurt + grievous-fault element + grievous
-// hurt actually caused. Per the s322 Explanation, the kind of grievous
-// hurt intended need not match the kind actually caused: intending one
-// kind and causing another still grounds s322.
 
 referencing penal_code/s322_voluntarily_causing_grievous_hurt
 
@@ -16,7 +11,6 @@ struct S322Scenario {
     bool defenceApplies,
 }
 
-// ----- canonical s322: intent for permanent privation of sight, blinding caused -----
 
 S322Scenario intentBlindingCauseBlinding := S322Scenario {
     voluntarilyCausesHurt := TRUE,
@@ -31,7 +25,6 @@ assert is_s322_voluntarily_causing_grievous_hurt(
     intentBlindingCauseBlinding.defenceApplies
 ) == TRUE
 
-// ----- knowledge limb: knows likely to cause grievous + grievous caused -----
 
 S322Scenario knowsLikelyGrievousFracture := S322Scenario {
     voluntarilyCausesHurt := TRUE,
@@ -46,7 +39,6 @@ assert is_s322_voluntarily_causing_grievous_hurt(
     knowsLikelyGrievousFracture.defenceApplies
 ) == TRUE
 
-// ----- kind-shift per Explanation: intent fracture, actual blinding (still s322) -----
 
 S322Scenario kindShift := S322Scenario {
     voluntarilyCausesHurt := TRUE,
@@ -61,7 +53,6 @@ assert is_s322_voluntarily_causing_grievous_hurt(
     kindShift.defenceApplies
 ) == TRUE
 
-// ----- intent for non-grievous + non-grievous caused: NOT s322 (s321 territory) -----
 
 S322Scenario nonGrievousIntent := S322Scenario {
     voluntarilyCausesHurt := TRUE,
@@ -76,7 +67,6 @@ assert is_s322_voluntarily_causing_grievous_hurt(
     nonGrievousIntent.defenceApplies
 ) == FALSE
 
-// ----- intent for grievous + only non-grievous caused: NOT s322 (per Explanation requires actual grievous; s323A territory) -----
 
 S322Scenario intentWithoutResult := S322Scenario {
     voluntarilyCausesHurt := TRUE,
@@ -91,7 +81,6 @@ assert is_s322_voluntarily_causing_grievous_hurt(
     intentWithoutResult.defenceApplies
 ) == FALSE
 
-// ----- defence applies (e.g., s96 right of private defence): NOT made out -----
 
 S322Scenario selfDefence := S322Scenario {
     voluntarilyCausesHurt := TRUE,

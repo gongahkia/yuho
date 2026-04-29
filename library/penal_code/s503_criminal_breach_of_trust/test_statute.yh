@@ -1,14 +1,11 @@
 // Test file for s503_criminal_breach_of_trust
-// Yuho v5 Syntax
 
 referencing penal_code/s503_criminal_breach_of_trust
 
-// Test case 1: Basic validation
 fn test_basic() : bool {
     return TRUE;
 }
 
-// Test case 2: Edge case
 fn test_edge_case() : bool {
     return TRUE;
 }

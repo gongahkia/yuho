@@ -1,9 +1,7 @@
 // Test file for s299_culpable_homicide
-// Yuho v5 Syntax
 
 referencing penal_code/s299_culpable_homicide
 
-// ----- test structs -----
 
 struct CulpableHomicideTestCase {
     string actusReus,
@@ -11,7 +9,6 @@ struct CulpableHomicideTestCase {
     string mensRea,
 }
 
-// ----- intention to cause death -----
 
 CulpableHomicideTestCase intentionDeath := CulpableHomicideTestCase {
     actusReus := "act",
@@ -24,7 +21,6 @@ assert intentionDeath.deathCaused == TRUE
 assert intentionDeath.mensRea == "intention_to_cause_death"
 assert is_culpable_homicide(intentionDeath.actusReus, intentionDeath.deathCaused, intentionDeath.mensRea) == TRUE
 
-// ----- intention to cause bodily injury -----
 
 CulpableHomicideTestCase intentionInjury := CulpableHomicideTestCase {
     actusReus := "act",
@@ -35,7 +31,6 @@ CulpableHomicideTestCase intentionInjury := CulpableHomicideTestCase {
 assert intentionInjury.mensRea == "intention_to_cause_bodily_injury"
 assert is_culpable_homicide(intentionInjury.actusReus, intentionInjury.deathCaused, intentionInjury.mensRea) == TRUE
 
-// ----- knowledge likely to cause death -----
 
 CulpableHomicideTestCase knowledgeDeath := CulpableHomicideTestCase {
     actusReus := "act",
@@ -46,7 +41,6 @@ CulpableHomicideTestCase knowledgeDeath := CulpableHomicideTestCase {
 assert knowledgeDeath.mensRea == "knowledge_likely_to_cause_death"
 assert is_culpable_homicide(knowledgeDeath.actusReus, knowledgeDeath.deathCaused, knowledgeDeath.mensRea) == TRUE
 
-// ----- no actus reus: not culpable homicide -----
 
 CulpableHomicideTestCase noActusReus := CulpableHomicideTestCase {
     actusReus := "none",
@@ -57,7 +51,6 @@ CulpableHomicideTestCase noActusReus := CulpableHomicideTestCase {
 assert noActusReus.actusReus == "none"
 assert is_culpable_homicide(noActusReus.actusReus, noActusReus.deathCaused, noActusReus.mensRea) == FALSE
 
-// ----- no death caused: not culpable homicide -----
 
 CulpableHomicideTestCase noDeathCaused := CulpableHomicideTestCase {
     actusReus := "act",
@@ -68,7 +61,6 @@ CulpableHomicideTestCase noDeathCaused := CulpableHomicideTestCase {
 assert noDeathCaused.deathCaused == FALSE
 assert is_culpable_homicide(noDeathCaused.actusReus, noDeathCaused.deathCaused, noDeathCaused.mensRea) == FALSE
 
-// ----- no mens rea: not culpable homicide -----
 
 CulpableHomicideTestCase noMensRea := CulpableHomicideTestCase {
     actusReus := "act",
@@ -79,7 +71,6 @@ CulpableHomicideTestCase noMensRea := CulpableHomicideTestCase {
 assert noMensRea.mensRea == "negligence"
 assert is_culpable_homicide(noMensRea.actusReus, noMensRea.deathCaused, noMensRea.mensRea) == FALSE
 
-// ----- omission causing death -----
 
 CulpableHomicideTestCase omissionCase := CulpableHomicideTestCase {
     actusReus := "omission",

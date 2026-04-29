@@ -1,6 +1,4 @@
 // Test file for s466_forgery_record_court_justice_public_register
-// Yuho v5 Syntax — behavioural fixture.
-// Universal offence shape: made out iff elements ∧ ¬defence.
 
 referencing penal_code/s466_forgery_record_court_justice_public_register
 
@@ -9,21 +7,18 @@ struct ForgeryRecordCourtJusticeTestCase {
     bool defence_applies,
 }
 
-// elements satisfied, no defence -> offence made out
 ForgeryRecordCourtJusticeTestCase guilty := ForgeryRecordCourtJusticeTestCase {
     elements_satisfied := TRUE,
     defence_applies := FALSE,
 }
 assert is_forgery_record_court_justice(guilty.elements_satisfied, guilty.defence_applies) == TRUE
 
-// elements satisfied, defence applies -> not made out
 ForgeryRecordCourtJusticeTestCase defended := ForgeryRecordCourtJusticeTestCase {
     elements_satisfied := TRUE,
     defence_applies := TRUE,
 }
 assert is_forgery_record_court_justice(defended.elements_satisfied, defended.defence_applies) == FALSE
 
-// no elements -> not made out
 ForgeryRecordCourtJusticeTestCase notMadeOut := ForgeryRecordCourtJusticeTestCase {
     elements_satisfied := FALSE,
     defence_applies := FALSE,

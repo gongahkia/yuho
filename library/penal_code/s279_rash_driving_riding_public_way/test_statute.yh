@@ -1,6 +1,4 @@
 // Test file for s279_rash_driving_riding_public_way
-// Yuho v5 Syntax — behavioural fixture.
-// Universal offence shape: made out iff elements ∧ ¬defence.
 
 referencing penal_code/s279_rash_driving_riding_public_way
 
@@ -9,21 +7,18 @@ struct RashDrivingRidingPublicTestCase {
     bool defence_applies,
 }
 
-// elements satisfied, no defence -> offence made out
 RashDrivingRidingPublicTestCase guilty := RashDrivingRidingPublicTestCase {
     elements_satisfied := TRUE,
     defence_applies := FALSE,
 }
 assert is_rash_driving_riding_public(guilty.elements_satisfied, guilty.defence_applies) == TRUE
 
-// elements satisfied, defence applies -> not made out
 RashDrivingRidingPublicTestCase defended := RashDrivingRidingPublicTestCase {
     elements_satisfied := TRUE,
     defence_applies := TRUE,
 }
 assert is_rash_driving_riding_public(defended.elements_satisfied, defended.defence_applies) == FALSE
 
-// no elements -> not made out
 RashDrivingRidingPublicTestCase notMadeOut := RashDrivingRidingPublicTestCase {
     elements_satisfied := FALSE,
     defence_applies := FALSE,

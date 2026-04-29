@@ -1,9 +1,7 @@
 // Test file for s378_theft
-// Yuho v5 Syntax
 
 referencing penal_code/s378_theft
 
-// ----- test structs -----
 
 struct TheftTestCase {
     string propertyType,
@@ -13,7 +11,6 @@ struct TheftTestCase {
     bool propertyMoved,
 }
 
-// ----- normal theft: all elements present -----
 
 TheftTestCase normalTheft := TheftTestCase {
     propertyType := "movable_property",
@@ -30,7 +27,6 @@ assert normalTheft.inPossessionOfAnother == TRUE
 assert normalTheft.propertyMoved == TRUE
 assert is_theft(normalTheft.propertyType, normalTheft.dishonestIntention, normalTheft.withoutConsent, normalTheft.inPossessionOfAnother, normalTheft.propertyMoved) == TRUE
 
-// ----- wrongful loss intention -----
 
 TheftTestCase wrongfulLossTheft := TheftTestCase {
     propertyType := "movable_property",
@@ -43,7 +39,6 @@ TheftTestCase wrongfulLossTheft := TheftTestCase {
 assert wrongfulLossTheft.dishonestIntention == "wrongful_loss"
 assert is_theft(wrongfulLossTheft.propertyType, wrongfulLossTheft.dishonestIntention, wrongfulLossTheft.withoutConsent, wrongfulLossTheft.inPossessionOfAnother, wrongfulLossTheft.propertyMoved) == TRUE
 
-// ----- no property: not theft -----
 
 TheftTestCase noProperty := TheftTestCase {
     propertyType := "none",
@@ -56,7 +51,6 @@ TheftTestCase noProperty := TheftTestCase {
 assert noProperty.propertyType == "none"
 assert is_theft(noProperty.propertyType, noProperty.dishonestIntention, noProperty.withoutConsent, noProperty.inPossessionOfAnother, noProperty.propertyMoved) == FALSE
 
-// ----- no dishonest intention: not theft -----
 
 TheftTestCase noIntention := TheftTestCase {
     propertyType := "movable_property",
@@ -69,7 +63,6 @@ TheftTestCase noIntention := TheftTestCase {
 assert noIntention.dishonestIntention == "none"
 assert is_theft(noIntention.propertyType, noIntention.dishonestIntention, noIntention.withoutConsent, noIntention.inPossessionOfAnother, noIntention.propertyMoved) == FALSE
 
-// ----- with consent: not theft -----
 
 TheftTestCase withConsent := TheftTestCase {
     propertyType := "movable_property",
@@ -82,7 +75,6 @@ TheftTestCase withConsent := TheftTestCase {
 assert withConsent.withoutConsent == FALSE
 assert is_theft(withConsent.propertyType, withConsent.dishonestIntention, withConsent.withoutConsent, withConsent.inPossessionOfAnother, withConsent.propertyMoved) == FALSE
 
-// ----- not in possession of another: not theft -----
 
 TheftTestCase notInPossession := TheftTestCase {
     propertyType := "movable_property",
@@ -95,7 +87,6 @@ TheftTestCase notInPossession := TheftTestCase {
 assert notInPossession.inPossessionOfAnother == FALSE
 assert is_theft(notInPossession.propertyType, notInPossession.dishonestIntention, notInPossession.withoutConsent, notInPossession.inPossessionOfAnother, notInPossession.propertyMoved) == FALSE
 
-// ----- property not moved: not theft -----
 
 TheftTestCase notMoved := TheftTestCase {
     propertyType := "movable_property",

@@ -1,6 +1,4 @@
 // Test file for s212_harbouring_offender
-// Yuho v5 Syntax — behavioural fixture.
-// Universal offence shape: made out iff elements ∧ ¬defence.
 
 referencing penal_code/s212_harbouring_offender
 
@@ -9,21 +7,18 @@ struct HarbouringOffenderTestCase {
     bool defence_applies,
 }
 
-// elements satisfied, no defence -> offence made out
 HarbouringOffenderTestCase guilty := HarbouringOffenderTestCase {
     elements_satisfied := TRUE,
     defence_applies := FALSE,
 }
 assert is_harbouring_offender(guilty.elements_satisfied, guilty.defence_applies) == TRUE
 
-// elements satisfied, defence applies -> not made out
 HarbouringOffenderTestCase defended := HarbouringOffenderTestCase {
     elements_satisfied := TRUE,
     defence_applies := TRUE,
 }
 assert is_harbouring_offender(defended.elements_satisfied, defended.defence_applies) == FALSE
 
-// no elements -> not made out
 HarbouringOffenderTestCase notMadeOut := HarbouringOffenderTestCase {
     elements_satisfied := FALSE,
     defence_applies := FALSE,

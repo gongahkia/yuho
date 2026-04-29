@@ -1,9 +1,7 @@
 // Test file for s390_robbery
-// Yuho v5 Syntax
 
 referencing penal_code/s390_robbery
 
-// ----- test structs -----
 
 struct RobberyTestCase {
     string accused,
@@ -14,7 +12,6 @@ struct RobberyTestCase {
     bool violenceUsed,
 }
 
-// ----- robbery via theft with violence: all elements present -----
 
 RobberyTestCase theftWithViolence := RobberyTestCase {
     accused := "A",
@@ -33,7 +30,6 @@ assert theftWithViolence.violenceType == "hurt"
 assert theftWithViolence.violenceUsed == TRUE
 assert is_robbery(theftWithViolence.theftCommitted, theftWithViolence.extortionCommitted, theftWithViolence.violenceUsed) == TRUE
 
-// ----- robbery via extortion with violence: all elements present -----
 
 RobberyTestCase extortionWithViolence := RobberyTestCase {
     accused := "C",
@@ -49,7 +45,6 @@ assert extortionWithViolence.extortionCommitted == TRUE
 assert extortionWithViolence.violenceUsed == TRUE
 assert is_robbery(extortionWithViolence.theftCommitted, extortionWithViolence.extortionCommitted, extortionWithViolence.violenceUsed) == TRUE
 
-// ----- robbery via both theft and extortion with violence -----
 
 RobberyTestCase bothOffences := RobberyTestCase {
     accused := "E",
@@ -65,7 +60,6 @@ assert bothOffences.extortionCommitted == TRUE
 assert bothOffences.violenceUsed == TRUE
 assert is_robbery(bothOffences.theftCommitted, bothOffences.extortionCommitted, bothOffences.violenceUsed) == TRUE
 
-// ----- no theft and no extortion: not robbery -----
 
 RobberyTestCase noOffence := RobberyTestCase {
     accused := "G",
@@ -80,7 +74,6 @@ assert noOffence.theftCommitted == FALSE
 assert noOffence.extortionCommitted == FALSE
 assert is_robbery(noOffence.theftCommitted, noOffence.extortionCommitted, noOffence.violenceUsed) == FALSE
 
-// ----- no violence: not robbery -----
 
 RobberyTestCase noViolence := RobberyTestCase {
     accused := "I",
@@ -94,7 +87,6 @@ RobberyTestCase noViolence := RobberyTestCase {
 assert noViolence.violenceUsed == FALSE
 assert is_robbery(noViolence.theftCommitted, noViolence.extortionCommitted, noViolence.violenceUsed) == FALSE
 
-// ----- extortion without violence: not robbery -----
 
 RobberyTestCase extortionNoViolence := RobberyTestCase {
     accused := "K",
@@ -109,7 +101,6 @@ assert extortionNoViolence.extortionCommitted == TRUE
 assert extortionNoViolence.violenceUsed == FALSE
 assert is_robbery(extortionNoViolence.theftCommitted, extortionNoViolence.extortionCommitted, extortionNoViolence.violenceUsed) == FALSE
 
-// ----- no offence and no violence: not robbery -----
 
 RobberyTestCase nothingPresent := RobberyTestCase {
     accused := "M",
@@ -125,7 +116,6 @@ assert nothingPresent.extortionCommitted == FALSE
 assert nothingPresent.violenceUsed == FALSE
 assert is_robbery(nothingPresent.theftCommitted, nothingPresent.extortionCommitted, nothingPresent.violenceUsed) == FALSE
 
-// ----- penalty verification -----
 
 int minImprisonment := 3
 int maxImprisonment := 14

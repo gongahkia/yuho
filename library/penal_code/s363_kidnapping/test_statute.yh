@@ -1,9 +1,7 @@
 // Test file for s363_kidnapping
-// Yuho v5 Syntax
 
 referencing penal_code/s363_kidnapping
 
-// ----- test structs -----
 
 struct S363TestCase {
     string kidnappingType,
@@ -11,7 +9,6 @@ struct S363TestCase {
     bool takenFromLawfulGuardian,
 }
 
-// ----- kidnapping from Singapore: guilty -----
 
 S363TestCase fromSG := S363TestCase {
     kidnappingType := "from_singapore",
@@ -21,7 +18,6 @@ S363TestCase fromSG := S363TestCase {
 
 assert is_kidnapping(fromSG.kidnappingType, fromSG.conveyedFromSingapore, fromSG.takenFromLawfulGuardian) == TRUE
 
-// ----- kidnapping from lawful guardianship: guilty -----
 
 S363TestCase fromGuardian := S363TestCase {
     kidnappingType := "from_lawful_guardianship",
@@ -31,7 +27,6 @@ S363TestCase fromGuardian := S363TestCase {
 
 assert is_kidnapping(fromGuardian.kidnappingType, fromGuardian.conveyedFromSingapore, fromGuardian.takenFromLawfulGuardian) == TRUE
 
-// ----- not conveyed from Singapore: not guilty -----
 
 S363TestCase notConveyed := S363TestCase {
     kidnappingType := "from_singapore",
@@ -41,7 +36,6 @@ S363TestCase notConveyed := S363TestCase {
 
 assert is_kidnapping(notConveyed.kidnappingType, notConveyed.conveyedFromSingapore, notConveyed.takenFromLawfulGuardian) == FALSE
 
-// ----- unknown type: not guilty -----
 
 S363TestCase unknownType := S363TestCase {
     kidnappingType := "none",

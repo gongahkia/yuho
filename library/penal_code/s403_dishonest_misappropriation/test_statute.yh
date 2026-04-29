@@ -1,9 +1,7 @@
 // Test file for s403_dishonest_misappropriation
-// Yuho v5 Syntax
 
 referencing penal_code/s403_dishonest_misappropriation
 
-// ----- test structs -----
 
 struct MisappropriationTestCase {
     string accused,
@@ -14,7 +12,6 @@ struct MisappropriationTestCase {
     bool conversionToOwnUse,
 }
 
-// ----- all elements present: convicted -----
 
 MisappropriationTestCase normalCase := MisappropriationTestCase {
     accused := "A",
@@ -33,7 +30,6 @@ assert normalCase.dishonestIntent == TRUE
 assert normalCase.conversionToOwnUse == TRUE
 assert is_misappropriation(normalCase.propertyMovable, normalCase.dishonestIntent, normalCase.conversionToOwnUse) == TRUE
 
-// ----- illustration example2: ring found near B's house, sold without finding owner -----
 
 MisappropriationTestCase illustrationGuilty := MisappropriationTestCase {
     accused := "A",
@@ -46,7 +42,6 @@ MisappropriationTestCase illustrationGuilty := MisappropriationTestCase {
 
 assert is_misappropriation(illustrationGuilty.propertyMovable, illustrationGuilty.dishonestIntent, illustrationGuilty.conversionToOwnUse) == TRUE
 
-// ----- illustration example1: no dishonest intent, not guilty -----
 
 MisappropriationTestCase illustrationNotGuilty := MisappropriationTestCase {
     accused := "A",
@@ -60,7 +55,6 @@ MisappropriationTestCase illustrationNotGuilty := MisappropriationTestCase {
 assert illustrationNotGuilty.dishonestIntent == FALSE
 assert is_misappropriation(illustrationNotGuilty.propertyMovable, illustrationNotGuilty.dishonestIntent, illustrationNotGuilty.conversionToOwnUse) == FALSE
 
-// ----- property not movable: not misappropriation -----
 
 MisappropriationTestCase immovableProperty := MisappropriationTestCase {
     accused := "A",
@@ -74,7 +68,6 @@ MisappropriationTestCase immovableProperty := MisappropriationTestCase {
 assert immovableProperty.propertyMovable == FALSE
 assert is_misappropriation(immovableProperty.propertyMovable, immovableProperty.dishonestIntent, immovableProperty.conversionToOwnUse) == FALSE
 
-// ----- no dishonest intent: not misappropriation -----
 
 MisappropriationTestCase noDishonesty := MisappropriationTestCase {
     accused := "A",
@@ -88,7 +81,6 @@ MisappropriationTestCase noDishonesty := MisappropriationTestCase {
 assert noDishonesty.dishonestIntent == FALSE
 assert is_misappropriation(noDishonesty.propertyMovable, noDishonesty.dishonestIntent, noDishonesty.conversionToOwnUse) == FALSE
 
-// ----- no conversion to own use: not misappropriation -----
 
 MisappropriationTestCase noConversion := MisappropriationTestCase {
     accused := "A",
@@ -102,7 +94,6 @@ MisappropriationTestCase noConversion := MisappropriationTestCase {
 assert noConversion.conversionToOwnUse == FALSE
 assert is_misappropriation(noConversion.propertyMovable, noConversion.dishonestIntent, noConversion.conversionToOwnUse) == FALSE
 
-// ----- no elements present: not misappropriation -----
 
 MisappropriationTestCase noElements := MisappropriationTestCase {
     accused := "A",
@@ -118,7 +109,6 @@ assert noElements.dishonestIntent == FALSE
 assert noElements.conversionToOwnUse == FALSE
 assert is_misappropriation(noElements.propertyMovable, noElements.dishonestIntent, noElements.conversionToOwnUse) == FALSE
 
-// ----- only movable property, missing mens rea and actus reus -----
 
 MisappropriationTestCase onlyMovable := MisappropriationTestCase {
     accused := "A",
@@ -134,7 +124,6 @@ assert onlyMovable.dishonestIntent == FALSE
 assert onlyMovable.conversionToOwnUse == FALSE
 assert is_misappropriation(onlyMovable.propertyMovable, onlyMovable.dishonestIntent, onlyMovable.conversionToOwnUse) == FALSE
 
-// ----- movable and dishonest but no conversion -----
 
 MisappropriationTestCase noConversionOnly := MisappropriationTestCase {
     accused := "A",
@@ -147,7 +136,6 @@ MisappropriationTestCase noConversionOnly := MisappropriationTestCase {
 
 assert is_misappropriation(noConversionOnly.propertyMovable, noConversionOnly.dishonestIntent, noConversionOnly.conversionToOwnUse) == FALSE
 
-// ----- movable and conversion but no dishonesty -----
 
 MisappropriationTestCase noDishonestyOnly := MisappropriationTestCase {
     accused := "A",
@@ -160,6 +148,3 @@ MisappropriationTestCase noDishonestyOnly := MisappropriationTestCase {
 
 assert is_misappropriation(noDishonestyOnly.propertyMovable, noDishonestyOnly.dishonestIntent, noDishonestyOnly.conversionToOwnUse) == FALSE
 
-// ----- penalty verification omitted -----
-// Referenced statutes currently expose callable symbols but not nested
-// statute metadata for semantic assertions.

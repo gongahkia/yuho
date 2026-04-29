@@ -1,9 +1,7 @@
 // Test file for s383_extortion
-// Yuho v5 Syntax
 
 referencing penal_code/s383_extortion
 
-// ----- test structs -----
 
 struct ExtortionTestCase {
     string accused,
@@ -13,7 +11,6 @@ struct ExtortionTestCase {
     string propertyType,
 }
 
-// ----- normal extortion: all elements present -----
 
 ExtortionTestCase normalExtortion := ExtortionTestCase {
     accused := "A",
@@ -30,7 +27,6 @@ assert normalExtortion.deliveryInduced == TRUE
 assert normalExtortion.propertyType == "money"
 assert is_extortion(normalExtortion.fearType, normalExtortion.deliveryInduced) == TRUE
 
-// ----- extortion via reputational harm -----
 
 ExtortionTestCase reputationExtortion := ExtortionTestCase {
     accused := "A",
@@ -44,7 +40,6 @@ assert reputationExtortion.fearType == "injury_to_reputation"
 assert reputationExtortion.deliveryInduced == TRUE
 assert is_extortion(reputationExtortion.fearType, reputationExtortion.deliveryInduced) == TRUE
 
-// ----- extortion via property harm -----
 
 ExtortionTestCase propertyExtortion := ExtortionTestCase {
     accused := "A",
@@ -57,7 +52,6 @@ ExtortionTestCase propertyExtortion := ExtortionTestCase {
 assert propertyExtortion.fearType == "injury_to_property"
 assert is_extortion(propertyExtortion.fearType, propertyExtortion.deliveryInduced) == TRUE
 
-// ----- no fear induced: not extortion -----
 
 ExtortionTestCase noFear := ExtortionTestCase {
     accused := "A",
@@ -70,7 +64,6 @@ ExtortionTestCase noFear := ExtortionTestCase {
 assert noFear.fearType == "none"
 assert is_extortion(noFear.fearType, noFear.deliveryInduced) == FALSE
 
-// ----- no delivery induced: not extortion -----
 
 ExtortionTestCase noDelivery := ExtortionTestCase {
     accused := "A",
@@ -83,7 +76,6 @@ ExtortionTestCase noDelivery := ExtortionTestCase {
 assert noDelivery.deliveryInduced == FALSE
 assert is_extortion(noDelivery.fearType, noDelivery.deliveryInduced) == FALSE
 
-// ----- no fear and no delivery: not extortion -----
 
 ExtortionTestCase noElements := ExtortionTestCase {
     accused := "A",
@@ -97,11 +89,7 @@ assert noElements.fearType == "none"
 assert noElements.deliveryInduced == FALSE
 assert is_extortion(noElements.fearType, noElements.deliveryInduced) == FALSE
 
-// ----- penalty verification omitted -----
-// Referenced statutes currently expose callable symbols but not nested
-// statute metadata for semantic assertions.
 
-// ----- illustration 1: defamatory threat for money -----
 
 ExtortionTestCase illustration1 := ExtortionTestCase {
     accused := "A",
@@ -113,7 +101,6 @@ ExtortionTestCase illustration1 := ExtortionTestCase {
 
 assert is_extortion(illustration1.fearType, illustration1.deliveryInduced) == TRUE
 
-// ----- illustration 2: threat to harm child for property -----
 
 ExtortionTestCase illustration2 := ExtortionTestCase {
     accused := "A",

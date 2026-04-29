@@ -1,9 +1,7 @@
 // Test file for s464_making_false_document_false_electronic_record
-// Yuho v5 Syntax
 
 referencing penal_code/s464_making_false_document_false_electronic_record
 
-// interpretation section -- no runtime behaviour to assert
 struct InterpretationTest {
     bool referenced,
 }

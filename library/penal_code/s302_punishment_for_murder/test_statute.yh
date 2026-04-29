@@ -1,15 +1,12 @@
 // Test file for s302_punishment_for_murder
-// Yuho v5 Syntax
 
 referencing penal_code/s302_punishment_for_murder
 
-// ----- test structs -----
 
 struct MurderPunishmentTestCase {
     bool murderCommitted,
 }
 
-// ----- murder committed: punishment applies -----
 
 MurderPunishmentTestCase convicted := MurderPunishmentTestCase {
     murderCommitted := TRUE,
@@ -18,7 +15,6 @@ MurderPunishmentTestCase convicted := MurderPunishmentTestCase {
 assert convicted.murderCommitted == TRUE
 assert punishment_applies(convicted.murderCommitted) == TRUE
 
-// ----- murder not committed: no punishment -----
 
 MurderPunishmentTestCase notConvicted := MurderPunishmentTestCase {
     murderCommitted := FALSE,

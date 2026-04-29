@@ -1,6 +1,4 @@
 // Test file for s186_obstructing_public_servant_discharge_his
-// Yuho v5 Syntax — behavioural fixture.
-// Universal offence shape: made out iff elements ∧ ¬defence.
 
 referencing penal_code/s186_obstructing_public_servant_discharge_his
 
@@ -9,21 +7,18 @@ struct ObstructingPublicServantDischargeTestCase {
     bool defence_applies,
 }
 
-// elements satisfied, no defence -> offence made out
 ObstructingPublicServantDischargeTestCase guilty := ObstructingPublicServantDischargeTestCase {
     elements_satisfied := TRUE,
     defence_applies := FALSE,
 }
 assert is_obstructing_public_servant_discharge(guilty.elements_satisfied, guilty.defence_applies) == TRUE
 
-// elements satisfied, defence applies -> not made out
 ObstructingPublicServantDischargeTestCase defended := ObstructingPublicServantDischargeTestCase {
     elements_satisfied := TRUE,
     defence_applies := TRUE,
 }
 assert is_obstructing_public_servant_discharge(defended.elements_satisfied, defended.defence_applies) == FALSE
 
-// no elements -> not made out
 ObstructingPublicServantDischargeTestCase notMadeOut := ObstructingPublicServantDischargeTestCase {
     elements_satisfied := FALSE,
     defence_applies := FALSE,

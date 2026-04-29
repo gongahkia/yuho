@@ -1,14 +1,11 @@
 // Test file for s463_forgery
-// Yuho v5 Syntax
 
 referencing penal_code/s463_forgery
 
-// Test case 1: Basic validation
 fn test_basic() : bool {
     return TRUE;
 }
 
-// Test case 2: Edge case
 fn test_edge_case() : bool {
     return TRUE;
 }

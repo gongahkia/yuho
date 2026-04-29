@@ -1,9 +1,7 @@
 // Test file for s473C_meaning_prejudice_induce
-// Yuho v5 Syntax
 
 referencing penal_code/s473C_meaning_prejudice_induce
 
-// interpretation section -- no runtime behaviour to assert
 struct InterpretationTest {
     bool referenced,
 }

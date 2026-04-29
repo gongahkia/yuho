@@ -1,6 +1,4 @@
 // Test file for s468_forgery_purpose_cheating
-// Yuho v5 Syntax — behavioural fixture.
-// Universal offence shape: made out iff elements ∧ ¬defence.
 
 referencing penal_code/s468_forgery_purpose_cheating
 
@@ -9,21 +7,18 @@ struct ForgeryPurposeCheatingTestCase {
     bool defence_applies,
 }
 
-// elements satisfied, no defence -> offence made out
 ForgeryPurposeCheatingTestCase guilty := ForgeryPurposeCheatingTestCase {
     elements_satisfied := TRUE,
     defence_applies := FALSE,
 }
 assert is_forgery_purpose_cheating(guilty.elements_satisfied, guilty.defence_applies) == TRUE
 
-// elements satisfied, defence applies -> not made out
 ForgeryPurposeCheatingTestCase defended := ForgeryPurposeCheatingTestCase {
     elements_satisfied := TRUE,
     defence_applies := TRUE,
 }
 assert is_forgery_purpose_cheating(defended.elements_satisfied, defended.defence_applies) == FALSE
 
-// no elements -> not made out
 ForgeryPurposeCheatingTestCase notMadeOut := ForgeryPurposeCheatingTestCase {
     elements_satisfied := FALSE,
     defence_applies := FALSE,

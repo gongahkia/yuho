@@ -1,6 +1,4 @@
 // Test file for s460_house_breaking_when_death_grievous_hurt
-// Yuho v5 Syntax — behavioural fixture.
-// Universal offence shape: made out iff elements ∧ ¬defence.
 
 referencing penal_code/s460_house_breaking_when_death_grievous_hurt
 
@@ -9,21 +7,18 @@ struct HouseBreakingWithDeathTestCase {
     bool defence_applies,
 }
 
-// elements satisfied, no defence -> offence made out
 HouseBreakingWithDeathTestCase guilty := HouseBreakingWithDeathTestCase {
     elements_satisfied := TRUE,
     defence_applies := FALSE,
 }
 assert is_house_breaking_with_death(guilty.elements_satisfied, guilty.defence_applies) == TRUE
 
-// elements satisfied, defence applies -> not made out
 HouseBreakingWithDeathTestCase defended := HouseBreakingWithDeathTestCase {
     elements_satisfied := TRUE,
     defence_applies := TRUE,
 }
 assert is_house_breaking_with_death(defended.elements_satisfied, defended.defence_applies) == FALSE
 
-// no elements -> not made out
 HouseBreakingWithDeathTestCase notMadeOut := HouseBreakingWithDeathTestCase {
     elements_satisfied := FALSE,
     defence_applies := FALSE,

@@ -1,6 +1,4 @@
 // Test file for s109_punishment_abetment_if_act_abetted_committed
-// Yuho v5 Syntax — behavioural fixture.
-// Universal offence shape: made out iff elements ∧ ¬defence.
 
 referencing penal_code/s109_punishment_abetment_if_act_abetted_committed
 
@@ -9,21 +7,18 @@ struct PunishmentAbetmentIfActTestCase {
     bool defence_applies,
 }
 
-// elements satisfied, no defence -> offence made out
 PunishmentAbetmentIfActTestCase guilty := PunishmentAbetmentIfActTestCase {
     elements_satisfied := TRUE,
     defence_applies := FALSE,
 }
 assert is_punishment_abetment_if_act(guilty.elements_satisfied, guilty.defence_applies) == TRUE
 
-// elements satisfied, defence applies -> not made out
 PunishmentAbetmentIfActTestCase defended := PunishmentAbetmentIfActTestCase {
     elements_satisfied := TRUE,
     defence_applies := TRUE,
 }
 assert is_punishment_abetment_if_act(defended.elements_satisfied, defended.defence_applies) == FALSE
 
-// no elements -> not made out
 PunishmentAbetmentIfActTestCase notMadeOut := PunishmentAbetmentIfActTestCase {
     elements_satisfied := FALSE,
     defence_applies := FALSE,

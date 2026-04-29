@@ -1,9 +1,7 @@
 // Test file for s304_culpable_homicide_not_amounting_to_murder
-// Yuho v5 Syntax
 
 referencing penal_code/s304_culpable_homicide_not_amounting_to_murder
 
-// ----- test structs -----
 
 struct S304TestCase {
     string intention,
@@ -11,7 +9,6 @@ struct S304TestCase {
     bool amountsToMurder,
 }
 
-// ----- intent to cause death, not murder: guilty -----
 
 S304TestCase intentDeath := S304TestCase {
     intention := "cause_death",
@@ -22,7 +19,6 @@ S304TestCase intentDeath := S304TestCase {
 assert intentDeath.intention == "cause_death"
 assert is_s304_offence(intentDeath.intention, intentDeath.deathCaused, intentDeath.amountsToMurder) == TRUE
 
-// ----- knowledge likely to cause death: guilty -----
 
 S304TestCase knowledgeDeath := S304TestCase {
     intention := "knowledge_likely_to_cause_death",
@@ -32,7 +28,6 @@ S304TestCase knowledgeDeath := S304TestCase {
 
 assert is_s304_offence(knowledgeDeath.intention, knowledgeDeath.deathCaused, knowledgeDeath.amountsToMurder) == TRUE
 
-// ----- amounts to murder: not s304 -----
 
 S304TestCase isMurder := S304TestCase {
     intention := "cause_death",
@@ -42,7 +37,6 @@ S304TestCase isMurder := S304TestCase {
 
 assert is_s304_offence(isMurder.intention, isMurder.deathCaused, isMurder.amountsToMurder) == FALSE
 
-// ----- no death caused: not guilty -----
 
 S304TestCase noDeath := S304TestCase {
     intention := "cause_death",
@@ -52,7 +46,6 @@ S304TestCase noDeath := S304TestCase {
 
 assert is_s304_offence(noDeath.intention, noDeath.deathCaused, noDeath.amountsToMurder) == FALSE
 
-// ----- no qualifying intention: not guilty -----
 
 S304TestCase noIntention := S304TestCase {
     intention := "none",
