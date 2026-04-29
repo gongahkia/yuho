@@ -193,14 +193,28 @@ language server, formal verification, Catala, Alloy, Z3}
 \bibliography{references}
 
 \appendix
-\section{Full inference rules for the operational semantics}
+\section{Scope of the formal treatment}
 \label{app:semantics-full}
 
-This appendix expands the rules of \S\ref{sec:semantics} to cover
-mens-rea intent typing, temporal-ordering constraints (G7),
-burden-of-proof qualifiers (G11), and full subsection
-composition. See \texttt{paper/appendix/semantics-full.tex} in
-the camera-ready branch; this appendix serves as an inventory
-in the working draft.
+The operational rules in \S\ref{sec:semantics} cover the
+core element-evaluation, exception-priority, and penalty
+combinator judgments --- the fragment exercised by every
+encoded section in the corpus and by the soundness lemmas
+in \S\ref{sec:soundness}. Four refinements are deliberately
+left at the prose level rather than fully formalised here:
+mens-rea intent typing (the discrimination between
+\emph{intentionally}, \emph{knowingly}, \emph{rashly}, and
+\emph{negligently} as Yuho enum values, beyond the boolean
+truth conditions of the present rules); the G7 temporal-
+ordering constraint between actus reus and the reus-bearing
+mens rea event; the G11 burden-of-proof qualifier on the
+defendant side of an exception; and the cross-section
+composition rules invoked when one section's elements
+predicate over another section's offence. The Lean 4
+mechanisation in \S\ref{sec:soundness}'s appendix discharge
+covers G8/G14 sentinels and the conviction-layer oracle
+constructively; the four refinements above remain as
+inventory items for a v6 mechanisation pass and are
+flagged in \S\ref{sec:limitations}.
 
 \end{document}

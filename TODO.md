@@ -217,11 +217,17 @@ hardening:
       every "remaining gap" / "future work" / "out of scope"
       sentence and confirm it's still accurate. (User action;
       the same sweep doubles as the manual read-through above.)
-- [ ] **Blog-post transpilation.** Hand the rendered paper to
-      Claude with a transpilation prompt; output to
-      `paper/blog/yuho.md`.
 - [ ] **External-reader pass on the full PDF.** Catches drift
       both author and AI miss.
+- [ ] **Local lualatex compile of arxiv.tar.gz.** Bundle is
+      structurally complete (`make arxiv` ships 24 files, 83K;
+      every `\input{}` / `\usepackage{}` resolves; smoke build
+      Apr 28 validated section content under `article` class).
+      Full lualatex compile of the acmart bundle blocked locally
+      on `sudo tlmgr install latexmk hyperxmp` (basic TeX Live
+      install missing transitive acmart deps). arXiv's TeXLive
+      has the full toolchain, so this is verification-only, not
+      a submission blocker. User action.
 
 ---
 
@@ -492,3 +498,31 @@ Only after PC L3 coverage is high and tooling is battle-tested.
       (Rights of Third Parties) Act, etc.)
 - [ ] Civil remedies and equitable doctrines — require AST shapes
       Yuho doesn't have yet.
+
+---
+
+## Post-submission — arXiv publish + cross-link `[ ]`
+
+Triggered the moment the paper is done (all "Research paper polish"
+items above closed). Sequencing:
+
+- [ ] **Build the arXiv tarball.** `cd paper && make paper && make
+      arxiv`. Confirm `paper/arxiv.tar.gz` is produced and includes
+      `00README.XXX`, `main.tex`, `main.bbl`, `sections/`,
+      `figures/*.tex`, `references.bib`, `stats.tex`,
+      `stats-extra.tex`, `yuho-listing.sty`,
+      `methodology/methodology.tex`.
+- [ ] **Upload to arXiv** under the registered account
+      (`gabrielzmong@gmail.com`, primary `cs.PL`, cross-list
+      `cs.LO` + `cs.CY` + optional `cs.SE`). First-time `cs.*`
+      submissions typically need endorsement; secure an endorser
+      before upload day.
+- [ ] **Record the arXiv ID + DOI.** Save the assigned
+      `arXiv:YYMM.NNNNN` ID to `paper/REPRODUCE.md` next to the
+      Zenodo deposit DOI.
+- [ ] **Cross-link from `README.md`.** Add a "Paper" section near
+      the top of the repo `README.md` linking to the arXiv abstract
+      page and the source build (`cd paper && make paper`).
+- [ ] **Cross-link from `gongahkia.github.io`.** Add a paper entry
+      to the personal site (publications / projects section) with
+      the arXiv link and a one-line abstract pointer.

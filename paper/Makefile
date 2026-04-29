@@ -67,10 +67,17 @@ figures/%.pdf: figures/%.mmd
 
 arxiv: paper
 	@rm -f arxiv.tar.gz
+	@cp $(BUILD_DIR)/$(PAPER).bbl ./$(PAPER).bbl 2>/dev/null || true
 	tar --exclude='$(BUILD_DIR)' --exclude='*.aux' --exclude='*.log' \
 	    --exclude='*.fls' --exclude='*.fdb_latexmk' --exclude='arxiv.tar.gz' \
+	    --exclude='figures/*.mmd' --exclude='figures/*.pdf' --exclude='figures/*.png' \
 	    -czf arxiv.tar.gz \
-	    $(PAPER).tex sections/ figures/ references.bib stats.tex \
+	    00README.XXX \
+	    $(PAPER).tex $(PAPER).bbl \
+	    sections/ figures/ \
+	    references.bib stats.tex stats-extra.tex \
+	    yuho-listing.sty \
+	    methodology/methodology.tex \
 	    2>/dev/null || true
 	@echo "Wrote arxiv.tar.gz"
 
