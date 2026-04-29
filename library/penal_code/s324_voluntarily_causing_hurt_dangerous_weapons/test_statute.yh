@@ -1,31 +1,109 @@
 // Test file for s324_voluntarily_causing_hurt_dangerous_weapons
-// Yuho v5 Syntax — behavioural fixture.
-// Universal offence shape: made out iff elements ∧ ¬defence.
+// Yuho v6 Syntax — enriched behavioural fixture (2026-04-29).
+// s324 is conjunctive: voluntary, hurt caused, AND at least one of the
+// disjunctive dangerous-weapon-or-means limbs (instrument for shooting/
+// stabbing/cutting; weapon likely to cause death; fire/heated substance;
+// poison/corrosive substance; explosive; specified noxious-substance
+// inhalation, etc.). Excludes the s334 case (hurt under provocation).
 
 referencing penal_code/s324_voluntarily_causing_hurt_dangerous_weapons
 
-struct VoluntarilyCausingHurtDangerousTestCase {
-    bool elements_satisfied,
-    bool defence_applies,
+struct S324Scenario {
+    bool voluntarily,
+    bool causesHurt,
+    bool dangerousMeansAny,
+    string weaponKind,
+    bool s334Excluded,
+    bool defenceApplies,
 }
 
-// elements satisfied, no defence -> offence made out
-VoluntarilyCausingHurtDangerousTestCase guilty := VoluntarilyCausingHurtDangerousTestCase {
-    elements_satisfied := TRUE,
-    defence_applies := FALSE,
+S324Scenario knifeStab := S324Scenario {
+    voluntarily := TRUE,
+    causesHurt := TRUE,
+    dangerousMeansAny := TRUE,
+    weaponKind := "instrument_for_shooting_stabbing_or_cutting",
+    s334Excluded := TRUE,
+    defenceApplies := FALSE,
 }
-assert is_voluntarily_causing_hurt_dangerous(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+assert is_voluntarily_causing_hurt_dangerous(
+    knifeStab.voluntarily && knifeStab.causesHurt && knifeStab.dangerousMeansAny && knifeStab.s334Excluded,
+    knifeStab.defenceApplies
+) == TRUE
 
-// elements satisfied, defence applies -> not made out
-VoluntarilyCausingHurtDangerousTestCase defended := VoluntarilyCausingHurtDangerousTestCase {
-    elements_satisfied := TRUE,
-    defence_applies := TRUE,
+S324Scenario clubLikelyDeath := S324Scenario {
+    voluntarily := TRUE,
+    causesHurt := TRUE,
+    dangerousMeansAny := TRUE,
+    weaponKind := "weapon_likely_to_cause_death",
+    s334Excluded := TRUE,
+    defenceApplies := FALSE,
 }
-assert is_voluntarily_causing_hurt_dangerous(defended.elements_satisfied, defended.defence_applies) == FALSE
+assert is_voluntarily_causing_hurt_dangerous(
+    clubLikelyDeath.voluntarily && clubLikelyDeath.causesHurt && clubLikelyDeath.dangerousMeansAny && clubLikelyDeath.s334Excluded,
+    clubLikelyDeath.defenceApplies
+) == TRUE
 
-// no elements -> not made out
-VoluntarilyCausingHurtDangerousTestCase notMadeOut := VoluntarilyCausingHurtDangerousTestCase {
-    elements_satisfied := FALSE,
-    defence_applies := FALSE,
+S324Scenario fireBurn := S324Scenario {
+    voluntarily := TRUE,
+    causesHurt := TRUE,
+    dangerousMeansAny := TRUE,
+    weaponKind := "fire_or_heated_substance",
+    s334Excluded := TRUE,
+    defenceApplies := FALSE,
 }
-assert is_voluntarily_causing_hurt_dangerous(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE
+assert is_voluntarily_causing_hurt_dangerous(
+    fireBurn.voluntarily && fireBurn.causesHurt && fireBurn.dangerousMeansAny && fireBurn.s334Excluded,
+    fireBurn.defenceApplies
+) == TRUE
+
+S324Scenario poisonAdmin := S324Scenario {
+    voluntarily := TRUE,
+    causesHurt := TRUE,
+    dangerousMeansAny := TRUE,
+    weaponKind := "poison_or_corrosive_substance",
+    s334Excluded := TRUE,
+    defenceApplies := FALSE,
+}
+assert is_voluntarily_causing_hurt_dangerous(
+    poisonAdmin.voluntarily && poisonAdmin.causesHurt && poisonAdmin.dangerousMeansAny && poisonAdmin.s334Excluded,
+    poisonAdmin.defenceApplies
+) == TRUE
+
+S324Scenario bareHands := S324Scenario {
+    voluntarily := TRUE,
+    causesHurt := TRUE,
+    dangerousMeansAny := FALSE,
+    weaponKind := "none",
+    s334Excluded := TRUE,
+    defenceApplies := FALSE,
+}
+assert is_voluntarily_causing_hurt_dangerous(
+    bareHands.voluntarily && bareHands.causesHurt && bareHands.dangerousMeansAny && bareHands.s334Excluded,
+    bareHands.defenceApplies
+) == FALSE
+
+S324Scenario notVoluntary := S324Scenario {
+    voluntarily := FALSE,
+    causesHurt := TRUE,
+    dangerousMeansAny := TRUE,
+    weaponKind := "instrument_for_shooting_stabbing_or_cutting",
+    s334Excluded := TRUE,
+    defenceApplies := FALSE,
+}
+assert is_voluntarily_causing_hurt_dangerous(
+    notVoluntary.voluntarily && notVoluntary.causesHurt && notVoluntary.dangerousMeansAny && notVoluntary.s334Excluded,
+    notVoluntary.defenceApplies
+) == FALSE
+
+S324Scenario s96PrivateDefence := S324Scenario {
+    voluntarily := TRUE,
+    causesHurt := TRUE,
+    dangerousMeansAny := TRUE,
+    weaponKind := "instrument_for_shooting_stabbing_or_cutting",
+    s334Excluded := TRUE,
+    defenceApplies := TRUE,
+}
+assert is_voluntarily_causing_hurt_dangerous(
+    s96PrivateDefence.voluntarily && s96PrivateDefence.causesHurt && s96PrivateDefence.dangerousMeansAny && s96PrivateDefence.s334Excluded,
+    s96PrivateDefence.defenceApplies
+) == FALSE

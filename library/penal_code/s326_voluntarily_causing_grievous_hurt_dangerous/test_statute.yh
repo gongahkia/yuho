@@ -1,31 +1,116 @@
 // Test file for s326_voluntarily_causing_grievous_hurt_dangerous
-// Yuho v5 Syntax — behavioural fixture.
-// Universal offence shape: made out iff elements ∧ ¬defence.
+// Yuho v6 Syntax — enriched behavioural fixture (2026-04-29).
+// s326 is conjunctive: voluntary + grievous hurt actually caused +
+// at least one dangerous-weapon-or-means limb. Excludes the s335 case
+// (grievous hurt under provocation). Combines the s322 fault element
+// (grievous hurt) with the s324 weapon limb.
 
 referencing penal_code/s326_voluntarily_causing_grievous_hurt_dangerous
 
-struct VoluntarilyCausingGrievousHurtTestCase {
-    bool elements_satisfied,
-    bool defence_applies,
+struct S326Scenario {
+    bool voluntarily,
+    bool causesGrievousHurt,
+    bool dangerousMeansAny,
+    string weaponKind,
+    string grievousKindCaused,
+    bool s335Excluded,
+    bool defenceApplies,
 }
 
-// elements satisfied, no defence -> offence made out
-VoluntarilyCausingGrievousHurtTestCase guilty := VoluntarilyCausingGrievousHurtTestCase {
-    elements_satisfied := TRUE,
-    defence_applies := FALSE,
+S326Scenario chopperFracture := S326Scenario {
+    voluntarily := TRUE,
+    causesGrievousHurt := TRUE,
+    dangerousMeansAny := TRUE,
+    weaponKind := "instrument_for_shooting_stabbing_or_cutting",
+    grievousKindCaused := "fracture_or_dislocation_of_a_bone",
+    s335Excluded := TRUE,
+    defenceApplies := FALSE,
 }
-assert is_voluntarily_causing_grievous_hurt(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+assert is_voluntarily_causing_grievous_hurt(
+    chopperFracture.voluntarily && chopperFracture.causesGrievousHurt && chopperFracture.dangerousMeansAny && chopperFracture.s335Excluded,
+    chopperFracture.defenceApplies
+) == TRUE
 
-// elements satisfied, defence applies -> not made out
-VoluntarilyCausingGrievousHurtTestCase defended := VoluntarilyCausingGrievousHurtTestCase {
-    elements_satisfied := TRUE,
-    defence_applies := TRUE,
+S326Scenario acidDisfiguration := S326Scenario {
+    voluntarily := TRUE,
+    causesGrievousHurt := TRUE,
+    dangerousMeansAny := TRUE,
+    weaponKind := "poison_or_corrosive_substance",
+    grievousKindCaused := "permanent_disfiguration_of_head_or_face",
+    s335Excluded := TRUE,
+    defenceApplies := FALSE,
 }
-assert is_voluntarily_causing_grievous_hurt(defended.elements_satisfied, defended.defence_applies) == FALSE
+assert is_voluntarily_causing_grievous_hurt(
+    acidDisfiguration.voluntarily && acidDisfiguration.causesGrievousHurt && acidDisfiguration.dangerousMeansAny && acidDisfiguration.s335Excluded,
+    acidDisfiguration.defenceApplies
+) == TRUE
 
-// no elements -> not made out
-VoluntarilyCausingGrievousHurtTestCase notMadeOut := VoluntarilyCausingGrievousHurtTestCase {
-    elements_satisfied := FALSE,
-    defence_applies := FALSE,
+S326Scenario fireEndangerLife := S326Scenario {
+    voluntarily := TRUE,
+    causesGrievousHurt := TRUE,
+    dangerousMeansAny := TRUE,
+    weaponKind := "fire_or_heated_substance",
+    grievousKindCaused := "hurt_endangering_life",
+    s335Excluded := TRUE,
+    defenceApplies := FALSE,
 }
-assert is_voluntarily_causing_grievous_hurt(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE
+assert is_voluntarily_causing_grievous_hurt(
+    fireEndangerLife.voluntarily && fireEndangerLife.causesGrievousHurt && fireEndangerLife.dangerousMeansAny && fireEndangerLife.s335Excluded,
+    fireEndangerLife.defenceApplies
+) == TRUE
+
+S326Scenario bareHandsGrievous := S326Scenario {
+    voluntarily := TRUE,
+    causesGrievousHurt := TRUE,
+    dangerousMeansAny := FALSE,
+    weaponKind := "none",
+    grievousKindCaused := "fracture_or_dislocation_of_a_bone",
+    s335Excluded := TRUE,
+    defenceApplies := FALSE,
+}
+assert is_voluntarily_causing_grievous_hurt(
+    bareHandsGrievous.voluntarily && bareHandsGrievous.causesGrievousHurt && bareHandsGrievous.dangerousMeansAny && bareHandsGrievous.s335Excluded,
+    bareHandsGrievous.defenceApplies
+) == FALSE
+
+S326Scenario knifeNonGrievous := S326Scenario {
+    voluntarily := TRUE,
+    causesGrievousHurt := FALSE,
+    dangerousMeansAny := TRUE,
+    weaponKind := "instrument_for_shooting_stabbing_or_cutting",
+    grievousKindCaused := "none",
+    s335Excluded := TRUE,
+    defenceApplies := FALSE,
+}
+assert is_voluntarily_causing_grievous_hurt(
+    knifeNonGrievous.voluntarily && knifeNonGrievous.causesGrievousHurt && knifeNonGrievous.dangerousMeansAny && knifeNonGrievous.s335Excluded,
+    knifeNonGrievous.defenceApplies
+) == FALSE
+
+S326Scenario s335Provocation := S326Scenario {
+    voluntarily := TRUE,
+    causesGrievousHurt := TRUE,
+    dangerousMeansAny := TRUE,
+    weaponKind := "instrument_for_shooting_stabbing_or_cutting",
+    grievousKindCaused := "fracture_or_dislocation_of_a_bone",
+    s335Excluded := FALSE,
+    defenceApplies := FALSE,
+}
+assert is_voluntarily_causing_grievous_hurt(
+    s335Provocation.voluntarily && s335Provocation.causesGrievousHurt && s335Provocation.dangerousMeansAny && s335Provocation.s335Excluded,
+    s335Provocation.defenceApplies
+) == FALSE
+
+S326Scenario s100Defence := S326Scenario {
+    voluntarily := TRUE,
+    causesGrievousHurt := TRUE,
+    dangerousMeansAny := TRUE,
+    weaponKind := "weapon_likely_to_cause_death",
+    grievousKindCaused := "hurt_endangering_life",
+    s335Excluded := TRUE,
+    defenceApplies := TRUE,
+}
+assert is_voluntarily_causing_grievous_hurt(
+    s100Defence.voluntarily && s100Defence.causesGrievousHurt && s100Defence.dangerousMeansAny && s100Defence.s335Excluded,
+    s100Defence.defenceApplies
+) == FALSE
