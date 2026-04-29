@@ -68,24 +68,37 @@ oracle discharge (`Generator.lean`'s constructive
 of 6.2 / 6.3 / 6.4) all kernel-check under Lean 4.10.0 with no
 `sorry`s. `lake build` + `lake build Tests` both green.
 
-Open follow-ups (deferred to v6):
+v6 closures (2026-04-29):
 
-- [ ] **CrossSMTModel discharge.** The single
-      `excFires : String → Bool` indexed by raw exception labels
-      needs a refactor to qualified atom names (`<sX>_exc_<label>`)
-      before a constructive module-wide witness fits. Adjacent to
-      the cross-library `apply_scope` extension.
-- [ ] **`Penalty.canonicalModel`.** Analogous to v5's discharge
-      for SMTModel / GraphSMTModel. The §6.5 `PenaltySMTModel`
-      bundle remains axiomatic; a constructive witness built from
-      `Penalty.admits` would close the §6.5 oracle the same way
-      v5 closed §6.2 / §6.3 / §6.4.
-- [ ] Mechanise the linter's no-sentinel-propagation invariant as
-      a `Penalty.wellFormed` predicate, tightening the satisfies
-      bundle to require it.
+* `Penalty.wellFormed` (`Yuho/Penalty.lean`) — Bool-valued
+  recursive predicate mechanises the linter's
+  sentinel-propagation + non-empty-`orBoth` invariant;
+  `PenaltySMTModel.satisfiesWF` strengthens the satisfies
+  bundle.
+* `Generator.canonicalPenaltyModel` (`Yuho/Generator.lean`) —
+  constructive §6.5 oracle discharge; leaf-shape canonical
+  footprint constructors auto-discharge the witness, arbitrary
+  `cumulative` / `orBoth` cases take user-supplied footprint.
+* `CrossSMTModel.satisfies` v4 refactor (`Yuho/Cross.lean`) —
+  `excFires` re-keyed on qualified atom names
+  (`<sX>_exc_<label>_fires`); `Generator.canonicalCrossModel`
+  constructive; singleton-module discharge
+  `canonical_cross_satisfies_singleton_singleton_exc`
+  kernel-checked.
+
+Open follow-ups (deferred to v7):
+
+- [ ] **Multi-statute extension of `canonical_cross_satisfies`.**
+      The singleton-module discharge ships in v6; the
+      multi-statute case reduces to structural induction over
+      `mod.statutes` under the linter-enforced
+      section-number-uniqueness invariant. Per-arm helpers
+      (`crossExcFiresInExceptions_head_match`,
+      `crossExcFiresInStatutes_head_match`) ship as the
+      induction's match-arm primitives.
 - [ ] Cross-library `apply_scope` (the case-law differential
       testing already restricts to in-module sections; this is a
-      v6-stretch item, not a release blocker).
+      v7-stretch item, not a release blocker).
 - [ ] **Python-side faithfulness, structural diff — full corpus.**
       PoC shipped on the four smoke fixtures via
       `mechanisation/scripts/ExportSpec.lean` +
