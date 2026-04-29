@@ -172,19 +172,36 @@ mechanised as a Bool-valued predicate in
 re-keys \texttt{excFires} on \emph{qualified} atom names
 (\texttt{<sX>\_exc\_<label>\_fires}) matching the Python
 generator's atom-naming convention, fixing the v3 raw-label
-collision when two statutes shared a label. Residual oracle
-scope after v7 (2026-04-29): a single item survives — the
-claim that the Python \texttt{Z3Generator} implementation
-matches the Lean specification's emit shape, narrower and
-round-trip-testable now that the spec exists, with
-\texttt{make verify-bulk-contrast}
-(\S\ref{subsec:scenario_synthesis}) serving as the
-differential check against the operational evaluator on
-every encoded statute. v7 closed the multi-statute extension
-of the cross-section bundle:
+collision when two statutes shared a label. Residual oracle scope after v7 (2026-04-29): the claim that
+the Python \texttt{Z3Generator} implementation matches the Lean
+specification's emit shape is now discharged structurally on
+the full corpus. The 2026-04-29 generator-emit consolidation
+pass aligned the two emitters bicond-by-bicond on the
+conviction layer (Python now emits the leaf bicond family,
+the uniform \texttt{\_fires} suffix on every exception, and
+the always-on conviction bicond), and
+\texttt{mechanisation/scripts/generate\_fixtures.py} regenerates
+a Lean fixture file for every section in
+\texttt{library/penal\_code/}. The harness
+\texttt{make verify-structural-diff-full} runs
+\texttt{Generator.encodeStatute} and
+\texttt{Z3Generator.\_generate\_statute\_constraints} on parallel
+fixtures across all 524 sections and reports
+\textbf{524/524 matched, 0 divergent} on the 2026-04-29 corpus
+snapshot, modulo two documented atom-naming canonicalisations
+(Lean's bare \texttt{<e.name>} leaf atom maps to Python's
+per-statute \texttt{<sX>\_leaf\_<e.name>}; the \texttt{\_fires}
+bicond RHS uses an opaque placeholder on Lean and an inline
+priority-suppression expression on Python, both resolving to
+the same \texttt{Exception.firedSet} membership under the
+canonical model). \texttt{make verify-bulk-contrast}
+(\S\ref{subsec:scenario_synthesis}) continues as a complementary
+behavioural cross-check against the operational evaluator on
+every encoded statute. v7 also closed the multi-statute
+extension of the cross-section bundle:
 \texttt{canonical\_cross\_satisfies} kernel-checks for any
-module under qualified-atom-name uniqueness +
-section-number uniqueness, both linter-enforced invariants.
+module under qualified-atom-name uniqueness + section-number
+uniqueness, both linter-enforced invariants.
 
 \paragraph{No formal grammar-completeness theorem.} We claim that
 Yuho can express every Penal Code section at L1+L2 fidelity,

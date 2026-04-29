@@ -546,12 +546,35 @@ mirroring \texttt{src/yuho/verify/z3\_solver.py} on atom names
 \texttt{<sX>\_elements\_satisfied} /
 \texttt{<sX>\_exc\_<label>\_fires} / \texttt{<sX>\_conviction}).
 A single residual survives, narrower than the v4 oracle: that
-the Python \texttt{Z3Generator} matches this Lean specification
---- a round-trip-testable claim rather than a load-bearing
-assumption, with \texttt{make verify-bulk-contrast}
-(\S\ref{subsec:scenario_synthesis}) exercising the Python
-generator against the operational evaluator on every encoded
-statute as the differential check.
+the Python \texttt{Z3Generator} matches this Lean specification.
+The v7 generator-emit consolidation pass (2026-04-29) reconciles
+the two emitters bicond-by-bicond on conviction-layer shape:
+Python now emits the leaf bicond family
+(\texttt{<sX>\_<elem>\_satisfied $\leftrightarrow$ <sX>\_leaf\_<elem>}),
+the uniform \texttt{\_fires} suffix on every exception (whether or
+not it carries defeaters), and the always-on conviction bicond
+\texttt{<sX>\_conviction $\leftrightarrow$ <sX>\_elements\_satisfied
+$\wedge$ $\neg$ any\_fires}. The differential check
+\texttt{make verify-structural-diff-full} regenerates the Lean
+fixture corpus from the live \texttt{library/penal\_code/*/statute.yh}
+encoded library, runs \texttt{Generator.encodeStatute} on all 524
+sections, runs \texttt{Z3Generator.\_generate\_statute\_constraints}
+on the same parallel fixtures, and diffs the per-statute bicond list
+modulo two atom-naming canonicalisations: Lean's bare \texttt{<e.name>}
+leaf atoms map to Python's per-statute \texttt{<sX>\_leaf\_<e.name>}
+(preserving Python's per-statute leaf independence under multi-statute
+compilation), and the \texttt{\_fires} bicond RHS treats Lean's opaque
+\texttt{\_firedSet} placeholder and Python's inline priority-suppression
+expression as canonically equivalent (both resolve to the same
+\texttt{Exception.firedSet} membership under the canonical model).
+The harness reports \textbf{524/524 matched, 0 divergent} on the
+2026-04-29 corpus snapshot; this elevates the residual from
+``round-trip-testable'' to a load-bearing differential check
+that fails CI on any regression. The behavioural cross-check
+\texttt{make verify-bulk-contrast}
+(\S\ref{subsec:scenario_synthesis}) continues as a complementary
+sanity test against the operational evaluator on every encoded
+statute.
 
 The cross-section bundle is fully discharged. v6 (2026-04-29)
 refactored \texttt{CrossSMTModel.satisfies} to index its
