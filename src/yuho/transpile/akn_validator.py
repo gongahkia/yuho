@@ -33,7 +33,21 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass, field
 from typing import List, Optional
-from xml.etree import ElementTree as ET
+
+# Prefer lxml when available — Python 3.14 + Homebrew ship a stdlib
+# ElementTree whose pyexpat dlopen fails against the system libexpat
+# (`_XML_SetAllocTrackerActivationThreshold` symbol mismatch). lxml
+# bundles its own libxml2 parser and exposes a compatible API.
+try:
+    from lxml import etree as _ET  # type: ignore[import-not-found]
+    _PARSE_ERROR: tuple = (_ET.XMLSyntaxError,)
+    _BACKEND = "lxml"
+except ImportError:  # pragma: no cover
+    from xml.etree import ElementTree as _ET  # type: ignore[no-redef]
+    _PARSE_ERROR = (_ET.ParseError,)
+    _BACKEND = "stdlib"
+
+ET = _ET
 
 
 _AKN_NS = "http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
@@ -71,8 +85,11 @@ def validate_akn(xml: str) -> AKNValidationResult:
     """
     errors: List[str] = []
     try:
-        root = ET.fromstring(xml)
-    except ET.ParseError as exc:
+        if _BACKEND == "lxml":
+            root = ET.fromstring(xml.encode("utf-8"))
+        else:
+            root = ET.fromstring(xml)
+    except _PARSE_ERROR as exc:
         return AKNValidationResult(ok=False, errors=(f"XML not well-formed: {exc}",))
 
     if root.tag != _qual("akomaNtoso"):

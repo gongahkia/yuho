@@ -466,15 +466,13 @@ populates an empty `AKN round-trip:` line in the
 (524/524 from the prior `6f2cc980` commit) — only the
 re-verification path is broken.
 
-- [ ] **Pin a working Python ElementTree backend.** Either
-      switch the validator to `defusedxml.ElementTree` (which
-      ships its own pure-Python parser), or vendor `expat` via
-      `pip install pyexpat` if a compatible build exists for
-      Python 3.14, or downgrade the dev environment to Python
-      3.13 which ships a working `_elementtree` wheel.
-- [ ] **Re-run `make verify-akn-xsd`** once fixed and confirm
-      the 524/524 AKN round-trip headline is restored in
-      `paper-reproduce-summary.txt` before the arXiv submission.
+Resolved 2026-04-29. `src/yuho/transpile/akn_validator.py` now
+prefers `lxml.etree` (already a transitive dep, ships its own
+libxml2) and falls back to stdlib `xml.etree.ElementTree` when
+unavailable. `tests/test_akomantoso_transpiler.py` got a
+matching backend shim. `make verify-akn-xsd` reports
+`AKN round-trip: 524/524 validate clean` under Python 3.14.4 +
+Homebrew. Full pytest suite: 12246 passed.
 
 ---
 

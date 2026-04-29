@@ -3,7 +3,20 @@
 from __future__ import annotations
 
 from pathlib import Path
-from xml.etree import ElementTree as ET
+try:
+    from lxml import etree as _ET  # Py 3.14 + Homebrew: stdlib pyexpat dlopen fails; lxml bundles libxml2
+    _BACKEND = "lxml"
+except ImportError:  # pragma: no cover
+    from xml.etree import ElementTree as _ET
+    _BACKEND = "stdlib"
+
+
+class ET:  # thin shim so the rest of the test file is backend-agnostic
+    @staticmethod
+    def fromstring(xml):
+        if _BACKEND == "lxml" and isinstance(xml, str):
+            return _ET.fromstring(xml.encode("utf-8"))  # lxml rejects str with encoding decl
+        return _ET.fromstring(xml)
 
 import pytest
 
