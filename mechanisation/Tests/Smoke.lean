@@ -456,4 +456,62 @@ example :
     (Range.orBothMeet []).admits ({} : Footprint) = false := by
   native_decide
 
+/-! ## §6.5-v6 smoke tests — `Penalty.wellFormed` predicate.
+
+The well-formedness predicate decides each fixture's
+sentinel-propagation + non-empty-orBoth invariant by
+`native_decide` on the recursive Bool definition. Pairs each
+shape from §6.5-v4 (bounded leaves, unbounded sentinels,
+combinators) with an ill-formed counterpart to confirm the
+predicate is non-vacuous. -/
+
+/-- Bounded imprisonment leaf with coherent range is well-formed. -/
+example : (Penalty.imprisonment 0 (3 * 365)).wellFormed = true := by
+  native_decide
+
+/-- Bounded imprisonment leaf with `lo > hi` is ill-formed. -/
+example : (Penalty.imprisonment 100 50).wellFormed = false := by
+  native_decide
+
+/-- Unbounded fine sentinel (G8) is vacuously well-formed. -/
+example : (Penalty.fineUnlimited 0).wellFormed = true := by
+  native_decide
+
+/-- Unspecified caning sentinel (G14) is vacuously well-formed. -/
+example : (Penalty.caningUnspecified 0).wellFormed = true := by
+  native_decide
+
+/-- Death penalty leaf is well-formed. -/
+example : Penalty.death.wellFormed = true := by
+  native_decide
+
+/-- Empty cumulative is vacuously well-formed (matches
+`Range.cumulativeJoin_nil`'s vacuous-admittance behaviour). -/
+example : (Penalty.cumulative []).wellFormed = true := by
+  native_decide
+
+/-- Empty or-both is ill-formed (matches `Range.orBothMeet_nil`'s
+admits-nothing behaviour). -/
+example : (Penalty.orBoth []).wellFormed = false := by
+  native_decide
+
+/-- Cumulative of two coherent leaves (mirrors a typical SG PC
+imprisonment + fine penalty schema). -/
+example :
+    (Penalty.cumulative [Penalty.imprisonment 0 (3 * 365),
+                         Penalty.fineUnlimited 0]).wellFormed = true := by
+  native_decide
+
+/-- Cumulative containing one ill-formed child is ill-formed. -/
+example :
+    (Penalty.cumulative [Penalty.imprisonment 100 50,
+                         Penalty.fine 0 1000]).wellFormed = false := by
+  native_decide
+
+/-- Or-both of two coherent leaves is well-formed. -/
+example :
+    (Penalty.orBoth [Penalty.fine 0 1000,
+                     Penalty.caning 0 12]).wellFormed = true := by
+  native_decide
+
 end Yuho.Tests

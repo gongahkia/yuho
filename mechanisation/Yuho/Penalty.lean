@@ -325,41 +325,168 @@ theorem penalty_correspondence_orBoth
       have ⟨p, hmem, hp⟩ := ih hrest
       exact ⟨p, List.mem_cons_of_mem _ hmem, hp⟩
 
-/-! ## §6.5-v4 follow-ups
+/-! ## §6.5-v6 layer 6 — Well-formedness predicate
 
-v4 (this commit) closed the G8 / G14 unbounded-axis sentinel
-gap that was the headline open item from v3. The
-`fineUnlimited` and `caningUnspecified` constructors plus the
-`Footprint.fine_unlimited` / `caning_unspecified` flags model
-the `fine := unlimited` and `caning := unspecified` cases
-faithfully, with per-leaf correspondence theorems
-(`penalty_correspondence_fine_unlimited` /
-`penalty_correspondence_caning_unspecified`) that kernel-check
-under the same template as the bounded leaves. Imprisonment
-intentionally retains a single `Nat`-bounded constructor:
-SG PC imprisonment ranges are always bounded (life imprisonment
-is encoded as a specific upper number; see `s54`), so no
-sentinel is needed.
+The §3.4 sentinel-propagation invariant ("sentinels do not
+propagate beyond the leaf via the combinators") and the
+non-emptiness invariant on `orBoth` (an empty disjunction
+admits nothing — see `Range.orBothMeet_nil`) live in the
+Python linter (`src/yuho/ast/statute_lint.py`). This layer
+mechanises both as a structural Bool-valued predicate
+`Penalty.wellFormed`, so the `PenaltySMTModel.satisfies`
+bundle (and the canonical-model discharge in `Generator.lean`)
+can require it as a hypothesis.
 
-What remains as a v5 extension:
+Coverage:
+  * each bounded leaf has a coherent range (`lo ≤ hi`);
+  * unbounded-axis leaves (`fineUnlimited`, `caningUnspecified`)
+    are vacuously well-formed — only the lower bound matters
+    and `Nat` is non-negative by construction;
+  * `cumulative` children are all well-formed (empty cumulative
+    is vacuously admissible per `Range.cumulativeJoin_nil`, so
+    we permit it);
+  * `orBoth` is non-empty (an empty disjunction admits nothing
+    and is rejected by the Python linter as ill-formed) and
+    every child is well-formed.
 
-1. **Linter integration.** The §3.4 sentinel-propagation
-   invariant ("sentinels do not propagate beyond the leaf via
-   the combinators") is not currently mechanised; it lives in
-   `src/yuho/ast/statute_lint.py`. A v5 extension would mechanise
-   the invariant as a Lean predicate `Penalty.wellFormed` and
-   tighten `PenaltySMTModel.satisfies` to require it.
+The predicate is decidable (Bool-valued); consumers can
+discharge it by `native_decide` on concrete fixtures, or by
+`Penalty.wellFormed_cumulative` / `wellFormed_orBoth` /
+`wellFormedAll_cons` projections for proof-script use. -/
+mutual
 
-2. **Range-arithmetic operators.** The paper writes
-   `R₁ ⊔ ⋯ ⊔ Rₖ` for cumulative and `R₁ ⊓ ⋯ ⊓ Rₖ` for orBoth.
-   The current admissibility-predicate framing sidesteps the
-   explicit operators; a v5 reformulation could expose them as
-   `Range.cumulativeJoin` and `Range.orBothMeet` for users who
-   prefer the algebraic style.
+/-- A penalty term is well-formed under the §3.4 invariants.
+See the `## §6.5-v6 layer 6` doc-comment above for the rule
+list. -/
+def Penalty.wellFormed : Penalty → Bool
+  | .imprisonment lo hi    => decide (lo ≤ hi)
+  | .fine lo hi            => decide (lo ≤ hi)
+  | .fineUnlimited _       => true
+  | .caning lo hi          => decide (lo ≤ hi)
+  | .caningUnspecified _   => true
+  | .death                 => true
+  | .cumulative ps         => Penalty.wellFormedAll ps
+  | .orBoth ps             => !ps.isEmpty && Penalty.wellFormedAll ps
 
-3. **Z3 oracle assumption discharge.** Out of scope for the
-   penalty layer specifically; tracked as a v5 cross-cutting
-   item in the paper §6.6 boundary statement.
+/-- Every child of a list is well-formed. Mirrors the
+`Penalty.admitsAll` shape so the proofs in this layer follow
+the same list-fold template as §6.5's combinator soundness
+sub-lemmas. -/
+def Penalty.wellFormedAll : List Penalty → Bool
+  | []        => true
+  | p :: rest => p.wellFormed && Penalty.wellFormedAll rest
+
+end
+
+/-- Projection: a `wellFormed` cumulative inherits the
+`wellFormedAll` body shape (immediate from the recursive
+definition). -/
+theorem Penalty.wellFormed_cumulative (ps : List Penalty)
+    (h : (Penalty.cumulative ps).wellFormed = true) :
+    Penalty.wellFormedAll ps = true := by
+  rw [Penalty.wellFormed] at h
+  exact h
+
+/-- Projection: a `wellFormed` orBoth is non-empty and
+inherits the `wellFormedAll` body shape. -/
+theorem Penalty.wellFormed_orBoth (ps : List Penalty)
+    (h : (Penalty.orBoth ps).wellFormed = true) :
+    ps ≠ [] ∧ Penalty.wellFormedAll ps = true := by
+  rw [Penalty.wellFormed, Bool.and_eq_true] at h
+  obtain ⟨hne, hall⟩ := h
+  refine ⟨?_, hall⟩
+  intro hnil
+  rw [hnil] at hne
+  simp [List.isEmpty] at hne
+
+/-- Projection: `wellFormedAll` of a `cons` extracts both head
+and tail well-formedness. -/
+theorem Penalty.wellFormedAll_cons (p : Penalty) (rest : List Penalty)
+    (h : Penalty.wellFormedAll (p :: rest) = true) :
+    p.wellFormed = true ∧ Penalty.wellFormedAll rest = true := by
+  rw [Penalty.wellFormedAll, Bool.and_eq_true] at h
+  exact h
+
+/-- Membership lemma: every member of a `wellFormedAll` list is
+itself well-formed. The structural induction follows the same
+shape as `penalty_correspondence_cumulative`. -/
+theorem Penalty.wellFormedAll_mem
+    (ps : List Penalty) (h : Penalty.wellFormedAll ps = true) :
+    ∀ p ∈ ps, p.wellFormed = true := by
+  induction ps with
+  | nil => intro p hp; cases hp
+  | cons q rest ih =>
+    intro p hp
+    obtain ⟨hq, hrest⟩ := Penalty.wellFormedAll_cons q rest h
+    cases hp with
+    | head        => exact hq
+    | tail _ hmem => exact ih hrest p hmem
+
+/-! ### Strengthened satisfies bundle
+
+`PenaltySMTModel.satisfies` (declared above) carries the
+graph-level biconditionals (B1 family + B2) and the
+penalty-admissibility bicond (B-pen). v6 adds a third field
+`wf` requiring the encoded penalty to satisfy the
+well-formedness predicate. The strengthening is intentional:
+the canonical-model discharge in `Generator.lean` is stated
+under `wf` so the linter's runtime invariants are visible to
+the proof system rather than implicit.
+
+We expose the strengthened bundle as a *separate* structure
+(`PenaltySMTModel.satisfiesWF`) rather than mutating the
+existing `satisfies` to preserve backward compatibility with
+the v5 leaf and combinator correspondence theorems above.
+Downstream consumers (the canonical-model layer) use
+`satisfiesWF`; legacy callers use `satisfies` unchanged. -/
+
+/-- Strengthened satisfies bundle: `satisfies` plus a
+well-formedness witness on the encoded penalty. -/
+structure PenaltySMTModel.satisfiesWF
+    (m : PenaltySMTModel) (s : Statute) (p : Penalty) : Prop where
+  /-- Inherited graph-level + penalty biconditionals. -/
+  base : m.satisfies s p
+  /-- (B-wf) The encoded penalty is well-formed under the
+  §3.4 sentinel-propagation + non-empty-orBoth invariants. -/
+  wf   : p.wellFormed = true
+
+/-- The §6.5 correspondence theorem lifts to the strengthened
+bundle by projection through `base`. -/
+theorem penalty_correspondence_wf
+    (m : PenaltySMTModel) (s : Statute) (p : Penalty)
+    (h : m.satisfiesWF s p) :
+    p.admits m.footprint = true :=
+  penalty_correspondence m s p h.base
+
+/-! ## §6.5-v6 follow-ups
+
+v4 closed the G8 / G14 unbounded-axis sentinel gap. v5 added
+the `Range.cumulativeJoin` / `Range.orBothMeet` algebraic
+surface (in `Range.lean`). v6 (this commit) mechanises the
+linter's well-formedness invariant as `Penalty.wellFormed`
+and exposes the strengthened satisfies bundle
+`PenaltySMTModel.satisfiesWF`.
+
+Imprisonment intentionally retains a single `Nat`-bounded
+constructor: SG PC imprisonment ranges are always bounded
+(life imprisonment is encoded as a specific upper number;
+see `s54`), so no sentinel is needed.
+
+What remains as a v7 extension:
+
+1. **Z3 oracle assumption discharge for the penalty layer.**
+   v6 closes the *abstract* satisfiability oracle via
+   `Generator.canonicalPenaltyModel`; the residual is the
+   round-trip diff between the Python `Z3Generator`'s
+   penalty-emission paths and the Lean
+   `Penalty.canonicalFootprint` (tracked in `todo.md` as
+   *Generator-emit consolidation*).
+
+2. **Decidability tactic for `wellFormed` on large penalties.**
+   The current Bool-valued predicate is decidable in principle
+   (`native_decide` works on small fixtures); for the 524-corpus
+   sweep a custom decision procedure that short-circuits early
+   on the first ill-formed child would tighten compile-time.
 -/
 
 end Yuho
