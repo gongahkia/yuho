@@ -6,7 +6,7 @@ referencing penal_code/s378_theft
 struct TheftTestCase {
     string propertyType,
     string dishonestIntention,
-    bool withoutConsent,
+    bool consent,
     bool inPossessionOfAnother,
     bool propertyMoved,
 }
@@ -15,86 +15,86 @@ struct TheftTestCase {
 TheftTestCase normalTheft := TheftTestCase {
     propertyType := "movable_property",
     dishonestIntention := "wrongful_gain",
-    withoutConsent := TRUE,
+    consent := FALSE,
     inPossessionOfAnother := TRUE,
     propertyMoved := TRUE,
 }
 
 assert normalTheft.propertyType == "movable_property"
 assert normalTheft.dishonestIntention == "wrongful_gain"
-assert normalTheft.withoutConsent == TRUE
+assert normalTheft.consent == FALSE
 assert normalTheft.inPossessionOfAnother == TRUE
 assert normalTheft.propertyMoved == TRUE
-assert is_theft(normalTheft.propertyType, normalTheft.dishonestIntention, normalTheft.withoutConsent, normalTheft.inPossessionOfAnother, normalTheft.propertyMoved) == TRUE
+assert is_theft(normalTheft.propertyType, normalTheft.dishonestIntention, normalTheft.consent, normalTheft.inPossessionOfAnother, normalTheft.propertyMoved) == TRUE
 
 
 TheftTestCase wrongfulLossTheft := TheftTestCase {
     propertyType := "movable_property",
     dishonestIntention := "wrongful_loss",
-    withoutConsent := TRUE,
+    consent := FALSE,
     inPossessionOfAnother := TRUE,
     propertyMoved := TRUE,
 }
 
 assert wrongfulLossTheft.dishonestIntention == "wrongful_loss"
-assert is_theft(wrongfulLossTheft.propertyType, wrongfulLossTheft.dishonestIntention, wrongfulLossTheft.withoutConsent, wrongfulLossTheft.inPossessionOfAnother, wrongfulLossTheft.propertyMoved) == TRUE
+assert is_theft(wrongfulLossTheft.propertyType, wrongfulLossTheft.dishonestIntention, wrongfulLossTheft.consent, wrongfulLossTheft.inPossessionOfAnother, wrongfulLossTheft.propertyMoved) == TRUE
 
 
 TheftTestCase noProperty := TheftTestCase {
     propertyType := "none",
     dishonestIntention := "wrongful_gain",
-    withoutConsent := TRUE,
+    consent := FALSE,
     inPossessionOfAnother := TRUE,
     propertyMoved := TRUE,
 }
 
 assert noProperty.propertyType == "none"
-assert is_theft(noProperty.propertyType, noProperty.dishonestIntention, noProperty.withoutConsent, noProperty.inPossessionOfAnother, noProperty.propertyMoved) == FALSE
+assert is_theft(noProperty.propertyType, noProperty.dishonestIntention, noProperty.consent, noProperty.inPossessionOfAnother, noProperty.propertyMoved) == FALSE
 
 
 TheftTestCase noIntention := TheftTestCase {
     propertyType := "movable_property",
     dishonestIntention := "none",
-    withoutConsent := TRUE,
+    consent := FALSE,
     inPossessionOfAnother := TRUE,
     propertyMoved := TRUE,
 }
 
 assert noIntention.dishonestIntention == "none"
-assert is_theft(noIntention.propertyType, noIntention.dishonestIntention, noIntention.withoutConsent, noIntention.inPossessionOfAnother, noIntention.propertyMoved) == FALSE
+assert is_theft(noIntention.propertyType, noIntention.dishonestIntention, noIntention.consent, noIntention.inPossessionOfAnother, noIntention.propertyMoved) == FALSE
 
 
 TheftTestCase withConsent := TheftTestCase {
     propertyType := "movable_property",
     dishonestIntention := "wrongful_gain",
-    withoutConsent := FALSE,
+    consent := TRUE,
     inPossessionOfAnother := TRUE,
     propertyMoved := TRUE,
 }
 
-assert withConsent.withoutConsent == FALSE
-assert is_theft(withConsent.propertyType, withConsent.dishonestIntention, withConsent.withoutConsent, withConsent.inPossessionOfAnother, withConsent.propertyMoved) == FALSE
+assert withConsent.consent == TRUE
+assert is_theft(withConsent.propertyType, withConsent.dishonestIntention, withConsent.consent, withConsent.inPossessionOfAnother, withConsent.propertyMoved) == FALSE
 
 
 TheftTestCase notInPossession := TheftTestCase {
     propertyType := "movable_property",
     dishonestIntention := "wrongful_gain",
-    withoutConsent := TRUE,
+    consent := FALSE,
     inPossessionOfAnother := FALSE,
     propertyMoved := TRUE,
 }
 
 assert notInPossession.inPossessionOfAnother == FALSE
-assert is_theft(notInPossession.propertyType, notInPossession.dishonestIntention, notInPossession.withoutConsent, notInPossession.inPossessionOfAnother, notInPossession.propertyMoved) == FALSE
+assert is_theft(notInPossession.propertyType, notInPossession.dishonestIntention, notInPossession.consent, notInPossession.inPossessionOfAnother, notInPossession.propertyMoved) == FALSE
 
 
 TheftTestCase notMoved := TheftTestCase {
     propertyType := "movable_property",
     dishonestIntention := "wrongful_gain",
-    withoutConsent := TRUE,
+    consent := FALSE,
     inPossessionOfAnother := TRUE,
     propertyMoved := FALSE,
 }
 
 assert notMoved.propertyMoved == FALSE
-assert is_theft(notMoved.propertyType, notMoved.dishonestIntention, notMoved.withoutConsent, notMoved.inPossessionOfAnother, notMoved.propertyMoved) == FALSE
+assert is_theft(notMoved.propertyType, notMoved.dishonestIntention, notMoved.consent, notMoved.inPossessionOfAnother, notMoved.propertyMoved) == FALSE

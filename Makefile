@@ -47,7 +47,7 @@ LOGS = logs
 .PHONY: paper-reproduce \
         verify-coverage verify-akn-xsd verify-evals \
         verify-case-law verify-bulk-contrast verify-mechanisation \
-        verify-structural-diff \
+        verify-structural-diff verify-runtime-tests \
         clean-reproduce
 
 paper-reproduce: $(LOGS)
@@ -55,6 +55,7 @@ paper-reproduce: $(LOGS)
 	@echo ""
 	$(MAKE) verify-coverage
 	$(MAKE) verify-akn-xsd
+	$(MAKE) verify-runtime-tests
 	$(MAKE) verify-evals
 	$(MAKE) verify-case-law
 	$(MAKE) verify-mechanisation
@@ -63,6 +64,8 @@ paper-reproduce: $(LOGS)
 	@printf "Coverage         : %s\n" "$$(tail -n 1 $(LOGS)/coverage.log)" \
 		| tee $(LOGS)/paper-reproduce-summary.txt
 	@printf "AKN XSD          : %s\n" "$$(grep -E 'AKN round-trip:' $(LOGS)/akn-xsd.log | tail -n 1)" \
+		| tee -a $(LOGS)/paper-reproduce-summary.txt
+	@printf "Runtime tests    : %s\n" "$$(grep -E 'runtime sweep:' $(LOGS)/runtime-tests.log | tail -n 1)" \
 		| tee -a $(LOGS)/paper-reproduce-summary.txt
 	@printf "Evals (fake)     : %s\n" "$$(grep -E 'mean F1' $(LOGS)/evals.log | tail -n 1)" \
 		| tee -a $(LOGS)/paper-reproduce-summary.txt
@@ -135,6 +138,10 @@ verify-structural-diff-full: $(LOGS)
 		echo "Full structural diff: SKIPPED (Lean toolchain not on PATH)" \
 			| tee $(LOGS)/structural-diff-full.log; \
 	fi
+
+verify-runtime-tests: $(LOGS)
+	@echo ">>> verifying runtime-eval sweep across 90 rich test fixtures…"
+	$(PYTHON) scripts/verify_runtime_tests.py 2>&1 | tee $(LOGS)/runtime-tests.log
 
 verify-mechanisation: $(LOGS)
 	@echo ">>> verifying §6.6 Lean 4 mechanisation kernel-checks…"
