@@ -405,6 +405,56 @@ because it only enforces parse validity, not assertion truth.
       explicitly and fold the assertion-eval into a separate
       tool.
 
+### Function-name collisions in encoded statutes `[ ]`
+
+Surfaced 2026-04-29 alongside the interpreter bug above. Both
+`s322_voluntarily_causing_grievous_hurt/statute.yh` and
+`s326_voluntarily_causing_grievous_hurt_dangerous/statute.yh`
+define a top-level helper `fn is_voluntarily_causing_grievous_hurt(...)`
+with identical signatures. Other plausible duplicates exist
+across the corpus (e.g. abetment helpers, hurt-family helpers
+with shared semantic roots). The cross-statute namespace
+appears flat — when a `referencing` directive pulls in two
+such statutes, the interpreter has no canonical way to
+disambiguate which `fn` body to bind, which is one candidate
+explanation for the assertion-eval bug above.
+
+- [ ] **Audit the corpus** for `fn` name collisions.
+      `grep "^fn " library/penal_code/*/statute.yh | sort -k2 |
+      awk -F: '{print $2}' | sort | uniq -d` should surface the
+      duplicates.
+- [ ] **Decide namespacing policy.** Either (a) prefix every
+      statute-local `fn` with the section number
+      (`is_s322_voluntarily_causing_grievous_hurt`), or (b)
+      enforce the linter check that within a `referencing`
+      transitive closure no two `fn`s share a name. Option (a)
+      is mechanical but verbose; option (b) requires the
+      linter pass plus a corpus-wide rename.
+
+### AKN XSD validator broken under Python 3.14 `[ ]`
+
+Surfaced 2026-04-29 during `make paper-reproduce` end-to-end
+verification. `src/yuho/transpile/akn_validator.py:74` calls
+`xml.etree.ElementTree.fromstring` which on Python 3.14
+attempts `from _elementtree import …` and fails with
+`ImportError: No module named expat; use SimpleXMLTreeBuilder
+instead`. The `make verify-akn-xsd` target errors out and
+populates an empty `AKN round-trip:` line in the
+`paper-reproduce-summary.txt`. Pre-existing under Python 3.14
++ Homebrew install; the XSD-validation claim itself is intact
+(524/524 from the prior `6f2cc980` commit) — only the
+re-verification path is broken.
+
+- [ ] **Pin a working Python ElementTree backend.** Either
+      switch the validator to `defusedxml.ElementTree` (which
+      ships its own pure-Python parser), or vendor `expat` via
+      `pip install pyexpat` if a compatible build exists for
+      Python 3.14, or downgrade the dev environment to Python
+      3.13 which ships a working `_elementtree` wheel.
+- [ ] **Re-run `make verify-akn-xsd`** once fixed and confirm
+      the 524/524 AKN round-trip headline is restored in
+      `paper-reproduce-summary.txt` before the arXiv submission.
+
 ---
 
 ## Notes for fresh contributors
