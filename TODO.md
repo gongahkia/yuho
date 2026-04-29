@@ -11,34 +11,43 @@ benchmarks.
 
 Status key: `[ ]` pending · `[~]` in progress · `(def)` deferred.
 
-Current snapshot (2026-04-29): **12251 unit tests green · 524
+Current snapshot (2026-04-29): **12270 unit tests green · 524
 sections at L1+L2 · 524 L3 author-stamped · §6.6 Lean 4 mechanisation
-v7 (all 5 soundness lemmas + canonical models kernel-checked,
+v8 (all 5 soundness lemmas + canonical models kernel-checked,
 multi-statute `canonical_cross_satisfies` discharged, cross-library
-`apply_scope` companion theorems closed) · structural diff harness
-524/524 matched on full corpus (`make verify-structural-diff-full`)
-· runtime-eval sweep 90/90 rich tests passing
-(`make verify-runtime-tests`, wired into `make paper-reproduce`) ·
-§7.8 case-law differential testing n=40 · §7.6 LLM benchmark full
-205 fixtures, 4-way prompt sweep · Direction B defeats-edge
-coverage 1253 edges across 147 sections · 32-page smoke PDF ·
-`make paper-reproduce` end-to-end including Lean kernel-check +
-runtime sweep.** Completed history lives in git log + `docs/PHASE_*`
-notes.
+`apply_scope` companion theorems closed, `CrossRefGraph.acyclic`
+linter-invariant mechanised + `acyclic_canonical_cross_satisfies`
+discharge kernel-checked) · structural diff harness 524/524
+matched on full corpus, `--strict` regression gate active
+(`make verify-structural-diff-full`) · runtime-eval sweep 95/95
+rich tests passing (`make verify-runtime-tests`, wired into
+`make paper-reproduce`) · §7.8 case-law differential testing
+n=40 · §7.6 LLM benchmark full 205 fixtures, 4-way prompt sweep
+· Direction B defeats-edge coverage 1253 edges across 147
+sections · 32-page smoke PDF · `make paper-reproduce` end-to-end
+including Lean kernel-check + runtime sweep.** Completed history
+lives in git log + `docs/PHASE_*` notes.
 
 ---
 
 ## §6.6 — Lean 4 mechanisation `[~]`
 
-v1–v7 shipped; per-version layout in
+v1–v8 shipped; per-version layout in
 [`mechanisation/README.md`](./mechanisation/README.md). Headline:
 all 5 soundness lemmas + G8/G14 sentinels + conviction-layer oracle
-discharge + cross-library `apply_scope` companion theorems
-kernel-check under Lean 4.10.0 with no `sorry`s.
+discharge + cross-library `apply_scope` companion theorems +
+v8 acyclicity-invariant mechanisation
+(`CrossRefGraph.acyclic` decidable predicate +
+`acyclic_canonical_cross_satisfies` discharge) kernel-check
+under Lean 4.10.0 with no `sorry`s.
 
-No outstanding work; tracked here as `[~]` only because future depth
-items (recursive cross-section references, etc.) may surface during
-external review.
+- [ ] **v9 — lift cross-section refs into `Element.eval`** (depth,
+      not a release blocker). Add an `Element.kind` constructor for
+      `is_infringed(n)` / `apply_scope(n, F')`, with `Element.eval`
+      recursively consulting the section table; the v8 acyclicity
+      hypothesis becomes load-bearing on the recursion's well-
+      foundedness at that point. Multi-session work; pays off only
+      under external-review pressure.
 
 ---
 

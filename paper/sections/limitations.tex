@@ -209,7 +209,19 @@ every encoded statute. v7 also closed the multi-statute
 extension of the cross-section bundle:
 \texttt{canonical\_cross\_satisfies} kernel-checks for any
 module under qualified-atom-name uniqueness + section-number
-uniqueness, both linter-enforced invariants.
+uniqueness, both linter-enforced invariants. v8 (2026-04-29)
+mechanises the linter's cross-section-reference acyclicity
+invariant explicitly: \texttt{CrossRefGraph.acyclic} is a
+decidable Bool predicate over the module's surface-level
+\texttt{is\_infringed} / \texttt{apply\_scope} edges, and
+\texttt{acyclic\_canonical\_cross\_satisfies} kernel-checks
+the discharge under that invariant. The discharge is vacuous
+at the current Lean abstraction level (the abstraction strips
+cross-section refs from \texttt{Statute}, so
+\texttt{Element.eval} never recurses through them); the
+hypothesis is preserved in the signature so a future v9 that
+lifts cross-section refs into \texttt{Element.eval} can rely
+on the invariant where it matters.
 
 \paragraph{No formal grammar-completeness theorem.} We claim that
 Yuho can express every Penal Code section at L1+L2 fidelity,

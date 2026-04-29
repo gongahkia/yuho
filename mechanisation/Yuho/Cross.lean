@@ -795,19 +795,152 @@ theorem is_infringed_eval_none_of_extern
   rw [hextern]
   rfl
 
-/-! ## §6-cross-v7 follow-ups
+/-! ## §6-cross-v8 layer 7 — Cross-section-reference acyclicity
 
-The v7 cross-library case completes the `applyScope` /
-`isInfringed` dichotomy. Remaining items:
+v7 closed the in-module / cross-library dichotomy on
+`applyScope` and `isInfringed`. The v7 prose notes that
+recursive cross-section references (e.g. `s_a` referencing
+`s_b` referencing `s_a`) "remain rejected by the Python linter
+at the source level; this file inherits that rejection as an
+unspoken hypothesis". v8 (this layer) makes that hypothesis
+explicit by mechanising the linter's acyclicity invariant
+directly in Lean.
 
-1. **Recursive cross-section references.** A statute `s_a`
-   referencing `s_b` referencing `s_a` would, in the
-   operational semantics, require a fixed-point construction.
-   The Python linter rejects such cycles (mirroring the
-   defeats-acyclicity invariant for exceptions); this file
-   inherits that rejection as an unspoken hypothesis. A v8
-   extension could mechanise the linter's acyclicity check
-   directly.
+The v8 contribution is structural rather than load-bearing:
+the Lean `Statute` abstraction stops at element-tree shape +
+exception list — it does not carry cross-section refs as
+first-class data, so `Element.eval F = F e.name` is a pure
+leaf-atom lookup with no recursion through other statutes'
+conviction atoms. Cross-section recursion only enters the
+picture at the surface-language level (the `is_infringed` /
+`apply_scope` expression nodes), not at the abstraction the
+soundness theorem operates on.
+
+What v8 adds:
+
+1. A `CrossRefGraph` sidecar type — list of
+   `(source-section, target-section)` edges, derived from
+   `is_infringed` / `apply_scope` calls in the Python AST
+   by the linter.
+2. A decidable `CrossRefGraph.acyclic` Bool predicate over
+   that sidecar, computed by a topological-sort-style walk.
+3. A vacuous-discharge theorem
+   `acyclic_canonical_cross_satisfies` showing that under
+   acyclicity, the canonical cross model satisfies the v4
+   bundle. The proof is the v5 multi-statute discharge —
+   acyclicity adds no further proof obligation at this
+   abstraction level because the model never recurses
+   through cross-section refs. The theorem documents the
+   discharge so the unspoken hypothesis is no longer
+   unspoken: it's a kernel-checked statement saying "under
+   the linter's acyclicity invariant, the bundle holds".
+-/
+
+/-- A cross-section-reference edge: source statute's section
+number, target statute's section number. The Python linter
+extracts the full set of edges from the surface AST by walking
+each statute's elements/exceptions for `is_infringed(n)` /
+`apply_scope(n, …)` calls, and rejects modules whose edge
+relation contains a cycle. -/
+structure CrossRef where
+  source : String
+  target : String
+deriving Repr, BEq, DecidableEq
+
+/-- A finite cross-reference graph over a module: list of
+edges. Constructed by the linter at parse time. -/
+abbrev CrossRefGraph := List CrossRef
+
+namespace CrossRefGraph
+
+/-- The set of nodes (section numbers) appearing as either
+endpoint of any edge. Linter uses this to bound the
+topological walk. -/
+def nodes (g : CrossRefGraph) : List String :=
+  ((g.map CrossRef.source) ++ (g.map CrossRef.target)).eraseDups
+
+/-- Out-edges from `n` in `g`. -/
+def outEdges (g : CrossRefGraph) (n : String) : List String :=
+  (g.filter (fun e => e.source = n)).map CrossRef.target
+
+/-- Reachability in one step. -/
+def reachable1 (g : CrossRefGraph) (s t : String) : Bool :=
+  g.any (fun e => decide (e.source = s) && decide (e.target = t))
+
+/-- Bounded reachability: `t` reachable from `s` in at most
+`fuel` steps. The `fuel` bound stops the walk on cycles; for
+acyclic graphs `fuel = nodes.length` suffices. -/
+def reachableIn (g : CrossRefGraph) (fuel : Nat) (s t : String) : Bool :=
+  match fuel with
+  | 0 => decide (s = t)
+  | n + 1 =>
+    decide (s = t)
+      || (outEdges g s).any (fun next => reachableIn g n next t)
+
+/-- A graph is acyclic iff no node reaches itself in a positive
+number of steps. We bound the walk by `nodes.length` since any
+cycle revisits a node within that horizon. -/
+def acyclic (g : CrossRefGraph) : Bool :=
+  let bound := g.nodes.length
+  g.nodes.all (fun n =>
+    !((outEdges g n).any (fun next => reachableIn g bound next n)))
+
+end CrossRefGraph
+
+/-- An empty cross-ref graph (no `is_infringed` / `apply_scope`
+calls anywhere in the module) is trivially acyclic. The
+`nodes` list is empty so the outer `all` quantifier holds
+vacuously. -/
+theorem CrossRefGraph.acyclic_empty :
+    CrossRefGraph.acyclic [] = true := by
+  unfold CrossRefGraph.acyclic CrossRefGraph.nodes
+  rfl
+
+/-- **§6-cross-v8 acyclicity-discharge.** For any module + facts
+pair whose cross-reference graph is acyclic (per the linter's
+invariant), the canonical cross model satisfies the v4 bundle.
+
+This is the v5 multi-statute discharge with the linter's
+acyclicity invariant made explicit. The proof discharges the
+acyclicity hypothesis vacuously: the Lean `Statute` abstraction
+keeps `Element.eval F = F e.name` as a pure leaf-atom lookup
+with no recursion through cross-section refs, so the canonical
+model never depends on the graph's shape. The hypothesis is
+preserved in the signature so a future extension that lifts
+cross-section refs into `Element.eval` (e.g. a v9 mechanisation
+of `is_infringed` as a first-class element kind) can rely on
+acyclicity at that point.
+
+The qualified-atom-name uniqueness (`hAtomUniq`) and
+section-number uniqueness (`hSecUniq`) invariants from v5
+remain load-bearing on the canonical model's exception-bicond
+and conviction-bicond proofs respectively. -/
+theorem acyclic_canonical_cross_satisfies
+    (mod : Module) (F : Facts) (g : CrossRefGraph)
+    (_hAcyclic : g.acyclic = true)
+    (hAtomUniq : ∀ s₁ ∈ mod.statutes, ∀ s₂ ∈ mod.statutes,
+                 ∀ x₁ ∈ s₁.exceptions, ∀ x₂ ∈ s₂.exceptions,
+                 Generator.exceptionAtomName s₁ x₁
+                   = Generator.exceptionAtomName s₂ x₂ →
+                 s₁ = s₂ ∧ x₁.label = x₂.label)
+    (hSecUniq : ∀ s₁ ∈ mod.statutes, ∀ s₂ ∈ mod.statutes,
+                s₁.section_number = s₂.section_number → s₁ = s₂) :
+    (Generator.canonicalCrossModel mod F).satisfies mod :=
+  canonical_cross_satisfies mod F hAtomUniq hSecUniq
+
+/-! ## §6-cross-v8 follow-ups
+
+The v8 acyclicity-discharge makes the linter invariant
+explicit but does not yet do real work, because the current
+Lean abstraction strips cross-section refs from `Statute`.
+A v9 extension could:
+
+1. **Lift cross-section refs into Element.** Add an
+   `Element.kind` constructor for `is_infringed(n)` and
+   `apply_scope(n, F')`, with `Element.eval` recursively
+   consulting the section table. At that point the
+   acyclicity hypothesis becomes load-bearing on the
+   recursion's well-foundedness.
 
 2. **Python-side faithfulness.** Showing that the Python
    generator's `_conviction_bool` lazy declaration matches
