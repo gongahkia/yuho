@@ -112,9 +112,9 @@ verify-bulk-contrast: $(LOGS)
 	$(PYTHON) scripts/bulk_contrast.py 2>&1 | tee $(LOGS)/bulk-contrast.log
 
 verify-structural-diff: $(LOGS)
-	@echo ">>> running §6.6 Lean spec ↔ Python Z3Generator structural diff (smoke fixtures)…"
+	@echo ">>> running §6.6 Lean spec ↔ Python Z3Generator structural diff (smoke fixtures, --strict)…"
 	@if command -v lake >/dev/null 2>&1; then \
-		$(PYTHON) scripts/verify_structural_diff.py 2>&1 \
+		$(PYTHON) scripts/verify_structural_diff.py --strict 2>&1 \
 			| tee $(LOGS)/structural-diff.log; \
 	else \
 		echo "Structural diff: SKIPPED (Lean toolchain not on PATH)" \
@@ -130,9 +130,9 @@ verify-structural-diff-full: $(LOGS)
 	@echo ">>> regenerating Lean corpus fixtures…"
 	@$(PYTHON) mechanisation/scripts/generate_fixtures.py 2>&1 \
 		| tee $(LOGS)/fixtures-gen.log
-	@echo ">>> running full-corpus Lean spec ↔ Python Z3Generator structural diff…"
+	@echo ">>> running full-corpus Lean spec ↔ Python Z3Generator structural diff (--strict)…"
 	@if command -v lake >/dev/null 2>&1; then \
-		$(PYTHON) scripts/verify_structural_diff.py --full --summary-only 2>&1 \
+		$(PYTHON) scripts/verify_structural_diff.py --full --strict --summary-only 2>&1 \
 			| tee $(LOGS)/structural-diff-full.log; \
 	else \
 		echo "Full structural diff: SKIPPED (Lean toolchain not on PATH)" \

@@ -424,8 +424,16 @@ def project_to_conviction_layer(asserts: list[dict[str, Any]]) -> dict[str, dict
     return out
 
 
+_EXPECTED_ATOM_SUFFIXES = ("_satisfied", "_fires", "_conviction")
+"""Atom-suffix vocabulary expected in the conviction layer. Any LHS
+atom whose name doesn't end with one of these suffixes counts as a
+new naming convention and triggers `--strict` failure (see
+`diff_one`'s strict checks)."""
+
+
 def diff_one(
-    name: str, statute_id: str, lean: list[Any], python: list[Any]
+    name: str, statute_id: str, lean: list[Any], python: list[Any],
+    strict: bool = False,
 ) -> tuple[bool, str]:
     leaf_names = _leaf_names_from_lean(lean, statute_id)
     lean_canon = [_canonicalise_lean_tree(a, statute_id, leaf_names) for a in lean]
@@ -446,6 +454,42 @@ def diff_one(
         if _canonical_form(lean_by_atom[atom]) != _canonical_form(py_by_atom[atom]):
             shape_diffs.append(atom)
 
+    # `--strict` regression checks. Catches drift that the standard
+    # diff would absorb silently:
+    #   (a) atom-suffix vocabulary expansion — a new emit-side
+    #       suffix means project_to_conviction_layer is missing
+    #       coverage and the docs need an update;
+    #   (b) bicond-count parity — both sides should emit the same
+    #       number of conviction-layer biconds per fixture; an
+    #       imbalance means one emitter quietly stopped emitting a
+    #       documented bicond family;
+    #   (c) `_fires` count parity — even though we skip RHS
+    #       comparison on `_fires`, the count should still match.
+    strict_failures: list[str] = []
+    if strict:
+        all_atoms = set(lean_by_atom) | set(py_by_atom)
+        unknown_suffix = sorted(
+            a for a in all_atoms
+            if not any(a.endswith(s) for s in _EXPECTED_ATOM_SUFFIXES)
+        )
+        if unknown_suffix:
+            strict_failures.append(
+                f"unknown atom suffix(es): {unknown_suffix} "
+                f"(expected {_EXPECTED_ATOM_SUFFIXES})"
+            )
+        if len(lean_by_atom) != len(py_by_atom):
+            strict_failures.append(
+                f"bicond-count mismatch: lean={len(lean_by_atom)} "
+                f"vs python={len(py_by_atom)}"
+            )
+        lean_fires = {a for a in lean_by_atom if a.endswith("_fires")}
+        py_fires = {a for a in py_by_atom if a.endswith("_fires")}
+        if lean_fires != py_fires:
+            strict_failures.append(
+                f"_fires atom set mismatch: only-lean={sorted(lean_fires - py_fires)}, "
+                f"only-python={sorted(py_fires - lean_fires)}"
+            )
+
     lines = [f"=== {name} ==="]
     lines.append(f"  lean biconds (conviction-layer):   {len(lean_by_atom)}")
     lines.append(f"  python biconds (conviction-layer): {len(py_by_atom)}")
@@ -456,10 +500,14 @@ def diff_one(
         lines.append(f"  only in python: {only_py}")
     if shape_diffs:
         lines.append(f"  shape differs on: {shape_diffs}")
+    if strict_failures:
+        for f in strict_failures:
+            lines.append(f"  STRICT: {f}")
 
     # Post-canonicalisation: any residue surfaces here. Empty residue
-    # means the two emitters agree on conviction-layer shape.
-    passed = not (only_lean or only_py or shape_diffs)
+    # (plus zero strict failures when applicable) means the two
+    # emitters agree on conviction-layer shape.
+    passed = not (only_lean or only_py or shape_diffs or strict_failures)
     return passed, "\n".join(lines)
 
 
@@ -477,6 +525,14 @@ def main() -> int:
         "--summary-only",
         action="store_true",
         help="suppress per-statute output; print only the aggregate result.",
+    )
+    ap.add_argument(
+        "--strict",
+        action="store_true",
+        help="add atom-vocabulary + bicond-count parity regression checks. "
+             "Catches drift that the canonicalisation pipeline would "
+             "otherwise absorb (e.g. a new atom-naming convention not "
+             "listed in KNOWN_DIVERGENCES).",
     )
     args = ap.parse_args()
 
@@ -509,7 +565,9 @@ def main() -> int:
             continue
         lean_asserts = lean_export[fname]
         statute_id = py_fixtures[fname].section_number.replace(".", "_")
-        passed, summary = diff_one(fname, statute_id, lean_asserts, py_asserts)
+        passed, summary = diff_one(
+            fname, statute_id, lean_asserts, py_asserts, strict=args.strict
+        )
         if passed:
             counts["matched"] += 1
         else:
