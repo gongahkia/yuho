@@ -14,7 +14,7 @@ Status key: `[ ]` pending · `[~]` in progress · `(def)` deferred.
 Current snapshot (2026-04-29): **4947 unit tests green · 524 sections at
 L1+L2 · 524 L3 author-stamped · §4 + §6 paper sections shipped (formal
 semantics + soundness theorem with 5 lemmas + 8 sanity-witness tests) ·
-§6.6 Lean 4 mechanisation v6: all 5 soundness lemmas kernel-checked
+§6.6 Lean 4 mechanisation v7: all 5 soundness lemmas kernel-checked
 (6.2 + 6.3 + 6.4 + 6.4' cross-section + 6.5 penalty) PLUS conviction-
 layer oracle assumption discharged via `Generator.lean`'s constructive
 canonical models (`canonical_smt_satisfies` /
@@ -28,9 +28,13 @@ sentinel-propagation invariant; `Generator.canonicalPenaltyModel`
 constructive §6.5 oracle discharge with leaf-shape canonical
 footprint constructors; `CrossSMTModel` qualified-atom refactor
 + `Generator.canonicalCrossModel` + singleton-module
-`canonical_cross_satisfies_singleton_singleton_exc` discharge) ·
-§7.8 case-law differential testing (n=38, three scorers; top-1 44.7%,
-MRR 0.461, contrast F1 0.239, constrained-contrast consistency 100%) ·
+`canonical_cross_satisfies_singleton_singleton_exc` discharge)
+PLUS v7 closures (multi-statute `canonical_cross_satisfies`
+discharged by structural induction over `mod.statutes` under
+linter-enforced uniqueness invariants — abstract module-level
+oracle no longer a residual) ·
+§7.8 case-law differential testing (n=40, three scorers; top-1 47.5%,
+MRR 0.480, contrast F1 0.239, constrained-contrast consistency 100%) ·
 §7.6 LLM benchmark with full 205-fixture GPT-4o-mini + GPT-4o + o3-mini
 cross-model baselines + 4-way prompt-variant comparison (baseline /
 polarity / polarity-soft / polarity-conditional; polarity-conditional
@@ -94,16 +98,22 @@ v6 closures (2026-04-29):
   `canonical_cross_satisfies_singleton_singleton_exc`
   kernel-checked.
 
-Open follow-ups (deferred to v7):
+v7 closures (2026-04-29):
 
-- [ ] **Multi-statute extension of `canonical_cross_satisfies`.**
-      The singleton-module discharge ships in v6; the
-      multi-statute case reduces to structural induction over
-      `mod.statutes` under the linter-enforced
-      section-number-uniqueness invariant. Per-arm helpers
-      (`crossExcFiresInExceptions_head_match`,
-      `crossExcFiresInStatutes_head_match`) ship as the
-      induction's match-arm primitives.
+* **Multi-statute `canonical_cross_satisfies`**
+  (`Yuho/Cross.lean`) — structural induction over
+  `mod.statutes` under qualified-atom-name uniqueness
+  (`hAtomUniq`) + section-number uniqueness (`hSecUniq`)
+  invariants, both linter-enforced. Auxiliary lemmas
+  `crossExcFiresInExceptions_no_match` /
+  `crossExcFiresInExceptions_eq_of_mem` /
+  `crossExcFiresInStatutes_skip_head` /
+  `crossExcFires_eq_of_mem` /
+  `find?_section_number_of_mem` shipped as induction
+  primitives. Two-statute smoke fixture
+  (`s299WithConsent + s378NoExc`) exhibits the discharge
+  in `Tests/Smoke.lean`. With v7, the abstract module-level
+  oracle is no longer a residual.
 - [ ] Cross-library `apply_scope` (the case-law differential
       testing already restricts to in-module sections; this is a
       v7-stretch item, not a release blocker).
@@ -135,14 +145,18 @@ Open follow-ups (deferred to v7):
 
 ## §7.8 — Case-law differential testing `[~]`
 
-n=38 fixtures shipped with three scorers (recommend / contrast /
+n=40 fixtures shipped with three scorers (recommend / contrast /
 constrained-contrast). Headline numbers wired into paper §7.8:
-top-1 44.7%, top-3 47.4%, MRR 0.461, contrast F1 0.239,
+top-1 47.5%, top-3 47.5%, MRR 0.480, contrast F1 0.239,
 constrained-contrast consistency 100% (n=25). v2 expansion
 (commits `e8f37c3e..3e7f3dc6`) added 8 fixtures covering s392 /
 s394 robbery, s425 mischief, s447 criminal trespass, and s506
 criminal intimidation; chapter XXII intimidation now first-class
-in the corpus. Open work:
+in the corpus. v3 expansion (2026-04-29) added 2 fixtures:
+`Nicholas Tan Siew Chye v PP [2023] SGHC 35` (s377BB(4)
+voyeurism — the s509 successor; chapter XXIII first-class) and
+`PP v BPK [2018] SGHC 135` (s307(1) attempt to murder; chapter
+XVI sub-coverage). Open work:
 
 - [ ] **Further sample growth.** Chapter II (state offences) and
       chapter XX (marriage offences) remain absent from the
@@ -151,10 +165,14 @@ in the corpus. Open work:
       prosecuted under the Internal Security Act / repealed
       Sedition Act; chapter XX bigamy cases are typically
       prosecuted via the Women's Charter rather than s494 PC).
-      Chapter XXIII s509 (insulting modesty) and s363 / s363A
-      kidnapping (most kidnapping cases use the Kidnapping Act
-      1961, not Penal Code ss363-367) similarly thin. Realistic
-      scope: target s363A kidnapping for ransom under PC, and
+      s363 / s363A kidnapping cases mostly use the Kidnapping
+      Act 1961 rather than Penal Code ss363-367 (verified
+      2026-04-29 via eLitigation search; no reported s363A PC
+      cases located). Chapter XXIII voyeurism partially covered
+      via the v3 `Nicholas Tan Siew Chye` fixture; further
+      scope: additional s377BA word/gesture cases (most are
+      District Court level and don't generate reported
+      judgments). Realistic next pass: target
       any s509 outrage-of-modesty cases reported on eLitigation.
 - [ ] Inter-rater reliability on the curated fact patterns. A
       second curator (human, not LLM) extracts facts from the
@@ -335,10 +353,57 @@ The suite is green at 4937. 82 sections carry behavioural-test
 companions; 442 sections are pure-interpretation provisions where
 structural parse + lint coverage is the appropriate bar.
 
+v3 enrichment (2026-04-29): hurt family s322 / s324 / s326
+upgraded from universal-shape to doctrinally-rich behavioural
+fixtures with intent / knowledge / weapon-kind / kind-shift
+variants, including the s322 Explanation kind-shift case
+(intend one kind of grievous hurt, cause another — still s322).
+Files parse + lint clean; runtime assertion evaluation hits the
+pre-existing interpreter bug below.
+
 - [ ] **442 sections without behavioural companions.** Author
       per-section companions opportunistically when an offence
       gains structural complexity that warrants behavioural
       testing.
+
+### Yuho interpreter bug — comments break assertion eval `[ ]`
+
+Surfaced 2026-04-29 during hurt-family enrichment. The
+`yuho test` runner's interpreter incorrectly evaluates
+assertions to `False` when an inline `// comment` appears
+between a `struct` definition and the first scenario
+instantiation in the same test file. Minimal repro:
+
+```yh
+referencing penal_code/<some>
+
+struct Foo { bool a, bool b }
+
+// any inline comment here
+Foo x := Foo { a := TRUE, b := FALSE }
+assert <encoded_predicate>(x.a, x.b) == TRUE   // evaluates False
+```
+
+Same content with the inline comment removed (or replaced by a
+blank line) evaluates correctly. The bug affects existing rich
+tests across the corpus (e.g. s378, s325) — they parse + lint
+clean (which is what `pytest tests/test_library_statutes.py`
+checks) but their `assert` lines do not evaluate to TRUE under
+`yuho test <file>` invocation. The pytest suite stays green
+because it only enforces parse validity, not assertion truth.
+
+- [ ] **Diagnose root cause** in
+      `src/yuho/eval/interpreter.py` or upstream parser. The
+      symptom is consistent across files; the cause may be a
+      comment-position-dependent AST walker bug or a function-
+      name collision (multiple `is_voluntarily_causing_*` defs
+      across the corpus).
+- [ ] **Decide test-runner contract.** If `yuho test`'s
+      assertion-eval is meant to be load-bearing, fix the bug
+      and run the runtime sweep across all 82 rich tests. If
+      it's parse-only-by-policy, document the runtime semantics
+      explicitly and fold the assertion-eval into a separate
+      tool.
 
 ---
 
