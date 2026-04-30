@@ -1,0 +1,25 @@
+/// @meta source=test_statute_for_s148
+referencing penal_code/s148_rioting_armed_deadly_weapon
+
+struct S148TestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+S148TestCase guilty := S148TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_s148_rioting_armed(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+S148TestCase defended := S148TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_s148_rioting_armed(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+S148TestCase notMadeOut := S148TestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_s148_rioting_armed(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE

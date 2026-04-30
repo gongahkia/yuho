@@ -1,6 +1,15 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr148-#pr148-
+
+fn is_s148_rioting_armed(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 148 "Rioting, armed with a deadly weapon" effective 1872-01-01 {
     elements {
         /// Section 148 is conjunctive: the accused must be guilty of rioting and be armed in the specified way.
