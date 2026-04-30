@@ -1144,11 +1144,18 @@ class Z3Generator:
             if expr is not None:
                 element_exprs.append(expr)
         if not element_exprs:
-            for sub in getattr(statute, "subsections", ()) or ():
-                for elem in getattr(sub, "elements", ()) or ():
-                    expr = self._translate_element(statute_id, elem)
-                    if expr is not None:
-                        element_exprs.append(expr)
+            # Recursive subsection walk: s305 nests `subsection (1) {
+            # subsection (a) { elements { … } } }`, so a single-level
+            # hoist (the prior shape of this loop) misses it. We
+            # gather elements from every reachable subsection.
+            def _walk_subs(subs):
+                for sub in subs or ():
+                    for elem in getattr(sub, "elements", ()) or ():
+                        expr = self._translate_element(statute_id, elem)
+                        if expr is not None:
+                            element_exprs.append(expr)
+                    _walk_subs(getattr(sub, "subsections", ()))
+            _walk_subs(getattr(statute, "subsections", ()) or ())
 
         # Top-level elements are implicitly conjunctive (all must hold).
         # We split the original biconditional `conviction == all_elements`
