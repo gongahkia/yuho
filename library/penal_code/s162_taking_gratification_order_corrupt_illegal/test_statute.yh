@@ -1,0 +1,25 @@
+/// @meta source=test_statute_for_s162
+referencing penal_code/s162_taking_gratification_order_corrupt_illegal
+
+struct S162TestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+S162TestCase guilty := S162TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_s162_gratification_corrupt_means(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+S162TestCase defended := S162TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_s162_gratification_corrupt_means(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+S162TestCase notMadeOut := S162TestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_s162_gratification_corrupt_means(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE
