@@ -1,0 +1,25 @@
+/// @meta source=test_statute_for_s168
+referencing penal_code/s168_public_servant_unlawfully_engaging_trade
+
+struct S168TestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+S168TestCase guilty := S168TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_s168_unlawful_trade_engagement(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+S168TestCase defended := S168TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_s168_unlawful_trade_engagement(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+S168TestCase notMadeOut := S168TestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_s168_unlawful_trade_engagement(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE
