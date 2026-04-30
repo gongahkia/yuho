@@ -1,0 +1,25 @@
+/// @meta source=test_statute_for_s172
+referencing penal_code/s172_absconding_avoid_arrest_warrant_service
+
+struct S172TestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+S172TestCase guilty := S172TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_s172_absconding_arrest(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+S172TestCase defended := S172TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_s172_absconding_arrest(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+S172TestCase notMadeOut := S172TestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_s172_absconding_arrest(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE

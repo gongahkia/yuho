@@ -2,6 +2,15 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr172-#pr172-
 /// @amendment [15/2019]
+
+fn is_s172_absconding_arrest(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 172 "Absconding to avoid arrest on warrant or service of summons, etc., proceeding from a public servant" effective 1872-01-01 effective 2020-01-01 {
     elements {
         /// Section 172 requires absconding to avoid arrest on a warrant or service of process issued by a legally competent public servant.
