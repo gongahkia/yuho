@@ -68,6 +68,7 @@ linter warnings.
 | Cross-section multi-statute discharge (v7) | `Yuho/Cross.lean` | `canonical_cross_satisfies` | Structural induction over `mod.statutes` under qualified-atom-name + section-number uniqueness invariants (linter-enforced) |
 | Cross-section-reference acyclicity (v8) | `Yuho/Cross.lean` | `CrossRefGraph.acyclic` + `acyclic_canonical_cross_satisfies` | Decidable Bool predicate via `reachableIn` fuel ceiling = `nodes.length`; v4 satisfies bundle re-discharged under the linter-enforced acyclicity hypothesis |
 | Deep element-tree base camp (v9) | `Yuho/CrossDeep.lean` | `ElementDeep` AST + `ElementDeep.eval` (fuel-bounded) + `ElementGroup.toDeep` lift + `Statute.deepBody_compat` | Conservative-extension lemma: the v9 deep evaluator agrees with v4–v8 `Statute.elementsSatisfied` on the existing `crossRef`-free surface library at every fuel budget; mutual induction over `ElementGroup` / `List ElementGroup` |
+| `applyScope` lift + cross-ref semantics smoke (v9) | `Yuho/CrossDeep.lean` | `ElementDeep.applyScope` constructor + `eval_crossRef_resolves` / `eval_applyScope_resolves` / `_missing` / `_zero_fuel` (six theorems) | Each branch of the `crossRef` / `applyScope` evaluator is pinned to its §3 inference rule (`is_infringed(n)` → ambient-facts `Statute.convicts`; `apply_scope(n, F')` → substituted-facts `Statute.convicts`; out-of-module → `false`; fuel-exhaustion → `false`) by `simp only` after a `sigma`-lookup hypothesis |
 
 ## Trusted base
 
