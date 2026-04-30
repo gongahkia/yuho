@@ -1,0 +1,25 @@
+/// @meta source=test_statute_for_s133
+referencing penal_code/s133_abetment_assault_officer_serviceman_his
+
+struct S133TestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+S133TestCase guilty := S133TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_s133_abetment_assault_superior(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+S133TestCase defended := S133TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_s133_abetment_assault_superior(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+S133TestCase notMadeOut := S133TestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_s133_abetment_assault_superior(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE

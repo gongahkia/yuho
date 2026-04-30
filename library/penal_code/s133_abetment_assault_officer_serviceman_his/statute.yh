@@ -1,6 +1,15 @@
 /// @jurisdiction singapore
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr133-#pr133-
+
+fn is_s133_abetment_assault_superior(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 133 "Abetment of an assault by an officer or a serviceman on his superior officer, when in the execution of his office" effective 1872-01-01 {
     elements {
         /// Section 133 is conjunctive: abetment, the assaulting party's status, the victim's status, and execution of office must all be present.
