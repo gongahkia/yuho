@@ -275,34 +275,44 @@ Structural transpiler validates 524/524 against vendored OASIS XSD.
       hierarchy, full `<componentRef>` graph): a named external user
       asks for it.
 
-### Mermaid flowchart richness `[~]` — **FLAGGED FOR HUMAN AUDIT**
+### Mermaid flowchart richness `[~]` — code-level audit done
 
 `--shape verbose` v1 shipped in
 `src/yuho/transpile/mermaid_transpiler.py`: per-element decision
-diamonds, priority-ordered exception chains, per-conditional penalty
-branches. The verbose shape is a mechanical rewrite that needs human
-audit before being relied on for documentation, teaching, or
-reviewer-facing rendering.
+diamonds, priority-ordered exception chains, per-conditional
+penalty branches. 2026-04-30 audit pass closed two silent bugs:
 
-- [ ] Diamond labels — confirm doctrinal fidelity for long element
-      descriptions; some labels may need a tooltip rather than an
-      inline glyph (Mermaid does not natively support tooltips on
-      diamonds).
-- [ ] Exception priority chain — currently rendered in source order;
-      AST visitor does NOT auto-sort by `priority` field. Audit
-      output against sections that use explicit priorities (e.g.
-      s300 Exceptions 1-7 are in priority order already; newer
-      hand-edited sections might diverge).
-- [ ] Penalty-conditional rendering — verify the AST attribute
-      access in `_transpile_statute_verbose` (`pen.when_condition`
-      then fallback `pen.when`) actually reads the `when` clause.
-      Spot-check on a multi-penalty section (s404 carries
-      `penalty when clerk_or_servant_case`; s302 has unconditional
-      penalty).
-- [ ] Mermaid render — run the verbose output through `mmdc` / the
-      explorer site; confirm no syntax errors / no orphaned nodes.
-      The 28 Mermaid unit tests cover the default `statute` shape
-      only.
+* **Penalty-conditional rendering** read `pen.when_condition` /
+  `pen.when` (commit `50eae123`) but `PenaltyNode` actually
+  carries the G9 conditional identifier on `pen.condition` —
+  the conditional-penalty diamonds had been silently dead since
+  v1 landed; verified working on s130 (`life_imprisonment_sentence`
+  / `non_life_sentence` chain renders correctly).
+* **Exception priority chain auto-sort** (commit `d825d2e5`) —
+  the loop now sorts by `exc.priority` (lower = higher
+  priority, rendered first; null priorities fall through in
+  source order at the tail). Previously the chain rendered in
+  source order, drifting silently for hand-edited sections that
+  interleaved priorities.
+* **Static syntax sanity** — verbose output for s300 has 44
+  nodes, 41 referenced in edges, 0 orphans, 16 diamonds, 28
+  rectangles. No parse-error structure detected by static
+  inspection.
+
+- [ ] **Doctrinal fidelity audit on diamond labels.** Long
+      element descriptions are truncated and rendered as inline
+      diamond labels. Whether the truncation preserves doctrinal
+      meaning is a content-audit question that needs a human
+      reader. Some labels may need tooltips rather than inline
+      glyphs — Mermaid does not natively support tooltips on
+      diamonds, so the alternative is to shorten on the encoder
+      side. (User action.)
+- [ ] **`mmdc` rendering smoke** — run verbose output through
+      the Mermaid CLI to confirm visual layout. Local
+      `mmdc` install needs `npx puppeteer browsers install
+      chrome-headless-shell` (Chrome download). Falls back to
+      the Mermaid Live Editor / explorer site. (User action;
+      Claude has no display target.)
 
 ### Test-suite backlog `[ ]`
 
