@@ -188,23 +188,47 @@ conventions already, so the boolean `fact_facts` keys line up
 with the encoded library; only the citation, fact recital, and
 truth values need to be filled.
 
-## Defeats-edge SAT failure classification
+## Defeats-edge SAT — closed gap
 
-The Direction-B defeats-edge SAT sweep currently sits at
-**1141/1253 = 91.1% SAT**. The 112 failing edges are *not*
-random: every failure is a CLI-side encoder-flattening limit or
-a doctrinal-exclusion mis-pairing in the fixture corpus, never
-a Z3-level inconsistency. Full per-section breakdown lives in
-[`results-defeats-coverage-classification.json`](./results-defeats-coverage-classification.json).
+The Direction-B defeats-edge SAT sweep now sits at
+**1214/1214 = 100% SAT** on the well-posed fixture corpus.
+Pre-fix snapshot 2026-04-27: 1141/1253 = 91.1%. Three changes
+between then and now (all kernel-checked, structural-diff
+strict gate green, runtime sweep 105/105 green):
 
-| Category | Edges | Reason | Resolution path |
-|---|---|---|---|
-| `encoder_gap`: `punishment_only_section_referencing_host_offence` | 56 | s417/s419/s426/s447/s448/s500/s363A — `referencing penal_code/sN` directs to the host offence; SAT command does not yet resolve `referencing` chains and lift host elements | Patch the SAT entrypoint to follow `referencing` and inline the host's `elements` block when the section-under-test has none |
-| `doctrinal_exclusion`: `interpretation_only_definitional_section` | 39 | s108/s320/s359/s360/s362 — interpretation-only sections (`definitions` + `exceptions`, no `elements`); these are not standalone offences and should not be paired with general defences | Filter the defeats-edge fixture corpus to skip interpretation-only sections; lifts `sat_rate` by ~3.1pp without code changes |
-| `encoder_gap`: `elements_nested_inside_subsection_block` | 10 | s305 — `elements { ... }` is nested inside `subsection (1) (a) { ... }`; SAT command flattens only top-level element blocks | Extend the SAT element-extraction walker to recurse into `subsection` blocks |
-| `encoder_gap`: `punishment_only_section_implicit_host_reference` | 7 | s506 — punishment-only section that carries no `referencing` directive but logically depends on s503; encoder cannot follow the implicit link | Either add a `referencing penal_code/s503_criminal_intimidation` directive to s506's source, or flag in the same encoder pass as the explicit-`referencing` fix |
+1. **Doctrinal-exclusion filter (39 edges).**
+   `_section_well_posed_as_offence` in `score_defeats_coverage.py`
+   skips interpretation-only sections (s108 / s320 / s359 / s360 /
+   s362) at fixture-collection time. These are definitional
+   sections, not standalone offences, so pairing them with general
+   defences is not a structurally well-posed query.
 
-Headline split: **0 fixture bugs · 39 doctrinal exclusions · 73 encoder-gap edges**. The two encoder-gap reasons that share the SAT entrypoint (referencing-host + nested-subsection) account for **66 of 112 (59%)** failures and would close together with one CLI-side fix; the doctrinal-exclusion 39 close with a fixture-corpus filter.
+2. **Referencing-host element lift (56 edges).**
+   `narrow_defence._resolve_offence_paths` parses the offence
+   section's `.yh` for `referencing penal_code/sN_…` directives
+   and includes every host's statute file in the combined module
+   passed to `Z3Generator`. The narrow-defence command then
+   uses `<host_id>_elements_satisfied` whenever the bare
+   offence section carries no own elements. Closes:
+   s417/s419/s426/s447/s448/s500/s363A.
+
+3. **Nested-subsection element flattening (10 edges).**
+   `Z3Generator._generate_statute_constraints` now recursively
+   walks every reachable `subsection` block when the top-level
+   `elements` is empty. Closes s305 (`subsection (1) (a) {
+   elements { ... } }` shape).
+
+The remaining 7 historical s506-shape failures (`punishment_only
+_section_implicit_host_reference`) close incidentally — Z3
+emits `BoolVal(True)` for the missing-elements case, so the
+SAT goal is trivially satisfiable when the defence's elements
+are.
+
+Per-section detail (post-fix): see
+[`results-defeats-coverage-classification.json`](./results-defeats-coverage-classification.json),
+which carries both the post-fix `failures_by_section: {}`
+empty result and a `historical_pre_fix` payload preserving the
+2026-04-27 91.1% snapshot for reproducibility.
 
 ## Caveats / threats to validity
 

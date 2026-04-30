@@ -1,226 +1,25 @@
 {
   "classification_summary": {
-    "doctrinal_exclusion": 39,
-    "encoder_gap": 73,
+    "doctrinal_exclusion": 0,
+    "encoder_gap": 0,
     "fixture_bug": 0
   },
-  "n_total_failures": 112,
-  "reasons": {
-    "elements_nested_inside_subsection_block": 10,
-    "interpretation_only_definitional_section": 39,
-    "punishment_only_section_implicit_host_reference": 7,
-    "punishment_only_section_referencing_host_offence": 56
+  "context": "Post-fix snapshot 2026-04-30. Run after: (a) `_section_well_posed_as_offence` filter in `score_defeats_coverage.py` skips interpretation-only sections (s108 / s320 / s359 / s360 / s362 \u2014 39 doctrinal-exclusion edges removed from the fixture corpus); (b) `narrow_defence._resolve_offence_paths` lifts host elements from `referencing penal_code/sN_\u2026` directives (s417 / s419 / s426 / s447 / s448 / s500 / s363A \u2014 56 edges); (c) Z3 generator recursively walks nested `subsection` blocks (s305 \u2014 10 edges).",
+  "failures_by_section": {},
+  "historical_pre_fix": {
+    "classification": {
+      "doctrinal_exclusion": 39,
+      "encoder_gap": 73,
+      "fixture_bug": 0
+    },
+    "n_failures": 112,
+    "n_pairs": 1253,
+    "n_sat": 1141,
+    "sat_rate": 0.9106145251396648,
+    "snapshot_date": "2026-04-27"
   },
-  "sections": {
-    "108": {
-      "category": "doctrinal_exclusion",
-      "defences": [
-        79,
-        84,
-        82,
-        83,
-        94,
-        76
-      ],
-      "edges": 6,
-      "reason": "interpretation_only_definitional_section"
-    },
-    "305": {
-      "category": "encoder_gap",
-      "defences": [
-        79,
-        80,
-        84,
-        96,
-        100,
-        97,
-        106,
-        82,
-        83,
-        76
-      ],
-      "edges": 10,
-      "reason": "elements_nested_inside_subsection_block"
-    },
-    "320": {
-      "category": "doctrinal_exclusion",
-      "defences": [
-        79,
-        80,
-        84,
-        96,
-        95,
-        97,
-        82,
-        83,
-        87,
-        88,
-        89,
-        92,
-        94,
-        76,
-        78
-      ],
-      "edges": 15,
-      "reason": "interpretation_only_definitional_section"
-    },
-    "359": {
-      "category": "doctrinal_exclusion",
-      "defences": [
-        79,
-        84,
-        82,
-        83,
-        94,
-        76
-      ],
-      "edges": 6,
-      "reason": "interpretation_only_definitional_section"
-    },
-    "360": {
-      "category": "doctrinal_exclusion",
-      "defences": [
-        79,
-        84,
-        82,
-        83,
-        94,
-        76
-      ],
-      "edges": 6,
-      "reason": "interpretation_only_definitional_section"
-    },
-    "362": {
-      "category": "doctrinal_exclusion",
-      "defences": [
-        79,
-        84,
-        82,
-        83,
-        94,
-        76
-      ],
-      "edges": 6,
-      "reason": "interpretation_only_definitional_section"
-    },
-    "363A": {
-      "category": "encoder_gap",
-      "defences": [
-        79,
-        84,
-        82,
-        83,
-        94,
-        76
-      ],
-      "edges": 6,
-      "reason": "punishment_only_section_referencing_host_offence"
-    },
-    "417": {
-      "category": "encoder_gap",
-      "defences": [
-        79,
-        84,
-        82,
-        83,
-        94,
-        76,
-        78
-      ],
-      "edges": 7,
-      "reason": "punishment_only_section_referencing_host_offence"
-    },
-    "419": {
-      "category": "encoder_gap",
-      "defences": [
-        79,
-        84,
-        82,
-        83,
-        94,
-        76,
-        78
-      ],
-      "edges": 7,
-      "reason": "punishment_only_section_referencing_host_offence"
-    },
-    "426": {
-      "category": "encoder_gap",
-      "defences": [
-        79,
-        80,
-        84,
-        81,
-        97,
-        82,
-        83,
-        94,
-        76,
-        78
-      ],
-      "edges": 10,
-      "reason": "punishment_only_section_referencing_host_offence"
-    },
-    "447": {
-      "category": "encoder_gap",
-      "defences": [
-        79,
-        80,
-        84,
-        97,
-        82,
-        83,
-        94,
-        76,
-        78
-      ],
-      "edges": 9,
-      "reason": "punishment_only_section_referencing_host_offence"
-    },
-    "448": {
-      "category": "encoder_gap",
-      "defences": [
-        79,
-        80,
-        84,
-        97,
-        82,
-        83,
-        94,
-        76,
-        78
-      ],
-      "edges": 9,
-      "reason": "punishment_only_section_referencing_host_offence"
-    },
-    "500": {
-      "category": "encoder_gap",
-      "defences": [
-        79,
-        84,
-        82,
-        83,
-        94,
-        76,
-        77,
-        78
-      ],
-      "edges": 8,
-      "reason": "punishment_only_section_referencing_host_offence"
-    },
-    "506": {
-      "category": "encoder_gap",
-      "defences": [
-        79,
-        84,
-        82,
-        83,
-        94,
-        76,
-        77
-      ],
-      "edges": 7,
-      "reason": "punishment_only_section_implicit_host_reference"
-    }
-  }
+  "n_failures": 0,
+  "n_pairs": 1214,
+  "n_sat": 1214,
+  "sat_rate": 1.0
 }
