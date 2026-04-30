@@ -1,0 +1,25 @@
+/// @meta source=test_statute_for_s127
+referencing penal_code/s127_receiving_property_taken_war_depredation
+
+struct S127TestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+S127TestCase guilty := S127TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_s127_receiving_war_property(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+S127TestCase defended := S127TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_s127_receiving_war_property(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+S127TestCase notMadeOut := S127TestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_s127_receiving_war_property(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE
