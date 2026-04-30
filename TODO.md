@@ -11,18 +11,22 @@ benchmarks.
 
 Status key: `[ ]` pending · `[~]` in progress · `(def)` deferred.
 
-Current snapshot (2026-04-29): **12270 unit tests green · 524
+Current snapshot (2026-04-30): **12270 unit tests green · 524
 sections at L1+L2 · 524 L3 author-stamped · §6.6 Lean 4 mechanisation
-v8 (all 5 soundness lemmas + canonical models kernel-checked,
+v9 (all 5 soundness lemmas + canonical models kernel-checked,
 multi-statute `canonical_cross_satisfies` discharged, cross-library
 `apply_scope` companion theorems closed, `CrossRefGraph.acyclic`
 linter-invariant mechanised + `acyclic_canonical_cross_satisfies`
-discharge kernel-checked) · structural diff harness 524/524
-matched on full corpus, `--strict` regression gate active
-(`make verify-structural-diff-full`) · runtime-eval sweep 95/95
+discharge kernel-checked, v9 `ElementDeep` cross-ref-bearing AST
++ fuel-bounded evaluator + `Statute.deepBody_compat` conservative-
+extension theorem kernel-checked) · structural diff harness
+524/524 matched on full corpus, `--strict` regression gate active
+(`make verify-structural-diff-full`) · runtime-eval sweep 100/100
 rich tests passing (`make verify-runtime-tests`, wired into
 `make paper-reproduce`) · §7.8 case-law differential testing
-n=40 · §7.6 LLM benchmark full 205 fixtures, 4-way prompt sweep
+n=40 · defeats-edge classification 0 fixture-bug / 39 doctrinal /
+73 encoder-gap (`evals/case_law/results-defeats-coverage-classification.json`)
+· §7.6 LLM benchmark full 205 fixtures, 4-way prompt sweep
 · Direction B defeats-edge coverage 1253 edges across 147
 sections · 32-page smoke PDF · `make paper-reproduce` end-to-end
 including Lean kernel-check + runtime sweep.** Completed history
@@ -32,22 +36,32 @@ lives in git log + `docs/PHASE_*` notes.
 
 ## §6.6 — Lean 4 mechanisation `[~]`
 
-v1–v8 shipped; per-version layout in
+v1–v9 shipped; per-version layout in
 [`mechanisation/README.md`](./mechanisation/README.md). Headline:
 all 5 soundness lemmas + G8/G14 sentinels + conviction-layer oracle
 discharge + cross-library `apply_scope` companion theorems +
 v8 acyclicity-invariant mechanisation
 (`CrossRefGraph.acyclic` decidable predicate +
-`acyclic_canonical_cross_satisfies` discharge) kernel-check
-under Lean 4.10.0 with no `sorry`s.
+`acyclic_canonical_cross_satisfies` discharge) +
+v9 deep-element AST (`ElementDeep` with `crossRef` leaf + fuel-
+bounded evaluator + `Statute.deepBody_compat` conservative-
+extension theorem) kernel-check under Lean 4.10.0 with no
+`sorry`s.
 
-- [ ] **v9 — lift cross-section refs into `Element.eval`** (depth,
-      not a release blocker). Add an `Element.kind` constructor for
-      `is_infringed(n)` / `apply_scope(n, F')`, with `Element.eval`
-      recursively consulting the section table; the v8 acyclicity
-      hypothesis becomes load-bearing on the recursion's well-
-      foundedness at that point. Multi-session work; pays off only
-      under external-review pressure.
+- [ ] **v9 follow-ups (depth, not a release blocker).** v9 base
+      camp shipped in `mechanisation/Yuho/CrossDeep.lean`:
+      `ElementDeep` AST + fuel-bounded `eval` + lift
+      `ElementGroup.toDeep` + conservative-extension theorem
+      `Statute.deepBody_compat`. Remaining v9 work, all multi-
+      session and pay off only under external-review pressure:
+      (i) replace `fuel : Nat` with well-founded recursion driven
+      by `CrossRefGraph` topological depth, making the v8
+      `acyclic` hypothesis load-bearing on termination;
+      (ii) recursive `crossRef` semantics (replace the v8-side
+      `Statute.convicts` call with `Statute.convictsDeep sigma F
+      (n - 1)`); (iii) `crossRef`-bearing strengthening of
+      `acyclic_canonical_cross_satisfies`; (iv) `applyScope`
+      constructor for substituted-fact element leaves.
 
 ---
 
@@ -163,38 +177,53 @@ Dockerfile + Makefile + REPRODUCE.md shipped.
 
 ## What to work on next (recommendation)
 
-Recently closed (2026-04-29 session): structural-diff `--strict`
-regression gate (commit `21472323`); behavioural-test ramp
-+5 sections taking the runtime sweep to 95/95 (commit `067b6370`);
-§6.6 v8 cross-section-reference acyclicity invariant mechanised
-(commit `3b21401c`). The Claude-tractable shortlist below is the
-*next* batch of items, not the one just shipped.
+Recently closed (2026-04-30 session): runtime sweep 95→100 via
+behavioural companions for s127 / s128 / s126 / s129 / s130
+(commits `605efbb0` / `7c236b6d` / `6050f5dd` / `d40811a8` /
+`1748053f`); defeats-edge SAT failure sweep classifies all 112
+edges as 0 fixture-bug / 39 doctrinal-exclusion / 73 encoder-gap
+(commit `6f403529`); §6.6 v9 `ElementDeep` AST + fuel-bounded
+evaluator + `Statute.deepBody_compat` conservative-extension
+theorem kernel-checked under Lean 4.10.0 (this session).
 
 Claude-driven (no user action needed):
 
-1. **Test-suite backlog continuation (next 5–10 sections).**
-   The 95/95 runtime sweep currently covers 95 of the 524
-   sections. Next batch candidates:
-   `s127_receiving_property_taken_war_depredation`,
-   `s128_public_servant_voluntarily_allowing_prisoner`,
-   `s130D_genocide` (if not already covered),
-   `s171_wearing_garb_carrying_token_used_public`,
-   `s182_false_information_intent_cause_public`. Each adds a
-   fixture to `make verify-runtime-tests`. ~10–15 min per
-   section.
+1. **Encoder-gap fix for defeats-edge SAT (high-yield).** The
+   classification at
+   `evals/case_law/results-defeats-coverage-classification.json`
+   shows 73 of the 112 failing edges share two CLI-side gaps:
+   (i) `referencing penal_code/sN` in punishment-only sections
+   (s417/s419/s426/s447/s448/s500/s363A — 56 edges) — patch the
+   SAT entrypoint to follow the directive and lift the host's
+   `elements`; (ii) elements nested inside `subsection` blocks
+   (s305 — 10 edges) — extend the element-extraction walker to
+   recurse. Combined, would lift Direction-B SAT from 91.1% to
+   ~96.9%. ~2–3 hr.
 
-2. **Defeats-edge structural-coverage extension.** Direction B
-   currently sits at 1141/1253 = 91.1% SAT. The remaining 112
-   defeats edges fail SAT under specific element-conjunction
-   shapes; a sweep of the failure set (logged in
-   `evals/case_law/results-defeats-coverage.json`) would
-   classify each as (a) fixture bug, (b) genuine doctrinal
-   exclusion, or (c) encoder gap. ~1–2 hr.
+2. **Doctrinal-exclusion fixture filter (low-risk).** The
+   defeats-edge fixture corpus pairs interpretation-only sections
+   (s108 / s320 / s359 / s360 / s362 — 39 edges) with general
+   defences, which is not well-posed since these sections have
+   no `elements` block. Filter the fixture generator to skip
+   them. Lifts SAT by ~3.1pp without code changes. ~30 min.
 
-3. **§6.6 v9 (depth, optional)** — lift cross-section refs
-   into `Element.eval` so the v8 acyclicity hypothesis becomes
-   load-bearing on well-founded recursion. Tracked under §6.6
-   above; multi-session and pays off only on external-review
+3. **Test-suite backlog continuation (next 5 sections).** The
+   100/100 runtime sweep covers 100 of the 524 sections.
+   Candidates with offence-style elements + penalty: s132
+   (`s132_abetment_mutiny_if_mutiny_committed`), s133
+   (`s133_abetment_assault_officer_serviceman_his`), s136
+   (`s136_harbouring_deserter`), s137
+   (`s137_deserter_concealed_board_merchant_vessel`), s138
+   (`s138_abetment_act_insubordination_officer`). Each adds a
+   fixture to `make verify-runtime-tests`. ~10–15 min per section.
+
+4. **§6.6 v9 deepening (optional, multi-session).** Base camp
+   shipped (`mechanisation/Yuho/CrossDeep.lean`). Follow-ups:
+   replace `fuel : Nat` with well-founded recursion driven by
+   `CrossRefGraph` depth (acyclicity becomes load-bearing on
+   termination); recursive `crossRef` semantics; `crossRef`-
+   bearing strengthening of `acyclic_canonical_cross_satisfies`;
+   `applyScope` constructor. Pays off only on external-review
    pressure.
 
 User-blocked items (no Claude work possible until you act):
