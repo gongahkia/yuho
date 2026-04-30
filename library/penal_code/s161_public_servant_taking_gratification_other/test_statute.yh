@@ -1,0 +1,25 @@
+/// @meta source=test_statute_for_s161
+referencing penal_code/s161_public_servant_taking_gratification_other
+
+struct S161TestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+S161TestCase guilty := S161TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_s161_public_servant_gratification(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+S161TestCase defended := S161TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_s161_public_servant_gratification(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+S161TestCase notMadeOut := S161TestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_s161_public_servant_gratification(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE

@@ -2,6 +2,14 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr161-#pr161-
 
+fn is_s161_public_servant_gratification(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 161 "Public servant taking a gratification, other than legal remuneration, in respect of an official act" effective 1872-01-01 {
     definitions {
         explanation_expecting_to_be_public_servant := "Explanations.— “Expecting to be a public servant”. If a person not expecting to be in office obtains a gratification by deceiving others into a belief that he is about to be in office, and that he will then serve them, he may be guilty of cheating, but he is not guilty of the offence defined in this section.";
