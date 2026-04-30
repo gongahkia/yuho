@@ -21,6 +21,7 @@ import Yuho.Penalty
 import Yuho.Range
 import Yuho.Generator
 import Yuho.Cross
+import Yuho.CrossDeep
 
 namespace Yuho.Tests
 
@@ -766,5 +767,77 @@ example :
         factsHomicideWithConsent).convicts "378"
       = false := by
   native_decide
+
+/-! ## v9 deep-eval smoke
+
+End-to-end smoke check that the v9 `ElementDeep.eval` evaluator
+reduces to the v8 `Statute.convicts` on the referenced section
+under a constructed `sigma` table. Establishes the
+`eval_crossRef_resolves` chain on concrete data. -/
+
+/-- A statute that holds whenever the leaf fact `taking` does. No
+exceptions, so `Statute.convicts F = F "taking"`. -/
+def s_referee : Statute :=
+  { section_number := "299"
+    title := "Test referee"
+    elements := .leaf { kind := .actusReus, name := "taking", description := "" }
+    exceptions := [] }
+
+/-- A two-statute module with `s_referee` as the lookup target. -/
+def crossRefMod : Module := { statutes := [s_referee] }
+
+/-- Facts with `taking := true`. -/
+def factsTaking : Facts := Facts.fromList [("taking", true)]
+
+/-- Facts with `taking := false`. -/
+def factsNoTaking : Facts := Facts.fromList []
+
+/-- v9 smoke: with positive fuel and a resolving `sigma`, the
+`crossRef "299"` leaf reduces to `s_referee.convicts F`.
+Under `factsTaking`, `s_referee.convicts F = true`. -/
+example :
+    ElementDeep.eval crossRefMod.lookup factsTaking 3 (.crossRef "299")
+      = true := by
+  native_decide
+
+/-- Same shape under `factsNoTaking` returns `false`. -/
+example :
+    ElementDeep.eval crossRefMod.lookup factsNoTaking 3 (.crossRef "299")
+      = false := by
+  native_decide
+
+/-- An out-of-module `crossRef` evaluates to `false` regardless
+of fuel — the §6.6 boundary statement on cross-library
+references. -/
+example :
+    ElementDeep.eval crossRefMod.lookup factsTaking 3 (.crossRef "999")
+      = false := by
+  native_decide
+
+/-- Fuel exhaustion on a `crossRef` returns `false` — sound
+under-approximation. -/
+example :
+    ElementDeep.eval crossRefMod.lookup factsTaking 0 (.crossRef "299")
+      = false := by
+  native_decide
+
+/-- `applyScope` substitutes facts. With ambient `factsNoTaking`
+but substituted `factsTaking`, the eval still resolves to `true`
+because the referee's `convicts` is computed on the substituted
+pattern. -/
+example :
+    ElementDeep.eval crossRefMod.lookup factsNoTaking 3
+        (.applyScope "299" factsTaking)
+      = true := by
+  native_decide
+
+/-- v9 conservative-extension smoke: an `ElementGroup` lifted
+via `toDeep` agrees with the v4–v8 `ElementGroup.eval` regardless
+of fuel. -/
+example :
+    ElementDeep.eval crossRefMod.lookup factsTaking 0
+        (ElementGroup.toDeep s_referee.elements)
+      = ElementGroup.eval s_referee.elements factsTaking := by
+  exact ElementDeep.eval_toDeep_compat _ _ _ _
 
 end Yuho.Tests
