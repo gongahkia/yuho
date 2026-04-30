@@ -265,10 +265,16 @@ class MermaidTranspiler(TranspilerBase, Visitor):
         all_penalties.extend(getattr(statute, "additional_penalties", ()) or ())
         for pen in all_penalties:
             penalty_text = self._penalty_to_label(pen)
-            when_clause = getattr(pen, "when_condition", None) or getattr(pen, "when", None)
+            # PenaltyNode.condition carries the G9 `penalty when <ident>`
+            # branch identifier; the prior `when_condition` / `when`
+            # attribute names this code looked for never existed on the
+            # AST node, so the conditional-penalty branch has been
+            # silently dead since the verbose-shape v1 landed. Fixed
+            # 2026-04-30 audit pass.
+            when_clause = getattr(pen, "condition", None)
             if when_clause:
                 guard_id = self._new_node_id("PENG")
-                guard_label = f"applies when {self._expr_to_label(when_clause)}?"
+                guard_label = f"applies when {when_clause}?"
                 self._emit(f"    {guard_id}{{{self._q(guard_label)}}}")
                 self._emit(f"    {prev_id} -->|{self._q('yes')}| {guard_id}")
                 penalty_id = self._new_node_id("PENALTY")
