@@ -1,0 +1,25 @@
+/// @meta source=test_statute_for_s140
+referencing penal_code/s140_wearing_dress_serviceman
+
+struct S140TestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+S140TestCase guilty := S140TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_s140_wearing_dress_serviceman(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+S140TestCase defended := S140TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_s140_wearing_dress_serviceman(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+S140TestCase notMadeOut := S140TestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_s140_wearing_dress_serviceman(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE
