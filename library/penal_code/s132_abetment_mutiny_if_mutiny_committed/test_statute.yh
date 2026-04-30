@@ -1,0 +1,25 @@
+/// @meta source=test_statute_for_s132
+referencing penal_code/s132_abetment_mutiny_if_mutiny_committed
+
+struct S132TestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+S132TestCase guilty := S132TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_s132_abetment_mutiny_committed(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+S132TestCase defended := S132TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_s132_abetment_mutiny_committed(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+S132TestCase notMadeOut := S132TestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_s132_abetment_mutiny_committed(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE

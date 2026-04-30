@@ -2,6 +2,15 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr132-#pr132-
 /// @amendment [15/2019]
+
+fn is_s132_abetment_mutiny_committed(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 132 "Abetment of mutiny, if mutiny is committed in consequence thereof" effective 1872-01-01 effective 2020-01-01 {
     elements {
         /// The offence requires abetment of mutiny and the consequential commission of mutiny.
