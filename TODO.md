@@ -11,9 +11,9 @@ benchmarks.
 
 Status key: `[ ]` pending · `[~]` in progress · `(def)` deferred.
 
-Current snapshot (2026-04-30 evening): **12350 unit tests green ·
-524 sections at L1+L2 · 524 L3 author-stamped · §6.6 Lean 4
-mechanisation v9 (all 5 soundness lemmas + canonical models
+Current snapshot (2026-04-30 late evening): **12350 unit tests
+green · 524 sections at L1+L2 · 524 L3 author-stamped · §6.6
+Lean 4 mechanisation v9 (all 5 soundness lemmas + canonical models
 kernel-checked, multi-statute `canonical_cross_satisfies`
 discharged, cross-library `apply_scope` companion theorems closed,
 `CrossRefGraph.acyclic` linter-invariant mechanised +
@@ -26,19 +26,33 @@ smoke fixtures in `Tests/Smoke.lean`) · structural diff harness
 **524/524 matched** on full corpus (recursive subsection walker
 landed both sides), `--strict` regression gate active
 (`make verify-structural-diff-full`) · runtime-eval sweep
-**110/110 rich tests passing** (`make verify-runtime-tests`,
+**115/115 rich tests passing** (`make verify-runtime-tests`,
 wired into `make paper-reproduce`) · §7.8 case-law differential
-testing n=40 · **defeats-edge SAT 1214/1214 = 100% post-fix**
-(was 1141/1253 = 91.1% pre-fix; 39 doctrinal-exclusion edges
-filtered from corpus, 73 encoder-gap edges closed via
-referencing-host lift + recursive subsection walk; per-section
-history in `evals/case_law/results-defeats-coverage-classification.json`)
-· §7.6 LLM benchmark full 205 fixtures, 4-way prompt sweep
-· Direction B defeats-edge coverage 1214 edges across 142
-sections · 32-page smoke PDF · `make paper-reproduce` end-to-end
-including Lean kernel-check + runtime sweep — last run exit 0,
-summary at `logs/paper-reproduce-summary.txt`.** Completed
-history lives in git log + `docs/PHASE_*` notes.
+testing **n=43** (was n=40; +3 chapter-XXIII fixtures from public
+eLitigation: PP v GED [2022] SGHC 301, PP v GEH [2022] SGHC 301,
+Abdul Ghufran [2025] SGHC 98), **top-1 51.2% / top-3 53.5% /
+top-5 53.5%** (was 47.5% / 47.5% / 47.5%) · **defeats-edge SAT
+1214/1214 = 100% post-fix** (was 1141/1253 = 91.1% pre-fix; 39
+doctrinal-exclusion edges filtered from corpus, 73 encoder-gap
+edges closed via referencing-host lift + recursive subsection
+walk; per-section history in
+`evals/case_law/results-defeats-coverage-classification.json`)
+· §7.6 LLM benchmark full 205 fixtures, 4-way prompt sweep ·
+Direction B defeats-edge coverage 1214 edges across 142 sections
+· **§8 IPC scraper unblocked** — `parse_advocatekhoj_index`
+fixed for relative hrefs (commit `a0bea2af`),
+`parse_advocatekhoj_section` rewritten for current
+`bareacts_contentarea` DOM (commit `4f161471`); index returns
+493 sections; **full scrape running in background** (task
+`b1hn44gaj`) at 6-second-per-request throttle (~50 min wall
+time) · Mermaid `--shape verbose` audit pass — penalty-conditional
+diamond rendering bug (silently dead since v1) fixed (commit
+`50eae123`); exception priority chain auto-sort by `priority`
+field (commit `d825d2e5`); static syntax check on s300 verbose
+output 0 orphans · 32-page smoke PDF · `make paper-reproduce`
+end-to-end exit 0, summary at
+`logs/paper-reproduce-summary.txt`.** Completed history lives
+in git log + `docs/PHASE_*` notes.
 
 ---
 
