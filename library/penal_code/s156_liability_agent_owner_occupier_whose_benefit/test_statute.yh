@@ -1,0 +1,25 @@
+/// @meta source=test_statute_for_s156
+referencing penal_code/s156_liability_agent_owner_occupier_whose_benefit
+
+struct S156TestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+S156TestCase guilty := S156TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_s156_agent_liability_for_riot_benefit(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+S156TestCase defended := S156TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_s156_agent_liability_for_riot_benefit(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+S156TestCase notMadeOut := S156TestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_s156_agent_liability_for_riot_benefit(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE

@@ -2,6 +2,14 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr156-#pr156-
 
+fn is_s156_agent_liability_for_riot_benefit(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 156 "Liability of agent of owner or occupier for whose benefit a riot is committed" effective 1872-01-01 {
     elements {
         all_of {
