@@ -1,0 +1,25 @@
+/// @meta source=test_statute_for_s150
+referencing penal_code/s150_hiring_conniving_hiring_persons_join
+
+struct S150TestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+S150TestCase guilty := S150TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_s150_hiring_unlawful_assembly(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+S150TestCase defended := S150TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_s150_hiring_unlawful_assembly(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+S150TestCase notMadeOut := S150TestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_s150_hiring_unlawful_assembly(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE

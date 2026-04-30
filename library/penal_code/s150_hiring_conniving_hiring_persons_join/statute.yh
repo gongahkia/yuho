@@ -2,6 +2,14 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr150-#pr150-
 
+fn is_s150_hiring_unlawful_assembly(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 150 "Hiring, or conniving at hiring, of persons to join an unlawful assembly" effective 1872-01-01 {
     elements {
         /// Section 150 is framed disjunctively as to the prohibited recruiting conduct.
