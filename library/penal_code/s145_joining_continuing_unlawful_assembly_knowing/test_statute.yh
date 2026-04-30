@@ -1,0 +1,25 @@
+/// @meta source=test_statute_for_s145
+referencing penal_code/s145_joining_continuing_unlawful_assembly_knowing
+
+struct S145TestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+S145TestCase guilty := S145TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_s145_unlawful_assembly_knowing_disperse(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+S145TestCase defended := S145TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_s145_unlawful_assembly_knowing_disperse(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+S145TestCase notMadeOut := S145TestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_s145_unlawful_assembly_knowing_disperse(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE
