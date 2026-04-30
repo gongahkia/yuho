@@ -1,0 +1,25 @@
+/// @meta source=test_statute_for_s130
+referencing penal_code/s130_aiding_escape_rescuing_harbouring_such
+
+struct S130TestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+S130TestCase guilty := S130TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_s130_aiding_escape_rescuing_harbouring(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+S130TestCase defended := S130TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_s130_aiding_escape_rescuing_harbouring(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+S130TestCase notMadeOut := S130TestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_s130_aiding_escape_rescuing_harbouring(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE

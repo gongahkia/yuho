@@ -3,6 +3,14 @@
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr130-#pr130-
 /// @amendment [15/2019]
 
+fn is_s130_aiding_escape_rescuing_harbouring(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 130 "Aiding escape of, rescuing, or harbouring such prisoner" effective 1872-01-01 effective 2020-01-01 {
     definitions {
         explanation_escape_from_lawful_custody := "Explanation .—A prisoner of State or prisoner of war who is permitted to be at large on his parole within certain limits in Singapore, is said to escape from lawful custody if he goes beyond the limits within which he is allowed to be at large.";
