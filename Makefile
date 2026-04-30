@@ -48,6 +48,7 @@ LOGS = logs
         verify-coverage verify-akn-xsd verify-evals \
         verify-case-law verify-bulk-contrast verify-mechanisation \
         verify-structural-diff verify-runtime-tests \
+        verify-mermaid-verbose \
         clean-reproduce
 
 paper-reproduce: $(LOGS)
@@ -142,6 +143,10 @@ verify-structural-diff-full: $(LOGS)
 verify-runtime-tests: $(LOGS)
 	@echo ">>> verifying runtime-eval sweep across 90 rich test fixtures…"
 	$(PYTHON) scripts/verify_runtime_tests.py 2>&1 | tee $(LOGS)/runtime-tests.log
+
+verify-mermaid-verbose: $(LOGS)
+	@echo ">>> verifying verbose-shape Mermaid render across 524 sections…"
+	$(PYTHON) scripts/verify_mermaid_verbose.py 2>&1 | tee $(LOGS)/mermaid-verbose.log
 
 verify-mechanisation: $(LOGS)
 	@echo ">>> verifying §6.6 Lean 4 mechanisation kernel-checks…"
