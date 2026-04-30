@@ -1,0 +1,25 @@
+/// @meta source=test_statute_for_s157
+referencing penal_code/s157_harbouring_persons_hired_unlawful_assembly
+
+struct S157TestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+S157TestCase guilty := S157TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_s157_harbouring_hired_assembly(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+S157TestCase defended := S157TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_s157_harbouring_hired_assembly(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+S157TestCase notMadeOut := S157TestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_s157_harbouring_hired_assembly(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE
