@@ -1,0 +1,226 @@
+{
+  "classification_summary": {
+    "doctrinal_exclusion": 39,
+    "encoder_gap": 73,
+    "fixture_bug": 0
+  },
+  "n_total_failures": 112,
+  "reasons": {
+    "elements_nested_inside_subsection_block": 10,
+    "interpretation_only_definitional_section": 39,
+    "punishment_only_section_implicit_host_reference": 7,
+    "punishment_only_section_referencing_host_offence": 56
+  },
+  "sections": {
+    "108": {
+      "category": "doctrinal_exclusion",
+      "defences": [
+        79,
+        84,
+        82,
+        83,
+        94,
+        76
+      ],
+      "edges": 6,
+      "reason": "interpretation_only_definitional_section"
+    },
+    "305": {
+      "category": "encoder_gap",
+      "defences": [
+        79,
+        80,
+        84,
+        96,
+        100,
+        97,
+        106,
+        82,
+        83,
+        76
+      ],
+      "edges": 10,
+      "reason": "elements_nested_inside_subsection_block"
+    },
+    "320": {
+      "category": "doctrinal_exclusion",
+      "defences": [
+        79,
+        80,
+        84,
+        96,
+        95,
+        97,
+        82,
+        83,
+        87,
+        88,
+        89,
+        92,
+        94,
+        76,
+        78
+      ],
+      "edges": 15,
+      "reason": "interpretation_only_definitional_section"
+    },
+    "359": {
+      "category": "doctrinal_exclusion",
+      "defences": [
+        79,
+        84,
+        82,
+        83,
+        94,
+        76
+      ],
+      "edges": 6,
+      "reason": "interpretation_only_definitional_section"
+    },
+    "360": {
+      "category": "doctrinal_exclusion",
+      "defences": [
+        79,
+        84,
+        82,
+        83,
+        94,
+        76
+      ],
+      "edges": 6,
+      "reason": "interpretation_only_definitional_section"
+    },
+    "362": {
+      "category": "doctrinal_exclusion",
+      "defences": [
+        79,
+        84,
+        82,
+        83,
+        94,
+        76
+      ],
+      "edges": 6,
+      "reason": "interpretation_only_definitional_section"
+    },
+    "363A": {
+      "category": "encoder_gap",
+      "defences": [
+        79,
+        84,
+        82,
+        83,
+        94,
+        76
+      ],
+      "edges": 6,
+      "reason": "punishment_only_section_referencing_host_offence"
+    },
+    "417": {
+      "category": "encoder_gap",
+      "defences": [
+        79,
+        84,
+        82,
+        83,
+        94,
+        76,
+        78
+      ],
+      "edges": 7,
+      "reason": "punishment_only_section_referencing_host_offence"
+    },
+    "419": {
+      "category": "encoder_gap",
+      "defences": [
+        79,
+        84,
+        82,
+        83,
+        94,
+        76,
+        78
+      ],
+      "edges": 7,
+      "reason": "punishment_only_section_referencing_host_offence"
+    },
+    "426": {
+      "category": "encoder_gap",
+      "defences": [
+        79,
+        80,
+        84,
+        81,
+        97,
+        82,
+        83,
+        94,
+        76,
+        78
+      ],
+      "edges": 10,
+      "reason": "punishment_only_section_referencing_host_offence"
+    },
+    "447": {
+      "category": "encoder_gap",
+      "defences": [
+        79,
+        80,
+        84,
+        97,
+        82,
+        83,
+        94,
+        76,
+        78
+      ],
+      "edges": 9,
+      "reason": "punishment_only_section_referencing_host_offence"
+    },
+    "448": {
+      "category": "encoder_gap",
+      "defences": [
+        79,
+        80,
+        84,
+        97,
+        82,
+        83,
+        94,
+        76,
+        78
+      ],
+      "edges": 9,
+      "reason": "punishment_only_section_referencing_host_offence"
+    },
+    "500": {
+      "category": "encoder_gap",
+      "defences": [
+        79,
+        84,
+        82,
+        83,
+        94,
+        76,
+        77,
+        78
+      ],
+      "edges": 8,
+      "reason": "punishment_only_section_referencing_host_offence"
+    },
+    "506": {
+      "category": "encoder_gap",
+      "defences": [
+        79,
+        84,
+        82,
+        83,
+        94,
+        76,
+        77
+      ],
+      "edges": 7,
+      "reason": "punishment_only_section_implicit_host_reference"
+    }
+  }
+}

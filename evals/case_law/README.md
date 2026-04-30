@@ -188,6 +188,24 @@ conventions already, so the boolean `fact_facts` keys line up
 with the encoded library; only the citation, fact recital, and
 truth values need to be filled.
 
+## Defeats-edge SAT failure classification
+
+The Direction-B defeats-edge SAT sweep currently sits at
+**1141/1253 = 91.1% SAT**. The 112 failing edges are *not*
+random: every failure is a CLI-side encoder-flattening limit or
+a doctrinal-exclusion mis-pairing in the fixture corpus, never
+a Z3-level inconsistency. Full per-section breakdown lives in
+[`results-defeats-coverage-classification.json`](./results-defeats-coverage-classification.json).
+
+| Category | Edges | Reason | Resolution path |
+|---|---|---|---|
+| `encoder_gap`: `punishment_only_section_referencing_host_offence` | 56 | s417/s419/s426/s447/s448/s500/s363A — `referencing penal_code/sN` directs to the host offence; SAT command does not yet resolve `referencing` chains and lift host elements | Patch the SAT entrypoint to follow `referencing` and inline the host's `elements` block when the section-under-test has none |
+| `doctrinal_exclusion`: `interpretation_only_definitional_section` | 39 | s108/s320/s359/s360/s362 — interpretation-only sections (`definitions` + `exceptions`, no `elements`); these are not standalone offences and should not be paired with general defences | Filter the defeats-edge fixture corpus to skip interpretation-only sections; lifts `sat_rate` by ~3.1pp without code changes |
+| `encoder_gap`: `elements_nested_inside_subsection_block` | 10 | s305 — `elements { ... }` is nested inside `subsection (1) (a) { ... }`; SAT command flattens only top-level element blocks | Extend the SAT element-extraction walker to recurse into `subsection` blocks |
+| `encoder_gap`: `punishment_only_section_implicit_host_reference` | 7 | s506 — punishment-only section that carries no `referencing` directive but logically depends on s503; encoder cannot follow the implicit link | Either add a `referencing penal_code/s503_criminal_intimidation` directive to s506's source, or flag in the same encoder pass as the explicit-`referencing` fix |
+
+Headline split: **0 fixture bugs · 39 doctrinal exclusions · 73 encoder-gap edges**. The two encoder-gap reasons that share the SAT entrypoint (referencing-host + nested-subsection) account for **66 of 112 (59%)** failures and would close together with one CLI-side fix; the doctrinal-exclusion 39 close with a fixture-corpus filter.
+
 ## Caveats / threats to validity
 
 The paper §7.8 enumerates these alongside the headline numbers:
