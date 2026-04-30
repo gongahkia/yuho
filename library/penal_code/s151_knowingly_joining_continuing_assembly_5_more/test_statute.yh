@@ -1,0 +1,25 @@
+/// @meta source=test_statute_for_s151
+referencing penal_code/s151_knowingly_joining_continuing_assembly_5_more
+
+struct S151TestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+S151TestCase guilty := S151TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_s151_knowingly_continuing_assembly(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+S151TestCase defended := S151TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_s151_knowingly_continuing_assembly(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+S151TestCase notMadeOut := S151TestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_s151_knowingly_continuing_assembly(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE
