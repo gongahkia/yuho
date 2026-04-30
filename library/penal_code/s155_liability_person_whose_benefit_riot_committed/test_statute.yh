@@ -1,0 +1,25 @@
+/// @meta source=test_statute_for_s155
+referencing penal_code/s155_liability_person_whose_benefit_riot_committed
+
+struct S155TestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+S155TestCase guilty := S155TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_s155_liability_for_riot_benefit(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+S155TestCase defended := S155TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_s155_liability_for_riot_benefit(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+S155TestCase notMadeOut := S155TestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_s155_liability_for_riot_benefit(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE
