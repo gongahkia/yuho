@@ -1,0 +1,25 @@
+/// @meta source=test_statute_for_s129
+referencing penal_code/s129_public_servant_negligently_suffering
+
+struct S129TestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+S129TestCase guilty := S129TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_s129_public_servant_negligent_escape(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+S129TestCase defended := S129TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_s129_public_servant_negligent_escape(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+S129TestCase notMadeOut := S129TestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_s129_public_servant_negligent_escape(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE
