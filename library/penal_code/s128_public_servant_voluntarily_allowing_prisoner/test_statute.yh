@@ -1,0 +1,25 @@
+/// @meta source=test_statute_for_s128
+referencing penal_code/s128_public_servant_voluntarily_allowing_prisoner
+
+struct S128TestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+S128TestCase guilty := S128TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_s128_public_servant_voluntarily_allowing(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+S128TestCase defended := S128TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_s128_public_servant_voluntarily_allowing(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+S128TestCase notMadeOut := S128TestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_s128_public_servant_voluntarily_allowing(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE
