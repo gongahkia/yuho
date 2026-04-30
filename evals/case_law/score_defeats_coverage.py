@@ -90,9 +90,42 @@ def _cluster_for(section_id: int) -> str:
     return "other"
 
 
+_ELEMENTS_BLOCK = re.compile(r"\belements\s*\{", re.MULTILINE)
+_PENALTY_BLOCK = re.compile(r"^\s*penalty\b", re.MULTILINE)
+_REFERENCING_DIR = re.compile(r"^referencing\s+", re.MULTILINE)
+
+
+def _section_well_posed_as_offence(yh_text: str) -> bool:
+    """Heuristic: an offence section is well-posed for defeats-edge SAT
+    iff it carries at least one of:
+
+    * a top-level or nested ``elements { ... }`` block, OR
+    * a top-level ``penalty { ... }`` block, OR
+    * a ``referencing penal_code/sN_…`` directive that lifts the
+      host offence's elements (the encoder-gap fix).
+
+    Interpretation-only sections (s108 / s320 / s359 / s360 / s362)
+    carry ``definitions`` + ``exceptions`` only — no ``elements``, no
+    ``penalty``, no ``referencing``. They are not standalone offences,
+    so pairing them with general defences is not a structurally
+    well-posed query. The 2026-04-30 classification sweep
+    (``results-defeats-coverage-classification.json``) categorises
+    these 39 edges under ``doctrinal_exclusion`` — the appropriate
+    response is to skip them at fixture-collection time, not to
+    flag them as encoder failures."""
+    return (
+        bool(_ELEMENTS_BLOCK.search(yh_text))
+        or bool(_PENALTY_BLOCK.search(yh_text))
+        or bool(_REFERENCING_DIR.search(yh_text))
+    )
+
+
 def collect_edges() -> List[Tuple[str, int]]:
     """Walk every encoded section and extract ``(offence, defence)``
-    pairs from each ``general_defence_s<N>`` block."""
+    pairs from each ``general_defence_s<N>`` block.
+
+    Skips offence sections that carry no ``elements`` block at all
+    (interpretation-only sections). See `_section_carries_elements`."""
     pattern = re.compile(r"general_defence_s(\d+)")
     out: List[Tuple[str, int]] = []
     for section_dir in sorted(LIB.iterdir()):
@@ -106,9 +139,10 @@ def collect_edges() -> List[Tuple[str, int]]:
         if not yh.exists():
             continue
         text = yh.read_text(encoding="utf-8")
+        if not _section_well_posed_as_offence(text):
+            continue
         for m in pattern.finditer(text):
             out.append((offence, int(m.group(1))))
-    # Deduplicate while preserving order
     seen = set()
     deduped = []
     for pair in out:
