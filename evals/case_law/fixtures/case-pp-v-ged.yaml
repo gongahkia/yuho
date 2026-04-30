@@ -1,0 +1,60 @@
+id: case-pp-v-ged
+case_citation: "PP v GED [2022] SGHC 301"
+case_url: "https://www.elitigation.sg/gd/s/2022_SGHC_301"
+actual_charge: "377BE"
+alternative_charge: null
+court_distinguished_on: [distribution, no_consent, knows_likely_distress]
+outcome: |
+  Conviction under s377BE(1) read with s377BE(3) on guilty plea; 12 weeks'
+  imprisonment for the headline charge. Two further charges (s377BD(1)(b)
+  possession and a second s377BE distribution charge for the blurred-face
+  re-post) taken into consideration for sentencing. Leading SG sentencing
+  authority for s377BE intimate-image-distribution offences; the High Court
+  used the appeal to lay down a five-step sentencing framework keyed on
+  objective harm aspects (nature of image, victim identifiability,
+  distribution scope) and the offender's culpability profile.
+case_summary: |
+  GED, age 26, accessed his estranged wife's (V1's) mobile phone without
+  permission and photographed an intimate image showing her face and body.
+  On 12 February 2020 he posted the image to Facebook publicly. The post
+  attracted approximately 1,000 comments, 3,000 likes, and 2,000 shares
+  before takedown. He later re-posted an edited version with V1's face
+  blurred; that re-post grounded a separate s377BE charge taken into
+  consideration. The High Court held that the assessment of harm under
+  s377BE should be more nuanced than treating sexual content alone as
+  determinative — distribution scope, victim identifiability, and the
+  nature of the image are all weighed. Citation verified against
+  eLitigation 2026-04-30; charge wording and 12-week sentence confirmed
+  against the judgment text.
+section: "377BE"
+description: |
+  A intentionally distributed an intimate image of B (B's face and body)
+  to a Facebook audience of approximately 1,000 commenters, 3,000 likers,
+  and 2,000 sharers. B did not consent to the distribution. A knew or had
+  reason to believe that publishing the image to a public Facebook
+  audience would cause B humiliation, alarm or distress.
+parties:
+  A: { role: accused }
+  B: { role: victim }
+acts:
+  - { actor: A, description: "accesses B's phone without permission and photographs an intimate image" }
+  - { actor: A, description: "posts the image to Facebook publicly with B's face visible" }
+mental_states:
+  A:
+    intent: "to publish the intimate image to A's Facebook audience"
+    knowledge: "knew B did not consent to distribution; knew it was likely to cause B humiliation, alarm or distress"
+circumstances:
+  - "image is intimate (depicts B's face and body in an intimate context)"
+  - "Facebook post was public (~1000 comments, ~3000 likes, ~2000 shares)"
+  - "A and B were estranged spouses at time of distribution"
+outcomes:
+  - { actor: B, description: "intimate image distributed without consent to a public audience; humiliation, alarm or distress caused" }
+fact_facts:
+  distribution: true
+  no_consent: true
+  knows_likely_distress: true
+tags:
+  - source:case-law
+  - chapter:xxiii
+  - category:intimate-image-distribution
+  - doctrine:s377BE-five-step-framework

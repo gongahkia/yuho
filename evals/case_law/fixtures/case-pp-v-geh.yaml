@@ -1,0 +1,63 @@
+id: case-pp-v-geh
+case_citation: "PP v GEH [2022] SGHC 301"
+case_url: "https://www.elitigation.sg/gd/s/2022_SGHC_301"
+actual_charge: "377BE"
+alternative_charge: null
+court_distinguished_on: [distribution, no_consent, knows_likely_distress]
+outcome: |
+  Conviction under s377BE(1) read with s377BE(3) on guilty plea; 18 months'
+  imprisonment for the headline distribution charge — markedly heavier than
+  GED's 12 weeks because the distribution targeted V2's identified contact
+  network (>500 WhatsApp recipients including colleagues and friends),
+  rather than an indiscriminate Facebook audience. Three further charges
+  taken into consideration: s506 r/w s34 criminal intimidation with common
+  intention, and two s377BA insulting-modesty charges. Decided alongside
+  GED in the same judgment that established the s377BE five-step
+  sentencing framework keyed on objective harm aspects.
+case_summary: |
+  GEH, age 38, participated in assaulting a man (V2) suspected of having
+  an affair with his wife. During the attack, GEH recorded a 55-second
+  video of V2's exposed genitals and injured face. He then sent the
+  video to E and more than 500 of V2's contacts via WhatsApp, including
+  V2's colleagues and friends. The targeted-distribution shape (named
+  contacts known to V2) drove the materially heavier 18-month
+  imprisonment compared with co-accused GED's 12 weeks for an
+  indiscriminate Facebook post: identified-recipient distribution
+  produces sharper humiliation harm than diffuse-audience distribution
+  on the §377BE harm framework. Citation verified against eLitigation
+  2026-04-30.
+section: "377BE"
+description: |
+  A intentionally distributed an intimate recording of B (a 55-second
+  video showing B's exposed genitals and injured face) by sending it via
+  WhatsApp to a named recipient and more than 500 of B's known contacts,
+  including B's colleagues and friends. B did not consent to the
+  distribution. A knew or had reason to believe that the targeted
+  distribution to B's contact network would cause B humiliation, alarm
+  or distress.
+parties:
+  A: { role: accused }
+  B: { role: victim }
+acts:
+  - { actor: A, description: "records 55-second video of B's exposed genitals during assault" }
+  - { actor: A, description: "distributes video via WhatsApp to >500 of B's identified contacts" }
+mental_states:
+  A:
+    intent: "to humiliate B by spreading the recording within B's social and professional network"
+    knowledge: "knew B did not consent to distribution; knew distribution to B's identified contacts was likely to cause humiliation, alarm or distress"
+circumstances:
+  - "recording is intimate (depicts B's exposed genitals and injured face)"
+  - "distribution targeted B's identified contact network (>500 recipients including colleagues, friends)"
+  - "recording was made during a violent assault"
+outcomes:
+  - { actor: B, description: "intimate recording distributed without consent to B's identified contact network; humiliation, alarm or distress caused" }
+fact_facts:
+  distribution: true
+  no_consent: true
+  knows_likely_distress: true
+tags:
+  - source:case-law
+  - chapter:xxiii
+  - category:intimate-image-distribution
+  - doctrine:s377BE-five-step-framework
+  - subdoctrine:targeted-network-distribution
