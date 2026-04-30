@@ -78,15 +78,21 @@ facts (the `is_infringed(n)` shape). -/
 inductive ElementDeep where
   /-- Leaf fact, indexed by name (mirrors `Element` /
   `Eval.lean`'s `Element.eval`). -/
-  | fact     : (name : String) → ElementDeep
+  | fact       : (name : String) → ElementDeep
   /-- Cross-section reference to another statute in the module,
   by `section_number`. Evaluates to that statute's
   `Statute.convicts` truth value under ambient facts. -/
-  | crossRef : (sectionNumber : String) → ElementDeep
+  | crossRef   : (sectionNumber : String) → ElementDeep
+  /-- Cross-section reference with a *substituted* fact pattern
+  (the `apply_scope(n, F')` shape from §3 of the paper). The
+  Lean `Facts = String → Bool` abstraction lets us thread a
+  parent-supplied `F'` through unchanged; the evaluator
+  forwards it instead of using ambient facts. -/
+  | applyScope : (sectionNumber : String) → (substituted : Facts) → ElementDeep
   /-- `all_of` combinator. -/
-  | allOf    : List ElementDeep → ElementDeep
+  | allOf      : List ElementDeep → ElementDeep
   /-- `any_of` combinator. -/
-  | anyOf    : List ElementDeep → ElementDeep
+  | anyOf      : List ElementDeep → ElementDeep
 
 /-! ## §6-cross-v9 layer 2 — Lift from `ElementGroup` -/
 
@@ -127,14 +133,19 @@ mirroring the sound under-approximation `Element.eval` applies
 to a missing fact. -/
 def ElementDeep.eval :
     (sigma : String → Option Statute) → Facts → Nat → ElementDeep → Bool
-  | _,     F, _,     .fact name      => F name
-  | _,     _, 0,     .crossRef _     => false
-  | sigma, F, _ + 1, .crossRef sec   =>
+  | _,     F, _,     .fact name           => F name
+  | _,     _, 0,     .crossRef _          => false
+  | sigma, F, _ + 1, .crossRef sec        =>
       match sigma sec with
       | none   => false
       | some s => s.convicts F
-  | sigma, F, n,     .allOf gs       => ElementDeep.evalAll sigma F n gs
-  | sigma, F, n,     .anyOf gs       => ElementDeep.evalAny sigma F n gs
+  | _,     _, 0,     .applyScope _ _      => false
+  | sigma, _, _ + 1, .applyScope sec F'   =>
+      match sigma sec with
+      | none   => false
+      | some s => s.convicts F'
+  | sigma, F, n,     .allOf gs            => ElementDeep.evalAll sigma F n gs
+  | sigma, F, n,     .anyOf gs            => ElementDeep.evalAny sigma F n gs
 
 /-- All-of over an `ElementDeep` list. -/
 def ElementDeep.evalAll :
@@ -159,10 +170,11 @@ mutual
 /-- Whether a deep element tree contains no `crossRef` leaves.
 Decidable Bool predicate. -/
 def ElementDeep.crossRefFree : ElementDeep → Bool
-  | .fact _     => true
-  | .crossRef _ => false
-  | .allOf gs   => ElementDeep.crossRefFreeList gs
-  | .anyOf gs   => ElementDeep.crossRefFreeList gs
+  | .fact _         => true
+  | .crossRef _     => false
+  | .applyScope _ _ => false
+  | .allOf gs       => ElementDeep.crossRefFreeList gs
+  | .anyOf gs       => ElementDeep.crossRefFreeList gs
 
 /-- List variant — explicit recursion. -/
 def ElementDeep.crossRefFreeList : List ElementDeep → Bool
@@ -266,6 +278,63 @@ theorem Statute.deepBody_compat
   unfold Statute.deepBody Statute.elementsSatisfied
   exact ElementDeep.eval_toDeep_compat sigma F n s.elements
 
+/-! ## §6-cross-v9 layer 6 — `crossRef` / `applyScope` semantics smoke -/
+
+/-- `crossRef` semantics specification. Under positive fuel and a
+section-table that resolves the reference, the v9 evaluator
+delegates to the v8 `Statute.convicts` on the referenced
+statute under *ambient* facts. Mirrors the `is_infringed(n)`
+inference rule from §3 of the paper. -/
+theorem ElementDeep.eval_crossRef_resolves
+    (sigma : String → Option Statute) (F : Facts)
+    (n : Nat) (sec : String) (s : Statute)
+    (hLookup : sigma sec = some s) :
+    ElementDeep.eval sigma F (n + 1) (.crossRef sec) = s.convicts F := by
+  simp only [ElementDeep.eval, hLookup]
+
+/-- `applyScope` semantics specification. Under positive fuel and a
+resolving section-table, the v9 evaluator delegates to the v8
+`Statute.convicts` under the *substituted* facts `F'`. Mirrors
+the `apply_scope(n, F')` inference rule from §3. -/
+theorem ElementDeep.eval_applyScope_resolves
+    (sigma : String → Option Statute) (F F' : Facts)
+    (n : Nat) (sec : String) (s : Statute)
+    (hLookup : sigma sec = some s) :
+    ElementDeep.eval sigma F (n + 1) (.applyScope sec F') = s.convicts F' := by
+  simp only [ElementDeep.eval, hLookup]
+
+/-- Out-of-module references resolve to `false` under any fuel.
+Mirrors the §6.6 boundary statement on cross-library references —
+the operational semantics defaults a missing section to `none`,
+which the evaluator interprets as the conservative `false`. -/
+theorem ElementDeep.eval_crossRef_missing
+    (sigma : String → Option Statute) (F : Facts)
+    (n : Nat) (sec : String)
+    (hMissing : sigma sec = none) :
+    ElementDeep.eval sigma F (n + 1) (.crossRef sec) = false := by
+  simp only [ElementDeep.eval, hMissing]
+
+theorem ElementDeep.eval_applyScope_missing
+    (sigma : String → Option Statute) (F F' : Facts)
+    (n : Nat) (sec : String)
+    (hMissing : sigma sec = none) :
+    ElementDeep.eval sigma F (n + 1) (.applyScope sec F') = false := by
+  simp only [ElementDeep.eval, hMissing]
+
+/-- Fuel exhaustion on a `crossRef` returns `false` regardless of
+whether `sigma` would have resolved the reference. The sound
+under-approximation matches the `Element.eval` default for a
+missing fact (`Facts.empty`'s `false`). -/
+theorem ElementDeep.eval_crossRef_zero_fuel
+    (sigma : String → Option Statute) (F : Facts) (sec : String) :
+    ElementDeep.eval sigma F 0 (.crossRef sec) = false := by
+  simp only [ElementDeep.eval]
+
+theorem ElementDeep.eval_applyScope_zero_fuel
+    (sigma : String → Option Statute) (F F' : Facts) (sec : String) :
+    ElementDeep.eval sigma F 0 (.applyScope sec F') = false := by
+  simp only [ElementDeep.eval]
+
 /-! ## §6-cross-v9 follow-ups
 
 Deferred to a follow-up session:
@@ -278,28 +347,29 @@ Deferred to a follow-up session:
    `g.acyclic = true` becomes load-bearing on the recursion's
    well-foundedness, completing the §6.6 boundary statement.
 
-2. **Recursive crossRef semantics.** The current `crossRef`
-   branch reduces to v8 `Statute.convicts`, which evaluates
-   the referenced statute under leaf-fact-only semantics —
-   non-recursive at the v9 layer. A follow-up extension would
-   replace `Statute.convicts F` with a deep `Statute.convictsDeep
-   sigma F (n - 1)` call, recursively consulting `sigma` at
-   each `crossRef`. Termination falls out of the well-founded
-   relation in (1).
+2. **Recursive `crossRef` / `applyScope` semantics.** The
+   current branches reduce to v8 `Statute.convicts`, which
+   evaluates the referenced statute under leaf-fact-only
+   semantics — non-recursive at the v9 layer. A follow-up
+   extension would replace `Statute.convicts F` with a deep
+   `Statute.convictsDeep sigma F (n - 1)` call, recursively
+   consulting `sigma` at each cross reference. Termination
+   falls out of the well-founded relation in (1).
 
 3. **`crossRef`-bearing soundness lemma.** Strengthen
    `acyclic_canonical_cross_satisfies` so the canonical model
    discharges the bicond bundle for a module whose statutes
-   carry `crossRef` element-leaves, not just leaf-fact-only
-   trees. Closes the cross-section dimension of Lemma 6.4'.
+   carry `crossRef` / `applyScope` element-leaves, not just
+   leaf-fact-only trees. Closes the cross-section dimension of
+   Lemma 6.4'.
 
-4. **`apply_scope` lift.** Add an `applyScope` constructor to
-   `ElementDeep` with a substituted-facts argument. Current
-   v9 layer covers `is_infringed` only.
-
-The conservative-extension theorem `Statute.deepBody_compat` is
-the kernel-checked base camp for those follow-ups: it shows the
-v9 layer adds capacity without perturbing v4–v8 correctness on
-the existing surface library. -/
+The conservative-extension theorem `Statute.deepBody_compat`
+plus the four semantics-smoke theorems
+(`eval_crossRef_resolves`, `eval_applyScope_resolves`, plus
+their missing / zero-fuel variants) form the kernel-checked
+base camp for those follow-ups: they show the v9 layer adds
+capacity without perturbing v4–v8 correctness on the existing
+surface library, and they pin down the `crossRef` / `applyScope`
+branches to exactly the §3 inference rules. -/
 
 end Yuho
