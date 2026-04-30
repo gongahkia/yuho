@@ -239,8 +239,22 @@ class MermaidTranspiler(TranspilerBase, Visitor):
         # Exceptions as a priority-ordered chain: each exception is a
         # diamond that asks "does this exception fire?", branching to
         # its own outcome on yes, falling through to the next on no.
+        # Sort by `priority` field (lower number = higher priority,
+        # rendered first); exceptions without an explicit priority fall
+        # through to source order at the tail. Auto-sort landed
+        # 2026-04-30 audit pass; before that the chain rendered in
+        # source order, which is correct for s300 (Exceptions 1-7
+        # already in priority order) but drifts for hand-edited
+        # sections that interleave priorities.
         if statute.exceptions:
-            for exc in statute.exceptions:
+            ordered_exceptions = sorted(
+                statute.exceptions,
+                key=lambda e: (
+                    0 if e.priority is not None else 1,
+                    e.priority if e.priority is not None else 0,
+                ),
+            )
+            for exc in ordered_exceptions:
                 guard_id = self._new_node_id("EXCG")
                 label = exc.label or "exception"
                 guard_label = f"{label} fires?"
