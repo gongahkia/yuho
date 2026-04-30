@@ -1,0 +1,25 @@
+/// @meta source=test_statute_for_s170
+referencing penal_code/s170_personating_public_servant
+
+struct S170TestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+S170TestCase guilty := S170TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_s170_personating_public_servant(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+S170TestCase defended := S170TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_s170_personating_public_servant(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+S170TestCase notMadeOut := S170TestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_s170_personating_public_servant(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE
