@@ -2,6 +2,14 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr163-#pr163-
 
+fn is_s163_gratification_personal_influence(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 163 "Taking a gratification, for the exercise of personal influence with a public servant" effective 1872-01-01 {
     elements {
         /// The offence requires one gratification-taking mode, the motive-or-reward nexus, personal influence over a public servant, and one of the listed intended official outcomes.

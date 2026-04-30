@@ -1,0 +1,25 @@
+/// @meta source=test_statute_for_s163
+referencing penal_code/s163_taking_gratification_exercise_personal
+
+struct S163TestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+S163TestCase guilty := S163TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_s163_gratification_personal_influence(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+S163TestCase defended := S163TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_s163_gratification_personal_influence(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+S163TestCase notMadeOut := S163TestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_s163_gratification_personal_influence(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE
