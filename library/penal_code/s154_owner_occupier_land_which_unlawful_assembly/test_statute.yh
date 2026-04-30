@@ -1,0 +1,25 @@
+/// @meta source=test_statute_for_s154
+referencing penal_code/s154_owner_occupier_land_which_unlawful_assembly
+
+struct S154TestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+S154TestCase guilty := S154TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_s154_owner_occupier_assembly(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+S154TestCase defended := S154TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_s154_owner_occupier_assembly(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+S154TestCase notMadeOut := S154TestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_s154_owner_occupier_assembly(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE

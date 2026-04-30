@@ -2,6 +2,14 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr154-#pr154-
 
+fn is_s154_owner_occupier_assembly(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 154 "Owner or occupier of land on which an unlawful assembly is held" effective 1872-01-01 {
     elements {
         /// The section is conjunctive: the qualifying status, the assembly-or-riot event, the knowledge threshold, and both omission limbs must all be present.
