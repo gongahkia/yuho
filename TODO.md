@@ -26,7 +26,7 @@ smoke fixtures in `Tests/Smoke.lean`) · structural diff harness
 **524/524 matched** on full corpus (recursive subsection walker
 landed both sides), `--strict` regression gate active
 (`make verify-structural-diff-full`) · runtime-eval sweep
-**115/115 rich tests passing** (`make verify-runtime-tests`,
+**125/125 rich tests passing** (`make verify-runtime-tests`,
 wired into `make paper-reproduce`) · §7.8 case-law differential
 testing **n=43** (was n=40; +3 chapter-XXIII fixtures from public
 eLitigation: PP v GED [2022] SGHC 301, PP v GEH [2022] SGHC 301,
@@ -48,8 +48,10 @@ fixed for relative hrefs (commit `a0bea2af`),
 time) · Mermaid `--shape verbose` audit pass — penalty-conditional
 diamond rendering bug (silently dead since v1) fixed (commit
 `50eae123`); exception priority chain auto-sort by `priority`
-field (commit `d825d2e5`); static syntax check on s300 verbose
-output 0 orphans · 32-page smoke PDF · `make paper-reproduce`
+field (commit `d825d2e5`); **corpus-wide static syntax sweep
+524/524 sections, 0 transpile failures, 0 orphan nodes** wired
+as `make verify-mermaid-verbose` regression gate (commit
+`363f134b`) · 32-page smoke PDF · `make paper-reproduce`
 end-to-end exit 0, summary at
 `logs/paper-reproduce-summary.txt`.** Completed history lives
 in git log + `docs/PHASE_*` notes.
