@@ -1,0 +1,25 @@
+/// @meta source=test_statute_for_s126
+referencing penal_code/s126_committing_depredation_territories_power
+
+struct S126TestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+S126TestCase guilty := S126TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_s126_depredation_allied_territory(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+S126TestCase defended := S126TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_s126_depredation_allied_territory(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+S126TestCase notMadeOut := S126TestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_s126_depredation_allied_territory(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE
