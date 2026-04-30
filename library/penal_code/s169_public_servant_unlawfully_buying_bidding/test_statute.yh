@@ -1,0 +1,25 @@
+/// @meta source=test_statute_for_s169
+referencing penal_code/s169_public_servant_unlawfully_buying_bidding
+
+struct S169TestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+S169TestCase guilty := S169TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_s169_unlawful_buying_bidding(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+S169TestCase defended := S169TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_s169_unlawful_buying_bidding(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+S169TestCase notMadeOut := S169TestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_s169_unlawful_buying_bidding(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE

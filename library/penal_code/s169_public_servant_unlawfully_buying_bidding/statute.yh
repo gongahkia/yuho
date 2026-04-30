@@ -2,6 +2,14 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr169-#pr169-
 
+fn is_s169_unlawful_buying_bidding(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 169 "Public servant unlawfully buying or bidding for property" effective 1872-01-01 {
     elements {
         /// The offence is conjunctive: public-servant status, legal disability, and the prohibited purchase or bid must all be proved.
