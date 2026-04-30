@@ -1,0 +1,67 @@
+id: case-abdul-ghufran-bin-abdul-wahid
+case_citation: "Abdul Ghufran bin Abdul Wahid v PP [2025] SGHC 98"
+case_url: "https://www.elitigation.sg/gd/s/2025_SGHC_98"
+actual_charge: "377BA"
+alternative_charge: null
+court_distinguished_on: [insult_modesty, exhibit_object, seen_by_person]
+outcome: |
+  Notional 9 months' imprisonment for the s377BA charge as part of a
+  six-charge basket of sexual / hurt offences. Disposition not a
+  conviction strictly speaking — accused was held unfit to plead under
+  s 248(2) Criminal Procedure Code 2010 owing to moderate intellectual
+  disability, so proceedings were stayed and the sentencing exercise
+  ran on a notional basis. The s377BA charge specifically captured
+  the genitalia-exposure act; the related conduct (biting, grinding,
+  humping) grounded the contemporaneous s323 voluntarily-causing-hurt
+  and s354 outrage-of-modesty charges. Useful chapter-XXIII fixture
+  growth for the unfit-to-plead / s84 unsoundness-of-mind structural
+  intersection (s84 is a general-defence exception edge on s377BA in
+  the encoded library; the procedural stay under s 248(2) CPC sits
+  alongside, not within, that doctrinal axis).
+case_summary: |
+  The accused, a 30-year-old man with moderate intellectual disability,
+  committed six offences across two days (1 and 25 December 2024)
+  against four elderly male victims (one aged 68). On 1 December 2024
+  he removed his pants and revealed his genitalia to the 68-year-old
+  victim. Other charges captured biting (causing bleeding) and
+  grinding/humping conduct. Held unfit to plead under s 248(2) CPC
+  due to moderate intellectual disability; proceedings stayed and a
+  notional 9-month imprisonment term recorded for sentencing-framework
+  purposes. Citation verified against eLitigation 2026-04-30.
+section: "377BA"
+description: |
+  A removed his pants in front of B (a 68-year-old male victim) and
+  revealed his exposed genitalia, intending that B would see the
+  exhibition and intending thereby to insult B's modesty. The act
+  was performed in B's immediate presence with the intention that
+  B would observe it.
+parties:
+  A: { role: accused }
+  B: { role: victim }
+acts:
+  - { actor: A, description: "removes his pants and reveals his exposed genitalia in B's presence" }
+mental_states:
+  A:
+    intent: "to insult B's modesty by exposing his genitalia; to ensure B sees the exhibition"
+    knowledge: "knew B was an elderly stranger; intentional staging in B's immediate visual range"
+circumstances:
+  - "B is a 68-year-old male stranger"
+  - "exhibition occurred in a public-facing context (one of multiple incidents across 1 and 25 December 2024)"
+  - "accused was later found to have moderate intellectual disability and was held unfit to plead"
+outcomes:
+  - { actor: B, description: "exposed to A's genitalia; modesty insulted" }
+fact_facts:
+  insult_modesty: true
+  exhibit_object: true
+  seen_by_person: true
+  utter_word: false
+  make_sound: false
+  make_gesture: false
+  heard_by_person: false
+  intrude_privacy: false
+tags:
+  - source:case-law
+  - chapter:xxiii
+  - category:modesty-insult
+  - doctrine:s377BA-genitalia-exposure
+  - subdoctrine:unfit-to-plead-CPC-s248
