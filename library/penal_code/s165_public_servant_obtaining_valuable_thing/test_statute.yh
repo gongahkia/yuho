@@ -1,0 +1,25 @@
+/// @meta source=test_statute_for_s165
+referencing penal_code/s165_public_servant_obtaining_valuable_thing
+
+struct S165TestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+S165TestCase guilty := S165TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_s165_obtaining_valuable_thing(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+S165TestCase defended := S165TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_s165_obtaining_valuable_thing(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+S165TestCase notMadeOut := S165TestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_s165_obtaining_valuable_thing(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE

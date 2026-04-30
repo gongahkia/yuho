@@ -2,6 +2,14 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr165-#pr165-
 
+fn is_s165_obtaining_valuable_thing(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 165 "Public servant obtaining any valuable thing, without consideration, from person concerned in any proceeding or business transacted by such public servant" effective 1872-01-01 {
     elements {
         /// Section 165 requires public-servant status, receipt or attempted receipt of a valuable thing for self or another without consideration or for known inadequate consideration, and knowledge of the giver's connection to the relevant proceeding, business, or official function.
