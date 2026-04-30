@@ -146,23 +146,23 @@ def _txt(el) -> str:
 def parse_advocatekhoj_section(html: str, section_num: str) -> Optional[Section]:
     """Parse one section page from AdvocateKhoj.
 
-    The site renders one section per URL like
-    ``/library/bareacts/indianpenalcode/<num>.php``. Each page has a
-    ``<h2>`` (or ``<h3>``) marginal note, a main ``<div class="content">``
-    body, and amendment markers in trailing ``<div>`` blocks.
+    AdvocateKhoj's IPC pages (verified 2026-04-30) render as a single
+    ``<div id="content_container" class="bareacts_contentarea">`` body
+    with no ``<h*>`` headings — the section number + marginal note
+    appear as the first non-empty text block (e.g. ``"1. Title and
+    extent of operation of the Code"``), followed by the section body
+    and trailing ``Back / Index / Next`` navigation strings.
+
+    The original parser hunted for ``<h1>/<h2>/<h3>`` headings and a
+    ``<div class="content">`` body; both selectors are stale. We now
+    pull the content area by id+class, drop the navigation tail, and
+    split the marginal note off the leading ``"<num>. <title>"``
+    prefix line.
     """
     soup = BeautifulSoup(html, "lxml")
-    # Marginal note: often the page <h2> after stripping the literal
-    # "Section N." prefix.
-    heading = (soup.find("h1") or soup.find("h2") or soup.find("h3"))
-    if heading is None:
-        return None
-    raw = _txt(heading)
-    marginal = re.sub(r"^Section\s+\d+[A-Z]*\.?\s*", "", raw,
-                      flags=re.IGNORECASE).strip()
-
-    # Body text: try common content containers.
-    body = (soup.find("div", class_="content")
+    body = (soup.find("div", id="content_container")
+            or soup.find("div", class_="bareacts_contentarea")
+            or soup.find("div", class_="content")
             or soup.find("div", id="content")
             or soup.find("div", class_="bareact")
             or soup.find("article")
@@ -171,40 +171,69 @@ def parse_advocatekhoj_section(html: str, section_num: str) -> Optional[Section]
     if body is None:
         return None
 
+    # Pull the entire content area as a flat newline-separated text
+    # block, then strip the heading-of-page boilerplate and the
+    # trailing "Back / Index / Next" navigation.
+    raw_text = body.get_text(separator="\n", strip=True)
+    lines = [ln.strip() for ln in raw_text.split("\n") if ln.strip()]
+
+    # Drop boilerplate "Indian Penal Code, 1860" head if present.
+    if lines and lines[0].lower().startswith("indian penal code"):
+        lines = lines[1:]
+    # Drop navigation tail — typical pattern: ["Back", "Index", "Next"].
+    while lines and lines[-1].lower() in {"back", "index", "next"}:
+        lines.pop()
+
+    if not lines:
+        return None
+
+    # The first 1-2 lines carry "<num>. <marginal note>" — collapse any
+    # soft-wrap so the regex can latch onto it.
+    head = lines[0]
+    if len(lines) > 1 and not re.search(r"[.;:]$", head):
+        # The marginal note often wraps onto line 2 (e.g. "1. Title and"
+        # / "extent of operation of the Code"). Glue them.
+        head = head + " " + lines[1]
+        rest = lines[2:]
+    else:
+        rest = lines[1:]
+
+    m = re.match(rf"^{re.escape(section_num)}\.\s*(.+)$", head)
+    if m:
+        marginal = m.group(1).strip()
+    else:
+        marginal = head
+
     sub_items: List[SubItem] = []
     amendments: List[Amendment] = []
-
     paragraphs: List[str] = []
-    for p in body.find_all(["p", "div"], recursive=False):
-        t = _txt(p)
-        if not t:
-            continue
-        # Amendment markers — strip and capture.
-        for m in _AMEND_RE.finditer(t):
-            amendments.append(Amendment(marker=m.group(0)))
-        t_clean = _AMEND_RE.sub("", t).strip()
+
+    for ln in rest:
+        for am in _AMEND_RE.finditer(ln):
+            amendments.append(Amendment(marker=am.group(0)))
+        t_clean = _AMEND_RE.sub("", ln).strip()
         if not t_clean:
             continue
-        # Subsection / illustration / exception classification.
         kind = "raw"
         label = ""
-        if t_clean.lower().startswith("illustration"):
+        low = t_clean.lower()
+        if low.startswith("illustration"):
             kind = "illustration"
-        elif t_clean.lower().startswith("explanation"):
+        elif low.startswith("explanation"):
             kind = "explanation"
-        elif t_clean.lower().startswith("exception"):
+        elif low.startswith("exception"):
             kind = "exception"
-        elif t_clean.lower().startswith("proviso"):
+        elif low.startswith("proviso"):
             kind = "proviso"
         elif _SUB_RE.match(t_clean):
             kind = "subsection"
-            m = _SUB_RE.match(t_clean)
-            label = m.group(1) if m else ""
+            sm = _SUB_RE.match(t_clean)
+            label = sm.group(1) if sm else ""
             t_clean = _SUB_RE.sub("", t_clean, count=1).strip()
         elif _ALPHA_RE.match(t_clean):
             kind = "item"
-            m = _ALPHA_RE.match(t_clean)
-            label = m.group(1) if m else ""
+            am2 = _ALPHA_RE.match(t_clean)
+            label = am2.group(1) if am2 else ""
             t_clean = _ALPHA_RE.sub("", t_clean, count=1).strip()
         if kind != "raw":
             sub_items.append(SubItem(kind=kind, label=label, text=t_clean))
