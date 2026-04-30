@@ -1,0 +1,25 @@
+/// @meta source=test_statute_for_s149
+referencing penal_code/s149_every_member_unlawful_assembly_deemed_guilty
+
+struct S149TestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+S149TestCase guilty := S149TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_s149_member_assembly_deemed_guilty(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+S149TestCase defended := S149TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_s149_member_assembly_deemed_guilty(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+S149TestCase notMadeOut := S149TestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_s149_member_assembly_deemed_guilty(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE
