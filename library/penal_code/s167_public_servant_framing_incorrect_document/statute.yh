@@ -2,6 +2,14 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr167-#pr167-
 
+fn is_s167_framing_incorrect_document(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 167 "Public servant framing an incorrect document or electronic record with intent to cause injury" effective 1872-01-01 {
     elements {
         /// The offence requires public-servant status, official responsibility for the document or electronic record, one of the listed acts, awareness of incorrectness, and one of the listed injury states.

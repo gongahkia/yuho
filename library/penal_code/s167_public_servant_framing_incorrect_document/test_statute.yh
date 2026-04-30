@@ -1,0 +1,25 @@
+/// @meta source=test_statute_for_s167
+referencing penal_code/s167_public_servant_framing_incorrect_document
+
+struct S167TestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+S167TestCase guilty := S167TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_s167_framing_incorrect_document(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+S167TestCase defended := S167TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_s167_framing_incorrect_document(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+S167TestCase notMadeOut := S167TestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_s167_framing_incorrect_document(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE
