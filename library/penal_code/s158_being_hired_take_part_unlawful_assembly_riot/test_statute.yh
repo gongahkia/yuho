@@ -1,0 +1,25 @@
+/// @meta source=test_statute_for_s158
+referencing penal_code/s158_being_hired_take_part_unlawful_assembly_riot
+
+struct S158TestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+S158TestCase guilty := S158TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_s158_being_hired_assembly(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+S158TestCase defended := S158TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_s158_being_hired_assembly(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+S158TestCase notMadeOut := S158TestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_s158_being_hired_assembly(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE

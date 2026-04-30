@@ -2,6 +2,14 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr158-#pr158-
 
+fn is_s158_being_hired_assembly(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 158 "Being hired to take part in an unlawful assembly or riot" effective 1872-01-01 {
     elements {
         /// Section 158 states separate ordinary and armed limbs, each with its own punishment branch.
