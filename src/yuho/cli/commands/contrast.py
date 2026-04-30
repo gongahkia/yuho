@@ -37,6 +37,7 @@ Caveats:
 from __future__ import annotations
 
 import json as _json
+import re
 import sys
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -62,6 +63,42 @@ def _statute_yh_for(library: Path, section: str) -> Optional[Path]:
         if r.ast and r.ast.statutes and r.ast.statutes[0].section_number == section:
             return stat_path
     return None
+
+
+_REFERENCING_LINE = re.compile(
+    r"^referencing\s+penal_code/(s\d+[A-Z]*)_", re.MULTILINE
+)
+
+
+def _resolve_offence_paths(
+    library: Path, section: str, offence_path: Path
+) -> List[Path]:
+    """Return the set of ``.yh`` paths to feed into a combined module so
+    that ``<sX>_elements_satisfied`` is materialised for the offence
+    section.
+
+    Punishment-only sections (s417 / s419 / s426 / s447 / s448 / s500 /
+    s363A) carry a ``referencing penal_code/sN_<slug>`` directive that
+    points at the host offence whose elements they punish. The Z3
+    backend never sees the host's elements unless its statute file is
+    parsed alongside, so the bare offence path returns no
+    ``_elements_satisfied`` constant. This helper detects the
+    directive and prepends every host path to the module-build input.
+
+    Returns a list with the offence path first (preserving the
+    existing semantics for sections that *do* declare their own
+    elements) and the referenced hosts appended."""
+    paths: List[Path] = [offence_path]
+    try:
+        text = offence_path.read_text(encoding="utf-8")
+    except OSError:
+        return paths
+    for m in _REFERENCING_LINE.finditer(text):
+        host = m.group(1)
+        host_path = _statute_yh_for(library, host)
+        if host_path is not None and host_path not in paths:
+            paths.append(host_path)
+    return paths
 
 
 def _build_combined_module(paths: List[Path]):

@@ -24,15 +24,27 @@ the structural-availability floor.
 from __future__ import annotations
 
 import json as _json
+import re
 import sys
 from pathlib import Path
 from typing import Any, Dict, List, Optional
+
+
+def _section_id_from_path(path: Path) -> str:
+    """Extract the bare section id (e.g. ``425`` or ``363A``) from a
+    library path of the form ``library/penal_code/sNNN[A-Z]*_…``.
+    Mirrors the canonical form ``Z3Generator`` uses to key its
+    constants table."""
+    name = path.parent.name
+    m = re.match(r"^s(\d+[A-Z]*)_", name)
+    return m.group(1) if m else name
 
 import click
 
 from yuho.cli.commands.contrast import (
     _build_combined_module,
     _read_model_facts,
+    _resolve_offence_paths,
     _statute_yh_for,
 )
 
@@ -72,7 +84,15 @@ def run_narrow_defence(
             f"could not locate encoded section {defence_section} under {lib_root}"
         )
 
-    module = _build_combined_module([o_path, d_path])
+    # Punishment-only sections (s417 / s419 / s426 / s447 / s448 /
+    # s500 / s363A) declare a ``referencing penal_code/sN_…`` directive
+    # at the top of statute.yh; we lift the host's element block by
+    # parsing it alongside in the combined module so
+    # `<host_id>_elements_satisfied` is materialised, and fall through
+    # to it as the offence's elements predicate when the bare offence
+    # carries no own elements.
+    offence_paths = _resolve_offence_paths(lib_root, offence_section, o_path)
+    module = _build_combined_module(offence_paths + [d_path])
 
     from yuho.verify.z3_solver import Z3Generator
     gen = Z3Generator()
@@ -82,6 +102,23 @@ def run_narrow_defence(
     d_id = defence_section.lstrip("sS").replace(".", "_")
     o_elements_sat = gen._consts.get(f"{o_id}_elements_satisfied")
     d_elements_sat = gen._consts.get(f"{d_id}_elements_satisfied")
+
+    # Referencing-host fallback: if the offence section's own
+    # `_elements_satisfied` exists but is empty (BoolVal(True) — see
+    # z3_solver.py around line 1170, emitted for interpretation-only
+    # / punishment-only shapes), prefer the referenced host's
+    # elements predicate. This fixes the s426 / s447 / etc. encoder
+    # gap classified in `evals/case_law/results-defeats-coverage-classification.json`.
+    o_id_used = o_id
+    if len(offence_paths) > 1:
+        for host_path in offence_paths[1:]:
+            host_id = _section_id_from_path(host_path)
+            host_sat = gen._consts.get(f"{host_id}_elements_satisfied")
+            if host_sat is not None:
+                o_elements_sat = host_sat
+                o_id_used = host_id
+                break
+
     missing = []
     if o_elements_sat is None:
         missing.append(offence_section)
@@ -136,7 +173,7 @@ def run_narrow_defence(
         sys.exit(1)
 
     model = solver.model()
-    o_facts = _read_model_facts(model, gen._consts, o_id)
+    o_facts = _read_model_facts(model, gen._consts, o_id_used)
     d_facts = _read_model_facts(model, gen._consts, d_id)
     shared = sorted(
         n for n, v in o_facts.items()
