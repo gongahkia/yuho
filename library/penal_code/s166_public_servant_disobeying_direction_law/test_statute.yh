@@ -1,0 +1,25 @@
+/// @meta source=test_statute_for_s166
+referencing penal_code/s166_public_servant_disobeying_direction_law
+
+struct S166TestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+S166TestCase guilty := S166TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_s166_disobeying_law_direction(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+S166TestCase defended := S166TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_s166_disobeying_law_direction(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+S166TestCase notMadeOut := S166TestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_s166_disobeying_law_direction(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE
