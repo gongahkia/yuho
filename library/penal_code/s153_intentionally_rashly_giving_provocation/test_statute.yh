@@ -1,0 +1,25 @@
+/// @meta source=test_statute_for_s153
+referencing penal_code/s153_intentionally_rashly_giving_provocation
+
+struct S153TestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+S153TestCase guilty := S153TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_s153_provocation_intent_riot(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+S153TestCase defended := S153TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_s153_provocation_intent_riot(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+S153TestCase notMadeOut := S153TestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_s153_provocation_intent_riot(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE
