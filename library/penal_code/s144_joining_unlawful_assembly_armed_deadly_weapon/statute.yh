@@ -2,6 +2,14 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr144-#pr144-
 
+fn is_s144_unlawful_assembly_armed(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 144 "Joining an unlawful assembly armed with any deadly weapon" effective 1872-01-01 {
     elements {
         /// The offence is conjunctive: membership in an unlawful assembly and the armed condition must both be present.

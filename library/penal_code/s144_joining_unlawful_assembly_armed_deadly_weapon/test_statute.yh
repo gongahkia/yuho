@@ -1,0 +1,25 @@
+/// @meta source=test_statute_for_s144
+referencing penal_code/s144_joining_unlawful_assembly_armed_deadly_weapon
+
+struct S144TestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+S144TestCase guilty := S144TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_s144_unlawful_assembly_armed(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+S144TestCase defended := S144TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_s144_unlawful_assembly_armed(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+S144TestCase notMadeOut := S144TestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_s144_unlawful_assembly_armed(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE
