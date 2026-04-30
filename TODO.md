@@ -75,42 +75,55 @@ extension theorem) kernel-check under Lean 4.10.0 with no
 
 ## §7.8 — Case-law differential testing `[~]`
 
-n=40 fixtures, three scorers (recommend / contrast /
-constrained-contrast). Headline numbers in paper §7.8: top-1 47.5%,
-top-3 47.5%, MRR 0.480, contrast F1 0.239, constrained-contrast
-consistency 100% (n=25).
+n=43 fixtures (post-2026-04-30 chapter-XXIII growth via public
+eLitigation + Singapore Law Watch, all citations verified by
+WebFetch), three scorers (recommend / contrast /
+constrained-contrast). Headline numbers: **top-1 51.2%, top-3
+53.5%, top-5 53.5%, contrast F1 0.239, constrained-contrast
+consistency 100%.** Paper §7.8 prose still cites the n=40 numbers
+and needs a refresh on the next paper compile.
 
-- [ ] **Further sample growth (user action — needs eLitigation /
-      LawNet access).** Chapter coverage gaps documented in
-      [`evals/case_law/README.md`](./evals/case_law/README.md)
-      under *Coverage gaps — sample growth roadmap* (chapter II
-      state offences, chapter XX marriage, chapter XXIII
-      modesty/voyeurism, ss363–367 kidnapping). Fixture template
-      ready at
-      `evals/case_law/fixtures/case-template-chapter-xxiii.yaml.template`;
-      author copies it, fills in a verified `case_url`, drops the
-      file in `fixtures/`, and re-runs the three scorers. Claude
-      blocked on this by the truth-verification rule (cannot
-      fabricate citations); user has the access.
+- [~] **Further sample growth.** Chapter XXIII closed three slots
+      this session (PP v GED [2022] SGHC 301, PP v GEH [2022]
+      SGHC 301, Abdul Ghufran [2025] SGHC 98). Remaining gaps —
+      all genuinely Penal-Code-track-empty per multi-query
+      eLitigation sweeps (chapter II via Internal Security Act,
+      chapter XX marriage via Women's Charter, ss359–367
+      kidnapping via Kidnapping Act 1961) — cannot grow without
+      a deliberate non-PC-source decision. The s364A Au Gan Chye
+      [2009] SGHC 124 case is the only s364-family Penal Code
+      conviction located, but s364A is not yet encoded in the
+      library.
 - [ ] **Inter-rater reliability** on the curated fact patterns.
       A second human curator extracts facts from the same judgments
       independently; compute κ score for §7.8's threats-to-validity
       caveat. Cannot be done by Claude (defeats the inter-rater
       claim); requires user action.
+- [ ] **s364A path closed.** The Au Gan Chye [2009] SGHC 124
+      kidnapping case was prosecuted under s364A, but s364A was
+      repealed before the current 2020 PC revision; encoding
+      repealed sections is out of scope (Phase 2a — historical
+      versions — is deferred). The chapter XV reported case-law
+      slot therefore remains gappable only through the
+      Kidnapping Act 1961, which is not on the encoded-PC scope.
 
 ---
 
-## §8 — Cross-jurisdiction comparative encoding `[ ]`
+## §8 — Cross-jurisdiction comparative encoding `[~]`
 
 The IPC scraper (`scripts/scrape_indiacode.py`) is committed and
-fixture-tested.
+2026-04-30 working — fixed `parse_advocatekhoj_index` for
+relative-href shape (commit `a0bea2af`) and rewrote
+`parse_advocatekhoj_section` for the current `bareacts_contentarea`
+DOM (commit `4f161471`). Index returns 493 sections (s1–s511 with
+gaps for repealed sections).
 
-- [ ] **First IPC scrape run** (user action): `python
+- [~] **First IPC scrape run.** Background task `b1hn44gaj` — `python
       scripts/scrape_indiacode.py act --out
-      library/indian_penal_code/_raw/act.json` (~50 minutes against
-      the AdvocateKhoj backend). Spot-check the first few section
-      JSONs.
-- [ ] Encode at full coverage (511 IPC sections) using the
+      library/indian_penal_code/_raw/act.json` running at
+      6-second-per-request throttle (~50 min wall time). Spot-check
+      first few section JSONs on completion.
+- [ ] Encode at full coverage (493 IPC sections) using the
       agent-dispatch shape from Phase D — months of agent runs.
 - [ ] Comparative analysis tool: `yuho refs --compare-libraries`
       emitting SCC overlap, divergent amendment paths, sections
