@@ -15,6 +15,7 @@ import Yuho.SMTAbs
 import Yuho.Soundness
 import Yuho.Graph
 import Yuho.Cross
+import Yuho.CrossDeep
 import Yuho.Penalty
 import Yuho.Range
 import Yuho.Generator
