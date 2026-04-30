@@ -11,31 +11,34 @@ benchmarks.
 
 Status key: `[ ]` pending · `[~]` in progress · `(def)` deferred.
 
-Current snapshot (2026-04-30 PM): **12350 unit tests green · 524
-sections at L1+L2 · 524 L3 author-stamped · §6.6 Lean 4 mechanisation
-v9 (all 5 soundness lemmas + canonical models kernel-checked,
-multi-statute `canonical_cross_satisfies` discharged, cross-library
-`apply_scope` companion theorems closed, `CrossRefGraph.acyclic`
-linter-invariant mechanised + `acyclic_canonical_cross_satisfies`
-discharge kernel-checked, v9 `ElementDeep` cross-ref-bearing AST
-+ `crossRef` + `applyScope` constructors + fuel-bounded evaluator
-+ `Statute.deepBody_compat` conservative-extension theorem +
-6 cross-ref semantics-smoke theorems kernel-checked) · structural
-diff harness 524/524 matched on full corpus (post-fix; recursive
-subsection walker landed Lean-side too), `--strict` regression
-gate active (`make verify-structural-diff-full`) · runtime-eval
-sweep 105/105 rich tests passing (`make verify-runtime-tests`,
+Current snapshot (2026-04-30 evening): **12350 unit tests green ·
+524 sections at L1+L2 · 524 L3 author-stamped · §6.6 Lean 4
+mechanisation v9 (all 5 soundness lemmas + canonical models
+kernel-checked, multi-statute `canonical_cross_satisfies`
+discharged, cross-library `apply_scope` companion theorems closed,
+`CrossRefGraph.acyclic` linter-invariant mechanised +
+`acyclic_canonical_cross_satisfies` discharge kernel-checked, v9
+`ElementDeep` cross-ref-bearing AST + `crossRef` + `applyScope`
+constructors + fuel-bounded evaluator + `Statute.deepBody_compat`
+conservative-extension theorem + 6 cross-ref semantics-smoke
+theorems kernel-checked + 6 `native_decide` end-to-end deep-eval
+smoke fixtures in `Tests/Smoke.lean`) · structural diff harness
+**524/524 matched** on full corpus (recursive subsection walker
+landed both sides), `--strict` regression gate active
+(`make verify-structural-diff-full`) · runtime-eval sweep
+**110/110 rich tests passing** (`make verify-runtime-tests`,
 wired into `make paper-reproduce`) · §7.8 case-law differential
 testing n=40 · **defeats-edge SAT 1214/1214 = 100% post-fix**
 (was 1141/1253 = 91.1% pre-fix; 39 doctrinal-exclusion edges
-filtered from corpus, 73 encoder-gap edges closed via referencing-
-host lift + recursive subsection walk; per-section history in
-`evals/case_law/results-defeats-coverage-classification.json`)
+filtered from corpus, 73 encoder-gap edges closed via
+referencing-host lift + recursive subsection walk; per-section
+history in `evals/case_law/results-defeats-coverage-classification.json`)
 · §7.6 LLM benchmark full 205 fixtures, 4-way prompt sweep
-· Direction B defeats-edge coverage 1214 edges across 142 sections
-· 32-page smoke PDF · `make paper-reproduce` end-to-end including
-Lean kernel-check + runtime sweep.** Completed history lives in
-git log + `docs/PHASE_*` notes.
+· Direction B defeats-edge coverage 1214 edges across 142
+sections · 32-page smoke PDF · `make paper-reproduce` end-to-end
+including Lean kernel-check + runtime sweep — last run exit 0,
+summary at `logs/paper-reproduce-summary.txt`.** Completed
+history lives in git log + `docs/PHASE_*` notes.
 
 ---
 
@@ -203,11 +206,12 @@ Recently closed (2026-04-30 PM session, all in-session):
 
 Claude-driven (no user action needed):
 
-1. **Test-suite backlog continuation (next 5 sections).** The
-   105/105 runtime sweep covers 105 of the 524 sections. Next
+1. **Test-suite backlog continuation (incremental).** The
+   110/110 runtime sweep covers 110 of the 524 sections. Next
    batch candidates with offence-style elements + penalty:
-   s139, s140, s142, s143, s144 (Chapter VII residue and Chapter
-   VIII unlawful-assembly cluster). ~10–15 min per section.
+   s150, s151, s152, s153, s154 (continuing the Chapter VIII
+   unlawful-assembly + public tranquillity cluster). ~10–15 min
+   per section.
 
 2. **§6.6 v9 deepening (multi-session, optional).** Remaining
    v9 follow-ups: (i) replace `fuel : Nat` with well-founded
@@ -216,8 +220,17 @@ Claude-driven (no user action needed):
    boundary statement; (ii) recursive `crossRef` / `applyScope`
    semantics (replace v8 `Statute.convicts` delegation with deep
    recursion at each cross-ref); (iii) `crossRef`-bearing
-   strengthening of `acyclic_canonical_cross_satisfies`. Pays off
-   only on external-review pressure.
+   strengthening of `acyclic_canonical_cross_satisfies`. Pays
+   off only on external-review pressure.
+
+3. **Grammar restructure for comment-before-struct bug**
+   (multi-session). Tree-sitter LR parser truncates `Foo p :=
+   Foo { … }` at `Foo` when a `// …` or `/* … */` comment
+   appears earlier in the file; `prec`/`prec.dynamic`
+   workarounds insufficient. Real fix needs grammar restructure
+   (variable_declaration terminator, or hoist type-name+`{`
+   into a single token). Mitigated today via comment-strip pass
+   + runtime-sweep regression gate (commit `ccca70dd`).
 
 User-blocked items (no Claude work possible until you act):
 
