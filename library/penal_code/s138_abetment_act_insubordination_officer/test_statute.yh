@@ -1,0 +1,25 @@
+/// @meta source=test_statute_for_s138
+referencing penal_code/s138_abetment_act_insubordination_officer
+
+struct S138TestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+S138TestCase guilty := S138TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_s138_abetment_insubordination(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+S138TestCase defended := S138TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_s138_abetment_insubordination(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+S138TestCase notMadeOut := S138TestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_s138_abetment_insubordination(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE
