@@ -297,17 +297,31 @@ def parse_indiacode_section(html: str, section_num: str) -> Optional[Section]:
 
 
 def parse_advocatekhoj_index(html: str) -> List[Dict[str, str]]:
-    """Extract the list of section links from AdvocateKhoj's IPC ToC."""
+    """Extract the list of section links from AdvocateKhoj's IPC ToC.
+
+    AdvocateKhoj's current ToC (verified 2026-04-30) uses *relative*
+    section hrefs of the form ``<num>.php?Title=…&STitle=…``, not the
+    fully-qualified ``indianpenalcode/<num>.php`` shape this parser
+    originally assumed. We match either form so the scraper survives
+    URL-shape drift in either direction; the downstream
+    ``advocatekhoj.section_url`` lambda always reconstructs the
+    canonical absolute URL anyway."""
     soup = BeautifulSoup(html, "lxml")
     out: List[Dict[str, str]] = []
     seen: set[str] = set()
+    abs_pattern = re.compile(r"indianpenalcode/(\d+[A-Z]*)\.php")
+    rel_pattern = re.compile(r"^(\d+[A-Z]*)\.php(?:\?.*)?$")
     for a in soup.find_all("a", href=True):
         href = a["href"]
-        m = re.search(r"indianpenalcode/(\d+[A-Z]*)\.php", href)
-        if not m:
-            continue
-        section_num = m.group(1)
-        if section_num in seen:
+        section_num: Optional[str] = None
+        m = abs_pattern.search(href)
+        if m:
+            section_num = m.group(1)
+        else:
+            m = rel_pattern.match(href)
+            if m:
+                section_num = m.group(1)
+        if section_num is None or section_num in seen:
             continue
         seen.add(section_num)
         out.append({
