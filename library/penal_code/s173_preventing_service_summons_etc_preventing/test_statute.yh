@@ -1,0 +1,25 @@
+/// @meta source=test_statute_for_s173
+referencing penal_code/s173_preventing_service_summons_etc_preventing
+
+struct S173TestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+S173TestCase guilty := S173TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_s173_preventing_service_summons(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+S173TestCase defended := S173TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_s173_preventing_service_summons(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+S173TestCase notMadeOut := S173TestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_s173_preventing_service_summons(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE
