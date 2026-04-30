@@ -1828,7 +1828,7 @@ def s304 : Statute :=
 def s305 : Statute :=
   { section_number := "305"
     title := "Abetment of suicide or attempted suicide of minor or person who lacks mental capacity"
-    elements := .allOf []
+    elements := .allOf [.allOf [.leaf { kind := .actusReus, name := "victim_commits_suicide", description := "" }, .leaf { kind := .actusReus, name := "abets_commission_of_suicide", description := "" }, .leaf { kind := .mensRea, name := "knows_or_ought_reasonably_to_have_known_status", description := "" }], .allOf [.leaf { kind := .actusReus, name := "victim_attempts_suicide", description := "" }, .leaf { kind := .actusReus, name := "abets_attempted_suicide", description := "" }, .leaf { kind := .mensRea, name := "knows_or_ought_reasonably_to_have_known_status", description := "" }], .allOf [.leaf { kind := .actusReus, name := "victim_attempts_suicide", description := "" }, .leaf { kind := .circumstance, name := "hurt_caused_in_course", description := "" }, .leaf { kind := .actusReus, name := "abets_attempted_suicide", description := "" }, .leaf { kind := .mensRea, name := "knows_or_ought_reasonably_to_have_known_status", description := "" }]]
     exceptions := [
   { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
   { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
@@ -3853,7 +3853,7 @@ def s41 : Statute :=
 def s420A : Statute :=
   { section_number := "420A"
     title := "Obtaining services dishonestly or fraudulently"
-    elements := .allOf [.leaf { kind := .actusReus, name := "obtaining_services", description := "" }, .anyOf [.leaf { kind := .mensRea, name := "dishonestly", description := "" }, .leaf { kind := .mensRea, name := "fraudulently", description := "" }], .leaf { kind := .circumstance, name := "payment_basis", description := "" }, .leaf { kind := .circumstance, name := "unpaid_or_not_paid_in_full", description := "" }]
+    elements := .allOf [.allOf [.leaf { kind := .actusReus, name := "obtaining_services", description := "" }, .anyOf [.leaf { kind := .mensRea, name := "dishonestly", description := "" }, .leaf { kind := .mensRea, name := "fraudulently", description := "" }], .leaf { kind := .circumstance, name := "payment_basis", description := "" }, .leaf { kind := .circumstance, name := "unpaid_or_not_paid_in_full", description := "" }], .allOf [.leaf { kind := .circumstance, name := "when_person_obtains_services", description := "" }], .allOf [.leaf { kind := .circumstance, name := "knows_payment_basis_or_might_be", description := "" }], .allOf [.leaf { kind := .mensRea, name := "intends_non_payment_or_not_in_full", description := "" }]]
     exceptions := []
   }
 
@@ -4892,7 +4892,7 @@ def s74E : Statute :=
 def s74 : Statute :=
   { section_number := "74"
     title := "Enhanced penalties for racially or religiously aggravated offences"
-    elements := .allOf [.allOf [.leaf { kind := .actusReus, name := "conviction", description := "" }, .leaf { kind := .circumstance, name := "racially_or_religiously_aggravated", description := "" }], .anyOf [.leaf { kind := .circumstance, name := "penal_code_offence_except_excluded", description := "" }, .leaf { kind := .circumstance, name := "inchoate_or_conspiracy_offence", description := "" }], .anyOf [.leaf { kind := .circumstance, name := "demonstrated_hostility", description := "" }, .leaf { kind := .circumstance, name := "motivated_by_hostility", description := "" }]]
+    elements := .allOf [.allOf [.leaf { kind := .actusReus, name := "conviction", description := "" }, .leaf { kind := .circumstance, name := "racially_or_religiously_aggravated", description := "" }], .anyOf [.leaf { kind := .circumstance, name := "penal_code_offence_except_excluded", description := "" }, .leaf { kind := .circumstance, name := "inchoate_or_conspiracy_offence", description := "" }], .allOf [.leaf { kind := .circumstance, name := "magistrates_court_jurisdiction", description := "" }, .leaf { kind := .circumstance, name := "magistrates_court_sentencing_power", description := "" }], .allOf [.leaf { kind := .circumstance, name := "district_court_jurisdiction", description := "" }, .leaf { kind := .circumstance, name := "district_court_sentencing_power", description := "" }], .anyOf [.leaf { kind := .circumstance, name := "demonstrated_hostility", description := "" }, .leaf { kind := .circumstance, name := "motivated_by_hostility", description := "" }]]
     exceptions := []
   }
 

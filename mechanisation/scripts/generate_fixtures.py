@@ -89,13 +89,19 @@ def _emit_element(elem) -> str:
 
 def _flatten_for_topelems(statute: StatuteNode) -> List:
     """Mirror `_generate_statute_constraints`: when top-level elements
-    are absent, hoist subsection elements to the top level."""
+    are absent, recursively hoist subsection elements to the top
+    level. The recursive walk matches the Z3 generator's deepening
+    landed 2026-04-30, which was needed for s305's
+    `subsection (1) (a) { elements { … } }` 2-level nesting."""
     if statute.elements:
         return list(statute.elements)
     out: List = []
-    for sub in getattr(statute, "subsections", ()) or ():
-        for elem in getattr(sub, "elements", ()) or ():
-            out.append(elem)
+    def _walk(subs):
+        for sub in subs or ():
+            for elem in getattr(sub, "elements", ()) or ():
+                out.append(elem)
+            _walk(getattr(sub, "subsections", ()))
+    _walk(getattr(statute, "subsections", ()) or ())
     return out
 
 
