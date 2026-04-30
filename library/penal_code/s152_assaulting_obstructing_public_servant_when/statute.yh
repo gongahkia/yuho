@@ -2,6 +2,14 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr152-#pr152-
 
+fn is_s152_assaulting_public_servant(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 152 "Assaulting or obstructing public servant when suppressing riot, etc." effective 1872-01-01 {
     elements {
         all_of {

@@ -1,0 +1,25 @@
+/// @meta source=test_statute_for_s152
+referencing penal_code/s152_assaulting_obstructing_public_servant_when
+
+struct S152TestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+S152TestCase guilty := S152TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_s152_assaulting_public_servant(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+S152TestCase defended := S152TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_s152_assaulting_public_servant(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+S152TestCase notMadeOut := S152TestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_s152_assaulting_public_servant(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE
