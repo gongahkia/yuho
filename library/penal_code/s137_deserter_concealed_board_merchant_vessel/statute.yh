@@ -2,6 +2,15 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr137-#pr137-
 /// @amendment [15/2019]
+
+fn is_s137_deserter_concealed_negligence(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 137 "Deserter concealed on board merchant vessel through negligence of master" effective 1872-01-01 effective 2020-01-01 {
     elements {
         /// the offence requires the concealed person to be on board the merchant vessel under the accused's charge

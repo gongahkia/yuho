@@ -1,0 +1,25 @@
+/// @meta source=test_statute_for_s137
+referencing penal_code/s137_deserter_concealed_board_merchant_vessel
+
+struct S137TestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+S137TestCase guilty := S137TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_s137_deserter_concealed_negligence(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+S137TestCase defended := S137TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_s137_deserter_concealed_negligence(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+S137TestCase notMadeOut := S137TestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_s137_deserter_concealed_negligence(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE
