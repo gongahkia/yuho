@@ -1,0 +1,25 @@
+/// @meta source=test_statute_for_s136
+referencing penal_code/s136_harbouring_deserter
+
+struct S136TestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+S136TestCase guilty := S136TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_s136_harbouring_deserter(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+S136TestCase defended := S136TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_s136_harbouring_deserter(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+S136TestCase notMadeOut := S136TestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_s136_harbouring_deserter(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE
