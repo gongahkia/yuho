@@ -1,0 +1,25 @@
+/// @meta source=test_statute_for_s179
+referencing penal_code/s179_refusing_answer_public_servant_authorised
+
+struct S179TestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+S179TestCase guilty := S179TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_s179_refusing_answer(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+S179TestCase defended := S179TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_s179_refusing_answer(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+S179TestCase notMadeOut := S179TestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_s179_refusing_answer(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE

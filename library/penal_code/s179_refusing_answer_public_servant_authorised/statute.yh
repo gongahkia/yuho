@@ -2,6 +2,15 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr179-#pr179-
 /// @amendment [15/2019]
+
+fn is_s179_refusing_answer(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 179 "Refusing to answer public servant authorised to question" effective 1872-01-01 effective 2019-12-31 {
     elements {
         /// The offence requires a legal duty to state the truth, refusal to answer a demanded question touching that subject, and that the demand is made by a public servant exercising legal powers.
