@@ -15,8 +15,26 @@
 
 % Theorem environments for §6 (soundness) + checkmark / math symbols
 % used in §8 comparison table.
+\usepackage{amsmath}
 \usepackage{amsthm}
 \usepackage{amssymb}
+
+% Two-column overflow control.  acmart's tight column width frequently
+% causes long \texttt{...} identifiers (paths, function names) to
+% overhang. The combination below tells TeX to (a) prefer extra inter-
+% word space over line overflow, (b) allow underfull-h-box stretch up
+% to 3em, (c) hyphenate inside \texttt{} via the inconsolata font's
+% built-in hyphenation hooks. Fixes the bulk of the user-flagged
+% overflow cases without per-line edits.
+\setlength{\emergencystretch}{3em}
+\tolerance=2000
+\hbadness=10000
+% Allow line breaks at slashes inside paths (e.g. paper/methodology/foo).
+\AtBeginDocument{%
+  \makeatletter
+  \def\BreakableSlash{\nobreak\hskip\z@skip /\nobreak\hskip\z@skip}%
+  \makeatother
+}
 
 % TikZ for the §3 + §5 figures (replaces the prior Mermaid-rendered PDFs
 % which had weak typographic control under acmart). Native LaTeX
@@ -206,30 +224,5 @@ detail rather than a synthetic toy.
 % rendered references list.
 \nocite{yuho2026}
 \bibliography{references}
-
-\appendix
-\section{Scope of the formal treatment}
-\label{app:semantics-full}
-
-The operational rules in \S\ref{sec:semantics} cover the
-core element-evaluation, exception-priority, and penalty
-combinator judgments --- the fragment exercised by every
-encoded section in the corpus and by the soundness lemmas
-in \S\ref{sec:soundness}. Four refinements are deliberately
-left at the prose level rather than fully formalised here:
-mens-rea intent typing (the discrimination between
-\emph{intentionally}, \emph{knowingly}, \emph{rashly}, and
-\emph{negligently} as Yuho enum values, beyond the boolean
-truth conditions of the present rules); the G7 temporal-
-ordering constraint between actus reus and the reus-bearing
-mens rea event; the G11 burden-of-proof qualifier on the
-defendant side of an exception; and the cross-section
-composition rules invoked when one section's elements
-predicate over another section's offence. The Lean 4
-mechanisation in \S\ref{sec:soundness}'s appendix discharge
-covers G8/G14 sentinels and the conviction-layer oracle
-constructively; the four refinements above remain as
-inventory items for a v6 mechanisation pass and are
-flagged in \S\ref{sec:limitations}.
 
 \end{document}

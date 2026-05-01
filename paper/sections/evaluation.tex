@@ -694,7 +694,11 @@ five fixtures is upgraded. The parser tolerates a preceding CoT
 preamble by extracting the last balanced JSON array. Scoring
 code is identical across all four variants.
 
-\begin{center}
+\begin{table*}[t]
+\centering
+\caption{LLM benchmark on \statBenchmarkLlmModel{} across four prompt
+variants. Whole corpus = full $n=205$; polarity-neg slice = $n=30$.}
+\label{tab:llm-benchmark}
 \begin{tabular}{lrrrr}
 \hline
 & \textbf{Baseline} & \textbf{Polarity} & \textbf{Polarity-soft} & \textbf{Polarity-cond.} \\
@@ -725,7 +729,7 @@ T2 F1 polarity-neg   & \statBenchmarkLlmNegPolarFOne{}
                      & \statBenchmarkLlmCondNegPolarFOne{} \\
 \hline
 \end{tabular}
-\end{center}
+\end{table*}
 
 The polarity variant does what it was designed to do on the
 $n=30$ negative slice (T1 rises from

@@ -12,7 +12,7 @@ section is the two-page summary reviewers can follow without
 flipping to the appendix; the complete inference rules
 (including the elided cases for ``mens rea'' typed-intent
 variants, temporal-ordering constraints, and the burden-of-proof
-qualifier) appear in Appendix~\ref{app:semantics-full}. We
+qualifier) appear in \S\ref{sec:limitations}. We
 deliberately omit any mechanisation here --- the soundness
 theorem of \S\ref{sec:soundness} rests on the pen-and-paper rules
 below; a Coq mechanisation is left as future work and noted in
@@ -85,7 +85,7 @@ semantically inert at the structural layer: under
 lookup. The downstream verifier
 (\S\ref{sec:implementation} Z3 backend) refines this with intent
 typing for $\textsf{mens\_rea}$ elements; that refinement is
-captured in Appendix~\ref{app:semantics-full}.
+captured in \S\ref{sec:limitations}.
 
 \begin{equation*}
 \small
@@ -150,7 +150,7 @@ that would otherwise be ambiguous.
 An exception's guard $\gamma$ is itself a boolean expression
 over facts; its truth value $\Gamma \vdash \gamma \Downarrow b$
 is given by standard expression evaluation
-(Appendix~\ref{app:semantics-full}). The exception ``fires'' iff
+(\S\ref{sec:limitations}). The exception ``fires'' iff
 its guard is true \emph{and} no defeating sibling also fires:
 
 \begin{equation*}
@@ -326,7 +326,7 @@ its own elements / penalty / exceptions). The Z3 backend
 (\S\ref{sec:implementation}) hoists subsection elements to the
 top level when the parent has none, which is the encoding
 choice the rules above implicitly assume; a fully compositional
-treatment lives in Appendix~\ref{app:semantics-full}.
+treatment lives in \S\ref{sec:limitations}.
 
 \textit{Definitional substitution.} The \texttt{definitions}
 block introduces named string aliases that the

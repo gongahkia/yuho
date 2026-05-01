@@ -106,17 +106,19 @@ assignment $\mathcal{M}$:
 \end{lemma}
 
 \begin{proof}[Sketch]
-Induction on the structure of $\mathit{Es}$. Base case: a leaf
-element, by Lemma~\ref{lem:soundness-elem}. Inductive cases:
+Induction on the structure of $\mathit{Es}$.
 
-\textit{$\textsf{all\_of}$ group.} The Z3 generator emits
-$\mathit{el}_n \Leftrightarrow \bigwedge_i b_i$ (or the
-sub-group-level boolean's biconditional). The operational rule
-\textsc{Eval-AllOf} computes the same conjunction. By the IH on
-each member, both sides agree.
+\paragraph{Base case.} A leaf element, by
+Lemma~\ref{lem:soundness-elem}.
 
-\textit{$\textsf{any\_of}$ group.} Symmetric, with $\bigvee$
-replacing $\bigwedge$ on both sides.
+\paragraph{Inductive case ($\textsf{all\_of}$ group).} The Z3
+generator emits $\mathit{el}_n \Leftrightarrow \bigwedge_i b_i$
+(or the sub-group-level boolean's biconditional). The operational
+rule \textsc{Eval-AllOf} computes the same conjunction. By the IH
+on each member, both sides agree.
+
+\paragraph{Inductive case ($\textsf{any\_of}$ group).} Symmetric,
+with $\bigvee$ replacing $\bigwedge$ on both sides.
 \end{proof}
 
 \begin{lemma}[Exception correspondence]
@@ -138,7 +140,7 @@ defeats-acyclicity invariant
 \texttt{defeats} edges, so the DAG admits a topological sort;
 induction proceeds along the reverse order).
 
-\textit{Base case:} an exception with no in-degree in the
+\paragraph{Base case.} An exception with no in-degree in the
 defeats relation. Its \textsc{Fires} premise simplifies to
 ``guard true'' alone, which the Z3 generator emits as the
 single-conjunct biconditional $\mathit{fires}_\xi
@@ -147,7 +149,7 @@ Lemma~\ref{lem:soundness-graph} (extended to general boolean
 expressions over the fact-map; the extension is mechanical), the
 guard's Z3-truth and operational-truth coincide.
 
-\textit{Inductive case:} an exception $\xi$ with non-empty
+\paragraph{Inductive case.} An exception $\xi$ with non-empty
 $\mathrm{defeats}^{-1}(\xi)$. The Z3 generator emits
 $\mathit{fires}_\xi \Leftrightarrow \mathcal{Z}(\gamma_\xi)
 \,\wedge\, \bigwedge_{\xi' \in \mathrm{defeats}^{-1}(\xi)}
@@ -280,14 +282,18 @@ notation of \S\ref{subsec:semantics-penalty}.
 \label{lem:soundness-penalty}
 Let $\mathcal{P}_S$ denote the encoded penalty term of statute
 $S$. Define the \emph{Z3 penalty footprint} as the tuple
-$\mathcal{F}_S(\mathcal{M}) = \langle \mathcal{M}(\mathit{imp}_n^{\textsc{lo}}),
-\mathcal{M}(\mathit{imp}_n^{\textsc{hi}}),
-\mathcal{M}(\mathit{fine}_n^{\textsc{lo}}),
-\mathcal{M}(\mathit{fine}_n^{\textsc{hi}}),
-\mathcal{M}(\mathit{can}_n^{\textsc{lo}}),
-\mathcal{M}(\mathit{can}_n^{\textsc{hi}}),
-\mathcal{M}(\mathit{death}_n) \rangle$. Then for every satisfying
-assignment $\mathcal{M}$:
+{\scriptsize
+\begin{align*}
+\mathcal{F}_S(\mathcal{M}) = \big\langle\;
+  &\mathcal{M}(\mathit{imp}_n^{\textsc{lo}}),
+  \mathcal{M}(\mathit{imp}_n^{\textsc{hi}}), \\
+  &\mathcal{M}(\mathit{fine}_n^{\textsc{lo}}),
+  \mathcal{M}(\mathit{fine}_n^{\textsc{hi}}), \\
+  &\mathcal{M}(\mathit{can}_n^{\textsc{lo}}),
+  \mathcal{M}(\mathit{can}_n^{\textsc{hi}}),
+  \mathcal{M}(\mathit{death}_n)\;\big\rangle.
+\end{align*}}%
+Then for every satisfying assignment $\mathcal{M}$:
 \[
   \mathcal{F}_S(\mathcal{M}) \in \mathit{ranges}(\mathcal{R})
   \;\;\Longleftrightarrow\;\;
