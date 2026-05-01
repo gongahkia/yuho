@@ -193,12 +193,18 @@ detail rather than a synthetic toy.
 \input{sections/related}
 \input{sections/applicability}
 \input{sections/limitations}
+\input{sections/future_work}
 \input{sections/conclusion}
 
 \bibliographystyle{ACM-Reference-Format}
 % Force numbered citations (acmart's default is author-year; the
 % "nonacm" build wants numbered to match the screenshot format).
 \setcitestyle{numbers,sort&compress}
+% Force the Yuho artefact self-reference into the bibliography even
+% though it is cited only contextually in the Artefact-availability
+% paragraph; \nocite{yuho2026} guarantees the entry appears in the
+% rendered references list.
+\nocite{yuho2026}
 \bibliography{references}
 
 \appendix

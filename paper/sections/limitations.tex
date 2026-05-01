@@ -99,33 +99,6 @@ not as a flaw but as a calibration: the verification stack is for
 checking that the \emph{encoding} is well-formed, not for adjudicating
 the \emph{law}.
 
-\paragraph{Editor surfaces are uneven.} The Language Server is the
-most complete surface; the MCP server has full tool/resource/prompt
-coverage; the VS Code extension is at v0.2 with snippets, status-bar
-indicator, and command palette but without a full library tree-view
-panel; the Microsoft Word add-in is in flight but not yet shipped.
-The unevenness reflects implementation order rather than design
-intent --- every surface should reach feature parity, and the
-remaining work is engineering rather than research.
-
-\paragraph{Charge-recommender is structural, not adjudicative.} The
-charge recommender (\S\ref{subsec:analytical_tools}) ranks Penal Code
-sections by element-overlap between a supplied fact pattern and the
-encoded grammar; it does not, and cannot, decide whether an offence
-is made out. The substring matching the simulator uses is permissive
-by design --- a fact mentioning ``deception'' will hit any section
-whose encoded element description contains that word --- which is the
-right behaviour for a candidate-surface tool but the wrong behaviour
-for a legal-conclusion tool. The recommender's output envelope
-carries an \texttt{not\_legal\_advice} flag and a fixed
-\texttt{LEGAL\_DISCLAIMER} string, and the CLI prints the disclaimer
-twice (once before results, once after) precisely so a hurried
-reader cannot ingest the ranking without ingesting the caveat.
-External counsel review is the appropriate route for any actual
-charge decision; the recommender is a teaching / research artefact
-over the encoded grammar, in the same posture as the
-counter-example explorer.
-
 \paragraph{Soundness is fully mechanised at the conviction +
 cross-section + penalty layers.}
 The mechanisation in \texttt{mechanisation/} (Lean~4, see
@@ -135,38 +108,41 @@ of Theorem~\ref{thm:z3-sound}:
 \ref{lem:soundness-exc} (Catala-style exception precedence) in
 \texttt{Yuho/Soundness.lean} (v1);
 \ref{lem:soundness-graph} (element-graph correspondence) in
-\texttt{Yuho/Graph.lean} (v2, 2026-04-27);
+\texttt{Yuho/Graph.lean} (v2);
 \ref{lem:soundness-cross} (cross-section composition) in
-\texttt{Yuho/Cross.lean} (v3, 2026-04-27);
+\texttt{Yuho/Cross.lean} (v3);
 \ref{lem:soundness-penalty} (penalty correspondence) in
-\texttt{Yuho/Penalty.lean} (v3, 2026-04-27);
+\texttt{Yuho/Penalty.lean} (v3);
 plus the composed \texttt{full\_conviction\_correspondence}
-corollary in \texttt{Yuho/Graph.lean}. The G8 / G14 unbounded-axis
-sentinels in \texttt{Penalty.lean} were closed in v4
-(\texttt{fineUnlimited} / \texttt{caningUnspecified} constructors
-plus \texttt{Footprint} flag fields, kernel-checked); the
+corollary in \texttt{Yuho/Graph.lean}.
+
+The G8 / G14 unbounded-axis sentinels in \texttt{Penalty.lean}
+were closed in v4 (\texttt{fineUnlimited} /
+\texttt{caningUnspecified} constructors plus
+\texttt{Footprint} flag fields, kernel-checked); the
 cross-library case for \texttt{apply\_scope} in
-\texttt{Cross.lean} was closed in v7 (2026-04-29) via the
-companion theorems
+\texttt{Cross.lean} was closed in v7 via the companion theorems
 \texttt{apply\_scope\_eval\_none\_of\_extern} and
 \texttt{is\_infringed\_eval\_none\_of\_extern}, which prove
 that extern references reduce to \texttt{none} on the
 operational side and therefore impose no SMT-side
-correspondence obligation; the case-law differential testing
+correspondence obligation. The case-law differential testing
 of \S\ref{subsec:case_law_diff} continues to use same-module
 fact patterns to keep the in-module correspondence
 non-trivial, but cross-library calls are no longer an
 unspoken caveat.
-The v5 layer in \texttt{Yuho/Generator.lean} (2026-04-28)
-discharges the conviction-layer oracle assumption: the lemmas
+
+The v5 layer in \texttt{Yuho/Generator.lean} discharges the
+conviction-layer oracle assumption: the lemmas
 \ref{lem:soundness-elem} / \ref{lem:soundness-graph} /
 \ref{lem:soundness-exc} now hold against a constructive
 \texttt{canonicalSMTModel} / \texttt{canonicalGraphModel} (built
 directly from the operational evaluator's outputs) rather than
 an axiomatic existential. The unconditional forms
 (\texttt{element\_correspondence\_unconditional}, etc.) are
-exported from \texttt{Yuho/Generator.lean}. The v6 layer
-(2026-04-29) extends the discharge to the §6.5 penalty layer
+exported from \texttt{Yuho/Generator.lean}.
+
+The v6 layer extends the discharge to the §6.5 penalty layer
 via \texttt{Generator.canonicalPenaltyModel} and to the
 single-statute case of the cross-section bundle via
 \texttt{Generator.canonicalCrossModel} +
@@ -180,39 +156,43 @@ mechanised as a Bool-valued predicate in
 re-keys \texttt{excFires} on \emph{qualified} atom names
 (\texttt{<sX>\_exc\_<label>\_fires}) matching the Python
 generator's atom-naming convention, fixing the v3 raw-label
-collision when two statutes shared a label. Residual oracle scope after v7 (2026-04-29): the claim that
-the Python \texttt{Z3Generator} implementation matches the Lean
+collision when two statutes shared a label.
+
+Residual oracle scope after v7: the claim that the Python
+\texttt{Z3Generator} implementation matches the Lean
 specification's emit shape is now discharged structurally on
-the full corpus. The 2026-04-29 generator-emit consolidation
-pass aligned the two emitters bicond-by-bicond on the
-conviction layer (Python now emits the leaf bicond family,
-the uniform \texttt{\_fires} suffix on every exception, and
-the always-on conviction bicond), and
+the full corpus. The generator-emit consolidation pass aligned
+the two emitters bicond-by-bicond on the conviction layer
+(Python now emits the leaf bicond family, the uniform
+\texttt{\_fires} suffix on every exception, and the always-on
+conviction bicond), and
 \texttt{mechanisation/scripts/generate\_fixtures.py} regenerates
 a Lean fixture file for every section in
-\texttt{library/penal\_code/}. The harness
-\texttt{make verify-structural-diff-full} runs
+\texttt{library/penal\_code/}.
+
+The harness \texttt{make verify-structural-diff-full} runs
 \texttt{Generator.encodeStatute} and
 \texttt{Z3Generator.\_generate\_statute\_constraints} on parallel
 fixtures across all 524 sections and reports
-\textbf{524/524 matched, 0 divergent} on the 2026-04-29 corpus
-snapshot, modulo two documented atom-naming canonicalisations
-(Lean's bare \texttt{<e.name>} leaf atom maps to Python's
-per-statute \texttt{<sX>\_leaf\_<e.name>}; the \texttt{\_fires}
-bicond RHS uses an opaque placeholder on Lean and an inline
+\textbf{524/524 matched, 0 divergent}, modulo two documented
+atom-naming canonicalisations (Lean's bare \texttt{<e.name>}
+leaf atom maps to Python's per-statute
+\texttt{<sX>\_leaf\_<e.name>}; the \texttt{\_fires} bicond
+RHS uses an opaque placeholder on Lean and an inline
 priority-suppression expression on Python, both resolving to
 the same \texttt{Exception.firedSet} membership under the
 canonical model). \texttt{make verify-bulk-contrast}
 (\S\ref{subsec:scenario_synthesis}) continues as a complementary
 behavioural cross-check against the operational evaluator on
-every encoded statute. v7 also closed the multi-statute
-extension of the cross-section bundle:
-\texttt{canonical\_cross\_satisfies} kernel-checks for any
-module under qualified-atom-name uniqueness + section-number
-uniqueness, both linter-enforced invariants. v8 (2026-04-29)
-mechanises the linter's cross-section-reference acyclicity
-invariant explicitly: \texttt{CrossRefGraph.acyclic} is a
-decidable Bool predicate over the module's surface-level
+every encoded statute.
+
+v7 also closed the multi-statute extension of the cross-section
+bundle: \texttt{canonical\_cross\_satisfies} kernel-checks for
+any module under qualified-atom-name uniqueness + section-number
+uniqueness, both linter-enforced invariants. v8 mechanises the
+linter's cross-section-reference acyclicity invariant
+explicitly: \texttt{CrossRefGraph.acyclic} is a decidable Bool
+predicate over the module's surface-level
 \texttt{is\_infringed} / \texttt{apply\_scope} edges, and
 \texttt{acyclic\_canonical\_cross\_satisfies} kernel-checks
 the discharge under that invariant. The discharge is vacuous

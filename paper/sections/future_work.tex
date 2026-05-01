@@ -1,0 +1,83 @@
+\section{Future work}
+\label{sec:future_work}
+
+Three concrete strands, plus a longer roadmap of explicitly deferred
+work.
+
+\subsection{Concrete next strands}
+\label{subsec:future_concrete}
+
+The \textsf{G10} cross-section resolver landed during the most
+recent iteration --- the LexScript-borrowed Tarjan-SCC analysis
+(\S\ref{subsec:scc_eval}), the lam4-style \texttt{is\_infringed}
+predicate, and the Catala-style \texttt{apply\_scope} composition
+primitive are all shipped --- so the remaining work in this strand
+is the elaboration of the evaluator-side semantics of
+\texttt{apply\_scope} into a full element-graph executor that returns
+bindings, not just a structural ``does this scope exist'' predicate.
+
+\paragraph{Cross-jurisdiction generalisation.} 8 representative
+Indian Penal Code 1860 sections (s300 / s302 / s375 / s376 / s378 /
+s420 / s497 / s509) are encoded as a proof-of-concept demonstrating
+grammar fit, with a fully-scraped IPC corpus (493 sections) and a
+\texttt{yuho refs --compare-libraries} structural-overlap tool
+shipped alongside. Full IPC encoding (493 sections) and a richer
+SCC-overlap / amendment-divergence analysis are deferred to the
+agent-dispatch pipeline. The structural argument and the
+falsification criteria are laid out in \S\ref{sec:applicability};
+the Akoma Ntoso transpiler is the on-ramp for any cross-jurisdiction
+work that wants to interoperate with LegalDocML-consuming tooling.
+
+\paragraph{Deeper precedent integration.} Lifting case-law holding
+strings into structured constraints that modify element burden
+qualifiers when the matching predicate fires. Right now the L3
+stamp records caselaw anchors as opaque strings; the next step is
+making them load-bearing.
+
+\paragraph{Evaluator-side \texttt{apply\_scope}.} Elaborating the
+cross-section composition primitive into a full element-graph
+executor that returns bindings, not just a structural ``does this
+scope exist'' predicate.
+
+\subsection{Roadmap (Phase 2A / 2B / 2C)}
+\label{subsec:future_roadmap}
+
+The Yuho corpus and tooling extend along three orthogonal axes that
+we treat as deferred but explicit, not unscoped.
+
+\paragraph{Phase 2A --- diachronic depth.} The Penal Code 1871 has
+150+ years of amendments. Phase 2A extends every encoded section
+with every historical version since 1872; \texttt{yuho check
+--as-of 1995-06-15 my\_facts.yh} becomes a first-class temporal
+query. Acceptance: 524 sections $\times$ at-least-3 historical
+versions encoded; per-section timeline rendering on
+\texttt{/s/<N>.html}; novel paper contributions on encoding
+lineage, an amendment-friction Levenshtein metric, and stable
+kernels classifying sections by drift since 1872.
+
+\paragraph{Phase 2B --- vision pivot.} Yuho moves beyond the Penal
+Code into the wider Singapore criminal-justice corpus: Evidence
+Act 1893, Criminal Procedure Code, Constitution 1963, and Contract
+Law (common-law plus Misrepresentation Act and the Contracts
+(Rights of Third Parties) Act). Civil remedies and equitable
+doctrines need AST shapes Yuho does not yet have, so this is
+gated on grammar extension first.
+
+\paragraph{Phase 2C --- interactive learn-by-doing.} The static
+explorer site grows into a guided learning surface for law
+students: per-section JS fact-builders, in-browser evaluators,
+worked-example walkthroughs from the canonical illustrations.
+Co-authoring with a law-school educator who can run a classroom
+trial unlocks measured learning-outcome evidence; the pedagogical
+claim is then ``interactive structural pedagogy for common-law
+penal codes''.
+
+\medskip
+
+Phases 2A--2C are deliberately out of scope for the present
+artefact: 2A is a multi-month diachronic re-encode, 2B is a
+multi-statute scope expansion, and 2C is a co-authored pedagogical
+study. The current paper's empirical claims rest entirely on the
+static, current-version, single-Act corpus; the roadmap is
+provided for honest scoping rather than as load-bearing future
+work.
