@@ -11,7 +11,7 @@ repository-code: "https://github.com/gongahkia/yuho"
 url: "https://github.com/gongahkia/yuho"
 license: MIT
 version: "5.1.0"
-date-released: "2026-04-25"
+date-released: "2026-05-01"
 keywords:
   - legal-dsl
   - statute-encoding
