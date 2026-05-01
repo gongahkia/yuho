@@ -1,10 +1,6 @@
 name: Yuho CI/CD on push
 
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
   workflow_dispatch:
 
 concurrency:
