@@ -6,19 +6,7 @@ name: Deploy explorer site to GitHub Pages
 # nightly so the deployed site doesn't drift from the encoded library.
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - "library/penal_code/**/*.yh"
-      - "src/yuho/transpile/**"
-      - "src/yuho/library/**"
-      - "scripts/build_corpus.py"
-      - "scripts/render_svg_cache.py"
-      - "editors/explorer-site/**"
-      - ".github/workflows/pages.yml"
   workflow_dispatch:
-  schedule:
-    - cron: "0 6 * * *"  # 06:00 UTC daily
 
 concurrency:
   group: pages-${{ github.workflow }}-${{ github.ref }}
