@@ -13,8 +13,10 @@
 % Yuho syntax highlighting for code listings.
 \usepackage{yuho-listing}
 
-% Theorem environments for §6 (soundness).
+% Theorem environments for §6 (soundness) + checkmark / math symbols
+% used in §8 comparison table.
 \usepackage{amsthm}
+\usepackage{amssymb}
 
 % TikZ for the §3 + §5 figures (replaces the prior Mermaid-rendered PDFs
 % which had weak typographic control under acmart). Native LaTeX
@@ -61,7 +63,14 @@
   \newcommand{\statThroughputN}{TBD}%
   \newcommand{\statThroughputMedian}{TBD}%
   \newcommand{\statThroughputPNinetyFive}{TBD}%
-  \providecommand{\statBenchmarkFixtures}{205}%
+}
+% Unconditional defaults for stats not present in methodology.tex.
+% `\providecommand` is a no-op if the macro is already defined, so a
+% future methodology.tex revision can override any of these without
+% conflict. Without this block the LLM benchmark + case-law tables
+% render with empty cells when methodology.tex is present (it currently
+% defines only the seven stats above).
+\providecommand{\statBenchmarkFixtures}{205}%
   \providecommand{\statBenchmarkChapters}{6}%
   \providecommand{\statBenchmarkCategories}{10}%
   \providecommand{\statBenchmarkSynth}{183}%
@@ -143,7 +152,6 @@
   \providecommand{\statDefeatsCoverageRate}{100.0}%
   \providecommand{\statDefeatsCoverageSections}{142}%
   \providecommand{\statDefeatsCoverageDefences}{15}%
-}
 
 \begin{abstract}
 We present \emph{Yuho}, a domain-specific language for encoding statutes as
@@ -169,10 +177,6 @@ involved in modelling a single common-law jurisdiction in production-strength
 detail rather than a synthetic toy.
 \end{abstract}
 
-% Optional CCS / keywords block (kept minimal; expand on submission).
-\keywords{legal DSL, statute encoding, Singapore Penal Code, tree-sitter,
-language server, formal verification, Catala, Alloy, Z3}
-
 % --------------------------------------------------------------------
 % Document
 % --------------------------------------------------------------------
@@ -192,6 +196,9 @@ language server, formal verification, Catala, Alloy, Z3}
 \input{sections/conclusion}
 
 \bibliographystyle{ACM-Reference-Format}
+% Force numbered citations (acmart's default is author-year; the
+% "nonacm" build wants numbered to match the screenshot format).
+\setcitestyle{numbers,sort&compress}
 \bibliography{references}
 
 \appendix

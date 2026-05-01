@@ -95,6 +95,7 @@ post-2012 penalty has the form ``death \emph{or} imprisonment for life,
 named \texttt{when} guard distinguishing the residual category in which
 the death penalty is available from the default life-imprisonment case.
 
+\begin{figure*}[!htbp]
 \begin{lstlisting}[language=yuho,basicstyle=\ttfamily\scriptsize]
 statute 302 "Murder" effective 1872-01-01
                      effective 2012-12-31 {
@@ -120,6 +121,13 @@ statute 302 "Murder" effective 1872-01-01
     defeats killing;
 }
 \end{lstlisting}
+\caption{Yuho encoding of s302 (Punishment for murder), illustrating
+the nested penalty combinator (\textsf{G12}), the \texttt{when}
+conditional (\textsf{G9}), the \texttt{fine := unlimited} sentinel
+(\textsf{G8}), and a Chapter~IV general exception with a
+\texttt{defeats} edge.}
+\label{fig:s302}
+\end{figure*}
 
 The combinator tree (already in Figure~\ref{fig:penalty}) is what
 \textsf{G12} purchased: before \textsf{G12} landed, the same content
@@ -254,16 +262,15 @@ sections in the Penal Code used a two-sibling-block hack that we
 collapsed into nested form via a one-shot migration script.
 Figure~\ref{fig:penalty} shows the resulting combinator tree for s302.
 
-\begin{figure}[!htbp]
+\begin{figure*}[!htbp]
 \centering
-\input{figures/penalty-tree}
+\resizebox{0.85\textwidth}{!}{\input{figures/penalty-tree}}
 \caption{Nested penalty combinator for s302: a top-level
 \texttt{cumulative} block wrapping an \texttt{or\_both} branch
 (death or imprisonment-for-life) plus an unconditional
-\texttt{fine := unlimited}. Native TikZ render at
-\texttt{paper/figures/penalty-tree.tex}.}
+\texttt{fine := unlimited}.}
 \label{fig:penalty}
-\end{figure}
+\end{figure*}
 
 \subsection{Exceptions as Catala-style defaults}
 \label{subsec:exceptions}
@@ -282,6 +289,7 @@ and a \texttt{priority N} integer (the rank in the DAG; lower numbers
 fire first). An optional \texttt{defeats <element\_name>} edge ties the
 exception to the specific element it overrides.
 
+\begin{figure*}[!htbp]
 \begin{lstlisting}[language=yuho,basicstyle=\ttfamily\scriptsize]
 exception "consent" priority 1
   guard "victim consents and exception 87 applies";
@@ -289,6 +297,10 @@ exception "self_defence" priority 2
   guard "private defence under sections 96-106"
   defeats inducement;
 \end{lstlisting}
+\caption{Two Chapter~IV exception bindings on a host offence,
+encoded as priority-DAG nodes with a \texttt{defeats} edge.}
+\label{fig:exception-listing}
+\end{figure*}
 
 The compilation target is Z3 prioritised rewriting in the style of
 Catala~\cite{catala2021}: the base rule fires; lower-priority exceptions
@@ -298,16 +310,15 @@ prioritised defaults rather than as flat negations.
 Figure~\ref{fig:exception-priority} shows the priority DAG over a
 typical Chapter IV exception cluster.
 
-\begin{figure}[!htbp]
+\begin{figure*}[!htbp]
 \centering
-\input{figures/exception-priority}
+\resizebox{0.85\textwidth}{!}{\input{figures/exception-priority}}
 \caption{Catala-style prioritised exception DAG: each exception
 \texttt{defeats} the base rule when its guard fires (solid arrows),
 and the priority edges (dashed) encode the order in which
-simultaneously-applicable exceptions resolve. Native TikZ render at
-\texttt{paper/figures/exception-priority.tex}.}
+simultaneously-applicable exceptions resolve.}
 \label{fig:exception-priority}
-\end{figure}
+\end{figure*}
 
 \subsection{Subsections and amendment lineage}
 \label{subsec:subsections}

@@ -1,50 +1,39 @@
 \section{Introduction}
 \label{sec:intro}
 
-Statutes are not free-form prose. A modern penal code is drafted to a tight
-internal grammar: numbered sections; enumerated elements; in-line illustration
-blocks; cross-cutting general exceptions; penalty clauses with named
-combinators (``or both''). Lawyers learn to read this structure as if it were
-a typed program, and computer scientists have, since at least Sergot et al.'s
-1986 encoding of the British Nationality Act~\cite{sergot1986british}, observed
-that the structure is amenable to direct symbolic representation. The persistent
-gap is not the recognition that statute looks like code --- it is the practical
-absence of a representation expressive enough to encode an entire production
-statute without immediately falling back on free-text strings.
+Statutes are not free-form prose. A modern penal code is drafted to a
+tight internal grammar: numbered sections; enumerated elements; in-line
+illustration blocks; cross-cutting general exceptions; penalty clauses
+with named combinators. Lawyers learn to read this structure as if it
+were a typed program, and computer scientists have, since at least
+Sergot et al.'s 1986 encoding of the British Nationality
+Act~\cite{sergot1986british}, observed that the structure is amenable
+to direct symbolic representation. The persistent gap is not the
+recognition that statute looks like code --- it is the practical
+absence of a representation expressive enough to encode an entire
+production statute without immediately falling back on free-text
+strings. \S\ref{sec:background} surveys the prior art across the
+logic-programming, markup, and modern-DSL traditions and explains why
+none of them target a common-law penal code at full coverage.
 
-This paper investigates whether the persistent statute-encoding gap reduces,
-in practice, to a grammar gap, and presents \emph{Yuho}, a domain-specific
-language designed by mass-encoding the entire Singapore Penal Code 1871. The
-headline number is engineering rather than methodological: \statRawSections{}
-sections, \statEncoded{} encoded, \statLOnePass{}/\statRawSections{} passing
-parse-and-build (the L1+L2 tiers of our coverage harness), and \statLThreePass{}
-carrying an \emph{author-administered} fidelity stamp at the L3 tier
-(\S\ref{subsec:coverage_eval}; external-reviewer validation is future work,
-\S\ref{sec:limitations}). Throughout, ``machine-checkable'' refers to the
-\emph{encoding}: the verification stack checks structural and inter-section
-consistency of the encoded artefact, not the legal correctness of the statute
-itself. The interesting numbers
-sit underneath: every section that the grammar could not natively express
-is documented as a numbered \emph{grammar gap} (\textsf{G1}--\textsf{G14}),
-and we report which were genuine grammar limitations, which were diagnostic
-issues misread as grammar issues, and which we resolved versus deferred.
-
-\paragraph{Why a fresh DSL?} Existing legal-encoding work clusters into three
-camps. The logic-programming tradition treats statute as Horn clauses
-\cite{sergot1986british,benchcapon2003legal}; the markup tradition treats
-statute as structured XML for archival and exchange (Akoma Ntoso
-\cite{akomantoso}, LegalRuleML \cite{legalruleml}); and the modern DSL
-tradition picks a sub-domain --- French tax code (Catala~\cite{catala2021}),
-contracts and regulations (lam4~\cite{lam4}), structured contract
-compilation (LexScript~\cite{lexscript}), plain-text DOCX authoring
-(LDOC~\cite{ldoc}) ---
-and builds a focused syntax for it. None of these target a common-law
-\emph{penal} code at full coverage, and none expose primitives that match
-how penal sections are actually drafted: an offence is a typed conjunction
-of elements; a penalty is a small algebra over imprisonment / fine / caning /
-death; an exception is a prioritised override; an illustration is a
-verbatim worked example tied to the parent section; an amendment is a
-new \texttt{effective <date>} clause that does not erase the prior text.
+This paper investigates whether the persistent statute-encoding gap
+reduces, in practice, to a grammar gap, and presents \emph{Yuho}, a
+domain-specific language designed by mass-encoding the entire Singapore
+Penal Code 1871. The headline number is engineering rather than
+methodological: \statRawSections{} sections, \statEncoded{} encoded,
+\statLOnePass{}/\statRawSections{} passing parse-and-build (the L1+L2
+tiers of our coverage harness), and \statLThreePass{} carrying an
+\emph{author-administered} fidelity stamp at the L3 tier
+(\S\ref{subsec:coverage_eval}; external-reviewer validation is future
+work, \S\ref{sec:limitations}). Throughout, ``machine-checkable''
+refers to the \emph{encoding}: the verification stack checks
+structural and inter-section consistency of the encoded artefact, not
+the legal correctness of the statute itself. The interesting numbers
+sit underneath: every section that the grammar could not natively
+express is documented as a numbered \emph{grammar gap}
+(\textsf{G1}--\textsf{G14}), and we report which were genuine grammar
+limitations, which were diagnostic issues misread as grammar issues,
+and which we resolved versus deferred.
 
 \paragraph{Contributions.} We make four contributions, the first of
 which is the methodological one we believe will travel beyond Yuho.
@@ -111,20 +100,20 @@ precision has not yet been hand-rated and we report this as a known
 gap (\S\ref{subsec:fidelity_eval}, \S\ref{subsec:threats}).
 \end{enumerate}
 
-\paragraph{Why criminal law and why Singapore?} The Singapore Penal Code 1871
-was selected for three pragmatic reasons. First, it is public: the canonical
-text is hosted on Singapore Statutes Online (SSO)~\cite{singaporepenalcode}
-under permissive terms that allow programmatic ingestion. Second, it is
-modestly sized: \statRawSections{} sections is small enough to mass-encode
-with manageable effort, and large enough to surface structural patterns that
-hand-picked toy examples would miss. Third, it inherits the Anglo-Indian
-drafting tradition --- short numbered sections, in-line illustrations,
-``or both'' penalty clauses, Chapter IV general exceptions --- which is
-shared with the Indian, Pakistani, Bruneian, and (with adjustments)
-Malaysian penal codes. Whether a grammar that fits the Singapore statute is
-portable across the wider Penal Code family is an empirical question
-we have not yet tested; the structural overlap makes the question
-worth asking, not the answer.
+\paragraph{Why criminal law and why Singapore?} The Singapore Penal
+Code 1871 was selected for three pragmatic reasons. First, it is
+public: the canonical text is hosted on Singapore Statutes Online
+(SSO)~\cite{singaporepenalcode} under permissive terms that allow
+programmatic ingestion. Second, it is modestly sized:
+\statRawSections{} sections is small enough to mass-encode with
+manageable effort, and large enough to surface structural patterns
+that hand-picked toy examples would miss. Third, it inherits the
+Anglo-Indian drafting tradition shared with the Indian, Pakistani,
+Bruneian, and (with adjustments) Malaysian penal codes. Whether a
+grammar that fits the Singapore statute is portable across the wider
+Penal Code family is an empirical question we have not yet
+exhaustively tested; \S\ref{sec:applicability} reports the partial
+answer.
 
 \paragraph{What this paper is not.} It is not a claim that the encoded
 sections constitute legal advice, that the author-administered L3
@@ -132,18 +121,8 @@ fidelity stamp replaces a court's reading or a legal practitioner's
 judgement, or that Yuho is the right tool for every legal-encoding
 problem (regulatory corpora, contract drafting, treaty interpretation,
 and judgment summarisation each have grammars that Yuho does not
-natively model). It is a claim that the gap between a drafted
-penal section and an executable artefact is smaller than the existing
+natively model). It is a claim that the gap between a drafted penal
+section and an executable artefact is smaller than the existing
 literature suggests --- and that an appropriately-shaped grammar
 dissolves a class of previously-reported encoding obstacles, leaving a
 residue that is tractable at full coverage for one statute family.
-
-\paragraph{Roadmap.} \S\ref{sec:background} surveys the prior art in
-statute encoding and positions Yuho against the three traditions.
-\S\ref{sec:design} presents the grammar through worked examples.
-\S\ref{sec:implementation} describes the toolchain end-to-end.
-\S\ref{sec:evaluation} reports empirical results from mass-encoding the
-Penal Code, including the gap-trigger frequency analysis and the fidelity
-diagnostic hit rate. \S\ref{sec:related} compares Yuho against Catala,
-lam4, LexScript, Akoma Ntoso, LegalRuleML, and LDOC. \S\ref{sec:limitations}
-discusses what we cannot do, and \S\ref{sec:conclusion} concludes.

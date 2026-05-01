@@ -88,11 +88,14 @@ typing for $\textsf{mens\_rea}$ elements; that refinement is
 captured in Appendix~\ref{app:semantics-full}.
 
 \begin{equation*}
+\small
 \inferrule[Eval-Elem]
   {F(x) = b}
   {\langle F, \Sigma \rangle \vdash \langle \kappa, x, \rho
    \rangle \Downarrow b}
-\qquad
+\end{equation*}
+\begin{equation*}
+\small
 \inferrule[Eval-Elem-Missing]
   {x \notin \mathrm{dom}(F)}
   {\langle F, \Sigma \rangle \vdash \langle \kappa, x, \rho
@@ -108,6 +111,7 @@ supply each element, not the encoder.
 Element groups distribute over their member judgements:
 
 \begin{equation*}
+\small
 \inferrule[Eval-AllOf]
   {\Gamma \vdash m_1 \Downarrow b_1 \quad \cdots \quad
    \Gamma \vdash m_k \Downarrow b_k}
@@ -116,6 +120,7 @@ Element groups distribute over their member judgements:
 \end{equation*}
 
 \begin{equation*}
+\small
 \inferrule[Eval-AnyOf]
   {\Gamma \vdash m_1 \Downarrow b_1 \quad \cdots \quad
    \Gamma \vdash m_k \Downarrow b_k}
@@ -149,6 +154,7 @@ is given by standard expression evaluation
 its guard is true \emph{and} no defeating sibling also fires:
 
 \begin{equation*}
+\small
 \inferrule[Fires]
   {\Gamma \vdash \gamma \Downarrow \top \\\\
    \forall \xi' \in \mathrm{defeats}^{-1}(\xi) :
@@ -157,10 +163,13 @@ its guard is true \emph{and} no defeating sibling also fires:
 \end{equation*}
 
 \begin{equation*}
+\small
 \inferrule[NotFires-Guard]
   {\Gamma \vdash \gamma \Downarrow \bot}
   {\Gamma \vdash \xi \Downarrow_{\!\textsc{f}} \bot}
-\qquad
+\end{equation*}
+\begin{equation*}
+\small
 \inferrule[NotFires-Defeated]
   {\Gamma \vdash \gamma \Downarrow \top \\
    \exists \xi' \in \mathrm{defeats}^{-1}(\xi) :
@@ -174,6 +183,7 @@ A section's \emph{conviction} judgement closes the loop: elements
 all hold \emph{and} no exception fires.
 
 \begin{equation*}
+\small
 \inferrule[Conviction]
   {\Gamma \vdash \mathit{Es} \Downarrow_{\!\textsc{el}} \top \\\\
    \forall \xi \in \mathit{Xs} :
@@ -182,10 +192,13 @@ all hold \emph{and} no exception fires.
 \end{equation*}
 
 \begin{equation*}
+\small
 \inferrule[NoConviction-Elements]
   {\Gamma \vdash \mathit{Es} \Downarrow_{\!\textsc{el}} \bot}
   {\Gamma \vdash S \Downarrow_{\!\textsc{c}} \bot}
-\quad
+\end{equation*}
+\begin{equation*}
+\small
 \inferrule[NoConviction-Excused]
   {\Gamma \vdash \mathit{Es} \Downarrow_{\!\textsc{el}} \top \\
    \exists \xi \in \mathit{Xs} :
@@ -215,6 +228,7 @@ ambient facts'', and the Catala-flavoured
 an explicit (possibly different) fact pattern $F'$.
 
 \begin{equation*}
+\small
 \inferrule[IsInfringed]
   {\Sigma(n) = S \\
    \langle F, \Sigma \rangle \vdash S \Downarrow_{\!\textsc{c}}
@@ -224,6 +238,7 @@ an explicit (possibly different) fact pattern $F'$.
 \end{equation*}
 
 \begin{equation*}
+\small
 \inferrule[ApplyScope]
   {\Sigma(n) = S \\
    \langle F', \Sigma \rangle \vdash S \Downarrow_{\!\textsc{c}}
@@ -255,6 +270,7 @@ $\{\textsf{death}\}$). The leaf rules wrap structural penalty
 literals; the combinator rules compose them.
 
 \begin{equation*}
+\small
 \inferrule[Pen-Imprisonment]
   { }
   {\Gamma \vdash \texttt{imprisonment}\,\mathit{lo}\,\texttt{..}\,
@@ -270,6 +286,7 @@ write $\sqcup$ and $\sqcap$ respectively for the corresponding
 range operations:
 
 \begin{equation*}
+\small
 \inferrule[Pen-Cumulative]
   {\Gamma \vdash p_1 \Downarrow_{\!\textsc{p}} \mathcal{R}_1
    \quad \cdots \quad
@@ -280,6 +297,7 @@ range operations:
 \end{equation*}
 
 \begin{equation*}
+\small
 \inferrule[Pen-OrBoth]
   {\Gamma \vdash p_1 \Downarrow_{\!\textsc{p}} \mathcal{R}_1
    \quad \cdots \quad
