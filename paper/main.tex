@@ -123,23 +123,25 @@
   \providecommand{\statBenchmarkLlmReasonTthree}{84.4}%
   \providecommand{\statBenchmarkLlmReasonNegPolarTone}{23.3}%
   \providecommand{\statBenchmarkLlmReasonNegPolarFOne}{0.052}%
-  \providecommand{\statCaseLawN}{40}%
-  \providecommand{\statCaseLawTopOne}{47.5}%
-  \providecommand{\statCaseLawTopThree}{47.5}%
+  \providecommand{\statCaseLawN}{43}%
+  \providecommand{\statCaseLawTopOne}{51.2}%
+  \providecommand{\statCaseLawTopThree}{53.5}%
   \providecommand{\statCaseLawMRR}{0.480}%
   \providecommand{\statCaseLawContrastN}{25}%
   \providecommand{\statCaseLawContrastF}{0.239}%
   \providecommand{\statCaseLawConsistencyN}{25}%
   \providecommand{\statCaseLawConsistency}{100.0}%
   \providecommand{\statCaseLawUnsatN}{0}%
-  % Defeats-edge structural-coverage sweep, post ss95-s106 elements{}
-  % encoding (commit 4ea3b97e). Numbers prior to that encoding (commit
-  % f1cb7cac) were 387/610 = 63.4%, with the entire ss95-s106 family
-  % at 0% SAT.
-  \providecommand{\statDefeatsCoverageN}{610}%
-  \providecommand{\statDefeatsCoverageSat}{560}%
-  \providecommand{\statDefeatsCoverageRate}{91.8}%
-  \providecommand{\statDefeatsCoverageSections}{147}%
+  % Defeats-edge structural-coverage sweep, post 2026-04-30 fixture
+  % filter (39 doctrinal-exclusion edges removed) + Z3 generator
+  % subsection-walker fix + narrow-defence referencing-host element
+  % lift. Pre-fix snapshot 2026-04-27: 1141/1253 = 91.1% with 73
+  % encoder-gap edges + 39 doctrinal exclusions; post-fix:
+  % 1214/1214 = 100% on the well-posed corpus.
+  \providecommand{\statDefeatsCoverageN}{1214}%
+  \providecommand{\statDefeatsCoverageSat}{1214}%
+  \providecommand{\statDefeatsCoverageRate}{100.0}%
+  \providecommand{\statDefeatsCoverageSections}{142}%
   \providecommand{\statDefeatsCoverageDefences}{15}%
 }
 
