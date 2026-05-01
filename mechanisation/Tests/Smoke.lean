@@ -840,4 +840,73 @@ example :
       = ElementGroup.eval s_referee.elements factsTaking := by
   exact ElementDeep.eval_toDeep_compat _ _ _ _
 
+/-! ## v9 recursive-evalDeep smoke
+
+The truly recursive `evalDeep` consumes one fuel unit per
+`crossRef` / `applyScope` step, then evaluates the referenced
+statute's `deepBody` recursively. With fuel ≥ 1 + chain depth,
+the result agrees with the operational reading. -/
+
+/-- `evalDeep` on a `crossRef "299"` with fuel 5 resolves the
+referee's `deepBody` (the `taking` leaf) under ambient facts.
+Under `factsTaking`, leaf evaluates true; the referee has no
+exceptions, so `deepFiresAny = false`. Result: `true && !false`
+= `true`. -/
+example :
+    ElementDeep.evalDeep crossRefMod.lookup factsTaking 5
+        (.crossRef "299")
+      = true := by
+  native_decide
+
+/-- Same shape under `factsNoTaking`: leaf evaluates false,
+overall result false. -/
+example :
+    ElementDeep.evalDeep crossRefMod.lookup factsNoTaking 5
+        (.crossRef "299")
+      = false := by
+  native_decide
+
+/-- Out-of-module `crossRef` resolves to `false` regardless of
+fuel — same boundary statement as v9 `eval`. -/
+example :
+    ElementDeep.evalDeep crossRefMod.lookup factsTaking 5
+        (.crossRef "999")
+      = false := by
+  native_decide
+
+/-- Fuel exhaustion on a `crossRef` returns `false` even when
+sigma would resolve. -/
+example :
+    ElementDeep.evalDeep crossRefMod.lookup factsTaking 0
+        (.crossRef "299")
+      = false := by
+  native_decide
+
+/-- `applyScope` substitutes facts. With ambient `factsNoTaking`
+but substituted `factsTaking`, the referee's deep body sees the
+substituted facts and resolves to `true`. -/
+example :
+    ElementDeep.evalDeep crossRefMod.lookup factsNoTaking 5
+        (.applyScope "299" factsTaking)
+      = true := by
+  native_decide
+
+/-- Combinator transparency: `allOf [.fact "taking", .crossRef
+"299"]` requires both the ambient fact and the referee's
+verdict. -/
+example :
+    ElementDeep.evalDeep crossRefMod.lookup factsTaking 5
+        (.allOf [.fact "taking", .crossRef "299"])
+      = true := by
+  native_decide
+
+/-- `anyOf` short-circuits on the first true. With an ambient
+fact missing but the referee resolving true, the disjunction
+holds. -/
+example :
+    ElementDeep.evalDeep crossRefMod.lookup factsTaking 5
+        (.anyOf [.fact "absent_fact", .crossRef "299"])
+      = true := by
+  native_decide
+
 end Yuho.Tests

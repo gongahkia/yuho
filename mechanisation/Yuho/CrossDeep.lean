@@ -335,26 +335,202 @@ theorem ElementDeep.eval_applyScope_zero_fuel
     ElementDeep.eval sigma F 0 (.applyScope sec F') = false := by
   simp only [ElementDeep.eval]
 
+/-! ## §6-cross-v9 layer 7 — `ElementDeep.evalDeep` recursive variant
+
+`ElementDeep.eval` (layer 3) delegates `crossRef` / `applyScope`
+to v8 `Statute.convicts`, which evaluates the referenced statute
+under leaf-fact-only semantics — non-recursive at the v9 layer.
+This layer ships `ElementDeep.evalDeep`, a *truly recursive*
+variant: at each `crossRef` / `applyScope` leaf, the evaluator
+recurses on the referenced statute's `deepBody` with fuel
+decremented by one. A `crossRef` chain `s₁ → s₂ → s₃` consumes
+three units of fuel; under the v8 `CrossRefGraph.acyclic`
+invariant, the longest such chain is bounded by `nodes.length`,
+so a caller passing `fuel ≥ nodes.length + 1` is guaranteed
+not to bottom out.
+
+Termination is structural-on-`Nat`: the fuel argument is the
+explicit decreasing measure, so the mutual block's
+well-foundedness check passes by structural recursion on the
+`fuel = n + 1` shape. The `ElementGroup`-level recursion
+(`allOf` / `anyOf`) is bounded by the element-tree's finite
+shape and does not consume fuel — only `crossRef` /
+`applyScope` decrement it.
+
+The v8 hypothesis `g.acyclic = true` becomes load-bearing
+*at the caller layer*: a soundness theorem of the form
+`evalDeep_agrees_with_convicts_at_fuel_floor` (deferred —
+see follow-ups below) would have `g.acyclic` as a precondition
+to the fuel-floor argument. -/
+
+mutual
+
+/-- Truly recursive deep evaluator. Each `crossRef` / `applyScope`
+recurses on the referenced statute's `deepBody`, consuming one
+unit of fuel. Terminates structurally on the `Nat` fuel
+argument. -/
+def ElementDeep.evalDeep :
+    (sigma : String → Option Statute) → Facts → Nat → ElementDeep → Bool
+  | _,     F, _,     .fact name           => F name
+  | _,     _, 0,     .crossRef _          => false
+  | sigma, F, n + 1, .crossRef sec        =>
+      match sigma sec with
+      | none   => false
+      | some s =>
+          ElementDeep.evalDeep sigma F n s.deepBody &&
+          !ElementDeep.deepFiresAny s.exceptions F
+  | _,     _, 0,     .applyScope _ _      => false
+  | sigma, _, n + 1, .applyScope sec F'   =>
+      match sigma sec with
+      | none   => false
+      | some s =>
+          ElementDeep.evalDeep sigma F' n s.deepBody &&
+          !ElementDeep.deepFiresAny s.exceptions F'
+  | sigma, F, n,     .allOf gs            =>
+      ElementDeep.evalDeepAll sigma F n gs
+  | sigma, F, n,     .anyOf gs            =>
+      ElementDeep.evalDeepAny sigma F n gs
+
+/-- All-of variant for `evalDeep`. -/
+def ElementDeep.evalDeepAll :
+    (String → Option Statute) → Facts → Nat → List ElementDeep → Bool
+  | _,     _, _, []        => true
+  | sigma, F, n, g :: rest =>
+      ElementDeep.evalDeep sigma F n g
+        && ElementDeep.evalDeepAll sigma F n rest
+
+/-- Any-of variant for `evalDeep`. -/
+def ElementDeep.evalDeepAny :
+    (String → Option Statute) → Facts → Nat → List ElementDeep → Bool
+  | _,     _, _, []        => false
+  | sigma, F, n, g :: rest =>
+      ElementDeep.evalDeep sigma F n g
+        || ElementDeep.evalDeepAny sigma F n rest
+
+/-- Whether *any* exception fires on the referenced statute under
+`F`. Reuses the v8 `Exception.firedSet`'s topological walk
+verbatim — exceptions in the surface library do not themselves
+recurse on `sigma` at this layer (their guards are opaque
+`Facts → Bool` predicates), so the v8-side resolution is sound
+for `evalDeep`'s purposes. -/
+def ElementDeep.deepFiresAny : List Exception → Facts → Bool
+  | xs, F => !(Exception.firedSet xs F).isEmpty
+
+end
+
+/- **`evalDeep` agrees with `eval` on `crossRef`-free trees.**
+Both evaluators share the same fact-leaf and combinator
+behaviour; they differ only on `crossRef` / `applyScope`. On a
+`crossRefFree` tree the difference is vacuous, so `evalDeep`
+reduces to the existing v9 `eval`. Mutual induction over
+`ElementGroup`. -/
+mutual
+
+/-- `evalDeep` ↔ `ElementGroup.eval` agreement on
+`crossRef`-free `ElementGroup` lifts (mutual induction). -/
+theorem ElementDeep.evalDeep_toDeep_compat
+    (sigma : String → Option Statute) (F : Facts) (n : Nat) :
+    ∀ (g : ElementGroup),
+      ElementDeep.evalDeep sigma F n (ElementGroup.toDeep g)
+        = ElementGroup.eval g F
+  | .leaf e   => by
+      simp only [ElementGroup.toDeep, ElementDeep.evalDeep,
+        ElementGroup.eval, Element.eval]
+  | .allOf gs => by
+      simp only [ElementGroup.toDeep, ElementDeep.evalDeep,
+        ElementGroup.eval]
+      exact ElementDeep.evalDeep_toDeep_compat_all sigma F n gs
+  | .anyOf gs => by
+      simp only [ElementGroup.toDeep, ElementDeep.evalDeep,
+        ElementGroup.eval]
+      exact ElementDeep.evalDeep_toDeep_compat_any sigma F n gs
+
+theorem ElementDeep.evalDeep_toDeep_compat_all
+    (sigma : String → Option Statute) (F : Facts) (n : Nat) :
+    ∀ (gs : List ElementGroup),
+      ElementDeep.evalDeepAll sigma F n (ElementGroup.toDeepList gs)
+        = ElementGroup.evalAll gs F
+  | []      => by
+      simp only [ElementGroup.toDeepList, ElementDeep.evalDeepAll,
+        ElementGroup.evalAll]
+  | g :: gs => by
+      simp only [ElementGroup.toDeepList, ElementDeep.evalDeepAll,
+        ElementGroup.evalAll]
+      rw [ElementDeep.evalDeep_toDeep_compat sigma F n g]
+      rw [ElementDeep.evalDeep_toDeep_compat_all sigma F n gs]
+
+theorem ElementDeep.evalDeep_toDeep_compat_any
+    (sigma : String → Option Statute) (F : Facts) (n : Nat) :
+    ∀ (gs : List ElementGroup),
+      ElementDeep.evalDeepAny sigma F n (ElementGroup.toDeepList gs)
+        = ElementGroup.evalAny gs F
+  | []      => by
+      simp only [ElementGroup.toDeepList, ElementDeep.evalDeepAny,
+        ElementGroup.evalAny]
+  | g :: gs => by
+      simp only [ElementGroup.toDeepList, ElementDeep.evalDeepAny,
+        ElementGroup.evalAny]
+      rw [ElementDeep.evalDeep_toDeep_compat sigma F n g]
+      rw [ElementDeep.evalDeep_toDeep_compat_any sigma F n gs]
+
+end
+
+/-- **`evalDeep` zero-fuel under-approximation.** Fuel exhaustion
+on a `crossRef` / `applyScope` returns `false`, mirroring the
+v9 `eval` zero-fuel theorems. -/
+theorem ElementDeep.evalDeep_crossRef_zero_fuel
+    (sigma : String → Option Statute) (F : Facts) (sec : String) :
+    ElementDeep.evalDeep sigma F 0 (.crossRef sec) = false := by
+  simp only [ElementDeep.evalDeep]
+
+theorem ElementDeep.evalDeep_applyScope_zero_fuel
+    (sigma : String → Option Statute) (F F' : Facts) (sec : String) :
+    ElementDeep.evalDeep sigma F 0 (.applyScope sec F') = false := by
+  simp only [ElementDeep.evalDeep]
+
+/-- **`evalDeep` `crossRef` resolution.** Under positive fuel and
+a resolving section table, the `crossRef` branch reduces to the
+recursive deep evaluator on the host's `deepBody` plus an
+exception-fires check. -/
+theorem ElementDeep.evalDeep_crossRef_resolves
+    (sigma : String → Option Statute) (F : Facts)
+    (n : Nat) (sec : String) (s : Statute)
+    (hLookup : sigma sec = some s) :
+    ElementDeep.evalDeep sigma F (n + 1) (.crossRef sec)
+      = (ElementDeep.evalDeep sigma F n s.deepBody
+         && !ElementDeep.deepFiresAny s.exceptions F) := by
+  simp only [ElementDeep.evalDeep, hLookup]
+
+theorem ElementDeep.evalDeep_applyScope_resolves
+    (sigma : String → Option Statute) (F F' : Facts)
+    (n : Nat) (sec : String) (s : Statute)
+    (hLookup : sigma sec = some s) :
+    ElementDeep.evalDeep sigma F (n + 1) (.applyScope sec F')
+      = (ElementDeep.evalDeep sigma F' n s.deepBody
+         && !ElementDeep.deepFiresAny s.exceptions F') := by
+  simp only [ElementDeep.evalDeep, hLookup]
+
 /-! ## §6-cross-v9 follow-ups
 
 Deferred to a follow-up session:
 
-1. **Well-founded recursion driven by `CrossRefGraph` depth.**
-   Replace the explicit `fuel : Nat` parameter with a
-   well-founded recursion whose termination measure is the
-   topological depth of the cross-reference graph under the
-   v8 `acyclic` invariant. At that point the v8 hypothesis
-   `g.acyclic = true` becomes load-bearing on the recursion's
-   well-foundedness, completing the §6.6 boundary statement.
+1. **Acyclicity-driven fuel-floor lemma.** Show that under the
+   v8 `CrossRefGraph.acyclic` invariant, `evalDeep` with
+   `fuel ≥ mod.statutes.length + 1` agrees with the
+   "infinite-fuel" semantic limit (i.e., further fuel does not
+   change the result). This is the theorem that makes the v8
+   acyclicity hypothesis strictly load-bearing on `evalDeep`'s
+   correctness — without acyclicity the chain length is
+   unbounded and no finite fuel suffices.
 
-2. **Recursive `crossRef` / `applyScope` semantics.** The
-   current branches reduce to v8 `Statute.convicts`, which
-   evaluates the referenced statute under leaf-fact-only
-   semantics — non-recursive at the v9 layer. A follow-up
-   extension would replace `Statute.convicts F` with a deep
-   `Statute.convictsDeep sigma F (n - 1)` call, recursively
-   consulting `sigma` at each cross reference. Termination
-   falls out of the well-founded relation in (1).
+2. **`evalDeep` agreement with v8 `Statute.convicts` on the
+   crossRef-free fragment.** A direct corollary of
+   `evalDeep_toDeep_compat` + the existing
+   `Statute.deepBody_compat`: on the existing surface library
+   (no `crossRef` / `applyScope` leaves), `evalDeep` and v8
+   `convicts` produce the same conviction verdict at any fuel.
+   The proof should be a one-liner once the exception-side
+   correspondence is threaded through.
 
 3. **`crossRef`-bearing soundness lemma.** Strengthen
    `acyclic_canonical_cross_satisfies` so the canonical model
@@ -364,12 +540,14 @@ Deferred to a follow-up session:
    Lemma 6.4'.
 
 The conservative-extension theorem `Statute.deepBody_compat`
-plus the four semantics-smoke theorems
-(`eval_crossRef_resolves`, `eval_applyScope_resolves`, plus
-their missing / zero-fuel variants) form the kernel-checked
-base camp for those follow-ups: they show the v9 layer adds
-capacity without perturbing v4–v8 correctness on the existing
-surface library, and they pin down the `crossRef` / `applyScope`
-branches to exactly the §3 inference rules. -/
+(layer 5) plus the eight semantics-smoke theorems for `eval`
+(layer 6) and `evalDeep` (layer 7 — `evalDeep_toDeep_compat`
++ `evalDeep_crossRef_resolves` + `evalDeep_applyScope_resolves`
++ `_zero_fuel` variants) form the kernel-checked base camp
+for those follow-ups. They show the v9 layer adds capacity
+without perturbing v4–v8 correctness on the existing surface
+library, and they pin down the `crossRef` / `applyScope`
+branches of both `eval` and `evalDeep` to exactly the §3
+inference rules. -/
 
 end Yuho
