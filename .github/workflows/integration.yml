@@ -2,10 +2,6 @@ name: Integration Tests
 
 on:
   workflow_call:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
 
 concurrency:
   group: integration-${{ github.workflow }}-${{ github.ref }}
