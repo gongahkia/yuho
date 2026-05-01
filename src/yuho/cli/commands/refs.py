@@ -256,10 +256,12 @@ def _enumerate_library_sections(root: Path) -> Tuple[List[str], str]:
     root.
 
     Recognised shapes:
-      * ``encoded``   — `<root>/sN_*/statute.yh` directory layout;
-      * ``raw_act``   — `<root>/_raw/act.json` produced by the
+      * ``encoded``         — `<root>/sN_*/statute.yh` directory layout;
+      * ``raw_act``         — `<root>/_raw/act.json` produced by the
         scrape pipelines (e.g. ``scrape_indiacode.py act``);
-      * ``empty``     — directory exists but matches neither shape.
+      * ``encoded+raw_act`` — both present (proof-of-concept encoding
+        plus the wider raw scrape; section-number set is the union);
+      * ``empty``           — directory exists but matches neither shape.
 
     Section numbers are normalised to the bare ``<num>[<suffix>]``
     form with no leading ``s`` (matching `ReferenceGraph.nodes`)."""
@@ -274,22 +276,32 @@ def _enumerate_library_sections(root: Path) -> Tuple[List[str], str]:
         m = pattern.match(child.name)
         if m and (child / "statute.yh").exists():
             encoded.append(m.group(1))
-    if encoded:
-        return sorted(set(encoded), key=_section_sort_key), "encoded"
 
+    raw_nums: List[str] = []
     raw_path = root / _RAW_ACT_RELPATH
+    raw_unreadable = False
     if raw_path.exists():
         try:
             raw = json.loads(raw_path.read_text(encoding="utf-8"))
+            for s in raw.get("sections", []) or []:
+                n = str(s.get("number", "")).strip()
+                if n:
+                    raw_nums.append(n)
         except (OSError, json.JSONDecodeError):
-            return [], "raw_act_unreadable"
-        nums = []
-        for s in raw.get("sections", []) or []:
-            n = str(s.get("number", "")).strip()
-            if n:
-                nums.append(n)
-        return sorted(set(nums), key=_section_sort_key), "raw_act"
+            raw_unreadable = True
 
+    # Both shapes coexist (e.g. IPC: 8 sections encoded as
+    # proof-of-concept + 493-section raw scrape) — union the section-
+    # number sets so phase-1 overlap analysis sees the wider corpus.
+    if encoded and raw_nums:
+        merged = sorted(set(encoded) | set(raw_nums), key=_section_sort_key)
+        return merged, "encoded+raw_act"
+    if encoded:
+        return sorted(set(encoded), key=_section_sort_key), "encoded"
+    if raw_nums:
+        return sorted(set(raw_nums), key=_section_sort_key), "raw_act"
+    if raw_unreadable:
+        return [], "raw_act_unreadable"
     return [], "empty"
 
 
@@ -320,7 +332,7 @@ def run_compare_libraries(
         }
 
     usable = [k for k, v in enumerated.items()
-              if v["kind"] in {"encoded", "raw_act"}]
+              if v["kind"] in {"encoded", "raw_act", "encoded+raw_act"}]
     if not usable:
         click.echo(
             colorize(
