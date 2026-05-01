@@ -11,7 +11,7 @@ benchmarks.
 
 Status key: `[ ]` pending · `[~]` in progress · `(def)` deferred.
 
-Current snapshot (2026-04-30 late evening): **12350 unit tests
+Current snapshot (2026-05-01 early morning): **12461 unit tests
 green · 524 sections at L1+L2 · 524 L3 author-stamped · §6.6
 Lean 4 mechanisation v9 (all 5 soundness lemmas + canonical models
 kernel-checked, multi-statute `canonical_cross_satisfies`
@@ -19,19 +19,26 @@ discharged, cross-library `apply_scope` companion theorems closed,
 `CrossRefGraph.acyclic` linter-invariant mechanised +
 `acyclic_canonical_cross_satisfies` discharge kernel-checked, v9
 `ElementDeep` cross-ref-bearing AST + `crossRef` + `applyScope`
-constructors + fuel-bounded evaluator + `Statute.deepBody_compat`
-conservative-extension theorem + 6 cross-ref semantics-smoke
-theorems kernel-checked + 6 `native_decide` end-to-end deep-eval
-smoke fixtures in `Tests/Smoke.lean`) · structural diff harness
-**524/524 matched** on full corpus (recursive subsection walker
-landed both sides), `--strict` regression gate active
+constructors + fuel-bounded `eval` + truly recursive `evalDeep`
++ `Statute.deepBody_compat` conservative-extension theorem
++ `evalDeep_toDeep_compat` recursive conservative-extension
++ 10 cross-ref semantics-smoke theorems kernel-checked + 13
+`native_decide` end-to-end deep-eval smoke fixtures in
+`Tests/Smoke.lean`) · structural diff harness **524/524 matched**
+on full corpus (recursive subsection walker landed both sides),
+`--strict` regression gate active
 (`make verify-structural-diff-full`) · runtime-eval sweep
-**125/125 rich tests passing** (`make verify-runtime-tests`,
+**139/139 rich tests passing** (`make verify-runtime-tests`,
 wired into `make paper-reproduce`) · §7.8 case-law differential
 testing **n=43** (was n=40; +3 chapter-XXIII fixtures from public
 eLitigation: PP v GED [2022] SGHC 301, PP v GEH [2022] SGHC 301,
 Abdul Ghufran [2025] SGHC 98), **top-1 51.2% / top-3 53.5% /
-top-5 53.5%** (was 47.5% / 47.5% / 47.5%) · **defeats-edge SAT
+top-5 53.5%** (was 47.5% / 47.5% / 47.5%) · **§8 IPC corpus
+scraped 493/493 sections, 0 failures** (`library/indian_penal_code/_raw/act.json`,
+459 KB; scraper supports both legacy-fixture and live-site DOM
+shapes) · **`yuho refs --compare-libraries` phase-1 surface lit**
+— 524 PC ↔ 493 IPC, **399 shared section numbers** (PC 125-only,
+IPC 94-only) · **defeats-edge SAT
 1214/1214 = 100% post-fix** (was 1141/1253 = 91.1% pre-fix; 39
 doctrinal-exclusion edges filtered from corpus, 73 encoder-gap
 edges closed via referencing-host lift + recursive subsection
@@ -134,16 +141,21 @@ relative-href shape (commit `a0bea2af`) and rewrote
 DOM (commit `4f161471`). Index returns 493 sections (s1–s511 with
 gaps for repealed sections).
 
-- [~] **First IPC scrape run.** Background task `b1hn44gaj` — `python
-      scripts/scrape_indiacode.py act --out
-      library/indian_penal_code/_raw/act.json` running at
-      6-second-per-request throttle (~50 min wall time). Spot-check
-      first few section JSONs on completion.
-- [ ] Encode at full coverage (493 IPC sections) using the
+- [x] **First IPC scrape run** completed 2026-05-01: 493/493
+      sections, 0 failures. Output at
+      `library/indian_penal_code/_raw/act.json` (459 KB).
+      Spot-checked s1, s100, s300, s376, s509 — all parse to
+      clean marginal-note + body-text + sub-items shape.
+- [ ] **Encode at full coverage** (493 IPC sections) using the
       agent-dispatch shape from Phase D — months of agent runs.
-- [ ] Comparative analysis tool: `yuho refs --compare-libraries`
-      emitting SCC overlap, divergent amendment paths, sections
-      renumbered / added / repealed.
+      The raw scrape provides the per-section JSON; the encoder
+      converts each into a `library/indian_penal_code/sN_*/statute.yh`.
+- [~] **Comparative analysis tool** — phase 1 shipped: `yuho refs
+      --compare-libraries` emits section-number overlap + per-pair
+      divergence + full-intersection count across N libraries.
+      Tested in `tests/test_refs_compare_libraries.py` (9 tests).
+      Phase 2 (SCC overlap, divergent amendment paths,
+      renumbered/added/repealed) deferred until IPC encoding lands.
 - [ ] **Paper §8 prose** writing the comparative findings.
 
 ---
