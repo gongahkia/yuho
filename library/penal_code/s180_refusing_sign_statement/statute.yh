@@ -2,6 +2,14 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr180-#pr180-
 
+fn is_s180_refusing_sign_statement(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 180 "Refusing to sign statement" effective 1872-01-01 {
     elements {
         /// The offence requires refusal, a statement made by the accused, and a lawful requirement by a legally competent public servant.

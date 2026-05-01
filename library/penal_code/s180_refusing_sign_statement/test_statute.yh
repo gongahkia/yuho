@@ -1,0 +1,25 @@
+/// @meta source=test_statute_for_s180
+referencing penal_code/s180_refusing_sign_statement
+
+struct S180TestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+S180TestCase guilty := S180TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_s180_refusing_sign_statement(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+S180TestCase defended := S180TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_s180_refusing_sign_statement(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+S180TestCase notMadeOut := S180TestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_s180_refusing_sign_statement(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE
