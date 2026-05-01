@@ -3,9 +3,10 @@
 from __future__ import annotations
 
 import json
+import re
 import sys
 from pathlib import Path
-from typing import Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 import click
 
@@ -18,6 +19,10 @@ from yuho.library.reference_graph import (
 
 
 _DEFAULT_LIBRARY = Path("library/penal_code")
+_DEFAULT_COMPARE_LIBRARIES: Tuple[Path, ...] = (
+    Path("library/penal_code"),
+    Path("library/indian_penal_code"),
+)
 
 
 def run_refs(
@@ -223,3 +228,180 @@ def _short(text: str, width: int = 60) -> str:
     if len(text) <= width:
         return text
     return text[: width - 1].rstrip() + "…"
+
+
+# =====================================================================
+# §8 cross-jurisdiction comparative-analysis surface (`--compare-libraries`)
+# ---------------------------------------------------------------------
+# Phase 1 (this skeleton, 2026-04-30): structural-overlap + divergence
+# at the bare-section-number level. Works against any library shape:
+# * an encoded library (`library/penal_code/sN_*/statute.yh`) — full
+#   reference-graph + SCC analysis is available;
+# * a raw scrape (`library/indian_penal_code/_raw/act.json`) — only
+#   the section-number set is available; SCC/edge comparison is
+#   skipped with a documented note.
+#
+# Phase 2 (deferred until IPC encoding lands): SCC-overlap diff,
+# divergent-amendment-paths surfacing, sections renumbered/added/
+# repealed comparison. Requires both libraries to be encoded as `.yh`
+# so `build_reference_graph` can run on each.
+# =====================================================================
+
+
+_RAW_ACT_RELPATH = Path("_raw") / "act.json"
+
+
+def _enumerate_library_sections(root: Path) -> Tuple[List[str], str]:
+    """Return (sorted_section_numbers, library_kind) for a library
+    root.
+
+    Recognised shapes:
+      * ``encoded``   — `<root>/sN_*/statute.yh` directory layout;
+      * ``raw_act``   — `<root>/_raw/act.json` produced by the
+        scrape pipelines (e.g. ``scrape_indiacode.py act``);
+      * ``empty``     — directory exists but matches neither shape.
+
+    Section numbers are normalised to the bare ``<num>[<suffix>]``
+    form with no leading ``s`` (matching `ReferenceGraph.nodes`)."""
+    if not root.exists() or not root.is_dir():
+        return [], "missing"
+
+    encoded: List[str] = []
+    pattern = re.compile(r"^s(\d+[A-Z]*)_")
+    for child in root.iterdir():
+        if not child.is_dir() or child.name.startswith("_"):
+            continue
+        m = pattern.match(child.name)
+        if m and (child / "statute.yh").exists():
+            encoded.append(m.group(1))
+    if encoded:
+        return sorted(set(encoded), key=_section_sort_key), "encoded"
+
+    raw_path = root / _RAW_ACT_RELPATH
+    if raw_path.exists():
+        try:
+            raw = json.loads(raw_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            return [], "raw_act_unreadable"
+        nums = []
+        for s in raw.get("sections", []) or []:
+            n = str(s.get("number", "")).strip()
+            if n:
+                nums.append(n)
+        return sorted(set(nums), key=_section_sort_key), "raw_act"
+
+    return [], "empty"
+
+
+def _section_sort_key(num: str) -> Tuple[int, str]:
+    """Sort `123` < `123A` < `124`. Falls back to lexicographic on
+    parse failure."""
+    m = re.match(r"^(\d+)([A-Z]*)$", num)
+    if m:
+        return (int(m.group(1)), m.group(2))
+    return (10**9, num)
+
+
+def run_compare_libraries(
+    libraries: Tuple[Path, ...],
+    json_output: bool,
+) -> int:
+    """Implementation of ``yuho refs --compare-libraries``.
+
+    Returns the process exit code (0 = success even when libraries
+    are partial, 1 = no usable libraries found at all)."""
+    enumerated: Dict[str, Dict[str, Any]] = {}
+    for lib in libraries:
+        sections, kind = _enumerate_library_sections(lib)
+        enumerated[str(lib)] = {
+            "kind": kind,
+            "n_sections": len(sections),
+            "sections": sections,
+        }
+
+    usable = [k for k, v in enumerated.items()
+              if v["kind"] in {"encoded", "raw_act"}]
+    if not usable:
+        click.echo(
+            colorize(
+                "no usable library found — pass --library-path for each "
+                "or run scripts/scrape_*.py first",
+                Colors.RED,
+            ),
+            err=True,
+        )
+        return 1
+
+    # Pairwise overlap on section-number sets. With two libraries we
+    # report a single overlap; with N>2 we emit each pair plus the
+    # full-intersection count.
+    lib_keys = list(enumerated.keys())
+    pairs: List[Dict[str, Any]] = []
+    for i in range(len(lib_keys)):
+        for j in range(i + 1, len(lib_keys)):
+            a, b = lib_keys[i], lib_keys[j]
+            sa = set(enumerated[a]["sections"])
+            sb = set(enumerated[b]["sections"])
+            pairs.append({
+                "a": a,
+                "b": b,
+                "shared": sorted(sa & sb, key=_section_sort_key),
+                "only_a": sorted(sa - sb, key=_section_sort_key),
+                "only_b": sorted(sb - sa, key=_section_sort_key),
+            })
+    full_intersection = sorted(
+        set.intersection(*(set(enumerated[k]["sections"]) for k in lib_keys))
+        if lib_keys else set(),
+        key=_section_sort_key,
+    )
+
+    payload: Dict[str, Any] = {
+        "libraries": enumerated,
+        "pairs": pairs,
+        "full_intersection_count": len(full_intersection),
+        "full_intersection": full_intersection,
+        "phase": "phase-1-section-number-overlap",
+        "phase_2_pending": (
+            "SCC-overlap, divergent-amendment-paths, renumbered/added/"
+            "repealed analysis pending IPC corpus encoding (deferred per "
+            "TODO §8 — months of agent runs to encode 493 IPC sections)"
+        ),
+    }
+
+    if json_output:
+        click.echo(json.dumps(payload, indent=2, sort_keys=True))
+        return 0
+
+    click.echo(colorize("=== cross-library section overlap (Phase 1) ===",
+                        Colors.BOLD))
+    click.echo("")
+    for k, v in enumerated.items():
+        kind = v["kind"]
+        tag_color = (Colors.GREEN if kind == "encoded"
+                     else Colors.CYAN if kind == "raw_act"
+                     else Colors.YELLOW)
+        click.echo(f"  {colorize('['+kind+']', tag_color)} {k}: "
+                   f"{v['n_sections']} sections")
+    click.echo("")
+    for p in pairs:
+        click.echo(colorize(f"--- {p['a']}  ↔  {p['b']} ---", Colors.BOLD))
+        click.echo(f"  shared:  {len(p['shared'])}")
+        click.echo(f"  only-a:  {len(p['only_a'])}")
+        click.echo(f"  only-b:  {len(p['only_b'])}")
+        if p["shared"]:
+            sample = ", ".join("s" + n for n in p["shared"][:10])
+            tail = "" if len(p["shared"]) <= 10 else f"  (+{len(p['shared']) - 10} more)"
+            click.echo(f"    sample shared: {sample}{tail}")
+    click.echo("")
+    click.echo(colorize(
+        f"full intersection across {len(lib_keys)} libraries: "
+        f"{len(full_intersection)} sections",
+        Colors.BOLD,
+    ))
+    click.echo("")
+    click.echo(colorize(
+        "Phase 2 (SCC-overlap, amendment paths, renumbered/added/"
+        "repealed) pending IPC corpus encoding.",
+        Colors.YELLOW,
+    ))
+    return 0

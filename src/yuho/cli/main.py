@@ -1299,6 +1299,14 @@ def eval(ctx: click.Context, file: str, json_output: bool) -> None:
               help="Print the full graph summary when no section is given")
 @click.option("--scc", "scc", is_flag=True,
               help="Run SCC analysis: list non-trivial cycles + lint warnings")
+@click.option("--compare-libraries", "compare_libraries", is_flag=True,
+              help="Compare section-number overlap across multiple libraries "
+                   "(default: library/penal_code + library/indian_penal_code). "
+                   "§8 cross-jurisdiction comparative-encoding skeleton.")
+@click.option("--library-path", "library_paths", multiple=True,
+              type=click.Path(),
+              help="Library root for --compare-libraries (repeatable; "
+                   "overrides the default pair).")
 @click.option("--json", "json_output", is_flag=True, help="Emit JSON instead of human text")
 @click.pass_context
 def refs(
@@ -1311,13 +1319,16 @@ def refs(
     transitive: bool,
     show_graph: bool,
     scc: bool,
+    compare_libraries: bool,
+    library_paths: tuple,
     json_output: bool,
 ) -> None:
     """Query the cross-section reference graph (G10).
 
     With a section number, prints the edges entering and/or leaving that
     section. Without a section, prints aggregate stats; pass --graph to dump
-    the full graph.
+    the full graph. Pass --compare-libraries to enter the §8
+    cross-jurisdiction overlap surface.
 
     Examples:
         yuho refs s415               # in + out for s415
@@ -1326,8 +1337,23 @@ def refs(
         yuho refs                    # full-graph stats
         yuho refs --graph            # full graph summary
         yuho refs s415 --json
+        yuho refs --compare-libraries
+        yuho refs --compare-libraries --library-path library/penal_code \\
+                                      --library-path library/indian_penal_code \\
+                                      --json
     """
-    from yuho.cli.commands.refs import run_refs
+    from yuho.cli.commands.refs import (
+        _DEFAULT_COMPARE_LIBRARIES,
+        run_compare_libraries,
+        run_refs,
+    )
+
+    if compare_libraries:
+        from pathlib import Path as _Path
+        libs = (tuple(_Path(p) for p in library_paths)
+                if library_paths else _DEFAULT_COMPARE_LIBRARIES)
+        rc = run_compare_libraries(libs, json_output)
+        sys.exit(rc)
 
     if in_only and out_only:
         direction = "both"
