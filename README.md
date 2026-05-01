@@ -10,6 +10,7 @@
 
 <p align="center">
   <a href="https://github.com/gongahkia/yuho/actions/workflows/release.yml"><img src="https://github.com/gongahkia/yuho/actions/workflows/release.yml/badge.svg" alt="Release"/></a>
+  <a href="https://doi.org/10.5281/zenodo.19935537"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.19935537.svg" alt="Zenodo DOI"/></a>
   <a href="https://pypi.org/project/yuho/"><img src="https://img.shields.io/pypi/v/yuho" alt="PyPI"/></a>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"/></a>
   <img src="https://img.shields.io/badge/python-3.10%2B-blue.svg" alt="Python 3.10+"/>
