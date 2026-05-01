@@ -1,0 +1,25 @@
+/// @meta source=test_statute_for_s181
+referencing penal_code/s181_false_statement_oath_public_servant_person
+
+struct S181TestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+S181TestCase guilty := S181TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_s181_false_statement_oath(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+S181TestCase defended := S181TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_s181_false_statement_oath(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+S181TestCase notMadeOut := S181TestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_s181_false_statement_oath(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE
