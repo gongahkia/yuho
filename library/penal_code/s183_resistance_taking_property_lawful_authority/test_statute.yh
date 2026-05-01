@@ -1,0 +1,25 @@
+/// @meta source=test_statute_for_s183
+referencing penal_code/s183_resistance_taking_property_lawful_authority
+
+struct S183TestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+S183TestCase guilty := S183TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_s183_resistance_lawful_taking(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+S183TestCase defended := S183TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_s183_resistance_lawful_taking(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+S183TestCase notMadeOut := S183TestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_s183_resistance_lawful_taking(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE

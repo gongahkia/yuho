@@ -3,6 +3,14 @@
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr183-#pr183-
 /// @amendment [15/2019]
 
+fn is_s183_resistance_lawful_taking(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 183 "Resistance to taking of property by lawful authority of public servant" effective 1872-01-01 effective 2020-01-01 {
     elements {
         /// Section 183 requires resistance to a lawful taking of property by a public servant, with knowledge or reason to believe that status.
