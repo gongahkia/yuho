@@ -3,6 +3,14 @@
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr184-#pr184-
 /// @amendment [15/2019]
 
+fn is_s184_obstructing_lawful_sale(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 184 "Obstructing sale of property offered for sale by authority of public servant" effective 1872-01-01 effective 2020-01-01 {
     definitions {
         sale_offered_by_lawful_authority := "Any sale of property offered for sale by the lawful authority of any public servant as such.";

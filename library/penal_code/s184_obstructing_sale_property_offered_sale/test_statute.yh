@@ -1,0 +1,25 @@
+/// @meta source=test_statute_for_s184
+referencing penal_code/s184_obstructing_sale_property_offered_sale
+
+struct S184TestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+S184TestCase guilty := S184TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_s184_obstructing_lawful_sale(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+S184TestCase defended := S184TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_s184_obstructing_lawful_sale(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+S184TestCase notMadeOut := S184TestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_s184_obstructing_lawful_sale(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE
