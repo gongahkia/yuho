@@ -47,6 +47,15 @@ code surfaced fourteen distinct grammar gaps (G1–G14), all either resolved
 in the parser or rerouted to a fidelity-diagnostic linter; the catalogue
 is documented in [`docs/researcher/phase-c-gaps.md`](./docs/researcher/phase-c-gaps.md).
 
+A second corpus — the **Indian Penal Code 1860** — ships as a phase-1
+cross-jurisdiction proof: 493 sections fully scraped (raw JSON in
+[`library/indian_penal_code/_raw/act.json`](./library/indian_penal_code/_raw/));
+8 representative sections (s300 / s302 / s375 / s376 / s378 / s420 /
+s497 / s509) fully encoded as `.yh` to test grammar fit. The
+[`yuho refs --compare-libraries`](./src/yuho/cli/commands/refs.py) tool
+emits structural-overlap stats across both libraries: 524 PC ↔ 493 IPC
+share **399 section numbers**.
+
 Around the language sits a complete toolchain — seven transpilers
 (including Akoma Ntoso for cross-jurisdictional interop), an LSP, an
 MCP server, a VS Code extension, and Z3 / Alloy verification hookups —
@@ -125,9 +134,9 @@ covers the same ground in less depth.
 | **Editors** | LSP (hover, inlay hints, completion, code lens, fidelity diagnostics) · VS Code · Word add-in · browser extension · static explorer site |
 | **AI integration** | MCP server (tools, resources, prompts) usable from Claude Desktop / Claude Code / Codex CLI / Cursor |
 | **Verification** | Z3 (exception-priority + cross-section conflict) · Alloy (bounded element-combination enumeration) |
-| **Analytical tools** | Counter-example explorer (`yuho explore`) · charge recommender (`yuho recommend`, structural ranking, not legal advice) · fact-pattern simulator |
+| **Analytical tools** | Counter-example explorer (`yuho explore`) · charge recommender (`yuho recommend`, structural ranking, not legal advice) · fact-pattern simulator · cross-library comparator (`yuho refs --compare-libraries`) |
 | **Coverage harness** | L1 (parse) · L2 (build + lint + fidelity) · L3 (11-point human audit) |
-| **Library** | 524 / 524 sections of the SG Penal Code 1871 encoded, stamped, and indexed |
+| **Library** | 524 / 524 sections of the SG Penal Code 1871 encoded, stamped, and indexed; 493 IPC sections raw-scraped + 8 phase-1 encoded for comparative analysis |
 
 ---
 
@@ -152,13 +161,20 @@ will land at `docs/architecture.svg` once the Mermaid CLI build runs.
 
 | Metric | Value |
 |---|---|
-| Sections encoded | 524 / 524 |
+| SG sections encoded | 524 / 524 |
 | L1 (parse) | 524 / 524 |
 | L2 (build + lint) | 524 / 524 |
 | L3 (author-stamped) | 524 / 524 |
 | Grammar gaps (G1–G14) | 10 fixed · 2 not-a-gap · 1 lint · 1 deferred |
+| Behavioural-test companions | 139 / 524 (`make verify-runtime-tests` gated) |
+| Verbose-mermaid render | 524 / 524 (0 orphan nodes) |
+| Structural-diff Lean ↔ Python | 524 / 524 matched (`make verify-structural-diff-full`) |
+| Defeats-edge SAT | 1214 / 1214 (post-fix; pre-fix 1141 / 1253 = 91.1%) |
+| Case-law fixtures | n=43, top-1 51.2% / top-3 53.5% / constrained-consistency 100% |
+| §6.6 Lean mechanisation | v9, 0 `sorry`s, kernel-checked under Lean 4.10.0 |
+| IPC corpus | 493 raw-scraped, 8 phase-1 encoded |
 | Implementation SLOC | ~38.7k Python + 900 grammar.js |
-| Library SLOC | ~16.4k `.yh` |
+| Library SLOC | ~16.4k `.yh` (SG) + ~1k (IPC phase-1) |
 
 Numbers regenerate from `library/penal_code/_coverage/coverage.json` via
 `scripts/coverage_report.py`.
