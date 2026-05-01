@@ -1,0 +1,25 @@
+/// @meta source=test_statute_for_s175
+referencing penal_code/s175_omission_produce_document_electronic_record
+
+struct S175TestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+S175TestCase guilty := S175TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_s175_omission_produce_document(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+S175TestCase defended := S175TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_s175_omission_produce_document(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+S175TestCase notMadeOut := S175TestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_s175_omission_produce_document(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE

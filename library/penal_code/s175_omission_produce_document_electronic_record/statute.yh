@@ -3,6 +3,14 @@
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr175-#pr175-
 /// @amendment [15/2019]
 
+fn is_s175_omission_produce_document(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 175 "Omission to produce document or electronic record to public servant by person legally bound to produce such document or electronic record" effective 1872-01-01 effective 2020-01-01 {
     definitions {
         document_or_electronic_record := "Any document or electronic record which the person is legally bound to produce or deliver up to any public servant, as such. [15/2019]";
