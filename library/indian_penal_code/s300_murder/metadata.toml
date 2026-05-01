@@ -1,0 +1,24 @@
+[statute]
+section_number = "300"
+title = "Murder"
+jurisdiction = "India"
+version = "1.0.0"
+
+[contributor]
+name = "Yuho Team"
+email = ""
+
+[description]
+summary = "Indian Penal Code 1860 s300 — culpable homicide is murder under any of four mens-rea limbs (intention to kill / intention to cause likely-fatal injury / intention to cause sufficient-in-ordinary-course injury / knowledge of imminent danger), subject to five general exceptions (grave and sudden provocation, private-defence excess, public-servant excess, sudden fight, consent of victim above 18). Mirrors Singapore Penal Code 1871 s300 in lineage; modern divergence sits in penalty (s302) and the s300A/B amendments not present in IPC."
+source = "Indian Penal Code 1860, Section 300"
+
+[verification]
+last_verified = "2026-05-01"
+sso_url = "https://www.advocatekhoj.com/library/bareacts/indianpenalcode/300.php"
+verified_by = "Yuho Team"
+disclaimer = "Educational purposes only. Cross-reference with India Code or AdvocateKhoj for canonical text. Encoding captures the structural shape of the offence; not a substitute for legal advice."
+
+[comparative]
+sg_counterpart = "300"
+shared_lineage = true
+divergence_notes = "SG s300 elements + 5 exceptions track IPC verbatim; modern divergence in s300A/B (causing death by act amounting to culpable homicide; death by reckless driving) which IPC lacks. Penalty divergence in s302 — IPC mandates death OR life; SG offers either at court's discretion."

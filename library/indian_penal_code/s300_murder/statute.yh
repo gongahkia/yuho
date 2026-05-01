@@ -1,0 +1,62 @@
+/// @jurisdiction india
+/// @meta act=Indian Penal Code 1860
+/// @meta source=https://www.advocatekhoj.com/library/bareacts/indianpenalcode/300.php
+
+fn is_ipc_s300_murder(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 300 "Murder" effective 1860-10-06 {
+    elements {
+        /// IPC s300 mirrors SG s300 — culpable homicide is murder under any of four mens-rea limbs, subject to five general exceptions.
+        all_of {
+            actus_reus death := "Culpable homicide causing death of a person";
+            any_of {
+                mens_rea intent_to_kill := "Act done with the intention of causing death";
+                mens_rea intent_likely_fatal := "Act done with the intention of causing such bodily injury as the offender knows to be likely to cause the death of the person to whom the harm is caused";
+                mens_rea intent_sufficient_injury := "Act done with the intention of causing bodily injury to any person and the bodily injury intended to be inflicted is sufficient in the ordinary course of nature to cause death";
+                mens_rea knowledge_imminently_dangerous := "Person committing the act knows that it is so imminently dangerous that it must in all probability cause death, or such bodily injury as is likely to cause death, and commits such act without any excuse for incurring the risk";
+            }
+        }
+    }
+
+    exception ipc_exception_1_provocation {
+        "grave and sudden provocation"
+        "culpable homicide is not murder if the offender, whilst deprived of the power of self-control by grave and sudden provocation, causes the death of the person who gave the provocation or causes the death of any other person by mistake or accident"
+        when grave_and_sudden_provocation
+        priority 1
+    }
+    exception ipc_exception_2_private_defence_excess {
+        "exceeding right of private defence"
+        "culpable homicide is not murder if the offender, in the exercise in good faith of the right of private defence of person or property, exceeds the power given to him by law and causes the death of the person against whom he is exercising such right of defence without premeditation, and without any intention of doing more harm than is necessary for the purpose of such defence"
+        when private_defence_excess_in_good_faith
+        priority 2
+    }
+    exception ipc_exception_3_public_servant_excess {
+        "public servant exceeding lawful power"
+        "culpable homicide is not murder if the offender, being a public servant or aiding a public servant acting for the advancement of public justice, exceeds the powers given to him by law, and causes death by doing an act which he, in good faith, believes to be lawful and necessary for the due discharge of his duty as such public servant and without ill-will"
+        when public_servant_excess_good_faith
+        priority 3
+    }
+    exception ipc_exception_4_sudden_fight {
+        "sudden fight without premeditation"
+        "culpable homicide is not murder if it is committed without premeditation in a sudden fight in the heat of passion upon a sudden quarrel and without the offender having taken undue advantage or acted in a cruel or unusual manner"
+        when sudden_fight_no_premeditation
+        priority 4
+    }
+    exception ipc_exception_5_consent {
+        "consent of person above 18"
+        "culpable homicide is not murder when the person whose death is caused, being above the age of eighteen years, suffers death or takes the risk of death with his own consent"
+        when victim_consent_above_18
+        priority 5
+    }
+
+    /// Penalty defined in s302. Sentinel here so structural-shape lint passes.
+    penalty {
+        supplementary := "Penalty defined in section 302 (Punishment for murder).";
+    }
+}

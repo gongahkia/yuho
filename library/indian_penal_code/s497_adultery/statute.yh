@@ -1,0 +1,31 @@
+/// @jurisdiction india
+/// @meta act=Indian Penal Code 1860
+/// @meta source=https://www.advocatekhoj.com/library/bareacts/indianpenalcode/497.php
+
+fn is_ipc_s497_adultery(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 497 "Adultery" effective 1860-10-06 {
+    /// IPC s497 — sexual intercourse with another man's wife without his consent or connivance, where the man knew or had reason to believe the woman was married. Asymmetric: only the male partner is criminally liable; the wife is not punishable even as an abettor.
+    /// Note: this section was struck down by the Indian Supreme Court in Joseph Shine v Union of India (2018) 3 SCC 39 as unconstitutional, but remains on the statute books pending parliamentary repeal. The encoding captures the textual shape; the operational effect is nil post-2018.
+    elements {
+        all_of {
+            actus_reus sexual_intercourse := "Has sexual intercourse with a person";
+            circumstance victim_is_anothers_wife := "The person is the wife of another man";
+            mens_rea knowledge_of_marriage := "Knows or has reason to believe that the woman is the wife of another man";
+            circumstance no_husband_consent := "The sexual intercourse is without the consent or connivance of the husband";
+            circumstance not_rape := "The sexual intercourse does not amount to the offence of rape";
+        }
+    }
+
+    penalty or_both {
+        imprisonment := 0 years .. 5 years;
+        fine := unlimited;
+        supplementary := "Shall be punished with imprisonment of either description for a term which may extend to five years, or with fine, or with both. The wife shall not be punishable as an abettor.";
+    }
+}

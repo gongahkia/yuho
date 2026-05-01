@@ -1,0 +1,31 @@
+/// @jurisdiction india
+/// @meta act=Indian Penal Code 1860
+/// @meta source=https://www.advocatekhoj.com/library/bareacts/indianpenalcode/420.php
+
+fn is_ipc_s420_cheating_inducing_delivery(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 420 "Cheating and dishonestly inducing delivery of property" effective 1860-10-06 {
+    /// IPC s420 — aggravated cheating where the deception induces the victim to part with property or alter / sign / seal a valuable security. Single-tier 7-year + fine penalty.
+    elements {
+        all_of {
+            actus_reus cheats := "Cheats (within the meaning of section 415)";
+            mens_rea dishonest_inducement := "Thereby dishonestly induces the person deceived";
+            any_of {
+                circumstance delivers_property := "Induces the person deceived to deliver any property to any person";
+                circumstance alters_valuable_security := "Induces the person deceived to make, alter or destroy the whole or any part of a valuable security, or anything which is signed or sealed, and which is capable of being converted into a valuable security";
+            }
+        }
+    }
+
+    penalty cumulative {
+        imprisonment := 0 years .. 7 years;
+        fine := unlimited;
+        supplementary := "Shall be punished with imprisonment of either description for a term which may extend to seven years, and shall also be liable to fine.";
+    }
+}

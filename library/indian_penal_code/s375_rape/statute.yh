@@ -1,0 +1,41 @@
+/// @jurisdiction india
+/// @meta act=Indian Penal Code 1860
+/// @meta source=https://www.advocatekhoj.com/library/bareacts/indianpenalcode/375.php
+
+fn is_ipc_s375_rape(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 375 "Rape" effective 1860-10-06 {
+    /// IPC s375 (pre-2013 form per AdvocateKhoj). Six descriptions of the offence; a marital exception. The 2013 Criminal Law (Amendment) Act materially expanded this in India proper, but the text scraped from AdvocateKhoj retains the older shape — see metadata.toml for the divergence note.
+    elements {
+        all_of {
+            actus_reus sexual_intercourse := "A man has sexual intercourse with a woman";
+            any_of {
+                circumstance against_will := "Sexual intercourse against the woman's will";
+                circumstance without_consent := "Sexual intercourse without the woman's consent";
+                mens_rea fear_induced_consent := "Sexual intercourse with consent obtained by putting the woman or any person in whom she is interested in fear of death or of hurt";
+                mens_rea identity_induced_consent := "Sexual intercourse with consent given because the woman believes the man is another man to whom she is or believes herself to be lawfully married";
+                circumstance unsoundness_or_intoxication := "Sexual intercourse with consent given when, by reason of unsoundness of mind or intoxication or the administration by the man of any stupefying or unwholesome substance, the woman is unable to understand the nature and consequences of that to which she gives consent";
+                circumstance under_age := "Sexual intercourse with a woman under sixteen years of age, whether with or without her consent";
+            }
+        }
+    }
+
+    exception ipc_marital_exception {
+        "marital exception (sexual intercourse by a man with his own wife, the wife not being under fifteen years of age, is not rape)"
+        "no s375 conviction where the offender and victim are married and the wife is at or above the age of fifteen"
+        when marital_exception_wife_15_plus
+        priority 1
+    }
+
+    /// Penalty for s375 lives in s376. Sentinel here so the structural-shape
+    /// lint passes; operational penalty resolved via the s376 referencing chain.
+    penalty {
+        supplementary := "Penalty defined in section 376 (Punishment for rape).";
+    }
+}

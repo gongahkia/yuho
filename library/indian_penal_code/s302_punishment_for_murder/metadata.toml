@@ -1,0 +1,24 @@
+[statute]
+section_number = "302"
+title = "Punishment for murder"
+jurisdiction = "India"
+version = "1.0.0"
+
+[contributor]
+name = "Yuho Team"
+email = ""
+
+[description]
+summary = "Indian Penal Code 1860 s302 — punishment provision for murder (s300). Mandatory death OR life imprisonment, plus fine. SG s302 covers the same penalty space but, post-2013 amendments, gives the court discretion between death and life imprisonment for non-aggravated murder; IPC retains the harder mandatory floor."
+source = "Indian Penal Code 1860, Section 302"
+
+[verification]
+last_verified = "2026-05-01"
+sso_url = "https://www.advocatekhoj.com/library/bareacts/indianpenalcode/302.php"
+verified_by = "Yuho Team"
+disclaimer = "Educational purposes only. Cross-reference with India Code or AdvocateKhoj for canonical text. Encoding captures the structural shape of the penalty; not a substitute for legal advice."
+
+[comparative]
+sg_counterpart = "302"
+shared_lineage = true
+divergence_notes = "SG amended 2013-01-01 to give the court discretion between death and life imprisonment for s300(a)-(d) murder; IPC retains the mandatory-death-or-life shape with court discretion only on which alternative."

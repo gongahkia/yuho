@@ -1,0 +1,24 @@
+[statute]
+section_number = "509"
+title = "Word, gesture or act intended to insult the modesty of a woman"
+jurisdiction = "India"
+version = "1.0.0"
+
+[contributor]
+name = "Yuho Team"
+email = ""
+
+[description]
+summary = "Indian Penal Code 1860 s509 — gendered offence criminalising words/gestures/objects/intrusion intended to insult a woman's modesty. 1 year simple imprisonment + fine."
+source = "Indian Penal Code 1860, Section 509"
+
+[verification]
+last_verified = "2026-05-01"
+sso_url = "https://www.advocatekhoj.com/library/bareacts/indianpenalcode/509.php"
+verified_by = "Yuho Team"
+disclaimer = "Educational purposes only."
+
+[comparative]
+sg_counterpart = "377BA"
+shared_lineage = true
+divergence_notes = "Headline divergence: SG repealed s509 in the 2019 Criminal Law Reform Act and replaced it with s377BA — gender-neutral 'word, gesture or act intended to insult modesty of any person'. IPC retained the gendered (woman-only-victim) form. The s509 → s377BA migration is the textbook example of doctrinal modernisation that IPC has not undertaken at this corpus snapshot."

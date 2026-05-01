@@ -1,0 +1,36 @@
+/// @jurisdiction india
+/// @meta act=Indian Penal Code 1860
+/// @meta source=https://www.advocatekhoj.com/library/bareacts/indianpenalcode/378.php
+
+fn is_ipc_s378_theft(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 378 "Theft" effective 1860-10-06 {
+    /// IPC s378 mirrors SG s378 nearly verbatim — dishonest intent + moveable property + without consent + moves the property. Five explanations clarify the boundaries (attached-to-earth qualification, severance-as-movement, animals, consent, removing obstacles).
+    elements {
+        all_of {
+            mens_rea dishonest_intent := "Intending to take dishonestly any moveable property";
+            actus_reus moves_property := "Moves that property in order to such taking";
+            circumstance from_possession := "The property is moved out of the possession of any person";
+            circumstance without_consent := "The taking is without that person's consent";
+        }
+    }
+
+    definitions {
+        explanation_1_attached_to_earth := "A thing so long as it is attached to the earth, not being movable property, is not the subject of theft; but it becomes capable of being the subject of theft as soon as it is severed from the earth.";
+        explanation_2_severance_as_movement := "A moving effected by the same act which affects the severance may be a theft.";
+        explanation_3_obstacle_removal := "A person is said to cause a thing to move by removing an obstacle which prevented it from moving or by separating it from any other thing, as well as by actually moving it.";
+        explanation_4_animals := "A person, who by any means causes an animal to move, is said to move that animal, and to move everything which, in consequence of the motion so caused, is moved by that animal.";
+        explanation_5_consent := "The consent mentioned in the definition may be express or implied, and may be given either by the person in possession, or by any person having for that purpose authority either express or implied.";
+    }
+
+    /// Penalty defined in section 379. Sentinel here so structural-shape lint passes.
+    penalty {
+        supplementary := "Penalty defined in section 379 (Punishment for theft).";
+    }
+}

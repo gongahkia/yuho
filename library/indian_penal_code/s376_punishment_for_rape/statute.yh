@@ -1,0 +1,50 @@
+/// @jurisdiction india
+/// @meta act=Indian Penal Code 1860
+/// @meta source=https://www.advocatekhoj.com/library/bareacts/indianpenalcode/376.php
+
+referencing indian_penal_code/s375_rape
+
+fn is_ipc_s376_punishment_rape(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 376 "Punishment for rape" effective 1860-10-06 {
+    /// Two-tier penalty: ordinary rape carries 7-life imprisonment + fine; aggravated forms (police custody, public-servant custody, jail/hospital staff abuse, gang rape, repeat offence) carry 10-life with a hard floor.
+
+    subsection (1) {
+        elements {
+            circumstance ordinary_rape := "Whoever, except in the cases provided for by subsection (2), commits rape";
+        }
+
+        penalty cumulative {
+            imprisonment := 7 years .. 99 years;
+            fine := unlimited;
+            supplementary := "Punished with imprisonment of either description for a term which shall not be less than seven years but which may be for life or for a term which may extend to ten years and shall also be liable to fine, unless the woman raped is his own wife and is not under twelve years of age, in which case he shall be punished with imprisonment of either description for a term which may extend to two years or with fine or with both. Provided that the court may, for adequate and special reasons to be mentioned in the judgment, impose a sentence of imprisonment for a term of less than seven years.";
+        }
+    }
+
+    subsection (2) {
+        elements {
+            /// Aggravated forms: any one of the listed circumstances triggers the heavier penalty.
+            any_of {
+                circumstance police_custody := "Being a police officer commits rape within the limits of the police station to which he is appointed, or in the premises of any station house, or on a woman in his custody or in the custody of a police officer subordinate to him";
+                circumstance public_servant_custody := "Being a public servant takes advantage of his official position and commits rape on a woman in his custody as such public servant or in the custody of a public servant subordinate to him";
+                circumstance jail_hospital_staff := "Being on the management or on the staff of a jail, remand home or other place of custody established by or under any law for the time being in force, or of a women's or children's institution, takes advantage of his official position and commits rape on any inmate of such jail, remand home, place or institution";
+                circumstance hospital_staff := "Being on the management or on the staff of a hospital, takes advantage of his official position and commits rape on a woman in that hospital";
+                circumstance pregnant_woman := "Commits rape on a woman knowing her to be pregnant";
+                circumstance under_twelve := "Commits rape on a woman when she is under twelve years of age";
+                circumstance gang_rape := "Commits gang rape";
+            }
+        }
+
+        penalty cumulative {
+            imprisonment := 10 years .. 99 years;
+            fine := unlimited;
+            supplementary := "Punished with rigorous imprisonment for a term which shall not be less than ten years but which may be for life and shall also be liable to fine. Provided that the court may, for adequate and special reasons to be mentioned in the judgment, impose a sentence of imprisonment of either description for a term of less than ten years.";
+        }
+    }
+}

@@ -1,0 +1,43 @@
+/// @jurisdiction india
+/// @meta act=Indian Penal Code 1860
+/// @meta source=https://www.advocatekhoj.com/library/bareacts/indianpenalcode/509.php
+
+fn is_ipc_s509_insulting_modesty_woman(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
+statute 509 "Word, gesture or act intended to insult the modesty of a woman" effective 1860-10-06 {
+    /// IPC s509 — gendered offence (only women as victims): intent to insult modesty + utterance/gesture/object/intrusion + intent to be heard or seen by such woman.
+    elements {
+        all_of {
+            mens_rea insult_modesty := "Intending to insult the modesty of any woman";
+            any_of {
+                all_of {
+                    any_of {
+                        actus_reus utter_word := "Utters any word";
+                        actus_reus make_sound := "Makes any sound";
+                    }
+                    mens_rea heard_by_woman := "Intending that such word or sound shall be heard by such woman";
+                }
+                all_of {
+                    any_of {
+                        actus_reus make_gesture := "Makes any gesture";
+                        actus_reus exhibit_object := "Exhibits any object";
+                    }
+                    mens_rea seen_by_woman := "Intending that such gesture or object shall be seen by such woman";
+                }
+                actus_reus intrude_privacy := "Intrudes upon the privacy of such woman";
+            }
+        }
+    }
+
+    penalty or_both {
+        imprisonment := 0 days .. 1 year;
+        fine := unlimited;
+        supplementary := "Shall be punished with simple imprisonment for a term which may extend to one year, or with fine, or with both.";
+    }
+}
