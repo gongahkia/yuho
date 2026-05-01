@@ -5,6 +5,14 @@
 /// @amendment [15/2019; 40/2019]
 /// @amendment [Act 25 of 2021 wef 01/04/2022]
 
+fn is_s174_failure_attend_obedience(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 174 "Failure to attend in obedience to order from public servant" effective 1872-01-01 effective 2019-12-31 effective 2022-04-01 {
     subsection (1) {
         elements {

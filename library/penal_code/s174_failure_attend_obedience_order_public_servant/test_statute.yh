@@ -1,0 +1,25 @@
+/// @meta source=test_statute_for_s174
+referencing penal_code/s174_failure_attend_obedience_order_public_servant
+
+struct S174TestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+S174TestCase guilty := S174TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_s174_failure_attend_obedience(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+S174TestCase defended := S174TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_s174_failure_attend_obedience(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+S174TestCase notMadeOut := S174TestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_s174_failure_attend_obedience(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE
