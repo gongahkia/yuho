@@ -2,6 +2,15 @@
 /// @meta act=Penal Code 1871
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr176-#pr176-
 /// @amendment [15/2019]
+
+fn is_s176_omission_give_notice(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 176 "Omission to give notice or information to public servant by person legally bound to give such notice or information" effective 1872-01-01 effective 2020-01-01 {
     subsection (1) {
         elements {
