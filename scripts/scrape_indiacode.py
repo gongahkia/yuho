@@ -160,6 +160,24 @@ def parse_advocatekhoj_section(html: str, section_num: str) -> Optional[Section]
     prefix line.
     """
     soup = BeautifulSoup(html, "lxml")
+
+    # Legacy-fixture path: when an explicit `<h1>/<h2>/<h3>` heading
+    # carries "Section N. <marginal>", honour it. The 2026-04-30
+    # AdvocateKhoj live site has dropped these headings (folding the
+    # marginal into the first `<p>` instead), but the bundled
+    # `tests/fixtures/indiacode_advocatekhoj_s302.html` fixture
+    # preserves the old shape — so the parser must accept both.
+    legacy_heading = soup.find("h1") or soup.find("h2") or soup.find("h3")
+    legacy_marginal: Optional[str] = None
+    if legacy_heading is not None:
+        h = _txt(legacy_heading)
+        m = re.search(
+            rf"Section\s+{re.escape(section_num)}[A-Z]*\.?\s*(.+)",
+            h, flags=re.IGNORECASE,
+        )
+        if m:
+            legacy_marginal = m.group(1).strip()
+
     body = (soup.find("div", id="content_container")
             or soup.find("div", class_="bareacts_contentarea")
             or soup.find("div", class_="content")
@@ -171,10 +189,6 @@ def parse_advocatekhoj_section(html: str, section_num: str) -> Optional[Section]
     if body is None:
         return None
 
-    # Walk the direct `<p>` children — AdvocateKhoj wraps every
-    # paragraph (heading + body + each illustration / exception)
-    # in its own `<p>`, so paragraph boundaries are reliable. Falls
-    # back to a flat-text split if the page lacks `<p>` structure.
     paragraphs_raw: List[str] = []
     p_tags = body.find_all("p", recursive=True)
     if p_tags:
@@ -186,31 +200,31 @@ def parse_advocatekhoj_section(html: str, section_num: str) -> Optional[Section]
         raw_text = body.get_text(separator="\n", strip=True)
         paragraphs_raw = [ln.strip() for ln in raw_text.split("\n") if ln.strip()]
 
-    # Drop boilerplate "Indian Penal Code, 1860" head if present.
     if paragraphs_raw and paragraphs_raw[0].lower().startswith("indian penal code"):
         paragraphs_raw = paragraphs_raw[1:]
-    # Drop navigation tail — typical pattern: ["Back", "Index", "Next"].
     while paragraphs_raw and paragraphs_raw[-1].lower() in {"back", "index", "next"}:
         paragraphs_raw.pop()
 
-    if not paragraphs_raw:
+    if not paragraphs_raw and legacy_marginal is None:
         return None
 
-    # The first paragraph carries "<num>. <marginal note>". The body
-    # begins on the second paragraph onward.
-    head = paragraphs_raw[0]
-    rest = paragraphs_raw[1:]
-
-    # Some Indian PC sections are republished post-amendment with
-    # the section number wrapped in square brackets, e.g. "[376.
-    # Punishment for rape …]". Strip the wrapping brackets before
-    # matching.
-    head_stripped = re.sub(r"^\[+\s*", "", head).rstrip("]").strip()
-    m = re.match(rf"^{re.escape(section_num)}[A-Z]*\s*\.?\s*(.*)$", head_stripped)
-    if m and m.group(1):
-        marginal = m.group(1).strip()
+    if legacy_marginal is not None:
+        # Legacy shape: heading-tag carries the marginal; all `<p>`s
+        # are body content.
+        marginal = legacy_marginal
+        rest = paragraphs_raw
     else:
-        marginal = head_stripped
+        # Live-site shape: first `<p>` carries "<num>. <marginal>".
+        head = paragraphs_raw[0]
+        rest = paragraphs_raw[1:]
+        head_stripped = re.sub(r"^\[+\s*", "", head).rstrip("]").strip()
+        m = re.match(
+            rf"^{re.escape(section_num)}[A-Z]*\s*\.?\s*(.*)$", head_stripped
+        )
+        if m and m.group(1):
+            marginal = m.group(1).strip()
+        else:
+            marginal = head_stripped
 
     sub_items: List[SubItem] = []
     amendments: List[Amendment] = []
