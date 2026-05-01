@@ -171,47 +171,55 @@ def parse_advocatekhoj_section(html: str, section_num: str) -> Optional[Section]
     if body is None:
         return None
 
-    # Pull the entire content area as a flat newline-separated text
-    # block, then strip the heading-of-page boilerplate and the
-    # trailing "Back / Index / Next" navigation.
-    raw_text = body.get_text(separator="\n", strip=True)
-    lines = [ln.strip() for ln in raw_text.split("\n") if ln.strip()]
+    # Walk the direct `<p>` children — AdvocateKhoj wraps every
+    # paragraph (heading + body + each illustration / exception)
+    # in its own `<p>`, so paragraph boundaries are reliable. Falls
+    # back to a flat-text split if the page lacks `<p>` structure.
+    paragraphs_raw: List[str] = []
+    p_tags = body.find_all("p", recursive=True)
+    if p_tags:
+        for p in p_tags:
+            t = " ".join(_txt(p).split())
+            if t:
+                paragraphs_raw.append(t)
+    else:
+        raw_text = body.get_text(separator="\n", strip=True)
+        paragraphs_raw = [ln.strip() for ln in raw_text.split("\n") if ln.strip()]
 
     # Drop boilerplate "Indian Penal Code, 1860" head if present.
-    if lines and lines[0].lower().startswith("indian penal code"):
-        lines = lines[1:]
+    if paragraphs_raw and paragraphs_raw[0].lower().startswith("indian penal code"):
+        paragraphs_raw = paragraphs_raw[1:]
     # Drop navigation tail — typical pattern: ["Back", "Index", "Next"].
-    while lines and lines[-1].lower() in {"back", "index", "next"}:
-        lines.pop()
+    while paragraphs_raw and paragraphs_raw[-1].lower() in {"back", "index", "next"}:
+        paragraphs_raw.pop()
 
-    if not lines:
+    if not paragraphs_raw:
         return None
 
-    # The first 1-2 lines carry "<num>. <marginal note>" — collapse any
-    # soft-wrap so the regex can latch onto it.
-    head = lines[0]
-    if len(lines) > 1 and not re.search(r"[.;:]$", head):
-        # The marginal note often wraps onto line 2 (e.g. "1. Title and"
-        # / "extent of operation of the Code"). Glue them.
-        head = head + " " + lines[1]
-        rest = lines[2:]
-    else:
-        rest = lines[1:]
+    # The first paragraph carries "<num>. <marginal note>". The body
+    # begins on the second paragraph onward.
+    head = paragraphs_raw[0]
+    rest = paragraphs_raw[1:]
 
-    m = re.match(rf"^{re.escape(section_num)}\.\s*(.+)$", head)
-    if m:
+    # Some Indian PC sections are republished post-amendment with
+    # the section number wrapped in square brackets, e.g. "[376.
+    # Punishment for rape …]". Strip the wrapping brackets before
+    # matching.
+    head_stripped = re.sub(r"^\[+\s*", "", head).rstrip("]").strip()
+    m = re.match(rf"^{re.escape(section_num)}[A-Z]*\s*\.?\s*(.*)$", head_stripped)
+    if m and m.group(1):
         marginal = m.group(1).strip()
     else:
-        marginal = head
+        marginal = head_stripped
 
     sub_items: List[SubItem] = []
     amendments: List[Amendment] = []
     paragraphs: List[str] = []
 
-    for ln in rest:
-        for am in _AMEND_RE.finditer(ln):
+    for para in rest:
+        for am in _AMEND_RE.finditer(para):
             amendments.append(Amendment(marker=am.group(0)))
-        t_clean = _AMEND_RE.sub("", ln).strip()
+        t_clean = _AMEND_RE.sub("", para).strip()
         if not t_clean:
             continue
         kind = "raw"
@@ -240,7 +248,7 @@ def parse_advocatekhoj_section(html: str, section_num: str) -> Optional[Section]
         else:
             paragraphs.append(t_clean)
 
-    text = "\n".join(paragraphs).strip()
+    text = "\n\n".join(paragraphs).strip()
     return Section(
         number=str(section_num),
         marginal_note=marginal,
