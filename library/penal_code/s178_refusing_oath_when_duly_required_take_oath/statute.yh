@@ -3,6 +3,14 @@
 /// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr178-#pr178-
 /// @amendment [15/2019]
 
+fn is_s178_refusing_oath(bool elements_satisfied, bool defence_applies) : bool {
+    match {
+        case TRUE if defence_applies := consequence FALSE;
+        case TRUE if elements_satisfied := consequence TRUE;
+        case _ := consequence FALSE;
+    }
+}
+
 statute 178 "Refusing oath when duly required to take oath by a public servant" effective 1872-01-01 effective 2019-12-31 {
     elements {
         /// The offence requires both the refusal and a lawful demand by a competent public servant.

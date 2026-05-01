@@ -1,0 +1,25 @@
+/// @meta source=test_statute_for_s178
+referencing penal_code/s178_refusing_oath_when_duly_required_take_oath
+
+struct S178TestCase {
+    bool elements_satisfied,
+    bool defence_applies,
+}
+
+S178TestCase guilty := S178TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := FALSE,
+}
+assert is_s178_refusing_oath(guilty.elements_satisfied, guilty.defence_applies) == TRUE
+
+S178TestCase defended := S178TestCase {
+    elements_satisfied := TRUE,
+    defence_applies := TRUE,
+}
+assert is_s178_refusing_oath(defended.elements_satisfied, defended.defence_applies) == FALSE
+
+S178TestCase notMadeOut := S178TestCase {
+    elements_satisfied := FALSE,
+    defence_applies := FALSE,
+}
+assert is_s178_refusing_oath(notMadeOut.elements_satisfied, notMadeOut.defence_applies) == FALSE
