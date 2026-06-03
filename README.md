@@ -23,18 +23,16 @@ Euclid is a modeling tool, not legal advice and not a hosted case platform. The 
 Legal and investigative timelines often contain more than dates. They contain claims, facts, witnesses, exhibits, citations, and contradictions. A text DSL makes those choices explicit:
 
 ```euclid
-type claim {
-    citation: string?,
-}
-
 timeline plaintiff_narrative {
     kind: linear,
     start: 2024-01-01,
     end: 2024-12-31,
 }
 
-entity notice_sent : claim {
+entity notice_record : evidence {
     citation: "Ex. 12",
+    source: "Discovery production",
+    bates: "ACME_000012",
     appears_on: plaintiff_narrative @ 2024-03-04..2024-03-04,
 }
 
@@ -43,7 +41,7 @@ entity notice_denied : claim {
     appears_on: plaintiff_narrative @ 2024-03-05..2024-03-05,
 }
 
-rel notice_sent -["contradicts"]-> notice_denied;
+rel notice_record -["contradicts"]-> notice_denied;
 ```
 
 Euclid's differentiator is not drawing a generic timeline. It is keeping timelines, branches, entities, relationships, and diffs in plain source form so they can be reviewed, rendered, and compared.

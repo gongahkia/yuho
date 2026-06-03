@@ -26,6 +26,7 @@ module Euclid.Model.Types
     , TypeField(..)
     , Value(..)
     , World(..)
+    , builtInTypeFields
     , builtInTypes
     , emptyWorld
     , findEntity
@@ -275,6 +276,10 @@ emptyWorld =
 
 builtInTypes :: Set Text
 builtInTypes =
+    coreBuiltInTypes `Set.union` Map.keysSet builtInTypeFields
+
+coreBuiltInTypes :: Set Text
+coreBuiltInTypes =
     Set.fromList
         [ "entity"
         , "event"
@@ -287,6 +292,51 @@ builtInTypes =
         , "location"
         , "faction"
         ]
+
+builtInTypeFields :: Map Text [TypeField]
+builtInTypeFields =
+    Map.fromList
+        [ ( "evidence"
+          , [ requiredField "citation" "string"
+            , requiredField "source" "string"
+            , optionalField "bates" "string"
+            , optionalField "admissibility" "string"
+            ]
+          )
+        , ( "witness"
+          , [ optionalField "affiliation" "string"
+            , optionalField "credibility" "int"
+            ]
+          )
+        , ("claim", [])
+        , ("fact", [])
+        , ( "exhibit"
+          , [ requiredField "number" "string"
+            , requiredField "description" "string"
+            ]
+          )
+        , ( "deposition"
+          , [ requiredField "deponent" "string"
+            , requiredField "date" "date"
+            ]
+          )
+        ]
+
+requiredField :: Text -> Text -> TypeField
+requiredField name fieldType =
+    TypeField
+        { typeFieldName = name
+        , typeFieldType = fieldType
+        , typeFieldOptional = False
+        }
+
+optionalField :: Text -> Text -> TypeField
+optionalField name fieldType =
+    TypeField
+        { typeFieldName = name
+        , typeFieldType = fieldType
+        , typeFieldOptional = True
+        }
 
 noSourceSpan :: SourceSpan
 noSourceSpan =

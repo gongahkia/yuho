@@ -2,7 +2,7 @@
 
 This walkthrough uses `Brown v. Board of Education` as a public legal-history demo for Euclid's current legal framing.
 
-The demo is intentionally explicit: Euclid does not infer legal truth. It models the claims, procedural events, and relationships that the author writes down, then makes the differences between two `.euclid` files visible.
+The demo is intentionally explicit: Euclid does not infer legal truth. It models the claims, facts, evidence, exhibits, and relationships that the author writes down, then makes the differences between two `.euclid` files visible.
 
 ## Sources Modeled
 
@@ -28,7 +28,7 @@ examples/legal/brown_plaintiffs.euclid
 examples/legal/brown_board.euclid
 ```
 
-Both files share the same `brown_case` timeline and core procedural events. They differ in the emphasis of the modeled claims and relationships:
+Both files share the same `brown_case` timeline, core `fact` entities, and source-backed `evidence`/`exhibit` entities. They differ in the emphasis of the modeled `claim` entities and relationships:
 
 * `brown_plaintiffs.euclid` foregrounds the equal-protection and harm claims that Brown accepted.
 * `brown_board.euclid` foregrounds the district-court and board posture under the separate-but-equal doctrine.

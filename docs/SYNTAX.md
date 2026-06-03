@@ -162,6 +162,70 @@ Built-in entity type labels:
 - `artifact`
 - `location`
 - `faction`
+- `evidence`
+- `witness`
+- `claim`
+- `fact`
+- `exhibit`
+- `deposition`
+
+Built-in legal/litigation entity schemas:
+
+| Type | Required fields | Optional fields | Intended use |
+|---|---|---|---|
+| `evidence` | `citation: string`, `source: string` | `bates: string`, `admissibility: string` | Source-backed support for a claim or fact |
+| `witness` | none | `affiliation: string`, `credibility: int` | Person or source whose statements matter to the narrative |
+| `claim` | none | user-defined fields | Contested assertion |
+| `fact` | none | user-defined fields | Uncontested assertion or procedural fact |
+| `exhibit` | `number: string`, `description: string` | user-defined fields | Filing-style exhibit record |
+| `deposition` | `deponent: string`, `date: date` | user-defined fields | Deposition event or transcript record |
+
+`source` is also an entity annotation field. For `evidence`, `source: "..."` satisfies the built-in `source` field requirement.
+
+Legal type examples:
+
+```euclid
+timeline case_file {
+    start: 2024-01-01,
+    end: 2024-12-31,
+}
+
+entity email_record : evidence {
+    citation: "Ex. 12",
+    source: "Discovery production",
+    bates: "ACME_000012",
+    admissibility: "business record",
+    appears_on: case_file @ 2024-03-04..2024-03-04,
+}
+
+entity jane_smith : witness {
+    affiliation: "Acme Corp",
+    credibility: 80,
+    appears_on: case_file @ 2024-04-01..2024-04-01,
+}
+
+entity notice_was_sent : claim {
+    position: "Notice was sent before the deadline.",
+    appears_on: case_file @ 2024-03-04..2024-03-04,
+}
+
+entity contract_signed : fact {
+    summary: "The contract was signed.",
+    appears_on: case_file @ 2024-01-15..2024-01-15,
+}
+
+entity exhibit_12 : exhibit {
+    number: "Ex. 12",
+    description: "Email notice record",
+    appears_on: case_file @ 2024-03-04..2024-03-04,
+}
+
+entity jane_deposition : deposition {
+    deponent: "Jane Smith",
+    date: 2024-04-01,
+    appears_on: case_file @ 2024-04-01..2024-04-01,
+}
+```
 
 Semantic rules:
 

@@ -235,6 +235,110 @@ spec = do
                             any (T.isInfixOf "missing required field rank") messages `shouldBe` True
                             any (T.isInfixOf "field nation does not match declared type string") messages `shouldBe` True
 
+    describe "built-in legal entity type validation" $ do
+        it "recognizes legal entity types and accepts their declared fields" $ do
+            let source =
+                    T.unlines
+                        [ "timeline case_file {"
+                        , "  start: 1951-01-01,"
+                        , "  end: 1955-12-31,"
+                        , "}"
+                        , ""
+                        , "entity archive_opinion : evidence {"
+                        , "  citation: \"347 U.S. 483\","
+                        , "  source: \"National Archives\","
+                        , "  bates: \"NA-001\","
+                        , "  admissibility: \"public record\","
+                        , "  appears_on: case_file @ 1954-05-17..1954-05-17,"
+                        , "}"
+                        , ""
+                        , "entity thurgood_marshall : witness {"
+                        , "  affiliation: \"NAACP Legal Defense Fund\","
+                        , "  credibility: 100,"
+                        , "  appears_on: case_file @ 1952-12-09..1953-12-08,"
+                        , "}"
+                        , ""
+                        , "entity contested_segregation : claim {"
+                        , "  summary: \"segregation denies equal protection\","
+                        , "  appears_on: case_file @ 1951-02-01..1954-05-17,"
+                        , "}"
+                        , ""
+                        , "entity decision_date : fact {"
+                        , "  summary: \"Brown was decided on 1954-05-17\","
+                        , "  appears_on: case_file @ 1954-05-17..1954-05-17,"
+                        , "}"
+                        , ""
+                        , "entity opinion_exhibit : exhibit {"
+                        , "  number: \"Ex. 12\","
+                        , "  description: \"Supreme Court opinion\","
+                        , "  appears_on: case_file @ 1954-05-17..1954-05-17,"
+                        , "}"
+                        , ""
+                        , "entity marshall_deposition : deposition {"
+                        , "  deponent: \"Thurgood Marshall\","
+                        , "  date: 1953-12-08,"
+                        , "  appears_on: case_file @ 1953-12-08..1953-12-08,"
+                        , "}"
+                        ]
+            case parseProgram "<inline>" source of
+                Left diags ->
+                    expectationFailure ("parse failed: " <> show diags)
+                Right program ->
+                    case evalProgram program of
+                        Left diag ->
+                            expectationFailure ("eval failed: " <> show diag)
+                        Right worldValue -> do
+                            let diagnostics = validateWorld worldValue
+                                messages = map diagnosticMessage diagnostics
+                            any ((== DiagnosticError) . diagnosticLevel) diagnostics `shouldBe` False
+                            any (T.isInfixOf "uses unknown type") messages `shouldBe` False
+
+        it "enforces required and optional fields on legal entity types" $ do
+            let source =
+                    T.unlines
+                        [ "timeline case_file {"
+                        , "  start: 1951-01-01,"
+                        , "  end: 1955-12-31,"
+                        , "}"
+                        , ""
+                        , "entity incomplete_evidence : evidence {"
+                        , "  source: \"National Archives\","
+                        , "  bates: 100,"
+                        , "  appears_on: case_file @ 1954-05-17..1954-05-17,"
+                        , "}"
+                        , ""
+                        , "entity weak_witness : witness {"
+                        , "  credibility: \"high\","
+                        , "  appears_on: case_file @ 1952-12-09..1952-12-09,"
+                        , "}"
+                        , ""
+                        , "entity bad_exhibit : exhibit {"
+                        , "  number: 12,"
+                        , "  appears_on: case_file @ 1954-05-17..1954-05-17,"
+                        , "}"
+                        , ""
+                        , "entity bad_deposition : deposition {"
+                        , "  deponent: \"Witness\","
+                        , "  date: \"1953-12-08\","
+                        , "  appears_on: case_file @ 1953-12-08..1953-12-08,"
+                        , "}"
+                        ]
+            case parseProgram "<inline>" source of
+                Left diags ->
+                    expectationFailure ("parse failed: " <> show diags)
+                Right program ->
+                    case evalProgram program of
+                        Left diag ->
+                            expectationFailure ("eval failed: " <> show diag)
+                        Right worldValue -> do
+                            let messages = map diagnosticMessage (validateWorld worldValue)
+                            any (T.isInfixOf "missing required field citation") messages `shouldBe` True
+                            any (T.isInfixOf "field bates does not match declared type string") messages `shouldBe` True
+                            any (T.isInfixOf "field credibility does not match declared type int") messages `shouldBe` True
+                            any (T.isInfixOf "missing required field description") messages `shouldBe` True
+                            any (T.isInfixOf "field number does not match declared type string") messages `shouldBe` True
+                            any (T.isInfixOf "field date does not match declared type date") messages `shouldBe` True
+
     describe "csv import" $
         it "creates euclid entity declarations from a CSV schema" $ do
             let csvInput =

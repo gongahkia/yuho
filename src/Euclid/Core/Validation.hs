@@ -94,7 +94,7 @@ validateEntities world =
             )
         | fieldDef <- resolvedTypeFields entity
         , not (typeFieldOptional fieldDef)
-        , Map.notMember (typeFieldName fieldDef) (entityFields entity)
+        , isNothing (entityDeclaredFieldValue entity (typeFieldName fieldDef))
         ]
     fieldTypeDiagnostics entity =
         [ validationDiagnostic
@@ -109,10 +109,11 @@ validateEntities world =
             )
         | fieldDef <- resolvedTypeFields entity
         , let fieldName = typeFieldName fieldDef
-        , Just fieldValue <- [Map.lookup fieldName (entityFields entity)]
+        , Just fieldValue <- [entityDeclaredFieldValue entity fieldName]
         , not (valueMatchesDeclaredType world fieldValue (typeFieldType fieldDef))
         ]
     resolvedTypeFields entity
+        | Just fields <- Map.lookup (entityType entity) builtInTypeFields = fields
         | Set.member (entityType entity) builtInTypes = []
         | otherwise =
             maybe [] (Map.elems . flattenTypeFields world) (Map.lookup (entityType entity) definedTypes)
@@ -252,3 +253,21 @@ entityTypeInheritsFrom world actualType expectedType
         case Map.lookup actualType (worldTypes world) >>= typeParent of
             Nothing -> False
             Just parentType -> entityTypeInheritsFrom world parentType expectedType
+
+entityDeclaredFieldValue :: Entity -> Text -> Maybe Value
+entityDeclaredFieldValue entity fieldName =
+    case Map.lookup fieldName (entityFields entity) of
+        Just value -> Just value
+        Nothing -> annotationFieldValue entity fieldName
+
+annotationFieldValue :: Entity -> Text -> Maybe Value
+annotationFieldValue entity fieldName =
+    case fieldName of
+        "note" -> VString <$> annotationNote (entityAnnotation entity)
+        "source" -> VString <$> annotationSource (entityAnnotation entity)
+        "confidence" -> VInt . round . (* 100) <$> annotationConfidence (entityAnnotation entity)
+        "tags" ->
+            case annotationTags (entityAnnotation entity) of
+                [] -> Nothing
+                tags -> Just (VList (map VString tags))
+        _ -> Nothing
