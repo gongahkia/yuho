@@ -11,7 +11,7 @@
 Euclid is a Haskell DSL for modeling legal chronologies, investigations, depositions, discovery narratives, and other timelines where the order of facts matters. Write timelines as source files, review them like code, and compare two competing narratives with `euclid diff`.
 
 ```console
-$ euclid diff plaintiff.euclid defendant.euclid
+$ euclid diff examples/legal/brown_plaintiffs.euclid examples/legal/brown_board.euclid
 ```
 
 The legal framing is concrete, but the core is general: branching timelines, typed entities, relationships, imports, validation diagnostics, a terminal explorer, an LSP server, and exports for SVG, HTML, JSON, Markdown, and Mermaid.
@@ -61,17 +61,17 @@ $ cabal install exe:euclid --installdir="$HOME/.local/bin" --overwrite-policy=al
 Run the shipped examples:
 
 ```console
-$ euclid check examples/ww2.euclid
-$ euclid diff examples/lotr.euclid examples/ww2.euclid
+$ euclid check examples/legal/brown_plaintiffs.euclid
+$ euclid check examples/legal/brown_board.euclid
+$ euclid diff examples/legal/brown_plaintiffs.euclid examples/legal/brown_board.euclid
 ```
 
 Export timelines:
 
 ```console
-$ euclid export examples/ww2.euclid -f svg -o ww2.svg
-$ euclid export examples/lotr.euclid -f svg -o lotr.svg --width 1920 --height 1080
-$ euclid export examples/lotr.euclid -f html -o lotr.html
-$ euclid export examples/lotr.euclid -f mermaid -o lotr.mmd
+$ euclid export examples/legal/brown_plaintiffs.euclid -f svg -o brown-plaintiffs.svg
+$ euclid export examples/legal/brown_board.euclid -f html -o brown-board.html
+$ euclid export examples/historical/ww2.euclid -f mermaid -o ww2.mmd
 ```
 
 ## Current Surfaces
@@ -107,7 +107,7 @@ $ euclid export examples/lotr.euclid -f mermaid -o lotr.mmd
 
 Learn more about `Euclid`' syntax at [`SYNTAX.md`](./docs/SYNTAX.md).
 
-Examples live in [`./examples`](./examples/).
+The legal walkthrough lives at [`docs/LEGAL.md`](./docs/LEGAL.md). Examples live in [`./examples`](./examples/), with legal examples first and historical/generative examples kept as secondary showcases.
 
 ### REPL commands
 

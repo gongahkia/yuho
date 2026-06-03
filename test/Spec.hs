@@ -46,8 +46,8 @@ spec :: Spec
 spec = do
     describe "parser and evaluator" $
         it "loads the LOTR example into a world" $ do
-            source <- TIO.readFile "examples/lotr.euclid"
-            case parseProgram "examples/lotr.euclid" source of
+            source <- TIO.readFile "examples/generative/lotr.euclid"
+            case parseProgram "examples/generative/lotr.euclid" source of
                 Left diags ->
                     expectationFailure ("parse failed: " <> show diags)
                 Right program ->
@@ -61,8 +61,8 @@ spec = do
 
     describe "validation" $
         it "accepts the LOTR example without hard errors" $ do
-            source <- TIO.readFile "examples/lotr.euclid"
-            case parseProgram "examples/lotr.euclid" source of
+            source <- TIO.readFile "examples/generative/lotr.euclid"
+            case parseProgram "examples/generative/lotr.euclid" source of
                 Left diags ->
                     expectationFailure ("parse failed: " <> show diags)
                 Right program ->
@@ -1230,8 +1230,8 @@ spec = do
 
     describe "diffing" $ do
         it "reports entity deltas between worlds" $ do
-            source <- TIO.readFile "examples/lotr.euclid"
-            case parseProgram "examples/lotr.euclid" source of
+            source <- TIO.readFile "examples/generative/lotr.euclid"
+            case parseProgram "examples/generative/lotr.euclid" source of
                 Left diags ->
                     expectationFailure ("parse failed: " <> show diags)
                 Right program ->
@@ -1244,8 +1244,8 @@ spec = do
                             diffText `shouldSatisfy` T.isInfixOf "ring"
 
         it "reports changed entity details when shared names diverge" $ do
-            source <- TIO.readFile "examples/lotr.euclid"
-            case parseProgram "examples/lotr.euclid" source of
+            source <- TIO.readFile "examples/generative/lotr.euclid"
+            case parseProgram "examples/generative/lotr.euclid" source of
                 Left diags ->
                     expectationFailure ("parse failed: " <> show diags)
                 Right program ->

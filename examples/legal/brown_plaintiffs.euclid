@@ -1,0 +1,93 @@
+// Brown v. Board legal narrative demo: plaintiffs-focused model.
+// Source facts are summarized in docs/LEGAL.md.
+
+type claim {
+    narrative: string,
+    reference_source: string,
+    citation: string,
+    position: string,
+}
+
+type procedural_event {
+    reference_source: string,
+    citation: string,
+    summary: string,
+}
+
+timeline brown_case {
+    kind: linear,
+    start: 1951-02-01,
+    end: 1955-05-31,
+}
+
+entity topeka_filing : procedural_event {
+    reference_source: "National Park Service",
+    citation: "Brown v. Board of Education National Historical Park",
+    summary: "Topeka NAACP filed suit on behalf of families in February 1951.",
+    appears_on: brown_case @ 1951-02-01..1951-02-28,
+}
+
+entity district_court_denial : procedural_event {
+    reference_source: "National Park Service",
+    citation: "Brown v. Board of Education National Historical Park",
+    summary: "The U.S. District Court denied relief under Plessy and separate but equal.",
+    appears_on: brown_case @ 1951-08-01..1951-08-31,
+}
+
+entity supreme_court_argument : procedural_event {
+    reference_source: "National Archives",
+    citation: "Brown v. Board of Education, 347 U.S. 483",
+    summary: "The Supreme Court heard argument.",
+    appears_on: brown_case @ 1952-12-09..1952-12-09,
+}
+
+entity supreme_court_reargument : procedural_event {
+    reference_source: "National Archives",
+    citation: "Brown v. Board of Education, 347 U.S. 483",
+    summary: "The Supreme Court heard reargument.",
+    appears_on: brown_case @ 1953-12-08..1953-12-08,
+}
+
+entity brown_decision : procedural_event {
+    reference_source: "National Archives",
+    citation: "Brown v. Board of Education, 347 U.S. 483",
+    summary: "The Supreme Court held school segregation unconstitutional under the Fourteenth Amendment.",
+    appears_on: brown_case @ 1954-05-17..1954-05-17,
+}
+
+entity brown_ii_decree : procedural_event {
+    reference_source: "National Archives",
+    citation: "Brown II, May 31 1955",
+    summary: "The Court instructed states to begin desegregation plans with all deliberate speed.",
+    appears_on: brown_case @ 1955-05-31..1955-05-31,
+}
+
+entity plaintiffs_equal_protection_claim : claim {
+    narrative: "plaintiffs",
+    reference_source: "National Archives",
+    citation: "Brown v. Board of Education, 347 U.S. 483",
+    position: "Segregated public schools deny equal protection even when tangible facilities are equal.",
+    appears_on: brown_case @ 1951-02-01..1954-05-17,
+}
+
+entity plaintiffs_harm_claim : claim {
+    narrative: "plaintiffs",
+    reference_source: "National Archives",
+    citation: "Brown v. Board of Education, 347 U.S. 483",
+    position: "State-sanctioned school segregation creates a harmful sense of inferiority.",
+    appears_on: brown_case @ 1951-02-01..1954-05-17,
+}
+
+entity board_separate_equal_claim : claim {
+    narrative: "board",
+    reference_source: "National Park Service",
+    citation: "District court posture summarized by NPS",
+    position: "Separate schools may remain constitutional when facilities are equal under Plessy.",
+    appears_on: brown_case @ 1951-02-01..1954-05-17,
+}
+
+rel plaintiffs_equal_protection_claim -["contradicts"]-> board_separate_equal_claim;
+rel plaintiffs_harm_claim -["corroborates"]-> plaintiffs_equal_protection_claim;
+rel brown_decision -["corroborates"]-> plaintiffs_equal_protection_claim;
+rel brown_decision -["supersedes"]-> district_court_denial;
+rel brown_ii_decree -["supersedes"]-> brown_decision;
