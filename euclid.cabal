@@ -8,7 +8,14 @@ license-file:       LICENSE
 author:             gabriel ong
 maintainer:         gabriel ong
 build-type:         Simple
-extra-doc-files:    README.md
+extra-doc-files:
+    README.md
+    docs/LEGAL.md
+    docs/SYNTAX.md
+    docs/WASM.md
+extra-source-files:
+    playground/browser-host.mjs
+    scripts/build-wasm-playground.sh
 
 common common-settings
     default-language: Haskell2010
@@ -48,6 +55,7 @@ library
         Euclid.Lang.AST
         Euclid.Lang.Parser
         Euclid.Model.Types
+        Euclid.Playground.API
         Euclid.Render.HTML
         Euclid.Render.Diff
         Euclid.Render.JSON
@@ -62,6 +70,13 @@ library
 executable euclid
     import: common-settings
     hs-source-dirs: app
+    main-is: Main.hs
+    build-depends:
+        euclid
+
+executable euclid-playground-wasi
+    import: common-settings
+    hs-source-dirs: playground
     main-is: Main.hs
     build-depends:
         euclid

@@ -22,6 +22,7 @@ import Euclid.Import.JSONLD
 import Euclid.Lang.AST
 import Euclid.Lang.Parser
 import Euclid.Model.Types
+import Euclid.Playground.API
 import Euclid.Render.HTML
 import Euclid.Render.Layout
 import Euclid.Render.Diff
@@ -46,6 +47,18 @@ lookupJsonInt keyName obj =
             case Aeson.fromJSON (Aeson.Number numberValue) of
                 Aeson.Success value -> Just value
                 Aeson.Error _ -> Nothing
+        _ -> Nothing
+
+lookupJsonBool :: T.Text -> Aeson.Object -> Maybe Bool
+lookupJsonBool keyName obj =
+    case KeyMap.lookup (Key.fromText keyName) obj of
+        Just (Aeson.Bool value) -> Just value
+        _ -> Nothing
+
+lookupJsonText :: T.Text -> Aeson.Object -> Maybe T.Text
+lookupJsonText keyName obj =
+    case KeyMap.lookup (Key.fromText keyName) obj of
+        Just (Aeson.String value) -> Just value
         _ -> Nothing
 
 spec :: Spec
@@ -198,6 +211,57 @@ spec = do
                             expectationFailure ("eval failed: " <> show diag)
                         Right worldValue ->
                             renderExhibitsCsv worldValue `shouldBe` expected
+
+    describe "playground API" $ do
+        it "handles browser check requests" $ do
+            let source =
+                    T.unlines
+                        [ "timeline case_file {"
+                        , "  start: 1,"
+                        , "  end: 10,"
+                        , "}"
+                        , "entity event_a : event {"
+                        , "  appears_on: case_file @ 1..1,"
+                        , "}"
+                        ]
+                request =
+                    Aeson.encode $
+                        Aeson.object
+                            [ "command" Aeson..= ("check" :: T.Text)
+                            , "fileName" Aeson..= ("case.euclid" :: T.Text)
+                            , "source" Aeson..= source
+                            ]
+            case Aeson.decode (handlePlaygroundJson request) of
+                Just (Aeson.Object response) -> do
+                    lookupJsonBool "ok" response `shouldBe` Just True
+                    KeyMap.lookup (Key.fromText "diagnostics") response `shouldBe` Just (Aeson.Array mempty)
+                other ->
+                    expectationFailure ("expected playground response object, got " <> show other)
+
+        it "handles browser export requests" $ do
+            let source =
+                    T.unlines
+                        [ "timeline case_file {"
+                        , "  start: 1,"
+                        , "  end: 10,"
+                        , "}"
+                        , "entity event_a : event {"
+                        , "  appears_on: case_file @ 1..1,"
+                        , "}"
+                        ]
+                request =
+                    Aeson.encode $
+                        Aeson.object
+                            [ "command" Aeson..= ("export" :: T.Text)
+                            , "source" Aeson..= source
+                            , "format" Aeson..= ("svg" :: T.Text)
+                            ]
+            case Aeson.decode (handlePlaygroundJson request) of
+                Just (Aeson.Object response) -> do
+                    lookupJsonBool "ok" response `shouldBe` Just True
+                    lookupJsonText "output" response `shouldSatisfy` maybe False (T.isInfixOf "<svg")
+                other ->
+                    expectationFailure ("expected playground response object, got " <> show other)
 
         it "parses visual diff formats" $ do
             parseDiffFormat "svg" `shouldBe` Right DiffSvg

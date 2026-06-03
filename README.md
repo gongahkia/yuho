@@ -80,6 +80,7 @@ $ euclid export examples/historical/ww2.euclid -f mermaid -o ww2.mmd
 * `lsp` provides completions, hover, and diagnostics over stdio.
 * `export` writes SVG, HTML, JSON, Markdown, or Mermaid output.
 * `import` converts CSV, GEDCOM, and JSON-LD into `.euclid` source.
+* `euclid-playground-wasi` exposes check/export as JSON over stdin/stdout for browser WASM hosts.
 
 ## Commands
 
@@ -112,6 +113,8 @@ $ euclid export examples/historical/ww2.euclid -f mermaid -o ww2.mmd
 Learn more about `Euclid`' syntax at [`SYNTAX.md`](./docs/SYNTAX.md).
 
 The legal walkthrough lives at [`docs/LEGAL.md`](./docs/LEGAL.md). Examples live in [`./examples`](./examples/), with legal examples first and historical/generative examples kept as secondary showcases.
+
+Browser WASM build notes live at [`docs/WASM.md`](./docs/WASM.md).
 
 ### REPL commands
 
