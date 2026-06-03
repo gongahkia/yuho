@@ -4,6 +4,7 @@ module Euclid.Core.Validation
     ( validateWorld
     ) where
 
+import qualified Data.List as List
 import qualified Data.Map.Strict as Map
 import Data.Maybe (isNothing)
 import qualified Data.Set as Set
@@ -17,6 +18,8 @@ validateWorld world =
         [ validateTimelines world
         , validateEntities world
         , validateRelationships world
+        , validateLegalSupport world
+        , validateContinuousCoverage world
         ]
 
 validationDiagnostic :: Maybe SourceSpan -> DiagnosticLevel -> Text -> Diagnostic
@@ -168,6 +171,7 @@ validateRelationships world =
             ++ temporalScopeDiagnostics
             ++ causalOrderDiagnostics
             ++ builtInRelationshipDiagnostics
+            ++ contradictionDiagnostics
       where
         labelText = relLabel relationship
         sourceEntity = findEntity (relSource relationship) world
@@ -265,6 +269,37 @@ validateRelationships world =
             , Just target <- [targetEntity]
             , not (relationshipSatisfiesTemporalRule rule source target)
             ]
+        contradictionDiagnostics =
+            [ validationDiagnostic
+                (relSourceSpan relationship)
+                DiagnosticWarning
+                ( "contradiction on timeline "
+                    <> renderTimelineNames sharedTimelines
+                    <> ": "
+                    <> relSource relationship
+                    <> " contradicts "
+                    <> relTarget relationship
+                )
+            | labelText == Just "contradicts"
+            , Just source <- [sourceEntity]
+            , Just target <- [targetEntity]
+            , let sharedTimelines = sharedAppearanceTimelines source target
+            , not (null sharedTimelines)
+            ]
+
+sharedAppearanceTimelines :: Entity -> Entity -> [Text]
+sharedAppearanceTimelines leftEntity rightEntity =
+    Set.toAscList $
+        entityTimelineNames leftEntity `Set.intersection` entityTimelineNames rightEntity
+  where
+    entityTimelineNames entity =
+        Set.fromList [appearanceTimeline appearance | appearance <- entityAppearances entity]
+
+renderTimelineNames :: [Text] -> Text
+renderTimelineNames [] = "none"
+renderTimelineNames [singleTimeline] = singleTimeline
+renderTimelineNames timelineNames =
+    T.intercalate ", " (init timelineNames) <> ", and " <> last timelineNames
 
 renderExpectedTypes :: [Text] -> Text
 renderExpectedTypes [] = "any"
@@ -295,6 +330,102 @@ relationshipSatisfiesTemporalRule rule source target =
     sourceEnds = [timePointOrdinal (rangeEnd (appearanceRange appearance)) | appearance <- entityAppearances source]
     targetStarts = [timePointOrdinal (rangeStart (appearanceRange appearance)) | appearance <- entityAppearances target]
     targetEnds = [timePointOrdinal (rangeEnd (appearanceRange appearance)) | appearance <- entityAppearances target]
+
+validateLegalSupport :: World -> [Diagnostic]
+validateLegalSupport world =
+    concatMap entityDiagnostics (Map.elems (worldEntities world))
+  where
+    citedTargets =
+        Set.fromList
+            [ relTarget relationship
+            | relationship <- worldRelationships world
+            , relLabel relationship == Just "cites"
+            ]
+    depositionDeponents =
+        Set.fromList
+            [ deponent
+            | entity <- Map.elems (worldEntities world)
+            , entityType entity == "deposition"
+            , Just (VString deponent) <- [entityDeclaredFieldValue entity "deponent"]
+            ]
+    entityDiagnostics entity =
+        uncitedClaimDiagnostics entity
+            ++ witnessDepositionDiagnostics entity
+    uncitedClaimDiagnostics entity =
+        [ validationDiagnostic
+            (entitySourceSpan entity)
+            DiagnosticWarning
+            ("claim " <> entityName entity <> " has no inbound cites relationship")
+        | entityType entity == "claim"
+        , Set.notMember (entityName entity) citedTargets
+        ]
+    witnessDepositionDiagnostics entity =
+        [ validationDiagnostic
+            (entitySourceSpan entity)
+            DiagnosticWarning
+            ("witness " <> entityName entity <> " has no matching deposition")
+        | entityType entity == "witness"
+        , Set.null (witnessNames entity `Set.intersection` depositionDeponents)
+        ]
+
+witnessNames :: Entity -> Set.Set Text
+witnessNames entity =
+    Set.fromList $
+        entityName entity
+            : [ witnessName
+              | Just (VString witnessName) <- [entityDeclaredFieldValue entity "name"]
+              ]
+
+validateContinuousCoverage :: World -> [Diagnostic]
+validateContinuousCoverage world =
+    concatMap continuousEntityDiagnostics (Map.elems (worldEntities world))
+  where
+    continuousEntityDiagnostics entity =
+        [ validationDiagnostic
+            (entitySourceSpan entity)
+            DiagnosticWarning
+            ( "continuous entity "
+                <> entityName entity
+                <> " has coverage gap on timeline "
+                <> timelineId
+                <> " after "
+                <> renderTimePointForDiagnostic (rangeEnd (appearanceRange previousAppearance))
+                <> " before "
+                <> renderTimePointForDiagnostic (rangeStart (appearanceRange nextAppearance))
+            )
+        | entityIsContinuous entity
+        , (timelineId, appearances) <- appearancesByTimeline entity
+        , (previousAppearance, nextAppearance) <- coverageGaps appearances
+        ]
+
+entityIsContinuous :: Entity -> Bool
+entityIsContinuous entity =
+    entityDeclaredFieldValue entity "continuous" == Just (VBool True)
+
+appearancesByTimeline :: Entity -> [(Text, [Appearance])]
+appearancesByTimeline entity =
+    Map.toAscList $
+        Map.fromListWith
+            (++)
+            [ (appearanceTimeline appearance, [appearance])
+            | appearance <- entityAppearances entity
+            ]
+
+coverageGaps :: [Appearance] -> [(Appearance, Appearance)]
+coverageGaps appearances =
+    [ (previousAppearance, nextAppearance)
+    | (previousAppearance, nextAppearance) <- zip sortedAppearances (drop 1 sortedAppearances)
+    , let previousEnd = timePointOrdinal (rangeEnd (appearanceRange previousAppearance))
+          nextStart = timePointOrdinal (rangeStart (appearanceRange nextAppearance))
+    , nextStart > previousEnd + 1
+    ]
+  where
+    sortedAppearances =
+        List.sortOn (timePointOrdinal . rangeStart . appearanceRange) appearances
+
+renderTimePointForDiagnostic :: TimePoint -> Text
+renderTimePointForDiagnostic (TimeDate day) = T.pack (show day)
+renderTimePointForDiagnostic (TimeOrdinal value) = T.pack (show value)
 
 flattenTypeFields :: World -> TypeDef -> Map.Map Text TypeField
 flattenTypeFields world typeDef =

@@ -56,6 +56,13 @@ entity brown_opinion_record : evidence {
     appears_on: brown_case @ 1954-05-17..1954-05-17,
 }
 
+entity nps_case_history : evidence {
+    citation: "Brown v. Board of Education National Historical Park",
+    source: "National Park Service",
+    admissibility: "public history",
+    appears_on: brown_case @ 1951-08-01..1951-08-31,
+}
+
 entity opinion_exhibit : exhibit {
     number: "Ex. 1",
     description: "National Archives copy of the Brown opinion",
@@ -91,6 +98,8 @@ rel plaintiffs_harm_claim -["corroborates"]-> plaintiffs_equal_protection_claim;
 rel brown_decision -["corroborates"]-> plaintiffs_equal_protection_claim;
 rel brown_opinion_record -["cites"]-> brown_decision;
 rel brown_opinion_record -["cites"]-> plaintiffs_equal_protection_claim;
+rel brown_opinion_record -["cites"]-> plaintiffs_harm_claim;
+rel nps_case_history -["cites"]-> board_separate_equal_claim;
 rel opinion_exhibit -["includes"]-> brown_opinion_record;
 rel brown_decision -["supersedes"]-> district_court_denial;
 rel brown_ii_decree -["supersedes"]-> brown_decision;

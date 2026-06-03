@@ -303,6 +303,184 @@ spec = do
                             any (T.isInfixOf "legal relationship 'preceded' expects source to appear before target") messages `shouldBe` True
                             any (T.isInfixOf "legal relationship 'supersedes' expects source to appear after target") messages `shouldBe` True
 
+        it "warns when contradiction edges share a timeline" $ do
+            let source =
+                    T.unlines
+                        [ "timeline case_file {"
+                        , "  start: 1,"
+                        , "  end: 10,"
+                        , "}"
+                        , "entity claim_a : claim {"
+                        , "  appears_on: case_file @ 1..3,"
+                        , "}"
+                        , "entity claim_b : claim {"
+                        , "  appears_on: case_file @ 2..4,"
+                        , "}"
+                        , "rel claim_a -[\"contradicts\"]-> claim_b;"
+                        ]
+            case parseProgram "<inline>" source of
+                Left diags ->
+                    expectationFailure ("parse failed: " <> show diags)
+                Right program ->
+                    case evalProgram program of
+                        Left diag ->
+                            expectationFailure ("eval failed: " <> show diag)
+                        Right worldValue -> do
+                            let diagnostics = validateWorld worldValue
+                                messages = map diagnosticMessage diagnostics
+                            any ((== DiagnosticError) . diagnosticLevel) diagnostics `shouldBe` False
+                            any (T.isInfixOf "contradiction on timeline case_file: claim_a contradicts claim_b") messages `shouldBe` True
+
+        it "does not warn for contradiction edges without a shared timeline" $ do
+            let source =
+                    T.unlines
+                        [ "timeline left_case {"
+                        , "  start: 1,"
+                        , "  end: 10,"
+                        , "}"
+                        , "timeline right_case {"
+                        , "  start: 1,"
+                        , "  end: 10,"
+                        , "}"
+                        , "entity claim_a : claim {"
+                        , "  appears_on: left_case @ 1..3,"
+                        , "}"
+                        , "entity claim_b : claim {"
+                        , "  appears_on: right_case @ 2..4,"
+                        , "}"
+                        , "rel claim_a -[\"contradicts\"]-> claim_b;"
+                        ]
+            case parseProgram "<inline>" source of
+                Left diags ->
+                    expectationFailure ("parse failed: " <> show diags)
+                Right program ->
+                    case evalProgram program of
+                        Left diag ->
+                            expectationFailure ("eval failed: " <> show diag)
+                        Right worldValue ->
+                            any (T.isInfixOf "contradiction on timeline" . diagnosticMessage) (validateWorld worldValue)
+                                `shouldBe` False
+
+        it "accepts cited claims and witnesses with matching depositions" $ do
+            let source =
+                    T.unlines
+                        [ "timeline case_file {"
+                        , "  start: 1,"
+                        , "  end: 10,"
+                        , "}"
+                        , "entity record : evidence {"
+                        , "  citation: \"Record A\","
+                        , "  source: \"Archive\","
+                        , "  appears_on: case_file @ 1..1,"
+                        , "}"
+                        , "entity supported_claim : claim {"
+                        , "  appears_on: case_file @ 2..2,"
+                        , "}"
+                        , "entity jane : witness {"
+                        , "  name: \"Jane Smith\","
+                        , "  appears_on: case_file @ 3..3,"
+                        , "}"
+                        , "entity jane_deposition : deposition {"
+                        , "  deponent: \"Jane Smith\","
+                        , "  date: 2024-01-05,"
+                        , "  appears_on: case_file @ 5..5,"
+                        , "}"
+                        , "rel record -[\"cites\"]-> supported_claim;"
+                        ]
+            case parseProgram "<inline>" source of
+                Left diags ->
+                    expectationFailure ("parse failed: " <> show diags)
+                Right program ->
+                    case evalProgram program of
+                        Left diag ->
+                            expectationFailure ("eval failed: " <> show diag)
+                        Right worldValue -> do
+                            let messages = map diagnosticMessage (validateWorld worldValue)
+                            any (T.isInfixOf "has no inbound cites relationship") messages `shouldBe` False
+                            any (T.isInfixOf "has no matching deposition") messages `shouldBe` False
+
+        it "warns for uncited claims and witnesses without depositions" $ do
+            let source =
+                    T.unlines
+                        [ "timeline case_file {"
+                        , "  start: 1,"
+                        , "  end: 10,"
+                        , "}"
+                        , "entity unsupported_claim : claim {"
+                        , "  appears_on: case_file @ 2..2,"
+                        , "}"
+                        , "entity jane : witness {"
+                        , "  appears_on: case_file @ 3..3,"
+                        , "}"
+                        ]
+            case parseProgram "<inline>" source of
+                Left diags ->
+                    expectationFailure ("parse failed: " <> show diags)
+                Right program ->
+                    case evalProgram program of
+                        Left diag ->
+                            expectationFailure ("eval failed: " <> show diag)
+                        Right worldValue -> do
+                            let diagnostics = validateWorld worldValue
+                                messages = map diagnosticMessage diagnostics
+                            any ((== DiagnosticError) . diagnosticLevel) diagnostics `shouldBe` False
+                            any (T.isInfixOf "claim unsupported_claim has no inbound cites relationship") messages `shouldBe` True
+                            any (T.isInfixOf "witness jane has no matching deposition") messages `shouldBe` True
+
+        it "accepts continuous entities with adjacent coverage" $ do
+            let source =
+                    T.unlines
+                        [ "timeline case_file {"
+                        , "  start: 1,"
+                        , "  end: 10,"
+                        , "}"
+                        , "entity chain_of_custody : event {"
+                        , "  continuous: true,"
+                        , "  appears_on: case_file @ 1..3,"
+                        , "  appears_on: case_file @ 4..6,"
+                        , "}"
+                        , "entity intermittent_log : event {"
+                        , "  appears_on: case_file @ 1..2,"
+                        , "  appears_on: case_file @ 5..6,"
+                        , "}"
+                        ]
+            case parseProgram "<inline>" source of
+                Left diags ->
+                    expectationFailure ("parse failed: " <> show diags)
+                Right program ->
+                    case evalProgram program of
+                        Left diag ->
+                            expectationFailure ("eval failed: " <> show diag)
+                        Right worldValue ->
+                            any (T.isInfixOf "has coverage gap" . diagnosticMessage) (validateWorld worldValue)
+                                `shouldBe` False
+
+        it "warns for continuous entity coverage gaps" $ do
+            let source =
+                    T.unlines
+                        [ "timeline case_file {"
+                        , "  start: 1,"
+                        , "  end: 10,"
+                        , "}"
+                        , "entity chain_of_custody : event {"
+                        , "  continuous: true,"
+                        , "  appears_on: case_file @ 1..2,"
+                        , "  appears_on: case_file @ 5..6,"
+                        , "}"
+                        ]
+            case parseProgram "<inline>" source of
+                Left diags ->
+                    expectationFailure ("parse failed: " <> show diags)
+                Right program ->
+                    case evalProgram program of
+                        Left diag ->
+                            expectationFailure ("eval failed: " <> show diag)
+                        Right worldValue -> do
+                            let diagnostics = validateWorld worldValue
+                                messages = map diagnosticMessage diagnostics
+                            any ((== DiagnosticError) . diagnosticLevel) diagnostics `shouldBe` False
+                            any (T.isInfixOf "continuous entity chain_of_custody has coverage gap on timeline case_file after 2 before 5") messages `shouldBe` True
+
     describe "declared entity type validation" $
         it "enforces required fields and declared field value types" $ do
             let source =

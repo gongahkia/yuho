@@ -199,6 +199,7 @@ entity email_record : evidence {
 }
 
 entity jane_smith : witness {
+    name: "Jane Smith",
     affiliation: "Acme Corp",
     credibility: 80,
     appears_on: case_file @ 2024-04-01..2024-04-01,
@@ -225,6 +226,8 @@ entity jane_deposition : deposition {
     date: 2024-04-01,
     appears_on: case_file @ 2024-04-01..2024-04-01,
 }
+
+rel email_record -["cites"]-> notice_was_sent;
 ```
 
 Semantic rules:
@@ -233,6 +236,9 @@ Semantic rules:
 - appearance ranges with `start > end` are errors
 - appearances outside timeline bounds are errors
 - unknown custom entity types are warnings, not errors
+- `claim` entities with no inbound `cites` relationship are warnings
+- `witness` entities with no matching `deposition` are warnings; `deposition.deponent` matches the witness entity id or string `name` field
+- entities marked `continuous: true` warn when their `appears_on` ranges have gaps on the same timeline
 
 ## Relationships
 
@@ -256,6 +262,7 @@ Semantic rules:
 - relationship source and target entities must exist
 - temporal scopes with `start > end` are errors
 - built-in legal relationship labels add direction warnings when their endpoint types or temporal order are malformed
+- `contradicts` edges warn when source and target appear on the same timeline
 
 Not currently supported:
 
@@ -300,6 +307,12 @@ entity hearing_fact : fact {
 
 entity witness_jane : witness {
     appears_on: case_file @ 2024-03-05..2024-03-05,
+}
+
+entity witness_jane_deposition : deposition {
+    deponent: "witness_jane",
+    date: 2024-03-06,
+    appears_on: case_file @ 2024-03-06..2024-03-06,
 }
 
 rel record -["cites"]-> disputed_claim;
