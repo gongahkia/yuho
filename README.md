@@ -94,6 +94,7 @@ $ euclid export examples/historical/ww2.euclid -f mermaid -o ww2.mmd
 | `euclid check <file>` | Parse and validate a `.euclid` file without opening the TUI |
 | `euclid contradict <file>` | List modeled contradiction edges with supporting evidence on both sides |
 | `euclid diff <file1> <file2>` | Render a semantic diff of timelines, entities, and relationships |
+| `euclid diff <file1> <file2> -f svg -o diff.svg` | Render a side-by-side visual diff with narrative colors and contradiction connectors |
 | `euclid exhibits <file>` | Emit a filing-style exhibit list as CSV |
 | `euclid import <file> --from csv` | Import CSV, GEDCOM, or JSON-LD data into `.euclid` source |
 | `euclid repl` | Start the interactive REPL with `:load`, `:world`, `:entities`, and `:rels` |

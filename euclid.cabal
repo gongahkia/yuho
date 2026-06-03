@@ -49,6 +49,7 @@ library
         Euclid.Lang.Parser
         Euclid.Model.Types
         Euclid.Render.HTML
+        Euclid.Render.Diff
         Euclid.Render.JSON
         Euclid.Render.Layout
         Euclid.Render.Markdown

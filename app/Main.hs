@@ -25,6 +25,7 @@ import Euclid.Lang.AST (Program(..), Stmt, pattern Program)
 import Euclid.Lang.Parser
 import Euclid.Model.Types
 import Euclid.Render.Layout
+import Euclid.Render.Diff
 import Euclid.Render.HTML
 import Euclid.Render.JSON
 import Euclid.Render.Markdown
@@ -68,7 +69,7 @@ runCommand configValue options =
         CommandExport exportOpts -> runExport configValue (optTheme options) exportOpts
         CommandCheck filePath -> runCheck filePath
         CommandContradict filePath -> runContradict filePath
-        CommandDiff leftPath rightPath -> runDiff leftPath rightPath
+        CommandDiff diffOpts -> runDiff configValue (optTheme options) diffOpts
         CommandExhibits filePath -> runExhibits filePath
         CommandImport importOpts -> runImport importOpts
         CommandRepl -> runRepl
@@ -137,11 +138,58 @@ runContradict filePath = do
         exitFailure
     TIO.putStr (renderContradictions (loadedWorld loaded))
 
-runDiff :: FilePath -> FilePath -> IO ()
-runDiff leftPath rightPath = do
-    leftWorldValue <- loadEuclidFile leftPath
-    rightWorldValue <- loadEuclidFile rightPath
-    TIO.putStrLn (diffWorlds (loadedWorld leftWorldValue) (loadedWorld rightWorldValue))
+runDiff :: EuclidConfig -> Maybe Text -> DiffOptions -> IO ()
+runDiff configValue themeOverride diffOptions = do
+    leftWorldValue <- loadEuclidFile (diffLeftFile diffOptions)
+    rightWorldValue <- loadEuclidFile (diffRightFile diffOptions)
+    case diffFormat diffOptions of
+        Nothing ->
+            TIO.putStrLn (diffWorlds (loadedWorld leftWorldValue) (loadedWorld rightWorldValue))
+        Just DiffSvg -> do
+            themeValue <- resolveSvgTheme themeOverride configValue
+            let outputPath = fromMaybe (defaultDiffOutput "svg") (diffOutput diffOptions)
+                svgOptions =
+                    defaultSvgOptions
+                        { svgWidth = fromMaybe (svgWidth defaultSvgOptions) (configDefaultWidth configValue)
+                        , svgHeight = fromMaybe (svgHeight defaultSvgOptions) (configDefaultHeight configValue)
+                        , svgTitle = "Euclid diff"
+                        , svgTheme = themeValue
+                        }
+                document =
+                    renderDiffSvg
+                        svgOptions
+                        (T.pack (takeBaseName (diffLeftFile diffOptions)))
+                        (computeLayout (loadedWorld leftWorldValue))
+                        (T.pack (takeBaseName (diffRightFile diffOptions)))
+                        (computeLayout (loadedWorld rightWorldValue))
+            TIO.writeFile outputPath document
+            putStrLn ("Wrote " <> outputPath)
+        Just DiffHtml -> do
+            themeValue <- resolveSvgTheme themeOverride configValue
+            let outputPath = fromMaybe (defaultDiffOutput "html") (diffOutput diffOptions)
+                svgOptions =
+                    defaultSvgOptions
+                        { svgWidth = fromMaybe (svgWidth defaultSvgOptions) (configDefaultWidth configValue)
+                        , svgHeight = fromMaybe (svgHeight defaultSvgOptions) (configDefaultHeight configValue)
+                        , svgTitle = "Euclid diff"
+                        , svgTheme = themeValue
+                        }
+                document =
+                    renderDiffHtml
+                        svgOptions
+                        (T.pack (takeBaseName (diffLeftFile diffOptions)))
+                        (computeLayout (loadedWorld leftWorldValue))
+                        (T.pack (takeBaseName (diffRightFile diffOptions)))
+                        (computeLayout (loadedWorld rightWorldValue))
+            TIO.writeFile outputPath document
+            putStrLn ("Wrote " <> outputPath)
+  where
+    defaultDiffOutput extension =
+        takeBaseName (diffLeftFile diffOptions)
+            <> "-vs-"
+            <> takeBaseName (diffRightFile diffOptions)
+            <> "."
+            <> extension
 
 runExhibits :: FilePath -> IO ()
 runExhibits filePath = do

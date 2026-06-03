@@ -2,12 +2,15 @@
 
 module Euclid.CLI.Options
     ( Command(..)
+    , DiffFormat(..)
+    , DiffOptions(..)
     , ExportFormat(..)
     , ExportOptions(..)
     , ImportFormat(..)
     , ImportOptions(..)
     , Options(..)
     , RunOptions(..)
+    , parseDiffFormat
     , parseExportFormat
     , optionsParserInfo
     ) where
@@ -23,6 +26,11 @@ data ExportFormat
     | ExportJson
     | ExportMarkdown
     | ExportMermaid
+    deriving (Eq, Show)
+
+data DiffFormat
+    = DiffSvg
+    | DiffHtml
     deriving (Eq, Show)
 
 data ImportFormat
@@ -47,6 +55,14 @@ data RunOptions = RunOptions
     }
     deriving (Eq, Show)
 
+data DiffOptions = DiffOptions
+    { diffLeftFile :: FilePath
+    , diffRightFile :: FilePath
+    , diffFormat :: Maybe DiffFormat
+    , diffOutput :: Maybe FilePath
+    }
+    deriving (Eq, Show)
+
 data ImportOptions = ImportOptions
     { importFile :: FilePath
     , importFormat :: ImportFormat
@@ -59,7 +75,7 @@ data Command
     | CommandExport ExportOptions
     | CommandCheck FilePath
     | CommandContradict FilePath
-    | CommandDiff FilePath FilePath
+    | CommandDiff DiffOptions
     | CommandExhibits FilePath
     | CommandImport ImportOptions
     | CommandRepl
@@ -143,8 +159,16 @@ contradictParser =
 diffParser :: Parser Command
 diffParser =
     CommandDiff
-        <$> argument str (metavar "FILE1")
-        <*> argument str (metavar "FILE2")
+        <$> ( DiffOptions
+                <$> argument str (metavar "FILE1")
+                <*> argument str (metavar "FILE2")
+                <*> optional
+                    ( option
+                        (eitherReader parseDiffFormat)
+                        (short 'f' <> long "format" <> metavar "FORMAT" <> help "Visual diff format: svg | html")
+                    )
+                <*> optional (strOption (short 'o' <> long "output" <> metavar "PATH"))
+            )
 
 exhibitsParser :: Parser Command
 exhibitsParser =
@@ -178,6 +202,13 @@ parseExportFormat raw =
         "markdown" -> Right ExportMarkdown
         "mermaid" -> Right ExportMermaid
         other -> Left ("unknown export format: " <> other <> " (supported: svg, html, json, md, mermaid)")
+
+parseDiffFormat :: String -> Either String DiffFormat
+parseDiffFormat raw =
+    case map toLower raw of
+        "svg" -> Right DiffSvg
+        "html" -> Right DiffHtml
+        other -> Left ("unknown diff format: " <> other <> " (supported: svg, html)")
 
 parseImportFormat :: String -> Either String ImportFormat
 parseImportFormat raw =

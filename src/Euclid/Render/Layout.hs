@@ -25,6 +25,7 @@ data LayoutTimeline = LayoutTimeline
 data LayoutEntity = LayoutEntity
     { layoutEntityName :: Text
     , layoutEntityType :: Text
+    , layoutEntityNarrative :: Maybe Text
     , layoutEntityTimeline :: Text
     , layoutEntityLane :: Int
     , layoutEntityStart :: Integer
@@ -80,6 +81,7 @@ computeLayout world =
         [ LayoutEntity
             { layoutEntityName = entityName entity
             , layoutEntityType = entityType entity
+            , layoutEntityNarrative = entityNarrative entity
             , layoutEntityTimeline = appearanceTimeline appearance
             , layoutEntityLane = entityLane
             , layoutEntityStart = timePointOrdinal (rangeStart (appearanceRange appearance))
@@ -99,3 +101,9 @@ computeLayout world =
             ++ [ layoutTimelineEnd timeline | timeline <- timelines ]
             ++ [ layoutEntityStart entity | entity <- entities ]
             ++ [ layoutEntityEnd entity | entity <- entities ]
+
+entityNarrative :: Entity -> Maybe Text
+entityNarrative entity =
+    case Map.lookup "narrative" (entityFields entity) of
+        Just (VString narrativeName) -> Just narrativeName
+        _ -> Nothing

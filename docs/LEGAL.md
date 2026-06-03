@@ -97,6 +97,8 @@ Ex. 1,opinion_exhibit,National Archives copy of the Brown opinion,brown_case,195
 $ euclid export examples/legal/brown_plaintiffs.euclid -f svg -o brown-plaintiffs.svg
 $ euclid export examples/legal/brown_board.euclid -f html -o brown-board.html
 $ euclid export examples/legal/brown_plaintiffs.euclid --narrative plaintiffs -f json -o brown-plaintiffs-only.json
+$ euclid diff examples/legal/brown_plaintiffs.euclid examples/legal/brown_board.euclid -f svg -o brown-diff.svg
+$ euclid diff examples/legal/brown_plaintiffs.euclid examples/legal/brown_board.euclid -f html -o brown-diff.html
 ```
 
 For the secondary historical and generative examples, see:

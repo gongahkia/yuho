@@ -79,6 +79,7 @@ renderSvg options layout =
         let y = laneY (layoutEntityLane entity) - 16
             x = scaleX (layoutEntityStart entity)
             width = max 14.0 (scaleX (layoutEntityEnd entity) - x)
+            fillColor = maybe (themeEntity (svgTheme options)) narrativeColor (layoutEntityNarrative entity)
          in T.concat
                 [ "<g>"
                 , "<rect x=\""
@@ -88,8 +89,10 @@ renderSvg options layout =
                 , "\" width=\""
                 , showDouble width
                 , "\" height=\"28\" rx=\"6\" fill=\""
-                , themeEntity (svgTheme options)
-                , "\" opacity=\"0.85\"/>"
+                , fillColor
+                , "\" opacity=\"0.9\""
+                , maybe "" (\narrative -> " data-narrative=\"" <> escapeXml narrative <> "\"") (layoutEntityNarrative entity)
+                , "/>"
                 , "<text x=\""
                 , showDouble (x + 8)
                 , "\" y=\""
@@ -108,25 +111,21 @@ renderSvg options layout =
                 case lookupEntityMidpoint (layoutRelTarget relationship) of
                     Nothing -> ""
                     Just (targetX, targetY) ->
+                        let isContradiction = layoutRelLabel relationship == Just "contradicts"
+                            strokeColor = if isContradiction then "#dc2626" else themeRelationship (svgTheme options)
+                            strokeWidth = if isContradiction then "2.75" else "1.5"
+                            dashArray = if isContradiction then "" else " stroke-dasharray=\"5,5\""
+                            relClass = if isContradiction then "relationship contradiction" else "relationship"
+                         in
                         T.concat
                             [ "<g>"
-                            , "<line x1=\""
-                            , showDouble sourceX
-                            , "\" y1=\""
-                            , showDouble sourceY
-                            , "\" x2=\""
-                            , showDouble targetX
-                            , "\" y2=\""
-                            , showDouble targetY
-                            , "\" stroke=\""
-                            , themeRelationship (svgTheme options)
-                            , "\" stroke-width=\"1.5\" stroke-dasharray=\"5,5\"/>"
+                            , renderRelationshipShape relClass strokeColor strokeWidth dashArray sourceX sourceY targetX targetY
                             , "<text x=\""
                             , showDouble ((sourceX + targetX) / 2)
                             , "\" y=\""
                             , showDouble ((sourceY + targetY) / 2 - 4)
                             , "\" fill=\""
-                            , themeRelationship (svgTheme options)
+                            , strokeColor
                             , "\" font-family=\"monospace\" font-size=\"12\">"
                             , escapeXml (maybe "rel" id (layoutRelLabel relationship))
                             , "</text>"
@@ -140,11 +139,79 @@ renderSvg options layout =
                     x2 = scaleX (layoutEntityEnd entity)
                  in Just ((x1 + x2) / 2, laneY (layoutEntityLane entity) - 2)
 
+    renderRelationshipShape relClass strokeColor strokeWidth dashArray sourceX sourceY targetX targetY
+        | abs (sourceX - targetX) < 1 && abs (sourceY - targetY) < 1 =
+            T.concat
+                [ "<path d=\"M "
+                , showDouble sourceX
+                , " "
+                , showDouble sourceY
+                , " C "
+                , showDouble sourceX
+                , " "
+                , showDouble (sourceY - 42)
+                , " "
+                , showDouble (sourceX + 72)
+                , " "
+                , showDouble (sourceY - 42)
+                , " "
+                , showDouble (sourceX + 72)
+                , " "
+                , showDouble sourceY
+                , "\" fill=\"none\" stroke=\""
+                , strokeColor
+                , "\" stroke-width=\""
+                , strokeWidth
+                , "\" class=\""
+                , relClass
+                , "\""
+                , dashArray
+                , "/>"
+                ]
+        | otherwise =
+            T.concat
+                [ "<line x1=\""
+                , showDouble sourceX
+                , "\" y1=\""
+                , showDouble sourceY
+                , "\" x2=\""
+                , showDouble targetX
+                , "\" y2=\""
+                , showDouble targetY
+                , "\" stroke=\""
+                , strokeColor
+                , "\" stroke-width=\""
+                , strokeWidth
+                , "\" class=\""
+                , relClass
+                , "\""
+                , dashArray
+                , "/>"
+                ]
+
 showText :: Show a => a -> Text
 showText = T.pack . show
 
 showDouble :: Double -> Text
 showDouble = T.pack . show
+
+narrativeColor :: Text -> Text
+narrativeColor narrative =
+    narrativePalette !! (fromIntegral (hashText narrative `mod` fromIntegral (length narrativePalette)))
+
+narrativePalette :: [Text]
+narrativePalette =
+    [ "#2563eb"
+    , "#059669"
+    , "#d97706"
+    , "#7c3aed"
+    , "#db2777"
+    , "#0891b2"
+    ]
+
+hashText :: Text -> Integer
+hashText =
+    T.foldl' (\acc char -> acc * 33 + fromIntegral (fromEnum char)) 5381
 
 escapeXml :: Text -> Text
 escapeXml =
