@@ -7,6 +7,7 @@ module Euclid.CLI.Options
     , ImportFormat(..)
     , ImportOptions(..)
     , Options(..)
+    , RunOptions(..)
     , parseExportFormat
     , optionsParserInfo
     ) where
@@ -36,6 +37,13 @@ data ExportOptions = ExportOptions
     , exportOutput :: Maybe FilePath
     , exportWidth :: Maybe Int
     , exportHeight :: Maybe Int
+    , exportNarrative :: Maybe Text
+    }
+    deriving (Eq, Show)
+
+data RunOptions = RunOptions
+    { runFile :: FilePath
+    , runNarrative :: Maybe Text
     }
     deriving (Eq, Show)
 
@@ -47,10 +55,12 @@ data ImportOptions = ImportOptions
     deriving (Eq, Show)
 
 data Command
-    = CommandRun FilePath
+    = CommandRun RunOptions
     | CommandExport ExportOptions
     | CommandCheck FilePath
+    | CommandContradict FilePath
     | CommandDiff FilePath FilePath
+    | CommandExhibits FilePath
     | CommandImport ImportOptions
     | CommandRepl
     | CommandLsp
@@ -80,7 +90,9 @@ optionsParser =
             ( command "run" (info runParser (progDesc "Run the analytical terminal UI"))
                 <> command "export" (info exportParser (progDesc "Export a .euclid file"))
                 <> command "check" (info checkParser (progDesc "Parse and validate a .euclid file"))
+                <> command "contradict" (info contradictParser (progDesc "List contradiction edges with supporting evidence"))
                 <> command "diff" (info diffParser (progDesc "Semantic diff of two .euclid files"))
+                <> command "exhibits" (info exhibitsParser (progDesc "Emit exhibit list CSV"))
                 <> command "import" (info importParser (progDesc "Import external data into .euclid"))
                 <> command "repl" (info replParser (progDesc "Interactive REPL"))
                 <> command "lsp" (info lspParser (progDesc "Run the stdio language server"))
@@ -89,7 +101,10 @@ optionsParser =
 runParser :: Parser Command
 runParser =
     CommandRun
-        <$> argument str (metavar "FILE")
+        <$> ( RunOptions
+                <$> argument str (metavar "FILE")
+                <*> narrativeOption
+            )
 
 exportParser :: Parser Command
 exportParser =
@@ -102,11 +117,27 @@ exportParser =
                 <*> optional (strOption (short 'o' <> long "output" <> metavar "PATH"))
                 <*> optional (option auto (long "width" <> metavar "PIXELS"))
                 <*> optional (option auto (long "height" <> metavar "PIXELS"))
+                <*> narrativeOption
             )
+
+narrativeOption :: Parser (Maybe Text)
+narrativeOption =
+    optional $
+        T.pack
+            <$> strOption
+                ( long "narrative"
+                    <> metavar "NAME"
+                    <> help "Filter to entities for a narrative while retaining neutral shared context"
+                )
 
 checkParser :: Parser Command
 checkParser =
     CommandCheck
+        <$> argument str (metavar "FILE")
+
+contradictParser :: Parser Command
+contradictParser =
+    CommandContradict
         <$> argument str (metavar "FILE")
 
 diffParser :: Parser Command
@@ -114,6 +145,11 @@ diffParser =
     CommandDiff
         <$> argument str (metavar "FILE1")
         <*> argument str (metavar "FILE2")
+
+exhibitsParser :: Parser Command
+exhibitsParser =
+    CommandExhibits
+        <$> argument str (metavar "FILE")
 
 importParser :: Parser Command
 importParser =

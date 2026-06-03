@@ -15,6 +15,8 @@ import Euclid.CLI.Options
 import Euclid.Config.Loader
 import Euclid.Core.Diff
 import Euclid.Core.Eval
+import Euclid.Core.Filter
+import Euclid.Core.Reports
 import Euclid.Core.Validation
 import Euclid.Import.CSV
 import Euclid.Import.GEDCOM
@@ -58,20 +60,23 @@ main = do
 runCommand :: EuclidConfig -> Options -> IO ()
 runCommand configValue options =
     case optCommand options of
-        CommandRun filePath -> do
-            loaded <- loadEuclidFile filePath
-            reportDiagnostics (loadedDiagnostics loaded)
-            runEuclidTui filePath (loadedWorld loaded)
+        CommandRun runOpts -> do
+            loaded <- loadEuclidFile (runFile runOpts)
+            let filtered = applyNarrativeFilter (runNarrative runOpts) loaded
+            reportDiagnostics (loadedDiagnostics filtered)
+            runEuclidTui (runFile runOpts) (loadedWorld filtered)
         CommandExport exportOpts -> runExport configValue (optTheme options) exportOpts
         CommandCheck filePath -> runCheck filePath
+        CommandContradict filePath -> runContradict filePath
         CommandDiff leftPath rightPath -> runDiff leftPath rightPath
+        CommandExhibits filePath -> runExhibits filePath
         CommandImport importOpts -> runImport importOpts
         CommandRepl -> runRepl
         CommandLsp -> runLspServer
 
 runExport :: EuclidConfig -> Maybe Text -> ExportOptions -> IO ()
 runExport configValue themeOverride exportOptions = do
-    loaded <- loadEuclidFile (exportFile exportOptions)
+    loaded <- applyNarrativeFilter (exportNarrative exportOptions) <$> loadEuclidFile (exportFile exportOptions)
     themeValue <- resolveSvgTheme themeOverride configValue
     case effectiveExportFormat configValue exportOptions of
         ExportSvg -> do
@@ -124,11 +129,27 @@ runCheck filePath = do
             reportDiagnostics (loadedDiagnostics loaded)
             when (hasErrors (loadedDiagnostics loaded)) exitFailure
 
+runContradict :: FilePath -> IO ()
+runContradict filePath = do
+    loaded <- loadEuclidFile filePath
+    when (hasErrors (loadedDiagnostics loaded)) $ do
+        reportDiagnostics (loadedDiagnostics loaded)
+        exitFailure
+    TIO.putStr (renderContradictions (loadedWorld loaded))
+
 runDiff :: FilePath -> FilePath -> IO ()
 runDiff leftPath rightPath = do
     leftWorldValue <- loadEuclidFile leftPath
     rightWorldValue <- loadEuclidFile rightPath
     TIO.putStrLn (diffWorlds (loadedWorld leftWorldValue) (loadedWorld rightWorldValue))
+
+runExhibits :: FilePath -> IO ()
+runExhibits filePath = do
+    loaded <- loadEuclidFile filePath
+    when (hasErrors (loadedDiagnostics loaded)) $ do
+        reportDiagnostics (loadedDiagnostics loaded)
+        exitFailure
+    TIO.putStr (renderExhibitsCsv (loadedWorld loaded))
 
 runImport :: ImportOptions -> IO ()
 runImport importOptions = do
@@ -258,6 +279,16 @@ loadEuclidFile filePath = do
                             , loadedDiagnostics = diagnostics
                             , loadedProgram = program
                             }
+
+applyNarrativeFilter :: Maybe Text -> LoadedWorld -> LoadedWorld
+applyNarrativeFilter Nothing loaded = loaded
+applyNarrativeFilter (Just narrativeName) loaded =
+    loaded
+        { loadedWorld = filteredWorld
+        , loadedDiagnostics = validateWorld filteredWorld
+        }
+  where
+    filteredWorld = filterWorldByNarrative narrativeName (loadedWorld loaded)
 
 loadSourceWithImports :: [FilePath] -> FilePath -> IO Text
 loadSourceWithImports visited filePath = do

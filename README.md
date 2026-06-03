@@ -88,9 +88,13 @@ $ euclid export examples/historical/ww2.euclid -f mermaid -o ww2.mmd
 | Command | Description |
 |---------|-------------|
 | `euclid run <file>` | Parse a `.euclid` file, validate it, and open the Brick-based terminal explorer |
+| `euclid run <file> --narrative plaintiffs` | Open the TUI filtered to one narrative plus neutral shared context |
 | `euclid export <file> -f svg -o out.svg` | Export a `.euclid` file as SVG |
+| `euclid export <file> --narrative plaintiffs -f json` | Export one narrative plus neutral shared context |
 | `euclid check <file>` | Parse and validate a `.euclid` file without opening the TUI |
+| `euclid contradict <file>` | List modeled contradiction edges with supporting evidence on both sides |
 | `euclid diff <file1> <file2>` | Render a semantic diff of timelines, entities, and relationships |
+| `euclid exhibits <file>` | Emit a filing-style exhibit list as CSV |
 | `euclid import <file> --from csv` | Import CSV, GEDCOM, or JSON-LD data into `.euclid` source |
 | `euclid repl` | Start the interactive REPL with `:load`, `:world`, `:entities`, and `:rels` |
 | `euclid lsp` | Run the stdio language server for completions, hover, and diagnostics |
@@ -100,6 +104,7 @@ $ euclid export examples/historical/ww2.euclid -f mermaid -o ww2.mmd
 | `--verbose` | Print extra startup and command execution details |
 | `--config <path>` | Path to a TOML config file for export defaults and theme settings |
 | `--theme <name>` | Theme: `dark`, `light`, or a path to a custom TOML theme |
+| `--narrative <name>` | Filter `run` and `export` to entities with that `narrative` field while retaining neutral entities |
 
 ## Syntax
 

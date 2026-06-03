@@ -149,6 +149,7 @@ Notes:
 - the type annotation is optional; omitted types become `entity`
 - `appears_on` may appear multiple times
 - non-`appears_on` fields are stored as evaluated values
+- a string `narrative` field can be used by `euclid run --narrative <name>` and `euclid export --narrative <name>`
 
 Built-in entity type labels:
 

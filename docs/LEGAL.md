@@ -74,11 +74,29 @@ Relationships:
 
 The useful part is not that Euclid decides which side is right. The useful part is that narrative differences become source-level changes: claims change, cited positions change, and relationship edges move between files.
 
+## Inspect Legal Reports
+
+```console
+$ euclid contradict examples/legal/brown_plaintiffs.euclid
+Contradictions:
+- plaintiffs_equal_protection_claim contradicts board_separate_equal_claim
+  timelines: brown_case
+  source evidence:
+    - brown_opinion_record | citation=Brown v. Board of Education, 347 U.S. 483 | source=National Archives
+  target evidence:
+    - nps_case_history | citation=Brown v. Board of Education National Historical Park | source=National Park Service
+
+$ euclid exhibits examples/legal/brown_plaintiffs.euclid
+number,entity,description,timeline,start,end
+Ex. 1,opinion_exhibit,National Archives copy of the Brown opinion,brown_case,1954-05-17,1954-05-17
+```
+
 ## Export A Visual
 
 ```console
 $ euclid export examples/legal/brown_plaintiffs.euclid -f svg -o brown-plaintiffs.svg
 $ euclid export examples/legal/brown_board.euclid -f html -o brown-board.html
+$ euclid export examples/legal/brown_plaintiffs.euclid --narrative plaintiffs -f json -o brown-plaintiffs-only.json
 ```
 
 For the secondary historical and generative examples, see:
