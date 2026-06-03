@@ -18,6 +18,8 @@ module Euclid.Model.Types
     , FunctionSig(..)
     , CausalKind(..)
     , Relationship(..)
+    , RelationshipSemantics(..)
+    , RelationshipTemporalRule(..)
     , TimePoint(..)
     , TimeRange(..)
     , Timeline(..)
@@ -27,6 +29,7 @@ module Euclid.Model.Types
     , Value(..)
     , World(..)
     , builtInTypeFields
+    , builtInRelationshipSemantics
     , builtInTypes
     , emptyWorld
     , findEntity
@@ -212,6 +215,18 @@ data Relationship = Relationship
     }
     deriving (Eq, Show)
 
+data RelationshipTemporalRule
+    = SourceBeforeTarget
+    | SourceAfterTarget
+    deriving (Eq, Ord, Show)
+
+data RelationshipSemantics = RelationshipSemantics
+    { relationshipSourceTypes :: [Text]
+    , relationshipTargetTypes :: [Text]
+    , relationshipTemporalRule :: Maybe RelationshipTemporalRule
+    }
+    deriving (Eq, Show)
+
 data FunctionSig = FunctionSig
     { functionName :: Text
     , functionParams :: [(Text, Text)]
@@ -321,6 +336,45 @@ builtInTypeFields =
             ]
           )
         ]
+
+builtInRelationshipSemantics :: Map Text RelationshipSemantics
+builtInRelationshipSemantics =
+    Map.fromList
+        [ ("contradicts", unconstrainedRelationship)
+        , ("corroborates", unconstrainedRelationship)
+        , ("supersedes", temporalRelationship SourceAfterTarget)
+        , ("caused", temporalRelationship SourceBeforeTarget)
+        , ("causes", temporalRelationship SourceBeforeTarget)
+        , ("enabled", temporalRelationship SourceBeforeTarget)
+        , ("enables", temporalRelationship SourceBeforeTarget)
+        , ("preceded", temporalRelationship SourceBeforeTarget)
+        , ( "cites"
+          , RelationshipSemantics
+                { relationshipSourceTypes = ["evidence"]
+                , relationshipTargetTypes = ["claim", "fact"]
+                , relationshipTemporalRule = Nothing
+                }
+          )
+        , ( "impeaches"
+          , RelationshipSemantics
+                { relationshipSourceTypes = ["evidence"]
+                , relationshipTargetTypes = ["witness"]
+                , relationshipTemporalRule = Nothing
+                }
+          )
+        ]
+
+unconstrainedRelationship :: RelationshipSemantics
+unconstrainedRelationship =
+    RelationshipSemantics
+        { relationshipSourceTypes = []
+        , relationshipTargetTypes = []
+        , relationshipTemporalRule = Nothing
+        }
+
+temporalRelationship :: RelationshipTemporalRule -> RelationshipSemantics
+temporalRelationship rule =
+    unconstrainedRelationship{relationshipTemporalRule = Just rule}
 
 requiredField :: Text -> Text -> TypeField
 requiredField name fieldType =

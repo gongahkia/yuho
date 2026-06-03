@@ -89,6 +89,8 @@ entity board_separate_equal_claim : claim {
 rel plaintiffs_equal_protection_claim -["contradicts"]-> board_separate_equal_claim;
 rel plaintiffs_harm_claim -["corroborates"]-> plaintiffs_equal_protection_claim;
 rel brown_decision -["corroborates"]-> plaintiffs_equal_protection_claim;
+rel brown_opinion_record -["cites"]-> brown_decision;
+rel brown_opinion_record -["cites"]-> plaintiffs_equal_protection_claim;
 rel opinion_exhibit -["includes"]-> brown_opinion_record;
 rel brown_decision -["supersedes"]-> district_court_denial;
 rel brown_ii_decree -["supersedes"]-> brown_decision;

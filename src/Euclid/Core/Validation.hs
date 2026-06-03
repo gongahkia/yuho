@@ -8,6 +8,7 @@ import qualified Data.Map.Strict as Map
 import Data.Maybe (isNothing)
 import qualified Data.Set as Set
 import Data.Text (Text)
+import qualified Data.Text as T
 import Euclid.Model.Types
 
 validateWorld :: World -> [Diagnostic]
@@ -166,20 +167,24 @@ validateRelationships world =
             ++ targetDiagnostics
             ++ temporalScopeDiagnostics
             ++ causalOrderDiagnostics
+            ++ builtInRelationshipDiagnostics
       where
+        labelText = relLabel relationship
+        sourceEntity = findEntity (relSource relationship) world
+        targetEntity = findEntity (relTarget relationship) world
         sourceDiagnostics =
             [ validationDiagnostic
                 (relSourceSpan relationship)
                 DiagnosticError
                 ("relationship source not found: " <> relSource relationship)
-            | isNothing (findEntity (relSource relationship) world)
+            | isNothing sourceEntity
             ]
         targetDiagnostics =
             [ validationDiagnostic
                 (relSourceSpan relationship)
                 DiagnosticError
                 ("relationship target not found: " <> relTarget relationship)
-            | isNothing (findEntity (relTarget relationship) world)
+            | isNothing targetEntity
             ]
         temporalScopeDiagnostics =
             [ validationDiagnostic
@@ -204,14 +209,92 @@ validateRelationships world =
                     <> "' has source appearing after target (temporal ordering violation)"
                 )
             | relCausalKind relationship /= CausalNone
-            , Just sourceEntity <- [findEntity (relSource relationship) world]
-            , Just targetEntity <- [findEntity (relTarget relationship) world]
-            , not (null (entityAppearances sourceEntity))
-            , not (null (entityAppearances targetEntity))
-            , let sourceEnd = minimum [timePointOrdinal (rangeEnd (appearanceRange a)) | a <- entityAppearances sourceEntity]
-                  targetStart = maximum [timePointOrdinal (rangeStart (appearanceRange a)) | a <- entityAppearances targetEntity]
+            , Just causalSourceEntity <- [findEntity (relSource relationship) world]
+            , Just causalTargetEntity <- [findEntity (relTarget relationship) world]
+            , not (null (entityAppearances causalSourceEntity))
+            , not (null (entityAppearances causalTargetEntity))
+            , let sourceEnd = minimum [timePointOrdinal (rangeEnd (appearanceRange a)) | a <- entityAppearances causalSourceEntity]
+                  targetStart = maximum [timePointOrdinal (rangeStart (appearanceRange a)) | a <- entityAppearances causalTargetEntity]
             , sourceEnd > targetStart
             ]
+        builtInRelationshipDiagnostics =
+            case labelText >>= (`Map.lookup` builtInRelationshipSemantics) of
+                Nothing -> []
+                Just semantics ->
+                    relationshipEndpointDiagnostics "source" (relSource relationship) sourceEntity (relationshipSourceTypes semantics)
+                        ++ relationshipEndpointDiagnostics "target" (relTarget relationship) targetEntity (relationshipTargetTypes semantics)
+                        ++ relationshipTemporalDiagnostics semantics
+        relationshipEndpointDiagnostics endpointName endpointEntityName maybeEntity expectedTypes =
+            [ validationDiagnostic
+                (relSourceSpan relationship)
+                DiagnosticWarning
+                ( "legal relationship '"
+                    <> label
+                    <> "' expects "
+                    <> endpointName
+                    <> " type "
+                    <> renderExpectedTypes expectedTypes
+                    <> ", got "
+                    <> entityType entity
+                    <> " for "
+                    <> endpointEntityName
+                )
+            | not (null expectedTypes)
+            , Just label <- [labelText]
+            , Just entity <- [maybeEntity]
+            , not (any (entityTypeInheritsFrom world (entityType entity)) expectedTypes)
+            ]
+        relationshipTemporalDiagnostics semantics =
+            [ validationDiagnostic
+                (relSourceSpan relationship)
+                DiagnosticWarning
+                ( "legal relationship '"
+                    <> label
+                    <> "' expects "
+                    <> temporalExpectation rule
+                    <> ", but "
+                    <> relSource relationship
+                    <> " and "
+                    <> relTarget relationship
+                    <> " do not match that direction"
+                )
+            | Just label <- [labelText]
+            , Just rule <- [relationshipTemporalRule semantics]
+            , relCausalKind relationship == CausalNone
+            , Just source <- [sourceEntity]
+            , Just target <- [targetEntity]
+            , not (relationshipSatisfiesTemporalRule rule source target)
+            ]
+
+renderExpectedTypes :: [Text] -> Text
+renderExpectedTypes [] = "any"
+renderExpectedTypes [expectedType] = expectedType
+renderExpectedTypes [firstType, secondType] = firstType <> " or " <> secondType
+renderExpectedTypes typeNames =
+    T.intercalate ", " (init typeNames) <> ", or " <> last typeNames
+
+temporalExpectation :: RelationshipTemporalRule -> Text
+temporalExpectation SourceBeforeTarget = "source to appear before target"
+temporalExpectation SourceAfterTarget = "source to appear after target"
+
+relationshipSatisfiesTemporalRule :: RelationshipTemporalRule -> Entity -> Entity -> Bool
+relationshipSatisfiesTemporalRule rule source target =
+    null (entityAppearances source)
+        || null (entityAppearances target)
+        || case rule of
+            SourceBeforeTarget ->
+                any
+                    (\sourceEnd -> any (sourceEnd <=) targetStarts)
+                    sourceEnds
+            SourceAfterTarget ->
+                any
+                    (\sourceStart -> any (sourceStart >=) targetEnds)
+                    sourceStarts
+  where
+    sourceStarts = [timePointOrdinal (rangeStart (appearanceRange appearance)) | appearance <- entityAppearances source]
+    sourceEnds = [timePointOrdinal (rangeEnd (appearanceRange appearance)) | appearance <- entityAppearances source]
+    targetStarts = [timePointOrdinal (rangeStart (appearanceRange appearance)) | appearance <- entityAppearances target]
+    targetEnds = [timePointOrdinal (rangeEnd (appearanceRange appearance)) | appearance <- entityAppearances target]
 
 flattenTypeFields :: World -> TypeDef -> Map.Map Text TypeField
 flattenTypeFields world typeDef =

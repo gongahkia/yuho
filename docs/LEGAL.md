@@ -33,7 +33,7 @@ Both files share the same `brown_case` timeline, core `fact` entities, and sourc
 * `brown_plaintiffs.euclid` foregrounds the equal-protection and harm claims that Brown accepted.
 * `brown_board.euclid` foregrounds the district-court and board posture under the separate-but-equal doctrine.
 
-The labels `contradicts`, `corroborates`, and `supersedes` are currently relationship labels. Later legal-model work can add first-class validation around them, but the current diff already exposes the modeled relationship deltas.
+Legal relationship labels are first-class validator metadata. `cites` is checked as `evidence -> claim/fact`, `supersedes` is checked as later source replacing earlier target, and `contradicts`/`corroborates` remain explicit modeled edges without automatic truth inference.
 
 ## Check The Inputs
 
@@ -64,9 +64,11 @@ Entities:
   ~ changed plaintiffs_equal_protection_claim
   ~ changed plaintiffs_harm_claim
 Relationships:
+  + only in right brown_opinion_record -[cites]-> board_separate_equal_claim
   + only in right district_court_denial -[contradicts]-> plaintiffs_equal_protection_claim
   + only in right district_court_denial -[corroborates]-> board_separate_equal_claim
   - only in left brown_decision -[corroborates]-> plaintiffs_equal_protection_claim
+  - only in left brown_opinion_record -[cites]-> plaintiffs_equal_protection_claim
   - only in left plaintiffs_equal_protection_claim -[contradicts]-> board_separate_equal_claim
   - only in left plaintiffs_harm_claim -[corroborates]-> plaintiffs_equal_protection_claim
 ```

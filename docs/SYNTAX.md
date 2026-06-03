@@ -255,10 +255,58 @@ Semantic rules:
 
 - relationship source and target entities must exist
 - temporal scopes with `start > end` are errors
+- built-in legal relationship labels add direction warnings when their endpoint types or temporal order are malformed
 
 Not currently supported:
 
 - undirected arrows such as `--` or `-["label"]-`
+
+Built-in legal relationship labels:
+
+| Label | Validator semantics |
+| --- | --- |
+| `contradicts` | Recognized as an explicit contradiction edge. No automatic truth inference is performed. |
+| `corroborates` | Recognized as an explicit support edge. No automatic truth inference is performed. |
+| `supersedes` | Source should appear after the target it replaces. |
+| `caused` | Source should appear before the target result. |
+| `enabled` | Source should appear before the target it made possible. |
+| `preceded` | Source should appear before the target. |
+| `cites` | Source should be `evidence`; target should be `claim` or `fact`. |
+| `impeaches` | Source should be `evidence`; target should be `witness`. |
+
+The causal keyword forms `source causes target;` and `source enables target;` keep their existing temporal-order warnings. Custom labels remain allowed.
+
+Legal examples:
+
+```euclid
+timeline case_file {
+    start: 2024-03-01,
+    end: 2024-03-31,
+}
+
+entity record : evidence {
+    citation: "Record A",
+    source: "Archive",
+    appears_on: case_file @ 2024-03-01..2024-03-01,
+}
+
+entity disputed_claim : claim {
+    appears_on: case_file @ 2024-03-02..2024-03-02,
+}
+
+entity hearing_fact : fact {
+    appears_on: case_file @ 2024-03-04..2024-03-04,
+}
+
+entity witness_jane : witness {
+    appears_on: case_file @ 2024-03-05..2024-03-05,
+}
+
+rel record -["cites"]-> disputed_claim;
+rel record -["cites"]-> hearing_fact;
+rel record -["impeaches"]-> witness_jane;
+rel hearing_fact -["corroborates"]-> disputed_claim;
+```
 
 ## Custom Types
 

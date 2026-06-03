@@ -206,6 +206,103 @@ spec = do
                             any (T.isInfixOf "relationship temporal scope has start after end" . diagnosticMessage) (validateWorld worldValue)
                                 `shouldBe` True
 
+        it "accepts built-in legal relationship labels with valid direction" $ do
+            let source =
+                    T.unlines
+                        [ "timeline case_file {"
+                        , "  start: 1,"
+                        , "  end: 30,"
+                        , "}"
+                        , "entity record : evidence {"
+                        , "  citation: \"Record A\","
+                        , "  source: \"Archive\","
+                        , "  appears_on: case_file @ 2..2,"
+                        , "}"
+                        , "entity claim_a : claim {"
+                        , "  appears_on: case_file @ 5..10,"
+                        , "}"
+                        , "entity fact_a : fact {"
+                        , "  appears_on: case_file @ 6..6,"
+                        , "}"
+                        , "entity witness_a : witness {"
+                        , "  appears_on: case_file @ 7..7,"
+                        , "}"
+                        , "entity old_order : fact {"
+                        , "  appears_on: case_file @ 8..8,"
+                        , "}"
+                        , "entity new_order : fact {"
+                        , "  appears_on: case_file @ 12..12,"
+                        , "}"
+                        , "entity prep_step : fact {"
+                        , "  appears_on: case_file @ 14..14,"
+                        , "}"
+                        , "entity result_step : fact {"
+                        , "  appears_on: case_file @ 18..18,"
+                        , "}"
+                        , "rel record -[\"cites\"]-> claim_a;"
+                        , "rel record -[\"cites\"]-> fact_a;"
+                        , "rel record -[\"impeaches\"]-> witness_a;"
+                        , "rel claim_a -[\"contradicts\"]-> fact_a;"
+                        , "rel fact_a -[\"corroborates\"]-> claim_a;"
+                        , "rel new_order -[\"supersedes\"]-> old_order;"
+                        , "rel prep_step -[\"caused\"]-> result_step;"
+                        , "rel prep_step -[\"enabled\"]-> result_step;"
+                        , "rel prep_step -[\"preceded\"]-> result_step;"
+                        ]
+            case parseProgram "<inline>" source of
+                Left diags ->
+                    expectationFailure ("parse failed: " <> show diags)
+                Right program ->
+                    case evalProgram program of
+                        Left diag ->
+                            expectationFailure ("eval failed: " <> show diag)
+                        Right worldValue ->
+                            any (T.isInfixOf "legal relationship" . diagnosticMessage) (validateWorld worldValue)
+                                `shouldBe` False
+
+        it "warns when built-in legal relationship direction is malformed" $ do
+            let source =
+                    T.unlines
+                        [ "timeline case_file {"
+                        , "  start: 1,"
+                        , "  end: 30,"
+                        , "}"
+                        , "entity record : evidence {"
+                        , "  citation: \"Record A\","
+                        , "  source: \"Archive\","
+                        , "  appears_on: case_file @ 20..20,"
+                        , "}"
+                        , "entity claim_a : claim {"
+                        , "  appears_on: case_file @ 5..5,"
+                        , "}"
+                        , "entity witness_a : witness {"
+                        , "  appears_on: case_file @ 7..7,"
+                        , "}"
+                        , "entity late_fact : fact {"
+                        , "  appears_on: case_file @ 24..24,"
+                        , "}"
+                        , "rel claim_a -[\"cites\"]-> record;"
+                        , "rel record -[\"impeaches\"]-> claim_a;"
+                        , "rel late_fact -[\"preceded\"]-> claim_a;"
+                        , "rel claim_a -[\"supersedes\"]-> late_fact;"
+                        ]
+            case parseProgram "<inline>" source of
+                Left diags ->
+                    expectationFailure ("parse failed: " <> show diags)
+                Right program ->
+                    case evalProgram program of
+                        Left diag ->
+                            expectationFailure ("eval failed: " <> show diag)
+                        Right worldValue -> do
+                            let diagnostics = validateWorld worldValue
+                                messages = map diagnosticMessage diagnostics
+                            any ((== DiagnosticError) . diagnosticLevel) diagnostics `shouldBe` False
+                            any (T.isInfixOf "legal relationship 'cites' expects source type evidence") messages `shouldBe` True
+                            any (T.isInfixOf "legal relationship 'cites' expects target type claim or fact") messages `shouldBe` True
+                            any (T.isInfixOf "legal relationship 'impeaches' expects target type witness") messages `shouldBe` True
+                            any (T.isInfixOf "legal relationship 'preceded' expects source to appear before target") messages `shouldBe` True
+                            any (T.isInfixOf "legal relationship 'supersedes' expects source to appear after target") messages `shouldBe` True
+
     describe "declared entity type validation" $
         it "enforces required fields and declared field value types" $ do
             let source =
