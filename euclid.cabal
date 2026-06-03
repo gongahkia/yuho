@@ -5,8 +5,8 @@ synopsis:           Euclid timeline DSL and terminal explorer
 description:        Haskell implementation of Euclid with parsing, evaluation, validation, SVG export, REPL, LSP, and a Brick-based TUI.
 license:            MIT
 license-file:       LICENSE
-author:             OpenAI Codex
-maintainer:         none@example.com
+author:             gabriel ong
+maintainer:         gabriel ong
 build-type:         Simple
 extra-doc-files:    README.md
 

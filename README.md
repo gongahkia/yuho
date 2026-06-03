@@ -1,43 +1,54 @@
-[![](https://img.shields.io/badge/euclid_1.0.0-passing-light_green)](https://github.com/gongahkia/euclid/releases/tag/1.0.0)
-[![](https://img.shields.io/badge/euclid_2.0.0-passing-green)](https://github.com/gongahkia/euclid/releases/tag/2.0.0)
-![](https://github.com/gongahkia/euclid/actions/workflows/ci.yml/badge.svg)
-![](https://github.com/gongahkia/euclid/actions/workflows/release.yml/badge.svg)
-
 # `Euclid`
 
-Euclid is a [domain-specific language](https://en.wikipedia.org/wiki/Domain-specific_language) for modeling [timelines](https://en.wikipedia.org/wiki/Timeline) and their [evolutions](https://en.wikipedia.org/wiki/Temporal_paradox).
+**Litigation timelines as code.**
+
+`git diff for facts.`
 
 <div align="center">
     <img src="./asset/logo/euclid.jpg" width="50%">
 </div>
 
-## Stack
+Euclid is a Haskell DSL for modeling legal chronologies, investigations, depositions, discovery narratives, and other timelines where the order of facts matters. Write timelines as source files, review them like code, and compare two competing narratives with `euclid diff`.
 
-* *Language & Parsing*: [Haskell](https://www.haskell.org/), [megaparsec](https://hackage.haskell.org/package/megaparsec), [optparse-applicative](https://hackage.haskell.org/package/optparse-applicative), [text](https://hackage.haskell.org/package/text)
-* *TUI*: [brick](https://hackage.haskell.org/package/brick), [vty](https://hackage.haskell.org/package/vty)
-* *Export Format*: [SVG](https://www.w3.org/Graphics/SVG/), [aeson](https://hackage.haskell.org/package/aeson), [tomland](https://hackage.haskell.org/package/tomland)
-* *Data & Utilities*: [containers](https://hackage.haskell.org/package/containers), [bytestring](https://hackage.haskell.org/package/bytestring), [filepath](https://hackage.haskell.org/package/filepath), [time](https://hackage.haskell.org/package/time)
-* *CI/CD*: [GitHub Actions](https://github.com/features/actions)
+```console
+$ euclid diff plaintiff.euclid defendant.euclid
+```
 
-## Screenshots
+The legal framing is concrete, but the core is general: branching timelines, typed entities, relationships, imports, validation diagnostics, a terminal explorer, an LSP server, and exports for SVG, HTML, JSON, Markdown, and Mermaid.
 
-<div align="center">
-    <img src="./asset/reference/1.png" width="32%">
-    <img src="./asset/reference/6.png" width="32%">
-    <img src="./asset/reference/3.png" width="32%">
-</div>
+Euclid is a modeling tool, not legal advice and not a hosted case platform. The goal is a small, inspectable language that makes narrative structure visible in a repo, a terminal, and a README.
 
-<div align="center">
-    <img src="./asset/reference/4.png" width="32%">
-    <img src="./asset/reference/2.png" width="32%">
-    <img src="./asset/reference/5.png" width="32%">
-</div>
+## Why timelines as code?
 
-## Usage
+Legal and investigative timelines often contain more than dates. They contain claims, facts, witnesses, exhibits, citations, and contradictions. A text DSL makes those choices explicit:
 
-The below instructions are for running `Euclid` locally.
+```euclid
+type claim {
+    citation: string?,
+}
 
-1. First execute the below command to clone the current Haskell implementation of `Euclid` onto your local machine.
+timeline plaintiff_narrative {
+    kind: linear,
+    start: 2024-01-01,
+    end: 2024-12-31,
+}
+
+entity notice_sent : claim {
+    citation: "Ex. 12",
+    appears_on: plaintiff_narrative @ 2024-03-04..2024-03-04,
+}
+
+entity notice_denied : claim {
+    citation: "Dep. 44:8",
+    appears_on: plaintiff_narrative @ 2024-03-05..2024-03-05,
+}
+
+rel notice_sent -["contradicts"]-> notice_denied;
+```
+
+Euclid's differentiator is not drawing a generic timeline. It is keeping timelines, branches, entities, relationships, and diffs in plain source form so they can be reviewed, rendered, and compared.
+
+## Quick Start
 
 ```console
 $ git clone https://github.com/gongahkia/euclid && cd euclid
@@ -47,18 +58,30 @@ $ cabal run euclid -- --help
 $ cabal install exe:euclid --installdir="$HOME/.local/bin" --overwrite-policy=always
 ```
 
-2. Next run any of the below [commands and flags](#commands-and-flags) to interact with `Euclid` and its [TUI](#tui-commands).
+Run the shipped examples:
 
-3. `Euclid`' current implementation additionally supports SVG export via the below commands.
+```console
+$ euclid check examples/ww2.euclid
+$ euclid diff examples/lotr.euclid examples/ww2.euclid
+```
+
+Export timelines:
 
 ```console
 $ euclid export examples/ww2.euclid -f svg -o ww2.svg
 $ euclid export examples/lotr.euclid -f svg -o lotr.svg --width 1920 --height 1080
-$ cabal run euclid -- export examples/ww2.euclid -f svg -o ww2.svg
-$ cabal run euclid -- --theme light export examples/lotr.euclid -f svg -o lotr.svg
+$ euclid export examples/lotr.euclid -f html -o lotr.html
+$ euclid export examples/lotr.euclid -f mermaid -o lotr.mmd
 ```
 
-4. Finally, interact with `Euclid`' [REPL](#repl-commands) or type raw `Euclid` declarations to interactively build a timeline.
+## Current Surfaces
+
+* `diff` renders semantic differences across timelines, entities, and relationships.
+* `run` opens the Brick-based terminal explorer.
+* `repl` supports interactive loading, validation, timeline summaries, entity lists, and relationship views.
+* `lsp` provides completions, hover, and diagnostics over stdio.
+* `export` writes SVG, HTML, JSON, Markdown, or Mermaid output.
+* `import` converts CSV, GEDCOM, and JSON-LD into `.euclid` source.
 
 ## Commands
 
@@ -79,6 +102,12 @@ $ cabal run euclid -- --theme light export examples/lotr.euclid -f svg -o lotr.s
 | `--verbose` | Print extra startup and command execution details |
 | `--config <path>` | Path to a TOML config file for export defaults and theme settings |
 | `--theme <name>` | Theme: `dark`, `light`, or a path to a custom TOML theme |
+
+## Syntax
+
+Learn more about `Euclid`' syntax at [`SYNTAX.md`](./docs/SYNTAX.md).
+
+Examples live in [`./examples`](./examples/).
 
 ### REPL commands
 
@@ -155,11 +184,26 @@ $ cabal run euclid -- --theme light export examples/lotr.euclid -f svg -o lotr.s
 | `t` | Cycle through entity-type filters |
 | `n` | Toggle relationship neighborhood filtering |
 
-## Syntax
+## Screenshots
 
-Learn more about `Euclid`' syntax at [`SYNTAX.md`](./docs/SYNTAX.md).
+<div align="center">
+    <img src="./asset/reference/1.png" width="32%">
+    <img src="./asset/reference/6.png" width="32%">
+    <img src="./asset/reference/3.png" width="32%">
+</div>
 
-Alternatively, refer to examples which live at [`./examples`](./examples/).
+<div align="center">
+    <img src="./asset/reference/4.png" width="32%">
+    <img src="./asset/reference/2.png" width="32%">
+    <img src="./asset/reference/5.png" width="32%">
+</div>
+
+## Stack
+
+* *Language & Parsing*: [Haskell](https://www.haskell.org/), [megaparsec](https://hackage.haskell.org/package/megaparsec), [optparse-applicative](https://hackage.haskell.org/package/optparse-applicative), [text](https://hackage.haskell.org/package/text)
+* *TUI*: [brick](https://hackage.haskell.org/package/brick), [vty](https://hackage.haskell.org/package/vty)
+* *Export Format*: [SVG](https://www.w3.org/Graphics/SVG/), [aeson](https://hackage.haskell.org/package/aeson), [tomland](https://hackage.haskell.org/package/tomland)
+* *Data & Utilities*: [containers](https://hackage.haskell.org/package/containers), [bytestring](https://hackage.haskell.org/package/bytestring), [filepath](https://hackage.haskell.org/package/filepath), [time](https://hackage.haskell.org/package/time)
 
 ## Architecture
 
