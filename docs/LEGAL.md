@@ -51,6 +51,16 @@ warning: validation- examples/legal/brown_board.euclid:97:1- contradiction on ti
 $ euclid diff examples/legal/brown_plaintiffs.euclid examples/legal/brown_board.euclid
 ```
 
+The README hero image and animated launch asset are generated from those same committed inputs:
+
+```console
+$ ./scripts/generate_demo_assets.sh
+asset/demo/brown-legal-diff.svg
+asset/demo/brown-legal-diff.gif
+```
+
+The SVG is the stable GitHub-rendered artifact. The GIF is a short annotated version for posts and launch pages.
+
 Representative output:
 
 ```text

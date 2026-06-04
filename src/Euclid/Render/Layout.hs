@@ -58,13 +58,16 @@ computeLayout world =
             [ LayoutRelationship (relSource relationship) (relTarget relationship) (relLabel relationship)
             | relationship <- worldRelationships world
             ]
-        , layoutMinTime = minimum (allTimes ++ [0])
-        , layoutMaxTime = maximum (allTimes ++ [100])
+        , layoutMinTime = if null allTimes then 0 else minimum allTimes
+        , layoutMaxTime = if null allTimes then 100 else maximum allTimes
         }
   where
     timelineValues = sortOn (timePointOrdinal . timelineStart) (Map.elems (worldTimelines world))
-    timelineLanes = zip timelineValues [0 ..]
-    timelineLaneMap = Map.fromList [(timelineName timeline, laneIndex) | (timeline, laneIndex) <- timelineLanes]
+    timelineLaneMap = snd (foldl assignTimelineLane (0, Map.empty) timelineValues)
+    assignTimelineLane (nextLane, laneMap) timeline =
+        let rowsForTimeline = sortedRowsForTimeline (timelineName timeline)
+            laneSpan = max 2 (length rowsForTimeline + 2)
+         in (nextLane + laneSpan, Map.insert (timelineName timeline) nextLane laneMap)
     timelines =
         [ LayoutTimeline
             { layoutTimelineName = timelineName timeline
@@ -73,8 +76,38 @@ computeLayout world =
             , layoutTimelineStart = timePointOrdinal (timelineStart timeline)
             , layoutTimelineEnd = timePointOrdinal (timelineEnd timeline)
             }
-        | (timeline, laneIndex) <- timelineLanes
+        | timeline <- timelineValues
+        , let laneIndex = Map.findWithDefault 0 (timelineName timeline) timelineLaneMap
         ]
+    entityRows =
+        [ ( appearanceTimeline appearance
+          , timePointOrdinal (rangeStart (appearanceRange appearance))
+          , entityName entity
+          , appearanceIndex
+          , entity
+          , appearance
+          )
+        | entity <- Map.elems (worldEntities world)
+        , (appearanceIndex, appearance) <- zip [0 :: Int ..] (entityAppearances entity)
+        ]
+    entityRowsByTimeline =
+        Map.fromListWith
+            (++)
+            [(timelineNameValue, [row]) | row@(timelineNameValue, _, _, _, _, _) <- entityRows]
+    sortedRowsForTimeline timelineNameValue =
+        sortOn
+            (\(_, startOrdinal, entityNameValue, appearanceIndex, _, _) -> (startOrdinal, entityNameValue, appearanceIndex))
+            (Map.findWithDefault [] timelineNameValue entityRowsByTimeline)
+    entityLaneMap =
+        Map.fromList
+            [ ( (entityName entity, appearanceIndex, appearanceTimeline appearance)
+              , baseLane + rowIndex + 1
+              )
+            | timeline <- timelineValues
+            , let baseLane = Map.findWithDefault 0 (timelineName timeline) timelineLaneMap
+            , (rowIndex, (_, _, _, appearanceIndex, entity, appearance)) <-
+                zip [0 :: Int ..] (sortedRowsForTimeline (timelineName timeline))
+            ]
     entities =
         concatMap layoutEntityForTimeline (Map.elems (worldEntities world))
     layoutEntityForTimeline entity =
@@ -89,10 +122,10 @@ computeLayout world =
             }
         | (appearanceIndex, appearance) <- zip [0 ..] (entityAppearances entity)
         , let entityLane =
-                maybe
+                Map.findWithDefault
                     appearanceIndex
-                    (\baseLane -> baseLane + appearanceIndex + 1)
-                    (Map.lookup (appearanceTimeline appearance) timelineLaneMap)
+                    (entityName entity, appearanceIndex, appearanceTimeline appearance)
+                    entityLaneMap
         ]
     allTimes =
         [ layoutTimelineStart timeline

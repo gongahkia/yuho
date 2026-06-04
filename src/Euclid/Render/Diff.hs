@@ -74,6 +74,13 @@ renderDiffSvg options leftTitle leftLayout rightTitle rightLayout =
             x = scaleX columnX (layoutEntityStart entity)
             width = max 16.0 (scaleX columnX (layoutEntityEnd entity) - x)
             fillColor = maybe (themeEntity (svgTheme options)) narrativeColor (layoutEntityNarrative entity)
+            label = layoutEntityName entity
+            labelWidth = estimatedTextWidth 11 label
+            rightEdge = columnX - 8 + columnWidth - 8
+            (labelX, labelAnchor)
+                | x + width + 8 + labelWidth <= rightEdge = (x + width + 8, "")
+                | x - 8 - labelWidth >= columnX = (x - 8, " text-anchor=\"end\"")
+                | otherwise = (max columnX (rightEdge - labelWidth), "")
          in T.concat
                 [ "<rect x=\""
                 , showDouble x
@@ -87,13 +94,15 @@ renderDiffSvg options leftTitle leftLayout rightTitle rightLayout =
                 , maybe "" (\narrative -> " data-narrative=\"" <> escapeXml narrative <> "\"") (layoutEntityNarrative entity)
                 , "/>"
                 , "<text x=\""
-                , showDouble (x + 5)
+                , showDouble labelX
                 , "\" y=\""
                 , showDouble (y + 16)
                 , "\" fill=\""
                 , themeText (svgTheme options)
-                , "\" font-family=\"monospace\" font-size=\"11\">"
-                , escapeXml (layoutEntityName entity)
+                , "\" font-family=\"monospace\" font-size=\"11\""
+                , labelAnchor
+                , ">"
+                , escapeXml label
                 , "</text>"
                 ]
     renderRelationship columnX layout relationship =
@@ -185,6 +194,10 @@ showText = T.pack . show
 
 showDouble :: Double -> Text
 showDouble = T.pack . show
+
+estimatedTextWidth :: Double -> Text -> Double
+estimatedTextWidth fontSize text =
+    fromIntegral (T.length text) * fontSize * 0.62
 
 narrativeColor :: Text -> Text
 narrativeColor narrative =

@@ -6,6 +6,7 @@ import qualified Data.Map.Strict as Map
 import qualified Data.Aeson as Aeson
 import qualified Data.Aeson.Key as Key
 import qualified Data.Aeson.KeyMap as KeyMap
+import Data.List (nub)
 import qualified Data.Text as T
 import qualified Data.Text.IO as TIO
 import Data.Time (fromGregorian)
@@ -269,6 +270,34 @@ spec = do
             parseDiffFormat "json" `shouldSatisfy` either (T.isInfixOf "supported: svg, html" . T.pack) (const False)
 
     describe "narrative-aware rendering" $ do
+        it "spreads date timelines across their own bounds and separates same-timeline entity rows" $ do
+            let source =
+                    T.unlines
+                        [ "timeline case_file {"
+                        , "  start: 2024-01-01,"
+                        , "  end: 2024-01-10,"
+                        , "}"
+                        , "entity first_event : event {"
+                        , "  appears_on: case_file @ 2024-01-02..2024-01-02,"
+                        , "}"
+                        , "entity second_event : event {"
+                        , "  appears_on: case_file @ 2024-01-03..2024-01-03,"
+                        , "}"
+                        ]
+            case parseProgram "<inline>" source of
+                Left diags ->
+                    expectationFailure ("parse failed: " <> show diags)
+                Right program ->
+                    case evalProgram program of
+                        Left diag ->
+                            expectationFailure ("eval failed: " <> show diag)
+                        Right worldValue -> do
+                            let layout = computeLayout worldValue
+                                entityLanes = map layoutEntityLane (layoutEntities layout)
+                            layoutMinTime layout `shouldBe` timePointOrdinal (TimeDate (fromGregorian 2024 1 1))
+                            layoutMaxTime layout `shouldBe` timePointOrdinal (TimeDate (fromGregorian 2024 1 10))
+                            length (nub entityLanes) `shouldBe` length entityLanes
+
         it "marks narrative entities and contradiction relationships in SVG and HTML" $ do
             let source =
                     T.unlines

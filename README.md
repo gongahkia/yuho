@@ -5,7 +5,7 @@
 `git diff for facts.`
 
 <div align="center">
-    <img src="./asset/logo/euclid.jpg" width="50%">
+    <img src="./asset/logo/euclid.jpg" width="36%">
 </div>
 
 Euclid is a Haskell DSL for modeling legal chronologies, investigations, depositions, discovery narratives, and other timelines where the order of facts matters. Write timelines as source files, review them like code, and compare two competing narratives with `euclid diff`.
@@ -13,6 +13,21 @@ Euclid is a Haskell DSL for modeling legal chronologies, investigations, deposit
 ```console
 $ euclid diff examples/legal/brown_plaintiffs.euclid examples/legal/brown_board.euclid
 ```
+
+<div align="center">
+    <img src="./asset/demo/brown-legal-diff.svg" alt="Side-by-side Euclid diff of Brown v. Board narratives with contradiction edges highlighted" width="100%">
+    <br>
+    <sub>Generated from committed `.euclid` files with `./scripts/generate_demo_assets.sh`.</sub>
+</div>
+
+<details>
+<summary>Animated diff flow</summary>
+
+<div align="center">
+    <img src="./asset/demo/brown-legal-diff.gif" alt="Animated Euclid legal diff walkthrough" width="100%">
+</div>
+
+</details>
 
 The legal framing is concrete, but the core is general: branching timelines, typed entities, relationships, imports, validation diagnostics, a terminal explorer, an LSP server, and exports for SVG, HTML, JSON, Markdown, and Mermaid.
 

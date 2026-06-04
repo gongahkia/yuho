@@ -14,8 +14,11 @@ extra-doc-files:
     docs/SYNTAX.md
     docs/WASM.md
 extra-source-files:
+    asset/demo/brown-legal-diff.gif
+    asset/demo/brown-legal-diff.svg
     playground/browser-host.mjs
     scripts/build-wasm-playground.sh
+    scripts/generate_demo_assets.sh
 
 common common-settings
     default-language: Haskell2010
