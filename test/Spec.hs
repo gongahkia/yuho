@@ -27,6 +27,7 @@ import Euclid.Playground.API
 import Euclid.Render.HTML
 import Euclid.Render.Layout
 import Euclid.Render.Diff
+import Euclid.Render.Mermaid
 import Euclid.Render.SVG
 import Euclid.Tooling.LSP
 import System.Directory (removeFile)
@@ -1012,13 +1013,76 @@ spec = do
             configThemeName configValue `shouldBe` Just "light"
             themeBackground resolvedTheme `shouldBe` "#ffffff"
 
+    describe "mermaid rendering" $ do
+        it "renders legal date timelines as GitHub-native Gantt syntax" $ do
+            source <- TIO.readFile "examples/legal/brown_plaintiffs.euclid"
+            case parseProgram "examples/legal/brown_plaintiffs.euclid" source of
+                Left diags ->
+                    expectationFailure ("parse failed: " <> show diags)
+                Right program ->
+                    case evalProgram program of
+                        Left diag ->
+                            expectationFailure ("eval failed: " <> show diag)
+                        Right worldValue -> do
+                            let output = renderMermaid (computeLayout worldValue)
+                            output `shouldSatisfy` T.isInfixOf "dateFormat YYYY-MM-DD"
+                            output `shouldSatisfy` T.isInfixOf "axisFormat %Y-%m-%d"
+                            output `shouldSatisfy` T.isInfixOf "section brown_case [linear]"
+                            output `shouldSatisfy` T.isInfixOf "plaintiffs_equal_protection_claim [claim/plaintiffs] :1951-02-01, 1954-05-17"
+                            output `shouldSatisfy` T.isInfixOf "brown_decision [fact] :milestone, 1954-05-17, 1d"
+                            output `shouldSatisfy` T.isInfixOf "Euclid relationships are not represented"
+
+        it "labels branch and parallel timelines in historical Mermaid exports" $ do
+            source <- TIO.readFile "examples/historical/ww2.euclid"
+            case parseProgram "examples/historical/ww2.euclid" source of
+                Left diags ->
+                    expectationFailure ("parse failed: " <> show diags)
+                Right program ->
+                    case evalProgram program of
+                        Left diag ->
+                            expectationFailure ("eval failed: " <> show diag)
+                        Right worldValue -> do
+                            let output = renderMermaid (computeLayout worldValue)
+                            output `shouldSatisfy` T.isInfixOf "section homefront [parallel]"
+                            output `shouldSatisfy` T.isInfixOf "section cold_war_prelude [branch]"
+                            output `shouldSatisfy` T.isInfixOf "pearl_harbor [battle] :milestone, 1941-12-07, 1d"
+
+        it "falls back to ordinal Mermaid mode for integer timelines" $ do
+            let source =
+                    T.unlines
+                        [ "timeline main {"
+                        , "  start: 1,"
+                        , "  end: 10,"
+                        , "}"
+                        , "entity step : event {"
+                        , "  appears_on: main @ 2..4,"
+                        , "}"
+                        ]
+            case parseProgram "<inline>" source of
+                Left diags ->
+                    expectationFailure ("parse failed: " <> show diags)
+                Right program ->
+                    case evalProgram program of
+                        Left diag ->
+                            expectationFailure ("eval failed: " <> show diag)
+                        Right worldValue -> do
+                            let output = renderMermaid (computeLayout worldValue)
+                            output `shouldSatisfy` T.isInfixOf "dateFormat X"
+                            output `shouldSatisfy` T.isInfixOf "axisFormat %s"
+                            output `shouldSatisfy` T.isInfixOf "step [event] :2, 4"
+
     describe "export format parsing" $ do
-        it "accepts svg as the only supported export format" $ do
+        it "accepts all supported export formats" $ do
             parseExportFormat "svg" `shouldBe` Right ExportSvg
+            parseExportFormat "html" `shouldBe` Right ExportHtml
+            parseExportFormat "json" `shouldBe` Right ExportJson
+            parseExportFormat "md" `shouldBe` Right ExportMarkdown
+            parseExportFormat "markdown" `shouldBe` Right ExportMarkdown
+            parseExportFormat "mermaid" `shouldBe` Right ExportMermaid
 
         it "rejects unsupported export formats at the parser boundary" $ do
-            parseExportFormat "png" `shouldSatisfy` either (T.isInfixOf "supported: svg" . T.pack) (const False)
-            parseExportFormat "pdf" `shouldSatisfy` either (T.isInfixOf "supported: svg" . T.pack) (const False)
+            parseExportFormat "png" `shouldSatisfy` either (T.isInfixOf "supported: svg, html, json, md, mermaid" . T.pack) (const False)
+            parseExportFormat "pdf" `shouldSatisfy` either (T.isInfixOf "supported: svg, html, json, md, mermaid" . T.pack) (const False)
 
     describe "import parsing" $
         it "accepts import statements in the current frontend" $ do

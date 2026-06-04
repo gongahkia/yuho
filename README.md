@@ -87,6 +87,8 @@ $ euclid export examples/legal/brown_board.euclid -f html -o brown-board.html
 $ euclid export examples/historical/ww2.euclid -f mermaid -o ww2.mmd
 ```
 
+Mermaid output can be pasted into GitHub-native `mermaid` code fences for lightweight README embeds.
+
 ## Current Surfaces
 
 * `diff` renders semantic differences across timelines, entities, and relationships.
@@ -128,6 +130,8 @@ $ euclid export examples/historical/ww2.euclid -f mermaid -o ww2.mmd
 Learn more about `Euclid`' syntax at [`SYNTAX.md`](./docs/SYNTAX.md).
 
 The legal walkthrough lives at [`docs/LEGAL.md`](./docs/LEGAL.md). Examples live in [`./examples`](./examples/), with legal examples first and historical/generative examples kept as secondary showcases.
+
+Mermaid export notes live at [`docs/MERMAID.md`](./docs/MERMAID.md).
 
 Browser WASM build notes live at [`docs/WASM.md`](./docs/WASM.md).
 

@@ -17,6 +17,8 @@ data LayoutTimeline = LayoutTimeline
     { layoutTimelineName :: Text
     , layoutTimelineKind :: TimelineKind
     , layoutTimelineLane :: Int
+    , layoutTimelineStartPoint :: TimePoint
+    , layoutTimelineEndPoint :: TimePoint
     , layoutTimelineStart :: Integer
     , layoutTimelineEnd :: Integer
     }
@@ -28,6 +30,8 @@ data LayoutEntity = LayoutEntity
     , layoutEntityNarrative :: Maybe Text
     , layoutEntityTimeline :: Text
     , layoutEntityLane :: Int
+    , layoutEntityStartPoint :: TimePoint
+    , layoutEntityEndPoint :: TimePoint
     , layoutEntityStart :: Integer
     , layoutEntityEnd :: Integer
     }
@@ -73,6 +77,8 @@ computeLayout world =
             { layoutTimelineName = timelineName timeline
             , layoutTimelineKind = timelineKind timeline
             , layoutTimelineLane = laneIndex
+            , layoutTimelineStartPoint = timelineStart timeline
+            , layoutTimelineEndPoint = timelineEnd timeline
             , layoutTimelineStart = timePointOrdinal (timelineStart timeline)
             , layoutTimelineEnd = timePointOrdinal (timelineEnd timeline)
             }
@@ -117,6 +123,8 @@ computeLayout world =
             , layoutEntityNarrative = entityNarrative entity
             , layoutEntityTimeline = appearanceTimeline appearance
             , layoutEntityLane = entityLane
+            , layoutEntityStartPoint = rangeStart (appearanceRange appearance)
+            , layoutEntityEndPoint = rangeEnd (appearanceRange appearance)
             , layoutEntityStart = timePointOrdinal (rangeStart (appearanceRange appearance))
             , layoutEntityEnd = timePointOrdinal (rangeEnd (appearanceRange appearance))
             }

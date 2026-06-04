@@ -129,7 +129,7 @@ exportParser =
                 <$> argument str (metavar "FILE")
                 <*> option
                     (eitherReader parseExportFormat)
-                    (short 'f' <> long "format" <> value ExportSvg <> metavar "FORMAT" <> help "svg")
+                    (short 'f' <> long "format" <> value ExportSvg <> metavar "FORMAT" <> help "svg | html | json | md | mermaid")
                 <*> optional (strOption (short 'o' <> long "output" <> metavar "PATH"))
                 <*> optional (option auto (long "width" <> metavar "PIXELS"))
                 <*> optional (option auto (long "height" <> metavar "PIXELS"))
