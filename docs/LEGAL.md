@@ -19,16 +19,33 @@ The example uses a small set of source-backed dates:
 
 Month-only source facts are represented as month ranges instead of invented exact days.
 
-## Files
+## Public Legal Example Pack
 
-The two narratives live under [`examples/legal/`](../examples/legal/):
+The legal examples live under [`examples/legal/`](../examples/legal/):
 
 ```text
 examples/legal/brown_plaintiffs.euclid
 examples/legal/brown_board.euclid
+examples/legal/us_microsoft.euclid
+examples/legal/miranda_v_arizona.euclid
+examples/legal/watergate_nixon.euclid
 ```
 
-Both files share the same `brown_case` timeline, core `fact` entities, and source-backed `evidence`/`exhibit` entities. They differ in the emphasis of the modeled `claim` entities and relationships:
+The pack is intentionally small and public-source-backed. Each file is runnable by the CLI and includes comments or nearby docs explaining the modeled sources.
+
+| File | Subject | Modeling focus | Sources |
+| --- | --- | --- | --- |
+| `brown_plaintiffs.euclid` | Brown v. Board of Education, plaintiffs narrative | Competing equal-protection and harm claims | [National Park Service](https://www.nps.gov/brvb/learn/historyculture/kansas.htm), [National Archives](https://www.archives.gov/milestone-documents/brown-v-board-of-education) |
+| `brown_board.euclid` | Brown v. Board of Education, board/district-court posture | Same facts with different claim emphasis | [National Park Service](https://www.nps.gov/brvb/learn/historyculture/kansas.htm), [National Archives](https://www.archives.gov/milestone-documents/brown-v-board-of-education) |
+| `us_microsoft.euclid` | U.S. v. Microsoft antitrust litigation | Government, Microsoft, and settlement narratives around liability/remedy | [DOJ case docket](https://www.justice.gov/atr/case/us-v-microsoft-corporation-browser-and-middleware), [DOJ final judgment](https://www.justice.gov/atr/final-judgment-us-v-microsoft-corporation-state-new-york-et-al-v-microsoft-corporation) |
+| `miranda_v_arizona.euclid` | Miranda v. Arizona | Custodial-interrogation claims, evidence, and the Supreme Court rule | [GovInfo U.S. Reports](https://www.govinfo.gov/app/details/USREPORTS-384/USREPORTS-384-436), [Oyez](https://www.oyez.org/cases/1965/759), [U.S. Courts summary](https://www.uscourts.gov/educational-resources/educational-activities/facts-and-case-summary-miranda-v-arizona) |
+| `watergate_nixon.euclid` | Watergate and United States v. Nixon | Investigation chronology, subpoena need, and executive-privilege dispute | [National Archives chronology](https://www.archives.gov/education/lessons/watergate-constitution/chronology.html), [GovInfo U.S. Reports](https://www.govinfo.gov/app/details/USREPORTS-418/USREPORTS-418-683), [National Archives Nixon exhibit](https://www.archives.gov/exhibits/american_originals/nixon.html) |
+
+Month-only or year-only source facts are represented as date ranges instead of invented exact days. Claims are modeled as author-written positions and linked to source-backed `evidence` entities with `cites`; contradiction edges are explicit modeling choices, not automatic truth findings.
+
+## Brown Diff Demo
+
+The two Brown narratives share the same `brown_case` timeline, core `fact` entities, and source-backed `evidence`/`exhibit` entities. They differ in the emphasis of the modeled `claim` entities and relationships:
 
 * `brown_plaintiffs.euclid` foregrounds the equal-protection and harm claims that Brown accepted.
 * `brown_board.euclid` foregrounds the district-court and board posture under the separate-but-equal doctrine.
@@ -43,6 +60,14 @@ warning: validation- examples/legal/brown_plaintiffs.euclid:96:1- contradiction 
 
 $ euclid check examples/legal/brown_board.euclid
 warning: validation- examples/legal/brown_board.euclid:97:1- contradiction on timeline brown_case: district_court_denial contradicts plaintiffs_equal_protection_claim
+```
+
+Check the wider legal pack:
+
+```console
+$ euclid check examples/legal/us_microsoft.euclid
+$ euclid check examples/legal/miranda_v_arizona.euclid
+$ euclid check examples/legal/watergate_nixon.euclid
 ```
 
 ## Diff The Narratives
@@ -111,7 +136,7 @@ $ euclid diff examples/legal/brown_plaintiffs.euclid examples/legal/brown_board.
 $ euclid diff examples/legal/brown_plaintiffs.euclid examples/legal/brown_board.euclid -f html -o brown-diff.html
 ```
 
-For the secondary historical and generative examples, see:
+For secondary historical and generative examples outside the legal pack, see:
 
 ```text
 examples/historical/ww2.euclid

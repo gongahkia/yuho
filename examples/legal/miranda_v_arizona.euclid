@@ -1,0 +1,117 @@
+// Miranda v. Arizona legal example pack model.
+// This file models the path from a custodial interrogation dispute to the
+// Supreme Court's Miranda warning rule. It is not legal advice.
+//
+// Primary sources:
+// - https://www.govinfo.gov/app/details/USREPORTS-384/USREPORTS-384-436
+// - https://www.oyez.org/cases/1965/759
+// - https://www.uscourts.gov/educational-resources/educational-activities/facts-and-case-summary-miranda-v-arizona
+
+timeline miranda_case {
+    kind: linear,
+    start: 1963-03-13,
+    end: 1966-06-13,
+}
+
+entity miranda_arrest_interrogation : fact {
+    reference_source: "Oyez",
+    citation: "Miranda v. Arizona case summary",
+    summary: "Ernesto Miranda was arrested and questioned at a Phoenix police station.",
+    appears_on: miranda_case @ 1963-03-13..1963-03-13,
+}
+
+entity written_confession : fact {
+    reference_source: "U.S. Reports, 384 U.S. 436",
+    citation: "Miranda v. Arizona",
+    summary: "The prosecution used Miranda's written confession in the criminal case.",
+    appears_on: miranda_case @ 1963-03-13..1963-03-13,
+}
+
+entity arizona_affirmance : fact {
+    reference_source: "U.S. Courts facts and case summary",
+    citation: "Facts and Case Summary - Miranda v. Arizona",
+    summary: "The Arizona Supreme Court affirmed the judgment before federal review.",
+    appears_on: miranda_case @ 1965-01-01..1965-12-31,
+}
+
+entity supreme_court_argument : fact {
+    reference_source: "U.S. Reports, 384 U.S. 436",
+    citation: "Miranda v. Arizona",
+    summary: "The Supreme Court heard the consolidated Miranda arguments.",
+    appears_on: miranda_case @ 1966-02-28..1966-03-02,
+}
+
+entity miranda_decision : fact {
+    reference_source: "GovInfo U.S. Reports",
+    citation: "Miranda v. Arizona, 384 U.S. 436",
+    summary: "The Supreme Court decided Miranda and reversed the Arizona judgment.",
+    appears_on: miranda_case @ 1966-06-13..1966-06-13,
+}
+
+entity us_reports_miranda : evidence {
+    citation: "Miranda v. Arizona, 384 U.S. 436",
+    source: "GovInfo U.S. Reports",
+    url: "https://www.govinfo.gov/app/details/USREPORTS-384/USREPORTS-384-436",
+    admissibility: "public court record",
+    appears_on: miranda_case @ 1966-06-13..1966-06-13,
+}
+
+entity oyez_miranda_summary : evidence {
+    citation: "Miranda v. Arizona case summary",
+    source: "Oyez",
+    url: "https://www.oyez.org/cases/1965/759",
+    admissibility: "public case summary",
+    appears_on: miranda_case @ 1963-03-13..1966-06-13,
+}
+
+entity uscourts_miranda_summary : evidence {
+    citation: "Facts and Case Summary - Miranda v. Arizona",
+    source: "United States Courts",
+    url: "https://www.uscourts.gov/educational-resources/educational-activities/facts-and-case-summary-miranda-v-arizona",
+    admissibility: "public education material",
+    appears_on: miranda_case @ 1966-06-13..1966-06-13,
+}
+
+entity miranda_opinion_exhibit : exhibit {
+    number: "MIR-1",
+    description: "GovInfo U.S. Reports copy of Miranda v. Arizona",
+    appears_on: miranda_case @ 1966-06-13..1966-06-13,
+}
+
+entity state_confession_admissibility_claim : claim {
+    narrative: "state",
+    reference_source: "U.S. Reports, 384 U.S. 436",
+    citation: "Miranda v. Arizona procedural posture",
+    position: "The confession could be admitted despite the absence of the warnings later required by Miranda.",
+    appears_on: miranda_case @ 1963-03-13..1966-06-13,
+}
+
+entity custodial_warning_claim : claim {
+    narrative: "defense",
+    reference_source: "U.S. Reports, 384 U.S. 436",
+    citation: "Miranda v. Arizona holding",
+    position: "Custodial interrogation requires procedural warnings before statements may be admitted.",
+    appears_on: miranda_case @ 1963-03-13..1966-06-13,
+}
+
+entity routine_warning_rule : claim {
+    narrative: "court",
+    reference_source: "U.S. Reports, 384 U.S. 436",
+    citation: "Miranda v. Arizona holding",
+    position: "Warnings protect the Fifth Amendment privilege during police custodial interrogation.",
+    appears_on: miranda_case @ 1966-06-13..1966-06-13,
+}
+
+rel oyez_miranda_summary -["cites"]-> miranda_arrest_interrogation;
+rel us_reports_miranda -["cites"]-> written_confession;
+rel uscourts_miranda_summary -["cites"]-> arizona_affirmance;
+rel us_reports_miranda -["cites"]-> supreme_court_argument;
+rel us_reports_miranda -["cites"]-> miranda_decision;
+rel us_reports_miranda -["cites"]-> state_confession_admissibility_claim;
+rel us_reports_miranda -["cites"]-> custodial_warning_claim;
+rel us_reports_miranda -["cites"]-> routine_warning_rule;
+rel miranda_opinion_exhibit -["includes"]-> us_reports_miranda;
+rel state_confession_admissibility_claim -["contradicts"]-> custodial_warning_claim;
+rel miranda_decision -["corroborates"]-> custodial_warning_claim;
+rel routine_warning_rule -["corroborates"]-> custodial_warning_claim;
+rel miranda_decision -["supersedes"]-> arizona_affirmance;

@@ -1,0 +1,134 @@
+// Watergate / United States v. Nixon legal example pack model.
+// This file models how an investigation chronology became a subpoena and
+// executive-privilege dispute. It is not legal advice.
+//
+// Primary sources:
+// - https://www.archives.gov/education/lessons/watergate-constitution/chronology.html
+// - https://www.govinfo.gov/app/details/USREPORTS-418/USREPORTS-418-683
+// - https://www.archives.gov/exhibits/american_originals/nixon.html
+
+timeline watergate_case {
+    kind: linear,
+    start: 1972-06-17,
+    end: 1974-08-09,
+}
+
+entity dnc_break_in_arrests : fact {
+    reference_source: "National Archives",
+    citation: "Watergate and the Constitution chronology",
+    summary: "Five men were arrested at Democratic National Committee headquarters in the Watergate complex.",
+    appears_on: watergate_case @ 1972-06-17..1972-06-17,
+}
+
+entity senate_hearings_begin : fact {
+    reference_source: "National Archives",
+    citation: "Watergate and the Constitution chronology",
+    summary: "The Senate Watergate Committee hearings began.",
+    appears_on: watergate_case @ 1973-05-17..1973-05-17,
+}
+
+entity grand_jury_indictments : fact {
+    reference_source: "U.S. Reports, 418 U.S. 683",
+    citation: "United States v. Nixon",
+    summary: "A grand jury returned indictments against White House aides and supporters.",
+    appears_on: watergate_case @ 1974-03-01..1974-03-01,
+}
+
+entity subpoena_dispute : fact {
+    reference_source: "U.S. Reports, 418 U.S. 683",
+    citation: "United States v. Nixon",
+    summary: "The special prosecutor sought subpoenaed tapes and documents for the criminal trial.",
+    appears_on: watergate_case @ 1974-04-01..1974-04-30,
+}
+
+entity supreme_court_argument : fact {
+    reference_source: "U.S. Reports, 418 U.S. 683",
+    citation: "United States v. Nixon",
+    summary: "The Supreme Court heard argument in United States v. Nixon.",
+    appears_on: watergate_case @ 1974-07-08..1974-07-08,
+}
+
+entity nixon_decision : fact {
+    reference_source: "GovInfo U.S. Reports",
+    citation: "United States v. Nixon, 418 U.S. 683",
+    summary: "The Supreme Court unanimously upheld the subpoena for Watergate trial materials.",
+    appears_on: watergate_case @ 1974-07-24..1974-07-24,
+}
+
+entity nixon_resignation : fact {
+    reference_source: "National Archives",
+    citation: "Exhibit: Nixon and Watergate",
+    summary: "President Nixon resigned after the release of the subpoenaed-tape dispute and related pressure.",
+    appears_on: watergate_case @ 1974-08-09..1974-08-09,
+}
+
+entity nara_watergate_chronology : evidence {
+    citation: "Watergate and the Constitution chronology",
+    source: "National Archives",
+    url: "https://www.archives.gov/education/lessons/watergate-constitution/chronology.html",
+    admissibility: "public archival chronology",
+    appears_on: watergate_case @ 1972-06-17..1974-08-09,
+}
+
+entity us_reports_nixon : evidence {
+    citation: "United States v. Nixon, 418 U.S. 683",
+    source: "GovInfo U.S. Reports",
+    url: "https://www.govinfo.gov/app/details/USREPORTS-418/USREPORTS-418-683",
+    admissibility: "public court record",
+    appears_on: watergate_case @ 1974-07-24..1974-07-24,
+}
+
+entity nara_resignation_record : evidence {
+    citation: "Exhibit: Nixon and Watergate",
+    source: "National Archives",
+    url: "https://www.archives.gov/exhibits/american_originals/nixon.html",
+    admissibility: "public archival exhibit",
+    appears_on: watergate_case @ 1974-08-09..1974-08-09,
+}
+
+entity nixon_tapes_exhibit : exhibit {
+    number: "WAT-1",
+    description: "United States v. Nixon opinion and Watergate archival chronology",
+    appears_on: watergate_case @ 1974-07-24..1974-07-24,
+}
+
+entity executive_privilege_claim : claim {
+    narrative: "president",
+    reference_source: "U.S. Reports, 418 U.S. 683",
+    citation: "United States v. Nixon privilege argument",
+    position: "A generalized executive privilege should protect presidential tapes from subpoena.",
+    appears_on: watergate_case @ 1974-04-01..1974-07-24,
+}
+
+entity trial_need_claim : claim {
+    narrative: "prosecution",
+    reference_source: "U.S. Reports, 418 U.S. 683",
+    citation: "United States v. Nixon subpoena ruling",
+    position: "A demonstrated need in a pending criminal trial overcomes generalized privilege.",
+    appears_on: watergate_case @ 1974-04-01..1974-07-24,
+}
+
+entity judicial_review_claim : claim {
+    narrative: "court",
+    reference_source: "U.S. Reports, 418 U.S. 683",
+    citation: "United States v. Nixon jurisdiction analysis",
+    position: "The subpoena dispute was justiciable despite its executive-branch posture.",
+    appears_on: watergate_case @ 1974-07-24..1974-07-24,
+}
+
+rel nara_watergate_chronology -["cites"]-> dnc_break_in_arrests;
+rel nara_watergate_chronology -["cites"]-> senate_hearings_begin;
+rel us_reports_nixon -["cites"]-> grand_jury_indictments;
+rel us_reports_nixon -["cites"]-> subpoena_dispute;
+rel us_reports_nixon -["cites"]-> supreme_court_argument;
+rel us_reports_nixon -["cites"]-> nixon_decision;
+rel nara_resignation_record -["cites"]-> nixon_resignation;
+rel us_reports_nixon -["cites"]-> executive_privilege_claim;
+rel us_reports_nixon -["cites"]-> trial_need_claim;
+rel us_reports_nixon -["cites"]-> judicial_review_claim;
+rel nixon_tapes_exhibit -["includes"]-> us_reports_nixon;
+rel trial_need_claim -["contradicts"]-> executive_privilege_claim;
+rel nixon_decision -["corroborates"]-> trial_need_claim;
+rel nixon_decision -["corroborates"]-> judicial_review_claim;
+rel nixon_decision -["supersedes"]-> subpoena_dispute;
+rel nixon_resignation -["supersedes"]-> executive_privilege_claim;

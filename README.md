@@ -76,6 +76,9 @@ Run the shipped examples:
 ```console
 $ euclid check examples/legal/brown_plaintiffs.euclid
 $ euclid check examples/legal/brown_board.euclid
+$ euclid check examples/legal/us_microsoft.euclid
+$ euclid check examples/legal/miranda_v_arizona.euclid
+$ euclid check examples/legal/watergate_nixon.euclid
 $ euclid diff examples/legal/brown_plaintiffs.euclid examples/legal/brown_board.euclid
 ```
 
@@ -129,7 +132,7 @@ Mermaid output can be pasted into GitHub-native `mermaid` code fences for lightw
 
 Learn more about `Euclid`' syntax at [`SYNTAX.md`](./docs/SYNTAX.md).
 
-The legal walkthrough lives at [`docs/LEGAL.md`](./docs/LEGAL.md). Examples live in [`./examples`](./examples/), with legal examples first and historical/generative examples kept as secondary showcases.
+The legal walkthrough and public case example pack live at [`docs/LEGAL.md`](./docs/LEGAL.md). Examples live in [`./examples`](./examples/), with legal examples first and historical/generative examples kept as secondary showcases.
 
 Mermaid export notes live at [`docs/MERMAID.md`](./docs/MERMAID.md).
 

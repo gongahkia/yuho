@@ -6,7 +6,7 @@ import qualified Data.Map.Strict as Map
 import qualified Data.Aeson as Aeson
 import qualified Data.Aeson.Key as Key
 import qualified Data.Aeson.KeyMap as KeyMap
-import Data.List (nub)
+import Data.List (isSuffixOf, nub, sort)
 import qualified Data.Text as T
 import qualified Data.Text.IO as TIO
 import Data.Time (fromGregorian)
@@ -30,7 +30,8 @@ import Euclid.Render.Diff
 import Euclid.Render.Mermaid
 import Euclid.Render.SVG
 import Euclid.Tooling.LSP
-import System.Directory (removeFile)
+import System.Directory (listDirectory, removeFile)
+import System.FilePath ((</>))
 import Test.Hspec
 
 main :: IO ()
@@ -63,6 +64,20 @@ lookupJsonText keyName obj =
         Just (Aeson.String value) -> Just value
         _ -> Nothing
 
+expectNoHardErrors :: FilePath -> Expectation
+expectNoHardErrors filePath = do
+    source <- TIO.readFile filePath
+    case parseProgram filePath source of
+        Left diags ->
+            expectationFailure (filePath <> " parse failed: " <> show diags)
+        Right program ->
+            case evalProgram program of
+                Left diag ->
+                    expectationFailure (filePath <> " eval failed: " <> show diag)
+                Right worldValue ->
+                    any ((== DiagnosticError) . diagnosticLevel) (validateWorld worldValue)
+                        `shouldBe` False
+
 spec :: Spec
 spec = do
     describe "parser and evaluator" $
@@ -93,6 +108,16 @@ spec = do
                         Right worldValue ->
                             any ((== DiagnosticError) . diagnosticLevel) (validateWorld worldValue)
                                 `shouldBe` False
+
+    describe "legal example pack" $
+        it "loads every legal example without hard validation errors" $ do
+            legalFiles <-
+                sort
+                    . map ("examples/legal" </>)
+                    . filter (".euclid" `isSuffixOf`)
+                    <$> listDirectory "examples/legal"
+            legalFiles `shouldSatisfy` (not . null)
+            mapM_ expectNoHardErrors legalFiles
 
     describe "narrative filtering" $
         it "keeps matching narrative entities, shared context, and valid relationships" $ do
