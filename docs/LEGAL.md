@@ -29,6 +29,11 @@ examples/legal/brown_board.euclid
 examples/legal/us_microsoft.euclid
 examples/legal/miranda_v_arizona.euclid
 examples/legal/watergate_nixon.euclid
+examples/legal/gideon_v_wainwright.euclid
+examples/legal/chevron_v_nrdc.euclid
+examples/legal/loper_bright_v_raimondo.euclid
+examples/legal/kelo_v_new_london.euclid
+examples/legal/obergefell_v_hodges.euclid
 ```
 
 The pack is intentionally small and public-source-backed. Each file is runnable by the CLI and includes comments or nearby docs explaining the modeled sources.
@@ -40,6 +45,11 @@ The pack is intentionally small and public-source-backed. Each file is runnable 
 | `us_microsoft.euclid` | U.S. v. Microsoft antitrust litigation | Government, Microsoft, and settlement narratives around liability/remedy | [DOJ case docket](https://www.justice.gov/atr/case/us-v-microsoft-corporation-browser-and-middleware), [DOJ final judgment](https://www.justice.gov/atr/final-judgment-us-v-microsoft-corporation-state-new-york-et-al-v-microsoft-corporation) |
 | `miranda_v_arizona.euclid` | Miranda v. Arizona | Custodial-interrogation claims, evidence, and the Supreme Court rule | [GovInfo U.S. Reports](https://www.govinfo.gov/app/details/USREPORTS-384/USREPORTS-384-436), [Oyez](https://www.oyez.org/cases/1965/759), [U.S. Courts summary](https://www.uscourts.gov/educational-resources/educational-activities/facts-and-case-summary-miranda-v-arizona) |
 | `watergate_nixon.euclid` | Watergate and United States v. Nixon | Investigation chronology, subpoena need, and executive-privilege dispute | [National Archives chronology](https://www.archives.gov/education/lessons/watergate-constitution/chronology.html), [GovInfo U.S. Reports](https://www.govinfo.gov/app/details/USREPORTS-418/USREPORTS-418-683), [National Archives Nixon exhibit](https://www.archives.gov/exhibits/american_originals/nixon.html) |
+| `gideon_v_wainwright.euclid` | Gideon v. Wainwright | Right-to-counsel claim, state habeas posture, and overruling of Betts | [GovInfo U.S. Reports PDF](https://www.govinfo.gov/content/pkg/USREPORTS-372/pdf/USREPORTS-372-335.pdf), [GovInfo volume context](https://www.govinfo.gov/app/details/USREPORTS-372/context) |
+| `chevron_v_nrdc.euclid` | Chevron U.S.A. v. NRDC | Agency deference, Clean Air Act ambiguity, and court-of-appeals reversal | [GovInfo U.S. Reports](https://www.govinfo.gov/app/details/USREPORTS-467/USREPORTS-467-837) |
+| `loper_bright_v_raimondo.euclid` | Loper Bright Enterprises v. Raimondo | Independent judicial judgment and overruling Chevron | [Supreme Court official opinion PDF](https://www.supremecourt.gov/opinions/23pdf/22-451_7m58.pdf) |
+| `kelo_v_new_london.euclid` | Kelo v. City of New London | Economic-development public use versus private-transfer objections | [GovInfo U.S. Reports](https://www.govinfo.gov/app/details/USREPORTS-545/USREPORTS-545-469) |
+| `obergefell_v_hodges.euclid` | Obergefell v. Hodges | Marriage licensing, recognition, liberty, and democratic-process claims | [GovInfo U.S. Reports](https://www.govinfo.gov/app/details/USREPORTS-576/USREPORTS-576-644) |
 
 Month-only or year-only source facts are represented as date ranges instead of invented exact days. Claims are modeled as author-written positions and linked to source-backed `evidence` entities with `cites`; contradiction edges are explicit modeling choices, not automatic truth findings.
 
@@ -68,6 +78,11 @@ Check the wider legal pack:
 $ euclid check examples/legal/us_microsoft.euclid
 $ euclid check examples/legal/miranda_v_arizona.euclid
 $ euclid check examples/legal/watergate_nixon.euclid
+$ euclid check examples/legal/gideon_v_wainwright.euclid
+$ euclid check examples/legal/chevron_v_nrdc.euclid
+$ euclid check examples/legal/loper_bright_v_raimondo.euclid
+$ euclid check examples/legal/kelo_v_new_london.euclid
+$ euclid check examples/legal/obergefell_v_hodges.euclid
 ```
 
 ## Diff The Narratives

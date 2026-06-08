@@ -353,96 +353,89 @@ evalExpr state (ExprTemporalAccess objExpr fieldName timeExpr) = do
             _ -> Left (evaluatorDiagnostic state2 "temporal access requires an entity reference")
 evalExpr state (ExprUnary op operand) = do
     (state1, value) <- evalExpr state operand
-    resultValue <- evalUnary op value
+    resultValue <- evalUnary state1 op value
     pure (state1, resultValue)
 evalExpr state (ExprBinary op lhs rhs) = do
     (state1, leftValue) <- evalExpr state lhs
     (state2, rightValue) <- evalExpr state1 rhs
-    resultValue <- evalBinary op leftValue rightValue
+    resultValue <- evalBinary state2 op leftValue rightValue
     pure (state2, resultValue)
 
-evalUnary :: UnaryOp -> Value -> Either Diagnostic Value
-evalUnary OpNeg (VInt value) = Right (VInt (negate value))
-evalUnary OpNeg (VDuration y m d) = Right (VDuration (negate y) (negate m) (negate d))
-evalUnary OpNot (VBool value) = Right (VBool (not value))
-evalUnary op value =
-    Left $ Diagnostic
-        { diagnosticLevel = DiagnosticError
-        , diagnosticSource = "evaluator"
-        , diagnosticMessage = "unsupported operand for " <> T.pack (show op) <> ": " <> T.pack (show value)
-        , diagnosticSpan = Nothing
-        }
-
-evalBinary :: BinaryOp -> Value -> Value -> Either Diagnostic Value
-evalBinary OpAdd (VInt leftValue) (VInt rightValue) = Right (VInt (leftValue + rightValue))
-evalBinary OpAdd (VString leftValue) (VString rightValue) = Right (VString (leftValue <> rightValue))
-evalBinary OpAdd (VDate d) (VDuration y m days) = Right (VDate (addDurationToDay d y m days))
-evalBinary OpAdd (VDuration y m days) (VDate d) = Right (VDate (addDurationToDay d y m days))
-evalBinary OpAdd (VDuration y1 m1 d1) (VDuration y2 m2 d2) = Right (VDuration (y1+y2) (m1+m2) (d1+d2))
-evalBinary OpSub (VDate d) (VDuration y m days) = Right (VDate (addDurationToDay d (negate y) (negate m) (negate days)))
-evalBinary OpSub (VDate d1) (VDate d2) = Right (VDuration 0 0 (daysBetween d1 d2))
-evalBinary OpSub (VDuration y1 m1 d1) (VDuration y2 m2 d2) = Right (VDuration (y1-y2) (m1-m2) (d1-d2))
-evalBinary OpSub (VInt leftValue) (VInt rightValue) = Right (VInt (leftValue - rightValue))
-evalBinary OpMul (VInt leftValue) (VInt rightValue) = Right (VInt (leftValue * rightValue))
-evalBinary OpDiv _ (VInt 0) = Left $ Diagnostic DiagnosticError "evaluator" "division by zero" Nothing
-evalBinary OpDiv (VInt leftValue) (VInt rightValue) = Right (VInt (div leftValue rightValue))
-evalBinary OpMod _ (VInt 0) = Left $ Diagnostic DiagnosticError "evaluator" "modulo by zero" Nothing
-evalBinary OpMod (VInt leftValue) (VInt rightValue) = Right (VInt (mod leftValue rightValue))
-evalBinary OpConcat (VString leftValue) (VString rightValue) = Right (VString (leftValue <> rightValue))
-evalBinary OpConcat (VList leftValue) (VList rightValue) = Right (VList (leftValue ++ rightValue))
-evalBinary OpGt (VInt leftValue) (VInt rightValue) = Right (VBool (leftValue > rightValue))
-evalBinary OpGt (VDate leftValue) (VDate rightValue) = Right (VBool (leftValue > rightValue))
-evalBinary OpLt (VInt leftValue) (VInt rightValue) = Right (VBool (leftValue < rightValue))
-evalBinary OpLt (VDate leftValue) (VDate rightValue) = Right (VBool (leftValue < rightValue))
-evalBinary OpGte (VInt leftValue) (VInt rightValue) = Right (VBool (leftValue >= rightValue))
-evalBinary OpGte (VDate leftValue) (VDate rightValue) = Right (VBool (leftValue >= rightValue))
-evalBinary OpLte (VInt leftValue) (VInt rightValue) = Right (VBool (leftValue <= rightValue))
-evalBinary OpLte (VDate leftValue) (VDate rightValue) = Right (VBool (leftValue <= rightValue))
-evalBinary OpEq leftValue rightValue = Right (VBool (leftValue == rightValue))
-evalBinary OpNeq leftValue rightValue = Right (VBool (leftValue /= rightValue))
-evalBinary OpAnd (VBool leftValue) (VBool rightValue) = Right (VBool (leftValue && rightValue))
-evalBinary OpOr (VBool leftValue) (VBool rightValue) = Right (VBool (leftValue || rightValue))
-evalBinary op leftValue rightValue =
+evalUnary :: EvalState -> UnaryOp -> Value -> Either Diagnostic Value
+evalUnary _ OpNeg (VInt value) = Right (VInt (negate value))
+evalUnary _ OpNeg (VDuration y m d) = Right (VDuration (negate y) (negate m) (negate d))
+evalUnary _ OpNot (VBool value) = Right (VBool (not value))
+evalUnary state op value =
     Left $
-        Diagnostic
-            { diagnosticLevel = DiagnosticError
-            , diagnosticSource = "evaluator"
-            , diagnosticMessage =
-                "unsupported operands for "
-                    <> T.pack (show op)
-                    <> ": "
-                    <> T.pack (show leftValue)
-                    <> " and "
-                    <> T.pack (show rightValue)
-            , diagnosticSpan = Nothing
-            }
+        evaluatorDiagnostic
+            state
+            ("unsupported operand for " <> T.pack (show op) <> ": " <> T.pack (show value))
+
+evalBinary :: EvalState -> BinaryOp -> Value -> Value -> Either Diagnostic Value
+evalBinary _ OpAdd (VInt leftValue) (VInt rightValue) = Right (VInt (leftValue + rightValue))
+evalBinary _ OpAdd (VString leftValue) (VString rightValue) = Right (VString (leftValue <> rightValue))
+evalBinary _ OpAdd (VDate d) (VDuration y m days) = Right (VDate (addDurationToDay d y m days))
+evalBinary _ OpAdd (VDuration y m days) (VDate d) = Right (VDate (addDurationToDay d y m days))
+evalBinary _ OpAdd (VDuration y1 m1 d1) (VDuration y2 m2 d2) = Right (VDuration (y1+y2) (m1+m2) (d1+d2))
+evalBinary _ OpSub (VDate d) (VDuration y m days) = Right (VDate (addDurationToDay d (negate y) (negate m) (negate days)))
+evalBinary _ OpSub (VDate d1) (VDate d2) = Right (VDuration 0 0 (daysBetween d1 d2))
+evalBinary _ OpSub (VDuration y1 m1 d1) (VDuration y2 m2 d2) = Right (VDuration (y1-y2) (m1-m2) (d1-d2))
+evalBinary _ OpSub (VInt leftValue) (VInt rightValue) = Right (VInt (leftValue - rightValue))
+evalBinary _ OpMul (VInt leftValue) (VInt rightValue) = Right (VInt (leftValue * rightValue))
+evalBinary state OpDiv _ (VInt 0) = Left (evaluatorDiagnostic state "division by zero")
+evalBinary _ OpDiv (VInt leftValue) (VInt rightValue) = Right (VInt (div leftValue rightValue))
+evalBinary state OpMod _ (VInt 0) = Left (evaluatorDiagnostic state "modulo by zero")
+evalBinary _ OpMod (VInt leftValue) (VInt rightValue) = Right (VInt (mod leftValue rightValue))
+evalBinary _ OpConcat (VString leftValue) (VString rightValue) = Right (VString (leftValue <> rightValue))
+evalBinary _ OpConcat (VList leftValue) (VList rightValue) = Right (VList (leftValue ++ rightValue))
+evalBinary _ OpGt (VInt leftValue) (VInt rightValue) = Right (VBool (leftValue > rightValue))
+evalBinary _ OpGt (VDate leftValue) (VDate rightValue) = Right (VBool (leftValue > rightValue))
+evalBinary _ OpLt (VInt leftValue) (VInt rightValue) = Right (VBool (leftValue < rightValue))
+evalBinary _ OpLt (VDate leftValue) (VDate rightValue) = Right (VBool (leftValue < rightValue))
+evalBinary _ OpGte (VInt leftValue) (VInt rightValue) = Right (VBool (leftValue >= rightValue))
+evalBinary _ OpGte (VDate leftValue) (VDate rightValue) = Right (VBool (leftValue >= rightValue))
+evalBinary _ OpLte (VInt leftValue) (VInt rightValue) = Right (VBool (leftValue <= rightValue))
+evalBinary _ OpLte (VDate leftValue) (VDate rightValue) = Right (VBool (leftValue <= rightValue))
+evalBinary _ OpEq leftValue rightValue = Right (VBool (leftValue == rightValue))
+evalBinary _ OpNeq leftValue rightValue = Right (VBool (leftValue /= rightValue))
+evalBinary _ OpAnd (VBool leftValue) (VBool rightValue) = Right (VBool (leftValue && rightValue))
+evalBinary _ OpOr (VBool leftValue) (VBool rightValue) = Right (VBool (leftValue || rightValue))
+evalBinary state op leftValue rightValue =
+    Left $
+        evaluatorDiagnostic
+            state
+            ( "unsupported operands for "
+                <> T.pack (show op)
+                <> ": "
+                <> T.pack (show leftValue)
+                <> " and "
+                <> T.pack (show rightValue)
+            )
 
 evalIndex :: EvalState -> Value -> Int -> Either Diagnostic Value
-evalIndex _ (VList values) indexValue
+evalIndex state (VList values) indexValue
     | indexValue < length values = Right (values !! indexValue)
-    | otherwise = Left (indexOutOfBounds "list" indexValue (length values))
-evalIndex _ (VString textValue) indexValue
+    | otherwise = Left (indexOutOfBounds state "list" indexValue (length values))
+evalIndex state (VString textValue) indexValue
     | indexValue < T.length textValue =
         Right (VString (T.singleton (T.index textValue indexValue)))
     | otherwise =
-        Left (indexOutOfBounds "string" indexValue (T.length textValue))
+        Left (indexOutOfBounds state "string" indexValue (T.length textValue))
 evalIndex state value _ =
     Left (evaluatorDiagnostic state ("cannot index into value " <> T.pack (show value)))
 
-indexOutOfBounds :: Text -> Int -> Int -> Diagnostic
-indexOutOfBounds targetName indexValue targetLength =
-    Diagnostic
-        { diagnosticLevel = DiagnosticError
-        , diagnosticSource = "evaluator"
-        , diagnosticMessage =
+indexOutOfBounds :: EvalState -> Text -> Int -> Int -> Diagnostic
+indexOutOfBounds state targetName indexValue targetLength =
+    evaluatorDiagnostic
+        state
+        ( 
             "index "
                 <> T.pack (show indexValue)
                 <> " is out of bounds for "
                 <> targetName
                 <> " of length "
                 <> T.pack (show targetLength)
-        , diagnosticSpan = Nothing
-        }
+        )
 
 evalCall :: EvalState -> Expr -> [Expr] -> Either Diagnostic (EvalState, Value)
 evalCall state (ExprIdent name) argExprs = do
@@ -580,7 +573,9 @@ evalBuiltin state name args =
         "max" -> case args of [VInt a, VInt b] -> Just (VInt (Prelude.max a b)); _ -> Nothing
         "clamp" -> case args of [VInt v, VInt lo, VInt hi] -> Just (VInt (Prelude.max lo (Prelude.min hi v))); _ -> Nothing
         -- string builtins
-        "contains" -> case args of [VString haystack, VString needle] -> Just (VBool (T.isInfixOf needle haystack)); _ -> Nothing
+        "contains" -> case args of
+            [VString haystack, VString needle] -> Just (VBool (T.isInfixOf needle haystack))
+            _ -> allenRelation args (\s1 e1 s2 e2 -> s1 < s2 && e1 > e2)
         "starts_with" -> case args of [VString text, VString pfx] -> Just (VBool (T.isPrefixOf pfx text)); _ -> Nothing
         "ends_with" -> case args of [VString text, VString sfx] -> Just (VBool (T.isSuffixOf sfx text)); _ -> Nothing
         "to_upper" -> case args of [VString text] -> Just (VString (T.toUpper text)); _ -> Nothing
@@ -619,7 +614,6 @@ evalBuiltin state name args =
         -- Allen's interval algebra (operating on pairs of date ranges)
         "overlaps" -> allenRelation args (\s1 e1 s2 e2 -> s1 < s2 && e1 > s2 && e1 < e2)
         "during" -> allenRelation args (\s1 e1 s2 e2 -> s1 > s2 && e1 < e2)
-        "contains" -> allenRelation args (\s1 e1 s2 e2 -> s1 < s2 && e1 > e2)
         "meets" -> allenRelation args (\s1 e1 s2 _e2 -> e1 == s2)
         "starts" -> allenRelation args (\s1 e1 s2 e2 -> s1 == s2 && e1 < e2)
         "finishes" -> allenRelation args (\s1 e1 _s2 e2 -> e1 == e2 && s1 > _s2)

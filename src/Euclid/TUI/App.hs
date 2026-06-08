@@ -581,7 +581,10 @@ saveBookmark state =
     case safeIndex (appEntityIndex state) (visibleEntities state) of
         Nothing -> state{appStatus = "No visible entity to bookmark"}
         Just entity ->
-            let nextSlot = head ([slot | slot <- [1 .. 9], Map.notMember slot (appBookmarks state)] ++ [1])
+            let nextSlot =
+                    case [slot | slot <- [1 .. 9], Map.notMember slot (appBookmarks state)] of
+                        slot : _ -> slot
+                        [] -> 1
              in state
                     { appBookmarks = Map.insert nextSlot (layoutEntityName entity) (appBookmarks state)
                     , appStatus = "Saved bookmark " <> T.pack (show nextSlot) <> " for " <> layoutEntityName entity
@@ -610,7 +613,10 @@ cycleCompareTimeline state =
             let names = map layoutTimelineName timelinesValue
                 nextName =
                     case appCompareTimeline state of
-                        Nothing -> Just (head names)
+                        Nothing ->
+                            case names of
+                                firstName : _ -> Just firstName
+                                [] -> Nothing
                         Just current ->
                             safeIndex 0 (drop 1 (dropWhile (/= current) names) ++ names)
              in (recordHistory state)

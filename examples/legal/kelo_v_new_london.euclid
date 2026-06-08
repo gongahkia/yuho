@@ -1,0 +1,107 @@
+// Kelo v. City of New London legal example pack model.
+// This file models a public-use eminent-domain dispute from public U.S.
+// Reports materials. It is not legal advice and does not infer legal truth.
+//
+// Primary source:
+// - https://www.govinfo.gov/app/details/USREPORTS-545/USREPORTS-545-469
+
+timeline kelo_case {
+    kind: linear,
+    start: 2000-01-01,
+    end: 2005-06-23,
+}
+
+entity development_plan_approved : fact {
+    reference_source: "GovInfo U.S. Reports",
+    citation: "Kelo v. City of New London, 545 U.S. 469",
+    summary: "New London approved an integrated economic-development plan.",
+    appears_on: kelo_case @ 2000-01-01..2000-12-31,
+}
+
+entity condemnation_dispute : fact {
+    reference_source: "GovInfo U.S. Reports",
+    citation: "Kelo v. City of New London, 545 U.S. 469",
+    summary: "Property owners challenged condemnations for the redevelopment project.",
+    appears_on: kelo_case @ 2000-01-01..2004-03-09,
+}
+
+entity connecticut_supreme_court_decision : fact {
+    reference_source: "GovInfo U.S. Reports",
+    citation: "Kelo v. City of New London, 545 U.S. 469",
+    summary: "The Connecticut Supreme Court upheld the proposed takings.",
+    appears_on: kelo_case @ 2004-03-09..2004-03-09,
+}
+
+entity cert_granted : fact {
+    reference_source: "GovInfo U.S. Reports",
+    citation: "Kelo v. City of New London, 545 U.S. 469",
+    summary: "The Supreme Court granted review.",
+    appears_on: kelo_case @ 2004-09-28..2004-09-28,
+}
+
+entity supreme_court_argument : fact {
+    reference_source: "GovInfo U.S. Reports",
+    citation: "Kelo v. City of New London, 545 U.S. 469",
+    summary: "The Supreme Court heard argument.",
+    appears_on: kelo_case @ 2005-02-22..2005-02-22,
+}
+
+entity kelo_decision : fact {
+    reference_source: "GovInfo U.S. Reports",
+    citation: "Kelo v. City of New London, 545 U.S. 469",
+    summary: "The Court held that the economic-development plan satisfied the public-use requirement.",
+    appears_on: kelo_case @ 2005-06-23..2005-06-23,
+}
+
+entity us_reports_kelo : evidence {
+    citation: "Kelo v. City of New London, 545 U.S. 469",
+    source: "GovInfo U.S. Reports",
+    url: "https://www.govinfo.gov/app/details/USREPORTS-545/USREPORTS-545-469",
+    admissibility: "public court record",
+    appears_on: kelo_case @ 2005-06-23..2005-06-23,
+}
+
+entity kelo_opinion_exhibit : exhibit {
+    number: "KEL-1",
+    description: "GovInfo U.S. Reports record for Kelo",
+    appears_on: kelo_case @ 2005-06-23..2005-06-23,
+}
+
+entity economic_development_claim : claim {
+    narrative: "city",
+    reference_source: "GovInfo U.S. Reports",
+    citation: "Kelo v. City of New London holding",
+    position: "A comprehensive economic-development plan may qualify as public use under the Takings Clause.",
+    appears_on: kelo_case @ 2000-01-01..2005-06-23,
+}
+
+entity private_transfer_claim : claim {
+    narrative: "owners",
+    reference_source: "GovInfo U.S. Reports",
+    citation: "Kelo v. City of New London property-owner challenge",
+    position: "Taking homes for transfer to private redevelopment actors exceeds the public-use limitation.",
+    appears_on: kelo_case @ 2000-01-01..2005-06-23,
+}
+
+entity judicial_deference_claim : claim {
+    narrative: "court",
+    reference_source: "GovInfo U.S. Reports",
+    citation: "Kelo v. City of New London reasoning",
+    position: "Courts should not second-guess a carefully considered development plan absent impermissible private purpose.",
+    appears_on: kelo_case @ 2005-06-23..2005-06-23,
+}
+
+rel us_reports_kelo -["cites"]-> development_plan_approved;
+rel us_reports_kelo -["cites"]-> condemnation_dispute;
+rel us_reports_kelo -["cites"]-> connecticut_supreme_court_decision;
+rel us_reports_kelo -["cites"]-> cert_granted;
+rel us_reports_kelo -["cites"]-> supreme_court_argument;
+rel us_reports_kelo -["cites"]-> kelo_decision;
+rel us_reports_kelo -["cites"]-> economic_development_claim;
+rel us_reports_kelo -["cites"]-> private_transfer_claim;
+rel us_reports_kelo -["cites"]-> judicial_deference_claim;
+rel kelo_opinion_exhibit -["includes"]-> us_reports_kelo;
+rel economic_development_claim -["contradicts"]-> private_transfer_claim;
+rel kelo_decision -["corroborates"]-> economic_development_claim;
+rel judicial_deference_claim -["corroborates"]-> economic_development_claim;
+rel kelo_decision -["supersedes"]-> condemnation_dispute;

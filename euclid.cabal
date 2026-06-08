@@ -91,5 +91,6 @@ test-suite euclid-test
     hs-source-dirs: test
     main-is: Spec.hs
     build-depends:
+        hedgehog >=1.7 && <1.8,
         hspec >=2.11,
         euclid

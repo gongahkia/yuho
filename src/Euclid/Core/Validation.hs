@@ -38,8 +38,8 @@ validateTimelines world =
     validateTimeline timeline =
         timelineBoundsDiagnostics timeline
             ++ maybe [] (timelineRefDiagnostics timeline "parent") (timelineParent timeline)
-            ++ maybe [] (forkMergeDiagnostics "fork_from") (timelineForkFrom timeline)
-            ++ maybe [] (forkMergeDiagnostics "merge_into") (timelineMergeInto timeline)
+            ++ maybe [] (forkMergeDiagnostics timeline "fork_from") (timelineForkFrom timeline)
+            ++ maybe [] (forkMergeDiagnostics timeline "merge_into") (timelineMergeInto timeline)
     timelineRefDiagnostics timeline label refName =
         [ validationDiagnostic
             (timelineSourceSpan timeline)
@@ -53,9 +53,9 @@ validateTimelines world =
             )
         | isNothing (findTimeline refName world)
         ]
-    forkMergeDiagnostics label (refName, _) =
+    forkMergeDiagnostics timeline label (refName, _) =
         [ validationDiagnostic
-            Nothing
+            (timelineSourceSpan timeline)
             DiagnosticError
             ("missing " <> label <> " timeline " <> refName)
         | isNothing (findTimeline refName world)

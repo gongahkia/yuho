@@ -34,19 +34,21 @@ Supported literals:
 - double-quoted strings
 - booleans
 - ISO dates in `YYYY-MM-DD` form
+- durations with `year`/`years`, `month`/`months`, and `day`/`days` components
 
 ```euclid
 42
 "hello"
 true
 1945-05-08
+2 years 3 months 10 days
 ```
 
 Not currently supported:
 
 - floating-point literals
 - fuzzy dates such as `~1945-05-08`
-- relative temporal phrases such as `5years after x`
+- relative temporal phrases such as `5 years after x`
 - era references such as `main::era::start`
 
 ## Top-Level Statements
@@ -58,6 +60,9 @@ A Euclid file is a sequence of statements. The current parser accepts these top-
 - `entity`
 - `rel`
 - `import`
+- `constraint`
+- `view`
+- `scenario`
 - `let`
 - `fn`
 - `if`
@@ -150,6 +155,8 @@ Notes:
 - `appears_on` may appear multiple times
 - non-`appears_on` fields are stored as evaluated values
 - a string `narrative` field can be used by `euclid run --narrative <name>` and `euclid export --narrative <name>`
+- annotation fields `note`, `source`, `confidence`, and `tags` are stored separately from ordinary entity fields
+- `recurrence` accepts a duration value and `skip` accepts a list of dates
 
 Built-in entity type labels:
 
@@ -413,6 +420,48 @@ Built-in callable names:
 - `before`
 - `after`
 - `type_of`
+- `abs`
+- `min`
+- `max`
+- `clamp`
+- `contains`
+- `starts_with`
+- `ends_with`
+- `to_upper`
+- `to_lower`
+- `trim`
+- `split`
+- `replace`
+- `substring`
+- `to_string`
+- `head`
+- `tail`
+- `last`
+- `reverse`
+- `flatten`
+- `range`
+- `sort`
+- `unique`
+- `years`
+- `months`
+- `days`
+- `duration_days`
+- `duration_months`
+- `duration_years`
+- `overlaps`
+- `during`
+- `meets`
+- `starts`
+- `finishes`
+- `equals`
+- `midpoint`
+- `duration_between`
+- `alive_at`
+- `active_on`
+- `entities_where`
+- `causes_of`
+- `effects_of`
+- `related_to`
 
 Current call semantics:
 
@@ -507,31 +556,32 @@ Supported expression forms:
 - field access
 - function and closure calls
 - closures
+- unary expressions
 - binary expressions
+- temporal field access
 
 Operator support:
 
 | Category | Operators |
 |---|---|
-| arithmetic | `+`, `-` |
+| arithmetic | unary `-`, `+`, `-`, `*`, `/`, `%` |
+| concatenation | `++` for strings and lists |
 | comparison | `>`, `<`, `>=`, `<=`, `==`, `!=` |
-| boolean | `&&`, `||` |
+| boolean | unary `!`, `&&`, `||` |
 | range | `..` |
 
 Precedence, highest to lowest:
 
 1. postfix access and calls
-2. `+`, `-`
-3. comparisons
-4. `&&`
-5. `||`
-6. `..`
+2. unary `-`, `!`
+3. `*`, `/`, `%`
+4. `+`, `-`, `++`
+5. comparisons
+6. `&&`
+7. `||`
+8. `..`
 
-Not currently supported:
-
-- `*`
-- `/`
-- unary `!`
+Duration arithmetic supports date-plus-duration, date-minus-duration, date-minus-date, and duration-plus/minus-duration. Division and modulo by zero are evaluator errors.
 
 ## Field Access And Indexing
 
@@ -556,8 +606,39 @@ Entity field access supports:
 
 - `name`
 - `type`
+- `note`
+- `source`
+- `confidence`
+- `tags`
 - declared entity fields
 - inherited type metadata fallback
+
+Temporal entity field access uses `entity.field @ time` and returns the field value active at that time, considering `state` changes when present.
+
+## Views, Scenarios, And Constraints
+
+The parser and evaluator accept lightweight view, scenario, and constraint declarations:
+
+```euclid
+view "case focus" {
+    timelines: [case_file],
+    filter: claim,
+    time_range: 1..10,
+    highlight: [central_claim],
+}
+
+scenario "what if" {
+    entity alternate_fact : fact {
+        appears_on: case_file @ 2..2,
+    }
+}
+
+constraint "sanity check" {
+    let ok = true;
+}
+```
+
+Views are stored in the evaluated world. Scenarios evaluate their body against the current world and store the resulting alternate world. Constraints evaluate their body and are recorded as named constraints; failed expressions in a constraint body fail evaluation.
 
 ## Imports
 

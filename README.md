@@ -79,6 +79,11 @@ $ euclid check examples/legal/brown_board.euclid
 $ euclid check examples/legal/us_microsoft.euclid
 $ euclid check examples/legal/miranda_v_arizona.euclid
 $ euclid check examples/legal/watergate_nixon.euclid
+$ euclid check examples/legal/gideon_v_wainwright.euclid
+$ euclid check examples/legal/chevron_v_nrdc.euclid
+$ euclid check examples/legal/loper_bright_v_raimondo.euclid
+$ euclid check examples/legal/kelo_v_new_london.euclid
+$ euclid check examples/legal/obergefell_v_hodges.euclid
 $ euclid diff examples/legal/brown_plaintiffs.euclid examples/legal/brown_board.euclid
 ```
 
