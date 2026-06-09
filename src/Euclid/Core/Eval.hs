@@ -26,6 +26,7 @@ data EvalState = EvalState
     , evalNextClosureId :: Integer
     , evalFunctionDepth :: Int
     , evalReturnValue :: Maybe Value
+    , evalConstraintName :: Maybe Text
     , evalCurrentSpan :: Maybe SourceSpan
     }
 
@@ -49,7 +50,7 @@ evaluatorDiagnostic state message =
 
 evalProgram :: Program -> Either Diagnostic World
 evalProgram (ProgramData _ statements) =
-    evalWorld <$> foldM evalStmt (EvalState emptyWorld Map.empty Set.empty Map.empty Map.empty 0 0 Nothing Nothing) statements
+    evalWorld <$> foldM evalStmt (EvalState emptyWorld Map.empty Set.empty Map.empty Map.empty 0 0 Nothing Nothing Nothing) statements
 
 evalStmt :: EvalState -> Stmt -> Either Diagnostic EvalState
 evalStmt state (StmtData currentSpan statement) =
@@ -196,14 +197,15 @@ evalStmt state (StmtData currentSpan statement) =
                             { worldScenarios = Map.insert (scenarioDeclName decl) scenarioWorld (worldScenarios baseWorld) }
                     pure scopedState{evalWorld = world'}
                 StmtConstraintNode decl ->
-                    let world' = (evalWorld scopedState)
+                    let baseWorld = evalWorld scopedState
+                        world' = baseWorld
                             { worldConstraints = worldConstraints (evalWorld scopedState)
                                 ++ [Constraint (constraintDeclName decl) (evalCurrentSpan scopedState)]
                             }
                     in do
-                        -- evaluate constraint body in current world to check it passes
-                        constraintState <- foldM evalStmt scopedState (constraintDeclBody decl)
-                        pure constraintState{evalWorld = world'}
+                        -- Evaluate against a local state so helper bindings/functions do not leak.
+                        _ <- foldM evalStmt scopedState{evalConstraintName = Just (constraintDeclName decl)} (constraintDeclBody decl)
+                        pure scopedState{evalWorld = world'}
                 StmtImportNode _ ->
                     pure state
                 StmtLetNode decl -> do
@@ -271,8 +273,12 @@ evalStmt state (StmtData currentSpan statement) =
                                     Nothing -> pure (scopedState, VNull)
                                     Just expr -> evalExpr scopedState expr
                             pure state1{evalReturnValue = Just returnValue}
-                StmtExprNode expr ->
-                    fst <$> evalExpr scopedState expr
+                StmtExprNode expr -> do
+                    (state1, value) <- evalExpr scopedState expr
+                    case evalConstraintName scopedState of
+                        Nothing -> pure state1
+                        Just activeConstraintName ->
+                            assertConstraintValue state1 activeConstraintName value
 
 evalExpr :: EvalState -> Expr -> Either Diagnostic (EvalState, Value)
 evalExpr state (ExprValue value) = Right (state, value)
@@ -766,6 +772,25 @@ renderValueType state (VEntityRef entityNameValue) =
 renderValueType _ (VTimelineRef _) = "timeline"
 renderValueType _ (VClosureRef _) = "closure"
 renderValueType _ (VDuration _ _ _) = "duration"
+
+assertConstraintValue :: EvalState -> Text -> Value -> Either Diagnostic EvalState
+assertConstraintValue state activeConstraintName value =
+    case value of
+        VBool True -> pure state
+        VBool False ->
+            Left $
+                evaluatorDiagnostic
+                    state
+                    ("constraint " <> activeConstraintName <> " failed")
+        _ ->
+            Left $
+                evaluatorDiagnostic
+                    state
+                    ( "constraint "
+                        <> activeConstraintName
+                        <> " expression must evaluate to a boolean, got "
+                        <> renderValueType state value
+                    )
 
 hasTypeAncestor :: World -> Text -> Text -> Bool
 hasTypeAncestor worldValue currentType expectedType =

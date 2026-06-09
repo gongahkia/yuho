@@ -1384,6 +1384,48 @@ spec = do
                 Right (Program statements) ->
                     statements `shouldBe` [StmtImport "shared.euclid"]
 
+    describe "constraint evaluation" $ do
+        it "records passing constraints and evaluates assertions against the current world" $ do
+            let source =
+                    T.unlines
+                        [ "timeline case_file {"
+                        , "  start: 1,"
+                        , "  end: 10,"
+                        , "}"
+                        , "entity hearing : event {"
+                        , "  appears_on: case_file @ 3..3,"
+                        , "}"
+                        , "constraint \"has one active entity\" {"
+                        , "  let active = active_on(case_file);"
+                        , "  len(active) == 1;"
+                        , "}"
+                        ]
+            case parseEvalWorld "<inline>" source of
+                Left diags ->
+                    expectationFailure ("failed: " <> show diags)
+                Right worldValue ->
+                    map constraintName (worldConstraints worldValue) `shouldBe` ["has one active entity"]
+
+        it "fails when a constraint assertion evaluates to false" $
+            expectEvalFailure "constraint \"sanity\" { false; }\n" $ \diag ->
+                diagnosticMessage diag `shouldSatisfy` T.isInfixOf "constraint sanity failed"
+
+        it "requires constraint expression statements to evaluate to booleans" $
+            expectEvalFailure "constraint \"typed\" { 1; }\n" $ \diag ->
+                diagnosticMessage diag `shouldSatisfy` T.isInfixOf "constraint typed expression must evaluate to a boolean, got int"
+
+        it "keeps constraint helper bindings local to the constraint body" $ do
+            let source =
+                    T.unlines
+                        [ "constraint \"local\" {"
+                        , "  let helper = true;"
+                        , "  helper;"
+                        , "}"
+                        , "let leaked = helper;"
+                        ]
+            expectEvalFailure source $ \diag ->
+                diagnosticMessage diag `shouldSatisfy` T.isInfixOf "unresolved identifier: helper"
+
     describe "conditional parsing and evaluation" $ do
         it "parses else-if and else branches into the AST" $ do
             let source =

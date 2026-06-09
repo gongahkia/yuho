@@ -635,10 +635,13 @@ scenario "what if" {
 
 constraint "sanity check" {
     let ok = true;
+    ok;
 }
 ```
 
-Views are stored in the evaluated world. Scenarios evaluate their body against the current world and store the resulting alternate world. Constraints evaluate their body and are recorded as named constraints; failed expressions in a constraint body fail evaluation.
+Views are stored in the evaluated world. Scenarios evaluate their body against the current world and store the resulting alternate world.
+
+Constraints evaluate their body against the current world and are recorded as named constraints when they pass. Expression statements inside a constraint are assertions: they must evaluate to `true`. A `false` expression fails evaluation, and a non-boolean expression is a type error. Helper bindings and functions declared inside a constraint are local to that constraint body and do not leak into the surrounding file.
 
 ## Imports
 
