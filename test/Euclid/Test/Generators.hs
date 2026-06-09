@@ -10,6 +10,7 @@ module Euclid.Test.Generators
 
 import Data.Text (Text)
 import qualified Data.Text as T
+import qualified Hedgehog as H
 import qualified Hedgehog.Gen as Gen
 import qualified Hedgehog.Range as Range
 
@@ -21,13 +22,13 @@ data GeneratedWorld = GeneratedWorld
     }
     deriving (Eq, Show)
 
-genValidWorld :: Gen.Gen GeneratedWorld
+genValidWorld :: H.Gen GeneratedWorld
 genValidWorld = do
     timelineName <- genIdentifierWith "timeline_"
     factName <- genIdentifierWith "fact_"
     evidenceName <- genIdentifierWith "evidence_"
-    start <- Gen.integral (Range.linear 0 100)
-    duration <- Gen.integral (Range.linear 1 100)
+    start <- Gen.integral (Range.linear (0 :: Integer) 100)
+    duration <- Gen.integral (Range.linear (1 :: Integer) 100)
     let end = start + duration
     factStart <- Gen.integral (Range.linear start end)
     factEnd <- Gen.integral (Range.linear factStart end)
@@ -60,11 +61,11 @@ genValidWorld = do
                     ]
             }
 
-genInvalidRangeWorld :: Gen.Gen Text
+genInvalidRangeWorld :: H.Gen Text
 genInvalidRangeWorld = do
     timelineName <- genIdentifierWith "timeline_"
     entityName <- genIdentifierWith "entity_"
-    start <- Gen.integral (Range.linear 0 50)
+    start <- Gen.integral (Range.linear (0 :: Integer) 50)
     end <- Gen.integral (Range.linear (start + 1) (start + 100))
     pure $
         T.unlines
@@ -77,11 +78,11 @@ genInvalidRangeWorld = do
             , "}"
             ]
 
-genIntExpression :: Gen.Gen (Text, Integer)
+genIntExpression :: H.Gen (Text, Integer)
 genIntExpression = do
-    left <- Gen.integral (Range.linear (-1000) 1000)
-    right <- Gen.integral (Range.linear (-1000) 1000)
-    divisor <- Gen.filter (/= 0) (Gen.integral (Range.linear (-1000) 1000))
+    left <- Gen.integral (Range.linear (-1000 :: Integer) 1000)
+    right <- Gen.integral (Range.linear (-1000 :: Integer) 1000)
+    divisor <- Gen.filter (/= 0) (Gen.integral (Range.linear (-1000 :: Integer) 1000))
     Gen.element
         [ (showText left <> " + " <> showText right, left + right)
         , (showText left <> " - " <> showText right, left - right)
@@ -90,11 +91,11 @@ genIntExpression = do
         , (showText left <> " % " <> showText divisor, left `mod` divisor)
         ]
 
-genCsvInput :: Gen.Gen Text
+genCsvInput :: H.Gen Text
 genCsvInput = do
     firstName <- genIdentifierWith "event_"
-    secondName <- genIdentifierWith "event_"
-    firstStart <- Gen.integral (Range.linear 1 10)
+    secondName <- Gen.filter (/= firstName) (genIdentifierWith "event_")
+    firstStart <- Gen.integral (Range.linear (1 :: Integer) 10)
     secondStart <- Gen.integral (Range.linear (firstStart + 1) 20)
     pure $
         T.unlines
@@ -103,7 +104,7 @@ genCsvInput = do
             , secondName <> ",fact,generated," <> showText secondStart <> "," <> showText secondStart <> ",Second generated row"
             ]
 
-genIdentifierWith :: Text -> Gen.Gen Text
+genIdentifierWith :: Text -> H.Gen Text
 genIdentifierWith prefix = do
     suffix <- Gen.text (Range.linear 3 12) (Gen.element identifierChars)
     pure (prefix <> suffix)

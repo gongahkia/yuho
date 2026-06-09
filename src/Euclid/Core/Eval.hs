@@ -428,7 +428,7 @@ indexOutOfBounds :: EvalState -> Text -> Int -> Int -> Diagnostic
 indexOutOfBounds state targetName indexValue targetLength =
     evaluatorDiagnostic
         state
-        ( 
+        (
             "index "
                 <> T.pack (show indexValue)
                 <> " is out of bounds for "
@@ -614,7 +614,7 @@ evalBuiltin state name args =
         -- Allen's interval algebra (operating on pairs of date ranges)
         "overlaps" -> allenRelation args (\s1 e1 s2 e2 -> s1 < s2 && e1 > s2 && e1 < e2)
         "during" -> allenRelation args (\s1 e1 s2 e2 -> s1 > s2 && e1 < e2)
-        "meets" -> allenRelation args (\s1 e1 s2 _e2 -> e1 == s2)
+        "meets" -> allenRelation args (\_s1 e1 s2 _e2 -> e1 == s2)
         "starts" -> allenRelation args (\s1 e1 s2 e2 -> s1 == s2 && e1 < e2)
         "finishes" -> allenRelation args (\s1 e1 _s2 e2 -> e1 == e2 && s1 > _s2)
         "equals" -> allenRelation args (\s1 e1 s2 e2 -> s1 == s2 && e1 == e2)
@@ -652,8 +652,8 @@ evalBuiltin state name args =
                 in Just (VList (map (VEntityRef . entityName) matching))
             _ -> Nothing
         "entities_where" -> case args of
-            [VString typeName] ->
-                let matching = filter (\e -> entityType e == typeName)
+            [VString requestedTypeName] ->
+                let matching = filter (\e -> entityType e == requestedTypeName)
                         (Map.elems (worldEntities (evalWorld state)))
                 in Just (VList (map (VEntityRef . entityName) matching))
             _ -> Nothing
@@ -670,10 +670,10 @@ evalBuiltin state name args =
                 in Just (VList (map VEntityRef directEffects))
             _ -> Nothing
         "related_to" -> case args of
-            [VEntityRef name] ->
+            [VEntityRef entityRefName] ->
                 let rels = worldRelationships (evalWorld state)
-                    related = [relTarget r | r <- rels, relSource r == name]
-                        ++ [relSource r | r <- rels, relTarget r == name]
+                    related = [relTarget r | r <- rels, relSource r == entityRefName]
+                        ++ [relSource r | r <- rels, relTarget r == entityRefName]
                 in Just (VList (map VEntityRef (uniqueTexts related)))
             _ -> Nothing
         _ -> Nothing

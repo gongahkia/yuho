@@ -2,12 +2,14 @@
 
 module Main (main) where
 
-import qualified Data.Map.Strict as Map
 import qualified Data.Aeson as Aeson
 import qualified Data.Aeson.Key as Key
 import qualified Data.Aeson.KeyMap as KeyMap
 import Data.List (isSuffixOf, nub, sort)
+import qualified Data.Map.Strict as Map
+import qualified Data.Set as Set
 import qualified Data.Text as T
+import qualified Data.Text.Encoding as TE
 import qualified Data.Text.IO as TIO
 import Data.Time (fromGregorian)
 import Euclid.CLI.Options
@@ -25,11 +27,15 @@ import Euclid.Lang.Parser
 import Euclid.Model.Types
 import Euclid.Playground.API
 import Euclid.Render.HTML
-import Euclid.Render.Layout
 import Euclid.Render.Diff
+import Euclid.Render.JSON
+import Euclid.Render.Layout
+import Euclid.Render.Markdown
 import Euclid.Render.Mermaid
 import Euclid.Render.SVG
+import Euclid.Test.Generators
 import Euclid.Tooling.LSP
+import qualified Hedgehog as H
 import System.Directory (listDirectory, removeFile)
 import System.FilePath ((</>))
 import Test.Hspec
@@ -64,19 +70,70 @@ lookupJsonText keyName obj =
         Just (Aeson.String value) -> Just value
         _ -> Nothing
 
-expectNoHardErrors :: FilePath -> Expectation
-expectNoHardErrors filePath = do
-    source <- TIO.readFile filePath
+checkHedgehog :: H.Property -> Expectation
+checkHedgehog property = do
+    success <- H.check property
+    success `shouldBe` True
+
+parseEvalWorld :: FilePath -> T.Text -> Either [Diagnostic] World
+parseEvalWorld filePath source =
     case parseProgram filePath source of
-        Left diags ->
-            expectationFailure (filePath <> " parse failed: " <> show diags)
+        Left diags -> Left diags
         Right program ->
             case evalProgram program of
-                Left diag ->
-                    expectationFailure (filePath <> " eval failed: " <> show diag)
+                Left diag -> Left [diag]
+                Right worldValue -> Right worldValue
+
+hardDiagnostics :: [Diagnostic] -> [Diagnostic]
+hardDiagnostics = filter ((== DiagnosticError) . diagnosticLevel)
+
+diagnosticHasSpanIn :: FilePath -> Diagnostic -> Bool
+diagnosticHasSpanIn filePath diagnostic =
+    maybe False ((== filePath) . spanFile) (diagnosticSpan diagnostic)
+
+expectEvalFailure :: T.Text -> (Diagnostic -> Expectation) -> Expectation
+expectEvalFailure source assertion =
+    case parseProgram "<inline>" source of
+        Left diags ->
+            expectationFailure ("parse failed: " <> show diags)
+        Right program ->
+            case evalProgram program of
+                Left diag -> assertion diag
                 Right worldValue ->
-                    any ((== DiagnosticError) . diagnosticLevel) (validateWorld worldValue)
-                        `shouldBe` False
+                    expectationFailure ("expected evaluation failure, got " <> show worldValue)
+
+lookupEntityField :: T.Text -> T.Text -> World -> Maybe Value
+lookupEntityField entityNameValue fieldName worldValue =
+    Map.lookup entityNameValue (worldEntities worldValue)
+        >>= Map.lookup fieldName . entityFields
+
+expectLegalFileInvariants :: FilePath -> Expectation
+expectLegalFileInvariants filePath = do
+    source <- TIO.readFile filePath
+    source `shouldSatisfy` T.isInfixOf "https://"
+    case parseEvalWorld filePath source of
+        Left diags ->
+            expectationFailure (filePath <> " failed: " <> show diags)
+        Right worldValue -> do
+            let entities = Map.elems (worldEntities worldValue)
+                relationships = worldRelationships worldValue
+                claims =
+                    [ entityName entityValue
+                    | entityValue <- entities
+                    , entityType entityValue == "claim"
+                    ]
+                citedTargets =
+                    Set.fromList
+                        [ relTarget relationship
+                        | relationship <- relationships
+                        , relLabel relationship == Just "cites"
+                        ]
+            hardDiagnostics (validateWorld worldValue) `shouldBe` []
+            entities `shouldSatisfy` any ((== "evidence") . entityType)
+            entities `shouldSatisfy` any ((== "exhibit") . entityType)
+            claims `shouldSatisfy` (not . null)
+            relationships `shouldSatisfy` any ((== Just "cites") . relLabel)
+            filter (`Set.notMember` citedTargets) claims `shouldBe` []
 
 spec :: Spec
 spec = do
@@ -116,8 +173,198 @@ spec = do
                     . map ("examples/legal" </>)
                     . filter (".euclid" `isSuffixOf`)
                     <$> listDirectory "examples/legal"
-            legalFiles `shouldSatisfy` (not . null)
-            mapM_ expectNoHardErrors legalFiles
+            length legalFiles `shouldBe` 10
+            mapM_ expectLegalFileInvariants legalFiles
+
+    describe "generated DSL coverage" $ do
+        it "accepts generated valid worlds without hard validation errors" $
+            checkHedgehog $
+                H.withTests 200 $
+                    H.property $ do
+                        generated <- H.forAll genValidWorld
+                        case parseEvalWorld "<generated-valid>" (generatedSource generated) of
+                            Left diags -> do
+                                H.annotateShow diags
+                                H.failure
+                            Right worldValue -> do
+                                H.assert (Map.member (generatedTimelineName generated) (worldTimelines worldValue))
+                                H.assert (Map.member (generatedFactName generated) (worldEntities worldValue))
+                                H.assert (Map.member (generatedEvidenceName generated) (worldEntities worldValue))
+                                H.assert (null (hardDiagnostics (validateWorld worldValue)))
+
+        it "flags generated reversed appearance ranges" $
+            checkHedgehog $
+                H.withTests 150 $
+                    H.property $ do
+                        source <- H.forAll genInvalidRangeWorld
+                        case parseEvalWorld "<generated-invalid-range>" source of
+                            Left diags -> do
+                                H.annotateShow diags
+                                H.failure
+                            Right worldValue -> do
+                                let diagnostics = validateWorld worldValue
+                                H.assert (any ((== DiagnosticError) . diagnosticLevel) diagnostics)
+                                H.assert (any (T.isInfixOf "appearance range with start after end" . diagnosticMessage) diagnostics)
+
+        it "evaluates generated integer arithmetic into entity fields" $
+            checkHedgehog $
+                H.withTests 200 $
+                    H.property $ do
+                        (exprSource, expectedValue) <- H.forAll genIntExpression
+                        let source =
+                                T.unlines
+                                    [ "timeline main {"
+                                    , "    start: -10000,"
+                                    , "    end: 10000,"
+                                    , "}"
+                                    , "entity calc : fact {"
+                                    , "    value: " <> exprSource <> ","
+                                    , "    appears_on: main @ 0..0,"
+                                    , "}"
+                                    ]
+                        case parseEvalWorld "<generated-arithmetic>" source of
+                            Left diags -> do
+                                H.annotateShow diags
+                                H.failure
+                            Right worldValue ->
+                                case lookupEntityField "calc" "value" worldValue of
+                                    Just (VInt actualValue) ->
+                                        actualValue H.=== expectedValue
+                                    other -> do
+                                        H.annotateShow other
+                                        H.failure
+
+        it "imports generated CSV inputs into valid worlds" $
+            checkHedgehog $
+                H.withTests 150 $
+                    H.property $ do
+                        csvInput <- H.forAll genCsvInput
+                        case importCsvToEuclid csvInput of
+                            Left diags -> do
+                                H.annotateShow diags
+                                H.failure
+                            Right generatedCsvSource ->
+                                case parseEvalWorld "<generated-csv>" generatedCsvSource of
+                                    Left diags -> do
+                                        H.annotateShow diags
+                                        H.failure
+                                    Right worldValue -> do
+                                        H.assert (Map.member "generated" (worldTimelines worldValue))
+                                        H.assert (Map.size (worldEntities worldValue) >= 2)
+                                        H.assert (null (hardDiagnostics (validateWorld worldValue)))
+
+        it "renders generated worlds through every export backend" $
+            checkHedgehog $
+                H.withTests 100 $
+                    H.property $ do
+                        generated <- H.forAll genValidWorld
+                        case parseEvalWorld "<generated-render>" (generatedSource generated) of
+                            Left diags -> do
+                                H.annotateShow diags
+                                H.failure
+                            Right worldValue -> do
+                                let layout = computeLayout worldValue
+                                    svgOutput = renderSvg defaultSvgOptions layout
+                                    htmlOutput = renderInteractiveHtml layout
+                                    jsonOutput = renderJson worldValue
+                                    markdownOutput = renderMarkdown worldValue
+                                    mermaidOutput = renderMermaid layout
+                                    factName = generatedFactName generated
+                                    generatedTimeline = generatedTimelineName generated
+                                H.assert (T.isInfixOf factName svgOutput)
+                                H.assert (T.isInfixOf factName htmlOutput)
+                                H.assert (T.isInfixOf generatedTimeline jsonOutput)
+                                H.assert (T.isInfixOf factName markdownOutput)
+                                H.assert (T.isInfixOf generatedTimeline mermaidOutput)
+                                case Aeson.decodeStrict (TE.encodeUtf8 jsonOutput) of
+                                    Just (Aeson.Object _) -> pure ()
+                                    other -> do
+                                        H.annotateShow (other :: Maybe Aeson.Value)
+                                        H.failure
+
+    describe "parser diagnostics" $ do
+        it "reports source spans for malformed syntax cases" $ do
+            let cases =
+                    [ ( "invalid date"
+                      , T.unlines
+                            [ "timeline main {"
+                            , "  start: 2024-02-30,"
+                            , "  end: 2024-03-01,"
+                            , "}"
+                            ]
+                      )
+                    , ("unterminated string", "let label = \"unterminated;\n")
+                    , ("missing relationship semicolon", "rel a -[\"x\"]-> b\n")
+                    , ("unsupported relationship arrow", "rel a ==> b;\n")
+                    ]
+            mapM_
+                ( \(caseName, source) ->
+                    case parseProgram "<inline>" source of
+                        Left (diag : _) -> do
+                            diagnosticSource diag `shouldBe` "parser"
+                            diagnosticMessage diag `shouldSatisfy` (not . T.null)
+                            diagnosticHasSpanIn "<inline>" diag `shouldBe` True
+                        Left [] ->
+                            expectationFailure ("expected parser diagnostic for " <> caseName)
+                        Right parsed ->
+                            expectationFailure ("expected parser failure for " <> caseName <> ", got " <> show parsed)
+                )
+                cases
+
+        it "renders diagnostic locations in CLI-friendly form" $ do
+            let diagnostic =
+                    Diagnostic
+                        { diagnosticLevel = DiagnosticWarning
+                        , diagnosticSource = "validation"
+                        , diagnosticMessage = "example warning"
+                        , diagnosticSpan =
+                            Just
+                                SourceSpan
+                                    { spanFile = "case.euclid"
+                                    , spanStartLine = 3
+                                    , spanStartColumn = 5
+                                    , spanEndLine = 3
+                                    , spanEndColumn = 11
+                                    }
+                        }
+            renderDiagnostic diagnostic `shouldBe` "warning: validation- case.euclid:3:5- example warning"
+
+    describe "evaluator diagnostics and edge cases" $ do
+        it "attaches source spans to arithmetic and index evaluator failures" $ do
+            let cases =
+                    [ ("let value = 10 / 0;\n", "division by zero")
+                    , ("let value = 10 % 0;\n", "modulo by zero")
+                    , ("let value = \"x\" + 1;\n", "unsupported operands")
+                    , ("let value = [1][2];\n", "out of bounds")
+                    ]
+            mapM_
+                ( \(source, expectedMessage) ->
+                    expectEvalFailure source $ \diag -> do
+                        diagnosticMessage diag `shouldSatisfy` T.isInfixOf expectedMessage
+                        diagnosticHasSpanIn "<inline>" diag `shouldBe` True
+                        diagnosticLevel diag `shouldBe` DiagnosticError
+                        diagnosticSource diag `shouldBe` "evaluator"
+                )
+                cases
+
+        it "supports both string containment and Allen interval containment" $ do
+            let source =
+                    T.unlines
+                        [ "timeline main {"
+                        , "  start: 2024-01-01,"
+                        , "  end: 2024-01-10,"
+                        , "}"
+                        , "if contains(\"Miranda warning\", \"warning\") && contains(2024-01-01, 2024-01-10, 2024-01-03, 2024-01-04) {"
+                        , "  entity contains_hit : event {"
+                        , "    appears_on: main @ 2024-01-03..2024-01-04,"
+                        , "  }"
+                        , "}"
+                        ]
+            case parseEvalWorld "<inline>" source of
+                Left diags ->
+                    expectationFailure ("failed: " <> show diags)
+                Right worldValue ->
+                    Map.member "contains_hit" (worldEntities worldValue) `shouldBe` True
 
     describe "narrative filtering" $
         it "keeps matching narrative entities, shared context, and valid relationships" $ do
@@ -477,6 +724,26 @@ spec = do
                             diagnosticMessage diag `shouldSatisfy` T.isInfixOf "invalid timeline kind"
                         Right _ ->
                             expectationFailure "expected invalid timeline kind failure"
+
+        it "keeps source spans on missing fork and merge timeline diagnostics" $ do
+            let source =
+                    T.unlines
+                        [ "timeline branch_case {"
+                        , "  kind: branch,"
+                        , "  start: 1,"
+                        , "  end: 10,"
+                        , "  fork_from: missing_parent @ 2,"
+                        , "  merge_into: missing_target @ 8,"
+                        , "}"
+                        ]
+            case parseEvalWorld "<inline>" source of
+                Left diags ->
+                    expectationFailure ("failed: " <> show diags)
+                Right worldValue -> do
+                    let diagnostics = hardDiagnostics (validateWorld worldValue)
+                    diagnostics `shouldSatisfy` any (T.isInfixOf "missing fork_from timeline missing_parent" . diagnosticMessage)
+                    diagnostics `shouldSatisfy` any (T.isInfixOf "missing merge_into timeline missing_target" . diagnosticMessage)
+                    mapM_ (\diag -> diagnosticHasSpanIn "<inline>" diag `shouldBe` True) diagnostics
 
         it "flags entity appearances that exceed timeline bounds" $ do
             let source =

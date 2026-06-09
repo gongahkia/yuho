@@ -90,6 +90,8 @@ test-suite euclid-test
     type: exitcode-stdio-1.0
     hs-source-dirs: test
     main-is: Spec.hs
+    other-modules:
+        Euclid.Test.Generators
     build-depends:
         hedgehog >=1.7 && <1.8,
         hspec >=2.11,

@@ -1,5 +1,9 @@
 // Brown v. Board legal narrative demo: plaintiffs-focused model.
 // Source facts are summarized in docs/LEGAL.md.
+//
+// Primary sources:
+// - https://www.nps.gov/brvb/learn/historyculture/kansas.htm
+// - https://www.archives.gov/milestone-documents/brown-v-board-of-education
 
 timeline brown_case {
     kind: linear,

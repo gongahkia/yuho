@@ -116,15 +116,17 @@ stringLiteral :: Parser Text
 stringLiteral = T.pack <$> lexeme (char '"' *> manyTill L.charLiteral (char '"'))
 
 dateLiteral :: Parser Day
-dateLiteral = lexeme $ try $ do
-    year <- count 4 digitChar
-    _ <- char '-'
-    month <- count 2 digitChar
-    _ <- char '-'
-    day <- count 2 digitChar
-    let textValue = year <> "-" <> month <> "-" <> day
-    maybe empty pure $
-        parseTimeM True defaultTimeLocale "%F" textValue
+dateLiteral = lexeme $ do
+    textValue <- try $ do
+        year <- count 4 digitChar
+        _ <- char '-'
+        month <- count 2 digitChar
+        _ <- char '-'
+        day <- count 2 digitChar
+        pure (year <> "-" <> month <> "-" <> day)
+    case parseTimeM True defaultTimeLocale "%F" textValue of
+        Just parsedDay -> pure parsedDay
+        Nothing -> fail ("invalid date literal: " <> textValue)
 
 integerLiteral :: Parser Integer
 integerLiteral = lexeme (L.signed sc L.decimal)
@@ -237,7 +239,7 @@ durationComponent = do
 literalValueParser :: Parser Value
 literalValueParser =
     choice
-        [ VDate <$> try dateLiteral
+        [ VDate <$> dateLiteral
         , try durationLiteral
         , VBool <$> boolLiteral
         , VInt <$> try integerLiteral
@@ -356,7 +358,7 @@ entityDeclParser = do
         customFields = Map.fromList [(n, e) | (n, e) <- allFields, Set.notMember n reservedFieldNames]
         annotFields = Map.fromList [(n, e) | (n, e) <- allFields, Set.member n (Set.fromList ["note", "source", "confidence", "tags"])]
         appearances = [appearance | AppearanceField appearance <- fields]
-        stateChanges = [sc | StateChangeField sc <- fields]
+        stateChanges = [stateChange | StateChangeField stateChange <- fields]
         annot = AnnotationDecl
             { annotationDeclNote = Map.lookup "note" annotFields
             , annotationDeclSource = Map.lookup "source" annotFields
@@ -409,7 +411,7 @@ standardRelParser = do
 causalRelParser :: Parser RelationshipDecl
 causalRelParser = do
     source <- identifier
-    (causalKind, label) <- choice
+    (causalKind, relationshipLabel) <- choice
         [ (CausalDeclCauses, "causes") <$ symbol "causes"
         , (CausalDeclEnables, "enables") <$ symbol "enables"
         ]
@@ -417,7 +419,7 @@ causalRelParser = do
     _ <- symbol ";"
     pure RelationshipDecl
         { relationshipDeclSource = source
-        , relationshipDeclLabel = Just label
+        , relationshipDeclLabel = Just relationshipLabel
         , relationshipDeclTarget = target
         , relationshipDeclDirected = True
         , relationshipDeclCausalKind = causalKind
