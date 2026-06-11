@@ -266,6 +266,15 @@ timeline jurisdiction_pack {
     court: "research pack",
 }
 
+timeline sample_us_case {
+    kind: linear,
+    start: 2026-01-01,
+    end: 2026-12-31,
+    jurisdiction: "US-FRCP",
+    procedure: "civil-procedure",
+    court: "Example U.S. district court",
+}
+
 entity sample_us_answer_deadline : deadline {
     rule: "FRCP 12(a)(1)(A)(i)",
     jurisdiction: "US-FRCP",
@@ -273,7 +282,7 @@ entity sample_us_answer_deadline : deadline {
     due: 2026-02-02,
     source_ref: frcp_2024,
     rule_ref: us_frcp_answer_21,
-    appears_on: jurisdiction_pack @ 2026-02-02..2026-02-02,
+    appears_on: sample_us_case @ 2026-02-02..2026-02-02,
 }
 
 entity frcp_authority_record : evidence {

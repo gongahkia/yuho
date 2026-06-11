@@ -345,6 +345,10 @@ spec = do
                     lookupEntityField "answer_deadline" "rule_ref" worldValue `shouldBe` Just (VDeadlineRuleRef "answer_21")
                     renderDeadlinesReport worldValue `shouldSatisfy` T.isInfixOf "answer_21"
                     renderIssuesReport worldValue `shouldSatisfy` T.isInfixOf "response_trigger"
+                    let reviewReport = renderLegalReview (validateWorld worldValue) worldValue
+                    reviewReport `shouldSatisfy` T.isInfixOf "Diagnostics:"
+                    reviewReport `shouldSatisfy` T.isInfixOf "Deadline Rules:"
+                    reviewReport `shouldSatisfy` T.isInfixOf "Issues:"
 
         it "enforces legal relationship cardinality declarations" $ do
             let source =

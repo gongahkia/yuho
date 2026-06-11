@@ -15,6 +15,20 @@ Different civil procedure systems encode timeline duties differently:
 | California civil motion practice (`CA-CIVIL`) | California motion papers combine statute, statewide rules, court days, and local practice. The committed starter rule records Rule 3.1300(c)'s proof-of-service timing. | [California Rule 3.1300](https://courts.ca.gov/cms/rules/index/three/rule3_1300) |
 | New York civil practice (`NY-CPLR`) | CPLR appearance and answer windows depend on service method and whether a pleading is served with the summons. Starter rules record CPLR 320(a) and 3012(a). | [N.Y. CPLR 320](https://www.nysenate.gov/legislation/laws/CVP/320), [N.Y. CPLR 3012](https://www.nysenate.gov/legislation/laws/CVP/3012) |
 
+## Current Value Proposition
+
+Euclid's useful niche is not "automatic legal advice." It is a small, reviewable language for converting a messy procedural chronology into a source-backed timeline that a lawyer, paralegal, journalist, researcher, or litigation-support analyst can inspect.
+
+The jurisdiction layer adds value when a user needs to:
+
+- tie a concrete due date back to the rule the author selected
+- keep official authority, pinpoint locators, source bundles, and timeline events in the same file
+- compare alternate procedural theories without losing the base chronology
+- inspect generated or hand-written legal drafts with one `euclid review <file>` command
+- export the same chronology to visual, JSON, Markdown, Mermaid, or report formats
+
+That scope is intentionally narrower than docketing software. Euclid can say "this deadline claims to use UK-CPR Part 15 and source X"; it does not yet say "this is the correct computed date after all local rules, holidays, extensions, orders, and service-method exceptions."
+
 ## Euclid Encoding
 
 Use timeline metadata to label the procedural frame:
