@@ -56,8 +56,16 @@ Not currently supported:
 A Euclid file is a sequence of statements. The current parser accepts these top-level forms:
 
 - `type`
+- `source`
+- `source_bundle`
+- `locator`
+- `ruleset`
+- `deadline_rule`
+- `issue`
+- `element`
 - `timeline`
 - `entity`
+- `reltype`
 - `rel`
 - `import`
 - `constraint`
@@ -96,6 +104,9 @@ Supported fields:
 | `start` | expr | date or integer at runtime |
 | `end` | expr | date or integer at runtime |
 | `parent` | identifier | validated after evaluation |
+| `jurisdiction` | string or identifier | Legal ruleset/jurisdiction label such as `US-FRCP` or `UK-CPR`. |
+| `court` | string or identifier | Court or forum label for reports and exports. |
+| `procedure` | string or identifier | Procedure/ruleset label such as `civil-procedure`; a jurisdiction without a procedure warns. |
 | `fork_from` | `timeline @ expr` | validated after evaluation |
 | `merge_into` | `timeline @ expr` | validated after evaluation |
 | `loop_count` | expr | must evaluate to an integer if present |
@@ -121,6 +132,14 @@ timeline alternate {
     fork_from: main @ 3,
     merge_into: main @ 7,
 }
+
+timeline federal_case {
+    jurisdiction: "US-FRCP",
+    court: "Example U.S. District Court",
+    procedure: "civil-procedure",
+    start: 2024-01-01,
+    end: 2024-12-31,
+}
 ```
 
 Semantic rules:
@@ -128,6 +147,7 @@ Semantic rules:
 - invalid explicit `kind` values are errors
 - timeline bounds with `start > end` are errors
 - missing `parent`, `fork_from`, and `merge_into` timeline references are errors
+- timelines with `jurisdiction` but no `procedure`, or `procedure` but no `jurisdiction`, produce warnings
 
 ## Entities
 
@@ -174,6 +194,8 @@ Built-in entity type labels:
 - `witness`
 - `claim`
 - `fact`
+- `expert_opinion`
+- `deadline`
 - `exhibit`
 - `deposition`
 
@@ -181,14 +203,154 @@ Built-in legal/litigation entity schemas:
 
 | Type | Required fields | Optional fields | Intended use |
 |---|---|---|---|
-| `evidence` | `citation: string`, `source: string` | `bates: string`, `admissibility: string` | Source-backed support for a claim or fact |
+| `evidence` | `citation: string`, `source: string` | `source_ref: source`, `locator_ref: locator`, `bates: string`, `admissibility: string` | Source-backed support for a claim or fact |
 | `witness` | none | `affiliation: string`, `credibility: int` | Person or source whose statements matter to the narrative |
 | `claim` | none | user-defined fields | Contested assertion |
 | `fact` | none | user-defined fields | Uncontested assertion or procedural fact |
-| `exhibit` | `number: string`, `description: string` | user-defined fields | Filing-style exhibit record |
+| `expert_opinion` | `opinion: string` | `source_ref: source`, `locator_ref: locator` | Expert conclusion tied to a record source |
+| `deadline` | `rule: string`, `jurisdiction: string`, `trigger: string`, `due: date` | `source_ref: source`, `rule_ref: deadline_rule` | Procedural deadline backed by an authority or docket source |
+| `exhibit` | `number: string`, `description: string` | `source_ref: source`, `locator_ref: locator` | Filing-style exhibit record |
 | `deposition` | `deponent: string`, `date: date` | user-defined fields | Deposition event or transcript record |
 
-`source` is also an entity annotation field. For `evidence`, `source: "..."` satisfies the built-in `source` field requirement.
+`source` is also an entity annotation field. For `evidence`, `source: "..."` satisfies the built-in string source field requirement. Use `source_ref: <source_id>` when the evidence should point at a first-class source declaration.
+
+## Sources
+
+Sources are first-class provenance records. They are addressable by identifier and can be stored in entity fields typed as `source`.
+
+```euclid
+source brown_opinion : legal_case {
+    title: "Brown v. Board of Education",
+    citation: "347 U.S. 483",
+    url: "https://www.archives.gov/milestone-documents/brown-v-board-of-education",
+    retrieved: 2026-06-11,
+}
+
+entity opinion_record : evidence {
+    citation: "347 U.S. 483",
+    source: "National Archives",
+    source_ref: brown_opinion,
+    appears_on: case_file @ 1954-05-17..1954-05-17,
+}
+```
+
+Source field access supports `name`, `kind`, and declared source fields such as `url` or `citation`. Validation warns when a source lacks all of `citation`, `title`, and `url`, and warns when a declared `url` is not an HTTP(S) URL.
+
+Validation also normalizes `citation` and `canonical_id` fields by lowercasing text and removing punctuation for duplicate checks. This catches sources such as `24-cv-100` and `24 CV 100` as the same source identity without preventing the file from evaluating.
+
+Source bundles group related source records for a pleading, docket packet, transcript set, or authority bundle:
+
+```euclid
+source_bundle pleadings {
+    sources: [brown_opinion],
+    jurisdiction: "US-FRCP",
+    court: "Example U.S. District Court",
+}
+```
+
+`sources` entries must point to declared `source` records. Missing source references are errors, and repeated bundle members are warnings.
+
+Source locators are first-class pins into a source. They keep the citation identity separate from the exact place used by an entity, issue, or deadline rule:
+
+```euclid
+locator complaint_para_12 {
+    source_ref: complaint,
+    bates: "ACME_000012",
+    page: 4,
+    paragraph: "12",
+}
+```
+
+`source_ref` is required and must point to a declared source. Validation warns when a locator has no concrete locator field such as `bates`, `page`, `paragraph`, `line`, `transcript_page`, `transcript_line`, `docket_entry`, or `url_fragment`.
+
+## Rulesets And Deadline Rules
+
+Jurisdiction coverage is modeled through source-backed rulesets and deadline-rule declarations. These declarations are inspectable authority records; they do not compute a docketing answer.
+
+```euclid
+ruleset us_frcp {
+    jurisdiction: "US-FRCP",
+    court: "U.S. district courts",
+    procedure: "civil-procedure",
+    effective: 2024-12-01..2026-12-31,
+    source_ref: frcp_2024,
+}
+
+deadline_rule us_frcp_answer_21 {
+    ruleset: us_frcp,
+    rule: "FRCP 12(a)(1)(A)(i)",
+    trigger: "service of summons and complaint",
+    actor: "defendant",
+    action: "serve an answer",
+    offset: days(21),
+    direction: after,
+    counting: calendar_days_with_last_day_rollover,
+    source_ref: frcp_2024,
+}
+```
+
+Ruleset fields:
+
+| Field | Type | Notes |
+|---|---|---|
+| `jurisdiction` | string or identifier | Coverage label such as `US-FRCP`, `UK-CPR`, `SG-ROC-2021`, `EU-2020-1784`, `CA-CIVIL`, or `NY-CPLR`. |
+| `court` | string or identifier | Court/forum scope. |
+| `procedure` | string or identifier | Rules/procedure family. |
+| `effective` | range | Effective-date range for this encoded pack. |
+| `source_ref` | source | Required by validation for legal authority traceability. |
+
+Deadline-rule fields:
+
+| Field | Type | Notes |
+|---|---|---|
+| `ruleset` | ruleset | Required. |
+| `rule` | string or identifier | Human-readable rule citation. |
+| `trigger` | string or identifier | Event that starts the clock. |
+| `actor` | string or identifier | Optional responsible actor. |
+| `action` | string or identifier | Optional required act. |
+| `offset` | duration | Required positive duration, usually `days(n)`, `months(n)`, or `years(n)`. |
+| `direction` | identifier | `after` or `before`; defaults to `after`. |
+| `counting` | identifier | `calendar_days`, `calendar_days_with_last_day_rollover`, `clear_days`, `business_days`, or `court_days`; defaults to `calendar_days_with_last_day_rollover`. |
+| `source_ref` | source | Required by validation. |
+
+Use `rule_ref` on a `deadline` entity when a concrete case date is tied to a declared authority:
+
+```euclid
+entity answer_due : deadline {
+    rule: "FRCP 12(a)(1)(A)(i)",
+    jurisdiction: "US-FRCP",
+    trigger: "service of summons and complaint",
+    due: 2026-02-02,
+    source_ref: frcp_2024,
+    rule_ref: us_frcp_answer_21,
+    appears_on: case_file @ 2026-02-02..2026-02-02,
+}
+```
+
+`euclid deadlines <file>` lists rulesets, deadline rules, and concrete `deadline` entities.
+
+## Issues And Elements
+
+Issue maps separate legal questions from timeline events:
+
+```euclid
+issue service_response_deadlines {
+    title: "Service-response deadline coverage",
+    question: "Which sourced rule controls the first response deadline?",
+    burden: "user-selected jurisdiction pack",
+    standard: "source-backed chronology",
+    source_ref: frcp_2024,
+}
+
+element response_trigger_identified {
+    issue: service_response_deadlines,
+    text: "The triggering event must be identified before selecting a deadline rule.",
+    burden: "drafter",
+    source_ref: frcp_2024,
+}
+```
+
+`element.issue` must point to a declared `issue`; `source_ref` fields must point to declared sources. `euclid issues <file>` renders the issue map, and `euclid review <file>` combines issues with diagnostics, source audits, deadline rules, and scenario reports for human review of a legal draft.
 
 Legal type examples:
 
@@ -252,6 +414,30 @@ Semantic rules:
 
 Relationships are directed in the current parser.
 
+Declared relationship types add validator semantics for custom labels:
+
+```euclid
+reltype cites {
+    source: evidence,
+    target: claim | fact,
+    temporal: source_before_target,
+    required: true,
+}
+```
+
+Supported `reltype` fields:
+
+| Field | Type | Notes |
+| --- | --- | --- |
+| `source` | type list | Allowed source entity types separated by `|`; omitted means any source type. |
+| `target` | type list | Allowed target entity types separated by `|`; omitted means any target type. |
+| `temporal` | identifier | `source_before_target`, `before`, `source_after_target`, `after`, or `none`. |
+| `required` | bool | If `true`, each matching target entity must have an inbound relationship with that label. |
+| `min_inbound` | int | Minimum number of inbound relationships required for each matching target entity. |
+| `max_inbound` | int | Maximum number of inbound relationships allowed for each matching target entity. |
+| `min_outbound` | int | Minimum number of outbound relationships required for each matching source entity. |
+| `max_outbound` | int | Maximum number of outbound relationships allowed for each matching source entity. |
+
 Supported arrow forms:
 
 - labeled: `-["label"]->`
@@ -269,7 +455,9 @@ Semantic rules:
 
 - relationship source and target entities must exist
 - temporal scopes with `start > end` are errors
-- built-in legal relationship labels add direction warnings when their endpoint types or temporal order are malformed
+- declared and built-in legal relationship labels add direction warnings when their endpoint types or temporal order are malformed
+- declared `required: true` relationship types are equivalent to `min_inbound: 1` for matching target entities
+- declared cardinality bounds produce errors when matching source/target entities have too few or too many legal support edges
 - `contradicts` edges warn when source and target appear on the same timeline
 
 Not currently supported:
@@ -363,9 +551,12 @@ Supported scalar/runtime type names in validation:
 - `string`
 - `bool`
 - `date`
+- `duration`
 - `list`
+- `range`
 - `entity`
 - `timeline`
+- `source`
 - `closure`
 
 Declared custom types may also be used as field types for entity references.
@@ -393,7 +584,7 @@ Semantic rules:
 - unresolved identifiers are errors
 - assignment to an undefined name is an error
 - assignment to a non-`mut` binding is an error
-- type annotations on `let` bindings are enforced at evaluation time
+- type annotations on `let` bindings are checked statically when possible and enforced at evaluation time
 
 ## Functions And Closures
 
@@ -449,10 +640,15 @@ Built-in callable names:
 - `duration_months`
 - `duration_years`
 - `overlaps`
+- `overlapped_by`
 - `during`
+- `contains_range`
 - `meets`
+- `met_by`
 - `starts`
+- `started_by`
 - `finishes`
+- `finished_by`
 - `equals`
 - `midpoint`
 - `duration_between`
@@ -462,6 +658,10 @@ Built-in callable names:
 - `causes_of`
 - `effects_of`
 - `related_to`
+- `inbound`
+- `outbound`
+- `has_inbound`
+- `has_outbound`
 
 Current call semantics:
 
@@ -469,6 +669,7 @@ Current call semantics:
 - closure values are callable
 - other values are not callable
 - `return` is only valid inside function bodies
+- known builtins report arity/type errors instead of falling through as undefined functions
 
 ## Control Flow
 
@@ -520,7 +721,7 @@ for label in ["one", "two"] {
 }
 ```
 
-If the iterable expression evaluates to a list, the loop iterates that list. Otherwise the current evaluator treats the value as a single-item iteration.
+If the iterable expression evaluates to a list, the loop iterates that list. If it evaluates to an ordinal range, the loop iterates each integer point in the range. Date ranges are interval values and are not implicitly expanded into daily loops. Other values are treated as single-item iterations.
 
 ### Repeat
 
@@ -556,6 +757,7 @@ Supported expression forms:
 - field access
 - function and closure calls
 - closures
+- quantifiers
 - unary expressions
 - binary expressions
 - temporal field access
@@ -580,6 +782,24 @@ Precedence, highest to lowest:
 6. `&&`
 7. `||`
 8. `..`
+
+Range expressions such as `1..3` and `2024-01-01..2024-01-31` evaluate to first-class `range` values. Ordinal ranges can be iterated by `for`; date ranges remain interval values and are intended for interval predicates such as `contains`, `overlaps`, `during`, `starts`, `finishes`, and `equals`.
+
+Quantifiers evaluate a boolean expression over an iterable:
+
+```euclid
+constraint "claims are cited" {
+    forall c in entities_where("claim") {
+        has_inbound(c, "cites")
+    };
+
+    exists e in inbound(central_claim, "cites") {
+        type_of(e) == "evidence"
+    };
+}
+```
+
+`forall` over an empty iterable evaluates to `true`; `exists` over an empty iterable evaluates to `false`. Quantifier bodies must evaluate to booleans.
 
 Duration arithmetic supports date-plus-duration, date-minus-duration, date-minus-date, and duration-plus/minus-duration. Division and modulo by zero are evaluator errors.
 
@@ -615,6 +835,10 @@ Entity field access supports:
 
 Temporal entity field access uses `entity.field @ time` and returns the field value active at that time, considering `state` changes when present.
 
+Source field access supports `name`, `kind`, and declared source fields. Range field access supports `start`, `end`, and `duration`.
+
+Timeline field access supports `jurisdiction`, `court`, and `procedure` in addition to `name`, `kind`, `start`, `end`, `parent`, and `loop_count`.
+
 ## Views, Scenarios, And Constraints
 
 The parser and evaluator accept lightweight view, scenario, and constraint declarations:
@@ -627,7 +851,7 @@ view "case focus" {
     highlight: [central_claim],
 }
 
-scenario "what if" {
+scenario "what if" from case_file {
     entity alternate_fact : fact {
         appears_on: case_file @ 2..2,
     }
@@ -639,7 +863,7 @@ constraint "sanity check" {
 }
 ```
 
-Views are stored in the evaluated world. Scenarios evaluate their body against the current world and store the resulting alternate world.
+Views are stored in the evaluated world. Scenarios evaluate their body against the current world and store the resulting alternate world. `scenario "..." from <timeline>` records the fork anchor and fails evaluation if the referenced timeline does not exist.
 
 Constraints evaluate their body against the current world and are recorded as named constraints when they pass. Expression statements inside a constraint are assertions: they must evaluate to `true`. A `false` expression fails evaluation, and a non-boolean expression is a type error. Helper bindings and functions declared inside a constraint are local to that constraint body and do not leak into the surrounding file.
 
@@ -651,7 +875,7 @@ Imports are string paths:
 import "shared/common.euclid";
 ```
 
-The current CLI loader expands imports before parsing.
+The shared loader parses imported files as Euclid programs, expands nested imports, preserves source spans from imported files, and reports import cycles as loader diagnostics.
 
 ## Audit-Driven Semantics
 
@@ -660,5 +884,10 @@ The current implementation now enforces these rules explicitly:
 - unresolved names fail instead of silently becoming strings
 - `let mut` is enforced for reassignment
 - explicit invalid timeline kinds fail instead of defaulting
+- known builtin calls are statically checked where argument types are known
 - declared entity type requirements are validated
+- declared source records and source-typed fields are validated
+- source bundles and normalized source identities are validated
+- declared relationship types can enforce endpoint types, temporal order, and inbound/outbound legal support cardinality
+- jurisdiction-tagged deadline entities warn when they appear on timelines with a different jurisdiction
 - diagnostics carry source locations through the parser, evaluator, validation, and LSP layers

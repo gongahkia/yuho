@@ -29,7 +29,7 @@ $ euclid diff examples/legal/brown_plaintiffs.euclid examples/legal/brown_board.
 
 </details>
 
-The legal framing is concrete, but the core is general: branching timelines, typed entities, relationships, imports, validation diagnostics, a terminal explorer, an LSP server, and exports for SVG, HTML, JSON, Markdown, and Mermaid.
+Euclid is legal-timeline-first: branching timelines, typed legal entities, first-class provenance, source bundles, source locators, jurisdiction rulesets, deadline rules, issue maps, declared relationship semantics, quantified constraints, imports, validation diagnostics, a terminal explorer, an LSP server, and exports for SVG, HTML, JSON, Markdown, and Mermaid. The primitives are reusable, but the product direction is litigation and investigation chronology.
 
 Euclid is a modeling tool, not legal advice and not a hosted case platform. The goal is a small, inspectable language that makes narrative structure visible in a repo, a terminal, and a README.
 
@@ -59,7 +59,7 @@ entity notice_denied : claim {
 rel notice_record -["contradicts"]-> notice_denied;
 ```
 
-Euclid's differentiator is not drawing a generic timeline. It is keeping timelines, branches, entities, relationships, and diffs in plain source form so they can be reviewed, rendered, and compared.
+Euclid's differentiator is not drawing a generic timeline. It is keeping legal timelines, source records, claims, facts, exhibits, relationship obligations, scenarios, and diffs in plain source form so they can be reviewed, rendered, challenged, and compared.
 
 ## Quick Start
 
@@ -84,7 +84,14 @@ $ euclid check examples/legal/chevron_v_nrdc.euclid
 $ euclid check examples/legal/loper_bright_v_raimondo.euclid
 $ euclid check examples/legal/kelo_v_new_london.euclid
 $ euclid check examples/legal/obergefell_v_hodges.euclid
+$ euclid check examples/legal/provenance_quantified.euclid
+$ euclid check examples/legal/jurisdiction_rulesets.euclid
 $ euclid diff examples/legal/brown_plaintiffs.euclid examples/legal/brown_board.euclid
+$ euclid sources examples/legal/provenance_quantified.euclid
+$ euclid deadlines examples/legal/jurisdiction_rulesets.euclid
+$ euclid issues examples/legal/jurisdiction_rulesets.euclid
+$ euclid review examples/legal/jurisdiction_rulesets.euclid
+$ euclid scenario-report examples/legal/provenance_quantified.euclid
 ```
 
 Export timelines:
@@ -99,7 +106,10 @@ Mermaid output can be pasted into GitHub-native `mermaid` code fences for lightw
 
 ## Current Surfaces
 
-* `diff` renders semantic differences across timelines, entities, and relationships.
+* `diff` renders semantic differences across sources, source bundles, timelines, entities, relationship types, and relationships.
+* `sources` audits source records, source bundles, citation normalization, canonical IDs, and source references.
+* `review` prints the legal drafting audit: diagnostics, sources, rulesets, deadline rules, issues, and stored scenarios.
+* `scenario-diff` and `scenario-report` inspect stored legal what-if worlds directly.
 * `run` opens the Brick-based terminal explorer.
 * `repl` supports interactive loading, validation, timeline summaries, entity lists, and relationship views.
 * `lsp` provides completions, hover, and diagnostics over stdio.
@@ -121,6 +131,12 @@ Mermaid output can be pasted into GitHub-native `mermaid` code fences for lightw
 | `euclid contradict <file>` | List modeled contradiction edges with supporting evidence on both sides |
 | `euclid diff <file1> <file2>` | Render a semantic diff of timelines, entities, and relationships |
 | `euclid diff <file1> <file2> -f svg -o diff.svg` | Render a side-by-side visual diff with narrative colors and contradiction connectors |
+| `euclid sources <file>` | Audit source records, source bundles, normalized citations, and source references |
+| `euclid deadlines <file>` | Audit jurisdiction rulesets, deadline rules, and concrete deadline entities |
+| `euclid issues <file>` | Audit legal issues and their elements |
+| `euclid review <file>` | Print a consolidated legal review for human checking of generated or hand-written drafts |
+| `euclid scenario-report <file>` | List stored legal scenarios and summarize their diffs against the base world |
+| `euclid scenario-diff <file> <scenario>` | Diff one stored legal scenario against the base world |
 | `euclid exhibits <file>` | Emit a filing-style exhibit list as CSV |
 | `euclid import <file> --from csv` | Import CSV, GEDCOM, or JSON-LD data into `.euclid` source |
 | `euclid repl` | Start the interactive REPL with `:load`, `:world`, `:entities`, and `:rels` |
@@ -137,7 +153,7 @@ Mermaid output can be pasted into GitHub-native `mermaid` code fences for lightw
 
 Learn more about `Euclid`' syntax at [`SYNTAX.md`](./docs/SYNTAX.md).
 
-The legal walkthrough and public case example pack live at [`docs/LEGAL.md`](./docs/LEGAL.md). Examples live in [`./examples`](./examples/), with legal examples first and historical/generative examples kept as secondary showcases.
+The legal walkthrough and public case example pack live at [`docs/LEGAL.md`](./docs/LEGAL.md). Jurisdiction modeling notes live at [`docs/JURISDICTIONS.md`](./docs/JURISDICTIONS.md). Examples live in [`./examples`](./examples/), with legal examples first and historical/generative examples kept as secondary showcases.
 
 Mermaid export notes live at [`docs/MERMAID.md`](./docs/MERMAID.md).
 

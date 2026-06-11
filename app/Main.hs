@@ -17,11 +17,13 @@ import Euclid.Core.Diff
 import Euclid.Core.Eval
 import Euclid.Core.Filter
 import Euclid.Core.Reports
+import Euclid.Core.Typecheck
 import Euclid.Core.Validation
 import Euclid.Import.CSV
 import Euclid.Import.GEDCOM
 import Euclid.Import.JSONLD
 import Euclid.Lang.AST (Program(..), Stmt, pattern Program)
+import Euclid.Lang.Loader
 import Euclid.Lang.Parser
 import Euclid.Model.Types
 import Euclid.Render.Layout
@@ -35,7 +37,7 @@ import Euclid.Tooling.LSP
 import Euclid.TUI.App
 import System.Directory
 import System.Exit (exitFailure)
-import System.FilePath ((</>), normalise, replaceExtension, takeBaseName, takeDirectory)
+import System.FilePath ((</>), replaceExtension, takeBaseName)
 import System.IO (hFlush, stdout)
 
 data LoadedWorld = LoadedWorld
@@ -70,6 +72,12 @@ runCommand configValue options =
         CommandCheck filePath -> runCheck filePath
         CommandContradict filePath -> runContradict filePath
         CommandDiff diffOpts -> runDiff configValue (optTheme options) diffOpts
+        CommandScenarioDiff scenarioDiffOpts -> runScenarioDiff scenarioDiffOpts
+        CommandScenarioReport filePath -> runScenarioReport filePath
+        CommandSources filePath -> runSources filePath
+        CommandDeadlines filePath -> runDeadlines filePath
+        CommandIssues filePath -> runIssues filePath
+        CommandReview filePath -> runReview filePath
         CommandExhibits filePath -> runExhibits filePath
         CommandImport importOpts -> runImport importOpts
         CommandRepl -> runRepl
@@ -191,6 +199,57 @@ runDiff configValue themeOverride diffOptions = do
             <> "."
             <> extension
 
+runScenarioDiff :: ScenarioDiffOptions -> IO ()
+runScenarioDiff scenarioDiffOptions = do
+    loaded <- loadEuclidFile (scenarioDiffFile scenarioDiffOptions)
+    when (hasErrors (loadedDiagnostics loaded)) $ do
+        reportDiagnostics (loadedDiagnostics loaded)
+        exitFailure
+    case renderScenarioDiff (loadedWorld loaded) (scenarioDiffName scenarioDiffOptions) of
+        Left message -> do
+            TIO.putStrLn message
+            exitFailure
+        Right report ->
+            TIO.putStr report
+
+runScenarioReport :: FilePath -> IO ()
+runScenarioReport filePath = do
+    loaded <- loadEuclidFile filePath
+    when (hasErrors (loadedDiagnostics loaded)) $ do
+        reportDiagnostics (loadedDiagnostics loaded)
+        exitFailure
+    TIO.putStr (renderScenarioReport (loadedWorld loaded))
+
+runSources :: FilePath -> IO ()
+runSources filePath = do
+    loaded <- loadEuclidFile filePath
+    when (hasErrors (loadedDiagnostics loaded)) $ do
+        reportDiagnostics (loadedDiagnostics loaded)
+        exitFailure
+    TIO.putStr (renderSourcesReport (loadedWorld loaded))
+
+runDeadlines :: FilePath -> IO ()
+runDeadlines filePath = do
+    loaded <- loadEuclidFile filePath
+    when (hasErrors (loadedDiagnostics loaded)) $ do
+        reportDiagnostics (loadedDiagnostics loaded)
+        exitFailure
+    TIO.putStr (renderDeadlinesReport (loadedWorld loaded))
+
+runIssues :: FilePath -> IO ()
+runIssues filePath = do
+    loaded <- loadEuclidFile filePath
+    when (hasErrors (loadedDiagnostics loaded)) $ do
+        reportDiagnostics (loadedDiagnostics loaded)
+        exitFailure
+    TIO.putStr (renderIssuesReport (loadedWorld loaded))
+
+runReview :: FilePath -> IO ()
+runReview filePath = do
+    loaded <- loadEuclidFile filePath
+    TIO.putStr (renderLegalReview (loadedDiagnostics loaded) (loadedWorld loaded))
+    when (hasErrors (loadedDiagnostics loaded)) exitFailure
+
 runExhibits :: FilePath -> IO ()
 runExhibits filePath = do
     loaded <- loadEuclidFile filePath
@@ -293,40 +352,53 @@ replLoop state = do
                     reportDiagnostics diags
                     replLoop state
                 Right statement ->
-                    case evalProgram (Program (replProgram state ++ [statement])) of
-                        Left diag -> do
-                            reportDiagnostics [diag]
+                    let nextProgram = Program (replProgram state ++ [statement])
+                        typeDiagnostics = typeCheckProgram nextProgram
+                    in if hasErrors typeDiagnostics
+                        then do
+                            reportDiagnostics typeDiagnostics
                             replLoop state
-                        Right worldValue -> do
-                            let newDiagnostics = validateWorld worldValue
-                            reportDiagnostics newDiagnostics
-                            replLoop
-                                state
-                                    { replProgram = replProgram state ++ [statement]
-                                    , replWorld = worldValue
-                                    , replDiagnostics = newDiagnostics
-                                    }
+                        else
+                            case evalProgram nextProgram of
+                                Left diag -> do
+                                    reportDiagnostics [diag]
+                                    replLoop state
+                                Right worldValue -> do
+                                    let newDiagnostics = typeDiagnostics ++ validateWorld worldValue
+                                    reportDiagnostics newDiagnostics
+                                    replLoop
+                                        state
+                                            { replProgram = replProgram state ++ [statement]
+                                            , replWorld = worldValue
+                                            , replDiagnostics = newDiagnostics
+                                            }
 
 loadEuclidFile :: FilePath -> IO LoadedWorld
 loadEuclidFile filePath = do
-    source <- loadSourceWithImports [] filePath
-    case parseProgram filePath source of
+    loadedProgramResult <- loadProgramWithImports filePath
+    case loadedProgramResult of
         Left diags -> do
             reportDiagnostics diags
             exitFailure
         Right program ->
-            case evalProgram program of
-                Left diag -> do
-                    reportDiagnostics [diag]
+            let typeDiagnostics = typeCheckProgram program
+            in if hasErrors typeDiagnostics
+                then do
+                    reportDiagnostics typeDiagnostics
                     exitFailure
-                Right worldValue -> do
-                    let diagnostics = validateWorld worldValue
-                    pure
-                        LoadedWorld
-                            { loadedWorld = worldValue
-                            , loadedDiagnostics = diagnostics
-                            , loadedProgram = program
-                            }
+                else
+                    case evalProgram program of
+                        Left diag -> do
+                            reportDiagnostics [diag]
+                            exitFailure
+                        Right worldValue -> do
+                            let diagnostics = typeDiagnostics ++ validateWorld worldValue
+                            pure
+                                LoadedWorld
+                                    { loadedWorld = worldValue
+                                    , loadedDiagnostics = diagnostics
+                                    , loadedProgram = program
+                                    }
 
 applyNarrativeFilter :: Maybe Text -> LoadedWorld -> LoadedWorld
 applyNarrativeFilter Nothing loaded = loaded
@@ -337,31 +409,6 @@ applyNarrativeFilter (Just narrativeName) loaded =
         }
   where
     filteredWorld = filterWorldByNarrative narrativeName (loadedWorld loaded)
-
-loadSourceWithImports :: [FilePath] -> FilePath -> IO Text
-loadSourceWithImports visited filePath = do
-    let normalizedPath = normalise filePath
-    when (normalizedPath `elem` visited) $ do
-        putStrLn ("Import cycle detected at " <> normalizedPath)
-        exitFailure
-    source <- TIO.readFile normalizedPath
-    expandedLines <- traverse (expandLine (normalizedPath : visited) normalizedPath) (T.lines source)
-    pure (T.unlines (concat expandedLines))
-
-expandLine :: [FilePath] -> FilePath -> Text -> IO [Text]
-expandLine visited currentFile lineValue =
-    case parseImportLine lineValue of
-        Nothing -> pure [lineValue]
-        Just relativePath -> do
-            importedSource <- loadSourceWithImports visited (takeDirectory currentFile </> T.unpack relativePath)
-            pure (T.lines importedSource)
-
-parseImportLine :: Text -> Maybe Text
-parseImportLine rawLine =
-    let cleaned = T.strip rawLine
-     in if "import \"" `T.isPrefixOf` cleaned && "\";" `T.isSuffixOf` cleaned
-            then Just (T.dropEnd 2 (T.drop 8 cleaned))
-            else Nothing
 
 discoverEuclidFiles :: FilePath -> IO [FilePath]
 discoverEuclidFiles root = do

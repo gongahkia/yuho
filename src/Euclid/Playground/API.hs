@@ -11,6 +11,7 @@ import qualified Data.ByteString.Lazy as BL
 import Data.Text (Text)
 import qualified Data.Text as T
 import Euclid.Core.Eval
+import Euclid.Core.Typecheck
 import Euclid.Core.Validation
 import Euclid.Lang.Parser
 import Euclid.Model.Types
@@ -80,9 +81,13 @@ loadWorldFromSource fileName source =
     case parseProgram fileName source of
         Left diagnostics -> Left diagnostics
         Right program ->
-            case evalProgram program of
-                Left diagnostic -> Left [diagnostic]
-                Right worldValue -> Right (worldValue, validateWorld worldValue)
+            let typeDiagnostics = typeCheckProgram program
+            in if hasErrors typeDiagnostics
+                then Left typeDiagnostics
+                else
+                    case evalProgram program of
+                        Left diagnostic -> Left [diagnostic]
+                        Right worldValue -> Right (worldValue, typeDiagnostics ++ validateWorld worldValue)
 
 renderPlaygroundExport :: Maybe Text -> World -> Either Text Text
 renderPlaygroundExport requestedFormat worldValue =

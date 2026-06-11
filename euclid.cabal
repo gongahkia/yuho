@@ -10,6 +10,7 @@ maintainer:         gabriel ong
 build-type:         Simple
 extra-doc-files:
     README.md
+    docs/JURISDICTIONS.md
     docs/LEGAL.md
     docs/MERMAID.md
     docs/SYNTAX.md
@@ -52,11 +53,13 @@ library
         Euclid.Core.Eval
         Euclid.Core.Filter
         Euclid.Core.Reports
+        Euclid.Core.Typecheck
         Euclid.Core.Validation
         Euclid.Import.CSV
         Euclid.Import.GEDCOM
         Euclid.Import.JSONLD
         Euclid.Lang.AST
+        Euclid.Lang.Loader
         Euclid.Lang.Parser
         Euclid.Model.Types
         Euclid.Playground.API

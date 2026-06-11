@@ -10,6 +10,7 @@ module Euclid.CLI.Options
     , ImportOptions(..)
     , Options(..)
     , RunOptions(..)
+    , ScenarioDiffOptions(..)
     , parseDiffFormat
     , parseExportFormat
     , optionsParserInfo
@@ -63,6 +64,12 @@ data DiffOptions = DiffOptions
     }
     deriving (Eq, Show)
 
+data ScenarioDiffOptions = ScenarioDiffOptions
+    { scenarioDiffFile :: FilePath
+    , scenarioDiffName :: Text
+    }
+    deriving (Eq, Show)
+
 data ImportOptions = ImportOptions
     { importFile :: FilePath
     , importFormat :: ImportFormat
@@ -76,6 +83,12 @@ data Command
     | CommandCheck FilePath
     | CommandContradict FilePath
     | CommandDiff DiffOptions
+    | CommandScenarioDiff ScenarioDiffOptions
+    | CommandScenarioReport FilePath
+    | CommandSources FilePath
+    | CommandDeadlines FilePath
+    | CommandIssues FilePath
+    | CommandReview FilePath
     | CommandExhibits FilePath
     | CommandImport ImportOptions
     | CommandRepl
@@ -108,6 +121,12 @@ optionsParser =
                 <> command "check" (info checkParser (progDesc "Parse and validate a .euclid file"))
                 <> command "contradict" (info contradictParser (progDesc "List contradiction edges with supporting evidence"))
                 <> command "diff" (info diffParser (progDesc "Semantic diff of two .euclid files"))
+                <> command "scenario-diff" (info scenarioDiffParser (progDesc "Diff a stored legal scenario against its base world"))
+                <> command "scenario-report" (info scenarioReportParser (progDesc "List stored legal scenarios and their diffs"))
+                <> command "sources" (info sourcesParser (progDesc "Audit source records, bundles, and citation normalization"))
+                <> command "deadlines" (info deadlinesParser (progDesc "Audit rulesets, deadline rules, and deadline entities"))
+                <> command "issues" (info issuesParser (progDesc "Audit legal issues and elements"))
+                <> command "review" (info reviewParser (progDesc "Review diagnostics, sources, rulesets, issues, and scenarios"))
                 <> command "exhibits" (info exhibitsParser (progDesc "Emit exhibit list CSV"))
                 <> command "import" (info importParser (progDesc "Import external data into .euclid"))
                 <> command "repl" (info replParser (progDesc "Interactive REPL"))
@@ -169,6 +188,39 @@ diffParser =
                     )
                 <*> optional (strOption (short 'o' <> long "output" <> metavar "PATH"))
             )
+
+scenarioDiffParser :: Parser Command
+scenarioDiffParser =
+    CommandScenarioDiff
+        <$> ( ScenarioDiffOptions
+                <$> argument str (metavar "FILE")
+                <*> (T.pack <$> argument str (metavar "SCENARIO"))
+            )
+
+scenarioReportParser :: Parser Command
+scenarioReportParser =
+    CommandScenarioReport
+        <$> argument str (metavar "FILE")
+
+sourcesParser :: Parser Command
+sourcesParser =
+    CommandSources
+        <$> argument str (metavar "FILE")
+
+deadlinesParser :: Parser Command
+deadlinesParser =
+    CommandDeadlines
+        <$> argument str (metavar "FILE")
+
+issuesParser :: Parser Command
+issuesParser =
+    CommandIssues
+        <$> argument str (metavar "FILE")
+
+reviewParser :: Parser Command
+reviewParser =
+    CommandReview
+        <$> argument str (metavar "FILE")
 
 exhibitsParser :: Parser Command
 exhibitsParser =

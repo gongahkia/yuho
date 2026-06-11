@@ -27,6 +27,7 @@ import Data.Text (Text)
 import qualified Data.Text as T
 import qualified Data.Vector as Vector
 import Euclid.Core.Eval
+import Euclid.Core.Typecheck
 import Euclid.Core.Validation
 import Euclid.Lang.AST
 import Euclid.Lang.Parser
@@ -81,9 +82,13 @@ getDiagnostics file input =
     case parseProgram file input of
         Left diags -> diags
         Right program ->
-            case evalProgram program of
-                Left diag -> [diag]
-                Right world -> validateWorld world
+            let typeDiagnostics = typeCheckProgram program
+            in if hasErrors typeDiagnostics
+                then typeDiagnostics
+                else
+                    case evalProgram program of
+                        Left diag -> [diag]
+                        Right world -> typeDiagnostics ++ validateWorld world
 
 getHoverInfo :: FilePath -> Text -> Text -> Maybe Text
 getHoverInfo file input word =
@@ -110,6 +115,10 @@ getHoverInfo file input word =
                                             <> T.pack (show (timelineKind timeline))
                                             <> ")"
                                 Nothing -> Nothing
+
+hasErrors :: [Diagnostic] -> Bool
+hasErrors =
+    any ((== DiagnosticError) . diagnosticLevel)
 
 runLspServer :: IO ()
 runLspServer = do
@@ -424,6 +433,12 @@ globalItemsForStmt stmt =
                   ]
         StmtTimelineNode decl -> [CompletionItem (timelineDeclName decl) "timeline"]
         StmtEntityNode decl -> [CompletionItem (entityDeclName decl) "entity"]
+        StmtSourceNode decl -> [CompletionItem (sourceDeclName decl) "source"]
+        StmtSourceLocatorNode decl -> [CompletionItem (sourceLocatorDeclName decl) "locator"]
+        StmtRulesetNode decl -> [CompletionItem (rulesetDeclName decl) "ruleset"]
+        StmtDeadlineRuleNode decl -> [CompletionItem (deadlineRuleDeclName decl) "deadline rule"]
+        StmtIssueNode decl -> [CompletionItem (legalIssueDeclName decl) "issue"]
+        StmtIssueElementNode decl -> [CompletionItem (issueElementDeclName decl) "issue element"]
         StmtFunctionNode decl -> [CompletionItem (fnName decl) "function"]
         _ -> []
 
@@ -538,13 +553,37 @@ bindingCompletionItem decl =
 commonFieldCompletionItems :: [CompletionItem]
 commonFieldCompletionItems =
     [ CompletionItem "appears_on" "field"
+    , CompletionItem "action" "field"
+    , CompletionItem "actor" "field"
+    , CompletionItem "bates" "field"
+    , CompletionItem "burden" "field"
+    , CompletionItem "canonical_id" "field"
+    , CompletionItem "counting" "field"
+    , CompletionItem "court" "field"
+    , CompletionItem "direction" "field"
     , CompletionItem "fork_from" "field"
+    , CompletionItem "effective" "field"
+    , CompletionItem "jurisdiction" "field"
     , CompletionItem "kind" "field"
+    , CompletionItem "line" "field"
+    , CompletionItem "locator_ref" "field"
     , CompletionItem "loop_count" "field"
+    , CompletionItem "max_inbound" "field"
+    , CompletionItem "max_outbound" "field"
     , CompletionItem "merge_into" "field"
+    , CompletionItem "min_inbound" "field"
+    , CompletionItem "min_outbound" "field"
     , CompletionItem "name" "field"
     , CompletionItem "parent" "field"
+    , CompletionItem "page" "field"
+    , CompletionItem "paragraph" "field"
+    , CompletionItem "procedure" "field"
+    , CompletionItem "question" "field"
+    , CompletionItem "rule_ref" "field"
+    , CompletionItem "source_ref" "field"
+    , CompletionItem "sources" "field"
     , CompletionItem "start" "field"
+    , CompletionItem "standard" "field"
     , CompletionItem "end" "field"
     , CompletionItem "type" "field"
     ]

@@ -9,7 +9,7 @@ import Data.Foldable (traverse_)
 import qualified Data.List
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
-import Data.Maybe (fromMaybe, isJust)
+import Data.Maybe (fromMaybe, isJust, isNothing)
 import qualified Data.Set as Set
 import Data.Text (Text)
 import qualified Data.Text as T
@@ -77,16 +77,181 @@ evalStmt state (StmtData currentSpan statement) =
                                         (worldTypes (evalWorld state1))
                                 }
                     pure state1{evalWorld = world'}
+                StmtSourceNode decl -> do
+                    rejectDuplicate scopedState "source" (sourceDeclName decl) (worldSources (evalWorld scopedState))
+                    (state1, fieldValues) <- evalExprMap scopedState (sourceDeclFields decl)
+                    let world' =
+                            (evalWorld state1)
+                                { worldSources =
+                                    Map.insert
+                                        (sourceDeclName decl)
+                                        SourceRecord
+                                            { sourceRecordName = sourceDeclName decl
+                                            , sourceRecordKind = sourceDeclKind decl
+                                            , sourceRecordFields = fieldValues
+                                            , sourceRecordSourceSpan = evalCurrentSpan scopedState
+                                            }
+                                        (worldSources (evalWorld state1))
+                                }
+                    pure state1{evalWorld = world'}
+                StmtSourceBundleNode decl -> do
+                    rejectDuplicate scopedState "source bundle" (sourceBundleDeclName decl) (worldSourceBundles (evalWorld scopedState))
+                    (state1, fieldValues) <- evalExprMap scopedState (sourceBundleDeclFields decl)
+                    let world' =
+                            (evalWorld state1)
+                                { worldSourceBundles =
+                                    Map.insert
+                                        (sourceBundleDeclName decl)
+                                        SourceBundle
+                                            { sourceBundleName = sourceBundleDeclName decl
+                                            , sourceBundleSources = sourceBundleDeclSources decl
+                                            , sourceBundleFields = fieldValues
+                                            , sourceBundleSourceSpan = evalCurrentSpan scopedState
+                                            }
+                                        (worldSourceBundles (evalWorld state1))
+                                }
+                    pure state1{evalWorld = world'}
+                StmtSourceLocatorNode decl -> do
+                    rejectDuplicate scopedState "locator" (sourceLocatorDeclName decl) (worldSourceLocators (evalWorld scopedState))
+                    (state1, sourceNameValue) <- evalRequiredSourceRef scopedState "locator" (sourceLocatorDeclName decl) (sourceLocatorDeclFields decl)
+                    (state2, fieldValues) <- evalExprMap state1 (Map.delete "source_ref" (sourceLocatorDeclFields decl))
+                    let world' =
+                            (evalWorld state2)
+                                { worldSourceLocators =
+                                    Map.insert
+                                        (sourceLocatorDeclName decl)
+                                        SourceLocator
+                                            { sourceLocatorName = sourceLocatorDeclName decl
+                                            , sourceLocatorSource = sourceNameValue
+                                            , sourceLocatorFields = fieldValues
+                                            , sourceLocatorSourceSpan = evalCurrentSpan scopedState
+                                            }
+                                        (worldSourceLocators (evalWorld state2))
+                                }
+                    pure state2{evalWorld = world'}
+                StmtRulesetNode decl -> do
+                    rejectDuplicate scopedState "ruleset" (rulesetDeclName decl) (worldRulesets (evalWorld scopedState))
+                    (state1, jurisdictionValue) <- evalOptionalTextField scopedState (rulesetDeclFields decl) "jurisdiction"
+                    (state2, courtValue) <- evalOptionalTextField state1 (rulesetDeclFields decl) "court"
+                    (state3, procedureValue) <- evalOptionalTextField state2 (rulesetDeclFields decl) "procedure"
+                    (state4, effectiveValue) <- evalOptionalRangeField state3 (rulesetDeclFields decl) "effective"
+                    (state5, sourceValue) <- evalOptionalSourceRef state4 (Map.lookup "source_ref" (rulesetDeclFields decl))
+                    (state6, fieldValues) <- evalExprMap state5 (dropKnownFields ["jurisdiction", "court", "procedure", "effective", "source_ref"] (rulesetDeclFields decl))
+                    let world' =
+                            (evalWorld state6)
+                                { worldRulesets =
+                                    Map.insert
+                                        (rulesetDeclName decl)
+                                        Ruleset
+                                            { rulesetName = rulesetDeclName decl
+                                            , rulesetJurisdiction = jurisdictionValue
+                                            , rulesetCourt = courtValue
+                                            , rulesetProcedure = procedureValue
+                                            , rulesetEffective = effectiveValue
+                                            , rulesetSourceRef = sourceValue
+                                            , rulesetFields = fieldValues
+                                            , rulesetSourceSpan = evalCurrentSpan scopedState
+                                            }
+                                        (worldRulesets (evalWorld state6))
+                                }
+                    pure state6{evalWorld = world'}
+                StmtDeadlineRuleNode decl -> do
+                    rejectDuplicate scopedState "deadline rule" (deadlineRuleDeclName decl) (worldDeadlineRules (evalWorld scopedState))
+                    (state1, rulesetValue) <- evalRequiredTextField scopedState "deadline_rule" (deadlineRuleDeclName decl) (deadlineRuleDeclFields decl) "ruleset"
+                    (state2, ruleValue) <- evalRequiredTextField state1 "deadline_rule" (deadlineRuleDeclName decl) (deadlineRuleDeclFields decl) "rule"
+                    (state3, triggerValue) <- evalRequiredTextField state2 "deadline_rule" (deadlineRuleDeclName decl) (deadlineRuleDeclFields decl) "trigger"
+                    (state4, actorValue) <- evalOptionalTextField state3 (deadlineRuleDeclFields decl) "actor"
+                    (state5, actionValue) <- evalOptionalTextField state4 (deadlineRuleDeclFields decl) "action"
+                    (state6, offsetValue) <- evalRequiredDurationField state5 "deadline_rule" (deadlineRuleDeclName decl) (deadlineRuleDeclFields decl) "offset"
+                    directionValue <- resolveDeadlineDirection state6 (Map.lookup "direction" (deadlineRuleDeclFields decl))
+                    countingValue <- resolveDeadlineCounting state6 (Map.lookup "counting" (deadlineRuleDeclFields decl))
+                    (state7, sourceValue) <- evalOptionalSourceRef state6 (Map.lookup "source_ref" (deadlineRuleDeclFields decl))
+                    (state8, fieldValues) <- evalExprMap state7 (dropKnownFields ["ruleset", "rule", "trigger", "actor", "action", "offset", "direction", "counting", "source_ref"] (deadlineRuleDeclFields decl))
+                    let world' =
+                            (evalWorld state8)
+                                { worldDeadlineRules =
+                                    Map.insert
+                                        (deadlineRuleDeclName decl)
+                                        DeadlineRule
+                                            { deadlineRuleName = deadlineRuleDeclName decl
+                                            , deadlineRuleRuleset = rulesetValue
+                                            , deadlineRuleRule = ruleValue
+                                            , deadlineRuleTrigger = triggerValue
+                                            , deadlineRuleActor = actorValue
+                                            , deadlineRuleAction = actionValue
+                                            , deadlineRuleOffset = offsetValue
+                                            , deadlineRuleDirection = directionValue
+                                            , deadlineRuleCounting = countingValue
+                                            , deadlineRuleSourceRef = sourceValue
+                                            , deadlineRuleFields = fieldValues
+                                            , deadlineRuleSourceSpan = evalCurrentSpan scopedState
+                                            }
+                                        (worldDeadlineRules (evalWorld state8))
+                                }
+                    pure state8{evalWorld = world'}
+                StmtIssueNode decl -> do
+                    rejectDuplicate scopedState "issue" (legalIssueDeclName decl) (worldIssues (evalWorld scopedState))
+                    (state1, titleValue) <- evalOptionalTextField scopedState (legalIssueDeclFields decl) "title"
+                    (state2, questionValue) <- evalOptionalTextField state1 (legalIssueDeclFields decl) "question"
+                    (state3, burdenValue) <- evalOptionalTextField state2 (legalIssueDeclFields decl) "burden"
+                    (state4, standardValue) <- evalOptionalTextField state3 (legalIssueDeclFields decl) "standard"
+                    (state5, sourceValue) <- evalOptionalSourceRef state4 (Map.lookup "source_ref" (legalIssueDeclFields decl))
+                    (state6, fieldValues) <- evalExprMap state5 (dropKnownFields ["title", "question", "burden", "standard", "source_ref"] (legalIssueDeclFields decl))
+                    let world' =
+                            (evalWorld state6)
+                                { worldIssues =
+                                    Map.insert
+                                        (legalIssueDeclName decl)
+                                        LegalIssue
+                                            { legalIssueName = legalIssueDeclName decl
+                                            , legalIssueTitle = titleValue
+                                            , legalIssueQuestion = questionValue
+                                            , legalIssueBurden = burdenValue
+                                            , legalIssueStandard = standardValue
+                                            , legalIssueSourceRef = sourceValue
+                                            , legalIssueFields = fieldValues
+                                            , legalIssueSourceSpan = evalCurrentSpan scopedState
+                                            }
+                                        (worldIssues (evalWorld state6))
+                                }
+                    pure state6{evalWorld = world'}
+                StmtIssueElementNode decl -> do
+                    rejectDuplicate scopedState "issue element" (issueElementDeclName decl) (worldIssueElements (evalWorld scopedState))
+                    (state1, issueValue) <- evalRequiredTextField scopedState "element" (issueElementDeclName decl) (issueElementDeclFields decl) "issue"
+                    (state2, textValue) <- evalRequiredTextField state1 "element" (issueElementDeclName decl) (issueElementDeclFields decl) "text"
+                    (state3, burdenValue) <- evalOptionalTextField state2 (issueElementDeclFields decl) "burden"
+                    (state4, sourceValue) <- evalOptionalSourceRef state3 (Map.lookup "source_ref" (issueElementDeclFields decl))
+                    (state5, fieldValues) <- evalExprMap state4 (dropKnownFields ["issue", "text", "burden", "source_ref"] (issueElementDeclFields decl))
+                    let world' =
+                            (evalWorld state5)
+                                { worldIssueElements =
+                                    Map.insert
+                                        (issueElementDeclName decl)
+                                        IssueElement
+                                            { issueElementName = issueElementDeclName decl
+                                            , issueElementIssue = issueValue
+                                            , issueElementText = textValue
+                                            , issueElementBurden = burdenValue
+                                            , issueElementSourceRef = sourceValue
+                                            , issueElementFields = fieldValues
+                                            , issueElementSourceSpan = evalCurrentSpan scopedState
+                                            }
+                                        (worldIssueElements (evalWorld state5))
+                                }
+                    pure state5{evalWorld = world'}
                 StmtTimelineNode decl -> do
                     rejectDuplicate scopedState "timeline" (timelineDeclName decl) (worldTimelines (evalWorld scopedState))
                     kindValue <- resolveTimelineKind scopedState (timelineDeclName decl) (timelineDeclKind decl)
                     (state1, startValue) <- exprToTimePoint scopedState (timelineDeclStart decl)
                     (state2, endValue) <- exprToTimePoint state1 (timelineDeclEnd decl)
-                    (state3, loopCountValue) <- evalOptionalInteger state2 (timelineDeclLoopCount decl)
-                    (state4, forkValue) <- evalOptionalTimelineRef state3 (timelineDeclForkFrom decl)
-                    (state5, mergeValue) <- evalOptionalTimelineRef state4 (timelineDeclMergeInto decl)
+                    (state3, jurisdictionValue) <- evalOptionalText state2 (timelineDeclJurisdiction decl)
+                    (state4, courtValue) <- evalOptionalText state3 (timelineDeclCourt decl)
+                    (state5, procedureValue) <- evalOptionalText state4 (timelineDeclProcedure decl)
+                    (state6, loopCountValue) <- evalOptionalInteger state5 (timelineDeclLoopCount decl)
+                    (state7, forkValue) <- evalOptionalTimelineRef state6 (timelineDeclForkFrom decl)
+                    (state8, mergeValue) <- evalOptionalTimelineRef state7 (timelineDeclMergeInto decl)
                     let world' =
-                            (evalWorld state5)
+                            (evalWorld state8)
                                 { worldTimelines =
                                     Map.insert
                                         (timelineDeclName decl)
@@ -96,14 +261,17 @@ evalStmt state (StmtData currentSpan statement) =
                                             , timelineStart = startValue
                                             , timelineEnd = endValue
                                             , timelineParent = timelineDeclParent decl
+                                            , timelineJurisdiction = jurisdictionValue
+                                            , timelineCourt = courtValue
+                                            , timelineProcedure = procedureValue
                                             , timelineForkFrom = forkValue
                                             , timelineMergeInto = mergeValue
                                             , timelineLoopCount = loopCountValue
                                             , timelineSourceSpan = evalCurrentSpan scopedState
                                             }
-                                        (worldTimelines (evalWorld state5))
+                                        (worldTimelines (evalWorld state8))
                                 }
-                    pure state5{evalWorld = world'}
+                    pure state8{evalWorld = world'}
                 StmtEntityNode decl -> do
                     rejectDuplicate scopedState "entity" (entityDeclName decl) (worldEntities (evalWorld scopedState))
                     (state1, fieldValues) <- evalExprMap scopedState (entityDeclFields decl)
@@ -167,6 +335,43 @@ evalStmt state (StmtData currentSpan statement) =
                                            ]
                                 }
                     pure state1{evalWorld = world'}
+                StmtRelationshipTypeNode decl -> do
+                    rejectDuplicate scopedState "relationship type" (relationshipTypeDeclName decl) (worldRelationshipTypes (evalWorld scopedState))
+                    (state1, minInboundValue) <- evalOptionalInteger scopedState (relationshipTypeDeclMinInbound decl)
+                    (state2, maxInboundValue) <- evalOptionalInteger state1 (relationshipTypeDeclMaxInbound decl)
+                    (state3, minOutboundValue) <- evalOptionalInteger state2 (relationshipTypeDeclMinOutbound decl)
+                    (state4, maxOutboundValue) <- evalOptionalInteger state3 (relationshipTypeDeclMaxOutbound decl)
+                    let semantics =
+                            RelationshipSemantics
+                                { relationshipSourceTypes = relationshipTypeDeclSources decl
+                                , relationshipTargetTypes = relationshipTypeDeclTargets decl
+                                , relationshipTemporalRule = relationshipTypeDeclTemporalRule decl
+                                }
+                        cardinality =
+                            RelationshipCardinality
+                                { relationshipMinInbound =
+                                    if relationshipTypeDeclRequired decl
+                                        then Just (maybe 1 (max 1) minInboundValue)
+                                        else minInboundValue
+                                , relationshipMaxInbound = maxInboundValue
+                                , relationshipMinOutbound = minOutboundValue
+                                , relationshipMaxOutbound = maxOutboundValue
+                                }
+                        world' =
+                            (evalWorld state4)
+                                { worldRelationshipTypes =
+                                    Map.insert
+                                        (relationshipTypeDeclName decl)
+                                        RelationshipType
+                                            { relationshipTypeName = relationshipTypeDeclName decl
+                                            , relationshipTypeSemantics = semantics
+                                            , relationshipTypeRequired = relationshipTypeDeclRequired decl
+                                            , relationshipTypeCardinality = cardinality
+                                            , relationshipTypeSourceSpan = evalCurrentSpan scopedState
+                                            }
+                                        (worldRelationshipTypes (evalWorld state4))
+                                }
+                    pure state4{evalWorld = world'}
                 StmtViewNode decl -> do
                     (state1, timeRange) <- case viewDeclTimeRange decl of
                         Nothing -> pure (scopedState, Nothing)
@@ -188,13 +393,19 @@ evalStmt state (StmtData currentSpan statement) =
                             }
                     pure state1{evalWorld = world'}
                 StmtScenarioNode decl -> do
-                    -- fork current world state, evaluate body in fork, store as scenario
                     let baseWorld = evalWorld scopedState
-                        forkState = scopedState -- inherits all current state
+                    case scenarioDeclForkFrom decl of
+                        Just timelineNameValue
+                            | isNothing (findTimeline timelineNameValue baseWorld) ->
+                                Left (evaluatorDiagnostic scopedState ("scenario fork references missing timeline: " <> timelineNameValue))
+                        _ -> pure ()
+                    let forkState = scopedState
                     scenarioState <- foldM evalStmt forkState (scenarioDeclBody decl)
                     let scenarioWorld = evalWorld scenarioState
                         world' = baseWorld
-                            { worldScenarios = Map.insert (scenarioDeclName decl) scenarioWorld (worldScenarios baseWorld) }
+                            { worldScenarios = Map.insert (scenarioDeclName decl) scenarioWorld (worldScenarios baseWorld)
+                            , worldScenarioForks = Map.insert (scenarioDeclName decl) (scenarioDeclForkFrom decl) (worldScenarioForks baseWorld)
+                            }
                     pure scopedState{evalWorld = world'}
                 StmtConstraintNode decl ->
                     let baseWorld = evalWorld scopedState
@@ -292,25 +503,53 @@ evalExpr state (ExprIdent name) =
                     case findTimeline name (evalWorld state) of
                         Just _ -> Right (state, VTimelineRef name)
                         Nothing ->
-                            Left (evaluatorDiagnostic state ("unresolved identifier: " <> name))
+                            case findSource name (evalWorld state) of
+                                Just _ -> Right (state, VSourceRef name)
+                                Nothing ->
+                                    case findRuleset name (evalWorld state) of
+                                        Just _ -> Right (state, VRulesetRef name)
+                                        Nothing ->
+                                            case findDeadlineRule name (evalWorld state) of
+                                                Just _ -> Right (state, VDeadlineRuleRef name)
+                                                Nothing ->
+                                                    case findSourceLocator name (evalWorld state) of
+                                                        Just _ -> Right (state, VLocatorRef name)
+                                                        Nothing ->
+                                                            case findIssue name (evalWorld state) of
+                                                                Just _ -> Right (state, VIssueRef name)
+                                                                Nothing ->
+                                                                    case findIssueElement name (evalWorld state) of
+                                                                        Just _ -> Right (state, VIssueElementRef name)
+                                                                        Nothing ->
+                                                                            Left (evaluatorDiagnostic state ("unresolved identifier: " <> name))
 evalExpr state (ExprList exprs) = do
     (nextState, values) <- evalExprList state exprs
     pure (nextState, VList values)
 evalExpr state (ExprRange startExpr endExpr) = do
     (state1, startValue) <- evalExpr state startExpr
     (state2, endValue) <- evalExpr state1 endExpr
-    case (startValue, endValue) of
-        (VInt startInt, VInt endInt) ->
-            pure
-                ( state2
-                , VList $
-                    map VInt $
-                        if startInt <= endInt
-                            then [startInt .. endInt]
-                            else reverse [endInt .. startInt]
-                )
-        _ ->
-            pure (state2, VList [startValue, endValue])
+    case timeRangeFromValues startValue endValue of
+        Left message -> Left (evaluatorDiagnostic state2 message)
+        Right rangeValue -> pure (state2, VRange rangeValue)
+evalExpr state (ExprQuantifier quantifierValue variableName iterableExpr bodyExpr) = do
+    (state1, iterableValue) <- evalExpr state iterableExpr
+    values <- iterableValues state1 iterableValue
+    let previousBinding = Map.lookup variableName (evalEnv state1)
+        savedMutableNames = evalMutableNames state1
+    (resultState, resultValue) <-
+        evalQuantifier
+            state1{evalMutableNames = Set.delete variableName savedMutableNames}
+            quantifierValue
+            variableName
+            bodyExpr
+            values
+    pure
+        ( resultState
+            { evalEnv = restoreBinding previousBinding variableName (evalEnv resultState)
+            , evalMutableNames = savedMutableNames
+            }
+        , VBool resultValue
+        )
 evalExpr state (ExprIndex objectExpr indexExpr) = do
     (state1, objectValue) <- evalExpr state objectExpr
     (state2, indexValue) <- evalExpr state1 indexExpr
@@ -454,13 +693,16 @@ evalCall state (ExprIdent name) argExprs = do
                 Just builtinValue ->
                     pure (state1, builtinValue)
                 Nothing ->
-                    case Map.lookup name (evalEnv state1) of
-                        Just (VClosureRef closureId) ->
-                            callClosure state1 closureId argValues
-                        Just _ ->
-                            Left (evaluatorDiagnostic state1 "only named functions and closure values are callable in the current implementation")
-                        Nothing ->
-                            undefinedFunction state1 name
+                    if isBuiltinName name
+                        then builtinTypeError state1 name argValues
+                        else
+                            case Map.lookup name (evalEnv state1) of
+                                Just (VClosureRef closureId) ->
+                                    callClosure state1 closureId argValues
+                                Just _ ->
+                                    Left (evaluatorDiagnostic state1 "only named functions and closure values are callable in the current implementation")
+                                Nothing ->
+                                    undefinedFunction state1 name
 evalCall state calleeExpr argExprs = do
     (state1, calleeValue) <- evalExpr state calleeExpr
     (state2, argValues) <- evalExprList state1 argExprs
@@ -560,11 +802,17 @@ evalBuiltin state name args =
                 _ -> Nothing
         "before" ->
             case args of
-                [leftValue, rightValue] -> VBool <$> ((<) <$> valueToOrdinal leftValue <*> valueToOrdinal rightValue)
+                [leftValue, rightValue] ->
+                    case compareRanges state leftValue rightValue (\_s1 e1 s2 _e2 -> e1 < s2) of
+                        Just value -> Just value
+                        Nothing -> VBool <$> ((<) <$> valueToOrdinal leftValue <*> valueToOrdinal rightValue)
                 _ -> Nothing
         "after" ->
             case args of
-                [leftValue, rightValue] -> VBool <$> ((>) <$> valueToOrdinal leftValue <*> valueToOrdinal rightValue)
+                [leftValue, rightValue] ->
+                    case compareRanges state leftValue rightValue (\s1 _e1 _s2 e2 -> s1 > e2) of
+                        Just value -> Just value
+                        Nothing -> VBool <$> ((>) <$> valueToOrdinal leftValue <*> valueToOrdinal rightValue)
                 _ -> Nothing
         "type_of" ->
             case args of
@@ -581,7 +829,7 @@ evalBuiltin state name args =
         -- string builtins
         "contains" -> case args of
             [VString haystack, VString needle] -> Just (VBool (T.isInfixOf needle haystack))
-            _ -> allenRelation args (\s1 e1 s2 e2 -> s1 < s2 && e1 > e2)
+            _ -> allenRelation state args (\s1 e1 s2 e2 -> s1 <= s2 && e1 >= e2)
         "starts_with" -> case args of [VString text, VString pfx] -> Just (VBool (T.isPrefixOf pfx text)); _ -> Nothing
         "ends_with" -> case args of [VString text, VString sfx] -> Just (VBool (T.isSuffixOf sfx text)); _ -> Nothing
         "to_upper" -> case args of [VString text] -> Just (VString (T.toUpper text)); _ -> Nothing
@@ -600,6 +848,16 @@ evalBuiltin state name args =
             [VString v] -> Just (VString v)
             [VNull] -> Just (VString "null")
             [VDate d] -> Just (VString (T.pack (show d)))
+            [VRange rangeValue] ->
+                Just (VString (renderTimePoint (rangeStart rangeValue) <> ".." <> renderTimePoint (rangeEnd rangeValue)))
+            [VEntityRef entityNameValue] -> Just (VString entityNameValue)
+            [VSourceRef sourceNameValue] -> Just (VString sourceNameValue)
+            [VTimelineRef timelineNameValue] -> Just (VString timelineNameValue)
+            [VRulesetRef rulesetNameValue] -> Just (VString rulesetNameValue)
+            [VDeadlineRuleRef deadlineRuleNameValue] -> Just (VString deadlineRuleNameValue)
+            [VLocatorRef locatorNameValue] -> Just (VString locatorNameValue)
+            [VIssueRef issueNameValue] -> Just (VString issueNameValue)
+            [VIssueElementRef elementNameValue] -> Just (VString elementNameValue)
             _ -> Nothing
         -- list builtins
         "head" -> case args of [VList (x:_)] -> Just x; _ -> Nothing
@@ -607,7 +865,9 @@ evalBuiltin state name args =
         "last" -> case args of [VList xs] | not (null xs) -> Just (Prelude.last xs); _ -> Nothing
         "reverse" -> case args of [VList xs] -> Just (VList (Prelude.reverse xs)); _ -> Nothing
         "flatten" -> case args of [VList xs] -> Just (VList (concatMap flattenValue xs)); _ -> Nothing
-        "range" -> case args of [VInt a, VInt b] -> Just (VList (map VInt [a..b])); _ -> Nothing
+        "range" -> case args of
+            [startValue, endValue] -> VRange <$> either (const Nothing) Just (timeRangeFromValues startValue endValue)
+            _ -> Nothing
         "sort" -> case args of [VList xs] -> Just (VList (sortValues xs)); _ -> Nothing
         "unique" -> case args of [VList xs] -> Just (VList (uniqueValues xs)); _ -> Nothing
         -- temporal builtins: duration constructors
@@ -618,20 +878,31 @@ evalBuiltin state name args =
         "duration_months" -> case args of [VDuration _ m _] -> Just (VInt m); _ -> Nothing
         "duration_years" -> case args of [VDuration y _ _] -> Just (VInt y); _ -> Nothing
         -- Allen's interval algebra (operating on pairs of date ranges)
-        "overlaps" -> allenRelation args (\s1 e1 s2 e2 -> s1 < s2 && e1 > s2 && e1 < e2)
-        "during" -> allenRelation args (\s1 e1 s2 e2 -> s1 > s2 && e1 < e2)
-        "meets" -> allenRelation args (\_s1 e1 s2 _e2 -> e1 == s2)
-        "starts" -> allenRelation args (\s1 e1 s2 e2 -> s1 == s2 && e1 < e2)
-        "finishes" -> allenRelation args (\s1 e1 _s2 e2 -> e1 == e2 && s1 > _s2)
-        "equals" -> allenRelation args (\s1 e1 s2 e2 -> s1 == s2 && e1 == e2)
+        "overlaps" -> allenRelation state args (\s1 e1 s2 e2 -> s1 < s2 && e1 > s2 && e1 < e2)
+        "overlapped_by" -> allenRelation state args (\s1 e1 s2 e2 -> s2 < s1 && e2 > s1 && e2 < e1)
+        "during" -> allenRelation state args (\s1 e1 s2 e2 -> s1 > s2 && e1 < e2)
+        "contains_range" -> allenRelation state args (\s1 e1 s2 e2 -> s1 < s2 && e1 > e2)
+        "meets" -> allenRelation state args (\_s1 e1 s2 _e2 -> e1 == s2)
+        "met_by" -> allenRelation state args (\s1 _e1 _s2 e2 -> s1 == e2)
+        "starts" -> allenRelation state args (\s1 e1 s2 e2 -> s1 == s2 && e1 < e2)
+        "started_by" -> allenRelation state args (\s1 e1 s2 e2 -> s1 == s2 && e1 > e2)
+        "finishes" -> allenRelation state args (\s1 e1 s2 e2 -> e1 == e2 && s1 > s2)
+        "finished_by" -> allenRelation state args (\s1 e1 s2 e2 -> e1 == e2 && s1 < s2)
+        "equals" -> allenRelation state args (\s1 e1 s2 e2 -> s1 == s2 && e1 == e2)
         -- temporal utilities
         "midpoint" -> case args of
             [VDate d1, VDate d2] ->
                 let diff = daysBetween d2 d1
                 in Just (VDate (addDurationToDay d1 0 0 (diff `div` 2)))
+            [VRange rangeValue] ->
+                let (startOrdinal, endOrdinal) = timeRangeOrdinals rangeValue
+                in Just (VInt (startOrdinal + ((endOrdinal - startOrdinal) `div` 2)))
             _ -> Nothing
         "duration_between" -> case args of
             [VDate d1, VDate d2] -> Just (VDuration 0 0 (Prelude.abs (daysBetween d1 d2)))
+            [VRange rangeValue] ->
+                let (startOrdinal, endOrdinal) = timeRangeOrdinals rangeValue
+                in Just (VDuration 0 0 (Prelude.abs (endOrdinal - startOrdinal)))
             _ -> Nothing
         -- temporal queries (world-aware)
         "alive_at" -> case args of
@@ -682,6 +953,10 @@ evalBuiltin state name args =
                         ++ [relSource r | r <- rels, relTarget r == entityRefName]
                 in Just (VList (map VEntityRef (uniqueTexts related)))
             _ -> Nothing
+        "inbound" -> relationshipEndpointList state args True
+        "outbound" -> relationshipEndpointList state args False
+        "has_inbound" -> relationshipEndpointExists state args True
+        "has_outbound" -> relationshipEndpointExists state args False
         _ -> Nothing
 
 uniqueTexts :: [Text] -> [Text]
@@ -692,14 +967,80 @@ uniqueTexts = go Set.empty
         | Set.member x seen = go seen xs
         | otherwise = x : go (Set.insert x seen) xs
 
-allenRelation :: [Value] -> (Integer -> Integer -> Integer -> Integer -> Bool) -> Maybe Value
-allenRelation args relation =
+relationshipEndpointList :: EvalState -> [Value] -> Bool -> Maybe Value
+relationshipEndpointList state args inboundQuery = do
+    (entityNameValue, labelValue) <- relationshipQueryArgs args
+    let matches relationship =
+            relLabel relationship == Just labelValue
+                && if inboundQuery
+                    then relTarget relationship == entityNameValue
+                    else relSource relationship == entityNameValue
+        endpoint relationship =
+            if inboundQuery
+                then relSource relationship
+                else relTarget relationship
+    pure $
+        VList
+            [ VEntityRef endpointName
+            | relationship <- worldRelationships (evalWorld state)
+            , matches relationship
+            , let endpointName = endpoint relationship
+            ]
+
+relationshipEndpointExists :: EvalState -> [Value] -> Bool -> Maybe Value
+relationshipEndpointExists state args inboundQuery = do
+    VList values <- relationshipEndpointList state args inboundQuery
+    pure (VBool (not (null values)))
+
+relationshipQueryArgs :: [Value] -> Maybe (Text, Text)
+relationshipQueryArgs args =
     case args of
-        [VEntityRef _, VEntityRef _] -> Nothing -- needs world context, handled elsewhere
+        [entityValue, VString labelValue] ->
+            case entityNameFromValue entityValue of
+                Just entityNameValue -> Just (entityNameValue, labelValue)
+                Nothing -> Nothing
+        _ -> Nothing
+
+entityNameFromValue :: Value -> Maybe Text
+entityNameFromValue (VEntityRef name) = Just name
+entityNameFromValue (VString name) = Just name
+entityNameFromValue _ = Nothing
+
+compareRanges :: EvalState -> Value -> Value -> (Integer -> Integer -> Integer -> Integer -> Bool) -> Maybe Value
+compareRanges state leftValue rightValue relation = do
+    leftRange <- valueToRange state leftValue
+    rightRange <- valueToRange state rightValue
+    let (leftStart, leftEnd) = timeRangeOrdinals leftRange
+        (rightStart, rightEnd) = timeRangeOrdinals rightRange
+    pure (VBool (relation leftStart leftEnd rightStart rightEnd))
+
+allenRelation :: EvalState -> [Value] -> (Integer -> Integer -> Integer -> Integer -> Bool) -> Maybe Value
+allenRelation state args relation =
+    case args of
+        [leftValue, rightValue] ->
+            compareRanges state leftValue rightValue relation
         [VDate s1, VDate e1, VDate s2, VDate e2] ->
             let o = toModifiedJulianDay
             in Just (VBool (relation (o s1) (o e1) (o s2) (o e2)))
+        [VInt s1, VInt e1, VInt s2, VInt e2] ->
+            Just (VBool (relation s1 e1 s2 e2))
         _ -> Nothing
+
+valueToRange :: EvalState -> Value -> Maybe TimeRange
+valueToRange _ (VRange rangeValue) = Just rangeValue
+valueToRange state (VEntityRef entityNameValue) = do
+    entity <- findEntity entityNameValue (evalWorld state)
+    entityAppearanceRange entity
+valueToRange _ _ = Nothing
+
+entityAppearanceRange :: Entity -> Maybe TimeRange
+entityAppearanceRange entity =
+    case entityAppearances entity of
+        [] -> Nothing
+        appearances ->
+            let starts = map (timePointOrdinal . rangeStart . appearanceRange) appearances
+                ends = map (timePointOrdinal . rangeEnd . appearanceRange) appearances
+            in Just (TimeRange (TimeOrdinal (minimum starts)) (TimeOrdinal (maximum ends)))
 
 flattenValue :: Value -> [Value]
 flattenValue (VList xs) = concatMap flattenValue xs
@@ -748,6 +1089,7 @@ valueMatchesType _ (VString _) "string" = True
 valueMatchesType _ (VBool _) "bool" = True
 valueMatchesType _ (VDate _) "date" = True
 valueMatchesType _ (VList _) "list" = True
+valueMatchesType _ (VRange _) "range" = True
 valueMatchesType _ (VEntityRef _) "entity" = True
 valueMatchesType state (VEntityRef entityNameValue) expectedType =
     case findEntity entityNameValue (evalWorld state) of
@@ -756,6 +1098,12 @@ valueMatchesType state (VEntityRef entityNameValue) expectedType =
             entityType entity == expectedType
                 || hasTypeAncestor (evalWorld state) (entityType entity) expectedType
 valueMatchesType _ (VTimelineRef _) "timeline" = True
+valueMatchesType _ (VSourceRef _) "source" = True
+valueMatchesType _ (VRulesetRef _) "ruleset" = True
+valueMatchesType _ (VDeadlineRuleRef _) "deadline_rule" = True
+valueMatchesType _ (VLocatorRef _) "locator" = True
+valueMatchesType _ (VIssueRef _) "issue" = True
+valueMatchesType _ (VIssueElementRef _) "issue_element" = True
 valueMatchesType _ (VClosureRef _) "closure" = True
 valueMatchesType _ (VDuration _ _ _) "duration" = True
 valueMatchesType _ _ _ = False
@@ -767,9 +1115,16 @@ renderValueType _ (VString _) = "string"
 renderValueType _ (VBool _) = "bool"
 renderValueType _ (VDate _) = "date"
 renderValueType _ (VList _) = "list"
+renderValueType _ (VRange _) = "range"
 renderValueType state (VEntityRef entityNameValue) =
     maybe "entity" entityType (findEntity entityNameValue (evalWorld state))
 renderValueType _ (VTimelineRef _) = "timeline"
+renderValueType _ (VSourceRef _) = "source"
+renderValueType _ (VRulesetRef _) = "ruleset"
+renderValueType _ (VDeadlineRuleRef _) = "deadline_rule"
+renderValueType _ (VLocatorRef _) = "locator"
+renderValueType _ (VIssueRef _) = "issue"
+renderValueType _ (VIssueElementRef _) = "issue_element"
 renderValueType _ (VClosureRef _) = "closure"
 renderValueType _ (VDuration _ _ _) = "duration"
 
@@ -806,6 +1161,117 @@ undefinedFunction :: EvalState -> Text -> Either Diagnostic a
 undefinedFunction state name =
     Left (evaluatorDiagnostic state ("undefined function: " <> name))
 
+builtinTypeError :: EvalState -> Text -> [Value] -> Either Diagnostic a
+builtinTypeError state name args =
+    Left $
+        evaluatorDiagnostic
+            state
+            ( "builtin "
+                <> name
+                <> " expected "
+                <> builtinUsage name
+                <> ", got ("
+                <> T.intercalate ", " (map (renderValueType state) args)
+                <> ")"
+            )
+
+isBuiltinName :: Text -> Bool
+isBuiltinName name = Set.member name builtinNames
+
+builtinNames :: Set.Set Text
+builtinNames =
+    Set.fromList
+        [ "abs"
+        , "active_on"
+        , "after"
+        , "alive_at"
+        , "before"
+        , "causes_of"
+        , "clamp"
+        , "contains"
+        , "contains_range"
+        , "days"
+        , "during"
+        , "duration_between"
+        , "duration_days"
+        , "duration_months"
+        , "duration_years"
+        , "effects_of"
+        , "ends_with"
+        , "entities_where"
+        , "equals"
+        , "finished_by"
+        , "finishes"
+        , "flatten"
+        , "has_inbound"
+        , "has_outbound"
+        , "head"
+        , "inbound"
+        , "last"
+        , "len"
+        , "max"
+        , "meets"
+        , "met_by"
+        , "midpoint"
+        , "min"
+        , "months"
+        , "outbound"
+        , "overlapped_by"
+        , "overlaps"
+        , "range"
+        , "related_to"
+        , "replace"
+        , "reverse"
+        , "sort"
+        , "split"
+        , "started_by"
+        , "starts"
+        , "starts_with"
+        , "substring"
+        , "tail"
+        , "to_lower"
+        , "to_string"
+        , "to_upper"
+        , "trim"
+        , "type_of"
+        , "unique"
+        , "years"
+        ]
+
+builtinUsage :: Text -> Text
+builtinUsage "len" = "list|string"
+builtinUsage "before" = "time|range, time|range"
+builtinUsage "after" = "time|range, time|range"
+builtinUsage "range" = "time, time"
+builtinUsage "inbound" = "entity|string, label:string"
+builtinUsage "outbound" = "entity|string, label:string"
+builtinUsage "has_inbound" = "entity|string, label:string"
+builtinUsage "has_outbound" = "entity|string, label:string"
+builtinUsage "entities_where" = "type_name:string"
+builtinUsage "active_on" = "timeline"
+builtinUsage "alive_at" = "date|int"
+builtinUsage "contains" = "string,string or range,range"
+builtinUsage "duration_between" = "date,date or range"
+builtinUsage name
+    | Set.member name intervalBuiltinNames = "range|entity, range|entity or start,end,start,end"
+    | otherwise = "valid arguments"
+
+intervalBuiltinNames :: Set.Set Text
+intervalBuiltinNames =
+    Set.fromList
+        [ "contains_range"
+        , "during"
+        , "equals"
+        , "finished_by"
+        , "finishes"
+        , "meets"
+        , "met_by"
+        , "overlapped_by"
+        , "overlaps"
+        , "started_by"
+        , "starts"
+        ]
+
 evalFieldAccess :: EvalState -> Value -> Text -> Either Diagnostic Value
 evalFieldAccess state objectValue fieldName =
     case objectValue of
@@ -839,10 +1305,98 @@ evalFieldAccess state objectValue fieldName =
                         "start" -> Right (timePointToValue (timelineStart timeline))
                         "end" -> Right (timePointToValue (timelineEnd timeline))
                         "parent" -> Right (maybe VNull VString (timelineParent timeline))
+                        "jurisdiction" -> Right (maybe VNull VString (timelineJurisdiction timeline))
+                        "court" -> Right (maybe VNull VString (timelineCourt timeline))
+                        "procedure" -> Right (maybe VNull VString (timelineProcedure timeline))
                         "loop_count" -> Right (maybe VNull VInt (timelineLoopCount timeline))
                         _ -> unknownField "timeline" fieldName
                 Nothing ->
                     Left (evaluatorDiagnostic state ("unknown timeline reference: " <> name))
+        VSourceRef name ->
+            case findSource name (evalWorld state) of
+                Just sourceRecord ->
+                    case fieldName of
+                        "name" -> Right (VString (sourceRecordName sourceRecord))
+                        "kind" -> Right (VString (sourceRecordKind sourceRecord))
+                        _ ->
+                            maybe
+                                (unknownField "source" fieldName)
+                                Right
+                                (Map.lookup fieldName (sourceRecordFields sourceRecord))
+                Nothing ->
+                    Left (evaluatorDiagnostic state ("unknown source reference: " <> name))
+        VRulesetRef name ->
+            case findRuleset name (evalWorld state) of
+                Just ruleset ->
+                    case fieldName of
+                        "name" -> Right (VString (rulesetName ruleset))
+                        "jurisdiction" -> Right (maybe VNull VString (rulesetJurisdiction ruleset))
+                        "court" -> Right (maybe VNull VString (rulesetCourt ruleset))
+                        "procedure" -> Right (maybe VNull VString (rulesetProcedure ruleset))
+                        "effective" -> Right (maybe VNull VRange (rulesetEffective ruleset))
+                        "source_ref" -> Right (maybe VNull VSourceRef (rulesetSourceRef ruleset))
+                        _ -> maybe (unknownField "ruleset" fieldName) Right (Map.lookup fieldName (rulesetFields ruleset))
+                Nothing ->
+                    Left (evaluatorDiagnostic state ("unknown ruleset reference: " <> name))
+        VDeadlineRuleRef name ->
+            case findDeadlineRule name (evalWorld state) of
+                Just deadlineRule ->
+                    case fieldName of
+                        "name" -> Right (VString (deadlineRuleName deadlineRule))
+                        "ruleset" -> Right (VRulesetRef (deadlineRuleRuleset deadlineRule))
+                        "rule" -> Right (VString (deadlineRuleRule deadlineRule))
+                        "trigger" -> Right (VString (deadlineRuleTrigger deadlineRule))
+                        "actor" -> Right (maybe VNull VString (deadlineRuleActor deadlineRule))
+                        "action" -> Right (maybe VNull VString (deadlineRuleAction deadlineRule))
+                        "offset" -> Right (deadlineRuleOffset deadlineRule)
+                        "direction" -> Right (VString (deadlineDirectionText (deadlineRuleDirection deadlineRule)))
+                        "counting" -> Right (VString (deadlineCountingText (deadlineRuleCounting deadlineRule)))
+                        "source_ref" -> Right (maybe VNull VSourceRef (deadlineRuleSourceRef deadlineRule))
+                        _ -> maybe (unknownField "deadline rule" fieldName) Right (Map.lookup fieldName (deadlineRuleFields deadlineRule))
+                Nothing ->
+                    Left (evaluatorDiagnostic state ("unknown deadline rule reference: " <> name))
+        VLocatorRef name ->
+            case findSourceLocator name (evalWorld state) of
+                Just locator ->
+                    case fieldName of
+                        "name" -> Right (VString (sourceLocatorName locator))
+                        "source_ref" -> Right (VSourceRef (sourceLocatorSource locator))
+                        _ -> maybe (unknownField "locator" fieldName) Right (Map.lookup fieldName (sourceLocatorFields locator))
+                Nothing ->
+                    Left (evaluatorDiagnostic state ("unknown locator reference: " <> name))
+        VIssueRef name ->
+            case findIssue name (evalWorld state) of
+                Just issue ->
+                    case fieldName of
+                        "name" -> Right (VString (legalIssueName issue))
+                        "title" -> Right (maybe VNull VString (legalIssueTitle issue))
+                        "question" -> Right (maybe VNull VString (legalIssueQuestion issue))
+                        "burden" -> Right (maybe VNull VString (legalIssueBurden issue))
+                        "standard" -> Right (maybe VNull VString (legalIssueStandard issue))
+                        "source_ref" -> Right (maybe VNull VSourceRef (legalIssueSourceRef issue))
+                        _ -> maybe (unknownField "issue" fieldName) Right (Map.lookup fieldName (legalIssueFields issue))
+                Nothing ->
+                    Left (evaluatorDiagnostic state ("unknown issue reference: " <> name))
+        VIssueElementRef name ->
+            case findIssueElement name (evalWorld state) of
+                Just issueElement ->
+                    case fieldName of
+                        "name" -> Right (VString (issueElementName issueElement))
+                        "issue" -> Right (VIssueRef (issueElementIssue issueElement))
+                        "text" -> Right (VString (issueElementText issueElement))
+                        "burden" -> Right (maybe VNull VString (issueElementBurden issueElement))
+                        "source_ref" -> Right (maybe VNull VSourceRef (issueElementSourceRef issueElement))
+                        _ -> maybe (unknownField "issue element" fieldName) Right (Map.lookup fieldName (issueElementFields issueElement))
+                Nothing ->
+                    Left (evaluatorDiagnostic state ("unknown issue element reference: " <> name))
+        VRange rangeValue ->
+            case fieldName of
+                "start" -> Right (timePointToValue (rangeStart rangeValue))
+                "end" -> Right (timePointToValue (rangeEnd rangeValue))
+                "duration" ->
+                    let (startOrdinal, endOrdinal) = timeRangeOrdinals rangeValue
+                    in Right (VInt (endOrdinal - startOrdinal))
+                _ -> unknownField "range" fieldName
         _ ->
             Left $
                 evaluatorDiagnostic
@@ -858,6 +1412,17 @@ timelineKindText TimelineLinear = "linear"
 timelineKindText TimelineBranch = "branch"
 timelineKindText TimelineParallel = "parallel"
 timelineKindText TimelineLoop = "loop"
+
+deadlineCountingText :: DeadlineCounting -> Text
+deadlineCountingText CountingCalendarDays = "calendar_days"
+deadlineCountingText CountingCalendarDaysWithLastDayRollover = "calendar_days_with_last_day_rollover"
+deadlineCountingText CountingClearDays = "clear_days"
+deadlineCountingText CountingBusinessDays = "business_days"
+deadlineCountingText CountingCourtDays = "court_days"
+
+deadlineDirectionText :: DeadlineDirection -> Text
+deadlineDirectionText DeadlineAfter = "after"
+deadlineDirectionText DeadlineBefore = "before"
 
 timePointToValue :: TimePoint -> Value
 timePointToValue (TimeDate day) = VDate day
@@ -964,11 +1529,109 @@ evalOptionalInteger state (Just expr) = do
     (nextState, value) <- exprToInteger state expr
     pure (nextState, Just value)
 
+evalOptionalText :: EvalState -> Maybe Expr -> Either Diagnostic (EvalState, Maybe Text)
+evalOptionalText state Nothing = pure (state, Nothing)
+evalOptionalText state (Just (ExprIdent name)) = pure (state, Just name)
+evalOptionalText state (Just expr) = do
+    (nextState, value) <- evalExpr state expr
+    case value of
+        VString textValue -> pure (nextState, Just textValue)
+        _ -> Left (evaluatorDiagnostic nextState "expected a string or identifier expression")
+
 evalOptionalTimelineRef :: EvalState -> Maybe (Text, Expr) -> Either Diagnostic (EvalState, Maybe (Text, TimePoint))
 evalOptionalTimelineRef state Nothing = pure (state, Nothing)
 evalOptionalTimelineRef state (Just (name, expr)) = do
     (nextState, point) <- exprToTimePoint state expr
     pure (nextState, Just (name, point))
+
+evalRequiredTextField :: EvalState -> Text -> Text -> Map Text Expr -> Text -> Either Diagnostic (EvalState, Text)
+evalRequiredTextField state kind name fields fieldName =
+    case Map.lookup fieldName fields of
+        Nothing -> Left (evaluatorDiagnostic state (kind <> " " <> name <> " is missing required field " <> fieldName))
+        Just expr -> evalTextExpr state expr
+
+evalOptionalTextField :: EvalState -> Map Text Expr -> Text -> Either Diagnostic (EvalState, Maybe Text)
+evalOptionalTextField state fields fieldName =
+    case Map.lookup fieldName fields of
+        Nothing -> pure (state, Nothing)
+        Just expr -> do
+            (nextState, value) <- evalTextExpr state expr
+            pure (nextState, Just value)
+
+evalTextExpr :: EvalState -> Expr -> Either Diagnostic (EvalState, Text)
+evalTextExpr state (ExprIdent name) = pure (state, name)
+evalTextExpr state expr = do
+    (nextState, value) <- evalExpr state expr
+    case value of
+        VString textValue -> pure (nextState, textValue)
+        VSourceRef sourceNameValue -> pure (nextState, sourceNameValue)
+        VRulesetRef rulesetNameValue -> pure (nextState, rulesetNameValue)
+        VDeadlineRuleRef deadlineRuleNameValue -> pure (nextState, deadlineRuleNameValue)
+        VLocatorRef locatorNameValue -> pure (nextState, locatorNameValue)
+        VIssueRef issueNameValue -> pure (nextState, issueNameValue)
+        VIssueElementRef elementNameValue -> pure (nextState, elementNameValue)
+        _ -> Left (evaluatorDiagnostic nextState "expected a string, identifier, or reference expression")
+
+evalRequiredDurationField :: EvalState -> Text -> Text -> Map Text Expr -> Text -> Either Diagnostic (EvalState, Value)
+evalRequiredDurationField state kind name fields fieldName =
+    case Map.lookup fieldName fields of
+        Nothing -> Left (evaluatorDiagnostic state (kind <> " " <> name <> " is missing required field " <> fieldName))
+        Just expr -> do
+            (nextState, value) <- evalExpr state expr
+            case value of
+                VDuration _ _ _ -> pure (nextState, value)
+                _ -> Left (evaluatorDiagnostic nextState (kind <> " " <> name <> " field " <> fieldName <> " must be a duration"))
+
+evalOptionalRangeField :: EvalState -> Map Text Expr -> Text -> Either Diagnostic (EvalState, Maybe TimeRange)
+evalOptionalRangeField state fields fieldName =
+    case Map.lookup fieldName fields of
+        Nothing -> pure (state, Nothing)
+        Just expr -> do
+            (nextState, value) <- evalExpr state expr
+            case value of
+                VRange rangeValue -> pure (nextState, Just rangeValue)
+                _ -> Left (evaluatorDiagnostic nextState ("field " <> fieldName <> " must be a range"))
+
+evalRequiredSourceRef :: EvalState -> Text -> Text -> Map Text Expr -> Either Diagnostic (EvalState, Text)
+evalRequiredSourceRef state kind name fields =
+    case Map.lookup "source_ref" fields of
+        Nothing -> Left (evaluatorDiagnostic state (kind <> " " <> name <> " is missing required field source_ref"))
+        Just expr -> do
+            (nextState, maybeSource) <- evalOptionalSourceRef state (Just expr)
+            case maybeSource of
+                Just sourceNameValue -> pure (nextState, sourceNameValue)
+                Nothing -> Left (evaluatorDiagnostic nextState (kind <> " " <> name <> " source_ref must reference a source"))
+
+evalOptionalSourceRef :: EvalState -> Maybe Expr -> Either Diagnostic (EvalState, Maybe Text)
+evalOptionalSourceRef state Nothing = pure (state, Nothing)
+evalOptionalSourceRef state (Just (ExprIdent name)) = pure (state, Just name)
+evalOptionalSourceRef state (Just expr) = do
+    (nextState, value) <- evalExpr state expr
+    case value of
+        VSourceRef sourceNameValue -> pure (nextState, Just sourceNameValue)
+        VString sourceNameValue -> pure (nextState, Just sourceNameValue)
+        _ -> Left (evaluatorDiagnostic nextState "source_ref must be a source reference or source id")
+
+resolveDeadlineCounting :: EvalState -> Maybe Expr -> Either Diagnostic DeadlineCounting
+resolveDeadlineCounting _ Nothing = Right CountingCalendarDaysWithLastDayRollover
+resolveDeadlineCounting _ (Just (ExprIdent "calendar_days")) = Right CountingCalendarDays
+resolveDeadlineCounting _ (Just (ExprIdent "calendar_days_with_last_day_rollover")) = Right CountingCalendarDaysWithLastDayRollover
+resolveDeadlineCounting _ (Just (ExprIdent "clear_days")) = Right CountingClearDays
+resolveDeadlineCounting _ (Just (ExprIdent "business_days")) = Right CountingBusinessDays
+resolveDeadlineCounting _ (Just (ExprIdent "court_days")) = Right CountingCourtDays
+resolveDeadlineCounting state (Just _) =
+    Left (evaluatorDiagnostic state "invalid deadline_rule counting mode")
+
+resolveDeadlineDirection :: EvalState -> Maybe Expr -> Either Diagnostic DeadlineDirection
+resolveDeadlineDirection _ Nothing = Right DeadlineAfter
+resolveDeadlineDirection _ (Just (ExprIdent "after")) = Right DeadlineAfter
+resolveDeadlineDirection _ (Just (ExprIdent "before")) = Right DeadlineBefore
+resolveDeadlineDirection state (Just _) =
+    Left (evaluatorDiagnostic state "invalid deadline_rule direction")
+
+dropKnownFields :: [Text] -> Map Text Expr -> Map Text Expr
+dropKnownFields fieldNames fields =
+    foldr Map.delete fields fieldNames
 
 evalBlockWithResult :: EvalState -> [Stmt] -> Either Diagnostic (EvalState, Value)
 evalBlockWithResult state statements =
@@ -1092,9 +1755,52 @@ evalForIterable state iterable =
             evalExprList state exprs
         ForExpr expr -> do
             (state1, value) <- evalExpr state expr
-            case value of
-                VList values -> pure (state1, values)
-                _ -> pure (state1, [value])
+            values <- iterableValues state1 value
+            pure (state1, values)
+
+iterableValues :: EvalState -> Value -> Either Diagnostic [Value]
+iterableValues state value =
+    case value of
+        VList values -> pure values
+        VRange rangeValue ->
+            case rangeValue of
+                TimeRange (TimeOrdinal startValue) (TimeOrdinal endValue) ->
+                    pure $
+                        map VInt $
+                            if startValue <= endValue
+                                then [startValue .. endValue]
+                                else reverse [endValue .. startValue]
+                _ ->
+                    Left (evaluatorDiagnostic state "date ranges are interval values, not implicit iterables")
+        _ -> pure [value]
+
+evalQuantifier :: EvalState -> Quantifier -> Text -> Expr -> [Value] -> Either Diagnostic (EvalState, Bool)
+evalQuantifier state QuantifierForAll variableName bodyExpr values =
+    go state values
+  where
+    go currentState [] = pure (currentState, True)
+    go currentState (value : remainingValues) = do
+        (nextState, resultValue) <- evalQuantifierBody currentState variableName bodyExpr value
+        case resultValue of
+            True -> go nextState remainingValues
+            False -> pure (nextState, False)
+evalQuantifier state QuantifierExists variableName bodyExpr values =
+    go state values
+  where
+    go currentState [] = pure (currentState, False)
+    go currentState (value : remainingValues) = do
+        (nextState, resultValue) <- evalQuantifierBody currentState variableName bodyExpr value
+        case resultValue of
+            True -> pure (nextState, True)
+            False -> go nextState remainingValues
+
+evalQuantifierBody :: EvalState -> Text -> Expr -> Value -> Either Diagnostic (EvalState, Bool)
+evalQuantifierBody state variableName bodyExpr value = do
+    let scopedState = state{evalEnv = Map.insert variableName value (evalEnv state)}
+    (nextState, resultValue) <- evalExpr scopedState bodyExpr
+    case resultValue of
+        VBool boolValue -> pure (nextState, boolValue)
+        _ -> Left (evaluatorDiagnostic nextState "quantifier body must evaluate to a boolean")
 
 restoreBinding :: Maybe Value -> Text -> Map Text Value -> Map Text Value
 restoreBinding Nothing name env = Map.delete name env

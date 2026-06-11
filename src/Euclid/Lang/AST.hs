@@ -20,9 +20,18 @@ module Euclid.Lang.AST
     , MatchPattern(..)
     , Program(..)
     , pattern Program
+    , Quantifier(..)
     , RepeatDecl(..)
     , CausalDeclKind(..)
     , RelationshipDecl(..)
+    , RelationshipTypeDecl(..)
+    , DeadlineRuleDecl(..)
+    , IssueElementDecl(..)
+    , LegalIssueDecl(..)
+    , RulesetDecl(..)
+    , SourceBundleDecl(..)
+    , SourceLocatorDecl(..)
+    , SourceDecl(..)
     , Stmt(..)
     , pattern StmtAssign
     , pattern StmtConstraint
@@ -37,8 +46,16 @@ module Euclid.Lang.AST
     , pattern StmtLet
     , pattern StmtMatch
     , pattern StmtRelationship
+    , pattern StmtRelationshipType
     , pattern StmtRepeat
     , pattern StmtReturn
+    , pattern StmtDeadlineRule
+    , pattern StmtIssue
+    , pattern StmtIssueElement
+    , pattern StmtRuleset
+    , pattern StmtSourceBundle
+    , pattern StmtSourceLocator
+    , pattern StmtSource
     , pattern StmtTimeline
     , pattern StmtType
     , pattern StmtWhile
@@ -50,13 +67,19 @@ module Euclid.Lang.AST
 
 import Data.Map.Strict (Map)
 import Data.Text (Text)
-import Euclid.Model.Types (BinaryOp(..), UnaryOp(..), SourceSpan, TypeField(..), Value(..), noSourceSpan)
+import Euclid.Model.Types (BinaryOp(..), RelationshipTemporalRule(..), UnaryOp(..), SourceSpan, TypeField(..), Value(..), noSourceSpan)
+
+data Quantifier
+    = QuantifierForAll
+    | QuantifierExists
+    deriving (Eq, Show)
 
 data Expr
     = ExprValue Value
     | ExprIdent Text
     | ExprList [Expr]
     | ExprRange Expr Expr
+    | ExprQuantifier Quantifier Text Expr Expr
     | ExprIndex Expr Expr
     | ExprField Expr Text
     | ExprCall Expr [Expr]
@@ -80,9 +103,56 @@ data TimelineDecl = TimelineDecl
     , timelineDeclStart :: Expr
     , timelineDeclEnd :: Expr
     , timelineDeclParent :: Maybe Text
+    , timelineDeclJurisdiction :: Maybe Expr
+    , timelineDeclCourt :: Maybe Expr
+    , timelineDeclProcedure :: Maybe Expr
     , timelineDeclForkFrom :: Maybe (Text, Expr)
     , timelineDeclMergeInto :: Maybe (Text, Expr)
     , timelineDeclLoopCount :: Maybe Expr
+    }
+    deriving (Eq, Show)
+
+data SourceDecl = SourceDecl
+    { sourceDeclName :: Text
+    , sourceDeclKind :: Text
+    , sourceDeclFields :: Map Text Expr
+    }
+    deriving (Eq, Show)
+
+data SourceBundleDecl = SourceBundleDecl
+    { sourceBundleDeclName :: Text
+    , sourceBundleDeclSources :: [Text]
+    , sourceBundleDeclFields :: Map Text Expr
+    }
+    deriving (Eq, Show)
+
+data SourceLocatorDecl = SourceLocatorDecl
+    { sourceLocatorDeclName :: Text
+    , sourceLocatorDeclFields :: Map Text Expr
+    }
+    deriving (Eq, Show)
+
+data RulesetDecl = RulesetDecl
+    { rulesetDeclName :: Text
+    , rulesetDeclFields :: Map Text Expr
+    }
+    deriving (Eq, Show)
+
+data DeadlineRuleDecl = DeadlineRuleDecl
+    { deadlineRuleDeclName :: Text
+    , deadlineRuleDeclFields :: Map Text Expr
+    }
+    deriving (Eq, Show)
+
+data LegalIssueDecl = LegalIssueDecl
+    { legalIssueDeclName :: Text
+    , legalIssueDeclFields :: Map Text Expr
+    }
+    deriving (Eq, Show)
+
+data IssueElementDecl = IssueElementDecl
+    { issueElementDeclName :: Text
+    , issueElementDeclFields :: Map Text Expr
     }
     deriving (Eq, Show)
 
@@ -151,6 +221,19 @@ data RelationshipDecl = RelationshipDecl
     , relationshipDeclDirected :: Bool
     , relationshipDeclCausalKind :: CausalDeclKind
     , relationshipDeclTemporalScope :: Maybe (Expr, Expr)
+    }
+    deriving (Eq, Show)
+
+data RelationshipTypeDecl = RelationshipTypeDecl
+    { relationshipTypeDeclName :: Text
+    , relationshipTypeDeclSources :: [Text]
+    , relationshipTypeDeclTargets :: [Text]
+    , relationshipTypeDeclTemporalRule :: Maybe RelationshipTemporalRule
+    , relationshipTypeDeclRequired :: Bool
+    , relationshipTypeDeclMinInbound :: Maybe Expr
+    , relationshipTypeDeclMaxInbound :: Maybe Expr
+    , relationshipTypeDeclMinOutbound :: Maybe Expr
+    , relationshipTypeDeclMaxOutbound :: Maybe Expr
     }
     deriving (Eq, Show)
 
@@ -223,9 +306,17 @@ data MatchDecl = MatchDecl
 
 data StmtNode
     = StmtTypeNode TypeDecl
+    | StmtSourceNode SourceDecl
+    | StmtSourceBundleNode SourceBundleDecl
+    | StmtSourceLocatorNode SourceLocatorDecl
+    | StmtRulesetNode RulesetDecl
+    | StmtDeadlineRuleNode DeadlineRuleDecl
+    | StmtIssueNode LegalIssueDecl
+    | StmtIssueElementNode IssueElementDecl
     | StmtTimelineNode TimelineDecl
     | StmtEntityNode EntityDecl
     | StmtRelationshipNode RelationshipDecl
+    | StmtRelationshipTypeNode RelationshipTypeDecl
     | StmtConstraintNode ConstraintDecl
     | StmtViewNode ViewDecl
     | StmtScenarioNode ScenarioDecl
@@ -256,6 +347,41 @@ pattern StmtType decl <- StmtData _ (StmtTypeNode decl)
   where
     StmtType decl = StmtData noSourceSpan (StmtTypeNode decl)
 
+pattern StmtSource :: SourceDecl -> Stmt
+pattern StmtSource decl <- StmtData _ (StmtSourceNode decl)
+  where
+    StmtSource decl = StmtData noSourceSpan (StmtSourceNode decl)
+
+pattern StmtSourceBundle :: SourceBundleDecl -> Stmt
+pattern StmtSourceBundle decl <- StmtData _ (StmtSourceBundleNode decl)
+  where
+    StmtSourceBundle decl = StmtData noSourceSpan (StmtSourceBundleNode decl)
+
+pattern StmtSourceLocator :: SourceLocatorDecl -> Stmt
+pattern StmtSourceLocator decl <- StmtData _ (StmtSourceLocatorNode decl)
+  where
+    StmtSourceLocator decl = StmtData noSourceSpan (StmtSourceLocatorNode decl)
+
+pattern StmtRuleset :: RulesetDecl -> Stmt
+pattern StmtRuleset decl <- StmtData _ (StmtRulesetNode decl)
+  where
+    StmtRuleset decl = StmtData noSourceSpan (StmtRulesetNode decl)
+
+pattern StmtDeadlineRule :: DeadlineRuleDecl -> Stmt
+pattern StmtDeadlineRule decl <- StmtData _ (StmtDeadlineRuleNode decl)
+  where
+    StmtDeadlineRule decl = StmtData noSourceSpan (StmtDeadlineRuleNode decl)
+
+pattern StmtIssue :: LegalIssueDecl -> Stmt
+pattern StmtIssue decl <- StmtData _ (StmtIssueNode decl)
+  where
+    StmtIssue decl = StmtData noSourceSpan (StmtIssueNode decl)
+
+pattern StmtIssueElement :: IssueElementDecl -> Stmt
+pattern StmtIssueElement decl <- StmtData _ (StmtIssueElementNode decl)
+  where
+    StmtIssueElement decl = StmtData noSourceSpan (StmtIssueElementNode decl)
+
 pattern StmtTimeline :: TimelineDecl -> Stmt
 pattern StmtTimeline decl <- StmtData _ (StmtTimelineNode decl)
   where
@@ -270,6 +396,11 @@ pattern StmtRelationship :: RelationshipDecl -> Stmt
 pattern StmtRelationship decl <- StmtData _ (StmtRelationshipNode decl)
   where
     StmtRelationship decl = StmtData noSourceSpan (StmtRelationshipNode decl)
+
+pattern StmtRelationshipType :: RelationshipTypeDecl -> Stmt
+pattern StmtRelationshipType decl <- StmtData _ (StmtRelationshipTypeNode decl)
+  where
+    StmtRelationshipType decl = StmtData noSourceSpan (StmtRelationshipTypeNode decl)
 
 pattern StmtConstraint :: ConstraintDecl -> Stmt
 pattern StmtConstraint decl <- StmtData _ (StmtConstraintNode decl)
@@ -343,9 +474,17 @@ pattern StmtExpr expr <- StmtData _ (StmtExprNode expr)
 
 {-# COMPLETE
     StmtType,
+    StmtSource,
+    StmtSourceBundle,
+    StmtSourceLocator,
+    StmtRuleset,
+    StmtDeadlineRule,
+    StmtIssue,
+    StmtIssueElement,
     StmtTimeline,
     StmtEntity,
     StmtRelationship,
+    StmtRelationshipType,
     StmtConstraint,
     StmtView,
     StmtScenario,

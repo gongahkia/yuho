@@ -40,8 +40,17 @@ statementParser :: Parser Stmt
 statementParser =
     choice
         [ withStatementSpan (StmtTypeNode <$> typeDeclParser)
+        , withStatementSpan (StmtSourceBundleNode <$> sourceBundleDeclParser)
+        , withStatementSpan (StmtSourceLocatorNode <$> sourceLocatorDeclParser)
+        , withStatementSpan (StmtRulesetNode <$> rulesetDeclParser)
+        , withStatementSpan (StmtDeadlineRuleNode <$> deadlineRuleDeclParser)
+        , withStatementSpan (StmtIssueNode <$> legalIssueDeclParser)
+        , withStatementSpan (StmtIssueElementNode <$> issueElementDeclParser)
+        , withStatementSpan (StmtSourceNode <$> sourceDeclParser)
         , withStatementSpan (StmtTimelineNode <$> timelineDeclParser)
         , withStatementSpan (StmtEntityNode <$> entityDeclParser)
+        , withStatementSpan (StmtRelationshipTypeNode <$> relationshipTypeDeclParser)
+        , withStatementSpan (StmtExprNode <$> try quantifierExprStmtParser)
         , withStatementSpan (StmtRelationshipNode <$> relationshipDeclParser)
         , withStatementSpan (StmtConstraintNode <$> constraintDeclParser)
         , withStatementSpan (StmtViewNode <$> viewDeclParser)
@@ -106,6 +115,12 @@ lexeme = L.lexeme sc
 symbol :: Text -> Parser Text
 symbol = L.symbol sc
 
+keyword :: Text -> Parser Text
+keyword word =
+    lexeme (string word <* notFollowedBy identifierTailChar)
+  where
+    identifierTailChar = satisfy (\c -> isAlphaNum c || c == '_')
+
 identifier :: Parser Text
 identifier = lexeme $ do
     first <- letterChar <|> char '_'
@@ -161,11 +176,23 @@ primaryTerm :: Parser Expr
 primaryTerm =
     choice
         [ try closureExprParser
+        , try quantifierExprParser
         , ExprValue <$> literalValueParser
         , ExprList <$> between (symbol "[") (symbol "]") (exprParser `sepBy` symbol ",")
         , ExprIdent <$> identifier
         , between (symbol "(") (symbol ")") exprParser
         ]
+
+quantifierExprParser :: Parser Expr
+quantifierExprParser = do
+    quantifierValue <-
+        (keyword "forall" $> QuantifierForAll)
+            <|> (keyword "exists" $> QuantifierExists)
+    variableName <- identifier
+    _ <- symbol "in"
+    iterable <- exprParser
+    body <- braces exprParser
+    pure (ExprQuantifier quantifierValue variableName iterable body)
 
 closureExprParser :: Parser Expr
 closureExprParser = do
@@ -332,6 +359,9 @@ timelineDeclParser = do
         startValue = maybe (ExprValue (VInt 0)) id (extractField "start" fields)
         endValue = maybe (ExprValue (VInt 100)) id (extractField "end" fields)
         parentValue = extractField "parent" fields >>= asIdentifier
+        jurisdictionValue = extractField "jurisdiction" fields
+        courtValue = extractField "court" fields
+        procedureValue = extractField "procedure" fields
         forkValue = extractField "fork_from" fields >>= asTimelineRef
         mergeValue = extractField "merge_into" fields >>= asTimelineRef
         loopValue = extractField "loop_count" fields
@@ -342,9 +372,135 @@ timelineDeclParser = do
             , timelineDeclStart = startValue
             , timelineDeclEnd = endValue
             , timelineDeclParent = parentValue
+            , timelineDeclJurisdiction = jurisdictionValue
+            , timelineDeclCourt = courtValue
+            , timelineDeclProcedure = procedureValue
             , timelineDeclForkFrom = forkValue
             , timelineDeclMergeInto = mergeValue
             , timelineDeclLoopCount = loopValue
+            }
+
+sourceDeclParser :: Parser SourceDecl
+sourceDeclParser = do
+    _ <- keyword "source"
+    name <- identifier
+    kindValue <- optional (symbol ":" *> identifier)
+    entries <- braces (many sourceFieldParser)
+    pure
+        SourceDecl
+            { sourceDeclName = name
+            , sourceDeclKind = maybe "source" id kindValue
+            , sourceDeclFields = Map.fromList entries
+            }
+
+sourceFieldParser :: Parser (Text, Expr)
+sourceFieldParser = do
+    fieldName <- identifier
+    _ <- symbol ":"
+    value <- exprParser
+    _ <- optional (symbol ",")
+    pure (fieldName, value)
+
+genericDeclFieldParser :: Parser (Text, Expr)
+genericDeclFieldParser = sourceFieldParser
+
+sourceBundleDeclParser :: Parser SourceBundleDecl
+sourceBundleDeclParser = do
+    _ <- keyword "source_bundle"
+    name <- identifier
+    entries <- braces (many sourceBundleFieldParser)
+    pure
+        SourceBundleDecl
+            { sourceBundleDeclName = name
+            , sourceBundleDeclSources =
+                concat
+                    [ sourceNames
+                    | SourceBundleSources sourceNames <- entries
+                    ]
+            , sourceBundleDeclFields =
+                Map.fromList
+                    [ (fieldName, value)
+                    | SourceBundleField fieldName value <- entries
+                    ]
+            }
+
+data SourceBundleEntry
+    = SourceBundleSources [Text]
+    | SourceBundleField Text Expr
+
+sourceBundleFieldParser :: Parser SourceBundleEntry
+sourceBundleFieldParser =
+    try sourceBundleSourcesParser <|> sourceBundleGenericFieldParser
+
+sourceBundleSourcesParser :: Parser SourceBundleEntry
+sourceBundleSourcesParser = do
+    _ <- symbol "sources"
+    _ <- symbol ":"
+    sourceNames <- between (symbol "[") (symbol "]") (identifier `sepBy` symbol ",")
+    _ <- optional (symbol ",")
+    pure (SourceBundleSources sourceNames)
+
+sourceBundleGenericFieldParser :: Parser SourceBundleEntry
+sourceBundleGenericFieldParser = do
+    fieldName <- identifier
+    _ <- symbol ":"
+    value <- exprParser
+    _ <- optional (symbol ",")
+    pure (SourceBundleField fieldName value)
+
+sourceLocatorDeclParser :: Parser SourceLocatorDecl
+sourceLocatorDeclParser = do
+    _ <- keyword "locator"
+    name <- identifier
+    fields <- braces (many genericDeclFieldParser)
+    pure
+        SourceLocatorDecl
+            { sourceLocatorDeclName = name
+            , sourceLocatorDeclFields = Map.fromList fields
+            }
+
+rulesetDeclParser :: Parser RulesetDecl
+rulesetDeclParser = do
+    _ <- keyword "ruleset"
+    name <- identifier
+    fields <- braces (many genericDeclFieldParser)
+    pure
+        RulesetDecl
+            { rulesetDeclName = name
+            , rulesetDeclFields = Map.fromList fields
+            }
+
+deadlineRuleDeclParser :: Parser DeadlineRuleDecl
+deadlineRuleDeclParser = do
+    _ <- keyword "deadline_rule"
+    name <- identifier
+    fields <- braces (many genericDeclFieldParser)
+    pure
+        DeadlineRuleDecl
+            { deadlineRuleDeclName = name
+            , deadlineRuleDeclFields = Map.fromList fields
+            }
+
+legalIssueDeclParser :: Parser LegalIssueDecl
+legalIssueDeclParser = do
+    _ <- keyword "issue"
+    name <- identifier
+    fields <- braces (many genericDeclFieldParser)
+    pure
+        LegalIssueDecl
+            { legalIssueDeclName = name
+            , legalIssueDeclFields = Map.fromList fields
+            }
+
+issueElementDeclParser :: Parser IssueElementDecl
+issueElementDeclParser = do
+    _ <- keyword "element"
+    name <- identifier
+    fields <- braces (many genericDeclFieldParser)
+    pure
+        IssueElementDecl
+            { issueElementDeclName = name
+            , issueElementDeclFields = Map.fromList fields
             }
 
 entityDeclParser :: Parser EntityDecl
@@ -383,6 +539,107 @@ entityDeclParser = do
 
 relationshipDeclParser :: Parser RelationshipDecl
 relationshipDeclParser = try causalRelParser <|> standardRelParser
+
+relationshipTypeDeclParser :: Parser RelationshipTypeDecl
+relationshipTypeDeclParser = do
+    _ <- symbol "reltype"
+    name <- identifier <|> stringLiteral
+    entries <- braces (many relationshipTypeEntryParser)
+    pure
+        RelationshipTypeDecl
+            { relationshipTypeDeclName = name
+            , relationshipTypeDeclSources = concat [types | RelationshipTypeSources types <- entries]
+            , relationshipTypeDeclTargets = concat [types | RelationshipTypeTargets types <- entries]
+            , relationshipTypeDeclTemporalRule = firstJust [rule | RelationshipTypeTemporal rule <- entries]
+            , relationshipTypeDeclRequired = or [value | RelationshipTypeRequired value <- entries]
+            , relationshipTypeDeclMinInbound = firstJust [value | RelationshipTypeMinInbound value <- entries]
+            , relationshipTypeDeclMaxInbound = firstJust [value | RelationshipTypeMaxInbound value <- entries]
+            , relationshipTypeDeclMinOutbound = firstJust [value | RelationshipTypeMinOutbound value <- entries]
+            , relationshipTypeDeclMaxOutbound = firstJust [value | RelationshipTypeMaxOutbound value <- entries]
+            }
+
+data RelationshipTypeEntry
+    = RelationshipTypeSources [Text]
+    | RelationshipTypeTargets [Text]
+    | RelationshipTypeTemporal (Maybe RelationshipTemporalRule)
+    | RelationshipTypeRequired Bool
+    | RelationshipTypeMinInbound (Maybe Expr)
+    | RelationshipTypeMaxInbound (Maybe Expr)
+    | RelationshipTypeMinOutbound (Maybe Expr)
+    | RelationshipTypeMaxOutbound (Maybe Expr)
+
+relationshipTypeEntryParser :: Parser RelationshipTypeEntry
+relationshipTypeEntryParser =
+    choice
+        [ try $ do
+            _ <- symbol "source"
+            _ <- symbol ":"
+            types <- relationshipTypeListParser
+            _ <- optional (symbol ",")
+            pure (RelationshipTypeSources types)
+        , try $ do
+            _ <- symbol "target"
+            _ <- symbol ":"
+            types <- relationshipTypeListParser
+            _ <- optional (symbol ",")
+            pure (RelationshipTypeTargets types)
+        , try $ do
+            _ <- symbol "temporal"
+            _ <- symbol ":"
+            rule <- relationshipTemporalRuleParser
+            _ <- optional (symbol ",")
+            pure (RelationshipTypeTemporal rule)
+        , try $ do
+            _ <- symbol "required"
+            _ <- symbol ":"
+            requiredValue <- boolLiteral
+            _ <- optional (symbol ",")
+            pure (RelationshipTypeRequired requiredValue)
+        , try $ do
+            _ <- symbol "min_inbound"
+            _ <- symbol ":"
+            value <- exprParser
+            _ <- optional (symbol ",")
+            pure (RelationshipTypeMinInbound (Just value))
+        , try $ do
+            _ <- symbol "max_inbound"
+            _ <- symbol ":"
+            value <- exprParser
+            _ <- optional (symbol ",")
+            pure (RelationshipTypeMaxInbound (Just value))
+        , try $ do
+            _ <- symbol "min_outbound"
+            _ <- symbol ":"
+            value <- exprParser
+            _ <- optional (symbol ",")
+            pure (RelationshipTypeMinOutbound (Just value))
+        , try $ do
+            _ <- symbol "max_outbound"
+            _ <- symbol ":"
+            value <- exprParser
+            _ <- optional (symbol ",")
+            pure (RelationshipTypeMaxOutbound (Just value))
+        ]
+
+relationshipTypeListParser :: Parser [Text]
+relationshipTypeListParser =
+    identifier `sepBy1` symbol "|"
+
+relationshipTemporalRuleParser :: Parser (Maybe RelationshipTemporalRule)
+relationshipTemporalRuleParser = do
+    ruleName <- identifier
+    case ruleName of
+        "source_before_target" -> pure (Just SourceBeforeTarget)
+        "before" -> pure (Just SourceBeforeTarget)
+        "source_after_target" -> pure (Just SourceAfterTarget)
+        "after" -> pure (Just SourceAfterTarget)
+        "none" -> pure Nothing
+        _ -> fail ("invalid relationship temporal rule: " <> T.unpack ruleName)
+
+firstJust :: [Maybe a] -> Maybe a
+firstJust [] = Nothing
+firstJust (Nothing : rest) = firstJust rest
+firstJust (Just value : _) = Just value
 
 standardRelParser :: Parser RelationshipDecl
 standardRelParser = do
@@ -509,9 +766,15 @@ exprStmtParser = do
     _ <- optional (symbol ";")
     pure value
 
+quantifierExprStmtParser :: Parser Expr
+quantifierExprStmtParser = do
+    value <- quantifierExprParser
+    _ <- optional (symbol ";")
+    pure value
+
 forDeclParser :: Parser ForDecl
 forDeclParser = do
-    _ <- symbol "for"
+    _ <- keyword "for"
     loopVar <- identifier
     _ <- symbol "in"
     iterable <- forIterableParser

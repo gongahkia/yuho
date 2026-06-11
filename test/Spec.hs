@@ -18,11 +18,13 @@ import Euclid.Core.Diff
 import Euclid.Core.Eval
 import Euclid.Core.Filter
 import Euclid.Core.Reports
+import Euclid.Core.Typecheck
 import Euclid.Core.Validation
 import Euclid.Import.CSV
 import Euclid.Import.GEDCOM
 import Euclid.Import.JSONLD
 import Euclid.Lang.AST
+import Euclid.Lang.Loader
 import Euclid.Lang.Parser
 import Euclid.Model.Types
 import Euclid.Playground.API
@@ -36,7 +38,7 @@ import Euclid.Render.SVG
 import Euclid.Test.Generators
 import Euclid.Tooling.LSP
 import qualified Hedgehog as H
-import System.Directory (listDirectory, removeFile)
+import System.Directory (createDirectoryIfMissing, listDirectory, removeFile)
 import System.FilePath ((</>))
 import Test.Hspec
 
@@ -152,7 +154,89 @@ spec = do
                             Map.size (worldEntities worldValue) `shouldBe` 4
                             length (worldRelationships worldValue) `shouldBe` 3
 
-    describe "validation" $
+    describe "provenance and stronger language semantics" $ do
+        it "evaluates source records, relation declarations, ranges, quantifiers, and scenario forks" $ do
+            source <- TIO.readFile "examples/legal/provenance_quantified.euclid"
+            case parseProgram "examples/legal/provenance_quantified.euclid" source of
+                Left diags ->
+                    expectationFailure ("parse failed: " <> show diags)
+                Right program -> do
+                    typeCheckProgram program `shouldBe` []
+                    case evalProgram program of
+                        Left diag ->
+                            expectationFailure ("eval failed: " <> show diag)
+                        Right worldValue -> do
+                            Map.member "docket_record" (worldSources worldValue) `shouldBe` True
+                            Map.member "pleadings" (worldSourceBundles worldValue) `shouldBe` True
+                            Map.member "cites" (worldRelationshipTypes worldValue) `shouldBe` True
+                            (timelineJurisdiction <$> Map.lookup "case_file" (worldTimelines worldValue)) `shouldBe` Just (Just "US-FRCP")
+                            (relationshipMinInbound . relationshipTypeCardinality <$> Map.lookup "cites" (worldRelationshipTypes worldValue)) `shouldBe` Just (Just 1)
+                            (relationshipMinOutbound . relationshipTypeCardinality <$> Map.lookup "supports" (worldRelationshipTypes worldValue)) `shouldBe` Just (Just 1)
+                            Map.lookup "late filing theory" (worldScenarioForks worldValue) `shouldBe` Just (Just "case_file")
+                            lookupEntityField "docket_entry" "source_ref" worldValue `shouldBe` Just (VSourceRef "docket_record")
+                            hardDiagnostics (validateWorld worldValue) `shouldBe` []
+
+        it "rejects scenario forks from missing timelines" $ do
+            let source =
+                    T.unlines
+                        [ "scenario \"bad fork\" from missing_timeline {"
+                        , "  let value = 1;"
+                        , "}"
+                        ]
+            expectEvalFailure source $ \diag ->
+                diagnosticMessage diag `shouldSatisfy` T.isInfixOf "scenario fork references missing timeline"
+
+        it "catches typed builtin and annotation errors before evaluation" $ do
+            let source =
+                    T.unlines
+                        [ "let count: int = \"wrong\";"
+                        , "let bad_call = len(1);"
+                        ]
+            case parseProgram "<inline>" source of
+                Left diags ->
+                    expectationFailure ("parse failed: " <> show diags)
+                Right program -> do
+                    let messages = map diagnosticMessage (typeCheckProgram program)
+                    messages `shouldSatisfy` any (T.isInfixOf "expected int but got string")
+                    messages `shouldSatisfy` any (T.isInfixOf "builtin len expected")
+
+        it "loads imports through the shared library loader" $ do
+            let dir = "dist-newstyle/test-imports"
+                importedPath = dir </> "common.euclid"
+                mainPath = dir </> "main.euclid"
+            createDirectoryIfMissing True dir
+            TIO.writeFile
+                importedPath
+                ( T.unlines
+                    [ "timeline imported {"
+                    , "  start: 1,"
+                    , "  end: 2,"
+                    , "}"
+                    ]
+                )
+            TIO.writeFile
+                mainPath
+                ( T.unlines
+                    [ "import \"common.euclid\";"
+                    , "entity imported_event : event {"
+                    , "  appears_on: imported @ 1..1,"
+                    , "}"
+                    ]
+                )
+            loaded <- loadProgramWithImports mainPath
+            case loaded of
+                Left diags ->
+                    expectationFailure ("load failed: " <> show diags)
+                Right program ->
+                    case evalProgram program of
+                        Left diag ->
+                            expectationFailure ("eval failed: " <> show diag)
+                        Right worldValue -> do
+                            Map.member "imported" (worldTimelines worldValue) `shouldBe` True
+                            any (\stmt -> "common.euclid" `isSuffixOf` spanFile (stmtSpan stmt)) (programStatements program)
+                                `shouldBe` True
+
+    describe "validation" $ do
         it "accepts the LOTR example without hard errors" $ do
             source <- TIO.readFile "examples/generative/lotr.euclid"
             case parseProgram "examples/generative/lotr.euclid" source of
@@ -166,6 +250,156 @@ spec = do
                             any ((== DiagnosticError) . diagnosticLevel) (validateWorld worldValue)
                                 `shouldBe` False
 
+        it "audits source bundles and normalized citation identity" $ do
+            let source =
+                    T.unlines
+                        [ "source docket_a : legal_case {"
+                        , "  citation: \"Example Court Docket No. 24-cv-100\","
+                        , "  url: \"https://example.com/a\","
+                        , "}"
+                        , "source docket_b : legal_case {"
+                        , "  citation: \"example court docket no 24 cv 100\","
+                        , "  url: \"https://example.com/b\","
+                        , "}"
+                        , "source_bundle pleadings {"
+                        , "  sources: [docket_a, docket_a, missing_source],"
+                        , "}"
+                        ]
+            case parseEvalWorld "<inline>" source of
+                Left diags ->
+                    expectationFailure ("failed: " <> show diags)
+                Right worldValue -> do
+                    let messages = map diagnosticMessage (validateWorld worldValue)
+                    messages `shouldSatisfy` any (T.isInfixOf "duplicates normalized citation")
+                    messages `shouldSatisfy` any (T.isInfixOf "references missing source missing_source")
+                    messages `shouldSatisfy` any (T.isInfixOf "includes source docket_a more than once")
+
+        it "models rulesets, deadline rules, locators, and issue elements" $ do
+            let source =
+                    T.unlines
+                        [ "source frcp : authority {"
+                        , "  title: \"Federal Rules\","
+                        , "  citation: \"FRCP 12\","
+                        , "  canonical_id: \"US-FRCP-12\","
+                        , "  url: \"https://example.com/frcp\","
+                        , "}"
+                        , "locator frcp_rule12 {"
+                        , "  source_ref: frcp,"
+                        , "  paragraph: \"12(a)(1)(A)(i)\","
+                        , "}"
+                        , "ruleset us_frcp {"
+                        , "  jurisdiction: \"US-FRCP\","
+                        , "  court: \"U.S. district courts\","
+                        , "  procedure: \"civil-procedure\","
+                        , "  effective: 2024-01-01..2024-12-31,"
+                        , "  source_ref: frcp,"
+                        , "}"
+                        , "deadline_rule answer_21 {"
+                        , "  ruleset: us_frcp,"
+                        , "  rule: \"FRCP 12(a)(1)(A)(i)\","
+                        , "  trigger: \"service of summons and complaint\","
+                        , "  actor: \"defendant\","
+                        , "  action: \"serve an answer\","
+                        , "  offset: days(21),"
+                        , "  direction: after,"
+                        , "  counting: calendar_days_with_last_day_rollover,"
+                        , "  source_ref: frcp,"
+                        , "  locator_ref: frcp_rule12,"
+                        , "}"
+                        , "timeline case_file {"
+                        , "  jurisdiction: \"US-FRCP\","
+                        , "  procedure: \"civil-procedure\","
+                        , "  start: 2024-01-01,"
+                        , "  end: 2024-12-31,"
+                        , "}"
+                        , "entity answer_deadline : deadline {"
+                        , "  rule: \"FRCP 12(a)(1)(A)(i)\","
+                        , "  jurisdiction: \"US-FRCP\","
+                        , "  trigger: \"service of summons and complaint\","
+                        , "  due: 2024-01-31,"
+                        , "  source_ref: frcp,"
+                        , "  rule_ref: answer_21,"
+                        , "  appears_on: case_file @ 2024-01-31..2024-01-31,"
+                        , "}"
+                        , "issue timeliness {"
+                        , "  title: \"Timeliness\","
+                        , "  question: \"Was the answer deadline identified?\","
+                        , "  source_ref: frcp,"
+                        , "}"
+                        , "element response_trigger {"
+                        , "  issue: timeliness,"
+                        , "  text: \"The trigger must be identified.\","
+                        , "  source_ref: frcp,"
+                        , "}"
+                        ]
+            case parseEvalWorld "<inline>" source of
+                Left diags ->
+                    expectationFailure ("failed: " <> show diags)
+                Right worldValue -> do
+                    hardDiagnostics (validateWorld worldValue) `shouldBe` []
+                    Map.member "us_frcp" (worldRulesets worldValue) `shouldBe` True
+                    Map.member "answer_21" (worldDeadlineRules worldValue) `shouldBe` True
+                    Map.member "frcp_rule12" (worldSourceLocators worldValue) `shouldBe` True
+                    Map.member "timeliness" (worldIssues worldValue) `shouldBe` True
+                    Map.member "response_trigger" (worldIssueElements worldValue) `shouldBe` True
+                    lookupEntityField "answer_deadline" "rule_ref" worldValue `shouldBe` Just (VDeadlineRuleRef "answer_21")
+                    renderDeadlinesReport worldValue `shouldSatisfy` T.isInfixOf "answer_21"
+                    renderIssuesReport worldValue `shouldSatisfy` T.isInfixOf "response_trigger"
+
+        it "enforces legal relationship cardinality declarations" $ do
+            let source =
+                    T.unlines
+                        [ "reltype supports {"
+                        , "  source: exhibit,"
+                        , "  target: fact,"
+                        , "  min_outbound: 1,"
+                        , "}"
+                        , "timeline case_file {"
+                        , "  start: 1,"
+                        , "  end: 10,"
+                        , "}"
+                        , "entity exhibit_a : exhibit {"
+                        , "  number: \"Ex. 1\","
+                        , "  description: \"Unsupported exhibit\","
+                        , "  appears_on: case_file @ 1..1,"
+                        , "}"
+                        , "entity fact_a : fact {"
+                        , "  appears_on: case_file @ 2..2,"
+                        , "}"
+                        ]
+            case parseEvalWorld "<inline>" source of
+                Left diags ->
+                    expectationFailure ("failed: " <> show diags)
+                Right worldValue ->
+                    hardDiagnostics (validateWorld worldValue)
+                        `shouldSatisfy` any (T.isInfixOf "entity exhibit_a has fewer than 1 outbound supports relationship(s) as source" . diagnosticMessage)
+
+        it "warns when a deadline jurisdiction does not match the appeared-on timeline" $ do
+            let source =
+                    T.unlines
+                        [ "timeline case_file {"
+                        , "  jurisdiction: \"US-FRCP\","
+                        , "  procedure: \"civil-procedure\","
+                        , "  start: 2024-01-01,"
+                        , "  end: 2024-02-01,"
+                        , "}"
+                        , "entity answer_deadline : deadline {"
+                        , "  rule: \"CPR 15.4\","
+                        , "  jurisdiction: \"UK-CPR\","
+                        , "  trigger: \"service of particulars\","
+                        , "  due: 2024-01-15,"
+                        , "  appears_on: case_file @ 2024-01-15..2024-01-15,"
+                        , "}"
+                        ]
+            case parseEvalWorld "<inline>" source of
+                Left diags ->
+                    expectationFailure ("failed: " <> show diags)
+                Right worldValue -> do
+                    let diagnostics = validateWorld worldValue
+                    any ((== DiagnosticError) . diagnosticLevel) diagnostics `shouldBe` False
+                    map diagnosticMessage diagnostics
+                        `shouldSatisfy` any (T.isInfixOf "deadline answer_deadline jurisdiction UK-CPR does not match")
+
     describe "legal example pack" $
         it "loads every legal example without hard validation errors" $ do
             legalFiles <-
@@ -173,7 +407,7 @@ spec = do
                     . map ("examples/legal" </>)
                     . filter (".euclid" `isSuffixOf`)
                     <$> listDirectory "examples/legal"
-            length legalFiles `shouldBe` 10
+            length legalFiles `shouldBe` 12
             mapM_ expectLegalFileInvariants legalFiles
 
     describe "generated DSL coverage" $ do
@@ -485,6 +719,60 @@ spec = do
                             expectationFailure ("eval failed: " <> show diag)
                         Right worldValue ->
                             renderExhibitsCsv worldValue `shouldBe` expected
+
+        it "renders source audits and stored scenario diffs" $ do
+            let source =
+                    T.unlines
+                        [ "source docket_record : legal_case {"
+                        , "  title: \"Record A\","
+                        , "  citation: \"Record A\","
+                        , "  canonical_id: \"REC-A\","
+                        , "  url: \"https://example.com/a\","
+                        , "}"
+                        , "source_bundle pleadings {"
+                        , "  sources: [docket_record],"
+                        , "  jurisdiction: \"US-FRCP\","
+                        , "}"
+                        , "timeline case_file {"
+                        , "  jurisdiction: \"US-FRCP\","
+                        , "  procedure: \"civil-procedure\","
+                        , "  start: 1,"
+                        , "  end: 10,"
+                        , "}"
+                        , "entity record_a : evidence {"
+                        , "  citation: \"Record A\","
+                        , "  source: \"Archive A\","
+                        , "  source_ref: docket_record,"
+                        , "  appears_on: case_file @ 1..1,"
+                        , "}"
+                        , "entity claim_a : claim {"
+                        , "  appears_on: case_file @ 2..2,"
+                        , "}"
+                        , "rel record_a -[\"cites\"]-> claim_a;"
+                        , "scenario \"late theory\" from case_file {"
+                        , "  entity alternate_fact : fact {"
+                        , "    appears_on: case_file @ 5..5,"
+                        , "  }"
+                        , "}"
+                        ]
+            case parseProgram "<inline>" source of
+                Left diags ->
+                    expectationFailure ("parse failed: " <> show diags)
+                Right program ->
+                    case evalProgram program of
+                        Left diag ->
+                            expectationFailure ("eval failed: " <> show diag)
+                        Right worldValue -> do
+                            renderSourcesReport worldValue `shouldSatisfy` T.isInfixOf "normalized_citation: record a"
+                            renderSourcesReport worldValue `shouldSatisfy` T.isInfixOf "referenced_by: record_a"
+                            renderScenarioReport worldValue `shouldSatisfy` T.isInfixOf "late theory"
+                            case renderScenarioDiff worldValue "late theory" of
+                                Left message ->
+                                    expectationFailure ("scenario diff failed: " <> T.unpack message)
+                                Right output -> do
+                                    output `shouldSatisfy` T.isInfixOf "Scenario: late theory"
+                                    output `shouldSatisfy` T.isInfixOf "scenario_diagnostics:"
+                                    output `shouldSatisfy` T.isInfixOf "+ only in right alternate_fact"
 
     describe "playground API" $ do
         it "handles browser check requests" $ do
