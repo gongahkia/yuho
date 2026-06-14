@@ -1,76 +1,86 @@
 # Yuho Statute Library
 
-Pre-built statute implementations in v5 syntax.
+Pre-built statute encodings in Yuho v5 syntax.
 
-> **Disclaimer:** These models are provided for educational purposes only and do not constitute legal advice. Each statute was verified against the official SSO text at the URL listed in its `metadata.toml`. Always cross-reference with the [official SSO text](https://sso.agc.gov.sg/).
+> **Disclaimer:** These models are provided for educational and research
+> purposes only and do not constitute legal advice. Cross-reference any
+> real decision with the official source text, including Singapore
+> Statutes Online.
 
 ## Structure
 
-Each statute directory contains:
+Each encoded statute directory contains some or all of:
 
 ```
-s<number>_<name>/
-  statute.yh         # main statute definition
-  illustrations.yh   # case illustrations (if any)
-  test_statute.yh    # automated tests
-  metadata.toml      # metadata (section, title, jurisdiction, version)
+s<number>_<slug>/
+  statute.yh         # canonical Yuho source
+  illustrations.yh   # additional illustration material, if split out
+  test_statute.yh    # behavioural smoke tests, where present
+  metadata.toml      # section metadata, source URL, verification notes
 ```
 
-## Available Statutes (Penal Code)
+Generated corpus files live under `_corpus/` and are intentionally
+rebuildable from the checked-in sources.
 
-The bundled library currently contains 25 Singapore Penal Code sections:
+## Singapore Penal Code 1871
 
-| Section | Offense |
-|---------|---------|
-| S299 | Culpable Homicide |
-| S300 | Murder |
-| S302 | Punishment for Murder |
-| S304 | Culpable Homicide not amounting to Murder |
-| S319 | Hurt |
-| S321 | Voluntarily Causing Hurt |
-| S323 | Punishment for Voluntarily Causing Hurt |
-| S325 | Voluntarily Causing Grievous Hurt |
-| S354 | Assault or Criminal Force to Outrage Modesty |
-| S363 | Kidnapping |
-| S378 | Theft |
-| S379 | Punishment for Theft |
-| S383 | Extortion |
-| S390 | Robbery |
-| S392 | Punishment for Robbery |
-| S395 | Dacoity |
-| S403 | Dishonest Misappropriation |
-| S406 | Punishment for Criminal Breach of Trust |
-| S411 | Dishonestly Receiving Stolen Property |
-| S415 | Cheating |
-| S420 | Cheating and Inducing Delivery |
-| S463 | Forgery |
-| S465 | Punishment for Forgery |
-| S499 | Defamation |
-| S503 | Criminal Breach of Trust |
+`library/penal_code/` contains the full Singapore Penal Code proof of
+concept:
+
+| Measure | Current value |
+|---|---:|
+| Raw sections in `_raw/act.json` | 524 |
+| Encoded `.yh` sections | 524 |
+| L1 parse pass | 524 / 524 |
+| L2 build + lint pass | 524 / 524 |
+| L3 author-stamped fidelity pass | 524 / 524 |
+
+Coverage data is stored in `library/penal_code/_coverage/coverage.json`.
+The generated reference/corpus layer can be rebuilt with:
+
+```bash
+python scripts/build_corpus.py --no-mermaid-svg
+```
+
+Use the supported project environment (`uv run ...` or an installed
+editable environment) so `tree-sitter` and `tree-sitter-yuho` are
+available.
+
+## Indian Penal Code 1860
+
+`library/indian_penal_code/` is a phase-1 cross-jurisdiction corpus:
+
+- 493 raw sections in `_raw/act.json`.
+- 8 representative encoded sections:
+  `s300`, `s302`, `s375`, `s376`, `s378`, `s420`, `s497`, and `s509`.
+
+The IPC corpus is used for structural-overlap and portability checks; it
+is not yet a full encoded IPC library.
 
 ## Usage
 
-Reference a library statute from your `.yh` file:
+Reference a library statute from a `.yh` file:
 
 ```yh
 referencing penal_code/s415_cheating
 ```
 
-Or via CLI:
+Or query the library through the CLI:
 
 ```bash
 yuho library search cheating
-yuho library install s415_cheating
+yuho refs s415
+yuho explain library/penal_code/s415_cheating/statute.yh
 ```
 
-## metadata.toml Schema
+## `metadata.toml` Schema
 
 ```toml
 [statute]
 section_number = "415"
 title = "Cheating"
 jurisdiction = "Singapore"
-version = "2.0.0"
+version = "5.1.0"
 
 [description]
 summary = "..."

@@ -1,8 +1,10 @@
 # Phase C — Expressiveness Gaps
 
 Surfaced during bulk encoding of the Singapore Penal Code and during a
-deeper L3-style review by Opus 4.7 acting as the reviewer. Each gap is a
-concrete input to Phase D (AST/grammar refactor).
+deeper L3-style review by Opus 4.7 acting as the reviewer. This file is
+the historical discovery log; current status is Phase D complete for the
+grammar/resolver items used by the paper. The post-fix incidence counts
+live in `paper/methodology/gap_frequency.json`.
 
 ## Already identified during encoding
 
@@ -37,7 +39,7 @@ the correct suffix (e.g. `statute 377BO "..."`). The temporary
 
 ## Identified during L3 review
 
-### G4 — no first-class model for illustrations as legal authority
+### G4 — no first-class model for illustrations as legal authority ✅ LINTED
 
 In the Penal Code, illustrations are binding statutory content — they
 disambiguate mens rea, fix the boundary of an offence, and are cited in
@@ -47,13 +49,10 @@ classified as "interpretation" or when the section had many
 illustrations (s464 has 16 illustrations, encoded has 0; s511 has 4,
 encoded has 0; s350 has 8, encoded has 1 *fabricated* one).
 
-**Current effect:** ~200+ illustrations across the corpus are missing
-from encodings.
-
-**Fix direction:** treat illustrations as first-class AST children with
-structured content (facts pattern + legal-conclusion fields), and have
-`yuho check` require their presence when the raw corpus has them. This
-makes silent illustration-drop detectable.
+**Current status:** illustrations are AST children and the fidelity
+diagnostic compares encoded illustration counts against the canonical
+scrape. The paper reports 98 post-Phase-D illustration-count warnings;
+these are lint findings rather than parser gaps.
 
 ### G5 — subsections with distinct content have no structural home ✅ FIXED
 
@@ -69,12 +68,10 @@ the AST carries its own definitions / elements / penalty / illustrations
 / exceptions / nested subsections. Verified on a multi-subsection test
 file; all 524 existing encodings remain green.
 
-**Still pending (data side):** re-encoding the ~50+ sections with real
-subsection structure (s21, s22, s33, s40, s377BO, s377BN, s377CB, s511,
-s464, etc.) to actually use the new construct. Part of the re-encoding
-wave.
+**Data side:** landed across the corpus where needed. The post-fix
+frequency report counts 123 uses of subsection blocks.
 
-### G6 — `effective` date cannot reflect amendment-introduced sections ✅ PARTIALLY FIXED
+### G6 — `effective` date cannot reflect amendment-introduced sections ✅ FIXED
 
 All 524 sections carry `effective 1872-01-01` in their encodings because
 that is the act's commencement. But s377BO, s4B, s22A, s26A-H, s74A-E,
@@ -95,9 +92,8 @@ say yes when they should say no.
 
 expressing original-act-commencement + amendment-introduction.
 
-**Still pending (data side):** re-encoding the ~50+ amendment-introduced
-sections to actually include the correct second `effective` clause.
-This is part of the re-encoding wave, not the grammar fix.
+**Data side:** landed across the corpus where needed. The post-fix
+frequency report counts 243 multiple-`effective` uses.
 
 ### G7 — no decomposition for long interpretation sections with nested terms ✅ SUBSUMED BY G5
 
@@ -115,7 +111,7 @@ definitions (e.g. s377C subsection (1) vs (2)) can use
 No separate grammar work required. Re-encoding agents will be told to
 decompose.
 
-### G8 — no explicit model for alternative punishments ✅ PARTIALLY FIXED
+### G8 — no explicit model for alternative punishments ✅ FIXED
 
 The Penal Code's standard penalty pattern is "imprisonment up to N
 years, or fine, or both," sometimes with caning. Yuho's `penalty { }`
@@ -143,10 +139,9 @@ s420, s325). (c) "or both" semantics are lost.
 Wire-up verified: grammar parses, AST builder reads the fields,
 `yuho check` / ast / semantic all pass.
 
-**Still pending (data side):** re-encoding the ~150+ offence sections
-that currently have fabricated fine caps and cumulative-defaulted
-penalty blocks. These need to use `fine := unlimited` and
-`penalty or_both { ... }` where appropriate.
+**Data side:** landed across the corpus where needed. The post-fix
+frequency report counts 249 `fine := unlimited` uses and 190
+`penalty or_both` uses.
 
 ### G9 — no support for conditional / branch-dependent penalties ✅ FIXED
 
@@ -161,13 +156,12 @@ blocks:
     penalty when rash_act     { imprisonment := 0 days .. 5 years; fine := unlimited; }
     penalty when negligent_act { imprisonment := 0 days .. 2 years; fine := unlimited; }
 
-`PenaltyNode` now carries `condition: Optional[str]`. The AST currently
-keeps only the first penalty block (`StatuteNode.penalty`) — multi-
-penalty collection is deferred until downstream consumers need it.
-Grammar shape is stable; AST extension is a mechanical follow-up.
+`PenaltyNode` now carries `condition: Optional[str]`. `StatuteNode`
+keeps the first penalty as the backwards-compatible `penalty` field and
+collects sibling blocks in `additional_penalties`.
 
-**Still pending (data side):** re-encoding the ~10 sections with real
-conditional penalties (s153, s304A, s420 subsections, etc.).
+**Data side:** landed across the corpus where needed. The post-fix
+frequency report counts 49 conditional penalty branches.
 
 ### G10 — no cross-section reference primitive ✅ NOT A GAP (GRAMMAR SIDE)
 
@@ -179,12 +173,11 @@ existed in the grammar since v5. The grammar also has `subsumes <num>`
 and `amends <num>` clauses on `statute_block`. Agents used the existing
 grammar correctly.
 
-**Still pending (semantic side):** the resolver / semantic analyzer
-doesn't traverse `referencing` edges to load the referenced statute's
-AST. Cross-section queries ("show me all sections that extend s415
-cheating") aren't wired yet. This is tooling, not grammar — deferred.
+**Resolver side:** landed. `yuho refs` builds the cross-section
+reference graph, LSP/MCP surfaces can query it, and the evaluator/Z3
+layers understand `is_infringed` / `apply_scope` guards.
 
-### G12 — mixed cumulative + alternative penalty clauses
+### G12 — mixed cumulative + alternative penalty clauses ✅ FIXED
 
 Surfaced during the Phase D priority-batch re-encoding of s420: "imprisonment
 for a term which may extend to 10 years, and shall also be liable to fine or
@@ -193,13 +186,7 @@ to caning or to both." This is cumulative imprisonment AND alternative
 or_both { ... }` alone expresses it — the imprisonment is always imposed,
 the fine/caning is a separate choice.
 
-**Workaround used by the Codex agent on s420:** split into two sibling
-penalty blocks, one `cumulative` with imprisonment, one `or_both` with fine
-and caning, plus `supplementary` string notes to document the relationship.
-Parses cleanly but isn't semantically integrated — a downstream tool can't
-easily tell that the second block modifies the first.
-
-**Fix direction:** allow nested penalty combinators, e.g.:
+**Fix landed:** nested penalty combinators are accepted, e.g.:
 
     penalty cumulative {
       imprisonment := 0 years .. 10 years;
@@ -209,31 +196,22 @@ easily tell that the second block modifies the first.
       }
     }
 
-Or: allow a `penalty` block to own a `then or_both { ... }` sub-block for
-"and also liable to" semantics.
+`PenaltyNode.nested` carries the nested sub-combinator. The post-fix
+frequency report counts 11 nested penalty uses.
 
-Known affected sections from a spot check: s420, s325, likely 50+ others
-that use the "… and shall also be liable to fine …" pattern. Re-encoding
-wave can use the workaround until the grammar lands the fix.
-
-### G11 — `any_of` vs `all_of` misclassification risk
+### G11 — `any_of` vs `all_of` misclassification risk ✅ LINTED
 
 s505 has three alternative mens-rea arms: intent to cause mutiny OR
 intent to cause public fear OR intent to incite class hatred. The
 encoding wraps all three in an `all_of { mens_rea … mens_rea … mens_rea … }`
 block, which is legally wrong — the statute requires any one of them.
 
-**Current effect:** ~unknown scale, but spot-check found at least one
-(s505). The checker has no way to validate that the encoding's boolean
-logic matches the statute's English "or" / "and" / "or both".
+**Current status:** this is a fidelity diagnostic, not a grammar fix.
+The checker compares raw connective cues against encoded element-group
+shape. The paper reports 208 post-Phase-D G11 warnings and explicitly
+treats the heuristic as low precision.
 
-**Fix direction:** this is not a grammar fix, it's a checking-
-infrastructure fix. Add a validation pass that cross-references the
-raw statute text's logical connectives against the element-group
-structure. Hard in general but feasible with an LLM judge or pattern
-matching on "or" / "and" in the raw text near element markers.
-
-### G14 — caning liability without stroke count
+### G14 — caning liability without stroke count ✅ FIXED
 
 Surfaced from the Phase D L3 re-review. Several sections (s21, s73,
 s304C, s376, s376H, s377, s377BB, s377BD, s377BG) say *"liable to
@@ -246,16 +224,16 @@ caning clause into `supplementary := "…"` strings, which the L3
 reviewer then flags as "not structured penalty facts." Genuine
 expressiveness gap, not a fabrication or encoding bug.
 
-**Fix direction:**
+**Fix landed:**
 
     caning := unspecified            // or: caning := liable
     caning := 12 .. unspecified      // minimum stated, no cap
 
-Grammar: add `"unspecified"` as a valid `caning_clause` value alongside
-`integer_literal` and `integer_literal .. integer_literal`. AST:
-`caning_min` / `caning_max` remain `Optional[int]`, add
-`caning_unspecified: bool` parallel to `fine_unlimited`. Grammar
-change is <10 lines; AST builder patch similar.
+`"unspecified"` is a valid `caning_clause` value alongside
+`integer_literal` and `integer_literal .. integer_literal`. AST fields
+`caning_min` / `caning_max` remain `Optional[int]`, with
+`caning_unspecified: bool` parallel to `fine_unlimited`. The post-fix
+frequency report counts 31 uses.
 
 ## Fabrication findings (not grammar gaps, but require fixing)
 

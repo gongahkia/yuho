@@ -1,17 +1,30 @@
 # Getting Started for Legal Tech Developers
 
-## 5-Minute Quickstart
+This guide covers the shipped local surfaces: CLI, transpilers, LSP, and
+MCP. Yuho does not currently ship a REST API, GraphQL target, Prolog
+target, or WASM package.
 
-### 1. Install
+## 1. Install
+
+For repository work, use the supported Python range from the README:
+
+```bash
+uv venv --python 3.13 .venv
+source .venv/bin/activate
+uv pip install -e '.[dev,lsp,mcp]'
+```
+
+For package use:
 
 ```bash
 pip install yuho
 ```
 
-### 2. Parse a statute
+## 2. Parse a statute
 
 ```bash
-echo 'statute 1 "Theft" {
+cat > theft.yh <<'YH'
+statute 1 "Theft" {
   elements {
     actus_reus taking := "Takes movable property";
     mens_rea dishonestly := "With dishonest intent";
@@ -19,53 +32,62 @@ echo 'statute 1 "Theft" {
   penalty {
     imprisonment := 1 year .. 3 years;
   }
-}' > theft.yh
+}
+YH
 
 yuho check theft.yh
 ```
 
-### 3. Transpile
+## 3. Transpile
 
 ```bash
-yuho transpile theft.yh -t english   # human-readable
-yuho transpile theft.yh -t json      # machine-readable
-yuho transpile theft.yh -t graphql   # API schema
-yuho transpile theft.yh -t prolog    # logic programming
+yuho transpile -t english    theft.yh
+yuho transpile -t json       theft.yh
+yuho transpile -t latex      theft.yh
+yuho transpile -t mermaid    theft.yh
+yuho transpile -t mindmap    theft.yh
+yuho transpile -t alloy      theft.yh
+yuho transpile -t docx       theft.yh -o theft.docx
+yuho transpile -t akomantoso theft.yh
 ```
 
-### 4. Start the API server
+`yuho transpile --all theft.yh --dir out/` writes the standard target
+set into a directory. The PDF/SVG/PNG paths are CLI conveniences built
+from LaTeX and Mermaid outputs; they are not separate AST targets.
+
+## 4. Explore the shipped library
 
 ```bash
-yuho api --port 8080
+yuho ci-report
+yuho refs --scc --json
+yuho explain library/penal_code/s415_cheating/statute.yh
+yuho recommend simulator/fixtures/s415_classic.yaml
 ```
+
+The repository ships all 524 Singapore Penal Code sections as `.yh`,
+plus a raw Indian Penal Code snapshot and eight phase-1 encoded IPC
+sections for cross-jurisdiction checks.
+
+## 5. Editor and AI integrations
+
+Start the language server over stdio:
 
 ```bash
-curl -X POST http://localhost:8080/v1/parse \
-  -H "Content-Type: application/json" \
-  -d '{"source": "statute 1 \"Theft\" { elements { actus_reus x := \"act\"; } }"}'
+yuho lsp
 ```
 
-### 5. Docker
+Start the MCP server for AI-client workflows:
 
 ```bash
-docker build -t yuho .
-docker run -p 8080:8080 yuho
+yuho serve --stdio
 ```
 
-## Integration Paths
-
-| Path | Best For | Latency |
-|------|----------|---------|
-| Python SDK | Python apps, embedding | Lowest |
-| REST API | Any language, microservices | Low |
-| MCP Server | AI assistants (Claude, etc.) | Low |
-| CLI | CI/CD, scripts, batch ops | N/A |
-| WASM | Browser, client-side | Zero network |
+See `editors/vscode-yuho/README.md` for VS Code setup and
+`docs/user/mcp-install.md` for MCP client wiring.
 
 ## Next Steps
 
-- [SDK Quickstart](../contributor/sdk-quickstart.md) - Python/TypeScript/Go/Java examples
-- [CLI Reference](cli-reference.md) - All 25+ commands
-- [OpenAPI Spec](../researcher/openapi.yaml) - Full API documentation
-- [Deployment Guide](deployment.md) - Docker, Kubernetes, Cloud Run
-- [Cookbook](../cookbook/) - Real-world integration recipes
+- [CLI Reference](cli-reference.md)
+- [Feature Walkthrough](verify-features.md)
+- [5-Minute Tour](5-minutes.md)
+- [Contributor Architecture](../contributor/architecture.md)

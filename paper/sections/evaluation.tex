@@ -130,7 +130,7 @@ implicit$\cup$subsumes subgraph (amendment chains were excluded as
 benign by construction).
 
 \paragraph{Findings.} Across the 524 encoded sections the analysis
-identifies four non-trivial cycles:
+identifies five non-trivial cycles:
 \begin{itemize}
 \item \texttt{s292} $\leftrightarrow$ \texttt{s293} (sale of obscene
       objects / sale to young persons --- mutually defining scopes).
@@ -140,12 +140,15 @@ identifies four non-trivial cycles:
       that mutually carve out exception scope).
 \item \texttt{s304B} $\leftrightarrow$ \texttt{s74A} (an aggravation
       pair where s74A modifies the s304B sentencing range).
+\item \texttt{s304A} $\leftrightarrow$ \texttt{s80} (causing death by
+      rash or negligent act and accident in a lawful act --- a general
+      defence cycle surfaced by the \texttt{is\_infringed} guards).
 \end{itemize}
 None of these are \emph{bugs}: each is a faithful mirror of how the
 statute itself is drafted. They are, however, structural facts that
 would be invisible without the resolver. The diagnostic surfaces them as
 \texttt{cross\_section\_cycle} warnings; the author can then either
-acknowledge the cycle (the four pairs above) or refactor the encoding
+acknowledge the cycle (the five pairs above) or refactor the encoding
 when the cycle reflects an authoring slip rather than the statute.
 
 \paragraph{Caveat.} A graph-theoretic cycle is not a \emph{legal}

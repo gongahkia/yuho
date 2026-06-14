@@ -11,10 +11,10 @@ reader has to be able to trust that the Z3 model and the
 operational semantics agree --- that the scorer's headline
 numbers measure something semantically grounded rather than an
 artefact of the encoding. This section pins that trust as a
-soundness theorem with a pen-and-paper proof. Mechanisation is
-deferred to a follow-on artefact (\S\ref{sec:limitations}); the
-working theorem is the structural-correspondence claim that
-follows.
+soundness theorem with a pen-and-paper proof and a Lean 4
+mechanisation of the load-bearing correspondence lemmas
+(\S\ref{subsec:soundness-mech}). The working theorem is the
+structural-correspondence claim that follows.
 
 \subsection{Theorem statement}
 \label{subsec:soundness-statement}
@@ -372,15 +372,13 @@ making the conviction-side proof carry the load.
 \subsection{Empirical witnesses to the lemmas}
 \label{subsec:soundness-witnesses}
 
-The pen-and-paper proofs above are not mechanised, but every
-lemma has a corresponding executable test under
-\texttt{tests/test\_soundness\_sanity.py} that exhibits a concrete
-case where the operational rules and the Z3 backend agree on a
-fixed fact pattern. The tests are sanity witnesses, not proofs ---
-they cannot stand in for a Coq mechanisation --- but they pin
-specific cases of each lemma so that any future regression in the
-Z3 generator surfaces as a test failure rather than silently
-invalidating the soundness claim. The tests cover:
+The Lean mechanisation below is complemented by executable sanity
+tests under \texttt{tests/test\_soundness\_sanity.py} that exhibit
+concrete cases where the operational rules and the Z3 backend agree
+on fixed fact patterns. The tests are sanity witnesses, not proofs,
+but they pin specific cases of each lemma so that any future
+regression in the Z3 generator surfaces as a test failure rather
+than silently invalidating the soundness claim. The tests cover:
 \textit{(i)} element correspondence for true and false leaves
 (Lemma~\ref{lem:soundness-elem});
 \textit{(ii)} \texttt{all\_of} and \texttt{any\_of} graph

@@ -36,6 +36,7 @@ yuho transpile -t latex      library/penal_code/s415_cheating/statute.yh
 yuho transpile -t mermaid    library/penal_code/s415_cheating/statute.yh
 yuho transpile -t mindmap    library/penal_code/s415_cheating/statute.yh
 yuho transpile -t alloy      library/penal_code/s415_cheating/statute.yh
+yuho transpile -t docx       library/penal_code/s415_cheating/statute.yh -o /tmp/s415.docx
 yuho transpile -t akomantoso library/penal_code/s415_cheating/statute.yh
 yuho transpile --all         library/penal_code/s415_cheating/statute.yh --dir /tmp/s415-all/
 ```
@@ -69,8 +70,8 @@ yuho refs --scc                        # find cross-section cycles
 yuho refs --scc --json                 # machine-readable
 ```
 
-The `--scc` run should report **4 non-trivial cycles** in the encoded
-library (s292↔s293, s85↔s86, s424A↔s424B, s304B↔s74A).
+The `--scc` run should report **5 non-trivial cycles** in the encoded
+library (s85↔s86, s304A↔s80, s292↔s293, s304B↔s74A, s424A↔s424B).
 
 ### Plain-language section summaries
 

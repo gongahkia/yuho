@@ -132,7 +132,7 @@ combination of all of the above on a statute-shaped top level --- are
 exactly the columns that fall out of taking the Penal Code's drafting
 conventions seriously. Where Yuho overlaps with a peer, the design
 borrows directly: Catala for the priority semantics, lam4 for the
-named-norm references planned under \textsf{G10}, LexScript for the
+named-norm references implemented under \textsf{G10}, LexScript for the
 Tarjan-SCC analysis over the cross-reference graph, LDOC for the
 DOCX authoring loop. The borrowings are explicit; we do not claim
 novelty on the borrowed pieces.
@@ -149,10 +149,10 @@ block carries an integer \texttt{priority} field, and our Z3 hookup
 follows the shape of Catala's prioritised-rewriting algorithm without
 inheriting Catala's actual compiler (Catala itself compiles to OCaml
 and Python). Catala also formalises a soundness theorem for its
-rewriting system; we do not, and our re-implementation does not
-inherit it. We treat Catala's theorem as the warrant that the
-priority semantics is well-defined and behaves the way drafted
-statutes are read; we make no formal claim about our Z3 encoding.
+rewriting system; our re-implementation does not inherit it. Yuho's
+own Lean artefact mechanises the structural correspondence for the
+Yuho Z3 encoding, but that is a separate proof obligation from
+Catala's compiler theorem.
 
 The disagreement on top-level shape matters in practice. Catala's
 scope is a callable function: it takes inputs (facts about the case),
@@ -161,9 +161,9 @@ sites. This is the right shape for tax code, where a tax-credit
 calculation is a function from taxpayer-facts to tax-owed. It is the
 wrong shape for a Penal Code section, where the section bundles
 definitions, elements, illustrations, and case law that are not
-function arguments. We discuss scope composition as a future-work
-layer (\S\ref{sec:limitations}) that adds Catala-style scope-call
-semantics on top of Yuho's statute blocks rather than replacing them.
+function arguments. Yuho's \texttt{apply\_scope} predicate adds a
+Catala-style composition surface on top of statute blocks rather than
+replacing those blocks with scopes.
 
 \subsection{lam4}
 \label{subsec:rel_lam4}
@@ -178,12 +178,12 @@ lam4's distinctive primitive is the named-norm reference and the
 \texttt{IS\_INFRINGED} predicate: a contract clause can predicate
 on whether another named norm has been infringed, which composes
 cleanly into multi-clause reasoning. This composes directly into
-our planned \textsf{G10} cross-section semantic resolver: a Yuho
+Yuho's \textsf{G10} cross-section semantic resolver: a Yuho
 section like \texttt{statute 107 abetment} should be able to
 predicate on whether a different section's offence elements are
 satisfied, and the lam4 \texttt{IS\_INFRINGED} shape is the right
-syntactic surface. We expect to import the predicate name and
-semantics, with credit, when \textsf{G10} lands.
+syntactic surface. Yuho imports that predicate shape, with credit,
+as \texttt{is\_infringed}.
 
 \subsection{LexScript}
 \label{subsec:rel_lexscript}
@@ -200,8 +200,7 @@ rather than penal codes.
 
 The most directly portable LexScript idea is the Tarjan-SCC analysis
 over the statute reference graph. We borrow it under \textsf{G10}:
-once the cross-section resolver lands, an SCC pass will catch
-unreachable exception branches and cyclic cross-references that the
+the shipped SCC pass catches cyclic cross-references that the
 plain parser cannot detect. The classification of LexScript as a
 ``thinner-grammar / broader-coverage'' alternative to Yuho's
 ``richer-grammar / single-family-coverage'' is meant descriptively;
@@ -231,9 +230,10 @@ first-order temporal versioning (date-stamped clauses on the statute
 header) but not full textual-modification tracking in the
 \texttt{<textualMod>} sense; the \texttt{subsumes}/\texttt{amends}
 clauses approximate the latter at the section-level granularity that
-suffices for the Penal Code's amendment cadence. We expect to ship a
-Yuho-to-Akoma-Ntoso transpile target as future work; the converse
-direction is harder because Akoma Ntoso does not commit to a fixed
+suffices for the Penal Code's amendment cadence. Yuho ships a one-way
+Yuho-to-Akoma-Ntoso transpile target and uses XSD round-trip validation
+as an interoperability check; the converse direction is harder because
+Akoma Ntoso does not commit to a fixed
 shape for an offence definition, so an Akoma-Ntoso-to-Yuho lifting
 would have to reconstruct missing semantics from the markup.
 

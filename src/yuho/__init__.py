@@ -4,7 +4,7 @@ Yuho v5 - A domain-specific language for encoding legal statutes
 This package provides:
 - Parser: tree-sitter based parser for .yh files
 - AST: Internal representation for semantic analysis
-- Transpilers: Code generation to JSON, JSON-LD, English, LaTeX, Mermaid, Alloy
+- Transpilers: JSON, English, LaTeX, Mermaid flowchart/mindmap, Alloy, DOCX, Akoma Ntoso
 - LSP: Language Server Protocol implementation
 - MCP: Model Context Protocol server
 """

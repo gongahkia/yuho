@@ -47,9 +47,9 @@ linter, semantic resolver, or not-a-gap-on-re-test). We apply it to
 fourteen gaps surfaced during mass-encoding (\textsf{G1}--\textsf{G14}),
 preserving initial and final classifications honestly so readers can
 audit the three reclassifications (\textsf{G2} and \textsf{G7}
-reclassified to not-a-gap; \textsf{G10} marked deferred because its
-remaining work is a semantic-resolver pass rather than a parser
-extension). The claim we advance is that conflating grammar gaps with
+reclassified to not-a-gap; \textsf{G10} reclassified as a tooling
+resolver rather than a parser extension and then implemented in the
+reference-graph layer). The claim we advance is that conflating grammar gaps with
 linter gaps leads to grammar bloat with no corresponding gain in
 fidelity --- and that the classification surfaces grammar-design
 feedback (e.g.\ a low-precision lint may indicate the grammar should

@@ -109,8 +109,10 @@ changes, the hash changes and the task can be flagged stale.
 
 ## Limitations
 
-- **Single jurisdiction.** Singapore-only. Cross-jurisdiction generalisation
-  (Indian Penal Code, etc.) is future work.
+- **Primary jurisdiction is Singapore.** The benchmark rows currently draw
+  from the complete Singapore corpus. The repository also ships an Indian
+  Penal Code raw scrape and eight phase-1 encoded IPC sections, but full
+  cross-jurisdiction benchmark generalisation is future work.
 - **Encoder + reviewer overlap.** The encoded corpus the tasks draw from
   was authored by the same team that drafted the L3 review prompts. External
   L3 review by a Singapore-qualified lawyer is the natural next step before

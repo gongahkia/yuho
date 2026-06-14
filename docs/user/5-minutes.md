@@ -434,8 +434,9 @@ Yuho does not replace IRAC. It sharpens the **R** by forcing you to explicitly i
 Two interactive graph surfaces in the static explorer site
 (`editors/explorer-site/build/`):
 
-- `/graph.html` — **reference graph** at section granularity: 524 nodes,
-  edges typed `subsumes` / `amends` / `implicit`. The same data the CLI's
+- `/graph.html` — **reference graph** at section granularity: 260
+  referenced sections and 1,402 typed edges (`subsumes` / `amends` /
+  `implicit`) in the current corpus. The same data the CLI's
   `yuho refs --scc` consumes.
 - `/semantic-graph.html` — **typed semantic graph** at definition / element
   / exception granularity. Node kinds: section / definition / element /

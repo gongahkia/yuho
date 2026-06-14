@@ -1,18 +1,11 @@
 # Yuho mechanisation — Lean 4 formal artefact
 
-Machine-checkable mechanisation of two paper-load-bearing lemmas
-from `paper/sections/soundness.tex`:
-
-* **Lemma 6.2** (element correspondence) — kernel-checked.
-* **Lemma 6.4** (exception correspondence) — kernel-checked,
-  composed with the operational definition of
-  `Exception.firedSet` realising Catala-style default-logic
-  priority precedence.
-
-The remaining lemmas of §6 (6.3 element-graph, 6.5 penalty,
-Theorem 6.1's main step) are **pen-and-paper-only** in this
-artefact. The boundary is documented honestly in §6.6 of the
-paper.
+Machine-checkable Lean 4 mechanisation of the paper-load-bearing
+soundness correspondence in `paper/sections/soundness.tex`. The v9
+artefact covers element, element-graph, exception, cross-section, and
+penalty correspondence, plus generator/canonical-model lemmas and
+cross-reference/apply-scope smoke theorems. It builds with 0 `sorry`s
+under the pinned Lean 4.10.0 toolchain.
 
 ## Layout
 
@@ -77,16 +70,17 @@ This artefact is **not** axiom-free. The trusted base consists of:
 1. **Lean 4.10's kernel** (the `lean-toolchain` pin).
 2. **No additional axioms** beyond what Lean's stdlib uses
    (Choice, propositional extensionality, quotient types).
-3. **Residual oracle scope (post-v7):** A single item.
+3. **Residual oracle scope (post-v9):** A single item.
    - The claim that the Python `Z3Generator`
      (`src/yuho/verify/z3_solver.py`) emits exactly the
      biconditional shape `Generator.encodeStatute` specifies.
      This is now **narrower** than the prior oracle assumption:
      the Lean spec is the verified target, and
-     `make verify-bulk-contrast` exercises the Python generator
-     against the operational evaluator on every encoded statute
-     as a differential check. Tightening this to a structural
-     diff against the Lean spec is the residual gap.
+     `make verify-bulk-contrast` and
+     `make verify-structural-diff-full` exercise the Python
+     generator against the operational evaluator / Lean-side shape
+     checks across the encoded library. A certified compiler proof
+     from Python emission to Lean spec remains outside this artefact.
 
 What v5 changed: the prior trust assumption — "*some* SMTModel
 satisfies the bicond bundle" — has been **discharged** for the
@@ -148,7 +142,7 @@ Decisions deliberately deferred:
   port the `SMTModel.satisfies` predicate to a Lean equivalent of
   SMTCoq once one exists; today the trust is in the encoder, not
   the solver's reconstruction.
-* **Per-statute lift to `apply_scope`.** Cross-section composition
-  is the natural next theorem to mechanise; it requires a
-  well-founded relation over the inter-section graph, which is
-  cleanly tractable but not in v1's scope.
+* **Richer doctrine and case-law semantics.** The current artefact
+  mechanises the structural encoding layer. Open-textured legal terms,
+  precedent-sensitive interpretation, and procedural burdens remain
+  deliberately outside the proof.

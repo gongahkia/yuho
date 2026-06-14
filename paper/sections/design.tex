@@ -355,13 +355,12 @@ handler, the MCP server, and the documentation transpilers.
 \label{subsec:gaps}
 Mass-encoding the Penal Code surfaced fourteen distinct grammar
 shortcomings, summarised in Table~\ref{tab:gaps}. We classify each as
-a real grammar limitation (ten items, all resolved by extending the
-parser) or a not-a-gap that the diagnostic layer catches (four items,
-resolved by adding fidelity linters). Two gaps initially classified as
+a real grammar limitation (nine items, all resolved by extending the
+parser), a diagnostic issue resolved in the lint layer, or a tooling
+resolver issue outside the grammar. Two gaps initially classified as
 grammar limitations turned out, on closer inspection, not to be gaps at
 all (\textsf{G2}, \textsf{G7}); one (\textsf{G10}) is a not-a-gap on
-the grammar side but does require a separate semantic-resolver pass
-that remains future work.
+the grammar side and is handled by the reference-graph resolver.
 
 \begin{table*}[t]
 \caption{The fourteen grammar gaps. ``Initial class.'' is what the
@@ -369,12 +368,12 @@ gap was called when first surfaced during mass-encoding; ``Final
 class.'' is the resolution after closer inspection. Three gaps shifted
 class post-hoc: \textsf{G2} and \textsf{G7} were reclassified as
 not-a-gap once the underlying issues were re-tested or subsumed by
-\textsf{G5}; \textsf{G10} stays a grammar concern in name but its
-remaining work is a semantic-resolver pass and we mark it deferred
-rather than fixed. ``Freq.'' is the post-fix incidence in the encoded
+\textsf{G5}; \textsf{G10} moved out of the grammar column and is now
+the shipped reference-graph resolver layer. ``Freq.'' is the post-fix incidence in the encoded
 corpus from \texttt{paper/methodology/gap\_frequency.json}; entries
 marked ``---'' have no post-fix incidence (G2 and G7 because they were
-not gaps; G10 because the semantic resolver is unimplemented).
+not gaps; G10 because it is measured by graph statistics rather than
+per-section gap incidence).
 \textsf{G8} is reported as two related counts:
 \texttt{fine := unlimited} sentinel uses (249) and \texttt{or\_both}
 combinator uses (190). Discovery-order narrative is in
@@ -393,7 +392,7 @@ combinator uses (190). Discovery-order narrative is in
 \textsf{G7}  & grammar       & not-a-gap & ---  & flat \texttt{definitions} suffices; G5 covers nesting \\
 \textsf{G8}  & grammar       & fixed     & 249/190 & \texttt{or\_both} / \texttt{alternative} / \texttt{cumulative}; \texttt{fine := unlimited} \\
 \textsf{G9}  & grammar       & fixed     &  49 & \texttt{penalty when <ident>} conditional branches \\
-\textsf{G10} & grammar       & deferred  & ---  & cross-section semantic resolver --- grammar already parses \texttt{referencing} / \texttt{subsumes} / \texttt{amends} \\
+\textsf{G10} & grammar       & resolver  & graph & reference graph + \texttt{is\_infringed} / \texttt{apply\_scope}; grammar already parses \texttt{referencing} / \texttt{subsumes} / \texttt{amends} \\
 \textsf{G11} & grammar       & lint      & 208 & \texttt{all\_of} vs ``or'' connective check \\
 \textsf{G12} & grammar       & fixed     &  11 & nested penalty combinators \\
 \textsf{G13} & grammar       & fixed     &   1 & exception-priority DAG with Z3 prioritised rewriting \\

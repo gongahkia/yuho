@@ -79,7 +79,7 @@ All reachable via the command palette (`Cmd/Ctrl+Shift+P`, type "Yuho").
 
 ### Status bar
 
-Right-side bar shows `📖 Yuho L1 524/524 · L2 524/524 · L3 122/524` when
+Right-side bar shows `📖 Yuho L1 524/524 · L2 524/524 · L3 524/524` when
 a workspace containing `library/penal_code/_coverage/coverage.json` is
 open. Click to open the dashboard.
 

@@ -31,15 +31,15 @@ The container's default entrypoint is `make paper-reproduce`.
 |---|---|---|
 | §1 Introduction (524-section coverage claim) | `yuho ci-report` | "524/524 sections at L1+L2; 524/524 author-stamped at L3" |
 | §5 Coverage | `make verify-coverage` | per-chapter breakdown matching `paper/sections/evaluation.tex` Table 5.1 |
-| §5 SCC findings | `yuho refs --scc --json` | 4 non-trivial cycles: s292↔s293, s85↔s86, s424A↔s424B, s304B↔s74A |
+| §5 SCC findings | `yuho refs --scc --json` | 5 non-trivial cycles: s85↔s86, s304A↔s80, s292↔s293, s304B↔s74A, s424A↔s424B |
 | §5 Fidelity diagnostics | `python scripts/paper_methodology.py` | regenerates `paper/methodology/{fidelity_hits,throughput,gap_frequency}.json` |
 | §5 Encoding throughput | `python scripts/paper_methodology.py` | same script — emits the throughput stats |
 | §7 AKN OASIS XSD round-trip | `make verify-akn-xsd` | "AKN round-trip: 524/524 validate clean" |
 | §7.5 Z3-driven scenario synthesis | `make verify-bulk-contrast` | "143 candidate pairs, 115 landed (100% subsumes, 79% referenced)" |
 | §7.6 LLM benchmark | `make verify-evals` | FakeClient at 100% on all 205 fixtures |
-| §7.8 Case-law differential testing | `make verify-case-law` | top-1 30.4% / mean F1 0.188 / consistency 100% |
+| §7.8 Case-law differential testing | `make verify-case-law` | n=43; top-1 51.2% / top-3 53.5%; contrast mean F1 0.239; constrained-consistency 100% |
 | Paper smoke build | `make -C paper smoke` | 32-page PDF at `paper/main_smoke.pdf` |
-| §6.6 Mechanisation | `cd mechanisation && lake build` | Lean 4 lib typechecks; Lemmas 6.2 + 6.4 kernel-checked. Requires `elan` (Lean toolchain manager). |
+| §6.6 Mechanisation | `cd mechanisation && lake build` | Lean 4 lib typechecks; v9 soundness lemmas kernel-check with 0 `sorry`s. Requires `elan` (Lean toolchain manager). |
 
 ## Expected wall-clock times (clean container, 2025-vintage laptop)
 
@@ -60,7 +60,7 @@ These steps are heavy enough to live separately:
 
 - **Full corpus build with rendered SVGs** — `python scripts/build_corpus.py` followed by `python scripts/render_svg_cache.py --workers 8`. Takes ~10 minutes with mmdc + Chrome installed (see `editors/explorer-site/build/`). Required only if you want to rebuild the explorer site.
 - **Full LLM benchmark against a real model** — needs `OPENAI_API_KEY` or `ANTHROPIC_API_KEY`. The FakeClient end-to-end above confirms the *runner* works; real-LLM scores require credentials and are reported separately at `evals/results-<model>.json`.
-- **Full IPC / MPC scrape (§8)** — `python scripts/scrape_indiacode.py act --out library/indian_penal_code/_raw/act.json`. Takes ~1 hour at the 6 s/request crawl-delay convention. Independent of paper-reproduce since the encoded library doesn't yet ship the IPC data.
+- **Full IPC / MPC scrape refresh (§8)** — `python scripts/scrape_indiacode.py act --out library/indian_penal_code/_raw/act.json`. Takes ~1 hour at the 6 s/request crawl-delay convention. The repository already ships the raw IPC snapshot and eight phase-1 encoded IPC sections; this command refreshes the upstream scrape.
 
 ## Reproducing the paper PDF
 

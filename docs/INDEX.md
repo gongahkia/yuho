@@ -45,7 +45,7 @@ Audience: paper readers, reviewers, anyone tracing the design rationale.
 - [Syntax reference](researcher/syntax.md) — every grammar production with examples.
 - [Phase C gaps](researcher/phase-c-gaps.md) — the fourteen grammar gaps surfaced during mass-encoding (G1–G14).
 - [Grammar quirks](grammar-quirks.md) — known parser limitations + authoring guidance to avoid them.
-- [OpenAPI spec](researcher/openapi.yaml) — Yuho's REST surface (where it has one).
+- [OpenAPI note](researcher/openapi.yaml) — records that Yuho does not currently ship a REST/OpenAPI server.
 
 ---
 

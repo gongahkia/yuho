@@ -1,632 +1,74 @@
-{
-  "n": 38,
-  "top1_accuracy": 0.4473684210526316,
-  "top3_accuracy": 0.47368421052631576,
-  "top5_accuracy": 0.47368421052631576,
-  "mean_reciprocal_rank": 0.4605263157894737,
-  "per_chapter": {
-    "xxii": {
-      "n": 3,
-      "top1_accuracy": 0.0,
-      "top3_accuracy": 0.0,
-      "top5_accuracy": 0.0
-    },
-    "xvi": {
-      "n": 25,
-      "top1_accuracy": 0.4,
-      "top3_accuracy": 0.4,
-      "top5_accuracy": 0.4
-    },
-    "v": {
-      "n": 1,
-      "top1_accuracy": 1.0,
-      "top3_accuracy": 1.0,
-      "top5_accuracy": 1.0
-    },
-    "xvii": {
-      "n": 9,
-      "top1_accuracy": 0.6666666666666666,
-      "top3_accuracy": 0.7777777777777778,
-      "top5_accuracy": 0.7777777777777778
-    }
-  },
-  "confusion": {
-    "506": {
-      "299": 2,
-      "148": 1
-    },
-    "300": {
-      "301": 12,
-      "148": 1
-    },
-    "406": {
-      "409": 1
-    },
-    "325": {
-      "321": 1
-    },
-    "376": {
-      "376A": 1
-    },
-    "409": {
-      "408": 1
-    },
-    "447": {
-      "204": 1
-    }
-  },
-  "fixtures": [
-    {
-      "fixture_id": "case-2016-sghc-154-paper-cutter",
-      "actual_charge": "506",
-      "predicted_top1": "299",
-      "predicted_top5": [
-        "299",
-        "300",
-        "168",
-        "190",
-        "459"
-      ],
-      "rank_of_actual": null,
-      "chapter": "xxii",
-      "notes": ""
-    },
-    {
-      "fixture_id": "case-adf-v-pp",
-      "actual_charge": "324",
-      "predicted_top1": "324",
-      "predicted_top5": [
-        "324",
-        "319",
-        "321",
-        "322",
-        "323"
-      ],
-      "rank_of_actual": 1,
-      "chapter": "xvi",
-      "notes": ""
-    },
-    {
-      "fixture_id": "case-aniza-bte-essa",
-      "actual_charge": "109",
-      "predicted_top1": "109",
-      "predicted_top5": [
-        "109",
-        "108B",
-        "112",
-        "113",
-        "114"
-      ],
-      "rank_of_actual": 1,
-      "chapter": "v",
-      "notes": ""
-    },
-    {
-      "fixture_id": "case-azlin-bte-arujunah",
-      "actual_charge": "304",
-      "predicted_top1": "304",
-      "predicted_top5": [
-        "304",
-        "299",
-        "300",
-        "301",
-        "268B"
-      ],
-      "rank_of_actual": 1,
-      "chapter": "xvi",
-      "notes": ""
-    },
-    {
-      "fixture_id": "case-chan-yok-tuang",
-      "actual_charge": "506",
-      "predicted_top1": "299",
-      "predicted_top5": [
-        "299",
-        "307",
-        "188",
-        "300",
-        "173"
-      ],
-      "rank_of_actual": null,
-      "chapter": "xxii",
-      "notes": ""
-    },
-    {
-      "fixture_id": "case-chee-cheong-hin-constance",
-      "actual_charge": "304",
-      "predicted_top1": "304",
-      "predicted_top5": [
-        "304",
-        "299",
-        "301",
-        "300",
-        "511"
-      ],
-      "rank_of_actual": 1,
-      "chapter": "xvi",
-      "notes": ""
-    },
-    {
-      "fixture_id": "case-chen-weixiong-jerriek",
-      "actual_charge": "394",
-      "predicted_top1": "394",
-      "predicted_top5": [
-        "394",
-        "321",
-        "323",
-        "323A",
-        "390"
-      ],
-      "rank_of_actual": 1,
-      "chapter": "xvii",
-      "notes": ""
-    },
-    {
-      "fixture_id": "case-chia-kee-chen",
-      "actual_charge": "300",
-      "predicted_top1": "301",
-      "predicted_top5": [
-        "301",
-        "321",
-        "322",
-        "323A",
-        "334"
-      ],
-      "rank_of_actual": null,
-      "chapter": "xvi",
-      "notes": ""
-    },
-    {
-      "fixture_id": "case-daniel-vijay-accomplice",
-      "actual_charge": "394",
-      "predicted_top1": "394",
-      "predicted_top5": [
-        "394",
-        "299",
-        "300",
-        "322",
-        "323A"
-      ],
-      "rank_of_actual": 1,
-      "chapter": "xvii",
-      "notes": ""
-    },
-    {
-      "fixture_id": "case-daniel-vijay-principal",
-      "actual_charge": "300",
-      "predicted_top1": "301",
-      "predicted_top5": [
-        "301",
-        "321",
-        "322",
-        "323A",
-        "325"
-      ],
-      "rank_of_actual": null,
-      "chapter": "xvi",
-      "notes": ""
-    },
-    {
-      "fixture_id": "case-haliffie-bin-mamat",
-      "actual_charge": "354",
-      "predicted_top1": "354",
-      "predicted_top5": [
-        "354",
-        "281",
-        "378",
-        "376F",
-        "376H"
-      ],
-      "rank_of_actual": 1,
-      "chapter": "xvi",
-      "notes": ""
-    },
-    {
-      "fixture_id": "case-idya-nurhazlyn",
-      "actual_charge": "420",
-      "predicted_top1": "420",
-      "predicted_top5": [
-        "420",
-        "415",
-        "403",
-        "406",
-        "503"
-      ],
-      "rank_of_actual": 1,
-      "chapter": "xvii",
-      "notes": ""
-    },
-    {
-      "fixture_id": "case-iskandar-rahmat",
-      "actual_charge": "300",
-      "predicted_top1": "301",
-      "predicted_top5": [
-        "301",
-        "299",
-        "304",
-        "308",
-        "87"
-      ],
-      "rank_of_actual": null,
-      "chapter": "xvi",
-      "notes": ""
-    },
-    {
-      "fixture_id": "case-lam-leng-hung",
-      "actual_charge": "406",
-      "predicted_top1": "409",
-      "predicted_top5": [
-        "409",
-        "377CB",
-        "453",
-        "79",
-        "137"
-      ],
-      "rank_of_actual": null,
-      "chapter": "xvii",
-      "notes": ""
-    },
-    {
-      "fixture_id": "case-lee-chez-kee",
-      "actual_charge": "300",
-      "predicted_top1": "301",
-      "predicted_top5": [
-        "301",
-        "322",
-        "323A",
-        "325",
-        "87"
-      ],
-      "rank_of_actual": null,
-      "chapter": "xvi",
-      "notes": ""
-    },
-    {
-      "fixture_id": "case-lim-ghim-peow",
-      "actual_charge": "304",
-      "predicted_top1": "304",
-      "predicted_top5": [
-        "304",
-        "299",
-        "301",
-        "300",
-        "511"
-      ],
-      "rank_of_actual": 1,
-      "chapter": "xvi",
-      "notes": ""
-    },
-    {
-      "fixture_id": "case-low-song-chye",
-      "actual_charge": "323",
-      "predicted_top1": "323",
-      "predicted_top5": [
-        "323",
-        "321",
-        "322",
-        "323A",
-        "334"
-      ],
-      "rank_of_actual": 1,
-      "chapter": "xvi",
-      "notes": ""
-    },
-    {
-      "fixture_id": "case-micheal-anak-garing",
-      "actual_charge": "300",
-      "predicted_top1": "301",
-      "predicted_top5": [
-        "301",
-        "322",
-        "323A",
-        "334A",
-        "335"
-      ],
-      "rank_of_actual": null,
-      "chapter": "xvi",
-      "notes": ""
-    },
-    {
-      "fixture_id": "case-mohammed-ali-johari",
-      "actual_charge": "300",
-      "predicted_top1": "301",
-      "predicted_top5": [
-        "301",
-        "322",
-        "323A",
-        "325",
-        "334A"
-      ],
-      "rank_of_actual": null,
-      "chapter": "xvi",
-      "notes": ""
-    },
-    {
-      "fixture_id": "case-mohammed-liton",
-      "actual_charge": "375",
-      "predicted_top1": "375",
-      "predicted_top5": [
-        "375",
-        "313",
-        "363",
-        "314",
-        "377BE"
-      ],
-      "rank_of_actual": 1,
-      "chapter": "xvi",
-      "notes": ""
-    },
-    {
-      "fixture_id": "case-ong-pang-siew",
-      "actual_charge": "304",
-      "predicted_top1": "304",
-      "predicted_top5": [
-        "304",
-        "299",
-        "301",
-        "300",
-        "511"
-      ],
-      "rank_of_actual": 1,
-      "chapter": "xvi",
-      "notes": ""
-    },
-    {
-      "fixture_id": "case-pp-v-bdb",
-      "actual_charge": "325",
-      "predicted_top1": "321",
-      "predicted_top5": [
-        "321",
-        "322",
-        "323A",
-        "334",
-        "334A"
-      ],
-      "rank_of_actual": null,
-      "chapter": "xvi",
-      "notes": ""
-    },
-    {
-      "fixture_id": "case-pp-v-kho-jabing",
-      "actual_charge": "300",
-      "predicted_top1": "301",
-      "predicted_top5": [
-        "301",
-        "190",
-        "355",
-        "358",
-        "279"
-      ],
-      "rank_of_actual": null,
-      "chapter": "xvi",
-      "notes": ""
-    },
-    {
-      "fixture_id": "case-pp-v-lim-poh-lye",
-      "actual_charge": "300",
-      "predicted_top1": "301",
-      "predicted_top5": [
-        "301",
-        "322",
-        "323",
-        "323A",
-        "325"
-      ],
-      "rank_of_actual": null,
-      "chapter": "xvi",
-      "notes": ""
-    },
-    {
-      "fixture_id": "case-pp-v-luan-yuanxin",
-      "actual_charge": "506",
-      "predicted_top1": "148",
-      "predicted_top5": [
-        "148",
-        "299",
-        "144",
-        "158",
-        "94"
-      ],
-      "rank_of_actual": null,
-      "chapter": "xxii",
-      "notes": ""
-    },
-    {
-      "fixture_id": "case-pp-v-ng-guan-hup",
-      "actual_charge": "425",
-      "predicted_top1": "425",
-      "predicted_top5": [
-        "425",
-        "463",
-        "378",
-        "321",
-        "354"
-      ],
-      "rank_of_actual": 1,
-      "chapter": "xvii",
-      "notes": ""
-    },
-    {
-      "fixture_id": "case-pram-nair",
-      "actual_charge": "376",
-      "predicted_top1": "376A",
-      "predicted_top5": [
-        "376A",
-        "90",
-        "375",
-        "313",
-        "377BE"
-      ],
-      "rank_of_actual": null,
-      "chapter": "xvi",
-      "notes": ""
-    },
-    {
-      "fixture_id": "case-see-li-quan-mendel",
-      "actual_charge": "392",
-      "predicted_top1": "392",
-      "predicted_top5": [
-        "392",
-        "302",
-        "323",
-        "379",
-        "465"
-      ],
-      "rank_of_actual": 1,
-      "chapter": "xvii",
-      "notes": ""
-    },
-    {
-      "fixture_id": "case-sundarti-supriyanto",
-      "actual_charge": "304",
-      "predicted_top1": "304",
-      "predicted_top5": [
-        "304",
-        "358",
-        "378",
-        "334",
-        "335"
-      ],
-      "rank_of_actual": 1,
-      "chapter": "xvi",
-      "notes": ""
-    },
-    {
-      "fixture_id": "case-tan-chee-wee",
-      "actual_charge": "300",
-      "predicted_top1": "301",
-      "predicted_top5": [
-        "301",
-        "299",
-        "355",
-        "358",
-        "304"
-      ],
-      "rank_of_actual": null,
-      "chapter": "xvi",
-      "notes": ""
-    },
-    {
-      "fixture_id": "case-tan-cheng-yew",
-      "actual_charge": "409",
-      "predicted_top1": "408",
-      "predicted_top5": [
-        "408",
-        "409",
-        "477A",
-        "464",
-        "156"
-      ],
-      "rank_of_actual": 2,
-      "chapter": "xvii",
-      "notes": ""
-    },
-    {
-      "fixture_id": "case-tan-joo-cheng",
-      "actual_charge": "300",
-      "predicted_top1": "301",
-      "predicted_top5": [
-        "301",
-        "322",
-        "323A",
-        "87",
-        "81"
-      ],
-      "rank_of_actual": null,
-      "chapter": "xvi",
-      "notes": ""
-    },
-    {
-      "fixture_id": "case-tan-kheng-ann-pulau-senang",
-      "actual_charge": "300",
-      "predicted_top1": "148",
-      "predicted_top5": [
-        "148",
-        "301",
-        "308A",
-        "299",
-        "144"
-      ],
-      "rank_of_actual": null,
-      "chapter": "xvi",
-      "notes": ""
-    },
-    {
-      "fixture_id": "case-tee-teng-heng",
-      "actual_charge": "447",
-      "predicted_top1": "204",
-      "predicted_top5": [
-        "204",
-        "441",
-        "194",
-        "477A",
-        "464"
-      ],
-      "rank_of_actual": null,
-      "chapter": "xvii",
-      "notes": ""
-    },
-    {
-      "fixture_id": "case-terence-ng",
-      "actual_charge": "375",
-      "predicted_top1": "375",
-      "predicted_top5": [
-        "375",
-        "168",
-        "313",
-        "377BE",
-        "377BF"
-      ],
-      "rank_of_actual": 1,
-      "chapter": "xvi",
-      "notes": ""
-    },
-    {
-      "fixture_id": "case-took-leng-how",
-      "actual_charge": "300",
-      "predicted_top1": "301",
-      "predicted_top5": [
-        "301",
-        "299",
-        "361",
-        "84",
-        "304B"
-      ],
-      "rank_of_actual": null,
-      "chapter": "xvi",
-      "notes": ""
-    },
-    {
-      "fixture_id": "case-wang-zhijian",
-      "actual_charge": "300",
-      "predicted_top1": "301",
-      "predicted_top5": [
-        "301",
-        "158",
-        "304",
-        "308",
-        "504"
-      ],
-      "rank_of_actual": null,
-      "chapter": "xvi",
-      "notes": ""
-    },
-    {
-      "fixture_id": "case-wong-seng-kwan",
-      "actual_charge": "378",
-      "predicted_top1": "378",
-      "predicted_top5": [
-        "378",
-        "403",
-        "354",
-        "511",
-        "474"
-      ],
-      "rank_of_actual": 1,
-      "chapter": "xvii",
-      "notes": ""
-    }
-  ],
-  "not_legal_advice": true,
-  "disclaimer": "Top-k agreement measures structural alignment between the encoded library and the section the Singapore prosecution actually brought. It is not a legal-correctness measure: prosecutors do not always charge every applicable section, and the encoded statute may diverge from a court's specific reading."
-}
+Case-law differential testing — yuho recommend vs SG courts
+  n = 43
+
+  Top-1 accuracy : 51.2%
+  Top-3 accuracy : 53.5%
+  Top-5 accuracy : 53.5%
+  Mean reciprocal rank : 0.523
+
+Per chapter:
+  chapter         n      T1      T3      T5
+  v               1  100.0%  100.0%  100.0%
+  xvi            26   46.2%   46.2%   46.2%
+  xvii            9   66.7%   77.8%   77.8%
+  xxii            3    0.0%    0.0%    0.0%
+  xxiii           1  100.0%  100.0%  100.0%
+
+Confusion matrix (actual → predicted top-1, when wrong):
+  s300 → s301     ×12
+  s300 → s321     ×1
+  s376 → s376A    ×1
+  s377BA → s354     ×1
+  s406 → s409     ×1
+  s409 → s408     ×1
+  s447 → s204     ×1
+  s506 → s299     ×1
+  s506 → s307     ×1
+  s506 → s148     ×1
+
+Per fixture:
+  ✗ case-2016-sghc-154-paper-cutter            actual=s506    top1=s299    rank=—
+  ✗ case-abdul-ghufran-bin-abdul-wahid         actual=s377BA  top1=s354    rank=—
+  ✓ case-adf-v-pp                              actual=s324    top1=s324    rank=1
+  ✓ case-aniza-bte-essa                        actual=s109    top1=s109    rank=1
+  ✓ case-azlin-bte-arujunah                    actual=s304    top1=s304    rank=1
+  ✗ case-chan-yok-tuang                        actual=s506    top1=s307    rank=—
+  ✓ case-chee-cheong-hin-constance             actual=s304    top1=s304    rank=1
+  ✓ case-chen-weixiong-jerriek                 actual=s394    top1=s394    rank=1
+  ✗ case-chia-kee-chen                         actual=s300    top1=s301    rank=—
+  ✓ case-daniel-vijay-accomplice               actual=s394    top1=s394    rank=1
+  ✗ case-daniel-vijay-principal                actual=s300    top1=s301    rank=—
+  ✓ case-haliffie-bin-mamat                    actual=s354    top1=s354    rank=1
+  ✓ case-idya-nurhazlyn                        actual=s420    top1=s420    rank=1
+  ✗ case-iskandar-rahmat                       actual=s300    top1=s301    rank=—
+  ✗ case-lam-leng-hung                         actual=s406    top1=s409    rank=—
+  ✗ case-lee-chez-kee                          actual=s300    top1=s301    rank=—
+  ✓ case-lim-ghim-peow                         actual=s304    top1=s304    rank=1
+  ✓ case-low-song-chye                         actual=s323    top1=s323    rank=1
+  ✗ case-micheal-anak-garing                   actual=s300    top1=s301    rank=—
+  ✗ case-mohammed-ali-johari                   actual=s300    top1=s301    rank=—
+  ✓ case-mohammed-liton                        actual=s375    top1=s375    rank=1
+  ✓ case-nicholas-tan-siew-chye                actual=s377BB  top1=s377BB  rank=1
+  ✓ case-ong-pang-siew                         actual=s304    top1=s304    rank=1
+  ✓ case-pp-v-bdb                              actual=s325    top1=s325    rank=1
+  ✓ case-pp-v-bpk                              actual=s307    top1=s307    rank=1
+  ✓ case-pp-v-ged                              actual=s377BE  top1=s377BE  rank=1
+  ✓ case-pp-v-geh                              actual=s377BE  top1=s377BE  rank=1
+  ✗ case-pp-v-kho-jabing                       actual=s300    top1=s301    rank=—
+  ✗ case-pp-v-lim-poh-lye                      actual=s300    top1=s301    rank=—
+  ✗ case-pp-v-luan-yuanxin                     actual=s506    top1=s148    rank=—
+  ✓ case-pp-v-ng-guan-hup                      actual=s425    top1=s425    rank=1
+  ✗ case-pram-nair                             actual=s376    top1=s376A   rank=—
+  ✓ case-see-li-quan-mendel                    actual=s392    top1=s392    rank=1
+  ✓ case-sundarti-supriyanto                   actual=s304    top1=s304    rank=1
+  ✗ case-tan-chee-wee                          actual=s300    top1=s301    rank=—
+  · case-tan-cheng-yew                         actual=s409    top1=s408    rank=2
+  ✗ case-tan-joo-cheng                         actual=s300    top1=s321    rank=—
+  ✗ case-tan-kheng-ann-pulau-senang            actual=s300    top1=s301    rank=—
+  ✗ case-tee-teng-heng                         actual=s447    top1=s204    rank=—
+  ✓ case-terence-ng                            actual=s375    top1=s375    rank=1
+  ✗ case-took-leng-how                         actual=s300    top1=s301    rank=—
+  ✗ case-wang-zhijian                          actual=s300    top1=s301    rank=—
+  ✓ case-wong-seng-kwan                        actual=s378    top1=s378    rank=1
+
+Not legal advice — structural agreement, not legal correctness.

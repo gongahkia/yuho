@@ -56,7 +56,7 @@ s497 / s509) fully encoded as `.yh` to test grammar fit. The
 emits structural-overlap stats across both libraries: 524 PC ↔ 493 IPC
 share **399 section numbers**.
 
-Around the language sits a complete toolchain — seven transpilers
+Around the language sits a complete toolchain — eight transpilers
 (including Akoma Ntoso for cross-jurisdictional interop), an LSP, an
 MCP server, a VS Code extension, and Z3 / Alloy verification hookups —
 described below.
@@ -148,8 +148,8 @@ covers the same ground in less depth.
                                        ┌────────────────┼────────────────┐
                                        ▼                ▼                ▼
                                    Transpilers      Verification      Editor surfaces
-                              (JSON/EN/TeX/MMD/         (Z3, Alloy)       (LSP, MCP, VSCode)
-                               Alloy/DOCX)
+                              (JSON/EN/TeX/MMD/
+                               mindmap/Alloy/DOCX/AKN)  (Z3, Alloy)       (LSP, MCP, VSCode)
 ```
 
 A rendered SVG version lives at `paper/figures/architecture.mmd` and
@@ -165,7 +165,7 @@ will land at `docs/architecture.svg` once the Mermaid CLI build runs.
 | L1 (parse) | 524 / 524 |
 | L2 (build + lint) | 524 / 524 |
 | L3 (author-stamped) | 524 / 524 |
-| Grammar gaps (G1–G14) | 10 fixed · 2 not-a-gap · 1 lint · 1 deferred |
+| Grammar gaps (G1–G14) | 9 parser fixes · 2 lint checks · 2 not-a-gap · G10 resolver landed |
 | Behavioural-test companions | 139 / 524 (`make verify-runtime-tests` gated) |
 | Verbose-mermaid render | 524 / 524 (0 orphan nodes) |
 | Structural-diff Lean ↔ Python | 524 / 524 matched (`make verify-structural-diff-full`) |
@@ -173,8 +173,8 @@ will land at `docs/architecture.svg` once the Mermaid CLI build runs.
 | Case-law fixtures | n=43, top-1 51.2% / top-3 53.5% / constrained-consistency 100% |
 | §6.6 Lean mechanisation | v9, 0 `sorry`s, kernel-checked under Lean 4.10.0 |
 | IPC corpus | 493 raw-scraped, 8 phase-1 encoded |
-| Implementation SLOC | ~38.7k Python + 900 grammar.js |
-| Library SLOC | ~16.4k `.yh` (SG) + ~1k (IPC phase-1) |
+| Implementation SLOC | ~70.0k implementation SLOC, including 903-line grammar |
+| Library SLOC | ~29.8k encoded `.yh` SLOC (SG + IPC phase-1) |
 
 Numbers regenerate from `library/penal_code/_coverage/coverage.json` via
 `scripts/coverage_report.py`.

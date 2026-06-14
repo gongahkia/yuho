@@ -34,11 +34,17 @@ See `editors/nvim-yuho/` for Neovim integration.
 
 ## 7. What transpilation targets are supported?
 
-JSON, JSON-LD, English, Mermaid (mindmap/flowchart), LaTeX, Alloy, GraphQL, and Blocks.
+JSON, controlled English, LaTeX, Mermaid flowchart, Mermaid mindmap,
+Alloy, DOCX, and Akoma Ntoso. The CLI can also derive PDF/SVG/PNG from
+LaTeX or Mermaid outputs when the external renderers are installed.
 
 ## 8. Do I need to know how to code?
 
-No. Yuho's syntax is designed to read like structured English. If you can read a statute and identify its elements (actus reus, mens rea, etc.), you can write Yuho. The `yuho wizard` command guides you through creating a statute interactively without writing any code. For those who want to write `.yh` files directly, the syntax uses only ~10 keywords and has no loops or complex programming constructs.
+No for reading and reviewing generated outputs; yes for authoring `.yh`
+directly at the current stage. Yuho's syntax is designed to read like
+structured English. If you can read a statute and identify its elements
+(actus reus, mens rea, etc.), the language server, snippets, and
+diagnostics provide the main authoring support.
 
 ## 9. What editor should I use to write `.yh` files?
 
