@@ -42,7 +42,7 @@ either grammar restructuring (terminator on `variable_declaration`,
 or hoisting the `<TypeName> {` shape into a single token) or a
 tree-sitter parser upgrade.
 
-**Mitigation today (option (a) of TODO.md).** All non-doc `// …`
+**Mitigation today.** All non-doc `// …`
 comments were stripped from
 `library/penal_code/*/test_statute.yh` on 2026-04-29 (commit
 `ccca70dd`); the runtime sweep
@@ -51,7 +51,7 @@ comments were stripped from
 all 90 rich tests passing assertion eval. New fixtures should
 follow the same convention until the grammar restructure lands.
 
-**Tracked in:** `TODO.md` — *Hardening / Grammar restructure*.
+**Tracked as:** *Hardening / Grammar restructure*.
 
 ## Authoring guidance
 

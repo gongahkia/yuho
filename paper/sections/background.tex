@@ -139,8 +139,8 @@ top of statute blocks, not as a replacement.
 Law) targets contracts and regulations with a deontic-logic core. Its
 distinctive primitive is the named-norm reference: a contract clause
 can predicate on whether another named norm has been infringed, via an
-\texttt{IS\_INFRINGED} predicate. This composes cleanly with our planned
-G10 inter-section semantic hookup, which will let one Penal Code section
+\texttt{IS\_INFRINGED} predicate. This composes cleanly with Yuho's
+\textsf{G10} inter-section semantic resolver, which lets one Penal Code section
 predicate on whether another section's elements are satisfied (e.g.\ the
 abetment provisions in Chapter V refer to whichever offence is being
 abetted). lam4 targets contracts; Yuho targets penal code; the two
@@ -153,7 +153,7 @@ contract-shaped top level, compiles to multiple targets, and notably
 implements Tarjan strongly-connected-component analysis over the
 contract reference graph to detect cyclic cross-references and
 unreachable termination paths. We adopt the SCC analysis directly
-(planned, blocked on G10). LexScript's element model is thinner
+over Yuho's \textsf{G10} reference graph. LexScript's element model is thinner
 than ours: it has no burden qualifier, no causal-link edges
 between elements, and no Catala-style exception priority. The two
 systems also target different statute families: LexScript targets
