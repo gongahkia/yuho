@@ -1,0 +1,324 @@
+// Jurisdiction pack skeletons for source-backed legal timelines.
+// These rules are declarative authority records; Euclid does not compute
+// docketing deadlines from them.
+
+source frcp_2024: authority {
+    citation: "Federal Rules of Civil Procedure, Rules 6 and 12, Dec. 1, 2024",
+    canonical_id: "US-FRCP-2024",
+    title: "Federal Rules of Civil Procedure",
+    url: "https://www.uscourts.gov/sites/default/files/2025-02/federal-rules-of-civil-procedure-dec-1-2024_0.pdf",
+}
+
+source cpr_part10: authority {
+    citation: "Civil Procedure Rules Part 10",
+    canonical_id: "UK-CPR-Part-10",
+    title: "Acknowledgment of Service",
+    url: "https://www.justice.gov.uk/courts/procedure-rules/civil/rules/part10",
+}
+
+source cpr_part15: authority {
+    citation: "Civil Procedure Rules Part 15",
+    canonical_id: "UK-CPR-Part-15",
+    title: "Defence and Reply",
+    url: "https://www.justice.gov.uk/courts/procedure-rules/civil/rules/part15",
+}
+
+source sg_roc_response: authority {
+    citation: "Singapore Judiciary, How to respond to an originating claim (from 1 April 2022)",
+    canonical_id: "SG-ROC-2021-Originating-Claim-Response",
+    title: "How to respond to an originating claim",
+    url: "https://www.judiciary.gov.sg/civil/civil-claims-%28from-1-april-2022%29/respond-to-a-civil-claim-%28from-1-april-2022%29/respond-to-a-civil-claim-made-by-an-originating-claim-%28from-1-april-2022%29/how-to-respond-to-an-originating-claim-%28from-1-april-2022%29",
+}
+
+source eu_service_reg_2020_1784: authority {
+    citation: "Regulation (EU) 2020/1784, Article 12",
+    canonical_id: "EU-2020-1784-Art-12",
+    title: "Service of documents regulation",
+    url: "https://eur-lex.europa.eu/eli/reg/2020/1784/oj/eng",
+}
+
+source ca_rule_31300: authority {
+    citation: "California Rules of Court, rule 3.1300",
+    canonical_id: "CA-CRC-3.1300",
+    title: "Time for filing and service of motion papers",
+    url: "https://courts.ca.gov/cms/rules/index/three/rule3_1300",
+}
+
+source ny_cplr_320: authority {
+    citation: "New York CPLR 320",
+    canonical_id: "NY-CPLR-320",
+    title: "Defendant's appearance",
+    url: "https://www.nysenate.gov/legislation/laws/CVP/320",
+}
+
+source ny_cplr_3012: authority {
+    citation: "New York CPLR 3012",
+    canonical_id: "NY-CPLR-3012",
+    title: "Service of pleadings and demand for complaint",
+    url: "https://www.nysenate.gov/legislation/laws/CVP/3012",
+}
+
+source_bundle jurisdiction_authorities {
+    sources: [frcp_2024, cpr_part10, cpr_part15, sg_roc_response, eu_service_reg_2020_1784, ca_rule_31300, ny_cplr_320, ny_cplr_3012],
+    jurisdiction: "multi-jurisdiction",
+    purpose: "seed authority records for legal timeline rule packs",
+}
+
+locator frcp_rule12_answer {
+    source_ref: frcp_2024,
+    page: 37,
+    paragraph: "Rule 12(a)(1)(A)(i)",
+}
+
+locator cpr_15_4_defence {
+    source_ref: cpr_part15,
+    paragraph: "15.4",
+}
+
+locator sg_response_oc_deadlines {
+    source_ref: sg_roc_response,
+    paragraph: "Contest the claim",
+}
+
+ruleset us_frcp {
+    jurisdiction: "US-FRCP",
+    court: "U.S. district courts",
+    procedure: "civil-procedure",
+    effective: 2024-12-01..2026-12-31,
+    source_ref: frcp_2024,
+    authority_sources: [frcp_2024],
+}
+
+ruleset uk_cpr {
+    jurisdiction: "UK-CPR",
+    court: "England and Wales civil courts",
+    procedure: "civil-procedure",
+    effective: 2025-04-06..2026-12-31,
+    source_ref: cpr_part15,
+    authority_sources: [cpr_part10, cpr_part15],
+}
+
+ruleset sg_roc_2021 {
+    jurisdiction: "SG-ROC-2021",
+    court: "Singapore civil courts",
+    procedure: "civil-procedure",
+    effective: 2021-04-01..2026-12-31,
+    source_ref: sg_roc_response,
+    authority_sources: [sg_roc_response],
+}
+
+ruleset eu_2020_1784 {
+    jurisdiction: "EU-2020-1784",
+    court: "EU member-state civil and commercial service",
+    procedure: "service-of-documents",
+    effective: 2022-07-01..2026-12-31,
+    source_ref: eu_service_reg_2020_1784,
+    authority_sources: [eu_service_reg_2020_1784],
+}
+
+ruleset ca_civil {
+    jurisdiction: "CA-CIVIL",
+    court: "California civil courts",
+    procedure: "civil-motion-practice",
+    effective: 2016-01-01..2026-12-31,
+    source_ref: ca_rule_31300,
+    authority_sources: [ca_rule_31300],
+}
+
+ruleset ny_cplr {
+    jurisdiction: "NY-CPLR",
+    court: "New York civil courts",
+    procedure: "civil-procedure",
+    effective: 2022-05-13..2026-12-31,
+    source_ref: ny_cplr_320,
+    authority_sources: [ny_cplr_320, ny_cplr_3012],
+}
+
+deadline_rule us_frcp_answer_21 {
+    ruleset: us_frcp,
+    rule: "FRCP 12(a)(1)(A)(i)",
+    trigger: "service of summons and complaint",
+    actor: "defendant",
+    action: "serve an answer",
+    offset: days(21),
+    direction: after,
+    counting: calendar_days_with_last_day_rollover,
+    source_ref: frcp_2024,
+    locator_ref: frcp_rule12_answer,
+}
+
+deadline_rule uk_cpr_acknowledgment_14 {
+    ruleset: uk_cpr,
+    rule: "CPR 10.3",
+    trigger: "service of claim form or particulars of claim",
+    actor: "defendant",
+    action: "file acknowledgment of service",
+    offset: days(14),
+    direction: after,
+    counting: clear_days,
+    source_ref: cpr_part10,
+}
+
+deadline_rule uk_cpr_defence_14 {
+    ruleset: uk_cpr,
+    rule: "CPR 15.4(1)(a)",
+    trigger: "service of particulars of claim",
+    actor: "defendant",
+    action: "file defence",
+    offset: days(14),
+    direction: after,
+    counting: clear_days,
+    source_ref: cpr_part15,
+    locator_ref: cpr_15_4_defence,
+}
+
+deadline_rule uk_cpr_defence_after_ack_28 {
+    ruleset: uk_cpr,
+    rule: "CPR 15.4(1)(b)",
+    trigger: "service of particulars of claim after acknowledgment of service",
+    actor: "defendant",
+    action: "file defence",
+    offset: days(28),
+    direction: after,
+    counting: clear_days,
+    source_ref: cpr_part15,
+}
+
+deadline_rule sg_notice_to_contest_14 {
+    ruleset: sg_roc_2021,
+    rule: "Rules of Court 2021 Order 6",
+    trigger: "service of statement of claim in Singapore",
+    actor: "defendant",
+    action: "file and serve notice of intention to contest or not contest",
+    offset: days(14),
+    direction: after,
+    counting: calendar_days,
+    source_ref: sg_roc_response,
+    locator_ref: sg_response_oc_deadlines,
+}
+
+deadline_rule sg_defence_21 {
+    ruleset: sg_roc_2021,
+    rule: "Rules of Court 2021 Order 6 / Order 9",
+    trigger: "service of statement of claim in Singapore",
+    actor: "defendant",
+    action: "file and serve defence",
+    offset: days(21),
+    direction: after,
+    counting: calendar_days,
+    source_ref: sg_roc_response,
+}
+
+deadline_rule eu_refusal_language_14 {
+    ruleset: eu_2020_1784,
+    rule: "Regulation (EU) 2020/1784 Article 12",
+    trigger: "service of document not in an accepted language",
+    actor: "addressee",
+    action: "return Form L or written refusal declaration",
+    offset: days(14),
+    direction: after,
+    counting: calendar_days,
+    source_ref: eu_service_reg_2020_1784,
+}
+
+deadline_rule ca_motion_proof_service_5 {
+    ruleset: ca_civil,
+    rule: "California Rules of Court 3.1300(c)",
+    trigger: "time appointed for hearing",
+    actor: "moving party",
+    action: "file proof of service of moving papers",
+    offset: days(5),
+    direction: before,
+    counting: court_days,
+    source_ref: ca_rule_31300,
+}
+
+deadline_rule ny_appearance_20 {
+    ruleset: ny_cplr,
+    rule: "CPLR 320(a)",
+    trigger: "service of summons",
+    actor: "defendant",
+    action: "appear by answer, notice of appearance, or motion",
+    offset: days(20),
+    direction: after,
+    counting: calendar_days,
+    source_ref: ny_cplr_320,
+}
+
+deadline_rule ny_answer_20 {
+    ruleset: ny_cplr,
+    rule: "CPLR 3012(a)",
+    trigger: "service of pleading to which answer or reply responds",
+    actor: "responding party",
+    action: "serve answer or reply",
+    offset: days(20),
+    direction: after,
+    counting: calendar_days,
+    source_ref: ny_cplr_3012,
+}
+
+timeline jurisdiction_pack {
+    kind: linear,
+    start: 2024-12-01,
+    end: 2026-12-31,
+    jurisdiction: "multi-jurisdiction",
+    procedure: "authority-modeling",
+    court: "research pack",
+}
+
+timeline sample_us_case {
+    kind: linear,
+    start: 2026-01-01,
+    end: 2026-12-31,
+    jurisdiction: "US-FRCP",
+    procedure: "civil-procedure",
+    court: "Example U.S. district court",
+}
+
+entity sample_us_answer_deadline : deadline {
+    rule: "FRCP 12(a)(1)(A)(i)",
+    jurisdiction: "US-FRCP",
+    trigger: "service of summons and complaint",
+    due: 2026-02-02,
+    source_ref: frcp_2024,
+    rule_ref: us_frcp_answer_21,
+    appears_on: sample_us_case @ 2026-02-02..2026-02-02,
+}
+
+entity frcp_authority_record : evidence {
+    citation: "Federal Rules of Civil Procedure, Rule 12(a)(1)(A)(i)",
+    source: "U.S. Courts",
+    source_ref: frcp_2024,
+    locator_ref: frcp_rule12_answer,
+    appears_on: jurisdiction_pack @ 2024-12-01..2024-12-01,
+}
+
+entity authority_pack_exhibit : exhibit {
+    number: "Auth. 1",
+    description: "Federal answer deadline authority locator",
+    source_ref: frcp_2024,
+    locator_ref: frcp_rule12_answer,
+    appears_on: jurisdiction_pack @ 2024-12-01..2024-12-01,
+}
+
+entity starter_pack_coverage_claim : claim {
+    position: "The starter pack contains a source-backed U.S. federal answer-deadline rule.",
+    appears_on: jurisdiction_pack @ 2024-12-01..2024-12-01,
+}
+
+issue service_response_deadlines {
+    title: "Service-response deadline coverage",
+    question: "Which sourced rule controls the first response deadline?",
+    burden: "user-selected jurisdiction pack",
+    standard: "source-backed chronology",
+    source_ref: frcp_2024,
+}
+
+element response_trigger_identified {
+    issue: service_response_deadlines,
+    text: "The triggering event must be identified before selecting a deadline rule.",
+    burden: "drafter",
+    source_ref: frcp_2024,
+}
+
+rel frcp_authority_record -["cites"]-> starter_pack_coverage_claim;

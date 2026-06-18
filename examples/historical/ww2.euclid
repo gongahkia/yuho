@@ -1,0 +1,263 @@
+// ─── Euclid showcase: World War II ───
+// Demonstrates timelines, entities, relationships,
+// types, variables, functions, and control flow.
+
+// ── Custom types ──
+
+type leader {
+    nation: string,
+    rank: string,
+}
+
+type battle : event {
+    theater: string,
+    outcome: string,
+}
+
+type alliance {
+    members: string,
+}
+
+// ── Timelines ──
+
+timeline european_theater {
+    kind: linear,
+    start: 1939-09-01,
+    end: 1945-05-08,
+}
+
+timeline pacific_theater {
+    kind: linear,
+    start: 1941-12-07,
+    end: 1945-09-02,
+}
+
+timeline homefront {
+    kind: parallel,
+    start: 1939-09-01,
+    end: 1945-09-02,
+}
+
+timeline cold_war_prelude {
+    kind: branch,
+    start: 1944-06-06,
+    end: 1945-09-02,
+}
+
+// ── Leaders ──
+
+entity churchill : leader {
+    nation: "United Kingdom",
+    rank: "Prime Minister",
+    appears_on: european_theater @ 1939-09-03..1945-05-08,
+}
+
+entity roosevelt : leader {
+    nation: "United States",
+    rank: "President",
+    appears_on: european_theater @ 1941-12-11..1945-04-12,
+}
+
+entity stalin : leader {
+    nation: "Soviet Union",
+    rank: "Premier",
+    appears_on: european_theater @ 1941-06-22..1945-05-08,
+}
+
+entity hitler : leader {
+    nation: "Germany",
+    rank: "Fuhrer",
+    appears_on: european_theater @ 1939-09-01..1945-04-30,
+}
+
+entity truman : leader {
+    nation: "United States",
+    rank: "President",
+    appears_on: pacific_theater @ 1945-04-12..1945-09-02,
+}
+
+entity hirohito : leader {
+    nation: "Japan",
+    rank: "Emperor",
+    appears_on: pacific_theater @ 1941-12-07..1945-09-02,
+}
+
+entity degaulle : leader {
+    nation: "France",
+    rank: "General",
+    appears_on: european_theater @ 1940-06-18..1945-05-08,
+}
+
+// ── Key battles ──
+
+entity invasion_of_poland : battle {
+    theater: "Europe",
+    outcome: "Axis victory",
+    appears_on: european_theater @ 1939-09-01..1939-10-06,
+}
+
+entity battle_of_britain : battle {
+    theater: "Europe",
+    outcome: "Allied victory",
+    appears_on: european_theater @ 1940-07-10..1940-10-31,
+}
+
+entity barbarossa : battle {
+    theater: "Eastern Front",
+    outcome: "Axis stalled",
+    appears_on: european_theater @ 1941-06-22..1941-12-05,
+}
+
+entity stalingrad : battle {
+    theater: "Eastern Front",
+    outcome: "Soviet victory",
+    appears_on: european_theater @ 1942-08-23..1943-02-02,
+}
+
+entity el_alamein : battle {
+    theater: "North Africa",
+    outcome: "Allied victory",
+    appears_on: european_theater @ 1942-10-23..1942-11-11,
+}
+
+entity d_day : battle {
+    theater: "Western Front",
+    outcome: "Allied victory",
+    appears_on: european_theater @ 1944-06-06..1944-08-25,
+}
+
+entity battle_of_the_bulge : battle {
+    theater: "Western Front",
+    outcome: "Allied victory",
+    appears_on: european_theater @ 1944-12-16..1945-01-25,
+}
+
+entity fall_of_berlin : battle {
+    theater: "Eastern Front",
+    outcome: "Soviet victory",
+    appears_on: european_theater @ 1945-04-16..1945-05-02,
+}
+
+entity pearl_harbor : battle {
+    theater: "Pacific",
+    outcome: "Japanese victory",
+    appears_on: pacific_theater @ 1941-12-07..1941-12-07,
+}
+
+entity midway : battle {
+    theater: "Pacific",
+    outcome: "American victory",
+    appears_on: pacific_theater @ 1942-06-04..1942-06-07,
+}
+
+entity iwo_jima : battle {
+    theater: "Pacific",
+    outcome: "American victory",
+    appears_on: pacific_theater @ 1945-02-19..1945-03-26,
+}
+
+entity hiroshima : battle {
+    theater: "Pacific",
+    outcome: "War ended",
+    appears_on: pacific_theater @ 1945-08-06..1945-08-09,
+}
+
+// ── Homefront entities ──
+
+entity manhattan_project : event {
+    appears_on: homefront @ 1942-08-13..1945-08-06,
+}
+
+entity enigma_decoded : event {
+    appears_on: homefront @ 1940-01-01..1945-05-08,
+}
+
+entity rationing : event {
+    appears_on: homefront @ 1940-01-08..1945-09-02,
+}
+
+// ── Alliances ──
+
+entity allies : alliance {
+    members: "UK, US, USSR, France",
+    appears_on: european_theater @ 1939-09-03..1945-05-08,
+}
+
+entity axis : alliance {
+    members: "Germany, Italy, Japan",
+    appears_on: european_theater @ 1939-09-01..1945-05-08,
+}
+
+// ── Cold war prelude entities ──
+
+entity yalta_conference : event {
+    appears_on: cold_war_prelude @ 1945-02-04..1945-02-11,
+}
+
+entity potsdam_conference : event {
+    appears_on: cold_war_prelude @ 1945-07-17..1945-08-02,
+}
+
+// ── Relationships ──
+
+// Allied leadership
+rel churchill -["allied with"]-> roosevelt;
+rel churchill -["allied with"]-> stalin;
+rel roosevelt -["allied with"]-> stalin;
+rel churchill -["allied with"]-> degaulle;
+
+// Axis opposition
+rel churchill -["opposed"]-> hitler;
+rel stalin -["opposed"]-> hitler;
+rel roosevelt -["opposed"]-> hirohito;
+
+// Succession
+rel roosevelt -["succeeded by"]-> truman;
+
+// Battle command
+rel hitler -["ordered"]-> invasion_of_poland;
+rel churchill -["defended"]-> battle_of_britain;
+rel hitler -["launched"]-> barbarossa;
+rel stalin -["commanded"]-> stalingrad;
+rel churchill -["commanded"]-> el_alamein;
+rel roosevelt -["authorized"]-> d_day;
+rel stalin -["commanded"]-> fall_of_berlin;
+rel hirohito -["ordered"]-> pearl_harbor;
+rel truman -["authorized"]-> hiroshima;
+
+// Strategic links
+rel manhattan_project -["enabled"]-> hiroshima;
+rel enigma_decoded -["aided"]-> battle_of_britain;
+rel pearl_harbor -["provoked"]-> midway;
+rel d_day -["preceded"]-> battle_of_the_bulge;
+rel stalingrad -["turned tide for"]-> fall_of_berlin;
+
+// Alliance membership
+rel churchill -["led"]-> allies;
+rel hitler -["led"]-> axis;
+
+// Cold war seeds
+rel stalin -["attended"]-> yalta_conference;
+rel churchill -["attended"]-> yalta_conference;
+rel roosevelt -["attended"]-> yalta_conference;
+rel truman -["attended"]-> potsdam_conference;
+rel stalin -["attended"]-> potsdam_conference;
+
+// ── Variables and logic ──
+
+let war_duration = 6;
+let total_battles = 12;
+
+fn summarize(count: int) {
+    let msg = "Tracked battles";
+}
+
+// ── Control flow ──
+
+if war_duration > 5 {
+    let long_war = true;
+}
+
+for i in [1, 2, 3] {
+    let phase = i;
+}

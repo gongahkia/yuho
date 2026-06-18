@@ -1,0 +1,108 @@
+// Gideon v. Wainwright legal example pack model.
+// This file models a right-to-counsel chronology from public U.S. Reports
+// materials. It is not legal advice and does not infer legal truth.
+//
+// Primary sources:
+// - https://www.govinfo.gov/content/pkg/USREPORTS-372/pdf/USREPORTS-372-335.pdf
+// - https://www.govinfo.gov/app/details/USREPORTS-372/context
+
+timeline gideon_case {
+    kind: linear,
+    start: 1961-06-03,
+    end: 1963-03-18,
+}
+
+entity poolroom_charge : fact {
+    reference_source: "GovInfo U.S. Reports",
+    citation: "Gideon v. Wainwright, 372 U.S. 335",
+    summary: "Clarence Earl Gideon was charged in Florida state court with a noncapital felony.",
+    appears_on: gideon_case @ 1961-06-03..1961-12-31,
+}
+
+entity counsel_request_denied : fact {
+    reference_source: "GovInfo U.S. Reports",
+    citation: "Gideon v. Wainwright, 372 U.S. 335",
+    summary: "Gideon's request for appointed counsel was denied under Florida's noncapital-case rule.",
+    appears_on: gideon_case @ 1961-06-03..1961-12-31,
+}
+
+entity state_habeas_denied : fact {
+    reference_source: "GovInfo U.S. Reports",
+    citation: "Gideon v. Wainwright, 372 U.S. 335",
+    summary: "The Florida Supreme Court denied Gideon's habeas petition.",
+    appears_on: gideon_case @ 1962-01-01..1962-12-31,
+}
+
+entity supreme_court_argument : fact {
+    reference_source: "GovInfo U.S. Reports",
+    citation: "Gideon v. Wainwright, 372 U.S. 335",
+    summary: "The Supreme Court heard argument.",
+    appears_on: gideon_case @ 1963-01-15..1963-01-15,
+}
+
+entity gideon_decision : fact {
+    reference_source: "GovInfo U.S. Reports",
+    citation: "Gideon v. Wainwright, 372 U.S. 335",
+    summary: "The Court reversed and held appointed counsel fundamental for indigent felony defendants.",
+    appears_on: gideon_case @ 1963-03-18..1963-03-18,
+}
+
+entity us_reports_gideon : evidence {
+    citation: "Gideon v. Wainwright, 372 U.S. 335",
+    source: "GovInfo U.S. Reports",
+    url: "https://www.govinfo.gov/content/pkg/USREPORTS-372/pdf/USREPORTS-372-335.pdf",
+    admissibility: "public court record",
+    appears_on: gideon_case @ 1963-03-18..1963-03-18,
+}
+
+entity gideon_volume_context : evidence {
+    citation: "United States Reports, Volume 372 context",
+    source: "GovInfo",
+    url: "https://www.govinfo.gov/app/details/USREPORTS-372/context",
+    admissibility: "public court record index",
+    appears_on: gideon_case @ 1963-03-18..1963-03-18,
+}
+
+entity gideon_opinion_exhibit : exhibit {
+    number: "GID-1",
+    description: "GovInfo U.S. Reports copy and volume context for Gideon",
+    appears_on: gideon_case @ 1963-03-18..1963-03-18,
+}
+
+entity state_special_circumstances_claim : claim {
+    narrative: "state",
+    reference_source: "GovInfo U.S. Reports",
+    citation: "Betts v. Brady posture discussed in Gideon",
+    position: "Appointment of counsel in state felony cases could depend on special circumstances.",
+    appears_on: gideon_case @ 1961-06-03..1963-03-18,
+}
+
+entity indigent_counsel_claim : claim {
+    narrative: "petitioner",
+    reference_source: "GovInfo U.S. Reports",
+    citation: "Gideon v. Wainwright holding",
+    position: "Counsel is fundamental and essential to a fair felony trial for indigent defendants.",
+    appears_on: gideon_case @ 1961-06-03..1963-03-18,
+}
+
+entity betts_overruled_claim : claim {
+    narrative: "court",
+    reference_source: "GovInfo U.S. Reports",
+    citation: "Gideon v. Wainwright holding",
+    position: "Betts v. Brady should no longer control state felony right-to-counsel cases.",
+    appears_on: gideon_case @ 1963-03-18..1963-03-18,
+}
+
+rel us_reports_gideon -["cites"]-> poolroom_charge;
+rel us_reports_gideon -["cites"]-> counsel_request_denied;
+rel us_reports_gideon -["cites"]-> state_habeas_denied;
+rel gideon_volume_context -["cites"]-> supreme_court_argument;
+rel us_reports_gideon -["cites"]-> gideon_decision;
+rel us_reports_gideon -["cites"]-> state_special_circumstances_claim;
+rel us_reports_gideon -["cites"]-> indigent_counsel_claim;
+rel us_reports_gideon -["cites"]-> betts_overruled_claim;
+rel gideon_opinion_exhibit -["includes"]-> us_reports_gideon;
+rel indigent_counsel_claim -["contradicts"]-> state_special_circumstances_claim;
+rel gideon_decision -["corroborates"]-> indigent_counsel_claim;
+rel betts_overruled_claim -["corroborates"]-> indigent_counsel_claim;
+rel gideon_decision -["supersedes"]-> state_habeas_denied;

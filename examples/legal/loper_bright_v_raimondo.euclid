@@ -1,0 +1,91 @@
+// Loper Bright Enterprises v. Raimondo legal example pack model.
+// This file models the 2024 administrative-law dispute that overruled Chevron.
+// It is not legal advice and does not infer legal truth.
+//
+// Primary source:
+// - https://www.supremecourt.gov/opinions/23pdf/22-451_7m58.pdf
+
+timeline loper_bright_case {
+    kind: linear,
+    start: 2023-05-01,
+    end: 2024-06-28,
+}
+
+entity cert_granted : fact {
+    reference_source: "Supreme Court of the United States",
+    citation: "Loper Bright Enterprises v. Raimondo, 603 U.S. ___",
+    summary: "The Supreme Court granted review in the administrative-law dispute.",
+    appears_on: loper_bright_case @ 2023-05-01..2023-05-01,
+}
+
+entity supreme_court_argument : fact {
+    reference_source: "Supreme Court of the United States",
+    citation: "Loper Bright Enterprises v. Raimondo, 603 U.S. ___",
+    summary: "The Supreme Court heard argument.",
+    appears_on: loper_bright_case @ 2024-01-17..2024-01-17,
+}
+
+entity loper_decision : fact {
+    reference_source: "Supreme Court of the United States",
+    citation: "Loper Bright Enterprises v. Raimondo, 603 U.S. ___",
+    summary: "The Court held that courts must exercise independent judgment when interpreting statutes.",
+    appears_on: loper_bright_case @ 2024-06-28..2024-06-28,
+}
+
+entity chevron_overruled : fact {
+    reference_source: "Supreme Court of the United States",
+    citation: "Loper Bright Enterprises v. Raimondo, 603 U.S. ___",
+    summary: "The Court overruled Chevron's deference framework.",
+    appears_on: loper_bright_case @ 2024-06-28..2024-06-28,
+}
+
+entity supreme_court_loper_pdf : evidence {
+    citation: "Loper Bright Enterprises v. Raimondo, 603 U.S. ___",
+    source: "Supreme Court of the United States",
+    url: "https://www.supremecourt.gov/opinions/23pdf/22-451_7m58.pdf",
+    admissibility: "official opinion",
+    appears_on: loper_bright_case @ 2024-06-28..2024-06-28,
+}
+
+entity loper_opinion_exhibit : exhibit {
+    number: "LOP-1",
+    description: "Official Supreme Court PDF for Loper Bright",
+    appears_on: loper_bright_case @ 2024-06-28..2024-06-28,
+}
+
+entity agency_deference_claim : claim {
+    narrative: "government",
+    reference_source: "Supreme Court of the United States",
+    citation: "Chevron framework discussed in Loper Bright",
+    position: "Courts may defer to agency interpretations of ambiguous statutory provisions under Chevron.",
+    appears_on: loper_bright_case @ 2023-05-01..2024-06-28,
+}
+
+entity independent_judgment_claim : claim {
+    narrative: "petitioners",
+    reference_source: "Supreme Court of the United States",
+    citation: "Loper Bright holding",
+    position: "Article III courts must independently decide statutory meaning rather than defer under Chevron.",
+    appears_on: loper_bright_case @ 2023-05-01..2024-06-28,
+}
+
+entity stare_decisis_limit_claim : claim {
+    narrative: "court",
+    reference_source: "Supreme Court of the United States",
+    citation: "Loper Bright holding",
+    position: "Stare decisis did not preserve Chevron once the Court found it inconsistent with judicial duty.",
+    appears_on: loper_bright_case @ 2024-06-28..2024-06-28,
+}
+
+rel supreme_court_loper_pdf -["cites"]-> cert_granted;
+rel supreme_court_loper_pdf -["cites"]-> supreme_court_argument;
+rel supreme_court_loper_pdf -["cites"]-> loper_decision;
+rel supreme_court_loper_pdf -["cites"]-> chevron_overruled;
+rel supreme_court_loper_pdf -["cites"]-> agency_deference_claim;
+rel supreme_court_loper_pdf -["cites"]-> independent_judgment_claim;
+rel supreme_court_loper_pdf -["cites"]-> stare_decisis_limit_claim;
+rel loper_opinion_exhibit -["includes"]-> supreme_court_loper_pdf;
+rel independent_judgment_claim -["contradicts"]-> agency_deference_claim;
+rel loper_decision -["corroborates"]-> independent_judgment_claim;
+rel stare_decisis_limit_claim -["corroborates"]-> independent_judgment_claim;
+rel chevron_overruled -["supersedes"]-> agency_deference_claim;

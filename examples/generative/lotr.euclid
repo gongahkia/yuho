@@ -1,0 +1,31 @@
+// Example: Lord of the Rings timeline
+
+timeline main {
+    kind: linear,
+    start: 2941-01-01,
+    end: 3019-12-31,
+}
+
+entity bilbo : character {
+    age: 111,
+    appears_on: main @ 2941-01-01..3001-09-22,
+}
+
+entity frodo : character {
+    age: 50,
+    appears_on: main @ 2968-09-22..3019-09-29,
+}
+
+entity gandalf : character {
+    role: "wizard",
+    appears_on: main @ 2941-01-01..3019-12-31,
+}
+
+entity ring : artifact {
+    power: "one ring",
+    appears_on: main @ 2941-07-10..3019-03-25,
+}
+
+rel bilbo -["mentors"]-> frodo;
+rel frodo -["carries"]-> ring;
+rel gandalf -["guides"]-> frodo;
