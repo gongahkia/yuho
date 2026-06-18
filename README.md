@@ -28,66 +28,46 @@
   <a href="./library/penal_code/">Encoded library</a>
 </p>
 
----
-
 ## What is Yuho?
 
-Yuho is a statute-shaped DSL: the top-level construct is a `statute N { … }`
-block with first-class fields for elements, penalties, illustrations,
-exceptions, and amendment lineage. The grammar tracks how penal code is
-actually drafted, so encoding a section is line-for-line with reading it.
+Yuho is a domain-specific language dedicated to simplifying [legalese](https://www.merriam-webster.com/dictionary/legalese) by providing a programmatic representation of Singapore Law.  
 
-The proof of concept is a complete encoding of the **Singapore Penal Code
-1871** — all 524 sections, 524 passing parse-and-build (L1+L2), 524
-author-stamped at the strictest fidelity tier (L3, 11-point checklist).
-The paper's §Limitations carries the explicit caveat that L3 stamps
-are author-administered.
-Mass-encoding the full
-code surfaced fourteen distinct grammar gaps (G1–G14), all either resolved
-in the parser or rerouted to a fidelity-diagnostic linter; the catalogue
-is documented in [`docs/researcher/phase-c-gaps.md`](./docs/researcher/phase-c-gaps.md).
+Yuho's top-level construct is a `statute` block with first-class fields for `elements`, `penalties`, `illustrations`, `exceptions`, and `amendment` lineage. 
 
-A second corpus — the **Indian Penal Code 1860** — ships as a phase-1
-cross-jurisdiction proof: 493 sections fully scraped (raw JSON in
-[`library/indian_penal_code/_raw/act.json`](./library/indian_penal_code/_raw/));
-8 representative sections (s300 / s302 / s375 / s376 / s378 / s420 /
-s497 / s509) fully encoded as `.yh` to test grammar fit. The
-[`yuho refs --compare-libraries`](./src/yuho/cli/commands/refs.py) tool
-emits structural-overlap stats across both libraries: 524 PC ↔ 493 IPC
-share **399 section numbers**.
+By tracking how statues are actually drafted, Yuho allows you to encode a section line-for-line *(the same way you would read it)*.
 
-Around the language sits a complete toolchain — eight transpilers
-(including Akoma Ntoso for cross-jurisdictional interop), an LSP, an
-MCP server, a VS Code extension, and Z3 / Alloy verification hookups —
-described below.
+[Current applications](#coverage) are focused on Singapore Criminal Law but really can be applied to any jurisdiction that relies on [statutes](https://www.merriam-webster.com/dictionary/statute).
+
+## Coverage
+
+The proof of concept is a complete encoding of all 524 sections of the **Singapore Penal Code 1871**
+
+In mass-encoding the full code surfaced fourteen distinct grammar gaps (G1–G14), all either resolved in the parser or rerouted to a fidelity-diagnostic linter. These are documented in greater detail at [`docs/researcher/phase-c-gaps.md`](./docs/researcher/phase-c-gaps.md).
+
+Road-map wise, a second corpus (in the **Indian Penal Code 1860**) was considered with presently conservative coverage of 493 of its sections at [`library/indian_penal_code/_raw/act.json`](./library/indian_penal_code/_raw/)).
+
+## Ecosystem
+
+Yuho is built around a toolchain of 8 other transpilers, including Akoma Ntoso for cross-jurisdictional interop, an LSP, an MCP server, a VS Code extension, and Z3 / Alloy verification hookups.
+
+For more on Yuho, see the paper at [`paper/`](./paper/) or check out a 5-minute tour at [`docs/user/5-minutes.md`](./docs/user/5-minutes.md)
 
 ## Quickstart
 
-### Supported Python: 3.10 – 3.13
+### Installation
 
-CI tests 3.10, 3.11, 3.12, 3.13. **Avoid Python 3.14 on macOS Homebrew** —
-the current `python@3.14` formula has an Expat ABI mismatch
-(`Symbol not found: _XML_SetAllocTrackerActivationThreshold`) that
-breaks every Python project doing XML parsing, including Yuho's AKN
-transpiler. A future Homebrew rotation will fix it; until then use
-3.10–3.13.
-
-### Recommended: install via `uv`
-
-`uv` ships its own statically-linked Pythons and sidesteps Homebrew's
-`ensurepip` and `libexpat` glitches entirely.
+#### `uv`
 
 ```sh
-brew install uv                 # one-time; or pipx install uv
 git clone https://github.com/gongahkia/yuho && cd yuho
 uv venv --python 3.13 .venv
 source .venv/bin/activate
 uv pip install -e '.[dev]'
-yuho --version                  # 5.1.0
+yuho --version
 pytest tests/ --ignore=tests/e2e -q
 ```
 
-### Fallback: plain `pip` (works if your Python install is healthy)
+#### `pip` 
 
 ```sh
 git clone https://github.com/gongahkia/yuho && cd yuho
@@ -96,30 +76,21 @@ source .venv/bin/activate
 pip install -e '.[dev]'
 ```
 
-### I want to *read* an encoded statute
+### Usage
+
+#### I want to *read* an encoded statute
 
 ```sh
-cat library/penal_code/s415_cheating/statute.yh           # the source
+cat library/penal_code/s415_cheating/statute.yh           
 yuho transpile -t english library/penal_code/s415_cheating/statute.yh
 ```
 
-### I want to *encode* a new statute
+#### I want to *encode* a new statute
 
 ```sh
-yuho --version                                            # 5.1.0
-yuho check examples/simple_statute.yh                     # validate
+yuho --version                                            
+yuho check examples/simple_statute.yh
 ```
-
-VS Code: install the extension under `editors/vscode-yuho/`, open a `.yh`
-file, hover over a `statute N` header to see its canonical SSO link and
-coverage badges. See [`editors/vscode-yuho/README.md`](./editors/vscode-yuho/README.md).
-
-### I want to *understand* the design
-
-Read the paper draft in [`paper/`](./paper/) — full prose treatment of
-the grammar, the toolchain, and the empirical findings from mass-encoding.
-The 5-minute tour at [`docs/user/5-minutes.md`](./docs/user/5-minutes.md)
-covers the same ground in less depth.
 
 ## Feature matrix
 
@@ -147,9 +118,6 @@ covers the same ground in less depth.
                                mindmap/Alloy/DOCX/AKN)  (Z3, Alloy)       (LSP, MCP, VSCode)
 ```
 
-A rendered SVG version lives at `paper/figures/architecture.mmd` and
-will land at `docs/architecture.svg` once the Mermaid CLI build runs.
-
 ## Citation
 
 If you use Yuho or its encoded library in academic work, please cite:
@@ -170,9 +138,7 @@ format.
 
 ## Contributing
 
-See [`.github/CONTRIBUTING.md`](./.github/CONTRIBUTING.md). Issues and pull
-requests welcome; use the paper reproducibility checklist and docs index
-as the current source of truth for implemented surfaces.
+See [`.github/CONTRIBUTING.md`](./.github/CONTRIBUTING.md)
 
 ## License
 
