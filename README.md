@@ -61,8 +61,6 @@ Around the language sits a complete toolchain — eight transpilers
 MCP server, a VS Code extension, and Z3 / Alloy verification hookups —
 described below.
 
----
-
 ## Quickstart
 
 ### Supported Python: 3.10 – 3.13
@@ -123,8 +121,6 @@ the grammar, the toolchain, and the empirical findings from mass-encoding.
 The 5-minute tour at [`docs/user/5-minutes.md`](./docs/user/5-minutes.md)
 covers the same ground in less depth.
 
----
-
 ## Feature matrix
 
 | Surface | Capability |
@@ -138,8 +134,6 @@ covers the same ground in less depth.
 | **Chronology / provenance** | Source-backed facts, timelines, relationships, issues, deadlines, exhibits, scenarios, semantic diff, and JSON/Markdown/Mermaid/SVG/HTML exports via `yuho chronology` |
 | **Coverage harness** | L1 (parse) · L2 (build + lint + fidelity) · L3 (11-point human audit) |
 | **Library** | 524 / 524 sections of the SG Penal Code 1871 encoded, stamped, and indexed; 493 IPC sections raw-scraped + 8 phase-1 encoded for comparative analysis |
-
----
 
 ## Architecture
 
@@ -155,32 +149,6 @@ covers the same ground in less depth.
 
 A rendered SVG version lives at `paper/figures/architecture.mmd` and
 will land at `docs/architecture.svg` once the Mermaid CLI build runs.
-
----
-
-## Project status
-
-| Metric | Value |
-|---|---|
-| SG sections encoded | 524 / 524 |
-| L1 (parse) | 524 / 524 |
-| L2 (build + lint) | 524 / 524 |
-| L3 (author-stamped) | 524 / 524 |
-| Grammar gaps (G1–G14) | 9 parser fixes · 2 lint checks · 2 not-a-gap · G10 resolver landed |
-| Behavioural-test companions | 139 / 524 (`make verify-runtime-tests` gated) |
-| Verbose-mermaid render | 524 / 524 (0 orphan nodes) |
-| Structural-diff Lean ↔ Python | 524 / 524 matched (`make verify-structural-diff-full`) |
-| Defeats-edge SAT | 1214 / 1214 (post-fix; pre-fix 1141 / 1253 = 91.1%) |
-| Case-law fixtures | n=43, top-1 51.2% / top-3 53.5% / constrained-consistency 100% |
-| §6.6 Lean mechanisation | v9, 0 `sorry`s, kernel-checked under Lean 4.10.0 |
-| IPC corpus | 493 raw-scraped, 8 phase-1 encoded |
-| Implementation SLOC | ~70.0k implementation SLOC, including 903-line grammar |
-| Library SLOC | ~29.8k encoded `.yh` SLOC (SG + IPC phase-1) |
-
-Numbers regenerate from `library/penal_code/_coverage/coverage.json` via
-`scripts/coverage_report.py`.
-
----
 
 ## Citation
 
@@ -199,8 +167,6 @@ If you use Yuho or its encoded library in academic work, please cite:
 
 A `CITATION.cff` is provided at the repo root for tools that consume that
 format.
-
----
 
 ## Contributing
 
