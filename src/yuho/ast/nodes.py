@@ -345,6 +345,47 @@ class IndexAccessNode(ASTNode):
 
 
 @dataclass(frozen=True)
+class ListExprNode(ASTNode):
+    """List literal expression."""
+
+    items: Tuple[ASTNode, ...]
+
+    def accept(self, visitor: "Visitor"):
+        return visitor.visit_list_expr(self)
+
+    def children(self) -> List[ASTNode]:
+        return list(self.items)
+
+
+@dataclass(frozen=True)
+class RangeExprNode(ASTNode):
+    """General range expression, e.g. 2024-01-01..2024-01-31."""
+
+    start: ASTNode
+    end: ASTNode
+
+    def accept(self, visitor: "Visitor"):
+        return visitor.visit_range_expr(self)
+
+    def children(self) -> List[ASTNode]:
+        return [self.start, self.end]
+
+
+@dataclass(frozen=True)
+class TimelineAppearanceNode(ASTNode):
+    """Timeline appearance expression: timeline @ start..end."""
+
+    timeline: str
+    range: RangeExprNode
+
+    def accept(self, visitor: "Visitor"):
+        return visitor.visit_timeline_appearance(self)
+
+    def children(self) -> List[ASTNode]:
+        return [self.range]
+
+
+@dataclass(frozen=True)
 class FunctionCallNode(ASTNode):
     """Function call expression: callee(args...)."""
 
@@ -596,6 +637,7 @@ class StructDefNode(ASTNode):
     fields: Tuple[FieldDef, ...]
     type_params: Tuple[str, ...] = ()  # Generic type parameters
     doc_comment: Optional[str] = None
+    parent: Optional[str] = None
 
     def accept(self, visitor: "Visitor"):
         return visitor.visit_struct_def(self)
@@ -1016,6 +1058,154 @@ class ConflictCheckNode(ASTNode):
         return visitor.visit_conflict_check(self)
 
 
+# =============================================================================
+# Chronology / provenance nodes
+# =============================================================================
+
+
+@dataclass(frozen=True)
+class ChronologyField(ASTNode):
+    """Named field inside a chronology declaration."""
+
+    name: str
+    value: ASTNode
+
+    def accept(self, visitor: "Visitor"):
+        return visitor.visit_chronology_field(self)
+
+    def children(self) -> List[ASTNode]:
+        return [self.value]
+
+
+@dataclass(frozen=True)
+class ChronologyDeclNode(ASTNode):
+    """Base class for top-level chronology declarations."""
+
+    name: str
+    fields: Tuple[ChronologyField, ...] = ()
+
+    def accept(self, visitor: "Visitor"):
+        return visitor.visit_chronology_decl(self)
+
+    def children(self) -> List[ASTNode]:
+        return list(self.fields)
+
+
+@dataclass(frozen=True)
+class SourceDeclNode(ChronologyDeclNode):
+    kind: Optional[str] = None
+
+    def accept(self, visitor: "Visitor"):
+        return visitor.visit_source_decl(self)
+
+
+@dataclass(frozen=True)
+class SourceBundleDeclNode(ChronologyDeclNode):
+    def accept(self, visitor: "Visitor"):
+        return visitor.visit_source_bundle_decl(self)
+
+
+@dataclass(frozen=True)
+class LocatorDeclNode(ChronologyDeclNode):
+    def accept(self, visitor: "Visitor"):
+        return visitor.visit_locator_decl(self)
+
+
+@dataclass(frozen=True)
+class RulesetDeclNode(ChronologyDeclNode):
+    def accept(self, visitor: "Visitor"):
+        return visitor.visit_ruleset_decl(self)
+
+
+@dataclass(frozen=True)
+class DeadlineRuleDeclNode(ChronologyDeclNode):
+    def accept(self, visitor: "Visitor"):
+        return visitor.visit_deadline_rule_decl(self)
+
+
+@dataclass(frozen=True)
+class IssueDeclNode(ChronologyDeclNode):
+    def accept(self, visitor: "Visitor"):
+        return visitor.visit_issue_decl(self)
+
+
+@dataclass(frozen=True)
+class IssueElementDeclNode(ChronologyDeclNode):
+    def accept(self, visitor: "Visitor"):
+        return visitor.visit_issue_element_decl(self)
+
+
+@dataclass(frozen=True)
+class TimelineDeclNode(ChronologyDeclNode):
+    def accept(self, visitor: "Visitor"):
+        return visitor.visit_timeline_decl(self)
+
+
+@dataclass(frozen=True)
+class EntityDeclNode(ChronologyDeclNode):
+    type_name: Optional[str] = None
+
+    def accept(self, visitor: "Visitor"):
+        return visitor.visit_entity_decl(self)
+
+
+@dataclass(frozen=True)
+class RelationshipTypeDeclNode(ChronologyDeclNode):
+    def accept(self, visitor: "Visitor"):
+        return visitor.visit_relationship_type_decl(self)
+
+
+@dataclass(frozen=True)
+class RelationshipDeclNode(ASTNode):
+    """Directed chronology relationship."""
+
+    source: str
+    target: str
+    label: Optional[str] = None
+    temporal_scope: Optional[RangeExprNode] = None
+
+    def accept(self, visitor: "Visitor"):
+        return visitor.visit_relationship_decl(self)
+
+    def children(self) -> List[ASTNode]:
+        return [self.temporal_scope] if self.temporal_scope else []
+
+
+@dataclass(frozen=True)
+class ScenarioDeclNode(ASTNode):
+    """Stored alternate chronology world."""
+
+    name: str
+    fork_from: Optional[str] = None
+    body: Tuple[ASTNode, ...] = ()
+
+    def accept(self, visitor: "Visitor"):
+        return visitor.visit_scenario_decl(self)
+
+    def children(self) -> List[ASTNode]:
+        return list(self.body)
+
+
+@dataclass(frozen=True)
+class ViewDeclNode(ChronologyDeclNode):
+    def accept(self, visitor: "Visitor"):
+        return visitor.visit_view_decl(self)
+
+
+@dataclass(frozen=True)
+class ConstraintDeclNode(ASTNode):
+    """Chronology constraint block."""
+
+    name: str
+    body: Tuple[ASTNode, ...] = ()
+
+    def accept(self, visitor: "Visitor"):
+        return visitor.visit_constraint_decl(self)
+
+    def children(self) -> List[ASTNode]:
+        return list(self.body)
+
+
 @dataclass(frozen=True)
 class PartyNode(ASTNode):
     """Party/role declaration within a statute (e.g., offender, victim)."""
@@ -1240,6 +1430,20 @@ class ModuleNode(ASTNode):
     type_aliases: Tuple[TypeAliasNode, ...] = ()
     legal_tests: Tuple[LegalTestNode, ...] = ()
     conflict_checks: Tuple[ConflictCheckNode, ...] = ()
+    sources: Tuple[SourceDeclNode, ...] = ()
+    source_bundles: Tuple[SourceBundleDeclNode, ...] = ()
+    locators: Tuple[LocatorDeclNode, ...] = ()
+    rulesets: Tuple[RulesetDeclNode, ...] = ()
+    deadline_rules: Tuple[DeadlineRuleDeclNode, ...] = ()
+    issues: Tuple[IssueDeclNode, ...] = ()
+    issue_elements: Tuple[IssueElementDeclNode, ...] = ()
+    timelines: Tuple[TimelineDeclNode, ...] = ()
+    entities: Tuple[EntityDeclNode, ...] = ()
+    relationship_types: Tuple[RelationshipTypeDeclNode, ...] = ()
+    relationships: Tuple[RelationshipDeclNode, ...] = ()
+    scenarios: Tuple[ScenarioDeclNode, ...] = ()
+    views: Tuple[ViewDeclNode, ...] = ()
+    constraints: Tuple[ConstraintDeclNode, ...] = ()
 
     def accept(self, visitor: "Visitor"):
         return visitor.visit_module(self)
@@ -1257,4 +1461,18 @@ class ModuleNode(ASTNode):
         result.extend(self.assertions)
         result.extend(self.legal_tests)
         result.extend(self.conflict_checks)
+        result.extend(self.sources)
+        result.extend(self.source_bundles)
+        result.extend(self.locators)
+        result.extend(self.rulesets)
+        result.extend(self.deadline_rules)
+        result.extend(self.issues)
+        result.extend(self.issue_elements)
+        result.extend(self.timelines)
+        result.extend(self.entities)
+        result.extend(self.relationship_types)
+        result.extend(self.relationships)
+        result.extend(self.scenarios)
+        result.extend(self.views)
+        result.extend(self.constraints)
         return result

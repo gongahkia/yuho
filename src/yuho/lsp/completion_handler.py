@@ -24,6 +24,20 @@ YUHO_KEYWORDS = [
     "pass",
     "return",
     "statute",
+    "source",
+    "source_bundle",
+    "locator",
+    "timeline",
+    "entity",
+    "reltype",
+    "rel",
+    "ruleset",
+    "deadline_rule",
+    "issue",
+    "issue_element",
+    "scenario",
+    "view",
+    "constraint",
     "subsection",                        # G5
     "definitions",
     "elements",
@@ -111,6 +125,9 @@ CONTEXTUAL_HINTS: Dict[str, List[str]] = {
     "statute_body": ["definitions", "elements", "penalty",
                      "illustration", "exception", "subsection",
                      "caselaw", "parties"],
+    "chronology": ["source", "source_bundle", "locator", "timeline", "entity",
+                   "reltype", "rel", "ruleset", "deadline_rule", "issue",
+                   "issue_element", "scenario", "view", "constraint"],
 }
 
 # Yuho built-in types
@@ -238,6 +255,24 @@ def get_completions(
                     label=f"S{statute.section_number}",
                     kind=lsp.CompletionItemKind.Module,
                     detail=f"statute {statute.section_number}: {title}",
+                )
+            )
+
+        chronology_symbols = []
+        chronology_symbols.extend((decl.name, "source") for decl in doc_state.ast.sources)
+        chronology_symbols.extend((decl.name, "source_bundle") for decl in doc_state.ast.source_bundles)
+        chronology_symbols.extend((decl.name, "locator") for decl in doc_state.ast.locators)
+        chronology_symbols.extend((decl.name, "timeline") for decl in doc_state.ast.timelines)
+        chronology_symbols.extend((decl.name, "entity") for decl in doc_state.ast.entities)
+        chronology_symbols.extend((decl.name, "reltype") for decl in doc_state.ast.relationship_types)
+        chronology_symbols.extend((decl.name, "issue") for decl in doc_state.ast.issues)
+        chronology_symbols.extend((decl.name, "deadline_rule") for decl in doc_state.ast.deadline_rules)
+        for name, kind in chronology_symbols:
+            items.append(
+                lsp.CompletionItem(
+                    label=name,
+                    kind=lsp.CompletionItemKind.Reference,
+                    detail=kind,
                 )
             )
 

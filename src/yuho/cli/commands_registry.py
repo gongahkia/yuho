@@ -88,6 +88,144 @@ def register_group_commands(cli: click.Group) -> None:
         run_config_init(force=force, verbose=ctx.obj["verbose"])
 
     # =========================================================================
+    # Chronology command
+    # =========================================================================
+
+    @cli.group()
+    @click.pass_context
+    def chronology(ctx: click.Context) -> None:
+        """Analyze and export chronology/provenance declarations."""
+        pass
+
+    @chronology.command("check")
+    @click.argument("file", type=click.Path(exists=True))
+    @click.option("--json", "json_output", is_flag=True, help="Output as JSON")
+    def chronology_check(file: str, json_output: bool) -> None:
+        from yuho.cli.commands.chronology import run_chronology_check
+
+        run_chronology_check(file, json_output=json_output)
+
+    @chronology.command("export")
+    @click.argument("file", type=click.Path(exists=True))
+    @click.option(
+        "-t",
+        "--target",
+        type=click.Choice(["json", "markdown", "mermaid", "svg", "html"]),
+        default="json",
+        help="Export target",
+    )
+    @click.option("-o", "--output", type=click.Path(), help="Output file")
+    @click.option("--narrative", help="Filter entities by narrative name")
+    def chronology_export(file: str, target: str, output: Optional[str], narrative: Optional[str]) -> None:
+        from yuho.cli.commands.chronology import run_chronology_export
+
+        run_chronology_export(file, target=target, output=output, narrative=narrative)
+
+    @chronology.command("diff")
+    @click.argument("left", type=click.Path(exists=True))
+    @click.argument("right", type=click.Path(exists=True))
+    @click.option(
+        "-t",
+        "--target",
+        type=click.Choice(["text", "svg", "html"]),
+        default="text",
+        help="Diff target",
+    )
+    @click.option("-o", "--output", type=click.Path(), help="Output file")
+    def chronology_diff(left: str, right: str, target: str, output: Optional[str]) -> None:
+        from yuho.cli.commands.chronology import run_chronology_diff
+
+        run_chronology_diff(left, right, target=target, output=output)
+
+    @chronology.command("sources")
+    @click.argument("file", type=click.Path(exists=True))
+    def chronology_sources(file: str) -> None:
+        from yuho.cli.commands.chronology import run_chronology_sources
+
+        run_chronology_sources(file)
+
+    @chronology.command("deadlines")
+    @click.argument("file", type=click.Path(exists=True))
+    def chronology_deadlines(file: str) -> None:
+        from yuho.cli.commands.chronology import run_chronology_deadlines
+
+        run_chronology_deadlines(file)
+
+    @chronology.command("issues")
+    @click.argument("file", type=click.Path(exists=True))
+    def chronology_issues(file: str) -> None:
+        from yuho.cli.commands.chronology import run_chronology_issues
+
+        run_chronology_issues(file)
+
+    @chronology.command("contradictions")
+    @click.argument("file", type=click.Path(exists=True))
+    def chronology_contradictions(file: str) -> None:
+        from yuho.cli.commands.chronology import run_chronology_contradictions
+
+        run_chronology_contradictions(file)
+
+    @chronology.command("review")
+    @click.argument("file", type=click.Path(exists=True))
+    def chronology_review(file: str) -> None:
+        from yuho.cli.commands.chronology import run_chronology_review
+
+        run_chronology_review(file)
+
+    @chronology.command("exhibits")
+    @click.argument("file", type=click.Path(exists=True))
+    @click.option(
+        "--format",
+        "output_format",
+        type=click.Choice(["text", "csv", "json"]),
+        default="text",
+        help="Report format",
+    )
+    def chronology_exhibits(file: str, output_format: str) -> None:
+        from yuho.cli.commands.chronology import run_chronology_exhibits
+
+        run_chronology_exhibits(file, output_format=output_format)
+
+    @chronology.command("scenario-report")
+    @click.argument("file", type=click.Path(exists=True))
+    @click.argument("scenario", required=False)
+    def chronology_scenario_report(file: str, scenario: Optional[str]) -> None:
+        from yuho.cli.commands.chronology import run_chronology_scenario_report
+
+        run_chronology_scenario_report(file, scenario=scenario)
+
+    @chronology.command("scenario-diff")
+    @click.argument("file", type=click.Path(exists=True))
+    @click.argument("scenario")
+    @click.option(
+        "-t",
+        "--target",
+        type=click.Choice(["text", "svg", "html"]),
+        default="text",
+        help="Diff target",
+    )
+    @click.option("-o", "--output", type=click.Path(), help="Output file")
+    def chronology_scenario_diff(file: str, scenario: str, target: str, output: Optional[str]) -> None:
+        from yuho.cli.commands.chronology import run_chronology_scenario_diff
+
+        run_chronology_scenario_diff(file, scenario=scenario, target=target, output=output)
+
+    @chronology.command("import")
+    @click.argument("file", type=click.Path(exists=True))
+    @click.option(
+        "--from",
+        "source_format",
+        type=click.Choice(["csv", "jsonld"]),
+        required=True,
+        help="Import format",
+    )
+    @click.option("-o", "--output", type=click.Path(), help="Output .yh file")
+    def chronology_import(file: str, source_format: str, output: Optional[str]) -> None:
+        from yuho.cli.commands.chronology import run_chronology_import
+
+        run_chronology_import(file, source_format=source_format, output=output)
+
+    # =========================================================================
     # Library command
     # =========================================================================
 

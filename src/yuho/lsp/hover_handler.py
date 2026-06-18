@@ -28,6 +28,20 @@ YUHO_KEYWORDS = [
     "pass",
     "return",
     "statute",
+    "source",
+    "source_bundle",
+    "locator",
+    "timeline",
+    "entity",
+    "reltype",
+    "rel",
+    "ruleset",
+    "deadline_rule",
+    "issue",
+    "issue_element",
+    "scenario",
+    "view",
+    "constraint",
     "definitions",
     "elements",
     "penalty",
@@ -63,6 +77,20 @@ KEYWORD_DOCS = {
     "match": "Pattern matching expression.",
     "case": "Case arm in a match expression.",
     "statute": "Defines a legal statute with elements and penalties.",
+    "source": "Defines an evidentiary or legal source record.",
+    "source_bundle": "Groups source records for shared provenance.",
+    "locator": "Defines a pinpoint location within a source.",
+    "timeline": "Defines a bounded chronology axis.",
+    "entity": "Defines a chronology fact, claim, witness, deadline, or exhibit.",
+    "reltype": "Defines relationship endpoint semantics.",
+    "rel": "Links two chronology entities.",
+    "ruleset": "Defines a jurisdiction or procedural authority record.",
+    "deadline_rule": "Defines declarative deadline authority.",
+    "issue": "Defines an issue map node.",
+    "issue_element": "Links issue map entries to facts or legal elements.",
+    "scenario": "Defines an alternate chronology world.",
+    "view": "Defines a chronology report/view filter.",
+    "constraint": "Defines chronology constraints.",
     "elements": "Section containing the elements of an offense.",
     "penalty": "Section specifying the punishment for an offense.",
     "actus_reus": "Physical/conduct element of an offense (guilty act).",
@@ -260,6 +288,25 @@ def get_hover(
                 if counts:
                     hover_content.append(f"\n*Structure:* {', '.join(counts)}")
                 break
+
+        chronology_decl_groups = (
+            ("source", doc_state.ast.sources),
+            ("source_bundle", doc_state.ast.source_bundles),
+            ("locator", doc_state.ast.locators),
+            ("timeline", doc_state.ast.timelines),
+            ("entity", doc_state.ast.entities),
+            ("reltype", doc_state.ast.relationship_types),
+            ("issue", doc_state.ast.issues),
+            ("issue_element", doc_state.ast.issue_elements),
+            ("deadline_rule", doc_state.ast.deadline_rules),
+        )
+        for kind, decls in chronology_decl_groups:
+            for decl in decls:
+                if decl.name == word:
+                    hover_content.append(f"**chronology {kind}** `{decl.name}`")
+                    if hasattr(decl, "type_name") and decl.type_name:
+                        hover_content.append(f"type: `{decl.type_name}`")
+                    break
 
     if not hover_content:
         return None

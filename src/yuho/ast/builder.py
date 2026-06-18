@@ -150,6 +150,20 @@ class ASTBuilder:
         type_aliases: List[nodes.TypeAliasNode] = []
         legal_tests: List[nodes.LegalTestNode] = []
         conflict_checks: List[nodes.ConflictCheckNode] = []
+        sources: List[nodes.SourceDeclNode] = []
+        source_bundles: List[nodes.SourceBundleDeclNode] = []
+        locators: List[nodes.LocatorDeclNode] = []
+        rulesets: List[nodes.RulesetDeclNode] = []
+        deadline_rules: List[nodes.DeadlineRuleDeclNode] = []
+        issues: List[nodes.IssueDeclNode] = []
+        issue_elements: List[nodes.IssueElementDeclNode] = []
+        timelines: List[nodes.TimelineDeclNode] = []
+        entities: List[nodes.EntityDeclNode] = []
+        relationship_types: List[nodes.RelationshipTypeDeclNode] = []
+        relationships: List[nodes.RelationshipDeclNode] = []
+        scenarios: List[nodes.ScenarioDeclNode] = []
+        views: List[nodes.ViewDeclNode] = []
+        constraints: List[nodes.ConstraintDeclNode] = []
 
         for child in node.children:
             if child.type == "import_statement":
@@ -174,6 +188,34 @@ class ASTBuilder:
                 legal_tests.append(self._build_legal_test(child))
             elif child.type == "conflict_check_block":
                 conflict_checks.append(self._build_conflict_check(child))
+            elif child.type == "source_declaration":
+                sources.append(self._build_source_decl(child))
+            elif child.type == "source_bundle_declaration":
+                source_bundles.append(self._build_source_bundle_decl(child))
+            elif child.type == "locator_declaration":
+                locators.append(self._build_locator_decl(child))
+            elif child.type == "ruleset_declaration":
+                rulesets.append(self._build_ruleset_decl(child))
+            elif child.type == "deadline_rule_declaration":
+                deadline_rules.append(self._build_deadline_rule_decl(child))
+            elif child.type == "issue_declaration":
+                issues.append(self._build_issue_decl(child))
+            elif child.type == "issue_element_declaration":
+                issue_elements.append(self._build_issue_element_decl(child))
+            elif child.type == "timeline_declaration":
+                timelines.append(self._build_timeline_decl(child))
+            elif child.type == "entity_declaration":
+                entities.append(self._build_entity_decl(child))
+            elif child.type == "relationship_type_declaration":
+                relationship_types.append(self._build_relationship_type_decl(child))
+            elif child.type == "relationship_declaration":
+                relationships.append(self._build_relationship_decl(child))
+            elif child.type == "scenario_declaration":
+                scenarios.append(self._build_scenario_decl(child))
+            elif child.type == "view_declaration":
+                views.append(self._build_view_decl(child))
+            elif child.type == "constraint_declaration":
+                constraints.append(self._build_constraint_decl(child))
 
         return nodes.ModuleNode(
             imports=tuple(imports),
@@ -187,6 +229,20 @@ class ASTBuilder:
             type_aliases=tuple(type_aliases),
             legal_tests=tuple(legal_tests),
             conflict_checks=tuple(conflict_checks),
+            sources=tuple(sources),
+            source_bundles=tuple(source_bundles),
+            locators=tuple(locators),
+            rulesets=tuple(rulesets),
+            deadline_rules=tuple(deadline_rules),
+            issues=tuple(issues),
+            issue_elements=tuple(issue_elements),
+            timelines=tuple(timelines),
+            entities=tuple(entities),
+            relationship_types=tuple(relationship_types),
+            relationships=tuple(relationships),
+            scenarios=tuple(scenarios),
+            views=tuple(views),
+            constraints=tuple(constraints),
             source_location=self._loc(node),
         )
 
@@ -212,6 +268,174 @@ class ASTBuilder:
         return nodes.AssertStmt(
             condition=condition,
             message=message,
+            source_location=self._loc(node),
+        )
+
+    # =========================================================================
+    # Chronology / provenance declarations
+    # =========================================================================
+
+    def _build_chronology_name(self, node) -> str:
+        """Extract an identifier or string literal declaration name."""
+        if not node:
+            return ""
+        if node.type == "string_literal":
+            return self._build_string_lit(node).value
+        return self._text(node)
+
+    def _build_chronology_fields(self, node) -> Tuple[nodes.ChronologyField, ...]:
+        fields: List[nodes.ChronologyField] = []
+        for child in node.children:
+            if child.type == "chronology_field":
+                fields.append(self._build_chronology_field(child))
+        return tuple(fields)
+
+    def _build_chronology_field(self, node) -> nodes.ChronologyField:
+        name_node = self._child_by_field(node, "name")
+        value_node = self._child_by_field(node, "value")
+        return nodes.ChronologyField(
+            name=self._text(name_node) if name_node else "",
+            value=self._build_expression(value_node) if value_node else nodes.PassExprNode(),
+            source_location=self._loc(node),
+        )
+
+    def _build_chronology_decl(self, node):
+        dispatch = {
+            "source_declaration": self._build_source_decl,
+            "source_bundle_declaration": self._build_source_bundle_decl,
+            "locator_declaration": self._build_locator_decl,
+            "ruleset_declaration": self._build_ruleset_decl,
+            "deadline_rule_declaration": self._build_deadline_rule_decl,
+            "issue_declaration": self._build_issue_decl,
+            "issue_element_declaration": self._build_issue_element_decl,
+            "timeline_declaration": self._build_timeline_decl,
+            "entity_declaration": self._build_entity_decl,
+            "relationship_type_declaration": self._build_relationship_type_decl,
+            "relationship_declaration": self._build_relationship_decl,
+            "scenario_declaration": self._build_scenario_decl,
+            "view_declaration": self._build_view_decl,
+            "constraint_declaration": self._build_constraint_decl,
+        }
+        builder = dispatch.get(node.type)
+        return builder(node) if builder else None
+
+    def _build_named_chronology_decl(self, node, cls):
+        name_node = self._child_by_field(node, "name")
+        return cls(
+            name=self._build_chronology_name(name_node),
+            fields=self._build_chronology_fields(node),
+            source_location=self._loc(node),
+        )
+
+    def _build_source_decl(self, node) -> nodes.SourceDeclNode:
+        name_node = self._child_by_field(node, "name")
+        kind_node = self._child_by_field(node, "kind")
+        return nodes.SourceDeclNode(
+            name=self._build_chronology_name(name_node),
+            fields=self._build_chronology_fields(node),
+            kind=self._text(kind_node) if kind_node else None,
+            source_location=self._loc(node),
+        )
+
+    def _build_source_bundle_decl(self, node) -> nodes.SourceBundleDeclNode:
+        return self._build_named_chronology_decl(node, nodes.SourceBundleDeclNode)
+
+    def _build_locator_decl(self, node) -> nodes.LocatorDeclNode:
+        return self._build_named_chronology_decl(node, nodes.LocatorDeclNode)
+
+    def _build_ruleset_decl(self, node) -> nodes.RulesetDeclNode:
+        return self._build_named_chronology_decl(node, nodes.RulesetDeclNode)
+
+    def _build_deadline_rule_decl(self, node) -> nodes.DeadlineRuleDeclNode:
+        return self._build_named_chronology_decl(node, nodes.DeadlineRuleDeclNode)
+
+    def _build_issue_decl(self, node) -> nodes.IssueDeclNode:
+        return self._build_named_chronology_decl(node, nodes.IssueDeclNode)
+
+    def _build_issue_element_decl(self, node) -> nodes.IssueElementDeclNode:
+        return self._build_named_chronology_decl(node, nodes.IssueElementDeclNode)
+
+    def _build_timeline_decl(self, node) -> nodes.TimelineDeclNode:
+        return self._build_named_chronology_decl(node, nodes.TimelineDeclNode)
+
+    def _build_entity_decl(self, node) -> nodes.EntityDeclNode:
+        name_node = self._child_by_field(node, "name")
+        type_node = self._child_by_field(node, "type_name")
+        return nodes.EntityDeclNode(
+            name=self._build_chronology_name(name_node),
+            fields=self._build_chronology_fields(node),
+            type_name=self._text(type_node) if type_node else None,
+            source_location=self._loc(node),
+        )
+
+    def _build_relationship_type_decl(self, node) -> nodes.RelationshipTypeDeclNode:
+        return self._build_named_chronology_decl(node, nodes.RelationshipTypeDeclNode)
+
+    def _build_relationship_decl(self, node) -> nodes.RelationshipDeclNode:
+        source_node = self._child_by_field(node, "source")
+        target_node = self._child_by_field(node, "target")
+        label_node = self._child_by_field(node, "label")
+        temporal_node = self._child_by_field(node, "temporal_scope")
+        temporal_scope = self._build_range_expr(temporal_node) if temporal_node else None
+        return nodes.RelationshipDeclNode(
+            source=self._text(source_node) if source_node else "",
+            target=self._text(target_node) if target_node else "",
+            label=self._build_string_lit(label_node).value if label_node else None,
+            temporal_scope=temporal_scope,
+            source_location=self._loc(node),
+        )
+
+    def _build_scenario_decl(self, node) -> nodes.ScenarioDeclNode:
+        name_node = self._child_by_field(node, "name")
+        fork_node = self._child_by_field(node, "fork_from")
+        body: List[nodes.ASTNode] = []
+        statement_types = {
+            "variable_declaration",
+            "assignment_statement",
+            "expression_statement",
+            "return_statement",
+            "pass_statement",
+            "assert_statement",
+        }
+        for child in node.children:
+            chrono = self._build_chronology_decl(child)
+            if chrono:
+                body.append(chrono)
+            elif child.type in statement_types:
+                stmt = self._build_statement(child)
+                if stmt:
+                    body.append(stmt)
+        return nodes.ScenarioDeclNode(
+            name=self._build_chronology_name(name_node),
+            fork_from=self._text(fork_node) if fork_node else None,
+            body=tuple(body),
+            source_location=self._loc(node),
+        )
+
+    def _build_view_decl(self, node) -> nodes.ViewDeclNode:
+        return self._build_named_chronology_decl(node, nodes.ViewDeclNode)
+
+    def _build_constraint_decl(self, node) -> nodes.ConstraintDeclNode:
+        name_node = self._child_by_field(node, "name")
+        body: List[nodes.ASTNode] = []
+        statement_types = {
+            "variable_declaration",
+            "assignment_statement",
+            "expression_statement",
+            "return_statement",
+            "pass_statement",
+            "assert_statement",
+        }
+        for child in node.children:
+            if child.type == "relationship_declaration":
+                body.append(self._build_relationship_decl(child))
+            elif child.type in statement_types:
+                stmt = self._build_statement(child)
+                if stmt:
+                    body.append(stmt)
+        return nodes.ConstraintDeclNode(
+            name=self._build_chronology_name(name_node),
+            body=tuple(body),
             source_location=self._loc(node),
         )
 
@@ -241,6 +465,7 @@ class ASTBuilder:
     def _build_struct_def(self, node) -> nodes.StructDefNode:
         """Build StructDefNode from struct_definition node."""
         name_node = self._child_by_field(node, "name")
+        parent_node = self._child_by_field(node, "parent")
         name = self._text(name_node) if name_node else ""
 
         # Type parameters
@@ -262,6 +487,7 @@ class ASTBuilder:
             fields=tuple(fields),
             type_params=tuple(type_params),
             doc_comment=self._get_doc_comment(node),
+            parent=self._text(parent_node) if parent_node else None,
             source_location=self._loc(node),
         )
 
@@ -408,6 +634,8 @@ class ASTBuilder:
             return self._build_return_stmt(node)
         elif node.type == "pass_statement":
             return nodes.PassStmt(source_location=self._loc(node))
+        elif node.type == "assert_statement":
+            return self._build_assert(node)
         elif node.type == "expression_statement":
             expr_node = node.children[0] if node.children else None
             if expr_node:
@@ -507,6 +735,12 @@ class ASTBuilder:
                 name=self._text(node),
                 source_location=self._loc(node),
             )
+        elif node_type == "list_literal":
+            return self._build_list_expr(node)
+        elif node_type == "range_expression":
+            return self._build_range_expr(node)
+        elif node_type == "timeline_appearance":
+            return self._build_timeline_appearance(node)
         elif node_type == "field_access":
             return self._build_field_access(node)
         elif node_type == "index_access":
@@ -645,6 +879,50 @@ class ASTBuilder:
             hours=hours,
             minutes=minutes,
             seconds=seconds,
+            source_location=self._loc(node),
+        )
+
+    def _build_list_expr(self, node) -> nodes.ListExprNode:
+        """Build ListExprNode from list_literal node."""
+        items: List[nodes.ASTNode] = []
+        for child in node.children:
+            if child.type not in ("[", "]", ","):
+                items.append(self._build_expression(child))
+        return nodes.ListExprNode(
+            items=tuple(items),
+            source_location=self._loc(node),
+        )
+
+    def _build_range_expr(self, node) -> nodes.RangeExprNode:
+        """Build RangeExprNode from range_expression node."""
+        expr_children = [c for c in node.children if c.type not in ("..",)]
+        if len(expr_children) < 2:
+            return nodes.RangeExprNode(
+                start=nodes.PassExprNode(source_location=self._loc(node)),
+                end=nodes.PassExprNode(source_location=self._loc(node)),
+                source_location=self._loc(node),
+            )
+        return nodes.RangeExprNode(
+            start=self._build_expression(expr_children[0]),
+            end=self._build_expression(expr_children[-1]),
+            source_location=self._loc(node),
+        )
+
+    def _build_timeline_appearance(self, node) -> nodes.TimelineAppearanceNode:
+        """Build TimelineAppearanceNode from timeline_appearance node."""
+        timeline_node = self._child_by_field(node, "timeline")
+        range_node = self._child_by_field(node, "range")
+        return nodes.TimelineAppearanceNode(
+            timeline=self._text(timeline_node) if timeline_node else "",
+            range=(
+                self._build_range_expr(range_node)
+                if range_node
+                else nodes.RangeExprNode(
+                    start=nodes.PassExprNode(source_location=self._loc(node)),
+                    end=nodes.PassExprNode(source_location=self._loc(node)),
+                    source_location=self._loc(node),
+                )
+            ),
             source_location=self._loc(node),
         )
 

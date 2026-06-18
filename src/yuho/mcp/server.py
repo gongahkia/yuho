@@ -925,6 +925,20 @@ class YuhoMCPServer:
                 "pass",
                 "return",
                 "statute",
+                "source",
+                "source_bundle",
+                "locator",
+                "timeline",
+                "entity",
+                "reltype",
+                "rel",
+                "ruleset",
+                "deadline_rule",
+                "issue",
+                "issue_element",
+                "scenario",
+                "view",
+                "constraint",
                 "definitions",
                 "elements",
                 "penalty",
@@ -988,6 +1002,20 @@ class YuhoMCPServer:
                 "match": "Pattern matching expression.",
                 "case": "Case arm in a match expression.",
                 "statute": "Defines a legal statute with elements and penalties.",
+                "source": "Defines an evidentiary or legal source record.",
+                "source_bundle": "Groups source records for shared provenance.",
+                "locator": "Defines a pinpoint location within a source.",
+                "timeline": "Defines a bounded chronology axis.",
+                "entity": "Defines a chronology fact, claim, witness, deadline, or exhibit.",
+                "reltype": "Defines relationship endpoint semantics.",
+                "rel": "Links two chronology entities.",
+                "ruleset": "Defines jurisdiction or procedural authority records.",
+                "deadline_rule": "Defines declarative deadline authority.",
+                "issue": "Defines an issue map node.",
+                "issue_element": "Links issues to chronology/legal elements.",
+                "scenario": "Defines an alternate chronology world.",
+                "view": "Defines a chronology report/view filter.",
+                "constraint": "Defines chronology constraints.",
                 "elements": "Section containing the elements of an offense.",
                 "penalty": "Section specifying the punishment for an offense.",
                 "actus_reus": "Physical/conduct element of an offense (guilty act).",
@@ -2651,6 +2679,25 @@ statute N "Title"
     parties { ... }
 }
 ```
+
+## Chronology / provenance declarations
+
+Top-level chronology declarations use Yuho field assignment (`:=`) and can coexist with statutes:
+
+```yh
+source trial_transcript: transcript { citation := "Tr. 42"; }
+locator tr_42 { source_ref := trial_transcript; page := 42; }
+timeline trial { start := 1951-01-01; end := 1954-05-17; }
+entity segregation_finding: fact {
+    source_ref := trial_transcript;
+    locator_ref := tr_42;
+    appears_on := trial @ 1951-01-01..1954-05-17;
+}
+entity equal_protection_claim: claim { section_ref := "14"; }
+rel segregation_finding -["corroborates"]-> equal_protection_claim;
+```
+
+Supported top-level blocks: `source`, `source_bundle`, `locator`, `timeline`, `entity`, `reltype`, `rel`, `ruleset`, `deadline_rule`, `issue`, `issue_element`, `scenario`, `view`, `constraint`. Chronology expressions add list literals, general ranges (`start..end`), and timeline appearances (`timeline @ start..end`).
 
 ## `definitions`
 

@@ -14,6 +14,8 @@ except ImportError:
 from yuho.parser.wrapper import ParseError
 from yuho.ast.type_inference import TypeInferenceVisitor
 from yuho.ast.type_check import TypeCheckVisitor, TypeErrorInfo
+from yuho.chronology import build_world, validate_world
+from yuho.chronology.model import Diagnostic as ChronologyDiagnostic
 
 if TYPE_CHECKING:
     from yuho.lsp.server import DocumentState
@@ -59,6 +61,9 @@ _YUHO_KEYWORDS = (
     "priority", "defeats", "unless", "fact", "conclusion", "presumed",
     "unlimited", "unspecified", "strokes",
     "referencing", "import",
+    "source", "source_bundle", "locator", "timeline", "entity", "reltype", "rel",
+    "ruleset", "deadline_rule", "issue", "issue_element", "scenario", "view",
+    "constraint",
     "struct", "enum", "fn", "match", "case", "consequence",
     "TRUE", "FALSE",
 )
@@ -133,6 +138,26 @@ def type_error_to_diagnostic(error: TypeErrorInfo) -> lsp.Diagnostic:
         message=error.message,
         severity=severity,
         source="yuho-typecheck",
+    )
+
+
+def chronology_error_to_diagnostic(error: ChronologyDiagnostic) -> lsp.Diagnostic:
+    """Convert chronology diagnostic to LSP Diagnostic."""
+    line = max(0, error.line - 1)
+    column = max(0, error.column - 1)
+    severity = (
+        lsp.DiagnosticSeverity.Error
+        if error.severity == "error"
+        else lsp.DiagnosticSeverity.Warning
+    )
+    return lsp.Diagnostic(
+        range=lsp.Range(
+            start=lsp.Position(line=line, character=column),
+            end=lsp.Position(line=line, character=column + 1),
+        ),
+        message=f"Chronology: {error.message}",
+        severity=severity,
+        source="yuho-chronology",
     )
 
 
@@ -348,6 +373,13 @@ def collect_diagnostics(doc_state: "DocumentState") -> List[lsp.Diagnostic]:
         type_errors = run_type_checker(doc_state.ast)
         for type_error in type_errors:
             diagnostics.append(type_error_to_diagnostic(type_error))
+        try:
+            world = build_world(doc_state.ast)
+            if world.has_content():
+                for error in validate_world(world):
+                    diagnostics.append(chronology_error_to_diagnostic(error))
+        except Exception as exc:
+            logger.warning(f"Chronology checking failed: {exc}")
 
     # Fidelity diagnostics (G4, G11, fabricated fine/caning) comparing
     # the encoded statute against the canonical _raw/act.json entry.

@@ -1,0 +1,63 @@
+source supreme_opinion: opinion {
+    citation := "Brown v. Board of Education, 347 U.S. 483 (1954)";
+    url := "https://supreme.justia.com/cases/federal/us/347/483/";
+}
+
+source trial_record: record {
+    citation := "Kansas trial record";
+}
+
+source_bundle brown_sources {
+    sources := [supreme_opinion, trial_record];
+}
+
+locator opinion_494 {
+    source_ref := supreme_opinion;
+    page := 494;
+}
+
+timeline brown_litigation {
+    start := 1951-02-28;
+    end := 1955-05-31;
+}
+
+entity segregation_harm: fact {
+    source_ref := trial_record;
+    citation := "Finding on segregated schools";
+    summary := "segregation generated measurable educational harm";
+    narrative := plaintiffs;
+    appears_on := brown_litigation @ 1951-02-28..1954-05-17;
+}
+
+entity equal_protection_claim: claim {
+    source_ref := supreme_opinion;
+    locator_ref := opinion_494;
+    citation := "347 U.S. at 494";
+    summary := "separate educational facilities are inherently unequal";
+    narrative := plaintiffs;
+    appears_on := brown_litigation @ 1954-05-17..1954-05-17;
+}
+
+entity social_science_evidence: evidence {
+    source_ref := brown_sources;
+    citation := "social science appendix";
+    summary := "record evidence supporting stigma and harm";
+    narrative := plaintiffs;
+    appears_on := brown_litigation @ 1951-02-28..1954-05-17;
+}
+
+issue constitutional_question {
+    summary := "whether school segregation violates equal protection";
+}
+
+issue_element injury_element {
+    issue_ref := constitutional_question;
+    entity_ref := segregation_harm;
+}
+
+rel social_science_evidence -["cites"]-> equal_protection_claim;
+rel segregation_harm -["corroborates"]-> equal_protection_claim;
+
+view plaintiffs {
+    narrative := plaintiffs;
+}

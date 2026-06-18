@@ -463,6 +463,8 @@ class Transformer(Visitor):
                 name=node.name,
                 fields=new_fields,
                 type_params=node.type_params,
+                doc_comment=node.doc_comment,
+                parent=node.parent,
                 source_location=node.source_location,
             )
         return node
