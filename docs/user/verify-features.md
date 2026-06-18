@@ -73,6 +73,23 @@ yuho refs --scc --json                 # machine-readable
 The `--scc` run should report **5 non-trivial cycles** in the encoded
 library (s85↔s86, s304A↔s80, s292↔s293, s304B↔s74A, s424A↔s424B).
 
+### Chronology/provenance reports
+
+```sh
+yuho chronology check examples/chronology/brown_plaintiffs.yh
+yuho chronology export examples/chronology/brown_plaintiffs.yh -t json
+yuho chronology export examples/chronology/brown_plaintiffs.yh -t mermaid
+yuho chronology sources examples/chronology/brown_plaintiffs.yh
+yuho chronology issues examples/chronology/brown_plaintiffs.yh
+yuho chronology exhibits examples/chronology/brown_plaintiffs.yh --format csv
+yuho chronology scenario-report examples/chronology/brown_board.yh
+yuho chronology scenario-diff examples/chronology/brown_board.yh "delayed remedy"
+```
+
+Expected: checks exit 0; exports emit deterministic JSON/Mermaid; scenario
+commands show the alternate-world additions. `yuho check` also runs the
+chronology validator when chronology declarations exist in the file.
+
 ### Plain-language section summaries
 
 ```sh

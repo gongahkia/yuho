@@ -12,6 +12,7 @@ This document mirrors the output of `yuho <subcommand> --help` for every impleme
 | `yuho ast` | Visualize AST structure as tree. |
 | `yuho batch` | Batch operations on directories of .yh files. |
 | `yuho check` | Parse and validate a Yuho source file. |
+| `yuho chronology` | Analyze and export chronology/provenance declarations. |
 | `yuho ci-report` | Run check+lint on all .yh files and produce a unified report. |
 | `yuho completion` | Generate shell completion script. |
 | `yuho compliance-matrix` | Generate a compliance checklist from statute elements. |
@@ -145,6 +146,177 @@ Options:
   --format [text|json|sarif]  Output format
   --syntax-only               Skip semantic analysis and report only parse/AST validity
   --help                      Show this message and exit.
+```
+
+## `yuho chronology`
+
+Analyze and export chronology/provenance declarations.
+
+```
+Usage: yuho chronology [OPTIONS] COMMAND [ARGS]...
+
+  Analyze and export chronology/provenance declarations.
+
+Options:
+  --help  Show this message and exit.
+
+Commands:
+  check
+  contradictions
+  deadlines
+  diff
+  exhibits
+  export
+  import
+  issues
+  review
+  scenario-diff
+  scenario-report
+  sources
+```
+
+### `yuho chronology check`
+
+(no description)
+
+```
+Usage: yuho chronology check [OPTIONS] FILE
+
+Options:
+  --json  Output as JSON
+  --help  Show this message and exit.
+```
+
+### `yuho chronology contradictions`
+
+(no description)
+
+```
+Usage: yuho chronology contradictions [OPTIONS] FILE
+
+Options:
+  --help  Show this message and exit.
+```
+
+### `yuho chronology deadlines`
+
+(no description)
+
+```
+Usage: yuho chronology deadlines [OPTIONS] FILE
+
+Options:
+  --help  Show this message and exit.
+```
+
+### `yuho chronology diff`
+
+(no description)
+
+```
+Usage: yuho chronology diff [OPTIONS] LEFT RIGHT
+
+Options:
+  -t, --target [text|svg|html]  Diff target
+  -o, --output PATH             Output file
+  --help                        Show this message and exit.
+```
+
+### `yuho chronology exhibits`
+
+(no description)
+
+```
+Usage: yuho chronology exhibits [OPTIONS] FILE
+
+Options:
+  --format [text|csv|json]  Report format
+  --help                    Show this message and exit.
+```
+
+### `yuho chronology export`
+
+(no description)
+
+```
+Usage: yuho chronology export [OPTIONS] FILE
+
+Options:
+  -t, --target [json|markdown|mermaid|svg|html]
+                                  Export target
+  -o, --output PATH               Output file
+  --narrative TEXT                Filter entities by narrative name
+  --help                          Show this message and exit.
+```
+
+### `yuho chronology import`
+
+(no description)
+
+```
+Usage: yuho chronology import [OPTIONS] FILE
+
+Options:
+  --from [csv|jsonld]  Import format  [required]
+  -o, --output PATH    Output .yh file
+  --help               Show this message and exit.
+```
+
+### `yuho chronology issues`
+
+(no description)
+
+```
+Usage: yuho chronology issues [OPTIONS] FILE
+
+Options:
+  --help  Show this message and exit.
+```
+
+### `yuho chronology review`
+
+(no description)
+
+```
+Usage: yuho chronology review [OPTIONS] FILE
+
+Options:
+  --help  Show this message and exit.
+```
+
+### `yuho chronology scenario-diff`
+
+(no description)
+
+```
+Usage: yuho chronology scenario-diff [OPTIONS] FILE SCENARIO
+
+Options:
+  -t, --target [text|svg|html]  Diff target
+  -o, --output PATH             Output file
+  --help                        Show this message and exit.
+```
+
+### `yuho chronology scenario-report`
+
+(no description)
+
+```
+Usage: yuho chronology scenario-report [OPTIONS] FILE [SCENARIO]
+
+Options:
+  --help  Show this message and exit.
+```
+
+### `yuho chronology sources`
+
+(no description)
+
+```
+Usage: yuho chronology sources [OPTIONS] FILE
+
+Options:
+  --help  Show this message and exit.
 ```
 
 ## `yuho ci-report`
@@ -1027,6 +1199,7 @@ Commands:
   ast                Visualize AST structure as tree.
   batch              Batch operations on directories of .yh files.
   check              Parse and validate a Yuho source file.
+  chronology         Analyze and export chronology/provenance declarations.
   ci-report          Run check+lint on all .yh files and produce a unified report.
   completion         Generate shell completion script.
   compliance-matrix  Generate a compliance checklist from statute elements.

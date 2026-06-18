@@ -135,6 +135,7 @@ covers the same ground in less depth.
 | **AI integration** | MCP server (tools, resources, prompts) usable from Claude Desktop / Claude Code / Codex CLI / Cursor |
 | **Verification** | Z3 (exception-priority + cross-section conflict) · Alloy (bounded element-combination enumeration) |
 | **Analytical tools** | Counter-example explorer (`yuho explore`) · charge recommender (`yuho recommend`, structural ranking, not legal advice) · fact-pattern simulator · cross-library comparator (`yuho refs --compare-libraries`) |
+| **Chronology / provenance** | Source-backed facts, timelines, relationships, issues, deadlines, exhibits, scenarios, semantic diff, and JSON/Markdown/Mermaid/SVG/HTML exports via `yuho chronology` |
 | **Coverage harness** | L1 (parse) · L2 (build + lint + fidelity) · L3 (11-point human audit) |
 | **Library** | 524 / 524 sections of the SG Penal Code 1871 encoded, stamped, and indexed; 493 IPC sections raw-scraped + 8 phase-1 encoded for comparative analysis |
 

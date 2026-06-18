@@ -12,6 +12,7 @@ encoding statutes or consuming the encoded library.
 
 - [Getting started](user/getting-started.md) — install + first encoding in 60 seconds.
 - [5-minute tour](user/5-minutes.md) — the core grammar by example.
+- [Chronology and provenance](user/chronology.md) — source-backed facts, timelines, issues, exhibits, scenarios, and reports.
 - [FAQ](user/faq.md) — common questions about scope, coverage, and how Yuho compares to Catala / Akoma Ntoso.
 - [Law student guide](user/law-student-guide.md) — Yuho through the lens of a Singapore criminal-law learner.
 - [CLI reference](user/cli-reference.md) — every `yuho` subcommand with examples.

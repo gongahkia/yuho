@@ -12,12 +12,14 @@ graph TD
     Commands --> Refs[library/reference_graph.py]
     Commands --> Recommend[recommend/charge_recommender.py]
     Commands --> Explore[explore/counterexamples.py]
+    Commands --> Chronology[chronology/*]
 
     Services --> Parser[parser/wrapper.py]
     Services --> ASTBuilder[ast/builder.py]
     Services --> Lint[ast/statute_lint.py]
     Services --> Scope[ast/scope_analysis.py]
     Services --> TypeCheck[ast/type_check.py]
+    Services --> Chronology
 
     Parser --> TreeSitter[src/tree-sitter-yuho/grammar.js]
     ASTBuilder --> Nodes[ast/nodes.py]
@@ -51,6 +53,7 @@ graph TD
 ```
 src/yuho/
 ├── ast/                 # AST nodes, builder, visitors, type/lint passes
+├── chronology/          # Provenance timelines, validation, reports, exports, imports
 ├── cli/                 # Click CLI and command implementations
 ├── config/              # TOML configuration loading and masking
 ├── eval/                # Interpreter and defeasible evaluation helpers
@@ -87,6 +90,7 @@ ASTBuilder.build() -> ModuleNode
     +-> reference graph and semantic graph
     +-> transpilers (JSON, English, LaTeX, Mermaid, mindmap, Alloy, DOCX, AKN)
     +-> verifiers (Z3, Alloy)
+    +-> chronology validation and provenance reports
     +-> editor and AI surfaces (LSP, MCP)
 ```
 

@@ -68,7 +68,22 @@ The repository ships all 524 Singapore Penal Code sections as `.yh`,
 plus a raw Indian Penal Code snapshot and eight phase-1 encoded IPC
 sections for cross-jurisdiction checks.
 
-## 5. Editor and AI integrations
+## 5. Add chronology/provenance declarations
+
+Chronology declarations live in normal `.yh` files and are checked by
+`yuho check` when present:
+
+```bash
+yuho chronology check examples/chronology/brown_plaintiffs.yh
+yuho chronology export examples/chronology/brown_plaintiffs.yh -t mermaid
+yuho chronology sources examples/chronology/brown_plaintiffs.yh
+```
+
+Use them for source-backed facts, timelines, relationships, issues,
+deadlines, exhibits, and scenario diffs. See
+`docs/user/chronology.md` for syntax and report commands.
+
+## 6. Editor and AI integrations
 
 Start the language server over stdio:
 
@@ -89,5 +104,6 @@ See `editors/vscode-yuho/README.md` for VS Code setup and
 
 - [CLI Reference](cli-reference.md)
 - [Feature Walkthrough](verify-features.md)
+- [Chronology and Provenance](chronology.md)
 - [5-Minute Tour](5-minutes.md)
 - [Contributor Architecture](../contributor/architecture.md)
