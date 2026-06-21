@@ -171,7 +171,7 @@ def run_verify(
         alloy_timeout=alloy_timeout,
         z3_timeout_ms=z3_timeout_ms,
     )
-    combined = verifier.verify(ast)
+    combined = verifier.verify(ast, fixture=file)
     alloy_failed = (
         any(r.violated for r in combined.alloy_results) if combined.alloy_available else False
     )

@@ -26,6 +26,7 @@ from yuho.verify.z3_solver import (
 from yuho.verify.combined import (
     CombinedVerifier,
     CombinedVerificationResult,
+    VerificationDisagreement,
 )
 from yuho.verify.logic_engine import (
     Formula,
@@ -60,6 +61,7 @@ __all__ = [
     "SatisfiabilityResult",
     "CombinedVerifier",
     "CombinedVerificationResult",
+    "VerificationDisagreement",
     "Formula",
     "FormulaType",
     "LogicAnalysisResult",

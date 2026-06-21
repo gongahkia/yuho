@@ -6,7 +6,8 @@ to provide higher confidence in verification outcomes.
 """
 
 from typing import List, Dict, Any, Tuple
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+import json
 import logging
 
 from yuho.verify.alloy import AlloyGenerator, AlloyAnalyzer, AlloyCounterexample
@@ -16,9 +17,33 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
+class VerificationDisagreement:
+    """Machine-readable Alloy/Z3 differential disagreement for one fixture."""
+
+    fixture: str
+    alloy_status: str
+    z3_status: str
+    alloy_failures: List[Dict[str, Any]] = field(default_factory=list)
+    z3_failures: List[Dict[str, Any]] = field(default_factory=list)
+    message: str = ""
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary for JSON logging."""
+        return {
+            "fixture": self.fixture,
+            "alloy_status": self.alloy_status,
+            "z3_status": self.z3_status,
+            "alloy_failures": self.alloy_failures,
+            "z3_failures": self.z3_failures,
+            "message": self.message,
+        }
+
+
+@dataclass
 class CombinedVerificationResult:
     """Result of combined Alloy+Z3 verification."""
 
+    fixture: str
     alloy_available: bool
     z3_available: bool
 
@@ -28,10 +53,12 @@ class CombinedVerificationResult:
     agreement: bool  # True if both agree on consistency
     confidence: str  # "high", "medium", "low"
     message: str
+    disagreements: List[VerificationDisagreement] = field(default_factory=list)
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for serialization."""
         return {
+            "fixture": self.fixture,
             "alloy_available": self.alloy_available,
             "z3_available": self.z3_available,
             "alloy_results": [r.__dict__ for r in self.alloy_results],
@@ -39,6 +66,7 @@ class CombinedVerificationResult:
             "agreement": self.agreement,
             "confidence": self.confidence,
             "message": self.message,
+            "disagreements": [d.to_dict() for d in self.disagreements],
         }
 
 
@@ -68,12 +96,13 @@ class CombinedVerifier:
         self.alloy_analyzer = AlloyAnalyzer(alloy_jar, alloy_timeout)
         self.z3_solver = Z3Solver(z3_timeout_ms)
 
-    def verify(self, ast) -> CombinedVerificationResult:
+    def verify(self, ast, fixture: str = "<memory>") -> CombinedVerificationResult:
         """
         Run combined verification on AST.
 
         Args:
             ast: ModuleNode from Yuho AST
+            fixture: Stable source label for JSON disagreement logs
 
         Returns:
             CombinedVerificationResult with comparison
@@ -104,11 +133,15 @@ class CombinedVerifier:
                 z3_available = False
 
         # Compare results
-        agreement, confidence, message = self._compare_results(
-            alloy_available, z3_available, alloy_results, z3_results
+        agreement, confidence, message, disagreements = self._compare_results(
+            fixture, alloy_available, z3_available, alloy_results, z3_results
         )
+        for disagreement in disagreements:
+            payload = {"event": "verification_disagreement", **disagreement.to_dict()}
+            logger.warning(json.dumps(payload, sort_keys=True))
 
         return CombinedVerificationResult(
+            fixture=fixture,
             alloy_available=alloy_available,
             z3_available=z3_available,
             alloy_results=alloy_results,
@@ -116,24 +149,26 @@ class CombinedVerifier:
             agreement=agreement,
             confidence=confidence,
             message=message,
+            disagreements=disagreements,
         )
 
     def _compare_results(
         self,
+        fixture: str,
         alloy_available: bool,
         z3_available: bool,
         alloy_results: List[AlloyCounterexample],
         z3_results: List[Z3Diagnostic],
-    ) -> Tuple[bool, str, str]:
+    ) -> Tuple[bool, str, str, List[VerificationDisagreement]]:
         """
         Compare Alloy and Z3 results.
 
         Returns:
-            Tuple of (agreement, confidence, message)
+            Tuple of (agreement, confidence, message, disagreements)
         """
         # If neither available
         if not alloy_available and not z3_available:
-            return (False, "low", "Neither Alloy nor Z3 available")
+            return (False, "low", "Neither Alloy nor Z3 available", [])
 
         # If only one available
         if not alloy_available:
@@ -142,6 +177,7 @@ class CombinedVerifier:
                 True,
                 "medium",
                 f"Z3 only: {'PASS' if z3_passed else 'FAIL'} ({len(z3_results)} checks)",
+                [],
             )
 
         if not z3_available:
@@ -150,6 +186,7 @@ class CombinedVerifier:
                 True,
                 "medium",
                 f"Alloy only: {'FAIL' if alloy_failed else 'PASS'} ({len(alloy_results)} checks)",
+                [],
             )
 
         # Both available - compare
@@ -163,33 +200,64 @@ class CombinedVerifier:
                 True,
                 "high",
                 f"Alloy and Z3 agree: {status} (Alloy: {len(alloy_results)}, Z3: {len(z3_results)} checks)",
+                [],
             )
         else:
             # Disagreement
+            alloy_status = "FAIL" if alloy_failed else "PASS"
+            z3_status = "FAIL" if z3_failed else "PASS"
+            message = f"DISAGREEMENT: Alloy {alloy_status}, Z3 {z3_status} - manual review required"
+            disagreement = VerificationDisagreement(
+                fixture=fixture,
+                alloy_status=alloy_status,
+                z3_status=z3_status,
+                alloy_failures=[
+                    {
+                        "assertion": r.assertion_name,
+                        "message": r.message,
+                        "witness": r.witness,
+                    }
+                    for r in alloy_results
+                    if r.violated
+                ],
+                z3_failures=[
+                    {
+                        "check": d.check_name,
+                        "message": d.message,
+                        "counterexample": d.counterexample,
+                    }
+                    for d in z3_results
+                    if not d.passed
+                ],
+                message=message,
+            )
             return (
                 False,
                 "low",
-                f"DISAGREEMENT: Alloy {'FAIL' if alloy_failed else 'PASS'}, "
-                f"Z3 {'FAIL' if z3_failed else 'PASS'} - manual review required",
+                message,
+                [disagreement],
             )
 
-    def verify_with_details(self, ast) -> Dict[str, Any]:
+    def verify_with_details(self, ast, fixture: str = "<memory>") -> Dict[str, Any]:
         """
         Run verification and return detailed results.
 
         Args:
             ast: ModuleNode from Yuho AST
+            fixture: Stable source label for JSON disagreement logs
 
         Returns:
             Detailed results dictionary
         """
-        result = self.verify(ast)
+        result = self.verify(ast, fixture=fixture)
 
         return {
             "summary": {
+                "fixture": result.fixture,
                 "agreement": result.agreement,
                 "confidence": result.confidence,
                 "message": result.message,
+                "disagreements": [d.to_dict() for d in result.disagreements],
             },
             "alloy": {
                 "available": result.alloy_available,
