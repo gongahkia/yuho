@@ -43,3 +43,30 @@ def test_diff_score_json_includes_penalty_and_related_section_coverage() -> None
     assert categories["penalty_detail"]["matched"] == 1
     assert categories["case_law"]["matched"] == 1
     assert categories["related_sections"]["matched"] == 1
+
+
+def test_diff_jurisdictions_compares_section_across_corpora() -> None:
+    runner = CliRunner()
+
+    result = runner.invoke(cli, ["diff", "--jurisdictions", "sg,my,pk", "300"])
+
+    assert result.exit_code == 1
+    assert "Jurisdiction diff: Section 300" in result.output
+    assert "sg -> my" in result.output
+    assert "sg -> pk" in result.output
+    assert "Modified" in result.output
+
+
+def test_diff_jurisdictions_json_reports_files_and_summaries() -> None:
+    runner = CliRunner()
+
+    result = runner.invoke(cli, ["diff", "--jurisdictions", "sg,my", "300", "--json"])
+
+    assert result.exit_code == 1
+    payload = json.loads(result.output)
+
+    assert payload["section"] == "300"
+    assert payload["jurisdictions"] == ["sg", "my"]
+    assert "library/penal_code" in payload["files"]["sg"]
+    assert "library/malaysia_penal_code" in payload["files"]["my"]
+    assert payload["comparisons"][0]["summary"]["modified"] > 0

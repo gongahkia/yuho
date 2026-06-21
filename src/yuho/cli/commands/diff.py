@@ -34,6 +34,16 @@ from yuho.ast.nodes import (
 from yuho.cli.error_formatter import Colors, colorize
 
 
+JURISDICTION_LIBRARY_DIRS = {
+    "sg": "penal_code",
+    "singapore": "penal_code",
+    "my": "malaysia_penal_code",
+    "malaysia": "malaysia_penal_code",
+    "pk": "pakistan_penal_code",
+    "pakistan": "pakistan_penal_code",
+}
+
+
 class ChangeType(Enum):
     """Type of change detected."""
 
@@ -753,6 +763,47 @@ def format_diff(changes: List[Change], color: bool = True) -> str:
     return "\n".join(lines)
 
 
+def _repo_root() -> Path:
+    return Path(__file__).resolve().parents[4]
+
+
+def _canonical_jurisdiction(value: str) -> str:
+    key = value.strip().lower()
+    if key not in JURISDICTION_LIBRARY_DIRS:
+        supported = ", ".join(sorted(JURISDICTION_LIBRARY_DIRS))
+        raise ValueError(f"Unsupported jurisdiction '{value}'. Supported: {supported}")
+    return key
+
+
+def _find_jurisdiction_statute(jurisdiction: str, section: str) -> Path:
+    root = _repo_root() / "library" / JURISDICTION_LIBRARY_DIRS[jurisdiction]
+    if not root.exists():
+        raise FileNotFoundError(f"Library not found for jurisdiction '{jurisdiction}': {root}")
+    wanted = section.upper()
+    for path in sorted(root.glob("s*/statute.yh")):
+        number = path.parent.name.split("_", 1)[0].removeprefix("s").upper()
+        if number == wanted:
+            return path
+    raise FileNotFoundError(
+        f"Section {section} not found for jurisdiction '{jurisdiction}' under {root}"
+    )
+
+
+def _parse_module(path: Path, *, color: bool = True) -> Optional[ModuleNode]:
+    parser = get_parser()
+    result = parser.parse_file(path)
+    if result.errors:
+        click.echo(colorize(f"error: Parse errors in {path}:", Colors.RED), err=True)
+        for err in result.errors[:3]:
+            click.echo(f"  {err.message}", err=True)
+        return None
+    if result.root_node is None:
+        click.echo(colorize(f"error: No parse tree available for {path}", Colors.RED), err=True)
+        return None
+    builder = ASTBuilder(result.source, result.file)
+    return builder.build(result.root_node)
+
+
 def run_diff(
     file1: str,
     file2: str,
@@ -780,24 +831,8 @@ def run_diff(
         click.echo(f"error: {e}", err=True)
         sys.exit(1)
 
-    parser = get_parser()
-
-    # Parse both files
-    def parse_file(path: Path) -> Optional[ModuleNode]:
-        result = parser.parse_file(path)
-        if result.errors:
-            click.echo(colorize(f"error: Parse errors in {path}:", Colors.RED), err=True)
-            for err in result.errors[:3]:
-                click.echo(f"  {err.message}", err=True)
-            return None
-        if result.root_node is None:
-            click.echo(colorize(f"error: No parse tree available for {path}", Colors.RED), err=True)
-            return None
-        builder = ASTBuilder(result.source, result.file)
-        return builder.build(result.root_node)
-
-    ast1 = parse_file(path1)
-    ast2 = parse_file(path2)
+    ast1 = _parse_module(path1, color=color)
+    ast2 = _parse_module(path2, color=color)
 
     if ast1 is None or ast2 is None:
         sys.exit(1)
@@ -835,6 +870,91 @@ def run_diff(
 
     # Exit with code 1 if there are changes (useful for CI)
     if changes:
+        sys.exit(1)
+
+
+def run_jurisdiction_diff(
+    section: str,
+    jurisdictions: Sequence[str],
+    json_output: bool = False,
+    verbose: bool = False,
+    color: bool = True,
+) -> None:
+    """Compare one section across jurisdiction corpus files."""
+    import json as json_module
+
+    try:
+        juris = [_canonical_jurisdiction(item) for item in jurisdictions if item.strip()]
+        if len(juris) < 2:
+            raise ValueError("--jurisdictions requires at least two jurisdictions")
+        resolved = [(jurisdiction, _find_jurisdiction_statute(jurisdiction, section)) for jurisdiction in juris]
+    except (ValueError, FileNotFoundError) as exc:
+        click.echo(f"error: {exc}", err=True)
+        sys.exit(1)
+
+    modules: dict[str, ModuleNode] = {}
+    for jurisdiction, path in resolved:
+        module = _parse_module(path, color=color)
+        if module is None:
+            sys.exit(1)
+        modules[jurisdiction] = module
+
+    baseline = juris[0]
+    comparisons = []
+    any_changes = False
+    for jurisdiction in juris[1:]:
+        differ = StatuteDiffer()
+        changes = differ.diff(modules[baseline], modules[jurisdiction])
+        any_changes = any_changes or bool(changes)
+        comparisons.append({
+            "baseline": baseline,
+            "jurisdiction": jurisdiction,
+            "baseline_file": str(dict(resolved)[baseline]),
+            "jurisdiction_file": str(dict(resolved)[jurisdiction]),
+            "changes": changes,
+            "summary": {
+                "added": len([c for c in changes if c.change_type == ChangeType.ADDED]),
+                "removed": len([c for c in changes if c.change_type == ChangeType.REMOVED]),
+                "modified": len([c for c in changes if c.change_type == ChangeType.MODIFIED]),
+            },
+        })
+
+    if json_output:
+        print(json_module.dumps({
+            "section": section,
+            "jurisdictions": juris,
+            "files": {jurisdiction: str(path) for jurisdiction, path in resolved},
+            "comparisons": [
+                {
+                    "baseline": item["baseline"],
+                    "jurisdiction": item["jurisdiction"],
+                    "baseline_file": item["baseline_file"],
+                    "jurisdiction_file": item["jurisdiction_file"],
+                    "changes": [
+                        {
+                            "type": change.change_type.name.lower(),
+                            "path": change.path,
+                            "description": change.description,
+                        }
+                        for change in item["changes"]
+                    ],
+                    "summary": item["summary"],
+                }
+                for item in comparisons
+            ],
+        }, indent=2))
+    else:
+        click.echo(f"Jurisdiction diff: Section {section}")
+        if verbose:
+            for jurisdiction, path in resolved:
+                click.echo(f"{jurisdiction}: {path}")
+            click.echo("")
+        for item in comparisons:
+            click.echo(f"{item['baseline']} -> {item['jurisdiction']}")
+            click.echo(format_diff(item["changes"], color=color))
+            click.echo("")
+
+    if any_changes:
         sys.exit(1)
 
 

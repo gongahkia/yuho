@@ -240,13 +240,41 @@ def transpile(
 
 
 @cli.command()
-@click.argument("file1", type=click.Path(exists=True))
-@click.argument("file2", type=click.Path(exists=True))
+@click.argument("targets", nargs=-1)
 @click.option("--json", "json_output", is_flag=True, help="Output as JSON")
 @click.option("--score", is_flag=True, help="Score file2 against file1")
+@click.option(
+    "--jurisdictions",
+    help="Comma-separated jurisdiction codes for corpus section diff, e.g. sg,my,pk",
+)
 @click.pass_context
-def diff(ctx: click.Context, file1: str, file2: str, json_output: bool, score: bool) -> None:
-    """Compare two Yuho statute files."""
+def diff(
+    ctx: click.Context,
+    targets: tuple[str, ...],
+    json_output: bool,
+    score: bool,
+    jurisdictions: Optional[str],
+) -> None:
+    """Compare Yuho statute files or corpus sections."""
+    if jurisdictions:
+        if score:
+            raise click.UsageError("--score cannot be combined with --jurisdictions")
+        if len(targets) != 1:
+            raise click.UsageError("--jurisdictions requires exactly one SECTION argument")
+        from yuho.cli.commands.diff import run_jurisdiction_diff
+
+        run_jurisdiction_diff(
+            targets[0],
+            jurisdictions=jurisdictions.split(","),
+            json_output=json_output,
+            verbose=ctx.obj["verbose"],
+            color=ctx.obj["color"],
+        )
+        return
+
+    if len(targets) != 2:
+        raise click.UsageError("diff requires FILE1 FILE2, or --jurisdictions JURISDICTIONS SECTION")
+    file1, file2 = targets
     if score:
         from yuho.cli.commands.diff import run_diff_score
 
