@@ -72,7 +72,7 @@ class AlloyTranspiler(TranspilerBase, Visitor):
         # Run commands
         self._emit_run_commands(ast)
 
-        return self.result("\n".join(self._output), manifest={"format": "alloy"})
+        return self.result("\n".join(self._output), manifest={"format": "alloy"}, source_ast=ast)
 
     def _emit(self, line: str = "") -> None:
         """Add a line to output with indentation."""

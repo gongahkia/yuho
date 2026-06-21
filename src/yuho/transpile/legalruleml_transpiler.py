@@ -67,6 +67,7 @@ class LegalRuleMLTranspiler(TranspilerBase):
         return self.result(
             "\n".join(lines) + "\n",
             manifest={"format": "legalruleml", "namespace": _LRML_NS},
+            source_ast=ast,
         )
 
     def _legal_sources(self, statutes: Sequence[nodes.StatuteNode]) -> List[str]:

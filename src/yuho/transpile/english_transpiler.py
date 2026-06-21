@@ -35,7 +35,7 @@ class EnglishTranspiler(TranspilerBase, Visitor):
         self._output = []
         self._indent_level = 0
         self._visit_module(ast)
-        return self.result("\n".join(self._output), manifest={"format": "text"})
+        return self.result("\n".join(self._output), manifest={"format": "text"}, source_ast=ast)
 
     def render_explain_trace(self, trace: JustificationTrace) -> str:
         """Render an explain trace as controlled English."""

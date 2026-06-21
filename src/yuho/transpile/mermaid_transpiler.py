@@ -97,6 +97,7 @@ class MermaidTranspiler(TranspilerBase, Visitor):
         return self.result(
             "\n".join(self._output),
             manifest={"format": "mermaid", "shape": self.shape},
+            source_ast=ast,
         )
 
     def _emit(self, line: str) -> None:

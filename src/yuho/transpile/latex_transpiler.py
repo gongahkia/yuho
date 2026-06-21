@@ -103,7 +103,11 @@ class LaTeXTranspiler(TranspilerBase, Visitor):
         self._emit("")
         self._emit(r"\end{document}")
 
-        return self.result("\n".join(self._output), manifest={"format": "latex"})
+        return self.result(
+            "\n".join(self._output),
+            manifest={"format": "latex"},
+            source_ast=ast,
+        )
 
     def _emit(self, text: str) -> None:
         """Add a line to output with current indentation."""

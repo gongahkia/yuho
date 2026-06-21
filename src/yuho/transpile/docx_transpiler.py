@@ -46,7 +46,11 @@ class DOCXTranspiler(TranspilerBase):
     def transpile(self, ast: nodes.ModuleNode) -> TranspileResult:
         self._paras = []
         self._visit_module(ast)
-        return self.result(self._serialize_document_xml(), manifest={"format": "word/document.xml"})
+        return self.result(
+            self._serialize_document_xml(),
+            manifest={"format": "word/document.xml"},
+            source_ast=ast,
+        )
 
     def write_docx(self, ast: nodes.ModuleNode, path: str) -> None:
         self._paras = []

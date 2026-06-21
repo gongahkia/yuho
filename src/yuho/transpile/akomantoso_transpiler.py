@@ -99,6 +99,7 @@ class AkomaNtosoTranspiler(TranspilerBase):
         return self.result(
             "\n".join(lines) + "\n",
             manifest={"format": "akomantoso", "namespace": _AKN_NAMESPACE},
+            source_ast=ast,
         )
 
     def _render_act(self, ast: nodes.ModuleNode) -> List[str]:

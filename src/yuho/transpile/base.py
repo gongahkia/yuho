@@ -7,6 +7,7 @@ from typing import Any, Mapping, Sequence
 from enum import Enum, auto
 
 from yuho.ast.nodes import ModuleNode
+from yuho.transpile.source_map import build_source_map
 
 
 class TranspileTarget(Enum):
@@ -72,25 +73,31 @@ class TranspileResult(str):
     output: str
     warnings: tuple[str, ...]
     manifest: dict[str, Any]
+    source_map: dict[str, Any] | None
 
     def __new__(
         cls,
         output: str,
         warnings: Sequence[str] = (),
         manifest: Mapping[str, Any] | None = None,
+        source_map: Mapping[str, Any] | None = None,
     ) -> "TranspileResult":
         obj = str.__new__(cls, output)
         obj.output = output
         obj.warnings = tuple(warnings)
         obj.manifest = dict(manifest or {})
+        obj.source_map = dict(source_map) if source_map is not None else None
         return obj
 
     def to_dict(self) -> dict[str, Any]:
-        return {
+        payload = {
             "output": self.output,
             "warnings": list(self.warnings),
             "manifest": self.manifest,
         }
+        if self.source_map is not None:
+            payload["source_map"] = self.source_map
+        return payload
 
 
 class TranspilerBase(ABC):
@@ -125,6 +132,7 @@ class TranspilerBase(ABC):
         output: str,
         warnings: Sequence[str] = (),
         manifest: Mapping[str, Any] | None = None,
+        source_ast: ModuleNode | None = None,
     ) -> TranspileResult:
         payload = {
             "target": self.target.name.lower(),
@@ -132,7 +140,21 @@ class TranspilerBase(ABC):
         }
         if manifest:
             payload.update(manifest)
-        return TranspileResult(output, warnings=warnings, manifest=payload)
+        source_map = None
+        if source_ast is not None:
+            source_map = build_source_map(output, source_ast)
+            payload["source_map"] = {
+                "version": source_map["version"],
+                "sources": len(source_map["sources"]),
+                "names": len(source_map["names"]),
+                "spans": len(source_map["x_yuho_spans"]),
+            }
+        return TranspileResult(
+            output,
+            warnings=warnings,
+            manifest=payload,
+            source_map=source_map,
+        )
 
     def transpile_to_file(self, ast: ModuleNode, path: str) -> None:
         """

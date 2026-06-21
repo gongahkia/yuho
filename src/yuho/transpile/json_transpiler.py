@@ -39,7 +39,7 @@ class JSONTranspiler(TranspilerBase, Visitor):
         """Transpile AST to JSON string."""
         data = self._to_dict(ast)
         output = json.dumps(data, indent=self.indent if self.indent else None, ensure_ascii=False)
-        return self.result(output, manifest={"format": "json"})
+        return self.result(output, manifest={"format": "json"}, source_ast=ast)
 
     def _to_dict(self, node: nodes.ASTNode) -> Dict[str, Any]:
         """Convert an AST node to a dictionary."""

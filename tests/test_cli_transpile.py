@@ -1,5 +1,6 @@
 """Regression tests for CLI transpile target coverage."""
 
+import json
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -75,3 +76,36 @@ def test_transpile_all_generates_every_target_output(tmp_path: Path, monkeypatch
         assert artifact.read_text(
             encoding="utf-8"
         ).strip(), f"Empty transpile output: {artifact.name}"
+
+
+def test_transpile_writes_source_map_sidecar(tmp_path: Path) -> None:
+    source_path = tmp_path / "sample.yh"
+    source_path.write_text(
+        """
+        statute 1 "Demo" {
+            elements {
+                actus_reus taking := "takes";
+            }
+        }
+        """,
+        encoding="utf-8",
+    )
+    output_path = tmp_path / "sample.txt"
+
+    run_transpile(
+        file=str(source_path),
+        target="english",
+        output=str(output_path),
+        json_output=False,
+        verbose=False,
+    )
+
+    sidecar_path = tmp_path / "sample.txt.map"
+    source_map = json.loads(sidecar_path.read_text(encoding="utf-8"))
+
+    assert output_path.exists()
+    assert source_map["version"] == 3
+    assert source_map["file"] == output_path.name
+    assert source_map["sources"] == [str(source_path.resolve())]
+    assert isinstance(source_map["mappings"], str)
+    assert source_map["x_yuho_spans"]

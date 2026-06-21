@@ -194,14 +194,16 @@ def run_transpile(
                 out_path = file_path.parent / f"{file_path.stem}{transpile_target.file_extension}"
 
             out_path.write_text(output_text, encoding="utf-8")
-            results.append(
-                {
-                    "target": tgt,
-                    "output": str(out_path),
-                    "warnings": list(transpile_result.warnings),
-                    "manifest": transpile_result.manifest,
-                }
-            )
+            result_entry = {
+                "target": tgt,
+                "output": str(out_path),
+                "warnings": list(transpile_result.warnings),
+                "manifest": transpile_result.manifest,
+            }
+            source_map_path = _write_source_map_sidecar(transpile_result, out_path)
+            if source_map_path:
+                result_entry["source_map"] = source_map_path
+            results.append(result_entry)
 
             if not json_output:
                 click.echo(f"  -> {out_path}")
@@ -211,14 +213,16 @@ def run_transpile(
             out_path = Path(output)
             out_path.parent.mkdir(parents=True, exist_ok=True)
             out_path.write_text(output_text, encoding="utf-8")
-            results.append(
-                {
-                    "target": tgt,
-                    "output": str(out_path),
-                    "warnings": list(transpile_result.warnings),
-                    "manifest": transpile_result.manifest,
-                }
-            )
+            result_entry = {
+                "target": tgt,
+                "output": str(out_path),
+                "warnings": list(transpile_result.warnings),
+                "manifest": transpile_result.manifest,
+            }
+            source_map_path = _write_source_map_sidecar(transpile_result, out_path)
+            if source_map_path:
+                result_entry["source_map"] = source_map_path
+            results.append(result_entry)
 
             if not json_output:
                 click.echo(f"  -> {out_path}")
@@ -245,3 +249,13 @@ def run_transpile(
                 indent=2,
             )
         )
+
+
+def _write_source_map_sidecar(transpile_result, out_path: Path) -> str | None:
+    if transpile_result.source_map is None:
+        return None
+    source_map = dict(transpile_result.source_map)
+    source_map["file"] = out_path.name
+    sidecar_path = out_path.with_name(f"{out_path.name}.map")
+    sidecar_path.write_text(json.dumps(source_map, indent=2), encoding="utf-8")
+    return str(sidecar_path)

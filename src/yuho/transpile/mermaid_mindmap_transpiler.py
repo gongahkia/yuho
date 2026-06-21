@@ -72,7 +72,11 @@ class MermaidMindmapTranspiler(TranspilerBase):
         statutes = list(ast.statutes)
         if not statutes:
             self._lines.append(f"{_INDENT}No statutes")
-            return self.result("\n".join(self._lines), manifest={"format": "mermaid-mindmap"})
+            return self.result(
+                "\n".join(self._lines),
+                manifest={"format": "mermaid-mindmap"},
+                source_ast=ast,
+            )
         if len(statutes) == 1:
             self._render_statute(statutes[0], depth=1)
         else:
@@ -82,7 +86,11 @@ class MermaidMindmapTranspiler(TranspilerBase):
             self._lines.append(f"{_INDENT}{module_label}")
             for s in statutes:
                 self._render_statute(s, depth=2)
-        return self.result("\n".join(self._lines), manifest={"format": "mermaid-mindmap"})
+        return self.result(
+            "\n".join(self._lines),
+            manifest={"format": "mermaid-mindmap"},
+            source_ast=ast,
+        )
 
     # ------------------------------------------------------------------
     # Per-statute hierarchy
