@@ -1,0 +1,11 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90612&sectionno=247&orderno=247&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 247 "Fraudulently obtaining decree for sum not due." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "Whoever fraudulently obtains a decree or order against any person for a sum not due, or for a larger sum than is due or for any property or interest in property to which he is not entitled, or fraudulently causes a decree or order to be executed against any person after it has been satisfied or for anything in respect of which it has been satisfied, or fraudulently suffers or permits any such act to be done in his name, shall be punished with imprisonment of either description for a term which may extend to two years, or with fine, or with both.";
+    }
+}

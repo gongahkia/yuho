@@ -1,0 +1,11 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90763&sectionno=339&orderno=339&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 339 "Having possession of document described in section 337 or section 338, knowing it to be forged and intending to use it as genuine." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "Whoever has in his possession any document or electronic record, knowing the same to be forged and intending that the same shall fraudulently or dishonestly be used as genuine, shall, if the document or electronic record is one of the description mentioned in section 337 of this Sanhita, be punished with imprisonment of either description for a term which may extend to seven years, and shall also be liable to fine; and if the document is one of the description mentioned in section 338, shall be punished with imprisonment for life, or with imprisonment of either description, for a term which may extend to seven years, and shall also be liable to fine.";
+    }
+}

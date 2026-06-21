@@ -1,0 +1,17 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90577&sectionno=212&orderno=212&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 212 "Furnishing false information." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "Whoever, being legally bound to furnish information on any subject to any public servant, as such, furnishes, as true, information on the subject which he knows or has reason to believe to be false,\u2014";
+        raw_item_001 := "[item a] shall be punished with simple imprisonment for a term which may extend to six months, or with fine which may extend to five thousand rupees, or with both;";
+        raw_item_002 := "[item b] where the information which he is legally bound to give respects the commission of an offence, or is required for the purpose of preventing the commission of an offence, or in order to the apprehension of an offender, with imprisonment of either description for a term which may extend to two years, or with fine, or with both.";
+        raw_item_003 := "[illustration ] Illustrations.";
+        raw_item_004 := "[item a] A, a landholder, knowing of the commission of a murder within the limits of his estate, wilfully misinforms the Magistrate of the district that the death has occurred by accident in consequence of the bite of a snake. A is guilty of the offence defined in this section.";
+        raw_item_005 := "[item b] A, a village watchman, knowing that a considerable body of strangers has passed through his village in order to commit a dacoity in the house of Z, a wealthy merchant residing in a neighbouring place, and being legally bound to give early and punctual information of the above fact to the officer of the nearest police station, wilfully misinforms the police officer that a body of suspicious characters passed through the village with a view to commit dacoity in a certain distant place in a different direction. Here A is guilty of the offence defined in this section.";
+        raw_item_006 := "[explanation ] Explanation.\u2014In section 211 and in this section the word \u201coffence\u201d include any act committed at any place out of India, which, if committed in India, would be punishable under any of the following sections, namely, 103, 105, 307, sub-sections (2), (3) and (4) of section 309, sub-sections (2), (3), (4) and (5) of section 310, 311, 312, clauses (f) and (g) of section 326, sub-sections (4), (6), (7) and (8) of section 331, clauses (a) and (b) of section 332 and the word \u201coffender\u201d includes any person who is alleged to have been guilty of any such act.";
+    }
+}

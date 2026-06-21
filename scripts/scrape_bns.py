@@ -115,6 +115,7 @@ _ALPHA_RE = re.compile(r"^\s*\(\s*([a-z]+|[ivxlcdm]+|\d+)\s*\)\s*", re.I)
 _EXPL_RE = re.compile(r"^\s*Explanation\s*(\d*)\s*\.?\s*[-—]*\s*", re.I)
 _EXCEPT_RE = re.compile(r"^\s*Exception\s*(\d*)\s*\.?\s*[-—]*\s*", re.I)
 _NOTE_SPLIT_RE = re.compile(r"(?=(?:\d+\.\s+))")
+_HTML_SPLIT = "__YUHO_SECTION_SPLIT__"
 
 
 def _txt(el) -> str:
@@ -161,10 +162,10 @@ def _split_html_lines(html: str) -> list[str]:
     html = re.sub(r"</br\s*>", "<br/>", html or "", flags=re.I)
     soup = BeautifulSoup(html, "lxml")
     for tag in soup.find_all(["br", "hr"]):
-        tag.replace_with("\n")
-    text = soup.get_text("\n", strip=True)
+        tag.replace_with(_HTML_SPLIT)
+    text = soup.get_text(" ", strip=True)
     out: list[str] = []
-    for raw in text.splitlines():
+    for raw in text.split(_HTML_SPLIT):
         line = _clean_text(raw)
         if not line:
             continue

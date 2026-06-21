@@ -1,0 +1,13 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90661&sectionno=296&orderno=296&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 296 "Obscene acts and songs." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "Whoever, to the annoyance of others,\u2014\n\nshall be punished with imprisonment of either description for a term which may extend to three months, or with fine which may extend to one thousand rupees, or with both.";
+        raw_item_001 := "[item a] does any obscene act in any public place; or";
+        raw_item_002 := "[item b] sings, recites or utters any obscene song, ballad or words, in or near any public place,";
+    }
+}

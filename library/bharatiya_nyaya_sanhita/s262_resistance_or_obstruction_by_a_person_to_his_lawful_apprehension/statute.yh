@@ -1,0 +1,12 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90627&sectionno=262&orderno=262&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 262 "Resistance or obstruction by a person to his lawful apprehension." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "Whoever intentionally offers any resistance or illegal obstruction to the lawful apprehension of himself for any offence with which he is charged or of which he has been convicted, or escapes or attempts to escape from any custody in which he is lawfully detained for any such offence, shall be punished with imprisonment of either description for a term which may extend to two years, or with fine, or with both.";
+        raw_item_001 := "[explanation ] Explanation. \u2014The punishment in this section is in addition to the punishment for which the person to be apprehended or detained in custody was liable for the offence with which he was charged, or of which he was convicted.";
+    }
+}

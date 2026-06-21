@@ -1,0 +1,19 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90433&sectionno=68&orderno=68&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 68 "Sexual intercourse by a person in authority." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "Whoever, being---\n\nabuses such position or fiduciary relationship to induce or seduce any woman either in his custody or under his charge or present in the premises to have sexual intercourse with him, such sexual intercourse not amounting to the offence of rape, shall be punished with rigorous imprisonment of either description for a term which shall not be less than five years, but which may extend to ten years, and shall also be liable to fine.";
+        raw_item_001 := "[item a] in a position of authority or in a fiduciary relationship; or";
+        raw_item_002 := "[item b] a public servant; or";
+        raw_item_003 := "[item c] superintendent or manager of a jail, remand home or other place of custody established by or under any law for the time being in force, or a women's or children's institution; or";
+        raw_item_004 := "[item d] on the management of a hospital or being on the staff of a hospital,";
+        raw_item_005 := "[explanation 1] Explanation 1 .--- In this section, \"sexual intercourse\" shall mean any of the acts mentioned in clauses (a) to (d) of section 63.";
+        raw_item_006 := "[explanation 2] Explanation 2. --- For the purposes of this section, Explanation 1 to section 63 shall also be applicable.";
+        raw_item_007 := "[explanation 3] Explanation 3. --- \"Superintendent\", in relation to a jail, remand home or other place of custody or a women's or children's institution, includes a person holding any other office in such jail, remand home, place or institution by virtue of which such person can exercise any authority or control over its inmates.";
+        raw_item_008 := "[explanation 4] Explanation 4. ---The expressions \"hospital\" and \"women's or children's institution\" shall respectively have the same meanings as in clauses (b) and (d) of the Explanation to sub-section (2) of section 64.";
+    }
+}

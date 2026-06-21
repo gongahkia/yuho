@@ -1,0 +1,16 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90535&sectionno=170&orderno=170&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 170 "Bribery." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "or (ii) accepts either for himself or for any other person any gratification as a reward for exercising any such right or for inducing or attempting to induce any other person to exercise any such right, commits the offence of bribery:";
+        raw_item_001 := "[subsection 1] Whoever\u2014";
+        raw_item_002 := "[item i] gives a gratification to any person with the object of inducing him or any other person to exercise any electoral right or of rewarding any person for having exercised any such right;";
+        raw_item_003 := "[proviso ] Provided that a declaration of public policy or a promise of public action shall not be an offence under this section.";
+        raw_item_004 := "[subsection 2] A person who offers, or agrees to give, or offers or attempts to procure, a gratification shall be deemed to give a gratification.";
+        raw_item_005 := "[subsection 3] A person who obtains or agrees to accept or attempts to obtain a gratification shall be deemed to accept a gratification, and a person who accepts a gratification as a motive for doing what he does not intend to do, or as a reward for doing what he has not done, shall be deemed to have accepted the gratification as a reward.";
+    }
+}

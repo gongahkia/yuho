@@ -1,0 +1,11 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90591&sectionno=226&orderno=226&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 226 "Attempt to commit suicide to compel or restrain exercise of lawful power." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "Whoever attempts to commit suicide with the intent to compel or restrain any public servant from discharging his official duty shall be punished with simple imprisonment for a term which may extend to one year, or with fine, or with both, or with community service.";
+    }
+}

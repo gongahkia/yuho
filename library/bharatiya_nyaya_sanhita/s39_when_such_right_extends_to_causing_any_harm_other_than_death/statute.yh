@@ -1,0 +1,11 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90404&sectionno=39&orderno=39&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 39 "When such right extends to causing any harm other than death." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "If the offence be not of any of the descriptions specified in section 38, the right of private defence of the body does not extend to the voluntary causing of death to the assailant, but does extend, under the restrictions specified in section 37, to the voluntary causing to the assailant of any harm other than death.";
+    }
+}

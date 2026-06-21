@@ -1,0 +1,16 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90670&sectionno=305&orderno=305&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 305 "Theft in a dwelling house, or means of transportation or place of worship, etc." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "Whoever commits theft\u2014\n\nshall be punished with imprisonment of either description for a term which may extend to seven years, and shall also be liable to fine.";
+        raw_item_001 := "[item a] in any building, tent or vessel used as a human dwelling or used for the custody of property; or";
+        raw_item_002 := "[item b] of any means of transport used for the transport of goods or passengers; or";
+        raw_item_003 := "[item c] of any article or goods from any means of transport used for the transport of goods or passengers; or";
+        raw_item_004 := "[item d] of idol or icon in any place of worship; or";
+        raw_item_005 := "[item e] of any property of the Government or of a local authority,";
+    }
+}

@@ -1,0 +1,25 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90373&sectionno=8&orderno=8&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 8 "Amount of fine, liability in default of payment of fine, etc." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "it shall be competent to the Court which sentences such offender to direct by the sentence that, in default of payment of the fine, the offender shall suffer imprisonment for a certain term, in which imprisonment shall be in excess of any other imprisonment to which he may have been sentenced or to which he may be liable under a commutation of a sentence.\n\nA is sentenced to a fine of one thousand rupees and to four months imprisonment in default of payment. Here, if seven hundred and fifty rupees of the fine be paid or levied before the expiration of one month of the imprisonment, A will be discharged as soon as the first month has expired. If seven hundred and fifty rupees be paid or levied at the time of the expiration of the first month, or at any later time while A continues in imprisonment, A will be immediately discharged. If five hundred rupees of the fine be paid or levied before the expiration of two months of the imprisonment, A will be discharged as soon as the two months are completed. If five hundred rupees be paid or levied at the time of the expiration of those two months, or at any later time while A continues in imprisonment, A will be immediately discharged.";
+        raw_item_001 := "[subsection 1] Where no sum is expressed to which a fine may extend, the amount of fine to which the offender is liable is unlimited, but shall not be excessive.";
+        raw_item_002 := "[subsection 2] In every case of an offence---";
+        raw_item_003 := "[item a] punishable with imprisonment as well as fine, in which the offender is sentenced to a fine, whether with or without imprisonment;";
+        raw_item_004 := "[item b] punishable with imprisonment or fine, or with fine only, in which the offender is sentenced to a fine,";
+        raw_item_005 := "[subsection 3] The term for which the Court directs the offender to be imprisoned in default of payment of a fine shall not exceed one-fourth of the term of imprisonment which is the maximum fixed for the offence, if the offence be punishable with imprisonment as well as fine.";
+        raw_item_006 := "[subsection 4] The imprisonment which the Court imposes in default of payment of a fine or in default of community service may be of any description to which the offender might have been sentenced for the offence.";
+        raw_item_007 := "[subsection 5] If the offence is punishable with fine or community service, the imprisonment which the Court imposes in default of payment of the fine or in default of community service shall be simple, and the term for which the Court directs the offender to be imprisoned, in default of payment of fine or in default of community service, shall not exceed,---";
+        raw_item_008 := "[item a] two months when the amount of the fine does not exceed five thousand rupees;";
+        raw_item_009 := "[item b] four months when the amount of the fine does not exceed ten thousand rupees; and";
+        raw_item_010 := "[item c] one year in any other case.";
+        raw_item_011 := "[subsection 6] (a) The imprisonment which is imposed in default of payment of a fine shall terminate whenever that fine is either paid or levied by process of law;";
+        raw_item_012 := "[item b] If, before the expiration of the term of imprisonment fixed in default of payment, such a proportion of the fine be paid or levied that the term of imprisonment suffered in default of payment is not less than proportional to the part of the fine still unpaid, the imprisonment shall terminate.";
+        raw_item_013 := "[illustration ] Illustration.";
+        raw_item_014 := "[subsection 7] The fine, or any part thereof which remains unpaid, may be levied at any time within six years after the passing of the sentence, and if, under the sentence, the offender be liable to imprisonment for a longer period than six years, then at any time previous to the expiration of that period; and the death of the offender does not discharge from the liability any property which would, after his death, be legally liable for his debts.";
+    }
+}

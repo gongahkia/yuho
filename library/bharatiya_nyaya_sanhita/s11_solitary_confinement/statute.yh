@@ -1,0 +1,14 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90376&sectionno=11&orderno=11&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 11 "Solitary confinement." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "Whenever any person is convicted of an offence for which under this Sanhita the Court has power to sentence him to rigorous imprisonment, the Court may, by its sentence, order that the offender shall be kept in solitary confinement for any portion or portions of the imprisonment to which he is sentenced, not exceeding three months in the whole, according to the following scale, namely: \u2014";
+        raw_item_001 := "[item a] a time not exceeding one month if the term of imprisonment shall not exceed six months;";
+        raw_item_002 := "[item b] a time not exceeding two months if the term of imprisonment shall exceed six months and shall not exceed one year;";
+        raw_item_003 := "[item c] a time not exceeding three months if the term of imprisonment shall exceed one year.";
+    }
+}

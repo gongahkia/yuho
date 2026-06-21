@@ -1,0 +1,15 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90384&sectionno=19&orderno=19&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 19 "Act likely to cause harm, but done without criminal intent, and to prevent other harm." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "Nothing is an offence merely by reason of its being done with the knowledge that it is likely to cause harm, if it be done without any criminal intention to cause harm, and in good faith for the purpose of preventing or avoiding other harm to person or property.";
+        raw_item_001 := "[explanation ] Explanation .\u2014It is a question of fact in such a case whether the harm to be prevented or avoided was of such a nature and so imminent as to justify or excuse the risk of doing the act with the knowledge that it was likely to cause harm.";
+        raw_item_002 := "[illustration ] Illustrations.";
+        raw_item_003 := "[item a] A, the captain of a vessel, suddenly and without any fault or negligence on his part, finds himself in such a position that, before he can stop his vessel, he must inevitably run down a boat B, with twenty or thirty passengers on board, unless he changes the course of his vessel, and that, by changing his course, he must incur risk of running down a boat C with only two passengers on board, which he may possibly clear. Here, if A alters his course without any intention to run down the boat C and in good faith for the purpose of avoiding the danger to the passengers in the boat B, he is not guilty of an offence, though he may run down the boat C by doing an act which he knew was likely to cause that effect, if it be found as a matter of fact that the danger which he intended to avoid was such as to excuse him in incurring the risk of running down the boat C.";
+        raw_item_004 := "[item b] A, in a great fire, pulls down houses in order to prevent the conflagration from spreading. He does this with the intention in good faith of saving human life or property. Here, if it be found that the harm to be prevented was of such a nature and so imminent as to excuse A\u2019s act, A is not guilty of the offence.";
+    }
+}

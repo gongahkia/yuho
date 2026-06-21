@@ -1,0 +1,12 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90595&sectionno=230&orderno=230&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 230 "Giving or fabricating false evidence with intent to procure conviction of capital offence." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_item_001 := "[subsection 1] Whoever gives or fabricates false evidence, intending thereby to cause, or knowing it to be likely that he will thereby cause, any person to be convicted of an offence which is capital by the law for the time being in force in India shall be punished with imprisonment for life, or with rigorous imprisonment for a term which may extend to ten years, and shall also be liable to fine which may extend to fifty thousand rupees.";
+        raw_item_002 := "[subsection 2] If an innocent person be convicted and executed in consequence of false evidence referred to in sub-section (1), the person who gives such false evidence shall be punished either with death or the punishment specified in sub-section (1).";
+    }
+}

@@ -1,0 +1,18 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90718&sectionno=353&orderno=353&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 353 "Statements conducing to public mischief." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "shall be punished with imprisonment which may extend to three years, or with fine, or with both.";
+        raw_item_001 := "[subsection 1] Whoever makes, publishes or circulates any statement, false information, rumour, or report, including through electronic means---";
+        raw_item_002 := "[item a] with intent to cause, or which is likely to cause, any officer, soldier, sailor or airman in the Army, Navy or Air Force of India to mutiny or otherwise disregard or fail in his duty as such; or";
+        raw_item_003 := "[item b] with intent to cause, or which is likely to cause, fear or alarm to the public, or to any section of the public whereby any person may be induced to commit an offence against the State or against the public tranquillity; or";
+        raw_item_004 := "[item c] with intent to incite, or which is likely to incite, any class or community of persons to commit any offence against any other class or community,";
+        raw_item_005 := "[subsection 2] Whoever makes, publishes or circulates any statement or report containing false information, rumour or alarming news, including through electronic means, with intent to create or promote, or which is likely to create or promote, on grounds of religion, race, place of birth, residence, language, caste or community or any other ground whatsoever, feelings of enmity, hatred or ill will between different religious, racial, language or regional groups or castes or communities, shall be punished with imprisonment which may extend to three years, or with fine, or with both.";
+        raw_item_006 := "[subsection 3] Whoever commits an offence specified in sub-section (2) in any place of worship or in any assembly engaged in the performance of religious worship or religious ceremonies, shall be punished with imprisonment which may extend to five years and shall also be liable to fine.";
+        raw_item_007 := "[exception ] Exception. ---It does not amount to an offence, within the meaning of this section, when the person making, publishing or circulating any such statement, false information, rumour or report, has reasonable grounds for believing that such statement, false information, rumour or report is true and makes, publishes or circulates it in good faith and without any such intent as aforesaid.";
+    }
+}

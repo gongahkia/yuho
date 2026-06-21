@@ -1,0 +1,15 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90697&sectionno=332&orderno=332&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 332 "House-trespass in order to commit offence." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "Whoever commits house-trespass in order to the committing of any offence---";
+        raw_item_001 := "[item a] punishable with death, shall be punished with imprisonment for life, or with rigorous imprisonment for a term not exceeding ten years, and shall also be liable to fine;";
+        raw_item_002 := "[item b] punishable with imprisonment for life, shall be punished with imprisonment of either description for a term not exceeding ten years, and shall also be liable to fine;";
+        raw_item_003 := "[item c] punishable with imprisonment, shall be punished with imprisonment of either description for a term which may extend to two years, and shall also be liable to fine:";
+        raw_item_004 := "[proviso ] Provided that if the offence intended to be committed is theft, the term of the imprisonment may be extended to seven years.";
+    }
+}

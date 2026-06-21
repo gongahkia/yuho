@@ -1,0 +1,15 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90421&sectionno=56&orderno=56&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 56 "Abetment of offence punishable with imprisonment." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "Whoever abets an offence punishable with imprisonment shall, if that offence be not committed in consequence of the abetment, and no express provision is made under this Sanhita for the punishment of such abetment, be punished with imprisonment of any description provided for that offence for a term which may extend to one-fourth part of the longest term provided for that offence; or with such fine as is provided for that offence, or with both; and if the abettor or the person abetted is a public servant, whose duty it is to prevent the commission of such offence, the abettor shall be punished with imprisonment of any description provided for that offence, for a term which may extend to one-half of the longest term provided for that offence, or with such fine as is provided for the offence, or with both.";
+        raw_item_001 := "[illustration ] Illustrations .";
+        raw_item_002 := "[item a] A instigates B to give false evidence. Here, if B does not give false evidence, A has nevertheless committed the offence defined in this section, and is punishable accordingly.";
+        raw_item_003 := "[item b] A, a police officer, whose duty it is to prevent robbery, abets the commission of robbery. Here, though the robbery be not committed, A is liable to one-half of the longest term of imprisonment provided for that offence, and also to fine.";
+        raw_item_004 := "[item c] B abets the commission of a robbery by A, a police officer, whose duty it is to prevent that offence. Here, though the robbery be not committed, B is liable to one-half of the longest term of imprisonment provided for the offence of robbery, and also to fine.";
+    }
+}

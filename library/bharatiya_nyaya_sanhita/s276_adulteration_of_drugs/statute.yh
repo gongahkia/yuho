@@ -1,0 +1,11 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90641&sectionno=276&orderno=276&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 276 "Adulteration of drugs." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "Whoever adulterates any drug or medical preparation in such a manner as to lessen the efficacy or change the operation of such drug or medical preparation, or to make it noxious, intending that it shall be sold or used for, or knowing it to be likely that it will be sold or used for, any medicinal purpose, as if it had not undergone such adulteration, shall be punished with imprisonment of either description for a term which may extend to one year, or with fine which may extend to five thousand rupees, or with both.";
+    }
+}

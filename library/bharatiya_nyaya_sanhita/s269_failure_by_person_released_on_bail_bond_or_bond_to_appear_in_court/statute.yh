@@ -1,0 +1,14 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90634&sectionno=269&orderno=269&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 269 "Failure by person released on bail bond or bond to appear in Court." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "Whoever, having been charged with an offence and released on bail bond or on bond, fails without sufficient cause (the burden of proving which shall lie upon him), to appear in Court in accordance with the terms of the bail or bond, shall be punished with imprisonment of either description for a term which may extend to one year, or with fine, or with both.";
+        raw_item_001 := "[explanation ] Explanation. \u2014The punishment under this section is\u2014";
+        raw_item_002 := "[item a] in addition to the punishment to which the offender would be liable on a conviction for the offence with which he has been charged; and";
+        raw_item_003 := "[item b] without prejudice to the power of the Court to order forfeiture of the bond.";
+    }
+}

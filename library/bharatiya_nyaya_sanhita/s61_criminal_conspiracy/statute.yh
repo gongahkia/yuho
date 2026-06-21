@@ -1,0 +1,18 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90426&sectionno=61&orderno=61&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 61 "Criminal conspiracy." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_item_001 := "[subsection 1] When two or more persons agree with the common object to do, or cause to be done\u2014";
+        raw_item_002 := "[item a] an illegal act; or";
+        raw_item_003 := "[item b] an act which is not illegal by illegal means, such an agreement is designated a criminal conspiracy:";
+        raw_item_004 := "[proviso ] Provided that no agreement except an agreement to commit an offence shall amount to a criminal conspiracy unless some act besides the agreement is done by one or more parties to such agreement in pursuance thereof.";
+        raw_item_005 := "[explanation ] Explanation .\u2014It is immaterial whether the illegal act is the ultimate object of such agreement, or is merely incidental to that object.";
+        raw_item_006 := "[subsection 2] Whoever is a party to a criminal conspiracy,\u2014";
+        raw_item_007 := "[item a] to commit an offence punishable with death, imprisonment for life or rigorous imprisonment for a term of two years or upwards, shall, where no express provision is made in this Sanhita for the punishment of such a conspiracy, be punished in the same manner as if he had abetted such offence;";
+        raw_item_008 := "[item b] other than a criminal conspiracy to commit an offence punishable as aforesaid shall be punished with imprisonment of either description for a term not exceeding six months, or with fine or with both.";
+    }
+}

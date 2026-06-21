@@ -1,0 +1,14 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90401&sectionno=36&orderno=36&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 36 "Right of private defence against act of a person of unsound mind, etc." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "When an act, which would otherwise be a certain offence, is not that offence, by reason of the youth, the want of maturity of understanding, the unsoundness of mind or the intoxication of the person doing that act, or by reason of any misconception on the part of that person, every person has the same right of private defence against that act which he would have if the act were that offence.";
+        raw_item_001 := "[illustration ] Illustrations .";
+        raw_item_002 := "[item a] Z, a person of unsound mind, attempts to kill A; Z is guilty of no offence. But A has the same right of private defence which he would have if Z were sane.";
+        raw_item_003 := "[item b] A enters by night a house which he is legally entitled to enter. Z, in good faith, taking A for a house-breaker, attacks A. Here Z, by attacking A under this misconception, commits no offence. But A has the same right of private defence against Z, which he would have if Z were not acting under that misconception.";
+    }
+}

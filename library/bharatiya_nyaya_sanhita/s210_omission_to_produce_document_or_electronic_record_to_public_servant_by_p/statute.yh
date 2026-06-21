@@ -1,0 +1,14 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90743&sectionno=210&orderno=210&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 210 "Omission to produce document or electronic record to public servant by person legally bound to produce it" jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "Whoever, being legally bound to produce or deliver up any document or electronic record to any public servant, as such, intentionally omits so to produce or deliver up the same,\u2014\n\nA, being legally bound to produce a document before a District Court, intentionally omits to produce the same. A has committed the offence defined in this section.";
+        raw_item_001 := "[item a] shall be punished with simple imprisonment for a term which may extend to one month, or with fine which may extend to five thousand rupees, or with both;";
+        raw_item_002 := "[item b] and where the document or electronic record is to be produced or delivered up to a Court with simple imprisonment for a term which may extend to six months, or with fine which may extend to ten thousand rupees, or with both.";
+        raw_item_003 := "[illustration ] Illustration.";
+    }
+}

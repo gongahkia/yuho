@@ -1,0 +1,13 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90455&sectionno=90&orderno=90&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 90 "Death caused by act done with intent to cause miscarriage." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_item_001 := "[subsection 1] Whoever, with intent to cause the miscarriage of a woman with child, does any act which causes the death of such woman, shall be punished with imprisonment of either description for a term which may extend to ten years, and shall also be liable to fine.";
+        raw_item_002 := "[subsection 2] Where the act referred to in sub-section (1) is done without the consent of the woman, shall be punishable either with imprisonment for life, or with the punishment specified in said sub-section.";
+        raw_item_003 := "[explanation ] Explanation.\u2014It is not essential to this offence that the offender should know that the act is likely to cause death.";
+    }
+}

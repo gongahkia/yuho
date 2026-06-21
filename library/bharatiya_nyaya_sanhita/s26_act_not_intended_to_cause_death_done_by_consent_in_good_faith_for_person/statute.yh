@@ -1,0 +1,12 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90391&sectionno=26&orderno=26&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 26 "Act not intended to cause death, done by consent in good faith for person's benefit." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "Nothing, which is not intended to cause death, is an offence by reason of any harm which it may cause, or be intended by the doer to cause, or be known by the doer to be likely to cause, to any person for whose benefit it is done in good faith, and who has given a consent, whether express or implied, to suffer that harm, or to take the risk of that harm.\n\nA, a surgeon, knowing that a particular operation is likely to cause the death of Z, who suffers under the painful complaint, but not intending to cause Zs death, and intending, in good faith, Zs benefit, performs that operation on Z, with Zs consent. A has committed no offence.";
+        raw_item_001 := "[illustration ] Illustration .";
+    }
+}

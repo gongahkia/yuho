@@ -1,0 +1,13 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90613&sectionno=248&orderno=248&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 248 "False charge of offence made with intent to injure." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "Whoever, with intent to cause injury to any person, institutes or causes to be instituted any criminal proceeding against that person, or falsely charges any person with having committed an offence, knowing that there is no just or lawful ground for such proceeding or charge against that person,\u2014";
+        raw_item_001 := "[item a] shall be punished with imprisonment of either description for a term which may extend to five years, or with fine which may extend to two lakh rupees, or with both;";
+        raw_item_002 := "[item b] if such criminal proceeding be instituted on a false charge of an offence punishable with death, imprisonment for life, or imprisonment for ten years or upwards, shall be punishable with imprisonment of either description for a term which may extend to ten years, and shall also be liable to fine.";
+    }
+}

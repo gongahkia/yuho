@@ -1,0 +1,16 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90562&sectionno=197&orderno=197&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 197 "Imputations, assertions prejudicial to national integration." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_item_001 := "[subsection 1] Whoever, by words either spoken or written or by signs or by visible representations or through electronic communication or otherwise,\u2014";
+        raw_item_002 := "[item a] makes or publishes any imputation that any class of persons cannot, by reason of their being members of any religious, racial, language or regional group or caste or community, bear true faith and allegiance to the Constitution of India as by law established or uphold the sovereignty and integrity of India; or";
+        raw_item_003 := "[item b] asserts, counsels, advises, propagates or publishes that any class of persons shall, by reason of their being members of any religious, racial, language or regional group or caste or community, be denied, or deprived of their rights as citizens of India; or";
+        raw_item_004 := "[item c] makes or publishes any assertion, counsel, plea or appeal concerning the obligation of any class of persons, by reason of their being members of any religious, racial, language or regional group or caste or community, and such assertion, counsel, plea or appeal causes or is likely to cause disharmony or feelings of enmity or hatred or ill-will between such members and other persons; or";
+        raw_item_005 := "[item d] makes or publishes false or misleading information, jeopardising the sovereignty, unity and integrity or security of India, shall be punished with imprisonment which may extend to three years, or with fine, or with both.";
+        raw_item_006 := "[subsection 2] Whoever commits an offence specified in sub-section (1) in any place of worship or in any assembly engaged in the performance of religious worship or religious ceremonies, shall be punished with imprisonment which may extend to five years and shall also be liable to fine.";
+    }
+}

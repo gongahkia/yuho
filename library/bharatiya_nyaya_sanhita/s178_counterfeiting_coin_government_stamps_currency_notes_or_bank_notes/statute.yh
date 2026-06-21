@@ -1,0 +1,16 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90543&sectionno=178&orderno=178&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 178 "Counterfeiting coin, Government stamps, currency-notes or bank-notes." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "Whoever counterfeits, or knowingly performs any part of the process of counterfeiting, any coin, stamp issued by Government for the purpose of revenue, currency-note or bank-note, shall be punished with imprisonment for life, or with imprisonment of either description for a term which may extend to ten years, and shall also be liable to fine.";
+        raw_item_001 := "[explanation ] Explanation.\u2014For the purposes of this Chapter,\u2014";
+        raw_item_002 := "[subsection 1] the expression \u201cbank-note\u201d means a promissory note or engagement for the payment of money to bearer on demand issued by any person carrying on the business of banking in any part of the world, or issued by or under the authority of any State or Sovereign Power, and intended to be used as equivalent to, or as a substitute for money;";
+        raw_item_003 := "[subsection 2] \u201ccoin\u201d shall have the same meaning as assigned to it in section 2 of the Coinage Act, 2011 (11 of 2011) and includes metal used for the time being as money and is stamped and issued by or under the authority of any State or Sovereign Power intended to be so used;";
+        raw_item_004 := "[subsection 3] a person commits the offence of \u201ccounterfeiting Government stamp\u201d who counterfeits by causing a genuine stamp of one denomination to appear like a genuine stamp of a different denomination; (4) a person commits the offence of counterfeiting coin who intending to practise deception, or knowing it to be likely that deception will thereby be practised, causes a genuine coin to appear like a different coin; and";
+        raw_item_005 := "[subsection 5] the offence of \u201ccounterfeiting coin\u201d includes diminishing the weight or alteration of the composition, or alteration of the appearance of the coin.";
+    }
+}

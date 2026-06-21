@@ -1,0 +1,13 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90710&sectionno=345&orderno=345&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 345 "Property mark." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_item_001 := "[subsection 1] A mark used for denoting that movable property belongs to a particular person is called a property mark.";
+        raw_item_002 := "[subsection 2] Whoever marks any movable property or goods or any case, package or other receptacle containing movable property or goods, or uses any case, package or other receptacle having any mark thereon, in a manner reasonably calculated to cause it to be believed that the property or goods so marked, or any property or goods contained in any such receptacle so marked, belong to a person to whom they do not belong, is said to use a false property mark.";
+        raw_item_003 := "[subsection 3] Whoever uses any false property mark shall, unless he proves that he acted without intent to defraud, be punished with imprisonment of either description for a term which may extend to one year, or with fine, or with both.";
+    }
+}

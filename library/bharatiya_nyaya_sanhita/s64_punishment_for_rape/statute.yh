@@ -1,0 +1,34 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90429&sectionno=64&orderno=64&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 64 "Punishment for rape." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "shall be punished with rigorous imprisonment for a term which shall not be less than ten years, but which may extend to imprisonment for life, which shall mean imprisonment for the remainder of that person's natural life, and shall also be liable to fine.";
+        raw_item_001 := "[subsection 1] Whoever, except in the cases provided for in sub-section (2), commits rape, shall be punished with rigorous imprisonment of either description for a term which shall not be less than ten years, but which may extend to imprisonment for life, and shall also be liable to fine.";
+        raw_item_002 := "[subsection 2] Whoever,---";
+        raw_item_003 := "[item a] being a police officer, commits rape,---";
+        raw_item_004 := "[item i] within the limits of the police station to which such police officer is appointed; or";
+        raw_item_005 := "[item ii] in the premises of any station house; or";
+        raw_item_006 := "[item iii] on a woman in such police officer's custody or in the custody of a police officer subordinate to such police officer; or";
+        raw_item_007 := "[item b] being a public servant, commits rape on a woman in such public servant's custody or in the custody of a public servant subordinate to such public servant; or";
+        raw_item_008 := "[item c] being a member of the armed forces deployed in an area by the Central Government or a State Government commits rape in such area; or";
+        raw_item_009 := "[item d] being on the management or on the staff of a jail, remand home or other place of custody established by or under any law for the time being in force or of a women's or children's institution, commits rape on any inmate of such jail, remand home, place or institution; or";
+        raw_item_010 := "[item e] being on the management or on the staff of a hospital, commits rape on a woman in that hospital; or";
+        raw_item_011 := "[item f] being a relative, guardian or teacher of, or a person in a position of trust or authority towards the woman, commits rape on such woman; or";
+        raw_item_012 := "[item g] commits rape during communal or sectarian violence; or";
+        raw_item_013 := "[item h] commits rape on a woman knowing her to be pregnant; or";
+        raw_item_014 := "[item i] commits rape, on a woman incapable of giving consent; or";
+        raw_item_015 := "[item j] being in a position of control or dominance over a woman, commits rape on such woman; or";
+        raw_item_016 := "[item k] commits rape on a woman suffering from mental or physical disability; or";
+        raw_item_017 := "[item l] while committing rape causes grievous bodily harm or maims or disfigures or endangers the life of a woman; or";
+        raw_item_018 := "[item m] commits rape repeatedly on the same woman,";
+        raw_item_019 := "[explanation ] Explanation. ---For the purposes of this sub-section,";
+        raw_item_020 := "[item a] \"armed forces\" means the naval, army and air forces and includes any member of the Armed Forces constituted under any law for the time being in force, including the paramilitary forces and any auxiliary forces that are under the control of the Central Government or the State Government;";
+        raw_item_021 := "[item b] \"hospital\" means the precincts of the hospital and includes the precincts of any institution for the reception and treatment of persons during convalescence or of persons requiring medical attention or rehabilitation;";
+        raw_item_022 := "[item c] \"police officer\" shall have the same meaning as assigned to the expression \"police\" under the Police Act, 1861 (5 of 1861);";
+        raw_item_023 := "[item d] \"women's or children's institution\" means an institution, whether called an orphanage or a home for neglected women or children or a widow's home or an institution called by any other name, which is established and maintained for the reception and care of women or children.";
+    }
+}

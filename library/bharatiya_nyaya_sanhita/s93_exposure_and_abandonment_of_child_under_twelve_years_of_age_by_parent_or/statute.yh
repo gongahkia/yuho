@@ -1,0 +1,12 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90729&sectionno=93&orderno=93&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 93 "Exposure and abandonment of child under twelve years of age, by parent or person having care of it." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "Whoever being the father or mother of a child under the age of twelve years, or having the care of such child, shall expose or leave such child in any place with the intention of wholly abandoning such child, shall be punished with imprisonment of either description for a term which may extend to seven years, or with fine, or with both.";
+        raw_item_001 := "[explanation ] Explanation.\u2014This section is not intended to prevent the trial of the offender for murder or culpable homicide, as the case may be, if the child die in consequence of the exposure.";
+    }
+}

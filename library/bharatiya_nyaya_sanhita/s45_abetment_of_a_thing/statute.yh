@@ -1,0 +1,17 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90410&sectionno=45&orderno=45&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 45 "Abetment of a thing." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "A person abets the doing of a thing, who\u2014\n\nA, a public officer, is authorised by a warrant from a Court to apprehend Z. B, knowing that fact and also that C is not Z, wilfully represents to A that C is Z and thereby intentionally causes A to apprehend C. Here B abets by instigation the apprehension of C.";
+        raw_item_001 := "[item a] instigates any person to do that thing; or";
+        raw_item_002 := "[item b] engages with one or more other person or persons in any conspiracy for the doing of that thing, if an act or illegal omission takes place in pursuance of that conspiracy, and in order to the doing of that thing; or";
+        raw_item_003 := "[item c] intentionally aids, by any act or illegal omission, the doing of that thing.";
+        raw_item_004 := "[explanation 1] Explanation 1.\u2014A person who, by wilful misrepresentation, or by wilful concealment of a material fact which he is bound to disclose, voluntarily causes or procures, or attempts to cause or procure, a thing to be done, is said to instigate the doing of that thing.";
+        raw_item_005 := "[illustration ] Illustration .";
+        raw_item_006 := "[explanation 2] Explanation 2.\u2014Whoever, either prior to or at the time of the commission of an act, does anything in order to facilitate the commission of that act, and thereby facilitates the commission thereof, is said to aid the doing of that act.";
+    }
+}

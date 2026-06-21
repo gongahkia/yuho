@@ -1,0 +1,15 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90747&sectionno=238&orderno=238&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 238 "Causing disappearance of evidence of offence, or giving false information to screen offender." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "Whoever, knowing or having reason to believe that an offence has been committed, causes any evidence of the commission of that offence to disappear, with the intention of screening the offender from legal punishment, or with that intention gives any information respecting the offence which he knows or believes to be false shall,\u2014\n\nA, knowing that B has murdered Z, assists B to hide the body with the intention of screening B from punishment. A is liable to imprisonment of either description for seven years, and also to fine.";
+        raw_item_001 := "[item a] if the offence which he knows or believes to have been committed is punishable with death, be punished with imprisonment of either description for a term which may extend to seven years, and shall also be liable to fine;";
+        raw_item_002 := "[item b] if the offence is punishable with imprisonment for life, or with imprisonment which may extend to ten years, be punished with imprisonment of either description for a term which may extend to three years, and shall also be liable to fine;";
+        raw_item_003 := "[item c] if the offence is punishable with imprisonment for any term not extending to ten years, be punished with imprisonment of the description provided for the offence, for a term which may extend to one-fourth part of the longest term of the imprisonment provided for the offence, or with fine, or with both.";
+        raw_item_004 := "[illustration ] Illustration.";
+    }
+}

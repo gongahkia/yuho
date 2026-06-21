@@ -1,0 +1,18 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90465&sectionno=100&orderno=100&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 100 "Culpable homicide." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "Whoever causes death by doing an act with the intention of causing death, or with the intention of causing such bodily injury as is likely to cause death, or with the knowledge that he is likely by such act to cause death, commits the offence of culpable homicide.";
+        raw_item_001 := "[illustration ] Illustrations.";
+        raw_item_002 := "[item a] A lays sticks and turf over a pit, with the intention of thereby causing death, or with the knowledge that death is likely to be thereby caused. Z, believing the ground to be firm, treads on it, falls in and is killed. A has committed the offence of culpable homicide.";
+        raw_item_003 := "[item b] A knows Z to be behind a bush. B does not know it. A, intending to cause, or knowing it to be likely to cause Z\u2019s death, induces B to fire at the bush. B fires and kills Z. Here B may be guilty of no offence; but A has committed the offence of culpable homicide.";
+        raw_item_004 := "[item c] A, by shooting at a fowl with intent to kill and steal it, kills B, who is behind a bush; A not knowing that he was there. Here, although A was doing an unlawful act, he was not guilty of culpable homicide, as he did not intend to kill B, or to cause death by doing an act that he knew was likely to cause death.";
+        raw_item_005 := "[explanation 1] Explanation 1.\u2014A person who causes bodily injury to another who is labouring under a disorder, disease or bodily infirmity, and thereby accelerates the death of that other, shall be deemed to have caused his death.";
+        raw_item_006 := "[explanation 2] Explanation 2.\u2014Where death is caused by bodily injury, the person who causes such bodily injury shall be deemed to have caused the death, although by resorting to proper remedies and skilful treatment the death might have been prevented.";
+        raw_item_007 := "[explanation 3] Explanation 3.\u2014The causing of the death of a child in the mother\u2019s womb is not homicide. But it may amount to culpable homicide to cause the death of a living child, if any part of that child has been brought forth, though the child may not have breathed or been completely born.";
+    }
+}

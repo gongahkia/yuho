@@ -1,0 +1,14 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90379&sectionno=14&orderno=14&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 14 "Act done by a person bound, or by mistake of fact believing himself bound, by law." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "Nothing is an offence which is done by a person who is, or who by reason of a mistake of fact and not by reason of a mistake of law in good faith believes himself to be, bound by law to do it.";
+        raw_item_001 := "[illustration ] Illustrations .";
+        raw_item_002 := "[item a] A, a soldier, fires on a mob by the order of his superior officer, in conformity with the commands of the law. A has committed no offence.";
+        raw_item_003 := "[item b] A, an officer of a Court, being ordered by that Court to arrest Y, and, after due enquiry, believing Z to be Y, arrests Z. A has committed no offence.";
+    }
+}

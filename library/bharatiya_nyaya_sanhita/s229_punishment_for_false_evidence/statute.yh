@@ -1,0 +1,18 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90594&sectionno=229&orderno=229&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 229 "Punishment for false evidence." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "A, in an enquiry before a Magistrate for the purpose of ascertaining whether Z ought to be committed for trial, makes on oath a statement which he knows to be false. As this enquiry is a stage of a judicial proceeding, A has given false evidence.\n\nA, in an enquiry before an officer deputed by a Court to ascertain on the spot the boundaries of land, makes on oath a statement which he knows to be false. As this enquiry is a stage of a judicial proceeding, A has given false evidence.";
+        raw_item_001 := "[subsection 1] Whoever intentionally gives false evidence in any stage of a judicial proceeding, or fabricates false evidence for the purpose of being used in any stage of a judicial proceeding, shall be punished with imprisonment of either description for a term which may extend to seven years, and shall also be liable to fine which may extend to ten thousand rupees.";
+        raw_item_002 := "[subsection 2] Whoever intentionally gives or fabricates false evidence in any case other than that referred to in sub-section (1), shall be punished with imprisonment of either description for a term which may extend to three years, and shall also be liable to fine which may extend to five thousand rupees.";
+        raw_item_003 := "[explanation 1] Explanation 1.\u2014A trial before a Court-martial is a judicial proceeding.";
+        raw_item_004 := "[explanation 2] Explanation 2.\u2014An investigation directed by law preliminary to a proceeding before a Court, is a stage of a judicial proceeding, though that investigation may not take place before a Court.";
+        raw_item_005 := "[illustration ] Illustration.";
+        raw_item_006 := "[explanation 3] Explanation 3.\u2014An investigation directed by a Court according to law, and conducted under the authority of a Court, is a stage of a judicial proceeding, though that investigation may not take place before a Court.";
+        raw_item_007 := "[illustration ] Illustration.";
+    }
+}

@@ -1,0 +1,86 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90367&sectionno=2&orderno=2&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 2 "Definitions." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "In this Sanhita, unless the context otherwise requires,---\n\nA writes his name on the back of a bill of exchange payable to his order. The meaning of the endorsement, as explained by mercantile usage, is that the bill is to be paid to the holder. The endorsement is a document, and shall be construed in the same manner as if the words\"pay to the holder\" or words to that effect had been written over the signature;\n\nA Magistrate exercising jurisdiction in respect of a charge on which he has power to sentence to fine or imprisonment, with or without appeal, is a Judge;\n\nA Municipal Commissioner is a public servant;\n\nA writes his name on the back of a bill of exchange. As the effect of this endorsement is to transfer the right to the bill to any person who may become the lawful holder of it, the endorsement is a \"valuable security\";\n\nA sets fire, by night, to an inhabited house in a large town, for the purpose of facilitating a robbery and thus causes the death of a person. Here, A may not have intended to cause death; and may even be sorry that death has been caused by his act; yet, if he knew that he was likely to cause death, he has caused death voluntarily;.";
+        raw_item_001 := "[subsection 1] \"act\" denotes as well a series of acts as a single act;";
+        raw_item_002 := "[subsection 2] \"animal\" means any living creature, other than a human being;";
+        raw_item_003 := "[subsection 3] \"child\" means any person below the age of eighteen years;";
+        raw_item_004 := "[subsection 4] \"counterfeit\".---A person is said to \"counterfeit\" who causes one thing to resemble another thing, intending by means of that resemblance to practise deception, or knowing it to be likely that deception will thereby be practised.";
+        raw_item_005 := "[explanation 1] Explanation 1.---It is not essential to counterfeiting that the imitation should be exact..";
+        raw_item_006 := "[explanation 2] Explanation 2.---When a person causes one thing to resemble another thing, and the resemblance is such that a person might be deceived thereby, it shall be presumed, until the contrary is proved, that the person so causing the one thing to resemble the other thing intended by means of that resemblance to practise deception or knew it to be likely that deception would thereby be practised;";
+        raw_item_007 := "[subsection 5] \"Court\" means a Judge who is empowered by law to act judicially alone, or a body of Judges which is empowered by law to act judicially as a body, when such Judge or body of Judges is acting judicially;";
+        raw_item_008 := "[subsection 6] \"death\" means the death of a human being unless the contrary appears from the context;";
+        raw_item_009 := "[subsection 7] \"dishonestly\" means doing anything with the intention of causing wrongful gain to one person or wrongful loss to another person;";
+        raw_item_010 := "[subsection 8] \"document\" means any matter expressed or described upon any substance by means of letters, figures or marks, or by more than one of those means, and includes electronic and digital record, intended to be used, or which may be used, as evidence of that matter.";
+        raw_item_011 := "[explanation 1] Explanation 1.---It is immaterial by what means or upon what substance the letters, figures or marks are formed, or whether the evidence is intended for, or may be used in a Court or not.";
+        raw_item_012 := "[item a] A writing expressing the terms of a contract, which may be used as evidence of the contract, is a document..";
+        raw_item_013 := "[item b] A cheque upon a banker is a document.";
+        raw_item_014 := "[item c] A power-of-attorney is a document.";
+        raw_item_015 := "[item d] A map or plan which is intended to be used or which may be used as evidence, is a document.";
+        raw_item_016 := "[item e] A writing containing directions or instructions is a document.";
+        raw_item_017 := "[explanation 2] Explanation 2.---Whatever is expressed by means of letters, figures or marks as explained by mercantile or other usage, shall be deemed to be expressed by such letters, figures or marks within the meaning of this section, although the same may not be actually expressed.";
+        raw_item_018 := "[illustration ] Illustration .";
+        raw_item_019 := "[subsection 9] \"fraudulently\" means doing anything with the intention to defraud but not otherwise;.";
+        raw_item_020 := "[subsection 10] \"gender\".---The pronoun \"he\" and its derivatives are used of any person, whether male, female or transgender.";
+        raw_item_021 := "[explanation ] Explanation .---\"transgender\" shall have the meaning assigned to it in clause (k) of section 2 of the Transgender Persons (Protection of Rights) Act, 2019 (40 of 2019);";
+        raw_item_022 := "[subsection 11] \"good faith\".---Nothing is said to be done or believed in \"good faith\" which is done or believed without due care and attention;";
+        raw_item_023 := "[subsection 12] \"Government\" means the Central Government or a State Government;";
+        raw_item_024 := "[subsection 13] \"harbour\" includes supplying a person with shelter, food, drink, money, clothes, arms, ammunition or means of conveyance, or the assisting a person by any means, whether of the same kind as those enumerated in this clause or not, to evade apprehension;";
+        raw_item_025 := "[subsection 14] \"injury\" means any harm whatever illegally caused to any person, in body, mind, reputation or property;";
+        raw_item_026 := "[subsection 15] \"illegal\" and \"legally bound to do\".---The word \"illegal\" is applicable to everything which is an offence or which is prohibited by law, or which furnishes ground for a civil action; and a person is said to be \"legally bound to do\" whatever it is illegal in him to omit;";
+        raw_item_027 := "[subsection 16] \"Judge\" means a person who is officially designated as a Judge and includes a person,---";
+        raw_item_028 := "[item i] who is empowered by law to give, in any legal proceeding, civil or criminal, a definitive judgment, or a judgment which, if not appealed against, would be definitive, or a judgment which, if confirmed by some other authority, would be definitive; or";
+        raw_item_029 := "[item ii] who is one of a body or persons, which body of persons is empowered by law to give such a judgment.";
+        raw_item_030 := "[illustration ] Illustration .";
+        raw_item_031 := "[subsection 17] \"life\" means the life of a human being, unless the contrary appears from the context;";
+        raw_item_032 := "[subsection 18] \"local law\" means a law applicable only to a particular part of India;";
+        raw_item_033 := "[subsection 19] \"man\" means male human being of any age;";
+        raw_item_034 := "[subsection 20] \"month\" and \"year\".---Wherever the word \"month\" or the word \"year\" is used, it is to be understood that the month or the year is to be reckoned according to the Gregorian calendar;";
+        raw_item_035 := "[subsection 21] \"movable property\" includes property of every description, except land and things attached to the earth or permanently fastened to anything which is attached to the earth;";
+        raw_item_036 := "[subsection 22] \"number\".---Unless the contrary appears from the context, words importing the singular number include the plural number, and words importing the plural number include the singular number;";
+        raw_item_037 := "[subsection 23] \"oath\" includes a solemn affirmation substituted by law for an oath, and any declaration required or authorised by law to be made before a public servant or to be used for the purpose of proof, whether in a Court or not;";
+        raw_item_038 := "[subsection 24] \"offence\".---Except in the Chapters and sections mentioned in sub-clauses (a) and (b) , the word \"offence\" means a thing made punishable by this Sanhita, but---";
+        raw_item_039 := "[item a] in Chapter III and in the following sections, namely, sub-sections (2), (3), (4) and (5) of section 8, sections 9, 49, 50, 52, 54, 55, 56, 57, 58, 59, 60, 61, 119, 120, 123, sub-sections (7) and (8) of section 127, 222, 230, 231, 240, 248, 250, 251, 259, 260, 261, 262, 263, sub-sections (6) and (7) of section 308 and sub-section (2) of section 330, the word offence means a thing punishable under this Sanhita, or under any special law or local law; and";
+        raw_item_040 := "[item b] in sub-section (1) of section 189, sections 211, 212, 238, 239, 249, 253 and sub-section (1) of section 329, the word \"offence\" shall have the same meaning when the act punishable under the special law or local law is punishable under such law with imprisonment for a term of six months or more, whether with or without fine;";
+        raw_item_041 := "[subsection 25] \"omission\" denotes as well as a series of omissions as a single omission;";
+        raw_item_042 := "[subsection 26] \"person\" includes any company or association or body of persons, whether incorporated or not;";
+        raw_item_043 := "[subsection 27] \"public\" includes any class of the public or any community;";
+        raw_item_044 := "[subsection 28] \"public servant\" means a person falling under any of the descriptions, namely:---";
+        raw_item_045 := "[item a] every commissioned officer in the Army, Navy or Air Force;";
+        raw_item_046 := "[item b] every Judge including any person empowered by law to discharge, whether by himself or as a member of any body of persons, any adjudicatory functions;";
+        raw_item_047 := "[item c] every officer of a Court including a liquidator, receiver or commissioner whose duty it is, as such officer, to investigate or report on any matter of law or fact, or to make, authenticate, or keep any document, or to take charge or dispose of any property, or to execute any judicial process, or to administer any oath, or to interpret, or to preserve order in the Court, and every person specially authorised by a Court to perform any of such duties;";
+        raw_item_048 := "[item d] every assessor or member of a panchayat assisting a Court or public servant;";
+        raw_item_049 := "[item e] every arbitrator or other person to whom any cause or matter has been referred for decision or report by any Court, or by any other competent public authority;";
+        raw_item_050 := "[item f] every person who holds any office by virtue of which he is empowered to place or keep any person in confinement;";
+        raw_item_051 := "[item g] every officer of the Government whose duty it is, as such officer, to prevent offences, to give information of offences, to bring offenders to justice, or to protect the public health, safety or convenience;";
+        raw_item_052 := "[item h] every officer whose duty it is, as such officer, to take, receive, keep or expend any property on behalf of the Government, or to make any survey, assessment or contract on behalf of the Government, or to execute any revenue-process, or to investigate, or to report, on any matter affecting the pecuniary interests of the Government, or to make, authenticate or keep any document relating to the pecuniary interests of the Government, or to prevent the infraction of any law for the protection of the pecuniary interests of the Government;";
+        raw_item_053 := "[item i] every officer whose duty it is, as such officer, to take, receive, keep or expend any property, to make any survey or assessment or to levy any rate or tax for any secular common purpose of any village, town or district, or to make, authenticate or keep any document for the ascertaining of the rights of the people of any village, town or district;";
+        raw_item_054 := "[item j] every person who holds any office by virtue of which he is empowered to prepare, publish, maintain or revise an electoral roll or to conduct an election or part of an election;";
+        raw_item_055 := "[item k] every person---";
+        raw_item_056 := "[item i] in the service or pay of the Government or remunerated by fees or commission for the performance of any public duty by the Government;.";
+        raw_item_057 := "[item ii] in the service or pay of a local authority as defined in clause (31) of section 3 of the General Clauses Act, 1897 (10 of 1897), a corporation established by or under a Central or State Act or a Government company as defined in clause (45) of section 2 of the Companies Act, 2013 (18 of 2013)..";
+        raw_item_058 := "[explanation ] Explanation. ---";
+        raw_item_059 := "[item a] persons falling under any of the descriptions made in this clause are public servants, whether appointed by the Government or not;";
+        raw_item_060 := "[item b] every person who is in actual possession of the situation of a public servant, whatever legal defect there may be in his right to hold that situation is a public servant;";
+        raw_item_061 := "[item c] \"election\" means an election for the purpose of selecting members of any legislative, municipal or other public authority, of whatever character, the method of selection to which is by, or under any law for the time being in force.";
+        raw_item_062 := "[illustration ] Illustration .";
+        raw_item_063 := "[subsection 29] \"reason to believe\".---A person is said to have \"reason to believe\" a thing, if he has sufficient cause to believe that thing but not otherwise;";
+        raw_item_064 := "[subsection 30] \"special law\" means a law applicable to a particular subject;";
+        raw_item_065 := "[subsection 31] \"valuable security\" means a document which is, or purports to be, a document whereby any legal right is created, extended, transferred, restricted, extinguished or released, or whereby any person acknowledges that he lies under legal liability, or has not a certain legal right.";
+        raw_item_066 := "[illustration ] Illustration.";
+        raw_item_067 := "[subsection 32] \"vessel\" means anything made for the conveyance by water of human beings or of property;";
+        raw_item_068 := "[subsection 33] \"voluntarily\".---A person is said to cause an effect \"voluntarily\" when he causes it by means whereby he intended to cause it, or by means which, at the time of employing those means, he knew or had reason to believe to be likely to cause it.";
+        raw_item_069 := "[illustration ] Illustration .";
+        raw_item_070 := "[subsection 34] \"will\" means any testamentary document;";
+        raw_item_071 := "[subsection 35] \"woman\" means a female human being of any age;";
+        raw_item_072 := "[subsection 36] \"wrongful gain\" means gain by unlawful means of property to which the person gaining is not legally entitled;";
+        raw_item_073 := "[subsection 37] \"wrongful loss\" means the loss by unlawful means of property to which the person losing it is legally entitled;";
+        raw_item_074 := "[subsection 38] \"gaining wrongfully\" and \"losing wrongfully\".---A person is said to gain wrongfully when such person retains wrongfully, as well as when such person acquires wrongfully. A person is said to lose wrongfully when such person is wrongfully kept out of any property, as well as when such person is wrongfully deprived of property; and";
+        raw_item_075 := "[subsection 39] words and expressions used but not defined in this Sanhita but defined in the Information Technology Act, 2000 (21 of 2000) and the Bharatiya Nagarik Suraksha Sanhita, 2023 shall have the meanings respectively assigned to them in that Act and Sanhita.";
+    }
+}

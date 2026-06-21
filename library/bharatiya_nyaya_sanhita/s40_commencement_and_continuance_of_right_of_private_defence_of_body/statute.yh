@@ -1,0 +1,11 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90405&sectionno=40&orderno=40&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 40 "Commencement and continuance of right of private defence of body." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "The right of private defence of the body commences as soon as a reasonable apprehension of danger to the body arises from an attempt or threat to commit the offence though the offence may not have been committed; and it continues as long as such apprehension of danger to the body continues.";
+    }
+}

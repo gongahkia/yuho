@@ -1,0 +1,11 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90720&sectionno=355&orderno=355&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 355 "Misconduct in public by a drunken person." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "Whoever, in a state of intoxication, appears in any public place, or in any place which it is a trespass in him to enter, and there conducts himself in such a manner as to cause annoyance to any person, shall be punished with simple imprisonment for a term which may extend to twenty-four hours, or with fine which may extend to one thousand rupees, or with both or with community service.";
+    }
+}

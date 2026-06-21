@@ -1,0 +1,11 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90515&sectionno=150&orderno=150&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 150 "Concealing with intent to facilitate design to wage war." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "Whoever by any act, or by any illegal omission, conceals the existence of a design to wage war against the Government of India, intending by such concealment to facilitate, or knowing it to be likely that such concealment will facilitate, the waging of such war, shall be punished with imprisonment of either description for a term which may extend to ten years, and shall also be liable to fine.";
+    }
+}

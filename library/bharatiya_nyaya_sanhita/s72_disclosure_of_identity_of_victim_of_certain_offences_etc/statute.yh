@@ -1,0 +1,13 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90437&sectionno=72&orderno=72&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 72 "Disclosure of identity of victim of certain offences, etc." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_item_001 := "[subsection 1] Whoever prints or publishes the name or any matter which may make known the identity of any person against whom an offence under section 64 or section 65 or section 66 or section 67 or section 68 or section 69 or section 70 or section 71 is alleged or found to have been committed (hereafter in this section referred to as the victim) shall be punished with imprisonment of either description for a term which may extend to two years and shall also be liable to fine.";
+        raw_item_002 := "[subsection 2] Nothing in sub-section (1) extends to any printing or publication of the name or any matter which may make known the identity of the victim if such printing or publication is\u2014";
+        raw_item_003 := "[item a] by or under the order in writing of the officer-in-charge of the police station or the police officer making the investigation into such offence acting in good faith for the purposes of such investigation; or";
+    }
+}

@@ -1,0 +1,11 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90724&sectionno=10&orderno=10&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 10 "Punishment of person guilty of one of several offences, judgment stating that it is doubtful of which." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "In all cases in which judgment is given that a person is guilty of one of several offences specified in the judgment, but that it is doubtful of which of these offences he is guilty, the offender shall be punished for the offence for which the lowest punishment is provided if the same punishment is not provided for all.";
+    }
+}

@@ -1,0 +1,12 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90563&sectionno=198&orderno=198&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 198 "Public servant disobeying law, with intent to cause injury to any person." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "Whoever, being a public servant, knowingly disobeys any direction of the law as to the way in which he is to conduct himself as such public servant, intending to cause, or knowing it to be likely that he will by such disobedience, cause injury to any person, shall be punished with simple imprisonment for a term which may extend to one year, or with fine, or with both.\n\nA, being an officer directed by law to take property in execution, in order to satisfy a decree pronounced in Z\u2019s favour by a Court, knowingly disobeys that direction of law, with the knowledge that he is likely thereby to cause injury to Z. A has committed the offence defined in this section.";
+        raw_item_001 := "[illustration ] Illustration.";
+    }
+}

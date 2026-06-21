@@ -1,0 +1,12 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90409&sectionno=44&orderno=44&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 44 "Right of private defence against deadly assault when there is risk of harm to innocent person." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "If in the exercise of the right of private defence against an assault which reasonably causes the apprehension of death, the defender be so situated that he cannot effectually exercise that right without risk of harm to an innocent person, his right of private defence extends to the running of that risk.\n\nA is attacked by a mob who attempt to murder him. He cannot effectually exercise his right of private defence without firing on the mob, and he cannot fire without risk of harming young children who are mingled with the mob. A commits no offence if by so firing he harms any of the children.";
+        raw_item_001 := "[illustration ] Illustration .";
+    }
+}

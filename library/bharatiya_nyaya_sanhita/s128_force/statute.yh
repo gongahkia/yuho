@@ -1,0 +1,15 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90493&sectionno=128&orderno=128&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 128 "Force." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "A person is said to use force to another if he causes motion, change of motion, or cessation of motion to that other, or if he causes to any substance such motion, or change of motion, or cessation of motion as brings that substance into contact with any part of that other\u2019s body, or with anything which that other is wearing or carrying, or with anything so situated that such contact affects that other\u2019s sense of feeling:";
+        raw_item_001 := "[proviso ] Provided that the person causing the motion, or change of motion, or cessation of motion, causes that motion, change of motion, or cessation of motion in one of the following three ways, namely:\u2014";
+        raw_item_002 := "[item a] by his own bodily power;";
+        raw_item_003 := "[item b] by disposing any substance in such a manner that the motion or change or cessation of motion takes place without any further act on his part, or on the part of any other person;";
+        raw_item_004 := "[item c] by inducing any animal to move, to change its motion, or to cease to move.";
+    }
+}

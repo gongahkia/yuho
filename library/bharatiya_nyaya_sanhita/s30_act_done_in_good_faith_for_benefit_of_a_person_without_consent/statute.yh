@@ -1,0 +1,22 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90395&sectionno=30&orderno=30&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 30 "Act done in good faith for benefit of a person without consent." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "Nothing is an offence by reason of any harm which it may cause to a person for whose benefit it is done in good faith, even without that person's consent, if the circumstances are such that it is impossible for that person to signify consent, or if that person is incapable of giving consent, and has no guardian or other person in lawful charge of him from whom it is possible to obtain consent in time for the thing to be done with benefit:\n\nA, not intending Zs death, but in good faith, for Z's benefit, performs the trepan before Z recovers his power of judging for himself. A has committed no offence.";
+        raw_item_001 := "[proviso ] Provided that this exception shall not extend to--";
+        raw_item_002 := "[item a] the intentional causing of death, or the attempting to cause death;";
+        raw_item_003 := "[item b] the doing of anything which the person doing it knows to be likely to cause death, for any purpose other than the preventing of death or grievous hurt, or the curing of any grievous disease or infirmity;";
+        raw_item_004 := "[item c] the voluntary causing of hurt, or to the attempting to cause hurt, for any purpose other than the preventing of death or hurt;";
+        raw_item_005 := "[item d] the abetment of any offence, to the committing of which offence it would not extend.";
+        raw_item_006 := "[illustration ] Illustrations .";
+        raw_item_007 := "[subsection 1] Z is thrown from his horse, and is insensible. A, a surgeon, finds that Z requires to be trepanned.";
+        raw_item_008 := "[subsection 2] Z is carried off by a tiger. A fires at the tiger knowing it to be likely that the shot may kill Z, but not intending to kill Z, and in good faith intending Z's benefit. A's bullet gives Z a mortal wound. A has committed no offence.";
+        raw_item_009 := "[subsection 3] A, a surgeon, sees a child suffer an accident which is likely to prove fatal unless an operation be immediately performed. There is no time to apply to the child's guardian. A performs the operation in spite of the entreaties of the child, intending, in good faith, the child's benefit. A has committed no offence.";
+        raw_item_010 := "[subsection 4] A is in a house which is on fire, with Z, a child. People below hold out a blanket. A drops the child from the house top, knowing it to be likely that the fall may kill the child, but not intending to kill the child, and intending, in good faith, the child's benefit. Here, even if the child is killed by the fall, A has committed no offence.";
+        raw_item_011 := "[explanation ] Explanation .---Mere pecuniary benefit is not benefit within the meaning of sections 26, 27 and this section.";
+    }
+}

@@ -1,0 +1,16 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90489&sectionno=124&orderno=124&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 124 "Voluntarily causing grievous hurt by use of acid, etc." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "Provided further that any fine imposed under this sub-section shall be paid to the victim.";
+        raw_item_001 := "[subsection 1] Whoever causes permanent or partial damage or deformity to, or burns or maims or disfigures or disables, any part or parts of the body of a person or causes grievous hurt by throwing acid on or by administering acid to that person, or by using any other means with the intention of causing or with the knowledge that he is likely to cause such injury or hurt or causes a person to be in a permanent vegetative state shall be punished with imprisonment of either description for a term which shall not be less than ten years but which may extend to imprisonment for life, and with fine:";
+        raw_item_002 := "[proviso ] Provided that such fine shall be just and reasonable to meet the medical expenses of the treatment of the victim:";
+        raw_item_003 := "[subsection 2] Whoever throws or attempts to throw acid on any person or attempts to administer acid to any person, or attempts to use any other means, with the intention of causing permanent or partial damage or deformity or burns or maiming or disfigurement or disability or grievous hurt to that person, shall be punished with imprisonment of either description for a term which shall not be less than five years but which may extend to seven years, and shall also be liable to fine.";
+        raw_item_004 := "[explanation 1] Explanation 1.--For the purposes of this section, \"acid\" includes any substance which has acidic or corrosive character or burning nature, that is capable of causing bodily injury leading to scars or disfigurement or temporary or permanent disability.";
+        raw_item_005 := "[explanation 2] Explanation 2.---For the purposes of this section, permanent or partial damage or deformity or permanent vegetative state shall not be required to be irreversible.";
+    }
+}

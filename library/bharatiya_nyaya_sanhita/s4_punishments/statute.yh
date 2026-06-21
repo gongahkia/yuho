@@ -1,0 +1,19 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90369&sectionno=4&orderno=4&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 4 "Punishments." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "The punishments to which offenders are liable under the provisions of this Sanhita are\u2014";
+        raw_item_001 := "[item a] Death;";
+        raw_item_002 := "[item b] Imprisonment for life;";
+        raw_item_003 := "[item c] Imprisonment, which is of two descriptions, namely:\u2014";
+        raw_item_004 := "[subsection 1] Rigorous, that is, with hard labour;";
+        raw_item_005 := "[subsection 2] Simple;";
+        raw_item_006 := "[item d] Forfeiture of property;";
+        raw_item_007 := "[item e] Fine;";
+        raw_item_008 := "[item f] Community Service.";
+    }
+}

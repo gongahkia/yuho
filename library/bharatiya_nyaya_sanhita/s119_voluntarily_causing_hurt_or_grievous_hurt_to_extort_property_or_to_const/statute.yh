@@ -1,0 +1,12 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90484&sectionno=119&orderno=119&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 119 "Voluntarily causing hurt or grievous hurt to extort property, or to constrain to an illegal act." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_item_001 := "[subsection 1] Whoever voluntarily causes hurt for the purpose of extorting from the sufferer, or from any person interested in the sufferer, any property or valuable security, or of constraining the sufferer or any person interested in such sufferer to do anything which is illegal or which may facilitate the commission of an offence, shall be punished with imprisonment of either description for a term which may extend to ten years, and shall also be liable to fine.";
+        raw_item_002 := "[subsection 2] Whoever voluntarily causes grievous hurt for any purpose referred to in sub-section (1), shall be punished with imprisonment for life, or imprisonment of either description for a term which may extend to ten years, and shall also be liable to fine.";
+    }
+}

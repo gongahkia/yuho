@@ -1,0 +1,14 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90576&sectionno=211&orderno=211&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 211 "Omission to give notice or information to public servant by person legally bound to give it." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "Whoever, being legally bound to give any notice or to furnish information on any subject to any public servant, as such, intentionally omits to give such notice or to furnish such information in the manner and at the time required by law,\u2014.";
+        raw_item_001 := "[item a] shall be punished with simple imprisonment for a term which may extend to one month, or with fine which may extend to five thousand rupees, or with both;.";
+        raw_item_002 := "[item b] where the notice or information required to be given respects the commission of an offence, or is required for the purpose of preventing the commission of an offence, or in order to the apprehension of an offender, with simple imprisonment for a term which may extend to six months, or with fine which may extend to ten thousand rupees, or with both;.";
+        raw_item_003 := "[item c] where the notice or information required to be given is required by an order passed under section 394 of the Bharatiya Nagarik Suraksha Sanhita, 2023 with imprisonment of either description for a term which may extend to six months, or with fine which may extend to one thousand rupees, or with both.";
+    }
+}

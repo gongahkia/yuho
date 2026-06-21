@@ -1,0 +1,21 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90492&sectionno=127&orderno=127&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 127 "Wrongful confinement." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_item_001 := "[subsection 1] Whoever wrongfully restrains any person in such a manner as to prevent that person from proceedings beyond certain circumscribing limits, is said \u201cwrongfully to confine\u201d that person..";
+        raw_item_002 := "[illustration ] Illustrations..";
+        raw_item_003 := "[item a] A causes Z to go within a walled space, and locks Z in. Z is thus prevented from proceeding in any direction beyond the circumscribing line of wall. A wrongfully confines Z.";
+        raw_item_004 := "[item b] A places men with firearms at the outlets of a building, and tells Z that they will fire at Z if Z attempts to leave the building. A wrongfully confines Z..";
+        raw_item_005 := "[subsection 2] Whoever wrongfully confines any person shall be punished with imprisonment of either description for a term which may extend to one year, or with fine which may extend to five thousand rupees, or with both..";
+        raw_item_006 := "[subsection 3] Whoever wrongfully confines any person for three days, or more, shall be punished with imprisonment of either description for a term which may extend to three years, or with fine which may extend to ten thousand rupees, or with both..";
+        raw_item_007 := "[subsection 4] Whoever wrongfully confines any person for ten days or more, shall be punished with imprisonment of either description for a term which may extend to five years, and shall also be liable to fine which shall not be less than ten thousand rupees..";
+        raw_item_008 := "[subsection 5] Whoever keeps any person in wrongful confinement, knowing that a writ for the liberation of that person has been duly issued, shall be punished with imprisonment of either description for a term which may extend to two years in addition to any term of imprisonment to which he may be liable under any other section of this Chapter and shall also be liable to fine..";
+        raw_item_009 := "[subsection 6] Whoever wrongfully confines any person in such manner as to indicate an intention that the confinement of such person may not be known to any person interested in the person so confined, or to any public servant, or that the place of such confinement may not be known to or discovered by any such person or public servant as hereinbefore mentioned, shall be punished with imprisonment of either description for a term which may extend to three years in addition to any other punishment to which he may be liable for such wrongful confinement and shall also be liable to fine..";
+        raw_item_010 := "[subsection 7] Whoever wrongfully confines any person for the purpose of extorting from the person confined, or from any person interested in the person confined, any property or valuable security or of constraining the person confined or any person interested in such person to do anything illegal or to give any information which may facilitate the commission of an offence, shall be punished with imprisonment of either description for a term which may extend to three years, and shall also be liable to fine..";
+        raw_item_011 := "[subsection 8] Whoever wrongfully confines any person for the purpose of extorting from the person confined or any person interested in the person confined any confession or any information which may lead to the detection of an offence or misconduct, or for the purpose of constraining the person confined or any person interested in the person confined to restore or to cause the restoration of any property or valuablesecurity or to satisfy any claim or demand, or to give information which may lead to the restoration of any property or valuable security, shall be punished with imprisonment of either description for a term which may extend to three years, and shall also be liable to fine.";
+    }
+}

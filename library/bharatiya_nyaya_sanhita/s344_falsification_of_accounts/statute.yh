@@ -1,0 +1,12 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90709&sectionno=344&orderno=344&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 344 "Falsification of accounts." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "Whoever, being a clerk, officer or servant, or employed or acting in the capacity of a clerk, officer or servant, wilfully, and with intent to defraud, destroys, alters, mutilates or falsifies any book, electronic record, paper, writing, valuable security or account which belongs to or is in the possession of his employer, or has been received by him for or on behalf of his employer, or wilfully, and with intent to defraud, makes or abets the making of any false entry in, or omits or alters or abets the omission or alteration of any material particular from or in, any such book, electronic record, paper, writing, valuable security or account, shall be punished with imprisonment of either description for a term which may extend to seven years, or with fine, or with both.";
+        raw_item_001 := "[explanation ] Explanation. \u2014It shall be sufficient in any charge under this section to allege a general intent to defraud without naming any particular person intended to be defrauded or specifying any particular sum of money intended to be the subject of the fraud, or any particular day on which the offence was committed.";
+    }
+}

@@ -1,0 +1,11 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90752&sectionno=258&orderno=258&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 258 "Commitment for trial or confinement by person having authority who knows that he is acting contrary to law" jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "Whoever, being in any office which gives him legal authority to commit persons for trial or to confinement, or to keep persons in confinement, corruptly or maliciously commits any person for trial or to confinement, or keeps any person in confinement, in the exercise of that authority knowing that in so doing he is acting contrary to law, shall be punished with imprisonment of either description for a term which may extend to seven years, or with fine, or with both.";
+    }
+}

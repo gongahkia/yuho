@@ -1,0 +1,17 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90614&sectionno=249&orderno=249&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 249 "Harbouring offender." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "Whenever an offence has been committed, whoever harbours or conceals a person whom he knows or has reason to believe to be the offender, with the intention of screening him from legal punishment shall,\u2014\n\nA, knowing that B has committed dacoity, knowingly conceals B in order to screen him from legal punishment. Here, as B is liable to imprisonment for life, A is liable to imprisonment of either description for a term not exceeding three years, and is also liable to fine.";
+        raw_item_001 := "[item a] if the offence is punishable with death, be punished with imprisonment of either description for a term which may extend to five years, and shall also be liable to fine;";
+        raw_item_002 := "[item b] if the offence is punishable with imprisonment for life, or with imprisonment which may extend to ten years, be punished with imprisonment of either description for a term which may extend to three years, and shall also be liable to fine;";
+        raw_item_003 := "[item c] if the offence is punishable with imprisonment which may extend to one year, and not to ten years, be punished with imprisonment of the description provided for the offence for a term which may extend to one-fourth part of the longest term of imprisonment provided for the offence, or with fine, or with both.";
+        raw_item_004 := "[explanation ] Explanation. \u2014 \"Offence\" in this section includes any act committed at any place out of India, which, if committed in India, would be punishable under any of the following sections, namely, 103, 105, 307, sub-sections (2), (3) and (4) of section 309, sub-sections (2), (3), (4) and (5) of section 310, 311, 312, clauses (f) and (g) of section 326, sub-sections (4), (6), (7) and (8) of section 331, clauses (a) and (b) of section 332 and every such act shall, for the purposes of this section, be deemed to be punishable as if the accused person had been guilty of it in India.";
+        raw_item_005 := "[exception ] Exception. \u2014This section shall not extend to any case in which the harbour or concealment is by the spouse of the offender.";
+        raw_item_006 := "[illustration ] Illustration.";
+    }
+}

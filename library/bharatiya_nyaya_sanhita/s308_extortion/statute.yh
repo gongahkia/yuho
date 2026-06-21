@@ -1,0 +1,23 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90673&sectionno=308&orderno=308&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 308 "Extortion." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_item_001 := "[subsection 1] Whoever intentionally puts any person in fear of any injury to that person, or to any other, and thereby dishonestly induces the person so put in fear to deliver to any person any property, or valuable security or anything signed or sealed which may be converted into a valuable security, commits extortion.";
+        raw_item_002 := "[illustration ] Illustrations.";
+        raw_item_003 := "[item a] A threatens to publish a defamatory libel concerning Z unless Z gives him money. He thus induces Z to give him money. A has committed extortion.";
+        raw_item_004 := "[item b] A threatens Z that he will keep Z\u2019s child in wrongful confinement, unless Z will sign and deliver to A a promissory note binding Z to pay certain monies to A. Z signs and delivers the note. A has committed extortion.";
+        raw_item_005 := "[item c] A threatens to send club-men to plough up Z\u2019s field unless Z will sign and deliver to B a bond binding Z under a penalty to deliver certain produce to B, and thereby induces Z to sign and deliver the bond. A has committed extortion.";
+        raw_item_006 := "[item d] A, by putting Z in fear of grievous hurt, dishonestly induces Z to sign or affix his seal to a blank paper and deliver it to A. Z signs and delivers the paper to A. Here, as the paper so signed may be converted into a valuable security. A has committed extortion.";
+        raw_item_007 := "[item e] A threatens Z by sending a message through an electronic device that \"Your child is in my possession, and will be put to death unless you send me one lakh rupees.\" A thus induces Z to give him money. A has committed extortion.";
+        raw_item_008 := "[subsection 2] Whoever commits extortion shall be punished with imprisonment of either description for a term which may extend to seven years, or with fine, or with both.";
+        raw_item_009 := "[subsection 3] Whoever, in order to the committing of extortion, puts any person in fear, or attempts to put any person in fear, of any injury, shall be punished with imprisonment of either description for a term which may extend to two years, or with fine, or with both.";
+        raw_item_010 := "[subsection 4] Whoever, in order to the committing of extortion, puts or attempts to put any person in fear of death or of grievous hurt to that person or to any other, shall be punished with imprisonment of either description for a term which may extend to seven years, and shall also be liable to fine.";
+        raw_item_011 := "[subsection 5] Whoever commits extortion by putting any person in fear of death or of grievous hurt to that person or to any other, shall be punished with imprisonment of either description for a term which may extend to ten years, and shall also be liable to fine.";
+        raw_item_012 := "[subsection 6] Whoever, in order to the committing of extortion, puts or attempts to put any person in fear of an accusation, against that person or any other, of having committed, or attempted to commit, an offence punishable with death or with imprisonment for life, or with imprisonment for a term which may extend to ten years, shall be punished with imprisonment of either description for a term which may extend to ten years, and shall also be liable to fine.";
+        raw_item_013 := "[subsection 7] Whoever commits extortion by putting any person in fear of an accusation against that person or any other, of having committed or attempted to commit any offence punishable with death, or with imprisonment for life, or with imprisonment for a term which may extend to ten years, or of having attempted to induce any other person to commit such offence, shall be punished with imprisonment of either description for a term which may extend to ten years, and shall also be liable to fine.";
+    }
+}

@@ -1,0 +1,27 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90689&sectionno=324&orderno=324&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 324 "Mischief." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_item_001 := "[subsection 1] Whoever with intent to cause, or knowing that he is likely to cause, wrongful loss or damage to the public or to any person, causes the destruction of any property, or any such change in any property or in the situation thereof as destroys or diminishes its value or utility, or affects it injuriously, commits mischief.";
+        raw_item_002 := "[explanation 1] Explanation 1. \u2014It is not essential to the offence of mischief that the offender should intend to cause loss or damage to the owner of the property injured or destroyed. It is sufficient if he intends to cause, or knows that he is likely to cause, wrongful loss or damage to any person by injuring any property, whether it belongs to that person or not.";
+        raw_item_003 := "[explanation 2] Explanation 2. \u2014Mischief may be committed by an act affecting property belonging to the person who commits the act, or to that person and others jointly.";
+        raw_item_004 := "[illustration ] Illustrations.";
+        raw_item_005 := "[item a] A voluntarily burns a valuable security belonging to Z intending to cause wrongful loss to Z. A has committed mischief.";
+        raw_item_006 := "[item b] A introduces water into an ice-house belonging to Z and thus causes the ice to melt, intending wrongful loss to Z. A has committed mischief.";
+        raw_item_007 := "[item c] A voluntarily throws into a river a ring belonging to Z, with the intention of thereby causing wrongful loss to Z. A has committed mischief.";
+        raw_item_008 := "[item d] A, knowing that his effects are about to be taken in execution in order to satisfy a debt due from him to Z, destroys those effects, with the intention of thereby preventing Z from obtaining satisfaction of the debt, and of thus causing damage to Z. A has committed mischief.";
+        raw_item_009 := "[item e] A having insured a ship, voluntarily causes the same to be cast away, with the intention of causing damage to the underwriters. A has committed mischief.";
+        raw_item_010 := "[item f] A causes a ship to be cast away, intending thereby to cause damage to Z who has lent money on bottomry on the ship. A has committed mischief.";
+        raw_item_011 := "[item g] A, having joint property with Z in a horse, shoots the horse, intending thereby to cause wrongful loss to Z. A has committed mischief.";
+        raw_item_012 := "[item h] A causes cattle to enter upon a field belonging to Z, intending to cause and knowing that he is likely to cause damage to Z\u2019s crop. A has committed mischief.";
+        raw_item_013 := "[subsection 2] Whoever commits mischief shall be punished with imprisonment of either description for a term which may extend to six months, or with fine, or with both.";
+        raw_item_014 := "[subsection 3] Whoever commits mischief and thereby causes loss or damage to any property including the property of Government or Local Authority shall be punished with imprisonment of either description for a term which may extend to one year, or with fine, or with both.";
+        raw_item_015 := "[subsection 4] Whoever commits mischief and thereby causes loss or damage to the amount of twenty thousand rupees and more but less than one lakh rupees shall be punished with imprisonment of either description for a term which may extend to two years, or with fine, or with both.";
+        raw_item_016 := "[subsection 5] Whoever commits mischief and thereby causes loss or damage to the amount of one lakh rupees or upwards, shall be punished with imprisonment of either description for a term which may extend to five years, or with fine, or with both.";
+        raw_item_017 := "[subsection 6] Whoever commits mischief, having made preparation for causing to any person death, or hurt, or wrongful restraint, or fear of death, or of hurt, or of wrongful restraint, shall be punished with imprisonment of either description for a term which may extend to five years, and shall also be liable to fine.";
+    }
+}

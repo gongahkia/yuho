@@ -1,0 +1,14 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90423&sectionno=58&orderno=58&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 58 "Concealing design to commit offence punishable with death or imprisonment for life." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "Whoever intending to facilitate or knowing it to be likely that he will thereby facilitate the commission of an offence punishable with death or imprisonment for life, voluntarily conceals by any act or omission, or by the use of encryption or any other information hiding tool, the existence of a design to commit such offence or makes any representation which he knows to be false respecting such design shall,.\n\nA, knowing that dacoity is about to be committed at B, falsely informs the Magistrate that a dacoity is about to be committed at C, a place in an opposite direction, and thereby misleads the Magistrate with intent to facilitate the commission of the offence. The dacoity is committed at B in pursuance of the design. A is punishable under this section.";
+        raw_item_001 := "[item a] if that offence be committed, be punished with imprisonment of either description for a term which may extend to seven years; or.";
+        raw_item_002 := "[item b] if the offence be not committed, with imprisonment of either description, for a term which may extend to three years, and shall also be liable to fine.";
+        raw_item_003 := "[illustration ] Illustration .";
+    }
+}

@@ -1,0 +1,19 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90723&sectionno=358&orderno=358&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 358 "Repeal and savings." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_item_001 := "[subsection 1] The Indian Penal Code (45 of 1860) is hereby repealed.";
+        raw_item_002 := "[subsection 2] Notwithstanding the repeal of the Code referred to in sub-section (1) , it shall not affect,---";
+        raw_item_003 := "[item a] the previous operation of the Code so repealed or anything duly done or suffered thereunder; or";
+        raw_item_004 := "[item b] any right, privilege, obligation or liability acquired, accrued or incurred under the Code so repealed; or";
+        raw_item_005 := "[item c] any penalty, or punishment incurred in respect of any offences committed against the Code so repealed; or";
+        raw_item_006 := "[item d] any investigation or remedy in respect of any such penalty, or punishment; or";
+        raw_item_007 := "[item e] any proceeding, investigation or remedy in respect of any such penalty or punishment as aforesaid, and any such proceeding or remedy may be instituted, continued or enforced, and any such penalty may be imposed as if that Code had not been repealed.";
+        raw_item_008 := "[subsection 3] Notwithstanding such repeal, anything done or any action taken under the said Code shall be deemed to have been done or taken under the corresponding provisions of this Sanhita.";
+        raw_item_009 := "[subsection 4] The mention of particular matters in sub-section (2) shall not be held to prejudice or affect the general application of section 6 of the General Clauses Act, 1897 (10 of 1897) with regard to the effect of the repeal.";
+    }
+}

@@ -1,0 +1,11 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90632&sectionno=267&orderno=267&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 267 "Intentional insult or interruption to public servant sitting in judicial proceeding." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "Whoever, intentionally offers any insult, or causes any interruption to any public servant, while such public servant is sitting in any stage of a judicial proceeding, shall be punished with simple imprisonment for a term which may extend to six months, or with fine which may extend to five thousand rupees, or with both.";
+    }
+}

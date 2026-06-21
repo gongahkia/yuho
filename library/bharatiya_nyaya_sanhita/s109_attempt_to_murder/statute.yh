@@ -1,0 +1,17 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90474&sectionno=109&orderno=109&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 109 "Attempt to murder." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_item_001 := "[subsection 1] Whoever does any act with such intention or knowledge, and under such circumstances that, if he by that act caused death, he would be guilty of murder, shall be punished with imprisonment of either description for a term which may extend to ten years, and shall also be liable to fine; and if hurt is caused to any person by such act, the offender shall be liable either to imprisonment for life, or to such punishment as is hereinbefore mentioned.";
+        raw_item_002 := "[subsection 2] When any person offending under sub-section (1) is under sentence of imprisonment for life, he may, if hurt is caused, be punished with death or with imprisonment for life, which shall mean the remainder of that person's natural life.";
+        raw_item_003 := "[illustration ] Illustrations.";
+        raw_item_004 := "[item a] A shoots at Z with intention to kill him, under such circumstances that, if death ensued, A would be guilty of murder. A is liable to punishment under this section.";
+        raw_item_005 := "[item b] A, with the intention of causing the death of a child of tender years, exposes it in a desert place. A has committed the offence defined by this section, though the death of the child does not ensue.";
+        raw_item_006 := "[item c] A, intending to murder Z, buys a gun and loads it. A has not yet committed the offence. A fires the gun at Z. He has committed the offence defined in this section, and, if by such firing he wounds Z, he is liable to the punishment provided by the latter part of sub-section (1).";
+        raw_item_007 := "[item d] A, intending to murder Z by poison, purchases poison and mixes the same with food which remains in A's keeping; A has not yet committed the offence defined in this section. A places the food on Z's table or delivers it to Z's servants to place it on Z's table. A has committed the offence defined in this section.";
+    }
+}

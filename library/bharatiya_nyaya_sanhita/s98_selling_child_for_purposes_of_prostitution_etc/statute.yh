@@ -1,0 +1,13 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90463&sectionno=98&orderno=98&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 98 "Selling child for purposes of prostitution, etc." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "Whoever sells, lets to hire, or otherwise disposes of any child with intent that such child shall at any age be employed or used for the purpose of prostitution or illicit intercourse with any person or for any unlawful and immoral purpose, or knowing it to be likely that such child will at any age be employed or used for any such purpose, shall be punished with imprisonment of either description for a term which may extend to ten years, and shall also be liable to fine.";
+        raw_item_001 := "[explanation 1] Explanation 1 .---When a female under the age of eighteen years is sold, let for hire, or otherwise disposed of to a prostitute or to any person who keeps or manages a brothel, the person so disposing of such female shall, until the contrary is proved, be presumed to have disposed of her with the intent that she shall be used for the purpose of prostitution.";
+        raw_item_002 := "[explanation 2] Explanation 2 .---For the purposes of this section \"illicit intercourse\" means sexual intercourse between persons not united by marriage or by any union or tie which, though not amounting to a marriage, is recognised by the personal law or custom of the community to which they belong or, where they belong to different communities, of both such communities, as constituting between them a quasi-marital relation.";
+    }
+}

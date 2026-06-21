@@ -1,0 +1,16 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90573&sectionno=208&orderno=208&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 208 "Non-attendance in obedience to an order from public servant." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "Whoever, being legally bound to attend in person or by an agent at a certain place and time in obedience to a summons, notice, order, or proclamation proceeding from any public servant legally competent, as such public servant, to issue the same, intentionally omits to attend at that place or time or departs from the place where he is bound to attend before the time at which it is lawful for him to depart,\u2014";
+        raw_item_001 := "[item a] shall be punished with simple imprisonment for a term which may extend to one month, or with fine which may extend to five thousand rupees, or with both;";
+        raw_item_002 := "[item b] where the summons, notice, order or proclamation is to attend in person or by agent in a Court with simple imprisonment for a term which may extend to six months, or with fine which may extend to ten thousand rupees, or with both.";
+        raw_item_003 := "[illustration ] Illustrations.";
+        raw_item_004 := "[item a] A, being legally bound to appear before a High Court, in obedience to a subpoena issuing from that Court, intentionally omits to appear. A has committed the offence defined in this section.";
+        raw_item_005 := "[item b] A, being legally bound to appear before a District Judge, as a witness, in obedience to a summons issued by that District Judge intentionally omits to appear. A has committed the offence defined in this section.";
+    }
+}

@@ -1,0 +1,33 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90478&sectionno=113&orderno=113&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 113 "Terrorist act." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "commit a terrorist act.";
+        raw_item_001 := "[subsection 1] Whoever does any act with the intent to threaten or likely to threaten the unity, integrity, sovereignty, security, or economic security of India or with the intent to strike terror or likely to strike terror in the people or any section of the people in India or in any foreign country,---";
+        raw_item_002 := "[item a] by using bombs, dynamite or other explosive substance or inflammable substance or firearms or other lethal weapons or poisonous or noxious gases or other chemicals or by any other substance (whether biological, radioactive, nuclear or otherwise) of a hazardous nature or by any other means of whatever nature to cause or likely to cause,---";
+        raw_item_003 := "[item i] death of, or injury to, any person or persons; or";
+        raw_item_004 := "[item ii] loss of, or damage to, or destruction of, property; or";
+        raw_item_005 := "[item iii] disruption of any supplies or services essential to the life of the community in India or in any foreign country; or";
+        raw_item_006 := "[item iv] damage to, the monetary stability of India by way of production or smuggling or circulation of counterfeit Indian paper currency, coin or of any other material; or";
+        raw_item_007 := "[item v] damage or destruction of any property in India or in a foreign country used or intended to be used for the defence of India or in connection with any other purposes of the Government of India, any State Government or any of their agencies; or";
+        raw_item_008 := "[item b] overawes by means of criminal force or the show of criminal force or attempts to do so or causes death of any public functionary or attempts to cause death of any public functionary; or";
+        raw_item_009 := "[item c] detains, kidnaps or abducts any person and threatening to kill or injure such person or does any other act in order to compel the Government of India, any State Government or the Government of a foreign country or an international or inter-governmental organisation or any other person to do or abstain from doing any act,";
+        raw_item_010 := "[explanation ] Explanation. ---For the purpose of this sub-section,---";
+        raw_item_011 := "[item a] \"public functionary\" means the constitutional authorities or any other functionary notified in the Official Gazette by the Central Government as public functionary;";
+        raw_item_012 := "[item b] \"counterfeit Indian currency\" means the counterfeit currency as may be declared after examination by an authorised or notified forensic authority that such currency imitates or compromises with the key security features of Indian currency.";
+        raw_item_013 := "[subsection 2] Whoever commits a terrorist act shall,---";
+        raw_item_014 := "[item a] if such offence has resulted in the death of any person, be punished with death or imprisonment for life, and shall also be liable to fine;";
+        raw_item_015 := "[item b] in any other case, be punished with imprisonment for a term which shall not be less than five years but which may extend to imprisonment for life, and shall also be liable to fine.";
+        raw_item_016 := "[subsection 3] Whoever conspires or attempts to commit, or advocates, abets, advises or incites, directly or knowingly facilitates the commission of a terrorist act or any act preparatory to the commission of a terrorist act, shall be punished with imprisonment for a term which shall not be less than five years but which may extend to imprisonment for life, and shall also be liable to fine.";
+        raw_item_017 := "[subsection 4] Whoever organises or causes to be organised any camp or camps for imparting training in terrorist act, or recruits or causes to be recruited any person or persons for commission of a terrorist act, shall be punished with imprisonment for a term which shall not be less than five years but which may extend to imprisonment for life, and shall also be liable to fine.";
+        raw_item_018 := "[subsection 5] Any person who is a member of an organisation which is involved in terrorist act, shall be punished with imprisonment for a term which may extend to imprisonment for life, and shall also be liable to fine.";
+        raw_item_019 := "[subsection 6] Whoever voluntarily harbours or conceals, or attempts to harbour or conceal any person knowing that such person has committed a terrorist act shall be punished with imprisonment for a term which shall not be less than three years but which may extend to imprisonment for life, and shall also be liable to fine:";
+        raw_item_020 := "[proviso ] Provided that this sub-section shall not apply to any case in which the harbour or concealment is by the spouse of the offender.";
+        raw_item_021 := "[subsection 7] Whoever knowingly possesses any property derived or obtained from commission of any terrorist act or acquired through the commission of any terrorist act shall be punished with imprisonment for a term which may extend to imprisonment for life, and shall also be liable to fine.";
+        raw_item_022 := "[explanation ] Explanation. ---For the removal of doubts, it is hereby declared that the officer not below the rank of Superintendent of Police shall decide whether to register the case under this section or under the Unlawful Activities (Prevention) Act, 1967 (37 of 1967).";
+    }
+}

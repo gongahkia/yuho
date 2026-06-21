@@ -1,0 +1,26 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90554&sectionno=189&orderno=189&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 189 "Unlawful assembly." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_item_001 := "[subsection 1] An assembly of five or more persons is designated an unlawful assembly, if the common object of the persons composing that assembly is---";
+        raw_item_002 := "[item a] to overawe by criminal force, or show of criminal force, the Central Government or any State Government or Parliament or the Legislature of any State, or any public servant in the exercise of the lawful power of such public servant; or";
+        raw_item_003 := "[item b] to resist the execution of any law, or of any legal process; or";
+        raw_item_004 := "[item c] to commit any mischief or criminal trespass, or other offence; or";
+        raw_item_005 := "[item d] by means of criminal force, or show of criminal force, to any person, to take or obtain possession of any property, or to deprive any person of the enjoyment of a right of way, or of the use of water or other incorporeal right of which he is in possession or enjoyment, or to enforce any right or supposed right; or";
+        raw_item_006 := "[item e] by means of criminal force, or show of criminal force, to compel any person to do what he is not legally bound to do, or to omit to do what he is legally entitled to do.";
+        raw_item_007 := "[explanation ] Explanation. ---An assembly which was not unlawful when it assembled, may subsequently become an unlawful assembly.";
+        raw_item_008 := "[subsection 2] Whoever, being aware of facts which render any assembly an unlawful assembly, intentionally joins that assembly, or continues in it, is said to be a member of an unlawful assembly and such member shall be punished with imprisonment of either description for a term which may extend to six months, or with fine, or with both.";
+        raw_item_009 := "[subsection 3] Whoever joins or continues in an unlawful assembly, knowing that such unlawful assembly has been commanded in the manner prescribed by law to disperse, shall be punished with imprisonment of either description for a term which may extend to two years, or with fine, or with both.";
+        raw_item_010 := "[subsection 4] Whoever, being armed with any deadly weapon, or with anything which, used as a weapon of offence, is likely to cause death, is a member of an unlawful assembly, shall be punished with imprisonment of either description for a term which may extend to two years, or with fine, or with both.";
+        raw_item_011 := "[subsection 5] Whoever knowingly joins or continues in any assembly of five or more persons likely to cause a disturbance of the public peace, after such assembly has been lawfully commanded to disperse, shall be punished with imprisonment of either description for a term which may extend to six months, or with fine, or with both.";
+        raw_item_012 := "[explanation ] Explanation. ---If the assembly is an unlawful assembly within the meaning of sub-section (1), the offender shall be punishable under sub-section (3).";
+        raw_item_013 := "[subsection 6] Whoever hires or engages, or employs, or promotes, or connives at the hiring, engagement or employment of any person to join or become a member of any unlawful assembly, shall be punishable as a member of such unlawful assembly, and for any offence which may be committed by any such person as a member of such unlawful assembly in pursuance of such hiring, engagement or employment, in the same manner as if he had been a member of such unlawful assembly, or himself had committed such offence.";
+        raw_item_014 := "[subsection 7] Whoever harbours, receives or assembles, in any house or premises in his occupation or charge, or under his control any persons knowing that such persons have been hired, engaged or employed, or are about to be hired, engaged or employed, to join or become members of an unlawful assembly, shall be punished with imprisonment of either description for a term which may extend to six months, or with fine, or with both.";
+        raw_item_015 := "[subsection 8] Whoever is engaged, or hired, or offers or attempts to be hired or engaged, to do or assist in doing any of the acts specified in sub-section (1), shall be punished with imprisonment of either description for a term which may extend to six months, or with fine, or with both.";
+        raw_item_016 := "[subsection 9] Whoever, being so engaged or hired as referred to in sub-section (8), goes armed, or engages or offers to go armed, with any deadly weapon or with anything which used as a weapon of offence is likely to cause death, shall be punished with imprisonment of either description for a term which may extend to two years, or with fine, or with both.";
+    }
+}

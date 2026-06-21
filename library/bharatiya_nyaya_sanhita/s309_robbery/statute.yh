@@ -1,0 +1,21 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90674&sectionno=309&orderno=309&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 309 "Robbery." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_item_001 := "[subsection 1] In all robbery there is either theft or extortion.";
+        raw_item_002 := "[subsection 2] Theft is robbery if, in order to the committing of the theft, or in committing the theft, or in carrying away or attempting to carry away property obtained by the theft, the offender, for that end voluntarily causes or attempts to cause to any person death or hurt or wrongful restraint, or fear of instant death or of instant hurt, or of instant wrongful restraint.";
+        raw_item_003 := "[subsection 3] Extortion is robbery if the offender, at the time of committing the extortion, is in the presence of the person put in fear, and commits the extortion by putting that person in fear of instant death, of instant hurt, or of instant wrongful restraint to that person or to some other person, and, by so putting in fear, induces the person so put in fear then and there to deliver up the thing extorted.";
+        raw_item_004 := "[explanation ] Explanation. \u2014The offender is said to be present if he is sufficiently near to put the other person in fear of instant death, of instant hurt, or of instant wrongful restraint. Illustrations.";
+        raw_item_005 := "[item a] A holds Z down, and fraudulently takes Z\u2019s money and jewels from Z\u2019s clothes, without Z\u2019s consent. Here A has committed theft, and, in order to the committing of that theft, has voluntarily caused wrongful restraint to Z. A has therefore committed robbery.";
+        raw_item_006 := "[item b] A meets Z on the high road, shows a pistol, and demands Z\u2019s purse. Z, in consequence, surrenders his purse. Here A has extorted the purse from Z by putting him in fear of instant hurt, and being at the time of committing the extortion in his presence. A has therefore committed robbery.";
+        raw_item_007 := "[item c] A meets Z and Z\u2019s child on the high road. A takes the child, and threatens to fling it down a precipice, unless Z delivers his purse. Z, in consequence, delivers his purse. Here A has extorted the purse from Z, by causing Z to be in fear of instant hurt to the child who is there present. A has therefore committed robbery on Z.";
+        raw_item_008 := "[item d] A obtains property from Z by saying\u2014\"Your child is in the hands of my gang, and will be put to death unless you send us ten thousand rupees\". This is extortion, and punishable as such; but it is not robbery, unless Z is put in fear of the instant death of his child.";
+        raw_item_009 := "[subsection 4] Whoever commits robbery shall be punished with rigorous imprisonment for a term which may extend to ten years, and shall also be liable to fine; and, if the robbery be committed on the highway between sunset and sunrise, the imprisonment may be extended to fourteen years.";
+        raw_item_010 := "[subsection 5] Whoever attempts to commit robbery shall be punished with rigorous imprisonment for a term which may extend to seven years, and shall also be liable to fine.";
+        raw_item_011 := "[subsection 6] If any person, in committing or in attempting to commit robbery, voluntarily causes hurt, such person, and any other person jointly concerned in committing or attempting to commit such robbery, shall be punished with imprisonment for life, or with rigorous imprisonment for a term which may extend to ten years, and shall also be liable to fine.";
+    }
+}

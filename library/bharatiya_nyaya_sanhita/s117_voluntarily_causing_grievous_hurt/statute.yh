@@ -1,0 +1,17 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90482&sectionno=117&orderno=117&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 117 "Voluntarily causing grievous hurt." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "A, intending of knowing himself to be likely permanently to disfigure Z\u2019s face, gives Z a blow which does not permanently disfigure Z\u2019s face, but which causes Z to suffer severe bodily pain for the space of fifteen days. A has voluntarily caused grievous hurt.";
+        raw_item_001 := "[subsection 1] Whoever voluntarily causes hurt, if the hurt which he intends to cause or knows himself to be likely to cause is grievous hurt, and if the hurt which he causes is grievous hurt, is said \u201cvoluntarily to cause grievous hurt\u201d.";
+        raw_item_002 := "[explanation ] Explanation.\u2014A person is not said voluntarily to cause grievous hurt except when he both causes grievous hurt and intends or knows himself to be likely to cause grievous hurt. But he is said voluntarily to cause grievous hurt, if intending or knowing himself to be likely to cause grievous hurt of one kind, he actually causes grievous hurt of another kind.";
+        raw_item_003 := "[illustration ] Illustration.";
+        raw_item_004 := "[subsection 2] Whoever, except in the case provided for by sub-section (2) of section 122, voluntarily causes grievous hurt, shall be punished with imprisonment of either description for a term which may extend to seven years, and shall also be liable to fine.";
+        raw_item_005 := "[subsection 3] Whoever commits an offence under sub-section (1) and in the course of such commission causes any hurt to a person which causes that person to be in permanent disability or in persistent vegetative state, shall be punished with rigorous imprisonment for a term which shall not be less than ten years but which may extend to imprisonment for life, which shall mean imprisonment for the remainder of that person\u2019s natural life.";
+        raw_item_006 := "[subsection 4] When a group of five or more persons acting in concert, causes grievous hurt to a person on the ground of his race, caste or community, sex, place of birth, language, personal belief or any other similar ground, each member of such group shall be guilty of the offence of causing grievous hurt, and shall be punished with imprisonment of either description for a term which may extend to seven years, and shall also be liable to fine.";
+    }
+}

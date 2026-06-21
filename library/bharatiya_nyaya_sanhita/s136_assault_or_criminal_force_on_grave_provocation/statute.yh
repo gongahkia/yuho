@@ -1,0 +1,12 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90501&sectionno=136&orderno=136&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 136 "Assault or criminal force on grave provocation." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "Whoever assaults or uses criminal force to any person on grave and sudden provocation given by that person, shall be punished with simple imprisonment for a term which may extend to one month, or with fine which may extend to one thousand rupees, or with both.";
+        raw_item_001 := "[explanation ] Explanation.\u2014This section is subject to the same Explanation as section 131.";
+    }
+}

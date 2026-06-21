@@ -1,0 +1,28 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90695&sectionno=330&orderno=330&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 330 "House-trespass and hous-ebreaking." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_item_001 := "[subsection 1] Whoever commits house-trespass having taken precautions to conceal such house-trespass from some person who has a right to exclude or eject the trespasser from the building, tent or vessel which is the subject of the trespass, is said to commit lurking house-trespass.";
+        raw_item_002 := "[subsection 2] A person is said to commit house-breaking who commits house-trespass if he effects his entrance into the house or any part of it in any of the six ways hereinafter described; or if, being in the house or any part of it for the purpose of committing an offence, or having committed an offence therein, he quits the house or any part of it in any of the following ways, namely:---";
+        raw_item_003 := "[item a] if he enters or quits through a passage made by himself, or by any abettor of the house-trespass, in order to the committing of the house-trespass;";
+        raw_item_004 := "[item b] if he enters or quits through any passage not intended by any person, other than himself or an abettor of the offence, for human entrance; or through any passage to which he has obtained access by scaling or climbing over any wall or building;";
+        raw_item_005 := "[item c] if he enters or quits through any passage which he or any abettor of the house-trespass has opened, in order to the committing of the house-trespass by any means by which that passage was not intended by the occupier of the house to be opened;";
+        raw_item_006 := "[item d] if he enters or quits by opening any lock in order to the committing of the house-trespass, or in order to the quitting of the house after a house-trespass;";
+        raw_item_007 := "[item e] if he effects his entrance or departure by using criminal force or committing an assault, or by threatening any person with assault;";
+        raw_item_008 := "[item f] if he enters or quits by any passage which he knows to have been fastened against such entrance or departure, and to have been unfastened by himself or by an abettor of the house-trespass.";
+        raw_item_009 := "[explanation ] Explanation. --- Any out-house or building occupied with a house, and between which and such house there is an immediate internal communication, is part of the house within the meaning of this section.";
+        raw_item_010 := "[illustration ] Illustrations.";
+        raw_item_011 := "[item a] A commits house-trespass by making a hole through the wall of Z\u2019s house, and putting his hand through the aperture. This is house-breaking.";
+        raw_item_012 := "[item b] A commits house-trespass by creeping into a ship at a port-hole between decks. This is house-breaking.";
+        raw_item_013 := "[item c] A commits house-trespass by entering Z\u2019s house through a window. This is house-breaking.";
+        raw_item_014 := "[item d] A commits house-trespass by entering Z\u2019s house through the door, having opened a door which was fastened. This is house-breaking.";
+        raw_item_015 := "[item e] A commits house-trespass by entering Z\u2019s house through the door, having lifted a latch by putting a wire through a hole in the door. This is house-breaking.";
+        raw_item_016 := "[item f] A finds the key of Z\u2019s house door, which Z had lost, and commits house-trespass by entering Z\u2019s house, having opened the door with that key. This is house-breaking.";
+        raw_item_017 := "[item g] Z is standing in his doorway. A forces a passage by knocking Z down, and commits housetrespass by entering the house. This is house-breaking.";
+        raw_item_018 := "[item h] Z, the door-keeper of Y, is standing in Y\u2019s doorway. A commits house-trespass by entering the house, having deterred Z from opposing him by threatening to beat him. This is house-breaking.";
+    }
+}

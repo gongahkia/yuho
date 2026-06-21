@@ -1,0 +1,15 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90588&sectionno=223&orderno=223&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 223 "Disobedience to order duly promulgated by public servant." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "Whoever, knowing that, by an order promulgated by a public servant lawfully empowered to promulgate such order, he is directed to abstain from a certain act, or to take certain order with certain property in his possession or under his management, disobeys such direction,\u2014\n\nAn order is promulgated by a public servant lawfully empowered to promulgate such order, directing that a religious procession shall not pass down a certain street. A knowingly disobeys the order, and thereby causes danger of riot. A has committed the offence defined in this section.";
+        raw_item_001 := "[item a] shall, if such disobedience causes or tends to cause obstruction, annoyance or injury, or risk of obstruction, annoyance or injury, to any person lawfully employed, be punished with simple imprisonment for a term which may extend to six months, or with fine which may extend to two thousand and five hundred rupees, or with both;";
+        raw_item_002 := "[item b] and where such disobedience causes or tends to cause danger to human life, health or safety, or causes or tends to cause a riot or affray, shall be punished with imprisonment of either description for a term which may extend to one year, or with fine which may extend to five thousand rupees, or with both.";
+        raw_item_003 := "[explanation ] Explanation .\u2014It is not necessary that the offender should intend to produce harm, or contemplate his disobedience as likely to produce harm. It is sufficient that he knows of the order which he disobeys, and that his disobedience produces, or is likely to produce, harm.";
+        raw_item_004 := "[illustration ] Illustration .";
+    }
+}

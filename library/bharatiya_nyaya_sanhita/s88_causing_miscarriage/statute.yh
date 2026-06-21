@@ -1,0 +1,12 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90453&sectionno=88&orderno=88&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 88 "Causing miscarriage." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "Whoever voluntarily causes a woman with child to miscarry, shall, if such miscarriage be not caused in good faith for the purpose of saving the life of the woman, be punished with imprisonment of either description for a term which may extend to three years, or with fine, or with both; and, if the woman be quick with child, shall be punished with imprisonment of either description for a term which may extend to seven years, and shall also be liable to fine.";
+        raw_item_001 := "[explanation ] Explanation.\u2014A woman who causes herself to miscarry, is within the meaning of this section.";
+    }
+}

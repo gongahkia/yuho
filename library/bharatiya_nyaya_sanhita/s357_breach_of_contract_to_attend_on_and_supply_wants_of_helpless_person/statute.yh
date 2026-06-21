@@ -1,0 +1,11 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90722&sectionno=357&orderno=357&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 357 "Breach of contract to attend on and supply wants of helpless person." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "Whoever, being bound by a lawful contract to attend on or to supply the wants of any person who, by reason of youth, or of unsoundness of mind, or of a disease or bodily weakness, is helpless or incapable of providing for his own safety or of supplying his own wants, voluntarily omits so to do, shall be punished with imprisonment of either description for a term which may extend to three months, or with fine which may extend to five thousand rupees, or with both.";
+    }
+}

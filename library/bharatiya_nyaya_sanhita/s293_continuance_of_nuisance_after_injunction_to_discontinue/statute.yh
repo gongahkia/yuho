@@ -1,0 +1,11 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90658&sectionno=293&orderno=293&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 293 "Continuance of nuisance after injunction to discontinue." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "Whoever repeats or continues a public nuisance, having been enjoined by any public servant who has lawful authority to issue such injunction not to repeat or continue such nuisance, shall be punished with simple imprisonment for a term which may extend to six months, or with fine which may extend to five thousand rupees or with both.";
+    }
+}

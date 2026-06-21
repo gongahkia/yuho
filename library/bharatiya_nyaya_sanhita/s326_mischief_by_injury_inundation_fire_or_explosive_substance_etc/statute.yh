@@ -1,0 +1,18 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90691&sectionno=326&orderno=326&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 326 "Mischief by injury, inundation, fire or explosive substance, etc." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "Whoever commits mischief by,---";
+        raw_item_001 := "[item a] doing any act which causes, or which he knows to be likely to cause, a diminution of the supply of water for agricultural purposes, or for food or drink for human beings or for animals which are property, or for cleanliness or for carrying on any manufacture, shall be punished with imprisonment of either description for a term which may extend to five years, or with fine, or with both;";
+        raw_item_002 := "[item b] doing any act which renders or which he knows to be likely to render any public road, bridge, navigable river or navigable channel, natural or artificial, impassable or less safe for travelling or conveying property, shall be punished with imprisonment of either description for a term which may extend to five years, or with fine, or with both;";
+        raw_item_003 := "[item c] doing any act which causes or which he knows to be likely to cause an inundation or an obstruction to any public drainage attended with injury or damage, shall be punished with imprisonment of either description for a term which may extend to five years, or with fine, or with both;";
+        raw_item_004 := "[item d] destroying or moving any sign or signal used for navigation of rail, aircraft or ship or other thing placed as a guide for navigators, or by any act which renders any such sign or signal less useful as a guide for navigators, shall be punished with imprisonment of either description for a term which may extend to seven years, or with fine, or with both;";
+        raw_item_005 := "[item e] destroying or moving any land-mark fixed by the authority of a public servant, or by any act which renders such land-mark less useful as such, shall be punished with imprisonment of either description for a term which may extend to one year, or with fine, or with both;";
+        raw_item_006 := "[item f] fire or any explosive substance intending to cause, or knowing it to be likely that he will thereby cause, damage to any property including agricultural produce, shall be punished with imprisonment of either description for a term which may extend to seven years, and shall also be liable to fine;";
+        raw_item_007 := "[item g] fire or any explosive substance, intending to cause, or knowing it to be likely that he will thereby cause, the destruction of any building which is ordinarily used as a place of worship or as a human dwelling or as a place for the custody of property, shall be punished with imprisonment for life, or with imprisonment of either description for a term which may extend to ten years, and shall also be liable to fine.";
+    }
+}

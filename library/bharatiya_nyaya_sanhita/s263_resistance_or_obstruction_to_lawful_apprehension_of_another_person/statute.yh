@@ -1,0 +1,16 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90628&sectionno=263&orderno=263&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 263 "Resistance or obstruction to lawful apprehension of another person." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "Whoever, intentionally offers any resistance or illegal obstruction to the lawful apprehension of any other person for an offence, or rescues or attempts to rescue any other person from any custody in which that person is lawfully detained for an offence,\u2014";
+        raw_item_001 := "[item a] shall be punished with imprisonment of either description for a term which may extend to two years, or with fine, or with both; or";
+        raw_item_002 := "[item b] if the person to be apprehended, or the person rescued or attempted to be rescued, is charged with or liable to be apprehended for an offence punishable with imprisonment for life or imprisonment for a term which may extend to ten years, shall be punished with imprisonment of either description for a term which may extend to three years, and shall also be liable to fine; or";
+        raw_item_003 := "[item c] if the person to be apprehended or rescued, or attempted to be rescued, is charged with or liable to be apprehended for an offence punishable with death, shall be punished with imprisonment of either description for a term which may extend to seven years, and shall also be liable to fine; or";
+        raw_item_004 := "[item d] if the person to be apprehended or rescued, or attempted to be rescued, is liable under the sentence of a Court or by virtue of a commutation of such a sentence, to imprisonment for life, or imprisonment for a term of ten years or upwards, shall be punished with imprisonment of either description for a term which may extend to seven years, and shall also be liable to fine; or";
+        raw_item_005 := "[item e] if the person to be apprehended or rescued, or attempted to be rescued, is under sentence of death, shall be punished with imprisonment for life or imprisonment of either description for a term not exceeding ten years, and shall also be liable to fine.";
+    }
+}

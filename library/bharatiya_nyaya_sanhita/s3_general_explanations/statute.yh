@@ -1,0 +1,30 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90368&sectionno=3&orderno=3&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 3 "General explanations." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "A intentionally causes Zs death, partly by illegally omitting to give Z food, and partly by beating Z. A has committed murder.\n\nA attacks Z under such circumstances of grave provocation that his killing of Z would be only culpable homicide not amounting to murder. B, having ill-will towards Z and intending to kill him, and not having been subject to the provocation, assists A in killing Z. Here, though A and B are both engaged in causing Z's death, B is guilty of murder, and A is guilty only of culpable homicide.";
+        raw_item_001 := "[subsection 1] Throughout this Sanhita every definition of an offence, every penal provision, and every Illustration of every such definition or penal provision, shall be understood subject to the exceptions contained in the Chapter entitled General Exceptions, though those exceptions are not repeated in such definition, penal provision, or Illustration.";
+        raw_item_002 := "[illustration ] Illustrations .";
+        raw_item_003 := "[item a] The sections in this Sanhita, which contain definitions of offences, do not express that a child under seven years of age cannot commit such offences; but the definitions are to be understood subject to the general exception which provides that nothing shall be an offence which is done by a child under seven years of age.";
+        raw_item_004 := "[item b] A, a police officer, without warrant, apprehends Z, who has committed murder. Here A is not guilty of the offence of wrongful confinement; for he was bound by law to apprehend Z, and therefore the case falls within the general exception which provides that \"nothing is an offence which is done by a person who is bound by law to do it\".";
+        raw_item_005 := "[subsection 2] Every expression which is explained in any Part of this Sanhita, is used in every Part of this Sanhita in conformity with the explanation.";
+        raw_item_006 := "[subsection 3] When property is in the possession of a person's spouse, clerk or servant, on account of that person, it is in that person's possession within the meaning of this Sanhita.";
+        raw_item_007 := "[explanation ] Explanation. ---A person employed temporarily or on a particular occasion in the capacity of a clerk or servant, is a clerk or servant within the meaning of this sub-section.";
+        raw_item_008 := "[subsection 4] In every Part of this Sanhita, except where a contrary intention appears from the context, words which refer to acts done extend also to illegal omissions.";
+        raw_item_009 := "[subsection 5] When a criminal act is done by several persons in furtherance of the common intention of all, each of such persons is liable for that act in the same manner as if it were done by him alone.";
+        raw_item_010 := "[subsection 6] Whenever an act, which is criminal only by reason of its being done with a criminal knowledge or intention, is done by several persons, each of such persons who joins in the act with such knowledge or intention is liable for the act in the same manner as if the act were done by him alone with that knowledge or intention.";
+        raw_item_011 := "[subsection 7] Wherever the causing of a certain effect, or an attempt to cause that effect, by an act or by an omission, is an offence, it is to be understood that the causing of that effect partly by an act and partly by an omission is the same offence.";
+        raw_item_012 := "[illustration ] Illustration.";
+        raw_item_013 := "[subsection 8] When an offence is committed by means of several acts, whoever intentionally cooperates in the commission of that offence by doing any one of those acts, either singly or jointly with any other person, commits that offence.";
+        raw_item_014 := "[illustration ] Illustrations.";
+        raw_item_015 := "[item a] A and B agree to murder Z by severally and at different times giving him small doses of poison. A and B administer the poison according to the agreement with intent to murder Z. Z dies from the effects the several doses of poison so administered to him. Here A and B intentionally cooperate in the commission of murder and as each of them does an act by which the death is caused, they are both guilty of the offence though their acts are separate.";
+        raw_item_016 := "[item b] A and B are joint jailors, and as such have the charge of Z, a prisoner, alternatively for six hours at a time. A and B, intending to cause Z's death, knowingly cooperate in causing that effect by illegally omitting, each during the time of his attendance, to furnish Z with food supplied to them for that purpose. Z dies of hunger. Both A and B are guilty of the murder of Z.";
+        raw_item_017 := "[item c] A, a jailor, has the charge of Z, a prisoner. A, intending to cause Z's death, illegally omits to supply Z with food; in consequence of which Z is much reduced in strength, but the starvation is not sufficient to cause his death. A is dismissed from his office, and B succeeds him. B, without collusion or cooperation with A, illegally omits to supply Z with food, knowing that he is likely thereby to cause Z's death. Z dies of hunger. B is guilty of murder, but, as A did not cooperate with B. A is guilty only of an attempt to commit murder.";
+        raw_item_018 := "[subsection 9] Where several persons are engaged or concerned in the commission of a criminal act, they may be guilty of different offences by means of that act.";
+        raw_item_019 := "[illustration ] Illustration.";
+    }
+}

@@ -7,7 +7,6 @@ Contexts: @grammar @ast @lint @lean @verify @transpile @cli @lsp @resolver @libr
 
 ```todo
 (A) 2026-06-21 Update MEMORY.md key paths after fossil deletion +housekeeping @memory effort:XS
-(B) 2026-06-21 Encode 358-section BNS skeleton under library/bharatiya_nyaya_sanhita/ with L1+L2 pass +jurisdiction @library effort:XL
 (B) 2026-06-21 IPC ↔ BNS section mapping table generated via structural diff at library/_index/ipc_bns_mapping.json +jurisdiction @library effort:M
 (C) 2026-06-21 Pakistan PPC raw scrape + 20-section proof-of-concept encoding under library/pakistan_penal_code/ +jurisdiction @scrape effort:L
 (C) 2026-06-21 Malaysia Penal Code Act 574 raw scrape + 20-section proof-of-concept encoding under library/malaysia_penal_code/ +jurisdiction @scrape effort:L

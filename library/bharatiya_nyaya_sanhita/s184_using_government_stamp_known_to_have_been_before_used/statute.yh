@@ -1,0 +1,11 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90549&sectionno=184&orderno=184&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 184 "Using Government stamp known to have been before used." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "Whoever, fraudulently or with intent to cause loss to the Government, uses for any purpose a stamp issued by Government for the purpose of revenue, which he knows to have been before used, shall be punished with imprisonment of either description for a term which may extend to two years, or with fine, or with both";
+    }
+}

@@ -1,0 +1,11 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90609&sectionno=244&orderno=244&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 244 "Fraudulent claim to property to prevent its seizure as forfeited or in execution." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "Whoever fraudulently accepts, receives or claims any property or any interest therein, knowing that he has no right or rightful claim to such property or interest, or practises any deception touching any right to any property or any interest therein, intending thereby to prevent that property or interest therein from being taken as a forfeiture or in satisfaction of a fine, under a sentence which has been pronounced, or which he knows to be likely to be pronounced by a Court or other competent authority, or from being taken in execution of a decree or order which has been made, or which he knows to be likely to be made by a Court in a civil suit, shall be punished with imprisonment of either description for a term which may extend to two years, or with fine, or with both.";
+    }
+}

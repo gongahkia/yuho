@@ -1,0 +1,12 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90746&sectionno=231&orderno=231&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 231 "Giving or fabricating false evidence with intent to procure conviction of offence punishable with imprisonment for life or imprisonment." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "Whoever gives or fabricates false evidence intending thereby to cause, or knowing it to be likely that he will thereby cause, any person to be convicted of an offence which by the law for the time being in force in India is not capital, but punishable with imprisonment for life, or imprisonment for a term of seven years or upwards, shall be punished as a person convicted of that offence would be liable to be punished.\n\nA gives false evidence before a Court, intending thereby to cause Z to be convicted of a dacoity. The punishment of dacoity is imprisonment for life, or rigorous imprisonment for a term which may extend to ten years, with or without fine. A, therefore, is liable to imprisonment for life or imprisonment, with or without fine.";
+        raw_item_001 := "[illustration ] Illustration.";
+    }
+}

@@ -1,0 +1,13 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90587&sectionno=222&orderno=222&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 222 "Omission to assist public servant when bound by law to give assistance." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "Whoever, being bound by law to render or furnish assistance to any public servant in the execution of his public duty, intentionally omits to give such assistance,\u2014";
+        raw_item_001 := "[item a] shall be punished with simple imprisonment for a term which may extend to one month, or with fine which may extend to two thousand and five hundred rupees, or with both;";
+        raw_item_002 := "[item b] and where such assistance be demanded of him by a public servant legally competent to make such demand for the purposes of executing any process lawfully issued by a Court or of preventing the commission of an offence, or suppressing a riot, or affray, or of apprehending a person charged with or guilty of an offence, or of having escaped from lawful custody, shall be punished with simple imprisonment for a term which may extend to six months, or with fine which may extend to five thousand rupees, or with both.";
+    }
+}

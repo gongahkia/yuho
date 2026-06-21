@@ -1,0 +1,11 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90742&sectionno=209&orderno=209&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 209 "Non-appearance in response to a proclamation under section 84 of Bharatiya Nagarik Suraksha Sanhita, 2023." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "Whoever fails to appear at the specified place and the specified time as required by a proclamation published under sub-section (1) of section 84 of the Bharatiya Nagarik Suraksha Sanhita, 2023, shall be punished with imprisonment for a term which may extend to three years, or with fine, or with both, or with community service, and where a declaration has been made under sub-section (4) of that section pronouncing him as a proclaimed offender, he shall be punished with imprisonment for a term which may extend to seven years and shall also be liable to fine.";
+    }
+}

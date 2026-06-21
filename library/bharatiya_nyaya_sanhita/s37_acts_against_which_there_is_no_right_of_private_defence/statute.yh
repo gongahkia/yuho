@@ -1,0 +1,17 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90402&sectionno=37&orderno=37&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 37 "Acts against which there is no right of private defence." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_item_001 := "[subsection 1] There is no right of private defence, \u2014";
+        raw_item_002 := "[item a] against an act which does not reasonably cause the apprehension of death or of grievous hurt, if done, or attempted to be done, by a public servant acting in good faith under colour of his office, though that act, may not be strictly justifiable by law;";
+        raw_item_003 := "[item b] against an act which does not reasonably cause the apprehension of death or of grievous hurt, if done, or attempted to be done, by the direction of a public servant acting in good faith under colour of his office, though that direction may not be strictly justifiable by law;";
+        raw_item_004 := "[item c] in cases in which there is time to have recourse to the protection of the public authorities.";
+        raw_item_005 := "[subsection 2] The right of private defence in no case extends to the inflicting of more harm than it is necessary to inflict for the purpose of defence.";
+        raw_item_006 := "[explanation 1] Explanation 1.\u2014A person is not deprived of the right of private defence against an act done, or attempted to be done, by a public servant, as such, unless he knows or has reason to believe, that the person doing the act is such public servant.";
+        raw_item_007 := "[explanation 2] Explanation 2.\u2014A person is not deprived of the right of private defence against an act done, or attempted to be done, by the direction of a public servant, unless he knows, or has reason to believe, that the person doing the act is acting by such direction, or unless such person states the authority under which he acts, or if he has authority in writing, unless he produces such authority, if demanded.";
+    }
+}

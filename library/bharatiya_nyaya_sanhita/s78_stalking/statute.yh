@@ -1,0 +1,19 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90443&sectionno=78&orderno=78&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 78 "Stalking." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "commits the offence of stalking:";
+        raw_item_001 := "[subsection 1] Any man who---";
+        raw_item_002 := "[item i] follows a woman and contacts, or attempts to contact such woman to foster personal interaction repeatedly despite a clear indication of disinterest by such woman; or";
+        raw_item_003 := "[item ii] monitors the use by a woman of the internet, e-mail or any other form of electronic communication,";
+        raw_item_004 := "[proviso ] Provided that such conduct shall not amount to stalking if the man who pursued it proves that---";
+        raw_item_005 := "[item i] it was pursued for the purpose of preventing or detecting crime and the man accused of stalking had been entrusted with the responsibility of prevention and detection of crime by the State; or";
+        raw_item_006 := "[item ii] it was pursued under any law or to comply with any condition or requirement imposed by any person under any law; or";
+        raw_item_007 := "[item iii] in the particular circumstances such conduct was reasonable and justified.";
+        raw_item_008 := "[subsection 2] Whoever commits the offence of stalking shall be punished on first conviction with imprisonment of either description for a term which may extend to three years, and shall also be liable to fine; and be punished on a second or subsequent conviction, with imprisonment of either description for a term which may extend to five years, and shall also be liable to fine.";
+    }
+}

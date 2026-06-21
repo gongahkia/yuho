@@ -1,0 +1,16 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90496&sectionno=131&orderno=131&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 131 "Punishment for assault or criminal force otherwise than on grave provocation." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "Whoever assaults or uses criminal force to any person otherwise than on grave and sudden provocation given by that person, shall be punished with imprisonment of either description for a term which may extend to three months, or with fine which may extend to one thousand rupees, or with both.";
+        raw_item_001 := "[explanation 1] Explanation 1.\u2014Grave and sudden provocation will not mitigate the punishment for an offence under this section,\u2014";
+        raw_item_002 := "[item a] if the provocation is sought or voluntarily provoked by the offender as an excuse for the offence; or";
+        raw_item_003 := "[item b] if the provocation is given by anything done in obedience to the law, or by a public servant, in the lawful exercise of the powers of such public servant; or";
+        raw_item_004 := "[item c] if the provocation is given by anything done in the lawful exercise of the right of private defence.";
+        raw_item_005 := "[explanation 2] Explanation 2.\u2014Whether the provocation was grave and sudden enough to mitigate the offence, is a question of fact.";
+    }
+}

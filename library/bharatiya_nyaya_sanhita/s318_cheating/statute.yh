@@ -1,0 +1,25 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90683&sectionno=318&orderno=318&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 318 "Cheating." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_item_001 := "[subsection 1] Whoever, by deceiving any person, fraudulently or dishonestly induces the person so deceived to deliver any property to any person, or to consent that any person shall retain any property, or intentionally induces the person so deceived to do or omit to do anything which he would not do or omit if he were not so deceived, and which act or omission causes or is likely to cause damage or harm to that person in body, mind, reputation or property, is said to cheat.";
+        raw_item_002 := "[explanation ] Explanation. \u2014A dishonest concealment of facts is a deception within the meaning of this section.";
+        raw_item_003 := "[illustration ] Illustrations.";
+        raw_item_004 := "[item a] A, by falsely pretending to be in the Civil Service, intentionally deceives Z, and thus dishonestly induces Z to let him have on credit goods for which he does not mean to pay. A cheats.";
+        raw_item_005 := "[item b] A, by putting a counterfeit mark on an article, intentionally deceives Z into a belief that this article was made by a certain celebrated manufacturer, and thus dishonestly induces Z to buy and pay for the article. A cheats.";
+        raw_item_006 := "[item c] A, by exhibiting to Z a false sample of an article intentionally deceives Z into believing that the article corresponds with the sample, and thereby dishonestly induces Z to buy and pay for the article. A cheats.";
+        raw_item_007 := "[item d] A, by tendering in payment for an article a bill on a house with which A keeps no money, and by which A expects that the bill will be dishonoured, intentionally deceives Z, and thereby dishonestly induces Z to deliver the article, intending not to pay for it. A cheats.";
+        raw_item_008 := "[item e] A, by pledging as diamonds articles which he knows are not diamonds, intentionally deceives Z, and thereby dishonestly induces Z to lend money. A cheats.";
+        raw_item_009 := "[item f] A intentionally deceives Z into a belief that A means to repay any money that Z may lend to him and thereby dishonestly induces Z to lend him money, A not intending to repay it. A cheats.";
+        raw_item_010 := "[item g] A intentionally deceives Z into a belief that A means to deliver to Z a certain quantity of indigo plant which he does not intend to deliver, and thereby dishonestly induces Z to advance money upon the faith of such delivery. A cheats; but if A, at the time of obtaining the money, intends to deliver the indigo plant, and afterwards breaks his contract and does not deliver it, he does not cheat, but is liable only to a civil action for breach of contract.";
+        raw_item_011 := "[item h] A intentionally deceives Z into a belief that A has performed A\u2019s part of a contract made with Z, which he has not performed, and thereby dishonestly induces Z to pay money. A cheats.";
+        raw_item_012 := "[item i] A sells and conveys an estate to B. A, knowing that in consequence of such sale he has no right to the property, sells or mortgages the same to Z, without disclosing the fact of the previous sale and conveyance to B, and receives the purchase or mortgage money from Z. A cheats.";
+        raw_item_013 := "[subsection 2] Whoever cheats shall be punished with imprisonment of either description for a term which may extend to three years, or with fine, or with both.";
+        raw_item_014 := "[subsection 3] Whoever cheats with the knowledge that he is likely thereby to cause wrongful loss to a person whose interest in the transaction to which the cheating relates, he was bound, either by law, or by a legal contract, to protect, shall be punished with imprisonment of either description for a term which may extend to five years, or with fine, or with both.";
+        raw_item_015 := "[subsection 4] Whoever cheats and thereby dishonestly induces the person deceived to deliver any property to any person, or to make, alter or destroy the whole or any part of a valuable security, or anything which is signed or sealed, and which is capable of being converted into a valuable security, shall be punished with imprisonment of either description for a term which may extend to seven years, and shall also be liable to fine.";
+    }
+}

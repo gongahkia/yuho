@@ -1,0 +1,27 @@
+/// @jurisdiction india
+/// @meta act=Bharatiya Nyaya Sanhita 2023
+/// @meta source=https://www.indiacode.nic.in/show-data?abv=CEN&statehandle=123456789%2F1362&actid=AC_CEN_5_23_00048_2023-45_1719292564123&sectionId=90428&sectionno=63&orderno=63&orgactid=AC_CEN_5_23_00048_2023-45_1719292564123
+/// @meta skeleton=true
+
+statute 63 "Rape." jurisdiction india effective 2024-07-01 {
+    definitions {
+        skeleton_note := "Generated skeleton from official India Code raw scrape; doctrinal elements pending manual encoding.";
+        raw_text := "A man is said to commit \"rape\" if he---\n\nunder the circumstances falling under any of the following seven descriptions:";
+        raw_item_001 := "[item a] penetrates his penis, to any extent, into the vagina, mouth, urethra or anus of a woman or makes her to do so with him or any other person; or";
+        raw_item_002 := "[item b] inserts, to any extent, any object or a part of the body, not being the penis, into the vagina, the urethra or anus of a woman or makes her to do so with him or any other person; or";
+        raw_item_003 := "[item c] manipulates any part of the body of a woman so as to cause penetration into the vagina, urethra, anus or any part of body of such woman or makes her to do so with him or any other person; or";
+        raw_item_004 := "[item d] applies his mouth to the vagina, anus, urethra of a woman or makes her to do so with him or any other person,";
+        raw_item_005 := "[item i] against her will;";
+        raw_item_006 := "[item ii] without her consent;";
+        raw_item_007 := "[item iii] with her consent, when her consent has been obtained by putting her or any person in whom she is interested, in fear of death or of hurt;";
+        raw_item_008 := "[item iv] with her consent, when the man knows that he is not her husband and that her consent is given because she believes that he is another man to whom she is or believes herself to be lawfully married;";
+        raw_item_009 := "[item v] with her consent when, at the time of giving such consent, by reason of unsoundness of mind or intoxication or the administration by him personally or through another of any stupefying or unwholesome substance, she is unable to understand the nature and consequences of that to which she gives consent;";
+        raw_item_010 := "[item vi] with or without her consent, when she is under eighteen years of age;";
+        raw_item_011 := "[item vii] when she is unable to communicate consent.";
+        raw_item_012 := "[explanation 1] Explanation 1.---For the purposes of this section, \"vagina\" shall also include labia majora.";
+        raw_item_013 := "[explanation 2] Explanation 2.---Consent means an unequivocal voluntary agreement when the woman by words, gestures or any form of verbal or non-verbal communication, communicates willingness to participate in the specific sexual act:";
+        raw_item_014 := "[proviso ] Provided that a woman who does not physically resist to the act of penetration shall not by the reason only of that fact, be regarded as consenting to the sexual activity.";
+        raw_item_015 := "[exception 1] Exception 1.---A medical procedure or intervention shall not constitute rape.";
+        raw_item_016 := "[exception 2] Exception 2.---Sexual intercourse or sexual acts by a man with his own wife, the wife not being under eighteen years of age, is not rape.";
+    }
+}
