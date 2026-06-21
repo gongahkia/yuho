@@ -16,6 +16,7 @@ from yuho.ast.nodes import ASTNode, ModuleNode
 from yuho.parser import get_parser
 from yuho.parser.source_location import SourceLocation
 from yuho.parser.wrapper import ParseResult, Parser
+from yuho.services.analysis import AnalysisResult, analyze_source
 
 
 @dataclass(frozen=True)
@@ -25,6 +26,7 @@ class ParsedDocument:
     source: str
     result: ParseResult
     ast: Optional[ModuleNode] = None
+    analysis: Optional[AnalysisResult] = None
 
 
 class YuhoLanguageServer(LanguageServer):
@@ -36,8 +38,16 @@ class YuhoLanguageServer(LanguageServer):
     def parse_source(self, uri: str, source: str) -> ParsedDocument:
         file = uri_to_file(uri)
         result = self.parser.parse(source, file=file)
-        ast = build_ast(source, file, result)
-        parsed = ParsedDocument(uri=uri, file=file, source=source, result=result, ast=ast)
+        analysis = analyze_source(source, file=file, run_semantic=True)
+        ast = analysis.ast or build_ast(source, file, result)
+        parsed = ParsedDocument(
+            uri=uri,
+            file=file,
+            source=source,
+            result=result,
+            ast=ast,
+            analysis=analysis,
+        )
         self.parsed_documents[uri] = parsed
         return parsed
 
@@ -52,6 +62,17 @@ class YuhoLanguageServer(LanguageServer):
 
     def drop_document(self, uri: str) -> None:
         self.parsed_documents.pop(uri, None)
+
+    def diagnostics_for_uri(self, uri: str) -> list[types.Diagnostic]:
+        parsed = self.cached_parse(uri) or self.parse_text_document(uri)
+        if parsed is None or parsed.analysis is None:
+            return []
+        return analysis_to_diagnostics(parsed.analysis)
+
+    def publish_diagnostics_for_uri(self, uri: str) -> None:
+        self.text_document_publish_diagnostics(
+            types.PublishDiagnosticsParams(uri=uri, diagnostics=self.diagnostics_for_uri(uri))
+        )
 
     def hover_at(self, uri: str, line: int, character: int) -> Optional[types.Hover]:
         parsed = self.cached_parse(uri) or self.parse_text_document(uri)
@@ -79,20 +100,26 @@ def register_features(server: YuhoLanguageServer) -> None:
     @server.feature(types.TEXT_DOCUMENT_DID_OPEN)
     def did_open(params: types.DidOpenTextDocumentParams) -> None:
         server.parse_source(params.text_document.uri, params.text_document.text)
+        server.publish_diagnostics_for_uri(params.text_document.uri)
 
     @server.feature(types.TEXT_DOCUMENT_DID_CHANGE)
     def did_change(params: types.DidChangeTextDocumentParams) -> None:
         document = server.workspace.get_text_document(params.text_document.uri)
         if document is not None:
             server.parse_source(params.text_document.uri, document.source)
+            server.publish_diagnostics_for_uri(params.text_document.uri)
 
     @server.feature(types.TEXT_DOCUMENT_DID_SAVE)
     def did_save(params: types.DidSaveTextDocumentParams) -> None:
         server.parse_text_document(params.text_document.uri)
+        server.publish_diagnostics_for_uri(params.text_document.uri)
 
     @server.feature(types.TEXT_DOCUMENT_DID_CLOSE)
     def did_close(params: types.DidCloseTextDocumentParams) -> None:
         server.drop_document(params.text_document.uri)
+        server.text_document_publish_diagnostics(
+            types.PublishDiagnosticsParams(uri=params.text_document.uri, diagnostics=[])
+        )
 
     @server.feature(types.TEXT_DOCUMENT_HOVER)
     def hover(params: types.HoverParams) -> Optional[types.Hover]:
@@ -151,6 +178,67 @@ def location_to_range(loc: SourceLocation) -> types.Range:
             character=max(loc.end_col - 1, 0),
         ),
     )
+
+
+def analysis_to_diagnostics(analysis: AnalysisResult) -> list[types.Diagnostic]:
+    diagnostics = [diagnostic_from_payload(item) for item in analysis.diagnostics()]
+    diagnostics.extend(
+        lint_warning_to_diagnostic(analysis, warning) for warning in analysis.lint_warnings
+    )
+    return diagnostics
+
+
+def diagnostic_from_payload(payload: dict) -> types.Diagnostic:
+    line = payload.get("line") or 1
+    column = payload.get("column") or 1
+    end_line = payload.get("end_line") or line
+    end_column = payload.get("end_column") or (column + 1)
+    return types.Diagnostic(
+        range=range_from_1_based(line, column, end_line, end_column),
+        message=payload.get("message", "Yuho diagnostic"),
+        severity=diagnostic_severity(payload.get("severity")),
+        code=payload.get("error_code"),
+        source=f"yuho:{payload.get('stage', 'analysis')}",
+    )
+
+
+def lint_warning_to_diagnostic(analysis: AnalysisResult, warning) -> types.Diagnostic:
+    loc = statute_location(analysis.ast, warning.statute_section) if analysis.ast else None
+    if loc is None:
+        diagnostic_range = range_from_1_based(1, 1, 1, 2)
+    else:
+        diagnostic_range = location_to_range(loc)
+    return types.Diagnostic(
+        range=diagnostic_range,
+        message=warning.message,
+        severity=diagnostic_severity(warning.severity),
+        code="statute_lint",
+        source="yuho:lint",
+    )
+
+
+def statute_location(ast: Optional[ModuleNode], section: str) -> Optional[SourceLocation]:
+    if ast is None:
+        return None
+    for statute in ast.statutes:
+        if statute.section_number == section:
+            return statute.source_location
+    return None
+
+
+def range_from_1_based(line: int, col: int, end_line: int, end_col: int) -> types.Range:
+    return types.Range(
+        start=types.Position(line=max(line - 1, 0), character=max(col - 1, 0)),
+        end=types.Position(line=max(end_line - 1, 0), character=max(end_col - 1, 0)),
+    )
+
+
+def diagnostic_severity(severity: Optional[str]) -> types.DiagnosticSeverity:
+    if severity == "error":
+        return types.DiagnosticSeverity.Error
+    if severity == "info":
+        return types.DiagnosticSeverity.Information
+    return types.DiagnosticSeverity.Warning
 
 
 def hover_markdown(node: ASTNode) -> str:

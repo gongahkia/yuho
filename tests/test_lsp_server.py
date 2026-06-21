@@ -52,3 +52,40 @@ def test_hover_surfaces_ast_node_kind_and_source_location():
     assert "ElementNode" in hover.contents.value
     assert "/tmp/demo.yh" in hover.contents.value
     assert hover.range is not None
+
+
+def test_diagnostics_include_lint_warnings():
+    server = YuhoLanguageServer()
+    uri = "file:///tmp/lint.yh"
+    server.parse_source(uri, VALID_SOURCE)
+    diagnostics = server.diagnostics_for_uri(uri)
+    messages = [diagnostic.message for diagnostic in diagnostics]
+    assert any("no mens_rea" in message for message in messages)
+    assert any("no penalty" in message for message in messages)
+
+
+def test_diagnostics_include_type_check_errors():
+    server = YuhoLanguageServer()
+    uri = "file:///tmp/type.yh"
+    server.parse_source(uri, 'fn f() : int { return "x"; }')
+    diagnostics = server.diagnostics_for_uri(uri)
+    assert any(
+        diagnostic.message == "Return type string does not match expected int"
+        for diagnostic in diagnostics
+    )
+
+
+def test_publish_diagnostics_for_uri_sends_publish_params(monkeypatch):
+    server = YuhoLanguageServer()
+    uri = "file:///tmp/lint.yh"
+    server.parse_source(uri, VALID_SOURCE)
+    published = []
+
+    def fake_publish(params):
+        published.append(params)
+
+    monkeypatch.setattr(server, "text_document_publish_diagnostics", fake_publish)
+    server.publish_diagnostics_for_uri(uri)
+    assert published
+    assert published[0].uri == uri
+    assert published[0].diagnostics
