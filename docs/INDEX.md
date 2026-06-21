@@ -32,6 +32,7 @@ Audience: reviewers, researchers, and contributors tracing the design.
 - [Syntax reference](researcher/syntax.md)
 - [Formal semantics](researcher/formal-semantics.md)
 - [Yuho and L4 positioning](positioning/yuho-vs-l4.md)
+- [Why criminal law](positioning/why-criminal-law.md)
 - [Phase C gaps](researcher/phase-c-gaps.md)
 - [Grammar quirks](grammar-quirks.md)
 - [OpenAPI note](researcher/openapi.yaml)
