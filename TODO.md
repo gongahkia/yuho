@@ -1,0 +1,65 @@
+# Yuho TODO
+
+Strict [todo.txt v1](https://github.com/todotxt/todo.txt) syntax inside the code fence below.
+Priorities: (A) cheap/blocker, (B) medium, (C) large/experimental.
+Projects: +language +tooling +corpus +housekeeping +education +jurisdiction +positioning.
+Contexts: @grammar @ast @lint @lean @verify @transpile @cli @lsp @resolver @library @repo @memory @typecheck @docs @scrape @viz.
+
+```todo
+(A) 2026-06-21 Delete empty fossil dir src/yuho/chronology +housekeeping @repo effort:XS
+(A) 2026-06-21 Delete empty fossil dir src/yuho/explore +housekeeping @repo effort:XS
+(A) 2026-06-21 Delete empty fossil dir src/yuho/recommend +housekeeping @repo effort:XS
+(A) 2026-06-21 Delete empty fossil dir editors/explorer-site +housekeeping @repo effort:XS
+(A) 2026-06-21 Delete empty fossil dir evals/case_law +housekeeping @repo effort:XS
+(A) 2026-06-21 Delete empty fossil dir simulator +housekeeping @repo effort:XS
+(A) 2026-06-21 Update MEMORY.md key paths after fossil deletion +housekeeping @memory effort:XS
+(A) 2026-06-21 Implement LegalRuleML XML transpiler at src/yuho/transpile/legalruleml_transpiler.py reusing AST deontic/defeasibility metadata +tooling @transpile effort:M
+(A) 2026-06-21 Register LRML target in src/yuho/transpile/registry.py and CLI choices in src/yuho/cli/main.py +tooling @transpile effort:S
+(A) 2026-06-21 Vendor LegalRuleML v1.0 XSD under src/yuho/transpile/lrml_schema and add roundtrip script alongside scripts/akn_roundtrip.py +tooling @transpile effort:S
+(A) 2026-06-21 Bootstrap LSP server at src/yuho/lsp/ using pygls reading existing tree-sitter parser via parser/wrapper.py +tooling @lsp effort:M
+(A) 2026-06-21 LSP hover surfacing AST node kind + source-locations via parser/source_location.py +tooling @lsp effort:S
+(A) 2026-06-21 LSP diagnostics piping ast/statute_lint.py + ast/type_check.py outputs +tooling @lsp effort:M
+(A) 2026-06-21 LSP goto-definition for cross-section refs via library/reference_graph.py and import resolver +tooling @lsp effort:M
+(A) 2026-06-21 VS Code extension under editors/vscode-yuho/ wiring tree-sitter highlight + LSP client +tooling @lsp effort:M
+(B) 2026-06-21 Grammar: add `rebuts` and `undercuts` keywords to exception block in src/tree-sitter-yuho/grammar.js +language @grammar effort:S
+(B) 2026-06-21 Regenerate parser via tree-sitter generate + recompile libtree-sitter-yuho.dylib +language @grammar effort:XS
+(B) 2026-06-21 AST: split DefeatsRelation into RebutsRelation + UndercutsRelation in src/yuho/ast/nodes.py and builder.py +language @ast effort:S
+(B) 2026-06-21 Lint: enforce priority DAG separately for rebuts vs undercuts in ast/statute_lint.py +language @lint effort:S
+(B) 2026-06-21 Z3 encoding: rebut negates conclusion, undercut negates inference rule in verify/z3_solver.py +language @verify effort:M
+(B) 2026-06-21 Lean: add mechanisation/Yuho/Defeasibility.lean splitting Cross.lean defeats lemmas into two soundness theorems +language @lean effort:L
+(B) 2026-06-21 Corpus sweep: convert existing `defeats` clauses to `rebuts` (default conservative mapping) via scripts/migrate_defeats.py +language @library effort:S
+(B) 2026-06-21 Grammar: add `interpretation` block on element with named alternative readings +language @grammar effort:M
+(B) 2026-06-21 AST: InterpretationNode carrying citation + court + endorsement (binding|persuasive|none) +language @ast effort:S
+(B) 2026-06-21 Lint: warn when element has competing interpretations with no endorsement metadata +language @lint effort:S
+(B) 2026-06-21 Reference encodings: rewrite s415_cheating and s300_murder using `interpretation` instead of dual-function pattern +language @library effort:S
+(B) 2026-06-21 Grammar: add `treatment followed|distinguished|overruled` to caselaw block +corpus @grammar effort:S
+(B) 2026-06-21 AST: caselaw treatment edges in library/reference_graph.py +corpus @ast effort:S
+(B) 2026-06-21 Lint: detect overruled caselaw still cited as authority; warn on contradictory treatment chains +corpus @lint effort:M
+(B) 2026-06-21 Extend `yuho refs` command to query treatment graph (--treatment, --overruled) +corpus @cli effort:S
+(C) 2026-06-21 Grammar: promote `@jurisdiction` annotation to first-class statute parameter +corpus @grammar effort:M
+(C) 2026-06-21 AST: JurisdictionNode and jurisdiction-scoped definition table in ast/scope_analysis.py +corpus @ast effort:M
+(C) 2026-06-21 Resolver: enforce same-jurisdiction or explicit cross-jurisdiction import in services/analysis.py +corpus @resolver effort:M
+(C) 2026-06-21 Encode 5 representative IPC sections under jurisdiction-typed scheme as proof-of-concept +corpus @library effort:L
+(C) 2026-06-21 Grammar: civil-law primitives `party` `obligation_to` `condition_precedent` `breach` behind --feature=civil flag +language @grammar effort:L
+(C) 2026-06-21 AST: civil-law primitive nodes in src/yuho/ast/nodes.py +language @ast effort:M
+(C) 2026-06-21 Type checker: civil-law primitive type rules in src/yuho/ast/type_check.py +language @typecheck effort:M
+(C) 2026-06-21 Proof-of-concept: encode one contract-law section under civil feature flag +language @library effort:M
+(C) 2026-06-21 Grammar: agent/patient role tags on element/struct fields +language @grammar effort:M
+(C) 2026-06-21 AST: FactEventNode with timestamped action + role-typed participants +language @ast effort:M
+(C) 2026-06-21 Bounded quantification primitive `exists_at_most N within DURATION` for sentencing aggravators +language @ast effort:M
+(C) 2026-06-21 ASP/Datalog backend under src/yuho/explain/ producing justification trace per element +tooling @verify effort:XL
+(C) 2026-06-21 New CLI `yuho explain --facts FILE SECTION` returning element-by-element satisfaction trace +tooling @cli effort:M
+(C) 2026-06-21 English-render the explain trace through existing transpile/english_transpiler.py +tooling @transpile effort:M
+(A) 2026-06-21 New CLI `yuho irac --facts FILE STATUTE.yh` emitting IRAC-structured English via english_transpiler.py +education @cli effort:M
+(A) 2026-06-21 Curate library/problem_questions/ with 10 canonical SG criminal-law hypos as .yh fact patterns +education @library effort:M
+(B) 2026-06-21 Mermaid theme colour-coding AR (red) MR (blue) circumstance (green) exception (amber) in mermaid_transpiler.py +positioning @viz effort:S
+(B) 2026-06-21 BNS 2023 raw scrape via scripts/scrape_bns.py mirroring scripts/scrape_sso.py +jurisdiction @scrape effort:L
+(B) 2026-06-21 Encode 358-section BNS skeleton under library/bharatiya_nyaya_sanhita/ with L1+L2 pass +jurisdiction @library effort:XL
+(B) 2026-06-21 IPC ↔ BNS section mapping table generated via structural diff at library/_index/ipc_bns_mapping.json +jurisdiction @library effort:M
+(C) 2026-06-21 Pakistan PPC raw scrape + 20-section proof-of-concept encoding under library/pakistan_penal_code/ +jurisdiction @scrape effort:L
+(C) 2026-06-21 Malaysia Penal Code Act 574 raw scrape + 20-section proof-of-concept encoding under library/malaysia_penal_code/ +jurisdiction @scrape effort:L
+(C) 2026-06-21 `yuho diff --jurisdictions sg,my,pk SECTION` cross-corpus comparative diff in cli/commands/diff.py +jurisdiction @cli effort:M
+(B) 2026-06-21 Auto-render SVG per statute under docs/visualizations/<section>/element-graph.svg via scripts/build_corpus.py +positioning @viz effort:M
+(B) 2026-06-21 Write docs/positioning/yuho-vs-l4.md as one-page complementary-not-competing technical comparison +positioning @docs effort:S
+(B) 2026-06-21 Write docs/positioning/why-criminal-law.md niche statement referencing CCLAW defeasible-semantics-for-L4 overlap +positioning @docs effort:S
+```
