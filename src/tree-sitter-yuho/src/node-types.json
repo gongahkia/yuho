@@ -609,6 +609,16 @@
             "named": true
           }
         ]
+      },
+      "treatment": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "treatment_clause",
+            "named": true
+          }
+        ]
       }
     }
   },
@@ -4076,6 +4086,47 @@
     }
   },
   {
+    "type": "treatment_clause",
+    "named": true,
+    "fields": {
+      "citation": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "string_literal",
+            "named": true
+          }
+        ]
+      },
+      "kind": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "treatment_kind",
+            "named": true
+          }
+        ]
+      },
+      "target": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "string_literal",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "treatment_kind",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "type_alias",
     "named": true,
     "fields": {
@@ -4783,6 +4834,10 @@
     "named": false
   },
   {
+    "type": "distinguished",
+    "named": false
+  },
+  {
     "type": "doc_comment",
     "named": true
   },
@@ -4840,6 +4895,10 @@
   },
   {
     "type": "fn",
+    "named": false
+  },
+  {
+    "type": "followed",
     "named": false
   },
   {
@@ -4949,6 +5008,10 @@
   },
   {
     "type": "or_both",
+    "named": false
+  },
+  {
+    "type": "overruled",
     "named": false
   },
   {
@@ -5085,6 +5148,10 @@
   },
   {
     "type": "temporal",
+    "named": false
+  },
+  {
+    "type": "treatment",
     "named": false
   },
   {

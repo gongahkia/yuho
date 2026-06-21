@@ -645,8 +645,19 @@ module.exports = grammar({
       '{',
       field('holding', $.string_literal),
       optional(seq('element', field('element_ref', $.identifier))),
+      repeat(field('treatment', $.treatment_clause)),
       '}'
     ),
+
+    treatment_clause: $ => seq(
+      'treatment',
+      field('kind', $.treatment_kind),
+      field('target', $.string_literal),
+      optional(field('citation', $.string_literal)),
+      optional(';'),
+    ),
+
+    treatment_kind: $ => choice('followed', 'distinguished', 'overruled'),
 
     // =========================================================================
     // Import statements

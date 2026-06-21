@@ -7,7 +7,6 @@ Contexts: @grammar @ast @lint @lean @verify @transpile @cli @lsp @resolver @libr
 
 ```todo
 (A) 2026-06-21 Update MEMORY.md key paths after fossil deletion +housekeeping @memory effort:XS
-(B) 2026-06-21 Grammar: add `treatment followed|distinguished|overruled` to caselaw block +corpus @grammar effort:S
 (B) 2026-06-21 AST: caselaw treatment edges in library/reference_graph.py +corpus @ast effort:S
 (B) 2026-06-21 Lint: detect overruled caselaw still cited as authority; warn on contradictory treatment chains +corpus @lint effort:M
 (B) 2026-06-21 Extend `yuho refs` command to query treatment graph (--treatment, --overruled) +corpus @cli effort:S
