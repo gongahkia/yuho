@@ -7,7 +7,6 @@ Contexts: @grammar @ast @lint @lean @verify @transpile @cli @lsp @resolver @libr
 
 ```todo
 (A) 2026-06-21 Update MEMORY.md key paths after fossil deletion +housekeeping @memory effort:XS
-(B) 2026-06-21 Regenerate parser via tree-sitter generate + recompile libtree-sitter-yuho.dylib +language @grammar effort:XS
 (B) 2026-06-21 AST: split DefeatsRelation into RebutsRelation + UndercutsRelation in src/yuho/ast/nodes.py and builder.py +language @ast effort:S
 (B) 2026-06-21 Lint: enforce priority DAG separately for rebuts vs undercuts in ast/statute_lint.py +language @lint effort:S
 (B) 2026-06-21 Z3 encoding: rebut negates conclusion, undercut negates inference rule in verify/z3_solver.py +language @verify effort:M

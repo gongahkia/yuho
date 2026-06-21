@@ -2943,8 +2943,12 @@
               "type": "SEQ",
               "members": [
                 {
-                  "type": "STRING",
-                  "value": "defeats"
+                  "type": "FIELD",
+                  "name": "defeat_relation",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "defeat_relation"
+                  }
                 },
                 {
                   "type": "FIELD",
@@ -2964,6 +2968,23 @@
         {
           "type": "STRING",
           "value": "}"
+        }
+      ]
+    },
+    "defeat_relation": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "defeats"
+        },
+        {
+          "type": "STRING",
+          "value": "rebuts"
+        },
+        {
+          "type": "STRING",
+          "value": "undercuts"
         }
       ]
     },

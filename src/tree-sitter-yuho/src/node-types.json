@@ -679,6 +679,11 @@
     }
   },
   {
+    "type": "defeat_relation",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "definition_entry",
     "named": true,
     "fields": {
@@ -1103,6 +1108,16 @@
         "types": [
           {
             "type": "string_literal",
+            "named": true
+          }
+        ]
+      },
+      "defeat_relation": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "defeat_relation",
             "named": true
           }
         ]
@@ -4890,6 +4905,10 @@
     "named": false
   },
   {
+    "type": "rebuts",
+    "named": false
+  },
+  {
     "type": "reference_path",
     "named": true
   },
@@ -4967,6 +4986,10 @@
   },
   {
     "type": "type",
+    "named": false
+  },
+  {
+    "type": "undercuts",
     "named": false
   },
   {
