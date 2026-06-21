@@ -7,7 +7,6 @@ Contexts: @grammar @ast @lint @lean @verify @transpile @cli @lsp @resolver @libr
 
 ```todo
 (A) 2026-06-21 Update MEMORY.md key paths after fossil deletion +housekeeping @memory effort:XS
-(B) 2026-06-21 Lint: enforce priority DAG separately for rebuts vs undercuts in ast/statute_lint.py +language @lint effort:S
 (B) 2026-06-21 Z3 encoding: rebut negates conclusion, undercut negates inference rule in verify/z3_solver.py +language @verify effort:M
 (B) 2026-06-21 Lean: add mechanisation/Yuho/Defeasibility.lean splitting Cross.lean defeats lemmas into two soundness theorems +language @lean effort:L
 (B) 2026-06-21 Corpus sweep: convert existing `defeats` clauses to `rebuts` (default conservative mapping) via scripts/migrate_defeats.py +language @library effort:S

@@ -22,8 +22,10 @@ from yuho.ast.nodes import (
     FloatLit,
     ModuleNode,
     RefinementTypeNode,
+    RebutsRelation,
     StatuteNode,
     StringLit,
+    UndercutsRelation,
     VariableDecl,
 )
 
@@ -224,32 +226,52 @@ def _check_deontic_conflict(statute: StatuteNode) -> List[LintWarning]:
 
 
 def _check_defeats_target(statute: StatuteNode) -> List[LintWarning]:
-    """Verify defeats label references an existing exception in the same statute."""
+    """Verify relation labels reference existing exceptions in the same statute."""
     warnings: List[LintWarning] = []
     labels = {exc.label for exc in statute.exceptions if exc.label}
     for exc in statute.exceptions:
         if exc.defeats and exc.defeats not in labels:
+            relation = _defeat_relation_kind(exc)
             warnings.append(
                 LintWarning(
                     statute_section=statute.section_number,
-                    message=f"exception '{exc.label or '<unlabeled>'}' defeats unknown label '{exc.defeats}'",
+                    message=(
+                        f"exception '{exc.label or '<unlabeled>'}' {relation} "
+                        f"unknown label '{exc.defeats}'"
+                    ),
                     severity="warning",
                 )
             )
     return warnings
 
 
+def _defeat_relation_kind(exc: ExceptionNode) -> str:
+    if isinstance(exc.defeat_relation, UndercutsRelation):
+        return "undercuts"
+    if isinstance(exc.defeat_relation, RebutsRelation):
+        return "rebuts"
+    return "rebuts"
+
+
 def _check_defeats_cycles(statute: StatuteNode) -> List[LintWarning]:
-    """G13: detect cycles in the exception-defeats DAG. Cyclic `defeats` edges
-    make the priority order indeterminate — warn so the author picks a base."""
+    """G13: detect cycles in each exception relation DAG."""
     warnings: List[LintWarning] = []
-    # build adjacency: exc.label -> exc.defeats (the label the exc overrides)
-    edges: dict[str, str] = {}
+    edges_by_kind: dict[str, dict[str, str]] = {"rebuts": {}, "undercuts": {}}
     for exc in statute.exceptions:
         if exc.label and exc.defeats:
-            edges[exc.label] = exc.defeats
+            edges_by_kind[_defeat_relation_kind(exc)][exc.label] = exc.defeats
 
-    # classic DFS cycle detection
+    for relation, edges in edges_by_kind.items():
+        warnings.extend(_check_relation_cycles(statute, relation, edges))
+    return warnings
+
+
+def _check_relation_cycles(
+    statute: StatuteNode,
+    relation: str,
+    edges: dict[str, str],
+) -> List[LintWarning]:
+    warnings: List[LintWarning] = []
     WHITE, GRAY, BLACK = 0, 1, 2
     colour: dict[str, int] = {k: WHITE for k in edges}
     found_cycles: set[tuple[str, ...]] = set()
@@ -260,7 +282,7 @@ def _check_defeats_cycles(statute: StatuteNode) -> List[LintWarning]:
         nxt = edges.get(node)
         if nxt and nxt in colour:
             if colour[nxt] == GRAY:
-                cycle = path[path.index(nxt):] + [nxt]
+                cycle = path[path.index(nxt) :] + [nxt]
                 found_cycles.add(tuple(cycle))
             elif colour[nxt] == WHITE:
                 visit(nxt, path)
@@ -275,7 +297,7 @@ def _check_defeats_cycles(statute: StatuteNode) -> List[LintWarning]:
         warnings.append(
             LintWarning(
                 statute_section=statute.section_number,
-                message=f"exception defeats chain forms a cycle: {' → '.join(cycle)}",
+                message=f"exception {relation} chain forms a cycle: {' → '.join(cycle)}",
                 severity="error",
             )
         )
