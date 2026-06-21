@@ -47,6 +47,8 @@ RAW_PATH = LIBRARY_DIR / "_raw" / "act.json"
 COVERAGE_PATH = LIBRARY_DIR / "_coverage" / "coverage.json"
 CORPUS_DIR = LIBRARY_DIR / "_corpus"
 SECTIONS_DIR = CORPUS_DIR / "sections"
+DOCS_VISUALIZATIONS_DIR = REPO / "docs" / "visualizations"
+ELEMENT_GRAPH_SVG = "element-graph.svg"
 
 
 # ---------------------------------------------------------------------------
@@ -363,6 +365,29 @@ def _render_mermaid_svg(mermaid_src: Optional[str]) -> Optional[str]:
             svg = svg[end + 2:].lstrip()
     svg = svg.replace("<svg ", '<svg class="yuho-mermaid-svg" ', 1)
     return svg
+
+
+def _visualization_dir_name(section: str) -> str:
+    return f"s{section}"
+
+
+def write_visualization_svgs(
+    records: List[Dict[str, Any]],
+    output_dir: Path = DOCS_VISUALIZATIONS_DIR,
+) -> List[Path]:
+    """Write rendered element-graph SVGs under docs/visualizations/s<section>/."""
+    written: List[Path] = []
+    for record in records:
+        svg = record.get("transpiled", {}).get("mermaid_svg")
+        if not svg:
+            continue
+        section = str(record["section_number"])
+        section_dir = output_dir / _visualization_dir_name(section)
+        section_dir.mkdir(parents=True, exist_ok=True)
+        out_path = section_dir / ELEMENT_GRAPH_SVG
+        out_path.write_text(svg, encoding="utf-8")
+        written.append(out_path)
+    return written
 
 
 # ---------------------------------------------------------------------------
@@ -687,6 +712,14 @@ def main() -> int:
     index_path = CORPUS_DIR / "index.json"
     index_path.write_text(json.dumps(index, indent=2, sort_keys=True, ensure_ascii=False))
     print(f"Wrote index to {index_path.relative_to(REPO)}", file=sys.stderr)
+
+    svg_paths = write_visualization_svgs(records)
+    if svg_paths:
+        print(
+            f"Wrote {len(svg_paths)} element graph SVG(s) to "
+            f"{DOCS_VISUALIZATIONS_DIR.relative_to(REPO)}/",
+            file=sys.stderr,
+        )
 
     print(f"\nDone. Corpus: {len(records)} sections, "
           f"L1={index['totals']['L1']}, L2={index['totals']['L2']}, "

@@ -7,7 +7,6 @@ Contexts: @grammar @ast @lint @lean @verify @transpile @cli @lsp @resolver @libr
 
 ```todo
 (A) 2026-06-21 Update MEMORY.md key paths after fossil deletion +housekeeping @memory effort:XS
-(B) 2026-06-21 Auto-render SVG per statute under docs/visualizations/<section>/element-graph.svg via scripts/build_corpus.py +positioning @viz effort:M
 (B) 2026-06-21 Write docs/positioning/yuho-vs-l4.md as one-page complementary-not-competing technical comparison +positioning @docs effort:S
 (B) 2026-06-21 Write docs/positioning/why-criminal-law.md niche statement referencing CCLAW defeasible-semantics-for-L4 overlap +positioning @docs effort:S
 (A) 2026-06-21 Stabilise error_code scheme: migrate snake_case strings in services/analysis.py to Y0001-Y9999 and expand docs/user/error-codes.md with per-code anchored explainers +compiler @analysis effort:M
