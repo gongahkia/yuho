@@ -224,6 +224,18 @@ class JSONTranspiler(TranspilerBase, Visitor):
             result["name"] = node.name
             if node.type_annotation:
                 result["type"] = self._to_dict(node.type_annotation)
+        elif isinstance(node, nodes.FactParticipantNode):
+            result["role"] = node.role
+            result["name"] = node.name
+            if node.type_annotation:
+                result["type"] = self._to_dict(node.type_annotation)
+        elif isinstance(node, nodes.FactEventNode):
+            result["name"] = node.name
+            result["action"] = node.action
+            result["timestamp"] = self._to_dict(node.timestamp)
+            result["participants"] = [self._to_dict(p) for p in node.participants]
+            if node.meta:
+                result["meta"] = dict(node.meta)
         elif isinstance(node, nodes.JurisdictionNode):
             result["name"] = node.name
             if node.meta:
@@ -354,6 +366,8 @@ class JSONTranspiler(TranspilerBase, Visitor):
             result["function_defs"] = [self._to_dict(f) for f in node.function_defs]
             result["statutes"] = [self._to_dict(s) for s in node.statutes]
             result["variables"] = [self._to_dict(v) for v in node.variables]
+            if node.fact_events:
+                result["fact_events"] = [self._to_dict(f) for f in node.fact_events]
             if node.enum_defs:
                 result["enum_defs"] = [self._to_dict(e) for e in node.enum_defs]
             if node.type_aliases:

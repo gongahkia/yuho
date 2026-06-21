@@ -139,6 +139,12 @@ class Transformer(Visitor):
     def visit_struct_literal(self, node):
         return self.transform_struct_literal(node)
 
+    def visit_fact_participant(self, node):
+        return self.transform_fact_participant(node)
+
+    def visit_fact_event(self, node):
+        return self.transform_fact_event(node)
+
     def visit_param_def(self, node):
         return self.transform_param_def(node)
 
@@ -675,6 +681,35 @@ class Transformer(Visitor):
             )
         return node
 
+    def transform_fact_participant(
+        self, node: nodes.FactParticipantNode
+    ) -> nodes.FactParticipantNode:
+        new_type = self._transform_optional_typed(node.type_annotation)
+        if new_type is not node.type_annotation:
+            return nodes.FactParticipantNode(
+                role=node.role,
+                name=node.name,
+                type_annotation=new_type,
+                source_location=node.source_location,
+            )
+        return node
+
+    def transform_fact_event(self, node: nodes.FactEventNode) -> nodes.FactEventNode:
+        new_timestamp = self._transform_typed(node.timestamp)
+        new_participants, participants_changed = self._transform_children_typed(
+            list(node.participants)
+        )
+        if new_timestamp is not node.timestamp or participants_changed:
+            return nodes.FactEventNode(
+                name=node.name,
+                action=node.action,
+                timestamp=new_timestamp,
+                participants=new_participants,
+                meta=dict(node.meta),
+                source_location=node.source_location,
+            )
+        return node
+
     def transform_penalty(self, node: nodes.PenaltyNode) -> nodes.PenaltyNode:
         return node
 
@@ -799,8 +834,16 @@ class Transformer(Visitor):
         new_funcs, funcs_changed = self._transform_children_typed(list(node.function_defs))
         new_statutes, statutes_changed = self._transform_children_typed(list(node.statutes))
         new_vars, vars_changed = self._transform_children_typed(list(node.variables))
+        new_facts, facts_changed = self._transform_children_typed(list(node.fact_events))
 
-        if imports_changed or types_changed or funcs_changed or statutes_changed or vars_changed:
+        if (
+            imports_changed
+            or types_changed
+            or funcs_changed
+            or statutes_changed
+            or vars_changed
+            or facts_changed
+        ):
             return nodes.ModuleNode(
                 imports=new_imports,
                 type_defs=new_types,
@@ -809,6 +852,11 @@ class Transformer(Visitor):
                 variables=new_vars,
                 references=node.references,
                 assertions=node.assertions,
+                enum_defs=node.enum_defs,
+                type_aliases=node.type_aliases,
+                legal_tests=node.legal_tests,
+                conflict_checks=node.conflict_checks,
+                fact_events=new_facts,
                 source_location=node.source_location,
             )
         return node

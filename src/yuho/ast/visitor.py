@@ -280,6 +280,12 @@ class Visitor:
     def visit_party(self, node: nodes.PartyNode) -> Any:
         return self.generic_visit(node)
 
+    def visit_fact_participant(self, node: nodes.FactParticipantNode) -> Any:
+        return self.generic_visit(node)
+
+    def visit_fact_event(self, node: nodes.FactEventNode) -> Any:
+        return self.generic_visit(node)
+
     def visit_temporal_constraint(self, node: nodes.TemporalConstraintNode) -> Any:
         return self.generic_visit(node)
 

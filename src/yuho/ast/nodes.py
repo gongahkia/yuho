@@ -1180,6 +1180,38 @@ class PartyNode(ASTNode):
 
 
 @dataclass(frozen=True)
+class FactParticipantNode(ASTNode):
+    """Role-typed participant in a fact event."""
+
+    role: str
+    name: str
+    type_annotation: Optional[TypeNode] = None
+
+    def accept(self, visitor: "Visitor"):
+        return visitor.visit_fact_participant(self)
+
+    def children(self) -> List[ASTNode]:
+        return [self.type_annotation] if self.type_annotation else []
+
+
+@dataclass(frozen=True)
+class FactEventNode(ASTNode):
+    """Timestamped action with typed participants."""
+
+    name: str
+    action: str
+    timestamp: DateNode
+    participants: Tuple[FactParticipantNode, ...] = ()
+    meta: Dict[str, str] = field(default_factory=dict)
+
+    def accept(self, visitor: "Visitor"):
+        return visitor.visit_fact_event(self)
+
+    def children(self) -> List[ASTNode]:
+        return [self.timestamp, *self.participants]
+
+
+@dataclass(frozen=True)
 class SubsectionNode(ASTNode):
     """
     G5: a numbered subsection inside a statute. Carries its own members
@@ -1405,6 +1437,7 @@ class ModuleNode(ASTNode):
     type_aliases: Tuple[TypeAliasNode, ...] = ()
     legal_tests: Tuple[LegalTestNode, ...] = ()
     conflict_checks: Tuple[ConflictCheckNode, ...] = ()
+    fact_events: Tuple[FactEventNode, ...] = ()
 
     def accept(self, visitor: "Visitor"):
         return visitor.visit_module(self)
@@ -1422,4 +1455,5 @@ class ModuleNode(ASTNode):
         result.extend(self.assertions)
         result.extend(self.legal_tests)
         result.extend(self.conflict_checks)
+        result.extend(self.fact_events)
         return result
