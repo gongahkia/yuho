@@ -7,7 +7,6 @@ Contexts: @grammar @ast @lint @lean @verify @transpile @cli @lsp @resolver @libr
 
 ```todo
 (A) 2026-06-21 Update MEMORY.md key paths after fossil deletion +housekeeping @memory effort:XS
-(C) 2026-06-21 Encode 5 representative IPC sections under jurisdiction-typed scheme as proof-of-concept +corpus @library effort:L
 (C) 2026-06-21 Grammar: civil-law primitives `party` `obligation_to` `condition_precedent` `breach` behind --feature=civil flag +language @grammar effort:L
 (C) 2026-06-21 AST: civil-law primitive nodes in src/yuho/ast/nodes.py +language @ast effort:M
 (C) 2026-06-21 Type checker: civil-law primitive type rules in src/yuho/ast/type_check.py +language @typecheck effort:M

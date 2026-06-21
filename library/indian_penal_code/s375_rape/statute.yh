@@ -1,4 +1,3 @@
-/// @jurisdiction india
 /// @meta act=Indian Penal Code 1860
 /// @meta source=https://www.advocatekhoj.com/library/bareacts/indianpenalcode/375.php
 
@@ -10,7 +9,7 @@ fn is_ipc_s375_rape(bool elements_satisfied, bool defence_applies) : bool {
     }
 }
 
-statute 375 "Rape" effective 1860-10-06 {
+statute 375 "Rape" jurisdiction india effective 1860-10-06 {
     /// IPC s375 (pre-2013 form per AdvocateKhoj). Six descriptions of the offence; a marital exception. The 2013 Criminal Law (Amendment) Act materially expanded this in India proper, but the text scraped from AdvocateKhoj retains the older shape — see metadata.toml for the divergence note.
     elements {
         all_of {
