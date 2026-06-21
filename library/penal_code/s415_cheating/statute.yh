@@ -14,14 +14,6 @@ struct CheatingCase {
     string damageHarmType,
 }
 
-fn is_fraudulent(string deceptionType) : bool {
-    return deceptionType == "fraudulently";
-}
-
-fn is_dishonest(string deceptionType) : bool {
-    return deceptionType == "dishonestly";
-}
-
 fn evaluate_cheating(string deceptionType, string inducementType, bool causesDamageHarm) : string {
     match {
         case TRUE if deceptionType == "none" := consequence "Not cheating - no deception";
@@ -46,9 +38,21 @@ statute 415 "Cheating" effective 1872-01-01 {
             actus_reus deception := "Deceiving any person";
             any_of {
                 /// per s25: intent to defraud
-                mens_rea fraudulent := "Fraudulently inducing the person";
+                mens_rea fraudulent := "Fraudulently inducing the person" interpretations {
+                    interpretation penal_code_s25 {
+                        "Fraudulently means with intent to defraud."
+                        citation "Penal Code 1871 s25"
+                        endorsement binding
+                    }
+                };
                 /// per s24: intent to cause wrongful gain/loss
-                mens_rea dishonest := "Dishonestly inducing the person";
+                mens_rea dishonest := "Dishonestly inducing the person" interpretations {
+                    interpretation penal_code_s24 {
+                        "Dishonestly means with intention of causing wrongful gain or wrongful loss."
+                        citation "Penal Code 1871 s24"
+                        endorsement binding
+                    }
+                };
             }
             /// three forms: deliver property, consent to retain, or do/omit an act
             actus_reus inducement := "Inducing delivery of property, consent to retain property, or act/omission";

@@ -19,8 +19,6 @@ CheatingTestCase fraudulentCheating := CheatingTestCase {
 assert fraudulentCheating.deceptionType == "fraudulently"
 assert fraudulentCheating.inducementType == "delivery_of_property"
 assert fraudulentCheating.causesDamageHarm == TRUE
-assert is_fraudulent(fraudulentCheating.deceptionType) == TRUE
-assert is_dishonest(fraudulentCheating.deceptionType) == FALSE
 assert evaluate_cheating(fraudulentCheating.deceptionType, fraudulentCheating.inducementType, fraudulentCheating.causesDamageHarm) == "Said to cheat"
 
 
@@ -31,8 +29,6 @@ CheatingTestCase dishonestCheating := CheatingTestCase {
 }
 
 assert dishonestCheating.deceptionType == "dishonestly"
-assert is_dishonest(dishonestCheating.deceptionType) == TRUE
-assert is_fraudulent(dishonestCheating.deceptionType) == FALSE
 assert evaluate_cheating(dishonestCheating.deceptionType, dishonestCheating.inducementType, dishonestCheating.causesDamageHarm) == "Said to cheat"
 
 
@@ -43,8 +39,6 @@ CheatingTestCase noDeception := CheatingTestCase {
 }
 
 assert noDeception.deceptionType == "none"
-assert is_fraudulent(noDeception.deceptionType) == FALSE
-assert is_dishonest(noDeception.deceptionType) == FALSE
 assert evaluate_cheating(noDeception.deceptionType, noDeception.inducementType, noDeception.causesDamageHarm) == "Not cheating - no deception"
 
 

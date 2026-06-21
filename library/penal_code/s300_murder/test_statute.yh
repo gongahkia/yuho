@@ -19,7 +19,6 @@ MurderTestCase normalMurder := MurderTestCase {
 assert normalMurder.causeDeath == TRUE
 assert normalMurder.mensRea == "intention_to_cause_death"
 assert normalMurder.exception == "none"
-assert has_murder_intent(normalMurder.mensRea) == TRUE
 assert exception_applies(normalMurder.exception) == FALSE
 
 
@@ -31,7 +30,6 @@ MurderTestCase fatalInjuryMurder := MurderTestCase {
 
 assert fatalInjuryMurder.causeDeath == TRUE
 assert fatalInjuryMurder.mensRea == "intention_to_inflict_fatal_injury"
-assert has_murder_intent(fatalInjuryMurder.mensRea) == TRUE
 
 
 MurderTestCase sufficientInjuryMurder := MurderTestCase {
@@ -41,7 +39,6 @@ MurderTestCase sufficientInjuryMurder := MurderTestCase {
 }
 
 assert sufficientInjuryMurder.mensRea == "intention_to_inflict_sufficient_injury"
-assert has_murder_intent(sufficientInjuryMurder.mensRea) == TRUE
 
 
 MurderTestCase dangerKnowledgeMurder := MurderTestCase {
@@ -51,7 +48,6 @@ MurderTestCase dangerKnowledgeMurder := MurderTestCase {
 }
 
 assert dangerKnowledgeMurder.mensRea == "knowledge_of_danger"
-assert has_murder_intent(dangerKnowledgeMurder.mensRea) == TRUE
 
 
 MurderTestCase noMensRea := MurderTestCase {
@@ -61,7 +57,6 @@ MurderTestCase noMensRea := MurderTestCase {
 }
 
 assert noMensRea.mensRea == "negligence"
-assert has_murder_intent(noMensRea.mensRea) == FALSE
 
 
 MurderTestCase provocationCase := MurderTestCase {
@@ -73,7 +68,6 @@ MurderTestCase provocationCase := MurderTestCase {
 assert provocationCase.causeDeath == TRUE
 assert provocationCase.mensRea == "intention_to_cause_death"
 assert provocationCase.exception == "provocation"
-assert has_murder_intent(provocationCase.mensRea) == TRUE
 assert exception_applies(provocationCase.exception) == TRUE
 
 

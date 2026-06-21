@@ -14,16 +14,6 @@ struct MurderCase {
     string exception,
 }
 
-fn has_murder_intent(string mensRea) : bool {
-    match {
-        case TRUE if mensRea == "intention_to_cause_death" := consequence TRUE;
-        case TRUE if mensRea == "intention_to_inflict_fatal_injury" := consequence TRUE;
-        case TRUE if mensRea == "intention_to_inflict_sufficient_injury" := consequence TRUE;
-        case TRUE if mensRea == "knowledge_of_danger" := consequence TRUE;
-        case _ := consequence FALSE;
-    }
-}
-
 fn exception_applies(string exception) : bool {
     match {
         case TRUE if exception == "none" := consequence FALSE;
@@ -45,13 +35,38 @@ statute 300 "Murder" effective 1872-01-01 subsumes 299 {
             actus_reus causeDeath := "Causing the death of a person" caused_by causeDeath burden prosecution beyond_reasonable_doubt;
             any_of {
                 /// limb (a): direct intention to kill
-                mens_rea intent1 := "Intention to cause death";
+                mens_rea intent1 := "Intention to cause death" interpretations {
+                    interpretation limb_a {
+                        "Culpable homicide is murder if the act causing death is done with intention to cause death."
+                        citation "Penal Code 1871 s300(a)"
+                        endorsement binding
+                    }
+                };
                 /// limb (b): intention to cause injury known to be likely fatal
-                mens_rea intent2 := "Intention to cause bodily injury known likely to cause death";
+                mens_rea intent2 := "Intention to cause bodily injury known likely to cause death" interpretations {
+                    interpretation limb_b {
+                        "Culpable homicide is murder if bodily injury is intended and known to be likely to cause the particular person's death."
+                        citation "Penal Code 1871 s300(b)"
+                        endorsement binding
+                    }
+                };
                 /// limb (c): intention to cause injury sufficient in ordinary course of nature
-                mens_rea intent3 := "Intention to cause bodily injury sufficient in ordinary course to cause death";
+                mens_rea intent3 := "Intention to cause bodily injury sufficient in ordinary course to cause death" interpretations {
+                    interpretation limb_c {
+                        "Culpable homicide is murder if the intended bodily injury is sufficient in the ordinary course of nature to cause death."
+                        citation "Penal Code 1871 s300(c)"
+                        endorsement binding
+                    }
+                };
                 /// limb (d): knowledge that act is imminently dangerous -- PP v Lim Poh Lye [2005]
-                mens_rea intent4 := "Knowledge that the act is so imminently dangerous that death is virtually certain";
+                mens_rea intent4 := "Knowledge that the act is so imminently dangerous that death is virtually certain" interpretations {
+                    interpretation limb_d {
+                        "The four s300 limbs are disjunctive; limb (d) covers imminently dangerous acts where death is virtually certain."
+                        citation "PP v Lim Poh Lye [2005] 4 SLR 582"
+                        court "CA"
+                        endorsement binding
+                    }
+                };
             }
         }
     }
