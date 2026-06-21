@@ -7,7 +7,6 @@ Contexts: @grammar @ast @lint @lean @verify @transpile @cli @lsp @resolver @libr
 
 ```todo
 (A) 2026-06-21 Update MEMORY.md key paths after fossil deletion +housekeeping @memory effort:XS
-(A) 2026-06-21 Bootstrap LSP server at src/yuho/lsp/ using pygls reading existing tree-sitter parser via parser/wrapper.py +tooling @lsp effort:M
 (A) 2026-06-21 LSP hover surfacing AST node kind + source-locations via parser/source_location.py +tooling @lsp effort:S
 (A) 2026-06-21 LSP diagnostics piping ast/statute_lint.py + ast/type_check.py outputs +tooling @lsp effort:M
 (A) 2026-06-21 LSP goto-definition for cross-section refs via library/reference_graph.py and import resolver +tooling @lsp effort:M

@@ -28,6 +28,7 @@ classifiers = [
 requires-python = ">=3.10"
 dependencies = [
     "click>=8.0,<9.0",
+    "pygls>=2.0,<3.0",
     "tree-sitter>=0.21.0,<1.0",
 ]
 
@@ -49,6 +50,7 @@ all = [
 
 [project.scripts]
 yuho = "yuho.cli:cli"
+yuho-lsp = "yuho.lsp.server:main"
 
 [project.urls]
 Homepage = "https://github.com/gongahkia/yuho"
