@@ -1099,6 +1099,17 @@ class AnnotationNode(ASTNode):
 
 
 @dataclass(frozen=True)
+class JurisdictionNode(ASTNode):
+    """Jurisdiction metadata attached to a statute."""
+
+    name: str
+    meta: Dict[str, str] = field(default_factory=dict)
+
+    def accept(self, visitor: "Visitor"):
+        return visitor.visit_jurisdiction(self)
+
+
+@dataclass(frozen=True)
 class LegalTestNode(ASTNode):
     """Conjunctive legal test: all requirements must hold for the test to pass."""
 
@@ -1207,6 +1218,7 @@ class StatuteNode(ASTNode):
     doc_comment: Optional[str] = None
     jurisdiction: Optional[str] = None
     jurisdiction_meta: Optional[Dict[str, str]] = None
+    jurisdiction_node: Optional[JurisdictionNode] = None
     effective_date: Optional[str] = None  # phase 11: ISO date; first `effective` clause
     effective_dates: Tuple[str, ...] = ()  # G6: all effective clauses (orig + amendments)
     repealed_date: Optional[str] = None  # phase 11: ISO date
@@ -1216,11 +1228,27 @@ class StatuteNode(ASTNode):
     temporal_constraints: Tuple["TemporalConstraintNode", ...] = ()
     annotations: Tuple["AnnotationNode", ...] = ()
 
+    def __post_init__(self):
+        if self.jurisdiction_node is None and self.jurisdiction:
+            object.__setattr__(
+                self,
+                "jurisdiction_node",
+                JurisdictionNode(
+                    name=self.jurisdiction,
+                    meta=dict(self.jurisdiction_meta or {}),
+                ),
+            )
+        elif self.jurisdiction_node is not None and self.jurisdiction is None:
+            object.__setattr__(self, "jurisdiction", self.jurisdiction_node.name)
+            object.__setattr__(self, "jurisdiction_meta", dict(self.jurisdiction_node.meta))
+
     def accept(self, visitor: "Visitor"):
         return visitor.visit_statute(self)
 
     def children(self) -> List[ASTNode]:
         result: List[ASTNode] = []
+        if self.jurisdiction_node:
+            result.append(self.jurisdiction_node)
         if self.title:
             result.append(self.title)
         result.extend(self.definitions)

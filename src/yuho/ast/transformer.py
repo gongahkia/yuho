@@ -193,6 +193,9 @@ class Transformer(Visitor):
     def visit_statute(self, node):
         return self.transform_statute(node)
 
+    def visit_jurisdiction(self, node):
+        return self.transform_jurisdiction(node)
+
     def visit_import(self, node):
         return self.transform_import(node)
 
@@ -702,23 +705,36 @@ class Transformer(Visitor):
             )
         return node
 
+    def transform_jurisdiction(self, node: nodes.JurisdictionNode) -> nodes.JurisdictionNode:
+        return node
+
     def transform_statute(self, node: nodes.StatuteNode) -> nodes.StatuteNode:
+        new_jurisdiction = self._transform_optional_typed(node.jurisdiction_node)
         new_title = self._transform_optional_typed(node.title)
         new_defs, defs_changed = self._transform_children_typed(list(node.definitions))
         new_elems, elems_changed = self._transform_children_typed(list(node.elements))
         new_penalty = self._transform_optional_typed(node.penalty)
+        new_additional_penalties, additional_penalties_changed = self._transform_children_typed(
+            list(node.additional_penalties)
+        )
         new_illus, illus_changed = self._transform_children_typed(list(node.illustrations))
         new_exc, exc_changed = self._transform_children_typed(list(node.exceptions))
         new_cl, cl_changed = self._transform_children_typed(list(node.case_law))
+        new_subsections, subsections_changed = self._transform_children_typed(
+            list(node.subsections)
+        )
 
         if (
-            new_title is not node.title
+            new_jurisdiction is not node.jurisdiction_node
+            or new_title is not node.title
             or defs_changed
             or elems_changed
             or new_penalty is not node.penalty
+            or additional_penalties_changed
             or illus_changed
             or exc_changed
             or cl_changed
+            or subsections_changed
         ):
             return nodes.StatuteNode(
                 section_number=node.section_number,
@@ -729,6 +745,20 @@ class Transformer(Visitor):
                 illustrations=new_illus,
                 exceptions=new_exc,
                 case_law=new_cl,
+                subsections=new_subsections,
+                additional_penalties=new_additional_penalties,
+                doc_comment=node.doc_comment,
+                jurisdiction=node.jurisdiction,
+                jurisdiction_meta=node.jurisdiction_meta,
+                jurisdiction_node=new_jurisdiction,
+                effective_date=node.effective_date,
+                effective_dates=node.effective_dates,
+                repealed_date=node.repealed_date,
+                subsumes=node.subsumes,
+                amends=node.amends,
+                parties=node.parties,
+                temporal_constraints=node.temporal_constraints,
+                annotations=node.annotations,
                 source_location=node.source_location,
             )
         return node

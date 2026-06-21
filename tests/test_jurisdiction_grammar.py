@@ -17,7 +17,10 @@ statute 1 "Demo" jurisdiction singapore effective 2020-01-01 {
 
     analysis = analyze_source(source, file="<jurisdiction>", run_semantic=False)
     assert not analysis.parse_errors
-    assert analysis.ast.statutes[0].jurisdiction == "singapore"
+    statute = analysis.ast.statutes[0]
+    assert statute.jurisdiction == "singapore"
+    assert statute.jurisdiction_node
+    assert statute.jurisdiction_node.name == "singapore"
 
 
 def test_statute_jurisdiction_string_overrides_doc_comment():
@@ -30,4 +33,7 @@ statute 1 "Demo" jurisdiction "india" {
     analysis = analyze_source(source, file="<jurisdiction>", run_semantic=False)
 
     assert not analysis.parse_errors
-    assert analysis.ast.statutes[0].jurisdiction == "india"
+    statute = analysis.ast.statutes[0]
+    assert statute.jurisdiction == "india"
+    assert statute.jurisdiction_node
+    assert statute.jurisdiction_node.name == "india"

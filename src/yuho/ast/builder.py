@@ -1145,6 +1145,15 @@ class ASTBuilder:
             if jurisdiction_node
             else doc_jurisdiction
         )
+        jurisdiction_ast_node = (
+            nodes.JurisdictionNode(
+                name=jurisdiction,
+                meta=dict(jurisdiction_meta or {}),
+                source_location=self._loc(jurisdiction_node or node),
+            )
+            if jurisdiction
+            else None
+        )
 
         # phase 11/13: temporal and hierarchy metadata
         # G6: collect all effective_date fields (the grammar now allows `repeat(...)`)
@@ -1168,6 +1177,7 @@ class ASTBuilder:
             doc_comment=doc,
             jurisdiction=jurisdiction,
             jurisdiction_meta=jurisdiction_meta,
+            jurisdiction_node=jurisdiction_ast_node,
             effective_date=effective_dates[0] if effective_dates else None,
             effective_dates=effective_dates,                    # G6
             repealed_date=self._text(repealed_node) if repealed_node else None,

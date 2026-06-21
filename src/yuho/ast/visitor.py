@@ -289,6 +289,9 @@ class Visitor:
     def visit_annotation(self, node: nodes.AnnotationNode) -> Any:
         return self.generic_visit(node)
 
+    def visit_jurisdiction(self, node: nodes.JurisdictionNode) -> Any:
+        return self.generic_visit(node)
+
     def visit_legal_test(self, node: nodes.LegalTestNode) -> Any:
         return self.generic_visit(node)
 

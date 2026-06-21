@@ -34,6 +34,8 @@ class SymbolKind(Enum):
     ENUM_VARIANT = auto()
     TYPE_ALIAS = auto()
     IMPORTED = auto()  # symbol injected from another module
+    JURISDICTION = auto()
+    DEFINITION = auto()
 
 
 @dataclass
@@ -51,6 +53,8 @@ class Symbol:
     members: Dict[str, "Symbol"] = field(default_factory=dict)
     # source module path for imported symbols
     source_module: Optional[str] = None
+    # jurisdiction key for statute-local symbols
+    jurisdiction: Optional[str] = None
 
 
 @dataclass
@@ -124,6 +128,8 @@ class ScopeAnalysisResult:
     references: Dict[int, Symbol] = field(default_factory=dict)
     # all scopes created
     all_scopes: List[Scope] = field(default_factory=list)
+    # jurisdiction -> definition term -> symbols
+    jurisdiction_definitions: Dict[str, Dict[str, List[Symbol]]] = field(default_factory=dict)
 
     @property
     def has_errors(self) -> bool:
@@ -194,6 +200,7 @@ class ScopeAnalysisVisitor(Visitor):
         self.result.all_scopes.append(self._current_scope)
         self._resolver = resolver  # Optional[ModuleResolver]
         self._source_file = Path(source_file) if source_file else None
+        self._current_jurisdiction: Optional[str] = None
 
     def _push_scope(self, name: str) -> Scope:
         """Create a new child scope and enter it."""
@@ -219,6 +226,7 @@ class ScopeAnalysisVisitor(Visitor):
         node: Optional[nodes.ASTNode] = None,
         type_annotation: Optional[str] = None,
         source_module: Optional[str] = None,
+        jurisdiction: Optional[str] = None,
     ) -> Symbol:
         """Define a new symbol in the current scope."""
         line = 0
@@ -234,6 +242,7 @@ class ScopeAnalysisVisitor(Visitor):
             line=line,
             column=column,
             source_module=source_module,
+            jurisdiction=jurisdiction,
         )
         error = self._current_scope.define(symbol)
         if error:
@@ -428,6 +437,21 @@ class ScopeAnalysisVisitor(Visitor):
             self.visit(node.value)
         return self.generic_visit(node)
 
+    def visit_definition_entry(self, node: nodes.DefinitionEntry) -> None:
+        """Define a statute-local definition and index it by jurisdiction."""
+        jurisdiction = self._current_jurisdiction or "<unspecified>"
+        symbol = self._define_symbol(
+            name=node.term,
+            kind=SymbolKind.DEFINITION,
+            node=node,
+            type_annotation="definition",
+            jurisdiction=jurisdiction,
+        )
+        table = self.result.jurisdiction_definitions.setdefault(jurisdiction, {})
+        table.setdefault(node.term, []).append(symbol)
+        self.visit(node.definition)
+        return None
+
     # =========================================================================
     # Identifier references
     # =========================================================================
@@ -503,14 +527,39 @@ class ScopeAnalysisVisitor(Visitor):
 
     def visit_statute(self, node: nodes.StatuteNode) -> None:
         """Create scope for statute definitions."""
-        scope_name = f"statute_{node.section_number}"
+        prev_jurisdiction = self._current_jurisdiction
+        self._current_jurisdiction = node.jurisdiction or "<unspecified>"
+        if node.jurisdiction_node:
+            self.visit_jurisdiction(node.jurisdiction_node)
+        scope_name = f"statute_{self._scope_token(self._current_jurisdiction)}_{node.section_number}"
         self._push_scope(scope_name)
         for definition in node.definitions:
             self.visit(definition)
         for element in node.elements:
             self.visit(element)
         self._pop_scope()
+        self._current_jurisdiction = prev_jurisdiction
         return None
+
+    def visit_jurisdiction(self, node: nodes.JurisdictionNode) -> None:
+        """Register a jurisdiction symbol once at module scope."""
+        name = f"jurisdiction:{node.name}"
+        if self.result.root_scope.lookup_local(name):
+            return None
+        symbol = Symbol(
+            name=name,
+            kind=SymbolKind.JURISDICTION,
+            declaration_node=node,
+            line=node.source_location.line if node.source_location else 0,
+            column=node.source_location.col if node.source_location else 0,
+            jurisdiction=node.name,
+        )
+        self.result.root_scope.define(symbol)
+        return None
+
+    @staticmethod
+    def _scope_token(value: str) -> str:
+        return "".join(ch if ch.isalnum() else "_" for ch in value)
 
     # =========================================================================
     # Module entry point

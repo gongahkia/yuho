@@ -130,6 +130,16 @@ _CASE_TREATMENT_NODE = {
     "required": ["_type", "kind", "target"],
 }
 
+_JURISDICTION_NODE = {
+    "type": "object",
+    "properties": {
+        "_type": {"const": "JurisdictionNode"},
+        "name": {"type": "string"},
+        "meta": {"type": "object", "additionalProperties": {"type": "string"}},
+    },
+    "required": ["_type", "name"],
+}
+
 _STATUTE_NODE = {
     "type": "object",
     "properties": {
@@ -142,6 +152,8 @@ _STATUTE_NODE = {
         "illustrations": {"type": "array", "items": {"$ref": "#/$defs/illustration"}},
         "exceptions": {"type": "array", "items": {"$ref": "#/$defs/exception"}},
         "case_law": {"type": "array", "items": {"$ref": "#/$defs/caselaw"}},
+        "jurisdiction": {"type": "string"},
+        "jurisdiction_node": {"$ref": "#/$defs/jurisdiction"},
     },
     "required": ["_type", "section_number", "definitions", "elements"],
 }
@@ -175,6 +187,7 @@ _SCHEMA = {
         "illustration": _ILLUSTRATION_NODE,
         "exception": _EXCEPTION_NODE,
         "caseTreatment": _CASE_TREATMENT_NODE,
+        "jurisdiction": _JURISDICTION_NODE,
         "caselaw": _CASELAW_NODE,
         "statute": _STATUTE_NODE,
     },

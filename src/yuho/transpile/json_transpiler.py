@@ -208,6 +208,10 @@ class JSONTranspiler(TranspilerBase, Visitor):
             result["name"] = node.name
             if node.type_annotation:
                 result["type"] = self._to_dict(node.type_annotation)
+        elif isinstance(node, nodes.JurisdictionNode):
+            result["name"] = node.name
+            if node.meta:
+                result["meta"] = dict(node.meta)
         elif isinstance(node, nodes.ExceptionNode):
             if node.label:
                 result["label"] = node.label
@@ -278,6 +282,8 @@ class JSONTranspiler(TranspilerBase, Visitor):
                 result["jurisdiction"] = node.jurisdiction
             if node.jurisdiction_meta:
                 result["jurisdiction_meta"] = dict(node.jurisdiction_meta)
+            if node.jurisdiction_node:
+                result["jurisdiction_node"] = self._to_dict(node.jurisdiction_node)
             if node.effective_date:
                 result["effective_date"] = node.effective_date
             if node.repealed_date:
