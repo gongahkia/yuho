@@ -6,7 +6,6 @@ Projects: +language +tooling +corpus +housekeeping +education +jurisdiction +pos
 Contexts: @grammar @ast @lint @lean @verify @transpile @cli @lsp @resolver @library @repo @memory @typecheck @docs @scrape @viz @parser @analysis @interpreter @tests.
 
 ```todo
-(A) 2026-06-21 Delete empty fossil dir evals/case_law +housekeeping @repo effort:XS
 (A) 2026-06-21 Delete empty fossil dir simulator +housekeeping @repo effort:XS
 (A) 2026-06-21 Update MEMORY.md key paths after fossil deletion +housekeeping @memory effort:XS
 (A) 2026-06-21 Implement LegalRuleML XML transpiler at src/yuho/transpile/legalruleml_transpiler.py reusing AST deontic/defeasibility metadata +tooling @transpile effort:M
