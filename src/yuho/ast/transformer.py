@@ -184,6 +184,9 @@ class Transformer(Visitor):
     def visit_exception(self, node):
         return self.transform_exception(node)
 
+    def visit_case_treatment(self, node):
+        return self.transform_case_treatment(node)
+
     def visit_caselaw(self, node):
         return self.transform_caselaw(node)
 
@@ -652,7 +655,41 @@ class Transformer(Visitor):
     def transform_exception(self, node: nodes.ExceptionNode) -> nodes.ExceptionNode:
         return node
 
+    def transform_case_treatment(
+        self, node: nodes.CaseTreatmentNode
+    ) -> nodes.CaseTreatmentNode:
+        new_target = self._transform_typed(node.target)
+        new_citation = self._transform_optional_typed(node.citation)
+        if new_target is not node.target or new_citation is not node.citation:
+            return nodes.CaseTreatmentNode(
+                kind=node.kind,
+                target=new_target,
+                citation=new_citation,
+                source_location=node.source_location,
+            )
+        return node
+
     def transform_caselaw(self, node: nodes.CaseLawNode) -> nodes.CaseLawNode:
+        new_case_name = self._transform_typed(node.case_name)
+        new_citation = self._transform_optional_typed(node.citation)
+        new_holding = self._transform_typed(node.holding)
+        new_treatments, treatments_changed = self._transform_children_typed(
+            list(node.treatments)
+        )
+        if (
+            new_case_name is not node.case_name
+            or new_citation is not node.citation
+            or new_holding is not node.holding
+            or treatments_changed
+        ):
+            return nodes.CaseLawNode(
+                case_name=new_case_name,
+                citation=new_citation,
+                holding=new_holding,
+                element_ref=node.element_ref,
+                treatments=new_treatments,
+                source_location=node.source_location,
+            )
         return node
 
     def transform_illustration(self, node: nodes.IllustrationNode) -> nodes.IllustrationNode:

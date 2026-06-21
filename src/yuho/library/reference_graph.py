@@ -3,7 +3,8 @@
 Walks every encoded statute and emits a typed directed edge for each
 explicit cross-section reference (`subsumes`, `amends`) plus implicit
 references (mentions like ``s415`` or ``section 415`` inside element
-descriptions, doc comments, and case-law holdings).
+descriptions, doc comments, and case-law holdings), plus case-law treatment
+relations.
 
 The resulting :class:`ReferenceGraph` answers reachability queries used by
 ``yuho refs``, corpus-wide graph lint, Tarjan-SCC analysis, and the
@@ -26,7 +27,12 @@ from typing import Iterable, List, Optional, Set, Tuple
 from yuho.ast import nodes
 
 
-_EDGE_KINDS = ("subsumes", "amends", "implicit")
+_TREATMENT_EDGE_KINDS = (
+    "treatment_followed",
+    "treatment_distinguished",
+    "treatment_overruled",
+)
+_EDGE_KINDS = ("subsumes", "amends", "implicit", *_TREATMENT_EDGE_KINDS)
 
 # Matches "s415", "s.415", "s. 415", "s.415A", "s. 376AA", "section 415",
 # "section 415A", and "Section 415" with optional trailing alpha suffix.
@@ -287,6 +293,10 @@ class ReferenceGraph:
                 "n_subsumes": self.edge_count("subsumes"),
                 "n_amends": self.edge_count("amends"),
                 "n_implicit": self.edge_count("implicit"),
+                "n_treatment": sum(self.edge_count(kind) for kind in _TREATMENT_EDGE_KINDS),
+                "n_treatment_followed": self.edge_count("treatment_followed"),
+                "n_treatment_distinguished": self.edge_count("treatment_distinguished"),
+                "n_treatment_overruled": self.edge_count("treatment_overruled"),
             },
         }
 
@@ -313,6 +323,11 @@ def _normalise_section(raw: str) -> str:
     elif lower.startswith("s") and len(s) > 1 and s[1].isdigit():
         s = s[1:]
     return s
+
+
+def _case_node(case_name: str) -> str:
+    """Canonical graph node id for a case-law authority."""
+    return f"case:{case_name.strip()}"
 
 
 def _gather_strings(node: nodes.ASTNode, depth: int = 0) -> List[str]:
@@ -375,6 +390,20 @@ def add_edges_from_module(
                 source_path=source_path,
             ))
             added += 1
+
+        for case in stat.case_law:
+            src_case = _case_node(case.case_name.value)
+            for treatment in case.treatments:
+                kind = f"treatment_{treatment.kind}"
+                target = treatment.target.value
+                graph.add(ReferenceEdge(
+                    src=src_case,
+                    dst=_case_node(target),
+                    kind=kind,
+                    source_path=source_path,
+                    snippet=target[:120].strip().replace("\n", " "),
+                ))
+                added += 1
 
         # Implicit edges from every string-bearing node under the statute.
         seen_pairs: Set[Tuple[str, str]] = set()

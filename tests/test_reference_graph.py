@@ -102,6 +102,17 @@ class TestReferenceGraph:
         assert d["stats"]["n_subsumes"] == 1
         assert d["stats"]["n_implicit"] == 1
 
+    def test_treatment_edge_kind(self):
+        self.g.add(ReferenceEdge(
+            src="case:Foo v Bar",
+            dst="case:Old v Case",
+            kind="treatment_overruled",
+            source_path="x",
+        ))
+        edge = self.g.outgoing("case:Foo v Bar", kinds=["treatment_overruled"])[0]
+        assert edge.dst == "case:Old v Case"
+        assert self.g.to_dict()["stats"]["n_treatment_overruled"] == 1
+
 
 class TestSCC:
     """Tarjan SCC + cycle detection over the reference graph."""
@@ -195,6 +206,33 @@ class TestSCC:
         sccs = self.g.find_sccs()
         order = [c[0] for c in sccs]
         assert order.index("C") < order.index("B") < order.index("A")
+
+
+class TestBuildTreatments:
+    def test_build_reference_graph_emits_case_treatment_edges(self, tmp_path):
+        library = tmp_path / "library"
+        section_dir = library / "s1_demo"
+        section_dir.mkdir(parents=True)
+        (section_dir / "statute.yh").write_text(
+            """
+statute 1 "Demo" {
+  elements { actus_reus act := "x"; }
+  caselaw "Foo v Bar" "[2020] SGCA 1" {
+    "holding"
+    treatment overruled "Old v Case" "[1990] 1 SLR 1"
+  }
+}
+""",
+            encoding="utf-8",
+        )
+
+        graph = build_reference_graph(library)
+
+        edges = graph.outgoing("case:Foo v Bar", kinds=["treatment_overruled"])
+        assert len(edges) == 1
+        assert edges[0].dst == "case:Old v Case"
+        assert edges[0].source_path == "library/s1_demo/statute.yh"
+        assert graph.to_dict()["stats"]["n_treatment"] == 1
 
 
 @pytest.mark.skipif(

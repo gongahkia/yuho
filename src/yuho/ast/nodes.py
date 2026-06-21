@@ -1033,6 +1033,24 @@ class ExceptionNode(ASTNode):
 
 
 @dataclass(frozen=True)
+class CaseTreatmentNode(ASTNode):
+    """Treatment of an earlier case by a case-law authority."""
+
+    kind: str
+    target: StringLit
+    citation: Optional[StringLit] = None
+
+    def accept(self, visitor: "Visitor"):
+        return visitor.visit_case_treatment(self)
+
+    def children(self) -> List[ASTNode]:
+        result: List[ASTNode] = [self.target]
+        if self.citation:
+            result.append(self.citation)
+        return result
+
+
+@dataclass(frozen=True)
 class CaseLawNode(ASTNode):
     """
     Case law reference associated with a statute.
@@ -1044,6 +1062,7 @@ class CaseLawNode(ASTNode):
     citation: Optional[StringLit] = None
     holding: StringLit = field(default_factory=lambda: StringLit(value=""))
     element_ref: Optional[str] = None  # name of element this case interprets
+    treatments: Tuple[CaseTreatmentNode, ...] = ()
 
     def accept(self, visitor: "Visitor"):
         return visitor.visit_caselaw(self)
@@ -1052,6 +1071,7 @@ class CaseLawNode(ASTNode):
         result: List[ASTNode] = [self.case_name, self.holding]
         if self.citation:
             result.append(self.citation)
+        result.extend(self.treatments)
         return result
 
 

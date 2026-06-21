@@ -1592,6 +1592,7 @@ class ASTBuilder:
         citation_node = self._child_by_field(node, "citation")
         holding_node = self._child_by_field(node, "holding")
         element_ref_node = self._child_by_field(node, "element_ref")
+        treatment_nodes = self._children_by_field(node, "treatment")
 
         case_name = (
             self._build_string_lit(case_name_node) if case_name_node else nodes.StringLit(value="")
@@ -1607,6 +1608,23 @@ class ASTBuilder:
             citation=citation,
             holding=holding,
             element_ref=element_ref,
+            treatments=tuple(self._build_case_treatment(child) for child in treatment_nodes),
+            source_location=self._loc(node),
+        )
+
+    def _build_case_treatment(self, node) -> nodes.CaseTreatmentNode:
+        """Build CaseTreatmentNode from treatment_clause node."""
+        kind_node = self._child_by_field(node, "kind")
+        target_node = self._child_by_field(node, "target")
+        citation_node = self._child_by_field(node, "citation")
+        return nodes.CaseTreatmentNode(
+            kind=self._text(kind_node) if kind_node else "",
+            target=(
+                self._build_string_lit(target_node)
+                if target_node
+                else nodes.StringLit(value="")
+            ),
+            citation=self._build_string_lit(citation_node) if citation_node else None,
             source_location=self._loc(node),
         )
 

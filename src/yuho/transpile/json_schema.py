@@ -111,8 +111,23 @@ _CASELAW_NODE = {
         "citation": {"$ref": "#/$defs/stringLit"},
         "holding": {"$ref": "#/$defs/stringLit"},
         "element_ref": {"type": ["string", "null"]},
+        "treatments": {
+            "type": "array",
+            "items": {"$ref": "#/$defs/caseTreatment"},
+        },
     },
     "required": ["_type", "case_name"],
+}
+
+_CASE_TREATMENT_NODE = {
+    "type": "object",
+    "properties": {
+        "_type": {"const": "CaseTreatmentNode"},
+        "kind": {"enum": ["followed", "distinguished", "overruled"]},
+        "target": {"$ref": "#/$defs/stringLit"},
+        "citation": {"$ref": "#/$defs/stringLit"},
+    },
+    "required": ["_type", "kind", "target"],
 }
 
 _STATUTE_NODE = {
@@ -159,6 +174,7 @@ _SCHEMA = {
         "penalty": _PENALTY_NODE,
         "illustration": _ILLUSTRATION_NODE,
         "exception": _EXCEPTION_NODE,
+        "caseTreatment": _CASE_TREATMENT_NODE,
         "caselaw": _CASELAW_NODE,
         "statute": _STATUTE_NODE,
     },

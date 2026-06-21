@@ -218,6 +218,11 @@ class JSONTranspiler(TranspilerBase, Visitor):
                 result["priority"] = node.priority
             if node.defeats:
                 result["defeats"] = node.defeats
+        elif isinstance(node, nodes.CaseTreatmentNode):
+            result["kind"] = node.kind
+            result["target"] = self._to_dict(node.target)
+            if node.citation:
+                result["citation"] = self._to_dict(node.citation)
         elif isinstance(node, nodes.CaseLawNode):
             result["case_name"] = self._to_dict(node.case_name)
             if node.citation:
@@ -225,6 +230,8 @@ class JSONTranspiler(TranspilerBase, Visitor):
             result["holding"] = self._to_dict(node.holding)
             if node.element_ref:
                 result["element_ref"] = node.element_ref
+            if node.treatments:
+                result["treatments"] = [self._to_dict(t) for t in node.treatments]
         elif isinstance(node, nodes.PenaltyNode):
             if node.imprisonment_min:
                 result["imprisonment_min"] = self._to_dict(node.imprisonment_min)

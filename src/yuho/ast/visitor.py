@@ -268,6 +268,9 @@ class Visitor:
     def visit_undercuts_relation(self, node: nodes.UndercutsRelation) -> Any:
         return self.generic_visit(node)
 
+    def visit_case_treatment(self, node: nodes.CaseTreatmentNode) -> Any:
+        return self.generic_visit(node)
+
     def visit_caselaw(self, node: nodes.CaseLawNode) -> Any:
         return self.generic_visit(node)
 
