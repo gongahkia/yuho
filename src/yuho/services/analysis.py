@@ -420,6 +420,7 @@ def analyze_file(
     *,
     run_semantic: bool = True,
     encoding: str = "utf-8",
+    features: Optional[set[str]] = None,
 ) -> AnalysisResult:
     """
     Analyze source from a file path.
@@ -495,7 +496,12 @@ def analyze_file(
             ],
         )
 
-    return analyze_source(source, file=str(file_path), run_semantic=run_semantic)
+    return analyze_source(
+        source,
+        file=str(file_path),
+        run_semantic=run_semantic,
+        features=features,
+    )
 
 
 def analyze_source(
@@ -503,6 +509,7 @@ def analyze_source(
     *,
     file: str = "<string>",
     run_semantic: bool = True,
+    features: Optional[set[str]] = None,
 ) -> AnalysisResult:
     """
     Analyze source text through parse, AST build, and semantic checks.
@@ -544,6 +551,7 @@ def analyze_source(
             parser.parse,
             source,
             file=file,
+            features=features,
             message="Failed to parse source",
         )
     except ParserBoundaryError as exc:

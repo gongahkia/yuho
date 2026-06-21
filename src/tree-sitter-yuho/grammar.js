@@ -466,6 +466,7 @@ module.exports = grammar({
       field('element_type', choice(
         'actus_reus', 'mens_rea', 'circumstance',
         'obligation', 'prohibition', 'permission', // phase 10: deontic
+        $.civil_element_type,
       )),
       field('name', $.identifier),
       ':=',
@@ -477,6 +478,13 @@ module.exports = grammar({
       optional(seq('interpretations', '{', repeat(field('interpretation', $.interpretation_block)), '}')),
       optional(';'),
     ),
+
+    civil_element_type: $ => token(choice(
+      'party',
+      'obligation_to',
+      'condition_precedent',
+      'breach',
+    )),
 
     interpretation_block: $ => seq(
       'interpretation',

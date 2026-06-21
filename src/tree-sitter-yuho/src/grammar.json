@@ -2021,6 +2021,10 @@
               {
                 "type": "STRING",
                 "value": "permission"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "civil_element_type"
               }
             ]
           }
@@ -2185,6 +2189,30 @@
           ]
         }
       ]
+    },
+    "civil_element_type": {
+      "type": "TOKEN",
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "STRING",
+            "value": "party"
+          },
+          {
+            "type": "STRING",
+            "value": "obligation_to"
+          },
+          {
+            "type": "STRING",
+            "value": "condition_precedent"
+          },
+          {
+            "type": "STRING",
+            "value": "breach"
+          }
+        ]
+      }
     },
     "interpretation_block": {
       "type": "SEQ",

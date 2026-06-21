@@ -4,7 +4,7 @@ Parser wrapper class for tree-sitter based Yuho parsing.
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional, List, Iterator
+from typing import Iterable, Optional, List, Iterator, Set
 import logging
 import os
 import threading
@@ -16,6 +16,7 @@ logger = logging.getLogger(__name__)
 MAX_FILE_SIZE = 10 * 1024 * 1024
 MAX_SOURCE_LENGTH = 10 * 1024 * 1024
 VALID_EXTENSIONS = {".yh", ".yuho"}
+CIVIL_ELEMENT_TYPES = {"party", "obligation_to", "condition_precedent", "breach"}
 
 # Module-level parser cache for performance
 _parser_cache: Optional["Parser"] = None
@@ -179,7 +180,12 @@ class Parser:
             source = source[1:]
         return source
 
-    def parse(self, source: str, file: str = "<string>") -> ParseResult:
+    def parse(
+        self,
+        source: str,
+        file: str = "<string>",
+        features: Optional[Iterable[str]] = None,
+    ) -> ParseResult:
         """
         Parse a Yuho source string.
 
@@ -205,7 +211,11 @@ class Parser:
             return ParseResult(tree=None, errors=[error], source=source, file=file)
 
         # Collect errors by walking the tree
+        enabled_features = set(features or ())
         errors = list(self._collect_errors(tree.root_node, source, file))
+        errors.extend(
+            self._collect_feature_errors(tree.root_node, source, file, enabled_features)
+        )
 
         return ParseResult(
             tree=tree,
@@ -214,7 +224,11 @@ class Parser:
             file=file,
         )
 
-    def parse_file(self, path: str | Path) -> ParseResult:
+    def parse_file(
+        self,
+        path: str | Path,
+        features: Optional[Iterable[str]] = None,
+    ) -> ParseResult:
         """
         Parse a Yuho source file.
 
@@ -258,7 +272,34 @@ class Parser:
         except PermissionError as e:
             raise PermissionError(f"cannot read file: {path} ({e})") from e
 
-        return self.parse(source, file=str(path))
+        return self.parse(source, file=str(path), features=features)
+
+    def _collect_feature_errors(
+        self,
+        node,
+        source: str,
+        file: str,
+        enabled_features: Set[str],
+    ) -> Iterator[ParseError]:
+        if "civil" in enabled_features:
+            return
+        if node.type == "element_entry" and self._is_civil_element(node, source):
+            yield ParseError(
+                message="civil-law primitive requires --feature=civil",
+                location=SourceLocation.from_tree_sitter_node(node, file),
+                node_type="FEATURE:civil",
+            )
+            return
+        for child in node.children:
+            yield from self._collect_feature_errors(child, source, file, enabled_features)
+
+    def _is_civil_element(self, node, source: str) -> bool:
+        element_type = node.child_by_field_name("element_type")
+        if element_type is None:
+            return False
+        source_bytes = source.encode("utf-8")
+        text = source_bytes[element_type.start_byte:element_type.end_byte].decode("utf-8")
+        return text in CIVIL_ELEMENT_TYPES
 
     def _collect_errors(self, node, source: str, file: str) -> Iterator[ParseError]:
         """

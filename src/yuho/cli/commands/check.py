@@ -112,6 +112,7 @@ def run_check(
     metrics: bool = False,
     output_format: str = "text",
     syntax_only: bool = False,
+    features: Optional[set[str]] = None,
 ) -> None:
     """
     Parse and validate a Yuho source file.
@@ -134,9 +135,14 @@ def run_check(
     # Parse + AST via shared analysis service
     if file == "-":
         stdin_source = sys.stdin.read()
-        analysis = analyze_source(stdin_source, file=file_label, run_semantic=not syntax_only)
+        analysis = analyze_source(
+            stdin_source,
+            file=file_label,
+            run_semantic=not syntax_only,
+            features=features,
+        )
     else:
-        analysis = analyze_file(file, run_semantic=not syntax_only)
+        analysis = analyze_file(file, run_semantic=not syntax_only, features=features)
 
     payload = analysis.validation_payload(include_metrics=metrics)
     payload["mode"] = "syntax-only" if syntax_only else "full"

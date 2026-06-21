@@ -62,6 +62,13 @@ def cli(ctx: click.Context, verbose: bool, use_color: Optional[bool], quiet: boo
     help="Output format",
 )
 @click.option("--syntax-only", is_flag=True, help="Skip semantic analysis")
+@click.option(
+    "--feature",
+    "features",
+    multiple=True,
+    type=click.Choice(["civil"]),
+    help="Enable experimental language feature",
+)
 @click.pass_context
 def check(
     ctx: click.Context,
@@ -71,6 +78,7 @@ def check(
     metrics: bool,
     output_format: str,
     syntax_only: bool,
+    features: tuple[str, ...],
 ) -> None:
     """Parse and validate a Yuho source file."""
     from yuho.cli.commands.check import run_check
@@ -83,6 +91,7 @@ def check(
         metrics=metrics,
         output_format=output_format,
         syntax_only=syntax_only,
+        features=set(features),
     )
 
 
