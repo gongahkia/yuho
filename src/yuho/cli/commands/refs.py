@@ -231,7 +231,7 @@ def _short(text: str, width: int = 60) -> str:
 
 
 # =====================================================================
-# §8 cross-jurisdiction comparative-analysis surface (`--compare-libraries`)
+# Cross-jurisdiction comparative-analysis surface (`--compare-libraries`)
 # ---------------------------------------------------------------------
 # Phase 1 (this skeleton, 2026-04-30): structural-overlap + divergence
 # at the bare-section-number level. Works against any library shape:
@@ -375,8 +375,8 @@ def run_compare_libraries(
         "phase": "phase-1-section-number-overlap",
         "phase_2_pending": (
             "SCC-overlap, divergent-amendment-paths, renumbered/added/"
-            "repealed analysis pending IPC corpus encoding (deferred per "
-            "TODO §8 — months of agent runs to encode 493 IPC sections)"
+            "repealed analysis pending IPC corpus encoding (deferred; "
+            "months of agent runs to encode 493 IPC sections)"
         ),
     }
 

@@ -7,12 +7,9 @@ encoded Yuho module: each statute becomes an ``<section>`` with nested
 ``<num>``, ``<heading>``, ``<content>`` containing definitions and
 elements, and ``<exception>`` blocks for prioritised exceptions.
 
-Scope (intentional, per the paper's Akoma Ntoso decision criterion):
-this transpiler is the structural on-ramp described in the
-applicability section of the paper. It produces a syntactically valid
-AKN skeleton; full schema validation requires the OASIS XSD and is
-out of scope for the proof of concept (``xmllint --schema akoma-ntoso-1.0.xsd``
-is the natural follow-up).
+Scope: this transpiler is a structural on-ramp to LegalDocML. It
+produces a syntactically valid AKN skeleton; full schema validation
+requires the OASIS XSD (``python scripts/akn_roundtrip.py --xsd``).
 
 Output shape
 ------------

@@ -12,11 +12,10 @@ runs ``yuho narrow-defence offence defence`` and records:
   in the returned model — per side;
 * per-defence and per-cluster aggregation.
 
-Output is the empirical artefact paper §7.6's ``defeats edge
-coverage'' paragraph cites: it shows that the bulk-inserted
-edges are not just syntactically present but Z3-actionable. The
-sweep ran end-to-end after the Direction B v3 expansion (610
-edges across 147 sections; 15 distinct Chapter IV defences).
+Output shows that the bulk-inserted ``defeats`` edges are not just
+syntactically present but Z3-actionable. The sweep ran end-to-end after
+the Direction B v3 expansion (610 edges across 147 sections; 15 distinct
+Chapter IV defences).
 
 Usage::
 

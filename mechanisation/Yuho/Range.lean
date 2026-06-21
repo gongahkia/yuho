@@ -1,13 +1,11 @@
 /-
 Range.lean — algebraic-style alternative surface to `Penalty.admits`.
 
-Per `paper/sections/soundness.tex` §6.5 footnote and the §6.5-v4
-"v5 follow-ups" entry in `Penalty.lean`, the paper writes
-`R₁ ⊔ ⋯ ⊔ Rₖ` for cumulative penalties and `R₁ ⊓ ⋯ ⊓ Rₖ` for
-or-both penalties. The current `Penalty.cumulative` / `Penalty.orBoth`
-constructors capture the same operational shape via the
-`Penalty.admits` predicate but use list-of-children syntax rather
-than infix algebra.
+This file exposes algebraic notation: `R₁ ⊔ ⋯ ⊔ Rₖ` for cumulative
+penalties and `R₁ ⊓ ⋯ ⊓ Rₖ` for or-both penalties. The current
+`Penalty.cumulative` / `Penalty.orBoth` constructors capture the same
+operational shape via the `Penalty.admits` predicate but use
+list-of-children syntax rather than infix algebra.
 
 This file exposes:
 
@@ -20,9 +18,9 @@ This file exposes:
     pinning the algebraic surface to the operational
     `Penalty.admits` predicate.
 
-Nothing semantically new lives here; the §6.5 lemma is unchanged.
-The file is a usability layer for downstream proofs and tutorials
-that prefer the paper's algebraic notation. -/
+Nothing semantically new lives here; the penalty correspondence theorem
+is unchanged. The file is a usability layer for downstream proofs and
+tutorials that prefer algebraic notation. -/
 
 import Yuho.Penalty
 
@@ -50,8 +48,8 @@ abbrev orBothMeet (rs : List Range) : Range :=
 
 These pin the algebraic surface to the operational `Penalty.admits`
 predicate, so users phrasing penalties in `cumulativeJoin` /
-`orBothMeet` notation can immediately appeal to the §6.5
-soundness lemma. -/
+`orBothMeet` notation can immediately appeal to the penalty soundness
+lemma. -/
 
 /-- **`cumulativeJoin` admits `fp` iff every component admits.**
 Forward direction reuses `penalty_correspondence_cumulative`. -/

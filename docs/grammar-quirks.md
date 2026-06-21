@@ -47,7 +47,7 @@ comments were stripped from
 `library/penal_code/*/test_statute.yh` on 2026-04-29 (commit
 `ccca70dd`); the runtime sweep
 `scripts/verify_runtime_tests.py` (wired into
-`make verify-runtime-tests` and `make paper-reproduce`) gates on
+`make verify-runtime-tests` and `make verify-all`) gates on
 all 90 rich tests passing assertion eval. New fixtures should
 follow the same convention until the grammar restructure lands.
 
@@ -75,5 +75,5 @@ follow the same convention until the grammar restructure lands.
 `test_statute.yh`. It fails CI on any assertion-eval failure or
 interpreter error, so a future regression of the comment pattern
 surfaces immediately. The sweep is also part of `make
-paper-reproduce`, so the headline reproducibility run reports the
-runtime-test result alongside coverage / AKN XSD / mechanisation.
+verify-all`, so the full verification run reports the runtime-test
+result alongside coverage / AKN XSD / mechanisation.

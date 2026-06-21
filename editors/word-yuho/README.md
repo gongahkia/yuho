@@ -9,8 +9,8 @@ Office Add-in that lives in the **Insert** ribbon of Microsoft Word
   a bulleted element list directly into the active document
 
 This is the **practitioner-facing surface** described in the project's
-delivery order — it sequences after the citable research artefacts
-(paper, JSON corpus, browser extension, static explorer site).
+delivery order — it sequences after the JSON corpus, browser extension,
+and static explorer site.
 
 ## Layout
 

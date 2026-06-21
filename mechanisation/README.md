@@ -1,11 +1,11 @@
 # Yuho mechanisation — Lean 4 formal artefact
 
-Machine-checkable Lean 4 mechanisation of the paper-load-bearing
-soundness correspondence in `paper/sections/soundness.tex`. The v9
-artefact covers element, element-graph, exception, cross-section, and
-penalty correspondence, plus generator/canonical-model lemmas and
-cross-reference/apply-scope smoke theorems. It builds with 0 `sorry`s
-under the pinned Lean 4.10.0 toolchain.
+Machine-checkable Lean 4 mechanisation of Yuho's soundness
+correspondence. The v9 artefact covers element, element-graph,
+exception, cross-section, and penalty correspondence, plus
+generator/canonical-model lemmas and cross-reference/apply-scope smoke
+theorems. It builds with 0 `sorry`s under the pinned Lean 4.10.0
+toolchain.
 
 ## Layout
 
@@ -46,7 +46,7 @@ linter warnings.
 
 ## What's mechanised, with file pointers
 
-| Paper claim | File | Theorem name | Proof technique |
+| Mechanised claim | File | Theorem name | Proof technique |
 |---|---|---|---|
 | Lemma 6.2 element correspondence | `Yuho/Soundness.lean` | `element_correspondence` | `rfl` after unfolding `Element.eval` and `SMTModel.facts` |
 | Lemma 6.3 element-graph correspondence | `Yuho/Graph.lean` | `element_graph_correspondence` | Well-founded recursion on `sizeOf g` + list-folding sub-lemmas |
@@ -61,7 +61,7 @@ linter warnings.
 | Cross-section multi-statute discharge (v7) | `Yuho/Cross.lean` | `canonical_cross_satisfies` | Structural induction over `mod.statutes` under qualified-atom-name + section-number uniqueness invariants (linter-enforced) |
 | Cross-section-reference acyclicity (v8) | `Yuho/Cross.lean` | `CrossRefGraph.acyclic` + `acyclic_canonical_cross_satisfies` | Decidable Bool predicate via `reachableIn` fuel ceiling = `nodes.length`; v4 satisfies bundle re-discharged under the linter-enforced acyclicity hypothesis |
 | Deep element-tree base camp (v9) | `Yuho/CrossDeep.lean` | `ElementDeep` AST + `ElementDeep.eval` (fuel-bounded) + `ElementGroup.toDeep` lift + `Statute.deepBody_compat` | Conservative-extension lemma: the v9 deep evaluator agrees with v4–v8 `Statute.elementsSatisfied` on the existing `crossRef`-free surface library at every fuel budget; mutual induction over `ElementGroup` / `List ElementGroup` |
-| `applyScope` lift + cross-ref semantics smoke (v9) | `Yuho/CrossDeep.lean` | `ElementDeep.applyScope` constructor + `eval_crossRef_resolves` / `eval_applyScope_resolves` / `_missing` / `_zero_fuel` (six theorems) | Each branch of the `crossRef` / `applyScope` evaluator is pinned to its §3 inference rule (`is_infringed(n)` → ambient-facts `Statute.convicts`; `apply_scope(n, F')` → substituted-facts `Statute.convicts`; out-of-module → `false`; fuel-exhaustion → `false`) by `simp only` after a `sigma`-lookup hypothesis |
+| `applyScope` lift + cross-ref semantics smoke (v9) | `Yuho/CrossDeep.lean` | `ElementDeep.applyScope` constructor + `eval_crossRef_resolves` / `eval_applyScope_resolves` / `_missing` / `_zero_fuel` (six theorems) | Each branch of the `crossRef` / `applyScope` evaluator is pinned to its inference rule (`is_infringed(n)` → ambient-facts `Statute.convicts`; `apply_scope(n, F')` → substituted-facts `Statute.convicts`; out-of-module → `false`; fuel-exhaustion → `false`) by `simp only` after a `sigma`-lookup hypothesis |
 
 ## Trusted base
 
@@ -122,13 +122,6 @@ There are **no `sorry`s** in `Yuho/`; the only `True`-bodied
 proof structure but is not depended on by any theorem proven in
 this artefact. It reserves the slot for a future expansion of
 Lemma 6.4's proof depth.
-
-## Citing the artefact
-
-In §6.6 of the paper, the artefact is referenced as
-``\texttt{mechanisation/}`` (a sub-directory of the Yuho repo).
-A future Zenodo deposit will give the artefact a citable DOI; the
-`paper/REPRODUCE.md` instructions point at both.
 
 ## Deferring decisions to v2
 

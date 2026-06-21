@@ -4,9 +4,8 @@ Consolidated lessons from Phases A through D of the encoding effort.
 Written after L3 reached 524/524 sections at human-verified tier.
 
 This is an honest retrospective: what worked, what didn't, what we'd do
-differently. Audience: future contributors, paper readers wanting the
-backstory, and anyone considering encoding a different statute family
-under Yuho.
+differently. Audience: future contributors and anyone considering
+encoding a different statute family under Yuho.
 
 ---
 
@@ -61,7 +60,7 @@ Phase D's core mechanism was a dispatcher that renders a structured
 prompt per section and invokes an agentic coder
 (`gpt-5.4` `high`) on each. Three flavours:
 
-- **Re-encoder** (`paper/reproducibility/phase_d_reencode.py`) — given a section, produce a clean encoding from the canonical text + the gap-aware grammar.
+- **Re-encoder** (`docs/researcher/phase-d-reencoding-prompt.md`) — given a section, produce a clean encoding from the canonical text + the gap-aware grammar.
 - **L3 reviewer** (`scripts/l3_audit.py`) — given a section's encoding, run the 11-point checklist and STAMP or FLAG.
 - **Flag-fixer** (`scripts/apply_flag_fix.py`) — given a `_L3_FLAG.md`, apply the minimum edit that addresses the flag.
 
@@ -78,7 +77,7 @@ trail that fed straight into the provenance ledger.
 
 ### 5. Fidelity diagnostics over canonical scrape
 
-Four lint passes that compare the encoded AST to `_raw/act.json` — illustration count, fabricated fine cap, fabricated caning range, disjunctive-connective mismatch — caught the most common encoding errors before they reached L3. They also acted as evidence in the paper: gaps that looked like grammar issues turned out to be diagnostic-layer issues, and the same fidelity check that was the root cause was also the fix.
+Four lint passes that compare the encoded AST to `_raw/act.json` — illustration count, fabricated fine cap, fabricated caning range, disjunctive-connective mismatch — caught the most common encoding errors before they reached L3. They also clarified which gaps were diagnostic-layer issues rather than grammar issues.
 
 ### 6. Single source of truth + radial UIs
 
@@ -201,7 +200,7 @@ encoder upfront would have eliminated the cluster.
 
 The 11-point checklist evolved during Phase D. Sections stamped
 under v1 of the checklist may not satisfy v3 of the checklist. We
-papered over this with timestamps in `metadata.toml` and a final
+worked around this with timestamps in `metadata.toml` and a final
 sweep, but a versioned prompt with explicit "this stamp was issued
 under prompt vN" annotation would have been more rigorous.
 

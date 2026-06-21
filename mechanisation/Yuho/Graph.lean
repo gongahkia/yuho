@@ -1,7 +1,6 @@
 /-
 Graph.lean — v2 mechanisation scaffold for Lemma 6.3
-(element-graph correspondence; cf. `paper/sections/soundness.tex`
-§6.2, lemma `lem:soundness-graph`).
+(element-graph correspondence).
 
 Lemma 6.3 is the structural twin of Catala's bisimulation lemma:
 for every element-tree `Es` in a statute and every satisfying SMT
@@ -192,9 +191,9 @@ decreasing_by
 Once `element_graph_correspondence` is closed, the partial
 conviction lemma (currently in `Soundness.lean`,
 `partial_conviction_correspondence`) is upgradable to the *full*
-conviction correspondence by composing 6.2 + 6.3 + 6.4. We
-declare the upgraded statement here so the §6.6 paper claim has a
-named target to cite once the `sorry` above is discharged.
+conviction correspondence by composing 6.2 + 6.3 + 6.4. We declare the
+upgraded statement here so there is a named target once the proof above
+is discharged.
 -/
 
 /-- **Full conviction correspondence (target).** Statement-only.
@@ -221,10 +220,8 @@ intentionally **out of scope for this file**:
 1. **Wire `full_conviction_correspondence` into Theorem 6.1.** The
    `Soundness.lean::partial_conviction_correspondence` lemma
    becomes a corollary of `full_conviction_correspondence` here.
-   The `Soundness.lean` boundary comment (lines 18–22) drops
-   Lemma 6.3 from the "pen-and-paper-only" list; the paper §6.6
-   boundary statement narrows to {6.5, cross-section composition,
-   oracle-Z3-port}. *Editorial only — no new proof obligations.*
+   The `Soundness.lean` boundary comment drops Lemma 6.3 from the
+   out-of-scope list. *Editorial only — no new proof obligations.*
 
 2. **Cross-section variant.** The cross-section lemma needs a
    separate `GraphSMTModel`-style extension that includes

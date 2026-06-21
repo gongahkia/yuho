@@ -26,9 +26,9 @@ Usage::
     python evals/case_law/score_recommend.py --top-k 10 --json
     python evals/case_law/score_recommend.py --out evals/case_law/results-recommend.json
 
-Output is the structural-agreement-against-courts claim that
-§7.8 of the paper rests on. NOT legal advice: agreement-rate
-measures Yuho-vs-prosecutor alignment, not legal correctness.
+Output is the structural agreement rate against curated court fixtures.
+NOT legal advice: agreement-rate measures Yuho-vs-prosecutor alignment,
+not legal correctness.
 """
 
 from __future__ import annotations

@@ -2,8 +2,7 @@ import Lake
 open Lake DSL
 
 -- Yuho mechanisation: Lemma 6.2 (element correspondence) +
--- Lemma 6.4 (exception correspondence) of the soundness theorem
--- in `paper/sections/soundness.tex`.
+-- Lemma 6.4 (exception correspondence) of the soundness theorem.
 
 package «yuho-mech» where
   leanOptions := #[
@@ -19,8 +18,8 @@ lean_lib «Yuho» where
 lean_lib «Tests» where
   globs := #[.submodules `Tests]
 
--- §6.6 Python-side faithfulness — emits Generator.encodeStatute
--- as JSON for the smoke fixtures. Driven by
+-- Python-side faithfulness — emits Generator.encodeStatute as JSON for
+-- the smoke fixtures. Driven by
 -- scripts/verify_structural_diff.py from the repo root.
 -- The full-corpus fixture file (`scripts/Fixtures.lean`) is
 -- auto-generated; it has to be declared as a lib so lake can

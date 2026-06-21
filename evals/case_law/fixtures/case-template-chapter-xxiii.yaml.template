@@ -11,7 +11,7 @@
 # eLitigation / LawNet URL (the curator should have the judgment
 # open on their machine while filling this template). Without a
 # verifiable URL, do NOT add the fixture — fabricated citations
-# corrupt the §7.8 differential-testing claim.
+# corrupt the differential-testing dataset.
 
 id: case-<short-id>            # kebab-case; matches filename
 case_citation: "<Party> v PP [<year>] <venue> <docket>"
@@ -38,10 +38,9 @@ outcome: |
   pronouncement that makes this a leading authority>
 
 case_summary: |
-  <natural-language summary for paper presentation; capture the
-  court's framing, the doctrinal hook, and the sentencing posture
-  so the §7.8 prose can quote it without needing to revisit the
-  judgment>
+  <natural-language summary for review; capture the court's framing,
+  the doctrinal hook, and the sentencing posture without needing to
+  revisit the judgment>
 
 # Below: simulator-shape fields used by ChargeRecommender.
 section: "377BB"

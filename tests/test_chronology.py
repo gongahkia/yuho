@@ -236,7 +236,7 @@ ruleset rs { jurisdiction := federal; procedure := civil; source_ref := s; }
 deadline_rule dr { ruleset := rs; rule := "R"; trigger := service; offset := 0 days; source_ref := s; direction := sideways; }
 timeline parent { start := 2024-01-01; end := 2024-01-31; jurisdiction := federal; procedure := civil; }
 timeline child { kind := branch; parent := parent; start := 2024-01-01; end := 2024-01-31; jurisdiction := state; loop_count := 0; }
-entity e: evidence { citation := "A"; source := "paper"; appears_on := parent @ 2024-01-01..2024-01-01; }
+entity e: evidence { citation := "A"; source := "source_doc"; appears_on := parent @ 2024-01-01..2024-01-01; }
 entity f: fact { source_ref := s; citation := "B"; continuous := TRUE; recurrence := 0 days; skip := ["bad"]; state := [{ at := "bad", status := "filed" }]; appears_on := parent @ 2024-01-01..2024-01-02; }
 entity g: fact { source_ref := s; citation := "C"; appears_on := parent @ 2024-01-10..2024-01-10; }
 reltype supports { source := evidence; target := fact; required := TRUE; min_inbound := 2; max_inbound := 1; temporal := before; }

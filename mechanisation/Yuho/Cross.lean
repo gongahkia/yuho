@@ -1,8 +1,6 @@
 /-
 Cross.lean — v4 mechanisation of the cross-section composition
-step of Theorem 6.1; cf. `paper/sections/soundness.tex` Lemma
-`lem:soundness-cross` and `paper/sections/semantics.tex`
-\S\ref{subsec:semantics-cross-section}.
+step of Theorem 6.1.
 
 The lemma covers the two cross-section predicates:
 
@@ -52,9 +50,8 @@ place:
    exhibiting a satisfying assignment for any module + facts
    pair under the section-number-uniqueness invariant.
 
-The "well-founded relation over the inter-section reference
-graph" the paper §6.6 boundary statement mentions is *not* needed
-at this abstraction level: the dedupe happens inside the Z3
+The well-founded relation over the inter-section reference graph is
+*not* needed at this abstraction level: the dedupe happens inside the Z3
 generator (`_conviction_bool(n')` declares the atom lazily and
 caches it by name), so by the time we reach the
 `CrossSMTModel.satisfies` biconditional bundle, every reference
@@ -87,7 +84,7 @@ namespace Yuho
 /-! ## §6-cross-v3 layer 1 — Cross-section reference AST -/
 
 /-- A cross-section reference, as it appears in a guard or
-expression. Mirrors §3 of the paper:
+expression:
 
 * `isInfringed n` — re-uses ambient facts.
 * `applyScope n F'` — substitutes a supplied fact pattern.
@@ -102,8 +99,8 @@ inductive SectionRef where
 
 /-- The operational reduction of a cross-section reference under
 an ambient fact pattern and a section lookup table `sigma`
-(written `Σ` in the paper's inference rules). Mirrors the
-`IsInfringed` and `ApplyScope` rules of \S3. -/
+(written `Σ` in inference rules). Mirrors the `IsInfringed` and
+`ApplyScope` rules. -/
 def SectionRef.eval (sigma : String → Option Statute) (F : Facts) :
     SectionRef → Option Bool
   | .isInfringed n   => (sigma n).map (fun s => s.convicts F)
@@ -111,8 +108,7 @@ def SectionRef.eval (sigma : String → Option Statute) (F : Facts) :
 
 /-- A finite section table, derived from a `Module` by
 section_number lookup. Out-of-module references resolve to
-`none`, mirroring the §6.6 boundary statement on cross-library
-references. -/
+`none`. -/
 def Module.lookup (mod : Module) (n : String) : Option Statute :=
   mod.statutes.find? (fun s => s.section_number = n)
 
@@ -245,8 +241,7 @@ linter as cross-library and rejected.
 We therefore state this lemma under the **fact-coincidence
 hypothesis** `s.convicts F' = s.convicts m.facts`, which the
 linter discharges in practice. The *unrestricted* version of this
-lemma is the cross-library case the paper §6.6 boundary statement
-explicitly puts out of scope. -/
+lemma is the unrestricted cross-library case. -/
 theorem apply_scope_correspondence
     (m : CrossSMTModel) (mod : Module) (h : m.satisfies mod)
     (n : String) (F' : Facts) (s : Statute)
@@ -743,8 +738,8 @@ theorem canonical_cross_satisfies
 
 v5 lifted the discharge from singleton to multi-statute
 modules. v7 (this layer) closes the cross-library case the
-paper §6.6 boundary statement previously held out of scope:
-when `apply_scope(n, F')` references a section not in the
+prior boundary previously held out of scope: when
+`apply_scope(n, F')` references a section not in the
 ambient module, the operational `SectionRef.eval` returns
 `none`, and no per-statute correspondence applies. The
 following theorem makes this asymmetry explicit so the

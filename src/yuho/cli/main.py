@@ -1302,7 +1302,7 @@ def eval(ctx: click.Context, file: str, json_output: bool) -> None:
 @click.option("--compare-libraries", "compare_libraries", is_flag=True,
               help="Compare section-number overlap across multiple libraries "
                    "(default: library/penal_code + library/indian_penal_code). "
-                   "§8 cross-jurisdiction comparative-encoding skeleton.")
+                   "Cross-jurisdiction comparative-encoding skeleton.")
 @click.option("--library-path", "library_paths", multiple=True,
               type=click.Path(),
               help="Library root for --compare-libraries (repeatable; "
@@ -1327,7 +1327,7 @@ def refs(
 
     With a section number, prints the edges entering and/or leaving that
     section. Without a section, prints aggregate stats; pass --graph to dump
-    the full graph. Pass --compare-libraries to enter the §8
+    the full graph. Pass --compare-libraries to enter the
     cross-jurisdiction overlap surface.
 
     Examples:

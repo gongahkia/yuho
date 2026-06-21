@@ -2,7 +2,7 @@
 Yuho mechanisation — top-level module.
 
 Re-exports the formal-statement layer (AST + operational semantics
-+ abstract SMT model + soundness lemmas) for the §6.6 paper claim.
++ abstract SMT model + soundness lemmas).
 
 Build: `cd mechanisation && lake build`. Requires the Lean
 toolchain pinned in `lean-toolchain` (Lean 4.10.0+).

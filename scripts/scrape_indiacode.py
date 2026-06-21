@@ -1,5 +1,4 @@
-"""Indian Penal Code 1860 scraper for the §8 cross-jurisdiction
-comparative-encoding paper claim.
+"""Indian Penal Code 1860 scraper for cross-jurisdiction comparison.
 
 Two source backends, both server-rendered HTML (no Playwright needed):
 

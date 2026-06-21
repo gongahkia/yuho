@@ -1,16 +1,13 @@
 /-
 Generator.lean — verified specification of the Yuho Z3 generator;
-v5 mechanisation that discharges the *oracle assumption* of §6.6
-for §6.2 / §6.3 / §6.4 (cf. `paper/sections/soundness.tex` and
-`todo.md` `§6.6 v5` bullet).
+v5 mechanisation that discharges the *oracle assumption* for Lemmas 6.2,
+6.3, and 6.4.
 
 Prior bundle (v1–v4):
   Lemmas 6.2 / 6.3 / 6.4 hold *for any SMT model satisfying the
   four families of biconditionals
   `Z3Generator._generate_statute_constraints` emits*. The
-  *existence* of such a model was assumed (the "oracle
-  assumption" — `paper/sections/limitations.tex` §11 carried the
-  caveat).
+  *existence* of such a model was assumed (the "oracle assumption").
 
 v5 bundle (this file):
   We exhibit constructive `canonicalSMTModel` and
@@ -394,8 +391,7 @@ single-shape constructors
 `canonicalPenaltyFootprintLeaf{Imprisonment,Fine,...}` below
 build the canonical witness for each leaf shape directly. The
 arbitrary-`Penalty` recursive constructor is left to v7
-(tracked in `paper/sections/limitations.tex` §11 and
-`Penalty.lean`'s §6.5-v6 follow-ups). -/
+(tracked in `Penalty.lean`'s v6 follow-ups). -/
 
 /-- Canonical PenaltySMTModel: v5 canonical graph model plus a
 user-supplied footprint. Pure data; the discharge below

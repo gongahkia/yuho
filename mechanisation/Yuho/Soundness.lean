@@ -1,6 +1,5 @@
 /-
-Soundness lemmas — mechanised correspondents of Lemmas 6.2 and 6.4
-from `paper/sections/soundness.tex`.
+Soundness lemmas — mechanised correspondents of Lemmas 6.2 and 6.4.
 
 The two lemmas mechanised here:
 
@@ -15,15 +14,13 @@ The two lemmas mechanised here:
   fact pattern. Catala-style default-logic priorities are
   realised by the topological-order walk of `Exception.firedSet`.
 
-The remaining lemmas of §6 (cross-section composition
-Theorem 6.1's main step, penalty correspondence 6.5) are
-pen-and-paper-only in this artefact and explicitly out of scope.
-Lemma 6.3 (element-graph correspondence) was pen-and-paper-only
-in v1 and is now mechanised in `Yuho/Graph.lean`; the v1 partial
+The remaining lemmas (cross-section composition and penalty
+correspondence) are explicitly out of scope for this file.
+Lemma 6.3 (element-graph correspondence) was out of scope in v1
+and is now mechanised in `Yuho/Graph.lean`; the v1 partial
 result `partial_conviction_correspondence` below is preserved
 unchanged for backward compatibility, and the upgraded
-`full_conviction_correspondence` lives in `Graph.lean`. See §6.6
-of the paper for the rhetorical statement of the boundary.
+`full_conviction_correspondence` lives in `Graph.lean`.
 -/
 
 import Yuho.AST
@@ -83,7 +80,7 @@ private theorem firedSet_prefix_subset
   -- the analogous lemma in their setting. We ship the lemma
   -- statement only; the proof body is `trivial` because the
   -- True statement is vacuous, but the named lemma reserves the
-  -- spot in the proof structure for the §6.6-claim shape.
+  -- spot in the proof structure for the strengthened soundness shape.
   trivial
 
 /-- **Lemma 6.4 (exception correspondence).** For every exception
@@ -113,7 +110,7 @@ the per-element + per-exception biconditionals, the model's
 elements-truth and exception-firing structure agree with the
 operational evaluator's. This is the proximate step toward the
 main Theorem 6.1; the *full* conviction correspondence requires
-Lemma 6.3 (element-graph) which is pen-and-paper in this artefact. -/
+Lemma 6.3 (element-graph). -/
 theorem partial_conviction_correspondence
     (m : SMTModel) (s : Statute) (h : m.satisfies s) :
     m.elementsTruth s = s.elementsSatisfied m.facts ∧

@@ -3,8 +3,7 @@
 Surfaced during bulk encoding of the Singapore Penal Code and during a
 deeper L3-style review by Opus 4.7 acting as the reviewer. This file is
 the historical discovery log; current status is Phase D complete for the
-grammar/resolver items used by the paper. The post-fix incidence counts
-live in `paper/methodology/gap_frequency.json`.
+grammar/resolver items used by the corpus.
 
 ## Already identified during encoding
 
@@ -51,7 +50,7 @@ encoded has 0; s350 has 8, encoded has 1 *fabricated* one).
 
 **Current status:** illustrations are AST children and the fidelity
 diagnostic compares encoded illustration counts against the canonical
-scrape. The paper reports 98 post-Phase-D illustration-count warnings;
+scrape. The Phase D audit found 98 post-fix illustration-count warnings;
 these are lint findings rather than parser gaps.
 
 ### G5 — subsections with distinct content have no structural home ✅ FIXED
@@ -208,8 +207,8 @@ block, which is legally wrong — the statute requires any one of them.
 
 **Current status:** this is a fidelity diagnostic, not a grammar fix.
 The checker compares raw connective cues against encoded element-group
-shape. The paper reports 208 post-Phase-D G11 warnings and explicitly
-treats the heuristic as low precision.
+shape. The Phase D audit found 208 post-fix G11 warnings and treats the
+heuristic as low precision.
 
 ### G14 — caning liability without stroke count ✅ FIXED
 

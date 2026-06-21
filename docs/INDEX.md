@@ -40,7 +40,7 @@ Yuho to a new statute family.
 
 ## I want to *understand* Yuho — `researcher/`
 
-Audience: paper readers, reviewers, anyone tracing the design rationale.
+Audience: reviewers, contributors, and anyone tracing the design rationale.
 
 - [Formal semantics](researcher/formal-semantics.md) — the grammar's denotational semantics.
 - [Syntax reference](researcher/syntax.md) — every grammar production with examples.
@@ -54,7 +54,7 @@ Audience: paper readers, reviewers, anyone tracing the design rationale.
 
 - [Cookbook](cookbook/) — recipe-style how-tos that don't fit one audience.
 - [Assets](assets/) — diagrams, screenshots, comic / meme variants.
-- [Architecture diagram (SVG)](architecture.svg) — rendered from `paper/figures/architecture.mmd`.
+- [Architecture diagram (SVG)](architecture.svg) — rendered architecture overview.
 - [Retrospective](retrospective.md) — Phase A–D lessons learned + numbers.
 
 The Phase D agent prompts now live under `researcher/`:
@@ -67,5 +67,4 @@ The Phase D agent prompts now live under `researcher/`:
 ## See also
 
 - [Top-level README](../README.md) — project pitch + quickstart.
-- [Research paper draft](../paper/) — full prose treatment of the design.
 - [Encoded library](../library/penal_code/) — the artefact itself.

@@ -1,6 +1,5 @@
 /-
-Operational evaluation rules — §4.2 (elements) and §4.3 (exception
-precedence) of the paper.
+Operational evaluation rules — elements and exception precedence.
 
 We encode the small-step rules as total Bool-valued functions over
 the AST. This makes them computable (so we can `decide` smoke

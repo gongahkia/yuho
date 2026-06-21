@@ -21,9 +21,9 @@ work: every task carries a citable provenance back to a specific section,
 a SHA-256 hash of the canonical SSO text, and the Yuho version that
 encoded it.
 
-The benchmark complements the DSL paper. It is *not* a chatbot benchmark
-or a legal-advice task; it is a structured-reasoning evaluation grounded
-in publicly-available statute text.
+The benchmark complements the DSL and encoded library. It is *not* a
+chatbot benchmark or a legal-advice task; it is a structured-reasoning
+evaluation grounded in publicly-available statute text.
 
 ## Tasks
 

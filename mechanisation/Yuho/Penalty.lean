@@ -1,8 +1,6 @@
 /-
 Penalty.lean — v3 mechanisation of Lemma 6.5 (penalty
-correspondence); cf. `paper/sections/soundness.tex`
-\S\ref{subsec:soundness-penalty}, `lem:soundness-penalty` and
-`paper/sections/semantics.tex` \S\ref{subsec:semantics-penalty}.
+correspondence).
 
 Theorem~\ref{thm:z3-sound} proper concerns conviction; Lemma 6.5
 extends the same shape of correspondence claim to the *penalty*
@@ -46,7 +44,7 @@ kernel-checked. The main theorem `penalty_correspondence` follows
 the same `termination_by sizeOf` template as
 `element_graph_correspondence` in `Graph.lean`.
 
-What is *not* covered by this file (per the §6.6 paper boundary):
+What is *not* covered by this file:
 
 * G8 (`fine := unlimited`) and G14 (`caning := unspecified`)
   sentinels. The leaf rules below admit only finite ranges; the
@@ -99,16 +97,16 @@ structure Footprint where
 
 /-! ## §6.5-v3 layer 2 — Penalty AST -/
 
-/-- The penalty AST. Mirrors §3.4 of the paper:
+/-- The penalty AST:
 
 * `imprisonment lo hi` — imprisonment range in days.
 * `fine lo hi` — fine range in cents.
 * `caning lo hi` — caning range in strokes.
 * `death` — death penalty applicable (single-point "range").
 * `cumulative ps` — every component of every child applies
-  (logical conjunction; `⊔` in the paper's range arithmetic).
+  (logical conjunction; `⊔` in the range arithmetic).
 * `orBoth ps` — at least one child's components apply (logical
-  disjunction; `⊓` in the paper). -/
+  disjunction; `⊓` in the range arithmetic). -/
 inductive Penalty where
   | imprisonment : (lo hi : Nat) → Penalty
   | fine         : (lo hi : Nat) → Penalty
@@ -199,18 +197,15 @@ structure PenaltySMTModel.satisfies (m : PenaltySMTModel) (s : Statute) (p : Pen
 
 /-- **Lemma 6.5 (penalty correspondence).** For every satisfying
 assignment `m`, the model's footprint is admitted by the operational
-range that `p` reduces to. As stated in the paper, this is a
-biconditional; in the Lean encoding the operational range is
-*defined* as `Penalty.admits`, so the lemma reduces to projecting
-the (B-pen) field of the satisfies bundle.
+range that `p` reduces to. In the Lean encoding the operational range is
+*defined* as `Penalty.admits`, so the lemma reduces to projecting the
+(B-pen) field of the satisfies bundle.
 
-The substantive content of the paper's structural-induction
-sketch is encoded in the recursive definition of
-`Penalty.admits` itself: each combinator case folds correctly
-over its children's admissibility. The proof obligations from
-the paper's induction (the cumulative ⊔ and orBoth ⊓ cases)
-become the well-foundedness obligations of the recursive
-definition, discharged by the `termination_by`/`decreasing_by`
+The substantive content of the structural-induction sketch is encoded
+in the recursive definition of `Penalty.admits` itself: each combinator
+case folds correctly over its children's admissibility. The cumulative
+⊔ and orBoth ⊓ cases become the well-foundedness obligations of the
+recursive definition, discharged by the `termination_by`/`decreasing_by`
 template inherited from `Graph.lean`. -/
 theorem penalty_correspondence
     (m : PenaltySMTModel) (s : Statute) (p : Penalty)
@@ -221,9 +216,8 @@ theorem penalty_correspondence
 /-! ### Per-leaf specialisations
 
 The four leaf-case theorems below extract the per-axis numeric
-constraints the paper §6.5 leaf-case sketch states. They
-kernel-check by direct unfolding of `Penalty.admits` plus
-`Bool.and_eq_true` / `decide_eq_true_iff`.
+constraints. They kernel-check by direct unfolding of `Penalty.admits`
+plus `Bool.and_eq_true` / `decide_eq_true_iff`.
 -/
 
 /-- **Leaf: imprisonment.** From `(imprisonment lo hi).admits fp`,
@@ -285,10 +279,9 @@ theorem penalty_correspondence_caning_unspecified
 
 /-! ### Combinator specialisations
 
-The two combinator-case lemmas are the paper §6.5 inductive-step
-sketch in mechanised form. Each takes the children's
-admissibility as a list-fold and unfolds it via the recursive
-`admitsAll` / `admitsAny` definitions.
+The two combinator-case lemmas are the inductive step in mechanised
+form. Each takes the children's admissibility as a list-fold and unfolds
+it via the recursive `admitsAll` / `admitsAny` definitions.
 -/
 
 /-- **Combinator: cumulative.** `(cumulative ps).admits fp` iff

@@ -4,9 +4,9 @@ The first Yuho-evaluation surface that scores against an *external*
 authoritative source (Singapore courts), rather than against
 Yuho's own ground truth.
 
-Catala's flagship empirical claim is *"our compiled tax calculator
-matches the French government's official tax calculator on N
-filings"*. This directory builds the Yuho analogue: *"`yuho
+Catala's flagship result is *"our compiled tax calculator matches the
+French government's official tax calculator on N filings"*. This
+directory builds the Yuho analogue: *"`yuho
 recommend` agrees with the actual charge in N reported Singapore
 criminal cases; `yuho contrast` recovers a structural distinguisher
 between actual and alternative charges in 100% of cases; the
@@ -104,7 +104,7 @@ alternative_charge: "299"          # section considered/argued as alternative
 court_distinguished_on: [intent3]  # element names the court relied on
 outcome: "Convicted of s300(c) murder; death sentence affirmed."
 case_summary: |
-  ...natural-language summary for paper presentation...
+  ...natural-language summary for review...
 
 # Below: simulator-shape fields used by ChargeRecommender
 section: "300"
@@ -232,7 +232,7 @@ empty result and a `historical_pre_fix` payload preserving the
 
 ## Caveats / threats to validity
 
-The paper §7.8 enumerates these alongside the headline numbers:
+These caveats apply to the headline numbers:
 
 - **Charge-selection bias.** Prosecutors do not always charge
   every applicable section; the "actual charge" is what they

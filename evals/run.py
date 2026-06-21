@@ -349,7 +349,7 @@ def _resolve_variant(variant: str, scenario: str) -> str:
 
 
 def _prompt_section(scenario: str, variant: str = "polarity") -> str:
-    # Four prompt variants supported for §7.6 N-way comparison:
+    # Four prompt variants supported for N-way comparison:
     #   - "baseline":     the original v1 closed-vocab prompt
     #   - "polarity":     adds `none` option + polarity priming +
     #                     `# ruled out:` CoT invitation on T2
@@ -423,7 +423,7 @@ def _prompt_elements(scenario: str, section: str,
         if variant == "polarity-soft":
             # Polarity priming alone, no CoT invitation. Tests the
             # hypothesis that the "polarity"-variant regression on
-            # the positive corpus (§7.6) comes from the
+            # the positive corpus comes from the
             # `# ruled out:` CoT path encouraging over-exclusion,
             # not from the priming itself.
             return (
@@ -443,7 +443,7 @@ def _prompt_elements(scenario: str, section: str,
             )
         # polarity priming + light CoT scaffold: explicitly call out
         # the empty-set case (the gpt-4o-mini polarity-negative
-        # collapse from §7.6 motivated this) and invite a one-line
+        # collapse motivated this) and invite a one-line
         # rule-out preamble before the final JSON array. Parser
         # tolerates the preamble: it extracts the LAST JSON array.
         return (
@@ -849,7 +849,7 @@ def main() -> int:
                         "CoT invitation; `polarity-conditional` = cheap "
                         "regex classifier on scenario routes to "
                         "polarity-soft on null-cue hits, baseline "
-                        "otherwise. Used for §7.6 N-way comparison.")
+                        "otherwise. Used for N-way comparison.")
     args = p.parse_args()
 
     fixtures = load_fixtures(args.fixtures)

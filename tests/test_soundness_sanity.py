@@ -1,12 +1,10 @@
 """Sanity-check tests for Theorem 6.1 (Z3-Operational Soundness).
 
-Each test exhibits a concrete case of one of the lemmas the
-pen-and-paper proof in `paper/sections/soundness.tex` uses. The
-tests do not constitute a mechanised proof — they cannot stand in
-for one — but they pin specific cases where the operational rules
-of §4 and the Z3 backend's encoding agree on a fact pattern, so
-that any future regression in the Z3 generator surfaces here
-instead of silently invalidating the paper's soundness claim.
+Each test exhibits a concrete case of one of the soundness lemmas. The
+tests do not constitute a mechanised proof — they cannot stand in for
+one — but they pin specific cases where the operational rules and the Z3
+backend's encoding agree on a fact pattern, so any future regression in
+the Z3 generator surfaces here.
 
 The four lemmas:
 
@@ -21,8 +19,7 @@ The four lemmas:
   suppresses the lower-priority one, in the Z3 model exactly as in
   the operational rules.
 * **Lemma 6.5 — Penalty correspondence.** Z3 penalty range bounds
-  fall within the operational range produced by the rules of
-  §4.5.
+  fall within the operational range produced by the penalty rules.
 
 Plus the main theorem witness:
 

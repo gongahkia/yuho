@@ -28,7 +28,7 @@ from yuho.services.analysis import analyze_file  # noqa: E402
 from yuho.transpile import TranspileTarget, get_transpiler  # noqa: E402
 from yuho.transpile.akn_validator import validate_akn  # noqa: E402
 
-XSD_PATH = REPO / "paper" / "reproducibility" / "akn-schema" / "akomantoso30.xsd"
+XSD_PATH = REPO / "src" / "yuho" / "transpile" / "akn_schema" / "akomantoso30.xsd"
 
 
 def _xsd_validate(xml: str, xsd: Path) -> tuple[bool, list[str]]:

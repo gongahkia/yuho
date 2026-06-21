@@ -302,12 +302,12 @@ python scripts/akn_roundtrip.py
 
 # Schema round-trip (vendored OASIS XSD via xmllint, all 524 sections).
 python scripts/akn_roundtrip.py --xsd
-xmllint --noout --schema paper/reproducibility/akn-schema/akomantoso30.xsd /tmp/s415.akn.xml
+xmllint --noout --schema src/yuho/transpile/akn_schema/akomantoso30.xsd /tmp/s415.akn.xml
 ```
 
 Should print `AKN round-trip: 524/524 validate clean` for both
 invocations. The vendored XSD bundle lives at
-`paper/reproducibility/akn-schema/` (OASIS LegalDocML 1.0).
+`src/yuho/transpile/akn_schema/` (OASIS LegalDocML 1.0).
 
 ---
 
@@ -322,45 +322,28 @@ end-to-end pack (slower).
 
 ---
 
-## 10. Build the paper
+## 10. Run full project verification
 
 ```sh
-cd paper
-make smoke              # article-class build (basic TeX Live)
-make paper              # full acmart build (needs latexmk + acmart)
-make stats stats-extra  # regenerate auto-injected metrics
+make verify-all
 ```
 
-Output is `paper/main.pdf` (or `paper/main_smoke.pdf`).
+Output is `logs/verify-all-summary.txt`.
 
 ---
 
-## 11. Reference-graph cycle dump (for the paper's §5)
+## 11. Reference-graph cycle dump
 
 ```sh
 yuho refs --scc --json | python -m json.tool
 ```
 
-The four cycles printed are the empirical evidence cited in
-evaluation §5.X (Cross-reference graph structure).
+The cycles identify strongly connected components in the encoded
+cross-reference graph.
 
 ---
 
-## 12. Methodology numbers (for paper readers)
-
-```sh
-python scripts/paper_methodology.py
-cat paper/methodology/throughput.json | python -m json.tool
-cat paper/methodology/fidelity_hits.json | python -m json.tool
-cat paper/methodology/gap_frequency.json | python -m json.tool
-```
-
-Regenerates the throughput / fidelity / gap-frequency JSON that
-backs the empirical claims in evaluation §5.
-
----
-
-## 13. Behavioural-test fixtures
+## 12. Behavioural-test fixtures
 
 ```sh
 .venv-test/bin/python -m pytest tests/test_library_statutes.py -k 'test_test_file_is_semantically_valid' -q
@@ -380,7 +363,5 @@ structural parse + lint coverage is the appropriate bar).
 | **L2** | AST builds, lint passes, fidelity diagnostics quiet. | Yes — `yuho check` + `yuho lint`. |
 | **L3** | An 11-point human-checklist audit passed. | Author-administered. |
 
-The paper's §Limitations is explicit that L3 stamps are
-author-administered, not externally validated. That is the
-load-bearing caveat to read the "524/524 L3-stamped" claim
-alongside.
+L3 stamps are author-administered, not externally validated. Treat
+that as the caveat to read alongside the "524/524 L3-stamped" claim.

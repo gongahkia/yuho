@@ -1,10 +1,9 @@
 """Recommender rediscovery benchmark.
 
 Locks in the recommender's behaviour against the simulator fixtures so
-the paper's prose claim ("the canonical section ranks first or in the
-top-3") becomes a regression-tested fact. Each fixture has explicit
-calibrated expectations; failures here are signal, not a tolerance
-breach.
+the canonical-section ranking expectation stays regression-tested. Each
+fixture has explicit calibrated expectations; failures here are signal,
+not a tolerance breach.
 
 Calibrated against the implementation as of the post-G12 commit. If
 the recommender's prefilter or scoring changes, expect to revise

@@ -1,5 +1,4 @@
-"""Tests for ``yuho refs --compare-libraries`` (§8 cross-jurisdiction
-comparative-encoding skeleton)."""
+"""Tests for ``yuho refs --compare-libraries`` cross-jurisdiction support."""
 from __future__ import annotations
 
 import json

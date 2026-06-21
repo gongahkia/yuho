@@ -1,5 +1,5 @@
 /-
-Yuho AST — the syntactic domains of §4 of the paper.
+Yuho AST — the syntactic domains used by the mechanisation.
 
 This file mechanises Definitions 4.1–4.4 (element / element group /
 exception / statute). The encoding intentionally drops fields that

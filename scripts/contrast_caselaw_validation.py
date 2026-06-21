@@ -14,8 +14,8 @@ we have a real case-law fixture covering the same (actual,
 alternative) section pair?** A high match rate is evidence the
 synthesis tool is producing scenarios that doctrinally matter
 (courts have addressed the same boundary); a low rate means the
-synthesis covers paper-relevant pairs the case-law sample does
-not yet exercise.
+synthesis covers doctrinal pairs the case-law sample does not yet
+exercise.
 
 The match is purely structural — the synthesised fact pattern
 and the case-law fact pattern can differ wildly while sharing the

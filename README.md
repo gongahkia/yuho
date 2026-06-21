@@ -21,8 +21,6 @@
 <p align="center">
   <a href="https://gabrielongzm.com">Gabriel Ong Zhe Mian</a>
   &nbsp;·&nbsp;
-  <a href="./paper/">Paper</a>
-  &nbsp;·&nbsp;
   <a href="./docs/INDEX.md">Docs</a>
   &nbsp;·&nbsp;
   <a href="./library/penal_code/">Encoded library</a>
@@ -50,7 +48,7 @@ Road-map wise, a second corpus (in the **Indian Penal Code 1860**) was considere
 
 Yuho is built around a toolchain of 8 other transpilers, including Akoma Ntoso for cross-jurisdictional interop, an LSP, an MCP server, a VS Code extension, and Z3 / Alloy verification hookups.
 
-For more on Yuho, see the paper at [`paper/`](./paper/) or check out a 5-minute tour at [`docs/user/5-minutes.md`](./docs/user/5-minutes.md)
+For more on Yuho, check out a 5-minute tour at [`docs/user/5-minutes.md`](./docs/user/5-minutes.md).
 
 ## Quickstart
 

@@ -84,7 +84,7 @@ inductive ElementDeep where
   `Statute.convicts` truth value under ambient facts. -/
   | crossRef   : (sectionNumber : String) → ElementDeep
   /-- Cross-section reference with a *substituted* fact pattern
-  (the `apply_scope(n, F')` shape from §3 of the paper). The
+  (the `apply_scope(n, F')` shape). The
   Lean `Facts = String → Bool` abstraction lets us thread a
   parent-supplied `F'` through unchanged; the evaluator
   forwards it instead of using ambient facts. -/
@@ -284,7 +284,7 @@ theorem Statute.deepBody_compat
 section-table that resolves the reference, the v9 evaluator
 delegates to the v8 `Statute.convicts` on the referenced
 statute under *ambient* facts. Mirrors the `is_infringed(n)`
-inference rule from §3 of the paper. -/
+inference rule. -/
 theorem ElementDeep.eval_crossRef_resolves
     (sigma : String → Option Statute) (F : Facts)
     (n : Nat) (sec : String) (s : Statute)
@@ -295,7 +295,7 @@ theorem ElementDeep.eval_crossRef_resolves
 /-- `applyScope` semantics specification. Under positive fuel and a
 resolving section-table, the v9 evaluator delegates to the v8
 `Statute.convicts` under the *substituted* facts `F'`. Mirrors
-the `apply_scope(n, F')` inference rule from §3. -/
+the `apply_scope(n, F')` inference rule. -/
 theorem ElementDeep.eval_applyScope_resolves
     (sigma : String → Option Statute) (F F' : Facts)
     (n : Nat) (sec : String) (s : Statute)
@@ -304,8 +304,7 @@ theorem ElementDeep.eval_applyScope_resolves
   simp only [ElementDeep.eval, hLookup]
 
 /-- Out-of-module references resolve to `false` under any fuel.
-Mirrors the §6.6 boundary statement on cross-library references —
-the operational semantics defaults a missing section to `none`,
+The operational semantics defaults a missing section to `none`,
 which the evaluator interprets as the conservative `false`. -/
 theorem ElementDeep.eval_crossRef_missing
     (sigma : String → Option Statute) (F : Facts)
