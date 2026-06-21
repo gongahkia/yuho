@@ -48,7 +48,11 @@ class YuhoLanguageServer(LanguageServer):
 
     def parse_source(self, uri: str, source: str) -> ParsedDocument:
         file = uri_to_file(uri)
-        result = self.parser.parse(source, file=file)
+        previous = self.parsed_documents.get(uri)
+        if previous is not None:
+            result = self.parser.parse_incremental(source, previous.result, file=file)
+        else:
+            result = self.parser.parse(source, file=file)
         analysis = analyze_source(source, file=file, run_semantic=True)
         ast = analysis.ast or build_ast(source, file, result)
         parsed = ParsedDocument(

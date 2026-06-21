@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from yuho.library.reference_graph import ReferenceEdge, ReferenceGraph
 from yuho.lsp.server import YuhoLanguageServer, create_server, uri_to_file
+from yuho.parser.wrapper import Parser
 
 
 VALID_SOURCE = """
@@ -34,6 +35,25 @@ def test_server_parse_source_caches_parse_errors():
     parsed = server.parse_source("file:///tmp/bad.yh", 'statute 1 "Bad" {')
     assert not parsed.result.is_valid
     assert parsed.result.errors
+
+
+def test_server_parse_source_uses_incremental_parse_after_first_result():
+    class RecordingParser(Parser):
+        def __init__(self):
+            super().__init__()
+            self.incremental_calls = 0
+
+        def parse_incremental(self, source, previous, file="<string>", features=None):
+            self.incremental_calls += 1
+            return super().parse_incremental(source, previous, file=file, features=features)
+
+    parser = RecordingParser()
+    server = YuhoLanguageServer(parser=parser)
+    uri = "file:///tmp/incremental.yh"
+    server.parse_source(uri, VALID_SOURCE)
+    server.parse_source(uri, VALID_SOURCE.replace("conduct", "conduct2"))
+
+    assert parser.incremental_calls == 1
 
 
 def test_create_server_registers_document_features():

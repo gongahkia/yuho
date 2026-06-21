@@ -24,6 +24,18 @@ _parser_lock = threading.Lock()
 
 
 @dataclass
+class TreeEdit:
+    """Byte/point edit descriptor for tree-sitter incremental parsing."""
+
+    start_byte: int
+    old_end_byte: int
+    new_end_byte: int
+    start_point: tuple[int, int]
+    old_end_point: tuple[int, int]
+    new_end_point: tuple[int, int]
+
+
+@dataclass
 class ParseError:
     """
     Represents a syntax error encountered during parsing.
@@ -115,6 +127,43 @@ def validate_output_path(path: str | Path) -> Path:
     return path
 
 
+def _compute_tree_edit(old_source: str, new_source: str) -> TreeEdit:
+    prefix_len = 0
+    max_prefix = min(len(old_source), len(new_source))
+    while prefix_len < max_prefix and old_source[prefix_len] == new_source[prefix_len]:
+        prefix_len += 1
+
+    suffix_len = 0
+    old_remaining = len(old_source) - prefix_len
+    new_remaining = len(new_source) - prefix_len
+    max_suffix = min(old_remaining, new_remaining)
+    while (
+        suffix_len < max_suffix
+        and old_source[len(old_source) - suffix_len - 1]
+        == new_source[len(new_source) - suffix_len - 1]
+    ):
+        suffix_len += 1
+
+    old_end_char = len(old_source) - suffix_len
+    new_end_char = len(new_source) - suffix_len
+    return TreeEdit(
+        start_byte=len(old_source[:prefix_len].encode("utf-8")),
+        old_end_byte=len(old_source[:old_end_char].encode("utf-8")),
+        new_end_byte=len(new_source[:new_end_char].encode("utf-8")),
+        start_point=_point_for_offset(old_source, prefix_len),
+        old_end_point=_point_for_offset(old_source, old_end_char),
+        new_end_point=_point_for_offset(new_source, new_end_char),
+    )
+
+
+def _point_for_offset(source: str, char_offset: int) -> tuple[int, int]:
+    before = source[:char_offset]
+    row = before.count("\n")
+    line_start = before.rfind("\n") + 1
+    column = len(before[line_start:].encode("utf-8"))
+    return (row, column)
+
+
 class Parser:
     """
     Parser for Yuho source files using tree-sitter.
@@ -185,6 +234,7 @@ class Parser:
         source: str,
         file: str = "<string>",
         features: Optional[Iterable[str]] = None,
+        previous: Optional[ParseResult] = None,
     ) -> ParseResult:
         """
         Parse a Yuho source string.
@@ -201,7 +251,11 @@ class Parser:
 
         try:
             source_bytes = source.encode("utf-8")
-            tree = self._parser.parse(source_bytes)
+            old_tree = self._edited_tree(previous, source)
+            if old_tree is None:
+                tree = self._parser.parse(source_bytes)
+            else:
+                tree = self._parser.parse(source_bytes, old_tree)
         except Exception as e:
             error = ParseError(
                 message=f"internal parser error: {e}",
@@ -213,9 +267,7 @@ class Parser:
         # Collect errors by walking the tree
         enabled_features = set(features or ())
         errors = list(self._collect_errors(tree.root_node, source, file))
-        errors.extend(
-            self._collect_feature_errors(tree.root_node, source, file, enabled_features)
-        )
+        errors.extend(self._collect_feature_errors(tree.root_node, source, file, enabled_features))
 
         return ParseResult(
             tree=tree,
@@ -223,6 +275,33 @@ class Parser:
             source=source,
             file=file,
         )
+
+    def parse_incremental(
+        self,
+        source: str,
+        previous: ParseResult,
+        file: str = "<string>",
+        features: Optional[Iterable[str]] = None,
+    ) -> ParseResult:
+        """Parse source using ``previous.tree`` as the incremental baseline."""
+        return self.parse(source, file=file, features=features, previous=previous)
+
+    def _edited_tree(self, previous: Optional[ParseResult], source: str):
+        if previous is None or previous.tree is None:
+            return None
+        old_tree = previous.tree.copy() if hasattr(previous.tree, "copy") else previous.tree
+        if previous.source == source:
+            return old_tree
+        edit = _compute_tree_edit(previous.source, source)
+        old_tree.edit(
+            edit.start_byte,
+            edit.old_end_byte,
+            edit.new_end_byte,
+            edit.start_point,
+            edit.old_end_point,
+            edit.new_end_point,
+        )
+        return old_tree
 
     def parse_file(
         self,
@@ -298,7 +377,7 @@ class Parser:
         if element_type is None:
             return False
         source_bytes = source.encode("utf-8")
-        text = source_bytes[element_type.start_byte:element_type.end_byte].decode("utf-8")
+        text = source_bytes[element_type.start_byte : element_type.end_byte].decode("utf-8")
         return text in CIVIL_ELEMENT_TYPES
 
     def _collect_errors(self, node, source: str, file: str) -> Iterator[ParseError]:
