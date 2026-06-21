@@ -193,6 +193,33 @@ class TestTranspilationDeterminism:
         assert output1 == output2
 
 
+class TestFormatterIdempotency:
+    """Tests for formatter idempotency."""
+
+    @given(yuho_module())
+    @SLOW_SETTINGS
+    def test_format_format_is_idempotent(self, module):
+        """fmt(fmt(x)) should equal fmt(x) for valid generated modules."""
+        from yuho.parser import Parser
+        from yuho.ast import ASTBuilder
+        from yuho.cli.commands.fmt import _format_module
+
+        parser = Parser()
+        result = parser.parse(module)
+        assume(result.is_valid)
+
+        ast = ASTBuilder(module).build(result.root_node)
+        formatted_once = _format_module(ast)
+
+        second = parser.parse(formatted_once)
+        assume(second.is_valid)
+
+        second_ast = ASTBuilder(formatted_once).build(second.root_node)
+        formatted_twice = _format_module(second_ast)
+
+        assert formatted_twice.strip() == formatted_once.strip()
+
+
 class TestVisitorTraversal:
     """Tests for visitor pattern traversal."""
 
