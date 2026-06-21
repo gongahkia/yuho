@@ -99,6 +99,34 @@ def check(
 
 
 @cli.command()
+@click.argument("file", type=str)
+@click.option("-i", "--in-place", is_flag=True, help="Rewrite FILE in place")
+@click.option("--check", "check_only", is_flag=True, help="Exit 1 if FILE needs upgrade")
+@click.option("--from", "from_version", help="Expected source grammar version")
+@click.option("--to", "to_version", default="5.1", show_default=True, help="Target grammar version")
+@click.pass_context
+def upgrade(
+    ctx: click.Context,
+    file: str,
+    in_place: bool,
+    check_only: bool,
+    from_version: Optional[str],
+    to_version: str,
+) -> None:
+    """Rewrite Yuho source to the requested grammar version."""
+    from yuho.cli.commands.upgrade import run_upgrade
+
+    run_upgrade(
+        file,
+        in_place=in_place,
+        check=check_only,
+        from_version=from_version,
+        to_version=to_version,
+        quiet=ctx.obj["quiet"],
+    )
+
+
+@cli.command()
 @click.argument("files", nargs=-1, type=click.Path(exists=True), required=True)
 @click.option("--rule", "-r", "rules", multiple=True, help="Specific rules to run")
 @click.option("--exclude", "-e", "exclude_rules", multiple=True, help="Rules to exclude")

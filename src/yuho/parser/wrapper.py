@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Iterable, Optional, List, Iterator, Set
 import logging
 import os
+import re
 import threading
 
 from yuho.parser.source_location import SourceLocation
@@ -17,6 +18,9 @@ MAX_FILE_SIZE = 10 * 1024 * 1024
 MAX_SOURCE_LENGTH = 10 * 1024 * 1024
 VALID_EXTENSIONS = {".yh", ".yuho"}
 CIVIL_ELEMENT_TYPES = {"party", "obligation_to", "condition_precedent", "breach"}
+CURRENT_GRAMMAR_VERSION = "5.1"
+SUPPORTED_GRAMMAR_VERSIONS = {CURRENT_GRAMMAR_VERSION, "5.1.0"}
+GRAMMAR_PRAGMA_RE = re.compile(r"#yuho\s+v(?P<version>[0-9]+(?:\.[0-9]+){0,2})\s*$")
 
 # Module-level parser cache for performance
 _parser_cache: Optional["Parser"] = None
@@ -70,6 +74,7 @@ class ParseResult:
     errors: List[ParseError]
     source: str
     file: str
+    grammar_version: Optional[str] = None
 
     @property
     def is_valid(self) -> bool:
@@ -164,6 +169,55 @@ def _point_for_offset(source: str, char_offset: int) -> tuple[int, int]:
     return (row, column)
 
 
+def _normalize_grammar_pragma(
+    source: str,
+    file: str,
+) -> tuple[str, Optional[str], list[ParseError]]:
+    line_end = source.find("\n")
+    first_line_end = len(source) if line_end == -1 else line_end
+    first_line = source[:first_line_end].rstrip("\r")
+    if not first_line.startswith("#yuho"):
+        return source, None, []
+
+    match = GRAMMAR_PRAGMA_RE.fullmatch(first_line)
+    version = match.group("version") if match else None
+    errors: list[ParseError] = []
+    if version is None:
+        errors.append(
+            ParseError(
+                message="invalid grammar pragma; expected '#yuho v5.1'",
+                location=SourceLocation(
+                    file=file,
+                    line=1,
+                    col=1,
+                    end_line=1,
+                    end_col=len(first_line) + 1,
+                ),
+                node_type="GRAMMAR_PRAGMA",
+            )
+        )
+    elif version not in SUPPORTED_GRAMMAR_VERSIONS:
+        errors.append(
+            ParseError(
+                message=(
+                    f"unsupported grammar version v{version}; "
+                    f"run `yuho upgrade` to rewrite to v{CURRENT_GRAMMAR_VERSION}"
+                ),
+                location=SourceLocation(
+                    file=file,
+                    line=1,
+                    col=1,
+                    end_line=1,
+                    end_col=len(first_line) + 1,
+                ),
+                node_type="GRAMMAR_PRAGMA",
+            )
+        )
+
+    parser_source = "//" + source[2:] if len(source) >= 2 else source
+    return parser_source, version, errors
+
+
 class Parser:
     """
     Parser for Yuho source files using tree-sitter.
@@ -250,7 +304,8 @@ class Parser:
         source = self.validate_source(source, file)
 
         try:
-            source_bytes = source.encode("utf-8")
+            parser_source, grammar_version, pragma_errors = _normalize_grammar_pragma(source, file)
+            source_bytes = parser_source.encode("utf-8")
             old_tree = self._edited_tree(previous, source)
             if old_tree is None:
                 tree = self._parser.parse(source_bytes)
@@ -266,7 +321,8 @@ class Parser:
 
         # Collect errors by walking the tree
         enabled_features = set(features or ())
-        errors = list(self._collect_errors(tree.root_node, source, file))
+        errors = list(pragma_errors)
+        errors.extend(self._collect_errors(tree.root_node, source, file))
         errors.extend(self._collect_feature_errors(tree.root_node, source, file, enabled_features))
 
         return ParseResult(
@@ -274,6 +330,7 @@ class Parser:
             errors=errors,
             source=source,
             file=file,
+            grammar_version=grammar_version,
         )
 
     def parse_incremental(

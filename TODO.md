@@ -7,5 +7,4 @@ Contexts: @grammar @ast @lint @lean @verify @transpile @cli @lsp @resolver @libr
 
 ```todo
 (A) 2026-06-21 Update MEMORY.md key paths after fossil deletion +housekeeping @memory effort:XS
-(C) 2026-06-21 Grammar version pragma `#yuho v5.1` at top of .yh files + `yuho upgrade` mechanical rewriter between grammar versions +compiler @grammar effort:L
 ```
