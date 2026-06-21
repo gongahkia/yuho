@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from yuho.library.reference_graph import ReferenceEdge, ReferenceGraph
 from yuho.lsp.server import YuhoLanguageServer, create_server, uri_to_file
 
 
@@ -54,6 +55,85 @@ def test_hover_surfaces_ast_node_kind_and_source_location():
     assert hover.range is not None
 
 
+def test_definition_resolves_same_file_cross_section_ref():
+    source = """
+statute 299 "Base" {
+  elements { all_of { actus_reus conduct := "does the act"; } }
+}
+
+fn run() : bool { return is_infringed(s299); }
+"""
+    server = YuhoLanguageServer()
+    uri = "file:///tmp/same.yh"
+    server.parse_source(uri, source)
+    line, character = position_of(source, "s299")
+    locations = server.definition_at(uri, line, character)
+    assert locations is not None
+    assert locations[0].uri == uri
+    assert locations[0].range.start.line == 1
+
+
+def test_definition_resolves_imported_cross_section_ref(tmp_path):
+    base = tmp_path / "base.yh"
+    base.write_text(
+        """
+statute 299 "Base" {
+  elements { all_of { actus_reus conduct := "does the act"; } }
+}
+""",
+        encoding="utf-8",
+    )
+    main = tmp_path / "main.yh"
+    source = """
+import "base.yh"
+
+fn run() : bool { return apply_scope(s299); }
+"""
+    main.write_text(source, encoding="utf-8")
+    server = YuhoLanguageServer()
+    uri = main.as_uri()
+    server.parse_source(uri, source)
+    line, character = position_of(source, "s299")
+    locations = server.definition_at(uri, line, character)
+    assert locations is not None
+    assert locations[0].uri == base.as_uri()
+    assert locations[0].range.start.line == 1
+
+
+def test_definition_uses_reference_graph_library_fallback(tmp_path, monkeypatch):
+    library_dir = tmp_path / "library" / "penal_code"
+    target = library_dir / "s299_base" / "statute.yh"
+    target.parent.mkdir(parents=True)
+    target.write_text(
+        """
+statute 299 "Base" {
+  elements { all_of { actus_reus conduct := "does the act"; } }
+}
+""",
+        encoding="utf-8",
+    )
+    graph = ReferenceGraph()
+    graph.add(
+        ReferenceEdge(
+            src="300",
+            dst="299",
+            kind="subsumes",
+            source_path="penal_code/s300_wrapper/statute.yh",
+        )
+    )
+    monkeypatch.setattr("yuho.lsp.server.DEFAULT_LIBRARY_DIR", library_dir)
+    server = YuhoLanguageServer()
+    server.reference_graphs[str(library_dir.resolve())] = graph
+    source = "fn run() : bool { return is_infringed(s299); }"
+    uri = "file:///tmp/library-fallback.yh"
+    server.parse_source(uri, source)
+    line, character = position_of(source, "s299")
+    locations = server.definition_at(uri, line, character)
+    assert locations is not None
+    assert locations[0].uri == target.as_uri()
+    assert locations[0].range.start.line == 1
+
+
 def test_diagnostics_include_lint_warnings():
     server = YuhoLanguageServer()
     uri = "file:///tmp/lint.yh"
@@ -89,3 +169,10 @@ def test_publish_diagnostics_for_uri_sends_publish_params(monkeypatch):
     assert published
     assert published[0].uri == uri
     assert published[0].diagnostics
+
+
+def position_of(source: str, needle: str) -> tuple[int, int]:
+    offset = source.index(needle)
+    line = source[:offset].count("\n")
+    character = offset - source.rfind("\n", 0, offset) - 1
+    return line, character

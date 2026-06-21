@@ -12,11 +12,21 @@ from pygls.lsp.server import LanguageServer
 
 from yuho import __version__
 from yuho.ast import ASTBuilder
-from yuho.ast.nodes import ASTNode, ModuleNode
+from yuho.ast.nodes import (
+    ASTNode,
+    ApplyScopeNode,
+    IsInfringedNode,
+    ModuleNode,
+    StatuteNode,
+)
+from yuho.library.reference_graph import ReferenceGraph, _normalise_section, build_reference_graph
 from yuho.parser import get_parser
 from yuho.parser.source_location import SourceLocation
 from yuho.parser.wrapper import ParseResult, Parser
+from yuho.resolver.module_resolver import ModuleResolutionError, ModuleResolver
 from yuho.services.analysis import AnalysisResult, analyze_source
+
+DEFAULT_LIBRARY_DIR = Path("library/penal_code")
 
 
 @dataclass(frozen=True)
@@ -34,6 +44,7 @@ class YuhoLanguageServer(LanguageServer):
         super().__init__("yuho-lsp", __version__)
         self.parser = parser or get_parser()
         self.parsed_documents: dict[str, ParsedDocument] = {}
+        self.reference_graphs: dict[str, ReferenceGraph] = {}
 
     def parse_source(self, uri: str, source: str) -> ParsedDocument:
         file = uri_to_file(uri)
@@ -89,6 +100,32 @@ class YuhoLanguageServer(LanguageServer):
             range=location_to_range(node.source_location),
         )
 
+    def definition_at(
+        self,
+        uri: str,
+        line: int,
+        character: int,
+    ) -> Optional[list[types.Location]]:
+        parsed = self.cached_parse(uri) or self.parse_text_document(uri)
+        if parsed is None or parsed.ast is None:
+            return None
+        section = cross_section_ref_at_lsp_position(parsed, line, character)
+        if section is None:
+            return None
+        location = resolve_section_definition(self, parsed, section)
+        return [location] if location is not None else None
+
+    def reference_graph(self, library_dir: Path = DEFAULT_LIBRARY_DIR) -> Optional[ReferenceGraph]:
+        resolved = library_dir.resolve()
+        if not resolved.exists():
+            return None
+        key = str(resolved)
+        graph = self.reference_graphs.get(key)
+        if graph is None:
+            graph = build_reference_graph(resolved)
+            self.reference_graphs[key] = graph
+        return graph
+
 
 def create_server() -> YuhoLanguageServer:
     server = YuhoLanguageServer()
@@ -129,6 +166,14 @@ def register_features(server: YuhoLanguageServer) -> None:
             params.position.character,
         )
 
+    @server.feature(types.TEXT_DOCUMENT_DEFINITION)
+    def definition(params: types.DefinitionParams) -> Optional[list[types.Location]]:
+        return server.definition_at(
+            params.text_document.uri,
+            params.position.line,
+            params.position.character,
+        )
+
 
 def build_ast(source: str, file: str, result: ParseResult) -> Optional[ModuleNode]:
     if not result.is_valid or result.root_node is None:
@@ -156,6 +201,190 @@ def ast_node_at_lsp_position(
                 best = node
             stack.extend(child for child in node.children() if child is not None)
     return best
+
+
+def cross_section_ref_at_lsp_position(
+    parsed: ParsedDocument,
+    line: int,
+    character: int,
+) -> Optional[str]:
+    if parsed.ast is None:
+        return None
+    word = word_at_lsp_position(parsed.source, line, character)
+    if not word:
+        return None
+    ref = _normalise_section(word)
+    stack = [parsed.ast]
+    while stack:
+        node = stack.pop()
+        loc = node.source_location
+        if loc is None or not location_contains_lsp_position(loc, line + 1, character + 1):
+            continue
+        if ref in cross_section_refs(node):
+            return ref
+        stack.extend(child for child in node.children() if child is not None)
+    return None
+
+
+def cross_section_refs(node: ASTNode) -> tuple[str, ...]:
+    if isinstance(node, (ApplyScopeNode, IsInfringedNode)):
+        return (_normalise_section(node.section_ref),)
+    if isinstance(node, StatuteNode):
+        refs = []
+        if node.subsumes:
+            refs.append(_normalise_section(node.subsumes))
+        if node.amends:
+            refs.append(_normalise_section(node.amends))
+        return tuple(refs)
+    return ()
+
+
+def word_at_lsp_position(source: str, line: int, character: int) -> str:
+    lines = source.splitlines()
+    if line < 0 or line >= len(lines):
+        return ""
+    row = lines[line]
+    if not row:
+        return ""
+    idx = min(max(character, 0), len(row) - 1)
+    if not is_section_word_char(row[idx]) and idx > 0 and is_section_word_char(row[idx - 1]):
+        idx -= 1
+    if not is_section_word_char(row[idx]):
+        return ""
+    start = idx
+    end = idx + 1
+    while start > 0 and is_section_word_char(row[start - 1]):
+        start -= 1
+    while end < len(row) and is_section_word_char(row[end]):
+        end += 1
+    return row[start:end]
+
+
+def is_section_word_char(char: str) -> bool:
+    return char.isalnum() or char in "._"
+
+
+def resolve_section_definition(
+    server: YuhoLanguageServer,
+    parsed: ParsedDocument,
+    section: str,
+) -> Optional[types.Location]:
+    if parsed.ast is None:
+        return None
+    current = find_statute(parsed.ast, section)
+    if current is not None and current.source_location is not None:
+        return location_from_node(parsed.uri, current)
+
+    imported = resolve_imported_section_definition(parsed, section)
+    if imported is not None:
+        return imported
+
+    return resolve_library_section_definition(server, section)
+
+
+def resolve_imported_section_definition(
+    parsed: ParsedDocument,
+    section: str,
+) -> Optional[types.Location]:
+    if parsed.ast is None:
+        return None
+    from_file = Path(parsed.file)
+    resolver = ModuleResolver(search_paths=resolver_search_paths(from_file))
+    for module, module_path in resolved_dependency_modules(resolver, parsed.ast, from_file):
+        statute = find_statute(module, section)
+        if statute is not None and statute.source_location is not None:
+            return location_from_node(file_to_uri(module_path), statute)
+    return None
+
+
+def resolved_dependency_modules(
+    resolver: ModuleResolver,
+    ast: ModuleNode,
+    from_file: Path,
+) -> list[tuple[ModuleNode, Path]]:
+    modules = []
+    for import_node in ast.imports:
+        try:
+            module = resolver.resolve(import_node, from_file)
+        except ModuleResolutionError:
+            continue
+        path = module_path(resolver, module)
+        if path is not None:
+            modules.append((module, path))
+    for reference in ast.references:
+        try:
+            module = resolver.resolve_reference(reference, from_file)
+        except ModuleResolutionError:
+            continue
+        path = module_path(resolver, module)
+        if path is not None:
+            modules.append((module, path))
+    return modules
+
+
+def resolver_search_paths(from_file: Path) -> list[Path]:
+    paths = [Path.cwd()]
+    if str(from_file):
+        paths.append(from_file.resolve().parent)
+    return paths
+
+
+def module_path(resolver: ModuleResolver, module: ModuleNode) -> Optional[Path]:
+    for path, cached in resolver.cached_modules.items():
+        if cached is module:
+            return Path(path)
+    return None
+
+
+def resolve_library_section_definition(
+    server: YuhoLanguageServer,
+    section: str,
+) -> Optional[types.Location]:
+    library_dir = DEFAULT_LIBRARY_DIR
+    graph = server.reference_graph(library_dir)
+    if graph is None or section not in graph.nodes:
+        return None
+    for path in library_section_candidates(library_dir, section):
+        location = section_location_in_file(path, section)
+        if location is not None:
+            return location
+    return None
+
+
+def library_section_candidates(library_dir: Path, section: str) -> list[Path]:
+    candidates = []
+    direct = library_dir / f"s{section}" / "statute.yh"
+    if direct.exists():
+        candidates.append(direct)
+    candidates.extend(sorted(library_dir.glob(f"s{section}_*/statute.yh")))
+    return candidates
+
+
+def section_location_in_file(path: Path, section: str) -> Optional[types.Location]:
+    try:
+        source = path.read_text(encoding="utf-8")
+    except OSError:
+        return None
+    analysis = analyze_source(source, file=str(path), run_semantic=False)
+    if analysis.ast is None:
+        return None
+    statute = find_statute(analysis.ast, section)
+    if statute is None or statute.source_location is None:
+        return None
+    return location_from_node(file_to_uri(path), statute)
+
+
+def find_statute(ast: ModuleNode, section: str) -> Optional[StatuteNode]:
+    canonical = _normalise_section(section)
+    for statute in ast.statutes:
+        if _normalise_section(statute.section_number) == canonical:
+            return statute
+    return None
+
+
+def location_from_node(uri: str, node: ASTNode) -> types.Location:
+    assert node.source_location is not None
+    return types.Location(uri=uri, range=location_to_range(node.source_location))
 
 
 def location_contains_lsp_position(loc: SourceLocation, line: int, col: int) -> bool:
@@ -255,6 +484,10 @@ def uri_to_file(uri: str) -> str:
     if parsed.netloc:
         path = f"//{parsed.netloc}{path}"
     return str(Path(path))
+
+
+def file_to_uri(path: Path) -> str:
+    return path.resolve().as_uri()
 
 
 def main() -> None:
