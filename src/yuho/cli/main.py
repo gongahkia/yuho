@@ -346,9 +346,19 @@ def verify(
     "--kind",
     "kinds",
     multiple=True,
-    type=click.Choice(["subsumes", "amends", "implicit"]),
+    type=click.Choice([
+        "subsumes",
+        "amends",
+        "implicit",
+        "authority",
+        "treatment_followed",
+        "treatment_distinguished",
+        "treatment_overruled",
+    ]),
     help="Filter edge kind",
 )
+@click.option("--treatment", is_flag=True, help="Query case-law treatment edges")
+@click.option("--overruled", is_flag=True, help="Query overruled case-law edges")
 @click.option("--transitive", is_flag=True, help="Follow edges transitively")
 @click.option("--graph", "show_graph", is_flag=True, help="Print full graph summary")
 @click.option("--scc", "scc", is_flag=True, help="Run SCC analysis")
@@ -359,6 +369,8 @@ def refs(
     in_only: bool,
     out_only: bool,
     kinds: tuple[str, ...],
+    treatment: bool,
+    overruled: bool,
     transitive: bool,
     show_graph: bool,
     scc: bool,
@@ -385,6 +397,8 @@ def refs(
         library_dir=library_dir,
         direction=direction,
         kinds=kinds,
+        treatment=treatment,
+        overruled=overruled,
         transitive=transitive,
         json_output=json_output,
         show_graph=show_graph,

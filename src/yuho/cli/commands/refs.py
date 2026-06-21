@@ -17,6 +17,11 @@ from yuho.library.reference_graph import (
     build_reference_graph,
 )
 
+_TREATMENT_KINDS = (
+    "treatment_followed",
+    "treatment_distinguished",
+    "treatment_overruled",
+)
 
 _DEFAULT_LIBRARY = Path("library/penal_code")
 _DEFAULT_COMPARE_LIBRARIES: Tuple[Path, ...] = (
@@ -30,9 +35,11 @@ def run_refs(
     library_dir: Optional[str],
     direction: str,
     kinds: tuple,
-    transitive: bool,
-    json_output: bool,
-    show_graph: bool,
+    treatment: bool = False,
+    overruled: bool = False,
+    transitive: bool = False,
+    json_output: bool = False,
+    show_graph: bool = False,
     scc: bool = False,
 ) -> None:
     """Implementation of ``yuho refs``.
@@ -42,7 +49,9 @@ def run_refs(
         library_dir: alternative library root; defaults to library/penal_code.
         direction: "out" (what this section refers to), "in" (what refers to
             this section), or "both".
-        kinds: subset of ("subsumes", "amends", "implicit"); empty = all.
+        kinds: edge-kind filter; empty = all.
+        treatment: restrict to case-law treatment edges.
+        overruled: restrict to overruled treatment edges.
         transitive: follow edges transitively (BFS closure).
         json_output: emit JSON instead of human-readable text.
         show_graph: emit the entire graph (only meaningful when section is None).
@@ -53,13 +62,18 @@ def run_refs(
         sys.exit(1)
 
     graph = build_reference_graph(root)
-    edge_kinds = list(kinds) if kinds else None
+    edge_kinds = _select_edge_kinds(kinds, treatment=treatment, overruled=overruled)
+    if section is not None:
+        section = _normalise_query_node(section, graph, treatment or overruled)
 
     if scc:
         _emit_scc(graph, edge_kinds, json_output)
         return
 
     if section is None:
+        if treatment or overruled:
+            _emit_treatment_edges(graph, edge_kinds or list(_TREATMENT_KINDS), json_output)
+            return
         if show_graph and json_output:
             click.echo(graph.to_json())
             return
@@ -77,11 +91,13 @@ def run_refs(
             click.echo(f"  subsumes: {stats['n_subsumes']}")
             click.echo(f"  amends:   {stats['n_amends']}")
             click.echo(f"  implicit: {stats['n_implicit']}")
+            click.echo(f"  authority: {stats['n_authority']}")
+            click.echo(f"  treatment: {stats['n_treatment']}")
         return
 
     if section not in graph.nodes:
         click.echo(
-            colorize(f"warning: section {section!r} not found in graph; reporting empty result.",
+            colorize(f"warning: node {section!r} not found in graph; reporting empty result.",
                      Colors.YELLOW),
             err=True,
         )
@@ -95,7 +111,7 @@ def run_refs(
 
 
 def _query_to_dict(graph, section, direction, kinds, transitive):
-    out = {"section": section, "direction": direction, "kinds": kinds, "transitive": transitive}
+    out = {"node": section, "direction": direction, "kinds": kinds, "transitive": transitive}
     if direction in ("out", "both"):
         if transitive:
             out["outgoing"] = sorted(graph.reachable_from(section, kinds))
@@ -118,32 +134,38 @@ def _query_to_dict(graph, section, direction, kinds, transitive):
 def _print_query(graph, section, direction, kinds, transitive):
     klabel = "/".join(kinds) if kinds else "all"
     if direction in ("out", "both"):
-        click.echo(colorize(f"=== outgoing from s{section} ({klabel}) ===", Colors.BOLD))
+        click.echo(colorize(
+            f"=== outgoing from {_format_node(section)} ({klabel}) ===",
+            Colors.BOLD,
+        ))
         if transitive:
             for tgt in sorted(graph.reachable_from(section, kinds)):
-                click.echo(f"  → s{tgt}")
+                click.echo(f"  → {_format_node(tgt)}")
             click.echo(f"  ({len(graph.reachable_from(section, kinds))} reachable)")
         else:
             edges = graph.outgoing(section, kinds)
             for e in edges:
                 tag = colorize(f"[{e.kind}]", _kind_color(e.kind))
-                line = f"  s{section} {tag} → s{e.dst}"
+                line = f"  {_format_node(section)} {tag} → {_format_node(e.dst)}"
                 if e.snippet:
                     line += f"  ({_short(e.snippet)})"
                 click.echo(line)
             if not edges:
                 click.echo("  (none)")
     if direction in ("in", "both"):
-        click.echo(colorize(f"=== incoming to s{section} ({klabel}) ===", Colors.BOLD))
+        click.echo(colorize(
+            f"=== incoming to {_format_node(section)} ({klabel}) ===",
+            Colors.BOLD,
+        ))
         if transitive:
             for src in sorted(graph.reachable_to(section, kinds)):
-                click.echo(f"  s{src} →")
+                click.echo(f"  {_format_node(src)} →")
             click.echo(f"  ({len(graph.reachable_to(section, kinds))} reverse-reachable)")
         else:
             edges = graph.incoming(section, kinds)
             for e in edges:
                 tag = colorize(f"[{e.kind}]", _kind_color(e.kind))
-                line = f"  s{e.src} {tag} → s{section}"
+                line = f"  {_format_node(e.src)} {tag} → {_format_node(section)}"
                 if e.snippet:
                     line += f"  ({_short(e.snippet)})"
                 click.echo(line)
@@ -155,20 +177,83 @@ def _print_graph_summary(graph: ReferenceGraph) -> None:
     d = graph.to_dict()
     stats = d["stats"]
     click.echo(colorize("=== reference graph ===", Colors.BOLD))
-    click.echo(f"{stats['n_nodes']} sections, {stats['n_edges']} edges")
+    click.echo(f"{stats['n_nodes']} nodes, {stats['n_edges']} edges")
     click.echo(f"  subsumes: {stats['n_subsumes']}")
     click.echo(f"  amends:   {stats['n_amends']}")
     click.echo(f"  implicit: {stats['n_implicit']}")
+    click.echo(f"  authority: {stats['n_authority']}")
+    click.echo(f"  treatment: {stats['n_treatment']}")
     # Top 5 most-referenced sections (by incoming edge count).
     top_in = sorted(
         ((s, len(graph.in_edges.get(s, []))) for s in graph.nodes),
         key=lambda x: -x[1],
     )[:5]
-    click.echo(colorize("\ntop 5 most-referenced sections:", Colors.BOLD))
+    click.echo(colorize("\ntop 5 most-referenced nodes:", Colors.BOLD))
     for s, n in top_in:
         if n == 0:
             break
-        click.echo(f"  s{s:<6}  ← {n} incoming")
+        click.echo(f"  {_format_node(s):<24} ← {n} incoming")
+
+
+def _emit_treatment_edges(graph: ReferenceGraph, kinds, json_output: bool) -> None:
+    kset = set(kinds)
+    edges = [
+        edge
+        for src_edges in graph.out_edges.values()
+        for edge in src_edges
+        if edge.kind in kset
+    ]
+    if json_output:
+        payload = {
+            "kinds": list(kinds),
+            "edges": [
+                {
+                    "src": edge.src,
+                    "dst": edge.dst,
+                    "kind": edge.kind,
+                    "source": edge.source_path,
+                    "snippet": edge.snippet,
+                }
+                for edge in edges
+            ],
+        }
+        click.echo(json.dumps(payload, indent=2, sort_keys=True))
+        return
+
+    klabel = "/".join(kinds)
+    click.echo(colorize(f"=== case-law treatment graph ({klabel}) ===", Colors.BOLD))
+    for edge in edges:
+        tag = colorize(f"[{edge.kind}]", _kind_color(edge.kind))
+        line = f"  {_format_node(edge.src)} {tag} → {_format_node(edge.dst)}"
+        if edge.snippet:
+            line += f"  ({_short(edge.snippet)})"
+        click.echo(line)
+    if not edges:
+        click.echo("  (none)")
+
+
+def _select_edge_kinds(kinds, *, treatment: bool, overruled: bool):
+    if overruled:
+        return ["treatment_overruled"]
+    if treatment:
+        return list(_TREATMENT_KINDS)
+    return list(kinds) if kinds else None
+
+
+def _normalise_query_node(section: str, graph: ReferenceGraph, case_mode: bool) -> str:
+    if section in graph.nodes:
+        return section
+    if case_mode and not section.startswith("case:"):
+        candidate = f"case:{section}"
+        if candidate in graph.nodes:
+            return candidate
+    return section
+
+
+def _format_node(node: str) -> str:
+    if node.startswith("case:"):
+        return node.removeprefix("case:")
+    return f"s{node}"
 
 
 def _emit_scc(graph: ReferenceGraph, kinds, json_output: bool) -> None:
@@ -219,9 +304,15 @@ def _emit_scc(graph: ReferenceGraph, kinds, json_output: bool) -> None:
 
 
 def _kind_color(kind: str) -> str:
-    return {"subsumes": Colors.BLUE, "amends": Colors.CYAN, "implicit": Colors.YELLOW}.get(
-        kind, Colors.RESET
-    )
+    return {
+        "subsumes": Colors.BLUE,
+        "amends": Colors.CYAN,
+        "implicit": Colors.YELLOW,
+        "authority": Colors.GREEN,
+        "treatment_followed": Colors.GREEN,
+        "treatment_distinguished": Colors.YELLOW,
+        "treatment_overruled": Colors.RED,
+    }.get(kind, Colors.RESET)
 
 
 def _short(text: str, width: int = 60) -> str:
