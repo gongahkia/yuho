@@ -601,6 +601,7 @@ def main() -> int:
     for k, v in KNOWN_DIVERGENCES.items():
         print(f"  - {k}: {v}")
 
+    print(f"\nStructural diff: {'PASS' if ok else 'FAIL'}")
     return 0 if ok else 1
 
 
