@@ -19,6 +19,16 @@ class MermaidTranspiler(TranspilerBase, Visitor):
     with diamonds for conditions and rectangles for outcomes.
     """
 
+    _ELEMENT_CLASSES = {
+        "actus_reus": ("ar", "fill:#fee2e2,stroke:#dc2626,color:#7f1d1d"),
+        "mens_rea": ("mr", "fill:#dbeafe,stroke:#2563eb,color:#1e3a8a"),
+        "circumstance": (
+            "circumstance",
+            "fill:#dcfce7,stroke:#16a34a,color:#14532d",
+        ),
+    }
+    _EXCEPTION_CLASS = ("exception", "fill:#fef3c7,stroke:#d97706,color:#78350f")
+
     def __init__(
         self,
         direction: str = "TD",
@@ -55,6 +65,7 @@ class MermaidTranspiler(TranspilerBase, Visitor):
         self._subgraph_counter = 0
         self._node_ids: Dict[int, str] = {}
         self._element_nodes: Dict[str, str] = {}
+        self._node_classes: Dict[str, str] = {}
         self._nesting_depth = 0
 
     @property
@@ -67,6 +78,7 @@ class MermaidTranspiler(TranspilerBase, Visitor):
         self._node_counter = 0
         self._subgraph_counter = 0
         self._element_nodes = {}
+        self._node_classes = {}
         self._nesting_depth = 0
         self._emit(f"flowchart {self.direction}")
         if self.shape == "schema":
@@ -81,6 +93,7 @@ class MermaidTranspiler(TranspilerBase, Visitor):
                 self._transpile_statute(statute)
             for func in ast.function_defs:
                 self._transpile_function(func)
+        self._emit_theme_classes()
         return "\n".join(self._output)
 
     def _emit(self, line: str) -> None:
@@ -93,6 +106,27 @@ class MermaidTranspiler(TranspilerBase, Visitor):
     def _new_subgraph_id(self, name: str = "sub") -> str:
         self._subgraph_counter += 1
         return f"{name}_{self._subgraph_counter}"
+
+    def _class_node(self, node_id: str, class_name: str) -> None:
+        self._node_classes[node_id] = class_name
+
+    def _class_element_node(self, node_id: str, element_type: str) -> None:
+        class_info = self._ELEMENT_CLASSES.get(element_type)
+        if class_info:
+            self._class_node(node_id, class_info[0])
+
+    def _class_exception_node(self, node_id: str) -> None:
+        self._class_node(node_id, self._EXCEPTION_CLASS[0])
+
+    def _emit_theme_classes(self) -> None:
+        if not self._node_classes:
+            return
+        used = set(self._node_classes.values())
+        for class_name, style in (*self._ELEMENT_CLASSES.values(), self._EXCEPTION_CLASS):
+            if class_name in used:
+                self._emit(f"    classDef {class_name} {style};")
+        for node_id, class_name in self._node_classes.items():
+            self._emit(f"    class {node_id} {class_name};")
 
     def _indent(self) -> str:
         return "    " * (self._nesting_depth + 1)
@@ -136,6 +170,7 @@ class MermaidTranspiler(TranspilerBase, Visitor):
                 self._emit(f"    {elem_start}[/{self._q(prefix + elem.name)}/]")
                 self._emit(f"    {prev_id} --> {elem_start}")
                 self._element_nodes[elem.name] = elem_start
+                self._class_element_node(elem_start, elem.element_type)
                 prev_id = self._transpile_match_expr(elem.description, elem_start)
             else:
                 elem_id = self._new_node_id("ELEM")
@@ -147,11 +182,13 @@ class MermaidTranspiler(TranspilerBase, Visitor):
                 self._emit(f"    {elem_id}[{self._q(label)}]")
                 self._emit(f"    {prev_id} --> {elem_id}")
                 self._element_nodes[elem.name] = elem_id
+                self._class_element_node(elem_id, elem.element_type)
                 prev_id = elem_id
         if statute.exceptions:
             exc_id = self._new_node_id("EXC")
             self._emit(f"    {exc_id}{{{{{self._q('Exceptions / defences')}}}}}")
             self._emit(f"    {prev_id} --> {exc_id}")
+            self._class_exception_node(exc_id)
             no_exc_id = self._new_node_id("NOEXC")
             self._emit(f"    {no_exc_id}[{self._q('No exception defeats liability')}]")
             self._emit(f"    {exc_id} -->|{self._q('None')}| {no_exc_id}")
@@ -161,6 +198,7 @@ class MermaidTranspiler(TranspilerBase, Visitor):
                 effect = self._exception_outcome_label(exc)
                 self._emit(f"    {exc_out_id}[{self._q(effect)}]")
                 self._emit(f"    {exc_id} -->|{self._q(label)}| {exc_out_id}")
+                self._class_exception_node(exc_out_id)
             prev_id = no_exc_id
         all_penalties = []
         if statute.penalty is not None:
@@ -234,6 +272,7 @@ class MermaidTranspiler(TranspilerBase, Visitor):
             self._emit(f"    {prev_id} -->|{self._q('yes')}| {elem_id}")
             self._emit(f"    {elem_id} -.->|{self._q('no')}| {no_offence_id}")
             self._element_nodes[elem.name] = elem_id
+            self._class_element_node(elem_id, elem.element_type)
             prev_id = elem_id
 
         # Exceptions as a priority-ordered chain: each exception is a
@@ -260,10 +299,12 @@ class MermaidTranspiler(TranspilerBase, Visitor):
                 guard_label = f"{label} fires?"
                 self._emit(f"    {guard_id}{{{self._q(guard_label)}}}")
                 self._emit(f"    {prev_id} -->|{self._q('continue')}| {guard_id}")
+                self._class_exception_node(guard_id)
                 exc_out_id = self._new_node_id("EXCOUT")
                 effect = self._exception_outcome_label(exc)
                 self._emit(f"    {exc_out_id}[{self._q(effect)}]")
                 self._emit(f"    {guard_id} -->|{self._q('yes')}| {exc_out_id}")
+                self._class_exception_node(exc_out_id)
                 # `no` falls through to the next guard / penalty.
                 prev_id = guard_id
                 # Track the no-edge target later; for now leave the
@@ -662,6 +703,7 @@ class MermaidTranspiler(TranspilerBase, Visitor):
                 self._emit(f"    {member_id}[{self._q(label)}]")
                 self._emit(f"    {current} --> {member_id}")
                 self._element_nodes[member.name] = member_id
+                self._class_element_node(member_id, member.element_type)
                 current = member_id
         return current
 
