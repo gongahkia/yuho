@@ -4,6 +4,11 @@ Shared analysis service for parser, AST, and semantic summaries.
 
 from __future__ import annotations
 
+import hashlib
+import os
+import pickle
+import re
+from copy import copy
 from dataclasses import dataclass, field
 from pathlib import Path
 from time import perf_counter
@@ -40,6 +45,9 @@ ANALYSIS_ERROR_CODES: dict[str, str] = {
     "semantic_issue": "Y0400",
     "semantic_analysis_failed": "Y0499",
 }
+CACHE_VERSION = "yuho-analysis-cache-v1"
+CACHE_ENV = "YUHO_ANALYSIS_CACHE"
+CACHE_DIR_ENV = "YUHO_CACHE_DIR"
 
 
 def _code(name: str) -> str:
@@ -232,6 +240,7 @@ class AnalysisResult:
     ast_duration_ms: float = 0.0
     semantic_duration_ms: float = 0.0
     total_duration_ms: float = 0.0
+    cache_hit: bool = False
 
     @property
     def is_valid(self) -> bool:
@@ -417,6 +426,7 @@ class AnalysisResult:
         payload: dict[str, Any] = {
             "valid": self.is_valid,
             "file": self.file,
+            "cache_hit": self.cache_hit,
             "parse_valid": self.parse_valid,
             "ast_valid": self.ast_valid,
             "semantic_checked": self.semantic_checked,
@@ -436,6 +446,95 @@ class AnalysisResult:
                 self.clock_load_scale.to_dict() if self.clock_load_scale else None
             )
         return payload
+
+
+def _source_hash(source: str) -> str:
+    digest = hashlib.sha256()
+    digest.update(CACHE_VERSION.encode("utf-8"))
+    digest.update(b"\0")
+    digest.update(source.encode("utf-8"))
+    return digest.hexdigest()
+
+
+def _analysis_stage(*, run_semantic: bool, features: Optional[set[str]]) -> str:
+    enabled = ",".join(sorted(features or ())) or "none"
+    semantic = "semantic" if run_semantic else "syntax"
+    return f"analysis:{semantic}:features={enabled}"
+
+
+def _cache_root() -> Optional[Path]:
+    if os.environ.get(CACHE_ENV, "1") in {"0", "false", "False", "no"}:
+        return None
+    if CACHE_DIR_ENV in os.environ:
+        return Path(os.environ[CACHE_DIR_ENV]).expanduser() / "analysis"
+    xdg = os.environ.get("XDG_CACHE_HOME")
+    if xdg:
+        return Path(xdg).expanduser() / "yuho" / "analysis"
+    return Path.home() / ".cache" / "yuho" / "analysis"
+
+
+def _cache_path(file_hash: str, stage: str) -> Optional[Path]:
+    root = _cache_root()
+    if root is None:
+        return None
+    safe_stage = re.sub(r"[^A-Za-z0-9_.=-]+", "_", stage)
+    return root / file_hash / f"{safe_stage}.pickle"
+
+
+def _load_cached_analysis(
+    file: str,
+    source: str,
+    file_hash: str,
+    stage: str,
+) -> Optional[AnalysisResult]:
+    path = _cache_path(file_hash, stage)
+    if path is None or not path.exists():
+        return None
+    try:
+        with path.open("rb") as fh:
+            payload = pickle.load(fh)
+    except Exception:
+        return None
+    if not isinstance(payload, dict):
+        return None
+    if payload.get("version") != CACHE_VERSION:
+        return None
+    if payload.get("file_hash") != file_hash or payload.get("stage") != stage:
+        return None
+    if payload.get("file") != file:
+        return None
+    result = payload.get("result")
+    if not isinstance(result, AnalysisResult):
+        return None
+    result.file = file
+    result.source = source
+    result.tree = None
+    result.cache_hit = True
+    return result
+
+
+def _store_cached_analysis(result: AnalysisResult, file_hash: str, stage: str) -> None:
+    path = _cache_path(file_hash, stage)
+    if path is None:
+        return
+    cached = copy(result)
+    cached.tree = None
+    cached.cache_hit = False
+    payload = {
+        "version": CACHE_VERSION,
+        "file": result.file,
+        "file_hash": file_hash,
+        "stage": stage,
+        "result": cached,
+    }
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        tmp_path = path.with_suffix(".tmp")
+        with tmp_path.open("wb") as fh:
+            pickle.dump(payload, fh, protocol=pickle.HIGHEST_PROTOCOL)
+        tmp_path.replace(path)
+    except Exception:
+        return
 
 
 def analyze_file(
@@ -519,12 +618,22 @@ def analyze_file(
             ],
         )
 
-    return analyze_source(
+    file_label = str(file_path)
+    normalized_source = source[1:] if source.startswith("\ufeff") else source
+    file_hash = _source_hash(normalized_source)
+    stage = _analysis_stage(run_semantic=run_semantic, features=features)
+    cached = _load_cached_analysis(file_label, normalized_source, file_hash, stage)
+    if cached is not None:
+        return cached
+
+    result = analyze_source(
         source,
-        file=str(file_path),
+        file=file_label,
         run_semantic=run_semantic,
         features=features,
     )
+    _store_cached_analysis(result, file_hash, stage)
+    return result
 
 
 def analyze_source(
