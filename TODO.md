@@ -6,5 +6,4 @@ Projects: +language +tooling +corpus +housekeeping +education +jurisdiction +pos
 Contexts: @grammar @ast @lint @lean @verify @transpile @cli @lsp @resolver @library @repo @memory @typecheck @docs @scrape @viz @parser @analysis @interpreter @tests.
 
 ```todo
-(A) 2026-06-21 Update MEMORY.md key paths after fossil deletion +housekeeping @memory effort:XS
 ```
