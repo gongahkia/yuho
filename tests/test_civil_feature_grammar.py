@@ -7,8 +7,10 @@ from pathlib import Path
 
 from click.testing import CliRunner
 
+from yuho.ast import nodes
 from yuho.cli.main import cli
 from yuho.parser import get_parser
+from yuho.services.analysis import analyze_source
 
 
 CIVIL_SOURCE = """
@@ -40,6 +42,29 @@ def test_civil_primitives_parse_with_feature_flag():
         "condition_precedent",
         "breach",
     ]
+
+
+def test_civil_primitives_build_ast_nodes():
+    result = analyze_source(
+        CIVIL_SOURCE,
+        file="<civil>",
+        run_semantic=False,
+        features={"civil"},
+    )
+
+    assert not result.parse_errors
+    civil_nodes = [
+        element
+        for element in result.ast.statutes[0].elements
+        if isinstance(element, nodes.CivilPrimitiveNode)
+    ]
+    assert [node.primitive_type for node in civil_nodes] == [
+        "party",
+        "obligation_to",
+        "condition_precedent",
+        "breach",
+    ]
+    assert civil_nodes[0].name == "buyer"
 
 
 def test_check_feature_civil_allows_file(tmp_path: Path):

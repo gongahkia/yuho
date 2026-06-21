@@ -203,6 +203,12 @@ class JSONTranspiler(TranspilerBase, Visitor):
                 result["actor"] = node.actor
             if node.patient:
                 result["patient"] = node.patient
+        elif isinstance(node, nodes.CivilPrimitiveNode):
+            result["primitive_type"] = node.primitive_type
+            result["name"] = node.name
+            result["description"] = self._to_dict(node.description)
+            if node.doc_comment:
+                result["doc_comment"] = node.doc_comment
         elif isinstance(node, nodes.PartyNode):
             result["role"] = node.role
             result["name"] = node.name

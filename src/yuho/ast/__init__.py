@@ -57,6 +57,7 @@ from yuho.ast.nodes import (
     # Statutes
     DefinitionEntry,
     ElementNode,
+    CivilPrimitiveNode,
     ElementGroupNode,
     ExceptionNode,
     CaseTreatmentNode,
@@ -173,6 +174,7 @@ __all__ = [
     # Statutes
     "DefinitionEntry",
     "ElementNode",
+    "CivilPrimitiveNode",
     "ElementGroupNode",
     "ExceptionNode",
     "CaseTreatmentNode",

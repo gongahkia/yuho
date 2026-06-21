@@ -172,6 +172,9 @@ class Transformer(Visitor):
     def visit_element(self, node):
         return self.transform_element(node)
 
+    def visit_civil_primitive(self, node):
+        return self.transform_civil_primitive(node)
+
     def visit_element_group(self, node):
         return self.transform_element_group(node)
 
@@ -638,6 +641,20 @@ class Transformer(Visitor):
                 actor=node.actor,
                 patient=node.patient,
                 interpretations=new_interpretations,
+                source_location=node.source_location,
+            )
+        return node
+
+    def transform_civil_primitive(
+        self, node: nodes.CivilPrimitiveNode
+    ) -> nodes.CivilPrimitiveNode:
+        new_desc = self.transform(node.description)
+        if new_desc is not node.description:
+            return nodes.CivilPrimitiveNode(
+                primitive_type=node.primitive_type,
+                name=node.name,
+                description=new_desc,
+                doc_comment=node.doc_comment,
                 source_location=node.source_location,
             )
         return node

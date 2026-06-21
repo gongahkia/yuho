@@ -10,6 +10,9 @@ from yuho.ast import nodes
 from yuho.parser.source_location import SourceLocation
 
 
+CIVIL_ELEMENT_TYPES = {"party", "obligation_to", "condition_precedent", "breach"}
+
+
 class ASTBuilder:
     """
     Builds Yuho AST from a tree-sitter parse tree.
@@ -1298,10 +1301,22 @@ class ASTBuilder:
                 )
         return parties
 
-    def _build_element_entry(self, node) -> nodes.ElementNode:
+    def _build_element_entry(self, node):
         type_node = self._child_by_field(node, "element_type")
         name_node = self._child_by_field(node, "name")
         desc_node = self._child_by_field(node, "description")
+        element_type = self._text(type_node) if type_node else "actus_reus"
+        description = (
+            self._build_expression(desc_node) if desc_node else nodes.StringLit(value="")
+        )
+        if element_type in CIVIL_ELEMENT_TYPES:
+            return nodes.CivilPrimitiveNode(
+                primitive_type=element_type,
+                name=self._text(name_node) if name_node else "",
+                description=description,
+                doc_comment=self._get_doc_comment(node),
+                source_location=self._loc(node),
+            )
         caused_by_node = self._child_by_field(node, "caused_by")
         burden_node = self._child_by_type(node, "burden_qualifier")
         actor_node = self._child_by_field(node, "actor")
@@ -1321,9 +1336,9 @@ class ASTBuilder:
                     burden_standard = t
 
         return nodes.ElementNode(
-            element_type=self._text(type_node) if type_node else "actus_reus",
+            element_type=element_type,
             name=self._text(name_node) if name_node else "",
-            description=self._build_expression(desc_node) if desc_node else nodes.StringLit(value=""),
+            description=description,
             caused_by=self._text(caused_by_node) if caused_by_node else None,
             burden=burden,
             burden_standard=burden_standard,

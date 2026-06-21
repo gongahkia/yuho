@@ -253,6 +253,9 @@ class Visitor:
     def visit_element(self, node: nodes.ElementNode) -> Any:
         return self.generic_visit(node)
 
+    def visit_civil_primitive(self, node: nodes.CivilPrimitiveNode) -> Any:
+        return self.generic_visit(node)
+
     def visit_penalty(self, node: nodes.PenaltyNode) -> Any:
         return self.generic_visit(node)
 

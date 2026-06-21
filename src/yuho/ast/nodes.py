@@ -876,6 +876,22 @@ class InterpretationNode(ASTNode):
 
 
 @dataclass(frozen=True)
+class CivilPrimitiveNode(ASTNode):
+    """Civil-law primitive gated by the civil feature."""
+
+    primitive_type: str
+    name: str
+    description: ASTNode
+    doc_comment: Optional[str] = None
+
+    def accept(self, visitor: "Visitor"):
+        return visitor.visit_civil_primitive(self)
+
+    def children(self) -> List[ASTNode]:
+        return [self.description]
+
+
+@dataclass(frozen=True)
 class ElementNode(ASTNode):
     """
     Element of an offense (actus reus or mens rea).
@@ -911,7 +927,7 @@ class ElementGroupNode(ASTNode):
     """
 
     combinator: str  # "all_of" or "any_of"
-    members: Tuple[Union["ElementNode", "ElementGroupNode"], ...]
+    members: Tuple[Union["ElementNode", "CivilPrimitiveNode", "ElementGroupNode"], ...]
 
     def accept(self, visitor: "Visitor"):
         return visitor.visit_element_group(self)
@@ -1170,7 +1186,7 @@ class SubsectionNode(ASTNode):
 
     number: str  # e.g. "(1)", "(2A)", "(a)"
     definitions: Tuple[DefinitionEntry, ...] = ()
-    elements: Tuple[Union[ElementNode, ElementGroupNode], ...] = ()
+    elements: Tuple[Union[ElementNode, CivilPrimitiveNode, ElementGroupNode], ...] = ()
     penalty: Optional[PenaltyNode] = None
     illustrations: Tuple[IllustrationNode, ...] = ()
     exceptions: Tuple[ExceptionNode, ...] = ()
@@ -1204,7 +1220,7 @@ class StatuteNode(ASTNode):
     section_number: str
     title: Optional[StringLit]
     definitions: Tuple[DefinitionEntry, ...]
-    elements: Tuple[Union[ElementNode, ElementGroupNode], ...]
+    elements: Tuple[Union[ElementNode, CivilPrimitiveNode, ElementGroupNode], ...]
     penalty: Optional[PenaltyNode]
     illustrations: Tuple[IllustrationNode, ...]
     exceptions: Tuple[ExceptionNode, ...] = ()
