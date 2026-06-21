@@ -4,12 +4,20 @@ Check command - parse and validate Yuho files.
 
 import json
 import sys
+import time
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any, Callable, Optional
 
 import click
 
-from yuho.cli.error_formatter import format_error, format_errors, format_suggestion, format_suggestions, Colors, colorize
+from yuho.cli.error_formatter import (
+    format_error,
+    format_errors,
+    format_suggestion,
+    format_suggestions,
+    Colors,
+    colorize,
+)
 from yuho.services.analysis import analyze_file, analyze_source
 from yuho.output.sarif import make_sarif_result, to_sarif
 
@@ -113,6 +121,7 @@ def run_check(
     output_format: str = "text",
     syntax_only: bool = False,
     features: Optional[set[str]] = None,
+    watch: bool = False,
 ) -> None:
     """
     Parse and validate a Yuho source file.
@@ -127,6 +136,25 @@ def run_check(
     """
     if output_format == "json":
         json_output = True
+    if watch:
+        if file == "-":
+            click.echo("error: --watch requires a file path, not stdin", err=True)
+            sys.exit(2)
+        status = _run_watch_mode(
+            file,
+            lambda: _run_check_once(
+                file=file,
+                json_output=json_output,
+                verbose=verbose,
+                explain_errors=explain_errors,
+                metrics=metrics,
+                output_format=output_format,
+                syntax_only=syntax_only,
+                features=features,
+            ),
+        )
+        sys.exit(status)
+
     file_label = "<stdin>" if file == "-" else str(Path(file))
 
     if verbose:
@@ -200,8 +228,7 @@ def run_check(
         # next to the offending source line, not at the end of a wall
         # of errors.
         click.echo(
-            colorize(f"Found {len(analysis.parse_errors)} error(s) in {file_label}:",
-                     Colors.BOLD),
+            colorize(f"Found {len(analysis.parse_errors)} error(s) in {file_label}:", Colors.BOLD),
             err=True,
         )
         click.echo("", err=True)
@@ -270,3 +297,108 @@ def run_check(
             )
 
     sys.exit(1 if payload["errors"] else 0)
+
+
+def _run_check_once(
+    *,
+    file: str,
+    json_output: bool,
+    verbose: bool,
+    explain_errors: bool,
+    metrics: bool,
+    output_format: str,
+    syntax_only: bool,
+    features: Optional[set[str]],
+) -> int:
+    try:
+        run_check(
+            file=file,
+            json_output=json_output,
+            verbose=verbose,
+            explain_errors=explain_errors,
+            metrics=metrics,
+            output_format=output_format,
+            syntax_only=syntax_only,
+            features=features,
+            watch=False,
+        )
+    except SystemExit as exc:
+        return _exit_code(exc)
+    return 0
+
+
+def _run_watch_mode(file: str, run_once: Callable[[], int]) -> int:
+    try:
+        FileSystemEventHandler, Observer = _load_watchdog()
+    except ImportError:
+        click.echo("error: --watch requires watchdog; install the project dependencies", err=True)
+        return 2
+
+    target = Path(file).resolve()
+    watch_dir = target.parent
+    if not watch_dir.exists():
+        click.echo(f"error: watch directory does not exist: {watch_dir}", err=True)
+        return 2
+
+    click.echo(f"Watching {target}")
+    last_status = run_once()
+    last_run = time.monotonic()
+
+    class Handler(FileSystemEventHandler):
+        def on_created(self, event) -> None:
+            self._maybe_run(event)
+
+        def on_modified(self, event) -> None:
+            self._maybe_run(event)
+
+        def on_moved(self, event) -> None:
+            self._maybe_run(event)
+
+        def _maybe_run(self, event) -> None:
+            nonlocal last_run, last_status
+            if getattr(event, "is_directory", False):
+                return
+            if not _event_touches_target(event, target):
+                return
+            now = time.monotonic()
+            if now - last_run < 0.1:
+                return
+            last_run = now
+            click.echo(f"\nChange detected: {target}")
+            last_status = run_once()
+
+    observer = Observer()
+    observer.schedule(Handler(), str(watch_dir), recursive=False)
+    observer.start()
+    try:
+        while True:
+            time.sleep(0.2)
+    except KeyboardInterrupt:
+        click.echo("\nStopped.")
+    finally:
+        observer.stop()
+        observer.join()
+    return last_status
+
+
+def _load_watchdog():
+    from watchdog.events import FileSystemEventHandler
+    from watchdog.observers import Observer
+
+    return FileSystemEventHandler, Observer
+
+
+def _event_touches_target(event, target: Path) -> bool:
+    candidates = [getattr(event, "src_path", None), getattr(event, "dest_path", None)]
+    for candidate in candidates:
+        if candidate and Path(candidate).resolve() == target:
+            return True
+    return False
+
+
+def _exit_code(exc: SystemExit) -> int:
+    if exc.code is None:
+        return 0
+    if isinstance(exc.code, int):
+        return exc.code
+    return 1

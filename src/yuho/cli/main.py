@@ -54,6 +54,7 @@ def cli(ctx: click.Context, verbose: bool, use_color: Optional[bool], quiet: boo
 @click.option("--json", "json_output", is_flag=True, help="Output errors as JSON")
 @click.option("--explain-error", "explain_errors", is_flag=True, help="Explain diagnostics")
 @click.option("--metrics", is_flag=True, help="Include code_scale and clock_load_scale metrics")
+@click.option("--watch", is_flag=True, help="Re-run when FILE changes")
 @click.option(
     "--format",
     "output_format",
@@ -76,6 +77,7 @@ def check(
     json_output: bool,
     explain_errors: bool,
     metrics: bool,
+    watch: bool,
     output_format: str,
     syntax_only: bool,
     features: tuple[str, ...],
@@ -89,6 +91,7 @@ def check(
         verbose=ctx.obj["verbose"],
         explain_errors=explain_errors,
         metrics=metrics,
+        watch=watch,
         output_format=output_format,
         syntax_only=syntax_only,
         features=set(features),
