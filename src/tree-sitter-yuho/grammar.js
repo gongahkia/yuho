@@ -26,15 +26,11 @@ module.exports = grammar({
   conflicts: $ => [
     // Allow recovery when statement/expression boundaries are ambiguous
     [$.variable_declaration, $.expression_statement],
-    [$.assignment_statement, $.expression_statement],
-    // Match arm body can be expression or pass
-    [$.match_arm],
     // Return statement with optional expression
     [$.return_statement],
     // pass can be statement or expression
     [$.pass_statement, $.pass_expression],
     // struct literal vs various statement boundaries
-    [$.struct_literal, $.expression_statement],
     [$.struct_literal, $.assert_statement],
     [$.struct_literal, $.return_statement],
     [$.struct_literal, $.variable_declaration],

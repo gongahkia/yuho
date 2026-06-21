@@ -222,7 +222,7 @@
 (wildcard_pattern) @constant.wildcard
 
 (match_arm
-  pattern: (identifier) @constant.enum)
+  pattern: (binding_pattern) @constant.enum)
 
 ; =============================================================================
 ; Statute-specific
