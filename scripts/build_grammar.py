@@ -133,6 +133,9 @@ def build_grammar(grammar_dir: Path, output_dir: Path = None):
                         shutil.copy2(lib_path, installed_pkg_dir / dest_name)
                 print(f"Copied {src_name} → {output_dir} and {installed_pkg_dir}")
                 copied = True
+                break
+        if copied:
+            break
 
     if not copied:
         # Check build directory
