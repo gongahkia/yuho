@@ -32,7 +32,7 @@ _TREATMENT_EDGE_KINDS = (
     "treatment_distinguished",
     "treatment_overruled",
 )
-_EDGE_KINDS = ("subsumes", "amends", "implicit", *_TREATMENT_EDGE_KINDS)
+_EDGE_KINDS = ("subsumes", "amends", "implicit", "authority", *_TREATMENT_EDGE_KINDS)
 
 # Matches "s415", "s.415", "s. 415", "s.415A", "s. 376AA", "section 415",
 # "section 415A", and "Section 415" with optional trailing alpha suffix.
@@ -293,6 +293,7 @@ class ReferenceGraph:
                 "n_subsumes": self.edge_count("subsumes"),
                 "n_amends": self.edge_count("amends"),
                 "n_implicit": self.edge_count("implicit"),
+                "n_authority": self.edge_count("authority"),
                 "n_treatment": sum(self.edge_count(kind) for kind in _TREATMENT_EDGE_KINDS),
                 "n_treatment_followed": self.edge_count("treatment_followed"),
                 "n_treatment_distinguished": self.edge_count("treatment_distinguished"),
@@ -393,6 +394,14 @@ def add_edges_from_module(
 
         for case in stat.case_law:
             src_case = _case_node(case.case_name.value)
+            graph.add(ReferenceEdge(
+                src=src_section,
+                dst=src_case,
+                kind="authority",
+                source_path=source_path,
+                snippet=case.holding.value[:120].strip().replace("\n", " "),
+            ))
+            added += 1
             for treatment in case.treatments:
                 kind = f"treatment_{treatment.kind}"
                 target = treatment.target.value

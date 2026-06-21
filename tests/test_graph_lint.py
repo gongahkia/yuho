@@ -62,3 +62,46 @@ class TestCrossSectionCycle:
         assert len(warnings) == 1
         msg = warnings[0].message
         assert "sA" in msg and "sB" in msg and "sC" in msg
+
+
+class TestTreatmentLint:
+    def test_overruled_case_cited_as_section_authority(self):
+        g = _g()
+        _add(g, "case:New v Case", "case:Old v Case", kind="treatment_overruled")
+        _add(g, "415", "case:Old v Case", kind="authority")
+
+        warnings = lint_reference_graph(g)
+
+        assert any(w.code == "overruled_authority_cited" for w in warnings)
+        warning = next(w for w in warnings if w.code == "overruled_authority_cited")
+        assert warning.sections == ("415", "case:Old v Case", "case:New v Case")
+        assert "Old v Case" in warning.message
+
+    def test_overruled_case_followed_by_later_case(self):
+        g = _g()
+        _add(g, "case:New v Case", "case:Old v Case", kind="treatment_overruled")
+        _add(g, "case:Later v Case", "case:Old v Case", kind="treatment_followed")
+
+        warnings = lint_reference_graph(g)
+
+        assert any(w.code == "overruled_authority_cited" for w in warnings)
+
+    def test_contradictory_treatment_pair(self):
+        g = _g()
+        _add(g, "case:New v Case", "case:Old v Case", kind="treatment_followed")
+        _add(g, "case:New v Case", "case:Old v Case", kind="treatment_overruled")
+
+        warnings = lint_reference_graph(g)
+
+        assert any(w.code == "contradictory_treatment" for w in warnings)
+        warning = next(w for w in warnings if w.code == "contradictory_treatment")
+        assert warning.sections == ("case:New v Case", "case:Old v Case")
+        assert "followed" in warning.message and "overruled" in warning.message
+
+    def test_overruled_case_not_cited_has_no_warning(self):
+        g = _g()
+        _add(g, "case:New v Case", "case:Old v Case", kind="treatment_overruled")
+
+        warnings = lint_reference_graph(g)
+
+        assert all(w.code != "overruled_authority_cited" for w in warnings)

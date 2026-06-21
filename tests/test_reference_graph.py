@@ -101,6 +101,7 @@ class TestReferenceGraph:
         assert d["stats"]["n_edges"] == 2
         assert d["stats"]["n_subsumes"] == 1
         assert d["stats"]["n_implicit"] == 1
+        assert d["stats"]["n_authority"] == 0
 
     def test_treatment_edge_kind(self):
         self.g.add(ReferenceEdge(
@@ -232,7 +233,10 @@ statute 1 "Demo" {
         assert len(edges) == 1
         assert edges[0].dst == "case:Old v Case"
         assert edges[0].source_path == "library/s1_demo/statute.yh"
+        authorities = graph.outgoing("1", kinds=["authority"])
+        assert [edge.dst for edge in authorities] == ["case:Foo v Bar"]
         assert graph.to_dict()["stats"]["n_treatment"] == 1
+        assert graph.to_dict()["stats"]["n_authority"] == 1
 
 
 @pytest.mark.skipif(

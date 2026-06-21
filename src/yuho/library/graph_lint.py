@@ -10,6 +10,10 @@ Current diagnostics:
 * ``cross_section_cycle`` — non-trivial SCC in the implicit/subsumes
   reference graph. Pure amendment chains are excluded by default since
   legitimate "amends" history is naturally chain-like and benign.
+* ``overruled_authority_cited`` — an overruled case is still cited as a
+  section authority or followed by another case.
+* ``contradictory_treatment`` — the same case pair carries inconsistent
+  treatment edges.
 
 Run via ``yuho refs --scc`` or programmatically::
 
@@ -30,6 +34,11 @@ from yuho.library.reference_graph import ReferenceGraph
 
 
 _DEFAULT_KINDS = ("implicit", "subsumes")  # exclude "amends" by default
+_TREATMENT_KINDS = (
+    "treatment_followed",
+    "treatment_distinguished",
+    "treatment_overruled",
+)
 
 
 @dataclass(frozen=True)
@@ -68,6 +77,79 @@ def _check_cross_section_cycles(
             )
         )
     return out
+
+
+def _case_label(node: str) -> str:
+    return node.removeprefix("case:")
+
+
+def _format_graph_node(node: str) -> str:
+    if node.startswith("case:"):
+        return _case_label(node)
+    return f"s{node}"
+
+
+def _iter_edges(graph: ReferenceGraph):
+    for edges in graph.out_edges.values():
+        yield from edges
+
+
+def _check_overruled_authority_citations(graph: ReferenceGraph) -> List[GraphLintWarning]:
+    overruled_by: dict[str, list[str]] = {}
+    for edge in _iter_edges(graph):
+        if edge.kind == "treatment_overruled":
+            overruled_by.setdefault(edge.dst, []).append(edge.src)
+
+    warnings: List[GraphLintWarning] = []
+    seen: set[tuple[str, str]] = set()
+    for overruled, overrulers in overruled_by.items():
+        for citing in graph.incoming(overruled, kinds=["authority", "treatment_followed"]):
+            key = (citing.src, overruled)
+            if key in seen:
+                continue
+            seen.add(key)
+            overruler_names = ", ".join(_format_graph_node(src) for src in sorted(overrulers))
+            if citing.kind == "authority":
+                relation = f"cited as authority by {_format_graph_node(citing.src)}"
+            else:
+                relation = f"followed by {_format_graph_node(citing.src)}"
+            warnings.append(
+                GraphLintWarning(
+                    code="overruled_authority_cited",
+                    sections=(citing.src, overruled, *tuple(sorted(overrulers))),
+                    message=(
+                        f"overruled case {_format_graph_node(overruled)} is still "
+                        f"{relation}; overruled by {overruler_names}"
+                    ),
+                    severity="warning",
+                )
+            )
+    return warnings
+
+
+def _check_contradictory_treatments(graph: ReferenceGraph) -> List[GraphLintWarning]:
+    by_pair: dict[tuple[str, str], set[str]] = {}
+    for edge in _iter_edges(graph):
+        if edge.kind in _TREATMENT_KINDS:
+            by_pair.setdefault((edge.src, edge.dst), set()).add(edge.kind)
+
+    warnings: List[GraphLintWarning] = []
+    for (src, dst), kinds in sorted(by_pair.items()):
+        if len(kinds) < 2:
+            continue
+        labels = ", ".join(kind.removeprefix("treatment_") for kind in sorted(kinds))
+        warnings.append(
+            GraphLintWarning(
+                code="contradictory_treatment",
+                sections=(src, dst),
+                message=(
+                    f"contradictory treatment chain: {_format_graph_node(src)} "
+                    f"marks {_format_graph_node(dst)} as {labels}"
+                ),
+                severity="warning",
+            )
+        )
+    return warnings
 
 
 def _walk_is_infringed(root: nodes.ASTNode) -> List[nodes.IsInfringedNode]:
@@ -258,6 +340,8 @@ def lint_reference_graph(
     edge_kinds = tuple(kinds) if kinds else _DEFAULT_KINDS
     warnings: List[GraphLintWarning] = []
     warnings.extend(_check_cross_section_cycles(graph, edge_kinds))
+    warnings.extend(_check_overruled_authority_citations(graph))
+    warnings.extend(_check_contradictory_treatments(graph))
     if module is not None:
         warnings.extend(check_is_infringed_resolution(module, graph.nodes))
         warnings.extend(check_apply_scope_resolution(module, graph.nodes))
